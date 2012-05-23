@@ -93,7 +93,7 @@ interface IMetaModelAttribute
 	 * 
 	 * @return array all valid setting names, this reensembles the columns in tl_metamodel_attribute this attribute class understands.
 	 */
-	public static function getFieldSettingNames();
+	public static function getAttributeSettingNames();
 
 	/**
 	 * This generates the field definition for use in a DCA. 

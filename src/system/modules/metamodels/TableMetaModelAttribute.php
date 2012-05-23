@@ -152,6 +152,13 @@ class TableMetaModelAttribute extends Backend
 	 */
 	public function onLoadCallback($objDC)
 	{
+
+		// do nothing if not in edit mode.
+		if(!($objDC->id && $this->Input->get('action')))
+		{
+			return;
+		}
+
 		$objDB = Database::getInstance();
 		// fetch current values of the field from DB.
 		$objField = $objDB->prepare('
@@ -161,7 +168,7 @@ class TableMetaModelAttribute extends Backend
 		)
 		->limit(1)
 		->executeUncached($objDC->id);
-		$this->Session->set('tl_metamodel_attribute.'.$objDC->id, $objField->row());
+		$this->Session->set('tl_metamodel_attribute', $objField->row());
 
 		$objMetaModel = MetaModelFactory::byId($objField->pid);
 
@@ -240,7 +247,7 @@ class TableMetaModelAttribute extends Backend
 	{
 		$objMetaModel = MetaModelFactory::byId($objDC->activeRecord->pid);
 
-		return MetaModelAttributeFactory::getFieldTypes($objMetaModel->isTranslated(), $objMetaModel->hasVariants());
+		return MetaModelAttributeFactory::getAttributeTypes($objMetaModel->isTranslated(), $objMetaModel->hasVariants());
 	}
 
 	public function decodeLangArray($varValue)

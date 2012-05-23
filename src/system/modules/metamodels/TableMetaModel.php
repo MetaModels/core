@@ -230,7 +230,7 @@ class TableMetaModel extends Backend
 	public function tableNameOnSaveCallback($strTableName, DataContainer $objDC)
 	{
 		// force mm_ prefix.
-		if(substr($strTableName, 0, 4) !== 'mm_')
+		if(substr($strTableName, 0, 3) !== 'mm_')
 		{
 			$strTableName = 'mm_' . $strTableName;
 		}
