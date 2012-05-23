@@ -123,7 +123,7 @@ class TableMetaModel extends Backend
 			{
 				$tableName = $objType->tableName;
 
-				if ($this->Database->tableExists($tableName))
+				if ($this->Database->tableExists($tableName, false, true))
 				{
 					$this->import('MetaModel');
 					$this->MetaModel->dropTable($tableName);
@@ -194,7 +194,7 @@ class TableMetaModel extends Backend
 	 */
 	public function getRowLabel($arrRow, $strLabel, $objDC)
 	{
-		if(!($arrRow['tableName'] && $this->Database->tableExists($arrRow['tableName'])))
+		if(!($arrRow['tableName'] && $this->Database->tableExists($arrRow['tableName'], false, true)))
 			return '';
 		// add image
 		$strImage = '';
@@ -287,7 +287,7 @@ class TableMetaModel extends Backend
 				->limit(1)
 				->execute($dc->id);
 		if ($objTable->numRows > 0
-		    && $this->Database->tableExists($objTable->itemTable))
+		    && $this->Database->tableExists($objTable->itemTable, false, true))
 		{
 			$fields = $this->Database->listFields($objTable->itemTable);
 			foreach($fields as $field)

@@ -157,7 +157,7 @@ class MetaModelAttribute implements IMetaModelAttribute
 	{
 		// by default we accept any change of meta information.
 		$this->set($strMetaName, $varNewValue);
-		
+
 		return $this;
 	}
 

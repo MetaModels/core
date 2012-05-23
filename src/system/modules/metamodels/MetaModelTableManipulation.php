@@ -179,7 +179,7 @@ class MetaModelTableManipulation
 	public static function checkTableExists($strTableName)
 	{
 		self::checkTablename($strTableName);
-		if (!self::getDB()->tableExists($strTableName))
+		if (!self::getDB()->tableExists($strTableName, false, true))
 		{
 			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['tableDoesNotExist'], $strTableName)); 
 		}
@@ -196,7 +196,7 @@ class MetaModelTableManipulation
 	public static function checkTableDoesNotExist($strTableName)
 	{
 		self::checkTablename($strTableName);
-		if (self::getDB()->tableExists($strTableName))
+		if (self::getDB()->tableExists($strTableName, false, true))
 		{
 			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['tableExists'], $strTableName)); 
 		}
@@ -223,7 +223,6 @@ class MetaModelTableManipulation
 	 * @param string $strTableName    the name of the table to rename.
 	 * 
 	 * @param string $strNewTableName the name to which the table shall be renamed to.
-	 * 
 	 * 
 	 * @return void
 	 * 	 */
@@ -265,9 +264,9 @@ class MetaModelTableManipulation
 	{
 		self::checkTableExists($strTableName);
 		self::checkColumnName($strTableName);
-		if (!self::getDB()->fieldExists($strColName, $strTableName))
+		if (!self::getDB()->fieldExists($strColName, $strTableName, true))
 		{
-			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['columnDoesNotExist'], $strColName)); 
+			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['columnDoesNotExist'], $strColName, $strTableName)); 
 		}
 	}
 
@@ -286,7 +285,7 @@ class MetaModelTableManipulation
 	{
 		self::checkTableExists($strTableName);
 		self::checkColumnName($strTableName);
-		if (self::getDB()->fieldExists($strColName, $strTableName))
+		if (self::getDB()->fieldExists($strColName, $strTableName, true))
 		{
 			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['columnExists'], $strColName)); 
 		}
@@ -393,7 +392,7 @@ class MetaModelTableManipulation
 	{
 		if ($blnVariantSupport)
 		{
-			if (!self::getDB()->fieldExists('varbase', $strTableName))
+			if (!self::getDB()->fieldExists('varbase', $strTableName, true))
 			{
 				self::createColumn($strTableName, 'varbase', 'char(1) NOT NULL default \'\'');
 				self::createColumn($strTableName, 'vargroup', 'int(11) NOT NULL default 0');
@@ -403,7 +402,7 @@ class MetaModelTableManipulation
 				self::getDB()->execute(sprintf('UPDATE %s SET vargroup=id, varbase=1', $strTableName));
 			}
 		} else {
-			if (self::getDB()->fieldExists('varbase', $strTableName))
+			if (self::getDB()->fieldExists('varbase', $strTableName, true))
 			{
 				self::dropColumn($strTableName, 'varbase');
 				self::dropColumn($strTableName, 'vargroup');

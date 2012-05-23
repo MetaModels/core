@@ -45,7 +45,10 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 		switch($strMetaName)
 		{
 			case 'colName':
-				$this->renameColumn($varNewValue);
+				if($this->get($strKey) != $varNewValue)
+				{
+					$this->renameColumn($varNewValue);
+				}
 				return $this;
 				break;
 		}
@@ -64,7 +67,7 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 	 * 
 	 * @return string 'blob NULL'
 	 */
-	public static function getSQLDataType()
+	public function getSQLDataType()
 	{
 		return 'blob NULL';
 	}
@@ -97,7 +100,7 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 	{
 		if($this->getColName())
 		{
-			MetaModelTableManipulation::createColumn($this->getMetaModel()->getTableName(), $this->getColName(), self::getSQLDataType());
+			MetaModelTableManipulation::createColumn($this->getMetaModel()->getTableName(), $this->getColName(), $this->getSQLDataType());
 		}
 	}
 
@@ -108,7 +111,8 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 	 */
 	public function deleteColumn()
 	{
-		if($this->getColName())
+		// try to delete the column. be graceful, if it does not exist as we can assume it has been deleted already then
+		if($this->getColName() && Database::getInstance()->fieldExists($this->getColName(), $this->getMetaModel()->getTableName(), true))
 		{
 			MetaModelTableManipulation::dropColumn($this->getMetaModel()->getTableName(), $this->getColName());
 		}
@@ -124,9 +128,9 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 	public function renameColumn($strNewColumnName)
 	{
 		MetaModelTableManipulation::checkColumnName($strNewColumnName);
-		if($this->getColName())
+		if($this->getColName() && Database::getInstance()->fieldExists($this->getColName(), $this->getMetaModel()->getTableName(), true))
 		{
-			MetaModelTableManipulation::renameColumn($this->getMetaModel()->getTableName(), $this->getColName(), $strNewColumnName, self::getSQLDataType());
+			MetaModelTableManipulation::renameColumn($this->getMetaModel()->getTableName(), $this->getColName(), $strNewColumnName, $this->getSQLDataType());
 		} else {
 			$strBackupColName = $this->getColName();
 			$this->set('colName', $strNewColumnName);

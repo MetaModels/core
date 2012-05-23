@@ -65,6 +65,8 @@ class TableMetaModelAttribute extends Backend
 				'inputType'               => 'multiColumnWizard',
 				'eval' 			=> array
 				(
+					'minCount' => count($arrLanguages),
+					'maxCount' => count($arrLanguages),
 					'columnFields' => array
 					(
 						'langcode' => array
@@ -103,6 +105,8 @@ class TableMetaModelAttribute extends Backend
 				'inputType'               => 'multiColumnWizard',
 				'eval' 			=> array
 				(
+					'minCount' => count($arrLanguages),
+					'maxCount' => count($arrLanguages),
 					'columnFields' => array
 					(
 						'langcode' => array
@@ -154,7 +158,7 @@ class TableMetaModelAttribute extends Backend
 	{
 
 		// do nothing if not in edit mode.
-		if(!($objDC->id && $this->Input->get('action')))
+		if(!($objDC->id && $this->Input->get('act')))
 		{
 			return;
 		}
@@ -230,7 +234,7 @@ class TableMetaModelAttribute extends Backend
 			}
 		}
 
-//		if($objField && $oldValue != $varValue)
+		if($objField)
 		{
 			$objField->handleMetaChange($objDC->field, $varValue);
 		}
