@@ -101,20 +101,14 @@ class MetaModel implements IMetaModel
 	 */
 	protected function createAttributes()
 	{
-		$objDB = Database::getInstance();
-		$objAttributes = $objDB->prepare('SELECT * FROM tl_metamodel_attribute WHERE pid=?')
-							->execute($this->get('id'));
-		while ($objAttributes->next())
+		$arrAttributes = MetaModelAttributeFactory::getAttributesFor($this);
+		foreach ($arrAttributes as $objAttribute)
 		{
-			if ($this->hasAttribute($objAttributes->colName))
+			if ($this->hasAttribute($objAttribute->getColName()))
 			{
 				continue;
 			}
-			$objAttribute = MetaModelAttributeFactory::createFromDB($objAttributes);
-			if ($objAttribute)
-			{
-				$this->addAttribute($objAttribute);
-			}
+			$this->addAttribute($objAttribute);
 		}
 	}
 
@@ -174,15 +168,23 @@ class MetaModel implements IMetaModel
 		foreach($arrComplexCols as $objAttribute)
 		{
 
-			$arrAttributeData = $objAttribute->getDataFor(array($intId));
+			$arrAttributeData = $objAttribute->getDataFor($arrIds);
 
 			foreach($arrAttributeData as $intId => $varValue)
 			{
-				$arrResult[$intId][$objAttribute->colName] = $varValue;
+				$arrResult[$intId][$objAttribute->getColName()] = $varValue;
 			}
 		}
 
-		return $arrResult;
+		$arrItems = array();
+		foreach($arrResult as $arrEntry)
+		{
+			$arrItems[] = new MetaModelItem($this, $arrEntry);
+		}
+
+		$objItems = new MetaModelItems($arrItems);
+
+		return $objItems;
 	}
 
 	/////////////////////////////////////////////////////////////////
@@ -322,8 +324,10 @@ class MetaModel implements IMetaModel
 		{
 			$arrIds['id'] = explode(',', $arrFilter['id']);
 		} else {
+			// if no id filter is passed, we assume all ids are provided.
 			$objDB = Database::getInstance();
 			// TODO: add ordering here.
+			// TODO: add simple column filtering here.
 			$objRow = $objDB->execute('SELECT id FROM ' . $this->getTableName());
 			$arrIds['id'] = $objRow->fetchEach('id');
 		}
@@ -344,13 +348,55 @@ class MetaModel implements IMetaModel
 				// now intersect the values.
 				$arrIds[$objAttribute->getColName()] = $objAttribute->getIdsFromFilter($varFilterValue);
 			} else if(in_array('IMetaModelAttributeSimple', $arrInterfaces)) {
-				// simple attributes's conditions can be applied in SQL notation.
+				// simple attributes's conditions can be applied in SQL notation, add them to the above query.
 			}
 		}
 
+		$arrFilteredIds = $arrIds['id'];
+		foreach($arrIds as $strCol=>$arrAttrIds)
+		{
+			$arrFilteredIds = array_intersect($arrFilteredIds, $arrAttrIds);
+		}
 //		$arrIds[$objAttribute->getColName()] = array_intersect($arrIds, $arrFieldValues);
 
-		return $this->getItemsWithId($arrIds);
+		return $this->getItemsWithId($arrFilteredIds);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getCount($arrFilter)
+	{
+		$objDB = Database::getInstance();
+		// TODO: implement filtering here.
+		$objRow = $objDB->execute('SELECT COUNT(id) AS count FROM ' . $this->getTableName());
+		return $objRow->count;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function findVariantBase($arrFilter)
+	{
+		$objDB = Database::getInstance();
+		$objRow = $objDB->execute('SELECT id FROM ' . $this->getTableName() . ' WHERE varbase=1');
+		$arrFilter['id'] = implode(',', $objRow->fetchEach('id'));
+		return $this->findByFilter($arrFilter);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function findVariants($arrIds, $arrFilter)
+	{
+		if(!$arrIds)
+		{
+			return array();
+		}
+		$objDB = Database::getInstance();
+		$objRow = $objDB->execute('SELECT id,vargroup FROM ' . $this->getTableName() . ' WHERE varbase=0 AND vargroup IN ('.implode(',', $arrIds).')');
+		$arrFilter['id'] = implode(',', $objRow->fetchEach('id'));
+		return $this->findByFilter($arrFilter);
 	}
 
 	/*

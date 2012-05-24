@@ -29,7 +29,10 @@ if (!defined('TL_ROOT'))
 class MetaModelAttributeFactory implements IMetaModelAttributeFactory
 {
 
-	// TODO: shall we keep all instances in an array here?
+	/**
+	 * All attribute instances for all MetaModels that are created via this factory.
+	 */
+	protected static $arrAttributes = array();
 
 	/**
 	 * Determines the correct class from a field type name.
@@ -63,6 +66,30 @@ class MetaModelAttributeFactory implements IMetaModelAttributeFactory
 	{
 		$strClassName = self::getAttributeTypeClass($objRow->type);
 		return $strClassName ? new $strClassName(MetaModelFactory::byId($objRow->pid), $objRow->row()) : NULL;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public static function getAttributesFor($objMetaModel)
+	{
+		$objDB = Database::getInstance();
+		$objAttributes = $objDB->prepare('SELECT * FROM tl_metamodel_attribute WHERE pid=?')
+							->execute($objMetaModel->get('id'));
+
+		$arrAttributes = array();
+		while ($objAttributes->next())
+		{
+			if(isset(self::$arrAttributes[$objAttributes->id]))
+			{
+				$arrAttributes[] = self::$arrAttributes[$objAttributes->id];
+			} else {
+				$objAttribute = self::createFromDB($objAttributes);
+				$arrAttributes[] = $objAttribute;
+				self::$arrAttributes[$objAttributes->id] = $objAttribute;
+			}
+		}
+		return $arrAttributes;
 	}
 
 	/**

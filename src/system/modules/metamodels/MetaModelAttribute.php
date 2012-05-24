@@ -31,11 +31,11 @@ class MetaModelAttribute implements IMetaModelAttribute
 {
 
 	/**
-	 * the MetaModel instance this object belongs to.
+	 * Name of the MetaModel instance this object belongs to.
 	 * 
-	 * @var IMetaModel
+	 * @var string
 	 */
-	protected $objMetaModel = null;
+	protected $objMetaModelTableName = '';
 
 	/**
 	 * The meta information of this attribute.
@@ -63,7 +63,7 @@ class MetaModelAttribute implements IMetaModelAttribute
 				$this->set($strSettingName, $arrData[$strSettingName]);
 			}
 		}
-		$this->objMetaModel = $objMetaModel;
+		$this->objMetaModelTableName = $objMetaModel->getTableName();
 	}
 
 	/**
@@ -121,7 +121,7 @@ class MetaModelAttribute implements IMetaModelAttribute
 	 */
 	public function getColName()
 	{
-		return $this->arrData['colName'];
+		return $this->arrData['colname'];
 	}
 
 	/**
@@ -129,7 +129,7 @@ class MetaModelAttribute implements IMetaModelAttribute
 	 */
 	public function getMetaModel()
 	{
-		return $this->objMetaModel;
+		return MetaModelFactory::byTableName($this->objMetaModelTableName);
 	}
 
 	/**
@@ -182,7 +182,7 @@ class MetaModelAttribute implements IMetaModelAttribute
 	 */
 	public static function getAttributeSettingNames()
 	{
-		return array('id', 'pid', 'sorting', 'tstamp', 'name', 'description', 'type', 'colName');
+		return array('id', 'pid', 'sorting', 'tstamp', 'name', 'description', 'type', 'colname');
 	}
 
 	/**

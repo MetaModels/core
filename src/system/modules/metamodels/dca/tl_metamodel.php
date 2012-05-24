@@ -132,7 +132,8 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'name',
 				'tableName',
 				'translated',
-				'backendsection'
+				'backendsection',
+				'backendicon'
 			),
 
 			'advanced' => array
@@ -146,7 +147,6 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			'display' => array
 			(
 				':hide',
-				'addImage',
 				'format'
 			),
 		)
@@ -155,11 +155,6 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 	// Subpalettes
 	'metasubpalettes' => array
 	(
-		'addImage' => array
-		(
-			'singleSRC',
-			'size'
-		),
 		'translated' => array
 		(
 			'languages'
@@ -295,30 +290,19 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			'options_callback'        => array('TableMetaModel', 'backendSectionCallback'),
 		),
 
-		'addImage' => array
+		'backendicon' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['addImage'],
-			'exclude'                 => true,
-			'inputType'               => 'checkbox',
-			'eval'                    => array('submitOnChange'=>true)
-		),
-
-		'singleSRC' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['singleSRC'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['backendicon'],
 			'exclude'                 => true,
 			'inputType'               => 'fileTree',
-			'eval'                    => array('fieldType'=>'radio', 'files'=>true, 'filesOnly'=>true, 'mandatory'=>true, 'extensions' => 'jpg,jpeg,gif,png,tif,tiff')
-		),
-		
-		'size' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['size'],
-			'exclude'                 => true,
-			'inputType'               => 'imageSize',
-			'options'                 => array('crop', 'proportional', 'box'),
-			'reference'               => &$GLOBALS['TL_LANG']['MSC'],
-			'eval'                    => array('rgxp'=>'digit', 'nospace'=>true)
+			'eval'                    => array
+			(
+				'fieldType'=>'radio',
+				'files'=>true,
+				'filesOnly'=>true,
+				//'mandatory'=>true,
+				'extensions' => 'jpg,jpeg,gif,png,tif,tiff'
+			)
 		),
 
 		'format' => array

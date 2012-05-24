@@ -40,11 +40,20 @@ interface IMetaModelAttributeFactory
 	/**
 	 * instantiate a attribute from an array.
 	 * 
-	 * @param array the attribute information data.
+	 * @param Database_Result $objRow the attribute information data.
 	 * 
 	 * @return IMetaModelAttribute|null the instance of the attribute or NULL if the class could not be determined
 	 */
 	public static function createFromDB($objRow);
+
+	/**
+	 * instantiate all attributes for the given MetaModel instance.
+	 * 
+	 * @param IMetaModel $objMetaModel the MetaModel instance for which all attributes shall be returned.
+	 * 
+	 * @return IMetaModelAttribute[] the instances of the attributes
+	 */
+	public static function getAttributesFor($objMetaModel);
 
 	/**
 	 * Returns an array of all registered attribute types.

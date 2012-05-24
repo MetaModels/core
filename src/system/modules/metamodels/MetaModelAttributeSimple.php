@@ -44,7 +44,7 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 		// by default we accept any change of meta information.
 		switch($strMetaName)
 		{
-			case 'colName':
+			case 'colname':
 				if($this->get($strKey) != $varNewValue)
 				{
 					$this->renameColumn($varNewValue);
@@ -133,9 +133,9 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 			MetaModelTableManipulation::renameColumn($this->getMetaModel()->getTableName(), $this->getColName(), $strNewColumnName, $this->getSQLDataType());
 		} else {
 			$strBackupColName = $this->getColName();
-			$this->set('colName', $strNewColumnName);
+			$this->set('colname', $strNewColumnName);
 			$this->createColumn();
-			$this->set('colName', $strBackupColName);
+			$this->set('colname', $strBackupColName);
 		}
 	}
 }

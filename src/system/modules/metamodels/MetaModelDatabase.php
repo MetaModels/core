@@ -78,7 +78,11 @@ class MetaModelDatabase extends Controller
 			(
 				'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_item']['varbase'],
 				'inputType'               => 'checkbox',
-				'eval'                    => array('submitOnChange'=>true)
+				'eval'                    => array
+				(
+					'submitOnChange'=>true,
+					'doNotShow' => true
+				)
 			);
 
 			$arrOperationCreateVariant = array
@@ -111,7 +115,7 @@ class MetaModelDatabase extends Controller
 
 			if($objAttribute->insertBreak && strlen($objAttribute->legendTitle))
 			{
-				$legendName = $objAttribute->colName.'_legend';
+				$legendName = $objAttribute->getColName().'_legend';
 				$GLOBALS['TL_LANG'][$objMetaModel->getTableName()][$legendName] = $objAttribute->legendTitle;
 				$strPalette .= ((strlen($strPalette)>0 ? ';':'') . '{'.$legendName.(($objAttribute->legendHide)?':hide':'').'},');
 			} else
@@ -153,13 +157,12 @@ class MetaModelDatabase extends Controller
 	 */
 	public function renderRow($arrRow)
 	{
-//		var_dump($arrRow);
 		foreach ($arrRow as $key => $value) {
 			
 		}
 		// TODO: use templating in here.
 		return
-'<div class="field_heading cte_type"><strong>' . $arrRow['colName'] . '</strong> <em>['.$arrRow['type'].']</em></div>
+'<div class="field_heading cte_type"><strong>' . $arrRow['colname'] . '</strong> <em>['.$arrRow['type'].']</em></div>
 <div class="field_type block">
 </div>';
 

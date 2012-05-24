@@ -122,7 +122,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 		// base palette for MetaModelAttribute derived types
 		'_base_ extends default' => array
 		(
-			'+title'			=> array('name', 'description', 'colName'),
+			'+title'			=> array('colname', 'name', 'description'),
 			'advanced'			=> array(':hide', 'isvariant', 'mandatory', 'unique', 'hasdefault'),
 			'metamodeloverview'	=> array('sortingField', 'filteredField', 'searchableField'),
 			'backenddisplay'	=> array('titleField', 'width50', 'insertBreak'),
@@ -165,19 +165,19 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 	(
 		'__selector__' => array('type')
 //		'__selector__' => array('type', 'insertBreak', 'sortingField', 'showImage', 'format', 'limitItems', 'customFiletree', 'editGroups', 'rte', 'multiple'),
-//		'default'      => '{title_legend},name,description,colName,type;{display_legend},parentCheckbox,titleField,width50;{legend_legend:hide},insertBreak;{filter_legend:hide},sortingField,filteredField,searchableField;{advanced_legend:hide},mandatory,defValue,uniqueItem;{format_legend:hide},formatPrePost,format;{feedit_legend},editGroups',
+//		'default'      => '{title_legend},name,description,colname,type;{display_legend},parentCheckbox,titleField,width50;{legend_legend:hide},insertBreak;{filter_legend:hide},sortingField,filteredField,searchableField;{advanced_legend:hide},mandatory,defValue,uniqueItem;{format_legend:hide},formatPrePost,format;{feedit_legend},editGroups',
 //		'default'      => '{title_legend},type;',
 /*
-		'longtext'     => '{title_legend},name,description,colName,type;{display_legend},parentCheckbox;{legend_legend:hide},insertBreak;{filter_legend:hide},searchableField;{advanced_legend:hide},mandatory,allowHtml,textHeight,rte;{feedit_legend},editGroups',
-		'number'       => '{title_legend},name,description,colName,type;{display_legend},parentCheckbox,titleField,width50;{legend_legend:hide},insertBreak;{filter_legend:hide},sortingField,filteredField,searchableField;{advanced_legend:hide},mandatory,defValue,minValue,maxValue;{format_legend:hide},formatPrePost,format;{feedit_legend},editGroups',
-		'decimal'      => '{title_legend},name,description,colName,type;{display_legend},parentCheckbox,titleField,width50;{legend_legend:hide},insertBreak;{filter_legend:hide},sortingField,filteredField,searchableField;{advanced_legend:hide},mandatory,defValue,minValue,maxValue;{format_legend:hide},formatPrePost,format;{feedit_legend},editGroups',
-		'date'         => '{title_legend},name,description,colName,type;{display_legend},parentCheckbox,titleField,width50;{legend_legend:hide},insertBreak;{filter_legend:hide},sortingField,filteredField,searchableField;{advanced_legend:hide},mandatory,defValue,includeTime;{format_legend:hide},formatPrePost,format;{feedit_legend},editGroups',
-		'select'       => '{title_legend},name,description,colName,type;{display_legend},parentCheckbox,titleField,width50;{legend_legend:hide},insertBreak;{filter_legend:hide},sortingField,filteredField;{advanced_legend:hide},mandatory,includeBlankOption;{options_legend},itemTable,itemTableValueCol,itemSortCol,itemFilter,limitItems,treeMinLevel,treeMaxLevel;{feedit_legend},editGroups',
-		'tags'         => '{title_legend},name,description,colName,type;{display_legend},parentCheckbox,titleField,width50;{legend_legend:hide},insertBreak;{filter_legend:hide},searchableField;{advanced_legend:hide},mandatory;{options_legend},itemTable,itemTableValueCol,itemSortCol,itemFilter,limitItems,treeMinLevel,treeMaxLevel;{feedit_legend},editGroups',
-		'checkbox'     => '{title_legend},name,description,colName,type;{display_legend},parentCheckbox,titleField,width50;{legend_legend:hide},insertBreak;{filter_legend:hide},sortingField,filteredField;{feedit_legend},editGroups',
-		'url'          => '{title_legend},name,description,colName,type;{display_legend},parentCheckbox,titleField,width50;{legend_legend:hide},insertBreak;{filter_legend:hide},sortingField,filteredField,searchableField;{advanced_legend:hide},mandatory,uniqueItem,allowedHosts;{format_legend:hide},formatPrePost,{feedit_legend},editGroups',
-		'file'         => '{title_legend},name,description,colName,type;{display_legend},parentCheckbox,titleField;{legend_legend:hide},insertBreak;{filter_legend:hide},sortingField,filteredField,searchableField;{advanced_legend:hide},mandatory,customFiletree,multiple;{format_legend},showImage,showLink;{feedit_legend},editGroups',
-		'calc'         => '{title_legend},name,description,colName,type,calcValue;{display_legend},parentCheckbox,titleField,width50;{legend_legend:hide},insertBreak;{filter_legend:hide},sortingField,filteredField,searchableField;{format_legend:hide},formatPrePost,format;{feedit_legend},editGroups',
+		'longtext'     => '{title_legend},name,description,colname,type;{display_legend},parentCheckbox;{legend_legend:hide},insertBreak;{filter_legend:hide},searchableField;{advanced_legend:hide},mandatory,allowHtml,textHeight,rte;{feedit_legend},editGroups',
+		'number'       => '{title_legend},name,description,colname,type;{display_legend},parentCheckbox,titleField,width50;{legend_legend:hide},insertBreak;{filter_legend:hide},sortingField,filteredField,searchableField;{advanced_legend:hide},mandatory,defValue,minValue,maxValue;{format_legend:hide},formatPrePost,format;{feedit_legend},editGroups',
+		'decimal'      => '{title_legend},name,description,colname,type;{display_legend},parentCheckbox,titleField,width50;{legend_legend:hide},insertBreak;{filter_legend:hide},sortingField,filteredField,searchableField;{advanced_legend:hide},mandatory,defValue,minValue,maxValue;{format_legend:hide},formatPrePost,format;{feedit_legend},editGroups',
+		'date'         => '{title_legend},name,description,colname,type;{display_legend},parentCheckbox,titleField,width50;{legend_legend:hide},insertBreak;{filter_legend:hide},sortingField,filteredField,searchableField;{advanced_legend:hide},mandatory,defValue,includeTime;{format_legend:hide},formatPrePost,format;{feedit_legend},editGroups',
+		'select'       => '{title_legend},name,description,colname,type;{display_legend},parentCheckbox,titleField,width50;{legend_legend:hide},insertBreak;{filter_legend:hide},sortingField,filteredField;{advanced_legend:hide},mandatory,includeBlankOption;{options_legend},itemTable,itemTableValueCol,itemSortCol,itemFilter,limitItems,treeMinLevel,treeMaxLevel;{feedit_legend},editGroups',
+		'tags'         => '{title_legend},name,description,colname,type;{display_legend},parentCheckbox,titleField,width50;{legend_legend:hide},insertBreak;{filter_legend:hide},searchableField;{advanced_legend:hide},mandatory;{options_legend},itemTable,itemTableValueCol,itemSortCol,itemFilter,limitItems,treeMinLevel,treeMaxLevel;{feedit_legend},editGroups',
+		'checkbox'     => '{title_legend},name,description,colname,type;{display_legend},parentCheckbox,titleField,width50;{legend_legend:hide},insertBreak;{filter_legend:hide},sortingField,filteredField;{feedit_legend},editGroups',
+		'url'          => '{title_legend},name,description,colname,type;{display_legend},parentCheckbox,titleField,width50;{legend_legend:hide},insertBreak;{filter_legend:hide},sortingField,filteredField,searchableField;{advanced_legend:hide},mandatory,uniqueItem,allowedHosts;{format_legend:hide},formatPrePost,{feedit_legend},editGroups',
+		'file'         => '{title_legend},name,description,colname,type;{display_legend},parentCheckbox,titleField;{legend_legend:hide},insertBreak;{filter_legend:hide},sortingField,filteredField,searchableField;{advanced_legend:hide},mandatory,customFiletree,multiple;{format_legend},showImage,showLink;{feedit_legend},editGroups',
+		'calc'         => '{title_legend},name,description,colname,type,calcValue;{display_legend},parentCheckbox,titleField,width50;{legend_legend:hide},insertBreak;{filter_legend:hide},sortingField,filteredField,searchableField;{format_legend:hide},formatPrePost,format;{feedit_legend},editGroups',
 
  */
 	),
@@ -210,8 +210,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 				'includeBlankOption' => true,
 				'doNotSaveEmpty' => true,
 				'alwaysSave' => true,
-				'submitOnChange'=>true,
-				/*'tl_class'=>'w50'*/
+				'submitOnChange'=> true,
+				'tl_class'=>'w50'
 			),
 			'options_callback'        => array('TableMetaModelAttribute', 'fieldTypesCallback'),
 			'save_callback'           => array
@@ -244,12 +244,17 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 		),
 
 		// AVOID: doNotCopy => true, as child records won't be copied when copy metamodel
-		'colName' => array
+		'colname' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['colName'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname'],
 			'exclude'                 => true,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>64, 'tl_class'=>'w50'),
+			'eval'                    => array
+			(
+				'mandatory'=>true,
+				'maxlength'=>64,
+				'tl_class'=>'w50'
+			),
 		),
 
 		'isvariant' => array

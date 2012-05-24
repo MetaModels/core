@@ -29,5 +29,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['cut']           = array('Move item', '
 $GLOBALS['TL_LANG']['tl_metamodel_item']['delete']        = array('Delete item', 'Delete item ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_item']['show']          = array('Item details', 'Show details of item ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_item']['editheader']    = array('Edit item type', 'Edit the item type');
+$GLOBALS['TL_LANG']['tl_metamodel_item']['fields']        = array('Manage attributes', 'Manage attributes of this MetaModel');
 
 ?>

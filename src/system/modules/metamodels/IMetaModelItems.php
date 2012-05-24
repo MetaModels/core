@@ -1,0 +1,80 @@
+<?php
+/**
+ * The MetaModels extension allows the creation of multiple collections of custom items,
+ * each with its own unique set of selectable attributes, with attribute extendability.
+ * The Front-End modules allow you to build powerful listing and filtering of the
+ * data in each collection.
+ *
+ * PHP version 5
+ * @package	   MetaModels
+ * @subpackage Interface
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  CyberSpectrum
+ * @license    private
+ * @filesource
+ */
+if (!defined('TL_ROOT'))
+{
+	die('You cannot access this file directly!');
+}
+
+/**
+ * Interface for a collection of MetaModel items.
+ * 
+ * @package	   MetaModels
+ * @subpackage Interface
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ */
+interface IMetaModelItems
+{
+	/**
+	 * return the current item
+	 * 
+	 * @return IMetaModelItem
+	 */
+	public function getItem();
+
+	/**
+	 * return the amount of contained items.
+	 * 
+	 * @return int the amount of contained items.
+	 */
+	public function getCount();
+
+	/**
+	 * reset to the first element in the collection.
+	 * 
+	 * @return bool true if there are items contained, false otherwise.
+	 */
+	public function first();
+
+	/**
+	 * advance the internal cursor by one.
+	 * 
+	 * @return IMetaModelItems|boolean the current instance or false when last item has had been reached.
+	 */
+	public function next();
+
+	/**
+	 * Go to the previous row of the current result
+	 * 
+	 * @return IMetaModelItems|boolean the current instance or false if no previous item is present.
+	 */
+	public function prev();
+
+	/**
+	 * Go to the last row of the current result
+	 * 
+	 * @return IMetaModelItems|boolean the current instance or false if no item is present.
+	 */
+	public function last();
+
+	/**
+	 * Reset the current result
+	 * 
+	 * @return IMetaModelItems the current instance.
+	 */
+	public function reset();
+}
+
+?>

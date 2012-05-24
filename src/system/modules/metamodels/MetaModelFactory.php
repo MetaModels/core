@@ -92,6 +92,9 @@ class MetaModelFactory /*extends System*/ implements IMetaModelFactory
 		$objMetaModel = null;
 		if ($arrData)
 		{
+			// NOTE: we might want to add support for a model type here in the future, where the model 
+			// can transport it's own class or even factory within a lookup table. This will allow
+			// other devs to inherit from MetaModel but perform different tasks.
 			$objMetaModel = new MetaModel($arrData);
 			self::$arrInstances[$arrData['id']] = $objMetaModel;
 		}
@@ -166,7 +169,7 @@ class MetaModelFactory /*extends System*/ implements IMetaModelFactory
 		);
 
 		$objDB = Database::getInstance();
-		if($objDB)
+		if ($objDB)
 		{
 			if (!$objDB->tableExists('tl_metamodel'))
 			{
@@ -192,9 +195,9 @@ class MetaModelFactory /*extends System*/ implements IMetaModelFactory
 
 			$arrMetaModels = array();
 			$objMetaModels = $objDB->execute('SELECT * FROM tl_metamodel');
-			while($objMetaModels->next())
+			while ($objMetaModels->next())
 			{
-				if(!$objMetaModels->backendsection)
+				if (!$objMetaModels->backendsection)
 				{
 					continue;
 				}
@@ -210,15 +213,22 @@ class MetaModelFactory /*extends System*/ implements IMetaModelFactory
 				// keep backend section handy.
 				$arrMetaModels[$objMetaModels->tableName] = $objMetaModels->backendsection;
 
+				// determine image to use.
+				if ($objMetaModels->backendicon && file_exists(TL_ROOT . '/' . $objMetaModels->backendicon))
+				{
+					$strIcon = $objMetaModels->backendicon;
+				} else {
+					$strIcon = 'system/modules/metamodels/html/icon.gif';
+				}
+
 				$GLOBALS['BE_MOD'][$objMetaModels->backendsection][$strModuleName] = array
 				(
 					'tables'			=> array($objMetaModels->tableName),
-					// TODO: add custom icon here.
-					'icon'				=> 'system/modules/metamodels/html/icon.gif',
+					'icon'				=> $strIcon,
 				);
 				$GLOBALS['TL_LANG']['MOD'][$strModuleName] = array($strTableCaption);
 
-				if($objMetaModels->ptable)
+				if ($objMetaModels->ptable)
 				{
 					$GLOBALS['BE_MOD'][$arrMetaModels[$objMetaModels->ptable]]['metamodel_' . $objMetaModels->ptable]['tables'][] = $objMetaModels->tableName;
 				}

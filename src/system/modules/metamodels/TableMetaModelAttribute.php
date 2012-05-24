@@ -299,7 +299,7 @@ class TableMetaModelAttribute extends Backend
 
 		$objMetaModel = MetaModelFactory::byId($arrRow['pid']);
 
-		$strColName = $arrRow['colName'];
+		$strColName = $arrRow['colname'];
 		$strType = $arrRow['type'];
 		$strImages = '';
 		$strTypeImage = '';
@@ -327,6 +327,8 @@ class TableMetaModelAttribute extends Backend
 		} else {
 			$strDescription = $arrRow['name'];
 		}
+
+		$strTypeImage = '<img src="' . $GLOBALS['METAMODELS']['attributes'][$strType]['image'] . '" />';
 
 		return
 		sprintf(

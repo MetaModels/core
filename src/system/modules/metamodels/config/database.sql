@@ -32,13 +32,10 @@ CREATE TABLE `tl_metamodel` (
 -- do we support variants?
   `varsupport` char(1) NOT NULL default '',
 
-  `backendsection` varchar(64) NOT NULL default '',
-
+  `backendsection` varchar(255) NOT NULL default '',
+  `backendicon` varchar(255) NOT NULL default '',
 
   `format` text NULL,
-  `addImage` char(1) NOT NULL default '',
-  `singleSRC` varchar(255) NOT NULL default '',
-  `size` varchar(255) NOT NULL default '',
 
   PRIMARY KEY  (`id`),
   KEY `tableName` (`tableName`)
@@ -59,7 +56,7 @@ CREATE TABLE `tl_metamodel_attribute` (
 
   `name` text NULL,
   `description` text NULL,
-  `colName` varchar(64) NOT NULL default '',
+  `colname` varchar(64) NOT NULL default '',
   `type` varchar(64) NOT NULL default '',
   `isvariant` char(1) NOT NULL default '',
 
@@ -115,7 +112,7 @@ CREATE TABLE `tl_metamodel_attribute` (
 
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`),
-  KEY `colName` (`colName`)
+  KEY `colname` (`colname`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

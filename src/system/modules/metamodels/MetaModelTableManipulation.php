@@ -396,6 +396,7 @@ class MetaModelTableManipulation
 			{
 				self::createColumn($strTableName, 'varbase', 'char(1) NOT NULL default \'\'');
 				self::createColumn($strTableName, 'vargroup', 'int(11) NOT NULL default 0');
+				// TODO: we should also apply an index on vargroup here.
 
 				// if there is pre-existing data in the table, we need to provide a separate 'vargroup' value to all of them,
 				// we can do this safely by setting all vargroups to the id of the base item.
