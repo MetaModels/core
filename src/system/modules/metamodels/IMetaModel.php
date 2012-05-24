@@ -117,6 +117,27 @@ interface IMetaModel
 	 */
 	// TODO: better use a Filter Object class here.
 	public function findByFilter($arrFilter);
+
+	/**
+	 * Fetch the amount of matching items against the given filter.
+	 * 
+	 * @param array $arrFilter the filter array to use.
+	 * 
+	 * @return int the amount of matching items.
+	 */
+	public function getCount($arrFilter);
+
+	/**
+	 * Get Variants for the given ids, optionally filter by the provided filter settings.
+	 * 
+	 * @param array $arrIds the Ids of the base elements.
+	 * 
+	 * @param array $arrFilter the filter array to use.
+	 * 
+	 * @return IMetaModelItems the collection of IMetaModelItem instances that match the given filter.
+	 */
+	// TODO: better use a Filter Object class here.
+	public function findVariants($arrIds, $arrFilter);
 }
 
 ?>
