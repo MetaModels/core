@@ -18,14 +18,35 @@ if (!defined('TL_ROOT'))
 	die('You cannot access this file directly!');
 }
 
-require_once(TL_ROOT . '/system/modules/metamodels/metamodel_functions.php');
+
+/*
+	In order to add attribute types into the system, add the following snippet to your extension config.php:
+
+	$GLOBALS['METAMODELS']['attributes']['TYPENAME'] = array
+	(
+		'class' => 'TYPECLASS',
+		'image' => 'IMAGEPATH',
+		'factory' => 'FACTORYCLASS' // optional
+	);
+
+	where:
+		TYPENAME     is the internal type name of your attribute.
+		TYPECLASS    is the name of the implementing class.
+		IMAGEPATH    path to an icon (16x16) that represents the attribute type. Based from TL_ROOT.
+		FACTORYCLASS this is optional, if defined, the herein declared classname will be used for instantiation
+		             of attributes of this type instead of plain constructing.
+*/
+
+
+// define our version so dependant extensions can use it in version_compare().
+define('METAMODELS_VERSION', '0.1');
 
 /**
  * Back-end module
  */
-// restrict database queries for active metamodels to the backend.
 if (TL_MODE=='BE')
 {
+	// restrict to the backend.
 	MetaModelFactory::buildBackendMenu();
 }
 
@@ -38,17 +59,9 @@ $GLOBALS['FE_MOD']['metamodels'] = array
 		'metamodel_list'			=> 'ModuleMetaModelList',
 	);
 
-
-
-
-/*
-$GLOBALS['METAMODELS']['attributes']['alias'] = array
-(
-	'class' => 'MetaModelAttritbuteAlias',
-	'image' => ''
-);
-*/
-
+/**
+ * HOOKS
+ */
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('MetaModelDatabase', 'createDataContainer');
 
 ?>
