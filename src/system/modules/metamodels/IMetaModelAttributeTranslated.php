@@ -32,16 +32,16 @@ interface IMetaModelAttributeTranslated extends IMetaModelAttribute
 {
 
 	/**
-	 * Set a value for an item in a certain lanugage.
+	 * Set a value for an item in a certain language.
 	 */
-	public function setValueFor($strLangCode, $intId, $varValue);
+	public function setTranslatedDataFor($arrValues, $strLangCode);
+
+	public function getTranslatedDataFor($arrIds, $strLangCode, $strFallbackLanguage = NULL);
 
 	/**
 	 * Set a value for an item in a certain lanugage.
 	 */
 	public function unsetValueFor($strLangCode);
-
-	public function getValueFor($strLangCode, $intId, $strFallbackLanguage = NULL);
 }
 
 ?>

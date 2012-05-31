@@ -133,6 +133,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 		(
 //			'+title' => array('')
 		),
+
+		// default palette for MetaModelAttributeComplex derived types
+		'_complexattribute_ extends _base_' => array
+		(
+//			'+title' => array('')
+		),
 	),
 
 /*
@@ -211,7 +217,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 				'doNotSaveEmpty' => true,
 				'alwaysSave' => true,
 				'submitOnChange'=> true,
-				'tl_class'=>'w50'
+				'tl_class'=>'w50',
+				'chosen' => 'true'
 			),
 			'options_callback'        => array('TableMetaModelAttribute', 'fieldTypesCallback'),
 			'save_callback'           => array

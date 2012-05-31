@@ -238,7 +238,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 						(
 							'valign' => 'top',
 							'style' => 'width:250px',
-							'chosen'=>true
+							'chosen'=> 'true'
 						)
 					),
 					'isfallback' => array

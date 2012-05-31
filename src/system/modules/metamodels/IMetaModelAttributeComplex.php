@@ -44,7 +44,7 @@ interface IMetaModelAttributeComplex extends IMetaModelAttribute
 	/**
 	 * This method is called to store the data for certain items to the database.
 	 * 
-	 * @param mixed[] $arrValues the values to be stored into database.
+	 * @param mixed[int] $arrValues the values to be stored into database.
 	 * 
 	 * @return void
 	 */

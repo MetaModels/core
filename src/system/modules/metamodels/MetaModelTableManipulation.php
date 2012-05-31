@@ -179,7 +179,7 @@ class MetaModelTableManipulation
 	public static function checkTableExists($strTableName)
 	{
 		self::checkTablename($strTableName);
-		if (!self::getDB()->tableExists($strTableName, false, true))
+		if (!self::getDB()->tableExists($strTableName, null, true))
 		{
 			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['tableDoesNotExist'], $strTableName)); 
 		}
@@ -196,7 +196,7 @@ class MetaModelTableManipulation
 	public static function checkTableDoesNotExist($strTableName)
 	{
 		self::checkTablename($strTableName);
-		if (self::getDB()->tableExists($strTableName, false, true))
+		if (self::getDB()->tableExists($strTableName, null, true))
 		{
 			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['tableExists'], $strTableName)); 
 		}

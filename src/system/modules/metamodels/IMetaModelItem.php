@@ -42,7 +42,6 @@ interface IMetaModelItem
 	 * @param string $strAttributeName the name of the attribute
 	 * 
 	 * @param mixed $varValue the value of the attribute
-	 * 
 	 */
 	public function set($strAttributeName, $varValue);
 
@@ -87,6 +86,14 @@ interface IMetaModelItem
 	 * @return IMetaModelItems a list of all variants for this item.
 	 */
 	public function getVariants($arrFilter);
+
+	/**
+	 * Save the current data for every attribute to the data sink.
+	 * 
+	 * @return void
+	 */
+	public function save();
+
 }
 
 ?>

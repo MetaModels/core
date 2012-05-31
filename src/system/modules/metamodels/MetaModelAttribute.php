@@ -78,7 +78,7 @@ class MetaModelAttribute implements IMetaModelAttribute
 	{
 		if (is_array($this->arrData['name']))
 		{
-			return $this->getLangValue($this->get('name'), $strLang);
+			return $this->getLangValue($this->get('name'));
 		}
 		return $this->arrData['name'];
 	}
@@ -190,17 +190,18 @@ class MetaModelAttribute implements IMetaModelAttribute
 	 */
 	public function getFieldDefinition()
 	{
+		$strTableName = $this->getMetaModel()->getTableName();
 		// only overwrite the language if not already set.
-		if(!$GLOBALS['TL_LANG'][$this->getMetaModel()->getTableName()][$this->getColName()])
+		if(!$GLOBALS['TL_LANG'][$strTableName][$this->getColName()])
 		{
-			$GLOBALS['TL_LANG'][$this->getMetaModel()->getTableName()][$this->getColName()] = array
+			$GLOBALS['TL_LANG'][$strTableName][$this->getColName()] = array
 			(
-				$this->getLangValue($this->get('name'), $strLang), 
-				$this->getLangValue($this->get('description'), $strLang),
+				$this->getLangValue($this->get('name')), 
+				$this->getLangValue($this->get('description')),
 			);
 		}
 		$arrFieldDef = array(
-			'label' => &$GLOBALS['TL_LANG'][$this->getMetaModel()->getTableName()][$this->getColName()],
+			'label' => &$GLOBALS['TL_LANG'][$strTableName][$this->getColName()],
 			'flag' => '1',
 			'eval'  => array()
 		);
@@ -226,9 +227,9 @@ class MetaModelAttribute implements IMetaModelAttribute
 	/**
 	 * {@inheritdoc}
 	 */
-	public function parseValue($arrRowData)
+	public function parseValue($arrRowData, $strOutputFormat = 'html')
 	{
-		return array('html' => $arrRowData[$this->getColName()]);
+		return array('raw' => $arrRowData[$this->getColName()]);
 	}
 }
 

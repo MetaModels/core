@@ -158,7 +158,10 @@ class TableMetaModelAttribute extends Backend
 	{
 
 		// do nothing if not in edit mode.
-		if(!($objDC->id && $this->Input->get('act')))
+		if(
+			!($objDC->id && $this->Input->get('act'))
+		|| ($this->Input->get('act') == 'paste')
+		)
 		{
 			return;
 		}
@@ -172,6 +175,12 @@ class TableMetaModelAttribute extends Backend
 		)
 		->limit(1)
 		->executeUncached($objDC->id);
+
+		if ($objField->numRows == 0)
+		{
+			return;
+		}
+
 		$this->Session->set('tl_metamodel_attribute', $objField->row());
 
 		$objMetaModel = MetaModelFactory::byId($objField->pid);
@@ -215,7 +224,6 @@ class TableMetaModelAttribute extends Backend
 			$oldValue = null;
 		}
 
-		// TODO: check if the type has been changed, if so, we have to pass to the new instance instead.
 		if ($objDC->field == 'type' && $oldValue != $varValue)
 		{
 			// we are changing the field type, destroy old instance and prepare new instance.
@@ -223,7 +231,7 @@ class TableMetaModelAttribute extends Backend
 			{
 				$objField->destroyAUX();
 			}
-			// TODO: potential problem when a field requires input not available here (later loop cycle in DC_Table save_callback).
+			// GOTCHA: potential problem when a field requires input not available here (later loop cycle in DC_Table save_callback).
 			$arrNewField = $objDC->activeRecord->row();
 			$arrNewField['type'] = $varValue;
 			$objField = MetaModelAttributeFactory::createFromArray($arrNewField);

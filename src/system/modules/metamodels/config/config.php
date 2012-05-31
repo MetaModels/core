@@ -29,6 +29,18 @@ if (TL_MODE=='BE')
 	MetaModelFactory::buildBackendMenu();
 }
 
+/**
+ * Front-end modules
+ */
+
+$GLOBALS['FE_MOD']['metamodels'] = array
+	(
+		'metamodel_list'			=> 'ModuleMetaModelList',
+	);
+
+
+
+
 /*
 $GLOBALS['METAMODELS']['attributes']['alias'] = array
 (

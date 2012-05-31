@@ -107,6 +107,46 @@ class MetaModelItem implements IMetaModelItem
 			return null;
 		}
 	}
+
+	public function save()
+	{
+		$objMetaModel = $this->getMetaModel();
+		$objMetaModel->saveItem($this->arrData);
+
+		// override all inherited values for all descendant items.
+		if($this->isVariantBase())
+		{
+			$objVariants = $this->getVariants(array());
+			$arrInvariantAttributes = $objMetaModel->getInVariantAttributes();
+			while ($objVariants->next())
+			{
+				$objItem = $objVariants->getItem();
+				foreach ($arrInvariantAttributes as $strAttributeId => $objAttribute)
+				{
+					$objItem->set($strAttributeId, $this->get($strAttributeId));
+				}
+				$objItem->save();
+			}
+		}
+	}
+
+	public function parseValue($strOutputFormat = 'html')
+	{
+		$arrResult = array
+		(
+			'raw' => $this->arrData,
+			$strOutputFormat => array()
+		);
+		foreach($this->getMetaModel()->getAttributes() as $objAttribute)
+		{
+			foreach($objAttribute->parseValue($this->arrData, $strOutputFormat) as $strKey => $varValue)
+			{
+				$arrResult[$strKey][$objAttribute->getColName()] = $varValue;
+			}
+			// TODO: parseValue HOOK?
+		}
+		return $arrResult;
+	}
 }
 
 ?>

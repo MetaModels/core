@@ -27,24 +27,18 @@ if (!defined('TL_ROOT'))
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-class MetaModelAttributeComplex extends MetaModelAttribute implements IMetaModelAttributeComplex
+abstract class MetaModelAttributeComplex extends MetaModelAttribute implements IMetaModelAttributeComplex
 {
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getDataFor($arrIds)
-	{
-		return null;
-	}
+//	abstract public function getDataFor($arrIds);
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function setDataFor($arrValues)
-	{
-		// no op
-	}
+//	abstract public function setDataFor($arrValues);
 
 	/**
 	 * {@inheritdoc}

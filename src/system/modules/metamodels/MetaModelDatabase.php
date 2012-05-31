@@ -45,6 +45,10 @@ class MetaModelDatabase extends Controller
 		$arrDCA = $GLOBALS['TL_DCA']['tl_metamodel_item'];
 
 		$objMetaModel=MetaModelFactory::byTableName($strTableName);
+		if ($objMetaModel->isTranslated())
+		{
+			$this->loadLanguageFile('languages');
+		}
 
 		if(TL_MODE == 'BE')
 		{

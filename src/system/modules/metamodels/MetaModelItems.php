@@ -124,6 +124,34 @@ class MetaModelItems implements IMetaModelItems
 		$this->intCursor = -1;
 		return $this;
 	}
+
+	public function getClass()
+	{
+		$arrClass = array();
+		if ($this->intCursor == 0)
+		{
+			$arrClass[] = 'first';
+		}
+
+		if ($this->intCursor == $this->getCount() -1)
+		{
+			$arrClass[] = 'last';
+		}
+
+		if ($this->intCursor %2 == 0)
+		{
+			$arrClass[] = 'even';
+		} else {
+			$arrClass[] = 'odd';
+		}
+		return implode(' ', $arrClass);
+	}
+
+	public function parseValue($strOutputFormat = 'html')
+	{
+		return $this->getItem()->parseValue($strOutputFormat);
+	}
+
 }
 
 ?>

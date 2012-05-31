@@ -1,0 +1,27 @@
+<?php if ($this->items->getCount()): ?>
+
+<div class="layout_full">
+
+<?php
+	while ($this->items->next()):
+	$data = $this->items->parseValue();
+?>
+<div class="item <?php echo $this->items->getClass(); ?>">
+
+<?php foreach ($data['html'] as $field=>$value): ?>
+<?php if ($data['raw'][$field]): ?>
+<div class="field <?php echo $field; ?>">
+	<div class="label"><?php echo $this->items->getItem()->getAttribute($field)->getName(); ?></div>
+	<div class="value"><?php echo $value; ?></div>
+</div>
+<?php endif; ?>
+<?php endforeach; ?>
+</div>
+<?php endwhile; ?>
+
+
+</div>
+
+<?php else: ?>
+<p class="info"><?php echo $this->noItemsMsg; ?></p>
+<?php endif; ?>

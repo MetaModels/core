@@ -123,14 +123,11 @@ interface IMetaModelAttribute
 	 * useful when being echo'ed in a template.
 	 * Each attribute class MAY return as many other values in this array with custom keys as it wants.
 	 * 
-	 * @todo do we need any more parameters here? Maybe we need a way to let the attribute 
-	 * gather information about the current view (output setting aside from (x)html(5)).
-	 * 
 	 * @param array $arrRowData the row data from the MetaModel table.
 	 * 
 	 * @return array an array with all the converted data.
 	 */
-	public function parseValue($arrRowData);
+	public function parseValue($arrRowData, $strOutputFormat = 'html');
 }
 
 ?>

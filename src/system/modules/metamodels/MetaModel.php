@@ -135,11 +135,14 @@ class MetaModel implements IMetaModel
 	 * 
 	 * @param int[] $arrIds the ids of the items to retrieve the order of ids is used for sorting of the return values.
 	 * 
-	 * @return mixed[] the nature of the resulting array is a mapping from id => "native data" where
-	 *                 the definition of "native data" is only of relevance to the given item.
+	 * @return IMetaModelItems a collection of all matched items.
 	 */
 	protected function getItemsWithId($arrIds)
 	{
+		if (!$arrIds)
+		{
+			return null;
+		}
 		$objDB = Database::getInstance();
 		$strIdList = implode(',', array_map('intval', $arrIds));
 		$objRow = $objDB->execute('SELECT * FROM ' . $this->getTableName() . ' WHERE id IN (' . $strIdList . ') ORDER BY FIELD(id,' . $strIdList . ')');
@@ -234,6 +237,29 @@ class MetaModel implements IMetaModel
 		return $this->arrAttributes;
 	}
 
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getInVariantAttributes()
+	{
+		$arrAttributes = $this->getAttributes();
+		if (!$this->hasVariants())
+		{
+			return $arrAttributes;
+		}
+		// remove all attributes that are selected for overriding.
+		foreach ($arrAttributes as $strAttributeId => $objAttribute)
+		{
+			if ($objAttribute->get('isvariant'))
+			{
+				unset($arrAttributes[$strAttributeId]);
+			}
+		}
+		return $arrAttributes;
+	}
+
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -279,6 +305,16 @@ class MetaModel implements IMetaModel
 			}
 		}
 		return NULL;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 * 
+	 * The value is taken from $GLOBALS['TL_LANGUAGE']
+	 */
+	public function getActiveLanguage()
+	{
+		return $GLOBALS['TL_LANGUAGE'];
 	}
 
 	/**
@@ -337,7 +373,7 @@ class MetaModel implements IMetaModel
 			$arrInterfaces = class_implements($objAttribute);
 			if(in_array('IMetaModelAttributeComplex', $arrInterfaces))
 			{
-				$varFilterValue = $objAttribute->parseFilterUrl();
+				$varFilterValue = $objAttribute->parseFilterUrl($arrFilter);
 
 				// if return value is null, ignore this attribute.
 				if($varFilterValue === null)
@@ -398,6 +434,62 @@ class MetaModel implements IMetaModel
 		$arrFilter['id'] = implode(',', $objRow->fetchEach('id'));
 		return $this->findByFilter($arrFilter);
 	}
+
+	public function saveItem(&$arrValues)
+	{
+		$objDB = Database::getInstance();
+
+		$blnDenyInvariantSave = $this->hasVariants() && ($arrValues['varbase'] === '0');
+
+		if (!$arrValues['id'])
+		{
+			$arrData = array
+			(
+				'tstamp' => now()
+			);
+
+			if ($this->hasVariants())
+			{
+				$arrData['varbase'] = $arrValues['varbase'];
+				$arrData['vargroup'] = $arrValues['vargroup'];
+			}
+
+			$arrValues['id'] = $objDB->prepare('INSERT INTO ' . $this->getTableName() . ' %s')
+					->set($arrData)
+					->insertId;
+		}
+
+		if ($this->isTranslated())
+		{
+			$strActiveLanguage = $this->getActiveLanguage();
+		} else {
+			$strActiveLanguage = null;
+		}
+
+		$arrDataSimple = array();
+		foreach ($this->getAttributes() as $strAttributeId => $objAttribute)
+		{
+			if ($blnDenyInvariantSave && !($objAttribute->get('isvariant')))
+			{
+				continue;
+			}
+
+			$arrInterfaces = class_implements($objAttribute);
+			if ($strActiveLanguage && in_array('IMetaModelAttributeTranslated', $arrInterfaces))
+			{
+				$objAttribute->setTranslatedDataFor(array($arrValues['id'] => $arrValues[$strAttributeId]), $strActiveLanguage);
+			} else if(in_array('IMetaModelAttributeComplex', $arrInterfaces))
+			{
+				// complex saving
+				$objAttribute->setDataFor(array($arrValues['id'] => $arrValues[$strAttributeId]));
+			} else {
+				$arrDataSimple[$strAttributeId] = $arrValues[$strAttributeId];
+			}
+			$objDB->prepare('UPDATE ' . $this->getTableName() . ' WHERE id=?')
+					->execute($arrValues['id']);
+		}
+	}
+
 
 	/*
 	public function getView($arrAttributes, $arrFilterUrl, $arrOrderBy)

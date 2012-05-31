@@ -83,6 +83,13 @@ interface IMetaModel
 	public function getFallbackLanguage();
 
 	/**
+	 * Get the current active language.
+	 * 
+	 * @return string the language code.
+	 */
+	public function getActiveLanguage();
+
+	/**
 	 * Fetches the instance of the attribute with the given name.
 	 * 
 	 * @param string $strAttributeName the name of the attribute to search
