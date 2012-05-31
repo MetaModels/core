@@ -81,21 +81,39 @@ class MetaModelFactory /*extends System*/ implements IMetaModelFactory
 	}
 
 	/**
+	 * Determines the correct factory from a metamodel table name.
+	 * 
+	 * @param string $strTableName the table name of the metamodel for which the factory class shall be fetched for.
+	 * 
+	 * @return string the factory class name which handles instanciation of the MetaModel or NULL if no class could be found.
+	 */
+	protected static function getModelFactory($strTableName)
+	{
+		return $GLOBALS['METAMODELS']['factories'][$strTableName];
+	}
+
+	/**
 	 * Create a MetaModel instance with the given information.
 	 * 
 	 * @param array $arrData the meta information for the MetaModel.
 	 * 
-	 * @return void
+	 * @return IMetaModel the meta model
 	 */
 	protected static function createInstance($arrData)
 	{
 		$objMetaModel = null;
 		if ($arrData)
 		{
-			// NOTE: we might want to add support for a model type here in the future, where the model 
-			// can transport it's own class or even factory within a lookup table. This will allow
-			// other devs to inherit from MetaModel but perform different tasks.
-			$objMetaModel = new MetaModel($arrData);
+			// NOTE: we allow other devs to override the factory via a lookup table. This way
+			// another (sub)class can be defined to create the instances.
+			// reference is via tableName => classname.
+			$strFactoryClass = self::getModelFactory($arrData['tableName']);
+			if($strFactoryClass)
+			{
+				$objMetaModel = call_user_func_array(array($strFactoryClass, 'createInstance'), array($arrData));
+			} else {
+				$objMetaModel = new MetaModel($arrData);
+			}
 			self::$arrInstances[$arrData['id']] = $objMetaModel;
 		}
 		return $objMetaModel;
