@@ -46,6 +46,45 @@ class MetaModelAttributeFactory implements IMetaModelAttributeFactory
 		return $GLOBALS['METAMODELS']['attributes'][$strFieldType]['class'];
 	}
 
+	/**
+	 * Determines the correct factory from a field type name.
+	 * 
+	 * @param string $strFieldType the field type of which the factory class shall be fetched from.
+	 * 
+	 * @return string the factory class name which handles instanciation of the field type or NULL if no class could be found.
+	 */
+	protected static function getAttributeTypeFactory($strFieldType)
+	{
+		return $GLOBALS['METAMODELS']['attributes'][$strFieldType]['factory'];
+	}
+
+
+	/**
+	 * Create a MetaModelAttribute instance with the given information.
+	 * 
+	 * @param array $arrData the meta information for the MetaModelAttribute.
+	 * 
+	 * @return IMetaModelAttribute the created instance.
+	 */
+	protected static function createInstance($arrData)
+	{
+		$strFactoryName = self::getAttributeTypeFactory($arrData['type']);
+
+		$objAttribute = null;
+		if ($strFactoryName)
+		{
+			$objAttribute = call_user_func_array(array($strFactoryName, 'createInstance'), array($arrData));
+		} else {
+			$strClassName = self::getAttributeTypeClass($arrData['type']);
+			if ($strClassName)
+			{
+				$objMetaModel = MetaModelFactory::byId($arrData['pid']);
+				$objAttribute = new $strClassName($objMetaModel, $arrData);
+			}
+		}
+		return $objAttribute;
+	}
+
 	/////////////////////////////////////////////////////////////////
 	// interface IMetaModelAttributeFactory
 	/////////////////////////////////////////////////////////////////
@@ -55,8 +94,7 @@ class MetaModelAttributeFactory implements IMetaModelAttributeFactory
 	 */
 	public static function createFromArray($arrData)
 	{
-		$strClassName = self::getAttributeTypeClass($arrData['type']);
-		return $strClassName ? new $strClassName(MetaModelFactory::byId($arrData['pid']), $arrData) : NULL;
+		return self::createInstance($arrData);
 	}
 
 	/**
@@ -64,8 +102,7 @@ class MetaModelAttributeFactory implements IMetaModelAttributeFactory
 	 */
 	public static function createFromDB($objRow)
 	{
-		$strClassName = self::getAttributeTypeClass($objRow->type);
-		return $strClassName ? new $strClassName(MetaModelFactory::byId($objRow->pid), $objRow->row()) : NULL;
+		return self::createInstance($objRow->row());
 	}
 
 	/**
