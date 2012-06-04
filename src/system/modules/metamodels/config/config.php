@@ -37,6 +37,8 @@ if (!defined('TL_ROOT'))
 		             of attributes of this type instead of plain constructing.
 */
 
+// enable support for php 5.2
+require_once(TL_ROOT . '/system/modules/metamodels/metamodel_functions.php');
 
 // define our version so dependant extensions can use it in version_compare().
 define('METAMODELS_VERSION', '0.1');

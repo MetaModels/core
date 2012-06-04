@@ -64,7 +64,7 @@ class MetaModelAttributeFactory implements IMetaModelAttributeFactory
 	 * 
 	 * @param array $arrData the meta information for the MetaModelAttribute.
 	 * 
-	 * @return IMetaModelAttribute the created instance.
+	 * @return IMetaModelAttribute|null the created instance or null if unable to construct.
 	 */
 	protected static function createInstance($arrData)
 	{

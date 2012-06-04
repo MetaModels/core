@@ -30,18 +30,20 @@ if (!defined('TL_ROOT'))
  */
 interface IMetaModelAttributeTranslated extends IMetaModelAttribute
 {
-
 	/**
 	 * Set a value for an item in a certain language.
 	 */
 	public function setTranslatedDataFor($arrValues, $strLangCode);
 
-	public function getTranslatedDataFor($arrIds, $strLangCode, $strFallbackLanguage = NULL);
+	/**
+	 * Get values for the given items in a certain language.
+	 */
+	public function getTranslatedDataFor($arrIds, $strLangCode);
 
 	/**
-	 * Set a value for an item in a certain lanugage.
+	 * Remove values for items in a certain lanugage.
 	 */
-	public function unsetValueFor($strLangCode);
+	public function unsetValueFor($arrIds, $strLangCode);
 }
 
 ?>

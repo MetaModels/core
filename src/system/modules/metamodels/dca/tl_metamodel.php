@@ -233,7 +233,8 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 						'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel']['languages_langcode'],
 						'exclude'               => true,
 						'inputType'             => 'select',
-						'options'               => &$GLOBALS['TL_LANG']['LNG'],
+//						'options'               => &$GLOBALS['TL_LANG']['LNG'],
+						'options_callback'      => array('TableMetaModel', 'getLanguageOptions'),
 						'eval'                  => array
 						(
 							'valign' => 'top',

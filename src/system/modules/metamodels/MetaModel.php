@@ -135,7 +135,7 @@ class MetaModel implements IMetaModel
 	 * 
 	 * @param int[] $arrIds the ids of the items to retrieve the order of ids is used for sorting of the return values.
 	 * 
-	 * @return IMetaModelItems a collection of all matched items.
+	 * @return IMetaModelItems a collection of all matched items, sorted by the id list.
 	 */
 	protected function getItemsWithId($arrIds)
 	{
@@ -144,6 +144,8 @@ class MetaModel implements IMetaModel
 			return null;
 		}
 		$objDB = Database::getInstance();
+
+		// ensure proper integer ids for SQL injection safety reasons.
 		$strIdList = implode(',', array_map('intval', $arrIds));
 		$objRow = $objDB->execute('SELECT * FROM ' . $this->getTableName() . ' WHERE id IN (' . $strIdList . ') ORDER BY FIELD(id,' . $strIdList . ')');
 		if($objRow->numRows == 0)
@@ -170,7 +172,6 @@ class MetaModel implements IMetaModel
 		// now inject the complex attribute's content into the row.
 		foreach($arrComplexCols as $objAttribute)
 		{
-
 			$arrAttributeData = $objAttribute->getDataFor($arrIds);
 
 			foreach($arrAttributeData as $intId => $varValue)
@@ -179,6 +180,7 @@ class MetaModel implements IMetaModel
 			}
 		}
 
+		// TODO: shall we also implement *item and *items factories?
 		$arrItems = array();
 		foreach($arrResult as $arrEntry)
 		{

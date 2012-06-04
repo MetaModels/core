@@ -59,6 +59,7 @@ class TableMetaModelAttribute extends Backend
 			{
 				$arrLanguages[$strLangCode] = $GLOBALS['TL_LANG']['LNG'][$strLangCode];
 			}
+			asort($arrLanguages);
 
 			$arrNameDef = array
 			(
@@ -75,10 +76,12 @@ class TableMetaModelAttribute extends Backend
 							'exclude'               => true,
 							'inputType'             => 'select',
 							'options'               => $arrLanguages,
-							'eval' 			=> array(
+							'eval' => array
+							(
 								'valign' => 'top',
-								'style' => 'width:250px',
-								'chosen'=>true
+								'style'  => 'width:250px" readonly="readonly',
+								'chosen' => true,
+								'readonly' => 'readonly'
 							)
 						),
 						'value' => array
@@ -86,7 +89,10 @@ class TableMetaModelAttribute extends Backend
 							'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value'],
 							'exclude'               => true,
 							'inputType'             => 'text',
-							'eval' 			=> array('style' => 'width:250px;')
+							'eval' 			=> array
+							(
+								'style' => 'width:250px;'
+							)
 						),
 					)
 				),
@@ -117,9 +123,9 @@ class TableMetaModelAttribute extends Backend
 							'options'               => $arrLanguages,
 							'eval' 			=> array(
 								'valign' => 'top',
-								'style' => 'width:250px',
-								'includeBlankOption'=>true,
-								'chosen'=>true
+								'style' => 'width:250px" readonly="readonly',
+								'chosen' => true,
+								'readonly' => 'readonly'
 							)
 						),
 						'value' => array
@@ -262,9 +268,47 @@ class TableMetaModelAttribute extends Backend
 		return MetaModelAttributeFactory::getAttributeTypes($objMetaModel->isTranslated(), $objMetaModel->hasVariants());
 	}
 
-	public function decodeLangArray($varValue)
+	public function decodeLangArray($varValue, $objDC)
 	{
 		$arrLangValues = (array)deserialize($varValue);
+
+		// check for predefined values.
+		$objDB = Database::getInstance();
+		// fetch current values of the field from DB.
+		$objField = $objDB->prepare('
+			SELECT *
+			FROM tl_metamodel_attribute
+			WHERE id=?'
+		)
+		->limit(1)
+		->executeUncached($objDC->id);
+
+		if ($objField->numRows == 1)
+		{
+			$objMetaModel = MetaModelFactory::byId($objField->pid);
+			if ($objMetaModel)
+			{
+				// sort like in metamodel definition
+				$arrLanguages = $objMetaModel->getAvailableLanguages();
+				if ($arrLanguages)
+				{
+					$arrOutput = array();
+					foreach($arrLanguages as $strLangCode)
+					{
+						$varSubValue = $arrLangValues[$strLangCode];
+						if (is_array($varSubValue))
+						{
+							$arrOutput[] = array_merge($varSubValue, array('langcode' => $strLangCode));
+						} else {
+							$arrOutput[] = array('langcode' => $strLangCode, 'value' => $varSubValue);
+						}
+					}
+				}
+				return serialize($arrOutput);
+			}
+		}
+
+		// fallthrough, plain reordering.
 		$arrOutput = array();
 		foreach ($arrLangValues as $strLangCode => $varSubValue)
 		{

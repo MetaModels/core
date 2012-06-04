@@ -56,7 +56,7 @@ class MetaModelAttribute implements IMetaModelAttribute
 	public function __construct(IMetaModel $objMetaModel, $arrData = array())
 	{
 		// meta information
-		foreach(self::getAttributeSettingNames() as $strSettingName)
+		foreach($this->getAttributeSettingNames() as $strSettingName)
 		{
 			if(isset($arrData[$strSettingName]))
 			{
@@ -145,7 +145,7 @@ class MetaModelAttribute implements IMetaModelAttribute
 	 */
 	public function set($strKey, $varValue)
 	{
-		if (in_array($strKey, self::getAttributeSettingNames()))
+		if (in_array($strKey, $this->getAttributeSettingNames()))
 			$this->arrData[$strKey] = deserialize($varValue);
 		return $this;
 	}
@@ -180,7 +180,7 @@ class MetaModelAttribute implements IMetaModelAttribute
 	/**
 	 * {@inheritdoc}
 	 */
-	public static function getAttributeSettingNames()
+	public function getAttributeSettingNames()
 	{
 		return array('id', 'pid', 'sorting', 'tstamp', 'name', 'description', 'type', 'colname');
 	}

@@ -79,12 +79,12 @@ interface IMetaModelAttribute
 	public function handleMetaChange($strMetaName, $varNewValue);
 
 	/**
-	 * Create auxiliary data like a column in the metamodel table or references in another table etc.
+	 * Delete all auxiliary data like a column in the metamodel table or references in another table etc.
 	 */
 	public function destroyAUX();
 
 	/**
-	 * Delete all auxiliary data like a column in the metamodel table or references in another table etc.
+	 * Create auxiliary data like a column in the metamodel table or references in another table etc.
 	 */
 	public function initializeAUX();
 
@@ -93,7 +93,7 @@ interface IMetaModelAttribute
 	 * 
 	 * @return array all valid setting names, this reensembles the columns in tl_metamodel_attribute this attribute class understands.
 	 */
-	public static function getAttributeSettingNames();
+	public function getAttributeSettingNames();
 
 	/**
 	 * This generates the field definition for use in a DCA. 

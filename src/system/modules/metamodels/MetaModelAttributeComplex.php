@@ -29,15 +29,8 @@ if (!defined('TL_ROOT'))
  */
 abstract class MetaModelAttributeComplex extends MetaModelAttribute implements IMetaModelAttributeComplex
 {
-
-	/**
-	 * {@inheritdoc}
-	 */
 //	abstract public function getDataFor($arrIds);
 
-	/**
-	 * {@inheritdoc}
-	 */
 //	abstract public function setDataFor($arrValues);
 
 	/**

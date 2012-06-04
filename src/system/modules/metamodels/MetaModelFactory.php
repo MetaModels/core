@@ -129,7 +129,6 @@ class MetaModelFactory /*extends System*/ implements IMetaModelFactory
 			return self::$arrInstances[$intId];
 		}
 		$objData = Database::getInstance()->prepare('SELECT * FROM tl_metamodel WHERE id=?')
-										->limit(1)
 										->execute($intId);
 		return ($objData->numRows)?self::createInstance($objData->row()):null;
 	}
