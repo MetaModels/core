@@ -45,13 +45,13 @@ class TableMetaModelAttribute extends Backend
 			$arrNameDef = array
 			(
 				'inputType'               => 'text',
-				'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50')
+				'eval'                    => array('mandatory'=>true, 'maxlength'=>255)
 			);
 
 			$arrDescriptionDef = array
 			(
 				'inputType'               => 'textarea',
-				'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50')
+				'eval'                    => array('mandatory'=>true, 'maxlength'=>255)
 			);
 		} else {
 			$arrLanguages = array();
