@@ -131,6 +131,58 @@ class MetaModel implements IMetaModel
 	}
 
 	/**
+	 * Narrow down the list of Ids that match the given filter.
+	 * 
+	 * @param $arrFilter
+	 * 
+	 * @return array all matching Ids.
+	 */
+	protected function getMatchingIds($arrFilter)
+	{
+		$arrIds = array();
+		// simple rule, id search is set.
+		if(isset($arrFilter['id']))
+		{
+			$arrIds['id'] = explode(',', $arrFilter['id']);
+		} else {
+			// if no id filter is passed, we assume all ids are provided.
+			$objDB = Database::getInstance();
+			// TODO: add ordering here.
+			// TODO: add simple column filtering here.
+			$objRow = $objDB->execute('SELECT id FROM ' . $this->getTableName());
+			$arrIds['id'] = $objRow->fetchEach('id');
+		}
+
+		foreach($this->getAttributes() as $objAttribute)
+		{
+			$arrInterfaces = class_implements($objAttribute);
+			if(in_array('IMetaModelAttributeComplex', $arrInterfaces))
+			{
+				$varFilterValue = $objAttribute->parseFilterUrl($arrFilter);
+
+				// if return value is null, ignore this attribute.
+				if($varFilterValue === null)
+				{
+					continue;
+				}
+
+				// now intersect the values.
+				$arrIds[$objAttribute->getColName()] = $objAttribute->getIdsFromFilter($varFilterValue);
+			} else if(in_array('IMetaModelAttributeSimple', $arrInterfaces)) {
+				// simple attributes's conditions can be applied in SQL notation, add them to the above query.
+			}
+		}
+
+		$arrFilteredIds = $arrIds['id'];
+		foreach($arrIds as $strCol=>$arrAttrIds)
+		{
+			$arrFilteredIds = array_intersect($arrFilteredIds, $arrAttrIds);
+		}
+//		$arrIds[$objAttribute->getColName()] = array_intersect($arrIds, $arrFieldValues);
+		return $arrFilteredIds;
+	}
+
+	/**
 	 * This method is called to retrieve the data for certain items from the database.
 	 * 
 	 * @param int[] $arrIds the ids of the items to retrieve the order of ids is used for sorting of the return values.
@@ -173,10 +225,10 @@ class MetaModel implements IMetaModel
 		foreach($arrComplexCols as $objAttribute)
 		{
 			$arrAttributeData = $objAttribute->getDataFor($arrIds);
-
-			foreach($arrAttributeData as $intId => $varValue)
+			$strColName = $objAttribute->getColName();
+			foreach (array_keys($arrResult) as $intId)
 			{
-				$arrResult[$intId][$objAttribute->getColName()] = $varValue;
+				$arrResult[$intId][$strColName] = $arrAttributeData[$intId];
 			}
 		}
 
@@ -356,46 +408,7 @@ class MetaModel implements IMetaModel
 	 */
 	public function findByFilter($arrFilter)
 	{
-		$arrIds = array();
-		// simple rule, id search is set.
-		if(isset($arrFilter['id']))
-		{
-			$arrIds['id'] = explode(',', $arrFilter['id']);
-		} else {
-			// if no id filter is passed, we assume all ids are provided.
-			$objDB = Database::getInstance();
-			// TODO: add ordering here.
-			// TODO: add simple column filtering here.
-			$objRow = $objDB->execute('SELECT id FROM ' . $this->getTableName());
-			$arrIds['id'] = $objRow->fetchEach('id');
-		}
-
-		foreach($this->getAttributes() as $objAttribute)
-		{
-			$arrInterfaces = class_implements($objAttribute);
-			if(in_array('IMetaModelAttributeComplex', $arrInterfaces))
-			{
-				$varFilterValue = $objAttribute->parseFilterUrl($arrFilter);
-
-				// if return value is null, ignore this attribute.
-				if($varFilterValue === null)
-				{
-					continue;
-				}
-
-				// now intersect the values.
-				$arrIds[$objAttribute->getColName()] = $objAttribute->getIdsFromFilter($varFilterValue);
-			} else if(in_array('IMetaModelAttributeSimple', $arrInterfaces)) {
-				// simple attributes's conditions can be applied in SQL notation, add them to the above query.
-			}
-		}
-
-		$arrFilteredIds = $arrIds['id'];
-		foreach($arrIds as $strCol=>$arrAttrIds)
-		{
-			$arrFilteredIds = array_intersect($arrFilteredIds, $arrAttrIds);
-		}
-//		$arrIds[$objAttribute->getColName()] = array_intersect($arrIds, $arrFieldValues);
+		$arrFilteredIds = $this->getMatchingIds($arrFilter);
 
 		return $this->getItemsWithId($arrFilteredIds);
 	}
@@ -406,8 +419,8 @@ class MetaModel implements IMetaModel
 	public function getCount($arrFilter)
 	{
 		$objDB = Database::getInstance();
-		// TODO: implement filtering here.
-		$objRow = $objDB->execute('SELECT COUNT(id) AS count FROM ' . $this->getTableName());
+		$arrFilteredIds = $this->getMatchingIds($arrFilter);
+		$objRow = $objDB->execute('SELECT COUNT(id) AS count FROM ' . $this->getTableName() . ' WHERE id IN('.implode(', ', $arrFilteredIds).')');
 		return $objRow->count;
 	}
 
@@ -477,6 +490,7 @@ class MetaModel implements IMetaModel
 			}
 
 			$arrInterfaces = class_implements($objAttribute);
+			// check for translated fields first, then for complex and save as simple then.
 			if ($strActiveLanguage && in_array('IMetaModelAttributeTranslated', $arrInterfaces))
 			{
 				$objAttribute->setTranslatedDataFor(array($arrValues['id'] => $arrValues[$strAttributeId]), $strActiveLanguage);
@@ -484,11 +498,18 @@ class MetaModel implements IMetaModel
 			{
 				// complex saving
 				$objAttribute->setDataFor(array($arrValues['id'] => $arrValues[$strAttributeId]));
-			} else {
+			} else if(in_array('IMetaModelAttributeSimple', $arrInterfaces)) {
 				$arrDataSimple[$strAttributeId] = $arrValues[$strAttributeId];
+			} else {
+				throw new Exception('Unknown attribute type, can not save. Interfaces implemented: ' . implode(', ', $arrInterfaces));
 			}
-			$objDB->prepare('UPDATE ' . $this->getTableName() . ' WHERE id=?')
-					->execute($arrValues['id']);
+		}
+		// now save the simple columns.
+		if ($arrDataSimple)
+		{
+			$objDB->prepare('UPDATE ' . $this->getTableName() . ' %s WHERE id=?')
+			      ->set($arrDataSimple)
+			      ->execute($arrValues['id']);
 		}
 	}
 
