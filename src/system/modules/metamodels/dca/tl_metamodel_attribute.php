@@ -275,7 +275,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 
 
 
-
+/*
 
 		'insertBreak' => array
 		(
@@ -643,7 +643,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 			'foreignKey'              => 'tl_member_group.name',
 			'eval'                    => array('title' => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['useridfield'], 'multiple'=>true , 'tl_class'=>'w50 m12') // class m12, see #1627
 		),
-		
+*/
 	)
 );
 
