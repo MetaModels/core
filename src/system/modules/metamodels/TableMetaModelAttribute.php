@@ -68,6 +68,7 @@ class TableMetaModelAttribute extends Backend
 				(
 					'minCount' => count($arrLanguages),
 					'maxCount' => count($arrLanguages),
+					'disableSorting' => true,
 					'columnFields' => array
 					(
 						'langcode' => array
@@ -113,6 +114,7 @@ class TableMetaModelAttribute extends Backend
 				(
 					'minCount' => count($arrLanguages),
 					'maxCount' => count($arrLanguages),
+					'disableSorting' => true,
 					'columnFields' => array
 					(
 						'langcode' => array
