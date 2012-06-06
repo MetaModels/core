@@ -122,8 +122,11 @@ class MetaModelAttributeFactory implements IMetaModelAttributeFactory
 				$arrAttributes[] = self::$arrAttributes[$objAttributes->id];
 			} else {
 				$objAttribute = self::createFromDB($objAttributes);
-				$arrAttributes[] = $objAttribute;
-				self::$arrAttributes[$objAttributes->id] = $objAttribute;
+				if ($objAttribute)
+				{
+					$arrAttributes[] = $objAttribute;
+					self::$arrAttributes[$objAttributes->id] = $objAttribute;
+				}
 			}
 		}
 		return $arrAttributes;
