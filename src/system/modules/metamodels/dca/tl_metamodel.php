@@ -131,7 +131,10 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			(
 				'name',
 				'tableName',
-				'translated',
+				'translated'
+			),
+			'backend' => array
+			(
 				'backendsection',
 				'backendicon'
 			),
@@ -191,7 +194,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['ptable'],
 			'inputType'               => 'select',
 			'options_callback'        => array('TableMetaModel', 'getTables'),
-			'eval'                    => array('submitOnChange'=>true, 'includeBlankOption'=>true)
+			'eval'                    => array('tl_class'=>'w50', 'submitOnChange'=>true, 'includeBlankOption'=>true)
 		),
 
 		'mode' => array
@@ -209,6 +212,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				5 Records are displayed as tree (see site structure)
 				6 Displays the child records within a tree structure (see articles module)
 			*/
+			'eval'                    => array('tl_class'=>'w50')
 		),
 
 		'translated' => array
@@ -216,7 +220,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['translated'],
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('submitOnChange' => true)
+			'eval'                    => array('tl_class'=>'clr', 'submitOnChange' => true)
 		),
 
 		'languages' => array
@@ -233,8 +237,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 						'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel']['languages_langcode'],
 						'exclude'               => true,
 						'inputType'             => 'select',
-//						'options'               => &$GLOBALS['TL_LANG']['LNG'],
-						'options_callback'      => array('TableMetaModel', 'getLanguageOptions'),
+						'options'               => $this->getLanguages(),
 						'eval'                  => array
 						(
 							'valign' => 'top',
@@ -249,7 +252,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 						'inputType'             => 'checkbox',
 						'eval'                  => array
 						(
-							'valign' => 'top',
+							'valign' => 'middle',
 						)
 					),
 				),
@@ -269,7 +272,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['varsupport'],
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('submitOnChange' => true)
+			'eval'                    => array('tl_class'=>'clr', 'submitOnChange' => true)
 		),
 
 		// TODO: add support to list this metamodel in the backend here. This can be done by adding the following fields:

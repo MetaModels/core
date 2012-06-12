@@ -89,24 +89,6 @@ class TableMetaModel extends Backend
 		return serialize($arrOutput);
 	}
 
-	public function getLanguageOptions()
-	{
-		// cached result.
-		if (!$GLOBALS['TL_LANG']['LNG_SORT'])
-		{
-			$GLOBALS['TL_LANG']['LNG_SORT']=$this->getLanguages();
-/*
-			$this->loadLanguageFile('languages');
-			foreach(array_keys($GLOBALS['TL_LANG']['LNG']) as $strKey)
-			{
-				$GLOBALS['TL_LANG']['LNG_SORT'][$strKey] = &$GLOBALS['TL_LANG']['LNG'][$strKey];
-			}
-			asort($GLOBALS['TL_LANG']['LNG_SORT']);
-*/
-		}
-		return $GLOBALS['TL_LANG']['LNG_SORT'];
-	}
-
 	protected function checkRemoveTable(DataContainer $dc)
 	{
 		return; // temporarily a no-op as unfinished.
