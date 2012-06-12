@@ -81,11 +81,11 @@ interface IMetaModelItem
 	/**
 	 * fetch the meta model variants for this item.
 	 * 
-	 * @param array $arrFilter the filter settings to be applied.
+	 * @param IMetaModelFilter $objFilter the filter settings to be applied.
 	 * 
 	 * @return IMetaModelItems a list of all variants for this item.
 	 */
-	public function getVariants($arrFilter);
+	public function getVariants($objFilter);
 
 	/**
 	 * Save the current data for every attribute to the data sink.

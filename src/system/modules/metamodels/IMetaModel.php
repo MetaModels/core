@@ -118,33 +118,52 @@ interface IMetaModel
 	/**
 	 * Filter the MetaModel by the provided filter settings.
 	 * 
-	 * @param array $arrFilter the filter array to use.
+	 * @param IMetaModelFilter|null $objFilter the filter object to use or null if none.
 	 * 
 	 * @return IMetaModelItems the collection of IMetaModelItem instances that match the given filter.
 	 */
-	// TODO: better use a Filter Object class here.
-	public function findByFilter($arrFilter);
+	public function findByFilter($objFilter);
 
 	/**
 	 * Fetch the amount of matching items against the given filter.
 	 * 
-	 * @param array $arrFilter the filter array to use.
+	 * @param IMetaModelFilter|null $objFilter the filter object to use or null if none.
 	 * 
 	 * @return int the amount of matching items.
 	 */
-	public function getCount($arrFilter);
+	public function getCount($objFilter);
 
 	/**
 	 * Get Variants for the given ids, optionally filter by the provided filter settings.
 	 * 
 	 * @param array $arrIds the Ids of the base elements.
 	 * 
-	 * @param array $arrFilter the filter array to use.
+	 * @param IMetaModelFilter $objFilter the filter to use or null if no filtering.
 	 * 
 	 * @return IMetaModelItems the collection of IMetaModelItem instances that match the given filter.
 	 */
-	// TODO: better use a Filter Object class here.
-	public function findVariants($arrIds, $arrFilter);
+	public function findVariants($arrIds, $objFilter);
+
+	/**
+	 * Prepare the base filter object for this meta model.
+	 * This object is produced by calling parseFlterUrl on all contained attributes with an empty filter url.
+	 * This allows the attributes to generate basic filter options that must be applied globally on the MetaModel
+	 * and hence allows functionality like "published"-attributes and the like.
+	 * 
+	 * @return IMetaModelFilter the base filter object.
+	 */
+	public function getBaseFilter();
+
+	/**
+	 * Generates a filter object that takes the given attributes into account.
+	 * 
+	 * @param array $arrAttributeNames all attributes that shall be evaluated in the filter.
+	 * 
+	 * @param array $arrFilterUrl      the filter url parameters (usually the contents of $_GET etc.)
+	 * 
+	 * @return IMetaModelFilter the generated filter object.
+	 */
+	public function prepareFilter($arrAttributeNames, $arrFilterUrl);
 }
 
 ?>

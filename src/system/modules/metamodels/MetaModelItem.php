@@ -98,11 +98,11 @@ class MetaModelItem implements IMetaModelItem
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getVariants($arrFilter)
+	public function getVariants($objFilter)
 	{
 		if($this->isVariantBase())
 		{
-			return $this->getMetaModel()->findVariants(array('id' => $this->get('id')), $arrFilter);
+			return $this->getMetaModel()->findVariants(array($this->get('id')), $objFilter);
 		} else {
 			return null;
 		}

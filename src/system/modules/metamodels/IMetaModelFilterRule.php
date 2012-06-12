@@ -7,32 +7,34 @@
  *
  * PHP version 5
  * @package	   MetaModels
- * @subpackage Core
+ * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  CyberSpectrum
  * @license    private
  * @filesource
  */
-if (!defined('TL_ROOT'))
-{
+if (!defined('TL_ROOT')) {
 	die('You cannot access this file directly!');
 }
 
 /**
- * Base implementation for "complex" MetaModel attributes.
- * Complex fields are fields that can not be fetched with a simple "SELECT colName FROM cat_table" and therefore need
- * to be handled differently.
- * 
+ * This is the MetaModel filter interface.
+ *
  * @package	   MetaModels
- * @subpackage Core
+ * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-abstract class MetaModelAttributeComplex extends MetaModelAttribute implements IMetaModelAttributeComplex
+interface IMetaModelFilterRule
 {
-//	abstract public function getDataFor($arrIds);
-
-//	abstract public function setDataFor($arrValues);
-
+	/**
+	 * Fetch the ids for all matches for this filter rule.
+	 * 
+	 * If no entries have been found, the result is an empty array.
+	 * If no filtering was applied and therefore all ids shall be reported as valid, the return value of NULL is allowed.
+	 * 
+	 * @return int[]|null
+	 */
+	public function getMatchingIds();
 }
 
 ?>

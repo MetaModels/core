@@ -133,53 +133,25 @@ class MetaModel implements IMetaModel
 	/**
 	 * Narrow down the list of Ids that match the given filter.
 	 * 
-	 * @param $arrFilter
+	 * @param IMetaModelFilter $objFilter
 	 * 
 	 * @return array all matching Ids.
 	 */
-	protected function getMatchingIds($arrFilter)
+	protected function getMatchingIds($objFilter)
 	{
-		$arrIds = array();
-		// simple rule, id search is set.
-		if(isset($arrFilter['id']))
+		if ($objFilter)
 		{
-			$arrIds['id'] = explode(',', $arrFilter['id']);
-		} else {
-			// if no id filter is passed, we assume all ids are provided.
-			$objDB = Database::getInstance();
-			// TODO: add ordering here.
-			// TODO: add simple column filtering here.
-			$objRow = $objDB->execute('SELECT id FROM ' . $this->getTableName());
-			$arrIds['id'] = $objRow->fetchEach('id');
-		}
-
-		foreach($this->getAttributes() as $objAttribute)
-		{
-			$arrInterfaces = class_implements($objAttribute);
-			if(in_array('IMetaModelAttributeComplex', $arrInterfaces))
+			$arrFilteredIds = $objFilter->getMatchingIds();
+			if ($arrFilteredIds !== NULL)
 			{
-				$varFilterValue = $objAttribute->parseFilterUrl($arrFilter);
-
-				// if return value is null, ignore this attribute.
-				if($varFilterValue === null)
-				{
-					continue;
-				}
-
-				// now intersect the values.
-				$arrIds[$objAttribute->getColName()] = $objAttribute->getIdsFromFilter($varFilterValue);
-			} else if(in_array('IMetaModelAttributeSimple', $arrInterfaces)) {
-				// simple attributes's conditions can be applied in SQL notation, add them to the above query.
+				return $arrFilteredIds;
 			}
 		}
-
-		$arrFilteredIds = $arrIds['id'];
-		foreach($arrIds as $strCol=>$arrAttrIds)
-		{
-			$arrFilteredIds = array_intersect($arrFilteredIds, $arrAttrIds);
-		}
-//		$arrIds[$objAttribute->getColName()] = array_intersect($arrIds, $arrFieldValues);
-		return $arrFilteredIds;
+		// either no filter object or all ids allowed => return all ids.
+		// if no id filter is passed, we assume all ids are provided.
+		$objDB = Database::getInstance();
+		$objRow = $objDB->execute('SELECT id FROM ' . $this->getTableName());
+		return $objRow->fetchEach('id');
 	}
 
 	/**
@@ -193,7 +165,7 @@ class MetaModel implements IMetaModel
 	{
 		if (!$arrIds)
 		{
-			return null;
+			return new MetaModelItems(array());
 		}
 		$objDB = Database::getInstance();
 
@@ -242,6 +214,17 @@ class MetaModel implements IMetaModel
 		$objItems = new MetaModelItems($arrItems);
 
 		return $objItems;
+	}
+
+	protected function copyFilter($objFilter)
+	{
+		if ($objFilter)
+		{
+			$objNewFilter = $objFilter->createCopy();
+		} else {
+			$objNewFilter = $this->getBaseFilter();
+		}
+		return $objNewFilter;
 	}
 
 	/////////////////////////////////////////////////////////////////
@@ -406,9 +389,11 @@ class MetaModel implements IMetaModel
 	/**
 	 * {@inheritdoc}
 	 */
-	public function findByFilter($arrFilter)
+	public function findByFilter($objFilter)
 	{
-		$arrFilteredIds = $this->getMatchingIds($arrFilter);
+		$arrFilteredIds = $this->getMatchingIds($objFilter);
+		// TODO: add ordering here.
+		// $arrFilteredIds = $this->getAttribute($sortCol)->sortIds($arrFilteredIds);
 
 		return $this->getItemsWithId($arrFilteredIds);
 	}
@@ -416,40 +401,52 @@ class MetaModel implements IMetaModel
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getCount($arrFilter)
+	public function getCount($objFilter)
 	{
 		$objDB = Database::getInstance();
-		$arrFilteredIds = $this->getMatchingIds($arrFilter);
-		$objRow = $objDB->execute('SELECT COUNT(id) AS count FROM ' . $this->getTableName() . ' WHERE id IN('.implode(', ', $arrFilteredIds).')');
+		$arrFilteredIds = $this->getMatchingIds($objFilter);
+		if (count($arrFilteredIds) == 0)
+		{
+			return 0;
+		}
+		$objRow = $objDB->execute('SELECT COUNT(id) AS count FROM ' . $this->getTableName() . ' WHERE id IN('.implode(',', $arrFilteredIds).')');
 		return $objRow->count;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function findVariantBase($arrFilter)
+	public function findVariantBase($objFilter)
 	{
+		$objNewFilter = $this->copyFilter($objFilter);
+
 		$objDB = Database::getInstance();
 		$objRow = $objDB->execute('SELECT id FROM ' . $this->getTableName() . ' WHERE varbase=1');
-		$arrFilter['id'] = implode(',', $objRow->fetchEach('id'));
-		return $this->findByFilter($arrFilter);
+		$objNewFilter->addFilterRule(new MetaModelFilterRuleStaticIdList($objRow->fetchEach('id')));
+		return $this->findByFilter($objNewFilter);
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function findVariants($arrIds, $arrFilter)
+	public function findVariants($arrIds, $objFilter)
 	{
 		if(!$arrIds)
 		{
-			return array();
+			// return an empty result
+			return $this->getItemsWithId(array());
 		}
+		$objNewFilter = $this->copyFilter($objFilter);
+
 		$objDB = Database::getInstance();
 		$objRow = $objDB->execute('SELECT id,vargroup FROM ' . $this->getTableName() . ' WHERE varbase=0 AND vargroup IN ('.implode(',', $arrIds).')');
-		$arrFilter['id'] = implode(',', $objRow->fetchEach('id'));
-		return $this->findByFilter($arrFilter);
+		$objNewFilter->addFilterRule(new MetaModelFilterRuleStaticIdList($objRow->fetchEach('id')));
+		return $this->findByFilter($objNewFilter);
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function saveItem(&$arrValues)
 	{
 		$objDB = Database::getInstance();
@@ -513,32 +510,47 @@ class MetaModel implements IMetaModel
 		}
 	}
 
-
-	/*
-	public function getView($arrAttributes, $arrFilterUrl, $arrOrderBy)
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getBaseFilter()
 	{
+		$objFilter = new MetaModelFilter($this);
 
-		$arrCols = array();
-		$arrFilter = array();
-		$arrOrderBy = array();
-		foreach ($arrAttributes as $colName)
+		foreach ($this->getAttributes() as $objAttribute)
 		{
-			$objField = $this->getField($colName);
-			if ($objField)
+			if ($objAttribute)
 			{
-				$arrCols[$colName] = $objField->getSQL();
-				$arrFilter[$colName] = $objField->getFilterSQL($arrFilterUrl);
+				$objFilterRule = $objAttribute->parseFilterUrl(array());
+				if ($objFilterRule)
+				{
+					$objFilter->addFilterRule($objFilterRule);
+				}
 			}
 		}
-
-		// TODO: we need support for LIMIT here aswell.
-		$strSQL = 'SELECT ' . 
-					impode(', ', $arrCols) . 
-					' FROM '. $this->tableName . 
-					(count($arrFilter)?' WHERE '. implode(' AND ', $arrFilter):'') . 
-					(count($arrOrderBy)?' ORDER BY ':'');
+		return $objFilter;
 	}
-	*/
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function prepareFilter($arrAttributeNames, $arrFilterUrl)
+	{
+		$objFilter = $this->getBaseFilter();
+		foreach ($arrAttributeNames as $strAttributeName)
+		{
+			$objAttribute = $this->getAttribute($strAttributeName);
+			if ($objAttribute)
+			{
+				$objFilterRule = $objAttribute->parseFilterUrl($arrFilterUrl);
+				if ($objFilterRule)
+				{
+					$objFilter->addFilterRule($objFilterRule);
+				}
+			}
+		}
+		return $objFilter;
+	}
 }
 
 ?>

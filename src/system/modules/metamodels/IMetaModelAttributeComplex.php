@@ -49,43 +49,6 @@ interface IMetaModelAttributeComplex extends IMetaModelAttribute
 	 * @return void
 	 */
 	public function setDataFor($arrValues);
-
-	/**
-	 * This parses the given URL and compiles a proper filter that can later be used in
-	 * the {@link IMetaModelAttribute::getIdsFromFilter()} method.
-	 * 
-	 * If an filter is empty, return null as value and the MetaModel will ignore the filter condition.
-	 * 
-	 * @param array $arrUrlParams the url params as key => value pairs.
-	 * 
-	 * @return mixed|null a filter setting that can be understood by this fieldtype.
-	 */
-	public function parseFilterUrl($arrUrlParams);
-
-	/**
-	 * This method retrieves the ids of all items that match the given filter.
-	 * The MetaModel will call {@link IMetaModelAttribute::parseFilterUrl())} when filtering by URL
-	 * and feed this function with the result.
-	 * 
-	 * If no entries have been found, the result is an empty array.
-	 * If no filtering was applied and therefore all ids shall be reported as valid, the return value of NULL is allowed.
-	 * 
-	 * @param array $arrFilter mapping of a filter retrieved by calling the {@link IMetaModelAttribute::parseFilterUrl())} filters.
-	 * 
-	 * @return int[]|null all matching ids from the MetaModel according to the given filter or null if no filtering is applied.
-	 */
-	public function getIdsFromFilter($arrFilter);
-
-	/**
-	 * Sorts the given array list by field value in the given direction.
-	 * 
-	 * @param int[]  $arrIds       a list of Ids from the MetaModel table.
-	 * 
-	 * @param string $strDirection the direction for sorting. either 'ASC' or 'DESC', as in plain SQL.
-	 * 
-	 * @return int[] the sorted integer array.
-	 */
-	public function sortIds($arrIds, $strDirection);
 }
 
 ?>

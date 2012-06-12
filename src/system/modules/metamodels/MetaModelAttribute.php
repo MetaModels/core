@@ -231,6 +231,23 @@ class MetaModelAttribute implements IMetaModelAttribute
 	{
 		return array('raw' => $arrRowData[$this->getColName()]);
 	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function parseFilterUrl($arrUrlParams)
+	{
+		return null;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function sortIds($arrIds, $strDirection)
+	{
+		// base implementation, do not perform any sorting.
+		return $arrIds;
+	}
 }
 
 ?>

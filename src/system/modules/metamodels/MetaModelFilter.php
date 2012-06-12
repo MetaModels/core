@@ -1,0 +1,123 @@
+<?php
+/**
+ * The MetaModels extension allows the creation of multiple collections of custom items,
+ * each with its own unique set of selectable attributes, with attribute extendability.
+ * The Front-End modules allow you to build powerful listing and filtering of the
+ * data in each collection.
+ *
+ * PHP version 5
+ * @package	   MetaModels
+ * @subpackage Interfaces
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  CyberSpectrum
+ * @license    private
+ * @filesource
+ */
+if (!defined('TL_ROOT')) {
+	die('You cannot access this file directly!');
+}
+
+/**
+ * This is the MetaModel filter interface.
+ *
+ * @package	   MetaModels
+ * @subpackage Interfaces
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ */
+class MetaModelFilter implements IMetaModelFilter
+{
+
+	/**
+	 * The corresponding MetaModel
+	 * @var string
+	 */
+	protected $strMetaModel = '';
+
+	/**
+	 * The contained filter rules.
+	 * 
+	 * @var array
+	 */
+	protected $arrFilterRules = array();
+
+	/**
+	 * The cached result after this filter has been evaluated.
+	 * 
+	 * @var int[]
+	 */
+	protected $arrMatches = array();
+
+	public function __construct(IMetaModel $objMetaModel)
+	{
+		if ($objMetaModel)
+		{
+			$this->strMetaModel = $objMetaModel->getTableName();
+		}
+	}
+
+	public function __clone()
+	{
+		$this->arrMatches = NULL;
+		$arrOld = $this->arrFilterRules;
+		$this->arrFilterRules = array();
+		foreach($arrOld as $objFilterRule)
+		{
+			$this->addFilterRule(clone $objFilterRule);
+		}
+	}
+
+	public function createCopy()
+	{
+		$objCopy = clone $this;
+		return $objCopy;
+	}
+
+	/////////////////////////////////////////////////////////////////
+	// interface IMetaModelFilter
+	/////////////////////////////////////////////////////////////////
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function addFilterRule(IMetaModelFilterRule $objFilterRule)
+	{
+		$this->arrFilterRules[] = $objFilterRule;
+	}
+
+	public function getMatchingIds()
+	{
+		if ($this->arrMatches)
+		{
+			return $this->arrMatches;
+		}
+
+		$arrIds = NULL;
+		foreach ($this->arrFilterRules as $objFilterRule)
+		{
+			$arrRuleIds = $objFilterRule->getMatchingIds();
+			if ($arrRuleIds === null)
+			{
+				//continue;
+			}
+			// the first rule determines the master ids.
+			if($arrIds === NULL)
+			{
+				$arrIds = $arrRuleIds;
+			} else {
+				// NOTE: all rules are implicitely "AND"-ed together.
+				// To allow "OR" conditions, we need a FilterRule, that has child filter rules
+				// which are merged then within this FilterRule.
+				$arrIds = array_intersect($arrIds, $arrRuleIds);
+				// when no ids are left any more, the result will stay empty.
+				if (count($arrIds) == 0)
+				{
+					break;
+				}
+			}
+		}
+		$this->arrMatches = $arrIds;
+		return $arrIds;
+	}
+}
+
+?>

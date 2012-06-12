@@ -128,6 +128,30 @@ interface IMetaModelAttribute
 	 * @return array an array with all the converted data.
 	 */
 	public function parseValue($arrRowData, $strOutputFormat = 'html');
+
+
+	/**
+	 * This parses the given URL and compiles a proper filter that can later be used in
+	 * the {@link IMetaModelAttribute::getIdsFromFilter()} method.
+	 * 
+	 * If an filter is empty, return null as value and the MetaModel will ignore the filter condition.
+	 * 
+	 * @param array $arrUrlParams the url params as key => value pairs.
+	 * 
+	 * @return mixed|null a filter setting that can be understood by this fieldtype.
+	 */
+	public function parseFilterUrl($arrUrlParams);
+
+	/**
+	 * Sorts the given array list by field value in the given direction.
+	 * 
+	 * @param int[]  $arrIds       a list of Ids from the MetaModel table.
+	 * 
+	 * @param string $strDirection the direction for sorting. either 'ASC' or 'DESC', as in plain SQL.
+	 * 
+	 * @return int[] the sorted integer array.
+	 */
+	public function sortIds($arrIds, $strDirection);
 }
 
 ?>
