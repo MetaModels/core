@@ -1,24 +1,28 @@
-<?php if (!defined('TL_ROOT')) die('You can not access this file directly!');
-
+<?php
 /**
- * The Catalog extension allows the creation of multiple catalogs of custom items,
- * each with its own unique set of selectable field types, with field extendability.
+ * The MetaModels extension allows the creation of multiple collections of custom items,
+ * each with its own unique set of selectable attributes, with attribute extendability.
  * The Front-End modules allow you to build powerful listing and filtering of the
- * data in each catalog.
+ * data in each collection.
  *
  * PHP version 5
- * @copyright	CyberSpectrum and others, see CONTRIBUTORS
- * @author		Christian Schiffler <c.schiffler@cyberspectrum.de> and others, see CONTRIBUTORS
- * @package		Catalog
- * @license		LGPL
+ * @package	   MetaModels
+ * @subpackage Backend
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  CyberSpectrum
+ * @license    private
  * @filesource
  */
+if (!defined('TL_ROOT'))
+{
+	die('You cannot access this file directly!');
+}
 
 /**
  * Add palettes to tl_module
  */
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list']  = '{title_legend},name,headline,type;{config_legend},metamodel,metamodel_use_limit;{template_legend:hide},metamodel_template,metamodel_layout;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list']  = '{title_legend},name,headline,type;{config_legend},metamodel,perPage,metamodel_use_limit,metamodel_sortby,metamodel_filtering;{template_legend:hide},metamodel_template,metamodel_layout;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'metamodel_use_limit';
 
@@ -51,7 +55,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'default'                 => 'catalog_full',
 		'exclude'                 => true,
 		'inputType'               => 'select',
-		'options_callback'        => array('tl_module_catalog','getCatalogTemplates'),
+		'options_callback'        => array('tl_module_metamodel','getMetaModelTemplates'),
 		'eval'                    => array('tl_class'=>'w50')
 	),
 
@@ -60,7 +64,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_layout'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
-		'options_callback'        => array('tl_module_catalog', 'getModuleTemplates'),
+		'options_callback'        => array('tl_module_metamodel', 'getModuleTemplates'),
 		'eval'                    => array('tl_class'=>'w50')
 	),
 
@@ -88,73 +92,54 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'inputType'               => 'text',
 		'default'                 => '10',
 		'eval'                    => array('rgxp' => 'digit', 'tl_class'=>'w50'),
+	),
+
+	'metamodel_sortby' => array
+	(
+		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_sortby'],
+		'exclude'                 => true,
+		'inputType'               => 'select',
+		'options_callback'        => array('tl_module_metamodel', 'getAttributeNames'),
+		'default'                 => '10',
+		'eval'                    => array('includeBlankOption' => true, 'tl_class'=>'w50'),
 	)
-)); 
+
+//metamodel_filtering
+
+));
 
 /**
- * Class tl_module_catalog
+ * complementary methods needed by the DCA.
  *
- * Provide miscellaneous methods that are used by the data configuration array.
- * @copyright	Martin Komara, Thyon Design, CyberSpectrum 2007-2009
- * @author		Martin Komara, 
- * 				John Brand <john.brand@thyon.com>,
- * 				Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @package    Controller
+ * @package	   MetaModels
+ * @subpackage Backend
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  CyberSpectrum
+ * @license    private
+ * @filesource
  */
-class tl_module_catalog extends Backend
+class tl_module_metamodel extends Backend
 {
 	public function getModuleTemplates(DataContainer $dc)
 	{
 		return $this->getTemplateGroup('mod_' . $dc->activeRecord->type, $dc->activeRecord->pid);
 	}
 
-	public function getCatalogTemplates(DataContainer $dc)
+	public function getMetaModelTemplates(DataContainer $dc)
 	{
 		return $this->getTemplateGroup('metamodel_', $dc->activeRecord->pid);
 	}
 
-	public function getFilterTemplates(DataContainer $dc)
+	public function getAttributeNames(DataContainer $dc)
 	{
-		// fix issue #70 - template selector shall only show relevant templates.
-		if (version_compare(VERSION.'.'.BUILD, '2.9.0', '>='))
+		$arrAttributeNames = array();
+		$objMetaModel = MetaModelFactory::byId($dc->activeRecord->metamodel);
+		if ($objMetaModel)
 		{
-			return $this->getTemplateGroup('filter_', $dc->activeRecord->pid);
+			foreach ($objMetaModel->getAttributes() as $objAttribute)
+			$arrAttributeNames[$objAttribute->getColName()] = $objAttribute->getName();
 		}
-		else
-		{
-			return $this->getTemplateGroup('filter_');
-		}
-	}
-
-	public function catalog_edit_default_value_subfields($arrOptions)
-	{
-		return $GLOBALS['TL_DCA']['tl_module']['fields']['catalog_edit_default_value']['subfields'];
-	}
-
-	public function onSaveColumns_catalog_edit_default_value($varValue, DataContainer $dc)
-	{
-		$result = $this->Database->prepare('SELECT m.* FROM tl_module m WHERE m.id=? AND m.catalog_edit_use_default=1')
-								->limit(1)
-								->execute($dc->id);
-		$fields=deserialize($result->catalog_edit_default);
-		$varValue=deserialize($varValue);
-		if(is_array($fields))
-		{
-			foreach($fields as $field)
-			{
-				$varValue[$field]=(isset($varValue[$field]) ? $varValue[$field] : false);
-			}
-		}
-		$varValue=serialize($varValue);
-		return $varValue;
-	}
-
-	public function onLoadColumns_catalog_edit_default_value($varValue, DataContainer $dc)
-	{
-		$result = $this->Database->prepare('SELECT m.* FROM tl_module m WHERE m.id=? AND m.catalog_edit_use_default=1')
-								->limit(1)
-								->execute($dc->id);
-		return $varValue;
+		return $arrAttributeNames;
 	}
 }
 

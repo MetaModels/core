@@ -383,18 +383,30 @@ class MetaModel implements IMetaModel
 	 */
 	public function findById($intId)
 	{
-		return $this->getItemsWithId(array($intId));
+		$objItems = $this->getItemsWithId(array($intId));
+		if ($objItems && $objItems->first())
+		{
+			return $objItems->getItem();
+		}
+		return null;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function findByFilter($objFilter)
+	public function findByFilter($objFilter, $strSortBy = '', $intOffset = 0, $intLimit = 0, $strSortOrder = 'ASC')
 	{
 		$arrFilteredIds = $this->getMatchingIds($objFilter);
-		// TODO: add ordering here.
-		// $arrFilteredIds = $this->getAttribute($sortCol)->sortIds($arrFilteredIds);
-
+		// if desired, sort the entries.
+		if ($strSortBy != '')
+		{
+			$arrFilteredIds = $this->getAttribute($strSortBy)->sortIds($arrFilteredIds, $strSortOrder);
+		}
+		// apply limiting then
+		if ($intOffset > 0 || $intLimit > 0)
+		{
+			$arrFilteredIds = array_slice($arrFilteredIds, $intOffset, $intLimit);
+		}
 		return $this->getItemsWithId($arrFilteredIds);
 	}
 

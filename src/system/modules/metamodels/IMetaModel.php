@@ -118,11 +118,19 @@ interface IMetaModel
 	/**
 	 * Filter the MetaModel by the provided filter settings.
 	 * 
-	 * @param IMetaModelFilter|null $objFilter the filter object to use or null if none.
+	 * @param IMetaModelFilter|null $objFilter    the filter object to use or null if none.
+	 * 
+	 * @param string                $strSortBy    optional name of the attribute the entries shall be sorted
+	 * 
+	 * @param int                   $intOffset    optional offset for the first item.
+	 * 
+	 * @param int                   $intLimit     optional amount of items to retrieve.
+	 * 
+	 * @param string                $strSortOrder optional sorting direction, either 'ASC'(default) or 'DESC'.
 	 * 
 	 * @return IMetaModelItems the collection of IMetaModelItem instances that match the given filter.
 	 */
-	public function findByFilter($objFilter);
+	public function findByFilter($objFilter, $strSortBy = '', $intOffset = 0, $intLimit = 0, $strSortOrder = 'ASC');
 
 	/**
 	 * Fetch the amount of matching items against the given filter.

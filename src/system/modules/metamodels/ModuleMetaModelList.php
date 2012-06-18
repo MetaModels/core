@@ -56,6 +56,8 @@ class ModuleMetaModelList extends Module
 
 		$this->strTemplate = $this->metamodel_layout;
 
+		$this->metamodel_filtering = deserialize($this->metamodel_filtering, true);
+
 		return parent::generate();
 	}
 
@@ -67,10 +69,68 @@ class ModuleMetaModelList extends Module
 	{
 		$objMetaModel = MetaModelFactory::byId($this->metamodel);
 
-		$objItems = $objMetaModel->findByFilter(array());
+		$objFilter = $objMetaModel->prepareFilter($this->metamodel_filtering, $_GET);
+
+		$intTotal = $objMetaModel->getCount($objFilter);
+
+		$intOffset = NULL;
+		$intLimit = NULL;
+		// if defined, we override the pagination here.
+		if ($this->metamodel_use_limit && ($this->metamodel_limit || $this->metamodel_offset))
+		{
+			if ($this->metamodel_limit)
+			{
+				$intLimit = $this->metamodel_limit;
+			}
+			if($this->metamodel_offset)
+			{
+				$intOffset = $this->metamodel_offset;
+			}
+		}
+
+		if ($this->perPage > 0)
+		{
+			// if a total limit has been defined, we need to honor that.
+			if (!is_null($intLimit) && ($intTotal>$intLimit))
+			{
+				$intTotal -= $intLimit;
+			}
+			$intTotal -= $intOffset;
+
+			// Get the current page
+			$intPage = $this->Input->get('page') ? $this->Input->get('page') : 1;
+
+			if ($intPage > ($intTotal/$this->perPage))
+			{
+				$intPage = ceil($intTotal/$this->perPage);
+			}
+
+			// Set limit and offset
+			$pageOffset = (max($intPage, 1) - 1) * $this->perPage;
+			$intOffset += $pageOffset;
+			if (is_null($intLimit))
+			{
+				$intLimit = $this->perPage;
+			} else {
+				$intLimit = min($intLimit - $intOffset, $this->perPage);
+			}
+			// Add pagination menu
+			$objPagination = new Pagination($intTotal, $this->perPage);
+			$this->Template->pagination = $objPagination->generate("\n  ");
+		} else {
+			if (is_null($intLimit))
+			{
+				$intLimit = 0;
+			}
+			if (is_null($intOffset))
+			{
+				$intOffset = 0;
+			}
+		}
+
+		$objItems = $objMetaModel->findByFilter($objFilter, $this->metamodel_sortby, $intOffset, $intLimit);
 		$objTemplate = new FrontendTemplate($this->metamodel_template);
 		$objTemplate->items = $objItems;
-
 
 		$this->Template->items = $objTemplate->parse();
 	}

@@ -150,4 +150,8 @@ CREATE TABLE `tl_module` (
   `metamodel_use_limit` char(1) NOT NULL default '',
   `metamodel_limit` smallint(5) NOT NULL default '0',
   `metamodel_offset` smallint(5) NOT NULL default '0',
+-- filtering and sorting
+  `metamodel_sortby` varchar(64) NOT NULL default '',
+  `metamodel_filtering` text NULL,
+
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
