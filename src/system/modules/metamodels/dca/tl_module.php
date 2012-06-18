@@ -102,10 +102,17 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'options_callback'        => array('tl_module_metamodel', 'getAttributeNames'),
 		'default'                 => '10',
 		'eval'                    => array('includeBlankOption' => true, 'tl_class'=>'w50'),
+	),
+
+	'metamodel_filtering' => array
+	(
+		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_filtering'],
+		'exclude'                 => true,
+		'inputType'               => 'checkbox',
+		'options_callback'        => array('tl_module_metamodel', 'getAttributeNames'),
+		'default'                 => '10',
+		'eval'                    => array('includeBlankOption' => true, 'tl_class'=>'w50', 'multiple' => true),
 	)
-
-//metamodel_filtering
-
 ));
 
 /**
