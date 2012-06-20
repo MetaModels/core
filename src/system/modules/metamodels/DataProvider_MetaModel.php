@@ -82,15 +82,37 @@ class DataProvider_MetaModel implements InterfaceGeneralData
 	 * 
 	 * @return InterfaceGeneralModel
 	 */
-	public function getEmpty()
+	public function getEmptyModel()
 	{
 		$objItem = new MetaModelItem($this->objMetaModel, array());
 		return new DataModel_MetaModel($objItem);
 	}
 
-	public function fetchAll($blnIdOnly = false, $intStart = 0, $intAmount = 0, $arrFilter = null)
+	public function getEmptyCollection()
 	{
-		// no op
+		return new GeneralCollection_Default();
+	}
+
+	public function fetchAll($blnIdOnly = false, $intStart = 0, $intAmount = 0, $arrFilter = array(), $arrSorting = array())
+	{
+		$objResultCollection = $this->getEmptyCollection();
+
+		if ($arrFilter)
+		{
+			$arrFilterFields = array_keys($arrFilter);
+		} else {
+			$arrFilterFields = array();
+		}
+
+var_dump($intAmount);
+
+		$objFilter = $this->objMetaModel->prepareFilter($arrFilterFields, $arrFilter);
+		$objItems = $this->objMetaModel->findByFilter($objFilter, ($arrSorting?$arrSorting[0]:''), $intStart, $intAmount);
+		foreach ($objItems as $objItem)
+		{
+			$objResultCollection->push(new DataModel_MetaModel($objItem));
+		}
+		return $objResultCollection;
 	}
 
 	public function fetchEach($ids)
@@ -141,6 +163,16 @@ class DataProvider_MetaModel implements InterfaceGeneralData
 	public function setVersion($intID, $strVersion)
 	{
 		// no version support on MetaModels so far, sorry.
+	}
+
+	public function fieldExists($strField)
+	{
+		if ($this->objMetaModel->getAttribute($strField) != null)
+		{
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
 

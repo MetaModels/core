@@ -43,7 +43,7 @@ class DataModel_MetaModel_Iterator implements Iterator
 
 	public function current()
 	{
-		return $this->array[$this->position];
+		return $this->objModel->getProperty($this->key());
 	}
 
 	public function key()
@@ -122,6 +122,24 @@ class DataModel_MetaModel implements InterfaceGeneralModel
 		}
 	}
 
+	public function getPropertiesAsArray()
+	{
+		$arrResult = array();
+		foreach (array_keys($this->objItem->getMetaModel()->getAttributes()) as $strKey)
+		{
+			$arrResult[$strKey] = $this->getProperty($strKey);
+		}
+		return $arrResult;
+	}
+
+	public function setPropertiesAsArray($arrProperties)
+	{
+		foreach ($arrProperties as $strKey => $varValue)
+		{
+			$this->setProperty($strKey, $varValue);
+		}
+	}
+
 	/**
 	 * @see InterfaceGeneralModel::hasProperties()
 	 * 
@@ -129,7 +147,7 @@ class DataModel_MetaModel implements InterfaceGeneralModel
 	 */
 	public function hasProperties()
 	{
-		return ($this->objItem);
+		return ($this->objItem)?true:false;
 	}
 
 	/**
