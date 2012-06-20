@@ -25,7 +25,7 @@ if (!defined('TL_ROOT'))
  * @subpackage Interface
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-interface IMetaModelItems
+interface IMetaModelItems extends Iterator
 {
 	/**
 	 * return the current item
@@ -53,7 +53,7 @@ interface IMetaModelItems
 	 * 
 	 * @return IMetaModelItems|boolean the current instance or false when last item has had been reached.
 	 */
-	public function next();
+//	public function next();
 
 	/**
 	 * Go to the previous row of the current result

@@ -45,6 +45,26 @@ class MetaModelItems implements IMetaModelItems
 		$this->arrItems = $arrItems;
 	}
 
+	public function rewind()
+	{
+		$this->first();
+	}
+
+	public function current()
+	{
+		return $this->getItem();
+	}
+
+	public function key()
+	{
+		return $this->intCursor;
+	}
+
+	public function valid()
+	{
+		return ($this->getCount() > $this->intCursor && $this->intCursor>-1);
+	}
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -54,6 +74,11 @@ class MetaModelItems implements IMetaModelItems
 		if ($this->intCursor < 0)
 		{
 			$this->first();
+		}
+		// beyond bounds? return null.
+		if (!$this->valid())
+		{
+			return null;
 		}
 		return $this->arrItems[$this->intCursor];
 	}
@@ -86,7 +111,7 @@ class MetaModelItems implements IMetaModelItems
 	{
 		if ($this->getCount() == ++$this->intCursor)
 		{
-			$this->intCursor--;
+//			$this->intCursor--;
 			return false;
 		}
 		return $this;
@@ -151,7 +176,6 @@ class MetaModelItems implements IMetaModelItems
 	{
 		return $this->getItem()->parseValue($strOutputFormat);
 	}
-
 }
 
 ?>
