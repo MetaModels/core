@@ -142,7 +142,16 @@ interface IMetaModel
 	public function getCount($objFilter);
 
 	/**
-	 * Get Variants for the given ids, optionally filter by the provided filter settings.
+	 * Get all variant base items, filtered by the provided filter settings.
+	 * 
+	 * @param IMetaModelFilter $objFilter the filter to use or null if no filtering.
+	 * 
+	 * @return IMetaModelItems the collection of IMetaModelItem instances that match the given filter.
+	 */
+	public function findVariantBase($objFilter);
+
+	/**
+	 * Get variants for the given ids, filtered by the provided filter settings.
 	 * 
 	 * @param array $arrIds the Ids of the base elements.
 	 * 
