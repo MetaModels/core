@@ -227,9 +227,17 @@ class MetaModelAttribute implements IMetaModelAttribute
 	/**
 	 * {@inheritdoc}
 	 */
-	public function parseValue($arrRowData, $strOutputFormat = 'html')
+	public function parseValue($arrRowData, $strOutputFormat = 'text')
 	{
-		return array('raw' => $arrRowData[$this->getColName()]);
+		$varRaw = $arrRowData[$this->getColName()];
+		$arrResult = array(
+			'raw' => $varRaw,
+		);
+		if (is_string($varRaw) || is_numeric($varRaw))
+		{
+			$arrResult['text'] = $varRaw;
+		}
+		return $arrResult;
 	}
 
 	/**

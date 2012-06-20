@@ -119,15 +119,15 @@ interface IMetaModelAttribute
 
 	/**
 	 * Transform a value into real data.
-	 * The returned array at least transports an string in the key 'html' which SHOULD be 
-	 * useful when being echo'ed in a template.
+	 * The returned array at least transports an string in the key 'text' which SHOULD be 
+	 * useful when being echo'ed in a template and the raw value in the section 'raw'.
 	 * Each attribute class MAY return as many other values in this array with custom keys as it wants.
 	 * 
 	 * @param array $arrRowData the row data from the MetaModel table.
 	 * 
 	 * @return array an array with all the converted data.
 	 */
-	public function parseValue($arrRowData, $strOutputFormat = 'html');
+	public function parseValue($arrRowData, $strOutputFormat = 'text');
 
 
 	/**
