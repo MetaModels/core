@@ -1,20 +1,25 @@
-<?php if (count($this->entries)): ?>
+<?php if ($this->items->getCount()): ?>
 
 <div class="layout_full">
 
-<?php foreach ($this->entries as $entry): ?>
-<div class="item<?php echo $entry['class'] ? ' '.$entry['class'] : ''; ?>">
-<?php if($entry['linkEdit']): ?><?php echo $entry['linkEdit']; ?><?php endif; ?>
-<?php foreach ($entry['data'] as $field=>$data): ?>
-<?php if (strlen($data['raw'])): ?>
+<?php
+	foreach ($this->items as $objItem):
+	$data = $objItem->parseValue();
+?>
+<div class="item <?php echo $this->items->getClass(); ?>">
+
+<?php foreach ($objItem->getMetaModel()->getAttributes() as $field => $objAttribute): ?>
+<?php if ($data['text'][$field]): ?>
 <div class="field <?php echo $field; ?>">
-	<div class="label"><?php echo $data['label']; ?></div>
-	<div class="value"><?php echo $data['value']; ?></div>
+	<div class="label"><?php echo $objAttribute->getName(); ?></div>
+	<div class="value"><?php echo $data['text'][$field]; ?></div>
 </div>
 <?php endif; ?>
 <?php endforeach; ?>
 </div>
 <?php endforeach; ?>
+
+
 </div>
 
 <?php else: ?>

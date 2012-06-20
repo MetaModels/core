@@ -3,21 +3,21 @@
 <div class="layout_full">
 
 <?php
-	while ($this->items->next()):
-	$data = $this->items->parseValue();
+	foreach ($this->items as $objItem):
+	$data = $objItem->parseValue();
 ?>
 <div class="item <?php echo $this->items->getClass(); ?>">
 
-<?php foreach ($data['html'] as $field=>$value): ?>
-<?php if ($data['raw'][$field]): ?>
+<?php foreach ($objItem->getMetaModel()->getAttributes() as $field => $objAttribute): ?>
+<?php if ($data['text'][$field]): ?>
 <div class="field <?php echo $field; ?>">
-	<div class="label"><?php echo $this->items->getItem()->getAttribute($field)->getName(); ?></div>
-	<div class="value"><?php echo $value; ?></div>
+	<div class="label"><?php echo $objAttribute->getName(); ?></div>
+	<div class="value"><?php echo $data['text'][$field]; ?></div>
 </div>
 <?php endif; ?>
 <?php endforeach; ?>
 </div>
-<?php endwhile; ?>
+<?php endforeach; ?>
 
 
 </div>
