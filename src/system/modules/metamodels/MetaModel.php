@@ -155,18 +155,14 @@ class MetaModel implements IMetaModel
 	}
 
 	/**
-	 * This method is called to retrieve the data for certain items from the database.
+	 * Fetch the "native" database rows with the given ids.
 	 * 
 	 * @param int[] $arrIds the ids of the items to retrieve the order of ids is used for sorting of the return values.
 	 * 
-	 * @return IMetaModelItems a collection of all matched items, sorted by the id list.
+	 * @param array an array containing the database rows with each column "deserialized".
 	 */
-	protected function getItemsWithId($arrIds)
+	protected function fetchRows($arrIds)
 	{
-		if (!$arrIds)
-		{
-			return new MetaModelItems(array());
-		}
 		$objDB = Database::getInstance();
 
 		// ensure proper integer ids for SQL injection safety reasons.
@@ -189,6 +185,24 @@ class MetaModel implements IMetaModel
 
 			$arrResult[$objRow->id] = $arrData;
 		}
+		return $arrResult;
+	}
+
+	/**
+	 * This method is called to retrieve the data for certain items from the database.
+	 * 
+	 * @param int[] $arrIds the ids of the items to retrieve the order of ids is used for sorting of the return values.
+	 * 
+	 * @return IMetaModelItems a collection of all matched items, sorted by the id list.
+	 */
+	protected function getItemsWithId($arrIds)
+	{
+		if (!$arrIds)
+		{
+			return new MetaModelItems(array());
+		}
+
+		$arrResult = $this->fetchRows($arrIds);
 
 		// determine "complex attributes".
 		$arrComplexCols = $this->getComplexAttributes();
@@ -398,9 +412,9 @@ class MetaModel implements IMetaModel
 	{
 		$arrFilteredIds = $this->getMatchingIds($objFilter);
 		// if desired, sort the entries.
-		if ($strSortBy != '')
+		if ($strSortBy != '' && ($objSortAttribute = $this->getAttribute($strSortBy)))
 		{
-			$arrFilteredIds = $this->getAttribute($strSortBy)->sortIds($arrFilteredIds, $strSortOrder);
+			$arrFilteredIds = $objSortAttribute->sortIds($arrFilteredIds, $strSortOrder);
 		}
 		// apply limiting then
 		if ($intOffset > 0 || $intLimit > 0)
