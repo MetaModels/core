@@ -152,6 +152,15 @@ interface IMetaModelAttribute
 	 * @return int[] the sorted integer array.
 	 */
 	public function sortIds($arrIds, $strDirection);
+
+	/**
+	 * Retrieve values for use in filter options, that will be understood by DC_ filter 
+	 * panels and frontend filter select boxes.
+	 * 
+	 * @param array $arrIds optional the ids that the values shall be fetched from.
+	 */
+	// TODO: this is a first draft, maybe we need some better approach here.
+	public function getFilterOptions($arrIds = array());
 }
 
 ?>

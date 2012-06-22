@@ -27,7 +27,7 @@ if (!defined('TL_ROOT'))
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-class MetaModelAttribute implements IMetaModelAttribute
+abstract class MetaModelAttribute implements IMetaModelAttribute
 {
 
 	/**

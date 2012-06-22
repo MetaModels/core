@@ -473,6 +473,26 @@ class MetaModel implements IMetaModel
 	/**
 	 * {@inheritdoc}
 	 */
+	public function getAttributeOptions($strAttribute, $objFilter = null)
+	{
+		$objAttribute = $this->getAttribute($strAttribute);
+		if ($objAttribute)
+		{
+			if ($objFilter)
+			{
+				$arrFilteredIds = $this->getMatchingIds($objFilter);
+				$arrFilteredIds = $objAttribute->sortIds($arrFilteredIds, 'ASC');
+				return $objAttribute->getFilterOptions($arrFilteredIds);
+			} else {
+				return $objAttribute->getFilterOptions();
+			}
+		}
+		return array();
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function saveItem(&$arrValues)
 	{
 		$objDB = Database::getInstance();

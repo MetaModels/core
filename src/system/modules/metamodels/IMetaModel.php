@@ -162,6 +162,17 @@ interface IMetaModel
 	public function findVariants($arrIds, $objFilter);
 
 	/**
+	 * Get all options of the given attribute.
+	 * 
+	 * @param string           $strAttribute the attribute to fetch options from.
+	 * 
+	 * @param IMetaModelFilter $objFilter    the filter to use or null if no filtering.
+	 * 
+	 * @return array all options matching the given filter for the given attribute to be usable in a filter select widget.
+	 */
+	public function getAttributeOptions($strAttribute, $objFilter);
+
+	/**
 	 * Prepare the base filter object for this meta model.
 	 * This object is produced by calling parseFlterUrl on all contained attributes with an empty filter url.
 	 * This allows the attributes to generate basic filter options that must be applied globally on the MetaModel
