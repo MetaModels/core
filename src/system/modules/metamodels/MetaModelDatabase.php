@@ -189,7 +189,7 @@ class MetaModelDatabase extends Controller
 				$strValues .= sprintf('<div><em>%s:</em> %s</div>', $strKey, $strValue);
 			}
 		}
-		foreach($objMetaModel->getAttributes() as $objAttribute)
+		foreach ($objMetaModel->getAttributes() as $objAttribute)
 		{
 			$arrResult = $objAttribute->parseValue($arrRow);
 			$strValues .= sprintf('<div><em>%s:</em> %s</div>', $objAttribute->getName(), $arrResult['html']);

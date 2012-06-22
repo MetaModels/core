@@ -26,8 +26,7 @@ if (!defined('TL_ROOT'))
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-// TODO: check if extending System is really neccessary.
-class MetaModelFactory /*extends System*/ implements IMetaModelFactory
+class MetaModelFactory implements IMetaModelFactory
 {
 	/**
 	 * All MetaModel instances.
