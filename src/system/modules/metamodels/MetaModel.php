@@ -112,6 +112,11 @@ class MetaModel implements IMetaModel
 		}
 	}
 
+	protected function isComplexAttribute($objAttribute)
+	{
+		return in_array('IMetaModelAttributeComplex', class_implements($objAttribute));
+	}
+
 	/**
 	 * This method retrieves all complex attributes from the current MetaModel.
 	 * 
@@ -122,7 +127,7 @@ class MetaModel implements IMetaModel
 		$arrResult = array();
 		foreach($this->getAttributes() as $objAttribute)
 		{
-			if(in_array('IMetaModelAttributeComplex', class_implements($objAttribute)))
+			if($this->isComplexAttribute($objAttribute))
 			{
 				$arrResult[] = $objAttribute;
 			}
@@ -537,7 +542,7 @@ class MetaModel implements IMetaModel
 			if ($strActiveLanguage && in_array('IMetaModelAttributeTranslated', $arrInterfaces))
 			{
 				$objAttribute->setTranslatedDataFor(array($arrValues['id'] => $arrValues[$strAttributeId]), $strActiveLanguage);
-			} else if(in_array('IMetaModelAttributeComplex', $arrInterfaces))
+			} else if($this->isComplexAttribute($objAttribute))
 			{
 				// complex saving
 				$objAttribute->setDataFor(array($arrValues['id'] => $arrValues[$strAttributeId]));
