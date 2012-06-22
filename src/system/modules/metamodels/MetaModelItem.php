@@ -108,6 +108,9 @@ class MetaModelItem implements IMetaModelItem
 		}
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function save()
 	{
 		$objMetaModel = $this->getMetaModel();
@@ -146,6 +149,33 @@ class MetaModelItem implements IMetaModelItem
 			// TODO: parseValue HOOK?
 		}
 		return $arrResult;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function copy()
+	{
+		// fetch data, clean undesired fields and return the new item.
+		$arrNewData = $this->arrData;
+		unset($arrNewData['id']);
+		unset($arrNewData['tstamp']);
+		return new MetaModelItem($arrNewData);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function varCopy()
+	{
+		$objNewItem = $this->copy();
+		// if this item is a variant base, we need to clean the varbase and set
+		// ourselves as the base
+		if ($this->isVariantBase())
+		{
+			$objNewItem->set('vargroup', $this->get('id'));
+			$objNewItem->set('varbase', 0);
+		}
 	}
 }
 

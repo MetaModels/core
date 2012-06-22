@@ -90,6 +90,16 @@ class DataModel_MetaModel implements InterfaceGeneralModel
 		$this->objItem = $objItem;
 	}
 
+	public function __clone()
+	{
+		return new DataModel_MetaModel($this->objItem->copy());
+	}
+
+	public function getID()
+	{
+		return $this->objItem->get('id');
+	}
+
 	/**
 	 * @see InterfaceGeneralModel::getProperty()
 	 * 
@@ -100,12 +110,35 @@ class DataModel_MetaModel implements InterfaceGeneralModel
 	{
 		if ($this->objItem)
 		{
-			return $this->objItem->get($strPropertyName);
+			$varValue = $this->objItem->get($strPropertyName);
+			// test if it is an attribute, if so, let it transform the data 
+			// for the widget.
+			$objAttribute = $this->objItem->getAttribute($strPropertyName);
+			if ($objAttribute)
+			{
+				$varValue = $objAttribute->valueToWidget($varValue);
+			}
+			return $varValue;
 		}
 		else
 		{
 			return null;
 		}
+	}
+
+	public function getPropertiesAsArray()
+	{
+		$arrResult = array();
+		foreach (array_keys($this->objItem->getMetaModel()->getAttributes()) as $strKey)
+		{
+			$arrResult[$strKey] = $this->getProperty($strKey);
+		}
+		return $arrResult;
+	}
+
+	public function setID($mixID)
+	{
+		$this->objItem->set('id', $mixID);
 	}
 
 	/**
@@ -118,18 +151,15 @@ class DataModel_MetaModel implements InterfaceGeneralModel
 	{
 		if ($this->objItem)
 		{
-			return $this->objItem->set($strPropertyName, $varValue);
+			// test if it is an attribute, if so, let it transform the data 
+			// for the widget.
+			$objAttribute = $this->objItem->getAttribute($strPropertyName);
+			if ($objAttribute)
+			{
+				$varValue = $objAttribute->widgetToValue($varValue);
+			}
+			$this->objItem->set($strPropertyName, $varValue);
 		}
-	}
-
-	public function getPropertiesAsArray()
-	{
-		$arrResult = array();
-		foreach (array_keys($this->objItem->getMetaModel()->getAttributes()) as $strKey)
-		{
-			$arrResult[$strKey] = $this->getProperty($strKey);
-		}
-		return $arrResult;
 	}
 
 	public function setPropertiesAsArray($arrProperties)

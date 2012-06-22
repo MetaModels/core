@@ -94,6 +94,25 @@ interface IMetaModelItem
 	 */
 	public function save();
 
+	/**
+	 * Returns a new item containing the same values as this item but no id.
+	 * 
+	 * This is useful when creating new items that shall be based upon anothe item
+	 * 
+	 * @return IMetaModelItem the new copy.
+	 */
+	public function copy();
+
+	/**
+	 * Returns a new item containing the same values as this item but no id.
+	 * Additionally, the item will be a variant child of this item.
+	 * 
+	 * NOTE: if this item is not a variant base itself, this item will return a item
+	 * that is a child of this items variant base. i.e. excact clone.
+	 * 
+	 * @return IMetaModelItem the new copy.
+	 */
+	public function varCopy();
 }
 
 ?>
