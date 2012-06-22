@@ -4,15 +4,15 @@
 
 <?php
 	foreach ($this->items as $objItem):
-	$data = $objItem->parseValue();
+	$data = $objItem->parseValue('xhtml');
 ?>
 <div class="item <?php echo $this->items->getClass(); ?>">
 
 <?php foreach ($objItem->getMetaModel()->getAttributes() as $field => $objAttribute): ?>
-<?php if ($data['text'][$field]): ?>
+<?php if (($strValue = $data['xhtml'][$field]) || ($strValue = $data['text'][$field])): ?>
 <div class="field <?php echo $field; ?>">
 	<div class="label"><?php echo $objAttribute->getName(); ?></div>
-	<div class="value"><?php echo $data['text'][$field]; ?></div>
+	<div class="value"><?php echo $strValue; ?></div>
 </div>
 <?php endif; ?>
 <?php endforeach; ?>
