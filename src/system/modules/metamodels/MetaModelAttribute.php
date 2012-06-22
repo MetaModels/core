@@ -227,6 +227,22 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	/**
 	 * {@inheritdoc}
 	 */
+	public function valueToWidget($varValue)
+	{
+		return $varValue;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function widgetToValue($varValue)
+	{
+		return $varValue;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function parseValue($arrRowData, $strOutputFormat = 'text')
 	{
 		$varRaw = $arrRowData[$this->getColName()];

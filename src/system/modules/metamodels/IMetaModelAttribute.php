@@ -118,6 +118,27 @@ interface IMetaModelAttribute
 	public function getItemDCA();
 
 	/**
+	 * This is used for transferring a native attribute value to a value that the widget, 
+	 * generated from the information obtained via {@link IMetaModelAttribute::getFieldDefinition()}
+	 * can handle.
+	 * 
+	 * @param mixed $varValue the value to be transformed.
+	 * 
+	 * @return mixed the resulting widget compatible value
+	 */
+	public function valueToWidget($varValue);
+
+	/**
+	 * This is used for transferring a value that has been retrieved from a widget into native attribute
+	 * value.
+	 * 
+	 * @param mixed $varValue the value to be transformed.
+	 * 
+	 * @return mixed the resulting native value
+	 */
+	public function widgetToValue($varValue);
+
+	/**
 	 * Transform a value into real data.
 	 * The returned array at least transports an string in the key 'text' which SHOULD be 
 	 * useful when being echo'ed in a template and the raw value in the section 'raw'.
