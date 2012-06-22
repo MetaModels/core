@@ -133,11 +133,15 @@ class MetaModelItem implements IMetaModelItem
 		}
 	}
 
-	public function parseValue($strOutputFormat = 'html')
+	/**
+	 * {@inheritdoc}
+	 */
+	public function parseValue($strOutputFormat = 'text')
 	{
 		$arrResult = array
 		(
 			'raw' => $this->arrData,
+			'text' => array(),
 			$strOutputFormat => array()
 		);
 		foreach($this->getMetaModel()->getAttributes() as $objAttribute)

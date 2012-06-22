@@ -95,6 +95,15 @@ interface IMetaModelItem
 	public function save();
 
 	/**
+	 * Renders the item in the given output format.
+	 * @see IMetaModelAttribute::parseValue() for further information.
+	 * 
+	 * @param string $strOutputFormat the desired output format.
+	 * 
+	 */
+	public function parseValue($strOutputFormat = 'text');
+
+	/**
 	 * Returns a new item containing the same values as this item but no id.
 	 * 
 	 * This is useful when creating new items that shall be based upon anothe item
