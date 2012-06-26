@@ -19,7 +19,7 @@ if (!defined('TL_ROOT'))
 }
 
 
-class DataModel_MetaModel_Iterator implements Iterator
+class DataModelMetaModelIterator implements Iterator
 {
 	protected $objModel = null;
 
@@ -70,7 +70,7 @@ class DataModel_MetaModel_Iterator implements Iterator
  * @package    MetaModels
  * @subpackage Core
  */
-class DataModel_MetaModel implements InterfaceGeneralModel
+class DataModelMetaModel implements InterfaceGeneralModel
 {
 
 	/**
@@ -92,7 +92,7 @@ class DataModel_MetaModel implements InterfaceGeneralModel
 
 	public function __clone()
 	{
-		return new DataModel_MetaModel($this->objItem->copy());
+		return new DataModelMetaModel($this->objItem->copy());
 	}
 
 	public function getID()
@@ -187,7 +187,7 @@ class DataModel_MetaModel implements InterfaceGeneralModel
 	 */
 	public function getIterator()
 	{
-		return new DataModel_MetaModel_Iterator($this);
+		return new DataModelMetaModelIterator($this);
 	}
 }
 
