@@ -39,6 +39,7 @@ class MetaModelFilterRuleStaticIdList extends MetaModelFilterRule
 	public function __construct($arrIds)
 	{
 		parent::__construct(null);
+		$this->arrIds = $arrIds;
 	}
 
 	/**
