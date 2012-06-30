@@ -33,15 +33,26 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 	// DC_MetaModel container config
 	'config' => array
 	(
-		'dataContainer'               => 'MetaModel',
+		'dataContainer'               => 'General',
 		'switchToEdit'                => false,
 		'enableVersioning'            => false,
 	),
+
+	'dca_config' => array
+	(
+		'default' => array
+		(
+			'class'  => 'DataProviderMetaModel',
+			'source' => '' // get's set within MetaModelDatabase::createDataContainer via $GLOBALS['TL_HOOKS']['loadDataContainer']
+		)
+	),
+
 	'list' => array
 	(
 		'sorting' => array
 		(
 			'mode'                    => 1, // 1 default sorting value, 2 switchable sorting value
+			'panelLayout'             => 'limit',
 			// TODO: panelLayout must be built dynamically in getMetaModelDca() to solve issue #199
 			'headerFields'            => array('tstamp'),
 			'fields'                  => array('sorting'),
@@ -50,9 +61,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 		
 		'label' => array
 		(
-			'fields'                  => array('tstamp'),
-			'format'                  => '%s',
-			'label_callback'          => array('MetaModelDatabase', 'labelCallback'),
+//			'fields'                  => array('tstamp'),
+//			'format'                  => '%s',
+//			'label_callback'          => array('MetaModelDatabase', 'labelCallback'),
 		),
 		'global_operations' => array
 		(

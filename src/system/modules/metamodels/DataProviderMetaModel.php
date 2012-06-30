@@ -47,13 +47,13 @@ class DataProviderMetaModel implements InterfaceGeneralData
 	public function __construct(array $arrConfig)
 	{
 		// Check Vars
-		if (!isset($arrConfig["table"]))
+		if (!isset($arrConfig["source"]))
 		{
-			throw new Excpetion("Missing table name.");
+			throw new Exception("Missing table name.");
 		}
 
 		// Init Vars
-		$this->strTable = $arrConfig["table"];
+		$this->strTable = $arrConfig["source"];
 
 		$this->objMetaModel = MetaModelFactory::byTableName($this->strTable);
 
@@ -61,6 +61,11 @@ class DataProviderMetaModel implements InterfaceGeneralData
 
 	// Functions ---------------------------------------------------------------
 
+	/**
+	 * Delete an item.
+	 * 
+	 * @param int|string|InterfaceGeneralModel Id or the object itself, to delete
+	 */
 	public function delete($item)
 	{
 		// Not impl now
@@ -115,10 +120,16 @@ class DataProviderMetaModel implements InterfaceGeneralData
 		throw new Exception('Versioning not supported in MetaModels so far.');
 	}
 
-	public function fetch($intId)
+	/**
+	 * Fetch a single record by id.
+	 * 
+	 * @param GeneralDataConfigDefault $objConfig
+	 * 
+	 * @return InterfaceGeneralModel
+	 */
+	public function fetch(GeneralDataConfigDefault $objConfig)
 	{
-		$objItem = $this->objMetaModel->findById($intId);
-
+		$objItem = $this->objMetaModel->findById($objConfig->getId());
 		if (!$objItem)
 		{
 			return null;
@@ -154,12 +165,20 @@ class DataProviderMetaModel implements InterfaceGeneralData
 		return $objFilter;
 	}
 
-	public function fetchAll($blnIdOnly = false, $intStart = 0, $intAmount = 0, $arrFilter = array(), $arrSorting = array())
+	/**
+	 * Fetch all records (optional limited).
+	 * 
+	 * @param GeneralDataConfigDefault $objConfig
+	 * 
+	 * @return InterfaceGeneralCollection
+	 */
+	public function fetchAll(GeneralDataConfigDefault $objConfig)
 	{
-		$objFilter = $this->prepareFilter($arrFilter);
-		$objItems = $this->objMetaModel->findByFilter($objFilter, ($arrSorting?$arrSorting[0]:''), $intStart, $intAmount);
+		$arrSorting = $objConfig->getSorting();
+		$objFilter = $this->prepareFilter($objConfig->getFilter());
+		$objItems = $this->objMetaModel->findByFilter($objFilter, ($arrSorting?$arrSorting[0]:''), $objConfig->getStart(), $objConfig->getAmount());
 		// TODO: optimize by implementing a getIdsFromFilter
-		if ($blnIdOnly)
+		if ($objConfig->getIdOnly())
 		{
 			$arrResult = array();
 			foreach ($objItems as $objItem)
@@ -177,14 +196,37 @@ class DataProviderMetaModel implements InterfaceGeneralData
 		}
 	}
 
-	public function fetchEach($ids)
+	/**
+	 * Fetch multiple records by ids.
+	 * 
+	 * @param GeneralDataConfigDefault $objConfig
+	 * 
+	 * @return InterfaceGeneralCollection
+	 */
+	public function fetchEach(GeneralDataConfigDefault $objConfig)
 	{
-		// no op
+		$objFilter = $this->objMetaModel->getBaseFilter();
+		// filter for the desired items only.
+		$objFilter->addFilterRule(new MetaModelFilterRuleStaticIdList($objConfig->getIds()));
+		$objItems = $this->objMetaModel->findByFilter($objFilter);
+		$objResultCollection = $this->getEmptyCollection();
+		foreach ($objItems as $objItem)
+		{
+			$objResultCollection->push(new DataModelMetaModel($objItem));
+		}
+		return $objResultCollection;
 	}
 
-	public function getCount($arrFilter = array())
+	/**
+	 * Return the amount of total items.
+	 *
+	 * @param GeneralDataConfigDefault $objConfig
+	 * 
+	 * @return int
+	 */
+	public function getCount(GeneralDataConfigDefault $objConfig)
 	{
-		$objFilter = $this->prepareFilter($arrFilter);
+		$objFilter = $this->prepareFilter($objConfig->getFilter());
 		return $this->objMetaModel->getCount($objFilter);
 	}
 
@@ -228,6 +270,11 @@ class DataProviderMetaModel implements InterfaceGeneralData
 		// no version support on MetaModels so far, sorry.
 	}
 
+	/**
+	 * Check if the value exists in the table
+	 * 
+	 * @return boolean 
+	 */
 	public function fieldExists($strField)
 	{
 		if ($this->objMetaModel->getAttribute($strField) != null)

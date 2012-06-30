@@ -44,6 +44,8 @@ class MetaModelDatabase extends Controller
 
 		$arrDCA = $GLOBALS['TL_DCA']['tl_metamodel_item'];
 
+		$arrDCA['dca_config']['default']['source'] = $strTableName;
+
 		$objMetaModel=MetaModelFactory::byTableName($strTableName);
 		if ($objMetaModel->isTranslated())
 		{
@@ -74,10 +76,12 @@ class MetaModelDatabase extends Controller
 
 		if($objMetaModel->hasVariants())
 		{
+			// TODO: do only show variant bases if we are told so, i.e. render child view.
+/*
 			$arrDCA['list']['sorting']['filter'] = array(
 				array('varbase=?', 1)
 			);
-
+*/
 			$arrDCA['fields']['varbase'] = array
 			(
 				'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_item']['varbase'],
@@ -110,6 +114,10 @@ class MetaModelDatabase extends Controller
 				// or append to the end, if copy operation has not been found
 				$arrDCA['list']['operations']['createvariant'] = $arrOperationCreateVariant;
 			}
+
+			$arrDCA['list']['label']['fields'][] = 'varbase';
+			$arrDCA['list']['label']['format'] .= '<span>Is variant base: %s</span><br/>';
+
 		}
 
 		$strPalette='';
@@ -125,6 +133,9 @@ class MetaModelDatabase extends Controller
 			} else
 				$strPalette .= (strlen($strPalette)>0 ? ',':'');
 			$strPalette .= $objAttribute->getColName();
+
+			$arrDCA['list']['label']['fields'][] = $objAttribute->getColName();
+			$arrDCA['list']['label']['format'] .= sprintf('<span>%s %%s</span><br/>', $objAttribute->getName());
 		}
 		$arrDCA['palettes']['default'] = $strPalette;
 		$GLOBALS['TL_DCA'][$strTableName] = array_replace_recursive($arrDCA, (array)$GLOBALS['TL_DCA'][$objMetaModel->getTableName()]);

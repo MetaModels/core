@@ -18,51 +18,6 @@ if (!defined('TL_ROOT'))
 	die('You cannot access this file directly!');
 }
 
-
-class DataModelMetaModelIterator implements Iterator
-{
-	protected $objModel = null;
-
-	private $intPosition = 0;
-
-	protected function getKeys()
-	{
-		return array_keys($this->objModel->getItem()->getMetaModel()->getAttributes());
-	}
-
-	public function __construct(DataModel_MetaModel $objModel)
-	{
-		$this->intPosition = 0;
-		$this->objModel = $objModel;
-	}
-
-	public function rewind()
-	{
-		$this->position = 0;
-	}
-
-	public function current()
-	{
-		return $this->objModel->getProperty($this->key());
-	}
-
-	public function key()
-	{
-		$arrKeys = $this->getKeys();
-		return $arrKeys[$this->position];
-	}
-
-	public function next()
-	{
-		++$this->position;
-	}
-
-	public function valid()
-	{
-		return strlen($this->key()) > 0;
-	}
-}
-
 /**
  * Data model class for DC_General <-> MetaModel adaption
  * 
@@ -114,6 +69,7 @@ class DataModelMetaModel implements InterfaceGeneralModel
 			// test if it is an attribute, if so, let it transform the data 
 			// for the widget.
 			$objAttribute = $this->objItem->getAttribute($strPropertyName);
+
 			if ($objAttribute)
 			{
 				$varValue = $objAttribute->valueToWidget($varValue);
