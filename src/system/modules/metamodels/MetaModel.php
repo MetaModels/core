@@ -187,7 +187,6 @@ class MetaModel implements IMetaModel
 			{
 				$arrData[$strKey] = deserialize($varValue);
 			}
-
 			$arrResult[$objRow->id] = $arrData;
 		}
 		return $arrResult;
@@ -417,7 +416,7 @@ class MetaModel implements IMetaModel
 	{
 		$arrFilteredIds = $this->getMatchingIds($objFilter);
 		// if desired, sort the entries.
-		if ($strSortBy != '' && ($objSortAttribute = $this->getAttribute($strSortBy)))
+		if ($arrFilteredIds && $strSortBy != '' && ($objSortAttribute = $this->getAttribute($strSortBy)))
 		{
 			$arrFilteredIds = $objSortAttribute->sortIds($arrFilteredIds, $strSortOrder);
 		}
@@ -508,7 +507,7 @@ class MetaModel implements IMetaModel
 		{
 			$arrData = array
 			(
-				'tstamp' => now()
+				'tstamp' => time()
 			);
 
 			if ($this->hasVariants())
@@ -519,6 +518,7 @@ class MetaModel implements IMetaModel
 
 			$arrValues['id'] = $objDB->prepare('INSERT INTO ' . $this->getTableName() . ' %s')
 					->set($arrData)
+					->execute()
 					->insertId;
 		}
 
@@ -564,9 +564,19 @@ class MetaModel implements IMetaModel
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getBaseFilter()
+	public function getEmptyFilter()
 	{
 		$objFilter = new MetaModelFilter($this);
+
+		return $objFilter;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getBaseFilter()
+	{
+		$objFilter = $this->getEmptyFilter();
 
 		foreach ($this->getAttributes() as $objAttribute)
 		{

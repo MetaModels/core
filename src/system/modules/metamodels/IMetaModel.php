@@ -173,8 +173,15 @@ interface IMetaModel
 	public function getAttributeOptions($strAttribute, $objFilter);
 
 	/**
+	 * Prepare an empty filter object for this meta model. The returned filter contains no rules.
+	 * 
+	 * @return IMetaModelFilter the filter object.
+	 */
+	public function getEmptyFilter();
+
+	/**
 	 * Prepare the base filter object for this meta model.
-	 * This object is produced by calling parseFlterUrl on all contained attributes with an empty filter url.
+	 * This object is produced by calling parseFilterUrl on all contained attributes with an empty filter url.
 	 * This allows the attributes to generate basic filter options that must be applied globally on the MetaModel
 	 * and hence allows functionality like "published"-attributes and the like.
 	 * 

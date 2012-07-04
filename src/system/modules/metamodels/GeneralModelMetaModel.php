@@ -25,7 +25,7 @@ if (!defined('TL_ROOT'))
  * @package    MetaModels
  * @subpackage Core
  */
-class DataModelMetaModel implements InterfaceGeneralModel
+class GeneralModelMetaModel implements InterfaceGeneralModel
 {
 
 	/**
@@ -47,12 +47,12 @@ class DataModelMetaModel implements InterfaceGeneralModel
 
 	public function __clone()
 	{
-		return new DataModelMetaModel($this->objItem->copy());
+		return new GeneralModelMetaModel($this->getItem()->copy());
 	}
 
 	public function getID()
 	{
-		return $this->objItem->get('id');
+		return $this->getItem()->get('id');
 	}
 
 	/**
@@ -63,12 +63,12 @@ class DataModelMetaModel implements InterfaceGeneralModel
 	 */
 	public function getProperty($strPropertyName)
 	{
-		if ($this->objItem)
+		if ($this->getItem())
 		{
-			$varValue = $this->objItem->get($strPropertyName);
+			$varValue = $this->getItem()->get($strPropertyName);
 			// test if it is an attribute, if so, let it transform the data 
 			// for the widget.
-			$objAttribute = $this->objItem->getAttribute($strPropertyName);
+			$objAttribute = $this->getItem()->getAttribute($strPropertyName);
 
 			if ($objAttribute)
 			{
@@ -85,7 +85,7 @@ class DataModelMetaModel implements InterfaceGeneralModel
 	public function getPropertiesAsArray()
 	{
 		$arrResult = array();
-		foreach (array_keys($this->objItem->getMetaModel()->getAttributes()) as $strKey)
+		foreach (array_keys($this->getItem()->getMetaModel()->getAttributes()) as $strKey)
 		{
 			$arrResult[$strKey] = $this->getProperty($strKey);
 		}
@@ -94,7 +94,7 @@ class DataModelMetaModel implements InterfaceGeneralModel
 
 	public function setID($mixID)
 	{
-		$this->objItem->set('id', $mixID);
+		$this->getItem()->set('id', $mixID);
 	}
 
 	/**
@@ -105,16 +105,16 @@ class DataModelMetaModel implements InterfaceGeneralModel
 	 */
 	public function setProperty($strPropertyName, $varValue)
 	{
-		if ($this->objItem)
+		if ($this->getItem())
 		{
 			// test if it is an attribute, if so, let it transform the data 
 			// for the widget.
-			$objAttribute = $this->objItem->getAttribute($strPropertyName);
+			$objAttribute = $this->getItem()->getAttribute($strPropertyName);
 			if ($objAttribute)
 			{
 				$varValue = $objAttribute->widgetToValue($varValue);
 			}
-			$this->objItem->set($strPropertyName, $varValue);
+			$this->getItem()->set($strPropertyName, $varValue);
 		}
 	}
 
@@ -133,7 +133,7 @@ class DataModelMetaModel implements InterfaceGeneralModel
 	 */
 	public function hasProperties()
 	{
-		return ($this->objItem)?true:false;
+		return ($this->getItem())?true:false;
 	}
 
 	/**
@@ -143,7 +143,7 @@ class DataModelMetaModel implements InterfaceGeneralModel
 	 */
 	public function getIterator()
 	{
-		return new DataModelMetaModelIterator($this);
+		return new GeneralModelMetaModelIterator($this);
 	}
 }
 

@@ -47,15 +47,12 @@ $GLOBALS['TL_LANG']['tl_metamodel']['display_legend']       = 'Display format';
  */
 $GLOBALS['TL_LANG']['tl_metamodel']['new']                  = array('New MetaModel', 'Create new MetaModel.');
 
-// TODO: is maintenance still used? If so, provide a better maintenance framework.
-$GLOBALS['TL_LANG']['tl_metamodel']['maintenance']          = array('Maintenance', 'Perform some maintenance tasks on your MetaModel tables.');
-
 $GLOBALS['TL_LANG']['tl_metamodel']['edit']                 = array('Manage items', 'Manage items of MetaModel ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel']['copy']                 = array('Copy MetaModel definiton', 'Copy definition of MetaModel ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel']['delete']               = array('Delete MetaModel', 'Delete MetaModel ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel']['show']                 = array('MetaModel details', 'Show details of MetaModel ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel']['editheader']           = array('Edit MetaModel', 'Edit the MetaModel');
-$GLOBALS['TL_LANG']['tl_metamodel']['fields']               = array('Define fields', 'Define fields for MetaModel ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel']['fields']               = array('Define attributes', 'Define attributes for MetaModel ID %s');
 
 /**
  * Misc.

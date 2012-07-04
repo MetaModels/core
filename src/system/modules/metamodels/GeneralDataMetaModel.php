@@ -19,13 +19,13 @@ if (!defined('TL_ROOT'))
 }
 
 /**
- * Data drive class for DC_General
+ * Data driver class for DC_General
  * 
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @package    MetaModels
  * @subpackage Core
  */
-class DataProviderMetaModel implements InterfaceGeneralData
+class GeneralDataMetaModel implements InterfaceGeneralData
 {
 	// Vars --------------------------------------------------------------------
 
@@ -41,23 +41,6 @@ class DataProviderMetaModel implements InterfaceGeneralData
 	 * @var IMetaModel
 	 */
 	protected $objMetaModel = NULL;
-
-	// Constructor and co ------------------------------------------------------
-
-	public function __construct(array $arrConfig)
-	{
-		// Check Vars
-		if (!isset($arrConfig["source"]))
-		{
-			throw new Exception("Missing table name.");
-		}
-
-		// Init Vars
-		$this->strTable = $arrConfig["source"];
-
-		$this->objMetaModel = MetaModelFactory::byTableName($this->strTable);
-
-	}
 
 	// Functions ---------------------------------------------------------------
 
@@ -130,11 +113,42 @@ class DataProviderMetaModel implements InterfaceGeneralData
 	public function fetch(GeneralDataConfigDefault $objConfig)
 	{
 		$objItem = $this->objMetaModel->findById($objConfig->getId());
+
 		if (!$objItem)
 		{
 			return null;
 		}
-		return new DataModelMetaModel($objItem);
+		return new GeneralModelMetaModel($objItem);
+	}
+
+	/**
+	 * Set base config with source and other neccesary prameter
+	 * 
+	 * @param array $arrConfig the configuration array.
+	 * @throws Exception
+	 */
+	public function setBaseConfig(array $arrConfig)
+	{
+		// Check Vars
+		if (!$arrConfig["source"])
+		{
+			throw new Exception("Missing table name.");
+		}
+
+		// Init Vars
+		$this->strTable = $arrConfig["source"];
+
+		$this->objMetaModel = MetaModelFactory::byTableName($this->strTable);
+	}
+
+	/**
+	 * Return empty config object
+	 * 
+	 * @return InterfaceGeneralDataConfig
+	 */
+	public function getEmptyConfig()
+	{
+		return GeneralDataConfigDefault::init();
 	}
 
 	/**
@@ -145,7 +159,7 @@ class DataProviderMetaModel implements InterfaceGeneralData
 	public function getEmptyModel()
 	{
 		$objItem = new MetaModelItem($this->objMetaModel, array());
-		return new DataModelMetaModel($objItem);
+		return new GeneralModelMetaModel($objItem);
 	}
 
 	public function getEmptyCollection()
@@ -153,7 +167,7 @@ class DataProviderMetaModel implements InterfaceGeneralData
 		return new GeneralCollectionDefault();
 	}
 
-	protected function prepareFilter($arrFilter)
+	protected function prepareFilter($arrFilter = array())
 	{
 		if ($arrFilter)
 		{
@@ -161,7 +175,9 @@ class DataProviderMetaModel implements InterfaceGeneralData
 		} else {
 			$arrFilterFields = array();
 		}
-		$objFilter = $this->objMetaModel->prepareFilter($arrFilterFields, $arrFilter);
+		$objFilter = $this->objMetaModel->getEmptyFilter();
+		// TODO: apply filter rules here.
+		//($arrFilterFields, $arrFilter);
 		return $objFilter;
 	}
 
@@ -190,7 +206,7 @@ class DataProviderMetaModel implements InterfaceGeneralData
 			$objResultCollection = $this->getEmptyCollection();
 			foreach ($objItems as $objItem)
 			{
-				$objResultCollection->push(new DataModelMetaModel($objItem));
+				$objResultCollection->push(new GeneralModelMetaModel($objItem));
 			}
 			return $objResultCollection;
 		}
@@ -205,14 +221,14 @@ class DataProviderMetaModel implements InterfaceGeneralData
 	 */
 	public function fetchEach(GeneralDataConfigDefault $objConfig)
 	{
-		$objFilter = $this->objMetaModel->getBaseFilter();
+		$objFilter = $this->prepareFilter();
 		// filter for the desired items only.
 		$objFilter->addFilterRule(new MetaModelFilterRuleStaticIdList($objConfig->getIds()));
 		$objItems = $this->objMetaModel->findByFilter($objFilter);
 		$objResultCollection = $this->getEmptyCollection();
 		foreach ($objItems as $objItem)
 		{
-			$objResultCollection->push(new DataModelMetaModel($objItem));
+			$objResultCollection->push(new GeneralModelMetaModel($objItem));
 		}
 		return $objResultCollection;
 	}
@@ -249,12 +265,12 @@ class DataProviderMetaModel implements InterfaceGeneralData
 
 	public function save(InterfaceGeneralModel $objItem, $recursive = false)
 	{
-		if ($objItem instanceof DataModel_MetaModel)
+		if ($objItem instanceof GeneralModelMetaModel)
 		{
 			$objItem->getItem()->save();
 			return;
 		}
-		throw new Exception('ERROR: incompatible object passed to DataProvider_MetaModel::save()');
+		throw new Exception('ERROR: incompatible object passed to GeneralDataMetaModel::save()');
 	}
 
 	public function saveEach(InterfaceGeneralCollection $objItems, $recursive = false)
@@ -309,6 +325,24 @@ class DataProviderMetaModel implements InterfaceGeneralData
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Fetch a variant of a single record by id.
+	 * 
+	 * @param GeneralDataConfigDefault $objConfig
+	 * 
+	 * @return InterfaceGeneralModel
+	 */
+	public function createVariant(GeneralDataConfigDefault $objConfig)
+	{
+		$objItem = $this->objMetaModel->findById($objConfig->getId())->varCopy();
+
+		if (!$objItem)
+		{
+			return null;
+		}
+		return new GeneralModelMetaModel($objItem);
 	}
 }
 

@@ -44,7 +44,7 @@ class MetaModelDatabase extends Controller
 
 		$arrDCA = $GLOBALS['TL_DCA']['tl_metamodel_item'];
 
-		$arrDCA['dca_config']['default']['source'] = $strTableName;
+		$arrDCA['dca_config']['data_provider']['default']['source'] = $strTableName;
 
 		$objMetaModel=MetaModelFactory::byTableName($strTableName);
 		if ($objMetaModel->isTranslated())
@@ -96,7 +96,7 @@ class MetaModelDatabase extends Controller
 			$arrOperationCreateVariant = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_item']['createvariant'],
-				'href'                => 'act=copy',
+				'href'                => 'act=createvariant',
 				'icon'                => 'system/modules/metamodels/html/createvariant.gif',
 				'button_callback'     => array('MetaModelDatabase', 'buttonCallbackCreateVariant')
 			);
@@ -116,7 +116,7 @@ class MetaModelDatabase extends Controller
 			}
 
 			$arrDCA['list']['label']['fields'][] = 'varbase';
-			$arrDCA['list']['label']['format'] .= '<span>Is variant base: %s</span><br/>';
+			$arrDCA['list']['label']['format'] .= '<span>%s</span><br/>';
 
 		}
 
@@ -162,55 +162,6 @@ class MetaModelDatabase extends Controller
 			$strImg?$strImg:$strLabel
 		);
 	}
-
-
-// TODO: move to DC_MetaModel?
-	/**
-	 * Add the type of input field
-	 * @param array
-	 * @return string
-	 */
-	public function renderRow($arrRow)
-	{
-		foreach ($arrRow as $key => $value) {
-			
-		}
-		// TODO: use templating in here.
-		return
-'<div class="field_heading cte_type"><strong>' . $arrRow['colname'] . '</strong> <em>['.$arrRow['type'].']</em></div>
-<div class="field_type block">
-</div>';
-
-	}
-
-// TODO: move to DC_MetaModel?
-	/**
-	 * Add the type of input field
-	 * @param array
-	 * @return string
-	 */
-	public function labelCallback($arrRow, $strLabel, DataContainer $objDC, $strFolderAttribute = '', $blnUnknown = false, $blnProtected = false)
-	{
-		$strValues = '';
-		$objMetaModel = MetaModelFactory::byTableName($objDC->table);
-		foreach ($arrRow as $strKey => $strValue)
-		{
-			if(in_array($strKey, array('id', 'pid', 'sorting', 'tstamp', 'varbase', 'vargroup')))
-			{
-				$strValues .= sprintf('<div><em>%s:</em> %s</div>', $strKey, $strValue);
-			}
-		}
-		foreach ($objMetaModel->getAttributes() as $objAttribute)
-		{
-			$arrResult = $objAttribute->parseValue($arrRow);
-			$strValues .= sprintf('<div><em>%s:</em> %s</div>', $objAttribute->getName(), $arrResult['html']);
-		}
-
-		// TODO: use templating in here.
-		return '<div class="field_type block">'.$strValues.'</div>';
-
-	}
-
 }
 
 ?>

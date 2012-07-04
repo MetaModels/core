@@ -37,14 +37,19 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 		'switchToEdit'                => false,
 		'enableVersioning'            => false,
 	),
-
 	'dca_config' => array
 	(
-		'default' => array
+		'callback' => 'GeneralCallbackMetaModel',
+		'data_provider' => array
 		(
-			'class'  => 'DataProviderMetaModel',
-			'source' => '' // get's set within MetaModelDatabase::createDataContainer via $GLOBALS['TL_HOOKS']['loadDataContainer']
-		)
+			'default' => array
+			(
+				'class'  => 'DataProviderMetaModel',
+				'source' => null // get's set within MetaModelDatabase::createDataContainer via $GLOBALS['TL_HOOKS']['loadDataContainer']
+			)
+		),
+		'controller' => 'GeneralControllerMetaModel',
+		'view' => 'GeneralViewMetaModel'
 	),
 
 	'list' => array
@@ -56,7 +61,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 			// TODO: panelLayout must be built dynamically in getMetaModelDca() to solve issue #199
 			'headerFields'            => array('tstamp'),
 			'fields'                  => array('sorting'),
-			'child_record_callback'   => array('MetaModelDatabase', 'renderRow'),
 		),
 		
 		'label' => array

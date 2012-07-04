@@ -53,7 +53,10 @@ class TableMetaModel extends Backend
 		$arrOutput = array();
 		foreach ($arrLangValues as $strLangCode => $varSubValue)
 		{
-			$arrOutput[] = array_merge($varSubValue, array('langcode' => $strLangCode));
+			if (is_array($varSubValue))
+			{
+				$arrOutput[] = array_merge($varSubValue, array('langcode' => $strLangCode));
+			}
 		}
 		return serialize($arrOutput);
 	}
@@ -178,7 +181,8 @@ class TableMetaModel extends Backend
 			return '';
 		}
 		return sprintf('<a href="%s" title="%s"%s>%s</a> ',
-			$this->addToUrl($strHref.'&amp;table='.$arrRow['tableName']),
+//			$this->addToUrl($strHref.'&amp;table='.$arrRow['tableName']),
+			'contao/main.php?do=metamodel_' . $arrRow['tableName'],
 			specialchars($strTitle),
 			$strAttributes,
 			$this->generateImage($strIcon, $strLabel)

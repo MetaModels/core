@@ -275,9 +275,6 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			'eval'                    => array('tl_class'=>'clr', 'submitOnChange' => true)
 		),
 
-		// TODO: add support to list this metamodel in the backend here. This can be done by adding the following fields:
-		// section    - the top level section id in the backend (i.e. system)
-		// icon       - file picker for an image which then has to be resized to 16x16 for use in the backend list.
 		'backendsection' => array
 		(
 			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel']['backendsection'],
@@ -304,7 +301,6 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'fieldType'=>'radio',
 				'files'=>true,
 				'filesOnly'=>true,
-				//'mandatory'=>true,
 				'extensions' => 'jpg,jpeg,gif,png,tif,tiff'
 			)
 		),
