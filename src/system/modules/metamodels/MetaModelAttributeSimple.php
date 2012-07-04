@@ -64,13 +64,20 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 	public function getFilterOptions($arrIds = array())
 	{
 		$strCol = $this->colName();
-		// ensure proper integer ids for SQL injection safety reasons.
-		$strIdList = implode(',', array_map('intval', $arrIds));
-		$objRow = Database::getInstance()->execute('
-			SELECT DISTINCT(' . $strCol . ')
-			FROM ' . $this->getMetaModel()->getTableName() .
-			' WHERE id IN (' . $strIdList . ')
-			ORDER BY FIELD(id,' . $strIdList . ')');
+		if ($arrIds)
+		{
+			// ensure proper integer ids for SQL injection safety reasons.
+			$strIdList = implode(',', array_map('intval', $arrIds));
+			$objRow = Database::getInstance()->execute('
+				SELECT DISTINCT(' . $strCol . ')
+				FROM ' . $this->getMetaModel()->getTableName() .
+				' WHERE id IN (' . $strIdList . ')
+				ORDER BY FIELD(id,' . $strIdList . ')');
+		} else {
+			$objRow = Database::getInstance()->execute('
+				SELECT DISTINCT(' . $strCol . ')
+				FROM ' . $this->getMetaModel()->getTableName());
+		}
 		$arrResult = array();
 		while($objRow->next())
 		{
