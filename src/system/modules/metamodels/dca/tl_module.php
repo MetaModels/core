@@ -81,7 +81,6 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_limit'],
 		'exclude'                 => true,
 		'inputType'               => 'text',
-		'default'               	=> '1',
 		'eval'                    => array('rgxp'=>'digit')
 	),
 
@@ -90,7 +89,6 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_offset'],
 		'exclude'                 => true,
 		'inputType'               => 'text',
-		'default'                 => '10',
 		'eval'                    => array('rgxp' => 'digit', 'tl_class'=>'w50'),
 	),
 
@@ -100,7 +98,6 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'exclude'                 => true,
 		'inputType'               => 'select',
 		'options_callback'        => array('tl_module_metamodel', 'getAttributeNames'),
-		'default'                 => '10',
 		'eval'                    => array('includeBlankOption' => true, 'tl_class'=>'w50'),
 	),
 
