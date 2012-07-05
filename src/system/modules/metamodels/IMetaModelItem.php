@@ -98,10 +98,24 @@ interface IMetaModelItem
 	 * Renders the item in the given output format.
 	 * @see IMetaModelAttribute::parseValue() for further information.
 	 * 
-	 * @param string $strOutputFormat the desired output format.
+	 * @param string $strOutputFormat optional, the desired output format (default: text).
+	 * 
+	 * @return array attribute name => format => value
 	 * 
 	 */
 	public function parseValue($strOutputFormat = 'text');
+
+	/**
+	 * Renders a single attribute in the given output format.
+	 * @see IMetaModelAttribute::parseValue() for further information.
+	 * 
+	 * @param string $strAttributeName the desired attribute.
+	 * 
+	 * @param string $strOutputFormat  optional, the desired output format (default: text).
+	 * 
+	 * @return array format=>value
+	 */
+	public function parseAttribute($strAttributeName, $strOutputFormat = 'text');
 
 	/**
 	 * Returns a new item containing the same values as this item but no id.

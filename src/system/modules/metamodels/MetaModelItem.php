@@ -158,13 +158,30 @@ class MetaModelItem implements IMetaModelItem
 	/**
 	 * {@inheritdoc}
 	 */
+	public function parseAttribute($strAttributeName, $strOutputFormat = 'text')
+	{
+		$objAttribute = $this->getMetaModel()->getAttribute($strAttributeName);
+		if ($objAttribute)
+		{
+			foreach($objAttribute->parseValue($this->arrData, $strOutputFormat) as $strKey => $varValue)
+			{
+				$arrResult[$strKey] = $varValue;
+			}
+			// TODO: parseValue HOOK?
+		}
+		return $arrResult;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function copy()
 	{
 		// fetch data, clean undesired fields and return the new item.
 		$arrNewData = $this->arrData;
 		unset($arrNewData['id']);
 		unset($arrNewData['tstamp']);
-		return new MetaModelItem($arrNewData);
+		return new MetaModelItem($this->getMetaModel(), $arrNewData);
 	}
 
 	/**
@@ -179,7 +196,11 @@ class MetaModelItem implements IMetaModelItem
 		{
 			$objNewItem->set('vargroup', $this->get('id'));
 			$objNewItem->set('varbase', 0);
+		} else {
+			$objNewItem->set('vargroup', $this->get('vargroup'));
+			$objNewItem->set('varbase', 0);
 		}
+		return $objNewItem;
 	}
 }
 
