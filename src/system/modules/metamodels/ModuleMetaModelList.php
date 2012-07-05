@@ -56,8 +56,6 @@ class ModuleMetaModelList extends Module
 
 		$this->strTemplate = $this->metamodel_layout;
 
-		$this->metamodel_filtering = deserialize($this->metamodel_filtering, true);
-
 		return parent::generate();
 	}
 

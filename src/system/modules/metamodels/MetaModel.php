@@ -598,6 +598,12 @@ class MetaModel implements IMetaModel
 	public function prepareFilter($arrAttributeNames, $arrFilterUrl)
 	{
 		$objFilter = $this->getBaseFilter();
+		if ($arrAttributeNames)
+		{
+			$objFilterSettings = MetaModelFilterSettings::byId($arrAttributeNames);
+			$objFilterSettings->addRules($objFilter, $arrFilterUrl);
+		}
+/*
 		foreach ($arrAttributeNames as $strAttributeName)
 		{
 			$objAttribute = $this->getAttribute($strAttributeName);
@@ -610,6 +616,7 @@ class MetaModel implements IMetaModel
 				}
 			}
 		}
+*/
 		return $objFilter;
 	}
 }

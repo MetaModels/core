@@ -18,34 +18,50 @@ if (!defined('TL_ROOT')) {
 }
 
 /**
- * This is the MetaModel filterrule base implementation.
+ * This is the MetaModel filter interface.
  *
  * @package	   MetaModels
  * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-abstract class MetaModelFilterRule implements IMetaModelFilterRule
+class MetaModelFilterRuleOR extends MetaModelFilterRule
 {
 
 	/**
-	 * The attribute this rule applies to.
-	 * @var IMetaModelAttribute
+	 * The static id list that shall be applied.
 	 */
-	protected $objAttribute = NULL;
+	protected $arrChildFilters = array();
 
 	/**
 	 * create a new FilterRule instance.
-	 * @param IMetaModelAttribute|null $objAttribute optional, the attribute this rule applies to.
+	 * @param IMetaModelAttribute $objAttribute the attribute this rule applies to.
 	 */
-	public function __construct($objAttribute = NULL)
+	public function __construct()
 	{
-		$this->objAttribute = $objAttribute;
+		parent::__construct(null);
+	}
+
+	public function addChild(IMetaModelFilter $objFilter)
+	{
+		$this->arrChildFilters[] = $objFilter;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-//	abstract public function getMatchingIds();
+	public function getMatchingIds()
+	{
+		$arrIds = array();
+		foreach ($this->arrChildFilters as $objChildFilter)
+		{
+			$arrChildMatches = $objChildFilter->getMatchingIds();
+			if ($arrChildMatches)
+			{
+				$arrIds = array_merge($arrIds, $arrChildMatches);
+			}
+		}
+		return $arrIds;
+	}
 }
 
 ?>

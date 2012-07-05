@@ -13,39 +13,41 @@
  * @license    private
  * @filesource
  */
-if (!defined('TL_ROOT')) {
+if (!defined('TL_ROOT'))
+{
 	die('You cannot access this file directly!');
 }
 
 /**
- * This is the MetaModel filterrule base implementation.
- *
+ * 
+ * This interface handles filter setting abstraction for settings that can contain childs.
+ * 
+ * @see 
  * @package	   MetaModels
  * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-abstract class MetaModelFilterRule implements IMetaModelFilterRule
+abstract class MetaModelFilterSettingWithChilds
+extends MetaModelFilterSetting
+implements IMetaModelFilterSettingWithChilds
 {
 
-	/**
-	 * The attribute this rule applies to.
-	 * @var IMetaModelAttribute
-	 */
-	protected $objAttribute = NULL;
+	protected $arrChilds = array();
+
+	///////////////////////////////////////////////////////////////////////////////
+	// Interface IMetaModelFilterSettingWithChilds
+	///////////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * create a new FilterRule instance.
-	 * @param IMetaModelAttribute|null $objAttribute optional, the attribute this rule applies to.
+	 * 
+	 * @return void
+	 * 
 	 */
-	public function __construct($objAttribute = NULL)
+	public function addChild(IMetaModelFilterSetting $objFilterSetting)
 	{
-		$this->objAttribute = $objAttribute;
+		$this->arrChilds[] = $objFilterSetting;
 	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-//	abstract public function getMatchingIds();
 }
+
 
 ?>

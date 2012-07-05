@@ -193,6 +193,7 @@ interface IMetaModel
 	 * Generates a filter object that takes the given attributes into account.
 	 * 
 	 * @param array $arrAttributeNames all attributes that shall be evaluated in the filter.
+	 * TODO: change to filter settings
 	 * 
 	 * @param array $arrFilterUrl      the filter url parameters (usually the contents of $_GET etc.)
 	 * 
