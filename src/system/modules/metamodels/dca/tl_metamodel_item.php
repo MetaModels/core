@@ -44,7 +44,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 		(
 			'default' => array
 			(
-				'class'  => 'DataProviderMetaModel',
+				'class'  => 'GeneralDataMetaModel',
 				'source' => null // get's set within MetaModelDatabase::createDataContainer via $GLOBALS['TL_HOOKS']['loadDataContainer']
 			)
 		),
