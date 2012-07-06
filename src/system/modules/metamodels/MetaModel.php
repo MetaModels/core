@@ -600,7 +600,7 @@ class MetaModel implements IMetaModel
 		$objFilter = $this->getBaseFilter();
 		if ($arrAttributeNames)
 		{
-			$objFilterSettings = MetaModelFilterSettings::byId($arrAttributeNames);
+			$objFilterSettings = MetaModelFilterSettingsFactory::byId($arrAttributeNames);
 			$objFilterSettings->addRules($objFilter, $arrFilterUrl);
 		}
 /*

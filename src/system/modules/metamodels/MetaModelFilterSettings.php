@@ -27,32 +27,6 @@ if (!defined('TL_ROOT'))
  */
 class MetaModelFilterSettings implements IMetaModelFilterSettings
 {
-	/**
-	 * @var IMetaModelFilterSettings[]
-	 */
-	protected static $arrInstances = array();
-
-	/*
-	 * fetch a settings collection from the database.
-	 * FIXME: make a factory!
-	 */
-	public static function byId($intId)
-	{
-		if (!self::$arrInstances[$intId])
-		{
-			$objDB = Database::getInstance();
-
-			$objSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')->execute($intId);
-
-			$objSetting = new self($objSettings->row());
-			self::$arrInstances[$intId] = $objSetting;
-			$objSetting->collectRules();
-		} else {
-			$objSetting = self::$arrInstances[$intId];
-		}
-		return $objSetting;
-	}
-
 	protected $arrData = array();
 
 	/**
@@ -95,7 +69,16 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 		}
 	}
 
-	protected function collectRules()
+	///////////////////////////////////////////////////////////////////////////////
+	// IMetaModelFilterSettings
+	///////////////////////////////////////////////////////////////////////////////
+
+	public function getMetaModel()
+	{
+		return MetaModelFactory::byId($this->arrData['pid']);
+	}
+
+	public function collectRules()
 	{
 		if (!$this->arrData['id'])
 		{
@@ -116,15 +99,6 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 				}
 			}
 		}
-	}
-
-	///////////////////////////////////////////////////////////////////////////////
-	// IMetaModelFilterSettings
-	///////////////////////////////////////////////////////////////////////////////
-
-	public function getMetaModel()
-	{
-		return MetaModelFactory::byId($this->arrData['pid']);
 	}
 
 	public function addRules(IMetaModelFilter $objFilter, $arrFilterUrl)

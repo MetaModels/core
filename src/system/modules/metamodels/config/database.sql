@@ -151,6 +151,8 @@ CREATE TABLE `tl_metamodel_filtersetting` (
   `attr_id` int(10) unsigned NOT NULL default '0',
 -- simple lookup - url param override.
   `urlparam` varchar(255) NOT NULL default '',
+-- custom SQL - query content.
+  `customsql` text NULL,
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

@@ -23,6 +23,9 @@ if (!defined('TL_ROOT'))
  */
 $GLOBALS['TL_LANG']['MOD']['metamodel'] = array('MetaModel', 'The MetaModels extension allows you to create own data models.');
 
+$GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord'] = 'edit filter setting %%s for filter "%s" in MetaModel "%s"';
+
+
 
 //Select Options
 $GLOBALS['TL_LANG']['MSC']['optionsTitle'] = 'Select %s';

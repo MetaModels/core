@@ -26,6 +26,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']      = array('Parent co
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['type']     = array('Type', 'The type of this setting.');
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id']  = array('Attribute', 'Attribute this setting relates to.');
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam'] = array('URL parameter', 'The URL parameter that shall get mapped to the selected attribute. The special <em>"auto_item"</em> parameter can also be used, this is especially useful for alias columns.');
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql'] = array('Custom SQL Query', 'The SQL query that shall be executed, insert tags are supported.');
 
 /**
  * Legends

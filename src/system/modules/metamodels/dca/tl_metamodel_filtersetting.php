@@ -29,7 +29,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		'dataContainer'               => 'Table',
 		'switchToEdit'                => false,
 		'enableVersioning'            => false,
-		'oncreate_callback'           => array(array('TableMetaModelFilterSetting', 'create_callback'))
+		'oncreate_callback'           => array(array('TableMetaModelFilterSetting', 'create_callback')),
+		'palettes_callback'           => array(array('TableMetaModelFilterSetting', 'preparePalettes'))
 	),
 
 	// List
@@ -60,6 +61,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
 				'href'                => 'act=select',
 				'class'               => 'header_edit_all',
+				'attributes'          => 'onclick="Backend.getScrollOffset();"'
+			),
+			// unfortunately, I can not place Back at the beginning (before new), so I put it at the end.
+			'back' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['MSC']['backBT'],
+				// TODO: this is an evil hack, replace with something better.
+				'href'                => str_replace(array('contao/main.php?do=metamodel', $this->Environment->url), '', $this->getReferer(false, 'tl_metamodel_filter')),
+				'class'               => 'header_back',
 				'attributes'          => 'onclick="Backend.getScrollOffset();"'
 			)
 		),
@@ -96,7 +106,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 
 	'palettes' => array
 	(
-		'__selector__' => array('type', 'attr_id')
+		'__selector__' => array('type')
 	),
 
 	'metapalettes' => array
@@ -107,16 +117,28 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		),
 		'_attribute_ extends default' => array
 		(
-			'+title' => array('attr_id after type')
+			'config' => array('attr_id')
 		),
 
 		// base rules shipped with metamodels.
 
 		'simplelookup extends _attribute_' => array
 		(
-			'config' => array('urlparam'),
+			'+config' => array('urlparam'),
 		),
 
+		'customsql extends default' => array
+		(
+			'+config' => array('customsql'),
+		),
+
+	),
+
+	'metasubselectpalettes' => array
+	(
+		'attr_id' => array
+		(
+		)
 	),
 
 	// Fields
@@ -124,9 +146,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 	(
 		'fid' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']
 			// keep this empty but keep it here!
 			// needed for act=copy in DC_Table, as otherwise the fid value will not be copied.
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid'],
 		),
 
 		'type' => array
@@ -142,7 +164,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 				'submitOnChange'      => true,
 				'includeBlankOption'  => true,
 				'mandatory'           => true,
-				'tl_class'            =>'w50'
+				'tl_class'            => 'w50',
+				'chosen'              => true
 			),
 		),
 
@@ -158,10 +181,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 				'submitOnChange'      => true,
 				'includeBlankOption'  => true,
 				'mandatory'           => true,
-				'tl_class'            =>'w50'
 			),
-			'load_callback'         => array(array('TableMetaModelFilterSetting', 'attrIdToName')),
-			'save_callback'         => array(array('TableMetaModelFilterSetting', 'nameToAttrId')),
+			'load_callback'           => array(array('TableMetaModelFilterSetting', 'attrIdToName')),
+			'save_callback'           => array(array('TableMetaModelFilterSetting', 'nameToAttrId')),
 		),
 
 		'urlparam' => array
@@ -171,6 +193,19 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'inputType'               => 'text',
 		),
 
+		'customsql' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql'],
+			'exclude'                 => true,
+			'inputType'               => 'textarea',
+			'eval'                    => array(
+				'allowHtml'           => true,
+				'rte'                 => 'codeMirror|sql',
+				'class'               => 'monospace',
+				'helpwizard'          => true,
+			),
+			'explanation'         => 'customsql'
+		),
 	)
 );
 

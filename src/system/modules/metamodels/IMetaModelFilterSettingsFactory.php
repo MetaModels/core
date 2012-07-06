@@ -19,36 +19,31 @@ if (!defined('TL_ROOT'))
 }
 
 /**
- * This is the main MetaModel interface.
+ * This is the IMetaModelFilterSettings factory interface.
  * 
- * This interface handles all filter setting abstraction.
- * dunn
- * @see MetaModelFilterFactory::byId	to instantiate a MetaModel by its ID.
+ * To create a IMetaModelFilterSettings instance, call {@link MetaModelFilterSettings::byId()}
+ * 
  * @package	   MetaModels
  * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-interface IMetaModelFilterSettings
+interface IMetaModelFilterSettingsFactory
 {
-	public function getMetaModel();
-
-	public function collectRules();
+	/**
+	 * Create a IMetaModelFilterSettings instance from the id.
+	 * 
+	 * @param int $intId the id of the IMetaModelFilterSettings.
+	 * 
+	 * @return IMetaModelFilterSettings the instance of the IMetaModelFilterSettings or null if not found.
+	 */
+	public static function byId($intId);
 
 	/**
-	 * Generates all filter rules from the contained filter settings.
+	 * Query for all known MetaModel database tables.
 	 * 
-	 * @param IMetaModelFilter $objFilter the filter object to add rules to.
-	 * 
-	 * @param array $arrFilterUrl
-	 * 
-	 * @return void
-	 * 
+	 * @return string[] all MetaModel table names as string array.
 	 */
-	public function addRules(IMetaModelFilter $objFilter, $arrFilterUrl);
-
-
-	public function generateFilterUrlFrom(IMetaModelItem $objItem);
+	// public static function getAllFor();
 }
-
 
 ?>

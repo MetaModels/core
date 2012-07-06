@@ -170,7 +170,7 @@ interface IMetaModel
 	 * 
 	 * @return array all options matching the given filter for the given attribute to be usable in a filter select widget.
 	 */
-	public function getAttributeOptions($strAttribute, $objFilter);
+	public function getAttributeOptions($strAttribute, $objFilter = null);
 
 	/**
 	 * Prepare an empty filter object for this meta model. The returned filter contains no rules.

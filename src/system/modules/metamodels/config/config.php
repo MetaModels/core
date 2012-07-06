@@ -117,5 +117,6 @@ $GLOBALS['FE_MOD']['metamodels'] = array
  * HOOKS
  */
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('MetaModelDatabase', 'createDataContainer');
+$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('TableMetaModelFilterSetting', 'createDataContainer');
 
 ?>

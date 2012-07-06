@@ -28,19 +28,61 @@ if (!defined('TL_ROOT'))
 
 class TableMetaModelFilterSetting extends Backend
 {
+	/**
+	 * @var MetaPalettes
+	 */
+	protected static $objInstance = null;
+
 	protected $objMetaModel = null;
+
+	protected $strSettingType = null;
+
+	protected $objFilter = null;
+
+	/**
+	 * Get the static instance.
+	 *
+	 * @static
+	 * @return MetaPalettes
+	 */
+	public static function getInstance()
+	{
+		if (self::$objInstance == null) {
+			self::$objInstance = new TableMetaModelFilterSetting();
+		}
+		return self::$objInstance;
+	}
+
+	/**
+	 * Protected constructor for singleton instance.
+	 */
+	protected function __construct()
+	{
+		parent::__construct();
+	}
+
+	public function createDataContainer($strTableName)
+	{
+		if ($strTableName != 'tl_metamodel_filtersetting')
+		{
+			return;
+		}
+		$this->objectsFromUrl(null);
+	}
 
 	protected function objectsFromUrl($objDC)
 	{
+		// TODO: detect all other ways we might end up here and fetch $objMetaModel accordingly.
 		if ($this->objMetaModel)
 		{
 			return;
 		}
 
-		if($objDC->activeRecord)
+		if($objDC && $objDC->activeRecord)
 		{
-			$objFilter = $this->Database->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')->execute($objDC->activeRecord->fid);
-			$this->objMetaModel = MetaModelFactory::byId($objFilter->pid);
+			$this->strSettingType = $objDC->activeRecord->type;
+			$this->objFilter = $this->Database->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')->execute($objDC->activeRecord->fid);
+			$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
 		}
 
 		if ($this->Input->get('act'))
@@ -48,55 +90,100 @@ class TableMetaModelFilterSetting extends Backend
 			// act present, but we have an id
 			switch ($this->Input->get('act'))
 			{
-				case 'edit': 
-					break;
+				case 'edit':
+					if ($this->Input->get('id'))
+					{
+						$strSettingType = $objDC->activeRecord->type;
+
+						$this->objFilter = $this->Database->prepare('
+							SELECT tl_metamodel_filter.*,
+								tl_metamodel_filtersetting.type AS tl_metamodel_filtersetting_type,
+								tl_metamodel_filtersetting.id AS tl_metamodel_filtersetting_id
+							FROM tl_metamodel_filtersetting
+							LEFT JOIN tl_metamodel_filter
+							ON (tl_metamodel_filtersetting.fid = tl_metamodel_filter.id)
+							WHERE (tl_metamodel_filtersetting.id=?)')
+							->execute($this->Input->get('id'));
+						$this->strSettingType = $this->objFilter->tl_metamodel_filtersetting_type;
+						$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
+					}
+					return;
 				default:;
 			}
-			
 		} else {
-			// no act but we have an id, list mode
+			// no act but we have an id, should be list mode then, no type name available.
 			if ($this->Input->get('id'))
 			{
-				$objFilter = $this->Database->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')->execute($this->Input->get('id'));
-				$this->objMetaModel = MetaModelFactory::byId($objFilter->pid);
+				$this->objFilter = $this->Database->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')->execute($this->Input->get('id'));
+				$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
 			}
 		}
 //		var_dump($_GET, $objDC->activeRecord, $this->objMetaModel);
 	}
 
-	/*
-	 * We are performing heavy typename to column name and vice versa calculations here to dynamically
-	 * create the metapalettes for the type of the currently selected attribute.
-	 * The resulting meta palettes are:
-	 * 'mm_metamodeltablename_attributename extends attributetype' => array()
-	 * where:
-	 * mm_metamodeltablename_attributename = the tablename and the attribute name combined by an "_".
-	 * attributetype                       = the attributes type name.
+	/**
+	 * translates an id to a generated alias {@see TableMetaModelFilterSetting::getAttributeNames()}
 	 * 
-	 * This way, attribute types can register their filter settings via
+	 * @param string        $strValue the id to translate.
+	 * 
+	 * @param DataContainer $objDC    the data container calling.
+	 * 
+	 * @return string
 	 */
-
 	public function attrIdToName($strValue, $objDC)
 	{
 		$this->objectsFromUrl($objDC);
+		if (!($this->objMetaModel && $strValue))
+		{
+			return;
+		}
 		$objAttribute = $this->objMetaModel->getAttributeById($strValue);
-		return $this->objMetaModel->getTableName() .'_' . $objAttribute->getColName();
+		if ($objAttribute)
+		{
+			return $this->objMetaModel->getTableName() .'_' . $objAttribute->getColName();
+		}
 	}
 
+	/**
+	 * translates an generated alias {@see TableMetaModelFilterSetting::getAttributeNames()}
+	 * to the corresponding attribute id.
+	 * 
+	 * @param string        $strValue the id to translate.
+	 * 
+	 * @param DataContainer $objDC    the data container calling.
+	 * 
+	 * @return int
+	 */
 	public function nameToAttrId($strValue, $objDC)
 	{
 		$this->objectsFromUrl($objDC);
-
+		if (!$this->objMetaModel)
+		{
+			return;
+		}
 		$strName = str_replace($this->objMetaModel->getTableName() . '_', '', $strValue);
 		return $this->objMetaModel->getAttribute($strName)->get('id');
 	}
 
+	/**
+	 * Translates an attribute id to the human readable name defined.
+	 * 
+	 * @return string the human readable name.
+	 */
 	public function attrIdToHumanName($strValue, $objDC)
 	{
 		$this->objectsFromUrl($objDC);
 		return $this->objMetaModel->getAttributeById($strValue)->getName();
 	}
 
+	/**
+	 * Prepares a option list with alias => name connection for all attributes.
+	 * This is used in the attr_id select box.
+	 * 
+	 * @param DataContainer $objDC the data container calling.
+	 * 
+	 * @return 
+	 */
 	public function getAttributeNames($objDC)
 	{
 		$this->objectsFromUrl($objDC);
@@ -105,48 +192,53 @@ class TableMetaModelFilterSetting extends Backend
 		{
 			return;
 		}
-		foreach ($this->objMetaModel->getAttributes() as $objAttribute)
-		{
-			$arrResult[$this->objMetaModel->getTableName() .'_' . $objAttribute->getColName()] = $objAttribute->getName();
-		}
-		return $arrResult;
-	}
-
-/*
-	public function prepareMetaPalettes($strTableName)
-	{
-		if($strTableName != 'tl_metamodel_filtersetting')
-		{
-			return false;
-		}
-
-		$objMetaModel = null;
-		if ($this->Input->get('pid'))
-		{
-			$objMetaModel = MetaModelFactory::byId($this->Input->get('pid'));
-		}
-		// TODO: detect all other ways we might end up here and fetch $objMetaModel accordingly.
-		if (!$objMetaModel)
-		{
-			return;
-		}
+		$objMetaModel = $this->objMetaModel;
 
 		foreach ($objMetaModel->getAttributes() as $objAttribute)
 		{
 			$strTypeName = $objAttribute->get('type');
-			$strBase = 'default';
-			foreach (array_keys($GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['metapalettes']) as $strPaletteName)
-			{
-				if (strncmp($strPaletteName, $strTypeName, strlen($strTypeName)) == 0)
-				{
-					$strBase = $strTypeName;
-				}
-			}
-			$strPalette = $objMetaModel->getTableName() .'_' . $objAttribute->getColName() . ' extends ' . $strBase;
-			$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['metapalettes'][$strPalette] = array();
+			$strSelectVal = $objMetaModel->getTableName() .'_' . $objAttribute->getColName();
+			$arrResult[$strSelectVal] = $objAttribute->getName() . ' [' . $strTypeName . ']';
 		}
+		return $arrResult;
 	}
-*/
+
+	/**
+	 * Prepares the sub palettes for simple look up filter setting types.
+	 * 
+	 * @return void
+	 */
+	public function preparePalettes()
+	{
+		$this->objectsFromUrl(null);
+		if (!($this->objMetaModel && $this->objFilter))
+		{
+			return;
+		}
+		$objMetaModel = $this->objMetaModel;
+
+		foreach ($objMetaModel->getAttributes() as $objAttribute)
+		{
+			$strTypeName = $objAttribute->get('type');
+			$strSelectVal = $objMetaModel->getTableName() .'_' . $objAttribute->getColName();
+			if ($GLOBALS['TL_DCA']['tl_metamodel_filtersetting'][$this->strSettingType . '_palettes'][$strTypeName])
+			{
+				$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['metasubselectpalettes']['attr_id'][$strSelectVal] = $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'][$this->strSettingType . '_palettes'][$strTypeName];
+			}
+		}
+
+		$GLOBALS['TL_LANG']['MSC']['editRecord'] = sprintf(
+			$GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord'],
+			$this->objFilter->name,
+			$this->objMetaModel->getName()
+		);
+	}
+
+	/**
+	 * returns all registered filter setting types.
+	 * 
+	 * @return string[]
+	 */
 	public function getSettingTypes()
 	{
 		return array_keys($GLOBALS['METAMODELS']['filters']);
@@ -191,8 +283,14 @@ class TableMetaModelFilterSetting extends Backend
 
 		$objAttribute = $this->objMetaModel->getAttributeById($arrRow['attr_id']);
 
-		$strAttrName = $objAttribute->getName();
-		$strAttrColName = $objAttribute->getColName();
+		if ($objAttribute)
+		{
+			$strAttrName = $objAttribute->getName();
+			$strAttrColName = $objAttribute->getColName();
+		} else {
+			$strAttrName = $arrRow['attr_id'];
+			$strAttrColName = $arrRow['attr_id'];
+		}
 
 		$strReturn = sprintf(
 		$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup'],
@@ -261,7 +359,7 @@ class TableMetaModelFilterSetting extends Backend
 		}
 
 		// if setting does not support childs, omit them.
-		if (!$GLOBALS['METAMODELS']['filters'][$arrRow['type']]['nestingAllowed'])
+		if ($arrRow['id'] && (!$GLOBALS['METAMODELS']['filters'][$arrRow['type']]['nestingAllowed']))
 		{
 			$disablePI = true;
 		}
