@@ -94,7 +94,6 @@ class TableMetaModelFilterSetting extends Backend
 					if ($this->Input->get('id'))
 					{
 						$strSettingType = $objDC->activeRecord->type;
-
 						$this->objFilter = $this->Database->prepare('
 							SELECT tl_metamodel_filter.*,
 								tl_metamodel_filtersetting.type AS tl_metamodel_filtersetting_type,
@@ -107,7 +106,32 @@ class TableMetaModelFilterSetting extends Backend
 						$this->strSettingType = $this->objFilter->tl_metamodel_filtersetting_type;
 						$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
 					}
-					return;
+					break;
+				case 'paste':
+					if ($this->Input->get('id'))
+					{
+						switch ($this->Input->get('mode'))
+						{
+							case 'create':
+								$this->objFilter = $this->Database->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')->execute($this->Input->get('id'));
+								$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
+							break;
+							case 'cut':
+								$this->objFilter = $this->Database->prepare('
+									SELECT tl_metamodel_filter.*,
+										tl_metamodel_filtersetting.type AS tl_metamodel_filtersetting_type,
+										tl_metamodel_filtersetting.id AS tl_metamodel_filtersetting_id
+									FROM tl_metamodel_filtersetting
+									LEFT JOIN tl_metamodel_filter
+									ON (tl_metamodel_filtersetting.fid = tl_metamodel_filter.id)
+									WHERE (tl_metamodel_filtersetting.id=?)')
+									->execute($this->Input->get('id'));
+								$this->strSettingType = $this->objFilter->tl_metamodel_filtersetting_type;
+								$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
+							break;
+						}
+					}
+					break;
 				default:;
 			}
 		} else {
@@ -118,7 +142,24 @@ class TableMetaModelFilterSetting extends Backend
 				$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
 			}
 		}
-//		var_dump($_GET, $objDC->activeRecord, $this->objMetaModel);
+		// select all root entries for the current filter.
+		$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['list']['sorting']['root'] = 
+			$this->Database->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE fid=? AND pid=0')
+			->execute($this->objFilter->id)
+			->fetchEach('id');
+		$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['list']['sorting']['rootPaste'] = true;
+
+		$GLOBALS['TL_LANG']['MSC']['editRecord'] = sprintf(
+			$GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord'],
+			$this->objFilter->name,
+			$this->objMetaModel->getName()
+		);
+
+		$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['config']['label'] = sprintf(
+			$GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label'],
+			$this->objFilter->name,
+			$this->objMetaModel->getName()
+		);
 	}
 
 	/**
@@ -226,12 +267,6 @@ class TableMetaModelFilterSetting extends Backend
 				$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['metasubselectpalettes']['attr_id'][$strSelectVal] = $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'][$this->strSettingType . '_palettes'][$strTypeName];
 			}
 		}
-
-		$GLOBALS['TL_LANG']['MSC']['editRecord'] = sprintf(
-			$GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord'],
-			$this->objFilter->name,
-			$this->objMetaModel->getName()
-		);
 	}
 
 	/**
@@ -351,6 +386,7 @@ class TableMetaModelFilterSetting extends Backend
 		$disablePA = false;
 		$disablePI = false;
 
+
 		// Disable all buttons if there is a circular reference
 		if ($arrClipboard !== false && ($arrClipboard['mode'] == 'cut' && ($cr == 1 || $arrClipboard['id'] == $arrRow['id']) || $arrClipboard['mode'] == 'cutAll' && ($cr == 1 || in_array($arrRow['id'], $arrClipboard['id']))))
 		{
@@ -368,7 +404,7 @@ class TableMetaModelFilterSetting extends Backend
 		$imagePasteAfter = $this->generateImage('pasteafter.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteafter'][1], $arrRow['id']), 'class="blink"');
 		$imagePasteInto = $this->generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteinto'][1], $arrRow['id']), 'class="blink"');
 
-		if ($row['id'] > 0)
+		if ($arrRow['id'] > 0)
 		{
 			$return = $disablePA 
 				? $this->generateImage('pasteafter_.gif', '', 'class="blink"').' '
