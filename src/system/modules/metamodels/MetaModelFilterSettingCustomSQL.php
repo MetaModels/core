@@ -32,8 +32,10 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 	{
 		$strSQL = $this->get('customsql');
 		// replace the metamodel table name.
-
 		$strSQL = str_replace('{{table}}', $this->getMetaModel()->getTableName(), $strSQL);
+		// and insert tags.
+		$strSQL = MetaModelController::getInstance()->replaceInsertTags($strSQL);
+		// TODO: support for arguments would be nice here.
 
 		if (strlen($strSQL))
 		{
