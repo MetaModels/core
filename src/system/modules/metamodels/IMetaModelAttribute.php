@@ -144,11 +144,15 @@ interface IMetaModelAttribute
 	 * useful when being echo'ed in a template and the raw value in the section 'raw'.
 	 * Each attribute class MAY return as many other values in this array with custom keys as it wants.
 	 * 
-	 * @param array $arrRowData the row data from the MetaModel table.
+	 * @param array  $arrRowData      the (native) row data from the MetaModel table.
+	 * 
+	 * @param string $strOutputFormat the desired output format.
+	 * 
+	 * @param object $objSettings     custom settings to be passed to the renderer.
 	 * 
 	 * @return array an array with all the converted data.
 	 */
-	public function parseValue($arrRowData, $strOutputFormat = 'text');
+	public function parseValue($arrRowData, $strOutputFormat = 'text', $objSettings = null);
 
 
 	/**
