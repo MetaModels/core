@@ -97,7 +97,7 @@ class MetaModelFilter implements IMetaModelFilter
 			$arrRuleIds = $objFilterRule->getMatchingIds();
 			if ($arrRuleIds === null)
 			{
-				//continue;
+				continue;
 			}
 			// the first rule determines the master ids.
 			if($arrIds === NULL)
@@ -105,10 +105,8 @@ class MetaModelFilter implements IMetaModelFilter
 				$arrIds = $arrRuleIds;
 			} else {
 				// NOTE: all rules are implicitely "AND"-ed together.
-				// To allow "OR" conditions, we need a FilterRule, that has child filter rules
-				// which are merged then within this FilterRule.
 				$arrIds = array_intersect($arrIds, $arrRuleIds);
-				// when no ids are left any more, the result will stay empty.
+				// when no ids are left any more, the result will stay empty, do not evaluate any further rules.
 				if (count($arrIds) == 0)
 				{
 					break;
