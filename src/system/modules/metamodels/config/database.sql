@@ -147,6 +147,8 @@ CREATE TABLE `tl_metamodel_filtersetting` (
   `fid` int(10) unsigned NOT NULL default '0',
 -- filter setting type
   `type` varchar(64) NOT NULL default '',
+-- active or disabled
+  `enabled` char(1) NOT NULL default '',
 -- corresponding tl_metamodel_attribute
   `attr_id` int(10) unsigned NOT NULL default '0',
 -- simple lookup - url param override.

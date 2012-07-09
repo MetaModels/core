@@ -59,6 +59,21 @@ class TableMetaModelFilterSetting extends Backend
 	protected function __construct()
 	{
 		parent::__construct();
+
+		// toggling of a filter setting?
+		if($this->Input->get('tid'))
+		{
+			// Update database
+			$this->Database->prepare('
+				UPDATE tl_metamodel_filtersetting
+				SET enabled=?
+				WHERE id=?'
+				)->execute(
+					($this->Input->get('state')=='1'?'1':''),
+					$this->Input->get('tid')
+				);
+			exit;
+		}
 	}
 
 	public function createDataContainer($strTableName)
@@ -142,6 +157,7 @@ class TableMetaModelFilterSetting extends Backend
 				$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
 			}
 		}
+
 		// select all root entries for the current filter.
 		$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['list']['sorting']['root'] = 
 			$this->Database->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE fid=? AND pid=0')
@@ -415,6 +431,27 @@ class TableMetaModelFilterSetting extends Backend
 			? $this->generateImage('pasteinto_.gif', '', 'class="blink"').' '
 			: '<a href="'.$this->addToUrl('act='.$arrClipboard['mode'].'&amp;mode=2&amp;pid='.$arrRow['id'].(!is_array($arrClipboard['id']) ? '&amp;id='.$arrClipboard['id'] : '')).'" title="'.specialchars(sprintf($GLOBALS['TL_LANG'][$strTable]['pasteinto'][1], $arrRow['id'])).'" onclick="Backend.getScrollOffset()">'.$imagePasteInto.'</a> ');
 	}
+
+	/**
+	 * Return the "toggle visibility" button
+	 * @param array
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @return string
+	 */
+	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
+	{
+		$href .= '&amp;tid='.$row['id'].'&amp;state='.($row['enabled'] ? '0' : '1');
+		if (!$row['enabled'])
+		{
+			$icon = 'invisible.gif';
+		}
+		return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
+	}
+
 }
 
 ?>

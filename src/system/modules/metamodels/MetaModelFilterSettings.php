@@ -53,7 +53,7 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 	protected function collectRulesFor($objBaseSettings, $objSetting)
 	{
 		$objDB = Database::getInstance();
-		$objSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE pid=?')->execute($objBaseSettings->id);
+		$objSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE pid=? AND enabled=1')->execute($objBaseSettings->id);
 		while ($objSettings->next())
 		{
 			$objNewSetting = $this->newSetting($objSettings);
@@ -86,7 +86,7 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 			
 		}
 		$objDB = Database::getInstance();
-		$objSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE fid=? AND pid=0')->execute($this->arrData['id']);
+		$objSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE fid=? AND pid=0 AND enabled=1')->execute($this->arrData['id']);
 		while ($objSettings->next())
 		{
 			$objNewSetting = $this->newSetting($objSettings);

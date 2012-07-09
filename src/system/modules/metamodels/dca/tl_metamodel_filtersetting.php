@@ -108,6 +108,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 				'href'                => 'act=show',
 				'icon'                => 'show.gif'
 			),
+
+			'toggle' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['toggle'],
+				'icon'                => 'visible.gif',
+				'attributes'          => 'onclick="Backend.getScrollOffset(); return AjaxRequest.toggleVisibility(this, %s);"',
+				'button_callback'     => array('TableMetaModelFilterSetting', 'toggleIcon')
+			)
 		)
 	),
 
@@ -120,7 +128,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 	(
 		'default' => array
 		(
-			'title' => array('type')
+			'title' => array('type', 'enabled')
 		),
 		'_attribute_ extends default' => array
 		(
@@ -173,6 +181,17 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 				'mandatory'           => true,
 				'tl_class'            => 'w50',
 				'chosen'              => true
+			),
+		),
+
+		'enabled' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['enabled'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array(
+				'alwaysSave'          => true,
+				'tl_class'            => 'w50',
 			),
 		),
 
