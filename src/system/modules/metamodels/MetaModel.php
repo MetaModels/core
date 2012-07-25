@@ -20,12 +20,12 @@ if (!defined('TL_ROOT'))
 
 /**
  * This is the main MetaModel class.
- * 
+ *
  * @see MetaModelFactory::byId()		to instantiate a MetaModel by its ID.
  * @see MetaModelFactory::byTableName()	to instantiate a MetaModel by its table name.
- * 
+ *
  * This class handles all attribute definition instantiation and can be queried for a view instance to certain entries.
- * 
+ *
  * @package	   MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
@@ -35,7 +35,7 @@ class MetaModel implements IMetaModel
 	/**
 	 * Information data of this MetaModel instance.
 	 * This is the data from tl_metamodel.
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $arrData=array();
@@ -43,14 +43,14 @@ class MetaModel implements IMetaModel
 	/**
 	 * This holds all attribute instances.
 	 * Association is $colName => object
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $arrAttributes=array();
 
 	/**
 	 * instantiate a MetaModel.
-	 * 
+	 *
 	 * @param array $arrData the information array, for information on the available columns, refer to documentation of table tl_metamodel
 	 */
 	public function __construct($arrData)
@@ -63,7 +63,7 @@ class MetaModel implements IMetaModel
 
 	/**
 	 * Retrieve the human readble name for this metamodel.
-	 * 
+	 *
 	 * @return string the name for the MetaModel.
 	 */
 	public function getName()
@@ -73,9 +73,9 @@ class MetaModel implements IMetaModel
 
 	/**
 	 * Adds an attribute to the internal list of attributes.
-	 * 
+	 *
 	 * @param IMetaModelAttribute the attribute instance to add.
-	 * 
+	 *
 	 * @return IMetaModel self for chaining
 	 */
 	protected function addAttribute(IMetaModelAttribute $objAttribute)
@@ -85,7 +85,7 @@ class MetaModel implements IMetaModel
 
 	/**
 	 * Checks if an attribute with the given name has been added to the internal list.
-	 * 
+	 *
 	 * @param string $strAttributeName the name of the attribute to search.
 	 */
 	protected function hasAttribute($strAttributeName)
@@ -96,7 +96,7 @@ class MetaModel implements IMetaModel
 	/**
 	 * Create instances of all attributes that are defined for this MetaModel instance.
 	 * This is called internally by the first query of MetaModel::getAttributes().
-	 * 
+	 *
 	 * @return void
 	 */
 	protected function createAttributes()
@@ -119,7 +119,7 @@ class MetaModel implements IMetaModel
 
 	/**
 	 * This method retrieves all complex attributes from the current MetaModel.
-	 * 
+	 *
 	 * @return IMetaModelAttributeComplex[] all complex attributes defined for this instance.
 	 */
 	protected function getComplexAttributes()
@@ -137,9 +137,9 @@ class MetaModel implements IMetaModel
 
 	/**
 	 * Narrow down the list of Ids that match the given filter.
-	 * 
+	 *
 	 * @param IMetaModelFilter $objFilter
-	 * 
+	 *
 	 * @return array all matching Ids.
 	 */
 	protected function getMatchingIds($objFilter)
@@ -161,9 +161,9 @@ class MetaModel implements IMetaModel
 
 	/**
 	 * Fetch the "native" database rows with the given ids.
-	 * 
+	 *
 	 * @param int[] $arrIds the ids of the items to retrieve the order of ids is used for sorting of the return values.
-	 * 
+	 *
 	 * @param array an array containing the database rows with each column "deserialized".
 	 */
 	protected function fetchRows($arrIds)
@@ -194,9 +194,9 @@ class MetaModel implements IMetaModel
 
 	/**
 	 * This method is called to retrieve the data for certain items from the database.
-	 * 
+	 *
 	 * @param int[] $arrIds the ids of the items to retrieve the order of ids is used for sorting of the return values.
-	 * 
+	 *
 	 * @return IMetaModelItems a collection of all matched items, sorted by the id list.
 	 */
 	protected function getItemsWithId($arrIds)
@@ -278,9 +278,9 @@ class MetaModel implements IMetaModel
 
 	/**
 	 * {@inheritdoc}
-	 * 
+	 *
 	 * @link MetaModel::createAttributes() is called internally when the attributes are requested the first time.
-	 * 
+	 *
 	 */
 	public function getAttributes()
 	{
@@ -338,7 +338,7 @@ class MetaModel implements IMetaModel
 	{
 		if ($this->isTranslated())
 		{
-			return array_keys($this->arrData['languages']);
+			return array_keys((array)$this->arrData['languages']);
 		} else {
 			return NULL;
 		}
@@ -364,7 +364,7 @@ class MetaModel implements IMetaModel
 
 	/**
 	 * {@inheritdoc}
-	 * 
+	 *
 	 * The value is taken from $GLOBALS['TL_LANGUAGE']
 	 */
 	public function getActiveLanguage()
