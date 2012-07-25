@@ -95,7 +95,7 @@ class TableMetaModel extends Backend
 	protected function checkRemoveTable(DataContainer $dc)
 	{
 		return; // temporarily a no-op as unfinished.
-		
+
 		// TODO: When and where do we really need this function? IMO it is way too hazardous. See comment for bugfix below.
 
 		// bugfix to resolve issue #52 also here - We keep ending up here as this is called from DC_Table::__construct
@@ -111,17 +111,17 @@ class TableMetaModel extends Backend
 			if ($act == 'delete')
 			{
 				$ids = array($dc->id);
-			} 
+			}
 			else
 			{
 				$session = $this->Session->getData();
-				$ids = $session['CURRENT']['IDS']; 
+				$ids = $session['CURRENT']['IDS'];
 			}
 			// TODO: Build a MetaModel::vaporize function for this or something like that.
 			$objType = $this->Database->execute(
 					sprintf("SELECT tableName FROM tl_metamodel WHERE id IN (%s)",
 							implode(',', $ids)));
-					
+
 			while ($objType->next())
 			{
 				$tableName = $objType->tableName;
@@ -251,7 +251,7 @@ class TableMetaModel extends Backend
 			return $strTableName;
 		}
 
-		if (strlen($objMetaModel->tableName))
+		if (strlen($objMetaModel->tableName) && $this->Database->tableExists($objMetaModel->tableName, null, true))
 		{
 			MetaModelTableManipulation::renameTable($objMetaModel->tableName, $strTableName);
 		} else {
