@@ -119,4 +119,13 @@ $GLOBALS['FE_MOD']['metamodels'] = array
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('MetaModelDatabase', 'createDataContainer');
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('TableMetaModelFilterSetting', 'createDataContainer');
 
+$GLOBALS['TL_HOOKS']['parseBackendTemplate'][] = array('TableMetaModel', 'checkDependencies');
+
+
+$GLOBALS['METAMODELS']['dependencies'] = array(
+	'metapalettes' => 'MetaPalettes',
+	'multicolumnwizard' => 'MultiColumnWizard',
+	'generalDriver' => 'DC_General'
+);
+
 ?>
