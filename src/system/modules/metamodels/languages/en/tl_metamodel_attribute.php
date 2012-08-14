@@ -26,7 +26,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name']                 = array('N
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['description']          = array('Description', 'Human readable description');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname']              = array('Column Name', 'Internal reference name for this attribute');
 
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['isvariant']            = array('Enable variant override', 'Check this, if you want variants within the MetaModule to override the parent\'s value');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['isvariant']            = array('Enable variant override', 'Check this, if you want variants within the MetaModel to override the parent\'s value');
+
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['unique']            = array('Unique values', 'Check this, if you want to ensure that each value only occurs once');
 
 /**
  * Legends
