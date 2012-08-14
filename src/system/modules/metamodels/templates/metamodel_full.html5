@@ -2,14 +2,10 @@
 
 <div class="layout_full">
 
-<?php
-	foreach ($this->items as $objItem):
-	$data = $objItem->parseValue('html5');
-?>
-<div class="item <?php echo $this->items->getClass(); ?>">
-
-<?php foreach ($objItem->getMetaModel()->getAttributes() as $field => $objAttribute): ?>
-<?php if (($strValue = $data['html5'][$field]) || ($strValue = $data['text'][$field])): ?>
+<?php foreach ($this->items->parseAll('html5') as $arrItem): ?>
+<div class="item <?php echo $arrItem['class']; ?>">
+<?php foreach ($this->items->getItem()->getMetaModel()->getAttributes() as $field => $objAttribute): ?>
+<?php if (($strValue = $arrItem['data']['html5'][$field]) || ($strValue = $arrItem['data']['text'][$field])): ?>
 <div class="field <?php echo $field; ?>">
 	<div class="label"><?php echo $objAttribute->getName(); ?></div>
 	<div class="value"><?php echo $strValue; ?></div>
