@@ -20,7 +20,7 @@ if (!defined('TL_ROOT'))
 
 /**
  * Data model class for DC_General <-> MetaModel adaption
- * 
+ *
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @package    MetaModels
  * @subpackage Core
@@ -30,7 +30,7 @@ class GeneralModelMetaModel implements InterfaceGeneralModel
 
 	/**
 	 * A list with all Properties.
-	 * 
+	 *
 	 * @var IMetaModelItem
 	 */
 	protected $objItem = null;
@@ -57,16 +57,16 @@ class GeneralModelMetaModel implements InterfaceGeneralModel
 
 	/**
 	 * @see InterfaceGeneralModel::getProperty()
-	 * 
+	 *
 	 * @param String $strPropertyName
-	 * @return null 
+	 * @return null
 	 */
 	public function getProperty($strPropertyName)
 	{
 		if ($this->getItem())
 		{
 			$varValue = $this->getItem()->get($strPropertyName);
-			// test if it is an attribute, if so, let it transform the data 
+			// test if it is an attribute, if so, let it transform the data
 			// for the widget.
 			$objAttribute = $this->getItem()->getAttribute($strPropertyName);
 
@@ -99,15 +99,15 @@ class GeneralModelMetaModel implements InterfaceGeneralModel
 
 	/**
 	 * @see InterfaceGeneralModel::setProperty()
-	 * 
+	 *
 	 * @param String $strPropertyName
-	 * @param mixed $varValue 
+	 * @param mixed $varValue
 	 */
 	public function setProperty($strPropertyName, $varValue)
 	{
 		if ($this->getItem())
 		{
-			// test if it is an attribute, if so, let it transform the data 
+			// test if it is an attribute, if so, let it transform the data
 			// for the widget.
 			$objAttribute = $this->getItem()->getAttribute($strPropertyName);
 			if ($objAttribute)
@@ -128,7 +128,7 @@ class GeneralModelMetaModel implements InterfaceGeneralModel
 
 	/**
 	 * @see InterfaceGeneralModel::hasProperties()
-	 * 
+	 *
 	 * @return boolean
 	 */
 	public function hasProperties()
@@ -138,8 +138,8 @@ class GeneralModelMetaModel implements InterfaceGeneralModel
 
 	/**
 	 * Get a iterator for this model
-	 * 
-	 * @return ArrayIterator 
+	 *
+	 * @return ArrayIterator
 	 */
 	public function getIterator()
 	{
