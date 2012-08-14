@@ -547,6 +547,7 @@ class MetaModel implements IMetaModel
 				// complex saving
 				$objAttribute->setDataFor(array($arrValues['id'] => $arrValues[$strAttributeId]));
 			} else if(in_array('IMetaModelAttributeSimple', $arrInterfaces)) {
+				// TODO: ensure unique-ness here?
 				$arrDataSimple[$strAttributeId] = $arrValues[$strAttributeId];
 			} else {
 				throw new Exception('Unknown attribute type, can not save. Interfaces implemented: ' . implode(', ', $arrInterfaces));
@@ -595,28 +596,14 @@ class MetaModel implements IMetaModel
 	/**
 	 * {@inheritdoc}
 	 */
-	public function prepareFilter($arrAttributeNames, $arrFilterUrl)
+	public function prepareFilter($intFilterSettings, $arrFilterUrl)
 	{
 		$objFilter = $this->getBaseFilter();
-		if ($arrAttributeNames)
+		if ($intFilterSettings)
 		{
-			$objFilterSettings = MetaModelFilterSettingsFactory::byId($arrAttributeNames);
+			$objFilterSettings = MetaModelFilterSettingsFactory::byId($intFilterSettings);
 			$objFilterSettings->addRules($objFilter, $arrFilterUrl);
 		}
-/*
-		foreach ($arrAttributeNames as $strAttributeName)
-		{
-			$objAttribute = $this->getAttribute($strAttributeName);
-			if ($objAttribute)
-			{
-				$objFilterRule = $objAttribute->parseFilterUrl($arrFilterUrl);
-				if ($objFilterRule)
-				{
-					$objFilter->addFilterRule($objFilterRule);
-				}
-			}
-		}
-*/
 		return $objFilter;
 	}
 }
