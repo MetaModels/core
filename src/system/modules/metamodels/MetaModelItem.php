@@ -20,7 +20,7 @@ if (!defined('TL_ROOT'))
 
 /**
  * Interface for a MetaModel item.
- * 
+ *
  * @package	   MetaModels
  * @subpackage Interface
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
@@ -34,17 +34,50 @@ class MetaModelItem implements IMetaModelItem
 
 	/**
 	 * Create a new instance.
-	 * 
+	 *
 	 * @param IMetaModel $objMetaModel the model this item is represented by.
-	 * 
+	 *
 	 * @param array      $arrData      the initial data that shall be injected into the new instance.
-	 * 
+	 *
 	 * @return IMetaModelItem the instance
 	 */
 	public function __construct(IMetaModel $objMetaModel, $arrData)
 	{
 		$this->arrData = $arrData;
 		$this->strModelName = $objMetaModel->getTableName();
+	}
+
+	/**
+	 * helper function for {@see MetaModelItem::parseValue()} and {@see MetaModelItem::parseAttribute()}
+	 *
+	 * @param IMetaModelAttribute      $objAttribute    the attribute to parse.
+	 *
+	 * @param string                   $strOutputFormat the desired output format.
+	 *
+	 * @param IMetaModelRenderSettings $objSettings     the settings object to be applied.
+	 *
+	 */
+	public function internalParseAttribute($objAttribute, $strOutputFormat, $objSettings)
+	{
+		$arrResult = array();
+		if ($objAttribute)
+		{
+			// extract view settings for this attribute.
+			if($objSettings)
+			{
+				$objAttributeSettings = $objSettings->getSetting($objAttribute->getColName());
+			}
+			else
+			{
+				$objAttributeSettings = NULL;
+			}
+			foreach($objAttribute->parseValue($this->arrData, $strOutputFormat, $objAttributeSettings) as $strKey => $varValue)
+			{
+				$arrResult[$strKey] = $varValue;
+			}
+			// TODO: parseValue HOOK?
+		}
+		return $arrResult;
 	}
 
 	/**
@@ -136,21 +169,36 @@ class MetaModelItem implements IMetaModelItem
 	/**
 	 * {@inheritdoc}
 	 */
-	public function parseValue($strOutputFormat = 'text')
+	public function parseValue($strOutputFormat = 'text', $objSettings = NULL)
 	{
 		$arrResult = array
 		(
 			'raw' => $this->arrData,
 			'text' => array(),
+			'attributes' => array(),
 			$strOutputFormat => array()
 		);
 		foreach($this->getMetaModel()->getAttributes() as $objAttribute)
 		{
-			foreach($objAttribute->parseValue($this->arrData, $strOutputFormat) as $strKey => $varValue)
+			$arrResult['attributes'][$objAttribute->getColName()] = $objAttribute->getName();
+
+			foreach($this->internalParseAttribute($objAttribute, $strOutputFormat, $objSettings) as $strKey => $varValue)
 			{
 				$arrResult[$strKey][$objAttribute->getColName()] = $varValue;
 			}
-			// TODO: parseValue HOOK?
+		}
+		if ($objSettings
+			&& ($objPage = MetaModelController::getPageDetails($objSettings->get('jumpTo')))
+			&& $objFilterSettings = $objSettings->get('filter')
+		)
+		{
+//			$arrParams = $objFilterSettings->generateFilterUrlFrom($this);
+//			var_dump($objFilterSettings, $arrParams);
+//			$strUrl = MetaModelController::generateFrontendUrl($objPage->row(), implode('/', $arrParams));
+			$arrResult['jumpTo'] = array
+			(
+				'url' => $strUrl,
+			);
 		}
 		return $arrResult;
 	}
@@ -158,18 +206,9 @@ class MetaModelItem implements IMetaModelItem
 	/**
 	 * {@inheritdoc}
 	 */
-	public function parseAttribute($strAttributeName, $strOutputFormat = 'text')
+	public function parseAttribute($strAttributeName, $strOutputFormat = 'text', $objSettings = NULL)
 	{
-		$objAttribute = $this->getMetaModel()->getAttribute($strAttributeName);
-		if ($objAttribute)
-		{
-			foreach($objAttribute->parseValue($this->arrData, $strOutputFormat) as $strKey => $varValue)
-			{
-				$arrResult[$strKey] = $varValue;
-			}
-			// TODO: parseValue HOOK?
-		}
-		return $arrResult;
+		return $this->internalParseAttribute($this->getAttribute($strAttributeName), $strOutputFormat, $objSettings);
 	}
 
 	/**
