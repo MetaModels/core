@@ -244,10 +244,9 @@ class MetaModelItems implements IMetaModelItems
 
 		foreach ($this as $objItem)
 		{
-			$arrResult[] = array(
-				'class' => $this->getClass(),
-				'data' => $this->parseValue($strOutputFormat, $objSettings)
-			);
+			$arrParsedItem = $this->parseValue($strOutputFormat, $objSettings);
+			$arrParsedItem['class'] = $this->getClass();
+			$arrResult[] = $arrParsedItem;
 		}
 		// restore cursor
 		$this->intCursor = $intCursor;
