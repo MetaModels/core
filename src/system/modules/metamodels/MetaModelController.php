@@ -57,6 +57,7 @@ class MetaModelController extends Controller
 	protected function __construct()
 	{
 		parent::__construct();
+		$this->import('Database');
 	}
 
 	/**
