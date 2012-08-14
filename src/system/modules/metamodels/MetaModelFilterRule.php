@@ -18,7 +18,7 @@ if (!defined('TL_ROOT')) {
 }
 
 /**
- * This is the MetaModel filterrule base implementation.
+ * This is the MetaModel filter interface.
  *
  * @package	   MetaModels
  * @subpackage Interfaces
@@ -35,7 +35,7 @@ abstract class MetaModelFilterRule implements IMetaModelFilterRule
 
 	/**
 	 * create a new FilterRule instance.
-	 * @param IMetaModelAttribute|null $objAttribute optional, the attribute this rule applies to.
+	 * @param IMetaModelAttribute|null $objAttribute the attribute this rule applies to.
 	 */
 	public function __construct($objAttribute = NULL)
 	{

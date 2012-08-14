@@ -1,5 +1,3 @@
-<?php var_export($this->items->parseAll()); ?>
-
 <?php if ($this->items->getCount()): ?>
 
 <div class="layout_full">

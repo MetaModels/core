@@ -112,38 +112,6 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 		}
 	}
 
-	// TODO: still a rough idea of how additional "external" formats can get supported, maybe we need more params.
-	public function hookAdditionalFormatters($arrBaseFormatted, $arrRowData, $strOutputFormat, $objSettings)
-	{
-		$arrResult = $arrBaseFormatted;
-
-		if (isset($GLOBALS['METAMODEL_HOOKS']['parseValue']) && is_array($GLOBALS['METAMODEL_HOOKS']['parseValue']))
-		{
-			foreach ($GLOBALS['METAMODEL_HOOKS']['parseValue'] as $callback)
-			{
-				list($strClass, $strMethod) = $callback;
-				$objCallback = (in_array('getInstance', get_class_methods($strClass)))
-					? call_user_func(array($strClass, 'getInstance'))
-					: new $strClass();
-
-				$arrResult = $objCallback->$strMethod($this, $arrBaseFormatted, $arrRowData, $strOutputFormat, $objSettings);
-			}
-		}
-
-		return $arrResult;
-	}
-
-	/**
-	 * when rendered via a template, this returns the values to be stored in the template.
-	 */
-	protected function prepareTemplate(MetaModelTemplate $objTemplate, $arrRowData, $objSettings = null)
-	{
-		$objTemplate->attribute = $this;
-		$objTemplate->settings  = $objSettings;
-		$objTemplate->row       = $arrRowData;
-		$objTemplate->raw       = $arrRowData[$this->getColName()];
-	}
-
 	/////////////////////////////////////////////////////////////////
 	// interface IMetaModelAttribute
 	/////////////////////////////////////////////////////////////////
@@ -275,39 +243,16 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	/**
 	 * {@inheritdoc}
 	 */
-	public function parseValue($arrRowData, $strOutputFormat = 'text', $objSettings = null)
+	public function parseValue($arrRowData, $strOutputFormat = 'text')
 	{
+		$varRaw = $arrRowData[$this->getColName()];
 		$arrResult = array(
-			'raw' => $arrRowData[$this->getColName()],
+			'raw' => $varRaw,
 		);
-
-		if($objSettings && $objSettings->template)
+		if (is_string($varRaw) || is_numeric($varRaw))
 		{
-			$strTemplate = $objSettings->template;
-
-			$objTemplate = new MetaModelTemplate($strTemplate);
-
-			$this->prepareTemplate($objTemplate, $arrRowData, $objSettings);
-
-			// text rendering is mandatory
-			$arrResult['text'] = $objTemplate->parse('text', true);
-			// now the desired format.
-			if ($strValue = $objTemplate->parse($strOutputFormat, false))
-			{
-				$arrResult[$strOutputFormat] = $strValue;
-			}
+			$arrResult['text'] = $varRaw;
 		}
-		else {
-			// try to transport what ever is possible, maybe we want to remove this.
-			if (is_string($varRaw) || is_numeric($varRaw))
-			{
-				$arrResult['text'] = $varRaw;
-			}
-		}
-
-		// HOOK: apply additional formatters to attribute.
-		$arrResult = $this->hookAdditionalFormatters($arrResult, $arrRowData, $strOutputFormat, $objSettings);
-
 		return $arrResult;
 	}
 
@@ -322,21 +267,10 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	/**
 	 * {@inheritdoc}
 	 */
-	public function prepareFilterUrl($arrRowData, $arrUrlParams)
-	{
-		$arrNewParams = array_slice($arrUrlParams, 0);
-		$arrNewParams[$this->getColName()] = urlencode($arrRowData[$this->getColName()]);
-		return $arrNewParams;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function sortIds($arrIds, $strDirection)
 	{
-            // base implementation, do a simple sorting on given column.
-            $arrIds = Database::getInstance()->prepare('SELECT id FROM '.$this->objMetaModelTableName.' WHERE id IN ('.implode(',', $arrIds).') ORDER BY '.$this->arrData['colname'].' '.$strDirection)->execute()->fetchEach('id');
-            return $arrIds;
+		// base implementation, do not perform any sorting.
+		return $arrIds;
 	}
 }
 

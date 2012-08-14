@@ -37,58 +37,6 @@ if (!defined('TL_ROOT'))
 		             of attributes of this type instead of plain constructing.
 */
 
-
-/*
-	In order to add filter rule types into the system, add the following snippet to your extension config.php:
-
-	$GLOBALS['METAMODELS']['filters']['TYPENAME'] = array
-	(
-		'class' => 'TYPECLASS',
-		'image' => 'IMAGEPATH',
-		'info_callback' => array(CALLBACK_CLASS, CALLBACK_METHOD),
-		'nestingAllowed' => NESTINGVALUE // optional
-	);
-
-	where:
-		TYPENAME     is the internal type name of your filter setting.
-		TYPECLASS    is the name of the implementing class.
-		IMAGEPATH    path to an icon (16x16) that represents the filter rule type. Based from TL_ROOT.
-		NESTINGVALUE boolean true or false. If this is true, you indicate that this rule may contain child rules.
-*/
-
-$GLOBALS['METAMODELS']['filters']['idlist'] = array
-(
-	'class' => 'MetaModelFilterSettingIdList',
-);
-
-$GLOBALS['METAMODELS']['filters']['simplelookup'] = array
-(
-	'class' => 'MetaModelFilterSettingSimpleLookup',
-	'info_callback' => array('TableMetaModelFilterSetting', 'drawSimpleLookup')
-);
-
-$GLOBALS['METAMODELS']['filters']['customsql'] = array
-(
-	'class' => 'MetaModelFilterSettingCustomSQL',
-	'image' => 'system/modules/metamodels/html/filter_customsql.png',
-);
-
-$GLOBALS['METAMODELS']['filters']['conditionand'] = array
-(
-	'class' => 'MetaModelFilterSettingConditionAnd',
-	'image' => 'system/modules/metamodels/html/filter_and.png',
-	'info_callback' => array('TableMetaModelFilterSetting', 'drawAndCondition'),
-	'nestingAllowed' => true
-);
-
-$GLOBALS['METAMODELS']['filters']['conditionor'] = array
-(
-	'class' => 'MetaModelFilterSettingConditionOr',
-	'image' => 'system/modules/metamodels/html/filter_or.png',
-	'info_callback' => array('TableMetaModelFilterSetting', 'drawOrCondition'),
-	'nestingAllowed' => true
-);
-
 // enable support for php 5.2
 require_once(TL_ROOT . '/system/modules/metamodels/metamodel_functions.php');
 
@@ -117,6 +65,5 @@ $GLOBALS['FE_MOD']['metamodels'] = array
  * HOOKS
  */
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('MetaModelDatabase', 'createDataContainer');
-//$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('TableMetaModelFilterSetting', 'createDataContainer');
 
 ?>

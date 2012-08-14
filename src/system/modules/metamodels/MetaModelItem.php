@@ -48,39 +48,6 @@ class MetaModelItem implements IMetaModelItem
 	}
 
 	/**
-	 * helper function for {@see MetaModelItem::parseValue()} and {@see MetaModelItem::parseAttribute()}
-	 * 
-	 * @param IMetaModelAttribute      $objAttribute    the attribute to parse.
-	 * 
-	 * @param string                   $strOutputFormat the desired output format.
-	 * 
-	 * @param IMetaModelRenderSettings $objSettings     the settings object to be applied.
-	 * 
-	 */
-	public function internalParseAttribute($objAttribute, $strOutputFormat, $objSettings)
-	{
-		$arrResult = array();
-		if ($objAttribute)
-		{
-			// extrqact view settings for this attribute.
-			if($objSettings)
-			{
-				$objAttributeSettings = $objSettings->getSetting($objAttribute->getColName());
-			}
-			else
-			{
-				$objAttributeSettings = NULL;
-			}
-			foreach($objAttribute->parseValue($this->arrData, $strOutputFormat, $objAttributeSettings) as $strKey => $varValue)
-			{
-				$arrResult[$strKey] = $varValue;
-			}
-			// TODO: parseValue HOOK?
-		}
-		return $arrResult;
-	}
-
-	/**
 	 * {@inheritdoc}
 	 */
 	public function get($strAttributeName)
@@ -139,21 +106,8 @@ class MetaModelItem implements IMetaModelItem
 		} else {
 			return null;
 		}
-	}     
-        
-        /**
-         * Find all Variants including the variant base. The item itself is excluded from the return list.
-         * 
-         * @param type $objFilter
-         * @return null
-         */
-	public function getSiblings($objFilter)
-	{
-            if (!$this->getMetaModel()->hasVariants()) return null;
-            return $this->getMetaModel()->findVariantsWithBase(array($this->get('id')), $objFilter);
-
 	}
-        
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -182,36 +136,21 @@ class MetaModelItem implements IMetaModelItem
 	/**
 	 * {@inheritdoc}
 	 */
-	public function parseValue($strOutputFormat = 'text', $objSettings = NULL)
+	public function parseValue($strOutputFormat = 'text')
 	{
 		$arrResult = array
 		(
 			'raw' => $this->arrData,
 			'text' => array(),
-			'attributes' => array(),
 			$strOutputFormat => array()
 		);
 		foreach($this->getMetaModel()->getAttributes() as $objAttribute)
 		{
-			$arrResult['attributes'][$objAttribute->getColName()] = $objAttribute->getName();
-
-			foreach($this->internalParseAttribute($objAttribute, $strOutputFormat, $objSettings) as $strKey => $varValue)
+			foreach($objAttribute->parseValue($this->arrData, $strOutputFormat) as $strKey => $varValue)
 			{
 				$arrResult[$strKey][$objAttribute->getColName()] = $varValue;
 			}
-		}
-		if ($objSettings
-			&& ($objPage = MetaModelController::getPageDetails($objSettings->get('jumpTo'))) 
-			&& $objFilterSettings = $objSettings->get('filter')
-		)
-		{
-//			$arrParams = $objFilterSettings->generateFilterUrlFrom($this);
-//			var_dump($objFilterSettings, $arrParams);
-//			$strUrl = MetaModelController::generateFrontendUrl($objPage->row(), implode('/', $arrParams));
-			$arrResult['jumpTo'] = array
-			(
-				'url' => $strUrl,
-			);
+			// TODO: parseValue HOOK?
 		}
 		return $arrResult;
 	}
@@ -219,9 +158,18 @@ class MetaModelItem implements IMetaModelItem
 	/**
 	 * {@inheritdoc}
 	 */
-	public function parseAttribute($strAttributeName, $strOutputFormat = 'text', $objSettings = NULL)
+	public function parseAttribute($strAttributeName, $strOutputFormat = 'text')
 	{
-		return $this->internalParseAttribute($this->getAttribute($strAttributeName), $strOutputFormat, $objSettings);
+		$objAttribute = $this->getMetaModel()->getAttribute($strAttributeName);
+		if ($objAttribute)
+		{
+			foreach($objAttribute->parseValue($this->arrData, $strOutputFormat) as $strKey => $varValue)
+			{
+				$arrResult[$strKey] = $varValue;
+			}
+			// TODO: parseValue HOOK?
+		}
+		return $arrResult;
 	}
 
 	/**

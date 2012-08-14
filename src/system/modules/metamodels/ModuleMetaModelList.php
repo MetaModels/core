@@ -33,6 +33,7 @@ class ModuleMetaModelList extends Module
 	 */
 	protected $strTemplate = 'mod_metamodellist';
 
+
 	public function generate()
 	{
 		if (TL_MODE == 'BE')
@@ -55,32 +56,23 @@ class ModuleMetaModelList extends Module
 
 		$this->strTemplate = $this->metamodel_layout;
 
+		$this->metamodel_filtering = deserialize($this->metamodel_filtering, true);
+
 		return parent::generate();
 	}
 
 	/**
-	 * Returns the correct render settings for the metamodel.
-	 * 
-	 * @param IMetaModel $objMetaModel the metamodel for which the view shall be retrieved.
-	 * 
-	 * @return IMetaModelRenderSettings the view information.
+	 * (non-PHPdoc)
+	 * @see Module::compile()
 	 */
-	protected function getRenderSettings($objMetaModel, $objFilter)
+	protected function compile()
 	{
-		$objView = new MetaModelRenderSettings();
+		$objMetaModel = MetaModelFactory::byId($this->metamodel);
 
-		if (!$this->metamodelview)
-		{
-			$objView->createDefaultFrom($objMetaModel);
-			$objView->set('jumpTo', 2);
-			$objView->set('alias', 'alias');
-			$objView->set('filter', $objFilter);
-		}
-		return $objView;
-	}
+		$objFilter = $objMetaModel->prepareFilter($this->metamodel_filtering, $_GET);
 
-	protected function calculatePagination($intTotal)
-	{
+		$intTotal = $objMetaModel->getCount($objFilter);
+
 		$intOffset = NULL;
 		$intLimit = NULL;
 		// if defined, we override the pagination here.
@@ -110,7 +102,7 @@ class ModuleMetaModelList extends Module
 
 			if ($intPage > ($intTotal/$this->perPage))
 			{
-				$intPage = (int)ceil($intTotal/$this->perPage);
+				$intPage = ceil($intTotal/$this->perPage);
 			}
 
 			// Set limit and offset
@@ -135,31 +127,10 @@ class ModuleMetaModelList extends Module
 				$intOffset = 0;
 			}
 		}
-		return array($intLimit, $intOffset);
-	}
 
-	/**
-	 * (non-PHPdoc)
-	 * @see Module::compile()
-	 */
-	protected function compile()
-	{
-		$objMetaModel = MetaModelFactory::byId($this->metamodel);
-
-		$objFilter = $objMetaModel->prepareFilter($this->metamodel_filtering, $_GET);
-
-		$intTotal = $objMetaModel->getCount($objFilter);
-
-		$arrLimits = $this->calculatePagination($intTotal);
-
-		$objItems = $objMetaModel->findByFilter($objFilter, $this->metamodel_sortby, $arrLimits[1], $arrLimits[0]);
-
+		$objItems = $objMetaModel->findByFilter($objFilter, $this->metamodel_sortby, $intOffset, $intLimit);
 		$objTemplate = new FrontendTemplate($this->metamodel_template);
 		$objTemplate->items = $objItems;
-
-		$objView = $this->getRenderSettings($objMetaModel, $objFilter);
-
-		$objTemplate->data = $objItems->parseAll($objTemplate->getFormat(), $objView);
 
 		$this->Template->items = $objTemplate->parse();
 	}

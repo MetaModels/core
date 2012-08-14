@@ -25,8 +25,7 @@ if (!defined('TL_ROOT'))
  * @subpackage Interface
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-interface IMetaModelItems
-extends Iterator, ArrayAccess
+interface IMetaModelItems extends Iterator
 {
 	/**
 	 * return the current item
@@ -76,42 +75,6 @@ extends Iterator, ArrayAccess
 	 * @return IMetaModelItems the current instance.
 	 */
 	public function reset();
-
-	/**
-	 * Get the CSS classes for the current item.
-	 * 
-	 * The class will be combined of:
-	 * * first - if the item is the first in the collection
-	 * * last  - if the item is the first in the collection
-	 * * even  - if the item is on even position
-	 * * odd   - if the item is on odd position
-	 * 
-	 * @return string the CSS class
-	 */
-	public function getClass();
-
-	/**
-	 * Parses the current item in the desired output format using the format settings.
-	 * 
-	 * @param string      $strOutputFormat optional, defaults to text. The output format to use.
-	 * 
-	 * @param object|null $objSettings     optional, defaults to null. The additional settings.
-	 * 
-	 * @return array the parsed information.
-	 */
-	public function parseValue($strOutputFormat = 'text', $objSettings = NULL);
-
-	/**
-	 * Parses all items in the desired output format using the format settings.
-	 * 
-	 * @param string      $strOutputFormat optional, defaults to text. The output format to use.
-	 * 
-	 * @param object|null $objSettings     optional, defaults to null. The additional settings.
-	 * 
-	 * @return array the parsed information.
-	 */
-	public function parseAll($strOutputFormat = 'text', $objSettings = NULL);
-
 }
 
 ?>

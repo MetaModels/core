@@ -414,13 +414,11 @@ class MetaModel implements IMetaModel
 	 */
 	public function findByFilter($objFilter, $strSortBy = '', $intOffset = 0, $intLimit = 0, $strSortOrder = 'ASC')
 	{
-
 		$arrFilteredIds = $this->getMatchingIds($objFilter);
 		// if desired, sort the entries.
 		if ($arrFilteredIds && $strSortBy != '' && ($objSortAttribute = $this->getAttribute($strSortBy)))
-		{   
+		{
 			$arrFilteredIds = $objSortAttribute->sortIds($arrFilteredIds, $strSortOrder);
-
 		}
 		// apply limiting then
 		if ($intOffset > 0 || $intLimit > 0)
@@ -472,24 +470,6 @@ class MetaModel implements IMetaModel
 
 		$objDB = Database::getInstance();
 		$objRow = $objDB->execute('SELECT id,vargroup FROM ' . $this->getTableName() . ' WHERE varbase=0 AND vargroup IN ('.implode(',', $arrIds).')');
-		$objNewFilter->addFilterRule(new MetaModelFilterRuleStaticIdList($objRow->fetchEach('id')));
-		return $this->findByFilter($objNewFilter);
-	}
-        
-        /**
-	 * {@inheritdoc}
-	 */
-	public function findVariantsWithBase($arrIds, $objFilter)
-	{
-		if(!$arrIds)
-		{
-			// return an empty result
-			return $this->getItemsWithId(array());
-		}
-		$objNewFilter = $this->copyFilter($objFilter);
-
-		$objDB = Database::getInstance();
-		$objRow = $objDB->execute('SELECT id,vargroup FROM ' . $this->getTableName() . ' WHERE vargroup IN (SELECT vargroup FROM ' . $this->getTableName() . ' WHERE id IN ('.implode(',', $arrIds).'))');
 		$objNewFilter->addFilterRule(new MetaModelFilterRuleStaticIdList($objRow->fetchEach('id')));
 		return $this->findByFilter($objNewFilter);
 	}
@@ -615,13 +595,20 @@ class MetaModel implements IMetaModel
 	/**
 	 * {@inheritdoc}
 	 */
-	public function prepareFilter($intFilterSettings, $arrFilterUrl)
+	public function prepareFilter($arrAttributeNames, $arrFilterUrl)
 	{
 		$objFilter = $this->getBaseFilter();
-		if ($intFilterSettings)
+		foreach ($arrAttributeNames as $strAttributeName)
 		{
-			$objFilterSettings = MetaModelFilterSettingsFactory::byId($intFilterSettings);
-			$objFilterSettings->addRules($objFilter, $arrFilterUrl);
+			$objAttribute = $this->getAttribute($strAttributeName);
+			if ($objAttribute)
+			{
+				$objFilterRule = $objAttribute->parseFilterUrl($arrFilterUrl);
+				if ($objFilterRule)
+				{
+					$objFilter->addFilterRule($objFilterRule);
+				}
+			}
 		}
 		return $objFilter;
 	}
