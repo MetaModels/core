@@ -36,7 +36,7 @@ interface IMetaModelFilter
 	/**
 	 * Narrow down the list of Ids that match the given filter.
 	 * 
-	 * @return array all matching Ids.
+	 * @return int[]|null all matching Ids or null if all ids did match.
 	 */
 	public function getMatchingIds();
 }

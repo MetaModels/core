@@ -40,10 +40,21 @@ class MetaModelItems implements IMetaModelItems
 	 */
 	protected $arrItems = array();
 
+	/**
+	 * creates a new instance with the passed items.
+	 * 
+	 * @param array $arrItems the items to be contained in the collection.
+	 * 
+	 * @return IMetaModelItems the new instance.
+	 */
 	public function __construct($arrItems)
 	{
 		$this->arrItems = $arrItems;
 	}
+
+	/////////////////////////////////////////////////////////////////
+	// interface Iterator
+	/////////////////////////////////////////////////////////////////
 
 	public function rewind()
 	{
@@ -62,8 +73,47 @@ class MetaModelItems implements IMetaModelItems
 
 	public function valid()
 	{
-		return ($this->getCount() > $this->intCursor && $this->intCursor>-1);
+		return ($this->offsetExists($this->intCursor));
 	}
+
+	/////////////////////////////////////////////////////////////////
+	// interface ArrayAccess
+	/////////////////////////////////////////////////////////////////
+
+	public function offsetExists($offset)
+	{
+		if (!is_numeric($offset))
+		{
+			return false;
+		}
+		return ($this->getCount() > $offset && $offset>-1);
+	}
+
+	public function offsetGet($offset)
+	{
+		if ($this->offsetExists($offset))
+		{
+			return $this->arrItems[$offset];
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public function offsetSet($offset, $value)
+	{
+		throw new Exception('MetaModelItems is a read only class, you can not manipulate the collection.', 1);
+	}
+
+	public function offsetUnset ($offset)
+	{
+		throw new Exception('MetaModelItems is a read only class, you can not manipulate the collection.', 1);
+	}
+
+	/////////////////////////////////////////////////////////////////
+	// interface IMetaModelItems
+	/////////////////////////////////////////////////////////////////
 
 	/**
 	 * {@inheritdoc}
@@ -111,7 +161,6 @@ class MetaModelItems implements IMetaModelItems
 	{
 		if ($this->getCount() == ++$this->intCursor)
 		{
-//			$this->intCursor--;
 			return false;
 		}
 		return $this;
@@ -150,6 +199,9 @@ class MetaModelItems implements IMetaModelItems
 		return $this;
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function getClass()
 	{
 		$arrClass = array();
@@ -172,9 +224,34 @@ class MetaModelItems implements IMetaModelItems
 		return implode(' ', $arrClass);
 	}
 
-	public function parseValue($strOutputFormat = 'html')
+	/**
+	 * {@inheritdoc}
+	 */
+	public function parseValue($strOutputFormat = 'text', $objSettings = NULL)
 	{
-		return $this->getItem()->parseValue($strOutputFormat);
+		return $this->getItem()->parseValue($strOutputFormat, $objSettings);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function parseAll($strOutputFormat = 'text', $objSettings = NULL)
+	{
+		$arrResult = array();
+
+		// buffer cursor
+		$intCursor = $this->intCursor;
+
+		foreach ($this as $objItem)
+		{
+			$arrParsedItem = $this->parseValue($strOutputFormat, $objSettings);
+			$arrParsedItem['class'] = $this->getClass();
+			$arrResult[] = $arrParsedItem;
+		}
+		// restore cursor
+		$this->intCursor = $intCursor;
+
+		return $arrResult;
 	}
 }
 

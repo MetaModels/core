@@ -49,6 +49,11 @@ interface IMetaModelAttributeComplex extends IMetaModelAttribute
 	 * @return void
 	 */
 	public function setDataFor($arrValues);
+
+	/**
+	 * Remove values for items.
+	 */
+//	 public function unsetDataFor($arrIds);
 }
 
 ?>

@@ -7,45 +7,29 @@
  *
  * PHP version 5
  * @package	   MetaModels
- * @subpackage Interfaces
+ * @subpackage Interface
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  CyberSpectrum
  * @license    private
  * @filesource
  */
-if (!defined('TL_ROOT')) {
+if (!defined('TL_ROOT'))
+{
 	die('You cannot access this file directly!');
 }
 
 /**
- * This is the MetaModel filterrule base implementation.
- *
+ * Interface for a catalog item.
+ * 
  * @package	   MetaModels
- * @subpackage Interfaces
+ * @subpackage Interface
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-abstract class MetaModelFilterRule implements IMetaModelFilterRule
+interface IMetaModelItem
 {
 
-	/**
-	 * The attribute this rule applies to.
-	 * @var IMetaModelAttribute
-	 */
-	protected $objAttribute = NULL;
+	public function parseValue();
 
-	/**
-	 * create a new FilterRule instance.
-	 * @param IMetaModelAttribute|null $objAttribute optional, the attribute this rule applies to.
-	 */
-	public function __construct($objAttribute = NULL)
-	{
-		$this->objAttribute = $objAttribute;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-//	abstract public function getMatchingIds();
 }
 
 ?>

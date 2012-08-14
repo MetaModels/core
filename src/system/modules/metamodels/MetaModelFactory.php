@@ -180,7 +180,7 @@ class MetaModelFactory implements IMetaModelFactory
 
 		$GLOBALS['BE_MOD']['system']['metamodel'] = array
 		(
-			'tables'			=> array_merge(array('tl_metamodel', 'tl_metamodel_attribute'), self::getAllTables()),
+			'tables'			=> array_merge(array('tl_metamodel', 'tl_metamodel_attribute', 'tl_metamodel_filter', 'tl_metamodel_filtersetting'), self::getAllTables()),
 			'icon'				=> 'system/modules/metamodels/html/icon.gif',
 		);
 

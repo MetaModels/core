@@ -117,6 +117,48 @@ CREATE TABLE `tl_metamodel_attribute` (
 
 -- --------------------------------------------------------
 
+
+-- 
+-- Table `tl_metamodel_filter`
+-- 
+
+CREATE TABLE `tl_metamodel_filter` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+-- corresponding meta model
+  `pid` int(10) unsigned NOT NULL default '0',
+  `tstamp` int(10) unsigned NOT NULL default '0',
+-- human readable name of the filter setting for internal use only.
+  `name` varchar(64) NOT NULL default '',
+  PRIMARY KEY  (`id`),
+  KEY `pid` (`pid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- 
+-- Table `tl_metamodel_filtersetting`
+-- 
+
+CREATE TABLE `tl_metamodel_filtersetting` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+-- corresponding meta model filter setting for hierarchical settings.
+  `pid` int(10) unsigned NOT NULL default '0',
+  `tstamp` int(10) unsigned NOT NULL default '0',
+  `sorting` int(10) unsigned NOT NULL default '0',
+-- corresponding tl_metamodel_filter
+  `fid` int(10) unsigned NOT NULL default '0',
+-- filter setting type
+  `type` varchar(64) NOT NULL default '',
+-- active or disabled
+  `enabled` char(1) NOT NULL default '',
+-- corresponding tl_metamodel_attribute
+  `attr_id` int(10) unsigned NOT NULL default '0',
+-- simple lookup - url param override.
+  `urlparam` varchar(255) NOT NULL default '',
+-- custom SQL - query content.
+  `customsql` text NULL,
+  PRIMARY KEY  (`id`),
+  KEY `pid` (`pid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 -- 
 -- Table `tl_user_group`
 -- 

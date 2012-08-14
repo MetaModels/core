@@ -105,10 +105,10 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 	(
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_filtering'],
 		'exclude'                 => true,
-		'inputType'               => 'checkbox',
-		'options_callback'        => array('tl_module_metamodel', 'getAttributeNames'),
-		'default'                 => '10',
-		'eval'                    => array('includeBlankOption' => true, 'tl_class'=>'w50', 'multiple' => true),
+		'inputType'               => 'select',
+		'options_callback'        => array('tl_module_metamodel', 'getFilterSettings'),
+		'default'                 => '',
+		'eval'                    => array('includeBlankOption' => true, 'tl_class'=>'w50'),
 	)
 ));
 
@@ -126,6 +126,7 @@ class tl_module_metamodel extends Backend
 {
 	public function getModuleTemplates(DataContainer $dc)
 	{
+
 		return $this->getTemplateGroup('mod_' . $dc->activeRecord->type, $dc->activeRecord->pid);
 	}
 
@@ -145,6 +146,19 @@ class tl_module_metamodel extends Backend
 		}
 		return $arrAttributeNames;
 	}
+
+	public function getFilterSettings(DataContainer $objDC)
+	{
+		$objDB = Database::getInstance();
+		$objFilterSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filter WHERE pid=?')->execute($objDC->activeRecord->metamodel);
+		$arrSettings = array();
+		while ($objFilterSettings->next())
+		{
+			$arrSettings[$objFilterSettings->id] = $objFilterSettings->name;
+		}
+		return $arrSettings;
+	}
+
 }
 
 ?>

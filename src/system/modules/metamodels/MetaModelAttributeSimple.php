@@ -56,6 +56,26 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 	}
 
 	/**
+	 * {@inheritdoc }
+	 *
+	 * Base implementation in MetaModelAttributeSimple performs a simple search on the url param
+	 * with the same name as the colName.
+	 */
+	public function parseFilterUrl($arrUrlParams)
+	{
+		$objFilterRule = NULL;
+		if (key_exists($this->getColName(), $arrUrlParams))
+		{
+			$objFilterRule = new MetaModelFilterRuleSimpleQuery(
+				'SELECT id FROM ' . $this->getMetaModel()->getTableName() . ' WHERE ' . $this->getColName() . '=?',
+				array($arrUrlParams[$this->getColName()]),
+				'id'
+			);
+		}
+		return $objFilterRule;
+	}
+
+	/**
 	 * {@inheritdoc}
 	 * 
 	 * Deriving classes SHOULD override this function.

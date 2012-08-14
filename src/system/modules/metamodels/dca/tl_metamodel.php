@@ -31,7 +31,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 	'config' => array
 	(
 		'dataContainer'               => 'Table',
-		'ctable'                      => array('tl_metamodel_attribute'),
+		'ctable'                      => array('tl_metamodel_attribute', 'tl_metamodel_filter'),
 		'switchToEdit'                => true,
 		'enableVersioning'            => true,
 		'onload_callback'             => array
@@ -117,6 +117,14 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['fields'],
 				'href'                => 'table=tl_metamodel_attribute',
 				'icon'                => 'system/modules/metamodels/html/fields.gif',
+				'button_callback'     => array('TableMetaModel', 'buttonCallback')
+			),
+
+			'filter' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['filter'],
+				'href'                => 'table=tl_metamodel_filter',
+				'icon'                => 'system/modules/metamodels/html/filter.png',
 				'button_callback'     => array('TableMetaModel', 'buttonCallback')
 			),
 		)
