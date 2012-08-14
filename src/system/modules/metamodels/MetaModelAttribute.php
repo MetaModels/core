@@ -97,7 +97,7 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	 */
 	protected function getLangValue($arrValues, $strLangCode = NULL)
 	{
-		if (!($this->translated && is_array($arrValues)))
+		if (!($this->getMetaModel()->isTranslated() && is_array($arrValues)))
 		{
 			return $arrValues;
 		}
