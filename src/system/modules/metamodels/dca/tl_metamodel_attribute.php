@@ -22,7 +22,7 @@ if (!defined('TL_ROOT'))
 $this->loadLanguageFile('languages');
 
 /**
- * Table tl_metamodel_attribute 
+ * Table tl_metamodel_attribute
  */
 
 $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
@@ -50,10 +50,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 		(
 			'mode'                    => 4,
 			'fields'                  => array('sorting'),
-			'panelLayout'             => 'filter,limit', 
-			'headerFields'            => array('name', 'tableName', 'tstamp', 'translated', 'supvariants', 'varsupport'), 
+			'panelLayout'             => 'filter,limit',
+			'headerFields'            => array('name', 'tableName', 'tstamp', 'translated', 'supvariants', 'varsupport'),
 			'flag'                    => 1,
-			'child_record_callback'   => array('TableMetaModelAttribute', 'renderField') 
+			'child_record_callback'   => array('TableMetaModelAttribute', 'renderField')
 		),
 
 		'label' => array
@@ -154,15 +154,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 	(
 		// displaying in backend
 		'insertBreak'		=> array('legendTitle','legendHide'),
-		
+
 		'sortingField'		=> 'groupingMode',
-		'showImage'				=> 'imageSize',
-		'format'					=> 'formatFunction,formatStr',
-		'limitItems'			=> 'items,childrenSelMode,parentFilter',
+		'showImage'			=> 'imageSize',
+		'format'			=> 'formatFunction,formatStr',
+		'limitItems'		=> 'items,childrenSelMode,parentFilter',
 		'customFiletree'	=> 'uploadFolder,validFileTypes,filesOnly',
-		'editGroups'			=> 'editGroups',
-		'rte'							=> 'rte_editor',
-		'multiple'				=> 'sortBy',
+		'editGroups'		=> 'editGroups',
+		'rte'				=> 'rte_editor',
+		'multiple'			=> 'sortBy',
 	),
 
 
@@ -228,15 +228,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 //				array('MetaModelDatabase', 'changeColumn')
 			)
 		),
-/*
-		'name' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name'],
-			'exclude'                 => true,
-			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50')
-		),
-*/
+
 		'name' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name'],
@@ -268,10 +260,22 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['isvariant'],
 			'inputType'               => 'checkbox',
-			'eval'                    => array('submitOnChange'=>true)
+			'eval'                    => array
+			(
+				'submitOnChange'=>true,
+				'tl_class'=>'w50'
+			)
 		),
 
-
+		'unique' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['unique'],
+			'inputType'               => 'checkbox',
+			'eval'                    => array
+			(
+				'tl_class'=>'w50'
+			),
+		),
 
 
 
@@ -283,7 +287,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 			'inputType'               => 'checkbox',
 			'eval'                    => array('submitOnChange'=>true)
 		),
-		
+
 		'legendTitle' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['legendTitle'],
@@ -296,21 +300,21 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['legendHide'],
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class'=>'w50 m12')
-		),		
+		),
 
 		'width50' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['width50'],
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class'=>'w50'),
-		),		
+		),
 
 		'titleField' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['titleField'],
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class'=>'w50')
-		),		
+		),
 
 		'filteredField' => array
 		(
@@ -318,20 +322,20 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class'=>'w50')
 		),
-		
+
 		'searchableField' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['searchableField'],
 			'inputType'               => 'checkbox',
 		),
-		
+
 		'sortingField' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['sortingField'],
 			'inputType'               => 'checkbox',
 			'eval'                    => array('submitOnChange'=>true)
 		),
-		
+
 		'groupingMode' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['groupingMode'],
@@ -340,7 +344,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['groupingModeOptions'],
 			'eval'      							=> array('mandatory' => true, 'includeBlankOption' => true),
 		),
-		
+
 		'parentCheckbox' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['parentCheckbox'],
@@ -348,7 +352,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 			'options_callback'        => array('tl_metamodel_attribute', 'getCheckboxSelectors'),
 			'eval'                    => array('includeBlankOption' => true),
 		),
-		
+
 		'mandatory' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['mandatory'],
@@ -362,14 +366,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class'=>'w50'),
 		),
-		
+
 		'defValue' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['defValue'],
 			'inputType'               => 'text',
 			'eval'                    => array('tl_class'=>'w50'),
 		),
-		
+
 		'calcValue' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['calcValue'],
@@ -381,12 +385,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 			),
 		),
 
-		'unique' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['uniqueItem'],
-			'inputType'               => 'checkbox'
-		),
-
 		'allowedHosts' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['allowedHosts'],
@@ -396,7 +394,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 //				array('tl_metamodel_attribute', 'saveAllowedHosts')
 			),
 		),
-		
+
 		'minValue' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['minValue'],
@@ -407,7 +405,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 //											array('tl_metamodel_attribute', 'resetMinMaxValues')
 										)
 		),
-		
+
 		'maxValue' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['maxValue'],
@@ -418,14 +416,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 //											array('tl_metamodel_attribute', 'resetMinMaxValues')
 										)
 		),
-		
+
 		'format' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['format'],
 			'inputType'               => 'checkbox',
 			'eval'                    => array('submitOnChange'=>true)
 		),
-		
+
 		'formatFunction' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['formatFunction'],
@@ -434,14 +432,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['formatFunctionOptions'],
 			'eval'                    => array('tl_class'=>'w50'),
 		),
-		
+
 		'formatStr' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['formatStr'],
 			'inputType'               => 'text',
 			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50')
 		),
-						
+
 		'formatPrePost' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['formatPrePost'],
@@ -449,7 +447,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 			'eval'                    => array('multiple'=>true, 'size'=>2, 'allowHtml'=>true),
 		),
 
-		
+
 		'rte' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['rte'],
@@ -463,7 +461,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 			'default'				  => 'tinyMCE',
 //			'options_callback'        => array('tl_metamodel_attribute', 'getRichTextEditors'),
 		),
-		
+
 		'allowHtml' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['allowHtml'],
@@ -477,7 +475,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 			'inputType'               => 'text',
 			'eval'                    => array('maxlength'=>10, 'rgxp' => 'digit')
 		),
-		
+
 		'itemTable' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['itemTable'],
@@ -485,7 +483,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 //			'options_callback'        => array('tl_metamodel_attribute', 'getTables'),
 			'eval'                    => array('submitOnChange'=>true)
 		),
-		
+
 		'itemTableValueCol' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['itemTableValueCol'],
@@ -502,14 +500,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 			'eval'                    => array('includeBlankOption'=>true)
 		),
 
-		
+
 		'limitItems' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['limitItems'],
 			'inputType'               => 'checkbox',
 			'eval'                    => array('submitOnChange'=>true),
 		),
-		
+
 		'items' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['items'],
@@ -519,7 +517,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 //					array('tl_metamodel_attribute', 'onLoadItems')
 			),
 		),
-		
+
 		'childrenSelMode' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['childrenSelMode'],
@@ -563,13 +561,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 			'eval'                    => array('decodeEntities'=>true, 'style'=>'height:80px;')
 		),
 
-		
+
 		'includeTime' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['includeTime'],
 			'inputType'               => 'checkbox'
 		),
-				
+
 		'multiple' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['multiple'],
@@ -586,21 +584,21 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_attribute'],
 			'eval'                    => array('tl_class'=>'w50')
 		),
-		
+
 		'showLink' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['showLink'],
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class'=>'w50 m12')
 		),
-		
+
 		'showImage' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['showImage'],
 			'inputType'               => 'checkbox',
-			'eval'                    => array('submitOnChange'=>true) 
+			'eval'                    => array('submitOnChange'=>true)
 		),
-						
+
 		'imageSize' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['imageSize'],
@@ -610,7 +608,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 			'reference'               => &$GLOBALS['TL_LANG']['MSC'],
 			'eval'                    => array('rgxp'=>'digit', 'nospace'=>true, 'tl_class'=>'w50')
 		),
-		
+
 		'customFiletree' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['customFiletree'],
