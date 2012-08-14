@@ -196,6 +196,15 @@ interface IMetaModelAttribute
 	 */
 	// TODO: this is a first draft, maybe we need some better approach here.
 	public function getFilterOptions($arrIds = array());
+
+	/**
+	 * search matches for the given expression.
+	 *
+	 * @param string $strPattern the text to search for. This may contain wildcards.
+	 *
+	 * @return int[] the ids of matching items.
+	 */
+	public function searchFor($strPattern);
 }
 
 ?>

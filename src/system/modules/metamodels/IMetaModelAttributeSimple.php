@@ -22,7 +22,7 @@ if (!defined('TL_ROOT'))
  * Interface for "simple" MetaModel attributes.
  * Simple attributes are attributes that only consist of one column in the metamodel table and therefore do not need
  * to be handled as complex fields must be.
- * 
+ *
  * @package	   MetaModels
  * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
@@ -47,16 +47,12 @@ interface IMetaModelAttributeSimple extends IMetaModelAttribute
 
 	/**
 	 * Renames the underlying database structure for this attribute.
-	 * 
+	 *
 	 * @param string $strNewColumnName the new column name for the attribute.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function renameColumn($strNewColumnName);
-
-
-
-
 }
 
 ?>
