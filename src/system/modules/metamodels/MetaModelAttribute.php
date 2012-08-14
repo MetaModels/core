@@ -22,7 +22,7 @@ if (!defined('TL_ROOT'))
  * This is the main MetaModels-attribute base class.
  * To create a MetaModelAttribute instance, use the {@link MetaModelAttributeFactory}
  * This class is the reference implementation for {@link IMetaModelAttribute}.
- * 
+ *
  * @package	   MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
@@ -32,14 +32,14 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 
 	/**
 	 * Name of the MetaModel instance this object belongs to.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $objMetaModelTableName = '';
 
 	/**
 	 * The meta information of this attribute.
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $arrData=array();
@@ -47,9 +47,9 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	/**
 	 * instantiate an metamodel attribute.
 	 * Note that you should not use this directly but use the factory classes to instantiate attributes.
-	 * 
+	 *
 	 * @param IMetaModel $objMetaModel the IMetaModel instance this attribute belongs to.
-	 * 
+	 *
 	 * @param array $arrData the information array, for attribute information, refer to documentation of table tl_metamodel_attribute
 	 *                       and documentation of the certain attribute classes for information what values are understood.
 	 */
@@ -68,10 +68,10 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 
 	/**
 	 * Retrieve the human readable name (or title) from the attribute.
-	 * 
+	 *
 	 * If the MetaModel is translated, the currently active language is used,
 	 * with properly falling back to the defined fallback language.
-	 * 
+	 *
 	 * @return string the human readable name
 	 */
 	public function getName()
@@ -85,18 +85,23 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 
 	/**
 	 * This extracts the value for the given language from the given language array.
-	 * 
+	 *
 	 * If the language is not contained within the value array, the fallback language from the parenting {@link IMetaModel}
 	 * instance is tried as well.
-	 * 
+	 *
 	 * @param array  $arrValues the array holding all language values in the form array('langcode' => $varValue)
-	 * 
+	 *
 	 * @param string $strLangCode The language code of the language to fetch. Optional, if not given, $GLOBALS['TL_LANGUAGE'] is used.
-	 * 
+	 *
 	 * @return mixed|null the value for the given language or the fallback language, NULL if neither is present.
 	 */
 	protected function getLangValue($arrValues, $strLangCode = NULL)
 	{
+		if (!($this->translated && is_array($arrValues)))
+		{
+			return $arrValues;
+		}
+
 		if ($strLangCode === NULL)
 		{
 			return $this->getLangValue($arrValues, $GLOBALS['TL_LANGUAGE']);
@@ -228,7 +233,7 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 		{
 			$GLOBALS['TL_LANG'][$strTableName][$this->getColName()] = array
 			(
-				$this->getLangValue($this->get('name')), 
+				$this->getLangValue($this->get('name')),
 				$this->getLangValue($this->get('description')),
 			);
 		}
@@ -322,10 +327,28 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	/**
 	 * {@inheritdoc}
 	 */
+	public function prepareFilterUrl($arrRowData, $arrUrlParams)
+	{
+		$arrNewParams = array_slice($arrUrlParams, 0);
+		$arrNewParams[$this->getColName()] = urlencode($arrRowData[$this->getColName()]);
+		return $arrNewParams;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function sortIds($arrIds, $strDirection)
 	{
 		// base implementation, do not perform any sorting.
 		return $arrIds;
+	}
+
+	/**
+	 * Base implementation, do not perform any search;
+	 */
+	public function searchFor($strPattern)
+	{
+		return array();
 	}
 }
 
