@@ -10,9 +10,9 @@
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table `tl_metamodel`
--- 
+--
 
 CREATE TABLE `tl_metamodel` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -44,9 +44,9 @@ CREATE TABLE `tl_metamodel` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table `tl_metamodel_attribute`
--- 
+--
 
 CREATE TABLE `tl_metamodel_attribute` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -59,6 +59,8 @@ CREATE TABLE `tl_metamodel_attribute` (
   `colname` varchar(64) NOT NULL default '',
   `type` varchar(64) NOT NULL default '',
   `isvariant` char(1) NOT NULL default '',
+-- unique value throughout the metamodel
+  `unique` char(1) NOT NULL default '',
 
 
 --  `titleField` char(1) NOT NULL default '',
@@ -83,7 +85,6 @@ CREATE TABLE `tl_metamodel_attribute` (
 --  `formatFunction` varchar(6) NOT NULL default '',
 --  `formatStr` varchar(255) NOT NULL default '',
 --  `formatPrePost` varchar(255) NOT NULL default '',
---  `unique` char(1) NOT NULL default '',
 --  `rte` char(1) NOT NULL default '',
 --  `rte_editor` varchar(255) NOT NULL default 'tinyMCE',
 --  `allowHtml` char(1) NOT NULL default '',
@@ -118,9 +119,9 @@ CREATE TABLE `tl_metamodel_attribute` (
 -- --------------------------------------------------------
 
 
--- 
+--
 -- Table `tl_metamodel_filter`
--- 
+--
 
 CREATE TABLE `tl_metamodel_filter` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -133,9 +134,9 @@ CREATE TABLE `tl_metamodel_filter` (
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- 
+--
 -- Table `tl_metamodel_filtersetting`
--- 
+--
 
 CREATE TABLE `tl_metamodel_filtersetting` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -159,9 +160,9 @@ CREATE TABLE `tl_metamodel_filtersetting` (
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- 
+--
 -- Table `tl_user_group`
--- 
+--
 
 CREATE TABLE `tl_user_group` (
   `metamodels` blob NULL
@@ -170,18 +171,18 @@ CREATE TABLE `tl_user_group` (
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table `tl_user`
--- 
+--
 
 CREATE TABLE `tl_user` (
   `metamodels` blob NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
--- 
+--
 -- Table `tl_module`
--- 
+--
 
 CREATE TABLE `tl_module` (
   `metamodel` int(10) unsigned NOT NULL default '0',
