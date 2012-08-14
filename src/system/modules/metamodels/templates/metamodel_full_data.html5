@@ -1,0 +1,36 @@
+<?php
+// display only if there is data.
+if (count($this->data)):
+?>
+<div class="layout_full">
+<?php
+// loop over all items.
+foreach ($this->data as $arrItem):
+?>
+<div class="item <?php echo $arrItem['class']; ?>">
+<?php 
+// loop over all attributes.
+foreach ($arrItem['attributes'] as $field => $strName):
+?>
+<?php
+// fetch the html5 value followed by the fallback to "text" as both are suitable.
+if (($strValue = $arrItem['html5'][$field]) || ($strValue = $arrItem['text'][$field])):
+?>
+<div class="field <?php echo $field; ?>">
+	<div class="label"><?php echo $strName; ?></div>
+	<div class="value"><?php echo $strValue; ?></div>
+</div>
+<?php endif; ?>
+<?php endforeach; ?>
+</div>
+<?php endforeach; ?>
+
+
+</div>
+
+<?php
+// no items found
+else:
+?>
+<p class="info"><?php echo $this->noItemsMsg; ?></p>
+<?php endif; ?>
