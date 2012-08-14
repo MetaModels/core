@@ -159,32 +159,34 @@ class TableMetaModelFilterSetting extends Backend
 		}
 
 		// select all root entries for the current filter.
-		$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['list']['sorting']['root'] = 
+		$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['list']['sorting']['root'] =
 			$this->Database->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE fid=? AND pid=0')
 			->execute($this->objFilter->id)
 			->fetchEach('id');
 		$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['list']['sorting']['rootPaste'] = true;
 
-		$GLOBALS['TL_LANG']['MSC']['editRecord'] = sprintf(
-			$GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord'],
-			$this->objFilter->name,
-			$this->objMetaModel->getName()
-		);
-
-		$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['config']['label'] = sprintf(
-			$GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label'],
-			$this->objFilter->name,
-			$this->objMetaModel->getName()
-		);
+		if ($this->objMetaModel)
+		{
+			$GLOBALS['TL_LANG']['MSC']['editRecord'] = sprintf(
+				$GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord'],
+				$this->objFilter->name,
+				$this->objMetaModel->getName()
+			);
+			$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['config']['label'] = sprintf(
+				$GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label'],
+				$this->objFilter->name,
+				$this->objMetaModel->getName()
+			);
+		}
 	}
 
 	/**
 	 * translates an id to a generated alias {@see TableMetaModelFilterSetting::getAttributeNames()}
-	 * 
+	 *
 	 * @param string        $strValue the id to translate.
-	 * 
+	 *
 	 * @param DataContainer $objDC    the data container calling.
-	 * 
+	 *
 	 * @return string
 	 */
 	public function attrIdToName($strValue, $objDC)
@@ -204,11 +206,11 @@ class TableMetaModelFilterSetting extends Backend
 	/**
 	 * translates an generated alias {@see TableMetaModelFilterSetting::getAttributeNames()}
 	 * to the corresponding attribute id.
-	 * 
+	 *
 	 * @param string        $strValue the id to translate.
-	 * 
+	 *
 	 * @param DataContainer $objDC    the data container calling.
-	 * 
+	 *
 	 * @return int
 	 */
 	public function nameToAttrId($strValue, $objDC)
@@ -224,7 +226,7 @@ class TableMetaModelFilterSetting extends Backend
 
 	/**
 	 * Translates an attribute id to the human readable name defined.
-	 * 
+	 *
 	 * @return string the human readable name.
 	 */
 	public function attrIdToHumanName($strValue, $objDC)
@@ -236,10 +238,10 @@ class TableMetaModelFilterSetting extends Backend
 	/**
 	 * Prepares a option list with alias => name connection for all attributes.
 	 * This is used in the attr_id select box.
-	 * 
+	 *
 	 * @param DataContainer $objDC the data container calling.
-	 * 
-	 * @return 
+	 *
+	 * @return
 	 */
 	public function getAttributeNames($objDC)
 	{
@@ -262,7 +264,7 @@ class TableMetaModelFilterSetting extends Backend
 
 	/**
 	 * Prepares the sub palettes for simple look up filter setting types.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function preparePalettes()
@@ -287,7 +289,7 @@ class TableMetaModelFilterSetting extends Backend
 
 	/**
 	 * returns all registered filter setting types.
-	 * 
+	 *
 	 * @return string[]
 	 */
 	public function getSettingTypes()
@@ -422,7 +424,7 @@ class TableMetaModelFilterSetting extends Backend
 
 		if ($arrRow['id'] > 0)
 		{
-			$return = $disablePA 
+			$return = $disablePA
 				? $this->generateImage('pasteafter_.gif', '', 'class="blink"').' '
 				: '<a href="'.$this->addToUrl('act='.$arrClipboard['mode'].'&amp;mode=1&amp;pid='.$arrRow['id'].(!is_array($arrClipboard['id']) ? '&amp;id='.$arrClipboard['id'] : '')).'" title="'.specialchars(sprintf($GLOBALS['TL_LANG'][$strTable]['pasteafter'][1], $arrRow['id'])).'" onclick="Backend.getScrollOffset()">'.$imagePasteAfter.'</a> ';
 		}
