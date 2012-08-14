@@ -124,16 +124,40 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
  */
 class tl_module_metamodel extends Backend
 {
+
+	/**
+	 * Fetch the template group for the current MetaModel module.
+	 *
+	 * @param DataContainer $dc the datacontainer calling this method.
+	 *
+	 * @return array
+	 *
+	 */
 	public function getModuleTemplates(DataContainer $dc)
 	{
 		return $this->getTemplateGroup('mod_' . $dc->activeRecord->type, $dc->activeRecord->pid);
 	}
 
+	/**
+	 * Fetch the template group for the detail view of the current MetaModel module.
+	 *
+	 * @param DataContainer $dc the datacontainer calling this method.
+	 *
+	 * @return array
+	 *
+	 */
 	public function getMetaModelTemplates(DataContainer $dc)
 	{
 		return $this->getTemplateGroup('metamodel_', $dc->activeRecord->pid);
 	}
 
+	/**
+	 * Fetch all attribute names for the current metamodel
+	 *
+	 * @param DataContainer $dc the datacontainer calling this method.
+	 *
+	 * @return string[string] array of all attributes as colName => human name
+	 */
 	public function getAttributeNames(DataContainer $dc)
 	{
 		$arrAttributeNames = array();
@@ -146,6 +170,13 @@ class tl_module_metamodel extends Backend
 		return $arrAttributeNames;
 	}
 
+	/**
+	 * Fetch all available filter settings for the current meta model.
+	 *
+	 * @param DataContainer $dc the datacontainer calling this method.
+	 *
+	 * @return string[int] array of all attributes as id => human name
+	 */
 	public function getFilterSettings(DataContainer $objDC)
 	{
 		$objDB = Database::getInstance();
