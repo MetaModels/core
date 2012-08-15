@@ -473,6 +473,28 @@ class MetaModel implements IMetaModel
 		$objNewFilter->addFilterRule(new MetaModelFilterRuleStaticIdList($objRow->fetchEach('id')));
 		return $this->findByFilter($objNewFilter);
 	}
+        
+    /**
+    * Find all varints of the given item. This methods makes no difference between the varbase item and other variants.
+    * 
+    * @param type $arrIds
+    * @param type $objFilter
+    * @return type
+    */
+	public function findVariantsWithBase($arrIds, $objFilter)
+	{
+		if(!$arrIds)
+		{
+			// return an empty result
+			return $this->getItemsWithId(array());
+		}
+		$objNewFilter = $this->copyFilter($objFilter);
+
+		$objDB = Database::getInstance();
+		$objRow = $objDB->execute('SELECT id,vargroup FROM ' . $this->getTableName() . ' WHERE vargroup IN (SELECT vargroup FROM ' . $this->getTableName() . ' WHERE id IN ('.implode(',', $arrIds).'))');
+		$objNewFilter->addFilterRule(new MetaModelFilterRuleStaticIdList($objRow->fetchEach('id')));
+		return $this->findByFilter($objNewFilter);
+	}
 
 	/**
 	 * {@inheritdoc}
