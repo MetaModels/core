@@ -61,7 +61,7 @@ class TableMetaModelFilterSetting extends Backend
 		parent::__construct();
 
 		// toggling of a filter setting?
-		if($this->Input->get('tid'))
+		if($this->Input->get('tid') && ($this->Input->get('table') == 'tl_metamodel_filtersetting'))
 		{
 			// Update database
 			$this->Database->prepare('
