@@ -19,11 +19,8 @@ if (!defined('TL_ROOT'))
 }
 
 /**
- * This is the main MetaModel interface.
- * 
  * This interface handles all filter setting abstraction.
- * dunn
- * @see MetaModelFilterFactory::byId	to instantiate a MetaModel by its ID.
+ *
  * @package	   MetaModels
  * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
@@ -36,13 +33,13 @@ interface IMetaModelFilterSettings
 
 	/**
 	 * Generates all filter rules from the contained filter settings.
-	 * 
+	 *
 	 * @param IMetaModelFilter $objFilter the filter object to add rules to.
-	 * 
+	 *
 	 * @param array $arrFilterUrl
-	 * 
+	 *
 	 * @return void
-	 * 
+	 *
 	 */
 	public function addRules(IMetaModelFilter $objFilter, $arrFilterUrl);
 
