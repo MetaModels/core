@@ -44,7 +44,13 @@ interface IMetaModelAttribute
 	 */
 	public function getMetaModel();
 
-
+	/**
+	 * retrieve a meta information setting.
+	 *
+	 * @param string $strKey   the meta information name that shall be retrieved.
+	 *
+	 * @return mixed
+	 */
 	public function get($strKey);
 
 	/**
@@ -80,11 +86,15 @@ interface IMetaModelAttribute
 
 	/**
 	 * Delete all auxiliary data like a column in the metamodel table or references in another table etc.
+	 *
+	 * @return void
 	 */
 	public function destroyAUX();
 
 	/**
 	 * Create auxiliary data like a column in the metamodel table or references in another table etc.
+	 *
+	 * @return void@return void
 	 */
 	public function initializeAUX();
 
@@ -194,8 +204,8 @@ interface IMetaModelAttribute
 	 *
 	 * @param array $arrIds optional the ids that the values shall be fetched from.
 	 */
-	// TODO: this is a first draft, maybe we need some better approach here.
 	public function getFilterOptions($arrIds = array());
+	// TODO: this is a first draft, maybe we need some better approach here.
 
 	/**
 	 * search matches for the given expression.

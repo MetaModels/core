@@ -112,6 +112,13 @@ class MetaModel implements IMetaModel
 		}
 	}
 
+	/**
+	 * Determine if the given attribute is a complex one.
+	 *
+	 * @param IMetaModelAttribute $objAttribute the attribute to test.
+	 *
+	 * @return bool true if it is complex, false otherwise.
+	 */
 	protected function isComplexAttribute($objAttribute)
 	{
 		return in_array('IMetaModelAttributeComplex', class_implements($objAttribute));
@@ -164,7 +171,7 @@ class MetaModel implements IMetaModel
 	 *
 	 * @param int[] $arrIds the ids of the items to retrieve the order of ids is used for sorting of the return values.
 	 *
-	 * @param array an array containing the database rows with each column "deserialized".
+	 * @return array an array containing the database rows with each column "deserialized".
 	 */
 	protected function fetchRows($arrIds)
 	{
@@ -234,6 +241,13 @@ class MetaModel implements IMetaModel
 		return $objItems;
 	}
 
+	/**
+	 * clone the given filter or create an empty one if no filter has been passed.
+	 *
+	 * @param null|IMetaModelFilter the filter to clone.
+	 *
+	 * @return IMetaModelFilter the cloned filter.
+	 */
 	protected function copyFilter($objFilter)
 	{
 		if ($objFilter)

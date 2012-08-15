@@ -20,13 +20,21 @@ if (!defined('TL_ROOT'))
 
 /**
  * Controller class for DC_General
- * 
+ *
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @package    MetaModels
  * @subpackage Core
  */
 class GeneralViewMetaModel extends GeneralViewDefault
 {
+
+	/**
+	 * Create a new variant based upon the current item loaded in the data container.
+	 *
+	 * @param DC_General $objDC the data container with the loaded item.
+	 *
+	 * @return void
+	 */
 	public function createvariant(DC_General $objDC)
 	{
 		return $this->edit($objDC);

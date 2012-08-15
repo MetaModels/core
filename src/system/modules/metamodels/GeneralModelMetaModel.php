@@ -35,31 +35,57 @@ class GeneralModelMetaModel implements InterfaceGeneralModel
 	 */
 	protected $objItem = null;
 
+	/**
+	 * Returns the native IMetaModelItem instance encapsulated within this abstraction.
+	 *
+	 * @return IMetaModelItem
+	 */
 	public function getItem()
 	{
 		return $this->objItem;
 	}
 
+	/**
+	 * Create a new instance of this class.
+	 *
+	 * @param IMetaModelItem $objItem the item that shall be encapsulated.
+	 *
+	 * @return GeneralModelMetaModel
+	 */
 	public function __construct($objItem)
 	{
 		$this->objItem = $objItem;
 	}
 
+	/**
+	 * Clone this instance and the encapsulated item.
+	 * The result is a fresh copy with no id.
+	 *
+	 * @return GeneralModelMetaModel
+	 */
 	public function __clone()
 	{
 		return new GeneralModelMetaModel($this->getItem()->copy());
 	}
 
+	/**
+	 * Returns the id of the item.
+	 *
+	 * @return int the id.
+	 */
 	public function getID()
 	{
 		return $this->getItem()->get('id');
 	}
 
 	/**
+	 * Retrieve a property from the model (in MetaModel context: an attribute value).
+	 *
 	 * @see InterfaceGeneralModel::getProperty()
 	 *
-	 * @param String $strPropertyName
-	 * @return null
+	 * @param  string     $strPropertyName the property name.
+	 *
+	 * @return null|mixed the property value or null if not contained.
 	 */
 	public function getProperty($strPropertyName)
 	{
@@ -82,6 +108,11 @@ class GeneralModelMetaModel implements InterfaceGeneralModel
 		}
 	}
 
+	/**
+	 * Fetches all properties as an array.
+	 *
+	 * @return mixed[string]
+	 */
 	public function getPropertiesAsArray()
 	{
 		$arrResult = array();
@@ -92,16 +123,25 @@ class GeneralModelMetaModel implements InterfaceGeneralModel
 		return $arrResult;
 	}
 
+	/**
+	 * Sets the id
+	 *
+	 * @param mixed $mixID the id that shall be set
+	 *
+	 * @return void
+	 */
 	public function setID($mixID)
 	{
 		$this->getItem()->set('id', $mixID);
 	}
 
 	/**
+	 * Set a property value.
 	 * @see InterfaceGeneralModel::setProperty()
 	 *
-	 * @param String $strPropertyName
-	 * @param mixed $varValue
+	 * @param String $strPropertyName name of the property to be set.
+	 *
+	 * @param mixed  $varValue        value to be set.
 	 */
 	public function setProperty($strPropertyName, $varValue)
 	{
@@ -118,6 +158,13 @@ class GeneralModelMetaModel implements InterfaceGeneralModel
 		}
 	}
 
+	/**
+	 * Set a bunch of properties.
+	 *
+	 * @param mixed[] $arrProperties the properties to be set.
+	 *
+	 * @return void
+	 */
 	public function setPropertiesAsArray($arrProperties)
 	{
 		foreach ($arrProperties as $strKey => $varValue)
@@ -127,6 +174,8 @@ class GeneralModelMetaModel implements InterfaceGeneralModel
 	}
 
 	/**
+	 * determine if there are properties contained within this instance.
+	 *
 	 * @see InterfaceGeneralModel::hasProperties()
 	 *
 	 * @return boolean

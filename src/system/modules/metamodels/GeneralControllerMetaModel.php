@@ -20,13 +20,21 @@ if (!defined('TL_ROOT'))
 
 /**
  * Controller class for DC_General
- * 
+ *
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @package    MetaModels
  * @subpackage Core
  */
 class GeneralControllerMetaModel extends GeneralControllerDefault
 {
+
+	/**
+	 * Create a variant of the model currently loaded.
+	 *
+	 * @param DC_General $objDC the data container holding the current model
+	 *
+	 * @return void
+	 */
 	public function createvariant(DC_General $objDC)
 	{
 		// Check if table is editable

@@ -20,7 +20,7 @@ if (!defined('TL_ROOT'))
 
 /**
  * Data driver class for DC_General
- * 
+ *
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @package    MetaModels
  * @subpackage Core
@@ -31,13 +31,13 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 
 	/**
 	 * Name of current table
-	 * @var string 
+	 * @var string
 	 */
 	protected $strTable = null;
 
 	/**
 	 * The MetaModel this DataContainer is working on.
-	 * 
+	 *
 	 * @var IMetaModel
 	 */
 	protected $objMetaModel = NULL;
@@ -46,8 +46,11 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 
 	/**
 	 * Delete an item.
-	 * 
-	 * @param int|string|InterfaceGeneralModel Id or the object itself, to delete
+	 *
+	 * @param int|string|InterfaceGeneralModel $item Id or the object itself, to delete
+	 *
+	 *
+	 * @return void
 	 */
 	public function delete($item)
 	{
@@ -56,10 +59,13 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 
 	/**
 	 * Save a new Version of a record
-	 * 
-	 * @param int $intID ID of current record
-	 * @param string $strVersion Version number
-	 * @return void 
+	 *
+	 * @param InterfaceGeneralModel $objModel    the model to be saved.
+	 *
+	 * @param string                $strUsername the username that creates the new version.
+	 *
+	 *
+	 * @return void
 	 */
 	public function saveVersion(InterfaceGeneralModel $objModel, $strUsername)
 	{
@@ -68,23 +74,28 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 
 	/**
 	 * Return a model based of the version information
-	 * 
-	 * @param mix $mixID The ID of record
-	 * @param mix $mixVersion The ID of the Version
-	 * 
-	 * @return InterfaceGeneralModel 
+	 *
+	 * @param mixed $mixID      The ID of record
+	 *
+	 * @param mixed $mixVersion The ID of the version
+	 *
+	 *
+	 * @return null|InterfaceGeneralModel the model or null if not found.
 	 */
 	public function getVersion($mixID, $mixVersion)
 	{
 		throw new Exception('Versioning not supported in MetaModels so far.');
 	}
 
-
 	/**
-	 * Set a Version as active. 
-	 * 
-	 * @param mix $mixID The ID of record
-	 * @param mix $mixVersion The ID of the Version
+	 * Set a version as active.
+	 *
+	 * @param mix $mixID      The ID of record
+	 *
+	 * @param mix $mixVersion The ID of the version
+	 *
+	 *
+	 * @return void
 	 */
 	public function setVersionActive($mixID, $mixVersion)
 	{
@@ -93,10 +104,11 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 
 	/**
 	 * Return the active version from a record
-	 * 
-	 * @param mix $mixID The ID of record
-	 * 
-	 * @return mix Version ID 
+	 *
+	 * @param mixed $mixID The ID of the record
+	 *
+	 *
+	 * @return mixed version ID
 	 */
 	public function getActiveVersion($mixID)
 	{
@@ -105,9 +117,9 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 
 	/**
 	 * Fetch a single record by id.
-	 * 
+	 *
 	 * @param GeneralDataConfigDefault $objConfig
-	 * 
+	 *
 	 * @return InterfaceGeneralModel
 	 */
 	public function fetch(GeneralDataConfigDefault $objConfig)
@@ -123,8 +135,12 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 
 	/**
 	 * Set base config with source and other neccesary prameter
-	 * 
+	 *
 	 * @param array $arrConfig the configuration array.
+	 *
+	 *
+	 * @return void
+	 *
 	 * @throws Exception
 	 */
 	public function setBaseConfig(array $arrConfig)
@@ -143,7 +159,7 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 
 	/**
 	 * Return empty config object
-	 * 
+	 *
 	 * @return InterfaceGeneralDataConfig
 	 */
 	public function getEmptyConfig()
@@ -153,7 +169,7 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 
 	/**
 	 * Fetch an empty single record (new item).
-	 * 
+	 *
 	 * @return InterfaceGeneralModel
 	 */
 	public function getEmptyModel()
@@ -162,11 +178,24 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 		return new GeneralModelMetaModel($objItem);
 	}
 
+	/**
+	 * Fetch an empty collection.
+	 *
+	 * @return InterfaceGeneralCollection
+	 */
 	public function getEmptyCollection()
 	{
 		return new GeneralCollectionDefault();
 	}
 
+	/**
+	 * Prepare a filter and return it.
+	 *
+	 * @param array $arrFilter the values to be applied in attribute name => value style.
+	 *
+	 *
+	 * @return IMetaModelFilter
+	 */
 	protected function prepareFilter($arrFilter = array())
 	{
 		if ($arrFilter)
@@ -183,10 +212,11 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 
 	/**
 	 * Fetch all records (optional limited).
-	 * 
-	 * @param GeneralDataConfigDefault $objConfig
-	 * 
-	 * @return InterfaceGeneralCollection
+	 *
+	 * @param GeneralDataConfigDefault $objConfig the configuration object to use.
+	 *
+	 *
+	 * @return InterfaceGeneralCollection collection containing all matching items.
 	 */
 	public function fetchAll(GeneralDataConfigDefault $objConfig)
 	{
@@ -214,10 +244,11 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 
 	/**
 	 * Fetch multiple records by ids.
-	 * 
-	 * @param GeneralDataConfigDefault $objConfig
-	 * 
-	 * @return InterfaceGeneralCollection
+	 *
+	 * @param GeneralDataConfigDefault $objConfig the configuration object to use.
+	 *
+	 *
+	 * @return InterfaceGeneralCollection collection containing all matching items.
 	 */
 	public function fetchEach(GeneralDataConfigDefault $objConfig)
 	{
@@ -236,9 +267,9 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 	/**
 	 * Return the amount of total items.
 	 *
-	 * @param GeneralDataConfigDefault $objConfig
-	 * 
-	 * @return int
+	 * @param GeneralDataConfigDefault $objConfig the configuration object to use.
+	 *
+	 * @return int the amount.
 	 */
 	public function getCount(GeneralDataConfigDefault $objConfig)
 	{
@@ -246,23 +277,54 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 		return $this->objMetaModel->getCount($objFilter);
 	}
 
-	public function getVersions($intID)
+	/**
+	 * Return a list with all versions for this row
+	 *
+	 * @param mixed $mixID The ID of record
+	 *
+	 *
+	 * @return InterfaceGeneralCollection all versions of the given item.
+	 */
+	public function getVersions($mixID)
 	{
 		// no version support on MetaModels so far, sorry.
 		return null;
 	}
 
+	/**
+	 * Determine if a given value is unique within the metamodel.
+	 *
+	 * @param string $strField the attribute name.
+	 *
+	 * @param mixed $varNew    the value that shall be checked.
+	 *
+	 * @return bool true if the values is not yet contained within the table, false otherwise.
+	 */
 	public function isUniqueValue($strField, $varNew)
 	{
 		// TODO: compile filter for attribute and value here and find all other items with this value, if only the current item has this value, return true.
 		return false;
 	}
 
+	/**
+	 * Vague definition, therefore currently unimplemented.
+	 */
 	public function resetFallback($strField)
 	{
 		// TODO: CS: I do not understand the docs in the base implementation, therefore I do not know how to implement this here. :/
 	}
 
+	/**
+	 * save the given item to the database.
+	 *
+	 * @param InterfaceGeneralModel $objItem   the item to save.
+	 *
+	 * @param bool                  $recursive if the model contains submodels, define if those shall be saved as well (defaults to false).
+	 *
+	 * @return void
+	 *
+	 * @throws Exception when an incompatible item was passed.
+	 */
 	public function save(InterfaceGeneralModel $objItem, $recursive = false)
 	{
 		if ($objItem instanceof GeneralModelMetaModel)
@@ -273,6 +335,18 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 		throw new Exception('ERROR: incompatible object passed to GeneralDataMetaModel::save()');
 	}
 
+	/**
+	 * save the given items to the database.
+	 *
+	 * @param InterfaceGeneralCollection $objItems  the item to save.
+	 *
+	 * @param bool                       $recursive if the model contains submodels, define if those shall be saved as well (defaults to false).
+	 *
+	 *
+	 * @return void
+	 *
+	 * @throws Exception when an incompatible item was passed.
+	 */
 	public function saveEach(InterfaceGeneralCollection $objItems, $recursive = false)
 	{
 		foreach ($objItems as $key => $value)
@@ -281,15 +355,13 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 		}
 	}
 
-	public function setVersion($intID, $strVersion)
-	{
-		// no version support on MetaModels so far, sorry.
-	}
-
 	/**
-	 * Check if the value exists in the table
-	 * 
-	 * @return boolean 
+	 * Check if the attribute exists in the table and holds a value.
+	 *
+	 * @param string $strField the name of the attribute that shall be tested.
+	 *
+	 *
+	 * @return boolean
 	 */
 	public function fieldExists($strField)
 	{
@@ -303,10 +375,11 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 
 	/**
 	 * Check if two models have the same properties
-	 * 
+	 *
 	 * @param InterfaceGeneralModel $objModel1
+	 *
 	 * @param InterfaceGeneralModel $objModel2
-	 * 
+	 *
 	 * return boolean True - If both models are same, false if not
 	 */
 	public function sameModels($objModel1 , $objModel2)
@@ -329,9 +402,9 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 
 	/**
 	 * Fetch a variant of a single record by id.
-	 * 
+	 *
 	 * @param GeneralDataConfigDefault $objConfig
-	 * 
+	 *
 	 * @return InterfaceGeneralModel
 	 */
 	public function createVariant(GeneralDataConfigDefault $objConfig)

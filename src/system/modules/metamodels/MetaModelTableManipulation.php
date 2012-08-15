@@ -21,7 +21,7 @@ if (!defined('TL_ROOT'))
 /**
  * This is the class for table manipulations like creation/renaming/deleting of tables and columns.
  *
- * @package	   MetaModel
+ * @package	   MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
