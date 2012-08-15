@@ -20,6 +20,7 @@ if (!defined('TL_ROOT'))
 
 /**
  * Interface for a MetaModel item.
+
  *
  * @package	   MetaModels
  * @subpackage Interface
@@ -34,10 +35,13 @@ class MetaModelItem implements IMetaModelItem
 
 	/**
 	 * Create a new instance.
+
 	 *
 	 * @param IMetaModel $objMetaModel the model this item is represented by.
+
 	 *
 	 * @param array      $arrData      the initial data that shall be injected into the new instance.
+
 	 *
 	 * @return IMetaModelItem the instance
 	 */
@@ -49,12 +53,16 @@ class MetaModelItem implements IMetaModelItem
 
 	/**
 	 * helper function for {@see MetaModelItem::parseValue()} and {@see MetaModelItem::parseAttribute()}
+
 	 *
 	 * @param IMetaModelAttribute      $objAttribute    the attribute to parse.
+
 	 *
 	 * @param string                   $strOutputFormat the desired output format.
+
 	 *
 	 * @param IMetaModelRenderSettings $objSettings     the settings object to be applied.
+
 	 *
 	 */
 	public function internalParseAttribute($objAttribute, $strOutputFormat, $objSettings)
@@ -140,6 +148,20 @@ class MetaModelItem implements IMetaModelItem
 			return null;
 		}
 	}
+    
+    /**
+    * Find all Variants including the variant base. The item itself is excluded from the return list.
+    * 
+    * @param type $objFilter
+    * @return null
+    */
+	public function getSiblings($objFilter)
+	{
+        if (!$this->getMetaModel()->hasVariants()) return null;
+        return $this->getMetaModel()->findVariantsWithBase(array($this->get('id')), $objFilter);
+
+	}    
+
 
 	/**
 	 * {@inheritdoc}

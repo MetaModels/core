@@ -189,6 +189,17 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 			$this->set('colname', $strBackupColName);
 		}
 	}
+    
+    /**
+	 * {@inheritdoc}
+	 */
+	public function sortIds($arrIds, $strDirection)
+	{
+            // base implementation, do a simple sorting on given column.
+            $arrIds = Database::getInstance()->prepare('SELECT id FROM '.$this->objMetaModelTableName.' WHERE id IN ('.implode(',', $arrIds).') ORDER BY '.$this->arrData['colname'].' '.$strDirection)->execute()->fetchEach('id');
+            return $arrIds;
+	}
+    
 }
 
 ?>
