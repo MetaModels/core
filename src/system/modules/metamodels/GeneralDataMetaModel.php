@@ -25,7 +25,7 @@ if (!defined('TL_ROOT'))
  * @package    MetaModels
  * @subpackage Core
  */
-class GeneralDataMetaModel implements InterfaceGeneralData
+class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralDataML
 {
 	// Vars --------------------------------------------------------------------
 
@@ -124,7 +124,19 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 	 */
 	public function fetch(GeneralDataConfigDefault $objConfig)
 	{
+		$strBackupLanguage = '';
+		if ($this->strCurrentLanguage != '')
+		{
+			$strBackupLanguage = $GLOBALS['TL_LANGUAGE'];
+			$GLOBALS['TL_LANGUAGE'] = $this->strCurrentLanguage;
+		}
+
 		$objItem = $this->objMetaModel->findById($objConfig->getId());
+
+		if ($strBackupLanguage != '')
+		{
+			$GLOBALS['TL_LANGUAGE'] = $strBackupLanguage;
+		}
 
 		if (!$objItem)
 		{
@@ -220,26 +232,35 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 	 */
 	public function fetchAll(GeneralDataConfigDefault $objConfig)
 	{
+		$strBackupLanguage = '';
+		if ($this->strCurrentLanguage != '')
+		{
+			$strBackupLanguage = $GLOBALS['TL_LANGUAGE'];
+			$GLOBALS['TL_LANGUAGE'] = $this->strCurrentLanguage;
+		}
+
+		$varResult = NULL;
+
 		$arrSorting = $objConfig->getSorting();
 		$objFilter = $this->prepareFilter($objConfig->getFilter());
-		$objItems = $this->objMetaModel->findByFilter($objFilter, ($arrSorting?$arrSorting[0]:''), $objConfig->getStart(), $objConfig->getAmount());
-		// TODO: optimize by implementing a getIdsFromFilter
 		if ($objConfig->getIdOnly())
 		{
-			$arrResult = array();
-			foreach ($objItems as $objItem)
-			{
-				$arrResult[] = $objItem->get('id');
-			}
-			return $arrResult;
+			$varResult = $this->objMetaModel->getIdsFromFilter($objFilter, ($arrSorting?$arrSorting[0]:''), $objConfig->getStart(), $objConfig->getAmount());
 		} else {
+			$objItems = $this->objMetaModel->findByFilter($objFilter, ($arrSorting?$arrSorting[0]:''), $objConfig->getStart(), $objConfig->getAmount());
 			$objResultCollection = $this->getEmptyCollection();
 			foreach ($objItems as $objItem)
 			{
 				$objResultCollection->push(new GeneralModelMetaModel($objItem));
 			}
-			return $objResultCollection;
+			$varResult = $objResultCollection;
 		}
+
+		if ($strBackupLanguage != '')
+		{
+			$GLOBALS['TL_LANGUAGE'] = $strBackupLanguage;
+		}
+		return $varResult;
 	}
 
 	/**
@@ -252,6 +273,13 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 	 */
 	public function fetchEach(GeneralDataConfigDefault $objConfig)
 	{
+		$strBackupLanguage = '';
+		if ($this->strCurrentLanguage != '')
+		{
+			$strBackupLanguage = $GLOBALS['TL_LANGUAGE'];
+			$GLOBALS['TL_LANGUAGE'] = $this->strCurrentLanguage;
+		}
+
 		$objFilter = $this->prepareFilter();
 		// filter for the desired items only.
 		$objFilter->addFilterRule(new MetaModelFilterRuleStaticIdList($objConfig->getIds()));
@@ -261,6 +289,12 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 		{
 			$objResultCollection->push(new GeneralModelMetaModel($objItem));
 		}
+
+		if ($strBackupLanguage != '')
+		{
+			$GLOBALS['TL_LANGUAGE'] = $strBackupLanguage;
+		}
+
 		return $objResultCollection;
 	}
 
@@ -417,6 +451,61 @@ class GeneralDataMetaModel implements InterfaceGeneralData
 		}
 		return new GeneralModelMetaModel($objItem);
 	}
+
+
+	/**
+	 * the currently active language.
+	 *
+	 * @var string
+	 */
+	protected $strCurrentLanguage;
+
+	/**
+	 * Get all avaidable languages for a special record.
+	 *
+	 * @param mixed $mixID The ID of record
+	 * @return InterfaceGeneralCollection
+	 */
+	public function getLanguages($mixID)
+	{
+		$objCollection = $this->getEmptyCollection();
+
+		foreach ($this->objMetaModel->getAvailableLanguages() as $strLangCode)
+		{
+			$objModel = new GeneralModelDefault();
+			$objModel->setID($strLangCode);
+			$objModel->setProperty("name", $GLOBALS['TL_LANG']['LNG'][$strLangCode]);
+			$objModel->setProperty("active", ($this->getCurrentLanguage() == $strLangCode));
+			$objCollection->add($objModel);
+		}
+		if ($objCollection->length() > 0)
+		{
+			return $objCollection;
+		}
+		return NULL;
+	}
+
+	/**
+	 * Set the working language for the whole dataprovider.
+	 *
+	 * @param $strLanguage The new language, use hort tag "2 chars like de, fr etc."
+	 * @return void
+	 */
+	public function setCurrentLanguage($strLanguage)
+	{
+		$this->strCurrentLanguage = $strLanguage;
+	}
+
+	/**
+	 * Get the working language
+	 *
+	 * return String Short tag for the current working language like de or fr etc.
+	 */
+	public function getCurrentLanguage()
+	{
+		return $this->strCurrentLanguage;
+	}
+
 }
 
 ?>

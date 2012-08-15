@@ -428,6 +428,14 @@ class MetaModel implements IMetaModel
 	 */
 	public function findByFilter($objFilter, $strSortBy = '', $intOffset = 0, $intLimit = 0, $strSortOrder = 'ASC')
 	{
+		return $this->getItemsWithId($this->getIdsFromFilter($objFilter, $strSortBy, $intOffset, $intLimit, $strSortOrder));
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getIdsFromFilter($objFilter, $strSortBy = '', $intOffset = 0, $intLimit = 0, $strSortOrder = 'ASC')
+	{
 		$arrFilteredIds = $this->getMatchingIds($objFilter);
 		// if desired, sort the entries.
 		if ($arrFilteredIds && $strSortBy != '' && ($objSortAttribute = $this->getAttribute($strSortBy)))
@@ -439,7 +447,7 @@ class MetaModel implements IMetaModel
 		{
 			$arrFilteredIds = array_slice($arrFilteredIds, $intOffset, $intLimit);
 		}
-		return $this->getItemsWithId($arrFilteredIds);
+		return $arrFilteredIds;
 	}
 
 	/**
@@ -487,10 +495,10 @@ class MetaModel implements IMetaModel
 		$objNewFilter->addFilterRule(new MetaModelFilterRuleStaticIdList($objRow->fetchEach('id')));
 		return $this->findByFilter($objNewFilter);
 	}
-        
+
     /**
     * Find all varints of the given item. This methods makes no difference between the varbase item and other variants.
-    * 
+    *
     * @param type $arrIds
     * @param type $objFilter
     * @return type
