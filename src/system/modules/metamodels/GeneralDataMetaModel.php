@@ -486,6 +486,26 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	}
 
 	/**
+	 * Get the fallback language
+	 *
+	 * @param mixed $mixID The ID of record
+	 * @return InterfaceGeneralModel
+	 */
+	public function getFallbackLanguage($mixID)
+	{
+		if ($this->objMetaModel->isTranslated())
+		{
+			$objModel = new GeneralModelDefault();
+			$strLangCode = $this->objMetaModel->getFallbackLanguage();
+			$objModel->setID($strLangCode);
+			$objModel->setProperty("name", $GLOBALS['TL_LANG']['LNG'][$strLangCode]);
+			$objModel->setProperty("active", ($this->getCurrentLanguage() == $strLangCode));
+			return $objModel;
+		}
+		return NULL;
+	}
+
+	/**
 	 * Set the working language for the whole dataprovider.
 	 *
 	 * @param $strLanguage The new language, use hort tag "2 chars like de, fr etc."
@@ -505,7 +525,6 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	{
 		return $this->strCurrentLanguage;
 	}
-
 }
 
 ?>

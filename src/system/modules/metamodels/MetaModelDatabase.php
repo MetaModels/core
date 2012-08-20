@@ -20,7 +20,7 @@ if (!defined('TL_ROOT'))
 
 /**
  * This is the MetaModel Database interface binder class.
- * 
+ *
  * @package	   MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
@@ -33,6 +33,13 @@ class MetaModelDatabase extends Controller
 		return Database::getInstance();
 	}
 
+	/**
+	 * Create the data container of a metamodel table.
+	 *
+	 * @param string $strTableName the name of the meta model table that shall be created.
+	 *
+	 * @return bool true on success, false otherwise.
+	 */
 	public function createDataContainer($strTableName)
 	{
 		if(!in_array($strTableName, MetaModelFactory::getAllTables()))
@@ -115,8 +122,8 @@ class MetaModelDatabase extends Controller
 				$arrDCA['list']['operations']['createvariant'] = $arrOperationCreateVariant;
 			}
 
-			$arrDCA['list']['label']['fields'][] = 'varbase';
-			$arrDCA['list']['label']['format'] .= '<span>%s</span><br/>';
+//			$arrDCA['list']['label']['fields'][] = 'varbase';
+//			$arrDCA['list']['label']['format'] .= '<span>%s</span><br/>';
 
 		}
 
@@ -134,8 +141,8 @@ class MetaModelDatabase extends Controller
 				$strPalette .= (strlen($strPalette)>0 ? ',':'');
 			$strPalette .= $objAttribute->getColName();
 
-			$arrDCA['list']['label']['fields'][] = $objAttribute->getColName();
-			$arrDCA['list']['label']['format'] .= sprintf('<span>%s %%s</span><br/>', $objAttribute->getName());
+//			$arrDCA['list']['label']['fields'][] = $objAttribute->getColName();
+//			$arrDCA['list']['label']['format'] .= sprintf('<span>%s %%s</span><br/>', $objAttribute->getName());
 		}
 		$arrDCA['palettes']['default'] = $strPalette;
 		$GLOBALS['TL_DCA'][$strTableName] = array_replace_recursive($arrDCA, (array)$GLOBALS['TL_DCA'][$objMetaModel->getTableName()]);

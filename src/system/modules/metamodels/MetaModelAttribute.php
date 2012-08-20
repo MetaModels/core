@@ -280,6 +280,19 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	/**
 	 * {@inheritdoc}
 	 */
+	public function getDefaultRenderSettings()
+	{
+		$objSetting = (object)array
+		(
+			'template' => 'mm_attr_' . $this->get('type')
+		);
+		return $objSetting;
+	}
+
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function parseValue($arrRowData, $strOutputFormat = 'text', $objSettings = null)
 	{
 		$arrResult = array(
@@ -297,6 +310,7 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 			// text rendering is mandatory
 			$arrResult['text'] = $objTemplate->parse('text', true);
 			// now the desired format.
+
 			if ($strValue = $objTemplate->parse($strOutputFormat, false))
 			{
 				$arrResult[$strOutputFormat] = $strValue;

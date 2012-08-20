@@ -121,7 +121,9 @@ $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('TableMetaModelFilterSetting
 
 $GLOBALS['TL_HOOKS']['parseBackendTemplate'][] = array('TableMetaModel', 'checkDependencies');
 
-
+/**
+ * Dependencies we need.
+ */
 $GLOBALS['METAMODELS']['dependencies'] = array(
 	'metapalettes' => 'MetaPalettes',
 	'multicolumnwizard' => 'MultiColumnWizard',

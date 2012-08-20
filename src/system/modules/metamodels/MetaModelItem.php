@@ -148,10 +148,10 @@ class MetaModelItem implements IMetaModelItem
 			return null;
 		}
 	}
-    
+
     /**
     * Find all Variants including the variant base. The item itself is excluded from the return list.
-    * 
+    *
     * @param type $objFilter
     * @return null
     */
@@ -160,7 +160,7 @@ class MetaModelItem implements IMetaModelItem
         if (!$this->getMetaModel()->hasVariants()) return null;
         return $this->getMetaModel()->findVariantsWithBase(array($this->get('id')), $objFilter);
 
-	}    
+	}
 
 
 	/**
@@ -210,6 +210,7 @@ class MetaModelItem implements IMetaModelItem
 			}
 		}
 		if ($objSettings
+			&& $objSettings->get('jumpTo')
 			&& ($objPage = MetaModelController::getPageDetails($objSettings->get('jumpTo')))
 			&& $objFilterSettings = $objSettings->get('filter')
 		)

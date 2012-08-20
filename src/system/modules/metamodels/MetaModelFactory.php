@@ -21,7 +21,7 @@ if (!defined('TL_ROOT'))
 /**
  * This is the MetaModel factory interface.
  * To create a MetaModel instance, either call @link{MetaModelFactory::byId()} or @link{MetaModelFactory::byTableName()}
- * 
+ *
  * @package	   MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
@@ -31,14 +31,14 @@ class MetaModelFactory implements IMetaModelFactory
 	/**
 	 * All MetaModel instances.
 	 * Assiciation: id => object
-	 * 
+	 *
 	 * @var array
 	 */
 	protected static $arrInstances = array();
 
 	/**
 	 * Returns the proper user object for the current context.
-	 * 
+	 *
 	 * @return BackendUser|FrontendUser|null the BackendUser when TL_MODE == 'BE', the FrontendUser when TL_MODE == 'FE' or null otherwise
 	 */
 	protected static function getUser()
@@ -54,14 +54,14 @@ class MetaModelFactory implements IMetaModelFactory
 	}
 
 	/**
-	 * This initializes the Contao Singleton object stack as it must be, 
+	 * This initializes the Contao Singleton object stack as it must be,
 	 * when using singletons within the config.php file of an Extension.
-	 * 
+	 *
 	 * @return void
 	 */
 	protected static function initializeContaoObjectStack()
 	{
-		// all of these getInstance calls are neccessary to keep the instance stack intact 
+		// all of these getInstance calls are neccessary to keep the instance stack intact
 		// and therefore prevent an Exception in unknown on line 0.
 		// Hopefully this will get fixed with Contao Reloaded or Contao 3.
 		Config::getInstance();
@@ -81,9 +81,9 @@ class MetaModelFactory implements IMetaModelFactory
 
 	/**
 	 * Determines the correct factory from a metamodel table name.
-	 * 
+	 *
 	 * @param string $strTableName the table name of the metamodel for which the factory class shall be fetched for.
-	 * 
+	 *
 	 * @return string the factory class name which handles instanciation of the MetaModel or NULL if no class could be found.
 	 */
 	protected static function getModelFactory($strTableName)
@@ -93,9 +93,9 @@ class MetaModelFactory implements IMetaModelFactory
 
 	/**
 	 * Create a MetaModel instance with the given information.
-	 * 
+	 *
 	 * @param array $arrData the meta information for the MetaModel.
-	 * 
+	 *
 	 * @return IMetaModel the meta model
 	 */
 	protected static function createInstance($arrData)
@@ -169,18 +169,18 @@ class MetaModelFactory implements IMetaModelFactory
 
 	/**
 	 * Currently proof of concept, we will rather build a new management interface for this functionality.
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function buildBackendMenu()
 	{
 		self::initializeContaoObjectStack();
 
-		$GLOBALS['TL_CSS'][] = 'system/modules/metamodels/html/style.css'; 
+		$GLOBALS['TL_CSS'][] = 'system/modules/metamodels/html/style.css';
 
 		$GLOBALS['BE_MOD']['system']['metamodel'] = array
 		(
-			'tables'			=> array_merge(array('tl_metamodel', 'tl_metamodel_attribute', 'tl_metamodel_filter', 'tl_metamodel_filtersetting'), self::getAllTables()),
+			'tables'			=> array_merge(array('tl_metamodel', 'tl_metamodel_attribute', 'tl_metamodel_filter', 'tl_metamodel_filtersetting', 'tl_metamodel_rendersettings', 'tl_metamodel_rendersetting'), self::getAllTables()),
 			'icon'				=> 'system/modules/metamodels/html/icon.gif',
 		);
 

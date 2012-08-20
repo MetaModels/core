@@ -149,6 +149,13 @@ interface IMetaModelAttribute
 	public function widgetToValue($varValue);
 
 	/**
+	 * Retrieve an instance containing the default render settings for an attribute of this type.
+	 *
+	 * @return object
+	 */
+	public function getDefaultRenderSettings();
+
+	/**
 	 * Transform a value into real data.
 	 * The returned array at least transports an string in the key 'text' which SHOULD be
 	 * useful when being echo'ed in a template and the raw value in the section 'raw'.

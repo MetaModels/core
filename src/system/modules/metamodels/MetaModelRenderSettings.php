@@ -38,11 +38,15 @@ class MetaModelRenderSettings
 	{
 		foreach ($objMetaModel->getAttributes() as $objAttribute)
 		{
+			$objSetting = $objAttribute->getDefaultRenderSettings();
+			$this->setSetting($objAttribute->getColName(), $objSetting);
+/*
 			$objSetting = (object)array
 			(
 				'template' => 'mm_attr_' . $objAttribute->get('type')
 			);
 			$this->setSetting($objAttribute->getColName(), $objSetting);
+*/
 		}
 		return $this;
 	}

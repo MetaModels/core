@@ -59,7 +59,7 @@ class TableMetaModel extends Backend
 		{
 			if (!in_array($strExtension, $arrActiveModules))
 			{
-				if (in_array($strExtension, $arrInactiveModules))
+				if (is_array($arrInactiveModules) && in_array($strExtension, $arrInactiveModules))
 				{
 					$arrMissing[] = sprintf('<li>Please activate required extension &quot;%s&quot; (%s)</li>', $strDisplay, $strExtension);
 				} else {

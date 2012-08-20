@@ -223,7 +223,13 @@ class MetaModelTemplate
 
 	/**
 	 * Parse the template file and return it as string
-	 * @return string
+	 *
+	 * @param $strOutputFormat   the desired output format.
+	 *
+	 * @param $blnFailIfNotFound if set to true, the template object will throw an exception if the template can not be found. Defaults to false.
+	 *
+	 * @return string the parsed template.
+	 *
 	 */
 	public function parse($strOutputFormat, $blnFailIfNotFound = false)
 	{
@@ -242,7 +248,7 @@ class MetaModelTemplate
 			include($strTplFile);
 			$strBuffer = ob_get_contents();
 			ob_end_clean();
-	
+
 			return $strBuffer;
 		}
 	}

@@ -26,7 +26,7 @@ $this->loadLanguageFile('tl_metamodel');
  */
 
 /**
- * Table tl_metamodel_item 
+ * Table tl_metamodel_item
  */
 $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 (
@@ -62,11 +62,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 			'headerFields'            => array('tstamp'),
 			'fields'                  => array('sorting'),
 		),
-		
+
 		'label' => array
 		(
-//			'fields'                  => array('tstamp'),
-//			'format'                  => '%s',
+			'fields'                  => array(),
+			'format'                  => 'unused',
 //			'label_callback'          => array('MetaModelDatabase', 'labelCallback'),
 		),
 		'global_operations' => array
