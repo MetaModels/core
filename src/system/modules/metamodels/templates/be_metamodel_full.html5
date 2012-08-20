@@ -1,0 +1,15 @@
+<div class="field_type block">
+<?php
+$arrItem = $this->data;
+?>
+
+<?php foreach ($this->item->getMetaModel()->getAttributes() as $field => $objAttribute): ?>
+
+<?php if (($strValue = $arrItem[$strOutputFormat][$field]) || ($strValue = $arrItem['text'][$field])): ?>
+<div class="field <?php echo $field; ?>">
+	<span class="label"><?php echo $objAttribute->getName(); ?></span>
+	<span class="value"><?php echo $strValue; ?></span>
+</div>
+<?php endif; ?>
+<?php endforeach; ?>
+</div>
