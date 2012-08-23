@@ -102,12 +102,6 @@ CREATE TABLE `tl_metamodel_attribute` (
 --  `multiple` char(1) NOT NULL default '',
 --  `sortBy` varchar(32) NOT NULL default '',
 --  `showLink` char(1) NOT NULL default '',
---  `showImage` char(1) NOT NULL default '',
---  `imageSize` varchar(255) NOT NULL default '',
---  `customFiletree` char(1) NOT NULL default '',
---  `uploadFolder` varchar(255) NOT NULL default '',
---  `validFileTypes` varchar(255) NOT NULL default '',
---  `filesOnly` char(1) NOT NULL default '',
 --  `editGroups` blob NULL,
 --  `allowedHosts` blob NULL,
 
@@ -160,6 +154,9 @@ CREATE TABLE `tl_metamodel_filtersetting` (
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+--
+-- Table `tl_metamodel_rendersettings`
+--
 
 CREATE TABLE `tl_metamodel_rendersettings` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -175,24 +172,22 @@ CREATE TABLE `tl_metamodel_rendersettings` (
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+--
+-- Table `tl_metamodel_rendersetting`
+--
 
 CREATE TABLE `tl_metamodel_rendersetting` (
   `id` int(10) unsigned NOT NULL auto_increment,
 -- corresponding tl_metamodel_rendersettings
   `pid` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
+  `sorting` int(10) unsigned NOT NULL default '0',
 -- corresponding tl_metamodel_attribute
   `attr_id` int(10) unsigned NOT NULL default '0',
   `template` varchar(64) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
---
--- Table `tl_metamodel_filtersetting`
---
-
 
 --
 -- Table `tl_user_group`
