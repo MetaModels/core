@@ -178,7 +178,7 @@ class MetaModelFactory implements IMetaModelFactory
 
 		$GLOBALS['TL_CSS'][] = 'system/modules/metamodels/html/style.css';
 
-		$GLOBALS['BE_MOD']['system']['metamodel'] = array
+		$GLOBALS['BE_MOD']['system']['metamodels'] = array
 		(
 			'tables'			=> array_merge(array('tl_metamodel', 'tl_metamodel_attribute', 'tl_metamodel_filter', 'tl_metamodel_filtersetting', 'tl_metamodel_rendersettings', 'tl_metamodel_rendersetting'), self::getAllTables()),
 			'icon'				=> 'system/modules/metamodels/html/icon.gif',
