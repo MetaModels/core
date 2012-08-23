@@ -103,7 +103,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 	(
 		'default' => array
 		(
-			'title' => array('name', 'isdefault')
+			'title' => array('name', 'isdefault'),
+			'settings' => array('template')
 		),
 	),
 
@@ -123,6 +124,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
 			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50')
+		),
+		'template' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template'],
+			'default'                 => 'catalog_full',
+			'exclude'                 => true,
+			'inputType'               => 'select',
+			'options_callback'        => array('TableMetaModelRenderSettings','getTemplates'),
+			'eval'                    => array('tl_class'=>'w50')
 		),
 	),
 

@@ -168,6 +168,8 @@ CREATE TABLE `tl_metamodel_rendersettings` (
   `name` varchar(64) NOT NULL default '',
 -- is default?
   `isdefault` char(1) NOT NULL default '',
+-- the template to use.
+  `template` varchar(64) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -215,7 +217,6 @@ CREATE TABLE `tl_user` (
 
 CREATE TABLE `tl_module` (
   `metamodel` int(10) unsigned NOT NULL default '0',
-  `metamodel_template` varchar(64) NOT NULL default '',
   `metamodel_layout` varchar(64) NOT NULL default '',
 
 -- LIMIT n,m for listings

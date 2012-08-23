@@ -154,17 +154,21 @@ class ModuleMetaModelList extends Module
 		$arrLimits = $this->calculatePagination($intTotal);
 
 		$objItems = $objMetaModel->findByFilter($objFilter, $this->metamodel_sortby, $arrLimits[1], $arrLimits[0]);
-		$objTemplate = new FrontendTemplate($this->metamodel_template);
-		$objTemplate->items = $objItems;
 
 		$objView = $this->getRenderSettings($objMetaModel, $objFilter);
 
 		if ($objView)
 		{
-			$objTemplate->data = $objItems->parseAll($objTemplate->getFormat(), $objView);
+			$objTemplate = new MetaModelTemplate($objView->get('template'));
+			$objTemplate->data = $objItems->parseAll($this->Template->getFormat(), $objView);
 			$objTemplate->view = $objView;
+		} else {
+			// fallback to default.
+			$objTemplate = new MetaModelTemplate('metamodel_full');
 		}
 
-		$this->Template->items = $objTemplate->parse();
+		$objTemplate->items = $objItems;
+
+		$this->Template->items = $objTemplate->parse($this->Template->getFormat());
 	}
 }

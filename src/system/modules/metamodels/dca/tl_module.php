@@ -22,7 +22,7 @@ if (!defined('TL_ROOT'))
  * Add palettes to tl_module
  */
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list']  = '{title_legend},name,headline,type;{config_legend},metamodel,perPage,metamodel_use_limit,metamodel_sortby,metamodel_filtering;{template_legend:hide},metamodel_template,metamodel_layout;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list']  = '{title_legend},name,headline,type;{config_legend},metamodel,perPage,metamodel_use_limit,metamodel_sortby,metamodel_filtering;{template_legend:hide},metamodel_layout;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'metamodel_use_limit';
 
@@ -47,16 +47,6 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'inputType'               => 'radio',
 		'foreignKey'              => 'tl_metamodel.name',
 		'eval'                    => array('mandatory'=> true, 'submitOnChange'=> true)
-	),
-
-	'metamodel_template' => array
-	(
-		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_template'],
-		'default'                 => 'catalog_full',
-		'exclude'                 => true,
-		'inputType'               => 'select',
-		'options_callback'        => array('tl_module_metamodel','getMetaModelTemplates'),
-		'eval'                    => array('tl_class'=>'w50')
 	),
 
 	'metamodel_layout' => array
@@ -136,19 +126,6 @@ class tl_module_metamodel extends Backend
 	public function getModuleTemplates(DataContainer $objDC)
 	{
 		return $this->getTemplateGroup('mod_' . $objDC->activeRecord->type, $objDC->activeRecord->pid);
-	}
-
-	/**
-	 * Fetch the template group for the detail view of the current MetaModel module.
-	 *
-	 * @param DataContainer $objDC the datacontainer calling this method.
-	 *
-	 * @return array
-	 *
-	 */
-	public function getMetaModelTemplates(DataContainer $objDC)
-	{
-		return $this->getTemplateGroup('metamodel_', $objDC->activeRecord->pid);
 	}
 
 	/**

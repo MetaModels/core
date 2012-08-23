@@ -1,5 +1,33 @@
 <?php
+/**
+ * The MetaModels extension allows the creation of multiple collections of custom items,
+ * each with its own unique set of selectable attributes, with attribute extendability.
+ * The Front-End modules allow you to build powerful listing and filtering of the
+ * data in each collection.
+ *
+ * PHP version 5
+ * @package	   MetaModels
+ * @subpackage Core
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  CyberSpectrum
+ * @license    private
+ * @filesource
+ */
+if (!defined('TL_ROOT'))
+{
+	die('You cannot access this file directly!');
+}
 
+
+/**
+ * Template class for metamodels.
+ * In most aspects this behaves identically to the FrontendTemplate class from Contao but it differs in respect to format selection.
+ * The format is being determined upon parsing and not upon instantiation. There is also an optional "fail on not found" flag,
+ * which defaults to false and therefore one can parse the template and have zero output instead of cluttering the frontend with exceptions.
+ * @package	   MetaModels
+ * @subpackage Core
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ */
 class MetaModelTemplate
 {
 	/**
@@ -19,6 +47,12 @@ class MetaModelTemplate
 	 * @var array
 	 */
 	protected $arrData = array();
+
+	/**
+	 * current output format. Only valid when within {@link MetaModelTemplate::parse()}
+	 * @var string
+	 */
+	protected $strFormat = NULL;
 
 	/**
 	 * Makes all protected methods from class Controller callable publically.
@@ -244,13 +278,25 @@ class MetaModelTemplate
 		$strTplFile = $this->getTemplate($this->strTemplate, $strOutputFormat, $blnFailIfNotFound);
 		if ($strTplFile)
 		{
+			$this->strFormat = $strOutputFormat;
+
 			ob_start();
 			include($strTplFile);
 			$strBuffer = ob_get_contents();
 			ob_end_clean();
 
+			$this->strFormat =  NULL;
+
 			return $strBuffer;
 		}
+	}
+
+	/**
+	 * Protected as only the included template file shall be able to call as outside from {@link MetaModelTemplate::parse()} the format is undefined.
+	 */
+	protected function getFormat()
+	{
+		return $this->strFormat;
 	}
 
 	public static function render($strTemplate, $strOutputFormat, $arrTplData, $blnFailIfNotFound = false)

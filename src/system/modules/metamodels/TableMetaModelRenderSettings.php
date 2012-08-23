@@ -59,6 +59,22 @@ class TableMetaModelRenderSettings extends Backend
 	{
 		return $strLabel . ($arrRow['isdefault']? ' <strong>*</strong>' : '');
 	}
+
+	/**
+	 * Fetch the template group for the detail view of the current MetaModel module.
+	 *
+	 * @param DataContainer $objDC the datacontainer calling this method.
+	 *
+	 * @return array
+	 *
+	 */
+	public function getTemplates(DataContainer $objDC)
+	{
+		return $this->getTemplateGroup('metamodel_', $objDC->activeRecord->pid);
+	}
+
+//template
+
 }
 
 ?>

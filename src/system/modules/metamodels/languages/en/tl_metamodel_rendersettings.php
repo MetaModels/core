@@ -23,11 +23,14 @@ if (!defined('TL_ROOT'))
  */
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']                 = array('Name', 'Setting name.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']               = array('Revision date', 'Date and time of the latest revision');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']            = array('Is default', 'Determines that this setting shall be used as default for the parenting MetaModel');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']             = array('Template', 'The template to use to render the items');
 
 /**
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']         = 'Name';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings_legend']      = 'Settings';
 
 /**
  * Buttons

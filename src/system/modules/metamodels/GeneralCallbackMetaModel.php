@@ -80,18 +80,18 @@ class GeneralCallbackMetaModel extends GeneralCallbackDefault
 
 		$objNativeItem = $objModelRow->getItem();
 		$objMetaModel = $objNativeItem->getMetaModel();
-
-		$arrValues = array_merge(array('id', 'pid', 'sorting', 'tstamp', 'varbase', 'vargroup'), array_keys($objMetaModel->getAttributes()));
-
-		$objView = new MetaModelRenderSettings();
-		// TODO: allow definition of a custom backend render view here.
-		if (!$this->metamodelview)
+		// TODO: we definately need an algorithm to tell frontend and backend render settings apart. this way of template switching is just plain evil.
+		$objView = MetaModelRenderSettingsFactory::byId($objMetaModel, $this->metamodelview);
+		if ($objView)
 		{
-			$objView->createDefaultFrom($objMetaModel);
+			$objTemplate = new MetaModelTemplate('be_' . $objView->get('template'));
+		} else {
+			// fallback to default.
+			$objTemplate = new MetaModelTemplate('be_metamodel_full');
 		}
 
-		$objTemplate = new MetaModelTemplate('be_metamodel_full');
 		$this->prepareTemplate($objTemplate, $objNativeItem, $objView);
+
 		return $objTemplate->parse('html5', true);
 	}
 }
