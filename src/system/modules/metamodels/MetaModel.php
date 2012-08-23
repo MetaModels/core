@@ -293,7 +293,7 @@ class MetaModel implements IMetaModel
 	/**
 	 * {@inheritdoc}
 	 *
-	 * @link MetaModel::createAttributes() is called internally when the attributes are requested the first time.
+	 * {@link MetaModel::createAttributes()} is called internally when the attributes are requested the first time.
 	 *
 	 */
 	public function getAttributes()
@@ -546,7 +546,7 @@ class MetaModel implements IMetaModel
 		$objDB = Database::getInstance();
 
 		$blnDenyInvariantSave = $this->hasVariants() && ($arrValues['varbase'] === '0');
-        $blnNewBaseItem = false;
+		$blnNewBaseItem = false;
 
 		if (!$arrValues['id'])
 		{
@@ -557,17 +557,16 @@ class MetaModel implements IMetaModel
 
 			if ($this->hasVariants())
 			{
-                /* no vargroup is given, so we have a complete new base item
-                * this should be a workaround for these values should be set by the
-                * GeneralDataMetaModel or whoever is calling this method.
-                */
-
-                if (!isset($arrValues['vargroup']))
-                {
-                    $arrValues['varbase'] = '1';
-                    $arrValues['vargroup'] = '0';
-                    $blnNewBaseItem = true;
-                }
+				/* no vargroup is given, so we have a complete new base item
+				 * this should be a workaround for these values should be set by the
+				 * GeneralDataMetaModel or whoever is calling this method.
+				 */
+				if (!isset($arrValues['vargroup']))
+				{
+					$arrValues['varbase'] = '1';
+					$arrValues['vargroup'] = '0';
+					$blnNewBaseItem = true;
+				}
 				$arrData['varbase'] = $arrValues['varbase'];
 				$arrData['vargroup'] = $arrValues['vargroup'];
 			}
@@ -586,8 +585,11 @@ class MetaModel implements IMetaModel
 		}
 
 		$arrDataSimple = array();
-        //add the vargroup equal to the id
-        if ($blnNewBaseItem) $arrDataSimple['vargroup'] = $arrValues['id'];
+		//add the vargroup equal to the id
+		if ($blnNewBaseItem)
+		{
+			$arrDataSimple['vargroup'] = $arrValues['id'];
+		}
 		foreach ($this->getAttributes() as $strAttributeId => $objAttribute)
 		{
 			if ($blnDenyInvariantSave && !($objAttribute->get('isvariant')))
