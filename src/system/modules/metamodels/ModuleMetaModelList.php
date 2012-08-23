@@ -20,7 +20,7 @@ if (!defined('TL_ROOT'))
 
 /**
  * Implementation of the MetaModel lister module.
- * 
+ *
  * @package	   MetaModels
  * @subpackage Frontend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
@@ -60,21 +60,22 @@ class ModuleMetaModelList extends Module
 
 	/**
 	 * Returns the correct render settings for the metamodel.
-	 * 
+	 *
 	 * @param IMetaModel $objMetaModel the metamodel for which the view shall be retrieved.
-	 * 
+	 *
 	 * @return IMetaModelRenderSettings the view information.
 	 */
 	protected function getRenderSettings($objMetaModel, $objFilter)
 	{
 		$objView = new MetaModelRenderSettings();
 
+		$objView = $objMetaModel->getView($this->metamodelview);
+
 		if (!$this->metamodelview)
 		{
-			$objView->createDefaultFrom($objMetaModel);
 			$objView->set('jumpTo', 2);
 			$objView->set('alias', 'alias');
-			$objView->set('filter', $objFilter);
+//			$objView->set('filter', $objFilter);
 		}
 		return $objView;
 	}
@@ -158,7 +159,11 @@ class ModuleMetaModelList extends Module
 
 		$objView = $this->getRenderSettings($objMetaModel, $objFilter);
 
-		$objTemplate->data = $objItems->parseAll($objTemplate->getFormat(), $objView);
+		if ($objView)
+		{
+			$objTemplate->data = $objItems->parseAll($objTemplate->getFormat(), $objView);
+			$objTemplate->view = $objView;
+		}
 
 		$this->Template->items = $objTemplate->parse();
 	}

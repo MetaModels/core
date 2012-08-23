@@ -209,14 +209,23 @@ interface IMetaModel
 	/**
 	 * Generates a filter object that takes the given attributes into account.
 	 *
-	 * @param array $arrAttributeNames all attributes that shall be evaluated in the filter.
-	 * TODO: change to filter settings
+	 * @param int   $intFilterSettings the id of the filter settings to use.
 	 *
 	 * @param array $arrFilterUrl      the filter url parameters (usually the contents of $_GET etc.)
 	 *
 	 * @return IMetaModelFilter the generated filter object.
 	 */
-	public function prepareFilter($arrAttributeNames, $arrFilterUrl);
+	public function prepareFilter($intFilterSettings, $arrFilterUrl);
+
+	/**
+	 * Return a IMetaModelRenderSettings instance for this metamodel.
+	 *
+	 * @param int $intViewId the id of the render settings to retrieve.
+	 *
+	 * @return IMetaModelRenderSettings
+	 */
+	public function getView($intViewId = 0);
+
 }
 
 ?>

@@ -38,10 +38,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 		'sorting' => array
 		(
 			'mode'                    => 4,
-			'fields'                  => array(/*'attr_id'*/),
-			'panelLayout'             => 'filter,search,limit',
+			'fields'                  => array('sorting'),
+			'panelLayout'             => 'limit',
 			'headerFields'            => array('name'),
-			'child_record_callback'   => array('TableMetaModelRenderSetting', 'drawSetting')
+			'child_record_callback'   => array('TableMetaModelRenderSetting', 'drawSetting'),
 		),
 
 		'global_operations' => array
@@ -83,6 +83,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 				'icon'                => 'show.gif'
 			),
 		)
+	),
+
+	'palettes' => array
+	(
+		'__selector__' => array('attr_id')
 	),
 
 	'metapalettes' => array

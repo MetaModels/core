@@ -66,6 +66,21 @@ class TableMetaModelRenderSetting extends Backend
 			return;
 		}
 		$this->objectsFromUrl(null);
+
+		if (!$this->objMetaModel)
+		{
+			return;
+		}
+
+		$objMetaModel=$this->objMetaModel;
+		foreach ($objMetaModel->getAttributes() as $objAttribute)
+		{
+			$strColName = sprintf('%s_%s', $objAttribute->getColName(), $objAttribute->get('id'));
+			$strTypeName = $objAttribute->get('type');
+			// GOTCHA: watch out to never ever use anyting numeric in the palettes anywhere else.
+			// We have the problem, that DC_Table does not call the load callback when determining the palette.
+			$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes'][$objAttribute->get('id') . ' extends ' . $strTypeName] = array();
+		}
 	}
 
 	protected function objectsFromUrl($objDC)
@@ -130,6 +145,7 @@ class TableMetaModelRenderSetting extends Backend
 			$strTypeName = $objAttribute->get('type');
 			$arrResult[$objAttribute->get('id')] = $objAttribute->getName() . ' [' . $strTypeName . ']';
 		}
+
 		return $arrResult;
 	}
 
@@ -163,7 +179,7 @@ class TableMetaModelRenderSetting extends Backend
 		$strLabel = $objAttribute->getName();
 
 		$strReturn = sprintf(
-			$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['typedesc']['_default_'],
+			$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row'],
 			$strImage,
 			$strLabel ? $strLabel : $objAttribute->get('type'),
 			$objAttribute->get('type')

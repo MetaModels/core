@@ -2,52 +2,66 @@
 
 
 
-class MetaModelRenderSettings
+class MetaModelRenderSettings implements IMetaModelRenderSettings
 {
+	/**
+	 * the base information for this render settings object.
+	 * @var array
+	 */
 	protected $arrBase = array();
 
+	/**
+	 * The subsettings for all attributes.
+	 * @var array
+	 */
 	protected $arrSettings = array();
 
-	public function __construct()
+	/**
+	 * Create a new instance.
+	 *
+	 * @param array $arrInformation the array that holds all base information for the new instance.
+	 *
+	 * @return IMetaModelRenderSettings the new instance.
+	 */
+	public function __construct($arrInformation = array())
 	{
+		foreach ($arrInformation as $strKey => $varValue)
+		{
+			$this->set($strKey, deserialize($varValue));
+		}
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function get($strName)
 	{
 		return $this->arrBase[$strName];
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function set($strName, $varSetting)
 	{
 		$this->arrBase[$strName] = $varSetting;
 		return $this;
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function getSetting($strAttributeName)
 	{
 		return $this->arrSettings[$strAttributeName];
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function setSetting($strAttributeName, $objSetting)
 	{
 		$this->arrSettings[$strAttributeName] = $objSetting;
-		return $this;
-	}
-
-	public function createDefaultFrom(IMetaModel $objMetaModel)
-	{
-		foreach ($objMetaModel->getAttributes() as $objAttribute)
-		{
-			$objSetting = $objAttribute->getDefaultRenderSettings();
-			$this->setSetting($objAttribute->getColName(), $objSetting);
-/*
-			$objSetting = (object)array
-			(
-				'template' => 'mm_attr_' . $objAttribute->get('type')
-			);
-			$this->setSetting($objAttribute->getColName(), $objSetting);
-*/
-		}
 		return $this;
 	}
 }

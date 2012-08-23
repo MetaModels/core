@@ -561,9 +561,9 @@ class MetaModel implements IMetaModel
                 * this should be a workaround for these values should be set by the
                 * GeneralDataMetaModel or whoever is calling this method.
                 */
-                
+
                 if (!isset($arrValues['vargroup']))
-                { 
+                {
                     $arrValues['varbase'] = '1';
                     $arrValues['vargroup'] = '0';
                     $blnNewBaseItem = true;
@@ -663,6 +663,14 @@ class MetaModel implements IMetaModel
 			$objFilterSettings->addRules($objFilter, $arrFilterUrl);
 		}
 		return $objFilter;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getView($intViewId = 0)
+	{
+		return MetaModelRenderSettingsFactory::byId($this, $intViewId);
 	}
 }
 
