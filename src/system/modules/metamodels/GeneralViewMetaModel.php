@@ -31,8 +31,6 @@ class GeneralViewMetaModel extends GeneralViewDefault
 	/**
 	 * Create a new variant based upon the current item loaded in the data container.
 	 *
-	 * @param DC_General $objDC the data container with the loaded item.
-	 *
 	 * @return void
 	 */
 	public function createvariant()

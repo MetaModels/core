@@ -190,6 +190,15 @@ interface IMetaModel
 	public function getAttributeOptions($strAttribute, $objFilter = null);
 
 	/**
+	 * Save an item into the database.
+	 *
+	 * @param array $arrValues The array holding the RAW data to save to the database.
+	 *
+	 * @return void
+	 */
+	public function saveItem(&$arrValues);
+
+	/**
 	 * Prepare an empty filter object for this meta model. The returned filter contains no rules.
 	 *
 	 * @return IMetaModelFilter the filter object.

@@ -45,7 +45,15 @@ class GeneralCallbackMetaModel extends GeneralCallbackDefault
 	}
 
 	/**
-	 * when rendered via a template, this returns the values to be stored in the template.
+	 * Populate the provided Template with the items and render them (in html5 mode as we are in the backend).
+	 *
+	 * @param MetaModelTemplate        $objTemplate The template to populate
+	 *
+	 * @param IMetaModelItem           $objItem     The MetaModel attached to the items.
+	 *
+	 * @param IMetaModelRenderSettings $objSettings The render settings to use (optional, defaults to: null).
+	 *
+	 *@return void
 	 */
 	protected function prepareTemplate(MetaModelTemplate $objTemplate, IMetaModelItem $objItem, $objSettings = null)
 	{
@@ -57,10 +65,13 @@ class GeneralCallbackMetaModel extends GeneralCallbackDefault
 	/**
 	 * Call the customer label callback
 	 *
-	 * @param InterfaceGeneralModel $objModelRow
-	 * @param string $mixedLabel
-	 * @param array $args
-	 * @return string
+	 * @param InterfaceGeneralModel $objModelRow The Model to "draw".
+	 *
+	 * @param string                $mixedLabel
+	 *
+	 * @param array                 $args
+	 *
+	 * @return string the label string.
 	 */
 	public function labelCallback(InterfaceGeneralModel $objModelRow, $mixedLabel, $args)
 	{
