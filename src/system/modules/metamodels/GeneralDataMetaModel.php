@@ -363,7 +363,20 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	{
 		if ($objItem instanceof GeneralModelMetaModel)
 		{
+			$strBackupLanguage = '';
+			if ($this->strCurrentLanguage != '')
+			{
+				$strBackupLanguage = $GLOBALS['TL_LANGUAGE'];
+				$GLOBALS['TL_LANGUAGE'] = $this->strCurrentLanguage;
+			}
+
 			$objItem->getItem()->save();
+
+			if ($strBackupLanguage != '')
+			{
+				$GLOBALS['TL_LANGUAGE'] = $strBackupLanguage;
+			}
+
 			return;
 		}
 		throw new Exception('ERROR: incompatible object passed to GeneralDataMetaModel::save()');
