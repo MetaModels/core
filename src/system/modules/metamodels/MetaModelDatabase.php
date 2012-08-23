@@ -78,7 +78,8 @@ class MetaModelDatabase extends Controller
 		$arrDCA['list']['sorting']['mode'] = $objMetaModel->get('mode');
 		if($objMetaModel->get('ptable'))
 		{
-			$arrDCA['config']['ptable'] = $objMetaModel->get('ptable');
+//			$arrDCA['config']['ptable'] = $objMetaModel->get('ptable');
+			$arrDCA['dca_config']['data_provider']['parent']['source'] = $objMetaModel->get('ptable');
 		}
 
 		if($objMetaModel->hasVariants())

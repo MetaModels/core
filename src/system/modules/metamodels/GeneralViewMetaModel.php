@@ -35,9 +35,9 @@ class GeneralViewMetaModel extends GeneralViewDefault
 	 *
 	 * @return void
 	 */
-	public function createvariant(DC_General $objDC)
+	public function createvariant()
 	{
-		return $this->edit($objDC);
+		return $this->edit();
 	}
 }
 
