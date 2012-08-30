@@ -20,7 +20,7 @@ if (!defined('TL_ROOT'))
 
 /**
  * This class is used from tl_metamodel for various callbacks.
- * 
+ *
  * @package	   MetaModels
  * @subpackage Backend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
@@ -30,7 +30,7 @@ class TableMetaModelAttribute extends Backend
 
 	/**
 	 * Buffer property to hold the instance of the current field being edited.
-	 * 
+	 *
 	 * @var IMetaModelAttribute
 	 */
 	protected static $objCurrentField = null;
@@ -157,9 +157,9 @@ class TableMetaModelAttribute extends Backend
 	/**
 	 * Retrieve and buffer the current value of the column frm the DB.
 	 * This will later be used for the on submit and onsave callbacks.
-	 * 
+	 *
 	 * Used from tl_metamodel_attribute DCA
-	 * 
+	 *
 	 * @param DataContainer $objDC the data container that issued this callback.
 	 */
 	public function onLoadCallback($objDC)
@@ -195,6 +195,11 @@ class TableMetaModelAttribute extends Backend
 
 		$this->setNameAndDescription($objMetaModel);
 
+		if (!$objMetaModel->hasVariants())
+		{
+			unset($GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['isvariant']);
+		}
+
 		// inline create the instance of this field and buffer it.
 		self::$objCurrentField = MetaModelAttributeFactory::createFromDB($objField);
 
@@ -208,7 +213,7 @@ class TableMetaModelAttribute extends Backend
 	/**
 	 * onsubmit_callback
 	 * Used from tl_metamodel_attribute DCA
-	 * 
+	 *
 	 * @param DataContainer $objDC the data container that issued this callback.
 	 */
 	public function onSubmitCallback($objDC)
@@ -220,7 +225,7 @@ class TableMetaModelAttribute extends Backend
 	{
 		/**
 		 * The currently edited field.
-		 * 
+		 *
 		 * @var IMetaModelAttribute
 		 */
 		$objField = self::$objCurrentField;
@@ -259,8 +264,8 @@ class TableMetaModelAttribute extends Backend
 	}
 
 	/**
-	 * Get all valid fieldtypes 
-	 * 
+	 * Get all valid fieldtypes
+	 *
 	 * @return string[] the field type identifiers for all valid fields for the current MetaModel.
 	 */
 	public function fieldTypesCallback($objDC)
