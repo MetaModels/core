@@ -82,6 +82,27 @@ class MetaModelDatabase extends Controller
 			$arrDCA['dca_config']['data_provider']['parent']['source'] = $objMetaModel->get('ptable');
 		}
 
+		switch ($objMetaModel->get('mode'))
+		{
+			case 5:
+				$arrDCA['dca_config']['joinCondition'] = array
+				(
+					'self' => array(
+						array
+						(
+							'id'    => 'id',
+							'pid'    => 'pid',
+							'srcField'    => 'id',
+							'dstField'    => 'pid',
+							'operation'   => '='
+						)
+					)
+				);
+				$arrDCA['dca_config']['rootEntries'] = array('pid = 0');
+				break;
+			default:
+		}
+
 		if($objMetaModel->hasVariants())
 		{
 			// TODO: do only show variant bases if we are told so, i.e. render child view.
