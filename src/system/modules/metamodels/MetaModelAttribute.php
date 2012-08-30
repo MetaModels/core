@@ -341,16 +341,6 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	/**
 	 * {@inheritdoc}
 	 */
-	public function prepareFilterUrl($arrRowData, $arrUrlParams)
-	{
-		$arrNewParams = array_slice($arrUrlParams, 0);
-		$arrNewParams[$this->getColName()] = urlencode($arrRowData[$this->getColName()]);
-		return $arrNewParams;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function sortIds($arrIds, $strDirection)
 	{
 		// base implementation, do not perform any sorting.

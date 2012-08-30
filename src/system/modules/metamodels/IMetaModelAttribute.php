@@ -184,17 +184,6 @@ interface IMetaModelAttribute
 	public function parseFilterUrl($arrUrlParams);
 
 	/**
-	 * Prepares the filter url parameters for the given value.
-	 *
-	 * @param array  $arrRowData      the (raw) data from the MetaModel.
-	 *
-	 * @param array  $arrUrlParams    the current filter url that shall be used as base.
-	 *
-	 * @return array the updated filter url.
-	 */
-	public function prepareFilterUrl($arrRowData, $arrUrlParams);
-
-	/**
 	 * Sorts the given array list by field value in the given direction.
 	 *
 	 * @param int[]  $arrIds       a list of Ids from the MetaModel table.
