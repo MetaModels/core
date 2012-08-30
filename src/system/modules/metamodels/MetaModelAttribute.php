@@ -243,6 +243,8 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 			'eval'  => array()
 		);
 
+		$arrFieldDef['eval']['mandatory'] = $this->isunique && in_array('isunique', $this->getAttributeSettingNames());
+
 		// TODO: this is not used currently.
 		$arrFieldDef['eval']['mandatory'] = $arrFieldDef['eval']['mandatory'] || ($this->mandatory && in_array('mandatory', $visibleOptions) ? true : false);
 		return $arrFieldDef;
