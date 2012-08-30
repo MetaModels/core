@@ -590,6 +590,18 @@ class MetaModel implements IMetaModel
 		{
 			$arrDataSimple['vargroup'] = $arrValues['id'];
 		}
+
+		// update system columns.
+		if ($arrValues['pid'])
+		{
+			$arrDataSimple['pid'] = $arrValues['pid'];
+		}
+		if ($arrValues['sorting'])
+		{
+			$arrDataSimple['sorting'] = $arrValues['sorting'];
+		}
+		$arrDataSimple['tstamp'] = time();
+
 		foreach ($this->getAttributes() as $strAttributeId => $objAttribute)
 		{
 			if ($blnDenyInvariantSave && !($objAttribute->get('isvariant')))
