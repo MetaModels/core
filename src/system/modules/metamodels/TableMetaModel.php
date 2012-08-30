@@ -44,7 +44,7 @@ class TableMetaModel extends Backend
 	 */
 	public function checkDependencies($strBuffer, $strTemplate)
 	{
-		if ($this->Input->get('do') != 'metamodel')
+		if ($this->Input->get('do') != 'metamodels')
 		{
 			return $strBuffer;
 		}
