@@ -59,42 +59,39 @@ class MetaModelDatabase extends Controller
 			$this->loadLanguageFile('languages');
 		}
 
-		$arrDCA['list']['sorting']['mode'] = $objMetaModel->get('mode');
-		if($objMetaModel->get('ptable'))
-		{
-//			$arrDCA['config']['ptable'] = $objMetaModel->get('ptable');
-			$arrDCA['dca_config']['data_provider']['parent']['source'] = $objMetaModel->get('ptable');
-		}
-
-		switch ($objMetaModel->get('mode'))
-		{
-			case 5:
-				$arrDCA['dca_config']['joinCondition'] = array
-				(
-					'self' => array(
-						array
-						(
-							'id'    => 'id',
-							'pid'    => 'pid',
-							'srcField'    => 'id',
-							'dstField'    => 'pid',
-							'operation'   => '='
-						)
-					)
-				);
-				$arrDCA['dca_config']['rootEntries'] = array('pid = 0');
-				break;
-			default:
-		}
+		$arrDCA['config']['label'] = $objMetaModel->get('name');
 
 		if($objMetaModel->hasVariants())
 		{
-			// TODO: do only show variant bases if we are told so, i.e. render child view.
-/*
-			$arrDCA['list']['sorting']['filter'] = array(
-				array('varbase=?', 1)
+			$arrDCA['list']['sorting']['mode'] = 5;
+			$arrDCA['dca_config']['data_provider']['parent']['source'] = $objMetaModel->getTableName();
+			$arrDCA['dca_config']['joinCondition']['self'] = array
+			(
+				array
+				(
+					'srcField'    => 'varbase',
+					'dstField'    => '',
+					'operation'   => '=0'
+				),
+				array
+				(
+					'srcField'    => 'vargroup',
+					'dstField'    => 'vargroup',
+					'operation'   => '='
+				),
 			);
-*/
+			$arrDCA['dca_config']['rootEntries']['self'] = array
+			(
+				array
+				(
+					'field'       => 'varbase',
+					'operation'   => '=',
+					'value'       => '1'
+				)
+			);
+
+
+			// TODO: do only show variant bases if we are told so, i.e. render child view.
 			$arrDCA['fields']['varbase'] = array
 			(
 				'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_item']['varbase'],
@@ -127,10 +124,31 @@ class MetaModelDatabase extends Controller
 				// or append to the end, if copy operation has not been found
 				$arrDCA['list']['operations']['createvariant'] = $arrOperationCreateVariant;
 			}
+		} else {
+			$arrDCA['list']['sorting']['mode'] = $objMetaModel->get('mode');
+			if($objMetaModel->get('ptable'))
+			{
+				$arrDCA['dca_config']['data_provider']['parent']['source'] = $objMetaModel->get('ptable');
+			}
 
-//			$arrDCA['list']['label']['fields'][] = 'varbase';
-//			$arrDCA['list']['label']['format'] .= '<span>%s</span><br/>';
-
+			switch ($objMetaModel->get('mode'))
+			{
+				case 5:
+					$arrDCA['dca_config']['joinCondition'] = array
+					(
+						'self' => array(
+							array
+							(
+								'srcField'    => 'id',
+								'dstField'    => 'pid',
+								'operation'   => '='
+							)
+						)
+					);
+					$arrDCA['dca_config']['rootEntries'] = array('pid = 0');
+					break;
+				default:
+			}
 		}
 
 		$strPalette='';
@@ -146,9 +164,6 @@ class MetaModelDatabase extends Controller
 			} else
 				$strPalette .= (strlen($strPalette)>0 ? ',':'');
 			$strPalette .= $objAttribute->getColName();
-
-//			$arrDCA['list']['label']['fields'][] = $objAttribute->getColName();
-//			$arrDCA['list']['label']['format'] .= sprintf('<span>%s %%s</span><br/>', $objAttribute->getName());
 		}
 		$arrDCA['palettes']['default'] = $strPalette;
 		$GLOBALS['TL_DCA'][$strTableName] = array_replace_recursive($arrDCA, (array)$GLOBALS['TL_DCA'][$objMetaModel->getTableName()]);
