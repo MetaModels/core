@@ -59,22 +59,6 @@ class MetaModelDatabase extends Controller
 			$this->loadLanguageFile('languages');
 		}
 
-		if(TL_MODE == 'BE')
-		{
-			// add a direct link to edit the fields but for admins only
-			$this->import('BackendUser', 'User');
-			if($this->User->isAdmin)
-			{
-				$arrDCA['list']['global_operations']['fields'] = array
-				(
-					'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_item']['fields'],
-					'href'                => 'do=metamodel&table=tl_metamodel_attribute&id=' . $objMetaModel->get('id'),
-					'class'               => 'header_css_fields',
-					'attributes'          => 'onclick="Backend.getScrollOffset();"'
-				);
-			}
-		}
-
 		$arrDCA['list']['sorting']['mode'] = $objMetaModel->get('mode');
 		if($objMetaModel->get('ptable'))
 		{
