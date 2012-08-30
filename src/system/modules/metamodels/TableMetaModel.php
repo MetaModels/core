@@ -68,6 +68,11 @@ class TableMetaModel extends Backend
 			}
 		}
 
+		if (!$GLOBALS['METAMODELS']['attributes'])
+		{
+			$arrMissing[] = '<li>Please install at least one attribute extension as MetaModels without attributes do not make sense.</li>';
+		}
+
 		if ($arrMissing)
 		{
 			if(preg_match('#<div id="main">(.*)<div class="clear">#ims', $strBuffer, $arrMatch))
