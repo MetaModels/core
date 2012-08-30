@@ -210,15 +210,33 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	 */
 	protected function prepareFilter($arrFilter = array())
 	{
+		$objFilter = $this->objMetaModel->getEmptyFilter();
+
 		if ($arrFilter)
 		{
 			$arrFilterFields = array_keys($arrFilter);
 		} else {
-			$arrFilterFields = array();
+			return $objFilter;
 		}
-		$objFilter = $this->objMetaModel->getEmptyFilter();
 		// TODO: apply filter rules here.
-		//($arrFilterFields, $arrFilter);
+
+		foreach ($arrFilter as $mixKey => $mixFilter)
+		{
+			if (is_array($mixFilter))
+			{
+
+			} else if (is_string($mixFilter)) {
+				// must be some filter in SQL notation. This will only work out for root entries in tree views etc.
+				$objFilter->addFilterRule(
+					new MetaModelFilterRuleSimpleQuery(
+						sprintf('SELECT * FROM %s WHERE %s',
+							$this->objMetaModel->getTableName(),
+							$mixFilter
+						)
+					)
+				);
+			}
+		}
 		return $objFilter;
 	}
 
@@ -483,17 +501,20 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	{
 		$objCollection = $this->getEmptyCollection();
 
-		foreach ($this->objMetaModel->getAvailableLanguages() as $strLangCode)
+		if ($this->objMetaModel->isTranslated())
 		{
-			$objModel = new GeneralModelDefault();
-			$objModel->setID($strLangCode);
-			$objModel->setProperty("name", $GLOBALS['TL_LANG']['LNG'][$strLangCode]);
-			$objModel->setProperty("active", ($this->getCurrentLanguage() == $strLangCode));
-			$objCollection->add($objModel);
-		}
-		if ($objCollection->length() > 0)
-		{
-			return $objCollection;
+			foreach ($this->objMetaModel->getAvailableLanguages() as $strLangCode)
+			{
+				$objModel = new GeneralModelDefault();
+				$objModel->setID($strLangCode);
+				$objModel->setProperty("name", $GLOBALS['TL_LANG']['LNG'][$strLangCode]);
+				$objModel->setProperty("active", ($this->getCurrentLanguage() == $strLangCode));
+				$objCollection->add($objModel);
+			}
+			if ($objCollection->length() > 0)
+			{
+				return $objCollection;
+			}
 		}
 		return NULL;
 	}
