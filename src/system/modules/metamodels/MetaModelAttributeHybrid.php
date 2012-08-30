@@ -22,7 +22,7 @@ if (!defined('TL_ROOT'))
  * Base implementation for hybrid attributes.
  * Hybrid attributes are attributes that have a column in the underlying metamodel table but reference auxiliary
  * data.
- * 
+ *
  * @package	   MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
@@ -37,31 +37,6 @@ abstract class MetaModelAttributeHybrid extends MetaModelAttributeSimple impleme
 	/////////////////////////////////////////////////////////////////
 	// interface IMetaModelAttributeComplex
 	/////////////////////////////////////////////////////////////////
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function parseFilterUrl($arrUrlParams)
-	{
-		return null;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getIdsFromFilter($arrFilter)
-	{
-		return null;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
-	public function sortIds($arrIds, $strDirection)
-	{
-		return $arrIds;
-	}
-
 }
 
 ?>
