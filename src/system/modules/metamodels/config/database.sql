@@ -60,7 +60,7 @@ CREATE TABLE `tl_metamodel_attribute` (
   `type` varchar(64) NOT NULL default '',
   `isvariant` char(1) NOT NULL default '',
 -- unique value throughout the metamodel
-  `unique` char(1) NOT NULL default '',
+  `isunique` char(1) NOT NULL default '',
 
 
 --  `titleField` char(1) NOT NULL default '',

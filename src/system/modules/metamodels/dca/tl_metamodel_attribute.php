@@ -123,7 +123,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 		'_base_ extends default' => array
 		(
 			'+title'			=> array('colname', 'name', 'description'),
-			'advanced'			=> array(':hide', 'isvariant', 'mandatory', 'unique', 'hasdefault'),
+			'advanced'			=> array(':hide', 'isvariant', 'mandatory', 'isunique', 'hasdefault'),
 			'metamodeloverview'	=> array('sortingField', 'filteredField', 'searchableField'),
 			'backenddisplay'	=> array('titleField', 'width50', 'insertBreak'),
 		),
@@ -267,9 +267,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 			)
 		),
 
-		'unique' => array
+		'isunique' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['unique'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['isunique'],
 			'inputType'               => 'checkbox',
 			'eval'                    => array
 			(

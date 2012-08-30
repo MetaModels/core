@@ -28,7 +28,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname']              = array('C
 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['isvariant']            = array('Enable variant override', 'Check this, if you want variants within the MetaModel to override the parent\'s value');
 
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['unique']            = array('Unique values', 'Check this, if you want to ensure that each value only occurs once');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['isunique']            = array('Unique values', 'Check this, if you want to ensure that each value only occurs once');
 
 /**
  * Legends
