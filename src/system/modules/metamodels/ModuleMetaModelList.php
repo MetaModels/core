@@ -147,27 +147,31 @@ class ModuleMetaModelList extends Module
 	{
 		$objMetaModel = MetaModelFactory::byId($this->metamodel);
 
-		$objFilter = $objMetaModel->prepareFilter($this->metamodel_filtering, $_GET);
-
-		$intTotal = $objMetaModel->getCount($objFilter);
-
-		$arrLimits = $this->calculatePagination($intTotal);
-
-		$objItems = $objMetaModel->findByFilter($objFilter, $this->metamodel_sortby, $arrLimits[1], $arrLimits[0]);
-
 		$objView = $this->getRenderSettings($objMetaModel, $objFilter);
-
 		if ($objView)
 		{
 			$objTemplate = new MetaModelTemplate($objView->get('template'));
-			$objTemplate->data = $objItems->parseAll($this->Template->getFormat(), $objView);
 			$objTemplate->view = $objView;
 		} else {
 			// fallback to default.
 			$objTemplate = new MetaModelTemplate('metamodel_full');
 		}
 
+		$objTemplate->noItemsMsg = $GLOBALS['TL_LANG']['MSC']['noItemsMsg'];
+
+		$objFilter = $objMetaModel->prepareFilter($this->metamodel_filtering, $_GET);
+
+		$intTotal = $objMetaModel->getCount($objFilter);
+
+		$arrLimits = $this->calculatePagination($intTotal);
+		$objItems = $objMetaModel->findByFilter($objFilter, $this->metamodel_sortby, $arrLimits[1], $arrLimits[0]);
+
 		$objTemplate->items = $objItems;
+
+		if ($intTotal)
+		{
+			$objTemplate->data = $objItems->parseAll($this->Template->getFormat(), $objView);
+		}
 
 		$this->Template->items = $objTemplate->parse($this->Template->getFormat());
 	}
