@@ -61,11 +61,13 @@ class ModuleMetaModelList extends Module
 	/**
 	 * Returns the correct render settings for the metamodel.
 	 *
-	 * @param IMetaModel $objMetaModel the metamodel for which the view shall be retrieved.
+	 * @param IMetaModel $objMetaModel      the metamodel for which the view shall be retrieved.
+	 *
+	 * @param int        $intFilterSettings the filter settings that shall be used for url generation.
 	 *
 	 * @return IMetaModelRenderSettings the view information.
 	 */
-	protected function getRenderSettings($objMetaModel, $objFilter)
+	protected function getRenderSettings($objMetaModel, $intFilterSettings)
 	{
 		$objView = new MetaModelRenderSettings();
 
@@ -73,9 +75,7 @@ class ModuleMetaModelList extends Module
 
 		if (!$this->metamodelview)
 		{
-			$objView->set('jumpTo', 2);
-			$objView->set('alias', 'alias');
-//			$objView->set('filter', $objFilter);
+			$objView->set('filter', $intFilterSettings);
 		}
 		return $objView;
 	}
@@ -147,7 +147,7 @@ class ModuleMetaModelList extends Module
 	{
 		$objMetaModel = MetaModelFactory::byId($this->metamodel);
 
-		$objView = $this->getRenderSettings($objMetaModel, $objFilter);
+		$objView = $this->getRenderSettings($objMetaModel, $this->metamodel_filtering);
 		if ($objView)
 		{
 			$objTemplate = new MetaModelTemplate($objView->get('template'));

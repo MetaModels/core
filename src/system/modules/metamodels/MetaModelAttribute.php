@@ -319,6 +319,7 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 			}
 		}
 		else {
+			$varRaw = $arrRowData[$this->getColName()];
 			// try to transport what ever is possible, maybe we want to remove this.
 			if (is_string($varRaw) || is_numeric($varRaw))
 			{

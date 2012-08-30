@@ -104,7 +104,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		'default' => array
 		(
 			'title' => array('name', 'isdefault'),
-			'settings' => array('template')
+			'settings' => array('template', 'jumpTo')
 		),
 	),
 
@@ -132,12 +132,17 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'exclude'                 => true,
 			'inputType'               => 'select',
 			'options_callback'        => array('TableMetaModelRenderSettings','getTemplates'),
-			'eval'                    => array('tl_class'=>'w50')
+			'eval'                    => array()
+		),
+		'jumpTo' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo'],
+			'exclude'                 => true,
+			'inputType'               => 'pageTree',
+			'eval'                    => array('fieldType'=>'radio', 'helpwizard'=>true),
+			'explanation'             => 'jumpTo'
 		),
 	),
-
-
-
 );
 
 ?>

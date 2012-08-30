@@ -150,6 +150,8 @@ CREATE TABLE `tl_metamodel_filtersetting` (
   `urlparam` varchar(255) NOT NULL default '',
 -- custom SQL - query content.
   `customsql` text NULL,
+-- items for idlist rule,
+  `items` text NULL
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -170,6 +172,8 @@ CREATE TABLE `tl_metamodel_rendersettings` (
   `isdefault` char(1) NOT NULL default '',
 -- the template to use.
   `template` varchar(64) NOT NULL default '',
+-- the jumpTo page to use.
+  `jumpTo` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

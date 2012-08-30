@@ -212,12 +212,24 @@ class MetaModelItem implements IMetaModelItem
 		if ($objSettings
 			&& $objSettings->get('jumpTo')
 			&& ($objPage = MetaModelController::getPageDetails($objSettings->get('jumpTo')))
-			&& $objFilterSettings = $objSettings->get('filter')
+			&& $intFilterSettings = $objSettings->get('filter')
 		)
 		{
-//			$arrParams = $objFilterSettings->generateFilterUrlFrom($this);
-//			var_dump($objFilterSettings, $arrParams);
-//			$strUrl = MetaModelController::generateFrontendUrl($objPage->row(), implode('/', $arrParams));
+			$objFilterSettings = MetaModelFilterSettingsFactory::byId($intFilterSettings);
+			$arrParams = $objFilterSettings->generateFilterUrlFrom($this);
+			$strParams = '';
+			// auto_item must be first in url.
+			if (array_key_exists('auto_item', $arrParams))
+			{
+				$strParams .= $arrParams['auto_item'];
+				unset($arrParams['auto_item']);
+			}
+
+			foreach ($arrParams as $strKey => $strValue)
+			{
+				$strParams .= sprintf('%s/%s', $strKey, $strValue);
+			}
+			$strUrl = MetaModelController::generateFrontendUrl($objPage->row(), '/' . $strParams);
 			$arrResult['jumpTo'] = array
 			(
 				'url' => $strUrl,

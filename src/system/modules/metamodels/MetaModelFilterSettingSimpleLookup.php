@@ -26,9 +26,9 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 		$objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
 		if ($objAttribute)
 		{
+			// TODO: we need a proper filter setting here as otherwise the templates are not used.
 			$arrResult = $objItem->parseAttribute($objAttribute->getColName(), 'text');
-
-			return array($objAttribute->getColName() => $arrResult['text']);
+			return array(($this->get('urlparam')?$this->get('urlparam'):$objAttribute->getColName()) => urlencode($arrResult['text']));
 		}
 	}
 }

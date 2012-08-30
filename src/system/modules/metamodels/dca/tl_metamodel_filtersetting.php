@@ -19,7 +19,7 @@ if (!defined('TL_ROOT'))
 }
 
 /**
- * Table tl_metamodel_attribute 
+ * Table tl_metamodel_attribute
  */
 
 $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
@@ -40,8 +40,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		(
 			'mode'                    => 5,
 			'fields'                  => array('attr_id'),
-			'panelLayout'             => 'filter,limit', 
-			'headerFields'            => array('type', 'attr_id'), 
+			'panelLayout'             => 'filter,limit',
+			'headerFields'            => array('type', 'attr_id'),
 			'flag'                    => 1,
 			'icon'                    => 'system/modules/metamodels/html/filter_and.png',
 			'paste_button_callback'   => array('TableMetaModelFilterSetting', 'pasteButton'),
@@ -137,6 +137,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 
 		// base rules shipped with metamodels.
 
+		'idlist extends default' => array
+		(
+			'+config' => array('items'),
+		),
+
 		'simplelookup extends _attribute_' => array
 		(
 			'+config' => array('urlparam'),
@@ -146,7 +151,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		(
 			'+config' => array('customsql'),
 		),
-
 	),
 
 	'metasubselectpalettes' => array
@@ -210,6 +214,18 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			),
 			'load_callback'           => array(array('TableMetaModelFilterSetting', 'attrIdToName')),
 			'save_callback'           => array(array('TableMetaModelFilterSetting', 'nameToAttrId')),
+		),
+
+		'items' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['items'],
+			'exclude'                 => true,
+			'inputType'               => 'textarea',
+			'eval'                    => array(
+				'doNotSaveEmpty'      => true,
+				'alwaysSave'          => true,
+				'mandatory'           => true,
+			),
 		),
 
 		'urlparam' => array
