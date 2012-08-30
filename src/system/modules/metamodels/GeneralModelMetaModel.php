@@ -115,7 +115,20 @@ class GeneralModelMetaModel implements InterfaceGeneralModel
 	 */
 	public function getPropertiesAsArray()
 	{
-		$arrResult = array();
+		$arrResult = array
+		(
+			'id'      => $this->getProperty('id'),
+			'pid'     => $this->getProperty('pid'),
+			'tstamp'  => $this->getProperty('tstamp'),
+			'sorting'  => $this->getProperty('sorting'),
+		);
+
+		if ($this->getItem()->getMetaModel()->hasVariants())
+		{
+			$arrResult['varbase'] = $this->getProperty('varbase');
+			$arrResult['vargroup'] = $this->getProperty('vargroup');
+		}
+
 		foreach (array_keys($this->getItem()->getMetaModel()->getAttributes()) as $strKey)
 		{
 			$arrResult[$strKey] = $this->getProperty($strKey);

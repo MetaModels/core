@@ -219,7 +219,7 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	 */
 	public function getAttributeSettingNames()
 	{
-		return array('id', 'pid', 'sorting', 'tstamp', 'name', 'description', 'type', 'colname');
+		return array('id', 'pid', 'sorting', 'tstamp', 'name', 'description', 'type', 'colname', 'isvariant');
 	}
 
 	/**

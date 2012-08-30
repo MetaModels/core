@@ -101,9 +101,50 @@ class GeneralCallbackMetaModel extends GeneralCallbackDefault
 			$objTemplate = new MetaModelTemplate('be_metamodel_full');
 		}
 
+		$objMetaModel = $objNativeItem->getMetaModel();
+		if ($objMetaModel->hasVariants() && !$objNativeItem->isVariantBase())
+		{
+			// create a clone to have a seperate copy of the object as we are going to manipulate it here.
+			$objView = clone $objView;
+
+			// loop over all attributes and remove those from rendering that are invariant.
+			foreach ($objMetaModel->getInVariantAttributes() as $strAttrName => $objAttribute)
+			{
+				$objView->setSetting($strAttrName, NULL);
+			}
+		}
+
 		$this->prepareTemplate($objTemplate, $objNativeItem, $objView);
 
 		return $objTemplate->parse('html5', true);
+	}
+
+	public function parseRootPaletteCallback($arrPalette)
+	{
+		$objModelRow = $this->objDC->getCurrentModel();
+
+		if ($objModelRow)
+		{
+			$objNativeItem = $objModelRow->getItem();
+			$objMetaModel = $objNativeItem->getMetaModel();
+			if ($objMetaModel->hasVariants() && !$objNativeItem->isVariantBase())
+			{
+				// loop over all attributes and remove those from rendering that are invariant.
+				foreach ($objMetaModel->getInVariantAttributes() as $strAttrName => $objAttribute)
+				{
+					foreach ($arrPalette as $intKey => $arrPaletteDef)
+					{
+						if (($intPos = array_search($strAttrName, $arrPaletteDef['palette'])) !== false)
+						{
+							unset($arrPalette[$intKey]['palette'][$intPos]);
+						}
+					}
+				}
+			}
+		}
+		$arrPalette = parent::parseRootPaletteCallback($arrPalette);
+
+		return $arrPalette;
 	}
 }
 
