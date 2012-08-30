@@ -354,7 +354,20 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	 */
 	public function isUniqueValue($strField, $varNew)
 	{
-		// TODO: compile filter for attribute and value here and find all other items with this value, if only the current item has this value, return true.
+		$objFilter = $this->objMetaModel->getEmptyFilter();
+
+		$objAttribute = $this->getMetaModel()->getAttribute($strField);
+		if ($objAttribute)
+		{
+			$objFilterRule = $objAttribute->parseFilterUrl(array($objAttribute->getColName() => $varNew));
+			if ($objFilterRule)
+			{
+				$objFilter->addFilterRule($objFilterRule);
+				$arrIds = $objFilter->getMatchingIds();
+				return count($arrIds) == 0;
+			}
+		}
+
 		return false;
 	}
 
