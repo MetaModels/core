@@ -92,13 +92,14 @@ class MetaModelRenderSettingsFactory implements IMetaModelRenderSettingsFactory
 			$objView = Database::getInstance()->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE pid=? AND isdefault=1')
 											  ->execute($objMetaModel->get('id'));
 		}
-		if (!$objView->numRows)
+		if ($objView->numRows)
 		{
-			return NULL;
+			$objRenderSetting = new MetaModelRenderSettings($objView->row());
+		} else {
+			$objRenderSetting = new MetaModelRenderSettings(array('template' => 'metamodel_full'));
 		}
 
-		$objRenderSetting = new MetaModelRenderSettings($objView->row());
-		self::$arrInstances[$intId] = $objSetting;
+		self::$arrInstances[$intId] = $objRenderSetting;
 
 		// populate the view with the defaults.
 		foreach ($objMetaModel->getAttributes() as $objAttribute)
@@ -107,7 +108,10 @@ class MetaModelRenderSettingsFactory implements IMetaModelRenderSettingsFactory
 			$objRenderSetting->setSetting($objAttribute->getColName(), $objSetting);
 		}
 
-		self::collectAttributeSettings($objMetaModel, $objRenderSetting);
+		if ($objView->numRows)
+		{
+			self::collectAttributeSettings($objMetaModel, $objRenderSetting);
+		}
 
 		return $objRenderSetting;
 	}
