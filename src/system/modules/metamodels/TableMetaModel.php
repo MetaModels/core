@@ -136,45 +136,35 @@ class TableMetaModel extends Backend
 		return serialize($arrOutput);
 	}
 
-	protected function checkRemoveTable(DataContainer $dc)
+	protected function checkRemoveTable(DataContainer $objDC)
 	{
-		return; // temporarily a no-op as unfinished.
-
-		// TODO: When and where do we really need this function? IMO it is way too hazardous. See comment for bugfix below.
-
-		// bugfix to resolve issue #52 also here - We keep ending up here as this is called from DC_Table::__construct
+		// Watch out! We keep ending up here as this is called from DC_Table::__construct
 		// This means, when we are deleting comments (or whatever we might want to add in the future) the act equals 'delete'
 		// and therefore without this check here, we would kill the MetaModel table.
-		// We have to find out if this routine is really needed in this way, or if it would be better to handle it in something
-		// like an onDelete callback. (c.schiffler 2009-08-04)
-		if($this->Input->get('key') != '')
-			return;
-		$act = $this->Input->get('act');
-		if ($act == 'deleteAll' || $act == 'delete')
+		if (!(($this->Input->get('act') == 'deleteAll') || ($this->Input->get('act') == 'delete'))
+		&& (($this->Input->get('key') != '') || ($this->Input->get('table') != '')))
 		{
-			if ($act == 'delete')
-			{
-				$ids = array($dc->id);
-			}
-			else
-			{
-				$session = $this->Session->getData();
-				$ids = $session['CURRENT']['IDS'];
-			}
-			// TODO: Build a MetaModel::vaporize function for this or something like that.
-			$objType = $this->Database->execute(
-					sprintf("SELECT tableName FROM tl_metamodel WHERE id IN (%s)",
-							implode(',', $ids)));
+			return;
+		}
 
-			while ($objType->next())
-			{
-				$tableName = $objType->tableName;
+		$arrIds = array();
+		if ($this->Input->get('act') != 'deleteAll')
+		{
+			$arrSession = $this->Session->getData();
+			$arrIds = $arrSession['CURRENT']['IDS'];
+		}
+		else if ($this->Input->get('act') != 'delete')
+		{
+			$arrIds = array($objDC->id);
+		}
 
-				if ($this->Database->tableExists($tableName, null, true))
-				{
-					$this->import('MetaModel');
-					$this->MetaModel->dropTable($tableName);
-				}
+		foreach ($arrIds as $intId)
+		{
+			$objMetaModel = MetaModelFactory::byId($intId);
+			if ($objMetaModel)
+			{
+				// TODO: implement IMetaModel::suicide() to delete all entries in secondary tables (complex attributes).
+				MetaModelTableManipulation::deleteTable($objMetaModel->getTableName());
 			}
 		}
 	}
