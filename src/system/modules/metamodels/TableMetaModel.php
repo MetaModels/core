@@ -142,7 +142,7 @@ class TableMetaModel extends Backend
 		// This means, when we are deleting comments (or whatever we might want to add in the future) the act equals 'delete'
 		// and therefore without this check here, we would kill the MetaModel table.
 		if (!(($this->Input->get('act') == 'deleteAll') || ($this->Input->get('act') == 'delete'))
-		&& (($this->Input->get('key') != '') || ($this->Input->get('table') != '')))
+		|| ($this->Input->get('key') != '') || ($this->Input->get('table') != ''))
 		{
 			return;
 		}
