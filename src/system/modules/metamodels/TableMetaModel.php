@@ -148,12 +148,12 @@ class TableMetaModel extends Backend
 		}
 
 		$arrIds = array();
-		if ($this->Input->get('act') != 'deleteAll')
+		if ($this->Input->get('act') == 'deleteAll')
 		{
 			$arrSession = $this->Session->getData();
 			$arrIds = $arrSession['CURRENT']['IDS'];
 		}
-		else if ($this->Input->get('act') != 'delete')
+		else if ($this->Input->get('act') == 'delete')
 		{
 			$arrIds = array($objDC->id);
 		}
