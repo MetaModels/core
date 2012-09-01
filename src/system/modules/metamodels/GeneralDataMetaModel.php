@@ -200,6 +200,100 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 		return new GeneralCollectionDefault();
 	}
 
+
+	/**
+	 * Combine a filter in standard filter array notation.
+	 * Supported operations are:
+	 * operation      needed arguments     argument type.
+	 * AND
+	 *                'childs'             array
+	 * OR
+	 *                'childs'             array
+	 * =
+	 *                'property'           string (the name of a property)
+	 *                'value'              literal
+	 * >
+	 *                'property'           string (the name of a property)
+	 *                'value'              literal
+	 * <
+	 *                'property'           string (the name of a property)
+	 *                'value'              literal
+	 * IN
+	 *                'property'           string (the name of a property)
+	 *                'values'             array of literal
+	 *
+	 * @param array $arrFilters the filter to be combined to a valid SQL filter query.
+	 *
+	 * @return string the combined WHERE clause.
+	 */
+	protected function calculateSubfilter($arrFilter, IMetaModelFilter $objFilter)
+	{
+		if (!is_array($arrFilter))
+		{
+			throw new Exception('Error Processing subfilter: ' . var_export($arrFilter, true), 1);
+		}
+
+		$objAttribute = NULL;
+		if ($arrFilter['property'])
+		{
+			$objAttrobute = $this->objMetaModel->getAttribute($arrFilter['property']);
+		}
+
+		switch ($arrFilter['operation'])
+		{
+			case 'AND':
+			case 'OR':
+				if ($arrFilter['operation'] == 'AND')
+				{
+					$objFilterRule = new MetaModelFilterRuleAND();
+				} else {
+					$objFilterRule = new MetaModelFilterRuleOR();
+				}
+				$objFilter->addFilterRule($objFilterRule);
+
+				$objSubFilter = new MetaModelFilter($this->objMetaModel);
+
+				$objFilterRule->addChild($objSubFilter);
+
+				foreach ($arrFilter['childs'] as $arrChild)
+				{
+					$this->calculateSubfilter($arrChild, $objSubFilter);
+				}
+				break;
+
+			case '=':
+				$objFilterRule = NULL;
+				if ($objAttribute)
+				{
+					$objFilterRule = $objAttribute->parseFilterUrl(array($objAttribute->getColName() => $arrFilter['value']));
+				} else if(Database::getInstance()->fieldExists($arrFilter['property'], $this->objMetaModel->getTableName())) {
+					// system column?
+					$objFilterRule = new MetaModelFilterRuleSimpleQuery(sprintf(
+						'SELECT id FROM %s WHERE %s %s %s',
+						$this->objMetaModel->getTableName(),
+						$arrFilter['property'],
+						$arrFilter['operation'],
+						$arrFilter['value']
+					));
+				}
+				if (!$objFilterRule)
+				{
+					throw new Exception('Error processing filter array - unknown property ' . var_export($arrFilter['property'], true), 1);
+				}
+				$objFilter->addFilterRule($objFilterRule);
+				break;
+			case '>':
+			case '<':
+				break;
+
+			case 'IN':
+				break;
+
+			default:
+				throw new Exception('Error processing filter array - unknown operation ' . var_export($arrFilter, true), 1);
+		}
+	}
+
 	/**
 	 * Prepare a filter and return it.
 	 *
@@ -214,28 +308,14 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 
 		if ($arrFilter)
 		{
-			$arrFilterFields = array_keys($arrFilter);
-		} else {
-			return $objFilter;
-		}
-		// TODO: apply filter rules here.
-
-		foreach ($arrFilter as $mixKey => $mixFilter)
-		{
-			if (is_array($mixFilter))
-			{
-
-			} else if (is_string($mixFilter)) {
-				// must be some filter in SQL notation. This will only work out for root entries in tree views etc.
-				$objFilter->addFilterRule(
-					new MetaModelFilterRuleSimpleQuery(
-						sprintf('SELECT * FROM %s WHERE %s',
-							$this->objMetaModel->getTableName(),
-							$mixFilter
-						)
-					)
-				);
-			}
+			$this->calculateSubfilter(
+				array
+				(
+					'operation' => 'AND',
+					'childs' => $arrFilter
+				),
+				$objFilter
+			);
 		}
 		return $objFilter;
 	}
@@ -266,6 +346,7 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 			$varResult = $this->objMetaModel->getIdsFromFilter($objFilter, ($arrSorting?$arrSorting[0]:''), $objConfig->getStart(), $objConfig->getAmount());
 		} else {
 			$objItems = $this->objMetaModel->findByFilter($objFilter, ($arrSorting?$arrSorting[0]:''), $objConfig->getStart(), $objConfig->getAmount());
+
 			$objResultCollection = $this->getEmptyCollection();
 			foreach ($objItems as $objItem)
 			{

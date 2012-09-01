@@ -232,7 +232,7 @@ class MetaModelFactory implements IMetaModelFactory
 				// determine image to use.
 				if ($objMetaModels->backendicon && file_exists(TL_ROOT . '/' . $objMetaModels->backendicon))
 				{
-					$strIcon = $objMetaModels->backendicon;
+					$strIcon = MetaModelController::getImage(MetaModelController::urlEncode($objMetaModels->backendicon), 16, 16);;
 				} else {
 					$strIcon = 'system/modules/metamodels/html/icon.gif';
 				}

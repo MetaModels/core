@@ -21,7 +21,7 @@ if (!defined('TL_ROOT'))
 
 /**
  * This is the MetaModelFilterRule class for handling checkbox fields.
- * 
+ *
  * @package	   MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
@@ -30,30 +30,30 @@ class MetaModelFilterRuleSimpleQuery extends MetaModelFilterRule
 {
 	/**
 	 * the query string
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $strQueryString = null;
 
 	/**
 	 * the query parameters.
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $arrParams = null;
 
 	/**
 	 * the name of the id column in the query.
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $strIdColumn = null;
 
 	/**
 	 * creates an instance of a simple query filter rule.
-	 * 
+	 *
 	 * @param string $strQueryString the query that shall be executed.
-	 * 
+	 *
 	 * @param array  $arrParams      the query parameters that shall be used.
 	 */
 	public function __construct($strQueryString, $arrParams=array(), $strIdColumn = 'id')

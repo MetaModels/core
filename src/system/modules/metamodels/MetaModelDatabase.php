@@ -65,31 +65,69 @@ class MetaModelDatabase extends Controller
 		{
 			$arrDCA['list']['sorting']['mode'] = 5;
 			$arrDCA['dca_config']['data_provider']['parent']['source'] = $objMetaModel->getTableName();
-			$arrDCA['dca_config']['joinCondition']['self'] = array
-			(
-				array
-				(
-					'srcField'    => 'varbase',
-					'dstField'    => '',
-					'operation'   => '=0'
-				),
-				array
-				(
-					'srcField'    => 'vargroup',
-					'dstField'    => 'vargroup',
-					'operation'   => '='
-				),
-			);
-			$arrDCA['dca_config']['rootEntries']['self'] = array
-			(
-				array
-				(
-					'field'       => 'varbase',
-					'operation'   => '=',
-					'value'       => '1'
-				)
+
+			$arrDCA['dca_config']['child_list']['self']['fields'] = array(
+				'id', 'tstamp'
 			);
 
+			$arrDCA['dca_config']['childCondition'] = array
+			(
+				array(
+					'from' => 'self',
+					'to' => 'self',
+					'setOn' => array
+					(
+						array(
+							'to_field'    => 'vargroup',
+							'from_field'  => 'vargroup',
+							// 'value'    => ''
+						),
+					),
+					'filter' => array
+					(
+						// TODO: filtering for parent id = vargroup works but we need another way to limit the scope.
+						array
+						(
+							'local'       => 'vargroup',
+							'remote'      => 'id',
+							'operation'   => '=',
+						),
+						array
+						(
+							'local'       => 'vargroup',
+							'remote'      => 'vargroup',
+							'operation'   => '='
+						),
+						array
+						(
+							'local'        => 'varbase',
+							'remote_value' => '0',
+							'operation'    => '=',
+						),
+					),
+				),
+			);
+
+			$arrDCA['dca_config']['rootEntries']['self'] = array
+			(
+				'setOn' => array
+				(
+					array(
+						'property'    => 'varbase',
+						'value'       => '0'
+					),
+				),
+
+				'filter' => array
+				(
+					array
+					(
+						'property'    => 'varbase',
+						'operation'   => '=',
+						'value'       => '1'
+					)
+				)
+			);
 
 			// TODO: do only show variant bases if we are told so, i.e. render child view.
 			$arrDCA['fields']['varbase'] = array
@@ -150,6 +188,16 @@ class MetaModelDatabase extends Controller
 				default:
 			}
 		}
+
+		// determine image to use.
+		if ($objMetaModel->get('backendicon') && file_exists(TL_ROOT . '/' . $objMetaModel->get('backendicon')))
+		{
+			$arrDCA['list']['sorting']['icon'] = $this->getImage($this->urlEncode($objMetaModel->get('backendicon')), 16, 16);
+		} else {
+			$arrDCA['list']['sorting']['icon'] = 'system/modules/metamodels/html/icon.gif';
+		}
+
+
 
 		$strPalette='';
 		foreach($objMetaModel->getAttributes() as $objAttribute)

@@ -29,11 +29,18 @@ class GeneralModelMetaModel implements InterfaceGeneralModel
 {
 
 	/**
-	 * A list with all Properties.
+	 * the MetaModel item accessible via this instance.
 	 *
 	 * @var IMetaModelItem
 	 */
 	protected $objItem = null;
+
+	/**
+	 * The meta information the DC and views need to buffer in this model.
+	 *
+	 * @var array
+	 */
+	protected $arrMetaInformation = array();
 
 	/**
 	 * Returns the native IMetaModelItem instance encapsulated within this abstraction.
@@ -137,6 +144,25 @@ class GeneralModelMetaModel implements InterfaceGeneralModel
 	}
 
 	/**
+	 * Fetch meta information from model.
+	 *
+	 * @param string $strMetaName the meta information to retrieve.
+	 *
+	 * @return mixed|null the set meta information or null if undefined.
+	 */
+	public function getMeta($strMetaName)
+	{
+		if (key_exists($strMetaName, $this->arrMetaInformation))
+		{
+			return $this->arrMetaInformation[$strMetaName];
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	/**
 	 * Sets the id
 	 *
 	 * @param mixed $mixID the id that shall be set
@@ -187,6 +213,20 @@ class GeneralModelMetaModel implements InterfaceGeneralModel
 	}
 
 	/**
+	 * Set a meta information in this model.
+	 *
+	 * @param string $strMetaName the meta information name.
+	 *
+	 * @param mixed $varValue the meta information to store.
+	 *
+	 * @return void
+	 */
+	public function setMeta($strMetaName, $varValue)
+	{
+		$this->arrMetaInformation[$strMetaName] = $varValue;
+	}
+
+	/**
 	 * determine if there are properties contained within this instance.
 	 *
 	 * @see InterfaceGeneralModel::hasProperties()
@@ -206,6 +246,16 @@ class GeneralModelMetaModel implements InterfaceGeneralModel
 	public function getIterator()
 	{
 		return new GeneralModelMetaModelIterator($this);
+	}
+
+	/**
+	 * Return the data provider name.
+	 *
+	 * @return string the name of the corresponding data provider.
+	 */
+	public function getProviderName()
+	{
+		return $this->getItem()->getMetaModel()->getTableName();
 	}
 }
 
