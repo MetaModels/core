@@ -602,9 +602,9 @@ class MetaModel implements IMetaModel
 	{
 		$objDB = Database::getInstance();
 
+		$objItem->set('tstamp', time());
 		if (!$objItem->get('id'))
 		{
-			$objItem->set('tstamp', time());
 			$arrData = array
 			(
 				'tstamp' => $objItem->get('tstamp')
