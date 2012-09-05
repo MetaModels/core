@@ -192,11 +192,11 @@ interface IMetaModel
 	/**
 	 * Save an item into the database.
 	 *
-	 * @param array $arrValues The array holding the RAW data to save to the database.
+	 * @param IMetaModelItem $objItem The item to save to the database.
 	 *
 	 * @return void
 	 */
-	public function saveItem(&$arrValues);
+	public function saveItem($objItem);
 
 	/**
 	 * Prepare an empty filter object for this meta model. The returned filter contains no rules.

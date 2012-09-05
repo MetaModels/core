@@ -169,23 +169,7 @@ class MetaModelItem implements IMetaModelItem
 	public function save()
 	{
 		$objMetaModel = $this->getMetaModel();
-		$objMetaModel->saveItem($this->arrData);
-
-		// override all inherited values for all descendant items.
-		if($this->isVariantBase())
-		{
-			$objVariants = $this->getVariants(array());
-			$arrInvariantAttributes = $objMetaModel->getInVariantAttributes();
-			while ($objVariants->next())
-			{
-				$objItem = $objVariants->getItem();
-				foreach ($arrInvariantAttributes as $strAttributeId => $objAttribute)
-				{
-					$objItem->set($strAttributeId, $this->get($strAttributeId));
-				}
-				$objItem->save();
-			}
-		}
+		$objMetaModel->saveItem($this);
 	}
 
 	/**

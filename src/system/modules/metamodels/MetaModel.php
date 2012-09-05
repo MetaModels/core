@@ -538,44 +538,117 @@ class MetaModel implements IMetaModel
 		return array();
 	}
 
+
+	/**
+	 * Update the value of a native column for the given ids with the given data.
+	 *
+	 * @param string $strColumn the column name to update (i.e. tstamp).
+	 *
+	 * @param array  $arrIds    the ids of the rows that shall be updated.
+	 *
+	 * @param mixed  $varData   the data to save. If this is an array, it is automatically serialized.
+	 *
+	 * @return void
+	 */
+	protected function saveSimpleColumn($strColumn, $arrIds, $varData)
+	{
+		if(is_array($varData))
+		{
+			$varData = serialize($varData);
+		}
+		Database::getInstance()->prepare(sprintf('UPDATE %s SET %s=? WHERE id IN (%s)', $this->getTableName(), $strColumn, implode(',', $arrIds)))
+		      ->execute($varData);
+	}
+
+	/**
+	 * Update an attribute for the given ids with the given data.
+	 *
+	 * @param IMetaModelAttribute $objAttribute the attribute to save.
+	 *
+	 * @param array               $arrIds       the ids of the rows that shall be updated.
+	 *
+	 * @param mixed               $varData      the data to save in raw data.
+	 *
+	 * @param string              $strLangCode  the language code to save.
+	 */
+	protected function saveAttribute($objAttribute, $arrIds, $varData, $strLangCode)
+	{
+		$arrInterfaces = class_implements($objAttribute);
+
+		$arrData = array();
+		foreach ($arrIds as $intId)
+		{
+			$arrData[$intId] = $varData;
+		}
+		// check for translated fields first, then for complex and save as simple then.
+		if ($strLangCode && in_array('IMetaModelAttributeTranslated', $arrInterfaces))
+		{
+			$objAttribute->setTranslatedDataFor($arrData, $strLangCode);
+		} else if($this->isComplexAttribute($objAttribute))
+		{
+			// complex saving
+			$objAttribute->setDataFor($arrData);
+		} else if(in_array('IMetaModelAttributeSimple', $arrInterfaces)) {
+			$this->saveSimpleColumn($objAttribute->getColName(), $arrIds, $varData);
+		} else {
+			throw new Exception('Unknown attribute type, can not save. Interfaces implemented: ' . implode(', ', $arrInterfaces));
+		}
+	}
+
 	/**
 	 * {@inheritdoc}
 	 */
-	public function saveItem(&$arrValues)
+	public function saveItem($objItem)
 	{
 		$objDB = Database::getInstance();
 
-		$blnDenyInvariantSave = $this->hasVariants() && ($arrValues['varbase'] === '0');
-		$blnNewBaseItem = false;
-
-		if (!$arrValues['id'])
+		if (!$objItem->get('id'))
 		{
+			$objItem->set('tstamp', time());
 			$arrData = array
 			(
-				'tstamp' => time()
+				'tstamp' => $objItem->get('tstamp')
 			);
 
+			$blnNewBaseItem = false;
 			if ($this->hasVariants())
 			{
 				/* no vargroup is given, so we have a complete new base item
 				 * this should be a workaround for these values should be set by the
 				 * GeneralDataMetaModel or whoever is calling this method.
 				 */
-				if (!isset($arrValues['vargroup']))
+				if (is_null($objItem->get('vargroup')))
 				{
-					$arrValues['varbase'] = '1';
-					$arrValues['vargroup'] = '0';
+					$objItem->set('varbase', '1');
+					$objItem->set('vargroup', '0');
 					$blnNewBaseItem = true;
 				}
-				$arrData['varbase'] = $arrValues['varbase'];
-				$arrData['vargroup'] = $arrValues['vargroup'];
+				$arrData['varbase'] = $objItem->get('varbase');
+				$arrData['vargroup'] = $objItem->get('vargroup');
 			}
 
-			$arrValues['id'] = $objDB->prepare('INSERT INTO ' . $this->getTableName() . ' %s')
+			$intItemId = $objDB->prepare('INSERT INTO ' . $this->getTableName() . ' %s')
 					->set($arrData)
 					->execute()
 					->insertId;
+			$objItem->set('id', $intItemId);
+			//add the vargroup equal to the id
+			if ($blnNewBaseItem)
+			{
+				$this->saveSimpleColumn('vargroup', array($objItem->get('id')), $objItem->get('id'));
+			}
 		}
+
+		// update system columns.
+		if ($objItem->get('pid'))
+		{
+			$this->saveSimpleColumn('pid', array($objItem->get('id')), $objItem->get('pid'));
+		}
+		if ($objItem->get('sorting'))
+		{
+			$this->saveSimpleColumn('sorting', array($objItem->get('id')), $objItem->get('sorting'));
+		}
+		$this->saveSimpleColumn('tstamp', array($objItem->get('id')), $objItem->get('tstamp'));
 
 		if ($this->isTranslated())
 		{
@@ -584,53 +657,35 @@ class MetaModel implements IMetaModel
 			$strActiveLanguage = null;
 		}
 
-		$arrDataSimple = array();
-		//add the vargroup equal to the id
-		if ($blnNewBaseItem)
+		$arrAllIds = array();
+		if ($objItem->isVariantBase())
 		{
-			$arrDataSimple['vargroup'] = $arrValues['id'];
+			$objVariants = $this->findVariantsWithBase(array($objItem->get('id')), NULL);
+			foreach ($objVariants as $objVariant)
+			{
+				$arrAllIds[] = $objVariant->get('id');
+			}
 		}
 
-		// update system columns.
-		if ($arrValues['pid'])
-		{
-			$arrDataSimple['pid'] = $arrValues['pid'];
-		}
-		if ($arrValues['sorting'])
-		{
-			$arrDataSimple['sorting'] = $arrValues['sorting'];
-		}
-		$arrDataSimple['tstamp'] = time();
+		$blnDenyInvariantSave = $objItem->isVariant();
+		$blnOverrideVariants = $objItem->isVariantBase();
 
 		foreach ($this->getAttributes() as $strAttributeId => $objAttribute)
 		{
 			if ($blnDenyInvariantSave && !($objAttribute->get('isvariant')))
 			{
+				// base not found, skip attribute.
 				continue;
 			}
 
-			$arrInterfaces = class_implements($objAttribute);
-			// check for translated fields first, then for complex and save as simple then.
-			if ($strActiveLanguage && in_array('IMetaModelAttributeTranslated', $arrInterfaces))
+			if ($blnOverrideVariants && !($objAttribute->get('isvariant')))
 			{
-				$objAttribute->setTranslatedDataFor(array($arrValues['id'] => $arrValues[$strAttributeId]), $strActiveLanguage);
-			} else if($this->isComplexAttribute($objAttribute))
-			{
-				// complex saving
-				$objAttribute->setDataFor(array($arrValues['id'] => $arrValues[$strAttributeId]));
-			} else if(in_array('IMetaModelAttributeSimple', $arrInterfaces)) {
-				// TODO: ensure unique-ness here?
-				$arrDataSimple[$strAttributeId] = $arrValues[$strAttributeId];
+				// we have to override in variants.
+				$arrIds = $arrAllIds;
 			} else {
-				throw new Exception('Unknown attribute type, can not save. Interfaces implemented: ' . implode(', ', $arrInterfaces));
+				$arrIds = array($objItem->get('id'));
 			}
-		}
-		// now save the simple columns.
-		if ($arrDataSimple)
-		{
-			$objDB->prepare('UPDATE ' . $this->getTableName() . ' %s WHERE id=?')
-			      ->set($arrDataSimple)
-			      ->execute($arrValues['id']);
+			$this->saveAttribute($objAttribute, $arrIds, $objItem->get($strAttributeId), $strActiveLanguage);
 		}
 	}
 
