@@ -102,7 +102,6 @@ class GeneralModelMetaModel implements InterfaceGeneralModel
 			// test if it is an attribute, if so, let it transform the data
 			// for the widget.
 			$objAttribute = $this->getItem()->getAttribute($strPropertyName);
-
 			if ($objAttribute)
 			{
 				$varValue = $objAttribute->valueToWidget($varValue);
@@ -191,7 +190,7 @@ class GeneralModelMetaModel implements InterfaceGeneralModel
 			$objAttribute = $this->getItem()->getAttribute($strPropertyName);
 			if ($objAttribute)
 			{
-				$varValue = $objAttribute->widgetToValue($varValue);
+				$varValue = $objAttribute->widgetToValue($varValue, $this->getItem()->get('id'));
 			}
 			$this->getItem()->set($strPropertyName, $varValue);
 		}

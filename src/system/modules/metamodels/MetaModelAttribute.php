@@ -274,7 +274,7 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	/**
 	 * {@inheritdoc}
 	 */
-	public function widgetToValue($varValue)
+	public function widgetToValue($varValue, $intId)
 	{
 		return $varValue;
 	}

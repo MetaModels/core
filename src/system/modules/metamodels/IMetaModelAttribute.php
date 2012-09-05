@@ -144,9 +144,11 @@ interface IMetaModelAttribute
 	 *
 	 * @param mixed $varValue the value to be transformed.
 	 *
+	 * @param int   $intId    the id of the item the value belongs to.
+	 *
 	 * @return mixed the resulting native value
 	 */
-	public function widgetToValue($varValue);
+	public function widgetToValue($varValue, $intId);
 
 	/**
 	 * Retrieve an instance containing the default render settings for an attribute of this type.
