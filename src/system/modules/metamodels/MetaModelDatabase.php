@@ -164,6 +164,7 @@ class MetaModelDatabase extends Controller
 			}
 		} else {
 			$arrDCA['list']['sorting']['mode'] = $objMetaModel->get('mode');
+			if (in_array($objMetaModel->get('mode'), array(3, 4, 6)))
 			if($objMetaModel->get('ptable'))
 			{
 				$arrDCA['dca_config']['data_provider']['parent']['source'] = $objMetaModel->get('ptable');
@@ -172,18 +173,56 @@ class MetaModelDatabase extends Controller
 			switch ($objMetaModel->get('mode'))
 			{
 				case 5:
-					$arrDCA['dca_config']['joinCondition'] = array
+					$arrDCA['dca_config']['child_list']['self']['fields'] = array(
+						'id', 'tstamp'
+					);
+
+					$arrDCA['dca_config']['rootEntries']['self'] = array
 					(
-						'self' => array(
+						'setOn' => array
+						(
+							array(
+								'property'    => 'pid',
+								'value'       => '0'
+							),
+						),
+
+						'filter' => array
+						(
 							array
 							(
-								'srcField'    => 'id',
-								'dstField'    => 'pid',
-								'operation'   => '='
+								'property'    => 'pid',
+								'operation'   => '=',
+								'value'       => '0'
 							)
 						)
 					);
-					$arrDCA['dca_config']['rootEntries'] = array('pid = 0');
+
+					$arrDCA['dca_config']['childCondition'] = array
+					(
+						array(
+							'from' => 'self',
+							'to' => 'self',
+							'setOn' => array
+							(
+								array(
+									'to_field'    => 'pid',
+									'from_field'  => 'id',
+								),
+							),
+							'filter' => array
+							(
+								array
+								(
+									'local'       => 'pid',
+									'remote'      => 'id',
+									'operation'   => '=',
+								)
+							),
+						),
+					);
+
+
 					break;
 				default:
 			}
