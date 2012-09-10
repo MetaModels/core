@@ -21,13 +21,13 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 		}
 	}
 
-	public function generateFilterUrlFrom(IMetaModelItem $objItem)
+	public function generateFilterUrlFrom(IMetaModelItem $objItem, IMetaModelRenderSettings $objRenderSetting)
 	{
 		$objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
 		if ($objAttribute)
 		{
-			// TODO: we need a proper filter setting here as otherwise the templates are not used.
-			$arrResult = $objItem->parseAttribute($objAttribute->getColName(), 'text');
+			// TODO: shall we omit returning of empty values?
+			$arrResult = $objItem->parseAttribute($objAttribute->getColName(), 'text', $objRenderSetting);
 			return array(($this->get('urlparam')?$this->get('urlparam'):$objAttribute->getColName()) => urlencode($arrResult['text']));
 		}
 	}

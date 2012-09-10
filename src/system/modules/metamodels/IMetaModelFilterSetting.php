@@ -41,7 +41,7 @@ interface IMetaModelFilterSetting
 	/**
 	 * obsolete?
 	 */
-	public function generateFilterUrlFrom(IMetaModelItem $objItem);
+	public function generateFilterUrlFrom(IMetaModelItem $objItem, IMetaModelRenderSettings $objRenderSetting);
 }
 
 ?>

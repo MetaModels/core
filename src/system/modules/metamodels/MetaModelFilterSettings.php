@@ -83,8 +83,8 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 		if (!$this->arrData['id'])
 		{
 			throw new Exception('Error: dynamically created FilterSettings can not collect attribute information', 1);
-			
 		}
+
 		$objDB = Database::getInstance();
 		$objSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE fid=? AND pid=0 AND enabled=1')->execute($this->arrData['id']);
 		while ($objSettings->next())
@@ -109,12 +109,12 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 		}
 	}
 
-	public function generateFilterUrlFrom(IMetaModelItem $objItem)
+	public function generateFilterUrlFrom(IMetaModelItem $objItem, IMetaModelRenderSettings $objRenderSetting)
 	{
 		$arrFilterUrl = array();
 		foreach ($this->arrSettings as $objSetting)
 		{
-			$arrFilterUrl = array_merge($arrFilterUrl, $objSetting->generateFilterUrlFrom($objItem));
+			$arrFilterUrl = array_merge($arrFilterUrl, $objSetting->generateFilterUrlFrom($objItem, $objRenderSetting));
 		}
 		return $arrFilterUrl;
 	}

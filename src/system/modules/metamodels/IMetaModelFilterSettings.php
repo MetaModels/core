@@ -43,8 +43,13 @@ interface IMetaModelFilterSettings
 	 */
 	public function addRules(IMetaModelFilter $objFilter, $arrFilterUrl);
 
-
-	public function generateFilterUrlFrom(IMetaModelItem $objItem);
+	/**
+	 * Generate an filter url (aka jump to url) according to the contained filter rules.
+	 * @todo this way of generating jump to urls is not as elegant as it could be and therefore we might want to refactor it.
+	 *
+	 *
+	 */
+	public function generateFilterUrlFrom(IMetaModelItem $objItem, IMetaModelRenderSettings $objRenderSetting);
 }
 
 

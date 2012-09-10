@@ -200,7 +200,7 @@ class MetaModelItem implements IMetaModelItem
 		)
 		{
 			$objFilterSettings = MetaModelFilterSettingsFactory::byId($intFilterSettings);
-			$arrParams = $objFilterSettings->generateFilterUrlFrom($this);
+			$arrParams = $objFilterSettings->generateFilterUrlFrom($this, $objSettings);
 			$strParams = '';
 			// auto_item must be first in url.
 			if (array_key_exists('auto_item', $arrParams))

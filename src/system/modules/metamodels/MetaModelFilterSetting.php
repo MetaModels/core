@@ -4,7 +4,7 @@ abstract class MetaModelFilterSetting implements IMetaModelFilterSetting
 {
 	/**
 	 * The parenting filter setting container this setting belongs to.
-	 * 
+	 *
 	 * @var IMetaModelFilterSettings
 	 */
 	protected $objFilterSettings = null;
@@ -32,7 +32,7 @@ abstract class MetaModelFilterSetting implements IMetaModelFilterSetting
 		return $this->objFilterSetting->getMetaModel();
 	}
 
-	public function generateFilterUrlFrom(IMetaModelItem $objItem)
+	public function generateFilterUrlFrom(IMetaModelItem $objItem, IMetaModelRenderSettings $objRenderSetting)
 	{
 		return array();
 	}
