@@ -24,8 +24,8 @@ if (!defined('TL_ROOT'))
  */
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']                 = array('Name', 'Einstellungsname.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']               = array('Änderungsdatum', 'Datum und Zeit der letzten Änderung.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']            = array('Standard', 'Bestimmt, ob diese Einstellung als Standardvorgabe bei Eltern-Kind-Beziehungen im MetaModel benutzt werden soll.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']             = array('Template', 'Das template festlegen, das für die Darstellung der Datensätze benutzt werden soll.');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']            = array('Standard', 'Bestimmt, ob diese Einstellung als Standardvorgabe bei Eltern-Kind-Beziehungen im MetaModel benutzt werden soll, wenn keine anderen Voreinstellungen getroffen wurden.');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']             = array('Template', 'Das Template festlegen, das für die Darstellung der Datensätze benutzt werden soll.');
 
 /**
  * Legends
