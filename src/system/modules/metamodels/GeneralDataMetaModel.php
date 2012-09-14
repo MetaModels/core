@@ -429,11 +429,13 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	 *
 	 * @param string $strField the attribute name.
 	 *
-	 * @param mixed $varNew    the value that shall be checked.
+	 * @param mixed  $varNew    the value that shall be checked.
+	 *
+	 * @param int    $intId    the (optional) id of the item currently in scope - pass null for new items.
 	 *
 	 * @return bool true if the values is not yet contained within the table, false otherwise.
 	 */
-	public function isUniqueValue($strField, $varNew)
+	public function isUniqueValue($strField, $varNew, $intId = null)
 	{
 		$objFilter = $this->objMetaModel->getEmptyFilter();
 
@@ -445,7 +447,7 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 			{
 				$objFilter->addFilterRule($objFilterRule);
 				$arrIds = $objFilter->getMatchingIds();
-				return count($arrIds) == 0;
+				return (count($arrIds) == 0) || ($arrIds == array($intId));
 			}
 		}
 
