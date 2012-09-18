@@ -113,7 +113,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'backend' => array
 			(
 				'be_template',
-				'fe_template',
 			),
 			'advanced' => array
 			(
@@ -186,18 +185,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['be_template'],
 			'inputType'               => 'select',
-			'foreignKey'              => 'tl_member_group.name',
-			'eval'                    => array
-			(
-				'tl_class'            => 'w50',
-			)
-		),
-
-		'fe_template' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['fe_template'],
-			'inputType'               => 'select',
-			'foreignKey'              => 'tl_member_group.name',
+			'options_callback'        => array('TableMetaModelDca','getTemplates'),
 			'eval'                    => array
 			(
 				'tl_class'            => 'w50',

@@ -149,16 +149,19 @@ class MetaModelItem implements IMetaModelItem
 		}
 	}
 
-    /**
-    * Find all Variants including the variant base. The item itself is excluded from the return list.
-    *
-    * @param type $objFilter
-    * @return null
-    */
+	/**
+	* Find all Variants including the variant base. The item itself is excluded from the return list.
+	*
+	* @param type $objFilter
+	* @return null
+	*/
 	public function getSiblings($objFilter)
 	{
-        if (!$this->getMetaModel()->hasVariants()) return null;
-        return $this->getMetaModel()->findVariantsWithBase(array($this->get('id')), $objFilter);
+		if (!$this->getMetaModel()->hasVariants())
+		{
+			return null;
+		}
+		return $this->getMetaModel()->findVariantsWithBase(array($this->get('id')), $objFilter);
 
 	}
 

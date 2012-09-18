@@ -61,7 +61,12 @@ class MetaModelRenderSettings implements IMetaModelRenderSettings
 	 */
 	public function setSetting($strAttributeName, $objSetting)
 	{
-		$this->arrSettings[$strAttributeName] = $objSetting;
+		if ($objSetting)
+		{
+			$this->arrSettings[$strAttributeName] = $objSetting;
+		} else {
+			unset($this->arrSettings[$strAttributeName]);
+		}
 		return $this;
 	}
 }

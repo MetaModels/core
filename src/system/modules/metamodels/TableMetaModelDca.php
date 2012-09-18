@@ -52,37 +52,17 @@ class TableMetaModelDca extends Backend
 		return '<span class="name">'.$strLabel. '</span>'.$strImage;
 	}
 
-	public function getTables()
+	/**
+	 * Fetch the template group for the detail view of the current MetaModel module.
+	 *
+	 * @param DataContainer $objDC the datacontainer calling this method.
+	 *
+	 * @return array
+	 *
+	 */
+	public function getTemplates(DataContainer $objDC)
 	{
-		$arrTables = array();
-		foreach($GLOBALS['BE_MOD'] as $strGroup => $arrGroup)
-		{
-			foreach($arrGroup as $strModule => $arrModule)
-			{
-				if ($strModule == 'metamodels')
-				{
-					continue;
-				}
-				if ($arrModule['tables'])
-				{
-					foreach ($arrModule['tables'] as $strTable)
-					{
-						$strAdd = $strTable;
-						if (substr($strTable, 0, 2) == 'mm')
-						{
-							$objMetaModel = MetaModelFactory::byTableName($strTable);
-
-							if ($objMetaModel)
-							{
-								$strAdd = sprintf('%s (%s)', $strTable, $objMetaModel->get('name'));
-							}
-						}
-						$arrTables[$strModule][$strTable] = $strAdd;
-					}
-				}
-			}
-		}
-		return $arrTables;
+		return $this->getTemplateGroup('be_metamodel_' /*, theme id how the heck shall I fetch that one? */);
 	}
 }
 

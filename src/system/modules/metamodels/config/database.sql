@@ -67,6 +67,8 @@ CREATE TABLE `tl_metamodel_dca` (
   `be_groups` text NULL,
   `fe_groups` text NULL,
 
+  `be_template` varchar(255) NOT NULL default '',
+
   PRIMARY KEY  (`id`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -88,18 +90,6 @@ CREATE TABLE `tl_metamodel_dcasetting` (
 
   `attr_id` int(10) unsigned NOT NULL default '0',
   `tl_class` varchar(64) NOT NULL default '',
-
-
-
--- mode for parent<->child relationship
-  `mode` int(1) unsigned NOT NULL default '1',
-
--- parent table
-  `ptable` varchar(64) NOT NULL default '',
-
-  `backendsection` varchar(255) NOT NULL default '',
-  `backendcaption` text NULL,
-  `backendicon` varchar(255) NOT NULL default '',
 
   PRIMARY KEY  (`id`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

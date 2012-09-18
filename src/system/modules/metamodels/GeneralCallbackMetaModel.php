@@ -77,17 +77,20 @@ class GeneralCallbackMetaModel extends GeneralCallbackDefault
 			$objTemplate = new MetaModelTemplate('be_metamodel_full');
 		}
 
-		$objMetaModel = $objNativeItem->getMetaModel();
+		$arrFields = array_keys($GLOBALS['TL_DCA'][$objMetaModel->getTableName()]['fields']);
+		$arrClearFields = array_diff(array_keys($objMetaModel->getAttributes()), $arrFields);
+
 		if ($objMetaModel->hasVariants() && !$objNativeItem->isVariantBase())
 		{
-			// create a clone to have a seperate copy of the object as we are going to manipulate it here.
-			$objView = clone $objView;
+			$arrClearFields = array_merge($arrClearFields, array_keys($objMetaModel->getInVariantAttributes()));
+		}
 
-			// loop over all attributes and remove those from rendering that are invariant.
-			foreach ($objMetaModel->getInVariantAttributes() as $strAttrName => $objAttribute)
-			{
-				$objView->setSetting($strAttrName, NULL);
-			}
+		// create a clone to have a seperate copy of the object as we are going to manipulate it here.
+		$objView = clone $objView;
+		// loop over all attributes and remove those from rendering that are not desired.
+		foreach ($arrClearFields as $strAttrName)
+		{
+			$objView->setSetting($strAttrName, NULL);
 		}
 
 		$this->prepareTemplate($objTemplate, $objNativeItem, $objView);
