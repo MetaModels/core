@@ -32,13 +32,76 @@ CREATE TABLE `tl_metamodel` (
 -- do we support variants?
   `varsupport` char(1) NOT NULL default '',
 
-  `backendsection` varchar(255) NOT NULL default '',
-  `backendicon` varchar(255) NOT NULL default '',
 
-  `format` text NULL,
+-- type, either standalone or attached.
+  `rendertype` varchar(10) NOT NULL default '',
+
+-- mode for parent<->child relationship
+  `mode` int(1) unsigned NOT NULL default '1',
+
+-- parent table
+  `ptable` varchar(64) NOT NULL default '',
+
+  `backendsection` varchar(255) NOT NULL default '',
+  `backendcaption` text NULL,
+  `backendicon` varchar(255) NOT NULL default '',
 
   PRIMARY KEY  (`id`),
   KEY `tableName` (`tableName`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+-- --------------------------------------------------------
+
+--
+-- Table `tl_metamodel_dca`
+--
+
+CREATE TABLE `tl_metamodel_dca` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `pid` int(10) unsigned NOT NULL default '0',
+  `sorting` int(10) unsigned NOT NULL default '0',
+  `tstamp` int(10) unsigned NOT NULL default '0',
+  `name` varchar(255) NOT NULL default '',
+
+  `be_groups` text NULL,
+  `fe_groups` text NULL,
+
+  PRIMARY KEY  (`id`),
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+--
+-- Table `tl_metamodel_dca`
+--
+
+CREATE TABLE `tl_metamodel_dcasetting` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `pid` int(10) unsigned NOT NULL default '0',
+  `sorting` int(10) unsigned NOT NULL default '0',
+  `tstamp` int(10) unsigned NOT NULL default '0',
+
+-- type, either legend or attribute.
+  `dcatype` varchar(10) NOT NULL default '',
+
+  `legendtitle` varchar(255) NOT NULL default '',
+  `legendhide` varchar(5) NOT NULL default '',
+
+  `attr_id` int(10) unsigned NOT NULL default '0',
+  `tl_class` varchar(64) NOT NULL default '',
+
+
+
+-- mode for parent<->child relationship
+  `mode` int(1) unsigned NOT NULL default '1',
+
+-- parent table
+  `ptable` varchar(64) NOT NULL default '',
+
+  `backendsection` varchar(255) NOT NULL default '',
+  `backendcaption` text NULL,
+  `backendicon` varchar(255) NOT NULL default '',
+
+  PRIMARY KEY  (`id`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -110,8 +173,8 @@ CREATE TABLE `tl_metamodel_attribute` (
   KEY `colname` (`colname`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
 
+-- --------------------------------------------------------
 
 --
 -- Table `tl_metamodel_filter`
@@ -127,6 +190,9 @@ CREATE TABLE `tl_metamodel_filter` (
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+-- --------------------------------------------------------
 
 --
 -- Table `tl_metamodel_filtersetting`
@@ -156,6 +222,9 @@ CREATE TABLE `tl_metamodel_filtersetting` (
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+
+-- --------------------------------------------------------
+
 --
 -- Table `tl_metamodel_rendersettings`
 --
@@ -178,6 +247,9 @@ CREATE TABLE `tl_metamodel_rendersettings` (
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+
+-- --------------------------------------------------------
+
 --
 -- Table `tl_metamodel_rendersetting`
 --
@@ -194,6 +266,9 @@ CREATE TABLE `tl_metamodel_rendersetting` (
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+-- --------------------------------------------------------
 
 --
 -- Table `tl_user_group`
@@ -214,6 +289,8 @@ CREATE TABLE `tl_user` (
   `metamodels` blob NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+
+-- --------------------------------------------------------
 
 --
 -- Table `tl_module`

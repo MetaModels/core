@@ -101,7 +101,7 @@ define('METAMODELS_VERSION', '0.1');
 if (TL_MODE=='BE')
 {
 	// restrict to the backend.
-	MetaModelFactory::buildBackendMenu();
+	MetaModelBackend::buildBackendMenu();
 }
 
 /**
@@ -116,6 +116,7 @@ $GLOBALS['FE_MOD']['metamodels'] = array
 /**
  * HOOKS
  */
+$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('MetaModelBackend', 'createDataContainer');
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('MetaModelDatabase', 'createDataContainer');
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('TableMetaModelFilterSetting', 'createDataContainer');
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('TableMetaModelRenderSetting', 'createDataContainer');

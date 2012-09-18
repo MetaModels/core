@@ -30,17 +30,23 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 	// Config
 	'config' => array
 	(
-		'dataContainer'               => 'Table',
-		'ctable'                      => array('tl_metamodel_attribute', 'tl_metamodel_filter', 'tl_metamodel_rendersettings'),
+//		'dataContainer'               => 'Table',
+		'dataContainer'               => 'General',
+
+		'ctable'                      => array('tl_metamodel_attribute', 'tl_metamodel_filter', 'tl_metamodel_rendersettings', 'tl_metamodel_dca'),
 		'switchToEdit'                => true,
 		'enableVersioning'            => true,
 		'onload_callback'             => array
 		(
 			array('TableMetaModel', 'onLoadCallback'),
 		),
-		'onsubmit_callback'             => array
+		'onsubmit_callback'           => array
 		(
 			array('TableMetaModel', 'onSubmitCallback'),
+		),
+		'ondelete_callback'           => array
+		(
+			array('TableMetaModel', 'onDeleteCallback')
 		)
 	),
 
@@ -75,6 +81,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 
 		'operations' => array
 		(
+/*
 			'edit' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['edit'],
@@ -88,6 +95,13 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'href'                => 'act=edit',
 				'icon'                => 'header.gif',
 				'attributes'          => 'class="edit-header"'
+			),
+*/
+			'edit' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['editheader'],
+				'href'                => 'act=edit',
+				'icon'                => 'edit.gif',
 			),
 			'copy' => array
 			(
@@ -135,6 +149,15 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'icon'                => 'system/modules/metamodels/html/rendersettings.png',
 				'button_callback'     => array('TableMetaModel', 'buttonCallback')
 			),
+
+			'dca' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['dca'],
+				'href'                => 'table=tl_metamodel_dca',
+				'icon'                => 'system/modules/metamodels/html/dca.png',
+				'button_callback'     => array('TableMetaModel', 'buttonCallback')
+			),
+
 		)
 	),
 
@@ -149,24 +172,20 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'tableName',
 				'translated'
 			),
-			'backend' => array
-			(
-				'backendsection',
-				'backendicon'
-			),
 
 			'advanced' => array
 			(
 				':hide',
-				'ptable',
-				'mode',
 				'varsupport'
 			),
 
-			'display' => array
+			'backend' => array
 			(
-				':hide',
-				'format'
+				'rendertype',
+/*
+				'backendsection',
+				'backendicon'
+*/
 			),
 		)
 	),
@@ -177,48 +196,8 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 		'translated' => array
 		(
 			'languages'
-		)
+		),
 	),
-
-	// Fields
-	'fields' => array
-	(
-		'name' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['name'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>64, 'tl_class'=>'w50', 'unique' => true)
-		),
-
-		'tableName' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['tableName'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>64, 'doNotCopy'=>true, 'tl_class'=>'w50'),
-			'save_callback'           => array
-			(
-				array('TableMetaModel', 'tableNameOnSaveCallback')
-			)
-		),
-
-		'ptable' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['ptable'],
-			'inputType'               => 'select',
-			'options_callback'        => array('TableMetaModel', 'getTables'),
-			'eval'                    => array('tl_class'=>'w50', 'submitOnChange'=>true, 'includeBlankOption'=>true)
-		),
-
-		'mode' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['mode'],
-			'inputType'               => 'select',
-			'default'                 => '1',
-			'options'                 => array('0', '1', '2', '3', '4', '5', '6'),
 			/*
 				0 Records are not sorted
 				1 Records are sorted by a fixed field
@@ -228,7 +207,56 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				5 Records are displayed as tree (see site structure)
 				6 Displays the child records within a tree structure (see articles module)
 			*/
-			'eval'                    => array('tl_class'=>'w50')
+	'metasubselectpalettes' => array
+	(
+		'rendertype' => array
+		(
+			'standalone' => array
+			(
+				'backendsection',
+				'backendicon'
+			),
+			'ctable' => array
+			(
+				'ptable',
+				'mode'
+			)
+		),
+
+		'mode' => array
+		(
+			'mode_0'  => array('backendsection', 'backendicon'),
+			'mode_1'  => array('backendsection', 'backendicon'),
+			'mode_2'  => array('backendsection', 'backendicon'),
+			'mode_3'  => array('backendsection', 'backendicon'),
+			'mode_4'  => array(''), // TODO: select parent head fields here.
+			'mode_5'  => array('backendsection', 'backendicon'),
+			'mode_6'  => array('ptable', 'backendicon'),
+		),
+	),
+
+
+	// Fields
+	'fields' => array
+	(
+		'name' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['name'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array('mandatory'=>true, 'maxlength'=>64, 'tl_class'=>'w50', 'unique' => true)
+		),
+
+		'tableName' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['tableName'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array('mandatory'=>true, 'maxlength'=>64, 'doNotCopy'=>true, 'tl_class'=>'w50'),
+			'save_callback'           => array
+			(
+				array('TableMetaModel', 'tableNameOnSaveCallback')
+			)
 		),
 
 		'translated' => array
@@ -291,6 +319,60 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			'eval'                    => array('tl_class'=>'clr', 'submitOnChange' => true)
 		),
 
+		'rendertype' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype'],
+			'inputType'               => 'select',
+			'options_callback'        => array('TableMetaModel', 'getRenderTypes'),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes'],
+			'eval'                    => array
+			(
+				'tl_class'=>'w50',
+				'submitOnChange'=>true,
+				'includeBlankOption'=>true
+			)
+		),
+
+		'ptable' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['ptable'],
+			'inputType'               => 'select',
+			'options_callback'        => array('TableMetaModel', 'getTables'),
+			'eval'                    => array('tl_class'=>'w50', 'submitOnChange'=>true, 'includeBlankOption'=>true)
+		),
+
+		'mode' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['mode'],
+			'inputType'               => 'select',
+			'default'                 => '',
+			'options_callback'        => array('TableMetaModel', 'getValidModes'),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel']['modes'],
+			/*
+				0 Records are not sorted
+				1 Records are sorted by a fixed field
+				2 Records are sorted by a switchable field
+				3 Records are sorted by the parent table
+				4 Displays the child records of a parent record (see style sheets module)
+				5 Records are displayed as tree (see site structure)
+				6 Displays the child records within a tree structure (see articles module)
+			*/
+			'eval'                    => array
+			(
+				'includeBlankOption' => true,
+				'tl_class'=>'w50',
+				'submitOnChange' => true
+			),
+			'load_callback'           => array
+			(
+				array('TableMetaModel', 'modeLoad')
+			),
+			'save_callback'           => array
+			(
+				array('TableMetaModel', 'modeSave')
+			)
+		),
+
 		'backendsection' => array
 		(
 			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel']['backendsection'],
@@ -317,17 +399,9 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'fieldType'=>'radio',
 				'files'=>true,
 				'filesOnly'=>true,
-				'extensions' => 'jpg,jpeg,gif,png,tif,tiff'
+				'extensions' => 'jpg,jpeg,gif,png,tif,tiff',
+				'tl_class' => 'clr'
 			)
-		),
-
-		'format' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['format'],
-			'exclude'                 => true,
-			'search'                  => true,
-			'inputType'               => 'textarea',
-			'eval'                    => array('allowHtml'=>true)
 		),
 	)
 );

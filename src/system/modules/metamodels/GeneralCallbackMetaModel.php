@@ -62,33 +62,9 @@ class GeneralCallbackMetaModel extends GeneralCallbackDefault
 		$objTemplate->data      = $objItem->parseValue('html5', $objSettings);
 	}
 
-	/**
-	 * Call the customer label callback
-	 *
-	 * @param InterfaceGeneralModel $objModelRow The Model to "draw".
-	 *
-	 * @param string                $mixedLabel
-	 *
-	 * @param array                 $args
-	 *
-	 * @return string the label string.
-	 */
-	public function labelCallback(InterfaceGeneralModel $objModelRow, $mixedLabel, $args)
+
+	protected function drawItem(InterfaceGeneralModel $objModelRow)
 	{
-		if (!($objModelRow instanceof GeneralModelMetaModel))
-		{
-			throw new Exception('ERROR: incompatible object passed to GeneralCallbackMetaModel::labelCallback()');
-		}
-		// Load DCA
-		$arrDCA      = $this->objDC->getDCA();
-		$arrCallback = $arrDCA['list']['label']['label_callback'];
-
-		// Check Callback
-		if (is_array($arrCallback))
-		{
-			return parent::labelCallback($objModelRow, $mixedLabel, $args);
-		}
-
 		$objNativeItem = $objModelRow->getItem();
 		$objMetaModel = $objNativeItem->getMetaModel();
 		// TODO: we definately need an algorithm to tell frontend and backend render settings apart. this way of template switching is just plain evil.
@@ -117,6 +93,60 @@ class GeneralCallbackMetaModel extends GeneralCallbackDefault
 		$this->prepareTemplate($objTemplate, $objNativeItem, $objView);
 
 		return $objTemplate->parse('html5', true);
+	}
+
+
+	/**
+	 * Call the customer label callback
+	 *
+	 * @param InterfaceGeneralModel $objModelRow The Model to "draw".
+	 *
+	 * @param string                $mixedLabel
+	 *
+	 * @param array                 $args
+	 *
+	 * @return string the label string.
+	 */
+	public function labelCallback(InterfaceGeneralModel $objModelRow, $mixedLabel, $args)
+	{
+		if (!($objModelRow instanceof GeneralModelMetaModel))
+		{
+			throw new Exception('ERROR: incompatible object passed to GeneralCallbackMetaModel::labelCallback()');
+		}
+		// Load DCA
+		$arrDCA      = $this->objDC->getDCA();
+		$arrCallback = $arrDCA['list']['label']['label_callback'];
+
+		// Check Callback
+		if (is_array($arrCallback) && count($arrCallback))
+		{
+			return parent::labelCallback($objModelRow, $mixedLabel, $args);
+		}
+		return $this->drawItem($objModelRow);
+	}
+
+	/**
+	 * Call the child record callback
+	 *
+	 * @param InterfaceGeneralModel $objModel
+	 * @return string|null
+	 */
+	public function childRecordCallback(InterfaceGeneralModel $objModel)
+	{
+		if (!($objModel instanceof GeneralModelMetaModel))
+		{
+			throw new Exception('ERROR: incompatible object passed to GeneralCallbackMetaModel::labelCallback()');
+		}
+		// Load DCA
+		$arrDCA      = $this->objDC->getDCA();
+		$arrCallback = $arrDCA['list']['sorting']['child_record_callback'];
+
+		// Check Callback
+		if (is_array($arrCallback) && count($arrCallback))
+		{
+			return parent::childRecordCallback($objModel);
+		}
+		return $this->drawItem($objModel);
 	}
 
 	public function parseRootPaletteCallback($arrPalette)

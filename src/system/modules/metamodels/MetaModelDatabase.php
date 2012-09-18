@@ -34,6 +34,23 @@ class MetaModelDatabase extends Controller
 	}
 
 	/**
+	 * Returns the proper user object for the current context.
+	 *
+	 * @return BackendUser|FrontendUser|null the BackendUser when TL_MODE == 'BE', the FrontendUser when TL_MODE == 'FE' or null otherwise
+	 */
+	protected static function getUser()
+	{
+		if(TL_MODE=='BE')
+		{
+			return BackendUser::getInstance();
+		} else if(TL_MODE=='FE')
+		{
+			return FrontendUser::getInstance();
+		}
+		return null;
+	}
+
+	/**
 	 * Create the data container of a metamodel table.
 	 *
 	 * @param string $strTableName the name of the meta model table that shall be created.
@@ -59,8 +76,45 @@ class MetaModelDatabase extends Controller
 			$this->loadLanguageFile('languages');
 		}
 
+
+		// select the (first) appropriate dca listing.
+		$objDCA = Database::getInstance()->prepare('SELECT * FROM tl_metamodel_dca WHERE pid=? ORDER BY sorting')->execute($objMetaModel->get('id'));
+		while ($objDCA->next())
+		{
+			$objUser = self::getUser();
+			// group allowed?
+			if (!($objUser->isAdmin || array_intersect($objUser->groups, deserialize($objDCA->be_groups))))
+			{
+				continue;
+			}
+
+			$strPalette='';
+			$objDCASettings = Database::getInstance()->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=? ORDER BY sorting')->execute($objDCA->id);
+			while ($objDCASettings->next())
+			{
+				switch ($objDCASettings->dcatype)
+				{
+					case 'attribute':
+						$objAttribute = $objMetaModel->getAttributeById($objDCASettings->attr_id);
+						$arrDCA = array_replace_recursive($arrDCA, $objAttribute->getItemDCA());
+						$strPalette .= (strlen($strPalette)>0 ? ',':'') . $objAttribute->getColName();
+					break;
+					case 'legend':
+						$legendName = standardize($objDCASettings->legendtitle).'_legend';
+						$GLOBALS['TL_LANG'][$objMetaModel->getTableName()][$legendName] = $objDCASettings->legendtitle;
+						$strPalette .= ((strlen($strPalette)>0 ? ';':'') . '{'.$legendName.$objAttribute->legendhide.'}');
+					break;
+					default:
+						throw new Exception("Unknown palette rendering mode " . $objDCASettings->dcatype);
+				}
+			}
+			$arrDCA['palettes']['default'] = $strPalette;
+			break;
+		}
+
 		$arrDCA['config']['label'] = $objMetaModel->get('name');
 
+		// FIXME: if we have variants, we force mode 5 here, no matter what the DCA configs say.
 		if($objMetaModel->hasVariants())
 		{
 			$arrDCA['list']['sorting']['mode'] = 5;
@@ -163,6 +217,53 @@ class MetaModelDatabase extends Controller
 				$arrDCA['list']['operations']['createvariant'] = $arrOperationCreateVariant;
 			}
 		} else {
+			switch ($objMetaModel->get('rendertype')) {
+				case 'ctable':
+					$arrDCA['dca_config']['data_provider']['parent']['source'] = $objMetaModel->get('ptable');
+					$arrDCA['list']['sorting']['child_record_callback'] = array();
+
+					if (substr($objMetaModel->get('ptable'), 0, 2) == 'mm')
+					{
+						// metamodels can be filtered on other fields than id=>pid
+					} else {
+						// for tl prefix, the only unique target can be the id? maybe load parent dc and scan for uniques in config then.
+						$arrDCA['dca_config']['childCondition'] = array
+						(
+							array(
+								'from' => $objMetaModel->get('ptable'),
+								'to' => 'self',
+								'setOn' => array
+								(
+									array(
+										'to_field'    => 'pid',
+										'from_field'  => 'id',
+									),
+								),
+								'filter' => array
+								(
+									array
+									(
+										'local'       => 'pid',
+										'remote'      => 'id',
+										'operation'   => '=',
+									)
+								),
+							),
+						);
+					}
+					break;
+
+				case 'selftree':
+					// => mode 5 - Records are displayed as self containing tree (see site structure)
+					// must provide backend section then, as no external parent available.
+					break;
+
+				default:
+					throw new Exception("Unknown Backend rendering mode for metamodel " . $objDCA->rendertype);
+
+					break;
+			}
+
 			$arrDCA['list']['sorting']['mode'] = $objMetaModel->get('mode');
 			if (in_array($objMetaModel->get('mode'), array(3, 4, 6)))
 			if($objMetaModel->get('ptable'))
@@ -221,39 +322,22 @@ class MetaModelDatabase extends Controller
 							),
 						),
 					);
-
-
 					break;
 				default:
 			}
-		}
 
-		// determine image to use.
-		if ($objMetaModel->get('backendicon') && file_exists(TL_ROOT . '/' . $objMetaModel->get('backendicon')))
-		{
-			$arrDCA['list']['sorting']['icon'] = $this->getImage($this->urlEncode($objMetaModel->get('backendicon')), 16, 16);
-		} else {
-			$arrDCA['list']['sorting']['icon'] = 'system/modules/metamodels/html/icon.gif';
-		}
-
-
-
-		$strPalette='';
-		foreach($objMetaModel->getAttributes() as $objAttribute)
-		{
-			$arrDCA = array_replace_recursive($arrDCA, $objAttribute->getItemDCA());
-
-			if($objAttribute->insertBreak && strlen($objAttribute->legendTitle))
+			// determine image to use.
+			if ($objMetaModel->get('backendicon') && file_exists(TL_ROOT . '/' . $objMetaModel->get('backendicon')))
 			{
-				$legendName = $objAttribute->getColName().'_legend';
-				$GLOBALS['TL_LANG'][$objMetaModel->getTableName()][$legendName] = $objAttribute->legendTitle;
-				$strPalette .= ((strlen($strPalette)>0 ? ';':'') . '{'.$legendName.(($objAttribute->legendHide)?':hide':'').'},');
-			} else
-				$strPalette .= (strlen($strPalette)>0 ? ',':'');
-			$strPalette .= $objAttribute->getColName();
+				$arrDCA['list']['sorting']['icon'] = $this->getImage($this->urlEncode($objMetaModel->get('backendicon')), 16, 16);
+			} else {
+				$arrDCA['list']['sorting']['icon'] = 'system/modules/metamodels/html/icon.gif';
+			}
 		}
-		$arrDCA['palettes']['default'] = $strPalette;
+
 		$GLOBALS['TL_DCA'][$strTableName] = array_replace_recursive($arrDCA, (array)$GLOBALS['TL_DCA'][$objMetaModel->getTableName()]);
+
+		$GLOBALS['TL_LANG'][$objMetaModel->getTableName()] = array_replace_recursive($GLOBALS['TL_LANG']['tl_metamodel_item'] , (array)$GLOBALS['TL_LANG'][$objMetaModel->getTableName()]);
 
 		// TODO: add a HOOK here for extensions to manipulate the DCA. loadMetaModelDataContainer($objMetaModel)
 		//$GLOBALS['METAMODEL_HOOKS']['loadDataContainer']

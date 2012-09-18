@@ -75,7 +75,8 @@ class TableMetaModelAttribute extends Backend
 						(
 							'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode'],
 							'exclude'               => true,
-							'inputType'             => 'select',
+//							'inputType'             => 'select',
+							'inputType'             => 'justtextoption',
 							'options'               => $arrLanguages,
 							'eval' => array
 							(
@@ -121,7 +122,8 @@ class TableMetaModelAttribute extends Backend
 						(
 							'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode'],
 							'exclude'               => true,
-							'inputType'             => 'select',
+//							'inputType'             => 'select',
+							'inputType'             => 'justtextoption',
 							'options'               => $arrLanguages,
 							'eval' 			=> array(
 								'valign' => 'top',
@@ -164,7 +166,6 @@ class TableMetaModelAttribute extends Backend
 	 */
 	public function onLoadCallback($objDC)
 	{
-
 		// do nothing if not in edit mode.
 		if(
 			!($objDC->id && $this->Input->get('act'))
@@ -244,8 +245,15 @@ class TableMetaModelAttribute extends Backend
 			{
 				$objField->destroyAUX();
 			}
+
+			if (method_exists($objDC, 'getCurrentModel'))
+			{
+				$arrNewField = $objDC->getCurrentModel()->getPropertiesAsArray();
+			} else {
+				$arrNewField = $objDC->activeRecord->row();
+			}
+
 			// GOTCHA: potential problem when a field requires input not available here (later loop cycle in DC_Table save_callback).
-			$arrNewField = $objDC->activeRecord->row();
 			$arrNewField['type'] = $varValue;
 			$objField = MetaModelAttributeFactory::createFromArray($arrNewField);
 			if($objField)
@@ -263,6 +271,11 @@ class TableMetaModelAttribute extends Backend
 		return $varValue;
 	}
 
+	public function onDeleteCallback($objDC)
+	{
+		throw new Exception("DELETE unsupported!", 1);
+	}
+
 	/**
 	 * Get all valid fieldtypes
 	 *
@@ -270,7 +283,12 @@ class TableMetaModelAttribute extends Backend
 	 */
 	public function fieldTypesCallback($objDC)
 	{
-		$objMetaModel = MetaModelFactory::byId($objDC->activeRecord->pid);
+		if (method_exists($objDC, 'getCurrentModel'))
+		{
+			$objMetaModel = MetaModelFactory::byId($objDC->getCurrentModel()->getProperty('pid'));
+		} else {
+			$objMetaModel = MetaModelFactory::byId($objDC->activeRecord->pid);
+		}
 
 		return MetaModelAttributeFactory::getAttributeTypes($objMetaModel->isTranslated(), $objMetaModel->hasVariants());
 	}

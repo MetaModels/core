@@ -297,10 +297,57 @@ class TableMetaModel extends Backend
 		return $strTableName;
 	}
 
+	public function modeLoad($varValue)
+	{
+		return 'mode_' . $varValue;
+	}
+
+	public function modeSave($varValue)
+	{
+		$arrSplit = explode('_', $varValue);
+		return $arrSplit[1];
+	}
+
 	public function backendSectionCallback()
 	{
 		return array_keys($GLOBALS['BE_MOD']);
 	}
+
+
+	public function getRenderTypes(DataContainer $objDC)
+	{
+		if (!$objDC->getCurrentModel()->getProperty('varsupport'))
+		{
+			return array('standalone', 'ctable', 'selftree');
+		}
+		return array('standalone', 'ctable');
+	}
+
+	public function getValidModes(DataContainer $objDC)
+	{
+		switch ($objDC->getCurrentModel()->getProperty('rendertype'))
+		{
+			case 'ctable':
+				return array('mode_3', 'mode_4', 'mode_6');
+			break;
+			case 'standalone':
+				return array('mode_0', 'mode_1', 'mode_2', 'mode_3', 'mode_4', 'mode_5', 'mode_6');
+			break;
+		}
+		return array();
+	}
+
+	public function getAttributes()
+	{
+		$objMetaModel = MetaModelFactory::byId();
+		$tables = array();
+		foreach($this->Database->listTables() as $table)
+		{
+			$tables[$table]=$table;
+		}
+		return $tables;
+	}
+
 
 	public function getTables()
 	{

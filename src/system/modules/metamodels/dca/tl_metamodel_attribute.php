@@ -29,7 +29,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 (
 	'config' => array
 	(
-		'dataContainer'               => 'Table',
+//		'dataContainer'               => 'Table',
 		'ptable'                      => 'tl_metamodel',
 		'switchToEdit'                => false,
 		'enableVersioning'            => false,
@@ -41,6 +41,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 		(
 			array('TableMetaModelAttribute', 'onSubmitCallback')
 		),
+		'ondelete_callback'           => array
+		(
+			array('TableMetaModelAttribute', 'onDeleteCallback')
+		),
+
+		'dataContainer'               => 'General',
 	),
 
 	// List
@@ -49,7 +55,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 		'sorting' => array
 		(
 			'mode'                    => 4,
-			'fields'                  => array('sorting'),
+//			'fields'                  => array('sorting'),
 			'panelLayout'             => 'filter,limit',
 			'headerFields'            => array('name', 'tableName', 'tstamp', 'translated', 'supvariants', 'varsupport'),
 			'flag'                    => 1,
