@@ -22,7 +22,7 @@ if (!defined('TL_ROOT'))
  * Add palettes to tl_module
  */
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list']  = '{title_legend},name,headline,type;{config_legend},metamodel,perPage,metamodel_use_limit,metamodel_sortby,metamodel_filtering;{template_legend:hide},metamodel_layout;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list']  = '{title_legend},name,headline,type;{config_legend},metamodel,perPage,metamodel_use_limit,metamodel_sortby,metamodel_filtering;{template_legend:hide},metamodel_layout,metamodel_rendersettings;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'metamodel_use_limit';
 
@@ -44,9 +44,17 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 	(
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel'],
 		'exclude'                 => true,
-		'inputType'               => 'radio',
+		'inputType'               => 'select',
 		'foreignKey'              => 'tl_metamodel.name',
-		'eval'                    => array('mandatory'=> true, 'submitOnChange'=> true)
+		'eval'                    => array
+		(
+			'mandatory'=> true,
+			'submitOnChange'=> true
+		),
+		'wizard' => array
+		(
+			array('tl_module_metamodel', 'editMetaModel')
+		)
 	),
 
 	'metamodel_layout' => array
@@ -98,8 +106,36 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'inputType'               => 'select',
 		'options_callback'        => array('tl_module_metamodel', 'getFilterSettings'),
 		'default'                 => '',
-		'eval'                    => array('includeBlankOption' => true, 'tl_class'=>'w50'),
-	)
+		'eval'                    => array
+		(
+			'includeBlankOption' => true,
+			'submitOnChange'=> true,
+			'tl_class'=>'w50'
+		),
+		'wizard' => array
+		(
+			array('tl_module_metamodel', 'editFilterSetting')
+		)
+	),
+
+	'metamodel_rendersettings' => array
+	(
+		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_rendersettings'],
+		'exclude'                 => true,
+		'inputType'               => 'select',
+		'options_callback'        => array('tl_module_metamodel', 'getRenderSettings'),
+		'default'                 => '',
+		'eval'                    => array
+		(
+			'includeBlankOption' => true,
+			'submitOnChange'=> true,
+			'tl_class'=>'w50'
+		),
+		'wizard' => array
+		(
+			array('tl_module_metamodel', 'editRenderSetting')
+		)
+	),
 ));
 
 /**
@@ -148,6 +184,51 @@ class tl_module_metamodel extends Backend
 	}
 
 	/**
+	 * Return the edit wizard
+	 * @param DataContainer $dc the datacontainer
+	 * @return string
+	 */
+	public function editMetaModel(DataContainer $dc)
+	{
+		return ($dc->value < 1) ? '' : sprintf('<a href="contao/main.php?%s&amp;act=edit&amp;id=%s" title="%s" style="padding-left:3px">%s</a>',
+			'do=metamodels',
+			$dc->value,
+			sprintf(specialchars($GLOBALS['TL_LANG']['tl_module']['editmetamodel'][1]), $dc->value),
+			$this->generateImage('alias.gif', $GLOBALS['TL_LANG']['tl_module']['editmetamodel'][0], 'style="vertical-align:top"')
+		);
+	}
+
+	/**
+	 * Return the edit wizard
+	 * @param DataContainer $dc the datacontainer
+	 * @return string
+	 */
+	public function editRenderSetting(DataContainer $dc)
+	{
+		return ($dc->value < 1) ? '' : sprintf('<a href="contao/main.php?%s&amp;act=edit&amp;id=%s" title="%s" style="padding-left:3px">%s</a>',
+			'do=metamodels&table=tl_metamodel_rendersettings',
+			$dc->value,
+			sprintf(specialchars($GLOBALS['TL_LANG']['tl_module']['editrendersetting'][1]), $dc->value),
+			$this->generateImage('alias.gif', $GLOBALS['TL_LANG']['tl_module']['editrendersetting'][0], 'style="vertical-align:top"')
+		);
+	}
+
+	/**
+	 * Return the edit wizard
+	 * @param DataContainer $dc the datacontainer
+	 * @return string
+	 */
+	public function editFilterSetting(DataContainer $dc)
+	{
+		return ($dc->value < 1) ? '' : sprintf('<a href="contao/main.php?%s&amp;act=edit&amp;id=%s" title="%s" style="padding-left:3px">%s</a>',
+			'do=metamodels&table=tl_metamodel_filter',
+			$dc->value,
+			sprintf(specialchars($GLOBALS['TL_LANG']['tl_module']['editfiltersetting'][1]), $dc->value),
+			$this->generateImage('alias.gif', $GLOBALS['TL_LANG']['tl_module']['editfiltersetting'][0], 'style="vertical-align:top"')
+		);
+	}
+
+	/**
 	 * Fetch all available filter settings for the current meta model.
 	 *
 	 * @param DataContainer $objDC the datacontainer calling this method.
@@ -166,6 +247,25 @@ class tl_module_metamodel extends Backend
 		return $arrSettings;
 	}
 
+
+	/**
+	 * Fetch all available filter settings for the current meta model.
+	 *
+	 * @param DataContainer $objDC the datacontainer calling this method.
+	 *
+	 * @return string[int] array of all attributes as id => human name
+	 */
+	public function getRenderSettings(DataContainer $objDC)
+	{
+		$objDB = Database::getInstance();
+		$objFilterSettings = $objDB->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE pid=?')->execute($objDC->activeRecord->metamodel);
+		$arrSettings = array();
+		while ($objFilterSettings->next())
+		{
+			$arrSettings[$objFilterSettings->id] = $objFilterSettings->name;
+		}
+		return $arrSettings;
+	}
 }
 
 ?>

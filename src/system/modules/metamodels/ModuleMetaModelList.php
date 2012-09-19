@@ -71,7 +71,7 @@ class ModuleMetaModelList extends Module
 	{
 		$objView = new MetaModelRenderSettings();
 
-		$objView = $objMetaModel->getView($this->metamodelview);
+		$objView = $objMetaModel->getView($this->metamodel_rendersettings);
 
 		if (!$this->metamodelview)
 		{
