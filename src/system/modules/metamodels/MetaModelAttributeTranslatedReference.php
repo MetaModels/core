@@ -66,7 +66,7 @@ implements IMetaModelAttributeTranslated
 		return array
 		(
 			'tstamp' => time(),
-			'value' => $arrValue['value'],
+			'value' => (string)$arrValue['value'],
 			'att_id' => $this->get('id'),
 			'langcode' => $strLangCode,
 			'item_id' => $intId,
