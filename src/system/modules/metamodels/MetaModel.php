@@ -415,6 +415,10 @@ class MetaModel implements IMetaModel
 	 */
 	public function findById($intId)
 	{
+		if (!$intId)
+		{
+			return null;
+		}
 		$objItems = $this->getItemsWithId(array($intId));
 		if ($objItems && $objItems->first())
 		{
