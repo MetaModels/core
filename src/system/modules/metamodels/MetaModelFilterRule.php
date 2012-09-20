@@ -26,20 +26,12 @@ if (!defined('TL_ROOT')) {
  */
 abstract class MetaModelFilterRule implements IMetaModelFilterRule
 {
-
-	/**
-	 * The attribute this rule applies to.
-	 * @var IMetaModelAttribute
-	 */
-	protected $objAttribute = NULL;
-
 	/**
 	 * create a new FilterRule instance.
 	 * @param IMetaModelAttribute|null $objAttribute optional, the attribute this rule applies to.
 	 */
 	public function __construct($objAttribute = NULL)
 	{
-		$this->objAttribute = $objAttribute;
 	}
 
 	/**
