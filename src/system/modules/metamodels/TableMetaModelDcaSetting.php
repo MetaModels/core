@@ -211,6 +211,99 @@ class TableMetaModelDcaSetting extends Backend
 
 		return $this->getTemplateGroup('mm_attr_' . $objAttribute->get('type') /*, theme id how the heck shall I fetch that one? */);
 	}
+
+	/**
+	 * Fetch the template group for the detail view of the current MetaModel module.
+	 *
+	 * @param DataContainer $objDC the datacontainer calling this method.
+	 *
+	 * @return array
+	 *
+	 */
+	/**
+	 * Generate module
+	 */
+	protected function addAll()
+	{
+		$this->loadLanguageFile('default');
+		$this->loadLanguageFile('tl_metamodel_dcasetting');
+
+		$this->Template = new BackendTemplate('be_autocreatepalette');
+
+		$this->Template->cacheMessage = '';
+		$this->Template->updateMessage = '';
+
+		$this->Template->href = $this->getReferer(true);
+		$this->Template->headline = 'Here we go again.';
+
+		// severity: error, confirm, info, new
+		$arrMessages = array();
+
+		$objPalette = $this->Database->prepare('SELECT * FROM tl_metamodel_dca WHERE id=?')->execute($this->Input->get('id'));
+
+		$objMetaModel = MetaModelFactory::byId($objPalette->pid);
+
+		$objAlreadyExist = $this->Database->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=? AND dcatype=?')->execute($this->Input->get('id'), 'attribute');
+
+		$arrKnown = array();
+		$intMax = 128;
+		while ($objAlreadyExist->next())
+		{
+			$arrKnown[$objAlreadyExist->attr_id] = $objAlreadyExist->row();
+			if ($intMax< $objAlreadyExist->sorting)
+			{
+				$intMax = $objAlreadyExist->sorting;
+			}
+		}
+
+		$blnWantPerform = false;
+		// perform the labour work
+		if ($this->Input->post('act') == 'perform')
+		{
+			// loop over all attributes now.
+			foreach ($objMetaModel->getAttributes() as $objAttribute)
+			{
+				if (!array_key_exists($objAttribute->get('id'), $arrKnown))
+				{
+					$intMax *= 128;
+					$this->Database->prepare('INSERT INTO tl_metamodel_dcasetting %s')->set(array(
+						'pid'      => $this->Input->get('id'),
+						'sorting'  => $intMax,
+						'tstamp'   => time(),
+						'dcatype'  => 'attribute',
+						'attr_id'  => $objAttribute->get('id'),
+						'tl_class' => ''
+					))->execute();
+					$arrMessages[sprintf('added attribute %s to palette.', $objAttribute->getName())] = 'confirm';
+				}
+			}
+		} else {
+			// loop over all attributes now.
+			foreach ($objMetaModel->getAttributes() as $objAttribute)
+			{
+				if (array_key_exists($objAttribute->get('id'), $arrKnown))
+				{
+					$arrMessages[sprintf('Attribute %s already in palette.', $objAttribute->getName())] = 'info';
+				} else {
+					$arrMessages[sprintf('will add attribute %s to palette.', $objAttribute->getName())] = 'confirm';
+					$blnWantPerform = true;
+				}
+			}
+		}
+
+		if ($blnWantPerform)
+		{
+			$this->Template->action = ampersand($this->Environment->request);
+			$this->Template->submit = 'GO!';
+		} else {
+			$this->Template->action = ampersand($this->getReferer(true));
+			$this->Template->submit = 'Done';
+		}
+
+		$this->Template->error = $arrMessages;
+
+		return $this->Template->parse();
+	}
 }
 
 ?>

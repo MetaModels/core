@@ -251,6 +251,8 @@ class MetaModelBackend
 		(
 			'tables'			=> array_merge(array('tl_metamodel', 'tl_metamodel_attribute', 'tl_metamodel_filter', 'tl_metamodel_filtersetting', 'tl_metamodel_rendersettings', 'tl_metamodel_rendersetting', 'tl_metamodel_dca', 'tl_metamodel_dcasetting')/*, MetaModelFactory::getAllTables()*/),
 			'icon'				=> 'system/modules/metamodels/html/icon.gif',
+
+			'dca_addall'		=> array('TableMetaModelDcaSetting', 'addAll'),
 		);
 
 		$objDB = Database::getInstance();

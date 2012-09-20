@@ -47,13 +47,20 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 
 		'global_operations' => array
 		(
+			'addall' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall'],
+				'href'                => 'key=dca_addall',
+				'class'               => 'header_add_all',
+				'attributes'          => 'onclick="Backend.getScrollOffset();"'
+			),
 			'all' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
 				'href'                => 'act=select',
 				'class'               => 'header_edit_all',
 				'attributes'          => 'onclick="Backend.getScrollOffset();"'
-			)
+			),
 		),
 
 		'operations' => array

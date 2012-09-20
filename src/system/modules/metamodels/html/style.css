@@ -1,2 +1,4 @@
 /* MetaModels style sheet */
 .header_css_fields { padding:2px 0px 3px 20px; background-image:url("fields.gif"); background-position:left center; background-repeat:no-repeat; }
+.header_add_all { padding:2px 0px 3px 20px; background-image:url("dca.png"); background-position:left center; background-repeat:no-repeat; }
+
