@@ -39,6 +39,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['edit']            = array('Edit 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy']            = array('Copy setting definiton', 'Copy setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete']          = array('Delete setting', 'Delete setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['show']            = array('Setting details', 'Show details of setting ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']          = array('Add all', 'Add all attributes to palette');
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['row']             = '%s <strong>%s</strong> <em>[%s]</em>';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legend_row']      = '<div style="color: #8AB858; padding-left: 18px; padding-right: 3px; background: url(system/themes/default/images/palOpen.gif) left center no-repeat; cursor: pointer;">%stest....</div>';
