@@ -99,6 +99,10 @@ class MetaModelDatabase extends Controller
 						if ($objAttribute)
 						{
 							$arrDCA = array_replace_recursive($arrDCA, $objAttribute->getItemDCA());
+							if ($objDCASettings->tl_class)
+							{
+								$arrDCA['fields'][$objAttribute->getColName()]['eval']['tl_class'] = $objDCASettings->tl_class;
+							}
 							$strPalette .= (strlen($strPalette)>0 ? ',':'') . $objAttribute->getColName();
 						}
 					break;
