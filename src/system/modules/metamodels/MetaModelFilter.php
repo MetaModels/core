@@ -35,17 +35,17 @@ class MetaModelFilter implements IMetaModelFilter
 
 	/**
 	 * The contained filter rules.
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $arrFilterRules = array();
 
 	/**
 	 * The cached result after this filter has been evaluated.
-	 * 
+	 *
 	 * @var int[]
 	 */
-	protected $arrMatches = array();
+	protected $arrMatches = null;
 
 	public function __construct(IMetaModel $objMetaModel)
 	{
@@ -81,12 +81,15 @@ class MetaModelFilter implements IMetaModelFilter
 	 */
 	public function addFilterRule(IMetaModelFilterRule $objFilterRule)
 	{
+		// reset matches as they are most likely invalid now.
+		$this->arrMatches = null;
+
 		$this->arrFilterRules[] = $objFilterRule;
 	}
 
 	public function getMatchingIds()
 	{
-		if ($this->arrMatches)
+		if ($this->arrMatches !== null)
 		{
 			return $this->arrMatches;
 		}
