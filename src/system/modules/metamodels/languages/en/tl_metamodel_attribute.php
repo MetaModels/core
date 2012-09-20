@@ -30,6 +30,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['isvariant']            = array('E
 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['isunique']            = array('Unique values', 'Check this, if you want to ensure that each value only occurs once');
 
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode']       = array('Language', 'the language');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value']          = array('Description text', 'the description text');
+
 /**
  * Legends
  */

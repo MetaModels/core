@@ -96,8 +96,11 @@ class MetaModelDatabase extends Controller
 				{
 					case 'attribute':
 						$objAttribute = $objMetaModel->getAttributeById($objDCASettings->attr_id);
-						$arrDCA = array_replace_recursive($arrDCA, $objAttribute->getItemDCA());
-						$strPalette .= (strlen($strPalette)>0 ? ',':'') . $objAttribute->getColName();
+						if ($objAttribute)
+						{
+							$arrDCA = array_replace_recursive($arrDCA, $objAttribute->getItemDCA());
+							$strPalette .= (strlen($strPalette)>0 ? ',':'') . $objAttribute->getColName();
+						}
 					break;
 					case 'legend':
 						$legendName = standardize($objDCASettings->legendtitle).'_legend';
@@ -258,8 +261,12 @@ class MetaModelDatabase extends Controller
 					// must provide backend section then, as no external parent available.
 					break;
 
+				case 'standalone':
+					break;
+
+
 				default:
-					throw new Exception("Unknown Backend rendering mode for metamodel " . $objDCA->rendertype);
+					throw new Exception("Unknown Backend rendering mode for metamodel " . $objMetaModel->get('rendertype'));
 
 					break;
 			}

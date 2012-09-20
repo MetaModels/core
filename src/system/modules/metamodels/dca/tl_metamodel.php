@@ -214,12 +214,15 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			'standalone' => array
 			(
 				'backendsection',
-				'backendicon'
+				'backendicon',
+				'backendcaption'
 			),
 			'ctable' => array
 			(
 				'ptable',
-				'mode'
+				'mode',
+				'backendicon',
+				'backendcaption'
 			)
 		),
 
@@ -316,20 +319,24 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['varsupport'],
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class'=>'clr', 'submitOnChange' => true)
+			'eval'                    => array
+			(
+				'tl_class'            => 'clr',
+				'submitOnChange'      => true
+			)
 		),
 
 		'rendertype' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['rendertype'],
 			'inputType'               => 'select',
 			'options_callback'        => array('TableMetaModel', 'getRenderTypes'),
-			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes'],
+			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel']['rendertypes'],
 			'eval'                    => array
 			(
-				'tl_class'=>'w50',
-				'submitOnChange'=>true,
-				'includeBlankOption'=>true
+				'tl_class'            => 'w50',
+				'submitOnChange'      => true,
+				'includeBlankOption'  => true
 			)
 		),
 
@@ -338,7 +345,12 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['ptable'],
 			'inputType'               => 'select',
 			'options_callback'        => array('TableMetaModel', 'getTables'),
-			'eval'                    => array('tl_class'=>'w50', 'submitOnChange'=>true, 'includeBlankOption'=>true)
+			'eval'                    => array
+			(
+				'tl_class'            => 'w50',
+				'submitOnChange'      => true,
+				'includeBlankOption'  => true
+			)
 		),
 
 		'mode' => array
@@ -359,9 +371,9 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			*/
 			'eval'                    => array
 			(
-				'includeBlankOption' => true,
-				'tl_class'=>'w50',
-				'submitOnChange' => true
+				'includeBlankOption'  => true,
+				'tl_class'            => 'w50',
+				'submitOnChange'      => true
 			),
 			'load_callback'           => array
 			(
@@ -375,16 +387,15 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 
 		'backendsection' => array
 		(
-			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel']['backendsection'],
-			'exclude'               => true,
-			'inputType'             => 'select',
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['backendsection'],
+			'exclude'                 => true,
+			'inputType'               => 'select',
 			'reference'               => &$GLOBALS['TL_LANG']['MOD'],
-			'eval'                  => array
+			'eval'                    => array
 			(
-				'includeBlankOption' => true,
-				'valign' => 'top',
-				'style' => 'width:250px',
-				'chosen'=>true,
+				'includeBlankOption'  => true,
+				'valign'              => 'top',
+				'chosen'              => true,
 			),
 			'options_callback'        => array('TableMetaModel', 'backendSectionCallback'),
 		),
@@ -396,11 +407,56 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			'inputType'               => 'fileTree',
 			'eval'                    => array
 			(
-				'fieldType'=>'radio',
-				'files'=>true,
-				'filesOnly'=>true,
-				'extensions' => 'jpg,jpeg,gif,png,tif,tiff',
-				'tl_class' => 'clr'
+				'fieldType'           => 'radio',
+				'files'               => true,
+				'filesOnly'           => true,
+				'extensions'          => 'jpg,jpeg,gif,png,tif,tiff',
+				'tl_class'            => 'clr'
+			)
+		),
+
+		'backendcaption' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['backendcaption'],
+			'exclude'                 => true,
+			'inputType'               => 'multiColumnWizard',
+			'eval' 			=> array
+			(
+				'columnFields' => array
+				(
+					'langcode' => array
+					(
+						'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel']['becap_langcode'],
+						'exclude'               => true,
+						'inputType'             => 'select',
+						'options'               => $this->getLanguages(),
+						'eval'                  => array
+						(
+							'style' => 'width:200px',
+							'chosen'=> 'true'
+						)
+					),
+					'label' => array
+					(
+						'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel']['becap_label'],
+						'exclude'               => true,
+						'inputType'             => 'text',
+						'eval'                  => array
+						(
+							'style' => 'width:180px',
+						)
+					),
+					'description' => array
+					(
+						'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel']['becap_description'],
+						'exclude'               => true,
+						'inputType'             => 'text',
+						'eval'                  => array
+						(
+							'style' => 'width:200px',
+						)
+					),
+				),
 			)
 		),
 	)

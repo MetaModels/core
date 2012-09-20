@@ -26,6 +26,8 @@ $GLOBALS['TL_LANG']['MOD']['metamodels'] = array('MetaModels', 'The MetaModels e
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord'] = 'edit filter setting %%s for filter "%s" in MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label'] = 'Filter "%s" in MetaModel "%s"';
 
+$GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'] = 'Edit "%s" for Item %%s';
+
 //Select Options
 $GLOBALS['TL_LANG']['MSC']['optionsTitle'] = 'Select %s';
 

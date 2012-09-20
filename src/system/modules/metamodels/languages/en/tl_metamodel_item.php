@@ -31,6 +31,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['show']          = array('Item details'
 $GLOBALS['TL_LANG']['tl_metamodel_item']['editheader']    = array('Edit item type', 'Edit the item type');
 $GLOBALS['TL_LANG']['tl_metamodel_item']['fields']        = array('Manage attributes', 'Manage attributes of this MetaModel');
 
+$GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']      = array('Create new item', 'Create a new item after item ID %s');
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_item']['varbase']       = array('Is variant base', 'Check this if you want to make this the base for the current variant group');
 

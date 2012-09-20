@@ -236,7 +236,7 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 		$objAttribute = NULL;
 		if ($arrFilter['property'])
 		{
-			$objAttrobute = $this->objMetaModel->getAttribute($arrFilter['property']);
+			$objAttribute = $this->objMetaModel->getAttribute($arrFilter['property']);
 		}
 
 		switch ($arrFilter['operation'])

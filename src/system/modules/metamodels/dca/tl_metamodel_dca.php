@@ -114,35 +114,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			(
 				'be_template',
 			),
-			'advanced' => array
+			'permission' => array
 			(
 				':hide',
 				'be_groups',
 				'fe_groups',
 			),
 		)
-	),
-
-	// Subpalettes
-	'metasubpalettes' => array
-	(
-	),
-
-	'metasubselectpalettes' => array
-	(
-		'rendertype' => array
-		(
-			'standalone' => array
-			(
-				'backendsection',
-				'backendicon'
-			),
-			'ctable' => array
-			(
-				'ptable',
-				'mode'
-			)
-		),
 	),
 
 	// Fields

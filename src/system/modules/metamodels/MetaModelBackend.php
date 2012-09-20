@@ -114,11 +114,20 @@ class MetaModelBackend
 			$objMetaModel = MetaModelFactory::byId($objDCA->id);
 			if ($objMetaModel)
 			{
+				$arrCaption = array('', sprintf($GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'], $objMetaModel->getName()));
+				foreach (deserialize($objMetaModel->get('backendcaption'), true) as $arrLangEntry)
+				{
+					if ($arrLangEntry['langcode'] == self::getUser()->language)
+					{
+						$arrCaption = array($arrLangEntry['description'], $arrLangEntry['label']);
+					}
+				}
+
 				$GLOBALS['TL_DCA'][$strTable]['list']['operations']['edit_'.$objMetaModel->getTableName()] = array
 				(
-					'label'               => array('', sprintf($GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'], $objMetaModel->getName())),
+					'label'               => $arrCaption,
 					'href'                => 'table='.$objMetaModel->getTableName(),
-					'icon'                => $this->getBackendIcon($objMetaModel->backendicon),
+					'icon'                => $this->getBackendIcon($objMetaModel->get('backendicon')),
 					'attributes'          => 'onclick="Backend.getScrollOffset()"'
 				);
 			}
@@ -166,8 +175,16 @@ class MetaModelBackend
 					'tables'			=> array($objMetaModel->tableName),
 					'icon'				=> $strIcon,
 				);
-				$GLOBALS['TL_LANG']['MOD'][$strModuleName] = array($strTableCaption);
 
+				$arrCaption = array($strTableCaption);
+				foreach (deserialize($objMetaModel->backendcaption, true) as $arrLangEntry)
+				{
+					if ($arrLangEntry['langcode'] == self::getUser()->language)
+					{
+						$arrCaption = array($arrLangEntry['label'], $arrLangEntry['description']);
+					}
+				}
+				$GLOBALS['TL_LANG']['MOD'][$strModuleName] = $arrCaption;
 				break;
 
 			default:
