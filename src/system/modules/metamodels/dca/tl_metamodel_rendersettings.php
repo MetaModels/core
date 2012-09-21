@@ -123,7 +123,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault'],
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50')
+			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50 m12')
 		),
 		'template' => array
 		(

@@ -267,7 +267,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['translated'],
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class'=>'clr', 'submitOnChange' => true)
+			'eval'                    => array('tl_class'=>'clr m12', 'submitOnChange' => true)
 		),
 
 		'languages' => array
@@ -287,8 +287,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 						'options'               => $this->getLanguages(),
 						'eval'                  => array
 						(
-							'valign' => 'top',
-							'style' => 'width:250px',
+							'style' => 'width:470px',
 							'chosen'=> 'true'
 						)
 					),
@@ -299,7 +298,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 						'inputType'             => 'checkbox',
 						'eval'                  => array
 						(
-							'valign' => 'middle',
+                            'style' => 'width:50px',
 						)
 					),
 				),
