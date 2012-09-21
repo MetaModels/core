@@ -342,7 +342,7 @@ class MetaModelDatabase extends Controller
 			{
 				$arrDCA['list']['sorting']['icon'] = $this->getImage($this->urlEncode($objMetaModel->get('backendicon')), 16, 16);
 			} else {
-				$arrDCA['list']['sorting']['icon'] = 'system/modules/metamodels/html/icon.gif';
+				$arrDCA['list']['sorting']['icon'] = 'system/modules/metamodels/html/metamodels.png';
 			}
 		}
 
