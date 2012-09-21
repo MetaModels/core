@@ -35,7 +35,7 @@ $GLOBALS['TL_LANG']['XPL']['customsql'] = array
 	(
 		'Insert tags',
 		'Insert tags are supported, but keep in mind that not all tags might be available
-		when the filter setting is used (for example the <em>{{env::page}}</em> is
+		when the filter setting is used (for example the <em>{{page::id}}</em> is
 		available only when used from a frontend page and not from RSS-feeds).'
 	),
 	array
