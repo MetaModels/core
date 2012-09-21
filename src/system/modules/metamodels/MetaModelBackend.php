@@ -99,7 +99,7 @@ class MetaModelBackend
 		{
 			return MetaModelController::getImage(MetaModelController::urlEncode($strBackendIcon), 16, 16);;
 		} else {
-			return 'system/modules/metamodels/html/icon.gif';
+			return 'system/modules/metamodels/html/metamodels.png';
 		}
 	}
 
@@ -167,7 +167,7 @@ class MetaModelBackend
 				{
 					$strIcon = MetaModelController::getImage(MetaModelController::urlEncode($objMetaModel->backendicon), 16, 16);;
 				} else {
-					$strIcon = 'system/modules/metamodels/html/icon.gif';
+					$strIcon = 'system/modules/metamodels/html/metamodels.png';
 				}
 
 				$GLOBALS['BE_MOD'][$objMetaModel->backendsection][$strModuleName] = array
@@ -250,7 +250,7 @@ class MetaModelBackend
 		$GLOBALS['BE_MOD']['system']['metamodels'] = array
 		(
 			'tables'			=> array_merge(array('tl_metamodel', 'tl_metamodel_attribute', 'tl_metamodel_filter', 'tl_metamodel_filtersetting', 'tl_metamodel_rendersettings', 'tl_metamodel_rendersetting', 'tl_metamodel_dca', 'tl_metamodel_dcasetting')/*, MetaModelFactory::getAllTables()*/),
-			'icon'				=> 'system/modules/metamodels/html/icon.gif',
+			'icon'				=> 'system/modules/metamodels/html/metamodels.png',
 
 			'dca_addall'		=> array('TableMetaModelDcaSetting', 'addAll'),
 		);

@@ -130,7 +130,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['fields'],
 				'href'                => 'table=tl_metamodel_attribute',
-				'icon'                => 'system/modules/metamodels/html/fields.gif',
+				'icon'                => 'system/modules/metamodels/html/fields.png',
 				'button_callback'     => array('TableMetaModel', 'buttonCallback')
 			),
 

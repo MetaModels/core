@@ -12,6 +12,7 @@
 <?php foreach ($this->error as $strError => $strSeverity): ?>
 <p class="tl_<?php echo $strSeverity; ?>"><?php echo $strError; ?></p>
 <?php endforeach; ?>
+<br />
 </div>
 <?php endif; ?>
 
@@ -22,11 +23,15 @@
 <div class="fields">
 <?php echo $this->content; ?>
 </div>
+
+</div>
+
+<div class="tl_formbody_submit">
 <div class="tl_submit_container">
 <input type="submit" id="tags" class="tl_submit" value="<?php echo $this->submit; ?>">
 </div>
-
 </div>
+
 </form>
 
 </div>

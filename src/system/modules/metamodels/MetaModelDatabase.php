@@ -206,7 +206,7 @@ class MetaModelDatabase extends Controller
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_item']['createvariant'],
 				'href'                => 'act=createvariant',
-				'icon'                => 'system/modules/metamodels/html/createvariant.gif',
+				'icon'                => 'system/modules/metamodels/html/variants.png',
 				'button_callback'     => array('MetaModelDatabase', 'buttonCallbackCreateVariant')
 			);
 

@@ -77,6 +77,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 				'href'                => 'act=copy',
 				'icon'                => 'copy.gif'
 			),
+                        'cut'  => array
+                        (
+                            'label'  => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['cut'],
+                            'href'   => 'act=paste&amp;mode=cut',
+                            'icon'   => 'cut.gif',
+                        ),
 			'delete' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete'],

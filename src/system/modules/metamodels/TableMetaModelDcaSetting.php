@@ -234,7 +234,7 @@ class TableMetaModelDcaSetting extends Backend
 		$this->Template->updateMessage = '';
 
 		$this->Template->href = $this->getReferer(true);
-		$this->Template->headline = 'Here we go again.';
+		$this->Template->headline = $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall'][1];
 
 		// severity: error, confirm, info, new
 		$arrMessages = array();
@@ -294,10 +294,10 @@ class TableMetaModelDcaSetting extends Backend
 		if ($blnWantPerform)
 		{
 			$this->Template->action = ampersand($this->Environment->request);
-			$this->Template->submit = 'GO!';
+			$this->Template->submit = $GLOBALS['TL_LANG']['MSC']['continue'];
 		} else {
 			$this->Template->action = ampersand($this->getReferer(true));
-			$this->Template->submit = 'Done';
+			$this->Template->submit = $GLOBALS['TL_LANG']['MSC']['saveNclose'];
 		}
 
 		$this->Template->error = $arrMessages;
