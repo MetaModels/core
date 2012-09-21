@@ -246,14 +246,13 @@ class MetaModelBackend
 		self::initializeContaoObjectStack();
 
 		$GLOBALS['TL_CSS'][] = 'system/modules/metamodels/html/style.css';
-
-		$GLOBALS['BE_MOD']['system']['metamodels'] = array
-		(
-			'tables'			=> array_merge(array('tl_metamodel', 'tl_metamodel_attribute', 'tl_metamodel_filter', 'tl_metamodel_filtersetting', 'tl_metamodel_rendersettings', 'tl_metamodel_rendersetting', 'tl_metamodel_dca', 'tl_metamodel_dcasetting')/*, MetaModelFactory::getAllTables()*/),
+		array_insert($GLOBALS['BE_MOD']['system'], 0, array
+		('metamodels' => array(
+			'tables'			=> array_merge(array('tl_metamodel', 'tl_metamodel_attribute', 'tl_metamodel_filter', 'tl_metamodel_filtersetting', 'tl_metamodel_rendersettings', 'tl_metamodel_rendersetting', 'tl_metamodel_dca', 'tl_metamodel_dcasetting')),
 			'icon'				=> 'system/modules/metamodels/html/metamodels.png',
 
 			'dca_addall'		=> array('TableMetaModelDcaSetting', 'addAll'),
-		);
+		)));
 
 		$objDB = Database::getInstance();
 		if ($objDB)
