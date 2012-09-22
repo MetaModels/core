@@ -223,7 +223,7 @@ class TableMetaModelDcaSetting extends Backend
 	/**
 	 * Generate module
 	 */
-	protected function addAll()
+	public function addAll()
 	{
 		$this->loadLanguageFile('default');
 		$this->loadLanguageFile('tl_metamodel_dcasetting');

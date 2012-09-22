@@ -95,6 +95,11 @@ require_once(TL_ROOT . '/system/modules/metamodels/metamodel_functions.php');
 // define our version so dependant extensions can use it in version_compare().
 define('METAMODELS_VERSION', '0.1');
 
+// define some error levels.
+define('METAMODELS_INFO', 3);
+define('METAMODELS_WARN', 2);
+define('METAMODELS_ERROR', 1);
+
 /**
  * Back-end module
  */
@@ -121,10 +126,9 @@ $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('MetaModelDatabase', 'create
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('TableMetaModelFilterSetting', 'createDataContainer');
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('TableMetaModelRenderSetting', 'createDataContainer');
 
-$GLOBALS['TL_HOOKS']['parseBackendTemplate'][] = array('TableMetaModel', 'checkDependencies');
-
 /**
  * Dependencies we need.
+ * mapping: extension folder => ER name
  */
 $GLOBALS['METAMODELS']['dependencies'] = array(
 	'metapalettes' => 'MetaPalettes',

@@ -1,0 +1,39 @@
+<div id="tl_buttons">
+<a href="<?php echo $this->href; ?>" class="header_back" title="<?php echo specialchars($GLOBALS['TL_LANG']['MSC']['backBT']); ?>"><?php echo $GLOBALS['TL_LANG']['MSC']['backBT']; ?></a>
+</div>
+
+<div class="tl_message mm_problem_display">
+	<ul>
+<?php foreach ($this->problems as $intSeverity => $arrErrorClass): ?>
+<?php switch ($intSeverity):
+			case METAMODELS_INFO:
+				$strClass = 'tl_info';
+				break;
+			case METAMODELS_ERROR:
+				$strClass = 'tl_gerror';
+				break;
+			case METAMODELS_ERROR:
+				$strClass = 'tl_gerror';
+				break;
+
+
+			endswitch;
+			?>
+
+<?php if (empty($arrErrorClass)) continue; ?>
+		<li class="<?php echo $strClass; ?>">
+			<ul><?php foreach ($arrErrorClass as $arrProblem): ?>
+
+				<li>
+					<?php echo $arrProblem['message']; ?>
+
+<?php if ($arrProblem['link']): ?> <a href="<?php echo $arrProblem['link']; ?>">HELP</a><?php endif; ?>
+
+				</li>
+			<?php endforeach; ?></ul>
+		</li>
+<?php endforeach; ?>
+	</ul>
+</div>
+
+

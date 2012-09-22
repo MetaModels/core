@@ -252,6 +252,7 @@ class MetaModelBackend
 			'icon'				=> 'system/modules/metamodels/html/metamodels.png',
 
 			'dca_addall'		=> array('TableMetaModelDcaSetting', 'addAll'),
+			'callback'			=> 'MetaModelBackendModule'
 		)));
 
 		$objDB = Database::getInstance();

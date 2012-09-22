@@ -78,22 +78,24 @@ class TableMetaModelFilterSetting extends Backend
 
 	public function createDataContainer($strTableName)
 	{
-		if ($strTableName != 'tl_metamodel_filtersetting')
-		{
-			return;
-		}
-		$this->objectsFromUrl(null);
+		$this->objectsFromUrl($strTableName);
 	}
 
 	protected function objectsFromUrl($objDC)
 	{
+		if (!(($this->Input->get('do') == 'metamodels')
+		&& ((is_object($objDC) && $objDC->table != 'tl_metamodel_filtersetting') || ($objDC == 'tl_metamodel_filtersetting'))))
+		{
+			return;
+		}
+
 		// TODO: detect all other ways we might end up here and fetch $objMetaModel accordingly.
 		if ($this->objMetaModel)
 		{
 			return;
 		}
 
-		if($objDC && $objDC->activeRecord)
+		if(is_object($objDC) && $objDC->activeRecord)
 		{
 			$this->strSettingType = $objDC->activeRecord->type;
 			$this->objFilter = $this->Database->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')->execute($objDC->activeRecord->fid);

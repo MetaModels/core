@@ -39,50 +39,6 @@ class TableMetaModel extends Backend
 		$this->checkRemoveTable($objDC);
 	}
 
-	/**
-	 * Check if all dependencies are present.
-	 */
-	public function checkDependencies($strBuffer, $strTemplate)
-	{
-		if ($this->Input->get('do') != 'metamodels')
-		{
-			return $strBuffer;
-		}
-
-		$arrMissing = array();
-
-		$arrActiveModules = $this->Config->getActiveModules();
-		$arrInactiveModules = deserialize($GLOBALS['TL_CONFIG']['inactiveModules']);
-
-		// check if all prerequsities are met.
-		foreach($GLOBALS['METAMODELS']['dependencies'] as $strExtension => $strDisplay)
-		{
-			if (!in_array($strExtension, $arrActiveModules))
-			{
-				if (is_array($arrInactiveModules) && in_array($strExtension, $arrInactiveModules))
-				{
-					$arrMissing[] = sprintf('<li>Please activate required extension &quot;%s&quot; (%s)</li>', $strDisplay, $strExtension);
-				} else {
-					$arrMissing[] = sprintf('<li>Please install required extension &quot;%s&quot; (%s)</li>', $strDisplay, $strExtension);
-				}
-			}
-		}
-
-		if (!$GLOBALS['METAMODELS']['attributes'])
-		{
-			$arrMissing[] = '<li>Please install at least one attribute extension as MetaModels without attributes do not make sense.</li>';
-		}
-
-		if ($arrMissing)
-		{
-			if(preg_match('#<div id="main">(.*)<div class="clear">#ims', $strBuffer, $arrMatch))
-			{
-				$strBuffer = str_replace($arrMatch[1], sprintf('<div class="tl_gerror"><ul>%s</ul></div>', implode('', $arrMissing)), $strBuffer);
-			}
-		}
-		return $strBuffer;
-	}
-
 	public function onSubmitCallback(DataContainer $objDC)
 	{
 		if($objDC->activeRecord)
@@ -384,8 +340,6 @@ class TableMetaModel extends Backend
 		}
 		return $result;
 	}
-
-
 }
 
 ?>
