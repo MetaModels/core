@@ -51,7 +51,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 		(
 			'fields'                  => array('name'),
 			'format'                  => '%s',
-//			'label_callback'          => array('TableMetaModelRenderSettings', 'drawSetting')
+            'label_callback'          => array('TableMetaModelRenderSettings', 'drawSetting')
 		),
 
 		'global_operations' => array

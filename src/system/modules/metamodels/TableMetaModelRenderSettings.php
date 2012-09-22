@@ -57,7 +57,7 @@ class TableMetaModelRenderSettings extends Backend
 
 	public function drawSetting($arrRow, $strLabel = '', DataContainer $objDC = null, $imageAttribute='', $blnReturnImage=false, $blnProtected=false)
 	{
-		return $strLabel . ($arrRow['isdefault']? ' <strong>*</strong>' : '');
+		return $strLabel . ($arrRow['isdefault']? ' <span style="color:#b3b3b3; padding-left:3px">[' . $GLOBALS['TL_LANG']['MSC']['fallback'] . ']</span>' : '');
 	}
 
 	/**
