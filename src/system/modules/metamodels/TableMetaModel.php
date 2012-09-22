@@ -39,11 +39,58 @@ class TableMetaModel extends Backend
 		$this->checkRemoveTable($objDC);
 	}
 
-	public function onSubmitCallback(DataContainer $objDC)
+	/**
+	 * Creates or renames the MetaModel table according to the given name.
+	 * Updates variant support information.
+	 *
+	 */
+	public function onSubmitCallback(DC_General $objDC)
 	{
-		if($objDC->activeRecord)
+
+		// table name changed?
+		$strOldTableName = '';
+		if ($objDC->getId())
 		{
-			MetaModelTableManipulation::setVariantSupport($objDC->activeRecord->tableName, $objDC->activeRecord->varsupport);
+			$objMetaModel = $this->Database->prepare("SELECT tableName FROM tl_metamodel WHERE id=?")
+											->limit(1)
+											->executeUncached($objDC->getId());
+			if ($objMetaModel->numRows)
+			{
+				$strOldTableName = $objMetaModel->tableName;
+			}
+		}
+
+		$objDBModel = $objDC->getCurrentModel();
+
+		$strNewTableName = $objDBModel->getProperty('tableName');
+
+		// table name is different.
+		if ($strNewTableName != $strOldTableName)
+		{
+			if ($strOldTableName && $this->Database->tableExists($strOldTableName, null, true))
+			{
+				MetaModelTableManipulation::renameTable($strOldTableName, $strNewTableName);
+				// TODO: notify fields that the MetaModel has changed its table name.
+			} else {
+				MetaModelTableManipulation::createTable($strNewTableName);
+			}
+		}
+		MetaModelTableManipulation::setVariantSupport($strNewTableName, $objDBModel->getProperty('varsupport'));
+	}
+
+	public function onDeleteCallback(DC_General $objDC)
+	{
+		$objMetaModel = MetaModelFactory::byId($objDC->getId());
+		if ($objMetaModel)
+		{
+			// TODO: implement IMetaModel::suicide() to delete all entries in secondary tables (complex attributes), better than here in an callback.
+			foreach ($objMetaModel->getAttributes() as $objAttribute)
+			{
+				$objAttribute->destroyAUX();
+			}
+			MetaModelTableManipulation::deleteTable($objMetaModel->getTableName());
+			$this->Database->prepare('DELETE FROM tl_metamodel_attribute WHERE pid=?')
+						   ->executeUncached($objMetaModel->get('id'));
 		}
 	}
 
@@ -103,6 +150,7 @@ class TableMetaModel extends Backend
 			return;
 		}
 
+		// FIXME: @CS do we really have to handle deleteAll, cannot we simply deny this?
 		$arrIds = array();
 		if ($this->Input->get('act') == 'deleteAll')
 		{
@@ -111,6 +159,8 @@ class TableMetaModel extends Backend
 		}
 		else if ($this->Input->get('act') == 'delete')
 		{
+			// see above onDeleteCallback(DC_General $objDC)
+			return;
 			$arrIds = array($objDC->id);
 		}
 
@@ -214,14 +264,15 @@ class TableMetaModel extends Backend
 
 	/**
 	 * called by tl_metamodel.tableName onsave_callback.
-	 * Creates or renames the MetaModel table according to the given name.
+	 * prefixes the table name with mm_ if not provided by the user as such.
+	 * Checks if the table name is legal to the DB.
 	 *
 	 * @param string        $strTableName the table name for the table.
 	 * @param DataContainer $objDC        the DataContainer which called us.
 	 *
 	 * @return string the table name $strTableName.
 	 */
-	public function tableNameOnSaveCallback($strTableName, DataContainer $objDC)
+	public function tableNameOnSaveCallback($strTableName, DC_General $objDC)
 	{
 		// force mm_ prefix.
 		if(substr($strTableName, 0, 3) !== 'mm_')
@@ -230,25 +281,6 @@ class TableMetaModel extends Backend
 		}
 
 		MetaModelTableManipulation::checkTablename($strTableName);
-
-		$objMetaModel = $this->Database->prepare("SELECT tableName FROM tl_metamodel WHERE id=?")
-										->limit(1)
-										->executeUncached($objDC->id);
-
-		// MetaModel not found in database or table name not changed, easy way out.
-		if ($objMetaModel->numRows == 0 || $strTableName==$objMetaModel->tableName)
-		{
-			return $strTableName;
-		}
-
-		if (strlen($objMetaModel->tableName) && $this->Database->tableExists($objMetaModel->tableName, null, true))
-		{
-			MetaModelTableManipulation::renameTable($objMetaModel->tableName, $strTableName);
-		} else {
-			MetaModelTableManipulation::createTable($strTableName);
-		}
-
-		// TODO: notify fields that the MetaModel has changed its table name.
 
 		return $strTableName;
 	}
