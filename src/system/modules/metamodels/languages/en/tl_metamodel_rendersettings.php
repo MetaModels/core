@@ -36,12 +36,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings_legend']      = 'Se
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']                  = array('New', 'Create new setting.');
-
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']                  = array('New', 'Create new setting');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['edit']                 = array('Edit setting', 'Edit setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['copy']                 = array('Copy setting definiton', 'Copy setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['delete']               = array('Delete setting', 'Delete setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']                 = array('Filter details', 'Show details of setting ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']               = array('Define attribute settings', 'Define attribute settings for setting ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']             = array('Define attribute settings', 'Define attribute settings for setting ID %s');
 
 ?>
