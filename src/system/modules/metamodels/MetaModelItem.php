@@ -214,7 +214,7 @@ class MetaModelItem implements IMetaModelItem
 
 			foreach ($arrParams as $strKey => $strValue)
 			{
-				$strParams .= sprintf('%s/%s', $strKey, $strValue);
+				$strParams .= sprintf('/%s/%s', $strKey, $strValue);
 			}
 
 			if ($strParams)
