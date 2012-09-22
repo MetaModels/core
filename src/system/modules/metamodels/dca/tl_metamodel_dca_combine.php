@@ -66,10 +66,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 			'eval'                               => array
 			(
 				'explanation'                    => 'customsql',
-				'class'                          => 'clr',
+				'tl_class'                       => 'dca_combine',
 				'columnFields'                   => array
 				(
-					'id'                         => array
+                    'id'                         => array
 					(
 						'label'                  => null,
 						'exclude'                => true,
@@ -77,7 +77,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 						'eval'                   => array
 						(
 							'columnPos'          => 1,
-							'style'              => 'width:0',
+							'style'              => 'display:none',
 							// 'chosen'          => 'true' // slows down the MCW like hell
 						)
 					),
@@ -90,8 +90,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 						'eval'                   => array
 						(
 							'includeBlankOption' => true,
-							'style'              => 'width:100px',
-							// 'chosen'          => 'true' // slows down the MCW like hell
+							'style'              => 'width:115px',
+							'chosen'             => 'true' // slows down the MCW like hell
 						)
 					),
 					'be_group'                   => array
@@ -103,8 +103,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 						'eval'                   => array
 						(
 							'includeBlankOption' => true,
-							'style'              => 'width:100px',
-							// 'chosen'=> 'true' // slows down the MCW like hell
+							'style'              => 'width:115px',
+							'chosen'             => 'true' // slows down the MCW like hell
 						)
 					),
 					'dca_id'                     => array
@@ -116,7 +116,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 						'eval'                   => array
 						(
 							'style'              => 'width:180px',
-							// 'chosen'          => 'true' // slows down the MCW like hell
+							'chosen'             => 'true' // slows down the MCW like hell
 						)
 					),
 					'view_id'                    => array
@@ -128,7 +128,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 						'eval'                   => array
 						(
 							'style'              => 'width:180px',
-							// 'chosen'          => 'true' // slows down the MCW like hell
+							'chosen'             => 'true' // slows down the MCW like hell
 						)
 					),
 				),
