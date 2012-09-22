@@ -21,7 +21,7 @@ if (!defined('TL_ROOT'))
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['name']                 = array('Name', 'DCA name.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['name']                 = array('Name', 'Name of the palette.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']               = array('Revision date', 'Date and time of the latest revision');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['be_template']          = array('Backend template', 'The template to use in the backend when listing items.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['be_groups']            = array('Backend user groups', 'Select any user group that may edit this MetaModel in the backend.');
@@ -37,13 +37,13 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['permission_legend']    = 'Permission se
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['new']                  = array('New DCA', 'Create new DCA.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['new']                  = array('New palette', 'Create new palette');
 
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']                 = array('Edit DCA', 'Edit the DCA ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['copy']                 = array('Copy DCA definiton', 'Copy definition of DCA ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['delete']               = array('Delete DCA', 'Delete DCA ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['show']                 = array('DCA details', 'Show details of DCA ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['settings']             = array('DCA Palette', 'Edit the palette of DCA ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']                 = array('Edit palette', 'Edit the palette ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['copy']                 = array('Copy palette definiton', 'Copy definition of palette ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['delete']               = array('Delete palette', 'Delete palette ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['show']                 = array('Palette details', 'Show details of palette ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['settings']             = array('Palette setting', 'Edit the setting of palette ID %s');
 
 /**
  * Reference

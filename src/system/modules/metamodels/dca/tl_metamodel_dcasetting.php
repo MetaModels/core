@@ -171,6 +171,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'eval'                  => array
 			(
 				'includeBlankOption' => true,
+                'tl_class'           => 'w50',
 			)
 		),
 
