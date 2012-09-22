@@ -33,6 +33,8 @@ class GeneralCallbackMetaModel extends GeneralCallbackDefault
 	 */
 	private $objDC;
 
+	protected $intViewId = null;
+
 	/**
 	 * Set the DC
 	 *
@@ -42,6 +44,9 @@ class GeneralCallbackMetaModel extends GeneralCallbackDefault
 	{
 		$this->objDC = $objDC;
 		parent::setDC($objDC);
+
+		$arrDCA = $this->objDC->getDCA();
+		$this->intViewId = $arrDCA['config']['metamodel_view'];
 	}
 
 	/**
@@ -58,46 +63,47 @@ class GeneralCallbackMetaModel extends GeneralCallbackDefault
 	protected function prepareTemplate(MetaModelTemplate $objTemplate, IMetaModelItem $objItem, $objSettings = null)
 	{
 		$objTemplate->settings  = $objSettings;
-		$objTemplate->item      = $objItem;
+
+		$objTemplate->items     = new MetaModelItems(array($objItem));
+		$objTemplate->view      = $objSettings;
 		$objTemplate->data      = $objItem->parseValue('html5', $objSettings);
 	}
 
-
+	/**
+	 * Render an item in the backend (list/tree)
+	 *
+	 * @param InterfaceGeneralModel $objModelRow the model to be drawn
+	 *
+	 * @return void
+	 */
 	protected function drawItem(InterfaceGeneralModel $objModelRow)
 	{
 		$objNativeItem = $objModelRow->getItem();
 		$objMetaModel = $objNativeItem->getMetaModel();
-		// TODO: we definately need an algorithm to tell frontend and backend render settings apart. this way of template switching is just plain evil.
-		$objView = MetaModelRenderSettingsFactory::byId($objMetaModel, $this->metamodelview);
+
+		$objView = MetaModelRenderSettingsFactory::byId($objMetaModel, $this->intViewId);
 		if ($objView)
 		{
-			$objTemplate = new MetaModelTemplate('be_' . $objView->get('template'));
+			$objTemplate = new MetaModelTemplate($objView->get('template'));
 		} else {
 			// fallback to default.
 			$objTemplate = new MetaModelTemplate('be_metamodel_full');
 		}
 
-		$arrFields = array_keys($GLOBALS['TL_DCA'][$objMetaModel->getTableName()]['fields']);
-		$arrClearFields = array_diff(array_keys($objMetaModel->getAttributes()), $arrFields);
-
 		if ($objMetaModel->hasVariants() && !$objNativeItem->isVariantBase())
 		{
-			$arrClearFields = array_merge($arrClearFields, array_keys($objMetaModel->getInVariantAttributes()));
+			// create a clone to have a seperate copy of the object as we are going to manipulate it here.
+			$objView = clone $objView;
+			// loop over all attributes and remove those from rendering that are not desired.
+			foreach (array_keys($objMetaModel->getInVariantAttributes()) as $strAttrName)
+			{
+				$objView->setSetting($strAttrName, NULL);
+			}
 		}
-
-		// create a clone to have a seperate copy of the object as we are going to manipulate it here.
-		$objView = clone $objView;
-		// loop over all attributes and remove those from rendering that are not desired.
-		foreach ($arrClearFields as $strAttrName)
-		{
-			$objView->setSetting($strAttrName, NULL);
-		}
-
 		$this->prepareTemplate($objTemplate, $objNativeItem, $objView);
 
 		return $objTemplate->parse('html5', true);
 	}
-
 
 	/**
 	 * Call the customer label callback
@@ -152,6 +158,14 @@ class GeneralCallbackMetaModel extends GeneralCallbackDefault
 		return $this->drawItem($objModel);
 	}
 
+	/**
+	 * Callback when an item is opened in edit view.
+	 * This method filters invariant attributes from the palette, when editing a variant.
+	 *
+	 * @param string the input palette
+	 *
+	 * @return string the filtered palette.
+	 */
 	public function parseRootPaletteCallback($arrPalette)
 	{
 		$objModelRow = $this->objDC->getCurrentModel();

@@ -174,6 +174,7 @@ class TableMetaModelFilterSetting extends Backend
 				$this->objFilter->name,
 				$this->objMetaModel->getName()
 			);
+
 			$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['config']['label'] = sprintf(
 				$GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label'],
 				$this->objFilter->name,
@@ -358,6 +359,8 @@ class TableMetaModelFilterSetting extends Backend
 		return $strReturn;
 	}
 
+	protected $objCallback = null;
+
 	public function drawSetting($arrRow, $strLabel, DataContainer $objDC = null, $imageAttribute='', $blnReturnImage=false, $blnProtected=false)
 	{
 		$strImage = $GLOBALS['METAMODELS']['filters'][$arrRow['type']]['image'];
@@ -379,8 +382,9 @@ class TableMetaModelFilterSetting extends Backend
 		// if a setting wants to render itself, let it do so.
 		if ($GLOBALS['METAMODELS']['filters'][$arrRow['type']]['info_callback'])
 		{
-			$objCallback = new $GLOBALS['METAMODELS']['filters'][$arrRow['type']]['info_callback'][0];
-			$strReturn = $objCallback->{$GLOBALS['METAMODELS']['filters'][$arrRow['type']]['info_callback'][1]}($arrRow, $strLabel, $objDC, $imageAttribute, $strImage);
+			$this->import($GLOBALS['METAMODELS']['filters'][$arrRow['type']]['info_callback'][0], 'objCallback');
+			$strReturn = $this->objCallback->{$GLOBALS['METAMODELS']['filters'][$arrRow['type']]['info_callback'][1]}($arrRow, $strLabel, $objDC, $imageAttribute, $strImage);
+			$this->objCallback = null;
 		} else {
 			$strReturn = sprintf(
 			$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_default_'],

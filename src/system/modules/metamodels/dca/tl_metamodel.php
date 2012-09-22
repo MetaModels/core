@@ -33,7 +33,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 //		'dataContainer'               => 'Table',
 		'dataContainer'               => 'General',
 
-		'ctable'                      => array('tl_metamodel_attribute', 'tl_metamodel_filter', 'tl_metamodel_rendersettings', 'tl_metamodel_dca'),
+		'ctable'                      => array('tl_metamodel_attribute', 'tl_metamodel_filter', 'tl_metamodel_rendersettings', 'tl_metamodel_dca', 'tl_metamodel_dca_combine'),
 		'switchToEdit'                => true,
 		'enableVersioning'            => true,
 		'onload_callback'             => array
@@ -158,6 +158,13 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'button_callback'     => array('TableMetaModel', 'buttonCallback')
 			),
 
+			'dca_combine' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['dca_combine'],
+				'href'                => 'table=tl_metamodel_dca_combine&act=edit',
+				'icon'                => 'system/modules/metamodels/html/dca_combine.png',
+				'button_callback'     => array('TableMetaModel', 'buttonCallback')
+			),
 		)
 	),
 

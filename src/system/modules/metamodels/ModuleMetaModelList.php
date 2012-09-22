@@ -69,11 +69,9 @@ class ModuleMetaModelList extends Module
 	 */
 	protected function getRenderSettings($objMetaModel, $intFilterSettings)
 	{
-		$objView = new MetaModelRenderSettings();
-
 		$objView = $objMetaModel->getView($this->metamodel_rendersettings);
 
-		if (!$this->metamodelview)
+		if ($objView)
 		{
 			$objView->set('filter', $intFilterSettings);
 		}

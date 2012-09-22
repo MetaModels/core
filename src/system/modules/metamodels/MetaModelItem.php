@@ -216,11 +216,15 @@ class MetaModelItem implements IMetaModelItem
 			{
 				$strParams .= sprintf('%s/%s', $strKey, $strValue);
 			}
-			$strUrl = MetaModelController::generateFrontendUrl($objPage->row(), '/' . $strParams);
-			$arrResult['jumpTo'] = array
-			(
-				'url' => $strUrl,
-			);
+
+			if ($strParams)
+			{
+				$strUrl = MetaModelController::generateFrontendUrl($objPage->row(), '/' . $strParams);
+				$arrResult['jumpTo'] = array
+				(
+					'url' => $strUrl,
+				);
+			}
 		}
 		return $arrResult;
 	}

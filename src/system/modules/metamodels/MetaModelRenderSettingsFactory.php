@@ -49,6 +49,10 @@ class MetaModelRenderSettingsFactory implements IMetaModelRenderSettingsFactory
 				if ($objAttr)
 				{
 					$objAttrSetting = $objSetting->getSetting($objAttr->getColName());
+					if (!$objAttrSetting)
+					{
+						$objAttrSetting = $objAttr->getDefaultRenderSettings();
+					}
 
 					foreach ($objViewAttributes->row() as $strKey=>$varValue)
 					{
@@ -75,44 +79,17 @@ class MetaModelRenderSettingsFactory implements IMetaModelRenderSettingsFactory
 
 		$objDB = Database::getInstance();
 		$objView = null;
-		if ($intId)
+
+		$objView = Database::getInstance()->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE pid=? AND (id=? OR isdefault=1) ORDER BY isdefault ASC')
+										  ->execute($objMetaModel->get('id'), $intId);
+		if (!$objView->numRows)
 		{
-			$objView = Database::getInstance()->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE pid=? AND id=?')
-											  ->execute($objMetaModel->get('id'), $intId);
-			if (!$objView->numRows)
-			{
-				$intId = 0;
-				$objView = NULL;
-			}
+			$intId = 0;
+			$objView = NULL;
 		}
 
-		if (!($intId || $objView))
-		{
-			// test if an default has been defined.
-			$objView = Database::getInstance()->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE pid=? AND isdefault=1')
-											  ->execute($objMetaModel->get('id'));
-		}
-		if ($objView->numRows)
-		{
-			$objRenderSetting = new MetaModelRenderSettings($objView->row());
-		} else {
-			$objRenderSetting = new MetaModelRenderSettings(array('template' => 'metamodel_full'));
-		}
-
-		self::$arrInstances[$intId] = $objRenderSetting;
-
-		// populate the view with the defaults.
-		foreach ($objMetaModel->getAttributes() as $objAttribute)
-		{
-			$objSetting = $objAttribute->getDefaultRenderSettings();
-			$objRenderSetting->setSetting($objAttribute->getColName(), $objSetting);
-		}
-
-		if ($objView->numRows)
-		{
-			self::collectAttributeSettings($objMetaModel, $objRenderSetting);
-		}
-
+		$objRenderSetting = new MetaModelRenderSettings($objView->row());
+		self::collectAttributeSettings($objMetaModel, $objRenderSetting);
 		return $objRenderSetting;
 	}
 }

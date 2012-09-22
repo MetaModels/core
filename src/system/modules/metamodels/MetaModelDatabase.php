@@ -50,6 +50,30 @@ class MetaModelDatabase extends Controller
 		return null;
 	}
 
+	protected function getPaletteCombination($objMetaModel)
+	{
+		$objUser = self::getUser();
+		if (get_class($objUser) == 'BackendUser')
+		{
+			$strGrpCol = 'be_group';
+		} else {
+			$strGrpCol = 'fe_group';
+		}
+
+		// there might be a NULL in there :/
+		$arrGroups = array_filter($objUser->groups);
+		$arrGroups[] = 0;
+
+		$objPossibleMatches = Database::getInstance()->prepare(
+			sprintf('SELECT * FROM tl_metamodel_dca_combine WHERE pid=? AND %s IN (%s) ORDER BY sorting ASC',
+				$strGrpCol,
+				implode(',', $arrGroups))
+			)->limit(1)
+			->execute($objMetaModel->get('id'));
+
+		return $objPossibleMatches->row();
+	}
+
 	/**
 	 * Create the data container of a metamodel table.
 	 *
@@ -76,48 +100,43 @@ class MetaModelDatabase extends Controller
 			$this->loadLanguageFile('languages');
 		}
 
-
-		// select the (first) appropriate dca listing.
-		$objDCA = Database::getInstance()->prepare('SELECT * FROM tl_metamodel_dca WHERE pid=? ORDER BY sorting')->execute($objMetaModel->get('id'));
-		while ($objDCA->next())
+		$arrCombination = $this->getPaletteCombination($objMetaModel);
+		if (!$arrCombination)
 		{
-			$objUser = self::getUser();
-			// group allowed?
-			if (!($objUser->isAdmin || array_intersect($objUser->groups, deserialize($objDCA->be_groups))))
-			{
-				continue;
-			}
-
-			$strPalette='';
-			$objDCASettings = Database::getInstance()->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=? ORDER BY sorting')->execute($objDCA->id);
-			while ($objDCASettings->next())
-			{
-				switch ($objDCASettings->dcatype)
-				{
-					case 'attribute':
-						$objAttribute = $objMetaModel->getAttributeById($objDCASettings->attr_id);
-						if ($objAttribute)
-						{
-							$arrDCA = array_replace_recursive($arrDCA, $objAttribute->getItemDCA());
-							if ($objDCASettings->tl_class)
-							{
-								$arrDCA['fields'][$objAttribute->getColName()]['eval']['tl_class'] = $objDCASettings->tl_class;
-							}
-							$strPalette .= (strlen($strPalette)>0 ? ',':'') . $objAttribute->getColName();
-						}
-					break;
-					case 'legend':
-						$legendName = standardize($objDCASettings->legendtitle).'_legend';
-						$GLOBALS['TL_LANG'][$objMetaModel->getTableName()][$legendName] = $objDCASettings->legendtitle;
-						$strPalette .= ((strlen($strPalette)>0 ? ';':'') . '{'.$legendName.$objAttribute->legendhide.'}');
-					break;
-					default:
-						throw new Exception("Unknown palette rendering mode " . $objDCASettings->dcatype);
-				}
-			}
-			$arrDCA['palettes']['default'] = $strPalette;
-			break;
+			$this->log('Attempt to access the metamodel "' . $objMetaModel->getName() . '" without palette combination for current user.', 'MetaModelDatabase createDataContainer()', TL_ERROR);
+			$this->redirect('contao/main.php?act=error');
 		}
+
+		$arrDCA['config']['metamodel_view'] = $arrCombination['view_id'];
+
+		$strPalette='';
+		$objDCASettings = Database::getInstance()->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=?')->execute($arrCombination['dca_id']);
+		while ($objDCASettings->next())
+		{
+			switch ($objDCASettings->dcatype)
+			{
+				case 'attribute':
+					$objAttribute = $objMetaModel->getAttributeById($objDCASettings->attr_id);
+					if ($objAttribute)
+					{
+						$arrDCA = array_replace_recursive($arrDCA, $objAttribute->getItemDCA());
+						if ($objDCASettings->tl_class)
+						{
+							$arrDCA['fields'][$objAttribute->getColName()]['eval']['tl_class'] = $objDCASettings->tl_class;
+						}
+						$strPalette .= (strlen($strPalette)>0 ? ',':'') . $objAttribute->getColName();
+					}
+				break;
+				case 'legend':
+					$legendName = standardize($objDCASettings->legendtitle).'_legend';
+					$GLOBALS['TL_LANG'][$objMetaModel->getTableName()][$legendName] = $objDCASettings->legendtitle;
+					$strPalette .= ((strlen($strPalette)>0 ? ';':'') . '{'.$legendName.$objAttribute->legendhide.'}');
+				break;
+				default:
+					throw new Exception("Unknown palette rendering mode " . $objDCASettings->dcatype);
+			}
+		}
+		$arrDCA['palettes']['default'] = $strPalette;
 
 		$arrDCA['config']['label'] = $objMetaModel->get('name');
 
