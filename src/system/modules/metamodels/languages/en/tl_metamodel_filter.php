@@ -32,12 +32,12 @@ $GLOBALS['TL_LANG']['tl_metamodel_filter']['title_legend']         = 'Name';
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_metamodel_filter']['new']                  = array('New', 'Create new Filter setting.');
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['new']                  = array('New', 'Create new filter setting');
 
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['edit']                 = array('Edit setting', 'Edit filter setting ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_filter']['copy']                 = array('Copy filter setting definiton', 'Copy filter setting ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['copy']                 = array('Copy filter setting', 'Copy filter setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['delete']               = array('Delete filter setting', 'Delete filter setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['show']                 = array('Filter setting details', 'Show details of filter setting ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_filter']['settings']               = array('Define attribute settings', 'Define attribute settings for filter setting ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['settings']             = array('Define attribute settings', 'Define attribute settings for filter setting ID %s');
 
 ?>
