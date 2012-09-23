@@ -21,7 +21,7 @@ if (!defined('TL_ROOT'))
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_combiner']        = array('For selected frontend user group (if any) and selected backend user group (if any) use the selected palette and the selected view', '');
+$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_combiner']        = array('Permissions for palettes and views', 'For selected frontend user group (if any) and selected backend user group (if any) use the selected palette and the selected view.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['fe_group']            = array('FE group', 'The frontend user group the combination applies to.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['be_group']            = array('BE group', 'The backend user group the combination applies to.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_id']              = array('The palette', 'The palette the combination applies to.');
