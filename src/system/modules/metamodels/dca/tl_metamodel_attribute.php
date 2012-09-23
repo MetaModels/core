@@ -239,6 +239,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
         (
             'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name'],
             'exclude'                 => true,
+            'eval'                    => array
+            (
+                'tl_class'=>'clr'
+            ),
         ),
 
 
@@ -246,6 +250,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
         (
             'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['description'],
             'exclude'                 => true,
+            'eval'                    => array
+            (
+                'tl_class'=>'clr'
+            ),
         ),
 
         // AVOID: doNotCopy => true, as child records won't be copied when copy metamodel
