@@ -75,15 +75,11 @@ class TableMetaModelAttribute extends Backend
 						(
 							'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode'],
 							'exclude'               => true,
-//							'inputType'             => 'select',
 							'inputType'             => 'justtextoption',
 							'options'               => $arrLanguages,
-							'eval' => array
+							'eval'                  => array
 							(
-								'valign' => 'top',
-								'style'  => 'width:250px" readonly="readonly',
-								'chosen' => true,
-								'readonly' => 'readonly'
+								'valign'            => 'top'
 							)
 						),
 						'value' => array
@@ -91,9 +87,9 @@ class TableMetaModelAttribute extends Backend
 							'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value'],
 							'exclude'               => true,
 							'inputType'             => 'text',
-							'eval' 			=> array
+							'eval' 			        => array
 							(
-								'style' => 'width:250px;'
+								'style'             => 'width:400px;'
 							)
 						),
 					)
@@ -122,14 +118,11 @@ class TableMetaModelAttribute extends Backend
 						(
 							'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode'],
 							'exclude'               => true,
-//							'inputType'             => 'select',
 							'inputType'             => 'justtextoption',
 							'options'               => $arrLanguages,
-							'eval' 			=> array(
-								'valign' => 'top',
-								'style' => 'width:250px" readonly="readonly',
-								'chosen' => true,
-								'readonly' => 'readonly'
+							'eval' 			        => array
+                            (
+								'valign'            => 'top'
 							)
 						),
 						'value' => array
@@ -137,7 +130,10 @@ class TableMetaModelAttribute extends Backend
 							'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value'],
 							'exclude'               => true,
 							'inputType'             => 'textarea',
-							'eval' 			=> array('style' => 'width:250px;height:60px;')
+							'eval' 			        => array
+                            (
+                                'style'             => 'width:400px;height:80px;'
+                            )
 						),
 					)
 				),
