@@ -40,19 +40,19 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 	(
 		'sorting' => array
 		(
-			'mode'                    => 1,
-			'fields'                  => array('sorting'),
-			'panelLayout'             => 'limit',
-			'headerFields'            => array('name'),
-			'flag'                    => 11,
+            'mode'                    => 1,
+            'fields'                  => array('name'),
+            'panelLayout'             => 'filter,limit',
+            'headerFields'            => array('name'),
+            'flag'                    => 1,
 		),
 
-		'label' => array
-		(
-			'fields'                  => array('name'),
-			'format'                  => '%s',
+        'label' => array
+        (
+            'fields'                  => array('name'),
+            'format'                  => '%s',
             'label_callback'          => array('TableMetaModelRenderSettings', 'drawSetting')
-		),
+        ),
 
 		'global_operations' => array
 		(
@@ -96,7 +96,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['settings'],
 				'href'                => 'table=tl_metamodel_dcasetting',
-				'icon'                => 'system/modules/metamodels/html/dca.png',
+				'icon'                => 'system/modules/metamodels/html/palettesetting.png',
 			),
 		)
 	),

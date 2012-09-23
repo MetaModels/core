@@ -94,7 +94,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings'],
 				'href'                => 'table=tl_metamodel_rendersetting',
-				'icon'                => 'system/modules/metamodels/html/filter.png',
+				'icon'                => 'system/modules/metamodels/html/rendersetting.png',
 			),
 		)
 	),

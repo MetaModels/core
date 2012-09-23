@@ -146,15 +146,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['dca'],
 				'href'                => 'table=tl_metamodel_dca',
-				'icon'                => 'system/modules/metamodels/html/dca.png',
-				'button_callback'     => array('TableMetaModel', 'buttonCallback')
-			),
-
-			'dca_combine' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['dca_combine'],
-				'href'                => 'table=tl_metamodel_dca_combine&act=edit',
-				'icon'                => 'system/modules/metamodels/html/dca_combine.png',
+				'icon'                => 'system/modules/metamodels/html/palettes.png',
 				'button_callback'     => array('TableMetaModel', 'buttonCallback')
 			),
 
@@ -165,6 +157,14 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
                 'icon'                => 'system/modules/metamodels/html/filter.png',
                 'button_callback'     => array('TableMetaModel', 'buttonCallback')
             ),
+
+			'dca_combine' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['dca_combine'],
+				'href'                => 'table=tl_metamodel_dca_combine&act=edit',
+				'icon'                => 'system/modules/metamodels/html/dca_combine.png',
+				'button_callback'     => array('TableMetaModel', 'buttonCallback')
+			),
 		)
 	),
 

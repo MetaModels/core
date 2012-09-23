@@ -165,7 +165,7 @@ class TableMetaModelRenderSetting extends Backend
 
 		if (!$strImage || !file_exists(TL_ROOT . '/' . $strImage))
 		{
-			$strImage = 'system/modules/metamodels/html/filter_default_icon.png';
+			$strImage = 'system/modules/metamodels/html/filter_default.png';
 		}
 
 		$strImage = $this->generateImage($strImage, '', $imageAttribute);
