@@ -271,9 +271,9 @@ CREATE TABLE `tl_metamodel_dca_combine` (
   `tstamp` int(10) unsigned NOT NULL default '0',
   `sorting` int(10) unsigned NOT NULL default '0',
 -- fe usergroup, if any
-  `fe_group` int(10) unsigned NOT NULL default '0',
+  `fe_group` varchar(32) NOT NULL default '',
 -- fe usergroup, if any
-  `be_group` int(10) unsigned NOT NULL default '0',
+  `be_group` varchar(32) NOT NULL default '',
 -- corresponding tl_metamodel_dca (palette)
   `dca_id` int(10) unsigned NOT NULL default '0',
 -- corresponding tl_metamodel_rendersetting (view)

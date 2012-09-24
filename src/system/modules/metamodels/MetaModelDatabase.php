@@ -39,7 +39,7 @@ class MetaModelDatabase extends Controller
 	 * @return BackendUser|FrontendUser|null the BackendUser when TL_MODE == 'BE', the FrontendUser when TL_MODE == 'FE' or null otherwise
 	 */
 	protected static function getUser()
-	{
+	{ 
 		if(TL_MODE=='BE')
 		{
 			return BackendUser::getInstance();
@@ -56,21 +56,56 @@ class MetaModelDatabase extends Controller
 		if (get_class($objUser) == 'BackendUser')
 		{
 			$strGrpCol = 'be_group';
+                        $isAdmin = $objUser->admin;
 		} else {
 			$strGrpCol = 'fe_group';
 		}
 
 		// there might be a NULL in there :/
-		$arrGroups = array_filter($objUser->groups);
-		$arrGroups[] = 0;
-
-		$objPossibleMatches = Database::getInstance()->prepare(
+                // SH: Yes. Admins have no groups and user might have one but it is a not must have. 
+                // I would prefer a default group for both, fe and be groups.
+                
+                // If admin try to get this group first
+                if($isAdmin == true)
+                {
+                    $objPossibleMatches = Database::getInstance()
+                            ->prepare(sprintf('SELECT * FROM tl_metamodel_dca_combine WHERE pid=? AND %s = "sysAdmin"', $strGrpCol))
+                            ->limit(1)
+                            ->execute($objMetaModel->get('id'));
+                    
+                    // Check if we have a result
+                    if($objPossibleMatches->numRows != 0)
+                    {
+                        return $objPossibleMatches->row();
+                    }
+                }
+                
+                // Try to get the group
+                $arrGroups = array_filter($objUser->groups);                
+               
+                if(count($arrGroups) != 0)
+                {
+                     $objPossibleMatches = Database::getInstance()->prepare(
 			sprintf('SELECT * FROM tl_metamodel_dca_combine WHERE pid=? AND %s IN (%s) ORDER BY sorting ASC',
 				$strGrpCol,
 				implode(',', $arrGroups))
 			)->limit(1)
 			->execute($objMetaModel->get('id'));
-
+                     
+                     // Check if we have a result
+                    if($objPossibleMatches->numRows != 0)
+                    {
+                        return $objPossibleMatches->row();
+                    }
+                }     
+                
+                // Try to load the default groups
+                $objPossibleMatches = Database::getInstance()
+                            ->prepare(sprintf('SELECT * FROM tl_metamodel_dca_combine WHERE pid=? AND %s = "default"', $strGrpCol))
+                            ->limit(1)
+                            ->execute($objMetaModel->get('id'));
+                 
+                // Return false or a group
 		return $objPossibleMatches->row();
 	}
 

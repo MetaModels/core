@@ -32,7 +32,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 		'ptable'                                 => 'tl_metamodel',
 		'switchToEdit'                           => false,
 		'enableVersioning'                       => false,
-		'closed'                                 => true,
+		'closed'                                 => false,
 	),
 
 	'dca_config' => array
