@@ -174,6 +174,7 @@ class MetaModelBackend
 				(
 					'tables'			=> array($objMetaModel->tableName),
 					'icon'				=> $strIcon,
+					'callback'			=> 'MetaModelBackendModule'
 				);
 
 				$arrCaption = array($strTableCaption);

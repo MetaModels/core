@@ -51,7 +51,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
         (
             'fields'                  => array('name'),
             'format'                  => '%s',
-            'label_callback'          => array('TableMetaModelRenderSettings', 'drawSetting')
+            'label_callback'          => array('TableMetaModelDca', 'drawSetting')
         ),
 
 		'global_operations' => array
@@ -109,16 +109,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'title' => array
 			(
 				'name',
-			),
-			'backend' => array
-			(
-				'be_template',
-			),
-			'permission' => array
-			(
-				':hide',
-				'be_groups',
-				'fe_groups',
+				'isdefault'
 			),
 		)
 	),
@@ -135,39 +126,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'eval'                    => array('mandatory'=>true, 'maxlength'=>64, 'tl_class'=>'w50')
 		),
 
-		'be_groups' => array
+		'isdefault' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['be_groups'],
-			'inputType'               => 'checkboxWizard',
-			'foreignKey'              => 'tl_user_group.name',
-			'eval'                    => array
-			(
-				'multiple'            => true,
-				'tl_class'            => 'w50',
-			)
-		),
-
-		'fe_groups' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['fe_groups'],
-			'inputType'               => 'checkboxWizard',
-			'foreignKey'              => 'tl_member_group.name',
-			'eval'                    => array
-			(
-				'multiple'            => true,
-				'tl_class'            => 'w50',
-			)
-		),
-
-		'be_template' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['be_template'],
-			'inputType'               => 'select',
-			'options_callback'        => array('TableMetaModelDca','getTemplates'),
-			'eval'                    => array
-			(
-				'tl_class'            => 'w50',
-			)
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50 m12')
 		),
 	)
 );

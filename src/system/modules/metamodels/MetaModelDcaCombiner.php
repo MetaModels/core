@@ -42,17 +42,15 @@ class MetaModelDcaCombiner extends Backend
 		}
 		$objGroups = $this->Database->execute(sprintf('SELECT id,name FROM tl_%s_group', $strTable));
 
-		$arrReturn = array();                
-                $arrReturn['default'] = 'Default';
-                
-                if($strTable == 'user')
-                {                        
-                        $arrReturn['sysAdmin'] = 'System Administrator';
-                }
-                        
+		$arrReturn = array();
+		if($strTable == 'user')
+		{
+			$arrReturn[-1] = $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['sysadmin'];
+		}
+
 		while ($objGroups->next())
 		{
-                        $arrReturn[$objGroups->id] = $objGroups->name;
+			$arrReturn[$objGroups->id] = $objGroups->name;
 		}
 		return $arrReturn;
 	}
@@ -101,7 +99,7 @@ class MetaModelDcaCombiner extends Backend
 		return $this->getViews($this->Input->get('id')/*$objDC->getId()*/);
 	}
 
-	public function updateSort($arrData, $objDC)
+	public function updateSort($arrData/*, $objDC*/)
 	{
 		foreach($arrData as $i => &$arrRow)
 		{

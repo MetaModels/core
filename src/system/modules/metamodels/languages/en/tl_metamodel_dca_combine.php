@@ -27,4 +27,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['be_group']            = array('
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_id']              = array('The palette', 'The palette the combination applies to.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['view_id']             = array('The render setting', 'The view the combination applies to.');
 
+$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['sysadmin']            = 'Sys. admins';
+
 ?>

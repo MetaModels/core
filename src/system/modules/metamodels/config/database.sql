@@ -63,12 +63,8 @@ CREATE TABLE `tl_metamodel_dca` (
   `sorting` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
-
-  `be_groups` text NULL,
-  `fe_groups` text NULL,
-
-  `be_template` varchar(255) NOT NULL default '',
-
+-- is default?
+  `isdefault` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -271,9 +267,9 @@ CREATE TABLE `tl_metamodel_dca_combine` (
   `tstamp` int(10) unsigned NOT NULL default '0',
   `sorting` int(10) unsigned NOT NULL default '0',
 -- fe usergroup, if any
-  `fe_group` varchar(32) NOT NULL default '',
--- fe usergroup, if any
-  `be_group` varchar(32) NOT NULL default '',
+  `fe_group` int(10) unsigned NOT NULL default '0',
+-- be usergroup, if any (keep signed as admins are -1)
+  `be_group` int(10) NOT NULL default '0',
 -- corresponding tl_metamodel_dca (palette)
   `dca_id` int(10) unsigned NOT NULL default '0',
 -- corresponding tl_metamodel_rendersetting (view)
