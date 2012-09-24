@@ -133,7 +133,8 @@ $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('TableMetaModelRenderSetting
 $GLOBALS['METAMODELS']['dependencies'] = array(
 	'metapalettes' => 'MetaPalettes',
 	'multicolumnwizard' => 'MultiColumnWizard',
-	'generalDriver' => 'DC_General'
+	'generalDriver' => 'DC_General',
+	'justtextwidgets' => 'JustTextWidgets'
 );
 
 ?>

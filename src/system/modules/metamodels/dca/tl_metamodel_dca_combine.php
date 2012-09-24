@@ -76,9 +76,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 						'inputType'              => 'justtext',
 						'eval'                   => array
 						(
-							'columnPos'          => 1,
-							'style'              => 'display:none',
-							// 'chosen'          => 'true' // slows down the MCW like hell
+							'hideHead'           => true,
+							'hideBody'           => true,
 						)
 					),
 					'fe_group'                   => array

@@ -39,7 +39,7 @@ class MetaModelDatabase extends Controller
 	 * @return BackendUser|FrontendUser|null the BackendUser when TL_MODE == 'BE', the FrontendUser when TL_MODE == 'FE' or null otherwise
 	 */
 	protected static function getUser()
-	{
+	{ 
 		if(TL_MODE=='BE')
 		{
 			return BackendUser::getInstance();
