@@ -39,6 +39,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit']            = array('Ed
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy']            = array('Copy filter setting definiton', 'Copy filter setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete']          = array('Delete filter setting', 'Delete filter setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show']            = array('Filter setting details', 'Show details of filter setting ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']          = array('Add all', 'Add all attributes to rendersetting');
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']             = '%s <strong>%s</strong> <em>[%s]</em>';
 
