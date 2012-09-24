@@ -204,8 +204,8 @@ class MetaModelDatabase extends Controller
 		parent::loadDataContainer('tl_metamodel_item');
 		parent::loadLanguageFile('tl_metamodel_item');
 
-		$arrDCA = $GLOBALS['TL_DCA']['tl_metamodel_item'];
-		$GLOBALS['TL_DCA'][$strTableName] = &$arrDCA;
+		$GLOBALS['TL_DCA'][$strTableName] = array_replace_recursive($GLOBALS['TL_DCA']['tl_metamodel_item'], (array)$GLOBALS['TL_DCA'][$strTableName]);
+		$arrDCA = &$GLOBALS['TL_DCA'][$strTableName];
 
 		$arrDCA['dca_config']['data_provider']['default']['source'] = $strTableName;
 
@@ -470,8 +470,6 @@ class MetaModelDatabase extends Controller
 				$arrDCA['list']['sorting']['icon'] = 'system/modules/metamodels/html/metamodels.png';
 			}
 		}
-
-		$GLOBALS['TL_DCA'][$strTableName] = array_replace_recursive($arrDCA, (array)$GLOBALS['TL_DCA'][$objMetaModel->getTableName()]);
 
 		$GLOBALS['TL_LANG'][$objMetaModel->getTableName()] = array_replace_recursive($GLOBALS['TL_LANG']['tl_metamodel_item'] , (array)$GLOBALS['TL_LANG'][$objMetaModel->getTableName()]);
 
