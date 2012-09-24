@@ -42,10 +42,17 @@ class MetaModelDcaCombiner extends Backend
 		}
 		$objGroups = $this->Database->execute(sprintf('SELECT id,name FROM tl_%s_group', $strTable));
 
-		$arrReturn = array();
+		$arrReturn = array();                
+                $arrReturn['default'] = 'Default';
+                
+                if($strTable == 'user')
+                {                        
+                        $arrReturn['sysAdmin'] = 'System Administrator';
+                }
+                        
 		while ($objGroups->next())
 		{
-			$arrReturn[$objGroups->id] = $objGroups->name;
+                        $arrReturn[$objGroups->id] = $objGroups->name;
 		}
 		return $arrReturn;
 	}
