@@ -313,7 +313,7 @@ class TableMetaModelDcaSetting extends Backend
 			$objDC->field,
 			$objDC->inputName,
 			$objDC->id,
-			$this->generateImage('system/modules/metamodels/html/metamodels.png', $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker'], 'style="vertical-align:top;"')
+			$this->generateImage('system/modules/metamodels/html/dca_wizard.png', $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker'], 'style="vertical-align:top;"')
 		);
 	}
 }
