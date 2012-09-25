@@ -164,17 +164,18 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 
 		'tl_class' => array
 		(
-			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class'],
-			'exclude'               => true,
-			'inputType'             => 'select',
-			'options'               => array('clr', 'clr long', 'long', 'w50', 'w50 m12'),
-			'eval'                  => array
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array
 			(
-				'includeBlankOption' => true,
-                'tl_class'           => 'w50',
-			)
+				'tl_class'            => 'w50 wizard',
+			),
+			'wizard'                  => array
+			(
+				'stylepicker'         => array('TableMetaModelDcaSetting','getStylepicker')
+			),
 		),
-
 		'legendhide' => array
 		(
 			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide'],

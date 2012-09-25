@@ -304,6 +304,18 @@ class TableMetaModelDcaSetting extends Backend
 
 		return $this->Template->parse();
 	}
+
+	public function getStylepicker($objDC)
+	{
+		return sprintf(
+			' <a href="system/modules/metamodels/popup.php?tbl=%s&fld=%s&inputName=ctrl_%s&id=%s" rel="lightbox[files 765 60%%]" data-lightbox="files 765 60%%">%s</a>',
+			$objDC->table,
+			$objDC->field,
+			$objDC->inputName,
+			$objDC->id,
+			$this->generateImage('system/modules/metamodels/html/metamodels.png', $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker'], 'style="vertical-align:top;"')
+		);
+	}
 }
 
 ?>

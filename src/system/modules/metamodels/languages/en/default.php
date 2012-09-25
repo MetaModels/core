@@ -38,4 +38,8 @@ $GLOBALS['TL_LANG']['ERR']['no_attribute_extension'] = 'Please install at least 
 $GLOBALS['TL_LANG']['ERR']['activate_extension'] = 'Please activate required extension &quot;%s&quot; (%s)';
 $GLOBALS['TL_LANG']['ERR']['install_extension'] = 'Please install required extension &quot;%s&quot; (%s)';
 
+$GLOBALS['TL_LANG']['MSC']['tl_class']['w50'] = array('half width', 'Use only half width');
+$GLOBALS['TL_LANG']['MSC']['tl_class']['clr'] = array('clr', 'clr');
+$GLOBALS['TL_LANG']['MSC']['tl_class']['m12'] = array('m12', 'm12');
+
 ?>
