@@ -157,6 +157,7 @@ class MetaModelBackendModule extends BackendModule
 	 */
 	public function generate()
 	{
+		$GLOBALS['TL_CSS'][] = 'system/modules/metamodels/html/style.css';
 		if ($this->needUserAction())
 		{
 			return parent::generate();

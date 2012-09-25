@@ -248,7 +248,6 @@ class MetaModelBackend
 	{
 		self::initializeContaoObjectStack();
 
-		$GLOBALS['TL_CSS'][] = 'system/modules/metamodels/html/style.css';
 		array_insert($GLOBALS['BE_MOD']['system'], 0, array
 		('metamodels' => array(
 			'tables'				=> array_merge(array('tl_metamodel', 'tl_metamodel_attribute', 'tl_metamodel_filter', 'tl_metamodel_filtersetting', 'tl_metamodel_rendersettings', 'tl_metamodel_rendersetting', 'tl_metamodel_dca', 'tl_metamodel_dcasetting', 'tl_metamodel_dca_combine')),
