@@ -46,13 +46,13 @@ class MetaModelBackendModule extends BackendModule
 				if (is_array($arrInactiveModules) && in_array($strExtension, $arrInactiveModules))
 				{
 					$this->addMessageEntry(
-						sprintf('Please activate required extension &quot;%s&quot; (%s)', $strDisplay, $strExtension),
+						sprintf($GLOBALS['TL_LANG']['ERR']['activate_extension'], $strDisplay, $strExtension),
 						METAMODELS_ERROR,
 						$this->addToUrl('do=settings')
 					);
 				} else {
 					$this->addMessageEntry(
-						sprintf('Please install required extension &quot;%s&quot; (%s)', $strDisplay, $strExtension),
+						sprintf($GLOBALS['TL_LANG']['ERR']['install_extension'], $strDisplay, $strExtension),
 						METAMODELS_ERROR,
 						$this->addToUrl('do=repository_catalog&view=' . $strDisplay)
 					);
@@ -66,7 +66,7 @@ class MetaModelBackendModule extends BackendModule
 		if (!$GLOBALS['METAMODELS']['attributes'])
 		{
 			$this->addMessageEntry(
-				'Please install at least one attribute extension as MetaModels without attributes do not make sense.',
+				$GLOBALS['TL_LANG']['ERR']['no_attribute_extension'],
 				METAMODELS_INFO,
 				$this->addToUrl('do=repository_catalog' . $strDisplay)
 			);

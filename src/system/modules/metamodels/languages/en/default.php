@@ -23,12 +23,19 @@ if (!defined('TL_ROOT'))
  */
 $GLOBALS['TL_LANG']['MOD']['metamodels'] = array('MetaModels', 'The MetaModels extension allows you to create own data models.');
 
-$GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord'] = 'edit filter setting %%s for filter "%s" in MetaModel "%s"';
+$GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord'] = 'Edit filter setting %%s for filter "%s" in MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label'] = 'Filter "%s" in MetaModel "%s"';
 
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'] = 'Edit "%s" for Item %%s';
 
-$GLOBALS['TL_LANG']['MSC']['no_palette'] = 'Attempt to access the metamodel "%s" without palette for current user %s.';
-$GLOBALS['TL_LANG']['MSC']['no_view'] = 'Attempt to access the metamodel "%s" without view for user %s.';
+$GLOBALS['TL_LANG']['ERR']['no_palette'] = 'Attempt to access the metamodel "%s" without palette for current user %s.';
+$GLOBALS['TL_LANG']['ERR']['no_view'] = 'Attempt to access the metamodel "%s" without view for user %s.';
+
+/**
+ * Errors
+ */
+$GLOBALS['TL_LANG']['ERR']['no_attribute_extension'] = 'Please install at least one attribute extension! MetaModels without attributes do not make sense.';
+$GLOBALS['TL_LANG']['ERR']['activate_extension'] = 'Please activate required extension &quot;%s&quot; (%s)';
+$GLOBALS['TL_LANG']['ERR']['install_extension'] = 'Please install required extension &quot;%s&quot; (%s)';
 
 ?>
