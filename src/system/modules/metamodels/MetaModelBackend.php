@@ -170,7 +170,9 @@ class MetaModelBackend
 					$strIcon = 'system/modules/metamodels/html/metamodels.png';
 				}
 
-				$GLOBALS['BE_MOD'][$objMetaModel->backendsection][$strModuleName] = array
+				$strSection = (trim($objMetaModel->backendsection)) ? $objMetaModel->backendsection : 'metamodels';
+
+				$GLOBALS['BE_MOD'][$strSection][$strModuleName] = array
 				(
 					'tables'			=> array($objMetaModel->tableName),
 					'icon'				=> $strIcon,
