@@ -14,8 +14,7 @@
  * Initialize the system
  */
 define('TL_MODE', 'BE');
-//require_once('../../initialize.php');
-require_once('/var/www/system/initialize.php');
+require_once('../../initialize.php');
 
 class DCAStylepicker_Wizard extends Backend
 {
