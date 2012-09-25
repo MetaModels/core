@@ -254,7 +254,7 @@ class TableMetaModel extends Backend
 		// count items
 		$objCount = $this->Database->prepare("SELECT count(*) AS itemCount FROM ".$arrRow['tableName'])
 					->execute();
-		$itemCount =  sprintf($GLOBALS['TL_LANG']['tl_metamodel']['itemFormat'], $objCount->itemCount,
+		$itemCount =  sprintf(' <span style="color:#b3b3b3; padding-left:3px">[' . $GLOBALS['TL_LANG']['tl_metamodel']['itemFormat'] . ']</span>', $objCount->itemCount,
 			($objCount->itemCount == 1) ? sprintf($GLOBALS['TL_LANG']['tl_metamodel']['itemSingle'])
 										: sprintf($GLOBALS['TL_LANG']['tl_metamodel']['itemPlural'])
 		);
