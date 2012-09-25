@@ -117,7 +117,7 @@ class MetaModelBackend
 				$arrCaption = array('', sprintf($GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'], $objMetaModel->getName()));
 				foreach (deserialize($objMetaModel->get('backendcaption'), true) as $arrLangEntry)
 				{
-					if ($arrLangEntry['langcode'] == self::getUser()->language)
+					if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == self::getUser()->language)
 					{
 						$arrCaption = array($arrLangEntry['description'], $arrLangEntry['label']);
 					}
@@ -182,7 +182,7 @@ class MetaModelBackend
 				$arrCaption = array($strTableCaption);
 				foreach (deserialize($objMetaModel->backendcaption, true) as $arrLangEntry)
 				{
-					if ($arrLangEntry['langcode'] == self::getUser()->language)
+					if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == self::getUser()->language)
 					{
 						$arrCaption = array($arrLangEntry['label'], $arrLangEntry['description']);
 					}
