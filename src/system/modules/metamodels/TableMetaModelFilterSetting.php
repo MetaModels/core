@@ -314,7 +314,7 @@ class TableMetaModelFilterSetting extends Backend
 	{
 		$strReturn = sprintf(
 		$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionor'],
-		$strImage,
+		'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
 		$strLabel ? $strLabel : $arrRow['type'],
 		$arrRow['type']
 		);
@@ -326,7 +326,7 @@ class TableMetaModelFilterSetting extends Backend
 	{
 		$strReturn = sprintf(
 		$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand'],
-		$strImage,
+		'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
 		$strLabel ? $strLabel : $arrRow['type'],
 		$arrRow['type']
 		);
@@ -350,7 +350,7 @@ class TableMetaModelFilterSetting extends Backend
 
 		$strReturn = sprintf(
 		$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup'],
-		$strImage,
+		'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
 		$strLabel ? $strLabel : $arrRow['type'],
 		$strAttrName,
 		($arrRow['urlparam'] ? $arrRow['urlparam'] : $strAttrColName)
@@ -388,7 +388,7 @@ class TableMetaModelFilterSetting extends Backend
 		} else {
 			$strReturn = sprintf(
 			$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_default_'],
-			$strImage,
+			'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
 			$strLabel ? $strLabel : $arrRow['type'],
 			$arrRow['type']
 			);
