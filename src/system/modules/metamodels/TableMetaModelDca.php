@@ -34,35 +34,9 @@ class TableMetaModelDca extends Backend
 	 * @param string        $strLabel the label text.
 	 * @param DataContainer $objDC    the DataContainer instance that called the method.
 	 */
-	public function getRowLabel($arrRow)
+	public function drawSetting($arrRow, $strLabel = '', DataContainer $objDC = null, $imageAttribute='', $blnReturnImage=false, $blnProtected=false)
 	{
-		return 'HULLA';
-
-		// add image
-		$strImage = '';
-		if ($arrRow['addImage'])
-		{
-			$arrSize = deserialize($arrRow['size']);
-			$strImage = sprintf('<div class="image" style="padding-top:3px"><img src="%s" alt="%s" /></div> ',
-				$this->getImage($arrRow['singleSRC'], $arrSize[0], $arrSize[1], $arrSize[2]),
-				htmlspecialchars($strLabel)
-			);
-		}
-
-		return '<span class="name">'.$strLabel. '</span>'.$strImage;
-	}
-
-	/**
-	 * Fetch the template group for the detail view of the current MetaModel module.
-	 *
-	 * @param DataContainer $objDC the datacontainer calling this method.
-	 *
-	 * @return array
-	 *
-	 */
-	public function getTemplates(DataContainer $objDC)
-	{
-		return $this->getTemplateGroup('be_metamodel_' /*, theme id how the heck shall I fetch that one? */);
+		return $strLabel . ($arrRow['isdefault']? ' <span style="color:#b3b3b3; padding-left:3px">[' . $GLOBALS['TL_LANG']['MSC']['fallback'] . ']</span>' : '');
 	}
 }
 

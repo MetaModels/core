@@ -81,6 +81,7 @@ class MetaModelRenderSettingsFactory implements IMetaModelRenderSettingsFactory
 		$objView = null;
 
 		$objView = Database::getInstance()->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE pid=? AND (id=? OR isdefault=1) ORDER BY isdefault ASC')
+										  ->limit(1)
 										  ->execute($objMetaModel->get('id'), $intId);
 		if (!$objView->numRows)
 		{
@@ -88,7 +89,7 @@ class MetaModelRenderSettingsFactory implements IMetaModelRenderSettingsFactory
 			$objView = NULL;
 		}
 
-		$objRenderSetting = new MetaModelRenderSettings($objView->row());
+		$objRenderSetting = new MetaModelRenderSettings($objView ? $objView->row(): array());
 		self::collectAttributeSettings($objMetaModel, $objRenderSetting);
 		return $objRenderSetting;
 	}

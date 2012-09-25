@@ -6,34 +6,26 @@
 	<ul>
 <?php foreach ($this->problems as $intSeverity => $arrErrorClass): ?>
 <?php switch ($intSeverity):
-			case METAMODELS_INFO:
-				$strClass = 'tl_info';
-				break;
-			case METAMODELS_ERROR:
-				$strClass = 'tl_gerror';
-				break;
-			case METAMODELS_ERROR:
-				$strClass = 'tl_gerror';
-				break;
-
-
-			endswitch;
-			?>
-
+    case METAMODELS_INFO:
+        $strClass = 'tl_info';
+        break;
+    case METAMODELS_ERROR:
+        $strClass = 'tl_error';
+        break;
+    case METAMODELS_ERROR:
+        $strClass = 'tl_error';
+        break;
+    endswitch; ?>
 <?php if (empty($arrErrorClass)) continue; ?>
-		<li class="<?php echo $strClass; ?>">
-			<ul><?php foreach ($arrErrorClass as $arrProblem): ?>
-
-				<li>
-					<?php echo $arrProblem['message']; ?>
-
-<?php if ($arrProblem['link']): ?> <a href="<?php echo $arrProblem['link']; ?>">HELP</a><?php endif; ?>
-
+		<li>
+			<ul>
+            <?php foreach ($arrErrorClass as $arrProblem): ?>
+				<li class="<?php echo $strClass; ?>">
+                <?php if ($arrProblem['link']): ?><a href="<?php echo $arrProblem['link']; ?>"><?php endif; ?><?php echo $arrProblem['message']; ?><?php if ($arrProblem['link']): ?></a><?php endif; ?>
 				</li>
-			<?php endforeach; ?></ul>
+			<?php endforeach; ?>
+            </ul>
 		</li>
 <?php endforeach; ?>
 	</ul>
 </div>
-
-

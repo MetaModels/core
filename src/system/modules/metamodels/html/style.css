@@ -3,3 +3,6 @@
 .header_add_all { padding:2px 0px 3px 20px; background-image:url("dca.png"); background-position:left center; background-repeat:no-repeat; }
 .dca_palette { color: #8AB858; padding-left: 18px; padding-right: 3px; background: url(../../../themes/default/images/palOpen.gif) left center no-repeat; }
 .dca_combine.widget td:empty { display:none; };
+
+.mm_problem_display { margin-bottom:30px; }
+.mm_problem_display ul { padding:0; list-style:none; }

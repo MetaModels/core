@@ -23,9 +23,7 @@ if (!defined('TL_ROOT'))
  */
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['name']                 = array('Name', 'Name of the palette.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']               = array('Revision date', 'Date and time of the latest revision');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['be_template']          = array('Backend template', 'The template to use in the backend when listing items.');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['be_groups']            = array('Backend user groups', 'Select any user group that may edit this MetaModel in the backend.');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['fe_groups']            = array('Frontend user groups', 'Select any user group that may edit this MetaModel in the frontend.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']            = array('Is default', 'Determines that this palette shall be used as default for the parenting MetaModel');
 
 /**
  * Legends

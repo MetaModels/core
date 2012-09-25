@@ -39,7 +39,7 @@ class MetaModelDatabase extends Controller
 	 * @return BackendUser|FrontendUser|null the BackendUser when TL_MODE == 'BE', the FrontendUser when TL_MODE == 'FE' or null otherwise
 	 */
 	protected static function getUser()
-	{ 
+	{
 		if(TL_MODE=='BE')
 		{
 			return BackendUser::getInstance();
@@ -50,102 +50,116 @@ class MetaModelDatabase extends Controller
 		return null;
 	}
 
+	/**
+	 * Fetch the palette view configuration valid for the given group ids.
+	 *
+	 * @param int    $intMetaModel the MetaModel for which a combination shall be retrieved.
+	 *
+	 * @param string $strGroupCol  the group column that shall be examined. either fe_group or be_group
+	 *
+	 * @param int[]  $arrGroupIds  the group ids that are valid
+	 *
+	 * @return array|null the matching combination or null if no combination has been found.
+	 *
+	 */
+	protected function getPaletteCombinationRow($intMetaModel, $strGroupCol, $arrGroupIds)
+	{
+		$objPossibleMatches = Database::getInstance()
+			->prepare(sprintf('SELECT * FROM tl_metamodel_dca_combine WHERE pid=? AND %s IN (%s)', $strGroupCol, implode(',', $arrGroupIds)))
+			->limit(1)
+			->execute($intMetaModel);
+		// Check if we have a result
+		return ($objPossibleMatches->numRows) ? $objPossibleMatches->row() : null;
+	}
+
+	/**
+	 * Get the default combination of palette and view (if any has been defined).
+	 *
+	 * @param int $intMetaModel the MetaModel for which a combination shall be retrieved.
+	 *
+	 * @return array|null the matching combination or null if no combination has been found.
+	 *
+	 */
+	protected function getPaletteCombinationDefault($intMetaModel)
+	{
+		$objDca = Database::getInstance()
+			->prepare('SELECT * FROM tl_metamodel_dca WHERE pid=? AND isdefault=1')
+			->limit(1)
+			->execute($intMetaModel);
+
+		$objRender = Database::getInstance()
+			->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE pid=? AND isdefault=1')
+			->limit(1)
+			->execute($intMetaModel);
+
+		return array
+		(
+			'dca_id' => $objDca->id,
+			'view_id' => $objRender->id,
+		);
+	}
+
+	/**
+	 * Get the default combination of palette and view (if any has been defined) for the current user.
+	 *
+	 * @param IMetaModel $objMetaModel the MetaModel for which a combination shall be retrieved.
+	 *
+	 * @return array|null the matching combination or null if no combination has been found.
+	 *
+	 */
 	protected function getPaletteCombination($objMetaModel)
 	{
 		$objUser = self::getUser();
 		if (get_class($objUser) == 'BackendUser')
 		{
 			$strGrpCol = 'be_group';
-                        $isAdmin = $objUser->admin;
+			if ($objUser->admin)
+			{
+				$arrMatch = $this->getPaletteCombinationRow($objMetaModel->get('id'), $strGrpCol, array(-1));
+				if ($arrMatch)
+				{
+					return $arrMatch;
+				}
+			}
 		} else {
 			$strGrpCol = 'fe_group';
 		}
 
-		// there might be a NULL in there :/
-                // SH: Yes. Admins have no groups and user might have one but it is a not must have. 
-                // I would prefer a default group for both, fe and be groups.
-                
-                // If admin try to get this group first
-                if($isAdmin == true)
-                {
-                    $objPossibleMatches = Database::getInstance()
-                            ->prepare(sprintf('SELECT * FROM tl_metamodel_dca_combine WHERE pid=? AND %s = "sysAdmin"', $strGrpCol))
-                            ->limit(1)
-                            ->execute($objMetaModel->get('id'));
-                    
-                    // Check if we have a result
-                    if($objPossibleMatches->numRows != 0)
-                    {
-                        return $objPossibleMatches->row();
-                    }
-                }
-                
-                // Try to get the group
-                $arrGroups = array_filter($objUser->groups);                
-               
-                if(count($arrGroups) != 0)
-                {
-                     $objPossibleMatches = Database::getInstance()->prepare(
-			sprintf('SELECT * FROM tl_metamodel_dca_combine WHERE pid=? AND %s IN (%s) ORDER BY sorting ASC',
-				$strGrpCol,
-				implode(',', $arrGroups))
-			)->limit(1)
-			->execute($objMetaModel->get('id'));
-                     
-                     // Check if we have a result
-                    if($objPossibleMatches->numRows != 0)
-                    {
-                        return $objPossibleMatches->row();
-                    }
-                }     
-                
-                // Try to load the default groups
-                $objPossibleMatches = Database::getInstance()
-                            ->prepare(sprintf('SELECT * FROM tl_metamodel_dca_combine WHERE pid=? AND %s = "default"', $strGrpCol))
-                            ->limit(1)
-                            ->execute($objMetaModel->get('id'));
-                 
-                // Return false or a group
-		return $objPossibleMatches->row();
+		// Try to get the group
+		// there might be a NULL in there as BE admins have no groups and user might have one but it is a not must have.
+		// I would prefer a default group for both, fe and be groups.
+		$arrGroups = array_filter($objUser->groups);
+		if(count($arrGroups) > 0)
+		{
+			$arrMatch = $this->getPaletteCombinationRow($objMetaModel->get('id'), $strGrpCol, $arrGroups);
+			if ($arrMatch)
+			{
+				return $arrMatch;
+			}
+		}
+
+		return $this->getPaletteCombinationDefault($objMetaModel->get('id'));
 	}
 
 	/**
-	 * Create the data container of a metamodel table.
+	 * Retrieves a palette from the database and populates the passed DCA 'fields' section with the correct settings.
 	 *
-	 * @param string $strTableName the name of the meta model table that shall be created.
+	 * @param int        $intPaletteId the id of the palette to retrieve
 	 *
-	 * @return bool true on success, false otherwise.
+	 * @param IMetaModel $objMetaModel the MetaModel for which the palette shall be built.
+	 *
+	 * @param array      $arrDCA       the DCA that shall get populated (used by reference).
+	 *
+	 * @return string the palette string.
 	 */
-	public function createDataContainer($strTableName)
+	protected function getPaletteAndFields($intPaletteId, $objMetaModel, &$arrDCA)
 	{
-		if(!in_array($strTableName, MetaModelFactory::getAllTables()))
-			return false;
-
-		// call the loadDataContainer from Controller.php for the base DCA.
-		parent::loadDataContainer('tl_metamodel_item');
-		parent::loadLanguageFile('tl_metamodel_item');
-
-		$arrDCA = $GLOBALS['TL_DCA']['tl_metamodel_item'];
-
-		$arrDCA['dca_config']['data_provider']['default']['source'] = $strTableName;
-
-		$objMetaModel=MetaModelFactory::byTableName($strTableName);
-		if ($objMetaModel->isTranslated())
-		{
-			$this->loadLanguageFile('languages');
-		}
-
-		$arrCombination = $this->getPaletteCombination($objMetaModel);
-		if (!$arrCombination)
-		{
-			$this->log('Attempt to access the metamodel "' . $objMetaModel->getName() . '" without palette combination for current user.', 'MetaModelDatabase createDataContainer()', TL_ERROR);
-			$this->redirect('contao/main.php?act=error');
-		}
-
-		$arrDCA['config']['metamodel_view'] = $arrCombination['view_id'];
-
 		$strPalette='';
-		$objDCASettings = Database::getInstance()->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=?')->execute($arrCombination['dca_id']);
+		$objDCASettings = Database::getInstance()
+			->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=?')
+			->limit(1)
+			->execute($intPaletteId);
+
 		while ($objDCASettings->next())
 		{
 			switch ($objDCASettings->dcatype)
@@ -171,7 +185,64 @@ class MetaModelDatabase extends Controller
 					throw new Exception("Unknown palette rendering mode " . $objDCASettings->dcatype);
 			}
 		}
-		$arrDCA['palettes']['default'] = $strPalette;
+		return $strPalette;
+	}
+
+	/**
+	 * Create the data container of a metamodel table.
+	 *
+	 * @param string $strTableName the name of the meta model table that shall be created.
+	 *
+	 * @return bool true on success, false otherwise.
+	 */
+	public function createDataContainer($strTableName)
+	{
+		if(!in_array($strTableName, MetaModelFactory::getAllTables()))
+			return false;
+
+		// call the loadDataContainer from Controller.php for the base DCA.
+		parent::loadDataContainer('tl_metamodel_item');
+		parent::loadLanguageFile('tl_metamodel_item');
+
+		$GLOBALS['TL_DCA'][$strTableName] = array_replace_recursive($GLOBALS['TL_DCA']['tl_metamodel_item'], (array)$GLOBALS['TL_DCA'][$strTableName]);
+		$arrDCA = &$GLOBALS['TL_DCA'][$strTableName];
+
+		$arrDCA['dca_config']['data_provider']['default']['source'] = $strTableName;
+
+		$objMetaModel=MetaModelFactory::byTableName($strTableName);
+		if ($objMetaModel->isTranslated())
+		{
+			$this->loadLanguageFile('languages');
+		}
+
+		$arrCombination = $this->getPaletteCombination($objMetaModel);
+
+		if (!$arrCombination['dca_id'])
+		{
+			$strMessage = sprintf($GLOBALS['TL_LANG']['MSC']['no_palette'], $objMetaModel->getName(), self::getUser()->username);
+			MetaModelBackendModule::addMessageEntry(
+				$strMessage,
+				METAMODELS_ERROR,
+				$this->addToUrl('do=metamodels&table=tl_metamodel_dca&id=' . $objMetaModel->get('id'))
+			);
+			$this->log($strMessage, 'MetaModelDatabase createDataContainer()', TL_ERROR);
+			return true;
+		}
+
+		if (!$arrCombination['view_id'])
+		{
+			$strMessage = sprintf($GLOBALS['TL_LANG']['MSC']['no_view'], $objMetaModel->getName(), self::getUser()->username);
+			MetaModelBackendModule::addMessageEntry(
+				$strMessage,
+				METAMODELS_ERROR,
+				$this->addToUrl('do=metamodels&table=tl_metamodel_rendersettings&id=' . $objMetaModel->get('id'))
+			);
+			$this->log($strMessage, 'MetaModelDatabase createDataContainer()', TL_ERROR);
+			return true;
+		}
+
+		$arrDCA['config']['metamodel_view'] = $arrCombination['view_id'];
+		$arrDCA['palettes']['default'] = $this->getPaletteAndFields($arrCombination['dca_id'], $objMetaModel, $arrDCA);
 
 		$arrDCA['config']['label'] = $objMetaModel->get('name');
 
@@ -399,8 +470,6 @@ class MetaModelDatabase extends Controller
 				$arrDCA['list']['sorting']['icon'] = 'system/modules/metamodels/html/metamodels.png';
 			}
 		}
-
-		$GLOBALS['TL_DCA'][$strTableName] = array_replace_recursive($arrDCA, (array)$GLOBALS['TL_DCA'][$objMetaModel->getTableName()]);
 
 		$GLOBALS['TL_LANG'][$objMetaModel->getTableName()] = array_replace_recursive($GLOBALS['TL_LANG']['tl_metamodel_item'] , (array)$GLOBALS['TL_LANG'][$objMetaModel->getTableName()]);
 

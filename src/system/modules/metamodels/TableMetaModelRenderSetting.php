@@ -211,6 +211,114 @@ class TableMetaModelRenderSetting extends Backend
 
 		return $this->getTemplateGroup('mm_attr_' . $objAttribute->get('type') /*, theme id how the heck shall I fetch that one? */);
 	}
+
+	/**
+	 * Fetch the template group for the detail view of the current MetaModel module.
+	 *
+	 * @param DataContainer $objDC the datacontainer calling this method.
+	 *
+	 * @return array
+	 *
+	 */
+	/**
+	 * Generate module
+	 */
+	public function addAll()
+	{
+		$this->loadLanguageFile('default');
+		$this->loadLanguageFile('tl_metamodel_rendersetting');
+
+		$this->Template = new BackendTemplate('be_autocreateview');
+
+		$this->Template->cacheMessage = '';
+		$this->Template->updateMessage = '';
+
+		$this->Template->href = $this->getReferer(true);
+		$this->Template->headline = $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall'][1];
+
+		// severity: error, confirm, info, new
+		$arrMessages = array();
+
+		$objPalette = $this->Database->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')->execute($this->Input->get('id'));
+
+		$objMetaModel = MetaModelFactory::byId($objPalette->pid);
+
+		$objAlreadyExist = $this->Database->prepare('SELECT * FROM tl_metamodel_rendersetting WHERE pid=?')->execute($this->Input->get('id'));
+
+		$arrKnown = array();
+		$intMax = 128;
+		while ($objAlreadyExist->next())
+		{
+			$arrKnown[$objAlreadyExist->attr_id] = $objAlreadyExist->row();
+			if ($intMax< $objAlreadyExist->sorting)
+			{
+				$intMax = $objAlreadyExist->sorting;
+			}
+		}
+
+		$blnWantPerform = false;
+		// perform the labour work
+		if ($this->Input->post('act') == 'perform')
+		{
+			// loop over all attributes now.
+			foreach ($objMetaModel->getAttributes() as $objAttribute)
+			{
+				if (!array_key_exists($objAttribute->get('id'), $arrKnown))
+				{
+					$arrData = array_replace_recursive(
+						(array)$objAttribute->getDefaultRenderSettings(),
+						array(
+							'pid'      => $this->Input->get('id'),
+							'sorting'  => $intMax,
+							'tstamp'   => time(),
+							'attr_id'  => $objAttribute->get('id'),
+						)
+					);
+
+					$intMax *= 128;
+					$this->Database->prepare('INSERT INTO tl_metamodel_rendersetting %s')->set($arrData)->execute();
+					$arrMessages[] = array
+					(
+						'severity' => 'confirm',
+						'message'  => sprintf('added attribute %s to rendersetting.', $objAttribute->getName()),
+					);
+				}
+			}
+		} else {
+			// loop over all attributes now.
+			foreach ($objMetaModel->getAttributes() as $objAttribute)
+			{
+				if (array_key_exists($objAttribute->get('id'), $arrKnown))
+				{
+					$arrMessages[] = array
+					(
+						'severity' => 'info',
+						'message'  => sprintf('Attribute %s already in rendersetting.', $objAttribute->getName()),
+					);
+				} else {
+					$arrMessages[] = array
+					(
+						'severity' => 'confirm',
+						'message'  => sprintf('will add attribute %s to rendersetting.', $objAttribute->getName()),
+					);
+					$blnWantPerform = true;
+				}
+			}
+		}
+
+		if ($blnWantPerform)
+		{
+			$this->Template->action = ampersand($this->Environment->request);
+			$this->Template->submit = $GLOBALS['TL_LANG']['MSC']['continue'];
+		} else {
+			$this->Template->action = ampersand($this->getReferer(true));
+			$this->Template->submit = $GLOBALS['TL_LANG']['MSC']['saveNclose'];
+		}
+
+		$this->Template->error = $arrMessages;
+
+		return $this->Template->parse();
+	}
 }
 
 ?>

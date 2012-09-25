@@ -12,7 +12,7 @@ class MetaModelBackendModule extends BackendModule
 	protected $strTemplate = 'be_detectedproblems';
 
 
-	protected $arrMessages = array();
+	protected static $arrMessages = array();
 
 	/**
 	 * Buffer a message in the stack.
@@ -23,9 +23,9 @@ class MetaModelBackendModule extends BackendModule
 	 *
 	 * @param string $strHelpfulLink (backend)-link to some location to resolve the problem.
 	 */
-	public function addMessage($strOutput, $intSeverity = METAMODELS_INFO, $strHelpfulLink = '')
+	public static function addMessageEntry($strOutput, $intSeverity = METAMODELS_INFO, $strHelpfulLink = '')
 	{
-		$this->arrMessages[$intSeverity][] = array('message' => $strOutput, 'link' => $strHelpfulLink);
+		self::$arrMessages[$intSeverity][] = array('message' => $strOutput, 'link' => $strHelpfulLink);
 	}
 
 	/**
@@ -45,13 +45,13 @@ class MetaModelBackendModule extends BackendModule
 			{
 				if (is_array($arrInactiveModules) && in_array($strExtension, $arrInactiveModules))
 				{
-					$this->addMessage(
+					$this->addMessageEntry(
 						sprintf('Please activate required extension &quot;%s&quot; (%s)', $strDisplay, $strExtension),
 						METAMODELS_ERROR,
 						$this->addToUrl('do=settings')
 					);
 				} else {
-					$this->addMessage(
+					$this->addMessageEntry(
 						sprintf('Please install required extension &quot;%s&quot; (%s)', $strDisplay, $strExtension),
 						METAMODELS_ERROR,
 						$this->addToUrl('do=repository_catalog&view=' . $strDisplay)
@@ -65,7 +65,7 @@ class MetaModelBackendModule extends BackendModule
 	{
 		if (!$GLOBALS['METAMODELS']['attributes'])
 		{
-			$this->addMessage(
+			$this->addMessageEntry(
 				'Please install at least one attribute extension as MetaModels without attributes do not make sense.',
 				METAMODELS_INFO,
 				$this->addToUrl('do=repository_catalog' . $strDisplay)
@@ -89,8 +89,7 @@ class MetaModelBackendModule extends BackendModule
 				$this->$strClass->perform($this->objDc, $this);
 			}
 		}
-
-		return count($this->arrMessages)> 0;
+		return count(self::$arrMessages)> 0;
 	}
 
 	protected function runDC()
@@ -172,9 +171,8 @@ class MetaModelBackendModule extends BackendModule
 	protected function compile()
 	{
 		$this->Template->href = $this->getReferer(true);
-		$this->Template->problems = $this->arrMessages;
+		$this->Template->problems = self::$arrMessages;
 	}
 }
-
 
 ?>
