@@ -72,7 +72,7 @@ parent.REQUEST_TOKEN = REQUEST_TOKEN;
 		<?php if(strlen($item['image'])):?>
 			<img src="<?php echo $this->getImage($item['image'],80,80,'proportional');?>" alt="" style="float:left;cursor:pointer;" rel="<?php echo $item['image'];?>"/>
 		<?php endif;?>
-		<div style="margin-left:100px">
+		<div>
 			<h2><?php echo $item['label'][0];?> <span style="font-weight:normal">(<?php echo $item['cssclass'];?>)</span></h2>
 			<?php if(strlen($item['label'][1])):?><p class="description"><?php echo $item['label'][1];?></p><?php endif;?>
 		</div>

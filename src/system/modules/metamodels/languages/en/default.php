@@ -38,8 +38,10 @@ $GLOBALS['TL_LANG']['ERR']['no_attribute_extension'] = 'Please install at least 
 $GLOBALS['TL_LANG']['ERR']['activate_extension'] = 'Please activate required extension &quot;%s&quot; (%s)';
 $GLOBALS['TL_LANG']['ERR']['install_extension'] = 'Please install required extension &quot;%s&quot; (%s)';
 
-$GLOBALS['TL_LANG']['MSC']['tl_class']['w50'] = array('half width', 'Use only half width');
-$GLOBALS['TL_LANG']['MSC']['tl_class']['clr'] = array('clr', 'clr');
-$GLOBALS['TL_LANG']['MSC']['tl_class']['m12'] = array('m12', 'm12');
+$GLOBALS['TL_LANG']['MSC']['tl_class']['w50']         = array('w50', 'Set the field width to 50% and float it (float:left).');
+$GLOBALS['TL_LANG']['MSC']['tl_class']['clr']         = array('clr', 'Clear all floats.');
+$GLOBALS['TL_LANG']['MSC']['tl_class']['m12']         = array('m12', 'Add a 12 pixel top margin to the element (used for single checkboxes).');
+$GLOBALS['TL_LANG']['MSC']['tl_class']['wizard']      = array('wizard', 'Shorten the input field so there is enough room for the wizard button (e.g. date picker fields).');
+$GLOBALS['TL_LANG']['MSC']['tl_class']['long']        = array('long', 'Make the text input field span two columns.');
 
 ?>

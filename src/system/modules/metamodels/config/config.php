@@ -144,18 +144,33 @@ $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 	'cssclass' => 'w50',
 	'image' => ''
 );
+
 $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 (
 	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['clr'],
 	'cssclass' => 'clr',
 	'image' => ''
 );
+
 $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 (
-	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['m12'],
-	'cssclass' => 'm12',
-	'image' => ''
+    'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['long'],
+    'cssclass' => 'long',
+    'image' => ''
 );
 
+$GLOBALS['PALETTE_STYLE_PICKER'][] = array
+(
+    'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['wizard'],
+    'cssclass' => 'wizard',
+    'image' => ''
+);
+
+$GLOBALS['PALETTE_STYLE_PICKER'][] = array
+(
+    'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['m12'],
+    'cssclass' => 'm12',
+    'image' => ''
+);
 
 ?>
