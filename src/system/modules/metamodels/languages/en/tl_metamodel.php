@@ -89,7 +89,7 @@ $GLOBALS['TL_LANG']['tl_metamodel']['rendertypes']['ctable']     = 'As child tab
 /**
  * Misc.
  */
-$GLOBALS['TL_LANG']['tl_metamodel']['itemFormat'] = ' <span style="color:#b3b3b3;"><em>(%s %s)</em></span>';
+$GLOBALS['TL_LANG']['tl_metamodel']['itemFormat'] = '%s %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemSingle'] = 'item';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemPlural'] = 'items';
 

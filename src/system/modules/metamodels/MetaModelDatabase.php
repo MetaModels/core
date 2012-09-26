@@ -157,7 +157,6 @@ class MetaModelDatabase extends Controller
 		$strPalette='';
 		$objDCASettings = Database::getInstance()
 			->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=?')
-			->limit(1)
 			->execute($intPaletteId);
 
 		while ($objDCASettings->next())
@@ -219,7 +218,7 @@ class MetaModelDatabase extends Controller
 
 		if (!$arrCombination['dca_id'])
 		{
-			$strMessage = sprintf($GLOBALS['TL_LANG']['MSC']['no_palette'], $objMetaModel->getName(), self::getUser()->username);
+			$strMessage = sprintf($GLOBALS['TL_LANG']['ERR']['no_palette'], $objMetaModel->getName(), self::getUser()->username);
 			MetaModelBackendModule::addMessageEntry(
 				$strMessage,
 				METAMODELS_ERROR,
@@ -231,7 +230,7 @@ class MetaModelDatabase extends Controller
 
 		if (!$arrCombination['view_id'])
 		{
-			$strMessage = sprintf($GLOBALS['TL_LANG']['MSC']['no_view'], $objMetaModel->getName(), self::getUser()->username);
+			$strMessage = sprintf($GLOBALS['TL_LANG']['ERR']['no_view'], $objMetaModel->getName(), self::getUser()->username);
 			MetaModelBackendModule::addMessageEntry(
 				$strMessage,
 				METAMODELS_ERROR,

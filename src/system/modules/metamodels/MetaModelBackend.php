@@ -117,7 +117,7 @@ class MetaModelBackend
 				$arrCaption = array('', sprintf($GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'], $objMetaModel->getName()));
 				foreach (deserialize($objMetaModel->get('backendcaption'), true) as $arrLangEntry)
 				{
-					if ($arrLangEntry['langcode'] == self::getUser()->language)
+					if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == self::getUser()->language)
 					{
 						$arrCaption = array($arrLangEntry['description'], $arrLangEntry['label']);
 					}
@@ -170,7 +170,9 @@ class MetaModelBackend
 					$strIcon = 'system/modules/metamodels/html/metamodels.png';
 				}
 
-				$GLOBALS['BE_MOD'][$objMetaModel->backendsection][$strModuleName] = array
+				$strSection = (trim($objMetaModel->backendsection)) ? $objMetaModel->backendsection : 'metamodels';
+
+				$GLOBALS['BE_MOD'][$strSection][$strModuleName] = array
 				(
 					'tables'			=> array($objMetaModel->tableName),
 					'icon'				=> $strIcon,
@@ -180,7 +182,7 @@ class MetaModelBackend
 				$arrCaption = array($strTableCaption);
 				foreach (deserialize($objMetaModel->backendcaption, true) as $arrLangEntry)
 				{
-					if ($arrLangEntry['langcode'] == self::getUser()->language)
+					if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == self::getUser()->language)
 					{
 						$arrCaption = array($arrLangEntry['label'], $arrLangEntry['description']);
 					}
@@ -246,7 +248,6 @@ class MetaModelBackend
 	{
 		self::initializeContaoObjectStack();
 
-		$GLOBALS['TL_CSS'][] = 'system/modules/metamodels/html/style.css';
 		array_insert($GLOBALS['BE_MOD']['system'], 0, array
 		('metamodels' => array(
 			'tables'				=> array_merge(array('tl_metamodel', 'tl_metamodel_attribute', 'tl_metamodel_filter', 'tl_metamodel_filtersetting', 'tl_metamodel_rendersettings', 'tl_metamodel_rendersetting', 'tl_metamodel_dca', 'tl_metamodel_dcasetting', 'tl_metamodel_dca_combine')),

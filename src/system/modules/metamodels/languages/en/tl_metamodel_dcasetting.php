@@ -25,6 +25,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype']         = array('Type'
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']         = array('Attribute', 'Attribute this setting relates to.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']        = array('Custom Template to use for generating', 'Select the template that shall be used for the selected attribute. Valid template files start with &quot;mm_<type>&quot; where the type name is put for &lt;type&gt;');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']        = array('Backend class', 'Here you can select one of the backend class.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker']     = 'Style picker';
 
 /**
  * Legends

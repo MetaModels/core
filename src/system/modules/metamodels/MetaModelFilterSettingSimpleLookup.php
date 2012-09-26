@@ -12,13 +12,19 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 			{
 				$arrMyFilterUrl[$objAttribute->getColName()] = $arrFilterUrl[$this->get('urlparam')];
 			}
-			// call prepare now.
-			$objFilterRule = $objAttribute->parseFilterUrl($arrMyFilterUrl);
-			if ($objFilterRule)
+			if ($arrMyFilterUrl[$objAttribute->getColName()])
 			{
-				$objFilter->addFilterRule($objFilterRule);
+				// call prepare now.
+				$objFilterRule = $objAttribute->parseFilterUrl($arrMyFilterUrl);
+				if ($objFilterRule)
+				{
+					$objFilter->addFilterRule($objFilterRule);
+					return;
+				}
 			}
 		}
+		// either no attribute found or no match in url, do not return anyting.
+		$objFilter->addFilterRule(new MetaModelFilterRuleStaticIdList(array()));
 	}
 
 	public function generateFilterUrlFrom(IMetaModelItem $objItem, IMetaModelRenderSettings $objRenderSetting)

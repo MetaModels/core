@@ -69,16 +69,18 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 			'format'                  => 'unused',
 //			'label_callback'          => array('MetaModelDatabase', 'labelCallback'),
 		),
-		'global_operations' => array
-		(
-			'all' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
-				'href'                => 'act=select',
-				'class'               => 'header_edit_all',
-				'attributes'          => 'onclick="Backend.getScrollOffset();"'
-			)
-		),
+        
+        // not yet implemented
+        /* 'global_operations' => array
+        (
+            'all' => array
+            (
+                'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
+                'href'                => 'act=select',
+                'class'               => 'header_edit_all',
+                'attributes'          => 'onclick="Backend.getScrollOffset();"'
+            )
+        ), */
 
 		'operations' => array
 		(

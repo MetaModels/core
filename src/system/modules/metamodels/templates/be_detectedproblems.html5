@@ -9,8 +9,8 @@
     case METAMODELS_INFO:
         $strClass = 'tl_info';
         break;
-    case METAMODELS_ERROR:
-        $strClass = 'tl_error';
+    case METAMODELS_WARN:
+        $strClass = 'tl_warning';
         break;
     case METAMODELS_ERROR:
         $strClass = 'tl_error';
