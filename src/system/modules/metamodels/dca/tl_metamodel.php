@@ -103,13 +103,6 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'href'                => 'act=edit',
 				'icon'                => 'edit.gif',
 			),
-			'copy' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['copy'],
-				'href'                => 'act=copy',
-				'icon'                => 'copy.gif',
-				'button_callback'     => array('TableMetaModel', 'buttonCallback')
-			),
 			'delete' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['delete'],
