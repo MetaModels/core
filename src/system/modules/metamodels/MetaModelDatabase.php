@@ -157,7 +157,6 @@ class MetaModelDatabase extends Controller
 		$strPalette='';
 		$objDCASettings = Database::getInstance()
 			->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=?')
-			->limit(1)
 			->execute($intPaletteId);
 
 		while ($objDCASettings->next())
