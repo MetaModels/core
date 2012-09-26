@@ -1,6 +1,7 @@
 /* MetaModels style sheet */
 .header_css_fields { padding:2px 0px 3px 20px; background-image:url("fields.png"); background-position:left center; background-repeat:no-repeat; }
 .header_add_all { padding:2px 0px 3px 20px; background-image:url("dca.png"); background-position:left center; background-repeat:no-repeat; }
+.rendersetting_add_all { background-image:url("rendersettings.png"); }
 .dca_palette { color: #8AB858; padding-left: 18px; padding-right: 3px; background: url(../../../themes/default/images/palOpen.gif) left center no-repeat; }
 .dca_combine.widget td:empty { display:none; };
 
