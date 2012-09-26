@@ -28,6 +28,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']        = array('Backe
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker']     = 'Stylepicker';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']      = array('Hide legend','Hide the legend on default.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']     = array('Legend title','Here you can enter the legend title.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']   = 'Language';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']      = 'Legend title';
 
 /**
  * Legends

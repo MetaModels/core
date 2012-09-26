@@ -79,7 +79,7 @@ class TableMetaModelAttribute extends Backend
 							'options'               => $arrLanguages,
 							'eval'                  => array
 							(
-								'valign'            => 'top'
+								'valign'            => 'center'
 							)
 						),
 						'value' => array

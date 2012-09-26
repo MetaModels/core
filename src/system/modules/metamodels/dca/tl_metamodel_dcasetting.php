@@ -31,6 +31,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 		'ptable'                      => 'tl_metamodel_dca',
 		'switchToEdit'                => true,
 		'enableVersioning'            => false,
+        'onload_callback'             => array
+        (
+            array('TableMetaModelDcaSetting', 'onLoadCallback')
+        )
 	),
 
 	// List
@@ -189,12 +193,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 		'legendtitle' => array
 		(
 			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle'],
-			'exclude'               => true,
-			'inputType'             => 'text',
-			'eval'                  => array
-			(
-				'tl_class'            => 'w50',
-			)
+			'exclude'               => true
 		)
 
 	)
