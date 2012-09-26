@@ -54,6 +54,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
     (
         'sorting' => array
         (
+			'disableGrouping'         => true,
             'mode'                    => 4,
 //            'fields'                  => array('sorting'),
             'panelLayout'             => 'filter,limit',
