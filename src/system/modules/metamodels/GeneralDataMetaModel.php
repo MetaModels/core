@@ -52,9 +52,20 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	 *
 	 * @return void
 	 */
-	public function delete($item)
+	public function delete($varItem)
 	{
-		// Not impl now
+		$objModelItem = null;
+		// determine the id
+		if (is_object($varItem) && ($varItem instanceof GeneralModelMetaModel))
+		{
+			$objModelItem = $varItem->getItem();
+		} else {
+			$objModelItem = $this->objMetaModel->findById($varItem);
+		}
+		if ($objModelItem)
+		{
+			$this->objMetaModel->delete($objModelItem);
+		}
 	}
 
 	/**
