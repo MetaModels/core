@@ -180,12 +180,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 		(
 			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide'],
 			'exclude'               => true,
-			'inputType'             => 'select',
-			'options'               => array(':hide'),
+			'inputType'             => 'checkbox',
 			'eval'                  => array
 			(
-				'tl_class'            => 'w50',
-				'includeBlankOption' => true,
+				'tl_class'          => 'clr m12'
 			)
 		),
 		'legendtitle' => array
