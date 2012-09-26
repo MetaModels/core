@@ -131,6 +131,17 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
             'metamodeloverview'    => array('sortingField', 'filteredField', 'searchableField'),
             'backenddisplay'    => array('titleField', 'width50', 'insertBreak'),
         ),
+        // WARNING: even though the following are empty, we have to keep them as otherwise
+        // metapalettes will have no way for deriving the palettes. - They need the index. :)
+
+        // default palette for MetaModelAttributeSimple derived types
+        '_simpleattribute_ extends _base_' => array
+        (
+        ),
+        // default palette for MetaModelAttributeComplex derived types
+        '_complexattribute_ extends _base_' => array
+        (
+        ),
     ),
     // Subpalettes
     'metasubpalettes' => array
