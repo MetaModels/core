@@ -304,10 +304,11 @@ class TableMetaModel extends Backend
 
 	public function getRenderTypes(DataContainer $objDC)
 	{
-		if (!$objDC->getCurrentModel()->getProperty('varsupport'))
-		{
-			return array('standalone', 'ctable', 'selftree');
-		}
+        if (!$objDC->getCurrentModel()->getProperty('varsupport'))
+        {
+            return array('standalone', 'ctable');
+            // do not forget the selftree option
+        }
 		return array('standalone', 'ctable');
 	}
 

@@ -176,8 +176,7 @@ class TableMetaModelDcaSetting extends Backend
 			case 'legend':
 				$strReturn = sprintf(
 					$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legend_row'],
-					$arrRow['legendtitle'] ? $arrRow['legendtitle'] : 'legend',
-					$arrRow['legenddefault']
+					$arrRow['legendtitle'] ? $arrRow['legendtitle'] : 'legend', $arrRow['legendhide'] ? ':hide' : ''
 				);
 				return $strReturn;
 			break;
