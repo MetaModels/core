@@ -284,28 +284,6 @@ CREATE TABLE `tl_metamodel_dca_combine` (
 -- --------------------------------------------------------
 
 --
--- Table `tl_user_group`
---
-
-CREATE TABLE `tl_user_group` (
-  `metamodels` blob NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
--- --------------------------------------------------------
-
---
--- Table `tl_user`
---
-
-CREATE TABLE `tl_user` (
-  `metamodels` blob NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
--- --------------------------------------------------------
-
---
 -- Table `tl_module`
 --
 

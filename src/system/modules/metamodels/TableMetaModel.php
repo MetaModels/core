@@ -35,6 +35,7 @@ class TableMetaModel extends Backend
 
 	public function onLoadCallback(DataContainer $objDC)
 	{
+		// TODO: only checks for admin, is this really needed anymore?
 		MetaModelPermissions::checkPermission($this->User, $this->Input->get('act'), $this->Input->get('id'));
 		$this->checkRemoveTable($objDC);
 	}

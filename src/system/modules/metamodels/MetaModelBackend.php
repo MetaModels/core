@@ -281,11 +281,6 @@ class MetaModelBackend
 			$objMetaModels = Database::getInstance()->prepare('SELECT * FROM tl_metamodel')->execute();
 			while ($objMetaModels->next())
 			{
-				// sort out all that may not be viewed.
-				if (!MetaModelPermissions::hasUserAccessTo(self::getUser(), $objMetaModels->id))
-				{
-					continue;
-				}
 				self::handleModel($objMetaModels);
 			}
 
