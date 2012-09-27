@@ -185,29 +185,14 @@ class TableMetaModelAttribute extends TableMetaModelHelper
 	 */
 	public function fieldTypesCallback($objDC)
 	{
-		if (method_exists($objDC, 'getCurrentModel'))
-		{
-			$objMetaModel = MetaModelFactory::byId($objDC->getCurrentModel()->getProperty('pid'));
-		} else {
-			$objMetaModel = MetaModelFactory::byId($objDC->activeRecord->pid);
-		}
+		$objMetaModel = MetaModelFactory::byId($objDC->getCurrentModel()->getProperty('pid'));
 
 		return MetaModelAttributeFactory::getAttributeTypes($objMetaModel->isTranslated(), $objMetaModel->hasVariants());
 	}
 
 	protected function getMetaModelFromDC($objDC)
 	{
-		// check for predefined values.
-		$objDB = Database::getInstance();
-		// fetch current values of the field from DB.
-		$objField = $objDB->prepare('
-			SELECT *
-			FROM tl_metamodel_attribute
-			WHERE id=?'
-		)
-		->limit(1)
-		->executeUncached($objDC->id);
-		return MetaModelFactory::byId($objField->pid);
+		return MetaModelFactory::byId($objDC->getCurrentModel()->getProperty('pid'));
 	}
 
 	public function decodeNameAndDescription($varValue, $objDC)
