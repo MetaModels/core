@@ -31,10 +31,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 		'ptable'                      => 'tl_metamodel_dca',
 		'switchToEdit'                => true,
 		'enableVersioning'            => false,
-		'onmodel_update'             => array
+		'onmodel_update'              => array
+		(
+			array('TableMetaModelDcaSetting', 'onModelUpdatedCallback')
+		),
+		'onmodel_beforeupdate'        => array
 		(
 			array('TableMetaModelDcaSetting', 'onModelUpdatedCallback')
 		)
+
 	),
 
 	// List
