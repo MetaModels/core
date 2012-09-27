@@ -342,10 +342,9 @@ class MetaModelDatabase extends Controller
 				)
 			);
 
-			$strIdOverride = 'id_' . $objMetaModel->get('ptable');
-			if ($strIdOverride)
+			if ($objMetaModel->get('ptable'))
 			{
-				$pidValue = $this->Input->get($strIdOverride);
+				$pidValue = $this->Input->get('id_' . $objMetaModel->get('ptable'));
 				$arrDCA['list']['sorting']['filter'] = array_merge_recursive
 				(
 					array(array('pid', $pidValue)),
@@ -498,7 +497,6 @@ class MetaModelDatabase extends Controller
 				$arrDCA['list']['sorting']['icon'] = 'system/modules/metamodels/html/metamodels.png';
 			}
 		}
-
 		$GLOBALS['TL_LANG'][$objMetaModel->getTableName()] = array_replace_recursive($GLOBALS['TL_LANG']['tl_metamodel_item'] , (array)$GLOBALS['TL_LANG'][$objMetaModel->getTableName()]);
 
 		// TODO: add a HOOK here for extensions to manipulate the DCA. loadMetaModelDataContainer($objMetaModel)
