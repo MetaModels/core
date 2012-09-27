@@ -340,13 +340,27 @@ class TableMetaModel extends Backend
 		return $tables;
 	}
 
-
-	public function getTables()
+	/**
+	 * Returns an array with all valid tables that can be used as parent table.
+	 * Excludes the metamodel table itself in ctable mode, as that one would be "selftree" then and not ctable.
+	 *
+	 * @param DC_General $objDC the general DataContainer calling us.
+	 *
+	 * @return string[] the tables.
+	 */
+	public function getTables(DC_General $objDC)
 	{
+		if ($objDC->getCurrentModel()->getProperty('rendertype') == 'ctable')
+		{
+			$blnOmit = $objDC->getCurrentModel()->getProperty('tableName');
+		}
 		$tables = array();
 		foreach($this->Database->listTables() as $table)
 		{
-			$tables[$table]=$table;
+			if (!($blnOmit && ($blnOmit == $table)))
+			{
+				$tables[$table]=$table;
+			}
 		}
 		return $tables;
 	}
