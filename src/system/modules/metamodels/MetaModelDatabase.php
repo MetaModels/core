@@ -326,6 +326,19 @@ class MetaModelDatabase extends Controller
 				)
 			);
 
+			$strIdOverride = 'id_' . $objMetaModel->get('ptable');
+			if ($strIdOverride)
+			{
+				$pidValue = $this->Input->get($strIdOverride);
+				$arrDCA['list']['sorting']['filter'] = array_merge_recursive
+				(
+					array(array('pid', $pidValue)),
+					(array)$arrDCA['list']['sorting']['filter']
+				);
+				$arrDCA['dca_config']['rootEntries']['self']['filter'][] = array('property' => 'pid', 'operation'   => '=', 'value' => $pidValue);
+				$arrDCA['dca_config']['rootEntries']['self']['setOn'][] = array('property' => 'pid', 'value' => $pidValue);
+			}
+
 			$arrOperationCreateVariant = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_item']['createvariant'],

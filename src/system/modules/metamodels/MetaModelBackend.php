@@ -130,6 +130,12 @@ class MetaModelBackend
 					'icon'                => $this->getBackendIcon($objMetaModel->get('backendicon')),
 					'attributes'          => 'onclick="Backend.getScrollOffset()"'
 				);
+
+				// is the destination table a metamodel with variants?
+				if ($objMetaModel->hasVariants())
+				{
+					$GLOBALS['TL_DCA'][$strTable]['list']['operations']['edit_'.$objMetaModel->getTableName()]['idparam'] = 'id_'.$strTable;
+				}
 			}
 		}
 	}
