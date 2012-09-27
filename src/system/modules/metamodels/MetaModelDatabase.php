@@ -362,6 +362,8 @@ class MetaModelDatabase extends Controller
 				'button_callback'     => array('MetaModelDatabase', 'buttonCallbackCreateVariant')
 			);
 
+			$arrDCA['list']['operations']['copy']['href'] = 'act=paste&mode=copy';
+
 			// search for copy operation and insert just behind that one
 			$intPos = array_search('copy', array_keys($arrDCA['list']['operations']));
 			if ($intPos !== false)
@@ -485,6 +487,7 @@ class MetaModelDatabase extends Controller
 							),
 						),
 					);
+					$arrDCA['list']['operations']['copy']['href'] = 'act=paste&mode=copy';
 					break;
 				default:
 			}
