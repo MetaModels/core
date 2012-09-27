@@ -94,17 +94,16 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 	}
 
 	/**
-	 * Retrieve and buffer the current value of the column frm the DB.
-	 * This will later be used for the on submit and onsave callbacks.
+	 * Retrieve the current values of the model and create the title widget information.
 	 *
-	 * Used from tl_metamodel_attribute DCA
+	 * @param InterfaceGeneralModel $objModel the current Model active in the DC.
 	 *
-	 * @param DataContainer $objDC the data container that issued this callback.
+	 * @param DC_General            $objDC    the Datacontainer calling us.
 	 */
-	public function onLoadCallback($objDC)
+	public function onModelUpdatedCallback($objModel, $objDC)
 	{
 		// do nothing if not in edit mode.
-		if(!($objDC->id && $this->Input->get('act')) || ($this->Input->get('act') == 'paste'))
+		if(!(($this->Input->get('act') == 'create') || ($this->Input->get('act') == 'edit')))
 		{
 			return;
 		}
@@ -126,7 +125,6 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 		{
 			return;
 		}
-
 		if($objDC && $objDC->getCurrentModel())
 		{
 			$this->objSetting = $this->Database->prepare('SELECT * FROM tl_metamodel_dca WHERE id=?')->execute($objDC->getCurrentModel()->getProperty('pid'));
