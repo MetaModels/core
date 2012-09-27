@@ -85,6 +85,97 @@ class TableMetaModelDcaSetting extends Backend
 		}
 	}
 
+    protected function setLegend (IMetaModel $objMetaModel)
+    {
+        $this->loadLanguageFile('languages');
+        $arrLegend = array();
+        if(!$objMetaModel->isTranslated())
+        {
+            $arrLegend = array
+            (
+                'inputType'            => 'text',
+                'eval'                 => array
+                (
+                    'tl_class'         => 'w50',
+                )
+
+            );
+        } else {
+            $arrLanguages = array();
+            foreach((array)$objMetaModel->getAvailableLanguages() as $strLangCode)
+            {
+                $arrLanguages[$strLangCode] = $GLOBALS['TL_LANG']['LNG'][$strLangCode];
+            }
+            asort($arrLanguages);
+
+            $arrLegend = array
+            (
+                'inputType'        => 'multiColumnWizard',
+                'eval'             => array
+                (
+                    'minCount' => count($arrLanguages),
+                    'maxCount' => count($arrLanguages),
+                    'disableSorting' => true,
+                    'tl_class' => 'clr',
+                    'columnFields' => array
+                    (
+                        'langcode' => array
+                        (
+                            'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode'],
+                            'exclude'               => true,
+                            'inputType'             => 'justtextoption',
+                            'options'               => $arrLanguages,
+                            'eval'                  => array
+                            (
+                                'valign'            => 'center'
+                            )
+                        ),
+                        'value' => array
+                        (
+                            'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value'],
+                            'exclude'               => true,
+                            'inputType'             => 'text',
+                            'eval'                     => array
+                            (
+                                'style'             => 'width:400px;'
+                            )
+                        ),
+                    )
+                ),
+                'load_callback' => array
+                (
+                    array('TableMetaModelDcaSetting', 'decodeLangArray')
+                ),
+                'save_callback' => array
+                (
+                    array('TableMetaModelDcaSetting', 'encodeLangArray')
+                )
+            );
+        }
+
+        $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['legendtitle'] = array_replace_recursive($arrLegend, $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['legendtitle']);
+    }
+
+    /**
+     * Retrieve and buffer the current value of the column frm the DB.
+     * This will later be used for the on submit and onsave callbacks.
+     *
+     * Used from tl_metamodel_attribute DCA
+     *
+     * @param DataContainer $objDC the data container that issued this callback.
+     */
+    public function onLoadCallback($objDC)
+    {
+        // do nothing if not in edit mode.
+        if(!($objDC->id && $this->Input->get('act')) || ($this->Input->get('act') == 'paste'))
+        {
+            return;
+        }
+
+        $this->objectsFromUrl($objDC);
+        $this->setLegend($this->objMetaModel);
+    }
+
 	protected function objectsFromUrl($objDC)
 	{
 		// TODO: detect all other ways we might end up here and fetch $objMetaModel accordingly.
@@ -98,6 +189,30 @@ class TableMetaModelDcaSetting extends Backend
 			$this->objSetting = $this->Database->prepare('SELECT * FROM tl_metamodel_dca WHERE id=?')->execute($objDC->getCurrentModel()->getProperty('pid'));
 			$this->objMetaModel = MetaModelFactory::byId($this->objSetting->pid);
 		}
+
+        if ($this->Input->get('act'))
+        {
+            // act present, but we have an id
+            switch ($this->Input->get('act'))
+            {
+                case 'edit':
+                    if ($this->Input->get('id'))
+                    {
+                        $this->objSetting = $this->Database->prepare('
+                            SELECT tl_metamodel_dcasetting.*,
+                                tl_metamodel_dca.pid AS tl_metamodel_dca_pid
+                            FROM tl_metamodel_dcasetting
+                            LEFT JOIN tl_metamodel_dca
+                            ON (tl_metamodel_dcasetting.pid = tl_metamodel_dca.id)
+                            WHERE (tl_metamodel_dcasetting.id=?)')
+                            ->execute($this->Input->get('id'));
+                        $this->objMetaModel = MetaModelFactory::byId($this->objSetting->tl_metamodel_dca_pid);
+                    }
+                    break;
+                default:;
+            }
+        } else {
+        }
 	}
 
 	/**
@@ -174,11 +289,25 @@ class TableMetaModelDcaSetting extends Backend
 			break;
 
 			case 'legend':
-				$strReturn = sprintf(
-					$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legend_row'],
-					$arrRow['legendtitle'] ? $arrRow['legendtitle'] : 'legend',
-					$arrRow['legenddefault']
-				);
+                $arrLegend = deserialize($arrRow['legendtitle']);
+                if(is_array($arrLegend))
+                {
+                    $strLegend = $arrLegend[$GLOBALS['TL_LANGUAGE']];
+                    
+                    if(!$strLegend)
+                    {
+                        // TODO: Get the fallback language here
+                        $strLegend = 'legend';
+                    }
+                } else {
+                    $strLegend = $arrRow['legendtitle'] ? $arrRow['legendtitle'] : 'legend';
+                }
+
+                $strReturn = sprintf(
+                    $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legend_row'],
+                    $strLegend, $arrRow['legendhide'] ? ':hide' : ''
+                );
+				
 				return $strReturn;
 			break;
 
@@ -304,6 +433,79 @@ class TableMetaModelDcaSetting extends Backend
 
 		return $this->Template->parse();
 	}
+
+    public function decodeLangArray($varValue, $objDC)
+    {
+        $arrLangValues = (array)deserialize($varValue);
+
+        // check for predefined values.
+        $objDB = Database::getInstance();
+        // fetch current values of the field from DB.
+        $objField = $objDB->prepare('
+            SELECT *
+            FROM tl_metamodel_dcasetting
+            WHERE id=?'
+        )
+        ->limit(1)
+        ->executeUncached($objDC->id);
+
+        if ($objField->numRows == 1)
+        {
+            $objMetaModel = MetaModelFactory::byId($objField->pid);
+            if ($objMetaModel)
+            {
+                // sort like in metamodel definition
+                $arrLanguages = $objMetaModel->getAvailableLanguages();
+                if ($arrLanguages)
+                {
+                    $arrOutput = array();
+                    foreach($arrLanguages as $strLangCode)
+                    {
+                        $varSubValue = $arrLangValues[$strLangCode];
+                        if (is_array($varSubValue))
+                        {
+                            $arrOutput[] = array_merge($varSubValue, array('langcode' => $strLangCode));
+                        } else {
+                            $arrOutput[] = array('langcode' => $strLangCode, 'value' => $varSubValue);
+                        }
+                    }
+                }
+                return serialize($arrOutput);
+            }
+        }
+
+        // fallthrough, plain reordering.
+        $arrOutput = array();
+        foreach ($arrLangValues as $strLangCode => $varSubValue)
+        {
+            if (is_array($varSubValue))
+            {
+                $arrOutput[] = array_merge($varSubValue, array('langcode' => $strLangCode));
+            } else {
+                $arrOutput[] = array('langcode' => $strLangCode, 'value' => $varSubValue);
+            }
+        }
+        return serialize($arrOutput);
+    }
+
+    public function encodeLangArray($varValue)
+    {
+        $arrLangValues = deserialize($varValue);
+        $arrOutput = array();
+        foreach ($arrLangValues as $varSubValue)
+        {
+            $strLangCode = $varSubValue['langcode'];
+            unset($varSubValue['langcode']);
+            if (count($varSubValue) > 1)
+            {
+                $arrOutput[$strLangCode] = $varSubValue;
+            } else {
+                $arrKeys = array_keys($varSubValue);
+                $arrOutput[$strLangCode] = $varSubValue[$arrKeys[0]];
+            }
+        }
+        return serialize($arrOutput);
+    }
 
 	public function getStylepicker($objDC)
 	{

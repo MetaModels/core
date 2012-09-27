@@ -696,6 +696,35 @@ class MetaModel implements IMetaModel
 	/**
 	 * {@inheritdoc}
 	 */
+	public function delete(IMetaModelItem $objItem)
+	{
+		$arrIds = array($objItem->get('id'));
+		// determine if the model is a variant base and if so, fetch the variants additionally.
+		if ($objItem->isVariantBase())
+		{
+			$objVariants = $objItem->getVariants();
+			foreach ($objVariants as $objVariant)
+			{
+				$arrIds[] = $objVariant->get('id');
+			}
+		}
+
+		// complex attributes shall delete their values first.
+		foreach ($this->getAttributes() as $strAttributeId => $objAttribute)
+		{
+			if($this->isComplexAttribute($objAttribute))
+			{
+				// complex saving
+				$objAttribute->unsetDataFor($arrIds);
+			}
+		}
+		// now make the real row disappear.
+		Database::getInstance()->execute(sprintf('DELETE FROM %s WHERE id IN (%s)', $this->getTableName(), implode(',', $arrIds)));
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function getEmptyFilter()
 	{
 		$objFilter = new MetaModelFilter($this);

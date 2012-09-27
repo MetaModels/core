@@ -199,6 +199,15 @@ interface IMetaModel
 	public function saveItem($objItem);
 
 	/**
+	 * Remove an item from the database.
+	 *
+	 * @param IMetaModelItem $objItem The item to delete from the database.
+	 *
+	 * @return void
+	 */
+	public function delete(IMetaModelItem $objItem);
+
+	/**
 	 * Prepare an empty filter object for this meta model. The returned filter contains no rules.
 	 *
 	 * @return IMetaModelFilter the filter object.

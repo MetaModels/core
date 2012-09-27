@@ -24,8 +24,12 @@ if (!defined('TL_ROOT'))
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype']         = array('Type', 'Select the attribute type.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']         = array('Attribute', 'Attribute this setting relates to.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']        = array('Custom Template to use for generating', 'Select the template that shall be used for the selected attribute. Valid template files start with &quot;mm_<type>&quot; where the type name is put for &lt;type&gt;');
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']        = array('Backend class', 'Here you can select one of the backend class.');
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker']     = 'Style picker';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']        = array('Backend class', 'Here you can set backend class(es). Use the stylepicker for a better experience.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker']     = 'Stylepicker';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']      = array('Hide legend','Hide the legend on default.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']     = array('Legend title','Here you can enter the legend title.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']   = 'Language';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']      = 'Legend title';
 
 /**
  * Legends
@@ -44,7 +48,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['show']            = array('Setti
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']          = array('Add all', 'Add all attributes to palette');
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['row']             = '%s <strong>%s</strong> <em>[%s]</em>';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legend_row']      = '<div class="dca_palette">%s</div>';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legend_row']      = '<div class="dca_palette">%s%s</div>';
 
 /**
  * References
