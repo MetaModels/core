@@ -173,9 +173,17 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 			return;
 		}
 		$objMetaModel = $this->objMetaModel;
+		$objSettings = $this->Database->prepare('SELECT attr_id FROM tl_metamodel_dcasetting WHERE pid=? AND dcatype="attribute"')
+			->execute($this->Input->get('pid'));
+
+		$arrAlreadyTaken = $objSettings->fetchEach('attr_id');
 
 		foreach ($objMetaModel->getAttributes() as $objAttribute)
 		{
+			if (in_array($objAttribute->get('id'), $arrAlreadyTaken))
+			{
+				continue;
+			}
 			$strTypeName = $objAttribute->get('type');
 			$arrResult[$objAttribute->get('id')] = $objAttribute->getName() . ' [' . $strTypeName . ']';
 		}
