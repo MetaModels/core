@@ -193,7 +193,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 		'legendtitle' => array
 		(
 			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle'],
-			'exclude'               => true
+			'exclude'               => true,
+			'load_callback'         => array
+			(
+				array('TableMetaModelDcaSetting', 'decodeLegendTitle')
+			),
+			'save_callback'         => array
+			(
+				array('TableMetaModelDcaSetting', 'encodeLegendTitle')
+			)
 		)
 
 	)

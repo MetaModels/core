@@ -25,7 +25,7 @@ if (!defined('TL_ROOT'))
  * @subpackage Backend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-class TableMetaModelAttribute extends Backend
+class TableMetaModelAttribute extends TableMetaModelHelper
 {
 
 	/**
@@ -38,118 +38,24 @@ class TableMetaModelAttribute extends Backend
 
 	protected function setNameAndDescription(IMetaModel $objMetaModel)
 	{
-		$arrNameDef = array();
-		$arrDescriptionDef = array();
-		if(!$objMetaModel->isTranslated())
-		{
-			$arrNameDef = array
-			(
-				'inputType'               => 'text',
-				'eval'                    => array('mandatory'=>true, 'maxlength'=>255)
-			);
+		$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['name'] = array_replace_recursive(
+			parent::makeMultiColumnName(
+				$objMetaModel,
+				$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode'],
+				$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value']
+			),
+			$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['name']
+		);
 
-			$arrDescriptionDef = array
-			(
-				'inputType'               => 'textarea',
-				'eval'                    => array('mandatory'=>true, 'maxlength'=>255)
-			);
-		} else {
-			$arrLanguages = array();
-			foreach((array)$objMetaModel->getAvailableLanguages() as $strLangCode)
-			{
-				$arrLanguages[$strLangCode] = $GLOBALS['TL_LANG']['LNG'][$strLangCode];
-			}
-			asort($arrLanguages);
-
-			$arrNameDef = array
-			(
-				'inputType'               => 'multiColumnWizard',
-				'eval' 			=> array
-				(
-					'minCount' => count($arrLanguages),
-					'maxCount' => count($arrLanguages),
-					'disableSorting' => true,
-					'columnFields' => array
-					(
-						'langcode' => array
-						(
-							'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode'],
-							'exclude'               => true,
-							'inputType'             => 'justtextoption',
-							'options'               => $arrLanguages,
-							'eval'                  => array
-							(
-								'valign'            => 'center'
-							)
-						),
-						'value' => array
-						(
-							'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value'],
-							'exclude'               => true,
-							'inputType'             => 'text',
-							'eval' 			        => array
-							(
-								'style'             => 'width:400px;'
-							)
-						),
-					)
-				),
-				'load_callback' => array
-				(
-					array('TableMetaModelAttribute', 'decodeLangArray')
-				),
-				'save_callback' => array
-				(
-					array('TableMetaModelAttribute', 'encodeLangArray')
-				)
-			);
-
-			$arrDescriptionDef = array
-			(
-				'inputType'               => 'multiColumnWizard',
-				'eval' 			=> array
-				(
-					'minCount' => count($arrLanguages),
-					'maxCount' => count($arrLanguages),
-					'disableSorting' => true,
-					'columnFields' => array
-					(
-						'langcode' => array
-						(
-							'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode'],
-							'exclude'               => true,
-							'inputType'             => 'justtextoption',
-							'options'               => $arrLanguages,
-							'eval' 			        => array
-                            (
-								'valign'            => 'top'
-							)
-						),
-						'value' => array
-						(
-							'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value'],
-							'exclude'               => true,
-							'inputType'             => 'textarea',
-							'eval' 			        => array
-                            (
-                                'style'             => 'width:400px;height:80px;'
-                            )
-						),
-					)
-				),
-				'load_callback' => array
-				(
-					array('TableMetaModelAttribute', 'decodeLangArray')
-				),
-				'save_callback' => array
-				(
-					array('TableMetaModelAttribute', 'encodeLangArray')
-				)
-			);
-		}
-
-		$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['name'] = array_replace_recursive($arrNameDef, $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['name']);
-		$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['description'] = array_replace_recursive($arrDescriptionDef, $GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['description']);
+		$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['description'] = array_replace_recursive(
+			parent::makeMultiColumnName(
+				$objMetaModel,
+				$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode'],
+				$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value'],
+				true
+			),
+			$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['description']
+		);
 	}
 
 	/**
@@ -289,10 +195,8 @@ class TableMetaModelAttribute extends Backend
 		return MetaModelAttributeFactory::getAttributeTypes($objMetaModel->isTranslated(), $objMetaModel->hasVariants());
 	}
 
-	public function decodeLangArray($varValue, $objDC)
+	protected function getMetaModelFromDC($objDC)
 	{
-		$arrLangValues = (array)deserialize($varValue);
-
 		// check for predefined values.
 		$objDB = Database::getInstance();
 		// fetch current values of the field from DB.
@@ -303,63 +207,17 @@ class TableMetaModelAttribute extends Backend
 		)
 		->limit(1)
 		->executeUncached($objDC->id);
-
-		if ($objField->numRows == 1)
-		{
-			$objMetaModel = MetaModelFactory::byId($objField->pid);
-			if ($objMetaModel)
-			{
-				// sort like in metamodel definition
-				$arrLanguages = $objMetaModel->getAvailableLanguages();
-				if ($arrLanguages)
-				{
-					$arrOutput = array();
-					foreach($arrLanguages as $strLangCode)
-					{
-						$varSubValue = $arrLangValues[$strLangCode];
-						if (is_array($varSubValue))
-						{
-							$arrOutput[] = array_merge($varSubValue, array('langcode' => $strLangCode));
-						} else {
-							$arrOutput[] = array('langcode' => $strLangCode, 'value' => $varSubValue);
-						}
-					}
-				}
-				return serialize($arrOutput);
-			}
-		}
-
-		// fallthrough, plain reordering.
-		$arrOutput = array();
-		foreach ($arrLangValues as $strLangCode => $varSubValue)
-		{
-			if (is_array($varSubValue))
-			{
-				$arrOutput[] = array_merge($varSubValue, array('langcode' => $strLangCode));
-			} else {
-				$arrOutput[] = array('langcode' => $strLangCode, 'value' => $varSubValue);
-			}
-		}
-		return serialize($arrOutput);
+		return MetaModelFactory::byId($objField->pid);
 	}
 
-	public function encodeLangArray($varValue)
+	public function decodeNameAndDescription($varValue, $objDC)
 	{
-		$arrLangValues = deserialize($varValue);
-		$arrOutput = array();
-		foreach ($arrLangValues as $varSubValue)
-		{
-			$strLangCode = $varSubValue['langcode'];
-			unset($varSubValue['langcode']);
-			if (count($varSubValue) > 1)
-			{
-				$arrOutput[$strLangCode] = $varSubValue;
-			} else {
-				$arrKeys = array_keys($varSubValue);
-				$arrOutput[$strLangCode] = $varSubValue[$arrKeys[0]];
-			}
-		}
-		return serialize($arrOutput);
+		return parent::decodeLangArray($varValue, $this->getMetaModelFromDC($objDC));
+	}
+
+	public function encodeNameAndDescription($varValue, $objDC)
+	{
+		return parent::encodeLangArray($varValue, $this->getMetaModelFromDC($objDC));
 	}
 
 	/**
