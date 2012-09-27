@@ -70,7 +70,7 @@ class TableMetaModelRenderSettings extends Backend
 	 */
 	public function getTemplates(DataContainer $objDC)
 	{
-		return $this->getTemplateGroup('metamodel_', $objDC->activeRecord->pid);
+		return $this->getTemplateGroup('metamodel_');
 	}
 
 //template
