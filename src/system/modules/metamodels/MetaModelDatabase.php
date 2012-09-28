@@ -176,8 +176,8 @@ class MetaModelDatabase extends Controller
 					}
 				break;
 				case 'legend':
-					$strLegend = deserialize($objDCASettings->legendtitle);
-					if (is_array($strLegend))
+					$arrLegend = deserialize($objDCASettings->legendtitle);
+					if (is_array($arrLegend))
 					{
 						// try to use the language string from the array.
 						$strLegend = $arrLegend[$GLOBALS['TL_LANGUAGE']];
@@ -191,7 +191,10 @@ class MetaModelDatabase extends Controller
 								$strLegend = 'legend';
 							}
 						}
-					}
+					} else {
+                        $strLegend = $objDCASettings->legendtitle ? $objDCASettings->legendtitle : 'legend';
+                    }
+                    
 					$legendName = standardize($strLegend).'_legend';
 					$GLOBALS['TL_LANG'][$objMetaModel->getTableName()][$legendName] = $strLegend;
 					$strPalette .= ((strlen($strPalette)>0 ? ';':'') . '{'.$legendName.$objAttribute->legendhide.'}');
