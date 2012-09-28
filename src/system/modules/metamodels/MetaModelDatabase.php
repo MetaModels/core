@@ -344,7 +344,15 @@ class MetaModelDatabase extends Controller
 
 			if ($objMetaModel->get('ptable'))
 			{
-				$pidValue = $this->Input->get('id_' . $objMetaModel->get('ptable'));
+				if($objMetaModel->get('ptable') == $objMetaModel->get('tableName'))
+				{
+					$pidValue = 0;
+				}
+				else
+				{
+					$pidValue = $this->Input->get('id_' . $objMetaModel->get('ptable'));
+				}                                
+                                                                
 				$arrDCA['list']['sorting']['filter'] = array_merge_recursive
 				(
 					array(array('pid', $pidValue)),
