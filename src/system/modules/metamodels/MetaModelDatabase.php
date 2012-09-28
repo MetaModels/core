@@ -194,7 +194,7 @@ class MetaModelDatabase extends Controller
 					} else {
                         $strLegend = $objDCASettings->legendtitle ? $objDCASettings->legendtitle : 'legend';
                     }
-                    
+
 					$legendName = standardize($strLegend).'_legend';
 					$GLOBALS['TL_LANG'][$objMetaModel->getTableName()][$legendName] = $strLegend;
 					$strPalette .= ((strlen($strPalette)>0 ? ';':'') . '{'.$legendName.$objAttribute->legendhide.'}');
@@ -282,9 +282,12 @@ class MetaModelDatabase extends Controller
 					'setOn' => array
 					(
 						array(
+							'to_field'    => 'varbase',
+							'value'       => '0'
+						),
+						array(
 							'to_field'    => 'vargroup',
 							'from_field'  => 'vargroup',
-							// 'value'    => ''
 						),
 					),
 					'filter' => array
@@ -318,8 +321,9 @@ class MetaModelDatabase extends Controller
 				(
 					array(
 						'property'    => 'varbase',
-						'value'       => '0'
+						'value'       => '1'
 					),
+					// NOTE: vargroup will be set to the item's id when being saved. This is done in the MetaModel itself, as we have no idea beforehand - DC_General is out here.
 				),
 
 				'filter' => array
@@ -354,8 +358,8 @@ class MetaModelDatabase extends Controller
 				else
 				{
 					$pidValue = $this->Input->get('id_' . $objMetaModel->get('ptable'));
-				}                                
-                                                                
+				}
+
 				$arrDCA['list']['sorting']['filter'] = array_merge_recursive
 				(
 					array(array('pid', $pidValue)),
