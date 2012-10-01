@@ -173,13 +173,14 @@ class tl_module_metamodel extends Backend
 	 */
 	public function getAttributeNames(DataContainer $objDC)
 	{
-		$arrAttributeNames = array();
+		$arrAttributeNames = array('sorting' => $GLOBALS['TL_LANG']['MSC']['sorting']);
 		$objMetaModel = MetaModelFactory::byId($objDC->activeRecord->metamodel);
 		if ($objMetaModel)
 		{
 			foreach ($objMetaModel->getAttributes() as $objAttribute)
 			$arrAttributeNames[$objAttribute->getColName()] = $objAttribute->getName();
 		}
+                
 		return $arrAttributeNames;
 	}
 

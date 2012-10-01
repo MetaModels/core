@@ -28,6 +28,8 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label'] = 'Filter "%s" in
 
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'] = 'Edit "%s" for Item %%s';
 
+$GLOBALS['TL_LANG']['MSC']['sorting'] = 'Sorting';
+
 $GLOBALS['TL_LANG']['ERR']['no_palette'] = 'Attempt to access the metamodel "%s" without palette for current user %s.';
 $GLOBALS['TL_LANG']['ERR']['no_view'] = 'Attempt to access the metamodel "%s" without view for user %s.';
 
