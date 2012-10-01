@@ -248,7 +248,10 @@ CREATE TABLE `tl_metamodel_rendersetting` (
   `sorting` int(10) unsigned NOT NULL default '0',
 -- corresponding tl_metamodel_attribute
   `attr_id` int(10) unsigned NOT NULL default '0',
+-- template to use
   `template` varchar(64) NOT NULL default '',
+-- active or disabled
+  `enabled` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

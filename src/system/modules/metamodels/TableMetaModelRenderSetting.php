@@ -57,6 +57,21 @@ class TableMetaModelRenderSetting extends Backend
 	protected function __construct()
 	{
 		parent::__construct();
+
+		// toggling of a render setting?
+		if($this->Input->get('tid') && ($this->Input->get('table') == 'tl_metamodel_rendersetting'))
+		{
+			// Update database
+			$this->Database->prepare('
+				UPDATE tl_metamodel_rendersetting
+				SET enabled=?
+				WHERE id=?'
+				)->execute(
+					($this->Input->get('state')=='1'?'1':''),
+					$this->Input->get('tid')
+				);
+			exit;
+		}
 	}
 
 	public function createDataContainer($strTableName)
@@ -318,6 +333,26 @@ class TableMetaModelRenderSetting extends Backend
 		$this->Template->error = $arrMessages;
 
 		return $this->Template->parse();
+	}
+
+	/**
+	 * Return the "toggle visibility" button
+	 * @param array
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @param string
+	 * @return string
+	 */
+	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
+	{
+		$href .= '&amp;tid='.$row['id'].'&amp;state='.($row['enabled'] ? '0' : '1');
+		if (!$row['enabled'])
+		{
+			$icon = 'invisible.gif';
+		}
+		return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
 	}
 }
 
