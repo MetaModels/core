@@ -202,15 +202,22 @@ class MetaModel implements IMetaModel
 	/**
 	 * This method is called to retrieve the data for certain items from the database.
 	 *
-	 * @param int[] $arrIds the ids of the items to retrieve the order of ids is used for sorting of the return values.
+	 * @param int[]    $arrIds      the ids of the items to retrieve the order of ids is used for sorting of the return values.
+	 *
+	 * @param string[] $arrAttrOnly names of the attributes that shall be contained in the result, defaults to array() which means all attributes. NOTE: simple columns will ever be contained due to the "SELECT *" query.
 	 *
 	 * @return IMetaModelItems a collection of all matched items, sorted by the id list.
 	 */
-	protected function getItemsWithId($arrIds)
+	protected function getItemsWithId($arrIds, $arrAttrOnly=array())
 	{
 		if (!$arrIds)
 		{
 			return new MetaModelItems(array());
+		}
+
+		if (!$arrAttrOnly)
+		{
+			$arrAttrOnly = array_keys($this->getAttributes());
 		}
 
 		$arrResult = $this->fetchRows($arrIds);
@@ -221,6 +228,10 @@ class MetaModel implements IMetaModel
 		// now inject the complex attribute's content into the row.
 		foreach($arrComplexCols as $objAttribute)
 		{
+			if (!in_array($objAttribute->getColName(), $arrAttrOnly))
+			{
+				continue;
+			}
 			$arrAttributeData = $objAttribute->getDataFor($arrIds);
 			$strColName = $objAttribute->getColName();
 			foreach (array_keys($arrResult) as $intId)
@@ -413,13 +424,13 @@ class MetaModel implements IMetaModel
 	/**
 	 * {@inheritdoc}
 	 */
-	public function findById($intId)
+	public function findById($intId, $arrAttrOnly = array())
 	{
 		if (!$intId)
 		{
 			return null;
 		}
-		$objItems = $this->getItemsWithId(array($intId));
+		$objItems = $this->getItemsWithId(array($intId), $arrAttrOnly);
 		if ($objItems && $objItems->first())
 		{
 			return $objItems->getItem();
@@ -430,9 +441,9 @@ class MetaModel implements IMetaModel
 	/**
 	 * {@inheritdoc}
 	 */
-	public function findByFilter($objFilter, $strSortBy = '', $intOffset = 0, $intLimit = 0, $strSortOrder = 'ASC')
+	public function findByFilter($objFilter, $strSortBy = '', $intOffset = 0, $intLimit = 0, $strSortOrder = 'ASC', $arrAttrOnly = array())
 	{
-		return $this->getItemsWithId($this->getIdsFromFilter($objFilter, $strSortBy, $intOffset, $intLimit, $strSortOrder));
+		return $this->getItemsWithId($this->getIdsFromFilter($objFilter, $strSortBy, $intOffset, $intLimit, $strSortOrder), $arrAttrOnly);
 	}
 
 	/**
@@ -500,13 +511,13 @@ class MetaModel implements IMetaModel
 		return $this->findByFilter($objNewFilter);
 	}
 
-    /**
-    * Find all varints of the given item. This methods makes no difference between the varbase item and other variants.
-    *
-    * @param type $arrIds
-    * @param type $objFilter
-    * @return type
-    */
+	/**
+	* Find all varints of the given item. This methods makes no difference between the varbase item and other variants.
+	*
+	* @param type $arrIds
+	* @param type $objFilter
+	* @return type
+	*/
 	public function findVariantsWithBase($arrIds, $objFilter)
 	{
 		if(!$arrIds)
