@@ -2,7 +2,7 @@
 
 <div class="layout_full">
 
-<?php foreach ($this->items->parseAll($this->getFormat(), $this->view) as $arrItem): ?>
+<?php foreach ($this->data as $arrItem): ?>
 <div class="item <?php echo $arrItem['class']; ?>">
 
 <?php foreach ($this->items->getItem()->getMetaModel()->getAttributes() as $field => $objAttribute): ?>
