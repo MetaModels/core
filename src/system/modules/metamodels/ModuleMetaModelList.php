@@ -167,7 +167,7 @@ class ModuleMetaModelList extends Module
 
 		$objTemplate->items = $objItems;
 
-		if ($intTotal)
+		if ($intTotal && !$this->metamodel_noparsing)
 		{
 			$objTemplate->data = $objItems->parseAll($this->Template->getFormat(), $objView);
 		}

@@ -293,6 +293,7 @@ CREATE TABLE `tl_metamodel_dca_combine` (
 CREATE TABLE `tl_module` (
   `metamodel` int(10) unsigned NOT NULL default '0',
   `metamodel_layout` varchar(64) NOT NULL default '',
+  `metamodel_noparsing` char(1) NOT NULL default '',
 
 -- LIMIT n,m for listings
   `metamodel_use_limit` char(1) NOT NULL default '',
