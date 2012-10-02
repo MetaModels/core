@@ -69,6 +69,14 @@ class MetaModelRenderSettings implements IMetaModelRenderSettings
 		}
 		return $this;
 	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getSettingNames()
+	{
+		return array_keys($this->arrSettings);
+	}
 }
 
 ?>

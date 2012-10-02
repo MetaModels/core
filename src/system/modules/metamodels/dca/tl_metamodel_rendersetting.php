@@ -89,6 +89,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 				'href'                => 'act=show',
 				'icon'                => 'show.gif'
 			),
+
+			'toggle' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['toggle'],
+				'icon'                => 'visible.gif',
+				'attributes'          => 'onclick="Backend.getScrollOffset(); return AjaxRequest.toggleVisibility(this, %s);"',
+				'button_callback'     => array('TableMetaModelRenderSetting', 'toggleIcon')
+			)
 		)
 	),
 

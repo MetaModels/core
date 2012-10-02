@@ -110,10 +110,13 @@ interface IMetaModel
 	/**
 	 * Search the MetaModel for the item with the given Id.
 	 *
-	 * @param int $intId the Id to be searched.
+	 * @param int      $intId       the Id to be searched.
+	 *
+	 * @param string[] $arrAttrOnly names of the attributes that shall be enclosed in the result, defaults to empty which means all attributes.
+	 *
 	 * @return IMetaModelItem the item if found, NULL otherwise.
 	 */
-	public function findById($intId);
+	public function findById($intId, $arrAttrOnly = array());
 
 	/**
 	 * Filter the MetaModel by the provided filter settings.
@@ -128,9 +131,11 @@ interface IMetaModel
 	 *
 	 * @param string                $strSortOrder optional sorting direction, either 'ASC'(default) or 'DESC'.
 	 *
+	 * @param string[]              $arrAttrOnly  names of the attributes that shall be enclosed in the result, defaults to empty which means all attributes.
+	 *
 	 * @return IMetaModelItems the collection of IMetaModelItem instances that match the given filter.
 	 */
-	public function findByFilter($objFilter, $strSortBy = '', $intOffset = 0, $intLimit = 0, $strSortOrder = 'ASC');
+	public function findByFilter($objFilter, $strSortBy = '', $intOffset = 0, $intLimit = 0, $strSortOrder = 'ASC', $arrAttrOnly = array());
 
 	/**
 	 * Filter the MetaModel by the provided filter settings and return the ids of all matching items.
@@ -145,7 +150,7 @@ interface IMetaModel
 	 *
 	 * @param string                $strSortOrder optional sorting direction, either 'ASC'(default) or 'DESC'.
 	 *
-	 * @return IMetaModelItems the collection of IMetaModelItem instances that match the given filter.
+	 * @return int[]                the ids of items that match the given filter.
 	 */
 	public function getIdsFromFilter($objFilter, $strSortBy = '', $intOffset = 0, $intLimit = 0, $strSortOrder = 'ASC');
 

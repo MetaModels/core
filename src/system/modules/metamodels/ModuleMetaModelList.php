@@ -162,7 +162,8 @@ class ModuleMetaModelList extends Module
 		$intTotal = $objMetaModel->getCount($objFilter);
 
 		$arrLimits = $this->calculatePagination($intTotal);
-		$objItems = $objMetaModel->findByFilter($objFilter, $this->metamodel_sortby, $arrLimits[1], $arrLimits[0]);
+		// TODO: don't we need to be able to invert sorting? DESC
+		$objItems = $objMetaModel->findByFilter($objFilter, $this->metamodel_sortby, $arrLimits[1], $arrLimits[0], 'ASC', $objView->getSettingNames());
 
 		$objTemplate->items = $objItems;
 

@@ -41,7 +41,7 @@ class MetaModelRenderSettingsFactory implements IMetaModelRenderSettingsFactory
 	{
 		if ($objSetting->get('id'))
 		{
-			$objViewAttributes = Database::getInstance()->prepare('SELECT * FROM tl_metamodel_rendersetting WHERE pid=?')
+			$objViewAttributes = Database::getInstance()->prepare('SELECT * FROM tl_metamodel_rendersetting WHERE pid=? AND enabled=1')
 											  ->execute($objSetting->get('id'));
 			while ($objViewAttributes->next())
 			{

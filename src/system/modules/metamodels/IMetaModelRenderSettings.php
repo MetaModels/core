@@ -43,6 +43,13 @@ interface IMetaModelRenderSettings
 	 * @return IMetaModelRenderSettings the instance itself for chaining.
 	 */
 	public function setSetting($strAttributeName, $objSetting);
+
+	/**
+	 * Retrieve the names of all columns getting rendered via this setting.
+	 *
+	 * @return string[]
+	 */
+	public function getSettingNames();
 }
 
 ?>
