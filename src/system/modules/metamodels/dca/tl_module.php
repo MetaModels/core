@@ -22,7 +22,7 @@ if (!defined('TL_ROOT'))
  * Add palettes to tl_module
  */
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list']  = '{title_legend},name,headline,type;{config_legend},metamodel,perPage,metamodel_use_limit,metamodel_sortby,metamodel_filtering;{template_legend:hide},metamodel_layout,metamodel_rendersettings;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list']  = '{title_legend},name,headline,type;{config_legend},metamodel,perPage,metamodel_use_limit,metamodel_sortby,metamodel_filtering;{template_legend:hide},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'metamodel_use_limit';
 
@@ -135,6 +135,13 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		(
 			array('tl_module_metamodel', 'editRenderSetting')
 		)
+	),
+    	'metamodel_noparsing' => array
+	(
+		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_noparsing'],
+		'exclude'                 => true,
+		'inputType'               => 'checkbox',
+		'eval'                    => array('submitOnChange'=> true, 'tl_class' => 'clr'),
 	),
 ));
 
