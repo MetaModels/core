@@ -189,6 +189,12 @@ class MetaModelItem implements IMetaModelItem
 		);
 		foreach($this->getMetaModel()->getAttributes() as $objAttribute)
 		{
+			//if rendersettings are present, only render attribute with render settings
+			if ($objSettings && $objSettings->getSetting($objAttribute->get('colname')) == null)
+			{
+				continue;  
+			}
+			
 			$arrResult['attributes'][$objAttribute->getColName()] = $objAttribute->getName();
 
 			foreach($this->internalParseAttribute($objAttribute, $strOutputFormat, $objSettings) as $strKey => $varValue)
