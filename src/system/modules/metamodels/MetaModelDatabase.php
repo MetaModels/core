@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The MetaModels extension allows the creation of multiple collections of custom items,
  * each with its own unique set of selectable attributes, with attribute extendability.
@@ -40,10 +41,11 @@ class MetaModelDatabase extends Controller
 	 */
 	protected static function getUser()
 	{
-		if(TL_MODE=='BE')
+		if (TL_MODE == 'BE')
 		{
 			return BackendUser::getInstance();
-		} else if(TL_MODE=='FE')
+		}
+		else if (TL_MODE == 'FE')
 		{
 			return FrontendUser::getInstance();
 		}
@@ -93,9 +95,9 @@ class MetaModelDatabase extends Controller
 			->execute($intMetaModel);
 
 		return array
-		(
-			'dca_id' => $objDca->id,
-			'view_id' => $objRender->id,
+		    (
+		    'dca_id' => $objDca->id,
+		    'view_id' => $objRender->id,
 		);
 	}
 
@@ -121,7 +123,9 @@ class MetaModelDatabase extends Controller
 					return $arrMatch;
 				}
 			}
-		} else {
+		}
+		else
+		{
 			$strGrpCol = 'fe_group';
 		}
 
@@ -129,7 +133,7 @@ class MetaModelDatabase extends Controller
 		// there might be a NULL in there as BE admins have no groups and user might have one but it is a not must have.
 		// I would prefer a default group for both, fe and be groups.
 		$arrGroups = array_filter($objUser->groups);
-		if(count($arrGroups) > 0)
+		if (count($arrGroups) > 0)
 		{
 			$arrMatch = $this->getPaletteCombinationRow($objMetaModel->get('id'), $strGrpCol, $arrGroups);
 			if ($arrMatch)
@@ -154,7 +158,7 @@ class MetaModelDatabase extends Controller
 	 */
 	protected function getPaletteAndFields($intPaletteId, $objMetaModel, &$arrDCA)
 	{
-		$strPalette='';
+		$strPalette = '';
 		$objDCASettings = Database::getInstance()
 			->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=? ORDER by sorting ASC')
 			->execute($intPaletteId);
@@ -172,33 +176,35 @@ class MetaModelDatabase extends Controller
 						{
 							$arrDCA['fields'][$objAttribute->getColName()]['eval']['tl_class'] = $objDCASettings->tl_class;
 						}
-						$strPalette .= (strlen($strPalette)>0 ? ',':'') . $objAttribute->getColName();
+						$strPalette .= (strlen($strPalette) > 0 ? ',' : '') . $objAttribute->getColName();
 					}
-				break;
+					break;
 				case 'legend':
 					$arrLegend = deserialize($objDCASettings->legendtitle);
 					if (is_array($arrLegend))
 					{
 						// try to use the language string from the array.
 						$strLegend = $arrLegend[$GLOBALS['TL_LANGUAGE']];
-						if(!$strLegend)
+						if (!$strLegend)
 						{
 							// use the fallback
 							$strLegend = $arrLegend[$objMetaModel->getFallbackLanguage()];
-							if(!$strLegend)
+							if (!$strLegend)
 							{
 								// last resort, simply "legend"
 								$strLegend = 'legend';
 							}
 						}
-					} else {
-                        $strLegend = $objDCASettings->legendtitle ? $objDCASettings->legendtitle : 'legend';
-                    }
+					}
+					else
+					{
+						$strLegend = $objDCASettings->legendtitle ? $objDCASettings->legendtitle : 'legend';
+					}
 
-					$legendName = standardize($strLegend).'_legend';
+					$legendName = standardize($strLegend) . '_legend';
 					$GLOBALS['TL_LANG'][$objMetaModel->getTableName()][$legendName] = $strLegend;
-					$strPalette .= ((strlen($strPalette)>0 ? ';':'') . '{'.$legendName.$objAttribute->legendhide.'}');
-				break;
+					$strPalette .= ((strlen($strPalette) > 0 ? ';' : '') . '{' . $legendName . $objAttribute->legendhide . '}');
+					break;
 				default:
 					throw new Exception("Unknown palette rendering mode " . $objDCASettings->dcatype);
 			}
@@ -215,19 +221,19 @@ class MetaModelDatabase extends Controller
 	 */
 	public function createDataContainer($strTableName)
 	{
-		if(!in_array($strTableName, MetaModelFactory::getAllTables()))
+		if (!in_array($strTableName, MetaModelFactory::getAllTables()))
 			return false;
 
 		// call the loadDataContainer from Controller.php for the base DCA.
 		parent::loadDataContainer('tl_metamodel_item');
 		parent::loadLanguageFile('tl_metamodel_item');
-
-		$GLOBALS['TL_DCA'][$strTableName] = array_replace_recursive($GLOBALS['TL_DCA']['tl_metamodel_item'], (array)$GLOBALS['TL_DCA'][$strTableName]);
-		$arrDCA = &$GLOBALS['TL_DCA'][$strTableName];
+		
+		$GLOBALS['TL_DCA'][$strTableName] = array_replace_recursive($GLOBALS['TL_DCA']['tl_metamodel_item'], (array) $GLOBALS['TL_DCA'][$strTableName]);
+		$arrDCA = &$GLOBALS['TL_DCA'][$strTableName];		
 
 		$arrDCA['dca_config']['data_provider']['default']['source'] = $strTableName;
 
-		$objMetaModel=MetaModelFactory::byTableName($strTableName);
+		$objMetaModel = MetaModelFactory::byTableName($strTableName);
 		if ($objMetaModel->isTranslated())
 		{
 			$this->loadLanguageFile('languages');
@@ -239,9 +245,7 @@ class MetaModelDatabase extends Controller
 		{
 			$strMessage = sprintf($GLOBALS['TL_LANG']['ERR']['no_palette'], $objMetaModel->getName(), self::getUser()->username);
 			MetaModelBackendModule::addMessageEntry(
-				$strMessage,
-				METAMODELS_ERROR,
-				$this->addToUrl('do=metamodels&table=tl_metamodel_dca&id=' . $objMetaModel->get('id'))
+				$strMessage, METAMODELS_ERROR, $this->addToUrl('do=metamodels&table=tl_metamodel_dca&id=' . $objMetaModel->get('id'))
 			);
 			$this->log($strMessage, 'MetaModelDatabase createDataContainer()', TL_ERROR);
 			return true;
@@ -251,9 +255,7 @@ class MetaModelDatabase extends Controller
 		{
 			$strMessage = sprintf($GLOBALS['TL_LANG']['ERR']['no_view'], $objMetaModel->getName(), self::getUser()->username);
 			MetaModelBackendModule::addMessageEntry(
-				$strMessage,
-				METAMODELS_ERROR,
-				$this->addToUrl('do=metamodels&table=tl_metamodel_rendersettings&id=' . $objMetaModel->get('id'))
+				$strMessage, METAMODELS_ERROR, $this->addToUrl('do=metamodels&table=tl_metamodel_rendersettings&id=' . $objMetaModel->get('id'))
 			);
 			$this->log($strMessage, 'MetaModelDatabase createDataContainer()', TL_ERROR);
 			return true;
@@ -263,95 +265,94 @@ class MetaModelDatabase extends Controller
 		$arrDCA['palettes']['default'] = $this->getPaletteAndFields($arrCombination['dca_id'], $objMetaModel, $arrDCA);
 
 		$arrDCA['config']['label'] = $objMetaModel->get('name');
-
+		
 		// FIXME: if we have variants, we force mode 5 here, no matter what the DCA configs say.
-		if($objMetaModel->hasVariants())
+		if ($objMetaModel->hasVariants())
 		{
 			$arrDCA['list']['sorting']['mode'] = 5;
 			$arrDCA['dca_config']['data_provider']['parent']['source'] = $objMetaModel->getTableName();
 
 			$arrDCA['dca_config']['child_list']['self']['fields'] = array(
-				'id', 'tstamp'
+			    'id', 'tstamp'
 			);
 
 			$arrDCA['dca_config']['childCondition'] = array
-			(
-				array(
-					'from' => 'self',
-					'to' => 'self',
-					'setOn' => array
-					(
-						array(
-							'to_field'    => 'varbase',
-							'value'       => '0'
-						),
-						array(
-							'to_field'    => 'vargroup',
-							'from_field'  => 'vargroup',
-						),
-					),
-					'filter' => array
-					(
-						// TODO: filtering for parent id = vargroup works but we need another way to limit the scope.
-						array
-						(
-							'local'       => 'vargroup',
-							'remote'      => 'id',
-							'operation'   => '=',
-						),
-						array
-						(
-							'local'       => 'vargroup',
-							'remote'      => 'vargroup',
-							'operation'   => '='
-						),
-						array
-						(
-							'local'        => 'varbase',
-							'remote_value' => '0',
-							'operation'    => '=',
-						),
-					),
+			    (
+			    array(
+				'from' => 'self',
+				'to' => 'self',
+				'setOn' => array
+				    (
+				    array(
+					'to_field' => 'varbase',
+					'value' => '0'
+				    ),
+				    array(
+					'to_field' => 'vargroup',
+					'from_field' => 'vargroup',
+				    ),
 				),
+				'filter' => array
+				    (
+				    // TODO: filtering for parent id = vargroup works but we need another way to limit the scope.
+				    array
+					(
+					'local' => 'vargroup',
+					'remote' => 'id',
+					'operation' => '=',
+				    ),
+				    array
+					(
+					'local' => 'vargroup',
+					'remote' => 'vargroup',
+					'operation' => '='
+				    ),
+				    array
+					(
+					'local' => 'varbase',
+					'remote_value' => '0',
+					'operation' => '=',
+				    ),
+				),
+			    ),
 			);
 
 			$arrDCA['dca_config']['rootEntries']['self'] = array
-			(
-				'setOn' => array
+			    (
+			    'setOn' => array
 				(
-					array(
-						'property'    => 'varbase',
-						'value'       => '1'
-					),
-					// NOTE: vargroup will be set to the item's id when being saved. This is done in the MetaModel itself, as we have no idea beforehand - DC_General is out here.
+				array(
+				    'property' => 'varbase',
+				    'value' => '1'
 				),
-
-				'filter' => array
+			    // NOTE: vargroup will be set to the item's id when being saved. This is done in the MetaModel itself, as we have no idea beforehand - DC_General is out here.
+			    ),
+			    'filter' => array
 				(
-					array
-					(
-						'property'    => 'varbase',
-						'operation'   => '=',
-						'value'       => '1'
-					)
+				array
+				    (
+				    'property' => 'varbase',
+				    'operation' => '=',
+				    'value' => '1'
 				)
+			    )
 			);
 
 			// TODO: do only show variant bases if we are told so, i.e. render child view.
 			$arrDCA['fields']['varbase'] = array
-			(
-				'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_item']['varbase'],
-				'inputType'               => 'checkbox',
-				'eval'                    => array
+			    (
+			    'label' => &$GLOBALS['TL_LANG']['tl_metamodel_item']['varbase'],
+			    'inputType' => 'checkbox',
+			    'eval' => array
 				(
-					'submitOnChange'=>true,
-					'doNotShow' => true
-				)
+				'submitOnChange' => true,
+				'doNotShow' => true
+			    )
 			);
 
 			if ($objMetaModel->get('ptable'))
 			{
-				if($objMetaModel->get('ptable') == $objMetaModel->get('tableName'))
+				if ($objMetaModel->get('ptable') == $objMetaModel->get('tableName'))
 				{
 					$pidValue = 0;
 				}
@@ -361,20 +362,19 @@ class MetaModelDatabase extends Controller
 				}
 
 				$arrDCA['list']['sorting']['filter'] = array_merge_recursive
-				(
-					array(array('pid', $pidValue)),
-					(array)$arrDCA['list']['sorting']['filter']
+					(
+					array(array('pid', $pidValue)), (array) $arrDCA['list']['sorting']['filter']
 				);
-				$arrDCA['dca_config']['rootEntries']['self']['filter'][] = array('property' => 'pid', 'operation'   => '=', 'value' => $pidValue);
+				$arrDCA['dca_config']['rootEntries']['self']['filter'][] = array('property' => 'pid', 'operation' => '=', 'value' => $pidValue);
 				$arrDCA['dca_config']['rootEntries']['self']['setOn'][] = array('property' => 'pid', 'value' => $pidValue);
 			}
 
 			$arrOperationCreateVariant = array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_item']['createvariant'],
-				'href'                => 'act=createvariant',
-				'icon'                => 'system/modules/metamodels/html/variants.png',
-				'button_callback'     => array('MetaModelDatabase', 'buttonCallbackCreateVariant')
+			    (
+			    'label' => &$GLOBALS['TL_LANG']['tl_metamodel_item']['createvariant'],
+			    'href' => 'act=createvariant',
+			    'icon' => 'system/modules/metamodels/html/variants.png',
+			    'button_callback' => array('MetaModelDatabase', 'buttonCallbackCreateVariant')
 			);
 
 			$arrDCA['list']['operations']['copy']['href'] = 'act=paste&mode=copy';
@@ -383,17 +383,21 @@ class MetaModelDatabase extends Controller
 			$intPos = array_search('copy', array_keys($arrDCA['list']['operations']));
 			if ($intPos !== false)
 			{
-				array_insert($arrDCA['list']['operations'], $intPos+1,
-					array(
-						'createvariant' => $arrOperationCreateVariant
+				array_insert($arrDCA['list']['operations'], $intPos + 1, array(
+				    'createvariant' => $arrOperationCreateVariant
 					)
 				);
-			} else {
+			}
+			else
+			{
 				// or append to the end, if copy operation has not been found
 				$arrDCA['list']['operations']['createvariant'] = $arrOperationCreateVariant;
 			}
-		} else {
-			switch ($objMetaModel->get('rendertype')) {
+		}
+		else
+		{	
+			switch ($objMetaModel->get('rendertype'))
+			{
 				case 'ctable':
 					$arrDCA['dca_config']['data_provider']['parent']['source'] = $objMetaModel->get('ptable');
 					$arrDCA['list']['sorting']['child_record_callback'] = array();
@@ -401,30 +405,32 @@ class MetaModelDatabase extends Controller
 					if (substr($objMetaModel->get('ptable'), 0, 2) == 'mm')
 					{
 						// metamodels can be filtered on other fields than id=>pid
-					} else {
+					}
+					else
+					{
 						// for tl prefix, the only unique target can be the id? maybe load parent dc and scan for uniques in config then.
 						$arrDCA['dca_config']['childCondition'] = array
-						(
-							array(
-								'from' => $objMetaModel->get('ptable'),
-								'to' => 'self',
-								'setOn' => array
-								(
-									array(
-										'to_field'    => 'pid',
-										'from_field'  => 'id',
-									),
-								),
-								'filter' => array
-								(
-									array
-									(
-										'local'       => 'pid',
-										'remote'      => 'id',
-										'operation'   => '=',
-									)
-								),
+						    (
+						    array(
+							'from' => $objMetaModel->get('ptable'),
+							'to' => 'self',
+							'setOn' => array
+							    (
+							    array(
+								'to_field' => 'pid',
+								'from_field' => 'id',
+							    ),
 							),
+							'filter' => array
+							    (
+							    array
+								(
+								'local' => 'pid',
+								'remote' => 'id',
+								'operation' => '=',
+							    )
+							),
+						    ),
 						);
 					}
 					break;
@@ -443,64 +449,84 @@ class MetaModelDatabase extends Controller
 
 					break;
 			}
-
+			
+			$objMetaModelRenderSettings = MetaModelRenderSettingsFactory::byId($objMetaModel);	
+						
 			$arrDCA['list']['sorting']['mode'] = $objMetaModel->get('mode');
-			if (in_array($objMetaModel->get('mode'), array(3, 4, 6)))
-			if($objMetaModel->get('ptable'))
+			
+			// ToDo: SH:CS: We have now 2 places for mode, one in mm and on in rendersettings :(
+			if ($objMetaModel->get('mode') == 1)
 			{
-				$arrDCA['dca_config']['data_provider']['parent']['source'] = $objMetaModel->get('ptable');
+				$arrDCA['list']['sorting']['mode'] = $objMetaModelRenderSettings->get('mode');
+
+				// Set Sorting flag from current renderSettings
+				$arrDCA['list']['sorting']['flag'] = $objMetaModelRenderSettings->get('flag');
+				
+				// Set Sorting flag from current renderSettings
+				$arrDCA['list']['sorting']['fields'] = deserialize($objMetaModelRenderSettings->get('fields'));
+				
+				var_dump($objMetaModelRenderSettings->get('fields'));
+				exit();
+
+				// Set Sorting panelLayout from current renderSettings
+				$arrDCA['list']['sorting']['panelLayout'] .= $objMetaModelRenderSettings->get('panelLayout');
 			}
+
+			if (in_array($objMetaModel->get('mode'), array(3, 4, 6)))
+				if ($objMetaModel->get('ptable'))
+				{
+					$arrDCA['dca_config']['data_provider']['parent']['source'] = $objMetaModel->get('ptable');
+				}
 
 			switch ($objMetaModel->get('mode'))
 			{
 				case 5:
 					$arrDCA['dca_config']['child_list']['self']['fields'] = array(
-						'id', 'tstamp'
+					    'id', 'tstamp'
 					);
 
 					$arrDCA['dca_config']['rootEntries']['self'] = array
-					(
-						'setOn' => array
+					    (
+					    'setOn' => array
 						(
-							array(
-								'property'    => 'pid',
-								'value'       => '0'
-							),
+						array(
+						    'property' => 'pid',
+						    'value' => '0'
 						),
-
-						'filter' => array
+					    ),
+					    'filter' => array
 						(
-							array
-							(
-								'property'    => 'pid',
-								'operation'   => '=',
-								'value'       => '0'
-							)
+						array
+						    (
+						    'property' => 'pid',
+						    'operation' => '=',
+						    'value' => '0'
 						)
+					    )
 					);
 
 					$arrDCA['dca_config']['childCondition'] = array
-					(
-						array(
-							'from' => 'self',
-							'to' => 'self',
-							'setOn' => array
-							(
-								array(
-									'to_field'    => 'pid',
-									'from_field'  => 'id',
-								),
-							),
-							'filter' => array
-							(
-								array
-								(
-									'local'       => 'pid',
-									'remote'      => 'id',
-									'operation'   => '=',
-								)
-							),
+					    (
+					    array(
+						'from' => 'self',
+						'to' => 'self',
+						'setOn' => array
+						    (
+						    array(
+							'to_field' => 'pid',
+							'from_field' => 'id',
+						    ),
 						),
+						'filter' => array
+						    (
+						    array
+							(
+							'local' => 'pid',
+							'remote' => 'id',
+							'operation' => '=',
+						    )
+						),
+					    ),
 					);
 					$arrDCA['list']['operations']['copy']['href'] = 'act=paste&mode=copy';
 					break;
@@ -511,11 +537,13 @@ class MetaModelDatabase extends Controller
 			if ($objMetaModel->get('backendicon') && file_exists(TL_ROOT . '/' . $objMetaModel->get('backendicon')))
 			{
 				$arrDCA['list']['sorting']['icon'] = $this->getImage($this->urlEncode($objMetaModel->get('backendicon')), 16, 16);
-			} else {
+			}
+			else
+			{
 				$arrDCA['list']['sorting']['icon'] = 'system/modules/metamodels/html/metamodels.png';
 			}
 		}
-		$GLOBALS['TL_LANG'][$objMetaModel->getTableName()] = array_replace_recursive($GLOBALS['TL_LANG']['tl_metamodel_item'] , (array)$GLOBALS['TL_LANG'][$objMetaModel->getTableName()]);
+		$GLOBALS['TL_LANG'][$objMetaModel->getTableName()] = array_replace_recursive($GLOBALS['TL_LANG']['tl_metamodel_item'], (array) $GLOBALS['TL_LANG'][$objMetaModel->getTableName()]);
 
 		// TODO: add a HOOK here for extensions to manipulate the DCA. loadMetaModelDataContainer($objMetaModel)
 		//$GLOBALS['METAMODEL_HOOKS']['loadDataContainer']
@@ -532,13 +560,10 @@ class MetaModelDatabase extends Controller
 		}
 
 		$strImg = $this->generateImage($strIcon, $strLabel);
-		return sprintf('<a href="%s" title="%s"%s>%s</a> ',
-			$this->addToUrl($strHref.'&amp;act=createvariant&amp;id='.$arrRow['id']),
-			specialchars($strTitle),
-			$strAttributes,
-			$strImg?$strImg:$strLabel
+		return sprintf('<a href="%s" title="%s"%s>%s</a> ', $this->addToUrl($strHref . '&amp;act=createvariant&amp;id=' . $arrRow['id']), specialchars($strTitle), $strAttributes, $strImg ? $strImg : $strLabel
 		);
 	}
+
 }
 
 ?>

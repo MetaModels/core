@@ -233,6 +233,8 @@ CREATE TABLE `tl_metamodel_rendersettings` (
   `mode` int(4) unsigned NOT NULL default '0',
 -- sorting flag.
   `flag` int(4) unsigned NOT NULL default '0',
+-- fields for sorting
+  `fields` blob NULL,
 -- the panel layouts we want to display.
   `panelLayout` blob NULL,
   PRIMARY KEY  (`id`),
