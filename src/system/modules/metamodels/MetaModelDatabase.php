@@ -465,9 +465,6 @@ class MetaModelDatabase extends Controller
 				// Set Sorting flag from current renderSettings
 				$arrDCA['list']['sorting']['fields'] = deserialize($objMetaModelRenderSettings->get('fields'));
 				
-				var_dump($objMetaModelRenderSettings->get('fields'));
-				exit();
-
 				// Set Sorting panelLayout from current renderSettings
 				$arrDCA['list']['sorting']['panelLayout'] .= $objMetaModelRenderSettings->get('panelLayout');
 			}
