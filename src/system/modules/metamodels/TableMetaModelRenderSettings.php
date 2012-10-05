@@ -84,6 +84,131 @@ class TableMetaModelRenderSettings extends Backend
             $this->generateImage('system/modules/metamodels/html/palette_wizard.png', $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['panelpicker'], 'style="vertical-align:top;"')
         );
     }
+	
+	/**
+	 * Check if the MM has a varsupport. If so disable some options in dca.
+	 * User the oncreate_callback.
+	 * 
+	 * @param String $strTable
+	 * @return String
+	 */
+	public function checkSortMode($strTable)
+	{
+		// Get Current id
+		$intID = $this->Input->get("id");
+		
+		if(empty($intID))
+		{
+			return null;
+}
+
+		// Check current table
+		if($strTable != 'tl_metamodel_rendersettings')
+		{
+			return null;
+		}
+		
+		// Get current dataset
+		$objResult = $this->Database
+			->prepare("SELECT pid FROM tl_metamodel_rendersettings WHERE id=?")
+			->limit(1)
+			->execute($intID);
+		
+		if($objResult->numRows == 0)
+		{
+			return null;
+		}
+		
+		// Get mm dataset
+		$objResult = $this->Database
+			->prepare('SELECT varsupport FROM tl_metamodel WHERE id=?')
+			->limit(1)
+			->execute($objResult->pid);
+		
+		if($objResult->numRows == 0)
+		{
+			return null;
+		}
+		
+		// Check varsupport
+		if($objResult->varsupport == 1 || in_array($objResult->mode, array(3,4,5,6)))
+		{
+			// Unset fields
+			unset($GLOBALS['TL_DCA'][$strTable]['fields']['mode']);
+			unset($GLOBALS['TL_DCA'][$strTable]['fields']['flag']);
+			unset($GLOBALS['TL_DCA'][$strTable]['fields']['panelLayout']);
+			
+			// Unset palettes
+			$arrParts = trimsplit(";", $GLOBALS['TL_DCA'][$strTable]['palettes']['default']);
+			foreach ($arrParts as $key => $value)
+			{
+				if(stripos($value, '{expert_legend}')!== false)
+				{
+					unset($arrParts[$key]);
+					break;
+				}
+			}			
+			$GLOBALS['TL_DCA'][$strTable]['palettes']['default'] = implode(";", $arrParts);
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * Check if the MM has a varsupport. If so disable some options in dca.
+	 * User the oncreate_callback.
+	 * 
+	 * @param String $strTable
+	 * @return String
+	 */
+	public function getAllAttributes()
+	{
+		$intID = $this->Input->get('id');
+		$intPID = $this->Input->get('pid');
+		
+		$objAttributes = null;
+		$arrReturn = array();
+		
+		if(!empty($intID))
+		{
+			$objResult = $this->Database
+				->prepare('SELECT pid FROM tl_metamodel_rendersettings WHERE id=?')
+				->limit(1)
+				->execute($intID);
+			
+			if($objResult->numRows == 0)
+			{
+				return $arrReturn;
+			}
+			
+			$objAttributes = $this->Database
+				->prepare('SELECT * FROM tl_metamodel_attribute WHERE pid=?')
+				->execute($objResult->pid);
+		}
+		
+		if(!empty($intPID))
+		{
+			$objAttributes = $this->Database
+				->prepare('SELECT * FROM tl_metamodel_attribute WHERE pid=?')
+				->execute($intPID);
+		}
+		
+		while ($objAttributes->next())
+		{
+			if(is_array(deserialize($objAttributes->name)))
+			{
+				$arrLanguage = deserialize($objAttributes->name); 
+				$arrReturn[$objAttributes->colname] = $arrLanguage[0];
+			}
+			else
+			{
+				$arrReturn[aaa] = $objAttributes->name;
+			}
+		}
+		
+		return $arrReturn;
+	}
+
 }
 
 ?>
