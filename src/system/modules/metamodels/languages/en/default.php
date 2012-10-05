@@ -21,29 +21,34 @@ if (!defined('TL_ROOT'))
 /**
  * Miscellaneous
  */
-$GLOBALS['TL_LANG']['MOD']['metamodels'] = array('MetaModels', 'The MetaModels extension allows you to create own data models.');
+$GLOBALS['TL_LANG']['MOD']['metamodels']                              = array('MetaModels', 'The MetaModels extension allows you to create own data models.');
 
-$GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord'] = 'Edit filter setting %%s for filter "%s" in MetaModel "%s"';
-$GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label'] = 'Filter "%s" in MetaModel "%s"';
+$GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord']   = 'Edit filter setting %%s for filter "%s" in MetaModel "%s"';
+$GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label']        = 'Filter "%s" in MetaModel "%s"';
+$GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']        = 'Edit "%s" for Item %%s';
+$GLOBALS['TL_LANG']['MSC']['sorting']                                 = 'Sorting';
 
-$GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'] = 'Edit "%s" for Item %%s';
+// Stylepicker
+$GLOBALS['TL_LANG']['MSC']['tl_class']['w50']                         = array('w50', 'Set the field width to 50% and float it (float:left).');
+$GLOBALS['TL_LANG']['MSC']['tl_class']['clr']                         = array('clr', 'Clear all floats.');
+$GLOBALS['TL_LANG']['MSC']['tl_class']['m12']                         = array('m12', 'Add a 12 pixel top margin to the element (used for single checkboxes).');
+$GLOBALS['TL_LANG']['MSC']['tl_class']['wizard']                      = array('wizard', 'Shorten the input field so there is enough room for the wizard button (e.g. date picker fields).');
+$GLOBALS['TL_LANG']['MSC']['tl_class']['long']                        = array('long', 'Make the text input field span two columns.');
 
-$GLOBALS['TL_LANG']['MSC']['sorting'] = 'Sorting';
-
-$GLOBALS['TL_LANG']['MSC']['tl_class']['w50']         = array('w50', 'Set the field width to 50% and float it (float:left).');
-$GLOBALS['TL_LANG']['MSC']['tl_class']['clr']         = array('clr', 'Clear all floats.');
-$GLOBALS['TL_LANG']['MSC']['tl_class']['m12']         = array('m12', 'Add a 12 pixel top margin to the element (used for single checkboxes).');
-$GLOBALS['TL_LANG']['MSC']['tl_class']['wizard']      = array('wizard', 'Shorten the input field so there is enough room for the wizard button (e.g. date picker fields).');
-$GLOBALS['TL_LANG']['MSC']['tl_class']['long']        = array('long', 'Make the text input field span two columns.');
+// Panelpicker
+$GLOBALS['TL_LANG']['MSC']['panelLayout']['search']                   = array('Search', '');
+$GLOBALS['TL_LANG']['MSC']['panelLayout']['sort']                     = array('Sort', '');
+$GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']                   = array('Filter', '');
+$GLOBALS['TL_LANG']['MSC']['panelLayout']['limit']                    = array('Limit', '');
 
 /**
  * Errors
  */
-$GLOBALS['TL_LANG']['ERR']['no_attribute_extension'] = 'Please install at least one attribute extension! MetaModels without attributes do not make sense.';
-$GLOBALS['TL_LANG']['ERR']['activate_extension'] = 'Please activate required extension &quot;%s&quot; (%s)';
-$GLOBALS['TL_LANG']['ERR']['install_extension'] = 'Please install required extension &quot;%s&quot; (%s)';
+$GLOBALS['TL_LANG']['ERR']['no_attribute_extension']                  = 'Please install at least one attribute extension! MetaModels without attributes do not make sense.';
+$GLOBALS['TL_LANG']['ERR']['activate_extension']                      = 'Please activate required extension &quot;%s&quot; (%s)';
+$GLOBALS['TL_LANG']['ERR']['install_extension']                       = 'Please install required extension &quot;%s&quot; (%s)';
 
-$GLOBALS['TL_LANG']['ERR']['no_palette'] = 'Attempt to access the metamodel "%s" without palette for current user %s.';
-$GLOBALS['TL_LANG']['ERR']['no_view'] = 'Attempt to access the metamodel "%s" without view for user %s.';
+$GLOBALS['TL_LANG']['ERR']['no_palette']                              = 'Attempt to access the metamodel "%s" without palette for current user %s.';
+$GLOBALS['TL_LANG']['ERR']['no_view']                                 = 'Attempt to access the metamodel "%s" without view for user %s.';
 
 ?>

@@ -173,4 +173,33 @@ $GLOBALS['PALETTE_STYLE_PICKER'][] = array
     'image' => ''
 );
 
+// Selectable panels in the palette panelLayout definitions.
+$GLOBALS['PALETTE_PANEL_PICKER'][] = array
+(
+    'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['search'],
+    'cssclass' => 'search',
+    'image' => ''
+);
+
+$GLOBALS['PALETTE_PANEL_PICKER'][] = array
+(
+    'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['sort'],
+    'cssclass' => 'sort',
+    'image' => ''
+);
+
+$GLOBALS['PALETTE_PANEL_PICKER'][] = array
+(
+    'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['filter'],
+    'cssclass' => 'filter',
+    'image' => ''
+);
+
+$GLOBALS['PALETTE_PANEL_PICKER'][] = array
+(
+    'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['limit'],
+    'cssclass' => 'limit',
+    'image' => ''
+);
+
 ?>

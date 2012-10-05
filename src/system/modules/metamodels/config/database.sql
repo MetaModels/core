@@ -229,6 +229,12 @@ CREATE TABLE `tl_metamodel_rendersettings` (
   `template` varchar(64) NOT NULL default '',
 -- the jumpTo page to use.
   `jumpTo` int(10) unsigned NOT NULL default '0',
+-- sorting mode.
+  `mode` int(4) unsigned NOT NULL default '0',
+-- sorting flag.
+  `flag` int(4) unsigned NOT NULL default '0',
+-- the panel layouts we want to display.
+  `panelLayout` blob NULL,
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

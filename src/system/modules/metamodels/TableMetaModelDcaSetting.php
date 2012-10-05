@@ -386,7 +386,7 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 	public function getStylepicker($objDC)
 	{
 		return sprintf(
-			' <a href="system/modules/metamodels/popup.php?tbl=%s&fld=%s&inputName=ctrl_%s&id=%s" rel="lightbox[files 765 60%%]" data-lightbox="files 765 60%%">%s</a>',
+			' <a href="system/modules/metamodels/popup.php?tbl=%s&fld=%s&inputName=ctrl_%s&id=%s&item=PALETTE_STYLE_PICKER" rel="lightbox[files 765 60%%]" data-lightbox="files 765 60%%">%s</a>',
 			$objDC->table,
 			$objDC->field,
 			$objDC->inputName,

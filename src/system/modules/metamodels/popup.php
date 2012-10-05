@@ -14,7 +14,8 @@
  * Initialize the system
  */
 define('TL_MODE', 'BE');
-require_once('../../initialize.php');
+//require_once('../../initialize.php');
+require_once('/var/www/entwicklung/_davidmaack/2.11.6/system/initialize.php');
 
 class DCAStylepicker_Wizard extends Backend
 {
@@ -57,7 +58,7 @@ class DCAStylepicker_Wizard extends Backend
 			die('Field-Parameter ERROR!');
 		}
 		$this->Template->field = $inputName;
-		$this->Template->items = $GLOBALS['PALETTE_STYLE_PICKER'];
+		$this->Template->items = $GLOBALS[$this->Input->get('item')];
 	}
 
 
