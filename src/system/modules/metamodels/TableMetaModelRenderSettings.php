@@ -70,7 +70,7 @@ class TableMetaModelRenderSettings extends Backend
 	 */
 	public function getTemplates(DataContainer $objDC)
 	{
-		return $this->getTemplateGroup('metamodel_');
+		return $this->getTemplateGroup('be_metamodel_');
 	}
 
     public function getPanelpicker($objDC)
