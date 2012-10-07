@@ -48,7 +48,7 @@ $GLOBALS['TL_LANG']['ERR']['no_attribute_extension']                  = 'Please 
 $GLOBALS['TL_LANG']['ERR']['activate_extension']                      = 'Please activate required extension &quot;%s&quot; (%s)';
 $GLOBALS['TL_LANG']['ERR']['install_extension']                       = 'Please install required extension &quot;%s&quot; (%s)';
 
-$GLOBALS['TL_LANG']['ERR']['no_palette']                              = 'Attempt to access the metamodel "%s" without palette for current user %s.';
-$GLOBALS['TL_LANG']['ERR']['no_view']                                 = 'Attempt to access the metamodel "%s" without view for user %s.';
+$GLOBALS['TL_LANG']['ERR']['no_palette']                              = 'Attempt to access the MetaModel "%s" without palette for current user %s.';
+$GLOBALS['TL_LANG']['ERR']['no_view']                                 = 'Attempt to access the MetaModel "%s" without view for user %s.';
 
 ?>
