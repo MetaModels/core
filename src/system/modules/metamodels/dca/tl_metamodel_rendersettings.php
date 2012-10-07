@@ -100,15 +100,26 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		)
 	),
 
-	'metapalettes' => array
-	(
-		'default' => array
-		(
-			'title' => array('name', 'isdefault'),
-			'settings' => array('template', 'jumpTo'),
-			'expert' => array('mode', 'flag', 'fields', 'panelLayout')
-		),
-	),
+    'palettes' => array
+    (
+        '__selector__' => array('use_limitview')
+    ),
+
+    'subpalettes' => array
+    (
+        'use_limitview' => 'limit_rendersetting'
+    ),
+
+    'metapalettes' => array
+    (
+        'default' => array
+        (
+            'title' => array('name', 'isdefault'),
+            'general' => array('template', 'jumpTo'),
+            'view' => array('mode', 'flag', 'panelLayout', 'fields'),
+            'expert' => array('use_limitview')
+        ),
+    ),
 
 	// Fields
 	'fields' => array
@@ -125,12 +136,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault'],
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50 m12')
+			'eval'                    => array('tl_class'=>'m12 w50 cbx')
 		),
 		'template' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template'],
-			'default'                 => 'catalog_full',
+			'default'                 => 'be_metamodel_full',
 			'exclude'                 => true,
 			'inputType'               => 'select',
 			'options_callback'        => array('TableMetaModelRenderSettings','getTemplates'),
@@ -166,10 +177,46 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		(
 		    'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['fields'],
 		    'exclude'                 => true,
-		    'inputType'               => 'checkboxWizard',
-		    'options_callback'        => array('TableMetaModelRenderSettings' ,'getAllAttributes'),
-		    'eval'                    => array('tl_class'=>'w50', 'isAssociative' => true)
-		),
+            'inputType'               => 'multiColumnWizard',
+            'eval' => array
+            (
+                'columnFields' => array
+                (
+                    'field_attribute' => array
+                    (
+                        'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_attribute'],
+                        'exclude'               => true,
+                        'inputType'             => 'select',
+                        'options'               => array('test'),
+                        'eval' => array
+                        (
+                            'style'             => 'width:465px',
+                            'chosen'            => 'true'
+                        )
+                    ),
+                    'filterable' => array
+                    (
+                        'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_filterable'],
+                        'exclude'               => true,
+                        'inputType'             => 'checkbox',
+                        'eval' => array
+                        (
+                            'style'             => 'width:55px',
+                        )
+                    ),
+                    'sortable' => array
+                    (
+                        'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_sortable'],
+                        'exclude'               => true,
+                        'inputType'             => 'checkbox',
+                        'eval' => array
+                        (
+                            'style'             => 'width:55px',
+                        )
+                    ),
+                ),
+            ),
+        ),
 		'panelLayout' => array
 		(
 		    'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['panelLayout'],
@@ -177,13 +224,28 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		    'inputType'               => 'text',
 		    'eval'                    => array
 		    (
-			'tl_class'            => 'clr long wizard',
+			    'tl_class'            => 'clr long wizard',
 		    ),
 		    'wizard'                  => array
 		    (
-			'stylepicker'         => array('TableMetaModelRenderSettings','getPanelpicker')
+			    'stylepicker'         => array('TableMetaModelRenderSettings','getPanelpicker')
 		    ),
 		),
+        'use_limitview' => array
+        (
+            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['use_limitview'],
+            'exclude'                 => true,
+            'inputType'               => 'checkbox',
+            'eval'                    => array('tl_class'=>'m12', 'submitOnChange' => true)
+        ),
+        'limit_rendersetting' => array
+        (
+            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['limit_rendersetting'],
+            'exclude'                 => true,
+            'inputType'               => 'select',
+            'options'                 => array('Frontend', 'Backend'),
+            'eval'                    => array('includeBlankOption' => true, 'mandatory' => true)
+        ),
 	),
 );
 

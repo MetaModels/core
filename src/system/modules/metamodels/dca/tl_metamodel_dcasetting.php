@@ -155,7 +155,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 				'submitOnChange'      => true,
 			)
 		),
-
 		'attr_id' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id'],
@@ -170,7 +169,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 				'mandatory'           => true,
 			),
 		),
-
 		'tl_class' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class'],
