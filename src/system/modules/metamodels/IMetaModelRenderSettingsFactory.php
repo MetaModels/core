@@ -49,7 +49,7 @@ interface IMetaModelRenderSettingsFactory
 	 *
 	 * @return IMetaModelRenderSettings the instance of the IMetaModelRenderSettings or null if not found.
 	 */
-	public static function byId(IMetaModel $objMetaModel, $intId);
+	public static function byId(IMetaModel $objMetaModel, $intId = 0);
 }
 
 ?>
