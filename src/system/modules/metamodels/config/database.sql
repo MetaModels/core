@@ -237,10 +237,6 @@ CREATE TABLE `tl_metamodel_rendersettings` (
   `fields` blob NULL,
 -- the panel layouts we want to display.
   `panelLayout` blob NULL,
--- activate view limitian
-  `use_limitview` char(1) NOT NULL default '',
--- choose between fe or be
-  `limit_rendersetting` varchar(32) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

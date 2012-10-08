@@ -100,24 +100,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		)
 	),
 
-    'palettes' => array
-    (
-        '__selector__' => array('use_limitview')
-    ),
-
-    'subpalettes' => array
-    (
-        'use_limitview' => 'limit_rendersetting'
-    ),
-
     'metapalettes' => array
     (
         'default' => array
         (
             'title' => array('name', 'isdefault'),
             'general' => array('template', 'jumpTo'),
-            'view' => array('mode', 'flag', 'panelLayout', 'fields'),
-            'expert' => array('use_limitview')
+            'view' => array('mode', 'flag', 'panelLayout', 'fields')
         ),
     ),
 
@@ -141,7 +130,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		'template' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template'],
-			'default'                 => 'be_metamodel_full',
+			'default'                 => 'metamodel_full',
 			'exclude'                 => true,
 			'inputType'               => 'select',
 			'options_callback'        => array('TableMetaModelRenderSettings','getTemplates'),
@@ -231,21 +220,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			    'stylepicker'         => array('TableMetaModelRenderSettings','getPanelpicker')
 		    ),
 		),
-        'use_limitview' => array
-        (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['use_limitview'],
-            'exclude'                 => true,
-            'inputType'               => 'checkbox',
-            'eval'                    => array('tl_class'=>'m12', 'submitOnChange' => true)
-        ),
-        'limit_rendersetting' => array
-        (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['limit_rendersetting'],
-            'exclude'                 => true,
-            'inputType'               => 'select',
-            'options'                 => array('Frontend', 'Backend'),
-            'eval'                    => array('includeBlankOption' => true, 'mandatory' => true)
-        ),
 	),
 );
 
