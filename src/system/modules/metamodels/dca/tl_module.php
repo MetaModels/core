@@ -71,7 +71,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_use_limit'],
 		'exclude'                 => true,
 		'inputType'               => 'checkbox',
-		'eval'                    => array('submitOnChange'=> true, 'tl_class' => 'clr'),
+		'eval'                    => array('submitOnChange'=> true, 'tl_class' => 'clr m12'),
 	),
 
 	'metamodel_limit' => array
@@ -79,7 +79,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_limit'],
 		'exclude'                 => true,
 		'inputType'               => 'text',
-		'eval'                    => array('rgxp'=>'digit')
+		'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50')
 	),
 
 	'metamodel_offset' => array
