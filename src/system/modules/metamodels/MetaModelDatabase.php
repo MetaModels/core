@@ -455,16 +455,38 @@ class MetaModelDatabase extends Controller
 			$arrDCA['list']['sorting']['mode'] = $objMetaModel->get('mode');
 			
 			// ToDo: SH:CS: We have now 2 places for mode, one in mm and on in rendersettings :(
+			// If mm-mode 1, use the renderingsettings as overwrite
 			if ($objMetaModel->get('mode') == 1)
 			{
+				// Set the new mode
 				$arrDCA['list']['sorting']['mode'] = $objMetaModelRenderSettings->get('mode');
 
 				// Set Sorting flag from current renderSettings
 				$arrDCA['list']['sorting']['flag'] = $objMetaModelRenderSettings->get('flag');
 				
-				// Set Sorting flag from current renderSettings
-				$arrDCA['list']['sorting']['fields'] = deserialize($objMetaModelRenderSettings->get('fields'));
+				// Set filter/sorting fields				
+				$arrSorting = array();				
+				foreach ((array)$objMetaModelRenderSettings->get('fields') as $field)
+				{
+					if($field['filterable'])
+					{
+						$arrDCA['fields'][$field['field_attribute']]['filter'] = true;
+					}
+					
+					if($field['searchable'])
+					{
+						$arrDCA['fields'][$field['field_attribute']]['search'] = true;
+					}
+					
+					if($field['sortable'])
+					{
+						$arrSorting[] = $field['field_attribute'];
+					}
+				}
 				
+				// Set Sorting flag from current renderSettings
+				$arrDCA['list']['sorting']['fields'] = $arrSorting;
+								
 				// Set Sorting panelLayout from current renderSettings
 				$arrDCA['list']['sorting']['panelLayout'] .= $objMetaModelRenderSettings->get('panelLayout');
 			}

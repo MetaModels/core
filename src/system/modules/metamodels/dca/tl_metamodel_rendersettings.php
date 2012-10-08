@@ -100,15 +100,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		)
 	),
 
-    'metapalettes' => array
-    (
-        'default' => array
-        (
-            'title' => array('name', 'isdefault'),
-            'general' => array('template', 'jumpTo'),
-            'view' => array('mode', 'flag', 'panelLayout', 'fields')
-        ),
-    ),
+	'metapalettes' => array
+	(
+		'default' => array
+		(
+			'title' => array('name', 'isdefault'),
+			'general' => array('template', 'jumpTo'),
+			'view' => array('mode', 'flag', 'panelLayout', 'fields')
+		),
+	),
 
 	// Fields
 	'fields' => array
@@ -146,66 +146,76 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		),
 		'mode' => array
 		(
-		    'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['mode'],
-		    'exclude'                 => true,
-		    'inputType'               => 'select',
-		    'options'                 => array('1', '2'),
-		    'eval'                    => array('tl_class'=>'w50', 'includeBlankOption' => true),
-		    'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingmode']
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['mode'],
+			'exclude'                 => true,
+			'inputType'               => 'select',
+			'options'                 => array('1', '2'),
+			'eval'                    => array('tl_class'=>'w50', 'includeBlankOption' => true),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingmode']
 		),
 		'flag' => array
 		(
-		    'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['flag'],
-		    'exclude'                 => true,
-		    'inputType'               => 'select',
-		    'options'                 => array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
-		    'eval'                    => array('tl_class'=>'w50', 'includeBlankOption' => true),
-		    'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['flag'],
+			'exclude'                 => true,
+			'inputType'               => 'select',
+			'options'                 => array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
+			'eval'                    => array('tl_class'=>'w50', 'includeBlankOption' => true),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']
 		),
 		'fields' => array
 		(
-		    'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['fields'],
-		    'exclude'                 => true,
-            'inputType'               => 'multiColumnWizard',
-            'eval' => array
-            (
-                'columnFields' => array
-                (
-                    'field_attribute' => array
-                    (
-                        'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_attribute'],
-                        'exclude'               => true,
-                        'inputType'             => 'select',
-                        'options'               => array('test'),
-                        'eval' => array
-                        (
-                            'style'             => 'width:465px',
-                            'chosen'            => 'true'
-                        )
-                    ),
-                    'filterable' => array
-                    (
-                        'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_filterable'],
-                        'exclude'               => true,
-                        'inputType'             => 'checkbox',
-                        'eval' => array
-                        (
-                            'style'             => 'width:55px',
-                        )
-                    ),
-                    'sortable' => array
-                    (
-                        'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_sortable'],
-                        'exclude'               => true,
-                        'inputType'             => 'checkbox',
-                        'eval' => array
-                        (
-                            'style'             => 'width:55px',
-                        )
-                    ),
-                ),
-            ),
-        ),
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['fields'],
+			'exclude'                 => true,
+			'inputType'               => 'multiColumnWizard',
+			'eval'		          => array
+			(
+				'columnFields' => array
+				(
+					'field_attribute' => array
+					(
+						'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_attribute'],
+						'exclude'               => true,
+						'inputType'             => 'select',
+						'options_callback'      => array('TableMetaModelRenderSettings','getAllAttributes'),
+						'eval' => array
+						(
+							'style'         => 'width:400px',
+							'chosen'        => 'true'
+						)
+					),
+					'filterable' => array
+					(
+						'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_filterable'],
+						'exclude'               => true,
+						'inputType'             => 'checkbox',
+						'eval' => array
+						(
+							'style'         => 'width:55px',
+						)
+					),
+					'sortable' => array
+					(
+					    'label'			=> &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_sortable'],
+					    'exclude'			=> true,
+					    'inputType'			=> 'checkbox',
+					    'eval' => array
+					    (
+							'style'		=> 'width:55px',
+					    )
+					),
+					'searchable' => array
+					(
+					    'label'			=> &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_searchable'],
+					    'exclude'			=> true,
+					    'inputType'			=> 'checkbox',
+					    'eval' => array
+					    (
+							'style'		=> 'width:65px',
+					    )
+					),
+				),
+			),
+		),
 		'panelLayout' => array
 		(
 		    'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['panelLayout'],

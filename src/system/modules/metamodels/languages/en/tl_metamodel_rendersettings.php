@@ -44,6 +44,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['fields']               = arr
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_attribute']      = 'Attribute name';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_filterable']     = 'Filterable';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_sortable']       = 'Sortable';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_searchable']     = 'Searchable';
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['use_limitview']        = array('View limitation', 'Activate the view limitation.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['limit_rendersetting']  = array('Limit the rendersetting', 'Choose between frontend or backend.');
