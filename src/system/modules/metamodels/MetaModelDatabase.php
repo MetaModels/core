@@ -481,6 +481,7 @@ class MetaModelDatabase extends Controller
 					if($field['sortable'])
 					{
 						$arrSorting[] = $field['field_attribute'];
+						$arrDCA['fields'][$field['field_attribute']]['sorting'] = true;
 					}
 				}
 				
@@ -488,7 +489,7 @@ class MetaModelDatabase extends Controller
 				$arrDCA['list']['sorting']['fields'] = $arrSorting;
 								
 				// Set Sorting panelLayout from current renderSettings
-				$arrDCA['list']['sorting']['panelLayout'] .= $objMetaModelRenderSettings->get('panelLayout');
+				$arrDCA['list']['sorting']['panelLayout'] = $objMetaModelRenderSettings->get('panelLayout');
 			}
 
 			if (in_array($objMetaModel->get('mode'), array(3, 4, 6)))
