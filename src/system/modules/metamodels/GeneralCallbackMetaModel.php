@@ -86,8 +86,7 @@ class GeneralCallbackMetaModel extends GeneralCallbackDefault
 		{
 			$objTemplate = new MetaModelTemplate($objView->get('template'));
 		} else {
-			// fallback to default.
-			$objTemplate = new MetaModelTemplate('be_metamodel_full');
+			return 'No rendersetting defined.';
 		}
 
 		if ($objMetaModel->hasVariants() && !$objNativeItem->isVariantBase())
