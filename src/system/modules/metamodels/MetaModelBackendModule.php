@@ -33,8 +33,6 @@ class MetaModelBackendModule extends BackendModule
 	 */
 	protected function checkDependencies()
 	{
-		$arrMissing = array();
-
 		$arrActiveModules = $this->Config->getActiveModules();
 		$arrInactiveModules = deserialize($GLOBALS['TL_CONFIG']['inactiveModules']);
 
@@ -61,6 +59,11 @@ class MetaModelBackendModule extends BackendModule
 		}
 	}
 
+	/**
+	 * Check if at least one attribute extension is installed and activated, if not display link to ER catalog.
+	 *
+	 * @return void
+	 */
 	protected function hasAttributes()
 	{
 		if (!$GLOBALS['METAMODELS']['attributes'])
@@ -68,7 +71,7 @@ class MetaModelBackendModule extends BackendModule
 			$this->addMessageEntry(
 				$GLOBALS['TL_LANG']['ERR']['no_attribute_extension'],
 				METAMODELS_INFO,
-				$this->addToUrl('do=repository_catalog' . $strDisplay)
+				$this->addToUrl('do=repository_catalog')
 			);
 		}
 	}
@@ -109,7 +112,7 @@ class MetaModelBackendModule extends BackendModule
 			case 'undo':
 				if (!$this->objDc instanceof listable)
 				{
-					$this->log('Data container ' . $strTable . ' is not listable', 'Backend getBackendModule()', TL_ERROR);
+					$this->log('Data container ' . $this->objDc->table . ' is not listable', 'Backend getBackendModule()', TL_ERROR);
 					trigger_error('The current data container is not listable', E_USER_ERROR);
 				}
 				break;
@@ -123,7 +126,7 @@ class MetaModelBackendModule extends BackendModule
 			case 'edit':
 				if (!$this->objDc instanceof editable)
 				{
-					$this->log('Data container ' . $strTable . ' is not editable', 'Backend getBackendModule()', TL_ERROR);
+					$this->log('Data container ' . $this->objDc->table . ' is not editable', 'Backend getBackendModule()', TL_ERROR);
 					trigger_error('The current data container is not editable', E_USER_ERROR);
 				}
 				break;
@@ -146,7 +149,7 @@ class MetaModelBackendModule extends BackendModule
 		if ($this->Input->get('key') && isset($arrModule[$this->Input->get('key')]))
 		{
 			$this->import($arrModule[$this->Input->get('key')][0], 'objKeyHandler');
-			return $this->objKeyHandler->$arrModule[$this->Input->get('key')][1]($objDc, $objDc->table, $arrModule);
+			return $this->objKeyHandler->$arrModule[$this->Input->get('key')][1]($this->objDc, $this->objDc->table, $arrModule);
 		}
 		return $this->runDC();
 	}
@@ -157,7 +160,7 @@ class MetaModelBackendModule extends BackendModule
 	 */
 	public function generate()
 	{
-        $GLOBALS['TL_CSS'][] = 'system/modules/metamodels/html/style.css';
+		$GLOBALS['TL_CSS'][] = 'system/modules/metamodels/html/style.css';
 		if ($this->needUserAction())
 		{
 			return parent::generate();
