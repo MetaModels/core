@@ -208,7 +208,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 			'exclude'                 => true,
 			'eval'                    => array
 			(
-				'tl_class'=>'clr'
+				'tl_class' => 'clr'
 			),
 			'load_callback'         => array
 			(
