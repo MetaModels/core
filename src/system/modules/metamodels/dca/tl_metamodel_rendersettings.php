@@ -31,7 +31,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		'ctable'                      => 'tl_metamodel_rendersetting',
 		'switchToEdit'                => false,
 		'enableVersioning'            => false,
-		'oncreate_callback'	      	  => array(array('TableMetaModelRenderSettings', 'checkSortMode')),
 	),
 
 	// List
@@ -106,7 +105,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		(
 			'title' => array('name', 'isdefault'),
 			'general' => array('template', 'jumpTo'),
-			'view' => array('mode', 'flag', 'panelLayout', 'fields')
 		),
 	),
 
@@ -143,92 +141,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'inputType'               => 'pageTree',
 			'eval'                    => array('fieldType'=>'radio', 'helpwizard'=>true),
 			'explanation'             => 'jumpTo'
-		),
-		'mode' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['mode'],
-			'exclude'                 => true,
-			'inputType'               => 'select',
-			'options'                 => array('1', '2'),
-			'eval'                    => array('tl_class'=>'w50', 'includeBlankOption' => true),
-			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingmode']
-		),
-		'flag' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['flag'],
-			'exclude'                 => true,
-			'inputType'               => 'select',
-			'options'                 => array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
-			'eval'                    => array('tl_class'=>'w50', 'includeBlankOption' => true),
-			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']
-		),
-		'fields' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['fields'],
-			'exclude'                 => true,
-			'inputType'               => 'multiColumnWizard',
-			'eval'		          => array
-			(
-				'columnFields' => array
-				(
-					'field_attribute' => array
-					(
-						'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_attribute'],
-						'exclude'               => true,
-						'inputType'             => 'select',
-						'options_callback'      => array('TableMetaModelRenderSettings','getAllAttributes'),
-						'eval' => array
-						(
-							'style'         => 'width:400px',
-							'chosen'        => 'true'
-						)
-					),
-					'filterable' => array
-					(
-						'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_filterable'],
-						'exclude'               => true,
-						'inputType'             => 'checkbox',
-						'eval' => array
-						(
-							'style'         => 'width:55px',
-						)
-					),
-					'sortable' => array
-					(
-					    'label'			=> &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_sortable'],
-					    'exclude'			=> true,
-					    'inputType'			=> 'checkbox',
-					    'eval' => array
-					    (
-							'style'		=> 'width:55px',
-					    )
-					),
-					'searchable' => array
-					(
-					    'label'			=> &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_searchable'],
-					    'exclude'			=> true,
-					    'inputType'			=> 'checkbox',
-					    'eval' => array
-					    (
-							'style'		=> 'width:65px',
-					    )
-					),
-				),
-			),
-		),
-		'panelLayout' => array
-		(
-		    'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['panelLayout'],
-		    'exclude'                 => true,
-		    'inputType'               => 'text',
-		    'eval'                    => array
-		    (
-			    'tl_class'            => 'clr long wizard',
-		    ),
-		    'wizard'                  => array
-		    (
-			    'stylepicker'         => array('TableMetaModelRenderSettings','getPanelpicker')
-		    ),
 		),
 	),
 );

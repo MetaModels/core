@@ -33,6 +33,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 		'ctable'                      => 'tl_metamodel_dcasetting',
 		'switchToEdit'                => false,
 		'enableVersioning'            => false,
+		'oncreate_callback'	      	  => array(array('TableMetaModelDca', 'checkSortMode')),
 	),
 
 	// List
@@ -40,19 +41,19 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 	(
 		'sorting' => array
 		(
-            'mode'                    => 1,
-            'fields'                  => array('name'),
-            'panelLayout'             => 'filter,limit',
-            'headerFields'            => array('name'),
-            'flag'                    => 1,
+			'mode'                    => 1,
+			'fields'                  => array('name'),
+			'panelLayout'             => 'filter,limit',
+			'headerFields'            => array('name'),
+			'flag'                    => 1,
 		),
 
-        'label' => array
-        (
-            'fields'                  => array('name'),
-            'format'                  => '%s',
-            'label_callback'          => array('TableMetaModelDca', 'drawSetting')
-        ),
+		'label' => array
+		(
+			'fields'                  => array('name'),
+			'format'                  => '%s',
+			'label_callback'          => array('TableMetaModelDca', 'drawSetting')
+		),
 
 		'global_operations' => array
 		(
@@ -111,6 +112,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 				'name',
 				'isdefault'
 			),
+			'view' => array
+			(
+				'mode',
+				'flag',
+				'panelLayout',
+				'fields'
+			)
 		)
 	),
 
@@ -132,6 +140,93 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
 			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50 m12')
+		),
+		'mode' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['mode'],
+			'exclude'                 => true,
+			'inputType'               => 'select',
+			'options'                 => array('1', '2'),
+			'eval'                    => array('tl_class'=>'w50', 'includeBlankOption' => true),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']
+		),
+		'flag' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['flag'],
+			'exclude'                 => true,
+			'inputType'               => 'select',
+			'options'                 => array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
+			'eval'                    => array('tl_class'=>'w50', 'includeBlankOption' => true),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']
+		),
+		// TODO: ensure in save callback the uniqueness of the attribute column.
+		'fields' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['fields'],
+			'exclude'                 => true,
+			'inputType'               => 'multiColumnWizard',
+			'eval'                    => array
+			(
+				'columnFields' => array
+				(
+					'field_attribute' => array
+					(
+						'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['field_attribute'],
+						'exclude'               => true,
+						'inputType'             => 'select',
+						'options_callback'      => array('TableMetaModelDca','getAllAttributes'),
+						'eval' => array
+						(
+							'style'             => 'width:400px',
+							'chosen'            => 'true'
+						)
+					),
+					'filterable' => array
+					(
+						'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['field_filterable'],
+						'exclude'               => true,
+						'inputType'             => 'checkbox',
+						'eval' => array
+						(
+							'style'             => 'width:55px',
+						)
+					),
+					'sortable' => array
+					(
+						'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['field_sortable'],
+						'exclude'               => true,
+						'inputType'             => 'checkbox',
+						'eval' => array
+						(
+							'style'             => 'width:55px',
+						)
+					),
+					'searchable' => array
+					(
+						'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['field_searchable'],
+						'exclude'               => true,
+						'inputType'             => 'checkbox',
+						'eval'                  => array
+						(
+							'style'             => 'width:65px',
+						)
+					),
+				),
+			),
+		),
+		'panelLayout' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array
+			(
+				'tl_class'            => 'clr long wizard',
+			),
+			'wizard'                  => array
+			(
+				'stylepicker'         => array('TableMetaModelDca','getPanelpicker')
+			),
 		),
 	)
 );

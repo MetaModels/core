@@ -25,12 +25,25 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['name']                 = array('Name', 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']               = array('Revision date', 'Date and time of the latest revision');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']            = array('Is default', 'Determines that this palette shall be used as default for the parenting MetaModel');
 
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']                 = array('Sorting mode', 'The sorting mode to use in the item view.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']                 = array('Sorting flag', 'The sorting flag to use in the item view.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']          = array('Panel layout', 'Separate panel options with comma (= space) and semicolon (= new line) like sort,filter;search,limit.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker']          = 'Panelpicker';
+
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['fields']               = array('Field configuration', 'Configure the header fields for a better user experience.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['field_attribute']      = 'Attribute name';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['field_filterable']     = 'Filterable';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['field_sortable']       = 'Sortable';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['field_searchable']     = 'Searchable';
+
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['use_limitview']        = array('View limitation', 'Activate the view limitation.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']  = array('Limit the rendersetting', 'Choose between frontend or backend.');
+
 /**
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['title_legend']         = 'Name';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']       = 'Backend integration';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['permission_legend']    = 'Permission settings';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['view_legend']          = 'View settings';
 
 /**
  * Buttons
@@ -46,5 +59,20 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['settings']             = array('Palette
 /**
  * Reference
  */
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['1']     = 'Sort by initial letter ascending';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['2']     = 'Sort by initial letter descending';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['3']     = 'Sort by initial two letters ascending';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['4']     = 'Sort by initial two letters descending';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['5']     = 'Sort by day ascending';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['6']     = 'Sort by day descending';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['7']     = 'Sort by month ascending';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['8']     = 'Sort by month descending';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['9']     = 'Sort by year ascending';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['10']    = 'Sort by year descending';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['11']    = 'Sort ascending';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['12']    = 'Sort descending';
+
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['1']     = 'Records are sorted by a fixed field';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['2']     = 'Records are sorted by a switchable field';
 
 ?>

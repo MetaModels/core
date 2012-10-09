@@ -227,9 +227,9 @@ class MetaModelDatabase extends Controller
 		// call the loadDataContainer from Controller.php for the base DCA.
 		parent::loadDataContainer('tl_metamodel_item');
 		parent::loadLanguageFile('tl_metamodel_item');
-		
+
 		$GLOBALS['TL_DCA'][$strTableName] = array_replace_recursive($GLOBALS['TL_DCA']['tl_metamodel_item'], (array) $GLOBALS['TL_DCA'][$strTableName]);
-		$arrDCA = &$GLOBALS['TL_DCA'][$strTableName];		
+		$arrDCA = &$GLOBALS['TL_DCA'][$strTableName];
 
 		$arrDCA['dca_config']['data_provider']['default']['source'] = $strTableName;
 
@@ -265,7 +265,7 @@ class MetaModelDatabase extends Controller
 		$arrDCA['palettes']['default'] = $this->getPaletteAndFields($arrCombination['dca_id'], $objMetaModel, $arrDCA);
 
 		$arrDCA['config']['label'] = $objMetaModel->get('name');
-		
+
 		// FIXME: if we have variants, we force mode 5 here, no matter what the DCA configs say.
 		if ($objMetaModel->hasVariants())
 		{
@@ -395,7 +395,7 @@ class MetaModelDatabase extends Controller
 			}
 		}
 		else
-		{	
+		{
 			switch ($objMetaModel->get('rendertype'))
 			{
 				case 'ctable':
@@ -449,47 +449,53 @@ class MetaModelDatabase extends Controller
 
 					break;
 			}
-			
-			$objMetaModelRenderSettings = MetaModelRenderSettingsFactory::byId($objMetaModel);	
-						
+
+			// TODO: implement a proper class that handles all of this when moving backend integration also to dca table.
+			$objDca = Database::getInstance()
+				->prepare('SELECT * FROM tl_metamodel_dca WHERE id=?')
+				->limit(1)
+				->execute($arrCombination['dca_id']);
+
 			$arrDCA['list']['sorting']['mode'] = $objMetaModel->get('mode');
-			
+
 			// ToDo: SH:CS: We have now 2 places for mode, one in mm and on in rendersettings :(
 			// If mm-mode 1, use the renderingsettings as overwrite
 			if ($objMetaModel->get('mode') == 1)
 			{
 				// Set the new mode
-				$arrDCA['list']['sorting']['mode'] = $objMetaModelRenderSettings->get('mode');
+				$arrDCA['list']['sorting']['mode'] = $objDca->mode;
 
 				// Set Sorting flag from current renderSettings
-				$arrDCA['list']['sorting']['flag'] = $objMetaModelRenderSettings->get('flag');
-				
-				// Set filter/sorting fields				
-				$arrSorting = array();				
-				foreach ((array)$objMetaModelRenderSettings->get('fields') as $field)
+				$arrDCA['list']['sorting']['flag'] = $objDca->flag;
+
+				// Set filter/sorting fields
+				$arrSorting = array();
+
+				// FIXME: We might want to push these config options to the tl_metamodel_dcasetting table to have it tied to it's definition.
+				foreach (deserialize($objDca->fields, true) as $field)
 				{
 					if($field['filterable'])
 					{
 						$arrDCA['fields'][$field['field_attribute']]['filter'] = true;
 					}
-					
+
 					if($field['searchable'])
 					{
 						$arrDCA['fields'][$field['field_attribute']]['search'] = true;
 					}
-					
+
 					if($field['sortable'])
 					{
 						$arrSorting[] = $field['field_attribute'];
 						$arrDCA['fields'][$field['field_attribute']]['sorting'] = true;
 					}
 				}
-				
+
 				// Set Sorting flag from current renderSettings
 				$arrDCA['list']['sorting']['fields'] = $arrSorting;
-								
+
 				// Set Sorting panelLayout from current renderSettings
-				$arrDCA['list']['sorting']['panelLayout'] = $objMetaModelRenderSettings->get('panelLayout');
+				$arrDCA['list']['sorting']['panelLayout'] = $objDca->panelLayout;
 			}
 
 			if (in_array($objMetaModel->get('mode'), array(3, 4, 6)))

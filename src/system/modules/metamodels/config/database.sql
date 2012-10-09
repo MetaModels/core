@@ -65,6 +65,14 @@ CREATE TABLE `tl_metamodel_dca` (
   `name` varchar(255) NOT NULL default '',
 -- is default?
   `isdefault` char(1) NOT NULL default '',
+-- sorting mode.
+  `mode` int(4) unsigned NOT NULL default '0',
+-- sorting flag.
+  `flag` int(4) unsigned NOT NULL default '0',
+-- fields for sorting
+  `fields` blob NULL,
+-- the panel layouts we want to display.
+  `panelLayout` blob NULL,
   PRIMARY KEY  (`id`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -220,7 +228,6 @@ CREATE TABLE `tl_metamodel_rendersettings` (
 -- corresponding meta model
   `pid` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
-  `sorting` int(10) unsigned NOT NULL default '0',
 -- human readable name of the setting for internal use only.
   `name` varchar(64) NOT NULL default '',
 -- is default?
@@ -229,14 +236,6 @@ CREATE TABLE `tl_metamodel_rendersettings` (
   `template` varchar(64) NOT NULL default '',
 -- the jumpTo page to use.
   `jumpTo` int(10) unsigned NOT NULL default '0',
--- sorting mode.
-  `mode` int(4) unsigned NOT NULL default '0',
--- sorting flag.
-  `flag` int(4) unsigned NOT NULL default '0',
--- fields for sorting
-  `fields` blob NULL,
--- the panel layouts we want to display.
-  `panelLayout` blob NULL,
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
