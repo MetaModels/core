@@ -148,7 +148,8 @@ class TableMetaModelHelper extends Backend
 							'inputType'             => $blnIsTextarea ? 'textarea' : 'text',
 							'eval'                     => array
 							(
-								'style'             => 'width:400px;'
+								'style'             => 'width:400px;',
+								'rows'		    => 3
 							)
 						),
 					)
