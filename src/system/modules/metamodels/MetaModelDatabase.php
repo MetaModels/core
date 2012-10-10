@@ -460,7 +460,7 @@ class MetaModelDatabase extends Controller
 
 			// ToDo: SH:CS: We have now 2 places for mode, one in mm and on in rendersettings :(
 			// If mm-mode 1, use the renderingsettings as overwrite
-			if ($objMetaModel->get('mode') == 1)
+			if ($objMetaModel->get('mode') == 1 || $objMetaModel->get('mode') == 5)
 			{
 				// Set the new mode
 				$arrDCA['list']['sorting']['mode'] = $objDca->mode;
