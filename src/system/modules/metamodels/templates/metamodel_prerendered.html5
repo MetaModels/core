@@ -1,0 +1,24 @@
+<?php if (count($this->data)): /* display only if there is data. */ ?>
+
+<div class="layout_full">
+
+<?php foreach ($this->data as $arrItem): /* loop over all items. */ ?>
+<div class="item <?php echo $arrItem['class']; ?>">
+
+<?php foreach ($arrItem['attributes'] as $field => $strName): /* loop over all attributes. */ ?>
+<?php if (($strValue = $arrItem[$this->getFormat()][$field]) || ($strValue = $arrItem['text'][$field])): /* fetch the html5 value followed by the fallback to "text" as both are suitable. */ ?>
+<div class="field <?php echo $field; ?>">
+	<div class="label"><?php echo $strName; ?></div>
+	<div class="value"><?php echo $strValue; ?></div>
+</div>
+<?php endif; ?>
+<?php endforeach; /* attribute loop */ ?>
+<?php if ($arrItem['jumpTo']): ?>
+<a href="<?php echo $arrItem['jumpTo']['url']; ?>">Details</a>
+<?php endif; ?>
+</div>
+<?php endforeach; /* item loop */ ?>
+</div>
+<?php else:  /* no items found */ ?>
+<p class="info"><?php echo $this->noItemsMsg; ?></p>
+<?php endif; ?>
