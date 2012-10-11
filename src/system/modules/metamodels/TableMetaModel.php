@@ -92,6 +92,34 @@ class TableMetaModel extends Backend
 			MetaModelTableManipulation::deleteTable($objMetaModel->getTableName());
 			$this->Database->prepare('DELETE FROM tl_metamodel_attribute WHERE pid=?')
 						   ->executeUncached($objMetaModel->get('id'));
+
+			$this->Database->prepare('DELETE FROM tl_metamodel_dca_combine WHERE pid=?')
+						   ->executeUncached($objMetaModel->get('id'));
+
+			// delete everything from dca settings
+			$arrIds = $this->Database->prepare('SELECT id FROM tl_metamodel_dca WHERE pid=?')
+						   ->executeUncached($objMetaModel->get('id'))
+						   ->fetchEach('id');
+			$this->Database->prepare(sprintf('DELETE FROM tl_metamodel_dcasetting WHERE pid IN (%s)', implode(',', $arrIds)))
+						   ->executeUncached();
+			$this->Database->prepare('DELETE FROM tl_metamodel_dca WHERE pid=?')
+						   ->executeUncached($objMetaModel->get('id'));
+			// delete everything from render settings
+			$arrIds = $this->Database->prepare('SELECT id FROM tl_metamodel_rendersettings WHERE pid=?')
+						   ->executeUncached($objMetaModel->get('id'))
+						   ->fetchEach('id');
+			$this->Database->prepare(sprintf('DELETE FROM tl_metamodel_rendersetting WHERE pid IN (%s)', implode(',', $arrIds)))
+						   ->executeUncached();
+			$this->Database->prepare('DELETE FROM tl_metamodel_rendersettings WHERE pid=?')
+						   ->executeUncached($objMetaModel->get('id'));
+			// delete everything from filter settings
+			$arrIds = $this->Database->prepare('SELECT id FROM tl_metamodel_filter WHERE pid=?')
+						   ->executeUncached($objMetaModel->get('id'))
+						   ->fetchEach('id');
+			$this->Database->prepare(sprintf('DELETE FROM tl_metamodel_filtersetting WHERE pid IN (%s)', implode(',', $arrIds)))
+						   ->executeUncached();
+			$this->Database->prepare('DELETE FROM tl_metamodel_filter WHERE pid=?')
+						   ->executeUncached($objMetaModel->get('id'));
 		}
 	}
 
