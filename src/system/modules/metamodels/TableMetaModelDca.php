@@ -27,6 +27,19 @@ if (!defined('TL_ROOT'))
  */
 class TableMetaModelDca extends Backend
 {
+	protected function getMetaModel(DataContainer $objDC)
+	{
+		// Get Current id
+		$intID = $this->Input->get('id');
+
+		if (empty($intID))
+		{
+			return;
+		}
+		return MetaModelFactory::byId($objDC->getCurrentModel()->getProperty('pid'));
+	}
+
+
 	/**
 	 * Render a row for the list view in the backend.
 	 *
@@ -38,6 +51,72 @@ class TableMetaModelDca extends Backend
 	{
 		return $strLabel . ($arrRow['isdefault']? ' <span style="color:#b3b3b3; padding-left:3px">[' . $GLOBALS['TL_LANG']['MSC']['fallback'] . ']</span>' : '');
 	}
+
+	public function getRenderTypes(DataContainer $objDC)
+	{
+		if (!$this->getMetaModel($objDC)->hasVariants())
+		{
+			return array('standalone', 'ctable');
+			// do not forget the selftree option
+		}
+		return array('standalone', 'ctable');
+	}
+
+	/**
+	 * Returns an array with all valid tables that can be used as parent table.
+	 * Excludes the metamodel table itself in ctable mode, as that one would be "selftree" then and not ctable.
+	 *
+	 * @param DC_General $objDC the general DataContainer calling us.
+	 *
+	 * @return string[] the tables.
+	 */
+	public function getTables(DC_General $objDC)
+	{
+		if ($objDC->getCurrentModel()->getProperty('rendertype') == 'ctable')
+		{
+			$blnOmit = $this->getMetaModel($objDC)->getTableName();
+		}
+		$tables = array();
+		foreach($this->Database->listTables() as $table)
+		{
+			if (!($blnOmit && ($blnOmit == $table)))
+			{
+				$tables[$table]=$table;
+			}
+		}
+		return $tables;
+	}
+
+	public function modeLoad($varValue)
+	{
+		return 'mode_' . $varValue;
+	}
+
+	public function modeSave($varValue)
+	{
+		$arrSplit = explode('_', $varValue);
+		return $arrSplit[1];
+	}
+
+	public function getValidModes(DataContainer $objDC)
+	{
+		switch ($objDC->getCurrentModel()->getProperty('rendertype'))
+		{
+			case 'ctable':
+				return array('mode_3', 'mode_4', 'mode_6');
+			break;
+			case 'standalone':
+				return array('mode_0', 'mode_1', 'mode_2', 'mode_3', 'mode_4', 'mode_5', 'mode_6');
+			break;
+		}
+		return array();
+	}
+
+	public function backendSectionCallback()
+	{
+		return array_keys($GLOBALS['BE_MOD']);
+	}
+
 
 	/**
 	 * Check if the MM has a varsupport. If so disable some options in dca.

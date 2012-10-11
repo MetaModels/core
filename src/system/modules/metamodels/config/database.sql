@@ -32,20 +32,6 @@ CREATE TABLE `tl_metamodel` (
 -- do we support variants?
   `varsupport` char(1) NOT NULL default '',
 
-
--- type, either standalone or attached.
-  `rendertype` varchar(10) NOT NULL default '',
-
--- mode for parent<->child relationship
-  `mode` int(1) unsigned NOT NULL default '1',
-
--- parent table
-  `ptable` varchar(64) NOT NULL default '',
-
-  `backendsection` varchar(255) NOT NULL default '',
-  `backendcaption` text NULL,
-  `backendicon` varchar(255) NOT NULL default '',
-
   PRIMARY KEY  (`id`),
   KEY `tableName` (`tableName`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -65,6 +51,8 @@ CREATE TABLE `tl_metamodel_dca` (
   `name` varchar(255) NOT NULL default '',
 -- is default?
   `isdefault` char(1) NOT NULL default '',
+-- type, either standalone or attached.
+  `rendertype` varchar(10) NOT NULL default '',
 -- sorting mode.
   `mode` int(4) unsigned NOT NULL default '0',
 -- sorting flag.
@@ -73,6 +61,15 @@ CREATE TABLE `tl_metamodel_dca` (
   `fields` blob NULL,
 -- the panel layouts we want to display.
   `panelLayout` blob NULL,
+
+-- parent table (if mode 3,4,6)
+  `ptable` varchar(64) NOT NULL default '',
+
+  `backendsection` varchar(255) NOT NULL default '',
+  `backendcaption` text NULL,
+  `backendicon` varchar(255) NOT NULL default '',
+
+
   PRIMARY KEY  (`id`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

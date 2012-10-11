@@ -104,129 +104,18 @@ class MetaModelBackend
 	}
 
 	/**
-	 * Add the child tables to the DCA if any present.
+	 * Add the child tables to the DCA as operation (if any child tables are present).
 	 */
 	public function createDataContainer($strTable)
 	{
-		$objDCA = Database::getInstance()->prepare('SELECT * FROM tl_metamodel WHERE rendertype=? AND ptable=?')->execute('ctable', $strTable);
-		while ($objDCA->next())
-		{
-			$objMetaModel = MetaModelFactory::byId($objDCA->id);
-			if ($objMetaModel)
-			{
-				$arrCaption = array('', sprintf($GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'], $objMetaModel->getName()));
-				foreach (deserialize($objMetaModel->get('backendcaption'), true) as $arrLangEntry)
-				{
-					if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == self::getUser()->language)
-					{
-						$arrCaption = array($arrLangEntry['description'], $arrLangEntry['label']);
-					}
-				}
-
-				$GLOBALS['TL_DCA'][$strTable]['list']['operations']['edit_'.$objMetaModel->getTableName()] = array
-				(
-					'label'               => $arrCaption,
-					'href'                => 'table='.$objMetaModel->getTableName(),
-					'icon'                => $this->getBackendIcon($objMetaModel->get('backendicon')),
-					'attributes'          => 'onclick="Backend.getScrollOffset()"'
-				);
-
-				// is the destination table a metamodel with variants?
-				if ($objMetaModel->hasVariants())
-				{
-					$GLOBALS['TL_DCA'][$strTable]['list']['operations']['edit_'.$objMetaModel->getTableName()]['idparam'] = 'id_'.$strTable;
-				}
-			}
-		}
+		MetaModelDcaBuilder::getInstance()->injectChildTablesIntoDCA($strTable, $GLOBALS['TL_DCA'][$strTable]);
 	}
-
-	/**
-	 * Prepare the backend layout for a certain MM.
-	 */
-	protected static function handleModel($objMetaModel)
-	{
-		if (!$objMetaModel->rendertype)
-		{
-			return;
-		}
-
-		switch ($objMetaModel->rendertype)
-		{
-			case 'ctable':
-				// create a child relation in parent.
-				self::$arrTableInjections[$objMetaModel->ptable][] = $objMetaModel->tableName;
-				$blnPostConfig = true;
-				self::registerLateConfig();
-				break;
-
-			case 'selftree':
-				// => mode 5 - Records are displayed as self containing tree (see site structure)
-				// must provide backend section then, as no external parent available.
-				break;
-
-			case 'standalone':
-				$strModuleName = 'metamodel_' . $objMetaModel->tableName;
-				$strTableCaption = $objMetaModel->name;
-
-				// determine image to use.
-				if ($objMetaModel->backendicon && file_exists(TL_ROOT . '/' . $objMetaModel->backendicon))
-				{
-					$strIcon = MetaModelController::getImage(MetaModelController::urlEncode($objMetaModel->backendicon), 16, 16);;
-				} else {
-					$strIcon = 'system/modules/metamodels/html/metamodels.png';
-				}
-
-				$strSection = (trim($objMetaModel->backendsection)) ? $objMetaModel->backendsection : 'metamodels';
-
-				$GLOBALS['BE_MOD'][$strSection][$strModuleName] = array
-				(
-					'tables'			=> array($objMetaModel->tableName),
-					'icon'				=> $strIcon,
-					'callback'			=> 'MetaModelBackendModule'
-				);
-
-				$arrCaption = array($strTableCaption);
-				foreach (deserialize($objMetaModel->backendcaption, true) as $arrLangEntry)
-				{
-					if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == self::getUser()->language)
-					{
-						$arrCaption = array($arrLangEntry['label'], $arrLangEntry['description']);
-					}
-				}
-				$GLOBALS['TL_LANG']['MOD'][$strModuleName] = $arrCaption;
-				break;
-
-			default:
-				throw new Exception("Unknown Backend rendering mode " . $objMetaModel->rendertype);
-
-				break;
-		}
-	}
-
-	protected static function addTablesToParent($arrTableNames, $strPTableName)
-	{
-		foreach ($GLOBALS['BE_MOD'] as $strGroup => $arrModules)
-		{
-			foreach ($arrModules as $strModule => $arrConfig)
-			{
-				if (isset($arrConfig['tables']) && in_array($strPTableName, $arrConfig['tables']))
-				{
-					$GLOBALS['BE_MOD'][$strGroup][$strModule]['tables'] = array_merge($GLOBALS['BE_MOD'][$strGroup][$strModule]['tables'], $arrTableNames);
-				}
-			}
-		}
-	}
-
-	protected static $arrTableInjections = array();
 
 	public static function checkBackendLoad($strClass)
 	{
 		if ($strClass == 'Backend')
 		{
-			foreach (self::$arrTableInjections as $strParent => $arrInjection)
-			{
-				self::addTablesToParent($arrInjection, $strParent);
-			}
+			MetaModelDcaBuilder::getInstance()->injectIntoBackendModules();
 			spl_autoload_unregister(array('MetaModelBackend', 'checkBackendLoad'));
 		}
 		return false;
@@ -234,14 +123,11 @@ class MetaModelBackend
 
 	protected static function registerLateConfig()
 	{
-		if (count(self::$arrTableInjections))
+		// register a autoloader which will transport the config variables and unregister itself when loading class Backend.
+		spl_autoload_register(array('MetaModelBackend', 'checkBackendLoad'), true, true);
+		if (!in_array('__autoload', spl_autoload_functions()))
 		{
-			// register a autoloader which will transport the config variables and unregister itself when loading class Backend.
-			spl_autoload_register(array('MetaModelBackend', 'checkBackendLoad'), true, true);
-			if (!in_array('__autoload', spl_autoload_functions()))
-			{
-				spl_autoload_register('__autoload');
-			}
+			spl_autoload_register('__autoload');
 		}
 	}
 
@@ -272,22 +158,11 @@ class MetaModelBackend
 				// I can't work without a properly installed database.
 				return;
 			}
-
 			// if no backend user authenticated, we will get redirected.
 			self::authenticateBackendUser();
 
-			$blnPostConfig = false;
-
-			$objMetaModels = Database::getInstance()->prepare('SELECT * FROM tl_metamodel')->execute();
-			while ($objMetaModels->next())
-			{
-				self::handleModel($objMetaModels);
-			}
-
-			if ($blnPostConfig)
-			{
-				self::registerLateConfig();
-			}
+			MetaModelDcaBuilder::getInstance()->injectBackendMenu();
+			self::registerLateConfig();
 		}
 	}
 }

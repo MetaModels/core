@@ -289,47 +289,6 @@ class TableMetaModel extends Backend
 		return $strTableName;
 	}
 
-	public function modeLoad($varValue)
-	{
-		return 'mode_' . $varValue;
-	}
-
-	public function modeSave($varValue)
-	{
-		$arrSplit = explode('_', $varValue);
-		return $arrSplit[1];
-	}
-
-	public function backendSectionCallback()
-	{
-		return array_keys($GLOBALS['BE_MOD']);
-	}
-
-
-	public function getRenderTypes(DataContainer $objDC)
-	{
-        if (!$objDC->getCurrentModel()->getProperty('varsupport'))
-        {
-            return array('standalone', 'ctable');
-            // do not forget the selftree option
-        }
-		return array('standalone', 'ctable');
-	}
-
-	public function getValidModes(DataContainer $objDC)
-	{
-		switch ($objDC->getCurrentModel()->getProperty('rendertype'))
-		{
-			case 'ctable':
-				return array('mode_3', 'mode_4', 'mode_6');
-			break;
-			case 'standalone':
-				return array('mode_0', 'mode_1', 'mode_2', 'mode_3', 'mode_4', 'mode_5', 'mode_6');
-			break;
-		}
-		return array();
-	}
-
 	public function getAttributes()
 	{
 		$objMetaModel = MetaModelFactory::byId();
@@ -337,31 +296,6 @@ class TableMetaModel extends Backend
 		foreach($this->Database->listTables() as $table)
 		{
 			$tables[$table]=$table;
-		}
-		return $tables;
-	}
-
-	/**
-	 * Returns an array with all valid tables that can be used as parent table.
-	 * Excludes the metamodel table itself in ctable mode, as that one would be "selftree" then and not ctable.
-	 *
-	 * @param DC_General $objDC the general DataContainer calling us.
-	 *
-	 * @return string[] the tables.
-	 */
-	public function getTables(DC_General $objDC)
-	{
-		if ($objDC->getCurrentModel()->getProperty('rendertype') == 'ctable')
-		{
-			$blnOmit = $objDC->getCurrentModel()->getProperty('tableName');
-		}
-		$tables = array();
-		foreach($this->Database->listTables() as $table)
-		{
-			if (!($blnOmit && ($blnOmit == $table)))
-			{
-				$tables[$table]=$table;
-			}
 		}
 		return $tables;
 	}
