@@ -166,6 +166,13 @@ class ModuleMetaModelList extends Module
 		$objItems = $objMetaModel->findByFilter($objFilter, $this->metamodel_sortby, $arrLimits[1], $arrLimits[0], 'ASC', $objView->getSettingNames());
 
 		$objTemplate->items = $objItems;
+		$objTemplate->data = array();
+
+		//render items (if any) only if the "do not render option" is not set
+		if ($intTotal && !$this->metamodel_noparsing)
+		{
+			$objTemplate->data = $objItems->parseAll($this->Template->getFormat(), $objView);			
+		}
 
 		$this->Template->items = $objTemplate->parse($this->Template->getFormat());
 	}

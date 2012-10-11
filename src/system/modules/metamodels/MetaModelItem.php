@@ -208,6 +208,7 @@ class MetaModelItem implements IMetaModelItem
 			$objAttribute = $this->getMetaModel()->getAttribute($strAttrName);
 			if ($objAttribute)
 			{
+				$arrResult['attributes'][$objAttribute->getColName()] = $objAttribute->getName();
 				foreach($this->internalParseAttribute($objAttribute, $strOutputFormat, $objSettings) as $strKey => $varValue)
 				{
 					$arrResult[$strKey][$objAttribute->getColName()] = $varValue;
