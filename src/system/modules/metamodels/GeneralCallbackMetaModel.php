@@ -66,7 +66,7 @@ class GeneralCallbackMetaModel extends GeneralCallbackDefault
 
 		$objTemplate->items     = new MetaModelItems(array($objItem));
 		$objTemplate->view      = $objSettings;
-		$objTemplate->data      = $objItem->parseValue('html5', $objSettings);
+		$objTemplate->data      = array($objItem->parseValue('html5', $objSettings));
 	}
 
 	/**
