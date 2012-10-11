@@ -13,10 +13,6 @@
  * @license    private
  * @filesource
  */
-if (!defined('TL_ROOT'))
-{
-	die('You cannot access this file directly!');
-}
 
 /**
  * This is the IMetaModelRenderSettings factory interface.
@@ -41,8 +37,9 @@ class MetaModelRenderSettingsFactory implements IMetaModelRenderSettingsFactory
 	{
 		if ($objSetting->get('id'))
 		{
-			$objViewAttributes = Database::getInstance()->prepare('SELECT * FROM tl_metamodel_rendersetting WHERE pid=? AND enabled=1')
-											  ->execute($objSetting->get('id'));
+			$objViewAttributes = Database::getInstance()
+					  ->prepare('SELECT * FROM tl_metamodel_rendersetting WHERE pid=? AND enabled=1 ORDER BY sorting')
+					  ->execute($objSetting->get('id'));
 			while ($objViewAttributes->next())
 			{
 				$objAttr = $objMetaModel->getAttributeById($objViewAttributes->attr_id);
