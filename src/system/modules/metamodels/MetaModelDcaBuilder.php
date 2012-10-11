@@ -201,7 +201,7 @@ class MetaModelDcaBuilder
 			}
 		}
 
-		if ($arrGroupIds)
+		if ($arrGroups)
 		{
 			$arrFallbacks = $this->getPaletteCombinationRows($strGrpCol, $arrGroups);
 		} else {
