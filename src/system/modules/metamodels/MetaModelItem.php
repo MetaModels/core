@@ -187,21 +187,35 @@ class MetaModelItem implements IMetaModelItem
 			'attributes' => array(),
 			$strOutputFormat => array()
 		);
-		foreach($this->getMetaModel()->getAttributes() as $objAttribute)
-		{
-			//if rendersettings are present, only render attribute with render settings
-			if ($objSettings && $objSettings->getSetting($objAttribute->get('colname')) == null)
-			{
-				continue;  
-			}
-			
-			$arrResult['attributes'][$objAttribute->getColName()] = $objAttribute->getName();
 
-			foreach($this->internalParseAttribute($objAttribute, $strOutputFormat, $objSettings) as $strKey => $varValue)
+		// no render settings, parse "normal" and hope the best - not all attribute types must provide usable output.
+		if (!$objSettings)
+		{
+			foreach($this->getMetaModel()->getAttributes() as $objAttribute)
 			{
-				$arrResult[$strKey][$objAttribute->getColName()] = $varValue;
+				$arrResult['attributes'][$objAttribute->getColName()] = $objAttribute->getName();
+				foreach($this->internalParseAttribute($objAttribute, $strOutputFormat, null) as $strKey => $varValue)
+				{
+					$arrResult[$strKey][$objAttribute->getColName()] = $varValue;
+				}
+			}
+			return $arrResult;
+		}
+
+		// first, parse the values in the same order as they are in the render settings.
+		foreach ($objSettings->getSettingNames() as $strAttrName)
+		{
+			$objAttribute = $this->getMetaModel()->getAttribute($strAttrName);
+			if ($objAttribute)
+			{
+				foreach($this->internalParseAttribute($objAttribute, $strOutputFormat, $objSettings) as $strKey => $varValue)
+				{
+					$arrResult[$strKey][$objAttribute->getColName()] = $varValue;
+				}
 			}
 		}
+
+		// second, apply jumpTo urls based upon the filter defined in the render settings.
 		if ($objSettings
 			&& $objSettings->get('jumpTo')
 			&& ($objPage = MetaModelController::getPageDetails($objSettings->get('jumpTo')))
