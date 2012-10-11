@@ -130,6 +130,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 		(
 			'standalone' => array
 			(
+				'mode',
 				'backendsection',
 				'backendicon',
 				'backendcaption'

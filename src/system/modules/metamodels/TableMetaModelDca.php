@@ -106,7 +106,7 @@ class TableMetaModelDca extends Backend
 				return array('mode_3', 'mode_4', 'mode_6');
 			break;
 			case 'standalone':
-				return array('mode_0', 'mode_1', 'mode_2', 'mode_3', 'mode_4', 'mode_5', 'mode_6');
+				return array('mode_0', 'mode_1', 'mode_2', 'mode_5');
 			break;
 		}
 		return array();
