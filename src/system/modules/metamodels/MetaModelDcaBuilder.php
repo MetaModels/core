@@ -148,7 +148,9 @@ class MetaModelDcaBuilder
 				$arrDCAs[] = $arrInfo['comb']['dca_id'];
 			}
 		}
-
+		
+		if (!$arrDCAs) return;
+		
 		$objDca = Database::getInstance()
 			->prepare(sprintf('SELECT * FROM tl_metamodel_dca WHERE id IN (%s)', implode(',', $arrDCAs)))
 			->execute();
@@ -205,8 +207,11 @@ class MetaModelDcaBuilder
 		} else {
 			$arrFallbacks = array_keys($this->arrInformation);
 		}
-		$this->getPaletteCombinationDefault($arrFallbacks);
-
+		if ($arrFallbacks)
+		{
+			$this->getPaletteCombinationDefault($arrFallbacks);
+		}
+		
 		$this->getDCAs();
 	}
 
