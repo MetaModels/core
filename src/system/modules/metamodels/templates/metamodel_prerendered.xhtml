@@ -2,7 +2,7 @@
 
 <div class="layout_full">
 
-<?php foreach ($this->items->parseAll($this->getFormat(), $this->view) as $arrItem): /* loop over all items. */ ?>
+<?php foreach ($this->data as $arrItem): /* loop over all items. */ ?>
 <div class="item <?php echo $arrItem['class']; ?>">
 
 <?php foreach ($arrItem['attributes'] as $field => $strName): /* loop over all attributes. */ ?>
