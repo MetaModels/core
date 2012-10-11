@@ -239,7 +239,6 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 		}
 		$arrFieldDef = array(
 			'label' => &$GLOBALS['TL_LANG'][$strTableName][$this->getColName()],
-			'flag' => '1',
 			'eval'  => array()
 		);
 
