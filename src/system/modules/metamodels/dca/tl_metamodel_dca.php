@@ -6,7 +6,7 @@
  * data in each collection.
  *
  * PHP version 5
- * @package	   MetaModels
+ * @package       MetaModels
  * @subpackage Backend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  CyberSpectrum
@@ -28,12 +28,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 	// Config
 	'config' => array
 	(
-		'dataContainer'               => 'General',
-		'ptable'                      => 'tl_metamodel',
-		'ctable'                      => 'tl_metamodel_dcasetting',
-		'switchToEdit'                => false,
-		'enableVersioning'            => false,
-//		'oncreate_callback'	      	  => array(array('TableMetaModelDca', 'checkSortMode')),
+		'dataContainer' => 'General',
+		'ptable' => 'tl_metamodel',
+		'ctable' => 'tl_metamodel_dcasetting',
+		'switchToEdit' => false,
+		'enableVersioning' => false,
+//		'oncreate_callback'                => array(array('TableMetaModelDca', 'checkSortMode')),
 	),
 
 	// List
@@ -132,15 +132,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			(
 				'mode',
 				'backendsection',
-				'backendicon',
-				'backendcaption'
+				'backendicon'
 			),
 			'ctable' => array
 			(
 				'ptable',
 				'mode',
-				'backendicon',
-				'backendcaption'
+				'backendicon'
 			)
 		),
 
@@ -155,13 +153,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 				5 Records are displayed as tree (see site structure)
 				6 Displays the child records within a tree structure (see articles module)
 			*/
-			'mode_0'  => array('backendsection', 'backendicon', 'flag'),
-			'mode_1'  => array('backendsection', 'backendicon', 'flag'),
-			'mode_2'  => array('backendsection', 'backendicon', 'flag'),
-			'mode_3'  => array('backendsection', 'backendicon'),
+			'mode_0'  => array('flag'),
+			'mode_1'  => array('flag'),
+			'mode_2'  => array('flag'),
+			'mode_3'  => array(''),
 			'mode_4'  => array(''), // TODO: select parent head fields here.
-			'mode_5'  => array('backendsection', 'backendicon'),
-			'mode_6'  => array('ptable', 'backendicon'),
+			'mode_5'  => array(''),
+			'mode_6'  => array('ptable'),
 		),
 	),
 
@@ -230,7 +228,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			*/
 			'eval'                    => array
 			(
-				'includeBlankOption'  => true,
 				'tl_class'            => 'w50',
 				'submitOnChange'      => true
 			),
@@ -265,7 +262,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 				'includeBlankOption'  => true,
 				'valign'              => 'top',
 				'chosen'              => true,
-                'tl_class'            => 'w50'
+				'tl_class'            => 'w50'
 			),
 			'options_callback'        => array('TableMetaModelDca', 'backendSectionCallback'),
 		),
@@ -290,7 +287,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption'],
 			'exclude'                 => true,
 			'inputType'               => 'multiColumnWizard',
-			'eval' 			=> array
+			'eval'             => array
 			(
 				'columnFields' => array
 				(
