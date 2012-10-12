@@ -132,7 +132,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		),
 		'_attribute_ extends default' => array
 		(
-			'config' => array('attr_id', 'allow_empty')
+			'config' => array('attr_id')
 		),
 
 		// base rules shipped with metamodels.
@@ -144,7 +144,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 
 		'simplelookup extends _attribute_' => array
 		(
-			'+config' => array('urlparam'),
+			'+config' => array('urlparam', 'allow_empty'),
 		),
 
 		'customsql extends default' => array
@@ -211,7 +211,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 				'submitOnChange'      => true,
 				'includeBlankOption'  => true,
 				'mandatory'           => true,
-                'tl_class'            => 'w50',
+				'tl_class'            => 'w50',
 			),
 			'load_callback'           => array(array('TableMetaModelFilterSetting', 'attrIdToName')),
 			'save_callback'           => array(array('TableMetaModelFilterSetting', 'nameToAttrId')),
@@ -234,9 +234,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam'],
 			'exclude'                 => true,
 			'inputType'               => 'text',
-            'eval'                    => array(
-                'tl_class'            => 'w50',
-            )
+			'eval'                    => array(
+				'tl_class'            => 'w50',
+			)
 		),
 
 		'customsql' => array
@@ -252,7 +252,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			),
 			'explanation'         => 'customsql'
 		),
-	    	'allow_empty' => array
+		'allow_empty' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['allow_empty'],
 			'exclude'                 => true,
