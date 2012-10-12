@@ -265,6 +265,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 				'includeBlankOption'  => true,
 				'valign'              => 'top',
 				'chosen'              => true,
+                'tl_class'            => 'w50'
 			),
 			'options_callback'        => array('TableMetaModelDca', 'backendSectionCallback'),
 		),
