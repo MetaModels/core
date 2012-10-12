@@ -249,7 +249,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'exclude'                 => true,
 			'inputType'               => 'select',
 			'options'                 => array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
-			'eval'                    => array('tl_class'=>'w50', 'includeBlankOption' => true),
+			'eval'                    => array('tl_class'=>'w50'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']
 		),
 
