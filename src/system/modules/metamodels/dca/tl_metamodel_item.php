@@ -60,7 +60,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 			'panelLayout'             => 'limit',
 			// TODO: panelLayout must be built dynamically in getMetaModelDca() to solve issue #199
 			'headerFields'            => array('tstamp'),
-			'fields'                  => array('sorting'),
 		),
 
 		'label' => array
@@ -69,7 +68,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 			'format'                  => 'unused',
 //			'label_callback'          => array('MetaModelDatabase', 'labelCallback'),
 		),
-        
+
         // not yet implemented
         /* 'global_operations' => array
         (

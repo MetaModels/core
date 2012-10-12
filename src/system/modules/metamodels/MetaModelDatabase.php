@@ -102,6 +102,8 @@ class MetaModelDatabase extends Controller
 						if ($objDCASettings->sortable)
 						{
 							$arrDCA['fields'][$objAttribute->getColName()]['sort'] = true;
+							// add sorting fields.
+							$arrDCA['list']['sorting']['fields'][] = $objAttribute->getColName();
 						}
 					}
 					break;
@@ -307,8 +309,9 @@ class MetaModelDatabase extends Controller
 		// Set filter/sorting fields
 		$arrSorting = array();
 
-		// Set Sorting flag from current renderSettings
-		$arrDCA['list']['sorting']['fields'] = $arrSorting;
+		// add sorting field to sortable field list.
+		// TODO: empty this list when toggling manual sort.
+		$arrDCA['list']['sorting']['fields'][] = 'sorting';
 
 		// Set Sorting panelLayout from current renderSettings
 		$arrDCA['list']['sorting']['panelLayout'] = $arrDCASettings['panelLayout'];
@@ -444,7 +447,6 @@ class MetaModelDatabase extends Controller
 			$this->createDataContainerNormal($objMetaModel, $arrDCASettings, $arrDCA);
 		}
 		$GLOBALS['TL_LANG'][$objMetaModel->getTableName()] = array_replace_recursive($GLOBALS['TL_LANG']['tl_metamodel_item'], (array) $GLOBALS['TL_LANG'][$objMetaModel->getTableName()]);
-
 		// TODO: add a HOOK here for extensions to manipulate the DCA. loadMetaModelDataContainer($objMetaModel)
 		//$GLOBALS['METAMODEL_HOOKS']['loadDataContainer']
 
