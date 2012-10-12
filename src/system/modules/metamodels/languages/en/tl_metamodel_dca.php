@@ -40,12 +40,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_description']    = array('Descrip
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']          = array('Panel layout', 'Separate panel options with comma (= space) and semicolon (= new line) like sort,filter;search,limit.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker']          = 'Panelpicker';
 
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['fields']               = array('Field configuration', 'Configure the header fields for a better user experience.');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['field_attribute']      = 'Attribute name';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['field_filterable']     = 'Filterable';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['field_sortable']       = 'Sortable';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['field_searchable']     = 'Searchable';
-
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['use_limitview']        = array('View limitation', 'Activate the view limitation.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']  = array('Limit the rendersetting', 'Choose between frontend or backend.');
 

@@ -31,6 +31,12 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']     = array('Legen
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']   = 'Language';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']      = 'Legend title';
 
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['filterable']      = array('Filterable', 'Check if this attribute shall be available for backend filtering.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortable']        = array('Sortable', 'Check if this attribute shall be available for backend sorting.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['searchable']      = array('Searchable', 'Check if this attribute shall be available for backend search.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag']            = array('Sorting flag override', 'If you want to override the global sorting flag from the palette for this attribute, please select it here.');
+
+
 /**
  * Legends
  */
@@ -55,5 +61,22 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legend_row']      = '<div class=
  */
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['legend']         = 'Legend';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['attribute']      = 'Attribute';
+
+/**
+ * Reference
+ */
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['1']     = 'Sort by initial letter ascending';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['2']     = 'Sort by initial letter descending';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['3']     = 'Sort by initial "length" letters ascending';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['4']     = 'Sort by initial "length" letters descending';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['5']     = 'Sort by day ascending';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['6']     = 'Sort by day descending';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['7']     = 'Sort by month ascending';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['8']     = 'Sort by month descending';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['9']     = 'Sort by year ascending';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['10']    = 'Sort by year descending';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['11']    = 'Sort ascending';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['12']    = 'Sort descending';
+
 
 ?>

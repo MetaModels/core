@@ -115,7 +115,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'view' => array
 			(
 				'panelLayout',
-				'fields',
 			),
 			'backend' => array
 			(
@@ -327,62 +326,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 					),
 				),
 			)
-		),
-
-		// TODO: ensure in save callback the uniqueness of the attribute column.
-		'fields' => array
-		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['fields'],
-			'exclude'                 => true,
-			'inputType'               => 'multiColumnWizard',
-			'eval'                    => array
-			(
-				'columnFields' => array
-				(
-					'field_attribute' => array
-					(
-						'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['field_attribute'],
-						'exclude'               => true,
-						'inputType'             => 'select',
-						'options_callback'      => array('TableMetaModelDca','getAllAttributes'),
-						'eval' => array
-						(
-							'style'             => 'width:400px',
-							'chosen'            => 'true'
-						)
-					),
-					'filterable' => array
-					(
-						'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['field_filterable'],
-						'exclude'               => true,
-						'inputType'             => 'checkbox',
-						'eval' => array
-						(
-							'style'             => 'width:55px',
-						)
-					),
-					'sortable' => array
-					(
-						'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['field_sortable'],
-						'exclude'               => true,
-						'inputType'             => 'checkbox',
-						'eval' => array
-						(
-							'style'             => 'width:55px',
-						)
-					),
-					'searchable' => array
-					(
-						'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['field_searchable'],
-						'exclude'               => true,
-						'inputType'             => 'checkbox',
-						'eval'                  => array
-						(
-							'style'             => 'width:65px',
-						)
-					),
-				),
-			),
 		),
 		'panelLayout' => array
 		(

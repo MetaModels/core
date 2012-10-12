@@ -57,19 +57,13 @@ CREATE TABLE `tl_metamodel_dca` (
   `mode` int(4) unsigned NOT NULL default '0',
 -- sorting flag.
   `flag` int(4) unsigned NOT NULL default '0',
--- fields for sorting
-  `fields` blob NULL,
 -- the panel layouts we want to display.
   `panelLayout` blob NULL,
-
 -- parent table (if mode 3,4,6)
   `ptable` varchar(64) NOT NULL default '',
-
   `backendsection` varchar(255) NOT NULL default '',
   `backendcaption` text NULL,
   `backendicon` varchar(255) NOT NULL default '',
-
-
   PRIMARY KEY  (`id`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -91,6 +85,12 @@ CREATE TABLE `tl_metamodel_dcasetting` (
 
   `attr_id` int(10) unsigned NOT NULL default '0',
   `tl_class` varchar(64) NOT NULL default '',
+
+  `filterable` char(1) NOT NULL default '',
+  `sortable` char(1) NOT NULL default '',
+  `searchable` char(1) NOT NULL default '',
+-- sorting flag override.
+  `flag` int(4) unsigned NOT NULL default '0',
 
   PRIMARY KEY  (`id`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

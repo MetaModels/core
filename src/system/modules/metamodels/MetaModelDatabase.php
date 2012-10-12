@@ -84,6 +84,25 @@ class MetaModelDatabase extends Controller
 							$arrDCA['fields'][$objAttribute->getColName()]['eval']['tl_class'] = $objDCASettings->tl_class;
 						}
 						$strPalette .= (strlen($strPalette) > 0 ? ',' : '') . $objAttribute->getColName();
+						// sorting flag override
+						if ($objDCASettings->flag)
+						{
+							$arrDCA['fields'][$objAttribute->getColName()]['flag'] = $objDCASettings->flag;
+						}
+
+						// panel conditions.
+						if ($objDCASettings->filterable)
+						{
+							$arrDCA['fields'][$objAttribute->getColName()]['filter'] = true;
+						}
+						if ($objDCASettings->searchable)
+						{
+							$arrDCA['fields'][$objAttribute->getColName()]['search'] = true;
+						}
+						if ($objDCASettings->sortable)
+						{
+							$arrDCA['fields'][$objAttribute->getColName()]['sort'] = true;
+						}
 					}
 					break;
 				case 'legend':
@@ -287,26 +306,6 @@ class MetaModelDatabase extends Controller
 
 		// Set filter/sorting fields
 		$arrSorting = array();
-
-		// FIXME: We might want to push these config options to the tl_metamodel_dcasetting table to have it tied to it's definition.
-		foreach (deserialize($arrDCASettings['fields'], true) as $field)
-		{
-			if($field['filterable'])
-			{
-				$arrDCA['fields'][$field['field_attribute']]['filter'] = true;
-			}
-
-			if($field['searchable'])
-			{
-				$arrDCA['fields'][$field['field_attribute']]['search'] = true;
-			}
-
-			if($field['sortable'])
-			{
-				$arrSorting[] = $field['field_attribute'];
-				$arrDCA['fields'][$field['field_attribute']]['sorting'] = true;
-			}
-		}
 
 		// Set Sorting flag from current renderSettings
 		$arrDCA['list']['sorting']['fields'] = $arrSorting;

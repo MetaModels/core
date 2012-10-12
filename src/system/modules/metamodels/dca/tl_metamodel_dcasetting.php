@@ -128,7 +128,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'attribute' => array
 			(
 				'attr_id',
-				'tl_class'
+				'tl_class',
+				// TODO: detect on a "per attribute basis" which attrs are sort/filter/searchable
+				'filterable',
+				'sortable',
+				'searchable',
+				'flag'
 			),
 			'legend' => array
 			(
@@ -150,7 +155,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes'],
 			'eval'                    => array
 			(
-				'tl_class'=>'w50',
+				'tl_class'            => 'w50',
 				'includeBlankOption'  => true,
 				'submitOnChange'      => true,
 			)
@@ -205,8 +210,50 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			(
 				array('TableMetaModelDcaSetting', 'encodeLegendTitle')
 			)
-		)
-
+		),
+		'filterable' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['filterable'],
+			'exclude'               => true,
+			'inputType'             => 'checkbox',
+			'eval' => array
+			(
+				'tl_class'          => 'w50 m12',
+			)
+		),
+		'sortable' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortable'],
+			'exclude'               => true,
+			'inputType'             => 'checkbox',
+			'eval' => array
+			(
+				'tl_class'          => 'w50 m12',
+			)
+		),
+		'searchable' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['searchable'],
+			'exclude'               => true,
+			'inputType'             => 'checkbox',
+			'eval'                  => array
+			(
+				'tl_class'          => 'w50 m12',
+			)
+		),
+		'flag' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag'],
+			'exclude'                 => true,
+			'inputType'               => 'select',
+			'options'                 => array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
+			'eval'                    => array
+			(
+				'tl_class'=>'w50',
+				'includeBlankOption' => true
+			),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']
+		),
 	)
 );
 
