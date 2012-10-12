@@ -132,13 +132,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			(
 				'mode',
 				'backendsection',
-				'backendicon'
+				'backendicon',
+				'backendcaption'
 			),
 			'ctable' => array
 			(
 				'ptable',
 				'mode',
-				'backendicon'
+				'backendicon',
+				'backendcaption'
 			)
 		),
 
