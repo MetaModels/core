@@ -213,6 +213,16 @@ interface IMetaModelAttribute
 	 * @return int[] the ids of matching items.
 	 */
 	public function searchFor($strPattern);
+
+	/**
+	 * Called by the MetaModel after an item has been saved.
+	 * Useful for alias fields, edit counters etc.
+	 *
+	 * @param IMetaModelItem the item that has just been saved.
+	 *
+	 * @return void
+	 */
+	public function modelSaved($objItem);
 }
 
 ?>

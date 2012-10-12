@@ -652,6 +652,11 @@ class MetaModel implements IMetaModel
 			{
 				$this->saveSimpleColumn('vargroup', array($objItem->get('id')), $objItem->get('id'));
 			}
+			// Tell all attributes that the model has been saved. Useful for alias fields, edit counters etc.
+			foreach ($this->getAttributes() as $objAttribute)
+			{
+				$objAttribute->modelSaved($objItem);
+			}
 		}
 
 		// update system columns.

@@ -345,11 +345,21 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	}
 
 	/**
+	 * {@inheritdoc}
 	 * Base implementation, do not perform any search;
 	 */
 	public function searchFor($strPattern)
 	{
 		return array();
+	}
+
+	/**
+	 * {@inheritdoc}
+	 * Base implementation, do not perform anything.
+	 */
+	public function modelSaved($objItem)
+	{
+		return;
 	}
 }
 
