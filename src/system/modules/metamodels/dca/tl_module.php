@@ -252,6 +252,9 @@ class tl_module_metamodel extends Backend
 		{
 			$arrSettings[$objFilterSettings->id] = $objFilterSettings->name;
 		}
+		
+		//sort the filtersettings
+		asort($arrSettings);
 		return $arrSettings;
 	}
 
@@ -267,11 +270,15 @@ class tl_module_metamodel extends Backend
 	{
 		$objDB = Database::getInstance();
 		$objFilterSettings = $objDB->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE pid=?')->execute($objDC->activeRecord->metamodel);
+
 		$arrSettings = array();
 		while ($objFilterSettings->next())
 		{
 			$arrSettings[$objFilterSettings->id] = $objFilterSettings->name;
 		}
+		
+		//sort the rendersettings
+		asort($arrSettings);
 		return $arrSettings;
 	}
 }
