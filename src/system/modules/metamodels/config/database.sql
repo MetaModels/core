@@ -203,6 +203,8 @@ CREATE TABLE `tl_metamodel_filtersetting` (
   `enabled` char(1) NOT NULL default '',
 -- corresponding tl_metamodel_attribute
   `attr_id` int(10) unsigned NOT NULL default '0',
+-- allow empty parameters
+  `allow_empty` char(1) NOT NULL default '',
 -- simple lookup - url param override.
   `urlparam` varchar(255) NOT NULL default '',
 -- custom SQL - query content.

@@ -132,7 +132,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		),
 		'_attribute_ extends default' => array
 		(
-			'config' => array('attr_id')
+			'config' => array('attr_id', 'allow_empty')
 		),
 
 		// base rules shipped with metamodels.
@@ -251,6 +251,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 				'helpwizard'          => true,
 			),
 			'explanation'         => 'customsql'
+		),
+	    	'allow_empty' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['allow_empty'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array(
+				'alwaysSave'          => true,
+				'tl_class'            => 'w50 m12',
+			),
 		),
 	)
 );
