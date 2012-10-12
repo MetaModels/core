@@ -318,7 +318,8 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 			}
 		}
 		else {
-			$varRaw = $arrRowData[$this->getColName()];
+			// text rendering is mandatory, therefore render using default render settings.
+			$arrResult = $this->parseValue($arrRowData, 'text', $this->getDefaultRenderSettings());
 		}
 
 		// HOOK: apply additional formatters to attribute.

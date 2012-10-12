@@ -41,15 +41,6 @@ interface IMetaModelAttributeComplex extends IMetaModelAttribute
 	public function getDataFor($arrIds);
 
 	/**
-	 * This method is called to store the data for certain items to the database.
-	 *
-	 * @param mixed[int] $arrValues the values to be stored into database. Mapping is item id=>value
-	 *
-	 * @return void
-	 */
-	public function setDataFor($arrValues);
-
-	/**
 	 * Remove values for items.
 	 *
 	 * @param int[] $arrIds the ids of the items to retrieve.

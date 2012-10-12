@@ -22,7 +22,7 @@ if (!defined('TL_ROOT'))
  * Reference implementation for IMetaModelAttributeSimple.
  * Simple fields are fields that only consist of one column in the metamodel table and therefore do not need
  * to be handled as complex fields must be.
- * 
+ *
  * @package	   MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
@@ -36,7 +36,7 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 
 	/**
 	 * {@inheritdoc }
-	 * in addition, the MetaModelAttributeSimple class will handle colName changes internally and create 
+	 * in addition, the MetaModelAttributeSimple class will handle colName changes internally and create
 	 * and rename the physical columns accordingly to the given value.
 	 */
 	public function handleMetaChange($strMetaName, $varNewValue)
@@ -53,6 +53,27 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 				break;
 		}
 		return parent::handleMetaChange($strMetaName, $varNewValue);
+	}
+
+	/**
+	 * {@inheritdoc }
+	 *
+	 * Updates the column in the MetaModel table.
+	 */
+	public function setDataFor($arrValues)
+	{
+		$strTable = $this->getMetaModel()->getTableName();
+		$strColName = $this->getColName();
+		foreach ($arrValues as $intId => $varData)
+		{
+			if(is_array($varData))
+			{
+				$varData = serialize($varData);
+			}
+			Database::getInstance()
+				->prepare(sprintf('UPDATE %s SET %s=? WHERE id=%s', $strTable, $strColName, $intId))
+				->execute($varData);
+		}
 	}
 
 	/**
@@ -77,9 +98,9 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 
 	/**
 	 * {@inheritdoc}
-	 * 
+	 *
 	 * Deriving classes SHOULD override this function.
-	 * 
+	 *
 	 */
 	public function getFilterOptions($arrIds = array())
 	{
@@ -106,16 +127,52 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 		return $arrResult;
 	}
 
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function sortIds($arrIds, $strDirection)
+	{
+		// base implementation, do a simple sorting on given column.
+		$arrIds = Database::getInstance()->prepare(sprintf(
+			'SELECT id FROM %s WHERE id IN (%s) ORDER BY %s %s',
+			$this->getMetaModel()->getTableName(),
+			implode(',', $arrIds),
+			$this->getColName(),
+			$strDirection))
+			->execute()
+			->fetchEach('id');
+		return $arrIds;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 * Base implementation, perform string matching search.
+	 */
+	public function searchFor($strPattern)
+	{
+
+		// base implementation, do a simple sorting on given column.
+		$arrIds = Database::getInstance()->prepare(sprintf(
+			'SELECT id FROM %s WHERE %s LIKE "?"',
+			$this->getMetaModel()->getTableName(),
+			$this->getColName()
+			))
+			->execute(str_replace(array('*', '?'), array('%', '_'), $strPattern))
+			->fetchEach('id');
+		return $arrIds;
+	}
+
 	/////////////////////////////////////////////////////////////////
 	// interface IMetaModelAttributeSimple
 	/////////////////////////////////////////////////////////////////
 
 	/**
 	 * {@inheritdoc}
-	 * 
+	 *
 	 * In this base class a sane value of "blob" allowing NULL is used.
 	 * Deriving classes SHOULD override this function.
-	 * 
+	 *
 	 * @return string 'blob NULL'
 	 */
 	public function getSQLDataType()
@@ -144,7 +201,7 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 	/**
 	 * Creates the underlying database structure for this field.
 	 * You have to override this function in field types, when you want to have multi column structure etc.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function createColumn()
@@ -157,7 +214,7 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 
 	/**
 	 * Removes the underlying database structure for this field.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function deleteColumn()
@@ -171,9 +228,9 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 
 	/**
 	 * Renames the underlying database structure for this field.
-	 * 
+	 *
 	 * @param string $strNewColumnName the new column name.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function renameColumn($strNewColumnName)
@@ -189,17 +246,6 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 			$this->set('colname', $strBackupColName);
 		}
 	}
-    
-    /**
-	 * {@inheritdoc}
-	 */
-	public function sortIds($arrIds, $strDirection)
-	{
-            // base implementation, do a simple sorting on given column.
-            $arrIds = Database::getInstance()->prepare('SELECT id FROM '.$this->objMetaModelTableName.' WHERE id IN ('.implode(',', $arrIds).') ORDER BY '.$this->arrData['colname'].' '.$strDirection)->execute()->fetchEach('id');
-            return $arrIds;
-	}
-    
 }
 
 ?>

@@ -151,6 +151,15 @@ interface IMetaModelAttribute
 	public function widgetToValue($varValue, $intId);
 
 	/**
+	 * This method is called to store the data for certain items to the database.
+	 *
+	 * @param mixed[int] $arrValues the values to be stored into database. Mapping is item id=>value
+	 *
+	 * @return void
+	 */
+	public function setDataFor($arrValues);
+
+	/**
 	 * Retrieve an instance containing the default render settings for an attribute of this type.
 	 *
 	 * @return object

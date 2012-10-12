@@ -604,7 +604,7 @@ class MetaModel implements IMetaModel
 			// complex saving
 			$objAttribute->setDataFor($arrData);
 		} else if(in_array('IMetaModelAttributeSimple', $arrInterfaces)) {
-			$this->saveSimpleColumn($objAttribute->getColName(), $arrIds, $varData);
+			$objAttribute->setDataFor($arrData);
 		} else {
 			throw new Exception('Unknown attribute type, can not save. Interfaces implemented: ' . implode(', ', $arrInterfaces));
 		}
@@ -651,11 +651,6 @@ class MetaModel implements IMetaModel
 			if ($blnNewBaseItem)
 			{
 				$this->saveSimpleColumn('vargroup', array($objItem->get('id')), $objItem->get('id'));
-			}
-			// Tell all attributes that the model has been saved. Useful for alias fields, edit counters etc.
-			foreach ($this->getAttributes() as $objAttribute)
-			{
-				$objAttribute->modelSaved($objItem);
 			}
 		}
 
@@ -706,6 +701,11 @@ class MetaModel implements IMetaModel
 				$arrIds = array($objItem->get('id'));
 			}
 			$this->saveAttribute($objAttribute, $arrIds, $objItem->get($strAttributeId), $strActiveLanguage);
+		}
+		// Tell all attributes that the model has been saved. Useful for alias fields, edit counters etc.
+		foreach ($this->getAttributes() as $objAttribute)
+		{
+			$objAttribute->modelSaved($objItem);
 		}
 	}
 
