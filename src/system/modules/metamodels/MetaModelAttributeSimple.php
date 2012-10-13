@@ -45,7 +45,7 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 		switch($strMetaName)
 		{
 			case 'colname':
-				if($this->get($strKey) != $varNewValue)
+				if($this->get($strMetaName) != $varNewValue)
 				{
 					$this->renameColumn($varNewValue);
 				}
