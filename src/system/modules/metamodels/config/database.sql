@@ -23,8 +23,6 @@ CREATE TABLE `tl_metamodel` (
   `tableName` varchar(64) NOT NULL default '',
 -- mode for parent<->child relationship
   `mode` int(1) unsigned NOT NULL default '1',
--- parent table
-  `ptable` varchar(64) NOT NULL default '',
 -- is this MetaModel translatable
   `translated` char(1) NOT NULL default '',
 -- if translated, to which languages?

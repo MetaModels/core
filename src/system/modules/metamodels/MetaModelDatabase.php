@@ -222,10 +222,9 @@ class MetaModelDatabase extends Controller
 			'doNotShow' => true
 		    )
 		);
-
-		if ($objMetaModel->get('ptable'))
+		if ($arrDCASetting['ptable'])
 		{
-			if ($objMetaModel->get('ptable') == $objMetaModel->get('tableName'))
+			if ($arrDCASetting['ptable'] == $objMetaModel->get('tableName'))
 			{
 				$pidValue = 0;
 			}
@@ -243,11 +242,11 @@ class MetaModelDatabase extends Controller
 		}
 
 		$arrOperationCreateVariant = array
-		    (
-		    'label' => &$GLOBALS['TL_LANG']['tl_metamodel_item']['createvariant'],
-		    'href' => 'act=createvariant',
-		    'icon' => 'system/modules/metamodels/html/variants.png',
-		    'button_callback' => array('MetaModelDatabase', 'buttonCallbackCreateVariant')
+		(
+			'label' => &$GLOBALS['TL_LANG']['tl_metamodel_item']['createvariant'],
+			'href' => 'act=createvariant',
+			'icon' => 'system/modules/metamodels/html/variants.png',
+			'button_callback' => array('MetaModelDatabase', 'buttonCallbackCreateVariant')
 		);
 
 		$arrDCA['list']['operations']['copy']['href'] = 'act=paste&mode=copy';
@@ -256,8 +255,9 @@ class MetaModelDatabase extends Controller
 		$intPos = array_search('copy', array_keys($arrDCA['list']['operations']));
 		if ($intPos !== false)
 		{
-			array_insert($arrDCA['list']['operations'], $intPos + 1, array(
-			    'createvariant' => $arrOperationCreateVariant
+			array_insert($arrDCA['list']['operations'], $intPos + 1, array
+				(
+					'createvariant' => $arrOperationCreateVariant
 				)
 			);
 		}
