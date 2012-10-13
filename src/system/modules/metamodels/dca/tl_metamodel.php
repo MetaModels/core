@@ -32,10 +32,6 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 		'ctable'                      => array('tl_metamodel_attribute', 'tl_metamodel_filter', 'tl_metamodel_rendersettings', 'tl_metamodel_dca', 'tl_metamodel_dca_combine'),
 		'switchToEdit'                => true,
 		'enableVersioning'            => true,
-		'onload_callback'             => array
-		(
-			array('TableMetaModel', 'onLoadCallback'),
-		),
 		'onsubmit_callback'           => array
 		(
 			array('TableMetaModel', 'onSubmitCallback'),

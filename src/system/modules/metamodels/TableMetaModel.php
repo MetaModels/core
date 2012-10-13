@@ -27,23 +27,22 @@ if (!defined('TL_ROOT'))
  */
 class TableMetaModel extends Backend
 {
+	/**
+	 * Class constructor, imports the Backend user.
+	 */
 	public function __construct()
 	{
 		parent::__construct();
 		$this->import('BackendUser', 'User');
 	}
 
-	public function onLoadCallback(DataContainer $objDC)
-	{
-		// TODO: only checks for admin, is this really needed anymore?
-		MetaModelPermissions::checkPermission($this->User, $this->Input->get('act'), $this->Input->get('id'));
-		$this->checkRemoveTable($objDC);
-	}
-
 	/**
 	 * Creates or renames the MetaModel table according to the given name.
 	 * Updates variant support information.
 	 *
+	 * @param DC_General $objDC the datacontainer where the model is loaded.
+	 *
+	 * @return void
 	 */
 	public function onSubmitCallback(DC_General $objDC)
 	{
@@ -79,6 +78,13 @@ class TableMetaModel extends Backend
 		MetaModelTableManipulation::setVariantSupport($strNewTableName, $objDBModel->getProperty('varsupport'));
 	}
 
+	/**
+	 * Destroys the MetaModel table and all associated entries in child tables like filter-, render- and dcasettings.
+	 *
+	 * @param DC_General $objDC the datacontainer where the model is loaded.
+	 *
+	 * @return void
+	 */
 	public function onDeleteCallback(DC_General $objDC)
 	{
 		$objMetaModel = MetaModelFactory::byId($objDC->getId());
@@ -166,42 +172,6 @@ class TableMetaModel extends Backend
 		}
 
 		return serialize($arrOutput);
-	}
-
-	protected function checkRemoveTable(DataContainer $objDC)
-	{
-		// Watch out! We keep ending up here as this is called from DC_Table::__construct
-		// This means, when we are deleting comments (or whatever we might want to add in the future) the act equals 'delete'
-		// and therefore without this check here, we would kill the MetaModel table.
-		if (!(($this->Input->get('act') == 'deleteAll') || ($this->Input->get('act') == 'delete'))
-		|| ($this->Input->get('key') != '') || ($this->Input->get('table') != ''))
-		{
-			return;
-		}
-
-		// FIXME: @CS do we really have to handle deleteAll, cannot we simply deny this?
-		$arrIds = array();
-		if ($this->Input->get('act') == 'deleteAll')
-		{
-			$arrSession = $this->Session->getData();
-			$arrIds = $arrSession['CURRENT']['IDS'];
-		}
-		else if ($this->Input->get('act') == 'delete')
-		{
-			// see above onDeleteCallback(DC_General $objDC)
-			return;
-			$arrIds = array($objDC->id);
-		}
-
-		foreach ($arrIds as $intId)
-		{
-			$objMetaModel = MetaModelFactory::byId($intId);
-			if ($objMetaModel)
-			{
-				// TODO: implement IMetaModel::suicide() to delete all entries in secondary tables (complex attributes).
-				MetaModelTableManipulation::deleteTable($objMetaModel->getTableName());
-			}
-		}
 	}
 
 	/**
