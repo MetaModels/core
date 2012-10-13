@@ -20,9 +20,9 @@ if (!defined('TL_ROOT'))
 
 /**
  * This is the IMetaModelFilter factory interface.
- * 
+ *
  * To create a IMetaModelFilter instance, call {@link MetaModelFilter::byId()}
- * 
+ *
  * @package	   MetaModels
  * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
@@ -30,15 +30,17 @@ if (!defined('TL_ROOT'))
 class MetaModelFilterSettingsFactory implements IMetaModelFilterSettingsFactory
 {
 	/**
+	 * Keeps track of all filter settings instances to save DB lookup queries.
+	 *
 	 * @var IMetaModelFilterSettings[]
 	 */
 	protected static $arrInstances = array();
 
 	/**
 	 * Create a IMetaModelFilter instance from the id.
-	 * 
+	 *
 	 * @param int $intId the id of the IMetaModelFilter.
-	 * 
+	 *
 	 * @return IMetaModelFilter the instance of the IMetaModelFilter or null if not found.
 	 */
 	public static function byId($intId)
@@ -60,7 +62,7 @@ class MetaModelFilterSettingsFactory implements IMetaModelFilterSettingsFactory
 
 	/**
 	 * Query for all known MetaModel database tables.
-	 * 
+	 *
 	 * @return string[] all MetaModel table names as string array.
 	 */
 	// public static function getAllFor();

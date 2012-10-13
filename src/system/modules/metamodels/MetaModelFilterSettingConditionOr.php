@@ -20,13 +20,20 @@ if (!defined('TL_ROOT')) {
 /**
  * This filter condition generates a "OR" condition from all child filter settings.
  * The generated rule will return ids that are mentioned in ANY of the child rules.
- * 
+ *
  * @package	   MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
 class MetaModelFilterSettingConditionOr extends MetaModelFilterSettingWithChilds
 {
+	/**
+	 * Generates the filter rules based upon the given fulter url.
+	 *
+	 * {@inheritdoc}
+	 *
+	 * @see MetaModelFilterSetting::prepareRules()
+	 */
 	public function prepareRules(IMetaModelFilter $objFilter, $arrFilterUrl)
 	{
 		$objFilterRule = new MetaModelFilterRuleOR();

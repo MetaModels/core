@@ -32,14 +32,19 @@ interface IMetaModelFilterSetting
 	 * Tells the filter setting to add all of its rules to the passed filter object.
 	 * The filter rules can evaluate the also passed filter url.
 	 *
+	 * A filter url hereby is a simple hash of name => value layout, it may eventually be interpreted
+	 * by attributes via IMetaModelAttribute::parseFilterUrl() method.
+	 *
 	 * @param IMetaModelFilter $objFilter    the filter to append the rules to.
 	 *
 	 * @param string[string]   $arrFilterUrl the parameters to evaluate.
+	 *
+	 * @return void
 	 */
 	public function prepareRules(IMetaModelFilter $objFilter, $arrFilterUrl);
 
 	/**
-	 * obsolete?
+	 * TODO: obsolete?
 	 */
 	public function generateFilterUrlFrom(IMetaModelItem $objItem, IMetaModelRenderSettings $objRenderSetting);
 }

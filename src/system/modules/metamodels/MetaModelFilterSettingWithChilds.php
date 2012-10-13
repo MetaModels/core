@@ -19,10 +19,10 @@ if (!defined('TL_ROOT'))
 }
 
 /**
- * 
- * This interface handles filter setting abstraction for settings that can contain childs.
- * 
- * @see 
+ *
+ * Base implementation for settings that can contain childs.
+ *
+ * @see
  * @package	   MetaModels
  * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
@@ -31,7 +31,10 @@ abstract class MetaModelFilterSettingWithChilds
 extends MetaModelFilterSetting
 implements IMetaModelFilterSettingWithChilds
 {
-
+	/**
+	 * all child settings embedded in this setting.
+	 * @var IMetaModelFilterSetting[]
+	 */
 	protected $arrChilds = array();
 
 	///////////////////////////////////////////////////////////////////////////////
@@ -39,9 +42,9 @@ implements IMetaModelFilterSettingWithChilds
 	///////////////////////////////////////////////////////////////////////////////
 
 	/**
-	 * 
-	 * @return void
-	 * 
+	 *
+	 * {@inheritdoc}
+	 *
 	 */
 	public function addChild(IMetaModelFilterSetting $objFilterSetting)
 	{
