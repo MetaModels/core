@@ -176,7 +176,7 @@ class GeneralCallbackMetaModel extends GeneralCallbackDefault
 			if ($objMetaModel->hasVariants() && !$objNativeItem->isVariantBase())
 			{
 				// loop over all attributes and remove those from rendering that are invariant.
-				foreach ($objMetaModel->getInVariantAttributes() as $strAttrName => $objAttribute)
+				foreach (array_keys($objMetaModel->getInVariantAttributes()) as $strAttrName)
 				{
 					foreach ($arrPalette as $intKey => $arrPaletteDef)
 					{

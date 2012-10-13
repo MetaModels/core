@@ -20,7 +20,7 @@ if (!defined('TL_ROOT'))
 
 /**
  * Interface for a collection of MetaModel items.
- * 
+ *
  * @package	   MetaModels
  * @subpackage Interface
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
@@ -30,7 +30,7 @@ class MetaModelItems implements IMetaModelItems
 
 	/**
 	 * current reading cursor
-	 * 
+	 *
 	 * @var int
 	 */
 	protected $intCursor = -1;
@@ -42,9 +42,9 @@ class MetaModelItems implements IMetaModelItems
 
 	/**
 	 * creates a new instance with the passed items.
-	 * 
+	 *
 	 * @param array $arrItems the items to be contained in the collection.
-	 * 
+	 *
 	 * @return IMetaModelItems the new instance.
 	 */
 	public function __construct($arrItems)
@@ -101,11 +101,25 @@ class MetaModelItems implements IMetaModelItems
 		}
 	}
 
+	/**
+	 * Not implemented in this class.
+	 *
+	 * @throws Exception
+	 *
+	 * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+	 */
 	public function offsetSet($offset, $value)
 	{
 		throw new Exception('MetaModelItems is a read only class, you can not manipulate the collection.', 1);
 	}
 
+	/**
+	 * Not implemented in this class.
+	 *
+	 * @throws Exception
+	 *
+	 * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+	 */
 	public function offsetUnset ($offset)
 	{
 		throw new Exception('MetaModelItems is a read only class, you can not manipulate the collection.', 1);

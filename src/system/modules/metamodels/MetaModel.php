@@ -726,7 +726,7 @@ class MetaModel implements IMetaModel
 		}
 
 		// complex attributes shall delete their values first.
-		foreach ($this->getAttributes() as $strAttributeId => $objAttribute)
+		foreach ($this->getAttributes() as $objAttribute)
 		{
 			if($this->isComplexAttribute($objAttribute))
 			{

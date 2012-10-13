@@ -35,7 +35,7 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	 *
 	 * @var string
 	 */
-	protected $objMetaModelTableName = '';
+	private $strMetaModel = '';
 
 	/**
 	 * The meta information of this attribute.
@@ -63,7 +63,7 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 				$this->set($strSettingName, $arrData[$strSettingName]);
 			}
 		}
-		$this->objMetaModelTableName = $objMetaModel->getTableName();
+		$this->strMetaModel = $objMetaModel->getTableName();
 	}
 
 	/**
@@ -111,7 +111,6 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 		{
 			return $arrValues[$strLangCode];
 		} else {
-			$arrKeys = array_keys($arrValues);
 			// lang code not set, use fallback.
 			return $arrValues[$this->getMetaModel()->getFallbackLanguage()];
 		}
@@ -166,7 +165,7 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	 */
 	public function getMetaModel()
 	{
-		return MetaModelFactory::byTableName($this->objMetaModelTableName);
+		return MetaModelFactory::byTableName($this->strMetaModel);
 	}
 
 	/**
@@ -242,10 +241,10 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 			'eval'  => array()
 		);
 
-		$arrFieldDef['eval']['mandatory'] = $this->isunique && in_array('isunique', $this->getAttributeSettingNames());
+		$arrFieldDef['eval']['mandatory'] = $this->get('isunique') && in_array('isunique', $this->getAttributeSettingNames());
 
 		// TODO: this is not used currently.
-		$arrFieldDef['eval']['mandatory'] = $arrFieldDef['eval']['mandatory'] || ($this->mandatory && in_array('mandatory', $visibleOptions) ? true : false);
+		$arrFieldDef['eval']['mandatory'] = $arrFieldDef['eval']['mandatory'] || ($this->get('mandatory') && in_array('mandatory', $this->getAttributeSettingNames()) ? true : false);
 		return $arrFieldDef;
 	}
 
