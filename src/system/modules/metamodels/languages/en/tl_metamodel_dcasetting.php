@@ -30,7 +30,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']      = array('Hide 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']     = array('Legend title','Here you can enter the legend title.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']   = 'Language';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']      = 'Legend title';
-
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory']       = array('Mandatory', 'Check if this attribute shall be mandatory.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['filterable']      = array('Filterable', 'Check if this attribute shall be available for backend filtering.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortable']        = array('Sortable', 'Check if this attribute shall be available for backend sorting.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['searchable']      = array('Searchable', 'Check if this attribute shall be available for backend search.');

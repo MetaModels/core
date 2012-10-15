@@ -129,11 +129,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			(
 				'attr_id',
 				'tl_class',
+                'flag',
+                'mandatory',
 				// TODO: detect on a "per attribute basis" which attrs are sort/filter/searchable
 				'filterable',
 				'sortable',
-				'searchable',
-				'flag'
+				'searchable'
 			),
 			'legend' => array
 			(
@@ -211,6 +212,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 				array('TableMetaModelDcaSetting', 'encodeLegendTitle')
 			)
 		),
+        'mandatory' => array
+        (
+            'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory'],
+            'exclude'               => true,
+            'inputType'             => 'checkbox',
+            'eval' => array
+            (
+                'tl_class'          => 'w50 m12',
+            )
+        ),
 		'filterable' => array
 		(
 			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['filterable'],
