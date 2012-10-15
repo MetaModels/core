@@ -8,8 +8,7 @@
 <?php foreach ($arrItem['attributes'] as $field => $strName): /* loop over all attributes. */ ?>
 <?php if (($strValue = $arrItem[$this->getFormat()][$field]) || ($strValue = $arrItem['text'][$field])): /* fetch the html5 value followed by the fallback to "text" as both are suitable. */ ?>
 <div class="field <?php echo $field; ?>">
-	<div class="label"><?php echo $strName; ?></div>
-	<div class="value"><?php echo $strValue; ?></div>
+	<span class="label"><?php echo $strName; ?></span>: <span class="value"><?php echo $strValue; ?></span>
 </div>
 <?php endif; ?>
 <?php endforeach; /* attribute loop */ ?>
