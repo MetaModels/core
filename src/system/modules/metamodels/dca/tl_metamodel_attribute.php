@@ -83,19 +83,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 				'href'                => 'act=edit',
 				'icon'                => 'edit.gif'
 			),
-			'copy' => array
+			/* 'copy' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['copy'],
 				'href'                => 'act=copy',
 				'icon'                => 'copy.gif'
-			),
-			'cut' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['cut'],
-				'href'                => 'act=paste&amp;mode=cut',
-				'icon'                => 'cut.gif',
-				'attributes'          => 'onclick="Backend.getScrollOffset();"'
-			),
+			), */
 			'delete' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['delete'],
