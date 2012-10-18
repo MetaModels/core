@@ -435,7 +435,24 @@ class MetaModelDatabase extends Controller
 		$arrDCA['config']['metamodel_view'] = $arrViewSettings['id'];
 		$arrDCA['palettes']['default'] = $this->getPaletteAndFields($arrDCASettings['id'], $objMetaModel, $arrDCA);
 
-		$arrDCA['config']['label'] = $objMetaModel->get('name');
+		if ($arrDCASettings['backendcaption'])
+		{
+			$arrCaptions = deserialize($arrDCASettings['backendcaption'], true);
+			foreach ($arrCaptions as $arrLangEntry)
+			{
+				if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == $objMetaModel->getActiveLanguage())
+				{
+					$arrDCA['config']['label'] = $arrLangEntry['label'];
+				} else if (($arrLangEntry['label'] != '') && (!$arrDCA['config']['label']) && ($arrLangEntry['langcode'] == $objMetaModel->getFallbackLanguage())) {
+					$arrDCA['config']['label'] = $arrLangEntry['label'];
+				}
+			}
+		}
+
+		if (!$arrDCA['config']['label'])
+		{
+			$arrDCA['config']['label'] = $objMetaModel->get('name');
+		}
 
 		// FIXME: if we have variants, we force mode 5 here, no matter what the DCA configs say.
 		if ($objMetaModel->hasVariants())
