@@ -34,13 +34,18 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 		(
 			array('TableMetaModelAttribute', 'onLoadCallback')
 		),
-		'onsubmit_callback'           => array
-		(
-			array('TableMetaModelAttribute', 'onSubmitCallback')
-		),
 		'ondelete_callback'           => array
 		(
 			array('TableMetaModelAttribute', 'onDeleteCallback')
+		),
+
+		'onmodel_beforeupdate'        => array
+		(
+			array('TableMetaModelAttribute', 'onModelBeforeUpdateCallback')
+		),
+		'onsave_callback'             => array
+		(
+			array('TableMetaModelAttribute', 'onSaveCallback')
 		),
 	),
 

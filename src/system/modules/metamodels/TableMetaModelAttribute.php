@@ -27,6 +27,32 @@ if (!defined('TL_ROOT'))
  */
 class TableMetaModelAttribute extends TableMetaModelHelper
 {
+	/**
+	 * @var TableMetaModelRenderSetting
+	 */
+	protected static $objInstance = null;
+
+	/**
+	 * Get the static instance.
+	 *
+	 * @static
+	 * @return MetaPalettes
+	 */
+	public static function getInstance()
+	{
+		if (self::$objInstance == null) {
+			self::$objInstance = new TableMetaModelAttribute();
+		}
+		return self::$objInstance;
+	}
+
+	/**
+	 * Protected constructor for singleton instance.
+	 */
+	protected function __construct()
+	{
+		parent::__construct();
+	}
 
 	/**
 	 * Buffer property to hold the instance of the current field being edited.
@@ -68,33 +94,18 @@ class TableMetaModelAttribute extends TableMetaModelHelper
 	 */
 	public function onLoadCallback($objDC)
 	{
-		// do nothing if not in edit mode.
-		if(
-			!($objDC->id && $this->Input->get('act'))
-		|| ($this->Input->get('act') == 'paste')
-		)
+		// do nothing if not in edit/create mode.
+		if(!(($this->Input->get('pid')) && in_array($this->Input->get('act'), array('create', 'edit'))))
 		{
 			return;
 		}
 
-		$objDB = Database::getInstance();
-		// fetch current values of the field from DB.
-		$objField = $objDB->prepare('
-			SELECT *
-			FROM tl_metamodel_attribute
-			WHERE id=?'
-		)
-		->limit(1)
-		->executeUncached($objDC->id);
+		$objMetaModel = MetaModelFactory::byId($this->Input->get('pid'));
 
-		if ($objField->numRows == 0)
+		if (!$objMetaModel)
 		{
-			return;
+			throw new Exception('unexpected condition, metamodel unknown', 1);
 		}
-
-		$this->Session->set('tl_metamodel_attribute', $objField->row());
-
-		$objMetaModel = MetaModelFactory::byId($objField->pid);
 
 		$this->setNameAndDescription($objMetaModel);
 
@@ -102,29 +113,28 @@ class TableMetaModelAttribute extends TableMetaModelHelper
 		{
 			unset($GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['isvariant']);
 		}
-
-		// inline create the instance of this field and buffer it.
-		self::$objCurrentField = MetaModelAttributeFactory::createFromDB($objField);
-
-		// hijack all onsave_callbacks to pass meta data change calls to field class.
-		foreach ($GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields'] as $strFieldname=>&$arrFieldDef)
-		{
-			$arrFieldDef['save_callback'][] = array('TableMetaModelAttribute', 'onSaveCallback');
-		}
 	}
 
 	/**
-	 * onsubmit_callback
-	 * Used from tl_metamodel_attribute DCA
+	 * Keep a copy of the attribute values.
+	 *
+	 * @param InterfaceGeneralModel $objModel the current Model active in the DC.
+	 *
+	 * @return void
+	 */
+	public function onModelBeforeUpdateCallback($objModel)
+	{
+		self::$objCurrentField = MetaModelAttributeFactory::createFromArray($objModel->getPropertiesAsArray());
+	}
+
+	/**
+	 * Called when the attribute has been saved.
+	 *
+	 * @param InterfaceGeneralModel $objModel The model that has been updated.
 	 *
 	 * @param DataContainer $objDC the data container that issued this callback.
 	 */
-	public function onSubmitCallback($objDC)
-	{
-
-	}
-
-	public function onSaveCallback($varValue, $objDC)
+	public function onSaveCallback($objModel, $objDC)
 	{
 		/**
 		 * The currently edited field.
@@ -132,32 +142,25 @@ class TableMetaModelAttribute extends TableMetaModelHelper
 		 * @var IMetaModelAttribute
 		 */
 		$objField = self::$objCurrentField;
+		$arrNewField = $objModel->getPropertiesAsArray();
 
 		if($objField)
 		{
-			$oldValue = $objField->get($objDC->field);
+			$oldType = $objField->get('type');
 		} else {
-			$oldValue = null;
+			$oldType = null;
 		}
 
-		if ($objDC->field == 'type' && $oldValue != $varValue)
+		if ($oldType != $arrNewField['type'])
 		{
-			// we are changing the field type, destroy old instance and prepare new instance.
+			// destroy old instance...
 			if($objField)
 			{
 				$objField->destroyAUX();
 			}
-
-			if (method_exists($objDC, 'getCurrentModel'))
-			{
-				$arrNewField = $objDC->getCurrentModel()->getPropertiesAsArray();
-			} else {
-				$arrNewField = $objDC->activeRecord->row();
-			}
-
-			// GOTCHA: potential problem when a field requires input not available here (later loop cycle in DC_Table save_callback).
-			$arrNewField['type'] = $varValue;
+			// ... prepare new instance.
 			$objField = MetaModelAttributeFactory::createFromArray($arrNewField);
+			// create new instance' aux info.
 			if($objField)
 			{
 				self::$objCurrentField = $objField;
@@ -167,15 +170,21 @@ class TableMetaModelAttribute extends TableMetaModelHelper
 
 		if($objField)
 		{
-			$objField->handleMetaChange($objDC->field, $varValue);
+			// now loop over all values and update the meta in the instance.
+			foreach ($arrNewField as $strKey => $varValue)
+			{
+				$objField->handleMetaChange($strKey, $varValue);
+			}
 		}
-
-		return $varValue;
 	}
 
 	public function onDeleteCallback($objDC)
 	{
-		throw new Exception("DELETE unsupported!", 1);
+		$objField = MetaModelAttributeFactory::createFromArray($objDC->getCurrentModel()->getPropertiesAsArray());
+		if($objField)
+		{
+			$objField->destroyAUX();
+		}
 	}
 
 	/**
