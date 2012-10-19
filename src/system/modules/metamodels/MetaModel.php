@@ -265,7 +265,7 @@ class MetaModel implements IMetaModel
 		{
 			$objNewFilter = $objFilter->createCopy();
 		} else {
-			$objNewFilter = $this->getBaseFilter();
+			$objNewFilter = $this->getEmptyFilter();
 		}
 		return $objNewFilter;
 	}
@@ -751,30 +751,9 @@ class MetaModel implements IMetaModel
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getBaseFilter()
-	{
-		$objFilter = $this->getEmptyFilter();
-
-		foreach ($this->getAttributes() as $objAttribute)
-		{
-			if ($objAttribute)
-			{
-				$objFilterRule = $objAttribute->parseFilterUrl(array());
-				if ($objFilterRule)
-				{
-					$objFilter->addFilterRule($objFilterRule);
-				}
-			}
-		}
-		return $objFilter;
-	}
-
-	/**
-	 * {@inheritdoc}
-	 */
 	public function prepareFilter($intFilterSettings, $arrFilterUrl)
 	{
-		$objFilter = $this->getBaseFilter();
+		$objFilter = $this->getEmptyFilter();
 		if ($intFilterSettings)
 		{
 			$objFilterSettings = MetaModelFilterSettingsFactory::byId($intFilterSettings);

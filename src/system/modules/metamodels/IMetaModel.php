@@ -220,16 +220,6 @@ interface IMetaModel
 	public function getEmptyFilter();
 
 	/**
-	 * Prepare the base filter object for this meta model.
-	 * This object is produced by calling parseFilterUrl on all contained attributes with an empty filter url.
-	 * This allows the attributes to generate basic filter options that must be applied globally on the MetaModel
-	 * and hence allows functionality like "published"-attributes and the like.
-	 *
-	 * @return IMetaModelFilter the base filter object.
-	 */
-	public function getBaseFilter();
-
-	/**
 	 * Generates a filter object that takes the given attributes into account.
 	 *
 	 * @param int   $intFilterSettings the id of the filter settings to use.
