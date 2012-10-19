@@ -183,6 +183,12 @@ class TableMetaModelFilterSetting extends Backend
 		}
 	}
 
+	public function getMetaModel($objDC)
+	{
+		$this->objectsFromUrl($objDC);
+		return $this->objMetaModel;
+	}
+
 	/**
 	 * translates an id to a generated alias {@see TableMetaModelFilterSetting::getAttributeNames()}
 	 *
