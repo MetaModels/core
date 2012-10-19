@@ -256,9 +256,14 @@ class TableMetaModelFilterSetting extends Backend
 		}
 		$objMetaModel = $this->objMetaModel;
 
+		$arrTypeFilter = $GLOBALS['METAMODELS']['filters'][$objDC->activeRecord->type]['attr_filter'];
 		foreach ($objMetaModel->getAttributes() as $objAttribute)
 		{
 			$strTypeName = $objAttribute->get('type');
+			if ($arrTypeFilter && (!in_array($strTypeName, $arrTypeFilter)))
+			{
+				continue;
+			}
 			$strSelectVal = $objMetaModel->getTableName() .'_' . $objAttribute->getColName();
 			$arrResult[$strSelectVal] = $objAttribute->getName() . ' [' . $strTypeName . ']';
 		}
