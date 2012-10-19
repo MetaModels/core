@@ -151,6 +151,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		(
 			'+config' => array('customsql'),
 		),
+
+		'simplelookup_translated extends _simplelookup_' => array
+		(
+			'+config' => array('all_langs'),
+		),
 	),
 
 	'metasubselectpalettes' => array
@@ -160,6 +165,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		)
 	),
 
+	'simplelookup_palettes' => array
+	(
+		'_translated_' => array
+		(
+			'all_langs'
+		)
+	),
 	// Fields
 	'fields' => array
 	(
@@ -215,6 +227,17 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			),
 			'load_callback'           => array(array('TableMetaModelFilterSetting', 'attrIdToName')),
 			'save_callback'           => array(array('TableMetaModelFilterSetting', 'nameToAttrId')),
+		),
+
+		'all_langs' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array(
+				'alwaysSave'          => true,
+				'tl_class'            => 'w50 m12 cbx',
+			),
 		),
 
 		'items' => array
