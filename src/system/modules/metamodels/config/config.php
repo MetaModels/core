@@ -137,6 +137,12 @@ $GLOBALS['METAMODELS']['dependencies'] = array(
 	'justtextwidgets' => 'JustTextWidgets'
 );
 
+
+array_insert($GLOBALS['BE_FFL'], 15, array
+(
+	'mm_subdca'    => 'MetaModelSubDCAWidget'
+));
+
 // Selectable styles in the palette tl_class definitions.
 $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 (

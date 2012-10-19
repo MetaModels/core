@@ -18,11 +18,13 @@ if (!defined('TL_ROOT'))
 	die('You cannot access this file directly!');
 }
 
+$GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = array('tl_module_metamodel', 'buildFilterParams');
+
 /**
  * Add palettes to tl_module
  */
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list']  = '{title_legend},name,headline,type;{config_legend},metamodel,perPage,metamodel_use_limit,metamodel_sortby,metamodel_filtering;{template_legend:hide},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list']  = '{title_legend},name,headline,type;{config_legend},metamodel,perPage,metamodel_use_limit,metamodel_sortby,metamodel_filtering,metamodel_filterparams;{template_legend:hide},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'metamodel_use_limit';
 
@@ -142,7 +144,17 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'exclude'                 => true,
 		'inputType'               => 'checkbox',
 		'eval'                    => array('submitOnChange'=> true, 'tl_class' => 'clr'),
-	 )
+	),
+	'metamodel_filterparams' => array
+		(
+		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_filterparams'],
+		'exclude'                 => true,
+		'inputType'               => 'mm_subdca',
+		'eval'                    => array
+		(
+			'subfields'           => array()
+		)
+	)
 ));
 
 /**
@@ -157,6 +169,37 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
  */
 class tl_module_metamodel extends Backend
 {
+
+	public function buildFilterParams($objDC)
+	{
+		// Check if we have a id, no create mode
+		if (is_null($objDC->id))
+		{
+			unset($GLOBALS['TL_DCA']['tl_module']['fields']['metamodel_filterparams']);
+			return;
+		}
+
+		// Get basic informations
+		$objModule = $this->Database
+				->prepare('SELECT type, metamodel, metamodel_filtering FROM tl_module WHERE id=?')
+				->limit(1)
+				->execute($objDC->id);
+
+		$intMetaModel	 = $objModule->metamodel;
+		$intFilter		 = $objModule->metamodel_filtering;
+
+		// Check if we have a row/metaModelconten/MetaModel/Filter
+		if ($objModule->numRows == 0 || $objModule->type != 'metamodel_list' || empty($intMetaModel) || empty($intFilter))
+		{
+			unset($GLOBALS['TL_DCA']['tl_module']['fields']['metamodel_filterparams']);
+			return;
+		}
+
+		$objFilter = $objFilterSettings = MetaModelFilterSettingsFactory::byId($intFilter);
+		$arrParams = $objFilter->getParameterDCA();
+
+		$GLOBALS['TL_DCA']['tl_module']['fields']['metamodel_filterparams']['eval']['subfields'] = $arrParams;
+	}
 
 	/**
 	 * Fetch the template group for the current MetaModel module.
@@ -187,7 +230,7 @@ class tl_module_metamodel extends Backend
 			foreach ($objMetaModel->getAttributes() as $objAttribute)
 			$arrAttributeNames[$objAttribute->getColName()] = $objAttribute->getName();
 		}
-                
+
 		return $arrAttributeNames;
 	}
 
@@ -252,7 +295,7 @@ class tl_module_metamodel extends Backend
 		{
 			$arrSettings[$objFilterSettings->id] = $objFilterSettings->name;
 		}
-		
+
 		//sort the filtersettings
 		asort($arrSettings);
 		return $arrSettings;
@@ -276,7 +319,7 @@ class tl_module_metamodel extends Backend
 		{
 			$arrSettings[$objFilterSettings->id] = $objFilterSettings->name;
 		}
-		
+
 		//sort the rendersettings
 		asort($arrSettings);
 		return $arrSettings;

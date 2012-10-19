@@ -306,6 +306,7 @@ CREATE TABLE `tl_module` (
   `metamodel_sortby` varchar(64) NOT NULL default '',
   `metamodel_filtering` int(10) NOT NULL default '0',
   `metamodel_rendersettings` int(10) NOT NULL default '0',
-  `metamodel_noparsing` char(1) NOT NULL default ''
+  `metamodel_noparsing` char(1) NOT NULL default '',
+  `metamodel_filterparams` longblob NULL
 
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
