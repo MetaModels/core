@@ -77,26 +77,6 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 	}
 
 	/**
-	 * {@inheritdoc }
-	 *
-	 * Base implementation in MetaModelAttributeSimple performs a simple search on the url param
-	 * with the same name as the colName.
-	 */
-	public function parseFilterUrl($arrUrlParams)
-	{
-		$objFilterRule = NULL;
-		if (key_exists($this->getColName(), $arrUrlParams))
-		{
-			$objFilterRule = new MetaModelFilterRuleSimpleQuery(
-				'SELECT id FROM ' . $this->getMetaModel()->getTableName() . ' WHERE ' . $this->getColName() . '=?',
-				array($arrUrlParams[$this->getColName()]),
-				'id'
-			);
-		}
-		return $objFilterRule;
-	}
-
-	/**
 	 * {@inheritdoc}
 	 *
 	 * Deriving classes SHOULD override this function.
@@ -151,15 +131,14 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 	 */
 	public function searchFor($strPattern)
 	{
-
-		// base implementation, do a simple sorting on given column.
-		$arrIds = Database::getInstance()->prepare(sprintf(
-			'SELECT id FROM %s WHERE %s LIKE "?"',
+		// base implementation, do a simple search on given column.
+		$objQuery = Database::getInstance()->prepare(sprintf(
+			'SELECT id FROM %s WHERE %s LIKE ?',
 			$this->getMetaModel()->getTableName(),
 			$this->getColName()
 			))
-			->execute(str_replace(array('*', '?'), array('%', '_'), $strPattern))
-			->fetchEach('id');
+			->execute(str_replace(array('*', '?'), array('%', '_'), $strPattern));
+		$arrIds = $objQuery->fetchEach('id');
 		return $arrIds;
 	}
 
