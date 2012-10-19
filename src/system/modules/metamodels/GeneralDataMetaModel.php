@@ -276,7 +276,7 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 				$objFilterRule = NULL;
 				if ($objAttribute)
 				{
-					$objFilterRule = $objAttribute->parseFilterUrl(array($objAttribute->getColName() => $arrFilter['value']));
+					$objFilterRule = new MetaModelFilterRuleSearchAttribute($objAttribute, $arrFilter['value'], $this->objMetaModel->getAvailableLanguages());
 				} else if(Database::getInstance()->fieldExists($arrFilter['property'], $this->objMetaModel->getTableName())) {
 					// system column?
 					$objFilterRule = new MetaModelFilterRuleSimpleQuery(sprintf(
