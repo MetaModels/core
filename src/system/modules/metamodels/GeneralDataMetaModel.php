@@ -351,12 +351,24 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 		$varResult = NULL;
 
 		$arrSorting = $objConfig->getSorting();
+
+		$strSortBy = '';
+		$strSortDir = '';
+		if ($arrSorting)
+		{
+			list($strSortBy, $strSortDir) = each($arrSorting);
+		}
+		if (!$strSortDir)
+		{
+			$strSortDir = DCGE::MODEL_SORTING_ASC;
+		}
+
 		$objFilter = $this->prepareFilter($objConfig->getFilter());
 		if ($objConfig->getIdOnly())
 		{
-			$varResult = $this->objMetaModel->getIdsFromFilter($objFilter, ($arrSorting?$arrSorting[0]:''), $objConfig->getStart(), $objConfig->getAmount());
+			$varResult = $this->objMetaModel->getIdsFromFilter($objFilter, ($strSortBy?$strSortBy:''), $objConfig->getStart(), $objConfig->getAmount(), ($strSortBy?$strSortDir:''));
 		} else {
-			$objItems = $this->objMetaModel->findByFilter($objFilter, ($arrSorting?$arrSorting[0]:''), $objConfig->getStart(), $objConfig->getAmount());
+			$objItems = $this->objMetaModel->findByFilter($objFilter, ($strSortBy?$strSortBy:''), $objConfig->getStart(), $objConfig->getAmount(), ($strSortBy?$strSortDir:''));
 
 			$objResultCollection = $this->getEmptyCollection();
 			foreach ($objItems as $objItem)
