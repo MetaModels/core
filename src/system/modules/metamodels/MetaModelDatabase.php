@@ -101,7 +101,7 @@ class MetaModelDatabase extends Controller
 						}
 						if ($objDCASettings->sortable)
 						{
-							$arrDCA['fields'][$objAttribute->getColName()]['sort'] = true;
+							$arrDCA['fields'][$objAttribute->getColName()]['sorting'] = true;
 							// add sorting fields.
 							$arrDCA['list']['sorting']['fields'][] = $objAttribute->getColName();
 						}
