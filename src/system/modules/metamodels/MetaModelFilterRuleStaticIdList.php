@@ -34,7 +34,8 @@ class MetaModelFilterRuleStaticIdList extends MetaModelFilterRule
 
 	/**
 	 * create a new FilterRule instance.
-	 * @param IMetaModelAttribute $objAttribute the attribute this rule applies to.
+	 *
+	 * @param int[] $arrIds static list of ids that shall be returned as matches.
 	 */
 	public function __construct($arrIds)
 	{
