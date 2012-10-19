@@ -183,18 +183,6 @@ interface IMetaModelAttribute
 	public function parseValue($arrRowData, $strOutputFormat = 'text', $objSettings = null);
 
 	/**
-	 * This parses the given URL and compiles a proper filter rule that can later be used in
-	 * a {@link IMetaModelFilter}.
-	 *
-	 * If an filter is empty, return null as value and the MetaModel will ignore the filter condition.
-	 *
-	 * @param array $arrUrlParams the url params as key => value pairs.
-	 *
-	 * @return IMetaModelFilterRule|null a filter rule that can be understood by this fieldtype.
-	 */
-	public function parseFilterUrl($arrUrlParams);
-
-	/**
 	 * Sorts the given array list by field value in the given direction.
 	 *
 	 * @param int[]  $arrIds       a list of Ids from the MetaModel table.
