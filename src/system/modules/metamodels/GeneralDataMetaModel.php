@@ -465,13 +465,13 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 		$objAttribute = $this->getMetaModel()->getAttribute($strField);
 		if ($objAttribute)
 		{
-			$objFilterRule = $objAttribute->parseFilterUrl(array($objAttribute->getColName() => $varNew));
-			if ($objFilterRule)
-			{
-				$objFilter->addFilterRule($objFilterRule);
-				$arrIds = $objFilter->getMatchingIds();
-				return (count($arrIds) == 0) || ($arrIds == array($intId));
-			}
+			$this->calculateSubfilter(array(
+				'operation' => '=',
+				'property' => $objAttribute->getColName(),
+				'value' => $varNew
+			), $objFilter);
+			$arrIds = $objFilter->getMatchingIds();
+			return (count($arrIds) == 0) || ($arrIds == array($intId));
 		}
 
 		return false;
