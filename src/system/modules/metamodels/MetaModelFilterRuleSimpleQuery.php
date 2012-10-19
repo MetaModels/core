@@ -72,7 +72,7 @@ class MetaModelFilterRuleSimpleQuery extends MetaModelFilterRule
 		$objDB = Database::getInstance();
 		$objMatches = $objDB->prepare($this->strQueryString)
 		                    ->execute($this->arrParams);
-		return $objMatches->fetchEach($this->strIdColumn);
+		return ($objMatches->numRows == 0) ? array() : $objMatches->fetchEach($this->strIdColumn);
 	}
 }
 
