@@ -33,7 +33,8 @@ interface IMetaModelFilterSetting
 	 * The filter rules can evaluate the also passed filter url.
 	 *
 	 * A filter url hereby is a simple hash of name => value layout, it may eventually be interpreted
-	 * by attributes via IMetaModelAttribute::parseFilterUrl() method.
+	 * by attributes via IMetaModelAttribute::searchFor() method.
+	 * @todo: we might want to change the name $arrFilterUrl to $arrFilterParams or something like that.
 	 *
 	 * @param IMetaModelFilter $objFilter    the filter to append the rules to.
 	 *
