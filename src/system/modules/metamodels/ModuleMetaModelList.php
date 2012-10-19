@@ -157,8 +157,9 @@ class ModuleMetaModelList extends Module
 
 		$objTemplate->noItemsMsg = $GLOBALS['TL_LANG']['MSC']['noItemsMsg'];
 
-		$objFilter = $objMetaModel->prepareFilter($this->metamodel_filtering, $_GET);
+		$arrParams = array_merge($_GET, deserialize($this->metamodel_filterparams, true));
 
+		$objFilter = $objMetaModel->prepareFilter($this->metamodel_filtering, $arrParams);
 		$intTotal = $objMetaModel->getCount($objFilter);
 
 		$arrLimits = $this->calculatePagination($intTotal);
@@ -171,7 +172,7 @@ class ModuleMetaModelList extends Module
 		//render items (if any) only if the "do not render option" is not set
 		if ($intTotal && !$this->metamodel_noparsing)
 		{
-			$objTemplate->data = $objItems->parseAll($this->Template->getFormat(), $objView);			
+			$objTemplate->data = $objItems->parseAll($this->Template->getFormat(), $objView);
 		}
 
 		$this->Template->items = $objTemplate->parse($this->Template->getFormat());
