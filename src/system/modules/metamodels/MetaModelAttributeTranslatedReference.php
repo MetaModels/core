@@ -51,14 +51,16 @@ implements IMetaModelAttributeTranslated
 				$strWhereIds = ' AND item_id='. $mixIds;
 			}
 		}
-		return array(
-			'procedure' => 'att_id=? AND langcode=?' . $strWhereIds,
-			'params' => array
-			(
-				intval($this->get('id')),
-				$strLangCode
-			)
+		$arrReturn = array(
+			'procedure' => 'att_id=?' . $strWhereIds,
+			'params' => array(intval($this->get('id')))
 		);
+		if ($strLangCode)
+		{
+			$arrReturn['procedure'] .=  ' AND langcode=?';
+			$arrReturn['params'][] = $strLangCode;
+		}
+		return $arrReturn;
 	}
 
 	protected function getSetValues($arrValue, $intId, $strLangCode)
@@ -145,6 +147,49 @@ implements IMetaModelAttributeTranslated
 		{
 			$this->unsetValueFor($arrIds, $strLangCode);
 		}
+	}
+
+	/**
+	 * {@inheritdoc}
+	 *
+	 * Search the attribute values for the given pattern in the active language.
+	 */
+	public function searchFor($strPattern)
+	{
+		return $this->searchForInLanguages($strPattern, array($this->getMetaModel()->getActiveLanguage()));
+	}
+
+	/**
+	 * {@inheritdoc}
+	 *
+	 * Search the attribute in the given languages.
+	 */
+	public function searchForInLanguages($strPattern, $arrLanguages = array())
+	{
+		$arrWhere = $this->getWhere(null);
+		$arrParams = array($strPattern);
+
+		$arrOptionizer = $this->getOptionizer();
+
+		if ($arrWhere)
+		{
+			$arrParams = array_merge($arrParams, $arrWhere['params']);
+		}
+
+		$objFilterRule = new MetaModelFilterRuleSimpleQuery(
+			sprintf(
+				'SELECT %s FROM %s WHERE %s=? %s',
+				'item_id',
+				$this->getValueTable(),
+				$arrOptionizer['value'],
+				($arrWhere ? ' AND ' . $arrWhere['procedure'] : ''),
+				$arrLanguages ? sprintf('AND lang_id IN (\'%s\')', implode('\',\'', $arrLanguages)) : ''
+			),
+			$arrParams,
+			'item_id'
+		);
+
+		return $objFilterRule->getMatchingIds();
 	}
 
 	/**
