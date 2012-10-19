@@ -31,6 +31,18 @@ if (!defined('TL_ROOT'))
 interface IMetaModelAttributeTranslated extends IMetaModelAttribute
 {
 	/**
+	 * search matches for the given expression.
+	 *
+	 * @param string $strPattern the text to search for. This may contain wildcards.
+	 *
+	 * @param array $arrLanguages array of valid language codes that shall be searched. (optional)
+	 *                            If empty, all languages will be taken into account.
+	 *
+	 * @return int[] the ids of matching items.
+	 */
+	public function searchForInLanguages($strPattern, $arrLanguages = array());
+
+	/**
 	 * Set a value for an item in a certain language.
 	 *
 	 * @param mixed[int] $arrValues the values to be set in id => value layout.
