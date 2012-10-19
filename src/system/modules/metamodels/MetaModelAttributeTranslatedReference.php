@@ -73,7 +73,7 @@ implements IMetaModelAttributeTranslated
 		);
 	}
 
-	protected function getOptionizer($arrValue, $intId, $strLangCode)
+	protected function getOptionizer()
 	{
 		return array(
 			'key' => 'value',

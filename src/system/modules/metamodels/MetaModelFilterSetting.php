@@ -36,6 +36,22 @@ abstract class MetaModelFilterSetting implements IMetaModelFilterSetting
 	{
 		return array();
 	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getParameters()
+	{
+		return array();
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getParameterDCA()
+	{
+		return array();
+	}
 }
 
 ?>

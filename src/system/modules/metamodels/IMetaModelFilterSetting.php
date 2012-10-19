@@ -47,6 +47,21 @@ interface IMetaModelFilterSetting
 	 * TODO: obsolete?
 	 */
 	public function generateFilterUrlFrom(IMetaModelItem $objItem, IMetaModelRenderSettings $objRenderSetting);
+
+
+	/**
+	 * Retrieve a list of all registered parameters from the setting.
+	 *
+	 * @return array
+	 */
+	public function getParameters();
+
+	/**
+	 * Retrieve a list of all registered parameters from the setting as DCA compatible arrays.
+	 *
+	 * @return array
+	 */
+	public function getParameterDCA();
 }
 
 ?>

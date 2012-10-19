@@ -50,6 +50,32 @@ implements IMetaModelFilterSettingWithChilds
 	{
 		$this->arrChilds[] = $objFilterSetting;
 	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getParameters()
+	{
+		$arrParams = array();
+		foreach ($this->arrChilds as $objSetting)
+		{
+			$arrParams = array_merge($arrParams, $objSetting->getParameters());
+		}
+		return $arrParams;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getParameterDCA()
+	{
+		$arrParams = array();
+		foreach ($this->arrChilds as $objSetting)
+		{
+			$arrParams = array_merge($arrParams, $objSetting->getParameterDCA());
+		}
+		return $arrParams;
+	}
 }
 
 

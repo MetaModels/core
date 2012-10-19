@@ -118,6 +118,32 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 		}
 		return $arrFilterUrl;
 	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getParameters()
+	{
+		$arrParams = array();
+		foreach ($this->arrSettings as $objSetting)
+		{
+			$arrParams = array_merge($arrParams, $objSetting->getParameters());
+		}
+		return $arrParams;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getParameterDCA()
+	{
+		$arrParams = array();
+		foreach ($this->arrSettings as $objSetting)
+		{
+			$arrParams = array_merge($arrParams, $objSetting->getParameterDCA());
+		}
+		return $arrParams;
+	}
 }
 
 ?>

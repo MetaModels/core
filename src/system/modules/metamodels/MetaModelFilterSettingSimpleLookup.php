@@ -22,7 +22,7 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 					return;
 				}
 			}
-			
+
 			//we found an attribute but no match in URL. So ignore this filtersetting if allow_empty is set
 			if ($this->get('allow_empty')) return;
 		}
@@ -39,6 +39,40 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 			$arrResult = $objItem->parseAttribute($objAttribute->getColName(), 'text', $objRenderSetting);
 			return array(($this->get('urlparam')?$this->get('urlparam'):$objAttribute->getColName()) => urlencode($arrResult['text']));
 		}
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getParameters()
+	{
+		if ($this->get('urlparam'))
+		{
+			return $this->get('urlparam');
+		} else {
+			$objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
+			return $objAttribute->getColName();
+		}
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getParameterDCA()
+	{
+		$objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
+		$arrOptions = $objAttribute->getFilterOptions();
+
+		$strParamName = $this->get('urlparam') ? $this->get('urlparam') : $objAttribute->getColName();
+
+		return array(
+			$strParamName => array
+			(
+				'label'   => sprintf('Filter value for attribute %s', $objAttribute->getName()),
+				'inputType'    => 'select',
+				'options' => $arrOptions,
+			)
+		);
 	}
 }
 
