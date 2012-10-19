@@ -24,7 +24,11 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 			}
 
 			//we found an attribute but no match in URL. So ignore this filtersetting if allow_empty is set
-			if ($this->get('allow_empty')) return;
+			if ($this->get('allow_empty'))
+			{
+				$objFilter->addFilterRule(new MetaModelFilterRuleStaticIdList(NULL));
+				return;
+			}
 		}
 		// either no attribute found or no match in url, do not return anyting.
 		$objFilter->addFilterRule(new MetaModelFilterRuleStaticIdList(array()));
