@@ -25,7 +25,7 @@ if (!defined('TL_ROOT'))
  * @package    MetaModels
  * @subpackage Core
  */
-class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralDataML
+class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralDataMultiLanguage
 {
 	// Vars --------------------------------------------------------------------
 
