@@ -95,12 +95,21 @@ class TableMetaModelAttribute extends TableMetaModelHelper
 	public function onLoadCallback($objDC)
 	{
 		// do nothing if not in edit/create mode.
-		if(!(($this->Input->get('pid')) && in_array($this->Input->get('act'), array('create', 'edit'))))
+		if(!(($this->Input->get('pid') || $this->Input->get('id')) && in_array($this->Input->get('act'), array('create', 'edit'))))
 		{
 			return;
 		}
 
-		$objMetaModel = MetaModelFactory::byId($this->Input->get('pid'));
+		if ($this->Input->get('pid'))
+		{
+			$objMetaModel = MetaModelFactory::byId($this->Input->get('pid'));
+		} else {
+			$objMetaModel = MetaModelFactory::byId(
+				$this->Database->prepare('SELECT pid FROM tl_metamodel_attribute WHERE id=?')
+							   ->execute($this->Input->get('id'))
+							   ->pid
+			);
+		}
 
 		if (!$objMetaModel)
 		{
