@@ -14,8 +14,7 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 			}
 			if ($arrMyFilterUrl[$objAttribute->getColName()])
 			{
-				// call prepare now.
-				$objFilterRule = $objAttribute->parseFilterUrl($arrMyFilterUrl);
+				$objFilterRule = new MetaModelFilterRuleSearchAttribute($objAttribute, $arrMyFilterUrl[$objAttribute->getColName()], $this->getMetaModel()->getAvailableLanguages());
 				if ($objFilterRule)
 				{
 					$objFilter->addFilterRule($objFilterRule);
