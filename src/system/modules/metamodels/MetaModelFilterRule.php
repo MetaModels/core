@@ -28,9 +28,8 @@ abstract class MetaModelFilterRule implements IMetaModelFilterRule
 {
 	/**
 	 * create a new FilterRule instance.
-	 * @param IMetaModelAttribute|null $objAttribute optional, the attribute this rule applies to.
 	 */
-	public function __construct($objAttribute = NULL)
+	public function __construct()
 	{
 	}
 
