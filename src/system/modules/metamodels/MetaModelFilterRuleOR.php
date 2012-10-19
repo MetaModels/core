@@ -34,13 +34,21 @@ class MetaModelFilterRuleOR extends MetaModelFilterRule
 
 	/**
 	 * create a new FilterRule instance.
-	 * @param IMetaModelAttribute $objAttribute the attribute this rule applies to.
+	 *
+	 * @return MetaModelFilterRuleOR
 	 */
 	public function __construct()
 	{
 		parent::__construct();
 	}
 
+	/**
+	 * adds a child filter to this rule that will get evaluated when this rule is evaluated.
+	 *
+	 * @param IMetaModelFilter $objFilter the filter to add as child
+	 *
+	 * @return void
+	 */
 	public function addChild(IMetaModelFilter $objFilter)
 	{
 		$this->arrChildFilters[] = $objFilter;
@@ -55,6 +63,12 @@ class MetaModelFilterRuleOR extends MetaModelFilterRule
 		foreach ($this->arrChildFilters as $objChildFilter)
 		{
 			$arrChildMatches = $objChildFilter->getMatchingIds();
+			// NULL => all items - for OR conditions, this can never be more than all so we are already satisfied here.
+			if ($arrChildMatches === NULL)
+			{
+				return NULL;
+			}
+
 			if ($arrChildMatches)
 			{
 				$arrIds = array_merge($arrIds, $arrChildMatches);
