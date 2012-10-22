@@ -84,7 +84,7 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 	 */
 	public function getFilterOptions($arrIds = array())
 	{
-		$strCol = $this->colName();
+		$strCol = $this->getColName();
 		if ($arrIds)
 		{
 			// ensure proper integer ids for SQL injection safety reasons.
