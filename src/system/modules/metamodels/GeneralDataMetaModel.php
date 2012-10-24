@@ -549,12 +549,7 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	 */
 	public function fieldExists($strField)
 	{
-		if ($this->objMetaModel->getAttribute($strField) != null)
-		{
-			return true;
-		} else {
-			return false;
-		}
+		return !!(in_array($strField, array('id', 'pid', 'tstamp', 'sorting')) || $this->objMetaModel->getAttribute($strField));
 	}
 
 	/**

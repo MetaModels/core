@@ -453,9 +453,21 @@ class MetaModel implements IMetaModel
 	{
 		$arrFilteredIds = $this->getMatchingIds($objFilter);
 		// if desired, sort the entries.
-		if ($arrFilteredIds && $strSortBy != '' && ($objSortAttribute = $this->getAttribute($strSortBy)))
+		if ($arrFilteredIds && $strSortBy != '')
 		{
-			$arrFilteredIds = $objSortAttribute->sortIds($arrFilteredIds, $strSortOrder);
+			if ($objSortAttribute = $this->getAttribute($strSortBy))
+			{
+				$arrFilteredIds = $objSortAttribute->sortIds($arrFilteredIds, $strSortOrder);
+			} else if (in_array($strSortBy, array('id', 'pid', 'tstamp', 'sorting'))) {
+				// sort by database values.
+				$arrFilteredIds = $objDB->execute(sprintf(
+						'SELECT id FROM %s WHERE id IN(%s) ORDER BY %s %s',
+						$this->getTableName(),
+						implode(',', $arrFilteredIds),
+						$strSortBy,
+						$strSortOrder)
+					)->fetchEach('id');
+			}
 		}
 		// apply limiting then
 		if ($intOffset > 0 || $intLimit > 0)
