@@ -207,6 +207,7 @@ CREATE TABLE `tl_metamodel_filtersetting` (
   `allow_empty` char(1) NOT NULL default '',
 -- simple lookup - url param override.
   `urlparam` varchar(255) NOT NULL default '',
+  `predef_param` char(1) NOT NULL default '',
 -- custom SQL - query content.
   `customsql` text NULL,
 -- items for idlist rule,

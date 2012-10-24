@@ -58,7 +58,7 @@ interface IMetaModelFilterSetting
 	public function getParameters();
 
 	/**
-	 * Retrieve a list of all registered parameters from the setting as DCA compatible arrays.
+	 * Retrieve a list of all registered parameters from the setting as DCA compatible arrays, these parameters may be overridden by modules and content elements and the like.
 	 *
 	 * @return array
 	 */
