@@ -13,10 +13,6 @@
  * @license    private
  * @filesource
  */
-if (!defined('TL_ROOT'))
-{
-	die('You cannot access this file directly!');
-}
 
 /**
  * Implementation of the MetaModel lister module.
@@ -44,6 +40,7 @@ class ModuleMetaModelList extends Module
 			$objTemplate->id = $this->id;
 			$objTemplate->link = $this->name;
 			$objTemplate->href = 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id=' . $this->id;
+
 			return $objTemplate->parse();
 		}
 
@@ -59,122 +56,23 @@ class ModuleMetaModelList extends Module
 	}
 
 	/**
-	 * Returns the correct render settings for the metamodel.
-	 *
-	 * @param IMetaModel $objMetaModel      the metamodel for which the view shall be retrieved.
-	 *
-	 * @param int        $intFilterSettings the filter settings that shall be used for url generation.
-	 *
-	 * @return IMetaModelRenderSettings the view information.
-	 */
-	protected function getRenderSettings($objMetaModel, $intFilterSettings)
-	{
-		$objView = $objMetaModel->getView($this->metamodel_rendersettings);
-
-		if ($objView)
-		{
-			$objView->set('filter', $intFilterSettings);
-		}
-		return $objView;
-	}
-
-	protected function calculatePagination($intTotal)
-	{
-		$intOffset = NULL;
-		$intLimit = NULL;
-		// if defined, we override the pagination here.
-		if ($this->metamodel_use_limit && ($this->metamodel_limit || $this->metamodel_offset))
-		{
-			if ($this->metamodel_limit)
-			{
-				$intLimit = $this->metamodel_limit;
-			}
-			if($this->metamodel_offset)
-			{
-				$intOffset = $this->metamodel_offset;
-			}
-		}
-
-		if ($this->perPage > 0)
-		{
-			// if a total limit has been defined, we need to honor that.
-			if (!is_null($intLimit) && ($intTotal>$intLimit))
-			{
-				$intTotal -= $intLimit;
-			}
-			$intTotal -= $intOffset;
-
-			// Get the current page
-			$intPage = $this->Input->get('page') ? $this->Input->get('page') : 1;
-
-			if ($intPage > ($intTotal/$this->perPage))
-			{
-				$intPage = (int)ceil($intTotal/$this->perPage);
-			}
-
-			// Set limit and offset
-			$pageOffset = (max($intPage, 1) - 1) * $this->perPage;
-			$intOffset += $pageOffset;
-			if (is_null($intLimit))
-			{
-				$intLimit = $this->perPage;
-			} else {
-				$intLimit = min($intLimit - $intOffset, $this->perPage);
-			}
-			// Add pagination menu
-			$objPagination = new Pagination($intTotal, $this->perPage);
-			$this->Template->pagination = $objPagination->generate("\n  ");
-		} else {
-			if (is_null($intLimit))
-			{
-				$intLimit = 0;
-			}
-			if (is_null($intOffset))
-			{
-				$intOffset = 0;
-			}
-		}
-		return array($intLimit, $intOffset);
-	}
-
-	/**
 	 * (non-PHPdoc)
 	 * @see Module::compile()
 	 */
 	protected function compile()
 	{
-		$objMetaModel = MetaModelFactory::byId($this->metamodel);
+		$objItemRenderer = new MetaModelList();
 
-		$objView = $this->getRenderSettings($objMetaModel, $this->metamodel_filtering);
-		if ($objView)
-		{
-			$objTemplate = new MetaModelTemplate($objView->get('template'));
-			$objTemplate->view = $objView;
-		} else {
-			// fallback to default.
-			$objTemplate = new MetaModelTemplate('metamodel_full');
-		}
-
-		$objTemplate->noItemsMsg = $GLOBALS['TL_LANG']['MSC']['noItemsMsg'];
-
-		$arrParams = array_merge($_GET, deserialize($this->metamodel_filterparams, true));
-
-		$objFilter = $objMetaModel->prepareFilter($this->metamodel_filtering, $arrParams);
-		$intTotal = $objMetaModel->getCount($objFilter);
-
-		$arrLimits = $this->calculatePagination($intTotal);
-		// TODO: don't we need to be able to invert sorting? DESC
-		$objItems = $objMetaModel->findByFilter($objFilter, $this->metamodel_sortby, $arrLimits[1], $arrLimits[0], 'ASC', $objView->getSettingNames());
-
-		$objTemplate->items = $objItems;
-		$objTemplate->data = array();
-
-		//render items (if any) only if the "do not render option" is not set
-		if ($intTotal && !$this->metamodel_noparsing)
-		{
-			$objTemplate->data = $objItems->parseAll($this->Template->getFormat(), $objView);
-		}
-
-		$this->Template->items = $objTemplate->parse($this->Template->getFormat());
+		$this->Template->items = $objItemRenderer
+			->setMetaModel($this->metamodel, $this->metamodel_rendersettings)
+			->setLimit($this->metamodel_use_limit, $this->metamodel_offset, $this->metamodel_limit)
+			->setPageBreak($this->perPage)
+			->setSorting($this->metamodel_sortby, $this->metamodel_sortby_direction)
+			->setTemplateFormat($this->Template->getFormat())
+			->setFilterParam($this->metamodel_filtering, deserialize($this->metamodel_filterparams, true), $_GET)
+			->render($this->metamodel_noparsing, $this);
+		$this->Template->pagination = $objItemRenderer->getPagination();
 	}
 }
+
+?>

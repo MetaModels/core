@@ -227,14 +227,11 @@ class tl_content_metamodel extends Backend
 
 		$objFilter = $objFilterSettings = MetaModelFilterSettingsFactory::byId($intFilter);
 		$arrParams = $objFilter->getParameterDCA();
-
 		// Update the custom Filter mcv widget
-		$intRow = 0;
-
 		foreach ($arrParams as $strKey => $arrParam)
 		{
 			// Description
-			$GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']['eval']['columnFields'][$intRow]['label'] = array(
+			$GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']['eval']['columnFields'][$strKey]['label'] = array(
 				'label' => $arrParam['label'],
 				'inputType' => 'justsmalltext',
 				'eval' => array('style' => 'width:250px'),
@@ -247,27 +244,25 @@ class tl_content_metamodel extends Backend
 			}
 
 			// Filter param
-			$GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']['eval']['columnFields'][$intRow][$strKey] = $arrParam;
-			$GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']['eval']['columnFields'][$intRow][$strKey]['eval']['style'] = 'width:250px';
+			$GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']['eval']['columnFields'][$strKey]['value'] = $arrParam;
+			$GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']['eval']['columnFields'][$strKey]['value']['eval']['style'] = 'width:250px';
 
 			// Checkbox for using GET
-			$GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']['eval']['columnFields'][$intRow]['use_get'] = array(
+			$GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']['eval']['columnFields'][$strKey]['use_get'] = array(
 				'label' => '',
 				'inputType' => 'checkbox',
 				'eval' => array('style' => 'width:100%; padding:auto 0;'),
 			);
-
-			$intRow++;
 		}
 	}
 
 	public function serializeParameters($arrValues)
 	{
 		$arrResult = array();
-		foreach(deserialize($arrValues, true) as $arrValue)
+		foreach(deserialize($arrValues, true) as $strKey => $arrValue)
 		{
 			unset($arrValue['label']);
-			$arrResult[] = $arrValue;
+			$arrResult[$strKey] = $arrValue;
 		}
 		return serialize($arrResult);
 	}
