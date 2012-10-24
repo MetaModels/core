@@ -20,7 +20,7 @@ if (!defined('TL_ROOT'))
 
 
 /**
- * This is the MetaModelFilterRule class for handling checkbox fields.
+ * This is the MetaModelFilterRule class for handling string value searches on attributes.
  *
  * @package	   MetaModels
  * @subpackage Core
