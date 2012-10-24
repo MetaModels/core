@@ -460,13 +460,15 @@ class MetaModel implements IMetaModel
 				$arrFilteredIds = $objSortAttribute->sortIds($arrFilteredIds, $strSortOrder);
 			} else if (in_array($strSortBy, array('id', 'pid', 'tstamp', 'sorting'))) {
 				// sort by database values.
-				$arrFilteredIds = $objDB->execute(sprintf(
+				$arrFilteredIds = Database::getInstance()->execute(
+					sprintf(
 						'SELECT id FROM %s WHERE id IN(%s) ORDER BY %s %s',
 						$this->getTableName(),
 						implode(',', $arrFilteredIds),
 						$strSortBy,
-						$strSortOrder)
-					)->fetchEach('id');
+						$strSortOrder
+					)
+				)->fetchEach('id');
 			}
 		}
 		// apply limiting then
