@@ -114,9 +114,17 @@ if (TL_MODE=='BE')
  */
 
 $GLOBALS['FE_MOD']['metamodels'] = array
-	(
-		'metamodel_list'			=> 'ModuleMetaModelList',
-	);
+(
+	'metamodel_list' => 'ModuleMetaModelList',
+);
+
+/**
+ * Content elements
+ */
+$GLOBALS['TL_CTE']['metamodels'] = array
+(
+	'metaModelContent' => 'ContentMetaModel'
+);
 
 /**
  * HOOKS

@@ -313,3 +313,28 @@ CREATE TABLE `tl_module` (
   `metamodel_filterparams` longblob NULL
 
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+-- --------------------------------------------------------
+
+--
+-- Table `tl_content`
+--
+
+CREATE TABLE `tl_content` (
+  `metamodel` int(10) unsigned NOT NULL default '0',
+  `metamodel_layout` varchar(64) NOT NULL default '',
+
+-- LIMIT n,m for listings
+  `metamodel_use_limit` char(1) NOT NULL default '',
+  `metamodel_limit` smallint(5) NOT NULL default '0',
+  `metamodel_offset` smallint(5) NOT NULL default '0',
+-- filtering and sorting
+  `metamodel_sortby` varchar(64) NOT NULL default '',
+  `metamodel_sortby_direction` varchar(4) NOT NULL default '',
+  `metamodel_filtering` int(10) NOT NULL default '0',
+  `metamodel_rendersettings` int(10) NOT NULL default '0',
+  `metamodel_noparsing` char(1) NOT NULL default '',
+  `metamodel_nopagination` char(1) NOT NULL default '',
+  `metamodel_filterparams` longblob NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
