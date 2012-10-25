@@ -21,6 +21,7 @@ if (!defined('TL_ROOT'))
 /**
  * Content elements
  */
+$GLOBALS['TL_LANG']['CTE']['metamodels']  = 'MetaModel elements';
 $GLOBALS['TL_LANG']['CTE']['metaModelContent'] = array('MetaModel list', 'Adds a list of MetaModel items to the article.');
 
 /**
