@@ -38,7 +38,7 @@ $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('tl_cont
 /**
  * Palettes
  */
-$GLOBALS['TL_DCA']['tl_content']['palettes']['metaModelContent'] = '{title_legend},name,headline,type;{mm_config_legend},metamodel,perPage,metamodel_use_limit;{mm_filter_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_filtering,metamodel_filterparams;{mm_rendering},metamodel_layout,metamodel_rendersettings,metamodel_noparsing,metamodel_nopagination;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['metaModelContent'] = '{title_legend},name,headline,type;{mm_config_legend},metamodel,perPage,metamodel_use_limit;{mm_filter_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_filtering,metamodel_filterparams;{mm_rendering},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_limit';
 
 // Insert new Subpalettes after position 1
@@ -158,13 +158,6 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array(
 			'submitOnChange' => true,
 			'tl_class' => 'w50'
 		),
-	),
-	'metamodel_nopagination' => array
-		(
-		'label' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_nopagination'],
-		'exclude' => true,
-		'inputType' => 'checkbox',
-		'eval' => array('tl_class' => 'w50')
 	),
 	'metamodel_filterparams' => array
 		(

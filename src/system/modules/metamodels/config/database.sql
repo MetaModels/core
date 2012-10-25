@@ -335,6 +335,5 @@ CREATE TABLE `tl_content` (
   `metamodel_filtering` int(10) NOT NULL default '0',
   `metamodel_rendersettings` int(10) NOT NULL default '0',
   `metamodel_noparsing` char(1) NOT NULL default '',
-  `metamodel_nopagination` char(1) NOT NULL default '',
   `metamodel_filterparams` longblob NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

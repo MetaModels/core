@@ -35,7 +35,6 @@ $GLOBALS['TL_LANG']['tl_content']['DESC']							= 'Descending';
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_content']['metamodel']						= array('MetaModel', 'The MetaModel to list in this listing.');
-$GLOBALS['TL_LANG']['tl_content']['metamodel_nopagination']			= array('Disable pagination', 'Don`t use a pagination.');
 $GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit']			= array('Use offset and limit for listing', 'Check if you want to limit the amount of items listed. This is useful for only showing the first 500 items or all excluding the first 10 items but keep pagination intact.');
 $GLOBALS['TL_LANG']['tl_content']['metamodel_offset']				= array('List offset', 'Please specify the offset value (i.e. 10 to skip the first 10 items).');
 $GLOBALS['TL_LANG']['tl_content']['metamodel_limit']				= array('Maximum number of items', 'Please enter the maximum number of items. Enter 0 to show all items.');
