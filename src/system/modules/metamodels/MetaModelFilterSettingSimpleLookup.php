@@ -89,7 +89,10 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 			$this->getParamName() => array
 			(
 				// TODO: langstring
-				'label'   => array(sprintf('Filter value for attribute %s', $objAttribute->getName()), 'description'),
+				'label'   => array(
+					sprintf($GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'][0], $objAttribute->getName()),
+					sprintf($GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'][1], $objAttribute->getName())
+				),
 				'inputType'    => 'select',
 				'options' => $arrOptions,
 				'eval' => array('includeBlankOption' => true)

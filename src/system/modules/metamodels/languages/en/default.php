@@ -55,4 +55,10 @@ $GLOBALS['TL_LANG']['ERR']['install_extension']                       = 'Please 
 $GLOBALS['TL_LANG']['ERR']['no_palette']                              = 'Attempt to access the MetaModel "%s" without palette for current user %s.';
 $GLOBALS['TL_LANG']['ERR']['no_view']                                 = 'Attempt to access the MetaModel "%s" without view for user %s.';
 
+/***
+ * Filter setting parameters.
+ */
+
+$GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'] = array('Filter value for attribute &quot;%s&quot;.', 'Select here the value to be used as filter value for attribute &quot;%s&quot;. If the flag for using the GET value is set, this value may be overriden via an url parameter.');
+
 ?>
