@@ -24,7 +24,7 @@ $GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = array('tl_modul
  * Add palettes to tl_module
  */
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list']  = '{title_legend},name,headline,type;{config_legend},metamodel,perPage,metamodel_use_limit,metamodel_sortby,metamodel_filtering,metamodel_filterparams;{template_legend:hide},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list']  = '{title_legend},name,headline,type;{config_legend},metamodel,perPage,metamodel_use_limit;{mm_filter_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_filtering,metamodel_filterparams;{template_legend:hide},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'metamodel_use_limit';
 
@@ -101,6 +101,16 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'eval'                    => array('includeBlankOption' => true, 'tl_class'=>'w50'),
 	),
 
+	'metamodel_sortby_direction' => array
+		(
+		'label' => &$GLOBALS['TL_LANG']['tl_module']['metamodel_sortby_direction'],
+		'exclude' => true,
+		'inputType' => 'select',
+		'reference' => &$GLOBALS['TL_LANG']['tl_content'],
+		'options' => array('ASC' => 'ASC', 'DESC' => 'DESC'),
+		'eval' => array('includeBlankOption' => false, 'tl_class' => 'w50'),
+	),
+
 	'metamodel_filtering' => array
 	(
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_filtering'],
@@ -152,8 +162,16 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'inputType'               => 'mm_subdca',
 		'eval'                    => array
 		(
-			'subfields'           => array()
-		)
+			'subfields'           => array(),
+			'flagfields' => array
+			(
+				'use_get' => array
+				(
+					'label' => &$GLOBALS['TL_LANG']['tl_module']['metamodel_filterparams_use_get'],
+					'inputType' => 'checkbox',
+				),
+			),
+		),
 	)
 ));
 

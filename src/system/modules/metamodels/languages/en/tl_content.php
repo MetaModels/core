@@ -45,8 +45,9 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering']			= array('Filter setti
 $GLOBALS['TL_LANG']['tl_content']['metamodel_layout']				= array('Custom Template to use for generating', 'Select the template that shall be used for the selected attribute. Valid template files start with &quot;mod_metamodel_<type>&quot; where the module type name is put for &lt;type&gt;');
 $GLOBALS['TL_LANG']['tl_content']['metamodel_rendersettings']		= array('Render settings to apply', 'Select the rendering settings to use for generating the output. If left empty, the default settings for the selected metamodel will get applied. If no default has been defined, the output will only get the raw values.');
 $GLOBALS['TL_LANG']['tl_content']['metamodel_noparsing']			= array('No parsing of items', 'If this checkbox is selected, the module will not parse the items. Only the item-objects will be available in the template.');
-$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams']			= array('Filtersettings overwrite', 'Set the dfault filter values for this content element.');
-$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams_head']	= array('Description', 'Values', 'Use GET Param');
+$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams']			= array('Filtersettings override');
+
+$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams_use_get'] = array('Use GET Param', 'allow this parameter to be overridden from _GET');
 
 /**
  * Wizards

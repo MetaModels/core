@@ -163,20 +163,19 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array(
 		(
 		'label' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams'],
 		'exclude' => true,
-		'inputType' => 'multiColumnWizardMM',
+		'inputType' => 'mm_subdca',
 		'eval' => array
-			(
+		(
 			'tl_class' => 'clr',
-			'buttons' => array(
-				'copy' => false,
-				'delete' => false,
-				'up' => false,
-				'down' => false
+			'flagfields' => array
+			(
+				'use_get' => array
+				(
+					'label' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams_use_get'],
+					'inputType' => 'checkbox',
+				),
 			),
-			'columnFields' => array(),
-			'columnHead' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams_head']
-		),
-		'save_callback' => array(array('tl_content_metamodel', 'serializeParameters'))
+		)
 	)
 ));
 
@@ -220,44 +219,7 @@ class tl_content_metamodel extends Backend
 
 		$objFilter = $objFilterSettings = MetaModelFilterSettingsFactory::byId($intFilter);
 		$arrParams = $objFilter->getParameterDCA();
-		// Update the custom Filter mcv widget
-		foreach ($arrParams as $strKey => $arrParam)
-		{
-			// Description
-			$GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']['eval']['columnFields'][$strKey]['label'] = array(
-				'label' => $arrParam['label'],
-				'inputType' => 'justsmalltext',
-				'eval' => array('style' => 'width:250px'),
-			);
-
-			// Include Blank for select
-			if ($arrParam['inputType'] == 'select')
-			{
-				$arrParam['eval']['includeBlankOption'] = true;
-			}
-
-			// Filter param
-			$GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']['eval']['columnFields'][$strKey]['value'] = $arrParam;
-			$GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']['eval']['columnFields'][$strKey]['value']['eval']['style'] = 'width:250px';
-
-			// Checkbox for using GET
-			$GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']['eval']['columnFields'][$strKey]['use_get'] = array(
-				'label' => '',
-				'inputType' => 'checkbox',
-				'eval' => array('style' => 'width:100%; padding:auto 0;'),
-			);
-		}
-	}
-
-	public function serializeParameters($arrValues)
-	{
-		$arrResult = array();
-		foreach(deserialize($arrValues, true) as $strKey => $arrValue)
-		{
-			unset($arrValue['label']);
-			$arrResult[$strKey] = $arrValue;
-		}
-		return serialize($arrResult);
+		$GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']['eval']['subfields'] = $arrParams;
 	}
 
 	/**
