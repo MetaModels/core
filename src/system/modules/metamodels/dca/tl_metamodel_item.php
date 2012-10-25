@@ -125,6 +125,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 	),
 	'fields' => array
 	(
+		'sorting' => array
+		(
+			'sorting' => true
+		)
 	)
 );
 
