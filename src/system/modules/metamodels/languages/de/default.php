@@ -28,7 +28,7 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord'] = 'Bearbeite
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label'] = 'Filter "%s" in MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'] = '"%s" für Item %%s bearbeiten';
 //Select Options
-$GLOBALS['TL_LANG']['MSC']['optionsTitle'] = 'Wähle %s';
+/* $GLOBALS['TL_LANG']['MSC']['optionsTitle'] = 'Wähle %s';
 $GLOBALS['TL_LANG']['MSC']['sorting'] = 'Sortierung';
 
 $GLOBALS['TL_LANG']['MSC']['noCatalog'] = 'Der Katalog existiert nicht. Wenden Sie sich bitte an Ihren Systemadministrator.';
@@ -157,5 +157,8 @@ $GLOBALS['TL_LANG']['MSC']['removeImage'] = 'Entferne %s';
  */
 $GLOBALS['TL_LANG']['MSC']['reportAbuse'] = 'Missbrauch melden';
 
+ */
+$GLOBALS['TL_LANG']['MSC']['no_palette'] = 'Versuch, auf MetaModel "%s" ohne Palette für den Benutzer %s zuzugreifen.';
+$GLOBALS['TL_LANG']['MSC']['no_view'] = 'Versuch, auf das MetaModel "%s" ohne Ansicht für den Benutzer %s zuzugeifen.';
 
 ?>
