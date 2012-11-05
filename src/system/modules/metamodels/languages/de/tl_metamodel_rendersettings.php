@@ -28,13 +28,34 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']            = arr
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']             = array('Template', 'Das Template festlegen, das für die Darstellung der Datensätze benutzt werden soll.');
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']               = array('Zielseite', 'Die Seite (URL) festlegen, die für die Darstellung der Details benutzt wird. Detaillierte URL-Parameter werden von der jeweilig benutzten Filtereinstellung generiert.');
- 
+
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['mode']                 = array('Sortiermodus', 'Den Sortiermodus einstellen, der in der Datensatzdarstellung benutzt werden soll.');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['flag']                 = array('Sortierung', 'Sortierungsart, die in der Datensatzansicht benutzt werden soll.');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['panelLayout']          = array('Panel-Layout', 'Für Zwischenräume die Optionen mit einem Komma (für Leerzeichen) und Semikolon (für eine neue Zeile) eingeben. Beispiel: sort,filter;search,limit.');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['panelpicker']          = 'Panelpicker';
+
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingmode']['1']     = 'Datensätze werden nach einem fest vorgegebenen Feld sortiert';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingmode']['2']     = 'Datensätze werden nach einem wechselbaren Feld sortiert';
+
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['1']     = 'Nach erstem Buchstaben aufsteigend sortieren';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['2']     = 'Nach erstem Buchstaben abfsteigend sortieren';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['3']     = 'Nach den ersten beiden Buchstaben aufsteigend sortieren';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['4']     = 'Nach den ersten beiden Buchstaben absteigend sortieren';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['5']     = 'Nach Kalendertag aufsteigend sortieren';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['6']     = 'Nach Kalendertag absteigend sortieren';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['7']     = 'Nach Monat aufsteigend sortieren';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['8']     = 'Nach Monat absteigend sortieren';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['9']     = 'Nach Jahr aufsteigend sortieren';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['10']    = 'Nach Jahr absteigend sortieren';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['11']    = 'Aufsteigend sortieren';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['12']    = 'Absteigend sortieren';
 
 /**
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']         = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings_legend']      = 'Einstellungen';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['expert_legend']        = 'Experteneinstellungen';
 
 /**
  * Buttons
