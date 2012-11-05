@@ -32,6 +32,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['show']          = array('Datensatz-Det
 $GLOBALS['TL_LANG']['tl_metamodel_item']['editheader']    = array('Datensatztyp bearbeiten', 'Den typ des Datensatzes bearbeiten.');
 $GLOBALS['TL_LANG']['tl_metamodel_item']['fields']        = array('Attribute verwalten', 'Die Attribute dieses MetaModels verwalten.');
 
+$GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']      = array('Neuer Datensatz', 'Einen neuen datensatz hinter Datensatz ID %s erzeugen');
 
 $GLOBALS['TL_LANG']['tl_metamodel_item']['varbase']       = array('Ist Basis für Varianten', 'Aktivieren, falls dieser Datensatz als Basis für die aktuelle Variantengruppe benutzt werden soll.');
 

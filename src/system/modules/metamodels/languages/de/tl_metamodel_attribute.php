@@ -30,6 +30,10 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname']              = array('S
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['isvariant']            = array('Varianten überschreiben Vorgabe', 'Anwählen, wenn Sie möchten, dass Varianten in diesem MetaModel die Werte der Elterntabelle überschreiben');
 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['isunique']            = array('Eindeutig', 'Wählen, wenn Sie sicherstellen möchten, dass jeder Wert nur ein einziges mal vorkommen darf.');
++$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode']       = array('Sprache', 'Sprache');
++$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value']          = array('Beschreibungstext', 'Beschreibungstext');
++
+
 
 /**
  * Legends

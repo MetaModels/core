@@ -12,7 +12,7 @@
  * @copyright  CyberSpectrum
  * @license    private
  * @filesource
- * @translation Carolina M Koehn <ck@kikmedia.de>
+ * @author Carolina M Koehn <ck@kikmedia.de>
  */
 if (!defined('TL_ROOT'))
 {
@@ -31,17 +31,30 @@ $GLOBALS['TL_LANG']['tl_metamodel']['mode']                 = array('List-Modus'
 
 $GLOBALS['TL_LANG']['tl_metamodel']['translated']           = array('Übersetzung', 'Auswählen falls diese MetaModell Übersetzungen und/oder Mehrsprachigkeit unterstützen soll.');
 $GLOBALS['TL_LANG']['tl_metamodel']['languages']            = array('Unterstützte Sprachen', 'Geben Sie alle Sprachen an, die für mehrsprachige Funktion genutzt werden sollen.');
-$GLOBALS['TL_LANG']['tl_metamodel']['languages_langcode']   = array('Sprache', '');
-$GLOBALS['TL_LANG']['tl_metamodel']['languages_isfallback'] = array('Als Fallback benutzen', '');
+$GLOBALS['TL_LANG']['tl_metamodel']['languages_langcode']   = array('Sprachen', 'Die Sprachen auswählen, die angeboten werden sollen.');
+$GLOBALS['TL_LANG']['tl_metamodel']['languages_isfallback'] = array('Als Fallback benutzen', 'Die Sprache auswählen, die als Fallback-Sprache benutzt werden soll.');
 
 $GLOBALS['TL_LANG']['tl_metamodel']['varsupport']           = array('Varianten aktivieren', 'Auswählen, falls das MetaModel Varianten unterstützen soll.');
+
+$GLOBALS['TL_LANG']['tl_metamodel']['rendertype']           = array('Integration', 'Die gewünschte Art der Integration auswählen.');
+
+$GLOBALS['TL_LANG']['tl_metamodel']['backendsection']       = array('Backend-Bereich', 'Den gewünschten Backend-Bereich auswählen, in dem das MetaModel erscheinen soll. Für Inhalte, die von Redakteuren bearbeitet werden sollen wird der Betreich 'Inhalte' empfohlen.');
+
+$GLOBALS['TL_LANG']['tl_metamodel']['backendcaption']       = array('Backend-Beschreibung', 'Der hier angegebene Text wird als Bereichsüberschrift und Beschreibung in der Backend-Navigation erscheinen.');
+
+$GLOBALS['TL_LANG']['tl_metamodel']['becap_langcode']       = array('Sprachen', 'Die Sprachen auswählen, die angeboten werden sollen.');
+$GLOBALS['TL_LANG']['tl_metamodel']['becap_label']          = array('Menütext', 'Der hier angegebene Text wird als Menütext im Backend benutzt.');
+$GLOBALS['TL_LANG']['tl_metamodel']['becap_description']    = array('Beschreibung', 'Der hier angegebene Text wird für die beim hovern sichtbare erweiterte Beschreibung im Backend benutzt.');
+
+$GLOBALS['TL_LANG']['tl_metamodel']['backendicon']          = array('Backend-Icon', 'Ein Icon für die Darstellung im Backend auswählen. Dieses Icon wird links vom Menütext angezeigt und ermöglicht eine schnelle Orientierung. In der Baumansicht wird das Icon ebenfalls im oberen Bereich benutzt.');
+
 
 /**
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_metamodel']['title_legend']         = 'Name, Tabelle und Weiterleitungsseite';
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']      = 'Experteneinstellungen';
-$GLOBALS['TL_LANG']['tl_metamodel']['display_legend']       = 'Anzeigeformat';
+$GLOBALS['TL_LANG']['tl_metamodel']['backend_legend']       = 'Backend-Integration';
 
 /**
  * Buttons
@@ -56,6 +69,23 @@ $GLOBALS['TL_LANG']['tl_metamodel']['editheader']           = array('MetaModel b
 $GLOBALS['TL_LANG']['tl_metamodel']['fields']               = array('Attribute definieren', 'Define attributes for MetaModel ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel']['filter']               = array('Filter definieren', 'Define filters for MetaModel ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']       = array('Ausgabevorgaben definieren', 'Define render settings for MetaModel ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel']['dca']                  = array('DCA-Einstellungen', 'DCA-Einstellungen für das MetaModel ID %s definieren.');
+
+/**
+ * Reference
+ */
+
+$GLOBALS['TL_LANG']['tl_metamodel']['modes']['mode_0'] = '0 Datensätze unsortiert darstellen';
+$GLOBALS['TL_LANG']['tl_metamodel']['modes']['mode_1'] = '1 Datensätze nach bestimmtem Feld sortiert darstellen';
+$GLOBALS['TL_LANG']['tl_metamodel']['modes']['mode_2'] = '2 Datensätze nach wählbarem Feld sortiert darstellen';
+$GLOBALS['TL_LANG']['tl_metamodel']['modes']['mode_3'] = '3 Datensätz nach Elterntabelle sortiert darstellen';
+$GLOBALS['TL_LANG']['tl_metamodel']['modes']['mode_4'] = '4 Kind-Datensätze einer Elterntabelle anzeigen (wie im CSS-Modul)';
+$GLOBALS['TL_LANG']['tl_metamodel']['modes']['mode_5'] = '5 Baumdarstellung (wie Seitenstruktur)';
+$GLOBALS['TL_LANG']['tl_metamodel']['modes']['mode_6'] = '6 Kind-Datensätze in einer Baumstruktur darstellen (wie Artikelmodul)';
+
+$GLOBALS['TL_LANG']['tl_metamodel']['rendertypes']['standalone'] = 'Als Einzeltabelle';
+$GLOBALS['TL_LANG']['tl_metamodel']['rendertypes']['ctable']     = 'Als Kind-Tabelle';
+
 
 /**
  * Misc.
