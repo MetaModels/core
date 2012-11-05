@@ -34,8 +34,11 @@ $GLOBALS['TL_LANG']['MSC']['sorting'] = 'Sortierung';
 $GLOBALS['TL_LANG']['MSC']['noCatalog'] = 'Der Katalog existiert nicht. Wenden Sie sich bitte an Ihren Systemadministrator.';
 $GLOBALS['TL_LANG']['MSC']['removeDataConfirm'] = 'Möchten Sie wirklich vor dem Import alle bestehenden Daten aus %s löschen?';
 
-
-
+$GLOBALS['TL_LANG']['MSC']['tl_class']['w50']         = array('w50', 'Die Breite auf 50% und nach links floaten.');
+$GLOBALS['TL_LANG']['MSC']['tl_class']['clr']         = array('clr', 'Alle Floats clearen.');
+$GLOBALS['TL_LANG']['MSC']['tl_class']['m12']         = array('m12', 'Dem Element einen oberen Abstand (top-margin) von 12 Pixel geben (für einzelne Checkboxen).');
+$GLOBALS['TL_LANG']['MSC']['tl_class']['wizard']      = array('wizard', 'Das Eingabefeld kürzen, so dass Platz für einen Wizard ist (z.B. einen Date-Picker).');
+$GLOBALS['TL_LANG']['MSC']['tl_class']['long']        = array('long', 'Vergrößert das Eingabefeld, so dass es zwei Spalten umfasst.');
 
 /**
  * Error
@@ -167,13 +170,5 @@ $GLOBALS['TL_LANG']['MSC']['no_view'] = 'Versuch, auf das MetaModel "%s" ohne An
 $GLOBALS['TL_LANG']['ERR']['no_attribute_extension'] = 'Bitte mindestens eine Erweiterung für Attribute installieren! MetaModels ohne Attribute sind sinnlos.';
 $GLOBALS['TL_LANG']['ERR']['activate_extension'] = 'Bitte die benötigte Erweiterung &quot;%s&quot; (%s) aktivieren.';
 $GLOBALS['TL_LANG']['ERR']['install_extension'] = 'Bitte die benötigte Erweiterung &quot;%s&quot; (%s) installieren.';
- 
-+$GLOBALS['TL_LANG']['MSC']['tl_class']['w50']         = array('w50', 'Die Breite auf 50% und nach links floaten.');
-+$GLOBALS['TL_LANG']['MSC']['tl_class']['clr']         = array('clr', 'Alle Floats clearen.');
-+$GLOBALS['TL_LANG']['MSC']['tl_class']['m12']         = array('m12', 'Dem Element einen oberen Abstand (top-margin) von 12 Pixel geben (für einzelne Checkboxen).');
-+$GLOBALS['TL_LANG']['MSC']['tl_class']['wizard']      = array('wizard', 'Das Eingabefeld kürzen, so dass Platz für einen Wizard ist (z.B. einen Date-Picker).');
-+$GLOBALS['TL_LANG']['MSC']['tl_class']['long']        = array('long', 'Vergrößert das Eingabefeld, so dass es zwei Spalten umfasst.');
- 
-
 
 ?>
