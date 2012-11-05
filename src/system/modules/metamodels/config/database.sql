@@ -62,7 +62,7 @@ CREATE TABLE `tl_metamodel_dca` (
   `backendsection` varchar(255) NOT NULL default '',
   `backendcaption` text NULL,
   `backendicon` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`id`),
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
@@ -90,7 +90,7 @@ CREATE TABLE `tl_metamodel_dcasetting` (
 -- sorting flag override.
   `flag` int(4) unsigned NOT NULL default '0',
 
-  PRIMARY KEY  (`id`),
+  PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -285,8 +285,8 @@ CREATE TABLE `tl_metamodel_dca_combine` (
 -- corresponding tl_metamodel_rendersetting (view)
   `view_id` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`),
-  KEY `pid` (`pid`)
-  KEY `fe_group` (`be_group`)
+  KEY `pid` (`pid`),
+  KEY `fe_group` (`be_group`),
   KEY `be_group` (`be_group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
