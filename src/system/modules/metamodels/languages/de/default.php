@@ -35,10 +35,10 @@ $GLOBALS['TL_LANG']['MSC']['tl_class']['wizard']      					= array('wizard', 'Da
 $GLOBALS['TL_LANG']['MSC']['tl_class']['long']        					= array('long', 'Vergrößert das Eingabefeld, so dass es zwei Spalten umfasst.');
 
 // Panelpicker
-+$GLOBALS['TL_LANG']['MSC']['panelLayout']['search']  					= array('Suche', '');
-+$GLOBALS['TL_LANG']['MSC']['panelLayout']['sort']    					= array('Sortierung', '');
-+$GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']  					= array('Filter', '');
-+$GLOBALS['TL_LANG']['MSC']['panelLayout']['limit']   					= array('Limitierung', '');
+$GLOBALS['TL_LANG']['MSC']['panelLayout']['search']  					= array('Suche', '');
+$GLOBALS['TL_LANG']['MSC']['panelLayout']['sort']    					= array('Sortierung', '');
+$GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']  					= array('Filter', '');
+$GLOBALS['TL_LANG']['MSC']['panelLayout']['limit']   					= array('Limitierung', '');
  
 /**
  * Errors
