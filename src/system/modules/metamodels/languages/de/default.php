@@ -22,8 +22,6 @@ if (!defined('TL_ROOT'))
 /**
  * Miscellaneous
  */
-$GLOBALS['TL_LANG']['MOD']['metamodels'] 								= array('MetaModels', 'Die MetaModels-Erweiterung ermöglicht die Erstellung eigener Datenbank-Modelle.');
-
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord'] 	= 'Bearbeiten der Filtereinstellungen %%s für den Filter "%s" in MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label'] 			= 'Filter "%s" in MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'] 			= '"%s" für Item %%s bearbeiten';
