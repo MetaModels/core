@@ -161,4 +161,12 @@ $GLOBALS['TL_LANG']['MSC']['reportAbuse'] = 'Missbrauch melden';
 $GLOBALS['TL_LANG']['MSC']['no_palette'] = 'Versuch, auf MetaModel "%s" ohne Palette für den Benutzer %s zuzugreifen.';
 $GLOBALS['TL_LANG']['MSC']['no_view'] = 'Versuch, auf das MetaModel "%s" ohne Ansicht für den Benutzer %s zuzugeifen.';
 
+/**
+ * Errors
+ */
+$GLOBALS['TL_LANG']['ERR']['no_attribute_extension'] = 'Bitte mindestens eine Erweiterung für Attribute installieren! MetaModels ohne Attribute sind sinnlos.';
+$GLOBALS['TL_LANG']['ERR']['activate_extension'] = 'Bitte die benötigte Erweiterung &quot;%s&quot; (%s) aktivieren.';
+$GLOBALS['TL_LANG']['ERR']['install_extension'] = 'Bitte die benötigte Erweiterung &quot;%s&quot; (%s) installieren.';
+ 
+
 ?>
