@@ -12,7 +12,7 @@
  * @copyright  CyberSpectrum
  * @license    private
  * @filesource
- * @translation Carolina M Koehn <ck@kikmedia.de>
+ * @author Carolina M Koehn <ck@kikmedia.de>
  */
 if (!defined('TL_ROOT'))
 {
@@ -40,7 +40,7 @@ $GLOBALS['TL_LANG']['MSC']['removeDataConfirm'] = 'Möchten Sie wirklich vor dem
 /**
  * Error
  */
-$GLOBALS['TL_LANG']['ERR']['noHeaderFields']     = 'Die Kopfzeilen (Zeile 1) der CSV-Datei müssen exakt den IM Katalog definierten entsprechen.';
+$GLOBALS['TL_LANG']['ERR']['noHeaderFields']     = 'Die Kopfzeilen (Zeile 1) der CSV-Datei müssen exakt den im Katalog definierten entsprechen.';
 $GLOBALS['TL_LANG']['ERR']['noCSVData']     = 'In der CSV-Datei befinden sich keine Daten.';
 $GLOBALS['TL_LANG']['ERR']['importSuccess'] = 'CSV-Import ini den Katalog erfolgreich: %s Datensätze';
 $GLOBALS['TL_LANG']['ERR']['noCSVFile']     = 'Bitte wählen Sie eine CSV-Datei aus!';
@@ -168,5 +168,8 @@ $GLOBALS['TL_LANG']['ERR']['no_attribute_extension'] = 'Bitte mindestens eine Er
 $GLOBALS['TL_LANG']['ERR']['activate_extension'] = 'Bitte die benötigte Erweiterung &quot;%s&quot; (%s) aktivieren.';
 $GLOBALS['TL_LANG']['ERR']['install_extension'] = 'Bitte die benötigte Erweiterung &quot;%s&quot; (%s) installieren.';
  
+$GLOBALS['TL_LANG']['MSC']['tl_class']['w50'] = array('Halbe Breite', 'Nur die halbe Breite nutzen');
+$GLOBALS['TL_LANG']['MSC']['tl_class']['clr'] = array('clr', 'clr');
+$GLOBALS['TL_LANG']['MSC']['tl_class']['m12'] = array('m12', 'm12');
 
 ?>
