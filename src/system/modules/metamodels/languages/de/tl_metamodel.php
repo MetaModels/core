@@ -69,7 +69,9 @@ $GLOBALS['TL_LANG']['tl_metamodel']['editheader']           = array('MetaModel b
 $GLOBALS['TL_LANG']['tl_metamodel']['fields']               = array('Attribute definieren', 'Define attributes for MetaModel ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel']['filter']               = array('Filter definieren', 'Define filters for MetaModel ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']       = array('Ausgabevorgaben definieren', 'Define render settings for MetaModel ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel']['dca']                  = array('DCA-Einstellungen', 'DCA-Einstellungen für das MetaModel ID %s definieren.');
+$GLOBALS['TL_LANG']['tl_metamodel']['dca']                  = array('Paletten-Einstellungen', 'Palletten-Einstellungen für das MetaModel ID %s definieren.');
+$GLOBALS['TL_LANG']['tl_metamodel']['dca_combine']          = array('Paletten- und Ansichtseinstellungen festlegen', 'Paletten- und Ansichtseinstellungen für MetaModel ID %s festlegen');
+
 
 /**
  * Reference

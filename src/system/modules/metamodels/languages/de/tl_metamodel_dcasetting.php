@@ -21,7 +21,7 @@ if (!defined('TL_ROOT'))
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype']         = array('Typ', 'Den Typ auswählen.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype']         = array('Typ', 'Den Attribut-Typ auswählen.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']         = array('Attribute', 'Attribute, auf die sich diese Einstellung bezieht.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']        = array('Eigenes Template für die Darstellung', 'Ein Template auswählen, das für das ausgewählte Attribut benutzt werden soll. Gültige Templatenamen beginnen mit &quot;mm_<type>&quot; - type steht dabei für den &lt;type&gt;');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']        = array('Backend-Class', 'Hier können eine oder mehrere Backend-Classes festgelegt werden. Für bessere Bedienung ist die Benutzung des Stylepickers empfohlen.');
@@ -51,7 +51,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['edit']            = array('Einst
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy']            = array('Einstellung kopieren', 'Die Einstellung ID %s kopieren');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete']          = array('Einstellung löschen', 'Die Einstellung ID %s löschen');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['show']            = array('Einstellungsdetails', 'Die Detials für die Einstellung ID %s anzeigen');
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']          = array('Alle hinzufügen all', 'Alle Attribute zur Palette hinzufügen');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']          = array('Alle hinzufügen', 'Alle Attribute zur Palette hinzufügen');
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['row']             = '%s <strong>%s</strong> <em>[%s]</em>';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legend_row']      = '<div class="dca_palette">%s%s</div>';

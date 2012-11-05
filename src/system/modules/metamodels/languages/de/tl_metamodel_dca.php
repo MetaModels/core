@@ -21,7 +21,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['name']                 = array('Name', 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']               = array('Änderungsdatum', 'Datum und Zeit der letzten Änderung');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']            = array('Als Standard benutzen', 'Bestimmt, ob diese Palette als Standardvorgabe für Eltern-Datensätze benutzt werden soll.');
 
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype']           = array('Integration', 'Die gwünschte Art der Integration auswählen.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype']           = array('Integration', 'Die gewünschte Art der Integration auswählen.');
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']               = array('Eltern-Tabelle (falls gewünscht)', 'Name der Datenbank-Tabelle, die als Eltern-Tabelle benutzt werden soll.');
 

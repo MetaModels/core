@@ -27,15 +27,15 @@ $GLOBALS['TL_LANG']['tl_module']['mm_filter_legend']				= 'MetaModel Filter';
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_module']['metamodel']                = array('MetaModel', 'Das MetaModel angeben, nach dem aufgelistet werden soll.');
-$GLOBALS['TL_LANG']['tl_module']['metamodel_use_limit']      = array('Datens‰tze ¸berspringen und begrenzen', 'Ausw‰hlen, um die Anzahl der aufgelisteten Datens‰tze zu begrenzen. Die Einstellung wird benˆtigt, um beispielsweise die 500 ersten Datens‰tze oder alle mit Ausnahme der ersten 10 Datens‰tze aufzulisten und dabei eine korrekte Paginierung zu ermˆglichen.');
-$GLOBALS['TL_LANG']['tl_module']['metamodel_offset']         = array('Datens‰tze ¸berspringen', 'Bitte die Anzahl der Datens‰tze angeben, die ¸bersprungen werden sollen (zum Beispiel 10, um die ersten 10 Datens‰tze zu ¸berspringen).');
-$GLOBALS['TL_LANG']['tl_module']['metamodel_limit']          = array('Maximale Anzahl an Datens‰tzen', 'Bitte die maximale Zahl der anzuzeigenden Datens‰tze angeben. Um alle Datens‰tze anzuzeigen und die Paginierung auszuschalten den Wert '0' eingeben.');
+$GLOBALS['TL_LANG']['tl_module']['metamodel_use_limit']      = array('Datens√§tze √ºberspringen und begrenzen', 'Ausw√§hlen, um die Anzahl der aufgelisteten Datens√§tze zu begrenzen. Die Einstellung wird ben√∂tigt, um beispielsweise die 500 ersten Datens√§tze oder alle mit Ausnahme der ersten 10 Datens√§tze aufzulisten und dabei eine korrekte Paginierung zu erm√∂glichen.');
+$GLOBALS['TL_LANG']['tl_module']['metamodel_offset']         = array('Datens√§tze √ºberspringen', 'Bitte die Anzahl der Datens√§tze angeben, die √ºbersprungen werden sollen (zum Beispiel 10, um die ersten 10 Datens√§tze zu √ºberspringen).');
+$GLOBALS['TL_LANG']['tl_module']['metamodel_limit']          = array('Maximale Anzahl an Datens√§tzen', 'Bitte die maximale Zahl der anzuzeigenden Datens√§tze angeben. Um alle Datens√§tze anzuzeigen und die Paginierung auszuschalten den Wert '0' eingeben.');
 
-$GLOBALS['TL_LANG']['tl_module']['metamodel_sortby']         = array('Sortieren nach', 'Bitte die Reihenfolge f¸r die Sortierung ausw‰hlen.');
+$GLOBALS['TL_LANG']['tl_module']['metamodel_sortby']         = array('Sortieren nach', 'Bitte die Reihenfolge f√ºr die Sortierung ausw√§hlen.');
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby_direction'] = array('Sortierreihenfolge', 'Austeigende oder absteigende Reihenfolge.');
-$GLOBALS['TL_LANG']['tl_module']['metamodel_filtering']      = array('Anzuwendende Filtereinstellungen', 'Die Filtereinstellungen ausw‰hlen, die beim Zusammenstellen der Datensatzliste angewandt werden sollen.');
-$GLOBALS['TL_LANG']['tl_module']['metamodel_layout']         = array('Eigenes Template f¸r Datensatzliste ausw‰hlen', 'Das Template ausw‰hlen, das f¸r die Generierung der Datensatzliste mit den ausgew‰hlten Attributen benutzt werden soll. G¸ltige Templatenamen beginnen mit &quot;mod_metamodel_&lt;type&gt;&quot;, wobei 'type' f¸r den jeweiligen &lt;Typ&gt; steht.');
-$GLOBALS['TL_LANG']['tl_module']['metamodel_rendersettings'] = array('Anzuwendende Rendereinstellungen', 'Die Rendereinstellungen ausw‰hlen, die benutzt werden sollen, um die Ausgabe zu erstellen. Falls leer werden die Standardeinstellungen f¸r das ausgew‰hlte MetaModel benutzt. Ist kein Standard definiert, dann werden Rohwerte ausgegeben.');
+$GLOBALS['TL_LANG']['tl_module']['metamodel_filtering']      = array('Anzuwendende Filtereinstellungen', 'Die Filtereinstellungen ausw√§hlen, die beim Zusammenstellen der Datensatzliste angewandt werden sollen.');
+$GLOBALS['TL_LANG']['tl_module']['metamodel_layout']         = array('Eigenes Template f√ºr Datensatzliste ausw√§hlen', 'Das Template ausw√§hlen, das f√ºr die Generierung der Datensatzliste mit den ausgew√§hlten Attributen benutzt werden soll. G√ºltige Templatenamen beginnen mit &quot;mod_metamodel_&lt;type&gt;&quot;, wobei 'type' f√ºr den jeweiligen &lt;Typ&gt; steht.');
+$GLOBALS['TL_LANG']['tl_module']['metamodel_rendersettings'] = array('Anzuwendende Rendereinstellungen', 'Die Rendereinstellungen ausw√§hlen, die benutzt werden sollen, um die Ausgabe zu erstellen. Falls leer werden die Standardeinstellungen f√ºr das ausgew√§hlte MetaModel benutzt. Ist kein Standard definiert, dann werden Rohwerte ausgegeben.');
 
 
 /**

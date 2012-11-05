@@ -39,12 +39,12 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings_legend']      = 'Ei
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']                  = array('Neu', 'Neue Einstellung erstellen.');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']                  = array('Neu', 'Neue Einstellung erstellen');
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['edit']                 = array('Einstellung bearbeiten', 'Die Einstellung ID %s bearbeiten.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['copy']                 = array('Einstellungsdefinition kopieren', 'Die Einstellungsdefinition ID %s kopieren');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['delete']               = array('Einstellungsdefinition löschen', 'Die Einstellungsdefinition ID %s löschen');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']                 = array('Filterdetails', 'Die Details der Einstellungsdefinition ID %s anzeigen.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']               = array('Attributeinstellungen definieren', 'Die Attributeinstllungen für ID %s definieren.');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']                 = array('Filterdetails', 'Die Details der Einstellungsdefinition ID %s anzeigen');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']             = array('Attributeinstellungen definieren', 'Die Attributeinstllungen für ID %s definieren');
 
 ?>
