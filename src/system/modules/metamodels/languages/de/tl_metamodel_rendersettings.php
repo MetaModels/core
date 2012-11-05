@@ -45,7 +45,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['fields']               = arr
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_attribute']      = 'Attribut-Name';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_filterable']     = 'Filterbar';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_sortable']       = 'Sortierbar';
-
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_searchable']     = 'Durchsuchbar';
+ 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['use_limitview']        = array('Ansicht beschränken', 'Die Beschränkungen für die Ansicht aktivieren.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['limit_rendersetting']  = array('Rendering-Einstellungen beschränken', 'Zwischen Frontend und Backend wählen.');
 
