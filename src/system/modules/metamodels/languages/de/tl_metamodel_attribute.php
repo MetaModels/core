@@ -20,36 +20,18 @@ if (!defined('TL_ROOT'))
 }
 
 /**
- * Fields
- */
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['type']                 = array('Attribut-Typ', 'Wählen Sie den Typ dieses Attributes aus. WARNUNG: Wenn Sie den Attribut-Typ ändern werden die vorhandenen Daten gelöscht.');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name']                 = array('Name', 'Name als Klartext');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['description']          = array('Beschreibung', 'Beschreibung als Klartext');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname']              = array('Spaltenname', 'Interner Referenzname für dieses Attribut');
-
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['isvariant']            = array('Varianten überschreiben Vorgabe', 'Anwählen, wenn Sie möchten, dass Varianten in diesem MetaModel die Werte der Elterntabelle überschreiben');
-
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['isunique']             = array('Eindeutig', 'Wählen, wenn Sie sicherstellen möchten, dass jeder Wert nur ein einziges mal vorkommen darf.');
-+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode']       = 'Sprache';
-+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value']          = 'Beschreibungstext';
-+
-
-
-/**
  * Legends
  */
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['title_legend']         = 'Typ, Benennung und Grundkonfiguration des Attributes';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['advanced_legend']      = 'Erweiterte Einstellungen';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['display_legend']		  = 'Anzeige-Einstellungen';
 
 /**
- * Buttons
+ * Fields
  */
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']                  = array('Neues Attribut', 'Ein neues Attribut erstellen.');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['edit']                 = array('Attribut bearbeiten', 'Das Attribut ID %s bearbeiten');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['cut']                  = array('Attribut-Definition ausschneiden', 'Schneiden Sie die Definition für das Attribut ID %s aus');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['copy']                 = array('Attribut-Definition kopieren', 'Kopieren Sie die Definition für das Attribut ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['delete']               = array('Attribut löschen', 'Löschen Sie die Definition für das Attribut ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']                 = array('Attributdetails', 'Die Details von Attribut ID %s anzeigen');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['editheader']           = array('Attribut bearbeiten', 'bearbeiten Sie das Attribut');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['typeOptions']['tags']    = 'Tags';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['tag_table']				= array('Datenbank-Tabelle', 'Bitte die Datenbank-Tabelle auswählen.');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['tag_column']			= array('Tabellenspalte', 'Bite die Spalte auswählen.');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['tag_id']				= array('Tag ID', 'Bitte einen Eintrag für den Tag id auswählen.');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['tag_alias']				= array('Tag-Alias', 'Bitte einen Eintrag für den Tag-Alias auswählen.');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['tag_sorting']    = array('Tag-Sortierung', 'Bitte einen Eintrag für die Tag-Sortierung auswählen.');
 
 ?>
