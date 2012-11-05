@@ -168,8 +168,12 @@ $GLOBALS['TL_LANG']['ERR']['no_attribute_extension'] = 'Bitte mindestens eine Er
 $GLOBALS['TL_LANG']['ERR']['activate_extension'] = 'Bitte die benötigte Erweiterung &quot;%s&quot; (%s) aktivieren.';
 $GLOBALS['TL_LANG']['ERR']['install_extension'] = 'Bitte die benötigte Erweiterung &quot;%s&quot; (%s) installieren.';
  
-$GLOBALS['TL_LANG']['MSC']['tl_class']['w50'] = array('Halbe Breite', 'Nur die halbe Breite nutzen');
-$GLOBALS['TL_LANG']['MSC']['tl_class']['clr'] = array('clr', 'clr');
-$GLOBALS['TL_LANG']['MSC']['tl_class']['m12'] = array('m12', 'm12');
++$GLOBALS['TL_LANG']['MSC']['tl_class']['w50']         = array('w50', 'Die Breite auf 50% und nach links floaten.');
++$GLOBALS['TL_LANG']['MSC']['tl_class']['clr']         = array('clr', 'Alle Floats clearen.');
++$GLOBALS['TL_LANG']['MSC']['tl_class']['m12']         = array('m12', 'Dem Element einen oberen Abstand (top-margin) von 12 Pixel geben (für einzelne Checkboxen).');
++$GLOBALS['TL_LANG']['MSC']['tl_class']['wizard']      = array('wizard', 'Das Eingabefeld kürzen, so dass Platz für einen Wizard ist (z.B. einen Date-Picker).');
++$GLOBALS['TL_LANG']['MSC']['tl_class']['long']        = array('long', 'Vergrößert das Eingabefeld, so dass es zwei Spalten umfasst.');
+ 
+
 
 ?>
