@@ -28,11 +28,11 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord'] = 'Bearbeite
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label'] = 'Filter "%s" in MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'] = '"%s" für Item %%s bearbeiten';
 //Select Options
-/* $GLOBALS['TL_LANG']['MSC']['optionsTitle'] = 'Wähle %s';
+$GLOBALS['TL_LANG']['MSC']['optionsTitle'] = 'Wähle %s';
 $GLOBALS['TL_LANG']['MSC']['sorting'] = 'Sortierung';
 
 $GLOBALS['TL_LANG']['MSC']['noCatalog'] = 'Der Katalog existiert nicht. Wenden Sie sich bitte an Ihren Systemadministrator.';
-$GLOBALS['TL_LANG']['MSC']['removeDataConfirm'] = 'Möchten Sie wirklich vor dem Import alle bestehenden Daten aus %s before löschen?';
+$GLOBALS['TL_LANG']['MSC']['removeDataConfirm'] = 'Möchten Sie wirklich vor dem Import alle bestehenden Daten aus %s löschen?';
 
 
 
