@@ -287,7 +287,7 @@ CREATE TABLE `tl_metamodel_dca_combine` (
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`),
   KEY `fe_group` (`be_group`),
-  KEY `be_group` (`be_group`),
+  KEY `be_group` (`be_group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
