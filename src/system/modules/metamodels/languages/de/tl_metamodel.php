@@ -26,8 +26,8 @@ $GLOBALS['TL_LANG']['tl_metamodel']['name']                 = array('Name', 'Nam
 $GLOBALS['TL_LANG']['tl_metamodel']['tstamp']               = array('Aktualisierungsdatum', 'Datum und Zeit der letzen Aktualisierung.');
 $GLOBALS['TL_LANG']['tl_metamodel']['tableName']            = array('Tabellenname', 'Name der Datenbanktabelle, in der die Datensätze gespeichert werden sollen.');
 
-$GLOBALS['TL_LANG']['tl_metamodel']['ptable']               = array('Elterntabelle (wenn gewünscht)', 'Name der Datenbank-Tabelle, die als Elterntabelle benutzt werden soll.');
-$GLOBALS['TL_LANG']['tl_metamodel']['mode']                 = array('List-Modus', 'List-Modus für Elterntabelle, falls man eine Parent/Child-Beziehung nutzt.');
+$GLOBALS['TL_LANG']['tl_metamodel']['ptable']               = array('Elterntabelle, falls gewünscht)', 'Name der Datenbank-Tabelle, die als Elterntabelle benutzt werden soll.');
+$GLOBALS['TL_LANG']['tl_metamodel']['mode']                 = array('List-Modus', 'List-Modus für Elterntabelle, falls man eine Parent-Child-Beziehung nutzt.');
 
 $GLOBALS['TL_LANG']['tl_metamodel']['translated']           = array('Übersetzung', 'Auswählen falls diese MetaModell Übersetzungen und/oder Mehrsprachigkeit unterstützen soll.');
 $GLOBALS['TL_LANG']['tl_metamodel']['languages']            = array('Unterstützte Sprachen', 'Geben Sie alle Sprachen an, die für mehrsprachige Funktion genutzt werden sollen.');
@@ -38,7 +38,7 @@ $GLOBALS['TL_LANG']['tl_metamodel']['varsupport']           = array('Varianten a
 
 $GLOBALS['TL_LANG']['tl_metamodel']['rendertype']           = array('Integration', 'Die gewünschte Art der Integration auswählen.');
 
-$GLOBALS['TL_LANG']['tl_metamodel']['backendsection']       = array('Backend-Bereich', 'Den gewünschten Backend-Bereich auswählen, in dem das MetaModel erscheinen soll. Für Inhalte, die von Redakteuren bearbeitet werden sollen wird der Betreich 'Inhalte' empfohlen.');
+$GLOBALS['TL_LANG']['tl_metamodel']['backendsection']       = array('Backend-Bereich', 'Den gewünschten Backend-Bereich auswählen, in dem das MetaModel erscheinen soll. Für Inhalte, die von Redakteuren bearbeitet werden sollen wird der Bereich Inhalte empfohlen.');
 
 $GLOBALS['TL_LANG']['tl_metamodel']['backendcaption']       = array('Backend-Beschreibung', 'Der hier angegebene Text wird als Bereichsüberschrift und Beschreibung in der Backend-Navigation erscheinen.');
 
@@ -47,7 +47,8 @@ $GLOBALS['TL_LANG']['tl_metamodel']['becap_label']          = array('Menütext',
 $GLOBALS['TL_LANG']['tl_metamodel']['becap_description']    = array('Beschreibung', 'Der hier angegebene Text wird für die beim hovern sichtbare erweiterte Beschreibung im Backend benutzt.');
 
 $GLOBALS['TL_LANG']['tl_metamodel']['backendicon']          = array('Backend-Icon', 'Ein Icon für die Darstellung im Backend auswählen. Dieses Icon wird links vom Menütext angezeigt und ermöglicht eine schnelle Orientierung. In der Baumansicht wird das Icon ebenfalls im oberen Bereich benutzt.');
-
+/**
+ */
 
 /**
  * Legends
