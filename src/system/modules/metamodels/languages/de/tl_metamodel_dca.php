@@ -27,7 +27,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']               = array('Eltern-
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']                 = array('Sortiermodus', 'Sortiermodus, der für die Darstellung der Datenbsätze benutzt werden soll.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']                 = array('Sortierung', 'Sortierung in der Datensatzansicht.');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']       = array('Backend-Bereich', 'Den gewünschten Backend-Bereich auswählen, in dem das MetaModel erscheinen soll. Für Inhalte, die von Redakteuren bearbeitet werden sollen wird der Betreich 'Inhalte' empfohlen');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']       = array('Backend-Bereich', 'Den gewünschten Backend-Bereich auswählen, in dem das MetaModel erscheinen soll. Für Inhalte, die von Redakteuren bearbeitet werden sollen wird der Betreich Inhalte empfohlen');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon']          = array('Backend-Icon', 'Ein Icon für die Darstellung im Backend auswählen. Dieses Icon wird links vom Menütext angezeigt und ermöglicht eine schnelle Orientierung. In der Baumansicht wird das Icon ebenfalls im oberen Bereich benutzt.');
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption']       = array('Backend-Beschreibung', 'Der hier angegebene Text wird als Bereichsüberschrift und Beschreibung in der Backend-Navigation erscheinen.');
