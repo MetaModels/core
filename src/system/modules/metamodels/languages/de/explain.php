@@ -12,7 +12,7 @@
  * @copyright  CyberSpectrum
  * @license    private
  * @filesource
- * @translation Carolina M Koehn <ck@kikmedia.de>
+ * @author Carolina M Koehn <ck@kikmedia.de>
  */
 if (!defined('TL_ROOT'))
 {
@@ -34,23 +34,20 @@ $GLOBALS['TL_LANG']['XPL']['customsql'] = array
 	),
 	array
 	(
-		'Insert tags',
-		'Insert tags are supported, but keep in mind that not all tags might be available
-		when the filter setting is used (for example the <em>{{env::page}}</em> is
-		available only when used from a frontend page and not from RSS-feeds).'
+		'Insert-Tags',
+		'InsertTags werden unterstützt. Bitte beachten, dass nicht immer alle Insert-Tags zur Verfügung stehen müssen, falls eine Filtereinstellung benutzt wird. Beispielsweise ist <em>{{env::page}}</em> nur für Frontenddarstellung möglich, nicht aber für RSS-Feeds.'
 	),
 	array
 	(
-		'Example 1<br />plain query',
+		'Beispiel 1<br />normale SQL-Abfrage',
 		'<pre>SELECT id FROM mm_mymetamodel WHERE page_id=1</pre>
-		This selects all ids from the table <em>mm_mymetamodel</em> that have the value page_id=1
-		'
+		Damit werden alle IDs der Tabelle <em>mm_mymetamodel</em> ausgewählt, die den Wert page_id=1 besitzen.'
 	),
 	array
 	(
-		'Example 2<br />insert tablename',
+		'Beispiel 2<br />dynamisches Einfügen eines Tabellennamens',
 		'<pre>SELECT id FROM {{table}} WHERE page_id=1</pre>
-		This is merely the same as example 1 but the table name of the current metamodel (i.e.: the <em>mm_mymetamodel</em> from above) will get inserted into the query.
+		Beinahe identisch zu Beispiel 1,  ausser dass der Tabellenname des aktuellen MetaModels (also <em>mm_mymetamodel</em> wie oben) in die Abfrage eingefügt wird.
 		'
 	)
 );

@@ -25,6 +25,7 @@ if (!defined('TL_ROOT'))
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']      = array('Elternelement', 'Geben Sie an, zu welchem Elternelement die Filtereinstellungen gehören.');
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['type']     = array('Typ', 'Einstellungstyp');
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['enabled']  = array('Aktivieren', 'Diese Filterienstellung aktivieren.');
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id']  = array('Attribut', 'Attribut auf das sich diese Einstellung bezieht.');
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam'] = array('URL-Parameter', 'geben Sie den URL-Parameter an, der für das ausgewählte Attribut verwendet werden soll. Der spezielle <em>"auto_item"</em>-Parameter kann ebenfalls benutzt werden. Dies ist für Aliasse nützlich.');
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql'] = array('Eigene SQL-Abfrage', 'Geben Sie die SQL-Abfrage an, deie ausgeführt werden soll. Die Verwendung von Insert-Tags wird unterstützt.');
