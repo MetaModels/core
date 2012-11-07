@@ -47,7 +47,7 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_rendersettings']		= array('Render s
 $GLOBALS['TL_LANG']['tl_content']['metamodel_noparsing']			= array('No parsing of items', 'If this checkbox is selected, the module will not parse the items. Only the item-objects will be available in the template.');
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams']			= array('Filtersettings override');
 
-$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams_use_get'] = array('Use GET Param', 'allow this parameter to be overridden from _GET');
+$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams_use_get'] = array('Use GET Parameter', '');
 
 /**
  * Wizards

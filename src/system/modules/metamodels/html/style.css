@@ -12,10 +12,11 @@
 .w50 { height: auto; }
 
 fieldset.tl_subdca { padding: 0; margin: 0; border: none; }
+
 .tl_subdca legend {
-	margin: 0; padding: 15px 0 15px 36px;
-	background: url(../../../../system/themes/default/images/current.gif) no-repeat left center;
+	margin:0; 
+    padding:10px 0 10px 23px;
+	background: url(filtersettings.png) no-repeat left center;
 }
-.tl_subdca legend label {
-	font-size: 14px;
-}
+
+.tl_subdca legend label { font-weight:bold; }

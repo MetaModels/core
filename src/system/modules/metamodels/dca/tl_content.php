@@ -79,7 +79,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array(
 		'label' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit'],
 		'exclude' => true,
 		'inputType' => 'checkbox',
-		'eval' => array('submitOnChange' => true, 'tl_class' => 'clr m12'),
+		'eval' => array('submitOnChange' => true, 'tl_class' => 'w50 m12'),
 	),
 	'metamodel_limit' => array
 		(
@@ -166,13 +166,13 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array(
 		'inputType' => 'mm_subdca',
 		'eval' => array
 		(
-			'tl_class' => 'clr',
+			'tl_class' => 'clr m12',
 			'flagfields' => array
 			(
 				'use_get' => array
 				(
 					'label' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams_use_get'],
-					'inputType' => 'checkbox',
+					'inputType' => 'checkbox'
 				),
 			),
 		)
