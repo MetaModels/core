@@ -60,6 +60,7 @@ implements IMetaModelAttributeTranslated
 			$arrReturn['procedure'] .=  ' AND langcode=?';
 			$arrReturn['params'][] = $strLangCode;
 		}
+
 		return $arrReturn;
 	}
 
@@ -166,6 +167,7 @@ implements IMetaModelAttributeTranslated
 	 */
 	public function searchForInLanguages($strPattern, $arrLanguages = array())
 	{
+
 		$arrWhere = $this->getWhere(null);
 		$arrParams = array($strPattern);
 
@@ -175,15 +177,15 @@ implements IMetaModelAttributeTranslated
 		{
 			$arrParams = array_merge($arrParams, $arrWhere['params']);
 		}
-
+		
 		$objFilterRule = new MetaModelFilterRuleSimpleQuery(
 			sprintf(
-				'SELECT %s FROM %s WHERE %s=? %s',
+				'SELECT DISTINCT %s FROM %s WHERE %s=? %s%s',
 				'item_id',
 				$this->getValueTable(),
 				$arrOptionizer['value'],
 				($arrWhere ? ' AND ' . $arrWhere['procedure'] : ''),
-				$arrLanguages ? sprintf('AND lang_id IN (\'%s\')', implode('\',\'', $arrLanguages)) : ''
+				$arrLanguages ? sprintf(' AND langcode IN (\'%s\')', implode('\',\'', $arrLanguages)) : ''
 			),
 			$arrParams,
 			'item_id'
