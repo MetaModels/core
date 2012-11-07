@@ -235,7 +235,7 @@ CREATE TABLE `tl_metamodel_rendersettings` (
 -- the template to use.
   `template` varchar(64) NOT NULL default '',
 -- the jumpTo page to use.
-  `jumpTo` int(10) unsigned NOT NULL default '0',
+  `jumpTo` blob NULL,
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
