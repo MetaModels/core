@@ -215,11 +215,25 @@ class MetaModelItem implements IMetaModelItem
 				}
 			}
 		}
-
+		//ToDo: this is just a quick patch
+		//get the right jumpto
+		$intJumpto = null;
+		if (is_array($objSettings->get('jumpTo')))
+		{
+			foreach($objSettings->get('jumpTo') as $arrJumpTO)
+			{
+				if ($arrJumpTO['langcode'] == $GLOBALS['TL_LANGUAGE'])
+				{
+					$intJumpto = $arrJumpTO['value'];
+					break;
+				}
+			}
+		}
+		
 		// second, apply jumpTo urls based upon the filter defined in the render settings.
 		if ($objSettings
-			&& $objSettings->get('jumpTo')
-			&& ($objPage = MetaModelController::getPageDetails($objSettings->get('jumpTo')))
+			&& $intJumpto
+			&& ($objPage = MetaModelController::getPageDetails($intJumpto))
 			&& $intFilterSettings = $objSettings->get('filter')
 		)
 		{
