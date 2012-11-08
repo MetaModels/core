@@ -81,7 +81,7 @@ class TableMetaModelRenderSettings extends Backend
 	 * @param DataContainer $objDC
 	 * @return type
 	 */
-	public function getLanguages(MultiColumnWizard $objMCW)
+	public function getLanguages($objMCW)
 	{
 		$objLangs = $this->Database->prepare('SELECT pid FROM tl_metamodel_rendersettings WHERE id = ?')->execute($objMCW->currentRecord);
 		$objMetaModel = MetaModelFactory::byId($objLangs->pid);
@@ -104,13 +104,17 @@ class TableMetaModelRenderSettings extends Backend
 			$newValue = '';
 			
 			//search for existing values
-			foreach ($varValue as $k => $arr)
+			if ($varValue)
 			{
-				//set the new value and exit the loop
-				if (array_search($key, $arr) !==false)
+				foreach ($varValue as $k => $arr)
 				{
-					$newValue = '{{link_url::'.$arr['value'].'}}';
-					break;
+					if (!is_array($arr)) break;
+					//set the new value and exit the loop
+					if (array_search($key, $arr) !==false)
+					{
+						$newValue = '{{link_url::'.$arr['value'].'}}';
+						break;
+					}
 				}
 			}
 			
