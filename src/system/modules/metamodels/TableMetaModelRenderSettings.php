@@ -96,16 +96,31 @@ class TableMetaModelRenderSettings extends Backend
 	public function prepareMCW($varValue)
 	{
 		$varValue = deserialize($varValue, true);
-		if (!$varValue)
+		$newValues = array();
+		$arrLanguages = $GLOBALS['TL_DCA']['tl_metamodel_rendersettings']['fields']['jumpTo']['eval']['columnFields']['langcode']['options'];
+		
+		foreach ($arrLanguages as $key => $lang)
 		{
-			$varValue = array();
-			$arrLanguages = $GLOBALS['TL_DCA']['tl_metamodel_rendersettings']['fields']['jumpTo']['eval']['columnFields']['langcode']['options'];
-			foreach ($arrLanguages as $key => $lang)
+			$newValue = '';
+			
+			//search for existing values
+			foreach ($varValue as $k => $arr)
 			{
-				$varValue[] = array('langcode' => $key, 'value' => '');
+				//set the new value and exit the loop
+				if (array_search($key, $arr) !==false)
+				{
+					$newValue = '{{link_url::'.$arr['value'].'}}';
+					break;
+				}
 			}
+			
+			//build the new array
+			$newValues[] = array(
+				'langcode' => $key, 
+				'value' => $newValue
+				);
 		}
-		return serialize($varValue);
+		return serialize($newValues);
 	}
 	
 	public function saveMCW($varValue)
@@ -167,6 +182,14 @@ class TableMetaModelRenderSettings extends Backend
 			$GLOBALS['TL_DCA']['tl_metamodel_rendersettings']['fields']['jumpTo']['maxCount'] = count($arrLanguages);
 			$GLOBALS['TL_DCA']['tl_metamodel_rendersettings']['fields']['jumpTo']['eval']['columnFields']['langcode']['options'] = $arrLanguages;
 		}
+		else
+		{
+			$GLOBALS['TL_DCA']['tl_metamodel_rendersettings']['fields']['jumpTo']['minCount'] = 1;
+			$GLOBALS['TL_DCA']['tl_metamodel_rendersettings']['fields']['jumpTo']['maxCount'] = 1;
+			$GLOBALS['TL_DCA']['tl_metamodel_rendersettings']['fields']['jumpTo']['eval']['columnFields']['langcode']['options'] = 
+								array('xx' => $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['allLanguages']);
+		}
+		
 	}
 	
 }
