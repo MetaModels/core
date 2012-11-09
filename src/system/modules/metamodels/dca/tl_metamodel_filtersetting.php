@@ -134,9 +134,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		(
 			'config' => array('attr_id')
 		),
-
+		
 		// base rules shipped with metamodels.
-
+		'conditionor extends default' => array
+		(
+			'config' => array('stop_after_match')
+		),
+		
 		'idlist extends default' => array
 		(
 			'+config' => array('items'),
@@ -289,6 +293,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		'allow_empty' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['allow_empty'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array(
+				'alwaysSave'          => true,
+				'tl_class'            => 'w50 m12',
+			),
+		),
+		'stop_after_match' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match'],
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
 			'eval'                    => array(
