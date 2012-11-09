@@ -205,6 +205,8 @@ CREATE TABLE `tl_metamodel_filtersetting` (
   `all_langs` char(1) NOT NULL default '',
 -- allow empty parameters
   `allow_empty` char(1) NOT NULL default '',
+-- stop filtering after one rule found soem matches
+  `stop_after_match` char(1) NOT NULL default '',
 -- simple lookup - url param override.
   `urlparam` varchar(255) NOT NULL default '',
   `predef_param` char(1) NOT NULL default '',

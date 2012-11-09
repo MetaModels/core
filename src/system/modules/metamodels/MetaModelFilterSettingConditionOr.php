@@ -36,7 +36,7 @@ class MetaModelFilterSettingConditionOr extends MetaModelFilterSettingWithChilds
 	 */
 	public function prepareRules(IMetaModelFilter $objFilter, $arrFilterUrl)
 	{
-		$objFilterRule = new MetaModelFilterRuleOR();
+		$objFilterRule = new MetaModelFilterRuleOR($this->get('stop_after_match'));
 		foreach ($this->arrChilds as $objChildSetting)
 		{
 			$objSubFilter = new MetaModelFilter($this->getMetaModel());

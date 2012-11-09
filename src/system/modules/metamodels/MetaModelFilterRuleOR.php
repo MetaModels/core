@@ -32,14 +32,18 @@ class MetaModelFilterRuleOR extends MetaModelFilterRule
 	 */
 	protected $arrChildFilters = array();
 
+	
+	protected $stopAfterMatch = false;
+	
 	/**
 	 * create a new FilterRule instance.
 	 *
 	 * @return MetaModelFilterRuleOR
 	 */
-	public function __construct()
+	public function __construct($stopAfterMatch = false)
 	{
 		parent::__construct();
+		$this->stopAfterMatch = $stopAfterMatch;
 	}
 
 	/**
@@ -68,7 +72,12 @@ class MetaModelFilterRuleOR extends MetaModelFilterRule
 			{
 				return NULL;
 			}
-
+			
+			if($arrChildMatches && $this->stopAfterMatch)
+			{
+				return $arrChildMatches;
+			}
+			
 			if ($arrChildMatches)
 			{
 				$arrIds = array_merge($arrIds, $arrChildMatches);
