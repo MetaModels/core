@@ -22,7 +22,7 @@
  * @subpackage Frontend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-class MetaModelList
+class MetaModelList extends Controller
 {
 	/**
 	 * Use limit.
