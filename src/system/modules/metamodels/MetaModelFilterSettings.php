@@ -54,6 +54,7 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 	{
 		$objDB = Database::getInstance();
 		$objSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE pid=? AND enabled=1')->execute($objBaseSettings->id);
+
 		while ($objSettings->next())
 		{
 			$objNewSetting = $this->newSetting($objSettings);
@@ -61,7 +62,7 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 			{
 				$objSetting->addChild($objNewSetting);
 				// collect next level.
-				if ($GLOBALS['METAMODELS']['filters'][$objNewSetting->type]['nestingAllowed'])
+				if ($GLOBALS['METAMODELS']['filters'][$objNewSetting->get('type')]['nestingAllowed'])
 				{
 					$this->collectRulesFor($objSettings, $objNewSetting);
 				}
