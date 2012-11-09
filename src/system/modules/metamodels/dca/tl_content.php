@@ -38,7 +38,7 @@ $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('tl_cont
 /**
  * Palettes
  */
-$GLOBALS['TL_DCA']['tl_content']['palettes']['metaModelContent'] = '{title_legend},name,headline,type;{mm_config_legend},metamodel,perPage,metamodel_use_limit;{mm_filter_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_filtering,metamodel_filterparams;{mm_rendering},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['metamodel_content'] = '{title_legend},name,headline,type;{mm_config_legend},metamodel,perPage,metamodel_use_limit;{mm_filter_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_filtering,metamodel_filterparams;{mm_rendering},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_limit';
 
 // Insert new Subpalettes after position 1
@@ -211,7 +211,7 @@ class tl_content_metamodel extends Backend
 		$intFilter = $objContent->metamodel_filtering;
 
 		// Check if we have a row/metaModelconten/MetaModel/Filter
-		if ($objContent->numRows == 0 || $objContent->type != 'metaModelContent' || empty($intMetaModel) || empty($intFilter))
+		if ($objContent->numRows == 0 || $objContent->type != 'metamodel_content' || empty($intMetaModel) || empty($intFilter))
 		{
 			unset($GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']);
 			return;

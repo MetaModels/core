@@ -123,7 +123,7 @@ $GLOBALS['FE_MOD']['metamodels'] = array
  */
 $GLOBALS['TL_CTE']['metamodels'] = array
 (
-	'metaModelContent' => 'ContentMetaModel'
+	'metamodel_content' => 'ContentMetaModel'
 );
 
 /**
