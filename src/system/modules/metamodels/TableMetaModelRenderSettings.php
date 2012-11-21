@@ -74,10 +74,10 @@ class TableMetaModelRenderSettings extends Backend
 	{
 		return $this->getTemplateGroup('metamodel_');
 	}
-	
-	
+
+
 	/**
-	 * 
+	 *
 	 * @param DataContainer $objDC
 	 * @return type
 	 */
@@ -87,7 +87,7 @@ class TableMetaModelRenderSettings extends Backend
 		$objMetaModel = MetaModelFactory::byId($objLangs->pid);
 		return $objMetaModel->getAvailableLanguages();
 	}
-	
+
 	/**
 	 * create an empty lang array if no data is given
 	 * @param type $varValue
@@ -98,11 +98,11 @@ class TableMetaModelRenderSettings extends Backend
 		$varValue = deserialize($varValue, true);
 		$newValues = array();
 		$arrLanguages = $GLOBALS['TL_DCA']['tl_metamodel_rendersettings']['fields']['jumpTo']['eval']['columnFields']['langcode']['options'];
-		
+
 		foreach ($arrLanguages as $key => $lang)
 		{
 			$newValue = '';
-			
+
 			//search for existing values
 			if ($varValue)
 			{
@@ -117,16 +117,16 @@ class TableMetaModelRenderSettings extends Backend
 					}
 				}
 			}
-			
+
 			//build the new array
 			$newValues[] = array(
-				'langcode' => $key, 
+				'langcode' => $key,
 				'value' => $newValue
 				);
 		}
 		return serialize($newValues);
 	}
-	
+
 	public function saveMCW($varValue)
 	{
 		$varValue = deserialize($varValue, true);
@@ -134,12 +134,12 @@ class TableMetaModelRenderSettings extends Backend
 		{
 			$varValue[$k]['value'] = str_replace(array('{{link_url::', '}}'), array('',''),$v['value']);
 		}
-		
+
 		return serialize($varValue);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param type $objDC
 	 * @return type
 	 * @throws Exception
@@ -151,24 +151,29 @@ class TableMetaModelRenderSettings extends Backend
 		{
 			return;
 		}
-		
-		$objMetaModel = MetaModelFactory::byId(
+
+		if ($objDC->id)
+		{
+			$objMetaModel = MetaModelFactory::byId(
 				$this->Database->prepare('SELECT pid FROM tl_metamodel_rendersettings WHERE id = ?')
 							   ->execute($objDC->id)
 							   ->pid
-				);
-				
+			);
+		} else if ($this->Input->get('pid')) {
+			$objMetaModel = MetaModelFactory::byId($this->Input->get('pid'));
+		}
+
 		if (!$objMetaModel)
 		{
 			throw new Exception('unexpected condition, metamodel unknown', 1);
 		}
-		
-		
+
+
 		$this->prepareJumpToMcw($objMetaModel);
 	}
-	
-	
-	
+
+
+
 	protected function prepareJumpToMcw(IMetaModel $objMetaModel)
 	{
 		$arrwidget = array();
@@ -190,12 +195,12 @@ class TableMetaModelRenderSettings extends Backend
 		{
 			$GLOBALS['TL_DCA']['tl_metamodel_rendersettings']['fields']['jumpTo']['minCount'] = 1;
 			$GLOBALS['TL_DCA']['tl_metamodel_rendersettings']['fields']['jumpTo']['maxCount'] = 1;
-			$GLOBALS['TL_DCA']['tl_metamodel_rendersettings']['fields']['jumpTo']['eval']['columnFields']['langcode']['options'] = 
+			$GLOBALS['TL_DCA']['tl_metamodel_rendersettings']['fields']['jumpTo']['eval']['columnFields']['langcode']['options'] =
 								array('xx' => $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['allLanguages']);
 		}
-		
+
 	}
-	
+
 }
 
 ?>
