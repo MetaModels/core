@@ -89,7 +89,8 @@ CREATE TABLE `tl_metamodel_dcasetting` (
   `searchable` char(1) NOT NULL default '',
 -- sorting flag override.
   `flag` int(4) unsigned NOT NULL default '0',
-
+-- mandatory flag
+  `mandatory` char(1) NOT NULL default ''
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
