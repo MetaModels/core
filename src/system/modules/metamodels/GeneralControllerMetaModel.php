@@ -90,6 +90,8 @@ class GeneralControllerMetaModel extends GeneralControllerDefault
 		{
 			if (isset($_POST["save"]))
 			{
+				$this->getDC()->updateModelFromPOST();
+				
 				// process input and update changed properties.
 				if ($this->doSave($objDC) !== false)
 				{
@@ -103,6 +105,8 @@ class GeneralControllerMetaModel extends GeneralControllerDefault
 			}
 			else if (isset($_POST["saveNclose"]))
 			{
+				$this->getDC()->updateModelFromPOST();
+
 				// process input and update changed properties.
 				if ($this->doSave($objDC) !== false)
 				{
