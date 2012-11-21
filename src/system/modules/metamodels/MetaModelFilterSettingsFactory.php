@@ -49,11 +49,17 @@ class MetaModelFilterSettingsFactory implements IMetaModelFilterSettingsFactory
 		{
 			$objDB = Database::getInstance();
 
-			$objSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')->execute($intId);
-
-			$objSetting = new MetaModelFilterSettings($objSettings->row());
+			$arrSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
+								 ->execute($intId)
+								 ->row();
+			if (!empty($arrSettings))
+			{
+				$objSetting = new MetaModelFilterSettings($arrSettings);
+				$objSetting->collectRules();
+			} else {
+				$objSetting = new MetaModelFilterSettings(array());
+			}
 			self::$arrInstances[$intId] = $objSetting;
-			$objSetting->collectRules();
 		} else {
 			$objSetting = self::$arrInstances[$intId];
 		}
