@@ -29,6 +29,10 @@ class TableMetaModelDca extends Backend
 {
 	protected function getMetaModel(DataContainer $objDC)
 	{
+		if ($this->Input->get('act') == 'create' && $this->Input->get('pid'))
+		{
+			return MetaModelFactory::byId($this->Input->get('pid'));
+		}
 		// Get Current id
 		$intID = $this->Input->get('id');
 
