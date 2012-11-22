@@ -22,7 +22,7 @@ if (!defined('TL_ROOT'))
  * Table tl_metamodel_attribute
  */
 
-$GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
+$GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 (
 	'config' => array
 	(
@@ -253,6 +253,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
 			),
 		),
 	)
-);
+), (array)$GLOBALS['TL_DCA']['tl_metamodel_attribute']);
 
 ?>
