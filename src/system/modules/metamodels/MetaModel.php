@@ -732,7 +732,7 @@ class MetaModel implements IMetaModel
 		// determine if the model is a variant base and if so, fetch the variants additionally.
 		if ($objItem->isVariantBase())
 		{
-			$objVariants = $objItem->getVariants();
+			$objVariants = $objItem->getVariants(new MetaModelFilter($this));
 			foreach ($objVariants as $objVariant)
 			{
 				$arrIds[] = $objVariant->get('id');
