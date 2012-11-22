@@ -31,8 +31,8 @@ $GLOBALS['TL_LANG']['tl_metamodel']['mode']                 = array('List-Modus'
 
 $GLOBALS['TL_LANG']['tl_metamodel']['translated']           = array('Übersetzung', 'Auswählen falls diese MetaModell Übersetzungen und/oder Mehrsprachigkeit unterstützen soll.');
 $GLOBALS['TL_LANG']['tl_metamodel']['languages']            = array('Unterstützte Sprachen', 'Geben Sie alle Sprachen an, die für mehrsprachige Funktion genutzt werden sollen.');
-$GLOBALS['TL_LANG']['tl_metamodel']['languages_langcode']   = array('Sprachen', 'Die Sprachen auswählen, die angeboten werden sollen.');
-$GLOBALS['TL_LANG']['tl_metamodel']['languages_isfallback'] = array('Als Fallback benutzen', 'Die Sprache auswählen, die als Fallback-Sprache benutzt werden soll.');
+$GLOBALS['TL_LANG']['tl_metamodel']['languages_langcode']   = array('Sprache', 'Die Sprache auswählen, die verwendet werden soll.');
+$GLOBALS['TL_LANG']['tl_metamodel']['languages_isfallback'] = array('Fallback', 'Die Sprache auswählen, die als Fallback-Sprache benutzt werden soll.');
 
 $GLOBALS['TL_LANG']['tl_metamodel']['varsupport']           = array('Varianten aktivieren', 'Auswählen, falls das MetaModel Varianten unterstützen soll.');
 
