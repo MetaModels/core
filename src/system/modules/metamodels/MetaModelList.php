@@ -182,10 +182,10 @@ class MetaModelList extends Controller
 		$this->intView      = $intView;
 
 		// initialize the metamodel
-		$this->getMetaModel();
+		$this->prepareMetaModel();
 
 		// initialize the view
-		$this->getView();
+		$this->prepareView();
 
 		return $this;
 	}
@@ -270,18 +270,18 @@ class MetaModelList extends Controller
 	 *
 	 * @return void
 	 */
-	protected function getMetaModel()
+	protected function prepareMetaModel()
 	{
 		$this->objMetaModel = MetaModelFactory::byId($this->intMetaModel);
 	}
 
 	/**
 	 * Prepare the view.
-	 * NOTE: must be called after getMetaModel().
+	 * NOTE: must be called after prepareMetaModel().
 	 *
 	 * @return void
 	 */
-	protected function getView()
+	protected function prepareView()
 	{
 		$this->objView = $this->objMetaModel->getView($this->intView);
 
@@ -387,9 +387,89 @@ class MetaModelList extends Controller
 		$this->intOffset = $intOffset;
 	}
 
+	/**
+	 * The items in the list view.
+	 * @var IMetaModelItems
+	 */
+	protected $objItems = NULL;
+
+	/**
+	 * Add additional filter rules to the list.
+	 * Can be overridden by subclasses to add additional filter rules to the filter before it will get evaluated.
+	 *
+	 * @return MetaModelList
+	 */
+	protected function modifyFilter()
+	{
+		return $this;
+	}
+
+	/**
+	 * Return all attributes that shall be fetched from the MetaModel.
+	 * In this base implementation, this only includes the attributes mentioned in the render setting.
+	 *
+	 * @return string[] the names of the attributes to be fetched.
+	 */
+	protected function getAttributeNames()
+	{
+		return $this->objView->getSettingNames();
+	}
+
+	/**
+	 * Prepare the rendering
+	 */
+	public function prepare()
+	{
+		if ($this->objItems)
+		{
+			return $this;
+		}
+
+		$this->objFilter = $this->objMetaModel->getEmptyFilter();
+		$this->objFilterSettings->addRules($this->objFilter, $this->arrParam);
+
+		$this->modifyFilter();
+
+		$intTotal = $this->objMetaModel->getCount($this->objFilter);
+
+		$this->calculatePagination($intTotal);
+
+		$this->objItems = $this->objMetaModel->findByFilter($this->objFilter, $this->strSortBy, $this->intOffset, $this->intLimit, $this->strSortDirection, $this->getAttributeNames());
+
+		return $this;
+	}
+
+	/**
+	 * Returns the pagination string.
+	 * Remember to call prepare() first.
+	 */
 	public function getPagination()
 	{
 		return $this->strPagination;
+	}
+
+	/**
+	 * Returns the item list in the view.
+	 */
+	public function getItems()
+	{
+		return $this->objItems;
+	}
+
+	/**
+	 * Returns the item list in the view.
+	 */
+	public function getView()
+	{
+		return $this->objView;
+	}
+
+	/**
+	 * Returns the item list in the view.
+	 */
+	public function getMetaModel()
+	{
+		return $this->objMetaModel;
 	}
 
 	/**
@@ -405,18 +485,11 @@ class MetaModelList extends Controller
 	{
 		$this->objTemplate->noItemsMsg = $GLOBALS['TL_LANG']['MSC']['noItemsMsg'];
 
-		$this->objFilter = $this->objMetaModel->getEmptyFilter();
-		$this->objFilterSettings->addRules($this->objFilter, $this->arrParam);
+		$this->prepare();
 
-		$intTotal = $this->objMetaModel->getCount($this->objFilter);
+		$this->objTemplate->data = ($this->objItems->getCount() && !$blnNoNativeParsing) ? $this->objItems->parseAll($this->strOutputFormat, $this->objView) : array();
 
-		$arrLimits = $this->calculatePagination($intTotal);
-
-		$objItems = $this->objMetaModel->findByFilter($this->objFilter, $this->strSortBy, $this->intOffset, $this->intLimit, $this->strSortDirection, $this->objView->getSettingNames());
-
-		$this->objTemplate->items = $objItems;
-
-		$this->objTemplate->data = ($intTotal && !$blnNoNativeParsing) ? $objItems->parseAll($this->strOutputFormat, $this->objView) : array();
+		$this->objTemplate->items = $this->objItems;
 
 		return $this->objTemplate->parse($this->strOutputFormat);
 	}
