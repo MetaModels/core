@@ -39,14 +39,14 @@ $GLOBALS['TL_LANG']['MSC']['panelLayout']['search']  					= array('Suche', '');
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['sort']    					= array('Sortierung', '');
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']  					= array('Filter', '');
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['limit']   					= array('Limitierung', '');
- 
+
 /**
  * Errors
  */
 $GLOBALS['TL_LANG']['ERR']['no_attribute_extension']					= 'Bitte mindestens eine Erweiterung für Attribute installieren! MetaModels ohne Attribute sind sinnlos.';
 $GLOBALS['TL_LANG']['ERR']['activate_extension']						= 'Bitte die benötigte Erweiterung &quot;%s&quot; (%s) aktivieren.';
 $GLOBALS['TL_LANG']['ERR']['install_extension']							= 'Bitte die benötigte Erweiterung &quot;%s&quot; (%s) installieren.';
-$GLOBALS['TL_LANG']['ERR']['columnExists']								= 'Ein Attribut mit der angegebene Column besteht bereits.';
+$GLOBALS['TL_LANG']['ERR']['columnExists']								= 'Es existiert bereits ein Attribut mit diesem Spaltennamen.';
 $GLOBALS['TL_LANG']['MSC']['no_palette']								= 'Versuch, auf MetaModel "%s" ohne Palette für den Benutzer %s zuzugreifen.';
 $GLOBALS['TL_LANG']['MSC']['no_view']									= 'Versuch, auf das MetaModel "%s" ohne Ansicht für den Benutzer %s zuzugeifen.';
 $GLOBALS['TL_LANG']['ERR']['invalidTableName']							= 'Der eingegebene Tabellenname ist nicht valide.'

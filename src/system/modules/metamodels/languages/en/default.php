@@ -51,10 +51,10 @@ $GLOBALS['TL_LANG']['MSC']['panelLayout']['limit']                    = array('L
 $GLOBALS['TL_LANG']['ERR']['no_attribute_extension']                  = 'Please install at least one attribute extension! MetaModels without attributes do not make sense.';
 $GLOBALS['TL_LANG']['ERR']['activate_extension']                      = 'Please activate required extension &quot;%s&quot; (%s)';
 $GLOBALS['TL_LANG']['ERR']['install_extension']                       = 'Please install required extension &quot;%s&quot; (%s)';
-$GLOBALS['TL_LANG']['ERR']['columnExists']							  = 'There is already an attribute with the given column name.';
+$GLOBALS['TL_LANG']['ERR']['columnExists']                            = 'There is already an attribute with the given column name.';
 $GLOBALS['TL_LANG']['ERR']['no_palette']                              = 'Attempt to access the MetaModel "%s" without palette for current user %s.';
 $GLOBALS['TL_LANG']['ERR']['no_view']                                 = 'Attempt to access the MetaModel "%s" without view for user %s.';
-$GLOBALS['TL_LANG']['ERR']['invalidTableName']						  = 'The table name is not validate.';
+$GLOBALS['TL_LANG']['ERR']['invalidTableName']                        = 'The table name is invalid.';
 /***
  * Filter setting parameters.
  */
