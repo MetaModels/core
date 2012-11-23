@@ -90,7 +90,7 @@ class TableMetaModel extends Backend
 		$objMetaModel = MetaModelFactory::byId($objDC->getId());
 		if ($objMetaModel)
 		{
-			// TODO: implement IMetaModel::suicide() to delete all entries in secondary tables (complex attributes), better than here in an callback.
+			// TODO: implement IMetaModel*::suicide() to delete all entries in secondary tables (complex attributes), better than here in an callback.
 			foreach ($objMetaModel->getAttributes() as $objAttribute)
 			{
 				$objAttribute->destroyAUX();
@@ -106,24 +106,35 @@ class TableMetaModel extends Backend
 			$arrIds = $this->Database->prepare('SELECT id FROM tl_metamodel_dca WHERE pid=?')
 						   ->executeUncached($objMetaModel->get('id'))
 						   ->fetchEach('id');
-			$this->Database->prepare(sprintf('DELETE FROM tl_metamodel_dcasetting WHERE pid IN (%s)', implode(',', $arrIds)))
-						   ->executeUncached();
+			if ($arrIds)
+			{
+				$this->Database->prepare(sprintf('DELETE FROM tl_metamodel_dcasetting WHERE pid IN (%s)', implode(',', $arrIds)))
+							   ->executeUncached();
+			}
 			$this->Database->prepare('DELETE FROM tl_metamodel_dca WHERE pid=?')
 						   ->executeUncached($objMetaModel->get('id'));
+
 			// delete everything from render settings
 			$arrIds = $this->Database->prepare('SELECT id FROM tl_metamodel_rendersettings WHERE pid=?')
 						   ->executeUncached($objMetaModel->get('id'))
 						   ->fetchEach('id');
-			$this->Database->prepare(sprintf('DELETE FROM tl_metamodel_rendersetting WHERE pid IN (%s)', implode(',', $arrIds)))
-						   ->executeUncached();
+			if ($arrIds)
+			{
+				$this->Database->prepare(sprintf('DELETE FROM tl_metamodel_rendersetting WHERE pid IN (%s)', implode(',', $arrIds)))
+							   ->executeUncached();
+			}
 			$this->Database->prepare('DELETE FROM tl_metamodel_rendersettings WHERE pid=?')
 						   ->executeUncached($objMetaModel->get('id'));
+
 			// delete everything from filter settings
 			$arrIds = $this->Database->prepare('SELECT id FROM tl_metamodel_filter WHERE pid=?')
 						   ->executeUncached($objMetaModel->get('id'))
 						   ->fetchEach('id');
-			$this->Database->prepare(sprintf('DELETE FROM tl_metamodel_filtersetting WHERE pid IN (%s)', implode(',', $arrIds)))
-						   ->executeUncached();
+			if ($arrIds)
+			{
+				$this->Database->prepare(sprintf('DELETE FROM tl_metamodel_filtersetting WHERE pid IN (%s)', implode(',', $arrIds)))
+							   ->executeUncached();
+			}
 			$this->Database->prepare('DELETE FROM tl_metamodel_filter WHERE pid=?')
 						   ->executeUncached($objMetaModel->get('id'));
 		}
