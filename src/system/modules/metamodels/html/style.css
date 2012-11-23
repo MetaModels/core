@@ -20,3 +20,8 @@ fieldset.tl_subdca { padding: 0; margin: 0; border: none; }
 }
 
 .tl_subdca legend label { font-weight:bold; }
+
+.tl_content .field_type img {
+margin-right:5px;
+float:left;
+}
