@@ -23,7 +23,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']            = array('Als Sta
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype']           = array('Integration', 'Die gewünschte Art der Integration auswählen.');
 
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']               = array('Eltern-Tabelle (falls gewünscht)', 'Name der Datenbank-Tabelle, die als Eltern-Tabelle benutzt werden soll.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']               = array('Eltern-Tabelle (falls gewünscht)', 'Name der Datenbanktabelle, die als Eltern-Tabelle benutzt werden soll.');
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']                 = array('Sortiermodus', 'Sortiermodus, der für die Darstellung der Datensätze benutzt werden soll.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']                 = array('Sortierung', 'Sortierung in der Datensatzansicht.');
@@ -40,7 +40,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_description']    = array('Beschre
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']          = array('Panel-Layout', 'Die Darstellungsoptionen des Panels mit Komma (= Zwischenraum) und Semikolon (= neue Zeile) bestimmen - wie bei sort,filter;search,limit.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker']          = 'Panelpicker';
 
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['use_limitview']        = array('View limitation', 'Activate the view limitation.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['use_limitview']        = array('Anzeigeeinschränkungen', 'Aktiviert die Anzeigeeinschränkungen.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']  = array('Rendern beschränken', 'Zwischen Frontend und Backend wählen.');
 
 /**
