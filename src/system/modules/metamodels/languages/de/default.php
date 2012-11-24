@@ -31,8 +31,8 @@ $GLOBALS['TL_LANG']['MSC']['sorting'] 									= 'Sortierung';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['w50']         					= array('w50', 'Die Breite auf 50% und nach links floaten.');
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clr']         					= array('clr', 'Alle Floats clearen.');
 $GLOBALS['TL_LANG']['MSC']['tl_class']['m12']         					= array('m12', 'Dem Element einen oberen Abstand (top-margin) von 12 Pixel geben (für einzelne Checkboxen).');
-$GLOBALS['TL_LANG']['MSC']['tl_class']['wizard']      					= array('wizard', 'Das Eingabefeld kürzen, so dass Platz für einen Wizard ist (z.B. einen Date-Picker).');
-$GLOBALS['TL_LANG']['MSC']['tl_class']['long']        					= array('long', 'Vergrößert das Eingabefeld, so dass es zwei Spalten umfasst.');
+$GLOBALS['TL_LANG']['MSC']['tl_class']['wizard']      					= array('wizard', 'Das Eingabefeld kürzen, sodass Platz für einen Wizard ist (z.B. einen Date-Picker).');
+$GLOBALS['TL_LANG']['MSC']['tl_class']['long']        					= array('long', 'Vergrößert das Eingabefeld, sodass es zwei Spalten umfasst.');
 
 // Panelpicker
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['search']  					= array('Suche', '');
@@ -48,7 +48,7 @@ $GLOBALS['TL_LANG']['ERR']['activate_extension']						= 'Bitte die benötigte Er
 $GLOBALS['TL_LANG']['ERR']['install_extension']							= 'Bitte die benötigte Erweiterung &quot;%s&quot; (%s) installieren.';
 $GLOBALS['TL_LANG']['ERR']['columnExists']								= 'Es existiert bereits ein Attribut mit diesem Spaltennamen.';
 $GLOBALS['TL_LANG']['MSC']['no_palette']								= 'Versuch, auf MetaModel "%s" ohne Palette für den Benutzer %s zuzugreifen.';
-$GLOBALS['TL_LANG']['MSC']['no_view']									= 'Versuch, auf das MetaModel "%s" ohne Ansicht für den Benutzer %s zuzugeifen.';
+$GLOBALS['TL_LANG']['MSC']['no_view']									= 'Versuch, auf das MetaModel "%s" ohne Ansicht für den Benutzer %s zuzugreifen.';
 $GLOBALS['TL_LANG']['ERR']['invalidTableName']							= 'Der eingegebene Tabellenname ist nicht valide.'
 
 ?>
