@@ -82,12 +82,12 @@ $GLOBALS['TL_LANG']['tl_metamodel']['modes']['mode_0'] = '0 Datensätze unsortie
 $GLOBALS['TL_LANG']['tl_metamodel']['modes']['mode_1'] = '1 Datensätze nach bestimmtem Feld sortiert darstellen';
 $GLOBALS['TL_LANG']['tl_metamodel']['modes']['mode_2'] = '2 Datensätze nach wählbarem Feld sortiert darstellen';
 $GLOBALS['TL_LANG']['tl_metamodel']['modes']['mode_3'] = '3 Datensätze nach Elterntabelle sortiert darstellen';
-$GLOBALS['TL_LANG']['tl_metamodel']['modes']['mode_4'] = '4 Kind-Datensätze einer Elterntabelle anzeigen (wie im CSS-Modul)';
+$GLOBALS['TL_LANG']['tl_metamodel']['modes']['mode_4'] = '4 Kinddatensätze einer Elterntabelle anzeigen (wie im CSS-Modul)';
 $GLOBALS['TL_LANG']['tl_metamodel']['modes']['mode_5'] = '5 Baumdarstellung (wie Seitenstruktur)';
-$GLOBALS['TL_LANG']['tl_metamodel']['modes']['mode_6'] = '6 Kind-Datensätze in einer Baumstruktur darstellen (wie Artikelmodul)';
+$GLOBALS['TL_LANG']['tl_metamodel']['modes']['mode_6'] = '6 Kinddatensätze in einer Baumstruktur darstellen (wie Artikelmodul)';
 
 $GLOBALS['TL_LANG']['tl_metamodel']['rendertypes']['standalone'] = 'Als Einzeltabelle';
-$GLOBALS['TL_LANG']['tl_metamodel']['rendertypes']['ctable']     = 'Als Kind-Tabelle';
+$GLOBALS['TL_LANG']['tl_metamodel']['rendertypes']['ctable']     = 'Als Kindtabelle';
 
 
 /**
