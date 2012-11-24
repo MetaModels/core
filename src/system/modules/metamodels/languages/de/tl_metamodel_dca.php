@@ -18,12 +18,12 @@
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['name']                 = array('Name', 'Name der Palette.');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']               = array('Änderungsdatum', 'Datum und Zeit der letzten Änderung');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']            = array('Als Standard benutzen', 'Bestimmt, ob diese Palette als Standardvorgabe für Eltern-Datensätze benutzt werden soll.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']               = array('Aktualisierungsdatum', 'Datum und Zeit der letzten Aktualisierung.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']            = array('Als Standard benutzen', 'Bestimmt, ob diese Palette als Standardvorgabe für Elterndatensätze benutzt werden soll.');
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype']           = array('Integration', 'Die gewünschte Art der Integration auswählen.');
 
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']               = array('Eltern-Tabelle (falls gewünscht)', 'Name der Datenbanktabelle, die als Eltern-Tabelle benutzt werden soll.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']               = array('Elterntabelle (falls gewünscht)', 'Name der Datenbanktabelle, die als Elterntabelle benutzt werden soll.');
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']                 = array('Sortiermodus', 'Sortiermodus, der für die Darstellung der Datensätze benutzt werden soll.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']                 = array('Sortierung', 'Sortierung in der Datensatzansicht.');
@@ -57,7 +57,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']       = 'Backend-Integ
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']                  = array('Neue Palette', 'Eine neue Palette erstellen');
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']                 = array('Palette bearbeiten', 'Die Palette ID %s bearbeiten');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['copy']                 = array('Palettendefiniton kopieren', 'Die Palettendefinition von ID %s kopieren');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['copy']                 = array('Palettendefinition kopieren', 'Die Palettendefinition von ID %s kopieren');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['delete']               = array('Palette löschen', 'Die Palette ID %s löschen');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['show']                 = array('Paletten-Details', 'Die Details der Palette ID %s anzeigen');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['settings']             = array('Paletten-Einstellungen', 'Die Einstellungen der Palette ID %s bearbeiten');
@@ -82,12 +82,12 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_0'] = '0 Datensätz
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_1'] = '1 Datensätze nach bestimmtem Feld sortiert darstellen';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_2'] = '2 Datensätze nach wählbarem Feld sortiert darstellen';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_3'] = '3 Datensätze nach Elterntabelle sortiert darstellen';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_4'] = '4 Kind-Datensätze einer Elterntabelle anzeigen (wie im CSS-Modul)';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_4'] = '4 Kinddatensätze einer Elterntabelle anzeigen (wie im CSS-Modul)';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_5'] = '5 Baumdarstellung (wie Seitenstruktur)';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_6'] = '6 Kind-Datensätze in einer Baumstruktur darstellen (wie Artikelmodul)';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_6'] = '6 Kinddatensätze in einer Baumstruktur darstellen (wie Artikelmodul)';
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes']['standalone'] = 'Als Einzeltabelle';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes']['ctable']     = 'Als Kind-Tabelle';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes']['ctable']     = 'Als Kindtabelle';
 
 
 
