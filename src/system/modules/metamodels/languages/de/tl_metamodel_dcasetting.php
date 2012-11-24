@@ -21,15 +21,15 @@ if (!defined('TL_ROOT'))
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype']         = array('Typ', 'Den Attribut-Typ auswählen.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype']         = array('Typ', 'Den Attributtyp auswählen.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']         = array('Attribute', 'Attribute, auf die sich diese Einstellung bezieht.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']        = array('Eigenes Template für die Darstellung', 'Ein Template auswählen, das für das ausgewählte Attribut benutzt werden soll. Gültige Templatenamen beginnen mit "mm_<type>" - type steht dabei für den &lt;type&gt;');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']        = array('Backend-Class', 'Hier können eine oder mehrere Backend-Classes festgelegt werden. Für bessere Bedienung ist die Benutzung des Stylepickers empfohlen.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker']     = 'Stylepicker';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']      = array('Legende verbergen','Die Legende standardmäßig verbergen.');
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']     = array('Legenden-Titel','Hier können Sie den Legenden-Titel angeben.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']     = array('Legendentitel','Hier können Sie den Legendentitel angeben.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']   = 'Sprache';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']      = 'Legenden-Titel';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']      = 'Legendentitel';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory']       = array('Pflichtfeld', 'Auswählen, wenn dieses Attribut ein Pflichtfeld sein soll.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['filterable']      = array('Filterbar', 'Auswählen, wenn dieses Attribut für die Filterung im Backend zur Verfügung stehen soll.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortable']        = array('Sortierbar', 'Auswählen, wenn dieses Attribut für die Sortierung im Backend zur Verfügung stehen soll.');
