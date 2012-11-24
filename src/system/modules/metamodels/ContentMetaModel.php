@@ -9,8 +9,8 @@
  * @package	   MetaModels
  * @subpackage Frontend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  CyberSpectrum
- * @license    private
+ * @copyright  The MetaModels team.
+ * @license    LGPL.
  * @filesource
  */
 

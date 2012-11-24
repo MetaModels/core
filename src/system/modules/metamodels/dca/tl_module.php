@@ -9,8 +9,8 @@
  * @package	   MetaModels
  * @subpackage Backend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  CyberSpectrum
- * @license    private
+ * @copyright  The MetaModels team.
+ * @license    LGPL.
  * @filesource
  */
 if (!defined('TL_ROOT'))
@@ -181,8 +181,8 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
  * @package	   MetaModels
  * @subpackage Backend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  CyberSpectrum
- * @license    private
+ * @copyright  The MetaModels team.
+ * @license    LGPL.
  * @filesource
  */
 class tl_module_metamodel extends Backend

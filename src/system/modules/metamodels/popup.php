@@ -2,7 +2,7 @@
 /**
  *
  * PHP version 5
- * @copyright  4ward.media 2011
+ * @copyright  The MetaModels team.
  * @author     Christoph Wiechert <christoph.wiechert@4wardmedia.de>
  * @package    stylepicker4ward
  * @filesource

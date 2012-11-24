@@ -10,8 +10,8 @@
  * @package	   MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  CyberSpectrum
- * @license    private
+ * @copyright  The MetaModels team.
+ * @license    LGPL.
  * @filesource
  */
 if (!defined('TL_ROOT'))

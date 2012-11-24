@@ -24,10 +24,10 @@ if (!defined('TL_ROOT'))
  * Software Foundation website at <http://www.gnu.org/licenses/>.
  *
  * PHP version 5
- * @copyright  Leo Feyer 2005-2012
+ * @copyright  The MetaModels team.
  * @author     Leo Feyer <http://www.contao.org>
  * @package    Backend
- * @license    LGPL
+ * @license    LGPL.
  * @filesource
  */
 /**
@@ -185,8 +185,8 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array(
  * @package	   MetaModels
  * @subpackage Backend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  CyberSpectrum
- * @license    private
+ * @copyright  The MetaModels team.
+ * @license    LGPL.
  * @filesource
  */
 class tl_content_metamodel extends Backend
