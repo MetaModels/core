@@ -28,7 +28,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['copy']          = array('Datensatz kop
 $GLOBALS['TL_LANG']['tl_metamodel_item']['createvariant'] = array('Neue Variante', 'Eine neue Variante von Datensatz ID %s erstellen');
 $GLOBALS['TL_LANG']['tl_metamodel_item']['cut']           = array('Datensatz verschieben', 'Den Datensatz ID %s verschieben.');
 $GLOBALS['TL_LANG']['tl_metamodel_item']['delete']        = array('Datensatz löschen', 'Den Datensatz ID %s löschen.');
-$GLOBALS['TL_LANG']['tl_metamodel_item']['show']          = array('Datensatz-Details', 'Die Details von Datensatz ID %s anzeigen.');
+$GLOBALS['TL_LANG']['tl_metamodel_item']['show']          = array('Datensatzdetails', 'Die Details von Datensatz ID %s anzeigen.');
 $GLOBALS['TL_LANG']['tl_metamodel_item']['editheader']    = array('Datensatztyp bearbeiten', 'Den Typ des Datensatzes bearbeiten.');
 $GLOBALS['TL_LANG']['tl_metamodel_item']['fields']        = array('Attribute verwalten', 'Die Attribute dieses MetaModels verwalten.');
 
