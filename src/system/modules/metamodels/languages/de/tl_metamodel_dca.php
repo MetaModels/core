@@ -25,16 +25,16 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype']           = array('Integra
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']               = array('Eltern-Tabelle (falls gewünscht)', 'Name der Datenbank-Tabelle, die als Eltern-Tabelle benutzt werden soll.');
 
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']                 = array('Sortiermodus', 'Sortiermodus, der für die Darstellung der Datenbsätze benutzt werden soll.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']                 = array('Sortiermodus', 'Sortiermodus, der für die Darstellung der Datensätze benutzt werden soll.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']                 = array('Sortierung', 'Sortierung in der Datensatzansicht.');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']       = array('Backend-Bereich', 'Den gewünschten Backend-Bereich auswählen, in dem das MetaModel erscheinen soll. Für Inhalte, die von Redakteuren bearbeitet werden sollen wird der Bereich Inhalte empfohlen');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']       = array('Backend-Bereich', 'Den gewünschten Backend-Bereich auswählen, in dem das MetaModel erscheinen soll. Für Inhalte, die von Redakteuren bearbeitet werden sollen, wird der Bereich "Inhalte" empfohlen.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon']          = array('Backend-Icon', 'Ein Icon für die Darstellung im Backend auswählen. Dieses Icon wird links vom Menütext angezeigt und ermöglicht eine schnelle Orientierung. In der Baumansicht wird das Icon ebenfalls im oberen Bereich benutzt.');
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption']       = array('Backend-Beschreibung', 'Der hier angegebene Text wird als Bereichsüberschrift und Beschreibung in der Backend-Navigation erscheinen.');
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_langcode']       = array('Sprachen', 'Die Sprachen auswählen, die angeboten werden sollen.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_label']          = array('Menütext', 'Der hier angegebene Text wird als Menütext im Backend benutzt.');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_description']    = array('Beschreibung', 'Der hier angegebene Text wird für die beim hovern sichtbare erweiterte Beschreibung im Backend benutzt.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_description']    = array('Beschreibung', 'Der hier angegebene Text wird für die beim Hovern sichtbare erweiterte Beschreibung im Backend benutzt.');
 
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']          = array('Panel-Layout', 'Die Darstellungsoptionen des Panels mit Komma (= Zwischenraum) und Semikolon (= neue Zeile) bestimmen - wie bei sort,filter;search,limit.');
@@ -81,7 +81,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['12']    = 'Absteigend so
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_0'] = '0 Datensätze unsortiert darstellen';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_1'] = '1 Datensätze nach bestimmtem Feld sortiert darstellen';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_2'] = '2 Datensätze nach wählbarem Feld sortiert darstellen';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_3'] = '3 Datensätz nach Elterntabelle sortiert darstellen';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_3'] = '3 Datensätze nach Elterntabelle sortiert darstellen';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_4'] = '4 Kind-Datensätze einer Elterntabelle anzeigen (wie im CSS-Modul)';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_5'] = '5 Baumdarstellung (wie Seitenstruktur)';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_6'] = '6 Kind-Datensätze in einer Baumstruktur darstellen (wie Artikelmodul)';
