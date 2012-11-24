@@ -29,7 +29,7 @@ $GLOBALS['TL_LANG']['CTE']['metamodel_content'] = array('MetaModel list', 'Adds 
  */
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord']   = 'Edit filter setting %%s for filter "%s" in MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label']        = 'Filter "%s" in MetaModel "%s"';
-$GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']        = 'Edit "%s" for Item %%s';
+$GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']        = 'Edit "%s" for item %%s';
 $GLOBALS['TL_LANG']['MSC']['sorting']                                 = 'Sorting';
 
 // Stylepicker
@@ -49,8 +49,8 @@ $GLOBALS['TL_LANG']['MSC']['panelLayout']['limit']                    = array('L
  * Errors
  */
 $GLOBALS['TL_LANG']['ERR']['no_attribute_extension']                  = 'Please install at least one attribute extension! MetaModels without attributes do not make sense.';
-$GLOBALS['TL_LANG']['ERR']['activate_extension']                      = 'Please activate required extension &quot;%s&quot; (%s)';
-$GLOBALS['TL_LANG']['ERR']['install_extension']                       = 'Please install required extension &quot;%s&quot; (%s)';
+$GLOBALS['TL_LANG']['ERR']['activate_extension']                      = 'Please activate the required extension "%s" (%s)';
+$GLOBALS['TL_LANG']['ERR']['install_extension']                       = 'Please install the required extension "%s" (%s)';
 $GLOBALS['TL_LANG']['ERR']['columnExists']                            = 'There is already an attribute with the given column name.';
 $GLOBALS['TL_LANG']['ERR']['no_palette']                              = 'Attempt to access the MetaModel "%s" without palette for current user %s.';
 $GLOBALS['TL_LANG']['ERR']['no_view']                                 = 'Attempt to access the MetaModel "%s" without view for user %s.';
@@ -58,6 +58,6 @@ $GLOBALS['TL_LANG']['ERR']['invalidTableName']                        = 'The tab
 /***
  * Filter setting parameters.
  */
-$GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'] = array('Filter value for attribute &quot;%s&quot;', '');
+$GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'] = array('Filter value for attribute "%s"', '');
 
 ?>

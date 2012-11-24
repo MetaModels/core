@@ -42,10 +42,10 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_limit']				= array('Maximum number 
 $GLOBALS['TL_LANG']['tl_content']['metamodel_sortby']				= array('Order by', 'Please choose the sort order.');
 $GLOBALS['TL_LANG']['tl_content']['metamodel_sortby_direction']		= array('Order by direction', 'Ascending or descending order.');
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering']			= array('Filter settings to apply', 'Select the filter settings that shall get applied when compiling the list.');
-$GLOBALS['TL_LANG']['tl_content']['metamodel_layout']				= array('Custom Template to use for generating', 'Select the template that shall be used for the selected attribute. Valid template filenames start with &quot;ce_metamodel&quot;.');
-$GLOBALS['TL_LANG']['tl_content']['metamodel_rendersettings']		= array('Render settings to apply', 'Select the rendering settings to use for generating the output. If left empty, the default settings for the selected metamodel will get applied. If no default has been defined, the output will only get the raw values.');
+$GLOBALS['TL_LANG']['tl_content']['metamodel_layout']				= array('Custom template to use for generating', 'Select the template that shall be used for the selected attribute. Valid template filenames start with "ce_metamodel".');
+$GLOBALS['TL_LANG']['tl_content']['metamodel_rendersettings']		= array('Render settings to apply', 'Select the rendering settings to use for generating the output. If left empty, the default settings for the selected MetaModel will get applied. If no default has been defined, the output will only get the raw values.');
 $GLOBALS['TL_LANG']['tl_content']['metamodel_noparsing']			= array('No parsing of items', 'If this checkbox is selected, the module will not parse the items. Only the item-objects will be available in the template.');
-$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams']			= array('Filtersettings override');
+$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams']			= array('Filter settings override');
 
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams_use_get'] = array('Use GET Parameter', '');
 
@@ -53,7 +53,7 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams_use_get'] = array('Use
  * Wizards
  */
 
-$GLOBALS['TL_LANG']['tl_content']['editmetamodel']            = array('Edit metamodel', 'Edit the metamodel ID %s.');
+$GLOBALS['TL_LANG']['tl_content']['editmetamodel']            = array('Edit MetaModel', 'Edit the MetaModel ID %s.');
 $GLOBALS['TL_LANG']['tl_content']['editrendersetting']        = array('Edit render setting', 'Edit the render setting ID %s.');
 $GLOBALS['TL_LANG']['tl_content']['editfiltersetting']        = array('Edit filter setting', 'Edit the filter setting ID %s.');
 

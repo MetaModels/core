@@ -22,7 +22,7 @@ if (!defined('TL_ROOT'))
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id']         = array('Attribute', 'Attribute this setting relates to.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template']        = array('Custom Template to use for generating', 'Select the template that shall be used for the selected attribute. Valid template files start with &quot;mm_<type>&quot; where the type name is put for &lt;type&gt;');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template']        = array('Custom template to use for generating', 'Select the template that shall be used for the selected attribute. Valid template files start with "mm_&lt;type&gt;" where the type name is put for &lt;type&gt;');
 
 /**
  * Legends
@@ -33,13 +33,13 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['advanced_legend'] = 'Advanced
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['new']             = array('New', 'Create new setting.');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['new']             = array('New', 'Create new setting');
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit']            = array('Edit setting', 'Edit filter setting ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy']            = array('Copy filter setting definiton', 'Copy filter setting ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy']            = array('Copy filter setting definition', 'Copy filter setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete']          = array('Delete filter setting', 'Delete filter setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show']            = array('Filter setting details', 'Show details of filter setting ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']          = array('Add all', 'Add all attributes to rendersetting');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']          = array('Add all', 'Add all attributes to render setting');
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']             = '%s <strong>%s</strong> <em>[%s]</em>';
 
