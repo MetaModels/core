@@ -41,7 +41,7 @@ $GLOBALS['TL_LANG']['XPL']['customsql'] = array
 	(
 		'Beispiel 1<br />normale SQL-Abfrage',
 		'<pre>SELECT id FROM mm_mymetamodel WHERE page_id=1</pre>
-		Damit werden alle IDs der Tabelle <em>mm_mymetamodel</em> ausgewählt, die den Wert page_id=1 besitzen.'
+		Damit werden alle IDs der Tabelle <em>mm_mymetamodel</em> ausgewählt, die den Wert <em>page_id=1</em> besitzen.'
 	),
 	array
 	(
