@@ -28,7 +28,7 @@ $GLOBALS['TL_LANG']['XPL']['customsql'] = array
 	(
 		'Abstract',
 		'Type in any SQL query that shall be executed.<br />
-		It is expected, that this query returns at least one column named "id".
+		It is expected that this query returns at least one column named "id".
 		'
 	),
 	array
@@ -36,20 +36,20 @@ $GLOBALS['TL_LANG']['XPL']['customsql'] = array
 		'Insert tags',
 		'Insert tags are supported, but keep in mind that not all tags might be available
 		when the filter setting is used (for example the <em>{{page::id}}</em> is
-		available only when used from a frontend page and not from RSS-feeds).'
+		available only when used from a front end page and not from RSS-feeds).'
 	),
 	array
 	(
 		'Example 1<br />plain query',
 		'<pre>SELECT id FROM mm_mymetamodel WHERE page_id=1</pre>
-		This selects all ids from the table <em>mm_mymetamodel</em> that have the value page_id=1
+		This selects all IDs from the table <em>mm_mymetamodel</em> that have the value <em>page_id=1</em>
 		'
 	),
 	array
 	(
 		'Example 2<br />insert tablename',
 		'<pre>SELECT id FROM {{table}} WHERE page_id=1</pre>
-		This is merely the same as example 1 but the table name of the current metamodel (i.e.: the <em>mm_mymetamodel</em> from above) will get inserted into the query.
+		This is merely the same as example 1 but the table name of the current MetaModel (i.e.: the <em>mm_mymetamodel</em> from above) will get inserted into the query.
 		'
 	)
 );
