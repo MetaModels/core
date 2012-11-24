@@ -38,7 +38,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['new']             = array('Ne
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit']            = array('Render-Einstellung bearbeiten', 'Die Einstellung ID %s bearbeiten.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy']            = array('Filtereinstellung kopieren', 'Die Filtereinstellung ID %s kopieren.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete']          = array('Filereinstellung löschen', 'Die Filtereinstellung ID %s löschen.');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete']          = array('Filtereinstellung löschen', 'Die Filtereinstellung ID %s löschen.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show']            = array('Details', 'Die Details der Filtereinstellung ID %s anzeigen.');
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']             = '%s <strong>%s</strong> <em>[%s]</em>';
