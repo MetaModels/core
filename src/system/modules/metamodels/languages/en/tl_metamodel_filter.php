@@ -22,7 +22,7 @@ if (!defined('TL_ROOT'))
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['name']                 = array('Name', 'Filter setting name.');
-$GLOBALS['TL_LANG']['tl_metamodel_filter']['tstamp']               = array('Revision date', 'Date and time of the latest revision');
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['tstamp']               = array('Revision date', 'Date and time of the latest revision.');
 
 /**
  * Legends
