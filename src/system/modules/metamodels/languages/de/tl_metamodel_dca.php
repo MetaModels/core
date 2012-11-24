@@ -59,8 +59,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']                  = array('Neue Pa
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']                 = array('Palette bearbeiten', 'Die Palette ID %s bearbeiten');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['copy']                 = array('Palettendefinition kopieren', 'Die Palettendefinition von ID %s kopieren');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['delete']               = array('Palette löschen', 'Die Palette ID %s löschen');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['show']                 = array('Paletten-Details', 'Die Details der Palette ID %s anzeigen');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['settings']             = array('Paletten-Einstellungen', 'Die Einstellungen der Palette ID %s bearbeiten');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['show']                 = array('Palettendetails', 'Die Details der Palette ID %s anzeigen');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['settings']             = array('Paletteneinstellungen', 'Die Einstellungen der Palette ID %s bearbeiten');
 
 /**
  * Reference
