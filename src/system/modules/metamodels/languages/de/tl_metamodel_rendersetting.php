@@ -23,7 +23,7 @@ if (!defined('TL_ROOT'))
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id']         = array('Attribut', 'Attribut, auf das sich diese Einstellung bezieht.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template']        = array('Eigenes Template für die Anzeige benutzen.', 'Wählen Sie das Template aus, das für das ausgewählte Attribut verwendet werden soll. Gültige templatenamen beginnen mit &quot;mm_<type>&quot;, wobei sich der Typname aus &lt;type&gt; ableitet.');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template']        = array('Eigenes Template für die Anzeige benutzen', 'Wählen Sie das Template aus, das für das ausgewählte Attribut verwendet werden soll. Gültige Templatenamen beginnen mit "mm_<type>", wobei sich der Typname aus &lt;type&gt; ableitet.');
 
 /**
  * Legends
@@ -39,7 +39,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['new']             = array('Ne
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit']            = array('Render-Einstellung bearbeiten', 'Die Einstellung ID %s bearbeiten.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy']            = array('Filtereinstellung kopieren', 'Die Filtereinstellung ID %s kopieren.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete']          = array('Filereinstellung löschen', 'Die Filtereinstellung ID %s löschen.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show']            = array('Details', 'Die Details der Filtereinstellung ID %s anzeigen-');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show']            = array('Details', 'Die Details der Filtereinstellung ID %s anzeigen.');
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']             = '%s <strong>%s</strong> <em>[%s]</em>';
 
