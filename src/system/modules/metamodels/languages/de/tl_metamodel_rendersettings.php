@@ -31,7 +31,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['expert_legend']        = 'Ex
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']                 = array('Name', 'Einstellungsname.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']               = array('Änderungsdatum', 'Datum und Zeit der letzten Änderung.');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']               = array('Aktualisierungsdatum', 'Datum und Zeit der letzten Aktualisierung.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']            = array('Standard', 'Bestimmt, ob diese Einstellung als Standardvorgabe bei Eltern-Kind-Beziehungen im MetaModel benutzt werden soll, wenn in einem Modul oder Inhaltselement keines explizit ausgewählt wurde.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']             = array('Template', 'Das Template festlegen, das für die Darstellung der Datensätze benutzt werden soll.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']               = array('Zielseite', 'Die Seite (URL) festlegen, die für die Darstellung der Details benutzt wird. Detaillierte URL-Parameter werden von der jeweiligen Filtereinstellung generiert.');
