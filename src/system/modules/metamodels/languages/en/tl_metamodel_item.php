@@ -21,7 +21,7 @@ if (!defined('TL_ROOT'))
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_metamodel_item']['new']           = array('New item', 'Create new item.');
+$GLOBALS['TL_LANG']['tl_metamodel_item']['new']           = array('New item', 'Create new item');
 $GLOBALS['TL_LANG']['tl_metamodel_item']['edit']          = array('Edit item', 'Edit item ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_item']['copy']          = array('Copy item', 'Copy item ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_item']['createvariant'] = array('New variant', 'Create a new variant of item ID %s');

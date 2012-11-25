@@ -22,15 +22,15 @@ if (!defined('TL_ROOT'))
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['display_legend']		  = 'Anzeige-Einstellungen';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['display_legend']		  = 'Anzeigeeinstellungen';
 
 /**
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['typeOptions']['tags']  = 'Tags';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['tag_table']			  = array('Datenbank-Tabelle', 'Bitte die Datenbank-Tabelle auswählen.');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['tag_column']			  = array('Tabellenspalte', 'Bite die Spalte auswählen.');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['tag_id']				  = array('Tag ID', 'Bitte einen Eintrag für den Tag id auswählen.');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['tag_table']			  = array('Datenbanktabelle', 'Bitte die Datenbanktabelle auswählen.');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['tag_column']			  = array('Tabellenspalte', 'Bitte die Tabellenspalte auswählen.');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['tag_id']				  = array('Tag ID', 'Bitte einen Eintrag für den Tag ID auswählen.');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['tag_alias']			  = array('Tag-Alias', 'Bitte einen Eintrag für den Tag-Alias auswählen.');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['tag_sorting']    	  = array('Tag-Sortierung', 'Bitte einen Eintrag für die Tag-Sortierung auswählen.');
 

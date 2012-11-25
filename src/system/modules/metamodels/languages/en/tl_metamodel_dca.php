@@ -18,8 +18,8 @@
  * Fields
  */
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['name']                 = array('Name', 'Name of the palette.');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']               = array('Revision date', 'Date and time of the latest revision');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']            = array('Is default', 'Determines that this palette shall be used as default for the parenting MetaModel');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']               = array('Revision date', 'Date and time of the latest revision.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']            = array('Is default', 'Determines that this palette shall be used as default for the parenting MetaModel.');
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype']           = array('Integration', 'Select the desired type of integration.');
 
@@ -27,28 +27,28 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']               = array('Parent 
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']                 = array('Sorting mode', 'The sorting mode to use in the item view.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']                 = array('Sorting flag', 'The sorting flag to use in the item view.');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']       = array('Backend section', 'Select the desired backend section where you want the MetaModel appear. For models that shall be edited by end users, the "content" section most likely will be appropriate.');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon']          = array('Backend icon', 'Select the desired backend icon. This icon will get used to draw an image in the left menu and on the top of the edit view in tree displays.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']       = array('Back end section', 'Select the desired back end section where you want the MetaModel appear. For models that shall be edited by end users, the "content" section most likely will be appropriate.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon']          = array('Back end icon', 'Select the desired back end icon. This icon will get used to draw an image in the left menu and on the top of the edit view in tree displays.');
 
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption']       = array('Backend caption', 'The text you specify in here, will get used as the label and description text in the backend menu.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption']       = array('Back end caption', 'The text you specify in here, will get used as the label and description text in the back end menu.');
 
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_langcode']       = array('Language', 'Select the languages you want to provide');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_label']          = array('Label text', 'The text you specify in here, will get used as the menu label in the backend menu.');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_description']    = array('Description text', 'The text you specify in here, will get used as the description (hover title) in the backend menu.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_langcode']       = array('Language', 'Select the languages you want to provide.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_label']          = array('Label text', 'The text you specify in here, will get used as the menu label in the back end menu.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_description']    = array('Description text', 'The text you specify in here, will get used as the description (hover title) in the back end menu.');
 
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']          = array('Panel layout', 'Separate panel options with comma (= space) and semicolon (= new line) like sort,filter;search,limit.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker']          = 'Panelpicker';
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['use_limitview']        = array('View limitation', 'Activate the view limitation.');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']  = array('Limit the rendersetting', 'Choose between frontend or backend.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']  = array('Limit the render setting', 'Choose between front end or back end.');
 
 /**
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['title_legend']         = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['view_legend']          = 'View settings';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']       = 'Backend integration';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']       = 'Back end integration';
 
 
 /**
@@ -57,10 +57,10 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']       = 'Backend integ
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']                  = array('New palette', 'Create new palette');
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']                 = array('Edit palette', 'Edit the palette ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['copy']                 = array('Copy palette definiton', 'Copy definition of palette ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['copy']                 = array('Copy palette definition', 'Copy definition of palette ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['delete']               = array('Delete palette', 'Delete palette ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['show']                 = array('Palette details', 'Show details of palette ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['settings']             = array('Palette setting', 'Edit the setting of palette ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['settings']             = array('Palette settings', 'Edit the settings of palette ID %s');
 
 /**
  * Reference

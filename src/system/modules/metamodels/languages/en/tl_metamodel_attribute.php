@@ -21,10 +21,10 @@ if (!defined('TL_ROOT'))
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['type']                 = array('Attribute type', 'Select the type of this attribute. WARNING! if you change this, all existing data within this attribute will be deleted.');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['type']                 = array('Attribute type', 'Select the type of this attribute. WARNING: if you change this, all existing data within this attribute will be deleted.');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name']                 = array('Name', 'Human readable name');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['description']          = array('Description', 'Human readable description');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname']              = array('Column Name', 'Internal reference name for this attribute');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname']              = array('Column name', 'Internal reference name for this attribute');
 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['isvariant']            = array('Enable variant override', 'Check this, if you want variants within the MetaModel to override the parent\'s value');
 
@@ -42,10 +42,10 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['advanced_legend']      = 'Advance
 /**
  * Buttons
  */
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']                  = array('New attribute', 'Create new Attribute.');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']                  = array('New attribute', 'Create new attribute');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['edit']                 = array('Edit attribute', 'Edit attribute ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['cut']                  = array('Cut attribute definiton', 'Cut definition of attribute ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['copy']                 = array('Copy attribute definiton', 'Copy definition of attribute ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['cut']                  = array('Cut attribute definition', 'Cut definition of attribute ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['copy']                 = array('Copy attribute definition', 'Copy definition of attribute ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['delete']               = array('Delete attribute', 'Delete attribute ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']                 = array('Attribute details', 'Show details of attribute ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['editheader']           = array('Edit attribute', 'Edit the attribute');

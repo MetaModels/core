@@ -29,25 +29,25 @@ $GLOBALS['TL_LANG']['XPL']['customsql'] = array
 	(
 		'Beschreibung',
 		'Geben Sie eine beliebige SQL-Abfrage ein, die ausgeführt werden soll.<br />
-		Dabei wird erwartet, das mindestens eine Spalte mit der Bezeichnung "id" zurüchgegeben wird.
+		Dabei wird erwartet, dass mindestens eine Spalte mit der Bezeichnung "id" zurückgegeben wird.
 		'
 	),
 	array
 	(
-		'Insert-Tags',
-		'InsertTags werden unterstützt. Bitte beachten, dass nicht immer alle Insert-Tags zur Verfügung stehen müssen, falls eine Filtereinstellung benutzt wird. Beispielsweise ist <em>{{env::page}}</em> nur für Frontenddarstellung möglich, nicht aber für RSS-Feeds.'
+		'Inserttags',
+		'Inserttags werden unterstützt. Bitte beachten Sie, dass nicht immer alle Inserttags zur Verfügung stehen müssen, falls eine Filtereinstellung benutzt wird. Beispielsweise ist <em>{{env::page}}</em> nur für Frontenddarstellung möglich, nicht aber für RSS-Feeds.'
 	),
 	array
 	(
 		'Beispiel 1<br />normale SQL-Abfrage',
 		'<pre>SELECT id FROM mm_mymetamodel WHERE page_id=1</pre>
-		Damit werden alle IDs der Tabelle <em>mm_mymetamodel</em> ausgewählt, die den Wert page_id=1 besitzen.'
+		Damit werden alle IDs der Tabelle <em>mm_mymetamodel</em> ausgewählt, die den Wert <em>page_id=1</em> besitzen.'
 	),
 	array
 	(
 		'Beispiel 2<br />dynamisches Einfügen eines Tabellennamens',
 		'<pre>SELECT id FROM {{table}} WHERE page_id=1</pre>
-		Beinahe identisch zu Beispiel 1,  ausser dass der Tabellenname des aktuellen MetaModels (also <em>mm_mymetamodel</em> wie oben) in die Abfrage eingefügt wird.
+		Beinahe identisch zu Beispiel 1, außer dass der Tabellenname des aktuellen MetaModels (also <em>mm_mymetamodel</em> wie oben) in die Abfrage eingefügt wird.
 		'
 	)
 );
