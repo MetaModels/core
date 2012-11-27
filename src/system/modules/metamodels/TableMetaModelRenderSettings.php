@@ -75,6 +75,17 @@ class TableMetaModelRenderSettings extends Backend
 		return $this->getTemplateGroup('metamodel_');
 	}
 
+	public function getFilterSettings($objMCW)
+	{
+		$objModel = $this->Database->prepare('SELECT pid FROM tl_metamodel_rendersettings WHERE id = ?')->execute($objMCW->currentRecord);
+		$objFilters = $this->Database->prepare('SELECT id, name FROM tl_metamodel_filter WHERE pid = ?')->execute($objModel->pid);
+		$arrResult = array();
+		while ($objFilters->next())
+		{
+			$arrResult[$objFilters->id] = $objFilters->name;
+		}
+		return $arrResult;
+	}
 
 	/**
 	 *
@@ -113,6 +124,7 @@ class TableMetaModelRenderSettings extends Backend
 					if (array_search($key, $arr) !==false)
 					{
 						$newValue = '{{link_url::'.$arr['value'].'}}';
+						$intFilter = $arr['filter'];
 						break;
 					}
 				}
@@ -121,7 +133,8 @@ class TableMetaModelRenderSettings extends Backend
 			//build the new array
 			$newValues[] = array(
 				'langcode' => $key,
-				'value' => $newValue
+				'value' => $newValue,
+				'filter' => $intFilter
 				);
 		}
 		return serialize($newValues);

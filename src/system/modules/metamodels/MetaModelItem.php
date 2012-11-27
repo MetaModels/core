@@ -218,23 +218,31 @@ class MetaModelItem implements IMetaModelItem
 		//ToDo: this is just a quick patch
 		//get the right jumpto
 		$intJumpto = null;
+		$strDesiredLanguage = $this->getMetaModel()->getActiveLanguage();
+		$strFallbackLanguage = $this->getMetaModel()->getFallbackLanguage();
 		if (is_array($objSettings->get('jumpTo')))
 		{
 			foreach($objSettings->get('jumpTo') as $arrJumpTO)
 			{
-				if ($arrJumpTO['langcode'] == $GLOBALS['TL_LANGUAGE'])
+				// if either desired language or fallback, keep the result.
+				if (in_array($arrJumpTO['langcode'], array($strDesiredLanguage, $strFallbackLanguage)))
 				{
 					$intJumpto = $arrJumpTO['value'];
-					break;
+					$intFilterSettings = $arrJumpTO['filter'];
+					// if the desired language, break. Otherwise try to get the desired one until all have been evaluated.
+					if ($strDesiredLanguage == $arrJumpTO['langcode'])
+					{
+						break;
+					}
 				}
 			}
 		}
-		
+
 		// second, apply jumpTo urls based upon the filter defined in the render settings.
 		if ($objSettings
 			&& $intJumpto
 			&& ($objPage = MetaModelController::getPageDetails($intJumpto))
-			&& $intFilterSettings = $objSettings->get('filter')
+			&& $intFilterSettings
 		)
 		{
 			$objFilterSettings = MetaModelFilterSettingsFactory::byId($intFilterSettings);

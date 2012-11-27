@@ -138,41 +138,44 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'options_callback'        => array('TableMetaModelRenderSettings','getTemplates'),
 			'eval'                    => array()
 		),
-		/* 'jumpTo' => array
+		'jumpTo' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo'],
-			'exclude'                 => true,
-			'inputType'               => 'pageTree',
-			'eval'                    => array('fieldType'=>'radio', 'helpwizard'=>true),
-			'explanation'             => 'jumpTo'
-		),*/ 
-        'jumpTo' => array
-        (
 			'label'							=> &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo'],
 			'exclude'						=> true,
 			'minCount'						=> 1,
 			'maxCount'						=> 1,
 			'disableSorting'				=>'1',
-			'inputType'                     => 'multiColumnWizard',
+			'inputType'						=> 'multiColumnWizard',
 			'load_callback'					=> array(array('TableMetaModelRenderSettings', 'prepareMCW')),
 			'save_callback'					=> array(array('TableMetaModelRenderSettings', 'saveMCW')),
 			'eval' => array(
-				'style'                     => 'width:100%;',
+				'style'						=> 'width:100%;',
 				'columnFields' => array(
-					'langcode'=>array(
-						'label'				=>'Language',
+					'langcode'=> array(
+						'label'				=> &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language'],
 						'exclude'			=>true,
 						'inputType'			=>'justtextoption',
 						'options'			=>array('xx' => 'all Languages'),
 						'eval'				=>array('valign'=>'center')
 					),
-					'value'=>array(
-						'label'				=>'Description',
+					'value' => array(
+						'label'				=> &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page'],
 						'exclude'			=> true,
 						'inputType'			=> 'text',
 						'wizard'			=> array(array('tl_metamodel_rendersettings', 'pagePicker')),
-						'eval'				=> array('style'=>'width:400px;')
-					)
+						'eval'				=> array('style'=>'width:200px;')
+					),
+					'filter' => array(
+						'label'				=> &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter'],
+						'exclude'			=> true,
+						'inputType'			=> 'select',
+						'options_callback'	=> array('TableMetaModelRenderSettings', 'getFilterSettings'),
+						'eval'				=> array
+						(
+							'style'			=> 'width:200px;',
+							'includeBlankOption' => true
+						)
+					),
 				),
 				'buttons' => array('copy' => false, 'delete' => false, 'up' => false, 'down' => false)
 			)
@@ -180,7 +183,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 	),
 );
 
-class tl_metamodel_rendersettings extends backend 
+class tl_metamodel_rendersettings extends backend
 {
 		/**
 	 * Return the link picker wizard
@@ -191,7 +194,7 @@ class tl_metamodel_rendersettings extends backend
 	{
 		return ' ' . $this->generateImage('pickpage.gif', $GLOBALS['TL_LANG']['MSC']['pagepicker'], 'style="vertical-align:top;cursor:pointer" onclick="Backend.pickPage(\'ctrl_' . $dc->inputName . '\')"');
 	}
-	
+
 }
 
 
