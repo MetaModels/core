@@ -215,7 +215,6 @@ class MetaModelItem implements IMetaModelItem
 				}
 			}
 		}
-		//ToDo: this is just a quick patch
 		//get the right jumpto
 		$intJumpto = null;
 		$strDesiredLanguage = $this->getMetaModel()->getActiveLanguage();
@@ -262,7 +261,7 @@ class MetaModelItem implements IMetaModelItem
 
 			if ($strParams)
 			{
-				$strUrl = MetaModelController::generateFrontendUrl($objPage->row(), '/' . $strParams);
+				$strUrl = MetaModelController::generateFrontendUrl($objPage->row(), $strParams);
 				$arrResult['jumpTo'] = array
 				(
 					'url' => $strUrl,
