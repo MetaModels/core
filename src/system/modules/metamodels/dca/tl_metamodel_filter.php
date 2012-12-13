@@ -13,13 +13,9 @@
  * @license    LGPL.
  * @filesource
  */
-if (!defined('TL_ROOT'))
-{
-	die('You cannot access this file directly!');
-}
 
 /**
- * Table tl_metamodel_attribute 
+ * Table tl_metamodel_attribute
  */
 
 $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
@@ -39,8 +35,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
 		(
 			'mode'                    => 1,
 			'fields'                  => array('name'),
-			'panelLayout'             => 'filter,limit', 
-			'headerFields'            => array('name'), 
+			'panelLayout'             => 'filter,limit',
+			'headerFields'            => array('name'),
 			'flag'                    => 1,
 		),
 

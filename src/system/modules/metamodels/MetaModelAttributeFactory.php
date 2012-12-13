@@ -13,15 +13,11 @@
  * @license    LGPL.
  * @filesource
  */
-if (!defined('TL_ROOT'))
-{
-	die('You cannot access this file directly!');
-}
 
 /**
  * This is the implementation of the Field factory to query instances of fields.
  * Usually this is only used internally by {@link MetaModel}
- * 
+ *
  * @package	   MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
@@ -36,9 +32,9 @@ class MetaModelAttributeFactory implements IMetaModelAttributeFactory
 
 	/**
 	 * Determines the correct class from a field type name.
-	 * 
+	 *
 	 * @param string $strFieldType the field type of which the class shall be fetched from.
-	 * 
+	 *
 	 * @return string the class name which handles the field type or NULL if no class could be found.
 	 */
 	protected static function getAttributeTypeClass($strFieldType)
@@ -48,9 +44,9 @@ class MetaModelAttributeFactory implements IMetaModelAttributeFactory
 
 	/**
 	 * Determines the correct factory from a field type name.
-	 * 
+	 *
 	 * @param string $strFieldType the field type of which the factory class shall be fetched from.
-	 * 
+	 *
 	 * @return string the factory class name which handles instanciation of the field type or NULL if no class could be found.
 	 */
 	protected static function getAttributeTypeFactory($strFieldType)
@@ -61,9 +57,9 @@ class MetaModelAttributeFactory implements IMetaModelAttributeFactory
 
 	/**
 	 * Create a MetaModelAttribute instance with the given information.
-	 * 
+	 *
 	 * @param array $arrData the meta information for the MetaModelAttribute.
-	 * 
+	 *
 	 * @return IMetaModelAttribute|null the created instance or null if unable to construct.
 	 */
 	protected static function createInstance($arrData)

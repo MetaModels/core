@@ -13,11 +13,6 @@
  * @license    LGPL.
  * @filesource
  */
-if (!defined('TL_ROOT'))
-{
-	die('You cannot access this file directly!');
-}
-
 
 /**
  * This is the MetaModelFilterRule class for handling string value searches on attributes.

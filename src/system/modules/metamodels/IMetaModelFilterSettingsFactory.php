@@ -13,16 +13,12 @@
  * @license    LGPL.
  * @filesource
  */
-if (!defined('TL_ROOT'))
-{
-	die('You cannot access this file directly!');
-}
 
 /**
  * This is the IMetaModelFilterSettings factory interface.
- * 
+ *
  * To create a IMetaModelFilterSettings instance, call {@link MetaModelFilterSettings::byId()}
- * 
+ *
  * @package	   MetaModels
  * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
@@ -31,16 +27,16 @@ interface IMetaModelFilterSettingsFactory
 {
 	/**
 	 * Create a IMetaModelFilterSettings instance from the id.
-	 * 
+	 *
 	 * @param int $intId the id of the IMetaModelFilterSettings.
-	 * 
+	 *
 	 * @return IMetaModelFilterSettings the instance of the IMetaModelFilterSettings or null if not found.
 	 */
 	public static function byId($intId);
 
 	/**
 	 * Query for all known MetaModel database tables.
-	 * 
+	 *
 	 * @return string[] all MetaModel table names as string array.
 	 */
 	// public static function getAllFor();

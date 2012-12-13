@@ -13,11 +13,6 @@
  * @license    LGPL.
  * @filesource
  */
-if (!defined('TL_ROOT'))
-{
-	die('You cannot access this file directly!');
-}
-
 
 /**
  * This is the interface for translated attributes.

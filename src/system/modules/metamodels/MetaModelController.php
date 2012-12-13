@@ -13,19 +13,15 @@
  * @license    LGPL.
  * @filesource
  */
-if (!defined('TL_ROOT'))
-{
-	die('You cannot access this file directly!');
-}
 
 /**
  * Gateway to the Contao "Controller" class for usage of the core without
  * importing any class.
- * 
+ *
  * This is achieved using the magic functions which will relay the call
- * to the parent class Controller. See there for a list of function that can 
+ * to the parent class Controller. See there for a list of function that can
  * be called (everything in Controller.php that is declared as protected).
- * 
+ *
  * @package	   MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>

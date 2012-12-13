@@ -13,16 +13,12 @@
  * @license    LGPL.
  * @filesource
  */
-if (!defined('TL_ROOT'))
-{
-	die('You cannot access this file directly!');
-}
 
 /**
  * Base implementation for "complex" MetaModel attributes.
  * Complex fields are fields that can not be fetched with a simple "SELECT colName FROM cat_table" and therefore need
  * to be handled differently.
- * 
+ *
  * @package	   MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>

@@ -13,10 +13,6 @@
  * @license    LGPL.
  * @filesource
  */
-if (!defined('TL_ROOT'))
-{
-	die('You cannot access this file directly!');
-}
 
 // as of PHP 5.3.0 array_replace_recursive() does the work for us
 if (!function_exists('array_replace_recursive'))
@@ -24,10 +20,10 @@ if (!function_exists('array_replace_recursive'))
 
 	/**
 	 * Recursive helper function for @see{array_replace_recursive()}
-	 * 
+	 *
 	 * @param array $array  the array that shall be overwritten
 	 * @param array $array1 the array that holds the values that shall overwrite the values in $array
-	 * 
+	 *
 	 * @return array the resulting array.
 	 */
 	function array_replace_recursive_recurse($array, $array1)
@@ -52,11 +48,11 @@ if (!function_exists('array_replace_recursive'))
 	/**
 	 * array_replace_recursive — Replaces elements from passed arrays into the first array recursively.
 	 * This is a work around implementation for PHP <5.3
-	 * 
+	 *
 	 * @author Gregor Meyer <gregor@der-meyer.de> (found on php.net)
-	 * 
+	 *
 	 * @link http://php.net/manual/de/function.array-replace-recursive.php
-	 * 
+	 *
 	 */
 	function array_replace_recursive(/* $array, ... */)
 	{

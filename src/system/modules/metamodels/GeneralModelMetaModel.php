@@ -13,10 +13,6 @@
  * @license    LGPL.
  * @filesource
  */
-if (!defined('TL_ROOT'))
-{
-	die('You cannot access this file directly!');
-}
 
 /**
  * Data model class for DC_General <-> MetaModel adaption

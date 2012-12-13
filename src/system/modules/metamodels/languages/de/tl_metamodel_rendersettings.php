@@ -14,10 +14,6 @@
  * @filesource
  * @translation Carolina M Koehn <ck@kikmedia.de>
  */
-if (!defined('TL_ROOT'))
-{
-	die('You cannot access this file directly!');
-}
 
 /**
  * Legends
@@ -47,7 +43,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_attribute']      = 'At
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_filterable']     = 'Filterbar';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_sortable']       = 'Sortierbar';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_searchable']     = 'Durchsuchbar';
- 
+
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['use_limitview']        = array('Ansicht beschränken', 'Die Beschränkungen für die Ansicht aktivieren.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['limit_rendersetting']  = array('Rendering-Einstellungen beschränken', 'Zwischen Frontend und Backend wählen.');
 

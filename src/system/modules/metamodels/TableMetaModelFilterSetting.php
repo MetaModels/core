@@ -13,10 +13,6 @@
  * @license    LGPL.
  * @filesource
  */
-if (!defined('TL_ROOT'))
-{
-	die('You cannot access this file directly!');
-}
 
 /**
  * This class is used from DCA tl_metamodel_filtersetting for various callbacks.

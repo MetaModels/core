@@ -13,10 +13,6 @@
  * @license    LGPL.
  * @filesource
  */
-if (!defined('TL_ROOT'))
-{
-	die('You cannot access this file directly!');
-}
 
 // preserve values by extensions but insert as first entry into 'system'
 $arrOld = (array)$GLOBALS['BE_MOD']['system']['metamodels'];

@@ -13,9 +13,6 @@
  * @license    LGPL.
  * @filesource
  */
-if (!defined('TL_ROOT')) {
-	die('You cannot access this file directly!');
-}
 
 /**
  * This is the MetaModel filter interface.
@@ -32,9 +29,9 @@ class MetaModelFilterRuleOR extends MetaModelFilterRule
 	 */
 	protected $arrChildFilters = array();
 
-	
+
 	protected $stopAfterMatch = false;
-	
+
 	/**
 	 * create a new FilterRule instance.
 	 *
@@ -72,12 +69,12 @@ class MetaModelFilterRuleOR extends MetaModelFilterRule
 			{
 				return NULL;
 			}
-			
+
 			if($arrChildMatches && $this->stopAfterMatch)
 			{
 				return $arrChildMatches;
 			}
-			
+
 			if ($arrChildMatches)
 			{
 				$arrIds = array_merge($arrIds, $arrChildMatches);

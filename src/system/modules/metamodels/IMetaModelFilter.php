@@ -13,9 +13,6 @@
  * @license    LGPL.
  * @filesource
  */
-if (!defined('TL_ROOT')) {
-	die('You cannot access this file directly!');
-}
 
 /**
  * This is the MetaModel filter interface.
@@ -28,14 +25,14 @@ interface IMetaModelFilter
 {
 	/**
 	 * Adds a filter rule to this filter chain.
-	 * 
+	 *
 	 * @param IMetaModelFilterRule $objFilterRule the filter rule to add.
 	 */
 	public function addFilterRule(IMetaModelFilterRule $objFilterRule);
 
 	/**
 	 * Narrow down the list of Ids that match the given filter.
-	 * 
+	 *
 	 * @return int[]|null all matching Ids or null if all ids did match.
 	 */
 	public function getMatchingIds();

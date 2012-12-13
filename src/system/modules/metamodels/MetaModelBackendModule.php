@@ -1,7 +1,28 @@
 <?php
+/**
+ * The MetaModels extension allows the creation of multiple collections of custom items,
+ * each with its own unique set of selectable attributes, with attribute extendability.
+ * The Front-End modules allow you to build powerful listing and filtering of the
+ * data in each collection.
+ *
+ * PHP version 5
+ * @package	   MetaModels
+ * @subpackage Frontend
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  The MetaModels team.
+ * @license    LGPL.
+ * @filesource
+ */
 
-
-
+/**
+ * Implementation of the MetaModel Backend Module that performs system checks
+ * before allowing access to MetaModel configuration etc. Everything below
+ * http://..../contao/main.php?do=metamodels&.... ends up here.
+ *
+ * @package	   MetaModels
+ * @subpackage Backend
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ */
 class MetaModelBackendModule extends BackendModule
 {
 

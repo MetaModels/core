@@ -13,10 +13,6 @@
  * @license    LGPL.
  * @filesource
  */
-if (!defined('TL_ROOT'))
-{
-	die('You cannot access this file directly!');
-}
 
 /**
  * Controller class for DC_General
@@ -91,7 +87,7 @@ class GeneralControllerMetaModel extends GeneralControllerDefault
 			if (isset($_POST["save"]))
 			{
 				$this->getDC()->updateModelFromPOST();
-				
+
 				// process input and update changed properties.
 				if ($this->doSave($objDC) !== false)
 				{
