@@ -26,7 +26,6 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 	// Config
 	'config' => array
 	(
-//		'dataContainer'               => 'Table',
 		'dataContainer'               => 'General',
 
 		'ctable'                      => array('tl_metamodel_attribute', 'tl_metamodel_filter', 'tl_metamodel_rendersettings', 'tl_metamodel_dca', 'tl_metamodel_dca_combine'),
