@@ -160,6 +160,7 @@ $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('MetaModelBackend', 'createD
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('MetaModelDatabase', 'createDataContainer');
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('TableMetaModelFilterSetting', 'createDataContainer');
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('TableMetaModelRenderSetting', 'createDataContainer');
+$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('TableMetaModelDcaSetting', 'createDataContainer');
 
 /**
  * Dependencies we need.
