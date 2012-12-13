@@ -18,6 +18,33 @@ if (!defined('TL_ROOT'))
 	die('You cannot access this file directly!');
 }
 
+// preserve values by extensions but insert as first entry into 'system'
+$arrOld = (array)$GLOBALS['BE_MOD']['system']['metamodels'];
+unset($GLOBALS['BE_MOD']['system']['metamodels']);
+array_insert($GLOBALS['BE_MOD']['system'], 0, array
+(
+	'metamodels' => array_merge_recursive(array
+	(
+		'tables'				=> array
+		(
+			'tl_metamodel',
+			'tl_metamodel_attribute',
+			'tl_metamodel_filter',
+			'tl_metamodel_filtersetting',
+			'tl_metamodel_rendersettings',
+			'tl_metamodel_rendersetting',
+			'tl_metamodel_dca',
+			'tl_metamodel_dcasetting',
+			'tl_metamodel_dca_combine'
+		),
+		'icon'					=> 'system/modules/metamodels/html/metamodels.png',
+		'dca_addall'			=> array('TableMetaModelDcaSetting', 'addAll'),
+		'rendersetting_addall'	=> array('TableMetaModelRenderSetting', 'addAll'),
+		'callback'				=> 'MetaModelBackendModule'
+	),
+	$arrOld
+	)
+));
 
 /*
 	In order to add attribute types into the system, add the following snippet to your extension config.php:

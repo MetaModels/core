@@ -92,7 +92,7 @@ class MetaModelBackend
 		{
 			define('TL_PATH', $GLOBALS['TL_CONFIG']['websitePath']);
 		}
-		
+
 		// TODO: double, triple and quadro check that this is really safe context here.
 		$objUser->authenticate();
 		// restore initial settings.
@@ -147,16 +147,6 @@ class MetaModelBackend
 	public static function buildBackendMenu()
 	{
 		self::initializeContaoObjectStack();
-
-		array_insert($GLOBALS['BE_MOD']['system'], 0, array
-		('metamodels' => array(
-			'tables'				=> array_merge(array('tl_metamodel', 'tl_metamodel_attribute', 'tl_metamodel_filter', 'tl_metamodel_filtersetting', 'tl_metamodel_rendersettings', 'tl_metamodel_rendersetting', 'tl_metamodel_dca', 'tl_metamodel_dcasetting', 'tl_metamodel_dca_combine')),
-			'icon'					=> 'system/modules/metamodels/html/metamodels.png',
-
-			'dca_addall'			=> array('TableMetaModelDcaSetting', 'addAll'),
-			'rendersetting_addall'	=> array('TableMetaModelRenderSetting', 'addAll'),
-			'callback'				=> 'MetaModelBackendModule'
-		)));
 
 		$objDB = Database::getInstance();
 		if ($objDB)
