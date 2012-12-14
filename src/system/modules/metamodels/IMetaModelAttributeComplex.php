@@ -45,4 +45,3 @@ interface IMetaModelAttributeComplex extends IMetaModelAttribute
 	 public function unsetDataFor($arrIds);
 }
 
-?>

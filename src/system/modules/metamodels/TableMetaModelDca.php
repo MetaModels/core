@@ -222,4 +222,3 @@ class TableMetaModelDca extends Backend
 	}
 }
 
-?>

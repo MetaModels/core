@@ -74,4 +74,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['delete']               = arr
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']                 = array('Filterdetails', 'Die Details der Einstellungsdefinition ID %s anzeigen');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']             = array('Attributeinstellungen definieren', 'Die Attributeinstellungen für ID %s definieren');
 
-?>

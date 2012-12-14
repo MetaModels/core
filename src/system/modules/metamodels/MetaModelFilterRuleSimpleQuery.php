@@ -71,4 +71,3 @@ class MetaModelFilterRuleSimpleQuery extends MetaModelFilterRule
 	}
 }
 
-?>

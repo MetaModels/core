@@ -265,4 +265,3 @@ class MetaModelItems implements IMetaModelItems
 	}
 }
 
-?>

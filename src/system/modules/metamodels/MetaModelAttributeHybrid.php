@@ -35,4 +35,3 @@ abstract class MetaModelAttributeHybrid extends MetaModelAttributeSimple impleme
 	/////////////////////////////////////////////////////////////////
 }
 
-?>

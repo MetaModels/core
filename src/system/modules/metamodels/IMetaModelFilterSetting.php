@@ -61,4 +61,3 @@ interface IMetaModelFilterSetting
 	public function getParameterDCA();
 }
 
-?>

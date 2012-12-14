@@ -89,6 +89,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_6'] = '6 Kinddatens
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes']['standalone'] = 'Als Einzeltabelle';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes']['ctable']     = 'Als Kindtabelle';
 
-
-
-?>

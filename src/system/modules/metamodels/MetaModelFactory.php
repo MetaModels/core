@@ -164,4 +164,3 @@ class MetaModelFactory implements IMetaModelFactory
 	}
 }
 
-?>

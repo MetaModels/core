@@ -89,6 +89,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_6'] = '6 Displays t
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes']['standalone'] = 'Standalone';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes']['ctable']     = 'As child table';
 
-
-
-?>

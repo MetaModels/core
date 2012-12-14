@@ -307,4 +307,3 @@ class MetaModelItem implements IMetaModelItem
 	}
 }
 
-?>

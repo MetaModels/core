@@ -130,4 +130,3 @@ class GeneralModelMetaModelIterator implements Iterator
 	}
 }
 
-?>

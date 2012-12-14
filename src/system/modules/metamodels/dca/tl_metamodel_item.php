@@ -128,4 +128,3 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 	)
 );
 
-?>

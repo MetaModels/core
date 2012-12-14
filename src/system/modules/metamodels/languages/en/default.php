@@ -56,4 +56,3 @@ $GLOBALS['TL_LANG']['ERR']['invalidTableName']                        = 'The tab
  */
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'] = array('Filter value for attribute "%s"', '');
 
-?>

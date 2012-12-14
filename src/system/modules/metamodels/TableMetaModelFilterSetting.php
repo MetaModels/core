@@ -469,4 +469,3 @@ class TableMetaModelFilterSetting extends Backend
 
 }
 
-?>

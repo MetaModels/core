@@ -251,4 +251,3 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 	)
 ), (array)$GLOBALS['TL_DCA']['tl_metamodel_attribute']);
 
-?>

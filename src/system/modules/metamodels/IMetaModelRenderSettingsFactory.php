@@ -48,4 +48,3 @@ interface IMetaModelRenderSettingsFactory
 	public static function byId(IMetaModel $objMetaModel, $intId = 0);
 }
 
-?>

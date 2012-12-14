@@ -74,5 +74,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['10']    = 'Sort b
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['11']    = 'Sort ascending';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['12']    = 'Sort descending';
 
-
-?>

@@ -352,4 +352,3 @@ class TableMetaModelRenderSetting extends Backend
 	}
 }
 
-?>

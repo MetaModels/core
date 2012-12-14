@@ -74,4 +74,3 @@ class MetaModelFilterRuleSearchAttribute extends MetaModelFilterRule
 	}
 }
 
-?>

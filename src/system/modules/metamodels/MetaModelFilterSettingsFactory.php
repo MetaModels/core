@@ -70,4 +70,3 @@ class MetaModelFilterSettingsFactory implements IMetaModelFilterSettingsFactory
 	// public static function getAllFor();
 }
 
-?>

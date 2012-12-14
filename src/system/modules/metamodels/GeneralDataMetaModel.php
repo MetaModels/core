@@ -671,4 +671,3 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	}
 }
 
-?>

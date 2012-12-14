@@ -468,4 +468,4 @@ class MetaModelSubDCAWidget extends Widget
 						$strOutput);
 	}
 }
-?>
+

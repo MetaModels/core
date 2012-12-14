@@ -47,4 +47,3 @@ $GLOBALS['TL_LANG']['XPL']['customsql'] = array
 	)
 );
 
-?>

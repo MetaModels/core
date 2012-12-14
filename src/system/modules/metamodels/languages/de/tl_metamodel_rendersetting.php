@@ -39,4 +39,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show']            = array('De
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']             = '%s <strong>%s</strong> <em>[%s]</em>';
 
-?>

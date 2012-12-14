@@ -38,4 +38,3 @@ interface IMetaModelFilter
 	public function getMatchingIds();
 }
 
-?>

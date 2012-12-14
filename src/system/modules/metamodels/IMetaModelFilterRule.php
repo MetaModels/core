@@ -34,4 +34,3 @@ interface IMetaModelFilterRule
 	public function getMatchingIds();
 }
 
-?>

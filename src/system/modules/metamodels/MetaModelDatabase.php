@@ -481,4 +481,3 @@ class MetaModelDatabase extends Controller
 
 }
 
-?>

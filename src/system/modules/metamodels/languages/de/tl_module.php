@@ -42,5 +42,3 @@ $GLOBALS['TL_LANG']['tl_module']['editmetamodel']            = array('MetaModel 
 $GLOBALS['TL_LANG']['tl_module']['editrendersetting']        = array('Darstellungsoptionen bearbeiten', 'Die Darstellungsoptionen von ID %s bearbeiten.');
 $GLOBALS['TL_LANG']['tl_module']['editfiltersetting']        = array('Filtereinstellung bearbeiten', 'Die Filtereinstellung von ID %s bearbeiten.');
 
-
-?>

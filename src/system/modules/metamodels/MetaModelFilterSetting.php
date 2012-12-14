@@ -75,4 +75,3 @@ abstract class MetaModelFilterSetting implements IMetaModelFilterSetting
 	}
 }
 
-?>

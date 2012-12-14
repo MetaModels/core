@@ -35,4 +35,3 @@ class GeneralViewMetaModel extends GeneralViewDefault
 	}
 }
 
-?>

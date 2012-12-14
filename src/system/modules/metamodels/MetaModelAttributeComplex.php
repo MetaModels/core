@@ -31,4 +31,3 @@ abstract class MetaModelAttributeComplex extends MetaModelAttribute implements I
 
 }
 
-?>

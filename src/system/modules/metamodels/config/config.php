@@ -239,4 +239,3 @@ $GLOBALS['PALETTE_PANEL_PICKER'][] = array
     'image' => ''
 );
 
-?>

@@ -34,4 +34,3 @@ interface IMetaModelFilterSettingWithChilds extends IMetaModelFilterSetting
 	public function addChild(IMetaModelFilterSetting $objFilterSetting);
 }
 
-?>

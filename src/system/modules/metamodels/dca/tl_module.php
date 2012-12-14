@@ -340,4 +340,3 @@ class tl_module_metamodel extends Backend
 	}
 }
 
-?>

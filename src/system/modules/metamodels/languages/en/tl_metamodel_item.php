@@ -32,4 +32,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']      = array('Create new it
 
 $GLOBALS['TL_LANG']['tl_metamodel_item']['varbase']       = array('Is variant base', 'Check this if you want to make this the base for the current variant group');
 
-?>

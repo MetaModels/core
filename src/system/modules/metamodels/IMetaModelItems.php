@@ -109,4 +109,3 @@ interface IMetaModelItems extends Iterator, ArrayAccess
 
 }
 
-?>

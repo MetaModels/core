@@ -74,4 +74,3 @@ if (!function_exists('array_replace_recursive'))
 	}
 }
 
-?>

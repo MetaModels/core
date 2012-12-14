@@ -45,5 +45,3 @@ $GLOBALS['TL_LANG']['tl_module']['editmetamodel']            = array('Edit MetaM
 $GLOBALS['TL_LANG']['tl_module']['editrendersetting']        = array('Edit render setting', 'Edit the render setting ID %s.');
 $GLOBALS['TL_LANG']['tl_module']['editfiltersetting']        = array('Edit filter setting', 'Edit the filter setting ID %s.');
 
-
-?>

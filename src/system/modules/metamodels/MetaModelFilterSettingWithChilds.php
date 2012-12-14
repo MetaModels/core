@@ -74,5 +74,3 @@ implements IMetaModelFilterSettingWithChilds
 	}
 }
 
-
-?>

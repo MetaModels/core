@@ -309,4 +309,3 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 	)
 );
 
-?>

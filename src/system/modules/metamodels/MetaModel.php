@@ -781,4 +781,3 @@ class MetaModel implements IMetaModel
 	}
 }
 
-?>

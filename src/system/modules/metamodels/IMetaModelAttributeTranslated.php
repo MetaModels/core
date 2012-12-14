@@ -74,4 +74,3 @@ interface IMetaModelAttributeTranslated extends IMetaModelAttribute
 	public function unsetValueFor($arrIds, $strLangCode);
 }
 
-?>

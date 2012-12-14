@@ -122,4 +122,3 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 	}
 }
 
-?>

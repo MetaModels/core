@@ -71,4 +71,3 @@ interface IMetaModelRenderSettings
 	public function getSettingNames();
 }
 
-?>

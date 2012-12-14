@@ -200,4 +200,3 @@ class MetaModelBackendModule extends BackendModule
 	}
 }
 
-?>

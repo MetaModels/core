@@ -332,4 +332,3 @@ class TableMetaModel extends Backend
 	}
 }
 
-?>

@@ -392,4 +392,3 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 	}
 }
 
-?>

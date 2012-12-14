@@ -47,4 +47,3 @@ $GLOBALS['TL_LANG']['MSC']['no_palette']								= 'Versuch, auf MetaModel "%s" o
 $GLOBALS['TL_LANG']['MSC']['no_view']									= 'Versuch, auf das MetaModel "%s" ohne Ansicht für den Benutzer %s zuzugreifen.';
 $GLOBALS['TL_LANG']['ERR']['invalidTableName']							= 'Der eingegebene Tabellenname ist nicht valide.';
 
-?>

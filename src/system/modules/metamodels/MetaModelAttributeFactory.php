@@ -167,4 +167,3 @@ class MetaModelAttributeFactory implements IMetaModelAttributeFactory
 	}
 }
 
-?>

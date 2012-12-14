@@ -106,4 +106,3 @@ class MetaModelDcaCombiner extends Backend
 	}
 }
 
-?>

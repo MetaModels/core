@@ -223,4 +223,3 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 	}
 }
 
-?>

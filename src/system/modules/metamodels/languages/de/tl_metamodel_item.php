@@ -32,4 +32,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']      = array('Neuer Datensa
 
 $GLOBALS['TL_LANG']['tl_metamodel_item']['varbase']       = array('Basis für Varianten', 'Aktivieren, falls dieser Datensatz als Basis für die aktuelle Variantengruppe benutzt werden soll.');
 
-?>

@@ -68,4 +68,3 @@ interface IMetaModelAttributeFactory
 	public static function isValidAttributeType($strFieldType);
 }
 
-?>

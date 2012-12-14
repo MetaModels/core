@@ -49,4 +49,3 @@ class MetaModelFilterRuleStaticIdList extends MetaModelFilterRule
 	}
 }
 
-?>

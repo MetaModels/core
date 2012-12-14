@@ -24,4 +24,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_id']              = array('
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['view_id']             = array('Ansicht wählen', 'Die entsprechende Ansicht auswählen.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['sysadmin']            = 'Administrator';
 
-?>

@@ -51,4 +51,3 @@ interface IMetaModelAttributeSimple extends IMetaModelAttribute
 	public function renameColumn($strNewColumnName);
 }
 
-?>

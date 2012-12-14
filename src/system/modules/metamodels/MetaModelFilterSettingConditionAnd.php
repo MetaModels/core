@@ -37,4 +37,3 @@ class MetaModelFilterSettingConditionAnd extends MetaModelFilterSettingWithChild
 	}
 }
 
-?>

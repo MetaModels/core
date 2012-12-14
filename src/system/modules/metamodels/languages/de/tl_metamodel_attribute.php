@@ -30,4 +30,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['tag_id']				  = array('Tag ID', '
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['tag_alias']			  = array('Tag-Alias', 'Bitte einen Eintrag für den Tag-Alias auswählen.');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['tag_sorting']    	  = array('Tag-Sortierung', 'Bitte einen Eintrag für die Tag-Sortierung auswählen.');
 
-?>

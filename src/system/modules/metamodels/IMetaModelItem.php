@@ -138,4 +138,3 @@ interface IMetaModelItem
 	public function varCopy();
 }
 
-?>

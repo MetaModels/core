@@ -118,4 +118,3 @@ class MetaModelFilter implements IMetaModelFilter
 	}
 }
 
-?>

@@ -35,4 +35,3 @@ class MetaModelFilterSettingIdList extends MetaModelFilterSetting
 	}
 }
 
-?>

@@ -75,4 +75,3 @@ class ContentMetaModel extends ContentElement
 	}
 }
 
-?>

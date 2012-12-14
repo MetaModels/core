@@ -57,4 +57,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_default_']    = 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup'] = '%s <strong>%s</strong><br /> für Attribut <em>%s</em> (URL-Parameter: %s)';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionor']  = '%s <strong>%s</strong><br /> Datensatz/Datensätze in beliebigem Ergebnis.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand'] = '%s <strong>%s</strong><br /> Datensatz/Datensätze in allen Ergebnissen.';
-?>
+

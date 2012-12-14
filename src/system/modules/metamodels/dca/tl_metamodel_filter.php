@@ -114,4 +114,3 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
 	)
 );
 
-?>

@@ -254,4 +254,3 @@ class GeneralModelMetaModel implements InterfaceGeneralModel
 	}
 }
 
-?>

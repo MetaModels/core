@@ -42,4 +42,3 @@ interface IMetaModelFilterSettingsFactory
 	// public static function getAllFor();
 }
 
-?>

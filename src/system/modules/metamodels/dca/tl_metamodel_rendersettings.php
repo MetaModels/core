@@ -193,6 +193,3 @@ class tl_metamodel_rendersettings extends backend
 
 }
 
-
-
-?>

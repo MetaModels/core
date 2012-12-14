@@ -98,4 +98,3 @@ class DCAStylepicker_Wizard extends Backend
 $x = new DCAStylepicker_Wizard();
 $x->run();
 
-?>

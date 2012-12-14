@@ -36,4 +36,3 @@ abstract class MetaModelFilterRule implements IMetaModelFilterRule
 //	abstract public function getMatchingIds();
 }
 
-?>

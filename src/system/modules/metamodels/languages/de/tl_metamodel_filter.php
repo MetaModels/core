@@ -36,4 +36,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_filter']['delete']               = array('Filt
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['show']                 = array('Filterdetails', 'Die Details der Filtereinstellung ID %s anzeigen');
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['settings']             = array('Filterattribute erstellen', 'Filterattribute für Filtereinstellung ID %s definieren');
 
-?>

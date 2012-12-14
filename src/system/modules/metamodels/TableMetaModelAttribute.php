@@ -278,4 +278,3 @@ class TableMetaModelAttribute extends TableMetaModelHelper
 	}
 }
 
-?>

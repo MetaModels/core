@@ -327,4 +327,3 @@ class tl_content_metamodel extends Backend
 	}
 }
 
-?>

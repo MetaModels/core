@@ -24,4 +24,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_id']              = array('
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['view_id']             = array('The render setting', 'The view the combination applies to.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['sysadmin']            = 'Administrator';
 
-?>

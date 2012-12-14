@@ -351,4 +351,3 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	}
 }
 
-?>

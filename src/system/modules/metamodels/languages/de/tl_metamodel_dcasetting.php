@@ -74,5 +74,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['10']    = 'Nach J
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['11']    = 'Aufsteigend sortieren';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['12']    = 'Absteigend sortieren';
 
-
-?>

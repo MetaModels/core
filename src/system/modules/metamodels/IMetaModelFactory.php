@@ -51,4 +51,3 @@ interface IMetaModelFactory
 	public static function getAllTables();
 }
 
-?>

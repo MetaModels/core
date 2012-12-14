@@ -59,5 +59,3 @@ $GLOBALS['TL_LANG']['tl_metamodel']['itemFormat'] = '%s %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemSingle'] = 'item';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemPlural'] = 'items';
 
-
-?>

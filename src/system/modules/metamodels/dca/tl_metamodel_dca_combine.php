@@ -132,6 +132,3 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 	)
 );
 
-
-
-?>

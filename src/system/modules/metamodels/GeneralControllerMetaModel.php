@@ -121,4 +121,3 @@ class GeneralControllerMetaModel extends GeneralControllerDefault
 	}
 }
 
-?>

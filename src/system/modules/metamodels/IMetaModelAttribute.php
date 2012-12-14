@@ -218,4 +218,3 @@ interface IMetaModelAttribute
 	public function modelSaved($objItem);
 }
 
-?>

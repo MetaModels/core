@@ -25,4 +25,3 @@ $GLOBALS['TL_LANG']['MOD']['metamodels']         = array('MetaModels', 'Die Meta
 $GLOBALS['TL_LANG']['FMD']['metamodels']         = array('MetaModels', 'Die MetaModels-Erweiterung erlaubt es, eigene Datenmodelle anzulegen.');
 $GLOBALS['TL_LANG']['FMD']['metamodel_list']     = array('MetaModels-Liste', 'Fügt der Seite eine Liste mit MetaModels-Datensätzen hinzu.');
 
-?>
