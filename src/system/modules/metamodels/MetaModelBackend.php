@@ -70,6 +70,11 @@ class MetaModelBackend
 		Database::getInstance();
 	}
 
+	protected static function isDBInitialized()
+	{
+		$objDB = Database::getInstance();
+		return $objDB && $objDB->tableExists('tl_metamodel');
+	}
 
 	protected static function authenticateBackendUser()
 	{
@@ -115,7 +120,10 @@ class MetaModelBackend
 	 */
 	public function createDataContainer($strTable)
 	{
-		MetaModelDcaBuilder::getInstance()->injectChildTablesIntoDCA($strTable, $GLOBALS['TL_DCA'][$strTable]);
+		if (self::isDBInitialized())
+		{
+			MetaModelDcaBuilder::getInstance()->injectChildTablesIntoDCA($strTable, $GLOBALS['TL_DCA'][$strTable]);
+		}
 	}
 
 	public static function checkBackendLoad($strClass)
@@ -147,14 +155,8 @@ class MetaModelBackend
 	{
 		self::initializeContaoObjectStack();
 
-		$objDB = Database::getInstance();
-		if ($objDB)
+		if (self::isDBInitialized())
 		{
-			if (!$objDB->tableExists('tl_metamodel'))
-			{
-				// I can't work without a properly installed database.
-				return;
-			}
 			// if no backend user authenticated, we will get redirected.
 			self::authenticateBackendUser();
 

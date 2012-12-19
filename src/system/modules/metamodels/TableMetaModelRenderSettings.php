@@ -84,18 +84,6 @@ class TableMetaModelRenderSettings extends Backend
 	}
 
 	/**
-	 *
-	 * @param DataContainer $objDC
-	 * @return type
-	 */
-	public function getLanguages($objMCW)
-	{
-		$objLangs = $this->Database->prepare('SELECT pid FROM tl_metamodel_rendersettings WHERE id = ?')->execute($objMCW->currentRecord);
-		$objMetaModel = MetaModelFactory::byId($objLangs->pid);
-		return $objMetaModel->getAvailableLanguages();
-	}
-
-	/**
 	 * create an empty lang array if no data is given
 	 * @param type $varValue
 	 * @return type
