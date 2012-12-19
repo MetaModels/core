@@ -134,13 +134,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		(
 			'config' => array('attr_id')
 		),
-		
+
 		// base rules shipped with metamodels.
 		'conditionor extends default' => array
 		(
 			'config' => array('stop_after_match')
 		),
-		
+
 		'idlist extends default' => array
 		(
 			'+config' => array('items'),
