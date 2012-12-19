@@ -52,6 +52,9 @@ class MetaModelBackend
 		// all of these getInstance calls are neccessary to keep the instance stack intact
 		// and therefore prevent an Exception in unknown on line 0.
 		// Hopefully this will get fixed with Contao Reloaded or Contao 3.
+
+		require_once(TL_ROOT . '/system/config/localconfig.php');
+
 		Config::getInstance();
 		Environment::getInstance();
 		Input::getInstance();
@@ -129,7 +132,7 @@ class MetaModelBackend
 	{
 		// register a autoloader which will transport the config variables and unregister itself when loading class Backend.
 		spl_autoload_register(array('MetaModelBackend', 'checkBackendLoad'), true, true);
-		if (!in_array('__autoload', spl_autoload_functions()))
+		if (version_compare(VERSION, '3.0', '<') && !in_array('__autoload', spl_autoload_functions()))
 		{
 			spl_autoload_register('__autoload');
 		}
