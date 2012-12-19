@@ -211,14 +211,29 @@ class TableMetaModelDca extends Backend
 	 */
 	public function getPanelpicker($objDC)
 	{
-		return sprintf(
-				' <a href="system/modules/metamodels/popup.php?tbl=%s&fld=%s&inputName=ctrl_%s&id=%s&item=PALETTE_PANEL_PICKER" rel="lightbox[files 765 60%%]" data-lightbox="files 765 60%%">%s</a>',
-				$objDC->table,
-				$objDC->field,
-				$objDC->inputName,
-				$objDC->id,
-				$this->generateImage('system/modules/metamodels/html/palette_wizard.png', $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['panelpicker'], 'style="vertical-align:top;"')
-		);
+		$strOpenAction = '';
+		if (version_compare(VERSION, '3.0', '<'))
+		{
+			return sprintf(
+					' <a href="system/modules/metamodels/popup.php?tbl=%s&fld=%s&inputName=ctrl_%s&id=%s&item=PALETTE_PANEL_PICKER" rel="lightbox[files 765 60%%]" data-lightbox="files 765 60%%">%s</a>',
+					$objDC->table,
+					$objDC->field,
+					$objDC->inputName,
+					$objDC->id,
+					$this->generateImage('system/modules/metamodels/html/palette_wizard.png', $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['panelpicker'], 'style="vertical-align:top;"')
+			);
+		} else {
+			return sprintf(
+					' <a href="system/modules/metamodels/popup.php?tbl=%s&fld=%s&inputName=ctrl_%s&id=%s&item=PALETTE_PANEL_PICKER" onclick="Backend.getScrollOffset();Backend.openModalIframe({\'width\':765,\'title\':\'%s\',\'url\':this.href,\'id\':\'%s\'});return false">%s</a>',
+					$objDC->table,
+					$objDC->field,
+					$objDC->inputName,
+					$objDC->id,
+					$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['panelpicker'],
+					$objDC->id,
+					$this->generateImage('system/modules/metamodels/html/palette_wizard.png', $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['panelpicker'], 'style="vertical-align:top;"')
+			);
+		}
 	}
 }
 

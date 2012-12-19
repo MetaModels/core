@@ -169,8 +169,9 @@ class MetaModelBackendModule extends BackendModule
 		// Custom action (if key is not defined in config.php the default action will be called)
 		if ($this->Input->get('key') && isset($arrModule[$this->Input->get('key')]))
 		{
-			$this->import($arrModule[$this->Input->get('key')][0], 'objKeyHandler');
-			return $this->objKeyHandler->$arrModule[$this->Input->get('key')][1]($this->objDc, $this->objDc->table, $arrModule);
+			$strClass = $arrModule[$this->Input->get('key')][0];
+			$objKeyHandler = (in_array('getInstance', get_class_methods($strClass))) ? call_user_func(array($strClass, 'getInstance')) : new $strClass();
+			return $objKeyHandler->$arrModule[$this->Input->get('key')][1]($this->objDc, $this->objDc->table, $arrModule);
 		}
 		return $this->runDC();
 	}
