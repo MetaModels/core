@@ -9,6 +9,6 @@ Christian Schiffler <c.schiffler@cyberspectrum.de>
 Carolina M. Koehn <office@kikmedia.de>
 David Maack <maack@men-at-work.de>
 Hannes <github@gmx.net>
-Stefan heimes <stefan_heimes@hotmail.com>
+Stefan heimes stefan_heimes@hotmail.com
 
 If you think your name is missing here, please file an issue.
