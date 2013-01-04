@@ -286,11 +286,6 @@ class MetaModelList extends Controller
 
 		if ($this->objView)
 		{
-			$this->objView->set('filter', $intFilterSettings);
-		}
-
-		if ($this->objView)
-		{
 			$this->objTemplate = new MetaModelTemplate($this->objView->get('template'));
 			$this->objTemplate->view = $this->objView;
 		} else {
@@ -309,12 +304,6 @@ class MetaModelList extends Controller
 	protected function getFilter()
 	{
 		$this->objFilterSettings = MetaModelFilterSettingsFactory::byId($this->intFilter);
-
-		if ($this->objView)
-		{
-			// TODO: we should use different filter settings for jumpTo generating but for now we use the input filter also for output.
-			$this->objView->set('filter', $this->intFilter);
-		}
 	}
 
 	/**
