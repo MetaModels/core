@@ -164,6 +164,27 @@ class MetaModelTemplate
 	protected function getTemplate($strTemplate, $strFormat='html5', $blnFailIfNotFound = false)
 	{
 		$strTemplate = basename($strTemplate);
+
+		// Contao 3.X only.
+		if (version_compare(VERSION, '3.0', '>='))
+		{
+			// Check for a theme folder
+			if (TL_MODE == 'FE')
+			{
+				global $objPage;
+				$strCustom = str_replace('../', '', $objPage->templateGroup);
+
+				if ($strCustom != '')
+				{
+					return \TemplateLoader::getPath($strTemplate, $strFormat, $strCustom);
+				}
+			}
+
+			return \TemplateLoader::getPath($strTemplate, $strFormat);
+		}
+
+		// Contao 2.X from here on.
+
 		$strKey = $strFilename = $strTemplate . '.' . $strFormat;
 
 		// Check for a theme folder
