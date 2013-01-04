@@ -178,7 +178,7 @@ class MetaModel implements IMetaModel
 		$objRow = $objDB->execute('SELECT * FROM ' . $this->getTableName() . ' WHERE id IN (' . $strIdList . ') ORDER BY FIELD(id,' . $strIdList . ')');
 		if($objRow->numRows == 0)
 		{
-			return null;
+			return array();
 		}
 
 		$arrResult = array();
