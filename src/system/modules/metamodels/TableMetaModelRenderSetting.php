@@ -118,7 +118,8 @@ class TableMetaModelRenderSetting extends Backend
 					{
 						$this->objSetting = $this->Database->prepare('
 							SELECT tl_metamodel_rendersetting.*,
-								tl_metamodel_rendersettings.pid AS tl_metamodel_rendersettings_pid
+								tl_metamodel_rendersettings.pid AS tl_metamodel_rendersettings_pid,
+								tl_metamodel_rendersettings.name AS name
 							FROM tl_metamodel_rendersetting
 							LEFT JOIN tl_metamodel_rendersettings
 							ON (tl_metamodel_rendersetting.pid = tl_metamodel_rendersettings.id)
@@ -130,6 +131,21 @@ class TableMetaModelRenderSetting extends Backend
 				default:;
 			}
 		} else {
+		}
+
+		if ($this->objMetaModel)
+		{
+			$GLOBALS['TL_LANG']['MSC']['editRecord'] = sprintf(
+				$GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord'],
+				$this->objSetting->name,
+				$this->objMetaModel->getName()
+			);
+
+			$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['config']['label'] = 'Hello' . sprintf(
+				$GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label'],
+				$this->objSetting->name,
+				$this->objMetaModel->getName()
+			);
 		}
 	}
 

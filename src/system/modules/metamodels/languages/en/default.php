@@ -25,6 +25,9 @@ $GLOBALS['TL_LANG']['CTE']['metamodel_content'] = array('MetaModel list', 'Adds 
  */
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord']   = 'Edit filter setting %%s for filter "%s" in MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label']        = 'Filter "%s" in MetaModel "%s"';
+$GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord']   = 'Edit attribute setting %%s for render setting "%s" in MetaModel "%s"';
+$GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']        = 'Render setting "%s" in MetaModel "%s"';
+
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']        = 'Edit "%s" for item %%s';
 $GLOBALS['TL_LANG']['MSC']['sorting']                                 = 'Sorting';
 
