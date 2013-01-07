@@ -3,7 +3,7 @@
 /**
  * Contao Open Source CMS
  * 
- * Copyright (C) 2005-2012 Leo Feyer
+ * Copyright (c) 2005-2013 Leo Feyer
  * 
  * @package Metamodels
  * @link    http://contao.org
@@ -23,6 +23,7 @@ ClassLoader::addClasses(array
 	'GeneralDataMetaModel'                  => 'system/modules/metamodels/GeneralDataMetaModel.php',
 	'GeneralModelMetaModel'                 => 'system/modules/metamodels/GeneralModelMetaModel.php',
 	'GeneralModelMetaModelIterator'         => 'system/modules/metamodels/GeneralModelMetaModelIterator.php',
+	'GeneralViewMetaModel'                  => 'system/modules/metamodels/GeneralViewMetaModel.php',
 	'IMetaModel'                            => 'system/modules/metamodels/IMetaModel.php',
 	'IMetaModelAttributeComplex'            => 'system/modules/metamodels/IMetaModelAttributeComplex.php',
 	'IMetaModelAttributeFactory'            => 'system/modules/metamodels/IMetaModelAttributeFactory.php',
@@ -53,6 +54,7 @@ ClassLoader::addClasses(array
 	'MetaModelDcaCombiner'                  => 'system/modules/metamodels/MetaModelDcaCombiner.php',
 	'MetaModelFactory'                      => 'system/modules/metamodels/MetaModelFactory.php',
 	'MetaModelFilter'                       => 'system/modules/metamodels/MetaModelFilter.php',
+	'MetaModelFilterRule'                   => 'system/modules/metamodels/MetaModelFilterRule.php',
 	'MetaModelFilterRuleAND'                => 'system/modules/metamodels/MetaModelFilterRuleAND.php',
 	'MetaModelFilterRuleOR'                 => 'system/modules/metamodels/MetaModelFilterRuleOR.php',
 	'MetaModelFilterRuleSearchAttribute'    => 'system/modules/metamodels/MetaModelFilterRuleSearchAttribute.php',
