@@ -326,7 +326,7 @@ class MetaModelSubDCAWidget extends Widget
 		$objWidget = $this->initializeWidget($arrField, $strRow, $strKey, $varValue);
 		if (!is_object($objWidget))
 		{
-			continue;
+			return;
 		}
 
 		// hack for checkboxes
