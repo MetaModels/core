@@ -9,8 +9,8 @@
  * @package	   MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  The MetaModels team.
- * @license    LGPL.
+ * @copyright  CyberSpectrum
+ * @license    private
  * @filesource
  */
 
@@ -62,6 +62,22 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 			return;
 		}
 		$this->objectsFromUrl(null);
+
+		if (!$this->objMetaModel)
+		{
+			return;
+		}
+
+		$objMetaModel=$this->objMetaModel;
+		foreach ($objMetaModel->getAttributes() as $objAttribute)
+		{
+			$strColName = sprintf('%s_%s', $objAttribute->getColName(), $objAttribute->get('id'));
+			$strTypeName = $objAttribute->get('type');
+			// GOTCHA: watch out to never ever use anyting numeric in the palettes anywhere else.
+			// We have the problem, that DC_Table does not call the load callback when determining the palette.
+			// FIXME: implement this using $type_$id as key and implement the proper save and load callback.
+			$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id'][$objAttribute->get('id')] = &$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id'][$strTypeName];
+		}
 	}
 
 	protected function getMetaModelFromDC($objDC)
@@ -185,6 +201,18 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 		}
 
 		return $arrResult;
+	}
+
+	public function getRichTextEditors()
+	{
+		$configs=array();
+		foreach(glob(TL_ROOT . '/system/config/tiny*.php') as $name)
+		{
+			$name = basename($name);
+			if((strpos($name, 'tiny')===0) && (substr($name, -4, 4)=='.php'))
+				$configs[]=substr($name, 0, -4);
+		}
+		return $configs;
 	}
 
 	public function drawSetting($arrRow, $strLabel = '', DataContainer $objDC = null, $imageAttribute='', $blnReturnImage=false, $blnProtected=false)

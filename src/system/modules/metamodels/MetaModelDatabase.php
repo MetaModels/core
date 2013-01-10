@@ -74,33 +74,8 @@ class MetaModelDatabase extends Controller
 					$objAttribute = $objMetaModel->getAttributeById($objDCASettings->attr_id);
 					if ($objAttribute)
 					{
-						$arrDCA = array_replace_recursive($arrDCA, $objAttribute->getItemDCA());
-						if ($objDCASettings->tl_class)
-						{
-							$arrDCA['fields'][$objAttribute->getColName()]['eval']['tl_class'] = $objDCASettings->tl_class;
-						}
+						$arrDCA = array_replace_recursive($arrDCA, $objAttribute->getItemDCA($objDCASettings->row()));
 						$strPalette .= (strlen($strPalette) > 0 ? ',' : '') . $objAttribute->getColName();
-						// sorting flag override
-						if ($objDCASettings->flag)
-						{
-							$arrDCA['fields'][$objAttribute->getColName()]['flag'] = $objDCASettings->flag;
-						}
-
-						// panel conditions.
-						if ($objDCASettings->filterable)
-						{
-							$arrDCA['fields'][$objAttribute->getColName()]['filter'] = true;
-						}
-						if ($objDCASettings->searchable)
-						{
-							$arrDCA['fields'][$objAttribute->getColName()]['search'] = true;
-						}
-						if ($objDCASettings->sortable)
-						{
-							$arrDCA['fields'][$objAttribute->getColName()]['sorting'] = true;
-							// add sorting fields.
-							$arrDCA['list']['sorting']['fields'][] = $objAttribute->getColName();
-						}
 					}
 					break;
 				case 'legend':

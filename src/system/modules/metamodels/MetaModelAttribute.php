@@ -214,13 +214,13 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	 */
 	public function getAttributeSettingNames()
 	{
-		return array('id', 'pid', 'sorting', 'tstamp', 'name', 'description', 'type', 'colname', 'isvariant');
+		return array('id', 'pid', 'sorting', 'tstamp', 'name', 'description', 'type', 'colname', 'isvariant', 'tl_class');
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getFieldDefinition()
+	public function getFieldDefinition($arrOverrides = array())
 	{
 		$strTableName = $this->getMetaModel()->getTableName();
 		// only overwrite the language if not already set.
@@ -237,24 +237,70 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 			'eval'  => array()
 		);
 
-		$arrFieldDef['eval']['mandatory'] = $this->get('isunique') && in_array('isunique', $this->getAttributeSettingNames());
+		$arrSettingNames = $this->getAttributeSettingNames();
 
+		$arrFieldDef['eval']['mandatory'] = $this->get('isunique') && in_array('isunique', $arrSettingNames);
 		// TODO: this is not used currently.
-		$arrFieldDef['eval']['mandatory'] = $arrFieldDef['eval']['mandatory'] || ($this->get('mandatory') && in_array('mandatory', $this->getAttributeSettingNames()) ? true : false);
+		$arrFieldDef['eval']['mandatory'] = $arrFieldDef['eval']['mandatory'] || ($this->get('mandatory') && in_array('mandatory', $arrSettingNames) ? true : false);
+
+		foreach (array(
+			'tl_class',
+			'mandatory',
+			'allowHtml',
+			'preserveTags',
+			'decodeEntities',
+			'rte',
+			'rows',
+			'cols',
+			'trailingSlash',
+			'spaceToUnderscore',
+			'includeBlankOption'
+		) as $strEval) {
+			if (in_array($strEval, $arrSettingNames) && $arrOverrides[$strEval])
+			{
+				$arrFieldDef['eval'][$strEval] = $arrOverrides[$strEval];
+			}
+		}
+
+		// sorting flag override
+		if (in_array('flag', $arrSettingNames) && $arrOverrides['flag'])
+		{
+			$arrFieldDef['flag'] = $arrOverrides['flag'];
+		}
+		// panel conditions.
+		if (in_array('filterable', $arrSettingNames) && $arrOverrides['filterable'])
+		{
+			$arrFieldDef['filter'] = true;
+		}
+		if (in_array('searchable', $arrSettingNames) && $arrOverrides['searchable'])
+		{
+			$arrFieldDef['search'] = true;
+		}
+		if (in_array('sortable', $arrSettingNames) && $arrOverrides['sortable'])
+		{
+			$arrFieldDef['sorting'] = true;
+		}
 		return $arrFieldDef;
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getItemDCA()
+	public function getItemDCA($arrOverrides = array())
 	{
-		return array('fields' => array_merge(
-			array(
-				$this->getColName() => $this->getFieldDefinition())
+		$arrReturn = array
+		(
+			'fields' => array_merge(
+				array($this->getColName() => $this->getFieldDefinition($arrOverrides)),
+				(array)$GLOBALS['TL_DCA'][$this->getMetaModel()->getTableName()]['fields'][$this->getColName()]
 			),
-			(array)$GLOBALS['TL_DCA'][$this->getMetaModel()->getTableName()]['fields'][$this->getColName()]
 		);
+		// add sorting fields.
+		if (in_array('sortable', $this->getAttributeSettingNames()) && $arrOverrides['sortable'])
+		{
+			$arrReturn['list']['sorting']['fields'][] = $this->getColName();
+		}
+		return $arrReturn;
 	}
 
 	/**

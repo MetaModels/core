@@ -34,8 +34,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 		'onmodel_beforeupdate'        => array
 		(
 			array('TableMetaModelDcaSetting', 'onModelUpdatedCallback')
-		)
-
+		),
 	),
 
 	// List
@@ -100,14 +99,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 
 	'palettes' => array
 	(
-		'__selector__' => array('dcatype')
+		'__selector__' => array('dcatype', 'attr_id')
 	),
 
 	'metapalettes' => array
 	(
 		'default' => array
 		(
-			'title' => array('dcatype')
+			'title' => array('dcatype'),
 		),
 	),
 
@@ -117,21 +116,57 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 		(
 			'attribute' => array
 			(
-				'attr_id',
-				'tl_class',
-                'flag',
-                'mandatory',
-				// TODO: detect on a "per attribute basis" which attrs are sort/filter/searchable
-				'filterable',
-				'sortable',
-				'searchable'
+				'title' => array(
+					'attr_id'
+				),
+				'backend' => array(),
+				'advanced' => array()
 			),
 			'legend' => array
 			(
-				'legendtitle',
-				'legendhide'
+				'title' => array
+				(
+					'legendtitle',
+					'legendhide'
+				)
 			)
 		),
+
+		'attr_id' => array
+		(
+			/*
+			 * 	'attributetypename' => array
+			 * 	(
+			 * 		'legend' => array
+			 * 		(
+			 * 			'field1',
+			 * 			'field2',
+			 * 		),
+			 *	),
+			 * Core legends:
+			 * * title
+			 * * backend
+			 * * config
+			 * * advanced
+			 *
+			 * Core fields:
+			 * * tl_class           css class to use in backend.
+			 * * flag               search flag to override.
+			 * * mandatory          mandatory
+			 * * filterable         can be filtered (in backend)
+			 * * sortable           can be sorted (in backend)
+			 * * searchable         can be searched (in backend)
+			 * * allowHtml          do not strip html content.
+			 * * preserveTags       do not encode html tags.
+			 * * decodeEntities     do decode HTML entities.
+			 * * rte                enable richtext editor on this
+			 * * rows               amount of rows in longtext and tables.
+			 * * cols               amount of columns in longtext and tables.
+			 * * trailingSlash      allow trailing slash, 2 => do nothing, 1 => add one on save, 0 => strip it on save.
+			 * * spaceToUnderscore  if true any whitespace character will be replaced by an underscore.
+			 * * includeBlankOption if true a blank option will be added to the options array.
+			 */
+		)
 	),
 
 	// Fields
@@ -202,16 +237,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 				array('TableMetaModelDcaSetting', 'encodeLegendTitle')
 			)
 		),
-        'mandatory' => array
-        (
-            'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory'],
-            'exclude'               => true,
-            'inputType'             => 'checkbox',
-            'eval' => array
-            (
-                'tl_class'          => 'w50 m12',
-            )
-        ),
+		'mandatory' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory'],
+			'exclude'               => true,
+			'inputType'             => 'checkbox',
+			'eval' => array
+			(
+				'tl_class'          => 'w50 m12',
+			)
+		),
 		'filterable' => array
 		(
 			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['filterable'],
@@ -254,6 +289,115 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 				'includeBlankOption' => true
 			),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']
+		),
+
+		/**
+		 * The following settings are predefined as they apply for a huge amount of attribute types.
+		 * Hence we define them in the core.
+		 * If others are needed, that apply to at least 2-3 attribute extensions, consider adding it in the core.
+		 */
+		'allowHtml' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml'],
+			'exclude'               => true,
+			'inputType'             => 'checkbox',
+			'eval'                  => array
+			(
+				'tl_class'          => 'w50 m12',
+			)
+		),
+
+		'preserveTags' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags'],
+			'exclude'               => true,
+			'inputType'             => 'checkbox',
+			'eval'                  => array
+			(
+				'tl_class'          => 'w50 m12',
+			)
+		),
+
+		'decodeEntities' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['decodeEntities'],
+			'exclude'               => true,
+			'inputType'             => 'checkbox',
+			'eval'                  => array
+			(
+				'tl_class'          => 'w50 m12',
+			)
+		),
+
+		'rte' => array
+		(
+			'label'                  => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rte'],
+			'exclude'                => true,
+			'inputType'              => 'select',
+			'options_callback'       => array('TableMetaModelDcaSetting', 'getRichTextEditors'),
+			'default'                => 'tinyMCE',
+			'eval'                   => array
+			(
+				'tl_class'           => 'w50 m12',
+				'includeBlankOption' => true,
+			)
+		),
+
+		'rows' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows'],
+			'exclude'               => true,
+			'inputType'             => 'text',
+			'eval'                  => array
+			(
+				'tl_class'          => 'w50 m12',
+				'rgxp'              => 'digit'
+			)
+		),
+
+		'cols' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['cols'],
+			'exclude'               => true,
+			'inputType'             => 'text',
+			'eval'                  => array
+			(
+				'tl_class'          => 'w50 m12',
+				'rgxp'              => 'digit'
+			)
+		),
+
+		'trailingSlash' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash'],
+			'exclude'               => true,
+			'inputType'             => 'checkbox',
+			'eval'                  => array
+			(
+				'tl_class'          => 'w50 m12',
+			)
+		),
+
+		'spaceToUnderscore' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['spaceToUnderscore'],
+			'exclude'               => true,
+			'inputType'             => 'checkbox',
+			'eval'                  => array
+			(
+				'tl_class'          => 'w50 m12',
+			)
+		),
+
+		'includeBlankOption' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption'],
+			'exclude'               => true,
+			'inputType'             => 'checkbox',
+			'eval'                  => array
+			(
+				'tl_class'          => 'w50 m12',
+			)
 		),
 	)
 );

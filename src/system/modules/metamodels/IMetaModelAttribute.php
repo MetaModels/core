@@ -104,10 +104,15 @@ interface IMetaModelAttribute
 	/**
 	 * This generates the field definition for use in a DCA.
 	 * It also sets the proper language variables (if not already set per dcaconfig.php or similar).
+	 * Using the optional override parameter, settings known by this attribute can be overridden for the
+	 * generating of the output array.
 	 *
-	 * @return array the DCA array to use as $GLOBALS['tablename']['fields']['attribute-name]
+	 * @param string[string] $arrOverrides the values to override, for a list of valid parameters, call
+	 *                                     getAttributeSettingNames().
+	 *
+	 * @return array the DCA array to use as $GLOBALS['TL_DCA']['tablename']['fields']['attribute-name]
 	 */
-	public function getFieldDefinition();
+	public function getFieldDefinition($arrOverrides = array());
 
 	/**
 	 * This generates the field definition for use in a DCA.
@@ -119,9 +124,11 @@ interface IMetaModelAttribute
 	 * Due to the fact that it calls getFieldDefinition() internally, the result at least contains
 	 * the sub array 'fields' with the information of this field's settings.
 	 *
+	 * @param string[string] $arrOverrides see documentation in getFieldDefinition() method.
+	 *
 	 * @return array the DCA array to use as $GLOBALS['tablename']
 	 */
-	public function getItemDCA();
+	public function getItemDCA($arrOverrides = array());
 
 	/**
 	 * This is used for transferring a native attribute value to a value that the widget,

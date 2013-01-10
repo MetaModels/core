@@ -91,6 +91,25 @@ CREATE TABLE `tl_metamodel_dcasetting` (
   `flag` int(4) unsigned NOT NULL default '0',
 -- mandatory flag
   `mandatory` char(1) NOT NULL default ''
+-- allow html in content.
+  `allowHtml` char(1) NOT NULL default '',
+-- preserve html tags.
+  `preserveTags` char(1) NOT NULL default '',
+-- decode entities.
+  `decodeEntities` char(1) NOT NULL default '',
+-- enable rich text editor configuration
+  `rte` varchar(64) NOT NULL default '',
+-- amount of rows in longtext and tables.
+  `rows` int(10) NOT NULL default '0',
+-- amount of columns in longtext and tables.
+  `cols` int(10) NOT NULL default '0',
+-- allow trailing slash, 2 => do nothing, 1 => add one on save, 0 => strip it on save.
+  `trailingSlash` char(1) NOT NULL default '',
+-- if true any whitespace character will be replaced by an underscore.
+  `spaceToUnderscore` char(1) NOT NULL default '',
+-- if true a blank option will be added to the options array.
+  `includeBlankOption` char(1) NOT NULL default '',
+
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
