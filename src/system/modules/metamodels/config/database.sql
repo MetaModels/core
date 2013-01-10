@@ -104,7 +104,7 @@ CREATE TABLE `tl_metamodel_dcasetting` (
 -- amount of columns in longtext and tables.
   `cols` int(10) NOT NULL default '0',
 -- allow trailing slash, 2 => do nothing, 1 => add one on save, 0 => strip it on save.
-  `trailingSlash` char(1) NOT NULL default '',
+  `trailingSlash` char(1) NOT NULL default '2',
 -- if true any whitespace character will be replaced by an underscore.
   `spaceToUnderscore` char(1) NOT NULL default '',
 -- if true a blank option will be added to the options array.
