@@ -371,7 +371,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 		(
 			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash'],
 			'exclude'               => true,
-			'inputType'             => 'checkbox',
+			'inputType'             => 'select',
+			'options'               => array(0, 1, 2),
+			'default'               => 2,
+			'reference'              => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options'],
 			'eval'                  => array
 			(
 				'tl_class'          => 'w50 m12',

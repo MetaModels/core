@@ -262,6 +262,11 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 			}
 		}
 
+		if (in_array('trailingSlash', $arrSettingNames) && ($arrOverrides['trailingSlash'] != 2))
+		{
+			$arrFieldDef['eval'][$strEval] = (bool)$arrOverrides['trailingSlash'];
+		}
+
 		// sorting flag override
 		if (in_array('flag', $arrSettingNames) && $arrOverrides['flag'])
 		{
