@@ -220,7 +220,7 @@ class MetaModelItem implements IMetaModelItem
 			foreach($objSettings->get('jumpTo') as $arrJumpTO)
 			{
 				// if either desired language or fallback, keep the result.
-				if (in_array($arrJumpTO['langcode'], array($strDesiredLanguage, $strFallbackLanguage)))
+				if (((!$this->getMetaModel()->isTranslated())) || in_array($arrJumpTO['langcode'], array($strDesiredLanguage, $strFallbackLanguage)))
 				{
 					$intJumpto = $arrJumpTO['value'];
 					$intFilterSettings = $arrJumpTO['filter'];
