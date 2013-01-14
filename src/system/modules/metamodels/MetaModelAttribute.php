@@ -252,7 +252,6 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 			'rte',
 			'rows',
 			'cols',
-			'trailingSlash',
 			'spaceToUnderscore',
 			'includeBlankOption'
 		) as $strEval) {
@@ -264,7 +263,7 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 
 		if (in_array('trailingSlash', $arrSettingNames) && ($arrOverrides['trailingSlash'] != 2))
 		{
-			$arrFieldDef['eval'][$strEval] = (bool)$arrOverrides['trailingSlash'];
+			$arrFieldDef['eval']['trailingSlash'] = (bool)$arrOverrides['trailingSlash'];
 		}
 
 		// sorting flag override
