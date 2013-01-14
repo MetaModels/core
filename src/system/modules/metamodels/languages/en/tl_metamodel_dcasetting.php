@@ -39,7 +39,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']               = array('Ro
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['cols']               = array('Columns', 'Amount of colums to use for longtext/table widget');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']      = array('Trailing slash handling', 'Here you can specify how trailing slashes shall be handled');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['spaceToUnderscore']  = array('Replace spaces with underscore', 'If true any whitespace character will be replaced by an underscore.');
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption'] = array('if true a blank option will be added to the options array.', '');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption'] = array('Include blank option', 'if true a blank option will be added to the options which allows to define a &quot;no item selected&quot; option.');
 
 
 /**
