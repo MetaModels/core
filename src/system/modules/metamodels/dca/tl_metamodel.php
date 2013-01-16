@@ -144,7 +144,12 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			'title' => array
 			(
 				'name',
-				'tableName',
+				'tableName'
+			),
+            
+            'translated' => array
+			(
+				':hide',
 				'translated'
 			),
 

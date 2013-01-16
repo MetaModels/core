@@ -34,7 +34,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 		(
 			array('TableMetaModelAttribute', 'onDeleteCallback')
 		),
-
 		'onmodel_beforeupdate'        => array
 		(
 			array('TableMetaModelAttribute', 'onModelBeforeUpdateCallback')
