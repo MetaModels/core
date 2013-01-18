@@ -128,7 +128,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		'template' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template'],
-			'default'                 => 'metamodel_full',
+			'default'                 => 'metamodel_prerendered',
 			'exclude'                 => true,
 			'inputType'               => 'select',
 			'options_callback'        => array('TableMetaModelRenderSettings','getTemplates'),
