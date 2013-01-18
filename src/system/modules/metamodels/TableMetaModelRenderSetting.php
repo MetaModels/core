@@ -22,7 +22,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
 
-class TableMetaModelRenderSetting extends Backend
+class TableMetaModelRenderSetting extends TableMetaModelHelper
 {
 	/**
 	 * @var TableMetaModelRenderSetting
@@ -235,8 +235,7 @@ class TableMetaModelRenderSetting extends Backend
 		{
 			return array();
 		}
-
-		return $this->getTemplateGroup('mm_attr_' . $objAttribute->get('type') /*, theme id how the heck shall I fetch that one? */);
+		return $this->getTemplatesForBase('mm_attr_' . $objAttribute->get('type'));
 	}
 
 	/**

@@ -22,7 +22,7 @@
  * @subpackage Backend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-class TableMetaModelRenderSettings extends Backend
+class TableMetaModelRenderSettings extends  TableMetaModelHelper
 {
 
 	/**
@@ -68,7 +68,7 @@ class TableMetaModelRenderSettings extends Backend
 	 */
 	public function getTemplates(DataContainer $objDC)
 	{
-		return $this->getTemplateGroup('metamodel_');
+		return $this->getTemplatesForBase('metamodel_');
 	}
 
 	public function getFilterSettings($objMCW)

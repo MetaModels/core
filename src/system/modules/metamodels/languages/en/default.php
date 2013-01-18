@@ -30,6 +30,8 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']        = 'Render 
 
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']        = 'Edit "%s" for item %%s';
 $GLOBALS['TL_LANG']['MSC']['sorting']                                 = 'Sorting';
+$GLOBALS['TL_LANG']['MSC']['template_in_theme']                       = '%s (%s)';
+$GLOBALS['TL_LANG']['MSC']['no_theme']                                = 'global scope';
 
 // Stylepicker
 $GLOBALS['TL_LANG']['MSC']['tl_class']['w50']                         = array('w50', 'Set the field width to 50% and float it (float:left).');

@@ -154,5 +154,38 @@ class TableMetaModelHelper extends Backend
 		}
 		return $arrwidget;
 	}
+
+	/**
+	 * Fetch the template group for the detail view of the current MetaModel module.
+	 *
+	 * @param DataContainer $objDC the datacontainer calling this method.
+	 *
+	 * @return array
+	 *
+	 */
+	public function getTemplatesForBase($strBase)
+	{
+		$arrTemplates = array();
+		foreach ($this->getTemplateGroup($strBase) as $strTemplate)
+		{
+			$arrTemplates[$strTemplate] = sprintf($GLOBALS['TL_LANG']['MSC']['template_in_theme'], $strTemplate, $GLOBALS['TL_LANG']['MSC']['no_theme']);
+		}
+
+		$objThemes = $this->Database->prepare('SELECT id,name FROM tl_theme')->execute();
+
+		while ($objThemes->next())
+		{
+			foreach ($this->getTemplateGroup($strBase, $objThemes->id) as $strTemplate)
+			{
+				if (!array_key_exists($strTemplate, $arrTemplates))
+				{
+					$arrTemplates[$strTemplate] = sprintf($GLOBALS['TL_LANG']['MSC']['template_in_theme'], $strTemplate, $objThemes->name);
+				}
+			}
+		}
+		ksort($arrTemplates);
+
+		return array_unique($arrTemplates);
+	}
 }
 
