@@ -382,41 +382,6 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	}
 
 	/**
-	 * Fetch multiple records by ids.
-	 *
-	 * @param GeneralDataConfigDefault $objConfig the configuration object to use.
-	 *
-	 *
-	 * @return InterfaceGeneralCollection collection containing all matching items.
-	 */
-	public function fetchEach(GeneralDataConfigDefault $objConfig)
-	{
-		$strBackupLanguage = '';
-		if ($this->strCurrentLanguage != '')
-		{
-			$strBackupLanguage = $GLOBALS['TL_LANGUAGE'];
-			$GLOBALS['TL_LANGUAGE'] = $this->strCurrentLanguage;
-		}
-
-		$objFilter = $this->prepareFilter();
-		// filter for the desired items only.
-		$objFilter->addFilterRule(new MetaModelFilterRuleStaticIdList($objConfig->getIds()));
-		$objItems = $this->objMetaModel->findByFilter($objFilter);
-		$objResultCollection = $this->getEmptyCollection();
-		foreach ($objItems as $objItem)
-		{
-			$objResultCollection->push(new GeneralModelMetaModel($objItem));
-		}
-
-		if ($strBackupLanguage != '')
-		{
-			$GLOBALS['TL_LANGUAGE'] = $strBackupLanguage;
-		}
-
-		return $objResultCollection;
-	}
-
-	/**
 	 * Return the amount of total items.
 	 *
 	 * @param GeneralDataConfigDefault $objConfig the configuration object to use.
