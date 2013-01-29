@@ -49,7 +49,7 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 	protected function collectRulesFor($objBaseSettings, $objSetting)
 	{
 		$objDB = Database::getInstance();
-		$objSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE pid=? AND enabled=1')->execute($objBaseSettings->id);
+		$objSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE pid=? AND enabled=1 ORDER BY sorting ASC')->execute($objBaseSettings->id);
 
 		while ($objSettings->next())
 		{
@@ -70,11 +70,24 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 	// IMetaModelFilterSettings
 	///////////////////////////////////////////////////////////////////////////////
 
+	/**
+	 * retrieve the MetaModel this filter belongs to.
+	 *
+	 * @return IMetaModel
+	 */
 	public function getMetaModel()
 	{
+		if (!$this->arrData['pid'])
+		{
+			throw new Exception(sprintf('Error: Filtersetting %d not attached to a MetaModel', $this->arrData['id']));
+
+		}
 		return MetaModelFactory::byId($this->arrData['pid']);
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function collectRules()
 	{
 		if (!$this->arrData['id'])
@@ -83,7 +96,7 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 		}
 
 		$objDB = Database::getInstance();
-		$objSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE fid=? AND pid=0 AND enabled=1')->execute($this->arrData['id']);
+		$objSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE fid=? AND pid=0 AND enabled=1 ORDER BY sorting ASC')->execute($this->arrData['id']);
 		while ($objSettings->next())
 		{
 			$objNewSetting = $this->newSetting($objSettings);
@@ -98,6 +111,9 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 		}
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function addRules(IMetaModelFilter $objFilter, $arrFilterUrl)
 	{
 		foreach ($this->arrSettings as $objSetting)
@@ -106,6 +122,9 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 		}
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function generateFilterUrlFrom(IMetaModelItem $objItem, IMetaModelRenderSettings $objRenderSetting)
 	{
 		$arrFilterUrl = array();
