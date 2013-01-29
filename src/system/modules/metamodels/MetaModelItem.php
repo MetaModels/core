@@ -246,7 +246,7 @@ class MetaModelItem implements IMetaModelItem
 			// auto_item must be first in url.
 			if (array_key_exists('auto_item', $arrParams))
 			{
-				$strParams .= $arrParams['auto_item'];
+				$strParams .= '/' . $arrParams['auto_item'];
 				unset($arrParams['auto_item']);
 			}
 
