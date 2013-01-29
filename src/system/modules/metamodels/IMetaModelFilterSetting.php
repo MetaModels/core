@@ -59,5 +59,23 @@ interface IMetaModelFilterSetting
 	 * @return array
 	 */
 	public function getParameterDCA();
+
+	/**
+	 * Retrieve the names of all parameters for listing in frontend filter configuration.
+	 *
+	 * @return string[string] the parameters as array. parametername => label
+	 */
+	public function getParameterFilterNames();
+
+	/**
+	 * Retrieve a list of filter widgets for all registered parameters as form field arrays.
+	 *
+	 * @param array $arrIds the ids matching the current filter values.
+	 *
+	 * @param array $arrFilterUrl the current filter url.
+	 *
+	 * @return array
+	 */
+	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit);
 }
 

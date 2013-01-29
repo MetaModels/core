@@ -16,6 +16,13 @@
  */
 
 /**
+ * Content elements
+ */
+$GLOBALS['TL_LANG']['CTE']['metamodels']  = 'MetaModel elements';
+$GLOBALS['TL_LANG']['CTE']['metamodel_content'] = array('MetaModels-Liste', 'Fügt der Seite eine Liste mit MetaModels-Datensätzen hinzu.');
+$GLOBALS['TL_LANG']['CTE']['metamodels_frontendfilter'] = array('MetaModels FE-Filter','Einen Frontend-Filter für MetaModels einbinden.');
+
+/**
  * Miscellaneous
  */
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord'] 	= 'Bearbeiten der Filtereinstellungen %%s für den Filter "%s" in MetaModel "%s"';
@@ -46,4 +53,15 @@ $GLOBALS['TL_LANG']['ERR']['columnExists']								= 'Es existiert bereits ein At
 $GLOBALS['TL_LANG']['MSC']['no_palette']								= 'Versuch, auf MetaModel "%s" ohne Palette für den Benutzer %s zuzugreifen.';
 $GLOBALS['TL_LANG']['MSC']['no_view']									= 'Versuch, auf das MetaModel "%s" ohne Ansicht für den Benutzer %s zuzugreifen.';
 $GLOBALS['TL_LANG']['ERR']['invalidTableName']							= 'Der eingegebene Tabellenname ist nicht valide.';
+
+/**
+ * Labels
+ */
+
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']          = 'filtern';
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter']   = 'nicht filtern';
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['select_all']      = 'alle auswählen';
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['action_add']      = '+';
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['action_remove']   = '-';
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations'] = ' (Keine passenden Kombinationen gefunden.)';
 

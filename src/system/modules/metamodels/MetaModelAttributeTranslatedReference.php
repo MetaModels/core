@@ -199,9 +199,10 @@ implements IMetaModelAttributeTranslated
 	 * Fetch filter options from foreign table.
 	 *
 	 */
-	public function getFilterOptions($arrIds = array())
+	public function getFilterOptions($arrIds, $usedOnly)
 	{
 		$objDB = Database::getInstance();
+		// TODO: implement $arrIds and $usedOnly handling here.
 
 		$arrWhere = $this->getWhere($arrIds, $this->getMetaModel()->getActiveLanguage());
 		$strQuery = 'SELECT * FROM ' . $this->getValueTable() . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '');

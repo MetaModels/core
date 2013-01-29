@@ -78,8 +78,9 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 	 * Deriving classes SHOULD override this function.
 	 *
 	 */
-	public function getFilterOptions($arrIds = array())
+	public function getFilterOptions($arrIds, $usedOnly)
 	{
+		// TODO: implement $arrIds and $usedOnly handling here.
 		$strCol = $this->getColName();
 		if ($arrIds)
 		{

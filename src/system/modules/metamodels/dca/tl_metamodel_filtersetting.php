@@ -144,7 +144,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 
 		'simplelookup extends _attribute_' => array
 		(
-			'+config' => array('urlparam', 'allow_empty', 'predef_param'),
+			'+config' => array('urlparam', 'allow_empty', 'predef_param', 'label', 'template', 'defaultid', 'blankoption', 'onlyused', 'onlypossible'),
 		),
 
 		'customsql extends default' => array
@@ -306,6 +306,56 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 				'tl_class'            => 'w50 m12',
 			),
 		),
+		'label' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array(
+				'tl_class'            => 'clr w50',
+			),
+		),
+		'template' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template'],
+			'default'                 => 'mm_filteritem_default',
+			'exclude'                 => true,
+			'inputType'               => 'select',
+			'options_callback'        => array('TableMetaModelFilterSetting', 'getSubTemplates'),
+			'eval'                    => array(
+				'tl_class'            => 'w50',
+			),
+		),
+		'blankoption'                 => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['blankoption'],
+			'exclude'                 => true,
+			'default'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array(
+				'tl_class'            => 'w50',
+			),
+		),
+		'onlyused'                    => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused'],
+			'exclude'                 => true,
+			'default'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array(
+				'tl_class'            => 'w50 clr',
+			),
+		),
+		'onlypossible'                => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible'],
+			'exclude'                 => true,
+			'default'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array(
+				'tl_class'            => 'w50',
+			),
+		)
 	)
 );
 

@@ -29,6 +29,12 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param'] = array('Stati
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql'] = array('Custom SQL Query', 'The SQL query that shall be executed, insert tags are supported.');
 
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']        = array('Label', 'Show label instead of attribute name.');
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']     = array('Template', 'Sub template for this filter element. Standard: form widget.');
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['blankoption']  = array('Empty option', 'Show empty options in select.');
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']     = array('Assigned tags only', 'Show only options, that are assigned somewhere in the MetaModel.');
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible'] = array('Remaining tags only', 'Show only options, that are still assigned somewhere after the actual filter is set.');
+
 /**
  * Legends
  */
@@ -60,4 +66,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_default_']    = 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup'] = '%s <strong>%s</strong><br /> on attribute <em>%s</em> (URL param: %s)';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionor']  = '%s <strong>%s</strong><br /> items that are mentioned in any result.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand'] = '%s <strong>%s</strong><br /> items that are mentioned in all results.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['fefilter'] = '%s <strong>%s</strong><br> for attribute <em>%s</em> (%s)';
 

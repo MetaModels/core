@@ -37,7 +37,7 @@ class MetaModelFilterSettingsFactory implements IMetaModelFilterSettingsFactory
 	 *
 	 * @param int $intId the id of the IMetaModelFilter.
 	 *
-	 * @return IMetaModelFilter the instance of the IMetaModelFilter or null if not found.
+	 * @return IMetaModelFilterSettings the instance of the IMetaModelFilterSettings or null if not found.
 	 */
 	public static function byId($intId)
 	{

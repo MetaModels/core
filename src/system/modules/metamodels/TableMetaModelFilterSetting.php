@@ -308,6 +308,23 @@ class TableMetaModelFilterSetting extends Backend
 	}
 
 	/**
+	 * get frontend templates for filter elements
+	 * @param DataContainer
+	 * @return array
+	 */
+	public function getSubTemplates(DataContainer $dc)
+	{
+		$intPid = $dc->activeRecord->pid;
+
+		if ($this->Input->get('act') == 'overrideAll')
+		{
+			$intPid = $this->Input->get('id');
+		}
+
+		return $this->getTemplateGroup('mm_filteritem_', $intPid);
+	}
+
+	/**
 	 * when creating a new item, we need to populate the fid column.
 	 */
 	public function create_callback($strTable, $insertID, $set, $objDC)
@@ -362,6 +379,31 @@ class TableMetaModelFilterSetting extends Backend
 		$strAttrName,
 		($arrRow['urlparam'] ? $arrRow['urlparam'] : $strAttrColName)
 		);
+
+		return $strReturn;
+	}
+
+	/**
+	 * backend list display of fe-filter
+	 * @param array
+	 * @param string
+	 * @param object
+	 * @param string
+	 * @param string
+	 * @return string
+	 */
+	public function infoCallback($arrRow, $strLabel, $objDC, $imageAttribute, $strImage)
+	{
+		$this->objectsFromUrl($objDC);
+		$objAttribute = $this->objMetaModel->getAttributeById($arrRow['attr_id']);
+
+		$strReturn = sprintf(
+			$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['fefilter'],
+			'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
+			$strLabel,
+			($objAttribute ? $objAttribute->getName() : ''),
+			$arrRow['urlparam']
+			);
 
 		return $strReturn;
 	}

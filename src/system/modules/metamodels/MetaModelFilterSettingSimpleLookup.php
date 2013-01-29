@@ -42,6 +42,44 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 	}
 
 	/**
+	 * Determine if this filter setting shall return all matches if no url param has been specified.
+	 *
+	 * @return bool true if all matches shall be returned, false otherwise.
+	 */
+	public function allowEmpty()
+	{
+		return (bool)$this->get('allow_empty');
+	}
+
+	/**
+	 * internal helper function for descendant classes to retrieve the options.
+	 *
+	 */
+	protected function getParameterFilterOptions($objAttribute, $arrIds)
+	{
+		$arrOptions = $objAttribute->getFilterOptions(
+			$this->get('onlypossible') ? $arrIds : NULL,
+			(bool)$this->get('onlyused')
+		);
+		return $arrOptions;
+	}
+
+	/**
+	 * Determine if this filter setting shall be available for frontend filter widget generating.
+	 *
+	 * @return bool true if available, false otherwise.
+	 */
+	public function enableFEFilterWidget()
+	{
+		// TODO: better use a seperate checkbox or the like? For the moment, this has to be overridden by sub classes.
+		return (bool)$this->get('predef_param');
+	}
+
+	//////////////////////////////////////////////////////////////////////////////
+	// IMetaModelFilterSetting
+	//////////////////////////////////////////////////////////////////////////////
+
+	/**
 	 * {@inheritdoc}
 	 */
 	public function prepareRules(IMetaModelFilter $objFilter, $arrFilterUrl)
@@ -61,7 +99,7 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 			}
 
 			//we found an attribute but no match in URL. So ignore this filtersetting if allow_empty is set
-			if ($this->get('allow_empty'))
+			if ($this->allowEmpty())
 			{
 				$objFilter->addFilterRule(new MetaModelFilterRuleStaticIdList(NULL));
 				return;
@@ -81,7 +119,7 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 		{
 			// TODO: shall we omit returning of empty values?
 			$arrResult = $objItem->parseAttribute($objAttribute->getColName(), 'text', $objRenderSetting);
-			return array(($this->get('urlparam')?$this->get('urlparam'):$objAttribute->getColName()) => urlencode($arrResult['text']));
+			return array($this->getParamName() => urlencode($arrResult['text']));
 		}
 	}
 
@@ -105,7 +143,7 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 		}
 
 		$objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
-		$arrOptions = $objAttribute->getFilterOptions();
+		$arrOptions = $objAttribute->getFilterOptions(NULL, true);
 
 		return array(
 			$this->getParamName() => array
@@ -118,6 +156,56 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 				'options' => $arrOptions,
 				'eval' => array('includeBlankOption' => true, 'style' => 'min-width:450px;margin-bottom:16px;margin-right:10px;')
 			)
+		);
+	}
+
+	public function getParameterFilterNames()
+	{
+		if ($this->enableFEFilterWidget())
+		{
+			return array(
+				$this->getParamName() => ($this->get('label') ? $this->get('label') : $this->getMetaModel()->getAttributeById($this->get('attr_id'))->getName())
+			);
+		} else {
+			return array();
+		}
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit)
+	{
+		// if defined as static, return nothing as not to be manipulated via editors.
+		if (!$this->enableFEFilterWidget())
+		{
+			return array();
+		}
+
+		$objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
+
+		$arrWidget = array(
+				'label'     => array(
+					// TODO: make this multilingual.
+					($this->get('label') ? $this->get('label') : $objAttribute->getName()),
+					'GET: ' . $this->getParamName()
+					),
+				'inputType'    => 'select',
+				'options' => $this->getParameterFilterOptions($objAttribute, $arrIds),
+				'eval' => array(
+					'includeBlankOption' => ($this->get('blankoption') ? true : false),
+					'blankOptionLabel'   => &$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'],
+					'colname'            => $objAttribute->getColname(),
+					'urlparam'           => $this->getParamName(),
+					'onlyused'           => $this->get('onlyused'),
+					'onlypossible'       => $this->get('onlypossible'),
+					'template'           => $this->get('template'),
+				)
+		);
+
+		return array
+		(
+			$this->getParamName() => $this->prepareFrontendFilterWidget($arrWidget, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit)
 		);
 	}
 }

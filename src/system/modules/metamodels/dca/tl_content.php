@@ -17,12 +17,14 @@
 /**
  * Config
  */
-$GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('tl_content_metamodel', 'buildCustomFilter');
+$GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('TableContent', 'buildCustomFilter');
 
 /**
  * Palettes
  */
 $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodel_content'] = '{title_legend},name,headline,type;{mm_config_legend},metamodel,perPage,metamodel_use_limit;{mm_filter_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_filtering,metamodel_filterparams;{mm_rendering},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['metamodels_frontendfilter'] = '{title_legend},name,headline,type;{mm_filter_legend},jumpTo,metamodel,metamodel_filtering,metamodel_fef_params,metamodel_fef_autosubmit,metamodel_fef_template;{protected_legend:hide},protected;{expert_legend:hide},guests,invisible,cssID,space';
+
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_limit';
 
 // Insert new Subpalettes after position 1
@@ -35,7 +37,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['subpalettes'], 1, array(
  */
 array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array(
 	'metamodel' => array
-		(
+	(
 		'label' => &$GLOBALS['TL_LANG']['tl_content']['metamodel'],
 		'exclude' => true,
 		'inputType' => 'select',
@@ -47,48 +49,48 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array(
 		),
 		'wizard' => array
 			(
-			array('tl_content_metamodel', 'editMetaModel')
+			array('TableContent', 'editMetaModel')
 		)
 	),
 	'metamodel_layout' => array
-		(
+	(
 		'label' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_layout'],
 		'exclude' => true,
 		'inputType' => 'select',
-		'options_callback' => array('tl_content_metamodel', 'getModuleTemplates'),
+		'options_callback' => array('TableContent', 'getModuleTemplates'),
 		'eval' => array('tl_class' => 'w50')
 	),
 	'metamodel_use_limit' => array
-		(
+	(
 		'label' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit'],
 		'exclude' => true,
 		'inputType' => 'checkbox',
 		'eval' => array('submitOnChange' => true, 'tl_class' => 'w50 m12'),
 	),
 	'metamodel_limit' => array
-		(
+	(
 		'label' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_limit'],
 		'exclude' => true,
 		'inputType' => 'text',
 		'eval' => array('rgxp' => 'digit', 'tl_class' => 'w50')
 	),
 	'metamodel_offset' => array
-		(
+	(
 		'label' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_offset'],
 		'exclude' => true,
 		'inputType' => 'text',
 		'eval' => array('rgxp' => 'digit', 'tl_class' => 'w50'),
 	),
 	'metamodel_sortby' => array
-		(
+	(
 		'label' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_sortby'],
 		'exclude' => true,
 		'inputType' => 'select',
-		'options_callback' => array('tl_content_metamodel', 'getAttributeNames'),
+		'options_callback' => array('TableContent', 'getAttributeNames'),
 		'eval' => array('includeBlankOption' => true, 'tl_class' => 'w50'),
 	),
 	'metamodel_sortby_direction' => array
-		(
+	(
 		'label' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_sortby_direction'],
 		'exclude' => true,
 		'inputType' => 'select',
@@ -97,11 +99,11 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array(
 		'eval' => array('includeBlankOption' => false, 'tl_class' => 'w50'),
 	),
 	'metamodel_filtering' => array
-		(
+	(
 		'label' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_filtering'],
 		'exclude' => true,
 		'inputType' => 'select',
-		'options_callback' => array('tl_content_metamodel', 'getFilterSettings'),
+		'options_callback' => array('TableContent', 'getFilterSettings'),
 		'default' => '',
 		'eval' => array
 			(
@@ -111,15 +113,15 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array(
 		),
 		'wizard' => array
 			(
-			array('tl_content_metamodel', 'editFilterSetting')
+			array('TableContent', 'editFilterSetting')
 		)
 	),
 	'metamodel_rendersettings' => array
-		(
+	(
 		'label' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_rendersettings'],
 		'exclude' => true,
 		'inputType' => 'select',
-		'options_callback' => array('tl_content_metamodel', 'getRenderSettings'),
+		'options_callback' => array('TableContent', 'getRenderSettings'),
 		'default' => '',
 		'eval' => array
 			(
@@ -129,11 +131,11 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array(
 		),
 		'wizard' => array
 			(
-			array('tl_content_metamodel', 'editRenderSetting')
+			array('TableContent', 'editRenderSetting')
 		)
 	),
 	'metamodel_noparsing' => array
-		(
+	(
 		'label' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_noparsing'],
 		'exclude' => true,
 		'inputType' => 'checkbox',
@@ -144,7 +146,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array(
 		),
 	),
 	'metamodel_filterparams' => array
-		(
+	(
 		'label' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams'],
 		'exclude' => true,
 		'inputType' => 'mm_subdca',
@@ -160,170 +162,37 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array(
 				),
 			),
 		)
+	),
+	'jumpTo' => array
+	(
+		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['jumpTo'],
+		'exclude'                 => true,
+		'exclude'                 => true,
+		'inputType'               => 'pageTree',
+		'eval'                    => array('fieldType'=>'radio')
+	),
+	'metamodel_fef_params' => array
+	(
+		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_params'],
+		'exclude'                 => true,
+		'inputType'               => 'checkboxWizard',
+		'options_callback'        => array('TableContent','getFilterParameterNames'),
+		'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
+	),
+	'metamodel_fef_autosubmit' => array
+	(
+		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_autosubmit'],
+		'exclude'                 => true,
+		'default'                 => '1',
+		'inputType'               => 'checkbox'
+	),
+	'metamodel_fef_template' => array
+	(
+		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_template'],
+		'default'                 => 'mm_filter_default',
+		'exclude'                 => true,
+		'inputType'               => 'select',
+		'options_callback'        => array('TableContent', 'getFilterTemplates')
 	)
 ));
-
-/**
- * complementary methods needed by the DCA.
- *
- * @package	   MetaModels
- * @subpackage Backend
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  The MetaModels team.
- * @license    LGPL.
- * @filesource
- */
-class tl_content_metamodel extends Backend
-{
-
-	public function buildCustomFilter($objDC)
-	{
-		// Check if we have a id, no create mode
-		if (is_null($objDC->id))
-		{
-			unset($GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']);
-			return;
-		}
-
-		// Get basic informations
-		$objContent = $this->Database
-				->prepare('SELECT type, metamodel, metamodel_filtering FROM tl_content WHERE id=?')
-				->limit(1)
-				->execute($objDC->id);
-
-		$intMetaModel = $objContent->metamodel;
-		$intFilter = $objContent->metamodel_filtering;
-
-		// Check if we have a row/metaModelconten/MetaModel/Filter
-		if ($objContent->numRows == 0 || $objContent->type != 'metamodel_content' || empty($intMetaModel) || empty($intFilter))
-		{
-			unset($GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']);
-			return;
-		}
-
-		$objFilter = $objFilterSettings = MetaModelFilterSettingsFactory::byId($intFilter);
-		$arrParams = $objFilter->getParameterDCA();
-		$GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']['eval']['subfields'] = $arrParams;
-	}
-
-	/**
-	 * Fetch the template group for the current MetaModel module.
-	 *
-	 * @param DataContainer $objDC the datacontainer calling this method.
-	 *
-	 * @return array
-	 *
-	 */
-	public function getModuleTemplates(DataContainer $objDC)
-	{
-		return $this->getTemplateGroup('ce_metamodel_', $objDC->activeRecord->pid);
-	}
-
-	/**
-	 * Fetch all attribute names for the current metamodel
-	 *
-	 * @param DataContainer $objDC the datacontainer calling this method.
-	 *
-	 * @return string[string] array of all attributes as colName => human name
-	 */
-	public function getAttributeNames(DataContainer $objDC)
-	{
-		$arrAttributeNames = array('sorting' => $GLOBALS['TL_LANG']['MSC']['sorting']);
-		$objMetaModel = MetaModelFactory::byId($objDC->activeRecord->metamodel);
-		if ($objMetaModel)
-		{
-			foreach ($objMetaModel->getAttributes() as $objAttribute)
-				$arrAttributeNames[$objAttribute->getColName()] = $objAttribute->getName();
-		}
-
-		return $arrAttributeNames;
-	}
-
-	/**
-	 * Return the edit wizard
-	 * @param DataContainer $dc the datacontainer
-	 * @return string
-	 */
-	public function editMetaModel(DataContainer $dc)
-	{
-		return ($dc->value < 1) ? '' : sprintf('<a href="contao/main.php?%s&amp;act=edit&amp;id=%s" title="%s" style="padding-left:3px">%s</a>', 'do=metamodels', $dc->value, sprintf(specialchars($GLOBALS['TL_LANG']['tl_module']['editmetamodel'][1]), $dc->value), $this->generateImage('alias.gif', $GLOBALS['TL_LANG']['tl_module']['editmetamodel'][0], 'style="vertical-align:top"')
-				);
-	}
-
-	/**
-	 * Return the edit wizard
-	 * @param DataContainer $dc the datacontainer
-	 * @return string
-	 */
-	public function editRenderSetting(DataContainer $dc)
-	{
-		return ($dc->value < 1) ? '' : sprintf('<a href="contao/main.php?%s&amp;act=edit&amp;id=%s" title="%s" style="padding-left:3px">%s</a>', 'do=metamodels&table=tl_metamodel_rendersettings', $dc->value, sprintf(specialchars($GLOBALS['TL_LANG']['tl_module']['editrendersetting'][1]), $dc->value), $this->generateImage('alias.gif', $GLOBALS['TL_LANG']['tl_module']['editrendersetting'][0], 'style="vertical-align:top"')
-				);
-	}
-
-	/**
-	 * Return the edit wizard
-	 * @param DataContainer $dc the datacontainer
-	 * @return string
-	 */
-	public function editFilterSetting(DataContainer $dc)
-	{
-
-		$strReturn = '';
-
-		if (($dc->value < 1))
-		{
-			return $strReturn;
-		}
-
-		$strReturn .= sprintf('<a href="contao/main.php?%s&amp;act=edit&amp;id=%s" title="%s" style="padding-left:3px">%s</a>', 'do=metamodels&table=tl_metamodel_filter', $dc->value, sprintf(specialchars($GLOBALS['TL_LANG']['tl_module']['editfiltersetting'][1]), $dc->value), $this->generateImage('alias.gif', $GLOBALS['TL_LANG']['tl_module']['editfiltersetting'][0], 'style="vertical-align:top"')
-		);
-		return $strReturn;
-	}
-
-	/**
-	 * Fetch all available filter settings for the current meta model.
-	 *
-	 * @param DataContainer $objDC the datacontainer calling this method.
-	 *
-	 * @return string[int] array of all attributes as id => human name
-	 */
-	public function getFilterSettings(DataContainer $objDC)
-	{
-		$objDB = Database::getInstance();
-		$objFilterSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filter WHERE pid=?')->execute($objDC->activeRecord->metamodel);
-		$arrSettings = array();
-		while ($objFilterSettings->next())
-		{
-			$arrSettings[$objFilterSettings->id] = $objFilterSettings->name;
-		}
-
-		//sort the filtersettings
-		asort($arrSettings);
-		return $arrSettings;
-	}
-
-	/**
-	 * Fetch all available render settings for the current meta model.
-	 *
-	 * @param DataContainer $objDC the datacontainer calling this method.
-	 *
-	 * @return string[int] array of all attributes as id => human name
-	 */
-	public function getRenderSettings($objDC)
-	{
-		$objDB = Database::getInstance();
-		$objFilterSettings = $objDB->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE pid=?')->execute($objDC->activeRecord->metamodel);
-
-		$arrSettings = array();
-		while ($objFilterSettings->next())
-		{
-			$arrSettings[$objFilterSettings->id] = $objFilterSettings->name;
-		}
-
-		//sort the rendersettings
-		asort($arrSettings);
-		return $arrSettings;
-	}
-}
 

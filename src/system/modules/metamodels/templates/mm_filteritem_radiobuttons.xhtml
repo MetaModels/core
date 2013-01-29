@@ -1,0 +1,25 @@
+<?php if(is_array($this->options) && count($this->options)>0): ?>
+<fieldset id="ctrl_<?php echo $this->urlparam; ?>"<?php echo ($this->submit ? ' onchange="submit();"' : ''); ?> class="checkbox_container">
+<?php
+$count = 0;
+foreach($this->options as $option): 
+	$field = sprintf('<input type="radio" name="%s" id="opt_%s_%s" class="checkbox" value="%s"%s />',
+		$this->urlparam,
+		$this->urlparam,
+		$count,
+		$option['key'],
+		($option['active'] ? ' checked="checked"':'')
+		);
+	$label = sprintf('<label id="lbl_%s_%s" for="opt_%s_%s">%s</label>',
+		$this->urlparam,
+		$count,
+		$this->urlparam,
+		$count,
+		$option['value']
+		);
+	$count++;
+?>
+<span><?php echo $field; ?> <?php echo $label; ?></span>
+<?php endforeach; ?>
+</fieldset>
+<?php endif; ?>

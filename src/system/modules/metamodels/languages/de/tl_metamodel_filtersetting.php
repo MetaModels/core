@@ -25,6 +25,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['enabled']  = array('Aktiviere
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id']  = array('Attribut', 'Attribut, auf das sich diese Einstellung bezieht.');
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam'] = array('URL-Parameter', 'Geben Sie den URL-Parameter an, der für das ausgewählte Attribut verwendet werden soll. Der spezielle <em>"auto_item"</em>-Parameter kann ebenfalls benutzt werden. Dies ist für Aliasse nützlich.');
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql'] = array('Eigene SQL-Abfrage', 'Geben Sie die SQL-Abfrage an, die ausgeführt werden soll. Die Verwendung von Inserttags wird unterstützt.');
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']        = array('Label', 'Label, falls nicht der Attributname genommen werden soll.');
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']     = array('Template', 'Sub-Template für dieses Filterelement. Standard: Formular-Widget.');
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['blankoption']  = array('Leerer Wert', 'Leere Auswahl einbinden.');
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']     = array('Nur zugeordnete Werte', 'In den Optionen nur Werte zeigen, die einem Datensatz zugeordnet sind.');
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible'] = array('Nur verbleibende Werte', 'In den Optionen nur Werte zeigen, die mit dem aktuellen Filter weiterhin vorkommen.');
 
 /**
  * Legends
@@ -57,4 +62,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_default_']    = 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup'] = '%s <strong>%s</strong><br /> für Attribut <em>%s</em> (URL-Parameter: %s)';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionor']  = '%s <strong>%s</strong><br /> Datensatz/Datensätze in beliebigem Ergebnis.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand'] = '%s <strong>%s</strong><br /> Datensatz/Datensätze in allen Ergebnissen.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['fefilter']    = '%s <strong>%s</strong><br> für Attribut <em>%s</em> (%s)';
 

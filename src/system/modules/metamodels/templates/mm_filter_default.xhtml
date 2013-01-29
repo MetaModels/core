@@ -1,0 +1,32 @@
+<!-- indexer::stop -->
+<div class="<?php echo $this->class; ?> block"<?php echo $this->cssID; ?><?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?>>
+<?php if ($this->headline): ?>
+
+<<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
+<?php endif; ?>
+
+<form<?php if ($this->action): ?> action="<?php echo $this->action; ?>"<?php endif; ?> method="get">
+<input type="hidden" name="FORM_SUBMIT" value="mm_fefilter" />
+<div class="formbody">
+
+<?php foreach((is_array($this->parameters) ? $this->parameters : array()) as $parameter): ?>
+<input type="hidden" name="<?php echo $parameter['key']; ?>" value="<?php echo $parameter['value']; ?>" />
+<?php endforeach; ?>
+
+<?php foreach((is_array($this->filters) ? $this->filters : array()) as $filter): ?>
+<div class="widget <?php echo $filter['class']; ?>">
+	<?php echo $filter['label']; ?>
+	<?php echo $filter['field']; ?>
+</div>
+<?php endforeach; ?>
+
+<?php if($this->submit): ?>
+<div class="submit_container">
+  <input type="submit" class="submit" value="<?php echo $this->submit; ?>" />
+</div>
+<?php endif; ?>
+</div>
+</form>
+
+</div>
+<!-- indexer::continue -->

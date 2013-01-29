@@ -160,5 +160,38 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 		}
 		return $arrParams;
 	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getParameterFilterNames()
+	{
+		$arrParams = array();
+
+		foreach ($this->arrSettings as $objSetting)
+		{
+			$arrParams = array_merge($arrParams, $objSetting->getParameterFilterNames());
+		}
+		return $arrParams;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getParameterFilterWidgets($arrFilterUrl, $arrJumpTo = array(), $blnAutoSubmit = true)
+	{
+		$arrParams = array();
+
+		$objFilter = $this->getMetaModel()->getEmptyFilter();
+		$this->addRules($objFilter, $arrFilterUrl);
+
+		$arrIds = $objFilter->getMatchingIds();
+
+		foreach ($this->arrSettings as $objSetting)
+		{
+			$arrParams = array_merge($arrParams, $objSetting->getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit));
+		}
+		return $arrParams;
+	}
 }
 

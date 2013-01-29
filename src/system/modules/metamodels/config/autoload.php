@@ -1,15 +1,18 @@
 <?php
-
 /**
- * Contao Open Source CMS
- * 
- * Copyright (c) 2005-2013 Leo Feyer
- * 
- * @package Metamodels
- * @link    http://contao.org
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * The MetaModels extension allows the creation of multiple collections of custom items,
+ * each with its own unique set of selectable attributes, with attribute extendability.
+ * The Front-End modules allow you to build powerful listing and filtering of the
+ * data in each collection.
+ *
+ * PHP version 5
+ * @package	   MetaModels
+ * @subpackage Core
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  The MetaModels team.
+ * @license    LGPL.
+ * @filesource
  */
-
 
 /**
  * Register the classes
@@ -18,6 +21,7 @@ ClassLoader::addClasses(array
 (
 	'IMetaModelAttribute'                   => 'system/modules/metamodels/IMetaModelAttribute.php',
 	'ContentMetaModel'                      => 'system/modules/metamodels/ContentMetaModel.php',
+	'ContentMetaModelFrontendFilter'        => 'system/modules/metamodels/ContentMetaModelFrontendFilter.php',
 	'GeneralCallbackMetaModel'              => 'system/modules/metamodels/GeneralCallbackMetaModel.php',
 	'GeneralControllerMetaModel'            => 'system/modules/metamodels/GeneralControllerMetaModel.php',
 	'GeneralDataMetaModel'                  => 'system/modules/metamodels/GeneralDataMetaModel.php',
@@ -69,6 +73,7 @@ ClassLoader::addClasses(array
 	'MetaModelFilterSettingWithChilds'      => 'system/modules/metamodels/MetaModelFilterSettingWithChilds.php',
 	'MetaModelFilterSettings'               => 'system/modules/metamodels/MetaModelFilterSettings.php',
 	'MetaModelFilterSettingsFactory'        => 'system/modules/metamodels/MetaModelFilterSettingsFactory.php',
+	'MetaModelFrontendFilter'               => 'system/modules/metamodels/MetaModelFrontendFilter.php',
 	'MetaModelItem'                         => 'system/modules/metamodels/MetaModelItem.php',
 	'MetaModelItems'                        => 'system/modules/metamodels/MetaModelItems.php',
 	'MetaModelList'                         => 'system/modules/metamodels/MetaModelList.php',
@@ -77,7 +82,9 @@ ClassLoader::addClasses(array
 	'MetaModelSubDCAWidget'                 => 'system/modules/metamodels/MetaModelSubDCAWidget.php',
 	'MetaModelTableManipulation'            => 'system/modules/metamodels/MetaModelTableManipulation.php',
 	'MetaModelTemplate'                     => 'system/modules/metamodels/MetaModelTemplate.php',
+	'ModuleMetaModelFrontendFilter'         => 'system/modules/metamodels/ModuleMetaModelFrontendFilter.php',
 	'ModuleMetaModelList'                   => 'system/modules/metamodels/ModuleMetaModelList.php',
+	'TableContent'                          => 'system/modules/metamodels/TableContent.php',
 	'TableMetaModel'                        => 'system/modules/metamodels/TableMetaModel.php',
 	'TableMetaModelAttribute'               => 'system/modules/metamodels/TableMetaModelAttribute.php',
 	'TableMetaModelDca'                     => 'system/modules/metamodels/TableMetaModelDca.php',
@@ -86,7 +93,10 @@ ClassLoader::addClasses(array
 	'TableMetaModelHelper'                  => 'system/modules/metamodels/TableMetaModelHelper.php',
 	'TableMetaModelRenderSetting'           => 'system/modules/metamodels/TableMetaModelRenderSetting.php',
 	'TableMetaModelRenderSettings'          => 'system/modules/metamodels/TableMetaModelRenderSettings.php',
+	'TableModule'                           => 'system/modules/metamodels/TableModule.php',
 	'MetaModelBackend'                      => 'system/modules/metamodels/MetaModelBackend.php',
+	'WidgetMultiText'                       => 'system/modules/metamodels/WidgetMultiText.php',
+	'WidgetTags'                            => 'system/modules/metamodels/WidgetTags.php',
 ));
 
 
@@ -95,14 +105,18 @@ ClassLoader::addClasses(array
  */
 TemplateLoader::addFiles(array
 (
-	'be_autocreatepalette'  => 'system/modules/metamodels/templates',
-	'be_autocreateview'     => 'system/modules/metamodels/templates',
-	'be_dcastylepicker'     => 'system/modules/metamodels/templates',
-	'be_detectedproblems'   => 'system/modules/metamodels/templates',
-	'be_metamodel_full'     => 'system/modules/metamodels/templates',
-	'be_subdca'             => 'system/modules/metamodels/templates',
-	'ce_metamodel_list'     => 'system/modules/metamodels/templates',
-	'metamodel_prerendered' => 'system/modules/metamodels/templates',
-	'metamodel_unrendered'  => 'system/modules/metamodels/templates',
-	'mod_metamodel_list'    => 'system/modules/metamodels/templates',
+	'be_autocreatepalette'       => 'system/modules/metamodels/templates',
+	'be_autocreateview'          => 'system/modules/metamodels/templates',
+	'be_dcastylepicker'          => 'system/modules/metamodels/templates',
+	'be_detectedproblems'        => 'system/modules/metamodels/templates',
+	'be_metamodel_full'          => 'system/modules/metamodels/templates',
+	'be_subdca'                  => 'system/modules/metamodels/templates',
+	'ce_metamodel_list'          => 'system/modules/metamodels/templates',
+	'metamodel_prerendered'      => 'system/modules/metamodels/templates',
+	'metamodel_unrendered'       => 'system/modules/metamodels/templates',
+	'mod_metamodel_list'         => 'system/modules/metamodels/templates',
+	'mm_filter_default'          => 'system/modules/metamodels/templates',
+	'mm_filteritem_default'      => 'system/modules/metamodels/templates',
+	'mm_filteritem_linklist'     => 'system/modules/metamodels/templates',
+	'mm_filteritem_radiobuttons' => 'system/modules/metamodels/templates',
 ));

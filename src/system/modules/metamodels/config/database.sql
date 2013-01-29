@@ -190,7 +190,17 @@ CREATE TABLE `tl_metamodel_filtersetting` (
 -- custom SQL - query content.
   `customsql` text NULL,
 -- items for idlist rule,
-  `items` text NULL
+  `items` text NULL,
+-- label for frontend filter widget.
+  `label` blob NULL,
+-- template for frontend filter widget.
+  `template` varchar(64) NOT NULL default '',
+-- include a reset option in FE filter.
+  `blankoption` char(1) NOT NULL default '1',
+-- display only attached options in FE filters.
+  `onlyused` char(1) NOT NULL default '0',
+-- display only remaining options in Fe filters.
+  `onlypossible` char(1) NOT NULL default '0'
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -290,8 +300,10 @@ CREATE TABLE `tl_module` (
   `metamodel_filtering` int(10) NOT NULL default '0',
   `metamodel_rendersettings` int(10) NOT NULL default '0',
   `metamodel_noparsing` char(1) NOT NULL default '',
-  `metamodel_filterparams` longblob NULL
-
+  `metamodel_filterparams` longblob NULL,
+  `metamodel_fef_autosubmit` char(1) NOT NULL default '',
+  `metamodel_fef_params` blob NULL,
+  `metamodel_fef_template` varchar(64) NOT NULL default ''
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -315,5 +327,9 @@ CREATE TABLE `tl_content` (
   `metamodel_filtering` int(10) NOT NULL default '0',
   `metamodel_rendersettings` int(10) NOT NULL default '0',
   `metamodel_noparsing` char(1) NOT NULL default '',
-  `metamodel_filterparams` longblob NULL
+  `metamodel_filterparams` longblob NULL,
+  `metamodel_fef_autosubmit` char(1) NOT NULL default '',
+  `metamodel_fef_params` blob NULL,
+  `metamodel_fef_template` varchar(64) NOT NULL default '',
+  `jumpTo` int(10) unsigned NOT NULL default '0',
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

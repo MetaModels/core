@@ -59,12 +59,6 @@ class MetaModelBackend
 		Environment::getInstance();
 		Input::getInstance();
 
-		// request token became available in 2.11
-		if (version_compare(TL_VERSION, '2.11', '>='))
-		{
-			RequestToken::getInstance();
-		}
-
 		self::getUser();
 
 		Database::getInstance();

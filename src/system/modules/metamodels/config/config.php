@@ -136,18 +136,30 @@ if (TL_MODE=='BE')
  * Front-end modules
  */
 
-$GLOBALS['FE_MOD']['metamodels'] = array
+array_insert($GLOBALS['FE_MOD']['metamodels'], 9, array
 (
-	'metamodel_list' => 'ModuleMetaModelList',
+	'metamodel_list'            => 'ModuleMetaModelList',
+	'metamodels_frontendfilter' => 'ModuleMetaModelFrontendFilter'
+)
 );
 
 /**
  * Content elements
  */
-$GLOBALS['TL_CTE']['metamodels'] = array
+array_insert($GLOBALS['TL_CTE']['metamodels'], 9, array
 (
-	'metamodel_content' => 'ContentMetaModel'
+	'metamodel_content'         => 'ContentMetaModel',
+	'metamodels_frontendfilter' => 'ContentMetaModelFrontendFilter'
+)
 );
+
+/**
+ * Frontend widgets
+ */
+
+$GLOBALS['TL_FFL']['multitext'] = 'WidgetMultiText';
+$GLOBALS['TL_FFL']['tags']      = 'WidgetTags';
+$GLOBALS['TL_FFL']['range']      = 'WidgetRange';
 
 /**
  * HOOKS
