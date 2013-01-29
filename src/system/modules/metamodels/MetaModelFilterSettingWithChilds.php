@@ -50,6 +50,19 @@ implements IMetaModelFilterSettingWithChilds
 	/**
 	 * {@inheritdoc}
 	 */
+	public function generateFilterUrlFrom(IMetaModelItem $objItem, IMetaModelRenderSettings $objRenderSetting)
+	{
+		$arrFilterUrl = array();
+		foreach ($this->arrChilds as $objSetting)
+		{
+			$arrFilterUrl = array_merge($arrFilterUrl, $objSetting->generateFilterUrlFrom($objItem, $objRenderSetting));
+		}
+		return $arrFilterUrl;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
 	public function getParameters()
 	{
 		$arrParams = array();
