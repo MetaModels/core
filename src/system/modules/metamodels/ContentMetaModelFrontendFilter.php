@@ -53,7 +53,7 @@ class ContentMetaModelFrontendFilter extends ContentElement
 
 
 	/**
-	 * Generate the module
+	 * Generate the content element
 	 */
 	protected function compile()
 	{
@@ -64,7 +64,7 @@ class ContentMetaModelFrontendFilter extends ContentElement
 		// sort filters
 		$arrSort = deserialize($this->metamodel_fef_params);
 
-		foreach($arrSort as $intKeySort=>$strValSort)
+		foreach((array)$arrSort as $intKeySort=>$strValSort)
 		{
 			foreach($arrFilter['filter'] as $arrFilterDef)
 			{

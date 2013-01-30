@@ -66,7 +66,7 @@ class ModuleMetaModelFrontendFilter extends Module
 		// sort filters
 		$arrSort = deserialize($this->metamodel_fef_params);
 
-		foreach($arrSort as $intKeySort=>$strValSort)
+		foreach((array)$arrSort as $intKeySort=>$strValSort)
 		{
 			foreach($arrFilter['filter'] as $arrFilterDef)
 			{
@@ -87,6 +87,5 @@ class ModuleMetaModelFrontendFilter extends Module
 		$this->Template->filters = $arrFilter['filterSorted'];
 		$this->Template->submit = $arrFilter['submit'];
 	}
-
 }
 
