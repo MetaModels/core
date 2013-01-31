@@ -306,7 +306,7 @@ class TableMetaModelRenderSetting extends TableMetaModelHelper
 					$arrMessages[] = array
 					(
 						'severity' => 'confirm',
-						'message'  => sprintf('added attribute %s to rendersetting.', $objAttribute->getName()),
+						'message'  => sprintf($GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_addsuccess'], $objAttribute->getName()),
 					);
 				}
 			}
@@ -319,13 +319,13 @@ class TableMetaModelRenderSetting extends TableMetaModelHelper
 					$arrMessages[] = array
 					(
 						'severity' => 'info',
-						'message'  => sprintf('Attribute %s already in rendersetting.', $objAttribute->getName()),
+						'message'  => sprintf($GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_alreadycontained'], $objAttribute->getName()),
 					);
 				} else {
 					$arrMessages[] = array
 					(
 						'severity' => 'confirm',
-						'message'  => sprintf('will add attribute %s to rendersetting.', $objAttribute->getName()),
+						'message'  => sprintf($GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_willadd'], $objAttribute->getName()),
 					);
 					$blnWantPerform = true;
 				}
