@@ -90,3 +90,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['0'] = '
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['1'] = 'Add slash on save';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['2'] = 'Do nothing';
 
+/**
+ * Messages
+ */
+
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd'] = 'will add attribute %s to palette.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained'] = 'Attribute %s already in palette.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess'] = 'added attribute %s to palette.';
+

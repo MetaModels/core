@@ -376,7 +376,7 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 						'attr_id'  => $objAttribute->get('id'),
 						'tl_class' => ''
 					))->execute();
-					$arrMessages[sprintf('added attribute %s to palette.', $objAttribute->getName())] = 'confirm';
+					$arrMessages[sprintf($GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess'], $objAttribute->getName())] = 'confirm';
 				}
 			}
 		} else {
@@ -385,9 +385,9 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 			{
 				if (array_key_exists($objAttribute->get('id'), $arrKnown))
 				{
-					$arrMessages[sprintf('Attribute %s already in palette.', $objAttribute->getName())] = 'info';
+					$arrMessages[sprintf($GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained'], $objAttribute->getName())] = 'info';
 				} else {
-					$arrMessages[sprintf('will add attribute %s to palette.', $objAttribute->getName())] = 'confirm';
+					$arrMessages[sprintf($GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd'], $objAttribute->getName())] = 'confirm';
 					$blnWantPerform = true;
 				}
 			}
