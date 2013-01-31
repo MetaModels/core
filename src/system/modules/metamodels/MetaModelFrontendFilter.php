@@ -91,7 +91,7 @@ class MetaModelFrontendFilter extends Frontend
 
 		$arrParameters = $objFilterSetting->getParameterFilterWidgets($_GET, $this->objFilterConfig->arrJumpTo, $this->objFilterConfig->metamodel_fef_autosubmit);
 
-		$arrAttributes = unserialize($this->objFilterConfig->metamodel_fef_params);
+		$arrAttributes = (array)unserialize($this->objFilterConfig->metamodel_fef_params);
 
 		foreach($arrParameters as $strKeyParameter=>$arrParameter)
 		{
