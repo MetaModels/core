@@ -17,15 +17,15 @@
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['tl_content']['mm_config_legend']				= 'MetaModel Configuration';
-$GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']				= 'MetaModel Filter';
-$GLOBALS['TL_LANG']['tl_content']['mm_rendering']					= 'MetaModel Rendering';
+$GLOBALS['TL_LANG']['tl_content']['mm_config_legend']				= 'MetaModel-Voreinstellung';
+$GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']				= 'MetaModel-Filter';
+$GLOBALS['TL_LANG']['tl_content']['mm_rendering']					= 'MetaModel-Darstellung';
 
 /**
  * Selects
  */
-$GLOBALS['TL_LANG']['tl_content']['ASC']							= 'Ascending';
-$GLOBALS['TL_LANG']['tl_content']['DESC']							= 'Descending';
+$GLOBALS['TL_LANG']['tl_content']['ASC']							= 'Aufsteigend';
+$GLOBALS['TL_LANG']['tl_content']['DESC']							= 'Absteigend';
 
 /**
  * Fields
@@ -50,7 +50,7 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_template']			= array('Template'
  * Wizards
  */
 
-$GLOBALS['TL_LANG']['tl_content']['editmetamodel']            = array('Edit MetaModel', 'Edit the MetaModel ID %s.');
-$GLOBALS['TL_LANG']['tl_content']['editrendersetting']        = array('Edit render setting', 'Edit the render setting ID %s.');
-$GLOBALS['TL_LANG']['tl_content']['editfiltersetting']        = array('Edit filter setting', 'Edit the filter setting ID %s.');
+$GLOBALS['TL_LANG']['tl_content']['editmetamodel']            = array('MetaModel bearbeiten', 'Das MetaModel mit der ID %s bearbeiten.');
+$GLOBALS['TL_LANG']['tl_content']['editrendersetting']        = array('Darstellungsoptionen bearbeiten', 'Die Darstellungsoptionen mit der ID %s bearbeiten.');
+$GLOBALS['TL_LANG']['tl_content']['editfiltersetting']        = array('Filtereinstellungen bearbeiten', 'Die Filtereinstellungen mit der ID %s bearbeiten.');
 
