@@ -33,6 +33,14 @@ class MetaModelFactory implements IMetaModelFactory
 	protected static $arrInstances = array();
 
 	/**
+	 * All MetaModel instances.
+	 * Assiciation: tableName => object
+	 *
+	 * @var array
+	 */
+	protected static $arrInstancesByTable = array();
+
+	/**
 	 * Returns the proper user object for the current context.
 	 *
 	 * @return BackendUser|FrontendUser|null the BackendUser when TL_MODE == 'BE', the FrontendUser when TL_MODE == 'FE' or null otherwise
@@ -109,7 +117,9 @@ class MetaModelFactory implements IMetaModelFactory
 			} else {
 				$objMetaModel = new MetaModel($arrData);
 			}
-			self::$arrInstances[$arrData['id']] = $objMetaModel;
+			self::$arrInstances[$arrData['id']] =
+			self::$arrInstancesByTable[$arrData['tableName']] =
+				$objMetaModel;
 		}
 		return $objMetaModel;
 	}
@@ -124,6 +134,7 @@ class MetaModelFactory implements IMetaModelFactory
 			return self::$arrInstances[$intId];
 		}
 		$objData = Database::getInstance()->prepare('SELECT * FROM tl_metamodel WHERE id=?')
+										->limit(1)
 										->execute($intId);
 		return ($objData->numRows)?self::createInstance($objData->row()):null;
 	}
@@ -133,13 +144,13 @@ class MetaModelFactory implements IMetaModelFactory
 	 */
 	public static function byTableName($strTablename)
 	{
+		if (array_key_exists($strTablename, self::$arrInstancesByTable))
+		{
+			return self::$arrInstancesByTable[$strTablename];
+		}
 		$objData = Database::getInstance()->prepare('SELECT * FROM tl_metamodel WHERE tableName=?')
 										->limit(1)
 										->execute($strTablename);
-		if (array_key_exists($objData->id, self::$arrInstances))
-		{
-			return self::$arrInstances[$objData->id];
-		}
 		return ($objData->numRows)?self::createInstance($objData->row()):null;
 	}
 
