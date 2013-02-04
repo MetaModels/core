@@ -54,7 +54,7 @@ class MetaModelTemplate
 	 */
 	public function __call($strMethod, $arrArgs)
 	{
-		return call_user_func_array(array('MetaModelController', $strMethod), $arrArgs);
+		return call_user_func_array(array(MetaModelController::getInstance(), $strMethod), $arrArgs);
 	}
 
 	/**
