@@ -21,23 +21,107 @@
  * @package	   MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Oliver Hoff <oliver@hofff.com>
  */
 class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 {
+	
 	public function prepareRules(IMetaModelFilter $objFilter, $arrFilterUrl)
 	{
 		$strSQL = $this->get('customsql');
-		// replace the metamodel table name.
-		$strSQL = str_replace('{{table}}', $this->getMetaModel()->getTableName(), $strSQL);
-		// and insert tags.
-		$strSQL = MetaModelController::getInstance()->replaceInsertTags($strSQL);
-		// TODO: support for arguments would be nice here.
+		$arrParams = array();
 
-		if (strlen($strSQL))
-		{
-			$objFilterRule = new MetaModelFilterRuleSimpleQuery($strSQL);
-			$objFilter->addFilterRule($objFilterRule);
+		$strSQL = $this->parseTable($strSQL, $arrParams);
+		$strSQL = $this->parseRequestVars($strSQL, $arrParams);
+		$strSQL = $this->parseInsertTags($strSQL, $arrParams);
+		
+		if (!strlen($strSQL)) {
+			return;
 		}
+		
+		$objFilterRule = new MetaModelFilterRuleSimpleQuery($strSQL);
+		$objFilter->addFilterRule($objFilterRule);
 	}
+	
+	protected function parseTable($strSQL, array &$arrParams) {
+		return str_replace('{{table}}', $this->getMetaModel()->getTableName(), $strSQL);
+	}
+	
+	protected function parseRequestVars($strSQL, array &$arrParams) {
+		return preg_replace_callback(
+			'@\{\{'
+			. '(?<var>get|post|session)'
+			. '(?:::(?<aggregate>list|set)(?<key>::key)?(?<recursive>::recursive)?)?'
+			. '::(?<name>[^:}]*)'
+			. '(?<hasDefault>::(?<default>[^}]*))?'
+			. '\}\}@',
+			function($arrMatch) use(&$arrParams) {
+				$arrName = array_map('urldecode', explode('/', $arrMatch['name']));
+				
+				switch($arrMatch['var']) {
+					case 'get': $var = Input::getInstance()->get(array_shift($arrName)); break;
+					case 'post': $var = Input::getInstance()->post(array_shift($arrName)); break;
+					case 'session': $var = Session::getInstance()->get(array_shift($arrName)); break;
+					default: throw new Exception('DOLPHINS RIDING RAINBOWS'); break;
+				}
+				
+				$i = 0;
+				while($i < count($arrName) && is_array($var)) {
+					$var = $var[$arrName[$i++]];
+				}
+				if($i != count($arrName) || $var === null) {
+					if($arrMatch['hasDefault']) {
+						$var = urldecode($arrMatch['default']);
+						return '?';
+					} else {
+						return 'NULL';
+					}
+				}
+				
+				// treat as scalar value
+				if(!$arrMatch['aggregate']) {
+					$arrParams[] = $var;
+					return '?';
+				}
+
+				// treat as list
+				$var = (array) $var;
+
+				if($arrMatch['recursive']) {
+					$var = iterator_to_array(
+						new RecursiveIteratorIterator(
+							new RecursiveArrayIterator(
+								$var
+							)
+						)
+					);
+				}
+				
+				if($arrMatch['key']) {
+					$var = array_keys($var);
+				} else { // use values
+					$var = array_values($var);
+				}
+				
+				if(!$var) {
+					return 'NULL';
+				}
+				
+				if($arrMatch['aggregate'] == 'set') {
+					$arrParams[] = implode(',', $var);
+					return '?';
+				} else {
+					$arrParams = array_merge($arrParams, $var);
+					return rtrim(str_repeat('?,', count($var)), ',');
+				}
+			},
+			$strSQL
+		);
+	}
+	
+	protected function parseInsertTags($strSQL, array &$arrParams) {
+		return MetaModelController::getInstance()->replaceInsertTags($strSQL);
+	}
+	
 }
 
