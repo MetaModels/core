@@ -32,7 +32,7 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 		$arrParams = array();
 
 		$strSQL = $this->parseTable($strSQL, $arrParams);
-		$strSQL = $this->parseRequestVars($strSQL, $arrParams);
+		$strSQL = $this->parseRequestVars($strSQL, $arrParams, $arrFilterUrl);
 		$strSQL = $this->parseInsertTags($strSQL, $arrParams);
 		
 		if (!strlen($strSQL)) {
@@ -47,11 +47,11 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 		return str_replace('{{table}}', $this->getMetaModel()->getTableName(), $strSQL);
 	}
 	
-	protected function parseRequestVars($strSQL, array &$arrParams) {
+	protected function parseRequestVars($strSQL, array &$arrParams, $arrFilterUrl) {
 		return preg_replace_callback(
-			'@\{\{'
-			. '(?<var>get|post|session)'
-			. '(?:::(?<aggregate>list|set)(?<key>::key)?(?<recursive>::recursive)?)?'
+			'@\{\{param'
+			. '(?:(?<aggregate>List|Set)(?<key>Key)?(?<recursive>::Recursive)?)?'
+			. '::(?<var>get|post|session)'
 			. '::(?<name>[^:}]*)'
 			. '(?<hasDefault>::(?<default>[^}]*))?'
 			. '\}\}@',
