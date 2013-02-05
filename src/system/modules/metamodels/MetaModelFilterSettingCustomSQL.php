@@ -51,7 +51,7 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 		return preg_replace_callback(
 			'@\{\{param'
 			. '(?:(?<aggregate>List|Set)(?<key>Key)?(?<recursive>::Recursive)?)?'
-			. '::(?<var>get|post|session)'
+			. '::(?<var>get|post|session|filter)'
 			. '::(?<name>[^:}]*)'
 			. '(?<hasDefault>::(?<default>[^}]*))?'
 			. '\}\}@',
@@ -62,6 +62,7 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 					case 'get': $var = Input::getInstance()->get(array_shift($arrName)); break;
 					case 'post': $var = Input::getInstance()->post(array_shift($arrName)); break;
 					case 'session': $var = Session::getInstance()->get(array_shift($arrName)); break;
+					case 'filter': $var = $arrFilterUrl ? $arrFilterUrl[array_shift($arrName)] : null; break;
 					default: throw new Exception('DOLPHINS RIDING RAINBOWS'); break;
 				}
 				
