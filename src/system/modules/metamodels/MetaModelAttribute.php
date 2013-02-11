@@ -353,14 +353,26 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 
 			$this->prepareTemplate($objTemplate, $arrRowData, $objSettings);
 
-			// text rendering is mandatory
-			$arrResult['text'] = $objTemplate->parse('text', true);
 			// now the desired format.
-
 			if ($strValue = $objTemplate->parse($strOutputFormat, false))
 			{
 				$arrResult[$strOutputFormat] = $strValue;
 			}
+
+			// text rendering is mandatory, try with the current setting,
+			// upon exception, try again with the default settings, as the template name might have changed.
+			// if this fails again, we are definately out of luck and bail the exception.
+			try {
+				$arrResult['text'] = $objTemplate->parse('text', true);
+			} catch (Exception $e) {
+				$objSettingsFallback = $this->getDefaultRenderSettings();
+
+				$objTemplate = new MetaModelTemplate($objSettingsFallback->template);
+				$this->prepareTemplate($objTemplate, $arrRowData, $objSettingsFallback);
+
+				$arrResult['text'] = $objTemplate->parse('text', true);
+			}
+
 		}
 		else {
 			// text rendering is mandatory, therefore render using default render settings.
