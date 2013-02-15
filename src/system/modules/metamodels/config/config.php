@@ -33,7 +33,7 @@ array_insert($GLOBALS['BE_MOD']['system'], 0, array
 			'tl_metamodel_dcasetting',
 			'tl_metamodel_dca_combine'
 		),
-		'icon'					=> 'system/modules/metamodels/html/metamodels.png',
+		'icon'					=> 'system/modules/metamodels/html/logo.png',
 		'dca_addall'			=> array('TableMetaModelDcaSetting', 'addAll'),
 		'rendersetting_addall'	=> array('TableMetaModelRenderSetting', 'addAll'),
 		'callback'				=> 'MetaModelBackendModule'
