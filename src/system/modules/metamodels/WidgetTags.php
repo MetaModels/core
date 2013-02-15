@@ -92,6 +92,19 @@ class WidgetTags extends Widget
 	}
 
 
+	protected function generateOption($val, $count)
+	{
+		return sprintf('<span class="%1$s opt_%2$s"><input type="checkbox" name="%1$s[]" id="opt_%3$s" class="checkbox" value="%4$s"%5$s%6$s <label id="lbl_%3$s" for="opt_%3$s">%7$s</label></span>',
+			$this->strName,
+			$count,
+			$this->strName.'_'.$count,
+			$val['value'],
+			(is_array($this->varValue) ? (in_array($val['value'],$this->varValue) ? ' checked="checked"' : ''):''),
+			$this->getAttributes() . $this->strTagEnding,
+			$val['label']
+		);
+	}
+
 	/**
 	 * Generate the widget and return it as string
 	 * @return string
@@ -103,65 +116,37 @@ class WidgetTags extends Widget
 		$this->strName
 		);
 
+		$count = 0;
+
 		if($this->options && is_array($this->options))
 		{
-			// do not filter
-			$return .= sprintf('<span class="%s none"><input type="checkbox" name="%s[]" id="opt_%s" class="checkbox" value="%s"%s%s <label id="lbl_%s" for="opt_%s">%s</label></span>',
-				$this->strName,
-				$this->strName,
-				$this->strName.'_0',
-				'--none--',
-				'',
-				$this->strTagEnding,
-				$this->strName.'_0',
-				$this->strName.'_0',
-				$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter']
-				);
+			if ($this->arrConfiguration['includeBlankOption'])
+			{
+				$return .= $this->generateOption(array('value' => '', 'label' => $this->arrConfiguration['blankOptionLabel']), $count++);
+			}
 
 			// select all tags
-			$return .= sprintf('<span class="%s all"><input type="checkbox" name="%s[]" id="opt_%s" class="checkbox" value="%s"%s%s <label id="lbl_%s" for="opt_%s">%s</label></span>',
-				$this->strName,
-				$this->strName,
-				$this->strName.'_1',
-				'--all--',
-				'',
-				$this->strTagEnding,
-				$this->strName.'_1',
-				$this->strName.'_1',
-				$GLOBALS['TL_LANG']['metamodels_frontendfilter']['select_all']
-				);
+			// TODO: does this really make sense? do we need such an option?
+			$return .= $this->generateOption(array('value' => '--all--', 'label' => $GLOBALS['TL_LANG']['metamodels_frontendfilter']['select_all']), $count++);
 
-			$count = 2;
 			foreach($this->options as $key=>$val)
 			{
-				$return .= sprintf('<span class="%s opt_%s"><input type="checkbox" name="%s[]" id="opt_%s" class="checkbox" value="%s"%s%s <label id="lbl_%s" for="opt_%s">%s</label></span>',
-					$this->strName,
-					$count,
-					$this->strName,
-					$this->strName.'_'.$count,
-					$val['value'],
-					(is_array($this->varValue) ? (in_array($val['value'],$this->varValue) ? ' checked="checked"' : ''):''),
-					$this->strTagEnding,
-					$this->strName.'_'.$count,
-					$this->strName.'_'.$count,
-					$val['label']
-					);
+				$return .= $this->generateOption($val, $count++);
 			}
 		}
 		else
 		{
 			// do not filter
-			$return .= sprintf('<span class="%s none"><input type="checkbox" name="%s[]" id="opt_%s" class="checkbox" value="%s"%s%s <label id="lbl_%s" for="opt_%s">%s</label></span>',
-				$this->strName,
-				$this->strName,
-				$this->strName.'_0',
-				'--none--',
-				'',
-				$this->strTagEnding,
-				$this->strName.'_0',
-				$this->strName.'_0',
-				$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'].'<span>'.$GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations'].'</span>'
+			if ($this->arrConfiguration['includeBlankOption'])
+			{
+				$return .= $this->generateOption(array
+					(
+						'value' => '',
+						'label' => $this->arrConfiguration['blankOptionLabel'].'<span>'.$GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations'].'</span>'
+					),
+					$count++
 				);
+			}
 		}
 
 		$return .='</fieldset>';
