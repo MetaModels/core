@@ -448,6 +448,7 @@ class MetaModel implements IMetaModel
 	public function getIdsFromFilter($objFilter, $strSortBy = '', $intOffset = 0, $intLimit = 0, $strSortOrder = 'ASC')
 	{
 		$arrFilteredIds = $this->getMatchingIds($objFilter);
+
 		// if desired, sort the entries.
 		if ($arrFilteredIds && $strSortBy != '')
 		{
@@ -555,9 +556,9 @@ class MetaModel implements IMetaModel
 			{
 				$arrFilteredIds = $this->getMatchingIds($objFilter);
 				$arrFilteredIds = $objAttribute->sortIds($arrFilteredIds, 'ASC');
-				return $objAttribute->getFilterOptions($arrFilteredIds);
+				return $objAttribute->getFilterOptions($arrFilteredIds, true);
 			} else {
-				return $objAttribute->getFilterOptions();
+				return $objAttribute->getFilterOptions(NULL, true);
 			}
 		}
 		return array();
