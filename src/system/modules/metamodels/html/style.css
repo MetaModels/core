@@ -1,27 +1,2 @@
 /* MetaModels style sheet */
-.header_css_fields { padding:2px 0px 3px 20px; background-image:url("fields.png"); background-position:left center; background-repeat:no-repeat; }
-.header_add_all { padding:2px 0px 3px 20px; margin-left: 15px; background-image:url("dca.png"); background-position:left center; background-repeat:no-repeat; }
-.rendersetting_add_all { background-image:url("rendersettings.png"); }
-.dca_palette { color: #8AB858; padding-left: 18px; padding-right: 3px; background: url(../../../themes/default/images/palOpen.gif) left center no-repeat; }
-.dca_combine.widget td:empty { display:none; }
-
-.mm_problem_display { margin-bottom:30px; }
-.mm_problem_display ul { padding:0; list-style:none; }
-.wizard a[data-lightbox] img { margin-top:3px; }
-
-.w50 { height: auto; }
-
-fieldset.tl_subdca { padding: 0; margin: 0; border: none; }
-
-.tl_subdca legend {
-	margin:0;
-	padding:10px 0 10px 23px;
-	background: url(filtersettings.png) no-repeat left center;
-}
-
-.tl_subdca legend label { font-weight:bold; }
-
-.tl_content .field_type img {
-margin-right:5px;
-float:left;
-}
+.header_css_fields{padding:2px 0 3px 20px;background-image:url("fields.png");background-position:left center;background-repeat:no-repeat}.header_add_all{padding:2px 0 3px 20px;margin-left:15px;background-image:url("dca.png");background-position:left center;background-repeat:no-repeat}.rendersetting_add_all{background-image:url("rendersettings.png")}.dca_palette{color:#8ab858;padding-left:18px;padding-right:3px;background:url(../../../themes/default/images/palOpen.gif) left center no-repeat}.dca_combine.widget td:empty{display:none}.mm_problem_display{margin-bottom:30px}.mm_problem_display ul{padding:0;list-style:none}.wizard a[data-lightbox] img{margin-top:3px}.w50{height:auto}fieldset.tl_subdca{padding:0;margin:0;border:0}.tl_subdca legend{margin:0;padding:10px 0 10px 23px;background:url(filtersettings.png) no-repeat left center}.tl_subdca legend label{font-weight:bold}.tl_content .field_type img{margin-right:5px;float:left}
