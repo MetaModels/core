@@ -192,37 +192,59 @@ class MetaModelList extends Controller
 	/**
 	 * Set filter and parameter.
 	 *
-	 * @param int $intFilter    the filter settings to use (if 0, the default will be used).
+	 * @param int      $intFilter  the filter settings to use (if 0, the default will be used).
 	 *
-	 * @param string[] $arrParam the parameters for the filter.
+	 * @param string[] $arrPresets the parameter preset values to use.
+	 *
+	 * @param string[] $arrValues the dynamic parameter values that may be used.
+	 *
+	 * @param string[] $arrPresets the parameters for the filter.
 	 *
 	 * @return MetaModelList
 	 */
-	public function setFilterParam($intFilter, $arrParams, $arrParamGet)
+	public function setFilterParam($intFilter, $arrPresets, $arrValues)
 	{
 		$this->intFilter    = $intFilter;
 
-		$this->getFilter($this->arrParam);
+		$this->getFilter();
 
 		if (!$this->objFilterSettings)
 		{
 			throw new Exception('Error: no filter object defined.');
 		}
 
-		$arrLegalParams = $this->objFilterSettings->getParameters();
+		$arrPresetNames = $this->objFilterSettings->getParameters();
+		$arrFEFilterParams = array_keys($this->objFilterSettings->getParameterFilterNames());
 
 		$arrProcessed = array();
 
-		foreach ($arrLegalParams as $strParameter)
+		// We have to use all the preset values we want first.
+		foreach ($arrPresets as $strPresetName => $arrPreset)
 		{
-			if (array_key_exists($strParameter, $arrParams))
+			if (in_array($strPresetName, $arrPresetNames))
 			{
-				// is in presets, check if _GET may override.
-				$arrProcessed[$strParameter] = ($arrParams[$strParameter]['use_get'] && $arrParamGet[$strParameter]) ? $arrParamGet[$strParameter] : $arrParams[$strParameter]['value'];
-			} else {
-				$arrProcessed[$strParameter] = $arrParamGet[$strParameter];
+				$arrProcessed[$strPresetName] = $arrPreset['value'];
 			}
 		}
+
+		// now we have to use all FE filter params, that are either:
+		// * not contained within the presets
+		// * or are overridable.
+		foreach ($arrFEFilterParams as $strParameter)
+		{
+			// unknown parameter? - next please
+			if (!array_key_exists($strParameter, $arrValues))
+			{
+				continue;
+			}
+
+			// not a preset or allowed to override? - use value
+			if ((!array_key_exists($strParameter, $arrPresets)) || $arrPresets[$strParameter]['use_get'])
+			{
+				$arrProcessed[$strParameter] = $arrValues[$strParameter];
+			}
+		}
+
 		$this->arrParam = $arrProcessed;
 
 		return $this;
@@ -296,8 +318,6 @@ class MetaModelList extends Controller
 
 	/**
 	 * Prepare the filter.
-	 *
-	 * @param array filter params to use.
 	 *
 	 * @return void
 	 */
