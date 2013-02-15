@@ -67,9 +67,9 @@ abstract class MetaModelFilterSetting implements IMetaModelFilterSetting
 		// action for empty selection
 		foreach($arrFilterUrl as $strKeyOption=>$strOption)
 		{
-			if($strKeyOption != $arrWidget['eval']['getparam'] && $arrFilterUrl[$strKeyOption])
+			if($strKeyOption != $arrWidget['eval']['urlparam'] && $arrFilterUrl[$strKeyOption])
 			{
-				$strFilterAction .= '/'.$strKeyOption.'/'.$arrFilterUrl[$strKeyOption];
+				$strFilterAction .= '/'.$strKeyOption.'/'. urlencode($arrFilterUrl[$strKeyOption]);
 			}
 		}
 
@@ -135,7 +135,8 @@ abstract class MetaModelFilterSetting implements IMetaModelFilterSetting
 			'urlparam'   => $arrWidget['eval']['urlparam'],
 			'getparam'   => $arrFilterUrl[$arrWidget['eval']['urlparam']],
 			'options'    => $this->prepareFrontendFilterOptions($arrWidget, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit),
-			'autosubmit' => $blnAutoSubmit
+			'autosubmit' => $blnAutoSubmit,
+			'urlvalue'   => $arrWidget['urlvalue'] ? $arrWidget['urlvalue'] : $arrWidget['value']
 		);
 	}
 
