@@ -28,7 +28,10 @@ class MetaModelFrontendFilter extends Frontend
 	 * Filter config
 	 */
 	protected $objFilterConfig;
+
 	protected $arrFilters = array();
+
+	protected $formId = 'mm_filter_';
 
 	/**
 	 * parameters to reset by the filter
@@ -39,6 +42,7 @@ class MetaModelFrontendFilter extends Frontend
 	 * parameters to link thru the filter
 	 */
 	protected $arrPreserveKeys = array();
+
 	protected $arrPreserveParams = array();
 
 
@@ -61,20 +65,99 @@ class MetaModelFrontendFilter extends Frontend
 			{
 				$this->objFilterConfig->arrJumpTo = $objPage->row();
 			}
-
 		}
 
-		// TODO: we should change this to POST data, definately better than redirecting different GET layouts around.
-		// redirect to same page with nice urls on form_submit
-		if($this->Input->get('FORM_SUBMIT')=='mm_fefilter')
-		{
-			$arrRequestParts = explode('?',$this->Environment->request);
-			$this->redirect(urldecode($this->addToUrl($this->getRequestString($this, $_GET), $arrRequestParts[0])));
-		}
-
+		$this->formId .= $this->objFilterConfig->id;
 		return $this->getFilters();
 	}
 
+	/**
+	 * generate an url determined by the given params and configured jumpTo page.
+	 *
+	 * @param array $arrParams the URL parameters to use.
+	 *
+	 * @return string the generated URL.
+	 *
+	 */
+	protected function getJumpToUrl($arrParams)
+	{
+		$strFilterAction = '';
+		foreach ($arrParams as $strName => $varParam)
+		{
+			$strValue = $varParam;
+
+			if (is_array($varParam))
+			{
+				$strValue = implode(',', array_filter($varParam));
+			}
+
+			$strValue = str_replace(array('/', '\''), array('-slash-', '-apos-'), $strValue);
+
+			if (strlen($strValue))
+			{
+				$strFilterAction .= sprintf(($GLOBALS['TL_CONFIG']['disableAlias'] ? '&amp;%s=%s' : '/%s/%s'), $strName, urlencode($strValue));
+			}
+		}
+		return $strFilterAction;
+	}
+
+	/**
+	 * Redirect the browser to the url determined by the given params (configured jumpTo page will get used).
+	 *
+	 * This will exit the script!
+	 *
+	 * @param array $arrParams the URL parameters to use.
+	 *
+	 */
+	protected function redirectPost($arrParams)
+	{
+		// now translate all params to a valid url and redirect us to it.
+		$this->redirect($this->Environment->base . $this->generateFrontendUrl($this->objFilterConfig->arrJumpTo, $this->getJumpToUrl($arrParams)));
+	}
+
+	protected function getWantedNames()
+	{
+		return (array)unserialize($this->objFilterConfig->metamodel_fef_params);
+	}
+
+	protected function getParams()
+	{
+		$arrWantedParam = $this->getWantedNames();
+
+		$arrMyParams = $arrOtherParams = array();
+
+		if ($_GET)
+		{
+			foreach (array_keys($_GET) as $strParam)
+			{
+				if(in_array($strParam, $arrWantedParam))
+				{
+					$arrMyParams[$strParam] = $this->Input->get($strParam);
+				} else {
+					$arrOtherParams[$strParam] = $this->Input->get($strParam);
+				}
+			}
+		}
+
+		// if POST, translate to proper GET url
+		if ($_POST && ($this->Input->post('FORM_SUBMIT') == $this->formId))
+		{
+			foreach (array_keys($_POST) as $strParam)
+			{
+				if(in_array($strParam, $arrWantedParam))
+				{
+					$arrMyParams[$strParam] = $this->Input->post($strParam);
+				}
+			}
+		}
+
+		return array
+		(
+			'filter' => $arrMyParams,
+			'other' => $arrOtherParams,
+			'all' => array_merge($arrOtherParams, $arrMyParams)
+		);
+	}
 
 	/**
 	 * Get the filters
@@ -83,201 +166,63 @@ class MetaModelFrontendFilter extends Frontend
 	{
 		$strAction = '';
 
-		// get filter settings
 		/**
 		 * @var IMetaModelFilterSettings
 		 */
 		$objFilterSetting = MetaModelFilterSettingsFactory::byId($this->objFilterConfig->metamodel_filtering);
 
-		$arrParameters = $objFilterSetting->getParameterFilterWidgets($_GET, $this->objFilterConfig->arrJumpTo, $this->objFilterConfig->metamodel_fef_autosubmit);
+		$blnAutoSubmit = $this->objFilterConfig->metamodel_fef_autosubmit ? true : false;
+		$arrJumpTo = $this->objFilterConfig->arrJumpTo;
 
-		$arrAttributes = (array)unserialize($this->objFilterConfig->metamodel_fef_params);
+		$arrParams = $this->getParams();
 
-		foreach($arrParameters as $strKeyParameter=>$arrParameter)
+		$arrWidgets = $objFilterSetting->getParameterFilterWidgets($arrParams['all'], $arrJumpTo, $blnAutoSubmit);
+
+		// filter the widgets we do not want to show.
+		$arrWanted = $this->getWantedNames();
+
+		// if we have POST data, we need to redirect now.
+		if ($_POST && ($this->Input->post('FORM_SUBMIT') == $this->formId))
 		{
-			if(!in_array($strKeyParameter, $arrAttributes))
+			$arrRedirectParams = $arrParams['other'];
+			foreach ($arrWanted as $strWidget)
 			{
-				unset($arrParameters[$strKeyParameter]);
+				$arrFilter = $arrWidgets[$strWidget];
+				if (!empty($arrFilter['urlvalue']))
+				{
+					$arrRedirectParams[$strWidget] = $arrFilter['urlvalue'];
+				}
 			}
+			$this->redirectPost($arrRedirectParams);
 		}
 
-		foreach($arrParameters as $key=>$val)
+		$arrRendered = array();
+
+		// render the widgets through the filter templates.
+		foreach($this->getWantedNames() as $strWidget)
 		{
-			// we need the get parameter later originally
-			$strGetParameter = $this->Input->get($key);
+			$arrFilter = $arrWidgets[$strWidget];
 
-			// convert __-separated tags to array
-			if($val['eval']['multiple'])
-			{
-				$arrTags = explode('__', $this->Input->get($key));
-				$this->Input->setGet($key, $arrTags);
-			}
+			$strTemplate = $arrFilter['raw']['eval']['template'];
 
-			// if an array-parameter is --none-- redirect to url without this key
-			if(is_array($this->Input->get($key)) && strpos($strGetParameter, '--none--')!==false)
-			{
-				$arrTmpGet = array();
-
-				foreach($_GET as $strKeyGet=>$strValGet)
-				{
-					if($strKeyGet != $key)
-					{
-						$arrTmpGet[$strKeyGet] = $strValGet;
-						$this->Input->setGet($strKeyGet, $strValGet);
-					}
-				}
-
-				$arrRequestParts = explode('?',$this->Environment->request);
-				$this->redirect($this->addToUrl($this->getRequestString($this, $arrTmpGet), $arrRequestParts[0]));
-			}
-
-			// if an array-parameter is --all-- redirect to url with all options checked
-			if(is_array($this->Input->get($key)) && strpos($strGetParameter, '--all--')!==false)
-			{
-				$arrTmpGet = array();
-
-				foreach($_GET as $strKeyGet=>$mixedValGet)
-				{
-					if($strKeyGet != $key)
-					{
-						$arrTmpGet[$strKeyGet] = $mixedValGet;
-						$this->Input->setGet($strKeyGet, $mixedValGet);
-					}
-					else
-					{
-						$mixedValGet = array();
-						foreach($val['options'] as $strKeyOption=>$strValOption)
-						{
-							$mixedValGet[] = $strKeyOption;
-						}
-						$arrTmpGet[$strKeyGet] = $mixedValGet;
-						$this->Input->setGet($strKeyGet, $mixedValGet);
-					}
-				}
-
-				$arrRequestParts = explode('?',$this->Environment->request);
-				$this->redirect($this->addToUrl($this->getRequestString($this, $arrTmpGet), $arrRequestParts[0]));
-			}
-
-			$this->arrFilters[] = $val;
-
-			// mark key as key to reset
-			$this->arrResetKeys[] = $key;
-		}
-
-		// collect parameters to keep
-		foreach($_GET as $strKeyGet=>$strValGet)
-		{
-			if(!in_array($strKeyGet, $this->arrResetKeys) && $strValGet)
-			{
-				$this->arrPreserveKeys[] = $strKeyGet;
-			}
-		}
-
-		// filter out double parameters
-		$this->arrPreserveKeys = is_array($this->arrPreserveKeys) ? array_unique($this->arrPreserveKeys) : array();
-
-		// store values for parameters to keep
-		foreach($this->arrPreserveKeys as $strKeyPreserveKey)
-		{
-			if($this->Input->get($strKeyPreserveKey))
-			{
-				$strAction .= '/'.$strKeyPreserveKey.'/';
-
-				// convert __-separated tags to array
-				if(strpos($this->Input->get($strKeyPreserveKey),'__'))
-				{
-					$arrTags = explode('__', $this->Input->get($strKeyPreserveKey));
-					$this->Input->setGet($strKeyPreserveKey, $arrTags);
-				}
-
-				// tags
-				if(is_array($this->Input->get($strKeyPreserveKey)))
-				{
-					$strTmpAction = '';
-
-					foreach($this->Input->get($strKeyPreserveKey) as $tmpVal)
-					{
-						$this->arrPreserveParams[] =array(
-							'key'   => $strKeyPreserveKey.'[]',
-							'value' => $tmpVal
-							);
-						$strTmpAction .= ($strTmpAction ? '__':'').urlencode($tmpVal);
-					}
-
-					$strAction .= $strTmpAction;
-				}
-				else
-				{
-					// standard
-					$this->arrPreserveParams[] =array(
-						'key'   => $strKeyPreserveKey,
-						'value' => $this->Input->get($strKeyPreserveKey)
-						);
-
-					$strAction .= urlencode($this->Input->get($strKeyPreserveKey));
-				}
-			}
-		}
-
-		// prepare action-urls for options via links and parse subtemplate
-		foreach($this->arrFilters as $intKeyFilter=>$arrFilter)
-		{
 			// parse sub template
-			$objSubTemplate            = new FrontendTemplate(($arrFilter['raw']['eval']['template'] ? $arrFilter['raw']['eval']['template'] : 'mm_filteritem_default'));
+			$objSubTemplate            = new FrontendTemplate($strTemplate ? $strTemplate : 'mm_filteritem_default');
 
 			$objSubTemplate->setData($arrFilter);
-			$objSubTemplate->submit    = ($this->objFilterConfig->metamodel_fef_autosubmit ? true : false);
-			$this->arrFilters[$intKeyFilter]['value'] = $objSubTemplate->parse();
+			$objSubTemplate->submit    = $blnAutoSubmit;
+
+			$arrFilter['value'] = $objSubTemplate->parse();
+
+			$arrRendered[$strWidget] = $arrFilter;
 		}
 
 		// return filter data
 		return array(
-			'action'     => $this->generateFrontendUrl($this->objFilterConfig->arrJumpTo),
-			'parameters' => $this->arrPreserveParams,
-			'filter'     => $this->arrFilters,
-			'submit'     => ($this->objFilterConfig->metamodel_fef_autosubmit ? '' : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit'])
-			);
-	}
-
-
-	/**
-	 * get a request string for nice urls
-	 */
-	protected function getRequestString($objThis, $arrGet)
-	{
-		foreach($arrGet as $strGet=>$voidGetVal)
-		{
-			// discard the FORM_SUBMIT to avoid an endless redirect ;)
-			if($strGet != 'FORM_SUBMIT')
-			{
-				// arrays
-				if(is_array($objThis->Input->get($strGet)))
-				{
-					$strAdd2 = '';
-
-					foreach($objThis->Input->get($strGet) as $strGetVal)
-					{
-						if($strGetVal)
-						{
-							$strAdd2 .= ($strAdd2 ? '__' : '').urlencode($strGetVal);
-						}
-					}
-
-					if($strAdd2)
-					{
-						$strAdd .= ($strAdd ? '&':'').$strGet.'='.$strAdd2;
-					}
-				}
-				// strings
-				elseif($objThis->Input->get($strGet))
-				{
-					$strAdd .= ($strAdd ? '&':'').$strGet.'='.urlencode($objThis->Input->get($strGet));
-				}
-			}
-		}
-
-		return $strAdd;
+			'action'     => $this->generateFrontendUrl($arrJumpTo, $this->getJumpToUrl($arrParams['other'])),
+			'formid'     => $this->formId,
+			'filters'    => $arrRendered,
+			'submit'     => ($blnAutoSubmit ? '' : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit'])
+		);
 	}
 }
 

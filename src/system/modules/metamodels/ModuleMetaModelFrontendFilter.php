@@ -63,28 +63,9 @@ class ModuleMetaModelFrontendFilter extends Module
 		$objFilter = new MetaModelFrontendFilter();
 		$arrFilter = $objFilter->getMetaModelFrontendFilter($this);
 
-		// sort filters
-		$arrSort = deserialize($this->metamodel_fef_params);
-
-		foreach((array)$arrSort as $intKeySort=>$strValSort)
-		{
-			foreach($arrFilter['filter'] as $arrFilterDef)
-			{
-				if($arrFilterDef['urlparam'] == $strValSort)
-				{
-					$arrFilter['filterSorted'][$intKeySort] = $arrFilterDef;
-					continue;
-				}
-			}
-		}
-
 		// get template
 		$objTemplate = new FrontendTemplate(($this->metamodel_fef_template ? $this->metamodel_fef_template : 'mm_filter_default'));
-
-		// fill template
-		$this->Template->action = $arrFilter['action'];
-		$this->Template->parameters = $arrFilter['parameters'];
-		$this->Template->filters = $arrFilter['filterSorted'];
+		$this->Template->setData($arrFilter);
 		$this->Template->submit = $arrFilter['submit'];
 	}
 }

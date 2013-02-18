@@ -420,6 +420,7 @@ class MetaModelList extends Controller
 	 */
 	protected function getAttributeNames()
 	{
+		// TODO: need a way to determine the names from the filtersetting used in the view here.
 		return $this->objView->getSettingNames();
 	}
 

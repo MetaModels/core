@@ -122,7 +122,7 @@ class WidgetTags extends Widget
 		{
 			if ($this->arrConfiguration['includeBlankOption'])
 			{
-				$return .= $this->generateOption(array('value' => '', 'label' => $this->arrConfiguration['blankOptionLabel']), $count++);
+				$return .= $this->generateOption(array('value' => '--none--', 'label' => $this->arrConfiguration['blankOptionLabel']), $count++);
 			}
 
 			// select all tags

@@ -6,17 +6,14 @@
 <?php endif; ?>
 
 <form<?php if ($this->action): ?> action="<?php echo $this->action; ?>"<?php endif; ?> method="get">
-<input type="hidden" name="FORM_SUBMIT" value="mm_fefilter" />
+<input name="REQUEST_TOKEN" type="hidden" value="{{request_token}}" />
+<input type="hidden" name="FORM_SUBMIT" value="<?php echo $this->formid; ?>">
 <div class="formbody">
-
-<?php foreach((is_array($this->parameters) ? $this->parameters : array()) as $parameter): ?>
-<input type="hidden" name="<?php echo $parameter['key']; ?>" value="<?php echo $parameter['value']; ?>" />
-<?php endforeach; ?>
 
 <?php foreach((is_array($this->filters) ? $this->filters : array()) as $filter): ?>
 <div class="widget <?php echo $filter['class']; ?>">
 	<?php echo $filter['label']; ?>
-	<?php echo $filter['field']; ?>
+	<?php echo $filter['value']; ?>
 </div>
 <?php endforeach; ?>
 
