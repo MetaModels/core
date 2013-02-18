@@ -133,6 +133,12 @@ abstract class MetaModelFilterSetting implements IMetaModelFilterSetting
 		// The URL parameter concerning us will be masked via %s to be used later on in a sprintf().
 		foreach($arrFilterUrl as $strKeyOption=>$strOption)
 		{
+			// skip the magic "language" parameter.
+			if (($strKeyOption == 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl'])
+			{
+				continue;
+			}
+
 			if($strKeyOption != $arrWidget['eval']['urlparam'])
 			{
 				if (!empty($arrFilterUrl[$strKeyOption]))

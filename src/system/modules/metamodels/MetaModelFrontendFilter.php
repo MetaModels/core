@@ -84,6 +84,12 @@ class MetaModelFrontendFilter extends Frontend
 		$strFilterAction = '';
 		foreach ($arrParams as $strName => $varParam)
 		{
+			// skip the magic "language" parameter.
+			if (($strName == 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl'])
+			{
+				continue;
+			}
+
 			$strValue = $varParam;
 
 			if (is_array($varParam))
