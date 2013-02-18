@@ -27,12 +27,15 @@ class MetaModelFilterSettingConditionAnd extends MetaModelFilterSettingWithChild
 	public function prepareRules(IMetaModelFilter $objFilter, $arrFilterUrl)
 	{
 		$objSubFilter = new MetaModelFilter($this->getMetaModel());
+
 		foreach ($this->arrChilds as $objChildSetting)
 		{
 			$objChildSetting->prepareRules($objSubFilter, $arrFilterUrl);
 		}
-		// TODO: we might rather want to implement a new combiner rule that handles this here.
-		$objFilterRule = new MetaModelFilterRuleStaticIdList($objSubFilter->getMatchingIds());
+
+		$objFilterRule = new MetaModelFilterRuleAND();
+		$objFilterRule->addChild($objSubFilter);
+
 		$objFilter->addFilterRule($objFilterRule);
 	}
 }

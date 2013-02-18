@@ -23,13 +23,19 @@
  */
 class MetaModelFilterRuleOR extends MetaModelFilterRule
 {
-
 	/**
-	 * The static id list that shall be applied.
+	 * The list of child filters that shall be evaluated.
+	 *
+	 * @var IMetaModelFilter[]
 	 */
 	protected $arrChildFilters = array();
 
-
+	/**
+	 * Boolean flag determining if filtering shall be stopped after the
+	 * first matching child that returns at least one element (NULL counts as "all ids" here).
+	 *
+	 * @var bool
+	 */
 	protected $stopAfterMatch = false;
 
 	/**

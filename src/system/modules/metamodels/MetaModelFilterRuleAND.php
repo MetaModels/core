@@ -23,9 +23,10 @@
  */
 class MetaModelFilterRuleAND extends MetaModelFilterRule
 {
-
 	/**
-	 * The static id list that shall be applied.
+	 * The list of child filters that shall be evaluated.
+	 *
+	 * @var IMetaModelFilter[]
 	 */
 	protected $arrChildFilters = array();
 
@@ -38,6 +39,13 @@ class MetaModelFilterRuleAND extends MetaModelFilterRule
 		parent::__construct();
 	}
 
+	/**
+	 * adds a child filter to this rule that will get evaluated when this rule is evaluated.
+	 *
+	 * @param IMetaModelFilter $objFilter the filter to add as child
+	 *
+	 * @return void
+	 */
 	public function addChild(IMetaModelFilter $objFilter)
 	{
 		$this->arrChildFilters[] = $objFilter;
