@@ -161,10 +161,10 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 
 	public function getParameterFilterNames()
 	{
-		if ($this->enableFEFilterWidget())
+		if ($strParamName = $this->getParamName())
 		{
 			return array(
-				$this->getParamName() => ($this->get('label') ? $this->get('label') : $this->getMetaModel()->getAttributeById($this->get('attr_id'))->getName())
+				$strParamName => ($this->get('label') ? $this->get('label') : $this->getMetaModel()->getAttributeById($this->get('attr_id'))->getName())
 			);
 		} else {
 			return array();
