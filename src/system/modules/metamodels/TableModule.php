@@ -15,33 +15,22 @@ class TableModule extends Backend
 
 	public function buildFilterParams($objDC)
 	{
-		// Check if we have a id, no create mode
-		if (is_null($objDC->id))
-		{
-			unset($GLOBALS['TL_DCA']['tl_module']['fields']['metamodel_filterparams']);
-			return;
-		}
-
 		// Get basic informations
-		$objModule = $this->Database
-				->prepare('SELECT type, metamodel, metamodel_filtering FROM tl_module WHERE id=?')
-				->limit(1)
-				->execute($objDC->id);
-
-		$intMetaModel	 = $objModule->metamodel;
-		$intFilter		 = $objModule->metamodel_filtering;
-
-		// Check if we have a row/metaModelconten/MetaModel/Filter
-		if ($objModule->numRows == 0 || $objModule->type != 'metamodel_list' || empty($intMetaModel) || empty($intFilter))
-		{
+		$objModule = $this->Database->prepare(
+			'SELECT	m.metamodel_filtering
+			FROM	tl_module AS m
+			JOIN	tl_metamodel AS mm ON mm.id = m.metamodel
+			WHERE	m.id = ?
+			AND		m.type = ?'
+		)->limit(1)->execute($objDC->id, 'metamodel_list');
+		
+		if(!$objModule->metamodel_filtering) {
 			unset($GLOBALS['TL_DCA']['tl_module']['fields']['metamodel_filterparams']);
 			return;
 		}
-
-		$objFilter = $objFilterSettings = MetaModelFilterSettingsFactory::byId($intFilter);
-		$arrParams = $objFilter->getParameterDCA();
-
-		$GLOBALS['TL_DCA']['tl_module']['fields']['metamodel_filterparams']['eval']['subfields'] = $arrParams;
+		
+		$objFilterSettings = MetaModelFilterSettingsFactory::byId($objModule->metamodel_filtering);
+		$GLOBALS['TL_DCA']['tl_module']['fields']['metamodel_filterparams']['eval']['subfields'] = $objFilterSettings->getParameterDCA();
 	}
 
 	/**
