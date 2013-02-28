@@ -98,5 +98,18 @@ implements IMetaModelFilterSettingWithChilds
 		}
 		return $arrParams;
 	}
+	
+	/**
+	* {@inheritdoc}
+	*/
+	public function getParameterFilterNames()
+	{
+		$arrParams = array();
+		foreach ($this->arrChilds as $objSetting)
+		{
+			$arrParams = array_merge($arrParams, $objSetting->getParameterFilterNames());
+		}
+		return $arrParams;
+	}
 }
 
