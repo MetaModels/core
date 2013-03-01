@@ -210,9 +210,9 @@ abstract class MetaModelFilterSetting implements IMetaModelFilterSetting
 
 		$arrData = MetaModelController::getInstance()->prepareForWidget($arrWidget, $arrWidget['eval']['urlparam'], $arrWidget['value']);
 
-		if ($blnAutoSubmit)
+		if ($blnAutoSubmit && TL_MODE == 'FE')
 		{
-			$arrData['onchange'] = 'submit();';
+			$GLOBALS['TL_JAVASCRIPT']['metamodels'] = 'system/modules/metamodels/html/metamodels.js';
 		}
 
 		$objWidget = new $strClass($arrData);
