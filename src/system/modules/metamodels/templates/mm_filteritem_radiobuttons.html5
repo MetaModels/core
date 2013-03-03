@@ -1,12 +1,13 @@
 <?php if(is_array($this->options) && count($this->options)>0): ?>
-<fieldset id="ctrl_<?php echo $this->urlparam; ?>"<?php echo ($this->submit ? ' onchange="submit();"' : ''); ?> class="checkbox_container">
+<fieldset id="ctrl_<?php echo $this->urlparam; ?>" class="checkbox_container">
 <?php
 $count = 0;
 foreach($this->options as $option): 
-	$field = sprintf('<input type="radio" name="%s" id="opt_%s_%s" class="checkbox" value="%s"%s>',
+	$field = sprintf('<input type="radio" name="%s" id="opt_%s_%s" class="checkbox%s" value="%s"%s />',
 		$this->urlparam,
 		$this->urlparam,
 		$count,
+        $this->submit ? ' submitonchange' : '',
 		$option['key'],
 		($option['active'] ? ' checked="checked"':'')
 		);
