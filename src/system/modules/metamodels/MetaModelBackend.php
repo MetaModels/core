@@ -80,6 +80,13 @@ class MetaModelBackend
 		// We also have to fix up the "script" parameter, as this one will otherwise try to redirect from
 		// "contao/index.php" to "/contao/index.php" therefore creating an infinite redirect loop.
 		$Env = Environment::getInstance();
+
+		// issue #66 - contao/install.php is not working anymore. Thanks to Stefan Lindecke (@lindesbs)
+		if (strpos($Env->request,"install.php") !== false)
+		{
+			return;
+		}
+
 		$Env->base = $Env->url . $GLOBALS['TL_CONFIG']['websitePath'] . '/';
 		$Env->script = preg_replace('/^' . preg_quote($GLOBALS['TL_CONFIG']['websitePath'], '/') . '\/?/i', '', $Env->scriptName);
 
