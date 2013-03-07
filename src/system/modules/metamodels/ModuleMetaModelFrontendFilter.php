@@ -64,7 +64,10 @@ class ModuleMetaModelFrontendFilter extends Module
 		$arrFilter = $objFilter->getMetaModelFrontendFilter($this);
 
 		// get template
-		$objTemplate = new FrontendTemplate(($this->metamodel_fef_template ? $this->metamodel_fef_template : 'mm_filter_default'));
+		if ($this->metamodel_fef_template)
+		{
+			$this->Template = new FrontendTemplate($this->metamodel_fef_template);
+		}
 		$this->Template->setData($arrFilter);
 		$this->Template->submit = $arrFilter['submit'];
 	}
