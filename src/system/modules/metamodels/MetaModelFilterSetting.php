@@ -222,10 +222,11 @@ abstract class MetaModelFilterSetting implements IMetaModelFilterSetting
 		return array
 		(
 			'class'      => sprintf(
-				'mm_%s %s%s',
+				'mm_%s %s%s%s',
 				$arrWidget['inputType'],
 				$arrWidget['eval']['urlparam'],
-				(($arrWidget['value']!==NULL) ? ' used':' unused')
+				(($arrWidget['value']!==NULL) ? ' used':' unused'),
+				($blnAutoSubmit ? ' submitonchange' : '')
 			),
 			'label'      => $objWidget->generateLabel(),
 			'formfield'  => $strField,
