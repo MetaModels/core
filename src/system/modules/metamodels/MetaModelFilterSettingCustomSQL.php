@@ -30,7 +30,7 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 	{
 		$strSQL = $this->get('customsql');
 		$arrParams = array();
-
+		
 		$strSQL = $this->parseTable($strSQL, $arrParams);
 		$strSQL = $this->parseRequestVars($strSQL, $arrParams, $arrFilterUrl);
 		$strSQL = $this->parseInsertTags($strSQL, $arrParams);
