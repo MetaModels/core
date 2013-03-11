@@ -39,7 +39,7 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 			return;
 		}
 		
-		$objFilterRule = new MetaModelFilterRuleSimpleQuery($strSQL);
+		$objFilterRule = new MetaModelFilterRuleSimpleQuery($strSQL, $arrParams);
 		$objFilter->addFilterRule($objFilterRule);
 	}
 	
