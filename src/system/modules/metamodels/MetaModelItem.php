@@ -211,20 +211,22 @@ class MetaModelItem implements IMetaModelItem
 				}
 			}
 		}
-		
+
 		$arrResult['jumpTo'] = $this->buildJumpToLink($objSettings);
-		
+
 		return $arrResult;
 	}
-	
-	public function buildJumpToLink($objSettings) {
+
+	public function buildJumpToLink($objSettings)
+	{
 		if(!$objSettings) {
 			return null;
 		}
-	
+
 		//get the right jumpto
 		$strDesiredLanguage = $this->getMetaModel()->getActiveLanguage();
 		$strFallbackLanguage = $this->getMetaModel()->getFallbackLanguage();
+
 		foreach((array) $objSettings->get('jumpTo') as $arrJumpTo)
 		{
 			// if either desired language or fallback, keep the result.
@@ -241,19 +243,19 @@ class MetaModelItem implements IMetaModelItem
 				}
 			}
 		}
-	
+
 		// second, apply jumpTo urls based upon the filter defined in the render settings.
 		$objPage = MetaModelController::getPageDetails($intJumpTo);
 		if(!$objPage) {
 			return null;
 		}
-	
+
 		$arrJumpTo = array();
-	
+
 		if($intFilterSettings) {
 			$objFilterSettings = MetaModelFilterSettingsFactory::byId($intFilterSettings);
 			$arrParams = $objFilterSettings->generateFilterUrlFrom($this, $objSettings);
-				
+
 			foreach ($arrParams as $strKey => $strValue)
 			{
 				if($strKey == 'auto_item') {
@@ -262,16 +264,16 @@ class MetaModelItem implements IMetaModelItem
 					$strParams .= sprintf('/%s/%s', $strKey, $strValue);
 				}
 			}
-				
+
 			$arrJumpTo['params'] = $arrParams;
 			$arrJumpTo['deep'] = strlen($strParams) > 0;
 		}
-	
+
 		$arrJumpTo['page'] = $intJumpTo;
 		$arrJumpTo['url'] = MetaModelController::generateFrontendUrl($objPage->row(), $strParams);
 		return $arrJumpTo;
 	}
-	
+
 	/**
 	 * {@inheritdoc}
 	 */
