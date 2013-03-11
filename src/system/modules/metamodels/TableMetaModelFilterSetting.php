@@ -22,7 +22,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
 
-class TableMetaModelFilterSetting extends Backend
+class TableMetaModelFilterSetting extends TableMetaModelHelper
 {
 	/**
 	 * @var MetaPalettes
@@ -314,14 +314,7 @@ class TableMetaModelFilterSetting extends Backend
 	 */
 	public function getSubTemplates(DataContainer $dc)
 	{
-		$intPid = $dc->activeRecord->pid;
-
-		if ($this->Input->get('act') == 'overrideAll')
-		{
-			$intPid = $this->Input->get('id');
-		}
-
-		return $this->getTemplateGroup('mm_filteritem_', $intPid);
+		return $this->getTemplatesForBase('mm_filteritem_');
 	}
 
 	/**
