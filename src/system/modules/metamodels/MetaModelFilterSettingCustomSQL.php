@@ -26,6 +26,9 @@
 class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 {
 	
+	/* (non-PHPdoc)
+	 * @see IMetaModelFilterSetting::prepareRules()
+	 */
 	public function prepareRules(IMetaModelFilter $objFilter, $arrFilterUrl)
 	{
 		$strSQL = $this->get('customsql');
@@ -43,10 +46,22 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 		$objFilter->addFilterRule($objFilterRule);
 	}
 	
+	/**
+	 * @param string $strSQL SQL to parse
+	 * @param array $arrParams Query param stack
+	 * @return string Parsed SQL
+	 */
 	protected function parseTable($strSQL, array &$arrParams) {
 		return str_replace('{{table}}', $this->getMetaModel()->getTableName(), $strSQL);
 	}
 	
+	/**
+	 * @param string $strSQL SQL to parse
+	 * @param array $arrParams Query param stack
+	 * @param mixed|array|null $arrFilterUrl The filter params (should be array or null)
+	 * @throws Exception DOLPHINS RIDING RAINBOWS
+	 * @return string Parsed SQL
+	 */
 	protected function parseRequestVars($strSQL, array &$arrParams, $arrFilterUrl) {
 		return preg_replace_callback(
 			'@\{\{param'
@@ -120,6 +135,11 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 		);
 	}
 	
+	/**
+	 * @param string $strSQL SQL to parse
+	 * @param array $arrParams Query param stack
+	 * @return string Parsed SQL
+	 */
 	protected function parseInsertTags($strSQL, array &$arrParams) {
 		return MetaModelController::getInstance()->replaceInsertTags($strSQL);
 	}
