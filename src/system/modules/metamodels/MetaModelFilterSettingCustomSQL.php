@@ -59,7 +59,6 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 	 * @param string $strSQL SQL to parse
 	 * @param array $arrParams Query param stack
 	 * @param mixed|array|null $arrFilterUrl The filter params (should be array or null)
-	 * @throws Exception DOLPHINS RIDING RAINBOWS
 	 * @return string Parsed SQL
 	 */
 	protected function parseRequestVars($strSQL, array &$arrParams, $arrFilterUrl) {
@@ -78,7 +77,7 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 					case 'post': $var = Input::getInstance()->post(array_shift($arrName)); break;
 					case 'session': $var = Session::getInstance()->get(array_shift($arrName)); break;
 					case 'filter': $var = $arrFilterUrl ? $arrFilterUrl[array_shift($arrName)] : null; break;
-					default: throw new Exception('DOLPHINS RIDING RAINBOWS'); break;
+					default: return ''; /* should never occur */ break;
 				}
 				
 				$i = 0;
