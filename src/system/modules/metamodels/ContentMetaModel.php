@@ -63,6 +63,8 @@ class ContentMetaModel extends ContentElement
 	{
 		$objItemRenderer = new MetaModelList();
 
+		$this->Template->searchable = !$this->metamodel_donotindex;
+
 		$this->Template->items = $objItemRenderer
 			->setMetaModel($this->metamodel, $this->metamodel_rendersettings)
 			->setLimit($this->metamodel_use_limit, $this->metamodel_offset, $this->metamodel_limit)

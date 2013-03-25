@@ -41,6 +41,8 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering']			= array('Filter setti
 $GLOBALS['TL_LANG']['tl_content']['metamodel_layout']				= array('Custom template to use for generating', 'Select the template that shall be used for the selected attribute. Valid template filenames start with "ce_metamodel".');
 $GLOBALS['TL_LANG']['tl_content']['metamodel_rendersettings']		= array('Render settings to apply', 'Select the rendering settings to use for generating the output. If left empty, the default settings for the selected MetaModel will get applied. If no default has been defined, the output will only get the raw values.');
 $GLOBALS['TL_LANG']['tl_content']['metamodel_noparsing']			= array('No parsing of items', 'If this checkbox is selected, the module will not parse the items. Only the item-objects will be available in the template.');
+$GLOBALS['TL_LANG']['tl_content']['metamodel_donotindex']     = array('Do not add to search index', 'If this is checked, the Contao internal search index will ignore the content of this content element.');
+
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams']			= array('Filter settings override');
 
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams_use_get'] = array('Use GET Parameter', '');

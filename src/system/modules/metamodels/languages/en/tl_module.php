@@ -37,6 +37,7 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_filterparams_use_get'] = array('Use 
 
 
 $GLOBALS['TL_LANG']['tl_module']['metamodel_noparsing']      = array('No parsing of items', 'If this checkbox is selected, the module will not parse the items. Only the item-objects will be available in the template.');
+$GLOBALS['TL_LANG']['tl_module']['metamodel_donotindex']     = array('Do not add to search index', 'If this is checked, the Contao internal search index will ignore the content of this module.');
 
 $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_autosubmit'] = array('Submit on change', 'reload page on filter change.');
 $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_params'] = array('Attributes', 'Select the attributes used in this FE filter.');
