@@ -163,95 +163,12 @@ class MetaModelTemplate
 	 */
 	protected function getTemplate($strTemplate, $strFormat='html5', $blnFailIfNotFound = false)
 	{
-		$strTemplate = basename($strTemplate);
-
-		// Contao 3.X only.
-		if (version_compare(VERSION, '3.0', '>='))
-		{
-			// Check for a theme folder
-			if (TL_MODE == 'FE')
-			{
-				global $objPage;
-				$strCustom = str_replace('../', '', $objPage->templateGroup);
-
-				if ($strCustom != '')
-				{
-					return \TemplateLoader::getPath($strTemplate, $strFormat, $strCustom);
-				}
+		try {
+			return MetaModelTemplateLoader::getTemplateFile(basename($strTemplate), $strFormat);
+		} catch(Exception $e) {
+			if($blnFailIfNotFound) {
+				throw $e;
 			}
-
-			return \TemplateLoader::getPath($strTemplate, $strFormat);
-		}
-
-		// Contao 2.X from here on.
-
-		$strKey = $strFilename = $strTemplate . '.' . $strFormat;
-
-		// Check for a theme folder
-		if (TL_MODE == 'FE')
-		{
-			global $objPage;
-			$strTemplateGroup = str_replace(array('../', 'templates/'), '', $objPage->templateGroup);
-
-			if ($strTemplateGroup != '')
-			{
-				$strKey = $strTemplateGroup . '/' . $strKey;
-			}
-		}
-
-		$objCache = FileCache::getInstance('templates');
-
-		// Try to load the template path from the cache
-		if (!$GLOBALS['TL_CONFIG']['debugMode'] && isset($objCache->$strKey))
-		{
-			if (file_exists(TL_ROOT . '/' . $objCache->$strKey))
-			{
-				return TL_ROOT . '/' . $objCache->$strKey;
-			}
-			else
-			{
-				unset($objCache->$strKey);
-			}
-		}
-
-		$strPath = TL_ROOT . '/templates';
-
-		// Check the theme folder first
-		if (TL_MODE == 'FE' && $strTemplateGroup != '')
-		{
-			$strFile = $strPath . '/' . $strTemplateGroup . '/' . $strFilename;
-
-			if (file_exists($strFile))
-			{
-				$objCache->$strKey = 'templates/' . $strTemplateGroup . '/' . $strFilename;
-				return $strFile;
-			}
-		}
-
-		// Then check the global templates directory
-		$strFile = $strPath . '/' . $strFilename;
-
-		if (file_exists($strFile))
-		{
-			$objCache->$strKey = 'templates/' . $strFilename;
-			return $strFile;
-		}
-
-		// At last browse all module folders in reverse order
-		foreach (array_reverse(Config::getInstance()->getActiveModules()) as $strModule)
-		{
-			$strFile = TL_ROOT . '/system/modules/' . $strModule . '/templates/' . $strFilename;
-
-			if (file_exists($strFile))
-			{
-				$objCache->$strKey = 'system/modules/' . $strModule . '/templates/' . $strFilename;
-				return $strFile;
-			}
-		}
-
-		if ($blnFailIfNotFound)
-		{
-			throw new Exception('Could not find template file "' . $strFilename . '"');
 		}
 	}
 
