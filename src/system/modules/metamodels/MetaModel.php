@@ -228,7 +228,7 @@ class MetaModel implements IMetaModel
 			{
 				continue;
 			}
-			$arrAttributeData = $objAttribute->getDataFor($arrIds);
+			$arrAttributeData = $objAttribute->getDataFor($arrIds, $arrResult);
 			$strColName = $objAttribute->getColName();
 			foreach (array_keys($arrResult) as $intId)
 			{

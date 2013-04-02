@@ -33,7 +33,7 @@ interface IMetaModelAttributeComplex extends IMetaModelAttribute
 	 * @return mixed[] the nature of the resulting array is a mapping from id => "native data" where
 	 *                 the definition of "native data" is only of relevance to the given item.
 	 */
-	public function getDataFor($arrIds);
+	public function getDataFor($arrIds/*, array $arrResult*/); // TODO update all implementors
 
 	/**
 	 * Remove values for items.

@@ -101,7 +101,7 @@ implements IMetaModelAttributeTranslated
 		);
 	}
 
-	public function getDataFor($arrIds)
+	public function getDataFor($arrIds/*, array $arrResult*/) // TODO see interface comment
 	{
 		$strActiveLanguage = $this->getMetaModel()->getActiveLanguage();
 		$strFallbackLanguage = $this->getMetaModel()->getFallbackLanguage();
