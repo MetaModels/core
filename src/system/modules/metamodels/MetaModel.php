@@ -626,6 +626,10 @@ class MetaModel implements IMetaModel
 	 */
 	public function saveItem($objItem)
 	{
+		foreach ($this->getAttributes() as $objAttribute) {
+			$objAttribute->checkSaveable($objItem);
+		}
+
 		$objDB = Database::getInstance();
 
 		$objItem->set('tstamp', time());

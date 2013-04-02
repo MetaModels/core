@@ -163,6 +163,14 @@ interface IMetaModelAttribute
 	public function setDataFor($arrValues/*, $objItem*/); // TODO update all implementors
 
 	/**
+	 * Checks if the given item can be saved in its current state.
+	 *
+	 * @param MetaModelItem $objItem The item to be checked
+	 * @throws MetaModelItemNotSaveableException If item is not saveable
+	 */
+	public function checkSaveable(MetaModelItem $objItem);
+
+	/**
 	 * Retrieve an instance containing the default render settings for an attribute of this type.
 	 *
 	 * @return object
