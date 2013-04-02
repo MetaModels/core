@@ -56,7 +56,7 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 	 *
 	 * Updates the column in the MetaModel table.
 	 */
-	public function setDataFor($arrValues)
+	public function setDataFor($arrValues/*, $objItem*/) // TODO see interface comment
 	{
 		$strTable = $this->getMetaModel()->getTableName();
 		$strColName = $this->getColName();

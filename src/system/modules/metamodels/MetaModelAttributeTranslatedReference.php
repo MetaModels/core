@@ -133,7 +133,7 @@ implements IMetaModelAttributeTranslated
 		return $arrReturn;
 	}
 
-	public function setDataFor($arrValues)
+	public function setDataFor($arrValues/*, $objItem*/) // TODO see interface comment
 	{
 		foreach ($this->getMetaModel()->getAvailableLanguages() as $strLangCode)
 		{

@@ -160,7 +160,7 @@ interface IMetaModelAttribute
 	 *
 	 * @return void
 	 */
-	public function setDataFor($arrValues);
+	public function setDataFor($arrValues/*, $objItem*/); // TODO update all implementors
 
 	/**
 	 * Retrieve an instance containing the default render settings for an attribute of this type.
