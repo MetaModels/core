@@ -63,16 +63,13 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 	 */
 	protected function parseRequestVars($strSQL, array &$arrParams, $arrFilterUrl) {
 		return preg_replace_callback(
-			'@\{\{param'
-			. '(?:(?<aggregate>List|Set)(?<key>Key)?(?<recursive>::Recursive)?)?'
-			. '::(?<var>get|post|session|filter)'
-			. '::(?<name>[^:}]*)'
-			. '(?<hasDefault>::(?<default>[^}]*))?'
-			. '\}\}@',
+			'@\{\{param::([^}]*)\}\}@',
 			function($arrMatch) use(&$arrParams, $arrFilterUrl) {
-				$arrName = array_map('urldecode', explode('/', $arrMatch['name']));
+				list($strSource, $strQuery) = explode('?', $arrMatch[1], 2);
+				parse_str($strQuery, $arrArgs);
+				$arrName = (array) $arrArgs['name'];
 
-				switch($arrMatch['var']) {
+				switch($strSource) {
 					case 'get': $var = Input::getInstance()->get(array_shift($arrName)); break;
 					case 'post': $var = Input::getInstance()->post(array_shift($arrName)); break;
 					case 'session': $var = Session::getInstance()->get(array_shift($arrName)); break;
@@ -85,8 +82,8 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 					$var = $var[$arrName[$i++]];
 				}
 				if($i != count($arrName) || $var === null) {
-					if($arrMatch['hasDefault']) {
-						$var = urldecode($arrMatch['default']);
+					if(isset($arrArgs['default'])) {
+						$var = $arrArgs['default'];
 						return '?';
 					} else {
 						return 'NULL';
@@ -94,7 +91,7 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 				}
 
 				// treat as scalar value
-				if(!$arrMatch['aggregate']) {
+				if(!$arrArgs['aggregate']) {
 					$arrParams[] = $var;
 					return '?';
 				}
@@ -102,7 +99,7 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 				// treat as list
 				$var = (array) $var;
 
-				if($arrMatch['recursive']) {
+				if($arrArgs['recursive']) {
 					$var = iterator_to_array(
 						new RecursiveIteratorIterator(
 							new RecursiveArrayIterator(
@@ -112,17 +109,17 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 					);
 				}
 
-				if($arrMatch['key']) {
+				if(!$var) {
+					return 'NULL';
+				}
+
+				if($arrArgs['key']) {
 					$var = array_keys($var);
 				} else { // use values
 					$var = array_values($var);
 				}
 
-				if(!$var) {
-					return 'NULL';
-				}
-
-				if($arrMatch['aggregate'] == 'set') {
+				if($arrArgs['aggregate'] == 'set') {
 					$arrParams[] = implode(',', $var);
 					return '?';
 				} else {
