@@ -282,7 +282,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 
 class tl_metamodel_rendersettings extends backend
 {
-		/**
+	/**
 	 * Return the link picker wizard
 	 * @param DataContainer
 	 * @return string
