@@ -27,6 +27,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']               = array('Parent 
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']                 = array('Sorting mode', 'The sorting mode to use in the item view.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']                 = array('Sorting flag', 'The sorting flag to use in the item view.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['disableGrouping']      = array('Disable group headers', 'Disables the intermediate group headers for entries with common sorting values.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']       = array('Back end section', 'Select the desired back end section where you want the MetaModel appear. For models that shall be edited by end users, the "content" section most likely will be appropriate.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon']          = array('Back end icon', 'Select the desired back end icon. This icon will get used to draw an image in the left menu and on the top of the edit view in tree displays.');
 

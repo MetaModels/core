@@ -276,6 +276,7 @@ class MetaModelDatabase extends Controller
 		$arrDCA['list']['sorting']['mode'] = $arrDCASettings['mode'];
 		// Set Sorting flag from current renderSettings
 		$arrDCA['list']['sorting']['flag'] = $arrDCASettings['flag'];
+		$arrDCA['list']['sorting']['disableGrouping'] = $arrDCASettings['mode'] == 0 || $arrDCASettings['disableGrouping'];
 
 		// Set filter/sorting fields
 		$arrSorting = array();
