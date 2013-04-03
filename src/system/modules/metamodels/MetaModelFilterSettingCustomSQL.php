@@ -25,7 +25,7 @@
  */
 class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 {
-	
+
 	/* (non-PHPdoc)
 	 * @see IMetaModelFilterSetting::prepareRules()
 	 */
@@ -33,19 +33,19 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 	{
 		$strSQL = $this->get('customsql');
 		$arrParams = array();
-		
+
 		$strSQL = $this->parseTable($strSQL, $arrParams);
 		$strSQL = $this->parseRequestVars($strSQL, $arrParams, $arrFilterUrl);
 		$strSQL = $this->parseInsertTags($strSQL, $arrParams);
-		
+
 		if (!strlen($strSQL)) {
 			return;
 		}
-		
+
 		$objFilterRule = new MetaModelFilterRuleSimpleQuery($strSQL, $arrParams);
 		$objFilter->addFilterRule($objFilterRule);
 	}
-	
+
 	/**
 	 * @param string $strSQL SQL to parse
 	 * @param array $arrParams Query param stack
@@ -54,7 +54,7 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 	protected function parseTable($strSQL, array &$arrParams) {
 		return str_replace('{{table}}', $this->getMetaModel()->getTableName(), $strSQL);
 	}
-	
+
 	/**
 	 * @param string $strSQL SQL to parse
 	 * @param array $arrParams Query param stack
@@ -71,7 +71,7 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 			. '\}\}@',
 			function($arrMatch) use(&$arrParams) {
 				$arrName = array_map('urldecode', explode('/', $arrMatch['name']));
-				
+
 				switch($arrMatch['var']) {
 					case 'get': $var = Input::getInstance()->get(array_shift($arrName)); break;
 					case 'post': $var = Input::getInstance()->post(array_shift($arrName)); break;
@@ -79,7 +79,7 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 					case 'filter': $var = $arrFilterUrl ? $arrFilterUrl[array_shift($arrName)] : null; break;
 					default: return ''; /* should never occur */ break;
 				}
-				
+
 				$i = 0;
 				while($i < count($arrName) && is_array($var)) {
 					$var = $var[$arrName[$i++]];
@@ -92,7 +92,7 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 						return 'NULL';
 					}
 				}
-				
+
 				// treat as scalar value
 				if(!$arrMatch['aggregate']) {
 					$arrParams[] = $var;
@@ -111,17 +111,17 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 						)
 					);
 				}
-				
+
 				if($arrMatch['key']) {
 					$var = array_keys($var);
 				} else { // use values
 					$var = array_values($var);
 				}
-				
+
 				if(!$var) {
 					return 'NULL';
 				}
-				
+
 				if($arrMatch['aggregate'] == 'set') {
 					$arrParams[] = implode(',', $var);
 					return '?';
@@ -133,7 +133,7 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 			$strSQL
 		);
 	}
-	
+
 	/**
 	 * @param string $strSQL SQL to parse
 	 * @param array $arrParams Query param stack
@@ -142,6 +142,6 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 	protected function parseInsertTags($strSQL, array &$arrParams) {
 		return MetaModelController::getInstance()->replaceInsertTags($strSQL);
 	}
-	
+
 }
 
