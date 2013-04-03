@@ -504,6 +504,8 @@ class MetaModelList extends Controller
 
 		$this->objTemplate->items = $this->objItems;
 
+		$this->objTemplate->filterParams = $this->arrParam;
+		
 		return $this->objTemplate->parse($this->strOutputFormat);
 	}
 
