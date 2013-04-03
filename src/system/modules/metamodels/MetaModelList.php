@@ -100,6 +100,10 @@ class MetaModelList extends Controller
 	 */
 	protected $arrParam = array();
 
+	public function __construct() {
+		parent::__construct();
+	}
+
 	/**
 	 * Set the limit
 	 *
