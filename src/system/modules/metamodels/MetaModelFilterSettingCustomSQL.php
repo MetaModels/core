@@ -69,7 +69,7 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 			. '::(?<name>[^:}]*)'
 			. '(?<hasDefault>::(?<default>[^}]*))?'
 			. '\}\}@',
-			function($arrMatch) use(&$arrParams) {
+			function($arrMatch) use(&$arrParams, $arrFilterUrl) {
 				$arrName = array_map('urldecode', explode('/', $arrMatch['name']));
 
 				switch($arrMatch['var']) {
