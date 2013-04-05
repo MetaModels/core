@@ -74,7 +74,7 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 					case 'post': $var = Input::getInstance()->post(array_shift($arrName)); break;
 					case 'session': $var = Session::getInstance()->get(array_shift($arrName)); break;
 					case 'filter': $var = $arrFilterUrl ? $arrFilterUrl[array_shift($arrName)] : null; break;
-					default: return ''; /* should never occur */ break;
+					default: return 'NULL'; /* should never occur */ break;
 				}
 
 				$i = 0;
