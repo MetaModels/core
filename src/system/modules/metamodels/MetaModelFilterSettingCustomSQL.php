@@ -140,6 +140,9 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 		return MetaModelController::getInstance()->replaceInsertTags($strSQL);
 	}
 
+	/* (non-PHPdoc)
+	 * @see MetaModelFilterSetting::getParameters()
+	 */
 	public function getParameters() {
 		preg_match_all('@\{\{param::filter\?([^}]*)\}\}@', $this->get('customsql'), $arrMatches);
 		foreach($arrMatches[1] as $strQuery) {
