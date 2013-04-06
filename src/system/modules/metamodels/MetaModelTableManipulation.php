@@ -119,7 +119,7 @@ class MetaModelTableManipulation
 
 	public static function isReservedIdentifier($strName)
 	{
-		return false !== strpos($strName, '__');
+		return $strName == 'varbase' || $strName == 'vargroup' || false !== strpos($strName, '__');
 	}
 
 	/**
@@ -498,23 +498,38 @@ class MetaModelTableManipulation
 	 */
 	public static function setVariantSupport($strTableName, $blnVariantSupport)
 	{
-		if ($blnVariantSupport)
-		{
-			if (self::getDB()->tableExists($strTableName, null, true) && (!self::getDB()->fieldExists('varbase', $strTableName, true)))
-			{
-				self::createColumn($strTableName, 'varbase', 'char(1) NOT NULL default \'\'');
-				self::createColumn($strTableName, 'vargroup', 'int(11) NOT NULL default 0');
-				// TODO: we should also apply an index on vargroup here.
+		if (!self::getDB()->tableExists($strTableName, null, true)) {
+			return;
+		}
+		self::checkTableName($strTableName);
 
+		if ($blnVariantSupport) {
+			if (!self::getDB()->fieldExists('varbase', $strTableName, true)) {
+				self::createColumn($strTableName, 'varbase', 'char(1) NOT NULL default \'\'', true);
+				$arrSet['varbase'] = '1';
+			}
+			if (!self::getDB()->fieldExists('vargroup', $strTableName, true)) {
+				self::createColumn($strTableName, 'vargroup', 'int(11) NOT NULL default 0', true);
+				$arrSet['vargroup'] = 'id';
+				// TODO: we should also apply an index on vargroup here.
+			}
+			if ($arrSet) {
 				// if there is pre-existing data in the table, we need to provide a separate 'vargroup' value to all of them,
 				// we can do this safely by setting all vargroups to the id of the base item.
-				self::getDB()->execute(sprintf('UPDATE %s SET vargroup=id, varbase=1', $strTableName));
+				foreach ($arrSet as $strColumnName => $strValue) {
+					$strValue = $strColumnName . ' = ' . $strValue;
+				}
+				$strSet = implode(', ', $arrSet);
+				$strQuery = sprintf('UPDATE %s SET %s', $strTableName, $strSet);
+				self::executeQuery($strQuery);
 			}
+
 		} else {
-			if (self::getDB()->tableExists($strTableName, null, true) && self::getDB()->fieldExists('varbase', $strTableName, true))
-			{
-				self::dropColumn($strTableName, 'varbase');
-				self::dropColumn($strTableName, 'vargroup');
+			if (self::getDB()->fieldExists('varbase', $strTableName, true)) {
+				self::dropColumn($strTableName, 'varbase', true);
+			}
+			if (self::getDB()->fieldExists('vargroup', $strTableName, true)) {
+				self::dropColumn($strTableName, 'vargroup', true);
 			}
 		}
 	}
