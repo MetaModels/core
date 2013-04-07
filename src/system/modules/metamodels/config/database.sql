@@ -56,6 +56,7 @@ CREATE TABLE `tl_metamodel_dca` (
 -- sorting flag.
   `flag` int(4) unsigned NOT NULL default '0',
   `disableGrouping` char(1) NOT NULL default '',
+  `initialSorting` int(10) NOT NULL default '0',
 -- the panel layouts we want to display.
   `panelLayout` blob NULL,
 -- parent table (if mode 3,4,6)

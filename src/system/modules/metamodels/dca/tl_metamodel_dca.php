@@ -151,10 +151,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 				6 Displays the child records within a tree structure (see articles module)
 			*/
 			'mode_0'  => array('flag'),
-			'mode_1'  => array('flag', 'disableGrouping'),
-			'mode_2'  => array('flag', 'disableGrouping'),
+			'mode_1'  => array('flag', 'disableGrouping', 'initialSorting'),
+			'mode_2'  => array('flag', 'disableGrouping', 'initialSorting'),
 			'mode_3'  => array(''),
-			'mode_4'  => array('disableGrouping'), // TODO: select parent head fields here.
+			'mode_4'  => array('disableGrouping', 'initialSorting'), // TODO: select parent head fields here.
 			'mode_5'  => array(''),
 			'mode_6'  => array('ptable'),
 		),
@@ -254,6 +254,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class'=>'w50 m12 cbx')
+		),
+
+		'initialSorting' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['initialSorting'],
+			'exclude'                 => true,
+			'inputType'               => 'select',
+			'options_callback'        => array('TableMetaModelDca', 'getAllAttributes'),
+			'eval'                    => array('includeBlankOption'=>true, 'tl_class'=>'clr w50'),
 		),
 
 		'backendsection' => array

@@ -200,7 +200,7 @@ class TableMetaModelDca extends Backend
 
 		foreach ($objMetaModel->getAttributes() as $objAttribute)
 		{
-			$arrReturn[$objAttribute->getColName()] = $objAttribute->getName();
+			$arrReturn[$objAttribute->get('id')] = $objAttribute->getName();
 		}
 		return $arrReturn;
 	}
