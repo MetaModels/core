@@ -28,6 +28,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']               = array('Elternt
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']                 = array('Sortiermodus', 'Sortiermodus, der für die Darstellung der Datensätze benutzt werden soll.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']                 = array('Sortierung', 'Sortierung in der Datensatzansicht.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['disableGrouping']      = array('Gruppenköpfe deaktivieren', 'Deaktiviert die Gruppierung der Datensätze mit gleichen Sortierwerten.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['initialSorting']       = array('Initiales Sortierfeld', '');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']       = array('Backend-Bereich', 'Den gewünschten Backend-Bereich auswählen, in dem das MetaModel erscheinen soll. Für Inhalte, die von Redakteuren bearbeitet werden sollen, wird der Bereich "Inhalte" empfohlen.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon']          = array('Backend-Icon', 'Ein Icon für die Darstellung im Backend auswählen. Dieses Icon wird links vom Menütext angezeigt und ermöglicht eine schnelle Orientierung. In der Baumansicht wird das Icon ebenfalls im oberen Bereich benutzt.');
 

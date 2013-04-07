@@ -286,7 +286,11 @@ class MetaModelDatabase extends Controller
 		$arrDCA['list']['sorting']['disableGrouping'] = $arrDCASettings['mode'] == 0 || $arrDCASettings['disableGrouping'];
 
 		// Set filter/sorting fields
-		$arrSorting = array();
+		$objSortingAttr = $objMetaModel->getAttributeById($arrDCASettings['initialSorting']);
+		if($objSortingAttr) {
+			$arrDCA['list']['sorting']['fields'] = (array) $arrDCA['list']['sorting']['fields'];
+			array_unshift($arrDCA['list']['sorting']['fields'], $objSortingAttr->getColName());
+		}
 
 		// add sorting field to sortable field list.
 		// TODO: empty this list when toggling manual sort.
