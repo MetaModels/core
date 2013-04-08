@@ -104,7 +104,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		'default' => array
 		(
 			'title' => array('name', 'isdefault'),
-			'general' => array('template', 'jumpTo'),
+			'general' => array('template', 'format', 'jumpTo'),
 		),
 	),
 
@@ -132,7 +132,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'exclude'                 => true,
 			'inputType'               => 'select',
 			'options_callback'        => array('TableMetaModelRenderSettings','getTemplates'),
-			'eval'                    => array()
+			'eval'                    => array('tl_class'=>'w50')
+		),
+		'format' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['format'],
+			'exclude'                 => true,
+			'inputType'               => 'select',
+			'options'                 => array('html5', 'xhtml', 'text'),
+			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions'],
+			'eval'                    => array('includeBlankOption'=>true, 'tl_class'=>'w50')
 		),
 		'jumpTo' => array
 		(
@@ -173,7 +182,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 						)
 					),
 				),
-				'buttons' => array('copy' => false, 'delete' => false, 'up' => false, 'down' => false)
+				'buttons' => array('copy' => false, 'delete' => false, 'up' => false, 'down' => false),
+				'tl_class' => 'clr',
 			)
 		),
 	),
