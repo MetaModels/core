@@ -95,6 +95,7 @@ CREATE TABLE `tl_metamodel_dcasetting` (
   `allowHtml` char(1) NOT NULL default '',
 -- preserve html tags.
   `preserveTags` char(1) NOT NULL default '',
+  `chosen` char(1) NOT NULL default '',
 -- decode entities.
   `decodeEntities` char(1) NOT NULL default '',
 -- enable rich text editor configuration

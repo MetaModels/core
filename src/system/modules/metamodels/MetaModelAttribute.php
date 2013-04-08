@@ -246,6 +246,7 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 		foreach (array(
 			'tl_class',
 			'mandatory',
+			'chosen',
 			'allowHtml',
 			'preserveTags',
 			'decodeEntities',
