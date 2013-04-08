@@ -45,10 +45,15 @@ class MetaModelBackend
 	 * This initializes the Contao Singleton object stack as it must be,
 	 * when using singletons within the config.php file of an Extension.
 	 *
-	 * @return void
+	 * @return bool
 	 */
 	protected static function initializeContaoObjectStack()
 	{
+		if (!file_exists(TL_ROOT . '/system/config/localconfig.php'))
+		{
+			return false;
+		}
+
 		// all of these getInstance calls are neccessary to keep the instance stack intact
 		// and therefore prevent an Exception in unknown on line 0.
 		// Hopefully this will get fixed with Contao Reloaded or Contao 3.
@@ -62,6 +67,8 @@ class MetaModelBackend
 		self::getUser();
 
 		Database::getInstance();
+
+		return true;
 	}
 
 	protected static function isDBInitialized()
@@ -154,7 +161,10 @@ class MetaModelBackend
 	 */
 	public static function buildBackendMenu()
 	{
-		self::initializeContaoObjectStack();
+		if (!self::initializeContaoObjectStack())
+		{
+			return;
+		}
 
 		if (self::isDBInitialized())
 		{
