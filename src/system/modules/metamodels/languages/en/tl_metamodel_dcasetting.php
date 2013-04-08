@@ -27,6 +27,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']        = array('Le
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']      = 'Language';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']         = 'Legend title';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory']          = array('Mandatory', 'Check if this attribute shall be mandatory.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['chosen']             = array('Chosen', 'Enable Chosen graphical select widget.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['filterable']         = array('Filterable', 'Check if this attribute shall be available for back end filtering.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortable']           = array('Sortable', 'Check if this attribute shall be available for back end sorting.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['searchable']         = array('Searchable', 'Check if this attribute shall be available for back end search.');

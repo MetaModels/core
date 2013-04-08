@@ -153,6 +153,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			 * * tl_class           css class to use in backend.
 			 * * flag               search flag to override.
 			 * * mandatory          mandatory
+			 * * chosen
 			 * * filterable         can be filtered (in backend)
 			 * * sortable           can be sorted (in backend)
 			 * * searchable         can be searched (in backend)
@@ -296,6 +297,17 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 		 * Hence we define them in the core.
 		 * If others are needed, that apply to at least 2-3 attribute extensions, consider adding it in the core.
 		 */
+		'chosen' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['chosen'],
+			'exclude'               => true,
+			'inputType'             => 'checkbox',
+			'eval'                  => array
+			(
+				'tl_class'          => 'w50 m12'
+			)
+		),
+
 		'allowHtml' => array
 		(
 			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml'],
