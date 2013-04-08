@@ -182,9 +182,7 @@ class MetaModelList extends Controller
 		if(strlen($strOutputFormat))
 		{
 			$this->strOutputFormat = $strOutputFormat;
-		}
-		else
-		{
+		} else {
 			unset($this->strOutputFormat);
 		}
 		return $this;
@@ -369,7 +367,7 @@ class MetaModelList extends Controller
 			{
 				$intLimit = $this->intLimit;
 			}
-			if($this->intOffset)
+			if ($this->intOffset)
 			{
 				$intOffset = $this->intOffset;
 			}
@@ -507,15 +505,15 @@ class MetaModelList extends Controller
 
 	public function getOutputFormat()
 	{
-		if(isset($this->strOutputFormat))
+		if (isset($this->strOutputFormat))
 		{
 			return $this->strOutputFormat;
 		}
-		if(isset($this->objView) && $this->objView->get('format'))
+		if (isset($this->objView) && $this->objView->get('format'))
 		{
 			return $this->objView->get('format');
 		}
-		if(TL_MODE == 'FE' && is_object($GLOBALS['objPage']) && $GLOBALS['objPage']->outputFormat)
+		if (TL_MODE == 'FE' && is_object($GLOBALS['objPage']) && $GLOBALS['objPage']->outputFormat)
 		{
 			return $GLOBALS['objPage']->outputFormat;
 		}
@@ -541,9 +539,7 @@ class MetaModelList extends Controller
 		if($this->objItems->getCount() && !$blnNoNativeParsing)
 		{
 			$this->objTemplate->data = $this->objItems->parseAll($strOutputFormat, $this->objView);
-		}
-		else
-		{
+		} else {
 			$this->objTemplate->data = array();
 		}
 

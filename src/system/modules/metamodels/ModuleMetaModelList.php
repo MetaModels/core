@@ -27,7 +27,7 @@ class ModuleMetaModelList extends Module
 	 * Template
 	 * @var string
 	 */
-	protected $strTemplate = 'mod_metamodellist';
+	protected $strTemplate = 'mod_metamodel_list';
 
 	public function generate()
 	{

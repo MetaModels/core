@@ -124,8 +124,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 				'submitOnChange'      => true,
 				'includeBlankOption'  => true,
 				'mandatory'           => true,
-                'chosen' => true,
-                'tl_class' => 'w50'
+				'chosen'              => true,
+				'tl_class'            => 'w50'
 			),
 		),
 
@@ -137,8 +137,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 			'options_callback'        => array('TableMetaModelRenderSetting', 'getTemplates'),
 			'eval'                    => array
 			(
-				'tl_class' => 'w50',
-				'includeBlankOption' => true,
+				'tl_class'            => 'w50',
+				'includeBlankOption'  => true,
 			)
 		),
 	)
