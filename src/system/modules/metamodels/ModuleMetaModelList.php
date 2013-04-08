@@ -70,7 +70,6 @@ class ModuleMetaModelList extends Module
 			->setLimit($this->metamodel_use_limit, $this->metamodel_offset, $this->metamodel_limit)
 			->setPageBreak($this->perPage)
 			->setSorting($this->metamodel_sortby, $this->metamodel_sortby_direction)
-			->setTemplateFormat($this->Template->getFormat())
 			->setFilterParam($this->metamodel_filtering, deserialize($this->metamodel_filterparams, true), $_GET)
 			->render($this->metamodel_noparsing, $this);
 		$this->Template->pagination = $objItemRenderer->getPagination();

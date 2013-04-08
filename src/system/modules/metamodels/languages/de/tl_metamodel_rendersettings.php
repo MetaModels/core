@@ -30,6 +30,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']                 = arr
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']               = array('Aktualisierungsdatum', 'Datum und Zeit der letzten Aktualisierung.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']            = array('Standard', 'Bestimmt, ob diese Einstellung als Standardvorgabe bei Eltern-Kind-Beziehungen im MetaModel benutzt werden soll, wenn in einem Modul oder Inhaltselement keines explizit ausgewählt wurde.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']             = array('Template', 'Das Template festlegen, das für die Darstellung der Datensätze benutzt werden soll.');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['format']               = array('Ausgabeformat', 'Das Ausgabeformat festlegen. Freilassen um das Format der Seite, auf der die Ausgabe dargestellt wird, zu verwenden.');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']        = array('html5' => 'HTML5', 'xhtml' => 'XHTML', 'text' => 'Text');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']               = array('Zielseite', 'Die Seite (URL) festlegen, die für die Darstellung der Details benutzt wird. Detaillierte URL-Parameter werden von der jeweiligen Filtereinstellung generiert.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['allLanguages'] = 'Alle Sprachen';
 
