@@ -90,7 +90,7 @@ interface IMetaModelItems extends Iterator, ArrayAccess
 	 *
 	 * @param string      $strOutputFormat optional, defaults to text. The output format to use.
 	 *
-	 * @param object|null $objSettings     optional, defaults to null. The additional settings.
+	 * @param IMetaModelRenderSettings|null $objSettings     optional, defaults to null. The additional settings.
 	 *
 	 * @return array the parsed information.
 	 */
@@ -101,7 +101,7 @@ interface IMetaModelItems extends Iterator, ArrayAccess
 	 *
 	 * @param string      $strOutputFormat optional, defaults to text. The output format to use.
 	 *
-	 * @param object|null $objSettings     optional, defaults to null. The additional settings.
+	 * @param IMetaModelRenderSettings|null $objSettings     optional, defaults to null. The additional settings.
 	 *
 	 * @return array the parsed information.
 	 */
