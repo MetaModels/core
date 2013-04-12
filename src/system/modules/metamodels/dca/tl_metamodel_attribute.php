@@ -89,6 +89,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 				'href'                => 'act=copy',
 				'icon'                => 'copy.gif'
 			), */
+			'cut' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['cut'],
+				'href'                => 'act=paste&amp;mode=cut',
+				'icon'                => 'cut.gif',
+				'attributes'          => 'onclick="Backend.getScrollOffset();"'
+			),
 			'delete' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['delete'],
