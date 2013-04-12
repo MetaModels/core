@@ -5,7 +5,7 @@
 <<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
 <?php endif; ?>
 
-<form<?php if ($this->action): ?> action="<?php echo $this->action; ?>"<?php endif; ?> method="get">
+<form<?php if ($this->action): ?> action="<?php echo $this->action; ?>"<?php endif; ?> method="post">
 <input name="REQUEST_TOKEN" type="hidden" value="{{request_token}}" />
 <input type="hidden" name="FORM_SUBMIT" value="<?php echo $this->formid; ?>">
 <div class="formbody">
