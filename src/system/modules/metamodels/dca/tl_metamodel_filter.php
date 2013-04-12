@@ -65,12 +65,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
 				'href'                => 'act=edit',
 				'icon'                => 'edit.gif'
 			),
-			'copy' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['copy'],
-				'href'                => 'act=copy',
-				'icon'                => 'copy.gif'
-			),
 			'delete' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['delete'],
