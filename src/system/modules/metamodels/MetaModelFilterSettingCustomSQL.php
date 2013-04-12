@@ -36,6 +36,7 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 
 		$strSQL = $this->parseTable($strSQL, $arrParams);
 		$strSQL = $this->parseRequestVars($strSQL, $arrParams, $arrFilterUrl);
+		$strSQL = $this->parseSecureInsertTags($strSQL, $arrParams);
 		$strSQL = $this->parseInsertTags($strSQL, $arrParams);
 
 		if (!strlen($strSQL)) {
@@ -126,6 +127,23 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 					$arrParams = array_merge($arrParams, $var);
 					return rtrim(str_repeat('?,', count($var)), ',');
 				}
+			},
+			$strSQL
+		);
+	}
+
+	/**
+	 * @param string $strSQL SQL to parse
+	 * @param array $arrParams Query param stack
+	 * @return string Parsed SQL
+	 */
+	protected function parseSecureInsertTags($strSQL, array &$arrParams) {
+		$objCtrl = MetaModelController::getInstance();
+		return preg_replace_callback(
+			'@\{\{secure::([^}]+)\}\}@',
+			function($arrMatch) use(&$arrParams, $objCtrl) {
+				$arrParams[] = $objCtrl->replaceInsertTags('{{' . $arrMatch[1] . '}}');
+				return '?';
 			},
 			$strSQL
 		);
