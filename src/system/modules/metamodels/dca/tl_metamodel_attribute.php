@@ -178,6 +178,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 				'doNotSaveEmpty' => true,
 				'alwaysSave' => true,
 				'submitOnChange'=> true,
+				'mandatory' => true,
 				'tl_class'=>'w50',
 				'chosen' => 'true'
 			),
