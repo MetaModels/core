@@ -61,6 +61,12 @@ class MetaModelBackend
 		require_once(TL_ROOT . '/system/config/localconfig.php');
 
 		Config::getInstance();
+
+		if (!Config::getInstance()->isComplete())
+		{
+			return false;
+		}
+
 		Environment::getInstance();
 		Input::getInstance();
 
