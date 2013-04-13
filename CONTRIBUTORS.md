@@ -10,7 +10,7 @@ Team member
 
 * Christian Schiffler <please.chris@metamodel.me>
 * Andreas Isaak <please.andi@metamodel.me>
-* Stefan heimes <stefan_heimes@hotmail.com>
+* Stefan Heimes <heimes@men-at-work.de>
 * Christian de la Haye <service@delahaye.de>
 
 
