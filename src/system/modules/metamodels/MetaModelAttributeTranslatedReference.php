@@ -166,9 +166,8 @@ implements IMetaModelAttributeTranslated
 	 */
 	public function searchForInLanguages($strPattern, $arrLanguages = array())
 	{
-
 		$arrWhere = $this->getWhere(null);
-		$arrParams = array($strPattern);
+		$arrParams = array(str_replace(array('*', '?'), array('%', '_'), $strPattern));
 
 		$arrOptionizer = $this->getOptionizer();
 
@@ -179,7 +178,7 @@ implements IMetaModelAttributeTranslated
 
 		$objFilterRule = new MetaModelFilterRuleSimpleQuery(
 			sprintf(
-				'SELECT DISTINCT %s FROM %s WHERE %s=? %s%s',
+				'SELECT DISTINCT %s FROM %s WHERE %s LIKE ? %s%s',
 				'item_id',
 				$this->getValueTable(),
 				$arrOptionizer['value'],
