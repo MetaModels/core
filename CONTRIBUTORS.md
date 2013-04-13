@@ -8,18 +8,18 @@ We would like to thank our contributors, whose efforts make this software what i
 Team member
 -----------
 
-Christian Schiffler <please.chris@metamodel.me>
-Andreas Isaak <please.andi@metamodel.me>
-Stefan heimes <stefan_heimes@hotmail.com>
-Christian de la Haye <service@delahaye.de>
+* Christian Schiffler <please.chris@metamodel.me>
+* Andreas Isaak <please.andi@metamodel.me>
+* Stefan heimes <stefan_heimes@hotmail.com>
+* Christian de la Haye <service@delahaye.de>
 
 
 Official contributors
 ---------------------
 
-David Maack <david.maack@arcor.de>
-Oliver Hoff <oliver@hofff.com>
-Carolina M. Koehn <office@kikmedia.de>
-Stefan Lindecke <hallo@lindesbs.de>
+* David Maack <david.maack@arcor.de>
+* Oliver Hoff <oliver@hofff.com>
+* Carolina M. Koehn <office@kikmedia.de>
+* Stefan Lindecke <hallo@lindesbs.de>
 
 If you think your name is missing here, please file an issue.
