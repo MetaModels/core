@@ -233,6 +233,16 @@ class MetaModelDcaBuilder
 		return $this->arrInformation[$intMetaModel]['dca'];
 	}
 
+	public function getFilterSettings($intMetaModel)
+	{
+		if(!$this->arrInformation[$intMetaModel]['filterSettings'])
+		{
+			$this->arrInformation[$intMetaModel]['filterSettings']
+				= MetaModelFilterSettingsFactory::byId($this->arrInformation[$intMetaModel]['comb']['filterSettings_id']);
+		}
+		return $this->arrInformation[$intMetaModel]['filterSettings'];
+	}
+
 	public function getModelsWithPtable($strTablename)
 	{
 		$arrResult = array();

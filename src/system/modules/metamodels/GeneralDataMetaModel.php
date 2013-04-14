@@ -38,6 +38,12 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	 */
 	protected $objMetaModel = NULL;
 
+	/** @var MetaModelFilter The base filter to use */
+	protected $objBaseFilter;
+
+	/** @var MetaModelFilterSettings The static filter settings to apply on each filter used */
+	protected $objFilterSettings;
+
 	// Functions ---------------------------------------------------------------
 
 	/**
@@ -174,6 +180,41 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 		$this->strTable = $arrConfig["source"];
 
 		$this->objMetaModel = MetaModelFactory::byTableName($this->strTable);
+
+		if($arrConfig['filter'] && is_a($arrConfig['filter'], 'MetaModelFilter'))
+		{
+			$this->objDefaultFilter = $arrConfig['filter'];
+		}
+		else
+		{
+			$this->objDefaultFilter = $this->objMetaModel->getEmptyFilter();
+		}
+
+		if($arrConfig['filterSettings'])
+		{
+			if(is_a($arrConfig['filterSettings'], 'MetaModelFilterSettings'))
+			{
+				$this->objFilterSettings = $arrConfig['filterSettings'];
+			}
+			else
+			{
+				$this->objFilterSettings = MetaModelFilterSettingsFactory::byId($arrConfig['filterSettings']);
+			}
+
+			try
+			{
+				$blnUseEmptyFilterSettings = !$this->objFilterSettings->getMetaModel()->equals($this->objMetaModel);
+			}
+			catch(Exception $e)
+			{
+				$blnUseEmptyFilterSettings = true;
+			}
+		}
+		else
+		{
+			$blnUseEmptyFilterSettings = true;
+		}
+ 		$blnUseEmptyFilterSettings && $this->objFilterSettings = new MetaModelFilterSettings(array());
 	}
 
 	/**
@@ -311,7 +352,8 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	 */
 	protected function prepareFilter($arrFilter = array())
 	{
-		$objFilter = $this->objMetaModel->getEmptyFilter();
+		$objFilter = clone $this->objBaseFilter;
+		$this->objFilterSettings->addRules($objFilter, array());
 
 		if ($arrFilter)
 		{
