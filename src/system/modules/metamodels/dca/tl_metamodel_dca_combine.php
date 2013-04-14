@@ -125,6 +125,19 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 							'chosen'             => 'true' // slows down the MCW like hell
 						)
 					),
+					'filterSettings_id'          => array
+					(
+						'label'                  => &$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['filterSettings_id'],
+						'exclude'                => true,
+						'inputType'              => 'select',
+						'options_callback'       => array('MetaModelDcaCombiner', 'getModelFilterSettings'),
+						'eval'                   => array
+						(
+							'includeBlankOption' => true,
+							'style'              => 'width:180px',
+							'chosen'             => true // slows down the MCW like hell
+						)
+					),
 				),
 			),
 			'save_callback'                      => array(array('MetaModelDcaCombiner', 'updateSort')),

@@ -22,5 +22,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['fe_group']            = array('
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['be_group']            = array('BE-Gruppe', 'Die Backend-Benutzergruppe auswählen, für die diese Kombination gilt.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_id']              = array('Palette wählen', 'Die entsprechende Palette auswählen.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['view_id']             = array('Ansicht wählen', 'Die entsprechende Ansicht auswählen.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['filterSettings_id']   = array('Filter wählen', 'Den immer anzuwendenden Filter auswählen. (optional)');
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['sysadmin']            = 'Administrator';
 
