@@ -35,20 +35,18 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['subpalettes'], 1, array
 /**
  * Add fields to tl_module
  */
-
 array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 (
-
 	'metamodel' => array
 	(
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
 		'foreignKey'              => 'tl_metamodel.name',
-		'eval'                    => array
+		'eval' => array
 		(
-			'mandatory'=> true,
-			'submitOnChange'=> true
+			'mandatory'           => true,
+			'submitOnChange'      => true
 		),
 		'wizard' => array
 		(
@@ -70,7 +68,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_use_limit'],
 		'exclude'                 => true,
 		'inputType'               => 'checkbox',
-		'eval'                    => array('submitOnChange'=> true, 'tl_class' => 'clr m12'),
+		'eval'                    => array('submitOnChange'=> true, 'tl_class' => 'w50 m12'),
 	),
 
 	'metamodel_limit' => array
@@ -100,12 +98,12 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 
 	'metamodel_sortby_direction' => array
 		(
-		'label' => &$GLOBALS['TL_LANG']['tl_module']['metamodel_sortby_direction'],
-		'exclude' => true,
-		'inputType' => 'select',
-		'reference' => &$GLOBALS['TL_LANG']['tl_content'],
-		'options' => array('ASC' => 'ASC', 'DESC' => 'DESC'),
-		'eval' => array('includeBlankOption' => false, 'tl_class' => 'w50'),
+		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_sortby_direction'],
+		'exclude'                 => true,
+		'inputType'               => 'select',
+		'reference'               => &$GLOBALS['TL_LANG']['tl_content'],
+		'options'                 => array('ASC' => 'ASC', 'DESC' => 'DESC'),
+		'eval'                    => array('includeBlankOption' => false, 'tl_class' => 'w50'),
 	),
 
 	'metamodel_filtering' => array
@@ -115,11 +113,11 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'inputType'               => 'select',
 		'options_callback'        => array('TableModule', 'getFilterSettings'),
 		'default'                 => '',
-		'eval'                    => array
+		'eval' => array
 		(
-			'includeBlankOption' => true,
-			'submitOnChange'=> true,
-			'tl_class'=>'w50'
+			'includeBlankOption'  => true,
+			'submitOnChange'      => true,
+			'tl_class'            => 'w50'
 		),
 		'wizard' => array
 		(
@@ -134,17 +132,18 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'inputType'               => 'select',
 		'options_callback'        => array('TableModule', 'getRenderSettings'),
 		'default'                 => '',
-		'eval'                    => array
+		'eval' => array
 		(
-			'includeBlankOption' => true,
-			'submitOnChange'=> true,
-			'tl_class'=>'w50'
+			'includeBlankOption'  => true,
+			'submitOnChange'      => true,
+			'tl_class'            =>'w50'
 		),
 		'wizard' => array
 		(
 			array('TableModule', 'editRenderSetting')
 		)
 	),
+
 	'metamodel_noparsing' => array
 	(
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_noparsing'],
@@ -152,34 +151,38 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'inputType'               => 'checkbox',
 		'eval'                    => array('submitOnChange'=> true, 'tl_class' => 'clr'),
 	),
+
 	'metamodel_donotindex' => array
 	(
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_donotindex'],
 		'exclude'                 => true,
 		'inputType'               => 'checkbox',
-		'eval'                    => array
+		'eval' => array
 		(
 			'tl_class'            => 'w50'
 		),
 	),
+
 	'metamodel_filterparams' => array
 		(
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_filterparams'],
 		'exclude'                 => true,
 		'inputType'               => 'mm_subdca',
-		'eval'                    => array
+		'eval' => array
 		(
+			'tl_class'            => 'clr m12',
 			'subfields'           => array(),
 			'flagfields' => array
 			(
 				'use_get' => array
 				(
-					'label' => &$GLOBALS['TL_LANG']['tl_module']['metamodel_filterparams_use_get'],
-					'inputType' => 'checkbox',
+					'label'       => &$GLOBALS['TL_LANG']['tl_module']['metamodel_filterparams_use_get'],
+					'inputType'   => 'checkbox',
 				),
 			),
 		),
 	),
+
 	'metamodel_fef_params' => array
 	(
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_params'],
@@ -188,6 +191,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'options_callback'        => array('TableModule','getFilterParameterNames'),
 		'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
 	),
+
 	'metamodel_fef_autosubmit' => array
 	(
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_autosubmit'],
@@ -195,6 +199,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'default'                 => '1',
 		'inputType'               => 'checkbox'
 	),
+
 	'metamodel_fef_template' => array
 	(
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_template'],
@@ -204,5 +209,3 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'options_callback'        => array('TableModule', 'getFilterTemplates')
 	)
 ));
-
-
