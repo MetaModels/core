@@ -4,6 +4,7 @@ var Stylepicker4ward = new Class(
     initialize: function(cont,parentField)
     {
 		this.checkboxes = cont.getElements('input');
+		this.seperators = [];
 		// find parent class-field
 		var parentField = $(parent.document.getElementById(parentField));
 		if(parentField == null)
@@ -32,16 +33,17 @@ var Stylepicker4ward = new Class(
     	}.bind(this));
     	
     	// check checkboxes if a classname is set
-    	var classes = this.parentField.get('value').trim().split(',');
+    	var classes = this.parentField.get('value').trim().split(/,|;/);
+		var parentString = this.parentField.get('value').trim();
     	for(var i=0;i<classes.length;i++)
     	{
+		this.seperators[classes[i]] = parentString[parentString.indexOf(classes[i]) + classes[i].length];
     		for(var j=0;j<this.checkboxes.length;j++)
     		{
     			if(classes[i] == $(this.checkboxes[j]).get('value'))
     				this.checkboxes[j].checked = true;
     		}
     	}
-    	
 	},
 	
 	clickItem: function(e,el)
@@ -60,7 +62,7 @@ var Stylepicker4ward = new Class(
 		
 		// update parent-field
 		var classname = inp.get('value');
-		var classes = this.parentField.get('value').trim().split(',');
+		var classes = this.parentField.get('value').trim().split(/,|;/);
 		if(inp.checked)
 		{
 			// add classname
@@ -73,7 +75,13 @@ var Stylepicker4ward = new Class(
 			// remove classname
 			classes.erase(classname);
 		}
-		this.parentField.set('value',classes.join(','));
+		var strClasses = "";
+		for (var i =0; i < classes.length; i++){
+			if (strClasses.length > 0)
+				strClasses += (this.seperators[classes[i-1]] == ';') ? ';': ',';
+			strClasses += classes[i];
+		}
+		this.parentField.set('value',strClasses);
 	},
 	
 	showImage: function(ev,el)
