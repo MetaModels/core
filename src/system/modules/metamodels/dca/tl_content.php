@@ -46,7 +46,8 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'eval' => array
 		(
 			'mandatory'           => true,
-			'submitOnChange'      => true
+			'submitOnChange'      => true, 
+			'includeBlankOption'  => true
 		),
 		'wizard' => array
 		(
