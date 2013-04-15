@@ -339,7 +339,7 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 			// Check if we have a pid
 			if(count($arrFid) == 0)
 			{
-				throw new Exception("Could not find FID. Please create a new enty from main overview.");
+				throw new Exception("Could not find FID. Please create a new entry from main overview.");
 			}
 			
 			// Set fid by pid`s fid
