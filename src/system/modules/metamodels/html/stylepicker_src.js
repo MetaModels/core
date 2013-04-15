@@ -33,8 +33,8 @@ var Stylepicker4ward = new Class(
     	}.bind(this));
     	
     	// check checkboxes if a classname is set
-    	var classes = this.parentField.get('value').trim().split(/,|;/);
-		var parentString = this.parentField.get('value').trim();
+	var classes = this.parentField.get('value').trim().split(/,|;/);
+	var parentString = this.parentField.get('value').trim();
     	for(var i=0;i<classes.length;i++)
     	{
 		this.seperators[classes[i]] = parentString[parentString.indexOf(classes[i]) + classes[i].length];
