@@ -57,7 +57,7 @@ array_insert($GLOBALS['BE_MOD']['system'], 0, array
 		TYPECLASS    is the name of the implementing class.
 		IMAGEPATH    path to an icon (16x16) that represents the attribute type. Based from TL_ROOT.
 		FACTORYCLASS this is optional, if defined, the herein declared classname will be used for instantiation
-		             of attributes of this type instead of plain constructing.
+					 of attributes of this type instead of plain constructing.
 */
 
 
@@ -204,51 +204,50 @@ $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 
 $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 (
-    'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['long'],
-    'cssclass' => 'long',
-    'image' => ''
+	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['long'],
+	'cssclass' => 'long',
+	'image' => ''
 );
 
 $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 (
-    'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['wizard'],
-    'cssclass' => 'wizard',
-    'image' => ''
+	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['wizard'],
+	'cssclass' => 'wizard',
+	'image' => ''
 );
 
 $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 (
-    'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['m12'],
-    'cssclass' => 'm12',
-    'image' => ''
+	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['m12'],
+	'cssclass' => 'm12',
+	'image' => ''
 );
 
 // Selectable panels in the palette panelLayout definitions.
 $GLOBALS['PALETTE_PANEL_PICKER'][] = array
 (
-    'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['search'],
-    'cssclass' => 'search',
-    'image' => ''
+	'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['search'],
+	'cssclass' => 'search',
+	'image' => ''
 );
 
 $GLOBALS['PALETTE_PANEL_PICKER'][] = array
 (
-    'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['sort'],
-    'cssclass' => 'sort',
-    'image' => ''
+	'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['sort'],
+	'cssclass' => 'sort',
+	'image' => ''
 );
 
 $GLOBALS['PALETTE_PANEL_PICKER'][] = array
 (
-    'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['filter'],
-    'cssclass' => 'filter',
-    'image' => ''
+	'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['filter'],
+	'cssclass' => 'filter',
+	'image' => ''
 );
 
 $GLOBALS['PALETTE_PANEL_PICKER'][] = array
 (
-    'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['limit'],
-    'cssclass' => 'limit',
-    'image' => ''
+	'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['limit'],
+	'cssclass' => 'limit',
+	'image' => ''
 );
-
