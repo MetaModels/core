@@ -322,8 +322,32 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 	 */
 	public function create_callback($strTable, $insertID, $set, $objDC)
 	{
+		// If we come from overview use pid
+		if($this->Input->get('id') != "")
+		{
+			$intFid = $this->Input->get('id');
+		}
+		// If we use the "save and new" btt use the pid instead
+		elseif($this->Input->get('pid') != "")
+		{		
+			// Get fid from pid 
+			$arrFid = $this->Database
+			->prepare('SELECT fid FROM tl_metamodel_filtersetting WHERE id=?')
+			->execute($this->Input->get('pid'))
+			->fetchEach('fid');
+			
+			// Check if we have a pid
+			if(count($arrFid) == 0)
+			{
+				throw new Exception("Could not find FID. Please create a new enty from main overview.");
+			}
+			
+			// Set fid by pid`s fid
+			$intFid = $arrFid[0];
+		}
+		
 		$objResult = $this->Database->prepare('UPDATE tl_metamodel_filtersetting %s WHERE id=?')
-		->set(array('fid' => $this->Input->get('id')))
+		->set(array('fid' => $intFid))
 		->execute($insertID);
 	}
 
