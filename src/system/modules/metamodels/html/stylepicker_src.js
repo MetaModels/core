@@ -32,7 +32,7 @@ var Stylepicker4ward = new Class(
     	}.bind(this));
     	
     	// check checkboxes if a classname is set
-    	var classes = this.parentField.get('value').trim().split(' ');
+    	var classes = this.parentField.get('value').trim().split(',');
     	for(var i=0;i<classes.length;i++)
     	{
     		for(var j=0;j<this.checkboxes.length;j++)
@@ -60,7 +60,7 @@ var Stylepicker4ward = new Class(
 		
 		// update parent-field
 		var classname = inp.get('value');
-		var classes = this.parentField.get('value').trim().split(' ');
+		var classes = this.parentField.get('value').trim().split(',');
 		if(inp.checked)
 		{
 			// add classname
@@ -73,7 +73,7 @@ var Stylepicker4ward = new Class(
 			// remove classname
 			classes.erase(classname);
 		}
-		this.parentField.set('value',classes.join(' '));
+		this.parentField.set('value',classes.join(','));
 	},
 	
 	showImage: function(ev,el)
