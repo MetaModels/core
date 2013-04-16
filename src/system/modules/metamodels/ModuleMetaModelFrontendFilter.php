@@ -50,6 +50,12 @@ class ModuleMetaModelFrontendFilter extends Module
 			return $objTemplate->parse();
 		}
 
+		// get template
+		if ($this->metamodel_fef_template)
+		{
+			$this->strTemplate = new FrontendTemplate($this->metamodel_fef_template);
+		}
+
 		return parent::generate();
 	}
 
@@ -63,11 +69,6 @@ class ModuleMetaModelFrontendFilter extends Module
 		$objFilter = new MetaModelFrontendFilter();
 		$arrFilter = $objFilter->getMetaModelFrontendFilter($this);
 
-		// get template
-		if ($this->metamodel_fef_template)
-		{
-			$this->Template = new FrontendTemplate($this->metamodel_fef_template);
-		}
 		$this->Template->setData($arrFilter);
 		$this->Template->submit = $arrFilter['submit'];
 	}
