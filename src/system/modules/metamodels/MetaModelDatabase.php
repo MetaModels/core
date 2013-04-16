@@ -220,7 +220,11 @@ class MetaModelDatabase extends Controller
 			'button_callback' => array('MetaModelDatabase', 'buttonCallbackCreateVariant')
 		);
 
-		$arrDCA['list']['operations']['copy']['href'] = 'act=paste&mode=copy';
+		// only rewrite the url if the operation has been registered.
+		if (array_key_exists('copy', $arrDCA['list']['operations']))
+		{
+			$arrDCA['list']['operations']['copy']['href'] = 'act=paste&mode=copy';
+		}
 
 		// search for copy operation and insert just behind that one
 		$intPos = array_search('copy', array_keys($arrDCA['list']['operations']));
