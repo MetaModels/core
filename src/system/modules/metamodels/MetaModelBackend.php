@@ -62,11 +62,6 @@ class MetaModelBackend
 
 		Config::getInstance();
 
-		if (!Config::getInstance()->isComplete())
-		{
-			return false;
-		}
-
 		Environment::getInstance();
 		Input::getInstance();
 
@@ -79,8 +74,17 @@ class MetaModelBackend
 
 	protected static function isDBInitialized()
 	{
-		$objDB = Database::getInstance();
-		return $objDB && $objDB->tableExists('tl_metamodel');
+		// When coming from install.php or somewhere else when localconfig.php
+		// has not yet completely been initialized, we will run into an exception here.
+		try
+		{
+			$objDB = Database::getInstance();
+			return $objDB && $objDB->tableExists('tl_metamodel');
+		}
+		catch (Exception $e)
+		{
+			return false;
+		}
 	}
 
 	protected static function authenticateBackendUser()
