@@ -53,7 +53,7 @@ class ModuleMetaModelFrontendFilter extends Module
 		// get template
 		if ($this->metamodel_fef_template)
 		{
-			$this->strTemplate = new FrontendTemplate($this->metamodel_fef_template);
+			$this->strTemplate = $this->metamodel_fef_template;
 		}
 
 		return parent::generate();
