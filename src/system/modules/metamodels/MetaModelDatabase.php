@@ -116,8 +116,10 @@ class MetaModelDatabase extends Controller
 		$arrDCA['list']['sorting']['mode'] = 5;
 		$arrDCA['dca_config']['data_provider']['parent']['source'] = $objMetaModel->getTableName();
 
-		$arrDCA['dca_config']['child_list']['self']['fields'] = array(
-		    'id', 'tstamp'
+		$arrDCA['dca_config']['child_list']['self']['fields'] = array
+		(
+			'id',
+			'tstamp'
 		);
 
 		$arrDCA['dca_config']['childCondition'] = array
@@ -184,15 +186,16 @@ class MetaModelDatabase extends Controller
 
 		// TODO: do only show variant bases if we are told so, i.e. render child view.
 		$arrDCA['fields']['varbase'] = array
-		    (
-		    'label' => &$GLOBALS['TL_LANG']['tl_metamodel_item']['varbase'],
-		    'inputType' => 'checkbox',
-		    'eval' => array
+		(
+			'label' => &$GLOBALS['TL_LANG']['tl_metamodel_item']['varbase'],
+			'inputType' => 'checkbox',
+			'eval' => array
 			(
-			'submitOnChange' => true,
-			'doNotShow' => true
-		    )
+				'submitOnChange' => true,
+				'doNotShow' => true
+			)
 		);
+
 		if ($arrDCASetting['ptable'])
 		{
 			if ($arrDCASetting['ptable'] == $objMetaModel->get('tableName'))
@@ -290,7 +293,6 @@ class MetaModelDatabase extends Controller
 
 		// Set Sorting panelLayout from current renderSettings
 		$arrDCA['list']['sorting']['panelLayout'] = $arrDCASettings['panelLayout'];
-
 		switch ($arrDCASettings['mode'])
 		{
 			case 5:
