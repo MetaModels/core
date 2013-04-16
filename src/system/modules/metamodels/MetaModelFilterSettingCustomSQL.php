@@ -39,7 +39,8 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 		$strSQL = $this->parseSecureInsertTags($strSQL, $arrParams);
 		$strSQL = $this->parseInsertTags($strSQL, $arrParams);
 
-		if (!strlen($strSQL)) {
+		if (!strlen($strSQL))
+		{
 			return;
 		}
 
@@ -48,42 +49,77 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 	}
 
 	/**
-	 * @param string $strSQL SQL to parse
-	 * @param array $arrParams Query param stack
-	 * @return string Parsed SQL
+	 * Replace the table name in the query string.
+	 *
+	 * @param string $strSQL    SQL to parse.
+	 *
+	 * @param array  $arrParams Query param stack.
+	 *
+	 * @return string Parsed SQL.
 	 */
-	protected function parseTable($strSQL, array &$arrParams) {
+	protected function parseTable($strSQL, array &$arrParams)
+	{
 		return str_replace('{{table}}', $this->getMetaModel()->getTableName(), $strSQL);
 	}
 
 	/**
-	 * @param string $strSQL SQL to parse
-	 * @param array $arrParams Query param stack
-	 * @param mixed|array|null $arrFilterUrl The filter params (should be array or null)
-	 * @return string Parsed SQL
+	 * @param string           $strSQL       SQL to parse.
+	 *
+	 * @param array            $arrParams    Query param stack.
+	 *
+	 * @param mixed|array|null $arrFilterUrl The filter params (should be array or null).
+	 *
+	 * @return string Parsed SQL.
 	 */
-	protected function parseRequestVars($strSQL, array &$arrParams, $arrFilterUrl) {
+	protected function parseRequestVars($strSQL, array &$arrParams, $arrFilterUrl)
+	{
 		return preg_replace_callback(
 			'@\{\{param::([^}]*)\}\}@',
-			function($arrMatch) use(&$arrParams, $arrFilterUrl) {
+			function($arrMatch) use(&$arrParams, $arrFilterUrl)
+			{
 				list($strSource, $strQuery) = explode('?', $arrMatch[1], 2);
 				parse_str($strQuery, $arrArgs);
 				$arrName = (array) $arrArgs['name'];
 
-				switch($strSource) {
-					case 'get': $var = Input::getInstance()->get(array_shift($arrName)); break;
-					case 'post': $var = Input::getInstance()->post(array_shift($arrName)); break;
-					case 'session': $var = Session::getInstance()->get(array_shift($arrName)); break;
-					case 'filter': $var = $arrFilterUrl ? $arrFilterUrl[array_shift($arrName)] : null; break;
-					default: return 'NULL'; /* should never occur */ break;
+				$var = null;
+
+				switch($strSource)
+				{
+					case 'get':
+						$var = Input::getInstance()->get(array_shift($arrName));
+						break;
+
+					case 'post':
+						$var = Input::getInstance()->post(array_shift($arrName));
+						break;
+
+					case 'session':
+						$var = Session::getInstance()->get(array_shift($arrName));
+						break;
+
+					case 'filter':
+						if ($arrFilterUrl)
+						{
+							$var = $arrFilterUrl[array_shift($arrName)];
+						}
+						break;
+
+					default:
+						/* This should never occur. */
+						return 'NULL';
+						break;
 				}
 
 				$i = 0;
-				while($i < count($arrName) && is_array($var)) {
+				while($i < count($arrName) && is_array($var))
+				{
 					$var = $var[$arrName[$i++]];
 				}
-				if($i != count($arrName) || $var === null) {
-					if(isset($arrArgs['default'])) {
+
+				if($i != count($arrName) || $var === null)
+				{
+					if(isset($arrArgs['default']))
+					{
 						$var = $arrArgs['default'];
 						return '?';
 					} else {
@@ -92,7 +128,8 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 				}
 
 				// treat as scalar value
-				if(!$arrArgs['aggregate']) {
+				if(!$arrArgs['aggregate'])
+				{
 					$arrParams[] = $var;
 					return '?';
 				}
@@ -100,7 +137,8 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 				// treat as list
 				$var = (array) $var;
 
-				if($arrArgs['recursive']) {
+				if($arrArgs['recursive'])
+				{
 					$var = iterator_to_array(
 						new RecursiveIteratorIterator(
 							new RecursiveArrayIterator(
@@ -110,17 +148,20 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 					);
 				}
 
-				if(!$var) {
+				if(!$var)
+				{
 					return 'NULL';
 				}
 
-				if($arrArgs['key']) {
+				if($arrArgs['key'])
+				{
 					$var = array_keys($var);
 				} else { // use values
 					$var = array_values($var);
 				}
 
-				if($arrArgs['aggregate'] == 'set') {
+				if($arrArgs['aggregate'] == 'set')
+				{
 					$arrParams[] = implode(',', $var);
 					return '?';
 				} else {
@@ -133,15 +174,21 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 	}
 
 	/**
-	 * @param string $strSQL SQL to parse
-	 * @param array $arrParams Query param stack
-	 * @return string Parsed SQL
+	 * Replace all secure insert tags.
+	 *
+	 * @param string $strSQL    SQL to parse.
+	 *
+	 * @param array  $arrParams Query param stack.
+	 *
+	 * @return string Parsed SQL.
 	 */
-	protected function parseSecureInsertTags($strSQL, array &$arrParams) {
+	protected function parseSecureInsertTags($strSQL, array &$arrParams)
+	{
 		$objCtrl = MetaModelController::getInstance();
 		return preg_replace_callback(
 			'@\{\{secure::([^}]+)\}\}@',
-			function($arrMatch) use(&$arrParams, $objCtrl) {
+			function($arrMatch) use(&$arrParams, $objCtrl)
+			{
 				$arrParams[] = $objCtrl->replaceInsertTags('{{' . $arrMatch[1] . '}}');
 				return '?';
 			},
@@ -150,18 +197,24 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 	}
 
 	/**
-	 * @param string $strSQL SQL to parse
-	 * @param array $arrParams Query param stack
+	 * Replace all insert tags in the query string.
+	 *
+	 * @param string $strSQL    SQL to parse
+	 *
+	 * @param array  $arrParams Query param stack
+	 *
 	 * @return string Parsed SQL
 	 */
-	protected function parseInsertTags($strSQL, array &$arrParams) {
+	protected function parseInsertTags($strSQL, array &$arrParams)
+	{
 		return MetaModelController::getInstance()->replaceInsertTags($strSQL);
 	}
 
 	/* (non-PHPdoc)
 	 * @see MetaModelFilterSetting::getParameters()
 	 */
-	public function getParameters() {
+	public function getParameters()
+	{
 		preg_match_all('@\{\{param::filter\?([^}]*)\}\}@', $this->get('customsql'), $arrMatches);
 		foreach($arrMatches[1] as $strQuery) {
 			parse_str($strQuery, $arrArgs);
