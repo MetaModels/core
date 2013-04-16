@@ -64,7 +64,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['MSC']['backBT'],
 				// TODO: this is an evil hack, replace with something better.
-				'href'                => str_replace(array('contao/main.php?do=metamodel', $this->Environment->url), '', $this->getReferer(false, 'tl_metamodel_filter')),
+				'href'                => str_replace(array('contao/main.php?do=metamodels', $this->Environment->url), '', $this->getReferer(false, 'tl_metamodel_filter')),
 				'class'               => 'header_back',
 				'attributes'          => 'onclick="Backend.getScrollOffset();"'
 			)
