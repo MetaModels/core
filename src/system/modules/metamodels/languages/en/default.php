@@ -58,6 +58,7 @@ $GLOBALS['TL_LANG']['ERR']['columnExists']                            = 'There i
 $GLOBALS['TL_LANG']['ERR']['no_palette']                              = 'Attempt to access the MetaModel "%s" without palette for current user %s.';
 $GLOBALS['TL_LANG']['ERR']['no_view']                                 = 'Attempt to access the MetaModel "%s" without view for user %s.';
 $GLOBALS['TL_LANG']['ERR']['invalidTableName']                        = 'The table name is invalid.';
+$GLOBALS['TL_LANG']['ERR']['upgrade_php_version']                     = 'The version of the PHP interpreter is too low, please upgrade to at least %s (you are currently running %s)';
 
 /**
  * Labels
