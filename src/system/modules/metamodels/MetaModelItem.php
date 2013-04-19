@@ -214,7 +214,42 @@ class MetaModelItem implements IMetaModelItem
 
 		$arrResult['jumpTo'] = $this->buildJumpToLink($objSettings);
 
+		// call HOOK for other extensions to inject data.
+		$this->parseValueHOOK($arrResult, $strOutputFormat, $objSettings);
+
 		return $arrResult;
+	}
+
+	/**
+	 * HOOK handler for third party extensions to inject data into the generated output or to
+	 * reformat the output.
+	 *
+	 * @param array                    $arrResult   the generated data.
+	 * @param string                   $strFormat   the desired output format
+	 *                                              (text, html, etc.)
+	 * @param IMetaModelRenderSettings $objSettings the render settings to use.
+	 *
+	 * @return void
+	 */
+	protected function parseValueHOOK(&$arrResult, $strFormat, $objSettings)
+	{
+		// HOOK: let third party extensions manipulate the generated data.
+		if (is_array($GLOBALS['METAMODEL_HOOKS']['MetaModelItem::parseValue']) && count($GLOBALS['METAMODEL_HOOKS']['MetaModelItem::parseValue']))
+		{
+			foreach ($GLOBALS['METAMODEL_HOOKS']['MetaModelItem::parseValue'] as $arrHook)
+			{
+				$strClass = $arrHook[0];
+				$strMethod = $arrHook[1];
+
+				if (in_array('getInstance', get_class_methods($strClass)))
+				{
+					$objHOOK = call_user_func(array($strClass, 'getInstance'));
+				} else {
+					$objHOOK = new $strClass();
+				}
+				$objHook->$strMethod($arrResult, $this, $strFormat, $objSettings);
+			}
+		}
 	}
 
 	public function buildJumpToLink($objSettings)
