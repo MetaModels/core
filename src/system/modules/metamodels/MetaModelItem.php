@@ -304,7 +304,8 @@ class MetaModelItem implements IMetaModelItem
 			$arrJumpTo['deep'] = strlen($strParams) > 0;
 		}
 
-		$arrJumpTo['page'] = $intJumpTo;
+		$arrJumpTo['id'] = $intJumpTo;
+		$arrJumpTo['page'] = $objPage;
 		$arrJumpTo['url'] = MetaModelController::generateFrontendUrl($objPage->row(), $strParams);
 		return $arrJumpTo;
 	}
