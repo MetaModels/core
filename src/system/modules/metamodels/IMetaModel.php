@@ -37,6 +37,14 @@ interface IMetaModel
 	public function get($strKey);
 
 	/**
+	 * check if two objects describing the same model
+	 *
+	 * @param mixed $objMetaModel The object to check against
+	 * @return boolean True if the two objects describe the same model, otherwise false
+	 */
+	public function equals($objMetaModel);
+
+	/**
 	 * Retrieve the table name for this MetaModel.
 	 *
 	 * @return string the table name for the metamodel table.

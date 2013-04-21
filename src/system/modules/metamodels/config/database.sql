@@ -275,6 +275,8 @@ CREATE TABLE `tl_metamodel_dca_combine` (
   `dca_id` int(10) unsigned NOT NULL default '0',
 -- corresponding tl_metamodel_rendersetting (view)
   `view_id` int(10) unsigned NOT NULL default '0',
+-- corresponding tl_metamodel_filter
+  `filterSettings_id` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`),
   KEY `fe_group` (`be_group`),

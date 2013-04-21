@@ -75,6 +75,18 @@ class MetaModelDcaCombiner extends Backend
 		return $arrReturn;
 	}
 
+	protected function getFilterSettings($intMetaModel)
+	{
+		$objFilterSettings = $this->Database->prepare('SELECT id,name FROM tl_metamodel_filter WHERE pid=?')->execute($intMetaModel);
+
+		$arrReturn = array();
+		while ($objFilterSettings->next())
+		{
+			$arrReturn[$objFilterSettings->id] = $objFilterSettings->name;
+		}
+		return $arrReturn;
+	}
+
 	public function getMemberGroups()
 	{
 		return $this->getGroups('member');
@@ -93,6 +105,11 @@ class MetaModelDcaCombiner extends Backend
 	public function getModelViews(/*$objDC <- would be nice but we are called from a MCW and therefore that is passed in here instead of the DC. :/ */)
 	{
 		return $this->getViews($this->Input->get('id')/*$objDC->getId()*/);
+	}
+
+	public function getModelFilterSettings(/*$objDC <- would be nice but we are called from a MCW and therefore that is passed in here instead of the DC. :/ */)
+	{
+		return $this->getFilterSettings($this->Input->get('id')/*$objDC->getId()*/);
 	}
 
 	public function updateSort($arrData/*, $objDC*/)

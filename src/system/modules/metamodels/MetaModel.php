@@ -289,6 +289,13 @@ class MetaModel implements IMetaModel
 		}
 	}
 
+	/* (non-PHPdoc)
+	 * @see IMetaModel::equals()
+	 */
+	public function equals($objMetaModel) {
+		return is_object($objMetaModel) && is_a($objMetaModel, __CLASS__) && $objMetaModel->get('id') == $this->get('id');
+	}
+
 	/**
 	 * {@inheritdoc}
 	 */

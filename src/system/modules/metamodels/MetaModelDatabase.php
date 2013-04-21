@@ -409,6 +409,8 @@ class MetaModelDatabase extends Controller
 			return true;
 		}
 
+		$objFilterSettings = MetaModelDcaBuilder::getInstance()->getFilterSettings($objMetaModel->get('id'));
+		$arrDCA['dca_config']['data_provider']['default']['filterSettings'] = $objFilterSettings;
 		$arrDCA['config']['metamodel_view'] = $arrViewSettings['id'];
 		$arrDCA['palettes']['default'] = $this->getPaletteAndFields($arrDCASettings['id'], $objMetaModel, $arrDCA);
 
