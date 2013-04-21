@@ -324,6 +324,13 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 		return $varValue;
 	}
 
+	/* (non-PHPdoc)
+	 * @see IMetaModelAttribute::checkSaveable()
+	 */
+	public function checkSaveable(MetaModelItem $objItem) {
+		// nothing
+	}
+
 	/**
 	 * {@inheritdoc}
 	 */

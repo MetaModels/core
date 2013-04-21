@@ -119,5 +119,45 @@ class GeneralControllerMetaModel extends GeneralControllerDefault
 			// Maybe Callbacks ?
 		}
 	}
+
+	protected function doSave() {
+		$objDBModel = $this->getDC()->getCurrentModel();
+
+		// Check if table is closed
+		if ($this->getDC()->arrDCA['config']['closed'] && !($objDBModel->getID()))
+		{
+			// TODO show alarm message
+			$this->redirect($this->getReferer());
+		}
+
+		// if we may not store the value, we keep the changes
+		// in the current model and return (DO NOT SAVE!).
+		if ($this->getDC()->isNoReload() == true)
+		{
+			return false;
+		}
+
+		$this->getDC()->getCallbackClass()->onsubmitCallback();
+		$objDBModel->setProperty("tstamp", time());
+		$this->getDC()->getCallbackClass()->onsaveCallback($objDBModel);
+
+		//        $this->getNewPosition($objDBModel, 'create', null, false);
+		// everything went ok, now save the new record
+		if (!$objDBModel->getMeta(DCGE::MODEL_IS_CHANGED))
+		{
+			return $objDBModel;
+		}
+
+		try {
+			$this->getDC()->getDataProvider()->save($objDBModel);
+		} catch(MetaModelItemNotSaveableException $e) {
+			$this->addErrorMessage($e->getMessage());
+			return false;
+		}
+
+		// Return the current model
+		return $objDBModel;
+	}
+
 }
 

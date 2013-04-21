@@ -57,8 +57,27 @@ $GLOBALS['TL_LANG']['ERR']['install_extension']                       = 'Please 
 $GLOBALS['TL_LANG']['ERR']['columnExists']                            = 'There is already an attribute with the given column name.';
 $GLOBALS['TL_LANG']['ERR']['no_palette']                              = 'Attempt to access the MetaModel "%s" without palette for current user %s.';
 $GLOBALS['TL_LANG']['ERR']['no_view']                                 = 'Attempt to access the MetaModel "%s" without view for user %s.';
-$GLOBALS['TL_LANG']['ERR']['invalidTableName']                        = 'The table name is invalid.';
 $GLOBALS['TL_LANG']['ERR']['upgrade_php_version']                     = 'The version of the PHP interpreter is too low, please upgrade to at least %s (you are currently running %s)';
+$GLOBALS['TL_LANG']['ERR']['invalidTableName']                        = 'The table name "%s" is invalid.';
+$GLOBALS['TL_LANG']['ERR']['reservedTableName']                       = 'The table name "%s" is reserved for system use.';
+$GLOBALS['TL_LANG']['ERR']['invalidColumnName']                       = 'The column name "%s" is invalid.';
+$GLOBALS['TL_LANG']['ERR']['reservedColumnName']                      = 'The column name "%s" is reserved for system use.';
+$GLOBALS['TL_LANG']['ERR']['tableExists']                             = 'Table "%s" already exists.';
+$GLOBALS['TL_LANG']['ERR']['tableDoesNotExist']                       = 'Table "%s" does not exist.';
+$GLOBALS['TL_LANG']['ERR']['columnExists']                            = 'Column "%s" already exists on table "%s".';
+$GLOBALS['TL_LANG']['ERR']['columnDoesNotExist']                      = 'Column "%s" does not exist on table "%s".';
+$GLOBALS['TL_LANG']['ERR']['createTableError']                        = 'Could not create table "%s".<br />%s';
+$GLOBALS['TL_LANG']['ERR']['renameTableError']                        = 'Could not rename table from "%s" to "%s".<br />%s';
+$GLOBALS['TL_LANG']['ERR']['dropTableError']                          = 'Could not drop table "%s".<br />%s';
+$GLOBALS['TL_LANG']['ERR']['createColumnError']                       = 'Could not create column "%s" on table "%s".<br />%s';
+$GLOBALS['TL_LANG']['ERR']['changeColumnError']                       = 'Could not change column from "%s" to "%s" on table "%s".<br />%s';
+$GLOBALS['TL_LANG']['ERR']['dropColumnError']                         = 'Could not drop column "%s" from table "%s".<br />%s';
+$GLOBALS['TL_LANG']['ERR']['queryError']                              = <<<EOT
+An error occured while executing the query:<br />
+<span style="font-family: Courier New, monospace;">%s</span><br />
+Original message:<br />
+%s
+EOT;
 
 /**
  * Labels

@@ -228,7 +228,7 @@ class MetaModel implements IMetaModel
 			{
 				continue;
 			}
-			$arrAttributeData = $objAttribute->getDataFor($arrIds);
+			$arrAttributeData = $objAttribute->getDataFor($arrIds, $arrResult);
 			$strColName = $objAttribute->getColName();
 			foreach (array_keys($arrResult) as $intId)
 			{
@@ -597,7 +597,7 @@ class MetaModel implements IMetaModel
 	 *
 	 * @param string              $strLangCode  the language code to save.
 	 */
-	protected function saveAttribute($objAttribute, $arrIds, $varData, $strLangCode)
+	protected function saveAttribute($objAttribute, $arrIds, $varData, $strLangCode, $objItem)
 	{
 		$arrInterfaces = class_implements($objAttribute);
 
@@ -613,9 +613,9 @@ class MetaModel implements IMetaModel
 		} else if($this->isComplexAttribute($objAttribute))
 		{
 			// complex saving
-			$objAttribute->setDataFor($arrData);
+			$objAttribute->setDataFor($arrData, $objItem);
 		} else if(in_array('IMetaModelAttributeSimple', $arrInterfaces)) {
-			$objAttribute->setDataFor($arrData);
+			$objAttribute->setDataFor($arrData, $objItem);
 		} else {
 			throw new Exception('Unknown attribute type, can not save. Interfaces implemented: ' . implode(', ', $arrInterfaces));
 		}
@@ -626,6 +626,10 @@ class MetaModel implements IMetaModel
 	 */
 	public function saveItem($objItem)
 	{
+		foreach ($this->getAttributes() as $objAttribute) {
+			$objAttribute->checkSaveable($objItem);
+		}
+
 		$objDB = Database::getInstance();
 
 		$objItem->set('tstamp', time());
@@ -711,7 +715,7 @@ class MetaModel implements IMetaModel
 			} else {
 				$arrIds = array($objItem->get('id'));
 			}
-			$this->saveAttribute($objAttribute, $arrIds, $objItem->get($strAttributeId), $strActiveLanguage);
+			$this->saveAttribute($objAttribute, $arrIds, $objItem->get($strAttributeId), $strActiveLanguage, $objItem);
 		}
 		// Tell all attributes that the model has been saved. Useful for alias fields, edit counters etc.
 		foreach ($this->getAttributes() as $objAttribute)

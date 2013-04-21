@@ -27,7 +27,7 @@ abstract class MetaModelAttributeComplex extends MetaModelAttribute implements I
 {
 //	abstract public function getDataFor($arrIds);
 
-//	abstract public function setDataFor($arrValues);
+//	abstract public function setDataFor($arrValues, $objItem);
 
 }
 
