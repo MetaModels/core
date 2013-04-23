@@ -23,24 +23,28 @@
  */
 class WidgetMultiText extends Widget
 {
-
 	/**
-	 * Submit user input
+	 * Submit user input.
+	 *
 	 * @var boolean
 	 */
 	protected $blnSubmitInput = true;
 
 	/**
-	 * Template
+	 * The template to use.
+	 *
 	 * @var string
 	 */
 	protected $strTemplate = 'form_widget';
 
-
 	/**
-	 * Add specific attributes
-	 * @param string
-	 * @param mixed
+	 * Add specific attributes.
+	 *
+	 * @param string $strKey   Name of the key to set.
+	 *
+	 * @param mixed  $varValue The value to use.
+	 *
+	 * @return void
 	 */
 	public function __set($strKey, $varValue)
 	{
@@ -75,11 +79,12 @@ class WidgetMultiText extends Widget
 		}
 	}
 
-
 	/**
-	 * Trim values
-	 * @param mixed
-	 * @return mixed
+	 * Trim the values and validate them.
+	 *
+	 * @param mixed $varInput The value to process.
+	 *
+	 * @return mixed The processed value
 	 */
 	protected function validator($varInput)
 	{
@@ -93,12 +98,13 @@ class WidgetMultiText extends Widget
 
 
 	/**
-	 * Generate the widget and return it as string
+	 * Generate the widget and return it as string.
+	 *
 	 * @return string
 	 */
 	public function generate()
 	{
-		for($i=0; $i<$this->size; $i++)
+		for ($i = 0; $i < $this->size; $i++)
 		{
 			$return .= sprintf('<input type="%s" name="%s[]" id="ctrl_%s_%s" class="text%s%s" value="%s"%s%s',
 						'text',

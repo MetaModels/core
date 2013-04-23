@@ -171,13 +171,25 @@ interface IMetaModel
 	/**
 	 * Get variants for the given ids, filtered by the provided filter settings.
 	 *
-	 * @param array $arrIds the Ids of the base elements.
+	 * @param array            $arrIds    The Ids of the base elements.
 	 *
-	 * @param IMetaModelFilter $objFilter the filter to use or null if no filtering.
+	 * @param IMetaModelFilter $objFilter The filter to use or null if no filtering.
 	 *
 	 * @return IMetaModelItems the collection of IMetaModelItem instances that match the given filter.
 	 */
 	public function findVariants($arrIds, $objFilter);
+
+	/**
+	 * Find all varints of the given item. This methods makes no difference between the varbase item and
+	 * other variants.
+	 *
+	 * @param array            $arrIds    The Ids of the base elements.
+	 *
+	 * @param IMetaModelFilter $objFilter The filter to use or null if no filtering.
+	 *
+	 * @return IMetaModelItems the collection of IMetaModelItem instances that match the given filter.
+	 */
+	public function findVariantsWithBase($arrIds, $objFilter);
 
 	/**
 	 * Get all options of the given attribute.

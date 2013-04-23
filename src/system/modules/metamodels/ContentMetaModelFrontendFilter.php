@@ -23,17 +23,16 @@
  */
 class ContentMetaModelFrontendFilter extends ContentElement
 {
-
 	/**
-	 * Template
+	 * Template.
+	 *
 	 * @var string
 	 */
 	protected $strTemplate = 'mm_filter_default';
 
-
-
 	/**
-	 * Display a wildcard in the back end
+	 * Display a wildcard in the back end.
+	 *
 	 * @return string
 	 */
 	public function generate()
@@ -43,12 +42,12 @@ class ContentMetaModelFrontendFilter extends ContentElement
 			$objTemplate = new BackendTemplate('be_wildcard');
 
 			$objTemplate->wildcard = '### METAMODELS FE-FILTERBLOCK ###';
-			$objTemplate->title = $this->headline;
+			$objTemplate->title    = $this->headline;
 
 			return $objTemplate->parse();
 		}
 
-		// get template
+		// Get template if configured.
 		if ($this->metamodel_fef_template)
 		{
 			$this->strTemplate = $this->metamodel_fef_template;
@@ -57,13 +56,14 @@ class ContentMetaModelFrontendFilter extends ContentElement
 		return parent::generate();
 	}
 
-
 	/**
-	 * Generate the content element
+	 * Generate the content element.
+	 *
+	 * @return void
 	 */
 	protected function compile()
 	{
-		// get filter data
+		// Get filter data.
 		$objFilter = new MetaModelFrontendFilter();
 		$arrFilter = $objFilter->getMetaModelFrontendFilter($this);
 

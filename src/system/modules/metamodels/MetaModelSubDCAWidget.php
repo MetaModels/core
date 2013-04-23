@@ -18,73 +18,90 @@
  * Class multiWidget
  *
  * Provide methods to handle multiple widgets in one.
+ *
  * @package	   MetaModels
+ *
  * @subpackage Backend
+ *
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
 class MetaModelSubDCAWidget extends Widget
 {
 
 	/**
-	 * Submit user input
+	 * Submit user input.
+	 *
 	 * @var boolean
 	 */
 	protected $blnSubmitInput = true;
 
 	/**
-	 * Template
+	 * Template.
+	 *
 	 * @var string
 	 */
 	protected $strTemplate = 'be_subdca';
 
 	/**
-	 * Options
+	 * Options.
+	 *
 	 * @var array
 	 */
 	protected $arrOptions = array();
 
 	/**
-	 * SubFields
+	 * SubFields.
+	 *
 	 * @var array
 	 */
 	protected $arrSubFields = array();
 
 	/**
 	 * Flag fields to be applied to each subfield.
+	 *
 	 * @var array
 	 */
 	protected $arrFlagFields = array();
 
 	/**
-	 * The prepared widgets
+	 * The prepared widgets.
 	 *
 	 * @var array
 	 */
 	protected $arrWidgets = array();
 
 	/**
-	 * Initialize the object
-	 * @param array
+	 * Initialize the object.
+	 *
+	 * @param array $arrAttributes The attributes to apply to this widget (optional).
 	 */
-	public function __construct($arrAttributes=false)
+	public function __construct($arrAttributes = false)
 	{
 		parent::__construct();
 		$this->addAttributes($arrAttributes);
-		// Input field callback
+		// Input field callback.
 		if (is_array($arrAttributes['getsubfields_callback']))
 		{
-			if (!is_object($this->$arrAttributes['getsubfields_callback'][0]))
+			$arrCallback = $this->$arrAttributes['getsubfields_callback'];
+			if (!is_object($arrCallback[0]))
 			{
-				$this->import($arrAttributes['getsubfields_callback'][0]);
+				$this->import($arrCallback[0]);
 			}
-			$this->arrSubFields=$this->$arrAttributes['getsubfields_callback'][0]->$arrAttributes['getsubfields_callback'][1]($this, $arrAttributes);
+			$this->arrSubFields = $this->{$arrCallback[0]}->{$arrCallback[1]}($this, $arrAttributes);
 		}
 	}
 
 	/**
-	 * Add specific attributes
-	 * @param string
-	 * @param mixed
+	 * Add specific attribute magic setter.
+	 *
+	 * In addition to those supported by the Contao Widget class, this
+	 * widget does understand: 'options', 'subfields' and 'flagfields'.
+	 *
+	 * @param string $strKey   The key of the attribute to set.
+	 *
+	 * @param mixed  $varValue The value to use.
+	 *
+	 * @return void
 	 */
 	public function __set($strKey, $varValue)
 	{
@@ -116,22 +133,26 @@ class MetaModelSubDCAWidget extends Widget
 	}
 
 	/**
-	 * Initialize widget
+	 * Initialize widget.
 	 *
-	 * Based on DataContainer::row() from Contao 2.10.1
+	 * Based on DataContainer::row() from Contao 2.10.1.
 	 *
-	 * @param	array        $arrField the field DCA
-	 * @param	string       $strRow   the setting name
-	 * @param	string       $strKey   the widget name
-	 * @param	mixed        $varValue the widget value
-	 * @return	Widget|null
+	 * @param array  &$arrField The field DCA - might get changed within this routine.
+	 *
+	 * @param string $strRow    The setting name.
+	 *
+	 * @param string $strKey    The widget name.
+	 *
+	 * @param mixed  $varValue  The widget value.
+	 *
+	 * @return Widget|null The widget on success, null otherwise.
 	 */
 	protected function initializeWidget(&$arrField, $strRow, $strKey, $varValue)
 	{
-		$xlabel = '';
+		$xlabel          = '';
 		$strContaoPrefix = 'contao/';
 
-		// Toggle line wrap (textarea)
+		// Toggle line wrap (textarea).
 		if ($arrField['inputType'] == 'textarea' && $arrField['eval']['rte'] == '')
 		{
 			$xlabel .= ' ' . $this->generateImage(
@@ -147,7 +168,7 @@ class MetaModelSubDCAWidget extends Widget
 			);
 		}
 
-		// Add the help wizard
+		// Add the help wizard.
 		if ($arrField['eval']['helpwizard'])
 		{
 			$xlabel .= sprintf(
@@ -161,7 +182,7 @@ class MetaModelSubDCAWidget extends Widget
 			);
 		}
 
-		// Add the popup file manager
+		// Add the popup file manager.
 		if ($arrField['inputType'] == 'fileTree')
 		{
 			$path = '';
@@ -176,42 +197,59 @@ class MetaModelSubDCAWidget extends Widget
 				$strContaoPrefix,
 				$path,
 				specialchars($GLOBALS['TL_LANG']['MSC']['fileManager']),
-				$this->generateImage('filemanager.gif', $GLOBALS['TL_LANG']['MSC']['fileManager'], 'style="vertical-align:text-bottom;"')
+				$this->generateImage(
+					'filemanager.gif',
+					$GLOBALS['TL_LANG']['MSC']['fileManager'],
+					'style="vertical-align:text-bottom;"'
+				)
 			);
 		}
-		// Add the table import wizard
+		// Add the table import wizard.
 		elseif ($arrField['inputType'] == 'tableWizard')
 		{
 			$xlabel .= sprintf(
 				' <a href="%s" title="%s" onclick="Backend.getScrollOffset();">%s</a>',
 				$this->addToUrl('key=table'),
 				specialchars($GLOBALS['TL_LANG']['MSC']['tw_import'][1]),
-				$this->generateImage('tablewizard.gif', $GLOBALS['TL_LANG']['MSC']['tw_import'][0], 'style="vertical-align:text-bottom;"')
+				$this->generateImage(
+					'tablewizard.gif',
+					$GLOBALS['TL_LANG']['MSC']['tw_import'][0], 'style="vertical-align:text-bottom;"'
+				)
 			);
 			$xlabel .= ' ' .
 				$this->generateImage(
 					'demagnify.gif',
 					'',
-					sprintf('title="%s" style="vertical-align:text-bottom; cursor:pointer;" onclick="Backend.tableWizardResize(0.9);"', specialchars($GLOBALS['TL_LANG']['MSC']['tw_shrink']))
+					sprintf(
+						'title="%s" style="vertical-align:text-bottom; cursor:pointer;" onclick="Backend.tableWizardResize(0.9);"',
+						specialchars($GLOBALS['TL_LANG']['MSC']['tw_shrink'])
+					)
 				) .
 				$this->generateImage(
 					'magnify.gif',
 					'',
-					sprintf('title="%s" style="vertical-align:text-bottom; cursor:pointer;" onclick="Backend.tableWizardResize(1.1);"', specialchars($GLOBALS['TL_LANG']['MSC']['tw_expand']))
+					sprintf(
+						'title="%s" style="vertical-align:text-bottom; cursor:pointer;" onclick="Backend.tableWizardResize(1.1);"',
+						specialchars($GLOBALS['TL_LANG']['MSC']['tw_expand'])
+					)
 				);
 		}
-		// Add the list import wizard
+		// Add the list import wizard.
 		elseif ($arrField['inputType'] == 'listWizard')
 		{
 			$xlabel .= sprintf(
 				' <a href="%s" title="%s" onclick="Backend.getScrollOffset();">%s</a>',
 				$this->addToUrl('key=list'),
 				specialchars($GLOBALS['TL_LANG']['MSC']['lw_import'][1]),
-				$this->generateImage('tablewizard.gif', $GLOBALS['TL_LANG']['MSC']['tw_import'][0], 'style="vertical-align:text-bottom;"')
+				$this->generateImage(
+					'tablewizard.gif',
+					$GLOBALS['TL_LANG']['MSC']['tw_import'][0],
+					'style="vertical-align:text-bottom;"'
+				)
 			);
 		}
 
-		// Input field callback
+		// Input field callback.
 		if (is_array($arrField['input_field_callback']))
 		{
 			if (!is_object($this->$arrField['input_field_callback'][0]))
@@ -231,7 +269,7 @@ class MetaModelSubDCAWidget extends Widget
 
 		$arrField['eval']['required'] = false;
 
-		// Use strlen() here (see #3277)
+		// Use strlen() here (see #3277).
 		if ($arrField['eval']['mandatory'])
 		{
 			if (is_array($this->varValue[$strRow][$strKey]))
@@ -250,7 +288,7 @@ class MetaModelSubDCAWidget extends Widget
 			}
 		}
 
-		// load callback
+		// Load callback.
 		if (is_array($arrField['load_callback']))
 		{
 			foreach ($arrField['load_callback'] as $callback)
@@ -261,21 +299,31 @@ class MetaModelSubDCAWidget extends Widget
 		}
 
 		// TODO: add initialization of tinyMCE, datepicker, colorpicker etc.
-
-		$arrField['name'] = $this->strName . '[' . $strRow . '][' . $strKey . ']';
-		$arrField['id'] = $this->strId . '_' . $strRow . '_' . $strKey;
-		$arrField['value'] = ($varValue !== '') ? $varValue : $arrField['default'];
+		$arrField['name']              = $this->strName . '[' . $strRow . '][' . $strKey . ']';
+		$arrField['id']                = $this->strId . '_' . $strRow . '_' . $strKey;
+		$arrField['value']             = ($varValue !== '') ? $varValue : $arrField['default'];
 		$arrField['eval']['tableless'] = true;
 
-		$objWidget = new $strClass($this->prepareForWidget($arrField, $arrField['name'], $arrField['value'], null, $this->strTable));
+		$objWidget = new $strClass($this->prepareForWidget(
+			$arrField,
+			$arrField['name'],
+			$arrField['value'],
+			null,
+			$this->strTable
+		));
 
-		$objWidget->strId = $arrField['id'];
+		$objWidget->strId       = $arrField['id'];
 		$objWidget->storeValues = true;
-		$objWidget->xlabel = $xlabel;
+		$objWidget->xlabel      = $xlabel;
 
 		return $objWidget;
 	}
 
+	/**
+	 * Prepare all widgets and store them in the protected $arrWidgets property.
+	 *
+	 * @return void
+	 */
 	protected function prepareWidgets()
 	{
 		if ($this->arrWidgets)
@@ -286,9 +334,15 @@ class MetaModelSubDCAWidget extends Widget
 		$arrWidgets = array();
 		foreach ($this->arrSubFields as $strFieldName => &$arrSubField)
 		{
-			$varValue = $this->value[$strFieldName];
-			$arrRow = array();
-			$objWidget = $this->initializeWidget($arrSubField, $strFieldName, 'value', $varValue['value']);
+			$varValue  = $this->value[$strFieldName];
+			$arrRow    = array();
+			$objWidget = $this->initializeWidget(
+				$arrSubField,
+				$strFieldName,
+				'value',
+				$varValue['value']
+			);
+
 			if (!$objWidget)
 			{
 				continue;
@@ -296,8 +350,12 @@ class MetaModelSubDCAWidget extends Widget
 			$arrRow[] = $objWidget;
 			foreach ($this->arrFlagFields as $strFlag => $arrFlagField)
 			{
-//				unset($arrFlagField['label']);
-				$objWidget = $this->initializeWidget($arrFlagField, $strFieldName, $strFlag, $varValue[$strFlag]);
+				$objWidget = $this->initializeWidget(
+					$arrFlagField,
+					$strFieldName,
+					$strFlag,
+					$varValue[$strFlag]
+				);
 
 				if ($objWidget)
 				{
@@ -310,44 +368,50 @@ class MetaModelSubDCAWidget extends Widget
 	}
 
 	/**
-	 * Initialize widget
+	 * Initialize widget.
 	 *
 	 * Based on DataContainer::row() from Contao 2.10.1
 	 *
-	 * @param	array        $arrField the field DCA
-	 * @param	string       $strRow   the setting name
-	 * @param	string       $strKey   the widget name
-	 * @param	mixed        $varInput the overall input value
-	 * @return	Widget|null
+	 * @param array  &$arrField The field DCA.
+	 *
+	 * @param string $strRow    The setting name.
+	 *
+	 * @param string $strKey    The widget name.
+	 *
+	 * @param mixed  &$varInput The overall input value.
+	 *
+	 * @return Widget|null
 	 */
 	protected function validateWidget(&$arrField, $strRow, $strKey, &$varInput)
 	{
-		$varValue = $varInput[$strRow][$strKey];
+		$varValue  = $varInput[$strRow][$strKey];
 		$objWidget = $this->initializeWidget($arrField, $strRow, $strKey, $varValue);
 		if (!is_object($objWidget))
 		{
-			return;
+			return null;
 		}
 
-		// hack for checkboxes
-		if ($arrField['inputType'] == 'checkbox' && isset($varInput[$strRow][$strKey]))
+		// Hack for checkboxes.
+		if (($arrField['inputType'] == 'checkbox') && isset($varInput[$strRow][$strKey]))
 		{
+			// @codingStandardsIgnoreStart - we know that access to $_POST is discouraged.
 			$_POST[$objWidget->name] = $varValue;
+			// @codingStandardsIgnoreEnd
 		}
 
 		$objWidget->validate();
 
 		$varValue = $objWidget->value;
 
-		// Convert date formats into timestamps (check the eval setting first -> #3063)
+		// Convert date formats into timestamps (check the eval setting first -> #3063).
 		$rgxp = $arrField['eval']['rgxp'];
 		if (($rgxp == 'date' || $rgxp == 'time' || $rgxp == 'datim') && $varValue != '')
 		{
-			$objDate = new Date($varValue, $GLOBALS['TL_CONFIG'][$rgxp . 'Format']);
+			$objDate  = new Date($varValue, $GLOBALS['TL_CONFIG'][$rgxp . 'Format']);
 			$varValue = $objDate->tstamp;
 		}
 
-		// Save callback
+		// Save callback.
 		if (is_array($arrField['save_callback']))
 		{
 			foreach ($arrField['save_callback'] as $callback)
@@ -368,10 +432,10 @@ class MetaModelSubDCAWidget extends Widget
 
 		$varInput[$strRow][$strKey] = $varValue;
 
-		// Do not submit if there are errors
+		// Do not submit if there are errors.
 		if ($objWidget->hasErrors())
 		{
-			// store the errors
+			// Store the errors.
 			$this->arrWidgetErrors[$strKey][$strRow] = $objWidget->getErrors();
 
 			return false;
@@ -381,6 +445,10 @@ class MetaModelSubDCAWidget extends Widget
 
 	/**
 	 * Validate the widget.
+	 *
+	 * @param mixed $varInput The value to validate.
+	 *
+	 * @return mixed The validated data.
 	 */
 	protected function validator($varInput)
 	{
@@ -410,7 +478,8 @@ class MetaModelSubDCAWidget extends Widget
 	}
 
 	/**
-	 * Generate the widget and return it as string
+	 * Generate the widget and return it as string.
+	 *
 	 * @return string
 	 */
 	public function generate()
@@ -431,16 +500,22 @@ class MetaModelSubDCAWidget extends Widget
 					($objWidget->tl_class != '' ? ' class="' . $objWidget->tl_class . '"' : ''),
 					($objWidget->style != '' ? ' style="' . $objWidget->style . '"' : ''),
 					$objWidget->parse(),
-					($GLOBALS['TL_CONFIG']['showHelp'] && $objWidget->description) ? '<p class="tl_help tl_tip' . $objWidget->tl_class . '">'.$objWidget->description.'</p>' : ''
+					($GLOBALS['TL_CONFIG']['showHelp'] && $objWidget->description)
+						? sprintf(
+							'<p class="tl_help tl_tip%s">%s</p>',
+							$objWidget->tl_class,
+							$objWidget->description
+						)
+						: ''
 				);
 			}
 			$arrOptions[] = implode('', $arrColumns);
 		}
 
-		// Add a "no entries found" message if there are no sub widgets
+		// Add a "no entries found" message if there are no sub widgets.
 		if (!count($arrOptions))
 		{
-			$arrOptions[]= '<p class="tl_noopt">'.$GLOBALS['TL_LANG']['MSC']['noResult'].'</p>';
+			$arrOptions[] = '<p class="tl_noopt">'.$GLOBALS['TL_LANG']['MSC']['noResult'].'</p>';
 		}
 
 		$strHead = '';

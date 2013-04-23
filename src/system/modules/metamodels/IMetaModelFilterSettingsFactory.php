@@ -28,17 +28,10 @@ interface IMetaModelFilterSettingsFactory
 	/**
 	 * Create a IMetaModelFilterSettings instance from the id.
 	 *
-	 * @param int $intId the id of the IMetaModelFilterSettings.
+	 * @param int $intId The id of the IMetaModelFilterSettings.
 	 *
-	 * @return IMetaModelFilterSettings the instance of the IMetaModelFilterSettings or null if not found.
+	 * @return IMetaModelFilterSettings The instance of the IMetaModelFilterSettings or null if not found.
 	 */
 	public static function byId($intId);
-
-	/**
-	 * Query for all known MetaModel database tables.
-	 *
-	 * @return string[] all MetaModel table names as string array.
-	 */
-	// public static function getAllFor();
 }
 

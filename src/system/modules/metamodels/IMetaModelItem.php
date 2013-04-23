@@ -24,62 +24,65 @@
 interface IMetaModelItem
 {
 	/**
-	 * return the native value of an attibute
+	 * Return the native value of an attibute.
 	 *
-	 * @param string $strAttributeName the name of the attribute
+	 * @param string $strAttributeName The name of the attribute.
 	 *
 	 * @return mixed
 	 */
 	public function get($strAttributeName);
 
 	/**
-	 * set the native value of an attibute
+	 * Set the native value of an attibute.
 	 *
-	 * @param string $strAttributeName the name of the attribute
+	 * @param string $strAttributeName The name of the attribute.
 	 *
-	 * @param mixed $varValue the value of the attribute
+	 * @param mixed  $varValue         The value of the attribute.
+	 *
+	 * @return IMetaModelItem
 	 */
 	public function set($strAttributeName, $varValue);
 
 	/**
-	 * fetch the meta model that repesents this item.
+	 * Fetch the meta model that repesents this item.
 	 *
-	 * @return IMetaModel the instance.
+	 * @return IMetaModel The instance.
 	 */
 	public function getMetaModel();
 
 	/**
-	 * fetch the meta model attribute instance with the given name.
+	 * Fetch the meta model attribute instance with the given name.
 	 *
-	 * @param string $strAttributeName the name of the attribute.
+	 * @param string $strAttributeName The name of the attribute.
 	 *
-	 * @return IMetaModelAttribute the instance.
+	 * @return IMetaModelAttribute The instance.
 	 */
 	public function getAttribute($strAttributeName);
 
 	/**
-	 * determines if this item is a variant of another item.
+	 * Determines if this item is a variant of another item.
 	 *
-	 * @return bool true if it is an variant, false otherwise
+	 * @return bool True if it is an variant, false otherwise
 	 */
 	public function isVariant();
 
 	/**
-	 * determines if this item is variant base of other items.
+	 * Determines if this item is variant base of other items.
+	 *
 	 * Note: this does not mean that there actually exist variants of
 	 * this item. It merely simply states, that this item is able
 	 * to function as variant base for other items.
 	 *
-	 * @return bool true if it is an variant base, false otherwise
+	 * @return bool true if it is an variant base, false otherwise.
 	 */
 	public function isVariantBase();
 
 	/**
-	 * fetch the meta model variants for this item.
+	 * Fetch the meta model variants for this item.
 	 *
-	 * @param IMetaModelFilter $objFilter the filter settings to be applied.
+	 * @param IMetaModelFilter $objFilter The filter settings to be applied.
 	 *
-	 * @return IMetaModelItems a list of all variants for this item.
+	 * @return IMetaModelItems A list of all variants for this item.
 	 */
 	public function getVariants($objFilter);
 
@@ -92,30 +95,31 @@ interface IMetaModelItem
 
 	/**
 	 * Renders the item in the given output format.
-	 * @see IMetaModelAttribute::parseValue() for further information.
 	 *
-	 * @param string                   $strOutputFormat optional, the desired output format (default: text).
+	 * For further information {@see IMetaModelAttribute::parseValue()}.
 	 *
-	 * @param IMetaModelRenderSettings $objSettings The render settings to use optional (default: null).
+	 * @param string                   $strOutputFormat Optional, the desired output format (default: text).
+	 *
+	 * @param IMetaModelRenderSettings $objSettings     The render settings to use optional (default: null).
 	 *
 	 * @return array attribute name => format => value
-	 *
 	 */
-	public function parseValue($strOutputFormat = 'text', $objSettings = NULL);
+	public function parseValue($strOutputFormat = 'text', $objSettings = null);
 
 	/**
 	 * Renders a single attribute in the given output format.
-	 * @see IMetaModelAttribute::parseValue() for further information.
 	 *
-	 * @param string                   $strAttributeName the desired attribute.
+	 * For further information {@see IMetaModelAttribute::parseValue()}.
 	 *
-	 * @param string                   $strOutputFormat  optional, the desired output format (default: text).
+	 * @param string                   $strAttributeName The desired attribute.
+	 *
+	 * @param string                   $strOutputFormat  Optional, the desired output format (default: text).
 	 *
 	 * @param IMetaModelRenderSettings $objSettings      The render settings to use optional (default: null).
 	 *
 	 * @return array format=>value
 	 */
-	public function parseAttribute($strAttributeName, $strOutputFormat = 'text', $objSettings = NULL);
+	public function parseAttribute($strAttributeName, $strOutputFormat = 'text', $objSettings = null);
 
 	/**
 	 * Returns a new item containing the same values as this item but no id.
@@ -128,6 +132,7 @@ interface IMetaModelItem
 
 	/**
 	 * Returns a new item containing the same values as this item but no id.
+	 *
 	 * Additionally, the item will be a variant child of this item.
 	 *
 	 * NOTE: if this item is not a variant base itself, this item will return a item

@@ -25,11 +25,13 @@
 class MetaModelFilterSettingConditionOr extends MetaModelFilterSettingWithChilds
 {
 	/**
-	 * Generates the filter rules based upon the given fulter url.
+	 * Generates the filter rules based upon the given filter url.
 	 *
-	 * {@inheritdoc}
+	 * @param IMetaModelFilter $objFilter    The filter to append the rules to.
 	 *
-	 * @see MetaModelFilterSetting::prepareRules()
+	 * @param string[string]   $arrFilterUrl The parameters to evaluate.
+	 *
+	 * @return void
 	 */
 	public function prepareRules(IMetaModelFilter $objFilter, $arrFilterUrl)
 	{

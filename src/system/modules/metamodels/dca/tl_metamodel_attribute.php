@@ -44,14 +44,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 		),
 	),
 
-	// List
 	'list' => array
 	(
 		'sorting' => array
 		(
 			'disableGrouping'         => true,
 			'mode'                    => 4,
-			// 'fields'                  => array('sorting'),
 			'panelLayout'             => 'filter,limit',
 			'headerFields'            => array('name', 'tableName', 'tstamp', 'translated', 'supvariants', 'varsupport'),
 			'flag'                    => 1,
@@ -83,12 +81,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 				'href'                => 'act=edit',
 				'icon'                => 'edit.gif'
 			),
-			/* 'copy' => array
+			/*
+			'copy' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['copy'],
 				'href'                => 'act=copy',
 				'icon'                => 'copy.gif'
-			), */
+			),
+			*/
+
 			'cut' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['cut'],
@@ -115,55 +116,56 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 
 	'metapalettes' => array
 	(
-		// initial palette with only the type to be selected.
+		// Initial palette with only the type to be selected.
 		'default' => array
 		(
 			'title' => array('type')
 		),
 
-		// base palette for MetaModelAttribute derived types
-		'_base_ extends default' => array
+		// Base palette for MetaModelAttribute derived types.
+		'_base_ extends default'      => array
 		(
-			'+title'            => array('colname', 'name', 'description'),
-			'advanced'            => array(':hide', 'isvariant', 'mandatory', 'isunique', 'hasdefault'),
-			'metamodeloverview'    => array('sortingField', 'filteredField', 'searchableField'),
-			'backenddisplay'    => array('titleField', 'width50', 'insertBreak'),
+			'+title'                  => array('colname', 'name', 'description'),
+			'advanced'                => array(':hide', 'isvariant', 'mandatory', 'isunique', 'hasdefault'),
+			'metamodeloverview'       => array('sortingField', 'filteredField', 'searchableField'),
+			'backenddisplay'          => array('titleField', 'width50', 'insertBreak'),
 		),
-		// WARNING: even though the following are empty, we have to keep them as otherwise
-		// metapalettes will have no way for deriving the palettes. - They need the index. :)
-
-		// default palette for MetaModelAttributeSimple derived types
-		'_simpleattribute_ extends _base_' => array
+		// Default palette for MetaModelAttributeSimple derived types.
+		// WARNING: even though it is empty, we have to keep it as otherwise
+		// metapalettes will have no way for deriving the palettes. - They need the index.
+				'_simpleattribute_ extends _base_' => array
 		(
 		),
-		// default palette for MetaModelAttributeComplex derived types
+		// Default palette for MetaModelAttributeComplex derived types.
+		// WARNING: even though it is empty, we have to keep it as otherwise
+		// metapalettes will have no way for deriving the palettes. - They need the index.
 		'_complexattribute_ extends _base_' => array
 		(
 		),
 	),
-	// Subpalettes
+
 	'metasubpalettes' => array
 	(
-		// displaying in backend
-		'insertBreak'        => array('legendTitle','legendHide'),
+		// Displaying in backend.
+		'insertBreak'                 => array('legendTitle','legendHide'),
 
-		'sortingField'        => 'groupingMode',
-		'showImage'            => 'imageSize',
-		'format'            => 'formatFunction,formatStr',
-		'limitItems'        => 'items,childrenSelMode,parentFilter',
-		'customFiletree'    => 'uploadFolder,validFileTypes,filesOnly',
-		'editGroups'        => 'editGroups',
-		'rte'                => 'rte_editor',
-		'multiple'            => 'sortBy',
+		'sortingField'                => 'groupingMode',
+		'showImage'                   => 'imageSize',
+		'format'                      => 'formatFunction,formatStr',
+		'limitItems'                  => 'items,childrenSelMode,parentFilter',
+		'customFiletree'              => 'uploadFolder,validFileTypes,filesOnly',
+		'editGroups'                  => 'editGroups',
+		'rte'                         => 'rte_editor',
+		'multiple'                    => 'sortBy',
 	),
 
 
-	// Palettes
+	// Palettes.
 	'palettes' => array
 	(
 		'__selector__' => array('type')
 	),
-	// Fields
+	// Fields.
 	'fields' => array
 	(
 		'type' => array
@@ -174,13 +176,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['typeOptions'],
 			'eval'                    => array
 			(
-				'includeBlankOption' => true,
-				'doNotSaveEmpty' => true,
-				'alwaysSave' => true,
-				'submitOnChange'=> true,
-				'mandatory' => true,
-				'tl_class'=>'w50',
-				'chosen' => 'true'
+				'includeBlankOption'  => true,
+				'doNotSaveEmpty'      => true,
+				'alwaysSave'          => true,
+				'submitOnChange'      => true,
+				'mandatory'           => true,
+				'tl_class'            => 'w50',
+				'chosen'              => 'true'
 			),
 			'options_callback'        => array('TableMetaModelAttribute', 'fieldTypesCallback'),
 		),
@@ -191,13 +193,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 			'exclude'                 => true,
 			'eval'                    => array
 			(
-				'tl_class'=>'clr'
+				'tl_class'            => 'clr'
 			),
-			'load_callback'         => array
+			'load_callback'           => array
 			(
 				array('TableMetaModelAttribute', 'decodeNameAndDescription')
 			),
-			'save_callback'         => array
+			'save_callback'           => array
 			(
 				array('TableMetaModelAttribute', 'encodeNameAndDescription')
 			)
@@ -209,19 +211,19 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 			'exclude'                 => true,
 			'eval'                    => array
 			(
-				'tl_class' => 'clr'
+				'tl_class'            => 'clr'
 			),
-			'load_callback'         => array
+			'load_callback'           => array
 			(
 				array('TableMetaModelAttribute', 'decodeNameAndDescription')
 			),
-			'save_callback'         => array
+			'save_callback'           => array
 			(
 				array('TableMetaModelAttribute', 'encodeNameAndDescription')
 			)
 		),
 
-		// AVOID: doNotCopy => true, as child records won't be copied when copy metamodel
+		// AVOID: doNotCopy => true, as child records won't be copied when copy metamodel.
 		'colname' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname'],
@@ -229,9 +231,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 			'inputType'               => 'text',
 			'eval'                    => array
 			(
-				'mandatory'=>true,
-				'maxlength'=>64,
-				'tl_class'=>'w50'
+				'mandatory'           => true,
+				'maxlength'           => 64,
+				'tl_class'            => 'w50'
 				),
 		),
 
@@ -241,8 +243,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 			'inputType'               => 'checkbox',
 			'eval'                    => array
 			(
-				'submitOnChange'=>true,
-				'tl_class'=>'cbx w50'
+				'submitOnChange'      => true,
+				'tl_class'            => 'cbx w50'
 			)
 		),
 
@@ -252,7 +254,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 			'inputType'               => 'checkbox',
 			'eval'                    => array
 			(
-				'tl_class'=>'cbx w50'
+				'tl_class'            => 'cbx w50'
 			),
 		),
 	)

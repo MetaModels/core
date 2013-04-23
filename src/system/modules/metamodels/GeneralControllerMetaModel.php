@@ -27,48 +27,55 @@ class GeneralControllerMetaModel extends GeneralControllerDefault
 	/**
 	 * Create a variant of the model currently loaded.
 	 *
-	 * @param DC_General $objDC the data container holding the current model
+	 * @param DC_General $objDC The data container holding the current model.
 	 *
 	 * @return void
 	 */
 	public function createvariant(DC_General $objDC)
 	{
-		// Check if table is editable
+		// Check if table is editable.
 		if (!$objDC->isEditable())
 		{
 			$this->log('Table ' . $objDC->getTable() . ' is not editable', 'DC_General - Controller - edit()', TL_ERROR);
 			$this->redirect('contao/main.php?act=error');
 		}
 
-		// Load fields and co
+		// Load fields.
 		$objDC->loadEditableFields();
 		$objDC->setWidgetID($objDC->getId());
 
-		// Check if we have fields
+		// Check if we have fields.
 		if (!$objDC->hasEditableFields())
 		{
 			$this->redirect($this->getReferer());
 		}
 
-		// Load something
+		// Load rich text editor.
 		$objDC->preloadTinyMce();
 
-		// Set buttons
-		$objDC->addButton("save");
-		$objDC->addButton("saveNclose");
+		// Set buttons.
+		$objDC->addButton('save');
+		$objDC->addButton('saveNclose');
 
-		// Load record from data provider
-		$objDBModel = $objDC->getDataProvider()->createVariant($objDC->getDataProvider()->getEmptyConfig()->setId($objDC->getId()));
+		// Load record from data provider.
+		$objDBModel = $objDC
+			->getDataProvider()
+			->createVariant(
+				$objDC
+					->getDataProvider()
+					->getEmptyConfig()
+					->setId($objDC->getId())
+			);
 		if ($objDBModel == null)
 		{
 			$objDBModel = $objDC->getDataProvider()->getEmptyModel();
 		}
 		$objDC->setCurrentModel($objDBModel);
 
-		// Check if we have a auto submit
+		// Check if we have a auto submit.
 		if ($objDC->isAutoSubmitted())
 		{
-			// process input and update changed properties.
+			// Process input and update changed properties.
 			foreach (array_keys($objDC->getFieldList()) as $key)
 			{
 				$varNewValue = $objDC->processInput($key);
@@ -81,42 +88,57 @@ class GeneralControllerMetaModel extends GeneralControllerDefault
 			$objDC->setCurrentModel($objDBModel);
 		}
 
-		// Check submit
+		// Check submit.
 		if ($objDC->isSubmitted() == true)
 		{
-			if (isset($_POST["save"]))
+			// @codingStandardsIgnoreStart - we know that access to $_POST is discouraged.
+			if (isset($_POST['save']))
+			// @codingStandardsIgnoreEnd
 			{
 				$this->getDC()->updateModelFromPOST();
 
-				// process input and update changed properties.
+				// Process input and update changed properties.
 				if ($this->doSave($objDC) !== false)
 				{
-					// Callback
-					$objDC->getCallbackClass()->oncreateCallback($objDBModel->getID(), $objDBModel->getPropertiesAsArray());
-					// Log
-					$this->log('A new entry in table "' . $objDC->getTable() . '" has been created (ID: ' . $objDBModel->getID() . ')', 'DC_General - Controller - createvariant()', TL_GENERAL);
-					// Redirect
-					$this->redirect($this->addToUrl("id=" . $objDBModel->getID() . "&amp;act=edit"));
+					// Call the on create callbacks.
+					$objDC
+						->getCallbackClass()
+						->oncreateCallback($objDBModel->getID(), $objDBModel->getPropertiesAsArray());
+					// Log the creation.
+					$this->log(
+						sprintf(
+							'A new entry in table "%s" has been created (ID: %s)',
+							$objDC->getTable(),
+							$objDBModel->getID()
+						),
+						'DC_General - Controller - createvariant()',
+						TL_GENERAL
+					);
+					// Redirect to edit mode.
+					$this->redirect($this->addToUrl('id=' . $objDBModel->getID() . '&amp;act=edit'));
 				}
 			}
-			else if (isset($_POST["saveNclose"]))
+			// @codingStandardsIgnoreStart - we know that access to $_POST is discouraged.
+			elseif (isset($_POST['saveNclose']))
+			// @codingStandardsIgnoreEnd
 			{
 				$this->getDC()->updateModelFromPOST();
 
-				// process input and update changed properties.
+				// Process input and update changed properties.
 				if ($this->doSave($objDC) !== false)
 				{
 					setcookie('BE_PAGE_OFFSET', 0, 0, '/');
 
+					// @codingStandardsIgnoreStart - we know that access to $_SESSION is discouraged.
 					$_SESSION['TL_INFO']    = '';
 					$_SESSION['TL_ERROR']   = '';
 					$_SESSION['TL_CONFIRM'] = '';
+					// @codingStandardsIgnoreEnd
 
 					$this->redirect($this->getReferer());
 				}
 			}
-
-			// Maybe Callbacks ?
+			// Maybe Callbacks?
 		}
 	}
 }

@@ -27,24 +27,30 @@ interface IMetaModelAttributeSimple extends IMetaModelAttribute
 {
 
 	/**
-	 * returns the SQL primitive type declaration in MySQL notation. i.e. "text NULL".
+	 * Returns the SQL primitive type declaration in MySQL notation. i.e. "text NULL".
+	 *
+	 * @return string
 	 */
 	public function getSQLDataType();
 
 	/**
 	 * Creates the underlying database structure for this attribute.
+	 *
+	 * @return void
 	 */
 	public function createColumn();
 
 	/**
 	 * Removes the underlying database structure for this attribute.
+	 *
+	 * @return void
 	 */
 	public function deleteColumn();
 
 	/**
 	 * Renames the underlying database structure for this attribute.
 	 *
-	 * @param string $strNewColumnName the new column name for the attribute.
+	 * @param string $strNewColumnName The new column name for the attribute.
 	 *
 	 * @return void
 	 */

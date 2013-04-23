@@ -523,12 +523,16 @@ class MetaModel implements IMetaModel
 	}
 
 	/**
-	* Find all varints of the given item. This methods makes no difference between the varbase item and other variants.
-	*
-	* @param type $arrIds
-	* @param type $objFilter
-	* @return type
-	*/
+	 * Find all varints of the given item.
+	 *
+	 * This methods makes no difference between the varbase item and other variants.
+	 *
+	 * @param array            $arrIds    The Ids of the base elements.
+	 *
+	 * @param IMetaModelFilter $objFilter The filter to use or null if no filtering.
+	 *
+	 * @return IMetaModelItems the collection of IMetaModelItem instances that match the given filter.
+	 */
 	public function findVariantsWithBase($arrIds, $objFilter)
 	{
 		if(!$arrIds)

@@ -10,3 +10,5 @@ Thumbs.db
 .idea/
 nbproject/
 
+# composer related
+vendor/
