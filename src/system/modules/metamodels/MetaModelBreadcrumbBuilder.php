@@ -8,8 +8,9 @@
  *
  * PHP version 5
  * @package	   MetaModels
- * @subpackage Frontend
+ * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -19,7 +20,7 @@
  * Implementation of the breadcrumb for MetaModels.
  *
  * @package	   MetaModels
- * @subpackage Backend
+ * @subpackage Core
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  */
 class MetaModelBreadcrumbBuilder
@@ -181,5 +182,3 @@ class MetaModelBreadcrumbBuilder
 	}
 
 }
-
-?>
