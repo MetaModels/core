@@ -54,7 +54,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 		(
 			'mode'                    => 1, // 1 default sorting value, 2 switchable sorting value
 			'panelLayout'             => 'limit',
-			// TODO: panelLayout must be built dynamically in getMetaModelDca() to solve issue #199
 			'headerFields'            => array('tstamp'),
 		),
 
