@@ -129,7 +129,10 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 						switch ($this->Input->get('mode'))
 						{
 							case 'create':
-								$this->objFilter = $this->Database->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')->execute($this->Input->get('id'));
+								$this->objFilter = $this->Database
+									->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
+									->execute($this->Input->get('id'));
+
 								$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
 							break;
 							case 'cut':
@@ -148,6 +151,14 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 						}
 					}
 					break;
+				case 'create':
+					$this->objFilter = $this->Database
+						->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
+						->execute($this->Input->get('id'));
+
+					$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
+					break;
+
 				default:;
 			}
 		} else {
