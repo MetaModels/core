@@ -141,7 +141,7 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 									LEFT JOIN tl_metamodel_filter
 									ON (tl_metamodel_filtersetting.fid = tl_metamodel_filter.id)
 									WHERE (tl_metamodel_filtersetting.id=?)')
-									->execute($this->Input->get('id'));
+									->execute($this->Input->get('source'));
 								$this->strSettingType = $this->objFilter->tl_metamodel_filtersetting_type;
 								$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
 							break;
@@ -479,7 +479,6 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		$disablePA = false;
 		$disablePI = false;
 
-
 		// Disable all buttons if there is a circular reference
 		if ($arrClipboard !== false && ($arrClipboard['mode'] == 'cut' && ($cr == 1 || $arrClipboard['id'] == $arrRow['id']) || $arrClipboard['mode'] == 'cutAll' && ($cr == 1 || in_array($arrRow['id'], $arrClipboard['id']))))
 		{
@@ -494,19 +493,104 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		}
 
 		// Return the buttons
-		$imagePasteAfter = $this->generateImage('pasteafter.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteafter'][1], $arrRow['id']), 'class="blink"');
-		$imagePasteInto = $this->generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteinto'][1], $arrRow['id']), 'class="blink"');
 
 		if ($arrRow['id'] > 0)
 		{
-			$return = $disablePA
-				? $this->generateImage('pasteafter_.gif', '', 'class="blink"').' '
-				: '<a href="'.$this->addToUrl('act='.$arrClipboard['mode'].'&amp;mode=1&amp;pid='.$arrRow['id'].(!is_array($arrClipboard['id']) ? '&amp;id='.$arrClipboard['id'] : '')).'" title="'.specialchars(sprintf($GLOBALS['TL_LANG'][$strTable]['pasteafter'][1], $arrRow['id'])).'" onclick="Backend.getScrollOffset()">'.$imagePasteAfter.'</a> ';
+			if ($disablePA)
+			{
+				$return = $this->generateImage('pasteafter_.gif', '', 'class="blink"').' ';
+			} else {
+				$imagePasteAfter = $this->generateImage('pasteafter.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteafter'][1], $arrRow['id']), 'class="blink"');
+
+				$strAdd2UrlAfter = sprintf(
+					'act=%s&amp;mode=1&amp;pid=%s&amp;after=%s&amp;source=%s&amp;childs=%s',
+					$arrClipboard['mode'],
+					$arrClipboard['id'],
+					$arrRow['id'],
+					$arrClipboard['source'],
+					$arrClipboard['childs']
+				);
+
+				if ($arrClipboard['pdp'] != '')
+				{
+					$strAdd2UrlAfter .= '&amp;pdp=' . $arrClipboard['pdp'];
+				}
+
+				if ($arrClipboard['cdp'] != '')
+				{
+					$strAdd2UrlAfter .= '&amp;cdp=' . $arrClipboard['cdp'];
+				}
+
+				$return = sprintf(
+					' <a href="%s" title="%s" onclick="Backend.getScrollOffset()">%s</a> ',
+					$this->addToUrl($strAdd2UrlAfter),
+					specialchars($GLOBALS['TL_LANG'][$strTable]['pasteafter'][0]),
+					$imagePasteAfter
+				);
+			}
+
+			if ($disablePI)
+			{
+				$return .= $this->generateImage('pasteinto_.gif', '', 'class="blink"').' ';
+			} else {
+				$imagePasteInto = $this->generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteinto'][1], $arrRow['id']), 'class="blink"');
+
+				$strAdd2UrlInto = sprintf(
+					'act=%s&amp;mode=2&amp;pid=%s&amp;after=%s&amp;source=%s&amp;childs=%s',
+					$arrClipboard['mode'],
+					$arrClipboard['id'],
+					$arrRow['id'],
+					$arrClipboard['source'],
+					$arrClipboard['childs']
+				);
+
+				if ($arrClipboard['pdp'] != '')
+				{
+					$strAdd2UrlInto .= '&amp;pdp=' . $arrClipboard['pdp'];
+				}
+
+				if ($arrClipboard['cdp'] != '')
+				{
+					$strAdd2UrlInto .= '&amp;cdp=' . $arrClipboard['cdp'];
+				}
+
+				$return .= sprintf(
+					' <a href="%s" title="%s" onclick="Backend.getScrollOffset()">%s</a> ',
+					$this->addToUrl($strAdd2UrlInto),
+					specialchars($GLOBALS['TL_LANG'][$strTable]['pasteinto'][0]),
+					$imagePasteInto
+				);
+			}
+		} else {
+			$imagePasteInto = $this->generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteinto'][1], $arrRow['id']), 'class="blink"');
+
+			$strAdd2UrlInto = sprintf(
+				'act=%s&amp;mode=2&amp;after=0;pid=0&amp;id=%s&amp;source=%s&amp;childs=%s',
+				$arrClipboard['mode'],
+				$arrClipboard['id'],
+				$arrClipboard['source'],
+				$arrClipboard['childs']
+			);
+
+			if ($arrClipboard['pdp'] != '')
+			{
+				$strAdd2UrlInto .= '&amp;pdp=' . $arrClipboard['pdp'];
+			}
+
+			if ($arrClipboard['cdp'] != '')
+			{
+				$strAdd2UrlInto .= '&amp;cdp=' . $arrClipboard['cdp'];
+			}
+
+			$return .= sprintf(
+				' <a href="%s" title="%s" onclick="Backend.getScrollOffset()">%s</a> ',
+				$this->addToUrl($strAdd2UrlInto),
+				specialchars($GLOBALS['TL_LANG'][$strTable]['pasteinto'][0]),
+				$imagePasteInto
+			);
 		}
 
-		return $return.($disablePI
-			? $this->generateImage('pasteinto_.gif', '', 'class="blink"').' '
-			: '<a href="'.$this->addToUrl('act='.$arrClipboard['mode'].'&amp;mode=2&amp;pid='.$arrRow['id'].(!is_array($arrClipboard['id']) ? '&amp;id='.$arrClipboard['id'] : '')).'" title="'.specialchars(sprintf($GLOBALS['TL_LANG'][$strTable]['pasteinto'][1], $arrRow['id'])).'" onclick="Backend.getScrollOffset()">'.$imagePasteInto.'</a> ');
+		return $return;
 	}
 
 	/**

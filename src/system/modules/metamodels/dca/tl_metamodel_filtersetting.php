@@ -45,8 +45,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 				'setOn'               => array
 				(
 					array(
-						'to_field'    => 'id',
-						'from_field'  => 'pid',
+						'to_field'    => 'pid',
+						'from_field'  => 'id',
+					),
+					array(
+						'to_field'    => 'fid',
+						'from_field'  => 'fid',
 					),
 				),
 				'filter'              => array
@@ -130,15 +134,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
 				'href'                => 'act=select',
 				'class'               => 'header_edit_all',
-				'attributes'          => 'onclick="Backend.getScrollOffset();"'
-			),
-			// unfortunately, I can not place Back at the beginning (before new), so I put it at the end.
-			'back' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['MSC']['backBT'],
-				// TODO: this is an evil hack, replace with something better.
-				'href'                => str_replace(array('contao/main.php?do=metamodels', $this->Environment->url), '', $this->getReferer(false, 'tl_metamodel_filter')),
-				'class'               => 'header_back',
 				'attributes'          => 'onclick="Backend.getScrollOffset();"'
 			)
 		),
