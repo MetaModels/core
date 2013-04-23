@@ -28,15 +28,83 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		'oncreate_callback'           => array(array('TableMetaModelFilterSetting', 'create_callback')),
 		'palettes_callback'           => array(array('TableMetaModelFilterSetting', 'preparePalettes'))
 	),
-
-	// List
+	'dca_config'                      => array
+	(
+		'data_provider'               => array
+		(
+			'parent'                  => array
+			(
+				'source'              => 'tl_metamodel_filtersetting'
+			)
+		),
+		'childCondition'              => array
+		(
+			array(
+				'from'                => 'self',
+				'to'                  => 'self',
+				'setOn'               => array
+				(
+					array(
+						'to_field'    => 'id',
+						'from_field'  => 'pid',
+					),
+				),
+				'filter'              => array
+				(
+					array
+					(
+						'local'       => 'pid',
+						'remote'      => 'id',
+						'operation'   => '=',
+					),
+				)
+			)
+		),
+		'rootEntries'                 => array
+		(
+			'self'                    => array
+			(
+				'setOn' => array
+				(
+					array
+					(
+						'property'    => 'pid',
+						'value'       => '0'
+					),
+				),
+				'filter'              => array
+				(
+					array
+					(
+						'property'    => 'pid',
+						'operation'   => '=',
+						'value'       => '0'
+					)
+				)
+			)
+		),
+		'child_list'                  => array
+		(
+			'self'                    => array
+			(
+				'fields'              => array
+				(
+					'type',
+					'attr_id',
+					'urlparam',
+				),
+				'format'              => '%s %s',
+			),
+		)
+	),
+	// List.
 	'list' => array
 	(
 		'presentation' => array
 		(
 			'breadcrumb_callback'     => array('MetaModelBreadcrumbBuilder', 'generateBreadcrumbItems'),
 		),
-		
+
 		'sorting' => array
 		(
 			'mode'                    => 5,
@@ -50,7 +118,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 
 		'label' => array
 		(
-			'fields'                  => array('type'),
+			'fields'                  => array('type', 'attr_id', 'urlparam'),
 			'format'                  => '%s',
 			'label_callback'          => array('TableMetaModelFilterSetting', 'drawSetting')
 		),
