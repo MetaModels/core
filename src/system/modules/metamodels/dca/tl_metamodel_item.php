@@ -56,6 +56,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 			'panelLayout'             => 'limit',
 			// TODO: panelLayout must be built dynamically in getMetaModelDca() to solve issue #199
 			'headerFields'            => array('tstamp'),
+			'paste_button_callback'   => array('MetaModelDatabase', 'pasteButton'),
 		),
 
 		'label' => array
