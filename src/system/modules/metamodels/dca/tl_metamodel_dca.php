@@ -35,6 +35,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 	// List
 	'list' => array
 	(
+		'presentation' => array
+		(
+			'breadcrumb_callback'     => array('MetaModelBreadcrumbBuilder', 'generateBreadcrumbItems'),
+		),
+		
 		'sorting' => array
 		(
 			'mode'                    => 1,

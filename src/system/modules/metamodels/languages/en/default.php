@@ -17,9 +17,9 @@
 /**
  * Content elements
  */
-$GLOBALS['TL_LANG']['CTE']['metamodels']  = 'MetaModel elements';
-$GLOBALS['TL_LANG']['CTE']['metamodel_content'] = array('MetaModel list', 'Adds a list of MetaModel items to the article.');
-$GLOBALS['TL_LANG']['CTE']['metamodels_frontendfilter'] = array('MetaModels FE filter','Implement a frontend filter for MetaModels.');
+$GLOBALS['TL_LANG']['CTE']['metamodels']                              = 'MetaModel elements';
+$GLOBALS['TL_LANG']['CTE']['metamodel_content']                       = array('MetaModel list', 'Adds a list of MetaModel items to the article.');
+$GLOBALS['TL_LANG']['CTE']['metamodels_frontendfilter']               = array('MetaModels FE filter','Implement a frontend filter for MetaModels.');
 
 /**
  * Miscellaneous
@@ -28,6 +28,15 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord']   = 'Edit fi
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label']        = 'Filter "%s" in MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord']   = 'Edit attribute setting %%s for render setting "%s" in MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']        = 'Render setting "%s" in MetaModel "%s"';
+
+$GLOBALS['TL_LANG']['BRD']['metamodels']                              = 'MetaModels';
+$GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                     = 'Attributes "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_rendersettings']                = 'Render setting "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_rendersetting']                 = 'Render settings "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_dca']                           = 'Palette "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting']                    = 'Palette settings "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_filter']                        = 'Filter "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_filtersettings']                = 'Filter settings "%s"';
 
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']        = 'Edit "%s" for item %%s';
 $GLOBALS['TL_LANG']['MSC']['sorting']                                 = 'Sorting';
@@ -63,15 +72,14 @@ $GLOBALS['TL_LANG']['ERR']['upgrade_php_version']                     = 'The ver
 /**
  * Labels
  */
-$GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']          = 'filter';
-$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter']   = 'no filtering';
-$GLOBALS['TL_LANG']['metamodels_frontendfilter']['select_all']      = 'select all';
-$GLOBALS['TL_LANG']['metamodels_frontendfilter']['action_add']      = '+';
-$GLOBALS['TL_LANG']['metamodels_frontendfilter']['action_remove']   = '-';
-$GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations'] = ' (No matching combinations found.)';
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']            = 'filter';
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter']     = 'no filtering';
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['select_all']        = 'select all';
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['action_add']        = '+';
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['action_remove']     = '-';
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations']   = ' (No matching combinations found.)';
 
 /**
  * Filter setting parameters.
  */
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'] = array('Filter value for attribute "%s"', '');
-
