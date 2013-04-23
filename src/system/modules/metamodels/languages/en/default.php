@@ -36,7 +36,7 @@ $GLOBALS['TL_LANG']['BRD']['metamodel_rendersetting']                 = 'Render 
 $GLOBALS['TL_LANG']['BRD']['metamodel_dca']                           = 'Palette "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting']                    = 'Palette settings "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_filter']                        = 'Filter "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodel_filtersettings']                = 'Filter settings "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_filtersetting']                 = 'Filter settings "%s"';
 
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']        = 'Edit "%s" for item %%s';
 $GLOBALS['TL_LANG']['MSC']['sorting']                                 = 'Sorting';
