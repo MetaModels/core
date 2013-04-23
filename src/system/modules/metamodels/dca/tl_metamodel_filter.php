@@ -22,7 +22,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
 (
 	'config' => array
 	(
-		'dataContainer'               => 'Table',
+		'dataContainer'               => 'General',
 		'ptable'                      => 'tl_metamodel',
 		'switchToEdit'                => false,
 		'enableVersioning'            => false,
