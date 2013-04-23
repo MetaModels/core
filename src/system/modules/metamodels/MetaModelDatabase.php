@@ -460,5 +460,119 @@ class MetaModelDatabase extends Controller
 		);
 	}
 
+	/**
+	 * Return the paste page button
+	 * @param DataContainer
+	 * @param array
+	 * @param string
+	 * @param boolean
+	 * @param array
+	 * @return string
+	 */
+	public function pasteButton(DC_General $objDC, $arrRow, $strTable, $cr, $arrClipboard=false)
+	{
+		$disablePA = true;
+		$disablePI = true;
+
+		// FIXME: whoa, this is hacky, the DC should provide a better way to obtain all of this.
+		$objSrcProvider = $objDC->getDataProvider($strTable);
+		$objModel = $objSrcProvider->fetch($objSrcProvider->getEmptyConfig()->setId($this->Input->get('source')));
+
+		// only allow pasting after an item with the same varbase
+		// OR into the same varbase
+		// BUT having a different Id than the base item.
+		if (isset($arrRow['id']) && strlen($arrRow['id']) && ($arrRow['id'] != $objModel->getID()))
+		{
+			if (($arrRow['varbase'] == 0) && ($arrRow['vargroup'] == $objModel->getProperty('vargroup')))
+			{
+				$disablePA = false;
+			} elseif (($arrRow['varbase'] == 1) && ($arrRow['id'] == $objModel->getProperty('vargroup'))) {
+				$disablePI = false;
+			}
+		}
+
+		// Return the buttons
+		$imagePasteAfter = $this->generateImage('pasteafter.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteafter'][1], $arrRow['id']), 'class="blink"');
+		$imagePasteInto = $this->generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteinto'][1], $arrRow['id']), 'class="blink"');
+
+		$strAdd2UrlAfter = sprintf(
+			'act=%s&amp;mode=1&amp;pid=%s&amp;after=%s&amp;source=%s&amp;childs=%s',
+			$arrClipboard['mode'],
+			$arrClipboard['id'],
+			$arrRow['id'],
+			$arrClipboard['source'],
+			$arrClipboard['childs']
+		);
+
+		$strAdd2UrlInto = sprintf(
+			'act=%s&amp;mode=2&amp;pid=%s&amp;after=%s&amp;source=%s&amp;childs=%s',
+			$arrClipboard['mode'],
+			$arrClipboard['id'],
+			$arrRow['id'],
+			$arrClipboard['source'],
+			$arrClipboard['childs']
+		);
+
+		if ($arrClipboard['pdp'] != '')
+		{
+			$strAdd2UrlAfter .= '&amp;pdp=' . $arrClipboard['pdp'];
+			$strAdd2UrlInto .= '&amp;pdp=' . $arrClipboard['pdp'];
+		}
+
+		if ($arrClipboard['cdp'] != '')
+		{
+			$strAdd2UrlAfter .= '&amp;cdp=' . $arrClipboard['cdp'];
+			$strAdd2UrlInto .= '&amp;cdp=' . $arrClipboard['cdp'];
+		}
+
+		$strPasteBtn = '';
+
+		if ($disablePA)
+		{
+			$strPasteBtn = $this->generateImage('pasteafter_.gif', '', 'class="blink"').' ';
+		} else {
+			$strPasteBtn = sprintf(
+				' <a href="%s" title="%s" onclick="Backend.getScrollOffset()">%s</a> ',
+				$this->addToUrl($strAdd2UrlAfter),
+				specialchars($GLOBALS['TL_LANG'][$strTable]['pasteafter'][0]),
+				$imagePasteAfter
+			);
+		}
+
+		if ($disablePI)
+		{
+			$strPasteBtn .= $this->generateImage('pasteinto_.gif', '', 'class="blink"').' ';
+		} else {
+			$strPasteBtn .= sprintf(
+				' <a href="%s" title="%s" onclick="Backend.getScrollOffset()">%s</a> ',
+				$this->addToUrl($strAdd2UrlInto),
+				specialchars($GLOBALS['TL_LANG'][$strTable]['pasteinto'][0]),
+				$imagePasteInto
+			);
+		}
+
+		// special case, the root paste into.
+		if (!(isset($arrRow['id']) && strlen($arrRow['id'])))
+		{
+			if ($objModel->getProperty('varbase') == 1)
+			{
+				$strPasteBtn = sprintf(
+					' <a href="%s" title="%s" onclick="Backend.getScrollOffset()">%s</a> ',
+					$this->addToUrl(sprintf(
+						'act=%s&amp;mode=2&amp;after=0&amp;pid=0&amp;id=%s&amp;childs=%s',
+						$arrClipboard['mode'],
+						$arrClipboard['id'],
+						$arrClipboard['childs']
+					)),
+					specialchars($GLOBALS['TL_LANG'][$strTable]['pasteinto'][0]),
+					$imagePasteInto
+				);
+			} else {
+				$strPasteBtn = $this->generateImage('pasteinto_.gif', '', 'class="blink"').' ';
+			}
+		}
+
+		return $strPasteBtn;
+	}
 }
 

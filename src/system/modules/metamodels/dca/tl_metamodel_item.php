@@ -55,6 +55,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 			'mode'                    => 1, // 1 default sorting value, 2 switchable sorting value
 			'panelLayout'             => 'limit',
 			'headerFields'            => array('tstamp'),
+			'paste_button_callback'   => array('MetaModelDatabase', 'pasteButton'),
 		),
 
 		'label' => array
