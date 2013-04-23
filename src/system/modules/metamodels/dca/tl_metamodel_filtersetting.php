@@ -22,7 +22,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 (
 	'config' => array
 	(
-		'dataContainer'               => 'Table',
+		'dataContainer'               => 'General',
 		'switchToEdit'                => false,
 		'enableVersioning'            => false,
 		'oncreate_callback'           => array(array('TableMetaModelFilterSetting', 'create_callback')),
