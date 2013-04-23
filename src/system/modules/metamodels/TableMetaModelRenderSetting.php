@@ -102,9 +102,12 @@ class TableMetaModelRenderSetting extends TableMetaModelHelper
 			return;
 		}
 
-		if($objDC && $objDC->activeRecord)
+		if($objDC && $objDC->getCurrentModel())
 		{
-			$this->objSetting = $this->Database->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')->execute($objDC->activeRecord->pid);
+			$this->objSetting = $this->Database
+				->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')
+				->execute($objDC->getCurrentModel()->getProperty('pid'));
+
 			$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
 		}
 
@@ -229,7 +232,7 @@ class TableMetaModelRenderSetting extends TableMetaModelHelper
 			return array();
 		}
 
-		$objAttribute = $this->objMetaModel->getAttributeById($objDC->activeRecord->attr_id);
+		$objAttribute = $this->objMetaModel->getAttributeById($objDC->getCurrentModel()->getProperty('attr_id'));
 
 		if (!$objAttribute)
 		{

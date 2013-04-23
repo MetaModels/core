@@ -239,9 +239,9 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 
 		$arrSettingNames = $this->getAttributeSettingNames();
 
-		$arrFieldDef['eval']['mandatory'] = $this->get('isunique') && in_array('isunique', $arrSettingNames);
-		// TODO: this is not used currently.
-		$arrFieldDef['eval']['mandatory'] = $arrFieldDef['eval']['mandatory'] || ($this->get('mandatory') && in_array('mandatory', $arrSettingNames) ? true : false);
+		$arrFieldDef['eval']['unique'] = $this->get('isunique') && in_array('isunique', $arrSettingNames);
+		$arrFieldDef['eval']['mandatory'] =
+			$arrFieldDef['eval']['unique'] || ($this->get('mandatory') && in_array('mandatory', $arrSettingNames));
 
 		foreach (array(
 			'tl_class',

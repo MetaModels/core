@@ -91,10 +91,14 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 			return;
 		}
 
-		if(is_object($objDC) && $objDC->activeRecord)
+		if(is_object($objDC) && $objDC->getCurrentModel())
 		{
-			$this->strSettingType = $objDC->activeRecord->type;
-			$this->objFilter = $this->Database->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')->execute($objDC->activeRecord->fid);
+			$this->strSettingType = $objDC->getCurrentModel()->getProperty('type');
+
+			$this->objFilter = $this->Database
+				->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
+				->execute($objDC->getCurrentModel()->getProperty('fid'));
+
 			$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
 		}
 
@@ -106,7 +110,6 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 				case 'edit':
 					if ($this->Input->get('id'))
 					{
-						$strSettingType = $objDC->activeRecord->type;
 						$this->objFilter = $this->Database->prepare('
 							SELECT tl_metamodel_filter.*,
 								tl_metamodel_filtersetting.type AS tl_metamodel_filtersetting_type,
@@ -258,7 +261,7 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		}
 		$objMetaModel = $this->objMetaModel;
 
-		$arrTypeFilter = $GLOBALS['METAMODELS']['filters'][$objDC->activeRecord->type]['attr_filter'];
+		$arrTypeFilter = $GLOBALS['METAMODELS']['filters'][$objDC->getCurrentModel()->getProperty('type')]['attr_filter'];
 		foreach ($objMetaModel->getAttributes() as $objAttribute)
 		{
 			$strTypeName = $objAttribute->get('type');
@@ -320,7 +323,7 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 	/**
 	 * when creating a new item, we need to populate the fid column.
 	 */
-	public function create_callback($strTable, $insertID, $set, $objDC)
+	public function create_callback($strTable, $insertID, $arrRow, $objDC)
 	{
 		// If we come from overview use pid
 		if($this->Input->get('id') != "")
@@ -329,23 +332,23 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		}
 		// If we use the "save and new" btt use the pid instead
 		elseif($this->Input->get('pid') != "")
-		{		
-			// Get fid from pid 
+		{
+			// Get fid from pid
 			$arrFid = $this->Database
 			->prepare('SELECT fid FROM tl_metamodel_filtersetting WHERE id=?')
 			->execute($this->Input->get('pid'))
 			->fetchEach('fid');
-			
+
 			// Check if we have a pid
 			if(count($arrFid) == 0)
 			{
 				throw new Exception("Could not find FID. Please create a new entry from main overview.");
 			}
-			
+
 			// Set fid by pid`s fid
 			$intFid = $arrFid[0];
 		}
-		
+
 		$objResult = $this->Database->prepare('UPDATE tl_metamodel_filtersetting %s WHERE id=?')
 		->set(array('fid' => $intFid))
 		->execute($insertID);
