@@ -198,7 +198,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['translated'],
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class'=>'clr m12', 'submitOnChange' => true)
+			'eval'                    => array('tl_class'=>'clr', 'submitOnChange' => true)
 		),
 
 		'languages' => array
