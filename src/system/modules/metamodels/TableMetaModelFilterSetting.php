@@ -237,10 +237,17 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		$this->objectsFromUrl($objDC);
 		if (!$this->objMetaModel)
 		{
-			return;
+			return 0;
 		}
 		$strName = str_replace($this->objMetaModel->getTableName() . '_', '', $strValue);
-		return $this->objMetaModel->getAttribute($strName)->get('id');
+
+		$objAttribute = $this->objMetaModel->getAttribute($strName);
+		if (!$objAttribute)
+		{
+			return 0;
+		}
+
+		return $objAttribute->get('id');
 	}
 
 	/**
@@ -615,7 +622,7 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 	 * @return string
 	 */
 	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
-	{		
+	{
 		$href .= '&amp;tid='.$row['id'].'&amp;state='.($row['enabled'] ? '0' : '1');
 		if (!$row['enabled'])
 		{
