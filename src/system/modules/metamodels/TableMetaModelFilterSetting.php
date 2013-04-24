@@ -339,6 +339,43 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 	}
 
 	/**
+	 * Set the parent condition for the current fid.
+	 *
+	 * @param string     $strTable The tablename - must be tl_metamodel_filtersetting.
+	 *
+	 * @param DC_General $objDC    The DataContainer calling us.
+	 *
+	 * @return string The value "tl_metamodel_filtersetting".
+	 */
+	public function loadTableCallback($strTable, $objDC)
+	{
+		if ($strTable == 'tl_metamodel_filtersetting')
+		{
+			$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['dca_config']['childCondition'][0]['filter'][] = array
+			(
+				'local'        => 'fid',
+				'remote_value' => $this->Input->get('id'),
+				'operation'    => '=',
+			);
+
+			$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['dca_config']['rootEntries']['self']['setOn'][] = array
+			(
+				'property'    => 'fid',
+				'value'       => $this->Input->get('id'),
+			);
+
+			$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['dca_config']['rootEntries']['self']['filter'][] = array
+			(
+				'property'    => 'fid',
+				'operation'   => '=',
+				'value'       => $this->Input->get('id'),
+			);
+		}
+
+		return $strTable;
+	}
+
+	/**
 	 * when creating a new item, we need to populate the fid column.
 	 */
 	public function create_callback($strTable, $insertID, $arrRow, $objDC)

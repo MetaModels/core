@@ -26,7 +26,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		'switchToEdit'                => false,
 		'enableVersioning'            => false,
 		'oncreate_callback'           => array(array('TableMetaModelFilterSetting', 'create_callback')),
-		'palettes_callback'           => array(array('TableMetaModelFilterSetting', 'preparePalettes'))
+		'palettes_callback'           => array(array('TableMetaModelFilterSetting', 'preparePalettes')),
+		'tablename_callback'          => array(array('TableMetaModelFilterSetting', 'loadTableCallback')),
 	),
 	'dca_config'                      => array
 	(
