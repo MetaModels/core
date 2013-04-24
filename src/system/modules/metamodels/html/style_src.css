@@ -15,7 +15,7 @@
   }
   
   .rendersetting_add_all { 
-    background-image:url("rendersettings.png"); 
+    background-image:url("render_settings.png"); 
   }
   
   .dca_palette { 
@@ -54,7 +54,7 @@
   .tl_subdca legend {
     margin:0;
     padding:10px 0 10px 23px;
-    background: url(filtersettings.png) no-repeat left center;
+    background: url(filter_settings.png) no-repeat left center;
   }
 
   .tl_subdca legend label { 

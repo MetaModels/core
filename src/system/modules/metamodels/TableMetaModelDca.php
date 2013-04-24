@@ -282,7 +282,7 @@ class TableMetaModelDca extends Backend
 				$objDC->inputName,
 				$objDC->id,
 				$this->generateImage(
-					'system/modules/metamodels/html/palette_wizard.png',
+					'system/modules/metamodels/html/panel_layout.png',
 					$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['panelpicker'], 'style="vertical-align:top;"'
 				)
 			);
@@ -298,7 +298,7 @@ class TableMetaModelDca extends Backend
 			$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['panelpicker'],
 			$objDC->id,
 			$this->generateImage(
-				'system/modules/metamodels/html/palette_wizard.png',
+				'system/modules/metamodels/html/panel_layout.png',
 				$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['panelpicker'],
 				'style="vertical-align:top;"'
 			)

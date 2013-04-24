@@ -106,7 +106,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['rendersettings'],
 				'href'                => 'table=tl_metamodel_rendersettings',
-				'icon'                => 'system/modules/metamodels/html/rendersettings.png',
+				'icon'                => 'system/modules/metamodels/html/render_settings.png',
 				'button_callback'     => array('TableMetaModel', 'buttonCallback')
 			),
 
@@ -114,7 +114,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['dca'],
 				'href'                => 'table=tl_metamodel_dca',
-				'icon'                => 'system/modules/metamodels/html/palettes.png',
+				'icon'                => 'system/modules/metamodels/html/dca.png',
 				'button_callback'     => array('TableMetaModel', 'buttonCallback')
 			),
 
@@ -146,8 +146,8 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'name',
 				'tableName'
 			),
-            
-            'translated' => array
+			
+			'translated' => array
 			(
 				':hide',
 				'translated'
@@ -206,7 +206,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['languages'],
 			'exclude'                 => true,
 			'inputType'               => 'multiColumnWizard',
-			'eval' 			=> array
+			'eval' => array
 			(
 				'columnFields' => array
 				(

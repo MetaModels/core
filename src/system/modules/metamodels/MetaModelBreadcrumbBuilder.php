@@ -56,19 +56,19 @@ class MetaModelBreadcrumbBuilder
 				break;
 
 			case 'tl_metamodel_rendersetting':
-				$arrReturn[] = $this->getThirdLevel('tl_metamodel_rendersetting', 'tl_metamodel_rendersettings', 'rendersetting.png');
+				$arrReturn[] = $this->getThirdLevel('tl_metamodel_rendersetting', 'tl_metamodel_rendersettings', 'render_setting.png');
 			case 'tl_metamodel_rendersettings':
-				$arrReturn[] = $this->getSecondLevel('tl_metamodel_rendersettings', 'rendersettings.png');
+				$arrReturn[] = $this->getSecondLevel('tl_metamodel_rendersettings', 'render_settings.png');
 				break;
 
 			case 'tl_metamodel_dcasetting':
-				$arrReturn[] = $this->getThirdLevel('tl_metamodel_dcasetting', 'tl_metamodel_dca', 'dca.png');
+				$arrReturn[] = $this->getThirdLevel('tl_metamodel_dcasetting', 'tl_metamodel_dca', 'dca_setting.png');
 			case 'tl_metamodel_dca':
 				$arrReturn[] = $this->getSecondLevel('tl_metamodel_dca', 'dca.png');
 				break;
 
 			case 'tl_metamodel_filtersetting':
-				$arrReturn[] = $this->getThirdLevel('tl_metamodel_filtersetting', 'tl_metamodel_filter', 'filtersetting.png');
+				$arrReturn[] = $this->getThirdLevel('tl_metamodel_filtersetting', 'tl_metamodel_filter', 'filter_setting.png');
 			case 'tl_metamodel_filter':
 				$arrReturn[] = $this->getSecondLevel('tl_metamodel_filter', 'filter.png');
 				break;
