@@ -494,6 +494,15 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 			$strImage = 'system/modules/metamodels/html/filter_default.png';
 		}
 
+		if (!$arrRow['enabled'])
+		{
+			$intPos=strrpos($strImage, '.');
+			if ($intPos !== false)
+			{
+				$strImage = substr_replace($strImage, '_1', $intPos, 0);
+			}
+		}
+
 		// Return the image only
 		if ($blnReturnImage)
 		{
