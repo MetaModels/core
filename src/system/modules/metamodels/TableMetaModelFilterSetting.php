@@ -576,7 +576,7 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 			$imagePasteInto = $this->generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteinto'][1], $arrRow['id']), 'class="blink"');
 
 			$strAdd2UrlInto = sprintf(
-				'act=%s&amp;mode=2&amp;after=0;pid=0&amp;id=%s&amp;source=%s&amp;childs=%s',
+				'act=%s&amp;mode=2&amp;after=0&amp;pid=0&amp;id=%s&amp;source=%s&amp;childs=%s',
 				$arrClipboard['mode'],
 				$arrClipboard['id'],
 				$arrClipboard['source'],
@@ -615,7 +615,7 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 	 * @return string
 	 */
 	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
-	{
+	{		
 		$href .= '&amp;tid='.$row['id'].'&amp;state='.($row['enabled'] ? '0' : '1');
 		if (!$row['enabled'])
 		{
