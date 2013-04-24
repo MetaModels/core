@@ -292,6 +292,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 				'includeBlankOption'  => true,
 				'mandatory'           => true,
 				'tl_class'            => 'w50',
+				'chosen'              => true
 			),
 			'load_callback'           => array(array('TableMetaModelFilterSetting', 'attrIdToName')),
 			'save_callback'           => array(array('TableMetaModelFilterSetting', 'nameToAttrId')),
@@ -392,6 +393,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'options_callback'        => array('TableMetaModelFilterSetting', 'getSubTemplates'),
 			'eval'                    => array(
 				'tl_class'            => 'w50',
+				'chosen'              => true
 			),
 		),
 		'blankoption'                 => array
