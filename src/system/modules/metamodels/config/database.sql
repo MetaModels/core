@@ -112,7 +112,8 @@ CREATE TABLE `tl_metamodel_dcasetting` (
   `spaceToUnderscore` char(1) NOT NULL default '',
 -- if true a blank option will be added to the options array.
   `includeBlankOption` char(1) NOT NULL default '',
-
+-- if true, the form will get reloaded when the widget changes
+  `submitOnChange` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

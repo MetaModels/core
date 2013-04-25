@@ -24,6 +24,12 @@
  */
 class MetaModelDatabase extends Controller
 {
+	/**
+	 * Cache for "dcasetting id" <=> "MM attribute colname" mapping.
+	 * 
+	 * @var array 
+	 */
+	protected static $arrColNameChache = array();
 
 	protected static function getDB()
 	{
@@ -47,6 +53,65 @@ class MetaModelDatabase extends Controller
 		}
 		return null;
 	}
+	
+	/**
+	 * Get from a dcasetting the colum name
+	 * 
+	 * @param IMetaModel $objMetaModel the MetaModel for which the palette shall be built.
+	 * 
+	 * @param int $intID ID of an entry from the tl_metamodel_dcasetting
+	 * 
+	 * @return string Name of the column
+	 */
+	protected function getColNameByDcaSettingId($objMetaModel, $intID)
+	{
+		// Get name from cache.
+		if(in_array($intID, self::$arrColNameChache))
+		{
+			return self::$arrColNameChache[$intID];
+		}
+
+		// Get the attr_id for MM.
+		$objDCASettings = Database::getInstance()
+				->prepare('SELECT attr_id FROM tl_metamodel_dcasetting WHERE id=?')
+				->execute($intID);
+
+		// Check if we have the selector id.
+		if ($objDCASettings->numRows == 0)
+		{
+			self::$arrColNameChache[$intID] = false;
+		}
+		else
+		{
+			// Get name from attribute.
+			$objAttribute = $objMetaModel->getAttributeById($objDCASettings->attr_id);
+			self::$arrColNameChache[$intID] = $objAttribute->getColName();
+		}
+
+		return self::$arrColNameChache[$intID];
+	}
+	
+	/**
+	 * Check if a field is a selector for a subpalette.
+	 * 
+	 * @param int $intID ID of an entry from the tl_metamodel_dcasetting
+	 * 
+	 * @return boolean
+	 */
+	protected function isSelector($intID)
+	{
+		// Count subpalette elements.
+		$objDCASettings = Database::getInstance()
+				->prepare('SELECT count(id) as count FROM tl_metamodel_dcasetting WHERE subpalette=?')
+				->execute($intID);
+		
+		if($objDCASettings->count != 0)
+		{
+			return true;
+		}
+		
+		return false;
+	}
 
 	/**
 	 * Retrieves a palette from the database and populates the passed DCA 'fields' section with the correct settings.
@@ -65,17 +130,47 @@ class MetaModelDatabase extends Controller
 		$objDCASettings = Database::getInstance()
 			->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=? ORDER by sorting ASC')
 			->execute($intPaletteId);
-
+		$arrMyDCA = array();
 		while ($objDCASettings->next())
-		{
+		{			
 			switch ($objDCASettings->dcatype)
 			{
 				case 'attribute':
 					$objAttribute = $objMetaModel->getAttributeById($objDCASettings->attr_id);
 					if ($objAttribute)
-					{
-						$arrDCA = array_replace_recursive($arrDCA, $objAttribute->getItemDCA($objDCASettings->row()));
-						$strPalette .= (strlen($strPalette) > 0 ? ',' : '') . $objAttribute->getColName();
+					{		
+						// Get basics.
+						$arrFieldSetting = $objDCASettings->row();
+
+						// Overwrite submitOnChange if we have a selector.
+						if ($this->isSelector($objDCASettings->id))
+						{
+							$arrFieldSetting = array_replace_recursive(
+									$objDCASettings->row(),
+									array('submitOnChange' => true)
+							);
+						}
+
+						$arrMyDCA = array_replace_recursive($arrMyDCA, $objAttribute->getItemDCA($arrFieldSetting));
+
+						// Check if we have a subpalette. If false, add to normal palettes.
+						if ($objDCASettings->subpalette == 0)
+						{
+							$strPalette .= (strlen($strPalette) > 0 ? ',' : '') . $objAttribute->getColName();
+						}
+						// Else add as subpalettes.
+						else
+						{							
+							$strSelector = $this->getColNameByDcaSettingId($objMetaModel, $objDCASettings->subpalette);
+							
+							// This should never ever be true. If so, we have dead entries in the database.
+							if($strSelector === false)
+							{
+								break;
+							}
+							
+							$arrMyDCA['metasubpalettes'][$strSelector][] = $objAttribute->getColName();
+						}
 					}
 					break;
 				case 'legend':
@@ -102,12 +197,23 @@ class MetaModelDatabase extends Controller
 
 					$legendName = standardize($strLegend) . '_legend';
 					$GLOBALS['TL_LANG'][$objMetaModel->getTableName()][$legendName] = $strLegend;
-					$strPalette .= ((strlen($strPalette) > 0 ? ';' : '') . '{' . $legendName . $objAttribute->legendhide . '}');
+
+					// Check if we have a subpalette.
+					if ($objDCASettings->subpalette == 0)
+					{
+						$strPalette .= ((strlen($strPalette) > 0 ? ';' : '') . '{' . $legendName . $objAttribute->legendhide . '}');
+					}
+					else
+					{
+						$arrMyDCA['metasubpalettes'][$strSelector][] = '{' . $legendName . $objAttribute->legendhide . '}';
+					}
 					break;
 				default:
 					throw new Exception("Unknown palette rendering mode " . $objDCASettings->dcatype);
 			}
 		}
+		$arrDCA = array_replace_recursive($arrMyDCA, $arrDCA);
+		
 		return $strPalette;
 	}
 
@@ -411,7 +517,7 @@ class MetaModelDatabase extends Controller
 
 		$arrDCA['config']['metamodel_view'] = $arrViewSettings['id'];
 		$arrDCA['palettes']['default'] = $this->getPaletteAndFields($arrDCASettings['id'], $objMetaModel, $arrDCA);
-
+		
 		if ($arrDCASettings['backendcaption'])
 		{
 			$arrCaptions = deserialize($arrDCASettings['backendcaption'], true);
@@ -476,10 +582,15 @@ class MetaModelDatabase extends Controller
 
 		// FIXME: whoa, this is hacky, the DC should provide a better way to obtain all of this.
 		$objSrcProvider = $objDC->getDataProvider($strTable);
-		$objModel = $objSrcProvider->fetch($objSrcProvider->getEmptyConfig()->setId($this->Input->get('source')));
+		if ($this->Input->get('source'))
+		{
+			$objModel = $objSrcProvider->fetch($objSrcProvider->getEmptyConfig()->setId($this->Input->get('source')));
+		} else {
+			$objModel = null;
+		}
 
 		
-		if (isset($arrRow['id']) && strlen($arrRow['id']) && ($arrRow['id'] != $objModel->getID()))
+		if ($objModel && isset($arrRow['id']) && strlen($arrRow['id']) && ($arrRow['id'] != $objModel->getID()))
 		{
 			// Insert a varbase after any other varbase, for sorting.
 			if ($objModel->getProperty('varbase') == 1 && $arrRow['id'] != $objModel->getID() && $arrRow['varbase'] != 0)
@@ -491,6 +602,12 @@ class MetaModelDatabase extends Controller
 			{
 				$disablePA = false;
 			}
+		}
+		else
+		{
+			
+			$disablePA = false;
+			$disablePI = !($arrRow['varbase'] == 1);
 		}
 
 		// Return the buttons
@@ -556,8 +673,20 @@ class MetaModelDatabase extends Controller
 		// special case, the root paste into.
 		if (!(isset($arrRow['id']) && strlen($arrRow['id'])))
 		{
-			if ($objModel->getProperty('varbase') == 1)
+			if ($objModel && ($objModel->getProperty('varbase') == 1))
 			{
+				$strPasteBtn = sprintf(
+					' <a href="%s" title="%s" onclick="Backend.getScrollOffset()">%s</a> ',
+					$this->addToUrl(sprintf(
+						'act=%s&amp;mode=2&amp;after=0&amp;pid=0&amp;id=%s&amp;childs=%s',
+						$arrClipboard['mode'],
+						$arrClipboard['id'],
+						$arrClipboard['childs']
+					)),
+					specialchars($GLOBALS['TL_LANG'][$strTable]['pasteinto'][0]),
+					$imagePasteInto
+				);
+			} elseif (!$objModel ) {
 				$strPasteBtn = sprintf(
 					' <a href="%s" title="%s" onclick="Backend.getScrollOffset()">%s</a> ',
 					$this->addToUrl(sprintf(
