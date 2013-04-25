@@ -143,14 +143,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 
 		'operations' => array
 		(
-			'subpalette' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['subpalette'],
-				'href'                => 'table=tl_metamodel_dcasetting',
-				'icon'                => 'system/modules/metamodels/html/dca_subpalette.png',
-				'button_callback'     => array('TableMetaModelDcaSetting', 'subpaletteButton')
-			),
-
 			'edit' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['edit'],
@@ -175,6 +167,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['show'],
 				'href'                => 'act=show',
 				'icon'                => 'show.gif'
+			),
+			'subpalette' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['subpalette'],
+				'href'                => 'table=tl_metamodel_dcasetting',
+				'icon'                => 'system/modules/metamodels/html/dca_subpalette.png',
+				'button_callback'     => array('TableMetaModelDcaSetting', 'subpaletteButton')
 			),
 		)
 	),
