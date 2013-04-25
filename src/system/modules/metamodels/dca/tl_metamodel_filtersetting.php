@@ -286,6 +286,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['comment'],
 			'exclude'                 => true,
 			'inputType'               => 'text',
+			'eval'                    => array('tl_class' => 'clr long')
 		),
 
 		'attr_id' => array
