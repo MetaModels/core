@@ -478,16 +478,18 @@ class MetaModelDatabase extends Controller
 		$objSrcProvider = $objDC->getDataProvider($strTable);
 		$objModel = $objSrcProvider->fetch($objSrcProvider->getEmptyConfig()->setId($this->Input->get('source')));
 
-		// only allow pasting after an item with the same varbase
-		// OR into the same varbase
-		// BUT having a different Id than the base item.
+		
 		if (isset($arrRow['id']) && strlen($arrRow['id']) && ($arrRow['id'] != $objModel->getID()))
 		{
-			if (($arrRow['varbase'] == 0) && ($arrRow['vargroup'] == $objModel->getProperty('vargroup')))
+			// Insert a varbase after any other varbase, for sorting.
+			if ($objModel->getProperty('varbase') == 1 && $arrRow['id'] != $objModel->getID() && $arrRow['varbase'] != 0)
 			{
 				$disablePA = false;
-			} elseif (($arrRow['varbase'] == 1) && ($arrRow['id'] == $objModel->getProperty('vargroup'))) {
-				$disablePI = false;
+			} 
+			// Move items in here vargroup and only there.
+			else if($objModel->getProperty('varbase') == 0 && $arrRow['vargroup'] == $objModel->getProperty('vargroup') && $arrRow['varbase'] != 1)
+			{
+				$disablePA = false;
 			}
 		}
 
