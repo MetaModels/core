@@ -58,9 +58,10 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['customsql']    =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionor']  = 'Oder-Bedingung (OR)';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionand'] = 'Und-Bedingung (AND)';
 
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_default_']    = '%s <strong>%s</strong> <span title="%s"><sup>(?)</sup></span> <em>[%s]</em>';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup'] = '%s <strong>%s</strong> <span title="%s"><sup>(?)</sup></span><br /> für Attribut <em>%s</em> (URL-Parameter: %s)';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionor']  = '%s <strong>%s</strong> <span title="%s"><sup>(?)</sup></span><br /> Datensatz/Datensätze in beliebigem Ergebnis.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand'] = '%s <strong>%s</strong> <span title="%s"><sup>(?)</sup></span><br /> Datensatz/Datensätze in allen Ergebnissen.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['fefilter']    = '%s <strong>%s</strong> <span title="%s"><sup>(?)</sup></span><br> für Attribut <em>%s</em> (URL-Parameter: %s)';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_']    = '<span title="%s"><sup>(?)</sup></span>';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_default_']    = '%s <strong>%s</strong> %s <em>[%s]</em>';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup'] = '%s <strong>%s</strong> %s <br /> für Attribut <em>%s</em> (URL-Parameter: %s)';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionor']  = '%s <strong>%s</strong> %s <br /> Datensatz/Datensätze in beliebigem Ergebnis.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand'] = '%s <strong>%s</strong> %s <br /> Datensatz/Datensätze in allen Ergebnissen.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['fefilter']     = '%s <strong>%s</strong> %s <br /> für Attribut <em>%s</em> (URL-Parameter: %s)';
 

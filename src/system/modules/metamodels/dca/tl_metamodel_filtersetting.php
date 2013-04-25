@@ -97,6 +97,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 					'type',
 					'attr_id',
 					'urlparam',
+					'comment'
 				),
 				'format'              => '%s %s',
 			),

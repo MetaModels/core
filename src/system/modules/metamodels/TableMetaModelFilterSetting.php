@@ -411,6 +411,11 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 
 	public function drawOrCondition($arrRow, $strLabel, DataContainer $objDC = null, $imageAttribute='', $strImage)
 	{
+		if (!empty($arrRow['comment']))
+		{
+			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], $arrRow['comment']);
+		}
+		
 		$strReturn = sprintf(
 		$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionor'],
 		'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
@@ -424,6 +429,11 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 
 	public function drawAndCondition($arrRow, $strLabel, DataContainer $objDC = null, $imageAttribute='', $strImage)
 	{
+		if (!empty($arrRow['comment']))
+		{
+			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], $arrRow['comment']);
+		}
+		
 		$strReturn = sprintf(
 		$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand'],
 		'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
@@ -447,6 +457,11 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		} else {
 			$strAttrName = $arrRow['attr_id'];
 			$strAttrColName = $arrRow['attr_id'];
+		}
+		
+		if (!empty($arrRow['comment']))
+		{
+			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], $arrRow['comment']);
 		}
 
 		$strReturn = sprintf(
@@ -482,6 +497,11 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		} else {
 			$strAttrName = $arrRow['attr_id'];
 			$strAttrColName = $arrRow['attr_id'];
+		}
+		
+		if (!empty($arrRow['comment']))
+		{
+			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], $arrRow['comment']);
 		}
 
 		$strReturn = sprintf(
@@ -538,6 +558,11 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 			);
 			$this->objCallback = null;
 		} else {
+			if(!empty($arrRow['comment']))
+			{
+				$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], $arrRow['comment']);
+			}
+			
 			$strReturn = sprintf(
 			$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_default_'],
 			'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
