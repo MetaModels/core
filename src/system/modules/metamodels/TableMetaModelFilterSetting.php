@@ -415,6 +415,7 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionor'],
 		'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
 		$strLabel ? $strLabel : $arrRow['type'],
+		$arrRow['comment'],
 		$arrRow['type']
 		);
 
@@ -427,6 +428,7 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand'],
 		'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
 		$strLabel ? $strLabel : $arrRow['type'],
+		$arrRow['comment'],
 		$arrRow['type']
 		);
 		return $strReturn;
@@ -451,6 +453,7 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup'],
 		'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
 		$strLabel ? $strLabel : $arrRow['type'],
+		$arrRow['comment'],
 		$strAttrName,
 		($arrRow['urlparam'] ? $arrRow['urlparam'] : $strAttrColName)
 		);
@@ -472,13 +475,23 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		$this->objectsFromUrl($objDC);
 		$objAttribute = $this->objMetaModel->getAttributeById($arrRow['attr_id']);
 
+		if ($objAttribute)
+		{
+			$strAttrName = $objAttribute->getName();
+			$strAttrColName = $objAttribute->getColName();
+		} else {
+			$strAttrName = $arrRow['attr_id'];
+			$strAttrColName = $arrRow['attr_id'];
+		}
+
 		$strReturn = sprintf(
 			$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['fefilter'],
 			'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
 			$strLabel,
-			($objAttribute ? $objAttribute->getName() : ''),
-			$arrRow['urlparam']
-			);
+			$arrRow['comment'],
+			$strAttrName,
+			$arrRow['urlparam'] ? $arrRow['urlparam'] : $strAttrColName
+		);
 
 		return $strReturn;
 	}
@@ -516,13 +529,20 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		if ($GLOBALS['METAMODELS']['filters'][$arrRow['type']]['info_callback'])
 		{
 			$this->import($GLOBALS['METAMODELS']['filters'][$arrRow['type']]['info_callback'][0], 'objCallback');
-			$strReturn = $this->objCallback->{$GLOBALS['METAMODELS']['filters'][$arrRow['type']]['info_callback'][1]}($arrRow, $strLabel, $objDC, $imageAttribute, $strImage);
+			$strReturn = $this->objCallback->{$GLOBALS['METAMODELS']['filters'][$arrRow['type']]['info_callback'][1]}(
+				$arrRow,
+				$strLabel,
+				$objDC,
+				$imageAttribute,
+				$strImage
+			);
 			$this->objCallback = null;
 		} else {
 			$strReturn = sprintf(
 			$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_default_'],
 			'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
 			$strLabel ? $strLabel : $arrRow['type'],
+			$arrRow['comment'],
 			$arrRow['type']
 			);
 		}

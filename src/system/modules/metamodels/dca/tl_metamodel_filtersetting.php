@@ -123,7 +123,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 
 		'label' => array
 		(
-			'fields'                  => array('type', 'attr_id', 'urlparam'),
+			'fields'                  => array('type', 'attr_id', 'urlparam', 'comment'),
 			'format'                  => '%s',
 			'label_callback'          => array('TableMetaModelFilterSetting', 'drawSetting')
 		),
@@ -193,8 +193,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 	(
 		'default' => array
 		(
-			'title' => array('type', 'enabled')
+			'title' => array('type', 'enabled', 'comment'),
 		),
+
 		'_attribute_ extends default' => array
 		(
 			'config' => array('attr_id')
@@ -278,6 +279,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 				'alwaysSave'          => true,
 				'tl_class'            => 'w50 m12',
 			),
+		),
+
+		'comment'                     => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['comment'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
 		),
 
 		'attr_id' => array
