@@ -64,7 +64,7 @@ class MetaModelBreadcrumbBuilder
 			case 'tl_metamodel_dcasetting':
 				if (Input::getInstance()->get('subpaletteid'))
 				{
-					$arrReturn[] = $this->getFourthLevel('tl_metamodel_dcasetting', 'tl_metamodel_dcasetting', 'dca_subpalette.png');
+					$arrReturn[] = $this->getFourthLevel('metamodel_dcasetting_subpalette', 'tl_metamodel_dcasetting', 'dca_subpalette.png');
 				}
 				$arrReturn[] = $this->getThirdLevel('tl_metamodel_dcasetting', 'tl_metamodel_dca', 'dca_setting.png');
 			case 'tl_metamodel_dca':
@@ -165,12 +165,14 @@ class MetaModelBreadcrumbBuilder
 
 	protected function getFourthLevel($strTable, $strParentTable, $strIcon)
 	{
+		$strUrl = 'contao/main.php?do=metamodels&table=' . $strTable . '&id=' . $intCurrrentID;
+
 		switch ($strTable)
 		{
-			case 'tl_metamodel_dcasetting':
+			case 'metamodel_dcasetting_subpalette':
 				$objParent = Database::getInstance()
-						->prepare('SELECT id, pid, name FROM tl_metamodel_attribute WHERE id=(SELECT attr_id FROM tl_metamodel_dcasetting WHERE id=?)')
-						->executeUncached(Input::getInstance()->get('subpaletteid'));
+						->prepare('SELECT id, pid, name FROM tl_metamodel_attribute WHERE id=(SELECT attr_id FROM tl_metamodel_dcasetting WHERE pid=? AND id=?)')
+						->executeUncached($this->intID, Input::getInstance()->get('subpaletteid'));
 				/**
 				 * @var IMetaModel
 				 */
@@ -183,11 +185,12 @@ class MetaModelBreadcrumbBuilder
 				//$this->intID = $objParent->pid;
 
 				$strSubfilter = 'subpaletteid=' . Input::getInstance()->get('subpaletteid');
+				$strUrl = 'contao/main.php?do=metamodels&table=' . $strParentTable . '&id=' . $intCurrrentID . '&' . $strSubfilter;
 				break;
 		}
 
 		return array(
-			'url' => 'contao/main.php?do=metamodels&table=' . $strTable . '&id=' . $intCurrrentID . '&' . $strSubfilter,
+			'url' => $strUrl,
 			'text' => sprintf($this->getLanguage($strTable), $strName),
 			'icon' => (!empty($strIcon)) ? Environment::getInstance()->base . '/system/modules/metamodels/html/' . $strIcon : null
 		);
