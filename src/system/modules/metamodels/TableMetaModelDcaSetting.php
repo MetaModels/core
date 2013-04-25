@@ -446,11 +446,35 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 
 	public function subpaletteButton($row, $href, $label, $title, $icon, $attributes)
 	{
+		// Check if we have a attribute
+		if($row['dcatype'] != 'attribute' || strlen($this->Input->get('subpaletteid')) != 0)
+		{
+			return '';
+		}		
+		
+		// Get MM and check if we have a valide one.
+		$objMetaModel = MetaModelFactory::byId($row['pid']);
+		
+		if(is_null($objMetaModel))
+		{
+			return '';
+		}
+		
+		// Get attribute and check if we have a valide one.
+		$objAttribute = $objMetaModel->getAttributeById($row['attr_id']);
+		
+		if(is_null($objAttribute))
+		{
+			return '';
+		}		
+		
 		// TODO: add some attribute::supports method to add only for attributes that indeed support subpaletting.
-		if ((!$this->Input->get('subpaletteid')) && ($row['dcatype'] == 'attribute'))
+		// For the moment we add a dirty check, only for checkboxes.
+		if (in_array($objAttribute->get('type'), array('checkbox')))
 		{
 			return '<a href="'.$this->addToUrl($href.'&amp;id='. $row['pid'] . '&amp;subpaletteid='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
 		}
+		
 		return '';
 	}
 }
