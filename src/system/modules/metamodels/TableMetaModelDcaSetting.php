@@ -444,14 +444,19 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 		);
 	}
 
+	protected function makeDisabledButton($icon, $label)
+	{
+		return $this->generateImage(substr_replace($icon, '_1', strrpos($icon, '.'), 0), $label);
+	}
+
 	public function subpaletteButton($row, $href, $label, $title, $icon, $attributes)
 	{
 		// Check if we have a attribute
 		if($row['dcatype'] != 'attribute' || strlen($this->Input->get('subpaletteid')) != 0)
 		{
-			return '';
-		}		
-		
+			return $this->makeDisabledButton($icon, $label);
+		}
+
 		// Get MM and check if we have a valide one.
 		$intId = $this->Database
 			->prepare('SELECT pid FROM tl_metamodel_dca WHERE id=?')
@@ -460,7 +465,7 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 		$objMetaModel = MetaModelFactory::byId($intId);
 		if(is_null($objMetaModel))
 		{
-			return '';
+			return $this->makeDisabledButton($icon, $label);
 		}
 
 		// Get attribute and check if we have a valide one.
@@ -468,7 +473,7 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 
 		if(is_null($objAttribute))
 		{
-			return '';
+			return $this->makeDisabledButton($icon, $label);
 		}
 
 		// TODO: add some attribute::supports method to add only for attributes that indeed support subpaletting.
@@ -478,7 +483,7 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 			return '<a href="'.$this->addToUrl($href.'&amp;id='. $row['pid'] . '&amp;subpaletteid='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
 		}
 
-		return '';
+		return $this->makeDisabledButton($icon, $label);
 	}
 }
 
