@@ -58,6 +58,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']             = array('New',
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['edit']            = array('Edit setting', 'Edit setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy']            = array('Copy setting definition', 'Copy setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete']          = array('Delete setting', 'Delete setting ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['subpalette']      = array('Manage subpalettes', 'Manage the subpalettes of filter setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['show']            = array('Setting details', 'Show details of setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']          = array('Add all', 'Add all attributes to palette');
 

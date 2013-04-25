@@ -61,6 +61,29 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 		{
 			return;
 		}
+
+		if ($this->Input->get('subpaletteid'))
+		{
+			$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['dca_config']['childCondition'][0]['setOn'][] = array
+			(
+				'to_field'    => 'subpalette',
+				'value'       => $this->Input->get('subpaletteid')
+			);
+			$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['dca_config']['childCondition'][0]['filter'][] = array
+			(
+				'local'        => 'subpalette',
+				'remote_value' => $this->Input->get('subpaletteid'),
+				'operation'   => '=',
+			);
+		} else {
+			$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['dca_config']['childCondition'][0]['filter'][] = array
+			(
+				'local'        => 'subpalette',
+				'remote_value' => 0,
+				'operation'   => '=',
+			);
+		}
+
 		$this->objectsFromUrl(null);
 
 		if (!$this->objMetaModel)
@@ -185,14 +208,15 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 			return;
 		}
 		$objMetaModel = $this->objMetaModel;
-		$objSettings = $this->Database->prepare('SELECT attr_id FROM tl_metamodel_dcasetting WHERE pid=? AND dcatype="attribute"')
-			->execute($this->Input->get('pid'));
+		$objSettings = $this->Database->prepare('SELECT attr_id FROM tl_metamodel_dcasetting WHERE pid=? AND dcatype="attribute" AND ((subpalette=0) OR (subpalette=?))')
+			->execute($this->Input->get('pid'), intval($this->Input->get('subpaletteid')));
 
 		$arrAlreadyTaken = $objSettings->fetchEach('attr_id');
 
 		foreach ($objMetaModel->getAttributes() as $objAttribute)
 		{
-			if (in_array($objAttribute->get('id'), $arrAlreadyTaken))
+			if ((!($objAttribute->get('id') == $objDC->getCurrentModel()->getProperty('attr_id')))
+			&& in_array($objAttribute->get('id'), $arrAlreadyTaken))
 			{
 				continue;
 			}
@@ -418,6 +442,16 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 			$objDC->id,
 			$this->generateImage('system/modules/metamodels/html/dca_wizard.png', $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker'], 'style="vertical-align:top;"')
 		);
+	}
+
+	public function subpaletteButton($row, $href, $label, $title, $icon, $attributes)
+	{
+		// TODO: add some attribute::supports method to add only for attributes that indeed support subpaletting.
+		if ((!$this->Input->get('subpaletteid')) && ($row['dcatype'] == 'attribute'))
+		{
+			return '<a href="'.$this->addToUrl($href.'&amp;id='. $row['pid'] . '&amp;subpaletteid='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
+		}
+		return '';
 	}
 }
 

@@ -62,6 +62,10 @@ class MetaModelBreadcrumbBuilder
 				break;
 
 			case 'tl_metamodel_dcasetting':
+				if (Input::getInstance()->get('subpaletteid'))
+				{
+					$arrReturn[] = $this->getFourthLevel('tl_metamodel_dcasetting', 'tl_metamodel_dcasetting', 'dca_subpalette.png');
+				}
 				$arrReturn[] = $this->getThirdLevel('tl_metamodel_dcasetting', 'tl_metamodel_dca', 'dca_setting.png');
 			case 'tl_metamodel_dca':
 				$arrReturn[] = $this->getSecondLevel('tl_metamodel_dca', 'dca.png');
@@ -154,6 +158,36 @@ class MetaModelBreadcrumbBuilder
 
 		return array(
 			'url' => 'contao/main.php?do=metamodels&table=' . $strTable . '&id=' . $intCurrrentID,
+			'text' => sprintf($this->getLanguage($strTable), $strName),
+			'icon' => (!empty($strIcon)) ? Environment::getInstance()->base . '/system/modules/metamodels/html/' . $strIcon : null
+		);
+	}
+
+	protected function getFourthLevel($strTable, $strParentTable, $strIcon)
+	{
+		switch ($strTable)
+		{
+			case 'tl_metamodel_dcasetting':
+				$objParent = Database::getInstance()
+						->prepare('SELECT id, pid, name FROM tl_metamodel_attribute WHERE id=(SELECT attr_id FROM tl_metamodel_dcasetting WHERE id=?)')
+						->executeUncached(Input::getInstance()->get('subpaletteid'));
+				/**
+				 * @var IMetaModel
+				 */
+				$objMetaModel = MetaModelFactory::byId($objParent->pid);
+				$objAttribute = $objMetaModel->getAttributeById($objParent->id);
+
+				// Change id for next entry.
+				$strName = $objAttribute->getName();
+				$intCurrrentID = $this->intID;
+				//$this->intID = $objParent->pid;
+
+				$strSubfilter = 'subpaletteid=' . Input::getInstance()->get('subpaletteid');
+				break;
+		}
+
+		return array(
+			'url' => 'contao/main.php?do=metamodels&table=' . $strTable . '&id=' . $intCurrrentID . '&' . $strSubfilter,
 			'text' => sprintf($this->getLanguage($strTable), $strName),
 			'icon' => (!empty($strIcon)) ? Environment::getInstance()->base . '/system/modules/metamodels/html/' . $strIcon : null
 		);

@@ -78,6 +78,8 @@ CREATE TABLE `tl_metamodel_dcasetting` (
 -- type, either legend or attribute.
   `dcatype` varchar(10) NOT NULL default '',
 
+  `subpalette` int(10) NOT NULL default '0',
+
   `legendtitle` varchar(255) NOT NULL default '',
   `legendhide` varchar(5) NOT NULL default '',
 
