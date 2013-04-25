@@ -50,7 +50,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete']          = array('Einst
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['show']            = array('Einstellungsdetails', 'Die Details für die Einstellung ID %s anzeigen');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']          = array('Alle hinzufügen', 'Alle Attribute zur Palette hinzufügen');
 
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['row']             = '%s <strong>%s</strong> <em>[%s]</em>';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['row']             = '%s <strong>%s</strong> %s <em>[%s]</em> <span class="tl_class">%s</span>';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legend_row']      = '<div class="dca_palette">%s%s</div>';
 
 /**

@@ -251,12 +251,13 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 				}
 
 				$strLabel = $objAttribute->getName();
-
 				$strReturn = sprintf(
 					$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['row'],
 					$strImage,
 					$strLabel ? $strLabel : $objAttribute->get('type'),
-					$objAttribute->get('type')
+					$arrRow['mandatory'] ? '*' : '',
+					$objAttribute->get('type'),
+					$arrRow['tl_class'] ? sprintf('[%s]', $arrRow['tl_class']) : ''
 				);
 				return $strReturn;
 			break;
