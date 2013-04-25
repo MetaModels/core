@@ -209,7 +209,7 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 		}
 		$objMetaModel = $this->objMetaModel;
 		$objSettings = $this->Database->prepare('SELECT attr_id FROM tl_metamodel_dcasetting WHERE pid=? AND dcatype="attribute" AND ((subpalette=0) OR (subpalette=?))')
-			->execute($this->Input->get('pid'), intval($this->Input->get('subpaletteid')));
+			->execute($objDC->getCurrentModel()->getProperty('pid'), $objDC->getCurrentModel()->getProperty('subpalette'));
 
 		$arrAlreadyTaken = $objSettings->fetchEach('attr_id');
 
