@@ -212,7 +212,7 @@ class MetaModelDatabase extends Controller
 					throw new Exception("Unknown palette rendering mode " . $objDCASettings->dcatype);
 			}
 		}
-		$arrDCA = array_replace_recursive($arrMyDCA, $arrDCA);
+		$arrDCA = array_replace_recursive($arrDCA, $arrMyDCA);
 		
 		return $strPalette;
 	}
