@@ -423,7 +423,7 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	{
 		$objFilter = $this->objMetaModel->getEmptyFilter();
 
-		$objAttribute = $this->getMetaModel()->getAttribute($strField);
+		$objAttribute = $this->objMetaModel->getAttribute($strField);
 		if ($objAttribute)
 		{
 			$this->calculateSubfilter(array(
