@@ -175,8 +175,12 @@ class TableContent extends Backend
 	 */
 	public function editRenderSetting(DataContainer $dc)
 	{
-		return ($dc->value < 1) ? '' : sprintf('<a href="contao/main.php?%s&amp;act=edit&amp;id=%s" title="%s" style="padding-left:3px">%s</a>', 'do=metamodels&table=tl_metamodel_rendersettings', $dc->value, sprintf(specialchars($GLOBALS['TL_LANG']['tl_module']['editrendersetting'][1]), $dc->value), $this->generateImage('alias.gif', $GLOBALS['TL_LANG']['tl_module']['editrendersetting'][0], 'style="vertical-align:top"')
-				);
+		return ($dc->value < 1) ? '' : sprintf('<a href="contao/main.php?%s&amp;id=%s" title="%s" style="padding-left:3px">%s</a>',
+			'do=metamodels&table=tl_metamodel_rendersetting',
+			$dc->value,
+			sprintf(specialchars($GLOBALS['TL_LANG']['tl_module']['editrendersetting'][1]), $dc->value),
+			$this->generateImage('alias.gif', $GLOBALS['TL_LANG']['tl_module']['editrendersetting'][0], 'style="vertical-align:top"')
+		);
 	}
 
 	/**
