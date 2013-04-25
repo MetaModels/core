@@ -210,7 +210,7 @@ class MetaModelBreadcrumbBuilder
 		// Search for translation.
 		if (key_exists($strShortTable, $GLOBALS['TL_LANG']['BRD']))
 		{
-			return $GLOBALS['TL_LANG']['BRD'][$strShortTable];
+			return specialchars($GLOBALS['TL_LANG']['BRD'][$strShortTable]);
 		}
 
 		// Fallback.
