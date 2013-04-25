@@ -90,6 +90,20 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 				)
 			)
 		),
+		'child_list'                  => array
+		(
+			'self'                    => array
+			(
+				'fields'              => array
+				(
+					'type',
+					'attr_id',
+					'urlparam',
+					'comment'
+				),
+				'format'              => '%s %s',
+			),
+		),
 	),
 
 	// List
