@@ -399,9 +399,51 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 						'tstamp'   => time(),
 						'dcatype'  => 'attribute',
 						'attr_id'  => $objAttribute->get('id'),
-						'tl_class' => ''
+						'tl_class' => '',
+						'subpalette' => (Input::getInstance()->get('subpaletteid')) ? Input::getInstance()->get('subpaletteid') : 0,
 					))->execute();
-					$arrMessages[sprintf($GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess'], $objAttribute->getName())] = 'confirm';
+					
+					// Get msg for adding at main palette or a subpalette 
+					if (Input::getInstance()->get('subpaletteid'))
+					{
+						$strPartentAttributeName = Input::getInstance()->get('subpaletteid');
+
+						// Get parent setting.
+						$objParentDcaSetting = Database::getInstance()
+								->prepare("SELECT attr_id FROM tl_metamodel_dcasetting WHERE id=?")
+								->execute(Input::getInstance()->get('subpaletteid'));
+
+						// Check if we have a attribute
+						$objPartenAttribute = $objMetaModel->getAttributeById($objParentDcaSetting->attr_id);
+
+						if (!is_null($objPartenAttribute))
+						{
+							// Multilanguage support.
+							if(is_array($objPartenAttribute->get('name')))
+							{
+								$arrName = $objPartenAttribute->get('name');
+
+								if (key_exists($objMetaModel->getActiveLanguage(), $arrName))
+								{
+									$strPartentAttributeName = $arrName[$objMetaModel->getActiveLanguage()];
+								}
+								else
+								{
+									$strPartentAttributeName = $arrName[$objMetaModel->getFallbackLanguage()];
+								}
+							}
+							else
+							{
+								$strPartentAttributeName = $objPartenAttribute->get('name');
+							}
+						}
+
+						$arrMessages[sprintf($GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess_subpalette'], $objAttribute->getName(), $strPartentAttributeName)] = 'confirm';
+					}
+					else
+					{
+						$arrMessages[sprintf($GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess'], $objAttribute->getName())] = 'confirm';
+					}
 				}
 			}
 		} else {

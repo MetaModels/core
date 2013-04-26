@@ -96,7 +96,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['2'] = '
  * Messages
  */
 
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd'] = 'will add attribute %s to palette.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained'] = 'Attribute %s already in palette.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess'] = 'added attribute %s to palette.';
-
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd']               = 'Will add the attribute "%s" to palette.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained']      = 'Attribute %s already in palette.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Added the attribute "%s" to palette.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess_subpalette'] = 'Added the attribute "%s" to subpalette "%s".';
