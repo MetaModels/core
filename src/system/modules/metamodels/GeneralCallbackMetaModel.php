@@ -176,10 +176,7 @@ class GeneralCallbackMetaModel extends GeneralCallbackDefault
 				{
 					foreach ($arrPalette as $intKey => $arrPaletteDef)
 					{
-						if (($intPos = array_search($strAttrName, $arrPaletteDef['palette'])) !== false)
-						{
-							unset($arrPalette[$intKey]['palette'][$intPos]);
-						}
+						$this->removeAttributeFromPalette($strAttrName, $arrPalette[$intKey]['palette']);
 					}
 				}
 			}
@@ -187,6 +184,32 @@ class GeneralCallbackMetaModel extends GeneralCallbackDefault
 		$arrPalette = parent::parseRootPaletteCallback($arrPalette);
 
 		return $arrPalette;
+	}
+	
+	/**
+	 * Search a value in the array. Search in all levels.
+	 * 
+	 * @param string $strAttrName Name of the attribute
+	 * @param array $arrPalette The array to search in
+	 */
+	protected function removeAttributeFromPalette($strAttrName, &$arrPalette)
+	{
+		foreach ($arrPalette as $intKey => $value)
+		{
+			if(is_array($value))
+			{
+				$this->removeAttributeFromPalette($strAttrName, $arrPalette[$intKey]);
+				
+				if(empty($arrPalette[$intKey]))
+				{
+					unset($arrPalette[$intKey]);
+				}
+			}
+			else if($strAttrName == $value)
+			{
+				unset($arrPalette[$intKey]);
+			}
+		}
 	}
 }
 

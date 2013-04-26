@@ -254,7 +254,8 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 			'rows',
 			'cols',
 			'spaceToUnderscore',
-			'includeBlankOption'
+			'includeBlankOption',
+			'submitOnChange'
 		) as $strEval) {
 			if (in_array($strEval, $arrSettingNames) && $arrOverrides[$strEval])
 			{

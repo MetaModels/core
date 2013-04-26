@@ -78,6 +78,8 @@ CREATE TABLE `tl_metamodel_dcasetting` (
 -- type, either legend or attribute.
   `dcatype` varchar(10) NOT NULL default '',
 
+  `subpalette` int(10) NOT NULL default '0',
+
   `legendtitle` varchar(255) NOT NULL default '',
   `legendhide` varchar(5) NOT NULL default '',
 
@@ -110,7 +112,8 @@ CREATE TABLE `tl_metamodel_dcasetting` (
   `spaceToUnderscore` char(1) NOT NULL default '',
 -- if true a blank option will be added to the options array.
   `includeBlankOption` char(1) NOT NULL default '',
-
+-- if true, the form will get reloaded when the widget changes
+  `submitOnChange` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

@@ -62,6 +62,10 @@ class MetaModelBreadcrumbBuilder
 				break;
 
 			case 'tl_metamodel_dcasetting':
+				if (Input::getInstance()->get('subpaletteid'))
+				{
+					$arrReturn[] = $this->getFourthLevel('metamodel_dcasetting_subpalette', 'tl_metamodel_dcasetting', 'dca_subpalette.png');
+				}
 				$arrReturn[] = $this->getThirdLevel('tl_metamodel_dcasetting', 'tl_metamodel_dca', 'dca_setting.png');
 			case 'tl_metamodel_dca':
 				$arrReturn[] = $this->getSecondLevel('tl_metamodel_dca', 'dca.png');
@@ -159,6 +163,39 @@ class MetaModelBreadcrumbBuilder
 		);
 	}
 
+	protected function getFourthLevel($strTable, $strParentTable, $strIcon)
+	{
+		$strUrl = 'contao/main.php?do=metamodels&table=' . $strTable . '&id=' . $intCurrrentID;
+
+		switch ($strTable)
+		{
+			case 'metamodel_dcasetting_subpalette':
+				$objParent = Database::getInstance()
+						->prepare('SELECT id, pid, name FROM tl_metamodel_attribute WHERE id=(SELECT attr_id FROM tl_metamodel_dcasetting WHERE pid=? AND id=?)')
+						->executeUncached($this->intID, Input::getInstance()->get('subpaletteid'));
+				/**
+				 * @var IMetaModel
+				 */
+				$objMetaModel = MetaModelFactory::byId($objParent->pid);
+				$objAttribute = $objMetaModel->getAttributeById($objParent->id);
+
+				// Change id for next entry.
+				$strName = $objAttribute->getName();
+				$intCurrrentID = $this->intID;
+				//$this->intID = $objParent->pid;
+
+				$strSubfilter = 'subpaletteid=' . Input::getInstance()->get('subpaletteid');
+				$strUrl = 'contao/main.php?do=metamodels&table=' . $strParentTable . '&id=' . $intCurrrentID . '&' . $strSubfilter;
+				break;
+		}
+
+		return array(
+			'url' => $strUrl,
+			'text' => sprintf($this->getLanguage($strTable), $strName),
+			'icon' => (!empty($strIcon)) ? Environment::getInstance()->base . '/system/modules/metamodels/html/' . $strIcon : null
+		);
+	}
+
 	/**
 	 * Get for a table the human readable name or a fallback
 	 * 
@@ -173,7 +210,7 @@ class MetaModelBreadcrumbBuilder
 		// Search for translation.
 		if (key_exists($strShortTable, $GLOBALS['TL_LANG']['BRD']))
 		{
-			return $GLOBALS['TL_LANG']['BRD'][$strShortTable];
+			return specialchars($GLOBALS['TL_LANG']['BRD'][$strShortTable]);
 		}
 
 		// Fallback.

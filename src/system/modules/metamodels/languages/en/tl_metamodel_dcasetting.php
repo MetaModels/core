@@ -58,6 +58,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']             = array('New',
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['edit']            = array('Edit setting', 'Edit setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy']            = array('Copy setting definition', 'Copy setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete']          = array('Delete setting', 'Delete setting ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['subpalette']      = array('Manage subpalettes', 'Manage the subpalettes of filter setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['show']            = array('Setting details', 'Show details of setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']          = array('Add all', 'Add all attributes to palette');
 
@@ -95,7 +96,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['2'] = '
  * Messages
  */
 
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd'] = 'will add attribute %s to palette.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained'] = 'Attribute %s already in palette.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess'] = 'added attribute %s to palette.';
-
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd']               = 'Will add the attribute "%s" to palette.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained']      = 'Attribute %s already in palette.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Added the attribute "%s" to palette.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess_subpalette'] = 'Added the attribute "%s" to subpalette "%s".';
