@@ -30,14 +30,14 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord']   = 'Edit at
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']        = 'Render setting "%s" in MetaModel "%s"';
 
 $GLOBALS['TL_LANG']['BRD']['metamodels']                              = 'MetaModels';
-$GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                     = 'Attributes "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodel_rendersettings']                = 'Render setting "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodel_rendersetting']                 = 'Render settings "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodel_dca']                           = 'Palette "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting']                    = 'Palette settings "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                     = 'Attributes of "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_rendersettings']                = 'All render setting of "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_rendersetting']                 = 'Render settings in "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_dca']                           = 'All palettes of "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting']                    = 'Palette settings in "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting_subpalette']         = 'Subpalette settings for "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodel_filter']                        = 'Filter "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodel_filtersetting']                 = 'Filter settings "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_filter']                        = 'All filter of "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_filtersetting']                 = 'Filter settings in "%s"';
 
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']        = 'Edit "%s" for item %%s';
 $GLOBALS['TL_LANG']['MSC']['sorting']                                 = 'Sorting';
