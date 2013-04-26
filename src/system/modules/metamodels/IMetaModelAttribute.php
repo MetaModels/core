@@ -238,6 +238,39 @@ interface IMetaModelAttribute
 	public function searchFor($strPattern);
 
 	/**
+	 * Filter all values greater than the passed value.
+	 *
+	 * @param mixed $varValue     The value to use as lower end
+	 *
+	 * @param bool  $blnInclusive If true, the passed value will be included, if false, it will be excluded.
+	 *
+	 * @return int[] The list of item ids of all items matching the condition.
+	 */
+	public function filterGreaterThan($varValue, $blnInclusive = false);
+
+	/**
+	 * Filter all values less than the passed value.
+	 *
+	 * @param mixed $varValue     The value to use as upper end.
+	 *
+	 * @param bool  $blnInclusive If true, the passed value will be included, if false, it will be excluded.
+	 *
+	 * @return int[] The list of item ids of all items matching the condition.
+	 */
+	public function filterLessThan($varValue, $blnInclusive = false);
+
+	/**
+	 * Filter all values not having the passed value.
+	 *
+	 * @param mixed $varValue     The value to use as upper end.
+	 *
+	 * @param bool  $blnInclusive If true, the passed value will be included, if false, it will be excluded.
+	 *
+	 * @return int[] The list of item ids of all items matching the condition.
+	 */
+	public function filterNotEqual($varValue);
+
+	/**
 	 * Called by the MetaModel after an item has been saved.
 	 *
 	 * Useful for alias fields, edit counters etc.

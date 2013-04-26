@@ -405,6 +405,52 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	}
 
 	/**
+	 * Filter all values greater than the passed value.
+	 *
+	 * This base implementation does not perform any search.
+	 *
+	 * @param mixed $varValue     The value to use as lower end.
+	 *
+	 * @param bool  $blnInclusive If true, the passed value will be included, if false, it will be excluded.
+	 *
+	 * @return int[] The list of item ids of all items matching the condition.
+	 */
+	public function filterGreaterThan($varValue, $blnInclusive = false)
+	{
+		return array();
+	}
+
+	/**
+	 * Filter all values less than the passed value.
+	 *
+	 * This base implementation does not perform any search.
+	 *
+	 * @param mixed $varValue     The value to use as upper end.
+	 *
+	 * @param bool  $blnInclusive If true, the passed value will be included, if false, it will be excluded.
+	 *
+	 * @return int[] The list of item ids of all items matching the condition.
+	 */
+	public function filterLessThan($varValue, $blnInclusive = false)
+	{
+		return array();
+	}
+
+	/**
+	 * Filter all values not having the passed value.
+	 *
+	 * This base implementation does an array_merge() on the return values of filterLessThan() and filterGreaterThan().
+	 *
+	 * @param mixed $varValue     The value to use as upper end.
+	 *
+	 * @return int[] The list of item ids of all items matching the condition.
+	 */
+	public function filterNotEqual($varValue)
+	{
+		return array_merge($this->filterLessThan($varValue), $this->filterGreaterThan($varValue));
+	}
+
+	/**
 	 * {@inheritdoc}
 	 * Base implementation, do not perform anything.
 	 */

@@ -269,10 +269,35 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 				break;
 
 			case '=':
-				$objFilterRule = NULL;
+			case '>':
+			case '<':
+				$objFilterRule = null;
 				if ($objAttribute)
 				{
-					$objFilterRule = new MetaModelFilterRuleSearchAttribute($objAttribute, $arrFilter['value'], $this->objMetaModel->getAvailableLanguages());
+					switch ($arrFilter['operation'])
+					{
+						case '=':
+							$objFilterRule = new MetaModelFilterRuleSearchAttribute(
+								$objAttribute,
+								$arrFilter['value'],
+								$this->objMetaModel->getAvailableLanguages()
+							);
+							break;
+
+						case '>':
+							$objFilterRule = new MetaModelFilterRuleFilterAttributeGreaterThan(
+								$objAttribute,
+								$arrFilter['value']
+							);
+							break;
+
+						case '<':
+							$objFilterRule = new MetaModelFilterRuleFilterAttributeLessThan(
+								$objAttribute,
+								$arrFilter['value']
+							);
+							break;
+					}
 				} else if(Database::getInstance()->fieldExists($arrFilter['property'], $this->objMetaModel->getTableName())) {
 					// system column?
 					$objFilterRule = new MetaModelFilterRuleSimpleQuery(sprintf(
@@ -289,11 +314,22 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 				}
 				$objFilter->addFilterRule($objFilterRule);
 				break;
-			case '>':
-			case '<':
-				break;
 
 			case 'IN':
+				// rewrite the IN operation to a rephrased term: "(x=a) OR (x=b) OR ..."
+				$arrSubRules = array();
+				foreach ($arrFilter['value'] as $varValue)
+				{
+					$arrSubRules[] = array(
+						'property'  => $arrFilter['property'],
+						'operation' => '=',
+						'value'     => $varValue
+					);
+				}
+				$this->calculateSubfilter(array(
+					'operation' => 'OR',
+					'childs'    => $arrSubRules
+				), $objFilter);
 				break;
 
 			default:
