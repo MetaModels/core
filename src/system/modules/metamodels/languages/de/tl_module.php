@@ -37,6 +37,8 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_autosubmit']		= array('Automatis
 $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_params']			= array('Filterparameter', 'In diesem FE-Filter angezeigte Parameter Widgets auswählen.');
 $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_template']			= array('Template', 'Frontend-Template auswählen.');
 
+$GLOBALS['TL_LANG']['tl_module']['metamodel_jumpTo']		= array('Weiterleitungsseite', 'Bitte wählen Sie die Seite aus, zu der Besucher beim Anklicken eines Links oder Abschicken eines Formulars weitergeleitet werden.');
+
 /**
  * Wizards
  */

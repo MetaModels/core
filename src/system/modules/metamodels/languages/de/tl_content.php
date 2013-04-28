@@ -41,7 +41,7 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering']			= array('Anzuwendende
 $GLOBALS['TL_LANG']['tl_content']['metamodel_layout']				= array('Eigenes Template für Datensatzliste auswählen', 'Das Template auswählen, das für die Generierung der Datensatzliste mit den ausgewählten Attributen benutzt werden soll. Gültige Templatenamen beginnen mit "mod_metamodel_&lt;type&gt;", wobei &lt;type&gt; für den jeweiligen &lt;Typ&gt; steht.');
 $GLOBALS['TL_LANG']['tl_content']['metamodel_rendersettings']		= array('Anzuwendende Rendereinstellungen', 'Die Rendereinstellungen auswählen, die benutzt werden sollen, um die Ausgabe zu erstellen. Falls leer, werden die Standardeinstellungen für das ausgewählte MetaModel benutzt. Ist kein Standard definiert, werden Rohwerte ausgegeben.');
 
-$GLOBALS['TL_LANG']['tl_content']['jumpTo']							= array('Weiterleitungsseite', 'Bitte wählen Sie die Seite aus, zu der Besucher beim Anklicken eines Links oder Abschicken eines Formulars weitergeleitet werden.');
+$GLOBALS['TL_LANG']['tl_content']['metamodel_jumpTo']							= array('Weiterleitungsseite', 'Bitte wählen Sie die Seite aus, zu der Besucher beim Anklicken eines Links oder Abschicken eines Formulars weitergeleitet werden.');
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_autosubmit']		= array('Automatische Aktualisierung', 'Filter bei jeder Änderung aktualisieren.');
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_params']			= array('Filterparameter widgets', 'In diesem FE-Filter angezeigte Parameter Widgets auswählen.');
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_template']			= array('Template', 'Frontend-Template auswählen.');

@@ -55,12 +55,12 @@ class MetaModelFrontendFilter extends Frontend
 
 		$this->objFilterConfig->arrJumpTo = $GLOBALS['objPage']->row();
 
-		if ($this->objFilterConfig->jumpTo)
+		if ($this->objFilterConfig->metamodel_jumpTo)
 		{
 			// page to jump to when filter submit
 			$objPage = $this->Database->prepare("SELECT id, alias FROM tl_page WHERE id=?")
 				->limit(1)
-				->execute($this->objFilterConfig->jumpTo);
+				->execute($this->objFilterConfig->metamodel_jumpTo);
 			if ($objPage->numRows)
 			{
 				$this->objFilterConfig->arrJumpTo = $objPage->row();

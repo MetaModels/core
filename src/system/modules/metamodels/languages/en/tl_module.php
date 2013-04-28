@@ -35,6 +35,7 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_rendersettings'] = array('Render set
 $GLOBALS['TL_LANG']['tl_module']['metamodel_filterparams']			= array('Filter parameters to use');
 $GLOBALS['TL_LANG']['tl_module']['metamodel_filterparams_use_get'] = array('Use GET Param', 'allow this parameter to be overridden from _GET');
 
+$GLOBALS['TL_LANG']['tl_module']['metamodel_jumpTo']         = array('Redirect page', 'Please choose the page to which visitors will be redirected when clicking a link or submitting a form.');
 
 $GLOBALS['TL_LANG']['tl_module']['metamodel_noparsing']      = array('No parsing of items', 'If this checkbox is selected, the module will not parse the items. Only the item-objects will be available in the template.');
 $GLOBALS['TL_LANG']['tl_module']['metamodel_donotindex']     = array('Do not add to search index', 'If this is checked, the Contao internal search index will ignore the content of this module.');

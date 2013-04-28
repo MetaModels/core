@@ -47,7 +47,7 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams']			= array('Filter se
 
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams_use_get'] = array('Use GET Parameter', '');
 
-$GLOBALS['TL_LANG']['tl_content']['jumpTo']                   = array('Redirect page', 'Please choose the page to which visitors will be redirected when clicking a link or submitting a form.');
+$GLOBALS['TL_LANG']['tl_content']['metamodel_jumpTo']               = array('Redirect page', 'Please choose the page to which visitors will be redirected when clicking a link or submitting a form.');
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_autosubmit'] = array('Submit on change', 'reload page on filter change.');
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_params'] = array('Attributes', 'Select the attributes used in this FE filter.');
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_template']   = array('Template', 'Select frontend template.');
