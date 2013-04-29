@@ -82,3 +82,7 @@
   .tl_class {
     color:#c6c6c6;
   }
+
+  .multicolumnwizard .fallback_language span {
+    font-weight:bold;
+  }
