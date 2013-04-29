@@ -58,7 +58,7 @@ class TableMetaModelAttribute extends TableMetaModelHelper
 	protected static $objCurrentField = null;
 
 
-	protected function setNameAndDescription(IMetaModel $objMetaModel, IMetaModelAttribute $objModel)
+	protected function setNameAndDescription(IMetaModel $objMetaModel, $objModel)
 	{
 		$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['name'] = array_replace_recursive(
 			parent::makeMultiColumnName(
@@ -66,7 +66,7 @@ class TableMetaModelAttribute extends TableMetaModelHelper
 				$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode'],
 				$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value'],
 				false,
-				$objModel->get('name')
+				$objModel ? $objModel->get('name') : array()
 			),
 			$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['name']
 		);
@@ -77,7 +77,7 @@ class TableMetaModelAttribute extends TableMetaModelHelper
 				$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode'],
 				$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value'],
 				true,
-				$objModel->get('description')
+				$objModel ? $objModel->get('description') : array()
 			),
 			$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['description']
 		);

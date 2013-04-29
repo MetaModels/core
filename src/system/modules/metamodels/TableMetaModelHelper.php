@@ -119,6 +119,15 @@ class TableMetaModelHelper extends Backend
 			}
 			asort($arrLanguages);
 
+			// Ensure we have the values present.
+			if (empty($arrValues))
+			{
+				foreach ((array)$objMetaModel->getAvailableLanguages() as $strLangCode)
+				{
+					$arrValues[$strLangCode] = '';
+				}
+			}
+
 			$arrRowClasses = array();
 			foreach (array_keys(deserialize($arrValues)) as $strLangcode)
 			{
