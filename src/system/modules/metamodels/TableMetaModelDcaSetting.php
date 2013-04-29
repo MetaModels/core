@@ -394,7 +394,7 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 			{
 				if (!array_key_exists($objAttribute->get('id'), $arrKnown))
 				{
-					$intMax *= 128;
+					$intMax += 128;
 					$this->Database->prepare('INSERT INTO tl_metamodel_dcasetting %s')->set(array(
 						'pid'      => $this->Input->get('id'),
 						'sorting'  => $intMax,

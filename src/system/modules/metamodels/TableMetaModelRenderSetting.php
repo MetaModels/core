@@ -304,7 +304,7 @@ class TableMetaModelRenderSetting extends TableMetaModelHelper
 						)
 					);
 
-					$intMax *= 128;
+					$intMax += 128;
 					$this->Database->prepare('INSERT INTO tl_metamodel_rendersetting %s')->set($arrData)->execute();
 					$arrMessages[] = array
 					(
