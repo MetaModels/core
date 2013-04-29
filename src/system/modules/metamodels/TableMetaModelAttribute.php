@@ -58,13 +58,15 @@ class TableMetaModelAttribute extends TableMetaModelHelper
 	protected static $objCurrentField = null;
 
 
-	protected function setNameAndDescription(IMetaModel $objMetaModel)
+	protected function setNameAndDescription(IMetaModel $objMetaModel, IMetaModelAttribute $objModel)
 	{
 		$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['name'] = array_replace_recursive(
 			parent::makeMultiColumnName(
 				$objMetaModel,
 				$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode'],
-				$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value']
+				$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value'],
+				false,
+				$objModel->get('name')
 			),
 			$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['name']
 		);
@@ -74,7 +76,8 @@ class TableMetaModelAttribute extends TableMetaModelHelper
 				$objMetaModel,
 				$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode'],
 				$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value'],
-				true
+				true,
+				$objModel->get('description')
 			),
 			$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['description']
 		);
@@ -112,7 +115,7 @@ class TableMetaModelAttribute extends TableMetaModelHelper
 			throw new Exception('unexpected condition, metamodel unknown', 1);
 		}
 
-		$this->setNameAndDescription($objMetaModel);
+		$this->setNameAndDescription($objMetaModel, $objMetaModel->getAttributeById($this->Input->get('id')));
 
 		if (!$objMetaModel->hasVariants())
 		{

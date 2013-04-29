@@ -147,7 +147,9 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 			parent::makeMultiColumnName(
 				$this->objMetaModel,
 				$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode'],
-				$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']
+				$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value'],
+				false,
+				$objModel->getProperty('legendtitle')
 				),
 			$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['legendtitle']
 		);
