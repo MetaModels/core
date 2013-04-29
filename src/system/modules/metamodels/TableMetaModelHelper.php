@@ -154,7 +154,8 @@ class TableMetaModelHelper extends Backend
 							'eval'                  => array
 							(
 								'rowClasses'        => $arrRowClasses,
-								'valign'            => 'center'
+								'valign'            => 'center',
+								'style'             => 'min-width:75px;display:block;'
 							)
 						),
 						'value' => array
