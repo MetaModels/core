@@ -46,8 +46,6 @@ class MetaModelFilterRuleFilterAttributeNotEqual implements IMetaModelFilterRule
 	 */
 	public function __construct($objAttribute, $varValue)
 	{
-		parent::__construct();
-
 		$this->objAttribute = $objAttribute;
 		$this->varValue     = $varValue;
 	}

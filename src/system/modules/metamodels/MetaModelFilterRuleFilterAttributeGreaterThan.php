@@ -56,8 +56,6 @@ class MetaModelFilterRuleFilterAttributeGreaterThan implements IMetaModelFilterR
 	 */
 	public function __construct($objAttribute, $varValue, $blnInclusive = false)
 	{
-		parent::__construct();
-
 		$this->objAttribute = $objAttribute;
 		$this->varValue     = $varValue;
 		$this->blnInclusive = $blnInclusive;
