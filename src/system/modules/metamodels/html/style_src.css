@@ -14,20 +14,20 @@
 
   .header_css_fields {
     padding:2px 0px 3px 20px;
-    background-image:url("fields.png");
+    background-image:url(fields.png);
     background-position:left center;
     background-repeat:no-repeat;
   }
 
   .header_add_all {
     padding:2px 0px 3px 20px;
-    background-image:url("dca.png");
+    background-image:url(dca.png);
     background-position:left center;
     background-repeat:no-repeat;
   }
   
   .rendersetting_add_all {
-    background-image:url("render_settings.png");
+    background-image:url(render_settings.png);
   }
   
   .dca_palette {
@@ -75,9 +75,17 @@
 
   .tl_content .field_type img, 
   .tl_content_right + img {
-    margin-right:5px;
     float:left;
+    margin-right:5px;
   }
+
+  /* li:first-child .tl_content {
+    border-top:1px solid #E9E9E9;
+  }
+
+  .tl_content > div:first-child {
+    float:left;
+  } */
 
   .tl_class {
     color:#c6c6c6;
