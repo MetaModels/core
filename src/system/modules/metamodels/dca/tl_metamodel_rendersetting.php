@@ -143,6 +143,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 			'eval'                    => array
 			(
 				'tl_class'            => 'w50',
+				'chosen'              => true,
 				'includeBlankOption'  => true,
 			)
 		),
