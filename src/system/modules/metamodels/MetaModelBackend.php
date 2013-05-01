@@ -176,13 +176,20 @@ class MetaModelBackend
 			return;
 		}
 
-		if (self::isDBInitialized())
+		try
 		{
-			// if no backend user authenticated, we will get redirected.
-			self::authenticateBackendUser();
+			if (self::isDBInitialized())
+			{
+				// if no backend user authenticated, we will get redirected.
+				self::authenticateBackendUser();
 
-			MetaModelDcaBuilder::getInstance()->injectBackendMenu();
-			self::registerLateConfig();
+				MetaModelDcaBuilder::getInstance()->injectBackendMenu();
+				self::registerLateConfig();
+			}
+		}
+		catch (Exception $exc)
+		{
+			return;
 		}
 	}
 }
