@@ -10,6 +10,7 @@
  * @subpackage Backend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Carolina M Koehn <ck@kikmedia.de>
+ * @author     Christian de la Haye <service@delahaye.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -49,6 +50,7 @@ $GLOBALS['TL_LANG']['tl_metamodel']['filter']               = array('Filter defi
 $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']       = array('Ausgabevorgaben definieren', 'Definieren Sie Ausgabevorgaben für das MetaModel ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel']['dca']                  = array('Paletteneinstellungen', 'Paletteneinstellungen für das MetaModel ID %s definieren.');
 $GLOBALS['TL_LANG']['tl_metamodel']['dca_combine']          = array('Paletten- und Ansichtseinstellungen festlegen', 'Paletten- und Ansichtseinstellungen für MetaModel ID %s festlegen');
+$GLOBALS['TL_LANG']['tl_metamodel']['cut']                  = array('MetaModel verschieben', 'Passen Sie die Reihenfolge der MetaModels an.');
 
 /**
  * Misc.

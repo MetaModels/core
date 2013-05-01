@@ -16,6 +16,7 @@
 
 CREATE TABLE `tl_metamodel` (
   `id` int(10) unsigned NOT NULL auto_increment,
+  `sorting` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
 

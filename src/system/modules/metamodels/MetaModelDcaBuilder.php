@@ -9,6 +9,7 @@
  * @package	   MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Christian de la Haye <service@delahaye.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -133,6 +134,7 @@ class MetaModelDcaBuilder
 		{
 			$this->arrInformation[$objRender->pid]['comb']['view_id'] = $objRender->id;
 		}
+
 	}
 
 	/**
@@ -172,7 +174,7 @@ class MetaModelDcaBuilder
 	 */
 	protected function bufferModels()
 	{
-		$objModels=Database::getInstance()->execute('SELECT id FROM tl_metamodel');
+		$objModels=Database::getInstance()->execute('SELECT id FROM tl_metamodel order by sorting');
 		while ($objModels->next())
 		{
 			$this->arrInformation[$objModels->id] = array
@@ -407,4 +409,3 @@ class MetaModelDcaBuilder
 		}
 	}
 }
-
