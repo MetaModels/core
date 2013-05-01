@@ -79,6 +79,14 @@
     margin-right:5px;
   }
 
+  .list_view li:first-child .tl_content {
+    border-top:1px solid #E9E9E9;
+  }
+
+  .list_view .tl_content > div:first-child {
+    float:left;
+  }
+
   /* li:first-child .tl_content {
     border-top:1px solid #E9E9E9;
   }
