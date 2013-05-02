@@ -48,7 +48,7 @@
 		"contao/core":"~2.11",
 		"metamodels/dc_general": "*",
 		"menatwork/contao-multicolumnwizard": ">=3.1.0",
-		"bit3/meta-palettes": "~1.4"
+		"bit3/contao-meta-palettes": "~1.4"
 	},
 	"extra":{
 		"contao": {
