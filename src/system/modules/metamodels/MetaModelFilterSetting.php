@@ -364,7 +364,7 @@ abstract class MetaModelFilterSetting implements IMetaModelFilterSetting
 	 *
 	 * @return array Empty array.
 	 */
-	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit)
+	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit, $blnHideClearFilter)
 	{
 		return array();
 	}

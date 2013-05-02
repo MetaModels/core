@@ -178,11 +178,12 @@ class MetaModelFrontendFilter extends Frontend
 		$objFilterSetting = MetaModelFilterSettingsFactory::byId($this->objFilterConfig->metamodel_filtering);
 
 		$blnAutoSubmit = $this->objFilterConfig->metamodel_fef_autosubmit ? true : false;
+		$blnHideClearFilter = $this->objFilterConfig->metamodel_fef_hideclearfilter ? true : false;
 		$arrJumpTo = $this->objFilterConfig->arrJumpTo;
 
 		$arrParams = $this->getParams();
 
-		$arrWidgets = $objFilterSetting->getParameterFilterWidgets($arrParams['all'], $arrJumpTo, $blnAutoSubmit);
+		$arrWidgets = $objFilterSetting->getParameterFilterWidgets($arrParams['all'], $arrJumpTo, $blnAutoSubmit, $blnHideClearFilter);
 
 		// filter the widgets we do not want to show.
 		$arrWanted = $this->getWantedNames();

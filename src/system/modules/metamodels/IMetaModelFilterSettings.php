@@ -72,7 +72,7 @@ interface IMetaModelFilterSettings
 	 *
 	 * @return array
 	 */
-	public function getParameterFilterWidgets($arrFilterUrl, $arrJumpTo = array(), $blnAutoSubmit = true);
+	public function getParameterFilterWidgets($arrFilterUrl, $arrJumpTo = array(), $blnAutoSubmit = true, $blnHideClearFilter = false);
 
 	/**
 	 * Retrieve a list of all registered parameters from the setting as DCA compatible arrays.
