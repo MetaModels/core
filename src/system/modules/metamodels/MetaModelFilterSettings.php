@@ -178,7 +178,7 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getParameterFilterWidgets($arrFilterUrl, $arrJumpTo = array(), $blnAutoSubmit = true)
+	public function getParameterFilterWidgets($arrFilterUrl, $arrJumpTo = array(), $blnAutoSubmit = true, $blnHideClearFilter = false)
 	{
 		$arrParams = array();
 
@@ -189,8 +189,9 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 
 		foreach ($this->arrSettings as $objSetting)
 		{
-			$arrParams = array_merge($arrParams, $objSetting->getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit));
+			$arrParams = array_merge($arrParams, $objSetting->getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit, $blnHideClearFilter));
 		}
+		
 		return $arrParams;
 	}
 }
