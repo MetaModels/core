@@ -23,7 +23,7 @@ $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('TableCo
  * Palettes
  */
 $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodel_content'] = '{title_legend},name,headline,type;{mm_config_legend},metamodel,perPage,metamodel_use_limit;{mm_filter_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_filtering,metamodel_filterparams;{mm_rendering},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;{protected_legend:hide},protected;{expert_legend:hide},metamodel_donotindex,guests,cssID,space';
-$GLOBALS['TL_DCA']['tl_content']['palettes']['metamodels_frontendfilter'] = '{title_legend},name,headline,type;{mm_filter_legend},metamodel_jumpTo,metamodel,metamodel_filtering,metamodel_fef_params,metamodel_fef_autosubmit,metamodel_fef_hideclearfilter,metamodel_fef_template;{protected_legend:hide},protected;{expert_legend:hide},guests,invisible,cssID,space';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['metamodels_frontendfilter'] = '{title_legend},name,headline,type;{mm_filter_legend},metamodel_jumpTo,metamodel,metamodel_filtering,metamodel_fef_template,metamodel_fef_params,metamodel_fef_autosubmit,metamodel_fef_hideclearfilter;{protected_legend:hide},protected;{expert_legend:hide},guests,invisible,cssID,space';
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_limit';
 
@@ -46,7 +46,8 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'eval' => array
 		(
 			'mandatory'           => true,
-			'submitOnChange'      => true, 
+			'chosen'              => true,
+			'submitOnChange'      => true,
 			'includeBlankOption'  => true
 		),
 		'wizard' => array
@@ -61,7 +62,11 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'exclude'                 => true,
 		'inputType'               => 'select',
 		'options_callback'        => array('TableContent', 'getModuleTemplates'),
-		'eval'                    => array('tl_class' => 'w50')
+		'eval'                    => array
+		(
+			'chosen'              => true,
+			'tl_class'            => 'w50'
+		)
 	),
 
 	'metamodel_use_limit' => array
@@ -94,7 +99,12 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'exclude'                 => true,
 		'inputType'               => 'select',
 		'options_callback'        => array('TableContent', 'getAttributeNames'),
-		'eval'                    => array('includeBlankOption' => true, 'tl_class' => 'w50'),
+		'eval'                    => array
+		(
+			'includeBlankOption'  => true,
+			'chosen'              => true,
+			'tl_class'            => 'w50'
+		)
 	),
 
 	'metamodel_sortby_direction' => array
@@ -104,7 +114,12 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'inputType'               => 'select',
 		'reference'               => &$GLOBALS['TL_LANG']['tl_content'],
 		'options'                 => array('ASC' => 'ASC', 'DESC' => 'DESC'),
-		'eval'                    => array('includeBlankOption' => false, 'tl_class' => 'w50'),
+		'eval'                    => array
+		(
+			'includeBlankOption'  => false,
+			'chosen'              => true,
+			'tl_class'            => 'w50'
+		)
 	),
 
 	'metamodel_filtering' => array
@@ -118,7 +133,8 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		(
 			'includeBlankOption'  => true,
 			'submitOnChange'      => true,
-			'tl_class'            => 'clr'
+			'chosen'              => true,
+			'tl_class'            => 'w50'
 		),
 		'wizard' => array
 		(
@@ -137,6 +153,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		(
 			'includeBlankOption'  => true,
 			'submitOnChange'      => true,
+			'chosen'              => true,
 			'tl_class'            => 'w50'
 		),
 		'wizard' => array
@@ -178,7 +195,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 			'tl_class'            => 'clr m12',
 			'flagfields'          => array
 			(
-				'use_get' => array
+				'use_get'         => array
 				(
 					'label'       => &$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams_use_get'],
 					'inputType'   => 'checkbox'
@@ -234,6 +251,11 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'default'                 => 'mm_filter_default',
 		'exclude'                 => true,
 		'inputType'               => 'select',
-		'options_callback'        => array('TableContent', 'getFilterTemplates')
+		'options_callback'        => array('TableContent', 'getFilterTemplates'),
+		'eval'                    => array
+		(
+			'tl_class'            => 'w50',
+			'chosen'              => true
+		),
 	)
 ));
