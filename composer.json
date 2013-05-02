@@ -11,6 +11,29 @@
 			"email":"c.schiffler@cyberspectrum.de",
 			"homepage":"http://www.cyberspectrum.de",
 			"role":"Developer"
+		},
+		{
+			"name":"Andreas Isaak",
+			"email":"info@andreas-isaak.de",
+			"homepage":"http://www.andreas-isaak.de",
+			"role":"Developer"
+		},
+		{
+			"name":"Stefan Heimes",
+			"email":"stefan_heimes@hotmail.com",
+			"role":"Developer"
+		},
+		{
+			"name":"Christian de la Haye",
+			"email":"service@delahaye.de",
+			"homepage":"http://www.delahaye.de/",
+			"role":"Developer"
+		},
+		{
+			"name":"Oliver Hoff",
+			"email":"oliver@hofff.com",
+			"homepage":"http://www.hofff.com/",
+			"role":"Developer"
 		}
 	],
 	"support":{
@@ -22,7 +45,9 @@
 	},
 	"require":{
 		"php":">=5.3",
-		"contao/core":"~2.11"
+		"contao/core":"~2.11",
+		"metamodels/dc_general": "*",
+		"menatwork/contao-multicolumnwizard": ">=3.1.0"
 	},
 	"extra":{
 		"contao": {
