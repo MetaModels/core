@@ -82,8 +82,86 @@ class MetaModelItem implements IMetaModelItem
 			}
 			// TODO: Add parseValue HOOK?
 		}
+		
+		// If "hideEmptyValues" is true and the raw is empty remove text and outputformat.
+		if($objSettings->get('hideEmptyValues') == true && $this->isEmptyValue($arrResult['raw']) == true)
+		{
+			unset($arrResult[$strOutputFormat]);
+			unset($arrResult['text']);
+		}
+		
 		return $arrResult;
 	}
+
+	/**
+	 * Check if a value is empty
+	 * 
+	 * @param array $mixValue
+	 * 
+	 * @return boolean True => empty, false => found a valid values
+	 */
+	protected function isEmptyValue($mixValue)
+	{
+		// Array check
+		if (is_array($mixValue))
+		{		
+			if(count($mixValue) == 0 || $this->isArrayEmpty($mixValue))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		
+		// Empty string
+		if ($mixValue === '')
+		{
+			return true;
+		}
+
+		// Null
+		if ($mixValue === null)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Run through each level of an array and check if we have an empty value.
+	 * 
+	 * @param array $arrArray
+	 * 
+	 * @return boolean True => empty, False => some values found.
+	 */
+	protected function isArrayEmpty($arrArray)
+	{
+		if (is_array($arrArray))
+		{
+			foreach ($arrArray as $key => $value)
+			{
+				if (is_array($value) && !$this->isArrayEmpty($value))
+				{
+					return false;
+				}
+
+				if ($value !== '' && $value !== null)
+				{
+					return false;
+				}
+			}
+		}
+		else if ($value !== '' && $value !== null)
+		{
+			return false;
+		}
+		
+		return true;
+	}
+		
 
 	/**
 	 * Return the native value of an attibute.

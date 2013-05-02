@@ -1,3 +1,5 @@
+<?php $strRendersettings = ($this->settings)? 'settings' : 'view'; ?>
+
 <?php if (count($this->data)): /* display only if there is data. */ ?>
 
 <div class="layout_full">
@@ -8,7 +10,10 @@
 <?php foreach ($arrItem['attributes'] as $field => $strName): /* loop over all attributes. */ ?>
 <?php if (($strValue = $arrItem[$this->getFormat()][$field]) || ($strValue = $arrItem['text'][$field])): /* fetch the html5 value followed by the fallback to "text" as both are suitable. */ ?>
 <div class="field <?php echo $field; ?>">
-	<span class="label"><?php echo $strName; ?></span>: <span class="value"><?php echo $strValue; ?></span>
+	<?php if(!$this->$strRendersettings->get('hideLabels')): ?>
+		<span class="label"><?php echo $strName; ?></span>: 
+	<?php endif; ?>
+	<span class="value"><?php echo $strValue; ?></span>
 </div>
 <?php endif; ?>
 <?php endforeach; /* attribute loop */ ?>

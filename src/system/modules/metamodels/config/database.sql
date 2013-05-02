@@ -231,6 +231,9 @@ CREATE TABLE `tl_metamodel_rendersettings` (
 -- the template to use.
   `template` varchar(64) NOT NULL default '',
   `format` varchar(255) NOT NULL default '',
+-- special options for the template
+  `hideEmptyValues` char(1) NOT NULL default '',
+  `hideLabels` char(1) NOT NULL default '',
 -- the jumpTo page to use.
   `jumpTo` blob NULL,
   PRIMARY KEY  (`id`),

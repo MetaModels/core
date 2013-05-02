@@ -34,6 +34,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']               = arr
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']      = array('Language', 'The language for the jump to page.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page']          = array('Jump to page', 'The page to use for detail links.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter']        = array('Filter settings', 'The filter settings that define how the target (the reader/lister on the detail page) will identify it\'s matches.');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues']      = array('Hide empty values', 'Hide empty values in backend and frontend.');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']           = array('Hide labels', 'Hide all labels in backend and frontend.');
 
 /**
  * Buttons

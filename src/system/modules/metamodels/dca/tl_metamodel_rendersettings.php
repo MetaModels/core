@@ -110,6 +110,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		(
 			'title' => array('name', 'isdefault'),
 			'general' => array('template', 'format', 'jumpTo'),
+			'expert' => array('hideEmptyValues', 'hideLabels'),
 		),
 	),
 
@@ -129,6 +130,20 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class'=>'m12 w50 cbx')
+		),
+		'hideEmptyValues' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('tl_class'=>'w50')
+		),
+		'hideLabels' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels'],
+			'exclude'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array('tl_class'=>'w50')
 		),
 		'template' => array
 		(
