@@ -1,0 +1,34 @@
+{
+	"name":"metamodels/core",
+	"description":"MetaModels core",
+	"keywords":["contao", "metamodels", "core"],
+	"type":"contao-module",
+	"homepage":"http://now.metamodel.me/",
+	"license":"LGPL-3.0+",
+	"authors":[
+		{
+			"name":"Christian Schiffler",
+			"email":"c.schiffler@cyberspectrum.de",
+			"homepage":"http://www.cyberspectrum.de",
+			"role":"Developer"
+		}
+	],
+	"support":{
+		"email":"mail@metamodel.me",
+		"issues":"https://github.com/MetaModels/core/issues",
+		"wiki":"http://de.contaowiki.org/MetaModels",
+		"irc":"irc://irc.freenode.org/contao.mm",
+		"source":"https://github.com/MetaModels/core"
+	},
+	"require":{
+		"php":">=5.3",
+		"contao/core":"~2.11"
+	},
+	"extra":{
+		"contao": {
+			"symlinks":{
+				"src/system/modules/metamodels":"system/modules/metamodels"
+			}
+		}
+	}
+}
