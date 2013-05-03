@@ -63,8 +63,8 @@
 			"transifex": {
 				"project": "metamodels",
 				"prefix": "core-",
-				"languages-cto": "src/system/modules/metamodels/languages",
-				"languages-tx": ".tx"
+				"languages_cto": "src/system/modules/metamodels/languages",
+				"languages_tx": ".tx"
 			}
 		}
 	}
