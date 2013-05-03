@@ -329,6 +329,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 				'tl_class'          => 'clr m12',
 			)
 		),
+		'alwaysSave' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave'],
+			'exclude'               => true,
+			'inputType'             => 'checkbox',
+			'eval' => array
+			(
+				'tl_class'          => 'clr m12',
+			)
+		),
 		'filterable' => array
 		(
 			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['filterable'],

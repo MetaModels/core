@@ -240,12 +240,13 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 		$arrSettingNames = $this->getAttributeSettingNames();
 
 		$arrFieldDef['eval']['unique'] = $this->get('isunique') && in_array('isunique', $arrSettingNames);
-		$arrFieldDef['eval']['mandatory'] =
-			$arrFieldDef['eval']['unique'] || ($this->get('mandatory') && in_array('mandatory', $arrSettingNames));
+		$arrFieldDef['eval']['mandatory'] = $arrFieldDef['eval']['unique'] || ($this->get('mandatory') && in_array('mandatory', $arrSettingNames));
+		$arrFieldDef['eval']['alwaysSave'] = $arrFieldDef['eval']['alwaysSave'] || ($this->get('alwaysSave') && in_array('alwaysSave', $arrSettingNames));
 
 		foreach (array(
 			'tl_class',
 			'mandatory',
+			'alwaysSave',
 			'chosen',
 			'allowHtml',
 			'preserveTags',
@@ -285,7 +286,7 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 		if (in_array('sortable', $arrSettingNames) && $arrOverrides['sortable'])
 		{
 			$arrFieldDef['sorting'] = true;
-		}
+		}		
 		return $arrFieldDef;
 	}
 

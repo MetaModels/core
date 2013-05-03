@@ -94,6 +94,8 @@ CREATE TABLE `tl_metamodel_dcasetting` (
   `flag` int(4) unsigned NOT NULL default '0',
 -- mandatory flag
   `mandatory` char(1) NOT NULL default ''
+-- alwaysSave flag
+  `alwaysSave` char(1) NOT NULL default ''
 -- allow html in content.
   `allowHtml` char(1) NOT NULL default '',
 -- preserve html tags.
