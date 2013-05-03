@@ -24,4 +24,4 @@ $GLOBALS['TL_LANG']['MOD']['metamodels']         = array('MetaModels', 'The Meta
  */
 $GLOBALS['TL_LANG']['FMD']['metamodels']         = array('MetaModels', 'The MetaModels extension allows you to create own data models.');
 $GLOBALS['TL_LANG']['FMD']['metamodel_list']     = array('MetaModel list', 'Adds a list of MetaModel items to the page.');
-$GLOBALS['TL_LANG']['FMD']['metamodels_frontendfilter']  = array('MetaModels FE filter', 'Adds a filter for MetaModel list.');
+$GLOBALS['TL_LANG']['FMD']['metamodels_frontendfilter']  = array('MetaModel frontend filter', 'Adds a frontend filter for a MetaModel.');

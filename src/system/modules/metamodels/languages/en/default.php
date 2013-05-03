@@ -19,7 +19,7 @@
  */
 $GLOBALS['TL_LANG']['CTE']['metamodels']                              = 'MetaModel elements';
 $GLOBALS['TL_LANG']['CTE']['metamodel_content']                       = array('MetaModel list', 'Adds a list of MetaModel items to the article.');
-$GLOBALS['TL_LANG']['CTE']['metamodels_frontendfilter']               = array('MetaModels frontent filter','Implement a frontend filter for MetaModels.');
+$GLOBALS['TL_LANG']['CTE']['metamodels_frontendfilter']               = array('MetaModel frontend filter','Adds a frontend filter for a MetaModel.');
 
 /**
  * Miscellaneous
@@ -33,9 +33,9 @@ $GLOBALS['TL_LANG']['BRD']['metamodels']                              = 'MetaMod
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                     = 'Attributes of "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_rendersettings']                = 'All render setting of "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_rendersetting']                 = 'Render settings in "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodel_dca']                           = 'All palettes of "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting']                    = 'Palette settings in "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting_subpalette']         = 'Subpalette settings for "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_dca']                           = 'All input screens of "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting']                    = 'Input screens in "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting_subpalette']         = 'Sub areas for "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_filter']                        = 'All filter of "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_filtersetting']                 = 'Filter settings in "%s"';
 
@@ -65,7 +65,7 @@ $GLOBALS['TL_LANG']['ERR']['no_attribute_extension']                  = 'Please 
 $GLOBALS['TL_LANG']['ERR']['activate_extension']                      = 'Please activate the required extension "%s" (%s)';
 $GLOBALS['TL_LANG']['ERR']['install_extension']                       = 'Please install the required extension "%s" (%s)';
 $GLOBALS['TL_LANG']['ERR']['columnExists']                            = 'There is already an attribute with the given column name.';
-$GLOBALS['TL_LANG']['ERR']['no_palette']                              = 'Attempt to access the MetaModel "%s" without palette for current user %s.';
+$GLOBALS['TL_LANG']['ERR']['no_palette']                              = 'Attempt to access the MetaModel "%s" without input screen for current user %s.';
 $GLOBALS['TL_LANG']['ERR']['no_view']                                 = 'Attempt to access the MetaModel "%s" without view for user %s.';
 $GLOBALS['TL_LANG']['ERR']['invalidTableName']                        = 'The table name is invalid.';
 $GLOBALS['TL_LANG']['ERR']['upgrade_php_version']                     = 'The version of the PHP interpreter is too low, please upgrade to at least %s (you are currently running %s)';

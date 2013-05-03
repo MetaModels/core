@@ -278,7 +278,7 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 
 				$strLabel = $objAttribute->getName();
 				$strReturn = sprintf(
-					$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['row'],
+					'%s <strong>%s</strong> %s <em>[%s]</em> <span class="tl_class">%s</span>',
 					$strImage,
 					$strLabel ? $strLabel : $objAttribute->get('type'),
 					$arrRow['mandatory'] ? '*' : '',
@@ -304,7 +304,7 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
                 }
 
                 $strReturn = sprintf(
-                    $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legend_row'],
+	                '<div class="dca_palette">%s%s</div>',
                     $strLegend, $arrRow['legendhide'] ? ':hide' : ''
                 );
 
@@ -404,8 +404,8 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 						'tl_class' => '',
 						'subpalette' => (Input::getInstance()->get('subpaletteid')) ? Input::getInstance()->get('subpaletteid') : 0,
 					))->execute();
-					
-					// Get msg for adding at main palette or a subpalette 
+
+					// Get msg for adding at main palette or a subpalette
 					if (Input::getInstance()->get('subpaletteid'))
 					{
 						$strPartentAttributeName = Input::getInstance()->get('subpaletteid');
