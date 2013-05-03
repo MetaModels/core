@@ -19,7 +19,7 @@
  */
 $GLOBALS['TL_LANG']['CTE']['metamodels']                              = 'MetaModel elements';
 $GLOBALS['TL_LANG']['CTE']['metamodel_content']                       = array('MetaModel list', 'Adds a list of MetaModel items to the article.');
-$GLOBALS['TL_LANG']['CTE']['metamodels_frontendfilter']               = array('MetaModels FE filter','Implement a frontend filter for MetaModels.');
+$GLOBALS['TL_LANG']['CTE']['metamodels_frontendfilter']               = array('MetaModels frontent filter','Implement a frontend filter for MetaModels.');
 
 /**
  * Miscellaneous
