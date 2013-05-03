@@ -52,7 +52,13 @@ if (version_compare(VERSION, '3.0', '<'))
   $objCombiner->add('system/themes/'. $this->theme .'/hover.js');
   echo $objCombiner->getCombinedFile();
 ?>"></script>
+
+<?php if($this->strField == 'panelLayout'): ?>
+<script src="system/modules/metamodels/html/panelpicker.js"></script>
+<?php else: ?>
 <script src="system/modules/metamodels/html/stylepicker.js"></script>
+<?php endif ?>
+
 <!--[if lt IE 9]><script src="<?php echo TL_PLUGINS_URL; ?>plugins/html5shim/html5-<?php echo HTML5SHIM; ?>.js"></script><![endif]-->
 <script>
 parent.REQUEST_TOKEN = REQUEST_TOKEN;
