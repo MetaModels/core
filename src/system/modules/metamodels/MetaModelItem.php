@@ -84,7 +84,7 @@ class MetaModelItem implements IMetaModelItem
 		}
 		
 		// If "hideEmptyValues" is true and the raw is empty remove text and outputformat.
-		if($objSettings->get('hideEmptyValues') == true && $this->isEmptyValue($arrResult['raw']) == true)
+		if(!is_null($objSettings) && $objSettings->get('hideEmptyValues') == true && $this->isEmptyValue($arrResult['raw']) == true)
 		{
 			unset($arrResult[$strOutputFormat]);
 			unset($arrResult['text']);
