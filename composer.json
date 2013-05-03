@@ -50,10 +50,20 @@
 		"menatwork/contao-multicolumnwizard": ">=3.1.0",
 		"bit3/contao-meta-palettes": "~1.4"
 	},
+	"require-dev": {
+		"metamodels/php-coding-standard":"dev-master",
+		"cyberspectrum/contao-toolbox": "dev-master"
+	},
 	"extra":{
 		"contao": {
 			"symlinks":{
 				"src/system/modules/metamodels":"system/modules/metamodels"
+			},
+			"transifex": {
+				"project": "metamodels",
+				"prefix": "core-",
+				"languages-cto": "src/system/modules/metamodels/languages",
+				"languages-tx": ".tx"
 			}
 		}
 	}
