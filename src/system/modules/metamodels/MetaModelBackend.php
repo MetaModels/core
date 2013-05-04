@@ -189,7 +189,9 @@ class MetaModelBackend
 		}
 		catch (Exception $exc)
 		{
-			return;
+			// Note: do NOT use the logging prvided by class System here as that one logs into the DB
+			// which is pretty useless as the DB most likely was the one throwing the exception.
+			log_message('Exception in MetaModelBackend::buildBackendMenu() - ' . $exc->getMessage());
 		}
 	}
 }
