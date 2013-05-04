@@ -49,7 +49,8 @@
 		"contao-community-alliance/composer-installer": "dev-master",
 		"metamodels/dc_general": "*",
 		"menatwork/contao-multicolumnwizard": ">=3.1.0",
-		"bit3/contao-meta-palettes": "~1.4"
+		"bit3/contao-meta-palettes": "~1.4",
+		"discordier/justtextwidgets": ">=0.5"
 	},
 	"require-dev": {
 		"metamodels/php-coding-standard":"dev-master",
