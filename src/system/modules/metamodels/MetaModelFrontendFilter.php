@@ -101,6 +101,13 @@ class MetaModelFrontendFilter extends Frontend
 
 			if (strlen($strValue))
 			{
+				// Shift auto_item to the front.
+				if ($strName == 'auto_item')
+				{
+					$strFilterAction = '/' . $strValue . $strFilterAction;
+					continue;
+				}
+
 				$strFilterAction .= sprintf(($GLOBALS['TL_CONFIG']['disableAlias'] ? '&amp;%s=%s' : '/%s/%s'), $strName, urlencode($strValue));
 			}
 		}
