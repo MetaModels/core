@@ -193,6 +193,31 @@ implements IMetaModelAttributeTranslated
 	}
 
 	/**
+	 * Sorts the given array list by field value in the given direction.
+	 *
+	 * @param int[]  $arrIds       A list of Ids from the MetaModel table.
+	 *
+	 * @param string $strDirection The direction for sorting. either 'ASC' or 'DESC', as in plain SQL.
+	 *
+	 * @return int[] The sorted integer array.
+	 */
+	public function sortIds($arrIds, $strDirection)
+	{
+		$objDB = Database::getInstance();
+
+		$arrWhere = $this->getWhere($arrIds, $this->getMetaModel()->getActiveLanguage());
+
+		$strQuery = 'SELECT item_id FROM ' . $this->getValueTable() . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '');
+
+		$arrOptionizer = $this->getOptionizer();
+
+		$objValue = $objDB->prepare($strQuery . ' ORDER BY '.$arrOptionizer['value'] . ' ' . $strDirection)
+			->execute(($arrWhere ? $arrWhere['params'] : null));
+
+		return $objValue->fetchEach('item_id');
+	}
+
+	/**
 	 * {@inheritdoc}
 	 *
 	 * Fetch filter options from foreign table.
