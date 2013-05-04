@@ -62,7 +62,7 @@ interface IMetaModelAttributeTranslated extends IMetaModelAttribute
 	public function getTranslatedDataFor($arrIds, $strLangCode);
 
 	/**
-	 * Remove values for items in a certain lanugage.
+	 * Remove values for items in a certain language.
 	 *
 	 * @param int[]  $arrIds      the ids for which values shall be removed.
 	 *

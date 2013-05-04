@@ -25,6 +25,15 @@
  */
 interface IMetaModelAttribute
 {
+	/**
+	 * Retrieve the human readable name (or title) from the attribute.
+	 *
+	 * If the MetaModel is translated, the currently active language is used,
+	 * with properly falling back to the defined fallback language.
+	 *
+	 * @return string the human readable name
+	 */
+	public function getName();
 
 	/**
 	 * Queries the attribute for it's column name within it's MetaModel.
@@ -112,7 +121,7 @@ interface IMetaModelAttribute
 	 * Using the optional override parameter, settings known by this attribute can be overridden for the
 	 * generating of the output array.
 	 *
-	 * @param string[string] $arrOverrides The values to override, for a list of valid parameters, call
+	 * @param array $arrOverrides The values to override, for a list of valid parameters, call
 	 *                                     getAttributeSettingNames().
 	 *
 	 * @return array The DCA array to use as $GLOBALS['TL_DCA']['tablename']['fields']['attribute-name]
@@ -127,7 +136,7 @@ interface IMetaModelAttribute
 	 * Due to the fact that it calls getFieldDefinition() internally, the result at least contains
 	 * the sub array 'fields' with the information of this field's settings.
 	 *
-	 * @param string[string] $arrOverrides See documentation in getFieldDefinition() method.
+	 * @param array $arrOverrides See documentation in getFieldDefinition() method.
 	 *
 	 * @return array The DCA array to use as $GLOBALS['tablename']
 	 *
@@ -264,9 +273,7 @@ interface IMetaModelAttribute
 	 *
 	 * @param mixed $varValue     The value to use as upper end.
 	 *
-	 * @param bool  $blnInclusive If true, the passed value will be included, if false, it will be excluded.
-	 *
-	 * @return int[] The list of item ids of all items matching the condition.
+	 * @return array The list of item ids of all items matching the condition.
 	 */
 	public function filterNotEqual($varValue);
 

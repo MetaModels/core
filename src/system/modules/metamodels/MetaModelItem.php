@@ -60,7 +60,7 @@ class MetaModelItem implements IMetaModelItem
 	 *
 	 * @param IMetaModelRenderSettings $objSettings     The settings object to be applied.
 	 *
-	 * @return The parsed information for the given attribute.
+	 * @return array The parsed information for the given attribute.
 	 */
 	public function internalParseAttribute($objAttribute, $strOutputFormat, $objSettings)
 	{
@@ -82,29 +82,29 @@ class MetaModelItem implements IMetaModelItem
 			}
 			// TODO: Add parseValue HOOK?
 		}
-		
-		// If "hideEmptyValues" is true and the raw is empty remove text and outputformat.
+
+		// If "hideEmptyValues" is true and the raw is empty remove text and output format.
 		if(!is_null($objSettings) && $objSettings->get('hideEmptyValues') == true && $this->isEmptyValue($arrResult['raw']) == true)
 		{
 			unset($arrResult[$strOutputFormat]);
 			unset($arrResult['text']);
 		}
-		
+
 		return $arrResult;
 	}
 
 	/**
 	 * Check if a value is empty
-	 * 
+	 *
 	 * @param array $mixValue
-	 * 
+	 *
 	 * @return boolean True => empty, false => found a valid values
 	 */
 	protected function isEmptyValue($mixValue)
 	{
 		// Array check
 		if (is_array($mixValue))
-		{		
+		{
 			if(count($mixValue) == 0 || $this->isArrayEmpty($mixValue))
 			{
 				return true;
@@ -114,7 +114,7 @@ class MetaModelItem implements IMetaModelItem
 				return false;
 			}
 		}
-		
+
 		// Empty string
 		if ($mixValue === '')
 		{
@@ -131,17 +131,17 @@ class MetaModelItem implements IMetaModelItem
 	}
 
 	/**
-	 * Run through each level of an array and check if we have an empty value.
-	 * 
-	 * @param array $arrArray
-	 * 
+	 * Run through each level of an array and check if we have at least one empty value.
+	 *
+	 * @param array $arrArray The array to check.
+	 *
 	 * @return boolean True => empty, False => some values found.
 	 */
 	protected function isArrayEmpty($arrArray)
 	{
 		if (is_array($arrArray))
 		{
-			foreach ($arrArray as $key => $value)
+			foreach ($arrArray as $value)
 			{
 				if (is_array($value) && !$this->isArrayEmpty($value))
 				{
@@ -154,17 +154,16 @@ class MetaModelItem implements IMetaModelItem
 				}
 			}
 		}
-		else if ($value !== '' && $value !== null)
+		else if (($arrArray !== '') && ($arrArray !== null))
 		{
 			return false;
 		}
-		
+
 		return true;
 	}
-		
 
 	/**
-	 * Return the native value of an attibute.
+	 * Return the native value of an attribute.
 	 *
 	 * @param string $strAttributeName The name of the attribute.
 	 *
@@ -176,7 +175,7 @@ class MetaModelItem implements IMetaModelItem
 	}
 
 	/**
-	 * Set the native value of an Attibute.
+	 * Set the native value of an Attribute.
 	 *
 	 * @param string $strAttributeName The name of the attribute.
 	 *
@@ -259,7 +258,7 @@ class MetaModelItem implements IMetaModelItem
 	 *
 	 * The item itself is excluded from the return list.
 	 *
-	 * @param type $objFilter The additional filter settings to apply.
+	 * @param IMetaModelFilter $objFilter The additional filter settings to apply.
 	 *
 	 * @return null|IMetaModelItems
 	 */
@@ -398,6 +397,9 @@ class MetaModelItem implements IMetaModelItem
 		$strDesiredLanguage  = $this->getMetaModel()->getActiveLanguage();
 		$strFallbackLanguage = $this->getMetaModel()->getFallbackLanguage();
 
+		$intJumpTo         = 0;
+		$intFilterSettings = 0;
+
 		foreach ((array)$objSettings->get('jumpTo') as $arrJumpTo)
 		{
 			// If either desired language or fallback, keep the result.
@@ -423,6 +425,7 @@ class MetaModelItem implements IMetaModelItem
 		}
 
 		$arrJumpTo = array();
+		$strParams = '';
 
 		if ($intFilterSettings)
 		{

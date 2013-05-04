@@ -70,7 +70,7 @@ class MetaModel implements IMetaModel
 	/**
 	 * Adds an attribute to the internal list of attributes.
 	 *
-	 * @param IMetaModelAttribute the attribute instance to add.
+	 * @param IMetaModelAttribute $objAttribute The attribute instance to add.
 	 *
 	 * @return IMetaModel self for chaining
 	 */

@@ -24,7 +24,7 @@
 interface IMetaModelItem
 {
 	/**
-	 * Return the native value of an attibute.
+	 * Return the native value of an attribute.
 	 *
 	 * @param string $strAttributeName The name of the attribute.
 	 *
@@ -33,7 +33,7 @@ interface IMetaModelItem
 	public function get($strAttributeName);
 
 	/**
-	 * Set the native value of an attibute.
+	 * Set the native value of an attribute.
 	 *
 	 * @param string $strAttributeName The name of the attribute.
 	 *
@@ -44,7 +44,7 @@ interface IMetaModelItem
 	public function set($strAttributeName, $varValue);
 
 	/**
-	 * Fetch the meta model that repesents this item.
+	 * Fetch the meta model that represents this item.
 	 *
 	 * @return IMetaModel The instance.
 	 */
@@ -124,7 +124,7 @@ interface IMetaModelItem
 	/**
 	 * Returns a new item containing the same values as this item but no id.
 	 *
-	 * This is useful when creating new items that shall be based upon anothe item
+	 * This is useful when creating new items that shall be based upon another item
 	 *
 	 * @return IMetaModelItem the new copy.
 	 */
@@ -136,7 +136,7 @@ interface IMetaModelItem
 	 * Additionally, the item will be a variant child of this item.
 	 *
 	 * NOTE: if this item is not a variant base itself, this item will return a item
-	 * that is a child of this items variant base. i.e. excact clone.
+	 * that is a child of this items variant base. i.e. exact clone.
 	 *
 	 * @return IMetaModelItem the new copy.
 	 */

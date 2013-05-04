@@ -64,11 +64,13 @@ interface IMetaModelFilterSettings
 	/**
 	 * Retrieve a list of filter widgets for all registered parameters as form field arrays.
 	 *
-	 * @param array $arrFilterUrl  the current filter url.
+	 * @param array $arrFilterUrl       the current filter url.
 	 *
-	 * @param array $arrJumpTo     the selected jump to page to use for link generating.
+	 * @param array $arrJumpTo          the selected jump to page to use for link generating.
 	 *
-	 * @param bool  $blnAutoSubmit determines if the filters shall auto submit themselves.
+	 * @param bool  $blnAutoSubmit      determines if the filters shall auto submit themselves.
+	 *
+	 * @param bool  $blnHideClearFilter TODO: s.heimes add comment text for this parameter.
 	 *
 	 * @return array
 	 */
