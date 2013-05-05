@@ -94,8 +94,17 @@ class WidgetTags extends Widget
 
 	protected function generateOption($val, $count)
 	{
+		// If true we need another offset.
+		$intSub = $this->arrConfiguration['includeBlankOption'] ? -1 : 1;
+		
+		$strClass = $this->strName;
+		$strClass .= ($count == 0) ? ' first' : '';
+		$strClass .= ($count == count($this->options) - $intSub ) ? ' last' : '';
+		$strClass .= ($count % 2 == 1) ? ' even' : ' odd';
+		$strClass .= (strlen($this->strClass)) ? ' ' . $this->strClass : '';
+
 		return sprintf('<span class="%1$s opt_%2$s"><input type="checkbox" name="%1$s[]" id="opt_%3$s" class="checkbox" value="%4$s"%5$s%6$s <label id="lbl_%3$s" for="opt_%3$s">%7$s</label></span>',
-			$this->strName,
+			$strClass,
 			$count,
 			$this->strName.'_'.$count,
 			$val['value'],
