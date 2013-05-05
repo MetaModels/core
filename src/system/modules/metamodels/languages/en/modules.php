@@ -18,6 +18,7 @@
  * Back end modules
  */
 $GLOBALS['TL_LANG']['MOD']['metamodels']         = array('MetaModels', 'The MetaModels extension allows you to create own data models.');
+$GLOBALS['TL_LANG']['MOD']['support_for_mm']     = array('MetaModels support', 'Support information for the MetaModels extension.');
 
 /**
  * Front end modules
