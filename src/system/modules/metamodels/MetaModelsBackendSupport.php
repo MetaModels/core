@@ -34,6 +34,7 @@ class MetaModelsBackendSupport extends BackendModule
 	 */
 	protected function compile()
 	{
+		$GLOBALS['TL_CSS'][] = 'system/modules/metamodels/html/style.css';
 		// TODO: if we need some information in the Template, add it here.
 		// $this->Template->some_information = 'pretty important data';
 	}
