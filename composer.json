@@ -46,9 +46,9 @@
 	"require":{
 		"php":">=5.3",
 		"contao/core":"~2.11",
-		"contao-community-alliance/composer-installer": "dev-master",
-		"metamodels/dc_general": "*",
-		"menatwork/contao-multicolumnwizard": ">=3.1.0",
+		"contao-community-alliance/composer-installer": "*",
+		"metamodels/dc_general": "dev-master@dev",
+		"menatwork/contao-multicolumnwizard": "3.1.*@dev",
 		"bit3/contao-meta-palettes": "~1.4",
 		"discordier/justtextwidgets": ">=0.5"
 	},
@@ -67,6 +67,12 @@
 				"languages_cto": "src/system/modules/metamodels/languages",
 				"languages_tx": ".tx"
 			}
+		},
+		"extra": {
+			"branch-alias": {
+				"dev-master": "1.0.x-dev"
+			}
 		}
+
 	}
 }
