@@ -23,7 +23,7 @@ array_insert($GLOBALS['BE_MOD'], array_search('system', array_keys($GLOBALS['BE_
 	(
 		'metamodels' => array
 		(
-			'tables'				=> array
+			'tables' => array
 			(
 				'tl_metamodel',
 				'tl_metamodel_attribute',
@@ -35,15 +35,15 @@ array_insert($GLOBALS['BE_MOD'], array_search('system', array_keys($GLOBALS['BE_
 				'tl_metamodel_dcasetting',
 				'tl_metamodel_dca_combine'
 			),
-			'icon'					=> 'system/modules/metamodels/html/logo.png',
-			'dca_addall'			=> array('TableMetaModelDcaSetting', 'addAll'),
-			'rendersetting_addall'	=> array('TableMetaModelRenderSetting', 'addAll'),
-			'callback'				=> 'MetaModelBackendModule'
+			'icon'                  => 'system/modules/metamodels/html/logo.png',
+			'dca_addall'            => array('TableMetaModelDcaSetting', 'addAll'),
+			'rendersetting_addall'  => array('TableMetaModelRenderSetting', 'addAll'),
+			'callback'              => 'MetaModelBackendModule'
 		),
 		'support_for_mm' => array
 		(
-			'icon'					=> 'system/modules/metamodels/html/support_icon.png',
-			'callback'				=> 'MetaModelsBackendSupport'
+			'icon'                  => 'system/modules/metamodels/html/support.png',
+			'callback'              => 'MetaModelsBackendSupport'
 		)
 	),
 	// Append all previous data here.

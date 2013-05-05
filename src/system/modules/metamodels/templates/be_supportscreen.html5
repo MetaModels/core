@@ -1,4 +1,31 @@
 <div class="tl_message mm_support_display">
-<a href="http://now.metamodel.me/" style="display: block;width: 169px;height: 86px;text-indent: -99999px;background: #fff url(http://now.metamodel.me/tl_files/standard/layout/images/metamodels.png) no-repeat center center;">MetaModels</a>
-This space has been intentionally been left empty to be filled later.
+
+<a class="logo" <?php echo LINK_NEW_WINDOW; ?> href="http://now.metamodel.me/">MetaModels</a>
+
+<div class="colset">
+
+<h1><?php echo $GLOBALS['TL_LANG']['MSC']['metamodels_help']; ?></h1>
+
+<div class="left">
+	<p><strong>Christian Schiffler</strong><br />
+	KSK Tübingen<br />
+	BLZ: 641 500 20<br />
+	KTO: 157 353 6<br /><br />
+	IBAN: DE24 6415 0020 0001 5735 36<br />
+	SWIFT-BIC: SOLADES1TUB<br /><br />
+	Purpose: MetaModels</p>
+
+	<form target="_top" method="post" action="https://www.paypal.com/cgi-bin/webscr"><input type="hidden" value="_donations" name="cmd"><input type="hidden" value="c.schiffler@cyberspectrum.de" name="business"><input type="hidden" value="GB" name="lc"><input type="hidden" value="MetaModels" name="item_name"><input type="hidden" value="0" name="no_note"><input type="hidden" value="EUR" name="currency_code"><input type="hidden" value="PP-DonationsBF:btn_donate_LG.gif:NonHostedGuest" name="bn"><input border="0" type="image" alt="" name="submit" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif"></form>
+</div>
+
+<div class="right">
+	<p>As the main developers of this project code for a living, all non paid work on MetaModels has to be in their very sparse free time. By donating money to the project, you give them the possibility to work on MetaModels during their work hours and therefore speed up development significantly. <br /><br />We guarantee you, all money will be spent on this project solely. If you have some specific requirements and/or features requests, you can also hire yourself a member from the team who will implement it for you. <br /><br />Please also have a look at the <a <?php echo LINK_NEW_WINDOW; ?> href="http://now.metamodel.me/en/supporters">fine people</a> already listed as sponsors. Supporting this project will put you on this list as well and you may feel proud to have supported such a fine open source project. <br /><br /><a <?php echo LINK_NEW_WINDOW; ?> href="http://now.metamodel.me/en/supporters/donate">More informations</a></p>
+</div>
+
+</div>
+
+<h1><?php echo $GLOBALS['TL_LANG']['MSC']['metamodels_contributor']; ?></h1>
+
+<p>cgpro, christian-kolb, cogizz, folkfreund, gioni, hendrik-d, jantheofel, katgirl, kikmedia, kryptychon, Kyros, MacKP, psren, Shoekrates, tim-bec, xat, xchs, Zeromax</p>
+
 </div>
