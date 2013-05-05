@@ -65,6 +65,10 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 		// Remove empty values.
 		foreach ($arrOptions as $mixOptionKey => $mixOptions)
 		{
+			// Remove html/php tags.
+			$mixOptions = strip_tags($mixOptions);
+			$mixOptions = trim($mixOptions);
+
 			if($mixOptions === '' ||$mixOptions === null)
 			{
 				unset($arrOptions[$mixOptionKey]);
