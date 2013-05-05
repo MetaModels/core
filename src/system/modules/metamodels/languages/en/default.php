@@ -73,9 +73,9 @@ $GLOBALS['TL_LANG']['ERR']['upgrade_php_version']                     = 'The ver
 /**
  * Labels
  */
-$GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']            = 'filter';
-$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter']     = 'no filtering';
-$GLOBALS['TL_LANG']['metamodels_frontendfilter']['select_all']        = 'select all';
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']            = 'Filter';
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter']     = 'No filtering';
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['select_all']        = 'Select all';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['action_add']        = '+';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['action_remove']     = '-';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations']   = ' (No matching combinations found.)';
