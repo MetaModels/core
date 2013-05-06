@@ -10,7 +10,7 @@
 <?php if (($strValue = $arrItem[$this->getFormat()][$field]) || ($strValue = $arrItem['text'][$field])): /* fetch the html5 value followed by the fallback to "text" as both are suitable. */ ?>
 <div class="field <?php echo $field; ?>">
 	<?php if(!$this->$strRendersettings->get('hideLabels')): ?>
-		<span class="label"><?php echo $strName; ?></span>: 
+		<span class="label"><?php echo $strName; ?>: </span>
 	<?php endif; ?>
 	<span class="value"><?php echo $strValue; ?></span>
 </div>
