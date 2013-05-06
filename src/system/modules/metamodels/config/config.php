@@ -17,7 +17,7 @@
 // preserve values by extensions but insert as first entry after 'system'
 $arrOld = (array)$GLOBALS['BE_MOD']['metamodels'];
 unset($GLOBALS['BE_MOD']['metamodels']);
-array_insert($GLOBALS['BE_MOD'], array_search('system', array_keys($GLOBALS['BE_MOD']))+1, array
+array_insert($GLOBALS['BE_MOD'], array_search('accounts', array_keys($GLOBALS['BE_MOD']))+1, array
 (
 	'metamodels' => array_replace_recursive(array
 	(
