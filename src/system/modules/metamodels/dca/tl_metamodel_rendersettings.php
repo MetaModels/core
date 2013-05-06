@@ -188,7 +188,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 						'exclude'                  => true,
 						'inputType'                => 'text',
 						'wizard'                   => array(array('tl_metamodel_rendersettings', 'pagePicker')),
-						'eval'                     => array('style'=>'width:200px;')
+						'eval'                     => array('style'=>'width:317px;')
 					),
 					'filter' => array(
 						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter'],
