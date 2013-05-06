@@ -84,3 +84,9 @@ $GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations']   = ' (No ma
  * Filter setting parameters.
  */
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'] = array('Filter value for attribute "%s"', '');
+
+/**
+ * Support
+ */
+$GLOBALS['TL_LANG']['MSC']['metamodels_help']                         = 'We are calling for your help!';
+$GLOBALS['TL_LANG']['MSC']['metamodels_contributor']                  = 'Thanks to these users for tickets, suggestions and translations';
