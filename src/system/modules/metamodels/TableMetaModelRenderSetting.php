@@ -108,10 +108,10 @@ class TableMetaModelRenderSetting extends TableMetaModelHelper
 				->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')
 				->execute($objDC->getCurrentModel()->getProperty('pid'));
 
-			$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
+			$this->objMetaModel = MetaModelFactory::byId($this->objSetting->pid);
 		}
-
-		if ($this->Input->get('act'))
+		// TODO: I guess the whole block here is not needed anymore since we are using DC_General. Check it.
+		elseif ($this->Input->get('act'))
 		{
 			// act present, but we have an id
 			switch ($this->Input->get('act'))
@@ -164,6 +164,7 @@ class TableMetaModelRenderSetting extends TableMetaModelHelper
 	{
 		$this->objectsFromUrl($objDC);
 		$arrResult = array();
+
 		if (!$this->objMetaModel)
 		{
 			return;
