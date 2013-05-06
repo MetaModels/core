@@ -40,7 +40,7 @@ array_insert($GLOBALS['BE_MOD'], array_search('system', array_keys($GLOBALS['BE_
 			'rendersetting_addall'  => array('TableMetaModelRenderSetting', 'addAll'),
 			'callback'              => 'MetaModelBackendModule'
 		),
-		'support_for_mm' => array
+		'support_metamodels' => array
 		(
 			'icon'                  => 'system/modules/metamodels/html/support.png',
 			'callback'              => 'MetaModelsBackendSupport'
