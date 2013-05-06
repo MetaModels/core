@@ -103,14 +103,15 @@ class WidgetTags extends Widget
 		$strClass .= ($count % 2 == 1) ? ' even' : ' odd';
 		$strClass .= (strlen($this->strClass)) ? ' ' . $this->strClass : '';
 
-		return sprintf('<span class="%1$s opt_%2$s"><input type="checkbox" name="%1$s[]" id="opt_%3$s" class="checkbox" value="%4$s"%5$s%6$s <label id="lbl_%3$s" for="opt_%3$s">%7$s</label></span>',
-			$strClass,
-			$count,
-			$this->strName.'_'.$count,
-			$val['value'],
-			(is_array($this->varValue) ? (in_array($val['value'],$this->varValue) ? ' checked="checked"' : ''):''),
-			$this->getAttributes() . $this->strTagEnding,
-			$val['label']
+		return sprintf('<span class="%1$s opt_%2$s"><input type="checkbox" name="%8$s[]" id="opt_%3$s" class="checkbox" value="%4$s"%5$s%6$s <label id="lbl_%3$s" for="opt_%3$s">%7$s</label></span>',
+			$strClass, // 1
+			$count, // 2
+			$this->strName.'_'.$count, // 3
+			$val['value'], // 4
+			(is_array($this->varValue) ? (in_array($val['value'],$this->varValue) ? ' checked="checked"' : ''):''), // 5
+			$this->getAttributes() . $this->strTagEnding, // 6
+			$val['label'], // 7
+			$this->strName // 8
 		);
 	}
 
