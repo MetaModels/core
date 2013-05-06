@@ -183,7 +183,7 @@ class MetaModelBackendModule extends BackendModule
 
 	protected function performNormal()
 	{
-		$arrModule = $GLOBALS['BE_MOD']['system']['metamodels'];
+		$arrModule = $GLOBALS['BE_MOD']['metamodels']['metamodels'];
 		// Custom action (if key is not defined in config.php the default action will be called)
 		if ($this->Input->get('key') && isset($arrModule[$this->Input->get('key')]))
 		{
