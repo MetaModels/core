@@ -230,7 +230,7 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 	{
 		if (!($this->get('attr_id') && ($objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id')))))
 		{
-			return;
+			return array();
 		}
 		return array($objAttribute->getColName());
 	}
