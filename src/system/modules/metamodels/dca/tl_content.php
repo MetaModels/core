@@ -22,8 +22,9 @@ $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('TableCo
 /**
  * Palettes
  */
-$GLOBALS['TL_DCA']['tl_content']['palettes']['metamodel_content'] = '{title_legend},name,headline,type;{mm_config_legend},metamodel,perPage,metamodel_use_limit;{mm_filter_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_filtering,metamodel_filterparams;{mm_rendering},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;{protected_legend:hide},protected;{expert_legend:hide},metamodel_donotindex,guests,cssID,space';
-$GLOBALS['TL_DCA']['tl_content']['palettes']['metamodels_frontendfilter'] = '{title_legend},name,headline,type;{mm_filter_legend},metamodel_jumpTo,metamodel,metamodel_filtering,metamodel_fef_template,metamodel_fef_params,metamodel_fef_autosubmit,metamodel_fef_hideclearfilter;{protected_legend:hide},protected;{expert_legend:hide},guests,invisible,cssID,space';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['metamodel_content']           = '{title_legend},name,headline,type;{mm_config_legend},metamodel,perPage,metamodel_use_limit;{mm_filter_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_filtering,metamodel_filterparams;{mm_rendering},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;{protected_legend:hide},protected;{expert_legend:hide},metamodel_donotindex,guests,cssID,space';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['metamodels_frontendfilter']   = '{title_legend},name,headline,type;{mm_filter_legend},metamodel_jumpTo,metamodel,metamodel_filtering,metamodel_fef_template,metamodel_fef_params,metamodel_fef_autosubmit,metamodel_fef_hideclearfilter;{protected_legend:hide},protected;{expert_legend:hide},guests,invisible,cssID,space';
+$GLOBALS['TL_DCA']['tl_content']['palettes']['metamodels_frontendclearall'] = '{title_legend},name,headline,type;{mm_filter_legend},metamodel_fef_template;{protected_legend:hide},protected;{expert_legend:hide},guests,invisible,cssID,space';
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_limit';
 
