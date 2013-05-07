@@ -79,12 +79,6 @@ class ContentMetaModelFrontendClearAll extends ContentElement
 			$arrGetParameters[$mixGetKey] = $this->Input->get($mixGetKey);
 		}
 		
-		var_dump((is_array($GLOBALS['MM_FILTER_PARAMS']) && count($GLOBALS['MM_FILTER_PARAMS']) != 0) ? true : false);
-		var_dump(is_array($GLOBALS['MM_FILTER_PARAMS']));
-		var_dump(count($GLOBALS['MM_FILTER_PARAMS']));
-		var_dump($GLOBALS['MM_FILTER_PARAMS']);
-		var_dump($blnActiveParam);
-		
 		// Check if we have filter and if we have active params
 		$this->Template->active      = (is_array($GLOBALS['MM_FILTER_PARAMS']) && count($GLOBALS['MM_FILTER_PARAMS']) != 0) ? true : false;
 		$this->Template->activeParam = $blnActiveParam;
