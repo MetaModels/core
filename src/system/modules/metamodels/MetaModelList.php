@@ -442,8 +442,37 @@ class MetaModelList extends Controller
 	 */
 	protected function getAttributeNames()
 	{
-		// TODO: need a way to determine the names from the filtersetting used in the view here.
-		return $this->objView->getSettingNames();
+		$arrAttributes = $this->objView->getSettingNames();
+
+		// Get the right jumpto.
+		$strDesiredLanguage  = $this->getMetaModel()->getActiveLanguage();
+		$strFallbackLanguage = $this->getMetaModel()->getFallbackLanguage();
+
+		$intFilterSettings = 0;
+
+		foreach ((array)$this->getView()->get('jumpTo') as $arrJumpTo)
+		{
+			// If either desired language or fallback, keep the result.
+			if (!$this->getMetaModel()->isTranslated()
+				|| $arrJumpTo['langcode'] == $strDesiredLanguage
+				|| $arrJumpTo['langcode'] == $strFallbackLanguage)
+			{
+				$intFilterSettings = $arrJumpTo['filter'];
+				// If the desired language, break. Otherwise try to get the desired one until all have been evaluated.
+				if ($strDesiredLanguage == $arrJumpTo['langcode'])
+				{
+					break;
+				}
+			}
+		}
+
+		if ($intFilterSettings)
+		{
+			$objFilterSettings = MetaModelFilterSettingsFactory::byId($intFilterSettings);
+			$arrAttributes = array_merge($objFilterSettings->getReferencedAttributes(), $arrAttributes);
+		}
+
+		return $arrAttributes;
 	}
 
 	/**
