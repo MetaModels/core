@@ -238,6 +238,65 @@ class MetaModelFrontendFilter extends Frontend
 			'submit'     => ($blnAutoSubmit ? '' : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit'])
 		);
 	}
+	
+	/**
+	 * Add the "clear all Filter"
+	 * 
+	 * @param string $strContent
+	 * @param string $strTemplate
+	 * @return string
+	 */
+	public function generateClearAll($strContent, $strTemplate)
+	{
+		if ($strTemplate == 'fe_page')
+		{
+			if (preg_match_all('#\[\[\[metamodelfrontendfilterclearall::(ce|mod)::([^\]]*)\]\]\]#', $strContent, $arrMatches))
+			{
+				for($i = 0; $i < count($arrMatches); $i = $i + 3)
+				{
+					switch ($arrMatches[$i + 1][0])
+					{
+						case 'ce':
+							$objDbResult = Database::getInstance()
+								->prepare('SELECT * FROM tl_content WHERE id=?')
+								->execute($arrMatches[$i + 2][0]);
+							
+							// Check if we have a ce element.
+							if($objDbResult->numRows == 0)
+							{
+								$strContent = str_replace($arrMatches[$i][0], '', $strContent);
+								break;
+							}	
+							
+							// Get instance and call generate function.
+							$objCE = new ContentMetaModelFrontendClearAll($objDbResult);
+							$strContent = str_replace($arrMatches[$i][0], $objCE->generateReal(), $strContent);							
+							break;
+							
+						case 'mod':
+							$objDbResult = Database::getInstance()
+								->prepare('SELECT * FROM tl_module WHERE id=?')
+								->execute($arrMatches[$i + 2]);
+							
+							// Check if we have a mod element.
+							if($objDbResult->numRows == 0)
+							{
+								$strContent = str_replace($arrMatches[$i][0], '', $strContent);
+								break;
+							}					
+							
+							// Get instance and call generate function.
+							$objCE = new ContentMetaModelFrontendClearAll($objDbResult);							
+							$strContent = str_replace($arrMatches[$i][0], $objCE->generateReal(), $strContent);							
+							break;
+					}
+				}
+			}
+		}
+
+		return $strContent;
+	}
+
 }
 
 ?>
