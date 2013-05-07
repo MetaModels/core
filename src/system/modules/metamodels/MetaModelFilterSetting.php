@@ -368,5 +368,15 @@ abstract class MetaModelFilterSetting implements IMetaModelFilterSetting
 	{
 		return array();
 	}
+
+	/**
+	 * Retrieve a list of all referenced attributes within the filter setting.
+	 *
+	 * @return array
+	 */
+	public function getReferencedAttributes()
+	{
+		return array();
+	}
 }
 

@@ -61,7 +61,7 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 			$this->get('onlypossible') ? $arrIds : NULL,
 			(bool)$this->get('onlyused')
 		);
-		
+
 		// Remove empty values.
 		foreach ($arrOptions as $mixOptionKey => $mixOptions)
 		{
@@ -158,7 +158,7 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 
 		$objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
 		$arrOptions = $objAttribute->getFilterOptions(NULL, true);
-		
+
 		return array(
 			$this->getParamName() => array
 			(
@@ -221,6 +221,18 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 		(
 			$this->getParamName() => $this->prepareFrontendFilterWidget($arrWidget, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit)
 		);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getReferencedAttributes()
+	{
+		if (!($this->get('attr_id') && ($objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id')))
+		{
+			return;
+		}
+		return array($objAttribute->getColName());
 	}
 }
 

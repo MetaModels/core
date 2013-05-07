@@ -89,11 +89,18 @@ interface IMetaModelFilterSetting
 	 * @param array $arrJumpTo     The jumpTo page (array, row data from tl_page).
 	 *
 	 * @param bool  $blnAutoSubmit Tells wheter the filter shall perform auto submitting or not.
-	 * 
+	 *
 	 * @param bool $$blnHideClearFilter Tells whether the filter shall hide the "no Filter" value
 	 *
 	 * @return array
 	 */
 	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit, $blnHideClearFilter);
+
+	/**
+	 * Retrieve a list of all referenced attributes within the filter setting.
+	 *
+	 * @return array
+	 */
+	public function getReferencedAttributes();
 }
 

@@ -208,5 +208,21 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 
 		return $arrParams;
 	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getReferencedAttributes()
+	{
+		$arrAttributes = array();
+
+		foreach ($this->arrSettings as $objSetting)
+		{
+			$arrAttributes = array_merge($arrAttributes, $objSetting->getReferencedAttributes());
+		}
+
+		return $arrAttributes;
+	}
+
 }
 
