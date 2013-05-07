@@ -15,24 +15,24 @@
  */
 
 /**
- * Content element clearing the FE-filter
+ * FE-module for FE-filtering
  *
  * @package	   MetaModels
  * @subpackage FrontendClearAll
  * @author     Stefan Heimes <cms@men-at-work.de>
  */
-class ContentMetaModelFrontendClearAll extends ContentElement
+class ModuleMetaModelFrontendClearAll extends Module
 {
+
 	/**
-	 * Template.
-	 *
+	 * Template
 	 * @var string
 	 */
-	protected $strTemplate = 'mm_filter_clearall';
-	
+	protected $strTemplate = 'mm_filter_default';
+
+
 	/**
-	 * Display a wildcard in the back end.
-	 *
+	 * Display a wildcard in the back end
 	 * @return string
 	 */
 	public function generate()
@@ -41,31 +41,33 @@ class ContentMetaModelFrontendClearAll extends ContentElement
 		{
 			$objTemplate = new BackendTemplate('be_wildcard');
 
-			$objTemplate->wildcard = '### METAMODELS FE-CLEAR ALL ###';
-			$objTemplate->title    = $this->headline;
+			$objTemplate->wildcard = '### METAMODELS FE-FILTERBLOCK ###';
+			$objTemplate->title = $this->headline;
+			$objTemplate->id = $this->id;
+			$objTemplate->link = $this->title;
+			$objTemplate->href = 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id=' . $this->id;
 
 			return $objTemplate->parse();
 		}
 
-		// Get template if configured.
+		// get template
 		if ($this->metamodel_fef_template)
 		{
 			$this->strTemplate = $this->metamodel_fef_template;
 		}
 
-		return sprintf('[[[metamodelfrontendfilterclearall::ce::%s]]]', $this->id);
+		return sprintf('[[[metamodelfrontendfilterclearall::mod::%s]]]', $this->id);
 	}
 
+
 	/**
-	 * Generate the content element.
-	 *
-	 * @return void
+	 * Generate module
 	 */
 	protected function compile()
 	{
 		$blnActiveParam   = false;
 		$arrPage          = $GLOBALS['objPage']->fetchAllAssoc();
-		$arrGetParameters = array();			
+		$arrGetParameters = array();
 
 		// Skip filter params.
 		foreach (array_keys($_GET) as $mixGetKey)
@@ -78,21 +80,15 @@ class ContentMetaModelFrontendClearAll extends ContentElement
 
 			$arrGetParameters[$mixGetKey] = $this->Input->get($mixGetKey);
 		}
-		
-		var_dump((is_array($GLOBALS['MM_FILTER_PARAMS']) && count($GLOBALS['MM_FILTER_PARAMS']) != 0) ? true : false);
-		var_dump(is_array($GLOBALS['MM_FILTER_PARAMS']));
-		var_dump(count($GLOBALS['MM_FILTER_PARAMS']));
-		var_dump($GLOBALS['MM_FILTER_PARAMS']);
-		var_dump($blnActiveParam);
-		
-		// Check if we have filter and if we have active params
-		$this->Template->active      = (is_array($GLOBALS['MM_FILTER_PARAMS']) && count($GLOBALS['MM_FILTER_PARAMS']) != 0) ? true : false;
-		$this->Template->activeParam = $blnActiveParam;
-		
-		// Build FE url.
-		$this->Template->href = $this->generateFrontendUrl($arrPage[0], $this->getJumpToUrl($arrGetParameters));		
-	}
 
+		// Check if we have filter and if we have active params
+		$this->Template->active		 = (!is_array($GLOBALS['MM_FILTER_PARAMS']) || count($GLOBALS['MM_FILTER_PARAMS']) == 0) ? false : true;
+		$this->Template->activeParam = $blnActiveParam;
+
+		// Build FE url.
+		$this->Template->href = $this->generateFrontendUrl($arrPage[0], $this->getJumpToUrl($arrGetParameters));
+	}
+	
 	public function generateReal()
 	{
 		return parent::generate();
@@ -140,5 +136,5 @@ class ContentMetaModelFrontendClearAll extends ContentElement
 		}
 		return $strFilterAction;
 	}
-
 }
+

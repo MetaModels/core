@@ -146,8 +146,9 @@ if (TL_MODE=='BE')
 
 array_insert($GLOBALS['FE_MOD']['metamodels'], 9, array
 (
-	'metamodel_list'            => 'ModuleMetaModelList',
-	'metamodels_frontendfilter' => 'ModuleMetaModelFrontendFilter'
+	'metamodel_list'              => 'ModuleMetaModelList',
+	'metamodels_frontendfilter'   => 'ModuleMetaModelFrontendFilter',
+	'metamodels_frontendclearall' => 'ModuleMetaModelFrontendClearAll'
 )
 );
 
