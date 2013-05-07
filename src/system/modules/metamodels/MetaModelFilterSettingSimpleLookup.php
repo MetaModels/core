@@ -197,6 +197,8 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 		}
 
 		$objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
+		
+		$GLOBALS['MM_FILTER_PARAMS'][] = $this->getParamName();
 
 		$arrWidget = array(
 				'label'     => array(
