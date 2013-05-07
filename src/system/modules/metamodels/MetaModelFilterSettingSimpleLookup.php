@@ -228,7 +228,7 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 	 */
 	public function getReferencedAttributes()
 	{
-		if (!($this->get('attr_id') && ($objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id')))
+		if (!($this->get('attr_id') && ($objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id')))))
 		{
 			return;
 		}
