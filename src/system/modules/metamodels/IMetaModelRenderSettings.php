@@ -48,16 +48,16 @@ interface IMetaModelRenderSettings
 	 *
 	 * @param string $strAttributeName The name of the attribute.
 	 *
-	 * @return object|null An object or null if the information is not available.
+	 * @return IMetaModelRenderSettingAttribute|null An object or null if the information is not available.
 	 */
 	public function getSetting($strAttributeName);
 
 	/**
 	 * Set the render information for an attribute.
 	 *
-	 * @param string $strAttributeName The name of the attribute.
+	 * @param string                           $strAttributeName The name of the attribute.
 	 *
-	 * @param object $objSetting       The object containing all the information.
+	 * @param IMetaModelRenderSettingAttribute $objSetting       The object containing all the information.
 	 *
 	 * @return IMetaModelRenderSettings The instance itself for chaining.
 	 */
@@ -69,5 +69,21 @@ interface IMetaModelRenderSettings
 	 * @return string[]
 	 */
 	public function getSettingNames();
+
+	/**
+	 * Retrieve the jump to information from the setting.
+	 *
+	 * @return array|null The jump to information or null if none has been set.
+	 */
+	public function getJumpTo();
+
+	/**
+	 * Set the jump to information in the settings object.
+	 *
+	 * @param mixed  $varSetting The value to use.
+	 *
+	 * @return IMetaModelRenderSettingAttribute The setting itself.
+	 */
+	public function setJumpTo($varSetting);
 }
 
