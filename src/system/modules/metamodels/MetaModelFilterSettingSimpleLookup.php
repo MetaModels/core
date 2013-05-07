@@ -207,7 +207,7 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 				'inputType'    => 'select',
 				'options' => $this->getParameterFilterOptions($objAttribute, $arrIds),
 				'eval' => array(
-					'includeBlankOption' => ($this->get('blankoption') ? true : false),
+					'includeBlankOption' => ($this->get('blankoption') && !$blnHideClearFilter ? true : false),
 					'blankOptionLabel'   => &$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'],
 					'colname'            => $objAttribute->getColname(),
 					'urlparam'           => $this->getParamName(),
