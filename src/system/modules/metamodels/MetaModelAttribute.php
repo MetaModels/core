@@ -286,7 +286,7 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 		if (in_array('sortable', $arrSettingNames) && $arrOverrides['sortable'])
 		{
 			$arrFieldDef['sorting'] = true;
-		}		
+		}
 		return $arrFieldDef;
 	}
 
@@ -331,13 +331,12 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	 */
 	public function getDefaultRenderSettings()
 	{
-		$objSetting = (object)array
+		$objSetting = new MetaModelRenderSettingAttribute(array
 		(
 			'template' => 'mm_attr_' . $this->get('type')
-		);
+		));
 		return $objSetting;
 	}
-
 
 	/**
 	 * {@inheritdoc}
@@ -348,9 +347,9 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 			'raw' => $arrRowData[$this->getColName()],
 		);
 
-		if($objSettings && $objSettings->template)
+		if($objSettings && $objSettings->get('template'))
 		{
-			$strTemplate = $objSettings->template;
+			$strTemplate = $objSettings->get('template');
 
 			$objTemplate = new MetaModelTemplate($strTemplate);
 
@@ -368,7 +367,7 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 			try {
 				$arrResult['text'] = $objTemplate->parse('text', true);
 			} catch (Exception $e) {
-				$objSettingsFallback = $this->getDefaultRenderSettings();
+				$objSettingsFallback = $this->getDefaultRenderSettings()->setParent($objSettings->getParent());
 
 				$objTemplate = new MetaModelTemplate($objSettingsFallback->template);
 				$this->prepareTemplate($objTemplate, $arrRowData, $objSettingsFallback);

@@ -38,6 +38,13 @@ class MetaModelRenderSettings implements IMetaModelRenderSettings
 	protected $arrSettings = array();
 
 	/**
+	 * The jump to information buffered in this setting.
+	 *
+	 * @var array
+	 */
+	protected $arrJumpTo;
+
+	/**
 	 * Create a new instance.
 	 *
 	 * @param array $arrInformation The array that holds all base information for the new instance.
@@ -82,7 +89,7 @@ class MetaModelRenderSettings implements IMetaModelRenderSettings
 	 *
 	 * @param string $strAttributeName The name of the attribute.
 	 *
-	 * @return object|null An object or null if the information is not available.
+	 * @return IMetaModelRenderSettingAttribute|null An object or null if the information is not available.
 	 */
 	public function getSetting($strAttributeName)
 	{
@@ -92,9 +99,9 @@ class MetaModelRenderSettings implements IMetaModelRenderSettings
 	/**
 	 * Set the render information for an attribute.
 	 *
-	 * @param string $strAttributeName The name of the attribute.
+	 * @param string                           $strAttributeName The name of the attribute.
 	 *
-	 * @param object $objSetting       The object containing all the information.
+	 * @param IMetaModelRenderSettingAttribute $objSetting       The object containing all the information.
 	 *
 	 * @return IMetaModelRenderSettings The instance itself for chaining.
 	 */
@@ -102,7 +109,7 @@ class MetaModelRenderSettings implements IMetaModelRenderSettings
 	{
 		if ($objSetting)
 		{
-			$this->arrSettings[$strAttributeName] = $objSetting;
+			$this->arrSettings[$strAttributeName] = $objSetting->setParent($this);
 		} else {
 			unset($this->arrSettings[$strAttributeName]);
 		}
@@ -117,6 +124,29 @@ class MetaModelRenderSettings implements IMetaModelRenderSettings
 	public function getSettingNames()
 	{
 		return array_keys($this->arrSettings);
+	}
+
+	/**
+	 * Retrieve the jump to information from the setting.
+	 *
+	 * @return array|null The jump to information or null if none has been set.
+	 */
+	public function getJumpTo()
+	{
+		return isset($this->arrJumpTo) ? $this->arrJumpTo : null;
+	}
+
+	/**
+	 * Set the jump to information in the settings object.
+	 *
+	 * @param mixed  $varSetting The value to use.
+	 *
+	 * @return IMetaModelRenderSettings The setting itself.
+	 */
+	public function setJumpTo($varSetting)
+	{
+		$this->arrJumpTo = $varSetting;
+		return $this;
 	}
 }
 
