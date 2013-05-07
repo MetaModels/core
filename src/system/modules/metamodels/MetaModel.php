@@ -175,7 +175,7 @@ class MetaModel implements IMetaModel
 
 		// ensure proper integer ids for SQL injection safety reasons.
 		$strIdList = implode(',', array_map('intval', $arrIds));
-		$objRow = $objDB->execute('SELECT * FROM ' . $this->getTableName() . ' WHERE id IN (' . $strIdList . ') ORDER BY FIELD(id,' . $strIdList . ')');
+		$objRow = $objDB->executeUncached('SELECT * FROM ' . $this->getTableName() . ' WHERE id IN (' . $strIdList . ') ORDER BY FIELD(id,' . $strIdList . ')');
 		if($objRow->numRows == 0)
 		{
 			return array();
