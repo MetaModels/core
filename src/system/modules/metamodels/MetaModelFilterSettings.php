@@ -35,6 +35,11 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 		$this->arrData = $arrData;
 	}
 
+	/**
+	 * @param Database_Result $objSettings The information from which to initialize the setting from
+	 *
+	 * @return IMetaModelFilterSetting
+	 */
 	protected function newSetting(Database_Result $objSettings)
 	{
 		$strClass = $GLOBALS['METAMODELS']['filters'][$objSettings->type]['class'];
@@ -46,6 +51,15 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 		return null;
 	}
 
+	/**
+	 * Fetch all child rules for the given setting.
+	 *
+	 * @param Database_Result                   $objBaseSettings The database information of the parent setting.
+	 *
+	 * @param IMetaModelFilterSettingWithChilds $objSetting      The information from which to initialize the setting from.
+	 *
+	 * @return void
+	 */
 	protected function collectRulesFor($objBaseSettings, $objSetting)
 	{
 		$objDB = Database::getInstance();
@@ -191,7 +205,7 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 		{
 			$arrParams = array_merge($arrParams, $objSetting->getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit, $blnHideClearFilter));
 		}
-		
+
 		return $arrParams;
 	}
 }

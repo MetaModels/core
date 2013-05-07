@@ -55,7 +55,7 @@ class MetaModelRenderSettingsFactory implements IMetaModelRenderSettingsFactory
 					{
 						if($varValue)
 						{
-							$objAttrSetting->$strKey = deserialize($varValue);
+							$objAttrSetting->set($strKey, deserialize($varValue));
 						}
 					}
 					$objSetting->setSetting($objAttr->getColName(), $objAttrSetting);
