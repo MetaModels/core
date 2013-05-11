@@ -197,6 +197,63 @@ class TableMetaModelRenderSettings extends  TableMetaModelHelper
 		}
 
 	}
+	
+	/**
+	 * Get a list with all CSS files inside of the tl_files.
+	 * 
+	 * @return array
+	 */
+	public function getCssFiles()
+	{
+		$arrCssFiles = array();
+		
+		$this->searchFiles($GLOBALS['TL_CONFIG']['uploadPath'], $arrCssFiles, ".css");
+		
+		return $arrCssFiles;
+	}
+	
+	/**
+	 * Get a list with all JS files inside of the tl_files.
+	 * 
+	 * @return array
+	 */
+	public function getJsFiles()
+	{
+		$arrJsFiles = array();
+		
+		$this->searchFiles($GLOBALS['TL_CONFIG']['uploadPath'], $arrJsFiles, ".js");
+		
+		return $arrJsFiles;
+	}
+	
+	protected function searchFiles($strFolder, &$arrResult, $strExtension)
+	{
+		// Check if we have a file or folder.
+		if(!is_file(TL_ROOT . '/' . $strFolder) && file_exists(TL_ROOT . '/' . $strFolder))
+		{
+			$arrScanResult = scan(TL_ROOT . '/' . $strFolder);
+		}
+		else if(is_file(TL_ROOT . '/' . $strFolder) && file_exists(TL_ROOT . '/' . $strFolder))
+		{
+			$arrScanResult = array();
+		}
+		
+		// Run each value.
+		foreach ($arrScanResult as $key => $value) 
+		{
+			if(!is_file(TL_ROOT . '/' . $strFolder . '/' . $value))
+			{
+				$this->searchFiles($strFolder . '/' . $value, $arrResult, $strExtension);
+			}
+			else 
+			{
+				if(preg_match('/'.$strExtension.'$/i', $value))
+				{
+					$arrResult[$strFolder][$strFolder . '/' . $value] = $value;
+				}
+			}
+		}	
+	}
 
 }
 
