@@ -233,6 +233,9 @@ CREATE TABLE `tl_metamodel_rendersettings` (
 -- the template to use.
   `template` varchar(64) NOT NULL default '',
   `format` varchar(255) NOT NULL default '',
+-- CSS JS files
+   `additionalCss` blob NULL,
+   `additionalJs` blob NULL,
 -- special options for the template
   `hideEmptyValues` char(1) NOT NULL default '',
   `hideLabels` char(1) NOT NULL default '',
