@@ -7,7 +7,7 @@
 
 <form<?php if ($this->action): ?> action="<?php echo $this->action; ?>"<?php endif; ?> method="post">
 <input name="REQUEST_TOKEN" type="hidden" value="{{request_token}}" />
-<input type="hidden" name="FORM_SUBMIT" value="<?php echo $this->formid; ?>">
+<input type="hidden" name="FORM_SUBMIT" value="<?php echo $this->formid; ?>" />
 <div class="formbody">
 
 <?php foreach((is_array($this->filters) ? $this->filters : array()) as $filter): ?>
