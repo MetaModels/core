@@ -21,10 +21,7 @@
 <?php endif; ?>
 </div>
 <?php endforeach; ?>
-
-
 </div>
-
 <?php else: ?>
 <p class="info"><?php echo $this->noItemsMsg; ?></p>
 <?php endif; ?>
