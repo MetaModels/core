@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2013-05-13T23:07:50+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['be_group']['0']     = 'Benutzergruppe';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['be_group']['1']     = 'Geben Sie die Benutzergruppe an, für die diese Kombination gelten soll.';
@@ -21,5 +20,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_id']['1']       = 'Geben Si
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['fe_group']['0']     = 'Mitgliedergruppe';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['fe_group']['1']     = 'Geben Sie die Mitglieder-Gruppe an, für die diese Kombination gelten soll.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['sysadmin']          = 'Administrator';
-$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['view_id']['0']      = 'Die Renderingeinstellung';
-$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['view_id']['1']      = 'Die zu benutzende Ansicht.';
+$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['view_id']['0']      = 'Rendering-Einstellung';
+$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['view_id']['1']      = 'Anzuwendende Ansicht.';
