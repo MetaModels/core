@@ -144,3 +144,8 @@
     float:right;
     width:60%;
   }
+
+  .clx {
+    overflow:visible;
+    clear:both;
+  }
