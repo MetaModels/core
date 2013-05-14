@@ -108,10 +108,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 	(
 		'default' => array
 		(
-			'title' => array('name', 'isdefault'),
-			'general' => array('template', 'format', 'jumpTo'),
-			'expert' => array('hideEmptyValues', 'hideLabels'),
-			'view' => array('additionalCss', 'additionalJs')
+			'title'                   => array('name', 'isdefault'),
+			'general'                 => array('template', 'jumpTo'),
 		),
 	),
 
@@ -188,30 +186,29 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'eval' => array(
 				'style'               => 'width:100%;',
 				'columnFields' => array(
-					'langcode' => array(
-						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language'],
-						'exclude'                  =>true,
-						'inputType'                =>'justtextoption',
-						'options'                  =>array('xx' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['allLanguages']),
-						'eval'                     =>array('valign'=>'center')
+					'langcode'=> array(
+						'label'                       => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language'],
+						'exclude'                     => true,
+						'inputType'                   => 'justtextoption',
+						'options'                     => array('xx' => 'all languages'),
+						'eval'                        => array('valign'=>'center')
 					),
 					'value' => array(
-						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page'],
-						'exclude'                  => true,
-						'inputType'                => 'text',
-						'wizard'                   => array(array('tl_metamodel_rendersettings', 'pagePicker')),
-						'eval'                     => array('style'=>'width:317px;')
+						'label'                       => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page'],
+						'exclude'                     => true,
+						'inputType'                   => 'text',
+						'wizard'                      => array(array('tl_metamodel_rendersettings', 'pagePicker')),
+						'eval'                        => array('style'=>'width:200px;')
 					),
 					'filter' => array(
-						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter'],
-						'exclude'                  => true,
-						'inputType'                => 'select',
-						'options_callback'         => array('TableMetaModelRenderSettings', 'getFilterSettings'),
-						'eval'                     => array
+						'label'                       => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter'],
+						'exclude'                     => true,
+						'inputType'                   => 'select',
+						'options_callback'            => array('TableMetaModelRenderSettings', 'getFilterSettings'),
+						'eval'                        => array
 						(
-							'style'                => 'width:200px;',
-							'includeBlankOption'   => true,
-							'chosen'               => true
+							'style'                   => 'width:200px;',
+							'includeBlankOption'      => true
 						)
 					),
 				),
