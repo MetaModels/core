@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2013-05-13T23:07:50+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_item']['copy']['0']          = 'Datensatz kopieren';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['copy']['1']          = 'Den Datensatz ID %s kopieren.';
@@ -32,5 +31,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']['0']      = 'Neuen Datensat
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']['1']      = 'Erstellen Sie einen neuen Datensatz nach Datensatz ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['show']['0']          = 'Datensatz-Details';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['show']['1']          = 'Die Details des Datensatzes ID %s anzeigen.';
-$GLOBALS['TL_LANG']['tl_metamodel_item']['varbase']['0']       = 'Basis für Varianten';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['varbase']['0']       = 'Als Basis für Varianten benutzen';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['varbase']['1']       = 'Wählen Sie diese Option, wenn Sie diesen Datensatz als Basis für die aktuelle Variantengruppe verwenden möchten.';

@@ -8,19 +8,18 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2013-05-13T23:07:50+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Erweiterte Einstellungen';
 $GLOBALS['TL_LANG']['tl_metamodel']['copy']['0']                 = 'MetaModel-Definition kopieren';
 $GLOBALS['TL_LANG']['tl_metamodel']['copy']['1']                 = 'Kopieren Sie die Definition des MetaModels ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel']['cut']['0']                  = 'MetaModel verschieben';
 $GLOBALS['TL_LANG']['tl_metamodel']['cut']['1']                  = 'Bestimmen Sie die Reihenfolge Ihrer MetaModels.';
-$GLOBALS['TL_LANG']['tl_metamodel']['dca']['0']                  = 'Eingabemaske definieren';
-$GLOBALS['TL_LANG']['tl_metamodel']['dca']['1']                  = 'Attribute für MetaModel ID %s definieren';
-$GLOBALS['TL_LANG']['tl_metamodel']['dca_combine']['0']          = 'Input / Output-Kombinationen definieren';
-$GLOBALS['TL_LANG']['tl_metamodel']['dca_combine']['1']          = 'Attribute für MetaModel ID %s definieren';
+$GLOBALS['TL_LANG']['tl_metamodel']['dca']['0']                  = 'Eingabemasken definieren';
+$GLOBALS['TL_LANG']['tl_metamodel']['dca']['1']                  = 'Eingabemaske für MetaModel ID %s definieren.';
+$GLOBALS['TL_LANG']['tl_metamodel']['dca_combine']['0']          = 'Eingabe- / Ausgabe-Optionen definieren';
+$GLOBALS['TL_LANG']['tl_metamodel']['dca_combine']['1']          = 'Definieren Sie die Eingabe- / Ausgabe-Optionen für MetaModel ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel']['delete']['0']               = 'MetaModel löschen';
 $GLOBALS['TL_LANG']['tl_metamodel']['delete']['1']               = 'Das MetaModel ID %s löschen.';
 $GLOBALS['TL_LANG']['tl_metamodel']['edit']['0']                 = 'Items verwalten';
@@ -32,8 +31,8 @@ $GLOBALS['TL_LANG']['tl_metamodel']['fields']['1']               = 'Attribute f�
 $GLOBALS['TL_LANG']['tl_metamodel']['filter']['0']               = 'Filter definieren';
 $GLOBALS['TL_LANG']['tl_metamodel']['filter']['1']               = 'Attribute für MetaModel ID %s definieren';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemFormat']                = '%s %s';
-$GLOBALS['TL_LANG']['tl_metamodel']['itemPlural']                = 'Items';
-$GLOBALS['TL_LANG']['tl_metamodel']['itemSingle']                = 'Item';
+$GLOBALS['TL_LANG']['tl_metamodel']['itemPlural']                = 'Datensätze';
+$GLOBALS['TL_LANG']['tl_metamodel']['itemSingle']                = 'Datensatz';
 $GLOBALS['TL_LANG']['tl_metamodel']['languages']['0']            = 'Sprachen für die Übersetzungen';
 $GLOBALS['TL_LANG']['tl_metamodel']['languages']['1']            = 'Geben Sie alle Sprachen an, die für Übersetzungen verfügbar sein sollen.';
 $GLOBALS['TL_LANG']['tl_metamodel']['languages_isfallback']['0'] = 'Fallback-Sprache';
