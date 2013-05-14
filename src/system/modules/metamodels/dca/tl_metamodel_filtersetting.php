@@ -22,16 +22,95 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 (
 	'config' => array
 	(
-		'dataContainer'               => 'Table',
+		'dataContainer'               => 'General',
 		'switchToEdit'                => false,
 		'enableVersioning'            => false,
 		'oncreate_callback'           => array(array('TableMetaModelFilterSetting', 'create_callback')),
-		'palettes_callback'           => array(array('TableMetaModelFilterSetting', 'preparePalettes'))
+		'palettes_callback'           => array(array('TableMetaModelFilterSetting', 'preparePalettes')),
+		'tablename_callback'          => array(array('TableMetaModelFilterSetting', 'loadTableCallback')),
 	),
-
-	// List
+	'dca_config'                      => array
+	(
+		'data_provider'               => array
+		(
+			'parent'                  => array
+			(
+				'source'              => 'tl_metamodel_filtersetting'
+			)
+		),
+		'childCondition'              => array
+		(
+			array(
+				'from'                => 'self',
+				'to'                  => 'self',
+				'setOn'               => array
+				(
+					array(
+						'to_field'    => 'pid',
+						'from_field'  => 'id',
+					),
+					array(
+						'to_field'    => 'fid',
+						'from_field'  => 'fid',
+					),
+				),
+				'filter'              => array
+				(
+					array
+					(
+						'local'       => 'pid',
+						'remote'      => 'id',
+						'operation'   => '=',
+					),
+				)
+			)
+		),
+		'rootEntries'                 => array
+		(
+			'self'                    => array
+			(
+				'setOn' => array
+				(
+					array
+					(
+						'property'    => 'pid',
+						'value'       => '0'
+					),
+				),
+				'filter'              => array
+				(
+					array
+					(
+						'property'    => 'pid',
+						'operation'   => '=',
+						'value'       => '0'
+					)
+				)
+			)
+		),
+		'child_list'                  => array
+		(
+			'self'                    => array
+			(
+				'fields'              => array
+				(
+					'type',
+					'attr_id',
+					'urlparam',
+					'comment'
+				),
+				'format'              => '%s %s',
+			),
+		)
+	),
+	// List.
 	'list' => array
 	(
+		'presentation' => array
+		(
+			'breadcrumb_callback'     => array('MetaModelBreadcrumbBuilder', 'generateBreadcrumbItems'),
+		),
+
 		'sorting' => array
 		(
 			'mode'                    => 5,
@@ -45,7 +124,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 
 		'label' => array
 		(
-			'fields'                  => array('type'),
+			'fields'                  => array('type', 'attr_id', 'urlparam', 'comment'),
 			'format'                  => '%s',
 			'label_callback'          => array('TableMetaModelFilterSetting', 'drawSetting')
 		),
@@ -57,15 +136,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 				'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
 				'href'                => 'act=select',
 				'class'               => 'header_edit_all',
-				'attributes'          => 'onclick="Backend.getScrollOffset();"'
-			),
-			// unfortunately, I can not place Back at the beginning (before new), so I put it at the end.
-			'back' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['MSC']['backBT'],
-				// TODO: this is an evil hack, replace with something better.
-				'href'                => str_replace(array('contao/main.php?do=metamodel', $this->Environment->url), '', $this->getReferer(false, 'tl_metamodel_filter')),
-				'class'               => 'header_back',
 				'attributes'          => 'onclick="Backend.getScrollOffset();"'
 			)
 		),
@@ -124,8 +194,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 	(
 		'default' => array
 		(
-			'title' => array('type', 'enabled')
+			'title' => array('type', 'enabled', 'comment'),
 		),
+
 		'_attribute_ extends default' => array
 		(
 			'config' => array('attr_id')
@@ -211,6 +282,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			),
 		),
 
+		'comment'                     => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['comment'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array('tl_class' => 'clr long')
+		),
+
 		'attr_id' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id'],
@@ -224,6 +303,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 				'includeBlankOption'  => true,
 				'mandatory'           => true,
 				'tl_class'            => 'w50',
+				'chosen'              => true
 			),
 			'load_callback'           => array(array('TableMetaModelFilterSetting', 'attrIdToName')),
 			'save_callback'           => array(array('TableMetaModelFilterSetting', 'nameToAttrId')),
@@ -326,6 +406,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'options_callback'        => array('TableMetaModelFilterSetting', 'getSubTemplates'),
 			'eval'                    => array(
 				'tl_class'            => 'w50',
+				'chosen'              => true
 			),
 		),
 		'blankoption'                 => array

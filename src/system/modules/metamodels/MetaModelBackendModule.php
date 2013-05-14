@@ -50,6 +50,23 @@ class MetaModelBackendModule extends BackendModule
 	}
 
 	/**
+	 * Ensure we have at least PHP 5.3
+	 *
+	 * @return void
+	 */
+	protected function checkPHPVersion()
+	{
+		if (version_compare(PHP_VERSION, '5.3') < 0)
+		{
+			$this->addMessageEntry(
+				sprintf($GLOBALS['TL_LANG']['ERR']['upgrade_php_version'], '5.3', PHP_VERSION),
+				METAMODELS_ERROR,
+				'http://www.php.org/'
+			);
+		}
+	}
+
+	/**
 	 * Check if all dependencies are present.
 	 */
 	protected function checkDependencies()
@@ -100,6 +117,7 @@ class MetaModelBackendModule extends BackendModule
 	protected function needUserAction()
 	{
 		// run the embedded methods now:
+		$this->checkPHPVersion();
 		$this->checkDependencies();
 		$this->hasAttributes();
 
@@ -165,7 +183,7 @@ class MetaModelBackendModule extends BackendModule
 
 	protected function performNormal()
 	{
-		$arrModule = $GLOBALS['BE_MOD']['system']['metamodels'];
+		$arrModule = $GLOBALS['BE_MOD']['metamodels']['metamodels'];
 		// Custom action (if key is not defined in config.php the default action will be called)
 		if ($this->Input->get('key') && isset($arrModule[$this->Input->get('key')]))
 		{

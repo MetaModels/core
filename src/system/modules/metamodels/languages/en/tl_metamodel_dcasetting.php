@@ -20,16 +20,18 @@
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype']            = array('Type', 'Select the attribute type.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']            = array('Attribute', 'Attribute this setting relates to.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']           = array('Custom template to use for generating', 'Select the template that shall be used for the selected attribute. Valid template files start with "mm_&lt;type&gt;" where the type name is put for &lt;type&gt;');
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']           = array('Back end class', 'Here you can set back end class(es). Use the style picker for a better experience.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']           = array('Backend class', 'Here you can set backend class(es). Use the style picker for a better experience.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker']        = 'Style picker';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']         = array('Hide legend', 'Hide the legend on default.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']        = array('Legend title', 'Here you can enter the legend title.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']      = 'Language';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']         = 'Legend title';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory']          = array('Mandatory', 'Check if this attribute shall be mandatory.');
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['filterable']         = array('Filterable', 'Check if this attribute shall be available for back end filtering.');
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortable']           = array('Sortable', 'Check if this attribute shall be available for back end sorting.');
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['searchable']         = array('Searchable', 'Check if this attribute shall be available for back end search.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']         = array('Always save', 'If true the field will always be saved, even if its value has not changed.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['chosen']             = array('Chosen', 'Enable Chosen graphical select widget.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['filterable']         = array('Filterable', 'Check if this attribute shall be available for backend filtering.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortable']           = array('Sortable', 'Check if this attribute shall be available for backend sorting.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['searchable']         = array('Searchable', 'Check if this attribute shall be available for backend search.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag']               = array('Sorting flag override', 'If you want to override the global sorting flag from the palette for this attribute, please select it here.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']          = array('Do not strip html content.', 'If you select this, HTML content will be preseved.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']       = array('Do not encode html tags.', 'If you select this, HTML tags will not be encoded.');
@@ -57,11 +59,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']             = array('New',
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['edit']            = array('Edit setting', 'Edit setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy']            = array('Copy setting definition', 'Copy setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete']          = array('Delete setting', 'Delete setting ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['subpalette']      = array('Manage sub areas', 'Manage the sub areas of input screen ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['show']            = array('Setting details', 'Show details of setting ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']          = array('Add all', 'Add all attributes to palette');
-
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['row']             = '%s <strong>%s</strong> <em>[%s]</em>';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legend_row']      = '<div class="dca_palette">%s%s</div>';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']          = array('Add all', 'Add all attributes to input screen');
 
 /**
  * References
@@ -94,7 +94,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['2'] = '
  * Messages
  */
 
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd'] = 'will add attribute %s to palette.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained'] = 'Attribute %s already in palette.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess'] = 'added attribute %s to palette.';
-
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd']               = 'Will add the attribute "%s" to the input screen.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained']      = 'Attribute %s is already contained in input screen.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Added the attribute "%s" to the input screen.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess_subpalette'] = 'Added the attribute "%s" to sub area "%s".';

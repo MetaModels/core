@@ -14,30 +14,39 @@
  * @filesource
  */
 
-// preserve values by extensions but insert as first entry into 'system'
-$arrOld = (array)$GLOBALS['BE_MOD']['system']['metamodels'];
-unset($GLOBALS['BE_MOD']['system']['metamodels']);
-array_insert($GLOBALS['BE_MOD']['system'], 0, array
+// preserve values by extensions but insert as first entry after 'system'
+$arrOld = (array)$GLOBALS['BE_MOD']['metamodels'];
+unset($GLOBALS['BE_MOD']['metamodels']);
+array_insert($GLOBALS['BE_MOD'], array_search('accounts', array_keys($GLOBALS['BE_MOD']))+1, array
 (
-	'metamodels' => array_merge_recursive(array
+	'metamodels' => array_replace_recursive(array
 	(
-		'tables'				=> array
+		'metamodels' => array
 		(
-			'tl_metamodel',
-			'tl_metamodel_attribute',
-			'tl_metamodel_filter',
-			'tl_metamodel_filtersetting',
-			'tl_metamodel_rendersettings',
-			'tl_metamodel_rendersetting',
-			'tl_metamodel_dca',
-			'tl_metamodel_dcasetting',
-			'tl_metamodel_dca_combine'
+			'tables' => array
+			(
+				'tl_metamodel',
+				'tl_metamodel_attribute',
+				'tl_metamodel_filter',
+				'tl_metamodel_filtersetting',
+				'tl_metamodel_rendersettings',
+				'tl_metamodel_rendersetting',
+				'tl_metamodel_dca',
+				'tl_metamodel_dcasetting',
+				'tl_metamodel_dca_combine'
+			),
+			'icon'                  => 'system/modules/metamodels/html/logo.png',
+			'dca_addall'            => array('TableMetaModelDcaSetting', 'addAll'),
+			'rendersetting_addall'  => array('TableMetaModelRenderSetting', 'addAll'),
+			'callback'              => 'MetaModelBackendModule'
 		),
-		'icon'					=> 'system/modules/metamodels/html/logo.png',
-		'dca_addall'			=> array('TableMetaModelDcaSetting', 'addAll'),
-		'rendersetting_addall'	=> array('TableMetaModelRenderSetting', 'addAll'),
-		'callback'				=> 'MetaModelBackendModule'
+		'support_metamodels' => array
+		(
+			'icon'                  => 'system/modules/metamodels/html/support.png',
+			'callback'              => 'MetaModelsBackendSupport'
+		)
 	),
+	// Append all previous data here.
 	$arrOld
 	)
 ));
@@ -57,7 +66,7 @@ array_insert($GLOBALS['BE_MOD']['system'], 0, array
 		TYPECLASS    is the name of the implementing class.
 		IMAGEPATH    path to an icon (16x16) that represents the attribute type. Based from TL_ROOT.
 		FACTORYCLASS this is optional, if defined, the herein declared classname will be used for instantiation
-		             of attributes of this type instead of plain constructing.
+					 of attributes of this type instead of plain constructing.
 */
 
 
@@ -78,6 +87,8 @@ array_insert($GLOBALS['BE_MOD']['system'], 0, array
 		IMAGEPATH    path to an icon (16x16) that represents the filter rule type. Based from TL_ROOT.
 		NESTINGVALUE boolean true or false. If this is true, you indicate that this rule may contain child rules.
 */
+
+$GLOBALS['MM_FILTER_PARAMS'] = array();
 
 $GLOBALS['METAMODELS']['filters']['idlist'] = array
 (
@@ -112,9 +123,6 @@ $GLOBALS['METAMODELS']['filters']['conditionor'] = array
 	'nestingAllowed' => true
 );
 
-// enable support for php 5.2
-require_once(TL_ROOT . '/system/modules/metamodels/metamodel_functions.php');
-
 // define our version so dependant extensions can use it in version_compare().
 define('METAMODELS_VERSION', '0.1');
 
@@ -138,8 +146,9 @@ if (TL_MODE=='BE')
 
 array_insert($GLOBALS['FE_MOD']['metamodels'], 9, array
 (
-	'metamodel_list'            => 'ModuleMetaModelList',
-	'metamodels_frontendfilter' => 'ModuleMetaModelFrontendFilter'
+	'metamodel_list'              => 'ModuleMetaModelList',
+	'metamodels_frontendfilter'   => 'ModuleMetaModelFrontendFilter',
+	'metamodels_frontendclearall' => 'ModuleMetaModelFrontendClearAll'
 )
 );
 
@@ -148,8 +157,9 @@ array_insert($GLOBALS['FE_MOD']['metamodels'], 9, array
  */
 array_insert($GLOBALS['TL_CTE']['metamodels'], 9, array
 (
-	'metamodel_content'         => 'ContentMetaModel',
-	'metamodels_frontendfilter' => 'ContentMetaModelFrontendFilter'
+	'metamodel_content'           => 'ContentMetaModel',
+	'metamodels_frontendfilter'   => 'ContentMetaModelFrontendFilter',
+	'metamodels_frontendclearall' => 'ContentMetaModelFrontendClearAll'
 )
 );
 
@@ -159,16 +169,17 @@ array_insert($GLOBALS['TL_CTE']['metamodels'], 9, array
 
 $GLOBALS['TL_FFL']['multitext'] = 'WidgetMultiText';
 $GLOBALS['TL_FFL']['tags']      = 'WidgetTags';
-$GLOBALS['TL_FFL']['range']      = 'WidgetRange';
+$GLOBALS['TL_FFL']['range']     = 'WidgetRange';
 
 /**
  * HOOKS
  */
-$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('MetaModelBackend', 'createDataContainer');
-$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('MetaModelDatabase', 'createDataContainer');
-$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('TableMetaModelFilterSetting', 'createDataContainer');
-$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('TableMetaModelRenderSetting', 'createDataContainer');
-$GLOBALS['TL_HOOKS']['loadDataContainer'][] = array('TableMetaModelDcaSetting', 'createDataContainer');
+$GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModelBackend', 'createDataContainer');
+$GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModelDatabase', 'createDataContainer');
+$GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('TableMetaModelFilterSetting', 'createDataContainer');
+$GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('TableMetaModelRenderSetting', 'createDataContainer');
+$GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('TableMetaModelDcaSetting', 'createDataContainer');
+$GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] = array('MetaModelFrontendFilter', 'generateClearAll');
 
 /**
  * Dependencies we need.
@@ -204,51 +215,50 @@ $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 
 $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 (
-    'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['long'],
-    'cssclass' => 'long',
-    'image' => ''
+	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['long'],
+	'cssclass' => 'long',
+	'image' => ''
 );
 
 $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 (
-    'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['wizard'],
-    'cssclass' => 'wizard',
-    'image' => ''
+	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['wizard'],
+	'cssclass' => 'wizard',
+	'image' => ''
 );
 
 $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 (
-    'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['m12'],
-    'cssclass' => 'm12',
-    'image' => ''
+	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['m12'],
+	'cssclass' => 'm12',
+	'image' => ''
 );
 
 // Selectable panels in the palette panelLayout definitions.
 $GLOBALS['PALETTE_PANEL_PICKER'][] = array
 (
-    'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['search'],
-    'cssclass' => 'search',
-    'image' => ''
+	'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['search'],
+	'cssclass' => 'search',
+	'image' => ''
 );
 
 $GLOBALS['PALETTE_PANEL_PICKER'][] = array
 (
-    'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['sort'],
-    'cssclass' => 'sort',
-    'image' => ''
+	'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['sort'],
+	'cssclass' => 'sort',
+	'image' => ''
 );
 
 $GLOBALS['PALETTE_PANEL_PICKER'][] = array
 (
-    'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['filter'],
-    'cssclass' => 'filter',
-    'image' => ''
+	'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['filter'],
+	'cssclass' => 'filter',
+	'image' => ''
 );
 
 $GLOBALS['PALETTE_PANEL_PICKER'][] = array
 (
-    'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['limit'],
-    'cssclass' => 'limit',
-    'image' => ''
+	'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['limit'],
+	'cssclass' => 'limit',
+	'image' => ''
 );
-

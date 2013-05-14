@@ -24,6 +24,13 @@
 interface IMetaModelFilter
 {
 	/**
+	 * Create an copy of this filter.
+	 *
+	 * @return IMetaModelFilter
+	 */
+	public function createCopy();
+
+	/**
 	 * Adds a filter rule to this filter chain.
 	 *
 	 * @param IMetaModelFilterRule $objFilterRule the filter rule to add.

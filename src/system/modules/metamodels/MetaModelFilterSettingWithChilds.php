@@ -89,16 +89,16 @@ implements IMetaModelFilterSettingWithChilds
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit)
+	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit, $blnHideClearFilter)
 	{
 		$arrParams = array();
 		foreach ($this->arrChilds as $objSetting)
 		{
-			$arrParams = array_merge($arrParams, $objSetting->getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit));
+			$arrParams = array_merge($arrParams, $objSetting->getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit, $blnHideClearFilter));
 		}
 		return $arrParams;
 	}
-	
+
 	/**
 	* {@inheritdoc}
 	*/
@@ -110,6 +110,21 @@ implements IMetaModelFilterSettingWithChilds
 			$arrParams = array_merge($arrParams, $objSetting->getParameterFilterNames());
 		}
 		return $arrParams;
+	}
+
+	/**
+	 * Retrieve a list of all referenced attributes within the filter setting.
+	 *
+	 * @return array
+	 */
+	public function getReferencedAttributes()
+	{
+		$arrAttributes = array();
+		foreach ($this->arrChilds as $objSetting)
+		{
+			$arrAttributes = array_merge($arrAttributes, $objSetting->getReferencedAttributes());
+		}
+		return $arrAttributes;
 	}
 }
 

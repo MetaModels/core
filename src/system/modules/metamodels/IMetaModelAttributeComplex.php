@@ -16,8 +16,8 @@
 
 /**
  * Interface for "complex" MeatModel attributes.
- * Complex attributes are attributes that can not be fetched with a simple "SELECT colName FROM cat_table" and therefore need
- * to be handled differently.
+ * Complex attributes are attributes that can not be fetched with a simple:
+ * "SELECT colName FROM cat_table" and therefore need to be handled differently.
  *
  * @package	   MetaModels
  * @subpackage Interfaces
@@ -28,9 +28,9 @@ interface IMetaModelAttributeComplex extends IMetaModelAttribute
 	/**
 	 * This method is called to retrieve the data for certain items from the database.
 	 *
-	 * @param int[] $arrIds the ids of the items to retrieve.
+	 * @param int[] $arrIds The ids of the items to retrieve.
 	 *
-	 * @return mixed[] the nature of the resulting array is a mapping from id => "native data" where
+	 * @return mixed[] The nature of the resulting array is a mapping from id => "native data" where
 	 *                 the definition of "native data" is only of relevance to the given item.
 	 */
 	public function getDataFor($arrIds);
@@ -38,10 +38,10 @@ interface IMetaModelAttributeComplex extends IMetaModelAttribute
 	/**
 	 * Remove values for items.
 	 *
-	 * @param int[] $arrIds the ids of the items to retrieve.
+	 * @param int[] $arrIds The ids of the items to retrieve.
 	 *
 	 * @return void
 	 */
-	 public function unsetDataFor($arrIds);
+	public function unsetDataFor($arrIds);
 }
 

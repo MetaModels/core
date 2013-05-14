@@ -239,13 +239,15 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 
 		$arrSettingNames = $this->getAttributeSettingNames();
 
-		$arrFieldDef['eval']['mandatory'] = $this->get('isunique') && in_array('isunique', $arrSettingNames);
-		// TODO: this is not used currently.
-		$arrFieldDef['eval']['mandatory'] = $arrFieldDef['eval']['mandatory'] || ($this->get('mandatory') && in_array('mandatory', $arrSettingNames) ? true : false);
+		$arrFieldDef['eval']['unique'] = $this->get('isunique') && in_array('isunique', $arrSettingNames);
+		$arrFieldDef['eval']['mandatory'] = $arrFieldDef['eval']['unique'] || ($this->get('mandatory') && in_array('mandatory', $arrSettingNames));
+		$arrFieldDef['eval']['alwaysSave'] = $arrFieldDef['eval']['alwaysSave'] || ($this->get('alwaysSave') && in_array('alwaysSave', $arrSettingNames));
 
 		foreach (array(
 			'tl_class',
 			'mandatory',
+			'alwaysSave',
+			'chosen',
 			'allowHtml',
 			'preserveTags',
 			'decodeEntities',
@@ -253,7 +255,8 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 			'rows',
 			'cols',
 			'spaceToUnderscore',
-			'includeBlankOption'
+			'includeBlankOption',
+			'submitOnChange'
 		) as $strEval) {
 			if (in_array($strEval, $arrSettingNames) && $arrOverrides[$strEval])
 			{
@@ -283,7 +286,7 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 		if (in_array('sortable', $arrSettingNames) && $arrOverrides['sortable'])
 		{
 			$arrFieldDef['sorting'] = true;
-		}
+		}		
 		return $arrFieldDef;
 	}
 
@@ -401,6 +404,52 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	public function searchFor($strPattern)
 	{
 		return array();
+	}
+
+	/**
+	 * Filter all values greater than the passed value.
+	 *
+	 * This base implementation does not perform any search.
+	 *
+	 * @param mixed $varValue     The value to use as lower end.
+	 *
+	 * @param bool  $blnInclusive If true, the passed value will be included, if false, it will be excluded.
+	 *
+	 * @return int[] The list of item ids of all items matching the condition.
+	 */
+	public function filterGreaterThan($varValue, $blnInclusive = false)
+	{
+		return array();
+	}
+
+	/**
+	 * Filter all values less than the passed value.
+	 *
+	 * This base implementation does not perform any search.
+	 *
+	 * @param mixed $varValue     The value to use as upper end.
+	 *
+	 * @param bool  $blnInclusive If true, the passed value will be included, if false, it will be excluded.
+	 *
+	 * @return int[] The list of item ids of all items matching the condition.
+	 */
+	public function filterLessThan($varValue, $blnInclusive = false)
+	{
+		return array();
+	}
+
+	/**
+	 * Filter all values not having the passed value.
+	 *
+	 * This base implementation does an array_merge() on the return values of filterLessThan() and filterGreaterThan().
+	 *
+	 * @param mixed $varValue     The value to use as upper end.
+	 *
+	 * @return int[] The list of item ids of all items matching the condition.
+	 */
+	public function filterNotEqual($varValue)
+	{
+		return array_merge($this->filterLessThan($varValue), $this->filterGreaterThan($varValue));
 	}
 
 	/**

@@ -1,0 +1,75 @@
+{
+	"name":"metamodels/core",
+	"description":"MetaModels core",
+	"keywords":["contao", "metamodels", "core"],
+	"type":"contao-module",
+	"homepage":"http://now.metamodel.me/",
+	"license":"LGPL-3.0+",
+	"authors":[
+		{
+			"name":"Christian Schiffler",
+			"email":"c.schiffler@cyberspectrum.de",
+			"homepage":"http://www.cyberspectrum.de",
+			"role":"Developer"
+		},
+		{
+			"name":"Andreas Isaak",
+			"email":"info@andreas-isaak.de",
+			"homepage":"http://www.andreas-isaak.de",
+			"role":"Developer"
+		},
+		{
+			"name":"Stefan Heimes",
+			"email":"stefan_heimes@hotmail.com",
+			"role":"Developer"
+		},
+		{
+			"name":"Christian de la Haye",
+			"email":"service@delahaye.de",
+			"homepage":"http://www.delahaye.de/",
+			"role":"Developer"
+		},
+		{
+			"name":"Oliver Hoff",
+			"email":"oliver@hofff.com",
+			"homepage":"http://www.hofff.com/",
+			"role":"Developer"
+		}
+	],
+	"support":{
+		"email":"mail@metamodel.me",
+		"issues":"https://github.com/MetaModels/core/issues",
+		"wiki":"http://de.contaowiki.org/MetaModels",
+		"irc":"irc://irc.freenode.org/contao.mm",
+		"source":"https://github.com/MetaModels/core"
+	},
+	"require":{
+		"php":">=5.3",
+		"contao/core":"~2.11",
+		"contao-community-alliance/composer-installer": "*",
+		"metamodels/dc_general": "0.9.*@dev",
+		"menatwork/contao-multicolumnwizard": "3.1.*",
+		"bit3/contao-meta-palettes": "~1.4",
+		"discordier/justtextwidgets": ">=0.5"
+	},
+	"require-dev": {
+		"metamodels/php-coding-standard":"dev-master",
+		"cyberspectrum/contao-toolbox": "dev-master"
+	},
+	"extra":{
+		"contao": {
+			"symlinks":{
+				"src/system/modules/metamodels":"system/modules/metamodels"
+			},
+			"transifex": {
+				"project": "metamodels",
+				"prefix": "core-",
+				"languages_cto": "src/system/modules/metamodels/languages",
+				"languages_tx": ".tx"
+			}
+		},
+		"branch-alias": {
+			"dev-master": "1.0.x-dev"
+		}
+	}
+}

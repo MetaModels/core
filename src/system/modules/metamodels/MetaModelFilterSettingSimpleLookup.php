@@ -61,6 +61,20 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 			$this->get('onlypossible') ? $arrIds : NULL,
 			(bool)$this->get('onlyused')
 		);
+
+		// Remove empty values.
+		foreach ($arrOptions as $mixOptionKey => $mixOptions)
+		{
+			// Remove html/php tags.
+			$mixOptions = strip_tags($mixOptions);
+			$mixOptions = trim($mixOptions);
+
+			if($mixOptions === '' ||$mixOptions === null)
+			{
+				unset($arrOptions[$mixOptionKey]);
+			}
+		}
+
 		return $arrOptions;
 	}
 
@@ -174,7 +188,7 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit)
+	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit, $blnHideClearFilter)
 	{
 		// if defined as static, return nothing as not to be manipulated via editors.
 		if (!$this->enableFEFilterWidget())
@@ -183,6 +197,8 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 		}
 
 		$objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
+		
+		$GLOBALS['MM_FILTER_PARAMS'][] = $this->getParamName();
 
 		$arrWidget = array(
 				'label'     => array(
@@ -193,7 +209,7 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 				'inputType'    => 'select',
 				'options' => $this->getParameterFilterOptions($objAttribute, $arrIds),
 				'eval' => array(
-					'includeBlankOption' => ($this->get('blankoption') ? true : false),
+					'includeBlankOption' => ($this->get('blankoption') && !$blnHideClearFilter ? true : false),
 					'blankOptionLabel'   => &$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'],
 					'colname'            => $objAttribute->getColname(),
 					'urlparam'           => $this->getParamName(),
@@ -207,6 +223,18 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 		(
 			$this->getParamName() => $this->prepareFrontendFilterWidget($arrWidget, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit)
 		);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getReferencedAttributes()
+	{
+		if (!($this->get('attr_id') && ($objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id')))))
+		{
+			return array();
+		}
+		return array($objAttribute->getColName());
 	}
 }
 

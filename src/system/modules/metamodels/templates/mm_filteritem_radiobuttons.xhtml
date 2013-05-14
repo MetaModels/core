@@ -2,12 +2,18 @@
 <fieldset id="ctrl_<?php echo $this->urlparam; ?>" class="checkbox_container">
 <?php
 $count = 0;
-foreach($this->options as $option): 
+foreach($this->options as $option):
+
+	$strClass = ($count == 0) ? 'first ' : '';
+	$strClass .= ($count == count($this->options) - 1 ) ? 'last ' : '';
+	$strClass .= ($count % 2 == 1) ? 'even' : 'odd';
+	$strClass .= (strlen($option['class'])) ? ' ' . standardize($option['class']) : '';
+
 	$field = sprintf('<input type="radio" name="%s" id="opt_%s_%s" class="checkbox%s" value="%s"%s />',
 		$this->urlparam,
 		$this->urlparam,
 		$count,
-        $this->submit ? ' submitonchange' : '',
+		$this->submit ? ' submitonchange' : '',
 		$option['key'],
 		($option['active'] ? ' checked="checked"':'')
 		);
@@ -20,7 +26,7 @@ foreach($this->options as $option):
 		);
 	$count++;
 ?>
-<span><?php echo $field; ?> <?php echo $label; ?></span>
+<span class="<?php echo $strClass; ?>"><?php echo $field; ?> <?php echo $label; ?></span>
 <?php endforeach; ?>
 </fieldset>
 <?php endif; ?>

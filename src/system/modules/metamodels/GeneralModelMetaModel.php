@@ -68,7 +68,7 @@ class GeneralModelMetaModel implements InterfaceGeneralModel
 	 */
 	public function __clone()
 	{
-		return new GeneralModelMetaModel($this->getItem()->copy());
+		$this->objItem = $this->getItem()->copy();
 	}
 
 	/**

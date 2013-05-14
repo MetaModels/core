@@ -24,6 +24,12 @@
  */
 class MetaModelDatabase extends Controller
 {
+	/**
+	 * Cache for "dcasetting id" <=> "MM attribute colname" mapping.
+	 * 
+	 * @var array 
+	 */
+	protected static $arrColNameChache = array();
 
 	protected static function getDB()
 	{
@@ -47,6 +53,65 @@ class MetaModelDatabase extends Controller
 		}
 		return null;
 	}
+	
+	/**
+	 * Get from a dcasetting the colum name
+	 * 
+	 * @param IMetaModel $objMetaModel the MetaModel for which the palette shall be built.
+	 * 
+	 * @param int $intID ID of an entry from the tl_metamodel_dcasetting
+	 * 
+	 * @return string Name of the column
+	 */
+	protected function getColNameByDcaSettingId($objMetaModel, $intID)
+	{
+		// Get name from cache.
+		if(in_array($intID, self::$arrColNameChache))
+		{
+			return self::$arrColNameChache[$intID];
+		}
+
+		// Get the attr_id for MM.
+		$objDCASettings = Database::getInstance()
+				->prepare('SELECT attr_id FROM tl_metamodel_dcasetting WHERE id=?')
+				->execute($intID);
+
+		// Check if we have the selector id.
+		if ($objDCASettings->numRows == 0)
+		{
+			self::$arrColNameChache[$intID] = false;
+		}
+		else
+		{
+			// Get name from attribute.
+			$objAttribute = $objMetaModel->getAttributeById($objDCASettings->attr_id);
+			self::$arrColNameChache[$intID] = $objAttribute->getColName();
+		}
+
+		return self::$arrColNameChache[$intID];
+	}
+	
+	/**
+	 * Check if a field is a selector for a subpalette.
+	 * 
+	 * @param int $intID ID of an entry from the tl_metamodel_dcasetting
+	 * 
+	 * @return boolean
+	 */
+	protected function isSelector($intID)
+	{
+		// Count subpalette elements.
+		$objDCASettings = Database::getInstance()
+				->prepare('SELECT count(id) as count FROM tl_metamodel_dcasetting WHERE subpalette=?')
+				->execute($intID);
+		
+		if($objDCASettings->count != 0)
+		{
+			return true;
+		}
+		
+		return false;
+	}
 
 	/**
 	 * Retrieves a palette from the database and populates the passed DCA 'fields' section with the correct settings.
@@ -65,17 +130,47 @@ class MetaModelDatabase extends Controller
 		$objDCASettings = Database::getInstance()
 			->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=? ORDER by sorting ASC')
 			->execute($intPaletteId);
-
+		$arrMyDCA = array();
 		while ($objDCASettings->next())
-		{
+		{			
 			switch ($objDCASettings->dcatype)
 			{
 				case 'attribute':
 					$objAttribute = $objMetaModel->getAttributeById($objDCASettings->attr_id);
 					if ($objAttribute)
-					{
-						$arrDCA = array_replace_recursive($arrDCA, $objAttribute->getItemDCA($objDCASettings->row()));
-						$strPalette .= (strlen($strPalette) > 0 ? ',' : '') . $objAttribute->getColName();
+					{		
+						// Get basics.
+						$arrFieldSetting = $objDCASettings->row();
+
+						// Overwrite submitOnChange if we have a selector.
+						if ($this->isSelector($objDCASettings->id))
+						{
+							$arrFieldSetting = array_replace_recursive(
+									$objDCASettings->row(),
+									array('submitOnChange' => true)
+							);
+						}
+
+						$arrMyDCA = array_replace_recursive($arrMyDCA, $objAttribute->getItemDCA($arrFieldSetting));
+
+						// Check if we have a subpalette. If false, add to normal palettes.
+						if ($objDCASettings->subpalette == 0)
+						{
+							$strPalette .= (strlen($strPalette) > 0 ? ',' : '') . $objAttribute->getColName();
+						}
+						// Else add as subpalettes.
+						else
+						{							
+							$strSelector = $this->getColNameByDcaSettingId($objMetaModel, $objDCASettings->subpalette);
+							
+							// This should never ever be true. If so, we have dead entries in the database.
+							if($strSelector === false)
+							{
+								break;
+							}
+							
+							$arrMyDCA['metasubpalettes'][$strSelector][] = $objAttribute->getColName();
+						}
 					}
 					break;
 				case 'legend':
@@ -102,12 +197,23 @@ class MetaModelDatabase extends Controller
 
 					$legendName = standardize($strLegend) . '_legend';
 					$GLOBALS['TL_LANG'][$objMetaModel->getTableName()][$legendName] = $strLegend;
-					$strPalette .= ((strlen($strPalette) > 0 ? ';' : '') . '{' . $legendName . $objAttribute->legendhide . '}');
+
+					// Check if we have a subpalette.
+					if ($objDCASettings->subpalette == 0)
+					{
+						$strPalette .= ((strlen($strPalette) > 0 ? ';' : '') . '{' . $legendName . $objAttribute->legendhide . '}');
+					}
+					else
+					{
+						$arrMyDCA['metasubpalettes'][$strSelector][] = '{' . $legendName . $objAttribute->legendhide . '}';
+					}
 					break;
 				default:
 					throw new Exception("Unknown palette rendering mode " . $objDCASettings->dcatype);
 			}
 		}
+		$arrDCA = array_replace_recursive($arrDCA, $arrMyDCA);
+		
 		return $strPalette;
 	}
 
@@ -116,8 +222,10 @@ class MetaModelDatabase extends Controller
 		$arrDCA['list']['sorting']['mode'] = 5;
 		$arrDCA['dca_config']['data_provider']['parent']['source'] = $objMetaModel->getTableName();
 
-		$arrDCA['dca_config']['child_list']['self']['fields'] = array(
-		    'id', 'tstamp'
+		$arrDCA['dca_config']['child_list']['self']['fields'] = array
+		(
+			'id',
+			'tstamp'
 		);
 
 		$arrDCA['dca_config']['childCondition'] = array
@@ -184,15 +292,16 @@ class MetaModelDatabase extends Controller
 
 		// TODO: do only show variant bases if we are told so, i.e. render child view.
 		$arrDCA['fields']['varbase'] = array
-		    (
-		    'label' => &$GLOBALS['TL_LANG']['tl_metamodel_item']['varbase'],
-		    'inputType' => 'checkbox',
-		    'eval' => array
+		(
+			'label' => &$GLOBALS['TL_LANG']['tl_metamodel_item']['varbase'],
+			'inputType' => 'checkbox',
+			'eval' => array
 			(
-			'submitOnChange' => true,
-			'doNotShow' => true
-		    )
+				'submitOnChange' => true,
+				'doNotShow' => true
+			)
 		);
+
 		if ($arrDCASetting['ptable'])
 		{
 			if ($arrDCASetting['ptable'] == $objMetaModel->get('tableName'))
@@ -220,7 +329,11 @@ class MetaModelDatabase extends Controller
 			'button_callback' => array('MetaModelDatabase', 'buttonCallbackCreateVariant')
 		);
 
-		$arrDCA['list']['operations']['copy']['href'] = 'act=paste&mode=copy';
+		// only rewrite the url if the operation has been registered.
+		if (array_key_exists('copy', $arrDCA['list']['operations']))
+		{
+			$arrDCA['list']['operations']['copy']['href'] = 'act=paste&mode=copy';
+		}
 
 		// search for copy operation and insert just behind that one
 		$intPos = array_search('copy', array_keys($arrDCA['list']['operations']));
@@ -286,7 +399,6 @@ class MetaModelDatabase extends Controller
 
 		// Set Sorting panelLayout from current renderSettings
 		$arrDCA['list']['sorting']['panelLayout'] = $arrDCASettings['panelLayout'];
-
 		switch ($arrDCASettings['mode'])
 		{
 			case 5:
@@ -405,7 +517,7 @@ class MetaModelDatabase extends Controller
 
 		$arrDCA['config']['metamodel_view'] = $arrViewSettings['id'];
 		$arrDCA['palettes']['default'] = $this->getPaletteAndFields($arrDCASettings['id'], $objMetaModel, $arrDCA);
-
+		
 		if ($arrDCASettings['backendcaption'])
 		{
 			$arrCaptions = deserialize($arrDCASettings['backendcaption'], true);
@@ -454,5 +566,144 @@ class MetaModelDatabase extends Controller
 		);
 	}
 
+	/**
+	 * Return the paste page button
+	 * @param DataContainer
+	 * @param array
+	 * @param string
+	 * @param boolean
+	 * @param array
+	 * @return string
+	 */
+	public function pasteButton(DC_General $objDC, $arrRow, $strTable, $cr, $arrClipboard=false)
+	{
+		$disablePA = true;
+		$disablePI = true;
+
+		// FIXME: whoa, this is hacky, the DC should provide a better way to obtain all of this.
+		$objSrcProvider = $objDC->getDataProvider($strTable);
+		if ($this->Input->get('source'))
+		{
+			$objModel = $objSrcProvider->fetch($objSrcProvider->getEmptyConfig()->setId($this->Input->get('source')));
+		} else {
+			$objModel = null;
+		}
+
+		
+		if ($objModel && isset($arrRow['id']) && strlen($arrRow['id']) && ($arrRow['id'] != $objModel->getID()))
+		{
+			// Insert a varbase after any other varbase, for sorting.
+			if ($objModel->getProperty('varbase') == 1 && $arrRow['id'] != $objModel->getID() && $arrRow['varbase'] != 0)
+			{
+				$disablePA = false;
+			} 
+			// Move items in here vargroup and only there.
+			else if($objModel->getProperty('varbase') == 0 && $arrRow['vargroup'] == $objModel->getProperty('vargroup') && $arrRow['varbase'] != 1)
+			{
+				$disablePA = false;
+			}
+		}
+		else
+		{
+			
+			$disablePA = false;
+			$disablePI = !($arrRow['varbase'] == 1);
+		}
+
+		// Return the buttons
+		$imagePasteAfter = $this->generateImage('pasteafter.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteafter'][1], $arrRow['id']), 'class="blink"');
+		$imagePasteInto = $this->generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteinto'][1], $arrRow['id']), 'class="blink"');
+
+		$strAdd2UrlAfter = sprintf(
+			'act=%s&amp;mode=1&amp;pid=%s&amp;after=%s&amp;source=%s&amp;childs=%s',
+			$arrClipboard['mode'],
+			$arrClipboard['id'],
+			$arrRow['id'],
+			$arrClipboard['source'],
+			$arrClipboard['childs']
+		);
+
+		$strAdd2UrlInto = sprintf(
+			'act=%s&amp;mode=2&amp;pid=%s&amp;after=%s&amp;source=%s&amp;childs=%s',
+			$arrClipboard['mode'],
+			$arrClipboard['id'],
+			$arrRow['id'],
+			$arrClipboard['source'],
+			$arrClipboard['childs']
+		);
+
+		if ($arrClipboard['pdp'] != '')
+		{
+			$strAdd2UrlAfter .= '&amp;pdp=' . $arrClipboard['pdp'];
+			$strAdd2UrlInto .= '&amp;pdp=' . $arrClipboard['pdp'];
+		}
+
+		if ($arrClipboard['cdp'] != '')
+		{
+			$strAdd2UrlAfter .= '&amp;cdp=' . $arrClipboard['cdp'];
+			$strAdd2UrlInto .= '&amp;cdp=' . $arrClipboard['cdp'];
+		}
+
+		$strPasteBtn = '';
+
+		if ($disablePA)
+		{
+			$strPasteBtn = $this->generateImage('pasteafter_.gif', '', 'class="blink"').' ';
+		} else {
+			$strPasteBtn = sprintf(
+				' <a href="%s" title="%s" onclick="Backend.getScrollOffset()">%s</a> ',
+				$this->addToUrl($strAdd2UrlAfter),
+				specialchars($GLOBALS['TL_LANG'][$strTable]['pasteafter'][0]),
+				$imagePasteAfter
+			);
+		}
+
+		if ($disablePI)
+		{
+			$strPasteBtn .= $this->generateImage('pasteinto_.gif', '', 'class="blink"').' ';
+		} else {
+			$strPasteBtn .= sprintf(
+				' <a href="%s" title="%s" onclick="Backend.getScrollOffset()">%s</a> ',
+				$this->addToUrl($strAdd2UrlInto),
+				specialchars($GLOBALS['TL_LANG'][$strTable]['pasteinto'][0]),
+				$imagePasteInto
+			);
+		}
+
+		// special case, the root paste into.
+		if (!(isset($arrRow['id']) && strlen($arrRow['id'])))
+		{
+			if ($objModel && ($objModel->getProperty('varbase') == 1))
+			{
+				$strPasteBtn = sprintf(
+					' <a href="%s" title="%s" onclick="Backend.getScrollOffset()">%s</a> ',
+					$this->addToUrl(sprintf(
+						'act=%s&amp;mode=2&amp;after=0&amp;pid=0&amp;id=%s&amp;childs=%s',
+						$arrClipboard['mode'],
+						$arrClipboard['id'],
+						$arrClipboard['childs']
+					)),
+					specialchars($GLOBALS['TL_LANG'][$strTable]['pasteinto'][0]),
+					$imagePasteInto
+				);
+			} elseif (!$objModel ) {
+				$strPasteBtn = sprintf(
+					' <a href="%s" title="%s" onclick="Backend.getScrollOffset()">%s</a> ',
+					$this->addToUrl(sprintf(
+						'act=%s&amp;mode=2&amp;after=0&amp;pid=0&amp;id=%s&amp;childs=%s',
+						$arrClipboard['mode'],
+						$arrClipboard['id'],
+						$arrClipboard['childs']
+					)),
+					specialchars($GLOBALS['TL_LANG'][$strTable]['pasteinto'][0]),
+					$imagePasteInto
+				);
+			} else {
+				$strPasteBtn = $this->generateImage('pasteinto_.gif', '', 'class="blink"').' ';
+			}
+		}
+
+		return $strPasteBtn;
+	}
 }
 

@@ -77,7 +77,7 @@ class MetaModelList extends Controller
 	 *
 	 * @var string
 	 */
-	protected $strOutputFormat = '';
+	protected $strOutputFormat;
 
 	/**
 	 * The metamodel to use.
@@ -99,6 +99,10 @@ class MetaModelList extends Controller
 	 * @var string[]
 	 */
 	protected $arrParam = array();
+
+	public function __construct() {
+		parent::__construct();
+	}
 
 	/**
 	 * Set the limit
@@ -158,11 +162,29 @@ class MetaModelList extends Controller
 	 * @param string $strFormat The name of the template output format to use.
 	 *
 	 * @return MetaModelList
+	 * @deprecated Use overrideOutputFormat instead
 	 */
 	public function setTemplateFormat($strFormat)
 	{
-		$this->strOutputFormat = $strFormat;
+		$this->overrideOutputFormat($strFormat);
+		return $this;
+	}
 
+	/**
+	 * Override the output format of the used view
+	 *
+	 * @param string|null $strOutputFormat
+	 * @return MetaModelList
+	 */
+	public function overrideOutputFormat($strOutputFormat = null)
+	{
+		$strOutputFormat = strval($strOutputFormat);
+		if(strlen($strOutputFormat))
+		{
+			$this->strOutputFormat = $strOutputFormat;
+		} else {
+			unset($this->strOutputFormat);
+		}
 		return $this;
 	}
 
@@ -345,7 +367,7 @@ class MetaModelList extends Controller
 			{
 				$intLimit = $this->intLimit;
 			}
-			if($this->intOffset)
+			if ($this->intOffset)
 			{
 				$intOffset = $this->intOffset;
 			}
@@ -420,8 +442,37 @@ class MetaModelList extends Controller
 	 */
 	protected function getAttributeNames()
 	{
-		// TODO: need a way to determine the names from the filtersetting used in the view here.
-		return $this->objView->getSettingNames();
+		$arrAttributes = $this->objView->getSettingNames();
+
+		// Get the right jumpto.
+		$strDesiredLanguage  = $this->getMetaModel()->getActiveLanguage();
+		$strFallbackLanguage = $this->getMetaModel()->getFallbackLanguage();
+
+		$intFilterSettings = 0;
+
+		foreach ((array)$this->getView()->get('jumpTo') as $arrJumpTo)
+		{
+			// If either desired language or fallback, keep the result.
+			if (!$this->getMetaModel()->isTranslated()
+				|| $arrJumpTo['langcode'] == $strDesiredLanguage
+				|| $arrJumpTo['langcode'] == $strFallbackLanguage)
+			{
+				$intFilterSettings = $arrJumpTo['filter'];
+				// If the desired language, break. Otherwise try to get the desired one until all have been evaluated.
+				if ($strDesiredLanguage == $arrJumpTo['langcode'])
+				{
+					break;
+				}
+			}
+		}
+
+		if ($intFilterSettings)
+		{
+			$objFilterSettings = MetaModelFilterSettingsFactory::byId($intFilterSettings);
+			$arrAttributes = array_merge($objFilterSettings->getReferencedAttributes(), $arrAttributes);
+		}
+
+		return $arrAttributes;
 	}
 
 	/**
@@ -481,6 +532,23 @@ class MetaModelList extends Controller
 		return $this->objMetaModel;
 	}
 
+	public function getOutputFormat()
+	{
+		if (isset($this->strOutputFormat))
+		{
+			return $this->strOutputFormat;
+		}
+		if (isset($this->objView) && $this->objView->get('format'))
+		{
+			return $this->objView->get('format');
+		}
+		if (TL_MODE == 'FE' && is_object($GLOBALS['objPage']) && $GLOBALS['objPage']->outputFormat)
+		{
+			return $GLOBALS['objPage']->outputFormat;
+		}
+		return 'text';
+	}
+
 	/**
 	 * Render the list view.
 	 *
@@ -493,14 +561,23 @@ class MetaModelList extends Controller
 	public function render($blnNoNativeParsing, $objCaller)
 	{
 		$this->objTemplate->noItemsMsg = $GLOBALS['TL_LANG']['MSC']['noItemsMsg'];
+		$this->objTemplate->details = $GLOBALS['TL_LANG']['MSC']['details'];
 
 		$this->prepare();
+		$strOutputFormat = $this->getOutputFormat();
 
-		$this->objTemplate->data = ($this->objItems->getCount() && !$blnNoNativeParsing) ? $this->objItems->parseAll($this->strOutputFormat, $this->objView) : array();
+		if($this->objItems->getCount() && !$blnNoNativeParsing)
+		{
+			$this->objTemplate->data = $this->objItems->parseAll($strOutputFormat, $this->objView);
+		} else {
+			$this->objTemplate->data = array();
+		}
 
 		$this->objTemplate->items = $this->objItems;
 
-		return $this->objTemplate->parse($this->strOutputFormat);
+		$this->objTemplate->filterParams = $this->arrParam;
+
+		return $this->objTemplate->parse($strOutputFormat);
 	}
 
 }

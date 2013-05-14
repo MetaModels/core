@@ -31,17 +31,22 @@ class MetaModelFilterRuleOR extends MetaModelFilterRule
 	protected $arrChildFilters = array();
 
 	/**
-	 * Boolean flag determining if filtering shall be stopped after the
-	 * first matching child that returns at least one element (NULL counts as "all ids" here).
+	 * Flag determining if filtering shall return the first non-empty match.
 	 *
-	 * @var bool
+	 * This flag determines if the rule shall return the result of the first
+	 * child that returns at least one element (a return value of NULL from a
+	 * rule counts as "all ids" in this context and therefore is considered
+	 * non empty per definition).
+	 *
+	 * @var boolean
 	 */
 	protected $stopAfterMatch = false;
 
 	/**
-	 * create a new FilterRule instance.
+	 * Create a new FilterRule instance.
 	 *
-	 * @return MetaModelFilterRuleOR
+	 * @param boolean $stopAfterMatch Flag determining if filtering shall return
+	 *                                the first non-empty match.
 	 */
 	public function __construct($stopAfterMatch = false)
 	{
@@ -50,9 +55,9 @@ class MetaModelFilterRuleOR extends MetaModelFilterRule
 	}
 
 	/**
-	 * adds a child filter to this rule that will get evaluated when this rule is evaluated.
+	 * Adds a child filter to this rule that will get evaluated when this rule is evaluated.
 	 *
-	 * @param IMetaModelFilter $objFilter the filter to add as child
+	 * @param IMetaModelFilter $objFilter The filter to add as child.
 	 *
 	 * @return void
 	 */
@@ -62,7 +67,21 @@ class MetaModelFilterRuleOR extends MetaModelFilterRule
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Fetch the ids from all child filter rules.
+	 *
+	 * If no entries have been found, the result is an empty array.
+	 * If no filtering was applied and therefore all ids shall be reported as
+	 * valid, the return value of NULL is allowed.
+	 *
+	 * The OR filter rule has an embedded shortcut for the first rule that
+	 * returns "null". When this happens, no further child rules will get
+	 * evaluated, as the result set can not expand any further.
+	 *
+	 * Note: when "stopAfterMatch" has been set, the rule will stop processing
+	 * also when the first rule returns a non empty result and return that
+	 * result.
+	 *
+	 * @return int[]|null
 	 */
 	public function getMatchingIds()
 	{
@@ -71,12 +90,12 @@ class MetaModelFilterRuleOR extends MetaModelFilterRule
 		{
 			$arrChildMatches = $objChildFilter->getMatchingIds();
 			// NULL => all items - for OR conditions, this can never be more than all so we are already satisfied here.
-			if ($arrChildMatches === NULL)
+			if ($arrChildMatches === null)
 			{
-				return NULL;
+				return null;
 			}
 
-			if($arrChildMatches && $this->stopAfterMatch)
+			if ($arrChildMatches && $this->stopAfterMatch)
 			{
 				return $arrChildMatches;
 			}

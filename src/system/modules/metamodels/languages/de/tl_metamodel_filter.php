@@ -1,38 +1,31 @@
 <?php
 /**
- * The MetaModels extension allows the creation of multiple collections of custom items,
- * each with its own unique set of selectable attributes, with attribute extendability.
- * The Front-End modules allow you to build powerful listing and filtering of the
- * data in each collection.
+ * Translations are managed using Transifex. To create a new translation
+ * or to help to maintain an existing one, please register at transifex.com.
  *
- * PHP version 5
- * @package	   MetaModels
- * @subpackage Backend
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  The MetaModels team.
- * @license    LGPL.
- * @filesource
- * @translation Carolina M Koehn <ck@kikmedia.de>
+ * @link http://help.transifex.com/intro/translating.html
+ * @link https://www.transifex.com/projects/p/metamodels/language/de/
+ *
+ * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ *
+ * last-updated: 2013-05-13T22:11:20+02:00
  */
 
-/**
- * Fields
- */
-$GLOBALS['TL_LANG']['tl_metamodel_filter']['name']                 = array('Name', 'Name der Filtereinstellung.');
-$GLOBALS['TL_LANG']['tl_metamodel_filter']['tstamp']               = array('Aktualisierungsdatum', 'Datum und Zeit der letzten Aktualisierung.');
 
-/**
- * Legends
- */
-$GLOBALS['TL_LANG']['tl_metamodel_filter']['title_legend']         = 'Name';
-
-/**
- * Buttons
- */
-$GLOBALS['TL_LANG']['tl_metamodel_filter']['new']                  = array('Neu', 'Neue Filtereinstellung erstellen');
-$GLOBALS['TL_LANG']['tl_metamodel_filter']['edit']                 = array('Filtereinstellung bearbeiten', 'Die Filtereinstellung ID %s bearbeiten');
-$GLOBALS['TL_LANG']['tl_metamodel_filter']['copy']                 = array('Filtereinstellung kopieren', 'Die Filtereinstellung ID %s kopieren');
-$GLOBALS['TL_LANG']['tl_metamodel_filter']['delete']               = array('Filtereinstellung löschen', 'Die Filtereinstellung ID %s löschen');
-$GLOBALS['TL_LANG']['tl_metamodel_filter']['show']                 = array('Filterdetails', 'Die Details der Filtereinstellung ID %s anzeigen');
-$GLOBALS['TL_LANG']['tl_metamodel_filter']['settings']             = array('Filterattribute erstellen', 'Filterattribute für Filtereinstellung ID %s definieren');
-
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['copy']['0']     = 'Filtereinstellung kopieren';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['copy']['1']     = 'Kopieren Sie die Filtereinstellung ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['delete']['0']   = 'Filtereinstellung löschen';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['delete']['1']   = 'Löschen Sie die Filtereinstellung ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['edit']['0']     = 'Einstellung bearbeiten';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['edit']['1']     = 'Die Filtereinstellung ID %s bearbeiten';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['name']['0']     = 'Name';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['name']['1']     = 'Filtername';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['new']['0']      = 'Neu';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['new']['1']      = 'Erstellen Sie eine neue Filtereinstellung.';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['settings']['0'] = 'Attributeinstellungen definieren';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['settings']['1'] = 'Definieren Sie die Attributeinstellungen für die Filtereinstellung ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['show']['0']     = 'Details';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['show']['1']     = 'Die Details der Filtereinstellung ID %s anzeigen.';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['title_legend']  = 'Name';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['tstamp']['0']   = 'Aktualisierungsdatum';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['tstamp']['1']   = 'Datum und Zeit der letzten Aktualisierung.';

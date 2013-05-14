@@ -24,13 +24,15 @@
 class MetaModelRenderSettings implements IMetaModelRenderSettings
 {
 	/**
-	 * the base information for this render settings object.
+	 * The base information for this render settings object.
+	 *
 	 * @var array
 	 */
 	protected $arrBase = array();
 
 	/**
 	 * The subsettings for all attributes.
+	 *
 	 * @var array
 	 */
 	protected $arrSettings = array();
@@ -38,9 +40,7 @@ class MetaModelRenderSettings implements IMetaModelRenderSettings
 	/**
 	 * Create a new instance.
 	 *
-	 * @param array $arrInformation the array that holds all base information for the new instance.
-	 *
-	 * @return IMetaModelRenderSettings the new instance.
+	 * @param array $arrInformation The array that holds all base information for the new instance.
 	 */
 	public function __construct($arrInformation = array())
 	{
@@ -51,7 +51,11 @@ class MetaModelRenderSettings implements IMetaModelRenderSettings
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Retrieve a setting from the settings instance.
+	 *
+	 * @param string $strName The name of the setting to retrieve.
+	 *
+	 * @return mixed|null The value or null if not set.
 	 */
 	public function get($strName)
 	{
@@ -59,7 +63,13 @@ class MetaModelRenderSettings implements IMetaModelRenderSettings
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Set a base property in the settings object.
+	 *
+	 * @param string $strName    The name of the setting to set.
+	 *
+	 * @param mixed  $varSetting The value to use.
+	 *
+	 * @return IMetaModelRenderSettings The setting itself.
 	 */
 	public function set($strName, $varSetting)
 	{
@@ -68,7 +78,11 @@ class MetaModelRenderSettings implements IMetaModelRenderSettings
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Get the render information for an attribute.
+	 *
+	 * @param string $strAttributeName The name of the attribute.
+	 *
+	 * @return object|null An object or null if the information is not available.
 	 */
 	public function getSetting($strAttributeName)
 	{
@@ -76,7 +90,13 @@ class MetaModelRenderSettings implements IMetaModelRenderSettings
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Set the render information for an attribute.
+	 *
+	 * @param string $strAttributeName The name of the attribute.
+	 *
+	 * @param object $objSetting       The object containing all the information.
+	 *
+	 * @return IMetaModelRenderSettings The instance itself for chaining.
 	 */
 	public function setSetting($strAttributeName, $objSetting)
 	{
@@ -90,7 +110,9 @@ class MetaModelRenderSettings implements IMetaModelRenderSettings
 	}
 
 	/**
-	 * {@inheritdoc}
+	 * Retrieve the names of all columns getting rendered via this setting.
+	 *
+	 * @return string[]
 	 */
 	public function getSettingNames()
 	{

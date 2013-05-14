@@ -61,6 +61,29 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 		{
 			return;
 		}
+
+		if ($this->Input->get('subpaletteid'))
+		{
+			$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['dca_config']['childCondition'][0]['setOn'][] = array
+			(
+				'to_field'    => 'subpalette',
+				'value'       => $this->Input->get('subpaletteid')
+			);
+			$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['dca_config']['childCondition'][0]['filter'][] = array
+			(
+				'local'        => 'subpalette',
+				'remote_value' => $this->Input->get('subpaletteid'),
+				'operation'   => '=',
+			);
+		} else {
+			$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['dca_config']['childCondition'][0]['filter'][] = array
+			(
+				'local'        => 'subpalette',
+				'remote_value' => 0,
+				'operation'   => '=',
+			);
+		}
+
 		$this->objectsFromUrl(null);
 
 		if (!$this->objMetaModel)
@@ -124,7 +147,9 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 			parent::makeMultiColumnName(
 				$this->objMetaModel,
 				$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode'],
-				$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']
+				$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value'],
+				false,
+				$objModel->getProperty('legendtitle')
 				),
 			$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['legendtitle']
 		);
@@ -185,14 +210,15 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 			return;
 		}
 		$objMetaModel = $this->objMetaModel;
-		$objSettings = $this->Database->prepare('SELECT attr_id FROM tl_metamodel_dcasetting WHERE pid=? AND dcatype="attribute"')
-			->execute($this->Input->get('pid'));
+		$objSettings = $this->Database->prepare('SELECT attr_id FROM tl_metamodel_dcasetting WHERE pid=? AND dcatype="attribute" AND ((subpalette=0) OR (subpalette=?))')
+			->execute($objDC->getCurrentModel()->getProperty('pid'), $objDC->getCurrentModel()->getProperty('subpalette'));
 
 		$arrAlreadyTaken = $objSettings->fetchEach('attr_id');
 
 		foreach ($objMetaModel->getAttributes() as $objAttribute)
 		{
-			if (in_array($objAttribute->get('id'), $arrAlreadyTaken))
+			if ((!($objAttribute->get('id') == $objDC->getCurrentModel()->getProperty('attr_id')))
+			&& in_array($objAttribute->get('id'), $arrAlreadyTaken))
 			{
 				continue;
 			}
@@ -251,12 +277,13 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 				}
 
 				$strLabel = $objAttribute->getName();
-
 				$strReturn = sprintf(
-					$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['row'],
+					'%s <strong>%s</strong> %s <em>[%s]</em> <span class="tl_class">%s</span>',
 					$strImage,
 					$strLabel ? $strLabel : $objAttribute->get('type'),
-					$objAttribute->get('type')
+					$arrRow['mandatory'] ? '*' : '',
+					$objAttribute->get('type'),
+					$arrRow['tl_class'] ? sprintf('[%s]', $arrRow['tl_class']) : ''
 				);
 				return $strReturn;
 			break;
@@ -277,7 +304,7 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
                 }
 
                 $strReturn = sprintf(
-                    $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legend_row'],
+	                '<div class="dca_palette">%s%s</div>',
                     $strLegend, $arrRow['legendhide'] ? ':hide' : ''
                 );
 
@@ -367,16 +394,58 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 			{
 				if (!array_key_exists($objAttribute->get('id'), $arrKnown))
 				{
-					$intMax *= 128;
+					$intMax += 128;
 					$this->Database->prepare('INSERT INTO tl_metamodel_dcasetting %s')->set(array(
 						'pid'      => $this->Input->get('id'),
 						'sorting'  => $intMax,
 						'tstamp'   => time(),
 						'dcatype'  => 'attribute',
 						'attr_id'  => $objAttribute->get('id'),
-						'tl_class' => ''
+						'tl_class' => '',
+						'subpalette' => (Input::getInstance()->get('subpaletteid')) ? Input::getInstance()->get('subpaletteid') : 0,
 					))->execute();
-					$arrMessages[sprintf($GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess'], $objAttribute->getName())] = 'confirm';
+
+					// Get msg for adding at main palette or a subpalette
+					if (Input::getInstance()->get('subpaletteid'))
+					{
+						$strPartentAttributeName = Input::getInstance()->get('subpaletteid');
+
+						// Get parent setting.
+						$objParentDcaSetting = Database::getInstance()
+								->prepare("SELECT attr_id FROM tl_metamodel_dcasetting WHERE id=?")
+								->execute(Input::getInstance()->get('subpaletteid'));
+
+						// Check if we have a attribute
+						$objPartenAttribute = $objMetaModel->getAttributeById($objParentDcaSetting->attr_id);
+
+						if (!is_null($objPartenAttribute))
+						{
+							// Multilanguage support.
+							if(is_array($objPartenAttribute->get('name')))
+							{
+								$arrName = $objPartenAttribute->get('name');
+
+								if (key_exists($objMetaModel->getActiveLanguage(), $arrName))
+								{
+									$strPartentAttributeName = $arrName[$objMetaModel->getActiveLanguage()];
+								}
+								else
+								{
+									$strPartentAttributeName = $arrName[$objMetaModel->getFallbackLanguage()];
+								}
+							}
+							else
+							{
+								$strPartentAttributeName = $objPartenAttribute->get('name');
+							}
+						}
+
+						$arrMessages[sprintf($GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess_subpalette'], $objAttribute->getName(), $strPartentAttributeName)] = 'confirm';
+					}
+					else
+					{
+						$arrMessages[sprintf($GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess'], $objAttribute->getName())] = 'confirm';
+					}
 				}
 			}
 		} else {
@@ -417,6 +486,48 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 			$objDC->id,
 			$this->generateImage('system/modules/metamodels/html/dca_wizard.png', $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker'], 'style="vertical-align:top;"')
 		);
+	}
+
+	protected function makeDisabledButton($icon, $label)
+	{
+		return $this->generateImage(substr_replace($icon, '_1', strrpos($icon, '.'), 0), $label);
+	}
+
+	public function subpaletteButton($row, $href, $label, $title, $icon, $attributes)
+	{
+		// Check if we have a attribute
+		if($row['dcatype'] != 'attribute' || strlen($this->Input->get('subpaletteid')) != 0)
+		{
+			return $this->makeDisabledButton($icon, $label);
+		}
+
+		// Get MM and check if we have a valide one.
+		$intId = $this->Database
+			->prepare('SELECT pid FROM tl_metamodel_dca WHERE id=?')
+			->execute($row['pid'])
+			->pid;
+		$objMetaModel = MetaModelFactory::byId($intId);
+		if(is_null($objMetaModel))
+		{
+			return $this->makeDisabledButton($icon, $label);
+		}
+
+		// Get attribute and check if we have a valide one.
+		$objAttribute = $objMetaModel->getAttributeById($row['attr_id']);
+
+		if(is_null($objAttribute))
+		{
+			return $this->makeDisabledButton($icon, $label);
+		}
+
+		// TODO: add some attribute::supports method to add only for attributes that indeed support subpaletting.
+		// For the moment we add a dirty check, only for checkboxes.
+		if (in_array($objAttribute->get('type'), array('checkbox')))
+		{
+			return '<a href="'.$this->addToUrl($href.'&amp;id='. $row['pid'] . '&amp;subpaletteid='.$row['id']).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
+		}
+
+		return $this->makeDisabledButton($icon, $label);
 	}
 }
 

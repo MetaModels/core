@@ -83,17 +83,21 @@ class TableMetaModelHelper extends Backend
 	}
 
 	/**
-	 * create a widget for naming contexts. Use the language and translation information from the MetaModel.
+	 * Create a widget for naming contexts. Use the language and translation information from the MetaModel.
 	 *
-	 * @param IMetaModel $objMetaModel  the metamodel
+	 * @param IMetaModel $objMetaModel  The metamodel
 	 *
-	 * @param string     $strLabelLang  the label to use for the language indicator
+	 * @param string     $strLabelLang  The label to use for the language indicator
 	 *
-	 * @param string     $strLabelValue the label to use for the input field.
+	 * @param string     $strLabelValue The label to use for the input field.
 	 *
-	 * @param bool       $blnIsTextarea if true, the widget will become a textarea, false otherwise.
+	 * @param bool       $blnIsTextarea If true, the widget will become a textarea, false otherwise.
+	 *
+	 * @param array      $arrValues     The values for the widget, needed to highlight the fallback language.
+	 *
+	 * @return array
 	 */
-	public function makeMultiColumnName(IMetaModel $objMetaModel, &$strLabelLang, &$strLabelValue, $blnIsTextarea = false)
+	public function makeMultiColumnName(IMetaModel $objMetaModel, &$strLabelLang, &$strLabelValue, $blnIsTextarea, $arrValues)
 	{
 		$arrwidget = array();
 		if(!$objMetaModel->isTranslated())
@@ -115,6 +119,21 @@ class TableMetaModelHelper extends Backend
 			}
 			asort($arrLanguages);
 
+			// Ensure we have the values present.
+			if (empty($arrValues))
+			{
+				foreach ((array)$objMetaModel->getAvailableLanguages() as $strLangCode)
+				{
+					$arrValues[$strLangCode] = '';
+				}
+			}
+
+			$arrRowClasses = array();
+			foreach (array_keys(deserialize($arrValues)) as $strLangcode)
+			{
+				$arrRowClasses[] = ($strLangcode == $objMetaModel->getFallbackLanguage()) ? 'fallback_language' : 'normal_language';
+			}
+
 			$arrwidget = array
 			(
 				'inputType'        => 'multiColumnWizard',
@@ -134,7 +153,9 @@ class TableMetaModelHelper extends Backend
 							'options'               => $arrLanguages,
 							'eval'                  => array
 							(
-								'valign'            => 'center'
+								'rowClasses'        => $arrRowClasses,
+								'valign'            => 'center',
+								'style'             => 'min-width:75px;display:block;'
 							)
 						),
 						'value' => array
@@ -142,10 +163,11 @@ class TableMetaModelHelper extends Backend
 							'label'                 => &$strLabelValue,
 							'exclude'               => true,
 							'inputType'             => $blnIsTextarea ? 'textarea' : 'text',
-							'eval'                     => array
+							'eval'                  => array
 							(
+								'rowClasses'        => $arrRowClasses,
 								'style'             => 'width:400px;',
-								'rows'		    => 3
+								'rows'              => 3
 							)
 						),
 					)

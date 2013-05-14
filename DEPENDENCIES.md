@@ -1,26 +1,24 @@
 Dependencies
 ============
 
-DC_General
-----------------
+**DC_General**
 
-* https://github.com/menatwork/DC_General
+* https://github.com/MetaModels/DC_General
+* https://contao.org/de/extension-list/view/DC_General.html
 
 
-Justtextwidgets
------------------
+**Justtextwidgets**
 
 * https://github.com/Discordier/justtextwidgets
+* https://contao.org/de/extension-list/view/justtextwidgets.html
 
 
-MultiColumnWizard (3.1.0 beta1)
-----------------
+**MultiColumnWizard**
 
+* https://github.com/menatwork/MultiColumnWizard
 * http://contao.org/en/extension-list/view/MultiColumnWizard.html
 
 
-MetaPalettes (1.3.7 stable)
------------------
+**MetaPalettes**
 
 * http://contao.org/en/extension-list/view/MetaPalettes.html
-

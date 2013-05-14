@@ -1,3 +1,4 @@
+<?php $strRendersettings = ($this->settings)? 'settings' : 'view'; ?>
 <?php if ($this->items->getCount()): ?>
 
 <div class="layout_full">
@@ -8,20 +9,19 @@
 <?php foreach ($this->items->getItem()->getMetaModel()->getAttributes() as $field => $objAttribute): ?>
 <?php if (($strValue = $arrItem[$this->getFormat()][$field]) || ($strValue = $arrItem['text'][$field])): ?>
 <div class="field <?php echo $field; ?>">
-    <div class="label"><?php echo $objAttribute->getName(); ?></div>
-    <div class="value"><?php echo $strValue; ?></div>
+	<?php if(!$this->$strRendersettings->get('hideLabels')): ?>
+		<div class="label"><?php echo $objAttribute->getName(); ?>: </div>
+	<?php endif; ?>
+	<div class="value"> <?php echo $strValue; ?></div>
 </div>
 <?php endif; ?>
 <?php endforeach; ?>
 <?php if ($arrItem['jumpTo']['deep']): ?>
-<a href="<?php echo $arrItem['jumpTo']['url']; ?>">Details</a>
+<a href="<?php echo $arrItem['jumpTo']['url']; ?>"><?php echo $this->details; ?></a>
 <?php endif; ?>
 </div>
 <?php endforeach; ?>
-
-
 </div>
-
 <?php else: ?>
 <p class="info"><?php echo $this->noItemsMsg; ?></p>
 <?php endif; ?>

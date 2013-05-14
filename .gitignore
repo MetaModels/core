@@ -7,6 +7,12 @@ Thumbs.db
 .project
 .settings/
 .build/
+.external*/
 .idea/
 nbproject/
 
+# composer related
+vendor/
+
+# build
+build/

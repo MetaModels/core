@@ -55,12 +55,12 @@ class MetaModelFrontendFilter extends Frontend
 
 		$this->objFilterConfig->arrJumpTo = $GLOBALS['objPage']->row();
 
-		if ($this->objFilterConfig->jumpTo)
+		if ($this->objFilterConfig->metamodel_jumpTo)
 		{
 			// page to jump to when filter submit
 			$objPage = $this->Database->prepare("SELECT id, alias FROM tl_page WHERE id=?")
 				->limit(1)
-				->execute($this->objFilterConfig->jumpTo);
+				->execute($this->objFilterConfig->metamodel_jumpTo);
 			if ($objPage->numRows)
 			{
 				$this->objFilterConfig->arrJumpTo = $objPage->row();
@@ -101,6 +101,13 @@ class MetaModelFrontendFilter extends Frontend
 
 			if (strlen($strValue))
 			{
+				// Shift auto_item to the front.
+				if ($strName == 'auto_item')
+				{
+					$strFilterAction = '/' . $strValue . $strFilterAction;
+					continue;
+				}
+
 				$strFilterAction .= sprintf(($GLOBALS['TL_CONFIG']['disableAlias'] ? '&amp;%s=%s' : '/%s/%s'), $strName, urlencode($strValue));
 			}
 		}
@@ -178,11 +185,12 @@ class MetaModelFrontendFilter extends Frontend
 		$objFilterSetting = MetaModelFilterSettingsFactory::byId($this->objFilterConfig->metamodel_filtering);
 
 		$blnAutoSubmit = $this->objFilterConfig->metamodel_fef_autosubmit ? true : false;
+		$blnHideClearFilter = $this->objFilterConfig->metamodel_fef_hideclearfilter ? true : false;
 		$arrJumpTo = $this->objFilterConfig->arrJumpTo;
 
 		$arrParams = $this->getParams();
 
-		$arrWidgets = $objFilterSetting->getParameterFilterWidgets($arrParams['all'], $arrJumpTo, $blnAutoSubmit);
+		$arrWidgets = $objFilterSetting->getParameterFilterWidgets($arrParams['all'], $arrJumpTo, $blnAutoSubmit, $blnHideClearFilter);
 
 		// filter the widgets we do not want to show.
 		$arrWanted = $this->getWantedNames();
@@ -230,6 +238,65 @@ class MetaModelFrontendFilter extends Frontend
 			'submit'     => ($blnAutoSubmit ? '' : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit'])
 		);
 	}
+	
+	/**
+	 * Add the "clear all Filter"
+	 * 
+	 * @param string $strContent
+	 * @param string $strTemplate
+	 * @return string
+	 */
+	public function generateClearAll($strContent, $strTemplate)
+	{
+		if ($strTemplate == 'fe_page')
+		{
+			if (preg_match_all('#\[\[\[metamodelfrontendfilterclearall::(ce|mod)::([^\]]*)\]\]\]#', $strContent, $arrMatches))
+			{
+				for($i = 0; $i < count($arrMatches); $i = $i + 3)
+				{
+					switch ($arrMatches[$i + 1][0])
+					{
+						case 'ce':
+							$objDbResult = Database::getInstance()
+								->prepare('SELECT * FROM tl_content WHERE id=?')
+								->execute($arrMatches[$i + 2][0]);
+							
+							// Check if we have a ce element.
+							if($objDbResult->numRows == 0)
+							{
+								$strContent = str_replace($arrMatches[$i][0], '', $strContent);
+								break;
+							}	
+							
+							// Get instance and call generate function.
+							$objCE = new ContentMetaModelFrontendClearAll($objDbResult);
+							$strContent = str_replace($arrMatches[$i][0], $objCE->generateReal(), $strContent);							
+							break;
+							
+						case 'mod':
+							$objDbResult = Database::getInstance()
+								->prepare('SELECT * FROM tl_module WHERE id=?')
+								->execute($arrMatches[$i + 2]);
+							
+							// Check if we have a mod element.
+							if($objDbResult->numRows == 0)
+							{
+								$strContent = str_replace($arrMatches[$i][0], '', $strContent);
+								break;
+							}					
+							
+							// Get instance and call generate function.
+							$objCE = new ContentMetaModelFrontendClearAll($objDbResult);							
+							$strContent = str_replace($arrMatches[$i][0], $objCE->generateReal(), $strContent);							
+							break;
+					}
+				}
+			}
+		}
+
+		return $strContent;
+	}
+
 }
 
 ?>

@@ -22,7 +22,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
 (
 	'config' => array
 	(
-		'dataContainer'               => 'Table',
+		'dataContainer'               => 'General',
 		'ptable'                      => 'tl_metamodel',
 		'switchToEdit'                => false,
 		'enableVersioning'            => false,
@@ -31,6 +31,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
 	// List
 	'list' => array
 	(
+		'presentation' => array
+		(
+			'breadcrumb_callback'     => array('MetaModelBreadcrumbBuilder', 'generateBreadcrumbItems'),
+		),
+		
 		'sorting' => array
 		(
 			'mode'                    => 1,
@@ -65,12 +70,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
 				'href'                => 'act=edit',
 				'icon'                => 'edit.gif'
 			),
-			'copy' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['copy'],
-				'href'                => 'act=copy',
-				'icon'                => 'copy.gif'
-			),
 			'delete' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['delete'],
@@ -88,7 +87,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['settings'],
 				'href'                => 'table=tl_metamodel_filtersetting',
-				'icon'                => 'system/modules/metamodels/html/filtersetting.png',
+				'icon'                => 'system/modules/metamodels/html/filter_setting.png',
 			),
 		)
 	),

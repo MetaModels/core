@@ -102,13 +102,16 @@ class TableMetaModelRenderSetting extends TableMetaModelHelper
 			return;
 		}
 
-		if($objDC && $objDC->activeRecord)
+		if($objDC && $objDC->getCurrentModel())
 		{
-			$this->objSetting = $this->Database->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')->execute($objDC->activeRecord->pid);
-			$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
-		}
+			$this->objSetting = $this->Database
+				->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')
+				->execute($objDC->getCurrentModel()->getProperty('pid'));
 
-		if ($this->Input->get('act'))
+			$this->objMetaModel = MetaModelFactory::byId($this->objSetting->pid);
+		}
+		// TODO: I guess the whole block here is not needed anymore since we are using DC_General. Check it.
+		elseif ($this->Input->get('act'))
 		{
 			// act present, but we have an id
 			switch ($this->Input->get('act'))
@@ -161,6 +164,7 @@ class TableMetaModelRenderSetting extends TableMetaModelHelper
 	{
 		$this->objectsFromUrl($objDC);
 		$arrResult = array();
+
 		if (!$this->objMetaModel)
 		{
 			return;
@@ -229,7 +233,7 @@ class TableMetaModelRenderSetting extends TableMetaModelHelper
 			return array();
 		}
 
-		$objAttribute = $this->objMetaModel->getAttributeById($objDC->activeRecord->attr_id);
+		$objAttribute = $this->objMetaModel->getAttributeById($objDC->getCurrentModel()->getProperty('attr_id'));
 
 		if (!$objAttribute)
 		{
@@ -301,7 +305,7 @@ class TableMetaModelRenderSetting extends TableMetaModelHelper
 						)
 					);
 
-					$intMax *= 128;
+					$intMax += 128;
 					$this->Database->prepare('INSERT INTO tl_metamodel_rendersetting %s')->set($arrData)->execute();
 					$arrMessages[] = array
 					(

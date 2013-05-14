@@ -166,9 +166,8 @@ implements IMetaModelAttributeTranslated
 	 */
 	public function searchForInLanguages($strPattern, $arrLanguages = array())
 	{
-
 		$arrWhere = $this->getWhere(null);
-		$arrParams = array($strPattern);
+		$arrParams = array(str_replace(array('*', '?'), array('%', '_'), $strPattern));
 
 		$arrOptionizer = $this->getOptionizer();
 
@@ -179,7 +178,7 @@ implements IMetaModelAttributeTranslated
 
 		$objFilterRule = new MetaModelFilterRuleSimpleQuery(
 			sprintf(
-				'SELECT DISTINCT %s FROM %s WHERE %s=? %s%s',
+				'SELECT DISTINCT %s FROM %s WHERE %s LIKE ? %s%s',
 				'item_id',
 				$this->getValueTable(),
 				$arrOptionizer['value'],
@@ -191,6 +190,31 @@ implements IMetaModelAttributeTranslated
 		);
 
 		return $objFilterRule->getMatchingIds();
+	}
+
+	/**
+	 * Sorts the given array list by field value in the given direction.
+	 *
+	 * @param int[]  $arrIds       A list of Ids from the MetaModel table.
+	 *
+	 * @param string $strDirection The direction for sorting. either 'ASC' or 'DESC', as in plain SQL.
+	 *
+	 * @return int[] The sorted integer array.
+	 */
+	public function sortIds($arrIds, $strDirection)
+	{
+		$objDB = Database::getInstance();
+
+		$arrWhere = $this->getWhere($arrIds, $this->getMetaModel()->getActiveLanguage());
+
+		$strQuery = 'SELECT item_id FROM ' . $this->getValueTable() . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '');
+
+		$arrOptionizer = $this->getOptionizer();
+
+		$objValue = $objDB->prepare($strQuery . ' ORDER BY '.$arrOptionizer['value'] . ' ' . $strDirection)
+			->execute(($arrWhere ? $arrWhere['params'] : null));
+
+		return $objValue->fetchEach('item_id');
 	}
 
 	/**

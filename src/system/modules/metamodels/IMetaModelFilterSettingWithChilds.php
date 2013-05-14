@@ -15,7 +15,6 @@
  */
 
 /**
- *
  * This interface handles filter setting abstraction for settings that can contain childs.
  *
  * @see
@@ -28,7 +27,8 @@ interface IMetaModelFilterSettingWithChilds extends IMetaModelFilterSetting
 	/**
 	 * Adds a child setting to this setting.
 	 *
-	 * @param IMetaModelFilterSetting $objFilterSetting the setting that shall be added as child.
+	 * @param IMetaModelFilterSetting $objFilterSetting The setting that shall be added as child.
+	 *
 	 * @return void
 	 */
 	public function addChild(IMetaModelFilterSetting $objFilterSetting);

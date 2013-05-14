@@ -91,10 +91,14 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 			return;
 		}
 
-		if(is_object($objDC) && $objDC->activeRecord)
+		if(is_object($objDC) && $objDC->getCurrentModel())
 		{
-			$this->strSettingType = $objDC->activeRecord->type;
-			$this->objFilter = $this->Database->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')->execute($objDC->activeRecord->fid);
+			$this->strSettingType = $objDC->getCurrentModel()->getProperty('type');
+
+			$this->objFilter = $this->Database
+				->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
+				->execute($objDC->getCurrentModel()->getProperty('fid'));
+
 			$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
 		}
 
@@ -106,7 +110,6 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 				case 'edit':
 					if ($this->Input->get('id'))
 					{
-						$strSettingType = $objDC->activeRecord->type;
 						$this->objFilter = $this->Database->prepare('
 							SELECT tl_metamodel_filter.*,
 								tl_metamodel_filtersetting.type AS tl_metamodel_filtersetting_type,
@@ -126,7 +129,10 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 						switch ($this->Input->get('mode'))
 						{
 							case 'create':
-								$this->objFilter = $this->Database->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')->execute($this->Input->get('id'));
+								$this->objFilter = $this->Database
+									->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
+									->execute($this->Input->get('id'));
+
 								$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
 							break;
 							case 'cut':
@@ -138,13 +144,21 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 									LEFT JOIN tl_metamodel_filter
 									ON (tl_metamodel_filtersetting.fid = tl_metamodel_filter.id)
 									WHERE (tl_metamodel_filtersetting.id=?)')
-									->execute($this->Input->get('id'));
+									->execute($this->Input->get('source'));
 								$this->strSettingType = $this->objFilter->tl_metamodel_filtersetting_type;
 								$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
 							break;
 						}
 					}
 					break;
+				case 'create':
+					$this->objFilter = $this->Database
+						->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
+						->execute($this->Input->get('id'));
+
+					$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
+					break;
+
 				default:;
 			}
 		} else {
@@ -223,10 +237,17 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		$this->objectsFromUrl($objDC);
 		if (!$this->objMetaModel)
 		{
-			return;
+			return 0;
 		}
 		$strName = str_replace($this->objMetaModel->getTableName() . '_', '', $strValue);
-		return $this->objMetaModel->getAttribute($strName)->get('id');
+
+		$objAttribute = $this->objMetaModel->getAttribute($strName);
+		if (!$objAttribute)
+		{
+			return 0;
+		}
+
+		return $objAttribute->get('id');
 	}
 
 	/**
@@ -258,7 +279,7 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		}
 		$objMetaModel = $this->objMetaModel;
 
-		$arrTypeFilter = $GLOBALS['METAMODELS']['filters'][$objDC->activeRecord->type]['attr_filter'];
+		$arrTypeFilter = $GLOBALS['METAMODELS']['filters'][$objDC->getCurrentModel()->getProperty('type')]['attr_filter'];
 		foreach ($objMetaModel->getAttributes() as $objAttribute)
 		{
 			$strTypeName = $objAttribute->get('type');
@@ -318,21 +339,88 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 	}
 
 	/**
+	 * Set the parent condition for the current fid.
+	 *
+	 * @param string     $strTable The tablename - must be tl_metamodel_filtersetting.
+	 *
+	 * @param DC_General $objDC    The DataContainer calling us.
+	 *
+	 * @return string The value "tl_metamodel_filtersetting".
+	 */
+	public function loadTableCallback($strTable, $objDC)
+	{
+		if ($strTable == 'tl_metamodel_filtersetting')
+		{
+			$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['dca_config']['childCondition'][0]['filter'][] = array
+			(
+				'local'        => 'fid',
+				'remote_value' => $this->Input->get('id'),
+				'operation'    => '=',
+			);
+
+			$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['dca_config']['rootEntries']['self']['setOn'][] = array
+			(
+				'property'    => 'fid',
+				'value'       => $this->Input->get('id'),
+			);
+
+			$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['dca_config']['rootEntries']['self']['filter'][] = array
+			(
+				'property'    => 'fid',
+				'operation'   => '=',
+				'value'       => $this->Input->get('id'),
+			);
+		}
+
+		return $strTable;
+	}
+
+	/**
 	 * when creating a new item, we need to populate the fid column.
 	 */
-	public function create_callback($strTable, $insertID, $set, $objDC)
+	public function create_callback($strTable, $insertID, $arrRow, $objDC)
 	{
+		// If we come from overview use pid
+		if($this->Input->get('id') != "")
+		{
+			$intFid = $this->Input->get('id');
+		}
+		// If we use the "save and new" btt use the pid instead
+		elseif($this->Input->get('pid') != "")
+		{
+			// Get fid from pid
+			$arrFid = $this->Database
+			->prepare('SELECT fid FROM tl_metamodel_filtersetting WHERE id=?')
+			->execute($this->Input->get('pid'))
+			->fetchEach('fid');
+
+			// Check if we have a pid
+			if(count($arrFid) == 0)
+			{
+				throw new Exception("Could not find FID. Please create a new entry from main overview.");
+			}
+
+			// Set fid by pid`s fid
+			$intFid = $arrFid[0];
+		}
+
 		$objResult = $this->Database->prepare('UPDATE tl_metamodel_filtersetting %s WHERE id=?')
-		->set(array('fid' => $this->Input->get('id')))
+		->set(array('fid' => $intFid))
 		->execute($insertID);
 	}
 
 	public function drawOrCondition($arrRow, $strLabel, DataContainer $objDC = null, $imageAttribute='', $strImage)
 	{
+		if (!empty($arrRow['comment']))
+		{
+			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], $arrRow['comment']);
+		}
+		
 		$strReturn = sprintf(
 		$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionor'],
 		'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
 		$strLabel ? $strLabel : $arrRow['type'],
+		$arrRow['comment'],
 		$arrRow['type']
 		);
 
@@ -341,10 +429,16 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 
 	public function drawAndCondition($arrRow, $strLabel, DataContainer $objDC = null, $imageAttribute='', $strImage)
 	{
+		if (!empty($arrRow['comment']))
+		{
+			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], $arrRow['comment']);
+		}
+		
 		$strReturn = sprintf(
 		$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand'],
 		'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
 		$strLabel ? $strLabel : $arrRow['type'],
+		$arrRow['comment'],
 		$arrRow['type']
 		);
 		return $strReturn;
@@ -364,11 +458,17 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 			$strAttrName = $arrRow['attr_id'];
 			$strAttrColName = $arrRow['attr_id'];
 		}
+		
+		if (!empty($arrRow['comment']))
+		{
+			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], $arrRow['comment']);
+		}
 
 		$strReturn = sprintf(
 		$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup'],
 		'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
 		$strLabel ? $strLabel : $arrRow['type'],
+		$arrRow['comment'],
 		$strAttrName,
 		($arrRow['urlparam'] ? $arrRow['urlparam'] : $strAttrColName)
 		);
@@ -390,13 +490,28 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		$this->objectsFromUrl($objDC);
 		$objAttribute = $this->objMetaModel->getAttributeById($arrRow['attr_id']);
 
+		if ($objAttribute)
+		{
+			$strAttrName = $objAttribute->getName();
+			$strAttrColName = $objAttribute->getColName();
+		} else {
+			$strAttrName = $arrRow['attr_id'];
+			$strAttrColName = $arrRow['attr_id'];
+		}
+		
+		if (!empty($arrRow['comment']))
+		{
+			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], $arrRow['comment']);
+		}
+
 		$strReturn = sprintf(
 			$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['fefilter'],
 			'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
 			$strLabel,
-			($objAttribute ? $objAttribute->getName() : ''),
-			$arrRow['urlparam']
-			);
+			$arrRow['comment'],
+			$strAttrName,
+			$arrRow['urlparam'] ? $arrRow['urlparam'] : $strAttrColName
+		);
 
 		return $strReturn;
 	}
@@ -412,6 +527,15 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 			$strImage = 'system/modules/metamodels/html/filter_default.png';
 		}
 
+		if (!$arrRow['enabled'])
+		{
+			$intPos=strrpos($strImage, '.');
+			if ($intPos !== false)
+			{
+				$strImage = substr_replace($strImage, '_1', $intPos, 0);
+			}
+		}
+
 		// Return the image only
 		if ($blnReturnImage)
 		{
@@ -425,13 +549,25 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		if ($GLOBALS['METAMODELS']['filters'][$arrRow['type']]['info_callback'])
 		{
 			$this->import($GLOBALS['METAMODELS']['filters'][$arrRow['type']]['info_callback'][0], 'objCallback');
-			$strReturn = $this->objCallback->{$GLOBALS['METAMODELS']['filters'][$arrRow['type']]['info_callback'][1]}($arrRow, $strLabel, $objDC, $imageAttribute, $strImage);
+			$strReturn = $this->objCallback->{$GLOBALS['METAMODELS']['filters'][$arrRow['type']]['info_callback'][1]}(
+				$arrRow,
+				$strLabel,
+				$objDC,
+				$imageAttribute,
+				$strImage
+			);
 			$this->objCallback = null;
 		} else {
+			if(!empty($arrRow['comment']))
+			{
+				$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], $arrRow['comment']);
+			}
+			
 			$strReturn = sprintf(
 			$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_default_'],
 			'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
 			$strLabel ? $strLabel : $arrRow['type'],
+			$arrRow['comment'],
 			$arrRow['type']
 			);
 		}
@@ -452,7 +588,6 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		$disablePA = false;
 		$disablePI = false;
 
-
 		// Disable all buttons if there is a circular reference
 		if ($arrClipboard !== false && ($arrClipboard['mode'] == 'cut' && ($cr == 1 || $arrClipboard['id'] == $arrRow['id']) || $arrClipboard['mode'] == 'cutAll' && ($cr == 1 || in_array($arrRow['id'], $arrClipboard['id']))))
 		{
@@ -467,19 +602,104 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		}
 
 		// Return the buttons
-		$imagePasteAfter = $this->generateImage('pasteafter.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteafter'][1], $arrRow['id']), 'class="blink"');
-		$imagePasteInto = $this->generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteinto'][1], $arrRow['id']), 'class="blink"');
 
 		if ($arrRow['id'] > 0)
 		{
-			$return = $disablePA
-				? $this->generateImage('pasteafter_.gif', '', 'class="blink"').' '
-				: '<a href="'.$this->addToUrl('act='.$arrClipboard['mode'].'&amp;mode=1&amp;pid='.$arrRow['id'].(!is_array($arrClipboard['id']) ? '&amp;id='.$arrClipboard['id'] : '')).'" title="'.specialchars(sprintf($GLOBALS['TL_LANG'][$strTable]['pasteafter'][1], $arrRow['id'])).'" onclick="Backend.getScrollOffset()">'.$imagePasteAfter.'</a> ';
+			if ($disablePA)
+			{
+				$return = $this->generateImage('pasteafter_.gif', '', 'class="blink"').' ';
+			} else {
+				$imagePasteAfter = $this->generateImage('pasteafter.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteafter'][1], $arrRow['id']), 'class="blink"');
+
+				$strAdd2UrlAfter = sprintf(
+					'act=%s&amp;mode=1&amp;pid=%s&amp;after=%s&amp;source=%s&amp;childs=%s',
+					$arrClipboard['mode'],
+					$arrClipboard['id'],
+					$arrRow['id'],
+					$arrClipboard['source'],
+					$arrClipboard['childs']
+				);
+
+				if ($arrClipboard['pdp'] != '')
+				{
+					$strAdd2UrlAfter .= '&amp;pdp=' . $arrClipboard['pdp'];
+				}
+
+				if ($arrClipboard['cdp'] != '')
+				{
+					$strAdd2UrlAfter .= '&amp;cdp=' . $arrClipboard['cdp'];
+				}
+
+				$return = sprintf(
+					' <a href="%s" title="%s" onclick="Backend.getScrollOffset()">%s</a> ',
+					$this->addToUrl($strAdd2UrlAfter),
+					specialchars($GLOBALS['TL_LANG'][$strTable]['pasteafter'][0]),
+					$imagePasteAfter
+				);
+			}
+
+			if ($disablePI)
+			{
+				$return .= $this->generateImage('pasteinto_.gif', '', 'class="blink"').' ';
+			} else {
+				$imagePasteInto = $this->generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteinto'][1], $arrRow['id']), 'class="blink"');
+
+				$strAdd2UrlInto = sprintf(
+					'act=%s&amp;mode=2&amp;pid=%s&amp;after=%s&amp;source=%s&amp;childs=%s',
+					$arrClipboard['mode'],
+					$arrClipboard['id'],
+					$arrRow['id'],
+					$arrClipboard['source'],
+					$arrClipboard['childs']
+				);
+
+				if ($arrClipboard['pdp'] != '')
+				{
+					$strAdd2UrlInto .= '&amp;pdp=' . $arrClipboard['pdp'];
+				}
+
+				if ($arrClipboard['cdp'] != '')
+				{
+					$strAdd2UrlInto .= '&amp;cdp=' . $arrClipboard['cdp'];
+				}
+
+				$return .= sprintf(
+					' <a href="%s" title="%s" onclick="Backend.getScrollOffset()">%s</a> ',
+					$this->addToUrl($strAdd2UrlInto),
+					specialchars($GLOBALS['TL_LANG'][$strTable]['pasteinto'][0]),
+					$imagePasteInto
+				);
+			}
+		} else {
+			$imagePasteInto = $this->generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteinto'][1], $arrRow['id']), 'class="blink"');
+
+			$strAdd2UrlInto = sprintf(
+				'act=%s&amp;mode=2&amp;after=0&amp;pid=0&amp;id=%s&amp;source=%s&amp;childs=%s',
+				$arrClipboard['mode'],
+				$arrClipboard['id'],
+				$arrClipboard['source'],
+				$arrClipboard['childs']
+			);
+
+			if ($arrClipboard['pdp'] != '')
+			{
+				$strAdd2UrlInto .= '&amp;pdp=' . $arrClipboard['pdp'];
+			}
+
+			if ($arrClipboard['cdp'] != '')
+			{
+				$strAdd2UrlInto .= '&amp;cdp=' . $arrClipboard['cdp'];
+			}
+
+			$return .= sprintf(
+				' <a href="%s" title="%s" onclick="Backend.getScrollOffset()">%s</a> ',
+				$this->addToUrl($strAdd2UrlInto),
+				specialchars($GLOBALS['TL_LANG'][$strTable]['pasteinto'][0]),
+				$imagePasteInto
+			);
 		}
 
-		return $return.($disablePI
-			? $this->generateImage('pasteinto_.gif', '', 'class="blink"').' '
-			: '<a href="'.$this->addToUrl('act='.$arrClipboard['mode'].'&amp;mode=2&amp;pid='.$arrRow['id'].(!is_array($arrClipboard['id']) ? '&amp;id='.$arrClipboard['id'] : '')).'" title="'.specialchars(sprintf($GLOBALS['TL_LANG'][$strTable]['pasteinto'][1], $arrRow['id'])).'" onclick="Backend.getScrollOffset()">'.$imagePasteInto.'</a> ');
+		return $return;
 	}
 
 	/**

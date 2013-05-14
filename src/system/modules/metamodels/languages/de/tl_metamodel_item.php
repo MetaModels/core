@@ -1,34 +1,35 @@
 <?php
 /**
- * The MetaModels extension allows the creation of multiple collections of custom items,
- * each with its own unique set of selectable attributes, with attribute extendability.
- * The Front-End modules allow you to build powerful listing and filtering of the
- * data in each collection.
+ * Translations are managed using Transifex. To create a new translation
+ * or to help to maintain an existing one, please register at transifex.com.
  *
- * PHP version 5
- * @package	   MetaModels
- * @subpackage Backend
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  The MetaModels team.
- * @license    LGPL.
- * @filesource
- * @translation Carolina M Koehn <ck@kikmedia.de>
+ * @link http://help.transifex.com/intro/translating.html
+ * @link https://www.transifex.com/projects/p/metamodels/language/de/
+ *
+ * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ *
+ * last-updated: 2013-05-13T23:07:50+02:00
  */
 
-/**
- * Buttons
- */
-$GLOBALS['TL_LANG']['tl_metamodel_item']['new']           = array('Neuer Datensatz', 'Einen neuen Datensatz erstellen.');
-$GLOBALS['TL_LANG']['tl_metamodel_item']['edit']          = array('Datensatz bearbeiten', 'Den Datensatz ID %s bearbeiten.');
-$GLOBALS['TL_LANG']['tl_metamodel_item']['copy']          = array('Datensatz kopieren', 'Den Datensatz ID %s kopieren.');
-$GLOBALS['TL_LANG']['tl_metamodel_item']['createvariant'] = array('Neue Variante', 'Eine neue Variante von Datensatz ID %s erstellen');
-$GLOBALS['TL_LANG']['tl_metamodel_item']['cut']           = array('Datensatz verschieben', 'Den Datensatz ID %s verschieben.');
-$GLOBALS['TL_LANG']['tl_metamodel_item']['delete']        = array('Datensatz löschen', 'Den Datensatz ID %s löschen.');
-$GLOBALS['TL_LANG']['tl_metamodel_item']['show']          = array('Datensatzdetails', 'Die Details von Datensatz ID %s anzeigen.');
-$GLOBALS['TL_LANG']['tl_metamodel_item']['editheader']    = array('Datensatztyp bearbeiten', 'Den Typ des Datensatzes bearbeiten.');
-$GLOBALS['TL_LANG']['tl_metamodel_item']['fields']        = array('Attribute verwalten', 'Die Attribute dieses MetaModels verwalten.');
-
-$GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']      = array('Neuer Datensatz', 'Einen neuen Datensatz hinter Datensatz ID %s erzeugen.');
-
-$GLOBALS['TL_LANG']['tl_metamodel_item']['varbase']       = array('Basis für Varianten', 'Aktivieren, falls dieser Datensatz als Basis für die aktuelle Variantengruppe benutzt werden soll.');
-
+$GLOBALS['TL_LANG']['tl_metamodel_item']['copy']['0']          = 'Datensatz kopieren';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['copy']['1']          = 'Den Datensatz ID %s kopieren.';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['createvariant']['0'] = 'Neue Variante';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['createvariant']['1'] = 'Eine neue Variante des Datensatzes ID %s erstellen.';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['cut']['0']           = 'Datensatz verschieben';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['cut']['1']           = 'Den Datensatz ID %s verschieben.';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['delete']['0']        = 'Item löschen';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['delete']['1']        = 'Den Datensatz ID %s löschen.';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['edit']['0']          = 'Datensatz bearbeiten';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['edit']['1']          = 'Den Datensatz mit der ID %s bearbeiten.';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['editheader']['0']    = 'Datensatz-Typ bearbeiten';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['editheader']['1']    = 'Bearbeiten Sie den Datensatz-Typ.';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['fields']['0']        = 'Attribute verwalten';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['fields']['1']        = 'Verwalten Sie die Attribute dieses MetaModels.';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['new']['0']           = 'Neuer Datensatz';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['new']['1']           = 'Einen neuen Datensatz erstellen';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']['0']      = 'Neuen Datensatz erstellen.';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']['1']      = 'Erstellen Sie einen neuen Datensatz nach Datensatz ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['show']['0']          = 'Datensatz-Details';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['show']['1']          = 'Die Details des Datensatzes ID %s anzeigen.';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['varbase']['0']       = 'Als Basis für Varianten benutzen';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['varbase']['1']       = 'Wählen Sie diese Option, wenn Sie diesen Datensatz als Basis für die aktuelle Variantengruppe verwenden möchten.';

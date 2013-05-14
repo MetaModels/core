@@ -1,41 +1,36 @@
 <?php
 /**
- * The MetaModels extension allows the creation of multiple collections of custom items,
- * each with its own unique set of selectable attributes, with attribute extendability.
- * The Front-End modules allow you to build powerful listing and filtering of the
- * data in each collection.
+ * Translations are managed using Transifex. To create a new translation
+ * or to help to maintain an existing one, please register at transifex.com.
  *
- * PHP version 5
- * @package	   MetaModels
- * @subpackage Backend
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  The MetaModels team.
- * @license    LGPL.
- * @filesource
- * @translation Carolina M Koehn <ck@kikmedia.de>
+ * @link http://help.transifex.com/intro/translating.html
+ * @link https://www.transifex.com/projects/p/metamodels/language/de/
+ *
+ * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ *
+ * last-updated: 2013-05-13T22:11:20+02:00
  */
 
-/**
- * Fields
- */
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id']         = array('Attribut', 'Attribut, auf das sich diese Einstellung bezieht.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template']        = array('Eigenes Template für die Anzeige benutzen', 'Wählen Sie das Template aus, das für das ausgewählte Attribut verwendet werden soll. Gültige Templatenamen beginnen mit "mm_<type>", wobei sich der Typname aus &lt;type&gt; ableitet.');
 
-/**
- * Legends
- */
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['title_legend']    = 'Typ';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['advanced_legend'] = 'Erweitert';
-
-/**
- * Buttons
- */
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['new']             = array('Neu', 'Neue Render-Einstellung erstellen.');
-
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit']            = array('Render-Einstellung bearbeiten', 'Die Einstellung ID %s bearbeiten.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy']            = array('Filtereinstellung kopieren', 'Die Filtereinstellung ID %s kopieren.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete']          = array('Filtereinstellung löschen', 'Die Filtereinstellung ID %s löschen.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show']            = array('Details', 'Die Details der Filtereinstellung ID %s anzeigen.');
-
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']             = '%s <strong>%s</strong> <em>[%s]</em>';
-
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']                     = '%s <strong>%s</strong> <em>[%s]</em>';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_addsuccess']       = 'Das Attribut "%s" wurde der Eingabemaske hinzugefügt.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_alreadycontained'] = 'Das Attribut %s ist bereits in der Eingabemaske vorhanden.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_willadd']          = 'Das Attribut %s wird dem rendersetting hinzugefügt.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']['0']             = 'Alle hinzufügen';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']['1']             = 'Alle Attribute den Rendering Einstellungen hinzufügen';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['advanced_legend']         = 'Erweitern';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id']['0']            = 'Attribut';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id']['1']            = 'Attribut, auf das sich diese Einstellung bezieht.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy']['0']               = 'Filtereinstellung kopieren';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy']['1']               = 'Kopieren Sie die Filtereinstellung ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete']['0']             = 'Filtereinstellung löschen';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete']['1']             = 'Löschen Sie die Filtereinstellung ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit']['0']               = 'Einstellung bearbeiten';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit']['1']               = 'Die Filtereinstellung ID %s bearbeiten';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['new']['0']                = 'Neu';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['new']['1']                = 'Neue Einstellung erstellen.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show']['0']               = 'Filtereimstellungsdetails';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show']['1']               = 'Die Details der Filtereinstellung ID %s anzeigen.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template']['0']           = 'Angepasstes Template für die Ausgabe';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template']['1']           = 'Wählen Sie das Template aus, das für das gewählte Attribut verwendet werden soll. Gültige Dateinamen für das Template beginnen mit "mm_&lt;typ&gt;", wobei &lt;typ&gt; für den Typ steht.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['title_legend']            = 'Typ';

@@ -70,7 +70,7 @@ class MetaModel implements IMetaModel
 	/**
 	 * Adds an attribute to the internal list of attributes.
 	 *
-	 * @param IMetaModelAttribute the attribute instance to add.
+	 * @param IMetaModelAttribute $objAttribute The attribute instance to add.
 	 *
 	 * @return IMetaModel self for chaining
 	 */
@@ -175,7 +175,7 @@ class MetaModel implements IMetaModel
 
 		// ensure proper integer ids for SQL injection safety reasons.
 		$strIdList = implode(',', array_map('intval', $arrIds));
-		$objRow = $objDB->execute('SELECT * FROM ' . $this->getTableName() . ' WHERE id IN (' . $strIdList . ') ORDER BY FIELD(id,' . $strIdList . ')');
+		$objRow = $objDB->executeUncached('SELECT * FROM ' . $this->getTableName() . ' WHERE id IN (' . $strIdList . ') ORDER BY FIELD(id,' . $strIdList . ')');
 		if($objRow->numRows == 0)
 		{
 			return array();
@@ -523,12 +523,16 @@ class MetaModel implements IMetaModel
 	}
 
 	/**
-	* Find all varints of the given item. This methods makes no difference between the varbase item and other variants.
-	*
-	* @param type $arrIds
-	* @param type $objFilter
-	* @return type
-	*/
+	 * Find all varints of the given item.
+	 *
+	 * This methods makes no difference between the varbase item and other variants.
+	 *
+	 * @param array            $arrIds    The Ids of the base elements.
+	 *
+	 * @param IMetaModelFilter $objFilter The filter to use or null if no filtering.
+	 *
+	 * @return IMetaModelItems the collection of IMetaModelItem instances that match the given filter.
+	 */
 	public function findVariantsWithBase($arrIds, $objFilter)
 	{
 		if(!$arrIds)

@@ -35,6 +35,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 	// List
 	'list' => array
 	(
+		'presentation' => array
+		(
+			'breadcrumb_callback'     => array('MetaModelBreadcrumbBuilder', 'generateBreadcrumbItems'),
+		),
+		
 		'sorting' => array
 		(
 			'mode'                    => 1,
@@ -93,7 +98,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['settings'],
 				'href'                => 'table=tl_metamodel_dcasetting',
-				'icon'                => 'system/modules/metamodels/html/palettesetting.png',
+				'icon'                => 'system/modules/metamodels/html/dca_setting.png',
 			),
 		)
 	),

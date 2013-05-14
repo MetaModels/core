@@ -1,0 +1,31 @@
+<div class="tl_message mm_support_display">
+
+<a class="logo" <?php echo LINK_NEW_WINDOW; ?> href="http://now.metamodel.me/">MetaModels</a>
+
+<div class="colset">
+
+<h1><?php echo $GLOBALS['TL_LANG']['MSC']['metamodels_help']; ?></h1>
+
+<div class="left">
+	<p><strong>Christian Schiffler</strong><br />
+	KSK Tübingen<br />
+	BLZ: 641 500 20<br />
+	KTO: 157 353 6<br /><br />
+	IBAN: DE24 6415 0020 0001 5735 36<br />
+	SWIFT-BIC: SOLADES1TUB<br /><br />
+	Purpose: MetaModels</p>
+
+	<form target="_top" method="post" action="https://www.paypal.com/cgi-bin/webscr"><input type="hidden" value="_donations" name="cmd"><input type="hidden" value="c.schiffler@cyberspectrum.de" name="business"><input type="hidden" value="GB" name="lc"><input type="hidden" value="MetaModels" name="item_name"><input type="hidden" value="0" name="no_note"><input type="hidden" value="EUR" name="currency_code"><input type="hidden" value="PP-DonationsBF:btn_donate_LG.gif:NonHostedGuest" name="bn"><input border="0" type="image" alt="" name="submit" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif"></form>
+</div>
+
+<div class="right">
+	<p>As the main developers of this project code for a living, all non paid work on MetaModels has to be in their very sparse free time. By donating money to the project, you give them the possibility to work on MetaModels during their work hours and therefore speed up development significantly. <br /><br />We guarantee you, all money will be spent on this project solely. If you have some specific requirements and/or features requests, you can also hire yourself a member from the team who will implement it for you. <br /><br />Please also have a look at the <a <?php echo LINK_NEW_WINDOW; ?> href="http://now.metamodel.me/en/supporters">fine people</a> already listed as sponsors. Supporting this project will put you on this list as well and you may feel proud to have supported such a fine open source project. <br /><br /><a <?php echo LINK_NEW_WINDOW; ?> href="http://now.metamodel.me/en/supporters/donate">More informations</a></p>
+</div>
+
+</div>
+
+<h1><?php echo $GLOBALS['TL_LANG']['MSC']['metamodels_contributor']; ?></h1>
+
+<p><a href="https://github.com/cgpro" target="_blank">cgpro</a>, <a href="https://github.com/christian-kolb" target="_blank">christian-kolb</a>, <a href="https://github.com/cogizz" target="_blank">cogizz</a>, <a href="https://github.com/folkfreund" target="_blank">folkfreund</a>, <a href="https://github.com/gion-andri" target="_blank">gioni</a>, <a href="https://github.com/hendrik-d" target="_blank">hendrik-d</a>, <a href="https://github.com/jantheofel" target="_blank">jantheofel</a>, <a href="https://github.com/kryptychon" target="_blank">kryptychon</a>, <a href="https://github.com/Kyros" target="_blank">Kyros</a>, <a href="https://github.com/MacKP" target="_blank">MacKP</a>, <a href="https://github.com/michelbalzer" target="_blank">michelbalzer</a>, <a href="https://github.com/psren" target="_blank">psren</a>, <a href="https://github.com/Shoekrates" target="_blank">Shoekrates</a>, <a href="https://github.com/tim-bec" target="_blank">tim-bec</a>, <a href="https://www.transifex.com/accounts/profile/Wasilis/" target="_blank">Wasilis</a>, <a href="https://github.com/xat" target="_blank">xat</a>, <a href="https://github.com/xchs" target="_blank">xchs</a>, <a href="https://github.com/Zeromax" target="_blank">Zeromax</a></p>
+
+</div>

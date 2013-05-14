@@ -16,6 +16,7 @@
 
 CREATE TABLE `tl_metamodel` (
   `id` int(10) unsigned NOT NULL auto_increment,
+  `sorting` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
   `name` varchar(255) NOT NULL default '',
 
@@ -78,6 +79,8 @@ CREATE TABLE `tl_metamodel_dcasetting` (
 -- type, either legend or attribute.
   `dcatype` varchar(10) NOT NULL default '',
 
+  `subpalette` int(10) NOT NULL default '0',
+
   `legendtitle` varchar(255) NOT NULL default '',
   `legendhide` varchar(5) NOT NULL default '',
 
@@ -91,10 +94,13 @@ CREATE TABLE `tl_metamodel_dcasetting` (
   `flag` int(4) unsigned NOT NULL default '0',
 -- mandatory flag
   `mandatory` char(1) NOT NULL default ''
+-- alwaysSave flag
+  `alwaysSave` char(1) NOT NULL default ''
 -- allow html in content.
   `allowHtml` char(1) NOT NULL default '',
 -- preserve html tags.
   `preserveTags` char(1) NOT NULL default '',
+  `chosen` char(1) NOT NULL default '',
 -- decode entities.
   `decodeEntities` char(1) NOT NULL default '',
 -- enable rich text editor configuration
@@ -109,7 +115,8 @@ CREATE TABLE `tl_metamodel_dcasetting` (
   `spaceToUnderscore` char(1) NOT NULL default '',
 -- if true a blank option will be added to the options array.
   `includeBlankOption` char(1) NOT NULL default '',
-
+-- if true, the form will get reloaded when the widget changes
+  `submitOnChange` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -176,6 +183,8 @@ CREATE TABLE `tl_metamodel_filtersetting` (
   `type` varchar(64) NOT NULL default '',
 -- active or disabled
   `enabled` char(1) NOT NULL default '',
+-- short comment for describing the purpose
+  `comment` varchar(255) NOT NULL default '',
 -- corresponding tl_metamodel_attribute
   `attr_id` int(10) unsigned NOT NULL default '0',
 -- search language independant (only valid for translation sensitive attributes)
@@ -223,6 +232,13 @@ CREATE TABLE `tl_metamodel_rendersettings` (
   `isdefault` char(1) NOT NULL default '',
 -- the template to use.
   `template` varchar(64) NOT NULL default '',
+  `format` varchar(255) NOT NULL default '',
+-- CSS JS files
+   `additionalCss` blob NULL,
+   `additionalJs` blob NULL,
+-- special options for the template
+  `hideEmptyValues` char(1) NOT NULL default '',
+  `hideLabels` char(1) NOT NULL default '',
 -- the jumpTo page to use.
   `jumpTo` blob NULL,
   PRIMARY KEY  (`id`),
@@ -302,8 +318,10 @@ CREATE TABLE `tl_module` (
   `metamodel_noparsing` char(1) NOT NULL default '',
   `metamodel_filterparams` longblob NULL,
   `metamodel_fef_autosubmit` char(1) NOT NULL default '',
+  `metamodel_fef_hideclearfilter` char(1) NOT NULL default '',
   `metamodel_fef_params` blob NULL,
   `metamodel_fef_template` varchar(64) NOT NULL default '',
+  `metamodel_jumpTo` int(10) unsigned NOT NULL default '0',
   `metamodel_donotindex` char(1) NOT NULL default ''
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -330,8 +348,9 @@ CREATE TABLE `tl_content` (
   `metamodel_noparsing` char(1) NOT NULL default '',
   `metamodel_filterparams` longblob NULL,
   `metamodel_fef_autosubmit` char(1) NOT NULL default '',
+  `metamodel_fef_hideclearfilter` char(1) NOT NULL default '',
   `metamodel_fef_params` blob NULL,
   `metamodel_fef_template` varchar(64) NOT NULL default '',
-  `jumpTo` int(10) unsigned NOT NULL default '0',
+  `metamodel_jumpTo` int(10) unsigned NOT NULL default '0',
   `metamodel_donotindex` char(1) NOT NULL default ''
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

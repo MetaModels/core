@@ -1,76 +1,61 @@
 <?php
 /**
- * The MetaModels extension allows the creation of multiple collections of custom items,
- * each with its own unique set of selectable attributes, with attribute extendability.
- * The Front-End modules allow you to build powerful listing and filtering of the
- * data in each collection.
+ * Translations are managed using Transifex. To create a new translation
+ * or to help to maintain an existing one, please register at transifex.com.
  *
- * PHP version 5
- * @package	   MetaModels
- * @subpackage Backend
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  The MetaModels team.
- * @license    LGPL.
- * @filesource
- * @translation Carolina M Koehn <ck@kikmedia.de>
+ * @link http://help.transifex.com/intro/translating.html
+ * @link https://www.transifex.com/projects/p/metamodels/language/de/
+ *
+ * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ *
+ * last-updated: 2013-05-13T22:11:20+02:00
  */
 
-/**
- * Legends
- */
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']         = 'Name';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['general_legend']       = 'Allgemeine Einstellungen';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings_legend']      = 'Einstellungen';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['expert_legend']        = 'Experteneinstellungen';
 
-/**
- * Fields
- */
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']                 = array('Name', 'Einstellungsname.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']               = array('Aktualisierungsdatum', 'Datum und Zeit der letzten Aktualisierung.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']            = array('Standard', 'Bestimmt, ob diese Einstellung als Standardvorgabe bei Eltern-Kind-Beziehungen im MetaModel benutzt werden soll, wenn in einem Modul oder Inhaltselement keines explizit ausgewählt wurde.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']             = array('Template', 'Das Template festlegen, das für die Darstellung der Datensätze benutzt werden soll.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']               = array('Zielseite', 'Die Seite (URL) festlegen, die für die Darstellung der Details benutzt wird. Detaillierte URL-Parameter werden von der jeweiligen Filtereinstellung generiert.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['allLanguages'] = 'Alle Sprachen';
-
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['mode']                 = array('Sortiermodus', 'Den Sortiermodus einstellen, der in der Datensatzdarstellung benutzt werden soll.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['flag']                 = array('Sortierung', 'Sortierungsart, die in der Datensatzansicht benutzt werden soll.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['panelLayout']          = array('Panel-Layout', 'Für Zwischenräume die Optionen mit einem Komma (für Leerzeichen) und Semikolon (für eine neue Zeile) eingeben. Beispiel: sort,filter;search,limit.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['panelpicker']          = 'Panelpicker';
-
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['fields']               = array('Feldeinstellungen', 'Die Header-Felder konfigurieren, um eine bessere Bedienbarkeit zu erreichen.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_attribute']      = 'Attributname';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_filterable']     = 'Filterbar';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_sortable']       = 'Sortierbar';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['field_searchable']     = 'Durchsuchbar';
-
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['use_limitview']        = array('Ansicht beschränken', 'Die Beschränkungen für die Ansicht aktivieren.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['limit_rendersetting']  = array('Rendering-Einstellungen beschränken', 'Zwischen Frontend und Backend wählen.');
-
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingmode']['1']     = 'Datensätze werden nach einem fest vorgegebenen Feld sortiert';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingmode']['2']     = 'Datensätze werden nach einem wechselbaren Feld sortiert';
-
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['1']     = 'Nach erstem Buchstaben aufsteigend sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['2']     = 'Nach erstem Buchstaben absteigend sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['3']     = 'Nach den ersten beiden Buchstaben aufsteigend sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['4']     = 'Nach den ersten beiden Buchstaben absteigend sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['5']     = 'Nach Tag aufsteigend sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['6']     = 'Nach Tag absteigend sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['7']     = 'Nach Monat aufsteigend sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['8']     = 'Nach Monat absteigend sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['9']     = 'Nach Jahr aufsteigend sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['10']    = 'Nach Jahr absteigend sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['11']    = 'Aufsteigend sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['sortingflag']['12']    = 'Absteigend sortieren';
-
-/**
- * Buttons
- */
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']                  = array('Neu', 'Neue Einstellung erstellen');
-
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['edit']                 = array('Einstellung bearbeiten', 'Die Einstellung ID %s bearbeiten.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['copy']                 = array('Einstellungsdefinition kopieren', 'Die Einstellungsdefinition ID %s kopieren');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['delete']               = array('Einstellungsdefinition löschen', 'Die Einstellungsdefinition ID %s löschen');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']                 = array('Filterdetails', 'Die Details der Einstellungsdefinition ID %s anzeigen');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']             = array('Attributeinstellungen definieren', 'Die Attributeinstellungen für ID %s definieren');
-
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['0']     = 'Zusätzliche CSS-Dateien';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['1']     = 'Wählen Sie diese Option, wenn Sie zusätzliche Css-Dateien einschließen möchten. ';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalJs']['0']      = 'Zusätzliche Javascript-Dateien';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalJs']['1']      = 'Wählen Sie diese Option, wenn Sie zusätzliche JavaScript-Dateien aufnehmen möchten.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['copy']['0']              = 'Einstellung kopieren';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['copy']['1']              = 'Kopieren Sie die Einstellung ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['delete']['0']            = 'Einstellung löschen';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['delete']['1']            = 'Löschen Sie die Einstellung ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['edit']['0']              = 'Einstellung bearbeiten';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['edit']['1']              = 'Bearbeiten Sie die Einstellungen ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['expert_legend']          = 'Experteneinstellungen';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['file']                   = 'Datei';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['format']['0']            = 'Ausgabeformat';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['format']['1']            = 'Legen Sie das Ausgabeformat fest. Lassen Sie die Definition leer, um das Format zu verwenden, das von der aktuellen Seite benutzt wird.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['html5'] = 'HTML5';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['text']  = 'Text';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['xhtml'] = 'XHTML';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['general_legend']         = 'Grundeinstellungen';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues']['0']   = 'Leere Einträge verbergen';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues']['1']   = 'Verbirgt leere Einträge im Backend und im Frontend.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['0']        = 'Labels verbergen';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['1']        = 'Verberge alle Labels im Backend und im Frontend.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['0']         = 'Als Standard verwenden';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['1']         = 'Bestimmt, dass diese Eingabemaske als Standard für das Eltern-MetaModel benutzt wird.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['0']            = 'Zielseite';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['1']            = 'Wählen Sie die Seite aus, die für die Detailansicht verwendet werden soll. Beachten Sie, dass die genauen URL-Parameter durch die verwendete Filtereinstellung bestimmt werden.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter']['0']     = 'Filtereinstellungen';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter']['1']     = 'Wählen Sie die Filtereinstellungen aus, die bestimmen, wie das Ziel (also die Lister- oder Reader-Seite) passende Datensätze erkennt.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['0']   = 'Sprache';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['1']   = 'Sprache der Seite zu der weitergeleitet wird.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page']['0']       = 'Springe zu Seite';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page']['1']       = 'Geben Sie die Seite an, die für die Detail-Links verwendet werden soll-';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']['0']              = 'Name';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']['1']              = 'Namenseinstellungen';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']['0']               = 'Neu';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']['1']               = 'Erstellen Sie eine neue Einstellung.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['publish']                = 'Veröffentlichen';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']['0']          = 'Attributeinstellungen definieren';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']['1']          = 'Definieren Sie die Attributeinstellungen für die Filtereinstellung ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']['0']              = 'Filterdetails';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']['1']              = 'Zeige Details der Einstellung ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['0']          = 'Template';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['1']          = 'Geben Sie ein (angepasstes) Template an, das für das Rendern der Einträge benutzt werden soll.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']           = 'Name';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['0']            = 'Aktualisierungsdatum';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['1']            = 'Datum und Zeit der letzten Aktualisierung.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['view_legend']            = 'Einstellungen ansehen';

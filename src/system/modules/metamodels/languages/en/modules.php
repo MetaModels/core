@@ -17,11 +17,13 @@
 /**
  * Back end modules
  */
-$GLOBALS['TL_LANG']['MOD']['metamodels']         = array('MetaModels', 'The MetaModels extension allows you to create own data models.');
+$GLOBALS['TL_LANG']['MOD']['metamodels']                   = array('MetaModels', 'The MetaModels extension allows you to create own data models.');
+$GLOBALS['TL_LANG']['MOD']['support_metamodels']           = array('Support MetaModels', 'Support information for the MetaModels extension.');
 
 /**
  * Front end modules
  */
-$GLOBALS['TL_LANG']['FMD']['metamodels']         = array('MetaModels', 'The MetaModels extension allows you to create own data models.');
-$GLOBALS['TL_LANG']['FMD']['metamodel_list']     = array('MetaModel list', 'Adds a list of MetaModel items to the page.');
-$GLOBALS['TL_LANG']['FMD']['metamodels_frontendfilter']  = array('MetaModels FE filter', 'Adds a filter for MetaModel list.');
+$GLOBALS['TL_LANG']['FMD']['metamodels']                   = array('MetaModels', 'The MetaModels extension allows you to create own data models.');
+$GLOBALS['TL_LANG']['FMD']['metamodel_list']               = array('MetaModel list', 'Adds a list of MetaModel items to the page.');
+$GLOBALS['TL_LANG']['FMD']['metamodels_frontendfilter']    = array('MetaModel frontend filter', 'Adds a frontend filter for a MetaModel.');
+$GLOBALS['TL_LANG']['FMD']['metamodels_frontendclearall']  = array('MetaModel clear all', 'Adds a clear all for all frontend filter.');

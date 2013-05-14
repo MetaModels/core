@@ -22,9 +22,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 (
 	'config' => array
 	(
-//		'dataContainer'               => 'Table',
 		'dataContainer'               => 'General',
-		'ptable'                      => 'tl_metamodel_dca',
 		'switchToEdit'                => true,
 		'enableVersioning'            => false,
 		'onmodel_update'              => array
@@ -37,9 +35,85 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 		),
 	),
 
+	'dca_config'                      => array
+	(
+		'data_provider'               => array
+		(
+			'parent'                  => array
+			(
+				'source'              => 'tl_metamodel_dca'
+			)
+		),
+		'childCondition'              => array
+		(
+			array(
+				'from'                => 'tl_metamodel_dca',
+				'to'                  => 'self',
+				'setOn'               => array
+				(
+					array(
+						'to_field'    => 'pid',
+						'from_field'  => 'id',
+					),
+				),
+				'filter'              => array
+				(
+					array
+					(
+						'local'       => 'pid',
+						'remote'      => 'id',
+						'operation'   => '=',
+					),
+				)
+			)
+		),
+		'rootEntries'                 => array
+		(
+			'self'                    => array
+			(
+				'setOn' => array
+				(
+					array
+					(
+						'property'    => 'pid',
+						'value'       => '0'
+					),
+				),
+				'filter'              => array
+				(
+					array
+					(
+						'property'    => 'pid',
+						'operation'   => '=',
+						'value'       => '0'
+					)
+				)
+			)
+		),
+		'child_list'                  => array
+		(
+			'self'                    => array
+			(
+				'fields'              => array
+				(
+					'type',
+					'attr_id',
+					'urlparam',
+					'comment'
+				),
+				'format'              => '%s %s',
+			),
+		),
+	),
+
 	// List
 	'list' => array
 	(
+		'presentation' => array
+		(
+			'breadcrumb_callback'     => array('MetaModelBreadcrumbBuilder', 'generateBreadcrumbItems'),
+		),
+		
 		'sorting' => array
 		(
 			'mode'                    => 4,
@@ -93,6 +167,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['show'],
 				'href'                => 'act=show',
 				'icon'                => 'show.gif'
+			),
+			'subpalette' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['subpalette'],
+				'href'                => 'table=tl_metamodel_dcasetting',
+				'icon'                => 'system/modules/metamodels/html/dca_subpalette.png',
+				'button_callback'     => array('TableMetaModelDcaSetting', 'subpaletteButton')
 			),
 		)
 	),
@@ -153,6 +234,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			 * * tl_class           css class to use in backend.
 			 * * flag               search flag to override.
 			 * * mandatory          mandatory
+			 * * chosen
 			 * * filterable         can be filtered (in backend)
 			 * * sortable           can be sorted (in backend)
 			 * * searchable         can be searched (in backend)
@@ -247,6 +329,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 				'tl_class'          => 'clr m12',
 			)
 		),
+		'alwaysSave' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave'],
+			'exclude'               => true,
+			'inputType'             => 'checkbox',
+			'eval' => array
+			(
+				'tl_class'          => 'clr m12',
+			)
+		),
 		'filterable' => array
 		(
 			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['filterable'],
@@ -296,6 +388,17 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 		 * Hence we define them in the core.
 		 * If others are needed, that apply to at least 2-3 attribute extensions, consider adding it in the core.
 		 */
+		'chosen' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['chosen'],
+			'exclude'               => true,
+			'inputType'             => 'checkbox',
+			'eval'                  => array
+			(
+				'tl_class'          => 'w50 m12'
+			)
+		),
+
 		'allowHtml' => array
 		(
 			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml'],
@@ -400,6 +503,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'eval'                  => array
 			(
 				'tl_class'          => 'clr m12',
+			)
+		),
+		'submitOnChange' => array
+		(
+			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['submitOnChange'],
+			'exclude'               => true,
+			'inputType'             => 'checkbox',
+			'eval'                  => array
+			(
+				'tl_class'          => 'clr m12', // TODO: dunno. fix as fits
 			)
 		),
 	)

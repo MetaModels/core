@@ -54,8 +54,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 		(
 			'mode'                    => 1, // 1 default sorting value, 2 switchable sorting value
 			'panelLayout'             => 'limit',
-			// TODO: panelLayout must be built dynamically in getMetaModelDca() to solve issue #199
 			'headerFields'            => array('tstamp'),
+			'paste_button_callback'   => array('MetaModelDatabase', 'pasteButton'),
 		),
 
 		'label' => array
@@ -89,7 +89,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_item']['copy'],
 				'href'                => 'act=copy',
-				'icon'                => 'copy.gif'
+				'icon'                => 'copy.gif',
+				'attributes'          => 'onclick="Backend.getScrollOffset();"'
 			),
 			'cut' => array
 			(

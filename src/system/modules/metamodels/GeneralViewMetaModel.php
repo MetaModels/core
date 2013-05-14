@@ -23,11 +23,10 @@
  */
 class GeneralViewMetaModel extends GeneralViewDefault
 {
-
 	/**
 	 * Create a new variant based upon the current item loaded in the data container.
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public function createvariant()
 	{

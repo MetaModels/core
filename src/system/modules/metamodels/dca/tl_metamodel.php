@@ -9,6 +9,7 @@
  * @package	   MetaModels
  * @subpackage Backend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Christian de la Haye <service@delahaye.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -46,10 +47,10 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 	(
 		'sorting' => array
 		(
-			'mode'                    => 1,
-			'fields'                  => array('name'),
+			'mode'                    => 2,
+			'fields'                  => array('name','sorting'),
 			'flag'                    => 1,
-			'panelLayout'             => 'filter;search,limit'
+			'panelLayout'             => 'filter;sort,search,limit'
 		),
 
 		'label' => array
@@ -78,6 +79,14 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'href'                => 'act=edit',
 				'icon'                => 'edit.gif',
 			),
+
+			'cut' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['cut'],
+				'href'                => 'act=paste&amp;mode=cut',
+				'icon'                => 'cut.gif'
+			),
+
 			'delete' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['delete'],
@@ -106,7 +115,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['rendersettings'],
 				'href'                => 'table=tl_metamodel_rendersettings',
-				'icon'                => 'system/modules/metamodels/html/rendersettings.png',
+				'icon'                => 'system/modules/metamodels/html/render_settings.png',
 				'button_callback'     => array('TableMetaModel', 'buttonCallback')
 			),
 
@@ -114,7 +123,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['dca'],
 				'href'                => 'table=tl_metamodel_dca',
-				'icon'                => 'system/modules/metamodels/html/palettes.png',
+				'icon'                => 'system/modules/metamodels/html/dca.png',
 				'button_callback'     => array('TableMetaModel', 'buttonCallback')
 			),
 
@@ -146,8 +155,8 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'name',
 				'tableName'
 			),
-            
-            'translated' => array
+			
+			'translated' => array
 			(
 				':hide',
 				'translated'
@@ -173,9 +182,15 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 	// Fields
 	'fields' => array
 	(
+		'sorting' => array
+		(
+			'sorting'                 => true,
+		),
+
 		'name' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['name'],
+			'sorting'                 => true,
 			'exclude'                 => true,
 			'inputType'               => 'text',
 			'eval'                    => array('mandatory'=>true, 'maxlength'=>64, 'tl_class'=>'w50', 'unique' => true)
@@ -198,7 +213,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['translated'],
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class'=>'clr m12', 'submitOnChange' => true)
+			'eval'                    => array('tl_class'=>'clr', 'submitOnChange' => true)
 		),
 
 		'languages' => array
@@ -206,7 +221,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['languages'],
 			'exclude'                 => true,
 			'inputType'               => 'multiColumnWizard',
-			'eval' 			=> array
+			'eval' => array
 			(
 				'columnFields' => array
 				(
@@ -258,3 +273,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 	)
 );
 
+if($_SESSION['BE_DATA']['sorting']['tl_metamodel'] == 'name')
+{
+	unset($GLOBALS['TL_DCA']['tl_metamodel']['list']['operations']['cut']);
+}
