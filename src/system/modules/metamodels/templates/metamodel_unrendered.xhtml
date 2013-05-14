@@ -17,14 +17,11 @@
 <?php endif; ?>
 <?php endforeach; ?>
 <?php if ($arrItem['jumpTo']['deep']): ?>
-<a href="<?php echo $arrItem['jumpTo']['url']; ?>">Details</a>
+<a href="<?php echo $arrItem['jumpTo']['url']; ?>"><?php echo $this->details; ?></a>
 <?php endif; ?>
 </div>
 <?php endforeach; ?>
-
-
 </div>
-
 <?php else: ?>
 <p class="info"><?php echo $this->noItemsMsg; ?></p>
 <?php endif; ?>

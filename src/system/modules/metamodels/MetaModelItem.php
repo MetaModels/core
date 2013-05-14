@@ -293,7 +293,32 @@ class MetaModelItem implements IMetaModelItem
 	 * @return array attribute name => format => value
 	 */
 	public function parseValue($strOutputFormat = 'text', $objSettings = null)
-	{
+	{	
+		if($objSettings != null)
+		{
+			// Include CSS.
+			$arrCss = $objSettings->get('additionalCss');
+						
+			foreach ((array) $arrCss as $arrFile)
+			{
+				if($arrFile['published'])
+				{
+					$GLOBALS['TL_CSS'][md5($arrFile['file'])] = $arrFile['file'];
+				}				
+			}
+			
+			// Include JS.
+			$arrJs = $objSettings->get('additionalJs');
+			
+			foreach ((array) $arrJs as $arrFile)
+			{
+				if($arrFile['published'])
+				{
+					$GLOBALS['TL_JAVASCRIPT'][md5($arrFile['file'])] = $arrFile['file'];
+				}
+			}
+		}
+		
 		$arrResult = array
 		(
 			'raw' => $this->arrData,

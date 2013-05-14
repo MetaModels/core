@@ -111,6 +111,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'title' => array('name', 'isdefault'),
 			'general' => array('template', 'format', 'jumpTo'),
 			'expert' => array('hideEmptyValues', 'hideLabels'),
+			'view' => array('additionalCss', 'additionalJs')
 		),
 	),
 
@@ -202,8 +203,66 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 						)
 					),
 				),
-				'buttons'               => array('copy' => false, 'delete' => false, 'up' => false, 'down' => false),
-				'tl_class'              => 'clr',
+				'buttons'                          => array('copy' => false, 'delete' => false, 'up' => false, 'down' => false),
+				'tl_class'                         => 'clr',
+			)
+		),
+		'additionalCss' => array(
+			'label'                                => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss'],
+			'exclude'                              => true,
+			'inputType'                            => 'multiColumnWizard',
+			'eval' => array(
+				'style'                            => 'width:100%;',
+				'columnFields' => array(
+					'file' => array(
+						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['file'],
+						'exclude'                  => true,
+						'inputType'                => 'select',
+						'options_callback'         => array('TableMetaModelRenderSettings', 'getCssFiles'),
+						'eval'                     => array
+						(
+							'style'                => 'width:545px;',
+							'chosen'               => true,
+							'includeBlankOption'   => true
+						)
+					),
+					'published' => array(
+						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['publish'],
+						'exclude'                  => true,
+						'inputType'                => 'checkbox',
+						'eval'                     => array('style'=>'width:40px;')
+					),
+					
+				)
+			)
+		),
+		'additionalJs' => array(
+			'label'                                => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalJs'],
+			'exclude'                              => true,
+			'inputType'                            => 'multiColumnWizard',
+			'eval' => array(
+				'style'                            => 'width:100%;',
+				'columnFields' => array(
+					'file' => array(
+						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['file'],
+						'exclude'                  => true,
+						'inputType'                => 'select',
+						'options_callback'         => array('TableMetaModelRenderSettings', 'getJsFiles'),
+						'eval'                     => array
+						(
+							'style'                => 'width:545px;',
+							'chosen'               => true,
+							'includeBlankOption'   => true
+						)
+					),
+					'published' => array(
+						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['publish'],
+						'exclude'                  => true,
+						'inputType'                => 'checkbox',
+						'eval'                     => array('style'=>'width:40px;')
+					),
+					
+				)
 			)
 		),
 	),
@@ -220,6 +279,4 @@ class tl_metamodel_rendersettings extends backend
 	{
 		return ' ' . $this->generateImage('pickpage.gif', $GLOBALS['TL_LANG']['MSC']['pagepicker'], 'style="vertical-align:top;cursor:pointer" onclick="Backend.pickPage(\'ctrl_' . $dc->inputName . '\')"');
 	}
-
 }
-

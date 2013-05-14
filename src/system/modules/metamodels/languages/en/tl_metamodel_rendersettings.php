@@ -20,6 +20,7 @@
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']         = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['general_legend']       = 'General settings';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['expert_legend']        = 'Expert settings';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['view_legend']          = 'View settings';
 
 /**
  * Fields
@@ -36,6 +37,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page']          = arr
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter']        = array('Filter settings', 'The filter settings that define how the target (the reader/lister on the detail page) will identify it\'s matches.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues']      = array('Hide empty values', 'Hide empty values in backend and frontend.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']           = array('Hide labels', 'Hide all labels in backend and frontend.');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']        = array('Additional css files', 'Choose this, if you want to include additional css files.');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalJs']         = array('Additional javascript files', 'Choose this, if you want to include additional javascript files.');
+
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['file']                 = 'File';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['publish']              = 'Publish';
 
 /**
  * Buttons
@@ -46,4 +52,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['copy']                 = arr
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['delete']               = array('Delete setting', 'Delete setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']                 = array('Filter details', 'Show details of setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']             = array('Define attribute settings', 'Define attribute settings for setting ID %s');
-

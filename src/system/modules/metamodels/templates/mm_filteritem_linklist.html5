@@ -4,7 +4,7 @@
 $strClass = ($intI == 0) ? 'first ' : '';
 $strClass .= ($intI == count($this->options) - 1 ) ? 'last ' : '';
 $strClass .= ($intI % 2 == 1) ? 'even' : 'odd';
-$strClass .= (strlen($option['class'])) ? ' ' . $option['class'] : '';
+$strClass .= (strlen($option['class'])) ? ' ' . standardize($option['class']) : '';
 	
 $link = sprintf('<a href="%s" class="%s" title="%s"><span class="action">%s </span>%s</a>',
 	$option['href'],

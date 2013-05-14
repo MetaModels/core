@@ -561,6 +561,7 @@ class MetaModelList extends Controller
 	public function render($blnNoNativeParsing, $objCaller)
 	{
 		$this->objTemplate->noItemsMsg = $GLOBALS['TL_LANG']['MSC']['noItemsMsg'];
+		$this->objTemplate->details = $GLOBALS['TL_LANG']['MSC']['details'];
 
 		$this->prepare();
 		$strOutputFormat = $this->getOutputFormat();
