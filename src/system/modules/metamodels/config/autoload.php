@@ -83,6 +83,7 @@ ClassLoader::addClasses(array
 	'MetaModelTableManipulation'            => 'system/modules/metamodels/MetaModelTableManipulation.php',
 	'MetaModelTemplate'                     => 'system/modules/metamodels/MetaModelTemplate.php',
 	'MetaModelsBackendSupport'              => 'system/modules/metamodels/MetaModelsBackendSupport.php',
+	'MetaModelsUpgradeHandler'              => 'system/modules/metamodels/MetaModelsUpgradeHandler.php',
 	'ModuleMetaModelFrontendFilter'         => 'system/modules/metamodels/ModuleMetaModelFrontendFilter.php',
 	'ModuleMetaModelList'                   => 'system/modules/metamodels/ModuleMetaModelList.php',
 	'TableContent'                          => 'system/modules/metamodels/TableContent.php',
