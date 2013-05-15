@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2013-05-13T23:07:50+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['0']     = 'Zusätzliche CSS-Dateien';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['1']     = 'Wählen Sie diese Option, wenn Sie zusätzliche Css-Dateien einschließen möchten. ';
@@ -58,4 +57,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['1']          = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']           = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['0']            = 'Aktualisierungsdatum';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['1']            = 'Datum und Zeit der letzten Aktualisierung.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['view_legend']            = 'Einstellungen ansehen';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['view_legend']            = 'Zusätzliche Dateien';
