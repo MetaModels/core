@@ -8,11 +8,12 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2013-05-13T23:07:50+02:00
  */
 
-
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['edit']['0']    = 'Éditer le paramètre';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['name']['0']    = 'Nom';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['new']['0']     = 'Nouveau';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['title_legend'] = 'Nom';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['tstamp']['0']  = 'Date de révision';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['tstamp']['1']  = 'Date et heure de la dernière révision.';

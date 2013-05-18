@@ -8,13 +8,17 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2013-05-13T23:07:50+02:00
  */
 
-
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['delete']['0']          = 'Supprimer le paramètre';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['delete']['1']          = 'Supprimer le paramètre ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['edit']['0']            = 'Éditer le paramètre';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['edit']['1']            = 'Éditer le paramètre ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['0']       = 'Par défaut';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['0'] = 'Langue';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']['0']            = 'Nom';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']['0']             = 'Nouveau';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['0']        = 'Modèle';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']         = 'Nom';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['0']          = 'Date de révision';
