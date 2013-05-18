@@ -87,14 +87,6 @@
     float:left;
   }
 
-  /* li:first-child .tl_content {
-    border-top:1px solid #E9E9E9;
-  }
-
-  .tl_content > div:first-child {
-    float:left;
-  } */
-
   .tl_class {
     color:#c6c6c6;
   }
@@ -103,9 +95,12 @@
     font-weight:bold;
   }
 
-  .mm_support_display {
-    padding-bottom:20px;
+  .clx {
+    overflow:visible;
+    clear:both;
   }
+
+ /*------------------------------------------------------------------------*/
 
   .mm_support_display .logo {
     display:block;
@@ -143,9 +138,4 @@
   .mm_support_display .colset .right {
     float:right;
     width:60%;
-  }
-
-  .clx {
-    overflow:visible;
-    clear:both;
   }

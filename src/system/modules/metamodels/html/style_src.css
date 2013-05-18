@@ -87,14 +87,6 @@
     float:left;
   }
 
-  /* li:first-child .tl_content {
-    border-top:1px solid #E9E9E9;
-  }
-
-  .tl_content > div:first-child {
-    float:left;
-  } */
-
   .tl_class {
     color:#c6c6c6;
   }
@@ -103,16 +95,19 @@
     font-weight:bold;
   }
 
-  .mm_support_display {
-    padding-bottom:20px;
+  .clx {
+    overflow:visible;
+    clear:both;
   }
+
+ /*------------------------------------------------------------------------*/
 
   .mm_support_display .logo {
     display:block;
     height:38px;
     text-indent:-99999px;
     width:169px;
-    background:#fff url(http://now.metamodel.me/tl_files/standard/layout/images/metamodels.png) no-repeat center left;
+    background:#fff url(http://now.metamodel.me/tl_files/standard/layout/images/metamodels.png) no-repeat top left;
   }
 
   .mm_support_display h1 {
@@ -143,9 +138,4 @@
   .mm_support_display .colset .right {
     float:right;
     width:60%;
-  }
-
-  .clx {
-    overflow:visible;
-    clear:both;
   }
