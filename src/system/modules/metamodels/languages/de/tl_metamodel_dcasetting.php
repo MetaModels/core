@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2013-05-13T23:07:50+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Das Attribut "%s" wurde der Eingabemaske hinzugefügt.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess_subpalette'] = 'Das Attribut "%s" wurde dem Unterbereich "%s" hinzugefügt.';
@@ -22,7 +21,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']              =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['0']               = 'HTML-Inhalte erhalten';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['1']               = 'Falls angewählt wird HTML-Inhalt erhalten.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['0']              = 'Immer speichern';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['1']              = 'Falls angewählt wird dieses Feld immer gespeichert, unabhängig davon, ob sich sein Wert geändert hat.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['1']              = 'Falls angewählt wird dieses Feld - unabhängig davon, ob sich sein Wert geändert hat - immer gespeichert, ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']['0']                 = 'Attribute';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']['1']                 = 'Attribut, auf das sich diese Einstellung bezieht.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['backend_legend']               = 'Backend';
@@ -48,7 +47,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['filterable']['1']              =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag']['0']                    = 'Sortierungsvorgabe überschreiben';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag']['1']                    = 'Auswählen, falls Sie die globale Vorgabe für die Sortierung dieses Attributes überschreiben möchten.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['0']      = 'Leere Option einfügen';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['1']      = 'Bei true wird die Option leer hinzugefügt werden die den Optionen ermöglicht, eine Option "kein Element ausgewählt" zu definieren. ';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['1']      = 'Falls diese Option angewählt ist wird zusätzlich "kein Element ausgewählt" ermöglicht.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']['0']              = 'Legende verbergen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']['1']              = 'Die Legende standardmäßig verstecken.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']['0']             = 'Legenden-Titel';
@@ -64,7 +63,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['1']            =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['0']                    = 'Zeilen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['1']                    = 'Anzahl der Zeilen, die für longtext / table Widget verwendet werden.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rte']['0']                     = 'Richtext-Editor aktivieren';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rte']['1']                     = 'Wählen Sie die Konfiguration für den Richtext-Editor aus, die für dieses Feld benutzt werden soll (falls vorhanden).';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rte']['1']                     = 'Wählen Sie eine Voreinstellung für den Richtext-Editor aus, die für dieses Feld benutzt werden soll (falls vorhanden).';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['searchable']['0']              = 'Suchbar';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['searchable']['1']              = 'Auswählen, falls dieses Attribut für die Suche im Backend zur Verfügung stehen soll.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['show']['0']                    = 'Einstellungsdetails';
@@ -83,8 +82,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['6']             =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['7']             = 'Aufsteigende Sortierung nach Monat';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['8']             = 'Absteigende Sortierung nach Monat';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['9']             = 'Aufsteigende Sortierung nach Jahr';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['spaceToUnderscore']['0']       = 'Leerzeichen mit Unterstrichen ersetzen';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['spaceToUnderscore']['1']       = 'Falls ausgewählt werden Leerzeichen durch Unterstriche ersetzt.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['spaceToUnderscore']['0']       = 'Leerzeichen durch Unterstriche ersetzen';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['spaceToUnderscore']['1']       = 'Falls diese Option angewählt ist werden Leerzeichen durch Unterstriche ersetzt.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker']                  = 'CSS-Wizard';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['subpalette']['0']              = 'Unterbereiche verwalten';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['subpalette']['1']              = 'Verwalten Sie die Unterbereiche für die Eingabemaske ID %s.';
@@ -92,7 +91,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['0']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['1']                = 'Wählen Sie das Template aus, das für das gewählte Attribut verwendet werden soll. Gültige Dateinamen für das Template beginnen mit "mm_&lt;typ&gt;", wobei &lt;typ&gt; für den Typ steht.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']                 = 'Typ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['0']                = 'Backend-Klasse';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['1']                = 'Hier können Sie eine oder mehrere Backend-Klassen festlegen. Benutzen Sie den Stylepicker für eine bessere Auswahl.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['1']                = 'Hier können Sie eine oder mehrere Backend-Klassen festlegen. Benutzen Sie den Stylepicker für eine einfachere Auswahl der Backend-Klassen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['0']           = 'Führende \'/\' bearbeiten';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['1']           = 'Hier können Sie angeben, wie führende \'/\' behandelt werden sollen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['0']   = 'Schrägstrich beim Speichern entfernen';

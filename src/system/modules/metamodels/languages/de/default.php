@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T23:07:50+02:00
+ * last-updated: 2013-05-15T08:12:18+02:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attribute von "%s"';
@@ -33,7 +33,7 @@ $GLOBALS['TL_LANG']['ERR']['install_extension']                                 
 $GLOBALS['TL_LANG']['ERR']['invalidTableName']                                        = 'Der Tabellenname ist ungültig.';
 $GLOBALS['TL_LANG']['ERR']['no_attribute_extension']                                  = 'Bitte installieren Sie mindestens eine Attribut-Erweiterung! MetaModels ohne Attribute sind nicht sinnvoll. ';
 $GLOBALS['TL_LANG']['ERR']['no_palette']                                              = 'Sie haben versucht, auf das MetaModel "%s" ohne eine Eingabemaske für Benutzer %s zuzugreifen.';
-$GLOBALS['TL_LANG']['ERR']['no_view']                                                 = 'Sie haben versucht, auf das MetaModel "%s" ohne eine Ansichtsoption für Benutzer %s zuzugreifen.';
+$GLOBALS['TL_LANG']['ERR']['no_view']                                                 = 'Sie haben versucht, auf das MetaModel "%s" ohne Ansichtsrechte für Benutzer %s zuzugreifen.';
 $GLOBALS['TL_LANG']['ERR']['upgrade_php_version']                                     = 'Ihre PHP-Version wird nicht unterstützt. Bitte machen Sie ein Upgrade und benutzen mindestens Version %s (Sie benutzen zur Zeit %s) .';
 $GLOBALS['TL_LANG']['MSC']['details']                                                 = 'Details';
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']                        = ' "%s" für den EIntrag %%s editieren.';
