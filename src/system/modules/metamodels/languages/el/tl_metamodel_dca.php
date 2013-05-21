@@ -8,15 +8,18 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T23:07:50+02:00
+ * last-updated: 2013-05-21T04:12:35+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_langcode']['0'] = 'Γλωσσα ';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_langcode']['1'] = 'Επιλέξτε τις γλώσσες που θέλετε να παρέχθουν.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['0']      = 'Προεπιλογη';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['name']['0']           = 'Ονομα';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype']['0']     = 'Ενσωμάτωση';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['1']    = 'Ταξινόμηση με αρχικό γράμμα αύξουσα ';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['10']   = 'Ταξινόμηση κατά φθίνουσα έτος ';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['11']   = 'Αύξουσα ταξινόμηση ';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['12']   = ' Φθίνουσα Ταξινόμηση ';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['2']    = 'Ταξινόμηση με αρχικό γράμμα φθίνουσα ';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['5']    = 'Ανά ημέρα αύξουσα ';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['6']    = 'Ανά ημέρα φθίνουσα ';
