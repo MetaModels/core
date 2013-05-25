@@ -95,7 +95,12 @@ abstract class MetaModelFilterSetting implements IMetaModelFilterSetting
 	 */
 	protected function isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption)
 	{
-		return $arrFilterUrl[$arrWidget['eval']['urlparam']] == $strKeyOption ? true : false;
+		$blnIsActive = ($arrFilterUrl[$arrWidget['eval']['urlparam']] == $strKeyOption);
+		if (!$blnIsActive && $this->get('defaultid'))
+		{
+			$blnIsActive = ($arrFilterUrl[$arrWidget['eval']['urlparam']] == $this->get('defaultid'));
+		}
+		return $blnIsActive;
 	}
 
 	/**
@@ -284,6 +289,7 @@ abstract class MetaModelFilterSetting implements IMetaModelFilterSetting
 			$GLOBALS['TL_JAVASCRIPT']['metamodels'] = 'system/modules/metamodels/html/metamodels.js';
 		}
 
+		/** @var Widget $objWidget */
 		$objWidget = new $strClass($arrData);
 
 		$strField = $objWidget->generate();
