@@ -302,6 +302,7 @@ abstract class MetaModelFilterSetting implements IMetaModelFilterSetting
 			'raw'        => $arrWidget,
 			'urlparam'   => $arrWidget['eval']['urlparam'],
 			'options'    => $this->prepareFrontendFilterOptions($arrWidget, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit),
+			'count'      => $arrWidget['count'],
 			'autosubmit' => $blnAutoSubmit,
 			'urlvalue'   => array_key_exists('urlvalue', $arrWidget) ? $arrWidget['urlvalue'] : $arrWidget['value']
 		);
