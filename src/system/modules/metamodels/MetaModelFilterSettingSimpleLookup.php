@@ -55,11 +55,12 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 	 * internal helper function for descendant classes to retrieve the options.
 	 *
 	 */
-	protected function getParameterFilterOptions($objAttribute, $arrIds)
+	protected function getParameterFilterOptions($objAttribute, $arrIds, &$arrCount = null)
 	{
 		$arrOptions = $objAttribute->getFilterOptions(
 			$this->get('onlypossible') ? $arrIds : NULL,
-			(bool)$this->get('onlyused')
+			(bool)$this->get('onlyused'),
+			$arrCount
 		);
 
 		// Remove empty values.
@@ -200,6 +201,7 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 		
 		$GLOBALS['MM_FILTER_PARAMS'][] = $this->getParamName();
 
+		$arrCount = array();
 		$arrWidget = array(
 				'label'     => array(
 					// TODO: make this multilingual.
@@ -207,7 +209,8 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 					'GET: ' . $this->getParamName()
 					),
 				'inputType'    => 'select',
-				'options' => $this->getParameterFilterOptions($objAttribute, $arrIds),
+				'options' => $this->getParameterFilterOptions($objAttribute, $arrIds, $arrCount),
+				'count'   => $arrCount,
 				'eval' => array(
 					'includeBlankOption' => ($this->get('blankoption') && !$blnHideClearFilter ? true : false),
 					'blankOptionLabel'   => &$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'],

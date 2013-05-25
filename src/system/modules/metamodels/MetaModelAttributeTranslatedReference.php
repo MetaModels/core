@@ -223,7 +223,7 @@ implements IMetaModelAttributeTranslated
 	 * Fetch filter options from foreign table.
 	 *
 	 */
-	public function getFilterOptions($arrIds, $usedOnly)
+	public function getFilterOptions($arrIds, $usedOnly, &$arrCount = null)
 	{
 		$objDB = Database::getInstance();
 		// TODO: implement $arrIds and $usedOnly handling here.
