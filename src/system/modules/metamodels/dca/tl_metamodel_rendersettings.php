@@ -153,7 +153,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'exclude'                 => true,
 			'inputType'               => 'select',
 			'options_callback'        => array('TableMetaModelRenderSettings','getTemplates'),
-			'eval'                    => array('tl_class'=>'w50')
+			'eval'                    => array
+			(
+				'includeBlankOption'  => true,
+				'tl_class'            =>'w50',
+				'mandatory'           => true,
+				'chosen'              => true
+			)
 		),
 		'format' => array
 		(
@@ -162,7 +168,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'inputType'               => 'select',
 			'options'                 => array('html5', 'xhtml', 'text'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions'],
-			'eval'                    => array('includeBlankOption'=>true, 'tl_class'=>'w50')
+			'eval'                    => array
+			(
+				'includeBlankOption'  => true,
+				'tl_class'            =>'w50',
+				'chosen'              => true
+			)
 		),
 		'jumpTo' => array
 		(
@@ -199,12 +210,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 						'eval'                     => array
 						(
 							'style'                => 'width:200px;',
-							'includeBlankOption'   => true
+							'includeBlankOption'   => true,
+							'chosen'               => true
 						)
 					),
 				),
 				'buttons'                          => array('copy' => false, 'delete' => false, 'up' => false, 'down' => false),
-				'tl_class'                         => 'clr',
+				'tl_class'                         => 'clx',
 			)
 		),
 		'additionalCss' => array(
@@ -221,7 +233,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 						'options_callback'         => array('TableMetaModelRenderSettings', 'getCssFiles'),
 						'eval'                     => array
 						(
-							'style'                => 'width:545px;',
+							'style'                => 'width:515px;',
 							'chosen'               => true,
 							'includeBlankOption'   => true
 						)
@@ -250,7 +262,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 						'options_callback'         => array('TableMetaModelRenderSettings', 'getJsFiles'),
 						'eval'                     => array
 						(
-							'style'                => 'width:545px;',
+							'style'                => 'width:515px;',
 							'chosen'               => true,
 							'includeBlankOption'   => true
 						)

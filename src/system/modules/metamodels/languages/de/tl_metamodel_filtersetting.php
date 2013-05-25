@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2013-05-13T23:07:50+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Alle Sprachen durchsuchen';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['1']            = 'Auswählen, falls Sie sprachunabhängige Suche ermöglichen möchten. Wenn nicht angewählt wird nur die aktive Sprache für die Suche benutzt.';
@@ -38,7 +37,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['1']                  =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['0']                = 'Label';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['1']                = 'Das Label anstelle des Attributnamens anzeigen.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['0']                  = 'Neu';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['1']                  = 'Neue Einstellung erstellen.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['1']                  = 'Neue Filtereinstellung erstellen.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['0']         = 'Nur verbleibende Tags';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['1']         = 'Nur Optionen anzeigen, für die es nach Anwendung dieses Filters ein Ergebnis gibt.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['0']             = 'Nur zugeordnete Tags';

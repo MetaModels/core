@@ -2,7 +2,7 @@
 
 <a class="logo" <?php echo LINK_NEW_WINDOW; ?> href="http://now.metamodel.me/">MetaModels</a>
 
-<div class="colset">
+<div class="tl_tbox block colset">
 
 <h1><?php echo $GLOBALS['TL_LANG']['MSC']['metamodels_help']; ?></h1>
 
@@ -24,8 +24,11 @@
 
 </div>
 
+<div class="tl_box block">
+
 <h1><?php echo $GLOBALS['TL_LANG']['MSC']['metamodels_contributor']; ?></h1>
 
 <p><a href="https://github.com/cgpro" target="_blank">cgpro</a>, <a href="https://github.com/christian-kolb" target="_blank">christian-kolb</a>, <a href="https://github.com/cogizz" target="_blank">cogizz</a>, <a href="https://github.com/folkfreund" target="_blank">folkfreund</a>, <a href="https://github.com/gion-andri" target="_blank">gioni</a>, <a href="https://github.com/hendrik-d" target="_blank">hendrik-d</a>, <a href="https://github.com/jantheofel" target="_blank">jantheofel</a>, <a href="https://github.com/kryptychon" target="_blank">kryptychon</a>, <a href="https://github.com/Kyros" target="_blank">Kyros</a>, <a href="https://github.com/MacKP" target="_blank">MacKP</a>, <a href="https://github.com/michelbalzer" target="_blank">michelbalzer</a>, <a href="https://github.com/psren" target="_blank">psren</a>, <a href="https://github.com/Shoekrates" target="_blank">Shoekrates</a>, <a href="https://github.com/tim-bec" target="_blank">tim-bec</a>, <a href="https://www.transifex.com/accounts/profile/Wasilis/" target="_blank">Wasilis</a>, <a href="https://github.com/xat" target="_blank">xat</a>, <a href="https://github.com/xchs" target="_blank">xchs</a>, <a href="https://github.com/Zeromax" target="_blank">Zeromax</a></p>
 
+</div>
 </div>
