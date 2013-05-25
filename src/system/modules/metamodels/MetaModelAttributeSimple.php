@@ -96,7 +96,7 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 	 *
 	 * @return array All options matching the given conditions as name => value.
 	 */
-	public function getFilterOptions($arrIds, $usedOnly)
+	public function getFilterOptions($arrIds, $usedOnly, &$arrCount = null)
 	{
 		// TODO: implement $arrIds and $usedOnly handling here.
 		$strCol = $this->getColName();
@@ -105,18 +105,23 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 			// Ensure proper integer ids for SQL injection safety reasons.
 			$strIdList = implode(',', array_map('intval', $arrIds));
 			$objRow    = Database::getInstance()->execute('
-				SELECT DISTINCT(' . $strCol . ')
+				SELECT DISTINCT(' . $strCol . '), COUNT(' . $strCol . ') as mm_count
 				FROM ' . $this->getMetaModel()->getTableName() .
 				' WHERE id IN (' . $strIdList . ')
 				ORDER BY FIELD(id,' . $strIdList . ')');
 		} else {
 			$objRow = Database::getInstance()->execute('
-				SELECT DISTINCT(' . $strCol . ')
+				SELECT DISTINCT(' . $strCol . '), COUNT(' . $strCol . ') as mm_count
 				FROM ' . $this->getMetaModel()->getTableName());
 		}
 		$arrResult = array();
 		while ($objRow->next())
 		{
+			if(is_array($arrCount))
+			{
+				$arrCount[$objRow->$strCol] = $objRow->mm_count;
+			}
+			
 			$arrResult[$objRow->$strCol] = $objRow->$strCol;
 		}
 		return $arrResult;

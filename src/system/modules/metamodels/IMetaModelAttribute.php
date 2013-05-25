@@ -230,10 +230,12 @@ interface IMetaModelAttribute
 	 * @param array $arrIds   The ids of items that the values shall be fetched from.
 	 *
 	 * @param bool  $usedOnly Determines if only "used" values shall be returned.
+	 * 
+	 * @param bool  $arrCount Array for the counted values
 	 *
 	 * @return array All options matching the given conditions as name => value.
 	 */
-	public function getFilterOptions($arrIds, $usedOnly);
+	public function getFilterOptions($arrIds, $usedOnly, &$arrCount = null);
 
 	/**
 	 * Search all items that match the given expression.
