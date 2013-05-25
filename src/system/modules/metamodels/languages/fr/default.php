@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2013-05-13T23:07:50+02:00
  */
-
 
 $GLOBALS['TL_LANG']['BRD']['metamodels']                          = 'MetaModels';
 $GLOBALS['TL_LANG']['CTE']['metamodel_content']['0']              = 'Liste des MetaModels';
@@ -22,7 +21,9 @@ $GLOBALS['TL_LANG']['ERR']['invalidTableName']                    = 'Le nom de l
 $GLOBALS['TL_LANG']['MSC']['details']                             = 'Détails';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']['0']          = 'Filter';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['limit']['0']           = 'Limit';
+$GLOBALS['TL_LANG']['MSC']['panelLayout']['search']['0']          = 'Search';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['sort']['0']            = 'Sort';
+$GLOBALS['TL_LANG']['MSC']['tl_class']['clr']['0']                = 'clr';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['long']['0']               = 'long';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['m12']['0']                = 'm12';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['w50']['0']                = 'w50';
