@@ -369,7 +369,7 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 			} catch (Exception $e) {
 				$objSettingsFallback = $this->getDefaultRenderSettings()->setParent($objSettings->getParent());
 
-				$objTemplate = new MetaModelTemplate($objSettingsFallback->template);
+				$objTemplate = new MetaModelTemplate($objSettingsFallback->get('template'));
 				$this->prepareTemplate($objTemplate, $arrRowData, $objSettingsFallback);
 
 				$arrResult['text'] = $objTemplate->parse('text', true);
