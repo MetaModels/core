@@ -341,6 +341,9 @@ class MetaModelItem implements IMetaModelItem
 			return $arrResult;
 		}
 
+		$arrResult['jumpTo'] = $this->buildJumpToLink($objSettings);
+		$objSettings->setJumpTo($arrResult['jumpTo']);
+
 		// First, parse the values in the same order as they are in the render settings.
 		foreach ($objSettings->getSettingNames() as $strAttrName)
 		{
@@ -354,8 +357,6 @@ class MetaModelItem implements IMetaModelItem
 				}
 			}
 		}
-
-		$arrResult['jumpTo'] = $this->buildJumpToLink($objSettings);
 
 		// Call HOOK for other extensions to inject data.
 		$this->parseValueHook($arrResult, $strOutputFormat, $objSettings);
