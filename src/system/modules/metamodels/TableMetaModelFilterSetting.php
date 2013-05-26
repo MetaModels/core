@@ -29,6 +29,11 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 	 */
 	protected static $objInstance = null;
 
+	/**
+	 * The MetaModel instance relevant to the current item in view.
+	 *
+	 * @var IMetaModel
+	 */
 	protected $objMetaModel = null;
 
 	protected $strSettingType = null;
@@ -193,6 +198,13 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		}
 	}
 
+	/**
+	 * Retrieve the MetaModel instance relevant for the current filter setting in view.
+	 *
+	 * @param DC_General $objDC The data container.
+	 *
+	 * @return IMetaModel
+	 */
 	public function getMetaModel($objDC)
 	{
 		$this->objectsFromUrl($objDC);
@@ -213,7 +225,7 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		$this->objectsFromUrl($objDC);
 		if (!($this->objMetaModel && $strValue))
 		{
-			return;
+			return '';
 		}
 		$objAttribute = $this->objMetaModel->getAttributeById($strValue);
 		if ($objAttribute)
@@ -265,7 +277,7 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 	 * Prepares a option list with alias => name connection for all attributes.
 	 * This is used in the attr_id select box.
 	 *
-	 * @param DataContainer $objDC the data container calling.
+	 * @param DC_General $objDC the data container calling.
 	 *
 	 * @return
 	 */
@@ -407,6 +419,49 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		$objResult = $this->Database->prepare('UPDATE tl_metamodel_filtersetting %s WHERE id=?')
 		->set(array('fid' => $intFid))
 		->execute($insertID);
+	}
+
+	/**
+	 * provide options for default selection
+	 *
+	 * @param DC_General $objDC The data container.
+	 *
+	 * @return array
+	 */
+	public function getSelectDefault($objDC)
+	{
+		$objMetaModel = $this->getMetaModel($objDC);
+
+		if(!$objMetaModel)
+		{
+			return array();
+		}
+
+		$objAttribute = $objMetaModel->getAttributeById($objDC->getCurrentModel()->getProperty('attr_id'));
+		if(!($this->getMetaModel($objDC) && $objAttribute))
+		{
+			return array();
+		}
+
+		$blnOnlyUsed = $objDC->getCurrentModel()->getProperty('onlyused') ? true : false;
+
+		$arrCount = array();
+		$arrOptions = $objAttribute->getFilterOptions(null, $blnOnlyUsed, $arrCount);
+
+		// Remove empty values.
+		foreach ($arrOptions as $mixOptionKey => $mixOptionValue)
+		{
+			// Remove html/php tags.
+			$mixOptionValue = strip_tags($mixOptionValue);
+			$mixOptionValue = trim($mixOptionValue);
+
+			if(($mixOptionValue === '') || ($mixOptionValue === null) || ($blnOnlyUsed && ($arrCount[$mixOptionKey] === 0)))
+			{
+				unset($arrOptions[$mixOptionKey]);
+			}
+		}
+
+		return $arrOptions;
 	}
 
 	public function drawOrCondition($arrRow, $strLabel, DataContainer $objDC = null, $imageAttribute='', $strImage)

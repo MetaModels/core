@@ -444,7 +444,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options_callback'        => array('TableMetaModelFilterSetting_Select','getSelectDefault'),
+			'options_callback'        => array('TableMetaModelFilterSetting','getSelectDefault'),
 			'eval'                    => array('tl_class'=>'w50 clr', 'includeBlankOption'=>true)
 		)
 	)
