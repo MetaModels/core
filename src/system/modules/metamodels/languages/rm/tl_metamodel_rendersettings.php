@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2013-05-13T23:07:50+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['0']     = 'Datotecas CSS supplementaras';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['1']     = 'Tscherna quai sche ti vuls includer ulteriuras datotecas CSS.';
@@ -38,6 +37,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['0']         = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['1']         = 'Definescha sche ina configuraziun duai vegnir utilisada sco standard per il genitur dal MetaModel.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['0']            = 'Pagina a la quala duai vegnir siglì';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['1']            = 'La pagina che quai vegnir utilisada per las URLs "mussar detagls". Fa stim ch\'ils parameters detagliads da l\'URL vegnan generads da la configuraziun da filter che vegn actualmain duvrada.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_allLanguages']    = 'Tut las linguas';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter']['0']     = 'Configuraziuns da filter';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter']['1']     = 'La configuraziun da filter che definescha sco che la destinaziun (il lectur/il glistader sin la pagina da detagls) vegn ad identifitgar las congruenzas.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['0']   = 'Lingua';
