@@ -438,7 +438,7 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		}
 
 		$objAttribute = $objMetaModel->getAttributeById($objDC->getCurrentModel()->getProperty('attr_id'));
-		if(!($this->getMetaModel($objDC) && $objAttribute))
+		if(!$objAttribute)
 		{
 			return array();
 		}
