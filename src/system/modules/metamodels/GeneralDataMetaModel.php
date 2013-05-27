@@ -418,6 +418,46 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	}
 
 	/**
+	 * Retrieve all unique values for the given property.
+	 *
+	 * The result set will be an array containing all unique values contained in the Dataprovider.
+	 * Note: this only re-ensembles really used values for at least one data set.
+	 *
+	 * The only information being interpreted from the passed config object is the first property to fetch and the
+	 * filter definition.
+	 *
+	 * @param InterfaceGeneralDataConfig $objConfig   The filter config options.
+	 *
+	 * @return InterfaceGeneralCollection
+	 *
+	 * @throws Exception if improper values have been passed (i.e. not exactly one field requested).
+	 */
+	public function getFilterOptions(InterfaceGeneralDataConfig $objConfig)
+	{
+		$arrProperties = $objConfig->getFields();
+		if (count($arrProperties) <> 1)
+		{
+			throw new Exception('objConfig must contain exactly one property to be retrieved.');
+		}
+
+		$objFilter = $this->prepareFilter($objConfig->getFilter());
+
+		$arrValues = $this->objMetaModel
+			->getAttribute($arrProperties[0])
+			->getFilterOptions($objFilter->getMatchingIds(), true);
+
+		$objCollection = $this->getEmptyCollection();
+		foreach ($arrValues as $strValue)
+		{
+			$objNewModel = $this->getEmptyModel();
+			$objNewModel->setProperty($arrProperties[0], $strValue);
+			$objCollection->add($objNewModel);
+		}
+
+		return $objCollection;
+	}
+
+	/**
 	 * Return the amount of total items.
 	 *
 	 * @param GeneralDataConfigDefault $objConfig the configuration object to use.

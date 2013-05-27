@@ -192,7 +192,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language'],
 						'exclude'                  =>true,
 						'inputType'                =>'justtextoption',
-						'options'                  =>array('xx' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['allLanguages']),
+						'options'                  =>array('xx' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_allLanguages']),
 						'eval'                     =>array('valign'=>'center')
 					),
 					'value' => array(

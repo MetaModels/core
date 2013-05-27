@@ -193,7 +193,7 @@ class TableMetaModelRenderSettings extends  TableMetaModelHelper
 			$GLOBALS['TL_DCA']['tl_metamodel_rendersettings']['fields']['jumpTo']['minCount'] = 1;
 			$GLOBALS['TL_DCA']['tl_metamodel_rendersettings']['fields']['jumpTo']['maxCount'] = 1;
 			$GLOBALS['TL_DCA']['tl_metamodel_rendersettings']['fields']['jumpTo']['eval']['columnFields']['langcode']['options'] =
-								array('xx' => $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['allLanguages']);
+								array('xx' => $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_allLanguages']);
 		}
 
 	}
