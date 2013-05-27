@@ -136,9 +136,9 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	/**
 	 * When rendered via a template, this populates the template with values.
 	 *
-	 * @param MetaModelTemplate                $objTemplate The Template instance to populate.
+	 * @param MetaModelTemplate               $objTemplate The Template instance to populate.
 	 *
-	 * @param array                            $arrRowData The row data for the current item.
+	 * @param array                           $arrRowData  The row data for the current item.
 	 *
 	 * @param MetaModelRenderSettingAttribute $objSettings The render settings to use for this attribute.
 	 *
