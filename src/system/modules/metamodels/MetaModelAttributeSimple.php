@@ -105,14 +105,16 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 			// Ensure proper integer ids for SQL injection safety reasons.
 			$strIdList = implode(',', array_map('intval', $arrIds));
 			$objRow    = Database::getInstance()->execute('
-				SELECT DISTINCT(' . $strCol . '), COUNT(' . $strCol . ') as mm_count
+				SELECT ' . $strCol . ', COUNT(' . $strCol . ') as mm_count
 				FROM ' . $this->getMetaModel()->getTableName() .
 				' WHERE id IN (' . $strIdList . ')
+				GROUP BY ' . $strCol . '
 				ORDER BY FIELD(id,' . $strIdList . ')');
 		} else {
 			$objRow = Database::getInstance()->execute('
-				SELECT DISTINCT(' . $strCol . '), COUNT(' . $strCol . ') as mm_count
-				FROM ' . $this->getMetaModel()->getTableName());
+				SELECT ' . $strCol . ', COUNT(' . $strCol . ') as mm_count
+				FROM ' . $this->getMetaModel()->getTableName()) . '
+				GROUP BY ' . $strCol;
 		}
 		$arrResult = array();
 		while ($objRow->next())
