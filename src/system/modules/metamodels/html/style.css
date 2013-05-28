@@ -53,10 +53,6 @@
     margin-top:3px; 
   }
 
-  .w50 { 
-    /* height:auto; */
-  }
-
   fieldset.tl_subdca {
     padding:0;
     margin:0;
@@ -95,9 +91,15 @@
     font-weight:bold;
   }
 
+ /*------------------------------------------------------------------------*/
+
   .clx {
     overflow:visible;
     clear:both;
+  }
+
+  .w50x {
+    height:auto;
   }
 
  /*------------------------------------------------------------------------*/
