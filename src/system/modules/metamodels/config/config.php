@@ -234,6 +234,20 @@ $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 	'image' => ''
 );
 
+$GLOBALS['PALETTE_STYLE_PICKER'][] = array
+(
+	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['clx'],
+	'cssclass' => 'clx',
+	'image' => ''
+);
+
+$GLOBALS['PALETTE_STYLE_PICKER'][] = array
+(
+	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['w50x'],
+	'cssclass' => 'w50x',
+	'image' => ''
+);
+
 // Selectable panels in the palette panelLayout definitions.
 $GLOBALS['PALETTE_PANEL_PICKER'][] = array
 (
