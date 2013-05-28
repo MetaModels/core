@@ -15,7 +15,7 @@
 	SWIFT-BIC: SOLADES1TUB<br /><br />
 	Purpose: MetaModels</p>
 
-	<form target="_top" method="post" action="https://www.paypal.com/cgi-bin/webscr"><input type="hidden" value="_donations" name="cmd"><input type="hidden" value="c.schiffler@cyberspectrum.de" name="business"><input type="hidden" value="GB" name="lc"><input type="hidden" value="MetaModels" name="item_name"><input type="hidden" value="0" name="no_note"><input type="hidden" value="EUR" name="currency_code"><input type="hidden" value="PP-DonationsBF:btn_donate_LG.gif:NonHostedGuest" name="bn"><input border="0" type="image" alt="" name="submit" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif"></form>
+	<form target="_top" method="post" action="https://www.paypal.com/cgi-bin/webscr"><input type="hidden" value="_donations" name="cmd"><input type="hidden" value="c.schiffler@cyberspectrum.de" name="business"><input type="hidden" value="GB" name="lc"><input type="hidden" value="MetaModels Support" name="item_name"><input type="hidden" value="0" name="no_note"><input type="hidden" value="EUR" name="currency_code"><input type="hidden" value="PP-DonationsBF:btn_donate_LG.gif:NonHostedGuest" name="bn"><input border="0" type="image" alt="" name="submit" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif"></form>
 </div>
 
 <div class="right">
