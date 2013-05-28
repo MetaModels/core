@@ -1,17 +1,17 @@
 <?php if(is_array($this->options) && count($this->options)>0): ?>
 <ul>
-<?php $intI = 0; foreach($this->options as $option): 
+<?php $intI = 0; foreach($this->options as $strKey => $option): 
 $strClass = ($intI == 0) ? 'first ' : '';
 $strClass .= ($intI == count($this->options) - 1 ) ? 'last ' : '';
 $strClass .= ($intI % 2 == 1) ? 'even' : 'odd';
 $strClass .= (strlen($option['class'])) ? ' ' . standardize($option['class']) : '';
 	
-$link = sprintf('<a href="%s" class="%s" title="%s"><span class="action">%s </span>%s</a>',
+$link = sprintf('<a href="%s" class="%s" title="%s"><span class="action">%s</span>%s</a>',
 	$option['href'],
-    $strClass,
+        $strClass,
 	$option['value'],
 	($option['action'] ? $GLOBALS['TL_LANG']['metamodels_frontendfilter']['action_'.$option['action']] : ''),
-	$option['value']
+	$option['value'] . (($this->showCount) ? ' (' . $this->count[$option['value']] . ')' : '')
 	);
 ?>
 <li class="<?php echo $strClass; ?>"><?php echo $link; ?></li>
