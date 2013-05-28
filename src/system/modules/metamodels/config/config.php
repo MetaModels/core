@@ -208,8 +208,22 @@ $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 
 $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 (
+	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['w50x'],
+	'cssclass' => 'w50x',
+	'image' => ''
+);
+
+$GLOBALS['PALETTE_STYLE_PICKER'][] = array
+(
 	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['clr'],
 	'cssclass' => 'clr',
+	'image' => ''
+);
+
+$GLOBALS['PALETTE_STYLE_PICKER'][] = array
+(
+	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['clx'],
+	'cssclass' => 'clx',
 	'image' => ''
 );
 
