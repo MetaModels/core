@@ -23,10 +23,8 @@
  */
 class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralDataMultiLanguage
 {
-	// Vars --------------------------------------------------------------------
-
 	/**
-	 * Name of current table
+	 * Name of current table.
 	 * @var string
 	 */
 	protected $strTable = null;
@@ -36,17 +34,25 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	 *
 	 * @var IMetaModel
 	 */
-	protected $objMetaModel = NULL;
+	protected $objMetaModel = null;
 
-	// Functions ---------------------------------------------------------------
+	/**
+	 * The current active language.
+	 *
+	 * @var string
+	 */
+	protected $strCurrentLanguage;
 
 	/**
 	 * Delete an item.
 	 *
-	 * @param int|string|InterfaceGeneralModel $item Id or the object itself, to delete
+	 * The given value may be either integer, string or an instance of InterfaceGeneralModel
 	 *
+	 * @param mixed $varItem Id or the model itself, to delete.
 	 *
 	 * @return void
+	 *
+	 * @throws Exception when an unusable object has been passed.
 	 */
 	public function delete($varItem)
 	{
@@ -71,8 +77,9 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	 *
 	 * @param string                $strUsername the username that creates the new version.
 	 *
-	 *
 	 * @return void
+	 *
+	 * @throws Exception As this is currently unimplemented, an Exception is thrown.
 	 */
 	public function saveVersion(InterfaceGeneralModel $objModel, $strUsername)
 	{
@@ -80,14 +87,15 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	}
 
 	/**
-	 * Return a model based of the version information
+	 * Return a model based of the version information.
 	 *
-	 * @param mixed $mixID      The ID of record
+	 * @param mixed $mixID      The ID of record.
 	 *
-	 * @param mixed $mixVersion The ID of the version
-	 *
+	 * @param mixed $mixVersion The ID of the version.
 	 *
 	 * @return null|InterfaceGeneralModel the model or null if not found.
+	 *
+	 * @throws Exception As this is currently unimplemented, an Exception is thrown.
 	 */
 	public function getVersion($mixID, $mixVersion)
 	{
@@ -97,12 +105,13 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	/**
 	 * Set a version as active.
 	 *
-	 * @param mix $mixID      The ID of record
+	 * @param mixed $mixID      The ID of record.
 	 *
-	 * @param mix $mixVersion The ID of the version
-	 *
+	 * @param mixed $mixVersion The ID of the version.
 	 *
 	 * @return void
+	 *
+	 * @throws Exception As this is currently unimplemented, an Exception is thrown.
 	 */
 	public function setVersionActive($mixID, $mixVersion)
 	{
@@ -110,12 +119,13 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	}
 
 	/**
-	 * Return the active version from a record
+	 * Return the active version from a record.
 	 *
-	 * @param mixed $mixID The ID of the record
-	 *
+	 * @param mixed $mixID The ID of the record.
 	 *
 	 * @return mixed version ID
+	 *
+	 * @throws Exception As this is currently unimplemented, an Exception is thrown.
 	 */
 	public function getActiveVersion($mixID)
 	{
@@ -123,14 +133,20 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	}
 
 	/**
-	 * Fetch a single record by id.
+	 * Fetch a single or first record by id or filter.
 	 *
-	 * @param GeneralDataConfigDefault $objConfig
+	 * If the model shall be retrieved by id, use $objConfig->setId() to populate the config with an Id.
+	 *
+	 * If the model shall be retrieved by filter, use $objConfig->setFilter() to populate the config with a filter.
+	 *
+	 * @param InterfaceGeneralDataConfig $objConfig
 	 *
 	 * @return InterfaceGeneralModel
 	 */
-	public function fetch(GeneralDataConfigDefault $objConfig)
+	public function fetch(InterfaceGeneralDataConfig $objConfig)
 	{
+		// TODO: implement find first item by filter here.
+
 		$strBackupLanguage = '';
 		if ($this->strCurrentLanguage != '')
 		{
@@ -153,14 +169,13 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	}
 
 	/**
-	 * Set base config with source and other neccesary prameter
+	 * Set base config with source and other necessary parameter.
 	 *
-	 * @param array $arrConfig the configuration array.
-	 *
+	 * @param array $arrConfig The configuration to use.
 	 *
 	 * @return void
 	 *
-	 * @throws Exception
+	 * @throws Exception when no source has been defined.
 	 */
 	public function setBaseConfig(array $arrConfig)
 	{
@@ -177,7 +192,7 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	}
 
 	/**
-	 * Return empty config object
+	 * Return empty config object.
 	 *
 	 * @return InterfaceGeneralDataConfig
 	 */
@@ -207,7 +222,6 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 		return new GeneralCollectionDefault();
 	}
 
-
 	/**
 	 * Combine a filter in standard filter array notation.
 	 * Supported operations are:
@@ -229,9 +243,13 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	 *                'property'           string (the name of a property)
 	 *                'values'             array of literal
 	 *
-	 * @param array $arrFilters the filter to be combined to a valid SQL filter query.
+	 * @param array            $arrFilter The filter to be combined into the passed filter object.
 	 *
-	 * @return string the combined WHERE clause.
+	 * @param IMetaModelFilter $objFilter The filter object where the rules shall get appended to.
+	 *
+	 * @return void.
+	 *
+	 * @throws Exception When an improper filter condition is encountered, an exception is thrown.
 	 */
 	protected function calculateSubfilter($arrFilter, IMetaModelFilter $objFilter)
 	{
@@ -240,7 +258,7 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 			throw new Exception('Error Processing subfilter: ' . var_export($arrFilter, true), 1);
 		}
 
-		$objAttribute = NULL;
+		$objAttribute = null;
 		if ($arrFilter['property'])
 		{
 			$objAttribute = $this->objMetaModel->getAttribute($arrFilter['property']);
@@ -340,8 +358,7 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	/**
 	 * Prepare a filter and return it.
 	 *
-	 * @param array $arrFilter the values to be applied in attribute name => value style.
-	 *
+	 * @param array $arrFilter The values to be applied in attribute name => value style.
 	 *
 	 * @return IMetaModelFilter
 	 */
@@ -364,14 +381,13 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	}
 
 	/**
-	 * Fetch all records (optional limited).
+	 * Fetch all records (optional filtered, sorted and limited).
 	 *
-	 * @param GeneralDataConfigDefault $objConfig the configuration object to use.
+	 * @param InterfaceGeneralDataConfig $objConfig The configuration to be applied.
 	 *
-	 *
-	 * @return InterfaceGeneralCollection collection containing all matching items.
+	 * @return InterfaceGeneralCollection
 	 */
-	public function fetchAll(GeneralDataConfigDefault $objConfig)
+	public function fetchAll(InterfaceGeneralDataConfig $objConfig)
 	{
 		$strBackupLanguage = '';
 		if ($this->strCurrentLanguage != '')
@@ -380,7 +396,7 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 			$GLOBALS['TL_LANGUAGE'] = $this->strCurrentLanguage;
 		}
 
-		$varResult = NULL;
+		$varResult = null;
 
 		$arrSorting = $objConfig->getSorting();
 
@@ -420,7 +436,9 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	/**
 	 * Retrieve all unique values for the given property.
 	 *
-	 * The result set will be an array containing all unique values contained in the Dataprovider.
+	 * The result set will be an array containing all unique values contained in the MetaModel for the defined
+	 * attribute in the configuration.
+	 *
 	 * Note: this only re-ensembles really used values for at least one data set.
 	 *
 	 * The only information being interpreted from the passed config object is the first property to fetch and the
@@ -458,27 +476,29 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	}
 
 	/**
-	 * Return the amount of total items.
+	 * Return the amount of total items (filtering may be used in the config).
 	 *
-	 * @param GeneralDataConfigDefault $objConfig the configuration object to use.
+	 * @param InterfaceGeneralDataConfig $objConfig
 	 *
-	 * @return int the amount.
+	 * @return int
 	 */
-	public function getCount(GeneralDataConfigDefault $objConfig)
+	public function getCount(InterfaceGeneralDataConfig $objConfig)
 	{
 		$objFilter = $this->prepareFilter($objConfig->getFilter());
 		return $this->objMetaModel->getCount($objFilter);
 	}
 
 	/**
-	 * Return a list with all versions for this row
+	 * Return a list with all versions for the model with the given Id.
 	 *
-	 * @param mixed $mixID The ID of record
+	 * @param mixed   $mixID         The ID of the row.
 	 *
+	 * @param boolean $blnOnlyActive If true, only active versions will get returned, if false all version will get
+	 *                               returned.
 	 *
-	 * @return InterfaceGeneralCollection all versions of the given item.
+	 * @return InterfaceGeneralCollection
 	 */
-	public function getVersions($mixID)
+	public function getVersions($mixID, $blnOnlyActive = false)
 	{
 		// no version support on MetaModels so far, sorry.
 		return null;
@@ -515,25 +535,32 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	}
 
 	/**
-	 * Vague definition, therefore currently unimplemented.
+	 * Reset the fallback field.
+	 *
+	 * This clears the given property in all items in the data provider to an empty value.
+	 *
+	 * @param string $strField The field to reset.
+	 *
+	 * @return void
 	 */
 	public function resetFallback($strField)
 	{
-		// TODO: CS: I do not understand the docs in the base implementation, therefore I do not know how to implement this here. :/
+		// TODO: Unimplemented so far.
 	}
 
 	/**
-	 * save the given item to the database.
+	 * Save an item to the data provider.
 	 *
-	 * @param InterfaceGeneralModel $objItem   the item to save.
+	 * If the item does not have an Id yet, the save operation will add it as a new row to the database and
+	 * populate the Id of the model accordingly.
 	 *
-	 * @param bool                  $recursive if the model contains submodels, define if those shall be saved as well (defaults to false).
+	 * @param InterfaceGeneralModel $objItem   The model to save back.
 	 *
-	 * @return void
+	 * @return InterfaceGeneralModel The passed model.
 	 *
-	 * @throws Exception when an incompatible item was passed.
+	 * @throws Exception When an incompatible item was passed, an Exception is being thrown.
 	 */
-	public function save(InterfaceGeneralModel $objItem, $recursive = false)
+	public function save(InterfaceGeneralModel $objItem)
 	{
 		if ($objItem instanceof GeneralModelMetaModel)
 		{
@@ -557,18 +584,15 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	}
 
 	/**
-	 * save the given items to the database.
+	 * Save a collection of items to the data provider.
 	 *
-	 * @param InterfaceGeneralCollection $objItems  the item to save.
-	 *
-	 * @param bool                       $recursive if the model contains submodels, define if those shall be saved as well (defaults to false).
-	 *
+	 * @param InterfaceGeneralCollection $objItems The collection containing all items to be saved.
 	 *
 	 * @return void
 	 *
 	 * @throws Exception when an incompatible item was passed.
 	 */
-	public function saveEach(InterfaceGeneralCollection $objItems, $recursive = false)
+	public function saveEach(InterfaceGeneralCollection $objItems)
 	{
 		foreach ($objItems as $key => $value)
 		{
@@ -581,7 +605,6 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	 *
 	 * @param string $strField the name of the attribute that shall be tested.
 	 *
-	 *
 	 * @return boolean
 	 */
 	public function fieldExists($strField)
@@ -590,16 +613,21 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	}
 
 	/**
-	 * Check if two models have the same properties
+	 * Check if two models have the same values in all properties.
 	 *
-	 * @param InterfaceGeneralModel $objModel1
+	 * @param InterfaceGeneralModel $objModel1 The first model to compare.
 	 *
-	 * @param InterfaceGeneralModel $objModel2
+	 * @param InterfaceGeneralModel $objModel2 The second model to compare.
 	 *
-	 * return boolean True - If both models are same, false if not
+	 * @return boolean True - If both models are same, false if not.
 	 */
 	public function sameModels($objModel1 , $objModel2)
 	{
+		/**
+		 * These must be:
+		 * @var GeneralModelMetaModel $objModel1
+		 * @var GeneralModelMetaModel $objModel2
+		 */
 		$objNative1 = $objModel1->getItem();
 		$objNative2 = $objModel2->getItem();
 		if ($objNative1->getMetaModel() != $objNative2->getMetaModel())
@@ -634,18 +662,11 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 		return new GeneralModelMetaModel($objItem);
 	}
 
-
 	/**
-	 * the currently active language.
+	 * Get all available languages of a certain record.
 	 *
-	 * @var string
-	 */
-	protected $strCurrentLanguage;
-
-	/**
-	 * Get all avaidable languages for a special record.
+	 * @param mixed $mixID The ID of the record to retrieve.
 	 *
-	 * @param mixed $mixID The ID of record
 	 * @return InterfaceGeneralCollection
 	 */
 	public function getLanguages($mixID)
@@ -667,13 +688,14 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 				return $objCollection;
 			}
 		}
-		return NULL;
+		return null;
 	}
 
 	/**
-	 * Get the fallback language
+	 * Get the fallback language of a certain record.
 	 *
-	 * @param mixed $mixID The ID of record
+	 * @param mixed $mixID The ID of the record to retrieve.
+	 *
 	 * @return InterfaceGeneralModel
 	 */
 	public function getFallbackLanguage($mixID)
@@ -687,13 +709,14 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 			$objModel->setProperty("active", ($this->getCurrentLanguage() == $strLangCode));
 			return $objModel;
 		}
-		return NULL;
+		return null;
 	}
 
 	/**
-	 * Set the working language for the whole dataprovider.
+	 * Set the current working language for the whole data provider.
 	 *
-	 * @param $strLanguage The new language, use hort tag "2 chars like de, fr etc."
+	 * @param string $strLanguage The new language, use short tag "2 chars like de, fr etc."
+	 *
 	 * @return void
 	 */
 	public function setCurrentLanguage($strLanguage)
@@ -702,13 +725,12 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 	}
 
 	/**
-	 * Get the working language
+	 * Get the current working language.
 	 *
-	 * return String Short tag for the current working language like de or fr etc.
+	 * @return string Short tag for the current working language like de or fr etc.
 	 */
 	public function getCurrentLanguage()
 	{
 		return $this->strCurrentLanguage;
 	}
 }
-
