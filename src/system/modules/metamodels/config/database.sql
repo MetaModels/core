@@ -210,6 +210,8 @@ CREATE TABLE `tl_metamodel_filtersetting` (
   `onlyused` char(1) NOT NULL default '0',
 -- display only remaining options in Fe filters.
   `onlypossible` char(1) NOT NULL default '0'
+-- default value for filter
+  `defaultid` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

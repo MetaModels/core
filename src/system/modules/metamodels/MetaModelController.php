@@ -37,7 +37,7 @@ class MetaModelController extends Controller
 	 * Get the static instance.
 	 *
 	 * @static
-	 * @return MetaPalettes
+	 * @return MetaModelController
 	 */
 	public static function getInstance()
 	{

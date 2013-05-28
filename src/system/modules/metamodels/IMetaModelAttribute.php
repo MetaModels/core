@@ -220,20 +220,22 @@ interface IMetaModelAttribute
 	 *
 	 * Retrieve values for use in filter options, that will be understood by DC_ filter
 	 * panels and frontend filter select boxes.
-	 * One can influence the amound of returned entries with the two parameters.
+	 * One can influence the amount of returned entries with the two parameters.
 	 * For the id list, the value "null" represents (as everywhere in MetaModels) all entries.
 	 * An empty array will return no entries at all.
 	 * The parameter "used only" determines, if only really attached values shall be returned.
 	 * This is only relevant, when using "null" as id list for attributes that have preconfigured
 	 * values like select lists and tags i.e.
 	 *
-	 * @param array $arrIds   The ids of items that the values shall be fetched from.
+	 * @param array $arrIds    The ids of items that the values shall be fetched from.
 	 *
-	 * @param bool  $usedOnly Determines if only "used" values shall be returned.
+	 * @param bool  $usedOnly  Determines if only "used" values shall be returned.
+	 *
+	 * @param bool  &$arrCount Array for the counted values.
 	 *
 	 * @return array All options matching the given conditions as name => value.
 	 */
-	public function getFilterOptions($arrIds, $usedOnly);
+	public function getFilterOptions($arrIds, $usedOnly, &$arrCount = null);
 
 	/**
 	 * Search all items that match the given expression.
