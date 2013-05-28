@@ -94,7 +94,7 @@ interface IMetaModelFilterSetting
 	 *
 	 * @return array
 	 */
-	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit, $blnHideClearFilter);
+	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, MetaModelFrontendFilterOptions $objFrontendFilterOptions);
 
 	/**
 	 * Retrieve a list of all referenced attributes within the filter setting.

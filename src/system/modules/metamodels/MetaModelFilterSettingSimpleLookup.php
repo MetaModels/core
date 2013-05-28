@@ -185,11 +185,11 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 			return array();
 		}
 	}
-
+	
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit, $blnHideClearFilter)
+	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, MetaModelFrontendFilterOptions $objFrontendFilterOptions)
 	{
 		// if defined as static, return nothing as not to be manipulated via editors.
 		if (!$this->enableFEFilterWidget())
@@ -209,10 +209,11 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 					'GET: ' . $this->getParamName()
 					),
 				'inputType'    => 'select',
-				'options' => $this->getParameterFilterOptions($objAttribute, $arrIds, $arrCount),
-				'count'   => $arrCount,
+				'options'   => $this->getParameterFilterOptions($objAttribute, $arrIds, $arrCount),
+				'count'     => $arrCount,
+				'showCount' => $objFrontendFilterOptions->isShowCountValues(),
 				'eval' => array(
-					'includeBlankOption' => ($this->get('blankoption') && !$blnHideClearFilter ? true : false),
+					'includeBlankOption' => ($this->get('blankoption') && !$objFrontendFilterOptions->isHideClearFilter() ? true : false),
 					'blankOptionLabel'   => &$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'],
 					'colname'            => $objAttribute->getColname(),
 					'urlparam'           => $this->getParamName(),
@@ -224,7 +225,7 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 
 		return array
 		(
-			$this->getParamName() => $this->prepareFrontendFilterWidget($arrWidget, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit)
+			$this->getParamName() => $this->prepareFrontendFilterWidget($arrWidget, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions)
 		);
 	}
 

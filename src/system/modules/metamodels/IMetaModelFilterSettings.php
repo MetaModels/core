@@ -71,10 +71,12 @@ interface IMetaModelFilterSettings
 	 * @param bool  $blnAutoSubmit      determines if the filters shall auto submit themselves.
 	 *
 	 * @param bool  $blnHideClearFilter TODO: s.heimes add comment text for this parameter.
+	 * 
+	 * @param bool $blnShowCountValues If true the system tries  to show the numbers of available values
 	 *
 	 * @return array
 	 */
-	public function getParameterFilterWidgets($arrFilterUrl, $arrJumpTo = array(), $blnAutoSubmit = true, $blnHideClearFilter = false);
+	public function getParameterFilterWidgets($arrFilterUrl, $arrJumpTo = array(), MetaModelFrontendFilterOptions $objFrontendFilterOptions);
 
 	/**
 	 * Retrieve a list of all registered parameters from the setting as DCA compatible arrays.

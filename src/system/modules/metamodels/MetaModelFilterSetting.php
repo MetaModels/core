@@ -260,7 +260,7 @@ abstract class MetaModelFilterSetting implements IMetaModelFilterSetting
 	 *
 	 * @return array
 	 */
-	protected function prepareFrontendFilterWidget($arrWidget, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit)
+	protected function prepareFrontendFilterWidget($arrWidget, $arrFilterUrl, $arrJumpTo, MetaModelFrontendFilterOptions $objFrontendFilterOptions)
 	{
 		$strClass = $GLOBALS['TL_FFL'][$arrWidget['inputType']];
 
@@ -279,7 +279,7 @@ abstract class MetaModelFilterSetting implements IMetaModelFilterSetting
 			$arrWidget['value']
 		);
 
-		if ($blnAutoSubmit && TL_MODE == 'FE')
+		if ($objFrontendFilterOptions->isAutoSubmit() && TL_MODE == 'FE')
 		{
 			$GLOBALS['TL_JAVASCRIPT']['metamodels'] = 'system/modules/metamodels/html/metamodels.js';
 		}
@@ -295,15 +295,16 @@ abstract class MetaModelFilterSetting implements IMetaModelFilterSetting
 				$arrWidget['inputType'],
 				$arrWidget['eval']['urlparam'],
 				(($arrWidget['value'] !== null) ? ' used':' unused'),
-				($blnAutoSubmit ? ' submitonchange' : '')
+				($objFrontendFilterOptions->isAutoSubmit() ? ' submitonchange' : '')
 			),
 			'label'      => $objWidget->generateLabel(),
 			'formfield'  => $strField,
 			'raw'        => $arrWidget,
 			'urlparam'   => $arrWidget['eval']['urlparam'],
-			'options'    => $this->prepareFrontendFilterOptions($arrWidget, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit),
+			'options'    => $this->prepareFrontendFilterOptions($arrWidget, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions->isAutoSubmit()),
 			'count'      => $arrWidget['count'],
-			'autosubmit' => $blnAutoSubmit,
+			'showCount'  => $objFrontendFilterOptions->isShowCountValues(),
+			'autosubmit' => $objFrontendFilterOptions->isAutoSubmit(),
 			'urlvalue'   => array_key_exists('urlvalue', $arrWidget) ? $arrWidget['urlvalue'] : $arrWidget['value']
 		);
 	}
@@ -365,7 +366,7 @@ abstract class MetaModelFilterSetting implements IMetaModelFilterSetting
 	 *
 	 * @return array Empty array.
 	 */
-	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit, $blnHideClearFilter)
+	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, MetaModelFrontendFilterOptions $objFrontendFilterOptions)
 	{
 		return array();
 	}
