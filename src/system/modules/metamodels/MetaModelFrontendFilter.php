@@ -226,7 +226,7 @@ class MetaModelFrontendFilter extends Frontend
 			$objSubTemplate            = new FrontendTemplate($strTemplate ? $strTemplate : 'mm_filteritem_default');
 
 			$objSubTemplate->setData($arrFilter);
-			$objSubTemplate->submit    = $blnAutoSubmit;
+			$objSubTemplate->submit    = $objFrontendFilterOptions->isAutoSubmit();
 
 			$arrFilter['value'] = $objSubTemplate->parse();
 
@@ -238,7 +238,7 @@ class MetaModelFrontendFilter extends Frontend
 			'action'     => $this->generateFrontendUrl($arrJumpTo, $this->getJumpToUrl($arrParams['other'])),
 			'formid'     => $this->formId,
 			'filters'    => $arrRendered,
-			'submit'     => ($blnAutoSubmit ? '' : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit'])
+			'submit'     => ($objFrontendFilterOptions->isAutoSubmit() ? '' : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit'])
 		);
 	}
 	
