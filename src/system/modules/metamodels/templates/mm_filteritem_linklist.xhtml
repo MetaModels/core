@@ -3,19 +3,13 @@
 <?php
 $i = 0; $last = count($this->options) - 1;
 foreach($this->options as $option):
-
-	$class = (!$i) ? 'first ' : '';
-	$class .= ($i == $last) ? 'last ' : '';
-	$class .= ($i++ % 2) ? 'even' : 'odd';
-	$class .= (strlen($option['class'])) ? ' ' . standardize($option['class']) : '';
+    $class = (!$i) ? 'first ' : '';
+    $class .= ($i == $last) ? 'last ' : '';
+    $class .= ($i++ % 2) ? 'even' : 'odd';
+    $class .= (strlen($option['class'])) ? ' ' . standardize($option['class']) : '';
 ?>
 <li class="<?php echo $class; ?>">
-<a href="<?php echo $option['href']; ?>" class="<?php echo $class; ?>" title="<?php echo $option['value']; ?>">
-<?php echo $option['value']; ?>
-<?php if($this->showCount): ?>
-<span class="count">(<?php echo $this->count[$option['key']]; ?>)</span>
-<?php endif; ?>
-</a>
+<a href="<?php echo $option['href']; ?>" class="<?php echo $class; ?>" title="<?php echo $option['value']; ?>"><?php echo $option['value']; ?><?php if($this->showCount): ?> <span class="count">(<?php echo $this->count[$option['key']]; ?>)</span><?php endif; ?></a>
 </li>
 <?php endforeach; ?>
 </ul>
