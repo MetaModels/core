@@ -223,7 +223,7 @@ class MetaModelFrontendFilter extends Frontend
 			$strTemplate = $arrFilter['raw']['eval']['template'];
 
 			// parse sub template
-			$objSubTemplate            = new FrontendTemplate($strTemplate ? $strTemplate : 'mm_filteritem_default');
+			$objSubTemplate            = new FrontendTemplate($strTemplate ? $strTemplate : 'mm_filteritem_checkbox');
 
 			$objSubTemplate->setData($arrFilter);
 			$objSubTemplate->submit    = $objFrontendFilterOptions->isAutoSubmit();

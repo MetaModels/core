@@ -398,7 +398,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		'template' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template'],
-			'default'                 => 'mm_filteritem_default',
+			'default'                 => 'mm_filteritem_checkbox',
 			'exclude'                 => true,
 			'inputType'               => 'select',
 			'options_callback'        => array('TableMetaModelFilterSetting', 'getSubTemplates'),
