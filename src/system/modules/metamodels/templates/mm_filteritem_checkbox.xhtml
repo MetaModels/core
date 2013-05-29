@@ -1,5 +1,5 @@
 <?php if(is_array($this->options) && count($this->options)>0): ?>
-<fieldset id="ctrl_<?php echo $this->urlparam; ?>" class="radio_container">
+<fieldset id="ctrl_<?php echo $this->urlparam; ?>" class="checkbox_container">
 <?php 
 $count = 0;
 foreach($this->options as $option):
@@ -10,7 +10,7 @@ foreach($this->options as $option):
 ?>
 
 <?php
-	$field = sprintf('<input type="radio" name="%s" id="opt_%s_%s" class="radio%s" value="%s"%s />',
+	$field = sprintf('<input type="checkbox" name="%s" id="opt_%s_%s" class="checkbox%s" value="%s"%s />',
 		$this->urlparam,
 		$this->urlparam,
 		$count,

@@ -184,7 +184,7 @@ class MetaModelFrontendFilter extends Frontend
 		 */
 		$objFilterSetting = MetaModelFilterSettingsFactory::byId($this->objFilterConfig->metamodel_filtering);
 		
-		$objFrontendFilterOptions = new MetaModelFrontendFilterOptions();		
+		$objFrontendFilterOptions = new MetaModelFrontendFilterOptions();
 		$objFrontendFilterOptions->setAutoSubmit($this->objFilterConfig->metamodel_fef_autosubmit ? true : false);
 		$objFrontendFilterOptions->setHideClearFilter($this->objFilterConfig->metamodel_fef_hideclearfilter ? true : false);
 		$objFrontendFilterOptions->setShowCountValues($this->objFilterConfig->metamodel_available_values ? true : false);
@@ -273,7 +273,7 @@ class MetaModelFrontendFilter extends Frontend
 							
 							// Get instance and call generate function.
 							$objCE = new ContentMetaModelFrontendClearAll($objDbResult);
-							$strContent = str_replace($arrMatches[$i][0], $objCE->generateReal(), $strContent);							
+							$strContent = str_replace($arrMatches[$i][0], $objCE->generateReal(), $strContent);
 							break;
 							
 						case 'mod':
@@ -286,11 +286,11 @@ class MetaModelFrontendFilter extends Frontend
 							{
 								$strContent = str_replace($arrMatches[$i][0], '', $strContent);
 								break;
-							}					
+							}
 							
 							// Get instance and call generate function.
-							$objCE = new ContentMetaModelFrontendClearAll($objDbResult);							
-							$strContent = str_replace($arrMatches[$i][0], $objCE->generateReal(), $strContent);							
+							$objCE = new ContentMetaModelFrontendClearAll($objDbResult);
+							$strContent = str_replace($arrMatches[$i][0], $objCE->generateReal(), $strContent);
 							break;
 					}
 				}
@@ -301,5 +301,3 @@ class MetaModelFrontendFilter extends Frontend
 	}
 
 }
-
-?>
