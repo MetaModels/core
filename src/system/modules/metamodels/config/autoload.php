@@ -123,4 +123,5 @@ TemplateLoader::addFiles(array
 	'mm_filteritem_default'      => 'system/modules/metamodels/templates',
 	'mm_filteritem_linklist'     => 'system/modules/metamodels/templates',
 	'mm_filteritem_radiobuttons' => 'system/modules/metamodels/templates',
+	'mm_filteritem_checkbox'     => 'system/modules/metamodels/templates',
 ));
