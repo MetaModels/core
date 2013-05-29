@@ -187,7 +187,7 @@ class MetaModelFrontendFilter extends Frontend
 		$objFrontendFilterOptions = new MetaModelFrontendFilterOptions();		
 		$objFrontendFilterOptions->setAutoSubmit($this->objFilterConfig->metamodel_fef_autosubmit ? true : false);
 		$objFrontendFilterOptions->setHideClearFilter($this->objFilterConfig->metamodel_fef_hideclearfilter ? true : false);
-		$objFrontendFilterOptions->setShowCountValues($this->objFilterConfig->metamodel_availableValues ? true : false);
+		$objFrontendFilterOptions->setShowCountValues($this->objFilterConfig->metamodel_available_values ? true : false);
 		
 		$arrJumpTo = $this->objFilterConfig->arrJumpTo;
 	
