@@ -178,7 +178,7 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getParameterFilterWidgets($arrFilterUrl, $arrJumpTo = array(), $blnAutoSubmit = true, $blnHideClearFilter = false)
+	public function getParameterFilterWidgets($arrFilterUrl, $arrJumpTo = array(), MetaModelFrontendFilterOptions $objFrontendFilterOptions)
 	{
 		$arrParams = array();
 
@@ -186,10 +186,10 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 		$this->addRules($objFilter, $arrFilterUrl);
 
 		$arrIds = $objFilter->getMatchingIds();
-
+		
 		foreach ($this->arrSettings as $objSetting)
 		{
-			$arrParams = array_merge($arrParams, $objSetting->getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit, $blnHideClearFilter));
+			$arrParams = array_merge($arrParams, $objSetting->getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions));
 		}
 
 		return $arrParams;

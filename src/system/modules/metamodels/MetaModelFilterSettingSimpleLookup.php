@@ -55,11 +55,12 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 	 * internal helper function for descendant classes to retrieve the options.
 	 *
 	 */
-	protected function getParameterFilterOptions($objAttribute, $arrIds)
+	protected function getParameterFilterOptions($objAttribute, $arrIds, &$arrCount = null)
 	{
 		$arrOptions = $objAttribute->getFilterOptions(
 			$this->get('onlypossible') ? $arrIds : NULL,
-			(bool)$this->get('onlyused')
+			(bool)$this->get('onlyused'),
+			$arrCount
 		);
 
 		// Remove empty values.
@@ -184,11 +185,11 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 			return array();
 		}
 	}
-
+	
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit, $blnHideClearFilter)
+	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, MetaModelFrontendFilterOptions $objFrontendFilterOptions)
 	{
 		// if defined as static, return nothing as not to be manipulated via editors.
 		if (!$this->enableFEFilterWidget())
@@ -200,6 +201,7 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 		
 		$GLOBALS['MM_FILTER_PARAMS'][] = $this->getParamName();
 
+		$arrCount = array();
 		$arrWidget = array(
 				'label'     => array(
 					// TODO: make this multilingual.
@@ -207,9 +209,11 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 					'GET: ' . $this->getParamName()
 					),
 				'inputType'    => 'select',
-				'options' => $this->getParameterFilterOptions($objAttribute, $arrIds),
+				'options'   => $this->getParameterFilterOptions($objAttribute, $arrIds, $arrCount),
+				'count'     => $arrCount,
+				'showCount' => $objFrontendFilterOptions->isShowCountValues(),
 				'eval' => array(
-					'includeBlankOption' => ($this->get('blankoption') && !$blnHideClearFilter ? true : false),
+					'includeBlankOption' => ($this->get('blankoption') && !$objFrontendFilterOptions->isHideClearFilter() ? true : false),
 					'blankOptionLabel'   => &$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'],
 					'colname'            => $objAttribute->getColname(),
 					'urlparam'           => $this->getParamName(),
@@ -221,7 +225,7 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 
 		return array
 		(
-			$this->getParamName() => $this->prepareFrontendFilterWidget($arrWidget, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit)
+			$this->getParamName() => $this->prepareFrontendFilterWidget($arrWidget, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions)
 		);
 	}
 
