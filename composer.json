@@ -59,7 +59,10 @@
 	"conflict": {
 		"contao/core": "3.0.*"
 	},
-	"extra": {
+	"autoload": {
+		"classmap": ["src"]
+	},
+	"extra":{
 		"contao": {
 			"symlinks":{
 				"src/system/modules/metamodels":"system/modules/metamodels"
