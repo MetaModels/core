@@ -56,6 +56,9 @@
 		"metamodels/php-coding-standard":"dev-master",
 		"cyberspectrum/contao-toolbox": "dev-master"
 	},
+	"autoload": {
+		"classmap": ["src"]
+	},
 	"extra":{
 		"contao": {
 			"symlinks":{
