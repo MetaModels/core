@@ -6,7 +6,7 @@ foreach($this->options as $option):
 	$class = ($count == 0) ? 'first ' : '';
 	$class .= ($count == count($this->options) - 1 ) ? 'last ' : '';
 	$class .= ($count % 2 == 1) ? 'even' : 'odd';
-	$class .= (strlen($option['class'])) ? ' ' . standardize($option['class']) : '';
+	$class .= (strlen($option['class'])) ? ' ' . $option['class'] : '';
 ?>
 
 <?php
