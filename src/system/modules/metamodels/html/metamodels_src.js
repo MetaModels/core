@@ -46,224 +46,224 @@
  */
 
 // Check if we have mootools
-if (typeof mootools !== 'undefined') {
+if (window.MooTools) {
 
-    (function($) {
-        var MetaModels = new Class({
+	(function($) {
+		var MetaModels = new Class({
 
-            Implements: Options,
+			Implements: Options,
 
-            /**
-             * Options
-             */
-            options: {},
+			/**
+			 * Options
+			 */
+			options: {},
 
-            /**
-             * List for additions functions
-             */
-            classhooks: {},
+			/**
+			 * List for additions functions
+			 */
+			classhooks: {},
 
-            /**
-             * Init
-             */
-            initialize: function(options) {
-                this.setOptions(options);
+			/**
+			 * Init
+			 */
+			initialize: function(options) {
+				this.setOptions(options);
 
-                this.addClassHook('submitonchange', this.applySubmitOnChange);
-                this.addClassHook('submitonclick', this.applySubmitOnClick);
-            },
+				this.addClassHook('submitonchange', this.applySubmitOnChange);
+				this.addClassHook('submitonclick', this.applySubmitOnClick);
+			},
 
-            /**
-             * Hook functions, for adding/remove new functions
-             */
-            addClassHook: function(name, callback) {
-                this.classhooks[name] = callback;
-            },
+			/**
+			 * Hook functions, for adding/remove new functions
+			 */
+			addClassHook: function(name, callback) {
+				this.classhooks[name] = callback;
+			},
 
-            removeClassHook: function(name) {
-                delete(this.classhooks[name]);
-            },
+			removeClassHook: function(name) {
+				delete(this.classhooks[name]);
+			},
 
-            /**
-             * apply all class handlers to their elements.
-             */
-            applyClassHooks: function() {
-                Object.each(this.classhooks, function(value, key) {
-                    $$('.' + key).each(function(el, key) {
-                        value(el);
-                    });
-                });
-            },
+			/**
+			 * apply all class handlers to their elements.
+			 */
+			applyClassHooks: function() {
+				Object.each(this.classhooks, function(value, key) {
+					$$('.' + key).each(function(el, key) {
+						value(el);
+					});
+				});
+			},
 
-            /**
-             * Local helper for form elements to submit the form.
-             */
+			/**
+			 * Local helper for form elements to submit the form.
+			 */
 
-            applySubmitOnChange: function(el) {
-                $(el).addEvent('change', function() {
-                    $(el).getParent('form').submit()
-                });
-            },
+			applySubmitOnChange: function(el) {
+				document.id(el).addEvent('change', function() {
+					document.id(el).getParent('form').submit();
+				});
+			},
 
-            applySubmitOnClick: function(el) {
-                $(el).addEvent('click', function() {
-                    $(el).getParent('form').submit()
-                });
-            },
+			applySubmitOnClick: function(el) {
+				document.id(el).addEvent('click', function() {
+					document.id(el).getParent('form').submit();
+				});
+			}
+		});
 
-        });
+		var MetaModelsFE = new MetaModels();
 
-        var MetaModelsFE = new MetaModels();
+		// apply all class hooks on domready
+		window.addEvent('domready', function() {
+			MetaModelsFE.applyClassHooks();
+		});
 
-        // apply all class hooks on domready
-        window.addEvent('domready', function() {
-            MetaModelsFE.applyClassHooks();
-        });
-
-    })(mootools);
+	})(window.MooTools);
 
 }
-// Check if we have jQuery
-else if (typeof jQuery !== 'undefined') {
 
-    (function($) {
-        $.MetaModels = {
+// check if we have jQuery
+else if (window.jQuery) {
 
-            // VARS ------------------------------------------------------------
-            /**
-             * Options
-             */
-            options: {},
+	(function($) {
+		$.MetaModels = {
 
-            /**
-             * List for additions functions
-             */
-            classhooks: {},
+			// VARS ------------------------------------------------------------
+			/**
+			 * Options
+			 */
+			options: {},
 
-            /**
-             * List for additions events
-             */
-            events: [],
+			/**
+			 * List for additions functions
+			 */
+			classhooks: {},
 
-            // CORE ------------------------------------------------------------
-            /**
-             * Init
-             */
-            init: function(opts) {
-                // Set the given params
-                this.options = $.extend(this.options, opts);
+			/**
+			 * List for additions events
+			 */
+			events: [],
 
-                this.addClassHook('submitonchange', this.applySubmitOnChange);
-                this.addClassHook('submitonclick', this.applySubmitOnClick);
-            },
+			// CORE ------------------------------------------------------------
+			/**
+			 * Init
+			 */
+			init: function(opts) {
+				// Set the given params
+				this.options = $.extend(this.options, opts);
 
-            // DEFAULT ---------------------------------------------------------
-            /**
-             * Local helper for form elements to submit the form.
-             */
-            applySubmitOnChange: function(el, helper) {
-                helper.bindEvent({
-                    object: el,
-                    type: 'change',
-                    func: function(event) {
-                        $(this).parents('form:first')[0].submit()
-                    }
-                });
-            },
+				this.addClassHook('submitonchange', this.applySubmitOnChange);
+				this.addClassHook('submitonclick', this.applySubmitOnClick);
+			},
 
-            applySubmitOnClick: function(el, helper) {
-                helper.bindEvent({
-                    object: el,
-                    type: 'click',
-                    func: function(event) {
-                        $(this).parents('form:first')[0].submit()
-                    }
-                });
-            },
+			// DEFAULT ---------------------------------------------------------
+			/**
+			 * Local helper for form elements to submit the form.
+			 */
+			applySubmitOnChange: function(el, helper) {
+				helper.bindEvent({
+					object: el,
+					type: 'change',
+					func: function(event) {
+						$(this).parents('form:first')[0].submit();
+					}
+				});
+			},
 
-            // API ------------------------------------------------------------
-            /**
-             * Hook functions, for adding/remove new functions
-             */
-            addClassHook: function(name, callback) {
-                this.classhooks[name] = callback;
-            },
+			applySubmitOnClick: function(el, helper) {
+				helper.bindEvent({
+					object: el,
+					type: 'click',
+					func: function(event) {
+						$(this).parents('form:first')[0].submit();
+					}
+				});
+			},
 
-            removeClassHook: function(name) {
-                delete(this.classhooks[name]);
-            },
+			// API ------------------------------------------------------------
+			/**
+			 * Hook functions, for adding/remove new functions
+			 */
+			addClassHook: function(name, callback) {
+				this.classhooks[name] = callback;
+			},
 
-            /**
-             * apply all class handlers to their elements.
-             */
-            applyClassHooks: function() {
-                var self = this;
+			removeClassHook: function(name) {
+				delete(this.classhooks[name]);
+			},
 
-                $.each(this.classhooks, function(key, value) {
-                    $('.' + key).each(function(key1, el) {
-                        value(el, self);
-                    });
-                });
-            },
+			/**
+			 * apply all class handlers to their elements.
+			 */
+			applyClassHooks: function() {
+				var self = this;
 
-            // EVENTS ----------------------------------------------------------
-            /**
-             * Bind given event
-             * 
-             * @param {object} objEvent
-             */
-            bindEvent: function(objEvent) {
-                this.events.push(objEvent);                
-                $(objEvent.object).bind(objEvent.type, objEvent.func);
-            },
+				$.each(this.classhooks, function(key, value) {
+					$('.' + key).each(function(key1, el) {
+						value(el, self);
+					});
+				});
+			},
 
-            /**
-             * Unbind given event
-             * 
-             * @param {object} objEvent
-             * @param {boolean} blnNotRemove
-             */
-            unbindEvent: function(objEvent, blnNotRemove) {
-                var intIndex = null;
+			// EVENTS ----------------------------------------------------------
+			/**
+			 * Bind given event
+			 * 
+			 * @param {object} objEvent
+			 */
+			bindEvent: function(objEvent) {
+				this.events.push(objEvent);                
+				$(objEvent.object).bind(objEvent.type, objEvent.func);
+			},
 
-                $(objEvent.object).unbind(objEvent.type);
+			/**
+			 * Unbind given event
+			 * 
+			 * @param {object} objEvent
+			 * @param {boolean} blnNotRemove
+			 */
+			unbindEvent: function(objEvent, blnNotRemove) {
+				var intIndex = null;
 
-                if (blnNotRemove !== true) {
-                    for (var i = 0; i < this.events.length; i++) {
-                        if (objEvent.object === this.events[i].object && objEvent.type === this.events[i].type) {
-                            intIndex = i;
-                            break;
-                        }
-                    }
-                    if (intIndex !== null) {
-                        this.events.splice(intIndex, 1);
-                    }
-                }
-            },
+				$(objEvent.object).unbind(objEvent.type);
 
-            /**
-             * Unbind events for this class
-             */
-            unbindEvents: function() {
-                var arrStore = [];
+				if (blnNotRemove !== true) {
+					for (var i = 0; i < this.events.length; i++) {
+						if (objEvent.object === this.events[i].object && objEvent.type === this.events[i].type) {
+							intIndex = i;
+							break;
+						}
+					}
+					if (intIndex !== null) {
+						this.events.splice(intIndex, 1);
+					}
+				}
+			},
 
-                for (var i = 0; i < this.events.length; i++) {
-                    if (this.onLoadWindowScroll === this.events[i]) {
-                        arrStore.push(this.onLoadWindowScroll);
-                        continue;
-                    }
+			/**
+			 * Unbind events for this class
+			 */
+			unbindEvents: function() {
+				var arrStore = [];
 
-                    this.unbindEvent(this.events[i], true);
-                }
+				for (var i = 0; i < this.events.length; i++) {
+					if (this.onLoadWindowScroll === this.events[i]) {
+						arrStore.push(this.onLoadWindowScroll);
+						continue;
+					}
 
-                this.events = arrStore;
-            },
-        }
+					this.unbindEvent(this.events[i], true);
+				}
 
-        $(document).ready(function() {
-            $.MetaModels.init();
-            $.MetaModels.applyClassHooks();
-        });
+				this.events = arrStore;
+			}
+		};
 
-    })(jQuery);
+		$(document).ready(function() {
+			$.MetaModels.init();
+			$.MetaModels.applyClassHooks();
+		});
+
+	})(window.jQuery);
 }

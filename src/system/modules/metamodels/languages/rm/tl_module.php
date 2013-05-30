@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2013-05-13T23:07:50+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_module']['editfiltersetting']['0']              = 'Modifitgar la configuraziun da filter';
 $GLOBALS['TL_LANG']['tl_module']['editfiltersetting']['1']              = 'Modifitgar la configuraziun da filter cun l\'ID %s';
@@ -20,6 +19,8 @@ $GLOBALS['TL_LANG']['tl_module']['editrendersetting']['0']              = 'Modif
 $GLOBALS['TL_LANG']['tl_module']['editrendersetting']['1']              = 'Modifitgar la configuraziun da visualisar cun l\'ID %s.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel']['0']                      = 'MetaModel';
 $GLOBALS['TL_LANG']['tl_module']['metamodel']['1']                      = 'Il MetaModel che duai vegnir enumerà en questa glista.';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_available_values']['0']     = 'Dumbrader da filter';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_available_values']['1']     = 'Mussa il dumber dad endataziuns per mintga opziun da filtrar.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_donotindex']['0']           = 'Na betg agiuntar a l\'index da tschertgar';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_donotindex']['1']           = 'Sche questa chaschetta è activada vegn l\'index da tschertgar intern da Contao ignorar il cuntegn da quest element da cuntegn.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_autosubmit']['0']       = 'Trametter tar mintga midada';
