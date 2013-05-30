@@ -184,7 +184,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 	
 	'metamodel_available_values' => array
 	(
-		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_available_values'],
+		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_available_values'],
 		'exclude'                 => true,
 		'inputType'               => 'checkbox',
 		'eval' => array
