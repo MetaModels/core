@@ -83,6 +83,8 @@ ClassLoader::addClasses(array
 	'MetaModelTableManipulation'            => 'system/modules/metamodels/MetaModelTableManipulation.php',
 	'MetaModelTemplate'                     => 'system/modules/metamodels/MetaModelTemplate.php',
 	'MetaModelsBackendSupport'              => 'system/modules/metamodels/MetaModelsBackendSupport.php',
+	'MetaModelsUpgradeHandler'              => 'system/modules/metamodels/MetaModelsUpgradeHandler.php',
+	'MetaModelBreadcrumbBuilder'            => 'system/modules/metamodels/MetaModelBreadcrumbBuilder.php',
 	'ModuleMetaModelFrontendFilter'         => 'system/modules/metamodels/ModuleMetaModelFrontendFilter.php',
 	'ModuleMetaModelList'                   => 'system/modules/metamodels/ModuleMetaModelList.php',
 	'TableContent'                          => 'system/modules/metamodels/TableContent.php',
@@ -121,4 +123,5 @@ TemplateLoader::addFiles(array
 	'mm_filteritem_default'      => 'system/modules/metamodels/templates',
 	'mm_filteritem_linklist'     => 'system/modules/metamodels/templates',
 	'mm_filteritem_radiobuttons' => 'system/modules/metamodels/templates',
+	'mm_filteritem_checkbox'     => 'system/modules/metamodels/templates',
 ));
