@@ -226,7 +226,7 @@ abstract class MetaModelFilterSetting implements IMetaModelFilterSetting
 					sprintf($strFilterAction, $strValue ? ('/'.$arrWidget['eval']['urlparam'].'/'.$strValue) : '')
 				),
 				'active' => $blnActive,
-				'class'  => $strKeyOption.($blnActive ? ' active' : '')
+				'class'  => standardize($strKeyOption) . ($blnActive ? ' active' : '')
 				);
 		}
 		return $arrOptions;
