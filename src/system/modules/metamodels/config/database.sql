@@ -293,7 +293,7 @@ CREATE TABLE `tl_metamodel_dca_combine` (
   `view_id` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`),
-  KEY `fe_group` (`be_group`),
+  KEY `fe_group` (`fe_group`),
   KEY `be_group` (`be_group`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
