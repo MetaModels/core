@@ -113,8 +113,9 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 		} else {
 			$objRow = Database::getInstance()->execute('
 				SELECT ' . $strCol . ', COUNT(' . $strCol . ') as mm_count
-				FROM ' . $this->getMetaModel()->getTableName()) . '
-				GROUP BY ' . $strCol;
+				FROM ' . $this->getMetaModel()->getTableName() . '
+				GROUP BY ' . $strCol
+			);
 		}
 		$arrResult = array();
 		while ($objRow->next())
@@ -123,7 +124,7 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 			{
 				$arrCount[$objRow->$strCol] = $objRow->mm_count;
 			}
-			
+
 			$arrResult[$objRow->$strCol] = $objRow->$strCol;
 		}
 		return $arrResult;
