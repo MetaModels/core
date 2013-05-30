@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2013-05-13T23:07:50+02:00
  */
-
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attributs da "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dca']                                           = 'Tut las mascras d\'endataziun da "%s"';
@@ -55,12 +54,16 @@ $GLOBALS['TL_LANG']['MSC']['sorting']                                           
 $GLOBALS['TL_LANG']['MSC']['template_in_theme']                                       = '%s (%s)';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clr']['0']                                    = 'clr';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clr']['1']                                    = 'Annular tut ils floats.';
+$GLOBALS['TL_LANG']['MSC']['tl_class']['clx']['0']                                    = 'clx';
+$GLOBALS['TL_LANG']['MSC']['tl_class']['clx']['1']                                    = 'Allontanar l\'overflow zuppentà mulestus. Utilisar ensemen cun "clr".';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['long']['0']                                   = 'long';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['long']['1']                                   = 'Procura ch\'il champ da text è uschè lad sco duas colonnas.';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['m12']['0']                                    = 'm12';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['m12']['1']                                    = 'Agiuntar sura a l\'element in ur da 12 pixels (vegn utilisà per chaschettas da controlla singulas).';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['w50']['0']                                    = 'w50';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['w50']['1']                                    = 'Definir la ladezza dal champ a 50% e laschar circumdar (float:left).';
+$GLOBALS['TL_LANG']['MSC']['tl_class']['w50x']['0']                                   = 'w50x';
+$GLOBALS['TL_LANG']['MSC']['tl_class']['w50x']['1']                                   = 'Allontanar la autezza fixa mulestusa. Utilisar ensemen cun "w50".';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['wizard']['0']                                 = 'assistent';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['wizard']['1']                                 = 'Scursanir il champ d\'endataziun per ch\'i haja avunda plaz per in buttun d\'assistenza (p.ex. champs da tscherner la data).';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['action_add']                        = '+';
