@@ -222,7 +222,11 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	 */
 	public function getAttributeSettingNames()
 	{
-		return array('id', 'pid', 'sorting', 'tstamp', 'name', 'description', 'type', 'colname', 'isvariant', 'tl_class');
+		return array(
+			// Settings originating from tl_metamodel_attribute.
+			'id', 'pid', 'sorting', 'tstamp', 'name', 'description', 'type', 'colname', 'isvariant',
+			// Settings originating from tl_metamodel_dcasetting.
+			'tl_class', 'readonly');
 	}
 
 	/**
@@ -264,7 +268,8 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 			'cols',
 			'spaceToUnderscore',
 			'includeBlankOption',
-			'submitOnChange'
+			'submitOnChange',
+			'readonly'
 		) as $strEval) {
 			if (in_array($strEval, $arrSettingNames) && $arrOverrides[$strEval])
 			{

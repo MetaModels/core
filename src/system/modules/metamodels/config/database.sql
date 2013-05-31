@@ -119,6 +119,8 @@ CREATE TABLE `tl_metamodel_dcasetting` (
   `includeBlankOption` char(1) NOT NULL default '',
 -- if true, the form will get reloaded when the widget changes
   `submitOnChange` char(1) NOT NULL default '',
+-- if true, the widget shall be rendered read only.
+  `readonly` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
