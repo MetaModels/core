@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2013-05-13T23:07:50+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']            = 'Backend-Integration';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption']['0']       = 'Backend-Hilfetext';
@@ -80,4 +79,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']['0']               = 'Aktualis
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']['1']               = 'Datum und Zeit der letzten Aktualisierung.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['use_limitview']['0']        = 'Limitierung anzeigen';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['use_limitview']['1']        = 'Die Limitierungsansicht aktivieren.';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['view_legend']               = 'Einstellungen ansehen';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['view_legend']               = 'Darstellungsoptionen';
