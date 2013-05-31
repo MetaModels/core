@@ -326,7 +326,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'inputType'             => 'checkbox',
 			'eval' => array
 			(
-				'tl_class'          => 'clr m12',
+				'tl_class'          => 'w50 m12',
 			)
 		),
 		'alwaysSave' => array
@@ -428,7 +428,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'inputType'             => 'checkbox',
 			'eval'                  => array
 			(
-				'tl_class'          => 'clr m12',
+				'tl_class'          => 'w50 m12',
 			)
 		),
 
@@ -480,7 +480,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'reference'              => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options'],
 			'eval'                  => array
 			(
-				'tl_class'          => 'w50',
+				'tl_class'          => 'w50 clr',
 			)
 		),
 
@@ -522,7 +522,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'inputType'               => 'checkbox',
 			'eval'                    => array
 			(
-				'tl_class'            => 'w50 m12 cbx',
+				'tl_class'            => 'w50 m12',
 			)
 		)
 	)

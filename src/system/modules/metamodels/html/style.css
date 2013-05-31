@@ -95,6 +95,11 @@
     position:relative;
   }
 
+  input[readonly],
+  textarea[readonly] {
+    background-color: #ebebe4;
+  }
+
  /*------------------------------------------------------------------------*/
 
   .clx {
