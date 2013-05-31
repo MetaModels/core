@@ -10,7 +10,7 @@
 <?php if (($strValue = $arrItem[$this->getFormat()][$field]) || ($strValue = $arrItem['text'][$field])): ?>
 <div class="field <?php echo $field; ?>">
 	<?php if(!$this->$strRendersettings->get('hideLabels')): ?>
-		<div class="label"><?php echo $strName; ?>: </div>
+		<div class="label"><?php echo sprintf($GLOBALS['TL_LANG']['MSC']['field_label'], $strName); ?></div>
 	<?php endif; ?>
 	<div class="value"> <?php echo $strValue; ?></div>
 </div>
