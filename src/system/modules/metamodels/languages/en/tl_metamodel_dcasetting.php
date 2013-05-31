@@ -49,10 +49,13 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']           = array('Re
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']    = 'Type';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['backend_legend']  = 'Backend';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['config_legend']   = 'Configuration';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend'] = 'Advanced';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']        = 'Type';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['presentation_legend'] = 'Widget appearance related options';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['functions_legend']    = 'Functionality related options';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']     = 'Backend listing, filtering and sorting';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['backend_legend']      = 'Backend';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['config_legend']       = 'Configuration';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']     = 'Advanced';
 
 /**
  * Buttons
