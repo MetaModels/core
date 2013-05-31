@@ -96,7 +96,9 @@
   }
 
   input[readonly],
-  textarea[readonly] {
+  textarea[readonly], 
+  input[readonly]:focus,
+  textarea[readonly]:focus {
     background-color: #ebebe4;
   }
 
