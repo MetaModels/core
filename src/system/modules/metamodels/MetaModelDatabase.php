@@ -537,6 +537,14 @@ class MetaModelDatabase extends Controller
 			$arrDCA['config']['label'] = $objMetaModel->get('name');
 		}
 
+		// Check access level.
+		if ($arrDCASettings['isclosed'])
+		{
+			$arrDCA['config']['closed']       = true;
+			$arrDCA['config']['notDeletable'] = true;
+			unset($arrDCA['list']['operations']['delete']);
+		}
+
 		// FIXME: if we have variants, we force mode 5 here, no matter what the DCA configs say.
 		if ($objMetaModel->hasVariants())
 		{
