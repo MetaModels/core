@@ -198,15 +198,8 @@ class MetaModelDatabase extends Controller
 					$legendName = standardize($strLegend) . '_legend';
 					$GLOBALS['TL_LANG'][$objMetaModel->getTableName()][$legendName] = $strLegend;
 
-					// Check if we have a subpalette.
-					if ($objDCASettings->subpalette == 0)
-					{
-						$strPalette .= ((strlen($strPalette) > 0 ? ';' : '') . '{' . $legendName . $objAttribute->legendhide . '}');
-					}
-					else
-					{
-						$arrMyDCA['metasubpalettes'][$strSelector][] = '{' . $legendName . $objAttribute->legendhide . '}';
-					}
+					$strPalette .= ((strlen($strPalette) > 0 ? ';' : '') .
+						'{' . $legendName . ($objDCASettings->legendhide ? ':hide' : '') . '}');
 					break;
 				default:
 					throw new Exception("Unknown palette rendering mode " . $objDCASettings->dcatype);
