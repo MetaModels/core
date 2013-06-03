@@ -39,7 +39,12 @@ class MetaModelAttributeFactory implements IMetaModelAttributeFactory
 	 */
 	protected static function getAttributeTypeClass($strFieldType)
 	{
-		return $GLOBALS['METAMODELS']['attributes'][$strFieldType]['class'];
+		if (isset($GLOBALS['METAMODELS']['attributes'][$strFieldType]['class']))
+		{
+			return $GLOBALS['METAMODELS']['attributes'][$strFieldType]['class'];
+		}
+
+		return null;
 	}
 
 	/**
@@ -51,7 +56,12 @@ class MetaModelAttributeFactory implements IMetaModelAttributeFactory
 	 */
 	protected static function getAttributeTypeFactory($strFieldType)
 	{
-		return $GLOBALS['METAMODELS']['attributes'][$strFieldType]['factory'];
+		if (isset($GLOBALS['METAMODELS']['attributes'][$strFieldType]['factory']))
+		{
+			return $GLOBALS['METAMODELS']['attributes'][$strFieldType]['factory'];
+		}
+
+		return null;
 	}
 
 
