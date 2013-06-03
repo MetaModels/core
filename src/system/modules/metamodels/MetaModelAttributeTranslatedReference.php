@@ -285,7 +285,7 @@ implements IMetaModelAttributeTranslated
 		$strQuery = 'SELECT * FROM ' . $this->getValueTable() . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '');
 
 		$objValue = $objDB->prepare($strQuery)
-						  ->execute(($arrWhere ? $arrWhere['params'] : null));
+						  ->executeUncached(($arrWhere ? $arrWhere['params'] : null));
 
 		$arrReturn = array();
 		while ($objValue->next())

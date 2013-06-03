@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2013-05-13T23:07:50+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Agiuntà l\'attribut "%s" a la mascra d\'endataziun.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess_subpalette'] = 'Agiuntà l\'attribut "%s" a la sut-sparta "%s".';
@@ -47,6 +46,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['filterable']['0']              =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['filterable']['1']              = 'Activescha questa chaschetta sche quest attribut duai star a disposiziun per filtrar en il back-end.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag']['0']                    = 'Surscriver il standard da zavrar';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag']['1']                    = 'Tscherna quai, sche ti vuls surscriver il standard global per zavrar quest attribut';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['functions_legend']             = 'Opziuns davart la funcziunalitad';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['0']      = 'Includer ina opziun vida';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['1']      = 'Sche activà vegn ina opziun agiuntada, che lubescha da definir la pussaivladad &quot;tschernì nagin element&quot;.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']['0']              = 'Zuppentar la legenda';
@@ -59,6 +59,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']                   = 'Titel da la legenda';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['0']                     = 'Nov';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['1']                     = 'Crear ina nova configuraziun.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']              = 'Glistar, filtrar e zavrar en il back-end';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['presentation_legend']          = 'Opziuns davart l\'apparientscha dal widget';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['0']            = 'Na betg encodar tags da html.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['1']            = 'Sche ti tschernas questa chaschetta, na vegnan tags da HTML betg encodads.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['0']                    = 'Lingias';
