@@ -120,6 +120,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'backend' => array
 			(
 				'rendertype',
+				'isclosed'
 			),
 		)
 	),
@@ -342,6 +343,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 				'stylepicker'         => array('TableMetaModelDca','getPanelpicker')
 			),
 		),
+		'isclosed' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed'],
+			'inputType'               => 'checkbox',
+			'eval'                    => array
+			(
+				'tl_class'            => 'w50 m12 cbx',
+			)
+		)
 	)
 );
 

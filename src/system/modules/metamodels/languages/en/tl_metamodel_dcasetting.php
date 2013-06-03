@@ -42,15 +42,20 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['cols']               = array('Co
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']      = array('Trailing slash handling', 'Here you can specify how trailing slashes shall be handled');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['spaceToUnderscore']  = array('Replace spaces with underscore', 'If true any whitespace character will be replaced by an underscore.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption'] = array('Include blank option', 'if true a blank option will be added to the options which allows to define a &quot;no item selected&quot; option.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']           = array('Read only', 'If true a the widget will be read only and may not be changed.');
+
 
 
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']    = 'Type';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['backend_legend']  = 'Backend';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['config_legend']   = 'Configuration';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend'] = 'Advanced';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']        = 'Type';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['presentation_legend'] = 'Widget appearance related options';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['functions_legend']    = 'Functionality related options';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']     = 'Backend listing, filtering and sorting';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['backend_legend']      = 'Backend';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['config_legend']       = 'Configuration';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']     = 'Advanced';
 
 /**
  * Buttons

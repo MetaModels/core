@@ -200,8 +200,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 				'title' => array(
 					'attr_id'
 				),
-				'backend' => array(),
-				'advanced' => array()
+				'functions' => array('readonly'),
+				'advanced'  => array()
 			),
 			'legend' => array
 			(
@@ -326,7 +326,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'inputType'             => 'checkbox',
 			'eval' => array
 			(
-				'tl_class'          => 'clr m12',
+				'tl_class'          => 'w50 m12',
 			)
 		),
 		'alwaysSave' => array
@@ -428,7 +428,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'inputType'             => 'checkbox',
 			'eval'                  => array
 			(
-				'tl_class'          => 'clr m12',
+				'tl_class'          => 'w50 m12',
 			)
 		),
 
@@ -480,7 +480,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'reference'              => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options'],
 			'eval'                  => array
 			(
-				'tl_class'          => 'w50',
+				'tl_class'          => 'w50 clr',
 			)
 		),
 
@@ -515,6 +515,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 				'tl_class'          => 'clr m12', // TODO: dunno. fix as fits
 			)
 		),
+
+		'readonly' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly'],
+			'inputType'               => 'checkbox',
+			'eval'                    => array
+			(
+				'tl_class'            => 'w50 m12',
+			)
+		)
 	)
 );
 

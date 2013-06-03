@@ -63,6 +63,8 @@ CREATE TABLE `tl_metamodel_dca` (
   `backendsection` varchar(255) NOT NULL default '',
   `backendcaption` text NULL,
   `backendicon` varchar(255) NOT NULL default '',
+-- close the dataset - allow only edit and no delete or create.
+  `isclosed` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -117,6 +119,8 @@ CREATE TABLE `tl_metamodel_dcasetting` (
   `includeBlankOption` char(1) NOT NULL default '',
 -- if true, the form will get reloaded when the widget changes
   `submitOnChange` char(1) NOT NULL default '',
+-- if true, the widget shall be rendered read only.
+  `readonly` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
