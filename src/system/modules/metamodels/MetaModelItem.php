@@ -130,7 +130,14 @@ class MetaModelItem implements IMetaModelItem
 	 */
 	protected function isArrayEmpty($arrArray)
 	{
-		if (is_array($arrArray))
+		if(is_array($arrArray) && key_exists('value', $arrArray))
+		{
+			if(!empty($arrArray['value']))
+			{
+				return false;
+			}
+		}
+		else if (is_array($arrArray))
 		{
 			foreach ($arrArray as $value)
 			{
