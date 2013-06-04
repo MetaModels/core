@@ -105,24 +105,15 @@ class MetaModelItem implements IMetaModelItem
 		// Array check
 		if (is_array($mixValue))
 		{
-			if(count($mixValue) == 0 || $this->isArrayEmpty($mixValue))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			return $this->isArrayEmpty($mixValue);
 		}
-
 		// Empty string
-		if ($mixValue === '')
+		else if ($mixValue === '')
 		{
 			return true;
 		}
-
 		// Null
-		if ($mixValue === null)
+		else if ($mixValue === null)
 		{
 			return true;
 		}
@@ -143,12 +134,11 @@ class MetaModelItem implements IMetaModelItem
 		{
 			foreach ($arrArray as $value)
 			{
-				if (is_array($value) && !$this->isArrayEmpty($value))
+				if (is_array($value))
 				{
-					return false;
+					return $this->isArrayEmpty($value);
 				}
-
-				if ($value !== '' && $value !== null)
+				else if ($value !== '' && $value !== null)
 				{
 					return false;
 				}
