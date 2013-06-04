@@ -10,7 +10,7 @@ foreach($this->options as $option):
 ?>
 
 <?php
-	$field = sprintf('<input type="checkbox" name="%s" id="opt_%s_%s" class="checkbox%s" value="%s"%s />',
+	$field = sprintf('<input type="checkbox" name="%s[]" id="opt_%s_%s" class="checkbox%s" value="%s"%s />',
 		$this->urlparam,
 		$this->urlparam,
 		$count,
