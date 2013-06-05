@@ -346,7 +346,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'inputType'             => 'checkbox',
 			'eval' => array
 			(
-				'tl_class'          => 'w50 m12',
+				'tl_class'          => 'w50',
 			)
 		),
 		'sortable' => array
@@ -356,7 +356,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'inputType'             => 'checkbox',
 			'eval' => array
 			(
-				'tl_class'          => 'clr w50 m12',
+				'tl_class'          => 'm12 w50',
 			)
 		),
 		'searchable' => array
@@ -366,7 +366,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'inputType'             => 'checkbox',
 			'eval'                  => array
 			(
-				'tl_class'          => 'w50 m12',
+				'tl_class'          => 'w50',
 			)
 		),
 		'flag' => array
