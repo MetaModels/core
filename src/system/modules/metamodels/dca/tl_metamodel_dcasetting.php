@@ -336,7 +336,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'inputType'             => 'checkbox',
 			'eval' => array
 			(
-				'tl_class'          => 'clr m12',
+				'tl_class'          => 'w50',
 			)
 		),
 		'filterable' => array
