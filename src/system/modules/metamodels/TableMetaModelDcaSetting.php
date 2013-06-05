@@ -529,5 +529,60 @@ class TableMetaModelDcaSetting extends TableMetaModelHelper
 
 		return $this->makeDisabledButton($icon, $label);
 	}
+	
+	/**
+	 * Toggle the published field
+	 * 
+	 * @param type $row
+	 * @param type $href
+	 * @param type $label
+	 * @param type $title
+	 * @param string $icon
+	 * @param type $attributes
+	 * 
+	 * @return string
+	 */
+	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
+	{
+		if (strlen($this->Input->get('tid')))
+		{
+			$this->toggleVisibility($this->Input->get('tid'), ($this->Input->get('state') == 1));
+			$this->redirect($this->getReferer());
+		}
+		
+		if (!$row['published'])
+		{
+			$icon = 'invisible.gif';
+		}
+		
+		return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
+	}
+	
+	/**
+	 * Disable/enable a field
+	 * 
+	 * @param integer
+	 * @param boolean
+	 */
+	public function toggleVisibility($intId, $blnVisible)
+	{
+		// Check permissions to edit
+		$this->Input->setGet('id', $intId);
+		$this->Input->setGet('act', 'toggle');
+	
+		// Trigger the save_callback
+		if (is_array($GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['published']['save_callback']))
+		{
+			foreach ($GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['published']['save_callback'] as $callback)
+			{
+				$this->import($callback[0]);
+				$blnVisible = $this->$callback[0]->$callback[1]($blnVisible, $this);
+			}
+		}
+
+		// Update the database
+		$this->Database->prepare("UPDATE tl_metamodel_dcasetting SET tstamp=". time() .", published='" . ($blnVisible ? 1 : '') . "' WHERE id=?")
+					   ->execute($intId);
+	}
 }
 
