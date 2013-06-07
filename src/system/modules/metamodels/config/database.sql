@@ -77,7 +77,7 @@ CREATE TABLE `tl_metamodel_dcasetting` (
   `pid` int(10) unsigned NOT NULL default '0',
   `sorting` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
-
+  `published` char(1) NOT NULL default '',
 -- type, either legend or attribute.
   `dcatype` varchar(10) NOT NULL default '',
 
