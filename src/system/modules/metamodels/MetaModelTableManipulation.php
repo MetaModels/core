@@ -88,6 +88,13 @@ class MetaModelTableManipulation
 		return Database::getInstance();
 	}
 
+	public static function isValidMySQLIdentifier($strName)
+	{
+		// match for valid table/column name, according to MySQL, a table name must start
+		// with a letter and must be combined of letters, decimals and underscore.
+		return 1 == preg_match('/^[a-z_][a-z\d_]*$/i', $strName);
+	}
+
 	/**
 	 * Checks wheter the given table name is valid.
 	 *
@@ -97,9 +104,7 @@ class MetaModelTableManipulation
 	 */
 	public static function isValidTablename($strTableName)
 	{
-		// match for valid table name, according to MySQL, a table name must start
-		// with a letter and must be combined of letters, decimals and underscore.
-		return (bool)preg_match('/^[a-z_][a-z\d_]*$/iu', $strTableName);
+		return self::isValidMySQLIdentifier($strTableName);
 	}
 
 	/**
@@ -111,7 +116,7 @@ class MetaModelTableManipulation
 	 */
 	public static function isValidColumnName($strColName)
 	{
-		return (bool)preg_match('/^[a-z_][a-z\d_]*$/i', $strColName);
+		return self::isValidMySQLIdentifier($strColName);
 	}
 
 	/**
@@ -128,11 +133,12 @@ class MetaModelTableManipulation
 
 	/**
 	 * Checks whether the given table name is valid.
-	 * Throws an Exception if the table name is invalid.
 	 *
 	 * @param string $strTableName the table name to check
 	 *
 	 * @return void
+	 *
+	 * @throws \Exception if an invalid table name has been passed.
 	 */
 	public static function checkTablename($strTableName)
 	{
@@ -150,6 +156,8 @@ class MetaModelTableManipulation
 	 * @param string $strColName the name of the column
 	 *
 	 * @return void
+	 *
+	 * @throws \Exception if an invalid column name has been passed.
 	 */
 	public static function checkColumnName($strColName)
 	{
@@ -166,11 +174,12 @@ class MetaModelTableManipulation
 
 	/**
 	 * Checks whether the given table exists.
-	 * Throws an Exception if the table name is invalid or does not exist.
 	 *
 	 * @param string $strTableName the table name to check
 	 *
 	 * @return void
+	 *
+	 * @throws \Exception if an invalid table name has been passed or the table does not exist.
 	 */
 	public static function checkTableExists($strTableName)
 	{
@@ -182,12 +191,13 @@ class MetaModelTableManipulation
 	}
 
 	/**
-	 * ensures that the given table does not exist.
-	 * Throws an Exception if the table name is invalid or does exist.
+	 * Ensures that the given table does not exist.
 	 *
 	 * @param string $strTableName the table name to check
 	 *
 	 * @return void
+	 *
+	 * @throws \Exception if an invalid table name has been passed or a table with the given name exists.
 	 */
 	public static function checkTableDoesNotExist($strTableName)
 	{
@@ -200,11 +210,12 @@ class MetaModelTableManipulation
 
 	/**
 	 * Creates a table with the given name.
-	 * Throws Exception if the table name is invalid or already exists.
 	 *
 	 * @param string $strTableName the name of the new table to create.
 	 *
 	 * @return void
+	 *
+	 * @throws \Exception if an invalid table name has been passed or a table with the given name exists.
 	 */
 	public static function createTable($strTableName)
 	{
@@ -214,13 +225,14 @@ class MetaModelTableManipulation
 
 	/**
 	 * Renames a table with the given name to the given new name.
-	 * Throws Exception if the new table name is invalid.
 	 *
 	 * @param string $strTableName    the name of the table to rename.
 	 *
 	 * @param string $strNewTableName the name to which the table shall be renamed to.
 	 *
 	 * @return void
+	 *
+	 * @throws \Exception if an invalid table name has been passed.
 	 * 	 */
 	public static function renameTable($strTableName, $strNewTableName)
 	{
@@ -232,11 +244,12 @@ class MetaModelTableManipulation
 
 	/**
 	 * Deletes the table with the given name.
-	 * Throws Exception if the table name is invalid or the table does not exist.
 	 *
 	 * @param string $strTableName the name of the new table to delete.
 	 *
 	 * @return void
+	 *
+	 * @throws \Exception if an invalid table name has been passed or the table does not exist.
 	 */
 	public static function deleteTable($strTableName)
 	{
@@ -247,19 +260,20 @@ class MetaModelTableManipulation
 
 	/**
 	 * Checks whether the given table exists.
-	 * Throws an Exception if the table name is invalid or does not exist.
 	 *
 	 * @param string $strTableName the table name to check
 	 *
 	 * @param string $strColName   the column name to check
 	 *
-	 *
 	 * @return void
+	 *
+	 * @throws \Exception if an invalid table name has been passed or the table does not exist, the column name is
+	 *                    invalid or the column does not exist.
 	 */
 	public static function checkColumnExists($strTableName, $strColName)
 	{
 		self::checkTableExists($strTableName);
-		self::checkColumnName($strTableName);
+		self::checkColumnName($strColName);
 		if (!self::getDB()->fieldExists($strColName, $strTableName, true))
 		{
 			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['columnDoesNotExist'], $strColName, $strTableName));
@@ -267,15 +281,16 @@ class MetaModelTableManipulation
 	}
 
 	/**
-	 * Checks whether the given table exists.
-	 * Throws an Exception if the table name is invalid or does not exist.
+	 * Checks whether the given column does not exist.
 	 *
 	 * @param string $strTableName the table name to check
 	 *
 	 * @param string $strColName   the column name to check
 	 *
-	 *
 	 * @return void
+	 *
+	 * @throws \Exception if an invalid table name has been passed or the table does not exist, the column name is
+	 *                    invalid or the column does not exist.
 	 */
 	public static function checkColumnDoesNotExist($strTableName, $strColName)
 	{
