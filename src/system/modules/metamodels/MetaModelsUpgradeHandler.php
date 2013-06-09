@@ -67,6 +67,33 @@ class MetaModelsUpgradeHandler
 	}
 
 	/**
+	 * Handle database upgrade for the published field in tl_metamodel_dcasetting.
+	 *
+	 * Introduced: version 1.0.1
+	 *
+	 * If the field 'published' does not exist in tl_metamodel_dcasetting,
+	 * it will get created and all rows within that table will get initialized to 1
+	 * to have the prior behaviour back (everything was being published before then).
+	 *
+	 * @return void
+	 */
+	protected static function upgradeDcaSettingsPublished()
+	{
+		$objDB = self::DB();
+		if (!$objDB->fieldExists('published', 'tl_metamodel_dcasetting', true))
+		{
+			// create the column in the database and copy the data over.
+			MetaModelTableManipulation::createColumn(
+				'tl_metamodel_dcasetting',
+				'published',
+				'char(1) NOT NULL default \'\''
+			);
+			// Publish everything we had so far.
+			$objDB->execute('UPDATE tl_metamodel_dcasetting SET published=1;');
+		}
+	}
+
+	/**
 	 * Perform all upgrade steps.
 	 *
 	 * @return void
@@ -74,6 +101,7 @@ class MetaModelsUpgradeHandler
 	public static function perform()
 	{
 		self::upgradeJumpTo();
+		self::upgradeDcaSettingsPublished();
 	}
 }
 
