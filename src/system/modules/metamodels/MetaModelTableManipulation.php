@@ -56,7 +56,7 @@ class MetaModelTableManipulation
 	 * Third paramter is the new name of the column.
 	 * Fourth parameter is the new type of the column.
 	 */
-	const STATEMENT_RENAME_COLUMN = 'ALTER TABLE %s CHANGE COLUMN %s %s %s';
+	const STATEMENT_CHANGE_COLUMN = 'ALTER TABLE %s CHANGE COLUMN %s %s %s';
 
 	/**
 	 * SQL statement template to add a column to a table.
@@ -76,7 +76,7 @@ class MetaModelTableManipulation
 	 * All system columns that always are defined in a MetaModel table.
 	 * When you alter this, ensure to also change @link{MetaModelTableManipulation::STATEMENT_CREATE_TABLE} above
 	 */
-	protected static $systemColumns = array('id', 'pid', 'sorting', 'tstamp');
+	protected static $arrSystemColumns = array('id', 'pid', 'sorting', 'tstamp');
 
 	/**
 	 * Returns the Contao database instance to use.
@@ -92,38 +92,75 @@ class MetaModelTableManipulation
 	 * Checks wheter the given table name is valid.
 	 *
 	 * @param string $strTableName the table name to check
-	 *
 	 * @return bool true if the table name is valid, false otherwise.
 	 */
-	public static function isValidTablename($strTableName)
+	public static function isValidTableName($strTableName)
+	{
+		return self::isValidMySQLIdentifier($strTableName);
+	}
+
+	/**
+	 * Checks whether the column with the given name is a MetaModel system column.
+	 *
+	 * @param string $strColumnName the name of the column
+	 * @return bool true if the column is a system column, false otherwise.
+	 */
+	public static function isValidColumnName($strColumnName)
+	{
+		return self::isValidMySQLIdentifier($strColumnName);
+	}
+
+	public static function isValidMySQLIdentifier($strName)
 	{
 		// match for valid table name, according to MySQL, a table name must start
 		// with a letter and must be combined of letters, decimals and underscore.
-		return (bool)preg_match('/^[a-z_][a-z\d_]*$/iu', $strTableName);
+		return 1 == preg_match('/^[a-z_][a-z\d_]*$/i', $strName);
 	}
 
-	/**
-	 * Checks whether the column with the given name is a MetaModel system column.
-	 *
-	 * @param string $strColName the name of the column
-	 *
-	 * @return bool true if the column is a system column, false otherwise.
-	 */
-	public static function isValidColumnName($strColName)
+	public static function isReservedIdentifier($strName)
 	{
-		return (bool)preg_match('/^[a-z_][a-z\d_]*$/i', $strColName);
+		return $strName == 'varbase' || $strName == 'vargroup' || false !== strpos($strName, '__');
 	}
 
 	/**
 	 * Checks whether the column with the given name is a MetaModel system column.
 	 *
-	 * @param string $strColName the name of the column
-	 *
+	 * @param string $strColumnName the name of the column
 	 * @return bool true if the column is a system column, false otherwise.
 	 */
 	public static function isSystemColumn($strColName)
 	{
-		return in_array($strColName, self::$systemColumns);
+		return in_array($strColName, self::$arrSystemColumns);
+	}
+
+	public static function getCreateTableStatement($strTableName)
+	{
+		return sprintf(self::STATEMENT_CREATE_TABLE, $strTableName);
+	}
+
+	public static function getRenameTableStatement($strTableName, $strNewTableName)
+	{
+		return sprintf(self::STATEMENT_RENAME_TABLE, $strTableName, $strNewTableName);
+	}
+
+	public static function getDropTableStatement($strTableName)
+	{
+		return sprintf(self::STATEMENT_DROP_TABLE, $strTableName);
+	}
+
+	public static function getCreateColumnStatement($strTableName, $strColumnName, $strType)
+	{
+		return sprintf(self::STATEMENT_CREATE_COLUMN, $strTableName, $strColumnName, $strType);
+	}
+
+	public static function getChangeColumnStatement($strTableName, $strColumnName, $strNewColumnName, $strNewType)
+	{
+		return sprintf(self::STATEMENT_CHANGE_COLUMN, $strTableName, $strColumnName, $strNewColumnName, $strNewType);
+	}
+
+	public static function getDropColumnStatement($strTableName, $strColumnName)
+	{
+		return sprintf(self::STATEMENT_DROP_COLUMN, $strTableName, $strColumnName);
 	}
 
 	/**
@@ -131,36 +168,23 @@ class MetaModelTableManipulation
 	 * Throws an Exception if the table name is invalid.
 	 *
 	 * @param string $strTableName the table name to check
-	 *
 	 * @return void
 	 */
-	public static function checkTablename($strTableName)
+	public static function checkTableName($strTableName, $blnAllowReserved = false)
 	{
-		if (!self::isValidTablename($strTableName))
-		{
-			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['invalidTableName'], $strTableName));
+		if (!self::isValidTableName($strTableName)) {
+			$strMessage = sprintf(
+				$GLOBALS['TL_LANG']['ERR']['invalidTableName'],
+				specialchars($strTableName)
+			);
+			throw new Exception($strMessage, 1);
 		}
-	}
-
-	/**
-	 * Checks whether the column with the given name is not a MetaModel system column and is a valid Database
-	 * column name, @see{MetaModelTableManipulation::isSystemColumn()} and @see{MetaModelTableManipulation::isValidColumnName()}.
-	 * If there is any problem, an Exception is raised, stating the nature of the error in the Exception message.
-	 *
-	 * @param string $strColName the name of the column
-	 *
-	 * @return void
-	 */
-	public static function checkColumnName($strColName)
-	{
-		if (!self::isValidColumnName($strColName))
-		{
-			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['invalidColumnName'], $strColName));
-		}
-
-		if (self::isSystemColumn($strColName))
-		{
-			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['systemColumn'], $strColName));
+		if (!$blnAllowReserved && self::isReservedIdentifier($strTableName)) {
+			$strMessage = sprintf(
+				$GLOBALS['TL_LANG']['ERR']['reservedTableName'],
+				$strTableName
+			);
+			throw new Exception($strMessage, 1);
 		}
 	}
 
@@ -169,15 +193,16 @@ class MetaModelTableManipulation
 	 * Throws an Exception if the table name is invalid or does not exist.
 	 *
 	 * @param string $strTableName the table name to check
-	 *
 	 * @return void
 	 */
 	public static function checkTableExists($strTableName)
 	{
-		self::checkTablename($strTableName);
-		if (!self::getDB()->tableExists($strTableName, null, true))
-		{
-			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['tableDoesNotExist'], $strTableName));
+		if (!self::getDB()->tableExists($strTableName, null, true)) {
+			$strMessage = sprintf(
+				$GLOBALS['TL_LANG']['ERR']['tableDoesNotExist'],
+				$strTableName
+			);
+			throw new Exception($strMessage, 1);
 		}
 	}
 
@@ -186,15 +211,101 @@ class MetaModelTableManipulation
 	 * Throws an Exception if the table name is invalid or does exist.
 	 *
 	 * @param string $strTableName the table name to check
-	 *
 	 * @return void
 	 */
 	public static function checkTableDoesNotExist($strTableName)
 	{
-		self::checkTablename($strTableName);
-		if (self::getDB()->tableExists($strTableName, null, true))
-		{
-			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['tableExists'], $strTableName));
+		if (self::getDB()->tableExists($strTableName, null, true)) {
+			$strMessage = sprintf(
+				$GLOBALS['TL_LANG']['ERR']['tableExists'],
+				$strTableName
+			);
+			throw new Exception($strMessage, 1);
+		}
+	}
+
+	/**
+	 * Checks whether the column with the given name is not a MetaModel system column and is a valid Database
+	 * column name, @see{MetaModelTableManipulation::isSystemColumn()} and @see{MetaModelTableManipulation::isValidColumnName()}.
+	 * If there is any problem, an Exception is raised, stating the nature of the error in the Exception message.
+	 *
+	 * @param string $strColumnName the name of the column
+	 * @return void
+	 */
+	public static function checkColumnName($strColumnName, $blnAllowReserved = false)
+	{
+		if (!self::isValidColumnName($strColumnName)) {
+			$strMessage = sprintf(
+				$GLOBALS['TL_LANG']['ERR']['invalidColumnName'],
+				specialchars($strColumnName)
+			);
+			throw new Exception($strMessage, 1);
+		}
+		if (
+			self::isSystemColumn($strColumnName)
+			|| (!$blnAllowReserved && self::isReservedIdentifier($strColumnName))
+		) {
+			$strMessage = sprintf(
+				$GLOBALS['TL_LANG']['ERR']['reservedColumnName'],
+				$strColumnName
+			);
+			throw new Exception($strMessage, 1);
+		}
+	}
+
+	/**
+	 * Checks whether the given table exists.
+	 * Throws an Exception if the table name is invalid or does not exist.
+	 *
+	 * @param string $strTableName the table name to check
+	 * @param string $strColumnName the column name to check
+	 * @return void
+	 */
+	public static function checkColumnExists($strTableName, $strColumnName)
+	{
+		self::checkTableName($strTableName, true); // this cant be handled by Contao Database class
+		if (!self::getDB()->fieldExists($strColumnName, $strTableName, true)) {
+			$strMessage = sprintf(
+				$GLOBALS['TL_LANG']['ERR']['columnDoesNotExist'],
+				$strColumnName,
+				$strTableName
+			);
+			throw new Exception($strMessage, 1);
+		}
+	}
+
+	/**
+	 * Checks whether the given table exists.
+	 * Throws an Exception if the table name is invalid or does not exist.
+	 *
+	 * @param string $strTableName the table name to check
+	 * @param string $strColumnName the column name to check
+	 * @return void
+	 */
+	public static function checkColumnDoesNotExist($strTableName, $strColumnName)
+	{
+		self::checkTableName($strTableName, true); // this cant be handled by Contao Database class
+		if (self::getDB()->fieldExists($strColumnName, $strTableName, true)) {
+			$strMessage = sprintf(
+				$GLOBALS['TL_LANG']['ERR']['columnExists'],
+				$strColumnName,
+				$strTableName
+			);
+			throw new Exception($strMessage, 1);
+		}
+	}
+
+	public static function executeQuery($strQuery)
+	{
+		try {
+			self::getDB()->query($strQuery);
+		} catch (Exception $e) {
+			$strMessage = sprintf(
+				$GLOBALS['TL_LANG']['ERR']['queryError'],
+				$strQuery,
+				$e->getMessage()
+			);
+			throw new Exception($strMessage, 1, $e);
 		}
 	}
 
@@ -203,31 +314,54 @@ class MetaModelTableManipulation
 	 * Throws Exception if the table name is invalid or already exists.
 	 *
 	 * @param string $strTableName the name of the new table to create.
-	 *
 	 * @return void
 	 */
-	public static function createTable($strTableName)
+	public static function createTable($strTableName, $blnAllowReserved = false)
 	{
-		self::checkTableDoesNotExist($strTableName);
-		self::getDB()->execute(sprintf(self::STATEMENT_CREATE_TABLE, $strTableName));
+		try {
+			self::checkTableName($strTableName, $blnAllowReserved);
+			self::checkTableDoesNotExist($strTableName);
+			$strQuery = self::getCreateTableStatement($strTableName);
+			self::executeQuery($strQuery);
+		} catch (Exception $e) {
+			$strMessage = sprintf(
+				$GLOBALS['TL_LANG']['ERR']['createTableError'],
+				$strTableName,
+				$e->getMessage()
+			);
+			throw new Exception($strMessage, 1, $e);
+		}
 	}
 
 	/**
 	 * Renames a table with the given name to the given new name.
 	 * Throws Exception if the new table name is invalid.
 	 *
-	 * @param string $strTableName    the name of the table to rename.
-	 *
+	 * @param string $strTableName the name of the table to rename.
 	 * @param string $strNewTableName the name to which the table shall be renamed to.
-	 *
 	 * @return void
-	 * 	 */
-	public static function renameTable($strTableName, $strNewTableName)
+	 */
+	public static function renameTable($strTableName, $strNewTableName, $blnAllowReserved = false)
 	{
-		self::checkTableExists($strTableName);
-		self::checkTableDoesNotExist($strNewTableName);
-
-		self::getDB()->execute(sprintf(self::STATEMENT_RENAME_TABLE, $strTableName, $strNewTableName));
+		if ($strTableName == $strNewTableName) {
+			return;
+		}
+		try {
+			self::checkTableName($strTableName, $blnAllowReserved);
+			self::checkTableName($strNewTableName, $blnAllowReserved);
+			self::checkTableExists($strTableName);
+			self::checkTableDoesNotExist($strNewTableName);
+			$strQuery = self::getRenameTableStatement($strTableName, $strNewTableName);
+			self::executeQuery($strQuery);
+		} catch (Exception $e) {
+			$strMessage = sprintf(
+				$GLOBALS['TL_LANG']['ERR']['renameTableError'],
+				$strTableName,
+				$strNewTableName,
+				$e->getMessage()
+			);
+			throw new Exception($strMessage, 1, $e);
+		}
 	}
 
 	/**
@@ -235,86 +369,52 @@ class MetaModelTableManipulation
 	 * Throws Exception if the table name is invalid or the table does not exist.
 	 *
 	 * @param string $strTableName the name of the new table to delete.
-	 *
 	 * @return void
 	 */
-	public static function deleteTable($strTableName)
+	public static function dropTable($strTableName, $blnAllowReserved = false)
 	{
-		self::checkTableExists($strTableName);
-
-		self::getDB()->execute(sprintf(self::STATEMENT_DROP_TABLE, $strTableName));
-	}
-
-	/**
-	 * Checks whether the given table exists.
-	 * Throws an Exception if the table name is invalid or does not exist.
-	 *
-	 * @param string $strTableName the table name to check
-	 *
-	 * @param string $strColName   the column name to check
-	 *
-	 *
-	 * @return void
-	 */
-	public static function checkColumnExists($strTableName, $strColName)
-	{
-		self::checkTableExists($strTableName);
-		self::checkColumnName($strTableName);
-		if (!self::getDB()->fieldExists($strColName, $strTableName, true))
-		{
-			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['columnDoesNotExist'], $strColName, $strTableName));
+		try {
+			self::checkTableName($strTableName, $blnAllowReserved);
+			self::checkTableExists($strTableName);
+			$strQuery = self::getDropTableStatement($strTableName);
+			self::executeQuery($strQuery);
+		} catch (Exception $e) {
+			$strMessage = sprintf(
+				$GLOBALS['TL_LANG']['ERR']['dropTableError'],
+				$strTableName,
+				$e->getMessage()
+			);
+			throw new Exception($strMessage, 1, $e);
 		}
 	}
-
-	/**
-	 * Checks whether the given table exists.
-	 * Throws an Exception if the table name is invalid or does not exist.
-	 *
-	 * @param string $strTableName the table name to check
-	 *
-	 * @param string $strColName   the column name to check
-	 *
-	 *
-	 * @return void
-	 */
-	public static function checkColumnDoesNotExist($strTableName, $strColName)
-	{
-		self::checkTableExists($strTableName);
-		self::checkColumnName($strTableName);
-		if (self::getDB()->fieldExists($strColName, $strTableName, true))
-		{
-			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['columnExists'], $strColName));
-		}
-	}
-
-
 
 	/**
 	 * Add a column to a table.
 	 *
 	 * Throws Exception if the table does not exist, the column name is invalid or the column already exists.
 	 *
-	 * @param string $strTableName  the name of the table to add the column to.
-	 *
+	 * @param string $strTableName the name of the table to add the column to.
 	 * @param string $strColumnName the name of the new column.
-	 *
-	 * @param string $strType       the SQL type notation of the new column.
-	 *
-	 *
+	 * @param string $strType the SQL type notation of the new column.
 	 * @return void
 	 */
-	public static function createColumn($strTableName, $strColumnName, $strType)
+	public static function createColumn($strTableName, $strColumnName, $strType, $blnAllowReserved = false)
 	{
-		self::checkColumnDoesNotExist($strTableName, $strColumnName);
-		// TODO: throw exceptions
-		self::getDB()->execute(
-						sprintf(
-							self::STATEMENT_CREATE_COLUMN,
-							$strTableName,
-							$strColumnName,
-							$strType
-						)
-		);
+		try {
+			self::checkTableName($strTableName, $blnAllowReserved);
+			self::checkColumnName($strColumnName, $blnAllowReserved);
+			self::checkColumnDoesNotExist($strTableName, $strColumnName);
+			$strQuery = self::getCreateColumnStatement($strTableName, $strColumnName, $strType);
+			self::executeQuery($strQuery);
+		} catch (Exception $e) {
+			$strMessage = sprintf(
+				$GLOBALS['TL_LANG']['ERR']['createColumnError'],
+				$strColumnName,
+				$strTableName,
+				$e->getMessage()
+			);
+			throw new Exception($strMessage, 1, $e);
+		}
 	}
 
 	/**
@@ -322,89 +422,126 @@ class MetaModelTableManipulation
 	 *
 	 * Throws Exception if the table does not exist, the column name is invalid or the column already exists.
 	 *
-	 * @param string $strTableName     the name of the table the column is in.
-	 *
-	 * @param string $strColumnName    the current name of the column to be renamed.
-	 *
+	 * @param string $strTableName the name of the table the column is in.
+	 * @param string $strColumnName the current name of the column to be renamed.
 	 * @param string $strNewColumnName the new name for the column.
-	 *
-	 * @param string $strNewType       the new SQL type notation of the column.
-	 *
-	 *
+	 * @param string $strNewType the new SQL type notation of the column.
 	 * @return void
 	 */
-	public static function renameColumn($strTableName, $strColumnName, $strNewColumnName, $strNewType)
+	public static function renameColumn($strTableName, $strColumnName, $strNewColumnName, $strNewType, $blnAllowReserved = false)
 	{
-		if ($strColumnName != $strNewColumnName)
-		{
-			self::checkColumnExists($strTableName, $strColumnName);
-			self::checkColumnDoesNotExist($strTableName, $strNewColumnName);
+		if ($strColumnName == $strNewColumnName) {
+			return;
 		}
-		// TODO: throw exceptions
-		self::getDB()->execute(
-						sprintf(
-							self::STATEMENT_RENAME_COLUMN,
-							$strTableName,
-							$strColumnName,
-							$strNewColumnName,
-							$strNewType
-						)
-		);
+		self::changeColumn($strTableName, $strColumnName, $strNewColumnName, $strNewType, $blnAllowReserved);
+	}
+
+	public static function changeColumn($strTableName, $strColumnName, $strNewColumnName, $strNewType, $blnAllowReserved = false)
+	{
+		try {
+			self::checkTableName($strTableName, $blnAllowReserved);
+			self::checkColumnName($strColumnName, $blnAllowReserved);
+			self::checkColumnName($strNewColumnName, $blnAllowReserved);
+			self::checkTableExists($strTableName);
+			self::checkColumnExists($strTableName, $strColumnName);
+			if ($strColumnName != $strNewColumnName) {
+				self::checkColumnDoesNotExist($strTableName, $strNewColumnName);
+			}
+			$strQuery = self::getChangeColumnStatement($strTableName, $strColumnName, $strNewColumnName, $strNewType);
+			self::executeQuery($strQuery);
+		} catch (Exception $e) {
+			$strMessage = sprintf(
+				$GLOBALS['TL_LANG']['ERR']['changeColumnError'],
+				$strColumnName,
+				$strNewColumnName,
+				$strTableName,
+				$e->getMessage()
+			);
+			throw new Exception($strMessage, 1, $e);
+		}
 	}
 
 	/**
 	 * Delete a column from a table.
 	 * Throws Exception if the table does not exist, the column name is invalid or the column does not exist.
 	 *
-	 * @param string $strTableName  the name of the table the column is in.
-	 *
+	 * @param string $strTableName the name of the table the column is in.
 	 * @param string $strColumnName the name of the column to drop.
-	 *
 	 * @return void
 	 */
-	public static function dropColumn($strTableName, $strColumnName)
+	public static function dropColumn($strTableName, $strColumnName, $blnAllowReserved = false)
 	{
-		self::checkColumnExists($strTableName, $strColumnName);
-		// TODO: throw exceptions
-		self::getDB()->execute(
-						sprintf(
-							self::STATEMENT_DROP_COLUMN,
-							$strTableName,
-							$strColumnName
-						)
-		);
+		try {
+			self::checkTableName($strTableName, $blnAllowReserved);
+			self::checkColumnName($strColumnName, $blnAllowReserved);
+			self::checkTableExists($strTableName);
+			self::checkColumnExists($strTableName, $strColumnName);
+			$strQuery = self::getDropColumnStatement($strTableName, $strColumnName);
+			self::executeQuery($strQuery);
+		} catch (Exception $e) {
+			$strMessage = sprintf(
+				$GLOBALS['TL_LANG']['ERR']['dropColumnError'],
+				$strColumnName,
+				$strTableName,
+				$e->getMessage()
+			);
+			throw new Exception($strMessage, 1, $e);
+		}
 	}
 
 	/**
 	 * Enables or disables Variant support on a certain MetaModel table.
 	 *
-	 * @param string $strTableName      the table name of the MetaModel.
-	 *
-	 * @param bool   $blnVariantSupport flag if the support shall be turned on or off.
-	 *
+	 * @param string $strTableName the table name of the MetaModel.
+	 * @param bool $blnVariantSupport flag if the support shall be turned on or off.
 	 * @return void
 	 */
 	public static function setVariantSupport($strTableName, $blnVariantSupport)
 	{
-		if ($blnVariantSupport)
-		{
-			if (self::getDB()->tableExists($strTableName, null, true) && (!self::getDB()->fieldExists('varbase', $strTableName, true)))
-			{
-				self::createColumn($strTableName, 'varbase', 'char(1) NOT NULL default \'\'');
-				self::createColumn($strTableName, 'vargroup', 'int(11) NOT NULL default 0');
-				// TODO: we should also apply an index on vargroup here.
+		if (!self::getDB()->tableExists($strTableName, null, true)) {
+			return;
+		}
+		self::checkTableName($strTableName);
 
+		if ($blnVariantSupport) {
+			if (!self::getDB()->fieldExists('varbase', $strTableName, true)) {
+				self::createColumn($strTableName, 'varbase', 'char(1) NOT NULL default \'\'', true);
+				$arrSet['varbase'] = '1';
+			}
+			if (!self::getDB()->fieldExists('vargroup', $strTableName, true)) {
+				self::createColumn($strTableName, 'vargroup', 'int(11) NOT NULL default 0', true);
+				$arrSet['vargroup'] = 'id';
+				// TODO: we should also apply an index on vargroup here.
+			}
+			if ($arrSet) {
 				// if there is pre-existing data in the table, we need to provide a separate 'vargroup' value to all of them,
 				// we can do this safely by setting all vargroups to the id of the base item.
-				self::getDB()->execute(sprintf('UPDATE %s SET vargroup=id, varbase=1', $strTableName));
+				foreach ($arrSet as $strColumnName => $strValue) {
+					$strValue = $strColumnName . ' = ' . $strValue;
+				}
+				$strSet = implode(', ', $arrSet);
+				$strQuery = sprintf('UPDATE %s SET %s', $strTableName, $strSet);
+				self::executeQuery($strQuery);
 			}
+
 		} else {
-			if (self::getDB()->tableExists($strTableName, null, true) && self::getDB()->fieldExists('varbase', $strTableName, true))
-			{
-				self::dropColumn($strTableName, 'varbase');
-				self::dropColumn($strTableName, 'vargroup');
+			if (self::getDB()->fieldExists('varbase', $strTableName, true)) {
+				self::dropColumn($strTableName, 'varbase', true);
+			}
+			if (self::getDB()->fieldExists('vargroup', $strTableName, true)) {
+				self::dropColumn($strTableName, 'vargroup', true);
 			}
 		}
 	}
+
+	/** @deprecated */
+	const STATEMENT_RENAME_COLUMN = 'ALTER TABLE %s CHANGE COLUMN %s %s %s';
+
+	/** @deprecated use dropTable */
+	public static function deleteTable($strTableName)
+	{
+		return self::dropTable($strTableName);
+	}
+
 }
 
