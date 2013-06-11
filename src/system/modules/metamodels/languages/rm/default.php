@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-30T20:13:27+02:00
+ * last-updated: 2013-06-01T01:50:49+02:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attributs da "%s"';
@@ -36,7 +36,7 @@ $GLOBALS['TL_LANG']['ERR']['no_palette']                                        
 $GLOBALS['TL_LANG']['ERR']['no_view']                                                 = 'Emprova dad acceder il MetaModel "%s" senza senza opziun da vista per l\'utilisader %s.';
 $GLOBALS['TL_LANG']['ERR']['upgrade_php_version']                                     = 'La versiun da l\'interpreter da PHP è memia bass, actualisescha almain a %s (ti utiliseschas actualmain %s)';
 $GLOBALS['TL_LANG']['MSC']['details']                                                 = 'Detagls';
-$GLOBALS['TL_LANG']['MSC']['field_label']                                             = '%s :';
+$GLOBALS['TL_LANG']['MSC']['field_label']                                             = '%s:';
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']                        = 'Modifitgar "%s" per l\'element %%s';
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord']                   = 'Modifitgar la configuraziun dal filter %%s per il filter "%s" en il MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label']                        = 'Filter "%s" en il MetaModel "%s"';
