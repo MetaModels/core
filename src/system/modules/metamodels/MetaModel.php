@@ -185,6 +185,12 @@ class MetaModel implements IMetaModel
 			return array();
 		}
 
+		// If we have an attribute restriction, make sure we keep the system columns. See #196.
+		if ($arrAttrOnly)
+		{
+			$arrAttrOnly = array_merge($GLOBALS['METAMODELS_SYSTEM_COLUMNS'], $arrAttrOnly);
+		}
+
 		$arrResult = array();
 		while($objRow->next())
 		{

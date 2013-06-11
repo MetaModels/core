@@ -123,6 +123,19 @@ $GLOBALS['METAMODELS']['filters']['conditionor'] = array
 	'nestingAllowed' => true
 );
 
+/**
+ * All system columns that always are defined in a MetaModel table and are not attributes.
+ *
+ * When you alter this, consider to also change @link{MetaModelTableManipulation::STATEMENT_CREATE_TABLE}.
+ * Extensions will have to alter the table on their own as the columns will not get transported then.
+ */
+$GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'id';
+$GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'pid';
+$GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'sorting';
+$GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'tstamp';
+$GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'vargroup';
+$GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'varbase';
+
 // define our version so dependant extensions can use it in version_compare().
 define('METAMODELS_VERSION', '0.1');
 
