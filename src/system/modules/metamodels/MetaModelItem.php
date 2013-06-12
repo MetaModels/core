@@ -467,6 +467,18 @@ class MetaModelItem implements IMetaModelItem
 
 			$arrJumpTo['params'] = $arrParams;
 			$arrJumpTo['deep']   = (strlen($strParams) > 0);
+			if (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$objSettings->get('id')]['details']))
+			{
+				$arrJumpTo['label'] = $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$objSettings->get('id')]['details'];
+			}
+			elseif (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details']))
+			{
+				$arrJumpTo['label'] = $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details'];
+			}
+			else
+			{
+				$arrJumpTo['label'] = $GLOBALS['TL_LANG']['MSC']['details'];
+			}
 		}
 
 		$arrJumpTo['page'] = $intJumpTo;
