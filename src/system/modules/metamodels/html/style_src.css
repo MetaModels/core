@@ -95,6 +95,10 @@
     position:relative;
   }
 
+  .tl_textarea {
+    height:auto;
+  }
+
   input[readonly],
   textarea[readonly], 
   input[readonly]:focus,
