@@ -216,7 +216,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 					),
 				),
 				'buttons'                          => array('copy' => false, 'delete' => false, 'up' => false, 'down' => false),
-				'tl_class'                         => 'clx',
+				'tl_class'                         => 'clr clx',
 			)
 		),
 		'additionalCss' => array(

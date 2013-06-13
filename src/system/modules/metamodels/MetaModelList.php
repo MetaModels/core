@@ -550,6 +550,58 @@ class MetaModelList extends Controller
 	}
 
 	/**
+	 * Retrieve the caption text for "No items found" message,
+	 *
+	 * This message is looked up in the following order:
+	 * 1. $GLOBALS['TL_LANG']['MSC'][<mm tablename>][<render settings id>]['noItemsMsg']
+	 * 2. $GLOBALS['TL_LANG']['MSC'][<mm tablename>]['noItemsMsg']
+	 * 3. $GLOBALS['TL_LANG']['MSC']['noItemsMsg']
+	 *
+	 * @return string
+	 */
+	protected function getNoItemsCaption()
+	{
+		if (isset($this->objView) && isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['noItemsMsg']))
+		{
+			return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['noItemsMsg'];
+		}
+		elseif (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['noItemsMsg']))
+		{
+			return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['noItemsMsg'];
+		}
+		else
+		{
+			return $GLOBALS['TL_LANG']['MSC']['noItemsMsg'];
+		}
+	}
+
+	/**
+	 * Retrieve the caption text for the "Show details" link,
+	 *
+	 * This message is looked up in the following order:
+	 * 1. $GLOBALS['TL_LANG']['MSC'][<mm tablename>][<render settings id>]['details']
+	 * 2. $GLOBALS['TL_LANG']['MSC'][<mm tablename>]['details']
+	 * 3. $GLOBALS['TL_LANG']['MSC']['details']
+	 *
+	 * @return string
+	 */
+	protected function getDetailsCaption()
+	{
+		if (isset($this->objView) && isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['details']))
+		{
+			return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['details'];
+		}
+		elseif (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details']))
+		{
+			return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details'];
+		}
+		else
+		{
+			return $GLOBALS['TL_LANG']['MSC']['details'];
+		}
+	}
+
+	/**
 	 * Render the list view.
 	 *
 	 * @param bool $blnNoNativeParsing flag determining if the parsing shall be done internal or if the template will handle the parsing on it's own.
@@ -560,8 +612,8 @@ class MetaModelList extends Controller
 	 */
 	public function render($blnNoNativeParsing, $objCaller)
 	{
-		$this->objTemplate->noItemsMsg = $GLOBALS['TL_LANG']['MSC']['noItemsMsg'];
-		$this->objTemplate->details    = $GLOBALS['TL_LANG']['MSC']['details'];
+		$this->objTemplate->noItemsMsg = $this->getNoItemsCaption();
+		$this->objTemplate->details    = $this->getDetailsCaption();
 
 		$this->prepare();
 		$strOutputFormat = $this->getOutputFormat();

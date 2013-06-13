@@ -165,11 +165,15 @@ class MetaModel implements IMetaModel
 	/**
 	 * Fetch the "native" database rows with the given ids.
 	 *
-	 * @param int[] $arrIds the ids of the items to retrieve the order of ids is used for sorting of the return values.
+	 * @param int[]    $arrIds      the ids of the items to retrieve the order of ids is used for sorting of the return
+	 *                              values.
+	 *
+	 * @param string[] $arrAttrOnly names of the attributes that shall be contained in the result, defaults to array()
+	 *                              which means all attributes.
 	 *
 	 * @return array an array containing the database rows with each column "deserialized".
 	 */
-	protected function fetchRows($arrIds)
+	protected function fetchRows($arrIds, $arrAttrOnly=array())
 	{
 		$objDB = Database::getInstance();
 
@@ -181,6 +185,12 @@ class MetaModel implements IMetaModel
 			return array();
 		}
 
+		// If we have an attribute restriction, make sure we keep the system columns. See #196.
+		if ($arrAttrOnly)
+		{
+			$arrAttrOnly = array_merge($GLOBALS['METAMODELS_SYSTEM_COLUMNS'], $arrAttrOnly);
+		}
+
 		$arrResult = array();
 		while($objRow->next())
 		{
@@ -188,7 +198,10 @@ class MetaModel implements IMetaModel
 
 			foreach($objRow->row() as $strKey=>$varValue)
 			{
-				$arrData[$strKey] = deserialize($varValue);
+				if ((!$arrAttrOnly) || (in_array($strKey, $arrAttrOnly)))
+				{
+					$arrData[$strKey] = deserialize($varValue);
+				}
 			}
 			$arrResult[$objRow->id] = $arrData;
 		}
@@ -200,7 +213,8 @@ class MetaModel implements IMetaModel
 	 *
 	 * @param int[]    $arrIds      the ids of the items to retrieve the order of ids is used for sorting of the return values.
 	 *
-	 * @param string[] $arrAttrOnly names of the attributes that shall be contained in the result, defaults to array() which means all attributes. NOTE: simple columns will ever be contained due to the "SELECT *" query.
+	 * @param string[] $arrAttrOnly names of the attributes that shall be contained in the result, defaults to array()
+	 *                              which means all attributes.
 	 *
 	 * @return IMetaModelItems a collection of all matched items, sorted by the id list.
 	 */
@@ -216,7 +230,7 @@ class MetaModel implements IMetaModel
 			$arrAttrOnly = array_keys($this->getAttributes());
 		}
 
-		$arrResult = $this->fetchRows($arrIds);
+		$arrResult = $this->fetchRows($arrIds, $arrAttrOnly);
 
 		// determine "complex attributes".
 		$arrComplexCols = $this->getComplexAttributes();

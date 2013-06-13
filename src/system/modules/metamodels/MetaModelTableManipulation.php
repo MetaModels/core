@@ -88,6 +88,13 @@ class MetaModelTableManipulation
 		return Database::getInstance();
 	}
 
+	public static function isValidMySQLIdentifier($strName)
+	{
+		// match for valid table/column name, according to MySQL, a table name must start
+		// with a letter and must be combined of letters, decimals and underscore.
+		return 1 == preg_match('/^[a-z_][a-z\d_]*$/i', $strName);
+	}
+
 	/**
 	 * Checks wheter the given table name is valid.
 	 *
@@ -97,9 +104,7 @@ class MetaModelTableManipulation
 	 */
 	public static function isValidTablename($strTableName)
 	{
-		// match for valid table name, according to MySQL, a table name must start
-		// with a letter and must be combined of letters, decimals and underscore.
-		return (bool)preg_match('/^[a-z_][a-z\d_]*$/iu', $strTableName);
+		return self::isValidMySQLIdentifier($strTableName);
 	}
 
 	/**
@@ -111,7 +116,7 @@ class MetaModelTableManipulation
 	 */
 	public static function isValidColumnName($strColName)
 	{
-		return (bool)preg_match('/^[a-z_][a-z\d_]*$/i', $strColName);
+		return self::isValidMySQLIdentifier($strColName);
 	}
 
 	/**
@@ -123,16 +128,17 @@ class MetaModelTableManipulation
 	 */
 	public static function isSystemColumn($strColName)
 	{
-		return in_array($strColName, self::$systemColumns);
+		return in_array($strColName, $GLOBALS['METAMODELS_SYSTEM_COLUMNS']);
 	}
 
 	/**
 	 * Checks whether the given table name is valid.
-	 * Throws an Exception if the table name is invalid.
 	 *
 	 * @param string $strTableName the table name to check
 	 *
 	 * @return void
+	 *
+	 * @throws \Exception if an invalid table name has been passed.
 	 */
 	public static function checkTablename($strTableName)
 	{
@@ -147,18 +153,22 @@ class MetaModelTableManipulation
 	 * column name, @see{MetaModelTableManipulation::isSystemColumn()} and @see{MetaModelTableManipulation::isValidColumnName()}.
 	 * If there is any problem, an Exception is raised, stating the nature of the error in the Exception message.
 	 *
-	 * @param string $strColName the name of the column
+	 * @param string  $strColName        The name of the column.
+	 *
+	 * @param boolean $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
 	 *
 	 * @return void
+	 *
+	 * @throws \Exception if an invalid column name has been passed.
 	 */
-	public static function checkColumnName($strColName)
+	public static function checkColumnName($strColName, $blnAllowSystemCol = false)
 	{
 		if (!self::isValidColumnName($strColName))
 		{
 			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['invalidColumnName'], $strColName));
 		}
 
-		if (self::isSystemColumn($strColName))
+		if ((!$blnAllowSystemCol) && self::isSystemColumn($strColName))
 		{
 			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['systemColumn'], $strColName));
 		}
@@ -166,11 +176,12 @@ class MetaModelTableManipulation
 
 	/**
 	 * Checks whether the given table exists.
-	 * Throws an Exception if the table name is invalid or does not exist.
 	 *
 	 * @param string $strTableName the table name to check
 	 *
 	 * @return void
+	 *
+	 * @throws \Exception if an invalid table name has been passed or the table does not exist.
 	 */
 	public static function checkTableExists($strTableName)
 	{
@@ -182,12 +193,13 @@ class MetaModelTableManipulation
 	}
 
 	/**
-	 * ensures that the given table does not exist.
-	 * Throws an Exception if the table name is invalid or does exist.
+	 * Ensures that the given table does not exist.
 	 *
 	 * @param string $strTableName the table name to check
 	 *
 	 * @return void
+	 *
+	 * @throws \Exception if an invalid table name has been passed or a table with the given name exists.
 	 */
 	public static function checkTableDoesNotExist($strTableName)
 	{
@@ -200,11 +212,12 @@ class MetaModelTableManipulation
 
 	/**
 	 * Creates a table with the given name.
-	 * Throws Exception if the table name is invalid or already exists.
 	 *
 	 * @param string $strTableName the name of the new table to create.
 	 *
 	 * @return void
+	 *
+	 * @throws \Exception if an invalid table name has been passed or a table with the given name exists.
 	 */
 	public static function createTable($strTableName)
 	{
@@ -214,13 +227,14 @@ class MetaModelTableManipulation
 
 	/**
 	 * Renames a table with the given name to the given new name.
-	 * Throws Exception if the new table name is invalid.
 	 *
 	 * @param string $strTableName    the name of the table to rename.
 	 *
 	 * @param string $strNewTableName the name to which the table shall be renamed to.
 	 *
 	 * @return void
+	 *
+	 * @throws \Exception if an invalid table name has been passed.
 	 * 	 */
 	public static function renameTable($strTableName, $strNewTableName)
 	{
@@ -232,11 +246,12 @@ class MetaModelTableManipulation
 
 	/**
 	 * Deletes the table with the given name.
-	 * Throws Exception if the table name is invalid or the table does not exist.
 	 *
 	 * @param string $strTableName the name of the new table to delete.
 	 *
 	 * @return void
+	 *
+	 * @throws \Exception if an invalid table name has been passed or the table does not exist.
 	 */
 	public static function deleteTable($strTableName)
 	{
@@ -247,19 +262,22 @@ class MetaModelTableManipulation
 
 	/**
 	 * Checks whether the given table exists.
-	 * Throws an Exception if the table name is invalid or does not exist.
 	 *
-	 * @param string $strTableName the table name to check
+	 * @param string $strTableName       The table name to check.
 	 *
-	 * @param string $strColName   the column name to check
+	 * @param string $strColName         The column name to check.
 	 *
+	 * @param boolean $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
 	 *
 	 * @return void
+	 *
+	 * @throws \Exception if an invalid table name has been passed or the table does not exist, the column name is
+	 *                    invalid or the column does not exist.
 	 */
-	public static function checkColumnExists($strTableName, $strColName)
+	public static function checkColumnExists($strTableName, $strColName, $blnAllowSystemCol = false)
 	{
 		self::checkTableExists($strTableName);
-		self::checkColumnName($strTableName);
+		self::checkColumnName($strColName, $blnAllowSystemCol);
 		if (!self::getDB()->fieldExists($strColName, $strTableName, true))
 		{
 			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['columnDoesNotExist'], $strColName, $strTableName));
@@ -267,20 +285,23 @@ class MetaModelTableManipulation
 	}
 
 	/**
-	 * Checks whether the given table exists.
-	 * Throws an Exception if the table name is invalid or does not exist.
+	 * Checks whether the given column does not exist.
 	 *
-	 * @param string $strTableName the table name to check
+	 * @param string  $strTableName      The table name to check.
 	 *
-	 * @param string $strColName   the column name to check
+	 * @param string  $strColName        The column name to check.
 	 *
+	 * @param boolean $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
 	 *
 	 * @return void
+	 *
+	 * @throws \Exception if an invalid table name has been passed or the table does not exist, the column name is
+	 *                    invalid or the column does not exist.
 	 */
-	public static function checkColumnDoesNotExist($strTableName, $strColName)
+	public static function checkColumnDoesNotExist($strTableName, $strColName, $blnAllowSystemCol = false)
 	{
 		self::checkTableExists($strTableName);
-		self::checkColumnName($strTableName);
+		self::checkColumnName($strColName, $blnAllowSystemCol);
 		if (self::getDB()->fieldExists($strColName, $strTableName, true))
 		{
 			throw new Exception(sprintf($GLOBALS['TL_LANG']['ERR']['columnExists'], $strColName));
@@ -294,18 +315,19 @@ class MetaModelTableManipulation
 	 *
 	 * Throws Exception if the table does not exist, the column name is invalid or the column already exists.
 	 *
-	 * @param string $strTableName  the name of the table to add the column to.
+	 * @param string  $strTableName      The name of the table to add the column to.
 	 *
-	 * @param string $strColumnName the name of the new column.
+	 * @param string  $strColumnName     The name of the new column.
 	 *
-	 * @param string $strType       the SQL type notation of the new column.
+	 * @param string  $strType           The SQL type notation of the new column.
 	 *
+	 * @param boolean $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
 	 *
 	 * @return void
 	 */
-	public static function createColumn($strTableName, $strColumnName, $strType)
+	public static function createColumn($strTableName, $strColumnName, $strType, $blnAllowSystemCol = false)
 	{
-		self::checkColumnDoesNotExist($strTableName, $strColumnName);
+		self::checkColumnDoesNotExist($strTableName, $strColumnName, $blnAllowSystemCol);
 		// TODO: throw exceptions
 		self::getDB()->execute(
 						sprintf(
@@ -322,23 +344,24 @@ class MetaModelTableManipulation
 	 *
 	 * Throws Exception if the table does not exist, the column name is invalid or the column already exists.
 	 *
-	 * @param string $strTableName     the name of the table the column is in.
+	 * @param string  $strTableName      The name of the table the column is in.
 	 *
-	 * @param string $strColumnName    the current name of the column to be renamed.
+	 * @param string  $strColumnName     The current name of the column to be renamed.
 	 *
-	 * @param string $strNewColumnName the new name for the column.
+	 * @param string  $strNewColumnName  The new name for the column.
 	 *
-	 * @param string $strNewType       the new SQL type notation of the column.
+	 * @param string  $strNewType        The new SQL type notation of the column.
 	 *
+	 * @param boolean $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
 	 *
 	 * @return void
 	 */
-	public static function renameColumn($strTableName, $strColumnName, $strNewColumnName, $strNewType)
+	public static function renameColumn($strTableName, $strColumnName, $strNewColumnName, $strNewType, $blnAllowSystemCol = false)
 	{
 		if ($strColumnName != $strNewColumnName)
 		{
-			self::checkColumnExists($strTableName, $strColumnName);
-			self::checkColumnDoesNotExist($strTableName, $strNewColumnName);
+			self::checkColumnExists($strTableName, $strColumnName, $blnAllowSystemCol);
+			self::checkColumnDoesNotExist($strTableName, $strNewColumnName, $blnAllowSystemCol);
 		}
 		// TODO: throw exceptions
 		self::getDB()->execute(
@@ -356,15 +379,17 @@ class MetaModelTableManipulation
 	 * Delete a column from a table.
 	 * Throws Exception if the table does not exist, the column name is invalid or the column does not exist.
 	 *
-	 * @param string $strTableName  the name of the table the column is in.
+	 * @param string  $strTableName      The name of the table the column is in.
 	 *
-	 * @param string $strColumnName the name of the column to drop.
+	 * @param string  $strColumnName     The name of the column to drop.
+	 *
+	 * @param boolean $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
 	 *
 	 * @return void
 	 */
-	public static function dropColumn($strTableName, $strColumnName)
+	public static function dropColumn($strTableName, $strColumnName, $blnAllowSystemCol = false)
 	{
-		self::checkColumnExists($strTableName, $strColumnName);
+		self::checkColumnExists($strTableName, $strColumnName, $blnAllowSystemCol);
 		// TODO: throw exceptions
 		self::getDB()->execute(
 						sprintf(
@@ -390,8 +415,8 @@ class MetaModelTableManipulation
 		{
 			if (self::getDB()->tableExists($strTableName, null, true) && (!self::getDB()->fieldExists('varbase', $strTableName, true)))
 			{
-				self::createColumn($strTableName, 'varbase', 'char(1) NOT NULL default \'\'');
-				self::createColumn($strTableName, 'vargroup', 'int(11) NOT NULL default 0');
+				self::createColumn($strTableName, 'varbase', 'char(1) NOT NULL default \'\'', true);
+				self::createColumn($strTableName, 'vargroup', 'int(11) NOT NULL default 0', true);
 				// TODO: we should also apply an index on vargroup here.
 
 				// if there is pre-existing data in the table, we need to provide a separate 'vargroup' value to all of them,
@@ -401,8 +426,8 @@ class MetaModelTableManipulation
 		} else {
 			if (self::getDB()->tableExists($strTableName, null, true) && self::getDB()->fieldExists('varbase', $strTableName, true))
 			{
-				self::dropColumn($strTableName, 'varbase');
-				self::dropColumn($strTableName, 'vargroup');
+				self::dropColumn($strTableName, 'varbase', true);
+				self::dropColumn($strTableName, 'vargroup', true);
 			}
 		}
 	}

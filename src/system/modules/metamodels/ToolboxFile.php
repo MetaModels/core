@@ -137,11 +137,17 @@ class ToolboxFile
 	}
 
 	/**
+	 * Set the base language.
+	 *
 	 * @param string $baseLanguage
+	 *
+	 * @return ToolboxFile
 	 */
 	public function setBaseLanguage($baseLanguage)
 	{
 		$this->baseLanguage = $baseLanguage;
+
+		return $this;
 	}
 
 	/**
@@ -153,11 +159,17 @@ class ToolboxFile
 	}
 
 	/**
+	 * Set the fallback language.
+	 *
 	 * @param string $fallbackLanguage
+	 *
+	 * @return ToolboxFile
 	 */
 	public function setFallbackLanguage($fallbackLanguage)
 	{
 		$this->fallbackLanguage = $fallbackLanguage;
+
+		return $this;
 	}
 
 	/**
@@ -169,11 +181,17 @@ class ToolboxFile
 	}
 
 	/**
+	 * Set to show/prepare images or not.
+	 *
 	 * @param boolean $blnShowImages
+	 *
+	 * @return ToolboxFile
 	 */
 	public function setShowImages($blnShowImages)
 	{
 		$this->blnShowImages = $blnShowImages;
+
+		return $this;
 	}
 
 	/**
@@ -185,11 +203,17 @@ class ToolboxFile
 	}
 
 	/**
+	 * Set the resize information.
+	 *
 	 * @param array $resizeImages
+	 *
+	 * @return ToolboxFile
 	 */
 	public function setResizeImages($resizeImages)
 	{
 		$this->resizeImages = $resizeImages;
+
+		return $this;
 	}
 
 	/**
@@ -201,11 +225,17 @@ class ToolboxFile
 	}
 
 	/**
+	 * Sets the Id to use for the lightbox.
+	 *
 	 * @param string $strLightboxId
+	 *
+	 * @return ToolboxFile
 	 */
 	public function setLightboxId($strLightboxId)
 	{
 		$this->strLightboxId = $strLightboxId;
+
+		return $this;
 	}
 
 	/**
@@ -221,13 +251,13 @@ class ToolboxFile
 	 *
 	 * @param $strPath
 	 *
-	 * @return void
+	 * @return ToolboxFile
 	 */
 	public function addPath($strPath)
 	{
 		if (is_file(TL_ROOT . DIRECTORY_SEPARATOR . $strPath))
 		{
-			if (in_array(substr($strPath, -3), $this->acceptedExtensions))
+			if (in_array(strtolower(substr($strPath, -3)), $this->acceptedExtensions))
 			{
 				$this->foundFiles[] = $strPath;
 			}
@@ -236,8 +266,15 @@ class ToolboxFile
 		{
 			$this->foundFolders[] = $strPath;
 		}
+
+		return $this;
 	}
 
+	/**
+	 * Walks the list of pending folders via ToolboxFile::addPath().
+	 *
+	 * @return void
+	 */
 	protected function collectFiles()
 	{
 		if (count($this->foundFolders))
@@ -288,6 +325,11 @@ class ToolboxFile
 		}
 	}
 
+	/**
+	 * Loops all found files and parses the corresponding metafile.
+	 *
+	 * @return void
+	 */
 	protected function parseMetafiles()
 	{
 		$this->metaInformation = array();
@@ -337,6 +379,11 @@ class ToolboxFile
 		return $strRequest;
 	}
 
+	/**
+	 * Walk all files and fetch desired additional information like image sizes etc.
+	 *
+	 * @return void
+	 */
 	protected function fetchAdditionalData()
 	{
 		$this->modifiedTime = array();
@@ -380,7 +427,7 @@ class ToolboxFile
 			// images
 			if ($arrSource['isGdImage'] = $objFile->isGdImage)
 			{
-				if ($this->getShowImages())
+				if ($this->getShowImages() && ($intWidth || $intHeight || $strMode))
 				{
 					$strSrc = $objController->getImage($objController->urlEncode($strFile), $intWidth, $intHeight, $strMode);
 				} else {
@@ -401,6 +448,21 @@ class ToolboxFile
 
 	}
 
+	/**
+	 * Maps the sorting from the files to the source.
+	 *
+	 * All files from $arrFiles are being walked and the corresponding entry from source gets pulled in.
+	 *
+	 * Additionally, the css classes are applied to the returned 'source' array.
+	 *
+	 * This returns an array like: array('files' => array(), 'source' => array())
+	 *
+	 * @param array $arrFiles
+	 *
+	 * @param array $arrSource
+	 *
+	 * @return array The mapped result.
+	 */
 	protected function remapSorting($arrFiles, $arrSource)
 	{
 		$files  = array();
@@ -422,6 +484,23 @@ class ToolboxFile
 		);
 	}
 
+	/**
+	 * Sorts the internal file list by a given condition.
+	 *
+	 * Allowed sort types are:
+	 * name_asc  - Sort by filename ascending.
+	 * name_desc - Sort by filename descending
+	 * date_asc  - Sort by modification time ascending.
+	 * date_desc - Sort by modification time descending.
+	 * meta      - Sort by meta.txt - the order of the files in the meta.txt is being used, however, the files are still
+	 *             being grouped by the folders, as the meta.txt is local to a folder and may not span more than one
+	 *             level of the file system
+	 * random    - Shuffle all the files around.
+	 *
+	 * @param string $sortType The sort condition to be applied.
+	 *
+	 * @return array The sorted file list.
+	 */
 	public function sortFiles($sortType)
 	{
 		switch ($sortType)
@@ -466,13 +545,15 @@ class ToolboxFile
 		foreach($arrSource as $k=>$v)
 		{
 			$arrSource[$k]['class'] = (($k == 0) ? ' first' : '')
-				. (($k == ($countFiles -1 )) ? ' last' : '')
+				. (($k == ($countFiles - 1)) ? ' last' : '')
 				. ((($k % 2) == 0) ? ' even' : ' odd');
 		}
 	}
 
 	/**
-	 * Sort by
+	 * Sort by filename.
+	 *
+	 * @param boolean $blnAscending Flag to determine if sorting shall be applied ascending (default) or descending.
 	 *
 	 * @return array
 	 */
@@ -498,7 +579,9 @@ class ToolboxFile
 	}
 
 	/**
-	 * Sort by
+	 * Sort by modification time.
+	 *
+	 * @param boolean $blnAscending Flag to determine if sorting shall be applied ascending (default) or descending.
 	 *
 	 * @return array
 	 */
@@ -564,7 +647,7 @@ class ToolboxFile
 	}
 
 	/**
-	 * Sort by random.
+	 * Shuffle the file list.
 	 *
 	 * @return array
 	 */
@@ -588,6 +671,13 @@ class ToolboxFile
 		return $this->remapSorting($arrFiles, $arrSource);
 	}
 
+	/**
+	 * Returns the file list.
+	 *
+	 * NOTE: you must call resolveFiles() beforehand as otherwise folders are not being evaluated.
+	 *
+	 * @return array
+	 */
 	public function getFiles()
 	{
 		return $this->foundFiles;
@@ -596,7 +686,7 @@ class ToolboxFile
 	/**
 	 * Process all folders and resolve to a valid file list.
 	 *
-	 * @return void
+	 * @return ToolboxFile
 	 */
 	public function resolveFiles()
 	{
@@ -608,5 +698,7 @@ class ToolboxFile
 
 		// Step 3.: fetch additional information like modification time etc. and prepare the output buffer.
 		$this->fetchAdditionalData();
+
+		return $this;
 	}
 }

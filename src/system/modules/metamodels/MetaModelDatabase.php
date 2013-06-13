@@ -128,7 +128,7 @@ class MetaModelDatabase extends Controller
 	{
 		$strPalette = '';
 		$objDCASettings = Database::getInstance()
-			->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=? ORDER by sorting ASC')
+			->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=? AND published = 1 ORDER by sorting ASC')
 			->execute($intPaletteId);
 		$arrMyDCA = array();
 		while ($objDCASettings->next())
