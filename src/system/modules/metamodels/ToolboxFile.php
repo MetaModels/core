@@ -380,7 +380,7 @@ class ToolboxFile
 			// images
 			if ($arrSource['isGdImage'] = $objFile->isGdImage)
 			{
-				if ($this->getShowImages())
+				if ($this->getShowImages() && ($intWidth || $intHeight || $strMode))
 				{
 					$strSrc = $objController->getImage($objController->urlEncode($strFile), $intWidth, $intHeight, $strMode);
 				} else {
