@@ -8,8 +8,13 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T06:40:07+02:00
+ * last-updated: 2013-06-19T08:12:25+02:00
  */
 
-
-$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel'] = 'MetaModels';
+$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel']               = 'MetaModels';
+$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_attribute']     = 'Attributi MetaModels';
+$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_dca']           = 'Maschere inserimento dati MetaModels ';
+$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_dca_combine']   = 'MetaModels workflow';
+$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_dcasetting']    = 'Configurazione maschere inserimento dati MetaModels ';
+$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_filter']        = 'Filtro MetaModels';
+$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_filtersetting'] = 'Configurazione filtro MetaModels ';
