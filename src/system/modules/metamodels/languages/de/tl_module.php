@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T23:07:50+02:00
+ * last-updated: 2013-05-15T16:12:36+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_module']['editfiltersetting']['0']              = 'Filtereinstellungen bearbeiten';
@@ -19,6 +19,8 @@ $GLOBALS['TL_LANG']['tl_module']['editrendersetting']['0']              = 'Rende
 $GLOBALS['TL_LANG']['tl_module']['editrendersetting']['1']              = 'Die Renderingeinstellung ID %s bearbeiten';
 $GLOBALS['TL_LANG']['tl_module']['metamodel']['0']                      = 'MetaModel';
 $GLOBALS['TL_LANG']['tl_module']['metamodel']['1']                      = 'Bitte geben Sie das MetaModel an, das in dieser Auflistung verwendet werden soll.';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_available_values']['0']     = 'Ergebnisse zählen';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_available_values']['1']     = 'Zeigt die Anzahl möglicher Ergebnisse dieses Filters hinter jeder Filteroption an.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_donotindex']['0']           = 'Nicht zum Suchindex hinzufügen';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_donotindex']['1']           = 'Falls gewählt werden die auzugebenden Inhalte von der internen Contao-Suche nicht berücksichtigt.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_autosubmit']['0']       = 'Bei Änderung aktualisieren';
