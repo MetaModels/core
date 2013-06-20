@@ -693,6 +693,13 @@ class ToolboxFile
 		// Step 1.: fetch all files.
 		$this->collectFiles();
 
+		// TODO: check if downloading is allowed and send file to browser then
+		// see https://github.com/MetaModels/attribute_file/issues/6
+		if ((!$this->getShowImages()) && ($strFile = Input::getInstance()->get('file')) && in_array($strFile, $this->foundFiles))
+		{
+			MetaModelController::getInstance()->sendFileToBrowser($strFile);
+		}
+
 		// Step 2.: Fetch all meta data for the found files.
 		$this->parseMetafiles();
 
