@@ -168,7 +168,7 @@ class MetaModelItem implements IMetaModelItem
 	 */
 	public function get($strAttributeName)
 	{
-		return $this->arrData[$strAttributeName];
+		return array_key_exists($strAttributeName, $this->arrData) ? $this->arrData[$strAttributeName] : null;
 	}
 
 	/**

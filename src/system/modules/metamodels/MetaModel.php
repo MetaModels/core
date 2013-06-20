@@ -357,7 +357,7 @@ class MetaModel implements IMetaModel
 	 */
 	public function getTableName()
 	{
-		return $this->arrData['tableName'];
+		return array_key_exists('tableName', $this->arrData) ? $this->arrData['tableName'] : null;
 	}
 
 	/**
