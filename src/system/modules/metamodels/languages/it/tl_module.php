@@ -8,11 +8,13 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-30T04:10:43+02:00
+ * last-updated: 2013-06-20T08:12:40+02:00
  */
 
-
+$GLOBALS['TL_LANG']['tl_module']['editmetamodel']['0']              = 'Modifica MetaModel';
 $GLOBALS['TL_LANG']['tl_module']['metamodel']['0']                  = 'MetaModel';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_params']['0']       = 'Attributi';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_template']['0']     = 'Template';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_filtering']['0']        = 'Seleziona le impostazioni dei filtri da aplicare';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_limit']['0']            = 'Numero massimo di elementi';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_offset']['0']           = 'Lista offset';
