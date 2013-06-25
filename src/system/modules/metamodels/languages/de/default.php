@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-19T12:12:19+02:00
+ * last-updated: 2013-06-21T00:12:34+02:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attribute von "%s"';
@@ -56,6 +56,7 @@ $GLOBALS['TL_LANG']['MSC']['template_in_theme']                                 
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clr']['0']                                    = 'clr';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clr']['1']                                    = 'Hebt alle Floats auf.';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clx']['0']                                    = 'clx';
+$GLOBALS['TL_LANG']['MSC']['tl_class']['clx']['1']                                    = 'Entfernt die Voreinstellung "overflow:hidden". Bitte gemeinsam mit mit "clr" verwenden.';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['long']['0']                                   = 'long';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['long']['1']                                   = 'Sorgt dafür, dass das Eingabefeld zwei Spalten umfasst.';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['m12']['0']                                    = 'm12';
@@ -63,6 +64,7 @@ $GLOBALS['TL_LANG']['MSC']['tl_class']['m12']['1']                              
 $GLOBALS['TL_LANG']['MSC']['tl_class']['w50']['0']                                    = 'w50';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['w50']['1']                                    = 'Setzt die Feldbreite auf 50% und floatet das Element (float:left).';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['w50x']['0']                                   = 'w50x';
+$GLOBALS['TL_LANG']['MSC']['tl_class']['w50x']['1']                                   = 'Entfernt die Voreinstellung für eine feste Höhe. Bitte gemeinsam mit mit "w50" verwenden.';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['wizard']['0']                                 = 'wizard';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['wizard']['1']                                 = 'Verkürzt das Eingabefeld, damit genug Platz für den Wizard (z.B. einen Date Picker) ist.';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['action_add']                        = '+';
