@@ -8,10 +8,12 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T23:07:50+02:00
+ * last-updated: 2013-05-25T12:12:36+02:00
  */
 
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['advanced_legend']  = 'Paramètres avancés';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname']['0']     = 'Nom de la colonne';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname']['1']     = 'Nom de référence interne pour cet attribut';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['delete']['0']      = 'Supprimer l\'attribut';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['delete']['1']      = 'Supprimer l\'attribut ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['description']['0'] = 'Description';
@@ -30,3 +32,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']['1']         = 'Créer un n
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['0']        = 'Détails de l\'attribut';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['1']        = 'Afficher les détails de l\'attribut ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['type']['0']        = 'Type d\'attribut';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['type']['1']        = 'Sélectionner le type de cet attribut. AVERTISSEMENT : si vous le modifiez, toutes les données existantes au sein de cet attribut seront supprimés.';
