@@ -54,12 +54,9 @@ array_insert($GLOBALS['BE_MOD'], (array_search('accounts', array_keys($GLOBALS['
 /*
 	In order to add attribute types into the system, add the following snippet to your extension config.php:
 
-	$GLOBALS['METAMODELS']['attributes']['TYPENAME'] = array
-	(
-		'class' => 'TYPECLASS',
-		'image' => 'IMAGEPATH',
-		'factory' => 'FACTORYCLASS' // optional
-	);
+	$GLOBALS['METAMODELS']['attributes']['TYPENAME']['class'] = 'TYPECLASS';
+	$GLOBALS['METAMODELS']['attributes']['TYPENAME']['image'] = 'IMAGEPATH';
+	$GLOBALS['METAMODELS']['attributes']['TYPENAME']['factory'] = 'FACTORYCLASS'; // optional
 
 	where:
 		TYPENAME     is the internal type name of your attribute.
