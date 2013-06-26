@@ -130,7 +130,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault'],
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class'=>'m12 w50 cbx')
+			'eval'                    => array('tl_class'=>'m12 w50 cbx'),
+			'save_callback'           => array(array('TableMetaModelRenderSettings', 'checkDefault'))
 		),
 		'hideEmptyValues' => array
 		(
