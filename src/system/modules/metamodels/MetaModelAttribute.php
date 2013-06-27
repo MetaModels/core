@@ -401,6 +401,23 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	}
 
 	/**
+	 * Convert a native attribute value into a value to be used in a filter Url.
+	 *
+	 * This base implementation returns the value itself.
+	 *
+	 * @param mixed $varValue The source value
+	 *
+	 * @return string
+	 */
+	public function getFilterUrlValue($varValue)
+	{
+		// We are parsing as text here as this was the way before this method was implemented. See #216.
+		$arrResult = $this->parseValue(array($this->getColName() => $varValue), 'text');
+
+		return urlencode($arrResult['text']);
+	}
+
+	/**
 	 * {@inheritdoc}
 	 */
 	public function sortIds($arrIds, $strDirection)
