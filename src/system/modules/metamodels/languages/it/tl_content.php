@@ -8,9 +8,11 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-06-20T12:12:48+02:00
+ * last-updated: 2013-06-23T16:12:43+02:00
  */
 
+$GLOBALS['TL_LANG']['tl_content']['ASC']                             = 'Ascendente';
+$GLOBALS['TL_LANG']['tl_content']['DESC']                            = 'Discendente';
 $GLOBALS['TL_LANG']['tl_content']['editmetamodel']['0']              = 'Modifica MetaModel';
 $GLOBALS['TL_LANG']['tl_content']['metamodel']['0']                  = 'MetaModel';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_params']['0']       = 'Attributi';
@@ -22,4 +24,5 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_sortby']['0']           = 'Ordiname
 $GLOBALS['TL_LANG']['tl_content']['metamodel_sortby']['1']           = 'Selezionare il tipo di ordinamento';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_sortby_direction']['1'] = 'Ordine ascendente o discendente';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit']['0']        = 'Utilizza offset e limiti nella lista';
+$GLOBALS['TL_LANG']['tl_content']['mm_config_legend']                = 'Configurazione MetaModel';
 $GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']                = 'Filtro MetaModels';
