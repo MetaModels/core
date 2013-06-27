@@ -8,19 +8,23 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-23T16:10:26+02:00
+ * last-updated: 2013-06-23T04:12:22+02:00
  */
 
-
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Impostazioni avanzate';
+$GLOBALS['TL_LANG']['tl_metamodel']['copy']['0']                 = 'Copia le definizioni del MetaModel ';
 $GLOBALS['TL_LANG']['tl_metamodel']['delete']['0']               = 'Cancella MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel']['delete']['1']               = 'Cancella MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['edit']['0']                 = 'Gestisce gli elementi';
+$GLOBALS['TL_LANG']['tl_metamodel']['edit']['1']                 = 'Gestisci elementi del MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['editheader']['0']           = 'Modifica MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel']['fields']['0']               = 'Definisce gli attributi';
+$GLOBALS['TL_LANG']['tl_metamodel']['filter']['0']               = 'Definisci filtri';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemFormat']                = '%s %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemPlural']                = 'Elementi';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemSingle']                = 'Elemento';
+$GLOBALS['TL_LANG']['tl_metamodel']['languages']['0']            = 'Lingue per la traduzione';
+$GLOBALS['TL_LANG']['tl_metamodel']['languages']['1']            = 'Specificare tutte le lingue che devono essere disponibili per la traduzione.';
 $GLOBALS['TL_LANG']['tl_metamodel']['languages_isfallback']['0'] = 'Lingua fallback';
 $GLOBALS['TL_LANG']['tl_metamodel']['languages_langcode']['0']   = 'Lingua';
 $GLOBALS['TL_LANG']['tl_metamodel']['name']['0']                 = 'Nome';
