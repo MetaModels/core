@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-06-23T04:12:22+02:00
+ * last-updated: 2013-06-23T16:12:43+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']    = 'Cerca tutte le lingue';
@@ -16,6 +16,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id']['0']      = 'Attrib
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['comment']['0']      = 'Commento';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['config_legend']     = 'Configurazione';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy']['1']         = 'Copia l\'impostazione del filtro ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql']['0']    = 'Query SQL personalizzata';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete']['0']       = 'Cancella l\'impostazione del filtro';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete']['1']       = 'Cancella l\'impostazione del filtro ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit']['0']         = 'Modifica l\'impostazione';
