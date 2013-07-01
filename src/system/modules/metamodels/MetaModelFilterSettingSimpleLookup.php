@@ -139,8 +139,8 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 		if ($objAttribute)
 		{
 			// TODO: shall we omit returning of empty values?
-			$arrResult = $objItem->parseAttribute($objAttribute->getColName(), 'text', $objRenderSetting);
-			return array($this->getParamName() => urlencode($arrResult['text']));
+			$strResult = $objAttribute->getFilterUrlValue($objItem->get($objAttribute->getColName()));
+			return array($this->getParamName() => $strResult);
 		}
 	}
 

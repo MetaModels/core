@@ -205,6 +205,15 @@ interface IMetaModelAttribute
 	public function parseValue($arrRowData, $strOutputFormat = 'text', $objSettings = null);
 
 	/**
+	 * Convert a native attribute value into a value to be used in a filter Url.
+	 *
+	 * @param mixed $varValue The source value
+	 *
+	 * @return string
+	 */
+	public function getFilterUrlValue($varValue);
+
+	/**
 	 * Sorts the given array list by field value in the given direction.
 	 *
 	 * @param int[]  $arrIds       A list of Ids from the MetaModel table.

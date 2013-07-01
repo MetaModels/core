@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T23:07:50+02:00
+ * last-updated: 2013-06-20T20:13:09+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Das Attribut "%s" wurde der Eingabemaske hinzugefügt.';
@@ -46,6 +46,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['filterable']['0']              =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['filterable']['1']              = 'Auswählen, falls dieses Attribut für die Filterung im Backend zur Verfügung stehen soll.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag']['0']                    = 'Sortierungsvorgabe überschreiben';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag']['1']                    = 'Auswählen, falls Sie die globale Vorgabe für die Sortierung dieses Attributes überschreiben möchten.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['functions_legend']             = 'Funktionsbezogene Einstellungen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['0']      = 'Leere Option einfügen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['1']      = 'Falls diese Option angewählt ist wird zusätzlich "kein Element ausgewählt" ermöglicht.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']['0']              = 'Legende verbergen';
@@ -58,6 +59,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']                   = 'Legenden-Titel';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['0']                     = 'Neu';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['1']                     = 'Neue Einstellung erstellen.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']              = 'Auflistung, Filterung und Sortierung im Backend';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['presentation_legend']          = 'Anzeigeoptionen des Widgets';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['0']            = 'HTML-Tags nicht codieren.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['1']            = 'Falls ausgewählt werden HTML-Tags nicht codiert.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['0']                    = 'Zeilen';

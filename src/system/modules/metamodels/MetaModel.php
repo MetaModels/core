@@ -121,6 +121,18 @@ class MetaModel implements IMetaModel
 	}
 
 	/**
+	 * Determine if the given attribute is a translated one.
+	 *
+	 * @param IMetaModelAttribute $objAttribute the attribute to test.
+	 *
+	 * @return bool true if it is translated, false otherwise.
+	 */
+	protected function isTranslatedAttribute($objAttribute)
+	{
+		return in_array('IMetaModelAttributeTranslated', class_implements($objAttribute));
+	}
+
+	/**
 	 * This method retrieves all complex attributes from the current MetaModel.
 	 *
 	 * @return IMetaModelAttributeComplex[] all complex attributes defined for this instance.
@@ -131,6 +143,24 @@ class MetaModel implements IMetaModel
 		foreach($this->getAttributes() as $objAttribute)
 		{
 			if($this->isComplexAttribute($objAttribute))
+			{
+				$arrResult[] = $objAttribute;
+			}
+		}
+		return $arrResult;
+	}
+
+	/**
+	 * This method retrieves all translated attributes from the current MetaModel.
+	 *
+	 * @return IMetaModelAttributeTranslated[] all translated attributes defined for this instance.
+	 */
+	protected function getTranslatedAttributes()
+	{
+		$arrResult = array();
+		foreach($this->getAttributes() as $objAttribute)
+		{
+			if($this->isTranslatedAttribute($objAttribute))
 			{
 				$arrResult[] = $objAttribute;
 			}
@@ -232,18 +262,37 @@ class MetaModel implements IMetaModel
 
 		$arrResult = $this->fetchRows($arrIds, $arrAttrOnly);
 
-		// determine "complex attributes".
-		$arrComplexCols = $this->getComplexAttributes();
-
-		// now inject the complex attribute's content into the row.
-		foreach($arrComplexCols as $objAttribute)
+		// Determine "independant attributes" (complex and translated) and inject their content into the row.
+		foreach(array_merge($this->getComplexAttributes(), $this->getTranslatedAttributes()) as $objAttribute)
 		{
-			if (!in_array($objAttribute->getColName(), $arrAttrOnly))
+			/** @var IMetaModelAttribute $objAttribute */
+			$strColName = $objAttribute->getColName();
+
+			if (!in_array($strColName, $arrAttrOnly))
 			{
 				continue;
 			}
-			$arrAttributeData = $objAttribute->getDataFor($arrIds);
-			$strColName = $objAttribute->getColName();
+
+			// if it is translated, fetch the translated data now.
+			if ($this->isTranslatedAttribute($objAttribute))
+			{
+				/** @var IMetaModelAttributeTranslated $objAttribute */
+				$arrAttributeData = $objAttribute->getTranslatedDataFor($arrIds, $this->getActiveLanguage());
+				$arrMissing = array_diff($arrIds, array_keys($arrAttributeData));
+				if ($arrMissing)
+				{
+					$arrAttributeData = array_merge(
+						$objAttribute->getTranslatedDataFor($arrMissing, $this->getActiveLanguage()),
+						$arrAttributeData
+					);
+				}
+			}
+			else
+			{
+				/** @var IMetaModelAttributeComplex $objAttribute */
+				$arrAttributeData = $objAttribute->getDataFor($arrIds);
+			}
+
 			foreach (array_keys($arrResult) as $intId)
 			{
 				$arrResult[$intId][$strColName] = $arrAttributeData[$intId];
@@ -308,7 +357,7 @@ class MetaModel implements IMetaModel
 	 */
 	public function getTableName()
 	{
-		return $this->arrData['tableName'];
+		return array_key_exists('tableName', $this->arrData) ? $this->arrData['tableName'] : null;
 	}
 
 	/**

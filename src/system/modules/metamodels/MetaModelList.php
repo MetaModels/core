@@ -290,7 +290,7 @@ class MetaModelList extends Controller
 	/**
 	 * The render template to use.
 	 *
-	 * @var IMetaModelRenderSettings
+	 * @var MetaModelTemplate
 	 */
 	protected $objTemplate;
 

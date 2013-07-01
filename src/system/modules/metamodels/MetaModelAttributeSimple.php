@@ -173,7 +173,7 @@ class MetaModelAttributeSimple extends MetaModelAttribute implements IMetaModelA
 			$this->getMetaModel()->getTableName(),
 			$this->getColName()
 			))
-			->execute(str_replace(array('*', '?'), array('%', '_'), $strPattern));
+			->executeUncached(str_replace(array('*', '?'), array('%', '_'), $strPattern));
 
 		$arrIds = $objQuery->fetchEach('id');
 		return $arrIds;
