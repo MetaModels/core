@@ -316,6 +316,10 @@ class MetaModelList extends Controller
 	protected function prepareMetaModel()
 	{
 		$this->objMetaModel = MetaModelFactory::byId($this->intMetaModel);
+		if (!$this->objMetaModel)
+		{
+			throw new \RuntimeException('Could get metamodel id: ' . $this->intMetaModel);
+		}
 	}
 
 	/**
