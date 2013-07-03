@@ -316,6 +316,10 @@ class MetaModelList extends Controller
 	protected function prepareMetaModel()
 	{
 		$this->objMetaModel = MetaModelFactory::byId($this->intMetaModel);
+		if (!$this->objMetaModel)
+		{
+			throw new \RuntimeException('Could get metamodel id: ' . $this->intMetaModel);
+		}
 	}
 
 	/**
@@ -358,8 +362,9 @@ class MetaModelList extends Controller
 	 */
 	protected function calculatePagination($intTotal)
 	{
-		$intOffset = NULL;
-		$intLimit = NULL;
+		$intOffset = null;
+		$intLimit  = null;
+
 		// if defined, we override the pagination here.
 		if ($this->blnUseLimit && ($this->intLimit || $this->intOffset))
 		{
@@ -421,7 +426,7 @@ class MetaModelList extends Controller
 	 * The items in the list view.
 	 * @var IMetaModelItems
 	 */
-	protected $objItems = NULL;
+	protected $objItems = null;
 
 	/**
 	 * Add additional filter rules to the list.
@@ -604,9 +609,9 @@ class MetaModelList extends Controller
 	/**
 	 * Render the list view.
 	 *
-	 * @param bool $blnNoNativeParsing flag determining if the parsing shall be done internal or if the template will handle the parsing on it's own.
+	 * @param bool $blnNoNativeParsing Flag determining if the parsing shall be done internal or if the template will handle the parsing on it's own.
 	 *
-	 * @param object $objCaller        the object calling us, might be a Module or ContentElement or anything else.
+	 * @param object $objCaller        The object calling us, might be a Module or ContentElement or anything else.
 	 *
 	 * @return string
 	 */

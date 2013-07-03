@@ -468,7 +468,7 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 	{
 		if (!empty($arrRow['comment']))
 		{
-			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], $arrRow['comment']);
+			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], specialchars($arrRow['comment']));
 		}
 		
 		$strReturn = sprintf(
@@ -486,7 +486,7 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 	{
 		if (!empty($arrRow['comment']))
 		{
-			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], $arrRow['comment']);
+			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], specialchars($arrRow['comment']));
 		}
 		
 		$strReturn = sprintf(
@@ -516,7 +516,7 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		
 		if (!empty($arrRow['comment']))
 		{
-			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], $arrRow['comment']);
+			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], specialchars($arrRow['comment']));
 		}
 
 		$strReturn = sprintf(
@@ -556,7 +556,7 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		
 		if (!empty($arrRow['comment']))
 		{
-			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], $arrRow['comment']);
+			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], specialchars($arrRow['comment']));
 		}
 
 		$strReturn = sprintf(
@@ -615,7 +615,7 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 		} else {
 			if(!empty($arrRow['comment']))
 			{
-				$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], $arrRow['comment']);
+				$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], specialchars($arrRow['comment']));
 			}
 			
 			$strReturn = sprintf(
