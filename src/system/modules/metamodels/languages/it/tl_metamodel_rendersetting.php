@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-06-23T04:12:22+02:00
+ * last-updated: 2013-07-10T10:02:32+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['advanced_legend'] = 'Avanzato';
@@ -22,4 +22,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['new']['0']        = 'Nuovo';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['new']['1']        = 'Crea una nuova impostazione';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show']['0']       = 'Dettagli dell\'impostazione del filtro';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show']['1']       = 'Mostra i dettagli dell\'impostazione del filtro ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template']['0']   = 'Template personalizzato da utilizzare per la generazione';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['title_legend']    = 'Tipo';

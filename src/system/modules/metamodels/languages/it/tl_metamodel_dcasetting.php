@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2013-07-17T12:13:16+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']       = 'Avanzato';
@@ -39,4 +39,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['6']      = 'Ordin
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['7']      = 'Ordina in base al mese in modo ascendente';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['8']      = 'Ordina in base al mese in modo discendente';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['9']      = 'Ordina in base all\'anno in modo ascendente';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['0']         = 'Template personalizzato da utilizzare per la generazione';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']          = 'Tipo';
