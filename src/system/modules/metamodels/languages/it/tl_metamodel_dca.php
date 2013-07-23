@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-17T12:13:16+02:00
+ * last-updated: 2013-07-22T16:12:57+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']            = 'Integrazione del backend';
@@ -28,6 +28,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']['1']                 = 'Modifica
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']['0']                 = 'Flag ordinamento';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']['1']                 = 'Flag di ordinamento da utilizzare nella vista';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['0']            = 'È default';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['1']            = 'Determina la maschera di inserimento predefinita che sarà utilizzata per il MetaModel padre.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['0']  = 'Limita l\'impostazione di rendering';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['1']  = 'Scegli tra front-end o back-end.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']['0']                 = 'Modo di ordinamento';
