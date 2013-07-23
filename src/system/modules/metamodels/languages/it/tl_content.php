@@ -8,14 +8,16 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-22T12:42:32+02:00
+ * last-updated: 2013-07-22T16:12:57+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_content']['ASC']                                 = 'Ascendente';
 $GLOBALS['TL_LANG']['tl_content']['DESC']                                = 'Discendente';
+$GLOBALS['TL_LANG']['tl_content']['editfiltersetting']['0']              = 'Modifica l\'impostazione del filtro';
 $GLOBALS['TL_LANG']['tl_content']['editfiltersetting']['1']              = 'Modifica l\'impostazione del filtro ID %s';
 $GLOBALS['TL_LANG']['tl_content']['editmetamodel']['0']                  = 'Modifica MetaModel';
 $GLOBALS['TL_LANG']['tl_content']['editmetamodel']['1']                  = 'Modifica il MetaModel ID %s';
+$GLOBALS['TL_LANG']['tl_content']['editrendersetting']['0']              = 'Modifica l\'impostazione di rendering';
 $GLOBALS['TL_LANG']['tl_content']['editrendersetting']['1']              = 'Modifica l\'impostazione di rendering ID %s.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel']['0']                      = 'MetaModel';
 $GLOBALS['TL_LANG']['tl_content']['metamodel']['1']                      = 'Il MetaModel in questa lista.';
@@ -55,3 +57,4 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit']['0']            = 'Util
 $GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit']['1']            = 'Controllare se si desidera limitare la quantità di elementi elencati. Questo è utile per mostrare solo 500 elementi o tutti escludendo i primi 10 record, ma mantenendo l\'impaginazione intatta.';
 $GLOBALS['TL_LANG']['tl_content']['mm_config_legend']                    = 'Configurazione MetaModel';
 $GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']                    = 'Filtro MetaModels';
+$GLOBALS['TL_LANG']['tl_content']['mm_rendering']                        = 'MetaModel Rendering';
