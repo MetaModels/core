@@ -8,15 +8,20 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-22T16:12:57+02:00
+ * last-updated: 2013-07-23T12:13:28+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']            = 'Integrazione del backend';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption']['0']       = 'Didascalia del backend';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption']['1']       = 'Il testo inserito in questa sezione sarà utilizzato come l\'etichetta e la descrizione del testo nel menu del backend.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon']['0']          = 'Icona del backend';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon']['1']          = 'Selezionare l\'icona che si desidera associare nel backend. Questa icona verrà mostrata nel menu a sinistra e sulla parte superiore della visualizzazione.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']['0']       = 'Sezione di backend';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']['1']       = 'Seleziona la sezione di backend in cui si desidera mostrare il MetaModel. Per i modelli che devono essere utilizzati dagli utenti finali, la sezione "contenuto" potrebbe essere la sezione più opportuna.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_description']['0']    = 'Testo di descrizione';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_description']['1']    = 'Il testo inserito in questa sezione sarà utilizzato testo alternativo per il menu del backend.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_label']['0']          = 'Etichetta di testo';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_label']['1']          = 'Il testo inserito in questa sezione sarà utilizzato menu nel backend.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_langcode']['0']       = 'Lingua';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_langcode']['1']       = 'Selezionare le lingue che si vogliono fornire.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['copy']['0']                 = 'Copia la definizione della maschera di inserimento';
