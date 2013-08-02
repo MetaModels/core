@@ -194,15 +194,24 @@ interface IMetaModelAttribute
 	 * useful when being echo'ed in a template and the raw value in the section 'raw'.
 	 * Each attribute class MAY return as many other values in this array with custom keys as it wants.
 	 *
-	 * @param array  $arrRowData      The (native) row data from the MetaModel table.
+	 * @param array                            $arrRowData      The (native) row data from the MetaModel table.
 	 *
-	 * @param string $strOutputFormat The desired output format.
+	 * @param string                           $strOutputFormat The desired output format.
 	 *
-	 * @param object $objSettings     Custom settings to be passed to the renderer.
+	 * @param IMetaModelRenderSettingAttribute $objSettings     Custom settings to be passed to the renderer.
 	 *
 	 * @return array An array with all the converted data.
 	 */
 	public function parseValue($arrRowData, $strOutputFormat = 'text', $objSettings = null);
+
+	/**
+	 * Convert a native attribute value into a value to be used in a filter Url.
+	 *
+	 * @param mixed $varValue The source value
+	 *
+	 * @return string
+	 */
+	public function getFilterUrlValue($varValue);
 
 	/**
 	 * Sorts the given array list by field value in the given direction.
@@ -220,18 +229,18 @@ interface IMetaModelAttribute
 	 *
 	 * Retrieve values for use in filter options, that will be understood by DC_ filter
 	 * panels and frontend filter select boxes.
-	 * One can influence the amound of returned entries with the two parameters.
+	 * One can influence the amount of returned entries with the two parameters.
 	 * For the id list, the value "null" represents (as everywhere in MetaModels) all entries.
 	 * An empty array will return no entries at all.
 	 * The parameter "used only" determines, if only really attached values shall be returned.
 	 * This is only relevant, when using "null" as id list for attributes that have preconfigured
 	 * values like select lists and tags i.e.
 	 *
-	 * @param array $arrIds   The ids of items that the values shall be fetched from.
+	 * @param array $arrIds    The ids of items that the values shall be fetched from.
 	 *
-	 * @param bool  $usedOnly Determines if only "used" values shall be returned.
-	 * 
-	 * @param bool  $arrCount Array for the counted values
+	 * @param bool  $usedOnly  Determines if only "used" values shall be returned.
+	 *
+	 * @param bool  &$arrCount Array for the counted values.
 	 *
 	 * @return array All options matching the given conditions as name => value.
 	 */

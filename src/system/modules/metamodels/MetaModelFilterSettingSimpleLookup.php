@@ -105,6 +105,12 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 		if ($objAttribute && $strParam)
 		{
 			$arrFilterValue = $arrFilterUrl[$strParam];
+
+			if (!$arrFilterValue && $this->get('defaultid'))
+			{
+				$arrFilterValue = $this->get('defaultid');
+			}
+
 			if ($arrFilterValue)
 			{
 				$arrLanguages = ($objMetaModel->isTranslated() && $this->get('all_langs')) ? $objMetaModel->getAvailableLanguages() : array($objMetaModel->getActiveLanguage());
@@ -133,8 +139,8 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 		if ($objAttribute)
 		{
 			// TODO: shall we omit returning of empty values?
-			$arrResult = $objItem->parseAttribute($objAttribute->getColName(), 'text', $objRenderSetting);
-			return array($this->getParamName() => urlencode($arrResult['text']));
+			$strResult = $objAttribute->getFilterUrlValue($objItem->get($objAttribute->getColName()));
+			return array($this->getParamName() => $strResult);
 		}
 	}
 
@@ -185,7 +191,7 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 			return array();
 		}
 	}
-	
+
 	/**
 	 * {@inheritdoc}
 	 */
@@ -198,7 +204,7 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 		}
 
 		$objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
-		
+
 		$GLOBALS['MM_FILTER_PARAMS'][] = $this->getParamName();
 
 		$arrCount = array();
@@ -208,11 +214,12 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 					($this->get('label') ? $this->get('label') : $objAttribute->getName()),
 					'GET: ' . $this->getParamName()
 					),
-				'inputType'    => 'select',
+				'inputType' => 'select',
 				'options'   => $this->getParameterFilterOptions($objAttribute, $arrIds, $arrCount),
 				'count'     => $arrCount,
 				'showCount' => $objFrontendFilterOptions->isShowCountValues(),
-				'eval' => array(
+				'eval'      => array
+				(
 					'includeBlankOption' => ($this->get('blankoption') && !$objFrontendFilterOptions->isHideClearFilter() ? true : false),
 					'blankOptionLabel'   => &$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'],
 					'colname'            => $objAttribute->getColname(),

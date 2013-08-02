@@ -130,7 +130,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault'],
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class'=>'m12 w50 cbx')
+			'eval'                    => array('tl_class'=>'m12 w50 cbx'),
+			'save_callback'           => array(array('TableMetaModelRenderSettings', 'checkDefault'))
 		),
 		'hideEmptyValues' => array
 		(
@@ -216,7 +217,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 					),
 				),
 				'buttons'                          => array('copy' => false, 'delete' => false, 'up' => false, 'down' => false),
-				'tl_class'                         => 'clx',
+				'tl_class'                         => 'clr clx',
 			)
 		),
 		'additionalCss' => array(
@@ -282,7 +283,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 
 class tl_metamodel_rendersettings extends backend
 {
-		/**
+	/**
 	 * Return the link picker wizard
 	 * @param DataContainer
 	 * @return string

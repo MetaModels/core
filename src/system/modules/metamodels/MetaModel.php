@@ -121,6 +121,18 @@ class MetaModel implements IMetaModel
 	}
 
 	/**
+	 * Determine if the given attribute is a translated one.
+	 *
+	 * @param IMetaModelAttribute $objAttribute the attribute to test.
+	 *
+	 * @return bool true if it is translated, false otherwise.
+	 */
+	protected function isTranslatedAttribute($objAttribute)
+	{
+		return in_array('IMetaModelAttributeTranslated', class_implements($objAttribute));
+	}
+
+	/**
 	 * This method retrieves all complex attributes from the current MetaModel.
 	 *
 	 * @return IMetaModelAttributeComplex[] all complex attributes defined for this instance.
@@ -131,6 +143,24 @@ class MetaModel implements IMetaModel
 		foreach($this->getAttributes() as $objAttribute)
 		{
 			if($this->isComplexAttribute($objAttribute))
+			{
+				$arrResult[] = $objAttribute;
+			}
+		}
+		return $arrResult;
+	}
+
+	/**
+	 * This method retrieves all translated attributes from the current MetaModel.
+	 *
+	 * @return IMetaModelAttributeTranslated[] all translated attributes defined for this instance.
+	 */
+	protected function getTranslatedAttributes()
+	{
+		$arrResult = array();
+		foreach($this->getAttributes() as $objAttribute)
+		{
+			if($this->isTranslatedAttribute($objAttribute))
 			{
 				$arrResult[] = $objAttribute;
 			}
@@ -165,11 +195,15 @@ class MetaModel implements IMetaModel
 	/**
 	 * Fetch the "native" database rows with the given ids.
 	 *
-	 * @param int[] $arrIds the ids of the items to retrieve the order of ids is used for sorting of the return values.
+	 * @param int[]    $arrIds      the ids of the items to retrieve the order of ids is used for sorting of the return
+	 *                              values.
+	 *
+	 * @param string[] $arrAttrOnly names of the attributes that shall be contained in the result, defaults to array()
+	 *                              which means all attributes.
 	 *
 	 * @return array an array containing the database rows with each column "deserialized".
 	 */
-	protected function fetchRows($arrIds)
+	protected function fetchRows($arrIds, $arrAttrOnly=array())
 	{
 		$objDB = Database::getInstance();
 
@@ -181,6 +215,12 @@ class MetaModel implements IMetaModel
 			return array();
 		}
 
+		// If we have an attribute restriction, make sure we keep the system columns. See #196.
+		if ($arrAttrOnly)
+		{
+			$arrAttrOnly = array_merge($GLOBALS['METAMODELS_SYSTEM_COLUMNS'], $arrAttrOnly);
+		}
+
 		$arrResult = array();
 		while($objRow->next())
 		{
@@ -188,7 +228,10 @@ class MetaModel implements IMetaModel
 
 			foreach($objRow->row() as $strKey=>$varValue)
 			{
-				$arrData[$strKey] = deserialize($varValue);
+				if ((!$arrAttrOnly) || (in_array($strKey, $arrAttrOnly)))
+				{
+					$arrData[$strKey] = deserialize($varValue);
+				}
 			}
 			$arrResult[$objRow->id] = $arrData;
 		}
@@ -200,7 +243,8 @@ class MetaModel implements IMetaModel
 	 *
 	 * @param int[]    $arrIds      the ids of the items to retrieve the order of ids is used for sorting of the return values.
 	 *
-	 * @param string[] $arrAttrOnly names of the attributes that shall be contained in the result, defaults to array() which means all attributes. NOTE: simple columns will ever be contained due to the "SELECT *" query.
+	 * @param string[] $arrAttrOnly names of the attributes that shall be contained in the result, defaults to array()
+	 *                              which means all attributes.
 	 *
 	 * @return IMetaModelItems a collection of all matched items, sorted by the id list.
 	 */
@@ -216,20 +260,39 @@ class MetaModel implements IMetaModel
 			$arrAttrOnly = array_keys($this->getAttributes());
 		}
 
-		$arrResult = $this->fetchRows($arrIds);
+		$arrResult = $this->fetchRows($arrIds, $arrAttrOnly);
 
-		// determine "complex attributes".
-		$arrComplexCols = $this->getComplexAttributes();
-
-		// now inject the complex attribute's content into the row.
-		foreach($arrComplexCols as $objAttribute)
+		// Determine "independant attributes" (complex and translated) and inject their content into the row.
+		foreach(array_merge($this->getComplexAttributes(), $this->getTranslatedAttributes()) as $objAttribute)
 		{
-			if (!in_array($objAttribute->getColName(), $arrAttrOnly))
+			/** @var IMetaModelAttribute $objAttribute */
+			$strColName = $objAttribute->getColName();
+
+			if (!in_array($strColName, $arrAttrOnly))
 			{
 				continue;
 			}
-			$arrAttributeData = $objAttribute->getDataFor($arrIds);
-			$strColName = $objAttribute->getColName();
+
+			// if it is translated, fetch the translated data now.
+			if ($this->isTranslatedAttribute($objAttribute))
+			{
+				/** @var IMetaModelAttributeTranslated $objAttribute */
+				$arrAttributeData = $objAttribute->getTranslatedDataFor($arrIds, $this->getActiveLanguage());
+				$arrMissing = array_diff($arrIds, array_keys($arrAttributeData));
+				if ($arrMissing)
+				{
+					$arrAttributeData = array_merge(
+						$objAttribute->getTranslatedDataFor($arrMissing, $this->getActiveLanguage()),
+						$arrAttributeData
+					);
+				}
+			}
+			else
+			{
+				/** @var IMetaModelAttributeComplex $objAttribute */
+				$arrAttributeData = $objAttribute->getDataFor($arrIds);
+			}
+
 			foreach (array_keys($arrResult) as $intId)
 			{
 				$arrResult[$intId][$strColName] = $arrAttributeData[$intId];
@@ -294,7 +357,7 @@ class MetaModel implements IMetaModel
 	 */
 	public function getTableName()
 	{
-		return $this->arrData['tableName'];
+		return array_key_exists('tableName', $this->arrData) ? $this->arrData['tableName'] : null;
 	}
 
 	/**

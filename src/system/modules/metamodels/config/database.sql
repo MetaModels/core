@@ -63,6 +63,8 @@ CREATE TABLE `tl_metamodel_dca` (
   `backendsection` varchar(255) NOT NULL default '',
   `backendcaption` text NULL,
   `backendicon` varchar(255) NOT NULL default '',
+-- close the dataset - allow only edit and no delete or create.
+  `isclosed` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -75,7 +77,7 @@ CREATE TABLE `tl_metamodel_dcasetting` (
   `pid` int(10) unsigned NOT NULL default '0',
   `sorting` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
-
+  `published` char(1) NOT NULL default '',
 -- type, either legend or attribute.
   `dcatype` varchar(10) NOT NULL default '',
 
@@ -117,6 +119,8 @@ CREATE TABLE `tl_metamodel_dcasetting` (
   `includeBlankOption` char(1) NOT NULL default '',
 -- if true, the form will get reloaded when the widget changes
   `submitOnChange` char(1) NOT NULL default '',
+-- if true, the widget shall be rendered read only.
+  `readonly` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
@@ -210,6 +214,8 @@ CREATE TABLE `tl_metamodel_filtersetting` (
   `onlyused` char(1) NOT NULL default '0',
 -- display only remaining options in Fe filters.
   `onlypossible` char(1) NOT NULL default '0'
+-- default value for filter
+  `defaultid` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

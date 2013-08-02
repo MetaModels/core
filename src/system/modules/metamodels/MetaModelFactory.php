@@ -92,7 +92,12 @@ class MetaModelFactory implements IMetaModelFactory
 	 */
 	protected static function getModelFactory($strTableName)
 	{
-		return $GLOBALS['METAMODELS']['factories'][$strTableName];
+		if (isset($GLOBALS['METAMODELS']['factories'][$strTableName]))
+		{
+			return $GLOBALS['METAMODELS']['factories'][$strTableName];
+		}
+
+		return null;
 	}
 
 	/**

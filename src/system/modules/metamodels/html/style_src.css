@@ -95,6 +95,17 @@
     position:relative;
   }
 
+  .tl_textarea {
+    height:auto;
+  }
+
+  input[readonly],
+  textarea[readonly], 
+  input[readonly]:focus,
+  textarea[readonly]:focus {
+    background-color: #ebebe4;
+  }
+
  /*------------------------------------------------------------------------*/
 
   .clx {

@@ -1,4 +1,9 @@
 <Files /popup.php>
+<IfModule mod_authz_core.c>
+   Require all granted
+</IfModule>
+<IfModule !mod_authz_core.c>
     Order Allow,Deny
     Allow from all
+</IfModule>
 </Files>

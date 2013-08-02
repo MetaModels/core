@@ -28,6 +28,77 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 		'enableVersioning'            => false,
 	),
 
+	'dca_config'                      => array
+	(
+		'data_provider'               => array
+		(
+			'parent'                  => array
+			(
+				'source'              => 'tl_metamodel_rendersettings'
+			)
+		),
+		'childCondition'              => array
+		(
+			array(
+				'from'                => 'tl_metamodel_rendersettings',
+				'to'                  => 'self',
+				'setOn'               => array
+				(
+					array(
+						'to_field'    => 'pid',
+						'from_field'  => 'id',
+					),
+				),
+				'filter'              => array
+				(
+					array
+					(
+						'local'       => 'pid',
+						'remote'      => 'id',
+						'operation'   => '=',
+					),
+				)
+			)
+		),
+		'rootEntries'                 => array
+		(
+			'self'                    => array
+			(
+				'setOn' => array
+				(
+					array
+					(
+						'property'    => 'pid',
+						'remote'      => 'id',
+					),
+				),
+				'filter'              => array
+				(
+					array
+					(
+						'property'    => 'pid',
+						'operation'   => '=',
+						'remote'      => 'id',
+					)
+				)
+			)
+		),
+		'child_list'                  => array
+		(
+			'self'                    => array
+			(
+				'fields'              => array
+				(
+					'type',
+					'attr_id',
+					'urlparam',
+					'comment'
+				),
+				'format'              => '%s %s',
+			),
+		),
+	),
+
 	// List
 	'list' => array
 	(

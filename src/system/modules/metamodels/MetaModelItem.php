@@ -168,7 +168,7 @@ class MetaModelItem implements IMetaModelItem
 	 */
 	public function get($strAttributeName)
 	{
-		return $this->arrData[$strAttributeName];
+		return array_key_exists($strAttributeName, $this->arrData) ? $this->arrData[$strAttributeName] : null;
 	}
 
 	/**
@@ -338,6 +338,9 @@ class MetaModelItem implements IMetaModelItem
 			return $arrResult;
 		}
 
+		$arrResult['jumpTo'] = $this->buildJumpToLink($objSettings);
+		$objSettings->setJumpTo($arrResult['jumpTo']);
+
 		// First, parse the values in the same order as they are in the render settings.
 		foreach ($objSettings->getSettingNames() as $strAttrName)
 		{
@@ -351,8 +354,6 @@ class MetaModelItem implements IMetaModelItem
 				}
 			}
 		}
-
-		$arrResult['jumpTo'] = $this->buildJumpToLink($objSettings);
 
 		// Call HOOK for other extensions to inject data.
 		$this->parseValueHook($arrResult, $strOutputFormat, $objSettings);
@@ -466,6 +467,18 @@ class MetaModelItem implements IMetaModelItem
 
 			$arrJumpTo['params'] = $arrParams;
 			$arrJumpTo['deep']   = (strlen($strParams) > 0);
+			if (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$objSettings->get('id')]['details']))
+			{
+				$arrJumpTo['label'] = $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$objSettings->get('id')]['details'];
+			}
+			elseif (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details']))
+			{
+				$arrJumpTo['label'] = $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details'];
+			}
+			else
+			{
+				$arrJumpTo['label'] = $GLOBALS['TL_LANG']['MSC']['details'];
+			}
 		}
 
 		$arrJumpTo['page'] = $intJumpTo;

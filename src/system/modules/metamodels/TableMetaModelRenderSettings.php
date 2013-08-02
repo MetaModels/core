@@ -255,5 +255,75 @@ class TableMetaModelRenderSettings extends  TableMetaModelHelper
 		}	
 	}
 
+	/**
+	 * Make sure there is only one default per mm
+	 * 
+	 * @param mixed
+	 * @param DataContainer
+	 * @return mixed
+	 * @throws Exception Maybe, but not now.
+	 */
+	public function checkDefault($varValue, DataContainer $dc)
+	{
+		if ($varValue == '')
+		{
+			return '';
+		}
+
+		// Get Parent MM
+		$intParentMm = null;
+		if ($dc->id)
+		{
+			// Get current row.
+			$objRendersettings = $this->Database
+					->prepare('SELECT id, pid 
+						FROM tl_metamodel_rendersettings 
+						WHERE id=?')
+					->execute($dc->id);
+
+			if ($objRendersettings->numRows == 0)
+			{
+				return '';
+			}
+
+			// Get all siblings
+			$intParentMm = $objRendersettings->pid;
+		}
+		else if ($this->Input->get('pid'))
+		{
+			$intParentMm = $this->Input->get('pid');
+		}
+		else
+		{
+			return '';
+		}
+
+		$objSiblingRendersettings = $this->Database
+				->prepare('SELECT id 
+					FROM tl_metamodel_rendersettings 
+					WHERE pid=? 
+						AND isdefault=1')
+				->execute($intParentMm);
+
+		// Check if we have some.
+		if ($objSiblingRendersettings->numRows == 0)
+		{
+			return $varValue;
+		}
+
+		// Reset all default flags.
+		$arrSiblings = $objSiblingRendersettings->fetchEach('id');
+		$arrSiblings = array_map('intval', $arrSiblings);
+
+		$this->Database
+				->prepare('UPDATE tl_metamodel_rendersettings 
+					SET isdefault = "" 
+					WHERE id IN(' . implode(', ', $arrSiblings) . ') 
+						AND isdefault=1')
+				->execute();
+
+		return $varValue;
+	}
+
 }
 

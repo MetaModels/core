@@ -177,6 +177,10 @@ class GeneralCallbackMetaModel extends GeneralCallbackDefault
 					foreach ($arrPalette as $intKey => $arrPaletteDef)
 					{
 						$this->removeAttributeFromPalette($strAttrName, $arrPalette[$intKey]['palette']);
+						if (!count($arrPalette[$intKey]['palette']))
+						{
+							unset($arrPalette[$intKey]);
+						}
 					}
 				}
 			}
