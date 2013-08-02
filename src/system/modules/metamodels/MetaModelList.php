@@ -531,7 +531,7 @@ class MetaModelList extends Controller
 	/**
 	 * Return the filter settings.
 	 *
-	 * @return MetaModelFilter
+	 * @return MetaModelFilterSettings
 	 */
 	public function getFilterSettings()
 	{
