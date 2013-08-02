@@ -228,8 +228,8 @@ class MetaModelList extends Controller
 	{
 		$this->intFilter    = $intFilter;
 
-		$this->getFilter();
-
+		$this->objFilterSettings = MetaModelFilterSettingsFactory::byId($this->intFilter);
+		
 		if (!$this->objFilterSettings)
 		{
 			throw new Exception('Error: no filter object defined.');
@@ -343,15 +343,25 @@ class MetaModelList extends Controller
 	}
 
 	/**
-	 * Prepare the filter.
+	 * Return the filter.
 	 *
-	 * @return void
+	 * @return MetaModelFilter
 	 */
-	protected function getFilter()
+	public function getFilter()
 	{
-		$this->objFilterSettings = MetaModelFilterSettingsFactory::byId($this->intFilter);
+		return $this->objFilter;
 	}
-
+	
+	/**
+	 * Return the filter settings.
+	 *
+	 * @return MetaModelFilterSettings
+	 */
+	public function getFilterSettings()
+	{
+		return $this->objFilterSettings;
+	}
+	
 	/**
 	 * the calculated pagination, if any.
 	 */
@@ -438,6 +448,23 @@ class MetaModelList extends Controller
 	{
 		return $this;
 	}
+	
+	/**
+	 * Add additional filter rules to the list on the fly.
+	 *
+	 * @return MetaModelList
+	 */
+	public function addFilterRule($objFilterRule)
+	{
+		if(!$this->objFilter)
+		{
+			$this->objFilter = $this->objMetaModel->getEmptyFilter();
+		}
+		
+		$this->objFilter->addFilterRule($objFilterRule);
+		
+		return $this;
+	}
 
 	/**
 	 * Return all attributes that shall be fetched from the MetaModel.
@@ -490,9 +517,17 @@ class MetaModelList extends Controller
 			return $this;
 		}
 
-		$this->objFilter = $this->objMetaModel->getEmptyFilter();
-		$this->objFilterSettings->addRules($this->objFilter, $this->arrParam);
-
+		// create an empty filter object if not done before
+		if(!$this->objFilter)
+		{
+			$this->objFilter = $this->objMetaModel->getEmptyFilter();
+		}
+		
+		if($this->objFilterSettings)
+		{
+			$this->objFilterSettings->addRules($this->objFilter, $this->arrParam);
+		}
+		
 		$this->modifyFilter();
 
 		$intTotal = $this->objMetaModel->getCount($this->objFilter);
