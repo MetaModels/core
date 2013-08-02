@@ -227,9 +227,9 @@ class MetaModelList extends Controller
 	public function setFilterParam($intFilter, $arrPresets, $arrValues)
 	{
 		$this->intFilter    = $intFilter;
-
-		$this->getFilter();
-
+		
+		$this->objFilterSettings = MetaModelFilterSettingsFactory::byId($this->intFilter);
+		
 		if (!$this->objFilterSettings)
 		{
 			throw new Exception('Error: no filter object defined.');
@@ -237,7 +237,7 @@ class MetaModelList extends Controller
 
 		$arrPresetNames = $this->objFilterSettings->getParameters();
 		$arrFEFilterParams = array_keys($this->objFilterSettings->getParameterFilterNames());
-
+		
 		$arrProcessed = array();
 
 		// We have to use all the preset values we want first.
@@ -248,7 +248,7 @@ class MetaModelList extends Controller
 				$arrProcessed[$strPresetName] = $arrPreset['value'];
 			}
 		}
-
+		
 		// now we have to use all FE filter params, that are either:
 		// * not contained within the presets
 		// * or are overridable.
@@ -290,7 +290,7 @@ class MetaModelList extends Controller
 	/**
 	 * The render template to use.
 	 *
-	 * @var MetaModelTemplate
+	 * @var IMetaModelRenderSettings
 	 */
 	protected $objTemplate;
 
@@ -316,10 +316,6 @@ class MetaModelList extends Controller
 	protected function prepareMetaModel()
 	{
 		$this->objMetaModel = MetaModelFactory::byId($this->intMetaModel);
-		if (!$this->objMetaModel)
-		{
-			throw new \RuntimeException('Could get metamodel id: ' . $this->intMetaModel);
-		}
 	}
 
 	/**
@@ -342,16 +338,7 @@ class MetaModelList extends Controller
 		}
 	}
 
-	/**
-	 * Prepare the filter.
-	 *
-	 * @return void
-	 */
-	protected function getFilter()
-	{
-		$this->objFilterSettings = MetaModelFilterSettingsFactory::byId($this->intFilter);
-	}
-
+		
 	/**
 	 * the calculated pagination, if any.
 	 */
@@ -362,9 +349,8 @@ class MetaModelList extends Controller
 	 */
 	protected function calculatePagination($intTotal)
 	{
-		$intOffset = null;
-		$intLimit  = null;
-
+		$intOffset = NULL;
+		$intLimit = NULL;
 		// if defined, we override the pagination here.
 		if ($this->blnUseLimit && ($this->intLimit || $this->intOffset))
 		{
@@ -426,7 +412,8 @@ class MetaModelList extends Controller
 	 * The items in the list view.
 	 * @var IMetaModelItems
 	 */
-	protected $objItems = null;
+	protected $objItems = NULL;
+
 
 	/**
 	 * Add additional filter rules to the list.
@@ -438,6 +425,25 @@ class MetaModelList extends Controller
 	{
 		return $this;
 	}
+	
+	
+	/**
+	 * Add additional filter rules to the list on the fly.
+	 *
+	 * @return MetaModelList
+	 */
+	public function addFilterRule($objFilterRule)
+	{
+		if(!$this->objFilter)
+		{
+			$this->objFilter = $this->objMetaModel->getEmptyFilter();
+		}
+		
+		$this->objFilter->addFilterRule($objFilterRule);
+		
+		return $this;
+	}
+	
 
 	/**
 	 * Return all attributes that shall be fetched from the MetaModel.
@@ -490,9 +496,17 @@ class MetaModelList extends Controller
 			return $this;
 		}
 
-		$this->objFilter = $this->objMetaModel->getEmptyFilter();
-		$this->objFilterSettings->addRules($this->objFilter, $this->arrParam);
-
+		// create an empty filter object if not done before
+		if(!$this->objFilter)
+		{
+			$this->objFilter = $this->objMetaModel->getEmptyFilter();
+		}
+		
+		if($this->objFilterSettings)
+		{
+			$this->objFilterSettings->addRules($this->objFilter, $this->arrParam);
+		}
+		
 		$this->modifyFilter();
 
 		$intTotal = $this->objMetaModel->getCount($this->objFilter);
@@ -502,6 +516,26 @@ class MetaModelList extends Controller
 		$this->objItems = $this->objMetaModel->findByFilter($this->objFilter, $this->strSortBy, $this->intOffset, $this->intLimit, $this->strSortDirection, $this->getAttributeNames());
 
 		return $this;
+	}
+	
+	/**
+	 * Return the filter.
+	 *
+	 * @return MetaModelFilter
+	 */
+	public function getFilter()
+	{
+		return $this->objFilter;
+	}
+	
+	/**
+	 * Return the filter settings.
+	 *
+	 * @return MetaModelFilter
+	 */
+	public function getFilterSettings()
+	{
+		return $this->objFilterSettings;
 	}
 
 	/**
@@ -555,70 +589,18 @@ class MetaModelList extends Controller
 	}
 
 	/**
-	 * Retrieve the caption text for "No items found" message,
-	 *
-	 * This message is looked up in the following order:
-	 * 1. $GLOBALS['TL_LANG']['MSC'][<mm tablename>][<render settings id>]['noItemsMsg']
-	 * 2. $GLOBALS['TL_LANG']['MSC'][<mm tablename>]['noItemsMsg']
-	 * 3. $GLOBALS['TL_LANG']['MSC']['noItemsMsg']
-	 *
-	 * @return string
-	 */
-	protected function getNoItemsCaption()
-	{
-		if (isset($this->objView) && isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['noItemsMsg']))
-		{
-			return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['noItemsMsg'];
-		}
-		elseif (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['noItemsMsg']))
-		{
-			return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['noItemsMsg'];
-		}
-		else
-		{
-			return $GLOBALS['TL_LANG']['MSC']['noItemsMsg'];
-		}
-	}
-
-	/**
-	 * Retrieve the caption text for the "Show details" link,
-	 *
-	 * This message is looked up in the following order:
-	 * 1. $GLOBALS['TL_LANG']['MSC'][<mm tablename>][<render settings id>]['details']
-	 * 2. $GLOBALS['TL_LANG']['MSC'][<mm tablename>]['details']
-	 * 3. $GLOBALS['TL_LANG']['MSC']['details']
-	 *
-	 * @return string
-	 */
-	protected function getDetailsCaption()
-	{
-		if (isset($this->objView) && isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['details']))
-		{
-			return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['details'];
-		}
-		elseif (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details']))
-		{
-			return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details'];
-		}
-		else
-		{
-			return $GLOBALS['TL_LANG']['MSC']['details'];
-		}
-	}
-
-	/**
 	 * Render the list view.
 	 *
-	 * @param bool $blnNoNativeParsing Flag determining if the parsing shall be done internal or if the template will handle the parsing on it's own.
+	 * @param bool $blnNoNativeParsing flag determining if the parsing shall be done internal or if the template will handle the parsing on it's own.
 	 *
-	 * @param object $objCaller        The object calling us, might be a Module or ContentElement or anything else.
+	 * @param object $objCaller        the object calling us, might be a Module or ContentElement or anything else.
 	 *
 	 * @return string
 	 */
 	public function render($blnNoNativeParsing, $objCaller)
 	{
-		$this->objTemplate->noItemsMsg = $this->getNoItemsCaption();
-		$this->objTemplate->details    = $this->getDetailsCaption();
+		$this->objTemplate->noItemsMsg = $GLOBALS['TL_LANG']['MSC']['noItemsMsg'];
+		$this->objTemplate->details    = $GLOBALS['TL_LANG']['MSC']['details'];
 
 		$this->prepare();
 		$strOutputFormat = $this->getOutputFormat();
