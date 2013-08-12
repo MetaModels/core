@@ -138,7 +138,7 @@ class MetaModelFrontendFilter extends Frontend
 		$arrWantedParam = $this->getWantedNames();
 
 		$arrMyParams = $arrOtherParams = array();
-
+echo "TEST";
 		if ($_GET)
 		{
 			foreach (array_keys($_GET) as $strParam)
