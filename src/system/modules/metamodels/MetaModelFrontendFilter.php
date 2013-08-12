@@ -146,7 +146,10 @@ class MetaModelFrontendFilter extends Frontend
 				if(in_array($strParam, $arrWantedParam))
 				{
 					$arrMyParams[$strParam] = $this->Input->get($strParam);
-				} elseif($strParam != 'page') {
+				}
+				// add only to the array if param is not page
+				elseif($strParam != 'page')
+				{
 					$arrOtherParams[$strParam] = $this->Input->get($strParam);
 				}
 			}
