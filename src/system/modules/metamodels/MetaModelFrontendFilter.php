@@ -138,7 +138,7 @@ class MetaModelFrontendFilter extends Frontend
 		$arrWantedParam = $this->getWantedNames();
 
 		$arrMyParams = $arrOtherParams = array();
-echo "TEST";
+
 		if ($_GET)
 		{
 			foreach (array_keys($_GET) as $strParam)
@@ -146,7 +146,7 @@ echo "TEST";
 				if(in_array($strParam, $arrWantedParam))
 				{
 					$arrMyParams[$strParam] = $this->Input->get($strParam);
-				} else {
+				} elseif($strParam != 'page') {
 					$arrOtherParams[$strParam] = $this->Input->get($strParam);
 				}
 			}
