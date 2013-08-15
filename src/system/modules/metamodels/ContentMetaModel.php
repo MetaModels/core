@@ -55,9 +55,32 @@ class ContentMetaModel extends ContentElement
 		return parent::generate();
 	}
 
+
+	/**
+	 * Retrieve all filter parameters from the input class for the specified filter setting.
+	 *
+	 * @param MetaModelList $objItemRenderer
+	 *
+	 * @return string[]
+	 */
+	protected function getFilterParameters($objItemRenderer)
+	{
+		$arrReturn = array();
+
+		foreach (array_keys($objItemRenderer->getFilterSettings()->getParameterFilterNames()) as $strName)
+		{
+			$varValue = \Input::getInstance()->get($strName);
+			if (is_string($varValue))
+			{
+				$arrReturn[$strName] = $varValue;
+			}
+		}
+		return $arrReturn;
+	}
+
 	/**
 	 * (non-PHPdoc)
-	 * @see Module::compile()
+	 * @see ContentElement::compile()
 	 */
 	protected function compile()
 	{
@@ -65,14 +88,15 @@ class ContentMetaModel extends ContentElement
 
 		$this->Template->searchable = !$this->metamodel_donotindex;
 
-		$this->Template->items = $objItemRenderer
+		$objItemRenderer
 			->setMetaModel($this->metamodel, $this->metamodel_rendersettings)
 			->setLimit($this->metamodel_use_limit, $this->metamodel_offset, $this->metamodel_limit)
 			->setPageBreak($this->perPage)
 			->setSorting($this->metamodel_sortby, $this->metamodel_sortby_direction)
-			->setFilterParam($this->metamodel_filtering, deserialize($this->metamodel_filterparams, true), $_GET)
-			->render($this->metamodel_noparsing, $this);
+			->setFilterSettings($this->metamodel_filtering)
+			->setFilterParameters(deserialize($this->metamodel_filterparams, true), $this->getFilterParameters($objItemRenderer));
+
+		$this->Template->items      = $objItemRenderer->render($this->metamodel_noparsing, $this);
 		$this->Template->pagination = $objItemRenderer->getPagination();
 	}
 }
-
