@@ -223,55 +223,17 @@ class MetaModelList extends Controller
 	 * @param string[] $arrPresets the parameters for the filter.
 	 *
 	 * @return MetaModelList
+	 *
+	 * @deprecated Use setFilterSettings() and setFilterParameters().
 	 */
 	public function setFilterParam($intFilter, $arrPresets, $arrValues)
 	{
-		$this->intFilter    = $intFilter;
+		$this->setFilterSettings($intFilter);
 
-		$this->getFilter();
-
-		if (!$this->objFilterSettings)
-		{
-			throw new Exception('Error: no filter object defined.');
-		}
-
-		$arrPresetNames = $this->objFilterSettings->getParameters();
-		$arrFEFilterParams = array_keys($this->objFilterSettings->getParameterFilterNames());
-
-		$arrProcessed = array();
-
-		// We have to use all the preset values we want first.
-		foreach ($arrPresets as $strPresetName => $arrPreset)
-		{
-			if (in_array($strPresetName, $arrPresetNames))
-			{
-				$arrProcessed[$strPresetName] = $arrPreset['value'];
-			}
-		}
-
-		// now we have to use all FE filter params, that are either:
-		// * not contained within the presets
-		// * or are overridable.
-		foreach ($arrFEFilterParams as $strParameter)
-		{
-			// unknown parameter? - next please
-			if (!array_key_exists($strParameter, $arrValues))
-			{
-				continue;
-			}
-
-			// not a preset or allowed to override? - use value
-			if ((!array_key_exists($strParameter, $arrPresets)) || $arrPresets[$strParameter]['use_get'])
-			{
-				$arrProcessed[$strParameter] = $arrValues[$strParameter];
-			}
-		}
-
-		$this->arrParam = $arrProcessed;
+		$this->setFilterParameters($arrPresets, $arrValues);
 
 		return $this;
 	}
-
 
 	/**
 	 * The Metamodel to use
@@ -309,9 +271,11 @@ class MetaModelList extends Controller
 	protected $objFilter;
 
 	/**
-	 * Prepare the metamodel.
+	 * Prepare the MetaModel.
 	 *
 	 * @return void
+	 *
+	 * @throws RuntimeException
 	 */
 	protected function prepareMetaModel()
 	{
@@ -321,7 +285,6 @@ class MetaModelList extends Controller
 			throw new \RuntimeException('Could get metamodel id: ' . $this->intMetaModel);
 		}
 	}
-
 	/**
 	 * Prepare the view.
 	 * NOTE: must be called after prepareMetaModel().
@@ -343,13 +306,101 @@ class MetaModelList extends Controller
 	}
 
 	/**
-	 * Prepare the filter.
+	 * @param $intFilter
 	 *
-	 * @return void
+	 * @return $this
+	 *
+	 * @throws RuntimeException
 	 */
-	protected function getFilter()
+	public function setFilterSettings($intFilter)
 	{
+		$this->intFilter    = $intFilter;
+
 		$this->objFilterSettings = MetaModelFilterSettingsFactory::byId($this->intFilter);
+
+		if (!$this->objFilterSettings)
+		{
+			throw new \RuntimeException('Error: no filter object defined.');
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Set parameters.
+	 *
+	 * @param string[] $arrPresets the parameter preset values to use.
+	 *
+	 * @param string[] $arrValues the dynamic parameter values that may be used.
+	 *
+	 * @param string[] $arrPresets the parameters for the filter.
+	 *
+	 * @return MetaModelList
+	 *
+	 * @throws RuntimeException
+	 */
+	public function setFilterParameters($arrPresets, $arrValues)
+	{
+		if (!$this->objFilterSettings)
+		{
+			throw new \RuntimeException('Error: no filter object defined, call setFilterSettings() before setFilterParameters().');
+		}
+
+		$arrPresetNames    = $this->objFilterSettings->getParameters();
+		$arrFEFilterParams = array_keys($this->objFilterSettings->getParameterFilterNames());
+
+		$arrProcessed = array();
+
+		// We have to use all the preset values we want first.
+		foreach ($arrPresets as $strPresetName => $arrPreset)
+		{
+			if (in_array($strPresetName, $arrPresetNames))
+			{
+				$arrProcessed[$strPresetName] = $arrPreset['value'];
+			}
+		}
+
+		// now we have to use all FE filter params, that are either:
+		// * not contained within the presets
+		// * or are overridable.
+		foreach ($arrFEFilterParams as $strParameter)
+		{
+			// unknown parameter? - next please
+			if (!array_key_exists($strParameter, $arrValues))
+			{
+				continue;
+			}
+
+			// not a preset or allowed to override? - use value
+			if ((!array_key_exists($strParameter, $arrPresets)) || $arrPresets[$strParameter]['use_get'])
+			{
+				$arrProcessed[$strParameter] = $arrValues[$strParameter];
+			}
+		}
+
+		$this->arrParam = $arrProcessed;
+
+		return $this;
+	}
+
+	/**
+	 * Return the filter.
+	 *
+	 * @return MetaModelFilter
+	 */
+	public function getFilter()
+	{
+		return $this->objFilter;
+	}
+
+	/**
+	 * Return the filter settings.
+	 *
+	 * @return MetaModelFilterSettings
+	 */
+	public function getFilterSettings()
+	{
+		return $this->objFilterSettings;
 	}
 
 	/**
@@ -440,6 +491,25 @@ class MetaModelList extends Controller
 	}
 
 	/**
+	 * Add additional filter rules to the list on the fly.
+	 *
+	 * @param IMetaModelFilterRule $objFilterRule
+	 *
+	 * @return MetaModelList
+	 */
+	public function addFilterRule($objFilterRule)
+	{
+		if(!$this->objFilter)
+		{
+			$this->objFilter = $this->objMetaModel->getEmptyFilter();
+		}
+
+		$this->objFilter->addFilterRule($objFilterRule);
+
+		return $this;
+	}
+
+	/**
 	 * Return all attributes that shall be fetched from the MetaModel.
 	 * In this base implementation, this only includes the attributes mentioned in the render setting.
 	 *
@@ -490,8 +560,16 @@ class MetaModelList extends Controller
 			return $this;
 		}
 
-		$this->objFilter = $this->objMetaModel->getEmptyFilter();
-		$this->objFilterSettings->addRules($this->objFilter, $this->arrParam);
+		// create an empty filter object if not done before
+		if(!$this->objFilter)
+		{
+			$this->objFilter = $this->objMetaModel->getEmptyFilter();
+		}
+
+		if($this->objFilterSettings)
+		{
+			$this->objFilterSettings->addRules($this->objFilter, $this->arrParam);
+		}
 
 		$this->modifyFilter();
 
