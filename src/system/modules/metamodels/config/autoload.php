@@ -20,7 +20,7 @@
 ClassLoader::addClasses(array
 (
 	// Real implementation for Contao 2.11 and Contao 3.1 - will get replaced with composer based auto loading in the future.
-//	'MetaModels\Attribute\Base'                             => 'system/modules/metamodels/MetaModels/Attribute/Base.php',
+	'MetaModels\Attribute\Base'                             => 'system/modules/metamodels/MetaModels/Attribute/Base.php',
 	'MetaModels\Attribute\BaseComplex'                      => 'system/modules/metamodels/MetaModels/Attribute/BaseComplex.php',
 	'MetaModels\Attribute\BaseSimple'                       => 'system/modules/metamodels/MetaModels/Attribute/BaseSimple.php',
 	'MetaModels\Attribute\Factory'                          => 'system/modules/metamodels/MetaModels/Attribute/Factory.php',

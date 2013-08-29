@@ -20,6 +20,7 @@ namespace MetaModels\Dca;
 use MetaModels\BackendIntegration\Module;
 use MetaModels\Factory;
 use MetaModels\Helper\ContaoController;
+use MetaModels\Helper\TableManipulation;
 use MetaModels\IMetaModel;
 
 /**
@@ -192,6 +193,11 @@ class MetaModelDcaBuilder
 	 */
 	protected function bufferModels()
 	{
+		if (!\Database::getInstance()->tableExists('tl_metamodel', null, true))
+		{
+			return;
+		}
+
 		$objModels = $this->getDB()->execute('SELECT id FROM tl_metamodel order by sorting');
 		while ($objModels->next())
 		{
