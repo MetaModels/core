@@ -29,7 +29,64 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		'enableVersioning'            => false,
 		'onload_callback'             => array
 		(
-			array('TableMetaModelRenderSettings', 'onLoadCallback')
+			array('MetaModels\Dca\RenderSettings', 'onLoadCallback')
+		),
+	),
+
+	'dca_config'                      => array
+	(
+		'data_provider'               => array
+		(
+			'parent'                  => array
+			(
+				'source'              => 'tl_metamodel'
+			)
+		),
+		'childCondition'              => array
+		(
+			array(
+				'from'                => 'tl_metamodel',
+				'to'                  => 'tl_metamodel_rendersettings',
+				'setOn'               => array
+				(
+					array(
+						'to_field'    => 'pid',
+						'from_field'  => 'id',
+					),
+				),
+				'filter'              => array
+				(
+					array
+					(
+						'local'       => 'pid',
+						'remote'      => 'id',
+						'operation'   => '=',
+					),
+				),
+				'inverse'             => array
+				(
+					array
+					(
+						'local'       => 'pid',
+						'remote'      => 'id',
+						'operation'   => '=',
+					),
+				)
+			)
+		),
+		'child_list'                  => array
+		(
+			'tl_metamodel_rendersettings' => array
+			(
+				'fields'              => array
+				(
+					'type',
+					'attr_id',
+					'urlparam',
+					'comment'
+				),
+				'format'              => '%s %s',
+			),
 		),
 	),
 
@@ -38,12 +95,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 	(
 		'presentation' => array
 		(
-			'breadcrumb_callback'     => array('MetaModelBreadcrumbBuilder', 'generateBreadcrumbItems'),
+			'breadcrumb_callback'     => array('MetaModels\Dca\BreadcrumbBuilder', 'generateBreadcrumbItems'),
 		),
 		
 		'sorting' => array
 		(
-			'mode'                    => 1,
+			'mode'                    => 3,
 			'fields'                  => array('name'),
 			'panelLayout'             => 'filter,limit',
 			'headerFields'            => array('name'),
@@ -54,7 +111,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		(
 			'fields'                  => array('name'),
 			'format'                  => '%s',
-			'label_callback'          => array('TableMetaModelRenderSettings', 'drawSetting')
+			'label_callback'          => array('MetaModels\Dca\RenderSettings', 'drawSetting')
 		),
 
 		'global_operations' => array
@@ -153,7 +210,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'default'                 => 'metamodel_prerendered',
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options_callback'        => array('TableMetaModelRenderSettings','getTemplates'),
+			'options_callback'        => array('MetaModels\Dca\RenderSettings','getTemplates'),
 			'eval'                    => array
 			(
 				'includeBlankOption'  => true,
@@ -184,8 +241,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'maxCount'                => 1,
 			'disableSorting'          =>'1',
 			'inputType'               => 'multiColumnWizard',
-			'load_callback'           => array(array('TableMetaModelRenderSettings', 'prepareMCW')),
-			'save_callback'           => array(array('TableMetaModelRenderSettings', 'saveMCW')),
+			'load_callback'           => array(array('MetaModels\Dca\RenderSettings', 'prepareMCW')),
+			'save_callback'           => array(array('MetaModels\Dca\RenderSettings', 'saveMCW')),
 			'eval' => array(
 				'style'               => 'width:100%;',
 				'columnFields' => array(
@@ -200,14 +257,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page'],
 						'exclude'                  => true,
 						'inputType'                => 'text',
-						'wizard'                   => array(array('tl_metamodel_rendersettings', 'pagePicker')),
+						'wizard'                   => array(array('MetaModels\Dca\RenderSettings', 'pagePicker')),
 						'eval'                     => array('style'=>'width:317px;')
 					),
 					'filter' => array(
 						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter'],
 						'exclude'                  => true,
 						'inputType'                => 'select',
-						'options_callback'         => array('TableMetaModelRenderSettings', 'getFilterSettings'),
+						'options_callback'         => array('MetaModels\Dca\RenderSettings', 'getFilterSettings'),
 						'eval'                     => array
 						(
 							'style'                => 'width:200px;',
@@ -231,7 +288,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['file'],
 						'exclude'                  => true,
 						'inputType'                => 'select',
-						'options_callback'         => array('TableMetaModelRenderSettings', 'getCssFiles'),
+						'options_callback'         => array('MetaModels\Dca\RenderSettings', 'getCssFiles'),
 						'eval'                     => array
 						(
 							'style'                => 'width:515px;',
@@ -260,7 +317,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['file'],
 						'exclude'                  => true,
 						'inputType'                => 'select',
-						'options_callback'         => array('TableMetaModelRenderSettings', 'getJsFiles'),
+						'options_callback'         => array('MetaModels\Dca\RenderSettings', 'getJsFiles'),
 						'eval'                     => array
 						(
 							'style'                => 'width:515px;',
@@ -280,16 +337,3 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		),
 	),
 );
-
-class tl_metamodel_rendersettings extends backend
-{
-	/**
-	 * Return the link picker wizard
-	 * @param DataContainer
-	 * @return string
-	 */
-	public function pagePicker(DataContainer $dc)
-	{
-		return ' ' . $this->generateImage('pickpage.gif', $GLOBALS['TL_LANG']['MSC']['pagepicker'], 'style="vertical-align:top;cursor:pointer" onclick="Backend.pickPage(\'ctrl_' . $dc->inputName . '\')"');
-	}
-}

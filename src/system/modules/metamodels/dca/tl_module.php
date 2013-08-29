@@ -14,7 +14,7 @@
  * @filesource
  */
 
-$GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = array('TableModule', 'buildFilterParams');
+$GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = array('MetaModels\Dca\Module', 'buildFilterParams');
 
 /**
  * Add palettes to tl_module
@@ -53,7 +53,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		),
 		'wizard' => array
 		(
-			array('TableModule', 'editMetaModel')
+			array('MetaModels\Dca\Module', 'editMetaModel')
 		)
 	),
 
@@ -62,7 +62,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_layout'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
-		'options_callback'        => array('TableModule', 'getModuleTemplates'),
+		'options_callback'        => array('MetaModels\Dca\Module', 'getModuleTemplates'),
 		'eval'                    => array
 		(
 			'chosen'              => true,
@@ -99,7 +99,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_sortby'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
-		'options_callback'        => array('TableModule', 'getAttributeNames'),
+		'options_callback'        => array('MetaModels\Dca\Module', 'getAttributeNames'),
 		'eval'                    => array
 		(
 			'includeBlankOption'  => true,
@@ -128,7 +128,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_filtering'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
-		'options_callback'        => array('TableModule', 'getFilterSettings'),
+		'options_callback'        => array('MetaModels\Dca\Module', 'getFilterSettings'),
 		'default'                 => '',
 		'eval' => array
 		(
@@ -139,7 +139,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		),
 		'wizard' => array
 		(
-			array('TableModule', 'editFilterSetting')
+			array('MetaModels\Dca\Module', 'editFilterSetting')
 		)
 	),
 
@@ -148,7 +148,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_rendersettings'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
-		'options_callback'        => array('TableModule', 'getRenderSettings'),
+		'options_callback'        => array('MetaModels\Dca\Module', 'getRenderSettings'),
 		'default'                 => '',
 		'eval' => array
 		(
@@ -159,7 +159,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		),
 		'wizard' => array
 		(
-			array('TableModule', 'editRenderSetting')
+			array('MetaModels\Dca\Module', 'editRenderSetting')
 		)
 	),
 
@@ -217,7 +217,6 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 	(
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_jumpTo'],
 		'exclude'                 => true,
-		'exclude'                 => true,
 		'inputType'               => 'pageTree',
 		'eval'                    => array('fieldType'=>'radio')
 	),
@@ -227,7 +226,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_params'],
 		'exclude'                 => true,
 		'inputType'               => 'checkboxWizard',
-		'options_callback'        => array('TableModule','getFilterParameterNames'),
+		'options_callback'        => array('MetaModels\Dca\Module','getFilterParameterNames'),
 		'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
 	),
 
@@ -260,7 +259,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'default'                 => 'event_full',
 		'exclude'                 => true,
 		'inputType'               => 'select',
-		'options_callback'        => array('TableModule', 'getFilterTemplates'),
+		'options_callback'        => array('MetaModels\Dca\Module', 'getFilterTemplates'),
 		'eval'                    => array
 		(
 			'tl_class'            => 'w50',

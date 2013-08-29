@@ -14,5 +14,5 @@
  * @filesource
  */
 
-// let our handler handle the neccessary steps.
-MetaModelsUpgradeHandler::perform();
+// let our handler handle the necessary steps.
+MetaModels\Helper\UpgradeHandler::perform();

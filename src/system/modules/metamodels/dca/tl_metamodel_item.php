@@ -35,17 +35,17 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 	),
 	'dca_config' => array
 	(
-		'callback' => 'GeneralCallbackMetaModel',
-		'data_provider' => array
+		'callback'                    => 'MetaModels\DcGeneral\Callbacks',
+		'data_provider'               => array
 		(
-			'default' => array
+			'default'                 => array
 			(
-				'class'  => 'GeneralDataMetaModel',
-				'source' => null // get's set within MetaModelDatabase::createDataContainer via $GLOBALS['TL_HOOKS']['loadDataContainer']
+				'class'               => 'MetaModels\DcGeneral\Data\Driver',
+				'source'              => null // get's set within MetaModelDatabase::createDataContainer via $GLOBALS['TL_HOOKS']['loadDataContainer']
 			)
 		),
-		'controller' => 'GeneralControllerMetaModel',
-		'view' => 'GeneralViewMetaModel'
+		'controller'                  => 'MetaModels\DcGeneral\Controller',
+		'view'                        => 'MetaModels\DcGeneral\View'
 	),
 
 	'list' => array

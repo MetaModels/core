@@ -41,7 +41,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 		(
 			array(
 				'from'                => 'tl_metamodel_rendersettings',
-				'to'                  => 'self',
+				'to'                  => 'tl_metamodel_rendersetting',
 				'setOn'               => array
 				(
 					array(
@@ -62,7 +62,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 		),
 		'rootEntries'                 => array
 		(
-			'self'                    => array
+			'tl_metamodel_rendersetting' => array
 			(
 				'setOn' => array
 				(
@@ -85,7 +85,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 		),
 		'child_list'                  => array
 		(
-			'self'                    => array
+			'tl_metamodel_rendersetting' => array
 			(
 				'fields'              => array
 				(
@@ -104,7 +104,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 	(
 		'presentation' => array
 		(
-			'breadcrumb_callback'     => array('MetaModelBreadcrumbBuilder', 'generateBreadcrumbItems'),
+			'breadcrumb_callback'     => array('MetaModels\Dca\BreadcrumbBuilder', 'generateBreadcrumbItems'),
 		),
 		
 		'sorting' => array
@@ -113,7 +113,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 			'fields'                  => array('sorting'),
 			'panelLayout'             => 'limit',
 			'headerFields'            => array('name'),
-			'child_record_callback'   => array('TableMetaModelRenderSetting', 'drawSetting'),
+			'child_record_callback'   => array('MetaModels\Dca\RenderSetting', 'drawSetting'),
 		),
 
 		'global_operations' => array
@@ -167,7 +167,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['toggle'],
 				'icon'                => 'visible.gif',
 				'attributes'          => 'onclick="Backend.getScrollOffset(); return AjaxRequest.toggleVisibility(this, %s);"',
-				'button_callback'     => array('TableMetaModelRenderSetting', 'toggleIcon')
+				'button_callback'     => array('MetaModels\Dca\RenderSetting', 'toggleIcon')
 			)
 		)
 	),
@@ -193,7 +193,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options_callback'        => array('TableMetaModelRenderSetting', 'getAttributeNames'),
+			'options_callback'        => array('MetaModels\Dca\RenderSetting', 'getAttributeNames'),
 			'eval'                    => array(
 				'doNotSaveEmpty'      => true,
 				'alwaysSave'          => true,
@@ -210,7 +210,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options_callback'        => array('TableMetaModelRenderSetting', 'getTemplates'),
+			'options_callback'        => array('MetaModels\Dca\RenderSetting', 'getTemplates'),
 			'eval'                    => array
 			(
 				'tl_class'            => 'w50',

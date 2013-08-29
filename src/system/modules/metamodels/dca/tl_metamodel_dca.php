@@ -37,7 +37,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 	(
 		'presentation' => array
 		(
-			'breadcrumb_callback'     => array('MetaModelBreadcrumbBuilder', 'generateBreadcrumbItems'),
+			'breadcrumb_callback'     => array('MetaModels\Dca\BreadcrumbBuilder', 'generateBreadcrumbItems'),
 		),
 		
 		'sorting' => array
@@ -53,7 +53,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 		(
 			'fields'                  => array('name'),
 			'format'                  => '%s',
-			'label_callback'          => array('TableMetaModelDca', 'drawSetting')
+			'label_callback'          => array('MetaModels\Dca\Dca', 'drawSetting')
 		),
 
 		'global_operations' => array
@@ -184,14 +184,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
 			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50 m12 cbx'),
-			'save_callback'           => array(array('TableMetaModelDca', 'checkDefault'))
+			'save_callback'           => array(array('MetaModels\Dca\Dca', 'checkDefault'))
 		),
 
 		'rendertype' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype'],
 			'inputType'               => 'select',
-			'options_callback'        => array('TableMetaModelDca', 'getRenderTypes'),
+			'options_callback'        => array('MetaModels\Dca\Dca', 'getRenderTypes'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes'],
 			'eval'                    => array
 			(
@@ -205,7 +205,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable'],
 			'inputType'               => 'select',
-			'options_callback'        => array('TableMetaModelDca', 'getTables'),
+			'options_callback'        => array('MetaModels\Dca\Dca', 'getTables'),
 			'eval'                    => array
 			(
 				'tl_class'            => 'w50',
@@ -219,7 +219,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['mode'],
 			'inputType'               => 'select',
 			'default'                 => '',
-			'options_callback'        => array('TableMetaModelDca', 'getValidModes'),
+			'options_callback'        => array('MetaModels\Dca\Dca', 'getValidModes'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode'],
 			/*
 				0 Records are not sorted
@@ -268,7 +268,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 				'chosen'              => true,
 				'tl_class'            => 'w50'
 			),
-			'options_callback'        => array('TableMetaModelDca', 'backendSectionCallback'),
+			'options_callback'        => array('MetaModels\Dca\Dca', 'backendSectionCallback'),
 		),
 
 		'backendicon' => array
@@ -341,7 +341,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			),
 			'wizard'                  => array
 			(
-				'stylepicker'         => array('TableMetaModelDca','getPanelpicker')
+				'stylepicker'         => array('MetaModels\Dca\Dca','getPanelpicker')
 			),
 		),
 		'isclosed' => array

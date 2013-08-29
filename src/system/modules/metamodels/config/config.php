@@ -14,6 +14,46 @@
  * @filesource
  */
 
+
+if (!is_array($GLOBALS['MM_AUTOLOAD']))
+{
+	$GLOBALS['MM_AUTOLOAD'] = array();
+}
+
+$GLOBALS['MM_AUTOLOAD'][] = dirname(__DIR__);
+$GLOBALS['MM_AUTOLOAD'][] = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'deprecated';
+
+// For the moment, we add our autoloader at the end for non composerized Contao 2.X compat.
+if (version_compare(VERSION, '3.0', '<') && !class_exists('Composer\Autoload\ClassLoader'))
+{
+	function metamodels_autoload($className)
+	{
+		$className = ltrim($className, '\\');
+		$fileName  = '';
+
+		if ($lastNsPos = strripos($className, '\\'))
+		{
+			$namespace = substr($className, 0, $lastNsPos);
+			$className = substr($className, $lastNsPos + 1);
+			$fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
+		}
+		$fileName .= $className . '.php';
+
+		foreach ($GLOBALS['MM_AUTOLOAD'] as $baseDir)
+		{
+			if (file_exists($baseDir . DIRECTORY_SEPARATOR . $fileName))
+			{
+				require $baseDir . DIRECTORY_SEPARATOR . $fileName;
+				return true;
+			}
+		}
+
+		return null;
+	}
+
+	spl_autoload_register('metamodels_autoload', true, false);
+}
+
 // Preserve values by extensions but insert as first entry after 'system'.
 $arrOld = (array)$GLOBALS['BE_MOD']['metamodels'];
 unset($GLOBALS['BE_MOD']['metamodels']);
@@ -38,12 +78,12 @@ array_insert($GLOBALS['BE_MOD'], (array_search('accounts', array_keys($GLOBALS['
 			'icon'                  => 'system/modules/metamodels/html/logo.png',
 			'dca_addall'            => array('TableMetaModelDcaSetting', 'addAll'),
 			'rendersetting_addall'  => array('TableMetaModelRenderSetting', 'addAll'),
-			'callback'              => 'MetaModelBackendModule'
+			'callback'              => 'MetaModels\BackendIntegration\Module'
 		),
 		'support_metamodels' => array
 		(
 			'icon'                  => 'system/modules/metamodels/html/support.png',
-			'callback'              => 'MetaModelsBackendSupport'
+			'callback'              => 'MetaModels\BackendIntegration\Support'
 		)
 	),
 	// Append all previous data here.
@@ -80,18 +120,18 @@ array_insert($GLOBALS['BE_MOD'], (array_search('accounts', array_keys($GLOBALS['
 		IMAGEPATH    path to an icon (16x16) that represents the filter rule type. Based from TL_ROOT.
 		NESTINGVALUE boolean true or false. If this is true, you indicate that this rule may contain child rules.
 */
-$GLOBALS['METAMODELS']['filters']['idlist']['class']                = 'MetaModelFilterSettingIdList';
-$GLOBALS['METAMODELS']['filters']['simplelookup']['class']          = 'MetaModelFilterSettingSimpleLookup';
-$GLOBALS['METAMODELS']['filters']['simplelookup']['info_callback']  = array('TableMetaModelFilterSetting', 'drawSimpleLookup');
-$GLOBALS['METAMODELS']['filters']['customsql']['class']             = 'MetaModelFilterSettingCustomSQL';
+$GLOBALS['METAMODELS']['filters']['idlist']['class']                = 'MetaModels\Filter\Setting\IdList';
+$GLOBALS['METAMODELS']['filters']['simplelookup']['class']          = 'MetaModels\Filter\Setting\SimpleLookup';
+$GLOBALS['METAMODELS']['filters']['simplelookup']['info_callback']  = array('MetaModels\Dca\Filter', 'drawSimpleLookup');
+$GLOBALS['METAMODELS']['filters']['customsql']['class']             = 'MetaModels\Filter\Setting\CustomSql';
 $GLOBALS['METAMODELS']['filters']['customsql']['image']             = 'system/modules/metamodels/html/filter_customsql.png';
-$GLOBALS['METAMODELS']['filters']['conditionand']['class']          = 'MetaModelFilterSettingConditionAnd';
+$GLOBALS['METAMODELS']['filters']['conditionand']['class']          = 'MetaModels\Filter\Setting\ConditionAnd';
 $GLOBALS['METAMODELS']['filters']['conditionand']['image']          = 'system/modules/metamodels/html/filter_and.png';
-$GLOBALS['METAMODELS']['filters']['conditionand']['info_callback']  = array('TableMetaModelFilterSetting', 'drawAndCondition');
+$GLOBALS['METAMODELS']['filters']['conditionand']['info_callback']  = array('MetaModels\Dca\Filter', 'drawAndCondition');
 $GLOBALS['METAMODELS']['filters']['conditionand']['nestingAllowed'] = true;
-$GLOBALS['METAMODELS']['filters']['conditionor']['class']           = 'MetaModelFilterSettingConditionOr';
+$GLOBALS['METAMODELS']['filters']['conditionor']['class']           = 'MetaModels\Filter\Setting\ConditionOr';
 $GLOBALS['METAMODELS']['filters']['conditionor']['image']           = 'system/modules/metamodels/html/filter_or.png';
-$GLOBALS['METAMODELS']['filters']['conditionor']['info_callback']   = array('TableMetaModelFilterSetting', 'drawOrCondition');
+$GLOBALS['METAMODELS']['filters']['conditionor']['info_callback']   = array('MetaModels\Dca\Filter', 'drawOrCondition');
 $GLOBALS['METAMODELS']['filters']['conditionor']['nestingAllowed']  = true;
 
 /*
@@ -117,18 +157,18 @@ define('METAMODELS_ERROR', 1);
 // Back-end module - include only in Backend.
 if (TL_MODE == 'BE')
 {
-	MetaModelBackend::buildBackendMenu();
+	MetaModels\BackendIntegration\Boot::buildBackendMenu();
 }
 
 // Front-end modules.
-$GLOBALS['FE_MOD']['metamodels']['metamodel_list']              = 'ModuleMetaModelList';
-$GLOBALS['FE_MOD']['metamodels']['metamodels_frontendfilter']   = 'ModuleMetaModelFrontendFilter';
-$GLOBALS['FE_MOD']['metamodels']['metamodels_frontendclearall'] = 'ModuleMetaModelFrontendClearAll';
+$GLOBALS['FE_MOD']['metamodels']['metamodel_list']              = 'MetaModels\FrontendIntegration\Module\ModelList';
+$GLOBALS['FE_MOD']['metamodels']['metamodels_frontendfilter']   = 'MetaModels\FrontendIntegration\Module\Filter';
+$GLOBALS['FE_MOD']['metamodels']['metamodels_frontendclearall'] = 'MetaModels\FrontendIntegration\Module\FilterClearAll';
 
 // Content elements.
-$GLOBALS['TL_CTE']['metamodels']['metamodel_content']           = 'ContentMetaModel';
-$GLOBALS['TL_CTE']['metamodels']['metamodels_frontendfilter']   = 'ContentMetaModelFrontendFilter';
-$GLOBALS['TL_CTE']['metamodels']['metamodels_frontendclearall'] = 'ContentMetaModelFrontendClearAll';
+$GLOBALS['TL_CTE']['metamodels']['metamodel_content']           = 'MetaModels\FrontendIntegration\Content\ModelList';
+$GLOBALS['TL_CTE']['metamodels']['metamodels_frontendfilter']   = 'MetaModels\FrontendIntegration\Content\Filter';
+$GLOBALS['TL_CTE']['metamodels']['metamodels_frontendclearall'] = 'MetaModels\FrontendIntegration\Content\FilterClearAll';
 
 // Frontend widgets.
 $GLOBALS['TL_FFL']['multitext'] = 'WidgetMultiText';
@@ -136,12 +176,12 @@ $GLOBALS['TL_FFL']['tags']      = 'WidgetTags';
 $GLOBALS['TL_FFL']['range']     = 'WidgetRange';
 
 // HOOKS.
-$GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModelBackend', 'createDataContainer');
-$GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModelDatabase', 'createDataContainer');
-$GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('TableMetaModelFilterSetting', 'createDataContainer');
-$GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('TableMetaModelRenderSetting', 'createDataContainer');
-$GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('TableMetaModelDcaSetting', 'createDataContainer');
-$GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] = array('MetaModelFrontendFilter', 'generateClearAll');
+$GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModels\BackendIntegration\Boot', 'createDataContainer');
+$GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModels\Dca\MetaModelDcaBuilder', 'createDataContainer');
+$GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModels\Dca\Filter', 'createDataContainer');
+$GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModels\Dca\RenderSetting', 'createDataContainer');
+$GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModels\Dca\DcaSetting', 'createDataContainer');
+$GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] = array('MetaModels\FrontendIntegration\FrontendFilter', 'generateClearAll');
 
 // Dependencies we need.
 // Mapping: extension folder => ER name.

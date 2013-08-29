@@ -28,19 +28,62 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 		'enableVersioning'            => false,
 		'onload_callback'             => array
 		(
-			array('TableMetaModelAttribute', 'onLoadCallback')
+			array('MetaModels\Dca\Attribute', 'onLoadCallback')
 		),
 		'ondelete_callback'           => array
 		(
-			array('TableMetaModelAttribute', 'onDeleteCallback')
+			array('MetaModels\Dca\Attribute', 'onDeleteCallback')
 		),
 		'onmodel_beforeupdate'        => array
 		(
-			array('TableMetaModelAttribute', 'onModelBeforeUpdateCallback')
+			array('MetaModels\Dca\Attribute', 'onModelBeforeUpdateCallback')
 		),
 		'onsave_callback'             => array
 		(
-			array('TableMetaModelAttribute', 'onSaveCallback')
+			array('MetaModels\Dca\Attribute', 'onSaveCallback')
+		),
+	),
+
+	'dca_config'                      => array
+	(
+		'data_provider'               => array
+		(
+			'parent'                  => array
+			(
+				'source'              => 'tl_metamodel'
+			)
+		),
+		'childCondition'              => array
+		(
+			array(
+				'from'                => 'tl_metamodel',
+				'to'                  => 'tl_metamodel_attribute',
+				'setOn'               => array
+				(
+					array(
+						'to_field'    => 'pid',
+						'from_field'  => 'id',
+					),
+				),
+				'filter'              => array
+				(
+					array
+					(
+						'local'       => 'pid',
+						'remote'      => 'id',
+						'operation'   => '=',
+					),
+				),
+				'inverse'             => array
+				(
+					array
+					(
+						'local'       => 'pid',
+						'remote'      => 'id',
+						'operation'   => '=',
+					),
+				)
+			)
 		),
 	),
 
@@ -48,7 +91,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 	(
 		'presentation' => array
 		(
-			'breadcrumb_callback'     => array('MetaModelBreadcrumbBuilder', 'generateBreadcrumbItems'),
+			'breadcrumb_callback'     => array('MetaModels\Dca\BreadcrumbBuilder', 'generateBreadcrumbItems'),
 		),
 		
 		'sorting' => array
@@ -58,7 +101,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 			'panelLayout'             => 'filter,limit',
 			'headerFields'            => array('name', 'tableName', 'tstamp', 'translated', 'supvariants', 'varsupport'),
 			'flag'                    => 1,
-			'child_record_callback'   => array('TableMetaModelAttribute', 'renderField')
+			'child_record_callback'   => array('MetaModels\Dca\Attribute', 'renderField')
 		),
 
 		'label' => array
@@ -189,7 +232,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 				'tl_class'            => 'w50',
 				'chosen'              => 'true'
 			),
-			'options_callback'        => array('TableMetaModelAttribute', 'fieldTypesCallback'),
+			'options_callback'        => array('MetaModels\Dca\Attribute', 'fieldTypesCallback'),
 		),
 
 		'name' => array
@@ -202,11 +245,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 			),
 			'load_callback'           => array
 			(
-				array('TableMetaModelAttribute', 'decodeNameAndDescription')
+				array('MetaModels\Dca\Attribute', 'decodeNameAndDescription')
 			),
 			'save_callback'           => array
 			(
-				array('TableMetaModelAttribute', 'encodeNameAndDescription')
+				array('MetaModels\Dca\Attribute', 'encodeNameAndDescription')
 			)
 		),
 
@@ -220,11 +263,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 			),
 			'load_callback'           => array
 			(
-				array('TableMetaModelAttribute', 'decodeNameAndDescription')
+				array('MetaModels\Dca\Attribute', 'decodeNameAndDescription')
 			),
 			'save_callback'           => array
 			(
-				array('TableMetaModelAttribute', 'encodeNameAndDescription')
+				array('MetaModels\Dca\Attribute', 'encodeNameAndDescription')
 			)
 		),
 

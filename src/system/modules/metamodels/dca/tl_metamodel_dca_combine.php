@@ -36,7 +36,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 		(
 			'default'                            => array
 			(
-				'class'                          => 'GeneralDataTableRowsAsRecords',
+				'class'                          => 'DcGeneral\Data\TableRowsAsRecordsDriver',
 				'source'                         => 'tl_metamodel_dca_combine',
 				'group_column'                   => 'pid',
 				'sort_column'                    => 'sorting'
@@ -80,7 +80,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 						'label'                  => &$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['fe_group'],
 						'exclude'                => true,
 						'inputType'              => 'select',
-						'options_callback'       => array('MetaModelDcaCombiner', 'getMemberGroups'),
+						'options_callback'       => array('MetaModels\Dca\DcaCombine', 'getMemberGroups'),
 						'eval'                   => array
 						(
 							'includeBlankOption' => true,
@@ -93,7 +93,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 						'label'                  => &$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['be_group'],
 						'exclude'                => true,
 						'inputType'              => 'select',
-						'options_callback'       => array('MetaModelDcaCombiner', 'getUserGroups'),
+						'options_callback'       => array('MetaModels\Dca\DcaCombine', 'getUserGroups'),
 						'eval'                   => array
 						(
 							'includeBlankOption' => true,
@@ -106,7 +106,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 						'label'                  => &$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_id'],
 						'exclude'                => true,
 						'inputType'              => 'select',
-						'options_callback'       => array('MetaModelDcaCombiner', 'getModelPalettes'),
+						'options_callback'       => array('MetaModels\Dca\DcaCombine', 'getModelPalettes'),
 						'eval'                   => array
 						(
 							'style'              => 'width:180px',
@@ -118,7 +118,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 						'label'                  => &$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['view_id'],
 						'exclude'                => true,
 						'inputType'              => 'select',
-						'options_callback'       => array('MetaModelDcaCombiner', 'getModelViews'),
+						'options_callback'       => array('MetaModels\Dca\DcaCombine', 'getModelViews'),
 						'eval'                   => array
 						(
 							'style'              => 'width:180px',
@@ -127,7 +127,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 					),
 				),
 			),
-			'save_callback'                      => array(array('MetaModelDcaCombiner', 'updateSort')),
+			'save_callback'                      => array(array('MetaModels\Dca\DcaCombine', 'updateSort')),
 		)
 	)
 );

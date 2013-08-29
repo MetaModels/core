@@ -25,9 +25,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		'dataContainer'               => 'General',
 		'switchToEdit'                => false,
 		'enableVersioning'            => false,
-		'oncreate_callback'           => array(array('TableMetaModelFilterSetting', 'create_callback')),
-		'palettes_callback'           => array(array('TableMetaModelFilterSetting', 'preparePalettes')),
-		'tablename_callback'          => array(array('TableMetaModelFilterSetting', 'loadTableCallback')),
+		'oncreate_callback'           => array(array('MetaModels\Dca\Filter', 'create_callback')),
+		'palettes_callback'           => array(array('MetaModels\Dca\Filter', 'preparePalettes')),
+		'tablename_callback'          => array(array('MetaModels\Dca\Filter', 'loadTableCallback')),
 	),
 	'dca_config'                      => array
 	(
@@ -108,7 +108,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 	(
 		'presentation' => array
 		(
-			'breadcrumb_callback'     => array('MetaModelBreadcrumbBuilder', 'generateBreadcrumbItems'),
+			'breadcrumb_callback'     => array('MetaModels\Dca\BreadcrumbBuilder', 'generateBreadcrumbItems'),
 		),
 
 		'sorting' => array
@@ -119,14 +119,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'headerFields'            => array('type', 'attr_id'),
 			'flag'                    => 1,
 			'icon'                    => 'system/modules/metamodels/html/filter_and.png',
-			'paste_button_callback'   => array('TableMetaModelFilterSetting', 'pasteButton'),
+			'paste_button_callback'   => array('MetaModels\Dca\Filter', 'pasteButton'),
 		),
 
 		'label' => array
 		(
 			'fields'                  => array('type', 'attr_id', 'urlparam', 'comment'),
 			'format'                  => '%s',
-			'label_callback'          => array('TableMetaModelFilterSetting', 'drawSetting')
+			'label_callback'          => array('MetaModels\Dca\Filter', 'drawSetting')
 		),
 
 		'global_operations' => array
@@ -180,7 +180,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['toggle'],
 				'icon'                => 'visible.gif',
 				'attributes'          => 'onclick="Backend.getScrollOffset(); return AjaxRequest.toggleVisibility(this, %s);"',
-				'button_callback'     => array('TableMetaModelFilterSetting', 'toggleIcon')
+				'button_callback'     => array('MetaModels\Dca\Filter', 'toggleIcon')
 			)
 		)
 	),
@@ -258,7 +258,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['type'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options_callback'        => array('TableMetaModelFilterSetting', 'getSettingTypes'),
+			'options_callback'        => array('MetaModels\Dca\Filter', 'getSettingTypes'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames'],
 			'eval'                    => array
 			(
@@ -297,7 +297,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options_callback'        => array('TableMetaModelFilterSetting', 'getAttributeNames'),
+			'options_callback'        => array('MetaModels\Dca\Filter', 'getAttributeNames'),
 			'eval'                    => array
 			(
 				'doNotSaveEmpty'      => true,
@@ -308,8 +308,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 				'tl_class'            => 'w50',
 				'chosen'              => true
 			),
-			'load_callback'           => array(array('TableMetaModelFilterSetting', 'attrIdToName')),
-			'save_callback'           => array(array('TableMetaModelFilterSetting', 'nameToAttrId')),
+			'load_callback'           => array(array('MetaModels\Dca\Filter', 'attrIdToName')),
+			'save_callback'           => array(array('MetaModels\Dca\Filter', 'nameToAttrId')),
 		),
 
 		'all_langs' => array
@@ -414,7 +414,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'default'                 => 'mm_filteritem_default',
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options_callback'        => array('TableMetaModelFilterSetting', 'getSubTemplates'),
+			'options_callback'        => array('MetaModels\Dca\Filter', 'getSubTemplates'),
 			'eval'                    => array
 			(
 				'tl_class'            => 'w50',
@@ -459,7 +459,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options_callback'        => array('TableMetaModelFilterSetting','getSelectDefault'),
+			'options_callback'        => array('MetaModels\Dca\Filter','getSelectDefault'),
 			'eval'                    => array('tl_class'=>'w50 clr', 'includeBlankOption'=>true)
 		)
 	)
