@@ -16,6 +16,8 @@
 
 namespace MetaModels\Dca;
 
+use DcGeneral\DataContainerInterface;
+use MetaModels\Factory;
 use MetaModels\IMetaModel;
 
 /**
@@ -69,17 +71,17 @@ class DcaSetting extends Helper
 			return;
 		}
 
-		if ($this->Input->get('subpaletteid'))
+		if (\Input::getInstance()->get('subpaletteid'))
 		{
 			$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['dca_config']['childCondition'][0]['setOn'][] = array
 			(
 				'to_field'    => 'subpalette',
-				'value'       => $this->Input->get('subpaletteid')
+				'value'       => \Input::getInstance()->get('subpaletteid')
 			);
 			$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['dca_config']['childCondition'][0]['filter'][] = array
 			(
 				'local'        => 'subpalette',
-				'remote_value' => $this->Input->get('subpaletteid'),
+				'remote_value' => \Input::getInstance()->get('subpaletteid'),
 				'operation'   => '=',
 			);
 		} else {
@@ -113,7 +115,7 @@ class DcaSetting extends Helper
 	protected function getMetaModelFromDC($objDC)
 	{
 		// check for predefined values.
-		$objDB = Database::getInstance();
+		$objDB = \Database::getInstance();
 		// fetch current values of the field from DB.
 		$objField = $objDB->prepare('
 			SELECT pid
@@ -122,7 +124,7 @@ class DcaSetting extends Helper
 		)
 			->limit(1)
 			->executeUncached($objDC->getCurrentModel()->getProperty('pid'));
-		return MetaModelFactory::byId($objField->pid);
+		return Factory::byId($objField->pid);
 	}
 
 	public function decodeLegendTitle($varValue, $objDC)
@@ -138,14 +140,14 @@ class DcaSetting extends Helper
 	/**
 	 * Retrieve the current values of the model and create the title widget information.
 	 *
-	 * @param InterfaceGeneralModel $objModel the current Model active in the DC.
+	 * @param \DcGeneral\Data\ModelInterface $objModel the current Model active in the DC.
 	 *
-	 * @param DC_General            $objDC    the Datacontainer calling us.
+	 * @param \DcGeneral\DC_General          $objDC    the Datacontainer calling us.
 	 */
 	public function onModelUpdatedCallback($objModel, $objDC)
 	{
 		// do nothing if not in edit mode.
-		if(!(($this->Input->get('act') == 'create') || ($this->Input->get('act') == 'edit')))
+		if(!((\Input::getInstance()->get('act') == 'create') || (\Input::getInstance()->get('act') == 'edit')))
 		{
 			return;
 		}
@@ -162,6 +164,9 @@ class DcaSetting extends Helper
 		);
 	}
 
+	/**
+	 * @param DataContainerInterface $objDC
+	 */
 	protected function objectsFromUrl($objDC)
 	{
 		// TODO: detect all other ways we might end up here and fetch $objMetaModel accordingly.
@@ -169,29 +174,33 @@ class DcaSetting extends Helper
 		{
 			return;
 		}
-		if($objDC && $objDC->getCurrentModel())
+
+		if($objDC && $objDC->getEnvironment()->getCurrentModel())
 		{
-			$this->objSetting = $this->Database->prepare('SELECT * FROM tl_metamodel_dca WHERE id=?')->execute($objDC->getCurrentModel()->getProperty('pid'));
-			$this->objMetaModel = MetaModelFactory::byId($this->objSetting->pid);
+			$this->objSetting = \Database::getInstance()
+				->prepare('SELECT * FROM tl_metamodel_dca WHERE id=?')
+				->execute($objDC->getEnvironment()->getCurrentModel()->getProperty('pid'));
+
+			$this->objMetaModel = Factory::byId($this->objSetting->pid);
 		}
 
-		if ($this->Input->get('act'))
+		if (\Input::getInstance()->get('act'))
 		{
 			// act present, but we have an id
-			switch ($this->Input->get('act'))
+			switch (\Input::getInstance()->get('act'))
 			{
 				case 'edit':
-					if ($this->Input->get('id'))
+					if (\Input::getInstance()->get('id'))
 					{
-						$this->objSetting = $this->Database->prepare('
+						$this->objSetting = \Database::getInstance()->prepare('
 						SELECT tl_metamodel_dcasetting.*,
 								tl_metamodel_dca.pid AS tl_metamodel_dca_pid
 						FROM tl_metamodel_dcasetting
 						LEFT JOIN tl_metamodel_dca
 						ON (tl_metamodel_dcasetting.pid = tl_metamodel_dca.id)
 						WHERE (tl_metamodel_dcasetting.id=?)')
-							->execute($this->Input->get('id'));
-						$this->objMetaModel = MetaModelFactory::byId($this->objSetting->tl_metamodel_dca_pid);
+							->execute(\Input::getInstance()->get('id'));
+						$this->objMetaModel = Factory::byId($this->objSetting->tl_metamodel_dca_pid);
 					}
 					break;
 				default:;
@@ -204,9 +213,9 @@ class DcaSetting extends Helper
 	 * Prepares a option list with alias => name connection for all attributes.
 	 * This is used in the attr_id select box.
 	 *
-	 * @param DataContainer $objDC the data container calling.
+	 * @param DataContainerInterface $objDC the data container calling.
 	 *
-	 * @return
+	 * @return array
 	 */
 	public function getAttributeNames($objDC)
 	{
@@ -214,17 +223,17 @@ class DcaSetting extends Helper
 		$arrResult = array();
 		if (!$this->objMetaModel)
 		{
-			return;
+			return array();
 		}
 		$objMetaModel = $this->objMetaModel;
-		$objSettings = $this->Database->prepare('SELECT attr_id FROM tl_metamodel_dcasetting WHERE pid=? AND dcatype="attribute" AND ((subpalette=0) OR (subpalette=?))')
-			->execute($objDC->getCurrentModel()->getProperty('pid'), $objDC->getCurrentModel()->getProperty('subpalette'));
+		$objSettings = \Database::getInstance()->prepare('SELECT attr_id FROM tl_metamodel_dcasetting WHERE pid=? AND dcatype="attribute" AND ((subpalette=0) OR (subpalette=?))')
+			->execute($objDC->getEnvironment()->getCurrentModel()->getProperty('pid'), $objDC->getEnvironment()->getCurrentModel()->getProperty('subpalette'));
 
 		$arrAlreadyTaken = $objSettings->fetchEach('attr_id');
 
 		foreach ($objMetaModel->getAttributes() as $objAttribute)
 		{
-			if ((!($objAttribute->get('id') == $objDC->getCurrentModel()->getProperty('attr_id')))
+			if ((!($objAttribute->get('id') == $objDC->getEnvironment()->getCurrentModel()->getProperty('attr_id')))
 				&& in_array($objAttribute->get('id'), $arrAlreadyTaken))
 			{
 				continue;
@@ -248,13 +257,13 @@ class DcaSetting extends Helper
 		return $configs;
 	}
 
-	public function drawSetting($arrRow, $strLabel = '', DataContainer $objDC = null, $imageAttribute='', $blnReturnImage=false, $blnProtected=false)
+	public function drawSetting($arrRow, $strLabel = '', DataContainerInterface $objDC = null, $imageAttribute='', $blnReturnImage=false, $blnProtected=false)
 	{
 		switch ($arrRow['dcatype'])
 		{
 			case 'attribute':
-				$objSetting = $this->Database->prepare('SELECT * FROM tl_metamodel_dca WHERE id=?')->execute($arrRow['pid']);
-				$objMetaModel = MetaModelFactory::byId($objSetting->pid);
+				$objSetting = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel_dca WHERE id=?')->execute($arrRow['pid']);
+				$objMetaModel = Factory::byId($objSetting->pid);
 
 				if (!$objMetaModel)
 				{
@@ -326,19 +335,19 @@ class DcaSetting extends Helper
 	/**
 	 * Fetch the template group for the detail view of the current MetaModel module.
 	 *
-	 * @param DataContainer $objDC the datacontainer calling this method.
+	 * @param \DcGeneral\DataContainerInterface $objDC the datacontainer calling this method.
 	 *
 	 * @return array
 	 *
 	 */
-	public function getTemplates(DataContainer $objDC)
+	public function getTemplates(DataContainerInterface $objDC)
 	{
 		if (!($this->objMetaModel))
 		{
 			return array();
 		}
 
-		$objAttribute = $this->objMetaModel->getAttributeById($objDC->activeRecord->attr_id);
+		$objAttribute = $this->objMetaModel->getAttributeById($objDC->getEnvironment()->getCurrentModel()->getProperty('attr_id'));
 
 		if (!$objAttribute)
 		{
@@ -351,7 +360,7 @@ class DcaSetting extends Helper
 	/**
 	 * Fetch the template group for the detail view of the current MetaModel module.
 	 *
-	 * @param DataContainer $objDC the datacontainer calling this method.
+	 * @param DataContainerInterface $objDC the datacontainer calling this method.
 	 *
 	 * @return array
 	 *
@@ -364,7 +373,7 @@ class DcaSetting extends Helper
 		$this->loadLanguageFile('default');
 		$this->loadLanguageFile('tl_metamodel_dcasetting');
 
-		$this->Template = new BackendTemplate('be_autocreatepalette');
+		$this->Template = new \BackendTemplate('be_autocreatepalette');
 
 		$this->Template->cacheMessage = '';
 		$this->Template->updateMessage = '';
@@ -375,11 +384,11 @@ class DcaSetting extends Helper
 		// severity: error, confirm, info, new
 		$arrMessages = array();
 
-		$objPalette = $this->Database->prepare('SELECT * FROM tl_metamodel_dca WHERE id=?')->execute($this->Input->get('id'));
+		$objPalette = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel_dca WHERE id=?')->execute(\Input::getInstance()->get('id'));
 
-		$objMetaModel = MetaModelFactory::byId($objPalette->pid);
+		$objMetaModel = Factory::byId($objPalette->pid);
 
-		$objAlreadyExist = $this->Database->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=? AND dcatype=?')->execute($this->Input->get('id'), 'attribute');
+		$objAlreadyExist = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=? AND dcatype=?')->execute(\Input::getInstance()->get('id'), 'attribute');
 
 		$arrKnown = array();
 		$intMax = 128;
@@ -394,7 +403,7 @@ class DcaSetting extends Helper
 
 		$blnWantPerform = false;
 		// perform the labour work
-		if ($this->Input->post('act') == 'perform')
+		if (\Input::getInstance()->post('act') == 'perform')
 		{
 			// loop over all attributes now.
 			foreach ($objMetaModel->getAttributes() as $objAttribute)
@@ -402,25 +411,25 @@ class DcaSetting extends Helper
 				if (!array_key_exists($objAttribute->get('id'), $arrKnown))
 				{
 					$intMax += 128;
-					$this->Database->prepare('INSERT INTO tl_metamodel_dcasetting %s')->set(array(
-						'pid'      => $this->Input->get('id'),
+					\Database::getInstance()->prepare('INSERT INTO tl_metamodel_dcasetting %s')->set(array(
+						'pid'      => \Input::getInstance()->get('id'),
 						'sorting'  => $intMax,
 						'tstamp'   => time(),
 						'dcatype'  => 'attribute',
 						'attr_id'  => $objAttribute->get('id'),
 						'tl_class' => '',
-						'subpalette' => (Input::getInstance()->get('subpaletteid')) ? Input::getInstance()->get('subpaletteid') : 0,
+						'subpalette' => (\Input::getInstance()->get('subpaletteid')) ? Input::getInstance()->get('subpaletteid') : 0,
 					))->execute();
 
 					// Get msg for adding at main palette or a subpalette
-					if (Input::getInstance()->get('subpaletteid'))
+					if (\Input::getInstance()->get('subpaletteid'))
 					{
-						$strPartentAttributeName = Input::getInstance()->get('subpaletteid');
+						$strPartentAttributeName = \Input::getInstance()->get('subpaletteid');
 
 						// Get parent setting.
-						$objParentDcaSetting = Database::getInstance()
+						$objParentDcaSetting = \Database::getInstance()
 							->prepare("SELECT attr_id FROM tl_metamodel_dcasetting WHERE id=?")
-							->execute(Input::getInstance()->get('subpaletteid'));
+							->execute(\Input::getInstance()->get('subpaletteid'));
 
 						// Check if we have a attribute
 						$objPartenAttribute = $objMetaModel->getAttributeById($objParentDcaSetting->attr_id);
@@ -503,17 +512,17 @@ class DcaSetting extends Helper
 	public function subpaletteButton($row, $href, $label, $title, $icon, $attributes)
 	{
 		// Check if we have a attribute
-		if($row['dcatype'] != 'attribute' || strlen($this->Input->get('subpaletteid')) != 0)
+		if($row['dcatype'] != 'attribute' || strlen(\Input::getInstance()->get('subpaletteid')) != 0)
 		{
 			return $this->makeDisabledButton($icon, $label);
 		}
 
 		// Get MM and check if we have a valide one.
-		$intId = $this->Database
+		$intId = \Database::getInstance()
 			->prepare('SELECT pid FROM tl_metamodel_dca WHERE id=?')
 			->execute($row['pid'])
 			->pid;
-		$objMetaModel = MetaModelFactory::byId($intId);
+		$objMetaModel = Factory::byId($intId);
 		if(is_null($objMetaModel))
 		{
 			return $this->makeDisabledButton($icon, $label);
@@ -551,9 +560,9 @@ class DcaSetting extends Helper
 	 */
 	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
 	{
-		if (strlen($this->Input->get('tid')))
+		if (strlen(\Input::getInstance()->get('tid')))
 		{
-			$this->toggleVisibility($this->Input->get('tid'), ($this->Input->get('state') == 1));
+			$this->toggleVisibility(\Input::getInstance()->get('tid'), (\Input::getInstance()->get('state') == 1));
 			$this->redirect($this->getReferer());
 		}
 
@@ -574,8 +583,8 @@ class DcaSetting extends Helper
 	public function toggleVisibility($intId, $blnVisible)
 	{
 		// Check permissions to edit
-		$this->Input->setGet('id', $intId);
-		$this->Input->setGet('act', 'toggle');
+		\Input::getInstance()->setGet('id', $intId);
+		\Input::getInstance()->setGet('act', 'toggle');
 
 		// Trigger the save_callback
 		if (is_array($GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['fields']['published']['save_callback']))
@@ -588,7 +597,7 @@ class DcaSetting extends Helper
 		}
 
 		// Update the database
-		$this->Database->prepare("UPDATE tl_metamodel_dcasetting SET tstamp=". time() .", published='" . ($blnVisible ? 1 : '') . "' WHERE id=?")
+		\Database::getInstance()->prepare("UPDATE tl_metamodel_dcasetting SET tstamp=". time() .", published='" . ($blnVisible ? 1 : '') . "' WHERE id=?")
 			->execute($intId);
 	}
 }
