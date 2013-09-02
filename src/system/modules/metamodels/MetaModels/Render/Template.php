@@ -16,6 +16,8 @@
 
 namespace MetaModels\Render;
 
+use MetaModels\Helper\ContaoController;
+
 /**
  * Template class for metamodels.
  * In most aspects this behaves identically to the FrontendTemplate class from Contao but it differs in respect to format selection.
@@ -57,7 +59,7 @@ class Template
 	 */
 	public function __call($strMethod, $arrArgs)
 	{
-		return call_user_func_array(array(\MetaModelController::getInstance(), $strMethod), $arrArgs);
+		return call_user_func_array(array(ContaoController::getInstance(), $strMethod), $arrArgs);
 	}
 
 	/**
