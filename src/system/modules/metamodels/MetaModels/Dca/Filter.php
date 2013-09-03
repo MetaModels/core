@@ -68,16 +68,16 @@ class Filter extends Helper
 		parent::__construct();
 
 		// toggling of a filter setting?
-		if($this->Input->get('tid') && ($this->Input->get('table') == 'tl_metamodel_filtersetting'))
+		if(\Input::getInstance()->get('tid') && (\Input::getInstance()->get('table') == 'tl_metamodel_filtersetting'))
 		{
 			// Update database
-			$this->Database->prepare('
+			\Database::getInstance()->prepare('
 				UPDATE tl_metamodel_filtersetting
 				SET enabled=?
 				WHERE id=?'
 			)->execute(
-					($this->Input->get('state')=='1'?'1':''),
-					$this->Input->get('tid')
+					(\Input::getInstance()->get('state')=='1'?'1':''),
+					\Input::getInstance()->get('tid')
 				);
 			exit;
 		}
@@ -90,7 +90,7 @@ class Filter extends Helper
 
 	protected function objectsFromUrl($objDC)
 	{
-		if (!(($this->Input->get('do') == 'metamodels')
+		if (!((\Input::getInstance()->get('do') == 'metamodels')
 			&& ((is_object($objDC) && $objDC->table != 'tl_metamodel_filtersetting') || ($objDC == 'tl_metamodel_filtersetting'))))
 		{
 			return;
@@ -106,22 +106,22 @@ class Filter extends Helper
 		{
 			$this->strSettingType = $objDC->getCurrentModel()->getProperty('type');
 
-			$this->objFilter = $this->Database
+			$this->objFilter = \Database::getInstance()
 				->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
 				->execute($objDC->getCurrentModel()->getProperty('fid'));
 
 			$this->objMetaModel = ModelFactory::byId($this->objFilter->pid);
 		}
 
-		if ($this->Input->get('act'))
+		if (\Input::getInstance()->get('act'))
 		{
 			// act present, but we have an id
-			switch ($this->Input->get('act'))
+			switch (\Input::getInstance()->get('act'))
 			{
 				case 'edit':
-					if ($this->Input->get('id'))
+					if (\Input::getInstance()->get('id'))
 					{
-						$this->objFilter = $this->Database->prepare('
+						$this->objFilter = \Database::getInstance()->prepare('
 							SELECT tl_metamodel_filter.*,
 								tl_metamodel_filtersetting.type AS tl_metamodel_filtersetting_type,
 								tl_metamodel_filtersetting.id AS tl_metamodel_filtersetting_id
@@ -129,25 +129,25 @@ class Filter extends Helper
 							LEFT JOIN tl_metamodel_filter
 							ON (tl_metamodel_filtersetting.fid = tl_metamodel_filter.id)
 							WHERE (tl_metamodel_filtersetting.id=?)')
-							->execute($this->Input->get('id'));
+							->execute(\Input::getInstance()->get('id'));
 						$this->strSettingType = $this->objFilter->tl_metamodel_filtersetting_type;
-						$this->objMetaModel = MetaModelFactory::byId($this->objFilter->pid);
+						$this->objMetaModel = ModelFactory::byId($this->objFilter->pid);
 					}
 					break;
 				case 'paste':
-					if ($this->Input->get('id'))
+					if (\Input::getInstance()->get('id'))
 					{
-						switch ($this->Input->get('mode'))
+						switch (\Input::getInstance()->get('mode'))
 						{
 							case 'create':
-								$this->objFilter = $this->Database
+								$this->objFilter = \Database::getInstance()
 									->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
-									->execute($this->Input->get('id'));
+									->execute(\Input::getInstance()->get('id'));
 
 								$this->objMetaModel = ModelFactory::byId($this->objFilter->pid);
 								break;
 							case 'cut':
-								$this->objFilter = $this->Database->prepare('
+								$this->objFilter = \Database::getInstance()->prepare('
 									SELECT tl_metamodel_filter.*,
 										tl_metamodel_filtersetting.type AS tl_metamodel_filtersetting_type,
 										tl_metamodel_filtersetting.id AS tl_metamodel_filtersetting_id
@@ -155,7 +155,7 @@ class Filter extends Helper
 									LEFT JOIN tl_metamodel_filter
 									ON (tl_metamodel_filtersetting.fid = tl_metamodel_filter.id)
 									WHERE (tl_metamodel_filtersetting.id=?)')
-									->execute($this->Input->get('source'));
+									->execute(\Input::getInstance()->get('source'));
 								$this->strSettingType = $this->objFilter->tl_metamodel_filtersetting_type;
 								$this->objMetaModel = ModelFactory::byId($this->objFilter->pid);
 								break;
@@ -163,9 +163,9 @@ class Filter extends Helper
 					}
 					break;
 				case 'create':
-					$this->objFilter = $this->Database
+					$this->objFilter = \Database::getInstance()
 						->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
-						->execute($this->Input->get('id'));
+						->execute(\Input::getInstance()->get('id'));
 
 					$this->objMetaModel = ModelFactory::byId($this->objFilter->pid);
 					break;
@@ -174,16 +174,16 @@ class Filter extends Helper
 			}
 		} else {
 			// no act but we have an id, should be list mode then, no type name available.
-			if ($this->Input->get('id'))
+			if (\Input::getInstance()->get('id'))
 			{
-				$this->objFilter = $this->Database->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')->execute($this->Input->get('id'));
+				$this->objFilter = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')->execute(\Input::getInstance()->get('id'));
 				$this->objMetaModel = ModelFactory::byId($this->objFilter->pid);
 			}
 		}
 
 		// select all root entries for the current filter.
 		$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['list']['sorting']['root'] =
-			$this->Database->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE fid=? AND pid=0')
+			\Database::getInstance()->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE fid=? AND pid=0')
 				->execute($this->objFilter->id)
 				->fetchEach('id');
 		$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['list']['sorting']['rootPaste'] = true;
@@ -379,21 +379,21 @@ class Filter extends Helper
 			$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['dca_config']['childCondition'][0]['filter'][] = array
 			(
 				'local'        => 'fid',
-				'remote_value' => $this->Input->get('id'),
+				'remote_value' => \Input::getInstance()->get('id'),
 				'operation'    => '=',
 			);
 
 			$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['dca_config']['rootEntries']['self']['setOn'][] = array
 			(
 				'property'    => 'fid',
-				'value'       => $this->Input->get('id'),
+				'value'       => \Input::getInstance()->get('id'),
 			);
 
 			$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['dca_config']['rootEntries']['self']['filter'][] = array
 			(
 				'property'    => 'fid',
 				'operation'   => '=',
-				'value'       => $this->Input->get('id'),
+				'value'       => \Input::getInstance()->get('id'),
 			);
 		}
 
@@ -406,17 +406,17 @@ class Filter extends Helper
 	public function create_callback($strTable, $insertID, $arrRow, $objDC)
 	{
 		// If we come from overview use pid
-		if($this->Input->get('id') != "")
+		if(\Input::getInstance()->get('id') != "")
 		{
-			$intFid = $this->Input->get('id');
+			$intFid = \Input::getInstance()->get('id');
 		}
 		// If we use the "save and new" btt use the pid instead
-		elseif($this->Input->get('pid') != "")
+		elseif(\Input::getInstance()->get('pid') != "")
 		{
 			// Get fid from pid
-			$arrFid = $this->Database
+			$arrFid = \Database::getInstance()
 				->prepare('SELECT fid FROM tl_metamodel_filtersetting WHERE id=?')
-				->execute($this->Input->get('pid'))
+				->execute(\Input::getInstance()->get('pid'))
 				->fetchEach('fid');
 
 			// Check if we have a pid
