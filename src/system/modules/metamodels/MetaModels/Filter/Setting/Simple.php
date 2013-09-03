@@ -17,6 +17,7 @@
 namespace MetaModels\Filter\Setting;
 
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
+use MetaModels\Helper\ContaoController;
 use MetaModels\IMetaModel;
 use MetaModels\IItem;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
@@ -163,7 +164,7 @@ abstract class Simple implements ISimple
 		{
 			return $arrOptions;
 		}
-		$objController = \MetaModelController::getInstance();
+		$objController = ContaoController::getInstance();
 
 		$strFilterAction = '';
 
@@ -267,11 +268,11 @@ abstract class Simple implements ISimple
 	 * @param array                           $arrJumpTo                The jumpTo page to use for URL generating - if empty, the current
 	 *                                                                  frontend page will get used.
 	 *
-	 * @param \MetaModelFrontendFilterOptions $objFrontendFilterOptions The options to use.
+	 * @param FrontendFilterOptions $objFrontendFilterOptions The options to use.
 	 *
 	 * @return array
 	 */
-	protected function prepareFrontendFilterWidget($arrWidget, $arrFilterUrl, $arrJumpTo, \MetaModelFrontendFilterOptions $objFrontendFilterOptions)
+	protected function prepareFrontendFilterWidget($arrWidget, $arrFilterUrl, $arrJumpTo, FrontendFilterOptions $objFrontendFilterOptions)
 	{
 		$strClass = $GLOBALS['TL_FFL'][$arrWidget['inputType']];
 
@@ -284,7 +285,7 @@ abstract class Simple implements ISimple
 		// Determine current value.
 		$arrWidget['value'] = $arrFilterUrl[$arrWidget['eval']['urlparam']];
 
-		$arrData = \MetaModelController::getInstance()->prepareForWidget(
+		$arrData = ContaoController::getInstance()->prepareForWidget(
 			$arrWidget,
 			$arrWidget['eval']['urlparam'],
 			$arrWidget['value']
