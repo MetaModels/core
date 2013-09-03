@@ -383,13 +383,13 @@ class Filter extends Helper
 				'operation'    => '=',
 			);
 
-			$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['dca_config']['rootEntries']['self']['setOn'][] = array
+			$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['dca_config']['rootEntries']['tl_metamodel_filtersetting']['setOn'][] = array
 			(
 				'property'    => 'fid',
 				'value'       => \Input::getInstance()->get('id'),
 			);
 
-			$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['dca_config']['rootEntries']['self']['filter'][] = array
+			$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['dca_config']['rootEntries']['tl_metamodel_filtersetting']['filter'][] = array
 			(
 				'property'    => 'fid',
 				'operation'   => '=',
