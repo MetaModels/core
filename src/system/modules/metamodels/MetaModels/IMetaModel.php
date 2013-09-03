@@ -48,6 +48,13 @@ interface IMetaModel
 	public function getTableName();
 
 	/**
+	 * Retrieve the human readble name for this metamodel.
+	 *
+	 * @return string the name for the MetaModel.
+	 */
+	public function getName();
+
+	/**
 	 * Returns the array of all attribute instances that are defined for this MetaModel instance.
 	 *
 	 * @return \MetaModels\Attribute\IAttribute[] as name=>instance

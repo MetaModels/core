@@ -68,16 +68,6 @@ class MetaModel implements IMetaModel
 	}
 
 	/**
-	 * Retrieve the human readble name for this metamodel.
-	 *
-	 * @return string the name for the MetaModel.
-	 */
-	public function getName()
-	{
-		return $this->arrData['name'];
-	}
-
-	/**
 	 * Adds an attribute to the internal list of attributes.
 	 *
 	 * @param \MetaModels\Attribute\IAttribute $objAttribute The attribute instance to add.
@@ -343,9 +333,9 @@ class MetaModel implements IMetaModel
 	}
 
 	/////////////////////////////////////////////////////////////////
+
 	// interface IMetaModel
 	/////////////////////////////////////////////////////////////////
-
 	/**
 	 * {@inheritdoc}
 	 */
@@ -373,6 +363,14 @@ class MetaModel implements IMetaModel
 	public function getTableName()
 	{
 		return array_key_exists('tableName', $this->arrData) ? $this->arrData['tableName'] : null;
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getName()
+	{
+		return $this->arrData['name'];
 	}
 
 	/**
