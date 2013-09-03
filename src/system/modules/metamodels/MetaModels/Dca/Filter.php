@@ -301,7 +301,7 @@ class Filter extends Helper
 		}
 
 		$objMetaModel  = $this->objMetaModel;
-		$arrTypeFilter = $GLOBALS['METAMODELS']['filters'][$objDC->getCurrentModel()->getProperty('type')]['attr_filter'];
+		$arrTypeFilter = $GLOBALS['METAMODELS']['filters'][$objDC->getEnvironment()->getCurrentModel()->getProperty('type')]['attr_filter'];
 
 		foreach ($objMetaModel->getAttributes() as $objAttribute)
 		{
@@ -450,13 +450,13 @@ class Filter extends Helper
 			return array();
 		}
 
-		$objAttribute = $objMetaModel->getAttributeById($objDC->getCurrentModel()->getProperty('attr_id'));
+		$objAttribute = $objMetaModel->getAttributeById($objDC->getEnvironment()->getCurrentModel()->getProperty('attr_id'));
 		if(!$objAttribute)
 		{
 			return array();
 		}
 
-		$blnOnlyUsed = $objDC->getCurrentModel()->getProperty('onlyused') ? true : false;
+		$blnOnlyUsed = $objDC->getEnvironment()->getCurrentModel()->getProperty('onlyused') ? true : false;
 
 		$arrCount = array();
 		$arrOptions = $objAttribute->getFilterOptions(null, $blnOnlyUsed, $arrCount);
