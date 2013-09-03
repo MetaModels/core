@@ -23,9 +23,42 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
 	'config' => array
 	(
 		'dataContainer'               => 'General',
-		'ptable'                      => 'tl_metamodel',
 		'switchToEdit'                => false,
 		'enableVersioning'            => false,
+	),
+
+	'dca_config'                      => array
+	(
+		'data_provider'               => array
+		(
+			'parent'                  => array
+			(
+				'source'              => 'tl_metamodel'
+			)
+		),
+		'childCondition'              => array
+		(
+			array(
+				'from'                => 'tl_metamodel',
+				'to'                  => 'tl_metamodel_filter',
+				'setOn'               => array
+				(
+					array(
+						'to_field'    => 'pid',
+						'from_field'  => 'id',
+					),
+				),
+				'filter'              => array
+				(
+					array
+					(
+						'local'       => 'pid',
+						'remote'      => 'id',
+						'operation'   => '=',
+					),
+				)
+			)
+		),
 	),
 
 	// List
