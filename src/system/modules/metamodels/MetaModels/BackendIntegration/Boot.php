@@ -154,7 +154,7 @@ class Boot
 		if ($strClass == 'Backend')
 		{
 			MetaModelDcaBuilder::getInstance()->injectIntoBackendModules();
-			spl_autoload_unregister(array('MetaModelBackend', 'checkBackendLoad'));
+			spl_autoload_unregister(array('MetaModels\BackendIntegration\Boot', 'checkBackendLoad'));
 		}
 		return false;
 	}
@@ -162,7 +162,7 @@ class Boot
 	protected static function registerLateConfig()
 	{
 		// register a autoloader which will transport the config variables and unregister itself when loading class Backend.
-		spl_autoload_register(array('MetaModelBackend', 'checkBackendLoad'), true, true);
+		spl_autoload_register(array('MetaModels\BackendIntegration\Boot', 'checkBackendLoad'), true, true);
 		if (version_compare(VERSION, '3.0', '<') && !in_array('__autoload', spl_autoload_functions()))
 		{
 			spl_autoload_register('__autoload');
@@ -196,7 +196,7 @@ class Boot
 		{
 			// Note: do NOT use the logging prvided by class System here as that one logs into the DB
 			// which is pretty useless as the DB most likely was the one throwing the exception.
-			log_message('Exception in MetaModelBackend::buildBackendMenu() - ' . $exc->getMessage());
+			log_message('Exception in MetaModels\BackendIntegration\Boot::buildBackendMenu() - ' . $exc->getMessage());
 		}
 	}
 }
