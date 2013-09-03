@@ -24,7 +24,7 @@ $GLOBALS['MM_AUTOLOAD'][] = dirname(__DIR__);
 $GLOBALS['MM_AUTOLOAD'][] = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'deprecated';
 
 // For the moment, we add our autoloader at the end for non composerized Contao 2.X compat.
-if (version_compare(VERSION, '3.0', '<') && !class_exists('Composer\Autoload\ClassLoader'))
+if (version_compare(VERSION, '3.0', '<')/* && !class_exists('Composer\Autoload\ClassLoader')*/)
 {
 	function metamodels_autoload($className)
 	{
