@@ -51,7 +51,9 @@ if (version_compare(VERSION, '3.0', '<')/* && !class_exists('Composer\Autoload\C
 		return null;
 	}
 
+	spl_autoload_unregister('__autoload');
 	spl_autoload_register('metamodels_autoload', true, false);
+	spl_autoload_register('__autoload');
 }
 
 // Preserve values by extensions but insert as first entry after 'system'.
