@@ -171,9 +171,8 @@ $GLOBALS['TL_CTE']['metamodels']['metamodels_frontendfilter']   = 'MetaModels\Fr
 $GLOBALS['TL_CTE']['metamodels']['metamodels_frontendclearall'] = 'MetaModels\FrontendIntegration\Content\FilterClearAll';
 
 // Frontend widgets.
-$GLOBALS['TL_FFL']['multitext'] = 'WidgetMultiText';
-$GLOBALS['TL_FFL']['tags']      = 'WidgetTags';
-$GLOBALS['TL_FFL']['range']     = 'WidgetRange';
+$GLOBALS['TL_FFL']['multitext'] = 'MetaModels\Widgets\MultiTextWidget';
+$GLOBALS['TL_FFL']['tags']      = 'MetaModels\Widgets\TagsWidget';
 
 // HOOKS.
 $GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModels\BackendIntegration\Boot', 'createDataContainer');
@@ -192,7 +191,7 @@ $GLOBALS['METAMODELS']['dependencies']['justtextwidgets']   = 'JustTextWidgets';
 
 array_insert($GLOBALS['BE_FFL'], 15, array
 (
-	'mm_subdca'    => 'MetaModelSubDCAWidget'
+	'mm_subdca'    => 'MetaModels\Widgets\SubDCAWidget'
 ));
 
 // Selectable styles in the palette tl_class definitions.

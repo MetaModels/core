@@ -104,6 +104,9 @@ ClassLoader::addClasses(array
 	'MetaModels\Render\Setting\ISimple'                     => 'system/modules/metamodels/MetaModels/Render/Setting/ISimple.php',
 	'MetaModels\Render\Setting\Simple'                      => 'system/modules/metamodels/MetaModels/Render/Setting/Simple.php',
 	'MetaModels\Render\Template'                            => 'system/modules/metamodels/MetaModels/Render/Template.php',
+	'MetaModels\Widgets\MultiTextWidget'                    => 'system/modules/metamodels/Widgets/MultiTextWidget.php',
+	'MetaModels\Widgets\SubDCAWidget'                       => 'system/modules/metamodels/Widgets/SubDCAWidget.php',
+	'MetaModels\Widgets\TagsWidget'                         => 'system/modules/metamodels/Widgets/TagsWidget.php',
 
 	// Backwards compatibility layer from here on. DEPRECATED only, DO NOT USE.
 	'IMetaModelAttribute'                   => 'system/modules/metamodels/deprecated/IMetaModelAttribute.php',
