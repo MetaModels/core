@@ -135,9 +135,9 @@ class Controller extends DefaultController
 					setcookie('BE_PAGE_OFFSET', 0, 0, '/');
 
 					// @codingStandardsIgnoreStart - we know that access to $_SESSION is discouraged.
-					$_SESSION['TL_INFO']    = '';
-					$_SESSION['TL_ERROR']   = '';
-					$_SESSION['TL_CONFIRM'] = '';
+					$_SESSION['TL_INFO']    = array();
+					$_SESSION['TL_ERROR']   = array();
+					$_SESSION['TL_CONFIRM'] = array();
 					// @codingStandardsIgnoreEnd
 
 					$this->redirect($this->getReferer());
