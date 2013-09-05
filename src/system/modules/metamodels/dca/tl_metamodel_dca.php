@@ -29,7 +29,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 		'ctable' => 'tl_metamodel_dcasetting',
 		'switchToEdit' => false,
 		'enableVersioning' => false,
-//		'oncreate_callback'                => array(array('TableMetaModelDca', 'checkSortMode')),
+//		'oncreate_callback'                => array(array('MetaModels\Dca\Dca', 'checkSortMode')),
 	),
 
 	// List
@@ -237,11 +237,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			),
 			'load_callback'           => array
 			(
-				array('TableMetaModelDca', 'modeLoad')
+				array('MetaModels\Dca\Dca', 'modeLoad')
 			),
 			'save_callback'           => array
 			(
-				array('TableMetaModelDca', 'modeSave')
+				array('MetaModels\Dca\Dca', 'modeSave')
 			)
 		),
 
