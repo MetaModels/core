@@ -148,7 +148,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_rendersettings'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
-		'options_callback'        => array('Content', 'getRenderSettings'),
+		'options_callback'        => array('MetaModels\Dca\Content', 'getRenderSettings'),
 		'default'                 => '',
 		'eval' => array
 		(
