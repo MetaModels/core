@@ -17,7 +17,7 @@
 /**
  * Config
  */
-$GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('MetaModels\Dca\TableContent', 'buildCustomFilter');
+$GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('MetaModels\Dca\Content', 'buildCustomFilter');
 
 /**
  * Palettes
@@ -53,7 +53,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		),
 		'wizard' => array
 		(
-			array('MetaModels\Dca\TableContent', 'editMetaModel')
+			array('MetaModels\Dca\Content', 'editMetaModel')
 		)
 	),
 
@@ -62,7 +62,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_layout'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
-		'options_callback'        => array('MetaModels\Dca\TableContent', 'getModuleTemplates'),
+		'options_callback'        => array('MetaModels\Dca\Content', 'getModuleTemplates'),
 		'eval'                    => array
 		(
 			'chosen'              => true,
@@ -99,7 +99,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_sortby'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
-		'options_callback'        => array('TableContent', 'getAttributeNames'),
+		'options_callback'        => array('MetaModels\Dca\Content', 'getAttributeNames'),
 		'eval'                    => array
 		(
 			'includeBlankOption'  => true,
@@ -128,7 +128,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_filtering'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
-		'options_callback'        => array('MetaModels\Dca\TableContent', 'getFilterSettings'),
+		'options_callback'        => array('MetaModels\Dca\Content', 'getFilterSettings'),
 		'default'                 => '',
 		'eval' => array
 		(
@@ -139,7 +139,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		),
 		'wizard' => array
 		(
-			array('MetaModels\Dca\TableContent', 'editFilterSetting')
+			array('MetaModels\Dca\Content', 'editFilterSetting')
 		)
 	),
 
@@ -148,7 +148,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_rendersettings'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
-		'options_callback'        => array('TableContent', 'getRenderSettings'),
+		'options_callback'        => array('Content', 'getRenderSettings'),
 		'default'                 => '',
 		'eval' => array
 		(
@@ -159,7 +159,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		),
 		'wizard' => array
 		(
-			array('MetaModels\Dca\TableContent', 'editRenderSetting')
+			array('MetaModels\Dca\Content', 'editRenderSetting')
 		)
 	),
 
@@ -229,7 +229,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_params'],
 		'exclude'                 => true,
 		'inputType'               => 'checkboxWizard',
-		'options_callback'        => array('MetaModels\Dca\TableContent','getFilterParameterNames'),
+		'options_callback'        => array('MetaModels\Dca\Content','getFilterParameterNames'),
 		'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
 	),
 
@@ -262,7 +262,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'default'                 => 'mm_filter_default',
 		'exclude'                 => true,
 		'inputType'               => 'select',
-		'options_callback'        => array('MetaModels\Dca\TableContent', 'getFilterTemplates'),
+		'options_callback'        => array('MetaModels\Dca\Content', 'getFilterTemplates'),
 		'eval'                    => array
 		(
 			'tl_class'            => 'w50',
