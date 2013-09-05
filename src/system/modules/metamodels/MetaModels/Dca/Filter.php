@@ -17,6 +17,7 @@
 namespace MetaModels\Dca;
 
 use DcGeneral\DC_General;
+use MetaModels\Helper\ContaoController;
 use MetaModels\IMetaModel;
 use MetaModels\Factory as ModelFactory;
 
@@ -218,7 +219,7 @@ class Filter extends Helper
 	}
 
 	/**
-	 * translates an id to a generated alias {@see TableMetaModelFilterSetting::getAttributeNames()}
+	 * translates an id to a generated alias {@see MetaModels\Dca\Filter::getAttributeNames()}
 	 *
 	 * @param string                $strValue the id to translate.
 	 *
@@ -241,7 +242,7 @@ class Filter extends Helper
 	}
 
 	/**
-	 * translates an generated alias {@see TableMetaModelFilterSetting::getAttributeNames()}
+	 * translates an generated alias {@see MetaModels\Dca\Filter::getAttributeNames()}
 	 * to the corresponding attribute id.
 	 *
 	 * @param string                $strValue the id to translate.
@@ -607,10 +608,10 @@ class Filter extends Helper
 		// Return the image only
 		if ($blnReturnImage)
 		{
-			return $this->generateImage($strImage, '', $imageAttribute);
+			return ContaoController::getInstance()->generateImage($strImage, '', $imageAttribute);
 		}
 
-		$strImage = $this->generateImage($strImage, '', $imageAttribute);
+		$strImage = ContaoController::getInstance()->generateImage($strImage, '', $imageAttribute);
 		$strLabel = $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames'][$arrRow['type']];
 
 		// if a setting wants to render itself, let it do so.

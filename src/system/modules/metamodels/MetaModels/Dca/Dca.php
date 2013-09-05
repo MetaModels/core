@@ -38,12 +38,12 @@ class Dca extends \Backend
 	 */
 	protected function getMetaModel(DC_General $objDC)
 	{
-		if ($this->Input->get('act') == 'create' && $this->Input->get('pid'))
+		if (\Input::getInstance()->get('act') == 'create' && \Input::getInstance()->get('pid'))
 		{
 			return Factory::byId($this->Input->get('pid'));
 		}
 		// Get Current id.
-		$intID = $this->Input->get('id');
+		$intID = \Input::getInstance()->get('id');
 
 		if (empty($intID))
 		{
@@ -102,7 +102,7 @@ class Dca extends \Backend
 	public function getTables(DC_General $objDC)
 	{
 		$blnOmit = '';
-		if ($objDC->getCurrentModel()->getProperty('rendertype') == 'ctable')
+		if ($objDC->getEnvironment()->getCurrentModel()->getProperty('rendertype') == 'ctable')
 		{
 			$blnOmit = $this->getMetaModel($objDC)->getTableName();
 		}
@@ -152,7 +152,7 @@ class Dca extends \Backend
 	public function getValidModes(DC_General $objDC)
 	{
 		$arrResult = array();
-		switch ($objDC->getCurrentModel()->getProperty('rendertype'))
+		switch ($objDC->getEnvironment()->getCurrentModel()->getProperty('rendertype'))
 		{
 			case 'ctable':
 				$arrResult = array('mode_3', 'mode_4', 'mode_6');
@@ -190,7 +190,7 @@ class Dca extends \Backend
 	public function checkSortMode($strTable)
 	{
 		// Get Current id.
-		$intID = $this->Input->get('id');
+		$intID = \Input::getInstance()->get('id');
 
 		if (empty($intID) || ($strTable != 'tl_metamodel_dca'))
 		{
@@ -240,8 +240,8 @@ class Dca extends \Backend
 	 */
 	public function getAllAttributes()
 	{
-		$intID  = $this->Input->get('id');
-		$intPid = $this->Input->get('pid');
+		$intID  = \Input::getInstance()->get('id');
+		$intPid = \Input::getInstance()->get('pid');
 
 		$arrReturn = array();
 
@@ -346,9 +346,9 @@ class Dca extends \Backend
 			// Get all siblings
 			$intParentMm = $objRendersettings->pid;
 		}
-		else if ($this->Input->get('pid'))
+		else if (\Input::getInstance()->get('pid'))
 		{
-			$intParentMm = $this->Input->get('pid');
+			$intParentMm = \Input::getInstance()->get('pid');
 		}
 		else
 		{
