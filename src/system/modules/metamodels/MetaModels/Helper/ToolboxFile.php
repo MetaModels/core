@@ -17,6 +17,8 @@
 
 namespace MetaModels\Helper;
 
+use MetaModels\Helper\ContaoController as MetaModelController;
+
 class ToolboxFile
 {
 	/**
@@ -273,6 +275,31 @@ class ToolboxFile
 	}
 
 	/**
+	 * Contao 3 DBAFS Support.
+	 * 
+	 * @param string $strID Id of the file.
+	 * 
+	 * @throws \RuntimeException
+	 */
+	public function addPathById($strID)
+	{
+		if(version_compare(VERSION, '3.0', '<'))
+		{
+			throw new \RuntimeException('You cannot use a contao 3 function in a contao 2.x context.');
+		}
+		
+		$objFile = \FilesModel::findByPk($strID);
+		
+		// ToDo: Should we throw a exception or just return if we have no file.
+		if ($objFile !== null)
+		{
+			$this->addPath($objFile->path);
+		}
+		
+		return $this;		
+	}
+
+	/**
 	 * Walks the list of pending folders via ToolboxFile::addPath().
 	 *
 	 * @return void
@@ -396,7 +423,7 @@ class ToolboxFile
 			return;
 		}
 
-		$objController = \MetaModelController::getInstance();
+		$objController = MetaModelController::getInstance();
 		$strThemeDir = $objController->getTheme();
 		$resizeInfo = $this->getResizeImages();
 		$intWidth = $resizeInfo[0] ? $resizeInfo[0] : '';
@@ -699,7 +726,7 @@ class ToolboxFile
 		// see https://github.com/MetaModels/attribute_file/issues/6
 		if ((!$this->getShowImages()) && ($strFile = \Input::getInstance()->get('file')) && in_array($strFile, $this->foundFiles))
 		{
-			\MetaModelController::getInstance()->sendFileToBrowser($strFile);
+			MetaModelController::getInstance()->sendFileToBrowser($strFile);
 		}
 
 		// Step 2.: Fetch all meta data for the found files.
