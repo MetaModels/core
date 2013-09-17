@@ -30,6 +30,7 @@ ClassLoader::addClasses(array
 	'MetaModels\Attribute\ISimple'                          => 'system/modules/metamodels/MetaModels/Attribute/ISimple.php',
 	'MetaModels\Attribute\ITranslated'                      => 'system/modules/metamodels/MetaModels/Attribute/ITranslated.php',
 	'MetaModels\Attribute\TranslatedReference'              => 'system/modules/metamodels/MetaModels/Attribute/TranslatedReference.php',
+	'MetaModels\Attribute\AbstractHybrid'                   => 'system/modules/metamodels/MetaModels/Attribute/AbstractHybrid.php',
 	'MetaModels\BackendIntegration\Boot'                    => 'system/modules/metamodels/MetaModels/BackendIntegration/Boot.php',
 	'MetaModels\BackendIntegration\Module'                  => 'system/modules/metamodels/MetaModels/BackendIntegration/Module.php',
 	'MetaModels\BackendIntegration\Support'                 => 'system/modules/metamodels/MetaModels/BackendIntegration/Support.php',
