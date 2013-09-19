@@ -65,4 +65,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['customsql']    =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['idlist']       = 'Vordefiniertes Filterset';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['simplelookup'] = 'Einfache Abfrage';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['0']             = 'URL-Parameter';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['1']             = 'Geben Sie den URL-Parameter an, der dem ausgewählten Attribut zugeordnet werden soll. Der <em>"auto-item"</em>-Parameter kann ebenfalls verwendet werden. Diese Einstellung ist nützlich um Aliase zu verwenden.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['1']             = 'Geben Sie den URL-Parameter an, der dem ausgewählten Attribut zugeordnet werden soll. Der <em>"auto_item"</em>-Parameter kann ebenfalls verwendet werden. Diese Einstellung ist nützlich um Aliase zu verwenden.';
