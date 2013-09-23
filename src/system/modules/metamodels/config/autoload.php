@@ -106,7 +106,7 @@ ClassLoader::addClasses(array
 	'MetaModels\Render\Setting\Simple'                      => 'system/modules/metamodels/MetaModels/Render/Setting/Simple.php',
 	'MetaModels\Render\Template'                            => 'system/modules/metamodels/MetaModels/Render/Template.php',
 	'MetaModels\Widgets\MultiTextWidget'                    => 'system/modules/metamodels/MetaModels/Widgets/MultiTextWidget.php',
-	'MetaModels\Widgets\SubDCAWidget'                       => 'system/modules/metamodels/MetaModels/Widgets/SubDCAWidget.php',
+	'MetaModels\Widgets\SubDcaWidget'                       => 'system/modules/metamodels/MetaModels/Widgets/SubDcaWidget.php',
 	'MetaModels\Widgets\TagsWidget'                         => 'system/modules/metamodels/MetaModels/Widgets/TagsWidget.php',
 
 	// Backwards compatibility layer from here on. DEPRECATED only, DO NOT USE.
