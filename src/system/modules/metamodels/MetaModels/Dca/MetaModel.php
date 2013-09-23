@@ -18,6 +18,7 @@ namespace MetaModels\Dca;
 
 use DcGeneral\DC_General;
 use MetaModels\Factory as ModelFactory;
+use MetaModels\Helper\TableManipulation as MetaModelTableManipulation;
 
 
 /**
@@ -71,13 +72,13 @@ class MetaModel extends \Backend
 		{
 			if ($strOldTableName && \Database::getInstance()->tableExists($strOldTableName, null, true))
 			{
-				\MetaModelTableManipulation::renameTable($strOldTableName, $strNewTableName);
+				MetaModelTableManipulation::renameTable($strOldTableName, $strNewTableName);
 				// TODO: notify fields that the MetaModel has changed its table name.
 			} else {
-				\MetaModelTableManipulation::createTable($strNewTableName);
+				MetaModelTableManipulation::createTable($strNewTableName);
 			}
 		}
-		\MetaModelTableManipulation::setVariantSupport($strNewTableName, $objDBModel->getProperty('varsupport'));
+		MetaModelTableManipulation::setVariantSupport($strNewTableName, $objDBModel->getProperty('varsupport'));
 	}
 
 	/**
@@ -97,7 +98,7 @@ class MetaModel extends \Backend
 			{
 				$objAttribute->destroyAUX();
 			}
-			\MetaModelTableManipulation::deleteTable($objMetaModel->getTableName());
+			MetaModelTableManipulation::deleteTable($objMetaModel->getTableName());
 			\Database::getInstance()->prepare('DELETE FROM tl_metamodel_attribute WHERE pid=?')
 				->executeUncached($objMetaModel->get('id'));
 
@@ -300,7 +301,7 @@ class MetaModel extends \Backend
 			$strTableName = 'mm_' . $strTableName;
 		}
 
-		\MetaModelTableManipulation::checkTablename($strTableName);
+		MetaModelTableManipulation::checkTablename($strTableName);
 
 		return $strTableName;
 	}
