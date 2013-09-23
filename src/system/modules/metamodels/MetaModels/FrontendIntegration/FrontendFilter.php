@@ -51,11 +51,6 @@ class FrontendFilter
 
 	protected $arrPreserveParams = array();
 
-	public function __construct()
-	{
-		// just to make it public... :(
-	}
-
 	/**
 	 * Configure the filter module
 	 */
