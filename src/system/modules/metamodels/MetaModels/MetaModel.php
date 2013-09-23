@@ -120,7 +120,8 @@ class MetaModel implements IMetaModel
 	 */
 	protected function isComplexAttribute($objAttribute)
 	{
-		return in_array('MetaModels\Attribute\IComplex', class_implements($objAttribute));
+		return in_array('MetaModels\Attribute\IComplex', class_implements($objAttribute))
+			|| in_array('IMetaModelAttributeComplex', class_implements($objAttribute));
 	}
 
 	/**
@@ -132,7 +133,8 @@ class MetaModel implements IMetaModel
 	 */
 	protected function isTranslatedAttribute($objAttribute)
 	{
-		return in_array('MetaModels\Attribute\ITranslated', class_implements($objAttribute));
+		return in_array('MetaModels\Attribute\ITranslated', class_implements($objAttribute))
+			|| in_array('IMetaModelAttributeTranslated', class_implements($objAttribute));
 	}
 
 	/**
@@ -699,7 +701,7 @@ class MetaModel implements IMetaModel
 		{
 			// complex saving
 			$objAttribute->setDataFor($arrData);
-		} else if(in_array('MetaModels\Attribute\ISimple', $arrInterfaces)) {
+		} else if(in_array('MetaModels\Attribute\ISimple', $arrInterfaces) || in_array('IMetaModelAttributeSimple', $arrInterfaces)) {
 			$objAttribute->setDataFor($arrData);
 		} else {
 			throw new \RuntimeException('Unknown attribute type, can not save. Interfaces implemented: ' . implode(', ', $arrInterfaces));
