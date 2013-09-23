@@ -660,9 +660,9 @@ class Driver implements MultiLanguageDriverInterface
 	 */
 	public function saveEach(CollectionInterface $objItems)
 	{
-		foreach (array_keys($objItems) as $value)
+		foreach ($objItems as $objItem)
 		{
-			$this->save($value);
+			$this->save($objItem);
 		}
 	}
 
