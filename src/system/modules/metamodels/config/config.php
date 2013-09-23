@@ -44,6 +44,14 @@ if (version_compare(VERSION, '3.0', '<')/* && !class_exists('Composer\Autoload\C
 			if (file_exists($baseDir . DIRECTORY_SEPARATOR . $fileName))
 			{
 				require $baseDir . DIRECTORY_SEPARATOR . $fileName;
+
+				// Tell the Contao 2.X auto loader cache that the class is available.
+				if (class_exists('Cache'))
+				{
+					\Cache::getInstance()->{'classFileExists-' . $className} = true;
+				}
+				\FileCache::getInstance('classes')->$className = true;
+
 				return true;
 			}
 		}
