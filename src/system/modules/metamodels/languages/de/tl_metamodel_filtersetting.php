@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-15T08:12:17+02:00
+ * last-updated: 2013-07-10T10:02:32+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Alle Sprachen durchsuchen';
@@ -65,4 +65,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['customsql']    =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['idlist']       = 'Vordefiniertes Filterset';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['simplelookup'] = 'Einfache Abfrage';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['0']             = 'URL-Parameter';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['1']             = 'Geben Sie den URL-Parameter an, der dem ausgewählten Attribut zugeordnet werden soll. Der <em>"auto-item"</em>-Parameter kann ebenfalls verwendet werden. Diese Einstellung ist nützlich um Aliase zu verwenden.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['1']             = 'Geben Sie den URL-Parameter an, der dem ausgewählten Attribut zugeordnet werden soll. Der <em>"auto_item"</em>-Parameter kann ebenfalls verwendet werden. Diese Einstellung ist nützlich um Aliase zu verwenden.';
