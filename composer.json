@@ -48,7 +48,7 @@
 		"contao/core": ">=2.11,<4.0",
 		"contao-community-alliance/composer-installer": "*",
 		"metamodels/dc_general": "1.0.*@dev",
-		"menatwork/contao-multicolumnwizard": "3.1.*",
+		"menatwork/contao-multicolumnwizard": "3.2.*@dev",
 		"bit3/contao-meta-palettes": "1.5.*@dev",
 		"discordier/justtextwidgets": ">=0.5"
 	},
