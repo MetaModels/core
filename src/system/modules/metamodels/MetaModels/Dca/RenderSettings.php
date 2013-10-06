@@ -340,7 +340,20 @@ class RenderSettings extends Helper
 	 */
 	public function pagePicker(\DataContainer $dc)
 	{
-		return ' ' . $this->generateImage('pickpage.gif', $GLOBALS['TL_LANG']['MSC']['pagepicker'], 'style="vertical-align:top;cursor:pointer" onclick="Backend.pickPage(\'ctrl_' . $dc->inputName . '\')"');
+		if(version_compare(VERSION, '3.0', '<'))
+		{
+			return ' ' . $this->generateImage('pickpage.gif', $GLOBALS['TL_LANG']['MSC']['pagepicker'], 'style="vertical-align:top;cursor:pointer" onclick="Backend.pickPage(\'ctrl_' . $dc->inputName . '\')"');
+		}
+		else
+		{
+			$strUrl = \Environment::get('base') . 'contao/page.php?do=metamodels&table=tl_metamodel_rendersettings&field=ctrl_' . $dc->inputName;
+			$strOptions = "{'width':765,'title':'Seitenstruktur','url':'" . $strUrl . "','id':'" . $dc->inputName . "','tag':'ctrl_" . $dc->inputName . "','self':this}";
+					
+			return ' ' . $this->generateImage(
+				'pickpage.gif', 
+				$GLOBALS['TL_LANG']['MSC']['pagepicker'], 
+				'style="vertical-align:top;cursor:pointer" onclick="Backend.openModalSelector(' . $strOptions . ')"');
+		}
 	}
 }
 
