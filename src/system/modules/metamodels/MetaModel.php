@@ -280,11 +280,8 @@ class MetaModel implements IMetaModel
 				$arrAttributeData = $objAttribute->getTranslatedDataFor($arrIds, $this->getActiveLanguage());
 				$arrMissing = array_diff($arrIds, array_keys($arrAttributeData));
 				if ($arrMissing)
-				{
-					$arrAttributeData = array_merge(
-						$objAttribute->getTranslatedDataFor($arrMissing, $this->getActiveLanguage()),
-						$arrAttributeData
-					);
+				{                    
+					$arrAttributeData += $objAttribute->getTranslatedDataFor($arrMissing, $this->getFallbackLanguage());
 				}
 			}
 			else
