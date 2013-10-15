@@ -47,8 +47,9 @@ if (version_compare(VERSION, '3.0', '<'))
 } else {
   $objCombiner->add('assets/mootools/core/' . MOOTOOLS . '/mootools-core.js', MOOTOOLS_CORE);
   $objCombiner->add('assets/mootools/core/' . MOOTOOLS . '/mootools-more.js', MOOTOOLS_MORE);
+  $objCombiner->add('assets/mootools/mootao/Mootao.js', MOOTOOLS_TAO);
   $objCombiner->add('assets/contao/js/core.js');
-  }
+}
   $objCombiner->add('system/themes/'. $this->theme .'/hover.js');
   echo $objCombiner->getCombinedFile();
 ?>"></script>
@@ -87,7 +88,7 @@ parent.REQUEST_TOKEN = REQUEST_TOKEN;
 		<?php endif;?>
 		<div>
 			<h2><?php echo $item['label'][0];?> <span style="font-weight:normal">(<?php echo $item['cssclass'];?>)</span></h2>
-			<?php if(strlen($item['label'][1])):?><p class="description"><?php echo $item['label'][1];?></p><?php endif;?>
+			<?php if(strlen($item['label'][1])):?><p class="description tl_help tl_tip"><?php echo $item['label'][1];?></p><?php endif;?>
 		</div>
 	</div>
 		<hr style="height:1px;margin:0px;"/>

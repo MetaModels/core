@@ -494,14 +494,28 @@ class DcaSetting extends Helper
 
 	public function getStylepicker($objDC)
 	{
-		return sprintf(
-			' <a href="system/modules/metamodels/popup.php?tbl=%s&fld=%s&inputName=ctrl_%s&id=%s&item=PALETTE_STYLE_PICKER" data-lightbox="files 768 80%%">%s</a>',
-			$objDC->table,
-			$objDC->field,
-			$objDC->inputName,
-			$objDC->id,
-			$this->generateImage('system/modules/metamodels/html/dca_wizard.png', $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker'], 'style="vertical-align:top;"')
-		);
+		if(version_compare(VERSION, '3.0', '<'))
+		{
+			return sprintf(
+				' <a href="system/modules/metamodels/popup.php?tbl=%s&fld=%s&inputName=ctrl_%s&id=%s&item=PALETTE_STYLE_PICKER" data-lightbox="files 768 80%%">%s</a>',
+				$objDC->table,
+				$objDC->field,
+				$objDC->inputName,
+				$objDC->id,
+				$this->generateImage('system/modules/metamodels/html/dca_wizard.png', $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker'], 'style="vertical-align:top;"')
+			);
+		}
+		else
+		{
+			return sprintf(
+				' <a href="javascript:Backend.openModalIframe({url:\'system/modules/metamodels/popup.php?tbl=%s&fld=%s&inputName=ctrl_%s&id=%s&item=PALETTE_STYLE_PICKER\',width:790,title:\'Stylepicker\'});">%s</a>',
+				$objDC->table,
+				$objDC->field,
+				$objDC->inputName,
+				$objDC->id,
+				$this->generateImage('system/modules/metamodels/html/dca_wizard.png', $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker'], 'style="vertical-align:top;"')
+			);
+		}
 	}
 
 	protected function makeDisabledButton($icon, $label)
