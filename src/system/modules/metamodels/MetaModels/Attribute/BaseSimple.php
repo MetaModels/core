@@ -17,6 +17,7 @@
 namespace MetaModels\Attribute;
 
 use MetaModels\Attribute\ISimple;
+use MetaModels\Helper\TableManipulation;
 
 /**
  * Reference implementation for Simple attributes.
@@ -231,7 +232,7 @@ class BaseSimple extends Base implements ISimple
 	{
 		if ($this->getColName())
 		{
-			\MetaModelTableManipulation::createColumn(
+			TableManipulation::createColumn(
 				$this->getMetaModel()->getTableName(),
 				$this->getColName(),
 				$this->getSQLDataType()
@@ -250,7 +251,7 @@ class BaseSimple extends Base implements ISimple
 		if ($this->getColName()
 		&& \Database::getInstance()->fieldExists($this->getColName(), $this->getMetaModel()->getTableName(), true))
 		{
-			\MetaModelTableManipulation::dropColumn($this->getMetaModel()->getTableName(), $this->getColName());
+			TableManipulation::dropColumn($this->getMetaModel()->getTableName(), $this->getColName());
 		}
 	}
 
@@ -263,11 +264,11 @@ class BaseSimple extends Base implements ISimple
 	 */
 	public function renameColumn($strNewColumnName)
 	{
-		\MetaModelTableManipulation::checkColumnName($strNewColumnName);
+		TableManipulation::checkColumnName($strNewColumnName);
 		if ($this->getColName()
 		&& \Database::getInstance()->fieldExists($this->getColName(), $this->getMetaModel()->getTableName(), true))
 		{
-			\MetaModelTableManipulation::renameColumn(
+			TableManipulation::renameColumn(
 				$this->getMetaModel()->getTableName(),
 				$this->getColName(),
 				$strNewColumnName,
