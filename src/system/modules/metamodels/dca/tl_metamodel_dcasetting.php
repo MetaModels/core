@@ -48,7 +48,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 		(
 			array(
 				'from'                => 'tl_metamodel_dca',
-				'to'                  => 'self',
+				'to'                  => 'tl_metamodel_dcasetting',
 				'setOn'               => array
 				(
 					array(
