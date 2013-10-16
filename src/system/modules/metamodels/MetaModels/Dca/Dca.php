@@ -49,7 +49,7 @@ class Dca extends \Backend
 		{
 			return null;
 		}
-		return Factory::byId($objDC->getCurrentModel()->getProperty('pid'));
+		return Factory::byId($objDC->getEnvironment()->getCurrentModel()->getProperty('pid'));
 	}
 
 	/**
