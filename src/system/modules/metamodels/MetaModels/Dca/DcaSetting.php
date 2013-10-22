@@ -123,7 +123,7 @@ class DcaSetting extends Helper
 			WHERE id=?'
 		)
 			->limit(1)
-			->executeUncached($objDC->getCurrentModel()->getProperty('pid'));
+			->executeUncached($objDC->getEnvironment()->getCurrentModel()->getProperty('pid'));
 		return Factory::byId($objField->pid);
 	}
 
