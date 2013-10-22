@@ -176,7 +176,7 @@ class BreadcrumbBuilder
 			case 'metamodel_dcasetting_subpalette':
 				$objParent = \Database::getInstance()
 					->prepare('SELECT id, pid, name FROM tl_metamodel_attribute WHERE id=(SELECT attr_id FROM tl_metamodel_dcasetting WHERE pid=? AND id=?)')
-					->executeUncached($this->intID, Input::getInstance()->get('subpaletteid'));
+					->executeUncached($this->intID, \Input::getInstance()->get('subpaletteid'));
 
 				$objMetaModel = Factory::byId($objParent->pid);
 				$objAttribute = $objMetaModel->getAttributeById($objParent->id);
