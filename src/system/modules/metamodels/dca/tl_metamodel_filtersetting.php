@@ -368,6 +368,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'eval'                    => array
 			(
 				'allowHtml'           => true,
+				'preserveTags'        => true,
+				'decodeEntities'      => true,
 				'rte'                 => 'codeMirror|sql',
 				'class'               => 'monospace',
 				'helpwizard'          => true,
@@ -451,6 +453,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			(
 				'tl_class'            => 'w50',
 			),
+		),
+		'defaultid'                   => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid'],
+			'exclude'                 => true,
+			'inputType'               => 'select',
+			'options_callback'        => array('TableMetaModelFilterSetting','getSelectDefault'),
+			'eval'                    => array('tl_class'=>'w50 clr', 'includeBlankOption'=>true)
 		)
 	)
 );

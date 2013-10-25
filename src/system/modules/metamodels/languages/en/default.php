@@ -74,6 +74,13 @@ $GLOBALS['TL_LANG']['ERR']['no_palette']                              = 'Attempt
 $GLOBALS['TL_LANG']['ERR']['no_view']                                 = 'Attempt to access the MetaModel "%s" without view for user %s.';
 $GLOBALS['TL_LANG']['ERR']['invalidTableName']                        = 'The table name is invalid.';
 $GLOBALS['TL_LANG']['ERR']['upgrade_php_version']                     = 'The version of the PHP interpreter is too low, please upgrade to at least %s (you are currently running %s)';
+$GLOBALS['TL_LANG']['ERR']['invalidTableName']                        = 'The table name "%s" is invalid.';
+$GLOBALS['TL_LANG']['ERR']['invalidColumnName']                       = 'The column name "%s" is invalid.';
+$GLOBALS['TL_LANG']['ERR']['systemColumn']                            = 'The column name "%s" is reserved for system use.';
+$GLOBALS['TL_LANG']['ERR']['tableDoesNotExist']                       = 'Table "%s" does not exist.';
+$GLOBALS['TL_LANG']['ERR']['tableExists']                             = 'Table "%s" already exists.';
+$GLOBALS['TL_LANG']['ERR']['columnDoesNotExist']                      = 'Column "%s" does not exist on table "%s".';
+$GLOBALS['TL_LANG']['ERR']['columnExists']                            = 'Column "%s" already exists on table "%s".';
 
 /**
  * Labels

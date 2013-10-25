@@ -134,7 +134,15 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	}
 
 	/**
-	 * when rendered via a template, this returns the values to be stored in the template.
+	 * When rendered via a template, this populates the template with values.
+	 *
+	 * @param MetaModelTemplate               $objTemplate The Template instance to populate.
+	 *
+	 * @param array                           $arrRowData  The row data for the current item.
+	 *
+	 * @param MetaModelRenderSettingAttribute $objSettings The render settings to use for this attribute.
+	 *
+	 *@return void
 	 */
 	protected function prepareTemplate(MetaModelTemplate $objTemplate, $arrRowData, $objSettings = null)
 	{
@@ -214,7 +222,11 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	 */
 	public function getAttributeSettingNames()
 	{
-		return array('id', 'pid', 'sorting', 'tstamp', 'name', 'description', 'type', 'colname', 'isvariant', 'tl_class');
+		return array(
+			// Settings originating from tl_metamodel_attribute.
+			'id', 'pid', 'sorting', 'tstamp', 'name', 'description', 'type', 'colname', 'isvariant',
+			// Settings originating from tl_metamodel_dcasetting.
+			'tl_class', 'readonly');
 	}
 
 	/**
@@ -256,7 +268,8 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 			'cols',
 			'spaceToUnderscore',
 			'includeBlankOption',
-			'submitOnChange'
+			'submitOnChange',
+			'readonly'
 		) as $strEval) {
 			if (in_array($strEval, $arrSettingNames) && $arrOverrides[$strEval])
 			{
@@ -286,7 +299,7 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 		if (in_array('sortable', $arrSettingNames) && $arrOverrides['sortable'])
 		{
 			$arrFieldDef['sorting'] = true;
-		}		
+		}
 		return $arrFieldDef;
 	}
 
@@ -331,13 +344,12 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 	 */
 	public function getDefaultRenderSettings()
 	{
-		$objSetting = (object)array
+		$objSetting = new MetaModelRenderSettingAttribute(array
 		(
 			'template' => 'mm_attr_' . $this->get('type')
-		);
+		));
 		return $objSetting;
 	}
-
 
 	/**
 	 * {@inheritdoc}
@@ -348,9 +360,9 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 			'raw' => $arrRowData[$this->getColName()],
 		);
 
-		if($objSettings && $objSettings->template)
+		if($objSettings && $objSettings->get('template'))
 		{
-			$strTemplate = $objSettings->template;
+			$strTemplate = $objSettings->get('template');
 
 			$objTemplate = new MetaModelTemplate($strTemplate);
 
@@ -368,9 +380,9 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 			try {
 				$arrResult['text'] = $objTemplate->parse('text', true);
 			} catch (Exception $e) {
-				$objSettingsFallback = $this->getDefaultRenderSettings();
+				$objSettingsFallback = $this->getDefaultRenderSettings()->setParent($objSettings->getParent());
 
-				$objTemplate = new MetaModelTemplate($objSettingsFallback->template);
+				$objTemplate = new MetaModelTemplate($objSettingsFallback->get('template'));
 				$this->prepareTemplate($objTemplate, $arrRowData, $objSettingsFallback);
 
 				$arrResult['text'] = $objTemplate->parse('text', true);
@@ -386,6 +398,23 @@ abstract class MetaModelAttribute implements IMetaModelAttribute
 		$arrResult = $this->hookAdditionalFormatters($arrResult, $arrRowData, $strOutputFormat, $objSettings);
 
 		return $arrResult;
+	}
+
+	/**
+	 * Convert a native attribute value into a value to be used in a filter Url.
+	 *
+	 * This base implementation returns the value itself.
+	 *
+	 * @param mixed $varValue The source value
+	 *
+	 * @return string
+	 */
+	public function getFilterUrlValue($varValue)
+	{
+		// We are parsing as text here as this was the way before this method was implemented. See #216.
+		$arrResult = $this->parseValue(array($this->getColName() => $varValue), 'text');
+
+		return urlencode($arrResult['text']);
 	}
 
 	/**

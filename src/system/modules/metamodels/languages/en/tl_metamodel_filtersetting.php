@@ -33,8 +33,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql'] = array('Custom S
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']        = array('Label', 'Show label instead of attribute name.');
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']     = array('Template', 'Sub template for this filter element. Standard: form widget.');
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['blankoption']  = array('Empty option', 'Show empty options in select.');
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']     = array('Assigned tags only', 'Show only options, that are assigned somewhere in the MetaModel.');
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible'] = array('Remaining tags only', 'Show only options, that are still assigned somewhere after the actual filter is set.');
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']     = array('Assigned values only', 'Show only options, that are assigned somewhere in the MetaModel.');
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible'] = array('Remaining values only', 'Show only options, that are still assigned somewhere after the actual filter is set.');
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid']    = array('Default', 'Default value for selection.');
 
 /**
  * Legends

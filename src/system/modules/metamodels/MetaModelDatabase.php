@@ -128,7 +128,7 @@ class MetaModelDatabase extends Controller
 	{
 		$strPalette = '';
 		$objDCASettings = Database::getInstance()
-			->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=? ORDER by sorting ASC')
+			->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=? AND published = 1 ORDER by sorting ASC')
 			->execute($intPaletteId);
 		$arrMyDCA = array();
 		while ($objDCASettings->next())
@@ -198,15 +198,8 @@ class MetaModelDatabase extends Controller
 					$legendName = standardize($strLegend) . '_legend';
 					$GLOBALS['TL_LANG'][$objMetaModel->getTableName()][$legendName] = $strLegend;
 
-					// Check if we have a subpalette.
-					if ($objDCASettings->subpalette == 0)
-					{
-						$strPalette .= ((strlen($strPalette) > 0 ? ';' : '') . '{' . $legendName . $objAttribute->legendhide . '}');
-					}
-					else
-					{
-						$arrMyDCA['metasubpalettes'][$strSelector][] = '{' . $legendName . $objAttribute->legendhide . '}';
-					}
+					$strPalette .= ((strlen($strPalette) > 0 ? ';' : '') .
+						'{' . $legendName . ($objDCASettings->legendhide ? ':hide' : '') . '}');
 					break;
 				default:
 					throw new Exception("Unknown palette rendering mode " . $objDCASettings->dcatype);
@@ -535,6 +528,14 @@ class MetaModelDatabase extends Controller
 		if (!$arrDCA['config']['label'])
 		{
 			$arrDCA['config']['label'] = $objMetaModel->get('name');
+		}
+
+		// Check access level.
+		if ($arrDCASettings['isclosed'])
+		{
+			$arrDCA['config']['closed']       = true;
+			$arrDCA['config']['notDeletable'] = true;
+			unset($arrDCA['list']['operations']['delete']);
 		}
 
 		// FIXME: if we have variants, we force mode 5 here, no matter what the DCA configs say.

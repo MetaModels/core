@@ -120,6 +120,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'backend' => array
 			(
 				'rendertype',
+				'isclosed'
 			),
 		)
 	),
@@ -182,7 +183,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault'],
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50 m12 cbx')
+			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50 m12 cbx'),
+			'save_callback'           => array(array('TableMetaModelDca', 'checkDefault'))
 		),
 
 		'rendertype' => array
@@ -342,6 +344,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 				'stylepicker'         => array('TableMetaModelDca','getPanelpicker')
 			),
 		),
+		'isclosed' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed'],
+			'inputType'               => 'checkbox',
+			'eval'                    => array
+			(
+				'tl_class'            => 'w50 m12 cbx',
+			)
+		)
 	)
 );
 

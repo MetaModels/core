@@ -295,9 +295,18 @@ class TableMetaModelRenderSetting extends TableMetaModelHelper
 			{
 				if (!array_key_exists($objAttribute->get('id'), $arrKnown))
 				{
+					$arrData = array();
+
+					$objRenderSetting = $objAttribute->getDefaultRenderSettings();
+					foreach ($objRenderSetting->getKeys() as $key)
+					{
+						$arrData[$key] = $objRenderSetting->get($key);
+					}
+
 					$arrData = array_replace_recursive(
-						(array)$objAttribute->getDefaultRenderSettings(),
-						array(
+						$arrData,
+						array
+						(
 							'pid'      => $this->Input->get('id'),
 							'sorting'  => $intMax,
 							'tstamp'   => time(),

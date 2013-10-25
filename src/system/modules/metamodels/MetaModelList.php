@@ -223,19 +223,130 @@ class MetaModelList extends Controller
 	 * @param string[] $arrPresets the parameters for the filter.
 	 *
 	 * @return MetaModelList
+	 *
+	 * @deprecated Use setFilterSettings() and setFilterParameters().
 	 */
 	public function setFilterParam($intFilter, $arrPresets, $arrValues)
 	{
+		$this->setFilterSettings($intFilter);
+
+		$this->setFilterParameters($arrPresets, $arrValues);
+
+		return $this;
+	}
+
+	/**
+	 * The Metamodel to use
+	 *
+	 * @var IMetaModel
+	 */
+	protected $objMetaModel;
+
+	/**
+	 * The render settings to use.
+	 *
+	 * @var IMetaModelRenderSettings
+	 */
+	protected $objView;
+
+	/**
+	 * The render template to use.
+	 *
+	 * @var MetaModelTemplate
+	 */
+	protected $objTemplate;
+
+	/**
+	 * The filter settings to use.
+	 *
+	 * @var IMetaModelFilterSettings
+	 */
+	protected $objFilterSettings;
+
+	/**
+	 * The filter to use.
+	 *
+	 * @var IMetaModelFilter
+	 */
+	protected $objFilter;
+
+	/**
+	 * Prepare the MetaModel.
+	 *
+	 * @return void
+	 *
+	 * @throws RuntimeException
+	 */
+	protected function prepareMetaModel()
+	{
+		$this->objMetaModel = MetaModelFactory::byId($this->intMetaModel);
+		if (!$this->objMetaModel)
+		{
+			throw new \RuntimeException('Could get metamodel id: ' . $this->intMetaModel);
+		}
+	}
+	/**
+	 * Prepare the view.
+	 * NOTE: must be called after prepareMetaModel().
+	 *
+	 * @return void
+	 */
+	protected function prepareView()
+	{
+		$this->objView = $this->objMetaModel->getView($this->intView);
+
+		if ($this->objView)
+		{
+			$this->objTemplate = new MetaModelTemplate($this->objView->get('template'));
+			$this->objTemplate->view = $this->objView;
+		} else {
+			// fallback to default.
+			$this->objTemplate = new MetaModelTemplate('metamodel_full');
+		}
+	}
+
+	/**
+	 * @param $intFilter
+	 *
+	 * @return $this
+	 *
+	 * @throws RuntimeException
+	 */
+	public function setFilterSettings($intFilter)
+	{
 		$this->intFilter    = $intFilter;
 
-		$this->getFilter();
+		$this->objFilterSettings = MetaModelFilterSettingsFactory::byId($this->intFilter);
 
 		if (!$this->objFilterSettings)
 		{
-			throw new Exception('Error: no filter object defined.');
+			throw new \RuntimeException('Error: no filter object defined.');
 		}
 
-		$arrPresetNames = $this->objFilterSettings->getParameters();
+		return $this;
+	}
+
+	/**
+	 * Set parameters.
+	 *
+	 * @param string[] $arrPresets the parameter preset values to use.
+	 *
+	 * @param string[] $arrValues the dynamic parameter values that may be used.
+	 *
+	 * @param string[] $arrPresets the parameters for the filter.
+	 *
+	 * @return MetaModelList
+	 *
+	 * @throws RuntimeException
+	 */
+	public function setFilterParameters($arrPresets, $arrValues)
+	{
+		if (!$this->objFilterSettings)
+		{
+			throw new \RuntimeException('Error: no filter object defined, call setFilterSettings() before setFilterParameters().');
+		}
+
+		$arrPresetNames    = $this->objFilterSettings->getParameters();
 		$arrFEFilterParams = array_keys($this->objFilterSettings->getParameterFilterNames());
 
 		$arrProcessed = array();
@@ -272,80 +383,24 @@ class MetaModelList extends Controller
 		return $this;
 	}
 
-
 	/**
-	 * The Metamodel to use
+	 * Return the filter.
 	 *
-	 * @var IMetaModel
+	 * @return MetaModelFilter
 	 */
-	protected $objMetaModel;
-
-	/**
-	 * The render settings to use.
-	 *
-	 * @var IMetaModelRenderSettings
-	 */
-	protected $objView;
-
-	/**
-	 * The render template to use.
-	 *
-	 * @var IMetaModelRenderSettings
-	 */
-	protected $objTemplate;
-
-	/**
-	 * The filter settings to use.
-	 *
-	 * @var IMetaModelFilterSettings
-	 */
-	protected $objFilterSettings;
-
-	/**
-	 * The filter to use.
-	 *
-	 * @var IMetaModelFilter
-	 */
-	protected $objFilter;
-
-	/**
-	 * Prepare the metamodel.
-	 *
-	 * @return void
-	 */
-	protected function prepareMetaModel()
+	public function getFilter()
 	{
-		$this->objMetaModel = MetaModelFactory::byId($this->intMetaModel);
+		return $this->objFilter;
 	}
 
 	/**
-	 * Prepare the view.
-	 * NOTE: must be called after prepareMetaModel().
+	 * Return the filter settings.
 	 *
-	 * @return void
+	 * @return MetaModelFilterSettings
 	 */
-	protected function prepareView()
+	public function getFilterSettings()
 	{
-		$this->objView = $this->objMetaModel->getView($this->intView);
-
-		if ($this->objView)
-		{
-			$this->objTemplate = new MetaModelTemplate($this->objView->get('template'));
-			$this->objTemplate->view = $this->objView;
-		} else {
-			// fallback to default.
-			$this->objTemplate = new MetaModelTemplate('metamodel_full');
-		}
-	}
-
-	/**
-	 * Prepare the filter.
-	 *
-	 * @return void
-	 */
-	protected function getFilter()
-	{
-		$this->objFilterSettings = MetaModelFilterSettingsFactory::byId($this->intFilter);
+		return $this->objFilterSettings;
 	}
 
 	/**
@@ -358,8 +413,9 @@ class MetaModelList extends Controller
 	 */
 	protected function calculatePagination($intTotal)
 	{
-		$intOffset = NULL;
-		$intLimit = NULL;
+		$intOffset = null;
+		$intLimit  = null;
+
 		// if defined, we override the pagination here.
 		if ($this->blnUseLimit && ($this->intLimit || $this->intOffset))
 		{
@@ -421,7 +477,7 @@ class MetaModelList extends Controller
 	 * The items in the list view.
 	 * @var IMetaModelItems
 	 */
-	protected $objItems = NULL;
+	protected $objItems = null;
 
 	/**
 	 * Add additional filter rules to the list.
@@ -431,6 +487,25 @@ class MetaModelList extends Controller
 	 */
 	protected function modifyFilter()
 	{
+		return $this;
+	}
+
+	/**
+	 * Add additional filter rules to the list on the fly.
+	 *
+	 * @param IMetaModelFilterRule $objFilterRule
+	 *
+	 * @return MetaModelList
+	 */
+	public function addFilterRule($objFilterRule)
+	{
+		if(!$this->objFilter)
+		{
+			$this->objFilter = $this->objMetaModel->getEmptyFilter();
+		}
+
+		$this->objFilter->addFilterRule($objFilterRule);
+
 		return $this;
 	}
 
@@ -485,8 +560,16 @@ class MetaModelList extends Controller
 			return $this;
 		}
 
-		$this->objFilter = $this->objMetaModel->getEmptyFilter();
-		$this->objFilterSettings->addRules($this->objFilter, $this->arrParam);
+		// create an empty filter object if not done before
+		if(!$this->objFilter)
+		{
+			$this->objFilter = $this->objMetaModel->getEmptyFilter();
+		}
+
+		if($this->objFilterSettings)
+		{
+			$this->objFilterSettings->addRules($this->objFilter, $this->arrParam);
+		}
 
 		$this->modifyFilter();
 
@@ -550,18 +633,70 @@ class MetaModelList extends Controller
 	}
 
 	/**
+	 * Retrieve the caption text for "No items found" message,
+	 *
+	 * This message is looked up in the following order:
+	 * 1. $GLOBALS['TL_LANG']['MSC'][<mm tablename>][<render settings id>]['noItemsMsg']
+	 * 2. $GLOBALS['TL_LANG']['MSC'][<mm tablename>]['noItemsMsg']
+	 * 3. $GLOBALS['TL_LANG']['MSC']['noItemsMsg']
+	 *
+	 * @return string
+	 */
+	protected function getNoItemsCaption()
+	{
+		if (isset($this->objView) && isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['noItemsMsg']))
+		{
+			return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['noItemsMsg'];
+		}
+		elseif (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['noItemsMsg']))
+		{
+			return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['noItemsMsg'];
+		}
+		else
+		{
+			return $GLOBALS['TL_LANG']['MSC']['noItemsMsg'];
+		}
+	}
+
+	/**
+	 * Retrieve the caption text for the "Show details" link,
+	 *
+	 * This message is looked up in the following order:
+	 * 1. $GLOBALS['TL_LANG']['MSC'][<mm tablename>][<render settings id>]['details']
+	 * 2. $GLOBALS['TL_LANG']['MSC'][<mm tablename>]['details']
+	 * 3. $GLOBALS['TL_LANG']['MSC']['details']
+	 *
+	 * @return string
+	 */
+	protected function getDetailsCaption()
+	{
+		if (isset($this->objView) && isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['details']))
+		{
+			return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['details'];
+		}
+		elseif (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details']))
+		{
+			return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details'];
+		}
+		else
+		{
+			return $GLOBALS['TL_LANG']['MSC']['details'];
+		}
+	}
+
+	/**
 	 * Render the list view.
 	 *
-	 * @param bool $blnNoNativeParsing flag determining if the parsing shall be done internal or if the template will handle the parsing on it's own.
+	 * @param bool $blnNoNativeParsing Flag determining if the parsing shall be done internal or if the template will handle the parsing on it's own.
 	 *
-	 * @param object $objCaller        the object calling us, might be a Module or ContentElement or anything else.
+	 * @param object $objCaller        The object calling us, might be a Module or ContentElement or anything else.
 	 *
 	 * @return string
 	 */
 	public function render($blnNoNativeParsing, $objCaller)
 	{
-		$this->objTemplate->noItemsMsg = $GLOBALS['TL_LANG']['MSC']['noItemsMsg'];
-		$this->objTemplate->details    = $GLOBALS['TL_LANG']['MSC']['details'];
+		$this->objTemplate->noItemsMsg = $this->getNoItemsCaption();
+		$this->objTemplate->details    = $this->getDetailsCaption();
 
 		$this->prepare();
 		$strOutputFormat = $this->getOutputFormat();

@@ -350,6 +350,33 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 				), $objFilter);
 				break;
 
+			case 'LIKE':
+				$objFilterRule = null;
+				if ($objAttribute)
+				{
+					$objFilterRule = new MetaModelFilterRuleSearchAttribute(
+						$objAttribute,
+						$arrFilter['value'],
+						$this->objMetaModel->getAvailableLanguages()
+					);
+				}
+				else if(Database::getInstance()->fieldExists($arrFilter['property'], $this->objMetaModel->getTableName()))
+				{
+					// system column?
+					$objFilterRule = new MetaModelFilterRuleSimpleQuery(sprintf(
+						'SELECT id FROM %s WHERE %s LIKE ?',
+						$this->objMetaModel->getTableName(),
+						$arrFilter['property']
+					),
+					array($arrFilter['value']));
+				}
+				if (!$objFilterRule)
+				{
+					throw new Exception('Error processing filter array - unknown property ' . var_export($arrFilter['property'], true), 1);
+				}
+				$objFilter->addFilterRule($objFilterRule);
+				break;
+
 			default:
 				throw new Exception('Error processing filter array - unknown operation ' . var_export($arrFilter, true), 1);
 		}
