@@ -17,6 +17,7 @@
 namespace MetaModels\Dca;
 
 use DcGeneral\DC_General;
+use DcGeneral\Clipboard\ClipboardInterface;
 use MetaModels\Helper\ContaoController;
 use MetaModels\IMetaModel;
 use MetaModels\Factory as ModelFactory;
@@ -655,13 +656,23 @@ class Filter extends Helper
 	 * @param array
 	 * @return string
 	 */
-	public function pasteButton(DC_General $objDC, $arrRow, $strTable, $cr, $arrClipboard=false)
+	public function pasteButton(DC_General $objDC, $arrRow, $strTable, $cr, $objClipboard=false)
 	{
 		$disablePA = false;
 		$disablePI = false;
+		
+		if($objClipboard == false)
+		{
+			$objClipboard = $objDC->getEnvironment()->getClipboard();
+		}
+		
+		$strMode = $objClipboard->getMode();
+		$arrIds = $objClipboard->getContainedIds();
+		$intID = $arrIds[0];
+		$arrChildren = (count($arrIds) > 1) ? array_slice($arrIds, 1, count($arrIds) - 1) : array();
 
 		// Disable all buttons if there is a circular reference
-		if ($arrClipboard !== false && ($arrClipboard['mode'] == 'cut' && ($cr == 1 || $arrClipboard['id'] == $arrRow['id']) || $arrClipboard['mode'] == 'cutAll' && ($cr == 1 || in_array($arrRow['id'], $arrClipboard['id']))))
+		if ($objClipboard !== false && ($strMode == 'cut' && ($cr == 1 || $intID == $arrRow['id']) || $strMode == 'cutAll' && ($cr == 1 || in_array($arrRow['id'], $intID))))
 		{
 			$disablePA = true;
 			$disablePI = true;
@@ -685,21 +696,22 @@ class Filter extends Helper
 
 				$strAdd2UrlAfter = sprintf(
 					'act=%s&amp;mode=1&amp;pid=%s&amp;after=%s&amp;source=%s&amp;childs=%s',
-					$arrClipboard['mode'],
-					$arrClipboard['id'],
+					$strMode,
+					$intID,
 					$arrRow['id'],
-					$arrClipboard['source'],
-					$arrClipboard['childs']
+//					$arrClipboard['source'],
+					'',
+					implode(',', $arrChildren)
 				);
 
-				if ($arrClipboard['pdp'] != '')
+				if ($objDC->getDataProvider('parent') != '')
 				{
-					$strAdd2UrlAfter .= '&amp;pdp=' . $arrClipboard['pdp'];
+					$strAdd2UrlAfter .= '&amp;pdp=' . (($objDC->getDataProvider('parent')) ? $objDC->getDataProvider('parent')->getEmptyModel()->getProviderName() : '');
 				}
 
-				if ($arrClipboard['cdp'] != '')
+				if ($objDC->getDataProvider('children') != '')
 				{
-					$strAdd2UrlAfter .= '&amp;cdp=' . $arrClipboard['cdp'];
+					$strAdd2UrlAfter .= '&amp;cdp=' . (($objDC->getDataProvider('children')) ? $objDC->getDataProvider('children')->getEmptyModel()->getProviderName() : '');
 				}
 
 				$return = sprintf(
@@ -718,21 +730,22 @@ class Filter extends Helper
 
 				$strAdd2UrlInto = sprintf(
 					'act=%s&amp;mode=2&amp;pid=%s&amp;after=%s&amp;source=%s&amp;childs=%s',
-					$arrClipboard['mode'],
-					$arrClipboard['id'],
+					$strMode,
+					$intID,
 					$arrRow['id'],
-					$arrClipboard['source'],
-					$arrClipboard['childs']
+//					$arrClipboard['source'],
+					'',
+					implode(',', $arrChildren)
 				);
-
-				if ($arrClipboard['pdp'] != '')
+				
+				if ($objDC->getDataProvider('parent') != '')
 				{
-					$strAdd2UrlInto .= '&amp;pdp=' . $arrClipboard['pdp'];
+					$strAdd2UrlInto .= '&amp;pdp=' . (($objDC->getDataProvider('parent')) ? $objDC->getDataProvider('parent')->getEmptyModel()->getProviderName() : '');
 				}
 
-				if ($arrClipboard['cdp'] != '')
+				if ($objDC->getDataProvider('children') != '')
 				{
-					$strAdd2UrlInto .= '&amp;cdp=' . $arrClipboard['cdp'];
+					$strAdd2UrlInto .= '&amp;cdp=' . (($objDC->getDataProvider('children')) ? $objDC->getDataProvider('children')->getEmptyModel()->getProviderName() : '');
 				}
 
 				$return .= sprintf(
@@ -747,20 +760,23 @@ class Filter extends Helper
 
 			$strAdd2UrlInto = sprintf(
 				'act=%s&amp;mode=2&amp;after=0&amp;pid=0&amp;id=%s&amp;source=%s&amp;childs=%s',
-				$arrClipboard['mode'],
-				$arrClipboard['id'],
-				$arrClipboard['source'],
-				$arrClipboard['childs']
+				$strMode,
+				$intID,
+				$arrRow['id'],
+//					$arrClipboard['source'],
+				'',
+				implode(',', $arrChildren)
 			);
-
-			if ($arrClipboard['pdp'] != '')
+			
+			if ($objDC->getDataProvider('parent') != '')
 			{
-				$strAdd2UrlInto .= '&amp;pdp=' . $arrClipboard['pdp'];
+				
+				$strAdd2UrlInto .= '&amp;pdp=' . (($objDC->getDataProvider('parent')) ? $objDC->getDataProvider('parent')->getEmptyModel()->getProviderName() : '');
 			}
 
-			if ($arrClipboard['cdp'] != '')
+			if ($objDC->getDataProvider('children') != '')
 			{
-				$strAdd2UrlInto .= '&amp;cdp=' . $arrClipboard['cdp'];
+				$strAdd2UrlInto .= '&amp;cdp=' . (($objDC->getDataProvider('children')) ? $objDC->getDataProvider('children')->getEmptyModel()->getProviderName() : '');
 			}
 
 			$return = sprintf(
