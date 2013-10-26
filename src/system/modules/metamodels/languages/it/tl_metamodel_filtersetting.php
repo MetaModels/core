@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-23T16:13:38+02:00
+ * last-updated: 2013-07-24T16:13:37+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Cerca tutte le lingue';
@@ -26,6 +26,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy']['0']                 =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy']['1']                 = 'Copia l\'impostazione del filtro ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql']['0']            = 'Query SQL personalizzata';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql']['1']            = 'La query SQL che deve essere eseguita. Sono ammessi anche gli tag insert.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid']['0']            = 'Default';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid']['1']            = 'Il valore di default per la selezione.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete']['0']               = 'Cancella l\'impostazione del filtro';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete']['1']               = 'Cancella l\'impostazione del filtro ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit']['0']                 = 'Modifica l\'impostazione';

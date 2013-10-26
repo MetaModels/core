@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2013-07-10T10:02:32+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Tschertgar tut las linguas';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['1']            = 'Activescha questa chaschetta sche ti vuls tschertgar independentamain da la lingua. Sche la chaschetta n\'è betg activada vegn be tschertgà en la lingua activa actualmain.';
@@ -27,6 +26,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy']['0']                 =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy']['1']                 = 'Copiar la configuraziun da filter cun l\'ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql']['0']            = 'Damonda da SQL persunalisada';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql']['1']            = 'La dumonda da SQL che duai vegnir execuida. Insert-tags vegnan sustegnids.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid']['0']            = 'Standard';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid']['1']            = 'Valur da standard da la selecziun.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete']['0']               = 'Stizzar configuraziun da filter';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete']['1']               = 'Stizzar la configuraziun da filter cun l\'ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit']['0']                 = 'Modifitgar la configuraziun';

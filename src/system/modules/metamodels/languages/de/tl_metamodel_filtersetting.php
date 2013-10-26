@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2013-09-26T08:12:59+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Alle Sprachen durchsuchen';
@@ -26,6 +26,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy']['0']                 =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy']['1']                 = 'Kopieren Sie die Filtereinstellung ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql']['0']            = 'Eigene SQL-Abfrage';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql']['1']            = 'Die SQL-Abfrage eingeben, die ausgeführt werden soll. Insert-Tags werden unterstützt.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid']['0']            = 'Standard';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid']['1']            = 'Standardwert für die Auswahl.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete']['0']               = 'Filtereinstellung löschen';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete']['1']               = 'Löschen Sie die Filtereinstellung ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit']['0']                 = 'Einstellung bearbeiten';

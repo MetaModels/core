@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2013-07-10T10:02:32+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Αναζητηση ολων των γλωσσων';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['1']            = 'Ελέγξτε εάν θέλετε να εκτελέσετε την αναζήτηση ανεξάρτητης γλώσσας. Αν αυτό δεν είναι επιλεγμένο, μόνο η τρέχουσα ενεργή γλώσσα θα αναζητηθεί. ';
@@ -27,6 +26,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy']['0']                 =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy']['1']                 = 'Αντιγραφή ρύθμιση φίλτρου ID%s ';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql']['0']            = ' Προσαρμοσμένη SQL Query ';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql']['1']            = 'Το ερώτημα SQL που θα εκτελεστεί, υποστηρίζει ένθετο ετικετων. ';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid']['0']            = 'Προεπιλογη';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid']['1']            = 'Προεπιλεγμενη τιμη για την επιλογη.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete']['0']               = 'Διαγραφή ρύθμισης φίλτρου';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete']['1']               = 'Διαγραφή ρύθμισης φίλτρου ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit']['0']                 = 'Επεξεργασια ρυθμισης';
