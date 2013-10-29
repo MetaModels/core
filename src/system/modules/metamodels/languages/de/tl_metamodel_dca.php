@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T23:07:50+02:00
+ * last-updated: 2013-07-10T10:02:32+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']            = 'Backend-Integration';
@@ -32,6 +32,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']['0']                 = 'Eingabem
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']['1']                 = 'Bearbeiten Sie die Eingabemaske ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']['0']                 = 'Sortier-Flag';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']['1']                 = 'Sortiermodus für die Item-Ansicht';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed']['0']             = 'Nur die Bearbeitung erlauben';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed']['1']             = 'Wenn aktiviert, erlaubt dieser Input-Screen nur das bearbeiten der Einträge. Die Erstell- und Löschfunktion wird deaktiviert.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['0']            = 'Als Standard verwenden';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['1']            = 'Bestimmt, dass diese Eingabemaske als Standard für das Eltern-MetaModel benutzt wird.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['0']  = 'Die Rendering-Einstellung begrenzen';

@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-06-21T00:12:34+02:00
+ * last-updated: 2013-07-10T12:10:19+02:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attribute von "%s"';
@@ -28,12 +28,17 @@ $GLOBALS['TL_LANG']['CTE']['metamodels_frontendclearall']['1']                  
 $GLOBALS['TL_LANG']['CTE']['metamodels_frontendfilter']['0']                          = 'MetaModel-Frontendfilter';
 $GLOBALS['TL_LANG']['CTE']['metamodels_frontendfilter']['1']                          = 'Fügt einen Frontend-Filter für ein MetaModel hinzu.';
 $GLOBALS['TL_LANG']['ERR']['activate_extension']                                      = 'Bitte aktivieren Sie die benötigte Erweiterung "%s" (%s).';
-$GLOBALS['TL_LANG']['ERR']['columnExists']                                            = 'Ein Attribut mit diesem Tabellennamen ist bereits vorhanden.';
+$GLOBALS['TL_LANG']['ERR']['columnDoesNotExist']                                      = 'Das Feld "%s" existiert nicht in der Tabelle "%s".';
+$GLOBALS['TL_LANG']['ERR']['columnExists']                                            = 'Das Feld "%s" exisitiert bereits in der Tabelle "%s".';
 $GLOBALS['TL_LANG']['ERR']['install_extension']                                       = 'Bitte installieren Sie die benötigte Erweiterung "%s" (%s).';
-$GLOBALS['TL_LANG']['ERR']['invalidTableName']                                        = 'Der Tabellenname ist ungültig.';
+$GLOBALS['TL_LANG']['ERR']['invalidColumnName']                                       = 'Der Feldname "%s" ist ungültig.';
+$GLOBALS['TL_LANG']['ERR']['invalidTableName']                                        = 'Der Tabellenname "%s" ist ungültig.';
 $GLOBALS['TL_LANG']['ERR']['no_attribute_extension']                                  = 'Bitte installieren Sie mindestens eine Attribut-Erweiterung! MetaModels ohne Attribute sind nicht sinnvoll. ';
 $GLOBALS['TL_LANG']['ERR']['no_palette']                                              = 'Sie haben versucht, auf das MetaModel "%s" ohne eine Eingabemaske für Benutzer %s zuzugreifen.';
 $GLOBALS['TL_LANG']['ERR']['no_view']                                                 = 'Sie haben versucht, auf das MetaModel "%s" ohne Ansichtsrechte für Benutzer %s zuzugreifen.';
+$GLOBALS['TL_LANG']['ERR']['systemColumn']                                            = 'Der Feldname "%s" ist für die Benutzung durch das System reserviert.';
+$GLOBALS['TL_LANG']['ERR']['tableDoesNotExist']                                       = 'Tabelle "%s" existiert nicht.';
+$GLOBALS['TL_LANG']['ERR']['tableExists']                                             = 'Tabelle "%s" existiert bereits.';
 $GLOBALS['TL_LANG']['ERR']['upgrade_php_version']                                     = 'Ihre PHP-Version wird nicht unterstützt. Bitte machen Sie ein Upgrade und benutzen mindestens Version %s (Sie benutzen zur Zeit %s) .';
 $GLOBALS['TL_LANG']['MSC']['details']                                                 = 'Details';
 $GLOBALS['TL_LANG']['MSC']['field_label']                                             = '%s:';

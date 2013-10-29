@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-24T12:13:05+02:00
+ * last-updated: 2013-07-24T16:13:37+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Aggiunto l\'attributo "%s" alla maschera di input.';
@@ -63,6 +63,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']              =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['presentation_legend']          = 'Widget per l\'aspetto delle opzioni correlate';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['0']            = 'Non codificare i tags html';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['1']            = 'Se viene selezionata questa opzione, i tag HTML non saranno codificati.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['0']                = 'Sola lettura';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['1']                = 'Selezionare questa opzione per rendere il campo in sola lettura, senza che possa essere cambiata.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['0']                    = 'Righe';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['1']                    = 'Numero di righe per questo elemento.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rte']['0']                     = 'Abilita l\'editor di testo evoluto';
