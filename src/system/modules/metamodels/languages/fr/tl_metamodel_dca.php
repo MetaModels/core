@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2013-09-29T00:13:17+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']            = 'intégration back-office';
@@ -32,6 +32,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']['0']                 = 'Éditer 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']['1']                 = 'Éditer le masque de saisie ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']['0']                 = 'Signe de tri';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']['1']                 = 'Signe de tri à utiliser dans la vue articles.';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed']['0']             = 'Permettre l\'édition seulement';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['0']            = 'Par défaut';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['1']            = 'Détermines que ce masque de saisie doit être utilisé par défaut pour le Metamodel parent.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['0']  = 'Limiter les paramètres de rendu';
