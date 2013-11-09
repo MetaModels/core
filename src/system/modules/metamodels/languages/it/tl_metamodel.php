@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-06-27T16:13:19+02:00
+ * last-updated: 2013-07-10T10:02:32+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Impostazioni avanzate';
@@ -39,10 +39,14 @@ $GLOBALS['TL_LANG']['tl_metamodel']['languages_isfallback']['0'] = 'Lingua fallb
 $GLOBALS['TL_LANG']['tl_metamodel']['languages_isfallback']['1'] = 'Seleziona la lingua che si vuole utilizzare come lingua principale';
 $GLOBALS['TL_LANG']['tl_metamodel']['languages_langcode']['0']   = 'Lingua';
 $GLOBALS['TL_LANG']['tl_metamodel']['languages_langcode']['1']   = 'Selezionare le lingue che si vogliono fornire.';
+$GLOBALS['TL_LANG']['tl_metamodel']['mode']['0']                 = 'Parent list mode';
+$GLOBALS['TL_LANG']['tl_metamodel']['mode']['1']                 = 'Modalità da utilizzare per la relazione padre/figlio.';
 $GLOBALS['TL_LANG']['tl_metamodel']['name']['0']                 = 'Nome';
 $GLOBALS['TL_LANG']['tl_metamodel']['name']['1']                 = 'Nome MetaModel.';
 $GLOBALS['TL_LANG']['tl_metamodel']['new']['0']                  = 'Nuovo MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel']['new']['1']                  = 'Crea un nuovo MetaModel.';
+$GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['0']       = 'Definisci l\'impostazione di rendering';
+$GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['1']       = 'Definisci l\'impostazione di rendering per il MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['0']                 = 'Dettagli MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['1']                 = 'Mostra i dettagli del MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['tableName']['0']            = 'Nome della tabella';

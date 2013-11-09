@@ -100,7 +100,6 @@ ClassLoader::addClasses(array
 	'MetaModelBackend'                      => 'system/modules/metamodels/MetaModelBackend.php',
 	'WidgetMultiText'                       => 'system/modules/metamodels/WidgetMultiText.php',
 	'WidgetTags'                            => 'system/modules/metamodels/WidgetTags.php',
-	'MetaModelInsertTags'					=> 'system/modules/metamodels/MetaModelInsertTags.php',
 ));
 
 
