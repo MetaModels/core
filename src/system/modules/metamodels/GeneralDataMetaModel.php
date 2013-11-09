@@ -276,12 +276,12 @@ class GeneralDataMetaModel implements InterfaceGeneralData, InterfaceGeneralData
 				}
 				$objFilter->addFilterRule($objFilterRule);
 
-				$objSubFilter = new MetaModelFilter($this->objMetaModel);
-
-				$objFilterRule->addChild($objSubFilter);
-
 				foreach ($arrFilter['childs'] as $arrChild)
 				{
+					$objSubFilter = new MetaModelFilter($this->objMetaModel);
+
+					$objFilterRule->addChild($objSubFilter);
+
 					$this->calculateSubfilter($arrChild, $objSubFilter);
 				}
 				break;
