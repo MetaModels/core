@@ -52,6 +52,7 @@ ClassLoader::addClasses(array
 	'MetaModels\DcGeneral\View'                             => 'system/modules/metamodels/MetaModels/DcGeneral/View.php',
 	'MetaModels\DcGeneral\Data\Driver'                      => 'system/modules/metamodels/MetaModels/DcGeneral/Data/Driver.php',
 	'MetaModels\DcGeneral\Data\Model'                       => 'system/modules/metamodels/MetaModels/DcGeneral/Data/Model.php',
+	'MetaModels\DcGeneral\Data\ModelIterator'               => 'system/modules/metamodels/MetaModels/DcGeneral/Data/ModelIterator.php',
 	'MetaModels\Factory'                                    => 'system/modules/metamodels/MetaModels/Factory.php',
 	'MetaModels\Filter\Filter'                              => 'system/modules/metamodels/MetaModels/Filter/Filter.php',
 	'MetaModels\Filter\FilterRule'                          => 'system/modules/metamodels/MetaModels/Filter/FilterRule.php',
