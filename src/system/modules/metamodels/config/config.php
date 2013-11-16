@@ -142,7 +142,7 @@ $GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('TableMetaModelFilterSe
 $GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('TableMetaModelRenderSetting', 'createDataContainer');
 $GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('TableMetaModelDcaSetting', 'createDataContainer');
 $GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] = array('MetaModelFrontendFilter', 'generateClearAll');
-$GLOBALS['TL_HOOKS']['replaceInsertTags'][] 	 = array('MetaModelsInsertTags', 'replaceTags');
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][] 	 = array('MetaModelInsertTags', 'replaceTags');
 
 // Dependencies we need.
 // Mapping: extension folder => ER name.
