@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2013-10-26T08:13:26+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Tschertgar tut las linguas';
@@ -40,9 +40,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['0']                =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['1']                = 'Mussar il label empè dal num da l\'attribut.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['0']                  = 'Nov';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['1']                  = 'Crear ina nova configuraziun.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['0']         = 'Be las etichettas restantas';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['0']         = 'Be valurs restantas';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['1']         = 'Be mussar opziuns ch\'èn anc adina assegnadas insanua suenter che quest filter è definì.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['0']             = 'Be etichettas assegnadas';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['0']             = 'Be valurs assegnadas';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['1']             = 'Mussar be opziuns ch\'èn assegnadas insanua en il MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['0']         = 'Parameter static';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['1']         = 'Activescha questa chaschetta, sche ti vuls esser abel da definir la valur da questa parameter en la glista dal genitur (moduls, elements da cuntegn,...).';

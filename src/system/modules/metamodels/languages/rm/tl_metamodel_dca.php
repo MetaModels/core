@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2013-07-10T10:02:32+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']            = 'Integraziun en il back-end';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption']['0']       = 'Num en il back-end';
@@ -33,6 +32,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']['0']                 = 'Modifitg
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']['1']                 = 'Modifitgar la mascra d\'endataziun cun l\'ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']['0']                 = 'Flag da zavrar';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']['1']                 = 'Il flag da zavrar che duai vegnir utilisà en la vista dad elements.';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed']['0']             = 'Be lubir da modifitgar';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed']['1']             = 'Sche questa funcziun vegn activada lubescha questa vista be da modifitgar endataziuns. La funcziunalitad da crear e stizzar vegn deactivada.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['0']            = 'È standard';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['1']            = 'Definescha che questa mascra d\'endataziun duai vegnir utilisada sco standard per il MetaModel da genitur.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['0']  = 'Limitar la configuraziun da visualisar';

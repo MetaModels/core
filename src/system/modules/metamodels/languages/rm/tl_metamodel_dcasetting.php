@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T23:07:50+02:00
+ * last-updated: 2013-07-10T10:02:32+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Agiuntà l\'attribut "%s" a la mascra d\'endataziun.';
@@ -63,6 +63,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']              =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['presentation_legend']          = 'Opziuns davart l\'apparientscha dal widget';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['0']            = 'Na betg encodar tags da html.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['1']            = 'Sche ti tschernas questa chaschetta, na vegnan tags da HTML betg encodads.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['0']                = 'Be leger';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['1']                = 'Sche activà vegn il widget be legì e na po betg vegnir midà.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['0']                    = 'Lingias';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['1']                    = 'Dumber da lingias per utilisar per il widgetg da text lung/tabella.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rte']['0']                     = 'Activar l\'editur da text ritg';
