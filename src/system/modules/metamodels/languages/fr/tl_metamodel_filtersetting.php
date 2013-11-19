@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-09-29T04:13:10+02:00
+ * last-updated: 2013-10-26T08:13:25+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Cherche dans toutes les langues';
@@ -40,9 +40,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['0']                =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['1']                = 'Montrer l\'étiquette au lieu du nom d\'attribut';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['0']                  = 'Nouveau';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['1']                  = 'Créer un nouveau paramètre.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['0']         = 'Balises restante seulement';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['0']         = 'Valeurs restante seulement';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['1']         = 'Montrer seulement les options qui sont assignées quelque part après que le premier filtre soit défini.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['0']             = 'Assigner seulement des balises';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['0']             = 'Valeurs assignées seulement';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['1']             = 'Montrer seulement les options assignés quelquepart dans le MetaModel.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['0']         = 'Paramètre statique';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['1']         = 'Cocher si vous souhaitez être capable de définir la valeur de ce paramètre dans les listes parent (modules, éléments, etc.)';

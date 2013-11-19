@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2013-09-29T00:13:17+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Attribut "%s" ajouté au masque de saisie.';
@@ -63,6 +63,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']              =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['presentation_legend']          = 'Option relative à l\'apparence du gadget';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['0']            = 'Ne pas encoder les balises HTML.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['1']            = 'Si vous sélectionnez cette option, les balises HTML ne seront pas encodées.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['0']                = 'Lecture seulement';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['1']                = 'Si vrai, le gadget sera en mode lecture seulement et ne pourra être modifié.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['0']                    = 'Lignes';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['1']                    = 'Nombre de lignes à utiliser pour le gadget longtext/table.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rte']['0']                     = 'Activer l\'éditeur texte enrichi sur ceci';
@@ -78,6 +80,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['10']            =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['11']            = 'Tri ascendant';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['12']            = 'Tri descendant';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['2']             = 'Tri descendant par la première lettre';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['3']             = 'Tri ascendant par les "length" premières lettres';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['4']             = 'Tri descendant par les "length" premières lettres';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['5']             = 'Trier par jour ascendant';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['6']             = 'Trier par jour descendant';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['7']             = 'Trier par mois ascendant';
