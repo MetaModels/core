@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-10-26T08:13:25+02:00
+ * last-updated: 2013-11-19T20:13:44+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Cherche dans toutes les langues';
@@ -34,7 +34,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit']['0']                 =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit']['1']                 = 'Editer paramètre filtre ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['enabled']['0']              = 'Permis';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['enabled']['1']              = 'Permettre ce paramètre de filtre.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['0']                  = 'collection parente';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['0']                  = 'Collection parente';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['1']                  = 'La collection des paramètre de filtre à laquelle ce paramètre appartiens.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['0']                = 'Etiquette';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['1']                = 'Montrer l\'étiquette au lieu du nom d\'attribut';
