@@ -20,7 +20,7 @@ $GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = array('TableMod
  * Add palettes to tl_module
  */
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list']              = '{title_legend},name,headline,type;{config_legend},metamodel,perPage,metamodel_use_limit;{mm_filter_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_filtering,metamodel_filterparams;{template_legend:hide},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;{protected_legend:hide},protected;{expert_legend:hide},metamodel_donotindex,guests,cssID,space';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list']              = '{title_legend},name,headline,type;{config_legend},metamodel,perPage,metamodel_use_limit;{mm_filter_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_filtering,metamodel_filterparams;{template_legend:hide},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;{mm_meta_legend},metamodel_meta_title,metamodel_meta_description;{protected_legend:hide},protected;{expert_legend:hide},metamodel_donotindex,guests,cssID,space';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['metamodels_frontendfilter']   = '{title_legend},name,headline,type;{mm_filter_legend},metamodel_jumpTo,metamodel,metamodel_filtering,metamodel_fef_template,metamodel_fef_params,metamodel_fef_autosubmit,metamodel_fef_hideclearfilter,metamodel_available_values;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['metamodels_frontendclearall'] = '{title_legend},name,headline,type;{mm_filter_legend},metamodel_fef_template;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 
@@ -265,6 +265,34 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		(
 			'tl_class'            => 'w50',
 			'chosen'              => true
+		),
+	),
+	
+	'metamodel_meta_title' => array
+	(
+		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_meta_title'],
+		'exclude'                 => true,
+		'inputType'               => 'select',
+		'options_callback'        => array('TableModule', 'getMetaTitleAttributes'),
+		'eval'                    => array
+		(
+			'tl_class'            => 'w50',
+			'chosen'              => true,
+			'includeBlankOption'  => true
+		),
+	),
+
+	'metamodel_meta_description' => array
+	(
+		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_meta_description'],
+		'exclude'                 => true,
+		'inputType'               => 'select',
+		'options_callback'        => array('TableModule', 'getMetaDescriptionAttributes'),
+		'eval'                    => array
+		(
+			'tl_class'            => 'w50',
+			'chosen'              => true,
+			'includeBlankOption'  => true
 		),
 	)
 ));

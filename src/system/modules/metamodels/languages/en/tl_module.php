@@ -18,6 +18,7 @@
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_module']['mm_filter_legend']                = 'MetaModel Filter';
+$GLOBALS['TL_LANG']['tl_module']['mm_meta_legend']                  = 'Search engine optimization';
 
 /**
  * Fields
@@ -41,6 +42,10 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_template']          = array('Tem
 $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_autosubmit']        = array('Submit on change', 'Reload page on filter change.');
 $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_hideclearfilter']   = array('Hide clear filter option', 'Hide the clear filter option in every filter.');
 $GLOBALS['TL_LANG']['tl_module']['metamodel_available_values']      = array('Filter counter', 'Display the amount of available entries behind each filter option.');
+$GLOBALS['TL_LANG']['tl_module']['metamodel_meta_title']            = array('Meta Title', 'NEED TEXT');
+$GLOBALS['TL_LANG']['tl_module']['metamodel_meta_description']      = array('Meta Description', 'NEED TEXT');
+
+
 
 /**
  * Wizards

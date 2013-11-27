@@ -93,7 +93,8 @@ class ModuleMetaModelList extends Module
 			->setPageBreak($this->perPage)
 			->setSorting($this->metamodel_sortby, $this->metamodel_sortby_direction)
 			->setFilterSettings($this->metamodel_filtering)
-			->setFilterParameters(deserialize($this->metamodel_filterparams, true), $this->getFilterParameters($objItemRenderer));
+			->setFilterParameters(deserialize($this->metamodel_filterparams, true), $this->getFilterParameters($objItemRenderer))
+			->setMetaTags($this->metamodel_meta_title, $this->metamodel_meta_description);
 
 		$this->Template->items      = $objItemRenderer->render($this->metamodel_noparsing, $this);
 		$this->Template->pagination = $objItemRenderer->getPagination();

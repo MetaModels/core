@@ -94,11 +94,25 @@ class MetaModelList extends Controller
 	protected $intFilter = 0;
 
 	/**
-	 *  the parameters for the filter.
+	 * The parameters for the filter.
 	 *
 	 * @var string[]
 	 */
 	protected $arrParam = array();
+
+	/**
+	 * The name of the attribute for the title.
+	 * 
+	 * @var string 
+	 */
+	protected $strTitleAttribute = '';
+
+	/**
+	 * The name of the attribute for the description.
+	 * 
+	 * @var string 
+	 */
+	protected $strDescriptionAttribute = '';
 
 	public function __construct() {
 		parent::__construct();
@@ -233,6 +247,19 @@ class MetaModelList extends Controller
 		$this->setFilterParameters($arrPresets, $arrValues);
 
 		return $this;
+	}
+
+	/**
+	 * Add the attribute names for meta title and description.
+	 * 
+	 * @param string $strTitleAttribute Name of attribute for title.
+	 * 
+	 * @param string $strDescriptionAttribute Name of attribue for description.
+	 */
+	public function setMetaTags($strTitleAttribute, $strDescriptionAttribute)
+	{
+		$this->strDescriptionAttribute = $strDescriptionAttribute;
+		$this->strTitleAttribute = $strTitleAttribute;
 	}
 
 	/**
@@ -695,6 +722,8 @@ class MetaModelList extends Controller
 	 */
 	public function render($blnNoNativeParsing, $objCaller)
 	{
+		global $objPage;
+
 		$this->objTemplate->noItemsMsg = $this->getNoItemsCaption();
 		$this->objTemplate->details    = $this->getDetailsCaption();
 
@@ -706,6 +735,30 @@ class MetaModelList extends Controller
 			$this->objTemplate->data = $this->objItems->parseAll($strOutputFormat, $this->objView);
 		} else {
 			$this->objTemplate->data = array();
+		}
+
+		// Add title if needed.
+		if($this->objItems->getCount() && !empty($this->strTitleAttribute))
+		{
+			$objFirstItem = $this->objItems->current();
+			$arrTitle = $objFirstItem->parseAttribute($this->strTitleAttribute, 'text');
+
+			if(isset($arrTitle['raw']) && !empty($arrTitle['raw']))
+			{
+				$objPage->rootTitle = $arrTitle['raw'];
+			}
+		}
+
+		// Add description if needed.
+		if($this->objItems->getCount() && !empty($this->strDescriptionAttribute))
+		{
+			$objFirstItem = $this->objItems->current();
+			$arrDescription = $objFirstItem->parseAttribute($this->strDescriptionAttribute, 'text');
+
+			if(isset($arrDescription['raw']) && !empty($arrDescription['raw']))
+			{
+				$objPage->description = $arrDescription['raw'];
+			}
 		}
 
 		$this->objTemplate->caller       = $objCaller;
