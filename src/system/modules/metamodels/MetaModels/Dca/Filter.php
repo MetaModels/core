@@ -259,7 +259,7 @@ class Filter extends Helper
 		{
 			return 0;
 		}
-		$strName = str_replace($this->objMetaModel->getTableName() . '_', '', $strValue);
+		$strName = substr($strValue, strlen($this->objMetaModel->getTableName() . '_'));
 
 		$objAttribute = $this->objMetaModel->getAttribute($strName);
 		if (!$objAttribute)
