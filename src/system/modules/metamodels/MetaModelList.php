@@ -738,7 +738,7 @@ class MetaModelList extends Controller
 		}
 
 		// Add title if needed.
-		if($this->objItems->getCount() && !empty($this->strTitleAttribute))
+		if($objPage && $this->objItems->getCount() && !empty($this->strTitleAttribute))
 		{
 			$objFirstItem = $this->objItems->current();
 			$arrTitle = $objFirstItem->parseAttribute($this->strTitleAttribute, 'text');
@@ -750,7 +750,7 @@ class MetaModelList extends Controller
 		}
 
 		// Add description if needed.
-		if($this->objItems->getCount() && !empty($this->strDescriptionAttribute))
+		if($objPage && $this->objItems->getCount() && !empty($this->strDescriptionAttribute))
 		{
 			$objFirstItem = $this->objItems->current();
 			$arrDescription = $objFirstItem->parseAttribute($this->strDescriptionAttribute, 'text');
