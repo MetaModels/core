@@ -18,6 +18,7 @@ namespace MetaModels\Filter\Setting;
 
 use MetaModels\IItem;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
+use MetaModels\FrontendIntegration\FrontendFilterOptions;
 
 /**
  *
@@ -90,7 +91,7 @@ abstract class WithChildren
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, \MetaModelFrontendFilterOptions $objFrontendFilterOptions)
+	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, FrontendFilterOptions $objFrontendFilterOptions)
 	{
 		$arrParams = array();
 		foreach ($this->arrChildren as $objSetting)
