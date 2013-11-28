@@ -4,6 +4,12 @@
 <div class="layout_full">
 
 <?php foreach ($this->items->parseAll($this->getFormat(), $this->view) as $arrItem): ?>
+<?php
+# SEO : To override <title> & <meta name="description"> of each item page, uncomment the two folowing lines and replace #TITLE_ATTRIBUTE# and #DESC_ATTRIBUTE# with your own attributes...
+#$GLOBALS['objPage']->pageTitle = htmlspecialchars_decode( html_entity_decode( trim( $arrItem['text']['#TITLE_ATTRIBUTE#'] )));
+#$GLOBALS['objPage']->description = htmlspecialchars_decode( html_entity_decode( trim( $arrItem['text']['#DESC_ATTRIBUTE#'] )));
+?>
+
 <div class="item <?php echo $arrItem['class']; ?>">
 
 <?php foreach ($this->items->getItem()->getMetaModel()->getAttributes() as $field => $objAttribute): ?>
