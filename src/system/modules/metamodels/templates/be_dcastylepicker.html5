@@ -100,11 +100,11 @@ parent.REQUEST_TOKEN = REQUEST_TOKEN;
 <?php endif;?>
 </div>
 <script>
-<!--//--><![CDATA[//><!--
+/* <![CDATA[ */
 window.addEvent('domready',function(){
 	new Stylepicker4ward($('styleItems'),'<?php echo $this->field;?>');
 });
-//--><!]]>
+/* ]]> */
 </script>
 
 <?php /*** Wizard END ***/ ?>

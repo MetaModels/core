@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-23T12:13:28+02:00
+ * last-updated: 2013-07-23T16:13:38+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']            = 'Integrazione del backend';
@@ -32,6 +32,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']['0']                 = 'Modifica
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']['1']                 = 'Modifica la maschera di inserimento ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']['0']                 = 'Flag ordinamento';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']['1']                 = 'Flag di ordinamento da utilizzare nella vista';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed']['0']             = 'Consenti solo la modifica';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed']['1']             = 'Se selezionata questa opzione, la schermata di inserimento consentirà solo la modifica delle informazioni. Le funzioni di nuovi inserimenti e di eliminazione dei record verranno disattivate.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['0']            = 'È default';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['1']            = 'Determina la maschera di inserimento predefinita che sarà utilizzata per il MetaModel padre.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['0']  = 'Limita l\'impostazione di rendering';

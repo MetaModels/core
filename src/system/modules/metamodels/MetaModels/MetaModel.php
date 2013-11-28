@@ -287,7 +287,7 @@ class MetaModel implements IMetaModel
 
 				if ($arrMissing)
 				{
-					$arrAttributeData += $objAttribute->getTranslatedDataFor($arrMissing, $this->getActiveLanguage());
+					$arrAttributeData += $objAttribute->getTranslatedDataFor($arrMissing, $this->getFallbackLanguage());
 				}
 			}
 			else

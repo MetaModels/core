@@ -214,5 +214,57 @@ class Module extends \Backend
 
 		return $arrParameterDca;
 	}
+
+	/**
+	 * Get a list with all allowed attributes for meta title.
+	 * 
+	 * @param DataContainer $objDC
+	 * 
+	 * @return array A list with all found attributes.
+	 */
+	public function getMetaTitleAttributes(DataContainer $objDC)
+	{
+		$arrAttributeNames = array();
+
+		$objMetaModel = MetaModelFactory::byId($objDC->activeRecord->metamodel);
+		if ($objMetaModel)
+		{
+			foreach ($objMetaModel->getAttributes() as $objAttribute)
+			{
+				if (in_array($objAttribute->get('type'), $GLOBALS['METAMODELS']['metainformation']['allowedTitle']))
+				{
+					$arrAttributeNames[$objAttribute->getColName()] = $objAttribute->getName() . ' [' . $objAttribute->getColName() . ']</span>';
+				}
+			}
+		}
+
+		return $arrAttributeNames;
+	}
+
+	/**
+	 * Get a list with all allowed attributes for meta description.
+	 * 
+	 * @param DataContainer $objDC
+	 * 
+	 * @return array A list with all found attributes.
+	 */
+	public function getMetaDescriptionAttributes(DataContainer $objDC)
+	{
+		$arrAttributeNames = array();
+
+		$objMetaModel = MetaModelFactory::byId($objDC->activeRecord->metamodel);
+		if ($objMetaModel)
+		{
+			foreach ($objMetaModel->getAttributes() as $objAttribute)
+			{
+				if (in_array($objAttribute->get('type'), $GLOBALS['METAMODELS']['metainformation']['allowedDescription']))
+				{
+					$arrAttributeNames[$objAttribute->getColName()] = $objAttribute->getName() . ' [' . $objAttribute->getColName() . ']</span>';
+				}
+			}
+		}
+
+		return $arrAttributeNames;
+	}
 }
 

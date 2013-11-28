@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-06-01T01:50:49+02:00
+ * last-updated: 2013-07-10T10:02:32+02:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attributs da "%s"';
@@ -28,12 +28,17 @@ $GLOBALS['TL_LANG']['CTE']['metamodels_frontendclearall']['1']                  
 $GLOBALS['TL_LANG']['CTE']['metamodels_frontendfilter']['0']                          = 'Filter da front-end da MetaModel';
 $GLOBALS['TL_LANG']['CTE']['metamodels_frontendfilter']['1']                          = 'Agiuntescha in filter da front-end per in MetaModel.';
 $GLOBALS['TL_LANG']['ERR']['activate_extension']                                      = 'Activescha l\'extensiun dumandada "%s" (%s)';
-$GLOBALS['TL_LANG']['ERR']['columnExists']                                            = 'I exista gia in attribut cun il num da colonna specifitgà.';
+$GLOBALS['TL_LANG']['ERR']['columnDoesNotExist']                                      = 'La colonna "%s" n\'exista betg en la tabella "%s".';
+$GLOBALS['TL_LANG']['ERR']['columnExists']                                            = 'La colonna "%s" exista gia en la tabella "%s".';
 $GLOBALS['TL_LANG']['ERR']['install_extension']                                       = 'Installescha l\'extensiun dumandada "%s" (%s)';
-$GLOBALS['TL_LANG']['ERR']['invalidTableName']                                        = 'Il num da tabella è nunvalid.';
+$GLOBALS['TL_LANG']['ERR']['invalidColumnName']                                       = 'IL num da colonna "%s" n\'è betg valid.';
+$GLOBALS['TL_LANG']['ERR']['invalidTableName']                                        = 'Il num da tabella "%s" n\'è betg valid.';
 $GLOBALS['TL_LANG']['ERR']['no_attribute_extension']                                  = 'Installescha almain ina extensiun d\'attributs! MetaModels senza attributs na fan naign senn.';
 $GLOBALS['TL_LANG']['ERR']['no_palette']                                              = 'Emprova dad acceder il MetaModel "%s" senza mascra d\'endataziun per l\'utilisader %s.';
 $GLOBALS['TL_LANG']['ERR']['no_view']                                                 = 'Emprova dad acceder il MetaModel "%s" senza senza opziun da vista per l\'utilisader %s.';
+$GLOBALS['TL_LANG']['ERR']['systemColumn']                                            = 'Il num da colonna "%s" è reservà per l\'utilisaziun dal sistem.';
+$GLOBALS['TL_LANG']['ERR']['tableDoesNotExist']                                       = 'La tabella "%s" n\'exista betg.';
+$GLOBALS['TL_LANG']['ERR']['tableExists']                                             = 'La tabella "%s" exista gia.';
 $GLOBALS['TL_LANG']['ERR']['upgrade_php_version']                                     = 'La versiun da l\'interpreter da PHP è memia bass, actualisescha almain a %s (ti utiliseschas actualmain %s)';
 $GLOBALS['TL_LANG']['MSC']['details']                                                 = 'Detagls';
 $GLOBALS['TL_LANG']['MSC']['field_label']                                             = '%s:';

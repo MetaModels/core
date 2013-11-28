@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-06-20T20:13:09+02:00
+ * last-updated: 2013-07-10T10:02:32+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Das Attribut "%s" wurde der Eingabemaske hinzugefügt.';
@@ -63,6 +63,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']              =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['presentation_legend']          = 'Anzeigeoptionen des Widgets';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['0']            = 'HTML-Tags nicht codieren.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['1']            = 'Falls ausgewählt werden HTML-Tags nicht codiert.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['0']                = 'Nur lesen';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['1']                = 'Wenn aktiviert, erlaubt das Feld nur das Lesen und kann nicht geändert werden.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['0']                    = 'Zeilen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['1']                    = 'Anzahl der Zeilen, die für longtext / table Widget verwendet werden.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rte']['0']                     = 'Richtext-Editor aktivieren';

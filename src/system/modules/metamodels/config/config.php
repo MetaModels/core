@@ -199,6 +199,11 @@ $GLOBALS['METAMODELS']['dependencies']['multicolumnwizard'] = 'MultiColumnWizard
 $GLOBALS['METAMODELS']['dependencies']['generalDriver']     = 'DC_General';
 $GLOBALS['METAMODELS']['dependencies']['justtextwidgets']   = 'JustTextWidgets';
 
+// Meta Informations
+$GLOBALS['METAMODELS']['metainformation']['allowedTitle'][]       = 'text';
+$GLOBALS['METAMODELS']['metainformation']['allowedTitle'][]       = 'select';
+$GLOBALS['METAMODELS']['metainformation']['allowedDescription'][] = 'longtext';
+
 array_insert($GLOBALS['BE_FFL'], 15, array
 (
 	'mm_subdca'    => 'MetaModels\Widgets\SubDcaWidget'

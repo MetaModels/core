@@ -329,7 +329,10 @@ CREATE TABLE `tl_module` (
   `metamodel_fef_template` varchar(64) NOT NULL default '',
   `metamodel_jumpTo` int(10) unsigned NOT NULL default '0',
   `metamodel_donotindex` char(1) NOT NULL default '',
-  `metamodel_available_values` char(1) NOT NULL default ''
+  `metamodel_available_values` char(1) NOT NULL default '',
+-- meta information
+  `metamodel_meta_title` varchar(64) NOT NULL default '',
+  `metamodel_meta_description` varchar(64) NOT NULL default ''
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
@@ -360,5 +363,8 @@ CREATE TABLE `tl_content` (
   `metamodel_fef_template` varchar(64) NOT NULL default '',
   `metamodel_jumpTo` int(10) unsigned NOT NULL default '0',
   `metamodel_donotindex` char(1) NOT NULL default '',
-  `metamodel_available_values` char(1) NOT NULL default ''
+  `metamodel_available_values` char(1) NOT NULL default '',
+-- meta information
+  `metamodel_meta_title` varchar(64) NOT NULL default '',
+  `metamodel_meta_description` varchar(64) NOT NULL default ''
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

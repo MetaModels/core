@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-23T16:13:38+02:00
+ * last-updated: 2013-10-26T08:13:25+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Cerca tutte le lingue';
@@ -26,6 +26,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy']['0']                 =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy']['1']                 = 'Copia l\'impostazione del filtro ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql']['0']            = 'Query SQL personalizzata';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql']['1']            = 'La query SQL che deve essere eseguita. Sono ammessi anche gli tag insert.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid']['0']            = 'Default';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid']['1']            = 'Il valore di default per la selezione.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete']['0']               = 'Cancella l\'impostazione del filtro';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete']['1']               = 'Cancella l\'impostazione del filtro ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit']['0']                 = 'Modifica l\'impostazione';
@@ -38,9 +40,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['0']                =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['1']                = 'Mostra l\'etichetta al posto del nome dell\'attributo.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['0']                  = 'Nuovo';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['1']                  = 'Crea una nuova impostazione.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['0']         = 'Solo tag rimanenti';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['0']         = 'Solo i valori rimanenti';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['1']         = 'Mostra solo le opzioni, che sono ancora assegnati da qualche parte dopo il filtro attuale viene impostato.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['0']             = 'Solo tag assegnati';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['0']             = 'Solo valori assegnati';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['1']             = 'Mostra solo le opzioni assegnati in qualche parte del MetaModel.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['0']         = 'Parametro statico';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['1']         = 'Controllare se si vuole essere in grado di impostare il valore di questo parametro nella parenting list (moduli, elementi di contenuto, ecc.)';

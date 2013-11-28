@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-01T12:13:34+02:00
+ * last-updated: 2013-07-10T10:02:32+02:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attributs de "%s"';
@@ -28,12 +28,17 @@ $GLOBALS['TL_LANG']['CTE']['metamodels_frontendclearall']['1']                  
 $GLOBALS['TL_LANG']['CTE']['metamodels_frontendfilter']['0']                          = 'Filtre frontal pour MetaModel';
 $GLOBALS['TL_LANG']['CTE']['metamodels_frontendfilter']['1']                          = 'Ajoute un frontend filtre pour un MetaModel.';
 $GLOBALS['TL_LANG']['ERR']['activate_extension']                                      = 'Veuillez s\'il vous plaît activer l\'extension requise "%s" (%s)';
-$GLOBALS['TL_LANG']['ERR']['columnExists']                                            = 'Il y a déjà un attribut avec ce nom de colonne.';
+$GLOBALS['TL_LANG']['ERR']['columnDoesNotExist']                                      = 'La colonne "%s" n\'existe pas sur le tableau"%s".';
+$GLOBALS['TL_LANG']['ERR']['columnExists']                                            = 'La colonne "%s" existe déjà sur le tableau "%s".';
 $GLOBALS['TL_LANG']['ERR']['install_extension']                                       = 'Veuillez s\'il vous plaît installer l\'extension requise "%s" (%s)';
-$GLOBALS['TL_LANG']['ERR']['invalidTableName']                                        = 'Le nom de la table n\'est pas valide.';
+$GLOBALS['TL_LANG']['ERR']['invalidColumnName']                                       = 'Le nom de colonne "%s" est invalide.';
+$GLOBALS['TL_LANG']['ERR']['invalidTableName']                                        = 'Le nom de tableau "%s" est invalide.';
 $GLOBALS['TL_LANG']['ERR']['no_attribute_extension']                                  = 'Veuillez installer au moins une extension d\'attribut ! Les Metamodels sans attributs n\'ont aucun sens.';
 $GLOBALS['TL_LANG']['ERR']['no_palette']                                              = 'Tenter d\'accéder au MetaModel "%s" sans écran de saisie pour l\'utilisateur courant %s.';
 $GLOBALS['TL_LANG']['ERR']['no_view']                                                 = 'Tenter d\'accéder au MetaModel "%s" sans vue pour l\'utilisateur %s.';
+$GLOBALS['TL_LANG']['ERR']['systemColumn']                                            = 'Le nom de colonne "%s" est réservé au fonctionnement du système.';
+$GLOBALS['TL_LANG']['ERR']['tableDoesNotExist']                                       = 'Le tableau "%s" n\'existe pas.';
+$GLOBALS['TL_LANG']['ERR']['tableExists']                                             = 'Le tableau "%s" existe déjà.';
 $GLOBALS['TL_LANG']['ERR']['upgrade_php_version']                                     = 'La version minimale de PHP requise est %s (vous utilisez actuellement %s)';
 $GLOBALS['TL_LANG']['MSC']['details']                                                 = 'Détails';
 $GLOBALS['TL_LANG']['MSC']['field_label']                                             = '%s:';

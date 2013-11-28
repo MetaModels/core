@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-15T08:12:17+02:00
+ * last-updated: 2013-07-10T10:02:32+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Erweiterte Einstellungen';
@@ -25,7 +25,7 @@ $GLOBALS['TL_LANG']['tl_metamodel']['delete']['1']               = 'Das MetaMode
 $GLOBALS['TL_LANG']['tl_metamodel']['edit']['0']                 = 'Items verwalten';
 $GLOBALS['TL_LANG']['tl_metamodel']['edit']['1']                 = 'Die Datenssätze des MetaModel ID %s verwalten.';
 $GLOBALS['TL_LANG']['tl_metamodel']['editheader']['0']           = 'MetaModel bearbeiten';
-$GLOBALS['TL_LANG']['tl_metamodel']['editheader']['1']           = 'Das MetaModel mit der ID %s bearbeiten.';
+$GLOBALS['TL_LANG']['tl_metamodel']['editheader']['1']           = 'Das MetaModel mit der ID% bearbeiten.';
 $GLOBALS['TL_LANG']['tl_metamodel']['fields']['0']               = 'Attribute definieren';
 $GLOBALS['TL_LANG']['tl_metamodel']['fields']['1']               = 'Attribute für MetaModel ID %s definieren';
 $GLOBALS['TL_LANG']['tl_metamodel']['filter']['0']               = 'Filter definieren';
