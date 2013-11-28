@@ -209,5 +209,31 @@ class TableMetaModelHelper extends Backend
 
 		return array_unique($arrTemplates);
 	}
+
+	/**
+	 * Get a list with all allowed attributes for meta description.
+	 * 
+	 * @param DataContainer $objDC
+	 * 
+	 * @return array A list with all found attributes.
+	 */
+	 public function getAttributeNamesForModel($intMetaModel, $arrTypes = array())
+	{
+		$arrAttributeNames = array();
+
+		$objMetaModel = MetaModelFactory::byId($intMetaModel);
+		if ($objMetaModel)
+		{
+			foreach ($objMetaModel->getAttributes() as $objAttribute)
+			{
+				if (empty($arrTypes) || in_array($objAttribute->get('type'), $arrTypes))
+				{
+					$arrAttributeNames[$objAttribute->getColName()] = $objAttribute->getName() . ' [' . $objAttribute->getColName() . ']';
+				}
+			}
+		}
+
+		return $arrAttributeNames;
+	}
 }
 
