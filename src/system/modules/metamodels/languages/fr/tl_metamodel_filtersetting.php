@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-11-19T20:13:44+01:00
+ * last-updated: 2013-11-20T20:13:51+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Cherche dans toutes les langues';
@@ -51,6 +51,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['1']                 =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['0']     = 'Arrêter après la première correspondance';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['1']     = 'Cocher si vous souhaitez que ce paramètre de filtre arrête l\'exécution de ses règles lèguées après que le premier sous ensemble ait trouvé des correspondances.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['0']             = 'Modèle';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['1']             = 'Sous-modèle pour cet élément filtre. Standard: gadget formulaire.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['title_legend']              = 'Type';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['type']['0']                 = 'Type';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['type']['1']                 = 'Le type de ce paramètre.';

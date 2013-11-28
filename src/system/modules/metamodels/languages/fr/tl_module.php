@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-09-28T20:13:01+02:00
+ * last-updated: 2013-09-29T00:13:17+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_module']['editfiltersetting']['0']              = 'Editer les paramètres de filtre';
@@ -41,6 +41,10 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_layout']['0']               = 'Templ
 $GLOBALS['TL_LANG']['tl_module']['metamodel_layout']['1']               = 'Selectionnez le template qui devrait être utilisé pour l\'attribut selectionné. Les noms de  templates valide commencent par "ce_metamodel".';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_limit']['0']                = 'Nombre maximum d\'articles';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_limit']['1']                = 'Veuillez entrer le nombre maximum d\'articles. Entrez 0 pour tout montrer et désactiver la pagination.';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_meta_description']['0']     = 'Description du Meta';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_meta_description']['1']     = 'NECESSITE DESCRIPTION';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_meta_title']['0']           = 'Titre Meta';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_meta_title']['1']           = 'NECESSITE DESCRIPTION';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_noparsing']['0']            = 'Pas d\'analyse des articles';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_noparsing']['1']            = 'Si cette case est sélectionné, le module n\'analysera les articles. Seul les objets d\'articles seront disponibles dans le template.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_offset']['0']               = 'Marge de la liste';
@@ -54,3 +58,4 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby_direction']['1']     = 'Ordre
 $GLOBALS['TL_LANG']['tl_module']['metamodel_use_limit']['0']            = 'Utiliser marge et limite pour la liste';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_use_limit']['1']            = 'Cochez si vous voulez limiter la quantité d\'article listé. C\'est utile pour créer une sélection des 500 premiers articles, ou de tout les articles hors les 10 premiers tout en gardant la pagination intacte.';
 $GLOBALS['TL_LANG']['tl_module']['mm_filter_legend']                    = 'Filtre du MetaModel';
+$GLOBALS['TL_LANG']['tl_module']['mm_meta_legend']                      = 'Optimisation du moteur de recherche';
