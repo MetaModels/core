@@ -339,11 +339,19 @@ class MetaModelDcaBuilder
 		$objMetaModel = Factory::byId($arrDCA['pid']);
 		$strModuleName = 'metamodel_' . $objMetaModel->getTableName();
 		$strTableCaption = $objMetaModel->getName();
+ 		$strBackendIcon = $arrDCA['backendicon'];
+
+		// If we have a c3 replace the id/uuid with the path.
+		if($strBackendIcon && version_compare(VERSION, '3.0', '>'))
+		{
+			$objFile = \FilesModel::findByPk($strBackendIcon);
+			$strBackendIcon = $objFile->path;
+		}
 
 		// determine image to use.
-		if ($arrDCA['backendicon'] && file_exists(TL_ROOT . '/' . $arrDCA['backendicon']))
+		if ($strBackendIcon && file_exists(TL_ROOT . '/' . $strBackendIcon))
 		{
-			$strIcon = ContaoController::getInstance()->getImage(ContaoController::getInstance()->urlEncode($arrDCA['backendicon']), 16, 16);
+			$strIcon = ContaoController::getInstance()->getImage(ContaoController::getInstance()->urlEncode($strBackendIcon), 16, 16);
 		} else {
 			$strIcon = 'system/modules/metamodels/html/metamodels.png';
 		}
