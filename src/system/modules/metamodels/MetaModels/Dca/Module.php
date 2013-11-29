@@ -224,21 +224,8 @@ class Module extends \Backend
 	 */
 	public function getMetaTitleAttributes(DataContainer $objDC)
 	{
-		$arrAttributeNames = array();
-
-		$objMetaModel = MetaModelFactory::byId($objDC->activeRecord->metamodel);
-		if ($objMetaModel)
-		{
-			foreach ($objMetaModel->getAttributes() as $objAttribute)
-			{
-				if (in_array($objAttribute->get('type'), $GLOBALS['METAMODELS']['metainformation']['allowedTitle']))
-				{
-					$arrAttributeNames[$objAttribute->getColName()] = $objAttribute->getName() . ' [' . $objAttribute->getColName() . ']</span>';
-				}
-			}
-		}
-
-		return $arrAttributeNames;
+		$objTableHelper = new TableMetaModelHelper();
+		return $objTableHelper->getAttributeNamesForModel($objDC->activeRecord->metamodel, (array) $GLOBALS['METAMODELS']['metainformation']['allowedTitle']);
 	}
 
 	/**
@@ -250,21 +237,8 @@ class Module extends \Backend
 	 */
 	public function getMetaDescriptionAttributes(DataContainer $objDC)
 	{
-		$arrAttributeNames = array();
-
-		$objMetaModel = MetaModelFactory::byId($objDC->activeRecord->metamodel);
-		if ($objMetaModel)
-		{
-			foreach ($objMetaModel->getAttributes() as $objAttribute)
-			{
-				if (in_array($objAttribute->get('type'), $GLOBALS['METAMODELS']['metainformation']['allowedDescription']))
-				{
-					$arrAttributeNames[$objAttribute->getColName()] = $objAttribute->getName() . ' [' . $objAttribute->getColName() . ']</span>';
-				}
-			}
-		}
-
-		return $arrAttributeNames;
+		$objTableHelper = new TableMetaModelHelper();
+		return $objTableHelper->getAttributeNamesForModel($objDC->activeRecord->metamodel, (array) $GLOBALS['METAMODELS']['metainformation']['allowedDescription']);
 	}
 }
 
