@@ -18,6 +18,7 @@ namespace MetaModels\Dca;
 
 use MetaModels\Factory as ModelFactory;
 use MetaModels\Filter\Setting\Factory as FilterFactory;
+use MetaModels\Dca\Helper as TableMetaModelHelper;
 
 /**
  * complementary methods needed by the DCA.
@@ -222,7 +223,7 @@ class Module extends \Backend
 	 * 
 	 * @return array A list with all found attributes.
 	 */
-	public function getMetaTitleAttributes(DataContainer $objDC)
+	public function getMetaTitleAttributes(\DataContainer $objDC)
 	{
 		$objTableHelper = new TableMetaModelHelper();
 		return $objTableHelper->getAttributeNamesForModel($objDC->activeRecord->metamodel, (array) $GLOBALS['METAMODELS']['metainformation']['allowedTitle']);
@@ -235,7 +236,7 @@ class Module extends \Backend
 	 * 
 	 * @return array A list with all found attributes.
 	 */
-	public function getMetaDescriptionAttributes(DataContainer $objDC)
+	public function getMetaDescriptionAttributes(\DataContainer $objDC)
 	{
 		$objTableHelper = new TableMetaModelHelper();
 		return $objTableHelper->getAttributeNamesForModel($objDC->activeRecord->metamodel, (array) $GLOBALS['METAMODELS']['metainformation']['allowedDescription']);
