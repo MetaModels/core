@@ -203,12 +203,11 @@ class MetaModelDcaBuilder
 			}
 		}
 
-		if ($arrGroups)
-		{
-			$arrFallbacks = $this->getPaletteCombinationRows($strGrpCol, $arrGroups);
-		} else {
-			$arrFallbacks = array_keys($this->arrInformation);
-		}
+		// Append the implicit "no group" value.
+		$arrGroups[] = 0;
+
+		$arrFallbacks = $this->getPaletteCombinationRows($strGrpCol, $arrGroups);
+
 		if ($arrFallbacks)
 		{
 			$this->getPaletteCombinationDefault($arrFallbacks);
