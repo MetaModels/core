@@ -418,7 +418,7 @@ class DcaSetting extends Helper
 						'dcatype'  => 'attribute',
 						'attr_id'  => $objAttribute->get('id'),
 						'tl_class' => '',
-						'subpalette' => (\Input::getInstance()->get('subpaletteid')) ? Input::getInstance()->get('subpaletteid') : 0,
+						'subpalette' => (\Input::getInstance()->get('subpaletteid')) ? \Input::getInstance()->get('subpaletteid') : 0,
 					))->execute();
 
 					// Get msg for adding at main palette or a subpalette
