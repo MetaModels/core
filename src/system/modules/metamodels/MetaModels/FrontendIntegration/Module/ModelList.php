@@ -31,7 +31,7 @@ class ModelList extends \Module
 	 * Template
 	 * @var string
 	 */
-	protected $strTemplate = 'ce_metamodel_list';
+	protected $strTemplate = 'mod_metamodel_list';
 
 	public function generate()
 	{
@@ -43,7 +43,7 @@ class ModelList extends \Module
 			$objTemplate->title = $this->headline;
 			$objTemplate->id = $this->id;
 			$objTemplate->link = $this->name;
-			$objTemplate->href = 'contao/main.php?do=themes&amp;table=tl_content&amp;act=edit&amp;id=' . $this->id;
+			$objTemplate->href = 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id=' . $this->id;
 
 			return $objTemplate->parse();
 		}
