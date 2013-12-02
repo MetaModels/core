@@ -25,7 +25,7 @@ use MetaModels\ItemList;
  * @subpackage Frontend
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  */
-class ModelList extends \ContentElement
+class ModelList extends \Module
 {
 	/**
 	 * Template
