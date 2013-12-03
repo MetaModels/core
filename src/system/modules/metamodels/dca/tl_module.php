@@ -270,7 +270,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 	
 	'metamodel_meta_title' => array
 	(
-		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_meta_title'],
+		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_meta_title'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
 		'options_callback'        => array('TableModule', 'getMetaTitleAttributes'),
@@ -284,7 +284,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 
 	'metamodel_meta_description' => array
 	(
-		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_meta_description'],
+		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_meta_description'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
 		'options_callback'        => array('TableModule', 'getMetaDescriptionAttributes'),
