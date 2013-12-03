@@ -202,7 +202,10 @@ $GLOBALS['METAMODELS']['dependencies']['justtextwidgets']   = 'JustTextWidgets';
 // Meta Informations
 $GLOBALS['METAMODELS']['metainformation']['allowedTitle'][]       = 'text';
 $GLOBALS['METAMODELS']['metainformation']['allowedTitle'][]       = 'select';
+$GLOBALS['METAMODELS']['metainformation']['allowedTitle'][]       = 'translatedtext';
+$GLOBALS['METAMODELS']['metainformation']['allowedTitle'][]       = 'translatedselect';
 $GLOBALS['METAMODELS']['metainformation']['allowedDescription'][] = 'longtext';
+$GLOBALS['METAMODELS']['metainformation']['allowedDescription'][] = 'translatedlongtext';
 
 array_insert($GLOBALS['BE_FFL'], 15, array
 (
