@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T23:07:50+02:00
+ * last-updated: 2013-07-10T10:02:32+02:00
  */
 
 $GLOBALS['TL_LANG']['FMD']['metamodel_list']['0']              = 'Liste des MetaModels';
@@ -16,7 +16,7 @@ $GLOBALS['TL_LANG']['FMD']['metamodel_list']['1']              = 'Ajoute une lis
 $GLOBALS['TL_LANG']['FMD']['metamodels']['0']                  = 'MetaModels';
 $GLOBALS['TL_LANG']['FMD']['metamodels']['1']                  = 'L\'extension des MetaModels vous permet de créer vos propres modèles de données.';
 $GLOBALS['TL_LANG']['FMD']['metamodels_frontendclearall']['0'] = 'MetaModel  "Effacer tout"';
-$GLOBALS['TL_LANG']['FMD']['metamodels_frontendclearall']['1'] = 'Ajoute un "Effecer tout" pour tous les filtres du front office.';
+$GLOBALS['TL_LANG']['FMD']['metamodels_frontendclearall']['1'] = 'Ajoute un lien "Effacer tout" pour tous les filtres du front office.';
 $GLOBALS['TL_LANG']['FMD']['metamodels_frontendfilter']['0']   = 'Filtre frontal pour MetaModel';
 $GLOBALS['TL_LANG']['FMD']['metamodels_frontendfilter']['1']   = 'Ajoute un frontend filtre pour un MetaModel.';
 $GLOBALS['TL_LANG']['MOD']['metamodels']['0']                  = 'MetaModels';
