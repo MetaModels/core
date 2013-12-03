@@ -745,7 +745,7 @@ class MetaModelList extends Controller
 
 			if(isset($arrTitle['text']) && !empty($arrTitle['text']))
 			{
-				$objPage->rootTitle = strip_tags($arrTitle['text']);
+				$objPage->pageTitle = strip_tags($arrTitle['text']);
 			}
 		}
 
