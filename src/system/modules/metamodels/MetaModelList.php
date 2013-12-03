@@ -745,7 +745,7 @@ class MetaModelList extends Controller
 
 			if(isset($arrTitle['text']) && !empty($arrTitle['text']))
 			{
-				$objPage->rootTitle = $arrTitle['text'];
+				$objPage->pageTitle = strip_tags($arrTitle['text']);
 			}
 		}
 
@@ -757,7 +757,7 @@ class MetaModelList extends Controller
 
 			if(isset($arrDescription['text']) && !empty($arrDescription['text']))
 			{
-				$objPage->description = $arrDescription['text'];
+				$objPage->description = String::getInstance()->substr($arrDescription['text'], 120);
 			}
 		}
 
