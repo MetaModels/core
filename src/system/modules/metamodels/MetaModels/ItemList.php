@@ -763,7 +763,7 @@ class ItemList extends \Controller
 
 			if(isset($arrDescription['text']) && !empty($arrDescription['text']))
 			{
-				$objPage->description = String::getInstance()->substr($arrDescription['text'], 120);
+				$objPage->description = \String::getInstance()->substr($arrDescription['text'], 120);
 			}
 		}
 
