@@ -281,5 +281,25 @@ class BaseSimple extends Base implements ISimple
 			$this->set('colname', $strBackupColName);
 		}
 	}
+	
+	/**
+	 * Take the raw data from the DB column and unserialize it.
+	 * 
+	 * @param type $value
+	 */
+	public function unserializeData($value)
+	{
+		return $value;
+	}
+	
+	/**
+	 * Take the unserialized data and serialize it for the native DB column.
+	 * 
+	 * @param type $value
+	 */
+	public function serializeData($value)
+	{
+		return $value;
+	}
 }
 

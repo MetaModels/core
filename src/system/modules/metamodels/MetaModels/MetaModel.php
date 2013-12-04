@@ -125,6 +125,19 @@ class MetaModel implements IMetaModel
 	}
 
 	/**
+	 * Determine if the given attribute is a simple one.
+	 *
+	 * @param \MetaModels\Attribute\IAttribute $objAttribute the attribute to test.
+	 *
+	 * @return bool true if it is simple, false otherwise.
+	 */
+	protected function isSimpleAttribute($objAttribute)
+	{
+		return in_array('MetaModels\Attribute\ISimple', class_implements($objAttribute))
+			|| in_array('IMetaModelAttributeSimple', class_implements($objAttribute));
+	}
+
+	/**
 	 * Determine if the given attribute is a translated one.
 	 *
 	 * @param \MetaModels\Attribute\IAttribute $objAttribute the attribute to test.
@@ -148,6 +161,24 @@ class MetaModel implements IMetaModel
 		foreach($this->getAttributes() as $objAttribute)
 		{
 			if($this->isComplexAttribute($objAttribute))
+			{
+				$arrResult[] = $objAttribute;
+			}
+		}
+		return $arrResult;
+	}
+
+	/**
+	 * This method retrieves all simple attributes from the current MetaModel.
+	 *
+	 * @return \MetaModels\Attribute\ISimple[] all simple attributes defined for this instance.
+	 */
+	protected function getSimpleAttributes()
+	{
+		$arrResult = array();
+		foreach($this->getAttributes() as $objAttribute)
+		{
+			if($this->isSimpleAttribute($objAttribute))
 			{
 				$arrResult[] = $objAttribute;
 			}
@@ -266,6 +297,20 @@ class MetaModel implements IMetaModel
 		}
 
 		$arrResult = $this->fetchRows($arrIds, $arrAttrOnly);
+
+		// Give simple attributes the chance for editing the "simple" data
+		foreach ($this->getSimpleAttributes() as $objAttribute)
+		{
+			// Get current simple attribute.
+			$strColName = $objAttribute->getName();
+
+			// Run each row.
+			foreach (array_keys($arrResult) as $intId)
+			{
+				$arrResult[$intId][$strColName] = $objAttribute->unserializeData($arrResult[$intId][$strColName]);
+				
+			}
+		}
 
 		// Determine "independant attributes" (complex and translated) and inject their content into the row.
 		foreach(array_merge($this->getComplexAttributes(), $this->getTranslatedAttributes()) as $objAttribute)

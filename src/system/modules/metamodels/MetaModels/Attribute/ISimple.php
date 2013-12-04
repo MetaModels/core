@@ -57,4 +57,18 @@ interface ISimple extends IAttribute
 	 * @return void
 	 */
 	public function renameColumn($strNewColumnName);
+	
+	/**
+	 * Take the raw data from the DB column and unserialize it.
+	 * 
+	 * @param type $value
+	 */
+	public function unserializeData($value);
+	
+	/**
+	 * Take the unserialized data and serialize it for the native DB column.
+	 * 
+	 * @param type $value
+	 */
+	public function serializeData($value);
 }
