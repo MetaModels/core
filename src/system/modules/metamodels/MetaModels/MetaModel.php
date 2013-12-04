@@ -302,13 +302,12 @@ class MetaModel implements IMetaModel
 		foreach ($this->getSimpleAttributes() as $objAttribute)
 		{
 			// Get current simple attribute.
-			$strColName = $objAttribute->getName();
+			$strColName = $objAttribute->getColName();
 
 			// Run each row.
 			foreach (array_keys($arrResult) as $intId)
 			{
 				$arrResult[$intId][$strColName] = $objAttribute->unserializeData($arrResult[$intId][$strColName]);
-				
 			}
 		}
 
