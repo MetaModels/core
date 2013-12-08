@@ -104,37 +104,7 @@ class FilterClearAll extends \ContentElement
 	 */
 	protected function getJumpToUrl($arrParams)
 	{
-		$strFilterAction = '';
-		foreach ($arrParams as $strName => $varParam)
-		{
-			// skip the magic "language" parameter.
-			if (($strName == 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl'])
-			{
-				continue;
-			}
-
-			$strValue = $varParam;
-
-			if (is_array($varParam))
-			{
-				$strValue = implode(',', array_filter($varParam));
-			}
-
-			$strValue = str_replace(array('/', '\''), array('-slash-', '-apos-'), $strValue);
-
-			if (strlen($strValue))
-			{
-				// Shift auto_item to the front.
-				if ($strName == 'auto_item')
-				{
-					$strFilterAction = '/' . $strValue . $strFilterAction;
-					continue;
-				}
-
-				$strFilterAction .= sprintf(($GLOBALS['TL_CONFIG']['disableAlias'] ? '&amp;%s=%s' : '/%s/%s'), $strName, urlencode($strValue));
-			}
-		}
-		return $strFilterAction;
+		return \MetaModels\Helper\Input::getJumpToUrl($arrParams);
 	}
 
 }

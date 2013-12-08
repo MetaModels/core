@@ -76,6 +76,8 @@ class ModelList extends \Module
 			$varValue = \Input::getInstance()->get($strName);
 			if (is_string($varValue))
 			{
+				// Decode the input value
+				$varValue = \MetaModels\Helper\Input::decode($varValue, true);
 				$arrReturn[$strName] = $varValue;
 			}
 		}
