@@ -36,9 +36,9 @@ implements IMetaModelAttributeTranslated
 	 *
 	 * @param mixed  $mixIds      one, none or many ids to use.
 	 *
-	 * @param string $strLangCode the langcode to use, optional.
+	 * @param string $mixLangCode the langcode/s to use, optional.
 	 */
-	protected function getWhere($mixIds, $strLangCode='')
+	protected function getWhere($mixIds, $mixLangCode='')
 	{
 		$strWhereIds = '';
 		if ($mixIds)
@@ -54,10 +54,15 @@ implements IMetaModelAttributeTranslated
 			'procedure' => 'att_id=?' . $strWhereIds,
 			'params' => array(intval($this->get('id')))
 		);
-		if ($strLangCode)
+
+		if (is_array($mixLangCode) && !empty($mixLangCode))
+		{
+			$arrReturn['procedure'] .= ' AND langcode IN ("' . implode('","', $mixLangCode) . '")';
+		}
+		else if ($mixLangCode)
 		{
 			$arrReturn['procedure'] .=  ' AND langcode=?';
-			$arrReturn['params'][] = $strLangCode;
+			$arrReturn['params'][] = $mixLangCode;
 		}
 
 		return $arrReturn;
@@ -205,7 +210,7 @@ implements IMetaModelAttributeTranslated
 	{
 		$objDB = Database::getInstance();
 
-		$arrWhere = $this->getWhere($arrIds, $this->getMetaModel()->getActiveLanguage());
+		$arrWhere = $this->getWhere($arrIds, array($this->getMetaModel()->getActiveLanguage(), $this->getMetaModel()->getFallbackLanguage()));
 
 		$strQuery = 'SELECT item_id FROM ' . $this->getValueTable() . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '');
 
