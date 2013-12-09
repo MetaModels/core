@@ -212,7 +212,7 @@ implements IMetaModelAttributeTranslated
 
 		$arrWhere = $this->getWhere($arrIds, array($this->getMetaModel()->getActiveLanguage(), $this->getMetaModel()->getFallbackLanguage()));
 
-		$strQuery = 'SELECT item_id FROM ' . $this->getValueTable() . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '');
+		$strQuery = 'SELECT item_id FROM ' . $this->getValueTable() . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '') . ' GROUP BY item_id';
 
 		$arrOptionizer = $this->getOptionizer();
 
