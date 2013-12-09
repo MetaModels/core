@@ -18,6 +18,7 @@ namespace MetaModels\Filter\Setting;
 
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Rules\SimpleQuery;
+use MetaModels\Helper\ContaoController;
 
 /**
  * This filter condition generates a filter rule for a predefined SQL query.
@@ -198,7 +199,7 @@ class CustomSql extends Simple
 	 */
 	protected function parseSecureInsertTags($strSQL, array &$arrParams)
 	{
-		$objCtrl = \MetaModelController::getInstance();
+		$objCtrl = ContaoController::getInstance();
 		return preg_replace_callback(
 			'@\{\{secure::([^}]+)\}\}@',
 			function($arrMatch) use(&$arrParams, $objCtrl)
@@ -221,7 +222,7 @@ class CustomSql extends Simple
 	 */
 	protected function parseInsertTags($strSQL, array &$arrParams)
 	{
-		return \MetaModelController::getInstance()->replaceInsertTags($strSQL);
+		return ContaoController::getInstance()->replaceInsertTags($strSQL);
 	}
 
 	/* (non-PHPdoc)
