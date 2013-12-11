@@ -168,6 +168,10 @@ define('METAMODELS_ERROR', 1);
 if (TL_MODE == 'BE')
 {
 	MetaModels\BackendIntegration\Boot::buildBackendMenu();
+	if (version_compare(VERSION,'3.1', '>=') && \Environment::get('scriptName') == (TL_PATH . '/contao/file.php') && stripos(\Input::get('do'), 'metamodel') !== false)
+	{
+		$GLOBALS['BE_FFL']['fileSelector'] = 'MetaModels\Widgets\FileSelectorWidget';
+	}
 }
 
 // Front-end modules.
