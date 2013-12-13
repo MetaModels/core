@@ -749,7 +749,7 @@ class ToolboxFile
 		if ($objFiles !== null)
 		{
 			return $objFiles->path;
-		}        
-        return '';
+		}
+		return '';
 	}
 }
