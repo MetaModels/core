@@ -737,4 +737,19 @@ class ToolboxFile
 
 		return $this;
 	}
+
+	/**
+	 * Translate the file ID to file path
+	 */
+	public function convertValueToPath($varValue)
+	{
+
+		$objFiles = \FilesModel::findByPk($varValue);
+
+		if ($objFiles !== null)
+		{
+			return $objFiles->path;
+		}        
+        return '';
+	}
 }
