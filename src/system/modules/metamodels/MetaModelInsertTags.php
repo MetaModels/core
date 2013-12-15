@@ -15,30 +15,11 @@
  * @license     LGPL.
  * @filesource
  */
-/*
-  Available inserttags
-
-  {{metamodel::total::list::ce::*}}
-  {{metamodel::total::list::mod::*}}
-  {{metamodel::total::filter::ce::*}}
-  {{metamodel::total::filter::mod::*}}
-  --> no need to tell the inserttag its a list or filter type
-  {{metamodel::total::mod::*}}
-  {{metamodel::total::ce::*}}
-
-  -- item based
-  {{metamodelitem::table-or-id::item-or-setOfIds::rendersetting}} -> html output
-  {{metamodeldetailitem::table-or-id::item::rendersetting}} -> html output
-
-  -- attribute based
-  {{metamodelattribute::table-or-id::item-id::field}} -> value, plain text
-
-  --------------------------------------------------
-
- */
 
 /**
  * MetaModelsInserttag.
+ * 
+ * Available inserttags:
  * 
  * -- Total Count --
  * mm::total::mod::[id]
@@ -52,7 +33,7 @@
  * mm::attribute::[MM Name|ID]::[Item ID]::[Attribute Name|ID](::[Output raw|text|html|..])
  * 
  * -- JumpTo --
- * mm::jumpTo::[MM Name|ID]::[Item ID]::[ID rendersetting]
+ * mm::jumpTo::[MM Name|ID]::[Item ID]::[ID rendersetting](::[Parameter (Default:url)|label|page|params.attname])
  */
 class MetaModelInsertTags extends Controller
 {
@@ -83,6 +64,9 @@ class MetaModelInsertTags extends Controller
 				// Get item.
 				case 'item':
 					return $this->getItem($arrElements[2], $arrElements[3], $arrElements[4]);
+					
+				case 'jumpTo':
+					return $this->jumpTo($arrElements[2], $arrElements[3], $arrElements[4], $arrElements[5]);
 			}
 		}
 		catch (Exception $exc)
@@ -98,14 +82,75 @@ class MetaModelInsertTags extends Controller
 	////////////////////////////////////////////////////////////////////////////
 
 	/**
+	 * Get the jumpTo for a chosen value.
+	 * 
+	 * @param string|int $mixMMName ID or name of MetaModels
+	 * @param int $mixDataId ID of the data row
+	 * @param int $intIdRendesetting ID of render setting
+	 * @param string $strParam Name of parameter - Default:url|label|page|params.[attrname]
+	 * 
+	 * @return boolean|string Return false when nothing was found for the requested value.
+	 */
+	protected function jumpTo($mixMMName, $mixDataId, $intIdRendesetting, $strParam = "url")
+	{
+		// Get the MetaModel. Return if we can not find one.
+		$objMetaModel = $this->loadMM($mixMMName);
+		if ($objMetaModel == null)
+		{
+			return false;
+		}
+
+		// Get the rendersetting.
+		$objRenderSettings = MetaModelRenderSettingsFactory::byId($objMetaModel, $intIdRendesetting);
+		if ($objRenderSettings == null)
+		{
+			return false;
+		}
+
+		// Get the data row.
+		$objItem = $objMetaModel->findById($mixDataId);
+		if ($objItem == null)
+		{
+			return false;
+		}
+
+		// Render the item and check if we have a jump to.
+		$arrRenderedItem = $objItem->parseValue('text', $objRenderSettings);
+		if (!isset($arrRenderedItem['jumpTo']))
+		{
+			return false;
+		}
+
+		// Check if someone want the sub params.
+		if (stripos($strParam, 'params.') !== false)
+		{
+			$mixAttName	 = trimsplit('.', $strParam);
+			$mixAttName	 = array_pop($mixAttName);
+
+			if (isset($arrRenderedItem['jumpTo']['params'][$mixAttName]))
+			{
+				return $arrRenderedItem['jumpTo']['params'][$mixAttName];
+			}
+		}
+		// Else just return the ask param.
+		else if (isset($arrRenderedItem['jumpTo'][$strParam]))
+		{
+			return $arrRenderedItem['jumpTo'][$strParam];
+		}
+
+		// Nothing hit the output. Return false.
+		return false;
+	}
+
+	/**
 	 * Get an item.
 	 * 
-	 * @param type $mixMMName
-	 * @param type $mixDataId
-	 * @param type $idRendesetting
-	 * @param type $strOutput ToDo: Add function
+	 * @param string|int $mixMMName ID or name of MetaModels
+	 * @param int $mixDataId ID of the data row
+	 * @param int $intIdRendesetting ID of render setting
+	 * @param string $strOutput Name of output. Default:raw|text|html5|xhtml|...
 	 * 
-	 * @return boolean|string
+	 * @return boolean|string Return false when nothing was found or return the value.
 	 */
 	protected function getItem($mixMMName, $mixDataId, $intIdRendesetting, $strOutput = 'raw')
 	{
@@ -152,12 +197,12 @@ class MetaModelInsertTags extends Controller
 	 * Get from MM X the item with the id Y and parse the attribute Z and
 	 * return it.
 	 * 
-	 * @param mixed $mixMMName Name or id of mm.
-	 * @param type $intDataId ID form the row.
-	 * @param type $strAttributeName Name of the attribute.
-	 * @param string $strOutput Output format
+	 * @param string|int $mixMMName ID or name of MetaModels
+	 * @param int $intDataId ID of the data row
+	 * @param string $strAttributeName Name of the attribute.
+	 * @param string $strOutput Name of output. Default:raw|text|html5|xhtml|...
 	 * 
-	 * @return boolean|mixed
+	 * @return boolean|string Return false when nothing was found or return the value.
 	 */
 	protected function getAttribute($mixMMName, $intDataId, $strAttributeName, $strOutput = 'raw')
 	{
@@ -188,9 +233,9 @@ class MetaModelInsertTags extends Controller
 	 * Get count from a module or content element of a mm.
 	 * 
 	 * @param string $strType Type of element like mod or ce.
-	 * @param type $intID
+	 * @param int $intID ID of content element or moule.
 	 * 
-	 * @return boolean
+	 * @return boolean|string Return false when nothing was found or the count value.
 	 */
 	protected function getCount($strType, $intID)
 	{
@@ -249,10 +294,12 @@ class MetaModelInsertTags extends Controller
 	}
 
 	/**
-	 * Get some informations about a table.
+	 * Get the metamodel id and the filter id.
 	 * 
 	 * @param string $strTable Name of table
-	 * @return null
+	 * 
+	 * @return null|Database_Result Returns null when nothing was found or a 
+	 * Contao Database_Result with the chosen informations.
 	 */
 	protected function getMMDataFrom($strTable, $intID)
 	{
@@ -304,10 +351,10 @@ class MetaModelInsertTags extends Controller
 	/**
 	 * Check if the item is published.
 	 * 
-	 * @param IMetaModel $objMetaModel
-	 * @param int $intItemId
+	 * @param IMetaModel $objMetaModel Current metamodels.
+	 * @param int $intItemId Id of the item.
 	 * 
-	 * @return boolean
+	 * @return boolean True => Published | Flase => Not published
 	 */
 	protected function isPublishedItem($objMetaModel, $intItemId)
 	{
