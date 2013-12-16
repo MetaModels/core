@@ -44,8 +44,10 @@ var Stylepicker4ward = new Class(
 		}
 
 		// set click-events
-		cont.getElements('.item').each(function(el){
-			el.addEvent('click',this.clickItem.bindWithEvent(this,[el]));
+		cont.getElements('.item').each(function(el) {
+			el.addEvent('click',function(e) {
+				this.clickItem.apply(this, [e,el]);
+			}.bind(this));
 		}.bind(this));
 
 		// check checkboxes if a classname is set
