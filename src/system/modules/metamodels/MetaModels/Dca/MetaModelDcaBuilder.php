@@ -982,8 +982,13 @@ class MetaModelDcaBuilder
 	 * @param array
 	 * @return string
 	 */
-	public function pasteButton(\DC_General $objDC, $arrRow, $strTable, $cr, $arrClipboard=false)
+	public function pasteButton(\DC_General $objDC, $arrRow, $strTable, $cr, DcGeneral\Clipboard\ClipboardInterface $objClipboard=null)
 	{
+		if($objClipboard == null)
+		{
+			return;
+		}
+
 		$disablePA = true;
 		$disablePI = true;
 
@@ -1011,44 +1016,35 @@ class MetaModelDcaBuilder
 		}
 		else
 		{
-
 			$disablePA = false;
-			$disablePI = !($arrRow['varbase'] == 1);
+			// If we are in create mode, disaple the paste into.
+			$disablePI = !($arrRow['varbase'] == 1 && $objClipboard->getMode() != 'create');
 		}
-
+		
 		// Return the buttons
 		$imagePasteAfter = ContaoController::getInstance()->generateImage('pasteafter.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteafter'][1], $arrRow['id']), 'class="blink"');
 		$imagePasteInto = ContaoController::getInstance()->generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteinto'][1], $arrRow['id']), 'class="blink"');
 
+		// Get the id`s from the clipboard.		
+		$arrContainId	 = $objClipboard->getContainedIds();
+		$intID			 = array_shift($arrContainId);
+		$arrChilds		 = (count($arrContainId) > 1) ? $arrContainId : array();
+
 		$strAdd2UrlAfter = sprintf(
-			'act=%s&amp;mode=1&amp;pid=%s&amp;after=%s&amp;source=%s&amp;childs=%s',
-			$arrClipboard['mode'],
-			$arrClipboard['id'],
+			'act=%s&amp;mode=1&amp;pid=%s&amp;after=%s&amp;childs=%s',
+			$objClipboard->getMode(),
+			$intID,
 			$arrRow['id'],
-			$arrClipboard['source'],
-			$arrClipboard['childs']
+			implode(',', $arrChilds)
 		);
 
 		$strAdd2UrlInto = sprintf(
-			'act=%s&amp;mode=2&amp;pid=%s&amp;after=%s&amp;source=%s&amp;childs=%s',
-			$arrClipboard['mode'],
-			$arrClipboard['id'],
+			'act=%s&amp;mode=2&amp;pid=%s&amp;after=%s&amp;childs=%s',
+			$objClipboard->getMode(),
+			$intID,
 			$arrRow['id'],
-			$arrClipboard['source'],
-			$arrClipboard['childs']
+			implode(',', $arrChilds)
 		);
-
-		if ($arrClipboard['pdp'] != '')
-		{
-			$strAdd2UrlAfter .= '&amp;pdp=' . $arrClipboard['pdp'];
-			$strAdd2UrlInto .= '&amp;pdp=' . $arrClipboard['pdp'];
-		}
-
-		if ($arrClipboard['cdp'] != '')
-		{
-			$strAdd2UrlAfter .= '&amp;cdp=' . $arrClipboard['cdp'];
-			$strAdd2UrlInto .= '&amp;cdp=' . $arrClipboard['cdp'];
-		}
 
 		$strPasteBtn = '';
 
@@ -1085,9 +1081,9 @@ class MetaModelDcaBuilder
 					' <a href="%s" title="%s" onclick="Backend.getScrollOffset()">%s</a> ',
 					ContaoController::getInstance()->addToUrl(sprintf(
 						'act=%s&amp;mode=2&amp;after=0&amp;pid=0&amp;id=%s&amp;childs=%s',
-						$arrClipboard['mode'],
-						$arrClipboard['id'],
-						$arrClipboard['childs']
+						$objClipboard->getMode(),
+						$intID,
+						implode(',', $arrChilds)
 					)),
 					specialchars($GLOBALS['TL_LANG'][$strTable]['pasteinto'][0]),
 					$imagePasteInto
@@ -1097,9 +1093,9 @@ class MetaModelDcaBuilder
 					' <a href="%s" title="%s" onclick="Backend.getScrollOffset()">%s</a> ',
 					ContaoController::getInstance()->addToUrl(sprintf(
 						'act=%s&amp;mode=2&amp;after=0&amp;pid=0&amp;id=%s&amp;childs=%s',
-						$arrClipboard['mode'],
-						$arrClipboard['id'],
-						$arrClipboard['childs']
+						$objClipboard->getMode(),
+						$intID,
+						implode(',', $arrChilds)
 					)),
 					specialchars($GLOBALS['TL_LANG'][$strTable]['pasteinto'][0]),
 					$imagePasteInto
