@@ -667,7 +667,7 @@ class Filter extends Helper
 		}
 		
 		$strMode = $objClipboard->getMode();
-		$arrIds = $objClipboard->getContainedIds();
+		$arrIds = (array) $objClipboard->getContainedIds();
 		$intID = $arrIds[0];
 		$arrChildren = (count($arrIds) > 1) ? array_slice($arrIds, 1, count($arrIds) - 1) : array();
 
@@ -685,7 +685,6 @@ class Filter extends Helper
 		}
 
 		// Return the buttons
-
 		if ($arrRow['id'] > 0)
 		{
 			if ($disablePA)
@@ -697,7 +696,7 @@ class Filter extends Helper
 				$strAdd2UrlAfter = sprintf(
 					'act=%s&amp;mode=1&amp;pid=%s&amp;after=%s&amp;source=%s&amp;childs=%s',
 					$strMode,
-					$intID,
+					0,
 					$arrRow['id'],
 //					$arrClipboard['source'],
 					'',
@@ -731,7 +730,7 @@ class Filter extends Helper
 				$strAdd2UrlInto = sprintf(
 					'act=%s&amp;mode=2&amp;pid=%s&amp;after=%s&amp;source=%s&amp;childs=%s',
 					$strMode,
-					$intID,
+					$arrRow['id'],
 					$arrRow['id'],
 //					$arrClipboard['source'],
 					'',
@@ -763,7 +762,7 @@ class Filter extends Helper
 				$strMode,
 				$intID,
 				$arrRow['id'],
-//					$arrClipboard['source'],
+//				$arrClipboard['source'],
 				'',
 				implode(',', $arrChildren)
 			);
