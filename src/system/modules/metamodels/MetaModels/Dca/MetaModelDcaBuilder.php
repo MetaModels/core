@@ -1014,6 +1014,10 @@ class MetaModelDcaBuilder
 				$disablePA = false;
 			}
 		}
+		elseif($objModel == null && $arrRow['varbase'] == 0)
+		{
+			$disablePA = true;
+		}
 		else
 		{
 			$disablePA = false;
