@@ -302,7 +302,7 @@ class Dca extends \Backend
 			$objDC->field,
 			$objDC->inputName,
 			$objDC->id,
-			$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['panelpicker'],
+			$GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker'],
 			$objDC->id,
 			$this->generateImage(
 				'system/modules/metamodels/html/panel_layout.png',
