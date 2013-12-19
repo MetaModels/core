@@ -89,6 +89,8 @@ class ToolboxFile
 	 * Meta sorting information for files.
 	 *
 	 * @var array
+	 * 
+	 * @deprecated Remove when we drop support for Contao 2.11 - impossible in Contao 3.
 	 */
 	protected $metaSort;
 
@@ -327,6 +329,8 @@ class ToolboxFile
 	 * @param string $strLanguage The language of the meta.txt to be searched.
 	 *
 	 * @return void
+	 * 
+	 * @deprecated Remove when we drop support for Contao 2.11.
 	 */
 	protected function parseMetaFile($strPath, $strLanguage='')
 	{
@@ -343,9 +347,13 @@ class ToolboxFile
 
 		foreach ($arrBuffer as $v)
 		{
+			// filename.ext = title | url | caption
 			list($strLabel, $strValue) = array_map('trim', explode('=', $v, 2));
 
 			$this->metaInformation[$strPath][$strLabel] = array_map('trim', explode('|', $strValue));
+			$this->metaInformation[$strPath][$strLabel]['title']   = $this->metaInformation[$strPath][$strLabel][0];
+			$this->metaInformation[$strPath][$strLabel]['link']    = $this->metaInformation[$strPath][$strLabel][1];
+			$this->metaInformation[$strPath][$strLabel]['caption'] = $this->metaInformation[$strPath][$strLabel][2];
 
 			if (!in_array($strPath . DIRECTORY_SEPARATOR . $strLabel, $this->metaSort))
 			{
@@ -355,11 +363,13 @@ class ToolboxFile
 	}
 
 	/**
-	 * Loops all found files and parses the corresponding metafile.
+	 * Loops all found files and parses the corresponding metafile (pre Contao 3).
 	 *
 	 * @return void
+	 * 
+	 * @deprecated Remove when we drop support for Contao 2.11.
 	 */
-	protected function parseMetafiles()
+	protected function parseMetaFilesPre3()
 	{
 		$this->metaInformation = array();
 		$this->metaSort        = array();
@@ -373,7 +383,6 @@ class ToolboxFile
 
 		foreach($this->foundFiles as $strFile)
 		{
-
 			$strDir = dirname($strFile);
 			if (in_array($strDir, $arrProcessed))
 			{
@@ -385,6 +394,36 @@ class ToolboxFile
 			$this->parseMetaFile($strDir, $this->getBaseLanguage());
 			$this->parseMetaFile($strDir, $this->getFallbackLanguage());
 			$this->parseMetaFile($strDir);
+		}
+	}
+	
+	/**
+	 * Loops all found files and parses the corresponding metafile.
+	 *
+	 * @return void
+	 */
+	protected function parseMetaFiles()
+	{
+		$files = \FilesModel::findMultipleByPaths($this->foundFiles);
+		
+		if (!$files)
+		{
+			return;
+		}
+		
+		while ($files->next())
+		{
+			$path = $files->path;
+			$meta = deserialize($files->meta, true);
+
+			if (isset($meta[$this->getBaseLanguage()]))
+			{
+				$this->metaInformation[dirname($path)][basename($path)] = $meta[$this->getBaseLanguage()];
+			}
+			elseif (isset($meta[$this->getFallbackLanguage()]))
+			{
+				$this->metaInformation[dirname($path)][basename($path)] = $meta[$this->getFallbackLanguage()];
+			}
 		}
 	}
 
@@ -435,8 +474,8 @@ class ToolboxFile
 			$objFile = new \File($strFile);
 
 			$arrMeta =$this->metaInformation[dirname($strFile)][$objFile->basename];
-			$strBasename = strlen($arrMeta[0]) ? $arrMeta[0] : specialchars($objFile->basename);
-			$strAltText = (strlen($arrMeta[0]) ? $arrMeta[0] : ucfirst(str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $objFile->filename))));
+			$strBasename = strlen($arrMeta['title']) ? $arrMeta['title'] : specialchars($objFile->basename);
+			$strAltText = (strlen($arrMeta['caption']) ? $arrMeta['caption'] : ucfirst(str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $objFile->filename))));
 
 			$strIcon = 'system/themes/' . $strThemeDir . '/images/' . $objFile->icon;
 			$arrSource = array
@@ -444,7 +483,7 @@ class ToolboxFile
 				'file'     => $strFile,
 				'mtime'    => $objFile->mtime,
 				'alt'      => $strAltText,
-				'caption'  => (strlen($arrMeta[2]) ? $arrMeta[2] : ''),
+				'caption'  => (strlen($arrMeta['caption']) ? $arrMeta['caption'] : ''),
 				'title'    => $strBasename,
 				'metafile' => $arrMeta,
 				'icon'     => $strIcon,
@@ -529,6 +568,8 @@ class ToolboxFile
 	 * @param string $sortType The sort condition to be applied.
 	 *
 	 * @return array The sorted file list.
+	 * 
+	 * @deprecated Remove sort by "meta" when we drop support for Contao 2.11.
 	 */
 	public function sortFiles($sortType)
 	{
@@ -640,6 +681,8 @@ class ToolboxFile
 	 * Sort by meta.txt
 	 *
 	 * @return array
+	 * 
+	 * @deprecated Remove when we drop support for Contao 2.11.
 	 */
 	protected function sortByMeta()
 	{
@@ -730,7 +773,14 @@ class ToolboxFile
 		}
 
 		// Step 2.: Fetch all meta data for the found files.
-		$this->parseMetafiles();
+		if (version_compare(VERSION, '3', '<'))
+		{
+			$this->parseMetaFilesPre3();
+		}
+		else
+		{
+			$this->parseMetaFiles();
+		}
 
 		// Step 3.: fetch additional information like modification time etc. and prepare the output buffer.
 		$this->fetchAdditionalData();
