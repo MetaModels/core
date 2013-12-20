@@ -218,7 +218,16 @@ class MetaModelDcaBuilder
 		$arrGroups = $objUser->groups ? array_filter($objUser->groups) : array();
 
 		// special case in combinations, admins have the implicit group id -1
-		if (get_class($objUser) == 'BackendUser')
+		if(version_compare(VERSION, '3.0', '>'))
+		{
+			$strBackendUserClass = 'Contao\BackendUser';
+		}
+		else
+		{
+			$strBackendUserClass = 'BackendUser';
+		}	
+		
+		if ($objUser instanceof $strBackendUserClass)
 		{
 			$strGrpCol = 'be_group';
 			if ($objUser->admin)
