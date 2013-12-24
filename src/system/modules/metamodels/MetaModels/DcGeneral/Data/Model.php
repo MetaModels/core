@@ -44,6 +44,24 @@ class Model implements ModelInterface
 	protected $arrMetaInformation = array();
 
 	/**
+	 * Return the names of all properties stored within this model.
+	 *
+	 * @return string[]
+	 */
+	protected function getPropertyNames()
+	{
+		$propertyNames = array('id', 'pid', 'tstamp', 'sorting');
+
+		if ($this->getItem()->getMetaModel()->hasVariants())
+		{
+			$propertyNames[] = 'varbase';
+			$propertyNames[] = 'vargroup';
+		}
+
+		return array_merge($propertyNames, array_keys($this->getItem()->getMetaModel()->getAttributes()));
+	}
+
+	/**
 	 * Returns the native IMetaModelItem instance encapsulated within this abstraction.
 	 *
 	 * @return IItem
@@ -122,21 +140,9 @@ class Model implements ModelInterface
 	 */
 	public function getPropertiesAsArray()
 	{
-		$arrResult = array
-		(
-			'id'      => $this->getProperty('id'),
-			'pid'     => $this->getProperty('pid'),
-			'tstamp'  => $this->getProperty('tstamp'),
-			'sorting'  => $this->getProperty('sorting'),
-		);
+		$arrResult = array();
 
-		if ($this->getItem()->getMetaModel()->hasVariants())
-		{
-			$arrResult['varbase'] = $this->getProperty('varbase');
-			$arrResult['vargroup'] = $this->getProperty('vargroup');
-		}
-
-		foreach (array_keys($this->getItem()->getMetaModel()->getAttributes()) as $strKey)
+		foreach ($this->getPropertyNames() as $strKey)
 		{
 			$arrResult[$strKey] = $this->getProperty($strKey);
 		}
