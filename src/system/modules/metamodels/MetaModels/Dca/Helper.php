@@ -189,10 +189,10 @@ class Helper extends \Backend
 	 *
 	 * @return array
 	 */
-	public function getTemplatesForBase($strBase)
+	public static function getTemplatesForBase($strBase)
 	{
 		$arrTemplates = array();
-		foreach ($this->getTemplateGroup($strBase) as $strTemplate)
+		foreach (self::getTemplateGroup($strBase) as $strTemplate)
 		{
 			$arrTemplates[$strTemplate] = sprintf($GLOBALS['TL_LANG']['MSC']['template_in_theme'], $strTemplate, $GLOBALS['TL_LANG']['MSC']['no_theme']);
 		}
@@ -201,7 +201,7 @@ class Helper extends \Backend
 
 		while ($objThemes->next())
 		{
-			foreach ($this->getTemplateGroup($strBase, $objThemes->id) as $strTemplate)
+			foreach (self::getTemplateGroup($strBase, $objThemes->id) as $strTemplate)
 			{
 				if (!array_key_exists($strTemplate, $arrTemplates))
 				{
