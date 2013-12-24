@@ -17,11 +17,14 @@
 
 namespace MetaModels\Dca;
 
+use DcGeneral\Contao\BackendBindings;
+use MetaModels\BackendIntegration\IInputScreen;
 use MetaModels\BackendIntegration\Module;
+use MetaModels\BackendIntegration\ViewCombinations;
 use MetaModels\Factory;
 use MetaModels\Helper\ContaoController;
-use MetaModels\Helper\TableManipulation;
 use MetaModels\IMetaModel;
+use MetaModels\Render\Setting\Factory as RenderFactory;
 
 /**
  * Collects the dca combinations for each MetaModel, that is matching the current user.
@@ -32,14 +35,6 @@ use MetaModels\IMetaModel;
  */
 class MetaModelDcaBuilder
 {
-	/**
-	 * all MetaModel combinations for lookup.
-	 * @var array
-	 */
-	protected $arrInformation = array();
-
-	protected $arrPTables = array();
-
 	/**
 	 * Cache for "dcasetting id" <=> "MM attribute colname" mapping.
 	 *
@@ -56,7 +51,6 @@ class MetaModelDcaBuilder
 
 	protected function __construct()
 	{
-		$this->bufferModels();
 	}
 
 	/**
@@ -72,200 +66,10 @@ class MetaModelDcaBuilder
 		}
 		return self::$objInstance;
 	}
-	/**
-	 * Returns the proper user object for the current context.
-	 *
-	 * @return \BackendUser|\FrontendUser|null the BackendUser when TL_MODE == 'BE', the FrontendUser when TL_MODE == 'FE' or null otherwise
-	 */
-	protected static function getUser()
-	{
-		if (TL_MODE == 'BE')
-		{
-			return \BackendUser::getInstance();
-		}
-		else if (TL_MODE == 'FE')
-		{
-			return \FrontendUser::getInstance();
-		}
-		return null;
-	}
 
 	protected static function getDB()
 	{
 		return \Database::getInstance();
-	}
-
-	/**
-	 * Fetch the palette view configurations valid for the given group ids.
-	 *
-	 * @param string $strGroupCol  the group column that shall be examined. either fe_group or be_group
-	 *
-	 * @param int[]  $arrGroupIds  the group ids that are valid
-	 *
-	 * @return int[] the ids that have not been resolved as no combination has been defined and therefore the default must be used for.
-	 *
-	 */
-	protected function getPaletteCombinationRows($strGroupCol, $arrGroupIds)
-	{
-		$objCombinations = $this->getDB()
-			->prepare(sprintf('SELECT * FROM tl_metamodel_dca_combine WHERE %s IN (%s) ORDER BY pid,sorting ASC', $strGroupCol, implode(',', $arrGroupIds)))
-			->execute();
-
-		$arrSuccess = array();
-
-		while ($objCombinations->next())
-		{
-			// already a combination present, continue with next one.
-			if ($this->arrInformation[$objCombinations->pid]['comb'])
-			{
-				continue;
-			}
-			$this->arrInformation[$objCombinations->pid]['comb'] = $objCombinations->row();
-			$arrSuccess[] = $objCombinations->pid;
-		}
-		return array_diff(array_keys($this->arrInformation), $arrSuccess);
-	}
-
-	/**
-	 * Get the default combination of palette and view (if any has been defined).
-	 *
-	 * @param int[] $arrMetaModels the MetaModels for which combinations shall be retrieved.
-	 *
-	 * @return array|null the matching combination or null if no combination has been found.
-	 *
-	 */
-	protected function getPaletteCombinationDefault($arrMetaModels)
-	{
-		$objDca = $this->getDB()
-			->prepare(sprintf('SELECT * FROM tl_metamodel_dca WHERE pid IN (%s) AND isdefault=1', implode(',', $arrMetaModels)))
-			->execute();
-
-		while ($objDca->next())
-		{
-			$this->arrInformation[$objDca->pid]['comb']['dca_id'] = $objDca->id;
-		}
-
-		$objRender = $this->getDB()
-			->prepare(sprintf('SELECT * FROM tl_metamodel_rendersettings WHERE pid IN (%s) AND isdefault=1', implode(',', $arrMetaModels)))
-			->execute();
-
-		while ($objRender->next())
-		{
-			$this->arrInformation[$objRender->pid]['comb']['view_id'] = $objRender->id;
-		}
-
-	}
-
-	/**
-	 * Pull in all DCA settings for the local MetaModels.
-	 */
-	protected function getDCAs()
-	{
-		$arrDCAs = array();
-		foreach ($this->arrInformation as $arrInfo)
-		{
-			if ($arrInfo['comb']['dca_id'])
-			{
-				$arrDCAs[] = $arrInfo['comb']['dca_id'];
-			}
-		}
-
-		if (!$arrDCAs) return;
-
-		$objDca = $this->getDB()
-			->prepare(sprintf('SELECT * FROM tl_metamodel_dca WHERE id IN (%s)', implode(',', $arrDCAs)))
-			->execute();
-
-		while ($objDca->next())
-		{
-			$this->arrInformation[$objDca->pid]['dca'] = $objDca->row();
-			// store the ptable lookup.
-			if ($objDca->rendertype == 'ctable')
-			{
-				$this->arrPTables[$objDca->ptable][] = $objDca->pid;
-			}
-		}
-	}
-
-	/**
-	 * Collect all metamodels from the Database, that have an relation to the current user.
-	 * Buffer them in a local list to have them handy when a corresponding parent table is being instantiated etc.
-	 */
-	protected function bufferModels()
-	{
-		if (!\Database::getInstance()->tableExists('tl_metamodel', null, true))
-		{
-			return;
-		}
-
-		$objModels = $this->getDB()->execute('SELECT id FROM tl_metamodel order by sorting');
-		while ($objModels->next())
-		{
-			$this->arrInformation[$objModels->id] = array
-			(
-				'comb' => array(),
-				'dca'  => array(),
-				'view' => array()
-			);
-		}
-
-		$strGrpCol = 'fe_group';
-		$objUser = self::getUser();
-
-		// Try to get the group
-		// there might be a NULL in there as BE admins have no groups and user might have one but it is a not must have.
-		// I would prefer a default group for both, fe and be groups.
-		$arrGroups = $objUser->groups ? array_filter($objUser->groups) : array();
-
-		// special case in combinations, admins have the implicit group id -1
-		if(version_compare(VERSION, '3.0', '>'))
-		{
-			$strBackendUserClass = 'Contao\BackendUser';
-		}
-		else
-		{
-			$strBackendUserClass = 'BackendUser';
-		}	
-		
-		if ($objUser instanceof $strBackendUserClass)
-		{
-			$strGrpCol = 'be_group';
-			if ($objUser->admin)
-			{
-				$arrGroups[] = -1;
-			}
-		}
-
-		if ($arrGroups)
-		{
-			$arrFallbacks = $this->getPaletteCombinationRows($strGrpCol, $arrGroups);
-		} else {
-			$arrFallbacks = array_keys($this->arrInformation);
-		}
-		if ($arrFallbacks)
-		{
-			$this->getPaletteCombinationDefault($arrFallbacks);
-		}
-
-		$this->getDCAs();
-	}
-
-	public function getView($intMetaModel)
-	{
-		if (!$this->arrInformation[$intMetaModel]['view'])
-		{
-			$this->arrInformation[$intMetaModel]['view'] = $this->getDB()
-				->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')
-				->limit(1)
-				->execute($this->arrInformation[$intMetaModel]['comb']['view_id'])
-				->row();
-		}
-		return $this->arrInformation[$intMetaModel]['view'];
-	}
-
-	public function getDca($intMetaModel)
-	{
-		return $this->arrInformation[$intMetaModel]['dca'];
 	}
 
 	public function getModelsWithPtable($strTablename)
@@ -283,7 +87,7 @@ class MetaModelDcaBuilder
 		// determine image to use.
 		if ($strBackendIcon && file_exists(TL_ROOT . '/' . $strBackendIcon))
 		{
-			return ContaoController::getInstance()->getImage(ContaoController::getInstance()->urlEncode($strBackendIcon), 16, 16);;
+			return ContaoController::getInstance()->getImage(ContaoController::getInstance()->urlEncode($strBackendIcon), 16, 16);
 		} else {
 			return 'system/modules/metamodels/html/metamodels.png';
 		}
@@ -298,8 +102,10 @@ class MetaModelDcaBuilder
 	 *
 	 * @return void
 	 */
-	public function injectChildTablesIntoDCA($strTable, &$arrTableDCA)
+	public function injectChildTablesIntoDCA($strTable)
 	{
+		$arrTableDCA = &$GLOBALS['TL_DCA'][$strTable];
+
 		$objMetaModels = $this->getModelsWithPtable($strTable);
 
 		foreach ($objMetaModels as $objMetaModel)
@@ -335,49 +141,43 @@ class MetaModelDcaBuilder
 		}
 	}
 
-	protected function handleCTable($arrDCA)
+	/**
+	 * @param IInputScreen $inputScreen
+	 */
+	protected function handleStandalone($inputScreen)
 	{
-		// TODO: nothing to do anymore, appearantly.
-		// create a child relation in parent.
-//		self::$arrTableInjections[$arrDCA['ptable']][] = $objMetaModel->tableName;
-//		self::registerLateConfig();
-	}
+		$metaModel = $inputScreen->getMetaModel();
 
-	protected function handleStandalone($arrDCA)
-	{
-		$objMetaModel = Factory::byId($arrDCA['pid']);
-		$strModuleName = 'metamodel_' . $objMetaModel->getTableName();
-		$strTableCaption = $objMetaModel->getName();
- 		$strBackendIcon = $arrDCA['backendicon'];
+		$strModuleName = 'metamodel_' . $metaModel->getTableName();
 
-		// If we have a c3 replace the id/uuid with the path.
-		if($strBackendIcon && version_compare(VERSION, '3.0', '>'))
-		{
-			$objFile = \FilesModel::findByPk($strBackendIcon);
-			$strBackendIcon = $objFile->path;
-		}
+		$strTableCaption = $metaModel->getName();
 
 		// determine image to use.
-		if ($strBackendIcon && file_exists(TL_ROOT . '/' . $strBackendIcon))
+		if (($icon = $inputScreen->getIcon()) && file_exists(TL_ROOT . '/' . $icon))
 		{
-			$strIcon = ContaoController::getInstance()->getImage(ContaoController::getInstance()->urlEncode($strBackendIcon), 16, 16);
+			$strIcon = BackendBindings::getImage(ContaoController::getInstance()->urlEncode($icon), 16, 16);
 		} else {
 			$strIcon = 'system/modules/metamodels/html/metamodels.png';
 		}
 
-		$strSection = (trim($arrDCA['backendsection'])) ? $arrDCA['backendsection'] : 'metamodels';
+		$section = $inputScreen->getBackendSection();
 
-		$GLOBALS['BE_MOD'][$strSection][$strModuleName] = array
+		if (!$section)
+		{
+			$section = 'metamodels';
+		}
+
+		$GLOBALS['BE_MOD'][$section][$strModuleName] = array
 		(
-			'tables'			=> array($objMetaModel->getTableName()),
+			// 'tables'			=> array($metaModel->getTableName()),
 			'icon'				=> $strIcon,
 			'callback'			=> 'MetaModels\BackendIntegration\Module'
 		);
 
 		$arrCaption = array($strTableCaption);
-		foreach (deserialize($arrDCA['backendcaption'], true) as $arrLangEntry)
+		foreach (deserialize($inputScreen->getBackendCaption(), true) as $arrLangEntry)
 		{
-			if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == self::getUser()->language)
+			if ($arrLangEntry['label'] != '' && ($arrLangEntry['langcode'] == $GLOBALS['TL_CONFIG']['language']))
 			{
 				$arrCaption = array($arrLangEntry['label'], $arrLangEntry['description']);
 			}
@@ -392,27 +192,9 @@ class MetaModelDcaBuilder
 	 */
 	public function injectBackendMenu()
 	{
-		foreach ($this->arrInformation as $intModel => $arrInfo)
+		foreach (ViewCombinations::getStandaloneInputScreens() as $inputScreen)
 		{
-			//
-			switch ($arrInfo['dca']['rendertype'])
-			{
-				case '':
-					// not configured yet.
-					break;
-				case 'ctable':
-					$this->handleCTable($arrInfo['dca']);
-					break;
-
-				case 'selftree':
-					// => mode 5 - Records are displayed as self containing tree (see site structure)
-					// must provide backend section then, as no external parent available.
-					break;
-
-				case 'standalone':
-					$this->handleStandalone($arrInfo['dca']);
-					break;
-			}
+			$this->handleStandalone($inputScreen);
 		}
 	}
 
@@ -449,65 +231,6 @@ class MetaModelDcaBuilder
 			}
 			$intCount = count($arrPTables);
 		}
-	}
-
-	/**
-	 * Get from a dcasetting the colum name
-	 *
-	 * @param \MetaModels\IMetaModel $objMetaModel the MetaModel for which the palette shall be built.
-	 *
-	 * @param int                    $intID ID of an entry from the tl_metamodel_dcasetting
-	 *
-	 * @return string Name of the column
-	 */
-	protected function getColNameByDcaSettingId($objMetaModel, $intID)
-	{
-		// Get name from cache.
-		if(in_array($intID, self::$arrColNameChache))
-		{
-			return self::$arrColNameChache[$intID];
-		}
-
-		// Get the attr_id for MM.
-		$objDCASettings = $this->getDB()
-			->prepare('SELECT attr_id FROM tl_metamodel_dcasetting WHERE id=?')
-			->execute($intID);
-
-		// Check if we have the selector id.
-		if ($objDCASettings->numRows == 0)
-		{
-			self::$arrColNameChache[$intID] = false;
-		}
-		else
-		{
-			// Get name from attribute.
-			$objAttribute = $objMetaModel->getAttributeById($objDCASettings->attr_id);
-			self::$arrColNameChache[$intID] = $objAttribute->getColName();
-		}
-
-		return self::$arrColNameChache[$intID];
-	}
-
-	/**
-	 * Check if a field is a selector for a subpalette.
-	 *
-	 * @param int $intID ID of an entry from the tl_metamodel_dcasetting
-	 *
-	 * @return boolean
-	 */
-	protected function isSelector($intID)
-	{
-		// Count subpalette elements.
-		$objDCASettings = $this->getDB()
-			->prepare('SELECT count(id) as count FROM tl_metamodel_dcasetting WHERE subpalette=?')
-			->execute($intID);
-
-		if($objDCASettings->count != 0)
-		{
-			return true;
-		}
-
-		return false;
 	}
 
 	/**
@@ -773,7 +496,7 @@ class MetaModelDcaBuilder
 				array
 				(
 					'from' => $arrDCASettings['ptable'],
-					'to' => 'self',
+					'to' => $objMetaModel->getTableName(),
 					'setOn' => array
 					(
 						array
@@ -810,11 +533,12 @@ class MetaModelDcaBuilder
 		switch ($arrDCASettings['mode'])
 		{
 			case 5:
-				$arrDCA['dca_config']['child_list']['self']['fields'] = array(
+				$arrDCA['dca_config']['child_list'][$objMetaModel->getTableName()]['fields'] = array(
 					'id', 'tstamp'
 				);
+				$arrDCA['dca_config']['data_provider']['parent']['source'] = $objMetaModel->getTableName();
 
-				$arrDCA['dca_config']['rootEntries']['self'] = array
+				$arrDCA['dca_config']['rootEntries'][$objMetaModel->getTableName()] = array
 				(
 					'setOn' => array
 					(
@@ -837,8 +561,8 @@ class MetaModelDcaBuilder
 				$arrDCA['dca_config']['childCondition'] = array
 				(
 					array(
-						'from' => 'self',
-						'to' => 'self',
+						'from' => $objMetaModel->getTableName(),
+						'to' => $objMetaModel->getTableName(),
 						'setOn' => array
 						(
 							array(
@@ -878,10 +602,16 @@ class MetaModelDcaBuilder
 	 *
 	 * @param string $strTableName the name of the meta model table that shall be created.
 	 *
+	 * @throws \Exception
+	 *
 	 * @return bool true on success, false otherwise.
 	 */
 	public function createDataContainer($strTableName)
 	{
+return;
+
+		$this->injectChildTablesIntoDCA($strTableName);
+
 		if (!in_array($strTableName, Factory::getAllTables()))
 			return false;
 
@@ -889,7 +619,7 @@ class MetaModelDcaBuilder
 		ContaoController::getInstance()->loadDataContainer('tl_metamodel_item');
 		ContaoController::getInstance()->loadLanguageFile('tl_metamodel_item');
 
-		$GLOBALS['TL_DCA'][$strTableName] = array_replace_recursive($GLOBALS['TL_DCA']['tl_metamodel_item'], (array) $GLOBALS['TL_DCA'][$strTableName]);
+		$GLOBALS['TL_DCA'][$strTableName] = array_replace_recursive((array)$GLOBALS['TL_DCA']['tl_metamodel_item'], (array) $GLOBALS['TL_DCA'][$strTableName]);
 		$arrDCA = &$GLOBALS['TL_DCA'][$strTableName];
 
 		$arrDCA['dca_config']['data_provider']['default']['source'] = $strTableName;
@@ -900,11 +630,12 @@ class MetaModelDcaBuilder
 			ContaoController::getInstance()->loadLanguageFile('languages');
 		}
 
-		$arrDCASettings = $this->getDca($objMetaModel->get('id'));
-		$arrViewSettings = $this->getView($objMetaModel->get('id'));
+		$arrDCASettings  = ViewCombinations::getInputScreenDetails($objMetaModel->get('id'));
+		$arrViewSettings = ViewCombinations::getRenderSettingDetails($objMetaModel->get('id'));
 
 		if (!$arrDCASettings)
 		{
+			// FIXME: refactor user lookup.
 			$strMessage = sprintf($GLOBALS['TL_LANG']['ERR']['no_palette'], $objMetaModel->getName(), self::getUser()->username);
 			Module::addMessageEntry(
 				$strMessage, METAMODELS_ERROR, ContaoController::getInstance()->addToUrl('do=metamodels&table=tl_metamodel_dca&id=' . $objMetaModel->get('id'))
@@ -915,6 +646,7 @@ class MetaModelDcaBuilder
 
 		if (!$arrViewSettings)
 		{
+			// FIXME: refactor user lookup.
 			$strMessage = sprintf($GLOBALS['TL_LANG']['ERR']['no_view'], $objMetaModel->getName(), self::getUser()->username);
 			Module::addMessageEntry(
 				$strMessage, METAMODELS_ERROR, ContaoController::getInstance()->addToUrl('do=metamodels&table=tl_metamodel_rendersettings&id=' . $objMetaModel->get('id'))
@@ -925,6 +657,20 @@ class MetaModelDcaBuilder
 
 		$arrDCA['config']['metamodel_view'] = $arrViewSettings['id'];
 		$arrDCA['palettes']['default'] = $this->getPaletteAndFields($arrDCASettings['id'], $objMetaModel, $arrDCA);
+
+
+		$objView = RenderFactory::byId($objMetaModel, $arrViewSettings['id']);
+
+		if (!$objView)
+		{
+			throw new \Exception('No backend screen defined.');
+		}
+
+		$arrDCA['list']['label'] = array
+		(
+			'fields' => $objView->getSettingNames(),
+			'format' => trim(str_repeat('%s ', count($objView->getSettingNames()))),
+		);
 
 		if ($arrDCASettings['backendcaption'])
 		{
@@ -983,15 +729,21 @@ class MetaModelDcaBuilder
 	}
 
 	/**
-	 * Return the paste page button
-	 * @param DataContainer
-	 * @param array
-	 * @param string
-	 * @param boolean
-	 * @param array
+	 * Return the paste button.
+	 *
+	 * @param \DC_General                             $objDC
+	 *
+	 * @param array                                   $arrRow
+	 *
+	 * @param string                                  $strTable
+	 *
+	 * @param boolean                                 $cr
+	 *
+	 * @param \DcGeneral\Clipboard\ClipboardInterface $objClipboard
+	 *
 	 * @return string
 	 */
-	public function pasteButton(\DC_General $objDC, $arrRow, $strTable, $cr, DcGeneral\Clipboard\ClipboardInterface $objClipboard=null)
+	public function pasteButton(\DC_General $objDC, $arrRow, $strTable, $cr, $objClipboard)
 	{
 		if($objClipboard == null)
 		{
@@ -1000,9 +752,14 @@ class MetaModelDcaBuilder
 
 		$disablePA = true;
 		$disablePI = true;
+		
+		$strMode = $objClipboard->getMode();
+		$arrIds = $objClipboard->getContainedIds();
+		$intID = $arrIds[0];
+		$arrChildren = (count($arrIds) > 1) ? array_slice($arrIds, 1, count($arrIds) - 1) : array();
 
 		// FIXME: whoa, this is hacky, the DC should provide a better way to obtain all of this.
-		$objSrcProvider = $objDC->getDataProvider($strTable);
+		$objSrcProvider = $objDC->getEnvironment()->getDataDriver($strTable);
 		if (\Input::getInstance()->get('source'))
 		{
 			$objModel = $objSrcProvider->fetch($objSrcProvider->getEmptyConfig()->setId(\Input::getInstance()->get('source')));
