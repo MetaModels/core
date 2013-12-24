@@ -17,7 +17,6 @@
 namespace MetaModels;
 
 use MetaModels\Filter\Filter;
-use MetaModels\IMetaModel;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\Attribute\Factory as AttributeFactory;
 use MetaModels\Render\Setting\Factory as RenderSettingFactory;
@@ -311,7 +310,7 @@ class MetaModel implements IMetaModel
 			}
 		}
 
-		// Determine "independant attributes" (complex and translated) and inject their content into the row.
+		// Determine "independent attributes" (complex and translated) and inject their content into the row.
 		foreach(array_merge($this->getComplexAttributes(), $this->getTranslatedAttributes()) as $objAttribute)
 		{
 			/** @var \MetaModels\Attribute\IAttribute $objAttribute */
