@@ -27,7 +27,7 @@ namespace MetaModels\Widgets;
  *
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-class SubDCAWidget extends \Widget
+class SubDcaWidget extends \Widget
 {
 
 	/**
