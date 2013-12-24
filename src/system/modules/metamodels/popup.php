@@ -8,13 +8,24 @@
  * @filesource
  */
 
-
-
 /**
  * Initialize the system
  */
 define('TL_MODE', 'BE');
-require_once('../../initialize.php');
+
+if (is_file('../../initialize.php'))
+{
+	require_once('../../initialize.php');
+}
+elseif ('../../../../../../../../system/initialize.php')
+{
+	require_once('../../../../../../../../system/initialize.php');
+}
+else
+{
+	echo 'I lost my place, where is Contao?';
+	exit;
+}
 
 class DCAStylepicker_Wizard extends Backend
 {
