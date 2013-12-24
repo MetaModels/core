@@ -16,6 +16,8 @@
 
 namespace MetaModels\Dca;
 
+use DcGeneral\DataDefinition\Definition\Properties\PropertyInterface;
+use DcGeneral\EnvironmentInterface;
 use MetaModels\IMetaModel;
 use MetaModels\Factory as MetaModelFactory;
 
@@ -102,6 +104,8 @@ class Helper extends \Backend
 	 * @param array      $arrValues     The values for the widget, needed to highlight the fallback language.
 	 *
 	 * @return array
+	 *
+	 * @deprecated Use prepareLanguageAwareWidget from BuildWidgetEvent.
 	 */
 	public function makeMultiColumnName(IMetaModel $objMetaModel, &$strLabelLang, &$strLabelValue, $blnIsTextarea, $arrValues)
 	{
@@ -180,6 +184,110 @@ class Helper extends \Backend
 			);
 		}
 		return $arrWidget;
+	}
+
+	/**
+	 * Create a widget for naming contexts. Use the language and translation information from the MetaModel.
+	 *
+	 * @param EnvironmentInterface $environment   The environment.
+	 *
+	 * @param PropertyInterface    $property      The property.
+	 *
+	 * @param IMetaModel           $metaModel     The MetaModel.
+	 *
+	 * @param string               $languageLabel The label to use for the language indicator.
+	 *
+	 * @param string               $valueLabel    The label to use for the input field.
+	 *
+	 * @param bool                 $isTextArea    If true, the widget will become a textarea, false otherwise.
+	 *
+	 * @param array                $arrValues     The values for the widget, needed to highlight the fallback language.
+	 *
+	 * @return void
+	 */
+	public static function prepareLanguageAwareWidget(
+		EnvironmentInterface $environment,
+		PropertyInterface $property,
+		IMetaModel $metaModel,
+		$languageLabel,
+		$valueLabel,
+		$isTextArea,
+		$arrValues)
+	{
+		if (!$metaModel->isTranslated())
+		{
+			$extra = $property->getExtra();
+
+			$extra['tl_class'] .= 'w50';
+
+			$property
+				->setWidgetType('text')
+				->setExtra($extra);
+
+			return;
+		}
+
+		$fallback = $metaModel->getFallbackLanguage();
+
+		$languages = array();
+		foreach ((array)$metaModel->getAvailableLanguages() as $langCode)
+		{
+			$languages[$langCode] = $environment->getTranslator()->translate('LNG.' . $langCode, 'languages');
+		}
+		asort($languages);
+
+		// Ensure we have the values present.
+		if (empty($arrValues))
+		{
+			foreach (array_keys($languages) as $langCode)
+			{
+				$arrValues[$langCode] = '';
+			}
+		}
+
+		$rowClasses = array();
+		foreach (array_keys($arrValues) as $langCode)
+		{
+			$rowClasses[] = ($langCode == $fallback) ? 'fallback_language' : 'normal_language';
+		}
+
+		$extra = $property->getExtra();
+
+		$extra['minCount']       =
+		$extra['maxCount']       = count($languages);
+		$extra['disableSorting'] = true;
+		$extra['tl_class']       = 'clr';
+		$extra['columnFields']   = array(
+			'langcode' => array
+			(
+				'label'                 => $languageLabel,
+				'exclude'               => true,
+				'inputType'             => 'justtextoption',
+				'options'               => $languages,
+				'eval'                  => array
+				(
+					'rowClasses'        => $rowClasses,
+					'valign'            => 'center',
+					'style'             => 'min-width:75px;display:block;'
+				)
+			),
+			'value' => array
+			(
+				'label'                 => $valueLabel,
+				'exclude'               => true,
+				'inputType'             => $isTextArea ? 'textarea' : 'text',
+				'eval'                  => array
+				(
+					'rowClasses'        => $rowClasses,
+					'style'             => 'width:400px;',
+					'rows'              => 3
+				)
+			),
+		);
+
+		$property
+			->setWidgetType('multiColumnWizard')
+			->setExtra($extra);
 	}
 
 	/**
