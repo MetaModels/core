@@ -16,14 +16,16 @@
 
 namespace MetaModels\BackendIntegration;
 
+use DcGeneral\Event\EventPropagator;
+use MetaModels\BackendIntegration\Contao2\initializeSystemHOOKHack;
+use MetaModels\BackendIntegration\Events\BackendIntegrationEvent;
 use MetaModels\Dca\MetaModelDcaBuilder;
-use MetaModels\Helper\ContaoController;
 
 /**
- * This is the MetaModel backend interface.
- * It is used in the backend to build the menu, pack all the
+ * This class is the abstract base class used in the backend to build the menu.
+ * See the concrete implementation in the ContaoX folders (depending on Contao Core version)
  *
- * @package	   MetaModels
+ * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
@@ -84,7 +86,7 @@ class Boot
 		try
 		{
 			$objDB = \Database::getInstance();
-			return $objDB && $objDB->tableExists('tl_metamodel');
+			return $objDB && $objDB->tableExists('tl_metamodel', null, true);
 		}
 		catch (\Exception $e)
 		{
@@ -127,76 +129,39 @@ class Boot
 		$Env->script = null;
 	}
 
-	public function getBackendIcon($strBackendIcon)
+	public static function perform()
 	{
-		// determine image to use.
-		if ($strBackendIcon && file_exists(TL_ROOT . '/' . $strBackendIcon))
-		{
-			return ContaoController::getInstance()->getImage(ContaoController::getInstance()->urlEncode($strBackendIcon), 16, 16);;
-		} else {
-			return 'system/modules/metamodels/html/metamodels.png';
-		}
-	}
-
-	/**
-	 * Add the child tables to the DCA as operation (if any child tables are present).
-	 */
-	public function createDataContainer($strTable)
-	{
-		if (self::isDBInitialized())
-		{
-			MetaModelDcaBuilder::getInstance()->injectChildTablesIntoDCA($strTable, $GLOBALS['TL_DCA'][$strTable]);
-		}
-	}
-
-	public static function checkBackendLoad($strClass)
-	{
-		if ($strClass == 'Backend')
-		{
-			MetaModelDcaBuilder::getInstance()->injectIntoBackendModules();
-			spl_autoload_unregister(array('MetaModels\BackendIntegration\Boot', 'checkBackendLoad'));
-		}
-		return false;
-	}
-
-	protected static function registerLateConfig()
-	{
-		// register a autoloader which will transport the config variables and unregister itself when loading class Backend.
-		spl_autoload_register(array('MetaModels\BackendIntegration\Boot', 'checkBackendLoad'), true, true);
-		if (version_compare(VERSION, '3.0', '<') && !in_array('__autoload', spl_autoload_functions()))
-		{
-			spl_autoload_register('__autoload');
-		}
-	}
-
-	/**
-	 * Called from config.php in TL_MODE == 'BE' to register everything neccessary for the backend.
-	 *
-	 * @return void
-	 */
-	public static function buildBackendMenu()
-	{
-		if (!self::initializeContaoObjectStack())
+		if (!(self::initializeContaoObjectStack() && self::isDBInitialized()))
 		{
 			return;
 		}
 
-		try
-		{
-			if (self::isDBInitialized())
-			{
-				// if no backend user authenticated, we will get redirected.
-				self::authenticateBackendUser();
+		// if no backend user authenticated, we will get redirected.
+		self::authenticateBackendUser();
 
-				MetaModelDcaBuilder::getInstance()->injectBackendMenu();
-				self::registerLateConfig();
-			}
-		}
-		catch (\Exception $exc)
+		global $container;
+		$propagator = new EventPropagator($container['event-dispatcher']);
+
+		$propagator->propagate(new BackendIntegrationEvent());
+
+		MetaModelDcaBuilder::getInstance()->injectBackendMenu();
+		MetaModelDcaBuilder::getInstance()->injectIntoBackendModules();
+	}
+
+	/**
+	 * Called from config.php in TL_MODE == 'BE' to register for startup in the backend.
+	 *
+	 * @return void
+	 */
+	public static function MetaModels()
+	{
+		if (version_compare(VERSION, '3.0', '<'))
 		{
-			// Note: do NOT use the logging prvided by class System here as that one logs into the DB
-			// which is pretty useless as the DB most likely was the one throwing the exception.
-			log_message('Exception in MetaModels\BackendIntegration\Boot::buildBackendMenu() - ' . $exc->getMessage());
+			initializeSystemHOOKHack::register();
+		}
+		else
+		{
+			$GLOBALS['TL_HOOKS']['initializeSystem'][] = array(__CLASS__, 'perform');
 		}
 	}
 }

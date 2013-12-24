@@ -167,11 +167,11 @@ define('METAMODELS_ERROR', 1);
 // Back-end module - include only in Backend.
 if (TL_MODE == 'BE')
 {
-	MetaModels\BackendIntegration\Boot::buildBackendMenu();
 	if (version_compare(VERSION,'3.1', '>=') && \Environment::get('scriptName') == (TL_PATH . '/contao/file.php') && \Input::get('mmfilepicker'))
 	{
 		$GLOBALS['BE_FFL']['fileSelector'] = 'MetaModels\Widgets\FileSelectorWidget';
 	}
+	MetaModels\BackendIntegration\Boot::MetaModels();
 }
 
 // Front-end modules.
@@ -189,7 +189,6 @@ $GLOBALS['TL_FFL']['multitext'] = 'MetaModels\Widgets\MultiTextWidget';
 $GLOBALS['TL_FFL']['tags']      = 'MetaModels\Widgets\TagsWidget';
 
 // HOOKS.
-$GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModels\BackendIntegration\Boot', 'createDataContainer');
 $GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModels\Dca\MetaModelDcaBuilder', 'createDataContainer');
 $GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModels\Dca\Filter', 'createDataContainer');
 $GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModels\Dca\RenderSetting', 'createDataContainer');
