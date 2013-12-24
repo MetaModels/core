@@ -16,9 +16,16 @@
 
 namespace MetaModels\DcGeneral\Events;
 
+use DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
+use DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
+use DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
+use DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
+use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
+use DcGeneral\Contao\View\Contao2BackendView\Event\GetGlobalButtonEvent;
 
 /**
  * Central event subscriber implementation.
@@ -50,6 +57,8 @@ class Subscriber
 	{
 		return array
 		(
+			sprintf('%s[%s]', BuildDataDefinitionEvent::NAME, 'tl_metamodel')
+				=> array('registerTableMetaModelsEvents', -200),
 		);
 	}
 
@@ -130,5 +139,53 @@ class Subscriber
 		{
 			$dispatcher->addListener($event . $eventSuffix, $listener, $priority);
 		}
+	}
+
+	/**
+	 * Register the events for table tl_metamodel.
+	 *
+	 * @param BuildDataDefinitionEvent $event The event being processed.
+	 *
+	 * @return void
+	 */
+	public static function registerTableMetaModelsEvents(BuildDataDefinitionEvent $event)
+	{
+		static $registered;
+		if ($registered)
+		{
+			return;
+		}
+		$registered = true;
+		$dispatcher = $event->getDispatcher();
+
+		self::registerListeners(
+			array(
+				GetOperationButtonEvent::NAME => 'MetaModels\DcGeneral\Events\Table\MetaModels\Subscriber::getOperationButton',
+				GetGlobalButtonEvent::NAME    => 'MetaModels\DcGeneral\Events\Table\MetaModels\Subscriber::getGlobalButton',
+				ModelToLabelEvent::NAME       => 'MetaModels\DcGeneral\Events\Table\MetaModels\Subscriber::modelToLabel',
+				GetBreadcrumbEvent::NAME      => self::createClosure(
+						'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbMetaModels',
+						'getBreadcrumb'
+					),
+			),
+			$dispatcher,
+			array('tl_metamodel')
+		);
+
+		// Save and load callbacks.
+		self::registerListeners(
+			array(
+				DecodePropertyValueForWidgetEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\MetaModels\Subscriber::fixLangArray',
+				EncodePropertyValueFromWidgetEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\MetaModels\Subscriber::unfixLangArray',
+			),
+			$dispatcher,
+			array('tl_metamodel', 'languages')
+		);
+	}
+
+	}
+
 	}
 }

@@ -57,7 +57,6 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 		(
 			'fields'                  => array('name'),
 			'format'                  => '%s',
-			'label_callback'          => array('MetaModels\Dca\MetaModel','getRowLabel')
 		),
 
 		'global_operations' => array
@@ -92,7 +91,6 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['delete'],
 				'href'                => 'act=delete',
 				'icon'                => 'delete.gif',
-				'button_callback'     => array('MetaModels\Dca\MetaModel', 'buttonCallback'),
 				'attributes'          => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
 
 			),
@@ -108,7 +106,6 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['fields'],
 				'href'                => 'table=tl_metamodel_attribute',
 				'icon'                => 'system/modules/metamodels/html/fields.png',
-				'button_callback'     => array('MetaModels\Dca\MetaModel', 'buttonCallback')
 			),
 
 			'rendersettings' => array
@@ -116,7 +113,6 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['rendersettings'],
 				'href'                => 'table=tl_metamodel_rendersettings',
 				'icon'                => 'system/modules/metamodels/html/render_settings.png',
-				'button_callback'     => array('MetaModels\Dca\MetaModel', 'buttonCallback')
 			),
 
 			'dca' => array
@@ -124,7 +120,6 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['dca'],
 				'href'                => 'table=tl_metamodel_dca',
 				'icon'                => 'system/modules/metamodels/html/dca.png',
-				'button_callback'     => array('MetaModels\Dca\MetaModel', 'buttonCallback')
 			),
 
 			'filter' => array
@@ -132,7 +127,6 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['filter'],
 				'href'                => 'table=tl_metamodel_filter',
 				'icon'                => 'system/modules/metamodels/html/filter.png',
-				'button_callback'     => array('MetaModels\Dca\MetaModel', 'buttonCallback')
 			),
 
 			'dca_combine' => array
@@ -140,7 +134,6 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['dca_combine'],
 				'href'                => 'table=tl_metamodel_dca_combine&act=edit',
 				'icon'                => 'system/modules/metamodels/html/dca_combine.png',
-				'button_callback'     => array('MetaModels\Dca\MetaModel', 'buttonCallback')
 			),
 		)
 	),
@@ -249,14 +242,6 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 					),
 				),
 			),
-			'load_callback' => array
-			(
-				array('MetaModels\Dca\MetaModel', 'fixLangArray')
-			),
-			'save_callback' => array
-			(
-				array('MetaModels\Dca\MetaModel', 'unfixLangArray')
-			)
 		),
 
 		'varsupport' => array
