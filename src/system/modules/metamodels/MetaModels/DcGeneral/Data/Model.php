@@ -17,6 +17,8 @@
 namespace MetaModels\DcGeneral\Data;
 
 use DcGeneral\Data\ModelInterface;
+use DcGeneral\Data\PropertyValueBagInterface;
+use DcGeneral\Exception\DcGeneralInvalidArgumentException;
 use MetaModels\IItem;
 
 /**
@@ -262,5 +264,42 @@ class Model implements ModelInterface
 	public function getProviderName()
 	{
 		return $this->getItem()->getMetaModel()->getTableName();
+	}
+
+	/**
+	 * Read values from a value bag.
+	 */
+	public function readFromPropertyValueBag(PropertyValueBagInterface $valueBag)
+	{
+		foreach ($this->getPropertyNames() as $property)
+		{
+			if (!$valueBag->hasPropertyValue($property))
+			{
+				continue;
+			}
+
+			if ($valueBag->isPropertyValueInvalid($property))
+			{
+				throw new DcGeneralInvalidArgumentException('The value for property ' . $property . ' is invalid.');
+			}
+
+			$this->setProperty($property, $valueBag->getPropertyValue($property));
+		}
+	}
+
+	/**
+	 * Read values from a value bag.
+	 */
+	public function writeToPropertyValueBag(PropertyValueBagInterface $valueBag)
+	{
+		foreach ($this->getPropertyNames() as $property)
+		{
+			if (!$valueBag->hasPropertyValue($property))
+			{
+				continue;
+			}
+
+			$valueBag->setPropertyValue($property, $this->getProperty($property));
+		}
 	}
 }
