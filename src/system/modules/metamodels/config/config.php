@@ -249,3 +249,6 @@ if (!isset($GLOBALS['MM_FILTER_PARAMS']))
 {
 	$GLOBALS['MM_FILTER_PARAMS'] = array();
 }
+
+// Attach ourselves to the DIC.
+$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'MetaModels\DcGeneral\Events\Subscriber';
