@@ -29,7 +29,7 @@ use MetaModels\Factory as MetaModelFactory;
 class Helper extends \Backend
 {
 
-	public function decodeLangArray($varValue, IMetaModel $objMetaModel)
+	public static function decodeLangArray($varValue, IMetaModel $objMetaModel)
 	{
 		$arrLangValues = deserialize($varValue);
 		if (!$objMetaModel->isTranslated())
@@ -64,7 +64,7 @@ class Helper extends \Backend
 		return serialize($arrOutput);
 	}
 
-	public function encodeLangArray($varValue, IMetaModel $objMetaModel)
+	public static function encodeLangArray($varValue, IMetaModel $objMetaModel)
 	{
 		// not translated, make it a plain string.
 		if (!$objMetaModel->isTranslated())
