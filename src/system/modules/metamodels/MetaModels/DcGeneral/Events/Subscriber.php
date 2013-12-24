@@ -59,6 +59,8 @@ class Subscriber
 		(
 			sprintf('%s[%s]', BuildDataDefinitionEvent::NAME, 'tl_metamodel')
 				=> array('registerTableMetaModelsEvents', -200),
+			sprintf('%s[%s]', BuildDataDefinitionEvent::NAME, 'tl_metamodel_attribute')
+				=> array('registerTableMetaModelAttributeEvents', -200),
 		);
 	}
 
@@ -185,6 +187,34 @@ class Subscriber
 		);
 	}
 
+	/**
+	 * Register the events for table tl_metamodel_attribute.
+	 *
+	 * @param BuildDataDefinitionEvent $event The event being processed.
+	 *
+	 * @return void
+	 */
+	public static function registerTableMetaModelAttributeEvents(BuildDataDefinitionEvent $event)
+	{
+		static $registered;
+		if ($registered)
+		{
+			return;
+		}
+		$registered = true;
+		$dispatcher = $event->getDispatcher();
+
+		self::registerListeners(
+			array(
+				GetBreadcrumbEvent::NAME
+					=> self::createClosure('MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbAttributes', 'getBreadcrumb'),
+			),
+			$dispatcher,
+			array('tl_metamodel_attribute')
+		);
+	}
+
+	}
 	}
 
 	}
