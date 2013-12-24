@@ -54,6 +54,6 @@ $GLOBALS['TL_LANG']['tl_metamodel']['cut']                  = array('Move MetaMo
 /**
  * Misc.
  */
-$GLOBALS['TL_LANG']['tl_metamodel']['itemFormat'] = '%s %s';
-$GLOBALS['TL_LANG']['tl_metamodel']['itemSingle'] = 'item';
-$GLOBALS['TL_LANG']['tl_metamodel']['itemPlural'] = 'items';
+$GLOBALS['TL_LANG']['tl_metamodel']['itemFormat']['0'] = '%s items';
+$GLOBALS['TL_LANG']['tl_metamodel']['itemFormat']['1'] = '%s item';
+$GLOBALS['TL_LANG']['tl_metamodel']['itemFormat']['2:'] = '%s items';

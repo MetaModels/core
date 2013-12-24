@@ -41,7 +41,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid']    = array('Defau
  * Legends
  */
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['title_legend']         = 'Type';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['config_legend']         = 'Configuration';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['config_legend']        = 'Configuration';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fefilter_legend']      = 'Frontend filter';
 
 /**
  * Buttons
@@ -50,6 +51,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']                  = arra
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit']                 = array('Edit setting', 'Edit filter setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy']                 = array('Copy filter setting definition', 'Copy filter setting ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cut']                  = array('Cut filter setting definition', 'Cut filter setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete']               = array('Delete filter setting', 'Delete filter setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']                 = array('Filter setting details', 'Show details of filter setting ID %s');
 
