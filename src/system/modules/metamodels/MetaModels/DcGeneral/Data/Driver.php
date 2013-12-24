@@ -311,12 +311,10 @@ class Driver implements MultiLanguageDriverInterface
 				}
 				$objFilter->addFilterRule($objFilterRule);
 
-				$objSubFilter = new Filter($this->objMetaModel);
-
-				$objFilterRule->addChild($objSubFilter);
-
 				foreach ($arrFilter['children'] as $arrChild)
 				{
+					$objSubFilter = new Filter($this->objMetaModel);
+					$objFilterRule->addChild($objSubFilter);
 					$this->calculateSubfilter($arrChild, $objSubFilter);
 				}
 				break;
@@ -384,7 +382,7 @@ class Driver implements MultiLanguageDriverInterface
 				}
 				$this->calculateSubfilter(array(
 					'operation' => 'OR',
-					'childs'    => $arrSubRules
+					'children'    => $arrSubRules
 				), $objFilter);
 				break;
 
