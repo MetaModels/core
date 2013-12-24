@@ -16,9 +16,9 @@
 
 namespace MetaModels\Filter\Setting;
 
+use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use MetaModels\IItem;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
-use MetaModels\FrontendIntegration\FrontendFilterOptions;
 
 /**
  *
