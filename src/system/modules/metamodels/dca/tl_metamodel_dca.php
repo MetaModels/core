@@ -78,11 +78,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 	// List
 	'list' => array
 	(
-		'presentation' => array
-		(
-			'breadcrumb_callback'     => array('MetaModels\Dca\BreadcrumbBuilder', 'generateBreadcrumbItems'),
-		),
-		
 		'sorting' => array
 		(
 			'mode'                    => 1,
@@ -96,7 +91,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 		(
 			'fields'                  => array('name'),
 			'format'                  => '%s',
-			'label_callback'          => array('MetaModels\Dca\Dca', 'drawSetting')
 		),
 
 		'global_operations' => array
@@ -381,10 +375,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'eval'                    => array
 			(
 				'tl_class'            => 'clr long wizard',
-			),
-			'wizard'                  => array
-			(
-				'stylepicker'         => array('MetaModels\Dca\Dca','getPanelpicker')
 			),
 		),
 		'isclosed' => array

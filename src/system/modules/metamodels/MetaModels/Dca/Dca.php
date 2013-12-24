@@ -27,7 +27,7 @@ use MetaModels\Factory;
  * @subpackage Backend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-class Dca extends \Backend
+class Dca
 {
 	/**
 	 * Return the MetaModel currently in scope of the given DataContainer.
@@ -50,26 +50,6 @@ class Dca extends \Backend
 			return null;
 		}
 		return Factory::byId($objDC->getEnvironment()->getCurrentModel()->getProperty('pid'));
-	}
-
-	/**
-	 * Render a row for the list view in the backend.
-	 *
-	 * @param array         $arrRow   The current data row.
-	 *
-	 * @param string        $strLabel The label text.
-	 *
-	 * @param \DcGeneral\DC_General $objDC    The DataContainer instance that called the method.
-	 *
-	 * @return string
-	 */
-	public function drawSetting($arrRow, $strLabel = '', DC_General $objDC = null)
-	{
-		return $strLabel . (
-		$arrRow['isdefault']
-			? ' <span style="color:#b3b3b3; padding-left:3px">[' . $GLOBALS['TL_LANG']['MSC']['fallback'] . ']</span>'
-			: ''
-		);
 	}
 
 	/**
@@ -266,50 +246,6 @@ class Dca extends \Backend
 			$arrReturn[$objAttribute->getColName()] = $objAttribute->getName();
 		}
 		return $arrReturn;
-	}
-
-	/**
-	 * Panel picker for convenient picking of panel layout strings.
-	 *
-	 * @param \DcGeneral\DC_General $objDC The DataContainer instance that called the method.
-	 *
-	 * @return string
-	 */
-	public function getPanelpicker($objDC)
-	{
-		$strOpenAction = '';
-		if (version_compare(VERSION, '3.0', '<'))
-		{
-			return sprintf(
-			// @codingStandardsIgnoreStart - we know that this line is long.
-				' <a href="system/modules/metamodels/popup.php?tbl=%s&fld=%s&inputName=ctrl_%s&id=%s&item=PALETTE_PANEL_PICKER" rel="lightbox[files 765 60%%]" data-lightbox="files 765 60%%">%s</a>',
-				// @codingStandardsIgnoreEnd
-				$objDC->table,
-				$objDC->field,
-				$objDC->inputName,
-				$objDC->id,
-				$this->generateImage(
-					'system/modules/metamodels/html/panel_layout.png',
-					$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['panelpicker'], 'style="vertical-align:top;"'
-				)
-			);
-		}
-		return sprintf(
-		// @codingStandardsIgnoreStart - we know that this line is long.
-			' <a href="system/modules/metamodels/popup.php?tbl=%s&fld=%s&inputName=ctrl_%s&id=%s&item=PALETTE_PANEL_PICKER" onclick="Backend.getScrollOffset();Backend.openModalIframe({\'width\':765,\'title\':\'%s\',\'url\':this.href,\'id\':\'%s\'});return false">%s</a>',
-			// @codingStandardsIgnoreEnd
-			$objDC->table,
-			$objDC->field,
-			$objDC->inputName,
-			$objDC->id,
-			$GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker'],
-			$objDC->id,
-			$this->generateImage(
-				'system/modules/metamodels/html/panel_layout.png',
-				$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['panelpicker'],
-				'style="vertical-align:top;"'
-			)
-		);
 	}
 
 	/**
