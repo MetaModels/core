@@ -384,7 +384,7 @@ class Driver implements MultiLanguageDriverInterface
 				}
 				$this->calculateSubfilter(array(
 					'operation' => 'OR',
-					'childs'    => $arrSubRules
+					'children'    => $arrSubRules
 				), $objFilter);
 				break;
 
