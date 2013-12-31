@@ -113,7 +113,7 @@ class FrontendFilter
 					continue;
 				}
 
-				$strFilterAction .= sprintf(($GLOBALS['TL_CONFIG']['disableAlias'] ? '&amp;%s=%s' : '/%s/%s'), $strName, urlencode($strValue));
+				$strFilterAction .= sprintf(($GLOBALS['TL_CONFIG']['disableAlias'] ? '&amp;%s=%s' : '/%s/%s'), $strName, rawurlencode($strValue));
 			}
 		}
 		return $strFilterAction;
@@ -151,7 +151,10 @@ class FrontendFilter
 				if(in_array($strParam, $arrWantedParam))
 				{
 					$arrMyParams[$strParam] = \Input::getInstance()->get($strParam);
-				} else {
+				}
+				// add only to the array if param is not page
+				elseif($strParam != 'page')
+				{
 					$arrOtherParams[$strParam] = \Input::getInstance()->get($strParam);
 				}
 			}
