@@ -88,6 +88,7 @@ ClassLoader::addClasses(array
 	'MetaModels\FrontendIntegration\Module\FilterClearAll'  => 'system/modules/metamodels/MetaModels/FrontendIntegration/Module/FilterClearAll.php',
 	'MetaModels\FrontendIntegration\Module\ModelList'       => 'system/modules/metamodels/MetaModels/FrontendIntegration/Module/ModelList.php',
 	'MetaModels\Helper\ContaoController'                    => 'system/modules/metamodels/MetaModels/Helper/ContaoController.php',
+	'MetaModels\Helper\Input'                               => 'system/modules/metamodels/MetaModels/Helper/Input.php',
 	'MetaModels\Helper\TableManipulation'                   => 'system/modules/metamodels/MetaModels/Helper/TableManipulation.php',
 	'MetaModels\Helper\ToolboxFile'                         => 'system/modules/metamodels/MetaModels/Helper/ToolboxFile.php',
 	'MetaModels\Helper\UpgradeHandler'                      => 'system/modules/metamodels/MetaModels/Helper/UpgradeHandler.php',
