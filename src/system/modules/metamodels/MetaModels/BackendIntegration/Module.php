@@ -16,6 +16,16 @@
 
 namespace MetaModels\BackendIntegration;
 
+use DcGeneral\Contao\BackendBindings;
+use DcGeneral\Contao\Callback\CallBacks;
+use DcGeneral\Contao\LangArrayTranslator;
+use DcGeneral\Event\EventPropagator;
+use DcGeneral\Factory\DcGeneralFactory;
+use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
+use DcGeneral\Factory\Event\PopulateEnvironmentEvent;
+use DcGeneral\TranslatorChain;
+use MetaModels\DcGeneral\Dca\Builder\Builder;
+
 /**
  * Implementation of the MetaModel Backend Module that performs system checks
  * before allowing access to MetaModel configuration etc. Everything below
@@ -25,15 +35,15 @@ namespace MetaModels\BackendIntegration;
  * @subpackage Backend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-class Module extends \BackendModule
+class Module
 {
-
 	/**
 	 * The template to use
 	 * @var string
 	 */
 	protected $strTemplate = 'be_detectedproblems';
 
+	protected $Template;
 
 	protected static $arrMessages = array();
 
@@ -73,7 +83,7 @@ class Module extends \BackendModule
 	 */
 	protected function checkDependencies()
 	{
-		$arrActiveModules = $this->Config->getActiveModules();
+		$arrActiveModules = \Config::getInstance()->getActiveModules();
 		$arrInactiveModules = deserialize($GLOBALS['TL_CONFIG']['inactiveModules']);
 
 		// check if all prerequsities are met.
@@ -86,13 +96,13 @@ class Module extends \BackendModule
 					$this->addMessageEntry(
 						sprintf($GLOBALS['TL_LANG']['ERR']['activate_extension'], $strDisplay, $strExtension),
 						METAMODELS_ERROR,
-						$this->addToUrl('do=settings')
+						BackendBindings::addToUrl('do=settings')
 					);
 				} else {
 					$this->addMessageEntry(
 						sprintf($GLOBALS['TL_LANG']['ERR']['install_extension'], $strDisplay, $strExtension),
 						METAMODELS_ERROR,
-						$this->addToUrl('do=repository_catalog&view=' . $strDisplay)
+						BackendBindings::addToUrl('do=repository_catalog&view=' . $strDisplay)
 					);
 				}
 			}
@@ -111,7 +121,7 @@ class Module extends \BackendModule
 			$this->addMessageEntry(
 				$GLOBALS['TL_LANG']['ERR']['no_attribute_extension'],
 				METAMODELS_INFO,
-				$this->addToUrl('do=repository_catalog')
+				BackendBindings::addToUrl('do=repository_catalog')
 			);
 		}
 	}
@@ -128,9 +138,7 @@ class Module extends \BackendModule
 			// loop through all metamodel backend checkers.
 			foreach ($GLOBALS['METAMODELS']['CHECK'] as $strClass)
 			{
-				//
-				$this->import($strClass);
-				$this->$strClass->perform($this->objDc, $this);
+				CallBacks::call(array($strClass, 'perform'), $this);
 			}
 		}
 		return count(self::$arrMessages)> 0;
@@ -138,42 +146,59 @@ class Module extends \BackendModule
 
 	protected function runDC()
 	{
-		$act = $this->Input->get('act');
+		global $container;
+		/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+		$dispatcher    = $container['event-dispatcher'];
+		$propagator    = new EventPropagator($dispatcher);
+		$translator    = new TranslatorChain();
+		$factory       = new DcGeneralFactory();
+		$backendModule = \Input::getInstance()->get('do');
 
-		if (!strlen($act) || $act == 'paste' || $act == 'select')
+		$translator->add(new LangArrayTranslator());
+
+		$factory
+			->setEventPropagator($propagator)
+			->setTranslator($translator);
+
+		if ($backendModule == 'metamodels')
 		{
-			$act = ($this->objDc instanceof \listable) ? 'showAll' : 'edit';
+			$name = \Input::getInstance()->get('table');
+			if (!$name)
+			{
+				$name = 'tl_metamodel';
+			}
+		}
+		else
+		{
+			$name = substr($backendModule, 10);
+
+			$generator = new Builder();
+
+			$dispatcher->addListener(
+				sprintf('%s[%s]', BuildDataDefinitionEvent::NAME, $name),
+				array($generator, 'build'),
+				$generator::PRIORITY
+			);
+			$dispatcher->addListener(
+				sprintf('%s[%s]', PopulateEnvironmentEvent::NAME, $name),
+				array($generator, 'populate'),
+				$generator::PRIORITY
+			);
+
+			$factory->setContainerClassName('MetaModels\DcGeneral\DataDefinition\MetaModelDataDefinition');
 		}
 
-		switch ($act)
-		{
-			case 'delete':
-			case 'show':
-			case 'showAll':
-			case 'undo':
-				if (!$this->objDc instanceof \listable)
-				{
-					$this->log('Data container ' . $this->objDc->table . ' is not listable', 'Backend getBackendModule()', TL_ERROR);
-					trigger_error('The current data container is not listable', E_USER_ERROR);
-				}
-				break;
+		$dcg = $factory
+			->setContainerName($name)
+			->createDcGeneral();
 
-			case 'create':
-			case 'cut':
-			case 'cutAll':
-			case 'copy':
-			case 'copyAll':
-			case 'move':
-			case 'edit':
-				if (!$this->objDc instanceof \editable)
-				{
-					$this->log('Data container ' . $this->objDc->table . ' is not editable', 'Backend getBackendModule()', TL_ERROR);
-					trigger_error('The current data container is not editable', E_USER_ERROR);
-				}
-				break;
+		$act = \Input::getInstance()->get('act');
+		if (!strlen($act))
+		{
+			$act = 'showAll';
 		}
 
-		return $this->objDc->$act();
+		return call_user_func(array($dcg->getEnvironment()->getView(), $act));
 	}
 
 	/**
@@ -187,11 +212,9 @@ class Module extends \BackendModule
 	{
 		$arrModule = $GLOBALS['BE_MOD']['metamodels']['metamodels'];
 		// Custom action (if key is not defined in config.php the default action will be called)
-		if ($this->Input->get('key') && isset($arrModule[$this->Input->get('key')]))
+		if (\Input::getInstance()->get('key') && isset($arrModule[\Input::getInstance()->get('key')]))
 		{
-			$strClass = $arrModule[$this->Input->get('key')][0];
-			$objKeyHandler = (in_array('getInstance', get_class_methods($strClass))) ? call_user_func(array($strClass, 'getInstance')) : new $strClass();
-			return $objKeyHandler->$arrModule[$this->Input->get('key')][1]($this->objDc, $this->objDc->table, $arrModule);
+			CallBacks::call($arrModule[\Input::getInstance()->get('key')], $this, $arrModule);
 		}
 		return $this->runDC();
 	}
@@ -205,6 +228,7 @@ class Module extends \BackendModule
 		$GLOBALS['TL_CSS'][] = 'system/modules/metamodels/html/style.css';
 		if ($this->needUserAction())
 		{
+			// FIXME: this is broken now.
 			return parent::generate();
 		} else {
 			return $this->performNormal();
@@ -216,7 +240,7 @@ class Module extends \BackendModule
 	 */
 	protected function compile()
 	{
-		$this->Template->href = $this->getReferer(true);
+		$this->Template->href = BackendBindings::getReferer(true);
 		$this->Template->problems = self::$arrMessages;
 	}
 }
