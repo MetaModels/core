@@ -74,6 +74,7 @@ ClassLoader::addClasses(array
 	'MetaModelFilterSettings'               => 'system/modules/metamodels/MetaModelFilterSettings.php',
 	'MetaModelFilterSettingsFactory'        => 'system/modules/metamodels/MetaModelFilterSettingsFactory.php',
 	'MetaModelFrontendFilter'               => 'system/modules/metamodels/MetaModelFrontendFilter.php',
+	'MetaModelInsertTags'                   => 'system/modules/metamodels/MetaModelInsertTags.php',
 	'MetaModelItem'                         => 'system/modules/metamodels/MetaModelItem.php',
 	'MetaModelItems'                        => 'system/modules/metamodels/MetaModelItems.php',
 	'MetaModelList'                         => 'system/modules/metamodels/MetaModelList.php',

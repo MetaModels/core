@@ -84,8 +84,8 @@ class TableMetaModelFilterSetting extends TableMetaModelHelper
 
 	protected function objectsFromUrl($objDC)
 	{
-		if (!(($this->Input->get('do') == 'metamodels')
-		&& ((is_object($objDC) && $objDC->table != 'tl_metamodel_filtersetting') || ($objDC == 'tl_metamodel_filtersetting'))))
+		if ((($this->Input->get('do') != 'metamodels')
+		|| ((is_object($objDC) && $objDC->table != 'tl_metamodel_filtersetting') || (!is_object($objDC) && $objDC != 'tl_metamodel_filtersetting'))))
 		{
 			return;
 		}
