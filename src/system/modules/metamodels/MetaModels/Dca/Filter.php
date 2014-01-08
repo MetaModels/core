@@ -92,8 +92,8 @@ class Filter extends Helper
 
 	protected function objectsFromUrl($objDC)
 	{
-		if (!((\Input::getInstance()->get('do') == 'metamodels')
-			&& ((is_object($objDC) && $objDC->table != 'tl_metamodel_filtersetting') || ($objDC == 'tl_metamodel_filtersetting'))))
+		if (((\Input::getInstance()->get('do') != 'metamodels')
+			|| ((is_object($objDC) && $objDC->table != 'tl_metamodel_filtersetting') || (!is_object($objDC) && $objDC != 'tl_metamodel_filtersetting'))))
 		{
 			return;
 		}
