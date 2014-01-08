@@ -10,34 +10,41 @@
  * @package     MetaModels
  * @subpackage  metamodels_inserttags
  * @author      Tim Gatzky <info@tim-gatzky.de>
- * @author		Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author      Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright   The MetaModels team.
- * @license     LGPL.
+ * @license     LGPL-3+.
  * @filesource
  */
 
 /**
- * MetaModelsInserttag.
+ * MetaModelInsertTags.
  * 
- * Available inserttags:
+ * Available insert tags:
  * 
  * -- Total Count --
  * mm::total::mod::[id]
  * mm::total::ce::[id]
  * 
  * -- Item --
- * mm::item::[MM Name|ID]::[Item ID|ID,ID,ID]::[ID rendersetting](::[Output raw|text|html|..])
- * mm::detail::[MM Name|ID]::[Item ID]::[ID rendersetting](::[Output raw|text|html|..])
+ * mm::item::[MM Name|ID]::[Item ID|ID,ID,ID]::[ID render setting](::[Output raw|text|html|..])
+ * mm::detail::[MM Name|ID]::[Item ID]::[ID render setting](::[Output raw|text|html|..])
  * 
- * -- Atrribute --
+ * -- Attribute --
  * mm::attribute::[MM Name|ID]::[Item ID]::[Attribute Name|ID](::[Output raw|text|html|..])
  * 
  * -- JumpTo --
- * mm::jumpTo::[MM Name|ID]::[Item ID]::[ID rendersetting](::[Parameter (Default:url)|label|page|params.attname])
+ * mm::jumpTo::[MM Name|ID]::[Item ID]::[ID render setting](::[Parameter (Default:url)|label|page|params.attname])
  */
 class MetaModelInsertTags extends Controller
 {
 
+	/**
+	 * Evaluate an insert tag.
+	 *
+	 * @param string $strTag The tag to evaluate.
+	 *
+	 * @return bool|string
+	 */
 	public function replaceTags($strTag)
 	{
 		$arrElements = explode('::', $strTag);
@@ -47,7 +54,7 @@ class MetaModelInsertTags extends Controller
 		{
 			return false;
 		}
-		
+
 		try
 		{
 			// Call the fitting function.
@@ -64,44 +71,42 @@ class MetaModelInsertTags extends Controller
 				// Get item.
 				case 'item':
 					return $this->getItem($arrElements[2], $arrElements[3], $arrElements[4]);
-					
+
 				case 'jumpTo':
 					return $this->jumpTo($arrElements[2], $arrElements[3], $arrElements[4], $arrElements[5]);
+
+				default:
 			}
 		}
 		catch (Exception $exc)
 		{
-			$this->log('Error by replac tags: ' . $exc->getMessage(), __CLASS__ . ' | ' . __FUNCTION__, TL_ERROR);
+			$this->log('Error by replace tags: ' . $exc->getMessage(), __CLASS__ . ' | ' . __FUNCTION__, TL_ERROR);
 		}
-		
+
 		return false;
 	}
-
-	////////////////////////////////////////////////////////////////////////////
-	// Tag functions
-	////////////////////////////////////////////////////////////////////////////
 
 	/**
 	 * Get the jumpTo for a chosen value.
 	 * 
-	 * @param string|int $mixMMName ID or name of MetaModels
-	 * @param int $mixDataId ID of the data row
-	 * @param int $intIdRendesetting ID of render setting
-	 * @param string $strParam Name of parameter - Default:url|label|page|params.[attrname]
+	 * @param string|int $mixMetaModel       ID or name of MetaModels.
+	 * @param int        $mixDataId          ID of the data row.
+	 * @param int        $intIdRenderSetting ID of render setting.
+	 * @param string     $strParam           Name of parameter - Default:url|label|page|params.[attrname].
 	 * 
 	 * @return boolean|string Return false when nothing was found for the requested value.
 	 */
-	protected function jumpTo($mixMMName, $mixDataId, $intIdRendesetting, $strParam = "url")
+	protected function jumpTo($mixMetaModel, $mixDataId, $intIdRenderSetting, $strParam = 'url')
 	{
 		// Get the MetaModel. Return if we can not find one.
-		$objMetaModel = $this->loadMM($mixMMName);
+		$objMetaModel = $this->loadMM($mixMetaModel);
 		if ($objMetaModel == null)
 		{
 			return false;
 		}
 
-		// Get the rendersetting.
-		$objRenderSettings = MetaModelRenderSettingsFactory::byId($objMetaModel, $intIdRendesetting);
+		// Get the render setting.
+		$objRenderSettings = MetaModelRenderSettingsFactory::byId($objMetaModel, $intIdRenderSetting);
 		if ($objRenderSettings == null)
 		{
 			return false;
@@ -124,8 +129,8 @@ class MetaModelInsertTags extends Controller
 		// Check if someone want the sub params.
 		if (stripos($strParam, 'params.') !== false)
 		{
-			$mixAttName	 = trimsplit('.', $strParam);
-			$mixAttName	 = array_pop($mixAttName);
+			$mixAttName	= trimsplit('.', $strParam);
+			$mixAttName	= array_pop($mixAttName);
 
 			if (isset($arrRenderedItem['jumpTo']['params'][$mixAttName]))
 			{
@@ -133,7 +138,7 @@ class MetaModelInsertTags extends Controller
 			}
 		}
 		// Else just return the ask param.
-		else if (isset($arrRenderedItem['jumpTo'][$strParam]))
+		elseif (isset($arrRenderedItem['jumpTo'][$strParam]))
 		{
 			return $arrRenderedItem['jumpTo'][$strParam];
 		}
@@ -145,10 +150,10 @@ class MetaModelInsertTags extends Controller
 	/**
 	 * Get an item.
 	 * 
-	 * @param string|int $mixMMName ID or name of MetaModels
-	 * @param int $mixDataId ID of the data row
-	 * @param int $intIdRendesetting ID of render setting
-	 * @param string $strOutput Name of output. Default:raw|text|html5|xhtml|...
+	 * @param string|int $mixMMName         ID or name of MetaModels
+	 * @param int        $mixDataId         ID of the data row
+	 * @param int        $intIdRendesetting ID of render setting
+	 * @param string     $strOutput         Name of output. Default:raw|text|html5|xhtml|...
 	 * 
 	 * @return boolean|string Return false when nothing was found or return the value.
 	 */
@@ -160,7 +165,7 @@ class MetaModelInsertTags extends Controller
 		{
 			return false;
 		}
-		
+
 		// Set output to default if not set.
 		if(empty($strOutput))
 		{
@@ -168,7 +173,9 @@ class MetaModelInsertTags extends Controller
 		}
 
 		$objMetaModelList = new MetaModelList();
-		$objMetaModelList->setMetaModel($objMetaModel->get('id'), $intIdRendesetting);
+		$objMetaModelList
+			->setMetaModel($objMetaModel->get('id'), $intIdRendesetting)
+			->overrideOutputFormat($strOutput);
 
 		// handle a set of ids
 		$arrIds = trimsplit(',', $mixDataId);
@@ -197,10 +204,10 @@ class MetaModelInsertTags extends Controller
 	 * Get from MM X the item with the id Y and parse the attribute Z and
 	 * return it.
 	 * 
-	 * @param string|int $mixMMName ID or name of MetaModels
-	 * @param int $intDataId ID of the data row
-	 * @param string $strAttributeName Name of the attribute.
-	 * @param string $strOutput Name of output. Default:raw|text|html5|xhtml|...
+	 * @param string|int $mixMMName        ID or name of MetaModels
+	 * @param int        $intDataId        ID of the data row
+	 * @param string     $strAttributeName Name of the attribute.
+	 * @param string     $strOutput        Name of output. Default:raw|text|html5|xhtml|...
 	 * 
 	 * @return boolean|string Return false when nothing was found or return the value.
 	 */
@@ -211,8 +218,8 @@ class MetaModelInsertTags extends Controller
 		if ($objMM == null)
 		{
 			return false;
-		}		
-		
+		}
+
 		// Set output to default if not set.
 		if(empty($strOutput))
 		{
@@ -233,7 +240,7 @@ class MetaModelInsertTags extends Controller
 	 * Get count from a module or content element of a mm.
 	 * 
 	 * @param string $strType Type of element like mod or ce.
-	 * @param int $intID ID of content element or moule.
+	 * @param int    $intID   ID of content element or moule.
 	 * 
 	 * @return boolean|string Return false when nothing was found or the count value.
 	 */
@@ -243,12 +250,12 @@ class MetaModelInsertTags extends Controller
 		{
 			// From module, can be a metamodel list or filter
 			case 'mod':
-				$objMMResult = $this->getMMDataFrom('tl_module', $intID);
+				$objMetaModelResult = $this->getMMDataFrom('tl_module', $intID);
 				break;
 
 			// From content element, can be a metamodel list or filter.
 			case 'ce':
-				$objMMResult = $this->getMMDataFrom('tl_content', $intID);
+				$objMetaModelResult = $this->getMMDataFrom('tl_content', $intID);
 				break;
 
 			// Unknow element type.
@@ -257,9 +264,9 @@ class MetaModelInsertTags extends Controller
 		}
 
 		// Check if we have data
-		if ($objMMResult != null)
+		if ($objMetaModelResult != null)
 		{
-			return $this->getCountFor($objMMResult->metamodel, $objMMResult->metamodel_filtering);
+			return $this->getCountFor($objMetaModelResult->metamodel, $objMetaModelResult->metamodel_filtering);
 		}
 
 		return false;
@@ -284,7 +291,7 @@ class MetaModelInsertTags extends Controller
 			return MetaModelFactory::byId($mixMMName);
 		}
 		// Name.
-		else if (is_string($mixMMName))
+		elseif (is_string($mixMMName))
 		{
 			return MetaModelFactory::byTableName($mixMMName);
 		}
@@ -329,7 +336,7 @@ class MetaModelInsertTags extends Controller
 	/**
 	 * Get count form one MM for chosen filter.
 	 * 
-	 * @param int $intMMId ID of the metamodels
+	 * @param int $intMMId     ID of the metamodels
 	 * @param int $intFilterID ID of the filter
 	 * 
 	 * @return boolean|int False for no data or integer for the count result.
@@ -352,7 +359,7 @@ class MetaModelInsertTags extends Controller
 	 * Check if the item is published.
 	 * 
 	 * @param IMetaModel $objMetaModel Current metamodels.
-	 * @param int $intItemId Id of the item.
+	 * @param int        $intItemId    Id of the item.
 	 * 
 	 * @return boolean True => Published | Flase => Not published
 	 */
