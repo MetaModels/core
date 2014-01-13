@@ -255,9 +255,4 @@ class Subscriber
 			array('tl_metamodel_dca', 'panelLayout')
 		);
 	}
-
-	}
-	}
-
-	}
 }
