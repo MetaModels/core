@@ -16,14 +16,14 @@
 
 namespace MetaModels\BackendIntegration;
 
+use ContaoCommunityAlliance\Translator\Contao\LangArrayTranslator;
+use ContaoCommunityAlliance\Translator\TranslatorChain;
 use DcGeneral\Contao\BackendBindings;
 use DcGeneral\Contao\Callback\CallBacks;
-use DcGeneral\Contao\LangArrayTranslator;
 use DcGeneral\Event\EventPropagator;
 use DcGeneral\Factory\DcGeneralFactory;
 use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use DcGeneral\Factory\Event\PopulateEnvironmentEvent;
-use DcGeneral\TranslatorChain;
 use MetaModels\DcGeneral\Dca\Builder\Builder;
 
 /**
@@ -154,7 +154,7 @@ class Module
 		$factory       = new DcGeneralFactory();
 		$backendModule = \Input::getInstance()->get('do');
 
-		$translator->add(new LangArrayTranslator());
+		$translator->add(new LangArrayTranslator($dispatcher));
 
 		$factory
 			->setEventPropagator($propagator)
