@@ -142,7 +142,10 @@ class Boot
 		global $container;
 		$propagator = new EventPropagator($container['event-dispatcher']);
 
-		$propagator->propagate(new BackendIntegrationEvent());
+		$propagator->propagate(
+			BackendIntegrationEvent::NAME,
+			new BackendIntegrationEvent()
+		);
 
 		MetaModelDcaBuilder::getInstance()->injectBackendMenu();
 		MetaModelDcaBuilder::getInstance()->injectIntoBackendModules();
