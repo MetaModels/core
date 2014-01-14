@@ -391,8 +391,8 @@ class ToolboxFile
 
 			$arrProcessed[] = $strDir;
 
-			$this->parseMetaFile($strDir, $this->getBaseLanguage());
 			$this->parseMetaFile($strDir, $this->getFallbackLanguage());
+			$this->parseMetaFile($strDir, $this->getBaseLanguage());
 			$this->parseMetaFile($strDir);
 		}
 	}
