@@ -146,9 +146,8 @@ class Module
 
 	protected function runDC()
 	{
-		global $container;
 		/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
-		$dispatcher    = $container['event-dispatcher'];
+		$dispatcher    = $GLOBALS['container']['event-dispatcher'];
 		$propagator    = new EventPropagator($dispatcher);
 		$translator    = new TranslatorChain();
 		$factory       = new DcGeneralFactory();
