@@ -212,7 +212,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 				'tl_class'            => 'w50',
 				'chosen'              => 'true'
 			),
-			'options_callback'        => array('MetaModels\Dca\Attribute', 'fieldTypesCallback'),
 		),
 
 		'name' => array
@@ -223,14 +222,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 			(
 				'tl_class'            => 'clr'
 			),
-			'load_callback'           => array
-			(
-				array('MetaModels\Dca\Attribute', 'decodeNameAndDescription')
-			),
-			'save_callback'           => array
-			(
-				array('MetaModels\Dca\Attribute', 'encodeNameAndDescription')
-			)
 		),
 
 		'description' => array
@@ -241,14 +232,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 			(
 				'tl_class'            => 'clr'
 			),
-			'load_callback'           => array
-			(
-				array('MetaModels\Dca\Attribute', 'decodeNameAndDescription')
-			),
-			'save_callback'           => array
-			(
-				array('MetaModels\Dca\Attribute', 'encodeNameAndDescription')
-			)
 		),
 
 		// AVOID: doNotCopy => true, as child records won't be copied when copy metamodel.

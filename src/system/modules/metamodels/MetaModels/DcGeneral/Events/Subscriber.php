@@ -214,6 +214,42 @@ class Subscriber
 			$dispatcher,
 			array('tl_metamodel_attribute')
 		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\Attribute\AttributeType::getOptions',
+			),
+			$dispatcher,
+			array('tl_metamodel_attribute', 'type')
+		);
+
+		// Save and load callbacks.
+		self::registerListeners(
+			array(
+				DecodePropertyValueForWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\Attribute\PropertyNameAndDescription::decodeValue',
+				EncodePropertyValueFromWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\Attribute\PropertyNameAndDescription::encodeValue',
+				BuildWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\Attribute\PropertyNameAndDescription::buildWidget',
+			),
+			$dispatcher,
+			array('tl_metamodel_attribute', 'name')
+		);
+
+		// Save and load callbacks.
+		self::registerListeners(
+			array(
+				DecodePropertyValueForWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\Attribute\PropertyNameAndDescription::decodeValue',
+				EncodePropertyValueFromWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\Attribute\PropertyNameAndDescription::encodeValue',
+				BuildWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\Attribute\PropertyNameAndDescription::buildWidget',
+			),
+			$dispatcher,
+			array('tl_metamodel_attribute', 'description')
+		);
 	}
 
 	/**
