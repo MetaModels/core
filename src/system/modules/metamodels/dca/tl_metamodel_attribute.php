@@ -93,8 +93,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 		(
 			'disableGrouping'         => true,
 			'mode'                    => 4,
+			'fields'                  => array('sorting'),
 			'panelLayout'             => 'filter,limit',
-			'headerFields'            => array('name', 'tableName', 'tstamp', 'translated', 'supvariants', 'varsupport'),
+			'headerFields'            => array('name', 'tableName', 'tstamp', 'translated', 'varsupport'),
 			'flag'                    => 1,
 			'child_record_callback'   => array('MetaModels\Dca\Attribute', 'renderField')
 		),
@@ -169,9 +170,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 		'_base_ extends default'      => array
 		(
 			'+title'                  => array('colname', 'name', 'description'),
-			'advanced'                => array(':hide', 'isvariant', 'mandatory', 'isunique', 'hasdefault'),
-			'metamodeloverview'       => array('sortingField', 'filteredField', 'searchableField'),
-			'backenddisplay'          => array('titleField', 'width50', 'insertBreak'),
+			'advanced'                => array(':hide', 'isvariant', 'isunique'),
+			'metamodeloverview'       => array(),
+			'backenddisplay'          => array(),
 		),
 		// Default palette for MetaModelAttributeSimple derived types.
 		// WARNING: even though it is empty, we have to keep it as otherwise
@@ -186,22 +187,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 		(
 		),
 	),
-
-	'metasubpalettes' => array
-	(
-		// Displaying in backend.
-		'insertBreak'                 => array('legendTitle','legendHide'),
-
-		'sortingField'                => 'groupingMode',
-		'showImage'                   => 'imageSize',
-		'format'                      => 'formatFunction,formatStr',
-		'limitItems'                  => 'items,childrenSelMode,parentFilter',
-		'customFiletree'              => 'uploadFolder,validFileTypes,filesOnly',
-		'editGroups'                  => 'editGroups',
-		'rte'                         => 'rte_editor',
-		'multiple'                    => 'sortBy',
-	),
-
 
 	// Palettes.
 	'palettes' => array
