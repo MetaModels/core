@@ -63,6 +63,8 @@ class Subscriber
 				=> array('registerTableMetaModelAttributeEvents', -200),
 			sprintf('%s[%s]', BuildDataDefinitionEvent::NAME, 'tl_metamodel_dca')
 				=> array('registerTableMetaModelDcaEvents', -200),
+			sprintf('%s[%s]', BuildDataDefinitionEvent::NAME, 'tl_metamodel_filter')
+				=> array('registerTableMetaModelFilterEvents', -200),
 		);
 	}
 
@@ -289,6 +291,36 @@ class Subscriber
 			),
 			$dispatcher,
 			array('tl_metamodel_dca', 'panelLayout')
+		);
+	}
+
+	/**
+	 * Register the events for table tl_metamodel_filter.
+	 *
+	 * @param BuildDataDefinitionEvent $event The event being processed.
+	 *
+	 * @return void
+	 */
+	public static function registerTableMetaModelFilterEvents(BuildDataDefinitionEvent $event)
+	{
+		static $registered;
+		if ($registered)
+		{
+			return;
+		}
+		$registered = true;
+		$dispatcher = $event->getDispatcher();
+
+		self::registerListeners(
+			array(
+				GetBreadcrumbEvent::NAME
+					=> self::createClosure(
+						'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbFilter',
+						'getBreadcrumb'
+					),
+			),
+			$dispatcher,
+			array('tl_metamodel_filter')
 		);
 	}
 }

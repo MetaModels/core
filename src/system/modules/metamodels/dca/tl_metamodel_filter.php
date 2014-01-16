@@ -64,24 +64,19 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
 	// List
 	'list' => array
 	(
-		'presentation' => array
-		(
-			'breadcrumb_callback'     => array('MetaModels\Dca\BreadcrumbBuilder', 'generateBreadcrumbItems'),
-		),
-		
 		'sorting' => array
 		(
-			'mode'                    => 1,
+			'mode'                    => 4,
 			'fields'                  => array('name'),
-			'panelLayout'             => 'filter,limit',
+			'panelLayout'             => 'filter,sort,limit',
 			'headerFields'            => array('name'),
 			'flag'                    => 1,
 		),
 
 		'label' => array
 		(
-			'fields'                  => array('name'),
-			'format'                  => '%s'
+			'fields'                  => array('name', 'tstamp'),
+			'format'                  => '%s %s'
 		),
 
 		'global_operations' => array
@@ -136,6 +131,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
 	// Fields
 	'fields' => array
 	(
+		'tstamp' => array(),
 		'name' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['name'],

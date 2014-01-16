@@ -370,11 +370,9 @@ class Filter extends Helper
 	 *
 	 * @param string     $strTable The tablename - must be tl_metamodel_filtersetting.
 	 *
-	 * @param DC_General $objDC    The DataContainer calling us.
-	 *
 	 * @return string The value "tl_metamodel_filtersetting".
 	 */
-	public function loadTableCallback($strTable, $objDC)
+	public function loadTableCallback($strTable)
 	{
 		if ($strTable == 'tl_metamodel_filtersetting')
 		{
@@ -398,7 +396,6 @@ class Filter extends Helper
 				'value'       => \Input::getInstance()->get('id'),
 			);
 		}
-
 		return $strTable;
 	}
 
