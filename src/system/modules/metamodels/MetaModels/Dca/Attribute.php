@@ -66,36 +66,6 @@ class Attribute extends Helper
 	protected static $objCurrentField = null;
 
 	/**
-	 * @param IMetaModel $objMetaModel
-	 *
-	 * @param IAttribute $objModel
-	 */
-	protected function setNameAndDescription(IMetaModel $objMetaModel, $objModel)
-	{
-		$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['name'] = array_replace_recursive(
-			parent::makeMultiColumnName(
-				$objMetaModel,
-				$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode'],
-				$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value'],
-				false,
-				$objModel ? $objModel->get('name') : array()
-			),
-			$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['name']
-		);
-
-		$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['description'] = array_replace_recursive(
-			parent::makeMultiColumnName(
-				$objMetaModel,
-				$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode'],
-				$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value'],
-				true,
-				$objModel ? $objModel->get('description') : array()
-			),
-			$GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['description']
-		);
-	}
-
-	/**
 	 * Retrieve and buffer the current value of the column frm the DB.
 	 * This will later be used for the on submit and onsave callbacks.
 	 *
@@ -129,8 +99,6 @@ class Attribute extends Helper
 		{
 			throw new \RuntimeException('unexpected condition, metamodel unknown', 1);
 		}
-
-		$this->setNameAndDescription($objMetaModel, $objMetaModel->getAttributeById(\Input::getInstance()->get('id')));
 
 		if (!$objMetaModel->hasVariants())
 		{
@@ -214,20 +182,6 @@ class Attribute extends Helper
 	}
 
 	/**
-	 * Get all valid field types
-	 *
-	 * @param \DcGeneral\DataContainerInterface $objDC
-	 *
-	 * @return string[] the field type identifiers for all valid fields for the current MetaModel.
-	 */
-	public function fieldTypesCallback(DataContainerInterface $objDC)
-	{
-		$objMetaModel = ModelFactory::byId($objDC->getEnvironment()->getCurrentModel()->getProperty('pid'));
-
-		return AttributeFactory::getAttributeTypes($objMetaModel->isTranslated(), $objMetaModel->hasVariants());
-	}
-
-	/**
 	 * @param \DcGeneral\DataContainerInterface $objDC The DataContainer.
 	 *
 	 * @return \MetaModels\IMetaModel
@@ -235,30 +189,6 @@ class Attribute extends Helper
 	protected function getMetaModelFromDC($objDC)
 	{
 		return ModelFactory::byId($objDC->getEnvironment()->getCurrentModel()->getProperty('pid'));
-	}
-
-	/**
-	 * @param                                   $varValue
-	 *
-	 * @param \DcGeneral\DataContainerInterface $objDC    The DataContainer.
-	 *
-	 * @return array
-	 */
-	public function decodeNameAndDescription($varValue, $objDC)
-	{
-		return parent::decodeLangArray($varValue, $this->getMetaModelFromDC($objDC));
-	}
-
-	/**
-	 * @param                                   $varValue
-	 *
-	 * @param \DcGeneral\DataContainerInterface $objDC    The DataContainer.
-	 *
-	 * @return string
-	 */
-	public function encodeNameAndDescription($varValue, $objDC)
-	{
-		return parent::encodeLangArray($varValue, $this->getMetaModelFromDC($objDC));
 	}
 
 	/**
