@@ -62,7 +62,7 @@ CREATE TABLE `tl_metamodel_dca` (
   `ptable` varchar(64) NOT NULL default '',
   `backendsection` varchar(255) NOT NULL default '',
   `backendcaption` text NULL,
-  `backendicon` varchar(255) NOT NULL default '',
+  `backendicon` blob NULL,
 -- close the dataset - allow only edit and no delete or create.
   `isclosed` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`)
