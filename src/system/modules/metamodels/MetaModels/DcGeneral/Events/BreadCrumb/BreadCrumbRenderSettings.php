@@ -17,24 +17,22 @@
 namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
 use DcGeneral\EnvironmentInterface;
+use MetaModels\Render\Setting\Factory;
 
-class BreadCrumbFilter
+class BreadCrumbRenderSettings
 	extends BreadCrumbMetaModels
 {
 	/**
 	 * @var int
 	 */
-	protected $filterId;
+	protected $renderSettingsId;
 
 	/**
-	 * @return object
+	 * @return \MetaModels\Render\Setting\ICollection
 	 */
-	protected function getFilter()
+	protected function getRenderSettings()
 	{
-		return (object) \Database::getInstance()
-			->prepare('SELECT id, pid, name FROM tl_metamodel_filter WHERE id=?')
-			->executeUncached($this->filterId)
-			->row();
+		return Factory::byId($this->getMetaModel(), $this->renderSettingsId);
 	}
 
 	/**
@@ -46,19 +44,10 @@ class BreadCrumbFilter
 	 */
 	public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
 	{
-		$input = $environment->getInputProvider();
-		if (!$this->isActiveTable('tl_metamodel_filter', $input))
-		{
-			$this->filterId = $input->getParameter('pid');
-		}
-		else
-		{
-			$this->metamodelId = $input->getParameter('pid');
-		}
-
 		if (!isset($this->metamodelId))
 		{
-			$this->metamodelId = $this->getFilter()->pid;
+			$input = $environment->getInputProvider();
+			$this->metamodelId = $input->getParameter('pid');
 		}
 
 		$elements = parent::getBreadcrumbElements($environment, $elements);
@@ -66,11 +55,11 @@ class BreadCrumbFilter
 		$elements[] = array(
 			'url' => sprintf(
 				'contao/main.php?do=metamodels&table=%s&pid=%s',
-				'tl_metamodel_filter',
+				'tl_metamodel_rendersettings',
 				$this->metamodelId
 			),
-			'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_filter'), $this->getMetaModel()->getName()),
-			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/html/filter.png'
+			'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_rendersettings'), $this->getMetaModel()->getName()),
+			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/html/render_settings.png'
 		);
 
 		return $elements;

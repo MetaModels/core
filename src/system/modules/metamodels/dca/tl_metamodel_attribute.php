@@ -196,6 +196,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 	// Fields.
 	'fields' => array
 	(
+		'tstamp' => array
+		(
+		),
+
+		'sorting' => array
+		(
+			'sorting'                 => true,
+		),
+
 		'type' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['type'],

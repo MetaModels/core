@@ -16,14 +16,17 @@
 
 namespace MetaModels\DcGeneral\Events;
 
+use ContaoCommunityAlliance\Contao\EventDispatcher\Event\CreateEventDispatcherEvent;
+use DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
+use DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\GetGlobalButtonEvent;
 
@@ -33,38 +36,97 @@ use DcGeneral\Contao\View\Contao2BackendView\Event\GetGlobalButtonEvent;
  * @package MetaModels\DcGeneral\Events
  */
 class Subscriber
-	implements EventSubscriberInterface
 {
 	/**
-	 * Returns an array of event names this subscriber wants to listen to.
+	 * Register a closure to the event dispatcher which will only be executed for the given container name.
 	 *
-	 * The array keys are event names and the value can be:
+	 * The closure checks if the BuildDataDefinitionEvent is for the container with the passed name, if so, the callback
+	 * will get executed.
 	 *
-	 *  * The method name to call (priority defaults to 0)
-	 *  * An array composed of the method name to call and the priority
-	 *  * An array of arrays composed of the method names to call and respective
-	 *    priorities, or 0 if unset
+	 * @param string                   $name       The name of the data container for which the callback shall be executed.
 	 *
-	 * For instance:
+	 * @param EventDispatcherInterface $dispatcher The event dispatcher to which the listener shall be attached.
 	 *
-	 *  * array('eventName' => 'methodName')
-	 *  * array('eventName' => array('methodName', $priority))
-	 *  * array('eventName' => array(array('methodName1', $priority), array('methodName2'))
+	 * @param callable                 $callback   The callback to call.
 	 *
-	 * @return array The event names to listen to.
+	 * @param int                      $priority   The priority, defaults to -200.
+	 *
+	 * @return void
 	 */
-	public static function getSubscribedEvents()
+	public static function registerBuildDataDefinitionFor(
+		$name,
+		EventDispatcherInterface $dispatcher,
+		$callback,
+		$priority = -200
+	)
 	{
-		return array
-		(
-			sprintf('%s[%s]', BuildDataDefinitionEvent::NAME, 'tl_metamodel')
-				=> array('registerTableMetaModelsEvents', -200),
-			sprintf('%s[%s]', BuildDataDefinitionEvent::NAME, 'tl_metamodel_attribute')
-				=> array('registerTableMetaModelAttributeEvents', -200),
-			sprintf('%s[%s]', BuildDataDefinitionEvent::NAME, 'tl_metamodel_dca')
-				=> array('registerTableMetaModelDcaEvents', -200),
-			sprintf('%s[%s]', BuildDataDefinitionEvent::NAME, 'tl_metamodel_filter')
-				=> array('registerTableMetaModelFilterEvents', -200),
+		$dispatcher->addListener(
+			BuildDataDefinitionEvent::NAME,
+			function(BuildDataDefinitionEvent $event) use($name, $callback) {
+				if ($event->getContainer()->getName() == $name)
+				{
+					call_user_func($callback, $event);
+				}
+			},
+			$priority
+		);
+	}
+
+	/**
+	 * Register all listeners to handle creation of a data container.
+	 *
+	 * @param CreateEventDispatcherEvent $event The event.
+	 *
+	 * @return void
+	 */
+	public static function registerEvents(CreateEventDispatcherEvent $event)
+	{
+		$dispatcher = $event->getEventDispatcher();
+		// Handlers for build data definition.
+		self::registerBuildDataDefinitionFor(
+			'tl_metamodel',
+			$dispatcher,
+			__CLASS__ . '::registerTableMetaModelsEvents'
+		);
+		self::registerBuildDataDefinitionFor(
+			'tl_metamodel_attribute',
+			$dispatcher,
+			__CLASS__ . '::registerTableMetaModelAttributeEvents'
+		);
+		self::registerBuildDataDefinitionFor(
+			'tl_metamodel_dca',
+			$dispatcher,
+			__CLASS__ . '::registerTableMetaModelDcaEvents'
+		);
+		self::registerBuildDataDefinitionFor(
+			'tl_metamodel_dca_combine',
+			$dispatcher,
+			__CLASS__ . '::registerTableMetaModelDcaCombineEvents'
+		);
+		self::registerBuildDataDefinitionFor(
+			'tl_metamodel_dcasetting',
+			$dispatcher,
+			__CLASS__ . '::registerTableMetaModelDcaSettingEvents'
+		);
+		self::registerBuildDataDefinitionFor(
+			'tl_metamodel_filter',
+			$dispatcher,
+			__CLASS__ . '::registerTableMetaModelFilterEvents'
+		);
+		self::registerBuildDataDefinitionFor(
+			'tl_metamodel_filtersetting',
+			$dispatcher,
+			__CLASS__ . '::registerTableMetaModelFilterSettingEvents'
+		);
+		self::registerBuildDataDefinitionFor(
+			'tl_metamodel_rendersetting',
+			$dispatcher,
+			__CLASS__ . '::registerTableMetaModelRenderSettingEvents'
+		);
+		self::registerBuildDataDefinitionFor(
+			'tl_metamodel_rendersettings',
+			$dispatcher,
+			__CLASS__ . '::registerTableMetaModelRenderSettingsEvents'
 		);
 	}
 
@@ -292,6 +354,152 @@ class Subscriber
 			$dispatcher,
 			array('tl_metamodel_dca', 'panelLayout')
 		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyBackendSection::getSections',
+			),
+			$dispatcher,
+			array('tl_metamodel_dca', 'backendsection')
+		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyMode::getValidModes',
+			),
+			$dispatcher,
+			array('tl_metamodel_dca', 'mode')
+		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPTable::getTables',
+			),
+			$dispatcher,
+			array('tl_metamodel_dca', 'ptable')
+		);
+
+		\MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPTable::setVisibility($event);
+	}
+
+	/**
+	 * Register the events for table tl_metamodel_dca_combine.
+	 *
+	 * @param BuildDataDefinitionEvent $event The event being processed.
+	 *
+	 * @return void
+	 */
+	public static function registerTableMetaModelDcaCombineEvents(BuildDataDefinitionEvent $event)
+	{
+		static $registered;
+		if ($registered)
+		{
+			return;
+		}
+		$registered = true;
+		$dispatcher = $event->getDispatcher();
+
+		self::registerListeners(
+			array(
+				GetBreadcrumbEvent::NAME => self::createClosure(
+					'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbDcaCombine',
+					'getBreadcrumb'
+				),
+			),
+			$dispatcher,
+			array('tl_metamodel_dca_combine')
+		);
+	}
+
+	/**
+	 * Register the events for table tl_metamodel_dcasetting.
+	 *
+	 * @param BuildDataDefinitionEvent $event The event being processed.
+	 *
+	 * @return void
+	 */
+	public static function registerTableMetaModelDcaSettingEvents(BuildDataDefinitionEvent $event)
+	{
+		static $registered;
+		if ($registered)
+		{
+			return;
+		}
+		$registered = true;
+		$dispatcher = $event->getDispatcher();
+
+		self::registerListeners(
+			array(
+				ModelToLabelEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\InputScreens\ModelToLabel::modelToLabel',
+				GetBreadcrumbEvent::NAME
+					=> self::createClosure(
+						'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbInputScreen',
+						'getBreadcrumb'
+					),
+			),
+			$dispatcher,
+			array('tl_metamodel_dcasetting')
+		);
+
+		self::registerListeners(
+			array(
+				GetOperationButtonEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\InputScreens\InputScreenButtons::getToggleButton',
+			),
+			$dispatcher,
+			array('tl_metamodel_dcasetting', 'toggle')
+		);
+
+		self::registerListeners(
+			array(
+				GetOperationButtonEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\InputScreens\InputScreenButtons::getSubPaletteButton',
+			),
+			$dispatcher,
+			array('tl_metamodel_dcasetting', 'subpalette')
+		);
+
+		// Save and load callbacks.
+		self::registerListeners(
+			array(
+				DecodePropertyValueForWidgetEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\InputScreens\PropertyLegendTitle::decodeValue',
+				EncodePropertyValueFromWidgetEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\InputScreens\PropertyLegendTitle::encodeValue',
+				BuildWidgetEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\InputScreens\PropertyLegendTitle::buildWidget',
+			),
+			$dispatcher,
+			array('tl_metamodel_dcasetting', 'legendtitle')
+		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\InputScreens\PropertyAttribute::getOptions',
+			),
+			$dispatcher,
+			array('tl_metamodel_dcasetting', 'attr_id')
+		);
+
+		self::registerListeners(
+			array(
+				ManipulateWidgetEvent::NAME => 'MetaModels\DcGeneral\Events\Table\InputScreens\PropertyTlClass::getWizard',
+			),
+			$dispatcher,
+			array('tl_metamodel_dcasetting', 'tl_class')
+		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\InputScreens\PropertyRte::getOptions',
+			),
+			$dispatcher,
+			array('tl_metamodel_dcasetting', 'rte')
+		);
+
+		\MetaModels\DcGeneral\Events\Table\InputScreens\BuildPalette::build($event);
 	}
 
 	/**
@@ -321,6 +529,146 @@ class Subscriber
 			),
 			$dispatcher,
 			array('tl_metamodel_filter')
+		);
+	}
+
+	/**
+	 * Register the events for table tl_metamodel_filtersetting.
+	 *
+	 * @param BuildDataDefinitionEvent $event The event being processed.
+	 *
+	 * @return void
+	 */
+	public static function registerTableMetaModelFilterSettingEvents(BuildDataDefinitionEvent $event)
+	{
+		static $registered;
+		if ($registered)
+		{
+			return;
+		}
+		$registered = true;
+		$dispatcher = $event->getDispatcher();
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\FilterSetting\PropertyDefaultId::getOptions',
+			),
+			$dispatcher,
+			array('tl_metamodel_filtersetting', 'defaultid')
+		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\FilterSetting\PropertyType::getOptions',
+			),
+			$dispatcher,
+			array('tl_metamodel_filtersetting', 'type')
+		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\FilterSetting\PropertyTemplate::getOptions',
+			),
+			$dispatcher,
+			array('tl_metamodel_filtersetting', 'template')
+		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\FilterSetting\PropertyAttributeId::getOptions',
+				DecodePropertyValueForWidgetEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\FilterSetting\PropertyAttributeId::decodeValue',
+				EncodePropertyValueFromWidgetEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\FilterSetting\PropertyAttributeId::encodeValue'
+			),
+			$dispatcher,
+			array('tl_metamodel_filtersetting', 'attr_id')
+		);
+
+		foreach ($GLOBALS['METAMODELS']['filters'] as $typeName => $information)
+		{
+			if (isset($information['info_callback']))
+			{
+				self::registerListeners(
+					array(
+						ModelToLabelEvent::NAME => $information['info_callback']
+					),
+					$dispatcher,
+					array('tl_metamodel_filtersetting', $typeName)
+				);
+			}
+		}
+
+		self::registerListeners(
+			array(
+				ModelToLabelEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\FilterSetting\DrawSetting::modelToLabel',
+				GetBreadcrumbEvent::NAME
+					=> self::createClosure('MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbFilterSetting', 'getBreadcrumb')
+			),
+			$dispatcher,
+			array('tl_metamodel_filtersetting')
+		);
+	}
+
+	/**
+	 * Register the events for table tl_metamodel_rendersetting.
+	 *
+	 * @param BuildDataDefinitionEvent $event The event being processed.
+	 *
+	 * @return void
+	 */
+	public static function registerTableMetaModelRenderSettingEvents(BuildDataDefinitionEvent $event)
+	{
+		static $registered;
+		if ($registered)
+		{
+			return;
+		}
+		$registered = true;
+		$dispatcher = $event->getDispatcher();
+
+		self::registerListeners(
+			array(
+				GetBreadcrumbEvent::NAME
+					=> self::createClosure(
+						'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbRenderSetting',
+						'getBreadcrumb'
+					)
+			),
+			$dispatcher,
+			array('tl_metamodel_rendersetting')
+		);
+	}
+
+	/**
+	 * Register the events for table tl_metamodel_rendersettings.
+	 *
+	 * @param BuildDataDefinitionEvent $event The event being processed.
+	 *
+	 * @return void
+	 */
+	public static function registerTableMetaModelRenderSettingsEvents(BuildDataDefinitionEvent $event)
+	{
+		static $registered;
+		if ($registered)
+		{
+			return;
+		}
+		$registered = true;
+		$dispatcher = $event->getDispatcher();
+
+		self::registerListeners(
+			array(
+				GetBreadcrumbEvent::NAME
+					=> self::createClosure(
+						'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbRenderSettings',
+						'getBreadcrumb'
+					)
+			),
+			$dispatcher,
+			array('tl_metamodel_rendersettings')
 		);
 	}
 }

@@ -33,10 +33,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 	(
 		'data_provider'               => array
 		(
-			'parent'                  => array
+			'root'                  => array
 			(
 				'source'              => 'tl_metamodel_filtersetting'
-			)
+			),
 		),
 		'childCondition'              => array
 		(
@@ -97,7 +97,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 					'type',
 					'attr_id',
 					'urlparam',
-					'comment'
+					'comment',
+					'enabled'
 				),
 				'format'              => '%s %s',
 			),
@@ -106,11 +107,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 	// List.
 	'list' => array
 	(
-		'presentation' => array
-		(
-			'breadcrumb_callback'     => array('MetaModels\Dca\BreadcrumbBuilder', 'generateBreadcrumbItems'),
-		),
-
 		'sorting' => array
 		(
 			'mode'                    => 5,
@@ -124,9 +120,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 
 		'label' => array
 		(
-			'fields'                  => array('type', 'attr_id', 'urlparam', 'comment'),
+			'fields'                  => array('fid', 'type', 'attr_id', 'urlparam', 'comment'),
 			'format'                  => '%s',
-			'label_callback'          => array('MetaModels\Dca\Filter', 'drawSetting')
 		),
 
 		'global_operations' => array
@@ -223,7 +218,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'+config' => array('customsql'),
 		),
 
-		'simplelookup_translated extends _simplelookup_' => array
+		'simplelookup_translated extends simplelookup' => array
 		(
 			'+config' => array('all_langs'),
 		),
@@ -258,8 +253,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['type'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options_callback'        => array('MetaModels\Dca\Filter', 'getSettingTypes'),
-			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames'],
 			'eval'                    => array
 			(
 				'doNotSaveEmpty'      => true,
@@ -297,7 +290,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options_callback'        => array('MetaModels\Dca\Filter', 'getAttributeNames'),
 			'eval'                    => array
 			(
 				'doNotSaveEmpty'      => true,
@@ -308,8 +300,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 				'tl_class'            => 'w50',
 				'chosen'              => true
 			),
-			'load_callback'           => array(array('MetaModels\Dca\Filter', 'attrIdToName')),
-			'save_callback'           => array(array('MetaModels\Dca\Filter', 'nameToAttrId')),
 		),
 
 		'all_langs' => array
@@ -414,7 +404,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'default'                 => 'mm_filteritem_default',
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options_callback'        => array('MetaModels\Dca\Filter', 'getSubTemplates'),
 			'eval'                    => array
 			(
 				'tl_class'            => 'w50',
@@ -459,7 +448,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options_callback'        => array('MetaModels\Dca\Filter','getSelectDefault'),
 			'eval'                    => array('tl_class'=>'w50 clr', 'includeBlankOption'=>true)
 		)
 	)

@@ -30,6 +30,9 @@ use MetaModels\Render\Setting\ICollection as IRenderSettings;
  */
 interface ICollection
 {
+	/**
+	 * @return \MetaModels\IMetaModel
+	 */
 	public function getMetaModel();
 
 	public function collectRules();

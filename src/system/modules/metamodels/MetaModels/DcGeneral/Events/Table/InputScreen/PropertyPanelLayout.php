@@ -16,7 +16,8 @@
 
 namespace MetaModels\DcGeneral\Events\Table\InputScreen;
 
-use DcGeneral\Contao\BackendBindings;
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
 
 /**
@@ -35,14 +36,26 @@ class PropertyPanelLayout
 	 */
 	public static function getWizard(ManipulateWidgetEvent $event)
 	{
+		$url = 'system/modules/metamodels/popup.php?tbl=%1$s&fld=%2$s&inputName=ctrl_%3$s&id=%4$s&item=PALETTE_PANEL_PICKER';
+
 		if (version_compare(VERSION, '3.0', '<'))
 		{
-			$link = ' <a href="system/modules/metamodels/popup.php?tbl=%1$s&fld=%2$s&inputName=ctrl_%3$s&id=%4$s&item=PALETTE_PANEL_PICKER" rel="lightbox[files 765 60%%]" data-lightbox="files 765 60%%">%5$s</a>';
+			$link = ' <a href="' . $url . '" rel="lightbox[files 765 60%%]" data-lightbox="files 765 60%%">%5$s</a>';
 		}
 		else
 		{
-			$link = ' <a href="system/modules/metamodels/popup.php?tbl=%1$s&fld=%2$s&inputName=ctrl_%3$s&id=%4$s&item=PALETTE_PANEL_PICKER" onclick="Backend.getScrollOffset();Backend.openModalIframe({\'width\':765,\'title\':\'%6$s\',\'url\':this.href,\'id\':\'%4$s\'});return false">%5$s</a>';
+			// @codingStandardsIgnoreStart - I know, this line is long but there is nothing I can do about it.
+			$link = ' <a href="' . $url . '" onclick="Backend.getScrollOffset();Backend.openModalIframe({\'width\':765,\'title\':\'%6$s\',\'url\':this.href,\'id\':\'%4$s\'});return false">%5$s</a>';
+			// @codingStandardsIgnoreEnd
 		}
+
+		$imageEvent = new GenerateHtmlEvent(
+			'system/modules/metamodels/html/panel_layout.png',
+			$event->getEnvironment()->getTranslator()->translate('panelpicker', 'tl_metamodel_dca'),
+			'style="vertical-align:top;"'
+		);
+
+		$event->getEnvironment()->getEventPropagator()->propagate(ContaoEvents::IMAGE_GET_HTML, $imageEvent);
 
 		$event->getWidget()->wizard = sprintf(
 			$link,
@@ -50,11 +63,7 @@ class PropertyPanelLayout
 			$event->getProperty()->getName(),
 			$event->getProperty()->getName(),
 			$event->getModel()->getId(),
-			BackendBindings::generateImage(
-				'system/modules/metamodels/html/panel_layout.png',
-				$event->getEnvironment()->getTranslator()->translate('panelpicker', 'tl_metamodel_dca'),
-				'style="vertical-align:top;"'
-			),
+			$imageEvent->getHtml(),
 			addslashes($event->getEnvironment()->getTranslator()->translate('panelpicker', 'tl_metamodel_dca'))
 		);
 	}

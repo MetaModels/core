@@ -63,98 +63,13 @@ class Dca
 	 */
 	public function getRenderTypes(DC_General $objDC)
 	{
+/*
 		if (!$this->getMetaModel($objDC)->hasVariants())
 		{
 			return array('standalone', 'ctable');
 		}
+*/
 		return array('standalone', 'ctable');
-	}
-
-	/**
-	 * Returns an array with all valid tables that can be used as parent table.
-	 *
-	 * Excludes the metamodel table itself in ctable mode, as that one would be "selftree" then and not ctable.
-	 *
-	 * @param DC_General $objDC The general DataContainer calling us.
-	 *
-	 * @return string[] the tables.
-	 */
-	public function getTables(DC_General $objDC)
-	{
-		$blnOmit = '';
-		if ($objDC->getEnvironment()->getCurrentModel()->getProperty('rendertype') == 'ctable')
-		{
-			$blnOmit = $this->getMetaModel($objDC)->getTableName();
-		}
-		$tables = array();
-		foreach (\Database::getInstance()->listTables() as $table)
-		{
-			if (!($blnOmit && ($blnOmit == $table)))
-			{
-				$tables[$table] = $table;
-			}
-		}
-		return $tables;
-	}
-
-	/**
-	 * Prefix the given value with "mode_" to prevent the DC from using numeric ids.
-	 *
-	 * @param int $varValue The mode to prefix.
-	 *
-	 * @return string
-	 */
-	public function modeLoad($varValue)
-	{
-		return 'mode_' . $varValue;
-	}
-
-	/**
-	 * Strip the mode prefix from the given value.
-	 *
-	 * @param string $varValue The mode to strip the prefix from.
-	 *
-	 * @return string
-	 */
-	public function modeSave($varValue)
-	{
-		$arrSplit = explode('_', $varValue);
-		return $arrSplit[1];
-	}
-
-	/**
-	 * Return all valid modes for the current MetaModels rendertype.
-	 *
-	 * @param \DcGeneral\DC_General $objDC The DataContainer instance that called the method.
-	 *
-	 * @return array
-	 */
-	public function getValidModes(DC_General $objDC)
-	{
-		$arrResult = array();
-		switch ($objDC->getEnvironment()->getCurrentModel()->getProperty('rendertype'))
-		{
-			case 'ctable':
-				$arrResult = array('mode_3', 'mode_4', 'mode_6');
-				break;
-			case 'standalone':
-				$arrResult = array('mode_0', 'mode_1', 'mode_2', 'mode_5');
-				break;
-			default:
-				$arrResult = array();
-				break;
-		}
-		return $arrResult;
-	}
-
-	/**
-	 * Retrieve all backend section keys, like "content", "system" etc.
-	 *
-	 * @return array
-	 */
-	public function backendSectionCallback()
-	{
-		return array_keys($GLOBALS['BE_MOD']);
 	}
 
 	/**
@@ -166,7 +81,6 @@ class Dca
 	 *
 	 * @return void
 	 */
-	// @codingStandardsIgnoreStart - only error left, is the warning about having always a return value.
 	public function checkSortMode($strTable)
 	{
 		// Get Current id.
@@ -211,7 +125,6 @@ class Dca
 			$GLOBALS['TL_DCA'][$strTable]['palettes']['default'] = implode(';', $arrParts);
 		}
 	}
-	// @codingStandardsIgnoreEnd
 
 	/**
 	 * Fetch all attributes from the parenting MetaModel. Called as options_callback.
@@ -256,6 +169,7 @@ class Dca
 	 * @return mixed
 	 * @throws \RuntimeException Maybe, but not now.
 	 */
+	// @codingStandardsIgnoreStart - only error left, is the warning about having always a return value.
 	public function checkDefault($varValue, DC_General $dc)
 	{
 		if ($varValue == '')
@@ -317,5 +231,6 @@ class Dca
 
 		return $varValue;
 	}
+	// @codingStandardsIgnoreEnd
 
 }

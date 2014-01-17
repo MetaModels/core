@@ -164,6 +164,7 @@ class Filter extends Helper
 						}
 					}
 					break;
+				case 'select':
 				case 'create':
 					$this->objFilter = \Database::getInstance()
 						->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
@@ -220,57 +221,6 @@ class Filter extends Helper
 	}
 
 	/**
-	 * translates an id to a generated alias {@see MetaModels\Dca\Filter::getAttributeNames()}
-	 *
-	 * @param string                $strValue the id to translate.
-	 *
-	 * @param \DcGeneral\DC_General $objDC    the data container calling.
-	 *
-	 * @return string
-	 */
-	public function attrIdToName($strValue, $objDC)
-	{
-		$this->objectsFromUrl($objDC);
-		if (!($this->objMetaModel && $strValue))
-		{
-			return '';
-		}
-		$objAttribute = $this->objMetaModel->getAttributeById($strValue);
-		if ($objAttribute)
-		{
-			return $this->objMetaModel->getTableName() .'_' . $objAttribute->getColName();
-		}
-	}
-
-	/**
-	 * translates an generated alias {@see MetaModels\Dca\Filter::getAttributeNames()}
-	 * to the corresponding attribute id.
-	 *
-	 * @param string                $strValue the id to translate.
-	 *
-	 * @param \DcGeneral\DC_General $objDC    the data container calling.
-	 *
-	 * @return int
-	 */
-	public function nameToAttrId($strValue, $objDC)
-	{
-		$this->objectsFromUrl($objDC);
-		if (!$this->objMetaModel)
-		{
-			return 0;
-		}
-		$strName = substr($strValue, strlen($this->objMetaModel->getTableName() . '_'));
-
-		$objAttribute = $this->objMetaModel->getAttribute($strName);
-		if (!$objAttribute)
-		{
-			return 0;
-		}
-
-		return $objAttribute->get('id');
-	}
-
-	/**
 	 * Translates an attribute id to the human readable name defined.
 	 *
 	 * @param $strValue
@@ -283,39 +233,6 @@ class Filter extends Helper
 	{
 		$this->objectsFromUrl($objDC);
 		return $this->objMetaModel->getAttributeById($strValue)->getName();
-	}
-
-	/**
-	 * Prepares a option list with alias => name connection for all attributes.
-	 * This is used in the attr_id select box.
-	 *
-	 * @param \DcGeneral\DC_General $objDC the data container calling.
-	 *
-	 * @return array
-	 */
-	public function getAttributeNames($objDC)
-	{
-		$this->objectsFromUrl($objDC);
-		$arrResult = array();
-		if (!$this->objMetaModel)
-		{
-			return array();
-		}
-
-		$objMetaModel  = $this->objMetaModel;
-		$arrTypeFilter = $GLOBALS['METAMODELS']['filters'][$objDC->getEnvironment()->getCurrentModel()->getProperty('type')]['attr_filter'];
-
-		foreach ($objMetaModel->getAttributes() as $objAttribute)
-		{
-			$strTypeName = $objAttribute->get('type');
-			if ($arrTypeFilter && (!in_array($strTypeName, $arrTypeFilter)))
-			{
-				continue;
-			}
-			$strSelectVal             = $objMetaModel->getTableName() .'_' . $objAttribute->getColName();
-			$arrResult[$strSelectVal] = $objAttribute->getName() . ' [' . $strTypeName . ']';
-		}
-		return $arrResult;
 	}
 
 	/**
@@ -341,16 +258,6 @@ class Filter extends Helper
 				$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['metasubselectpalettes']['attr_id'][$strSelectVal] = $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'][$this->strSettingType . '_palettes'][$strTypeName];
 			}
 		}
-	}
-
-	/**
-	 * returns all registered filter setting types.
-	 *
-	 * @return string[]
-	 */
-	public function getSettingTypes()
-	{
-		return array_keys($GLOBALS['METAMODELS']['filters']);
 	}
 
 	/**
@@ -433,156 +340,6 @@ class Filter extends Helper
 			->execute($insertID);
 	}
 
-	/**
-	 * provide options for default selection
-	 *
-	 * @param DC_General $objDC The data container.
-	 *
-	 * @return array
-	 */
-	public function getSelectDefault($objDC)
-	{
-		$objMetaModel = $this->getMetaModel($objDC);
-
-		if(!$objMetaModel)
-		{
-			return array();
-		}
-
-		$objAttribute = $objMetaModel->getAttributeById($objDC->getEnvironment()->getCurrentModel()->getProperty('attr_id'));
-		if(!$objAttribute)
-		{
-			return array();
-		}
-
-		$blnOnlyUsed = $objDC->getEnvironment()->getCurrentModel()->getProperty('onlyused') ? true : false;
-
-		$arrCount = array();
-		$arrOptions = $objAttribute->getFilterOptions(null, $blnOnlyUsed, $arrCount);
-
-		// Remove empty values.
-		foreach ($arrOptions as $mixOptionKey => $mixOptionValue)
-		{
-			// Remove html/php tags.
-			$mixOptionValue = strip_tags($mixOptionValue);
-			$mixOptionValue = trim($mixOptionValue);
-
-			if(($mixOptionValue === '') || ($mixOptionValue === null) || ($blnOnlyUsed && ($arrCount[$mixOptionKey] === 0)))
-			{
-				unset($arrOptions[$mixOptionKey]);
-			}
-		}
-
-		return $arrOptions;
-	}
-
-	public function drawOrCondition($arrRow, $strLabel, DC_General $objDC = null, $imageAttribute='', $strImage)
-	{
-		if (!empty($arrRow['comment']))
-		{
-			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], specialchars($arrRow['comment']));
-		}
-
-		$strReturn = sprintf(
-			$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionor'],
-			'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
-			$strLabel ? $strLabel : $arrRow['type'],
-			$arrRow['comment'],
-			$arrRow['type']
-		);
-
-		return $strReturn;
-	}
-
-	public function drawAndCondition($arrRow, $strLabel, DC_General $objDC = null, $imageAttribute='', $strImage)
-	{
-		if (!empty($arrRow['comment']))
-		{
-			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], specialchars($arrRow['comment']));
-		}
-
-		$strReturn = sprintf(
-			$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand'],
-			'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
-			$strLabel ? $strLabel : $arrRow['type'],
-			$arrRow['comment'],
-			$arrRow['type']
-		);
-		return $strReturn;
-	}
-
-	public function drawSimpleLookup($arrRow, $strLabel, DC_General $objDC = null, $imageAttribute='', $strImage)
-	{
-		$this->objectsFromUrl($objDC);
-
-		$objAttribute = $this->objMetaModel->getAttributeById($arrRow['attr_id']);
-
-		if ($objAttribute)
-		{
-			$strAttrName = $objAttribute->getName();
-			$strAttrColName = $objAttribute->getColName();
-		} else {
-			$strAttrName = $arrRow['attr_id'];
-			$strAttrColName = $arrRow['attr_id'];
-		}
-
-		if (!empty($arrRow['comment']))
-		{
-			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], specialchars($arrRow['comment']));
-		}
-
-		$strReturn = sprintf(
-			$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup'],
-			'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
-			$strLabel ? $strLabel : $arrRow['type'],
-			$arrRow['comment'],
-			$strAttrName,
-			($arrRow['urlparam'] ? $arrRow['urlparam'] : $strAttrColName)
-		);
-
-		return $strReturn;
-	}
-
-	/**
-	 * backend list display of fe-filter
-	 * @param array
-	 * @param string
-	 * @param object
-	 * @param string
-	 * @param string
-	 * @return string
-	 */
-	public function infoCallback($arrRow, $strLabel, $objDC, $imageAttribute, $strImage)
-	{
-		$this->objectsFromUrl($objDC);
-		$objAttribute = $this->objMetaModel->getAttributeById($arrRow['attr_id']);
-
-		if ($objAttribute)
-		{
-			$strAttrName = $objAttribute->getName();
-			$strAttrColName = $objAttribute->getColName();
-		} else {
-			$strAttrName = $arrRow['attr_id'];
-			$strAttrColName = $arrRow['attr_id'];
-		}
-
-		if (!empty($arrRow['comment']))
-		{
-			$arrRow['comment'] = sprintf($GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_'], specialchars($arrRow['comment']));
-		}
-
-		$strReturn = sprintf(
-			$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['fefilter'],
-			'<a href="' . $this->addToUrl('act=edit&amp;id='.$arrRow['id']). '">' . $strImage . '</a>',
-			$strLabel,
-			$arrRow['comment'],
-			$strAttrName,
-			$arrRow['urlparam'] ? $arrRow['urlparam'] : $strAttrColName
-		);
-
-		return $strReturn;
-	}
-
 	protected $objCallback = null;
 
 	public function drawSetting($arrRow, $strLabel, DC_General $objDC = null, $imageAttribute='', $blnReturnImage=false, $blnProtected=false)
@@ -645,12 +402,18 @@ class Filter extends Helper
 	}
 
 	/**
-	 * Return the paste page button
-	 * @param DataContainer
-	 * @param array
-	 * @param string
-	 * @param boolean
-	 * @param array
+	 * Return the paste button.
+	 *
+	 * @param \DcGeneral\DC_General                        $objDC
+	 *
+	 * @param array                                        $arrRow
+	 *
+	 * @param string                                       $strTable
+	 *
+	 * @param boolean                                      $cr
+	 *
+	 * @param bool|\DcGeneral\Clipboard\ClipboardInterface $objClipboard
+	 *
 	 * @return string
 	 */
 	public function pasteButton(DC_General $objDC, $arrRow, $strTable, $cr, $objClipboard=false)
@@ -668,8 +431,11 @@ class Filter extends Helper
 		$intID = $arrIds[0];
 		$arrChildren = (count($arrIds) > 1) ? array_slice($arrIds, 1, count($arrIds) - 1) : array();
 
+		$objEnvironment = $objDC->getEnvironment();
+		$objClipBoard   = $objEnvironment->getClipboard();
+
 		// Disable all buttons if there is a circular reference
-		if ($objClipboard !== false && ($strMode == 'cut' && ($cr == 1 || $intID == $arrRow['id']) || $strMode == 'cutAll' && ($cr == 1 || in_array($arrRow['id'], $intID))))
+		if (($objClipBoard->isCut() && ($cr == 1 || in_array($arrRow['id'], $objClipBoard->getContainedIds()))))
 		{
 			$disablePA = true;
 			$disablePI = true;
@@ -686,21 +452,20 @@ class Filter extends Helper
 		{
 			if ($disablePA)
 			{
-				$return = $this->generateImage('pasteafter_.gif', '', 'class="blink"').' ';
+				$return = ContaoController::getInstance()->generateImage('pasteafter_.gif', '', 'class="blink"').' ';
 			} else {
-				$imagePasteAfter = $this->generateImage('pasteafter.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteafter'][1], $arrRow['id']), 'class="blink"');
+				$imagePasteAfter = ContaoController::getInstance()->generateImage('pasteafter.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteafter'][1], $arrRow['id']), 'class="blink"');
 
 				$strAdd2UrlAfter = sprintf(
-					'act=%s&amp;mode=1&amp;pid=%s&amp;after=%s&amp;source=%s&amp;childs=%s',
-					$strMode,
-					0,
+					'act=%s&amp;mode=1&amp;pid=%s&amp;after=%s&amp;source=%s',
+					$objClipBoard->getMode(),
+					$objClipBoard->getContainedIds(),
 					$arrRow['id'],
-//					$arrClipboard['source'],
-					'',
-					implode(',', $arrChildren)
+					$objEnvironment->getDataDefinition()->getName()
 				);
 
-				if ($objDC->getDataProvider('parent') != '')
+				/*
+				if ($arrClipboard['pdp'] != '')
 				{
 					$strAdd2UrlAfter .= '&amp;pdp=' . (($objDC->getDataProvider('parent')) ? $objDC->getDataProvider('parent')->getEmptyModel()->getProviderName() : '');
 				}
@@ -709,6 +474,7 @@ class Filter extends Helper
 				{
 					$strAdd2UrlAfter .= '&amp;cdp=' . (($objDC->getDataProvider('children')) ? $objDC->getDataProvider('children')->getEmptyModel()->getProviderName() : '');
 				}
+				*/
 
 				$return = sprintf(
 					' <a href="%s" title="%s" onclick="Backend.getScrollOffset()">%s</a> ',
@@ -720,13 +486,14 @@ class Filter extends Helper
 
 			if ($disablePI)
 			{
-				$return .= $this->generateImage('pasteinto_.gif', '', 'class="blink"').' ';
+				$return .= ContaoController::getInstance()->generateImage('pasteinto_.gif', '', 'class="blink"').' ';
 			} else {
-				$imagePasteInto = $this->generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteinto'][1], $arrRow['id']), 'class="blink"');
+				$imagePasteInto = ContaoController::getInstance()->generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteinto'][1], $arrRow['id']), 'class="blink"');
 
 				$strAdd2UrlInto = sprintf(
 					'act=%s&amp;mode=2&amp;pid=%s&amp;after=%s&amp;source=%s&amp;childs=%s',
-					$strMode,
+					$objClipBoard->getMode(),
+					$objClipBoard->getContainedIds(),
 					$arrRow['id'],
 					$arrRow['id'],
 //					$arrClipboard['source'],
@@ -752,7 +519,7 @@ class Filter extends Helper
 				);
 			}
 		} else {
-			$imagePasteInto = $this->generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteinto'][1], $arrRow['id']), 'class="blink"');
+			$imagePasteInto = ContaoController::getInstance()->generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteinto'][1], $arrRow['id']), 'class="blink"');
 
 			$strAdd2UrlInto = sprintf(
 				'act=%s&amp;mode=2&amp;after=0&amp;pid=0&amp;id=%s&amp;source=%s&amp;childs=%s',
@@ -803,6 +570,6 @@ class Filter extends Helper
 		{
 			$icon = 'invisible.gif';
 		}
-		return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
+		return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.ContaoController::getInstance()->generateImage($icon, $label).'</a> ';
 	}
 }

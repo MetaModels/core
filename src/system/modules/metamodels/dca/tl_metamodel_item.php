@@ -35,7 +35,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 	),
 	'dca_config' => array
 	(
-		'callback'                    => 'MetaModels\DcGeneral\Callbacks',
+//		'callback'                    => 'MetaModels\DcGeneral\Callbacks',
 		'data_provider'               => array
 		(
 			'default'                 => array
@@ -45,7 +45,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 			)
 		),
 		'controller'                  => 'MetaModels\DcGeneral\Controller',
-		'view'                        => 'MetaModels\DcGeneral\View'
+//		'view'                        => 'MetaModels\DcGeneral\View'
 	),
 
 	'list' => array
@@ -55,14 +55,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 			'mode'                    => 1, // 1 default sorting value, 2 switchable sorting value
 			'panelLayout'             => 'limit',
 			'headerFields'            => array('tstamp'),
-			'paste_button_callback'   => array('MetaModelDatabase', 'pasteButton'),
+			'paste_button_callback'   => array('MetaModels\Dca\MetaModelDcaBuilder', 'pasteButton'),
 		),
 
 		'label' => array
 		(
 			'fields'                  => array(),
-			'format'                  => 'unused',
-//			'label_callback'          => array('MetaModelDatabase', 'labelCallback'),
+			'format'                  => '%s',
+//			'label_callback'          => array('MetaModels\Dca\MetaModelDcaBuilder', 'labelCallback'),
 		),
 
         // not yet implemented
@@ -79,6 +79,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 
 		'operations' => array
 		(
+/*
 			'edit' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_item']['edit'],
@@ -112,6 +113,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 				'href'                => 'act=show',
 				'icon'                => 'show.gif'
 			)
+*/
 		),
 	),
 	'palettes' => array

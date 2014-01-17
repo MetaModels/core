@@ -18,25 +18,9 @@ namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
 use DcGeneral\EnvironmentInterface;
 
-class BreadCrumbFilter
-	extends BreadCrumbMetaModels
+class BreadCrumbFilterSetting
+	extends BreadCrumbFilter
 {
-	/**
-	 * @var int
-	 */
-	protected $filterId;
-
-	/**
-	 * @return object
-	 */
-	protected function getFilter()
-	{
-		return (object) \Database::getInstance()
-			->prepare('SELECT id, pid, name FROM tl_metamodel_filter WHERE id=?')
-			->executeUncached($this->filterId)
-			->row();
-	}
-
 	/**
 	 * @param \DcGeneral\EnvironmentInterface $environment
 	 *
@@ -46,31 +30,33 @@ class BreadCrumbFilter
 	 */
 	public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
 	{
-		$input = $environment->getInputProvider();
-		if (!$this->isActiveTable('tl_metamodel_filter', $input))
+		if (!isset($this->filterId))
 		{
+			$input = $environment->getInputProvider();
 			$this->filterId = $input->getParameter('pid');
-		}
-		else
-		{
-			$this->metamodelId = $input->getParameter('pid');
 		}
 
 		if (!isset($this->metamodelId))
 		{
-			$this->metamodelId = $this->getFilter()->pid;
+			$parent = \Database::getInstance()
+				->prepare('SELECT id, pid, name FROM tl_metamodel_filter WHERE id=?')
+				->executeUncached($this->filterId);
+
+			$this->metamodelId = $parent->pid;
 		}
+
+		$filterSetting = $this->getFilter();
 
 		$elements = parent::getBreadcrumbElements($environment, $elements);
 
 		$elements[] = array(
 			'url' => sprintf(
 				'contao/main.php?do=metamodels&table=%s&pid=%s',
-				'tl_metamodel_filter',
-				$this->metamodelId
+				'tl_metamodel_filtersetting',
+				$this->filterId
 			),
-			'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_filter'), $this->getMetaModel()->getName()),
-			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/html/filter.png'
+			'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_filtersetting'), $filterSetting->name),
+			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/html/filter_setting.png'
 		);
 
 		return $elements;

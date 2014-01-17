@@ -26,6 +26,8 @@ use MetaModels\Factory;
  * @package	   MetaModels
  * @subpackage Core
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ *
+ * @deprecated Should be overridden by now via event handlers.
  */
 class BreadcrumbBuilder
 {

@@ -16,6 +16,8 @@
 
 namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
 use DcGeneral\EnvironmentInterface;
 
 /**
@@ -54,11 +56,11 @@ class BreadCrumbInputScreens
 		$input = $environment->getInputProvider();
 		if (!$this->isActiveTable('tl_metamodel_dca', $input))
 		{
-			$this->inputScreenId = $input->getParameter('id');
+			$this->inputScreenId = $input->getParameter('pid');
 		}
 		else
 		{
-			$this->metamodelId = $input->getParameter('id');
+			$this->metamodelId = $input->getParameter('pid');
 		}
 
 		if (!isset($this->metamodelId))
@@ -68,12 +70,20 @@ class BreadCrumbInputScreens
 
 		$elements = parent::getBreadcrumbElements($environment, $elements);
 
+		$urlEvent = new AddToUrlEvent(sprintf('do=metamodels&table=%s&id=%s',
+			'tl_metamodel_dca',
+			$this->metamodelId
+		));
+		$environment->getEventPropagator()->propagate(ContaoEvents::BACKEND_ADD_TO_URL, $urlEvent);
+
 		$elements[] = array(
-			'url' => sprintf(
+/*			'url' => sprintf(
 				'contao/main.php?do=metamodels&table=%s&id=%s',
 				'tl_metamodel_dca',
 				$this->metamodelId
 			),
+*/
+			'url'  => $urlEvent->getUrl(),
 			'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_dca'), $this->getMetaModel()->getName()),
 			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/html/dca.png'
 		);

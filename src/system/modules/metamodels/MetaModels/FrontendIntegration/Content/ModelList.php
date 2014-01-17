@@ -74,11 +74,13 @@ class ModelList extends \ContentElement
 		foreach (array_keys($objItemRenderer->getFilterSettings()->getParameterFilterNames()) as $strName)
 		{
 			$varValue = \Input::getInstance()->get($strName);
+
 			if (is_string($varValue))
 			{
 				$arrReturn[$strName] = $varValue;
 			}
 		}
+
 		return $arrReturn;
 	}
 

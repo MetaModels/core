@@ -36,6 +36,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 	(
 		'data_provider'               => array
 		(
+			'default'                 => array
+			(
+				'source'              => 'tl_metamodel_dca'
+			),
 			'parent'                  => array
 			(
 				'source'              => 'tl_metamodel'
@@ -75,12 +79,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 		),
 	),
 
-	// List
 	'list' => array
 	(
 		'sorting' => array
 		(
-			'mode'                    => 1,
+			'mode'                    => 4,
 			'fields'                  => array('name'),
 			'panelLayout'             => 'filter,limit',
 			'headerFields'            => array('name'),
@@ -136,6 +139,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['settings'],
 				'href'                => 'table=tl_metamodel_dcasetting',
 				'icon'                => 'system/modules/metamodels/html/dca_setting.png',
+				'idparam'             => 'pid'
 			),
 		)
 	),
@@ -242,7 +246,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable'],
 			'inputType'               => 'select',
-			'options_callback'        => array('MetaModels\Dca\Dca', 'getTables'),
 			'eval'                    => array
 			(
 				'tl_class'            => 'w50',
@@ -256,7 +259,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['mode'],
 			'inputType'               => 'select',
 			'default'                 => '',
-			'options_callback'        => array('MetaModels\Dca\Dca', 'getValidModes'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode'],
 			/*
 				0 Records are not sorted
@@ -271,14 +273,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			(
 				'tl_class'            => 'w50',
 				'submitOnChange'      => true
-			),
-			'load_callback'           => array
-			(
-				array('MetaModels\Dca\Dca', 'modeLoad')
-			),
-			'save_callback'           => array
-			(
-				array('MetaModels\Dca\Dca', 'modeSave')
 			)
 		),
 
@@ -305,7 +299,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 				'chosen'              => true,
 				'tl_class'            => 'w50'
 			),
-			'options_callback'        => array('MetaModels\Dca\Dca', 'backendSectionCallback'),
 		),
 
 		'backendicon' => array

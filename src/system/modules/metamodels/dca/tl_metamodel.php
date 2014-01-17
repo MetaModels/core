@@ -106,6 +106,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['fields'],
 				'href'                => 'table=tl_metamodel_attribute',
 				'icon'                => 'system/modules/metamodels/html/fields.png',
+				'idparam'             => 'pid'
 			),
 
 			'rendersettings' => array
@@ -113,6 +114,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['rendersettings'],
 				'href'                => 'table=tl_metamodel_rendersettings',
 				'icon'                => 'system/modules/metamodels/html/render_settings.png',
+				'idparam'             => 'pid'
 			),
 
 			'dca' => array
@@ -120,6 +122,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['dca'],
 				'href'                => 'table=tl_metamodel_dca',
 				'icon'                => 'system/modules/metamodels/html/dca.png',
+				'idparam'             => 'pid'
 			),
 
 			'filter' => array
@@ -127,6 +130,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['filter'],
 				'href'                => 'table=tl_metamodel_filter',
 				'icon'                => 'system/modules/metamodels/html/filter.png',
+				'idparam'             => 'pid'
 			),
 
 			'dca_combine' => array
@@ -134,6 +138,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['dca_combine'],
 				'href'                => 'table=tl_metamodel_dca_combine&act=edit',
 				'icon'                => 'system/modules/metamodels/html/dca_combine.png',
+				'idparam'             => 'pid'
 			),
 		)
 	),
@@ -175,6 +180,10 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 	// Fields
 	'fields' => array
 	(
+		'tstamp' => array
+		(
+		),
+
 		'sorting' => array
 		(
 			'sorting'                 => true,

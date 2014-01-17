@@ -1,4 +1,6 @@
 <?php
+use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
+
 /**
  * The MetaModels extension allows the creation of multiple collections of custom items,
  * each with its own unique set of selectable attributes, with attribute extendability.
@@ -82,16 +84,16 @@ array_insert($GLOBALS['BE_MOD'], (array_search('accounts', array_keys($GLOBALS['
 */
 $GLOBALS['METAMODELS']['filters']['idlist']['class']                = 'MetaModels\Filter\Setting\IdList';
 $GLOBALS['METAMODELS']['filters']['simplelookup']['class']          = 'MetaModels\Filter\Setting\SimpleLookup';
-$GLOBALS['METAMODELS']['filters']['simplelookup']['info_callback']  = array('MetaModels\Dca\Filter', 'drawSimpleLookup');
+$GLOBALS['METAMODELS']['filters']['simplelookup']['info_callback']  = 'MetaModels\DcGeneral\Events\Table\FilterSetting\DrawSetting::modelToLabelWithAttributeAndUrlParam';
 $GLOBALS['METAMODELS']['filters']['customsql']['class']             = 'MetaModels\Filter\Setting\CustomSql';
 $GLOBALS['METAMODELS']['filters']['customsql']['image']             = 'system/modules/metamodels/html/filter_customsql.png';
 $GLOBALS['METAMODELS']['filters']['conditionand']['class']          = 'MetaModels\Filter\Setting\Condition\ConditionAnd';
 $GLOBALS['METAMODELS']['filters']['conditionand']['image']          = 'system/modules/metamodels/html/filter_and.png';
-$GLOBALS['METAMODELS']['filters']['conditionand']['info_callback']  = array('MetaModels\Dca\Filter', 'drawAndCondition');
+//$GLOBALS['METAMODELS']['filters']['conditionand']['info_callback']  = array('MetaModels\Dca\Filter', 'drawAndCondition');
 $GLOBALS['METAMODELS']['filters']['conditionand']['nestingAllowed'] = true;
 $GLOBALS['METAMODELS']['filters']['conditionor']['class']           = 'MetaModels\Filter\Setting\Condition\ConditionOr';
 $GLOBALS['METAMODELS']['filters']['conditionor']['image']           = 'system/modules/metamodels/html/filter_or.png';
-$GLOBALS['METAMODELS']['filters']['conditionor']['info_callback']   = array('MetaModels\Dca\Filter', 'drawOrCondition');
+//$GLOBALS['METAMODELS']['filters']['conditionor']['info_callback']   = array('MetaModels\Dca\Filter', 'drawOrCondition');
 $GLOBALS['METAMODELS']['filters']['conditionor']['nestingAllowed']  = true;
 
 /*
@@ -144,6 +146,8 @@ $GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModels\Dca\Filter'
 $GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModels\Dca\RenderSetting', 'createDataContainer');
 $GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModels\Dca\DcaSetting', 'createDataContainer');
 $GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] = array('MetaModels\FrontendIntegration\FrontendFilter', 'generateClearAll');
+
+$GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModels\Dca\Filter', 'loadTableCallback');
 
 // Dependencies we need.
 // Mapping: extension folder => ER name.
@@ -251,4 +255,8 @@ if (!isset($GLOBALS['MM_FILTER_PARAMS']))
 }
 
 // Attach ourselves to the DIC.
-$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'MetaModels\DcGeneral\Events\Subscriber';
+//$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'MetaModels\DcGeneral\Events\Subscriber';
+
+$GLOBALS['TL_EVENTS'][\ContaoCommunityAlliance\Contao\EventDispatcher\Event\CreateEventDispatcherEvent::NAME][] = 'MetaModels\DcGeneral\Events\Subscriber::registerEvents';
+
+

@@ -143,6 +143,8 @@ interface IAttribute
 	 * @return array The DCA array to use as $GLOBALS['tablename']
 	 *
 	 * @link IMetaModelAttribute::getFieldDefinition() is used internally for generating the result.
+	 *
+	 * @deprecated Use DataDefinition builders in DC_General 1.0.0
 	 */
 	public function getItemDCA($arrOverrides = array());
 

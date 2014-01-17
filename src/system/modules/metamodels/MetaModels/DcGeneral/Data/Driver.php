@@ -296,6 +296,7 @@ class Driver implements MultiLanguageDriverInterface
 				{
 					trigger_error('Filter array uses deprecated entry "childs", please use "children" instead.', E_USER_DEPRECATED);
 					$arrFilter['children'] = $arrFilter['childs'];
+					unset($arrFilter['childs']);
 				}
 
 				if (!$arrFilter['children'])

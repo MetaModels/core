@@ -39,10 +39,20 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 	(
 		'data_provider'               => array
 		(
+			'default'                 => array
+			(
+				'source'              => 'tl_metamodel_dcasetting'
+			),
+
 			'parent'                  => array
 			(
-				'source'              => 'tl_metamodel_dca'
-			)
+			'source'              => 'tl_metamodel_dca'
+			),
+
+			'root'                  => array
+			(
+			'source'              => 'tl_metamodel_dca'
+			),
 		),
 		'childCondition'              => array
 		(
@@ -69,7 +79,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 		),
 		'rootEntries'                 => array
 		(
-			'self'                    => array
+			'tl_metamodel_dcasetting' => array
 			(
 				'setOn' => array
 				(
@@ -92,7 +102,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 		),
 		'child_list'                  => array
 		(
-			'self'                    => array
+			'tl_metamodel_dcasetting' => array
 			(
 				'fields'              => array
 				(
@@ -109,18 +119,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 	// List
 	'list' => array
 	(
-		'presentation' => array
-		(
-			'breadcrumb_callback'     => array('MetaModels\Dca\BreadcrumbBuilder', 'generateBreadcrumbItems'),
-		),
-		
 		'sorting' => array
 		(
 			'mode'                    => 4,
 			'fields'                  => array('sorting'),
 			'panelLayout'             => 'limit',
 			'headerFields'            => array('name'),
-			'child_record_callback'   => array('MetaModels\Dca\DcaSetting', 'drawSetting'),
 		),
 
 		'global_operations' => array
@@ -173,14 +177,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle'],
 				'icon'                => 'visible.gif',
 				'attributes'          => 'onclick="Backend.getScrollOffset(); return AjaxRequest.toggleVisibility(this, %s);"',
-				'button_callback'     => array('MetaModels\Dca\DcaSetting', 'toggleIcon')
 			),
 			'subpalette' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['subpalette'],
 				'href'                => 'table=tl_metamodel_dcasetting',
 				'icon'                => 'system/modules/metamodels/html/dca_subpalette.png',
-				'button_callback'     => array('MetaModels\Dca\DcaSetting', 'subpaletteButton')
 			),
 		)
 	),
@@ -222,15 +224,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 
 		'attr_id' => array
 		(
+
 			/*
-			 * 	'attributetypename' => array
-			 * 	(
-			 * 		'legend' => array
-			 * 		(
-			 * 			'field1',
-			 * 			'field2',
-			 * 		),
-			 *	),
 			 * Core legends:
 			 * * title
 			 * * backend
@@ -261,6 +256,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 	// Fields
 	'fields' => array
 	(
+		'sorting' => array(),
+
 		'dcatype' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype'],
@@ -280,7 +277,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options_callback'        => array('MetaModels\Dca\DcaSetting', 'getAttributeNames'),
 			'eval'                    => array(
 				'tl_class'            => 'w50',
 				'doNotSaveEmpty'      => true,
@@ -298,10 +294,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			(
 				'tl_class'            => 'long wizard',
 			),
-			'wizard'                  => array
-			(
-				'stylepicker'         => array('MetaModels\Dca\DcaSetting','getStylepicker')
-			),
 		),
 		'legendhide' => array
 		(
@@ -317,14 +309,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 		(
 			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle'],
 			'exclude'               => true,
-			'load_callback'         => array
-			(
-				array('MetaModels\Dca\DcaSetting', 'decodeLegendTitle')
-			),
-			'save_callback'         => array
-			(
-				array('MetaModels\Dca\DcaSetting', 'encodeLegendTitle')
-			)
 		),
 		'mandatory' => array
 		(
@@ -444,7 +428,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'label'                  => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rte'],
 			'exclude'                => true,
 			'inputType'              => 'select',
-			'options_callback'       => array('MetaModels\Dca\DcaSetting', 'getRichTextEditors'),
 			'default'                => 'tinyMCE',
 			'eval'                   => array
 			(
