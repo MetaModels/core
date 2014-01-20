@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-21T04:12:35+02:00
+ * last-updated: 2013-07-10T10:02:32+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Προστέθηκε το χαρακτηριστικό %s στην οθονη εισαγωγης.';
@@ -86,7 +86,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['spaceToUnderscore']['0']       =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['spaceToUnderscore']['1']       = 'Αν αυτό αληθεύει οποιοσδήποτε χαρακτήρας κενόυ θα αντικατασταθεί από μια παύλα.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker']                  = 'Style picker';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['subpalette']['0']              = 'Διαχηριση υποπεριοχων';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['subpalette']['1']              = 'Διαχειριστείτε τις επιμέρους περιοχές της οθόνης εισόδου ID% s ';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['subpalette']['1']              = 'Διαχειριστείτε τις επιμέρους περιοχές της οθόνης εισόδου ID %s ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['0']                = 'Προσαρμοσμένο πρότυπο που θα χρησιμοποιηθεί για την παραγωγή ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['1']                = 'Επιλέξτε το πρότυπο που πρέπει να χρησιμοποιηθεί για την επιλεγμένη ιδιότητα. Ισχύει για αρχεία προτύπων αρχίζουν με "mm_&lt;type&gt;" όπου το όνομα του τύπου τίθεται για &lt;type&gt;';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']                 = 'Τυπος';
@@ -97,3 +97,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['1']           =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['0']   = 'Strip κάθετος κατά την αποθήκευση ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['1']   = 'Προσθήκη κάθετος κατά την αποθήκευση ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['2']   = 'Καμία ενέργεια ';
+

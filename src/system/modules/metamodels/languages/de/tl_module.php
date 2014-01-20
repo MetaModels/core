@@ -8,13 +8,13 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2013-12-11T16:14:26+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_module']['editfiltersetting']['0']              = 'Filtereinstellungen bearbeiten';
 $GLOBALS['TL_LANG']['tl_module']['editfiltersetting']['1']              = 'Die Filtereinstellungen ID %s bearbeiten';
 $GLOBALS['TL_LANG']['tl_module']['editmetamodel']['0']                  = 'MetaModel bearbeiten';
-$GLOBALS['TL_LANG']['tl_module']['editmetamodel']['1']                  = 'Das MetaModel mit der ID% bearbeiten.';
+$GLOBALS['TL_LANG']['tl_module']['editmetamodel']['1']                  = 'Das MetaModel mit der ID %s bearbeiten.';
 $GLOBALS['TL_LANG']['tl_module']['editrendersetting']['0']              = 'Renderingeinstellungen bearbeiten';
 $GLOBALS['TL_LANG']['tl_module']['editrendersetting']['1']              = 'Die Renderingeinstellung ID %s bearbeiten';
 $GLOBALS['TL_LANG']['tl_module']['metamodel']['0']                      = 'MetaModel';
@@ -59,3 +59,4 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_use_limit']['0']            = 'Offse
 $GLOBALS['TL_LANG']['tl_module']['metamodel_use_limit']['1']            = 'Auswählen, falls Sie die Anzahl anzuzeigender Datensätze begrenzen möchten. Diese Einstellung ist beipielsweise nützlich, wenn Sie nur die ersten 500 Datensätze anzeigen möchten, oder falls Sie alle Datensätze anzeigen und dabei die ersten 10 überspringen wollen. Eine voreingestellte Paginierung bleibt dabei erhalten.';
 $GLOBALS['TL_LANG']['tl_module']['mm_filter_legend']                    = 'MetaModel-Filter';
 $GLOBALS['TL_LANG']['tl_module']['mm_meta_legend']                      = 'Suchmaschinen-Optimierung';
+

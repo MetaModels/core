@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-11-19T16:13:33+01:00
+ * last-updated: 2013-12-11T16:14:26+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_content']['ASC']                                 = 'aufsteigend';
@@ -16,7 +16,7 @@ $GLOBALS['TL_LANG']['tl_content']['DESC']                                = 'abst
 $GLOBALS['TL_LANG']['tl_content']['editfiltersetting']['0']              = 'Filtereinstellungen bearbeiten';
 $GLOBALS['TL_LANG']['tl_content']['editfiltersetting']['1']              = 'Die Filtereinstellungen ID %s bearbeiten';
 $GLOBALS['TL_LANG']['tl_content']['editmetamodel']['0']                  = 'MetaModel bearbeiten';
-$GLOBALS['TL_LANG']['tl_content']['editmetamodel']['1']                  = 'Das MetaModel mit der ID% bearbeiten.';
+$GLOBALS['TL_LANG']['tl_content']['editmetamodel']['1']                  = 'Das MetaModel mit der ID %s bearbeiten.';
 $GLOBALS['TL_LANG']['tl_content']['editrendersetting']['0']              = 'Rendereinstellungen bearbeiten';
 $GLOBALS['TL_LANG']['tl_content']['editrendersetting']['1']              = 'Die Renderingeinstellungen ID %s bearbeiten';
 $GLOBALS['TL_LANG']['tl_content']['metamodel']['0']                      = 'MetaModel';
@@ -63,3 +63,4 @@ $GLOBALS['TL_LANG']['tl_content']['mm_config_legend']                    = 'Meta
 $GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']                    = 'MetaModel-Filter';
 $GLOBALS['TL_LANG']['tl_content']['mm_meta_legend']                      = 'Suchmaschinen-Optimierung';
 $GLOBALS['TL_LANG']['tl_content']['mm_rendering']                        = 'MetaModel-Rendering';
+
