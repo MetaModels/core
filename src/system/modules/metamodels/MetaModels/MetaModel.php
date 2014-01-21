@@ -729,6 +729,13 @@ class MetaModel implements IMetaModel
 	{
 		$arrInterfaces = class_implements($objAttribute);
 
+		// Call the serializeData for all simple attributes.
+		if(in_array('MetaModels\Attribute\ISimple', $arrInterfaces) || in_array('IMetaModelAttributeSimple', $arrInterfaces))
+		{
+			/** @var \MetaModels\Attribute\ISimple $objAttribute */
+			$varData = $objAttribute->serializeData($varData);
+		}
+
 		$arrData = array();
 		foreach ($arrIds as $intId)
 		{
