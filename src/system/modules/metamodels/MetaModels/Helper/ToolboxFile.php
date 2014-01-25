@@ -477,7 +477,13 @@ class ToolboxFile
 			$strBasename = strlen($arrMeta['title']) ? $arrMeta['title'] : specialchars($objFile->basename);
 			$strAltText = (strlen($arrMeta['caption']) ? $arrMeta['caption'] : ucfirst(str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $objFile->filename))));
 
-			$strIcon = 'system/themes/' . $strThemeDir . '/images/' . $objFile->icon;
+			if (version_compare(VERSION, '3.0', '<'))
+			{
+				$strIcon = 'system/themes/' . $strThemeDir . '/images/' . $objFile->icon;
+			} else {
+				$strIcon = 'assets/contao/images/' . $objFile->icon;
+			}
+
 			$arrSource = array
 			(
 				'file'     => $strFile,
