@@ -214,6 +214,8 @@ CREATE TABLE `tl_metamodel_filtersetting` (
   `onlyused` char(1) NOT NULL default '0',
 -- display only remaining options in Fe filters.
   `onlypossible` char(1) NOT NULL default '0'
+-- skip the filter from the search of id list for generating the widgets.
+  `skipfilteroptions` char(1) NOT NULL default '0'
 -- default value for filter
   `defaultid` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
