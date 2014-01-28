@@ -128,10 +128,16 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 	/**
 	 * {@inheritdoc}
 	 */
-	public function addRules(IMetaModelFilter $objFilter, $arrFilterUrl)
+	public function addRules(IMetaModelFilter $objFilter, $arrFilterUrl, $arrIgnoredFilter = array())
 	{
 		foreach ($this->arrSettings as $objSetting)
 		{
+			// If the setting is on the ignore list skip it.
+			if(in_array($objSetting->get('id'),$arrIgnoredFilter))
+			{
+				continue;
+			}
+
 			$objSetting->prepareRules($objFilter, $arrFilterUrl);
 		}
 	}
@@ -196,13 +202,25 @@ class MetaModelFilterSettings implements IMetaModelFilterSettings
 	{
 		$arrParams = array();
 
+		// Get the id with all enabled filter.
 		$objFilter = $this->getMetaModel()->getEmptyFilter();
 		$this->addRules($objFilter, $arrFilterUrl);
 
-		$arrIds = $objFilter->getMatchingIds();
-		
+		$arrBaseIds = $objFilter->getMatchingIds();
+
 		foreach ($this->arrSettings as $objSetting)
 		{
+			if ($objSetting->get('skipfilteroptions'))
+			{
+				$objFilter = $this->getMetaModel()->getEmptyFilter();
+				$this->addRules($objFilter, $arrFilterUrl, array($objSetting->get('id')));
+				$arrIds = $objFilter->getMatchingIds();
+			}
+			else
+			{
+				$arrIds = $arrBaseIds;
+			}
+
 			$arrParams = array_merge($arrParams, $objSetting->getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions));
 		}
 
