@@ -32,12 +32,13 @@ interface IMetaModelFilterSettings
 	 *
 	 * @param IMetaModelFilter $objFilter the filter object to add rules to.
 	 *
-	 * @param array $arrFilterUrl
+	 * @param array            $arrFilterUrl
+	 *
+	 * @param array            $arrIgnoredFilter An optional list with filter ids that should be ignored. Defaults to empty array.
 	 *
 	 * @return void
-	 *
 	 */
-	public function addRules(IMetaModelFilter $objFilter, $arrFilterUrl);
+	public function addRules(IMetaModelFilter $objFilter, $arrFilterUrl, $arrIgnoredFilter = array());
 
 	/**
 	 * Generate an filter url (aka jump to url) according to the contained filter rules.
