@@ -35,14 +35,14 @@ class BreadCrumbAttributes
 		{
 			$input = $environment->getInputProvider();
 
-			$this->metamodelId = $input->getParameter('id');
+			$this->metamodelId = $input->getParameter('pid');
 		}
 
 		$elements = parent::getBreadcrumbElements($environment, $elements);
 
 		$elements[] = array(
 			'url' => sprintf(
-				'contao/main.php?do=metamodels&table=%s&id=%s',
+				'contao/main.php?do=metamodels&table=%s&pid=%s',
 				'tl_metamodel_attribute',
 				$this->metamodelId
 			),
