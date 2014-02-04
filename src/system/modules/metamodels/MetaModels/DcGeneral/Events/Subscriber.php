@@ -36,42 +36,8 @@ use DcGeneral\Contao\View\Contao2BackendView\Event\GetGlobalButtonEvent;
  * @package MetaModels\DcGeneral\Events
  */
 class Subscriber
+	extends BaseSubscriber
 {
-	/**
-	 * Register a closure to the event dispatcher which will only be executed for the given container name.
-	 *
-	 * The closure checks if the BuildDataDefinitionEvent is for the container with the passed name, if so, the callback
-	 * will get executed.
-	 *
-	 * @param string                   $name       The name of the data container for which the callback shall be executed.
-	 *
-	 * @param EventDispatcherInterface $dispatcher The event dispatcher to which the listener shall be attached.
-	 *
-	 * @param callable                 $callback   The callback to call.
-	 *
-	 * @param int                      $priority   The priority, defaults to -200.
-	 *
-	 * @return void
-	 */
-	public static function registerBuildDataDefinitionFor(
-		$name,
-		EventDispatcherInterface $dispatcher,
-		$callback,
-		$priority = -200
-	)
-	{
-		$dispatcher->addListener(
-			BuildDataDefinitionEvent::NAME,
-			function(BuildDataDefinitionEvent $event) use($name, $callback) {
-				if ($event->getContainer()->getName() == $name)
-				{
-					call_user_func($callback, $event);
-				}
-			},
-			$priority
-		);
-	}
-
 	/**
 	 * Register all listeners to handle creation of a data container.
 	 *
@@ -128,85 +94,6 @@ class Subscriber
 			$dispatcher,
 			__CLASS__ . '::registerTableMetaModelRenderSettingsEvents'
 		);
-	}
-
-	/**
-	 * Create a closure creating an instance of the passed class and calling the named method.
-	 *
-	 * @param string $class  The class name.
-	 *
-	 * @param string $method The method name.
-	 *
-	 * @return callable
-	 */
-	public static function createClosure($class, $method)
-	{
-		return function($event) use($class, $method) {
-			$reflection = new \ReflectionClass($class);
-			$instance   = $reflection->newInstance();
-			call_user_func(array($instance, $method), $event);
-		};
-	}
-
-	/**
-	 * Create a callback that delays the event execution.
-	 *
-	 * This is done by registering the event within the returned callback and unregistering it when the callback has
-	 * been executed.
-	 *
-	 * This only works for non top level events (it needs at least one sub level, like the data container name).
-	 *
-	 * @param callable $handler  The event handler to execute.
-	 *
-	 * @param int      $priority The priority.
-	 *
-	 * @return callable
-	 */
-	public static function delayEvent($handler, $priority = 0)
-	{
-		return function(Event $event) use($handler, $priority)
-		{
-			$name = $event->getName();
-
-			$chunks = explode('[', $name);
-			array_pop($chunks);
-
-			$listener = function($event) use($handler)
-			{
-				/** @var Event $event */
-				$event->getDispatcher()->removeListener($event->getName(), $handler);
-				call_user_func($handler, $event);
-			};
-
-			$event->getDispatcher()->addListener(implode('[', $chunks), $listener, $priority);
-		};
-	}
-
-	/**
-	 * Register multiple event listeners.
-	 *
-	 * @param array                    $listeners  The listeners to register.
-	 *
-	 * @param EventDispatcherInterface $dispatcher The event dispatcher to which the events shall be registered.
-	 *
-	 * @param string[]                 $suffixes   The suffixes for the event names to use.
-	 *
-	 * @param int                      $priority   The priority.
-	 *
-	 * @return void
-	 */
-	public static function registerListeners($listeners, $dispatcher, $suffixes = array(), $priority = 200)
-	{
-		$eventSuffix = '';
-		foreach ($suffixes as $suffix)
-		{
-			$eventSuffix .= sprintf('[%s]', $suffix);
-		}
-
-		foreach ($listeners as $event => $listener)
-		{
-			$dispatcher->addListener($event . $eventSuffix, $listener, $priority);
-		}
 	}
 
 	/**
