@@ -115,7 +115,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'headerFields'            => array('type', 'attr_id'),
 			'flag'                    => 1,
 			'icon'                    => 'system/modules/metamodels/html/filter_and.png',
-			'paste_button_callback'   => array('MetaModels\Dca\Filter', 'pasteButton'),
 		),
 
 		'label' => array

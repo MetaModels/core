@@ -21,6 +21,7 @@ use DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
+use DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
@@ -437,6 +438,14 @@ class Subscriber
 		}
 		$registered = true;
 		$dispatcher = $event->getDispatcher();
+
+		self::registerListeners(
+			array(
+				GetPasteButtonEvent::NAME => 'MetaModels\DcGeneral\Events\Table\FilterSetting\PasteButton::generate',
+			),
+			$dispatcher,
+			array('tl_metamodel_filtersetting')
+		);
 
 		self::registerListeners(
 			array(
