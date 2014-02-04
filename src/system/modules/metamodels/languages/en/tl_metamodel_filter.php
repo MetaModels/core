@@ -28,6 +28,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_filter']['title_legend']         = 'Name';
 /**
  * Buttons
  */
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['pastenew']             = array('New', 'Create a new filter setting');
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['editheader']           = array('Edit', 'Edit MetaModel');
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['new']                  = array('New', 'Create new filter setting');
 
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['edit']                 = array('Edit setting', 'Edit filter setting ID %s');
