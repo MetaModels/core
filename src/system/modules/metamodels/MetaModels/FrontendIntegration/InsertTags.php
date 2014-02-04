@@ -18,6 +18,12 @@
 
 namespace MetaModels\FrontendIntegration;
 
+use MetaModels\Factory;
+use MetaModels\Filter\Rules\StaticIdList;
+use MetaModels\IMetaModel;
+use MetaModels\ItemList;
+use MetaModels\Render\Setting\Factory as SettingFactory;
+
 /**
  * MetaModelInsertTags.
  * 
@@ -80,7 +86,7 @@ class InsertTags extends \Controller
 				default:
 			}
 		}
-		catch (Exception $exc)
+		catch (\Exception $exc)
 		{
 			$this->log('Error by replace tags: ' . $exc->getMessage(), __CLASS__ . ' | ' . __FUNCTION__, TL_ERROR);
 		}
@@ -117,7 +123,7 @@ class InsertTags extends \Controller
 		}
 
 		// Get the render setting.
-		$objRenderSettings = MetaModelRenderSettingsFactory::byId($objMetaModel, $intIdRenderSetting);
+		$objRenderSettings = SettingFactory::byId($objMetaModel, $intIdRenderSetting);
 		if ($objRenderSettings == null)
 		{
 			return false;
@@ -186,7 +192,7 @@ class InsertTags extends \Controller
 			$strOutput = 'html5';
 		}
 
-		$objMetaModelList = new MetaModelList();
+		$objMetaModelList = new ItemList();
 		$objMetaModelList
 			->setMetaModel($objMetaModel->get('id'), $intIdRendesetting)
 			->overrideOutputFormat($strOutput);
@@ -210,7 +216,7 @@ class InsertTags extends \Controller
 			return '';
 		}
 
-		$objMetaModelList->addFilterRule(new MetaModelFilterRuleStaticIdList($arrIds));
+		$objMetaModelList->addFilterRule(new StaticIdList($arrIds));
 		return $objMetaModelList->render(false, $this);
 	}
 
@@ -248,7 +254,7 @@ class InsertTags extends \Controller
 		// Parse attribute.
 		$arrAttr = $objMetaModelItem->parseAttribute($strAttributeName);
 
-		// ToDo: Maybe this should not allways be a text element.
+		// ToDo: Maybe this should not always be a text element.
 		return $arrAttr[$strOutput];
 	}
 
@@ -301,12 +307,12 @@ class InsertTags extends \Controller
 		// ID.
 		if (is_numeric($nameOrId))
 		{
-			return MetaModelFactory::byId($nameOrId);
+			return Factory::byId($nameOrId);
 		}
 		// Name.
 		elseif (is_string($nameOrId))
 		{
-			return MetaModelFactory::byTableName($nameOrId);
+			return Factory::byTableName($nameOrId);
 		}
 
 		// Unknown.
@@ -320,12 +326,12 @@ class InsertTags extends \Controller
 	 *
 	 * @param int    $intID    ID of the filter.
 	 * 
-	 * @return null|Database_Result Returns null when nothing was found or a 
+	 * @return null|\Database_Result Returns null when nothing was found or a
 	 * Contao Database_Result with the chosen information.
 	 */
 	protected function getMMDataFrom($strTable, $intID)
 	{
-		$objDB = Database::getInstance();
+		$objDB = \Database::getInstance();
 
 		// Check if we know the table.
 		if (!$objDB->tableExists($strTable))
@@ -381,7 +387,7 @@ class InsertTags extends \Controller
 	protected function isPublishedItem($objMetaModel, $intItemId)
 	{
 		// Check publish state of an item.
-		$objAttrCheckPublish = Database::getInstance()
+		$objAttrCheckPublish = \Database::getInstance()
 				->prepare('SELECT colname FROM tl_metamodel_attribute WHERE pid=? AND check_publish=1')
 				->limit(1)
 				->execute($objMetaModel->get('id'));
