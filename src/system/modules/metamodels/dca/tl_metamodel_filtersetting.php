@@ -33,13 +33,29 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 	(
 		'data_provider'               => array
 		(
-			'root'                  => array
+			'root'                    => array
 			(
 				'source'              => 'tl_metamodel_filtersetting'
+			),
+			'parent'                  => array
+			(
+				'source'              => 'tl_metamodel_filter',
 			),
 		),
 		'childCondition'              => array
 		(
+			array(
+				'from'                => 'tl_metamodel_filter',
+				'to'                  => 'tl_metamodel_filtersetting',
+				'setOn'               => array
+				(
+					array(
+						'to_field'    => 'fid',
+						'from_field'  => 'id',
+					)
+				),
+			),
+
 			array(
 				'from'                => 'tl_metamodel_filtersetting',
 				'to'                  => 'tl_metamodel_filtersetting',
