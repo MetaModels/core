@@ -437,7 +437,7 @@ class Driver implements MultiLanguageDriverInterface
 				array
 				(
 					'operation' => 'AND',
-					'childs' => $arrFilter
+					'children' => $arrFilter
 				),
 				$objFilter
 			);
