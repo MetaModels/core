@@ -215,7 +215,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 
 		'simplelookup extends _attribute_' => array
 		(
-			'+config' => array('urlparam', 'allow_empty', 'predef_param', 'label', 'template', 'defaultid', 'blankoption', 'onlyused', 'onlypossible'),
+			'+config' => array('urlparam', 'allow_empty', 'predef_param', 'label', 'template', 'defaultid', 'blankoption', 'onlyused', 'onlypossible', 'skipfilteroptions'),
 		),
 
 		'customsql extends default' => array
@@ -446,6 +446,17 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		'onlypossible'                => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible'],
+			'exclude'                 => true,
+			'default'                 => true,
+			'inputType'               => 'checkbox',
+			'eval'                    => array
+			(
+				'tl_class'            => 'w50',
+			),
+		),
+		'skipfilteroptions'                => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions'],
 			'exclude'                 => true,
 			'default'                 => true,
 			'inputType'               => 'checkbox',

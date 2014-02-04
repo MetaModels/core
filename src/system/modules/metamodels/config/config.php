@@ -195,6 +195,7 @@ $GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModels\Dca\Filter'
 $GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModels\Dca\RenderSetting', 'createDataContainer');
 $GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModels\Dca\DcaSetting', 'createDataContainer');
 $GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] = array('MetaModels\FrontendIntegration\FrontendFilter', 'generateClearAll');
+$GLOBALS['TL_HOOKS']['replaceInsertTags'][]      = array('MetaModels\FrontendIntegration\InsertTags', 'replaceTags');
 
 // Dependencies we need.
 // Mapping: extension folder => ER name.

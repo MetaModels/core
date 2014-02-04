@@ -151,7 +151,10 @@ class FrontendFilter
 				if(in_array($strParam, $arrWantedParam))
 				{
 					$arrMyParams[$strParam] = \Input::getInstance()->get($strParam);
-				} else {
+				}
+				// add only to the array if param is not page
+				elseif($strParam != 'page')
+				{
 					$arrOtherParams[$strParam] = \Input::getInstance()->get($strParam);
 				}
 			}

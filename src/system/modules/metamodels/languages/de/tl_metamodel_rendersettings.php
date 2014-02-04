@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-15T16:12:36+02:00
+ * last-updated: 2013-12-11T16:14:26+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['0']     = 'Zusätzliche CSS-Dateien';
@@ -34,7 +34,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues']['1']   = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['0']        = 'Labels verbergen';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['1']        = 'Verberge alle Labels im Backend und im Frontend.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['0']         = 'Als Standard verwenden';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['1']         = 'Bestimmt, dass diese Eingabemaske als Standard für das Eltern-MetaModel benutzt wird.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['1']         = 'Bestimmt, dass diese Eingabemaske als Standard für das Eltern-MetaModel benutzt wird. <strong>Wichtig:</strong> Eine Eingabemaske muss als Standard aktiviert sein.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['0']            = 'Weiterleitungsseite';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['1']            = 'Wählen Sie die Seite aus, die für die Detailansicht verwendet werden soll. Beachten Sie, dass die genauen URL-Parameter durch die verwendete Filtereinstellung bestimmt werden.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_allLanguages']    = 'Alle Sprachen';
@@ -58,4 +58,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['1']          = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']           = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['0']            = 'Aktualisierungsdatum';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['1']            = 'Datum und Uhrzeit der letzten Aktualisierung.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['view_legend']            = 'Zusätzliche Dateien';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['view_legend']            = 'Einstellungen ansehen';

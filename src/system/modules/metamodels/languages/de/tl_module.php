@@ -8,13 +8,13 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-15T16:12:36+02:00
+ * last-updated: 2013-12-11T16:14:26+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_module']['editfiltersetting']['0']              = 'Filtereinstellungen bearbeiten';
 $GLOBALS['TL_LANG']['tl_module']['editfiltersetting']['1']              = 'Die Filtereinstellungen ID %s bearbeiten';
 $GLOBALS['TL_LANG']['tl_module']['editmetamodel']['0']                  = 'MetaModel bearbeiten';
-$GLOBALS['TL_LANG']['tl_module']['editmetamodel']['1']                  = 'Das MetaModel mit der ID% bearbeiten.';
+$GLOBALS['TL_LANG']['tl_module']['editmetamodel']['1']                  = 'Das MetaModel mit der ID %s bearbeiten.';
 $GLOBALS['TL_LANG']['tl_module']['editrendersetting']['0']              = 'Renderingeinstellungen bearbeiten';
 $GLOBALS['TL_LANG']['tl_module']['editrendersetting']['1']              = 'Die Renderingeinstellung ID %s bearbeiten';
 $GLOBALS['TL_LANG']['tl_module']['metamodel']['0']                      = 'MetaModel';
@@ -41,6 +41,10 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_layout']['0']               = 'Angep
 $GLOBALS['TL_LANG']['tl_module']['metamodel_layout']['1']               = 'Wählen Sie das Template aus, das für das gewählte Attribut verwendet werden soll. Gültige Dateinamen für das Template beginnen mit "ce_metamodel"';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_limit']['0']                = 'Maximale Anzahl der Datensätze die angezeigt werden sollen.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_limit']['1']                = 'Bitte geben Sie maximale Anzahl der Datensätze an. Geben Sie 0 an, um alle Datensätze anzuzeigen und damit die Paginierung zu deaktivieren.';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_meta_description']['0']     = 'Meta-Beschreibung';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_meta_description']['1']     = 'Wählen Sie aus, welches Attribut für die Meta-Beschreibung der Seite benutzt wird.';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_meta_title']['0']           = 'Meta-Titel';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_meta_title']['1']           = 'Wählen Sie aus, welches Attribut für den Meta-Titel der Seite benutzt wird,';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_noparsing']['0']            = 'Keine Datensätze parsen';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_noparsing']['1']            = 'Wenn diese Box aktiviert ist, dann gibt das Modul keine Datensätze aus. Stattdessen stellt es dafür Objekte im Template zur Verfügung.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_offset']['0']               = 'Listen-Offset';
@@ -54,3 +58,5 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby_direction']['1']     = 'In au
 $GLOBALS['TL_LANG']['tl_module']['metamodel_use_limit']['0']            = 'Offset und Limit für die Auflistung verwenden';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_use_limit']['1']            = 'Auswählen, falls Sie die Anzahl anzuzeigender Datensätze begrenzen möchten. Diese Einstellung ist beipielsweise nützlich, wenn Sie nur die ersten 500 Datensätze anzeigen möchten, oder falls Sie alle Datensätze anzeigen und dabei die ersten 10 überspringen wollen. Eine voreingestellte Paginierung bleibt dabei erhalten.';
 $GLOBALS['TL_LANG']['tl_module']['mm_filter_legend']                    = 'MetaModel-Filter';
+$GLOBALS['TL_LANG']['tl_module']['mm_meta_legend']                      = 'Suchmaschinen-Optimierung';
+
