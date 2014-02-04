@@ -50,7 +50,7 @@
 		"contao-community-alliance/translator": "1.0.*@dev",
 		"metamodels/dc_general": "1.0.*@dev",
 		"menatwork/contao-multicolumnwizard": "3.2.*@dev",
-		"bit3/contao-meta-palettes": "1.5.*@dev",
+		"bit3/contao-meta-palettes": "1.6.*@dev",
 		"discordier/justtextwidgets": ">=0.5"
 	},
 	"require-dev": {
