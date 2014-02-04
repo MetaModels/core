@@ -25,6 +25,8 @@ use DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
+use MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPTable;
+use MetaModels\DcGeneral\Events\Table\InputScreens\BuildPalette;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
@@ -267,7 +269,7 @@ class Subscriber
 			array('tl_metamodel_dca', 'ptable')
 		);
 
-		\MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPTable::setVisibility($event);
+		PropertyPTable::setVisibility($event);
 	}
 
 	/**
@@ -386,7 +388,7 @@ class Subscriber
 			array('tl_metamodel_dcasetting', 'rte')
 		);
 
-		\MetaModels\DcGeneral\Events\Table\InputScreens\BuildPalette::build($event);
+		BuildPalette::build($event);
 	}
 
 	/**
