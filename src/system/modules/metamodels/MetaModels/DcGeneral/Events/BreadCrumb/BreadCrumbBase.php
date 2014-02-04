@@ -20,16 +20,21 @@ use DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use DcGeneral\EnvironmentInterface;
 use DcGeneral\InputProviderInterface;
 
+/**
+ * Base class for calculating hierarchical breadcrumbs.
+ *
+ * @package MetaModels\DcGeneral\Events\BreadCrumb
+ */
 abstract class BreadCrumbBase
 {
 	/**
-	 * Get for a table the human readable name or a fallback
+	 * Get for a table the human readable name or a fallback.
 	 *
-	 * @param \DcGeneral\EnvironmentInterface $environment
+	 * @param EnvironmentInterface $environment The environment in use.
 	 *
-	 * @param string                          $table Name of table
+	 * @param string               $table       Name of table.
 	 *
-	 * @return string Human readable name
+	 * @return string The human readable name.
 	 */
 	protected function getBreadcrumbLabel(EnvironmentInterface $environment, $table)
 	{
@@ -40,13 +45,15 @@ abstract class BreadCrumbBase
 		if ($label == $shortTable)
 		{
 			$shortTable = str_replace('tl_metamodel_', '', $table);
-			return strtoupper(substr($shortTable, 0, 1)) . substr($shortTable, 1, strlen($shortTable) - 1) . ' %s';
+			return strtoupper(substr($shortTable, 0, 1)) . substr($shortTable, 1, (strlen($shortTable) - 1)) . ' %s';
 		}
 
 		return specialchars($label);
 	}
 
 	/**
+	 * Retrieve the current base url.
+	 *
 	 * @return string
 	 */
 	protected function getBaseUrl()
@@ -55,9 +62,11 @@ abstract class BreadCrumbBase
 	}
 
 	/**
-	 * @param string $table
+	 * Check if the given table is the current table.
 	 *
-	 * @param InputProviderInterface $input
+	 * @param string                 $table The name of the table.
+	 *
+	 * @param InputProviderInterface $input The input provider in use.
 	 *
 	 * @return mixed
 	 */
@@ -66,8 +75,24 @@ abstract class BreadCrumbBase
 		return $input->getParameter('table') == $table;
 	}
 
+	/**
+	 * Perform the bread crumb generating.
+	 *
+	 * @param EnvironmentInterface $environment The environment in use.
+	 *
+	 * @param array                $elements    The elements generated so far.
+	 *
+	 * @return array
+	 */
 	abstract public function getBreadcrumbElements(EnvironmentInterface $environment, $elements);
 
+	/**
+	 * Event handler.
+	 *
+	 * @param GetBreadcrumbEvent $event The event.
+	 *
+	 * @return void
+	 */
 	public function getBreadcrumb(GetBreadcrumbEvent $event)
 	{
 		$environment = $event->getEnvironment();
