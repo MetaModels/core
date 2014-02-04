@@ -138,7 +138,7 @@ class Collection implements ICollection
 	/**
 	 * {@inheritdoc}
 	 */
-	public function addRules(IMetaModelFilter $objFilter, $arrFilterUrl, $arrIgnoredFilter = array())
+	public function addRules(IFilter $objFilter, $arrFilterUrl, $arrIgnoredFilter = array())
 	{
 		foreach ($this->arrSettings as $objSetting)
 		{

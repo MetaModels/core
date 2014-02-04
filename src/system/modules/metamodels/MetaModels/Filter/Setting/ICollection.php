@@ -45,7 +45,7 @@ interface ICollection
 	 *
 	 * @return void
 	 */
-	public function addRules(IMetaModelFilter $objFilter, $arrFilterUrl, $arrIgnoredFilter = array());
+	public function addRules(IFilter $objFilter, $arrFilterUrl, $arrIgnoredFilter = array());
 
 	/**
 	 * Generate an filter url (aka jump to url) according to the contained filter rules.
