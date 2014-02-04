@@ -27,7 +27,7 @@ class PropertyAttributeId
 	/**
 	 * Retrieve the MetaModel attached to the model filter setting.
 	 *
-	 * @param ModelInterface $model
+	 * @param ModelInterface $model The model for which to retrieve the MetaModel.
 	 *
 	 * @return \MetaModels\IMetaModel
 	 */
@@ -39,11 +39,12 @@ class PropertyAttributeId
 
 	/**
 	 * Prepares a option list with alias => name connection for all attributes.
+	 *
 	 * This is used in the attr_id select box.
 	 *
-	 * @param GetPropertyOptionsEvent $event
+	 * @param GetPropertyOptionsEvent $event The event.
 	 *
-	 * @return array
+	 * @return void
 	 */
 	public static function getOptions(GetPropertyOptionsEvent $event)
 	{
@@ -51,7 +52,6 @@ class PropertyAttributeId
 		$model  = $event->getModel();
 
 		$metaModel  = self::getMetaModel($model);
-
 		$typeFilter = $GLOBALS['METAMODELS']['filters'][$model->getProperty('type')]['attr_filter'];
 
 		foreach ($metaModel->getAttributes() as $attribute)
@@ -71,15 +71,17 @@ class PropertyAttributeId
 	}
 
 	/**
-	 * Translates an attribute id to a generated alias {@see getAttributeNames()}
+	 * Translates an attribute id to a generated alias {@see getAttributeNames()}.
 	 *
-	 * @param \DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent $event
+	 * @param DecodePropertyValueForWidgetEvent $event The event.
+	 *
+	 * @return void
 	 */
 	public static function decodeValue(DecodePropertyValueForWidgetEvent $event)
 	{
-		$model      = $event->getModel();
-		$metaModel  = self::getMetaModel($model);
-		$value      = $event->getValue();
+		$model     = $event->getModel();
+		$metaModel = self::getMetaModel($model);
+		$value     = $event->getValue();
 
 		if (!($metaModel && $value))
 		{
@@ -100,9 +102,9 @@ class PropertyAttributeId
 	 */
 	public static function encodeValue(EncodePropertyValueFromWidgetEvent $event)
 	{
-		$model      = $event->getModel();
-		$metaModel  = self::getMetaModel($model);
-		$value      = $event->getValue();
+		$model     = $event->getModel();
+		$metaModel = self::getMetaModel($model);
+		$value     = $event->getValue();
 
 		if (!($metaModel && $value))
 		{
