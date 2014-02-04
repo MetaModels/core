@@ -115,6 +115,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['settings'],
 				'href'                => 'table=tl_metamodel_filtersetting',
+				'idparam'             => 'pid',
 				'icon'                => 'system/modules/metamodels/html/filter_setting.png',
 			),
 		)

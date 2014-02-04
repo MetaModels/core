@@ -286,21 +286,21 @@ class Filter extends Helper
 			$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['dca_config']['childCondition'][0]['filter'][] = array
 			(
 				'local'        => 'fid',
-				'remote_value' => \Input::getInstance()->get('id'),
+				'remote_value' => \Input::getInstance()->get('pid'),
 				'operation'    => '=',
 			);
 
 			$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['dca_config']['rootEntries']['tl_metamodel_filtersetting']['setOn'][] = array
 			(
 				'property'    => 'fid',
-				'value'       => \Input::getInstance()->get('id'),
+				'value'       => \Input::getInstance()->get('pid'),
 			);
 
 			$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['dca_config']['rootEntries']['tl_metamodel_filtersetting']['filter'][] = array
 			(
 				'property'    => 'fid',
 				'operation'   => '=',
-				'value'       => \Input::getInstance()->get('id'),
+				'value'       => \Input::getInstance()->get('pid'),
 			);
 		}
 		return $strTable;
