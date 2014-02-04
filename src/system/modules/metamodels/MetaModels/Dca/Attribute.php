@@ -16,9 +16,6 @@
 
 namespace MetaModels\Dca;
 
-use DcGeneral\DataContainerInterface;
-use MetaModels\IMetaModel;
-use MetaModels\Attribute\IAttribute;
 use MetaModels\Factory as ModelFactory;
 use MetaModels\Attribute\Factory as AttributeFactory;
 
@@ -64,47 +61,6 @@ class Attribute extends Helper
 	 * @var \MetaModels\Attribute\IAttribute
 	 */
 	protected static $objCurrentField = null;
-
-	/**
-	 * Retrieve and buffer the current value of the column frm the DB.
-	 * This will later be used for the on submit and onsave callbacks.
-	 *
-	 * Used from tl_metamodel_attribute DCA
-	 *
-	 * @param \DcGeneral\DataContainerInterface $objDC the data container that issued this callback.
-	 *
-	 * @throws \RuntimeException
-	 */
-	public function onLoadCallback($objDC)
-	{
-		// FIXME: we have DC_General available here, so alter the quirky hacks using the parameters from the Url.
-		// do nothing if not in edit/create mode.
-		if(!((\Input::getInstance()->get('pid') || \Input::getInstance()->get('id')) && in_array(\Input::getInstance()->get('act'), array('create', 'edit'))))
-		{
-			return;
-		}
-
-		if (\Input::getInstance()->get('pid'))
-		{
-			$objMetaModel = ModelFactory::byId(\Input::getInstance()->get('pid'));
-		} else {
-			$objMetaModel = ModelFactory::byId(
-				$this->Database->prepare('SELECT pid FROM tl_metamodel_attribute WHERE id=?')
-					->execute(\Input::getInstance()->get('id'))
-					->pid
-			);
-		}
-
-		if (!$objMetaModel)
-		{
-			throw new \RuntimeException('unexpected condition, metamodel unknown', 1);
-		}
-
-		if (!$objMetaModel->hasVariants())
-		{
-			unset($GLOBALS['TL_DCA']['tl_metamodel_attribute']['fields']['isvariant']);
-		}
-	}
 
 	/**
 	 * Keep a copy of the attribute values.
