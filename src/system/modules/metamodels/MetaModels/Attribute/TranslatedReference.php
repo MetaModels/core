@@ -40,13 +40,13 @@ abstract class TranslatedReference
 	/**
 	 * Build a where clause for the given id(s) and langcode.
 	 *
-	 * @param mixed  $mixIds      one, none or many ids to use.
+	 * @param mixed  $mixIds      One, none or many ids to use.
 	 *
-	 * @param string $strLangCode the langcode to use, optional.
+	 * @param string $mixLangCode The langcode/s to use, optional.
 	 *
 	 * @return array
 	 */
-	protected function getWhere($mixIds, $strLangCode='')
+	protected function getWhere($mixIds, $mixLangCode = '')
 	{
 		$strWhereIds = '';
 		if ($mixIds)
@@ -62,10 +62,15 @@ abstract class TranslatedReference
 			'procedure' => 'att_id=?' . $strWhereIds,
 			'params' => array(intval($this->get('id')))
 		);
-		if ($strLangCode)
+
+		if (is_array($mixLangCode) && !empty($mixLangCode))
+		{
+			$arrReturn['procedure'] .= ' AND langcode IN ("' . implode('","', $mixLangCode) . '")';
+		}
+		elseif ($mixLangCode)
 		{
 			$arrReturn['procedure'] .=  ' AND langcode=?';
-			$arrReturn['params'][] = $strLangCode;
+			$arrReturn['params'][]   = $mixLangCode;
 		}
 
 		return $arrReturn;
@@ -213,9 +218,9 @@ abstract class TranslatedReference
 	{
 		$objDB = \Database::getInstance();
 
-		$arrWhere = $this->getWhere($arrIds, $this->getMetaModel()->getActiveLanguage());
+		$arrWhere = $this->getWhere($arrIds, array($this->getMetaModel()->getActiveLanguage(), $this->getMetaModel()->getFallbackLanguage()));
 
-		$strQuery = 'SELECT item_id FROM ' . $this->getValueTable() . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '');
+		$strQuery = 'SELECT item_id FROM ' . $this->getValueTable() . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '') . ' GROUP BY item_id';
 
 		$arrOptionizer = $this->getOptionizer();
 

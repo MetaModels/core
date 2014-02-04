@@ -1,25 +1,26 @@
 <?php
-
 /**
- * Contao Open Source CMS
+ * The MetaModels extension allows the creation of multiple collections of custom items,
+ * each with its own unique set of selectable attributes, with attribute extendability.
+ * The Front-End modules allow you to build powerful listing and filtering of the
+ * data in each collection.
  *
- * Copyright (c) 2005-2013 Leo Feyer
- *
- * @package Core
- * @link    https://contao.org
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * PHP version 5
+ * @package    MetaModels
+ * @subpackage Core
+ * @author     David Maack <david.maack@arcor.de>
+ * @copyright  The MetaModels team.
+ * @license    LGPL.
+ * @filesource
  */
 
 namespace MetaModels\Widgets;
 
 
 /**
- * Class FileSelectorWidget
- *
  * Provide methods to handle input field "file tree".
- * @copyright  Leo Feyer 2005-2013
- * @author     Leo Feyer <https://contao.org>
- * @package    Core
+ *
+ * @package Core
  */
 class FileSelectorWidget extends \FileSelector
 {

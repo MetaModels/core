@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2013-12-11T16:14:26+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_content']['ASC']                                 = 'aufsteigend';
@@ -16,7 +16,7 @@ $GLOBALS['TL_LANG']['tl_content']['DESC']                                = 'abst
 $GLOBALS['TL_LANG']['tl_content']['editfiltersetting']['0']              = 'Filtereinstellungen bearbeiten';
 $GLOBALS['TL_LANG']['tl_content']['editfiltersetting']['1']              = 'Die Filtereinstellungen ID %s bearbeiten';
 $GLOBALS['TL_LANG']['tl_content']['editmetamodel']['0']                  = 'MetaModel bearbeiten';
-$GLOBALS['TL_LANG']['tl_content']['editmetamodel']['1']                  = 'Das MetaModel mit der ID% bearbeiten.';
+$GLOBALS['TL_LANG']['tl_content']['editmetamodel']['1']                  = 'Das MetaModel mit der ID %s bearbeiten.';
 $GLOBALS['TL_LANG']['tl_content']['editrendersetting']['0']              = 'Rendereinstellungen bearbeiten';
 $GLOBALS['TL_LANG']['tl_content']['editrendersetting']['1']              = 'Die Renderingeinstellungen ID %s bearbeiten';
 $GLOBALS['TL_LANG']['tl_content']['metamodel']['0']                      = 'MetaModel';
@@ -43,6 +43,10 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_layout']['0']               = 'Ange
 $GLOBALS['TL_LANG']['tl_content']['metamodel_layout']['1']               = 'Wählen Sie das Template aus, das für das gewählte Attribut verwendet werden soll. Gültige Dateinamen für das Template beginnen mit "ce_metamodel"';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_limit']['0']                = 'Maximale Anzahl an Items';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_limit']['1']                = 'Bitte geben Sie maximale Anzahl der Items an. Geben Sie 0 an, um alle Items anzuzeigen und damit die Paginierung zu deaktivieren.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_meta_description']['0']     = 'Meta-Beschreibung';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_meta_description']['1']     = 'Wählen Sie aus, welches Attribut für die Meta-Beschreibung der Seite benutzt wird.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_meta_title']['0']           = 'Meta-Titel';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_meta_title']['1']           = 'Wählen Sie aus, welches Attribut für den Meta-Titel der Seite benutzt wird.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_noparsing']['0']            = 'Keine Items ausgeben';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_noparsing']['1']            = 'Wenn diese Box aktiviert ist gibt das Module keine Items aus. Stattdessen stellt es Items-Objekte im Template zur Verfügung.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_offset']['0']               = 'Listen-Offset';
@@ -57,4 +61,6 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit']['0']            = 'Offs
 $GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit']['1']            = 'Auswählen, falls Sie die Anzahl anzuzeigender Items begrenzen möchten. Diese Einstellung ist beipielsweise nützlich, wenn Sie nur die ersten 500 Items anzeigen möchten, oder falls Sie alle Items anzeigen und dabei die ersten 10 überspringen wollen. Eine voreingestellte Paginierung bleibt dabei erhalten.';
 $GLOBALS['TL_LANG']['tl_content']['mm_config_legend']                    = 'MetaModel-Einstellungen';
 $GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']                    = 'MetaModel-Filter';
+$GLOBALS['TL_LANG']['tl_content']['mm_meta_legend']                      = 'Suchmaschinen-Optimierung';
 $GLOBALS['TL_LANG']['tl_content']['mm_rendering']                        = 'MetaModel-Rendering';
+

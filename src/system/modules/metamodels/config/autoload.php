@@ -85,6 +85,7 @@ ClassLoader::addClasses(array
 	'MetaModels\FrontendIntegration\Content\ModelList'      => 'system/modules/metamodels/MetaModels/FrontendIntegration/Content/ModelList.php',
 	'MetaModels\FrontendIntegration\FrontendFilter'         => 'system/modules/metamodels/MetaModels/FrontendIntegration/FrontendFilter.php',
 	'MetaModels\FrontendIntegration\FrontendFilterOptions'  => 'system/modules/metamodels/MetaModels/FrontendIntegration/FrontendFilterOptions.php',
+	'MetaModels\FrontendIntegration\InsertTags'             => 'system/modules/metamodels/MetaModels/FrontendIntegration/InsertTags.php',
 	'MetaModels\FrontendIntegration\Module\Filter'          => 'system/modules/metamodels/MetaModels/FrontendIntegration/Module/Filter.php',
 	'MetaModels\FrontendIntegration\Module\FilterClearAll'  => 'system/modules/metamodels/MetaModels/FrontendIntegration/Module/FilterClearAll.php',
 	'MetaModels\FrontendIntegration\Module\ModelList'       => 'system/modules/metamodels/MetaModels/FrontendIntegration/Module/ModelList.php',
