@@ -18,29 +18,35 @@ namespace MetaModels\DcGeneral\Events\Table\Attribute;
 
 use DcGeneral\Data\ModelInterface;
 use DcGeneral\Exception\DcGeneralInvalidArgumentException;
+use MetaModels\Factory;
 use MetaModels\IMetaModel;
 
+/**
+ * Base class for providing methods to retrieve various stuff related to a tl_metamodel_attribute model.
+ *
+ * @package MetaModels\DcGeneral\Events\Table\Attribute
+ */
 class AttributeBase
 {
 	/**
 	 * Retrieve the MetaModel the given model is attached to.
 	 *
-	 * @param ModelInterface $model The model being processed
+	 * @param ModelInterface $model The model being processed.
 	 *
 	 * @return IMetaModel
 	 *
-	 * @throws DcGeneralInvalidArgumentException
+	 * @throws DcGeneralInvalidArgumentException When an invalid model has been passed.
 	 */
-	protected static function getMetaModelFromModel(ModelInterface $model)
+	public static function getMetaModelFromModel(ModelInterface $model)
 	{
-		if (!(($model->getProviderName() == 'tl_metamodel_attribute') && $model->getId()))
+		if (!(($model->getProviderName() == 'tl_metamodel_attribute') && $model->getProperty('pid')))
 		{
 			throw new DcGeneralInvalidArgumentException(
-				'Model must originate from tl_metamodel_attribute and be saved, this one originates from ' .
-				$model->getProviderName() . ' and has id ' . $model->getId()
+				'Model must originate from tl_metamodel_attribute and contain a pid, this one originates from ' .
+				$model->getProviderName() . ' and has pid ' . $model->getProperty('pid')
 			);
 		}
 
-		return \MetaModels\Factory::byId($model->getProperty('pid'));
+		return Factory::byId($model->getProperty('pid'));
 	}
 }
