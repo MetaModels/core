@@ -36,11 +36,18 @@ class AttributeType
 	 */
 	public static function getOptions(GetPropertyOptionsEvent $event)
 	{
+		$translator   = $event->getEnvironment()->getTranslator();
 		$objMetaModel = ModelFactory::byId($event->getModel()->getProperty('pid'));
-		$options      = AttributeFactory::getAttributeTypes(
+		$attributes   = AttributeFactory::getAttributeTypes(
 			$objMetaModel->isTranslated(),
 			$objMetaModel->hasVariants()
 		);
+
+		$options = array();
+		foreach ($attributes as $attributeType)
+		{
+			$options[$attributeType] = $translator->translate('typeOptions.' . $attributeType, 'tl_metamodel_attribute');
+		}
 
 		$event->setOptions($options);
 	}
