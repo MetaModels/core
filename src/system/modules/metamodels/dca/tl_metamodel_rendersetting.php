@@ -60,29 +60,30 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 				)
 			)
 		),
-		'rootEntries'                 => array
-		(
-			'tl_metamodel_rendersetting' => array
-			(
-				'setOn' => array
-				(
-					array
-					(
-						'property'    => 'pid',
-						'remote'      => 'id',
-					),
-				),
-				'filter'              => array
-				(
-					array
-					(
-						'property'    => 'pid',
-						'operation'   => '=',
-						'remote'      => 'id',
-					)
-				)
-			)
-		),
+// ToDo: Temp removed for test purpose.
+//		'rootEntries'                 => array
+//		(
+//			'tl_metamodel_rendersetting' => array
+//			(
+//				'setOn' => array
+//				(
+//					array
+//					(
+//						'property'    => 'pid',
+//						'remote'      => 'id',
+//					),
+//				),
+//				'filter'              => array
+//				(
+//					array
+//					(
+//						'property'    => 'pid',
+//						'operation'   => '=',
+//						'remote'      => 'id',
+//					)
+//				)
+//			)
+//		),
 		'child_list'                  => array
 		(
 			'tl_metamodel_rendersetting' => array
