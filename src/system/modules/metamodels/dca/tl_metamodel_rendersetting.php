@@ -204,7 +204,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options_callback'        => array('MetaModels\Dca\RenderSetting', 'getTemplates'),
 			'eval'                    => array
 			(
 				'tl_class'            => 'w50',
