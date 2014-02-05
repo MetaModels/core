@@ -212,6 +212,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 				'includeBlankOption'  => true,
 			)
 		),
+
+		'sorting' => array(),
 	)
 );
 
