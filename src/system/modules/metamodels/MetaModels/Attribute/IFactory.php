@@ -16,6 +16,8 @@
 
 namespace MetaModels\Attribute;
 
+use MetaModels\IMetaModel;
+
 /**
  * This is the factory interface to query instances of attributes.
  * Usually this is only used internally from within the MetaModel class.
@@ -31,25 +33,25 @@ interface IFactory
 	 *
 	 * @param array $arrData The attribute information data.
 	 *
-	 * @return \MetaModels\Attribute\IAttribute|null The instance of the attribute or NULL if the class could not be determined
+	 * @return IAttribute|null The instance of the attribute or NULL if the class could not be determined
 	 */
 	public static function createFromArray($arrData);
 
 	/**
 	 * Instantiate a attribute from an array.
 	 *
-	 * @param \Database_Result $objRow The attribute information data.
+	 * @param \Database\Result $objRow The attribute information data.
 	 *
-	 * @return \MetaModels\Attribute\IAttribute|null The instance of the attribute or NULL if the class could not be determined.
+	 * @return IAttribute|null The instance of the attribute or NULL if the class could not be determined.
 	 */
 	public static function createFromDB($objRow);
 
 	/**
 	 * Instantiate all attributes for the given MetaModel instance.
 	 *
-	 * @param \MetaModels\IMetaModel $objMetaModel The MetaModel instance for which all attributes shall be returned.
+	 * @param IMetaModel $objMetaModel The MetaModel instance for which all attributes shall be returned.
 	 *
-	 * @return \MetaModels\Attribute\IAttribute[] The instances of the attributes.
+	 * @return IAttribute[] The instances of the attributes.
 	 */
 	public static function getAttributesFor($objMetaModel);
 
