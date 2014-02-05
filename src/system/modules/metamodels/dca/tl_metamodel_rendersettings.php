@@ -100,7 +100,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		
 		'sorting' => array
 		(
-			'mode'                    => 3,
+			'mode'                    => 4,
 			'fields'                  => array('name'),
 			'panelLayout'             => 'filter,limit',
 			'headerFields'            => array('name'),
