@@ -90,14 +90,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		),
 	),
 
-	// List
 	'list' => array
 	(
-		'presentation' => array
-		(
-			'breadcrumb_callback'     => array('MetaModels\Dca\BreadcrumbBuilder', 'generateBreadcrumbItems'),
-		),
-		
 		'sorting' => array
 		(
 			'mode'                    => 4,
