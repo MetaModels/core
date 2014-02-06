@@ -6,7 +6,7 @@
  * data in each collection.
  *
  * PHP version 5
- * @package	   MetaModels
+ * @package    MetaModels
  * @subpackage Backend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  The MetaModels team.
@@ -14,13 +14,8 @@
  * @filesource
  */
 
-/**
- * Table tl_metamodel_dca
- */
-
 $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 (
-	// Config
 	'config' => array
 	(
 		'dataContainer'                          => 'General',
@@ -44,13 +39,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 		),
 	),
 
-	// Palettes
 	'palettes' => array
 	(
 		'default' => 'rows'
 	),
 
-	// Fields
 	'fields' => array
 	(
 		'rows' => array
@@ -64,7 +57,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 				'tl_class'                       => 'dca_combine',
 				'columnFields'                   => array
 				(
-                    'id'                         => array
+					'id'                         => array
 					(
 						'label'                  => null,
 						'exclude'                => true,
@@ -80,12 +73,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 						'label'                  => &$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['fe_group'],
 						'exclude'                => true,
 						'inputType'              => 'select',
+						// TODO: change callbacks to event handlers.
 						'options_callback'       => array('MetaModels\Dca\DcaCombine', 'getMemberGroups'),
 						'eval'                   => array
 						(
 							'includeBlankOption' => true,
 							'style'              => 'width:115px',
-							'chosen'             => 'true' // slows down the MCW like hell
+							'chosen'             => 'true'
 						)
 					),
 					'be_group'                   => array
@@ -93,12 +87,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 						'label'                  => &$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['be_group'],
 						'exclude'                => true,
 						'inputType'              => 'select',
+						// TODO: change callbacks to event handlers.
 						'options_callback'       => array('MetaModels\Dca\DcaCombine', 'getUserGroups'),
 						'eval'                   => array
 						(
 							'includeBlankOption' => true,
 							'style'              => 'width:115px',
-							'chosen'             => 'true' // slows down the MCW like hell
+							'chosen'             => 'true'
 						)
 					),
 					'dca_id'                     => array
@@ -106,11 +101,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 						'label'                  => &$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_id'],
 						'exclude'                => true,
 						'inputType'              => 'select',
+						// TODO: change callbacks to event handlers.
 						'options_callback'       => array('MetaModels\Dca\DcaCombine', 'getModelPalettes'),
 						'eval'                   => array
 						(
 							'style'              => 'width:180px',
-							'chosen'             => 'true' // slows down the MCW like hell
+							'chosen'             => 'true'
 						)
 					),
 					'view_id'                    => array
@@ -118,15 +114,17 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 						'label'                  => &$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['view_id'],
 						'exclude'                => true,
 						'inputType'              => 'select',
+						// TODO: change callbacks to event handlers.
 						'options_callback'       => array('MetaModels\Dca\DcaCombine', 'getModelViews'),
 						'eval'                   => array
 						(
 							'style'              => 'width:180px',
-							'chosen'             => 'true' // slows down the MCW like hell
+							'chosen'             => 'true'
 						)
 					),
 				),
 			),
+			// TODO: change callbacks to event handlers.
 			'save_callback'                      => array(array('MetaModels\Dca\DcaCombine', 'updateSort')),
 		)
 	)

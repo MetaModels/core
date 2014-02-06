@@ -6,7 +6,7 @@
  * data in each collection.
  *
  * PHP version 5
- * @package	   MetaModels
+ * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  The MetaModels team.
@@ -14,28 +14,23 @@
  * @filesource
  */
 
-/**
- * Config
- */
+// Config.
+// TODO: change callbacks to event handlers.
 $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] = array('MetaModels\Dca\Content', 'buildCustomFilter');
 
-/**
- * Palettes
- */
+// Palettes.
 $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodel_content']           = '{title_legend},name,headline,type;{mm_config_legend},metamodel,perPage,metamodel_use_limit;{mm_filter_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_filtering,metamodel_filterparams;{mm_rendering},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;{mm_meta_legend},metamodel_meta_title,metamodel_meta_description;{protected_legend:hide},protected;{expert_legend:hide},metamodel_donotindex,guests,cssID,space';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodels_frontendfilter']   = '{title_legend},name,headline,type;{mm_filter_legend},metamodel_jumpTo,metamodel,metamodel_filtering,metamodel_fef_template,metamodel_fef_params,metamodel_fef_autosubmit,metamodel_fef_hideclearfilter,metamodel_available_values;{protected_legend:hide},protected;{expert_legend:hide},guests,invisible,cssID,space';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodels_frontendclearall'] = '{title_legend},name,headline,type;{mm_filter_legend},metamodel_fef_template;{protected_legend:hide},protected;{expert_legend:hide},guests,invisible,cssID,space';
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_limit';
 
-// Insert new Subpalettes after position 1
+// Insert new Subpalettes after position 1.
 array_insert($GLOBALS['TL_DCA']['tl_content']['subpalettes'], 1, array(
 	'metamodel_use_limit' => 'metamodel_offset,metamodel_limit',
 ));
 
-/**
- * Fields
- */
+// Fields.
 array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 (
 	'metamodel' => array
@@ -51,6 +46,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 			'submitOnChange'      => true,
 			'includeBlankOption'  => true
 		),
+		// TODO: change callbacks to event handlers.
 		'wizard' => array
 		(
 			array('MetaModels\Dca\Content', 'editMetaModel')
@@ -62,6 +58,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_layout'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
+		// TODO: change callbacks to event handlers.
 		'options_callback'        => array('MetaModels\Dca\Content', 'getModuleTemplates'),
 		'eval'                    => array
 		(
@@ -99,6 +96,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_sortby'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
+		// TODO: change callbacks to event handlers.
 		'options_callback'        => array('MetaModels\Dca\Content', 'getAttributeNames'),
 		'eval'                    => array
 		(
@@ -128,6 +126,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_filtering'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
+		// TODO: change callbacks to event handlers.
 		'options_callback'        => array('MetaModels\Dca\Content', 'getFilterSettings'),
 		'default'                 => '',
 		'eval' => array
@@ -139,6 +138,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		),
 		'wizard' => array
 		(
+			// TODO: change callbacks to event handlers.
 			array('MetaModels\Dca\Content', 'editFilterSetting')
 		)
 	),
@@ -148,6 +148,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_rendersettings'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
+		// TODO: change callbacks to event handlers.
 		'options_callback'        => array('MetaModels\Dca\Content', 'getRenderSettings'),
 		'default'                 => '',
 		'eval' => array
@@ -159,6 +160,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		),
 		'wizard' => array
 		(
+			// TODO: change callbacks to event handlers.
 			array('MetaModels\Dca\Content', 'editRenderSetting')
 		)
 	),
@@ -174,7 +176,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 			'tl_class'            => 'w50'
 		),
 	),
-	
+
 	'metamodel_donotindex' => array
 	(
 		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_donotindex'],
@@ -185,7 +187,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 			'tl_class'            => 'w50'
 		),
 	),
-	
+
 	'metamodel_available_values' => array
 	(
 		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_available_values'],
@@ -221,7 +223,10 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_jumpTo'],
 		'exclude'                 => true,
 		'inputType'               => 'pageTree',
-		'eval'                    => array('fieldType'=>'radio')
+		'eval'                    => array
+		(
+			'fieldType'           => 'radio'
+		)
 	),
 
 	'metamodel_fef_params' => array
@@ -229,8 +234,13 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_params'],
 		'exclude'                 => true,
 		'inputType'               => 'checkboxWizard',
+		// TODO: change callbacks to event handlers.
 		'options_callback'        => array('MetaModels\Dca\Content','getFilterParameterNames'),
-		'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
+		'eval'                    => array
+		(
+			'multiple'            => true,
+			'tl_class'            => 'clr'
+		)
 	),
 
 	'metamodel_fef_autosubmit' => array
@@ -244,7 +254,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 			'tl_class'            => 'w50'
 		),
 	),
-	
+
 	'metamodel_fef_hideclearfilter' => array
 	(
 		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_hideclearfilter'],
@@ -262,6 +272,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'default'                 => 'mm_filter_default',
 		'exclude'                 => true,
 		'inputType'               => 'select',
+		// TODO: change callbacks to event handlers.
 		'options_callback'        => array('MetaModels\Dca\Content', 'getFilterTemplates'),
 		'eval'                    => array
 		(
@@ -275,6 +286,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_meta_title'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
+		// TODO: change callbacks to event handlers.
 		'options_callback'        => array('MetaModels\Dca\Content', 'getMetaTitleAttributes'),
 		'eval'                    => array
 		(
@@ -289,6 +301,7 @@ array_insert($GLOBALS['TL_DCA']['tl_content']['fields'], 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_content']['metamodel_meta_description'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
+		// TODO: change callbacks to event handlers.
 		'options_callback'        => array('MetaModels\Dca\Content', 'getMetaDescriptionAttributes'),
 		'eval'                    => array
 		(

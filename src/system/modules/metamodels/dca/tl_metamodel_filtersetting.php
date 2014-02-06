@@ -25,6 +25,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		'dataContainer'               => 'General',
 		'switchToEdit'                => false,
 		'enableVersioning'            => false,
+		// TODO: change callbacks to event handlers.
 		'oncreate_callback'           => array(array('MetaModels\Dca\Filter', 'create_callback')),
 		'palettes_callback'           => array(array('MetaModels\Dca\Filter', 'preparePalettes')),
 		'tablename_callback'          => array(array('MetaModels\Dca\Filter', 'loadTableCallback')),
@@ -120,14 +121,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			),
 		)
 	),
-	// List.
 	'list' => array
 	(
 		'sorting' => array
 		(
 			'mode'                    => 5,
 			'fields'                  => array('attr_id'),
-//			'panelLayout'             => 'filter,limit',
 			'headerFields'            => array('type', 'attr_id'),
 			'flag'                    => 1,
 			'icon'                    => 'system/modules/metamodels/html/filter_and.png',
@@ -176,7 +175,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete'],
 				'href'                => 'act=delete',
 				'icon'                => 'delete.gif',
-				'attributes'          => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+				'attributes'          => sprintf(
+					'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
+					$GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+				)
 			),
 			'show' => array
 			(
@@ -190,6 +192,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['toggle'],
 				'icon'                => 'visible.gif',
 				'attributes'          => 'onclick="Backend.getScrollOffset(); return AjaxRequest.toggleVisibility(this, %s);"',
+				// TODO: change callbacks to event handlers.
 				'button_callback'     => array('MetaModels\Dca\Filter', 'toggleIcon')
 			)
 		)
@@ -212,7 +215,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'config' => array('attr_id')
 		),
 
-		// base rules shipped with metamodels.
 		'conditionor extends default' => array
 		(
 			'config' => array('stop_after_match')
@@ -225,7 +227,19 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 
 		'simplelookup extends _attribute_' => array
 		(
-			'+config' => array('urlparam', 'allow_empty', 'predef_param', 'label', 'template', 'defaultid', 'blankoption', 'onlyused', 'onlypossible', 'skipfilteroptions'),
+			'+config' => array
+			(
+				'urlparam',
+				'allow_empty',
+				'predef_param',
+				'label',
+				'template',
+				'defaultid',
+				'blankoption',
+				'onlyused',
+				'onlypossible',
+				'skipfilteroptions'
+			),
 		),
 
 		'customsql extends default' => array
@@ -253,12 +267,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'all_langs'
 		)
 	),
-	// Fields
 	'fields' => array
 	(
 		'fid' => array
 		(
-			// keep this empty but keep it here!
+			// Keep this empty but keep it here!
 			// needed for act=copy in DC_Table, as otherwise the fid value will not be copied.
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid'],
 		),
@@ -474,8 +487,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'eval'                    => array('tl_class'=>'w50 clr', 'includeBlankOption'=>true)
+			'eval'                    => array
+			(
+				'tl_class'            => 'w50 clr',
+				'includeBlankOption'  => true
+			)
 		)
 	)
 );
-

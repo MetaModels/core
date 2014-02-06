@@ -6,7 +6,7 @@
  * data in each collection.
  *
  * PHP version 5
- * @package	   MetaModels
+ * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  The MetaModels team.
@@ -14,29 +14,25 @@
  * @filesource
  */
 
+// TODO: change callbacks to event handlers.
 $GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = array('MetaModels\Dca\Module', 'buildFilterParams');
 
-/**
- * Add palettes to tl_module
- */
-
+// Add palettes to tl_module.
 $GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list']              = '{title_legend},name,headline,type;{config_legend},metamodel,perPage,metamodel_use_limit;{mm_filter_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_filtering,metamodel_filterparams;{template_legend:hide},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;{mm_meta_legend},metamodel_meta_title,metamodel_meta_description;{protected_legend:hide},protected;{expert_legend:hide},metamodel_donotindex,guests,cssID,space';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['metamodels_frontendfilter']   = '{title_legend},name,headline,type;{mm_filter_legend},metamodel_jumpTo,metamodel,metamodel_filtering,metamodel_fef_template,metamodel_fef_params,metamodel_fef_autosubmit,metamodel_fef_hideclearfilter,metamodel_available_values;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['metamodels_frontendclearall'] = '{title_legend},name,headline,type;{mm_filter_legend},metamodel_fef_template;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID,space';
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'metamodel_use_limit';
 
-// Insert new Subpalettes after position 1
+// Insert new Subpalettes after position 1.
 array_insert($GLOBALS['TL_DCA']['tl_module']['subpalettes'], 1, array
 	(
 		'metamodel_use_limit' => 'metamodel_offset,metamodel_limit',
 	)
 );
 
-/**
- * Fields
- */
-array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
+// Fields.
+array_insert($GLOBALS['TL_DCA']['tl_module']['fields'], 1, array
 (
 	'metamodel' => array
 	(
@@ -53,6 +49,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		),
 		'wizard' => array
 		(
+			// TODO: change callbacks to event handlers.
 			array('MetaModels\Dca\Module', 'editMetaModel')
 		)
 	),
@@ -62,11 +59,12 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_layout'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
+		// TODO: change callbacks to event handlers.
 		'options_callback'        => array('MetaModels\Dca\Module', 'getModuleTemplates'),
 		'eval'                    => array
 		(
 			'chosen'              => true,
-			'tl_class'            =>'w50'
+			'tl_class'            => 'w50'
 		)
 	),
 
@@ -75,7 +73,11 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_use_limit'],
 		'exclude'                 => true,
 		'inputType'               => 'checkbox',
-		'eval'                    => array('submitOnChange'=> true, 'tl_class' => 'w50 m12'),
+		'eval'                    => array
+		(
+			'submitOnChange'      => true,
+			'tl_class'            => 'w50 m12'
+		),
 	),
 
 	'metamodel_limit' => array
@@ -83,7 +85,11 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_limit'],
 		'exclude'                 => true,
 		'inputType'               => 'text',
-		'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50')
+		'eval'                    => array
+		(
+			'rgxp'                => 'digit',
+			'tl_class'            => 'w50'
+		)
 	),
 
 	'metamodel_offset' => array
@@ -91,7 +97,11 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_offset'],
 		'exclude'                 => true,
 		'inputType'               => 'text',
-		'eval'                    => array('rgxp' => 'digit', 'tl_class'=>'w50'),
+		'eval'                    => array
+		(
+			'rgxp'                => 'digit',
+			'tl_class'            => 'w50'
+		),
 	),
 
 	'metamodel_sortby' => array
@@ -99,12 +109,13 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_sortby'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
+		// TODO: change callbacks to event handlers.
 		'options_callback'        => array('MetaModels\Dca\Module', 'getAttributeNames'),
 		'eval'                    => array
 		(
 			'includeBlankOption'  => true,
 			'chosen'              => true,
-			'tl_class'=>'w50'
+			'tl_class'            => 'w50'
 		),
 	),
 
@@ -168,7 +179,11 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_noparsing'],
 		'exclude'                 => true,
 		'inputType'               => 'checkbox',
-		'eval'                    => array('submitOnChange'=> true, 'tl_class' => 'clr'),
+		'eval'                    => array
+		(
+			'submitOnChange'      => true,
+			'tl_class'            => 'clr'
+		),
 	),
 
 	'metamodel_donotindex' => array
@@ -181,7 +196,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 			'tl_class'            => 'w50'
 		),
 	),
-	
+
 	'metamodel_available_values' => array
 	(
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_available_values'],
@@ -218,7 +233,10 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_jumpTo'],
 		'exclude'                 => true,
 		'inputType'               => 'pageTree',
-		'eval'                    => array('fieldType'=>'radio')
+		'eval'                    => array
+		(
+			'fieldType'           => 'radio'
+		)
 	),
 
 	'metamodel_fef_params' => array
@@ -226,8 +244,13 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_params'],
 		'exclude'                 => true,
 		'inputType'               => 'checkboxWizard',
+		// TODO: change callbacks to event handlers.
 		'options_callback'        => array('MetaModels\Dca\Module','getFilterParameterNames'),
-		'eval'                    => array('multiple'=>true, 'tl_class'=>'clr')
+		'eval'                    => array
+		(
+			'multiple'            => true,
+			'tl_class'            => 'clr'
+		)
 	),
 
 	'metamodel_fef_autosubmit' => array
@@ -259,6 +282,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'default'                 => 'event_full',
 		'exclude'                 => true,
 		'inputType'               => 'select',
+		// TODO: change callbacks to event handlers.
 		'options_callback'        => array('MetaModels\Dca\Module', 'getFilterTemplates'),
 		'eval'                    => array
 		(
@@ -266,12 +290,13 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 			'chosen'              => true
 		),
 	),
-	
+
 	'metamodel_meta_title' => array
 	(
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_meta_title'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
+		// TODO: change callbacks to event handlers.
 		'options_callback'        => array('MetaModels\Dca\Module', 'getMetaTitleAttributes'),
 		'eval'                    => array
 		(
@@ -286,6 +311,7 @@ array_insert($GLOBALS['TL_DCA']['tl_module']['fields'] , 1, array
 		'label'                   => &$GLOBALS['TL_LANG']['tl_module']['metamodel_meta_description'],
 		'exclude'                 => true,
 		'inputType'               => 'select',
+		// TODO: change callbacks to event handlers.
 		'options_callback'        => array('MetaModels\Dca\Module', 'getMetaDescriptionAttributes'),
 		'eval'                    => array
 		(

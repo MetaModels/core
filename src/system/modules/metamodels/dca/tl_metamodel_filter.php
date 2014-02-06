@@ -20,7 +20,7 @@
 
 $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
 (
-	'config' => array
+	'config'                          => array
 	(
 		'dataContainer'               => 'General',
 		'switchToEdit'                => false,
@@ -38,12 +38,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
 		),
 		'childCondition'              => array
 		(
-			array(
+			array
+			(
 				'from'                => 'tl_metamodel',
 				'to'                  => 'tl_metamodel_filter',
 				'setOn'               => array
 				(
-					array(
+					array
+					(
 						'to_field'    => 'pid',
 						'from_field'  => 'id',
 					),
@@ -61,7 +63,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
 		),
 	),
 
-	// List
 	'list' => array
 	(
 		'sorting' => array
@@ -103,7 +104,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['delete'],
 				'href'                => 'act=delete',
 				'icon'                => 'delete.gif',
-				'attributes'          => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+				'attributes'          => sprintf(
+					'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
+					$GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+				)
 			),
 			'show' => array
 			(
@@ -121,24 +125,28 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
 		)
 	),
 
-	'metapalettes' => array
+	'metapalettes'                    => array
 	(
-		'default' => array
+		'default'                     => array
 		(
-			'title' => array('name')
+			'title'                   => array('name')
 		),
 	),
 
-	// Fields
 	'fields' => array
 	(
-		'tstamp' => array(),
-		'name' => array
+		'tstamp'                      => array(),
+		'name'                        => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['name'],
 			'exclude'                 => true,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50')
+			'eval'                    => array
+			(
+				'mandatory'           => true,
+				'maxlength'           => 255,
+				'tl_class'            => 'w50'
+			)
 		),
 	)
 );

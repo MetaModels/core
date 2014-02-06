@@ -14,14 +14,8 @@
  * @filesource
  */
 
-/**
- * Table tl_metamodel_dca
- */
-
 $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 (
-
-	// Config
 	'config' => array
 	(
 		'dataContainer' => 'General',
@@ -29,7 +23,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 		'ctable' => 'tl_metamodel_dcasetting',
 		'switchToEdit' => false,
 		'enableVersioning' => false,
-//		'oncreate_callback'                => array(array('MetaModels\Dca\Dca', 'checkSortMode')),
 	),
 
 	'dca_config'                      => array
@@ -126,7 +119,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['delete'],
 				'href'                => 'act=delete',
 				'icon'                => 'delete.gif',
-				'attributes'          => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+				'attributes'          => sprintf(
+					'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
+					$GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+				)
 			),
 			'show' => array
 			(
@@ -144,7 +140,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 		)
 	),
 
-	// Palettes
 	'metapalettes' => array
 	(
 		'default' => array
@@ -207,7 +202,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 		),
 	),
 
-	// Fields
 	'fields' => array
 	(
 		'name' => array
@@ -216,7 +210,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'exclude'                 => true,
 			'search'                  => true,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>64, 'tl_class'=>'w50')
+			'eval'                    => array
+			(
+				'mandatory'           => true,
+				'maxlength'           => 64,
+				'tl_class'            => 'w50'
+			)
 		),
 
 		'isdefault' => array
@@ -224,7 +223,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault'],
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('maxlength'=>255, 'tl_class'=>'w50 m12 cbx'),
+			'eval'                    => array
+			(
+				'maxlength'           => 255,
+				'tl_class'            => 'w50 m12 cbx'
+			),
+			// TODO: change callbacks to event handlers.
 			'save_callback'           => array(array('MetaModels\Dca\Dca', 'checkDefault'))
 		),
 
@@ -282,7 +286,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'exclude'                 => true,
 			'inputType'               => 'select',
 			'options'                 => array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
-			'eval'                    => array('tl_class'=>'w50'),
+			'eval'                    => array('tl_class' => 'w50'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']
 		),
 
@@ -333,8 +337,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 						'options'               => $this->getLanguages(),
 						'eval'                  => array
 						(
-							'style' => 'width:200px',
-							'chosen'=> 'true'
+							'style'             => 'width:200px',
+							'chosen'            => 'true'
 						)
 					),
 					'label' => array

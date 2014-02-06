@@ -6,16 +6,12 @@
  * data in each collection.
  *
  * PHP version 5
- * @package	   MetaModels
+ * @package    MetaModels
  * @subpackage Backend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
- */
-
-/**
- * Table tl_metamodel_attribute
  */
 
 $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
@@ -29,6 +25,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		'enableVersioning'            => false,
 		'onload_callback'             => array
 		(
+			// TODO: change callbacks to event handlers.
 			array('MetaModels\Dca\RenderSettings', 'onLoadCallback')
 		),
 	),
@@ -105,6 +102,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		(
 			'fields'                  => array('name'),
 			'format'                  => '%s',
+			// TODO: change callbacks to event handlers.
 			'label_callback'          => array('MetaModels\Dca\RenderSettings', 'drawSetting')
 		),
 
@@ -138,7 +136,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['delete'],
 				'href'                => 'act=delete',
 				'icon'                => 'delete.gif',
-				'attributes'          => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+				'attributes'          => sprintf(
+					'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
+					$GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+				)
 			),
 			'show' => array
 			(
@@ -167,7 +168,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		),
 	),
 
-	// Fields
 	'fields' => array
 	(
 		'name' => array
@@ -175,7 +175,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name'],
 			'exclude'                 => true,
 			'inputType'               => 'text',
-			'eval'                    => array('mandatory'=>true, 'maxlength'=>255, 'tl_class'=>'w50')
+			'eval'                    => array
+			(
+				'mandatory'           => true,
+				'maxlength'           => 255,
+				'tl_class'            => 'w50'
+			)
 		),
 		'isdefault' => array
 		(
@@ -183,6 +188,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class'=>'m12 w50 cbx'),
+			// TODO: change callbacks to event handlers.
 			'save_callback'           => array(array('MetaModels\Dca\RenderSettings', 'checkDefault'))
 		),
 		'hideEmptyValues' => array
@@ -190,14 +196,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues'],
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class'=>'w50')
+			'eval'                    => array('tl_class' => 'w50')
 		),
 		'hideLabels' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels'],
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class'=>'w50')
+			'eval'                    => array('tl_class' => 'w50')
 		),
 		'template' => array
 		(
@@ -205,11 +211,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'default'                 => 'metamodel_prerendered',
 			'exclude'                 => true,
 			'inputType'               => 'select',
+			// TODO: change callbacks to event handlers.
 			'options_callback'        => array('MetaModels\Dca\RenderSettings','getTemplates'),
 			'eval'                    => array
 			(
 				'includeBlankOption'  => true,
-				'tl_class'            =>'w50',
+				'tl_class'            => 'w50',
 				'mandatory'           => true,
 				'chosen'              => true
 			)
@@ -224,7 +231,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'eval'                    => array
 			(
 				'includeBlankOption'  => true,
-				'tl_class'            =>'w50',
+				'tl_class'            => 'w50',
 				'chosen'              => true
 			)
 		),
@@ -234,7 +241,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'exclude'                 => true,
 			'minCount'                => 1,
 			'maxCount'                => 1,
-			'disableSorting'          =>'1',
+			'disableSorting'          => '1',
 			'inputType'               => 'multiColumnWizard',
 			'load_callback'           => array(array('MetaModels\Dca\RenderSettings', 'prepareMCW')),
 			'save_callback'           => array(array('MetaModels\Dca\RenderSettings', 'saveMCW')),
@@ -243,22 +250,27 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 				'columnFields' => array(
 					'langcode' => array(
 						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language'],
-						'exclude'                  =>true,
-						'inputType'                =>'justtextoption',
-						'options'                  =>array('xx' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_allLanguages']),
-						'eval'                     =>array('valign'=>'center')
+						'exclude'                  => true,
+						'inputType'                => 'justtextoption',
+						'options'                  => array
+						(
+							'xx' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_allLanguages']
+						),
+						'eval'                     => array('valign' => 'center')
 					),
 					'value' => array(
 						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page'],
 						'exclude'                  => true,
 						'inputType'                => 'text',
+						// TODO: change callbacks to event handlers.
 						'wizard'                   => array(array('MetaModels\Dca\RenderSettings', 'pagePicker')),
-						'eval'                     => array('style'=>'width:317px;')
+						'eval'                     => array('style' => 'width:317px;')
 					),
 					'filter' => array(
 						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter'],
 						'exclude'                  => true,
 						'inputType'                => 'select',
+						// TODO: change callbacks to event handlers.
 						'options_callback'         => array('MetaModels\Dca\RenderSettings', 'getFilterSettings'),
 						'eval'                     => array
 						(
@@ -283,6 +295,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['file'],
 						'exclude'                  => true,
 						'inputType'                => 'select',
+						// TODO: change callbacks to event handlers.
 						'options_callback'         => array('MetaModels\Dca\RenderSettings', 'getCssFiles'),
 						'eval'                     => array
 						(
@@ -295,9 +308,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['publish'],
 						'exclude'                  => true,
 						'inputType'                => 'checkbox',
-						'eval'                     => array('style'=>'width:40px;')
+						'eval'                     => array('style' => 'width:40px;')
 					),
-					
 				)
 			)
 		),
@@ -312,6 +324,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['file'],
 						'exclude'                  => true,
 						'inputType'                => 'select',
+						// TODO: change callbacks to event handlers.
 						'options_callback'         => array('MetaModels\Dca\RenderSettings', 'getJsFiles'),
 						'eval'                     => array
 						(
@@ -320,13 +333,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 							'includeBlankOption'   => true
 						)
 					),
-					'published' => array(
+					'published'                    => array
+					(
 						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['publish'],
 						'exclude'                  => true,
 						'inputType'                => 'checkbox',
-						'eval'                     => array('style'=>'width:40px;')
+						'eval'                     => array('style' => 'width:40px;')
 					),
-					
 				)
 			)
 		),

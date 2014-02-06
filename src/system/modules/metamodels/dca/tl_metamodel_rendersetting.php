@@ -6,7 +6,7 @@
  * data in each collection.
  *
  * PHP version 5
- * @package	   MetaModels
+ * @package    MetaModels
  * @subpackage Backend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  The MetaModels team.
@@ -108,6 +108,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 			'fields'                  => array('sorting'),
 			'panelLayout'             => 'limit',
 			'headerFields'            => array('name'),
+			// TODO: change callbacks to event handlers.
 			'child_record_callback'   => array('MetaModels\Dca\RenderSetting', 'drawSetting'),
 		),
 
@@ -148,7 +149,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete'],
 				'href'                => 'act=delete',
 				'icon'                => 'delete.gif',
-				'attributes'          => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+				'attributes'          => sprintf(
+					'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
+					$GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+				)
 			),
 			'show' => array
 			(
@@ -162,6 +166,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['toggle'],
 				'icon'                => 'visible.gif',
 				'attributes'          => 'onclick="Backend.getScrollOffset(); return AjaxRequest.toggleVisibility(this, %s);"',
+				// TODO: change callbacks to event handlers.
 				'button_callback'     => array('MetaModels\Dca\RenderSetting', 'toggleIcon')
 			)
 		)
@@ -188,6 +193,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
+			// TODO: change callbacks to event handlers.
 			'options_callback'        => array('MetaModels\Dca\RenderSetting', 'getAttributeNames'),
 			'eval'                    => array(
 				'doNotSaveEmpty'      => true,

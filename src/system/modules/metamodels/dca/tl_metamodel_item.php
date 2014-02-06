@@ -6,7 +6,7 @@
  * data in each collection.
  *
  * PHP version 5
- * @package	   MetaModels
+ * @package    MetaModels
  * @subpackage Backend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  The MetaModels team.
@@ -14,19 +14,13 @@
  * @filesource
  */
 
-$this->loadLanguageFile('tl_metamodel');
+/*
+    This file defines the basic structure of ALL MetaModels.
+    Note however, that various MetaModel extensions might remove or add stuff here.
+*/
 
-/**
- * This file defines the basic structure of ALL MetaModels.
- * Note however, that various MetaModel extensions might remove or add stuff here.
- */
-
-/**
- * Table tl_metamodel_item
- */
 $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 (
-	// DC_MetaModel container config
 	'config' => array
 	(
 		'dataContainer'               => 'General',
@@ -35,24 +29,22 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 	),
 	'dca_config' => array
 	(
-//		'callback'                    => 'MetaModels\DcGeneral\Callbacks',
 		'data_provider'               => array
 		(
 			'default'                 => array
 			(
 				'class'               => 'MetaModels\DcGeneral\Data\Driver',
-				'source'              => null // get's set within MetaModelDatabase::createDataContainer via $GLOBALS['TL_HOOKS']['loadDataContainer']
 			)
 		),
 		'controller'                  => 'MetaModels\DcGeneral\Controller',
-//		'view'                        => 'MetaModels\DcGeneral\View'
 	),
 
 	'list' => array
 	(
 		'sorting' => array
 		(
-			'mode'                    => 1, // 1 default sorting value, 2 switchable sorting value
+			// This means: 1 default sorting value, 2 switchable sorting value.
+			'mode'                    => 1,
 			'panelLayout'             => 'limit',
 			'headerFields'            => array('tstamp'),
 			'paste_button_callback'   => array('MetaModels\Dca\MetaModelDcaBuilder', 'pasteButton'),
@@ -62,65 +54,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 		(
 			'fields'                  => array(),
 			'format'                  => '%s',
-//			'label_callback'          => array('MetaModels\Dca\MetaModelDcaBuilder', 'labelCallback'),
 		),
-
-        // not yet implemented
-        /* 'global_operations' => array
-        (
-            'all' => array
-            (
-                'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
-                'href'                => 'act=select',
-                'class'               => 'header_edit_all',
-                'attributes'          => 'onclick="Backend.getScrollOffset();"'
-            )
-        ), */
-
-		'operations' => array
-		(
-/*
-			'edit' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_item']['edit'],
-				'href'                => 'act=edit',
-				'icon'                => 'edit.gif',
-			),
-			'copy' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_item']['copy'],
-				'href'                => 'act=copy',
-				'icon'                => 'copy.gif',
-				'attributes'          => 'onclick="Backend.getScrollOffset();"'
-			),
-			'cut' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_item']['cut'],
-				'href'                => 'act=paste&amp;mode=cut',
-				'icon'                => 'cut.gif',
-				'attributes'          => 'onclick="Backend.getScrollOffset();"'
-			),
-			'delete' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_item']['delete'],
-				'href'                => 'act=delete',
-				'icon'                => 'delete.gif',
-				'attributes'          => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
-			),
-			'show' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_item']['show'],
-				'href'                => 'act=show',
-				'icon'                => 'show.gif'
-			)
-*/
-		),
-	),
-	'palettes' => array
-	(
-	),
-	'subpalettes' => array
-	(
 	),
 	'fields' => array
 	(

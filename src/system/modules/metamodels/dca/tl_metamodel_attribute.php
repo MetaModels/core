@@ -26,6 +26,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 		'ptable'                      => 'tl_metamodel',
 		'switchToEdit'                => false,
 		'enableVersioning'            => false,
+		// TODO: change callbacks to event handlers.
 		'ondelete_callback'           => array
 		(
 			array('MetaModels\Dca\Attribute', 'onDeleteCallback')
@@ -93,6 +94,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 			'panelLayout'             => 'filter,limit',
 			'headerFields'            => array('name', 'tableName', 'tstamp', 'translated', 'varsupport'),
 			'flag'                    => 1,
+			// TODO: change callbacks to event handlers.
 			'child_record_callback'   => array('MetaModels\Dca\Attribute', 'renderField')
 		),
 
@@ -121,15 +123,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 				'href'                => 'act=edit',
 				'icon'                => 'edit.gif'
 			),
-			/*
-			'copy' => array
-			(
-				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['copy'],
-				'href'                => 'act=copy',
-				'icon'                => 'copy.gif'
-			),
-			*/
-
 			'cut' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['cut'],
@@ -142,7 +135,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['delete'],
 				'href'                => 'act=delete',
 				'icon'                => 'delete.gif',
-				'attributes'          => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+				'attributes'          => sprintf(
+					'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
+					$GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+				)
 			),
 			'show' => array
 			(
@@ -275,4 +271,3 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 		),
 	)
 ), (array)$GLOBALS['TL_DCA']['tl_metamodel_attribute']);
-

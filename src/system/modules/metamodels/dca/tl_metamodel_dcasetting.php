@@ -6,7 +6,7 @@
  * data in each collection.
  *
  * PHP version 5
- * @package	   MetaModels
+ * @package    MetaModels
  * @subpackage Backend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  The MetaModels team.
@@ -25,6 +25,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 		'dataContainer'               => 'General',
 		'switchToEdit'                => true,
 		'enableVersioning'            => false,
+		// TODO: change callbacks to event handlers.
 		'onmodel_update'              => array
 		(
 			array('MetaModels\Dca\DcaSetting', 'onModelUpdatedCallback')
@@ -116,7 +117,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 		),
 	),
 
-	// List
 	'list' => array
 	(
 		'sorting' => array
@@ -164,7 +164,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete'],
 				'href'                => 'act=delete',
 				'icon'                => 'delete.gif',
-				'attributes'          => 'onclick="if (!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\')) return false; Backend.getScrollOffset();"'
+				'attributes'          => sprintf(
+					'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
+					$GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+				)
 			),
 			'show' => array
 			(
@@ -224,7 +227,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 
 		'attr_id' => array
 		(
-
 			/*
 			 * Core legends:
 			 * * title
@@ -253,7 +255,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 		)
 	),
 
-	// Fields
 	'fields' => array
 	(
 		'sorting' => array(),
@@ -374,7 +375,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']
 		),
 
-		/**
+		/*
 		 * The following settings are predefined as they apply for a huge amount of attribute types.
 		 * Hence we define them in the core.
 		 * If others are needed, that apply to at least 2-3 attribute extensions, consider adding it in the core.
