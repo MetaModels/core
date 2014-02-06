@@ -81,8 +81,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 			'panelLayout'             => 'filter,limit',
 			'headerFields'            => array('name', 'tableName', 'tstamp', 'translated', 'varsupport'),
 			'flag'                    => 1,
-			// TODO: change callbacks to event handlers.
-			'child_record_callback'   => array('MetaModels\Dca\Attribute', 'renderField')
 		),
 
 		'label' => array

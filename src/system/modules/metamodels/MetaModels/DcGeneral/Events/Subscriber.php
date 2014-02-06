@@ -188,6 +188,8 @@ class Subscriber
 			array(
 				GetBreadcrumbEvent::NAME
 					=> self::createClosure('MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbAttributes', 'getBreadcrumb'),
+				ModelToLabelEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\Attribute\DrawAttribute::modelToLabel',
 			),
 			$dispatcher,
 			array('tl_metamodel_attribute')
