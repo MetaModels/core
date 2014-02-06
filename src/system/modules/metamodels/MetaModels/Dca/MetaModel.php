@@ -40,48 +40,6 @@ class MetaModel extends \Backend
 	}
 
 	/**
-	 * Creates or renames the MetaModel table according to the given name.
-	 * Updates variant support information.
-	 *
-	 * @param \DcGeneral\DC_General $objDC the data container where the model is loaded.
-	 *
-	 * @return void
-	 */
-	public function onSubmitCallback(DC_General $objDC)
-	{
-
-		// table name changed?
-		$strOldTableName = '';
-		if ($objDC->getId())
-		{
-			$objMetaModel = \Database::getInstance()->prepare('SELECT tableName FROM tl_metamodel WHERE id=?')
-				->limit(1)
-				->executeUncached($objDC->getId());
-			if ($objMetaModel->numRows)
-			{
-				$strOldTableName = $objMetaModel->tableName;
-			}
-		}
-
-		$objDBModel = $objDC->getEnvironment()->getCurrentModel();
-
-		$strNewTableName = $objDBModel->getProperty('tableName');
-
-		// table name is different.
-		if ($strNewTableName != $strOldTableName)
-		{
-			if ($strOldTableName && \Database::getInstance()->tableExists($strOldTableName, null, true))
-			{
-				MetaModelTableManipulation::renameTable($strOldTableName, $strNewTableName);
-				// TODO: notify fields that the MetaModel has changed its table name.
-			} else {
-				MetaModelTableManipulation::createTable($strNewTableName);
-			}
-		}
-		MetaModelTableManipulation::setVariantSupport($strNewTableName, $objDBModel->getProperty('varsupport'));
-	}
-
-	/**
 	 * called by tl_metamodel.tableName onsave_callback.
 	 * prefixes the table name with mm_ if not provided by the user as such.
 	 * Checks if the table name is legal to the DB.

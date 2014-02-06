@@ -25,6 +25,7 @@ use DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
+use DcGeneral\Event\PostPersistModelEvent;
 use DcGeneral\Event\PreDeleteModelEvent;
 use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPTable;
@@ -142,8 +143,12 @@ class Subscriber
 			$dispatcher,
 			array('tl_metamodel', 'languages')
 		);
+
+		// Save and load callbacks.
 		self::registerListeners(
 			array(
+				PostPersistModelEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\MetaModels\UpdateMetaModel::handle',
 				PreDeleteModelEvent::NAME
 				=> 'MetaModels\DcGeneral\Events\Table\MetaModels\DeleteMetaModel::handle',
 			),
