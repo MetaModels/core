@@ -16,7 +16,8 @@
 
 namespace MetaModels\DcGeneral\Events\Table\InputScreens;
 
-use DcGeneral\Contao\BackendBindings;
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
 
 class PropertyTlClass
@@ -32,17 +33,24 @@ class PropertyTlClass
 			$link = ' <a href="javascript:Backend.openModalIframe({url:\'system/modules/metamodels/popup.php?tbl=%s&fld=%s&inputName=ctrl_%s&id=%s&item=PALETTE_STYLE_PICKER\',width:790,title:\'Stylepicker\'});">%s</a>';
 		}
 
+		/** @var GenerateHtmlEvent $imageEvent */
+		$imageEvent = $event->getEnvironment()->getEventPropagator()->propagate(
+			ContaoEvents::IMAGE_GET_HTML,
+			new GenerateHtmlEvent(
+				'system/modules/metamodels/html/dca_wizard.png',
+				$event->getEnvironment()->getTranslator()->translate('stylepicker', 'tl_metamodel_dcasetting'),
+				'style="vertical-align:top;"'
+			)
+		);
+
+
 		$event->getWidget()->wizard = sprintf(
 			$link,
 			$event->getEnvironment()->getDataDefinition()->getName(),
 			$event->getProperty()->getName(),
 			$event->getProperty()->getName(),
 			$event->getModel()->getId(),
-			BackendBindings::generateImage(
-				'system/modules/metamodels/html/dca_wizard.png',
-				$event->getEnvironment()->getTranslator()->translate('stylepicker', 'tl_metamodel_dcasetting'),
-				'style="vertical-align:top;"'
-			)
+			$imageEvent->getHtml()
 		);
 	}
 }
