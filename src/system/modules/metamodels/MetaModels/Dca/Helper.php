@@ -28,9 +28,8 @@ use MetaModels\Factory as MetaModelFactory;
  * @subpackage Backend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-class Helper extends \Backend
+class Helper
 {
-
 	public static function decodeLangArray($varValue, IMetaModel $objMetaModel)
 	{
 		$arrLangValues = deserialize($varValue);
@@ -300,20 +299,28 @@ class Helper extends \Backend
 	public static function getTemplatesForBase($strBase)
 	{
 		$arrTemplates = array();
-		foreach (self::getTemplateGroup($strBase) as $strTemplate)
+		foreach (\Backend::getTemplateGroup($strBase) as $strTemplate)
 		{
-			$arrTemplates[$strTemplate] = sprintf($GLOBALS['TL_LANG']['MSC']['template_in_theme'], $strTemplate, $GLOBALS['TL_LANG']['MSC']['no_theme']);
+			$arrTemplates[$strTemplate] = sprintf(
+				$GLOBALS['TL_LANG']['MSC']['template_in_theme'],
+				$strTemplate,
+				$GLOBALS['TL_LANG']['MSC']['no_theme']
+			);
 		}
 
 		$objThemes = \Database::getInstance()->prepare('SELECT id,name FROM tl_theme')->execute();
 
 		while ($objThemes->next())
 		{
-			foreach (self::getTemplateGroup($strBase, $objThemes->id) as $strTemplate)
+			foreach (\Backend::getTemplateGroup($strBase, $objThemes->id) as $strTemplate)
 			{
 				if (!array_key_exists($strTemplate, $arrTemplates))
 				{
-					$arrTemplates[$strTemplate] = sprintf($GLOBALS['TL_LANG']['MSC']['template_in_theme'], $strTemplate, $objThemes->name);
+					$arrTemplates[$strTemplate] = sprintf(
+						$GLOBALS['TL_LANG']['MSC']['template_in_theme'],
+						$strTemplate,
+						$objThemes->name
+					);
 				}
 			}
 		}
@@ -324,9 +331,13 @@ class Helper extends \Backend
 
 	/**
 	 * Get a list with all allowed attributes for meta description.
-	 * 
-	 * @param DataContainer $objDC
-	 * 
+	 *
+	 * If the optional parameter arrTypes is not given, all attributes will be retrieved.
+	 *
+	 * @param int      $intMetaModel The id of the MetaModel from which the attributes shall be retrieved from.
+	 *
+	 * @param string[] $arrTypes     The attribute type names that shall be retrieved (optional).
+	 *
 	 * @return array A list with all found attributes.
 	 */
 	public static function getAttributeNamesForModel($intMetaModel, $arrTypes = array())
@@ -340,7 +351,11 @@ class Helper extends \Backend
 			{
 				if (empty($arrTypes) || in_array($objAttribute->get('type'), $arrTypes))
 				{
-					$arrAttributeNames[$objAttribute->getColName()] = $objAttribute->getName() . ' [' . $objAttribute->getColName() . ']';
+					$arrAttributeNames[$objAttribute->getColName()] =
+						sprintf('%s [%s]',
+							$objAttribute->getName(),
+							$objAttribute->getColName()
+						);
 				}
 			}
 		}
@@ -348,4 +363,3 @@ class Helper extends \Backend
 		return $arrAttributeNames;
 	}
 }
-
