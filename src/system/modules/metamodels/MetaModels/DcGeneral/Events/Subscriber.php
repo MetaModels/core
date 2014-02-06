@@ -615,5 +615,18 @@ class Subscriber
 			$dispatcher,
 			array('tl_metamodel_rendersettings')
 		);
+
+		self::registerListeners(
+			array(
+				DecodePropertyValueForWidgetEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\RenderSettings\PropertyJumpTo::decodeValue',
+				EncodePropertyValueFromWidgetEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\RenderSettings\PropertyJumpTo::encodeValue',
+				BuildWidgetEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\RenderSettings\PropertyJumpTo::buildWidget',
+			),
+			$dispatcher,
+			array('tl_metamodel_rendersettings', 'jumpTo')
+		);
 	}
 }

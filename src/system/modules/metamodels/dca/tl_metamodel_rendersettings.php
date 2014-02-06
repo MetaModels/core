@@ -23,11 +23,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		'ctable'                      => 'tl_metamodel_rendersetting',
 		'switchToEdit'                => false,
 		'enableVersioning'            => false,
-		'onload_callback'             => array
-		(
-			// TODO: change callbacks to event handlers.
-			array('MetaModels\Dca\RenderSettings', 'onLoadCallback')
-		),
 	),
 
 	'dca_config'                      => array
@@ -243,8 +238,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'maxCount'                => 1,
 			'disableSorting'          => '1',
 			'inputType'               => 'multiColumnWizard',
-			'load_callback'           => array(array('MetaModels\Dca\RenderSettings', 'prepareMCW')),
-			'save_callback'           => array(array('MetaModels\Dca\RenderSettings', 'saveMCW')),
 			'eval' => array(
 				'style'               => 'width:100%;',
 				'columnFields' => array(
@@ -270,8 +263,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter'],
 						'exclude'                  => true,
 						'inputType'                => 'select',
-						// TODO: change callbacks to event handlers.
-						'options_callback'         => array('MetaModels\Dca\RenderSettings', 'getFilterSettings'),
 						'eval'                     => array
 						(
 							'style'                => 'width:200px;',
