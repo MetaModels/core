@@ -97,8 +97,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 		(
 			'fields'                  => array('name'),
 			'format'                  => '%s',
-			// TODO: change callbacks to event handlers.
-			'label_callback'          => array('MetaModels\Dca\RenderSettings', 'drawSetting')
 		),
 
 		'global_operations' => array
@@ -182,7 +180,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault'],
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
-			'eval'                    => array('tl_class'=>'m12 w50 cbx'),
+			'eval'                    => array('tl_class' => 'm12 w50 cbx'),
 		),
 		'hideEmptyValues' => array
 		(

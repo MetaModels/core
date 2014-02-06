@@ -613,6 +613,8 @@ class Subscriber
 					),
 				PostPersistModelEvent::NAME
 					=> 'MetaModels\DcGeneral\Events\Table\RenderSettings\UpdateRenderSettings::handle',
+				ModelToLabelEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\FilterSetting\DrawSetting::modelToLabel'
 			),
 			$dispatcher,
 			array('tl_metamodel_rendersettings')

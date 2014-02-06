@@ -51,11 +51,6 @@ class RenderSettings extends Helper
 		return self::$objInstance;
 	}
 
-	public function drawSetting($arrRow, $strLabel = '', DC_General $objDC = null, $imageAttribute = '', $blnReturnImage = false, $blnProtected = false)
-	{
-		return $strLabel . ($arrRow['isdefault'] ? ' <span style="color:#b3b3b3; padding-left:3px">[' . $GLOBALS['TL_LANG']['MSC']['fallback'] . ']</span>' : '');
-	}
-
 	/**
 	 * Fetch the template group for the detail view of the current MetaModel module.
 	 *
