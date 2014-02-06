@@ -62,8 +62,6 @@ class RenderSetting extends Helper
 	 */
 	protected function __construct()
 	{
-		parent::__construct();
-
 		// toggling of a render setting?
 		if(\Input::getInstance()->get('tid') && ($this->Input->get('table') == 'tl_metamodel_rendersetting'))
 		{

@@ -56,14 +56,6 @@ class DcaSetting extends Helper
 		return self::$objInstance;
 	}
 
-	/**
-	 * Protected constructor for singleton instance.
-	 */
-	protected function __construct()
-	{
-		parent::__construct();
-	}
-
 	public function createDataContainer($strTableName)
 	{
 		if ($strTableName != 'tl_metamodel_dcasetting')
