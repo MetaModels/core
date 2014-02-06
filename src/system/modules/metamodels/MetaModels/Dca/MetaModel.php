@@ -82,68 +82,6 @@ class MetaModel extends \Backend
 	}
 
 	/**
-	 * Destroys the MetaModel table and all associated entries in child tables like filter-, render- and dca settings.
-	 *
-	 * @param DC_General $objDC the data container where the model is loaded.
-	 *
-	 * @return void
-	 */
-	public function onDeleteCallback(DC_General $objDC)
-	{
-		$objMetaModel = ModelFactory::byId($objDC->getId());
-		if ($objMetaModel)
-		{
-			// TODO: implement IMetaModel*::suicide() to delete all entries in secondary tables (complex attributes), better than here in an callback.
-			foreach ($objMetaModel->getAttributes() as $objAttribute)
-			{
-				$objAttribute->destroyAUX();
-			}
-			MetaModelTableManipulation::deleteTable($objMetaModel->getTableName());
-			\Database::getInstance()->prepare('DELETE FROM tl_metamodel_attribute WHERE pid=?')
-				->executeUncached($objMetaModel->get('id'));
-
-			\Database::getInstance()->prepare('DELETE FROM tl_metamodel_dca_combine WHERE pid=?')
-				->executeUncached($objMetaModel->get('id'));
-
-			// delete everything from dca settings
-			$arrIds = \Database::getInstance()->prepare('SELECT id FROM tl_metamodel_dca WHERE pid=?')
-				->executeUncached($objMetaModel->get('id'))
-				->fetchEach('id');
-			if ($arrIds)
-			{
-				\Database::getInstance()->prepare(sprintf('DELETE FROM tl_metamodel_dcasetting WHERE pid IN (%s)', implode(',', $arrIds)))
-					->executeUncached();
-			}
-			\Database::getInstance()->prepare('DELETE FROM tl_metamodel_dca WHERE pid=?')
-				->executeUncached($objMetaModel->get('id'));
-
-			// delete everything from render settings
-			$arrIds = \Database::getInstance()->prepare('SELECT id FROM tl_metamodel_rendersettings WHERE pid=?')
-				->executeUncached($objMetaModel->get('id'))
-				->fetchEach('id');
-			if ($arrIds)
-			{
-				\Database::getInstance()->prepare(sprintf('DELETE FROM tl_metamodel_rendersetting WHERE pid IN (%s)', implode(',', $arrIds)))
-					->executeUncached();
-			}
-			\Database::getInstance()->prepare('DELETE FROM tl_metamodel_rendersettings WHERE pid=?')
-				->executeUncached($objMetaModel->get('id'));
-
-			// delete everything from filter settings
-			$arrIds = \Database::getInstance()->prepare('SELECT id FROM tl_metamodel_filter WHERE pid=?')
-				->executeUncached($objMetaModel->get('id'))
-				->fetchEach('id');
-			if ($arrIds)
-			{
-				\Database::getInstance()->prepare(sprintf('DELETE FROM tl_metamodel_filtersetting WHERE pid IN (%s)', implode(',', $arrIds)))
-					->executeUncached();
-			}
-			\Database::getInstance()->prepare('DELETE FROM tl_metamodel_filter WHERE pid=?')
-				->executeUncached($objMetaModel->get('id'));
-		}
-	}
-
-	/**
 	 * called by tl_metamodel.tableName onsave_callback.
 	 * prefixes the table name with mm_ if not provided by the user as such.
 	 * Checks if the table name is legal to the DB.

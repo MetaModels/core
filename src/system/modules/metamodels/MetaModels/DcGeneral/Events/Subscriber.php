@@ -25,6 +25,7 @@ use DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
+use DcGeneral\Event\PreDeleteModelEvent;
 use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPTable;
 use MetaModels\DcGeneral\Events\Table\InputScreens\BuildPalette;
@@ -141,6 +142,15 @@ class Subscriber
 			$dispatcher,
 			array('tl_metamodel', 'languages')
 		);
+		self::registerListeners(
+			array(
+				PreDeleteModelEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\MetaModels\DeleteMetaModel::handle',
+			),
+			$dispatcher,
+			array('tl_metamodel')
+		);
+
 	}
 
 	/**

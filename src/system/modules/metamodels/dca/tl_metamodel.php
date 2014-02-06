@@ -36,10 +36,6 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 		(
 			array('MetaModels\Dca\MetaModel', 'onSubmitCallback'),
 		),
-		'ondelete_callback'           => array
-		(
-			array('MetaModels\Dca\MetaModel', 'onDeleteCallback')
-		)
 	),
 
 	// List
