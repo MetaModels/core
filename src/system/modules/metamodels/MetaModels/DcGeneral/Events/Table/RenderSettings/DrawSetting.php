@@ -14,7 +14,7 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\Events\Table\FilterSetting;
+namespace MetaModels\DcGeneral\Events\Table\RenderSettings;
 
 use DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 
