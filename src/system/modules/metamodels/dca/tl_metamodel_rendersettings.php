@@ -183,8 +183,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'exclude'                 => true,
 			'inputType'               => 'checkbox',
 			'eval'                    => array('tl_class'=>'m12 w50 cbx'),
-			// TODO: change callbacks to event handlers.
-			'save_callback'           => array(array('MetaModels\Dca\RenderSettings', 'checkDefault'))
 		),
 		'hideEmptyValues' => array
 		(

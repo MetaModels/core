@@ -610,7 +610,9 @@ class Subscriber
 					=> self::createClosure(
 						'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbRenderSettings',
 						'getBreadcrumb'
-					)
+					),
+				PostPersistModelEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\RenderSettings\UpdateRenderSettings::handle',
 			),
 			$dispatcher,
 			array('tl_metamodel_rendersettings')
