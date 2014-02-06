@@ -22,6 +22,11 @@ use DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use DcGeneral\Data\ModelInterface;
 use MetaModels\Filter\Setting\Factory as FilterFactory;
 
+/**
+ * Event handlers for tl_metamodel_filtersetting.attr_id.
+ *
+ * @package MetaModels\DcGeneral\Events\Table\FilterSetting
+ */
 class PropertyAttributeId
 {
 	/**
@@ -98,7 +103,9 @@ class PropertyAttributeId
 	/**
 	 * Translates an generated alias {@see getAttributeNames()} to the corresponding attribute id.
 	 *
-	 * @param \DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent $event
+	 * @param EncodePropertyValueFromWidgetEvent $event The event.
+	 *
+	 * @return void
 	 */
 	public static function encodeValue(EncodePropertyValueFromWidgetEvent $event)
 	{
