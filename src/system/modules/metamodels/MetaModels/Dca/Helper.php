@@ -329,7 +329,7 @@ class Helper extends \Backend
 	 * 
 	 * @return array A list with all found attributes.
 	 */
-	 public function getAttributeNamesForModel($intMetaModel, $arrTypes = array())
+	public static function getAttributeNamesForModel($intMetaModel, $arrTypes = array())
 	{
 		$arrAttributeNames = array();
 

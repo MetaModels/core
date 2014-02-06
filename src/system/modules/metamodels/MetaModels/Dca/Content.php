@@ -16,217 +16,260 @@
 
 namespace MetaModels\Dca;
 
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
+use Database\Result;
 use MetaModels\Filter\Setting\Factory as FilterFactory;
 use MetaModels\Factory as MetaModelFactory;
-use MetaModels\Dca\Helper as TableMetaModelHelper;
 
 /**
- * Provides be-functionalities
+ * Provides backend functionality.
  *
  * @package	   MetaModels
  * @subpackage Backend
  * @author     Christian de la Haye <service@delahaye.de>
  */
-class Content extends \Backend
+class Content
 {
-	public function buildCustomFilter($objDC)
+	/**
+	 * Called from tl_content.onload_callback.
+	 *
+	 * @param \DC_Table $objDC The data container calling this method.
+	 *
+	 * @return void
+	 */
+	public function buildCustomFilter(\DC_Table $objDC)
 	{
-		$objContent = $this->Database->prepare(
-			'SELECT	c.metamodel_filtering
-			FROM	tl_content AS c
-			JOIN	tl_metamodel AS mm ON mm.id = c.metamodel
-			WHERE	c.id = ?
-			AND		c.type = ?'
-		)->limit(1)->execute($objDC->id, 'metamodel_content');
+		$objContent = \Database::getInstance()
+			->prepare(
+				'SELECT	c.metamodel_filtering
+				FROM	tl_content AS c
+				JOIN	tl_metamodel AS mm ON mm.id = c.metamodel
+				WHERE	c.id = ?
+				AND		c.type = ?'
+			)
+			->limit(1)
+			->execute($objDC->id, 'metamodel_content');
 
-
-		if(!$objContent->metamodel_filtering) {
+		if (!$objContent->metamodel_filtering)
+		{
 			unset($GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']);
 			return;
 		}
 
 		$objFilterSettings = FilterFactory::byId($objContent->metamodel_filtering);
-		$GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']['eval']['subfields'] = $objFilterSettings->getParameterDCA();
+
+		$GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']['eval']['subfields'] =
+			$objFilterSettings->getParameterDCA();
 	}
 
 	/**
-	 * Fetch the template group for the current MetaModel module.
+	 * Fetch the template group for the current MetaModel content element.
 	 *
-	 * @param \DataContainer $objDC the datacontainer calling this method.
+	 * @param \DC_Table $objDC The data container calling this method.
 	 *
 	 * @return array
-	 *
 	 */
-	public function getModuleTemplates(\DataContainer $objDC)
+	public function getModuleTemplates(\DC_Table $objDC)
 	{
-		return $this->getTemplateGroup('ce_metamodel_', $objDC->activeRecord->pid);
+		return Helper::getTemplatesForBase('ce_metamodel_' . $objDC->activeRecord->type);
 	}
 
 	/**
 	 * Get frontend templates for filters.
 	 *
-	 * @param \DataContainer
-	 *
 	 * @return array
 	 */
-	public function getFilterTemplates(\DataContainer $dc)
+	public function getFilterTemplates()
 	{
-		$intPid = $dc->activeRecord->pid;
-
-		if ($this->Input->get('act') == 'overrideAll')
-		{
-			$intPid = $this->Input->get('id');
-		}
-
-		return $this->getTemplateGroup('mm_filter_', $intPid);
+		return Helper::getTemplatesForBase('mm_filter_');
 	}
 
 	/**
-	 * get filters
+	 * Fetch all attribute names for the current MetaModel.
 	 *
-	 * @param \DataContainer $objDc
-	 *
-	 * @return array
-	 */
-	public function getFilter(\DataContainer $objDc)
-	{
-		$return = array();
-
-		$objFilter = $this->Database->prepare("SELECT id,name FROM tl_metamodel_filter WHERE pid=? ORDER BY name")
-			->execute($objDc->activeRecord->metamodel);
-
-		while($objFilter->next())
-		{
-			$return[$objFilter->id] = $objFilter->name;
-		}
-
-		return $return;
-	}
-
-	/**
-	 * Fetch all attribute names for the current MetaModel
-	 *
-	 * @param \DataContainer $objDC the data container calling this method.
+	 * @param \DC_Table $objDc The data container calling this method.
 	 *
 	 * @return string[string] array of all attributes as colName => human name
 	 */
-	public function getAttributeNames(\DataContainer $objDC)
+	public function getAttributeNames(\DC_Table $objDc)
 	{
 		$arrAttributeNames = array('sorting' => $GLOBALS['TL_LANG']['MSC']['sorting']);
-		$objMetaModel = MetaModelFactory::byId($objDC->activeRecord->metamodel);
+		$objMetaModel      = MetaModelFactory::byId($objDc->activeRecord->metamodel);
 		if ($objMetaModel)
 		{
 			foreach ($objMetaModel->getAttributes() as $objAttribute)
+			{
 				$arrAttributeNames[$objAttribute->getColName()] = $objAttribute->getName();
+			}
 		}
 
 		return $arrAttributeNames;
 	}
 
 	/**
-	 * get attributes for checkbox wizard
-	 * @param object
+	 * Get attributes for checkbox wizard.
+	 *
+	 * @param Result $objRow The current row.
+	 *
 	 * @return array
 	 */
-	public function getFilterParameterNames($objRow)
+	public function getFilterParameterNames(Result $objRow)
 	{
 		$return = array();
 
-		if(!$objRow->activeRecord->metamodel_filtering)
+		if (!$objRow->activeRecord->metamodel_filtering)
 		{
 			return $return;
 		}
 
 		$objFilterSetting = FilterFactory::byId($objRow->activeRecord->metamodel_filtering);
-		$arrParameterDca = $objFilterSetting->getParameterFilterNames();
+		$arrParameterDca  = $objFilterSetting->getParameterFilterNames();
 
 		return $arrParameterDca;
 	}
 
 	/**
-	 * Return the edit wizard
+	 * Return the edit wizard.
 	 *
-	 * @param \DataContainer $dc the datacontainer
+	 * @param \DC_Table $dc The data container.
 	 *
 	 * @return string
 	 */
-	public function editMetaModel(\DataContainer $dc)
+	public function editMetaModel(\DC_Table $dc)
 	{
-		return ($dc->value < 1) ? '' : sprintf('<a href="contao/main.php?%s&amp;act=edit&amp;id=%s" title="%s" style="padding-left:3px">%s</a>',
+		if ($dc->value < 1)
+		{
+			return '';
+		}
+
+		$event = new GenerateHtmlEvent(
+			'alias.gif',
+			$GLOBALS['TL_LANG']['tl_content']['editmetamodel'][0],
+			'style="vertical-align:top"'
+		);
+
+		/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+		$dispatcher = $GLOBALS['container']['event-dispatcher'];
+
+		$dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
+
+		return sprintf(
+			'<a href="contao/main.php?%s&amp;act=edit&amp;id=%s" title="%s" style="padding-left:3px">%s</a>',
 			'do=metamodels',
 			$dc->value,
-			sprintf(specialchars($GLOBALS['TL_LANG']['tl_module']['editmetamodel'][1]), $dc->value),
-			$this->generateImage('alias.gif', $GLOBALS['TL_LANG']['tl_module']['editmetamodel'][0], 'style="vertical-align:top"')
+			sprintf(specialchars($GLOBALS['TL_LANG']['tl_content']['editmetamodel'][1]), $dc->value),
+			$event->getHtml()
 		);
 	}
 
 	/**
-	 * Return the edit wizard
+	 * Return the edit wizard.
 	 *
-	 * @param \DataContainer $dc the datacontainer
+	 * @param \DC_Table $dc The data container.
 	 *
 	 * @return string
 	 */
-	public function editFilterSetting(\DataContainer $dc)
+	public function editFilterSetting(\DC_Table $dc)
 	{
-		return ($dc->value < 1) ? '' : sprintf('<a href="contao/main.php?%s&amp;id=%s" title="%s" style="padding-left:3px">%s</a>',
+		if ($dc->value < 1)
+		{
+			return '';
+		}
+
+		$event = new GenerateHtmlEvent(
+			'alias.gif',
+			$GLOBALS['TL_LANG']['tl_content']['editfiltersetting'][0],
+			'style="vertical-align:top"'
+		);
+
+		/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+		$dispatcher = $GLOBALS['container']['event-dispatcher'];
+
+		$dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
+
+		return sprintf(
+			'<a href="contao/main.php?%s&amp;id=%s" title="%s" style="padding-left:3px">%s</a>',
 			'do=metamodels&table=tl_metamodel_filtersetting',
 			$dc->value,
-			sprintf(specialchars($GLOBALS['TL_LANG']['tl_module']['editfiltersetting'][1]), $dc->value),
-			$this->generateImage('alias.gif', $GLOBALS['TL_LANG']['tl_module']['editfiltersetting'][0], 'style="vertical-align:top"')
+			sprintf(specialchars($GLOBALS['TL_LANG']['tl_content']['editfiltersetting'][1]), $dc->value),
+			$event->getHtml()
 		);
 	}
 
 	/**
-	 * Return the edit wizard
+	 * Return the edit wizard.
 	 *
-	 * @param \DataContainer $dc the datacontainer
+	 * @param \DC_Table $dc The data container.
 	 *
 	 * @return string
 	 */
-	public function editRenderSetting(\DataContainer $dc)
+	public function editRenderSetting(\DC_Table $dc)
 	{
-		return ($dc->value < 1) ? '' : sprintf('<a href="contao/main.php?%s&amp;id=%s" title="%s" style="padding-left:3px">%s</a>',
+		if ($dc->value < 1)
+		{
+			return '';
+		}
+
+		$event = new GenerateHtmlEvent(
+			'alias.gif',
+			$GLOBALS['TL_LANG']['tl_content']['editrendersetting'][0],
+			'style="vertical-align:top"'
+		);
+
+		/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+		$dispatcher = $GLOBALS['container']['event-dispatcher'];
+
+		$dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
+
+		return sprintf(
+			'<a href="contao/main.php?%s&amp;id=%s" title="%s" style="padding-left:3px">%s</a>',
 			'do=metamodels&table=tl_metamodel_rendersetting',
 			$dc->value,
-			sprintf(specialchars($GLOBALS['TL_LANG']['tl_module']['editrendersetting'][1]), $dc->value),
-			$this->generateImage('alias.gif', $GLOBALS['TL_LANG']['tl_module']['editrendersetting'][0], 'style="vertical-align:top"')
+			sprintf(specialchars($GLOBALS['TL_LANG']['tl_content']['editrendersetting'][1]), $dc->value),
+			$event->getHtml()
 		);
 	}
 
 	/**
 	 * Fetch all available filter settings for the current meta model.
 	 *
-	 * @param \DataContainer $objDC the datacontainer calling this method.
+	 * @param \DC_Table $objDC The data container calling this method.
 	 *
 	 * @return string[int] array of all attributes as id => human name
 	 */
-	public function getFilterSettings(\DataContainer $objDC)
+	public function getFilterSettings(\DC_Table $objDC)
 	{
-		$objDB = \Database::getInstance();
-		$objFilterSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filter WHERE pid=?')->execute($objDC->activeRecord->metamodel);
-		$arrSettings = array();
+		$objDB             = \Database::getInstance();
+		$objFilterSettings = $objDB
+			->prepare('SELECT * FROM tl_metamodel_filter WHERE pid=?')
+			->execute($objDC->activeRecord->metamodel);
+		$arrSettings       = array();
+
 		while ($objFilterSettings->next())
 		{
 			$arrSettings[$objFilterSettings->id] = $objFilterSettings->name;
 		}
 
-		//sort the filtersettings
+		// Sort the filter settings.
 		asort($arrSettings);
+
 		return $arrSettings;
 	}
 
 	/**
 	 * Fetch all available render settings for the current meta model.
 	 *
-	 * @param \DataContainer $objDC the datacontainer calling this method.
+	 * @param \DC_Table $objDC The data container calling this method.
 	 *
 	 * @return string[int] array of all attributes as id => human name
 	 */
-	public function getRenderSettings($objDC)
+	public function getRenderSettings(\DC_Table $objDC)
 	{
-		$objDB = \Database::getInstance();
-		$objFilterSettings = $objDB->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE pid=?')->execute($objDC->activeRecord->metamodel);
+		$objFilterSettings = \Database::getInstance()
+			->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE pid=?')
+			->execute($objDC->activeRecord->metamodel);
 
 		$arrSettings = array();
 		while ($objFilterSettings->next())
@@ -234,7 +277,7 @@ class Content extends \Backend
 			$arrSettings[$objFilterSettings->id] = $objFilterSettings->name;
 		}
 
-		//Sort the render settings.
+		// Sort the render settings.
 		asort($arrSettings);
 		return $arrSettings;
 	}
@@ -242,27 +285,30 @@ class Content extends \Backend
 	/**
 	 * Get a list with all allowed attributes for meta title.
 	 * 
-	 * @param DataContainer $objDC
+	 * @param \DC_Table $objDC The data container calling this method.
 	 * 
 	 * @return array A list with all found attributes.
 	 */
-	public function getMetaTitleAttributes(\DataContainer $objDC)
+	public function getMetaTitleAttributes(\DC_Table $objDC)
 	{
-		$objTableHelper = new TableMetaModelHelper();
-		return $objTableHelper->getAttributeNamesForModel($objDC->activeRecord->metamodel, (array) $GLOBALS['METAMODELS']['metainformation']['allowedTitle']);
+		return Helper::getAttributeNamesForModel(
+				$objDC->activeRecord->metamodel,
+				(array)$GLOBALS['METAMODELS']['metainformation']['allowedTitle']
+			);
 	}
 
 	/**
 	 * Get a list with all allowed attributes for meta description.
 	 * 
-	 * @param DataContainer $objDC
+	 * @param \DC_Table $objDC The data container calling this method.
 	 * 
 	 * @return array A list with all found attributes.
 	 */
-	public function getMetaDescriptionAttributes(\DataContainer $objDC)
+	public function getMetaDescriptionAttributes(\DC_Table $objDC)
 	{
-		$objTableHelper = new TableMetaModelHelper();
-		return $objTableHelper->getAttributeNamesForModel($objDC->activeRecord->metamodel, (array) $GLOBALS['METAMODELS']['metainformation']['allowedDescription']);		
+		return Helper::getAttributeNamesForModel(
+				$objDC->activeRecord->metamodel,
+				(array)$GLOBALS['METAMODELS']['metainformation']['allowedDescription']
+			);
 	}
-
 }
