@@ -208,10 +208,6 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'doNotCopy'           => true,
 				'tl_class'            => 'w50'
 			),
-			'save_callback'           => array
-			(
-				array('MetaModels\Dca\MetaModel', 'tableNameOnSaveCallback')
-			)
 		),
 
 		'translated'                  => array

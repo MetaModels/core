@@ -39,33 +39,6 @@ class MetaModel extends \Backend
 		$this->import('BackendUser', 'User');
 	}
 
-	/**
-	 * called by tl_metamodel.tableName onsave_callback.
-	 * prefixes the table name with mm_ if not provided by the user as such.
-	 * Checks if the table name is legal to the DB.
-	 *
-	 * @param string                $strTableName the table name for the table.
-	 *
-	 * @param \DcGeneral\DC_General $objDC        the DataContainer which called us.
-	 *
-	 * @return string the table name $strTableName.
-	 */
-	public function tableNameOnSaveCallback($strTableName, DC_General $objDC)
-	{
-		// See #49
-		$strTableName = strtolower($strTableName);
-
-		// force mm_ prefix.
-		if(substr($strTableName, 0, 3) !== 'mm_')
-		{
-			$strTableName = 'mm_' . $strTableName;
-		}
-
-		MetaModelTableManipulation::checkTablename($strTableName);
-
-		return $strTableName;
-	}
-
 	public function getAttributes()
 	{
 		$objMetaModel = ModelFactory::byId();

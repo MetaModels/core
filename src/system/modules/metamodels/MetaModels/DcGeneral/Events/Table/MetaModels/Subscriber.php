@@ -24,6 +24,7 @@ use DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidget
 use DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\GetGlobalButtonEvent;
+use MetaModels\Helper\TableManipulation;
 
 /**
  * Handles event operations on tl_metamodel.
@@ -168,5 +169,31 @@ class Subscriber
 		}
 
 		$event->setValue($output);
+	}
+
+	/**
+	 * Called by tl_metamodel.tableName onsave_callback.
+	 *
+	 * Prefixes the table name with mm_ if not provided by the user as such.
+	 * Checks if the table name is legal to the DB.
+	 *
+	 * @param EncodePropertyValueFromWidgetEvent $event The event.
+	 *
+	 * @return void
+	 */
+	public static function ensureTableNamePrefix(EncodePropertyValueFromWidgetEvent $event)
+	{
+		// See #49.
+		$tableName = strtolower($event->getModel()->getProperty('tableName'));
+
+		// Force mm_ prefix.
+		if (substr($tableName, 0, 3) !== 'mm_')
+		{
+			$tableName = 'mm_' . $tableName;
+		}
+
+		TableManipulation::checkTablename($tableName);
+
+		$event->getModel()->setProperty('tableName', $tableName);
 	}
 }

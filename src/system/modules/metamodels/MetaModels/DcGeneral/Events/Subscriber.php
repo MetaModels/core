@@ -144,6 +144,16 @@ class Subscriber
 			array('tl_metamodel', 'languages')
 		);
 
+		// Save callbacks.
+		self::registerListeners(
+			array(
+				EncodePropertyValueFromWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\MetaModels\Subscriber::ensureTableNamePrefix',
+			),
+			$dispatcher,
+			array('tl_metamodel', 'tableName')
+		);
+
 		// Save and load callbacks.
 		self::registerListeners(
 			array(
