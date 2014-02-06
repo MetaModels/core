@@ -52,19 +52,6 @@ class RenderSettings extends Helper
 	}
 
 	/**
-	 * Fetch the template group for the detail view of the current MetaModel module.
-	 *
-	 * @param \DCGeneral\DC_General $objDC the datacontainer calling this method.
-	 *
-	 * @return array
-	 *
-	 */
-	public function getTemplates(DC_General $objDC)
-	{
-		return $this->getTemplatesForBase('metamodel_');
-	}
-
-	/**
 	 * Get a list with all CSS files inside of the tl_files.
 	 *
 	 * @return array

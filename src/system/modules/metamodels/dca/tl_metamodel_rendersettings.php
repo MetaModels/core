@@ -202,8 +202,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 			'default'                 => 'metamodel_prerendered',
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			// TODO: change callbacks to event handlers.
-			'options_callback'        => array('MetaModels\Dca\RenderSettings','getTemplates'),
 			'eval'                    => array
 			(
 				'includeBlankOption'  => true,

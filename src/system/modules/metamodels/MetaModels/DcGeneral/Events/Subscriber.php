@@ -632,5 +632,14 @@ class Subscriber
 			$dispatcher,
 			array('tl_metamodel_rendersettings', 'jumpTo')
 		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\RenderSettings\PropertyTemplate::getOptions',
+			),
+			$dispatcher,
+			array('tl_metamodel_rendersettings', 'template')
+		);
 	}
 }
