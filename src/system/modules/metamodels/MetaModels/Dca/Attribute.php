@@ -53,19 +53,6 @@ class Attribute extends Helper
 	}
 
 	/**
-	/**
-	 * @param \DcGeneral\DataContainerInterface $objDC The DataContainer.
-	 */
-	public function onDeleteCallback($objDC)
-	{
-		$objField = AttributeFactory::createFromArray($objDC->getCurrentModel()->getPropertiesAsArray());
-		if($objField)
-		{
-			$objField->destroyAUX();
-		}
-	}
-
-	/**
 	 * @param \DcGeneral\DataContainerInterface $objDC The DataContainer.
 	 *
 	 * @return \MetaModels\IMetaModel

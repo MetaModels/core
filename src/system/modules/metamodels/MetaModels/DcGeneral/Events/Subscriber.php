@@ -234,6 +234,9 @@ class Subscriber
 			array(
 				PostPersistModelEvent::NAME
 				=> 'MetaModels\DcGeneral\Events\Table\MetaModels\UpdateAttribute::handle',
+				PreDeleteModelEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\MetaModels\DeleteAttribute::handle',
+
 			),
 			$dispatcher,
 			array('tl_metamodel_attribute')

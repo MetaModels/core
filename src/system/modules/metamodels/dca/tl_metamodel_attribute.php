@@ -26,11 +26,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 		'ptable'                      => 'tl_metamodel',
 		'switchToEdit'                => false,
 		'enableVersioning'            => false,
-		// TODO: change callbacks to event handlers.
-		'ondelete_callback'           => array
-		(
-			array('MetaModels\Dca\Attribute', 'onDeleteCallback')
-		),
 	),
 
 	'dca_config'                      => array
