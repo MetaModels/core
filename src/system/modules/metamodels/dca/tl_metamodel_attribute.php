@@ -202,7 +202,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['type'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['typeOptions'],
 			'eval'                    => array
 			(
 				'includeBlankOption'  => true,
