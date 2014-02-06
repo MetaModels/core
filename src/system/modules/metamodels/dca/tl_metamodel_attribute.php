@@ -31,14 +31,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 		(
 			array('MetaModels\Dca\Attribute', 'onDeleteCallback')
 		),
-		'onmodel_beforeupdate'        => array
-		(
-			array('MetaModels\Dca\Attribute', 'onModelBeforeUpdateCallback')
-		),
-		'onsave_callback'             => array
-		(
-			array('MetaModels\Dca\Attribute', 'onSaveCallback')
-		),
 	),
 
 	'dca_config'                      => array

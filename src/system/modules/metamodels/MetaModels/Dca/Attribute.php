@@ -17,7 +17,6 @@
 namespace MetaModels\Dca;
 
 use MetaModels\Factory as ModelFactory;
-use MetaModels\Attribute\Factory as AttributeFactory;
 
 /**
  * This class is used from tl_metamodel for various callbacks.
@@ -32,8 +31,6 @@ class Attribute extends Helper
 	 * @var Helper
 	 */
 	protected static $objInstance = null;
-
-	/**
 	 * Get the static instance.
 	 *
 	 * @static
@@ -56,75 +53,6 @@ class Attribute extends Helper
 	}
 
 	/**
-	 * Buffer property to hold the instance of the current field being edited.
-	 *
-	 * @var \MetaModels\Attribute\IAttribute
-	 */
-	protected static $objCurrentField = null;
-
-	/**
-	 * Keep a copy of the attribute values.
-	 *
-	 * @param \DcGeneral\Data\ModelInterface $objModel the current Model active in the DC.
-	 *
-	 * @return void
-	 */
-	public function onModelBeforeUpdateCallback($objModel)
-	{
-		self::$objCurrentField = AttributeFactory::createFromArray($objModel->getPropertiesAsArray());
-	}
-
-	/**
-	 * Called when the attribute has been saved.
-	 *
-	 * @param \DcGeneral\Data\ModelInterface $objModel The model that has been updated.
-	 *
-	 * @param \DcGeneral\DataContainerInterface $objDC the data container that issued this callback.
-	 */
-	public function onSaveCallback($objModel, $objDC)
-	{
-		/**
-		 * The currently edited field.
-		 *
-		 * @var \MetaModels\Attribute\IAttribute $objField
-		 */
-		$objField = self::$objCurrentField;
-		$arrNewField = $objModel->getPropertiesAsArray();
-
-		if($objField)
-		{
-			$oldType = $objField->get('type');
-		} else {
-			$oldType = null;
-		}
-
-		if ($oldType != $arrNewField['type'])
-		{
-			// destroy old instance...
-			if($objField)
-			{
-				$objField->destroyAUX();
-			}
-			// ... prepare new instance.
-			$objField = AttributeFactory::createFromArray($arrNewField);
-			// create new instance' aux info.
-			if($objField)
-			{
-				self::$objCurrentField = $objField;
-				$objField->initializeAUX();
-			}
-		}
-
-		if($objField)
-		{
-			// now loop over all values and update the meta in the instance.
-			foreach ($arrNewField as $strKey => $varValue)
-			{
-				$objField->handleMetaChange($strKey, $varValue);
-			}
-		}
-	}
-
 	/**
 	 * @param \DcGeneral\DataContainerInterface $objDC The DataContainer.
 	 */

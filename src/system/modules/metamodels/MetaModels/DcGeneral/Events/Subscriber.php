@@ -154,7 +154,7 @@ class Subscriber
 			array('tl_metamodel', 'tableName')
 		);
 
-		// Save and load callbacks.
+		// Global table events.
 		self::registerListeners(
 			array(
 				PostPersistModelEvent::NAME
@@ -165,7 +165,6 @@ class Subscriber
 			$dispatcher,
 			array('tl_metamodel')
 		);
-
 	}
 
 	/**
@@ -228,6 +227,16 @@ class Subscriber
 			),
 			$dispatcher,
 			array('tl_metamodel_attribute', 'description')
+		);
+
+		// Global table events.
+		self::registerListeners(
+			array(
+				PostPersistModelEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\MetaModels\UpdateAttribute::handle',
+			),
+			$dispatcher,
+			array('tl_metamodel_attribute')
 		);
 	}
 
