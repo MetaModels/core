@@ -87,8 +87,6 @@ class PropertyPTable
 	 */
 	public static function setVisibility(BuildDataDefinitionEvent $event)
 	{
-		var_dump('here');
-
 		foreach ($event->getContainer()->getPalettesDefinition()->getPalettes() as $palette)
 		{
 			foreach ($palette->getProperties() as $property)
