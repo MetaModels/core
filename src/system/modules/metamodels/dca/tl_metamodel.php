@@ -270,8 +270,3 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 		),
 	)
 );
-
-if($_SESSION['BE_DATA']['sorting']['tl_metamodel'] == 'name')
-{
-	unset($GLOBALS['TL_DCA']['tl_metamodel']['list']['operations']['cut']);
-}
