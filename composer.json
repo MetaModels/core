@@ -75,8 +75,7 @@
 			}
 		},
 		"branch-alias": {
-			"dev-master": "1.0.x-dev",
-			"dev-contao3": "1.1.x-dev"
+			"dev-v2": "2.0.x-dev"
 		}
 	}
 }
