@@ -47,7 +47,7 @@
 		"php":">=5.3",
 		"contao/core": ">=2.11,<4.0",
 		"contao-community-alliance/composer-plugin": "*",
-		"metamodels/dc_general": "2.0.*@dev",
+		"contao-community-alliance/dc-general": "2.0.*@dev",
 		"menatwork/contao-multicolumnwizard": "3.2.*@dev",
 		"bit3/contao-meta-palettes": "1.6.*@dev",
 		"discordier/justtextwidgets": ">=0.5"
