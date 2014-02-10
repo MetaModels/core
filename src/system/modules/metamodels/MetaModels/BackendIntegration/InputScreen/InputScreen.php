@@ -186,7 +186,7 @@ class InputScreen implements IInputScreen
 		}
 
 		// Third pass, set submitOnChange for all sub palette fields.
-		foreach ($this->properties as $propName => $propInfo)
+		foreach ((array)$this->properties as $propName => $propInfo)
 		{
 			if (!empty($propInfo['subpalette']))
 			{
