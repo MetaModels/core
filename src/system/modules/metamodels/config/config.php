@@ -151,7 +151,7 @@ $GLOBALS['TL_HOOKS']['replaceInsertTags'][]      = array('MetaModels\FrontendInt
 // Mapping: extension folder => ER name.
 $GLOBALS['METAMODELS']['dependencies']['metapalettes']      = 'MetaPalettes';
 $GLOBALS['METAMODELS']['dependencies']['multicolumnwizard'] = 'MultiColumnWizard';
-$GLOBALS['METAMODELS']['dependencies']['generalDriver']     = 'DC_General';
+$GLOBALS['METAMODELS']['dependencies']['dc-general']        = 'DC_General';
 $GLOBALS['METAMODELS']['dependencies']['justtextwidgets']   = 'JustTextWidgets';
 
 // Meta Informations
