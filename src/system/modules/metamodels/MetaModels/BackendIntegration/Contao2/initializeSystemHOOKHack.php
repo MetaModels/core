@@ -34,9 +34,8 @@ class initializeSystemHOOKHack extends \MetaModels\BackendIntegration\Boot
 	 */
 	public static function checkBackendLoad($strClass)
 	{
-		if ($strClass == 'Backend')
+		if ($strClass == 'RequestToken')
 		{
-			spl_autoload_unregister(array(__CLASS__, 'checkBackendLoad'));
 			self::perform();
 		}
 		return false;
@@ -47,11 +46,11 @@ class initializeSystemHOOKHack extends \MetaModels\BackendIntegration\Boot
 	 */
 	public static function register()
 	{
-		spl_autoload_register(array(__CLASS__, 'checkBackendLoad'), true, true);
-		if (version_compare(VERSION, '3.0', '<') && !in_array('__autoload', spl_autoload_functions()))
+		if (in_array('__autoload', spl_autoload_functions()))
 		{
-			spl_autoload_register('__autoload');
+			spl_autoload_unregister('__autoload');
 		}
+		spl_autoload_register(array(__CLASS__, 'checkBackendLoad'), true, false);
+		spl_autoload_register('__autoload');
 	}
 }
-
