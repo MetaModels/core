@@ -210,7 +210,7 @@ class Module
 	protected function performNormal()
 	{
 		$arrModule = $GLOBALS['BE_MOD']['metamodels']['metamodels'];
-		// Custom action (if key is not defined in config.php the default action will be called)
+		// Custom action (if key is not defined in config.php the default action will be called).
 		if (\Input::getInstance()->get('key') && isset($arrModule[\Input::getInstance()->get('key')]))
 		{
 			CallBacks::call($arrModule[\Input::getInstance()->get('key')], $this, $arrModule);
@@ -227,8 +227,10 @@ class Module
 		$GLOBALS['TL_CSS'][] = 'system/modules/metamodels/html/style.css';
 		if ($this->needUserAction())
 		{
-			// FIXME: this is broken now.
-			return parent::generate();
+			$this->Template = new \BackendTemplate($this->strTemplate);
+			$this->compile();
+
+			return $this->Template->parse();
 		} else {
 			return $this->performNormal();
 		}
