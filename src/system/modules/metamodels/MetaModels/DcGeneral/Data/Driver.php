@@ -17,7 +17,7 @@
 namespace MetaModels\DcGeneral\Data;
 
 use DcGeneral\Data\DCGE;
-use DcGeneral\Data\MultiLanguageDriverInterface;
+use DcGeneral\Data\MultiLanguageDataProviderInterface;
 use DcGeneral\Data\ModelInterface;
 use DcGeneral\Data\ConfigInterface;
 use DcGeneral\Data\CollectionInterface;
@@ -44,7 +44,7 @@ use MetaModels\Filter\Rules\SimpleQuery;
  * @package    MetaModels
  * @subpackage Core
  */
-class Driver implements MultiLanguageDriverInterface
+class Driver implements MultiLanguageDataProviderInterface
 {
 	/**
 	 * Name of current table.
