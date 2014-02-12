@@ -215,12 +215,12 @@ class CustomSql extends Simple
 	 */
 	protected function parseSecureInsertTags($strSQL, array &$arrParams)
 	{
-		$objCtrl = ContaoController::getInstance();
+		$objMe = $this;
 		return preg_replace_callback(
 			'@\{\{secure::([^}]+)\}\}@',
-			function($arrMatch) use(&$arrParams, $objCtrl)
+			function($arrMatch) use(&$arrParams, $objMe)
 			{
-				$arrParams[] = $objCtrl->replaceInsertTags('{{' . $arrMatch[1] . '}}');
+				$arrParams[] = $objMe->parseInsertTags('{{' . $arrMatch[1] . '}}', $arrParams);
 				return '?';
 			},
 			$strSQL
