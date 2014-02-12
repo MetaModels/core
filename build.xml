@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<project name="Example" default="test">
+	<target name="phpunit">
+		<exec dir="${basedir}" executable="vendor/bin/phpunit" failonerror="true" />
+	</target>
+
+	<target name="phpcs">
+		<exec dir="${basedir}" executable="vendor/bin/phpcs" failonerror="true">
+			<arg line="--standard=${basedir}/vendor/metamodels/php-coding-standard/MetaModels/ruleset.xml ${basedir}/src"/>
+		</exec>
+	</target>
+
+	<target name="test" depends="phpunit,phpcs"/>
+</project>

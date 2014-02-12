@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/metamodels/core.png?branch=v2)](https://travis-ci.org/metamodels/core)
+
 MetaModels
 ==========
 

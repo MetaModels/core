@@ -1,0 +1,17 @@
+language: php
+php:
+    - "5.3"
+    - "5.4"
+    - "5.5"
+env:
+    global:
+    matrix:
+        - CONTAO_VERSION=~2.11
+        - CONTAO_VERSION=~3.1
+        - CONTAO_VERSION=~3.2
+
+install:
+    - composer require contao/core $CONTAO_VERSION
+    - composer install --prefer-dist --dev
+
+script: ant -keep-going
