@@ -65,7 +65,7 @@
 	},
 	"extra":{
 		"contao": {
-			"symlinks":{
+			"sources":{
 				"src/system/modules/metamodels":"system/modules/metamodels"
 			},
 			"transifex": {
