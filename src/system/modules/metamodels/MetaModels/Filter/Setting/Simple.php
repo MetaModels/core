@@ -18,7 +18,6 @@ namespace MetaModels\Filter\Setting;
 
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use MetaModels\Helper\ContaoController;
-use MetaModels\IMetaModel;
 use MetaModels\IItem;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
 
@@ -73,7 +72,7 @@ abstract class Simple implements ISimple
 	/**
 	 * Get the parenting collection instance.
 	 *
-	 * @return \MetaModels\Render\Setting\ICollection The parent.
+	 * @return \MetaModels\Filter\Setting\ICollection The parent.
 	 */
 	protected function getFilterSettings()
 	{
@@ -87,7 +86,7 @@ abstract class Simple implements ISimple
 	 */
 	protected function getMetaModel()
 	{
-		return $this->objFilterSetting->getMetaModel();
+		return $this->getFilterSettings()->getMetaModel();
 	}
 
 	/**
@@ -261,18 +260,23 @@ abstract class Simple implements ISimple
 	 * * urlvalue   - The current value selected in the filtersetting. Will use "urlvalue" from $arrWidget with
 	 *                fallback to the value of the url param in the filter url.
 	 *
-	 * @param array                           $arrWidget                The widget information to use for generating.
+	 * @param array                 $arrWidget                The widget information to use for generating.
 	 *
-	 * @param array                           $arrFilterUrl             The filter url parameters to use.
+	 * @param array                 $arrFilterUrl             The filter url parameters to use.
 	 *
-	 * @param array                           $arrJumpTo                The jumpTo page to use for URL generating - if empty, the current
-	 *                                                                  frontend page will get used.
+	 * @param array                 $arrJumpTo                The jumpTo page to use for URL generating - if empty, the
+	 *                                                        current frontend page will get used.
 	 *
 	 * @param FrontendFilterOptions $objFrontendFilterOptions The options to use.
 	 *
 	 * @return array
 	 */
-	protected function prepareFrontendFilterWidget($arrWidget, $arrFilterUrl, $arrJumpTo, FrontendFilterOptions $objFrontendFilterOptions)
+	protected function prepareFrontendFilterWidget(
+		$arrWidget,
+		$arrFilterUrl,
+		$arrJumpTo,
+		FrontendFilterOptions $objFrontendFilterOptions
+	)
 	{
 		$strClass = $GLOBALS['TL_FFL'][$arrWidget['inputType']];
 
@@ -314,7 +318,12 @@ abstract class Simple implements ISimple
 			'formfield'  => $strField,
 			'raw'        => $arrWidget,
 			'urlparam'   => $arrWidget['eval']['urlparam'],
-			'options'    => $this->prepareFrontendFilterOptions($arrWidget, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions->isAutoSubmit()),
+			'options'    => $this->prepareFrontendFilterOptions(
+					$arrWidget,
+					$arrFilterUrl,
+					$arrJumpTo,
+					$objFrontendFilterOptions->isAutoSubmit()
+				),
 			'count'      => $arrWidget['count'],
 			'showCount'  => $objFrontendFilterOptions->isShowCountValues(),
 			'autosubmit' => $objFrontendFilterOptions->isAutoSubmit(),
@@ -325,9 +334,9 @@ abstract class Simple implements ISimple
 	/**
 	 * This base implementation returns an empty array.
 	 *
-	 * @param \MetaModels\IItem                      $objItem          The item to fetch the values from.
+	 * @param IItem           $objItem          The item to fetch the values from.
 	 *
-	 * @param \MetaModels\Render\Setting\ICollection $objRenderSetting The render setting to be applied.
+	 * @param IRenderSettings $objRenderSetting The render setting to be applied.
 	 *
 	 * @return array An empty array.
 	 */
@@ -369,17 +378,22 @@ abstract class Simple implements ISimple
 	/**
 	 * Retrieve a list of filter widgets for all registered parameters as form field arrays.
 	 *
-	 * @param array                                                 $arrIds        The ids matching the current filter values.
+	 * @param array                 $arrIds                   The ids matching the current filter values.
 	 *
-	 * @param array                                                 $arrFilterUrl  The current filter url.
+	 * @param array                 $arrFilterUrl             The current filter url.
 	 *
-	 * @param array                                                 $arrJumpTo     The jumpTo page (array, row data from tl_page).
+	 * @param array                 $arrJumpTo                The jumpTo page (array, row data from tl_page).
 	 *
-	 * @param \MetaModels\FrontendIntegration\FrontendFilterOptions $objFrontendFilterOptions
+	 * @param FrontendFilterOptions $objFrontendFilterOptions The frontend filter options.
 	 *
 	 * @return array
 	 */
-	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, FrontendFilterOptions $objFrontendFilterOptions)
+	public function getParameterFilterWidgets(
+		$arrIds,
+		$arrFilterUrl,
+		$arrJumpTo,
+		FrontendFilterOptions $objFrontendFilterOptions
+	)
 	{
 		return array();
 	}
