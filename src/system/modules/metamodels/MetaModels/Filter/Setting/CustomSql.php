@@ -155,7 +155,7 @@ class CustomSql extends Simple
 				}
 
 				// treat as scalar value
-				if(!$arrArgs['aggregate'])
+				if(empty($arrArgs['aggregate']))
 				{
 					$arrParams[] = $var;
 					return '?';
