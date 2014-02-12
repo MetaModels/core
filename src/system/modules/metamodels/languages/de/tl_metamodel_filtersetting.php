@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-10-26T08:13:25+02:00
+ * last-updated: 2013-10-29T12:13:24+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Alle Sprachen durchsuchen';
@@ -48,6 +48,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['0']         =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['1']         = 'Auswählen, wenn Sie Werte für diesen Parameter aus einer übergordneten Liste (wie zum Beispiel Module, Inhaltselemente, etc.) beziehen möchten.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['0']                 = 'Details';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['1']                 = 'Die Details der Filtereinstellung ID %s anzeigen.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions']['0']    = 'Diesen Filter für verbleibende Werte ignorieren';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions']['1']    = 'Falls aktiviert wird dieser Filter alle Optionen außer seine eigenen zurückliefern.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['0']     = 'Nach erstem Treffer beenden';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['1']     = 'Anwählen, falls Sie möchten, dass nachfolgende Regeln nach dem ersten Treffer nicht mehr ausgeführt werden.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['0']             = 'Template';
@@ -68,3 +70,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['idlist']       =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['simplelookup'] = 'Einfache Abfrage';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['0']             = 'URL-Parameter';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['1']             = 'Geben Sie den URL-Parameter an, der dem ausgewählten Attribut zugeordnet werden soll. Der <em>"auto_item"</em>-Parameter kann ebenfalls verwendet werden. Diese Einstellung ist nützlich um Aliase zu verwenden.';
+
