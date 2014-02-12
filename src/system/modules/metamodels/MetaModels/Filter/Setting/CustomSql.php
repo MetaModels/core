@@ -34,9 +34,9 @@ class CustomSql extends Simple
 	/**
 	 * Generates the filter rules based upon the given filter url.
 	 *
-	 * @param \MetaModels\Filter\IFilter $objFilter    The filter to append the rules to.
+	 * @param IFilter        $objFilter    The filter to append the rules to.
 	 *
-	 * @param string[string]             $arrFilterUrl The parameters to evaluate.
+	 * @param string[string] $arrFilterUrl The parameters to evaluate.
 	 *
 	 * @return void
 	 */
@@ -78,7 +78,7 @@ class CustomSql extends Simple
 	/**
 	 * Replace the table name in the query string.
 	 *
-	 * @param string $strSQL    SQL to parse.
+	 * @param string $strSQL SQL to parse.
 	 *
 	 * @return string Parsed SQL.
 	 */
@@ -88,6 +88,8 @@ class CustomSql extends Simple
 	}
 
 	/**
+	 * Parse a request var insert tag within the SQL.
+	 *
 	 * @param string           $strSQL       SQL to parse.
 	 *
 	 * @param array            $arrParams    Query param stack.
@@ -104,7 +106,7 @@ class CustomSql extends Simple
 			{
 				list($strSource, $strQuery) = explode('?', $arrMatch[1], 2);
 				parse_str($strQuery, $arrArgs);
-				$arrName = (array) $arrArgs['name'];
+				$arrName = (array)$arrArgs['name'];
 
 				$var = null;
 
@@ -130,20 +132,20 @@ class CustomSql extends Simple
 						break;
 
 					default:
-						/* This should never occur. */
+						// This should never occur.
 						return 'NULL';
-						break;
 				}
 
-				$i = 0;
-				while($i < count($arrName) && is_array($var))
+				$i     = 0;
+				$count = count($arrName);
+				while ($i < $count && is_array($var))
 				{
 					$var = $var[$arrName[$i++]];
 				}
 
-				if($i != count($arrName) || $var === null)
+				if ($i != count($arrName) || $var === null)
 				{
-					if(isset($arrArgs['default']))
+					if (isset($arrArgs['default']))
 					{
 						$arrParams[] = $arrArgs['default'];
 						return '?';
@@ -154,17 +156,17 @@ class CustomSql extends Simple
 					}
 				}
 
-				// treat as scalar value
-				if(empty($arrArgs['aggregate']))
+				// Treat as scalar value.
+				if (empty($arrArgs['aggregate']))
 				{
 					$arrParams[] = $var;
 					return '?';
 				}
 
-				// treat as list
-				$var = (array) $var;
+				// Treat as list.
+				$var = (array)$var;
 
-				if($arrArgs['recursive'])
+				if (!empty($arrArgs['recursive']))
 				{
 					$var = iterator_to_array(
 						new \RecursiveIteratorIterator(
@@ -175,21 +177,22 @@ class CustomSql extends Simple
 					);
 				}
 
-				if(!$var)
+				if (!$var)
 				{
 					return 'NULL';
 				}
 
-				if($arrArgs['key'])
+				if ($arrArgs['key'])
 				{
 					$var = array_keys($var);
 				}
 				else
-				{ // use values
+				{
+					// Use values.
 					$var = array_values($var);
 				}
 
-				if($arrArgs['aggregate'] == 'set')
+				if ($arrArgs['aggregate'] == 'set')
 				{
 					$arrParams[] = implode(',', $var);
 					return '?';
@@ -230,9 +233,9 @@ class CustomSql extends Simple
 	/**
 	 * Replace all insert tags in the query string.
 	 *
-	 * @param string $strSQL    SQL to parse
+	 * @param string $strSQL    SQL to parse.
 	 *
-	 * @param array  $arrParams Query param stack
+	 * @param array  $arrParams Query param stack.
 	 *
 	 * @return string Parsed SQL
 	 */
@@ -241,20 +244,20 @@ class CustomSql extends Simple
 		return ContaoController::getInstance()->replaceInsertTags($strSQL);
 	}
 
-	/* (non-PHPdoc)
-	 * @see MetaModelFilterSetting::getParameters()
+	/**
+	 * {@inheritDoc}
 	 */
 	public function getParameters()
 	{
 		$arrParams = array();
 
 		preg_match_all('@\{\{param::filter\?([^}]*)\}\}@', $this->get('customsql'), $arrMatches);
-		foreach($arrMatches[1] as $strQuery)
+		foreach ($arrMatches[1] as $strQuery)
 		{
 			parse_str($strQuery, $arrArgs);
-			if(isset($arrArgs['name']))
+			if (isset($arrArgs['name']))
 			{
-				$arrName = (array) $arrArgs['name'];
+				$arrName     = (array)$arrArgs['name'];
 				$arrParams[] = $arrName[0];
 			}
 		}
