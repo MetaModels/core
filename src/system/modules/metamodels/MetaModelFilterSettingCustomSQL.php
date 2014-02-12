@@ -120,7 +120,7 @@ class MetaModelFilterSettingCustomSQL extends MetaModelFilterSetting
 				{
 					if(isset($arrArgs['default']))
 					{
-						$var = $arrArgs['default'];
+						$arrParams[] = $arrArgs['default'];
 						return '?';
 					} else {
 						return 'NULL';
