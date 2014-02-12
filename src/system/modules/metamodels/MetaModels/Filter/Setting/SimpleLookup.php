@@ -200,8 +200,15 @@ class SimpleLookup extends Simple
 	{
 		if ($strParamName = $this->getParamName())
 		{
+			$objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
+
+			if (!$objAttribute)
+			{
+				return array();
+			}
+
 			return array(
-				$strParamName => ($this->get('label') ? $this->get('label') : $this->getMetaModel()->getAttributeById($this->get('attr_id'))->getName())
+				$strParamName => ($this->get('label') ? $this->get('label') : $objAttribute->getName())
 			);
 		} else {
 			return array();
@@ -220,6 +227,11 @@ class SimpleLookup extends Simple
 		}
 
 		$objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
+
+		if (!$objAttribute)
+		{
+			return array();
+		}
 
 		$GLOBALS['MM_FILTER_PARAMS'][] = $this->getParamName();
 
