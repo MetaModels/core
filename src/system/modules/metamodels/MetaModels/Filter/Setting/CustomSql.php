@@ -42,21 +42,37 @@ class CustomSql extends Simple
 	 */
 	public function prepareRules(IFilter $objFilter, $arrFilterUrl)
 	{
-		$strSQL = $this->get('customsql');
 		$arrParams = array();
+		$strSql    = $this->generateSql($arrParams, $arrFilterUrl);
+
+		if (!strlen($strSql))
+		{
+			return;
+		}
+
+		$objFilterRule = new SimpleQuery($strSql, $arrParams);
+		$objFilter->addFilterRule($objFilterRule);
+	}
+
+	/**
+	 * Build the SQL query string.
+	 *
+	 * @param array            $arrParams    Query param stack.
+	 *
+	 * @param mixed|array|null $arrFilterUrl The filter params (should be array or null).
+	 *
+	 * @return string
+	 */
+	protected function generateSql(array &$arrParams, $arrFilterUrl)
+	{
+		$strSQL = $this->get('customsql');
 
 		$strSQL = $this->parseTable($strSQL);
 		$strSQL = $this->parseRequestVars($strSQL, $arrParams, $arrFilterUrl);
 		$strSQL = $this->parseSecureInsertTags($strSQL, $arrParams);
 		$strSQL = $this->parseInsertTags($strSQL, $arrParams);
 
-		if (!strlen($strSQL))
-		{
-			return;
-		}
-
-		$objFilterRule = new SimpleQuery($strSQL, $arrParams);
-		$objFilter->addFilterRule($objFilterRule);
+		return $strSQL;
 	}
 
 	/**
