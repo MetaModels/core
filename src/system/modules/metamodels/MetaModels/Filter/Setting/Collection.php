@@ -16,10 +16,12 @@
 
 namespace MetaModels\Filter\Setting;
 
+use Database\Result;
 use MetaModels\Factory as ModelFactory;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use MetaModels\IItem;
 use MetaModels\Filter\IFilter;
+use MetaModels\IMetaModel;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
 
 /**
@@ -31,24 +33,38 @@ use MetaModels\Render\Setting\ICollection as IRenderSettings;
  */
 class Collection implements ICollection
 {
+	/**
+	 * The additional meta data for this filter setting collection.
+	 *
+	 * @var array
+	 */
 	protected $arrData = array();
 
 	/**
-	 * @var \MetaModels\Filter\Setting\ISimple[]
+	 * The filter settings contained.
+	 *
+	 * @var ISimple[]
 	 */
 	protected $arrSettings = array();
 
+	/**
+	 * Create a new instance.
+	 *
+	 * @param array $arrData The meta data for this filter setting collection.
+	 */
 	public function __construct($arrData)
 	{
 		$this->arrData = $arrData;
 	}
 
 	/**
-	 * @param \Database_Result $objSettings The information from which to initialize the setting from
+	 * Create a new setting.
 	 *
-	 * @return \MetaModels\Filter\Setting\ISimple
+	 * @param Result $objSettings The information from which to initialize the setting from.
+	 *
+	 * @return ISimple
 	 */
-	protected function newSetting(\Database_Result $objSettings)
+	protected function newSetting(Result $objSettings)
 	{
 		$strClass = $GLOBALS['METAMODELS']['filters'][$objSettings->type]['class'];
 		// TODO: add factory support here.
@@ -62,16 +78,18 @@ class Collection implements ICollection
 	/**
 	 * Fetch all child rules for the given setting.
 	 *
-	 * @param Database_Result                          $objBaseSettings The database information of the parent setting.
+	 * @param Result        $objBaseSettings The database information of the parent setting.
 	 *
-	 * @param \MetaModels\Filter\Setting\IWithChildren $objSetting      The information from which to initialize the setting from.
+	 * @param IWithChildren $objSetting      The information from which to initialize the setting from.
 	 *
 	 * @return void
 	 */
 	protected function collectRulesFor($objBaseSettings, $objSetting)
 	{
-		$objDB = \Database::getInstance();
-		$objSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE pid=? AND enabled=1 ORDER BY sorting ASC')->execute($objBaseSettings->id);
+		$objDB       = \Database::getInstance();
+		$objSettings = $objDB
+			->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE pid=? AND enabled=1 ORDER BY sorting ASC')
+			->execute($objBaseSettings->id);
 
 		while ($objSettings->next())
 		{
@@ -79,31 +97,31 @@ class Collection implements ICollection
 			if ($objNewSetting)
 			{
 				$objSetting->addChild($objNewSetting);
-				// collect next level.
+				// Collect next level.
 				if ($GLOBALS['METAMODELS']['filters'][$objNewSetting->get('type')]['nestingAllowed'])
 				{
+					/** @var IWithChildren $objNewSetting */
 					$this->collectRulesFor($objSettings, $objNewSetting);
 				}
 			}
 		}
 	}
 
-	///////////////////////////////////////////////////////////////////////////////
-	// IMetaModelFilterSettings
-	///////////////////////////////////////////////////////////////////////////////
-
 	/**
-	 * retrieve the MetaModel this filter belongs to.
+	 * Retrieve the MetaModel this filter belongs to.
 	 *
-	 * @return \MetaModels\IMetaModel
+	 * @return IMetaModel
 	 *
-	 * @throws \RuntimeException
+	 * @throws \RuntimeException When the MetaModel can not be determined.
 	 */
 	public function getMetaModel()
 	{
 		if (!$this->arrData['pid'])
 		{
-			throw new \RuntimeException(sprintf('Error: Filtersetting %d not attached to a MetaModel', $this->arrData['id']));
+			throw new \RuntimeException(sprintf(
+				'Error: Filtersetting %d not attached to a MetaModel',
+				$this->arrData['id'])
+			);
 
 		}
 		return ModelFactory::byId($this->arrData['pid']);
@@ -111,6 +129,8 @@ class Collection implements ICollection
 
 	/**
 	 * {@inheritdoc}
+	 *
+	 * @throws \RuntimeException When the filter setting is not created from a database result (holds no id).
 	 */
 	public function collectRules()
 	{
@@ -119,8 +139,11 @@ class Collection implements ICollection
 			throw new \RuntimeException('Error: dynamically created FilterSettings can not collect attribute information', 1);
 		}
 
-		$objDB = \Database::getInstance();
-		$objSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE fid=? AND pid=0 AND enabled=1 ORDER BY sorting ASC')->execute($this->arrData['id']);
+		$objDB       = \Database::getInstance();
+		$objSettings = $objDB
+			->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE fid=? AND pid=0 AND enabled=1 ORDER BY sorting ASC')
+			->execute($this->arrData['id']);
+
 		while ($objSettings->next())
 		{
 			$objNewSetting = $this->newSetting($objSettings);
@@ -129,6 +152,7 @@ class Collection implements ICollection
 				$this->arrSettings[] = $objNewSetting;
 				if ($GLOBALS['METAMODELS']['filters'][$objSettings->type]['nestingAllowed'])
 				{
+					/** @var IWithChildren $objNewSetting */
 					$this->collectRulesFor($objSettings, $objNewSetting);
 				}
 			}
@@ -143,7 +167,7 @@ class Collection implements ICollection
 		foreach ($this->arrSettings as $objSetting)
 		{
 			// If the setting is on the ignore list skip it.
-			if(in_array($objSetting->get('id'),$arrIgnoredFilter))
+			if (in_array($objSetting->get('id'), $arrIgnoredFilter))
 			{
 				continue;
 			}
@@ -208,7 +232,11 @@ class Collection implements ICollection
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getParameterFilterWidgets($arrFilterUrl, $arrJumpTo = array(), FrontendFilterOptions $objFrontendFilterOptions)
+	public function getParameterFilterWidgets(
+		$arrFilterUrl,
+		$arrJumpTo = array(),
+		FrontendFilterOptions $objFrontendFilterOptions
+	)
 	{
 		$arrParams = array();
 
@@ -231,7 +259,10 @@ class Collection implements ICollection
 				$arrIds = $arrBaseIds;
 			}
 
-			$arrParams = array_merge($arrParams, $objSetting->getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions));
+			$arrParams = array_merge(
+				$arrParams,
+				$objSetting->getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions)
+			);
 		}
 
 		return $arrParams;

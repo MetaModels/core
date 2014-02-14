@@ -28,7 +28,7 @@ use MetaModels\Filter\FilterRule;
 class SimpleQuery extends FilterRule
 {
 	/**
-	 * The query string
+	 * The query string.
 	 *
 	 * @var string
 	 */
@@ -49,7 +49,7 @@ class SimpleQuery extends FilterRule
 	protected $strIdColumn = null;
 
 	/**
-	 * creates an instance of a simple query filter rule.
+	 * Creates an instance of a simple query filter rule.
 	 *
 	 * @param string $strQueryString The query that shall be executed.
 	 *
@@ -57,12 +57,12 @@ class SimpleQuery extends FilterRule
 	 *
 	 * @param string $strIdColumn    The column where the item id is stored in.
 	 */
-	public function __construct($strQueryString, $arrParams=array(), $strIdColumn = 'id')
+	public function __construct($strQueryString, $arrParams = array(), $strIdColumn = 'id')
 	{
 		parent::__construct(null);
 		$this->strQueryString = $strQueryString;
-		$this->arrParams = $arrParams;
-		$this->strIdColumn = $strIdColumn;
+		$this->arrParams      = $arrParams;
+		$this->strIdColumn    = $strIdColumn;
 	}
 
 	/**
@@ -70,9 +70,11 @@ class SimpleQuery extends FilterRule
 	 */
 	public function getMatchingIds()
 	{
-		$objDB = \Database::getInstance();
-		$objMatches = $objDB->prepare($this->strQueryString)
+		$objDB      = \Database::getInstance();
+		$objMatches = $objDB
+			->prepare($this->strQueryString)
 			->execute($this->arrParams);
+
 		return ($objMatches->numRows == 0) ? array() : $objMatches->fetchEach($this->strIdColumn);
 	}
 }

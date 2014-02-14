@@ -21,7 +21,6 @@ use MetaModels\IItem;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
 
 /**
- *
  * Base implementation for settings that can contain children.
  *
  * @see
@@ -34,7 +33,8 @@ abstract class WithChildren
 	implements IWithChildren
 {
 	/**
-	 * all child settings embedded in this setting.
+	 * All child settings embedded in this setting.
+	 *
 	 * @var ISimple[]
 	 */
 	protected $arrChildren = array();
@@ -91,12 +91,20 @@ abstract class WithChildren
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, FrontendFilterOptions $objFrontendFilterOptions)
+	public function getParameterFilterWidgets(
+		$arrIds,
+		$arrFilterUrl,
+		$arrJumpTo,
+		FrontendFilterOptions $objFrontendFilterOptions
+	)
 	{
 		$arrParams = array();
 		foreach ($this->arrChildren as $objSetting)
 		{
-			$arrParams = array_merge($arrParams, $objSetting->getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions));
+			$arrParams = array_merge(
+				$arrParams,
+				$objSetting->getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions)
+			);
 		}
 		return $arrParams;
 	}

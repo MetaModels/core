@@ -19,7 +19,8 @@ namespace MetaModels;
 /**
  * This is the MetaModel factory interface.
  *
- * To create a MetaModel instance, either call {@link \MetaModels\Factory::byId()} or {@link \MetaModels\Factory::byTableName()}
+ * To create a MetaModel instance, either call {@link \MetaModels\Factory::byId()} or
+ * {@link \MetaModels\Factory::byTableName()}
  *
  * @package    MetaModels
  * @subpackage Interfaces
@@ -30,7 +31,7 @@ interface IFactory
 	/**
 	 * Create a MetaModel instance from the id.
 	 *
-	 * @param int $intId the id of the MetaModel.
+	 * @param int $intId The id of the MetaModel.
 	 *
 	 * @return IMetaModel the instance of the MetaModel or null if not found.
 	 */
@@ -39,7 +40,7 @@ interface IFactory
 	/**
 	 * Create a MetaModel instance from the table name.
 	 *
-	 * @param string $strTablename the name of the table
+	 * @param string $strTablename The name of the table.
 	 *
 	 * @return IMetaModel the instance of the MetaModel or null if not found.
 	 */

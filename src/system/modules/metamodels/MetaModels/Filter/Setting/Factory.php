@@ -30,16 +30,16 @@ class Factory implements IFactory
 	/**
 	 * Keeps track of all filter settings instances to save DB lookup queries.
 	 *
-	 * @var \MetaModels\Filter\Setting\ICollection[]
+	 * @var ICollection[]
 	 */
 	protected static $arrInstances = array();
 
 	/**
 	 * Create a IMetaModelFilter instance from the id.
 	 *
-	 * @param int $intId the id of the IMetaModelFilter.
+	 * @param int $intId The id of the IMetaModelFilter.
 	 *
-	 * @return \MetaModels\Filter\Setting\ICollection the instance of the IMetaModelFilterSettings or null if not found.
+	 * @return ICollection the instance of the IMetaModelFilterSettings or null if not found.
 	 */
 	public static function byId($intId)
 	{
@@ -63,12 +63,5 @@ class Factory implements IFactory
 		}
 		return $objSetting;
 	}
-
-	/**
-	 * Query for all known MetaModel database tables.
-	 *
-	 * @return string[] all MetaModel table names as string array.
-	 */
-	// public static function getAllFor();
 }
 

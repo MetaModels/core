@@ -28,6 +28,9 @@ use MetaModels\Filter\Rules\StaticIdList as FilterRuleIdList;
  */
 class IdList extends Simple
 {
+	/**
+	 * {@inheritDoc}
+	 */
 	public function prepareRules(IFilter $objFilter, $arrFilterUrl)
 	{
 		if ($this->get('items'))

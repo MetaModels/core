@@ -19,6 +19,9 @@ namespace MetaModels\Helper;
 
 use MetaModels\Helper\ContaoController as MetaModelController;
 
+/**
+ * This class provides various methods for handling file collection within Contao.
+ */
 class ToolboxFile
 {
 	/**
@@ -108,6 +111,9 @@ class ToolboxFile
 	 */
 	protected $modifiedTime;
 
+	/**
+	 * Create a new instance.
+	 */
 	public function __construct()
 	{
 		// Initialize some values to sane base.
@@ -117,14 +123,16 @@ class ToolboxFile
 	/**
 	 * Set the allowed file extensions.
 	 *
-	 * @param string|array $acceptedExtensions
+	 * @param string|array $acceptedExtensions The list of accepted file extensions.
+	 *
+	 * @return void
 	 */
 	public function setAcceptedExtensions($acceptedExtensions)
 	{
 		// We must not allow file extensions that are globally disabled.
 		$allowedDownload = trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']);
 
-		if(!is_array($acceptedExtensions))
+		if (!is_array($acceptedExtensions))
 		{
 			$acceptedExtensions = trimsplit(',', $acceptedExtensions);
 		}
@@ -145,7 +153,7 @@ class ToolboxFile
 	/**
 	 * Set the base language.
 	 *
-	 * @param string $baseLanguage
+	 * @param string $baseLanguage The base language to use.
 	 *
 	 * @return ToolboxFile
 	 */
@@ -157,6 +165,8 @@ class ToolboxFile
 	}
 
 	/**
+	 * Retrieve the base language.
+	 *
 	 * @return string
 	 */
 	public function getBaseLanguage()
@@ -167,7 +177,7 @@ class ToolboxFile
 	/**
 	 * Set the fallback language.
 	 *
-	 * @param string $fallbackLanguage
+	 * @param string $fallbackLanguage The fallback language to use.
 	 *
 	 * @return ToolboxFile
 	 */
@@ -179,6 +189,8 @@ class ToolboxFile
 	}
 
 	/**
+	 * Retrieve the fallback language.
+	 *
 	 * @return string
 	 */
 	public function getFallbackLanguage()
@@ -189,7 +201,7 @@ class ToolboxFile
 	/**
 	 * Set to show/prepare images or not.
 	 *
-	 * @param boolean $blnShowImages
+	 * @param boolean $blnShowImages True to show images, false otherwise.
 	 *
 	 * @return ToolboxFile
 	 */
@@ -201,6 +213,8 @@ class ToolboxFile
 	}
 
 	/**
+	 * Retrieve the flag if images shall be rendered as images.
+	 *
 	 * @return boolean
 	 */
 	public function getShowImages()
@@ -211,7 +225,7 @@ class ToolboxFile
 	/**
 	 * Set the resize information.
 	 *
-	 * @param array $resizeImages
+	 * @param array $resizeImages The resize information. Array of 3 elements: 0: Width, 1: Height, 2: Mode.
 	 *
 	 * @return ToolboxFile
 	 */
@@ -223,6 +237,8 @@ class ToolboxFile
 	}
 
 	/**
+	 * Retrieve the resize information.
+	 *
 	 * @return array
 	 */
 	public function getResizeImages()
@@ -233,7 +249,7 @@ class ToolboxFile
 	/**
 	 * Sets the Id to use for the lightbox.
 	 *
-	 * @param string $strLightboxId
+	 * @param string $strLightboxId The lightbox id to use.
 	 *
 	 * @return ToolboxFile
 	 */
@@ -245,6 +261,8 @@ class ToolboxFile
 	}
 
 	/**
+	 * Retrieve the lightbox id to use.
+	 *
 	 * @return string
 	 */
 	public function getLightboxId()
@@ -255,7 +273,7 @@ class ToolboxFile
 	/**
 	 * Add path to file or folder list.
 	 *
-	 * @param $strPath
+	 * @param string $strPath The path to be added.
 	 *
 	 * @return ToolboxFile
 	 */
@@ -280,25 +298,27 @@ class ToolboxFile
 	 * Contao 3 DBAFS Support.
 	 * 
 	 * @param string $strID Id of the file.
+	 *
+	 * @return ToolboxFile
 	 * 
-	 * @throws \RuntimeException
+	 * @throws \RuntimeException When being called in Contao 2.X.
 	 */
 	public function addPathById($strID)
 	{
-		if(version_compare(VERSION, '3.0', '<'))
+		if (version_compare(VERSION, '3.0', '<'))
 		{
 			throw new \RuntimeException('You cannot use a contao 3 function in a contao 2.x context.');
 		}
-		
+
 		$objFile = \FilesModel::findByPk($strID);
-		
+
 		// ToDo: Should we throw a exception or just return if we have no file.
 		if ($objFile !== null)
 		{
 			$this->addPath($objFile->path);
 		}
-		
-		return $this;		
+
+		return $this;
 	}
 
 	/**
@@ -321,8 +341,9 @@ class ToolboxFile
 	}
 
 	/**
-	 * Parse the meta.txt file of a folder. This is an altered version and differs from the
-	 * Contao core function as it also checks the fallback language.
+	 * Parse the meta.txt file of a folder.
+	 *
+	 * This is an altered version and differs from the Contao core function as it also checks the fallback language.
 	 *
 	 * @param string $strPath     The path where to look for the meta.txt.
 	 *
@@ -332,7 +353,7 @@ class ToolboxFile
 	 * 
 	 * @deprecated Remove when we drop support for Contao 2.11.
 	 */
-	protected function parseMetaFile($strPath, $strLanguage='')
+	protected function parseMetaFile($strPath, $strLanguage = '')
 	{
 		$strFile = $strPath . DIRECTORY_SEPARATOR . 'meta' . (strlen($strLanguage) ? '_' . $strLanguage : '') . '.txt';
 
@@ -347,10 +368,10 @@ class ToolboxFile
 
 		foreach ($arrBuffer as $v)
 		{
-			// filename.ext = title | url | caption
+			// Schema: filename.ext = title | url | caption.
 			list($strLabel, $strValue) = array_map('trim', explode('=', $v, 2));
 
-			$this->metaInformation[$strPath][$strLabel] = array_map('trim', explode('|', $strValue));
+			$this->metaInformation[$strPath][$strLabel]            = array_map('trim', explode('|', $strValue));
 			$this->metaInformation[$strPath][$strLabel]['title']   = $this->metaInformation[$strPath][$strLabel][0];
 			$this->metaInformation[$strPath][$strLabel]['link']    = $this->metaInformation[$strPath][$strLabel][1];
 			$this->metaInformation[$strPath][$strLabel]['caption'] = $this->metaInformation[$strPath][$strLabel][2];
@@ -381,7 +402,7 @@ class ToolboxFile
 
 		$arrProcessed = array();
 
-		foreach($this->foundFiles as $strFile)
+		foreach ($this->foundFiles as $strFile)
 		{
 			$strDir = dirname($strFile);
 			if (in_array($strDir, $arrProcessed))
@@ -396,7 +417,7 @@ class ToolboxFile
 			$this->parseMetaFile($strDir);
 		}
 	}
-	
+
 	/**
 	 * Loops all found files and parses the corresponding metafile.
 	 *
@@ -405,12 +426,12 @@ class ToolboxFile
 	protected function parseMetaFiles()
 	{
 		$files = \FilesModel::findMultipleByPaths($this->foundFiles);
-		
+
 		if (!$files)
 		{
 			return;
 		}
-		
+
 		while ($files->next())
 		{
 			$path = $files->path;
@@ -463,19 +484,26 @@ class ToolboxFile
 		}
 
 		$objController = MetaModelController::getInstance();
-		$strThemeDir = $objController->getTheme();
-		$resizeInfo = $this->getResizeImages();
-		$intWidth = $resizeInfo[0] ? $resizeInfo[0] : '';
-		$intHeight = $resizeInfo[1] ? $resizeInfo[1] : '';
-		$strMode = $resizeInfo[2] ? $resizeInfo[2] : '';
+		$strThemeDir   = $objController->getTheme();
+		$resizeInfo    = $this->getResizeImages();
+		$intWidth      = $resizeInfo[0] ? $resizeInfo[0] : '';
+		$intHeight     = $resizeInfo[1] ? $resizeInfo[1] : '';
+		$strMode       = $resizeInfo[2] ? $resizeInfo[2] : '';
 
 		foreach ($this->foundFiles as $strFile)
 		{
 			$objFile = new \File($strFile);
 
-			$arrMeta =$this->metaInformation[dirname($strFile)][$objFile->basename];
+			$arrMeta     = $this->metaInformation[dirname($strFile)][$objFile->basename];
 			$strBasename = strlen($arrMeta['title']) ? $arrMeta['title'] : specialchars($objFile->basename);
-			$strAltText = (strlen($arrMeta['caption']) ? $arrMeta['caption'] : ucfirst(str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $objFile->filename))));
+			if (strlen($arrMeta['caption']))
+			{
+				$strAltText = $arrMeta['caption'];
+			}
+			else
+			{
+				$strAltText = ucfirst(str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $objFile->filename)));
+			}
 
 			if (version_compare(VERSION, '3.0', '<'))
 			{
@@ -498,7 +526,7 @@ class ToolboxFile
 				'url'      => specialchars($this->getDownloadLink($strFile))
 			);
 
-			// images
+			// Prepare images.
 			if ($arrSource['isGdImage'] = $objFile->isGdImage)
 			{
 				if ($this->getShowImages() && ($intWidth || $intHeight || $strMode))
@@ -509,10 +537,10 @@ class ToolboxFile
 				}
 				$arrSource['src'] = $strSrc;
 
-				$size = getimagesize(TL_ROOT . '/' . urldecode($strSrc));
+				$size            = getimagesize(TL_ROOT . '/' . urldecode($strSrc));
 				$arrSource['lb'] = 'lb'.$this->getLightboxId();
-				$arrSource['w'] = $size[0];
-				$arrSource['h'] = $size[1];
+				$arrSource['w']  = $size[0];
+				$arrSource['h']  = $size[1];
 				$arrSource['wh'] = $size[3];
 			}
 
@@ -531,9 +559,9 @@ class ToolboxFile
 	 *
 	 * This returns an array like: array('files' => array(), 'source' => array())
 	 *
-	 * @param array $arrFiles
+	 * @param array $arrFiles  The files to sort.
 	 *
-	 * @param array $arrSource
+	 * @param array $arrSource The source list.
 	 *
 	 * @return array The mapped result.
 	 */
@@ -542,8 +570,7 @@ class ToolboxFile
 		$files  = array();
 		$source = array();
 
-		// re-sort the values
-		foreach($arrFiles as $k => $v)
+		foreach ($arrFiles as $k => $v)
 		{
 			$files[]  = $arrFiles[$k];
 			$source[] = $arrSource[$k];
@@ -581,48 +608,42 @@ class ToolboxFile
 	{
 		switch ($sortType)
 		{
-			default:
-			case 'name_asc':
-				return $this->sortByName(true);
-				break;
-
 			case 'name_desc':
 				return $this->sortByName(false);
-				break;
 
 			case 'date_asc':
 				return $this->sortByDate(true);
-				break;
 
 			case 'date_desc':
 				return $this->sortByDate(false);
-				break;
 
 			case 'meta':
 				return $this->sortByMeta();
-				break;
 
 			case 'random':
 				return $this->sortByRandom();
-				break;
+
+			default:
+			case 'name_asc':
 		}
+		return $this->sortByName(true);
 	}
 
 	/**
 	 * Attach first, last and even/odd classes to the given array.
 	 *
-	 * @param $arrSource
+	 * @param array $arrSource The array reference of the array to which the classes shall be added to.
 	 *
 	 * @return void
 	 */
 	protected function addClasses(&$arrSource)
 	{
 		$countFiles = count($arrSource);
-		foreach($arrSource as $k=>$v)
+		foreach ($arrSource as $k => $v)
 		{
-			$arrSource[$k]['class'] = (($k == 0) ? ' first' : '')
-				. (($k == ($countFiles - 1)) ? ' last' : '')
-				. ((($k % 2) == 0) ? ' even' : ' odd');
+			$arrSource[$k]['class'] = (($k == 0) ? ' first' : '') .
+				(($k == ($countFiles - 1)) ? ' last' : '') .
+				((($k % 2) == 0) ? ' even' : ' odd');
 		}
 	}
 
@@ -684,7 +705,7 @@ class ToolboxFile
 	}
 
 	/**
-	 * Sort by meta.txt
+	 * Sort by meta.txt.
 	 *
 	 * @return array
 	 * 
@@ -701,7 +722,7 @@ class ToolboxFile
 			return array('files' => array(), 'source' => array());
 		}
 
-		$files = array();
+		$files  = array();
 		$source = array();
 
 		foreach ($arrMeta as $aux)
@@ -710,7 +731,7 @@ class ToolboxFile
 
 			if ($k !== false)
 			{
-				$files[] = $arrFiles[$k];
+				$files[]  = $arrFiles[$k];
 				$source[] = $arrSource[$k];
 			}
 		}
@@ -741,7 +762,7 @@ class ToolboxFile
 
 		$keys = array_keys($arrFiles);
 		shuffle($keys);
-		foreach($keys as $key)
+		foreach ($keys as $key)
 		{
 			$files[$key] = $arrFiles[$key];
 		}
@@ -772,8 +793,10 @@ class ToolboxFile
 		$this->collectFiles();
 
 		// TODO: check if downloading is allowed and send file to browser then
-		// see https://github.com/MetaModels/attribute_file/issues/6
-		if ((!$this->getShowImages()) && ($strFile = \Input::getInstance()->get('file')) && in_array($strFile, $this->foundFiles))
+		// See https://github.com/MetaModels/attribute_file/issues/6 for details of how to implement this.
+		if ((!$this->getShowImages())
+			&& ($strFile = \Input::getInstance()->get('file')) && in_array($strFile, $this->foundFiles)
+		)
 		{
 			MetaModelController::getInstance()->sendFileToBrowser($strFile);
 		}
@@ -795,7 +818,11 @@ class ToolboxFile
 	}
 
 	/**
-	 * Translate the file ID to file path
+	 * Translate the file ID to file path.
+	 *
+	 * @param mixed $varValue The file id.
+	 *
+	 * @return string
 	 */
 	public function convertValueToPath($varValue)
 	{

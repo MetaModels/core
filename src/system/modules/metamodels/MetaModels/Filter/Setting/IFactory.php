@@ -32,7 +32,7 @@ interface IFactory
 	 *
 	 * @param int $intId The id of the IMetaModelFilterSettings.
 	 *
-	 * @return \MetaModels\Filter\Setting\ICollection The instance of the filter settings or null if not found.
+	 * @return ICollection The instance of the filter settings or null if not found.
 	 */
 	public static function byId($intId);
 }

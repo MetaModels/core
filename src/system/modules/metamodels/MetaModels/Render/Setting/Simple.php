@@ -6,7 +6,7 @@
  * data in each collection.
  *
  * PHP version 5
- * @package	   MetaModels
+ * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  The MetaModels team.
@@ -15,8 +15,6 @@
  */
 
 namespace MetaModels\Render\Setting;
-
-use MetaModels\Render\Setting\ISimple;
 
 /**
  * base implementation for render settings.
@@ -37,14 +35,14 @@ class Simple implements ISimple
 	/**
 	 * The parenting instance.
 	 *
-	 * @var \MetaModels\Render\Setting\ICollection
+	 * @var ICollection
 	 */
 	protected $parent;
 
 	/**
 	 * Create a new instance.
 	 *
-	 * @param array                    $arrInformation The array that holds all base information for the new instance.
+	 * @param array $arrInformation The array that holds all base information for the new instance.
 	 */
 	public function __construct($arrInformation = array())
 	{
@@ -57,9 +55,9 @@ class Simple implements ISimple
 	/**
 	 * For backwards compatibility only as this used to be stdClass.
 	 *
-	 * @param string $key  The key to set.
+	 * @param string $key   The key to set.
 	 *
-	 * @param mixed $value The value to set.
+	 * @param mixed  $value The value to set.
 	 *
 	 * @return void
 	 */
@@ -75,7 +73,7 @@ class Simple implements ISimple
 	/**
 	 * For backwards compatibility only as this used to be stdClass.
 	 *
-	 * @param string $key  The key to set.
+	 * @param string $key The key to set.
 	 *
 	 * @return mixed
 	 */
@@ -91,9 +89,9 @@ class Simple implements ISimple
 	/**
 	 * Set the parenting render setting.
 	 *
-	 * @param \MetaModels\Render\Setting\ICollection $parent The parenting instance.
+	 * @param ICollection $parent The parenting instance.
 	 *
-	 * @return \MetaModels\Render\Setting\ISimple
+	 * @return ISimple
 	 */
 	public function setParent($parent)
 	{
@@ -105,7 +103,7 @@ class Simple implements ISimple
 	/**
 	 * Retrieve the parenting render setting.
 	 *
-	 * @return \MetaModels\Render\Setting\ICollection
+	 * @return ICollection
 	 */
 	public function getParent()
 	{
@@ -131,7 +129,7 @@ class Simple implements ISimple
 	 *
 	 * @param mixed  $varSetting The value to use.
 	 *
-	 * @return \MetaModels\Render\Setting\ISimple The setting itself.
+	 * @return ISimple The setting itself.
 	 */
 	public function set($strName, $varSetting)
 	{

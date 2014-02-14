@@ -82,7 +82,7 @@ interface IItem
 	/**
 	 * Fetch the meta model variants for this item.
 	 *
-	 * @param IMetaModelFilter $objFilter The filter settings to be applied.
+	 * @param \MetaModels\Filter\IFilter $objFilter The filter settings to be applied.
 	 *
 	 * @return \MetaModels\IItems A list of all variants for this item.
 	 */

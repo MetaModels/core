@@ -16,9 +16,6 @@
 
 namespace MetaModels\Render\Setting;
 
-use MetaModels\Render\Setting\ICollection;
-use MetaModels\Render\Setting\ISimple;
-
 /**
  * base implementation for render settings.
  *
@@ -81,7 +78,7 @@ class Collection implements ICollection
 	 *
 	 * @param mixed  $varSetting The value to use.
 	 *
-	 * @return \MetaModels\Render\Setting\ICollection The setting itself.
+	 * @return ICollection The setting itself.
 	 */
 	public function set($strName, $varSetting)
 	{
@@ -94,7 +91,7 @@ class Collection implements ICollection
 	 *
 	 * @param string $strAttributeName The name of the attribute.
 	 *
-	 * @return \MetaModels\Render\Setting\ISimple|null An object or null if the information is not available.
+	 * @return ISimple|null An object or null if the information is not available.
 	 */
 	public function getSetting($strAttributeName)
 	{
@@ -104,11 +101,11 @@ class Collection implements ICollection
 	/**
 	 * Set the render information for an attribute.
 	 *
-	 * @param string                             $strAttributeName The name of the attribute.
+	 * @param string  $strAttributeName The name of the attribute.
 	 *
-	 * @param \MetaModels\Render\Setting\ISimple $objSetting       The object containing all the information.
+	 * @param ISimple $objSetting       The object containing all the information.
 	 *
-	 * @return \MetaModels\Render\Setting\ICollection The instance itself for chaining.
+	 * @return ICollection The instance itself for chaining.
 	 */
 	public function setSetting($strAttributeName, $objSetting)
 	{
@@ -144,9 +141,9 @@ class Collection implements ICollection
 	/**
 	 * Set the jump to information in the settings object.
 	 *
-	 * @param mixed  $varSetting The value to use.
+	 * @param mixed $varSetting The value to use.
 	 *
-	 * @return \MetaModels\Render\Setting\ICollection The setting itself.
+	 * @return ICollection The setting itself.
 	 */
 	public function setJumpTo($varSetting)
 	{

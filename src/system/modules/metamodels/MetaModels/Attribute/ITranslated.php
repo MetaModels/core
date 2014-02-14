@@ -28,12 +28,12 @@ namespace MetaModels\Attribute;
 interface ITranslated extends IAttribute
 {
 	/**
-	 * search matches for the given expression.
+	 * Search matches for the given expression.
 	 *
-	 * @param string $strPattern the text to search for. This may contain wildcards.
+	 * @param string $strPattern   The text to search for. This may contain wildcards.
 	 *
-	 * @param array $arrLanguages array of valid language codes that shall be searched. (optional)
-	 *                            If empty, all languages will be taken into account.
+	 * @param array  $arrLanguages Array of valid language codes that shall be searched. (optional)
+	 *                             If empty, all languages will be taken into account.
 	 *
 	 * @return int[] the ids of matching items.
 	 */
@@ -42,10 +42,9 @@ interface ITranslated extends IAttribute
 	/**
 	 * Set a value for an item in a certain language.
 	 *
-	 * @param mixed[int] $arrValues the values to be set in id => value layout.
+	 * @param mixed[int] $arrValues   The values to be set in id => value layout.
 	 *
-	 * @param string $strLangCode the language code for which the data shall be retrieved.
-	 *
+	 * @param string     $strLangCode The language code for which the data shall be retrieved.
 	 *
 	 * @return void
 	 */
@@ -54,10 +53,9 @@ interface ITranslated extends IAttribute
 	/**
 	 * Get values for the given items in a certain language.
 	 *
-	 * @param int[]  $arrIds      the ids for which values shall be retrieved.
+	 * @param int[]  $arrIds      The ids for which values shall be retrieved.
 	 *
-	 * @param string $strLangCode the language code for which the data shall be retrieved.
-	 *
+	 * @param string $strLangCode The language code for which the data shall be retrieved.
 	 *
 	 * @return mixed[int] the values.
 	 */
@@ -66,10 +64,9 @@ interface ITranslated extends IAttribute
 	/**
 	 * Remove values for items in a certain language.
 	 *
-	 * @param int[]  $arrIds      the ids for which values shall be removed.
+	 * @param int[]  $arrIds      The ids for which values shall be removed.
 	 *
-	 * @param string $strLangCode the language code for which the data shall be removed.
-	 *
+	 * @param string $strLangCode The language code for which the data shall be removed.
 	 *
 	 * @return void
 	 */

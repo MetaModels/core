@@ -27,7 +27,7 @@ use MetaModels\Render\Template;
  * @subpackage Frontend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-class ItemList extends \Controller
+class ItemList
 {
 	/**
 	 * Use limit.
@@ -58,14 +58,14 @@ class ItemList extends \Controller
 	protected $intPerPage = 0;
 
 	/**
-	 * Sort by attribute
+	 * Sort by attribute.
 	 *
 	 * @var string
 	 */
 	protected $strSortBy = '';
 
 	/**
-	 * Sort by attribute
+	 * Sort by attribute.
 	 *
 	 * @var string
 	 */
@@ -79,14 +79,14 @@ class ItemList extends \Controller
 	protected $intView = 0;
 
 	/**
-	 * Sort by attribute
+	 * Sort by attribute.
 	 *
 	 * @var string
 	 */
 	protected $strOutputFormat;
 
 	/**
-	 * The metamodel to use.
+	 * The MetaModel to use.
 	 *
 	 * @var int
 	 */
@@ -120,24 +120,19 @@ class ItemList extends \Controller
 	 */
 	protected $strDescriptionAttribute = '';
 
-	public function __construct() {
-		parent::__construct();
-	}
-
 	/**
-	 * Set the limit
+	 * Set the limit.
 	 *
-	 * @param bool $blnUse    if true, use limit, if false no limit is applied.
+	 * @param bool $blnUse    If true, use limit, if false no limit is applied.
 	 *
-	 * @param int  $intOffset like in SQL, first element to be returned (0 based).
+	 * @param int  $intOffset Like in SQL, first element to be returned (0 based).
 	 *
-	 * @param int  $intLimit  like in SQL, amount of elements to retrieve.
+	 * @param int  $intLimit  Like in SQL, amount of elements to retrieve.
 	 *
 	 * @return ItemList
 	 */
 	public function setLimit($blnUse, $intOffset, $intLimit)
 	{
-		//
 		$this->blnUseLimit = $blnUse;
 		$this->intOffset   = $intOffset;
 		$this->intLimit    = $intLimit;
@@ -148,13 +143,13 @@ class ItemList extends \Controller
 	/**
 	 * Set page breaking to the given amount of items. A value of 0 disables pagination at all.
 	 *
-	 * @param int $intLimit the amount of items per page. A value of 0 disables pagination.
+	 * @param int $intLimit The amount of items per page. A value of 0 disables pagination.
 	 *
 	 * @return ItemList
 	 */
 	public function setPageBreak($intLimit)
 	{
-		$this->intPerPage   = $intLimit;
+		$this->intPerPage = $intLimit;
 
 		return $this;
 	}
@@ -170,8 +165,8 @@ class ItemList extends \Controller
 	 */
 	public function setSorting($strSortBy, $strDirection = 'ASC')
 	{
-		$this->strSortBy          = $strSortBy;
-		$this->strSortDirection   = ($strDirection == 'DESC') ? 'DESC' : 'ASC';
+		$this->strSortBy        = $strSortBy;
+		$this->strSortDirection = ($strDirection == 'DESC') ? 'DESC' : 'ASC';
 
 		return $this;
 	}
@@ -191,29 +186,31 @@ class ItemList extends \Controller
 	}
 
 	/**
-	 * Override the output format of the used view
+	 * Override the output format of the used view.
 	 *
-	 * @param string|null $strOutputFormat
+	 * @param string|null $strOutputFormat The desired output format.
+	 *
 	 * @return ItemList
 	 */
 	public function overrideOutputFormat($strOutputFormat = null)
 	{
 		$strOutputFormat = strval($strOutputFormat);
-		if(strlen($strOutputFormat))
+		if (strlen($strOutputFormat))
 		{
 			$this->strOutputFormat = $strOutputFormat;
 		} else {
 			unset($this->strOutputFormat);
 		}
+
 		return $this;
 	}
 
 	/**
-	 * Set metamodel and render settings.
+	 * Set MetaModel and render settings.
 	 *
-	 * @param int $intMetaModel the metamodel to use.
+	 * @param int $intMetaModel The MetaModel to use.
 	 *
-	 * @param int $intView      the render settings to use (if 0, the default will be used).
+	 * @param int $intView      The render settings to use (if 0, the default will be used).
 	 *
 	 * @return ItemList
 	 */
@@ -222,10 +219,8 @@ class ItemList extends \Controller
 		$this->intMetaModel = $intMetaModel;
 		$this->intView      = $intView;
 
-		// initialize the metamodel
 		$this->prepareMetaModel();
 
-		// initialize the view
 		$this->prepareView();
 
 		return $this;
@@ -234,13 +229,11 @@ class ItemList extends \Controller
 	/**
 	 * Set filter and parameter.
 	 *
-	 * @param int      $intFilter  the filter settings to use (if 0, the default will be used).
+	 * @param int      $intFilter  The filter settings to use (if 0, the default will be used).
 	 *
-	 * @param string[] $arrPresets the parameter preset values to use.
+	 * @param string[] $arrPresets The parameter preset values to use.
 	 *
-	 * @param string[] $arrValues the dynamic parameter values that may be used.
-	 *
-	 * @param string[] $arrPresets the parameters for the filter.
+	 * @param string[] $arrValues  The dynamic parameter values that may be used.
 	 *
 	 * @return ItemList
 	 *
@@ -258,34 +251,36 @@ class ItemList extends \Controller
 	/**
 	 * Add the attribute names for meta title and description.
 	 * 
-	 * @param string $strTitleAttribute Name of attribute for title.
+	 * @param string $strTitleAttribute       Name of attribute for title.
 	 * 
 	 * @param string $strDescriptionAttribute Name of attribue for description.
+	 *
+	 * @return void
 	 */
 	public function setMetaTags($strTitleAttribute, $strDescriptionAttribute)
 	{
 		$this->strDescriptionAttribute = $strDescriptionAttribute;
-		$this->strTitleAttribute = $strTitleAttribute;
+		$this->strTitleAttribute       = $strTitleAttribute;
 	}
 
 	/**
-	 * The Metamodel to use
+	 * The Metamodel to use.
 	 *
-	 * @var \MetaModels\IMetaModel
+	 * @var IMetaModel
 	 */
 	protected $objMetaModel;
 
 	/**
 	 * The render settings to use.
 	 *
-	 * @var \MetaModels\Render\Setting\Collection
+	 * @var \MetaModels\Render\Setting\ICollection
 	 */
 	protected $objView;
 
 	/**
 	 * The render template to use.
 	 *
-	 * @var \MetaModels\Render\Template
+	 * @var Template
 	 */
 	protected $objTemplate;
 
@@ -308,7 +303,7 @@ class ItemList extends \Controller
 	 *
 	 * @return void
 	 *
-	 * @throws \RuntimeException
+	 * @throws \RuntimeException When the MetaModel can not be found.
 	 */
 	protected function prepareMetaModel()
 	{
@@ -320,6 +315,7 @@ class ItemList extends \Controller
 	}
 	/**
 	 * Prepare the view.
+	 *
 	 * NOTE: must be called after prepareMetaModel().
 	 *
 	 * @return void
@@ -330,24 +326,26 @@ class ItemList extends \Controller
 
 		if ($this->objView)
 		{
-			$this->objTemplate = new Template($this->objView->get('template'));
+			$this->objTemplate       = new Template($this->objView->get('template'));
 			$this->objTemplate->view = $this->objView;
 		} else {
-			// fallback to default.
+			// Fallback to default.
 			$this->objTemplate = new Template('metamodel_full');
 		}
 	}
 
 	/**
-	 * @param $intFilter
+	 * Set the filter setting to use.
+	 *
+	 * @param int $intFilter The filter setting to use.
 	 *
 	 * @return $this
 	 *
-	 * @throws \RuntimeException
+	 * @throws \RuntimeException When the filter settings can not be found.
 	 */
 	public function setFilterSettings($intFilter)
 	{
-		$this->intFilter    = $intFilter;
+		$this->intFilter = $intFilter;
 
 		$this->objFilterSettings = FilterFactory::byId($this->intFilter);
 
@@ -362,21 +360,21 @@ class ItemList extends \Controller
 	/**
 	 * Set parameters.
 	 *
-	 * @param string[] $arrPresets the parameter preset values to use.
+	 * @param string[] $arrPresets The parameter preset values to use.
 	 *
-	 * @param string[] $arrValues the dynamic parameter values that may be used.
-	 *
-	 * @param string[] $arrPresets the parameters for the filter.
+	 * @param string[] $arrValues  The dynamic parameter values that may be used.
 	 *
 	 * @return ItemList
 	 *
-	 * @throws \RuntimeException
+	 * @throws \RuntimeException When no filter settings have been set.
 	 */
 	public function setFilterParameters($arrPresets, $arrValues)
 	{
 		if (!$this->objFilterSettings)
 		{
-			throw new \RuntimeException('Error: no filter object defined, call setFilterSettings() before setFilterParameters().');
+			throw new \RuntimeException(
+				'Error: no filter object defined, call setFilterSettings() before setFilterParameters().'
+			);
 		}
 
 		$arrPresetNames    = $this->objFilterSettings->getParameters();
@@ -393,18 +391,18 @@ class ItemList extends \Controller
 			}
 		}
 
-		// now we have to use all FE filter params, that are either:
+		// Now we have to use all FE filter params, that are either:
 		// * not contained within the presets
 		// * or are overridable.
 		foreach ($arrFEFilterParams as $strParameter)
 		{
-			// unknown parameter? - next please
+			// Unknown parameter? - next please.
 			if (!array_key_exists($strParameter, $arrValues))
 			{
 				continue;
 			}
 
-			// not a preset or allowed to override? - use value
+			// Not a preset or allowed to override? - use value.
 			if ((!array_key_exists($strParameter, $arrPresets)) || $arrPresets[$strParameter]['use_get'])
 			{
 				$arrProcessed[$strParameter] = $arrValues[$strParameter];
@@ -437,19 +435,25 @@ class ItemList extends \Controller
 	}
 
 	/**
-	 * the calculated pagination, if any.
+	 * The calculated pagination, if any.
+	 *
+	 * @var string
 	 */
 	protected $strPagination = '';
 
 	/**
 	 * Calculate the pagination based upon the offset, limit and total amount of items.
+	 *
+	 * @param int $intTotal The total amount of items.
+	 *
+	 * @return void
 	 */
 	protected function calculatePagination($intTotal)
 	{
 		$intOffset = null;
 		$intLimit  = null;
 
-		// if defined, we override the pagination here.
+		// If defined, we override the pagination here.
 		if ($this->blnUseLimit && ($this->intLimit || $this->intOffset))
 		{
 			if ($this->intLimit)
@@ -464,31 +468,32 @@ class ItemList extends \Controller
 
 		if ($this->intPerPage > 0)
 		{
-			// if a total limit has been defined, we need to honor that.
-			if (!is_null($intLimit) && ($intTotal>$intLimit))
+			// If a total limit has been defined, we need to honor that.
+			if (!is_null($intLimit) && ($intTotal > $intLimit))
 			{
 				$intTotal -= $intLimit;
 			}
 			$intTotal -= $intOffset;
 
-			// Get the current page
+			// Get the current page.
 			$intPage = \Input::getInstance()->get('page') ? \Input::getInstance()->get('page') : 1;
 
-			if ($intPage > ($intTotal/$this->intPerPage))
+			if ($intPage > ($intTotal / $this->intPerPage))
 			{
-				$intPage = (int)ceil($intTotal/$this->intPerPage);
+				$intPage = (int)ceil($intTotal / $this->intPerPage);
 			}
 
-			// Set limit and offset
-			$pageOffset = (max($intPage, 1) - 1) * $this->intPerPage;
+			// Set limit and offset.
+			$pageOffset = ((max($intPage, 1) - 1) * $this->intPerPage);
 			$intOffset += $pageOffset;
 			if (is_null($intLimit))
 			{
 				$intLimit = $this->intPerPage;
 			} else {
-				$intLimit = min($intLimit - $intOffset, $this->intPerPage);
+				$intLimit = min(($intLimit - $intOffset), $this->intPerPage);
 			}
-			// Add pagination menu
+
+			// Add pagination menu.
 			$objPagination = new \Pagination($intTotal, $this->intPerPage);
 
 			$this->strPagination = $objPagination->generate("\n  ");
@@ -508,12 +513,14 @@ class ItemList extends \Controller
 
 	/**
 	 * The items in the list view.
+	 *
 	 * @var \MetaModels\IItems
 	 */
 	protected $objItems = null;
 
 	/**
 	 * Add additional filter rules to the list.
+	 *
 	 * Can be overridden by subclasses to add additional filter rules to the filter before it will get evaluated.
 	 *
 	 * @return ItemList
@@ -526,13 +533,13 @@ class ItemList extends \Controller
 	/**
 	 * Add additional filter rules to the list on the fly.
 	 *
-	 * @param \MetaModels\Filter\IFilterRule $objFilterRule
+	 * @param \MetaModels\Filter\IFilterRule $objFilterRule The filter rule to add.
 	 *
 	 * @return ItemList
 	 */
 	public function addFilterRule($objFilterRule)
 	{
-		if(!$this->objFilter)
+		if (!$this->objFilter)
 		{
 			$this->objFilter = $this->objMetaModel->getEmptyFilter();
 		}
@@ -544,6 +551,7 @@ class ItemList extends \Controller
 
 	/**
 	 * Return all attributes that shall be fetched from the MetaModel.
+	 *
 	 * In this base implementation, this only includes the attributes mentioned in the render setting.
 	 *
 	 * @return string[] the names of the attributes to be fetched.
@@ -552,7 +560,7 @@ class ItemList extends \Controller
 	{
 		$arrAttributes = $this->objView->getSettingNames();
 
-		// Get the right jumpto.
+		// Get the right jumpTo.
 		$strDesiredLanguage  = $this->getMetaModel()->getActiveLanguage();
 		$strFallbackLanguage = $this->getMetaModel()->getFallbackLanguage();
 
@@ -577,14 +585,16 @@ class ItemList extends \Controller
 		if ($intFilterSettings)
 		{
 			$objFilterSettings = FilterFactory::byId($intFilterSettings);
-			$arrAttributes = array_merge($objFilterSettings->getReferencedAttributes(), $arrAttributes);
+			$arrAttributes     = array_merge($objFilterSettings->getReferencedAttributes(), $arrAttributes);
 		}
 
 		return $arrAttributes;
 	}
 
 	/**
-	 * Prepare the rendering
+	 * Prepare the rendering.
+	 *
+	 * @return ItemList
 	 */
 	public function prepare()
 	{
@@ -593,13 +603,13 @@ class ItemList extends \Controller
 			return $this;
 		}
 
-		// create an empty filter object if not done before
-		if(!$this->objFilter)
+		// Create an empty filter object if not done before.
+		if (!$this->objFilter)
 		{
 			$this->objFilter = $this->objMetaModel->getEmptyFilter();
 		}
 
-		if($this->objFilterSettings)
+		if ($this->objFilterSettings)
 		{
 			$this->objFilterSettings->addRules($this->objFilter, $this->arrParam);
 		}
@@ -610,14 +620,24 @@ class ItemList extends \Controller
 
 		$this->calculatePagination($intTotal);
 
-		$this->objItems = $this->objMetaModel->findByFilter($this->objFilter, $this->strSortBy, $this->intOffset, $this->intLimit, $this->strSortDirection, $this->getAttributeNames());
+		$this->objItems = $this->objMetaModel->findByFilter(
+			$this->objFilter,
+			$this->strSortBy,
+			$this->intOffset,
+			$this->intLimit,
+			$this->strSortDirection,
+			$this->getAttributeNames()
+		);
 
 		return $this;
 	}
 
 	/**
 	 * Returns the pagination string.
+	 *
 	 * Remember to call prepare() first.
+	 *
+	 * @return string
 	 */
 	public function getPagination()
 	{
@@ -626,6 +646,8 @@ class ItemList extends \Controller
 
 	/**
 	 * Returns the item list in the view.
+	 *
+	 * @return IItems
 	 */
 	public function getItems()
 	{
@@ -633,7 +655,9 @@ class ItemList extends \Controller
 	}
 
 	/**
-	 * Returns the item list in the view.
+	 * Returns the view.
+	 *
+	 * @return \MetaModels\Render\Setting\ICollection
 	 */
 	public function getView()
 	{
@@ -641,32 +665,42 @@ class ItemList extends \Controller
 	}
 
 	/**
-	 * Returns the item list in the view.
+	 * Returns the MetaModel.
+	 *
+	 * @return IMetaModel
 	 */
 	public function getMetaModel()
 	{
 		return $this->objMetaModel;
 	}
 
+	/**
+	 * Retrieve the output format used by this list.
+	 *
+	 * @return string
+	 */
 	public function getOutputFormat()
 	{
 		if (isset($this->strOutputFormat))
 		{
 			return $this->strOutputFormat;
 		}
+
 		if (isset($this->objView) && $this->objView->get('format'))
 		{
 			return $this->objView->get('format');
 		}
+
 		if (TL_MODE == 'FE' && is_object($GLOBALS['objPage']) && $GLOBALS['objPage']->outputFormat)
 		{
 			return $GLOBALS['objPage']->outputFormat;
 		}
+
 		return 'text';
 	}
 
 	/**
-	 * Retrieve the caption text for "No items found" message,
+	 * Retrieve the caption text for "No items found" message.
 	 *
 	 * This message is looked up in the following order:
 	 * 1. $GLOBALS['TL_LANG']['MSC'][<mm tablename>][<render settings id>]['noItemsMsg']
@@ -677,7 +711,8 @@ class ItemList extends \Controller
 	 */
 	protected function getNoItemsCaption()
 	{
-		if (isset($this->objView) && isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['noItemsMsg']))
+		if (isset($this->objView)
+			&& isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['noItemsMsg']))
 		{
 			return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['noItemsMsg'];
 		}
@@ -685,14 +720,12 @@ class ItemList extends \Controller
 		{
 			return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['noItemsMsg'];
 		}
-		else
-		{
-			return $GLOBALS['TL_LANG']['MSC']['noItemsMsg'];
-		}
+
+		return $GLOBALS['TL_LANG']['MSC']['noItemsMsg'];
 	}
 
 	/**
-	 * Retrieve the caption text for the "Show details" link,
+	 * Retrieve the caption text for the "Show details" link.
 	 *
 	 * This message is looked up in the following order:
 	 * 1. $GLOBALS['TL_LANG']['MSC'][<mm tablename>][<render settings id>]['details']
@@ -703,7 +736,8 @@ class ItemList extends \Controller
 	 */
 	protected function getDetailsCaption()
 	{
-		if (isset($this->objView) && isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['details']))
+		if (isset($this->objView)
+			&& isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['details']))
 		{
 			return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['details'];
 		}
@@ -711,32 +745,29 @@ class ItemList extends \Controller
 		{
 			return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details'];
 		}
-		else
-		{
-			return $GLOBALS['TL_LANG']['MSC']['details'];
-		}
+
+		return $GLOBALS['TL_LANG']['MSC']['details'];
 	}
 
 	/**
 	 * Render the list view.
 	 *
-	 * @param bool $blnNoNativeParsing Flag determining if the parsing shall be done internal or if the template will handle the parsing on it's own.
+	 * @param bool   $blnNoNativeParsing Flag determining if the parsing shall be done internal or if the template will
+	 *                                   handle the parsing on it's own.
 	 *
-	 * @param object $objCaller        The object calling us, might be a Module or ContentElement or anything else.
+	 * @param object $objCaller          The object calling us, might be a Module or ContentElement or anything else.
 	 *
 	 * @return string
 	 */
 	public function render($blnNoNativeParsing, $objCaller)
 	{
-		global $objPage;
-
 		$this->objTemplate->noItemsMsg = $this->getNoItemsCaption();
 		$this->objTemplate->details    = $this->getDetailsCaption();
 
 		$this->prepare();
 		$strOutputFormat = $this->getOutputFormat();
 
-		if($this->objItems->getCount() && !$blnNoNativeParsing)
+		if ($this->objItems->getCount() && !$blnNoNativeParsing)
 		{
 			$this->objTemplate->data = $this->objItems->parseAll($strOutputFormat, $this->objView);
 		} else {
@@ -744,26 +775,26 @@ class ItemList extends \Controller
 		}
 
 		// Add title if needed.
-		if($objPage && $this->objItems->getCount() && !empty($this->strTitleAttribute))
+		if ($GLOBALS['objPage'] && $this->objItems->getCount() && !empty($this->strTitleAttribute))
 		{
 			$objFirstItem = $this->objItems->current();
-			$arrTitle = $objFirstItem->parseAttribute($this->strTitleAttribute, 'text');
+			$arrTitle     = $objFirstItem->parseAttribute($this->strTitleAttribute, 'text');
 
-			if(isset($arrTitle['text']) && !empty($arrTitle['text']))
+			if (isset($arrTitle['text']) && !empty($arrTitle['text']))
 			{
-				$objPage->pageTitle = strip_tags($arrTitle['text']);
+				$GLOBALS['objPage']->pageTitle = strip_tags($arrTitle['text']);
 			}
 		}
 
 		// Add description if needed.
-		if($objPage && $this->objItems->getCount() && !empty($this->strDescriptionAttribute))
+		if ($GLOBALS['objPage'] && $this->objItems->getCount() && !empty($this->strDescriptionAttribute))
 		{
-			$objFirstItem = $this->objItems->current();
+			$objFirstItem   = $this->objItems->current();
 			$arrDescription = $objFirstItem->parseAttribute($this->strDescriptionAttribute, 'text');
 
-			if(isset($arrDescription['text']) && !empty($arrDescription['text']))
+			if (isset($arrDescription['text']) && !empty($arrDescription['text']))
 			{
-				$objPage->description = \String::getInstance()->substr($arrDescription['text'], 120);
+				$GLOBALS['objPage']->description = \String::getInstance()->substr($arrDescription['text'], 120);
 			}
 		}
 

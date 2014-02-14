@@ -16,6 +16,8 @@
 
 namespace MetaModels;
 
+use MetaModels\Render\Setting\ICollection;
+
 /**
  * Interface for a collection of MetaModel items.
  *
@@ -26,49 +28,49 @@ namespace MetaModels;
 interface IItems extends \Iterator, \ArrayAccess
 {
 	/**
-	 * return the current item
+	 * Return the current item.
 	 *
 	 * @return IItem
 	 */
 	public function getItem();
 
 	/**
-	 * return the amount of contained items.
+	 * Return the amount of contained items.
 	 *
 	 * @return int the amount of contained items.
 	 */
 	public function getCount();
 
 	/**
-	 * reset to the first element in the collection.
+	 * Reset to the first element in the collection.
 	 *
 	 * @return bool true if there are items contained, false otherwise.
 	 */
 	public function first();
 
 	/**
-	 * advance the internal cursor by one.
+	 * Advance the internal cursor by one.
 	 *
 	 * @return IItems|boolean the current instance or false when last item has had been reached.
 	 */
 //	public function next();
 
 	/**
-	 * Go to the previous row of the current result
+	 * Go to the previous row of the current result.
 	 *
 	 * @return IItems|boolean the current instance or false if no previous item is present.
 	 */
 	public function prev();
 
 	/**
-	 * Go to the last row of the current result
+	 * Go to the last row of the current result.
 	 *
 	 * @return IItems|boolean the current instance or false if no item is present.
 	 */
 	public function last();
 
 	/**
-	 * Reset the current result
+	 * Reset the current result.
 	 *
 	 * @return IItems the current instance.
 	 */
@@ -90,24 +92,24 @@ interface IItems extends \Iterator, \ArrayAccess
 	/**
 	 * Parses the current item in the desired output format using the format settings.
 	 *
-	 * @param string      $strOutputFormat optional, defaults to text. The output format to use.
+	 * @param string           $strOutputFormat Optional, defaults to text. The output format to use.
 	 *
-	 * @param \MetaModels\Render\Setting\ICollection|null $objSettings     optional, defaults to null. The additional settings.
+	 * @param ICollection|null $objSettings     Optional, defaults to null. The additional settings.
 	 *
 	 * @return array the parsed information.
 	 */
-	public function parseValue($strOutputFormat = 'text', $objSettings = NULL);
+	public function parseValue($strOutputFormat = 'text', $objSettings = null);
 
 	/**
 	 * Parses all items in the desired output format using the format settings.
 	 *
-	 * @param string      $strOutputFormat optional, defaults to text. The output format to use.
+	 * @param string           $strOutputFormat Optional, defaults to text. The output format to use.
 	 *
-	 * @param \MetaModels\Render\Setting\ICollection|null $objSettings     optional, defaults to null. The additional settings.
+	 * @param ICollection|null $objSettings     Optional, defaults to null. The additional settings.
 	 *
 	 * @return array the parsed information.
 	 */
-	public function parseAll($strOutputFormat = 'text', $objSettings = NULL);
+	public function parseAll($strOutputFormat = 'text', $objSettings = null);
 
 }
 

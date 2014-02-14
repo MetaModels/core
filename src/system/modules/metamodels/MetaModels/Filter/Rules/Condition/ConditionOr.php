@@ -16,8 +16,8 @@
 
 namespace MetaModels\Filter\Rules\Condition;
 
-use MetaModels\Filter\IFilter;
 use MetaModels\Filter\FilterRule;
+use MetaModels\Filter\IFilter;
 
 /**
  * This is the MetaModel filter interface.
@@ -31,7 +31,7 @@ class ConditionOr extends FilterRule
 	/**
 	 * The list of child filters that shall be evaluated.
 	 *
-	 * @var \MetaModels\Filter\IFilter[]
+	 * @var IFilter[]
 	 */
 	protected $arrChildFilters = array();
 
@@ -62,7 +62,7 @@ class ConditionOr extends FilterRule
 	/**
 	 * Adds a child filter to this rule that will get evaluated when this rule is evaluated.
 	 *
-	 * @param \MetaModels\Filter\IFilter $objFilter The filter to add as child.
+	 * @param IFilter $objFilter The filter to add as child.
 	 *
 	 * @return void
 	 */

@@ -31,7 +31,7 @@ class LessThan implements IFilterRule
 	/**
 	 * The attribute to search in.
 	 *
-	 * @var \MetaModels\Attribute\IAttribute
+	 * @var IAttribute
 	 */
 	protected $objAttribute = null;
 
@@ -52,12 +52,12 @@ class LessThan implements IFilterRule
 	/**
 	 * Creates an instance of this class.
 	 *
-	 * @param \MetaModels\Attribute\IAttribute $objAttribute The attribute that shall be searched.
+	 * @param IAttribute $objAttribute The attribute that shall be searched.
 	 *
-	 * @param array                            $varValue     The value to compare against.
+	 * @param array      $varValue     The value to compare against.
 	 *
-	 * @param bool                             $blnInclusive If true, the passed value will be included in the check
-	 *                                                       and therefore make the check an less-or-equal test.
+	 * @param bool       $blnInclusive If true, the passed value will be included in the check
+	 *                                 and therefore make the check an less-or-equal test.
 	 */
 	public function __construct($objAttribute, $varValue, $blnInclusive = false)
 	{

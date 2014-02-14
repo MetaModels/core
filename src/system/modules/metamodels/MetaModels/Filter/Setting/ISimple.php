@@ -16,9 +16,9 @@
 
 namespace MetaModels\Filter\Setting;
 
+use MetaModels\Filter\IFilter;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use MetaModels\IItem;
-use MetaModels\Filter\IFilter;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
 
 /**
@@ -30,6 +30,14 @@ use MetaModels\Render\Setting\ICollection as IRenderSettings;
  */
 interface ISimple
 {
+	/**
+	 * Return the value of the requested attribute.
+	 *
+	 * @param string $strKey Name of the attribute to retrieve.
+	 *
+	 * @return mixed The stored value, if any.
+	 */
+	public function get($strKey);
 
 	/**
 	 * Tells the filter setting to add all of its rules to the passed filter object.
@@ -39,9 +47,10 @@ interface ISimple
 	 * A filter url hereby is a simple hash of name => value layout, it may eventually be interpreted
 	 * by attributes via IMetaModelAttribute::searchFor() method.
 	 *
-	 * @param \MetaModels\Filter\IFilter $objFilter    The filter to append the rules to.
+	 * @param IFilter        $objFilter    The filter to append the rules to.
 	 *
-	 * @param string[string]   $arrFilterUrl The parameters to evaluate.
+	 * @param string[string] $arrFilterUrl The parameters to evaluate.
+	 *
 	 * @todo: we might want to change the name $arrFilterUrl to $arrFilterParams or something like that.
 	 *
 	 * @return void
@@ -54,14 +63,13 @@ interface ISimple
 	 * This method is being called when a frontend "jumpTo" URL is being generated and the
 	 * parameters have to be fetched.
 	 *
-	 * @param \MetaModels\IItem           $objItem          The item to fetch the values from.
+	 * @param IItem           $objItem          The item to fetch the values from.
 	 *
-	 * @param \MetaModels\Render\Setting\ICollection $objRenderSetting The render setting to be applied.
+	 * @param IRenderSettings $objRenderSetting The render setting to be applied.
 	 *
 	 * @return array An array containing all the URL parameters needed by this filter setting.
 	 */
 	public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting);
-
 
 	/**
 	 * Retrieve a list of all registered parameters from the setting.
@@ -89,17 +97,22 @@ interface ISimple
 	/**
 	 * Retrieve a list of filter widgets for all registered parameters as form field arrays.
 	 *
-	 * @param array                                                 $arrIds        The ids matching the current filter values.
+	 * @param array                 $arrIds                   The ids matching the current filter values.
 	 *
-	 * @param array                                                 $arrFilterUrl  The current filter url.
+	 * @param array                 $arrFilterUrl             The current filter url.
 	 *
-	 * @param array                                                 $arrJumpTo     The jumpTo page (array, row data from tl_page).
+	 * @param array                 $arrJumpTo                The jumpTo page (array, row data from tl_page).
 	 *
-	 * @param \MetaModels\FrontendIntegration\FrontendFilterOptions $objFrontendFilterOptions
+	 * @param FrontendFilterOptions $objFrontendFilterOptions The frontend filter options.
 	 *
 	 * @return array
 	 */
-	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, FrontendFilterOptions $objFrontendFilterOptions);
+	public function getParameterFilterWidgets(
+		$arrIds,
+		$arrFilterUrl,
+		$arrJumpTo,
+		FrontendFilterOptions $objFrontendFilterOptions
+	);
 
 	/**
 	 * Retrieve a list of all referenced attributes within the filter setting.

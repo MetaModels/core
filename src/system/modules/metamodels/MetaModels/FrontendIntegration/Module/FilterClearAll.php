@@ -25,34 +25,34 @@ namespace MetaModels\FrontendIntegration\Module;
  */
 class FilterClearAll extends \Module
 {
-
 	/**
-	 * Template
+	 * Template.
+	 *
 	 * @var string
 	 */
 	protected $strTemplate = 'mm_filter_default';
 
 
 	/**
-	 * Display a wildcard in the back end
+	 * Display a wildcard in the back end.
+	 *
 	 * @return string
 	 */
 	public function generate()
 	{
 		if (TL_MODE == 'BE')
 		{
-			$objTemplate = new \BackendTemplate('be_wildcard');
-
+			$objTemplate           = new \BackendTemplate('be_wildcard');
 			$objTemplate->wildcard = '### METAMODELS FE-FILTERBLOCK ###';
-			$objTemplate->title = $this->headline;
-			$objTemplate->id = $this->id;
-			$objTemplate->link = $this->title;
-			$objTemplate->href = 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id=' . $this->id;
+			$objTemplate->title    = $this->headline;
+			$objTemplate->id       = $this->id;
+			$objTemplate->link     = $this->title;
+			$objTemplate->href     = 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id=' . $this->id;
 
 			return $objTemplate->parse();
 		}
 
-		// get template
+		// Get template if configured.
 		if ($this->metamodel_fef_template)
 		{
 			$this->strTemplate = $this->metamodel_fef_template;
@@ -63,7 +63,9 @@ class FilterClearAll extends \Module
 
 
 	/**
-	 * Generate module
+	 * Generate the module.
+	 *
+	 * @return void
 	 */
 	protected function compile()
 	{
@@ -71,8 +73,9 @@ class FilterClearAll extends \Module
 		$arrPage          = $GLOBALS['objPage']->row();
 		$arrGetParameters = array();
 
-		// Skip filter params.
+		// @codingStandardsIgnoreStart - Skip filter params, loop over $_GET to get a list of all keys.
 		foreach (array_keys($_GET) as $mixGetKey)
+		// @codingStandardsIgnoreEnd - Continue with style checking.
 		{
 			if (in_array($mixGetKey, $GLOBALS['MM_FILTER_PARAMS']))
 			{
@@ -83,33 +86,37 @@ class FilterClearAll extends \Module
 			$arrGetParameters[$mixGetKey] = \Input::getInstance()->get($mixGetKey);
 		}
 
-		// Check if we have filter and if we have active params
-		$this->Template->active		 = (!is_array($GLOBALS['MM_FILTER_PARAMS']) || count($GLOBALS['MM_FILTER_PARAMS']) == 0) ? false : true;
+		// Check if we have filter and if we have active params.
+		$this->Template->active      = (!is_array($GLOBALS['MM_FILTER_PARAMS']) || count($GLOBALS['MM_FILTER_PARAMS']) == 0);
 		$this->Template->activeParam = $blnActiveParam;
 
 		// Build FE url.
 		$this->Template->href = $this->generateFrontendUrl($arrPage, $this->getJumpToUrl($arrGetParameters));
 	}
 
+	/**
+	 * Call the generate() method from parent class.
+	 *
+	 * @return string
+	 */
 	public function generateReal()
 	{
 		return parent::generate();
 	}
 
 	/**
-	 * generate an url determined by the given params and configured jumpTo page.
+	 * Generate an url determined by the given params and configured jumpTo page.
 	 *
-	 * @param array $arrParams the URL parameters to use.
+	 * @param array $arrParams The URL parameters to use.
 	 *
 	 * @return string the generated URL.
-	 *
 	 */
 	protected function getJumpToUrl($arrParams)
 	{
 		$strFilterAction = '';
 		foreach ($arrParams as $strName => $varParam)
 		{
-			// skip the magic "language" parameter.
+			// Skip the magic "language" parameter.
 			if (($strName == 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl'])
 			{
 				continue;
@@ -133,7 +140,11 @@ class FilterClearAll extends \Module
 					continue;
 				}
 
-				$strFilterAction .= sprintf(($GLOBALS['TL_CONFIG']['disableAlias'] ? '&amp;%s=%s' : '/%s/%s'), $strName, urlencode($strValue));
+				$strFilterAction .= sprintf(
+					$GLOBALS['TL_CONFIG']['disableAlias'] ? '&amp;%s=%s' : '/%s/%s',
+					$strName,
+					urlencode($strValue)
+				);
 			}
 		}
 		return $strFilterAction;

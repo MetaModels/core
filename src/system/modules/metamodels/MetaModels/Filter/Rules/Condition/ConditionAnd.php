@@ -16,8 +16,8 @@
 
 namespace MetaModels\Filter\Rules\Condition;
 
-use MetaModels\Filter\IFilter;
 use MetaModels\Filter\FilterRule;
+use MetaModels\Filter\IFilter;
 
 /**
  * This is the MetaModel filter interface.
@@ -31,22 +31,14 @@ class ConditionAnd extends FilterRule
 	/**
 	 * The list of child filters that shall be evaluated.
 	 *
-	 * @var \MetaModels\Filter\IFilter[]
+	 * @var IFilter[]
 	 */
 	protected $arrChildFilters = array();
 
 	/**
-	 * Create a new FilterRule instance.
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-	}
-
-	/**
 	 * Adds a child filter to this rule that will get evaluated when this rule is evaluated.
 	 *
-	 * @param \MetaModels\Filter\IFilter $objFilter the filter to add as child
+	 * @param IFilter $objFilter The filter to add as child.
 	 *
 	 * @return void
 	 */
@@ -60,12 +52,12 @@ class ConditionAnd extends FilterRule
 	 */
 	public function getMatchingIds()
 	{
-		$arrIds = NULL;
+		$arrIds   = null;
 		$blnEmpty = true;
 		foreach ($this->arrChildFilters as $objChildFilter)
 		{
 			$arrChildMatches = $objChildFilter->getMatchingIds();
-			// null => all items allowed by this rule.
+			// If null => all items allowed by this rule.
 			if (is_null($arrChildMatches))
 			{
 				continue;
@@ -80,7 +72,9 @@ class ConditionAnd extends FilterRule
 				} else {
 					$arrIds = array_intersect($arrIds, $arrChildMatches);
 				}
-			} else {
+			}
+			else
+			{
 				// Empty array, no items allowed by this rule, break out.
 				$arrIds = array();
 				break;

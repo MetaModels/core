@@ -16,8 +16,6 @@
 
 namespace MetaModels\Attribute;
 
-use MetaModels\Attribute\IComplex;
-
 /**
  * Base implementation for "complex" MetaModel attributes.
  * Complex fields are fields that can not be fetched with a simple "SELECT colName FROM cat_table" and therefore need

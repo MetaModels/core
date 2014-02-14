@@ -6,7 +6,7 @@
  * data in each collection.
  *
  * PHP version 5
- * @package	   MetaModels
+ * @package    MetaModels
  * @subpackage Interface
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  The MetaModels team.
@@ -16,12 +16,10 @@
 
 namespace MetaModels\Render\Setting;
 
-use MetaModels\Render\Setting\ICollection;
-
 /**
  * Interface for render settings.
  *
- * @package	   MetaModels
+ * @package    MetaModels
  * @subpackage Interface
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
@@ -30,16 +28,16 @@ interface ISimple
 	/**
 	 * Set the parenting render setting.
 	 *
-	 * @param \MetaModels\Render\Setting\ICollection $parent The parenting instance.
+	 * @param ICollection $parent The parenting instance.
 	 *
-	 * @return \MetaModels\Render\Setting\ISimple
+	 * @return ISimple
 	 */
 	public function setParent($parent);
 
 	/**
 	 * Retrieve the parenting render setting.
 	 *
-	 * @return \MetaModels\Render\Setting\ICollection
+	 * @return ICollection
 	 */
 	public function getParent();
 
@@ -59,7 +57,7 @@ interface ISimple
 	 *
 	 * @param mixed  $varSetting The value to use.
 	 *
-	 * @return \MetaModels\Render\Setting\ISimple The setting itself.
+	 * @return ISimple The setting itself.
 	 */
 	public function set($strName, $varSetting);
 

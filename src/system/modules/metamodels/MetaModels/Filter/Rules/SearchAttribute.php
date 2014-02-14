@@ -17,6 +17,8 @@
 namespace MetaModels\Filter\Rules;
 
 use MetaModels\Attribute\IAttribute;
+use MetaModels\Attribute\IComplex;
+use MetaModels\Attribute\ITranslated;
 use MetaModels\Filter\FilterRule;
 
 /**
@@ -31,38 +33,38 @@ class SearchAttribute extends FilterRule
 	/**
 	 * The attribute to search in.
 	 *
-	 * @var \MetaModels\Attribute\IAttribute|\MetaModels\Attribute\ITranslated
+	 * @var IAttribute|ITranslated|IComplex
 	 */
 	protected $objAttribute = null;
 
 	/**
-	 * the value to search for.
+	 * The value to search for.
 	 *
 	 * @var string
 	 */
 	protected $strValue = null;
 
 	/**
-	 * the valid languages to match (only used when searching a translated attribute)
+	 * The valid languages to match (only used when searching a translated attribute).
 	 *
 	 * @var array
 	 */
 	protected $arrValidLanguages = null;
 
 	/**
-	 * creates an instance of a simple query filter rule.
+	 * Creates an instance of a simple query filter rule.
 	 *
-	 * @param \MetaModels\Attribute\IAttribute $objAttribute      The attribute to be searched
+	 * @param IAttribute $objAttribute      The attribute to be searched.
 	 *
-	 * @param array                            $strValue          The value to be searched for. Wildcards (* and ? allowed)
+	 * @param array      $strValue          The value to be searched for. Wildcards (* and ? allowed).
 	 *
-	 * @param array                            $arrValidLanguages The list of valid languages to be searched in.
+	 * @param array      $arrValidLanguages The list of valid languages to be searched in.
 	 */
-	public function __construct($objAttribute, $strValue=array(), $arrValidLanguages = array())
+	public function __construct($objAttribute, $strValue = array(), $arrValidLanguages = array())
 	{
 		parent::__construct(null);
-		$this->objAttribute = $objAttribute;
-		$this->strValue = $strValue;
+		$this->objAttribute      = $objAttribute;
+		$this->strValue          = $strValue;
 		$this->arrValidLanguages = $arrValidLanguages;
 	}
 
@@ -74,9 +76,9 @@ class SearchAttribute extends FilterRule
 		if (in_array('MetaModels\Attribute\ITranslated', class_implements($this->objAttribute)))
 		{
 			return $this->objAttribute->searchForInLanguages($this->strValue, $this->arrValidLanguages);
-		} else {
-			return $this->objAttribute->searchFor($this->strValue);
 		}
+
+		return $this->objAttribute->searchFor($this->strValue);
 	}
 }
 

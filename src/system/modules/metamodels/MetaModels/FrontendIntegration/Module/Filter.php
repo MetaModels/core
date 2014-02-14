@@ -27,34 +27,34 @@ use MetaModels\FrontendIntegration\FrontendFilter;
  */
 class Filter extends \Module
 {
-
 	/**
-	 * Template
+	 * Template.
+	 *
 	 * @var string
 	 */
 	protected $strTemplate = 'mm_filter_default';
 
 
 	/**
-	 * Display a wildcard in the back end
+	 * Display a wildcard in the back end.
+	 *
 	 * @return string
 	 */
 	public function generate()
 	{
 		if (TL_MODE == 'BE')
 		{
-			$objTemplate = new \BackendTemplate('be_wildcard');
-
+			$objTemplate           = new \BackendTemplate('be_wildcard');
 			$objTemplate->wildcard = '### METAMODELS FE-FILTERBLOCK ###';
-			$objTemplate->title = $this->headline;
-			$objTemplate->id = $this->id;
-			$objTemplate->link = $this->title;
-			$objTemplate->href = 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id=' . $this->id;
+			$objTemplate->title    = $this->headline;
+			$objTemplate->id       = $this->id;
+			$objTemplate->link     = $this->title;
+			$objTemplate->href     = 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id=' . $this->id;
 
 			return $objTemplate->parse();
 		}
 
-		// get template
+		// Get template if configured.
 		if ($this->metamodel_fef_template)
 		{
 			$this->strTemplate = $this->metamodel_fef_template;
@@ -65,11 +65,12 @@ class Filter extends \Module
 
 
 	/**
-	 * Generate module
+	 * Generate the module.
+	 *
+	 * @return void
 	 */
 	protected function compile()
 	{
-		// get filter data
 		$objFilter = new FrontendFilter();
 		$arrFilter = $objFilter->getMetaModelFrontendFilter($this);
 

@@ -16,9 +16,13 @@
 
 namespace MetaModels\Attribute;
 
+use MetaModels\IItem;
+use MetaModels\IMetaModel;
+use MetaModels\Render\Setting\ISimple;
+
 /**
  * This is the main MetaModels attribute interface.
- * To create {@link MetaModelAttribute} instances, use a {@link IMetaModelAttributeFactory}
+ * To create Attribute instances, use a {@link Factory}
  * This interface handles all general purpose attribute management and interfacing.
  *
  * @package	   MetaModels
@@ -40,14 +44,14 @@ interface IAttribute
 	/**
 	 * Queries the attribute for it's column name within it's MetaModel.
 	 *
-	 * @return string the attribute's column name.
+	 * @return string the attributes column name.
 	 */
 	public function getColName();
 
 	/**
 	 * Queries the attribute for it's parent MetaModel instance.
 	 *
-	 * @return \MetaModels\IMetaModel the MetaModel instance.
+	 * @return IMetaModel the MetaModel instance.
 	 */
 	public function getMetaModel();
 
@@ -66,13 +70,13 @@ interface IAttribute
 	 * All changes to an attribute via set() are considered to be non persistent and therefore will not update any
 	 * structural information or auxiliary properties that might be needed within the attribute type.
 	 *
-	 * For persistent updates, use {@link IMetaModelAttribute::handleMetaChange()} instead.
+	 * For persistent updates, use {@link IAttribute::handleMetaChange()} instead.
 	 *
 	 * @param string $strKey   The meta information name that shall be set.
 	 *
 	 * @param mixed  $varValue The value to set.
 	 *
-	 * @return \MetaModels\Attribute\IAttribute Instance of this attribute, for chaining support.
+	 * @return IAttribute Instance of this attribute, for chaining support.
 	 */
 	public function set($strKey, $varValue);
 
@@ -83,26 +87,26 @@ interface IAttribute
 	 * and to perform any action to undo the changes that had been done for the previous value.
 	 * i.e.: when an attribute type needs columns in an an auxiliary table, these will have to be updated herein.
 	 *
-	 * This method may throw an exception, when the new value is invalid or any problems appear, the MetaModelAttribute
+	 * This method may throw an exception, when the new value is invalid or any problems appear, the Attribute
 	 * will then keep the old meta value.
 	 *
 	 * @param string $strMetaName Name of the meta information that shall be updated.
 	 *
 	 * @param mixed  $varNewValue The new value for this meta information.
 	 *
-	 * @return \MetaModels\Attribute\IAttribute The instance of this attribute, to support chaining.
+	 * @return IAttribute The instance of this attribute, to support chaining.
 	 */
 	public function handleMetaChange($strMetaName, $varNewValue);
 
 	/**
-	 * Delete all auxiliary data like a column in the metamodel table or references in another table etc.
+	 * Delete all auxiliary data like a column in the MetaModel table or references in another table etc.
 	 *
 	 * @return void
 	 */
 	public function destroyAUX();
 
 	/**
-	 * Create auxiliary data like a column in the metamodel table or references in another table etc.
+	 * Create auxiliary data like a column in the MetaModel table or references in another table etc.
 	 *
 	 * @return void
 	 */
@@ -111,7 +115,7 @@ interface IAttribute
 	/**
 	 * Returns all valid settings for the attribute type.
 	 *
-	 * @return array All valid setting names, this reensembles the columns in tl_metamodel_attribute
+	 * @return array All valid setting names, this re-ensembles the columns in tl_metamodel_attribute
 	 *               this attribute class understands.
 	 */
 	public function getAttributeSettingNames();
@@ -119,12 +123,12 @@ interface IAttribute
 	/**
 	 * This generates the field definition for use in a DCA.
 	 *
-	 * It also sets the proper language variables (if not already set per dcaconfig.php or similar).
+	 * It also sets the proper language variables (if not already set per dca-config.php or similar).
 	 * Using the optional override parameter, settings known by this attribute can be overridden for the
 	 * generating of the output array.
 	 *
 	 * @param array $arrOverrides The values to override, for a list of valid parameters, call
-	 *                                     getAttributeSettingNames().
+	 *                            getAttributeSettingNames().
 	 *
 	 * @return array The DCA array to use as $GLOBALS['TL_DCA']['tablename']['fields']['attribute-name]
 	 */
@@ -134,7 +138,7 @@ interface IAttribute
 	 * This generates the field definition for use in a DCA.
 	 *
 	 * The result contains all relevant settings for this field in an DCA for the given table
-	 * and MAY override anything like palettes, subpalettes, field definitions etc.
+	 * and MAY override anything like palettes, sub palettes, field definitions etc.
 	 * Due to the fact that it calls getFieldDefinition() internally, the result at least contains
 	 * the sub array 'fields' with the information of this field's settings.
 	 *
@@ -142,7 +146,7 @@ interface IAttribute
 	 *
 	 * @return array The DCA array to use as $GLOBALS['tablename']
 	 *
-	 * @link IMetaModelAttribute::getFieldDefinition() is used internally for generating the result.
+	 * @link IAttribute::getFieldDefinition() is used internally for generating the result.
 	 *
 	 * @deprecated Use DataDefinition builders in DC_General 1.0.0
 	 */
@@ -152,7 +156,7 @@ interface IAttribute
 	 * Convert native attribute value to widget value.
 	 *
 	 * This is used for transferring a native attribute value to a value that the widget,
-	 * generated from the information obtained via {@link IMetaModelAttribute::getFieldDefinition()}
+	 * generated from the information obtained via {@link IAttribute::getFieldDefinition()}
 	 * can handle.
 	 *
 	 * @param mixed $varValue The value to be transformed.
@@ -198,11 +202,11 @@ interface IAttribute
 	 * useful when being echo'ed in a template and the raw value in the section 'raw'.
 	 * Each attribute class MAY return as many other values in this array with custom keys as it wants.
 	 *
-	 * @param array                              $arrRowData      The (native) row data from the MetaModel table.
+	 * @param array   $arrRowData      The (native) row data from the MetaModel table.
 	 *
-	 * @param string                             $strOutputFormat The desired output format.
+	 * @param string  $strOutputFormat The desired output format.
 	 *
-	 * @param \MetaModels\Render\Setting\ISimple $objSettings     Custom settings to be passed to the renderer.
+	 * @param ISimple $objSettings     Custom settings to be passed to the renderer.
 	 *
 	 * @return array An array with all the converted data.
 	 */
@@ -211,7 +215,7 @@ interface IAttribute
 	/**
 	 * Convert a native attribute value into a value to be used in a filter Url.
 	 *
-	 * @param mixed $varValue The source value
+	 * @param mixed $varValue The source value.
 	 *
 	 * @return string
 	 */
@@ -237,14 +241,14 @@ interface IAttribute
 	 * For the id list, the value "null" represents (as everywhere in MetaModels) all entries.
 	 * An empty array will return no entries at all.
 	 * The parameter "used only" determines, if only really attached values shall be returned.
-	 * This is only relevant, when using "null" as id list for attributes that have preconfigured
+	 * This is only relevant, when using "null" as id list for attributes that have pre configured
 	 * values like select lists and tags i.e.
 	 *
-	 * @param array $arrIds    The ids of items that the values shall be fetched from.
+	 * @param array      $arrIds   The ids of items that the values shall be fetched from.
 	 *
-	 * @param bool  $usedOnly  Determines if only "used" values shall be returned.
+	 * @param bool       $usedOnly Determines if only "used" values shall be returned.
 	 *
-	 * @param bool  &$arrCount Array for the counted values.
+	 * @param array|null $arrCount Array for the counted values.
 	 *
 	 * @return array All options matching the given conditions as name => value.
 	 */
@@ -264,7 +268,7 @@ interface IAttribute
 	/**
 	 * Filter all values greater than the passed value.
 	 *
-	 * @param mixed $varValue     The value to use as lower end
+	 * @param mixed $varValue     The value to use as lower end.
 	 *
 	 * @param bool  $blnInclusive If true, the passed value will be included, if false, it will be excluded.
 	 *
@@ -286,7 +290,7 @@ interface IAttribute
 	/**
 	 * Filter all values not having the passed value.
 	 *
-	 * @param mixed $varValue     The value to use as upper end.
+	 * @param mixed $varValue The value to use as upper end.
 	 *
 	 * @return array The list of item ids of all items matching the condition.
 	 */
@@ -297,7 +301,7 @@ interface IAttribute
 	 *
 	 * Useful for alias fields, edit counters etc.
 	 *
-	 * @param \MetaModels\IItem $objItem The item that has just been saved.
+	 * @param IItem $objItem The item that has just been saved.
 	 *
 	 * @return void
 	 */

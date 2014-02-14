@@ -28,27 +28,32 @@ use MetaModels\ItemList;
 class ModelList extends \Module
 {
 	/**
-	 * Template
+	 * The Template instance.
+	 *
 	 * @var string
 	 */
 	protected $strTemplate = 'mod_metamodel_list';
 
+	/**
+	 * Generate the list.
+	 *
+	 * @return string
+	 */
 	public function generate()
 	{
 		if (TL_MODE == 'BE')
 		{
-			$objTemplate = new \BackendTemplate('be_wildcard');
+			$objTemplate           = new \BackendTemplate('be_wildcard');
 			$objTemplate->wildcard = '### METAMODEL LIST ###';
-
-			$objTemplate->title = $this->headline;
-			$objTemplate->id = $this->id;
-			$objTemplate->link = $this->name;
-			$objTemplate->href = 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id=' . $this->id;
+			$objTemplate->title    = $this->headline;
+			$objTemplate->id       = $this->id;
+			$objTemplate->link     = $this->name;
+			$objTemplate->href     = 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id=' . $this->id;
 
 			return $objTemplate->parse();
 		}
 
-		// Fallback template
+		// Fallback template.
 		if (!strlen($this->metamodel_layout))
 		{
 			$this->metamodel_layout = $this->strTemplate;
@@ -63,7 +68,7 @@ class ModelList extends \Module
 	/**
 	 * Retrieve all filter parameters from the input class for the specified filter setting.
 	 *
-	 * @param \MetaModels\ItemList $objItemRenderer
+	 * @param ItemList $objItemRenderer The list renderer instance to be used.
 	 *
 	 * @return string[]
 	 */
@@ -82,9 +87,11 @@ class ModelList extends \Module
 		return $arrReturn;
 	}
 
+
 	/**
-	 * (non-PHPdoc)
-	 * @see ContentElement::compile()
+	 * Compile the content element.
+	 *
+	 * @return void
 	 */
 	protected function compile()
 	{

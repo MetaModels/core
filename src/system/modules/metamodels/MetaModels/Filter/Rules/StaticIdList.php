@@ -30,13 +30,15 @@ class StaticIdList extends FilterRule
 
 	/**
 	 * The static id list that shall be applied.
+	 *
+	 * @var int[]
 	 */
 	protected $arrIds = array();
 
 	/**
-	 * create a new FilterRule instance.
+	 * Create a new FilterRule instance.
 	 *
-	 * @param int[] $arrIds static list of ids that shall be returned as matches.
+	 * @param int[] $arrIds Static list of ids that shall be returned as matches.
 	 */
 	public function __construct($arrIds)
 	{

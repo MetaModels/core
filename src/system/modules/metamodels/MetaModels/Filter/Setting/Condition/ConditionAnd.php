@@ -16,10 +16,10 @@
 
 namespace MetaModels\Filter\Setting\Condition;
 
-use MetaModels\Filter\Setting\WithChildren;
-use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Filter;
+use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Rules\Condition\ConditionAnd as FilterRuleAnd;
+use MetaModels\Filter\Setting\WithChildren;
 
 /**
  * This filter condition generates a "AND" condition from all child filter settings.
@@ -34,9 +34,9 @@ class ConditionAnd extends WithChildren
 	/**
 	 * Generates the filter rules based upon the given filter url.
 	 *
-	 * @param \MetaModels\Filter\IFilter $objFilter    The filter to append the rules to.
+	 * @param IFilter        $objFilter    The filter to append the rules to.
 	 *
-	 * @param string[string]             $arrFilterUrl The parameters to evaluate.
+	 * @param string[string] $arrFilterUrl The parameters to evaluate.
 	 *
 	 * @return void
 	 */

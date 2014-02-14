@@ -18,6 +18,7 @@
 
 namespace MetaModels\FrontendIntegration;
 
+use Database\Result;
 use MetaModels\Factory;
 use MetaModels\Filter\Rules\StaticIdList;
 use MetaModels\IMetaModel;
@@ -116,7 +117,7 @@ class InsertTags extends \Controller
 		}
 
 		// Get the MetaModel. Return if we can not find one.
-		$objMetaModel = $this->loadMM($mixMetaModel);
+		$objMetaModel = $this->loadMetaModel($mixMetaModel);
 		if ($objMetaModel == null)
 		{
 			return false;
@@ -167,20 +168,20 @@ class InsertTags extends \Controller
 	/**
 	 * Get an item.
 	 * 
-	 * @param string|int $mixMMName         ID or name of MetaModels.
+	 * @param string|int $metaModelIdOrName  ID or name of MetaModels.
 	 *
-	 * @param string|int $mixDataId         ID of the data row.
+	 * @param string|int $mixDataId          ID of the data row.
 	 *
-	 * @param int        $intIdRendesetting ID of render setting.
+	 * @param int        $intIdRenderSetting ID of render setting.
 	 *
-	 * @param string     $strOutput         Name of output. Default:null (fallback to htmlfynf)|text|html5|xhtml|...
+	 * @param string     $strOutput          Name of output. Default:null (fallback to htmlfynf)|text|html5|xhtml|...
 	 * 
 	 * @return boolean|string Return false when nothing was found or return the value.
 	 */
-	protected function getItem($mixMMName, $mixDataId, $intIdRendesetting, $strOutput = null)
+	protected function getItem($metaModelIdOrName, $mixDataId, $intIdRenderSetting, $strOutput = null)
 	{
 		// Get the MetaModel. Return if we can not find one.
-		$objMetaModel = $this->loadMM($mixMMName);
+		$objMetaModel = $this->loadMetaModel($metaModelIdOrName);
 		if ($objMetaModel == null)
 		{
 			return false;
@@ -194,7 +195,7 @@ class InsertTags extends \Controller
 
 		$objMetaModelList = new ItemList();
 		$objMetaModelList
-			->setMetaModel($objMetaModel->get('id'), $intIdRendesetting)
+			->setMetaModel($objMetaModel->get('id'), $intIdRenderSetting)
 			->overrideOutputFormat($strOutput);
 
 		// Handle a set of ids.
@@ -209,8 +210,8 @@ class InsertTags extends \Controller
 			}
 		}
 
-		// Render an empty inserttag rather than displaying a list with an empty.
-		// result information. do not return false here because the inserttag itself is correct.
+		// Render an empty insert tag rather than displaying a list with an empty.
+		// result information. do not return false here because the insert tag itself is correct.
 		if (count($arrIds) < 1)
 		{
 			return '';
@@ -223,27 +224,27 @@ class InsertTags extends \Controller
 	/**
 	 * Get from MM X the item with the id Y and parse the attribute Z and return it.
 	 * 
-	 * @param string|int $mixMMName        ID or name of MetaModels.
+	 * @param string|int $metaModelIdOrName ID or name of MetaModels.
 	 *
-	 * @param int        $intDataId        ID of the data row.
+	 * @param int        $intDataId         ID of the data row.
 	 *
-	 * @param string     $strAttributeName Name of the attribute.
+	 * @param string     $strAttributeName  Name of the attribute.
 	 *
-	 * @param string     $strOutput        Name of output. Default:raw|text|html5|xhtml|...
+	 * @param string     $strOutput         Name of output. Default:raw|text|html5|xhtml|...
 	 * 
 	 * @return boolean|string Return false when nothing was found or return the value.
 	 */
-	protected function getAttribute($mixMMName, $intDataId, $strAttributeName, $strOutput = 'raw')
+	protected function getAttribute($metaModelIdOrName, $intDataId, $strAttributeName, $strOutput = 'raw')
 	{
 		// Get the MM.
-		$objMM = $this->loadMM($mixMMName);
+		$objMM = $this->loadMetaModel($metaModelIdOrName);
 		if ($objMM == null)
 		{
 			return false;
 		}
 
 		// Set output to default if not set.
-		if(empty($strOutput))
+		if (empty($strOutput))
 		{
 			$strOutput = 'raw';
 		}
@@ -263,7 +264,7 @@ class InsertTags extends \Controller
 	 * 
 	 * @param string $strType Type of element like mod or ce.
 	 *
-	 * @param int    $intID   ID of content element or moule.
+	 * @param int    $intID   ID of content element or module.
 	 * 
 	 * @return boolean|string Return false when nothing was found or the count value.
 	 */
@@ -271,17 +272,17 @@ class InsertTags extends \Controller
 	{
 		switch ($strType)
 		{
-			// From module, can be a metamodel list or filter.
+			// From module, can be a MetaModel list or filter.
 			case 'mod':
-				$objMetaModelResult = $this->getMMDataFrom('tl_module', $intID);
+				$objMetaModelResult = $this->getMetaModelDataFrom('tl_module', $intID);
 				break;
 
-			// From content element, can be a metamodel list or filter.
+			// From content element, can be a MetaModel list or filter.
 			case 'ce':
-				$objMetaModelResult = $this->getMMDataFrom('tl_content', $intID);
+				$objMetaModelResult = $this->getMetaModelDataFrom('tl_content', $intID);
 				break;
 
-			// Unknow element type.
+			// Unknown element type.
 			default:
 				return false;
 		}
@@ -296,13 +297,13 @@ class InsertTags extends \Controller
 	}
 
 	/**
-	 * Try to load the mm by id or name.
+	 * Try to load the MetaModel by id or name.
 	 * 
-	 * @param mixed $nameOrId Name or id of mm.
+	 * @param mixed $nameOrId Name or id of the MetaModel.
 	 * 
 	 * @return IMetaModel|null
 	 */
-	protected function loadMM($nameOrId)
+	protected function loadMetaModel($nameOrId)
 	{
 		// ID.
 		if (is_numeric($nameOrId))
@@ -320,16 +321,15 @@ class InsertTags extends \Controller
 	}
 
 	/**
-	 * Get the metamodel id and the filter id.
+	 * Get the MetaModel id and the filter id.
 	 * 
 	 * @param string $strTable Name of table.
 	 *
 	 * @param int    $intID    ID of the filter.
 	 * 
-	 * @return null|\Database_Result Returns null when nothing was found or a
-	 * Contao Database_Result with the chosen information.
+	 * @return null|Result Returns null when nothing was found or a \Database\Result with the chosen information.
 	 */
-	protected function getMMDataFrom($strTable, $intID)
+	protected function getMetaModelDataFrom($strTable, $intID)
 	{
 		$objDB = \Database::getInstance();
 
@@ -357,20 +357,21 @@ class InsertTags extends \Controller
 	/**
 	 * Get count form one MM for chosen filter.
 	 * 
-	 * @param int $intMMId     ID of the metamodels.
+	 * @param int $intMetaModelId ID of the metamodels.
 	 *
-	 * @param int $intFilterId ID of the filter.
+	 * @param int $intFilterId    ID of the filter.
 	 * 
 	 * @return boolean|int False for no data or integer for the count result.
 	 */
-	protected function getCountFor($intMMId, $intFilterId)
+	protected function getCountFor($intMetaModelId, $intFilterId)
 	{
-		$objMetaModel = $this->loadMM($intMMId);
+		$objMetaModel = $this->loadMetaModel($intMetaModelId);
 		if ($objMetaModel == null)
 		{
 			return false;
 		}
 
+		// FIXME: sanitize input parameters.
 		$objFilter = $objMetaModel->prepareFilter($intFilterId, $_GET);
 
 		return $objMetaModel->getCount($objFilter);
@@ -403,5 +404,4 @@ class InsertTags extends \Controller
 
 		return true;
 	}
-
 }

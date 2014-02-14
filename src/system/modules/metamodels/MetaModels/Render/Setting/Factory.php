@@ -16,9 +16,7 @@
 
 namespace MetaModels\Render\Setting;
 
-use MetaModels\Render\Setting\Collection;
 use MetaModels\IMetaModel;
-use MetaModels\Render\Setting\IFactory as FactoryInterface;
 
 /**
  * This is the factory implementation.
@@ -32,7 +30,9 @@ use MetaModels\Render\Setting\IFactory as FactoryInterface;
 class Factory implements IFactory
 {
 	/**
-	 * @var \MetaModels\Render\Setting\ICollection[]
+	 * The instances of created collections..
+	 *
+	 * @var ICollection[]
 	 */
 	protected static $arrInstances = array();
 
@@ -57,9 +57,9 @@ class Factory implements IFactory
 						$objAttrSetting = $objAttr->getDefaultRenderSettings();
 					}
 
-					foreach ($objViewAttributes->row() as $strKey=>$varValue)
+					foreach ($objViewAttributes->row() as $strKey => $varValue)
 					{
-						if($varValue)
+						if ($varValue)
 						{
 							$objAttrSetting->set($strKey, deserialize($varValue));
 						}
@@ -80,17 +80,16 @@ class Factory implements IFactory
 			return self::$arrInstances[$intId];
 		}
 
-		$objView = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE pid=? AND (id=? OR isdefault=1) ORDER BY isdefault ASC')
+		$objView = \Database::getInstance()
+			->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE pid=? AND (id=? OR isdefault=1) ORDER BY isdefault ASC')
 			->limit(1)
 			->execute($objMetaModel->get('id'), $intId);
 		if (!$objView->numRows)
 		{
-			$intId = 0;
-			$objView = NULL;
+			$objView = null;
 		}
 
 		// TODO: $arrInstances is never getting filled in here.
-
 		$objRenderSetting = new Collection($objView ? $objView->row(): array());
 		self::collectAttributeSettings($objMetaModel, $objRenderSetting);
 		return $objRenderSetting;

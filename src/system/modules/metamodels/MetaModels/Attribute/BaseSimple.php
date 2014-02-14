@@ -16,7 +16,6 @@
 
 namespace MetaModels\Attribute;
 
-use MetaModels\Attribute\ISimple;
 use MetaModels\Helper\TableManipulation;
 
 /**
@@ -88,11 +87,11 @@ class BaseSimple extends Base implements ISimple
 	 *
 	 * Retrieve values for use in filter options, that will be understood by DC_ filter
 	 * panels and frontend filter select boxes.
-	 * One can influence the amound of returned entries with the two parameters.
+	 * One can influence the amount of returned entries with the two parameters.
 	 * For the id list, the value "null" represents (as everywhere in MetaModels) all entries.
 	 * An empty array will return no entries at all.
 	 * The parameter "used only" determines, if only really attached values shall be returned.
-	 * This is only relevant, when using "null" as id list for attributes that have preconfigured
+	 * This is only relevant, when using "null" as id list for attributes that have pre configured
 	 * values like select lists and tags i.e.
 	 *
 	 * @param array $arrIds   The ids of items that the values shall be fetched from.
@@ -127,7 +126,7 @@ class BaseSimple extends Base implements ISimple
 		$arrResult = array();
 		while ($objRow->next())
 		{
-			if(is_array($arrCount))
+			if (is_array($arrCount))
 			{
 				$arrCount[$objRow->$strCol] = $objRow->mm_count;
 			}
@@ -281,21 +280,25 @@ class BaseSimple extends Base implements ISimple
 			$this->set('colname', $strBackupColName);
 		}
 	}
-	
+
 	/**
 	 * Take the raw data from the DB column and unserialize it.
 	 * 
-	 * @param type $value
+	 * @param string $value The input value.
+	 *
+	 * @return mixed
 	 */
 	public function unserializeData($value)
 	{
 		return $value;
 	}
-	
+
 	/**
 	 * Take the unserialized data and serialize it for the native DB column.
 	 * 
-	 * @param type $value
+	 * @param mixed $value The input value.
+	 *
+	 * @return string
 	 */
 	public function serializeData($value)
 	{

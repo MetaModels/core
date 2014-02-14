@@ -29,7 +29,7 @@ interface IWithChildren extends ISimple
 	/**
 	 * Adds a child setting to this setting.
 	 *
-	 * @param \MetaModels\Filter\Setting\ISimple $objFilterSetting The setting that shall be added as child.
+	 * @param ISimple $objFilterSetting The setting that shall be added as child.
 	 *
 	 * @return void
 	 */

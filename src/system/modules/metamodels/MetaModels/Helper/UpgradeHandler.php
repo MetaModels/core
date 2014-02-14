@@ -23,7 +23,7 @@ namespace MetaModels\Helper;
 class UpgradeHandler
 {
 	/**
-	 * retrieve the database instance from Contao.
+	 * Retrieve the database instance from Contao.
 	 *
 	 * @return \Database
 	 */
@@ -48,7 +48,7 @@ class UpgradeHandler
 		$objDB = self::DB();
 		if (!$objDB->fieldExists('metamodel_jumpTo', 'tl_content', true))
 		{
-			// create the column in the database and copy the data over.
+			// Create the column in the database and copy the data over.
 			TableManipulation::createColumn(
 				'tl_content',
 				'metamodel_jumpTo',
@@ -58,7 +58,7 @@ class UpgradeHandler
 		}
 		if (!$objDB->fieldExists('metamodel_jumpTo', 'tl_module', true))
 		{
-			// create the column in the database and copy the data over.
+			// Create the column in the database and copy the data over.
 			TableManipulation::createColumn(
 				'tl_module',
 				'metamodel_jumpTo',
@@ -84,7 +84,7 @@ class UpgradeHandler
 		$objDB = self::DB();
 		if (!$objDB->fieldExists('published', 'tl_metamodel_dcasetting', true))
 		{
-			// create the column in the database and copy the data over.
+			// Create the column in the database and copy the data over.
 			TableManipulation::createColumn(
 				'tl_metamodel_dcasetting',
 				'published',

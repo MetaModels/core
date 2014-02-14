@@ -16,11 +16,12 @@
 
 namespace MetaModels;
 
+use MetaModels\Attribute\IAttribute;
+use MetaModels\Filter\IFilter;
 use MetaModels\Helper\ContaoController;
-use MetaModels\IItem;
-use MetaModels\IMetaModel;
 use MetaModels\Factory as MetaModelFactory;
 use MetaModels\Filter\Setting\Factory as FilterSettingsFactory;
+use MetaModels\Render\Setting\ICollection;
 
 /**
  * Interface for a MetaModel item.
@@ -38,7 +39,6 @@ class Item implements IItem
 	 */
 	protected $strModelName = null;
 
-	// TODO: switch to stdClass here?
 	/**
 	 * The data array containing the raw values obtained from the attributes.
 	 *
@@ -49,7 +49,7 @@ class Item implements IItem
 	/**
 	 * Create a new instance.
 	 *
-	 * @param \MetaModels\IMetaModel $objMetaModel The model this item is represented by.
+	 * @param IMetaModel $objMetaModel The model this item is represented by.
 	 *
 	 * @param array      $arrData      The initial data that shall be injected into the new instance.
 	 */
@@ -62,11 +62,11 @@ class Item implements IItem
 	/**
 	 * Helper function for {@see MetaModelItem::parseValue()} and {@see MetaModelItem::parseAttribute()}.
 	 *
-	 * @param \MetaModels\Attribute\IAttribute       $objAttribute    The attribute to parse.
+	 * @param IAttribute  $objAttribute    The attribute to parse.
 	 *
-	 * @param string                                 $strOutputFormat The desired output format.
+	 * @param string      $strOutputFormat The desired output format.
 	 *
-	 * @param \MetaModels\Render\Setting\ICollection $objSettings     The settings object to be applied.
+	 * @param ICollection $objSettings     The settings object to be applied.
 	 *
 	 * @return array The parsed information for the given attribute.
 	 */
@@ -92,7 +92,10 @@ class Item implements IItem
 		}
 
 		// If "hideEmptyValues" is true and the raw is empty remove text and output format.
-		if(!is_null($objSettings) && $objSettings->get('hideEmptyValues') == true && $this->isEmptyValue($arrResult['raw']) == true)
+		if (!is_null($objSettings)
+			&& $objSettings->get('hideEmptyValues')
+			&& $this->isEmptyValue($arrResult['raw'])
+		)
 		{
 			unset($arrResult[$strOutputFormat]);
 			unset($arrResult['text']);
@@ -102,26 +105,23 @@ class Item implements IItem
 	}
 
 	/**
-	 * Check if a value is empty
+	 * Check if a value is empty.
 	 *
-	 * @param array $mixValue
+	 * @param array $mixValue The value.
 	 *
 	 * @return boolean True => empty, false => found a valid values
 	 */
 	protected function isEmptyValue($mixValue)
 	{
-		// Array check
 		if (is_array($mixValue))
 		{
 			return $this->isArrayEmpty($mixValue);
 		}
-		// Empty string
-		else if ($mixValue === '')
+		elseif ($mixValue === '')
 		{
 			return true;
 		}
-		// Null
-		else if ($mixValue === null)
+		elseif ($mixValue === null)
 		{
 			return true;
 		}
@@ -138,14 +138,14 @@ class Item implements IItem
 	 */
 	protected function isArrayEmpty($arrArray)
 	{
-		if(is_array($arrArray) && key_exists('value', $arrArray))
+		if (is_array($arrArray) && array_key_exists('value', $arrArray))
 		{
-			if(!empty($arrArray['value']))
+			if (!empty($arrArray['value']))
 			{
 				return false;
 			}
 		}
-		else if (is_array($arrArray))
+		elseif (is_array($arrArray))
 		{
 			foreach ($arrArray as $value)
 			{
@@ -153,13 +153,13 @@ class Item implements IItem
 				{
 					return $this->isArrayEmpty($value);
 				}
-				else if ($value !== '' && $value !== null)
+				elseif ($value !== '' && $value !== null)
 				{
 					return false;
 				}
 			}
 		}
-		else if (($arrArray !== '') && ($arrArray !== null))
+		elseif (($arrArray !== '') && ($arrArray !== null))
 		{
 			return false;
 		}
@@ -186,7 +186,7 @@ class Item implements IItem
 	 *
 	 * @param mixed  $varValue         The value of the attribute.
 	 *
-	 * @return \MetaModels\IItem
+	 * @return IItem
 	 */
 	public function set($strAttributeName, $varValue)
 	{
@@ -210,7 +210,7 @@ class Item implements IItem
 	 *
 	 * @param string $strAttributeName The name of the attribute.
 	 *
-	 * @return \MetaModels\Attribute\IAttribute The instance.
+	 * @return IAttribute The instance.
 	 */
 	public function getAttribute($strAttributeName)
 	{
@@ -244,9 +244,9 @@ class Item implements IItem
 	/**
 	 * Fetch the meta model variants for this item.
 	 *
-	 * @param \MetaModels\Filter\IFilter $objFilter The filter settings to be applied.
+	 * @param IFilter $objFilter The filter settings to be applied.
 	 *
-	 * @return \MetaModels\IItems A list of all variants for this item.
+	 * @return IItems A list of all variants for this item.
 	 */
 	public function getVariants($objFilter)
 	{
@@ -263,9 +263,9 @@ class Item implements IItem
 	 *
 	 * The item itself is excluded from the return list.
 	 *
-	 * @param \MetaModels\Filter\IFilter $objFilter The additional filter settings to apply.
+	 * @param IFilter $objFilter The additional filter settings to apply.
 	 *
-	 * @return null|\MetaModels\IItems
+	 * @return null|IItems
 	 */
 	public function getSiblings($objFilter)
 	{
@@ -291,22 +291,22 @@ class Item implements IItem
 	/**
 	 * Renders the item in the given output format.
 	 *
-	 * @param string                   $strOutputFormat The desired output format (optional - default: text).
+	 * @param string      $strOutputFormat The desired output format (optional - default: text).
 	 *
-	 * @param \MetaModels\Render\Setting\ICollection $objSettings     The render settings to use (optional - default: null).
+	 * @param ICollection $objSettings     The render settings to use (optional - default: null).
 	 *
 	 * @return array attribute name => format => value
 	 */
 	public function parseValue($strOutputFormat = 'text', $objSettings = null)
 	{
-		if($objSettings != null)
+		if ($objSettings != null)
 		{
 			// Include CSS.
 			$arrCss = $objSettings->get('additionalCss');
 
-			foreach ((array) $arrCss as $arrFile)
+			foreach ((array)$arrCss as $arrFile)
 			{
-				if($arrFile['published'])
+				if ($arrFile['published'])
 				{
 					$GLOBALS['TL_CSS'][md5($arrFile['file'])] = $arrFile['file'];
 				}
@@ -315,9 +315,9 @@ class Item implements IItem
 			// Include JS.
 			$arrJs = $objSettings->get('additionalJs');
 
-			foreach ((array) $arrJs as $arrFile)
+			foreach ((array)$arrJs as $arrFile)
 			{
-				if($arrFile['published'])
+				if ($arrFile['published'])
 				{
 					$GLOBALS['TL_JAVASCRIPT'][md5($arrFile['file'])] = $arrFile['file'];
 				}
@@ -372,12 +372,11 @@ class Item implements IItem
 	/**
 	 * HOOK handler for third party extensions to inject data into the generated output or to reformat the output.
 	 *
-	 * @param array                    &$arrResult  The generated data.
+	 * @param array       $arrResult   The generated data.
 	 *
-	 * @param string                   $strFormat   The desired output format
-	 *                                              (text, html, etc.).
+	 * @param string      $strFormat   The desired output format (text, html, etc.).
 	 *
-	 * @param \MetaModels\Render\Setting\Collection $objSettings The render settings to use.
+	 * @param ICollection $objSettings The render settings to use.
 	 *
 	 * @return void
 	 */
@@ -413,7 +412,7 @@ class Item implements IItem
 	 * * page   - id of the jumpTo page.
 	 * * url    - the complete generated url
 	 *
-	 * @param \MetaModels\Render\Setting\Collection $objSettings The render settings to use.
+	 * @param ICollection $objSettings The render settings to use.
 	 *
 	 * @return array
 	 */
@@ -477,7 +476,8 @@ class Item implements IItem
 			$arrJumpTo['deep']   = (strlen($strParams) > 0);
 			if (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$objSettings->get('id')]['details']))
 			{
-				$arrJumpTo['label'] = $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$objSettings->get('id')]['details'];
+				$arrJumpTo['label'] =
+					$GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$objSettings->get('id')]['details'];
 			}
 			elseif (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details']))
 			{
@@ -497,11 +497,11 @@ class Item implements IItem
 	/**
 	 * Renders a single attribute in the given output format.
 	 *
-	 * @param string                                $strAttributeName The desired attribute.
+	 * @param string      $strAttributeName The desired attribute.
 	 *
-	 * @param string                                $strOutputFormat  The desired output format (optional - default: text).
+	 * @param string      $strOutputFormat  The desired output format (optional - default: text).
 	 *
-	 * @param \MetaModels\Render\Setting\Collection $objSettings      The render settings to use (optional - default: null).
+	 * @param ICollection $objSettings      The render settings to use (optional - default: null).
 	 *
 	 * @return array format=>value
 	 */
@@ -513,9 +513,9 @@ class Item implements IItem
 	/**
 	 * Returns a new item containing the same values as this item but no id.
 	 *
-	 * This is useful when creating new items that shall be based upon anothe item.
+	 * This is useful when creating new items that shall be based upon another item.
 	 *
-	 * @return \MetaModels\IItem the new copy.
+	 * @return IItem the new copy.
 	 */
 	public function copy()
 	{
@@ -532,15 +532,14 @@ class Item implements IItem
 	 * Additionally, the item will be a variant child of this item.
 	 *
 	 * NOTE: if this item is not a variant base itself, this item will return a item
-	 * that is a child of this items variant base. i.e. excact clone.
+	 * that is a child of this items variant base. i.e. exact clone.
 	 *
 	 * @return \MetaModels\IItem the new copy.
 	 */
 	public function varCopy()
 	{
 		$objNewItem = $this->copy();
-		// If this item is a variant base, we need to clean the varbase and set
-		// ourselves as the base.
+		// If this item is a variant base, we need to clean the variant base and set ourselves as the base.
 		if ($this->isVariantBase())
 		{
 			$objNewItem->set('vargroup', $this->get('id'));

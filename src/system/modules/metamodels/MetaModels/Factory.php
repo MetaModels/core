@@ -28,6 +28,7 @@ class Factory implements IFactory
 {
 	/**
 	 * All MetaModel instances.
+	 *
 	 * Assiciation: id => object
 	 *
 	 * @var array
@@ -36,6 +37,7 @@ class Factory implements IFactory
 
 	/**
 	 * All MetaModel instances.
+	 *
 	 * Assiciation: tableName => object
 	 *
 	 * @var array
@@ -45,36 +47,40 @@ class Factory implements IFactory
 	/**
 	 * Returns the proper user object for the current context.
 	 *
-	 * @return \BackendUser|\FrontendUser|null the BackendUser when TL_MODE == 'BE', the FrontendUser when TL_MODE == 'FE' or null otherwise
+	 * @return \BackendUser|\FrontendUser|null The BackendUser when TL_MODE == 'BE',
+	 *                                         the FrontendUser when TL_MODE == 'FE'
+	 *                                         or null otherwise
 	 */
 	protected static function getUser()
 	{
-		if(TL_MODE=='BE')
+		if (TL_MODE == 'BE')
 		{
 			return \BackendUser::getInstance();
-		} else if(TL_MODE=='FE')
+		} elseif(TL_MODE == 'FE')
 		{
 			return \FrontendUser::getInstance();
 		}
+
 		return null;
 	}
 
 	/**
-	 * This initializes the Contao Singleton object stack as it must be,
-	 * when using singletons within the config.php file of an Extension.
+	 * This initializes the Contao Singleton object stack as it must be.
+	 *
+	 * When using singletons within the config.php file of an Extension.
 	 *
 	 * @return void
 	 */
 	protected static function initializeContaoObjectStack()
 	{
-		// all of these getInstance calls are neccessary to keep the instance stack intact
+		// All of these getInstance calls are necessary to keep the instance stack intact
 		// and therefore prevent an Exception in unknown on line 0.
 		// Hopefully this will get fixed with Contao Reloaded or Contao 3.
 		\Config::getInstance();
 		\Environment::getInstance();
 		\Input::getInstance();
 
-		// request token became available in 2.11
+		// Request token became available in 2.11.
 		if (version_compare(TL_VERSION, '2.11', '>='))
 		{
 			\RequestToken::getInstance();
@@ -88,9 +94,10 @@ class Factory implements IFactory
 	/**
 	 * Determines the correct factory from a metamodel table name.
 	 *
-	 * @param string $strTableName the table name of the metamodel for which the factory class shall be fetched for.
+	 * @param string $strTableName The table name of the metamodel for which the factory class shall be fetched for.
 	 *
-	 * @return string the factory class name which handles instanciation of the MetaModel or NULL if no class could be found.
+	 * @return string The factory class name which handles instantiation of the MetaModel or NULL if no class could
+	 *                be found.
 	 */
 	protected static function getModelFactory($strTableName)
 	{
@@ -105,7 +112,7 @@ class Factory implements IFactory
 	/**
 	 * Create a MetaModel instance with the given information.
 	 *
-	 * @param array $arrData the meta information for the MetaModel.
+	 * @param array $arrData The meta information for the MetaModel.
 	 *
 	 * @return \MetaModels\IMetaModel the meta model
 	 */
@@ -118,7 +125,7 @@ class Factory implements IFactory
 			// another (sub)class can be defined to create the instances.
 			// reference is via tableName => classname.
 			$strFactoryClass = self::getModelFactory($arrData['tableName']);
-			if($strFactoryClass)
+			if ($strFactoryClass)
 			{
 				$objMetaModel = call_user_func_array(array($strFactoryClass, 'createInstance'), array($arrData));
 			} else {
@@ -169,7 +176,7 @@ class Factory implements IFactory
 		self::initializeContaoObjectStack();
 
 		$objDB = \Database::getInstance();
-		if($objDB)
+		if ($objDB)
 		{
 			if (!$objDB->tableExists('tl_metamodel'))
 			{
@@ -179,6 +186,8 @@ class Factory implements IFactory
 			return $objDB->execute('SELECT * FROM tl_metamodel')
 				->fetchEach('tableName');
 		}
+
+		return array();
 	}
 }
 

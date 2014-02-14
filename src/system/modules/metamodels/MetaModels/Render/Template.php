@@ -20,9 +20,11 @@ use MetaModels\Helper\ContaoController;
 
 /**
  * Template class for metamodels.
- * In most aspects this behaves identically to the FrontendTemplate class from Contao but it differs in respect to format selection.
- * The format is being determined upon parsing and not upon instantiation. There is also an optional "fail on not found" flag,
- * which defaults to false and therefore one can parse the template and have zero output instead of cluttering the frontend with exceptions.
+ * In most aspects this behaves identically to the FrontendTemplate class from Contao but it differs in respect to
+ * format selection.
+ * The format is being determined upon parsing and not upon instantiation. There is also an optional "fail on not
+ * found" flag,which defaults to false and therefore one can parse the template and have zero output instead of
+ * cluttering the frontend with exceptions.
  *
  * @package    MetaModels
  * @subpackage Core
@@ -31,31 +33,41 @@ use MetaModels\Helper\ContaoController;
 class Template
 {
 	/**
-	 * Template file
+	 * Template file.
+	 *
 	 * @var string
 	 */
 	protected $strTemplate;
 
 	/**
-	 * Output buffer
+	 * Output buffer.
+	 *
 	 * @var string
 	 */
 	protected $strBuffer;
 
 	/**
-	 * Template data
+	 * Template data.
+	 *
 	 * @var array
 	 */
 	protected $arrData = array();
 
 	/**
-	 * current output format. Only valid when within {@link MetaModelTemplate::parse()}
+	 * Current output format. Only valid when within {@link MetaModelTemplate::parse()}.
+	 *
 	 * @var string
 	 */
-	protected $strFormat = NULL;
+	protected $strFormat = null;
 
 	/**
 	 * Makes all protected methods from class Controller callable publically.
+	 *
+	 * @param string $strMethod The method name.
+	 *
+	 * @param array  $arrArgs   The parameters for the method.
+	 *
+	 * @return mixed
 	 */
 	public function __call($strMethod, $arrArgs)
 	{
@@ -65,18 +77,21 @@ class Template
 	/**
 	 * Create a new template instance.
 	 *
-	 * @param string
-	 *
+	 * @param string $strTemplate The name of the template file.
 	 */
-	public function __construct($strTemplate='')
+	public function __construct($strTemplate = '')
 	{
 		$this->strTemplate = $strTemplate;
 	}
 
 	/**
-	 * Set an object property
-	 * @param string
-	 * @param mixed
+	 * Set an object property.
+	 *
+	 * @param string $strKey   The name of the property.
+	 *
+	 * @param mixed  $varValue The value to set.
+	 *
+	 * @return void
 	 */
 	public function __set($strKey, $varValue)
 	{
@@ -84,8 +99,10 @@ class Template
 	}
 
 	/**
-	 * Return an object property
-	 * @param string
+	 * Return an object property.
+	 *
+	 * @param string $strKey The name of the property.
+	 *
 	 * @return mixed
 	 */
 	public function __get($strKey)
@@ -94,8 +111,10 @@ class Template
 	}
 
 	/**
-	 * Check whether a property is set
-	 * @param string
+	 * Check whether a property is set.
+	 *
+	 * @param string $strKey The name of the property.
+	 *
 	 * @return boolean
 	 */
 	public function __isset($strKey)
@@ -104,8 +123,11 @@ class Template
 	}
 
 	/**
-	 * Set the template data from an array
-	 * @param array
+	 * Set the template data from an array.
+	 *
+	 * @param array $arrData The properties to be set.
+	 *
+	 * @return void
 	 */
 	public function setData($arrData)
 	{
@@ -113,7 +135,8 @@ class Template
 	}
 
 	/**
-	 * Return the template data as array
+	 * Return the template data as array.
+	 *
 	 * @return array
 	 */
 	public function getData()
@@ -122,8 +145,11 @@ class Template
 	}
 
 	/**
-	 * Set the template name
-	 * @param string
+	 * Set the template name.
+	 *
+	 * @param string $strTemplate The new name.
+	 *
+	 * @return void
 	 */
 	public function setName($strTemplate)
 	{
@@ -131,7 +157,8 @@ class Template
 	}
 
 	/**
-	 * Return the template name
+	 * Return the template name.
+	 *
 	 * @return string
 	 */
 	public function getName()
@@ -140,50 +167,58 @@ class Template
 	}
 
 	/**
-	 * Print all template variables to the screen using print_r
+	 * Print all template variables to the screen using print_r.
+	 *
+	 * @return void
 	 */
 	public function showTemplateVars()
 	{
 		echo "<pre>\n";
+		// @codingStandardsIgnoreStart - We really want to keep this debug function here.
 		print_r($this->arrData);
+		// @codingStandardsIgnoreEnd
 		echo "</pre>\n";
 	}
 
 	/**
-	 * Print all template variables to the screen using var_dump
+	 * Print all template variables to the screen using var_dump.
+	 *
+	 * @return void
 	 */
 	public function dumpTemplateVars()
 	{
 		echo "<pre>\n";
+		// @codingStandardsIgnoreStart - We really want to keep this debug function here.
 		var_dump($this->arrData);
+		// @codingStandardsIgnoreEnd
 		echo "</pre>\n";
 	}
 
 	/**
-	 * Find a particular template file and return its path
+	 * Find a particular template file and return its path.
 	 *
-	 * @param string $strTemplate
+	 * @param string $strTemplate       Name of the template file.
 	 *
-	 * @param string $strFormat
+	 * @param string $strFormat         The format to search for.
 	 *
-	 * @param bool   $blnFailIfNotFound
+	 * @param bool   $blnFailIfNotFound Boolean flag telling if an Exception shall be thrown when the file can not
+	 *                                  be found.
 	 *
-	 * @throws \Exception
+	 * @throws \Exception When the flag has been set and the file has not been found.
+	 *
 	 * @return string
-	 *
 	 */
-	protected function getTemplate($strTemplate, $strFormat='html5', $blnFailIfNotFound = false)
+	protected function getTemplate($strTemplate, $strFormat = 'html5', $blnFailIfNotFound = false)
 	{
 		$strTemplate = basename($strTemplate);
 
 		// Contao 3.X only.
 		if (version_compare(VERSION, '3.0', '>='))
 		{
-			// Check for a theme folder
+			// Check for a theme folder.
 			if (TL_MODE == 'FE')
 			{
-				global $objPage;
-				$strCustom = str_replace('../', '', $objPage->templateGroup);
+				$strCustom = str_replace('../', '', $GLOBALS['objPage']->templateGroup);
 
 				if ($strCustom != '')
 				{
@@ -195,15 +230,13 @@ class Template
 		}
 
 		// Contao 2.X from here on.
-
 		$strKey = $strFilename = $strTemplate . '.' . $strFormat;
 
 		$strTemplateGroup = '';
-		// Check for a theme folder
+		// Check for a theme folder.
 		if (TL_MODE == 'FE')
 		{
-			global $objPage;
-			$strTemplateGroup = str_replace(array('../', 'templates/'), '', $objPage->templateGroup);
+			$strTemplateGroup = str_replace(array('../', 'templates/'), '', $GLOBALS['objPage']->templateGroup);
 
 			if ($strTemplateGroup != '')
 			{
@@ -213,7 +246,7 @@ class Template
 
 		$objCache = \FileCache::getInstance('templates');
 
-		// Try to load the template path from the cache
+		// Try to load the template path from the cache.
 		if (!$GLOBALS['TL_CONFIG']['debugMode'] && isset($objCache->$strKey))
 		{
 			if (file_exists(TL_ROOT . '/' . $objCache->$strKey))
@@ -228,7 +261,7 @@ class Template
 
 		$strPath = TL_ROOT . '/templates';
 
-		// Check the theme folder first
+		// Check the theme folder first.
 		if (TL_MODE == 'FE' && $strTemplateGroup != '')
 		{
 			$strFile = $strPath . '/' . $strTemplateGroup . '/' . $strFilename;
@@ -240,7 +273,7 @@ class Template
 			}
 		}
 
-		// Then check the global templates directory
+		// Then check the global templates directory.
 		$strFile = $strPath . '/' . $strFilename;
 
 		if (file_exists($strFile))
@@ -249,7 +282,7 @@ class Template
 			return $strFile;
 		}
 
-		// At last browse all module folders in reverse order
+		// At last browse all module folders in reverse order.
 		foreach (array_reverse(\Config::getInstance()->getActiveModules()) as $strModule)
 		{
 			$strFile = TL_ROOT . '/system/modules/' . $strModule . '/templates/' . $strFilename;
@@ -269,6 +302,11 @@ class Template
 		return null;
 	}
 
+	/**
+	 * Call the parse Template HOOK.
+	 *
+	 * @return void
+	 */
 	protected function callParseTemplateHook()
 	{
 		if (isset($GLOBALS['METAMODEL_HOOKS']['parseTemplate']) && is_array($GLOBALS['METAMODEL_HOOKS']['parseTemplate']))
@@ -276,6 +314,7 @@ class Template
 			foreach ($GLOBALS['METAMODEL_HOOKS']['parseTemplate'] as $callback)
 			{
 				list($strClass, $strMethod) = $callback;
+
 				$objCallback = (in_array('getInstance', get_class_methods($strClass)))
 					? call_user_func(array($strClass, 'getInstance'))
 					: new $strClass();
@@ -286,14 +325,14 @@ class Template
 	}
 
 	/**
-	 * Parse the template file and return it as string
+	 * Parse the template file and return it as string.
 	 *
-	 * @param string  $strOutputFormat   the desired output format.
+	 * @param string  $strOutputFormat   The desired output format.
 	 *
-	 * @param boolean $blnFailIfNotFound if set to true, the template object will throw an exception if the template can not be found. Defaults to false.
+	 * @param boolean $blnFailIfNotFound If set to true, the template object will throw an exception if the template
+	 *                                   can not be found. Defaults to false.
 	 *
-	 * @return string the parsed template.
-	 *
+	 * @return string The parsed template.
 	 */
 	public function parse($strOutputFormat, $blnFailIfNotFound = false)
 	{
@@ -302,7 +341,7 @@ class Template
 			return '';
 		}
 
-		// HOOK: add custom parse filters
+		// HOOK: add custom parse filters.
 		$this->callParseTemplateHook();
 
 		$strTplFile = $this->getTemplate($this->strTemplate, $strOutputFormat, $blnFailIfNotFound);
@@ -311,11 +350,14 @@ class Template
 			$this->strFormat = $strOutputFormat;
 
 			ob_start();
+			// @codingStandardsIgnoreStart - We really want to keep this include, as we might end up using the same file
+			// more than once.
 			include($strTplFile);
+			// @codingStandardsIgnoreEnd
 			$strBuffer = ob_get_contents();
 			ob_end_clean();
 
-			$this->strFormat =  NULL;
+			$this->strFormat = null;
 
 			return $strBuffer;
 		}
@@ -323,13 +365,31 @@ class Template
 	}
 
 	/**
-	 * Protected as only the included template file shall be able to call as outside from {@link Template::parse()} the format is undefined.
+	 * Protected as only the included template file shall be able to call.
+	 *
+	 * This is needed to remain protected, as outside from {@link Template::parse()} the format is undefined.
+	 *
+	 * @return string
 	 */
 	protected function getFormat()
 	{
 		return $this->strFormat;
 	}
 
+	/**
+	 * Static convenience method to perform the whole rendering within one line of code.
+	 *
+	 * @param string $strTemplate       Name of the template file.
+	 *
+	 * @param string $strOutputFormat   The desired output format.
+	 *
+	 * @param array  $arrTplData        The data to use in the template.
+	 *
+	 * @param bool   $blnFailIfNotFound If set to true, the template object will throw an exception if the template
+	 *                                  can not be found. Defaults to false.
+	 *
+	 * @return string
+	 */
 	public static function render($strTemplate, $strOutputFormat, $arrTplData, $blnFailIfNotFound = false)
 	{
 		$objTemplate = new self($strTemplate);

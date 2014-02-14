@@ -31,28 +31,25 @@ use MetaModels\Helper\ContaoController;
 class FrontendFilter
 {
 	/**
-	 * Filter config
+	 * Filter config.
+	 *
+	 * @var \ContentElement|\Module
 	 */
 	protected $objFilterConfig;
 
-	protected $arrFilters = array();
-
+	/**
+	 * The form id to use.
+	 *
+	 * @var string
+	 */
 	protected $formId = 'mm_filter_';
 
 	/**
-	 * parameters to reset by the filter
-	 */
-	protected $arrResetKeys = array('FORM_SUBMIT');
-
-	/**
-	 * parameters to link through the filter
-	 */
-	protected $arrPreserveKeys = array();
-
-	protected $arrPreserveParams = array();
-
-	/**
-	 * Configure the filter module
+	 * Configure the filter module.
+	 *
+	 * @param \ContentElement|\Module $objFilterConfig The content element or module using this filter.
+	 *
+	 * @return array
 	 */
 	public function getMetaModelFrontendFilter($objFilterConfig)
 	{
@@ -62,8 +59,8 @@ class FrontendFilter
 
 		if ($this->objFilterConfig->metamodel_jumpTo)
 		{
-			// page to jump to when filter submit
-			$objPage = \Database::getInstance()->prepare("SELECT id, alias FROM tl_page WHERE id=?")
+			// Page to jump to when filter submit.
+			$objPage = \Database::getInstance()->prepare('SELECT id, alias FROM tl_page WHERE id=?')
 				->limit(1)
 				->execute($this->objFilterConfig->metamodel_jumpTo);
 			if ($objPage->numRows)
@@ -77,19 +74,18 @@ class FrontendFilter
 	}
 
 	/**
-	 * generate an url determined by the given params and configured jumpTo page.
+	 * Generate an url determined by the given params and configured jumpTo page.
 	 *
-	 * @param array $arrParams the URL parameters to use.
+	 * @param array $arrParams The URL parameters to use.
 	 *
 	 * @return string the generated URL.
-	 *
 	 */
 	protected function getJumpToUrl($arrParams)
 	{
 		$strFilterAction = '';
 		foreach ($arrParams as $strName => $varParam)
 		{
-			// skip the magic "language" parameter.
+			// Skip the magic "language" parameter.
 			if (($strName == 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl'])
 			{
 				continue;
@@ -113,7 +109,11 @@ class FrontendFilter
 					continue;
 				}
 
-				$strFilterAction .= sprintf(($GLOBALS['TL_CONFIG']['disableAlias'] ? '&amp;%s=%s' : '/%s/%s'), $strName, urlencode($strValue));
+				$strFilterAction .= sprintf(
+					$GLOBALS['TL_CONFIG']['disableAlias'] ? '&amp;%s=%s' : '/%s/%s',
+					$strName,
+					urlencode($strValue)
+				);
 			}
 		}
 		return $strFilterAction;
@@ -124,35 +124,56 @@ class FrontendFilter
 	 *
 	 * This will exit the script!
 	 *
-	 * @param array $arrParams the URL parameters to use.
+	 * @param array $arrParams The URL parameters to use.
 	 *
+	 * @return void
 	 */
 	protected function redirectPost($arrParams)
 	{
-		// now translate all params to a valid url and redirect us to it.
-		ContaoController::getInstance()->redirect(\Environment::getInstance()->base . ContaoController::getInstance()->generateFrontendUrl($this->objFilterConfig->arrJumpTo, $this->getJumpToUrl($arrParams)));
+		// Translate all params to a valid url and redirect us to it.
+		ContaoController::getInstance()
+			->redirect(
+				\Environment::getInstance()->base .
+				ContaoController::getInstance()
+					->generateFrontendUrl(
+						$this->objFilterConfig->arrJumpTo,
+						$this->getJumpToUrl($arrParams)
+					)
+			);
 	}
 
+	/**
+	 * Retrieve the list of parameter names that shall be evaluated.
+	 *
+	 * @return array
+	 */
 	protected function getWantedNames()
 	{
 		return (array)unserialize($this->objFilterConfig->metamodel_fef_params);
 	}
 
+	/**
+	 * Retrieve the parameter values.
+	 *
+	 * @return array
+	 */
 	protected function getParams()
 	{
 		$arrWantedParam = $this->getWantedNames();
 
 		$arrMyParams = $arrOtherParams = array();
 
+		// @codingStandardsIgnoreStart - Loop over $_GET to get a list of all keys.
 		if ($_GET)
 		{
 			foreach (array_keys($_GET) as $strParam)
+			// @codingStandardsIgnoreEnd - Continue with style checking.
 			{
-				if(in_array($strParam, $arrWantedParam))
+				if (in_array($strParam, $arrWantedParam))
 				{
 					$arrMyParams[$strParam] = \Input::getInstance()->get($strParam);
 				}
-				// add only to the array if param is not page
+				// Add only to the array if param is not page.
 				elseif($strParam != 'page')
 				{
 					$arrOtherParams[$strParam] = \Input::getInstance()->get($strParam);
@@ -161,11 +182,13 @@ class FrontendFilter
 		}
 
 		// if POST, translate to proper GET url
+		// @codingStandardsIgnoreStart - Loop over $_POST to get a list of all keys.
 		if ($_POST && (\Input::getInstance()->post('FORM_SUBMIT') == $this->formId))
 		{
 			foreach (array_keys($_POST) as $strParam)
+			// @codingStandardsIgnoreEnd - Continue with style checking.
 			{
-				if(in_array($strParam, $arrWantedParam))
+				if (in_array($strParam, $arrWantedParam))
 				{
 					$arrMyParams[$strParam] = \Input::getInstance()->post($strParam);
 				}
@@ -181,15 +204,12 @@ class FrontendFilter
 	}
 
 	/**
-	 * Get the filters
+	 * Get the filters.
+	 *
+	 * @return array
 	 */
 	protected function getFilters()
 	{
-		$strAction = '';
-
-		/**
-		 * @var ICollection
-		 */
 		$objFilterSetting = FilterFactory::byId($this->objFilterConfig->metamodel_filtering);
 
 		$objFrontendFilterOptions = new FrontendFilterOptions();
@@ -203,11 +223,13 @@ class FrontendFilter
 
 		$arrWidgets = $objFilterSetting->getParameterFilterWidgets($arrParams['all'], $arrJumpTo, $objFrontendFilterOptions);
 
-		// filter the widgets we do not want to show.
+		// Filter the widgets we do not want to show.
 		$arrWanted = $this->getWantedNames();
 
-		// if we have POST data, we need to redirect now.
+		// If we have POST data, we need to redirect now.
+		// @codingStandardsIgnoreStart - Test $_POST to check if any data has been submitted.
 		if ($_POST && (\Input::getInstance()->post('FORM_SUBMIT') == $this->formId))
+		// @codingStandardsIgnoreEnd - Continue with style checking.
 		{
 			$arrRedirectParams = $arrParams['other'];
 			foreach ($arrWanted as $strWidget)
@@ -223,39 +245,48 @@ class FrontendFilter
 
 		$arrRendered = array();
 
-		// render the widgets through the filter templates.
-		foreach($this->getWantedNames() as $strWidget)
+		// Render the widgets through the filter templates.
+		foreach ($this->getWantedNames() as $strWidget)
 		{
-			$arrFilter = $arrWidgets[$strWidget];
-
-			$strTemplate = $arrFilter['raw']['eval']['template'];
-
-			// parse sub template
-			$objSubTemplate            = new \FrontendTemplate($strTemplate ? $strTemplate : 'mm_filteritem_default');
+			$arrFilter      = $arrWidgets[$strWidget];
+			$strTemplate    = $arrFilter['raw']['eval']['template'];
+			$objSubTemplate = new \FrontendTemplate($strTemplate ? $strTemplate : 'mm_filteritem_default');
 
 			$objSubTemplate->setData($arrFilter);
-			$objSubTemplate->submit    = $objFrontendFilterOptions->isAutoSubmit();
 
-			$arrFilter['value'] = $objSubTemplate->parse();
-
+			$objSubTemplate->submit  = $objFrontendFilterOptions->isAutoSubmit();
+			$arrFilter['value']      = $objSubTemplate->parse();
 			$arrRendered[$strWidget] = $arrFilter;
 		}
 
-		// return filter data
+		// Return filter data.
 		return array(
-			'action'     => ContaoController::getInstance()->generateFrontendUrl($arrJumpTo, $this->getJumpToUrl($arrParams['other'])),
+			'action'     => ContaoController::getInstance()->generateFrontendUrl(
+					$arrJumpTo,
+					$this->getJumpToUrl($arrParams['other'])
+				),
 			'formid'     => $this->formId,
 			'filters'    => $arrRendered,
-			'submit'     => ($objFrontendFilterOptions->isAutoSubmit() ? '' : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit'])
+			'submit'     => (
+				$objFrontendFilterOptions->isAutoSubmit()
+					? ''
+					: $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']
+				)
 		);
 	}
 
 	/**
-	 * Add the "clear all Filter"
+	 * Add the "clear all Filter".
 	 *
-	 * @param string $strContent
-	 * @param string $strTemplate
+	 * This is called via parseTemplate HOOK to inject the "clear all" filter into fe_page.
+	 *
+	 * @param string $strContent  The whole page content.
+	 *
+	 * @param string $strTemplate The name of the template being parsed.
+	 *
 	 * @return string
+	 *
+	 * @throws \RuntimeException When an invalid selector has been used (different than "ce" or "mod").
 	 */
 	public function generateClearAll($strContent, $strTemplate)
 	{
@@ -263,43 +294,47 @@ class FrontendFilter
 		{
 			if (preg_match_all('#\[\[\[metamodelfrontendfilterclearall::(ce|mod)::([^\]]*)\]\]\]#', $strContent, $arrMatches))
 			{
-				for($i = 0; $i < count($arrMatches); $i = $i + 3)
+				$count = count($arrMatches);
+				for ($i = 0; $i < $count; $i = ($i + 3))
 				{
-					switch ($arrMatches[$i + 1][0])
+					switch ($arrMatches[($i + 1)][0])
 					{
 						case 'ce':
 							$objDbResult = \Database::getInstance()
 								->prepare('SELECT * FROM tl_content WHERE id=?')
-								->execute($arrMatches[$i + 2][0]);
+								->execute($arrMatches[($i + 2)][0]);
 
 							// Check if we have a ce element.
-							if($objDbResult->numRows == 0)
+							if ($objDbResult->numRows == 0)
 							{
 								$strContent = str_replace($arrMatches[$i][0], '', $strContent);
 								break;
 							}
 
 							// Get instance and call generate function.
-							$objCE = new FilterClearAll($objDbResult);
+							$objCE      = new FilterClearAll($objDbResult);
 							$strContent = str_replace($arrMatches[$i][0], $objCE->generateReal(), $strContent);
 							break;
 
 						case 'mod':
 							$objDbResult = \Database::getInstance()
 								->prepare('SELECT * FROM tl_module WHERE id=?')
-								->execute($arrMatches[$i + 2]);
+								->execute($arrMatches[($i + 2)]);
 
 							// Check if we have a mod element.
-							if($objDbResult->numRows == 0)
+							if ($objDbResult->numRows == 0)
 							{
 								$strContent = str_replace($arrMatches[$i][0], '', $strContent);
 								break;
 							}
 
 							// Get instance and call generate function.
-							$objCE = new FilterClearAll($objDbResult);
+							$objCE      = new FilterClearAll($objDbResult);
 							$strContent = str_replace($arrMatches[$i][0], $objCE->generateReal(), $strContent);
 							break;
+
+						default:
+							throw new \RuntimeException('Unexpected element determinator encountered: ' . $arrMatches[($i + 1)][0]);
 					}
 				}
 			}

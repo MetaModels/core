@@ -43,8 +43,7 @@ class Filter extends \ContentElement
 	{
 		if (TL_MODE == 'BE')
 		{
-			$objTemplate = new \BackendTemplate('be_wildcard');
-
+			$objTemplate           = new \BackendTemplate('be_wildcard');
 			$objTemplate->wildcard = '### METAMODELS FE-FILTERBLOCK ###';
 			$objTemplate->title    = $this->headline;
 
@@ -67,7 +66,6 @@ class Filter extends \ContentElement
 	 */
 	protected function compile()
 	{
-		// Get filter data.
 		$objFilter = new FrontendFilter();
 		$arrFilter = $objFilter->getMetaModelFrontendFilter($this);
 

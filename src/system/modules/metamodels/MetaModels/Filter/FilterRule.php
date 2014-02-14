@@ -26,7 +26,7 @@ namespace MetaModels\Filter;
 abstract class FilterRule implements IFilterRule
 {
 	/**
-	 * create a new FilterRule instance.
+	 * Create a new FilterRule instance.
 	 */
 	public function __construct()
 	{

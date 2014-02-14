@@ -35,7 +35,9 @@ interface IFilter
 	/**
 	 * Adds a filter rule to this filter chain.
 	 *
-	 * @param IFilterRule $objFilterRule the filter rule to add.
+	 * @param IFilterRule $objFilterRule The filter rule to add.
+	 *
+	 * @return void
 	 */
 	public function addFilterRule(IFilterRule $objFilterRule);
 

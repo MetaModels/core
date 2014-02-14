@@ -31,7 +31,7 @@ class NotEqual implements IFilterRule
 	/**
 	 * The attribute to search in.
 	 *
-	 * @var \MetaModels\Attribute\IAttribute
+	 * @var IAttribute
 	 */
 	protected $objAttribute = null;
 
@@ -45,9 +45,9 @@ class NotEqual implements IFilterRule
 	/**
 	 * Creates an instance of this class.
 	 *
-	 * @param \MetaModels\Attribute\IAttribute $objAttribute The query that shall be executed.
+	 * @param IAttribute $objAttribute The query that shall be executed.
 	 *
-	 * @param array                            $varValue     The value to compare against.
+	 * @param array      $varValue     The value to compare against.
 	 */
 	public function __construct($objAttribute, $varValue)
 	{

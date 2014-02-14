@@ -16,6 +16,7 @@
 
 namespace MetaModels\Filter\Setting;
 
+use MetaModels\Attribute\IAttribute;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use MetaModels\IItem;
 use MetaModels\Filter\IFilter;
@@ -27,7 +28,7 @@ use MetaModels\Render\Setting\ICollection as IRenderSettings;
  * Filter setting implementation performing a search for a value on a
  * configured attribute.
  *
- * @package	   MetaModels
+ * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
@@ -63,20 +64,20 @@ class SimpleLookup extends Simple
 	}
 
 	/**
-	 * internal helper function for descendant classes to retrieve the options.
+	 * Internal helper function for descendant classes to retrieve the options.
 	 *
-	 * @param \MetaModels\Attribute\IAttribute $objAttribute The attribute to search.
+	 * @param IAttribute $objAttribute The attribute to search.
 	 *
-	 * @param array                            $arrIds       The Id list of items for which to retrieve the options.
+	 * @param array      $arrIds       The Id list of items for which to retrieve the options.
 	 *
-	 * @param array                            $arrCount     If non null, the amount of matches will get returned.
+	 * @param array      $arrCount     If non null, the amount of matches will get returned.
 	 *
 	 * @return array
 	 */
 	protected function getParameterFilterOptions($objAttribute, $arrIds, &$arrCount = null)
 	{
 		$arrOptions = $objAttribute->getFilterOptions(
-			$this->get('onlypossible') ? $arrIds : NULL,
+			$this->get('onlypossible') ? $arrIds : null,
 			(bool)$this->get('onlyused'),
 			$arrCount
 		);
@@ -88,7 +89,7 @@ class SimpleLookup extends Simple
 			$mixOptions = strip_tags($mixOptions);
 			$mixOptions = trim($mixOptions);
 
-			if($mixOptions === '' ||$mixOptions === null)
+			if ($mixOptions === '' || $mixOptions === null)
 			{
 				unset($arrOptions[$mixOptionKey]);
 			}
@@ -115,7 +116,8 @@ class SimpleLookup extends Simple
 	{
 		$objMetaModel = $this->getMetaModel();
 		$objAttribute = $objMetaModel->getAttributeById($this->get('attr_id'));
-		$strParam = $this->getParamName();
+		$strParam     = $this->getParamName();
+
 		if ($objAttribute && $strParam)
 		{
 			$arrFilterValue = $arrFilterUrl[$strParam];
@@ -127,20 +129,27 @@ class SimpleLookup extends Simple
 
 			if ($arrFilterValue)
 			{
-				$arrLanguages = ($objMetaModel->isTranslated() && $this->get('all_langs')) ? $objMetaModel->getAvailableLanguages() : array($objMetaModel->getActiveLanguage());
+				if ($objMetaModel->isTranslated() && $this->get('all_langs'))
+				{
+					$arrLanguages = $objMetaModel->getAvailableLanguages();
+				}
+				else
+				{
+					$arrLanguages = array($objMetaModel->getActiveLanguage());
+				}
 				$objFilterRule = new FilterRuleSimpleLookup($objAttribute, $arrFilterValue, $arrLanguages);
 				$objFilter->addFilterRule($objFilterRule);
 				return;
 			}
 
-			//we found an attribute but no match in URL. So ignore this filter setting if allow_empty is set
+			// We found an attribute but no match in URL. So ignore this filter setting if allow_empty is set.
 			if ($this->allowEmpty())
 			{
-				$objFilter->addFilterRule(new FilterRuleStaticIdList(NULL));
+				$objFilter->addFilterRule(new FilterRuleStaticIdList(null));
 				return;
 			}
 		}
-		// either no attribute found or no match in url, do not return anything.
+		// Either no attribute found or no match in url, do not return anything.
 		$objFilter->addFilterRule(new FilterRuleStaticIdList(array()));
 	}
 
@@ -173,21 +182,27 @@ class SimpleLookup extends Simple
 	 */
 	public function getParameterDCA()
 	{
-		// if defined as static, return nothing as not to be manipulated via editors.
+		// If defined as static, return nothing as not to be manipulated via editors.
 		if (!$this->get('predef_param'))
 		{
 			return array();
 		}
 
 		$objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
-		$arrOptions = $objAttribute->getFilterOptions(NULL, true);
+		$arrOptions   = $objAttribute->getFilterOptions(null, true);
 
 		return array(
 			$this->getParamName() => array
 			(
 				'label'   => array(
-					sprintf($GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'][0], $objAttribute->getName()),
-					sprintf($GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'][1], $objAttribute->getName())
+					sprintf(
+						$GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'][0],
+						$objAttribute->getName()
+					),
+					sprintf(
+						$GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'][1],
+						$objAttribute->getName()
+					)
 				),
 				'inputType'    => 'select',
 				'options' => $arrOptions,
@@ -196,6 +211,9 @@ class SimpleLookup extends Simple
 		);
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function getParameterFilterNames()
 	{
 		if ($strParamName = $this->getParamName())
@@ -210,17 +228,22 @@ class SimpleLookup extends Simple
 			return array(
 				$strParamName => ($this->get('label') ? $this->get('label') : $objAttribute->getName())
 			);
-		} else {
-			return array();
 		}
+
+		return array();
 	}
 
 	/**
 	 * {@inheritdoc}
 	 */
-	public function getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, FrontendFilterOptions $objFrontendFilterOptions)
+	public function getParameterFilterWidgets(
+		$arrIds,
+		$arrFilterUrl,
+		$arrJumpTo,
+		FrontendFilterOptions $objFrontendFilterOptions
+	)
 	{
-		// if defined as static, return nothing as not to be manipulated via editors.
+		// If defined as static, return nothing as not to be manipulated via editors.
 		if (!$this->enableFEFilterWidget())
 		{
 			return array();
@@ -235,7 +258,7 @@ class SimpleLookup extends Simple
 
 		$GLOBALS['MM_FILTER_PARAMS'][] = $this->getParamName();
 
-		$arrCount = array();
+		$arrCount  = array();
 		$arrWidget = array(
 			'label'     => array(
 				// TODO: make this multilingual.
@@ -248,7 +271,11 @@ class SimpleLookup extends Simple
 			'showCount' => $objFrontendFilterOptions->isShowCountValues(),
 			'eval'      => array
 			(
-				'includeBlankOption' => ($this->get('blankoption') && !$objFrontendFilterOptions->isHideClearFilter() ? true : false),
+				'includeBlankOption' => (
+						$this->get('blankoption') && !$objFrontendFilterOptions->isHideClearFilter()
+						? true
+						: false
+					),
 				'blankOptionLabel'   => &$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'],
 				'colname'            => $objAttribute->getColname(),
 				'urlparam'           => $this->getParamName(),
@@ -260,7 +287,12 @@ class SimpleLookup extends Simple
 
 		return array
 		(
-			$this->getParamName() => $this->prepareFrontendFilterWidget($arrWidget, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions)
+			$this->getParamName() => $this->prepareFrontendFilterWidget(
+					$arrWidget,
+					$arrFilterUrl,
+					$arrJumpTo,
+					$objFrontendFilterOptions
+				)
 		);
 	}
 
@@ -273,6 +305,7 @@ class SimpleLookup extends Simple
 		{
 			return array();
 		}
+
 		return array($objAttribute->getColName());
 	}
 }

@@ -17,14 +17,16 @@
 namespace MetaModels;
 
 use MetaModels\Attribute\IAttribute;
+use MetaModels\Filter\IFilter;
 
 /**
  * This is the main MetaModel interface.
  *
- * This interface handles all attribute definition instantiation and can be queried for a view instance to certain entries.
- * dunn
- * @see MetaModelFactory::byId        to instantiate a MetaModel by its ID.
- * @see MetaModelFactory::byTableName to instantiate a MetaModel by its table name.
+ * This interface handles all attribute definition instantiation and can be queried for a view instance to certain
+ * entries.
+ *
+ * @see MetaModelFactory::byId        To instantiate a MetaModel by its ID.
+ * @see MetaModelFactory::byTableName To instantiate a MetaModel by its table name.
  * @package    MetaModels
  * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
@@ -32,23 +34,24 @@ use MetaModels\Attribute\IAttribute;
 interface IMetaModel
 {
 	/**
-	 * get a configuration setting.
+	 * Get a configuration setting.
 	 *
-	 * @param string $strKey the key of the property that shall be fetched.
+	 * @param string $strKey The key of the property that shall be fetched.
 	 *
-	 * @return mixed the value provided during instantiation. This includes all attributes from the database table tl_metamodel.
+	 * @return mixed The value provided during instantiation.
+	 *               This includes all attributes from the database table tl_metamodel.
 	 */
 	public function get($strKey);
 
 	/**
 	 * Retrieve the table name for this MetaModel.
 	 *
-	 * @return string the table name for the metamodel table.
+	 * @return string the table name for the MetaModel table.
 	 */
 	public function getTableName();
 
 	/**
-	 * Retrieve the human readble name for this metamodel.
+	 * Retrieve the human readable name for this MetaModel.
 	 *
 	 * @return string the name for the MetaModel.
 	 */
@@ -57,7 +60,7 @@ interface IMetaModel
 	/**
 	 * Returns the array of all attribute instances that are defined for this MetaModel instance.
 	 *
-	 * @return \MetaModels\Attribute\IAttribute[] as name=>instance
+	 * @return IAttribute[] as name=>instance
 	 */
 	public function getAttributes();
 
@@ -85,14 +88,16 @@ interface IMetaModel
 	/**
 	 * Fetches all language codes that have been marked as available for translation in this MetaModel.
 	 *
-	 * @return string[]|null an array containing all codes if the MetaModel is translated, null if translation is not active.
+	 * @return string[]|null An array containing all codes if the MetaModel is translated,
+	 *                       null if translation is not active.
 	 */
 	public function getAvailableLanguages();
 
 	/**
 	 * Fetches the language code that has been marked as fallback language for translation in this MetaModel.
 	 *
-	 * @return string[]|null if the MetaModel is translated an array containing all codes, null if translation is not active.
+	 * @return string[]|null If the MetaModel is translated an array containing all codes,
+	 *                       null if translation is not active.
 	 */
 	public function getFallbackLanguage();
 
@@ -106,63 +111,72 @@ interface IMetaModel
 	/**
 	 * Fetches the instance of the attribute with the given name.
 	 *
-	 * @param string $strAttributeName the name of the attribute to search
+	 * @param string $strAttributeName The name of the attribute to search.
 	 *
-	 * @return \MetaModels\Attribute\IAttribute the instance or null if not found.
+	 * @return IAttribute the instance or null if not found.
 	 */
 	public function getAttribute($strAttributeName);
 
 	/**
 	 * Fetches the instance of the attribute with the given name.
 	 *
-	 * @param int $intId the id of the attribute to search
+	 * @param int $intId The id of the attribute to search.
 	 *
-	 * @return \MetaModels\Attribute\IAttribute the instance or null if not found.
+	 * @return IAttribute the instance or null if not found.
 	 */
 	public function getAttributeById($intId);
 
 	/**
 	 * Search the MetaModel for the item with the given Id.
 	 *
-	 * @param int      $intId       the Id to be searched.
+	 * @param int      $intId       The Id to be searched.
 	 *
-	 * @param string[] $arrAttrOnly names of the attributes that shall be enclosed in the result, defaults to empty which means all attributes.
+	 * @param string[] $arrAttrOnly Names of the attributes that shall be enclosed in the result, defaults to empty
+	 *                              which means all attributes.
 	 *
-	 * @return \MetaModels\IItem the item if found, NULL otherwise.
+	 * @return IItem the item if found, NULL otherwise.
 	 */
 	public function findById($intId, $arrAttrOnly = array());
 
 	/**
 	 * Filter the MetaModel by the provided filter settings.
 	 *
-	 * @param \MetaModels\Filter\IFilter|null $objFilter    the filter object to use or null if none.
+	 * @param IFilter|null $objFilter    The filter object to use or null if none.
 	 *
-	 * @param string                          $strSortBy    optional name of the attribute the entries shall be sorted
+	 * @param string       $strSortBy    Optional name of the attribute the entries shall be sorted.
 	 *
-	 * @param int                             $intOffset    optional offset for the first item.
+	 * @param int          $intOffset    Optional offset for the first item.
 	 *
-	 * @param int                             $intLimit     optional amount of items to retrieve.
+	 * @param int          $intLimit     Optional amount of items to retrieve.
 	 *
-	 * @param string                          $strSortOrder optional sorting direction, either 'ASC'(default) or 'DESC'.
+	 * @param string       $strSortOrder Optional sorting direction, either 'ASC'(default) or 'DESC'.
 	 *
-	 * @param string[]                        $arrAttrOnly  names of the attributes that shall be enclosed in the result, defaults to empty which means all attributes.
+	 * @param string[]     $arrAttrOnly  Names of the attributes that shall be enclosed in the result, defaults to
+	 *                                   empty which means all attributes.
 	 *
-	 * @return \MetaModels\IItems the collection of IMetaModelItem instances that match the given filter.
+	 * @return IItems The collection of IItem instances that match the given filter.
 	 */
-	public function findByFilter($objFilter, $strSortBy = '', $intOffset = 0, $intLimit = 0, $strSortOrder = 'ASC', $arrAttrOnly = array());
+	public function findByFilter(
+		$objFilter,
+		$strSortBy = '',
+		$intOffset = 0,
+		$intLimit = 0,
+		$strSortOrder = 'ASC',
+		$arrAttrOnly = array()
+	);
 
 	/**
 	 * Filter the MetaModel by the provided filter settings and return the ids of all matching items.
 	 *
-	 * @param \MetaModels\Filter\IFilter|null $objFilter    the filter object to use or null if none.
+	 * @param IFilter|null $objFilter    The filter object to use or null if none.
 	 *
-	 * @param string                          $strSortBy    optional name of the attribute the entries shall be sorted
+	 * @param string       $strSortBy    Optional name of the attribute the entries shall be sorted.
 	 *
-	 * @param int                             $intOffset    optional offset for the first item.
+	 * @param int          $intOffset    Optional offset for the first item.
 	 *
-	 * @param int                             $intLimit     optional amount of items to retrieve.
+	 * @param int          $intLimit     Optional amount of items to retrieve.
 	 *
-	 * @param string                          $strSortOrder optional sorting direction, either 'ASC'(default) or 'DESC'.
+	 * @param string       $strSortOrder Optional sorting direction, either 'ASC'(default) or 'DESC'.
 	 *
 	 * @return int[] the ids of items that match the given filter.
 	 */
@@ -171,7 +185,7 @@ interface IMetaModel
 	/**
 	 * Fetch the amount of matching items against the given filter.
 	 *
-	 * @param \MetaModels\Filter\IFilter|null $objFilter the filter object to use or null if none.
+	 * @param IFilter|null $objFilter The filter object to use or null if none.
 	 *
 	 * @return int the amount of matching items.
 	 */
@@ -180,41 +194,42 @@ interface IMetaModel
 	/**
 	 * Get all variant base items, filtered by the provided filter settings.
 	 *
-	 * @param \MetaModels\Filter\IFilter $objFilter the filter to use or null if no filtering.
+	 * @param IFilter $objFilter The filter to use or null if no filtering.
 	 *
-	 * @return \MetaModels\IItems the collection of IMetaModelItem instances that match the given filter.
+	 * @return IItems the collection of IItem instances that match the given filter.
 	 */
 	public function findVariantBase($objFilter);
 
 	/**
 	 * Get variants for the given ids, filtered by the provided filter settings.
 	 *
-	 * @param array                      $arrIds    The Ids of the base elements.
+	 * @param array   $arrIds    The Ids of the base elements.
 	 *
-	 * @param \MetaModels\Filter\IFilter $objFilter The filter to use or null if no filtering.
+	 * @param IFilter $objFilter The filter to use or null if no filtering.
 	 *
-	 * @return \MetaModels\IItems the collection of IMetaModelItem instances that match the given filter.
+	 * @return IItems The collection of IItem instances that match the given filter.
 	 */
 	public function findVariants($arrIds, $objFilter);
 
 	/**
-	 * Find all varints of the given item. This methods makes no difference between the varbase item and
-	 * other variants.
+	 * Find all variants of the given item.
 	 *
-	 * @param array            $arrIds    The Ids of the base elements.
+	 * This methods makes no difference between the variant base item and other variants.
 	 *
-	 * @param \MetaModels\Filter\IFilter $objFilter The filter to use or null if no filtering.
+	 * @param array   $arrIds    The Ids of the base elements.
 	 *
-	 * @return \MetaModels\IItems the collection of IMetaModelItem instances that match the given filter.
+	 * @param IFilter $objFilter The filter to use or null if no filtering.
+	 *
+	 * @return IItems the collection of IItem instances that match the given filter.
 	 */
 	public function findVariantsWithBase($arrIds, $objFilter);
 
 	/**
 	 * Get all options of the given attribute.
 	 *
-	 * @param string                     $strAttribute the attribute to fetch options from.
+	 * @param string  $strAttribute The attribute to fetch options from.
 	 *
-	 * @param \MetaModels\Filter\IFilter $objFilter    the filter to use or null if no filtering.
+	 * @param IFilter $objFilter    The filter to use or null if no filtering.
 	 *
 	 * @return array all options matching the given filter for the given attribute to be usable in a filter select widget.
 	 */
@@ -223,7 +238,7 @@ interface IMetaModel
 	/**
 	 * Save an item into the database.
 	 *
-	 * @param \MetaModels\IItem $objItem The item to save to the database.
+	 * @param IItem $objItem The item to save to the database.
 	 *
 	 * @return void
 	 */
@@ -232,7 +247,7 @@ interface IMetaModel
 	/**
 	 * Remove an item from the database.
 	 *
-	 * @param \MetaModels\IItem $objItem The item to delete from the database.
+	 * @param IItem $objItem The item to delete from the database.
 	 *
 	 * @return void
 	 */
@@ -241,29 +256,28 @@ interface IMetaModel
 	/**
 	 * Prepare an empty filter object for this meta model. The returned filter contains no rules.
 	 *
-	 * @return \MetaModels\Filter\IFilter the filter object.
+	 * @return IFilter the filter object.
 	 */
 	public function getEmptyFilter();
 
 	/**
 	 * Generates a filter object that takes the given attributes into account.
 	 *
-	 * @param int   $intFilterSettings the id of the filter settings to use.
+	 * @param int   $intFilterSettings The id of the filter settings to use.
 	 *
-	 * @param array $arrFilterUrl      the filter url parameters (usually the contents of $_GET etc.)
+	 * @param array $arrFilterUrl      The filter url parameters (usually the contents of $_GET etc.).
 	 *
-	 * @return \MetaModels\Filter\IFilter the generated filter object.
+	 * @return IFilter the generated filter object.
 	 */
 	public function prepareFilter($intFilterSettings, $arrFilterUrl);
 
 	/**
-	 * Return a IMetaModelRenderSettings instance for this metamodel.
+	 * Return a IMetaModelRenderSettings instance for this MetaModel.
 	 *
-	 * @param int $intViewId the id of the render settings to retrieve.
+	 * @param int $intViewId The id of the render settings to retrieve.
 	 *
 	 * @return \MetaModels\Render\Setting\ICollection
 	 */
 	public function getView($intViewId = 0);
-
 }
 

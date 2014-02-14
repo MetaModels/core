@@ -38,11 +38,11 @@ abstract class TranslatedReference
 	abstract protected function getValueTable();
 
 	/**
-	 * Build a where clause for the given id(s) and langcode.
+	 * Build a where clause for the given id(s) and language code.
 	 *
 	 * @param mixed  $mixIds      One, none or many ids to use.
 	 *
-	 * @param string $mixLangCode The langcode/s to use, optional.
+	 * @param string $mixLangCode The language code/s to use, optional.
 	 *
 	 * @return array
 	 */
@@ -76,6 +76,17 @@ abstract class TranslatedReference
 		return $arrReturn;
 	}
 
+	/**
+	 * Retrieve the values to be used in the INSERT or UPDATE SQL for the given parameters.
+	 *
+	 * @param mixed  $arrValue    The native value of the attribute.
+	 *
+	 * @param int    $intId       The id of the item to be saved.
+	 *
+	 * @param string $strLangCode The language code of the language the value is in.
+	 *
+	 * @return array
+	 */
 	protected function getSetValues($arrValue, $intId, $strLangCode)
 	{
 		return array
@@ -88,6 +99,13 @@ abstract class TranslatedReference
 		);
 	}
 
+	/**
+	 * Retrieve the columns to be used for key and value when retrieving the filter options.
+	 *
+	 * Returned array must contain two elements having the keys "key" and "value".
+	 *
+	 * @return array
+	 */
 	protected function getOptionizer()
 	{
 		return array(
@@ -97,11 +115,17 @@ abstract class TranslatedReference
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function valueToWidget($varValue)
 	{
 		return $varValue['value'];
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function widgetToValue($varValue, $intId)
 	{
 		return array
@@ -109,19 +133,20 @@ abstract class TranslatedReference
 			'tstamp' => time(),
 			'value' => $varValue,
 			'att_id' => $this->get('id'),
-//			'langcode' => $strLangCode,
-//			'item_id' => $intId,
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function getDataFor($arrIds)
 	{
-		$strActiveLanguage = $this->getMetaModel()->getActiveLanguage();
+		$strActiveLanguage   = $this->getMetaModel()->getActiveLanguage();
 		$strFallbackLanguage = $this->getMetaModel()->getFallbackLanguage();
 
 		$arrReturn = $this->getTranslatedDataFor($arrIds, $strActiveLanguage);
 
-		// second round, fetch fallback languages if not all items could be resolved.
+		// Second round, fetch fallback languages if not all items could be resolved.
 		if ((count($arrReturn) < count($arrIds)) && ($strActiveLanguage != $strFallbackLanguage))
 		{
 			$arrFallbackIds = array();
@@ -136,7 +161,7 @@ abstract class TranslatedReference
 			if ($arrFallbackIds)
 			{
 				$arrFallbackData = $this->getTranslatedDataFor($arrFallbackIds, $strFallbackLanguage);
-				// cannot use array_merge here as it would renumber the keys.
+				// Cannot use array_merge here as it would renumber the keys.
 				foreach ($arrFallbackData as $intId => $arrValue)
 				{
 					$arrReturn[$intId] = $arrValue;
@@ -146,6 +171,9 @@ abstract class TranslatedReference
 		return $arrReturn;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function setDataFor($arrValues)
 	{
 		foreach ($this->getMetaModel()->getAvailableLanguages() as $strLangCode)
@@ -154,6 +182,9 @@ abstract class TranslatedReference
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public function unsetDataFor($arrIds)
 	{
 		foreach ($this->getMetaModel()->getAvailableLanguages() as $strLangCode)
@@ -163,9 +194,7 @@ abstract class TranslatedReference
 	}
 
 	/**
-	 * {@inheritdoc}
-	 *
-	 * Search the attribute values for the given pattern in the active language.
+	 * {@inheritDoc}
 	 */
 	public function searchFor($strPattern)
 	{
@@ -173,13 +202,11 @@ abstract class TranslatedReference
 	}
 
 	/**
-	 * {@inheritdoc}
-	 *
-	 * Search the attribute in the given languages.
+	 * {@inheritDoc}
 	 */
 	public function searchForInLanguages($strPattern, $arrLanguages = array())
 	{
-		$arrWhere = $this->getWhere(null);
+		$arrWhere  = $this->getWhere(null);
 		$arrParams = array(str_replace(array('*', '?'), array('%', '_'), $strPattern));
 
 		$arrOptionizer = $this->getOptionizer();
@@ -206,21 +233,21 @@ abstract class TranslatedReference
 	}
 
 	/**
-	 * Sorts the given array list by field value in the given direction.
-	 *
-	 * @param int[]  $arrIds       A list of Ids from the MetaModel table.
-	 *
-	 * @param string $strDirection The direction for sorting. either 'ASC' or 'DESC', as in plain SQL.
-	 *
-	 * @return int[] The sorted integer array.
+	 * {@inheritDoc}
 	 */
 	public function sortIds($arrIds, $strDirection)
 	{
 		$objDB = \Database::getInstance();
 
-		$arrWhere = $this->getWhere($arrIds, array($this->getMetaModel()->getActiveLanguage(), $this->getMetaModel()->getFallbackLanguage()));
+		$arrWhere = $this->getWhere($arrIds, array(
+			$this->getMetaModel()->getActiveLanguage(),
+			$this->getMetaModel()->getFallbackLanguage()
+		));
 
-		$strQuery = 'SELECT item_id FROM ' . $this->getValueTable() . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '') . ' GROUP BY item_id';
+		$strQuery = sprintf('SELECT item_id FROM %s %s GROUP BY item_id',
+			$this->getValueTable(),
+			($arrWhere ? 'WHERE' . $arrWhere['procedure'] : '')
+		);
 
 		$arrOptionizer = $this->getOptionizer();
 
@@ -231,10 +258,7 @@ abstract class TranslatedReference
 	}
 
 	/**
-	 * {@inheritdoc}
-	 *
-	 * Fetch filter options from foreign table.
-	 *
+	 * {@inheritDoc}
 	 */
 	public function getFilterOptions($arrIds, $usedOnly, &$arrCount = null)
 	{
@@ -248,6 +272,7 @@ abstract class TranslatedReference
 			->execute(($arrWhere ? $arrWhere['params'] : null));
 
 		$arrOptionizer = $this->getOptionizer();
+
 		$arrReturn = array();
 		while ($objValue->next())
 		{
@@ -256,19 +281,18 @@ abstract class TranslatedReference
 		return $arrReturn;
 	}
 
-	/////////////////////////////////////////////////////////////////
-	// interface IMetaModelAttributeTranslated
-	/////////////////////////////////////////////////////////////////
-
+	/**
+	 * {@inheritDoc}
+	 */
 	public function setTranslatedDataFor($arrValues, $strLangCode)
 	{
 		$objDB = \Database::getInstance();
-		// first off determine those to be updated and those to be inserted.
-		$arrIds = array_keys($arrValues);
+		// First off determine those to be updated and those to be inserted.
+		$arrIds      = array_keys($arrValues);
 		$arrExisting = array_keys($this->getTranslatedDataFor($arrIds, $strLangCode));
-		$arrNewIds = array_diff($arrIds, $arrExisting);
+		$arrNewIds   = array_diff($arrIds, $arrExisting);
 
-		// now update...
+		// Now update...
 		$strQuery = 'UPDATE ' . $this->getValueTable() . ' %s';
 		foreach ($arrExisting as $intId)
 		{
@@ -277,7 +301,8 @@ abstract class TranslatedReference
 				->set($this->getSetValues($arrValues[$intId], $intId, $strLangCode))
 				->execute(($arrWhere ? $arrWhere['params'] : null));
 		}
-		// ...and insert
+
+		// And insert...
 		$strQuery = 'INSERT INTO ' . $this->getValueTable() . ' %s';
 		foreach ($arrNewIds as $intId)
 		{
@@ -288,7 +313,7 @@ abstract class TranslatedReference
 	}
 
 	/**
-	 * Get values for the given items in a certain language.
+	 * {@inheritDoc}
 	 */
 	public function getTranslatedDataFor($arrIds, $strLangCode)
 	{
@@ -309,7 +334,7 @@ abstract class TranslatedReference
 	}
 
 	/**
-	 * Remove values for items in a certain lanugage.
+	 * {@inheritDoc}
 	 */
 	public function unsetValueFor($arrIds, $strLangCode)
 	{

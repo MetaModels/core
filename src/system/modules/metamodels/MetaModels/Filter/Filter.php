@@ -16,6 +16,7 @@
 
 namespace MetaModels\Filter;
 
+use MetaModels\Filter\IFilterRule;
 use MetaModels\IMetaModel;
 
 /**
@@ -29,7 +30,8 @@ class Filter implements IFilter
 {
 
 	/**
-	 * The corresponding MetaModel
+	 * The corresponding MetaModel.
+	 *
 	 * @var string
 	 */
 	protected $strMetaModel = '';
@@ -48,6 +50,11 @@ class Filter implements IFilter
 	 */
 	protected $arrMatches = null;
 
+	/**
+	 * Create a new filter instance.
+	 *
+	 * @param IMetaModel $objMetaModel The MetaModel this filter shall apply to.
+	 */
 	public function __construct(IMetaModel $objMetaModel)
 	{
 		if ($objMetaModel)
@@ -56,21 +63,27 @@ class Filter implements IFilter
 		}
 	}
 
+	/**
+	 * Clone the filter rule list.
+	 *
+	 * @return void
+	 */
 	public function __clone()
 	{
-		$this->arrMatches = NULL;
-		$arrOld = $this->arrFilterRules;
+		$this->arrMatches     = null;
+		$arrOld               = $this->arrFilterRules;
 		$this->arrFilterRules = array();
-		foreach($arrOld as $objFilterRule)
+		foreach ($arrOld as $objFilterRule)
 		{
 			$this->addFilterRule(clone $objFilterRule);
 		}
 	}
 
-	/////////////////////////////////////////////////////////////////
-	// interface IMetaModelFilter
-	/////////////////////////////////////////////////////////////////
-
+	/**
+	 * Create a copy of this filter.
+	 *
+	 * @return Filter|IFilter
+	 */
 	public function createCopy()
 	{
 		$objCopy = clone $this;
@@ -82,12 +95,15 @@ class Filter implements IFilter
 	 */
 	public function addFilterRule(IFilterRule $objFilterRule)
 	{
-		// reset matches as they are most likely invalid now.
+		// Reset matches as they are most likely invalid now.
 		$this->arrMatches = null;
 
 		$this->arrFilterRules[] = $objFilterRule;
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function getMatchingIds()
 	{
 		if ($this->arrMatches !== null)
@@ -95,23 +111,25 @@ class Filter implements IFilter
 			return $this->arrMatches;
 		}
 
-		$arrIds = NULL;
+		$arrIds = null;
 		foreach ($this->arrFilterRules as $objFilterRule)
 		{
-			/** @var \MetaModels\Filter\IFilterRule $objFilterRule */
+			/** @var IFilterRule $objFilterRule */
 			$arrRuleIds = $objFilterRule->getMatchingIds();
 			if ($arrRuleIds === null)
 			{
 				continue;
 			}
-			// the first rule determines the master ids.
-			if($arrIds === NULL)
+			// The first rule determines the master ids.
+			if ($arrIds === null)
 			{
 				$arrIds = $arrRuleIds;
-			} else {
+			}
+			else
+			{
 				// NOTE: all rules are implicitely "AND"-ed together.
 				$arrIds = array_intersect($arrIds, $arrRuleIds);
-				// when no ids are left any more, the result will stay empty, do not evaluate any further rules.
+				// When no ids are left any more, the result will stay empty, do not evaluate any further rules.
 				if (count($arrIds) == 0)
 				{
 					break;

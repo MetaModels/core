@@ -21,7 +21,7 @@ use MetaModels\IMetaModel;
 /**
  * This is the factory interface for render settings.
  *
- * To create a IMetaModelRenderSettingsFactory instance, call {@link MetaModelRenderSettingsFactory::byId()}
+ * To create a IFactory instance, call {@link Factory::byId()}
  *
  * @package    MetaModels
  * @subpackage Interfaces
@@ -31,23 +31,25 @@ interface IFactory
 {
 	/**
 	 * Load all attribute render information from the database and push the contained information into the settings object.
-	 * You should not call this method directly but rather use {@link IMetaModelRenderSettingsFactory::byId} instead.
 	 *
-	 * @param \MetaModels\IMetaModel                 $objMetaModel the MetaModel information for which the setting shall be retrieved.
+	 * You should not call this method directly but rather use {@link IFactory::byId} instead.
 	 *
-	 * @param \MetaModels\Render\Setting\ICollection $objSetting   the render setting instance to be populated.
+	 * @param IMetaModel  $objMetaModel The MetaModel information for which the setting shall be retrieved.
 	 *
+	 * @param ICollection $objSetting   The render setting instance to be populated.
+	 *
+	 * @return void
 	 */
 	public static function collectAttributeSettings(IMetaModel $objMetaModel, $objSetting);
 
 	/**
-	 * Create a IMetaModelRenderSettings instance from the id.
+	 * Create a ICollection instance from the id.
 	 *
-	 * @param \MetaModels\IMetaModel $objMetaModel the MetaModel information for which the setting shall be retrieved.
+	 * @param IMetaModel $objMetaModel The MetaModel information for which the setting shall be retrieved.
 	 *
-	 * @param int                              $intId        the id of the IMetaModelRenderSettings.
+	 * @param int        $intId        The id of the ICollection.
 	 *
-	 * @return \MetaModels\Render\Setting\ICollection the instance of the render setting collection or null if not found.
+	 * @return ICollection the instance of the render setting collection or null if not found.
 	 */
 	public static function byId(IMetaModel $objMetaModel, $intId = 0);
 }
