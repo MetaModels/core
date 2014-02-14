@@ -8,9 +8,6 @@
  * @filesource
  */
 
-/**
- * Initialize the system
- */
 define('TL_MODE', 'BE');
 
 if (is_file('../../initialize.php'))
@@ -27,20 +24,25 @@ else
 	exit;
 }
 
-class DCAStylepicker_Wizard extends Backend
+/**
+ * This class handles the DCA style picker.
+ */
+class popup extends Backend
 {
 
 	/**
-	 * Current Ajax object
+	 * Current Ajax object.
+	 *
 	 * @var object
 	 */
 	protected $objAjax;
 
 
 	/**
-	 * Initialize the controller
+	 * Initialize the controller.
 	 *
-	 * 1. Import user
+	 * The workflow is:
+	 * 1. Import user.
 	 * 2. Call parent constructor
 	 * 3. Authenticate user
 	 * 4. Load language files
@@ -58,12 +60,17 @@ class DCAStylepicker_Wizard extends Backend
 		$this->loadLanguageFile('modules');
 	}
 
-
+	/**
+	 * Generate the template.
+	 *
+	 * @return void
+	 */
 	public function generate()
 	{
 		$this->Template->headline = $GLOBALS['TL_LANG']['MSC']['stylepicker4ward'];
+
 		$inputName = $this->Input->get('inputName');
-		if(!preg_match("~^[a-z\-_0-9]+$~i",$inputName))
+		if (!preg_match('~^[a-z\-_0-9]+$~i', $inputName))
 		{
 			die('Field-Parameter ERROR!');
 		}
@@ -73,40 +80,40 @@ class DCAStylepicker_Wizard extends Backend
 
 
 	/**
-	 * Run controller and parse the login template
+	 * Run controller and parse the login template.
+	 *
+	 * @return void
 	 */
 	public function run()
 	{
-		$this->Template = new BackendTemplate('be_dcastylepicker');
+		$this->Template       = new BackendTemplate('be_dcastylepicker');
 		$this->Template->main = '';
-
- 		$this->Template->main .= $this->generate();
+		$this->generate();
 
 		if (!strlen($this->Template->headline))
 		{
 			$this->Template->headline = $GLOBALS['TL_CONFIG']['websiteTitle'];
 		}
 
-		$this->Template->theme = $this->getTheme();
-		$this->Template->base = $this->Environment->base;
-		$this->Template->language = $GLOBALS['TL_LANGUAGE'];
-		$this->Template->title = $GLOBALS['TL_CONFIG']['websiteTitle'];
-		$this->Template->charset = $GLOBALS['TL_CONFIG']['characterSet'];
-		$this->Template->pageOffset = $this->Input->cookie('BE_PAGE_OFFSET');
-		$this->Template->error = ($this->Input->get('act') == 'error') ? $GLOBALS['TL_LANG']['ERR']['general'] : '';
+		$this->Template->theme          = $this->getTheme();
+		$this->Template->base           = $this->Environment->base;
+		$this->Template->language       = $GLOBALS['TL_LANGUAGE'];
+		$this->Template->title          = $GLOBALS['TL_CONFIG']['websiteTitle'];
+		$this->Template->charset        = $GLOBALS['TL_CONFIG']['characterSet'];
+		$this->Template->pageOffset     = $this->Input->cookie('BE_PAGE_OFFSET');
+		$this->Template->error          = ($this->Input->get('act') == 'error') ? $GLOBALS['TL_LANG']['ERR']['general'] : '';
 		$this->Template->skipNavigation = $GLOBALS['TL_LANG']['MSC']['skipNavigation'];
-		$this->Template->request = ampersand($this->Environment->request);
-		$this->Template->top = $GLOBALS['TL_LANG']['MSC']['backToTop'];
-		$this->Template->be27 = !$GLOBALS['TL_CONFIG']['oldBeTheme'];
-		$this->Template->expandNode = $GLOBALS['TL_LANG']['MSC']['expandNode'];
-		$this->Template->collapseNode = $GLOBALS['TL_LANG']['MSC']['collapseNode'];
-		$this->Template->strField = $this->Input->get('fld');
+		$this->Template->request        = ampersand($this->Environment->request);
+		$this->Template->top            = $GLOBALS['TL_LANG']['MSC']['backToTop'];
+		$this->Template->be27           = !$GLOBALS['TL_CONFIG']['oldBeTheme'];
+		$this->Template->expandNode     = $GLOBALS['TL_LANG']['MSC']['expandNode'];
+		$this->Template->collapseNode   = $GLOBALS['TL_LANG']['MSC']['collapseNode'];
+		$this->Template->strField       = $this->Input->get('fld');
 
 		$this->Template->output();
 	}
 }
 
-// run the stuff
-$x = new DCAStylepicker_Wizard();
+// Run the style picker.
+$x = new popup();
 $x->run();
-
