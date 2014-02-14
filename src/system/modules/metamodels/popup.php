@@ -10,17 +10,17 @@
 
 define('TL_MODE', 'BE');
 
-if (is_file('../../initialize.php'))
+// Search the initialize.php.
+$dir = dirname($_SERVER['SCRIPT_FILENAME']);
+
+while ($dir != '.' && $dir != '/' && !is_file($dir . '/system/initialize.php'))
 {
-	require_once('../../initialize.php');
+	$dir = dirname($dir);
 }
-elseif ('../../../../../../../../system/initialize.php')
+
+if (!is_file($dir . '/system/initialize.php'))
 {
-	require_once('../../../../../../../../system/initialize.php');
-}
-else
-{
-	echo 'I lost my place, where is Contao?';
+	echo 'Could not find initialize.php, where is Contao?';
 	exit;
 }
 
