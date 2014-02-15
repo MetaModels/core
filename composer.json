@@ -1,50 +1,50 @@
 {
-	"name":"metamodels/core",
-	"description":"MetaModels core",
-	"keywords":["contao", "metamodels", "core"],
-	"type":"contao-module",
-	"homepage":"http://now.metamodel.me/",
-	"license":"LGPL-3.0+",
-	"authors":[
+	"name": "metamodels/core",
+	"description": "MetaModels core",
+	"keywords": ["contao", "metamodels", "core"],
+	"type": "contao-module",
+	"homepage": "http://now.metamodel.me/",
+	"license": "LGPL-3.0+",
+	"authors": [
 		{
-			"name":"Christian Schiffler",
-			"email":"c.schiffler@cyberspectrum.de",
-			"homepage":"http://www.cyberspectrum.de",
-			"role":"Developer"
+			"name": "Christian Schiffler",
+			"email": "c.schiffler@cyberspectrum.de",
+			"homepage": "http://www.cyberspectrum.de",
+			"role": "Developer"
 		},
 		{
-			"name":"Andreas Isaak",
-			"email":"info@andreas-isaak.de",
-			"homepage":"http://www.andreas-isaak.de",
-			"role":"Developer"
+			"name": "Andreas Isaak",
+			"email": "info@andreas-isaak.de",
+			"homepage": "http://www.andreas-isaak.de",
+			"role": "Developer"
 		},
 		{
-			"name":"Stefan Heimes",
-			"email":"stefan_heimes@hotmail.com",
-			"role":"Developer"
+			"name": "Stefan Heimes",
+			"email": "stefan_heimes@hotmail.com",
+			"role": "Developer"
 		},
 		{
-			"name":"Christian de la Haye",
-			"email":"service@delahaye.de",
-			"homepage":"http://www.delahaye.de/",
-			"role":"Developer"
+			"name": "Christian de la Haye",
+			"email": "service@delahaye.de",
+			"homepage": "http://www.delahaye.de/",
+			"role": "Developer"
 		},
 		{
-			"name":"Oliver Hoff",
-			"email":"oliver@hofff.com",
-			"homepage":"http://www.hofff.com/",
-			"role":"Developer"
+			"name": "Oliver Hoff",
+			"email": "oliver@hofff.com",
+			"homepage": "http://www.hofff.com/",
+			"role": "Developer"
 		}
 	],
 	"support": {
-		"email":"mail@metamodel.me",
-		"issues":"https://github.com/MetaModels/core/issues",
-		"wiki":"http://de.contaowiki.org/MetaModels",
-		"irc":"irc://irc.freenode.org/contao.mm",
-		"source":"https://github.com/MetaModels/core"
+		"email": "mail@metamodel.me",
+		"issues": "https://github.com/MetaModels/core/issues",
+		"wiki": "http://de.contaowiki.org/MetaModels",
+		"irc": "irc://irc.freenode.org/contao.mm",
+		"source": "https://github.com/MetaModels/core"
 	},
 	"require": {
-		"php":">=5.3",
+		"php": ">=5.3",
 		"contao/core": ">=2.11,<4.0",
 		"contao-community-alliance/composer-plugin": "*",
 		"contao-community-alliance/dc-general": "2.0.*@dev",
@@ -53,7 +53,7 @@
 		"discordier/justtextwidgets": ">=0.5"
 	},
 	"require-dev": {
-		"metamodels/php-coding-standard":"dev-master",
+		"metamodels/php-coding-standard": "dev-master",
 		"cyberspectrum/contao-toolbox": "dev-master",
 		"phpunit/phpunit": ">=3.7.10,<4-dev"
 	},
@@ -61,12 +61,17 @@
 		"contao/core": "3.0.*"
 	},
 	"autoload": {
-		"classmap": ["src"]
+		"classmap": [
+			"src"
+		],
+		"psr-0": {
+			"MetaModels": "src/system/modules/metamodels"
+		}
 	},
-	"extra":{
+	"extra": {
 		"contao": {
-			"sources":{
-				"src/system/modules/metamodels":"system/modules/metamodels"
+			"sources": {
+				"src/system/modules/metamodels": "system/modules/metamodels"
 			},
 			"transifex": {
 				"project": "metamodels",
