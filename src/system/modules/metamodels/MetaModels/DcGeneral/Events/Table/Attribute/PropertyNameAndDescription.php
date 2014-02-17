@@ -21,11 +21,20 @@ use DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetE
 use DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use MetaModels\Dca\Helper;
 
+/**
+ * Handle events for properties "name" and "description".
+ *
+ * @package MetaModels\DcGeneral\Events\Table\Attribute
+ */
 class PropertyNameAndDescription
 	extends AttributeBase
 {
 	/**
-	 * @param \DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent $event
+	 * Decode the given value from a serialized language array into the real language array.
+	 *
+	 * @param DecodePropertyValueForWidgetEvent $event The event.
+	 *
+	 * @return void
 	 */
 	public static function decodeValue(DecodePropertyValueForWidgetEvent $event)
 	{
@@ -37,7 +46,11 @@ class PropertyNameAndDescription
 	}
 
 	/**
-	 * @param \DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent $event
+	 * Encode the given value from a real language array into a serialized language array.
+	 *
+	 * @param EncodePropertyValueFromWidgetEvent $event The event.
+	 *
+	 * @return void
 	 */
 	public static function encodeValue(EncodePropertyValueFromWidgetEvent $event)
 	{
@@ -48,11 +61,18 @@ class PropertyNameAndDescription
 		$event->setValue($values);
 	}
 
+	/**
+	 * Build the widget for the MCW.
+	 *
+	 * @param BuildWidgetEvent $event The event.
+	 *
+	 * @return void
+	 */
 	public static function buildWidget(BuildWidgetEvent $event)
 	{
 		$metaModel = self::getMetaModelFromModel($event->getModel());
 
-		\MetaModels\Dca\Helper::prepareLanguageAwareWidget(
+		Helper::prepareLanguageAwareWidget(
 			$event->getEnvironment(),
 			$event->getProperty(),
 			$metaModel,

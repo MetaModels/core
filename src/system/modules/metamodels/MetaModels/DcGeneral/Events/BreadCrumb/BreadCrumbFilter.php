@@ -18,31 +18,36 @@ namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
 use DcGeneral\EnvironmentInterface;
 
+/**
+ * Generate a breadcrumb for table tl_metamodel_filter.
+ *
+ * @package MetaModels\DcGeneral\Events\BreadCrumb
+ */
 class BreadCrumbFilter
 	extends BreadCrumbMetaModels
 {
 	/**
+	 * The id of the filter setting.
+	 *
 	 * @var int
 	 */
 	protected $filterId;
 
 	/**
+	 * Get the filter setting data base row object.
+	 *
 	 * @return object
 	 */
 	protected function getFilter()
 	{
-		return (object) \Database::getInstance()
+		return (object)\Database::getInstance()
 			->prepare('SELECT id, pid, name FROM tl_metamodel_filter WHERE id=?')
 			->executeUncached($this->filterId)
 			->row();
 	}
 
 	/**
-	 * @param \DcGeneral\EnvironmentInterface $environment
-	 *
-	 * @param array array                     $elements
-	 *
-	 * @return array
+	 * {@inheritDoc}
 	 */
 	public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
 	{

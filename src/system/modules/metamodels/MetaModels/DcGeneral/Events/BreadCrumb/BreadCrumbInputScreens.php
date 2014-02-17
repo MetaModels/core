@@ -77,12 +77,6 @@ class BreadCrumbInputScreens
 		$environment->getEventPropagator()->propagate(ContaoEvents::BACKEND_ADD_TO_URL, $urlEvent);
 
 		$elements[] = array(
-/*			'url' => sprintf(
-				'contao/main.php?do=metamodels&table=%s&id=%s',
-				'tl_metamodel_dca',
-				$this->metamodelId
-			),
-*/
 			'url'  => $urlEvent->getUrl(),
 			'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_dca'), $this->getMetaModel()->getName()),
 			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/html/dca.png'

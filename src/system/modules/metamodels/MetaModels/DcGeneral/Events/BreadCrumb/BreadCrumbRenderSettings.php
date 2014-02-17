@@ -18,17 +18,27 @@ namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
 use DcGeneral\EnvironmentInterface;
 use MetaModels\Render\Setting\Factory;
+use MetaModels\Render\Setting\ICollection;
 
+/**
+ * Generate a breadcrumb for table tl_metamodel_rendersettings.
+ *
+ * @package MetaModels\DcGeneral\Events\BreadCrumb
+ */
 class BreadCrumbRenderSettings
 	extends BreadCrumbMetaModels
 {
 	/**
+	 * Id of the render setting.
+	 *
 	 * @var int
 	 */
 	protected $renderSettingsId;
 
 	/**
-	 * @return \MetaModels\Render\Setting\ICollection
+	 * Retrieve the render setting.
+	 *
+	 * @return ICollection
 	 */
 	protected function getRenderSettings()
 	{
@@ -36,18 +46,13 @@ class BreadCrumbRenderSettings
 	}
 
 	/**
-	 * @param \DcGeneral\EnvironmentInterface $environment
-	 *
-	 * @param array array                     $elements
-	 *
-	 * @return array
+	 * {@inheritDoc}
 	 */
 	public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
 	{
 		if (!isset($this->metamodelId))
 		{
-			$input = $environment->getInputProvider();
-			$this->metamodelId = $input->getParameter('pid');
+			$this->metamodelId = $environment->getInputProvider()->getParameter('pid');
 		}
 
 		$elements = parent::getBreadcrumbElements($environment, $elements);
@@ -58,7 +63,10 @@ class BreadCrumbRenderSettings
 				'tl_metamodel_rendersettings',
 				$this->metamodelId
 			),
-			'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_rendersettings'), $this->getMetaModel()->getName()),
+			'text' => sprintf(
+				$this->getBreadcrumbLabel($environment, 'tl_metamodel_rendersettings'),
+				$this->getMetaModel()->getName()
+			),
 			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/html/render_settings.png'
 		);
 

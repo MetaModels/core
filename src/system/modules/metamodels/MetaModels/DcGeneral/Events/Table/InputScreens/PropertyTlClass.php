@@ -20,17 +20,31 @@ use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
 
+/**
+ * Handle events for tl_metamodel_dcasetting.tl_class.
+ *
+ * @package MetaModels\DcGeneral\Events\Table\InputScreens
+ */
 class PropertyTlClass
 {
+	/**
+	 * Build the wizard string.
+	 *
+	 * @param ManipulateWidgetEvent $event The event.
+	 *
+	 * @return void
+	 */
 	public static function getWizard(ManipulateWidgetEvent $event)
 	{
-		if(version_compare(VERSION, '3.0', '<'))
+		$url = 'system/modules/metamodels/popup.php?tbl=%s&fld=%s&inputName=ctrl_%s&id=%s&item=PALETTE_STYLE_PICKER';
+		if (version_compare(VERSION, '3.0', '<'))
 		{
-			$link = ' <a href="system/modules/metamodels/popup.php?tbl=%s&fld=%s&inputName=ctrl_%s&id=%s&item=PALETTE_STYLE_PICKER" data-lightbox="files 768 80%%">%s</a>';
+			$link = ' <a href="' . $url . '" data-lightbox="files 768 80%%">%s</a>';
 		}
 		else
 		{
-			$link = ' <a href="javascript:Backend.openModalIframe({url:\'system/modules/metamodels/popup.php?tbl=%s&fld=%s&inputName=ctrl_%s&id=%s&item=PALETTE_STYLE_PICKER\',width:790,title:\'Stylepicker\'});">%s</a>';
+			$link =
+				' <a href="javascript:Backend.openModalIframe({url:\'' . $url . '\',width:790,title:\'Stylepicker\'});">%s</a>';
 		}
 
 		/** @var GenerateHtmlEvent $imageEvent */
@@ -42,7 +56,6 @@ class PropertyTlClass
 				'style="vertical-align:top;"'
 			)
 		);
-
 
 		$event->getWidget()->wizard = sprintf(
 			$link,

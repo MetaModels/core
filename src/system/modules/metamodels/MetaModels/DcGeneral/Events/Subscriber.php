@@ -361,7 +361,7 @@ class Subscriber
 		self::registerListeners(
 			array(
 				ModelToLabelEvent::NAME
-					=> 'MetaModels\DcGeneral\Events\Table\InputScreens\ModelToLabel::modelToLabel',
+					=> 'MetaModels\DcGeneral\Events\Table\InputScreens\ModelToLabel::handleModelToLabel',
 				GetBreadcrumbEvent::NAME
 					=> self::createClosure(
 						'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbInputScreen',

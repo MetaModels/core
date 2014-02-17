@@ -21,6 +21,7 @@ use DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinition;
 use DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinitionInterface;
 use DcGeneral\Contao\Dca\ContaoDataProviderInformation;
 use DcGeneral\DataDefinition\Definition\BasicDefinitionInterface;
+use DcGeneral\DataDefinition\Definition\DataProviderDefinitionInterface;
 use DcGeneral\DataDefinition\Definition\DefaultBasicDefinition;
 use DcGeneral\DataDefinition\Definition\DefaultDataProviderDefinition;
 use DcGeneral\DataDefinition\Definition\DefaultPalettesDefinition;
@@ -41,6 +42,7 @@ use DcGeneral\DataDefinition\Palette\Legend;
 use DcGeneral\DataDefinition\Palette\LegendInterface;
 use DcGeneral\DataDefinition\Palette\Palette;
 use DcGeneral\DataDefinition\Palette\Property;
+use DcGeneral\DataDefinition\Palette\PropertyInterface;
 use DcGeneral\Exception\DcGeneralInvalidArgumentException;
 use DcGeneral\Exception\DcGeneralRuntimeException;
 use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
@@ -51,6 +53,7 @@ use MetaModels\DcGeneral\DataDefinition\Definition\MetaModelDefinition;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\Events\MetaModel\RenderItem;
 use MetaModels\Factory;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Build the container config from MetaModels information.
@@ -69,7 +72,7 @@ class Builder
 	/**
 	 * The event dispatcher currently in use.
 	 *
-	 * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+	 * @var EventDispatcherInterface
 	 */
 	protected $dispatcher;
 
@@ -146,16 +149,37 @@ class Builder
 		$translatorChain->add($this->translator);
 	}
 
+	/**
+	 * Return the input screen details.
+	 *
+	 * @param IMetaModelDataDefinition $container The data container.
+	 *
+	 * @return IInputScreen
+	 */
 	protected function getInputScreenDetails(IMetaModelDataDefinition $container)
 	{
 		return ViewCombinations::getInputScreenDetails($container->getName());
 	}
 
+	/**
+	 * Retrieve the MetaModel for the data container.
+	 *
+	 * @param IMetaModelDataDefinition $container The data container.
+	 *
+	 * @return \MetaModels\IMetaModel|null
+	 */
 	protected function getMetaModel(IMetaModelDataDefinition $container)
 	{
 		return Factory::byTableName($container->getName());
 	}
 
+	/**
+	 * Retrieve the data provider definition.
+	 *
+	 * @param IMetaModelDataDefinition $container The data container.
+	 *
+	 * @return DataProviderDefinitionInterface|DefaultDataProviderDefinition
+	 */
 	protected function getDataProviderDefinition(IMetaModelDataDefinition $container)
 	{
 		// Parse data provider.
@@ -163,12 +187,10 @@ class Builder
 		{
 			return $container->getDataProviderDefinition();
 		}
-		else
-		{
-			$config = new DefaultDataProviderDefinition();
-			$container->setDataProviderDefinition($config);
-			return $config;
-		}
+
+		$config = new DefaultDataProviderDefinition();
+		$container->setDataProviderDefinition($config);
+		return $config;
 	}
 
 	/**
@@ -199,21 +221,12 @@ class Builder
 
 		// Attach renderer to event.
 		RenderItem::register($event->getDispatcher());
-
-		return;
-
-		$this->parseCallbacks($container, $event->getDispatcher());
-		$this->parseDataProvider($container);
-		$this->parseRootEntries($container);
-		$this->parseParentChildConditions($container);
-		$this->parsePalettes($container);
-		$this->loadAdditionalDefinitions($container, $event);
 	}
 
 	/**
 	 * Parse the basic configuration and populate the definition.
 	 *
-	 * @param IMetaModelDataDefinition $container
+	 * @param IMetaModelDataDefinition $container The data container.
 	 *
 	 * @return void
 	 */
@@ -243,13 +256,12 @@ class Builder
 	/**
 	 * Parse the basic configuration and populate the definition.
 	 *
-	 * @param IMetaModelDataDefinition $container
+	 * @param IMetaModelDataDefinition $container The data container.
 	 *
 	 * @return void
 	 */
 	protected function parseBasicDefinition(IMetaModelDataDefinition $container)
 	{
-		// parse data provider
 		if ($container->hasBasicDefinition())
 		{
 			$config = $container->getBasicDefinition();
@@ -266,17 +278,26 @@ class Builder
 
 		switch ($inputScreen->getMode())
 		{
-			case 0: // Records are not sorted
-			case 1: // Records are sorted by a fixed field
-			case 2: // Records are sorted by a switchable field
-			case 3: // Records are sorted by the parent table
+			case 0:
+			case 1:
+			case 2:
+			case 3:
+				// Flat mode.
+				// 0 Records are not sorted.
+				// 1 Records are sorted by a fixed field.
+				// 2 Records are sorted by a switchable field.
+				// 3 Records are sorted by the parent table.
 				$config->setMode(BasicDefinitionInterface::MODE_FLAT);
 				break;
-			case 4: // Displays the child records of a parent record (see style sheets module)
+			case 4:
+				// Displays the child records of a parent record (see style sheets module).
 				$config->setMode(BasicDefinitionInterface::MODE_PARENTEDLIST);
 				break;
-			case 5: // Records are displayed as tree (see site structure)
-			case 6: // Displays the child records within a tree structure (see articles module)
+			case 5:
+			case 6:
+				// Hierarchical mode.
+				// 5 Records are displayed as tree (see site structure).
+				// 6 Displays the child records within a tree structure (see articles module).
 				$config->setMode(BasicDefinitionInterface::MODE_HIERARCHICAL);
 				break;
 			default:
@@ -284,10 +305,17 @@ class Builder
 
 		if (($value = $inputScreen->isClosed()) !== null)
 		{
-			$config->setClosed((bool) $value);
+			$config->setClosed((bool)$value);
 		}
 	}
 
+	/**
+	 * Create the data provider definition in the container if not already set.
+	 *
+	 * @param IMetaModelDataDefinition $container The data container.
+	 *
+	 * @return void
+	 */
 	protected function parseDataProvider(IMetaModelDataDefinition $container)
 	{
 		$config = $this->getDataProviderDefinition($container);
@@ -320,9 +348,9 @@ class Builder
 	/**
 	 * Parse and build the backend view definition for the old Contao2 backend view.
 	 *
-	 * @param IMetaModelDataDefinition $container
+	 * @param IMetaModelDataDefinition $container The data container.
 	 *
-	 * @throws \DcGeneral\Exception\DcGeneralInvalidArgumentException
+	 * @throws DcGeneralInvalidArgumentException When the contained view definition is of invalid type.
 	 *
 	 * @return void
 	 */
@@ -340,12 +368,12 @@ class Builder
 
 		if (!$view instanceof Contao2BackendViewDefinitionInterface)
 		{
-			throw new DcGeneralInvalidArgumentException('Configured BackendViewDefinition does not implement Contao2BackendViewDefinitionInterface.');
+			throw new DcGeneralInvalidArgumentException(
+				'Configured BackendViewDefinition does not implement Contao2BackendViewDefinitionInterface.'
+			);
 		}
 
 		$this->parseListing($container, $view);
-		// $this->parsePanel($container, $view);
-		//$this->parseGlobalOperations($container, $view);
 		$this->parseModelOperations($view);
 	}
 
@@ -353,9 +381,9 @@ class Builder
 	/**
 	 * Parse the listing configuration.
 	 *
-	 * @param IMetaModelDataDefinition              $container
+	 * @param IMetaModelDataDefinition              $container The data container.
 	 *
-	 * @param Contao2BackendViewDefinitionInterface $view
+	 * @param Contao2BackendViewDefinitionInterface $view      The view definition.
 	 *
 	 * @return void
 	 */
@@ -397,66 +425,25 @@ class Builder
 	/**
 	 * Parse the sorting part of listing configuration.
 	 *
-	 * @param IMetaModelDataDefinition $container
+	 * @param IMetaModelDataDefinition $container The data container.
 	 *
-	 * @param ListingConfigInterface   $listing
+	 * @param ListingConfigInterface   $listing   The listing configuration.
 	 *
 	 * @return void
-	 *
-	 * @throws \DcGeneral\Exception\DcGeneralRuntimeException
 	 */
 	protected function parseListSorting(IMetaModelDataDefinition $container, ListingConfigInterface $listing)
 	{
 		$inputScreen = ViewCombinations::getInputScreenDetails($container->getName());
 
 		$listing->setRootIcon($this->getBackendIcon($inputScreen->getIcon()));
-
-		return;
-
-		$sortingDca = isset($listDca['sorting']) ? $listDca['sorting'] : array();
-
-		if (isset($sortingDca['flag'])) {
-			$this->evalFlag($listing, $sortingDca['flag']);
-		}
-
-		if (isset($sortingDca['fields'])) {
-			$fields = array();
-
-			foreach ($sortingDca['fields'] as $field) {
-				if (preg_match('~^(\w+)(?: (ASC|DESC))?$~', $field, $matches)) {
-					$fields[$matches[1]] = isset($matches[2]) ? $matches[2] : 'ASC';
-				}
-				else {
-					throw new DcGeneralRuntimeException('Custom SQL in sorting fields are currently unsupported');
-				}
-			}
-
-			$listing->setDefaultSortingFields($fields);
-		}
-
-		if (isset($sortingDca['headerFields'])) {
-			$listing->setHeaderPropertyNames((array) $sortingDca['headerFields']);
-		}
-
-		if (isset($sortingDca['icon'])) {
-			$listing->setRootIcon($sortingDca['icon']);
-		}
-
-		if (isset($sortingDca['disableGrouping']) && $sortingDca['disableGrouping']) {
-			$listing->setGroupingMode(ListingConfigInterface::GROUP_NONE);
-		}
-
-		if (isset($sortingDca['child_record_class'])) {
-			$listing->setItemCssClass($sortingDca['child_record_class']);
-		}
 	}
 
 	/**
 	 * Parse the sorting part of listing configuration.
 	 *
-	 * @param IMetaModelDataDefinition $container
+	 * @param IMetaModelDataDefinition $container The data container.
 	 *
-	 * @param ListingConfigInterface   $listing
+	 * @param ListingConfigInterface   $listing   The listing config.
 	 *
 	 * @return void
 	 */
@@ -487,42 +474,27 @@ class Builder
 	}
 
 	/**
-	 * Parse the defined container scoped operations and populate the definition.
+	 * Build a command into the the command collection.
 	 *
-	 * @param IMetaModelDataDefinition              $container
+	 * @param CommandCollectionInterface $collection      The command collection.
 	 *
-	 * @param Contao2BackendViewDefinitionInterface $view
+	 * @param string                     $operationName   The operation name.
 	 *
-	 * @return void
-	 */
-	protected function parseGlobalOperations(IMetaModelDataDefinition $container, Contao2BackendViewDefinitionInterface $view)
-	{
-		$collection = $view->getGlobalCommands();
-
-		return;
-
-
-
-		foreach ($operationsDca as $operationName => $operationDca) {
-			$command = $this->createCommand($operationName, $operationsDca[$operationName]);
-			$collection->addCommand($command);
-		}
-	}
-
-	/**
-	 * @param CommandCollectionInterface $collection
+	 * @param array                      $queryParameters The query parameters for the operation.
 	 *
-	 * @param string                     $operationName
+	 * @param string                     $icon            The icon to use in the backend.
 	 *
-	 * @param array                      $queryParameters
-	 *
-	 * @param string                     $icon
-	 *
-	 * @param array                      $extraValues
+	 * @param array                      $extraValues     The extra values for the command.
 	 *
 	 * @return Builder
 	 */
-	protected function createCommand(CommandCollectionInterface $collection, $operationName, $queryParameters, $icon, $extraValues)
+	protected function createCommand(
+		CommandCollectionInterface $collection,
+		$operationName,
+		$queryParameters,
+		$icon,
+		$extraValues
+	)
 	{
 		if ($collection->hasCommandNamed($operationName))
 		{
@@ -571,7 +543,7 @@ class Builder
 	/**
 	 * Parse the defined model scoped operations and populate the definition.
 	 *
-	 * @param Contao2BackendViewDefinitionInterface $view
+	 * @param Contao2BackendViewDefinitionInterface $view The backend view information.
 	 *
 	 * @return void
 	 */
@@ -628,7 +600,12 @@ class Builder
 		);
 	}
 
-	protected function buildPropertyFromDca(IMetaModelDataDefinition $container, PropertiesDefinitionInterface $definition, $propName, IInputScreen $inputScreen)
+	protected function buildPropertyFromDca(
+		IMetaModelDataDefinition $container,
+		PropertiesDefinitionInterface $definition,
+		$propName,
+		IInputScreen $inputScreen
+	)
 	{
 		$property = $inputScreen->getProperty($propName);
 		$propInfo = $property['info'];
@@ -647,7 +624,8 @@ class Builder
 		{
 			$lang = $propInfo['label'];
 
-			if (is_array($lang)) {
+			if (is_array($lang))
+			{
 				$label       = reset($lang);
 				$description = next($lang);
 
@@ -690,11 +668,6 @@ class Builder
 			$property->setFilterable($propInfo['filter']);
 		}
 
-		if (isset($propInfo['flag']))
-		{
-			//$this->evalFlag($property, $propInfo['flag']);
-		}
-
 		if (!$property->getGroupingLength() && isset($propInfo['length']))
 		{
 			$property->setGroupingLength($propInfo['length']);
@@ -724,13 +697,12 @@ class Builder
 	/**
 	 * Parse the defined properties and populate the definition.
 	 *
-	 * @param IMetaModelDataDefinition $container
+	 * @param IMetaModelDataDefinition $container The data container.
 	 *
 	 * @return void
 	 */
 	protected function parseProperties(IMetaModelDataDefinition $container)
 	{
-		// parse data provider
 		if ($container->hasPropertiesDefinition())
 		{
 			$definition = $container->getPropertiesDefinition();
@@ -750,6 +722,17 @@ class Builder
 		}
 	}
 
+	/**
+	 * Add a PropertyTrueCondition to the condition of the sub palette parent property if parent property is defined.
+	 *
+	 * @param string          $parentPropertyName The name of the parent property.
+	 *
+	 * @param array           $propInfo           The property definition from the dca.
+	 *
+	 * @param LegendInterface $paletteLegend      The legend where the property is contained.
+	 *
+	 * @return void
+	 */
 	protected function addSubPalette($parentPropertyName, $propInfo, LegendInterface $paletteLegend)
 	{
 		if ($propInfo['subpalette'])
@@ -764,7 +747,11 @@ class Builder
 	}
 
 	/**
-	 * @param IMetaModelDataDefinition $container
+	 * Parse the palettes from the input screen into the data container.
+	 *
+	 * @param IMetaModelDataDefinition $container The data container.
+	 *
+	 * @return void
 	 */
 	protected function parsePalettes(IMetaModelDataDefinition $container)
 	{
@@ -814,7 +801,6 @@ class Builder
 				}
 
 				$extra = $propInfo['info'];
-				// TODO: determine visible state.
 				$property->setVisibleCondition(new BooleanCondition(
 					!((isset($extra['doNotShow']) && $extra['doNotShow'])
 					|| (isset($extra['hideInput']) && $extra['hideInput']))

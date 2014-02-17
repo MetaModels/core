@@ -20,15 +20,24 @@ use DcGeneral\EnvironmentInterface;
 use MetaModels\Factory as MetaModelFactory;
 use MetaModels\IMetaModel;
 
+/**
+ * Generate a breadcrumb for table tl_metamodel.
+ *
+ * @package MetaModels\DcGeneral\Events\BreadCrumb
+ */
 class BreadCrumbMetaModels
 	extends BreadCrumbBase
 {
 	/**
+	 * The id of the MetaModel.
+	 *
 	 * @var int
 	 */
 	protected $metamodelId;
 
 	/**
+	 * Retrieve the MetaModel instance.
+	 *
 	 * @return IMetaModel
 	 */
 	protected function getMetaModel()
@@ -37,11 +46,7 @@ class BreadCrumbMetaModels
 	}
 
 	/**
-	 * @param \DcGeneral\EnvironmentInterface $environment
-	 *
-	 * @param array array                     $elements
-	 *
-	 * @return array
+	 * {@inheritDoc}
 	 */
 	public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
 	{

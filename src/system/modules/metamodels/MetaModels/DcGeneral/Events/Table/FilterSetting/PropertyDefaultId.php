@@ -19,38 +19,41 @@ namespace MetaModels\DcGeneral\Events\Table\FilterSetting;
 use DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use MetaModels\Filter\Setting\Factory as FilterFactory;
 
+/**
+ * Handle events for property tl_metamodel_filtersetting.defaultid.
+ */
 class PropertyDefaultId
 {
 	/**
-	 * provide options for default selection
+	 * Provide options for default selection.
 	 *
-	 * @param \DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent $event
+	 * @param GetPropertyOptionsEvent $event The event.
 	 *
-	 * @throws \Exception
+	 * @return void
 	 */
 	public static function getOptions(GetPropertyOptionsEvent $event)
 	{
-		$model  = $event->getModel();
+		$model = $event->getModel();
 
 		$event->getEnvironment()->getInputProvider();
 
 		$filterSetting = FilterFactory::byId($model->getProperty('fid'));
-		$metaModel  = $filterSetting->getMetaModel();
+		$metaModel     = $filterSetting->getMetaModel();
 
-		if(!$metaModel)
+		if (!$metaModel)
 		{
 			return;
 		}
 
 		$attribute = $metaModel->getAttributeById($model->getProperty('attr_id'));
-		if(!$attribute)
+		if (!$attribute)
 		{
 			return;
 		}
 
 		$onlyUsed = $model->getProperty('onlyused') ? true : false;
 
-		$count = array();
+		$count   = array();
 		$options = $attribute->getFilterOptions(null, $onlyUsed, $count);
 
 		// Remove empty values.
@@ -59,7 +62,7 @@ class PropertyDefaultId
 			// Remove html/php tags.
 			$mixValue = trim(strip_tags($mixValue));
 
-			if(($mixValue === '') || ($mixValue === null) || ($onlyUsed && ($count[$mixKey] === 0)))
+			if (($mixValue === '') || ($mixValue === null) || ($onlyUsed && ($count[$mixKey] === 0)))
 			{
 				unset($options[$mixKey]);
 			}

@@ -32,7 +32,7 @@ class Model implements ModelInterface
 {
 
 	/**
-	 * the MetaModel item accessible via this instance.
+	 * The MetaModel item accessible via this instance.
 	 *
 	 * @var IItem
 	 */
@@ -76,9 +76,7 @@ class Model implements ModelInterface
 	/**
 	 * Create a new instance of this class.
 	 *
-	 * @param IItem $objItem the item that shall be encapsulated.
-	 *
-	 * @return \MetaModels\DcGeneral\Data\Model
+	 * @param IItem $objItem The item that shall be encapsulated.
 	 */
 	public function __construct($objItem)
 	{
@@ -86,10 +84,7 @@ class Model implements ModelInterface
 	}
 
 	/**
-	 * Clone this instance and the encapsulated item.
-	 * The result is a fresh copy with no id.
-	 *
-	 * @return \DcGeneral\Data\ModelInterface
+	 * {@inheritDoc}
 	 */
 	public function __clone()
 	{
@@ -97,31 +92,22 @@ class Model implements ModelInterface
 	}
 
 	/**
-	 * Returns the id of the item.
-	 *
-	 * @return int the id.
+	 * {@inheritDoc}
 	 */
-	public function getID()
+	public function getId()
 	{
 		return $this->getItem()->get('id');
 	}
 
 	/**
-	 * Retrieve a property from the model (in MetaModel context: an attribute value).
-	 *
-	 * @see InterfaceGeneralModel::getProperty()
-	 *
-	 * @param  string     $strPropertyName the property name.
-	 *
-	 * @return null|mixed the property value or null if not contained.
+	 * {@inheritDoc}
 	 */
 	public function getProperty($strPropertyName)
 	{
 		if ($this->getItem())
 		{
 			$varValue = $this->getItem()->get($strPropertyName);
-			// test if it is an attribute, if so, let it transform the data
-			// for the widget.
+			// Test if it is an attribute, if so, let it transform the data for the widget.
 			$objAttribute = $this->getItem()->getAttribute($strPropertyName);
 			if ($objAttribute)
 			{
@@ -129,16 +115,11 @@ class Model implements ModelInterface
 			}
 			return $varValue;
 		}
-		else
-		{
-			return null;
-		}
+		return null;
 	}
 
 	/**
-	 * Fetches all properties as an array.
-	 *
-	 * @return mixed[string]
+	 * {@inheritDoc}
 	 */
 	public function getPropertiesAsArray()
 	{
@@ -152,11 +133,7 @@ class Model implements ModelInterface
 	}
 
 	/**
-	 * Fetch meta information from model.
-	 *
-	 * @param string $strMetaName the meta information to retrieve.
-	 *
-	 * @return mixed|null the set meta information or null if undefined.
+	 * {@inheritDoc}
 	 */
 	public function getMeta($strMetaName)
 	{
@@ -164,38 +141,25 @@ class Model implements ModelInterface
 		{
 			return $this->arrMetaInformation[$strMetaName];
 		}
-		else
-		{
-			return null;
-		}
+		return null;
 	}
 
 	/**
-	 * Sets the id
-	 *
-	 * @param mixed $mixID the id that shall be set
-	 *
-	 * @return void
+	 * {@inheritDoc}
 	 */
-	public function setID($mixID)
+	public function setId($mixID)
 	{
 		$this->getItem()->set('id', $mixID);
 	}
 
 	/**
-	 * Set a property value.
-	 * @see InterfaceGeneralModel::setProperty()
-	 *
-	 * @param String $strPropertyName name of the property to be set.
-	 *
-	 * @param mixed  $varValue        value to be set.
+	 * {@inheritDoc}
 	 */
 	public function setProperty($strPropertyName, $varValue)
 	{
 		if ($this->getItem())
 		{
-			// test if it is an attribute, if so, let it transform the data
-			// for the widget.
+			// Test if it is an attribute, if so, let it transform the data for the widget.
 			$objAttribute = $this->getItem()->getAttribute($strPropertyName);
 			if ($objAttribute)
 			{
@@ -206,11 +170,7 @@ class Model implements ModelInterface
 	}
 
 	/**
-	 * Set a bunch of properties.
-	 *
-	 * @param mixed[] $arrProperties the properties to be set.
-	 *
-	 * @return void
+	 * {@inheritDoc}
 	 */
 	public function setPropertiesAsArray($arrProperties)
 	{
@@ -221,13 +181,7 @@ class Model implements ModelInterface
 	}
 
 	/**
-	 * Set a meta information in this model.
-	 *
-	 * @param string $strMetaName the meta information name.
-	 *
-	 * @param mixed $varValue the meta information to store.
-	 *
-	 * @return void
+	 * {@inheritDoc}
 	 */
 	public function setMeta($strMetaName, $varValue)
 	{
@@ -235,11 +189,7 @@ class Model implements ModelInterface
 	}
 
 	/**
-	 * determine if there are properties contained within this instance.
-	 *
-	 * @see InterfaceGeneralModel::hasProperties()
-	 *
-	 * @return boolean
+	 * {@inheritDoc}
 	 */
 	public function hasProperties()
 	{
@@ -247,9 +197,7 @@ class Model implements ModelInterface
 	}
 
 	/**
-	 * Get a iterator for this model
-	 *
-	 * @return \ArrayIterator
+	 * {@inheritDoc}
 	 */
 	public function getIterator()
 	{
@@ -257,9 +205,7 @@ class Model implements ModelInterface
 	}
 
 	/**
-	 * Return the data provider name.
-	 *
-	 * @return string the name of the corresponding data provider.
+	 * {@inheritDoc}
 	 */
 	public function getProviderName()
 	{
@@ -267,7 +213,9 @@ class Model implements ModelInterface
 	}
 
 	/**
-	 * Read values from a value bag.
+	 * {@inheritDoc}
+	 *
+	 * @throws DcGeneralInvalidArgumentException When a property in the value bag has been marked as invalid.
 	 */
 	public function readFromPropertyValueBag(PropertyValueBagInterface $valueBag)
 	{
@@ -288,7 +236,7 @@ class Model implements ModelInterface
 	}
 
 	/**
-	 * Read values from a value bag.
+	 * {@inheritDoc}
 	 */
 	public function writeToPropertyValueBag(PropertyValueBagInterface $valueBag)
 	{

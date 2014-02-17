@@ -18,22 +18,22 @@ namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
 use DcGeneral\EnvironmentInterface;
 
+/**
+ * Generate a breadcrumb for table tl_metamodel_filtersetting.
+ *
+ * @package MetaModels\DcGeneral\Events\BreadCrumb
+ */
 class BreadCrumbFilterSetting
 	extends BreadCrumbFilter
 {
 	/**
-	 * @param \DcGeneral\EnvironmentInterface $environment
-	 *
-	 * @param array array                     $elements
-	 *
-	 * @return array
+	 * {@inheritDoc}
 	 */
 	public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
 	{
 		if (!isset($this->filterId))
 		{
-			$input = $environment->getInputProvider();
-			$this->filterId = $input->getParameter('pid');
+			$this->filterId = $environment->getInputProvider()->getParameter('pid');
 		}
 
 		if (!isset($this->metamodelId))

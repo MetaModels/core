@@ -1,7 +1,7 @@
 <?php
 /**
  * PHP version 5
- * @package    generalDriver
+ * @package    MetaModels
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Tristan Lins <tristan.lins@bit3.de>
@@ -35,13 +35,20 @@ class InputScreenAttributeIs implements PropertyConditionInterface
 	 */
 	protected static $attributeTypes = array();
 
-	function __construct($attributeType)
+	/**
+	 * Create a new instance.
+	 *
+	 * @param string $attributeType The attribute type name.
+	 */
+	public function __construct($attributeType)
 	{
 		$this->attributeType = $attributeType;
 	}
 
 	/**
-	 * @param mixed $attributeType
+	 * Set the attribute type name.
+	 *
+	 * @param string $attributeType The attribute type name.
 	 *
 	 * @return InputScreenAttributeIs
 	 */
@@ -53,6 +60,8 @@ class InputScreenAttributeIs implements PropertyConditionInterface
 	}
 
 	/**
+	 * Retrieve the attribute type name.
+	 *
 	 * @return mixed
 	 */
 	public function getAttributeType()
@@ -60,6 +69,13 @@ class InputScreenAttributeIs implements PropertyConditionInterface
 		return $this->attributeType;
 	}
 
+	/**
+	 * Retrieve the type name from an attribute.
+	 *
+	 * @param int $value The id of an attribute.
+	 *
+	 * @return string
+	 */
 	public function getTypeOfAttribute($value)
 	{
 		if (!isset(self::$attributeTypes[$value]))
@@ -78,13 +94,16 @@ class InputScreenAttributeIs implements PropertyConditionInterface
 	 */
 	public function match(ModelInterface $model = null, PropertyValueBag $input = null)
 	{
-		if ($input && $input->hasPropertyValue('attr_id')) {
+		if ($input && $input->hasPropertyValue('attr_id'))
+		{
 			$value = $input->getPropertyValue('attr_id');
 		}
-		else if ($model) {
+		elseif ($model)
+		{
 			$value = $model->getProperty('attr_id');
 		}
-		else {
+		else
+		{
 			return false;
 		}
 

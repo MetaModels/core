@@ -21,13 +21,28 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use MetaModels\Factory;
 
+/**
+ * Render an attribute in an input screen.
+ *
+ * @package MetaModels\DcGeneral\Events\Table\InputScreens
+ */
 class ModelToLabel
 {
+	/**
+	 * Draw the attribute.
+	 *
+	 * @param ModelToLabelEvent $event The event.
+	 *
+	 * @return void
+	 */
 	protected static function drawAttribute(ModelToLabelEvent $event)
 	{
 		$model = $event->getModel();
 
-		$objSetting = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel_dca WHERE id=?')->execute($model->getProperty('pid'));
+		$objSetting = \Database::getInstance()
+			->prepare('SELECT * FROM tl_metamodel_dca WHERE id=?')
+			->execute($model->getProperty('pid'));
+
 		$objMetaModel = Factory::byId($objSetting->pid);
 
 		if (!$objMetaModel)
@@ -64,18 +79,25 @@ class ModelToLabel
 			));
 	}
 
+	/**
+	 * Draw a legend.
+	 *
+	 * @param ModelToLabelEvent $event The event.
+	 *
+	 * @return void
+	 */
 	protected static function drawLegend(ModelToLabelEvent $event)
 	{
 		$model = $event->getModel();
 
 		$arrLegend = deserialize($model->getProperty('legendtitle'));
-		if(is_array($arrLegend))
+		if (is_array($arrLegend))
 		{
 			$strLegend = $arrLegend[$GLOBALS['TL_LANGUAGE']];
 
-			if(!$strLegend)
+			if (!$strLegend)
 			{
-				// TODO: Get the fallback language here
+				// TODO: Get the fallback language here.
 				$strLegend = 'legend';
 			}
 		} else {
@@ -90,7 +112,14 @@ class ModelToLabel
 			));
 	}
 
-	public static function modelToLabel(ModelToLabelEvent $event)
+	/**
+	 * Render an attribute or legend.
+	 *
+	 * @param ModelToLabelEvent $event The event.
+	 *
+	 * @return void
+	 */
+	public static function handleModelToLabel(ModelToLabelEvent $event)
 	{
 		$model = $event->getModel();
 

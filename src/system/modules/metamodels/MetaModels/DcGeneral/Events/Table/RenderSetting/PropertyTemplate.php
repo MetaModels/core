@@ -18,8 +18,7 @@ namespace MetaModels\DcGeneral\Events\Table\RenderSetting;
 
 use DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use MetaModels\Dca\Helper;
-use MetaModels\Factory as ModelFactory;
-use MetaModels\Attribute\Factory as AttributeFactory;
+use MetaModels\Factory;
 
 /**
  * Event handler to populate the options array of the attribute type select widget.
@@ -37,11 +36,11 @@ class PropertyTemplate
 	 */
 	public static function getOptions(GetPropertyOptionsEvent $event)
 	{
-		$model = $event->getModel();
+		$model          = $event->getModel();
 		$parentProvider = $event->getEnvironment()->getDataProvider('tl_metamodel_rendersettings');
 		$renderSettings = $parentProvider->fetch($parentProvider->getEmptyConfig()->setId($model->getProperty('pid')));
-		$objMetaModel  = ModelFactory::byId($renderSettings->getProperty('pid'));
-		$objAttribute  = $objMetaModel->getAttributeById($model->getProperty('attr_id'));
+		$objMetaModel   = Factory::byId($renderSettings->getProperty('pid'));
+		$objAttribute   = $objMetaModel->getAttributeById($model->getProperty('attr_id'));
 
 		if (!$objAttribute)
 		{

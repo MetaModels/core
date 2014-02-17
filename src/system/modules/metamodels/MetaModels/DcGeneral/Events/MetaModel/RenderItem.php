@@ -1,18 +1,18 @@
 <?php
 /**
-* The MetaModels extension allows the creation of multiple collections of custom items,
-* each with its own unique set of selectable attributes, with attribute extendability.
-* The Front-End modules allow you to build powerful listing and filtering of the
-* data in each collection.
-*
-* PHP version 5
-* @package    MetaModels
-* @subpackage Core
-* @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
-* @copyright  The MetaModels team.
-* @license    LGPL.
-* @filesource
-*/
+ * The MetaModels extension allows the creation of multiple collections of custom items,
+ * each with its own unique set of selectable attributes, with attribute extendability.
+ * The Front-End modules allow you to build powerful listing and filtering of the
+ * data in each collection.
+ *
+ * PHP version 5
+ * @package    MetaModels
+ * @subpackage Core
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  The MetaModels team.
+ * @license    LGPL.
+ * @filesource
+ */
 
 namespace MetaModels\DcGeneral\Events\MetaModel;
 
@@ -24,12 +24,21 @@ use MetaModels\Items;
 use MetaModels\Render\Setting\Factory;
 use MetaModels\Render\Setting\ICollection;
 use MetaModels\Render\Template;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * Render a MetaModel item in the backend using the render setting attached to the active input screen.
+ */
 class RenderItem
 {
 	/**
-	 * @param \MetaModels\IItem $nativeItem
-	 * @param ICollection       $renderSetting
+	 * Remove invariant attributes from the render setting.
+	 *
+	 * This is done by cloning the input collection of render settings and removing any invariant attribute.
+	 *
+	 * @param IItem       $nativeItem    The native item.
+	 *
+	 * @param ICollection $renderSetting The render setting to be used.
 	 *
 	 * @return ICollection
 	 */
@@ -45,7 +54,7 @@ class RenderItem
 			// Loop over all attributes and remove those from rendering that are not desired.
 			foreach (array_keys($model->getInVariantAttributes()) as $strAttrName)
 			{
-				$renderSetting->setSetting($strAttrName, NULL);
+				$renderSetting->setSetting($strAttrName, null);
 			}
 		}
 
@@ -55,7 +64,9 @@ class RenderItem
 	/**
 	 * Render the current item using the specified render setting.
 	 *
-	 * @param ModelToLabelEvent $event
+	 * @param ModelToLabelEvent $event The event.
+	 *
+	 * @return void
 	 */
 	public static function render(ModelToLabelEvent $event)
 	{
@@ -87,20 +98,20 @@ class RenderItem
 		$template      = new Template($renderSetting->get('template'));
 		$renderSetting = self::removeInvariantAttributes($nativeItem, $renderSetting);
 
-		/** @noinspection PhpUndefinedFieldInspection */
-		$template->settings  = $renderSetting;
-		/** @noinspection PhpUndefinedFieldInspection */
-		$template->items     = new Items(array($nativeItem));
-		/** @noinspection PhpUndefinedFieldInspection */
-		$template->view      = $renderSetting;
-		/** @noinspection PhpUndefinedFieldInspection */
-		$template->data      = array($nativeItem->parseValue('html5', $renderSetting));
+		$template->settings = $renderSetting;
+		$template->items    = new Items(array($nativeItem));
+		$template->view     = $renderSetting;
+		$template->data     = array($nativeItem->parseValue('html5', $renderSetting));
 
 		$event->setLabel($template->parse('html5', true));
 	}
 
 	/**
-	 * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+	 * Register to the event dispatcher.
+	 *
+	 * @param EventDispatcherInterface $dispatcher The event dispatcher.
+	 *
+	 * @return void
 	 */
 	public static function register($dispatcher)
 	{

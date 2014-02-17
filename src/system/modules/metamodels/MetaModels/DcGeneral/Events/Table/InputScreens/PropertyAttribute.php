@@ -18,9 +18,21 @@ namespace MetaModels\DcGeneral\Events\Table\InputScreens;
 
 use DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 
+/**
+ * Handle events for tl_metamodel_dcasetting.attr_id.
+ *
+ * @package MetaModels\DcGeneral\Events\Table\InputScreens
+ */
 class PropertyAttribute
 	extends InputScreenBase
 {
+	/**
+	 * Retrieve the options for the attributes.
+	 *
+	 * @param GetPropertyOptionsEvent $event The event.
+	 *
+	 * @return void
+	 */
 	public static function getOptions(GetPropertyOptionsEvent $event)
 	{
 		$model     = $event->getModel();

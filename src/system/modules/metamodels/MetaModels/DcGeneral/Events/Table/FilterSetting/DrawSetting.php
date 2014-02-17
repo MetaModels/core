@@ -22,14 +22,20 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use DcGeneral\Data\ModelInterface;
 use DcGeneral\EnvironmentInterface;
+use MetaModels\Filter\Setting\Factory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
+/**
+ * Draw a filter setting in the backend.
+ */
 class DrawSetting
 {
 	/**
-	 * @param ModelInterface       $model
+	 * Retrieve the comment for the label.
 	 *
-	 * @param EnvironmentInterface $environment
+	 * @param ModelInterface       $model       The filter setting to render.
+	 *
+	 * @param EnvironmentInterface $environment The environment in use.
 	 *
 	 * @return string
 	 */
@@ -45,6 +51,15 @@ class DrawSetting
 		return '';
 	}
 
+	/**
+	 * Retrieve the image for the label.
+	 *
+	 * @param ModelInterface           $model      The filter setting to render.
+	 *
+	 * @param EventDispatcherInterface $dispatcher The event dispatcher.
+	 *
+	 * @return string
+	 */
 	public static function getLabelImage(ModelInterface $model, EventDispatcherInterface $dispatcher)
 	{
 		$type  = $model->getProperty('type');
@@ -83,6 +98,15 @@ class DrawSetting
 		);
 	}
 
+	/**
+	 * Retrieve the label text for a filter setting.
+	 *
+	 * @param EnvironmentInterface $environment The environment in use.
+	 *
+	 * @param ModelInterface       $model       The filter setting to render.
+	 *
+	 * @return mixed|string
+	 */
 	public static function getLabelText(EnvironmentInterface $environment, ModelInterface $model)
 	{
 		$type  = $model->getProperty('type');
@@ -94,23 +118,41 @@ class DrawSetting
 		return $label;
 	}
 
+	/**
+	 * Retrieve the label pattern.
+	 *
+	 * @param EnvironmentInterface $environment The environment in use.
+	 *
+	 * @param ModelInterface       $model       The filter setting to render.
+	 *
+	 * @return string
+	 */
 	public static function getLabelPattern(EnvironmentInterface $environment, ModelInterface $model)
 	{
-		$type = $model->getProperty('type');
+		$type       = $model->getProperty('type');
+		$translator = $environment->getTranslator();
+		$combined   = 'typedesc.' . $type;
 
-		if (($resultPattern = $environment->getTranslator()->translate('typedesc.' . $type, 'tl_metamodel_filtersetting')) == 'typedesc.' . $type)
+		if (($resultPattern = $translator->translate($combined, 'tl_metamodel_filtersetting')) == $combined)
 		{
-			$resultPattern = $environment->getTranslator()->translate('typedesc._default_', 'tl_metamodel_filtersetting');
+			$resultPattern = $translator->translate('typedesc._default_', 'tl_metamodel_filtersetting');
 		}
 
 		return $resultPattern;
 	}
 
+	/**
+	 * Render a model that has an attribute and url param attached.
+	 *
+	 * @param ModelToLabelEvent $event The Event.
+	 *
+	 * @return void
+	 */
 	public static function modelToLabelWithAttributeAndUrlParam(ModelToLabelEvent $event)
 	{
 		$environment = $event->getEnvironment();
 		$model       = $event->getModel();
-		$metamodel   = \MetaModels\Filter\Setting\Factory::byId($model->getProperty('fid'))->getMetaModel();
+		$metamodel   = Factory::byId($model->getProperty('fid'))->getMetaModel();
 		$attribute   = $metamodel->getAttributeById($model->getProperty('attr_id'));
 
 		if ($attribute)
@@ -132,6 +174,13 @@ class DrawSetting
 			->stopPropagation();
 	}
 
+	/**
+	 * Fallback rendering method that renders a plain setting.
+	 *
+	 * @param ModelToLabelEvent $event The event.
+	 *
+	 * @return void
+	 */
 	public static function modelToLabelDefault(ModelToLabelEvent $event)
 	{
 		$environment = $event->getEnvironment();
@@ -147,11 +196,18 @@ class DrawSetting
 			));
 	}
 
+	/**
+	 * Render a filter setting into html.
+	 *
+	 * @param ModelToLabelEvent $event The event.
+	 *
+	 * @return void
+	 */
 	public static function modelToLabel(ModelToLabelEvent $event)
 	{
 		$environment = $event->getEnvironment();
-		$model = $event->getModel();
-		$type  = $model->getProperty('type');
+		$model       = $event->getModel();
+		$type        = $model->getProperty('type');
 
 		// Delegate the event further to the type handlers.
 		if (!$environment->getEventPropagator()->propagateExact(

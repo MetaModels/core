@@ -21,11 +21,20 @@ use DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetE
 use DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use MetaModels\Dca\Helper;
 
+/**
+ * Handle events for property tl_metamodel_dcasetting.legendtitle.
+ *
+ * @package MetaModels\DcGeneral\Events\Table\InputScreens
+ */
 class PropertyLegendTitle
 	extends InputScreenBase
 {
 	/**
-	 * @param \DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent $event
+	 * Decode the title value.
+	 *
+	 * @param DecodePropertyValueForWidgetEvent $event The event.
+	 *
+	 * @return void
 	 */
 	public static function decodeValue(DecodePropertyValueForWidgetEvent $event)
 	{
@@ -37,7 +46,11 @@ class PropertyLegendTitle
 	}
 
 	/**
-	 * @param \DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent $event
+	 * Encode the title value.
+	 *
+	 * @param EncodePropertyValueFromWidgetEvent $event The event.
+	 *
+	 * @return void
 	 */
 	public static function encodeValue(EncodePropertyValueFromWidgetEvent $event)
 	{
@@ -48,11 +61,18 @@ class PropertyLegendTitle
 		$event->setValue($values);
 	}
 
+	/**
+	 * Generate the widget.
+	 *
+	 * @param BuildWidgetEvent $event The event.
+	 *
+	 * @return void
+	 */
 	public static function buildWidget(BuildWidgetEvent $event)
 	{
 		$metaModel = self::getMetaModelFromModel($event->getModel());
 
-		\MetaModels\Dca\Helper::prepareLanguageAwareWidget(
+		Helper::prepareLanguageAwareWidget(
 			$event->getEnvironment(),
 			$event->getProperty(),
 			$metaModel,

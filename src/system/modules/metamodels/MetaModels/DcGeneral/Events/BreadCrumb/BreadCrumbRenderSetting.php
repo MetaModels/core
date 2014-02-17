@@ -18,22 +18,22 @@ namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
 use DcGeneral\EnvironmentInterface;
 
+/**
+ * Generate a breadcrumb for table tl_metamodel_rendersettings.
+ *
+ * @package MetaModels\DcGeneral\Events\BreadCrumb
+ */
 class BreadCrumbRenderSetting
 	extends BreadCrumbRenderSettings
 {
 	/**
-	 * @param \DcGeneral\EnvironmentInterface $environment
-	 *
-	 * @param array array                     $elements
-	 *
-	 * @return array
+	 * {@inheritDoc}
 	 */
 	public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
 	{
 		if (!isset($this->renderSettingsId))
 		{
-			$input = $environment->getInputProvider();
-			$this->renderSettingsId = $input->getParameter('pid');
+			$this->renderSettingsId = $environment->getInputProvider()->getParameter('pid');
 		}
 
 		if (!isset($this->metamodelId))
@@ -55,7 +55,10 @@ class BreadCrumbRenderSetting
 				'tl_metamodel_rendersetting',
 				$this->renderSettingsId
 			),
-			'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_rendersetting'), $renderSettings->get('name')),
+			'text' => sprintf(
+				$this->getBreadcrumbLabel($environment, 'tl_metamodel_rendersetting'),
+				$renderSettings->get('name')
+			),
 			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/html/render_setting.png'
 		);
 

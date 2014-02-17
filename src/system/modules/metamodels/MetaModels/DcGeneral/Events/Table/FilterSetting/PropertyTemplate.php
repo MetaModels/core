@@ -19,14 +19,17 @@ namespace MetaModels\DcGeneral\Events\Table\FilterSetting;
 use DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use MetaModels\Dca\Helper;
 
+/**
+ * Handle events for property tl_metamodel_filtersetting.template.
+ */
 class PropertyTemplate
 {
 	/**
-	 * provide options for default selection
+	 * Provide options for default selection.
 	 *
-	 * @param \DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent $event
+	 * @param GetPropertyOptionsEvent $event The event.
 	 *
-	 * @throws \Exception
+	 * @return void
 	 */
 	public static function getOptions(GetPropertyOptionsEvent $event)
 	{

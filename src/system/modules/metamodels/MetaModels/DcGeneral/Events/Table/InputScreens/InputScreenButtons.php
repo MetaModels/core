@@ -21,9 +21,19 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
 use DcGeneral\Contao\BackendBindings;
 use DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
 
+/**
+ * Handle events to generate buttons.
+ */
 class InputScreenButtons
 	extends InputScreenBase
 {
+	/**
+	 * Render the toggle button.
+	 *
+	 * @param GetOperationButtonEvent $event The event.
+	 *
+	 * @return void
+	 */
 	public static function getToggleButton(GetOperationButtonEvent $event)
 	{
 		$environment = $event->getEnvironment();
@@ -42,12 +52,19 @@ class InputScreenButtons
 
 		if (!$event->getModel()->getProperty('published'))
 		{
-			$extra = $event->getCommand()->getExtra();
+			$extra         = $event->getCommand()->getExtra();
 			$extra['icon'] = 'invisible.gif';
 			$event->getCommand()->setExtra($extra);
 		}
 	}
 
+	/**
+	 * Render the sub palette button.
+	 *
+	 * @param GetOperationButtonEvent $event The event.
+	 *
+	 * @return void
+	 */
 	public static function getSubPaletteButton(GetOperationButtonEvent $event)
 	{
 		$input = $event->getEnvironment()->getInputProvider();
@@ -64,7 +81,7 @@ class InputScreenButtons
 		// Get attribute and check if we have a valid one.
 		$attribute = self::getMetaModelFromModel($model)->getAttributeById($model->getProperty('attr_id'));
 
-		if(!($attribute && $attribute->get('type') == 'checkbox'))
+		if (!($attribute && $attribute->get('type') == 'checkbox'))
 		{
 			$event->getCommand()->setDisabled($model->getProperty('attr_id'));
 			return;

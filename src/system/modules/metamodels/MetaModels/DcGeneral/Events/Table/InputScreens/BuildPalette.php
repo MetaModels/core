@@ -17,6 +17,7 @@
 namespace MetaModels\DcGeneral\Events\Table\InputScreens;
 
 use DcGeneral\DataDefinition\ConditionChainInterface;
+use DcGeneral\DataDefinition\ConditionInterface;
 use DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
 use DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition;
 use DcGeneral\DataDefinition\Palette\Legend;
@@ -27,14 +28,19 @@ use DcGeneral\DataDefinition\Palette\PropertyInterface;
 use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\InputScreenAttributeIs;
 
+/**
+ * Handle events for tl_metamodel_dca palette building.
+ */
 class BuildPalette
 {
 	/**
-	 * @param string           $name
+	 * Retrieve the legend with the given name.
 	 *
-	 * @param PaletteInterface $palette
+	 * @param string           $name       Name of the legend.
 	 *
-	 * @param LegendInterface  $prevLegend
+	 * @param PaletteInterface $palette    The palette.
+	 *
+	 * @param LegendInterface  $prevLegend The previous legend.
 	 *
 	 * @return LegendInterface
 	 */
@@ -49,9 +55,11 @@ class BuildPalette
 	}
 
 	/**
-	 * @param string          $name
+	 * Retrieve a property from a legend or create a new one.
 	 *
-	 * @param LegendInterface $legend
+	 * @param string          $name   The legend name.
+	 *
+	 * @param LegendInterface $legend The legend instance.
 	 *
 	 * @return PropertyInterface
 	 */
@@ -72,14 +80,20 @@ class BuildPalette
 	}
 
 	/**
-	 * @param PropertyInterface $property
+	 * Add a condition to a property.
 	 *
-	 * @param                   $condition
+	 * @param PropertyInterface  $property  The property.
+	 *
+	 * @param ConditionInterface $condition The condition to add.
+	 *
+	 * @return void
 	 */
 	public static function addCondition($property, $condition)
 	{
 		$currentCondition = $property->getVisibleCondition();
-		if ((!($currentCondition instanceof ConditionChainInterface)) || ($currentCondition->getConjunction() != ConditionChainInterface::OR_CONJUNCTION))
+		if ((!($currentCondition instanceof ConditionChainInterface))
+			|| ($currentCondition->getConjunction() != ConditionChainInterface::OR_CONJUNCTION)
+		)
 		{
 			if ($currentCondition === null)
 			{
@@ -99,7 +113,11 @@ class BuildPalette
 	}
 
 	/**
-	 * @param BuildDataDefinitionEvent $event
+	 * Build the data definition palettes.
+	 *
+	 * @param BuildDataDefinitionEvent $event The event.
+	 *
+	 * @return void
 	 */
 	public static function build(BuildDataDefinitionEvent $event)
 	{
@@ -110,9 +128,9 @@ class BuildPalette
 		{
 			$condition = new PropertyValueCondition('dcatype', 'attribute');
 			$legend    = self::getLegend('functions', $palette, $legend);
-			$property = self::getProperty('readonly', $legend);
+			$property  = self::getProperty('readonly', $legend);
 			self::addCondition($property, $condition);
-			$legend    = self::getLegend('title', $palette, $legend);
+			$legend   = self::getLegend('title', $palette, $legend);
 			$property = self::getProperty('attr_id', $legend);
 			self::addCondition($property, $condition);
 
@@ -124,7 +142,8 @@ class BuildPalette
 			$property = self::getProperty('legendhide', $legend);
 			self::addCondition($property, $condition);
 
-			foreach ($GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id'] as $typeName => $paletteInfo)
+			foreach ($GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id'] as
+				$typeName => $paletteInfo)
 			{
 				foreach ($paletteInfo as $legendName => $properties)
 				{

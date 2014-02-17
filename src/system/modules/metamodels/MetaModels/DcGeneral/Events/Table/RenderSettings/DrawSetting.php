@@ -19,7 +19,7 @@ namespace MetaModels\DcGeneral\Events\Table\RenderSettings;
 use DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 
 /**
- * Class DrawSetting.
+ * Handle event to draw a render setting.
  *
  * @package MetaModels\DcGeneral\Events\Table\RenderSettings
  */

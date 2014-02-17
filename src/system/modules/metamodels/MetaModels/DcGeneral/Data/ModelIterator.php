@@ -28,21 +28,21 @@ namespace MetaModels\DcGeneral\Data;
 class ModelIterator implements \Iterator
 {
 	/**
-	 * the model to iterate over
+	 * The model to iterate over.
 	 *
 	 * @var Model
 	 */
 	protected $objModel = null;
 
 	/**
-	 * the current position of the index.
+	 * The current position of the index.
 	 *
 	 * @var int
 	 */
 	private $intPosition = 0;
 
 	/**
-	 * all property names.
+	 * All property names.
 	 *
 	 * @var string[]
 	 */
@@ -61,16 +61,13 @@ class ModelIterator implements \Iterator
 	/**
 	 * Create a new instance for the given model.
 	 *
-	 * @param Model $objModel the model to iterate over.
-	 *
-	 * @return ModelIterator the new instance.
+	 * @param Model $objModel The model to iterate over.
 	 */
 	public function __construct(Model $objModel)
 	{
 		$this->intPosition = 0;
-		$this->objModel = $objModel;
-
-		$objMetaModel = $this->objModel->getItem()->getMetaModel();
+		$this->objModel    = $objModel;
+		$objMetaModel      = $this->objModel->getItem()->getMetaModel();
 
 		$arrKeys = array();
 		if ($objMetaModel->hasVariants())
@@ -92,7 +89,7 @@ class ModelIterator implements \Iterator
 	}
 
 	/**
-	 * return the current value.
+	 * Return the current value.
 	 *
 	 * @return mixed
 	 */
@@ -102,7 +99,7 @@ class ModelIterator implements \Iterator
 	}
 
 	/**
-	 * return the current property name.
+	 * Return the current property name.
 	 *
 	 * @return string
 	 */
@@ -123,7 +120,7 @@ class ModelIterator implements \Iterator
 	}
 
 	/**
-	 * determine if the current index is still valid.
+	 * Determine if the current index is still valid.
 	 *
 	 * @return bool
 	 */
