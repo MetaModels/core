@@ -63,7 +63,7 @@ class CustomSql extends Simple
 	 *
 	 * @return string
 	 */
-	protected function generateSql(array &$arrParams, $arrFilterUrl)
+	public function generateSql(array &$arrParams, $arrFilterUrl)
 	{
 		$strSQL = $this->get('customsql');
 
@@ -82,7 +82,7 @@ class CustomSql extends Simple
 	 *
 	 * @return string Parsed SQL.
 	 */
-	protected function parseTable($strSQL)
+	public function parseTable($strSQL)
 	{
 		return str_replace('{{table}}', $this->getMetaModel()->getTableName(), $strSQL);
 	}
@@ -98,7 +98,7 @@ class CustomSql extends Simple
 	 *
 	 * @return string Parsed SQL.
 	 */
-	protected function parseRequestVars($strSQL, array &$arrParams, $arrFilterUrl)
+	public function parseRequestVars($strSQL, array &$arrParams, $arrFilterUrl)
 	{
 		return preg_replace_callback(
 			'@\{\{param::([^}]*)\}\}@',
@@ -216,7 +216,7 @@ class CustomSql extends Simple
 	 *
 	 * @return string Parsed SQL.
 	 */
-	protected function parseSecureInsertTags($strSQL, array &$arrParams)
+	public function parseSecureInsertTags($strSQL, array &$arrParams)
 	{
 		$objMe = $this;
 		return preg_replace_callback(
@@ -239,7 +239,7 @@ class CustomSql extends Simple
 	 *
 	 * @return string Parsed SQL
 	 */
-	protected function parseInsertTags($strSQL, array &$arrParams)
+	public function parseInsertTags($strSQL, array &$arrParams)
 	{
 		return ContaoController::getInstance()->replaceInsertTags($strSQL);
 	}

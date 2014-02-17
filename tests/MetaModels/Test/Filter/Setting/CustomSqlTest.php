@@ -62,9 +62,7 @@ class CustomSqlTest extends TestCase
 	 */
 	protected function generateSql($instance, &$params, $filterUrl = array())
 	{
-		$reflection = new \ReflectionMethod($instance, 'generateSql');
-		$reflection->setAccessible(true);
-		return $reflection->invokeArgs($instance, array(&$params, $filterUrl));
+		return $instance->generateSql($params, $filterUrl);
 	}
 
 	/**
