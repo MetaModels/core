@@ -27,7 +27,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 	 */
 	protected function initializeContaoInputClass($get = null, $post = null, $cookies = null)
 	{
-		if (!class_exists('Contao\Input'))
+		if (!class_exists('Contao\Input', false))
 		{
 			class_alias('MetaModels\Test\Contao\Input', 'Contao\Input');
 			class_alias('MetaModels\Test\Contao\Input', 'Input');
