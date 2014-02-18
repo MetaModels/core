@@ -29,7 +29,6 @@ use MetaModels\IMetaModel;
  *
  * @package MetaModels\DcGeneral\Events\Table\InputScreen
  */
-
 class PropertyPTable
 {
 	/**
