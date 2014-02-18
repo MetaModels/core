@@ -23,15 +23,15 @@ use DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
 use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 
 /**
- * Manipulate the data definition for the property "rendertypes" in table "tl_dca".
+ * Manipulate the data definition for the property "rendertype" in table "tl_dca".
  *
  * @package MetaModels\DcGeneral\Events\Table\InputScreen
  */
-class PropertyRenderTypes
+class PropertyRenderType
 {
 
 	/**
-	 * Populates an array with all valid "rendertypes".
+	 * Populates an array with all valid "rendertype".
 	 *
 	 * @param GetPropertyOptionsEvent $event The event.
 	 *

@@ -314,10 +314,10 @@ class Subscriber
 		self::registerListeners(
 			array(
 				GetPropertyOptionsEvent::NAME
-					=> 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyRenderTypes::getRenderTypes',
+					=> 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyRenderType::getRenderTypes',
 			),
 			$dispatcher,
-			array('tl_metamodel_dca', 'rendertypes')
+			array('tl_metamodel_dca', 'rendertype')
 		);
 
 		PropertyPTable::setVisibility($event);
