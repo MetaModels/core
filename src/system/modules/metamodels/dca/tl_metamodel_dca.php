@@ -219,8 +219,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 				'maxlength'           => 255,
 				'tl_class'            => 'w50 m12 cbx'
 			),
-			// TODO: change callbacks to event handlers.
-			'save_callback'           => array(array('MetaModels\Dca\Dca', 'checkDefault'))
 		),
 
 		'rendertype' => array

@@ -266,6 +266,8 @@ class Subscriber
 			array(
 				ModelToLabelEvent::NAME
 					=> 'MetaModels\DcGeneral\Events\Table\InputScreen\ModelToLabel::render',
+				PostPersistModelEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\InputScreen\UpdateInputScreen::handle',
 				GetBreadcrumbEvent::NAME
 					=> self::createClosure(
 						'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbInputScreens',
