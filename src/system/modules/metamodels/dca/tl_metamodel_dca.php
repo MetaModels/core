@@ -183,20 +183,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 
 		'mode' => array
 		(
-			/*
-				0 Records are not sorted
-				1 Records are sorted by a fixed field
-				2 Records are sorted by a switchable field
-				3 Records are sorted by the parent table
-				4 Displays the child records of a parent record (see style sheets module)
-				5 Records are displayed as tree (see site structure)
-				6 Displays the child records within a tree structure (see articles module)
-			*/
 			'mode_0'  => array('flag'),
 			'mode_1'  => array('flag'),
 			'mode_2'  => array('flag'),
 			'mode_3'  => array(''),
-			'mode_4'  => array(''), // TODO: select parent head fields here.
+			'mode_4'  => array(''),
 			'mode_5'  => array(''),
 			'mode_6'  => array('ptable'),
 		),
@@ -236,6 +227,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype'],
 			'inputType'               => 'select',
+			// TODO: change callbacks to event handlers.
 			'options_callback'        => array('MetaModels\Dca\Dca', 'getRenderTypes'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes'],
 			'eval'                    => array
@@ -264,15 +256,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'inputType'               => 'select',
 			'default'                 => '',
 			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode'],
-			/*
-				0 Records are not sorted
-				1 Records are sorted by a fixed field
-				2 Records are sorted by a switchable field
-				3 Records are sorted by the parent table
-				4 Displays the child records of a parent record (see style sheets module)
-				5 Records are displayed as tree (see site structure)
-				6 Displays the child records within a tree structure (see articles module)
-			*/
 			'eval'                    => array
 			(
 				'tl_class'            => 'w50',
