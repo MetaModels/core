@@ -38,23 +38,36 @@ use MetaModels\DcGeneral\Dca\Builder\Builder;
 class Module
 {
 	/**
-	 * The template to use
+	 * The template to use.
+	 *
 	 * @var string
 	 */
 	protected $strTemplate = 'be_detectedproblems';
 
+	/**
+	 * The current BackendTemplate instance.
+	 *
+	 * @var \BackendTemplate
+	 */
 	protected $Template;
 
+	/**
+	 * The message log.
+	 *
+	 * @var array
+	 */
 	protected static $arrMessages = array();
 
 	/**
 	 * Buffer a message in the stack.
 	 *
-	 * @param string $strOutput      the message to be displayed (HTML welcome).
+	 * @param string $strOutput      The message to be displayed (HTML welcome).
 	 *
-	 * @param int    $intSeverity    may be METAMODELS_INFO, METAMODELS_WARN, METAMODELS_ERROR
+	 * @param int    $intSeverity    May be METAMODELS_INFO, METAMODELS_WARN, METAMODELS_ERROR.
 	 *
-	 * @param string $strHelpfulLink (backend)-link to some location to resolve the problem.
+	 * @param string $strHelpfulLink The (backend)-link to some location to resolve the problem.
+	 *
+	 * @return void
 	 */
 	public static function addMessageEntry($strOutput, $intSeverity = METAMODELS_INFO, $strHelpfulLink = '')
 	{
@@ -62,7 +75,7 @@ class Module
 	}
 
 	/**
-	 * Ensure we have at least PHP 5.3
+	 * Ensure we have at least PHP 5.3.
 	 *
 	 * @return void
 	 */
@@ -80,14 +93,16 @@ class Module
 
 	/**
 	 * Check if all dependencies are present.
+	 *
+	 * @return void
 	 */
 	protected function checkDependencies()
 	{
-		$arrActiveModules = \Config::getInstance()->getActiveModules();
+		$arrActiveModules   = \Config::getInstance()->getActiveModules();
 		$arrInactiveModules = deserialize($GLOBALS['TL_CONFIG']['inactiveModules']);
 
-		// check if all prerequsities are met.
-		foreach($GLOBALS['METAMODELS']['dependencies'] as $strExtension => $strDisplay)
+		// Check if all prerequsities are met.
+		foreach ($GLOBALS['METAMODELS']['dependencies'] as $strExtension => $strDisplay)
 		{
 			if (!in_array($strExtension, $arrActiveModules))
 			{
@@ -126,24 +141,34 @@ class Module
 		}
 	}
 
+	/**
+	 * Check if user action is needed.
+	 *
+	 * @return bool
+	 */
 	protected function needUserAction()
 	{
-		// run the embedded methods now:
+		// Run the embedded methods now.
 		$this->checkPHPVersion();
 		$this->checkDependencies();
 		$this->hasAttributes();
 
 		if ($GLOBALS['METAMODELS']['CHECK'])
 		{
-			// loop through all metamodel backend checkers.
+			// Loop through all metamodel backend checkers.
 			foreach ($GLOBALS['METAMODELS']['CHECK'] as $strClass)
 			{
 				CallBacks::call(array($strClass, 'perform'), $this);
 			}
 		}
-		return count(self::$arrMessages)> 0;
+		return count(self::$arrMessages) > 0;
 	}
 
+	/**
+	 * Run the data container.
+	 *
+	 * @return string
+	 */
 	protected function runDC()
 	{
 		/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
@@ -201,12 +226,17 @@ class Module
 	}
 
 	/**
-	 * handler object for key operation.
+	 * Handler object for key operation.
 	 *
 	 * @var object
 	 */
 	protected $objKeyHandler = null;
 
+	/**
+	 * Perform the normal operation, no user action is required.
+	 *
+	 * @return string
+	 */
 	protected function performNormal()
 	{
 		$arrModule = $GLOBALS['BE_MOD']['metamodels']['metamodels'];
@@ -219,7 +249,8 @@ class Module
 	}
 
 	/**
-	 * Parse the template
+	 * Parse the template.
+	 *
 	 * @return string
 	 */
 	public function generate()
@@ -231,17 +262,18 @@ class Module
 			$this->compile();
 
 			return $this->Template->parse();
-		} else {
-			return $this->performNormal();
 		}
+		return $this->performNormal();
 	}
 
 	/**
-	 * Compile the current element
+	 * Compile the current element.
+	 *
+	 * @return void
 	 */
 	protected function compile()
 	{
-		$this->Template->href = BackendBindings::getReferer(true);
+		$this->Template->href     = BackendBindings::getReferer(true);
 		$this->Template->problems = self::$arrMessages;
 	}
 }

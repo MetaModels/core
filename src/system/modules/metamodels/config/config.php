@@ -1,6 +1,4 @@
 <?php
-use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
-
 /**
  * The MetaModels extension allows the creation of multiple collections of custom items,
  * each with its own unique set of selectable attributes, with attribute extendability.
@@ -15,6 +13,8 @@ use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
  * @license    LGPL.
  * @filesource
  */
+
+use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 
 // Preserve values by extensions but insert as first entry after 'system'.
 $arrOld = (array)$GLOBALS['BE_MOD']['metamodels'];
@@ -123,7 +123,7 @@ if (TL_MODE == 'BE')
 	{
 		$GLOBALS['BE_FFL']['fileSelector'] = 'MetaModels\Widgets\FileSelectorWidget';
 	}
-	MetaModels\BackendIntegration\Boot::MetaModels();
+	MetaModels\BackendIntegration\Boot::metaModels();
 }
 
 // Front-end modules.
