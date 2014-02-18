@@ -225,8 +225,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype'],
 			'inputType'               => 'select',
-			// TODO: change callbacks to event handlers.
-			'options_callback'        => array('MetaModels\Dca\Dca', 'getRenderTypes'),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes'],
 			'eval'                    => array
 			(

@@ -311,6 +311,15 @@ class Subscriber
 			array('tl_metamodel_dca', 'ptable')
 		);
 
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyRenderTypes::getRenderTypes',
+			),
+			$dispatcher,
+			array('tl_metamodel_dca', 'rendertypes')
+		);
+
 		PropertyPTable::setVisibility($event);
 	}
 
