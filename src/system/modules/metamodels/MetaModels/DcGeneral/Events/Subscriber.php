@@ -350,6 +350,46 @@ class Subscriber
 			$dispatcher,
 			array('tl_metamodel_dca_combine')
 		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyFeGroup::getOptions',
+			),
+			$dispatcher,
+			array('tl_metamodel_dca_combine', 'fe_group')
+		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyBeGroup::getOptions',
+			),
+			$dispatcher,
+			array('tl_metamodel_dca_combine', 'be_group')
+		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyDcaId::getOptions',
+			),
+			$dispatcher,
+			array('tl_metamodel_dca_combine', 'dca_id')
+		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyViewId::getOptions',
+			),
+			$dispatcher,
+			array('tl_metamodel_dca_combine', 'view_id')
+		);
+
+		self::registerListeners(
+			array(
+				EncodePropertyValueFromWidgetEvent::NAME => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyRows::fixSorting',
+			),
+			$dispatcher,
+			array('tl_metamodel_dca_combine', 'rows')
+		);
 	}
 
 	/**

@@ -31,7 +31,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 		(
 			'default'                            => array
 			(
-				'class'                          => 'DcGeneral\Data\TableRowsAsRecordsDriver',
+				'class'                          => 'DcGeneral\Data\TableRowsAsRecordsDataProvider',
 				'source'                         => 'tl_metamodel_dca_combine',
 				'group_column'                   => 'pid',
 				'sort_column'                    => 'sorting'
@@ -53,7 +53,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 			'inputType'                          => 'multiColumnWizard',
 			'eval'                               => array
 			(
-				'explanation'                    => 'customsql',
 				'tl_class'                       => 'dca_combine',
 				'columnFields'                   => array
 				(
@@ -73,8 +72,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 						'label'                  => &$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['fe_group'],
 						'exclude'                => true,
 						'inputType'              => 'select',
-						// TODO: change callbacks to event handlers.
-						'options_callback'       => array('MetaModels\Dca\DcaCombine', 'getMemberGroups'),
 						'eval'                   => array
 						(
 							'includeBlankOption' => true,
@@ -87,8 +84,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 						'label'                  => &$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['be_group'],
 						'exclude'                => true,
 						'inputType'              => 'select',
-						// TODO: change callbacks to event handlers.
-						'options_callback'       => array('MetaModels\Dca\DcaCombine', 'getUserGroups'),
 						'eval'                   => array
 						(
 							'includeBlankOption' => true,
@@ -101,8 +96,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 						'label'                  => &$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_id'],
 						'exclude'                => true,
 						'inputType'              => 'select',
-						// TODO: change callbacks to event handlers.
-						'options_callback'       => array('MetaModels\Dca\DcaCombine', 'getModelPalettes'),
 						'eval'                   => array
 						(
 							'style'              => 'width:180px',
@@ -114,8 +107,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 						'label'                  => &$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['view_id'],
 						'exclude'                => true,
 						'inputType'              => 'select',
-						// TODO: change callbacks to event handlers.
-						'options_callback'       => array('MetaModels\Dca\DcaCombine', 'getModelViews'),
 						'eval'                   => array
 						(
 							'style'              => 'width:180px',
@@ -124,8 +115,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 					),
 				),
 			),
-			// TODO: change callbacks to event handlers.
-			'save_callback'                      => array(array('MetaModels\Dca\DcaCombine', 'updateSort')),
 		)
 	)
 );
