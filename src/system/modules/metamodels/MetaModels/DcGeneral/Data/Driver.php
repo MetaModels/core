@@ -17,6 +17,9 @@
 namespace MetaModels\DcGeneral\Data;
 
 use DcGeneral\Data\DCGE;
+use DcGeneral\Data\DefaultLanguageInformation;
+use DcGeneral\Data\DefaultLanguageInformationCollection;
+use DcGeneral\Data\LanguageInformationCollectionInterface;
 use DcGeneral\Data\MultiLanguageDataProviderInterface;
 use DcGeneral\Data\ModelInterface;
 use DcGeneral\Data\ConfigInterface;
@@ -24,10 +27,7 @@ use DcGeneral\Data\CollectionInterface;
 use DcGeneral\Data\DefaultConfig;
 use DcGeneral\Data\DefaultCollection;
 use DcGeneral\Data\DefaultModel;
-
 use MetaModels\Factory as ModelFactory;
-use MetaModels\IMetaModel;
-use MetaModels\Item;
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Rules\Condition\ConditionAnd;
 use MetaModels\Filter\Rules\Condition\ConditionOr;
@@ -36,6 +36,8 @@ use MetaModels\Filter\Rules\Comparing\LessThan;
 use MetaModels\Filter\Rules\SearchAttribute;
 use MetaModels\Filter\Filter;
 use MetaModels\Filter\Rules\SimpleQuery;
+use MetaModels\IMetaModel;
+use MetaModels\Item;
 
 /**
  * Data driver class for DC_General
@@ -750,27 +752,28 @@ class Driver implements MultiLanguageDataProviderInterface
 	 *
 	 * @param mixed $mixID The ID of the record to retrieve.
 	 *
-	 * @return \DcGeneral\Data\CollectionInterface
+	 * @return LanguageInformationCollectionInterface
 	 */
 	public function getLanguages($mixID)
 	{
-		$objCollection = $this->getEmptyCollection();
-
-		if ($this->objMetaModel->isTranslated())
+		if (!$this->objMetaModel->isTranslated())
 		{
-			foreach ($this->objMetaModel->getAvailableLanguages() as $strLangCode)
-			{
-				$objModel = new DefaultModel();
-				$objModel->setID($strLangCode);
-				$objModel->setProperty('name', $GLOBALS['TL_LANG']['LNG'][$strLangCode]);
-				$objModel->setProperty('active', ($this->getCurrentLanguage() == $strLangCode));
-				$objCollection->add($objModel);
-			}
-			if ($objCollection->length() > 0)
-			{
-				return $objCollection;
-			}
+			return null;
 		}
+
+		$collection = new DefaultLanguageInformationCollection();
+
+		foreach ($this->objMetaModel->getAvailableLanguages() as $langCode)
+		{
+			// TODO: support country code.
+			$collection->add(new DefaultLanguageInformation($langCode, null));
+		}
+
+		if (count($collection) > 0)
+		{
+			return $collection;
+		}
+
 		return null;
 	}
 
@@ -779,19 +782,17 @@ class Driver implements MultiLanguageDataProviderInterface
 	 *
 	 * @param mixed $mixID The ID of the record to retrieve.
 	 *
-	 * @return \DcGeneral\Data\ModelInterface|null
+	 * @return \DcGeneral\Data\LanguageInformationInterface|null
 	 */
 	public function getFallbackLanguage($mixID)
 	{
 		if ($this->objMetaModel->isTranslated())
 		{
-			$objModel    = new DefaultModel();
-			$strLangCode = $this->objMetaModel->getFallbackLanguage();
-			$objModel->setID($strLangCode);
-			$objModel->setProperty('name', $GLOBALS['TL_LANG']['LNG'][$strLangCode]);
-			$objModel->setProperty('active', ($this->getCurrentLanguage() == $strLangCode));
-			return $objModel;
+			$langCode = $this->objMetaModel->getFallbackLanguage();
+			// TODO: support country code.
+			return new DefaultLanguageInformation($langCode, null);
 		}
+
 		return null;
 	}
 
