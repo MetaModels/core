@@ -71,8 +71,8 @@ class RenderSetting extends Helper
 				SET enabled=?
 				WHERE id=?'
 			)->execute(
-					($this->Input->get('state')=='1'?'1':''),
-					$this->Input->get('tid')
+					(\Input::getInstance()->get('state')=='1'?'1':''),
+					\Input::getInstance()->get('tid')
 				);
 			exit;
 		}
@@ -122,13 +122,13 @@ class RenderSetting extends Helper
 			$this->objMetaModel = ModelFactory::byId($this->objSetting->pid);
 		}
 		// TODO: I guess the whole block here is not needed anymore since we are using DC_General. Check it.
-		elseif ($this->Input->get('act'))
+		elseif (\Input::getInstance()->get('act'))
 		{
 			// act present, but we have an id
-			switch ($this->Input->get('act'))
+			switch (\Input::getInstance()->get('act'))
 			{
 				case 'edit':
-					if ($this->Input->get('id'))
+					if (\Input::getInstance()->get('id'))
 					{
 						$this->objSetting = \Database::getInstance()->prepare('
 							SELECT tl_metamodel_rendersetting.*,
@@ -138,7 +138,7 @@ class RenderSetting extends Helper
 							LEFT JOIN tl_metamodel_rendersettings
 							ON (tl_metamodel_rendersetting.pid = tl_metamodel_rendersettings.id)
 							WHERE (tl_metamodel_rendersetting.id=?)')
-							->execute($this->Input->get('id'));
+							->execute(\Input::getInstance()->get('id'));
 						$this->objMetaModel = ModelFactory::byId($this->objSetting->tl_metamodel_rendersettings_pid);
 					}
 					break;
@@ -276,11 +276,11 @@ class RenderSetting extends Helper
 		// severity: error, confirm, info, new
 		$arrMessages = array();
 
-		$objPalette = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')->execute($this->Input->get('id'));
+		$objPalette = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')->execute(\Input::getInstance()->get('id'));
 
 		$objMetaModel = ModelFactory::byId($objPalette->pid);
 
-		$objAlreadyExist = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel_rendersetting WHERE pid=?')->execute($this->Input->get('id'));
+		$objAlreadyExist = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel_rendersetting WHERE pid=?')->execute(\Input::getInstance()->get('id'));
 
 		$arrKnown = array();
 		$intMax = 128;
@@ -295,7 +295,7 @@ class RenderSetting extends Helper
 
 		$blnWantPerform = false;
 		// perform the labour work
-		if ($this->Input->post('act') == 'perform')
+		if (\Input::getInstance()->post('act') == 'perform')
 		{
 			// loop over all attributes now.
 			foreach ($objMetaModel->getAttributes() as $objAttribute)
@@ -314,7 +314,7 @@ class RenderSetting extends Helper
 						$arrData,
 						array
 						(
-							'pid'      => $this->Input->get('id'),
+							'pid'      => \Input::getInstance()->get('id'),
 							'sorting'  => $intMax,
 							'tstamp'   => time(),
 							'attr_id'  => $objAttribute->get('id'),
