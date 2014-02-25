@@ -54,6 +54,12 @@ class ModelToLabel
 
 		if (!$objAttribute)
 		{
+			$event
+				->setLabel('<strong>Unknown attribute %d</strong> <span class="tl_class">%s</span>')
+				->setArgs(array(
+					$model->getProperty('attr_id'),
+					$model->getProperty('tl_class') ? sprintf('[%s]', $model->getProperty('tl_class')) : ''
+				));
 			return;
 		}
 
