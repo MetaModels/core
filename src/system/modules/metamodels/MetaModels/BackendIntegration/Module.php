@@ -19,7 +19,7 @@ namespace MetaModels\BackendIntegration;
 use ContaoCommunityAlliance\Translator\Contao\LangArrayTranslator;
 use ContaoCommunityAlliance\Translator\TranslatorChain;
 use DcGeneral\Contao\BackendBindings;
-use DcGeneral\Contao\Callback\CallBacks;
+use DcGeneral\Contao\Callback\Callbacks;
 use DcGeneral\Event\EventPropagator;
 use DcGeneral\Factory\DcGeneralFactory;
 use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
@@ -158,7 +158,7 @@ class Module
 			// Loop through all metamodel backend checkers.
 			foreach ($GLOBALS['METAMODELS']['CHECK'] as $strClass)
 			{
-				CallBacks::call(array($strClass, 'perform'), $this);
+				Callbacks::call(array($strClass, 'perform'), $this);
 			}
 		}
 		return count(self::$arrMessages) > 0;
@@ -243,7 +243,7 @@ class Module
 		// Custom action (if key is not defined in config.php the default action will be called).
 		if (\Input::getInstance()->get('key') && isset($arrModule[\Input::getInstance()->get('key')]))
 		{
-			CallBacks::call($arrModule[\Input::getInstance()->get('key')], $this, $arrModule);
+			Callbacks::call($arrModule[\Input::getInstance()->get('key')], $this, $arrModule);
 		}
 		return $this->runDC();
 	}
