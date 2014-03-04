@@ -139,18 +139,6 @@ class Filter extends Helper
 	}
 
 	/**
-	 * get frontend templates for filter elements
-	 *
-	 * @param \DcGeneral\DC_General
-	 *
-	 * @return array
-	 */
-	public function getSubTemplates(DC_General $dc)
-	{
-		return $this->getTemplatesForBase('mm_filteritem_');
-	}
-
-	/**
 	 * Return the "toggle visibility" button
 	 * @param array
 	 * @param string
