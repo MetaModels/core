@@ -28,6 +28,7 @@ use DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use DcGeneral\Event\PostPersistModelEvent;
 use DcGeneral\Event\PreDeleteModelEvent;
 use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
+use DcGeneral\Factory\Event\PopulateEnvironmentEvent;
 use MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPTable;
 use MetaModels\DcGeneral\Events\Table\InputScreens\BuildPalette;
 use Symfony\Component\EventDispatcher\Event;
@@ -98,6 +99,15 @@ class Subscriber
 			'tl_metamodel_rendersettings',
 			$dispatcher,
 			__CLASS__ . '::registerTableMetaModelRenderSettingsEvents'
+		);
+
+		self::registerListeners(
+			array(
+				PopulateEnvironmentEvent::NAME
+					=> self::delayEvent('MetaModels\DcGeneral\Events\Table\FilterSetting\InjectFidFilter::handle')
+			),
+			$dispatcher,
+			array('tl_metamodel_filtersetting')
 		);
 	}
 

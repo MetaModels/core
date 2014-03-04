@@ -6,7 +6,7 @@
  * data in each collection.
  *
  * PHP version 5
- * @package	   MetaModels
+ * @package    MetaModels
  * @subpackage Backend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  The MetaModels team.
@@ -26,9 +26,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		'switchToEdit'                => false,
 		'enableVersioning'            => false,
 		// TODO: change callbacks to event handlers.
-		'oncreate_callback'           => array(array('MetaModels\Dca\Filter', 'create_callback')),
-		'palettes_callback'           => array(array('MetaModels\Dca\Filter', 'preparePalettes')),
-		'tablename_callback'          => array(array('MetaModels\Dca\Filter', 'loadTableCallback')),
+//		'palettes_callback'           => array(array('MetaModels\Dca\Filter', 'preparePalettes')),
 	),
 	'dca_config'                      => array
 	(
