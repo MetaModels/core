@@ -31,10 +31,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['advanced_legend'] = 'Advanced
  */
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['new']             = array('New', 'Create new setting');
 
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit']            = array('Edit setting', 'Edit filter setting ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy']            = array('Copy filter setting definition', 'Copy filter setting ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete']          = array('Delete filter setting', 'Delete filter setting ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show']            = array('Filter setting details', 'Show details of filter setting ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit']            = array('Edit setting', 'Edit render setting ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['cut']             = array('Cut render setting definition', 'Cut render setting ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy']            = array('Copy render setting definition', 'Copy render setting ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete']          = array('Delete render setting', 'Delete render setting ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show']            = array('Render setting details', 'Show details of render setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']          = array('Add all', 'Add all attributes to render setting');
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']             = '%s <strong>%s</strong> <em>[%s]</em>';
