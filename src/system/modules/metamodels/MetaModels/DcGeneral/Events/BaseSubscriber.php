@@ -104,14 +104,11 @@ class BaseSubscriber
 			$chunks = explode('[', $name);
 			array_pop($chunks);
 
-			$listener = function($event) use($handler)
-			{
-				/** @var Event $event */
-				$event->getDispatcher()->removeListener($event->getName(), $handler);
-				call_user_func($handler, $event);
-			};
-
-			$event->getDispatcher()->addListener(implode('[', $chunks), $listener, $priority);
+			$event->getDispatcher()->addListener(
+				implode('[', $chunks),
+				new DelayedEvent($handler),
+				$priority
+			);
 		};
 	}
 
