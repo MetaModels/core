@@ -52,7 +52,7 @@ class BreadCrumbRenderSettings
 	{
 		if (!isset($this->metamodelId))
 		{
-			$this->metamodelId = $environment->getInputProvider()->getParameter('pid');
+			$this->metamodelId = $this->extractIdFrom($environment, 'pid');
 		}
 
 		$elements = parent::getBreadcrumbElements($environment, $elements);
@@ -61,7 +61,7 @@ class BreadCrumbRenderSettings
 			'url' => sprintf(
 				'contao/main.php?do=metamodels&table=%s&pid=%s',
 				'tl_metamodel_rendersettings',
-				$this->metamodelId
+				$this->seralizeId('tl_metamodel', $this->metamodelId)
 			),
 			'text' => sprintf(
 				$this->getBreadcrumbLabel($environment, 'tl_metamodel_rendersettings'),

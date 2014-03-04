@@ -33,7 +33,7 @@ class BreadCrumbFilterSetting
 	{
 		if (!isset($this->filterId))
 		{
-			$this->filterId = $environment->getInputProvider()->getParameter('pid');
+			$this->filterId = $this->extractIdFrom($environment, 'pid');
 		}
 
 		if (!isset($this->metamodelId))
@@ -53,7 +53,7 @@ class BreadCrumbFilterSetting
 			'url' => sprintf(
 				'contao/main.php?do=metamodels&table=%s&pid=%s',
 				'tl_metamodel_filtersetting',
-				$this->filterId
+				$this->seralizeId('tl_metamodel_filter', $this->filterId)
 			),
 			'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_filtersetting'), $filterSetting->name),
 			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/html/filter_setting.png'

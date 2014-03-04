@@ -56,11 +56,11 @@ class BreadCrumbInputScreens
 		$input = $environment->getInputProvider();
 		if (!$this->isActiveTable('tl_metamodel_dca', $input))
 		{
-			$this->inputScreenId = $input->getParameter('pid');
+			$this->inputScreenId = $this->extractIdFrom($environment, 'pid');
 		}
 		else
 		{
-			$this->metamodelId = $input->getParameter('pid');
+			$this->metamodelId = $this->extractIdFrom($environment, 'pid');
 		}
 
 		if (!isset($this->metamodelId))
@@ -72,7 +72,7 @@ class BreadCrumbInputScreens
 
 		$urlEvent = new AddToUrlEvent(sprintf('do=metamodels&table=%s&id=%s',
 			'tl_metamodel_dca',
-			$this->metamodelId
+			$this->seralizeId('tl_metamodel', $this->metamodelId)
 		));
 		$environment->getEventPropagator()->propagate(ContaoEvents::BACKEND_ADD_TO_URL, $urlEvent);
 

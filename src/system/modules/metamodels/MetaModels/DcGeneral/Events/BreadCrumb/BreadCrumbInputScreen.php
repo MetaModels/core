@@ -56,7 +56,7 @@ class BreadCrumbInputScreen
 		$input = $environment->getInputProvider();
 		if (!isset($this->inputScreenId))
 		{
-			$this->inputScreenId = $input->getParameter('pid');
+			$this->inputScreenId = $this->extractIdFrom($environment, 'pid');
 		}
 
 		$inputScreen = $this->getInputScreen();
@@ -71,7 +71,7 @@ class BreadCrumbInputScreen
 			'url' => sprintf(
 				'contao/main.php?do=metamodels&table=%s&pid=%s',
 				'tl_metamodel_dcasetting',
-				$this->inputScreenId
+				$this->seralizeId('tl_metamodel_dca', $this->inputScreenId)
 			),
 			'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_dcasetting'), $inputScreen->name),
 			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/html/dca_setting.png'
@@ -79,14 +79,14 @@ class BreadCrumbInputScreen
 
 		if ($input->hasParameter('subpaletteid'))
 		{
-			$id = $input->getParameter('subpaletteid');
+			$id = $this->extractIdFrom($environment, 'subpaletteid');
 
 			$elements[] = array(
 				'url' => sprintf(
 					'contao/main.php?do=metamodels&table=%s&pid=%s&subpaletteid=%s',
 					'tl_metamodel_dcasetting',
-					$this->inputScreenId,
-					$id
+					$this->seralizeId('tl_metamodel_dca', $this->inputScreenId),
+					$this->seralizeId('tl_metamodel_dcasetting', $id)
 				),
 				'text' => sprintf(
 					$this->getBreadcrumbLabel($environment, 'metamodel_dcasetting_subpalette'),

@@ -17,6 +17,7 @@
 namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
 use DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
+use DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use DcGeneral\EnvironmentInterface;
 use DcGeneral\InputProviderInterface;
 
@@ -73,6 +74,36 @@ abstract class BreadCrumbBase
 	protected function isActiveTable($table, InputProviderInterface $input)
 	{
 		return $input->getParameter('table') == $table;
+	}
+
+	/**
+	 * Extract the id value from the serialized parameter with the given name.
+	 *
+	 * @param EnvironmentInterface $environment   The environment.
+	 *
+	 * @param string               $parameterName The parameter name containing the id.
+	 *
+	 * @return int
+	 */
+	protected function extractIdFrom(EnvironmentInterface $environment, $parameterName = 'pid')
+	{
+		$parameter = $environment->getInputProvider()->getParameter($parameterName);
+
+		return IdSerializer::fromSerialized($parameter)->getId();
+	}
+
+	/**
+	 * Create an instance from the passed values.
+	 *
+	 * @param string $dataProviderName The data provider name.
+	 *
+	 * @param mixed  $id               The id.
+	 *
+	 * @return IdSerializer
+	 */
+	public static function seralizeId($dataProviderName, $id)
+	{
+		return IdSerializer::fromValues($dataProviderName, $id)->getSerialized();
 	}
 
 	/**
