@@ -256,44 +256,49 @@ class MetaModelFrontendFilter extends Frontend
 	{
 		if (substr($strTemplate, 0, 7) === 'fe_page')
 		{
-			if (preg_match_all('#\[\[\[metamodelfrontendfilterclearall::(ce|mod)::([^\]]*)\]\]\]#', $strContent, $arrMatches))
+			if (preg_match_all(
+				'#\[\[\[metamodelfrontendfilterclearall::(ce|mod)::([^\]]*)\]\]\]#',
+				$strContent,
+				$arrMatches,
+				PREG_SET_ORDER
+			))
 			{
-				for($i = 0; $i < count($arrMatches); $i = $i + 3)
+				foreach ($arrMatches as $arrMatch)
 				{
-					switch ($arrMatches[$i + 1][0])
+					switch ($arrMatch[1])
 					{
 						case 'ce':
 							$objDbResult = Database::getInstance()
 								->prepare('SELECT * FROM tl_content WHERE id=?')
-								->execute($arrMatches[$i + 2][0]);
-							
+								->execute($arrMatch[2]);
+
 							// Check if we have a ce element.
 							if($objDbResult->numRows == 0)
 							{
-								$strContent = str_replace($arrMatches[$i][0], '', $strContent);
+								$strContent = str_replace($arrMatch[0], '', $strContent);
 								break;
-							}	
-							
+							}
+
 							// Get instance and call generate function.
 							$objCE = new ContentMetaModelFrontendClearAll($objDbResult);
-							$strContent = str_replace($arrMatches[$i][0], $objCE->generateReal(), $strContent);
+							$strContent = str_replace($arrMatch[0], $objCE->generateReal(), $strContent);
 							break;
-							
+
 						case 'mod':
 							$objDbResult = Database::getInstance()
 								->prepare('SELECT * FROM tl_module WHERE id=?')
-								->execute($arrMatches[$i + 2]);
-							
+								->execute($arrMatch[2]);
+
 							// Check if we have a mod element.
 							if($objDbResult->numRows == 0)
 							{
-								$strContent = str_replace($arrMatches[$i][0], '', $strContent);
+								$strContent = str_replace($arrMatch[0], '', $strContent);
 								break;
 							}
-							
+
 							// Get instance and call generate function.
 							$objCE = new ContentMetaModelFrontendClearAll($objDbResult);
-							$strContent = str_replace($arrMatches[$i][0], $objCE->generateReal(), $strContent);
+							$strContent = str_replace($arrMatch[0], $objCE->generateReal(), $strContent);
 							break;
 					}
 				}
