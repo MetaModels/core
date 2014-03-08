@@ -257,7 +257,8 @@ class ToolboxFile
 	{
 		if (is_file(TL_ROOT . DIRECTORY_SEPARATOR . $strPath))
 		{
-			if (in_array(strtolower(substr($strPath, -3)), $this->acceptedExtensions))
+			$strExtension = pathinfo (TL_ROOT . DIRECTORY_SEPARATOR . $strPath, PATHINFO_EXTENSION);
+			if (in_array(strtolower($strExtension), $this->acceptedExtensions))
 			{
 				$this->foundFiles[] = $strPath;
 			}
