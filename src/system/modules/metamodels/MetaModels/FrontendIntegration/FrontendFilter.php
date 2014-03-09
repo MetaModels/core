@@ -113,7 +113,7 @@ class FrontendFilter
 					continue;
 				}
 
-				$strFilterAction .= sprintf(($GLOBALS['TL_CONFIG']['disableAlias'] ? '&amp;%s=%s' : '/%s/%s'), $strName, urlencode($strValue));
+				$strFilterAction .= sprintf(($GLOBALS['TL_CONFIG']['disableAlias'] ? '&amp;%s=%s' : '/%s/%s'), $strName, rawurlencode($strValue));
 			}
 		}
 		return $strFilterAction;
