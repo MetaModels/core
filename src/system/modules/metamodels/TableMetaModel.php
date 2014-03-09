@@ -245,7 +245,9 @@ class TableMetaModel extends Backend
 	public function getRowLabel($arrRow, $strLabel, $objDC)
 	{
 		if(!($arrRow['tableName'] && $this->Database->tableExists($arrRow['tableName'], null, true)))
+		{
 			return '';
+		}
 		// add image
 		$strImage = '';
 		if ($arrRow['addImage'])
@@ -260,12 +262,13 @@ class TableMetaModel extends Backend
 		// count items
 		$objCount = $this->Database->prepare("SELECT count(*) AS itemCount FROM ".$arrRow['tableName'])
 					->execute();
-		$itemCount =  sprintf(' <span style="color:#b3b3b3; padding-left:3px">[' . $GLOBALS['TL_LANG']['tl_metamodel']['itemFormat'] . ']</span>', $objCount->itemCount,
+		$itemCount =  sprintf('<span style="color:#b3b3b3; padding-left:3px">[' . $GLOBALS['TL_LANG']['tl_metamodel']['itemFormat'] . ']</span>', $objCount->itemCount,
 			($objCount->itemCount == 1) ? sprintf($GLOBALS['TL_LANG']['tl_metamodel']['itemSingle'])
 										: sprintf($GLOBALS['TL_LANG']['tl_metamodel']['itemPlural'])
 		);
+		$strTableName = '<span style="color:#b3b3b3; padding-left:3px">(' . $arrRow['tableName'] . ')</span>';
 
-		return '<span class="name">'.$strLabel. $itemCount . '</span>'.$strImage;
+		return '<span class="name">'.$strLabel . $strTableName . $itemCount . '</span>'.$strImage;
 	}
 
 	/**
