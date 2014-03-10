@@ -17,7 +17,8 @@
 namespace MetaModels\FrontendIntegration;
 
 use MetaModels\Filter\Setting\Factory as FilterFactory;
-use MetaModels\FrontendIntegration\Content\FilterClearAll;
+use MetaModels\FrontendIntegration\Content\FilterClearAll as ContentElementFilterClearAll;
+use MetaModels\FrontendIntegration\Module\FilterClearAll as ModuleFilterClearAll;
 use MetaModels\Helper\ContaoController;
 
 /**
@@ -275,6 +276,64 @@ class FrontendFilter
 	}
 
 	/**
+	 * Render a content element.
+	 *
+	 * @param string $content The html content in which to replace.
+	 *
+	 * @param string $replace The string within the html to be replaced.
+	 *
+	 * @param int    $id      The id of the content element to be inserted for the replace string.
+	 *
+	 * @return string
+	 */
+	protected function generateContentElement($content, $replace, $id)
+	{
+		$objDbResult = \Database::getInstance()
+			->prepare('SELECT * FROM tl_content WHERE id=? AND type="metamodels_frontendclearall"')
+			->execute($id);
+
+		// Check if we have a ce element.
+		if ($objDbResult->numRows == 0)
+		{
+			return str_replace($replace, '', $content);
+		}
+
+		// Get instance and call generate function.
+		$objCE = new ContentElementFilterClearAll($objDbResult);
+		return str_replace($replace, $objCE->generateReal(), $content);
+	}
+
+	/**
+	 * Render a module.
+	 *
+	 * @param string $content The html content in which to replace.
+	 *
+	 * @param string $replace The string within the html to be replaced.
+	 *
+	 * @param int    $id      The id of the module to be inserted for the replace string.
+	 *
+	 * @return string
+	 */
+	protected function generateModule($content, $replace, $id)
+	{
+		$objDbResult = \Database::getInstance()
+			->prepare('SELECT * FROM tl_module WHERE id=? AND type="metamodels_frontendclearall"')
+			->execute($id);
+
+		// Check if we have a ce element.
+		if ($objDbResult->numRows == 0)
+		{
+			return str_replace($replace, '', $content);
+		}
+
+		// Get instance and call generate function.
+		$objModule = new ModuleFilterClearAll($objDbResult);
+		return str_replace($replace, $objModule->generateReal(), $content);
+	}
+
+
+
+	/**
 	 * Add the "clear all Filter".
 	 *
 	 * This is called via parseTemplate HOOK to inject the "clear all" filter into fe_page.
@@ -303,37 +362,11 @@ class FrontendFilter
 					switch ($arrMatch[1])
 					{
 						case 'ce':
-							$objDbResult = \Database::getInstance()
-								->prepare('SELECT * FROM tl_content WHERE id=?')
-								->execute($arrMatch[2]);
-
-							// Check if we have a ce element.
-							if ($objDbResult->numRows == 0)
-							{
-								$strContent = str_replace($arrMatch[0], '', $strContent);
-								break;
-							}
-
-							// Get instance and call generate function.
-							$objCE      = new FilterClearAll($objDbResult);
-							$strContent = str_replace($arrMatch[0], $objCE->generateReal(), $strContent);
+							$strContent = $this->generateContentElement($strContent, $arrMatch[0], $arrMatch[2]);
 							break;
 
 						case 'mod':
-							$objDbResult = \Database::getInstance()
-								->prepare('SELECT * FROM tl_module WHERE id=?')
-								->execute($arrMatch[2]);
-
-							// Check if we have a mod element.
-							if ($objDbResult->numRows == 0)
-							{
-								$strContent = str_replace($arrMatch[0], '', $strContent);
-								break;
-							}
-
-							// Get instance and call generate function.
-							$objCE      = new FilterClearAll($objDbResult);
-							$strContent = str_replace($arrMatch[0], $objCE->generateReal(), $strContent);
+							$strContent = $this->generateModule($strContent, $arrMatch[0], $arrMatch[2]);
 							break;
 
 						default:
