@@ -27,7 +27,9 @@ if (!is_file($dir . '/system/initialize.php'))
 /**
  * This class handles the DCA style picker.
  */
+// @codingStandardsIgnoreStart - Ignore that the class name is not in camel case.
 class popup extends Backend
+// @codingStandardsIgnoreEnd
 {
 
 	/**
