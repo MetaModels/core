@@ -16,7 +16,6 @@
 
 namespace MetaModels\FrontendIntegration;
 
-use MetaModels\Filter\Setting\ICollection;
 use MetaModels\Filter\Setting\Factory as FilterFactory;
 use MetaModels\FrontendIntegration\Content\FilterClearAll;
 use MetaModels\Helper\ContaoController;
