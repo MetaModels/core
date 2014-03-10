@@ -18,4 +18,4 @@ script: ant -keep-going
 
 branches:
   only:
-    - v2
+    - tng
