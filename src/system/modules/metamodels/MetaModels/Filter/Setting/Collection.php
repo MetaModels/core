@@ -64,7 +64,7 @@ class Collection implements ICollection
 	 *
 	 * @return ISimple
 	 */
-	protected function newSetting(Result $objSettings)
+	protected function newSetting($objSettings)
 	{
 		$strClass = $GLOBALS['METAMODELS']['filters'][$objSettings->type]['class'];
 		// TODO: add factory support here.
