@@ -102,11 +102,12 @@ class Subscriber
 			->execute();
 
 		$itemCount =  sprintf(
-			' <span style="color:#b3b3b3; padding-left:3px">[%s]</span>',
+			'<span style="color:#b3b3b3; padding-left:3px">[%s]</span>',
 			$translator->translatePluralized('itemFormat', $objCount->itemCount, 'tl_metamodel', array($objCount->itemCount))
 		);
+		$tableName = '<span style="color:#b3b3b3; padding-left:3px">(' . $model->getProperty('tableName') . ')</span>';
 
-		$event->setArgs('<span class="name">' . $strLabel . $itemCount . '</span>' . $strImage);
+		$event->setArgs('<span class="name">' . $strLabel . $tableName . $itemCount . '</span>' . $strImage);
 	}
 
 	/**

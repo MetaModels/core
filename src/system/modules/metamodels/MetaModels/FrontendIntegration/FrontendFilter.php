@@ -112,7 +112,7 @@ class FrontendFilter
 				$strFilterAction .= sprintf(
 					$GLOBALS['TL_CONFIG']['disableAlias'] ? '&amp;%s=%s' : '/%s/%s',
 					$strName,
-					urlencode($strValue)
+					rawurlencode($strValue)
 				);
 			}
 		}
