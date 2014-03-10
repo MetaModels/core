@@ -108,8 +108,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 			'fields'                  => array('sorting'),
 			'panelLayout'             => 'limit',
 			'headerFields'            => array('name'),
-			// TODO: change callbacks to event handlers.
-			'child_record_callback'   => array('MetaModels\Dca\RenderSetting', 'drawSetting'),
 		),
 
 		'global_operations' => array

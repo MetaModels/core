@@ -16,7 +16,6 @@
 
 namespace MetaModels\Dca;
 
-use DcGeneral\Contao\BackendBindings;
 use DcGeneral\DC_General;
 use MetaModels\IMetaModel;
 use MetaModels\Factory as ModelFactory;
@@ -189,48 +188,6 @@ class RenderSetting extends Helper
 		}
 
 		return $arrResult;
-	}
-
-	public function drawSetting($arrRow, $strLabel = '', DC_General $objDC = null, $imageAttribute='', $blnReturnImage=false, $blnProtected=false)
-	{
-		$objSetting = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')->execute($arrRow['pid']);
-		$objMetaModel = ModelFactory::byId($objSetting->pid);
-
-		$objAttribute = $objMetaModel->getAttributeById($arrRow['attr_id']);
-
-		if ($objAttribute)
-		{
-			$strType  = $objAttribute->get('type');
-			$strImage = $GLOBALS['METAMODELS']['attributes'][$strType]['image'];
-			if (!$strImage || !file_exists(TL_ROOT . '/' . $strImage))
-			{
-				$strImage = 'system/modules/metamodels/html/filter_default.png';
-			}
-			$strLabel = $objAttribute->getName();
-		}
-		else
-		{
-			$strType  = 'unknown ID: ' . $arrRow['attr_id'];
-			$strImage = 'system/modules/metamodels/html/filter_default.png';
-			$strLabel = 'unknown attribute';
-		}
-
-		$strImage = BackendBindings::generateImage($strImage, '', $imageAttribute);
-
-		// Return the image only
-		if ($blnReturnImage)
-		{
-			return $strImage;
-		}
-
-		$strReturn = sprintf(
-			$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row'],
-			$strImage,
-			$strLabel ? $strLabel : $strType,
-			$strType
-		);
-
-		return $strReturn;
 	}
 
 	/**

@@ -633,7 +633,9 @@ class Subscriber
 					=> self::createClosure(
 						'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbRenderSetting',
 						'getBreadcrumb'
-					)
+					),
+				ModelToLabelEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\RenderSetting\DrawSetting::modelToLabel',
 			),
 			$dispatcher,
 			array('tl_metamodel_rendersetting')
