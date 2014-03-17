@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\FilterSetting;
 
-use DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 
 /**
  * Handle events for property tl_metamodel_filtersetting.type.

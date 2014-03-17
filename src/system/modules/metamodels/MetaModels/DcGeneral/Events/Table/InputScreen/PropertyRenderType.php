@@ -16,11 +16,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\InputScreen;
 
-use DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
-use DcGeneral\Data\ModelInterface;
-use DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition;
-use DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
-use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 
 /**
  * Manipulate the data definition for the property "rendertype" in table "tl_dca".

@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\RenderSettings;
 
-use DcGeneral\Event\PostPersistModelEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 
 /**
  * Handles update operation on tl_metamodel_rendersettings.

@@ -16,8 +16,8 @@
 
 namespace MetaModels\DcGeneral;
 
-use DcGeneral\Controller\DefaultController;
-use DcGeneral\DC_General;
+use ContaoCommunityAlliance\DcGeneral\Controller\DefaultController;
+use ContaoCommunityAlliance\DcGeneral\DC_General;
 
 /**
  * Controller class for DC_General

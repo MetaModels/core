@@ -12,9 +12,9 @@
 
 namespace MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property;
 
-use DcGeneral\Data\ModelInterface;
-use DcGeneral\Data\PropertyValueBag;
-use DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
+use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBag;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
 
 /**
  * Condition for the default palette.

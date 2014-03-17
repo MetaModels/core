@@ -16,8 +16,8 @@
 
 namespace MetaModels\DcGeneral\Events\Table\Attribute;
 
-use DcGeneral\Data\ModelInterface;
-use DcGeneral\Exception\DcGeneralInvalidArgumentException;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
+use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
 use MetaModels\Factory;
 use MetaModels\IMetaModel;
 

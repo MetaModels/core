@@ -19,9 +19,9 @@ namespace MetaModels\DcGeneral\Events\Table\FilterSetting;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
-use DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
-use DcGeneral\DataDefinition\ModelRelationship\FilterBuilder;
-use DcGeneral\Factory\Event\PopulateEnvironmentEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\FilterBuilder;
+use ContaoCommunityAlliance\DcGeneral\Factory\Event\PopulateEnvironmentEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**

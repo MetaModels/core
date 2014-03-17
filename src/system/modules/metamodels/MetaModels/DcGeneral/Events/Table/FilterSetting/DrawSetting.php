@@ -19,9 +19,9 @@ namespace MetaModels\DcGeneral\Events\Table\FilterSetting;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
-use DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
-use DcGeneral\Data\ModelInterface;
-use DcGeneral\EnvironmentInterface;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
+use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use MetaModels\Filter\Setting\Factory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 

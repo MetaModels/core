@@ -16,8 +16,8 @@
 
 namespace MetaModels\Dca;
 
-use DcGeneral\DataDefinition\Definition\Properties\PropertyInterface;
-use DcGeneral\EnvironmentInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\PropertyInterface;
+use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use MetaModels\IMetaModel;
 use MetaModels\Factory as MetaModelFactory;
 

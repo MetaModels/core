@@ -16,17 +16,17 @@
 
 namespace MetaModels\DcGeneral\Data;
 
-use DcGeneral\Data\DCGE;
-use DcGeneral\Data\DefaultLanguageInformation;
-use DcGeneral\Data\DefaultLanguageInformationCollection;
-use DcGeneral\Data\LanguageInformationCollectionInterface;
-use DcGeneral\Data\MultiLanguageDataProviderInterface;
-use DcGeneral\Data\ModelInterface;
-use DcGeneral\Data\ConfigInterface;
-use DcGeneral\Data\CollectionInterface;
-use DcGeneral\Data\DefaultConfig;
-use DcGeneral\Data\DefaultCollection;
-use DcGeneral\Data\DefaultModel;
+use ContaoCommunityAlliance\DcGeneral\Data\DCGE;
+use ContaoCommunityAlliance\DcGeneral\Data\DefaultLanguageInformation;
+use ContaoCommunityAlliance\DcGeneral\Data\DefaultLanguageInformationCollection;
+use ContaoCommunityAlliance\DcGeneral\Data\LanguageInformationCollectionInterface;
+use ContaoCommunityAlliance\DcGeneral\Data\LanguageInformationInterface;
+use ContaoCommunityAlliance\DcGeneral\Data\MultiLanguageDataProviderInterface;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
+use ContaoCommunityAlliance\DcGeneral\Data\ConfigInterface;
+use ContaoCommunityAlliance\DcGeneral\Data\CollectionInterface;
+use ContaoCommunityAlliance\DcGeneral\Data\DefaultConfig;
+use ContaoCommunityAlliance\DcGeneral\Data\DefaultCollection;
 use MetaModels\Factory as ModelFactory;
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Rules\Condition\ConditionAnd;
@@ -782,7 +782,7 @@ class Driver implements MultiLanguageDataProviderInterface
 	 *
 	 * @param mixed $mixID The ID of the record to retrieve.
 	 *
-	 * @return \DcGeneral\Data\LanguageInformationInterface|null
+	 * @return LanguageInformationInterface|null
 	 */
 	public function getFallbackLanguage($mixID)
 	{

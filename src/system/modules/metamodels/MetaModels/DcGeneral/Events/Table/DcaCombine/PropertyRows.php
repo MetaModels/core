@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\DcaCombine;
 
-use DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 
 /**
  * Handle events for tl_metamodel_dca_combine.rows.

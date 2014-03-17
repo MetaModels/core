@@ -16,6 +16,9 @@
 
 namespace MetaModels\Dca;
 
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\System\GetReferrerEvent;
+use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use DcGeneral\DataContainerInterface;
 use MetaModels\Factory;
 use MetaModels\IMetaModel;

@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral\DataDefinition;
 
-use DcGeneral\DataDefinition\DefaultContainer;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\DefaultContainer;
 use MetaModels\DcGeneral\DataDefinition\Definition\IMetaModelDefinition;
 
 /**

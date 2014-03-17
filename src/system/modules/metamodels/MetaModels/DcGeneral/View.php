@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral;
 
-use DcGeneral\View\DefaultView;
+use ContaoCommunityAlliance\DcGeneral\View\DefaultView;
 
 /**
  * Controller class for DC_General

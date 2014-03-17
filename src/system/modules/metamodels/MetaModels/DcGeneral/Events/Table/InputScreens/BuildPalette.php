@@ -16,16 +16,16 @@
 
 namespace MetaModels\DcGeneral\Events\Table\InputScreens;
 
-use DcGeneral\DataDefinition\ConditionChainInterface;
-use DcGeneral\DataDefinition\ConditionInterface;
-use DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
-use DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition;
-use DcGeneral\DataDefinition\Palette\Legend;
-use DcGeneral\DataDefinition\Palette\LegendInterface;
-use DcGeneral\DataDefinition\Palette\PaletteInterface;
-use DcGeneral\DataDefinition\Palette\Property;
-use DcGeneral\DataDefinition\Palette\PropertyInterface;
-use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionChainInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Legend;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PaletteInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
+use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\InputScreenAttributeIs;
 
 /**

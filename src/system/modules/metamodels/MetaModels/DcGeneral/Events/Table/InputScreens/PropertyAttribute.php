@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\InputScreens;
 
-use DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 
 /**
  * Handle events for tl_metamodel_dcasetting.attr_id.

@@ -18,8 +18,8 @@ namespace MetaModels\DcGeneral\Events\Table\InputScreens;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
-use DcGeneral\Contao\BackendBindings;
-use DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\BackendBindings;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
 
 /**
  * Handle events to generate buttons.

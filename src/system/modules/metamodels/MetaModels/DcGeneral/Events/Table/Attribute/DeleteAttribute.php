@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\Attribute;
 
-use DcGeneral\Event\PreDeleteModelEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PreDeleteModelEvent;
 use MetaModels\Attribute\Factory;
 
 /**

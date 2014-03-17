@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\InputScreen;
 
-use DcGeneral\Event\PostPersistModelEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 
 /**
  * Handle event to update model in table tl_metamodel_dca.

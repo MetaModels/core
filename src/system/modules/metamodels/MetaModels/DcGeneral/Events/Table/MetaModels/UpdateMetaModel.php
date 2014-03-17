@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\MetaModels;
 
-use DcGeneral\Event\PostPersistModelEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use MetaModels\Helper\TableManipulation;
 
 /**

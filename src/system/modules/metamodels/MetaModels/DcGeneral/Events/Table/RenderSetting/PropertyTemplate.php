@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\RenderSetting;
 
-use DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use MetaModels\Dca\Helper;
 use MetaModels\Factory;
 

@@ -16,9 +16,9 @@
 
 namespace MetaModels\DcGeneral\Data;
 
-use DcGeneral\Data\ModelInterface;
-use DcGeneral\Data\PropertyValueBagInterface;
-use DcGeneral\Exception\DcGeneralInvalidArgumentException;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
+use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBagInterface;
+use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
 use MetaModels\IItem;
 
 /**

@@ -18,7 +18,7 @@ namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
-use DcGeneral\EnvironmentInterface;
+use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 
 /**
  * Generate a breadcrumb for table tl_metamodel_dca.

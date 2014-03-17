@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral\DataDefinition\Definition;
 
-use DcGeneral\DataDefinition\Definition\DefinitionInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefinitionInterface;
 
 /**
  * This interface describes a data definition of a MetaModel.

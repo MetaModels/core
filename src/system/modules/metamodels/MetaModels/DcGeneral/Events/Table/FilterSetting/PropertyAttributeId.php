@@ -16,10 +16,10 @@
 
 namespace MetaModels\DcGeneral\Events\Table\FilterSetting;
 
-use DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
-use DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
-use DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
-use DcGeneral\Data\ModelInterface;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use MetaModels\Filter\Setting\Factory as FilterFactory;
 
 /**

@@ -16,10 +16,10 @@
 
 namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
-use DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
-use DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
-use DcGeneral\EnvironmentInterface;
-use DcGeneral\InputProviderInterface;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
+use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
 
 /**
  * Base class for calculating hierarchical breadcrumbs.

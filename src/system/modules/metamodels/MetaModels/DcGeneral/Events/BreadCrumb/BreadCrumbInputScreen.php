@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
-use DcGeneral\EnvironmentInterface;
+use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use MetaModels\Factory;
 
 /**

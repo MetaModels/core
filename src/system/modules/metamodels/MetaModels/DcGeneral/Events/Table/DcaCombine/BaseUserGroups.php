@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\DcaCombine;
 
-use DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 
 /**
  * Provide base method for retrieving user groups from a table.

@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral\Events\MetaModel;
 
-use DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use MetaModels\DcGeneral\Data\Model;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\IItem;

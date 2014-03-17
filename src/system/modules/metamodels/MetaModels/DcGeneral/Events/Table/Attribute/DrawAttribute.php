@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\Attribute;
 
-use DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use MetaModels\Attribute\Factory;
 
 /**

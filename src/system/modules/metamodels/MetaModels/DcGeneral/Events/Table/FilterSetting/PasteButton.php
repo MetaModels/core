@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\FilterSetting;
 
-use DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
 
 /**
  * Calculate the paste button for a given filter setting.

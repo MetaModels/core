@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\InputScreen;
 
-use DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 
 /**
  * Manipulate the data definition for the property "backendsection" in table "tl_dca".

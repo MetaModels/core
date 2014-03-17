@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\MetaModels;
 
-use DcGeneral\Event\PreDeleteModelEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PreDeleteModelEvent;
 use MetaModels\Factory;
 use MetaModels\Helper\TableManipulation;
 use MetaModels\IMetaModel;

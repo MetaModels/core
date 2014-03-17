@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\Attribute;
 
-use DcGeneral\Event\PostPersistModelEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use MetaModels\Attribute\Factory;
 
 /**

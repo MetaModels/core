@@ -18,7 +18,7 @@ namespace MetaModels\DcGeneral\Events\Table\InputScreens;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
-use DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
 
 /**
  * Handle events for tl_metamodel_dcasetting.tl_class.

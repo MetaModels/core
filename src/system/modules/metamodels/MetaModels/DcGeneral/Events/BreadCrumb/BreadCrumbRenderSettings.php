@@ -16,7 +16,7 @@
 
 namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
-use DcGeneral\EnvironmentInterface;
+use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use MetaModels\Render\Setting\Factory;
 use MetaModels\Render\Setting\ICollection;
 

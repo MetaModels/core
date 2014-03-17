@@ -16,10 +16,10 @@
 
 namespace MetaModels\DcGeneral\Events\Table\RenderSettings;
 
-use DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
-use DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
-use DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
-use DcGeneral\Data\ModelInterface;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use MetaModels\Factory;
 
 /**

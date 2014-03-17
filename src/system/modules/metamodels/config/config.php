@@ -14,8 +14,6 @@
  * @filesource
  */
 
-use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
-
 // Preserve values by extensions but insert as first entry after 'system'.
 $arrOld = (array)$GLOBALS['BE_MOD']['metamodels'];
 unset($GLOBALS['BE_MOD']['metamodels']);
