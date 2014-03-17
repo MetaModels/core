@@ -20,6 +20,7 @@ use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use DcGeneral\DataDefinition\ModelRelationship\FilterBuilder;
 use DcGeneral\Factory\Event\PopulateEnvironmentEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -42,15 +43,14 @@ class InjectFidFilter
 		$relationships = $environment->getDataDefinition()->getModelRelationshipDefinition();
 		$filterId      = IdSerializer::fromSerialized($input->getParameter('pid'));
 
-		$root     = $relationships->getRootCondition();
-		$filter   = $root->getFilterArray();
-		$filter[] = array
-		(
-			'property'    => 'fid',
-			'operation'   => '=',
-			'value'       => $filterId->getId(),
+		$root = $relationships->getRootCondition();
+
+		$root->setFilterArray(
+			FilterBuilder::fromArrayForRoot($root->getFilterArray())
+			->getFilter()
+			->andPropertyEquals('fid', $filterId->getId())
+			->getAllAsArray()
 		);
-		$root->setFilterArray($filter);
 
 		$childConditions = $relationships->getChildConditions('tl_metamodel_filtersetting');
 
@@ -58,19 +58,17 @@ class InjectFidFilter
 		{
 			if ($childCondition->getDestinationName() == 'tl_metamodel_filtersetting')
 			{
-				$filter   = $childCondition->getFilterArray();
-				$filter[] = array
-				(
-					'local'        => 'fid',
-					'operation'    => '=',
-					'remote_value' => $filterId->getId(),
-				);
-				$childCondition->setFilterArray($filter);
+				$childCondition->setFilterArray(
+					FilterBuilder::fromArray($childCondition->getFilterArray())
+					->getFilter()
+					->andPropertyEquals('fid', $filterId->getId())
+					->getAllAsArray()
+			);
 
 				$setter   = $childCondition->getSetters();
 				$setter[] = array
 				(
-					'property'    => 'fid',
+					'to_field'    => 'fid',
 					'value'       => $filterId->getId(),
 				);
 
