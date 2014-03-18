@@ -18,12 +18,12 @@ namespace MetaModels\BackendIntegration;
 
 use ContaoCommunityAlliance\Translator\Contao\LangArrayTranslator;
 use ContaoCommunityAlliance\Translator\TranslatorChain;
-use DcGeneral\Contao\BackendBindings;
-use DcGeneral\Contao\Callback\Callbacks;
-use DcGeneral\Event\EventPropagator;
-use DcGeneral\Factory\DcGeneralFactory;
-use DcGeneral\Factory\Event\BuildDataDefinitionEvent;
-use DcGeneral\Factory\Event\PopulateEnvironmentEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\BackendBindings;
+use ContaoCommunityAlliance\DcGeneral\Contao\Callback\Callbacks;
+use ContaoCommunityAlliance\DcGeneral\Event\EventPropagator;
+use ContaoCommunityAlliance\DcGeneral\Factory\DcGeneralFactory;
+use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
+use ContaoCommunityAlliance\DcGeneral\Factory\Event\PopulateEnvironmentEvent;
 use MetaModels\DcGeneral\Dca\Builder\Builder;
 
 /**
