@@ -16,7 +16,7 @@
 
 namespace MetaModels\BackendIntegration;
 
-use DcGeneral\Event\EventPropagator;
+use ContaoCommunityAlliance\DcGeneral\Event\EventPropagator;
 use MetaModels\BackendIntegration\Contao2\initializeSystemHOOKHack;
 use MetaModels\BackendIntegration\Events\BackendIntegrationEvent;
 use MetaModels\Dca\MetaModelDcaBuilder;
