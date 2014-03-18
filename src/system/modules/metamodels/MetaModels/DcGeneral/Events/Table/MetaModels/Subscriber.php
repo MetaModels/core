@@ -103,7 +103,12 @@ class Subscriber
 
 		$itemCount =  sprintf(
 			'<span style="color:#b3b3b3; padding-left:3px">[%s]</span>',
-			$translator->translatePluralized('itemFormat', $objCount->itemCount, 'tl_metamodel', array($objCount->itemCount))
+			$translator->translatePluralized(
+				'itemFormatCount',
+				$objCount->itemCount,
+				'tl_metamodel',
+				array($objCount->itemCount)
+			)
 		);
 		$tableName = '<span style="color:#b3b3b3; padding-left:3px">(' . $model->getProperty('tableName') . ')</span>';
 
