@@ -17,7 +17,7 @@
 
 namespace MetaModels\Dca;
 
-use DcGeneral\Contao\BackendBindings;
+use ContaoCommunityAlliance\DcGeneral\Contao\BackendBindings;
 use MetaModels\BackendIntegration\IInputScreen;
 use MetaModels\BackendIntegration\Module;
 use MetaModels\BackendIntegration\ViewCombinations;
