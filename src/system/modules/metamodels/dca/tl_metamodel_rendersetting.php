@@ -181,7 +181,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 	(
 		'default' => array
 		(
-			'title' => array('attr_id', 'template')
+			'title' => array('attr_id', 'template', 'additional_class')
 		),
 	),
 
@@ -216,6 +216,18 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 				'tl_class'            => 'w50',
 				'chosen'              => true,
 				'includeBlankOption'  => true,
+			)
+		),
+
+		'additional_class' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['additional_class'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array
+			(
+				'tl_class'            => 'w50',
+				'maxlength'           => 64,
 			)
 		),
 	)
