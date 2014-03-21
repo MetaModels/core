@@ -53,6 +53,7 @@ use MetaModels\DcGeneral\DataDefinition\Definition\MetaModelDefinition;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\Events\MetaModel\RenderItem;
 use MetaModels\Factory;
+use MetaModels\Helper\ToolboxFile;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -407,6 +408,8 @@ class Builder
 		// Determine the image to use.
 		if ($icon)
 		{
+			$icon = ToolboxFile::convertValueToPath($icon);
+
 			/** @var ResizeImageEvent $event */
 			$event = $this->dispatcher->dispatch(
 				ContaoEvents::IMAGE_RESIZE,
