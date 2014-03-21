@@ -825,8 +825,12 @@ class ToolboxFile
 	 *
 	 * @return string
 	 */
-	public function convertValueToPath($varValue)
+	public static function convertValueToPath($varValue)
 	{
+		if (version_compare(VERSION, '3', '<'))
+		{
+			return $varValue;
+		}
 
 		$objFiles = \FilesModel::findByPk($varValue);
 
