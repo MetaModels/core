@@ -15,6 +15,7 @@ namespace MetaModels\DcGeneral\Dca\Builder;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CutCommand;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
 use ContaoCommunityAlliance\Translator\TranslatorChain;
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinition;
@@ -505,7 +506,15 @@ class Builder
 		}
 		else
 		{
-			$command = new Command();
+			switch ($operationName)
+			{
+				case 'cut':
+					$command = new CutCommand();
+					break;
+				default:
+					$command = new Command();
+			}
+
 			$command->setName($operationName);
 			$collection->addCommand($command);
 		}
