@@ -17,12 +17,15 @@
 
 namespace MetaModels\Dca;
 
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\BackendBindings;
-use MetaModels\BackendIntegration\IInputScreen;
+use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\Module;
 use MetaModels\BackendIntegration\ViewCombinations;
 use MetaModels\Factory;
 use MetaModels\Helper\ContaoController;
+use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModel;
 use MetaModels\Render\Setting\Factory as RenderFactory;
 
@@ -146,16 +149,21 @@ class MetaModelDcaBuilder
 	 */
 	protected function handleStandalone($inputScreen)
 	{
-		$metaModel = $inputScreen->getMetaModel();
+		$metaModel  = $inputScreen->getMetaModel();
+		$dispatcher = $GLOBALS['container']['event-dispatcher'];
 
 		$strModuleName = 'metamodel_' . $metaModel->getTableName();
 
 		$strTableCaption = $metaModel->getName();
 
-		// determine image to use.
-		if (($icon = $inputScreen->getIcon()) && file_exists(TL_ROOT . '/' . $icon))
+		$icon = ToolboxFile::convertValueToPath($inputScreen->getIcon());
+		// Determine image to use.
+		if ($icon && file_exists(TL_ROOT . '/' . $icon))
 		{
-			$strIcon = BackendBindings::getImage(ContaoController::getInstance()->urlEncode($icon), 16, 16);
+			$event = new ResizeImageEvent($icon, 16, 16);
+			/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+			$dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
+			$strIcon = $event->getResultImage();
 		} else {
 			$strIcon = 'system/modules/metamodels/html/metamodels.png';
 		}
