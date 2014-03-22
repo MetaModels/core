@@ -270,6 +270,8 @@ CREATE TABLE `tl_metamodel_rendersetting` (
   `attr_id` int(10) unsigned NOT NULL default '0',
 -- template to use
   `template` varchar(64) NOT NULL default '',
+-- additional css class to use
+  `additional_class` varchar(64) NOT NULL default '',
 -- active or disabled
   `enabled` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`),
