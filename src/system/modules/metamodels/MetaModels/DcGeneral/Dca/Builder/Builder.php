@@ -122,6 +122,13 @@ class Builder
 	 */
 	public function populate(PopulateEnvironmentEvent $event)
 	{
+		$container = $event->getEnvironment()->getDataDefinition();
+
+		if (!($container instanceof IMetaModelDataDefinition))
+		{
+			return;
+		}
+
 		$this->dispatcher = $event->getDispatcher();
 
 		$translator = $event->getEnvironment()->getTranslator();
