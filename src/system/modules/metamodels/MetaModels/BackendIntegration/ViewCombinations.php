@@ -340,14 +340,9 @@ class ViewCombinations
 	 */
 	public static function getRenderSetting($metaModel)
 	{
-		self::bufferModels();
+		$renderSetting = self::getRenderSettingDetails($metaModel);
 
-		if (!is_numeric($metaModel))
-		{
-			$metaModel = self::$tableMap[$metaModel];
-		}
-
-		return self::$information[$metaModel][self::RENDERSETTING]['id'];
+		return $renderSetting ? $renderSetting['id'] : null;
 	}
 
 	/**
@@ -359,14 +354,8 @@ class ViewCombinations
 	 */
 	public static function getInputScreen($metaModel)
 	{
-		self::bufferModels();
-
-		if (!is_numeric($metaModel))
-		{
-			$metaModel = self::$tableMap[$metaModel];
-		}
-
-		return self::$information[$metaModel][self::INPUTSCREEN]->getId();
+		$inputScreen = self::getInputScreenDetails($metaModel);
+		return $inputScreen ? $inputScreen->getId() : null;
 	}
 
 	/**
@@ -419,7 +408,9 @@ class ViewCombinations
 		$result = array();
 		foreach (self::$information as $information)
 		{
-			if ($information[self::INPUTSCREEN] && $information[self::INPUTSCREEN]->isStandalone())
+			/** @var IInputScreen $inputScreen */
+			$inputScreen = isset($information[self::INPUTSCREEN]) ? $information[self::INPUTSCREEN] : null;
+			if ($inputScreen && $inputScreen->isStandalone())
 			{
 				$result[] = $information[self::INPUTSCREEN];
 			}
