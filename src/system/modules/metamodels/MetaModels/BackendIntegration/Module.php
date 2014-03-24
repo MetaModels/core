@@ -195,21 +195,6 @@ class Module
 		else
 		{
 			$name = substr($backendModule, 10);
-
-			$generator = new Builder();
-
-			$dispatcher->addListener(
-				sprintf('%s[%s]', BuildDataDefinitionEvent::NAME, $name),
-				array($generator, 'build'),
-				$generator::PRIORITY
-			);
-			$dispatcher->addListener(
-				sprintf('%s[%s]', PopulateEnvironmentEvent::NAME, $name),
-				array($generator, 'populate'),
-				$generator::PRIORITY
-			);
-
-			$factory->setContainerClassName('MetaModels\DcGeneral\DataDefinition\MetaModelDataDefinition');
 		}
 
 		$dcg = $factory

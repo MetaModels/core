@@ -29,6 +29,8 @@ use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PreDeleteModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\PopulateEnvironmentEvent;
+use ContaoCommunityAlliance\DcGeneral\Factory\Event\PreCreateDcGeneralEvent;
+use MetaModels\DcGeneral\Dca\Builder\Builder;
 use MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPTable;
 use MetaModels\DcGeneral\Events\Table\InputScreens\BuildPalette;
 use Symfony\Component\EventDispatcher\Event;
@@ -108,6 +110,13 @@ class Subscriber
 			),
 			$dispatcher,
 			array('tl_metamodel_filtersetting')
+		);
+
+		self::registerListeners(
+			array(
+				PreCreateDcGeneralEvent::NAME => __CLASS__ . '::preCreateDcGeneral'
+			),
+			$dispatcher
 		);
 	}
 
@@ -704,5 +713,38 @@ class Subscriber
 			$dispatcher,
 			array('tl_metamodel_rendersettings', 'template')
 		);
+	}
+
+	/**
+	 * Determine if a MetaModel is being loaded and if so, populate the container.
+	 *
+	 * @param PreCreateDcGeneralEvent $event The event.
+	 *
+	 * @return void
+	 */
+	public static function preCreateDcGeneral(PreCreateDcGeneralEvent $event)
+	{
+		$factory = $event->getFactory();
+		$name    = $factory->getContainerName();
+
+		if (substr($name, 0, 3) !== 'mm_')
+		{
+			return;
+		}
+
+		$generator = new Builder();
+
+		$event->getDispatcher()->addListener(
+			sprintf('%s[%s]', BuildDataDefinitionEvent::NAME, $name),
+			array($generator, 'build'),
+			$generator::PRIORITY
+		);
+		$event->getDispatcher()->addListener(
+			sprintf('%s[%s]', PopulateEnvironmentEvent::NAME, $name),
+			array($generator, 'populate'),
+			$generator::PRIORITY
+		);
+
+		$factory->setContainerClassName('MetaModels\DcGeneral\DataDefinition\MetaModelDataDefinition');
 	}
 }
