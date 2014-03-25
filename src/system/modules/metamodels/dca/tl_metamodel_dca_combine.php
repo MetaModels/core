@@ -31,7 +31,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
 		(
 			'default'                            => array
 			(
-				'class'                          => 'DcGeneral\Data\TableRowsAsRecordsDataProvider',
+				'class'                          => 'ContaoCommunityAlliance\DcGeneral\Data\TableRowsAsRecordsDataProvider',
 				'source'                         => 'tl_metamodel_dca_combine',
 				'group_column'                   => 'pid',
 				'sort_column'                    => 'sorting'
