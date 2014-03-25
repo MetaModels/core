@@ -27,6 +27,8 @@ namespace MetaModels\Helper;
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ *
+ * @deprecated Deprecated in favor of contao-events-bindings
  */
 class ContaoController extends \Controller
 {
