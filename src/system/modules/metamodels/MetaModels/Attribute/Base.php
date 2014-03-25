@@ -169,10 +169,11 @@ abstract class Base implements IAttribute
 	 */
 	protected function prepareTemplate(Template $objTemplate, $arrRowData, $objSettings = null)
 	{
-		$objTemplate->attribute = $this;
-		$objTemplate->settings  = $objSettings;
-		$objTemplate->row       = $arrRowData;
-		$objTemplate->raw       = $arrRowData[$this->getColName()];
+		$objTemplate->attribute        = $this;
+		$objTemplate->settings         = $objSettings;
+		$objTemplate->row              = $arrRowData;
+		$objTemplate->raw              = $arrRowData[$this->getColName()];
+		$objTemplate->additional_class = $objSettings->get('additional_class') ? ' ' . $objSettings->get('additional_class') : '';
 	}
 
 	/**
