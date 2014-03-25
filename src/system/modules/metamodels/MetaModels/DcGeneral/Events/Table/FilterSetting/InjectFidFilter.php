@@ -61,7 +61,7 @@ class InjectFidFilter
 				$childCondition->setFilterArray(
 					FilterBuilder::fromArray($childCondition->getFilterArray())
 					->getFilter()
-					->andRemotePropertyEquals('fid', $filterId->getId())
+					->andRemotePropertyEquals('fid', $filterId->getId(), true)
 					->getAllAsArray()
 			);
 
