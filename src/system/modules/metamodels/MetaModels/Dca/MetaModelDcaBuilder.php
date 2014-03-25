@@ -18,6 +18,7 @@
 namespace MetaModels\Dca;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\LoadDataContainerEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\BackendBindings;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
@@ -616,7 +617,20 @@ class MetaModelDcaBuilder
 	 */
 	public function createDataContainer($strTableName)
 	{
-return;
+		if (substr($strTableName, 0, 3) === 'mm_')
+		{
+			/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+			$dispatcher = $GLOBALS['container']['event-dispatcher'];
+			$event      = new LoadDataContainerEvent($strTableName);
+			$dispatcher->dispatch(ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER, $event);
+
+			$GLOBALS['TL_DCA'][$strTableName] = array_replace_recursive(
+				(array)$GLOBALS['TL_DCA']['tl_metamodel_item'],
+				(array)$GLOBALS['TL_DCA'][$strTableName]
+			);
+
+			return true;
+		}
 
 		$this->injectChildTablesIntoDCA($strTableName);
 
