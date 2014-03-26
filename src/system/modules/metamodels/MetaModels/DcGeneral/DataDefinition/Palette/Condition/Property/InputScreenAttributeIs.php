@@ -15,6 +15,8 @@ namespace MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBag;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
 
 /**
  * Condition for the default palette.
@@ -92,7 +94,12 @@ class InputScreenAttributeIs implements PropertyConditionInterface
 	/**
 	 * {@inheritdoc}
 	 */
-	public function match(ModelInterface $model = null, PropertyValueBag $input = null)
+	public function match(
+		ModelInterface $model = null,
+		PropertyValueBag $input = null,
+		PropertyInterface $property = null,
+		LegendInterface $legend = null
+	)
 	{
 		if ($input && $input->hasPropertyValue('attr_id'))
 		{
