@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/MetaModels/core.png?branch=v2)](https://travis-ci.org/MetaModels/core)
+[![Build Status](https://travis-ci.org/MetaModels/core.png?branch=tng)](https://travis-ci.org/MetaModels/core)
 
 MetaModels
 ==========
