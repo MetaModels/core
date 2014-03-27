@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-10-26T08:13:25+02:00
+ * last-updated: 2013-10-29T16:13:41+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Cerca tutte le lingue';
@@ -48,6 +48,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['0']         =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['1']         = 'Controllare se si vuole essere in grado di impostare il valore di questo parametro nella parenting list (moduli, elementi di contenuto, ecc.)';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['0']                 = 'Dettagli dell\'impostazione del filtro';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['1']                 = 'Mostra i dettagli dell\'impostazione del filtro ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions']['0']    = 'Ignorare questo tipo di filtro per i valori rimanenti';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions']['1']    = 'Se questa opzione è attiva, il filtro restituirà tutti i valori senza prendere nelle regole del filtro.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['0']     = 'Stop dopo la prima corrispondenza';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['1']     = 'Se abilitata, questa impostazione filtro fermerà l\'esecuzione altre regole dopo il primo sottoinsieme valido.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['0']             = 'Template';
@@ -68,3 +70,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['idlist']       =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['simplelookup'] = 'Lookup semplice';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['0']             = 'Parametri URL';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['1']             = 'Il parametro URL che si deve ottenere mappando l\'attributo selezionato. Lo speciale  parametro <em>"auto_item"</ em> può essere utilizzato, questo è particolarmente utile come alias delle colonne.';
+

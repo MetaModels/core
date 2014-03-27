@@ -226,7 +226,7 @@ abstract class Simple implements ISimple
 
 		foreach ($arrWidget['options'] as $strKeyOption => $strOption)
 		{
-			$strValue  = urlencode($this->getFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption));
+			$strValue  = rawurlencode($this->getFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption));
 			$blnActive = $this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption);
 
 			$arrOptions[] = array

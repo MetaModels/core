@@ -108,7 +108,8 @@ class ModelList extends \Module
 			->setFilterParameters(deserialize($this->metamodel_filterparams, true), $this->getFilterParameters($objItemRenderer))
 			->setMetaTags($this->metamodel_meta_title, $this->metamodel_meta_description);
 
-		$this->Template->items      = $objItemRenderer->render($this->metamodel_noparsing, $this);
-		$this->Template->pagination = $objItemRenderer->getPagination();
+		$this->Template->items         = $objItemRenderer->render($this->metamodel_noparsing, $this);
+		$this->Template->numberOfItems = $objItemRenderer->getItems()->getCount();
+		$this->Template->pagination    = $objItemRenderer->getPagination();
 	}
 }
