@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-24T16:13:37+02:00
+ * last-updated: 2013-10-29T12:13:24+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Aggiunto l\'attributo "%s" alla maschera di input.';
@@ -91,7 +91,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['spaceToUnderscore']['0']       =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['spaceToUnderscore']['1']       = 'Se abilitato, ogni spazio vuoto verrà sostituito da un carattere underscore.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker']                  = 'Selettore Stile';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['subpalette']['0']              = 'Gestisci la sotto area';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['subpalette']['1']              = 'gestisci la sotto area della maschera di inserimento ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['subpalette']['1']              = 'Gestisci la sotto area della maschera di inserimento ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['0']                = 'Template personalizzato da utilizzare per la generazione';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['1']                = 'Selezionare il template che deve essere utilizzato per l\'attributo selezionato. Il nome del template deve iniziare con  "mm_&lt;type&gt;" dove il nome del tipo deve essere inserito al posto di &lt;type&gt;';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']                 = 'Tipo';
@@ -102,3 +102,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['1']           =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['0']   = 'Elimina slash durante il salvataggio';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['1']   = 'Aggiungi slash durante il salvataggio';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['2']   = 'Non fare nulla';
+

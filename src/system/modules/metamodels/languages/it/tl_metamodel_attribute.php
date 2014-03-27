@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2013-07-22T12:42:32+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['advanced_legend']  = 'Impostazioni avanzate';
@@ -21,7 +21,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['cut']['1']         = 'Taglia la d
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['delete']['0']      = 'Elimina attributo';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['delete']['1']      = 'Elimina attributo ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['description']['0'] = 'Descrizione';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['description']['1'] = 'Descrizione comprensibile da un utente';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['description']['1'] = 'Indicare la descrizione del campo che sarà visibile all\'utente';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['edit']['0']        = 'Modifica attributo';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['edit']['1']        = 'Modifica attributo ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['editheader']['0']  = 'Modifica attributo';
@@ -31,7 +31,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['isunique']['1']    = 'Selezionare
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['isvariant']['0']   = 'Abilita la sovrascrittura della variante';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['isvariant']['1']   = 'Seleziona questa opzione se si desidera sovrascrivere il valore con quello dell\'elemento padre';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name']['0']        = 'Nome';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name']['1']        = 'Nome comprensibile da un utente';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name']['1']        = 'Indicare l\'etichetta del campo che visualizzerà l\'utente';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode']    = 'Lingua';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value']       = 'Descrizione';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']['0']         = 'Nuovo attributo';
@@ -41,3 +41,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['1']        = 'Mostra i de
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['title_legend']     = 'Tipologia, denominazione e configurazione attributi di base';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['type']['0']        = 'Tipo di attributo';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['type']['1']        = 'Selezionare il tipo di attributo. ATTENZIONE: Se questa selezione viene variata, ogni informazione inserita potrebbe essere cancellata.';
+
