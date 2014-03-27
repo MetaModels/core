@@ -63,7 +63,7 @@ class InjectFidFilter
 					->getFilter()
 					->andRemotePropertyEquals('fid', $filterId->getId(), true)
 					->getAllAsArray()
-			);
+				);
 
 				$setter   = $childCondition->getSetters();
 				$setter[] = array
