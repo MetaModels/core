@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2013-07-22T12:42:32+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Impostazioni avanzate';
@@ -49,13 +49,14 @@ $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['0']       = 'Definisci l\
 $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['1']       = 'Definisci l\'impostazione di rendering per il MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['0']                 = 'Dettagli MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['1']                 = 'Mostra i dettagli del MetaModel ID %s';
-$GLOBALS['TL_LANG']['tl_metamodel']['tableName']['0']            = 'Nome della tabella';
-$GLOBALS['TL_LANG']['tl_metamodel']['tableName']['1']            = 'Nome della tabella banca dati per memorizzare gli elementi.';
+$GLOBALS['TL_LANG']['tl_metamodel']['tableName']['0']            = 'Nome tabella';
+$GLOBALS['TL_LANG']['tl_metamodel']['tableName']['1']            = 'Nome della tabella per memorizzare gli elementi.';
 $GLOBALS['TL_LANG']['tl_metamodel']['title_legend']              = 'Nome e tabella';
 $GLOBALS['TL_LANG']['tl_metamodel']['translated']['0']           = 'Traduzione';
-$GLOBALS['TL_LANG']['tl_metamodel']['translated']['1']           = 'Verifica se il MetaModel può essere tradotto oppure essere multilingua';
+$GLOBALS['TL_LANG']['tl_metamodel']['translated']['1']           = 'Se questa opzione è selezionata, il MetaModel può essere tradotto oppure essere multilingua.';
 $GLOBALS['TL_LANG']['tl_metamodel']['translated_legend']         = 'Traduzione';
 $GLOBALS['TL_LANG']['tl_metamodel']['tstamp']['0']               = 'Data di revisione';
 $GLOBALS['TL_LANG']['tl_metamodel']['tstamp']['1']               = 'Data e ora dell\'ultima revisione';
 $GLOBALS['TL_LANG']['tl_metamodel']['varsupport']['0']           = 'Supporto varianti';
 $GLOBALS['TL_LANG']['tl_metamodel']['varsupport']['1']           = 'Selezionare se questo MetaModel può supportare varianti di elementi';
+

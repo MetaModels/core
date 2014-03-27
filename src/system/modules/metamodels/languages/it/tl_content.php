@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-22T16:12:57+02:00
+ * last-updated: 2013-07-23T08:13:00+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_content']['ASC']                                 = 'Ascendente';
@@ -43,6 +43,10 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_layout']['0']               = 'Temp
 $GLOBALS['TL_LANG']['tl_content']['metamodel_layout']['1']               = 'Selezionare il template che deve essere utilizzato. Il nome del template deve iniziare con "ce_metamodel".';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_limit']['0']                = 'Numero massimo di elementi';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_limit']['1']                = 'Indicare il numero massimo di record. Inserire 0 per mostrare tutti gli elementi e disattivare l\'impaginazione.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_meta_description']['0']     = 'Meta Description';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_meta_description']['1']     = 'Imposta questo campo come meta-description della pagina.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_meta_title']['0']           = 'Meta Title';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_meta_title']['1']           = 'Imposta questo campo come meta-title della pagina.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_noparsing']['0']            = 'Nessun parsing degli elementi';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_noparsing']['1']            = 'Se si seleziona questa opzione, il modulo non analizza gli elementi. Solo gli elementi oggetto saranno disponibili nel template.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_offset']['0']               = 'Lista offset';
@@ -57,4 +61,6 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit']['0']            = 'Util
 $GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit']['1']            = 'Controllare se si desidera limitare la quantità di elementi elencati. Questo è utile per mostrare solo 500 elementi o tutti escludendo i primi 10 record, ma mantenendo l\'impaginazione intatta.';
 $GLOBALS['TL_LANG']['tl_content']['mm_config_legend']                    = 'Configurazione MetaModel';
 $GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']                    = 'Filtro MetaModels';
+$GLOBALS['TL_LANG']['tl_content']['mm_meta_legend']                      = 'Ottimizzazione motori di ricerca';
 $GLOBALS['TL_LANG']['tl_content']['mm_rendering']                        = 'MetaModel Rendering';
+
