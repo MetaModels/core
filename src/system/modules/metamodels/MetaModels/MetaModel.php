@@ -304,6 +304,8 @@ class MetaModel implements IMetaModel
 	 */
 	protected function getItemsWithId($arrIds, $arrAttrOnly = array())
 	{
+		$arrIds = array_unique(array_filter($arrIds));
+
 		if (!$arrIds)
 		{
 			return new Items(array());
