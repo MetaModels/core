@@ -303,7 +303,7 @@ class MetaModelDatabase extends Controller
 			}
 			else
 			{
-				$pidValue = $this->Input->get('id_' . $objMetaModel->get('ptable'));
+				$pidValue = $this->Input->get('id_' . $arrDCASetting['ptable']);
 			}
 
 			$arrDCA['list']['sorting']['filter'] = array_merge_recursive
