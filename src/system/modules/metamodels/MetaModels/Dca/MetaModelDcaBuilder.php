@@ -709,7 +709,7 @@ class MetaModelDcaBuilder
 			}
 			else
 			{
-				$pidValue = \Input::getInstance()->get('id_' . $objMetaModel->get('ptable'));
+				$pidValue = \Input::getInstance()->get('id_' . $arrDCASetting['ptable']);
 			}
 
 			$arrDCA['list']['sorting']['filter'] = array_merge_recursive
