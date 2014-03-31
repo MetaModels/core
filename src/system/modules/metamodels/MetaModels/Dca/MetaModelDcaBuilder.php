@@ -104,6 +104,11 @@ class MetaModelDcaBuilder
 
 		foreach ($screens as $screen)
 		{
+			if ($screen->getParentTable() !== $strTable)
+			{
+				continue;
+			}
+
 			$metaModel = $screen->getMetaModel();
 
 			$arrCaption = array(
