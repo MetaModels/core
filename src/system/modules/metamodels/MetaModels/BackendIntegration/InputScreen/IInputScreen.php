@@ -88,6 +88,13 @@ interface IInputScreen
 	public function getBackendCaption();
 
 	/**
+	 * Retrieve the name of the parent table (only valid when not stand-alone mode).
+	 *
+	 * @return string|null
+	 */
+	public function getParentTable();
+
+	/**
 	 * Check if the input screen shall be injected as standalone module.
 	 *
 	 * @return bool

@@ -298,6 +298,14 @@ class InputScreen implements IInputScreen
 	/**
 	 * {@inheritDoc}
 	 */
+	public function getParentTable()
+	{
+		return $this->data['ptable'];
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public function isStandalone()
 	{
 		return $this->data['rendertype'] == 'standalone';

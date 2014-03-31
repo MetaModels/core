@@ -46,6 +46,8 @@ class MetaModelDcaBuilder
 	 */
 	protected static $arrColNameChache = array();
 
+	protected $arrPTables = array();
+
 	/**
 	 * The singleton instance
 	 *
@@ -76,16 +78,6 @@ class MetaModelDcaBuilder
 		return \Database::getInstance();
 	}
 
-	public function getModelsWithPtable($strTablename)
-	{
-		$arrResult = array();
-		foreach ((array)$this->arrPTables[$strTablename] as $intId)
-		{
-			$arrResult[] = Factory::byId($intId);
-		}
-		return $arrResult;
-	}
-
 	public static function getBackendIcon($strBackendIcon)
 	{
 		// determine image to use.
@@ -100,9 +92,7 @@ class MetaModelDcaBuilder
 	/**
 	 * Inject child tables for the given table name as operations.
 	 *
-	 * @param string $strTable     the table to inject into.
-	 *
-	 * @param array  $arrTableDCA  the DCA corresponding to that table.
+	 * @param string $strTable The table to inject into.
 	 *
 	 * @return void
 	 */
@@ -110,36 +100,39 @@ class MetaModelDcaBuilder
 	{
 		$arrTableDCA = &$GLOBALS['TL_DCA'][$strTable];
 
-		$objMetaModels = $this->getModelsWithPtable($strTable);
+		$screens = ViewCombinations::getParentedInputScreens();
 
-		foreach ($objMetaModels as $objMetaModel)
+		foreach ($screens as $screen)
 		{
-			if ($objMetaModel)
-			{
-				/* @var IMetaModel $objMetaModel */
-				$arrDca = $this->getDca($objMetaModel->get('id'));
+			$metaModel = $screen->getMetaModel();
 
-				$arrCaption = array('', sprintf($GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'], $objMetaModel->getName()));
-				foreach (deserialize($arrDca['backendcaption'], true) as $arrLangEntry)
+			$arrCaption = array(
+				'',
+				sprintf(
+					$GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'],
+					$metaModel->getName()
+				)
+			);
+
+			foreach ($screen->getBackendCaption() as $arrLangEntry)
+			{
+				if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == $GLOBALS['TL_LANGUAGE'])
 				{
-					if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == self::getUser()->language)
-					{
-						$arrCaption = array($arrLangEntry['description'], $arrLangEntry['label']);
-					}
+					$arrCaption = array($arrLangEntry['description'], $arrLangEntry['label']);
 				}
 
-				$arrTableDCA['list']['operations']['edit_'.$objMetaModel->getTableName()] = array
+				$arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()] = array
 				(
 					'label'               => $arrCaption,
-					'href'                => 'table='.$objMetaModel->getTableName(),
-					'icon'                => self::getBackendIcon($arrDca['backendicon']),
+					'href'                => 'table='.$metaModel->getTableName(),
+					'icon'                => self::getBackendIcon($screen->getIcon()),
 					'attributes'          => 'onclick="Backend.getScrollOffset()"'
 				);
 
-				// is the destination table a metamodel with variants?
-				if ($objMetaModel->hasVariants())
+				// Is the destination table a metamodel with variants?
+				if ($metaModel->hasVariants())
 				{
-					$arrTableDCA['list']['operations']['edit_'.$objMetaModel->getTableName()]['idparam'] = 'id_'.$strTable;
+					$arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['idparam'] = 'id_'.$strTable;
 				}
 			}
 		}
@@ -209,13 +202,24 @@ class MetaModelDcaBuilder
 
 	public function injectIntoBackendModules()
 	{
-		$arrPTables = $this->arrPTables;
-		$intCount = count($arrPTables);
+		$screens = ViewCombinations::getParentedInputScreens();
+
+		$pTables = array();
+		foreach ($screens as $screen)
+		{
+			$ptable = $screen->getParentTable();
+
+			$pTables[$ptable][] = $screen->getMetaModel();
+		}
+
+		$this->arrPTables = $pTables;
+
+		$intCount = count($pTables);
 		// loop until all tables are injected or until there was no injection during one run.
 		// This is important, as we might have models that are child of another model.
-		while ($arrPTables)
+		while ($pTables)
 		{
-			foreach ($arrPTables as $strTable => $arrModels)
+			foreach ($pTables as $strTable => $arrModels)
 			{
 				foreach ($GLOBALS['BE_MOD'] as $strGroup => $arrModules)
 				{
@@ -224,21 +228,25 @@ class MetaModelDcaBuilder
 						if (isset($arrConfig['tables']) && in_array($strTable, $arrConfig['tables']))
 						{
 							$arrSubTables = array();
-							foreach ($arrModels as $intModel)
+							foreach ($arrModels as $metaModel)
 							{
-								$arrSubTables[] = Factory::byId($intModel)->getTableName();
+								/** @var IMetaModel $metaModel */
+								$arrSubTables[] = $metaModel->getTableName();
 							}
-							$GLOBALS['BE_MOD'][$strGroup][$strModule]['tables'] = array_merge($GLOBALS['BE_MOD'][$strGroup][$strModule]['tables'], $arrSubTables);
-							unset($arrPTables[$strTable]);
+							$GLOBALS['BE_MOD'][$strGroup][$strModule]['tables'] = array_merge(
+								$GLOBALS['BE_MOD'][$strGroup][$strModule]['tables'],
+								$arrSubTables
+							);
+							unset($pTables[$strTable]);
 						}
 					}
 				}
 			}
-			if (count($arrPTables) == $intCount)
+			if (count($pTables) == $intCount)
 			{
 				break;
 			}
-			$intCount = count($arrPTables);
+			$intCount = count($pTables);
 		}
 	}
 
@@ -621,7 +629,7 @@ class MetaModelDcaBuilder
 		{
 			/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
 			$dispatcher = $GLOBALS['container']['event-dispatcher'];
-			$event      = new LoadDataContainerEvent($strTableName);
+			$event      = new LoadDataContainerEvent('tl_metamodel_item');
 			$dispatcher->dispatch(ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER, $event);
 
 			$GLOBALS['TL_DCA'][$strTableName] = array_replace_recursive(

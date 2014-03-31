@@ -418,4 +418,27 @@ class ViewCombinations
 
 		return $result;
 	}
+
+	/**
+	 * Retrieve all standalone input screens.
+	 *
+	 * @return IInputScreen[]
+	 */
+	public static function getParentedInputScreens()
+	{
+		self::bufferModels();
+
+		$result = array();
+		foreach (self::$information as $information)
+		{
+			/** @var IInputScreen $inputScreen */
+			$inputScreen = isset($information[self::INPUTSCREEN]) ? $information[self::INPUTSCREEN] : null;
+			if ($inputScreen && !$inputScreen->isStandalone())
+			{
+				$result[] = $information[self::INPUTSCREEN];
+			}
+		}
+
+		return $result;
+	}
 }
