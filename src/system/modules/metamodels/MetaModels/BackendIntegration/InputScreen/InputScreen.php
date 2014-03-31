@@ -23,14 +23,14 @@ class InputScreen implements IInputScreen
 	 *
 	 * @var array
 	 */
-	protected $legends;
+	protected $legends = array();
 
 	/**
 	 * The properties contained within the input screen.
 	 *
 	 * @var array
 	 */
-	protected $properties;
+	protected $properties = array();
 
 	/**
 	 * Create a new instance.
