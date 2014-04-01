@@ -256,9 +256,9 @@ class Subscriber
 		self::registerListeners(
 			array(
 				PostPersistModelEvent::NAME
-				=> 'MetaModels\DcGeneral\Events\Table\MetaModels\UpdateAttribute::handle',
+				=> 'MetaModels\DcGeneral\Events\Table\Attribute\UpdateAttribute::handle',
 				PreDeleteModelEvent::NAME
-				=> 'MetaModels\DcGeneral\Events\Table\MetaModels\DeleteAttribute::handle',
+				=> 'MetaModels\DcGeneral\Events\Table\Attribute\DeleteAttribute::handle',
 
 			),
 			$dispatcher,
