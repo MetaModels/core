@@ -18,9 +18,12 @@
 namespace MetaModels\Dca;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\LoadDataContainerEvent;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\BackendBindings;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\Module;
 use MetaModels\BackendIntegration\ViewCombinations;
@@ -143,7 +146,7 @@ class MetaModelDcaBuilder
 					'label'               => $arrCaption,
 					'href'                => 'table='.$metaModel->getTableName(),
 					'icon'                => self::getBackendIcon($screen->getIcon()),
-					'attributes'          => 'onclick="Backend.getScrollOffset()"'
+					'attributes'          => 'onclick="Backend.getScrollOffset()"',
 				);
 
 				// Is the destination table a metamodel with variants?
@@ -151,8 +154,68 @@ class MetaModelDcaBuilder
 				{
 					$arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['idparam'] = 'id_'.$strTable;
 				}
+				else
+				{
+					$arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['idparam'] = 'pid';
+				}
+
+				// Compatibility with DC_Table.
+				if ($arrTableDCA['config']['dataContainer'] !== 'General')
+				{
+					$arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['button_callback'] =
+						array(
+							__CLASS__,
+							'buildChildButton'
+						);
+				}
 			}
 		}
+	}
+
+	/**
+	 * This method exists only for being compatible when MetaModels are being used as child table from DC_Table context.
+	 *
+	 * @param array  $arrRow     The current data row.
+	 *
+	 * @param string $href       The href to be appended.
+	 *
+	 * @param string $label      The operation label.
+	 *
+	 * @param string $name       The operation name.
+	 *
+	 * @param string $icon       The icon path.
+	 *
+	 * @param string $attributes The button attributes.
+	 *
+	 * @param string $table      The table name.
+	 *
+	 * @return string
+	 */
+	public function buildChildButton($arrRow, $href, $label, $name, $icon, $attributes, $table)
+	{
+		if (preg_match('#class="([^"]*)"#i', $attributes, $matches))
+		{
+			$operation = $matches[1];
+		}
+		else
+		{
+			$operation = $name;
+		}
+
+		$dispatcher = $GLOBALS['container']['event-dispatcher'];
+		$idparam    = $GLOBALS['TL_DCA'][$table]['list']['operations'][$operation]['idparam'];
+		$id         = IdSerializer::fromValues($table, $arrRow['id']);
+		$urlEvent   = new AddToUrlEvent($href. '&amp;' . $idparam . '=' . $id->getSerialized());
+		/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+		$dispatcher->dispatch(ContaoEvents::BACKEND_ADD_TO_URL, $urlEvent);
+
+		$imageEvent = new GenerateHtmlEvent($this->getBackendIcon($icon), $label);
+		$dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $imageEvent);
+
+		$title = sprintf($label ?: $name, $arrRow['id']);
+		return '<a href="' . $urlEvent->getUrl() . '" title="' .
+			specialchars($title) . '"' . $attributes . '>' . $imageEvent->getHtml() .
+		'</a> ';
 	}
 
 	/**
