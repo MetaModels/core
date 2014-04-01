@@ -16,6 +16,8 @@
 
 namespace MetaModels\BackendIntegration;
 
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\System\GetReferrerEvent;
 use ContaoCommunityAlliance\DcGeneral\Action;
 use ContaoCommunityAlliance\Translator\Contao\LangArrayTranslator;
 use ContaoCommunityAlliance\Translator\TranslatorChain;
@@ -259,7 +261,13 @@ class Module
 	 */
 	protected function compile()
 	{
-		$this->Template->href     = BackendBindings::getReferer(true);
+		/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+		$dispatcher = $GLOBALS['container']['event-dispatcher'];
+		$event      = new GetReferrerEvent(true);
+
+		$dispatcher->dispatch(ContaoEvents::SYSTEM_GET_REFERRER, $event);
+
+		$this->Template->href     = $event->getReferrerUrl();
 		$this->Template->problems = self::$arrMessages;
 	}
 }
