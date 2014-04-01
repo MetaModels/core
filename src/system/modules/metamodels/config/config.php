@@ -36,7 +36,6 @@ array_insert($GLOBALS['BE_MOD'], (array_search('accounts', array_keys($GLOBALS['
 				'tl_metamodel_dca_combine'
 			),
 			'icon'                  => 'system/modules/metamodels/html/logo.png',
-			'rendersetting_addall'  => array('MetaModels\Dca\RenderSetting', 'addAll'),
 			'callback'              => 'MetaModels\BackendIntegration\Module'
 		),
 		'support_metamodels' => array

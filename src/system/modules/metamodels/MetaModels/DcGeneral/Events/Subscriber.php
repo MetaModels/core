@@ -649,6 +649,8 @@ class Subscriber
 					),
 				ModelToLabelEvent::NAME
 					=> 'MetaModels\DcGeneral\Events\Table\RenderSetting\DrawSetting::modelToLabel',
+				DcGeneralEvents::ACTION
+					=> 'MetaModels\DcGeneral\Events\Table\RenderSetting\ProcessAddAll::handleAddAll',
 			),
 			$dispatcher,
 			array('tl_metamodel_rendersetting')

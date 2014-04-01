@@ -115,7 +115,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 			'addall' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall'],
-				'href'                => 'key=rendersetting_addall',
+				'href'                => 'act=rendersetting_addall',
 				'class'               => 'header_add_all rendersetting_add_all',
 				'attributes'          => 'onclick="Backend.getScrollOffset();"'
 			),
