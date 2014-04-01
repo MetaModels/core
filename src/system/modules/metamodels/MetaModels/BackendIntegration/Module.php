@@ -25,9 +25,6 @@ use ContaoCommunityAlliance\DcGeneral\Contao\BackendBindings;
 use ContaoCommunityAlliance\DcGeneral\Contao\Callback\Callbacks;
 use ContaoCommunityAlliance\DcGeneral\Event\EventPropagator;
 use ContaoCommunityAlliance\DcGeneral\Factory\DcGeneralFactory;
-use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
-use ContaoCommunityAlliance\DcGeneral\Factory\Event\PopulateEnvironmentEvent;
-use MetaModels\DcGeneral\Dca\Builder\Builder;
 
 /**
  * Implementation of the MetaModel Backend Module that performs system checks
