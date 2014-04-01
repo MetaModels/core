@@ -92,11 +92,12 @@ class MetaModelDcaBuilder
 	 */
 	public static function getBackendIcon($icon, $defaultIcon = 'system/modules/metamodels/html/metamodels.png')
 	{
+		/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+		$dispatcher = $GLOBALS['container']['event-dispatcher'];
 		// Determine image to use.
 		if ($icon && file_exists(TL_ROOT . '/' . $icon))
 		{
 			$event = new ResizeImageEvent($icon, 16, 16);
-			/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
 			$dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
 			return $event->getResultImage();
 		}
