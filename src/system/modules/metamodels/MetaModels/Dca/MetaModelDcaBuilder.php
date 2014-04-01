@@ -78,15 +78,27 @@ class MetaModelDcaBuilder
 		return \Database::getInstance();
 	}
 
-	public static function getBackendIcon($strBackendIcon)
+	/**
+	 * Get a 16x16 pixel resized icon of the passed image if it exists, return the default icon otherwise.
+	 *
+	 * @param string $icon        The icon to resize.
+	 *
+	 * @param string $defaultIcon The default icon.
+	 *
+	 * @return string
+	 */
+	public static function getBackendIcon($icon, $defaultIcon = 'system/modules/metamodels/html/metamodels.png')
 	{
-		// determine image to use.
-		if ($strBackendIcon && file_exists(TL_ROOT . '/' . $strBackendIcon))
+		// Determine image to use.
+		if ($icon && file_exists(TL_ROOT . '/' . $icon))
 		{
-			return ContaoController::getInstance()->getImage(ContaoController::getInstance()->urlEncode($strBackendIcon), 16, 16);
-		} else {
-			return 'system/modules/metamodels/html/metamodels.png';
+			$event = new ResizeImageEvent($icon, 16, 16);
+			/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+			$dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
+			return $event->getResultImage();
 		}
+
+		return $defaultIcon;
 	}
 
 	/**
