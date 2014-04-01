@@ -23,7 +23,7 @@ use MetaModels\Factory;
 /**
  * Event handler to populate the options array of the attribute type select widget.
  *
- * @package MetaModels\DcGeneral\Events\Table\Attribute
+ * @package MetaModels\DcGeneral\Events\Table\RenderSetting
  */
 class PropertyTemplate
 {
