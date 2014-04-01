@@ -294,6 +294,58 @@ class MetaModel implements IMetaModel
 	/**
 	 * This method is called to retrieve the data for certain items from the database.
 	 *
+	 * @param int[]    $ids      The ids of the items to retrieve the order of ids is used for sorting of the
+	 *                           return values.
+	 *
+	 * @param array    $result   The current values.
+	 *
+	 * @param string[] $attrOnly Names of the attributes that shall be contained in the result, defaults to array()
+	 *                           which means all attributes.
+	 *
+	 * @return array an array of all matched items, sorted by the id list.
+	 */
+	protected function fetchAdditionalAttributes($ids, $result, $attrOnly = array())
+	{
+		foreach (array_merge($this->getComplexAttributes(), $this->getTranslatedAttributes()) as $attribute)
+		{
+			/** @var IAttribute $attribute */
+			$attributeName = $attribute->getColName();
+
+			if (!in_array($attributeName, $attrOnly))
+			{
+				continue;
+			}
+
+			// If it is translated, fetch the translated data now.
+			if ($this->isTranslatedAttribute($attribute))
+			{
+				/** @var ITranslated $attribute */
+				$attributeData = $attribute->getTranslatedDataFor($ids, $this->getActiveLanguage());
+				$missing       = array_diff($ids, array_keys($attributeData));
+
+				if ($missing)
+				{
+					$attributeData += $attribute->getTranslatedDataFor($missing, $this->getFallbackLanguage());
+				}
+			}
+			else
+			{
+				/** @var IComplex $attribute */
+				$attributeData = $attribute->getDataFor($ids);
+			}
+
+			foreach (array_keys($result) as $id)
+			{
+				$result[$id][$attributeName] = $attributeData[$id];
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * This method is called to retrieve the data for certain items from the database.
+	 *
 	 * @param int[]    $arrIds      The ids of the items to retrieve the order of ids is used for sorting of the
 	 *                              return values.
 	 *
@@ -332,42 +384,8 @@ class MetaModel implements IMetaModel
 		}
 
 		// Determine "independent attributes" (complex and translated) and inject their content into the row.
-		foreach (array_merge($this->getComplexAttributes(), $this->getTranslatedAttributes()) as $objAttribute)
-		{
-			/** @var IAttribute $objAttribute */
-			$strColName = $objAttribute->getColName();
-
-			if (!in_array($strColName, $arrAttrOnly))
-			{
-				continue;
-			}
-
-			// If it is translated, fetch the translated data now.
-			if ($this->isTranslatedAttribute($objAttribute))
-			{
-				/** @var ITranslated $objAttribute */
-				$arrAttributeData = $objAttribute->getTranslatedDataFor($arrIds, $this->getActiveLanguage());
-				$arrMissing       = array_diff($arrIds, array_keys($arrAttributeData));
-
-				if ($arrMissing)
-				{
-					$arrAttributeData += $objAttribute->getTranslatedDataFor($arrMissing, $this->getFallbackLanguage());
-				}
-			}
-			else
-			{
-				/** @var IComplex $objAttribute */
-				$arrAttributeData = $objAttribute->getDataFor($arrIds);
-			}
-
-			foreach (array_keys($arrResult) as $intId)
-			{
-				$arrResult[$intId][$strColName] = $arrAttributeData[$intId];
-			}
-		}
-
-		// TODO: shall we also implement *item and *items factories?
-		$arrItems = array();
+		$arrResult = $this->fetchAdditionalAttributes($arrIds, $arrResult, $arrAttrOnly);
+		$arrItems  = array();
 		foreach ($arrResult as $arrEntry)
 		{
 			$arrItems[] = new Item($this, $arrEntry);
