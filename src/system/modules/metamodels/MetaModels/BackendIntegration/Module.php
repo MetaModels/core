@@ -16,6 +16,7 @@
 
 namespace MetaModels\BackendIntegration;
 
+use ContaoCommunityAlliance\DcGeneral\Action;
 use ContaoCommunityAlliance\Translator\Contao\LangArrayTranslator;
 use ContaoCommunityAlliance\Translator\TranslatorChain;
 use ContaoCommunityAlliance\DcGeneral\Contao\BackendBindings;
@@ -207,7 +208,7 @@ class Module
 			$act = 'showAll';
 		}
 
-		return call_user_func(array($dcg->getEnvironment()->getView(), $act));
+		return $dcg->getEnvironment()->getController()->handle(new Action($act));
 	}
 
 	/**

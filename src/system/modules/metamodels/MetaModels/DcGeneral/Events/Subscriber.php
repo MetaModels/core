@@ -25,6 +25,8 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPa
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
+use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
+use ContaoCommunityAlliance\DcGeneral\Event\ActionEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PreDeleteModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
@@ -437,6 +439,8 @@ class Subscriber
 						'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbInputScreen',
 						'getBreadcrumb'
 					),
+				DcGeneralEvents::ACTION
+					=> 'MetaModels\DcGeneral\Events\Table\InputScreens\ProcessAddAll::handleAddAll',
 			),
 			$dispatcher,
 			array('tl_metamodel_dcasetting')

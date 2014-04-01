@@ -132,7 +132,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'addall' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall'],
-				'href'                => 'key=dca_addall',
+				'href'                => 'act=dca_addall',
 				'class'               => 'header_add_all',
 				'attributes'          => 'onclick="Backend.getScrollOffset();"'
 			),
