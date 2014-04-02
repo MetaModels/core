@@ -19,7 +19,7 @@ namespace MetaModels\Dca;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
-use DcGeneral\DC_General;
+use ContaoCommunityAlliance\DcGeneral\DC_General;
 
 /**
  * This class is used from DCA tl_metamodel_rendersetting for various callbacks.
@@ -126,32 +126,38 @@ class RenderSettings extends Helper
 				$environment->getTranslator()->translate('MSC.pagepicker'),
 				'style="vertical-align:top;cursor:pointer" onclick="Backend.pickPage(\'ctrl_' . $dc->inputName . '\')"'
 			);
-		}
-		else
-		{
-			$url = sprintf('%scontao/page.php?do=metamodels&table=tl_metamodel_rendersettings&field=ctrl_%s',
-				\Environment::get('base'),
-				$dc->inputName
-			);
 
-			$options = sprintf(
-				"{'width':765,'title':'%s','url':'%s','id':'%s','tag':'ctrl_%s','self':this}",
-				$environment->getTranslator()->translate('MOD.page.0'),
-				$url,
-				$dc->inputName,
-				$dc->inputName
-			);
+			$environment->getEventPropagator()->propagate(ContaoEvents::IMAGE_GET_HTML, $event);
 
-			$event = new GenerateHtmlEvent(
-				'pickpage.gif',
-				$environment->getTranslator()->translate('MSC.pagepicker'),
-				'style="vertical-align:top;cursor:pointer" onclick="Backend.openModalSelector(' . $options . ')"'
-			);
+			return ' ' . $event->getHtml();
 		}
+
+		$url = sprintf('%scontao/page.php?do=metamodels&table=tl_metamodel_rendersettings&field=ctrl_%s',
+			\Environment::get('base'),
+			$dc->inputName
+		);
+
+		$options = sprintf(
+			"{'width':765,'title':'%s','url':'%s','id':'%s','tag':'ctrl_%s','self':this}",
+			$environment->getTranslator()->translate('MOD.page.0'),
+			$url,
+			$dc->inputName,
+			$dc->inputName
+		);
+
+		$event = new GenerateHtmlEvent(
+			'pickpage.gif',
+			$environment->getTranslator()->translate('MSC.pagepicker'),
+			'style="vertical-align:top;cursor:pointer"'
+		);
 
 		$environment->getEventPropagator()->propagate(ContaoEvents::IMAGE_GET_HTML, $event);
 
-		return ' ' . $event->getHtml();
+		return sprintf(' <a href="%s"%s>%s</a>',
+			$url,
+			' onclick="Backend.openModalSelector(' . $options . '); return false;"',
+			$event->getHtml()
+		);
 	}
 }
 
