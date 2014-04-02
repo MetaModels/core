@@ -280,8 +280,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['file'],
 						'exclude'                  => true,
 						'inputType'                => 'select',
-						// TODO: change callbacks to event handlers.
-						'options_callback'         => array('MetaModels\Dca\RenderSettings', 'getCssFiles'),
 						'eval'                     => array
 						(
 							'style'                => 'width:515px;',
@@ -309,8 +307,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
 						'label'                    => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['file'],
 						'exclude'                  => true,
 						'inputType'                => 'select',
-						// TODO: change callbacks to event handlers.
-						'options_callback'         => array('MetaModels\Dca\RenderSettings', 'getJsFiles'),
 						'eval'                     => array
 						(
 							'style'                => 'width:515px;',

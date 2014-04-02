@@ -719,6 +719,23 @@ class Subscriber
 			$dispatcher,
 			array('tl_metamodel_rendersettings', 'template')
 		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\RenderSettings\PropertyCssFiles::getOptions',
+			),
+			$dispatcher,
+			array('tl_metamodel_rendersettings', 'additionalCss', 'file')
+		);
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\RenderSettings\PropertyJsFiles::getOptions',
+			),
+			$dispatcher,
+			array('tl_metamodel_rendersettings', 'additionalJs', 'file')
+		);
 	}
 
 	/**

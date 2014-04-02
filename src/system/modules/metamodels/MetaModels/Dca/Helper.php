@@ -362,4 +362,42 @@ class Helper
 
 		return $arrAttributeNames;
 	}
+
+	/**
+	 * Search all files with the given file extension below the given path.
+	 *
+	 * @param string $folder    The folder to scan.
+	 *
+	 * @param string $extension The file extension.
+	 *
+	 * @return array
+	 */
+	public static function searchFiles($folder, $extension)
+	{
+		$scanResult = array();
+		$result     = array();
+		// Check if we have a file or folder.
+		if (is_dir(TL_ROOT . '/' . $folder))
+		{
+			$scanResult = scan(TL_ROOT . '/' . $folder);
+		}
+
+		// Run each value.
+		foreach ($scanResult as $value)
+		{
+			if (!is_file(TL_ROOT . '/' . $folder . '/' . $value))
+			{
+				$result += self::searchFiles($folder . '/' . $value, $extension);
+			}
+			else
+			{
+				if (preg_match('/'.$extension.'$/i', $value))
+				{
+					$result[$folder][$folder . '/' . $value] = $value;
+				}
+			}
+		}
+
+		return $result;
+	}
 }
