@@ -28,29 +28,8 @@ use ContaoCommunityAlliance\DcGeneral\DC_General;
  * @subpackage Backend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-class RenderSettings extends Helper
+class RenderSettings
 {
-
-	/**
-	 * @var RenderSettings
-	 */
-	protected static $objInstance = null;
-
-	/**
-	 * Get the static instance.
-	 *
-	 * @static
-	 * @return RenderSettings
-	 */
-	public static function getInstance()
-	{
-		if (self::$objInstance == null)
-		{
-			self::$objInstance = new RenderSettings();
-		}
-		return self::$objInstance;
-	}
-
 	/**
 	 * Return the link picker wizard.
 	 *
