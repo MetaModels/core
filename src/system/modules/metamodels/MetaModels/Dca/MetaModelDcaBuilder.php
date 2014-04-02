@@ -252,7 +252,7 @@ class MetaModelDcaBuilder
 
 		$GLOBALS['BE_MOD'][$section][$strModuleName] = array
 		(
-			// 'tables'			=> array($metaModel->getTableName()),
+			'tables'			=> array($metaModel->getTableName()),
 			'icon'				=> $strIcon,
 			'callback'			=> 'MetaModels\BackendIntegration\Module'
 		);
