@@ -191,6 +191,9 @@ class Helper extends \Backend
 	 */
 	public function getTemplatesForBase($strBase)
 	{
+	return $this->getTemplateGroup($strBase);
+	}
+	{
 		$arrTemplates = array();
 		foreach ($this->getTemplateGroup($strBase) as $strTemplate)
 		{
