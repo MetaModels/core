@@ -8,12 +8,12 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-22T12:42:32+02:00
+ * last-updated: 2014-03-23T12:13:41+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['advanced_legend']  = 'Impostazioni avanzate';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname']['0']     = 'Nome della colonna';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname']['1']     = 'Riferimento interno per questo attributo';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname']['0']     = 'Nome del campo';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname']['1']     = 'Nome del campo della tabella';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['copy']['0']        = 'Copia la definizione dell\'attributo';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['copy']['1']        = 'Copia la definizione dell\'attributo ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['cut']['0']         = 'Taglia la definizione dell\'attributo';
