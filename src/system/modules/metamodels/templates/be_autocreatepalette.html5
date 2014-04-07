@@ -9,8 +9,8 @@
 <?php if ($this->error): ?>
 
 <div class="tl_message">
-<?php foreach ($this->error as $strError => $strSeverity): ?>
-<p class="tl_<?php echo $strSeverity; ?>"><?php echo $strError; ?></p>
+<?php foreach ($this->error as $strError => $arrError): ?>
+<p class="tl_<?php echo $arrError['severity']; ?>"><?php echo $arrError['message']; ?></p>
 <?php endforeach; ?>
 <br />
 </div>
