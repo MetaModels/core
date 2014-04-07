@@ -30,22 +30,31 @@ use MetaModels\Factory as MetaModelFactory;
  */
 class Helper
 {
+	/**
+	 * Decode a language array.
+	 *
+	 * @param array|string $varValue     The value to decode.
+	 *
+	 * @param IMetaModel   $objMetaModel The MetaModel holding the languages.
+	 *
+	 * @return string
+	 */
 	public static function decodeLangArray($varValue, IMetaModel $objMetaModel)
 	{
 		$arrLangValues = deserialize($varValue);
 		if (!$objMetaModel->isTranslated())
 		{
-			// if we have an array, return the first value and exit, if not an array, return the value itself.
+			// If we have an array, return the first value and exit, if not an array, return the value itself.
 			return is_array($arrLangValues) ? $arrLangValues[key($arrLangValues)] : $arrLangValues;
 		}
 
-		// sort like in MetaModel definition
+		// Sort like in MetaModel definition.
 		$arrLanguages = $objMetaModel->getAvailableLanguages();
 		$arrOutput    = array();
 
 		if ($arrLanguages)
 		{
-			foreach($arrLanguages as $strLangCode)
+			foreach ($arrLanguages as $strLangCode)
 			{
 				if (is_array($arrLangValues))
 				{
@@ -65,15 +74,24 @@ class Helper
 		return serialize($arrOutput);
 	}
 
+	/**
+	 * Decode a language array.
+	 *
+	 * @param array|string $varValue     The value to decode.
+	 *
+	 * @param IMetaModel   $objMetaModel The MetaModel holding the languages.
+	 *
+	 * @return string
+	 */
 	public static function encodeLangArray($varValue, IMetaModel $objMetaModel)
 	{
-		// not translated, make it a plain string.
+		// Not translated, make it a plain string.
 		if (!$objMetaModel->isTranslated())
 		{
 			return $varValue;
 		}
 		$arrLangValues = deserialize($varValue);
-		$arrOutput = array();
+		$arrOutput     = array();
 		foreach ($arrLangValues as $varSubValue)
 		{
 			$strLangCode = $varSubValue['langcode'];
@@ -81,8 +99,10 @@ class Helper
 			if (count($varSubValue) > 1)
 			{
 				$arrOutput[$strLangCode] = $varSubValue;
-			} else {
-				$arrKeys = array_keys($varSubValue);
+			}
+			else
+			{
+				$arrKeys                 = array_keys($varSubValue);
 				$arrOutput[$strLangCode] = $varSubValue[$arrKeys[0]];
 			}
 		}
