@@ -104,15 +104,17 @@ class MetaModelBackend
 			return;
 		}
 
-		$Env->base = $Env->url . $GLOBALS['TL_CONFIG']['websitePath'] . '/';
-		$Env->script = preg_replace('/^' . preg_quote($GLOBALS['TL_CONFIG']['websitePath'], '/') . '\/?/i', '', $Env->scriptName);
+		// Fix issue #397 - the security patch rendered our redirect method non working (websitePath can now be null).
+		$path        = constant('TL_PATH') ?: $GLOBALS['TL_CONFIG']['websitePath'];
+		$Env->base   = $Env->url . $path . '/';
+		$Env->script = preg_replace('/^' . preg_quote($path, '/') . '\/?/i', '', $Env->scriptName);
 
 		// Bugfix: If the user is not authenticated, contao will redirect to contao/index.php
 		// But in this moment the TL_PATH is not defined, so the $this->Environment->request
 		// generate a url without replacing the basepath(TL_PATH) with an empty string.
-		if(!defined(TL_PATH))
+		if (!defined(TL_PATH))
 		{
-			define('TL_PATH', $GLOBALS['TL_CONFIG']['websitePath']);
+			define('TL_PATH', $path);
 		}
 
 		// TODO: double, triple and quadro check that this is really safe context here.
