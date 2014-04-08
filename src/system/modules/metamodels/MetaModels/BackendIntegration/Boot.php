@@ -122,9 +122,11 @@ class Boot
 			return;
 		}
 
-		$Env->base   = $Env->url . $GLOBALS['TL_CONFIG']['websitePath'] . '/';
+		// Fix issue #397 - the security patch rendered our redirect method non working (websitePath can now be null).
+		$path        = constant('TL_PATH') ?: $GLOBALS['TL_CONFIG']['websitePath'];
+		$Env->base   = $Env->url . $path . '/';
 		$Env->script = preg_replace(
-			'/^' . preg_quote($GLOBALS['TL_CONFIG']['websitePath'], '/') . '\/?/i',
+			'/^' . preg_quote($path, '/') . '\/?/i',
 			'',
 			$Env->scriptName
 		);
@@ -134,7 +136,7 @@ class Boot
 		// generate a url without replacing the basepath(TL_PATH) with an empty string.
 		if (!defined(TL_PATH))
 		{
-			define('TL_PATH', $GLOBALS['TL_CONFIG']['websitePath']);
+			define('TL_PATH', $path);
 		}
 
 		$objUser->authenticate();
