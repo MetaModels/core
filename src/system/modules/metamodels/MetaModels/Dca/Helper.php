@@ -223,8 +223,13 @@ class Helper
 	public static function getTemplatesForBase($strBase)
 	{
 		$arrTemplates = array();
-		foreach (\Backend::getTemplateGroup($strBase) as $strTemplate)
+
+		// Add the templates root directory.
+		$arrThemeTemplates = glob(TL_ROOT . '/templates/' . $strBase . '*');
+		foreach ((array)$arrThemeTemplates as $strTemplate)
 		{
+			$strTemplate = basename($strTemplate, strrchr($strTemplate, '.'));
+
 			$arrTemplates[$strTemplate] = sprintf(
 				$GLOBALS['TL_LANG']['MSC']['template_in_theme'],
 				$strTemplate,
@@ -232,22 +237,50 @@ class Helper
 			);
 		}
 
-		$objThemes = \Database::getInstance()->prepare('SELECT id,name FROM tl_theme')->execute();
+		$objThemes = \Database::getInstance()
+			->prepare('SELECT id,name,templates FROM tl_theme')
+			->execute();
 
 		while ($objThemes->next())
 		{
-			foreach (\Backend::getTemplateGroup($strBase, $objThemes->id) as $strTemplate)
+			if ($objThemes->templates != '')
+			{
+				$arrThemeTemplates = glob(TL_ROOT . '/' . $objThemes->templates . '/' . $strBase . '*');
+				foreach ($arrThemeTemplates as $strTemplate)
+				{
+					if (!array_key_exists($strTemplate, $arrTemplates))
+					{
+						$strTemplate = basename($strTemplate, strrchr($strTemplate, '.'));
+
+						$arrTemplates[$strTemplate] = sprintf(
+							$GLOBALS['TL_LANG']['MSC']['template_in_theme'],
+							$strTemplate,
+							$objThemes->name
+						);
+					}
+				}
+			}
+		}
+
+		// Add the module templates folders if they exist.
+		foreach (\Config::getInstance()->getActiveModules() as $strModule)
+		{
+			$arrThemeTemplates = glob(TL_ROOT . '/system/modules/' . $strModule . '/templates' . $strBase . '*');
+			foreach ((array)$arrThemeTemplates as $strTemplate)
 			{
 				if (!array_key_exists($strTemplate, $arrTemplates))
 				{
+					$strTemplate = basename($strTemplate, strrchr($strTemplate, '.'));
+
 					$arrTemplates[$strTemplate] = sprintf(
 						$GLOBALS['TL_LANG']['MSC']['template_in_theme'],
 						$strTemplate,
-						$objThemes->name
+						$GLOBALS['TL_LANG']['MSC']['no_theme']
 					);
 				}
 			}
 		}
+
 		ksort($arrTemplates);
 
 		return array_unique($arrTemplates);
