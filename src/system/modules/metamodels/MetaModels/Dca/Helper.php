@@ -191,34 +191,42 @@ class Helper extends \Backend
 	 */
 	public function getTemplatesForBase($strBase)
 	{
-		$arrTemplates = array();
-		foreach ($this->getTemplateGroup($strBase) as $strTemplate)
+		if(version_compare(VERSION, '3', '<'))
 		{
-			$arrTemplates[$strTemplate] = sprintf($GLOBALS['TL_LANG']['MSC']['template_in_theme'], $strTemplate, $GLOBALS['TL_LANG']['MSC']['no_theme']);
-		}
-
-		$objThemes = \Database::getInstance()->prepare('SELECT id,name FROM tl_theme')->execute();
-
-		while ($objThemes->next())
-		{
-			foreach ($this->getTemplateGroup($strBase, $objThemes->id) as $strTemplate)
+			$arrTemplates = array();
+			foreach ($this->getTemplateGroup($strBase) as $strTemplate)
 			{
-				if (!array_key_exists($strTemplate, $arrTemplates))
+				$arrTemplates[$strTemplate] = sprintf($GLOBALS['TL_LANG']['MSC']['template_in_theme'], $strTemplate, $GLOBALS['TL_LANG']['MSC']['no_theme']);
+			}
+
+			$objThemes = \Database::getInstance()->prepare('SELECT id,name FROM tl_theme')->execute();
+
+			while ($objThemes->next())
+			{
+				foreach ($this->getTemplateGroup($strBase, $objThemes->id) as $strTemplate)
 				{
-					$arrTemplates[$strTemplate] = sprintf($GLOBALS['TL_LANG']['MSC']['template_in_theme'], $strTemplate, $objThemes->name);
+					if (!array_key_exists($strTemplate, $arrTemplates))
+					{
+						$arrTemplates[$strTemplate] = sprintf($GLOBALS['TL_LANG']['MSC']['template_in_theme'], $strTemplate, $objThemes->name);
+					}
 				}
 			}
-		}
-		ksort($arrTemplates);
+			ksort($arrTemplates);
 
-		return array_unique($arrTemplates);
+			return array_unique($arrTemplates);
+
+		}
+		else
+		{
+			return $this->getTemplateGroup($strBase);
+		}
 	}
 
 	/**
 	 * Get a list with all allowed attributes for meta description.
-	 * 
+	 *
 	 * @param DataContainer $objDC
-	 * 
+	 *
 	 * @return array A list with all found attributes.
 	 */
 	 public function getAttributeNamesForModel($intMetaModel, $arrTypes = array())
