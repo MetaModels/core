@@ -190,7 +190,12 @@ class Subscriber
 	public static function ensureTableNamePrefix(EncodePropertyValueFromWidgetEvent $event)
 	{
 		// See #49.
-		$tableName = strtolower($event->getModel()->getProperty('tableName'));
+		$tableName = strtolower($event->getValue());
+
+		if (!strlen($tableName))
+		{
+			throw new \RuntimeException('Table name not given');
+		}
 
 		// Force mm_ prefix.
 		if (substr($tableName, 0, 3) !== 'mm_')
@@ -198,8 +203,8 @@ class Subscriber
 			$tableName = 'mm_' . $tableName;
 		}
 
-		TableManipulation::checkTablename($tableName);
+		TableManipulation::checkTableDoesNotExist($tableName);
 
-		$event->getModel()->setProperty('tableName', $tableName);
+		$event->setValue($tableName);
 	}
 }
