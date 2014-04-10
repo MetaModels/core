@@ -70,7 +70,7 @@ class BreadCrumbInputScreens
 
 		$elements = parent::getBreadcrumbElements($environment, $elements);
 
-		$urlEvent = new AddToUrlEvent(sprintf('do=metamodels&table=%s&id=%s',
+		$urlEvent = new AddToUrlEvent(sprintf('do=metamodels&table=%s&pid=%s',
 			'tl_metamodel_dca',
 			$this->seralizeId('tl_metamodel', $this->metamodelId)
 		));
