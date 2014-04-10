@@ -50,6 +50,7 @@ class Factory implements IFactory
 			$arrSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
 				->execute($intId)
 				->row();
+
 			if (!empty($arrSettings))
 			{
 				$objSetting = new Collection($arrSettings);
@@ -61,6 +62,7 @@ class Factory implements IFactory
 		} else {
 			$objSetting = self::$arrInstances[$intId];
 		}
+
 		return $objSetting;
 	}
 }

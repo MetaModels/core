@@ -230,7 +230,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array_replace_recursive(array
 				'mandatory'           => true,
 				'maxlength'           => 64,
 				'tl_class'            => 'w50'
-				),
+			),
 		),
 
 		'isvariant' => array
