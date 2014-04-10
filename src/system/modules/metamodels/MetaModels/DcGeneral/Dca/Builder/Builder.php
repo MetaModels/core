@@ -398,6 +398,27 @@ class Builder
 	{
 		$listing = $view->getListingConfig();
 
+		if ($listing->getRootLabel() === null)
+		{
+			$listing->setRootLabel($this->getMetaModel($container)->get('name'));
+		}
+
+		if (($listing->getRootIcon() === null) && (($inputScreen = $this->getInputScreenDetails($container)) !== null))
+		{
+			$icon = ToolboxFile::convertValueToPath($inputScreen->getIcon());
+			// Determine image to use.
+			if ($icon && file_exists(TL_ROOT . '/' . $icon))
+			{
+				$event = new ResizeImageEvent($icon, 16, 16);
+				$this->dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
+				$icon = $event->getResultImage();
+			} else {
+				$icon = 'system/modules/metamodels/html/metamodels.png';
+			}
+
+			$listing->setRootIcon($icon);
+		}
+
 		$this->parseListSorting($container, $listing);
 		$this->parseListLabel($container, $listing);
 	}
