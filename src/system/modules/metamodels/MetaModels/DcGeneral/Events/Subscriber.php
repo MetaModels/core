@@ -252,6 +252,16 @@ class Subscriber
 			array('tl_metamodel_attribute', 'description')
 		);
 
+		// Save and load callbacks.
+		self::registerListeners(
+			array(
+				EncodePropertyValueFromWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\Attribute\PropertyColName::encodeValue',
+			),
+			$dispatcher,
+			array('tl_metamodel_attribute', 'colname')
+		);
+
 		// Global table events.
 		self::registerListeners(
 			array(

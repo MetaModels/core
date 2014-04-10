@@ -37,9 +37,9 @@ class UpdateAttribute
 	{
 		$old         = $event->getOriginalModel();
 		$new         = $event->getModel();
-		$oldType     = $old->getProperty('type');
+		$oldType     = $old ? $old->getProperty('type') : null;
 		$newType     = $new->getProperty('type');
-		$oldInstance = Factory::createFromArray($old->getPropertiesAsArray());
+		$oldInstance = $old ? Factory::createFromArray($old->getPropertiesAsArray()) : null;
 		$newInstance = Factory::createFromArray($new->getPropertiesAsArray());
 
 		if ($oldType !== $newType)
