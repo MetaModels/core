@@ -329,6 +329,10 @@ class Subscriber
 		self::registerListeners(
 			array(
 				GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyMode::getValidModes',
+				DecodePropertyValueForWidgetEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyMode::decodeMode',
+				EncodePropertyValueFromWidgetEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyMode::encodeMode',
 			),
 			$dispatcher,
 			array('tl_metamodel_dca', 'mode')

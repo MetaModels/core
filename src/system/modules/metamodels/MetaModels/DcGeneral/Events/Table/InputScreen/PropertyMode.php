@@ -19,6 +19,7 @@ namespace MetaModels\DcGeneral\Events\Table\InputScreen;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use MetaModels\Factory;
 
 /**
  * Manipulate the data definition for the property "mode" in table "tl_dca".
@@ -43,6 +44,13 @@ class PropertyMode
 				break;
 			case 'standalone':
 				$arrResult = array('mode_0', 'mode_1', 'mode_2', 'mode_5');
+
+				// Allow tree mode only when no variants are in place.
+				if (!Factory::byId($event->getModel()->getProperty('pid'))->hasVariants())
+				{
+					$arrResult[] = 'mode_6';
+				}
+
 				break;
 			default:
 				$arrResult = array();
@@ -61,7 +69,7 @@ class PropertyMode
 	 */
 	public static function decodeMode(DecodePropertyValueForWidgetEvent $event)
 	{
-		$event->setValue('mode_' . $event->getModel()->getProperty('mode'));
+		$event->setValue('mode_' . $event->getValue('mode'));
 	}
 
 	/**
@@ -73,7 +81,7 @@ class PropertyMode
 	 */
 	public static function encodeMode(EncodePropertyValueFromWidgetEvent $event)
 	{
-		$arrSplit = explode('_', $event->getModel()->getProperty('mode'));
+		$arrSplit = explode('_', $event->getValue('mode'));
 
 		$event->setValue($arrSplit[1]);
 	}
