@@ -265,7 +265,7 @@ class Helper
 		// Add the module templates folders if they exist.
 		foreach (\Config::getInstance()->getActiveModules() as $strModule)
 		{
-			$arrThemeTemplates = glob(TL_ROOT . '/system/modules/' . $strModule . '/templates' . $strBase . '*');
+			$arrThemeTemplates = glob(TL_ROOT . '/system/modules/' . $strModule . '/templates/' . $strBase . '*');
 			foreach ((array)$arrThemeTemplates as $strTemplate)
 			{
 				if (!array_key_exists($strTemplate, $arrTemplates))
