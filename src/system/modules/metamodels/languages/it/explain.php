@@ -8,12 +8,12 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2013-07-22T12:42:32+02:00
  */
 
 $GLOBALS['TL_LANG']['XPL']['customsql']['0']['0'] = 'Anteprima';
 $GLOBALS['TL_LANG']['XPL']['customsql']['0']['1'] = 'Digitare una query SQL che deve essere eseguita.<br />
-		E \'necessario che questa query restituisce almeno una colonna denominata "id".
+		E\' necessario che questa query restituisce almeno una colonna denominata "id".
 		';
 $GLOBALS['TL_LANG']['XPL']['customsql']['1']['0'] = 'Esempio 1<br />query semplice';
 $GLOBALS['TL_LANG']['XPL']['customsql']['1']['1'] = '<pre>SELECT id FROM mm_mymetamodel WHERE page_id=1</pre>
@@ -70,3 +70,4 @@ $GLOBALS['TL_LANG']['XPL']['customsql']['6']['1'] = '<pre>SELECT id
 		la query risultante sarebbe: "SELECT id FROM mm_demo WHERE catname=\'defaultcat\'"
 		</p>
 		';
+
