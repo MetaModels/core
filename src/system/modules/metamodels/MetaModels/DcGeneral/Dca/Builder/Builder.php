@@ -51,6 +51,8 @@ use MetaModels\BackendIntegration\ViewCombinations;
 use MetaModels\DcGeneral\DataDefinition\Definition\MetaModelDefinition;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\Events\MetaModel\RenderItem;
+use MetaModels\Events\BuildAttributeEvent;
+use MetaModels\Events\PopulateAttributeEvent;
 use MetaModels\Factory;
 use MetaModels\Helper\ToolboxFile;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -154,6 +156,15 @@ class Builder
 		);
 
 		$translatorChain->add($this->translator);
+
+		$metaModel   = $this->getMetaModel($container);
+		$environment = $event->getEnvironment();
+		foreach ($metaModel->getAttributes() as $attribute)
+		{
+			$event = new PopulateAttributeEvent($metaModel, $attribute, $environment);
+			// Trigger BuildAttribute Event.
+			$this->dispatcher->dispatch($event::NAME, $event);
+		}
 	}
 
 	/**
@@ -757,6 +768,10 @@ class Builder
 		foreach ($metaModel->getAttributes() as $attribute)
 		{
 			$this->buildPropertyFromDca($container, $definition, $attribute->getColName(), $inputScreen);
+
+			$event = new BuildAttributeEvent($metaModel, $attribute, $container);
+			// Trigger BuildAttribute Event.
+			$this->dispatcher->dispatch($event::NAME, $event);
 		}
 	}
 
