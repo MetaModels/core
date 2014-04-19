@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-06-23T00:12:30+02:00
+ * last-updated: 2013-07-10T10:02:32+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['0']     = 'Ulteriori file CSS';
@@ -31,8 +31,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['xhtml'] = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['general_legend']         = 'Impostazioni generali';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues']['0']   = 'Nasconde i valori vuoti';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues']['1']   = 'Nasconde i valori vuoti sia nel backend che nel frontend.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['0']        = 'Nasconde i labels';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['1']        = 'Nasconde i labels sia nel backend che nel frontend.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['0']        = 'Nascondi le etichette';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['1']        = 'Nascondi le etichette sia nel backend che nel frontend.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['0']         = 'È default';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['1']         = 'Determina che questa impostazione deve essere utilizzata come predefinito per il MetaModel di parent.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['0']            = 'Pagina JumpTo';
@@ -59,3 +59,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']           = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['0']            = 'Data di revisione';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['1']            = 'Data e ora dell\'ultima revisione.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['view_legend']            = 'Visualizza le impostazioni';
+
