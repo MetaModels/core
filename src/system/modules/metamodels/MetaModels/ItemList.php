@@ -777,25 +777,37 @@ class ItemList
 		// Add title if needed.
 		if ($GLOBALS['objPage'] && $this->objItems->getCount() && !empty($this->strTitleAttribute))
 		{
-			$objFirstItem = $this->objItems->current();
-			$arrTitle     = $objFirstItem->parseAttribute($this->strTitleAttribute, 'text');
-
-			if (isset($arrTitle['text']) && !empty($arrTitle['text']))
+			while ($this->objItems->next())
 			{
-				$GLOBALS['objPage']->pageTitle = strip_tags($arrTitle['text']);
+				$objCurrentItem = $this->objItems->current();
+				$arrTitle       = $objCurrentItem->parseAttribute($this->strTitleAttribute, 'text');
+
+				if (isset($arrTitle['text']) && !empty($arrTitle['text']))
+				{
+					$GLOBALS['objPage']->pageTitle = strip_tags($arrTitle['text']);
+					break;
+				}
 			}
+
+			$this->objItems->reset();
 		}
 
 		// Add description if needed.
 		if ($GLOBALS['objPage'] && $this->objItems->getCount() && !empty($this->strDescriptionAttribute))
 		{
-			$objFirstItem   = $this->objItems->current();
-			$arrDescription = $objFirstItem->parseAttribute($this->strDescriptionAttribute, 'text');
-
-			if (isset($arrDescription['text']) && !empty($arrDescription['text']))
+			while ($this->objItems->next())
 			{
-				$GLOBALS['objPage']->description = \String::getInstance()->substr($arrDescription['text'], 120);
+				$objCurrentItem = $this->objItems->current();
+				$arrDescription = $objCurrentItem->parseAttribute($this->strDescriptionAttribute, 'text');
+
+				if (isset($arrDescription['text']) && !empty($arrDescription['text']))
+				{
+					$GLOBALS['objPage']->description = \String::getInstance()->substr($arrDescription['text'], 120);
+					break;
+				}
 			}
+
+			$this->objItems->reset();
 		}
 
 		$this->objTemplate->caller       = $objCaller;
