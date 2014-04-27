@@ -42,6 +42,7 @@ $GLOBALS['TL_LANG']['BRD']['metamodel_filtersetting']                 = 'Filter 
 
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']        = 'Edit "%s" for item %%s';
 $GLOBALS['TL_LANG']['MSC']['sorting']                                 = 'Sorting';
+$GLOBALS['TL_LANG']['MSC']['random']                                  = 'Random';
 $GLOBALS['TL_LANG']['MSC']['template_in_theme']                       = '%s (%s)';
 $GLOBALS['TL_LANG']['MSC']['no_theme']                                = 'global scope';
 $GLOBALS['TL_LANG']['MSC']['noItemsMsg']                              = 'There are no items matching your search.';
