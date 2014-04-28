@@ -96,8 +96,8 @@ interface IMetaModel
 	/**
 	 * Fetches the language code that has been marked as fallback language for translation in this MetaModel.
 	 *
-	 * @return string[]|null If the MetaModel is translated an array containing all codes,
-	 *                       null if translation is not active.
+	 * @return string|null If the MetaModel is translated the language code to be used as fallback,
+	 *                     null if translation is not active.
 	 */
 	public function getFallbackLanguage();
 
