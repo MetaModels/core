@@ -727,7 +727,7 @@ class MetaModelDcaBuilder
 	 */
 	public function createDataContainer($strTableName)
 	{
-		if (substr($strTableName, 0, 3) === 'mm_')
+		if (in_array($strTableName, Factory::getAllTables()))
 		{
 			/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
 			$dispatcher = $GLOBALS['container']['event-dispatcher'];
