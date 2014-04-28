@@ -49,10 +49,17 @@ class MetaModelDcaBuilder
 	 */
 	protected static $arrColNameChache = array();
 
+	/**
+	 * All parent tables.
+	 *
+	 * Key is table name.
+	 *
+	 * @var IMetaModel[]
+	 */
 	protected $arrPTables = array();
 
 	/**
-	 * The singleton instance
+	 * The singleton instance.
 	 *
 	 * @var MetaModelDcaBuilder
 	 */
@@ -76,6 +83,11 @@ class MetaModelDcaBuilder
 		return self::$objInstance;
 	}
 
+	/**
+	 * Get Contao Database instance.
+	 *
+	 * @return \Database
+	 */
 	protected static function getDB()
 	{
 		return \Database::getInstance();
@@ -220,7 +232,11 @@ class MetaModelDcaBuilder
 	}
 
 	/**
-	 * @param IInputScreen $inputScreen
+	 * Handle stand alone integration in the backend.
+	 *
+	 * @param IInputScreen $inputScreen The input screen containing the information.
+	 *
+	 * @return void
 	 */
 	protected function handleStandalone($inputScreen)
 	{
@@ -281,6 +297,11 @@ class MetaModelDcaBuilder
 		}
 	}
 
+	/**
+	 * Inject all meta models into their corresponding parent tables.
+	 *
+	 * @return void
+	 */
 	public function injectIntoBackendModules()
 	{
 		$screens = ViewCombinations::getParentedInputScreens();
@@ -334,15 +355,15 @@ class MetaModelDcaBuilder
 	/**
 	 * Retrieves a palette from the database and populates the passed DCA 'fields' section with the correct settings.
 	 *
-	 * @param int                    $intPaletteId  the id of the palette to retrieve
+	 * @param int                    $intPaletteId The id of the palette to retrieve.
 	 *
-	 * @param \MetaModels\IMetaModel $objMetaModel  the MetaModel for which the palette shall be built.
+	 * @param \MetaModels\IMetaModel $objMetaModel The MetaModel for which the palette shall be built.
 	 *
-	 * @param array                  &$arrDCA       the DCA that shall get populated (used by reference).
+	 * @param array                  $arrDCA       The DCA that shall get populated (used by reference).
 	 *
 	 * @return string the palette string.
 	 *
-	 * @throws \RuntimeException
+	 * @throws \RuntimeException When an entry is neither an attribute nor a legend.
 	 */
 	protected function getPaletteAndFields($intPaletteId, $objMetaModel, &$arrDCA)
 	{
