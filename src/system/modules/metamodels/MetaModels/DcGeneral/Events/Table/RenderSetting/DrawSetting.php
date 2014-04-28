@@ -37,6 +37,8 @@ class DrawSetting
 	 */
 	public static function modelToLabel(ModelToLabelEvent $event)
 	{
+		// FIXME: in here all language strings and icons are related to filters?
+
 		$model        = $event->getModel();
 		$objSetting   = \Database::getInstance()
 			->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')
