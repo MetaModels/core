@@ -17,7 +17,7 @@
 namespace MetaModels\Attribute;
 
 /**
- * Interface for "complex" MeatModel attributes.
+ * Interface for "complex" MetaModel attributes.
  * Complex attributes are attributes that can not be fetched with a simple:
  * "SELECT colName FROM mm_table" and therefore need to be handled differently.
  *
