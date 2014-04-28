@@ -744,92 +744,7 @@ class MetaModelDcaBuilder
 
 		$this->injectChildTablesIntoDCA($strTableName);
 
-		if (!in_array($strTableName, Factory::getAllTables()))
-			return false;
-
-		// call the loadDataContainer from Controller.php for the base DCA.
-		ContaoController::getInstance()->loadDataContainer('tl_metamodel_item');
-		ContaoController::getInstance()->loadLanguageFile('tl_metamodel_item');
-
-		$GLOBALS['TL_DCA'][$strTableName] = array_replace_recursive((array)$GLOBALS['TL_DCA']['tl_metamodel_item'], (array) $GLOBALS['TL_DCA'][$strTableName]);
-		$arrDCA = &$GLOBALS['TL_DCA'][$strTableName];
-
-		$arrDCA['dca_config']['data_provider']['default']['source'] = $strTableName;
-
-		$objMetaModel = Factory::byTableName($strTableName);
-		if ($objMetaModel->isTranslated())
-		{
-			ContaoController::getInstance()->loadLanguageFile('languages');
-		}
-
-		$arrDCASettings  = ViewCombinations::getInputScreenDetails($objMetaModel->get('id'));
-		$arrViewSettings = ViewCombinations::getRenderSettingDetails($objMetaModel->get('id'));
-
-		if (!$arrDCASettings)
-		{
-			// FIXME: refactor user lookup.
-			$strMessage = sprintf($GLOBALS['TL_LANG']['ERR']['no_palette'], $objMetaModel->getName(), self::getUser()->username);
-			Module::addMessageEntry(
-				$strMessage, METAMODELS_ERROR, ContaoController::getInstance()->addToUrl('do=metamodels&table=tl_metamodel_dca&id=' . $objMetaModel->get('id'))
-			);
-			ContaoController::getInstance()->log($strMessage, 'MetaModelDatabase createDataContainer()', TL_ERROR);
-			return true;
-		}
-
-		if (!$arrViewSettings)
-		{
-			// FIXME: refactor user lookup.
-			$strMessage = sprintf($GLOBALS['TL_LANG']['ERR']['no_view'], $objMetaModel->getName(), self::getUser()->username);
-			Module::addMessageEntry(
-				$strMessage, METAMODELS_ERROR, ContaoController::getInstance()->addToUrl('do=metamodels&table=tl_metamodel_rendersettings&id=' . $objMetaModel->get('id'))
-			);
-			ContaoController::getInstance()->log($strMessage, 'MetaModelDatabase createDataContainer()', TL_ERROR);
-			return true;
-		}
-
-		$arrDCA['config']['metamodel_view'] = $arrViewSettings['id'];
-		$arrDCA['palettes']['default'] = $this->getPaletteAndFields($arrDCASettings['id'], $objMetaModel, $arrDCA);
-
-
-		$objView = RenderFactory::byId($objMetaModel, $arrViewSettings['id']);
-
-		if (!$objView)
-		{
-			throw new \Exception('No backend screen defined.');
-		}
-
-		$arrDCA['list']['label'] = array
-		(
-			'fields' => $objView->getSettingNames(),
-			'format' => trim(str_repeat('%s ', count($objView->getSettingNames()))),
-		);
-
-		if ($arrDCASettings['backendcaption'])
-		{
-			$arrCaptions = deserialize($arrDCASettings['backendcaption'], true);
-			foreach ($arrCaptions as $arrLangEntry)
-			{
-				if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == $objMetaModel->getActiveLanguage())
-				{
-					$arrDCA['config']['label'] = $arrLangEntry['label'];
-				} else if (($arrLangEntry['label'] != '') && (!$arrDCA['config']['label']) && ($arrLangEntry['langcode'] == $objMetaModel->getFallbackLanguage())) {
-					$arrDCA['config']['label'] = $arrLangEntry['label'];
-				}
-			}
-		}
-
-		if (!$arrDCA['config']['label'])
-		{
-			$arrDCA['config']['label'] = $objMetaModel->get('name');
-		}
-
-		// Check access level.
-		if ($arrDCASettings['isclosed'])
-		{
-			$arrDCA['config']['closed']       = true;
-			$arrDCA['config']['notDeletable'] = true;
-			unset($arrDCA['list']['operations']['delete']);
-		}
+		return true;
 
 		// FIXME: if we have variants, we force mode 5 here, no matter what the DCA configs say.
 		if ($objMetaModel->hasVariants())
@@ -840,9 +755,6 @@ class MetaModelDcaBuilder
 		{
 			$this->createDataContainerNormal($objMetaModel, $arrDCASettings, $arrDCA);
 		}
-		$GLOBALS['TL_LANG'][$objMetaModel->getTableName()] = array_replace_recursive($GLOBALS['TL_LANG']['tl_metamodel_item'], (array) $GLOBALS['TL_LANG'][$objMetaModel->getTableName()]);
-		// TODO: add a HOOK here for extensions to manipulate the DCA. loadMetaModelDataContainer($objMetaModel)
-		//$GLOBALS['METAMODEL_HOOKS']['loadDataContainer']
 
 		return true;
 	}

@@ -15,7 +15,14 @@ namespace MetaModels\DcGeneral\Dca\Builder;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultModelRelationshipDefinition;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\ModelRelationshipDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CutCommand;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\FilterBuilder;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChildCondition;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChildConditionInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootCondition;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootConditionInterface;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
 use ContaoCommunityAlliance\Translator\TranslatorChain;
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinition;
@@ -317,6 +324,7 @@ class Builder
 				// 5 Records are displayed as tree (see site structure).
 				// 6 Displays the child records within a tree structure (see articles module).
 				$config->setMode(BasicDefinitionInterface::MODE_HIERARCHICAL);
+
 				break;
 			default:
 		}
@@ -325,6 +333,216 @@ class Builder
 		{
 			$config->setClosed((bool)$value);
 		}
+
+		$this->calculateConditions($container);
+	}
+
+	/**
+	 * Parse the correct conditions.
+	 *
+	 * @param IMetaModelDataDefinition $container The data container.
+	 *
+	 * @return void
+	 */
+	protected function calculateConditions(IMetaModelDataDefinition $container)
+	{
+		if ($container->hasDefinition(ModelRelationshipDefinitionInterface::NAME))
+		{
+			$definition = $container->getDefinition(ModelRelationshipDefinitionInterface::NAME);
+		}
+		else
+		{
+			$definition = new DefaultModelRelationshipDefinition();
+
+			$container->setDefinition(ModelRelationshipDefinitionInterface::NAME, $definition);
+		}
+
+		if ($this->getMetaModel($container)->hasVariants())
+		{
+			$this->calculateConditionsWithVariants($container, $definition);
+		}
+		else
+		{
+			$this->calculateConditionsWithoutVariants($container, $definition);
+		}
+	}
+
+	/**
+	 * Parse the correct conditions for a MetaModel with variant support.
+	 *
+	 * @param IMetaModelDataDefinition             $container  The data container.
+	 *
+	 * @param ModelRelationshipDefinitionInterface $definition The relationship container.
+	 *
+	 * @return RootConditionInterface
+	 */
+	protected function getRootCondition($container, $definition)
+	{
+		$rootProvider = $container->getName();
+
+		if (($relationship = $definition->getRootCondition()) === null)
+		{
+			$relationship = new RootCondition();
+			$relationship
+				->setSourceName($rootProvider);
+			$definition->setRootCondition($relationship);
+		}
+
+		return $relationship;
+	}
+
+	/**
+	 * Parse the correct conditions for a MetaModel with variant support.
+	 *
+	 * @param IMetaModelDataDefinition             $container  The data container.
+	 *
+	 * @param ModelRelationshipDefinitionInterface $definition The relationship container.
+	 *
+	 * @return void
+	 */
+	protected function addHierarchicalConditions(IMetaModelDataDefinition $container, $definition)
+	{
+		// Not hierarchical? Get out.
+		if ($container->getBasicDefinition()->getMode() !== BasicDefinitionInterface::MODE_HIERARCHICAL)
+		{
+			return;
+		}
+
+		$relationship = $this->getRootCondition($container, $definition);
+
+		if (!$relationship->getSetters())
+		{
+			$relationship
+				->setSetters(array(array('property' => 'pid', 'value' => '0')));
+		}
+
+		$builder = FilterBuilder::fromArrayForRoot((array)$relationship->getFilterArray())->getFilter();
+
+		$builder->andPropertyEquals('pid', 0);
+
+		$relationship
+			->setFilterArray($builder->getAllAsArray());
+
+		$setter  = array(array('to_field' => 'pid', 'from_field' => 'id'));
+		$inverse = array();
+
+		/** @var ParentChildConditionInterface $relationship */
+		$relationship = $definition->getChildCondition($container->getName(), $container->getName());
+		if (!$relationship instanceof ParentChildConditionInterface)
+		{
+			$relationship = new ParentChildCondition();
+			$relationship
+				->setSourceName($container->getName())
+				->setDestinationName($container->getName());
+			$definition->addChildCondition($relationship);
+		}
+		else
+		{
+			$setter  = array_merge_recursive($setter, $relationship->getSetters());
+			$inverse = array_merge_recursive($inverse, $relationship->getInverseFilterArray());
+		}
+
+		// For tl_ prefix, the only unique target can be the id?
+		// maybe load parent dc and scan for unique in config then.
+		$relationship
+			->setFilterArray(
+				FilterBuilder::fromArray($relationship->getFilterArray())
+					->getFilter()
+					->andRemotePropertyEquals('pid', 'id')
+					->getAllAsArray()
+			)
+			->setSetters($setter)
+			->setInverseFilterArray($inverse);
+	}
+
+	/**
+	 * Parse the correct conditions for a MetaModel with variant support.
+	 *
+	 * @param IMetaModelDataDefinition             $container  The data container.
+	 *
+	 * @param ModelRelationshipDefinitionInterface $definition The relationship container.
+	 *
+	 * @return void
+	 */
+	protected function addParentCondition(IMetaModelDataDefinition $container, $definition)
+	{
+		$inputScreen = $this->getInputScreenDetails($container);
+
+		if ($this->getInputScreenDetails($container)->isStandalone())
+		{
+			return;
+		}
+
+		$setter  = array(array('to_field' => 'pid', 'from_field' => 'id'));
+		$inverse = array();
+
+		/** @var ParentChildConditionInterface $relationship */
+		$relationship = $definition->getChildCondition($inputScreen->getParentTable(), $container->getName());
+		if (!$relationship instanceof ParentChildConditionInterface)
+		{
+			$relationship = new ParentChildCondition();
+			$relationship
+				->setSourceName($inputScreen->getParentTable())
+				->setDestinationName($container->getName());
+			$definition->addChildCondition($relationship);
+		}
+		else
+		{
+			$setter  = array_merge_recursive($setter, $relationship->getSetters());
+			$inverse = array_merge_recursive($inverse, $relationship->getInverseFilterArray());
+		}
+
+		// For tl_ prefix, the only unique target can be the id?
+		// maybe load parent dc and scan for unique in config then.
+		$relationship
+			->setFilterArray(
+				FilterBuilder::fromArray($relationship->getFilterArray())
+					->getFilter()
+					->andRemotePropertyEquals('pid', 'id')
+					->getAllAsArray()
+			)
+			->setSetters($setter)
+			->setInverseFilterArray($inverse);
+	}
+
+	/**
+	 * Parse the correct conditions for a MetaModel with variant support.
+	 *
+	 * @param IMetaModelDataDefinition             $container  The data container.
+	 *
+	 * @param ModelRelationshipDefinitionInterface $definition The relationship container.
+	 *
+	 * @return bool
+	 */
+	protected function calculateConditionsWithVariants(IMetaModelDataDefinition $container, $definition)
+	{
+		$this->addHierarchicalConditions($container, $definition);
+		$this->addParentCondition($container, $definition);
+	}
+
+	/**
+	 * Parse the correct conditions for a MetaModel with variant support.
+	 *
+	 * @param IMetaModelDataDefinition             $container  The data container.
+	 *
+	 * @param ModelRelationshipDefinitionInterface $definition The relationship container.
+	 *
+	 * @return void
+	 */
+	protected function calculateConditionsWithoutVariants(IMetaModelDataDefinition $container, $definition)
+	{
+		$inputScreen = $this->getInputScreenDetails($container);
+		if (!$inputScreen->isStandalone())
+		{
+			if ($container->getBasicDefinition()->getMode() == BasicDefinitionInterface::MODE_HIERARCHICAL)
+			{
+				// FIXME: if parent table is not the same table, we are screwed here.
+				throw new \RuntimeException('Hierarchical mode with parent table is not supported yet.');
+			}
+		}
+
+		$this->addHierarchicalConditions($container, $definition);
+		$this->addParentCondition($container, $definition);
 	}
 
 	/**
@@ -360,6 +578,49 @@ class Builder
 				))
 				->isVersioningEnabled(false);
 			$container->getBasicDefinition()->setDataProvider($container->getName());
+		}
+
+		// If in hierarchical mode, set the root provider.
+		if ($container->getBasicDefinition()->getMode() == BasicDefinitionInterface::MODE_HIERARCHICAL)
+		{
+			$container->getBasicDefinition()->setRootDataProvider($container->getName());
+		}
+
+		// If not standalone, set the correct parent provider.
+		if (!$this->getInputScreenDetails($container)->isStandalone())
+		{
+			$inputScreen = $this->getInputScreenDetails($container);
+
+			// Check config if it already exists, if not, add it.
+			if (!$config->hasInformation($inputScreen->getParentTable()))
+			{
+				$providerInformation = new ContaoDataProviderInformation();
+				$providerInformation->setName($inputScreen->getParentTable());
+				$config->addInformation($providerInformation);
+			}
+			else
+			{
+				$providerInformation = $config->getInformation($inputScreen->getParentTable());
+			}
+
+			if ($providerInformation instanceof ContaoDataProviderInformation)
+			{
+				$providerInformation
+					->setTableName($inputScreen->getParentTable())
+					->setInitializationData(array(
+						'source' => $inputScreen->getParentTable()
+					)
+				);
+
+				// How can we honor other drivers? We do only check for MetaModels and legacy SQL here.
+				if (in_array($inputScreen->getParentTable(), Factory::getAllTables()))
+				{
+					$providerInformation
+						->setClassName('MetaModels\DcGeneral\Data\Driver');
+				}
+
+				$container->getBasicDefinition()->setParentDataProvider($inputScreen->getParentTable());
+			}
 		}
 	}
 
