@@ -189,7 +189,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['toggle'],
 				'icon'                => 'visible.gif',
-				'togglePropery'       => 'enabled',
+				'toggleProperty'      => 'enabled',
 			)
 		)
 	),
