@@ -65,10 +65,6 @@ class MetaModelDcaBuilder
 	 */
 	protected static $objInstance;
 
-	protected function __construct()
-	{
-	}
-
 	/**
 	 * Retrieve the singleton.
 	 *

@@ -162,10 +162,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 			'toggle' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['toggle'],
+				'href'                => 'act=toggle',
 				'icon'                => 'visible.gif',
-				'attributes'          => 'onclick="Backend.getScrollOffset(); return AjaxRequest.toggleVisibility(this, %s);"',
-				// TODO: change callbacks to event handlers.
-				'button_callback'     => array('MetaModels\Dca\RenderSetting', 'toggleIcon')
+				'togglePropery'       => 'enabled',
 			)
 		)
 	),

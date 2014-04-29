@@ -61,20 +61,6 @@ class RenderSetting extends Helper
 	 */
 	protected function __construct()
 	{
-		// toggling of a render setting?
-		if(\Input::getInstance()->get('tid') && (\Input::getInstance()->get('table') == 'tl_metamodel_rendersetting'))
-		{
-			// Update database
-			\Database::getInstance()->prepare('
-				UPDATE tl_metamodel_rendersetting
-				SET enabled=?
-				WHERE id=?'
-			)->execute(
-					(\Input::getInstance()->get('state')=='1'?'1':''),
-					\Input::getInstance()->get('tid')
-				);
-			exit;
-		}
 	}
 
 	public function createDataContainer($strTableName)
@@ -212,26 +198,6 @@ class RenderSetting extends Helper
 			return array();
 		}
 		return $this->getTemplatesForBase('mm_attr_' . $objAttribute->get('type'));
-	}
-
-	/**
-	 * Return the "toggle visibility" button
-	 * @param array
-	 * @param string
-	 * @param string
-	 * @param string
-	 * @param string
-	 * @param string
-	 * @return string
-	 */
-	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
-	{
-		$href .= '&amp;tid='.$row['id'].'&amp;state='.($row['enabled'] ? '0' : '1');
-		if (!$row['enabled'])
-		{
-			$icon = 'invisible.gif';
-		}
-		return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.$this->generateImage($icon, $label).'</a> ';
 	}
 }
 
