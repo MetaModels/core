@@ -179,7 +179,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle'],
 				'icon'                => 'visible.gif',
-				'attributes'          => 'onclick="Backend.getScrollOffset(); return AjaxRequest.toggleVisibility(this, %s);"',
+				'togglePropery'       => 'published',
 			),
 			'subpalette' => array
 			(

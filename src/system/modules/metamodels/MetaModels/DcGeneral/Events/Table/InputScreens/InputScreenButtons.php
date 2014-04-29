@@ -18,7 +18,8 @@ namespace MetaModels\DcGeneral\Events\Table\InputScreens;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\BackendBindings;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
+use ContaoCommunityAlliance\Contao\Bindings\Events\System\GetReferrerEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
 
 /**
@@ -27,37 +28,6 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOp
 class InputScreenButtons
 	extends InputScreenBase
 {
-	/**
-	 * Render the toggle button.
-	 *
-	 * @param GetOperationButtonEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function getToggleButton(GetOperationButtonEvent $event)
-	{
-		$environment = $event->getEnvironment();
-		$input       = $environment->getInputProvider();
-		$model       = $event->getModel();
-		if ($input->getParameter('tid') === $model->getId())
-		{
-			$model->setProperty('published', $input->getParameter('state') == 1);
-
-			$environment
-				->getDataProvider($model->getProviderName())
-				->save($model);
-
-			BackendBindings::redirect(BackendBindings::getReferer());
-		}
-
-		if (!$event->getModel()->getProperty('published'))
-		{
-			$extra         = $event->getCommand()->getExtra();
-			$extra['icon'] = 'invisible.gif';
-			$event->getCommand()->setExtra($extra);
-		}
-	}
-
 	/**
 	 * Render the sub palette button.
 	 *

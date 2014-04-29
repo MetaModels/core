@@ -462,15 +462,6 @@ class Subscriber
 		self::registerListeners(
 			array(
 				GetOperationButtonEvent::NAME
-					=> 'MetaModels\DcGeneral\Events\Table\InputScreens\InputScreenButtons::getToggleButton',
-			),
-			$dispatcher,
-			array('tl_metamodel_dcasetting', 'toggle')
-		);
-
-		self::registerListeners(
-			array(
-				GetOperationButtonEvent::NAME
 					=> 'MetaModels\DcGeneral\Events\Table\InputScreens\InputScreenButtons::getSubPaletteButton',
 			),
 			$dispatcher,

@@ -162,7 +162,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 			'toggle' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['toggle'],
-				'href'                => 'act=toggle',
 				'icon'                => 'visible.gif',
 				'togglePropery'       => 'enabled',
 			)

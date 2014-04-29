@@ -189,9 +189,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['toggle'],
 				'icon'                => 'visible.gif',
-				'attributes'          => 'onclick="Backend.getScrollOffset(); return AjaxRequest.toggleVisibility(this, %s);"',
-				// TODO: change callbacks to event handlers.
-				'button_callback'     => array('MetaModels\Dca\Filter', 'toggleIcon')
+				'togglePropery'       => 'enabled',
 			)
 		)
 	),

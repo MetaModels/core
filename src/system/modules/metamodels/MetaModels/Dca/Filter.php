@@ -67,22 +67,6 @@ class Filter extends Helper
 	 */
 	protected function __construct()
 	{
-		parent::__construct();
-
-		// toggling of a filter setting?
-		if(\Input::getInstance()->get('tid') && (\Input::getInstance()->get('table') == 'tl_metamodel_filtersetting'))
-		{
-			// Update database
-			\Database::getInstance()->prepare('
-				UPDATE tl_metamodel_filtersetting
-				SET enabled=?
-				WHERE id=?'
-			)->execute(
-					(\Input::getInstance()->get('state')=='1'?'1':''),
-					\Input::getInstance()->get('tid')
-				);
-			exit;
-		}
 	}
 
 	/**
@@ -136,25 +120,5 @@ class Filter extends Helper
 				$GLOBALS['TL_DCA']['tl_metamodel_filtersetting']['metasubselectpalettes']['attr_id'][$strSelectVal] = $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'][$this->strSettingType . '_palettes'][$strTypeName];
 			}
 		}
-	}
-
-	/**
-	 * Return the "toggle visibility" button
-	 * @param array
-	 * @param string
-	 * @param string
-	 * @param string
-	 * @param string
-	 * @param string
-	 * @return string
-	 */
-	public function toggleIcon($row, $href, $label, $title, $icon, $attributes)
-	{
-		$href .= '&amp;tid='.$row['id'].'&amp;state='.($row['enabled'] ? '0' : '1');
-		if (!$row['enabled'])
-		{
-			$icon = 'invisible.gif';
-		}
-		return '<a href="'.$this->addToUrl($href).'" title="'.specialchars($title).'"'.$attributes.'>'.ContaoController::getInstance()->generateImage($icon, $label).'</a> ';
 	}
 }
