@@ -162,7 +162,7 @@ class InputScreen implements IInputScreen
 				continue;
 			}
 
-			$attribute = $metaModel->getAttributeById($row['id']);
+			$attribute = $metaModel->getAttributeById($row['attr_id']);
 			if ($attribute)
 			{
 				$columnNames[$row['id']] = $attribute->getColName();
