@@ -147,57 +147,5 @@ class RenderSetting extends Helper
 				);
 		}
 	}
-
-	/**
-	 * Prepares a option list with alias => name connection for all attributes.
-	 * This is used in the attr_id select box.
-	 *
-	 * @param \DcGeneral\DC_General $objDC the data container calling.
-	 *
-	 * @return array
-	 */
-	public function getAttributeNames($objDC)
-	{
-		$this->objectsFromUrl($objDC);
-		$arrResult = array();
-
-		if (!$this->objMetaModel)
-		{
-			return array();
-		}
-		$objMetaModel = $this->objMetaModel;
-
-		foreach ($objMetaModel->getAttributes() as $objAttribute)
-		{
-			$strTypeName = $objAttribute->get('type');
-			$arrResult[$objAttribute->get('id')] = $objAttribute->getName() . ' [' . $strTypeName . ']';
-		}
-
-		return $arrResult;
-	}
-
-	/**
-	 * Fetch the template group for the detail view of the current MetaModel module.
-	 *
-	 * @param \DcGeneral\DC_General $objDC the datacontainer calling this method.
-	 *
-	 * @return array
-	 *
-	 */
-	public function getTemplates(DC_General $objDC)
-	{
-		if (!($this->objMetaModel))
-		{
-			return array();
-		}
-
-		$objAttribute = $this->objMetaModel->getAttributeById($objDC->getEnvironment()->getCurrentModel()->getProperty('attr_id'));
-
-		if (!$objAttribute)
-		{
-			return array();
-		}
-		return $this->getTemplatesForBase('mm_attr_' . $objAttribute->get('type'));
-	}
 }
 

@@ -181,7 +181,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 		),
 	),
 
-	// Fields
+	// Fields.
 	'fields' => array
 	(
 		'attr_id' => array
@@ -189,8 +189,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			// TODO: change callbacks to event handlers.
-			'options_callback'        => array('MetaModels\Dca\RenderSetting', 'getAttributeNames'),
 			'eval'                    => array(
 				'doNotSaveEmpty'      => true,
 				'alwaysSave'          => true,
@@ -230,4 +228,3 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 		),
 	)
 );
-
