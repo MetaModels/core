@@ -636,6 +636,8 @@ class MetaModel implements IMetaModel
 						$strSortOrder
 					)
 				)->fetchEach('id');
+			} else if ($strSortBy == 'random') {
+				shuffle($arrFilteredIds);
 			}
 		}
 

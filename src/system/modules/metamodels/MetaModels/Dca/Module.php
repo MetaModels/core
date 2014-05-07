@@ -97,8 +97,12 @@ class Module
 	 */
 	public function getAttributeNames(\DC_Table $objDc)
 	{
-		$arrAttributeNames = array('sorting' => $GLOBALS['TL_LANG']['MSC']['sorting']);
+		$arrAttributeNames = array(
+			'sorting' => $GLOBALS['TL_LANG']['MSC']['sorting'],
+			'random' => $GLOBALS['TL_LANG']['MSC']['random']
+		);
 		$objMetaModel      = MetaModelFactory::byId($objDc->activeRecord->metamodel);
+
 		if ($objMetaModel)
 		{
 			foreach ($objMetaModel->getAttributes() as $objAttribute)
