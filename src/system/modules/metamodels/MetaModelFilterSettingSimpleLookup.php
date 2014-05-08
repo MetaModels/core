@@ -175,7 +175,7 @@ class MetaModelFilterSettingSimpleLookup extends MetaModelFilterSetting
 				),
 				'inputType'    => 'select',
 				'options' => $arrOptions,
-				'eval' => array('includeBlankOption' => true, 'style' => 'min-width:450px;margin-bottom:16px;margin-right:10px;')
+				'eval' => array('includeBlankOption' => true, 'style' => 'min-width:450px;width:450px;margin-bottom:16px;margin-right:10px;')
 			)
 		);
 	}
