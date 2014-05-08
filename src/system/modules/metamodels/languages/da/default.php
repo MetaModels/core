@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-06-11T01:40:38+02:00
+ * last-updated: 2013-07-10T10:02:32+02:00
  */
-
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Egenskaber for "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dca']                                           = 'Alle indtastningsvisninger for "%s"';
@@ -61,6 +60,7 @@ $GLOBALS['TL_LANG']['MSC']['tl_class']['w50']['0']                              
 $GLOBALS['TL_LANG']['MSC']['tl_class']['w50']['1']                                    = 'Sæt feltets bredte til 50% og venstrestil det (float:left).';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['w50x']['0']                                   = 'w50x';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['wizard']['0']                                 = 'guide';
+$GLOBALS['TL_LANG']['MSC']['tl_class']['wizard']['1']                                 = 'Gør input feltet kortere så der er plads nok til guide knappen (f.eks. datovælger).';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['action_add']                        = '+';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['action_remove']                     = '-';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['clear_all']                         = 'Ryd alle filtre';
@@ -68,3 +68,4 @@ $GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter']               
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations']                   = '(Ingen matchende kombinationer blev fundet.)';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['select_all']                        = 'Vælg alle';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']                            = 'Filtrer';
+
