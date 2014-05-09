@@ -246,7 +246,7 @@ abstract class TranslatedReference
 
 		$strQuery = sprintf('SELECT item_id FROM %s %s GROUP BY item_id',
 			$this->getValueTable(),
-			($arrWhere ? 'WHERE' . $arrWhere['procedure'] : '')
+			($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '')
 		);
 
 		$arrOptionizer = $this->getOptionizer();
