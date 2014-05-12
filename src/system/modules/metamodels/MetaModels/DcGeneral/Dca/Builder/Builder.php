@@ -428,7 +428,7 @@ class Builder
 
 		/** @var ParentChildConditionInterface $relationship */
 		$relationship = $definition->getChildCondition($container->getName(), $container->getName());
-		if (!$relationship instanceof ParentChildConditionInterface)
+		if ($relationship === null)
 		{
 			$relationship = new ParentChildCondition();
 			$relationship
