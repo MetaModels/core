@@ -516,8 +516,58 @@ class Builder
 	 */
 	protected function calculateConditionsWithVariants(IMetaModelDataDefinition $container, $definition)
 	{
+		// Basic conditions.
 		$this->addHierarchicalConditions($container, $definition);
 		$this->addParentCondition($container, $definition);
+
+		// Conditions for metamodels variants.
+		$relationship = $this->getRootCondition($container, $definition);
+		$relationship->setSetters(array_merge_recursive(
+			array(array('property' => 'varbase', 'value' => '1')),
+			$relationship->getSetters()
+		));
+
+		$builder = FilterBuilder::fromArrayForRoot((array)$relationship->getFilterArray())->getFilter();
+
+		$builder->andPropertyEquals('varbase', 1);
+
+		$relationship->setFilterArray($builder->getAllAsArray());
+
+		$setter  = array(
+			array('to_field' => 'varbase', 'value' => '0'),
+			array('to_field' => 'vargroup', 'from_field' => 'vargroup')
+		);
+		$inverse = array();
+
+		/** @var ParentChildConditionInterface $relationship */
+		$relationship = $definition->getChildCondition($container->getName(), $container->getName());
+
+		if ($relationship === null)
+		{
+			$relationship = new ParentChildCondition();
+			$relationship
+				->setSourceName($container->getName())
+				->setDestinationName($container->getName());
+			$definition->addChildCondition($relationship);
+		}
+		else
+		{
+			$setter  = array_merge_recursive($setter, $relationship->getSetters());
+			$inverse = array_merge_recursive($inverse, $relationship->getInverseFilterArray());
+		}
+
+		$relationship
+			->setFilterArray(
+				FilterBuilder::fromArray($relationship->getFilterArray())
+					->getFilter()
+					->getBuilder()->encapsulateOr()
+						->andRemotePropertyEquals('vargroup', 'vargroup')
+						->andRemotePropertyEquals('vargroup', 'id')
+						->andRemotePropertyEquals('varbase', 0, true)
+					->getAllAsArray()
+			)
+			->setSetters($setter)
+			->setInverseFilterArray($inverse);
 	}
 
 	/**

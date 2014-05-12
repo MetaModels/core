@@ -316,7 +316,16 @@ class InputScreen implements IInputScreen
 	 */
 	public function getMode()
 	{
-		return $this->data['mode'];
+		// If we have variant overwrite all modes and set mode 5 - treemode.
+		$objMetaModels = $this->getMetaModel();
+		if ($objMetaModels->hasVariants())
+		{
+			return 5;
+		}
+		else
+		{
+			return $this->data['mode'];
+		}
 	}
 
 	/**
