@@ -15,6 +15,7 @@ namespace MetaModels\DcGeneral\Dca\Builder;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultModelRelationshipDefinition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\ModelRelationshipDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CutCommand;
@@ -23,6 +24,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChi
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChildConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootConditionInterface;
+use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
 use ContaoCommunityAlliance\Translator\TranslatorChain;
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinition;
@@ -57,6 +59,7 @@ use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\ViewCombinations;
 use MetaModels\DcGeneral\DataDefinition\Definition\MetaModelDefinition;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
+use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\IsVariantAttribute;
 use MetaModels\DcGeneral\Events\MetaModel\RenderItem;
 use MetaModels\Events\BuildAttributeEvent;
 use MetaModels\Events\PopulateAttributeEvent;
@@ -172,6 +175,26 @@ class Builder
 			// Trigger BuildAttribute Event.
 			$this->dispatcher->dispatch($event::NAME, $event);
 		}
+
+		$this->dispatcher->addListener(
+			sprintf(
+				'%s[%s][%s]',
+				GetOperationButtonEvent::NAME,
+				$metaModel->getTableName(),
+				'createvariant'
+			),
+			'MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton::createButton'
+		);
+
+		$this->dispatcher->addListener(
+			sprintf(
+				'%s[%s][%s]',
+				DcGeneralEvents::ACTION,
+				$metaModel->getTableName(),
+				'createvariant'
+			),
+			'MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton::handleCreateVariantAction'
+		);
 	}
 
 	/**
@@ -703,7 +726,7 @@ class Builder
 		}
 
 		$this->parseListing($container, $view);
-		$this->parseModelOperations($view);
+		$this->parseModelOperations($view, $container);
 	}
 
 
@@ -903,11 +926,13 @@ class Builder
 	/**
 	 * Parse the defined model scoped operations and populate the definition.
 	 *
-	 * @param Contao2BackendViewDefinitionInterface $view The backend view information.
+	 * @param Contao2BackendViewDefinitionInterface $view      The backend view information.
+	 *
+	 * @param IMetaModelDataDefinition              $container The data container.
 	 *
 	 * @return void
 	 */
-	protected function parseModelOperations(Contao2BackendViewDefinitionInterface $view)
+	protected function parseModelOperations(Contao2BackendViewDefinitionInterface $view, IMetaModelDataDefinition $container)
 	{
 		$collection = $view->getModelCommands();
 		$this->createCommand
@@ -958,6 +983,17 @@ class Builder
 			'show.gif',
 			array()
 		);
+
+		if ($this->getMetaModel($container))
+		{
+			$this->createCommand(
+				$collection,
+				'createvariant',
+				array('act' => 'createvariant'),
+				'system/modules/metamodels/html/variants.png',
+				array()
+			);
+		}
 	}
 
 	protected function buildPropertyFromDca(
@@ -1165,10 +1201,18 @@ class Builder
 				}
 
 				$extra = $propInfo['info'];
-				$property->setVisibleCondition(new BooleanCondition(
+				$chain = new PropertyConditionChain();
+				$property->setVisibleCondition($chain);
+				$chain->addCondition(new BooleanCondition(
 					!((isset($extra['doNotShow']) && $extra['doNotShow'])
-					|| (isset($extra['hideInput']) && $extra['hideInput']))
+						|| (isset($extra['hideInput']) && $extra['hideInput']))
 				));
+
+				// If variants, do show only if allowed.
+				if ($metaModel->hasVariants())
+				{
+					$chain->addCondition(new IsVariantAttribute());
+				}
 
 				$this->addSubPalette($propertyName, $propInfo, $paletteLegend);
 			}
