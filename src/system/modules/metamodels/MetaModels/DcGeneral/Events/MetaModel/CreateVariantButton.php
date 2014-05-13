@@ -30,7 +30,10 @@ class CreateVariantButton
 	 */
 	public static function createButton(GetOperationButtonEvent $event)
 	{
-		if ($event->getModel()->getProperty('varbase') === '0')
+		$model     = $event->getModel();
+		$metamodel = $model->getItem()->getMetaModel();
+
+		if (!$metamodel->hasVariants() || $model ->getProperty('varbase') === '0')
 		{
 			$event->setHtml('');
 		}
