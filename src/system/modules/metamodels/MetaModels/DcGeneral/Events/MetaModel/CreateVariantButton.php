@@ -23,6 +23,11 @@ use ContaoCommunityAlliance\DcGeneral\Event\PreCreateModelEvent;
 class CreateVariantButton
 	extends BaseView
 {
+	/**
+	 * Check if we have to add the "Create variant" button.
+	 *
+	 * @param GetOperationButtonEvent $event
+	 */
 	public static function createButton(GetOperationButtonEvent $event)
 	{
 		if ($event->getModel()->getProperty('varbase') === '0')
@@ -31,6 +36,13 @@ class CreateVariantButton
 		}
 	}
 
+	/**
+	 * Handle the "create variant" event.
+	 *
+	 * @param ActionEvent $event
+	 *
+	 * @throws \RuntimeException
+	 */
 	public static function handleCreateVariantAction(ActionEvent $event)
 	{
 		$environment   = $event->getEnvironment();
