@@ -21,6 +21,7 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\GetReferrerEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 
 /**
  * Handle events to generate buttons.
@@ -57,7 +58,11 @@ class InputScreenButtons
 			return;
 		}
 
-		$urlEvent = new AddToUrlEvent('&pid='. $model->getProperty('pid') . '&subpaletteid='.$model->getProperty('id'));
+		$urlEvent = new AddToUrlEvent(sprintf(
+			'&pid=%s&subpaletteid=%s',
+			IdSerializer::fromValues($model->getProviderName(), $model->getProperty('pid'))->getSerialized(),
+			IdSerializer::fromModel($model)->getSerialized())
+		);
 		$event->getEnvironment()->getEventPropagator()->propagate(ContaoEvents::BACKEND_ADD_TO_URL, $urlEvent);
 
 		$event->setHref($urlEvent->getUrl());

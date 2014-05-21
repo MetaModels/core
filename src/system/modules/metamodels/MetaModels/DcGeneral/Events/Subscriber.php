@@ -115,6 +115,15 @@ class Subscriber
 
 		self::registerListeners(
 			array(
+				PopulateEnvironmentEvent::NAME
+					=> self::delayEvent('MetaModels\DcGeneral\Events\Table\InputScreens\InjectSubPalettes::build')
+			),
+			$dispatcher,
+			array('tl_metamodel_dcasetting')
+		);
+
+		self::registerListeners(
+			array(
 				PreCreateDcGeneralEvent::NAME => __CLASS__ . '::preCreateDcGeneral'
 			),
 			$dispatcher
