@@ -34,6 +34,7 @@ use ContaoCommunityAlliance\DcGeneral\Factory\Event\PreCreateDcGeneralEvent;
 use MetaModels\DcGeneral\Dca\Builder\Builder;
 use MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPTable;
 use MetaModels\DcGeneral\Events\Table\InputScreens\BuildPalette;
+use MetaModels\Factory;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
@@ -806,7 +807,7 @@ class Subscriber
 		$factory = $event->getFactory();
 		$name    = $factory->getContainerName();
 
-		if (substr($name, 0, 3) !== 'mm_')
+		if (!in_array($name, Factory::getAllTables()))
 		{
 			return;
 		}
