@@ -142,27 +142,11 @@ class InputScreen implements IInputScreen
 
 		$propName = $attribute->getColName();
 
-		if ($property['subpalette'])
-		{
-			// This should never ever be true. If so, we have dead entries in the database.
-			if (!isset($this->propertyMap[$property['subpalette']]))
-			{
-				return;
-			}
-
-			$parentColumn = $this->propertyMap[$property['subpalette']];
-
-			$this->properties[$parentColumn]['subpalette'][] = $propName;
-		}
-		else
-		{
-			$this->legends[$legend]['properties'][] = $propName;
-		}
+		$this->legends[$legend]['properties'][] = $propName;
 
 		$this->properties[$propName] = array
 		(
 			'info'       => $attribute->getFieldDefinition($property),
-			'subpalette' => array()
 		);
 	}
 
@@ -212,15 +196,6 @@ class InputScreen implements IInputScreen
 					break;
 				default:
 					throw new \RuntimeException('Unknown palette rendering mode ' . $row['dcatype']);
-			}
-		}
-
-		// Third pass, set submitOnChange for all sub palette fields.
-		foreach ((array)$this->properties as $propName => $propInfo)
-		{
-			if (!empty($propInfo['subpalette']))
-			{
-				$this->properties[$propName]['info']['submitOnChange'] = true;
 			}
 		}
 	}

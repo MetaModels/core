@@ -77,25 +77,6 @@ class BreadCrumbInputScreen
 			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/html/dca_setting.png'
 		);
 
-		if ($input->hasParameter('subpaletteid'))
-		{
-			$id = $this->extractIdFrom($environment, 'subpaletteid');
-
-			$elements[] = array(
-				'url' => sprintf(
-					'contao/main.php?do=metamodels&table=%s&pid=%s&subpaletteid=%s',
-					'tl_metamodel_dcasetting',
-					$this->seralizeId('tl_metamodel_dca', $this->inputScreenId),
-					$this->seralizeId('tl_metamodel_dcasetting', $id)
-				),
-				'text' => sprintf(
-					$this->getBreadcrumbLabel($environment, 'metamodel_dcasetting_subpalette'),
-					$this->getSubPaletteAttributeName($id)->getName()
-				),
-				'icon' => $this->getBaseUrl() . '/system/modules/metamodels/html/dca_setting.png'
-			);
-		}
-
 		return $elements;
 	}
 }

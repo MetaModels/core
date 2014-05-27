@@ -111,15 +111,6 @@ class Subscriber
 
 		self::registerListeners(
 			array(
-				PopulateEnvironmentEvent::NAME
-					=> self::delayEvent('MetaModels\DcGeneral\Events\Table\InputScreens\InjectSubPalettes::build')
-			),
-			$dispatcher,
-			array('tl_metamodel_dcasetting')
-		);
-
-		self::registerListeners(
-			array(
 				PreCreateDcGeneralEvent::NAME => __CLASS__ . '::preCreateDcGeneral'
 			),
 			$dispatcher
@@ -462,15 +453,6 @@ class Subscriber
 			),
 			$dispatcher,
 			array('tl_metamodel_dcasetting')
-		);
-
-		self::registerListeners(
-			array(
-				GetOperationButtonEvent::NAME
-					=> 'MetaModels\DcGeneral\Events\Table\InputScreens\InputScreenButtons::getSubPaletteButton',
-			),
-			$dispatcher,
-			array('tl_metamodel_dcasetting', 'subpalette')
 		);
 
 		// Save and load callbacks.

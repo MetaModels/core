@@ -42,13 +42,11 @@ class ProcessAddAll
 	 *
 	 * @param int        $pid             The pid.
 	 *
-	 * @param int        $subPalette      The id of the attribute that this attribute depends on.
-	 *
 	 * @param array      $messages        The messages array.
 	 *
 	 * @return void
 	 */
-	protected static function perform(IMetaModel $metaModel, $knownAttributes, $startSort, $pid, $subPalette, &$messages)
+	protected static function perform(IMetaModel $metaModel, $knownAttributes, $startSort, $pid, &$messages)
 	{
 		$database = \Database::getInstance();
 
@@ -65,7 +63,6 @@ class ProcessAddAll
 					'dcatype'  => 'attribute',
 					'attr_id'  => $attribute->get('id'),
 					'tl_class' => '',
-					'subpalette' => $subPalette ? $subPalette : 0,
 				);
 
 				$startSort += 128;
@@ -74,43 +71,14 @@ class ProcessAddAll
 					->set($arrData)
 					->execute();
 
-				if ($subPalette)
-				{
-					$parentAttributeName = $subPalette;
-					// Get parent setting.
-					$parentDcaSetting = \Database::getInstance()
-						->prepare('SELECT attr_id FROM tl_metamodel_dcasetting WHERE id=?')
-						->execute($subPalette);
-
-					// Check if we have a attribute.
-					$parentAttribute = $metaModel->getAttributeById($parentDcaSetting->attr_id);
-
-					if (!is_null($parentAttribute))
-					{
-						$parentAttributeName = $parentAttribute->getName();
-					}
-
-					$messages[] = array
-					(
-						'severity' => 'confirm',
-						'message'  => sprintf(
-							$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess_subpalette'],
-							$attribute->getName(),
-							$parentAttributeName
-						),
-					);
-				}
-				else
-				{
-					$messages[] = array
-					(
-						'severity' => 'confirm',
-						'message'  => sprintf(
-							$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess'],
-							$attribute->getName()
-						),
-					);
-				}
+				$messages[] = array
+				(
+					'severity' => 'confirm',
+					'message'  => sprintf(
+						$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess'],
+						$attribute->getName()
+					),
+				);
 			}
 		}
 	}
@@ -191,7 +159,6 @@ class ProcessAddAll
 				$knownAttributes,
 				$intMax,
 				$pid->getId(),
-				$input->getParameter('subpaletteid'),
 				$messages
 			);
 		}

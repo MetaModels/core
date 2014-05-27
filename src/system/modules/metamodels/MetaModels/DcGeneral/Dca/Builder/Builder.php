@@ -1125,30 +1125,6 @@ class Builder
 	}
 
 	/**
-	 * Add a PropertyTrueCondition to the condition of the sub palette parent property if parent property is defined.
-	 *
-	 * @param string          $parentPropertyName The name of the parent property.
-	 *
-	 * @param array           $propInfo           The property definition from the dca.
-	 *
-	 * @param LegendInterface $paletteLegend      The legend where the property is contained.
-	 *
-	 * @return void
-	 */
-	protected function addSubPalette($parentPropertyName, $propInfo, LegendInterface $paletteLegend)
-	{
-		if ($propInfo['subpalette'])
-		{
-			foreach ($propInfo['subpalette'] as $propertyName)
-			{
-				$property = new Property($propertyName);
-				$paletteLegend->addProperty($property);
-				$property->setVisibleCondition(new PropertyTrueCondition($parentPropertyName));
-			}
-		}
-	}
-
-	/**
 	 * Parse the palettes from the input screen into the data container.
 	 *
 	 * @param IMetaModelDataDefinition $container The data container.
@@ -1221,8 +1197,6 @@ class Builder
 				{
 					$chain->addCondition(new IsVariantAttribute());
 				}
-
-				$this->addSubPalette($propertyName, $propInfo, $paletteLegend);
 			}
 		}
 	}

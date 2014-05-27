@@ -55,12 +55,10 @@ class PropertyAttribute
 			WHERE
 				attr_id<>?
 				AND pid=?
-				AND dcatype="attribute"
-				AND ((subpalette=0) OR (subpalette=?))')
+				AND dcatype="attribute"')
 			->execute(
 				$model->getProperty('attr_id'),
-				$model->getProperty('pid'),
-				$model->getProperty('subpalette')
+				$model->getProperty('pid')
 			)
 			->fetchEach('attr_id');
 
