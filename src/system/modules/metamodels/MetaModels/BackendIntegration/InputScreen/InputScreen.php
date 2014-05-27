@@ -246,6 +246,8 @@ class InputScreen implements IInputScreen
 			$byPid[$condition['pid']][] = $condition['id'];
 		}
 
+		unset($condition);
+
 		$instances = array();
 		// Second pass, handle them.
 		foreach ($sorted as $id => $condition)
