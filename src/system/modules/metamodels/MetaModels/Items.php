@@ -186,10 +186,13 @@ class Items implements IItems
 	 */
 	public function next()
 	{
-		if ($this->getCount() == ++$this->intCursor)
+		if ($this->getCount() == $this->intCursor)
 		{
 			return false;
 		}
+		// We must advance over the last element.
+		$this->intCursor += 1;
+
 		return $this;
 	}
 
