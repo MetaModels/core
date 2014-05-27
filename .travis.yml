@@ -9,6 +9,7 @@ env:
         - CONTAO_VERSION=~2.11
         - CONTAO_VERSION=~3.1
         - CONTAO_VERSION=~3.2
+        - CONTAO_VERSION=~3.3
 
 install:
     - composer require contao/core $CONTAO_VERSION --prefer-dist --dev
@@ -19,3 +20,7 @@ script: ant -keep-going
 branches:
   only:
     - tng
+
+matrix:
+  allow_failures:
+    - env: CONTAO_VERSION=~3.3
