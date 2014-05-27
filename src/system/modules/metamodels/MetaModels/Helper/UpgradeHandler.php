@@ -96,6 +96,105 @@ class UpgradeHandler
 	}
 
 	/**
+	 * Handle database upgrade for changing sub palettes to input field conditions.
+	 *
+	 * @return void
+	 */
+	protected static function changeSubPalettesToConditions()
+	{
+		$objDB = self::DB();
+
+		// Create the table.
+		if (!$objDB->tableExists('tl_metamodel_dcasetting_condition'))
+		{
+			$objDB->execute(
+				'CREATE TABLE `tl_metamodel_dcasetting_condition` (
+				  `id` int(10) unsigned NOT NULL auto_increment,
+				  `pid` int(10) unsigned NOT NULL default \'0\',
+				  `settingId` int(10) unsigned NOT NULL default \'0\',
+				  `sorting` int(10) unsigned NOT NULL default \'0\',
+				  `tstamp` int(10) unsigned NOT NULL default \'0\',
+				  `enabled` char(1) NOT NULL default \'\',
+				  `type` varchar(255) NOT NULL default \'\',
+				  `attr_id` int(10) unsigned NOT NULL default \'0\',
+				  `comment` varchar(255) NOT NULL default \'\',
+				  `value` blob NULL,
+				  PRIMARY KEY  (`id`)
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8;'
+			);
+		}
+
+		if ($objDB->fieldExists('subpalette', 'tl_metamodel_dcasetting', true))
+		{
+			$subpalettes = $objDB->execute('SELECT * FROM tl_metamodel_dcasetting WHERE subpalette!=0');
+
+			if ($subpalettes->numRows)
+			{
+				// Get all attribute names and setting ids.
+				$attributes = $objDB
+					->execute('
+						SELECT attr_id, colName
+						FROM tl_metamodel_dcasetting AS setting
+						LEFT JOIN tl_metamodel_attribute AS attribute
+						ON (setting.attr_id=attribute.id)
+						WHERE dcatype=\'attribute\'
+					');
+
+				$attr = array();
+				while ($attributes->next())
+				{
+					$attr[$attributes->attr_id] = $attributes->colName;
+				}
+
+				$checkboxes = $objDB->execute('
+					SELECT *
+					FROM tl_metamodel_dcasetting
+					WHERE
+						subpalette=0
+						AND dcatype=\'attribute\'
+					');
+
+				$check = array();
+				while ($checkboxes->next())
+				{
+					$check[$checkboxes->id] = $checkboxes->attr_id;
+				}
+
+				while ($subpalettes->next())
+				{
+					// Add property value condition for parent property dependency.
+					$data = array(
+						'pid' => 0,
+						'settingId' => $subpalettes->id,
+						'sorting' => '128',
+						'tstamp' => time(),
+						'enabled' => '1',
+						'type' => 'conditionpropertyvalueis',
+						'attr_id' => $check[$subpalettes->subpalette],
+						'comment' => sprintf('Only show when checkbox "%s" is checked', $attr[$check[$subpalettes->subpalette]]),
+						'value' => '1',
+					);
+
+					$objDB
+						->prepare('INSERT INTO tl_metamodel_dcasetting_condition %s')
+						->set($data)
+						->execute();
+
+					$objDB
+						->prepare('UPDATE tl_metamodel_dcasetting SET subpalette=0 WHERE id=?')
+						->execute($subpalettes->id);
+
+					$objDB
+						->prepare('UPDATE tl_metamodel_dcasetting SET submitOnChange=1 WHERE id=?')
+						->execute($subpalettes->subpalette);
+				}
+			}
+
+			TableManipulation::dropColumn('tl_metamodel_dcasetting', 'subpalette', true);
+		}
+	}
+
+	/**
 	 * Perform all upgrade steps.
 	 *
 	 * @return void
@@ -104,5 +203,6 @@ class UpgradeHandler
 	{
 		self::upgradeJumpTo();
 		self::upgradeDcaSettingsPublished();
+		self::changeSubPalettesToConditions();
 	}
 }
