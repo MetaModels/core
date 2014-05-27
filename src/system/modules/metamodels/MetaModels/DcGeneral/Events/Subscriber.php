@@ -112,15 +112,6 @@ class Subscriber
 		self::registerListeners(
 			array(
 				PopulateEnvironmentEvent::NAME
-					=> self::delayEvent('MetaModels\DcGeneral\Events\Table\FilterSetting\InjectFidFilter::handle')
-			),
-			$dispatcher,
-			array('tl_metamodel_filtersetting')
-		);
-
-		self::registerListeners(
-			array(
-				PopulateEnvironmentEvent::NAME
 					=> self::delayEvent('MetaModels\DcGeneral\Events\Table\InputScreens\InjectSubPalettes::build')
 			),
 			$dispatcher,
