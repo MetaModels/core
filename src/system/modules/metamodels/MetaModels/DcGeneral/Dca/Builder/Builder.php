@@ -16,6 +16,7 @@ use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionChainInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultModelRelationshipDefinition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\ModelRelationshipDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CutCommand;
@@ -24,6 +25,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChi
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChildConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootConditionInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
 use ContaoCommunityAlliance\Translator\TranslatorChain;
@@ -1207,6 +1209,12 @@ class Builder
 					!((isset($extra['doNotShow']) && $extra['doNotShow'])
 						|| (isset($extra['hideInput']) && $extra['hideInput']))
 				));
+
+				$propertyConditions = $inputScreen->getConditionsFor($propertyName);
+				if ($propertyConditions !== null)
+				{
+					$chain->addCondition($propertyConditions);
+				}
 
 				// If variants, do show only if allowed.
 				if ($metaModel->hasVariants())

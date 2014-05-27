@@ -84,6 +84,11 @@ class Subscriber
 			__CLASS__ . '::registerTableMetaModelDcaSettingEvents'
 		);
 		self::registerBuildDataDefinitionFor(
+			'tl_metamodel_dcasetting_condition',
+			$dispatcher,
+			__CLASS__ . '::registerTableMetaModelDcaSettingConditionsEvents'
+		);
+		self::registerBuildDataDefinitionFor(
 			'tl_metamodel_filter',
 			$dispatcher,
 			__CLASS__ . '::registerTableMetaModelFilterEvents'
@@ -517,6 +522,63 @@ class Subscriber
 
 		BuildPalette::build($event);
 	}
+
+	/**
+	 * Register the events for table tl_metamodel_dcasetting_condition.
+	 *
+	 * @param BuildDataDefinitionEvent $event The event being processed.
+	 *
+	 * @return void
+	 */
+	public static function registerTableMetaModelDcaSettingConditionsEvents(BuildDataDefinitionEvent $event)
+	{
+		static $registered;
+		if ($registered)
+		{
+			return;
+		}
+		$registered = true;
+		$dispatcher = $event->getDispatcher();
+
+		self::registerListeners(
+			array(
+				GetPasteButtonEvent::NAME => 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PasteButton::generate',
+			),
+			$dispatcher,
+			array('tl_metamodel_dcasetting_condition')
+		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PropertyType::getOptions',
+			),
+			$dispatcher,
+			array('tl_metamodel_dcasetting_condition', 'type')
+		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PropertyAttributeId::getOptions',
+				DecodePropertyValueForWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PropertyAttributeId::decodeValue',
+				EncodePropertyValueFromWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PropertyAttributeId::encodeValue'
+			),
+			$dispatcher,
+			array('tl_metamodel_dcasetting_condition', 'attr_id')
+		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PropertyValue::getOptions',
+			),
+			$dispatcher,
+			array('tl_metamodel_dcasetting_condition', 'value')
+		);
+	}
+
 
 	/**
 	 * Register the events for table tl_metamodel_filter.

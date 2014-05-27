@@ -33,7 +33,8 @@ array_insert($GLOBALS['BE_MOD'], (array_search('accounts', array_keys($GLOBALS['
 				'tl_metamodel_rendersetting',
 				'tl_metamodel_dca',
 				'tl_metamodel_dcasetting',
-				'tl_metamodel_dca_combine'
+				'tl_metamodel_dca_combine',
+				'tl_metamodel_dcasetting_condition'
 			),
 			'icon'                  => 'system/modules/metamodels/html/logo.png',
 			'callback'              => 'MetaModels\BackendIntegration\Module'
@@ -91,6 +92,13 @@ $GLOBALS['METAMODELS']['filters']['conditionor']['class']           = 'MetaModel
 $GLOBALS['METAMODELS']['filters']['conditionor']['image']           = 'system/modules/metamodels/html/filter_or.png';
 //$GLOBALS['METAMODELS']['filters']['conditionor']['info_callback']   = array('MetaModels\Dca\Filter', 'drawOrCondition');
 $GLOBALS['METAMODELS']['filters']['conditionor']['nestingAllowed']  = true;
+
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionor']['nestingAllowed']              = true;
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionand']['nestingAllowed']             = true;
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvalueis']['nestingAllowed'] = false;
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvisible']['nestingAllowed'] = false;
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionnot']['nestingAllowed']             = true;
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionnot']['maxChildren']                = 1;
 
 /*
 	All system columns that always are defined in a MetaModel table and are not attributes.
@@ -248,8 +256,9 @@ if (!isset($GLOBALS['MM_FILTER_PARAMS']))
 }
 
 // Attach ourselves to the DIC.
-//$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'MetaModels\DcGeneral\Events\Subscriber';
+$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'MetaModels\Events\DefaultPropertyConditionCreator';
 
-$GLOBALS['TL_EVENTS'][\ContaoCommunityAlliance\Contao\EventDispatcher\Event\CreateEventDispatcherEvent::NAME][] = 'MetaModels\DcGeneral\Events\Subscriber::registerEvents';
+$GLOBALS['TL_EVENTS'][\ContaoCommunityAlliance\Contao\EventDispatcher\Event\CreateEventDispatcherEvent::NAME][] =
+	'MetaModels\DcGeneral\Events\Subscriber::registerEvents';
 
 

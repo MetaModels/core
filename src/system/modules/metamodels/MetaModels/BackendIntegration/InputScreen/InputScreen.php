@@ -2,6 +2,11 @@
 
 namespace MetaModels\BackendIntegration\InputScreen;
 
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionChainInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
+use MetaModels\Events\CreatePropertyConditionEvent;
+use MetaModels\Factory;
 use MetaModels\IMetaModel;
 
 /**
@@ -33,16 +38,40 @@ class InputScreen implements IInputScreen
 	protected $properties = array();
 
 	/**
+	 * The conditions.
+	 *
+	 * @var array
+	 */
+	protected $conditions = array();
+
+	/**
+	 * Simple map from property setting id to property name.
+	 *
+	 * @var array
+	 */
+	protected $propertyMap = array();
+
+	/**
+	 * Simple map from property name to property setting id.
+	 *
+	 * @var array
+	 */
+	protected $propertyMap2 = array();
+
+	/**
 	 * Create a new instance.
 	 *
 	 * @param array $data         The information about the input screen.
 	 *
 	 * @param array $propertyRows The information about all contained properties.
+	 *
+	 * @param array $conditions   The property condition information.
 	 */
-	public function __construct($data, $propertyRows)
+	public function __construct($data, $propertyRows, $conditions)
 	{
 		$this->data = $data;
 
+		$this->transformConditions($conditions);
 		$this->translateRows($propertyRows);
 	}
 
@@ -55,7 +84,7 @@ class InputScreen implements IInputScreen
 	 *
 	 * @return string
 	 */
-	public function translateLegend($legend, $metaModel)
+	protected function translateLegend($legend, $metaModel)
 	{
 		$arrLegend = deserialize($legend['legendtitle']);
 		if (is_array($arrLegend))
@@ -99,11 +128,9 @@ class InputScreen implements IInputScreen
 	 *
 	 * @param string     $legend      The legend the property belongs to.
 	 *
-	 * @param array      $columnNames The column name information.
-	 *
 	 * @return void
 	 */
-	public function translateProperty($property, $metaModel, $legend, $columnNames)
+	protected function translateProperty($property, $metaModel, $legend)
 	{
 		$attribute = $metaModel->getAttributeById($property['attr_id']);
 
@@ -118,12 +145,12 @@ class InputScreen implements IInputScreen
 		if ($property['subpalette'])
 		{
 			// This should never ever be true. If so, we have dead entries in the database.
-			if (!isset($columnNames[$property['subpalette']]))
+			if (!isset($this->propertyMap[$property['subpalette']]))
 			{
 				return;
 			}
 
-			$parentColumn = $columnNames[$property['subpalette']];
+			$parentColumn = $this->propertyMap[$property['subpalette']];
 
 			$this->properties[$parentColumn]['subpalette'][] = $propName;
 		}
@@ -148,7 +175,7 @@ class InputScreen implements IInputScreen
 	 *
 	 * @throws \RuntimeException When an unknown palette rendering mode is encountered (neither 'legend' nor 'attribute').
 	 */
-	public function translateRows($rows)
+	protected function translateRows($rows)
 	{
 		$metaModel    = $this->getMetaModel();
 		$activeLegend = null;
@@ -169,6 +196,9 @@ class InputScreen implements IInputScreen
 			}
 		}
 
+		$this->propertyMap  = $columnNames;
+		$this->propertyMap2 = array_flip($columnNames);
+
 		// Second pass, translate all information into local properties.
 		foreach ($rows as $row)
 		{
@@ -178,7 +208,7 @@ class InputScreen implements IInputScreen
 					$activeLegend = $this->translateLegend($row, $metaModel);
 					break;
 				case 'attribute':
-					$this->translateProperty($row, $metaModel, $activeLegend, $columnNames);
+					$this->translateProperty($row, $metaModel, $activeLegend);
 					break;
 				default:
 					throw new \RuntimeException('Unknown palette rendering mode ' . $row['dcatype']);
@@ -191,6 +221,79 @@ class InputScreen implements IInputScreen
 			if (!empty($propInfo['subpalette']))
 			{
 				$this->properties[$propName]['info']['submitOnChange'] = true;
+			}
+		}
+	}
+
+	/**
+	 * Transform a single condition into a valid condition object.
+	 *
+	 * @param array $condition The condition to transform.
+	 *
+	 * @return PropertyConditionInterface
+	 *
+	 * @throws \RuntimeException When a condition has not been transformed into a valid handling instance.
+	 */
+	protected function transformCondition($condition)
+	{
+		$dispatcher = $GLOBALS['container']['event-dispatcher'];
+		$event      = new CreatePropertyConditionEvent($condition, $this->getMetaModel());
+
+		/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+		$dispatcher->dispatch(CreatePropertyConditionEvent::NAME, $event);
+
+		if ($event->getInstance() === null)
+		{
+			throw new \RuntimeException(sprintf(
+				'Condition of type %s could not be transformed to an instance.',
+				$condition['type']
+			));
+		}
+
+		return $event->getInstance();
+	}
+
+	/**
+	 * Transform the given condition array into real conditions.
+	 *
+	 * @param array $conditions The property condition information.
+	 *
+	 * @return void
+	 */
+	protected function transformConditions($conditions)
+	{
+		// First pass, sort them into pid.
+		$sorted = array();
+		$byPid  = array();
+		foreach ($conditions as $condition)
+		{
+			$sorted[$condition['id']]   = &$condition;
+			$byPid[$condition['pid']][] = $condition['id'];
+		}
+
+		$instances = array();
+		// Second pass, handle them.
+		foreach ($sorted as $id => $condition)
+		{
+			$instances[$id] = $this->transformCondition($condition);
+		}
+
+		// Sort all conditions into their parents.
+		foreach ($byPid as $pid => $ids)
+		{
+			foreach ($ids as $id)
+			{
+				$settingId = $sorted[$id]['settingId'];
+				if (!isset($this->conditions[$settingId]))
+				{
+					$this->conditions[$settingId] = new PropertyConditionChain();
+				}
+				$result    = $this->conditions[$settingId];
+				$condition = $instances[$id];
+				$parent    = ($pid == 0) ? $result : $instances[$pid];
+
+				/** @var ConditionChainInterface $parent */
+				$parent->addCondition($condition);
 			}
 		}
 	}
@@ -260,9 +363,18 @@ class InputScreen implements IInputScreen
 	/**
 	 * {@inheritDoc}
 	 */
+	public function getConditionsFor($name)
+	{
+		$property = $this->propertyMap2[$name];
+		return $this->conditions[$property];
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public function getMetaModel()
 	{
-		return \MetaModels\Factory::byId($this->data['pid']);
+		return Factory::byId($this->data['pid']);
 	}
 
 	/**

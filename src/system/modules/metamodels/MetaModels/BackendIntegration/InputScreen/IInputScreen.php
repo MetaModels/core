@@ -60,6 +60,13 @@ interface IInputScreen
 	public function getPropertyNames();
 
 	/**
+	 * Retrieve the conditions for the given property name.
+	 *
+	 * @param string $name The name of the property.
+	 */
+	public function getConditionsFor($name);
+
+	/**
 	 * Get the MetaModel the input screen belongs to.
 	 *
 	 * @return IMetaModel

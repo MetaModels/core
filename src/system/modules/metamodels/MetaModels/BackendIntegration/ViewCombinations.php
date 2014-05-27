@@ -239,12 +239,26 @@ class ViewCombinations
 		while ($inputScreens->next())
 		{
 			$propertyRows = self::getDb()
-				->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=? AND published = 1 ORDER BY sorting ASC')
+				->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=? AND published=1 ORDER BY sorting ASC')
+				->executeUncached($inputScreens->id);
+
+			$conditions = self::getDb()
+				->prepare('
+					SELECT cond.*, setting.attr_id AS setting_attr_id
+					FROM tl_metamodel_dcasetting_condition AS cond
+					LEFT JOIN tl_metamodel_dcasetting AS setting
+					ON (cond.settingId=setting.id)
+					LEFT JOIN tl_metamodel_dca AS dca
+					ON (setting.pid=dca.id)
+					WHERE dca.id=? AND setting.published=1 AND cond.enabled=1
+					ORDER BY sorting ASC
+				')
 				->executeUncached($inputScreens->id);
 
 			self::$information[$inputScreens->pid][self::INPUTSCREEN] = new InputScreen(
 				$inputScreens->row(),
-				$propertyRows->fetchAllAssoc()
+				$propertyRows->fetchAllAssoc(),
+				$conditions->fetchAllAssoc()
 			);
 		}
 	}
