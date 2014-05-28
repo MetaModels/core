@@ -57,7 +57,7 @@ class PropertyAttribute
 				AND pid=?
 				AND dcatype="attribute"')
 			->execute(
-				$model->getProperty('attr_id'),
+				$model->getProperty('attr_id') ?: 0,
 				$model->getProperty('pid')
 			)
 			->fetchEach('attr_id');
