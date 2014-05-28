@@ -240,13 +240,11 @@ class InputScreen implements IInputScreen
 		// First pass, sort them into pid.
 		$sorted = array();
 		$byPid  = array();
-		foreach ($conditions as $condition)
+		foreach ($conditions as $i => $condition)
 		{
-			$sorted[$condition['id']]   = &$condition;
+			$sorted[$condition['id']]   = $conditions[$i];
 			$byPid[$condition['pid']][] = $condition['id'];
 		}
-
-		unset($condition);
 
 		$instances = array();
 		// Second pass, handle them.
