@@ -37,13 +37,13 @@ class InputScreenBase
 	 */
 	protected static function getMetaModelFromModel(ModelInterface $model)
 	{
-		if (!(($model->getProviderName() == 'tl_metamodel_dcasetting') && $model->getId()))
+		if (!(($model->getProviderName() == 'tl_metamodel_dcasetting') && $model->getProperty('pid')))
 		{
 			throw new DcGeneralInvalidArgumentException(
 				sprintf(
-					'Model must originate from tl_metamodel_dcasetting and be saved, this one originates from %s and has id %s',
+					'Model must originate from tl_metamodel_dcasetting and be saved, this one originates from %s and has pid %s',
 					$model->getProviderName(),
-					$model->getId()
+					$model->getProperty('pid')
 				)
 			);
 		}
