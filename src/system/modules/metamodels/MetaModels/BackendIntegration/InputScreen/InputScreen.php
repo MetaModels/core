@@ -122,11 +122,11 @@ class InputScreen implements IInputScreen
 	/**
 	 * Translate a property.
 	 *
-	 * @param array      $property    The property information to transform.
+	 * @param array      $property  The property information to transform.
 	 *
-	 * @param IMetaModel $metaModel   The MetaModel the property belongs to.
+	 * @param IMetaModel $metaModel The MetaModel the property belongs to.
 	 *
-	 * @param string     $legend      The legend the property belongs to.
+	 * @param string     $legend    The legend the property belongs to.
 	 *
 	 * @return void
 	 */
