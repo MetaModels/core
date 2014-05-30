@@ -24,6 +24,8 @@ if (!is_file($dir . '/system/initialize.php'))
 	exit;
 }
 
+require_once $dir . '/system/initialize.php';
+
 /**
  * This class handles the DCA style picker.
  */
