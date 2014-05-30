@@ -142,7 +142,7 @@ class BuildPalette
 			$property = self::getProperty('legendhide', $legend);
 			self::addCondition($property, $condition);
 
-			foreach ($GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id'] as
+			foreach ((array)$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id'] as
 				$typeName => $paletteInfo)
 			{
 				foreach ($paletteInfo as $legendName => $properties)
