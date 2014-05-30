@@ -271,9 +271,15 @@ class MetaModelDcaBuilder
 		$arrCaption = array($strTableCaption);
 		foreach (deserialize($inputScreen->getBackendCaption(), true) as $arrLangEntry)
 		{
+			if ($arrLangEntry['langcode'] == 'en')
+			{
+				$arrCaption = array($arrLangEntry['label'], $arrLangEntry['description']);
+			}
+
 			if ($arrLangEntry['label'] != '' && ($arrLangEntry['langcode'] == $GLOBALS['TL_CONFIG']['language']))
 			{
 				$arrCaption = array($arrLangEntry['label'], $arrLangEntry['description']);
+				break;
 			}
 		}
 		$GLOBALS['TL_LANG']['MOD'][$strModuleName] = $arrCaption;
