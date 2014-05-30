@@ -196,6 +196,8 @@ class Subscriber
 	 * @param EncodePropertyValueFromWidgetEvent $event The event.
 	 *
 	 * @return void
+	 *
+	 * @throws \RuntimeException When no table name has been given.
 	 */
 	public static function ensureTableNamePrefix(EncodePropertyValueFromWidgetEvent $event)
 	{
@@ -213,7 +215,23 @@ class Subscriber
 			$tableName = 'mm_' . $tableName;
 		}
 
-		TableManipulation::checkTableDoesNotExist($tableName);
+		$dataProvider = $event->getEnvironment()->getDataProvider('tl_metamodel');
+
+		// New model, ensure the table does not exist.
+		if (!$event->getModel()->getId())
+		{
+			TableManipulation::checkTableDoesNotExist($tableName);
+		}
+		else
+		{
+			// Edited model, ensure the value is unique and then that the table does not exist.
+			$oldVersion = $dataProvider->fetch($dataProvider->getEmptyConfig()->setId($event->getModel()->getId()));
+
+			if ($oldVersion->getProperty('tableName') !== $event->getModel()->getProperty('tableName'))
+			{
+				TableManipulation::checkTableDoesNotExist($tableName);
+			}
+		}
 
 		$event->setValue($tableName);
 	}
