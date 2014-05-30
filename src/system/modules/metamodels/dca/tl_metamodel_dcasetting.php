@@ -285,6 +285,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 				'alwaysSave'          => true,
 				'includeBlankOption'  => true,
 				'mandatory'           => true,
+				'submitOnChange'      => true,
 			),
 		),
 		'tl_class' => array
