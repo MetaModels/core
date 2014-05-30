@@ -136,6 +136,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
 				'href'                => 'act=edit',
 				'icon'                => 'edit.gif'
 			),
+			'cut' => array
+			(
+				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['cut'],
+				'icon'                => 'cut.gif'
+			),
 			'copy' => array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy'],
