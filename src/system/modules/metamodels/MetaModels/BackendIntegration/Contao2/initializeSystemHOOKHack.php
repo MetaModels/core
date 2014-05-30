@@ -28,7 +28,7 @@ class initializeSystemHOOKHack extends \MetaModels\BackendIntegration\Boot
 	/**
 	 * Autoloader helper hack to simulate initializeSystem HOOK.
 	 *
-	 * @param $strClass
+	 * @param string $strClass The class name to be loaded.
 	 *
 	 * @return bool
 	 */
@@ -43,6 +43,8 @@ class initializeSystemHOOKHack extends \MetaModels\BackendIntegration\Boot
 
 	/**
 	 * Register an auto loader which will transport the config variables and un register itself when loading class Backend.
+	 *
+	 * @return void
 	 */
 	public static function register()
 	{
