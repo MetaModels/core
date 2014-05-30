@@ -24,6 +24,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Encod
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetGlobalButtonEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use MetaModels\Helper\TableManipulation;
 
 /**
@@ -45,6 +46,15 @@ class Subscriber
 		if (!\BackendUser::getInstance()->isAdmin)
 		{
 			$event->setHtml('');
+		}
+
+		$command = $event->getCommand();
+		if ($command->getName() == 'dca_combine')
+		{
+			$parameters       = $command->getParameters();
+			$parameters['id'] = IdSerializer::fromModel($event->getModel())
+				->setDataProviderName('tl_metamodel_dca_combine')
+				->getSerialized();
 		}
 	}
 

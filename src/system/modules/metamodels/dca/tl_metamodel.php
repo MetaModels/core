@@ -133,7 +133,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['dca_combine'],
 				'href'                => 'table=tl_metamodel_dca_combine&act=edit',
 				'icon'                => 'system/modules/metamodels/html/dca_combine.png',
-				'idparam'             => 'id'
+				'idparam'             => 'metamodel'
 			),
 		)
 	),

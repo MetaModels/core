@@ -387,7 +387,7 @@ class Subscriber
 				GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyFeGroup::getOptions',
 			),
 			$dispatcher,
-			array('tl_metamodel_dca_combine', 'fe_group')
+			array('tl_metamodel_dca_combine', 'rows', 'fe_group')
 		);
 
 		self::registerListeners(
@@ -395,7 +395,7 @@ class Subscriber
 				GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyBeGroup::getOptions',
 			),
 			$dispatcher,
-			array('tl_metamodel_dca_combine', 'be_group')
+			array('tl_metamodel_dca_combine', 'rows', 'be_group')
 		);
 
 		self::registerListeners(
@@ -403,7 +403,7 @@ class Subscriber
 				GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyDcaId::getOptions',
 			),
 			$dispatcher,
-			array('tl_metamodel_dca_combine', 'dca_id')
+			array('tl_metamodel_dca_combine', 'rows', 'dca_id')
 		);
 
 		self::registerListeners(
@@ -411,7 +411,7 @@ class Subscriber
 				GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyViewId::getOptions',
 			),
 			$dispatcher,
-			array('tl_metamodel_dca_combine', 'view_id')
+			array('tl_metamodel_dca_combine', 'rows', 'view_id')
 		);
 
 		self::registerListeners(
