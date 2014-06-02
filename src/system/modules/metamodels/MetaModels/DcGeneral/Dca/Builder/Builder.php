@@ -17,6 +17,7 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionChainInterface;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultModelRelationshipDefinition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\ModelRelationshipDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CutCommand;
@@ -196,6 +197,15 @@ class Builder
 				'createvariant'
 			),
 			'MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton::handleCreateVariantAction'
+		);
+
+		$this->dispatcher->addListener(
+			sprintf(
+				'%s[%s]',
+				GetPasteButtonEvent::NAME,
+				$metaModel->getTableName()
+			),
+			'MetaModels\DcGeneral\Events\MetaModel\PasteButton::handle'
 		);
 	}
 

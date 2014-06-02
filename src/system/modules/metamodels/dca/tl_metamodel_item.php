@@ -47,7 +47,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 			'mode'                    => 1,
 			'panelLayout'             => 'limit',
 			'headerFields'            => array('tstamp'),
-			'paste_button_callback'   => array('MetaModels\Dca\MetaModelDcaBuilder', 'pasteButton'),
 		),
 
 		'label' => array
