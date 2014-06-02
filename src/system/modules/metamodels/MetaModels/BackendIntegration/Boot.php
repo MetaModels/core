@@ -17,7 +17,6 @@
 namespace MetaModels\BackendIntegration;
 
 use ContaoCommunityAlliance\DcGeneral\Event\EventPropagator;
-use MetaModels\BackendIntegration\Contao2\initializeSystemHOOKHack;
 use MetaModels\BackendIntegration\Events\BackendIntegrationEvent;
 use MetaModels\Dca\MetaModelDcaBuilder;
 
@@ -169,22 +168,5 @@ class Boot
 
 		MetaModelDcaBuilder::getInstance()->injectBackendMenu();
 		MetaModelDcaBuilder::getInstance()->injectIntoBackendModules();
-	}
-
-	/**
-	 * Called from config.php in TL_MODE == 'BE' to register for startup in the backend.
-	 *
-	 * @return void
-	 */
-	public static function metaModels()
-	{
-		if (version_compare(VERSION, '3.0', '<'))
-		{
-			initializeSystemHOOKHack::register();
-		}
-		else
-		{
-			$GLOBALS['TL_HOOKS']['initializeSystem'][] = array(__CLASS__, 'perform');
-		}
 	}
 }

@@ -127,7 +127,8 @@ if (TL_MODE == 'BE')
 	{
 		$GLOBALS['BE_FFL']['fileSelector'] = 'MetaModels\Widgets\FileSelectorWidget';
 	}
-	MetaModels\BackendIntegration\Boot::metaModels();
+
+	$GLOBALS['TL_HOOKS']['initializeSystem'][] = array('MetaModels\BackendIntegration\Boot', 'perform');
 }
 
 // Front-end modules.
