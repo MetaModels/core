@@ -318,7 +318,7 @@ class MetaModelDcaBuilder
 		$this->arrPTables = $pTables;
 
 		$intCount = count($pTables);
-		// loop until all tables are injected or until there was no injection during one run.
+		// Loop until all tables are injected or until there was no injection during one run.
 		// This is important, as we might have models that are child of another model.
 		while ($pTables)
 		{
@@ -356,9 +356,7 @@ class MetaModelDcaBuilder
 	/**
 	 * Create the data container of a metamodel table.
 	 *
-	 * @param string $strTableName the name of the meta model table that shall be created.
-	 *
-	 * @throws \Exception
+	 * @param string $strTableName The name of the meta model table that shall be created.
 	 *
 	 * @return bool true on success, false otherwise.
 	 */
