@@ -16,7 +16,6 @@ use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionChainInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultModelRelationshipDefinition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\ModelRelationshipDefinitionInterface;
@@ -26,7 +25,6 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChi
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChildConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootConditionInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
 use ContaoCommunityAlliance\Translator\TranslatorChain;
@@ -49,10 +47,8 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\ListingConf
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Palette\DefaultPaletteCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\BooleanCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyTrueCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Legend;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Palette;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
 use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
@@ -547,7 +543,7 @@ class Builder
 	 *
 	 * @param ModelRelationshipDefinitionInterface $definition The relationship container.
 	 *
-	 * @return bool
+	 * @return void
 	 */
 	protected function calculateConditionsWithVariants(IMetaModelDataDefinition $container, $definition)
 	{
@@ -613,6 +609,8 @@ class Builder
 	 * @param ModelRelationshipDefinitionInterface $definition The relationship container.
 	 *
 	 * @return void
+	 *
+	 * @throws \RuntimeException When the conditions can not be determined yet.
 	 */
 	protected function calculateConditionsWithoutVariants(IMetaModelDataDefinition $container, $definition)
 	{
@@ -944,7 +942,10 @@ class Builder
 	 *
 	 * @return void
 	 */
-	protected function parseModelOperations(Contao2BackendViewDefinitionInterface $view, IMetaModelDataDefinition $container)
+	protected function parseModelOperations(
+		Contao2BackendViewDefinitionInterface $view,
+		IMetaModelDataDefinition $container
+	)
 	{
 		$collection = $view->getModelCommands();
 		$this->createCommand
@@ -1008,6 +1009,19 @@ class Builder
 		}
 	}
 
+	/**
+	 * Build the property information for a certain property from the data container array.
+	 *
+	 * @param IMetaModelDataDefinition      $container   The MetaModel data definition.
+	 *
+	 * @param PropertiesDefinitionInterface $definition  The property collection definition.
+	 *
+	 * @param string                        $propName    The name of the property.
+	 *
+	 * @param IInputScreen                  $inputScreen The input screen instance.
+	 *
+	 * @return void
+	 */
 	protected function buildPropertyFromDca(
 		IMetaModelDataDefinition $container,
 		PropertiesDefinitionInterface $definition,
