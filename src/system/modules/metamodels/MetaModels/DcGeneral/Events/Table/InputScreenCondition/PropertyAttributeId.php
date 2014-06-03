@@ -42,7 +42,7 @@ class PropertyAttributeId
 	{
 		$metaModelId = \Database::getInstance()
 			->prepare('SELECT id FROM tl_metamodel WHERE
-				id=(SELECT id FROM tl_metamodel_dca WHERE
+				id=(SELECT pid FROM tl_metamodel_dca WHERE
 				id=(SELECT pid FROM tl_metamodel_dcasetting WHERE id=?))')
 			->execute(IdSerializer::fromSerialized($interface->getInputProvider()->getParameter('pid'))->getId());
 
