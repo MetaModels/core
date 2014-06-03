@@ -37,50 +37,52 @@ class ModelToLabel
 	 */
 	protected static function drawAttribute(ModelToLabelEvent $event)
 	{
-		$model = $event->getModel();
+		// FIXME: in here all language strings and icons are related to filters?
+		// FIXME: Add language files for the error msg.
 
-		$objSetting = \Database::getInstance()
+		$model        = $event->getModel();
+		$objSetting   = \Database::getInstance()
 			->prepare('SELECT * FROM tl_metamodel_dca WHERE id=?')
 			->execute($model->getProperty('pid'));
-
 		$objMetaModel = Factory::byId($objSetting->pid);
-
-		if (!$objMetaModel)
-		{
-			return;
-		}
 
 		$objAttribute = $objMetaModel->getAttributeById($model->getProperty('attr_id'));
 
-		if (!$objAttribute)
+		if ($objAttribute)
 		{
-			$event
-				->setLabel('<strong>Unknown attribute %d</strong> <span class="tl_class">%s</span>')
-				->setArgs(array(
-					$model->getProperty('attr_id'),
-					$model->getProperty('tl_class') ? sprintf('[%s]', $model->getProperty('tl_class')) : ''
-				));
-			return;
+			$type  = $objAttribute->get('type');
+			$image = $GLOBALS['METAMODELS']['attributes'][$type]['image'];
+			if (!$image || !file_exists(TL_ROOT . '/' . $image))
+			{
+				$image = 'system/modules/metamodels/html/fields.png';
+			}
+			$name    = $objAttribute->getName();
+			$colName = $objAttribute->getColName();
+		}
+		else
+		{
+			$type    = 'unknown ID: ' . $model->getProperty('attr_id');
+			$image   = 'system/modules/metamodels/html/fields.png';
+			$name    = 'unknown attribute';
+			$colName = 'unknown column';
 		}
 
-		$strImage = $GLOBALS['METAMODELS']['attributes'][$objAttribute->get('type')]['image'];
-
-		if (!$strImage || !file_exists(TL_ROOT . '/' . $strImage))
-		{
-			$strImage = 'system/modules/metamodels/html/filter_default.png';
-		}
-
-		$imageEvent = new GenerateHtmlEvent($strImage);
-
-		$event->getEnvironment()->getEventPropagator()->propagate(ContaoEvents::IMAGE_GET_HTML, $imageEvent);
+		/** @var GenerateHtmlEvent $imageEvent */
+		$imageEvent = $event->getEnvironment()->getEventPropagator()->propagate(
+			ContaoEvents::IMAGE_GET_HTML,
+			new GenerateHtmlEvent($image)
+		);
 
 		$event
-			->setLabel('%s <strong>%s</strong> %s <em>[%s]</em> <span class="tl_class">%s</span>')
+			->setLabel('<div class="field_heading cte_type"><strong>%s</strong> <em>[%s]</em></div>
+				<div class="field_type block">
+					%s<strong>%s</strong> <span class="tl_class">%s</span>
+				</div>')
 			->setArgs(array(
+				$colName,
+				$type,
 				$imageEvent->getHtml(),
-				$objAttribute->getName() ? $objAttribute->getName() : $objAttribute->get('type'),
-				$model->getProperty('mandatory') ? '*' : '',
-				$objAttribute->get('type'),
+				$name,
 				$model->getProperty('tl_class') ? sprintf('[%s]', $model->getProperty('tl_class')) : ''
 			));
 	}

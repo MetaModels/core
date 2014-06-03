@@ -38,6 +38,7 @@ class DrawSetting
 	public static function modelToLabel(ModelToLabelEvent $event)
 	{
 		// FIXME: in here all language strings and icons are related to filters?
+		// FIXME: Add language files for the error msg.
 
 		$model        = $event->getModel();
 		$objSetting   = \Database::getInstance()
@@ -53,15 +54,17 @@ class DrawSetting
 			$image = $GLOBALS['METAMODELS']['attributes'][$type]['image'];
 			if (!$image || !file_exists(TL_ROOT . '/' . $image))
 			{
-				$image = 'system/modules/metamodels/html/filter_default.png';
+				$image = 'system/modules/metamodels/html/fields.png';
 			}
-			$label = $objAttribute->getName();
+			$name    = $objAttribute->getName();
+			$colName = $objAttribute->getColName();
 		}
 		else
 		{
-			$type  = 'unknown ID: ' . $model->getProperty('attr_id');
-			$image = 'system/modules/metamodels/html/filter_default.png';
-			$label = 'unknown attribute';
+			$type    = 'unknown ID: ' . $model->getProperty('attr_id');
+			$image   = 'system/modules/metamodels/html/fields.png';
+			$name    = 'unknown attribute';
+			$colName = 'unknown column';
 		}
 
 		/** @var GenerateHtmlEvent $imageEvent */
@@ -70,12 +73,16 @@ class DrawSetting
 			new GenerateHtmlEvent($image)
 		);
 
-		$event->setLabel(
-			sprintf(
-			$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row'],
-			$imageEvent->getHtml(),
-			$label ? $label : $type,
-			$type
-		));
+		$event
+			->setLabel('<div class="field_heading cte_type"><strong>%s</strong> <em>[%s]</em></div>
+				<div class="field_type block">
+					%s<strong>%s</strong>
+				</div>')
+			->setArgs(array(
+				$colName,
+				$type,
+				$imageEvent->getHtml(),
+				$name
+			));
 	}
 }

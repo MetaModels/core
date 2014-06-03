@@ -35,6 +35,8 @@ class DrawAttribute
 	 */
 	public static function modelToLabel(ModelToLabelEvent $event)
 	{
+		// FIXME: Add language files for the error msg.
+
 		$model     = $event->getModel();
 		$type      = $model->getProperty('type');
 		$image     = '<img src="' . $GLOBALS['METAMODELS']['attributes'][$type]['image'] . '" />';
@@ -74,7 +76,7 @@ class DrawAttribute
 			->setLabel(
 				'<div class="field_heading cte_type"><strong>%s</strong> <em>[%s]</em></div>
 				<div class="field_type block">
-					%s<strong>%s</strong> - %s<br />
+					%s<strong>%s</strong> - %s
 				</div>'
 			)
 			->setArgs(array(
