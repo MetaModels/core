@@ -24,13 +24,10 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
-use MetaModels\BackendIntegration\Module;
 use MetaModels\BackendIntegration\ViewCombinations;
 use MetaModels\Factory;
-use MetaModels\Helper\ContaoController;
 use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModel;
-use MetaModels\Render\Setting\Factory as RenderFactory;
 
 /**
  * Collects the dca combinations for each MetaModel, that is matching the current user.
