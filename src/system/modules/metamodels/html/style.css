@@ -12,6 +12,10 @@
  * @filesource
  */
 
+  body[class*="version_3"] a[class*="header_"] {
+    margin-left:15px;
+  }
+
   .header_css_fields {
     padding:2px 0px 3px 20px;
     background-image:url(fields.png);
@@ -25,16 +29,17 @@
     background-position:left center;
     background-repeat:no-repeat;
   }
-  
+
   .rendersetting_add_all {
     background-image:url(render_settings.png);
   }
-  
+
+ /*------------------------------------------------------------------------*/
+
   .dca_palette {
     color:#8AB858;
-    padding-left:18px;
-    padding-right:3px;
-    background:url(../../../themes/default/images/palOpen.gif) left center no-repeat;
+    padding-left:24px;
+    background:url(../../../themes/default/images/palOpen.gif) 3px center no-repeat;
   }
 
   .dca_combine.widget td:empty {
@@ -49,8 +54,13 @@
     padding:0; list-style:none;
   }
   
-  .wizard a[data-lightbox] img {
+  form[id*="tl_metamodel_"] .wizard a[data-lightbox] img, 
+  form[id*="tl_metamodel_"] .wizard a[onclick] img {
     margin-top:3px; 
+  }
+
+  div[class*="table_tl_metamodel_"] .tl_file_list {
+    padding:4px 0 6px;
   }
 
   fieldset.tl_subdca {
@@ -69,11 +79,16 @@
     font-weight:bold;
   }
 
-  .tl_content .field_type img, 
-  .tl_content_right + img {
+ /*------------------------------------------------------------------------*/
+
+  body[class*="version_3"] .tl_file_list .field_type img, 
+  body[class*="version_2"] .tl_content .field_type img, 
+  body[class*="version_2"] .tl_content_right + img {
+    margin-right:8px;
     float:left;
-    margin-right:5px;
   }
+
+ /*------------------------------------------------------------------------*/
 
   .list_view li:first-child .tl_content {
     border-top:1px solid #E9E9E9;
