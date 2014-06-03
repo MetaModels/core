@@ -516,6 +516,15 @@ class Subscriber
 
 		self::registerListeners(
 			array(
+				ModelToLabelEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\ModelToLabel::handleModelToLabel',
+			),
+			$dispatcher,
+			array('tl_metamodel_dcasetting_condition')
+		);
+
+		self::registerListeners(
+			array(
 				GetPasteButtonEvent::NAME => 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PasteButton::generate',
 			),
 			$dispatcher,
