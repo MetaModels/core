@@ -46,3 +46,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['cond
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionpropertyvalueis'] = 'Property value is';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionpropertyvisible'] = 'Property is visible';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionnot']             = 'Not';
+
+/**
+ * Reference
+ */
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['typedesc']['_default_'] = '%s <strong>%s</strong><br /> for attribute <em>%s</em> (Parameter: %s)';
