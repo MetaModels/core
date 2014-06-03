@@ -344,35 +344,7 @@ class Builder
 			$fields = trimsplit(',', $rowElements);
 			$fields = array_reverse($fields);
 
-			// Parse each type.
-			foreach ($fields as $field)
-			{
-				switch ($field)
-				{
-					case 'sort';
-						$this->parsePanelSort($panelRow, $inputScreen);
-						break;
-
-					case 'limit';
-						$this->parsePanelLimit($panelRow, $inputScreen);
-						break;
-
-					case 'filter';
-						$this->parsePanelFilter($panelRow, $inputScreen);
-						break;
-
-					case 'search';
-						$this->parsePanelSearch($panelRow, $inputScreen);
-						break;
-
-					case 'submit';
-						$this->parsePanelSubmit($panelRow, $inputScreen);
-						break;
-
-					default:
-						break;
-				}
-			}
+			$this->parsePanelRow($fields, $panelRow, $inputScreen);
 
 			// If we have no entries for this row, remove it.
 			if ($panelRow->getCount() == 0)
@@ -405,6 +377,50 @@ class Builder
 		{
 			$row = $panelRows->getRow($panelRows->getRowCount() - 1);
 			$row->addElement(new DefaultSubmitElementInformation(), 0);
+		}
+	}
+
+	/**
+	 * Parse a single row with all elements
+	 *
+	 * @param  array            $fields      A list of fields for adding to the row.
+	 *
+	 * @param PanelRowInterface $panelRow    The row container itself.
+	 *
+	 * @param IInputScreen      $inputScreen The input screen with information about the attributes.
+	 *
+	 * @return void
+	 */
+	protected function parsePanelRow($fields, PanelRowInterface $panelRow, IInputScreen $inputScreen)
+	{
+		// Parse each type.
+		foreach ($fields as $field)
+		{
+			switch ($field)
+			{
+				case 'sort':
+					$this->parsePanelSort($panelRow, $inputScreen);
+					break;
+
+				case 'limit':
+					$this->parsePanelLimit($panelRow, $inputScreen);
+					break;
+
+				case 'filter':
+					$this->parsePanelFilter($panelRow, $inputScreen);
+					break;
+
+				case 'search':
+					$this->parsePanelSearch($panelRow, $inputScreen);
+					break;
+
+				case 'submit':
+					$this->parsePanelSubmit($panelRow, $inputScreen);
+					break;
+
+				default:
+					break;
+			}
 		}
 	}
 
