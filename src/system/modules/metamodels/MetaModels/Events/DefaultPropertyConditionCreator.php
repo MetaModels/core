@@ -50,6 +50,11 @@ class DefaultPropertyConditionCreator
 		$meta      = $event->getData();
 		$metaModel = $event->getMetaModel();
 
+		if (!$metaModel)
+		{
+			throw new \RuntimeException('Could not retrieve MetaModel from event.');
+		}
+
 		switch ($meta['type'])
 		{
 			case 'conditionor':
@@ -59,14 +64,36 @@ class DefaultPropertyConditionCreator
 				$event->setInstance(new PropertyConditionChain(array(), ConditionChainInterface::AND_CONJUNCTION));
 				break;
 			case 'conditionpropertyvalueis':
+				$attribute = $metaModel->getAttributeById($meta['attr_id']);
+
+				if (!$attribute)
+				{
+					throw new \RuntimeException(sprintf(
+						'Could not retrieve attribute %s from MetaModel %s.',
+						$meta['attr_id'],
+						$metaModel->getTableName()
+					));
+				}
+
 				$event->setInstance(new PropertyValueCondition(
-					$metaModel->getAttributeById($meta['attr_id'])->getColName(),
+					$attribute->getColName(),
 					$meta['value']
 				));
 				break;
 			case 'conditionpropertyvisible':
+				$attribute = $metaModel->getAttributeById($meta['attr_id']);
+
+				if (!$attribute)
+				{
+					throw new \RuntimeException(sprintf(
+						'Could not retrieve attribute %s from MetaModel %s.',
+						$meta['attr_id'],
+						$metaModel->getTableName()
+					));
+				}
+
 				$event->setInstance(new PropertyVisibleCondition(
-					$metaModel->getAttributeById($meta['attr_id'])->getColName())
+					$attribute->getColName())
 				);
 				break;
 			default:
