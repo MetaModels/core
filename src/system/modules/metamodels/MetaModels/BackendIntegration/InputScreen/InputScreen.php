@@ -420,4 +420,12 @@ class InputScreen implements IInputScreen
 	{
 		return $this->data['closed'];
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getPanelLayout()
+	{
+		return $this->data['panelLayout'];
+	}
 }

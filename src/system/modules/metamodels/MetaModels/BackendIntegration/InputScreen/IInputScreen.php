@@ -121,4 +121,11 @@ interface IInputScreen
 	 * @return bool
 	 */
 	public function isClosed();
+
+	/**
+	 * Get a string with the panel layout.
+	 *
+	 * @return string
+	 */
+	public function getPanelLayout();
 }

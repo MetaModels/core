@@ -20,12 +20,22 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPa
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultModelRelationshipDefinition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\ModelRelationshipDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CutCommand;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\DefaultPanelLayout;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultFilterElementInformation;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultLimitElementInformation;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultSearchElementInformation;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultSortElementInformation;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultSubmitElementInformation;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\SubmitElementInformationInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\PanelRowInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\FilterBuilder;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChildCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChildConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
+use ContaoCommunityAlliance\DcGeneral\Panel\DefaultPanel;
+use ContaoCommunityAlliance\DcGeneral\Panel\DefaultPanelContainer;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
 use ContaoCommunityAlliance\Translator\TranslatorChain;
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinition;
@@ -60,6 +70,7 @@ use MetaModels\DcGeneral\DataDefinition\Definition\MetaModelDefinition;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\IsVariantAttribute;
 use MetaModels\DcGeneral\Events\MetaModel\RenderItem;
+use MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPanelLayout;
 use MetaModels\Events\BuildAttributeEvent;
 use MetaModels\Events\PopulateAttributeEvent;
 use MetaModels\Factory;
@@ -272,12 +283,254 @@ class Builder
 		$this->parseBasicDefinition($container);
 		$this->parseDataProvider($container);
 		$this->parseBackendView($container);
+		$this->parsePanels($container);
 
 		$this->parsePalettes($container);
 
 		// Attach renderer to event.
 		RenderItem::register($event->getDispatcher());
 	}
+
+	/**
+	 * Parse the panels, if we have some one.
+	 *
+	 * @param IMetaModelDataDefinition $container
+	 *
+	 * @return void
+	 */
+	protected function parsePanels(IMetaModelDataDefinition $container)
+	{
+		// Check if we have a BackendViewDef.
+		if ($container->hasDefinition(Contao2BackendViewDefinitionInterface::NAME))
+		{
+			/** @var Contao2BackendViewDefinitionInterface $view */
+			$view = $container->getDefinition(Contao2BackendViewDefinitionInterface::NAME);
+		}
+		else
+		{
+			return;
+		}
+
+		// Get the panel layout.
+		$inputScreen = $this->getInputScreenDetails($container);
+		$panelLayout = $inputScreen->getPanelLayout();
+
+		// Check if we have a layout.
+		if (empty($panelLayout))
+		{
+			return;
+		}
+
+		// Get the layout from the dca.
+		$arrRows = trimsplit(';', $panelLayout);
+
+		// Create a new panel container.
+		$panel = $view->getPanelLayout();
+		$panelRows   = $panel->getRows();
+
+		foreach ($arrRows as $rowNo => $rowElements)
+		{
+			// Get the row, if we have one or create a new one.
+			if ($panelRows->getRowCount() < ($rowNo + 1))
+			{
+				$panelRow = $panelRows->addRow();
+			}
+			else
+			{
+				$panelRow = $panelRows->getRow($rowNo);
+			}
+
+			// Get the fields.
+			$fields = trimsplit(',', $rowElements);
+			$fields = array_reverse($fields);
+
+			// Parse each type.
+			foreach ($fields as $field)
+			{
+				switch ($field)
+				{
+					case 'sort';
+						$this->parsePanelSort($panelRow, $inputScreen);
+						break;
+
+					case 'limit';
+						$this->parsePanelLimit($panelRow, $inputScreen);
+						break;
+
+					case 'filter';
+						$this->parsePanelFilter($panelRow, $inputScreen);
+						break;
+
+					case 'search';
+						$this->parsePanelSearch($panelRow, $inputScreen);
+						break;
+
+					case 'submit';
+						$this->parsePanelSubmit($panelRow, $inputScreen);
+						break;
+
+					default:
+						break;
+				}
+			}
+
+			// If we have no entries for this row, remove it.
+			if ($panelRow->getCount() == 0)
+			{
+				$panelRows->deleteRow($rowNo);
+			}
+		}
+
+		// Check if we have a submit button.
+		$hasSubmit = false;
+		foreach ($panelRows as $panelRow)
+		{
+			foreach ($panelRow as $element)
+			{
+				if ($element instanceof SubmitElementInformationInterface)
+				{
+					$hasSubmit = true;
+					break;
+				}
+
+				if ($hasSubmit)
+				{
+					break;
+				}
+			}
+		}
+
+		// If not add a submit.
+		if (!$hasSubmit && $panelRows->getRowCount())
+		{
+			$row = $panelRows->getRow($panelRows->getRowCount() - 1);
+			$row->addElement(new DefaultSubmitElementInformation(), 0);
+		}
+	}
+
+	/**
+	 * Add filter elements to the panel.
+	 *
+	 * @param PanelRowInterface $row         The row to which the element shall get added to.
+	 *
+	 * @param IInputScreen      $inputScreen The Input screen with some information
+	 *
+	 * @return void
+	 */
+	protected function parsePanelFilter(PanelRowInterface $row, IInputScreen $inputScreen)
+	{
+		foreach ($inputScreen->getProperties() as $property => $value)
+		{
+			if (isset($value['info']['filter']))
+			{
+				$element = new DefaultFilterElementInformation();
+				$element->setPropertyName($property);
+				if (!$row->hasElement($element->getName()))
+				{
+					$row->addElement($element);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Add sort element to the panel.
+	 *
+	 * @param PanelRowInterface $row         The row to which the element shall get added to.
+	 *
+	 * @param IInputScreen      $inputScreen The Input screen with some information
+	 *
+	 * @return void
+	 */
+	protected function parsePanelSort(PanelRowInterface $row, IInputScreen $inputScreen)
+	{
+		if ($row->hasElement('sort'))
+		{
+			$element = $row->getElement('sort');
+		}
+		else
+		{
+			$element = new DefaultSortElementInformation();
+			$row->addElement($element);
+		}
+
+		foreach ($inputScreen->getProperties() as $property => $value)
+		{
+			if (isset($value['info']['sorting']))
+			{
+				$element->addProperty($property, (int)$value['info']['flag']);
+			}
+		}
+	}
+
+	/**
+	 * Add search element to the panel.
+	 *
+	 * @param PanelRowInterface $row         The row to which the element shall get added to.
+	 *
+	 * @param IInputScreen      $inputScreen The Input screen with some information
+	 *
+	 * @return void
+	 */
+	protected function parsePanelSearch(PanelRowInterface $row, IInputScreen $inputScreen)
+	{
+		if ($row->hasElement('search'))
+		{
+			$element = $row->getElement('search');
+		}
+		else
+		{
+			$element = new DefaultSearchElementInformation();
+		}
+
+		foreach ($inputScreen->getProperties() as $property => $value)
+		{
+			if (isset($value['info']['search']))
+			{
+				$element->addProperty($property);
+			}
+		}
+
+		if ($element->getPropertyNames() && !$row->hasElement('search'))
+		{
+			$row->addElement($element);
+		}
+	}
+
+	/**
+	 * Add  elements to the panel.
+	 *
+	 * @param PanelRowInterface $row         The row to which the element shall get added to.
+	 *
+	 * @param IInputScreen      $inputScreen The Input screen with some information
+	 *
+	 * @return void
+	 */
+	protected function parsePanelLimit(PanelRowInterface $row, IInputScreen $inputScreen)
+	{
+		if (!$row->hasElement('limit'))
+		{
+			$row->addElement(new DefaultLimitElementInformation());
+		}
+	}
+
+	/**
+	 * Add  elements to the panel.
+	 *
+	 * @param PanelRowInterface $row         The row to which the element shall get added to.
+	 *
+	 * @param IInputScreen      $inputScreen The Input screen with some information
+	 *
+	 * @return void
+	 */
+	protected function parsePanelSubmit(PanelRowInterface $row, IInputScreen $inputScreen)
+	{
+		if (!$row->hasElement('submit'))
+		{
+			$row->addElement(new DefaultSubmitElementInformation());
+		}
+	}
+
 
 	/**
 	 * Parse the basic configuration and populate the definition.
