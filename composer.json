@@ -46,7 +46,7 @@
 	"require": {
 		"php": ">=5.3",
 		"contao/core": ">=2.11,<4.0",
-		"contao-community-alliance/composer-plugin": "*",
+		"contao-community-alliance/composer-plugin": "~2.0",
 		"contao-community-alliance/dc-general": "2.0.*@dev",
 		"contao-community-alliance/backports-initialize-system": "~1.0",
 		"menatwork/contao-multicolumnwizard": "3.2.*@dev",
