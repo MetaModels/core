@@ -25,19 +25,24 @@
 
   .header_add_all {
     padding:2px 0px 3px 20px;
-    background-image:url(dca.png);
+    background-image:url(images/icons/dca_add.png);
     background-position:left center;
     background-repeat:no-repeat;
   }
 
   .rendersetting_add_all {
-    background-image:url(render_settings.png);
+    background-image:url(images/icons/rendersettings_add.png);
   }
 
  /*------------------------------------------------------------------------*/
 
+  #table_tl_metamodel_dcasetting_ tr.odd td {
+    background-color:transparent;
+  }
+
   .dca_palette {
     color:#8AB858;
+    margin:6px 0;
     padding-left:24px;
     background:url(../../../themes/default/images/palOpen.gif) 3px center no-repeat;
   }
