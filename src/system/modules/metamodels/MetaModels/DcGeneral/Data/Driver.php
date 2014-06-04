@@ -378,7 +378,7 @@ class Driver implements MultiLanguageDataProviderInterface
 			case 'IN':
 				// Rewrite the IN operation to a rephrased term: "(x=a) OR (x=b) OR ...".
 				$arrSubRules = array();
-				foreach ($arrFilter['value'] as $varValue)
+				foreach ($arrFilter['values'] as $varValue)
 				{
 					$arrSubRules[] = array(
 						'property'  => $arrFilter['property'],
