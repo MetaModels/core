@@ -19,6 +19,8 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOp
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultModelRelationshipDefinition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\ModelRelationshipDefinitionInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CommandInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CopyCommand;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CutCommand;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\DefaultPanelLayout;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultFilterElementInformation;
@@ -1128,6 +1130,44 @@ class Builder
 	}
 
 	/**
+	 * Retrieve or create a command instance of the given name.
+	 *
+	 * @param CommandCollectionInterface $collection    The command collection.
+	 *
+	 * @param string                     $operationName The name of the operation.
+	 *
+	 * @return CommandInterface
+	 */
+	protected function getCommandInstance(CommandCollectionInterface $collection, $operationName)
+	{
+		if ($collection->hasCommandNamed($operationName))
+		{
+			$command = $collection->getCommandNamed($operationName);
+		}
+		else
+		{
+			switch ($operationName)
+			{
+				case 'cut':
+					$command = new CutCommand();
+					break;
+
+				case 'copy':
+					$command = new CopyCommand();
+					break;
+
+				default:
+					$command = new Command();
+			}
+
+			$command->setName($operationName);
+			$collection->addCommand($command);
+		}
+
+		return $command;
+	}
+
+	/**
 	 * Build a command into the the command collection.
 	 *
 	 * @param CommandCollectionInterface $collection      The command collection.
@@ -1150,25 +1190,7 @@ class Builder
 		$extraValues
 	)
 	{
-		if ($collection->hasCommandNamed($operationName))
-		{
-			$command = $collection->getCommandNamed($operationName);
-		}
-		else
-		{
-			switch ($operationName)
-			{
-				case 'cut':
-					$command = new CutCommand();
-					break;
-				default:
-					$command = new Command();
-			}
-
-			$command->setName($operationName);
-			$collection->addCommand($command);
-		}
-
+		$command    = $this->getCommandInstance($collection, $operationName);
 		$parameters = $command->getParameters();
 		foreach ($queryParameters as $name => $value)
 		{
