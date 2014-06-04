@@ -18,20 +18,20 @@
 
   .header_css_fields {
     padding:2px 0px 3px 20px;
-    background-image:url(fields.png);
+    background-image:url(../images/icons/fields.png);
     background-position:left center;
     background-repeat:no-repeat;
   }
 
   .header_add_all {
     padding:2px 0px 3px 20px;
-    background-image:url(images/icons/dca_add.png);
+    background-image:url(../images/icons/dca_add.png);
     background-position:left center;
     background-repeat:no-repeat;
   }
 
   .rendersetting_add_all {
-    background-image:url(images/icons/rendersettings_add.png);
+    background-image:url(../images/icons/rendersettings_add.png);
   }
 
  /*------------------------------------------------------------------------*/
@@ -44,7 +44,7 @@
     color:#8AB858;
     margin:6px 0;
     padding-left:24px;
-    background:url(../../../themes/default/images/palOpen.gif) 3px center no-repeat;
+    background:url(../../../../themes/default/images/palOpen.gif) 3px center no-repeat;
   }
 
   .dca_combine.widget td:empty {
@@ -77,7 +77,7 @@
   .tl_subdca legend {
     margin:0;
     padding:10px 0 10px 23px;
-    background:url(filter_settings.png) no-repeat left center;
+    background:url(../images/icons/filter_settings.png) no-repeat left center;
   }
 
   .tl_subdca legend label {
