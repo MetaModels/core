@@ -127,7 +127,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 			'fields'                  => array('attr_id'),
 			'headerFields'            => array('type', 'attr_id'),
 			'flag'                    => 1,
-			'icon'                    => 'system/modules/metamodels/html/filter_and.png',
+			'icon'                    => 'system/modules/metamodels/assets/images/icons/filter_and.png',
 		),
 
 		'label' => array

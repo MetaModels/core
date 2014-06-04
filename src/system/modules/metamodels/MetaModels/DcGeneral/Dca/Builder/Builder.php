@@ -1037,7 +1037,7 @@ class Builder
 				$this->dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
 				$icon = $event->getResultImage();
 			} else {
-				$icon = 'system/modules/metamodels/html/metamodels.png';
+				$icon = 'system/modules/metamodels/assets/images/icons/metamodels.png';
 			}
 
 			$listing->setRootIcon($icon);
@@ -1073,7 +1073,7 @@ class Builder
 			}
 		}
 
-		return 'system/modules/metamodels/html/metamodels.png';
+		return 'system/modules/metamodels/assets/images/icons/metamodels.png';
 	}
 
 	/**
@@ -1272,7 +1272,7 @@ class Builder
 				$collection,
 				'createvariant',
 				array('act' => 'createvariant'),
-				'system/modules/metamodels/html/variants.png',
+				'system/modules/metamodels/assets/images/icons/variants.png',
 				array()
 			);
 		}

@@ -67,7 +67,7 @@ class DrawSetting
 
 		if (!$image || !file_exists(TL_ROOT . '/' . $image))
 		{
-			$image = 'system/modules/metamodels/html/filter_default.png';
+			$image = 'system/modules/metamodels/assets/images/icons/filter_default.png';
 		}
 
 		if (!$model->getProperty('enabled'))

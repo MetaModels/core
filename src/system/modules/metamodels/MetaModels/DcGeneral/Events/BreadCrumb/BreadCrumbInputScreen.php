@@ -74,7 +74,7 @@ class BreadCrumbInputScreen
 				$this->seralizeId('tl_metamodel_dca', $this->inputScreenId)
 			),
 			'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_dcasetting'), $inputScreen->name),
-			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/html/dca_setting.png'
+			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/dca_setting.png'
 		);
 
 		return $elements;

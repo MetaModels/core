@@ -51,7 +51,7 @@ class PropertyTlClass
 		$imageEvent = $event->getEnvironment()->getEventPropagator()->propagate(
 			ContaoEvents::IMAGE_GET_HTML,
 			new GenerateHtmlEvent(
-				'system/modules/metamodels/html/dca_wizard.png',
+				'system/modules/metamodels/assets/images/icons/dca_wizard.png',
 				$event->getEnvironment()->getTranslator()->translate('stylepicker', 'tl_metamodel_dcasetting'),
 				'style="vertical-align:top;"'
 			)

@@ -96,7 +96,7 @@ class ModelToLabel
 		$image = $GLOBALS['METAMODELS']['attributes'][$type]['image'];
 		if (!$image || !file_exists(TL_ROOT . '/' . $image))
 		{
-			$image = 'system/modules/metamodels/html/filter_default.png';
+			$image = 'system/modules/metamodels/assets/images/icons/filter_default.png';
 		}
 
 		/** @var GenerateHtmlEvent $imageEvent */

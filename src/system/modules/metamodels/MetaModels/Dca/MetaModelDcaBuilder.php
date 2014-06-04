@@ -94,7 +94,7 @@ class MetaModelDcaBuilder
 	 *
 	 * @return string
 	 */
-	public static function getBackendIcon($icon, $defaultIcon = 'system/modules/metamodels/html/metamodels.png')
+	public static function getBackendIcon($icon, $defaultIcon = 'system/modules/metamodels/assets/images/icons/metamodels.png')
 	{
 		/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
 		$dispatcher = $GLOBALS['container']['event-dispatcher'];
@@ -248,7 +248,7 @@ class MetaModelDcaBuilder
 			$dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
 			$strIcon = $event->getResultImage();
 		} else {
-			$strIcon = 'system/modules/metamodels/html/metamodels.png';
+			$strIcon = 'system/modules/metamodels/assets/images/icons/metamodels.png';
 		}
 
 		$section = $inputScreen->getBackendSection();

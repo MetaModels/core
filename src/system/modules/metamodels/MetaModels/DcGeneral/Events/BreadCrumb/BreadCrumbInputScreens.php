@@ -79,7 +79,7 @@ class BreadCrumbInputScreens
 		$elements[] = array(
 			'url'  => $urlEvent->getUrl(),
 			'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_dca'), $this->getMetaModel()->getName()),
-			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/html/dca.png'
+			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/dca.png'
 		);
 
 		return $elements;

@@ -240,7 +240,7 @@ class Module
 	 */
 	public function generate()
 	{
-		$GLOBALS['TL_CSS'][] = 'system/modules/metamodels/html/style.css';
+		$GLOBALS['TL_CSS'][] = 'system/modules/metamodels/assets/css/style.css';
 		if ($this->needUserAction())
 		{
 			$this->Template = new \BackendTemplate($this->strTemplate);

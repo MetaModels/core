@@ -56,7 +56,7 @@ class BreadCrumbFilterSetting
 				$this->seralizeId('tl_metamodel_filter', $this->filterId)
 			),
 			'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_filtersetting'), $filterSetting->name),
-			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/html/filter_setting.png'
+			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/filter_setting.png'
 		);
 
 		return $elements;

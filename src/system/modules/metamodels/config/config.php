@@ -36,12 +36,12 @@ array_insert($GLOBALS['BE_MOD'], (array_search('accounts', array_keys($GLOBALS['
 				'tl_metamodel_dca_combine',
 				'tl_metamodel_dcasetting_condition'
 			),
-			'icon'                  => 'system/modules/metamodels/html/logo.png',
+			'icon'                  => 'system/modules/metamodels/assets/images/backend/logo.png',
 			'callback'              => 'MetaModels\BackendIntegration\Module'
 		),
 		'support_metamodels' => array
 		(
-			'icon'                  => 'system/modules/metamodels/html/support.png',
+			'icon'                  => 'system/modules/metamodels/assets/images/backend/support.png',
 			'callback'              => 'MetaModels\BackendIntegration\Support'
 		)
 	),
@@ -83,13 +83,13 @@ $GLOBALS['METAMODELS']['filters']['idlist']['class']                = 'MetaModel
 $GLOBALS['METAMODELS']['filters']['simplelookup']['class']          = 'MetaModels\Filter\Setting\SimpleLookup';
 $GLOBALS['METAMODELS']['filters']['simplelookup']['info_callback']  = 'MetaModels\DcGeneral\Events\Table\FilterSetting\DrawSetting::modelToLabelWithAttributeAndUrlParam';
 $GLOBALS['METAMODELS']['filters']['customsql']['class']             = 'MetaModels\Filter\Setting\CustomSql';
-$GLOBALS['METAMODELS']['filters']['customsql']['image']             = 'system/modules/metamodels/html/filter_customsql.png';
+$GLOBALS['METAMODELS']['filters']['customsql']['image']             = 'system/modules/metamodels/assets/images/icons/filter_customsql.png';
 $GLOBALS['METAMODELS']['filters']['conditionand']['class']          = 'MetaModels\Filter\Setting\Condition\ConditionAnd';
-$GLOBALS['METAMODELS']['filters']['conditionand']['image']          = 'system/modules/metamodels/html/filter_and.png';
+$GLOBALS['METAMODELS']['filters']['conditionand']['image']          = 'system/modules/metamodels/assets/images/icons/filter_and.png';
 //$GLOBALS['METAMODELS']['filters']['conditionand']['info_callback']  = array('MetaModels\Dca\Filter', 'drawAndCondition');
 $GLOBALS['METAMODELS']['filters']['conditionand']['nestingAllowed'] = true;
 $GLOBALS['METAMODELS']['filters']['conditionor']['class']           = 'MetaModels\Filter\Setting\Condition\ConditionOr';
-$GLOBALS['METAMODELS']['filters']['conditionor']['image']           = 'system/modules/metamodels/html/filter_or.png';
+$GLOBALS['METAMODELS']['filters']['conditionor']['image']           = 'system/modules/metamodels/assets/images/icons/filter_or.png';
 //$GLOBALS['METAMODELS']['filters']['conditionor']['info_callback']   = array('MetaModels\Dca\Filter', 'drawOrCondition');
 $GLOBALS['METAMODELS']['filters']['conditionor']['nestingAllowed']  = true;
 

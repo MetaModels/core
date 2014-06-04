@@ -67,7 +67,7 @@ class BreadCrumbRenderSettings
 				$this->getBreadcrumbLabel($environment, 'tl_metamodel_rendersettings'),
 				$this->getMetaModel()->getName()
 			),
-			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/html/render_settings.png'
+			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/rendersettings.png'
 		);
 
 		return $elements;

@@ -54,7 +54,7 @@ class DrawSetting
 			$image = $GLOBALS['METAMODELS']['attributes'][$type]['image'];
 			if (!$image || !file_exists(TL_ROOT . '/' . $image))
 			{
-				$image = 'system/modules/metamodels/html/fields.png';
+				$image = 'system/modules/metamodels/assets/images/icons/fields.png';
 			}
 			$name    = $objAttribute->getName();
 			$colName = $objAttribute->getColName();
@@ -62,7 +62,7 @@ class DrawSetting
 		else
 		{
 			$type    = 'unknown ID: ' . $model->getProperty('attr_id');
-			$image   = 'system/modules/metamodels/html/fields.png';
+			$image   = 'system/modules/metamodels/assets/images/icons/fields.png';
 			$name    = 'unknown attribute';
 			$colName = 'unknown column';
 		}

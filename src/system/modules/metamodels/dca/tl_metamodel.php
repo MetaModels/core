@@ -100,7 +100,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['fields'],
 				'href'                => 'table=tl_metamodel_attribute',
-				'icon'                => 'system/modules/metamodels/html/fields.png',
+				'icon'                => 'system/modules/metamodels/assets/images/icons/fields.png',
 				'idparam'             => 'pid'
 			),
 
@@ -108,7 +108,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['rendersettings'],
 				'href'                => 'table=tl_metamodel_rendersettings',
-				'icon'                => 'system/modules/metamodels/html/render_settings.png',
+				'icon'                => 'system/modules/metamodels/assets/images/icons/rendersettings.png',
 				'idparam'             => 'pid'
 			),
 
@@ -116,7 +116,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['dca'],
 				'href'                => 'table=tl_metamodel_dca',
-				'icon'                => 'system/modules/metamodels/html/dca.png',
+				'icon'                => 'system/modules/metamodels/assets/images/icons/dca.png',
 				'idparam'             => 'pid'
 			),
 
@@ -124,7 +124,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['filter'],
 				'href'                => 'table=tl_metamodel_filter',
-				'icon'                => 'system/modules/metamodels/html/filter.png',
+				'icon'                => 'system/modules/metamodels/assets/images/icons/filter.png',
 				'idparam'             => 'pid'
 			),
 
@@ -132,7 +132,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel']['dca_combine'],
 				'href'                => 'table=tl_metamodel_dca_combine&act=edit',
-				'icon'                => 'system/modules/metamodels/html/dca_combine.png',
+				'icon'                => 'system/modules/metamodels/assets/images/icons/dca_combine.png',
 				'idparam'             => 'metamodel'
 			),
 		)

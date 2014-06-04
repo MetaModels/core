@@ -185,7 +185,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			(
 				'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['conditions'],
 				'href'                => 'table=tl_metamodel_dcasetting_condition',
-				'icon'                => 'system/modules/metamodels/html/dca_subpalette.png',
+				'icon'                => 'system/modules/metamodels/assets/images/icons/dca_subpalette.png',
 				'idparam'             => 'pid'
 			),
 		)
