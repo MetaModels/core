@@ -29,6 +29,7 @@ use ContaoCommunityAlliance\DcGeneral\Data\ConfigInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\CollectionInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\DefaultConfig;
 use ContaoCommunityAlliance\DcGeneral\Data\DefaultCollection;
+use MetaModels\Attribute\IAttribute;
 use MetaModels\Factory as ModelFactory;
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Rules\Condition\ConditionAnd;
@@ -259,6 +260,212 @@ class Driver implements MultiLanguageDataProviderInterface
 	}
 
 	/**
+	 * Retrieve the attribute for a filter operation.
+	 *
+	 * @param array $operation The operation to retrieve the attribute for.
+	 *
+	 * @return IAttribute|null
+	 */
+	protected function getAttributeFromFilterOperation($operation)
+	{
+		$attribute = null;
+		if ($operation['property'])
+		{
+			$attribute = $this->objMetaModel->getAttribute($operation['property']);
+		}
+
+		return $attribute;
+	}
+
+	/**
+	 * Build an AND or OR query.
+	 *
+	 * @param IFilter $filter    The filter to add the operations to.
+	 *
+	 * @param array   $operation The operation to convert.
+	 *
+	 * @return void
+	 */
+	protected function getAndOrFilter(IFilter $filter, $operation)
+	{
+		// FIXME: backwards compat - remove when done.
+		if (is_array($operation['childs']))
+		{
+			trigger_error('Filter array uses deprecated entry "childs", please use "children" instead.', E_USER_DEPRECATED);
+			$operation['children'] = $operation['childs'];
+			unset($operation['childs']);
+		}
+
+		if (!$operation['children'])
+		{
+			return;
+		}
+
+		if ($operation['operation'] == 'AND')
+		{
+			$filterRule = new ConditionAnd();
+		} else {
+			$filterRule = new ConditionOr();
+		}
+		$filter->addFilterRule($filterRule);
+
+		foreach ($operation['children'] as $child)
+		{
+			$subFilter = new Filter($this->objMetaModel);
+			$filterRule->addChild($subFilter);
+			$this->calculateSubfilter($child, $subFilter);
+		}
+	}
+
+	/**
+	 * Build the sub query for a comparing operator like =,<,>.
+	 *
+	 * @param IAttribute $attribute The attribute.
+	 *
+	 * @param IFilter    $filter    The filter to add the operations to.
+	 *
+	 * @param array      $operation The operation to convert.
+	 *
+	 * @return void
+	 *
+	 * @throws \RuntimeException When the operation can not be parsed.
+	 */
+	protected function getFilterForComparingOperator($attribute, IFilter $filter, $operation)
+	{
+		$filterRule = null;
+		if ($attribute)
+		{
+			switch ($operation['operation'])
+			{
+				case '=':
+					$filterRule = new SearchAttribute(
+						$attribute,
+						$operation['value'],
+						$this->objMetaModel->getAvailableLanguages()
+					);
+					break;
+
+				case '>':
+					$filterRule = new GreaterThan(
+						$attribute,
+						$operation['value']
+					);
+					break;
+
+				case '<':
+					$filterRule = new LessThan(
+						$attribute,
+						$operation['value']
+					);
+					break;
+
+				default:
+					throw new \RuntimeException(
+						'Error processing filter array - unknown operation ' . var_export($operation['operation'], true),
+						1
+					);
+			}
+		}
+		elseif(\Database::getInstance()->fieldExists($operation['property'], $this->objMetaModel->getTableName()))
+		{
+			// System column?
+			$filterRule = new SimpleQuery(sprintf(
+				'SELECT id FROM %s WHERE %s %s %s',
+				$this->objMetaModel->getTableName(),
+				$operation['property'],
+				$operation['operation'],
+				$operation['value']
+			));
+		}
+
+		if (!$filterRule)
+		{
+			throw new \RuntimeException(
+				'Error processing filter array - unknown property ' . var_export($operation['property'], true),
+				1
+			);
+		}
+
+		$filter->addFilterRule($filterRule);
+	}
+
+	/**
+	 * Return the filter query for a "foo IN ('a', 'b')" filter.
+	 *
+	 * @param IFilter $filter    The filter to add the operations to.
+	 *
+	 * @param array   $operation The operation to convert.
+	 *
+	 * @return void
+	 *
+	 * @throws \RuntimeException When the operation can not be parsed.
+	 */
+	protected function getFilterForInList(IFilter $filter, $operation)
+	{
+		// Rewrite the IN operation to a rephrased term: "(x=a) OR (x=b) OR ...".
+		$subRules = array();
+		foreach ($operation['values'] as $varValue)
+		{
+			$subRules[] = array(
+				'property'  => $operation['property'],
+				'operation' => '=',
+				'value'     => $varValue
+			);
+		}
+		$this->calculateSubfilter(array(
+			'operation' => 'OR',
+			'children'    => $subRules
+		), $filter);
+	}
+
+	/**
+	 * Return the filter query for a "foo LIKE '%ba_r%'" filter.
+	 *
+	 * The searched value may contain the wildcards '*' and '?' which will get converted to proper SQL.
+	 *
+	 * @param IAttribute $attribute The attribute.
+	 *
+	 * @param IFilter    $filter    The filter to add the operations to.
+	 *
+	 * @param array      $operation The operation to convert.
+	 *
+	 * @return void
+	 *
+	 * @throws \RuntimeException When the operation can not be parsed.
+	 */
+	protected function getFilterForLike($attribute, IFilter $filter, $operation)
+	{
+		$objFilterRule = null;
+		if ($attribute)
+		{
+			$objFilterRule = new SearchAttribute(
+				$attribute,
+				$operation['value'],
+				$this->objMetaModel->getAvailableLanguages()
+			);
+		}
+		elseif (\Database::getInstance()->fieldExists($operation['property'], $this->objMetaModel->getTableName()))
+		{
+			// System column?
+			$objFilterRule = new SimpleQuery(sprintf(
+					'SELECT id FROM %s WHERE %s LIKE ?',
+					$this->objMetaModel->getTableName(),
+					$operation['property']
+				),
+				array($operation['value']));
+		}
+
+		if (!$objFilterRule)
+		{
+			throw new \RuntimeException(
+				'Error processing filter array - unknown property ' . var_export($operation['property'], true),
+				1
+			);
+		}
+		$filter->addFilterRule($objFilterRule);
+	}
+
+	/**
 	 * Combine a filter in standard filter array notation.
 	 *
 	 * Supported operations are:
@@ -280,163 +487,52 @@ class Driver implements MultiLanguageDataProviderInterface
 	 *                'property'           string (the name of a property)
 	 *                'values'             array of literal
 	 *
-	 * @param array   $arrFilter The filter to be combined into the passed filter object.
+	 * @param array   $operation The filter to be combined into the passed filter object.
 	 *
-	 * @param IFilter $objFilter The filter object where the rules shall get appended to.
+	 * @param IFilter $filter    The filter object where the rules shall get appended to.
 	 *
 	 * @return void
 	 *
 	 * @throws \RuntimeException When an improper filter condition is encountered, an exception is thrown.
 	 */
-	protected function calculateSubfilter($arrFilter, IFilter $objFilter)
+	protected function calculateSubfilter($operation, IFilter $filter)
 	{
-		if (!is_array($arrFilter))
+		if (!is_array($operation))
 		{
-			throw new \RuntimeException('Error Processing subfilter: ' . var_export($arrFilter, true), 1);
+			throw new \RuntimeException('Error Processing subfilter: ' . var_export($operation, true), 1);
 		}
 
-		$objAttribute = null;
-		if ($arrFilter['property'])
-		{
-			$objAttribute = $this->objMetaModel->getAttribute($arrFilter['property']);
-		}
-
-		switch ($arrFilter['operation'])
+		switch ($operation['operation'])
 		{
 			case 'AND':
 			case 'OR':
-				// FIXME: backwards compat - remove when done.
-				if (is_array($arrFilter['childs']))
-				{
-					trigger_error('Filter array uses deprecated entry "childs", please use "children" instead.', E_USER_DEPRECATED);
-					$arrFilter['children'] = $arrFilter['childs'];
-					unset($arrFilter['childs']);
-				}
-
-				if (!$arrFilter['children'])
-				{
-					return;
-				}
-
-				if ($arrFilter['operation'] == 'AND')
-				{
-					$objFilterRule = new ConditionAnd();
-				} else {
-					$objFilterRule = new ConditionOr();
-				}
-				$objFilter->addFilterRule($objFilterRule);
-
-				foreach ($arrFilter['children'] as $arrChild)
-				{
-					$objSubFilter = new Filter($this->objMetaModel);
-					$objFilterRule->addChild($objSubFilter);
-					$this->calculateSubfilter($arrChild, $objSubFilter);
-				}
+				$this->getAndOrFilter($filter, $operation);
 				break;
 
 			case '=':
 			case '>':
 			case '<':
-				$objFilterRule = null;
-				if ($objAttribute)
-				{
-					switch ($arrFilter['operation'])
-					{
-						case '=':
-							$objFilterRule = new SearchAttribute(
-								$objAttribute,
-								$arrFilter['value'],
-								$this->objMetaModel->getAvailableLanguages()
-							);
-							break;
-
-						case '>':
-							$objFilterRule = new GreaterThan(
-								$objAttribute,
-								$arrFilter['value']
-							);
-							break;
-
-						case '<':
-							$objFilterRule = new LessThan(
-								$objAttribute,
-								$arrFilter['value']
-							);
-							break;
-					}
-				}
-				elseif(\Database::getInstance()->fieldExists($arrFilter['property'], $this->objMetaModel->getTableName()))
-				{
-					// System column?
-					$objFilterRule = new SimpleQuery(sprintf(
-						'SELECT id FROM %s WHERE %s %s %s',
-						$this->objMetaModel->getTableName(),
-						$arrFilter['property'],
-						$arrFilter['operation'],
-						$arrFilter['value']
-					));
-				}
-
-				if (!$objFilterRule)
-				{
-					throw new \RuntimeException(
-						'Error processing filter array - unknown property ' . var_export($arrFilter['property'], true),
-						1
-					);
-				}
-				$objFilter->addFilterRule($objFilterRule);
+				$this->getFilterForComparingOperator(
+					$this->getAttributeFromFilterOperation($operation),
+					$filter,
+					$operation
+				);
 				break;
 
 			case 'IN':
-				// Rewrite the IN operation to a rephrased term: "(x=a) OR (x=b) OR ...".
-				$arrSubRules = array();
-				foreach ($arrFilter['values'] as $varValue)
-				{
-					$arrSubRules[] = array(
-						'property'  => $arrFilter['property'],
-						'operation' => '=',
-						'value'     => $varValue
-					);
-				}
-				$this->calculateSubfilter(array(
-					'operation' => 'OR',
-					'children'    => $arrSubRules
-				), $objFilter);
+				$this->getFilterForInList($filter, $operation);
 				break;
 
 			case 'LIKE':
-				$objFilterRule = null;
-				if ($objAttribute)
-				{
-					$objFilterRule = new SearchAttribute(
-						$objAttribute,
-						$arrFilter['value'],
-						$this->objMetaModel->getAvailableLanguages()
-					);
-				}
-				elseif (\Database::getInstance()->fieldExists($arrFilter['property'], $this->objMetaModel->getTableName()))
-				{
-					// System column?
-					$objFilterRule = new SimpleQuery(sprintf(
-							'SELECT id FROM %s WHERE %s LIKE ?',
-							$this->objMetaModel->getTableName(),
-							$arrFilter['property']
-						),
-						array($arrFilter['value']));
-				}
-
-				if (!$objFilterRule)
-				{
-					throw new \RuntimeException(
-						'Error processing filter array - unknown property ' . var_export($arrFilter['property'], true),
-						1
-					);
-				}
-				$objFilter->addFilterRule($objFilterRule);
+				$this->getFilterForLike(
+					$this->getAttributeFromFilterOperation($operation),
+					$filter,
+					$operation
+				);
 				break;
 
 			default:
-				throw new \RuntimeException('Error processing filter array - unknown operation ' . var_export($arrFilter, true), 1);
+				throw new \RuntimeException('Error processing filter array - unknown operation ' . var_export($operation, true), 1);
 		}
 	}
 
