@@ -17,8 +17,10 @@
 namespace MetaModels\DcGeneral\Data;
 
 use ContaoCommunityAlliance\DcGeneral\Data\DCGE;
+use ContaoCommunityAlliance\DcGeneral\Data\DefaultFilterOptionCollection;
 use ContaoCommunityAlliance\DcGeneral\Data\DefaultLanguageInformation;
 use ContaoCommunityAlliance\DcGeneral\Data\DefaultLanguageInformationCollection;
+use ContaoCommunityAlliance\DcGeneral\Data\FilterOptionCollectionInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\LanguageInformationCollectionInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\LanguageInformationInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\MultiLanguageDataProviderInterface;
@@ -244,6 +246,16 @@ class Driver implements MultiLanguageDataProviderInterface
 	public function getEmptyCollection()
 	{
 		return new DefaultCollection();
+	}
+
+	/**
+	 * Fetch an empty filter item collection.
+	 *
+	 * @return FilterOptionCollectionInterface
+	 */
+	public function getEmptyFilterOptionCollection()
+	{
+		return new DefaultFilterOptionCollection();
 	}
 
 	/**
@@ -531,7 +543,7 @@ class Driver implements MultiLanguageDataProviderInterface
 	 *
 	 * @param ConfigInterface $objConfig The filter config options.
 	 *
-	 * @return CollectionInterface
+	 * @return FilterOptionCollectionInterface
 	 *
 	 * @throws \RuntimeException If improper values have been passed (i.e. not exactly one field requested).
 	 */
@@ -549,12 +561,10 @@ class Driver implements MultiLanguageDataProviderInterface
 			->getAttribute($arrProperties[0])
 			->getFilterOptions($objFilter->getMatchingIds(), true);
 
-		$objCollection = $this->getEmptyCollection();
-		foreach ($arrValues as $strValue)
+		$objCollection = $this->getEmptyFilterOptionCollection();
+		foreach ($arrValues as $strKey => $strValue)
 		{
-			$objNewModel = $this->getEmptyModel();
-			$objNewModel->setProperty($arrProperties[0], $strValue);
-			$objCollection->add($objNewModel);
+			$objCollection->add($strKey, $strValue);
 		}
 
 		return $objCollection;
