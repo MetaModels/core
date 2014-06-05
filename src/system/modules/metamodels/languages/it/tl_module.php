@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-22T16:12:57+02:00
+ * last-updated: 2014-03-27T12:16:04+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_module']['editfiltersetting']['0']              = 'Modifica l\'impostazione del filtro';
@@ -21,7 +21,7 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel']['0']                      = 'MetaM
 $GLOBALS['TL_LANG']['tl_module']['metamodel']['1']                      = 'Il MetaModel in questa lista.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_available_values']['0']     = 'Numero elementi filtrati';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_available_values']['1']     = 'Visualizzare la quantità di elementi disponibili in ogni opzione di filtro.';
-$GLOBALS['TL_LANG']['tl_module']['metamodel_donotindex']['0']           = 'Non aggiungere dell\'indice di ricerca';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_donotindex']['0']           = 'Non aggiungere all\'indice di ricerca';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_donotindex']['1']           = 'Se selezionato, l\'indice di ricerca Contao interno ignorerà il contenuto di questo elemento di contenuto.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_autosubmit']['0']       = 'Invia quando viene cambiato';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_autosubmit']['1']       = 'Ricarica la pagina quando il filtro viene cambiato.';
