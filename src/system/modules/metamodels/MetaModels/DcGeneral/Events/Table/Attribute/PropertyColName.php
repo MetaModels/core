@@ -16,10 +16,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\Attribute;
 
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
-use MetaModels\Dca\Helper;
 use MetaModels\Helper\TableManipulation;
 
 /**
