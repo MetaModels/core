@@ -18,6 +18,7 @@ namespace MetaModels\DcGeneral\Events\Table\RenderSetting;
 
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionChainInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Palette\PaletteConditionChain;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Legend;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
@@ -25,7 +26,8 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PaletteInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
-use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\RenderSettingAttributeIs;
+use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\RenderSettingAttributeIs as PropertyCondition;
+use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Palette\RenderSettingAttributeIs as PaletteCondition;
 
 /**
  * Handle events for tl_metamodel_rendersetting palette building.
@@ -130,6 +132,22 @@ class RenderSettingBuildPalette
 
 		foreach ($palettes->getPalettes() as $palette)
 		{
+			if ($palette->getName() !== 'default')
+			{
+				$paletteCondition = $palette->getCondition();
+				if (!($paletteCondition instanceof ConditionChainInterface)
+					|| ($paletteCondition->getConjunction() !== PaletteConditionChain::OR_CONJUNCTION)
+				)
+				{
+					$paletteCondition = new PaletteConditionChain(
+						$paletteCondition ? array($paletteCondition) : array(),
+						PaletteConditionChain::OR_CONJUNCTION
+					);
+					$palette->setCondition($paletteCondition);
+				}
+				$paletteCondition->addCondition(new PaletteCondition($palette->getName()));
+			}
+
 			foreach ((array)$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes'] as
 				$typeName => $paletteInfo)
 			{
@@ -147,7 +165,7 @@ class RenderSettingBuildPalette
 				{
 					foreach ($properties as $propertyName)
 					{
-						$condition = new RenderSettingAttributeIs($typeName);
+						$condition = new PropertyCondition($typeName);
 						$legend    = self::getLegend($legendName, $palette);
 						$property  = self::getProperty($propertyName, $legend);
 						self::addCondition($property, $condition);
