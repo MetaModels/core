@@ -34,6 +34,7 @@ use ContaoCommunityAlliance\DcGeneral\Factory\Event\PreCreateDcGeneralEvent;
 use MetaModels\DcGeneral\Dca\Builder\Builder;
 use MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPTable;
 use MetaModels\DcGeneral\Events\Table\InputScreens\BuildPalette;
+use MetaModels\DcGeneral\Events\Table\RenderSetting\RenderSettingBuildPalette;
 use MetaModels\Factory;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -729,6 +730,8 @@ class Subscriber
 			$dispatcher,
 			array('tl_metamodel_rendersetting', 'attr_id')
 		);
+
+		RenderSettingBuildPalette::build($event);
 	}
 
 	/**
