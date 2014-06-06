@@ -8,9 +8,9 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-01-28T16:10:46+01:00
+ * last-updated: 2014-05-28T20:13:10+02:00
  */
 
-
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id']['0'] = 'Атрибут';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id']['0']  = 'Атрибут';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['0'] = 'Шаблон';
 

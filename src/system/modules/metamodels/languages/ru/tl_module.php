@@ -8,10 +8,12 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-05-22T12:13:44+02:00
+ * last-updated: 2014-05-23T20:13:35+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_params']['0']       = 'Атрибуты';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_template']['0']     = 'Шаблон';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_template']['1']     = 'Выбрать шаблон внешнего интерфейса';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_jumpTo']['0']           = 'Страница перенаправления';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_jumpTo']['1']           = 'Выберите страницу, к которой будут перенаправлены посетители при нажатии ссылки или отправки формы.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_offset']['0']           = 'Список смещения';
