@@ -39,10 +39,13 @@ class UpdateAttribute
 		$new         = $event->getModel();
 		$oldType     = $old ? $old->getProperty('type') : null;
 		$newType     = $new->getProperty('type');
+		$oldName     = $old ? $old->getProperty('colname') : null;
+		$newName     = $new->getProperty('colname');
 		$oldInstance = $old ? Factory::createFromArray($old->getPropertiesAsArray()) : null;
 		$newInstance = Factory::createFromArray($new->getPropertiesAsArray());
 
-		if ($oldType !== $newType)
+		// If type or column name has been changed, destroy old data and initialize new.
+		if (($oldType !== $newType) || ($oldName !== $newName))
 		{
 			// Destroy old instance.
 			if ($oldInstance)
