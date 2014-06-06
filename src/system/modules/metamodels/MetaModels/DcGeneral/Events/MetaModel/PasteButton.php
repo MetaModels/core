@@ -51,21 +51,32 @@ class PasteButton
 
 		if ($model && $model->getId() && !$event->getCircularReference())
 		{
-			// Insert a varbase after any other varbase, for sorting.
-			if ($containedModel->getProperty('varbase') == 1
-				&& (!$event->getCircularReference())
-				&& $model->getProperty('varbase') == 1
-			)
+			if (Factory::byTableName($model->getProviderName())->hasVariants())
 			{
-				$disablePA = false;
+				// Insert new items only after bases.
+				// Insert a varbase after any other varbase, for sorting.
+				if ((($containedModel->getProperty('varbase') == 1) || !$containedModel->getId())
+					&& (!$event->getCircularReference())
+					&& $model->getProperty('varbase') == 1
+				)
+				{
+					$disablePA = false;
+				}
+				// Move items in their vargroup and only there.
+				elseif ($containedModel->getProperty('varbase') == 0
+					&& $containedModel->getProperty('vargroup') == $model->getProperty('vargroup')
+					&& $containedModel->getProperty('varbase') != 1
+				)
+				{
+					$disablePA = false;
+				}
+
+				$disablePI = ($model->getProperty('varbase') != 1) || ($containedModel->getProperty('varbase'));
 			}
-			// Move items in their vargroup and only there.
-			elseif ($containedModel->getProperty('varbase') == 0
-				&& $containedModel->getProperty('vargroup') == $model->getProperty('vargroup')
-				&& $containedModel->getProperty('varbase') != 1
-			)
+			else
 			{
 				$disablePA = false;
+				$disablePI = !$event->getCircularReference();
 			}
 		}
 		elseif($model == null && $containedModel->getProperty('varbase') == 0)
