@@ -103,7 +103,7 @@ class RenderItem
 		$template->view     = $renderSetting;
 		$template->data     = array($nativeItem->parseValue('html5', $renderSetting));
 
-		$event->setLabel($template->parse('html5', true));
+		$event->setArgs(array($template->parse('html5', true)));
 	}
 
 	/**
