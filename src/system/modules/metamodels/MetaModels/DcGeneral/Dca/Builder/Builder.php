@@ -1092,6 +1092,10 @@ class Builder
 		$inputScreen = ViewCombinations::getInputScreenDetails($container->getName());
 
 		$listing->setRootIcon($this->getBackendIcon($inputScreen->getIcon()));
+		$listing->setDefaultSortingFields(array_merge(
+			(array)$listing->getDefaultSortingFields(),
+			array('sorting' => 'ASC')
+		));
 	}
 
 	/**
