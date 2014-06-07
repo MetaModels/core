@@ -878,11 +878,11 @@ class MetaModel implements IMetaModel
 		}
 
 		// Update system columns.
-		if ($objItem->get('pid'))
+		if ($objItem->get('pid') !== null)
 		{
 			$this->saveSimpleColumn('pid', array($objItem->get('id')), $objItem->get('pid'));
 		}
-		if ($objItem->get('sorting'))
+		if ($objItem->get('sorting') !== null)
 		{
 			$this->saveSimpleColumn('sorting', array($objItem->get('id')), $objItem->get('sorting'));
 		}
