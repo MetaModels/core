@@ -77,7 +77,7 @@ class PasteButton
 			else
 			{
 				$disablePA = false;
-				$disablePI = !$event->getCircularReference();
+				$disablePI = $event->getCircularReference();
 			}
 		}
 		elseif($model == null && $containedModel->getProperty('varbase') == 0)
