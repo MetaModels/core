@@ -14,6 +14,7 @@ namespace MetaModels\DcGeneral\Events\MetaModel;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\BaseView;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
+use MetaModels\Factory;
 
 /**
  * This class handles the paste into and after button activation and deactivation for all MetaModels being edited.
