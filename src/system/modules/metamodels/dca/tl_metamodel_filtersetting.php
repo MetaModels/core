@@ -25,8 +25,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		'dataContainer'               => 'General',
 		'switchToEdit'                => false,
 		'enableVersioning'            => false,
-		// TODO: change callbacks to event handlers.
-//		'palettes_callback'           => array(array('MetaModels\Dca\Filter', 'preparePalettes')),
 	),
 	'dca_config'                      => array
 	(
