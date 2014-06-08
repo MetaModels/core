@@ -53,6 +53,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 						'from_field'  => 'id',
 					)
 				),
+				'filter'              => array
+				(
+					array
+					(
+						'local'       => 'fid',
+						'remote'      => 'id',
+						'operation'   => '=',
+					),
+				)
 			),
 
 			array(
