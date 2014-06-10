@@ -50,7 +50,7 @@ class PasteButton
 		// We assume we only have either varbase or non varbase items in the clipboard, mixed contents are not supported.
 		$containedModel = $contained->get(0);
 
-		if ($model && $model->getId() && !$event->getCircularReference())
+		if ($containedModel && $containedModel->getId() && !$event->getCircularReference())
 		{
 			if (Factory::byTableName($model->getProviderName())->hasVariants())
 			{
@@ -76,7 +76,7 @@ class PasteButton
 			}
 			else
 			{
-				$disablePA = false;
+				$disablePA = ($model->getId() == $containedModel->getId());
 				$disablePI = $event->getCircularReference();
 			}
 		}
