@@ -45,7 +45,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 		(
 			// This means: 1 default sorting value, 2 switchable sorting value.
 			'mode'                    => 1,
-			'panelLayout'             => 'limit',
 			'headerFields'            => array('tstamp'),
 		),
 
