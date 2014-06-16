@@ -90,7 +90,9 @@ class Boot
 		try
 		{
 			$objDB = \Database::getInstance();
-			return $objDB && $objDB->tableExists('tl_metamodel', null, true);
+			return $objDB
+				&& $objDB->tableExists('tl_metamodel', null, true)
+				&& $objDB->tableExists('tl_metamodel_dcasetting_condition', null, true);
 		}
 		catch (\Exception $e)
 		{
