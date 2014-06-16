@@ -73,7 +73,13 @@ class Content
 	 */
 	public function getModuleTemplates(\DC_Table $objDC)
 	{
-		return Helper::getTemplatesForBase('ce_metamodel_' . $objDC->activeRecord->type);
+		$type = $objDC->activeRecord->type;
+		if ($type == 'metamodel_content')
+		{
+			$type = 'metamodel_list';
+		}
+
+		return Helper::getTemplatesForBase('ce_' . $type);
 	}
 
 	/**
