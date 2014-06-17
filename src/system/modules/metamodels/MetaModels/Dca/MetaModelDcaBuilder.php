@@ -118,6 +118,22 @@ class MetaModelDcaBuilder
 	 */
 	public function injectChildTablesIntoDCA($strTable)
 	{
+		try
+		{
+			$objDB = \Database::getInstance();
+			if (!($objDB
+				&& $objDB->tableExists('tl_metamodel', null, true)
+				&& $objDB->tableExists('tl_metamodel_dcasetting_condition', null, true)
+			))
+			{
+				return;
+			}
+		}
+		catch (\Exception $e)
+		{
+			return;
+		}
+
 		$arrTableDCA = &$GLOBALS['TL_DCA'][$strTable];
 
 		$screens = ViewCombinations::getParentedInputScreens();
