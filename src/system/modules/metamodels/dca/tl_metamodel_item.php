@@ -54,12 +54,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 			'format'                  => '%s',
 		),
 	),
+
 	'fields' => array
 	(
+		'id' => array(),
+		'pid' => array(),
 		'sorting' => array
 		(
-			'sorting' => true
-		)
+			'sorting'                 => true
+		),
+		'tstamp' => array()
 	)
 );
 
