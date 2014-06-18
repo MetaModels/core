@@ -1292,7 +1292,7 @@ class Builder
 			array()
 		);
 
-		if ($this->getMetaModel($container))
+		if ($this->getMetaModel($container)->hasVariants())
 		{
 			$this->createCommand(
 				$collection,
