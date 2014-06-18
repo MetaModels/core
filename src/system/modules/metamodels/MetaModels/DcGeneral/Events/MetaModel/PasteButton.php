@@ -88,7 +88,7 @@ class PasteButton
 		{
 			$disablePA = false;
 			// If we are in create mode, disable the paste into.
-			$disablePI = !($containedModel->getProperty('varbase') == 1 && $clipboard->getMode() != 'create');
+			$disablePI = !($containedModel->getProperty('varbase') == 1 && $clipboard->getMode() != 'create' && $containedModel->getId() != $model->getId());
 		}
 
 		$event
