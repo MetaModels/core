@@ -19,6 +19,8 @@ namespace MetaModels\Dca;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use ContaoCommunityAlliance\UrlBuilder\Contao\BackendUrlBuilder;
 use Database\Result;
 use MetaModels\Filter\Setting\Factory as FilterFactory;
 use MetaModels\Factory as MetaModelFactory;
@@ -164,10 +166,12 @@ class Content
 
 		$dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
 
+		$url = BackendUrlBuilder::fromUrl('contao/main.php?do=metamodels&act=edit')
+			->setQueryParameter('id', IdSerializer::fromValues('tl_metamodel', $dc->value)->getSerialized());
+
 		return sprintf(
-			'<a href="contao/main.php?%s&amp;act=edit&amp;id=%s" title="%s" style="padding-left:3px">%s</a>',
-			'do=metamodels',
-			$dc->value,
+			'<a href="%s" title="%s" style="padding-left:3px">%s</a>',
+			$url->getUrl(),
 			sprintf(specialchars($GLOBALS['TL_LANG']['tl_content']['editmetamodel'][1]), $dc->value),
 			$event->getHtml()
 		);
@@ -198,10 +202,12 @@ class Content
 
 		$dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
 
+		$url = BackendUrlBuilder::fromUrl('contao/main.php?do=metamodels&table=tl_metamodel_filtersetting')
+			->setQueryParameter('pid', IdSerializer::fromValues('tl_metamodel_filter', $dc->value)->getSerialized());
+
 		return sprintf(
-			'<a href="contao/main.php?%s&amp;id=%s" title="%s" style="padding-left:3px">%s</a>',
-			'do=metamodels&table=tl_metamodel_filtersetting',
-			$dc->value,
+			'<a href="%s" title="%s" style="padding-left:3px">%s</a>',
+			$url->getUrl(),
 			sprintf(specialchars($GLOBALS['TL_LANG']['tl_content']['editfiltersetting'][1]), $dc->value),
 			$event->getHtml()
 		);
@@ -232,10 +238,12 @@ class Content
 
 		$dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
 
+		$url = BackendUrlBuilder::fromUrl('contao/main.php?do=metamodels&table=tl_metamodel_rendersetting')
+			->setQueryParameter('pid', IdSerializer::fromValues('tl_metamodel_rendersettings', $dc->value)->getSerialized());
+
 		return sprintf(
-			'<a href="contao/main.php?%s&amp;id=%s" title="%s" style="padding-left:3px">%s</a>',
-			'do=metamodels&table=tl_metamodel_rendersetting',
-			$dc->value,
+			'<a href="%s" title="%s" style="padding-left:3px">%s</a>',
+			$url->getUrl(),
 			sprintf(specialchars($GLOBALS['TL_LANG']['tl_content']['editrendersetting'][1]), $dc->value),
 			$event->getHtml()
 		);
