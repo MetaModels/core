@@ -1433,6 +1433,13 @@ class Builder
 		$metaModel   = Factory::byTableName($container->getName());
 		$inputScreen = $this->getInputScreenDetails($container);
 
+		// If the current metamodels has variants add the varbase and vargroup to the definition.
+		if($metaModel->hasVariants())
+		{
+			$this->buildPropertyFromDca($container, $definition, 'varbase', $inputScreen);
+			$this->buildPropertyFromDca($container, $definition, 'vargroup', $inputScreen);
+		}
+
 		foreach ($metaModel->getAttributes() as $attribute)
 		{
 			$this->buildPropertyFromDca($container, $definition, $attribute->getColName(), $inputScreen);
