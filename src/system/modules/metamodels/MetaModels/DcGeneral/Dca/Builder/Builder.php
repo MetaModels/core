@@ -36,6 +36,9 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChi
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
+use ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PreDuplicateModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Panel\DefaultPanel;
 use ContaoCommunityAlliance\DcGeneral\Panel\DefaultPanelContainer;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
@@ -200,22 +203,35 @@ class Builder
 
 		$this->dispatcher->addListener(
 			sprintf(
-				'%s[%s][%s]',
-				DcGeneralEvents::ACTION,
-				$metaModel->getTableName(),
-				'createvariant'
-			),
-			'MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton::handleCreateVariantAction'
-		);
-
-		$this->dispatcher->addListener(
-			sprintf(
 				'%s[%s]',
 				GetPasteButtonEvent::NAME,
 				$metaModel->getTableName()
 			),
 			'MetaModels\DcGeneral\Events\MetaModel\PasteButton::handle'
 		);
+
+		// Add some sepcial actions for variants.
+		if($metaModel->hasVariants())
+		{
+			$this->dispatcher->addListener(
+				sprintf(
+					'%s[%s]',
+					PostDuplicateModelEvent::NAME,
+					$metaModel->getTableName()
+				),
+				'MetaModels\DcGeneral\Events\MetaModel\DuplicateModel::handle'
+			);
+
+			$this->dispatcher->addListener(
+				sprintf(
+					'%s[%s][%s]',
+					DcGeneralEvents::ACTION,
+					$metaModel->getTableName(),
+					'createvariant'
+				),
+				'MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton::handleCreateVariantAction'
+			);
+		}
 	}
 
 	/**
@@ -1204,14 +1220,22 @@ class Builder
 			}
 		}
 
-		if (!$command->getLabel())
+		if (!$command->getLabel() && !isset($extraValues['label']))
 		{
 			$command->setLabel($operationName . '.0');
 		}
+		elseif (!$command->getLabel() && isset($extraValues['label']))
+		{
+			$command->setLabel($extraValues['label']);
+		}
 
-		if (!$command->getDescription())
+		if (!$command->getDescription() && !isset($extraValues['description']))
 		{
 			$command->setDescription($operationName . '.1');
+		}
+		elseif (!$command->getDescription() && isset($extraValues['description']))
+		{
+			$command->setDescription($extraValues['description']);
 		}
 
 		$extra         = $command->getExtra();
@@ -1300,6 +1324,56 @@ class Builder
 				array('act' => 'createvariant'),
 				'system/modules/metamodels/assets/images/icons/variants.png',
 				array()
+			);
+		}
+
+		// Check if we have some children.
+		foreach(ViewCombinations::getParentedInputScreens() as $screen)
+		{
+			/** @var \MetaModels\BackendIntegration\InputScreen\IInputScreen $screen */
+			if($screen->getParentTable() != $container->getName())
+			{
+				continue;
+			}
+
+			$metaModel = $screen->getMetaModel();
+			$arrCaption = array(
+				'',
+				sprintf(
+					$GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'],
+					$metaModel->getName()
+				)
+			);
+
+			foreach ($screen->getBackendCaption() as $arrLangEntry)
+			{
+				if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == $GLOBALS['TL_LANGUAGE'])
+				{
+					$arrCaption = array($arrLangEntry['description'], $arrLangEntry['label']);
+				}
+
+//				// Is the destination table a metamodel with variants?
+//				if ($metaModel->hasVariants())
+//				{
+//					$arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['idparam'] = 'id_' . $strTable;
+//				}
+//				else
+//				{
+//					$arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['idparam'] = 'pid';
+//				}
+			}
+
+			$this->createCommand(
+				$collection,
+				'edit_' . $metaModel->getTableName(),
+				array('table' => $metaModel->getTableName()),
+				self::getBackendIcon($screen->getIcon()),
+				array
+				(
+					'attributes'  => 'onclick="Backend.getScrollOffset();"',
+					'label'       => $arrCaption[0],
+					'description' => $arrCaption[1],
+				)
 			);
 		}
 	}
