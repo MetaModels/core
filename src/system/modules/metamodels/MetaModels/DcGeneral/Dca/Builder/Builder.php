@@ -288,8 +288,7 @@ class Builder
 	public function build(BuildDataDefinitionEvent $event)
 	{
 		$this->dispatcher = $event->getDispatcher();
-
-		$container = $event->getContainer();
+		$container        = $event->getContainer();
 
 		if (!($container instanceof IMetaModelDataDefinition))
 		{
@@ -878,7 +877,8 @@ class Builder
 			->setFilterArray(
 				FilterBuilder::fromArray($relationship->getFilterArray())
 					->getFilter()
-					->getBuilder()->encapsulateOr()
+					->getBuilder()
+					->encapsulateOr()
 						->andRemotePropertyEquals('vargroup', 'vargroup')
 						->andRemotePropertyEquals('vargroup', 'id')
 						->andRemotePropertyEquals('varbase', 0, true)
@@ -978,9 +978,9 @@ class Builder
 				$providerInformation
 					->setTableName($inputScreen->getParentTable())
 					->setInitializationData(array(
-						'source' => $inputScreen->getParentTable()
-					)
-				);
+							'source' => $inputScreen->getParentTable()
+						)
+					);
 
 				// How can we honor other drivers? We do only check for MetaModels and legacy SQL here.
 				if (in_array($inputScreen->getParentTable(), Factory::getAllTables()))
