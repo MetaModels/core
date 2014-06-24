@@ -1373,6 +1373,7 @@ class Builder
 					'attributes'  => 'onclick="Backend.getScrollOffset();"',
 					'label'       => $arrCaption[0],
 					'description' => $arrCaption[1],
+					'idparam'     => 'pid'
 				)
 			);
 		}
