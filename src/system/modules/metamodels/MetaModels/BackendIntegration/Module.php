@@ -192,6 +192,10 @@ class Module
 				$name = 'tl_metamodel';
 			}
 		}
+		elseif(\Input::getInstance()->get('table'))
+		{
+			$name = \Input::getInstance()->get('table');
+		}
 		else
 		{
 			$name = substr($backendModule, 10);
