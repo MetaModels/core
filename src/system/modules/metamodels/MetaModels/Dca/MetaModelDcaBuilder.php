@@ -151,23 +151,23 @@ class MetaModelDcaBuilder
 			$metaModel = $screen->getMetaModel();
 
 			$arrCaption = array(
-				'',
 				sprintf(
 					$GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'],
 					$metaModel->getName()
-				)
+				),
+				''
 			);
 
 			foreach ($screen->getBackendCaption() as $arrLangEntry)
 			{
 				if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == $GLOBALS['TL_LANGUAGE'])
 				{
-					$arrCaption = array($arrLangEntry['description'], $arrLangEntry['label']);
+					$arrCaption = array($arrLangEntry['label'], $arrLangEntry['description']);
 				}
 
 				$arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()] = array
 				(
-					'label'               => $arrCaption,
+					'label'               => &$arrCaption,
 					'href'                => 'table='.$metaModel->getTableName(),
 					'icon'                => self::getBackendIcon($screen->getIcon()),
 					'attributes'          => 'onclick="Backend.getScrollOffset()"',
