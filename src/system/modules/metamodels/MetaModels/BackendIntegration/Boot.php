@@ -190,6 +190,13 @@ class Boot
 				// if no backend user authenticated, we will get redirected.
 				self::authenticateBackendUser();
 
+				if (version_compare(VERSION, '3.0', '>'))
+				{
+					$GLOBALS['TL_HOOKS']['initializeSystem'][] = array('MetaModels\Dca\MetaModelDcaBuilder', 'injectBackendMenu');
+					$GLOBALS['TL_HOOKS']['initializeSystem'][] = array('MetaModels\Dca\MetaModelDcaBuilder', 'injectIntoBackendModules');
+					return;
+				}
+
 				MetaModelDcaBuilder::getInstance()->injectBackendMenu();
 				self::registerLateConfig();
 			}
