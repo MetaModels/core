@@ -225,8 +225,8 @@ class MetaModelDcaBuilder
 		else
 		{
 			$strBackendUserClass = 'BackendUser';
-		}	
-		
+		}
+
 		if ($objUser instanceof $strBackendUserClass)
 		{
 			$strGrpCol = 'be_group';
@@ -348,7 +348,7 @@ class MetaModelDcaBuilder
 		$objMetaModel = Factory::byId($arrDCA['pid']);
 		$strModuleName = 'metamodel_' . $objMetaModel->getTableName();
 		$strTableCaption = $objMetaModel->getName();
- 		$strBackendIcon = $arrDCA['backendicon'];
+		$strBackendIcon = $arrDCA['backendicon'];
 
 		// If we have a c3 replace the id/uuid with the path.
 		if($strBackendIcon && version_compare(VERSION, '3.0', '>'))
@@ -394,7 +394,6 @@ class MetaModelDcaBuilder
 	{
 		foreach ($this->arrInformation as $intModel => $arrInfo)
 		{
-			//
 			switch ($arrInfo['dca']['rendertype'])
 			{
 				case '':
@@ -1033,7 +1032,7 @@ class MetaModelDcaBuilder
 			// If we are in create mode, disaple the paste into.
 			$disablePI = !($arrRow['varbase'] == 1 && $objClipboard->getMode() != 'create');
 		}
-		
+
 		// Return the buttons
 		$imagePasteAfter = ContaoController::getInstance()->generateImage('pasteafter.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteafter'][1], $arrRow['id']), 'class="blink"');
 		$imagePasteInto = ContaoController::getInstance()->generateImage('pasteinto.gif', sprintf($GLOBALS['TL_LANG'][$strTable]['pasteinto'][1], $arrRow['id']), 'class="blink"');
