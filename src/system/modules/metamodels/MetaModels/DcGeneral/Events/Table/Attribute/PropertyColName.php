@@ -33,6 +33,8 @@ class PropertyColName
 	 * @param EncodePropertyValueFromWidgetEvent $event The event.
 	 *
 	 * @return void
+	 *
+	 * @throws \RuntimeException When the column name is illegal or duplicate.
 	 */
 	public static function encodeValue(EncodePropertyValueFromWidgetEvent $event)
 	{
