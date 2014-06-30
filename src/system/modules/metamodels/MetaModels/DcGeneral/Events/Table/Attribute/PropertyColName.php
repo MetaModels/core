@@ -43,6 +43,17 @@ class PropertyColName
 		if ((!$columnName) || $oldColumnName !== $columnName)
 		{
 			TableManipulation::checkColumnDoesNotExist($metaModel->getTableName(), $columnName);
+
+			$colNames = array_keys($metaModel->getAttributes());
+			if (in_array($columnName, $colNames))
+			{
+				throw new \RuntimeException(
+					sprintf($GLOBALS['TL_LANG']['ERR']['columnExists'],
+						$columnName,
+						$metaModel->getTableName()
+					)
+				);
+			}
 		}
 	}
 }

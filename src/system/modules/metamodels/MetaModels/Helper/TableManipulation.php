@@ -366,7 +366,7 @@ class TableManipulation
 		self::checkColumnName($strColName, $blnAllowSystemCol);
 		if (self::getDB()->fieldExists($strColName, $strTableName, true))
 		{
-			throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['columnExists'], $strColName));
+			throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['columnExists'], $strColName, $strTableName));
 		}
 	}
 
