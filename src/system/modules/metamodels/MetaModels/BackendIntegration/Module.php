@@ -17,14 +17,15 @@
 namespace MetaModels\BackendIntegration;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\AddToUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\GetReferrerEvent;
 use ContaoCommunityAlliance\DcGeneral\Action;
 use ContaoCommunityAlliance\Translator\Contao\LangArrayTranslator;
 use ContaoCommunityAlliance\Translator\TranslatorChain;
-use ContaoCommunityAlliance\DcGeneral\Contao\BackendBindings;
 use ContaoCommunityAlliance\DcGeneral\Contao\Callback\Callbacks;
 use ContaoCommunityAlliance\DcGeneral\Event\EventPropagator;
 use ContaoCommunityAlliance\DcGeneral\Factory\DcGeneralFactory;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Implementation of the MetaModel Backend Module that performs system checks
@@ -75,6 +76,24 @@ class Module
 	}
 
 	/**
+	 * Add a suffix to the current url.
+	 *
+	 * @param string $suffix The suffix to add.
+	 *
+	 * @return string
+	 */
+	public function addToUrl($suffix)
+	{
+		/** @var EventDispatcherInterface $dispatcher */
+		$dispatcher = $GLOBALS['event-dispatcher'];
+		$event      = new AddToUrlEvent($suffix);
+
+		$dispatcher->dispatch($event);
+
+		return $event->getUrl();
+	}
+
+	/**
 	 * Ensure we have at least PHP 5.3.
 	 *
 	 * @return void
@@ -111,13 +130,13 @@ class Module
 					$this->addMessageEntry(
 						sprintf($GLOBALS['TL_LANG']['ERR']['activate_extension'], $strDisplay, $strExtension),
 						METAMODELS_ERROR,
-						BackendBindings::addToUrl('do=settings')
+						$this->addToUrl('do=settings')
 					);
 				} else {
 					$this->addMessageEntry(
 						sprintf($GLOBALS['TL_LANG']['ERR']['install_extension'], $strDisplay, $strExtension),
 						METAMODELS_ERROR,
-						BackendBindings::addToUrl('do=repository_catalog&view=' . $strDisplay)
+						$this->addToUrl('do=repository_catalog&view=' . $strDisplay)
 					);
 				}
 			}
@@ -136,7 +155,7 @@ class Module
 			$this->addMessageEntry(
 				$GLOBALS['TL_LANG']['ERR']['no_attribute_extension'],
 				METAMODELS_INFO,
-				BackendBindings::addToUrl('do=repository_catalog')
+				$this->addToUrl('do=repository_catalog')
 			);
 		}
 	}
@@ -272,4 +291,3 @@ class Module
 		$this->Template->problems = self::$arrMessages;
 	}
 }
-
