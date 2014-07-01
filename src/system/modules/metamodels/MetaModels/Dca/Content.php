@@ -108,6 +108,7 @@ class Content
 			'random'  => $GLOBALS['TL_LANG']['MSC']['random']
 		);
 		$objMetaModel      = MetaModelFactory::byId($objDc->activeRecord->metamodel);
+
 		if ($objMetaModel)
 		{
 			foreach ($objMetaModel->getAttributes() as $objAttribute)

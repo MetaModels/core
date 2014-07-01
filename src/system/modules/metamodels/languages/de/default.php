@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T12:10:19+02:00
+ * last-updated: 2013-10-29T12:13:25+01:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attribute von "%s"';
@@ -42,7 +42,7 @@ $GLOBALS['TL_LANG']['ERR']['tableExists']                                       
 $GLOBALS['TL_LANG']['ERR']['upgrade_php_version']                                     = 'Ihre PHP-Version wird nicht unterstützt. Bitte machen Sie ein Upgrade und benutzen mindestens Version %s (Sie benutzen zur Zeit %s) .';
 $GLOBALS['TL_LANG']['MSC']['details']                                                 = 'Details';
 $GLOBALS['TL_LANG']['MSC']['field_label']                                             = '%s:';
-$GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']                        = ' "%s" für den EIntrag %%s editieren.';
+$GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']                        = ' "%s" für den Eintrag %%s editieren.';
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord']                   = 'Die Filtereinstellungen %%s für Filter "%s" in MetaModel "%s" bearbeiten.';
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label']                        = 'Filter "%s" in MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup']['0'] = 'Filterwert für das Attribut "%s"';
@@ -79,3 +79,4 @@ $GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter']               
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations']                   = '(Keine passenden Kombinationen gefunden.)';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['select_all']                        = 'Alles auswählen';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']                            = 'Filter';
+
