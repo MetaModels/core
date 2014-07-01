@@ -72,7 +72,10 @@ class TableModule extends Backend
 	 */
 	public function getAttributeNames(DataContainer $objDC)
 	{
-		$arrAttributeNames = array('sorting' => $GLOBALS['TL_LANG']['MSC']['sorting']);
+		$arrAttributeNames = array(
+			'sorting' => $GLOBALS['TL_LANG']['MSC']['sorting'],
+			'random' => $GLOBALS['TL_LANG']['MSC']['random']
+		);
 		$objMetaModel = MetaModelFactory::byId($objDC->activeRecord->metamodel);
 		if ($objMetaModel)
 		{
