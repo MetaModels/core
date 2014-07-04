@@ -85,7 +85,7 @@ class Module
 	public function addToUrl($suffix)
 	{
 		/** @var EventDispatcherInterface $dispatcher */
-		$dispatcher = $GLOBALS['event-dispatcher'];
+		$dispatcher = $GLOBALS['container']['event-dispatcher'];
 		$event      = new AddToUrlEvent($suffix);
 
 		$dispatcher->dispatch($event);
