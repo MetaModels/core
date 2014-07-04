@@ -88,7 +88,7 @@ class Module
 		$dispatcher = $GLOBALS['container']['event-dispatcher'];
 		$event      = new AddToUrlEvent($suffix);
 
-		$dispatcher->dispatch($event);
+		$dispatcher->dispatch(ContaoEvents::BACKEND_ADD_TO_URL, $event);
 
 		return $event->getUrl();
 	}
