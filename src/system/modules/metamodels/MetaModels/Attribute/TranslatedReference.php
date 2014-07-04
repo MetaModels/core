@@ -292,7 +292,7 @@ abstract class TranslatedReference
 		$arrExisting = array_keys($this->getTranslatedDataFor($arrIds, $strLangCode));
 		$arrNewIds   = array_diff($arrIds, $arrExisting);
 
-		// Now update...
+		// Update existing values.
 		$strQuery = 'UPDATE ' . $this->getValueTable() . ' %s';
 		foreach ($arrExisting as $intId)
 		{
@@ -302,7 +302,7 @@ abstract class TranslatedReference
 				->execute(($arrWhere ? $arrWhere['params'] : null));
 		}
 
-		// And insert...
+		// Insert the new values.
 		$strQuery = 'INSERT INTO ' . $this->getValueTable() . ' %s';
 		foreach ($arrNewIds as $intId)
 		{
