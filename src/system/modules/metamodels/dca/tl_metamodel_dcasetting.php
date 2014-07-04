@@ -401,11 +401,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag'],
 			'exclude'                 => true,
 			'inputType'               => 'select',
-			'options'                 => array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
+			'options'                 => array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
+			'default'                 => '0',
 			'eval'                    => array
 			(
 				'tl_class'           => 'w50',
-				'includeBlankOption' => true
 			),
 			'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']
 		),

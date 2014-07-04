@@ -77,6 +77,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['attribute']      = '
 /**
  * Reference
  */
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['0']     = 'Do not override sorting';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['1']     = 'Sort by initial letter ascending';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['2']     = 'Sort by initial letter descending';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['3']     = 'Sort by initial "length" letters ascending';
