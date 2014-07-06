@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-10-29T12:13:25+01:00
+ * last-updated: 2014-06-25T12:14:01+02:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attribute von "%s"';
@@ -56,6 +56,7 @@ $GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']['0']                        
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['limit']['0']                               = 'Limitierung';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['search']['0']                              = 'Suche';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['sort']['0']                                = 'Sortierung';
+$GLOBALS['TL_LANG']['MSC']['random']                                                  = 'Zufällig';
 $GLOBALS['TL_LANG']['MSC']['sorting']                                                 = 'Sortierung';
 $GLOBALS['TL_LANG']['MSC']['template_in_theme']                                       = '%s (%s)';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clr']['0']                                    = 'clr';
