@@ -214,6 +214,44 @@ class Helper
 	}
 
 	/**
+	 * Fetch a list of matching templates of the current base within the given folder and the passed theme name.
+	 *
+	 * @param string $base      The base for the templates to be retrieved.
+	 *
+	 * @param string $folder    The folder to search in.
+	 *
+	 * @param string $themeName The name of the theme for the given folder (will get used in the returned description
+	 *                          text).
+	 *
+	 * @return array
+	 */
+	public static function getTemplatesForBaseFrom($base, $folder, $themeName)
+	{
+		// Add the templates root directory.
+		$themeTemplates = glob($folder . '/' . $base . '*');
+
+		if (!$themeTemplates)
+		{
+			return array();
+		}
+
+		$templates = array();
+
+		foreach ($themeTemplates as $template)
+		{
+			$template = basename($template, strrchr($template, '.'));
+
+			$templates[$template] = sprintf(
+				$GLOBALS['TL_LANG']['MSC']['template_in_theme'],
+				$template,
+				$themeName
+			);
+		}
+
+		return $templates;
+	}
+
+	/**
 	 * Fetch the template group for the detail view of the current MetaModel module.
 	 *
 	 * @param string $strBase The base for the templates to retrieve.
@@ -222,63 +260,44 @@ class Helper
 	 */
 	public static function getTemplatesForBase($strBase)
 	{
-		$arrTemplates = array();
-
 		// Add the templates root directory.
-		$arrThemeTemplates = glob(TL_ROOT . '/templates/' . $strBase . '*');
-		foreach ((array)$arrThemeTemplates as $strTemplate)
-		{
-			$strTemplate = basename($strTemplate, strrchr($strTemplate, '.'));
-
-			$arrTemplates[$strTemplate] = sprintf(
-				$GLOBALS['TL_LANG']['MSC']['template_in_theme'],
-				$strTemplate,
-				$GLOBALS['TL_LANG']['MSC']['no_theme']
-			);
-		}
+		$arrTemplates = self::getTemplatesForBaseFrom(
+			$strBase,
+			TL_ROOT . '/templates',
+			$GLOBALS['TL_LANG']['MSC']['no_theme']
+		);
 
 		$objThemes = \Database::getInstance()
 			->prepare('SELECT id,name,templates FROM tl_theme')
 			->execute();
 
+		// Add all the theme templates folders.
 		while ($objThemes->next())
 		{
 			if ($objThemes->templates != '')
 			{
-				$arrThemeTemplates = glob(TL_ROOT . '/' . $objThemes->templates . '/' . $strBase . '*');
-				foreach ($arrThemeTemplates as $strTemplate)
-				{
-					if (!array_key_exists($strTemplate, $arrTemplates))
-					{
-						$strTemplate = basename($strTemplate, strrchr($strTemplate, '.'));
-
-						$arrTemplates[$strTemplate] = sprintf(
-							$GLOBALS['TL_LANG']['MSC']['template_in_theme'],
-							$strTemplate,
-							$objThemes->name
-						);
-					}
-				}
+				$arrTemplates = array_merge(
+					$arrTemplates,
+					self::getTemplatesForBaseFrom(
+						$strBase,
+						TL_ROOT . '/' . $objThemes->templates,
+						$objThemes->name
+					)
+				);
 			}
 		}
 
 		// Add the module templates folders if they exist.
 		foreach (\Config::getInstance()->getActiveModules() as $strModule)
 		{
-			$arrThemeTemplates = glob(TL_ROOT . '/system/modules/' . $strModule . '/templates/' . $strBase . '*');
-			foreach ((array)$arrThemeTemplates as $strTemplate)
-			{
-				if (!array_key_exists($strTemplate, $arrTemplates))
-				{
-					$strTemplate = basename($strTemplate, strrchr($strTemplate, '.'));
-
-					$arrTemplates[$strTemplate] = sprintf(
-						$GLOBALS['TL_LANG']['MSC']['template_in_theme'],
-						$strTemplate,
-						$GLOBALS['TL_LANG']['MSC']['no_theme']
-					);
-				}
-			}
+			$arrTemplates = array_merge(
+				$arrTemplates,
+				self::getTemplatesForBaseFrom(
+					$strBase,
+					TL_ROOT . '/system/modules/' . $strModule . '/templates',
+					$GLOBALS['TL_LANG']['MSC']['no_theme']
+				)
+			);
 		}
 
 		ksort($arrTemplates);
