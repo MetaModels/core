@@ -17,6 +17,8 @@
 namespace MetaModels\Events;
 
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionChainInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\BooleanCondition;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\NotCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyVisibleCondition;
@@ -44,6 +46,9 @@ class DefaultPropertyConditionCreator
 	 * @param CreatePropertyConditionEvent $event The event.
 	 *
 	 * @return void
+	 *
+	 * @throws \RuntimeException When no MetaModel is attached to the event or any other important information could
+	 *                           not be retrieved.
 	 */
 	public function handle(CreatePropertyConditionEvent $event)
 	{
@@ -95,6 +100,10 @@ class DefaultPropertyConditionCreator
 				$event->setInstance(new PropertyVisibleCondition(
 					$attribute->getColName())
 				);
+				break;
+
+			case 'conditionnot':
+				$event->setInstance(new NotCondition(new BooleanCondition(false)));
 				break;
 			default:
 		}

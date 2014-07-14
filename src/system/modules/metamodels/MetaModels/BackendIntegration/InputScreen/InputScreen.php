@@ -3,6 +3,7 @@
 namespace MetaModels\BackendIntegration\InputScreen;
 
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionChainInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\NotCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
 use MetaModels\Events\CreatePropertyConditionEvent;
@@ -267,8 +268,16 @@ class InputScreen implements IInputScreen
 				$condition = $instances[$id];
 				$parent    = ($pid == 0) ? $result : $instances[$pid];
 
-				/** @var ConditionChainInterface $parent */
-				$parent->addCondition($condition);
+				// TODO: this is better to be done with a new event to sort conditions into their parents as we might
+				// have other classes in the future.
+				if ($parent instanceof ConditionChainInterface)
+				{
+					$parent->addCondition($condition);
+				}
+				elseif ($parent instanceof NotCondition)
+				{
+					$parent->setCondition($condition);
+				}
 			}
 		}
 	}

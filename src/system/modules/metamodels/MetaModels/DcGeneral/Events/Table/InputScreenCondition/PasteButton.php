@@ -58,9 +58,10 @@ class PasteButton
 			return;
 		}
 
-		if (isset($flags['maxChildren']))
+		if (isset($flags['maxChildren'])
+			&& count($event->getEnvironment()->getController()->assembleAllChildrenFrom($model)) > $flags['maxChildren']
+		)
 		{
-			// TODO: check how many children are present and disable the button accordingly.
 			$event->setPasteIntoDisabled(true);
 		}
 	}
