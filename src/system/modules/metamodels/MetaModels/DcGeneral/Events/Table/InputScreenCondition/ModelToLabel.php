@@ -21,7 +21,6 @@ use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
-use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use MetaModels\Factory;
 
@@ -55,7 +54,7 @@ class ModelToLabel
 	 *
 	 * @param EnvironmentInterface $environment The environment in use.
 	 *
-	 * @param  string              $type        The type of the element.
+	 * @param string               $type        The type of the element.
 	 *
 	 * @return mixed|string
 	 */
@@ -85,10 +84,8 @@ class ModelToLabel
 		$environment    = $event->getEnvironment();
 		$translator     = $environment->getTranslator();
 		$model          = $event->getModel();
-
 		$metaModels     = self::getMetaModel($environment);
 		$attribute      = $metaModels->getAttributeById($model->getProperty('attr_id'));
-
 		$type           = $model->getProperty('type');
 		$parameterValue = $model->getProperty('value');
 		$name           = $translator->translate('conditionnames.' . $type, 'tl_metamodel_dcasetting_condition');
@@ -110,7 +107,7 @@ class ModelToLabel
 			->setArgs(array(
 					$imageEvent->getHtml(),
 					$name,
-					$attribute->getName(),
+					$attribute ? $attribute->getName() : '',
 					$parameterValue
 				));
 	}

@@ -50,4 +50,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['cond
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['typedesc']['_default_'] = '%s <strong>%s</strong><br /> for attribute <em>%s</em> (Parameter: %s)';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['typedesc']['_default_']    = '%s <strong>%s</strong><br /> for attribute <em>%s</em> (Parameter: %s)';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['typedesc']['conditionnot'] = '%s <strong>%s</strong><br /> invert the result of the contained conditions.';
