@@ -25,15 +25,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 		'dataContainer'               => 'General',
 		'switchToEdit'                => true,
 		'enableVersioning'            => false,
-		// TODO: change callbacks to event handlers.
-		'onmodel_update'              => array
-		(
-			array('MetaModels\Dca\DcaSetting', 'onModelUpdatedCallback')
-		),
-		'onmodel_beforeupdate'        => array
-		(
-			array('MetaModels\Dca\DcaSetting', 'onModelUpdatedCallback')
-		),
 	),
 
 	'dca_config'                      => array
