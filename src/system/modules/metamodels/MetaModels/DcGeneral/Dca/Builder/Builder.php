@@ -1509,7 +1509,7 @@ class Builder
 		$inputScreen = $this->getInputScreenDetails($container);
 
 		// If the current metamodels has variants add the varbase and vargroup to the definition.
-		if($metaModel->hasVariants())
+		if ($metaModel->hasVariants())
 		{
 			$this->buildPropertyFromDca($container, $definition, 'varbase', $inputScreen);
 			$this->buildPropertyFromDca($container, $definition, 'vargroup', $inputScreen);
@@ -1519,7 +1519,7 @@ class Builder
 		{
 			$this->buildPropertyFromDca($container, $definition, $attribute->getColName(), $inputScreen);
 
-			$event = new BuildAttributeEvent($metaModel, $attribute, $container);
+			$event = new BuildAttributeEvent($metaModel, $attribute, $container, $inputScreen);
 			// Trigger BuildAttribute Event.
 			$this->dispatcher->dispatch($event::NAME, $event);
 		}
