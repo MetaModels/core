@@ -79,7 +79,7 @@ class PropertyLegendTitle
 			$event->getEnvironment()->getTranslator()->translate('name_langcode', 'tl_metamodel_dcasetting'),
 			$event->getEnvironment()->getTranslator()->translate('name_value', 'tl_metamodel_dcasetting'),
 			false,
-			$event->getModel()->getProperty('legendtitle')
+			deserialize($event->getModel()->getProperty('legendtitle'))
 		);
 	}
 }
