@@ -17,7 +17,10 @@
 
 namespace MetaModels\Helper;
 
-use MetaModels\Helper\ContaoController as MetaModelController;
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\GetThemeEvent;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This class provides various methods for handling file collection within Contao.
@@ -484,12 +487,16 @@ class ToolboxFile
 			return;
 		}
 
-		$objController = MetaModelController::getInstance();
-		$strThemeDir   = $objController->getTheme();
-		$resizeInfo    = $this->getResizeImages();
-		$intWidth      = $resizeInfo[0] ? $resizeInfo[0] : '';
-		$intHeight     = $resizeInfo[1] ? $resizeInfo[1] : '';
-		$strMode       = $resizeInfo[2] ? $resizeInfo[2] : '';
+		/** @var EventDispatcherInterface $dispatcher */
+		$dispatcher = $GLOBALS['container']['event-dispatcher'];
+		$event      = new GetThemeEvent();
+		$dispatcher->dispatch(ContaoEvents::BACKEND_GET_THEME, $event);
+
+		$strThemeDir = $event->getTheme();
+		$resizeInfo  = $this->getResizeImages();
+		$intWidth    = $resizeInfo[0] ? $resizeInfo[0] : '';
+		$intHeight   = $resizeInfo[1] ? $resizeInfo[1] : '';
+		$strMode     = $resizeInfo[2] ? $resizeInfo[2] : '';
 
 		foreach ($this->foundFiles as $strFile)
 		{
@@ -523,7 +530,7 @@ class ToolboxFile
 				'metafile' => $arrMeta,
 				'icon'     => $strIcon,
 				'size'     => $objFile->filesize,
-				'sizetext' => sprintf('(%s)', $objController->getReadableSize($objFile->filesize, 2)),
+				'sizetext' => sprintf('(%s)', \MetaModels\Helper\ContaoController::getInstance()->getReadableSize($objFile->filesize, 2)),
 				'url'      => specialchars($this->getDownloadLink($strFile))
 			);
 
@@ -532,8 +539,12 @@ class ToolboxFile
 			{
 				if ($this->getShowImages() && ($intWidth || $intHeight || $strMode))
 				{
-					$strSrc = $objController->getImage($objController->urlEncode($strFile), $intWidth, $intHeight, $strMode);
-				} else {
+					$event = new ResizeImageEvent($strFile, $intWidth, $intHeight, $strMode);
+					$dispatcher->dispatch(ContaoEvents::BACKEND_GET_THEME, $event);
+					$strSrc = $event->getResultImage();
+				}
+				else
+				{
 					$strSrc = $strFile;
 				}
 				$arrSource['src'] = $strSrc;
@@ -548,7 +559,6 @@ class ToolboxFile
 			$this->modifiedTime[] = $objFile->mtime;
 			$this->outputBuffer[] = $arrSource;
 		}
-
 	}
 
 	/**
@@ -799,7 +809,7 @@ class ToolboxFile
 			&& ($strFile = \Input::getInstance()->get('file')) && in_array($strFile, $this->foundFiles)
 		)
 		{
-			MetaModelController::getInstance()->sendFileToBrowser($strFile);
+			\MetaModels\Helper\ContaoController::getInstance()->sendFileToBrowser($strFile);
 		}
 
 		// Step 2.: Fetch all meta data for the found files.
