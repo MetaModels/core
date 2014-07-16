@@ -22,7 +22,6 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\ModelRelationshi
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CommandInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CopyCommand;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CutCommand;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\DefaultPanelLayout;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultFilterElementInformation;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultLimitElementInformation;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultSearchElementInformation;
@@ -37,10 +36,6 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootCondi
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
 use ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent;
-use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
-use ContaoCommunityAlliance\DcGeneral\Event\PreDuplicateModelEvent;
-use ContaoCommunityAlliance\DcGeneral\Panel\DefaultPanel;
-use ContaoCommunityAlliance\DcGeneral\Panel\DefaultPanelContainer;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
 use ContaoCommunityAlliance\Translator\TranslatorChain;
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinition;
@@ -75,7 +70,6 @@ use MetaModels\DcGeneral\DataDefinition\Definition\MetaModelDefinition;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\IsVariantAttribute;
 use MetaModels\DcGeneral\Events\MetaModel\RenderItem;
-use MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPanelLayout;
 use MetaModels\Events\BuildAttributeEvent;
 use MetaModels\Events\PopulateAttributeEvent;
 use MetaModels\Factory;
@@ -211,7 +205,7 @@ class Builder
 		);
 
 		// Add some sepcial actions for variants.
-		if($metaModel->hasVariants())
+		if ($metaModel->hasVariants())
 		{
 			$this->dispatcher->addListener(
 				sprintf(
@@ -311,7 +305,7 @@ class Builder
 	/**
 	 * Parse the panels, if we have some one.
 	 *
-	 * @param IMetaModelDataDefinition $container
+	 * @param IMetaModelDataDefinition $container The panel container.
 	 *
 	 * @return void
 	 */
@@ -342,8 +336,8 @@ class Builder
 		$arrRows = trimsplit(';', $panelLayout);
 
 		// Create a new panel container.
-		$panel = $view->getPanelLayout();
-		$panelRows   = $panel->getRows();
+		$panel     = $view->getPanelLayout();
+		$panelRows = $panel->getRows();
 
 		foreach ($arrRows as $rowNo => $rowElements)
 		{
@@ -398,9 +392,9 @@ class Builder
 	}
 
 	/**
-	 * Parse a single row with all elements
+	 * Parse a single row with all elements.
 	 *
-	 * @param  array            $fields      A list of fields for adding to the row.
+	 * @param array             $fields      A list of fields for adding to the row.
 	 *
 	 * @param PanelRowInterface $panelRow    The row container itself.
 	 *
@@ -446,7 +440,7 @@ class Builder
 	 *
 	 * @param PanelRowInterface $row         The row to which the element shall get added to.
 	 *
-	 * @param IInputScreen      $inputScreen The Input screen with some information
+	 * @param IInputScreen      $inputScreen The Input screen with some information.
 	 *
 	 * @return void
 	 */
@@ -471,7 +465,7 @@ class Builder
 	 *
 	 * @param PanelRowInterface $row         The row to which the element shall get added to.
 	 *
-	 * @param IInputScreen      $inputScreen The Input screen with some information
+	 * @param IInputScreen      $inputScreen The Input screen with some information.
 	 *
 	 * @return void
 	 */
@@ -501,7 +495,7 @@ class Builder
 	 *
 	 * @param PanelRowInterface $row         The row to which the element shall get added to.
 	 *
-	 * @param IInputScreen      $inputScreen The Input screen with some information
+	 * @param IInputScreen      $inputScreen The Input screen with some information.
 	 *
 	 * @return void
 	 */
@@ -535,7 +529,7 @@ class Builder
 	 *
 	 * @param PanelRowInterface $row         The row to which the element shall get added to.
 	 *
-	 * @param IInputScreen      $inputScreen The Input screen with some information
+	 * @param IInputScreen      $inputScreen The Input screen with some information.
 	 *
 	 * @return void
 	 */
@@ -552,7 +546,7 @@ class Builder
 	 *
 	 * @param PanelRowInterface $row         The row to which the element shall get added to.
 	 *
-	 * @param IInputScreen      $inputScreen The Input screen with some information
+	 * @param IInputScreen      $inputScreen The Input screen with some information.
 	 *
 	 * @return void
 	 */
@@ -1328,15 +1322,15 @@ class Builder
 		}
 
 		// Check if we have some children.
-		foreach(ViewCombinations::getParentedInputScreens() as $screen)
+		foreach (ViewCombinations::getParentedInputScreens() as $screen)
 		{
 			/** @var \MetaModels\BackendIntegration\InputScreen\IInputScreen $screen */
-			if($screen->getParentTable() != $container->getName())
+			if ($screen->getParentTable() != $container->getName())
 			{
 				continue;
 			}
 
-			$metaModel = $screen->getMetaModel();
+			$metaModel  = $screen->getMetaModel();
 			$arrCaption = array(
 				'',
 				sprintf(

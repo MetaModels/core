@@ -75,21 +75,21 @@ class SubDcaWidget extends \Widget
 	/**
 	 * Initialize the object.
 	 *
-	 * @param array|bool $arrAttributes The attributes to apply to this widget (optional).
+	 * @param array|bool $attributes The attributes to apply to this widget (optional).
 	 */
-	public function __construct($arrAttributes = false)
+	public function __construct($attributes = false)
 	{
 		parent::__construct();
-		$this->addAttributes($arrAttributes);
+		$this->addAttributes($attributes);
 		// Input field callback.
-		if (is_array($arrAttributes['getsubfields_callback']))
+		if (is_array($attributes['getsubfields_callback']))
 		{
-			$arrCallback = $this->$arrAttributes['getsubfields_callback'];
+			$arrCallback = $this->$attributes['getsubfields_callback'];
 			if (!is_object($arrCallback[0]))
 			{
 				$this->import($arrCallback[0]);
 			}
-			$this->arrSubFields = $this->{$arrCallback[0]}->{$arrCallback[1]}($this, $arrAttributes);
+			$this->arrSubFields = $this->{$arrCallback[0]}->{$arrCallback[1]}($this, $attributes);
 		}
 	}
 
