@@ -20,6 +20,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractContainerAwareEvent;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
+use MetaModels\DcGeneral\Dca\Builder\Builder;
 use MetaModels\IMetaModel;
 
 /**
@@ -55,6 +56,13 @@ class BuildAttributeEvent
 	protected $inputScreen;
 
 	/**
+	 * The data definition builder.
+	 *
+	 * @var Builder
+	 */
+	protected $builder;
+
+	/**
 	 * Create a new container aware event.
 	 *
 	 * @param IMetaModel         $metaModel     The MetaModel.
@@ -64,12 +72,15 @@ class BuildAttributeEvent
 	 * @param ContainerInterface $dataContainer The data container information.
 	 *
 	 * @param IInputScreen       $inputScreen   The input screen in use.
+	 *
+	 * @param Builder            $builder       The data definition builder calling.
 	 */
 	public function __construct(
 		IMetaModel $metaModel,
 		IAttribute $attribute,
 		ContainerInterface $dataContainer,
-		IInputScreen $inputScreen
+		IInputScreen $inputScreen,
+		Builder $builder
 	)
 	{
 		parent::__construct($dataContainer);
@@ -77,6 +88,7 @@ class BuildAttributeEvent
 		$this->metaModel   = $metaModel;
 		$this->attribute   = $attribute;
 		$this->inputScreen = $inputScreen;
+		$this->builder     = $builder;
 	}
 
 	/**
@@ -107,5 +119,15 @@ class BuildAttributeEvent
 	public function getInputScreen()
 	{
 		return $this->inputScreen;
+	}
+
+	/**
+	 * Retrieve the builder instance.
+	 *
+	 * @return Builder
+	 */
+	public function getBuilder()
+	{
+		return $this->builder;
 	}
 }

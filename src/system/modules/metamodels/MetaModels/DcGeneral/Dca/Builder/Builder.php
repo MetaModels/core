@@ -1513,7 +1513,7 @@ class Builder
 		{
 			$this->buildPropertyFromDca($container, $definition, $attribute->getColName(), $inputScreen);
 
-			$event = new BuildAttributeEvent($metaModel, $attribute, $container, $inputScreen);
+			$event = new BuildAttributeEvent($metaModel, $attribute, $container, $inputScreen, $this);
 			// Trigger BuildAttribute Event.
 			$this->dispatcher->dispatch($event::NAME, $event);
 		}
