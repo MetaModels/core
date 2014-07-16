@@ -87,8 +87,11 @@ class PasteButton
 		else
 		{
 			$disablePA = false;
-			// If we are in create mode, disable the paste into.
-			$disablePI = !($containedModel->getProperty('varbase') == 1 && $clipboard->getMode() != 'create' && $containedModel->getId() != $model->getId());
+			// The following rules apply:
+			// 1. Variant bases must not get pasted into anything.
+			// 2. If we are not in create mode, disable the paste into for the item itself.
+			$disablePI = ($containedModel->getProperty('varbase') == 1)
+				|| ($clipboard->getMode() != 'create' && $containedModel->getId() == $model->getId());
 		}
 
 		$event
