@@ -193,7 +193,8 @@ class Items implements IItems
 		// We must advance over the last element.
 		$this->intCursor += 1;
 
-		return $this;
+		// Check the index again, see #461.
+		return ($this->getCount() == $this->intCursor) ? false : $this;
 	}
 
 	/**
