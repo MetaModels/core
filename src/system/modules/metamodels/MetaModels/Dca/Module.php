@@ -20,7 +20,6 @@ use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use ContaoCommunityAlliance\UrlBuilder\Contao\BackendUrlBuilder;
-use Database\Result;
 use MetaModels\Factory as MetaModelFactory;
 use MetaModels\Filter\Setting\Factory as FilterFactory;
 
@@ -119,20 +118,20 @@ class Module
 	/**
 	 * Get attributes for checkbox wizard.
 	 *
-	 * @param Result $objRow The current row.
+	 * @param \DC_Table $objDc The current row.
 	 *
 	 * @return array
 	 */
-	public function getFilterParameterNames(Result $objRow)
+	public function getFilterParameterNames(\DC_Table $objDc)
 	{
 		$return = array();
 
-		if (!$objRow->activeRecord->metamodel_filtering)
+		if (!$objDc->activeRecord->metamodel_filtering)
 		{
 			return $return;
 		}
 
-		$objFilterSetting = FilterFactory::byId($objRow->activeRecord->metamodel_filtering);
+		$objFilterSetting = FilterFactory::byId($objDc->activeRecord->metamodel_filtering);
 		$arrParameterDca  = $objFilterSetting->getParameterFilterNames();
 
 		return $arrParameterDca;
