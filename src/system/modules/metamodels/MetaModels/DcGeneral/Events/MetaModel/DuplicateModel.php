@@ -14,10 +14,9 @@ namespace MetaModels\DcGeneral\Events\MetaModel;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\BaseView;
 use ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent;
-use MetaModels\Factory;
 
 /**
- * This class handels the paste into or after handling for variants.
+ * This class handles the paste into or after handling for variants.
  *
  * @package MetaModels\DcGeneral\Events\MetaModel
  */
@@ -27,14 +26,13 @@ class DuplicateModel
 	/**
 	 * Handle the paste into and after event.
 	 *
-	 * @param \ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent $event The event.
+	 * @param PostDuplicateModelEvent $event The event.
 	 *
 	 * @return void
 	 */
 	public static function handle(PostDuplicateModelEvent $event)
 	{
-		$model       = $event->getModel();
-		$sourceModel = $event->getSourceModel();
+		$model = $event->getModel();
 
 		// Set the vargroup to null for auto creating.
 		$model->setProperty('vargroup', null);

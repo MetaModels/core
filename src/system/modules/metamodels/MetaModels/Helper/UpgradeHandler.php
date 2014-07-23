@@ -29,7 +29,6 @@ class UpgradeHandler
 	 */
 	protected static function DB()
 	{
-		// TODO: do we need to ensure the existance of the Contao object stack before somehow?
 		return \Database::getInstance();
 	}
 
@@ -109,18 +108,18 @@ class UpgradeHandler
 		{
 			$objDB->execute(
 				'CREATE TABLE `tl_metamodel_dcasetting_condition` (
-				  `id` int(10) unsigned NOT NULL auto_increment,
-				  `pid` int(10) unsigned NOT NULL default \'0\',
-				  `settingId` int(10) unsigned NOT NULL default \'0\',
-				  `sorting` int(10) unsigned NOT NULL default \'0\',
-				  `tstamp` int(10) unsigned NOT NULL default \'0\',
-				  `enabled` char(1) NOT NULL default \'\',
-				  `type` varchar(255) NOT NULL default \'\',
-				  `attr_id` int(10) unsigned NOT NULL default \'0\',
-				  `comment` varchar(255) NOT NULL default \'\',
-				  `value` blob NULL,
-				  PRIMARY KEY  (`id`)
-				) ENGINE=MyISAM DEFAULT CHARSET=utf8;'
+				`id` int(10) unsigned NOT NULL auto_increment,
+				`pid` int(10) unsigned NOT NULL default \'0\',
+				`settingId` int(10) unsigned NOT NULL default \'0\',
+				`sorting` int(10) unsigned NOT NULL default \'0\',
+				`tstamp` int(10) unsigned NOT NULL default \'0\',
+				`enabled` char(1) NOT NULL default \'\',
+				`type` varchar(255) NOT NULL default \'\',
+				`attr_id` int(10) unsigned NOT NULL default \'0\',
+				`comment` varchar(255) NOT NULL default \'\',
+				`value` blob NULL,
+				PRIMARY KEY  (`id`)
+				)ENGINE=MyISAM DEFAULT CHARSET=utf8;'
 			);
 		}
 

@@ -173,7 +173,9 @@ abstract class Base implements IAttribute
 		$objTemplate->settings         = $objSettings;
 		$objTemplate->row              = $arrRowData;
 		$objTemplate->raw              = $arrRowData[$this->getColName()];
-		$objTemplate->additional_class = $objSettings->get('additional_class') ? ' ' . $objSettings->get('additional_class') : '';
+		$objTemplate->additional_class = $objSettings->get('additional_class')
+			? ' ' . $objSettings->get('additional_class')
+			: '';
 	}
 
 	/**

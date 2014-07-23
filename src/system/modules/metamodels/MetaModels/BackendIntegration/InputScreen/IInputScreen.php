@@ -4,6 +4,9 @@ namespace MetaModels\BackendIntegration\InputScreen;
 
 use MetaModels\IMetaModel;
 
+/**
+ * This interface describes the abstraction of an input screen.
+ */
 interface IInputScreen
 {
 	/**
@@ -63,6 +66,8 @@ interface IInputScreen
 	 * Retrieve the conditions for the given property name.
 	 *
 	 * @param string $name The name of the property.
+	 *
+	 * @return array
 	 */
 	public function getConditionsFor($name);
 

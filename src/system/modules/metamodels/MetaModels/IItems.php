@@ -24,6 +24,9 @@ use MetaModels\Render\Setting\ICollection;
  * @package    MetaModels
  * @subpackage Interface
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ *
+ * @method IItems|boolean next() Advance the internal cursor by one returns the current instance or false when last
+ *                               item has had been reached.
  */
 interface IItems extends \Iterator, \ArrayAccess
 {
@@ -47,13 +50,6 @@ interface IItems extends \Iterator, \ArrayAccess
 	 * @return bool true if there are items contained, false otherwise.
 	 */
 	public function first();
-
-	/**
-	 * Advance the internal cursor by one.
-	 *
-	 * @return IItems|boolean the current instance or false when last item has had been reached.
-	 */
-//	public function next();
 
 	/**
 	 * Go to the previous row of the current result.

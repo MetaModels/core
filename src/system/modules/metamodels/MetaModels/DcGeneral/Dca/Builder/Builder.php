@@ -1345,16 +1345,6 @@ class Builder
 				{
 					$arrCaption = array($arrLangEntry['description'], $arrLangEntry['label']);
 				}
-
-//				// Is the destination table a metamodel with variants?
-//				if ($metaModel->hasVariants())
-//				{
-//					$arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['idparam'] = 'id_' . $strTable;
-//				}
-//				else
-//				{
-//					$arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['idparam'] = 'pid';
-//				}
 			}
 
 			$this->createCommand(

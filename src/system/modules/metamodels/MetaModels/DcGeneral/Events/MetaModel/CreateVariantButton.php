@@ -19,17 +19,24 @@ use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\ActionEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PostCreateModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PreCreateModelEvent;
+use MetaModels\DcGeneral\Data\Model;
 
+/**
+ * Event handler class to manage the "create variant" button.
+ */
 class CreateVariantButton
 	extends BaseView
 {
 	/**
 	 * Check if we have to add the "Create variant" button.
 	 *
-	 * @param GetOperationButtonEvent $event
+	 * @param GetOperationButtonEvent $event The event.
+	 *
+	 * @return void
 	 */
 	public static function createButton(GetOperationButtonEvent $event)
 	{
+		/** @var Model $model */
 		$model     = $event->getModel();
 		$metamodel = $model->getItem()->getMetaModel();
 
