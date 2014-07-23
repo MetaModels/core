@@ -557,6 +557,10 @@ class Subscriber
 			array(
 				GetPropertyOptionsEvent::NAME
 				=> 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PropertyValue::getOptions',
+				DecodePropertyValueForWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PropertyValue::decodeValue',
+				EncodePropertyValueFromWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PropertyValue::encodeValue',
 			),
 			$dispatcher,
 			array('tl_metamodel_dcasetting_condition', 'value')

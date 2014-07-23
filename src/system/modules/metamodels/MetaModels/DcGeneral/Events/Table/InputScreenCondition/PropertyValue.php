@@ -16,6 +16,8 @@
 
 namespace MetaModels\DcGeneral\Events\Table\InputScreenCondition;
 
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
@@ -47,6 +49,8 @@ class PropertyValue
 	/**
 	 * Provide options for the values contained within a certain attribute.
 	 *
+	 * The values get prefixed with 'value_' to ensure numeric values are kept intact.
+	 *
 	 * @param GetPropertyOptionsEvent $event The event.
 	 *
 	 * @return void
@@ -59,7 +63,39 @@ class PropertyValue
 
 		if ($attribute)
 		{
-			$event->setOptions($attribute->getFilterOptions(null, false));
+			$options = $attribute->getFilterOptions(null, false);
+			$mangled = array();
+			foreach ($options as $key => $option)
+			{
+				$mangled['value_' . $key] = $option;
+			}
+
+			$event->setOptions($mangled);
 		}
+	}
+
+
+	/**
+	 * Translates an value to a generated alias to allow numeric values.
+	 *
+	 * @param DecodePropertyValueForWidgetEvent $event The event.
+	 *
+	 * @return void
+	 */
+	public static function decodeValue(DecodePropertyValueForWidgetEvent $event)
+	{
+		$event->setValue('value_' . $event->getValue());
+	}
+
+	/**
+	 * Translates an generated alias to the corresponding value.
+	 *
+	 * @param EncodePropertyValueFromWidgetEvent $event The event.
+	 *
+	 * @return void
+	 */
+	public static function encodeValue(EncodePropertyValueFromWidgetEvent $event)
+	{
+		$event->setValue(str_replace('value_', '', $event->getValue()));
 	}
 }
