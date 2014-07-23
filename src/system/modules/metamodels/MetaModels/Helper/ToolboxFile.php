@@ -540,7 +540,7 @@ class ToolboxFile
 				if ($this->getShowImages() && ($intWidth || $intHeight || $strMode))
 				{
 					$event = new ResizeImageEvent($strFile, $intWidth, $intHeight, $strMode);
-					$dispatcher->dispatch(ContaoEvents::BACKEND_GET_THEME, $event);
+					$dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
 					$strSrc = $event->getResultImage();
 				}
 				else
