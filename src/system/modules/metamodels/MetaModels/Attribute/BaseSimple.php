@@ -104,7 +104,6 @@ class BaseSimple extends Base implements ISimple
 	 */
 	public function getFilterOptions($arrIds, $usedOnly, &$arrCount = null)
 	{
-		// TODO: implement $arrIds and $usedOnly handling here.
 		$strCol = $this->getColName();
 		if ($arrIds)
 		{
@@ -116,13 +115,21 @@ class BaseSimple extends Base implements ISimple
 				' WHERE id IN (' . $strIdList . ')
 				GROUP BY ' . $strCol . '
 				ORDER BY FIELD(id,' . $strIdList . ')');
-		} else {
+		}
+		elseif ($usedOnly)
+		{
 			$objRow = \Database::getInstance()->execute('
 				SELECT ' . $strCol . ', COUNT(' . $strCol . ') as mm_count
 				FROM ' . $this->getMetaModel()->getTableName() . '
 				GROUP BY ' . $strCol
 			);
 		}
+		else
+		{
+			// We can not do anything here, must be handled by the derived attribute class.
+			return array();
+		}
+
 		$arrResult = array();
 		while ($objRow->next())
 		{
