@@ -41,7 +41,7 @@ class InputScreen implements IInputScreen
 	/**
 	 * The conditions.
 	 *
-	 * @var array
+	 * @var ConditionChainInterface[]
 	 */
 	protected $conditions = array();
 

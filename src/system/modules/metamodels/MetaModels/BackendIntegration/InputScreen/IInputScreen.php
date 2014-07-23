@@ -2,6 +2,7 @@
 
 namespace MetaModels\BackendIntegration\InputScreen;
 
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionChainInterface;
 use MetaModels\IMetaModel;
 
 /**
@@ -67,7 +68,7 @@ interface IInputScreen
 	 *
 	 * @param string $name The name of the property.
 	 *
-	 * @return array
+	 * @return ConditionChainInterface
 	 */
 	public function getConditionsFor($name);
 
