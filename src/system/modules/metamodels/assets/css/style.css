@@ -131,3 +131,9 @@
   .w50x {
     height:auto;
   }
+
+  .widget.translat-attr label {
+    padding-left: 20px;
+    display: inline-block;
+    background: no-repeat left center;
+  }

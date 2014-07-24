@@ -1383,8 +1383,11 @@ class Builder
 		IInputScreen $inputScreen
 	)
 	{
-		$property = $inputScreen->getProperty($propName);
-		$propInfo = $property['info'];
+		$property     = $inputScreen->getProperty($propName);
+		$propInfo     = $property['info'];
+		$metaModel    = $this->getMetaModel($container);
+		$isTranslated = $metaModel->isTranslated()
+			&& in_array('MetaModels\Attribute\ITranslated', class_implements($metaModel->getAttribute($propName)));
 
 		if ($definition->hasProperty($propName))
 		{
@@ -1466,7 +1469,12 @@ class Builder
 
 		if (!$property->getExtra() && isset($propInfo['eval']))
 		{
-			$property->setExtra($propInfo['eval']);
+			$extra = $propInfo['eval'];
+			if ($isTranslated)
+			{
+				$extra['tl_class'] = 'translat-attr' . ($extra['tl_class'] ? ' ' . $extra['tl_class'] : '');
+			}
+			$property->setExtra($extra);
 		}
 	}
 
