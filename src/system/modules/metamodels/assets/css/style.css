@@ -135,5 +135,5 @@
   .widget.translat-attr label {
     padding-left: 20px;
     display: inline-block;
-    background: no-repeat left center;
-  }
+   background:url(../images/icons/locale.png) no-repeat left center;
+}

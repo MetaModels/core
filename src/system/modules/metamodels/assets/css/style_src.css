@@ -131,3 +131,9 @@ textarea[readonly]:focus {
 .w50x {
     height:auto;
 }
+
+.widget.translat-attr label {
+    padding-left: 20px;
+    display: inline-block;
+   background:url(../images/icons/locale.png) no-repeat left center;
+}
