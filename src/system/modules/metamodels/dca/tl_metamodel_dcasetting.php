@@ -244,8 +244,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			(
 				'title' => array
 				(
+					'legendhide',
 					'legendtitle',
-					'legendhide'
 				)
 			)
 		),
@@ -329,13 +329,17 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
 			'inputType'             => 'checkbox',
 			'eval'                  => array
 			(
-				'tl_class'          => 'clr m12'
+				'tl_class'          => 'w50 m12 cbx'
 			)
 		),
 		'legendtitle' => array
 		(
 			'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle'],
 			'exclude'               => true,
+			'eval'                  => array
+			(
+				'tl_class'          => 'clr'
+			)
 		),
 		'mandatory' => array
 		(
