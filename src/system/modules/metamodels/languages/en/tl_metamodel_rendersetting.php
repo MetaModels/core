@@ -19,6 +19,7 @@
  */
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id']         = array('Attribute', 'Attribute this setting relates to.');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template']        = array('Custom template to use for generating', 'Select the template that shall be used for the selected attribute. Valid template files start with "mm_&lt;type&gt;" where the type name is put for &lt;type&gt;');
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['additional_class'] = array('Custom CSS class', 'Enter any CSS classes that you want get added to the output of this attribute');
 
 /**
  * Legends
