@@ -74,7 +74,7 @@ class ToolboxFile
 	 *
 	 * @var array
 	 */
-	protected $foundFiles;
+	protected $foundFiles = array();
 
 	/**
 	 * The folders to process in this instance.
