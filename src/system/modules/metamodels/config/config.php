@@ -156,8 +156,11 @@ $GLOBALS['METAMODELS']['metainformation']['allowedTitle'][]       = 'text';
 $GLOBALS['METAMODELS']['metainformation']['allowedTitle'][]       = 'select';
 $GLOBALS['METAMODELS']['metainformation']['allowedTitle'][]       = 'translatedtext';
 $GLOBALS['METAMODELS']['metainformation']['allowedTitle'][]       = 'translatedselect';
+$GLOBALS['METAMODELS']['metainformation']['allowedTitle'][]       = 'combinedvalues';
 $GLOBALS['METAMODELS']['metainformation']['allowedDescription'][] = 'longtext';
 $GLOBALS['METAMODELS']['metainformation']['allowedDescription'][] = 'translatedlongtext';
+$GLOBALS['METAMODELS']['metainformation']['allowedDescription'][] = 'combinedvalues';
+
 
 array_insert($GLOBALS['BE_FFL'], 15, array
 (
