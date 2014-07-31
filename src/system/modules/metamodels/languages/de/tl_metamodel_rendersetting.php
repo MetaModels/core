@@ -8,15 +8,15 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2014-07-30T16:14:19+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']                     = '%s <strong>%s</strong> <em>[%s]</em>';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_addsuccess']       = 'Das Attribut "%s" wurde der Eingabemaske hinzugefügt.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_alreadycontained'] = 'Das Attribut %s ist bereits in der Eingabemaske vorhanden.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_willadd']          = 'Das Attribut %s wird dem Rendersetting hinzugefügt.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_willadd']          = 'Das Attribut %s wird der Eingabemaske hinzugefügt.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']['0']             = 'Alle hinzufügen';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']['1']             = 'Alle Attribute den Rendering Einstellungen hinzufügen';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']['1']             = 'Alle Attribute der Eingabemaske hinzufügen';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['advanced_legend']         = 'Erweitern';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id']['0']            = 'Attribut';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id']['1']            = 'Attribut, auf das sich diese Einstellung bezieht.';
@@ -28,7 +28,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit']['0']               = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit']['1']               = 'Die Filtereinstellung ID %s bearbeiten';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['new']['0']                = 'Neu';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['new']['1']                = 'Neue Einstellung erstellen.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show']['0']               = 'Filtereimstellungsdetails';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show']['0']               = 'Filtereinstellungs-Details';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show']['1']               = 'Die Details der Filtereinstellung ID %s anzeigen.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template']['0']           = 'Angepasstes Template für die Ausgabe';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template']['1']           = 'Wählen Sie das Template aus, das für das gewählte Attribut verwendet werden soll. Gültige Dateinamen für das Template beginnen mit "mm_&lt;typ&gt;", wobei &lt;typ&gt; für den Typ steht.';
