@@ -184,8 +184,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 		'mode' => array
 		(
 			'0'  => array(),
-			'1'  => array('flag'),
-			'2'  => array('flag'),
+			'1'  => array
+			(
+				'backend after mode' => array('flag')
+			),
+			'2'  => array
+			(
+				'backend after mode' => array('flag')
+			),
 			'3'  => array(),
 			'4'  => array(),
 			'5'  => array(),
