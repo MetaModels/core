@@ -76,8 +76,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
 
 		'label' => array
 		(
-			'fields'                  => array('name', 'tstamp'),
-			'format'                  => '%s %s'
+			'fields'                  => array('name'),
+			'format'                  => '%s'
 		),
 
 		'global_operations' => array
