@@ -34,14 +34,14 @@ How to use it.
 
 ### Composer
 
-MetaModels and all its dependencies are available through the great [composer extension](https://c-c-a.org/ueber-compose)! 
+MetaModels and all its dependencies are available through the great [composer extension](https://c-c-a.org/ueber-composer)! 
 
 When your Contao Installation is composered, you can simply installing metamodels by adding following packages
 
 * MetaModels/core 
 * MetaModels/bundle_all 
 
-If you do not need all attributes & filters, feel free to just install the core and grab some filter and attributes of your choice. (Ore another [bundle](https://github.com/MetaModels?query=bundle)!
+If you do not need all attributes & filters, feel free to just install the core and grab some filter and attributes of your choice. (Or another [bundle](https://github.com/MetaModels?query=bundle)!
 
 ### Nightly
 
