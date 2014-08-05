@@ -34,14 +34,14 @@ How to use it.
 
 ### Composer
 
-MetaModels and all its dependencies are available through the great [composer extension](https://c-c-a.org/ueber-composer)! 
+MetaModels and all its dependencies are available through the great [composer extension](https://c-c-a.org/ueber-composer) 
 
 When your Contao Installation is composered, you can simply installing metamodels by adding following packages
 
 * MetaModels/core 
 * MetaModels/bundle_all 
 
-If you do not need all attributes & filters, feel free to just install the core and grab some filter and attributes of your choice. (Or another [bundle](https://github.com/MetaModels?query=bundle)!
+If you do not need all attributes & filters, feel free to just install the core and grab some filter and attributes of your choice. (Or another [bundle](https://github.com/MetaModels?query=bundle)
 
 ### Nightly
 
@@ -52,9 +52,9 @@ http://now.metamodel.me/
 Ressources:
 -----------
 
-[MetaModels Contao Wiki](http://de.contaowiki.org/MetaModels)!
-[MetaModels Contao Community Subforum](https://community.contao.org/de/forumdisplay.php?149-MetaModels)!
-[MetaModels IRC Channel on freenode #contao.mm](irc://chat.freenode.net/#contao.mm)
+* [MetaModels Contao Wiki](http://de.contaowiki.org/MetaModels)
+* [MetaModels Contao Community Subforum](https://community.contao.org/de/forumdisplay.php?149-MetaModels)
+* [MetaModels IRC Channel on freenode #contao.mm](irc://chat.freenode.net/#contao.mm)
 
 Who did it?
 -----------
