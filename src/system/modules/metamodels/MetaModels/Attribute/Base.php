@@ -199,7 +199,7 @@ abstract class Base implements IAttribute
 	 */
 	public function get($strKey)
 	{
-		return $this->arrData[$strKey];
+		return isset($this->arrData[$strKey]) ? $this->arrData[$strKey] : null;
 	}
 
 	/**
@@ -260,7 +260,7 @@ abstract class Base implements IAttribute
 	{
 		$strTableName = $this->getMetaModel()->getTableName();
 		// Only overwrite the language if not already set.
-		if (!$GLOBALS['TL_LANG'][$strTableName][$this->getColName()])
+		if (!empty($GLOBALS['TL_LANG'][$strTableName][$this->getColName()]))
 		{
 			$GLOBALS['TL_LANG'][$strTableName][$this->getColName()] = array
 			(
@@ -277,9 +277,9 @@ abstract class Base implements IAttribute
 		$arrSettingNames = $this->getAttributeSettingNames();
 
 		$arrFieldDef['eval']['unique']     = $this->get('isunique') && in_array('isunique', $arrSettingNames);
-		$arrFieldDef['eval']['mandatory']  = $arrFieldDef['eval']['unique']
+		$arrFieldDef['eval']['mandatory']  = (!empty($arrFieldDef['eval']['unique']))
 			|| ($this->get('mandatory') && in_array('mandatory', $arrSettingNames));
-		$arrFieldDef['eval']['alwaysSave'] = $arrFieldDef['eval']['alwaysSave']
+		$arrFieldDef['eval']['alwaysSave'] = (!empty($arrFieldDef['eval']['alwaysSave']))
 			|| ($this->get('alwaysSave') && in_array('alwaysSave', $arrSettingNames));
 
 		foreach (array(
