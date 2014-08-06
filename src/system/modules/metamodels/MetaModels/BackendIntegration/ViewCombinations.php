@@ -213,7 +213,7 @@ class ViewCombinations
 		$inputScreenIds = array();
 		foreach (self::$information as $info)
 		{
-			if ($info[self::COMBINATION]['dca_id'])
+			if (!empty($info[self::COMBINATION]['dca_id']))
 			{
 				$inputScreenIds[] = $info[self::COMBINATION]['dca_id'];
 			}
@@ -273,7 +273,7 @@ class ViewCombinations
 		$renderSettingIds = array();
 		foreach (self::$information as $info)
 		{
-			if ($info[self::COMBINATION]['view_id'])
+			if (!empty($info[self::COMBINATION]['view_id']))
 			{
 				$renderSettingIds[] = $info[self::COMBINATION]['view_id'];
 			}
