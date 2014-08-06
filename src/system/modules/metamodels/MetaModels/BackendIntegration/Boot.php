@@ -135,7 +135,7 @@ class Boot
 		// Bugfix: If the user is not authenticated, contao will redirect to contao/index.php
 		// But in this moment the TL_PATH is not defined, so the $this->Environment->request
 		// generate a url without replacing the basepath(TL_PATH) with an empty string.
-		if (!defined(TL_PATH))
+		if (!defined('TL_PATH'))
 		{
 			define('TL_PATH', $path);
 		}

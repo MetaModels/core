@@ -81,7 +81,7 @@ class Factory implements IFactory
 		\Input::getInstance();
 
 		// Request token became available in 2.11.
-		if (version_compare(TL_VERSION, '2.11', '>='))
+		if (version_compare(VERSION, '2.11', '>='))
 		{
 			\RequestToken::getInstance();
 		}
