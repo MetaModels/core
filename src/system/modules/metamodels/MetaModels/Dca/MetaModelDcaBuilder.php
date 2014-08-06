@@ -292,7 +292,7 @@ class MetaModelDcaBuilder
 				$arrCaption = array($arrLangEntry['label'], $arrLangEntry['description']);
 			}
 
-			if ($arrLangEntry['label'] != '' && ($arrLangEntry['langcode'] == $GLOBALS['TL_CONFIG']['language']))
+			if (!empty($arrLangEntry['label']) && ($arrLangEntry['langcode'] == $GLOBALS['TL_LANGUAGE']))
 			{
 				$arrCaption = array($arrLangEntry['label'], $arrLangEntry['description']);
 				break;
