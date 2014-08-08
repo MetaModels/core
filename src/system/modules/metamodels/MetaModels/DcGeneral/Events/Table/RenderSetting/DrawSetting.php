@@ -74,11 +74,12 @@ class DrawSetting
 		);
 
 		$event
-			->setLabel('<div class="field_heading cte_type"><strong>%s</strong> <em>[%s]</em></div>
+			->setLabel('<div class="field_heading cte_type %s"><strong>%s</strong> <em>[%s]</em></div>
 				<div class="field_type block">
 					%s<strong>%s</strong>
 				</div>')
 			->setArgs(array(
+				$model->getProperty('enabled') ? 'published' : 'unpublished',
 				$colName,
 				$type,
 				$imageEvent->getHtml(),
