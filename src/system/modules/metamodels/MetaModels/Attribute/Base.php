@@ -260,7 +260,7 @@ abstract class Base implements IAttribute
 	{
 		$strTableName = $this->getMetaModel()->getTableName();
 		// Only overwrite the language if not already set.
-		if (!empty($GLOBALS['TL_LANG'][$strTableName][$this->getColName()]))
+		if (empty($GLOBALS['TL_LANG'][$strTableName][$this->getColName()]))
 		{
 			$GLOBALS['TL_LANG'][$strTableName][$this->getColName()] = array
 			(
@@ -269,9 +269,18 @@ abstract class Base implements IAttribute
 			);
 		}
 
-		$arrFieldDef = array(
-			'label' => &$GLOBALS['TL_LANG'][$strTableName][$this->getColName()],
-			'eval'  => array()
+		$arrFieldDef = array();
+		if (isset($GLOBALS['TL_DCA'][$strTableName]['fields'][$this->getColName()]))
+		{
+			$arrFieldDef = $GLOBALS['TL_DCA'][$strTableName]['fields'][$this->getColName()];
+		}
+
+		$arrFieldDef = array_replace_recursive(
+			array(
+				'label' => &$GLOBALS['TL_LANG'][$strTableName][$this->getColName()],
+				'eval'  => array()
+			),
+			$arrFieldDef
 		);
 
 		$arrSettingNames = $this->getAttributeSettingNames();
