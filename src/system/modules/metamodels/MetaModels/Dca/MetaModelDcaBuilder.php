@@ -385,6 +385,11 @@ class MetaModelDcaBuilder
 			$event      = new LoadDataContainerEvent('tl_metamodel_item');
 			$dispatcher->dispatch(ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER, $event);
 
+			if (!isset($GLOBALS['TL_DCA'][$strTableName]))
+			{
+				$GLOBALS['TL_DCA'][$strTableName] = array();
+			}
+
 			$GLOBALS['TL_DCA'][$strTableName] = array_replace_recursive(
 				(array)$GLOBALS['TL_DCA']['tl_metamodel_item'],
 				(array)$GLOBALS['TL_DCA'][$strTableName]
