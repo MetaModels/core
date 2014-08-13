@@ -27,6 +27,7 @@ $GLOBALS['TL_LANG']['tl_metamodel']['languages']            = array('Languages t
 $GLOBALS['TL_LANG']['tl_metamodel']['languages_langcode']   = array('Language', 'Select the languages you want to provide.');
 $GLOBALS['TL_LANG']['tl_metamodel']['languages_isfallback'] = array('Fallback language', 'Check the language that shall be used as fallback.');
 $GLOBALS['TL_LANG']['tl_metamodel']['varsupport']           = array('Variant support', 'Check if this MetaModel shall support variants of items.');
+$GLOBALS['TL_LANG']['tl_metamodel']['sorting']              = array('Sorting', 'Sorting order of items.');
 
 /**
  * Legends

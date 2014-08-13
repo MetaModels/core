@@ -40,7 +40,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 		'sorting'                     => array
 		(
 			'mode'                    => 2,
-			'fields'                  => array('name','sorting'),
+			'fields'                  => array(),
 			'flag'                    => 1,
 			'panelLayout'             => 'sort,limit'
 		),
@@ -178,13 +178,17 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 
 		'sorting'                     => array
 		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['sorting'],
 			'sorting'                 => true,
+			'flag'                    => 11
 		),
 
 		'name' => array
 		(
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel']['name'],
 			'sorting'                 => true,
+			'flag'                    => 3,
+			'length'                  => 1,
 			'exclude'                 => true,
 			'inputType'               => 'text',
 			'eval'                    => array
