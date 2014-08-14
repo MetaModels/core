@@ -21,6 +21,6 @@ branches:
   only:
     - tng
 
-matrix:
-  allow_failures:
-    - env: CONTAO_VERSION=~3.3
+#matrix:
+#  allow_failures:
+#    - env: CONTAO_VERSION=~3.3.0
