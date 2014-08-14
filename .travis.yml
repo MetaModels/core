@@ -6,10 +6,10 @@ php:
 env:
     global:
     matrix:
-        - CONTAO_VERSION=~2.11
-        - CONTAO_VERSION=~3.1
-        - CONTAO_VERSION=~3.2
-        - CONTAO_VERSION=~3.3
+        - CONTAO_VERSION=~2.11.0
+        - CONTAO_VERSION=~3.1.0
+        - CONTAO_VERSION=~3.2.0
+        - CONTAO_VERSION=~3.3.0
 
 install:
     - composer require contao/core $CONTAO_VERSION --prefer-dist --dev
