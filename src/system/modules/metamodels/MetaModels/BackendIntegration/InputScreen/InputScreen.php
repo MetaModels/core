@@ -386,6 +386,14 @@ class InputScreen implements IInputScreen
 	/**
 	 * {@inheritDoc}
 	 */
+	public function getBackendSectionPosition()
+	{
+		return trim($this->data['backendsectionpos']);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public function getBackendCaption()
 	{
 		return deserialize($this->data['backendcaption'], true);

@@ -426,9 +426,15 @@ class ViewCombinations
 			$inputScreen = isset($information[self::INPUTSCREEN]) ? $information[self::INPUTSCREEN] : null;
 			if ($inputScreen && $inputScreen->isStandalone())
 			{
-				$result[] = $information[self::INPUTSCREEN];
+				$sortingKey = $inputScreen->getBackendSectionPosition();
+				while(array_key_exists($sortingKey, $result))
+				{
+					$sortingKey++;
+				}
+				$result[$sortingKey] = $inputScreen;
 			}
 		}
+		ksort($result);
 
 		return $result;
 	}
@@ -449,7 +455,7 @@ class ViewCombinations
 			$inputScreen = isset($information[self::INPUTSCREEN]) ? $information[self::INPUTSCREEN] : null;
 			if ($inputScreen && !$inputScreen->isStandalone())
 			{
-				$result[] = $information[self::INPUTSCREEN];
+				$result[] = $inputScreen;
 			}
 		}
 

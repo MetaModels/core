@@ -169,6 +169,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			(
 				'mode',
 				'backendsection',
+				'backendsectionpos',
 				'backendicon',
 				'backendcaption'
 			),
@@ -286,8 +287,21 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 				'includeBlankOption'  => true,
 				'valign'              => 'top',
 				'chosen'              => true,
-				'tl_class'            => 'w50'
+				'tl_class'            => 'clr w50'
 			),
+		),
+
+		'backendsectionpos' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsectionpos'],
+			'exclude'                 => true,
+			'inputType'               => 'text',
+			'eval'                    => array
+			(
+				'maxlength'           => 4,
+				'tl_class'            => 'w50',
+				'rgxp'                => 'digit'
+			)
 		),
 
 		'backendicon' => array
