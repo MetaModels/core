@@ -131,7 +131,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 		'sorting' => array
 		(
 			'mode'                    => 5,
-			'fields'                  => array('attr_id'),
+			'fields'                  => array('sorting'),
 			'headerFields'            => array('type', 'attr_id'),
 			'flag'                    => 1,
 			'icon'                    => 'system/modules/metamodels/assets/images/icons/filter_and.png',
