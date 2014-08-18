@@ -114,8 +114,11 @@ class ModelToLabel
 		}
 
 		$event
-			->setLabel('<div class="dca_palette">%s%s</div>')
+			->setLabel('<div class="field_heading cte_type %s"><strong>%s</strong></div>
+				<div class="dca_palette">%s%s</div>')
 			->setArgs(array(
+				$model->getProperty('published') ? 'published' : 'unpublished',
+				$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['legend'],
 				$strLegend,
 				$model->getProperty('legendhide') ? ':hide' : ''
 			));
