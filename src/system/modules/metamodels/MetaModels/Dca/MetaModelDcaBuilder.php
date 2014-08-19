@@ -125,8 +125,8 @@ class MetaModelDcaBuilder
 		{
 			$objDB = \Database::getInstance();
 			if (!($objDB
-				&& $objDB->tableExists('tl_metamodel', null, true)
-				&& $objDB->tableExists('tl_metamodel_dcasetting_condition', null, true)
+				&& $objDB->tableExists('tl_metamodel', null)
+				&& $objDB->tableExists('tl_metamodel_dcasetting_condition', null)
 			))
 			{
 				return;

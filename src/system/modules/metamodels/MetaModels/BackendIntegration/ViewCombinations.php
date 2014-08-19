@@ -307,12 +307,12 @@ class ViewCombinations
 	 */
 	protected static function bufferModels()
 	{
-		if (!\Database::getInstance()->tableExists('tl_metamodel', null, true))
+		if (!empty(self::$information))
 		{
 			return;
 		}
 
-		if (!empty(self::$information))
+		if (!\Database::getInstance()->tableExists('tl_metamodel', null))
 		{
 			return;
 		}

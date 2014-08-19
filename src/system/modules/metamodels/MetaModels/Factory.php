@@ -45,6 +45,13 @@ class Factory implements IFactory
 	protected static $arrInstancesByTable = array();
 
 	/**
+	 * The table names.
+	 *
+	 * @var array
+	 */
+	protected static $tableNames = null;
+
+	/**
 	 * Returns the proper user object for the current context.
 	 *
 	 * @return \BackendUser|\FrontendUser|null The BackendUser when TL_MODE == 'BE',
@@ -173,6 +180,11 @@ class Factory implements IFactory
 	 */
 	public static function getAllTables()
 	{
+		if (self::$tableNames !== null)
+		{
+			return self::$tableNames;
+		}
+
 		self::initializeContaoObjectStack();
 
 		$objDB = \Database::getInstance();
@@ -183,8 +195,11 @@ class Factory implements IFactory
 				// I can't work without a properly installed database.
 				return array();
 			}
-			return $objDB->execute('SELECT * FROM tl_metamodel')
+
+			self::$tableNames = $objDB->execute('SELECT * FROM tl_metamodel')
 				->fetchEach('tableName');
+
+			return self::$tableNames;
 		}
 
 		return array();
