@@ -153,6 +153,12 @@ class Boot
 	 */
 	public static function perform()
 	{
+		// Do not execute anything if we are on the index page because no User is logged in
+		if (\Environment::get('script') == 'contao/index.php')
+		{
+			return;
+		}
+
 		if (!(self::initializeContaoObjectStack() && self::isDBInitialized()))
 		{
 			return;
