@@ -85,7 +85,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_2'] = '2 Records ar
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_3'] = '3 Records are sorted by the parent table';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_4'] = '4 Displays the child records of a parent record (see style sheets module)';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_5'] = '5 Records are displayed as tree (see site structure)';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_6'] = '6 Displays the child records within a tree structure (see articles module)';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_6'] = '6 Displays the child records within a tree structure (see article module)';
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes']['standalone'] = 'Standalone';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes']['ctable']     = 'As child table';

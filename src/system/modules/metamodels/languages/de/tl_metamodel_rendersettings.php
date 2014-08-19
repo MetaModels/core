@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-12-11T16:14:26+01:00
+ * last-updated: 2013-12-19T20:14:02+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['0']     = 'Zusätzliche CSS-Dateien';
@@ -49,8 +49,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']['1']              = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']['0']               = 'Neu';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']['1']               = 'Erstellen Sie eine neue Einstellung.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['publish']                = 'Veröffentlichen';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']['0']          = 'Attributeinstellungen definieren';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']['1']          = 'Definieren Sie die Attributeinstellungen für die Filtereinstellung ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']['0']          = 'Attributeinstellungen festlegen';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']['1']          = 'Legen Sie die Attributeinstellungen für die Filtereinstellung ID %s fest.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']['0']              = 'Filterdetails';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']['1']              = 'Zeige Details der Einstellung ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['0']          = 'Template';
@@ -59,3 +59,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']           = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['0']            = 'Aktualisierungsdatum';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['1']            = 'Datum und Uhrzeit der letzten Aktualisierung.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['view_legend']            = 'Einstellungen ansehen';
+
