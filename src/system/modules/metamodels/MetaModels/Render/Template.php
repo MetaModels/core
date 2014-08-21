@@ -107,6 +107,10 @@ class Template
 	 */
 	public function __get($strKey)
 	{
+		if (!isset($this->arrData[$strKey]))
+		{
+			trigger_error($this->getName() . ': Undefined template variable: ' . $strKey, E_USER_WARNING);
+		}
 		return $this->arrData[$strKey];
 	}
 

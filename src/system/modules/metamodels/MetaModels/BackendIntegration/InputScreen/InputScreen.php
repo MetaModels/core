@@ -350,7 +350,7 @@ class InputScreen implements IInputScreen
 	public function getConditionsFor($name)
 	{
 		$property = $this->propertyMap2[$name];
-		return $this->conditions[$property];
+		return isset($this->conditions[$property]) ? $this->conditions[$property] : null;
 	}
 
 	/**
