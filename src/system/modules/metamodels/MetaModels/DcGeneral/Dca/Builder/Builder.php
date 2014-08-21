@@ -28,6 +28,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\Defau
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultSortElementInformation;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultSubmitElementInformation;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\SubmitElementInformationInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\PanelRowCollectionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\PanelRowInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\FilterBuilder;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChildCondition;
@@ -311,6 +312,44 @@ class Builder
 	}
 
 	/**
+	 * Ensure at least one submit element is present in any of the rows.
+	 *
+	 * If no submit element is present, this method will create one at the end of the last row.
+	 *
+	 * @param PanelRowCollectionInterface $panelRows The panel rows.
+	 *
+	 * @return void
+	 */
+	protected function ensureSubmitElement($panelRows)
+	{
+		// Check if we have a submit button.
+		$hasSubmit = false;
+		foreach ($panelRows as $panelRow)
+		{
+			foreach ($panelRow as $element)
+			{
+				if ($element instanceof SubmitElementInformationInterface)
+				{
+					$hasSubmit = true;
+					break;
+				}
+
+				if ($hasSubmit)
+				{
+					break;
+				}
+			}
+		}
+
+		// If not add a submit.
+		if (!$hasSubmit && $panelRows->getRowCount())
+		{
+			$row = $panelRows->getRow($panelRows->getRowCount() - 1);
+			$row->addElement(new DefaultSubmitElementInformation(), 0);
+		}
+	}
+
+	/**
 	 * Parse the panels, if we have some one.
 	 *
 	 * @param IMetaModelDataDefinition $container The panel container.
@@ -372,31 +411,7 @@ class Builder
 			}
 		}
 
-		// Check if we have a submit button.
-		$hasSubmit = false;
-		foreach ($panelRows as $panelRow)
-		{
-			foreach ($panelRow as $element)
-			{
-				if ($element instanceof SubmitElementInformationInterface)
-				{
-					$hasSubmit = true;
-					break;
-				}
-
-				if ($hasSubmit)
-				{
-					break;
-				}
-			}
-		}
-
-		// If not add a submit.
-		if (!$hasSubmit && $panelRows->getRowCount())
-		{
-			$row = $panelRows->getRow($panelRows->getRowCount() - 1);
-			$row->addElement(new DefaultSubmitElementInformation(), 0);
-		}
+		$this->ensureSubmitElement($panelRows);
 	}
 
 	/**
