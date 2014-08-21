@@ -95,7 +95,7 @@ class Collection implements ICollection
 	 */
 	public function getSetting($strAttributeName)
 	{
-		return $this->arrSettings[$strAttributeName];
+		return isset($this->arrSettings[$strAttributeName]) ? $this->arrSettings[$strAttributeName] : null;
 	}
 
 	/**

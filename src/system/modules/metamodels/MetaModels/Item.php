@@ -329,7 +329,8 @@ class Item implements IItem
 			'raw' => $this->arrData,
 			'text' => array(),
 			'attributes' => array(),
-			$strOutputFormat => array()
+			$strOutputFormat => array(),
+			'class' => ''
 		);
 
 		// No render settings, parse "normal" and hope the best - not all attribute types must provide usable output.
@@ -383,8 +384,8 @@ class Item implements IItem
 	protected function parseValueHook(&$arrResult, $strFormat, $objSettings)
 	{
 		// HOOK: let third party extensions manipulate the generated data.
-		if (is_array($GLOBALS['METAMODEL_HOOKS']['MetaModelItem::parseValue'])
-			&& count($GLOBALS['METAMODEL_HOOKS']['MetaModelItem::parseValue'])
+		if (!empty($GLOBALS['METAMODEL_HOOKS']['MetaModelItem::parseValue'])
+			&& is_array($GLOBALS['METAMODEL_HOOKS']['MetaModelItem::parseValue'])
 		)
 		{
 			foreach ($GLOBALS['METAMODEL_HOOKS']['MetaModelItem::parseValue'] as $arrHook)

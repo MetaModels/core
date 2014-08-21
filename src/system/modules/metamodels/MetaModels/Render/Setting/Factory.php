@@ -75,7 +75,7 @@ class Factory implements IFactory
 	 */
 	public static function byId(IMetaModel $objMetaModel, $intId = 0)
 	{
-		if (self::$arrInstances[$intId])
+		if (isset(self::$arrInstances[$intId]))
 		{
 			return self::$arrInstances[$intId];
 		}
@@ -89,9 +89,11 @@ class Factory implements IFactory
 			$objView = null;
 		}
 
-		// TODO: $arrInstances is never getting filled in here.
 		$objRenderSetting = new Collection($objView ? $objView->row(): array());
 		self::collectAttributeSettings($objMetaModel, $objRenderSetting);
+
+		self::$arrInstances[$intId] = $objRenderSetting;
+
 		return $objRenderSetting;
 	}
 }
