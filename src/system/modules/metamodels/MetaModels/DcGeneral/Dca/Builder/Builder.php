@@ -135,11 +135,15 @@ class Builder
 	/**
 	 * Handle a populate environment event for MetaModels.
 	 *
-	 * @param PopulateEnvironmentEvent $event The event.
+	 * @param PopulateEnvironmentEvent $event      The event payload.
+	 *
+	 * @param string                   $eventName  The name of the called event.
+	 *
+	 * @param EventDispatcherInterface $dispatcher The event dispatcher.
 	 *
 	 * @return void
 	 */
-	public function populate(PopulateEnvironmentEvent $event)
+	public function populate(PopulateEnvironmentEvent $event, $eventName, $dispatcher)
 	{
 		$container = $event->getEnvironment()->getDataDefinition();
 
@@ -148,7 +152,7 @@ class Builder
 			return;
 		}
 
-		$this->dispatcher = $event->getDispatcher();
+		$this->dispatcher = $dispatcher;
 
 		$translator = $event->getEnvironment()->getTranslator();
 
@@ -275,13 +279,17 @@ class Builder
 	/**
 	 * Handle a build data definition event for MetaModels.
 	 *
-	 * @param BuildDataDefinitionEvent $event The event.
+	 * @param BuildDataDefinitionEvent $event      The event payload.
+	 *
+	 * @param string                   $eventName  The name of the called event.
+	 *
+	 * @param EventDispatcherInterface $dispatcher The event dispatcher.
 	 *
 	 * @return void
 	 */
-	public function build(BuildDataDefinitionEvent $event)
+	public function build(BuildDataDefinitionEvent $event, $eventName, $dispatcher)
 	{
-		$this->dispatcher = $event->getDispatcher();
+		$this->dispatcher = $dispatcher;
 		$container        = $event->getContainer();
 
 		if (!($container instanceof IMetaModelDataDefinition))
@@ -299,7 +307,7 @@ class Builder
 		$this->parsePalettes($container);
 
 		// Attach renderer to event.
-		RenderItem::register($event->getDispatcher());
+		RenderItem::register($dispatcher);
 	}
 
 	/**
