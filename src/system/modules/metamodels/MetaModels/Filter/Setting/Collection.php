@@ -98,7 +98,7 @@ class Collection implements ICollection
 			{
 				$objSetting->addChild($objNewSetting);
 				// Collect next level.
-				if ($GLOBALS['METAMODELS']['filters'][$objNewSetting->get('type')]['nestingAllowed'])
+				if (!empty($GLOBALS['METAMODELS']['filters'][$objNewSetting->get('type')]['nestingAllowed']))
 				{
 					/** @var IWithChildren $objNewSetting */
 					$this->collectRulesFor($objSettings, $objNewSetting);

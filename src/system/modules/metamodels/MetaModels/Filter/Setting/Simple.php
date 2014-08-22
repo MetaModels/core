@@ -102,7 +102,8 @@ abstract class Simple implements ISimple
 	 */
 	protected function isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption)
 	{
-		$blnIsActive = ($arrFilterUrl[$arrWidget['eval']['urlparam']] == $strKeyOption);
+		$blnIsActive = isset($arrFilterUrl[$arrWidget['eval']['urlparam']])
+			&& ($arrFilterUrl[$arrWidget['eval']['urlparam']] == $strKeyOption);
 		if (!$blnIsActive && $this->get('defaultid'))
 		{
 			$blnIsActive = ($arrFilterUrl[$arrWidget['eval']['urlparam']] == $this->get('defaultid'));
@@ -159,7 +160,7 @@ abstract class Simple implements ISimple
 	protected function prepareFrontendFilterOptions($arrWidget, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit)
 	{
 		$arrOptions = array();
-		if (!$arrWidget['options'])
+		if (!isset($arrWidget['options']))
 		{
 			return $arrOptions;
 		}
@@ -287,7 +288,9 @@ abstract class Simple implements ISimple
 		}
 
 		// Determine current value.
-		$arrWidget['value'] = $arrFilterUrl[$arrWidget['eval']['urlparam']];
+		$arrWidget['value'] = isset($arrFilterUrl[$arrWidget['eval']['urlparam']])
+			? $arrFilterUrl[$arrWidget['eval']['urlparam']]
+			: null;
 
 		$arrData = ContaoController::getInstance()->prepareForWidget(
 			$arrWidget,
@@ -324,7 +327,7 @@ abstract class Simple implements ISimple
 					$arrJumpTo,
 					$objFrontendFilterOptions->isAutoSubmit()
 				),
-			'count'      => $arrWidget['count'],
+			'count'      => isset($arrWidget['count']) ? $arrWidget['count'] : null,
 			'showCount'  => $objFrontendFilterOptions->isShowCountValues(),
 			'autosubmit' => $objFrontendFilterOptions->isAutoSubmit(),
 			'urlvalue'   => array_key_exists('urlvalue', $arrWidget) ? $arrWidget['urlvalue'] : $arrWidget['value']

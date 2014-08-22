@@ -43,7 +43,7 @@ class Factory implements IFactory
 	 */
 	public static function byId($intId)
 	{
-		if (!self::$arrInstances[$intId])
+		if (empty(self::$arrInstances[$intId]))
 		{
 			$objDB = \Database::getInstance();
 

@@ -172,7 +172,7 @@ class Module
 		$this->checkDependencies();
 		$this->hasAttributes();
 
-		if ($GLOBALS['METAMODELS']['CHECK'])
+		if (!empty($GLOBALS['METAMODELS']['CHECK']))
 		{
 			// Loop through all metamodel backend checkers.
 			foreach ($GLOBALS['METAMODELS']['CHECK'] as $strClass)
