@@ -1,4 +1,4 @@
-<?php $strRendersettings = ($this->settings)? 'settings' : 'view'; ?>
+<?php $strRendersettings = isset($this->settings)? 'settings' : 'view'; ?>
 <?php if ($this->items->getCount()): ?>
 
 <div class="layout_full">
