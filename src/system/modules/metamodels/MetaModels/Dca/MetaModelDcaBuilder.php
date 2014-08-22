@@ -164,34 +164,34 @@ class MetaModelDcaBuilder
 				{
 					$arrCaption = array($arrLangEntry['label'], $arrLangEntry['description']);
 				}
+			}
 
-				$arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()] = array
-				(
-					'label'               => &$arrCaption,
-					'href'                => 'table='.$metaModel->getTableName(),
-					'icon'                => self::getBackendIcon($screen->getIcon()),
-					'attributes'          => 'onclick="Backend.getScrollOffset()"',
-				);
+			$arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()] = array
+			(
+				'label'               => &$arrCaption,
+				'href'                => 'table='.$metaModel->getTableName(),
+				'icon'                => self::getBackendIcon($screen->getIcon()),
+				'attributes'          => 'onclick="Backend.getScrollOffset()"',
+			);
 
-				// Is the destination table a metamodel with variants?
-				if ($metaModel->hasVariants())
-				{
-					$arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['idparam'] = 'id_'.$strTable;
-				}
-				else
-				{
-					$arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['idparam'] = 'pid';
-				}
+			// Is the destination table a metamodel with variants?
+			if ($metaModel->hasVariants())
+			{
+				$arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['idparam'] = 'id_'.$strTable;
+			}
+			else
+			{
+				$arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['idparam'] = 'pid';
+			}
 
-				// Compatibility with DC_Table.
-				if ($arrTableDCA['config']['dataContainer'] !== 'General')
-				{
-					$arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['button_callback'] =
-						array(
-							__CLASS__,
-							'buildChildButton'
-						);
-				}
+			// Compatibility with DC_Table.
+			if ($arrTableDCA['config']['dataContainer'] !== 'General')
+			{
+				$arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['button_callback'] =
+					array(
+						__CLASS__,
+						'buildChildButton'
+					);
 			}
 		}
 	}
