@@ -120,7 +120,7 @@ class SimpleLookup extends Simple
 
 		if ($objAttribute && $strParam)
 		{
-			$arrFilterValue = $arrFilterUrl[$strParam];
+			$arrFilterValue = isset($arrFilterUrl[$strParam]) ? $arrFilterUrl[$strParam] : null;
 
 			if (!$arrFilterValue && $this->get('defaultid'))
 			{

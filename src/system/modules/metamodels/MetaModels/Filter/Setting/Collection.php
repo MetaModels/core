@@ -150,7 +150,7 @@ class Collection implements ICollection
 			if ($objNewSetting)
 			{
 				$this->arrSettings[] = $objNewSetting;
-				if ($GLOBALS['METAMODELS']['filters'][$objSettings->type]['nestingAllowed'])
+				if (!empty($GLOBALS['METAMODELS']['filters'][$objNewSetting->get('type')]['nestingAllowed']))
 				{
 					/** @var IWithChildren $objNewSetting */
 					$this->collectRulesFor($objSettings, $objNewSetting);

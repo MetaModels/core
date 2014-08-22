@@ -379,6 +379,10 @@ class MetaModel implements IMetaModel
 			// Run each row.
 			foreach (array_keys($arrResult) as $intId)
 			{
+				if (!isset($arrResult[$intId][$strColName]))
+				{
+					continue;
+				}
 				$arrResult[$intId][$strColName] = $objAttribute->unserializeData($arrResult[$intId][$strColName]);
 			}
 		}
