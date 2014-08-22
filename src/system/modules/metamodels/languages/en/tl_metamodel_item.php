@@ -44,3 +44,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['varbase'][1] = 'Check this if you want
 $GLOBALS['TL_LANG']['tl_metamodel_item']['editRecord'] = 'Edit item %s';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['newRecord']  = 'Create a new item';
 
+$GLOBALS['TL_LANG']['tl_metamodel_item']['sorting'] = array('Sorting', 'The manual sorting');
