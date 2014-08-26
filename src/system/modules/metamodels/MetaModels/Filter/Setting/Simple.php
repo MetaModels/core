@@ -151,11 +151,11 @@ abstract class Simple implements ISimple
 	/**
 	 * Add a parameter to the url, if it is auto_item, it will get prepended.
 	 *
-	 * @param string $url    The url built so far.
+	 * @param string $url   The url built so far.
 	 *
-	 * @param string $name   The parameter name.
+	 * @param string $name  The parameter name.
 	 *
-	 * @param mixed  $value  The parameter value.
+	 * @param mixed  $value The parameter value.
 	 *
 	 * @return string.
 	 */
