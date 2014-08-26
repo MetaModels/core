@@ -156,7 +156,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 			'backend' => array
 			(
 				'rendertype',
-				'isclosed'
+				'iseditable',
+				'iscreatable',
+				'isdeletable',
 			),
 		)
 	),
@@ -359,9 +361,27 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 				'tl_class'            => 'clr long wizard',
 			),
 		),
-		'isclosed' => array
+		'iseditable' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['iseditable'],
+			'inputType'               => 'checkbox',
+			'eval'                    => array
+			(
+				'tl_class'            => 'w50 m12 cbx',
+			)
+		),
+		'iscreatable' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['iscreatable'],
+			'inputType'               => 'checkbox',
+			'eval'                    => array
+			(
+				'tl_class'            => 'w50 m12 cbx',
+			)
+		),
+		'isdeletable' => array
+		(
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdeletable'],
 			'inputType'               => 'checkbox',
 			'eval'                    => array
 			(

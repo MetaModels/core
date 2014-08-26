@@ -42,7 +42,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker']          = 'Panelpicker';
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['use_limitview']        = array('View limitation', 'Activate the view limitation.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']  = array('Limit the render setting', 'Choose between front end or backend.');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed']             = array('Allow edit only', 'If checked, this input screen only allows the editing of entries. The create and delete functionality will be disabled.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['iseditable']           = array('Allow editing of items', 'If checked, this input screen allows the editing of items.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['iscreatable']          = array('Allow creating of items', 'If checked, this input screen allows the creating of items.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdeletable']          = array('Allow deleting of items', 'If checked, this input screen allows the deleting of items.');
 
 /**
  * Legends

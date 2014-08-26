@@ -125,8 +125,32 @@ interface IInputScreen
 	 * Check if the MetaModel is closed.
 	 *
 	 * @return bool
+	 *
+	 * @deprecated use isEditable() and isCreatable() and isDeletable().
 	 */
 	public function isClosed();
+
+	/**
+	 * Check if the MetaModel is editable.
+	 *
+	 * @return bool
+	 */
+	public function isEditable();
+
+	/**
+	 * Check if the MetaModel is creatable.
+	 *
+	 * @return bool
+	 */
+	public function isCreatable();
+
+	/**
+	 * Check if the MetaModel is deletable.
+	 *
+	 * @return bool
+	 */
+	public function isDeletable();
+
 
 	/**
 	 * Get a string with the panel layout.

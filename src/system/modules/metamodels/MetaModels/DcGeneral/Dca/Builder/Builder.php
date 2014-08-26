@@ -663,10 +663,10 @@ class Builder
 			default:
 		}
 
-		if (($value = $inputScreen->isClosed()) !== null)
-		{
-			$config->setClosed((bool)$value);
-		}
+		$config
+			->setEditable($inputScreen->isEditable())
+			->setCreatable($inputScreen->isCreatable())
+			->setDeletable($inputScreen->isDeletable());
 
 		$this->calculateConditions($container);
 	}

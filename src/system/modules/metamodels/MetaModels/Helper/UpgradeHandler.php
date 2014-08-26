@@ -193,6 +193,35 @@ class UpgradeHandler
 		}
 	}
 
+	public static function upgradeInputScreens()
+	{
+		$objDB = self::DB();
+
+		if (!$objDB->fieldExists('iseditable', 'tl_metamodel_dca'))
+		{
+			// Create the column in the database and copy the data over.
+			TableManipulation::createColumn(
+				'tl_metamodel_dca',
+				'iseditable',
+				'char(1) NOT NULL default \'\''
+			);
+			TableManipulation::createColumn(
+				'tl_metamodel_dca',
+				'iscreatable',
+				'char(1) NOT NULL default \'\''
+			);
+
+			$objDB->execute('
+				UPDATE tl_metamodel_dca
+				SET
+					iseditable=isclosed^1,
+					iscreatable=isclosed^1,
+					isdeleteable=isclosed^1');
+
+			TableManipulation::dropColumn('tl_metamodel_dca', 'isclosed', true);
+		}
+	}
+
 	/**
 	 * Perform all upgrade steps.
 	 *
@@ -203,5 +232,6 @@ class UpgradeHandler
 		self::upgradeJumpTo();
 		self::upgradeDcaSettingsPublished();
 		self::changeSubPalettesToConditions();
+		self::upgradeInputScreens();
 	}
 }

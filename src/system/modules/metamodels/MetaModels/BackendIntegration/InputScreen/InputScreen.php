@@ -427,7 +427,31 @@ class InputScreen implements IInputScreen
 	 */
 	public function isClosed()
 	{
-		return $this->data['closed'];
+		return !($this->isCreatable() || $this->isEditable() || $this->isDeletable());
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function isEditable()
+	{
+		return (bool)$this->data['iseditable'];
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function isCreatable()
+	{
+		return (bool)$this->data['iscreatable'];
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function isDeletable()
+	{
+		return (bool)$this->data['isdeleteable'];
 	}
 
 	/**

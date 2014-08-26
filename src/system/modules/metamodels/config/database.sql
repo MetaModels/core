@@ -63,8 +63,12 @@ CREATE TABLE `tl_metamodel_dca` (
   `backendsection` varchar(255) NOT NULL default '',
   `backendcaption` text NULL,
   `backendicon` blob NULL,
--- close the dataset - allow only edit and no delete or create.
-  `isclosed` char(1) NOT NULL default '',
+-- allow edit.
+  `iseditable` char(1) NOT NULL default '',
+-- allow create.
+  `iscreatable` char(1) NOT NULL default '',
+-- allow delete.
+  `isdeleteable` char(1) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
