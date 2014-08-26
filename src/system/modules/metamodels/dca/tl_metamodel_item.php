@@ -61,7 +61,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 		'pid' => array(),
 		'sorting' => array
 		(
-			'sorting'                 => true
+			'sorting'                 => true,
 			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_item']['sorting'],
 		),
 		'tstamp' => array()
