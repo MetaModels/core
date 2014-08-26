@@ -136,6 +136,94 @@ abstract class Simple implements ISimple
 	}
 
 	/**
+	 * Add a parameter to the url, if it is auto_item, it will get prepended.
+	 *
+	 * @param string $url    The url built so far.
+	 *
+	 * @param string $name   The parameter name.
+	 *
+	 * @param mixed  $value  The parameter value.
+	 *
+	 * @return string.
+	 */
+	protected function addUrlParameter($url, $name, $value)
+	{
+		if (is_array($value))
+		{
+			$value = implode(',', array_filter($value));
+		}
+
+		$value = str_replace('%', '%%', urlencode($value));
+
+		if (empty($value))
+		{
+			return $url;
+		}
+
+		if ($name !== 'auto_item')
+		{
+			$url .= '/' . $name . '/' . $value;
+		}
+		else
+		{
+			$url = '/' . $value . $url;
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Build the filter url based upon the fragments.
+	 *
+	 * @param array  $fragments The parameters to be used in the Url.
+	 *
+	 * @param string $searchKey The param key to handle for "this".
+	 *
+	 * @return string
+	 */
+	protected function buildFilterUrl($fragments, $searchKey)
+	{
+		$url   = '';
+		$found = false;
+
+		// Create base url containing for preserving the current filter on unrelated widgets and modules.
+		// The URL parameter concerning us will be masked via %s to be used later on in a sprintf().
+		foreach ($fragments as $key => $value)
+		{
+			// Skip the magic "language" parameter.
+			if (($key == 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl'])
+			{
+				continue;
+			}
+
+			if ($key == $searchKey)
+			{
+				if ($key !== 'auto_item')
+				{
+					$url .= '%s';
+				}
+				else
+				{
+					$url = '%s' . $url;
+				}
+				$found = true;
+			}
+			else
+			{
+				$url = $this->addUrlParameter($url, $key, $value);
+			}
+		}
+
+		// If we have not found our parameter in the URL, we add it as %s now to be able to populate it via sprintf() below.
+		if (!$found)
+		{
+			$url .= '%s';
+		}
+
+		return $url;
+	}
+
+	/**
 	 * Generate the options for the frontend widget as the frontend templates expect them.
 	 *
 	 * The returning array will be made of option arrays containing the following fields:
@@ -166,48 +254,7 @@ abstract class Simple implements ISimple
 		}
 		$objController = ContaoController::getInstance();
 
-		$strFilterAction = '';
-
-		$blnFound = false;
-
-		// Create base url containing for preserving the current filter on unrelated widgets and modules.
-		// The URL parameter concerning us will be masked via %s to be used later on in a sprintf().
-		foreach ($arrFilterUrl as $strKeyOption => $strOption)
-		{
-			// Skip the magic "language" parameter.
-			if (($strKeyOption == 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl'])
-			{
-				continue;
-			}
-
-			if ($strKeyOption != $arrWidget['eval']['urlparam'])
-			{
-				if (!empty($arrFilterUrl[$strKeyOption]))
-				{
-					$strValue = is_array($arrFilterUrl[$strKeyOption])
-						? implode(',', array_filter($arrFilterUrl[$strKeyOption]))
-						: $arrFilterUrl[$strKeyOption];
-
-					if ($strKeyOption !== 'auto_item')
-					{
-						$strFilterAction .= '/'.$strKeyOption.'/'. str_replace('%', '%%', urlencode($strValue));
-					}
-					else
-					{
-						$strFilterAction = '/' . str_replace('%', '%%', urlencode($strValue)) . $strFilterAction;
-					}
-				}
-			} else {
-				$strFilterAction .= '%s';
-				$blnFound         = true;
-			}
-		}
-
-		// If we have not found our parameter in the URL, we add it as %s now to be able to populate it via sprintf() below.
-		if (!$blnFound)
-		{
-			$strFilterAction .= '%s';
-		}
+		$strFilterAction = $this->buildFilterUrl($arrFilterUrl, $arrWidget['eval']['urlparam']);
 
 		// If no jumpTo-page has been provided, we use the current page.
 		if (!$arrJumpTo)
