@@ -217,7 +217,14 @@ abstract class Simple implements ISimple
 		// If we have not found our parameter in the URL, we add it as %s now to be able to populate it via sprintf() below.
 		if (!$found)
 		{
-			$url .= '%s';
+			if ($searchKey !== 'auto_item')
+			{
+				$url .= '%s';
+			}
+			else
+			{
+				$url = '%s' . $url;
+			}
 		}
 
 		return $url;
@@ -285,13 +292,25 @@ abstract class Simple implements ISimple
 			$strValue  = rawurlencode($this->getFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption));
 			$blnActive = $this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption);
 
+			if (!empty($strValue))
+			{
+				if ($arrWidget['eval']['urlparam'] !== 'auto_item')
+				{
+					$strValue = '/' . $arrWidget['eval']['urlparam'] . '/' . $strValue;
+				}
+				else
+				{
+					$strValue = '/' . $strValue;
+				}
+			}
+
 			$arrOptions[] = array
 			(
 				'key'    => $strKeyOption,
 				'value'  => $strOption,
 				'href'   => $objController->generateFrontendUrl(
 					$arrJumpTo,
-					sprintf($strFilterAction, $strValue ? ('/'.$arrWidget['eval']['urlparam'].'/'.$strValue) : '')
+					sprintf($strFilterAction, $strValue)
 				),
 				'active' => $blnActive,
 				'class'  => standardize($strKeyOption) . ($blnActive ? ' active' : '')

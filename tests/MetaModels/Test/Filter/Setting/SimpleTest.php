@@ -138,6 +138,20 @@ class SimpleTest extends TestCase
 			$this->buildFilterUrl($setting, array('a' => 'A', 'b' => 'B', 'auto_item' => 'AUTO'), 'c'),
 			'c'
 		);
+		$this->assertEquals(
+			'%s/a/A/b/B',
+			$this->buildFilterUrl($setting, array('a' => 'A', 'b' => 'B'), 'auto_item'),
+			'auto_item 2'
+		);
+		$this->assertEquals(
+			'%s',
+			$this->buildFilterUrl($setting, array(), 'auto_item'),
+			'auto_item 3'
+		);
+		$this->assertEquals(
+			'%s',
+			$this->buildFilterUrl($setting, array('auto_item' => 'AUTO'), 'auto_item'),
+			'auto_item 4'
+		);
 	}
-
 }
