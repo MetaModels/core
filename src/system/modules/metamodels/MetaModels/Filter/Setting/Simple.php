@@ -184,10 +184,18 @@ abstract class Simple implements ISimple
 			{
 				if (!empty($arrFilterUrl[$strKeyOption]))
 				{
-					$strValue         = is_array($arrFilterUrl[$strKeyOption])
+					$strValue = is_array($arrFilterUrl[$strKeyOption])
 						? implode(',', array_filter($arrFilterUrl[$strKeyOption]))
 						: $arrFilterUrl[$strKeyOption];
-					$strFilterAction .= '/'.$strKeyOption.'/'. str_replace('%', '%%', urlencode($strValue));
+
+					if ($strKeyOption !== 'auto_item')
+					{
+						$strFilterAction .= '/'.$strKeyOption.'/'. str_replace('%', '%%', urlencode($strValue));
+					}
+					else
+					{
+						$strFilterAction = '/' . str_replace('%', '%%', urlencode($strValue)) . $strFilterAction;
+					}
 				}
 			} else {
 				$strFilterAction .= '%s';
