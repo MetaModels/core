@@ -495,22 +495,10 @@ class Builder
 	 */
 	protected function parsePanelSort(PanelRowInterface $row, IInputScreen $inputScreen)
 	{
-		if ($row->hasElement('sort'))
-		{
-			$element = $row->getElement('sort');
-		}
-		else
+		if (!$row->hasElement('sort'))
 		{
 			$element = new DefaultSortElementInformation();
 			$row->addElement($element);
-		}
-
-		foreach ($inputScreen->getProperties() as $property => $value)
-		{
-			if (isset($value['info']['sorting']))
-			{
-				$element->addProperty($property, (int)$value['info']['flag']);
-			}
 		}
 	}
 
