@@ -1495,7 +1495,7 @@ class Builder
 			$extra = $propInfo['eval'];
 			if ($isTranslated)
 			{
-				$extra['tl_class'] = 'translat-attr' . ($extra['tl_class'] ? ' ' . $extra['tl_class'] : '');
+				$extra['tl_class'] = 'translat-attr' . (!empty($extra['tl_class']) ? ' ' . $extra['tl_class'] : '');
 			}
 			$property->setExtra($extra);
 		}

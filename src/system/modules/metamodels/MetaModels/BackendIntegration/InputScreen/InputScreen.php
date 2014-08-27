@@ -327,7 +327,7 @@ class InputScreen implements IInputScreen
 	 */
 	public function getProperty($name)
 	{
-		return $this->properties[$name];
+		return isset($this->properties[$name]) ? $this->properties[$name] : null;
 	}
 
 	/**

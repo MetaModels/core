@@ -336,7 +336,7 @@ class MetaModel implements IMetaModel
 
 			foreach (array_keys($result) as $id)
 			{
-				$result[$id][$attributeName] = $attributeData[$id];
+				$result[$id][$attributeName] = isset($attributeData[$id]) ? $attributeData[$id] : null;
 			}
 		}
 
