@@ -86,6 +86,16 @@ class MetaModelDcaBuilder
 	}
 
 	/**
+	 * Retrieve the event dispatcher from the DIC.
+	 *
+	 * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+	 */
+	protected static function getDispatcher()
+	{
+		return $GLOBALS['container']['event-dispatcher'];
+	}
+
+	/**
 	 * Get a 16x16 pixel resized icon of the passed image if it exists, return the default icon otherwise.
 	 *
 	 * @param string $icon        The icon to resize.
@@ -99,8 +109,7 @@ class MetaModelDcaBuilder
 		$defaultIcon = 'system/modules/metamodels/assets/images/icons/metamodels.png'
 	)
 	{
-		/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
-		$dispatcher = $GLOBALS['container']['event-dispatcher'];
+		$dispatcher = self::getDispatcher();
 		// Determine image to use.
 		if ($icon && file_exists(TL_ROOT . '/' . $icon))
 		{
@@ -226,7 +235,7 @@ class MetaModelDcaBuilder
 			$operation = $name;
 		}
 
-		$dispatcher = $GLOBALS['container']['event-dispatcher'];
+		$dispatcher = self::getDispatcher();
 		$idparam    = $GLOBALS['TL_DCA'][$table]['list']['operations'][$operation]['idparam'];
 		$id         = IdSerializer::fromValues($table, $arrRow['id']);
 		$urlEvent   = new AddToUrlEvent($href. '&amp;' . $idparam . '=' . $id->getSerialized());
@@ -252,7 +261,7 @@ class MetaModelDcaBuilder
 	protected function handleStandalone($inputScreen)
 	{
 		$metaModel  = $inputScreen->getMetaModel();
-		$dispatcher = $GLOBALS['container']['event-dispatcher'];
+		$dispatcher = self::getDispatcher();
 
 		$strModuleName = 'metamodel_' . $metaModel->getTableName();
 
@@ -380,8 +389,7 @@ class MetaModelDcaBuilder
 	{
 		if (in_array($strTableName, Factory::getAllTables()))
 		{
-			/** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
-			$dispatcher = $GLOBALS['container']['event-dispatcher'];
+			$dispatcher = self::getDispatcher();
 			$event      = new LoadDataContainerEvent('tl_metamodel_item');
 			$dispatcher->dispatch(ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER, $event);
 
