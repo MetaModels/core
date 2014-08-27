@@ -410,16 +410,114 @@ class InputScreen implements IInputScreen
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getMode()
+	public function getRenderMode()
 	{
 		// If we have variant overwrite all modes and set mode 5 - tree mode.
 		$objMetaModels = $this->getMetaModel();
 		if ($objMetaModels->hasVariants())
 		{
-			return 5;
+			return 'hierarchical';
 		}
 
-		return $this->data['mode'];
+		return $this->data['rendermode'];
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function isHierarchical()
+	{
+		return $this->getRenderMode() === 'hierarchical';
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function isParented()
+	{
+		return $this->getRenderMode() === 'parented';
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function isFlat()
+	{
+		return $this->getRenderMode() === 'flat';
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getRenderGroupType()
+	{
+		return $this->data['rendergrouptype'];
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getRenderGroupLength()
+	{
+		return (int)$this->data['rendergrouplen'];
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getRenderGroupAttribute()
+	{
+		if (!empty($this->data['rendergroupattr']))
+		{
+			$metaModel = $this->getMetaModel();
+			if ($metaModel)
+			{
+				$attribute = $metaModel->getAttributeById($this->data['rendergroupattr']);
+				if ($attribute)
+				{
+					return $attribute->getColName();
+				}
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getRenderSortDirection()
+	{
+		return $this->data['rendersort'];
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getRenderSortAttribute()
+	{
+		if (!empty($this->data['rendersortattr']))
+		{
+			$metaModel = $this->getMetaModel();
+			if ($metaModel)
+			{
+				$attribute = $metaModel->getAttributeById($this->data['rendersortattr']);
+				if ($attribute)
+				{
+					$attribute->getColName();
+				}
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function isManualSorting()
+	{
+		return (bool)$this->data['ismanualsort'];
 	}
 
 	/**

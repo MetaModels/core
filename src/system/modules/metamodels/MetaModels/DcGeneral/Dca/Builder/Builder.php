@@ -22,6 +22,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\ModelRelationshi
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CommandInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CopyCommand;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CutCommand;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\GroupAndSortingInformationInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultFilterElementInformation;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultLimitElementInformation;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultSearchElementInformation;
@@ -635,32 +636,20 @@ class Builder
 
 		$inputScreen = $this->getInputScreenDetails($container);
 
-		switch ($inputScreen->getMode())
+		if ($inputScreen->isHierarchical())
 		{
-			case 0:
-			case 1:
-			case 2:
-			case 3:
-				// Flat mode.
-				// 0 Records are not sorted.
-				// 1 Records are sorted by a fixed field.
-				// 2 Records are sorted by a switchable field.
-				// 3 Records are sorted by the parent table.
-				$config->setMode(BasicDefinitionInterface::MODE_FLAT);
-				break;
-			case 4:
-				// Displays the child records of a parent record (see style sheets module).
-				$config->setMode(BasicDefinitionInterface::MODE_PARENTEDLIST);
-				break;
-			case 5:
-			case 6:
-				// Hierarchical mode.
-				// 5 Records are displayed as tree (see site structure).
-				// 6 Displays the child records within a tree structure (see articles module).
-				$config->setMode(BasicDefinitionInterface::MODE_HIERARCHICAL);
-
-				break;
-			default:
+			// Hierarchical mode - Records are displayed as tree (see site structure).
+			$config->setMode(BasicDefinitionInterface::MODE_HIERARCHICAL);
+		}
+		elseif ($inputScreen->isParented())
+		{
+			// Displays the child records of a parent record (see style sheets module).
+			$config->setMode(BasicDefinitionInterface::MODE_PARENTEDLIST);
+		}
+		elseif ($inputScreen->isFlat())
+		{
+			// Flat mode.
+			$config->setMode(BasicDefinitionInterface::MODE_FLAT);
 		}
 
 		$config
@@ -1112,6 +1101,44 @@ class Builder
 	}
 
 	/**
+	 * Convert a render group type from InputScreen value to GroupAndSortingInformationInterface value.
+	 *
+	 * @param string $type The group type.
+	 *
+	 * @return string
+	 */
+	protected function convertRenderGroupType($type)
+	{
+		switch ($type)
+		{
+			case 'char':
+				return GroupAndSortingInformationInterface::GROUP_CHAR;
+
+			case 'digit':
+				return GroupAndSortingInformationInterface::GROUP_DIGIT;
+
+			case 'day':
+				return GroupAndSortingInformationInterface::GROUP_DAY;
+
+			case 'weekday':
+				return GroupAndSortingInformationInterface::GROUP_WEEKDAY;
+
+			case 'week':
+				return GroupAndSortingInformationInterface::GROUP_WEEK;
+
+			case 'month':
+				return GroupAndSortingInformationInterface::GROUP_MONTH;
+
+			case 'year':
+				return GroupAndSortingInformationInterface::GROUP_YEAR;
+
+			default:
+		}
+
+		return GroupAndSortingInformationInterface::GROUP_NONE;
+	}
+
+	/**
 	 * Parse the sorting part of listing configuration.
 	 *
 	 * @param IMetaModelDataDefinition $container The data container.
@@ -1125,10 +1152,48 @@ class Builder
 		$inputScreen = ViewCombinations::getInputScreenDetails($container->getName());
 
 		$listing->setRootIcon($this->getBackendIcon($inputScreen->getIcon()));
-		$listing->setDefaultSortingFields(array_merge(
-			(array)$listing->getDefaultSortingFields(),
-			array('sorting' => 'ASC')
-		));
+		if ($inputScreen->isManualSorting())
+		{
+			$definitions = $listing->getGroupAndSortingDefinition();
+			if (!$definitions->hasDefault())
+			{
+				$definition = $definitions->add();
+				$definitions->markDefault($definition);
+				// TODO: need translation string here.
+				$definition->setName('Default');
+			}
+			else
+			{
+				$definition = $definitions->getDefault();
+			}
+
+			$propertyInformation = $definition->add();
+			$propertyInformation
+				->setProperty('sorting')
+				->setSortingMode('ASC');
+		}
+
+		if ($inputScreen->getRenderGroupAttribute())
+		{
+			$definitions = $listing->getGroupAndSortingDefinition();
+			if (!$definitions->hasDefault())
+			{
+				$definition = $definitions->add();
+				$definitions->markDefault($definition);
+				// TODO: need translation string here.
+				$definition->setName('Default');
+			}
+			else
+			{
+				$definition = $definitions->getDefault();
+			}
+
+			$propertyInformation = $definition->add(0);
+			$propertyInformation
+				->setProperty($inputScreen->getRenderGroupAttribute())
+				->setGroupingMode($this->convertRenderGroupType($inputScreen->getRenderGroupType()))
+				->setGroupingLength($inputScreen->getRenderGroupLength());
+		}
 	}
 
 	/**

@@ -115,11 +115,74 @@ interface IInputScreen
 	public function isStandalone();
 
 	/**
-	 * Retrieve the default sorting mode for this input screen.
+	 * Retrieve the render mode.
 	 *
-	 * @return int
+	 * @return string
 	 */
-	public function getMode();
+	public function getRenderMode();
+
+	/**
+	 * Check if the render mode is hierarchical.
+	 *
+	 * @return bool
+	 */
+	public function isHierarchical();
+
+	/**
+	 * Check if the render mode is parent mode.
+	 *
+	 * @return bool
+	 */
+	public function isParented();
+
+	/**
+	 * Check if the render mode is flat mode.
+	 *
+	 * @return bool
+	 */
+	public function isFlat();
+
+	/**
+	 * Retrieve the render group name.
+	 *
+	 * @return string
+	 */
+	public function getRenderGroupType();
+
+	/**
+	 * Retrieve the render group name.
+	 *
+	 * @return string
+	 */
+	public function getRenderGroupLength();
+
+	/**
+	 * Retrieve the render group name.
+	 *
+	 * @return string
+	 */
+	public function getRenderGroupAttribute();
+
+	/**
+	 * Retrieve the render sorting direction.
+	 *
+	 * @return string
+	 */
+	public function getRenderSortDirection();
+
+	/**
+	 * Retrieve the render sort attribute name.
+	 *
+	 * @return string
+	 */
+	public function getRenderSortAttribute();
+
+	/**
+	 * Determine if manual sorting is enabled or not.
+	 *
+	 * @return bool
+	 */
+	public function isManualSorting();
 
 	/**
 	 * Check if the MetaModel is closed.
@@ -150,7 +213,6 @@ interface IInputScreen
 	 * @return bool
 	 */
 	public function isDeletable();
-
 
 	/**
 	 * Get a string with the panel layout.
