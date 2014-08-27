@@ -346,6 +346,41 @@ class Subscriber
 			array('tl_metamodel_dca', 'rendertype')
 		);
 
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME
+					=> 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyRenderMode::getModes',
+			),
+			$dispatcher,
+			array('tl_metamodel_dca', 'rendermode')
+		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyRenderGroupAttribute::getOptions',
+				DecodePropertyValueForWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyRenderGroupAttribute::decodeValue',
+				EncodePropertyValueFromWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyRenderGroupAttribute::encodeValue'
+			),
+			$dispatcher,
+			array('tl_metamodel_dca', 'rendergroupattr')
+		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyRenderSortAttribute::getOptions',
+				DecodePropertyValueForWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyRenderSortAttribute::decodeValue',
+				EncodePropertyValueFromWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyRenderSortAttribute::encodeValue'
+			),
+			$dispatcher,
+			array('tl_metamodel_dca', 'rendersortattr')
+		);
+
 		PropertyPTable::setVisibility($event);
 	}
 

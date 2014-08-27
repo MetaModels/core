@@ -226,6 +226,65 @@ class UpgradeHandler
 
 			TableManipulation::dropColumn('tl_metamodel_dca', 'isclosed', true);
 		}
+
+		// Create the fields for grouping and sorting and migrate.
+		if (!$objDB->fieldExists('rendermode', 'tl_metamodel_dca'))
+		{
+			TableManipulation::createColumn(
+				'tl_metamodel_dca',
+				'rendermode',
+				'varchar(10) NOT NULL default \'\''
+			);
+			TableManipulation::createColumn(
+				'tl_metamodel_dca',
+				'rendergrouptype',
+				'varchar(10) NOT NULL default \'none\''
+			);
+			TableManipulation::createColumn(
+				'tl_metamodel_dca',
+				'rendergrouplen',
+				'int(10) unsigned NOT NULL default \'1\''
+			);
+			TableManipulation::createColumn(
+				'tl_metamodel_dca',
+				'rendergroupattr',
+				'int(10) unsigned NOT NULL default \'0\''
+			);
+			TableManipulation::createColumn(
+				'tl_metamodel_dca',
+				'rendersort',
+				'varchar(10) NOT NULL default \'asc\''
+			);
+			TableManipulation::createColumn(
+				'tl_metamodel_dca',
+				'rendersortattr',
+				'int(10) unsigned NOT NULL default \'0\''
+			);
+			TableManipulation::createColumn(
+				'tl_metamodel_dca',
+				'ismanualsort',
+				' char(1) NOT NULL default \'\''
+			);
+
+			$objDB->execute('UPDATE tl_metamodel_dca SET rendermode="flat" WHERE mode IN (0,1,2,3)');
+			$objDB->execute('UPDATE tl_metamodel_dca SET rendermode="parented" WHERE mode IN (4)');
+			$objDB->execute('UPDATE tl_metamodel_dca SET rendermode="hierarchical" WHERE mode IN (5,6)');
+
+			$objDB->execute('UPDATE tl_metamodel_dca SET rendergrouptype="char" WHERE flag IN (1,2,3,4)');
+			$objDB->execute('UPDATE tl_metamodel_dca SET rendergrouptype="digit" WHERE flag IN (11,12)');
+			$objDB->execute('UPDATE tl_metamodel_dca SET rendergrouptype="day" WHERE flag IN (5,6)');
+			$objDB->execute('UPDATE tl_metamodel_dca SET rendergrouptype="month" WHERE flag IN (7,8)');
+			$objDB->execute('UPDATE tl_metamodel_dca SET rendergrouptype="year" WHERE flag IN (9,10)');
+
+			$objDB->execute('UPDATE tl_metamodel_dca SET rendergrouplen="0"');
+			$objDB->execute('UPDATE tl_metamodel_dca SET rendergrouplen="1" WHERE flag IN (1,2)');
+			$objDB->execute('UPDATE tl_metamodel_dca SET rendergrouplen="2" WHERE flag IN (3,4)');
+
+			$objDB->execute('UPDATE tl_metamodel_dca SET rendersort="desc" WHERE flag IN (2,4,6,8,10,12)');
+
+			TableManipulation::dropColumn('tl_metamodel_dca', 'mode', true);
+			TableManipulation::dropColumn('tl_metamodel_dca', 'flag', true);
+		}
 	}
 
 	/**

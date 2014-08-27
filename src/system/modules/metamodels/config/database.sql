@@ -50,15 +50,26 @@ CREATE TABLE `tl_metamodel_dca` (
   `name` varchar(255) NOT NULL default '',
 -- is default?
   `isdefault` char(1) NOT NULL default '',
--- type, either standalone or attached.
+-- type, either "standalone" or "ctable".
   `rendertype` varchar(10) NOT NULL default '',
--- sorting mode.
-  `mode` int(4) unsigned NOT NULL default '0',
--- sorting flag.
-  `flag` int(4) unsigned NOT NULL default '0',
+-- render mode - one of: "flat", "parented" (ctable only), "hierarchical"
+  `rendermode` varchar(10) NOT NULL default '',
+-- is manual sorting active?
+  `ismanualsort` char(1) NOT NULL default '',
+-- the grouping to apply (optional) one of:
+-- "none", "char" (see redergrouplen), "digit", "day", "weekday", "week", "month", "year".
+  `rendergrouptype` varchar(10) NOT NULL default 'none',
+-- the (optional) length of the grouping to apply
+  `rendergrouplen` int(10) unsigned NOT NULL default '1',
+-- attribute to use for grouping, 0 for no grouping, any other is id of an attribute.
+  `rendergroupattr` int(10) unsigned NOT NULL default '0',
+-- sorting mode "asc" or "desc"
+  `rendersort` varchar(10) NOT NULL default 'asc',
+-- attribute to use for sorting, 0 for no sorting, any other is an id of an attribute.
+  `rendersortattr` int(10) unsigned NOT NULL default '0',
 -- the panel layouts we want to display.
   `panelLayout` blob NULL,
--- parent table (if mode 3,4,6)
+-- parent table (if rendertype == "ctable")
   `ptable` varchar(64) NOT NULL default '',
   `backendsection` varchar(255) NOT NULL default '',
   `backendcaption` text NULL,

@@ -20,31 +20,26 @@
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['name']                 = array('Name', 'Name of the input screen.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']               = array('Revision date', 'Date and time of the latest revision.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']            = array('Is default', 'Determines that this input screen shall be used as default for the parenting MetaModel.');
-
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype']           = array('Integration', 'Select the desired type of integration.');
-
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']               = array('Parent table name (if any)', 'Name of the database table that shall be referred to as parent table.');
-
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']                 = array('Sorting mode', 'The sorting mode to use in the item view.');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']                 = array('Sorting flag', 'The sorting flag to use in the item view.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermode']           = array('Render mode', 'Select the desired render mode.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']               = array('Parent table name', 'Name of the database table that shall be referred to as parent table.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']       = array('Backend section', 'Select the desired backend section where you want the MetaModel appear. For models that shall be edited by end users, the "content" section most likely will be appropriate.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon']          = array('Backend icon', 'Select the desired backend icon. This icon will get used to draw an image in the left menu and on the top of the edit view in tree displays.');
-
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption']       = array('Backend caption', 'The text you specify in here, will get used as the label and description text in the backend menu.');
-
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_langcode']       = array('Language', 'Select the languages you want to provide.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_label']          = array('Label text', 'The text you specify in here, will get used as the menu label in the backend menu.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_description']    = array('Description text', 'The text you specify in here, will get used as the description (hover title) in the backend menu.');
-
-
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']          = array('Panel layout', 'Separate panel options with comma (= space) and semicolon (= new line) like sort,filter;search,limit.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker']          = 'Panelpicker';
-
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['use_limitview']        = array('View limitation', 'Activate the view limitation.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']  = array('Limit the render setting', 'Choose between front end or backend.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['iseditable']           = array('Allow editing of items', 'If checked, this input screen allows the editing of items.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['iscreatable']          = array('Allow creating of items', 'If checked, this input screen allows the creating of items.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdeleteable']         = array('Allow deleting of items', 'If checked, this input screen allows the deleting of items.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouptype']      = array('Grouping type', 'The grouping type to use in the item view.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergroupattr']      = array('Grouping attribute', 'The attribute to use for grouping in the item view.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouplen']       = array('Grouping length', 'The amount of characters to use for grouping.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['ismanualsort']         = array('Enable manual sorting', 'If this is enabled, the user will be able to perform manual sorting.');
 
 /**
  * Legends
@@ -52,6 +47,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdeleteable']         = array('Allow d
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['title_legend']         = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['view_legend']          = 'View settings';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']       = 'Backend integration';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['display_legend']       = 'Data display settings';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['permissions_legend']   = 'Data manipulation permissions';
 
 
 /**
@@ -68,27 +65,18 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['settings']             = array('Input s
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['1']     = 'Sort by initial letter ascending';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['2']     = 'Sort by initial letter descending';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['3']     = 'Sort by initial two letters ascending';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['4']     = 'Sort by initial two letters descending';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['5']     = 'Sort by day ascending';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['6']     = 'Sort by day descending';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['7']     = 'Sort by month ascending';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['8']     = 'Sort by month descending';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['9']     = 'Sort by year ascending';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['10']    = 'Sort by year descending';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['11']    = 'Sort ascending';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['12']    = 'Sort descending';
-
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_0'] = '0 Records are not sorted';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_1'] = '1 Records are sorted by a fixed field';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_2'] = '2 Records are sorted by a switchable field';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_3'] = '3 Records are sorted by the parent table';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_4'] = '4 Displays the child records of a parent record (see style sheets module)';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_5'] = '5 Records are displayed as tree (see site structure)';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_6'] = '6 Displays the child records within a tree structure (see article module)';
-
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes']['standalone'] = 'Standalone';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes']['ctable']     = 'As child table';
 
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermodes']['flat']         = 'Flat';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermodes']['parented']     = 'Parented';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermodes']['hierarchical'] = 'Hierarchical';
+
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouptypes']['none']    = 'Do not group ';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouptypes']['char']    = 'Group by initial letter(s)';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouptypes']['digit']   = 'Group by numeric order';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouptypes']['day']     = 'Group by day of date';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouptypes']['weekday'] = 'Group by weekday of date';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouptypes']['week']    = 'Group by week of year';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouptypes']['month']   = 'Group by month of date';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouptypes']['year']    = 'Group by year of date';
