@@ -44,7 +44,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['use_limitview']        = array('View li
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']  = array('Limit the render setting', 'Choose between front end or backend.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['iseditable']           = array('Allow editing of items', 'If checked, this input screen allows the editing of items.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['iscreatable']          = array('Allow creating of items', 'If checked, this input screen allows the creating of items.');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdeletable']          = array('Allow deleting of items', 'If checked, this input screen allows the deleting of items.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdeleteable']         = array('Allow deleting of items', 'If checked, this input screen allows the deleting of items.');
 
 /**
  * Legends

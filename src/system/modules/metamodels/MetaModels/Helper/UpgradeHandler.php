@@ -197,6 +197,7 @@ class UpgradeHandler
 	{
 		$objDB = self::DB();
 
+		// Change isclosed to iseditable, iscreatable and isdeleteable.
 		if (!$objDB->fieldExists('iseditable', 'tl_metamodel_dca'))
 		{
 			// Create the column in the database and copy the data over.
@@ -208,6 +209,11 @@ class UpgradeHandler
 			TableManipulation::createColumn(
 				'tl_metamodel_dca',
 				'iscreatable',
+				'char(1) NOT NULL default \'\''
+			);
+			TableManipulation::createColumn(
+				'tl_metamodel_dca',
+				'isdeleteable',
 				'char(1) NOT NULL default \'\''
 			);
 

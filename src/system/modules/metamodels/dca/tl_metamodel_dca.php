@@ -158,7 +158,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 				'rendertype',
 				'iseditable',
 				'iscreatable',
-				'isdeletable',
+				'isdeleteable',
 			),
 		)
 	),
@@ -379,9 +379,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 				'tl_class'            => 'w50 m12 cbx',
 			)
 		),
-		'isdeletable' => array
+		'isdeleteable' => array
 		(
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdeletable'],
+			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdeleteable'],
 			'inputType'               => 'checkbox',
 			'eval'                    => array
 			(
