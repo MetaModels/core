@@ -255,10 +255,20 @@ class ViewCombinations
 				')
 				->executeUncached($inputScreens->id);
 
+				$groupSort = self::getDb()
+				->prepare('
+					SELECT *
+					FROM tl_metamodel_dca_sortgroup
+					WHERE pid=?
+					ORDER BY sorting ASC
+				')
+				->executeUncached($inputScreens->id);
+
 			self::$information[$inputScreens->pid][self::INPUTSCREEN] = new InputScreen(
 				$inputScreens->row(),
 				$propertyRows->fetchAllAssoc(),
-				$conditions->fetchAllAssoc()
+				$conditions->fetchAllAssoc(),
+				$groupSort->fetchAllAssoc()
 			);
 		}
 	}
@@ -369,6 +379,7 @@ class ViewCombinations
 	public static function getInputScreen($metaModel)
 	{
 		$inputScreen = self::getInputScreenDetails($metaModel);
+
 		return $inputScreen ? $inputScreen->getId() : null;
 	}
 

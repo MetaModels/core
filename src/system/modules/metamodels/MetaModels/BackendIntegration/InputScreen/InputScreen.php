@@ -1,4 +1,18 @@
 <?php
+/**
+ * The MetaModels extension allows the creation of multiple collections of custom items,
+ * each with its own unique set of selectable attributes, with attribute extendability.
+ * The Front-End modules allow you to build powerful listing and filtering of the
+ * data in each collection.
+ *
+ * PHP version 5
+ * @package    MetaModels
+ * @subpackage Core
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  The MetaModels team.
+ * @license    LGPL.
+ * @filesource
+ */
 
 namespace MetaModels\BackendIntegration\InputScreen;
 
@@ -46,6 +60,13 @@ class InputScreen implements IInputScreen
 	protected $conditions = array();
 
 	/**
+	 * Grouping and sorting information.
+	 *
+	 * @var IInputScreenGroupingAndSorting
+	 */
+	protected $groupSort = array();
+
+	/**
 	 * Simple map from property setting id to property name.
 	 *
 	 * @var array
@@ -67,13 +88,16 @@ class InputScreen implements IInputScreen
 	 * @param array $propertyRows The information about all contained properties.
 	 *
 	 * @param array $conditions   The property condition information.
+	 *
+	 * @param array $groupSort    The grouping and sorting information.
 	 */
-	public function __construct($data, $propertyRows, $conditions)
+	public function __construct($data, $propertyRows, $conditions, $groupSort)
 	{
 		$this->data = $data;
 
 		$this->transformConditions($conditions);
 		$this->translateRows($propertyRows);
+		$this->transformGroupSort($groupSort);
 	}
 
 	/**
@@ -283,6 +307,23 @@ class InputScreen implements IInputScreen
 	}
 
 	/**
+	 * Transform the grouping and sorting modes.
+	 *
+	 * @param array $rows The rows from the Database to convert.
+	 *
+	 * @return void
+	 */
+	protected function transformGroupSort($rows)
+	{
+		foreach ($rows as $row)
+		{
+			$this->groupSort[] = new InputScreenGroupingAndSorting($row, $this);
+		}
+	}
+
+
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function getId()
@@ -351,6 +392,14 @@ class InputScreen implements IInputScreen
 	{
 		$property = $this->propertyMap2[$name];
 		return isset($this->conditions[$property]) ? $this->conditions[$property] : null;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getGroupingAndSorting()
+	{
+		return $this->groupSort;
 	}
 
 	/**
@@ -444,80 +493,6 @@ class InputScreen implements IInputScreen
 	public function isFlat()
 	{
 		return $this->getRenderMode() === 'flat';
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getRenderGroupType()
-	{
-		return $this->data['rendergrouptype'];
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getRenderGroupLength()
-	{
-		return (int)$this->data['rendergrouplen'];
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getRenderGroupAttribute()
-	{
-		if (!empty($this->data['rendergroupattr']))
-		{
-			$metaModel = $this->getMetaModel();
-			if ($metaModel)
-			{
-				$attribute = $metaModel->getAttributeById($this->data['rendergroupattr']);
-				if ($attribute)
-				{
-					return $attribute->getColName();
-				}
-			}
-		}
-
-		return '';
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getRenderSortDirection()
-	{
-		return $this->data['rendersort'];
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getRenderSortAttribute()
-	{
-		if (!empty($this->data['rendersortattr']))
-		{
-			$metaModel = $this->getMetaModel();
-			if ($metaModel)
-			{
-				$attribute = $metaModel->getAttributeById($this->data['rendersortattr']);
-				if ($attribute)
-				{
-					$attribute->getColName();
-				}
-			}
-		}
-
-		return '';
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function isManualSorting()
-	{
-		return (bool)$this->data['ismanualsort'];
 	}
 
 	/**

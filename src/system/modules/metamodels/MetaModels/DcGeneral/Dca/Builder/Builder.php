@@ -22,6 +22,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\ModelRelationshi
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CommandInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CopyCommand;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CutCommand;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\GroupAndSortingDefinitionCollectionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\GroupAndSortingInformationInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultFilterElementInformation;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultLimitElementInformation;
@@ -1020,7 +1021,6 @@ class Builder
 		$this->parseModelOperations($view, $container);
 	}
 
-
 	/**
 	 * Parse the listing configuration.
 	 *
@@ -1140,47 +1140,40 @@ class Builder
 		$inputScreen = ViewCombinations::getInputScreenDetails($container->getName());
 
 		$listing->setRootIcon($this->getBackendIcon($inputScreen->getIcon()));
-		if ($inputScreen->isManualSorting())
+
+		$definitions = $listing->getGroupAndSortingDefinition();
+		foreach ($inputScreen->getGroupingAndSorting() as $information)
 		{
-			$definitions = $listing->getGroupAndSortingDefinition();
-			if (!$definitions->hasDefault())
+			$definition = $definitions->add();
+			$definition->setName($information->getName());
+			if ($information->isDefault() && !$definitions->hasDefault())
 			{
-				$definition = $definitions->add();
 				$definitions->markDefault($definition);
-				// TODO: need translation string here.
-				$definition->setName('Default');
-			}
-			else
-			{
-				$definition = $definitions->getDefault();
 			}
 
-			$propertyInformation = $definition->add();
-			$propertyInformation
-				->setProperty('sorting')
-				->setSortingMode('ASC');
-		}
-
-		if ($inputScreen->getRenderGroupAttribute())
-		{
-			$definitions = $listing->getGroupAndSortingDefinition();
-			if (!$definitions->hasDefault())
+			if ($information->isManualSorting())
 			{
-				$definition = $definitions->add();
-				$definitions->markDefault($definition);
-				// TODO: need translation string here.
-				$definition->setName('Default');
+				$propertyInformation = $definition->add();
+				$propertyInformation
+					->setProperty('sorting')
+					->setSortingMode('ASC');
 			}
-			else
+			elseif ($information->getRenderSortAttribute())
 			{
-				$definition = $definitions->getDefault();
+				$propertyInformation = $definition->add();
+				$propertyInformation
+					->setProperty($information->getRenderSortAttribute())
+					->setSortingMode($information->getRenderSortDirection());
 			}
 
-			$propertyInformation = $definition->add(0);
-			$propertyInformation
-				->setProperty($inputScreen->getRenderGroupAttribute())
-				->setGroupingMode($this->convertRenderGroupType($inputScreen->getRenderGroupType()))
-				->setGroupingLength($inputScreen->getRenderGroupLength());
+			if ($information->getRenderGroupAttribute())
+			{
+				$propertyInformation = $definition->add(0);
+				$propertyInformation
+					->setProperty($information->getRenderGroupAttribute())
+					->setGroupingMode($this->convertRenderGroupType($information->getRenderGroupType()))
+					->setGroupingLength($information->getRenderGroupLength());
+			}
 		}
 	}
 
@@ -1523,11 +1516,6 @@ class Builder
 		if (isset($propInfo['filter']))
 		{
 			$property->setFilterable($propInfo['filter']);
-		}
-
-		if (!$property->getGroupingLength() && isset($propInfo['length']))
-		{
-			$property->setGroupingLength($propInfo['length']);
 		}
 
 		if (!$property->getWidgetType() && isset($propInfo['inputType']))
