@@ -193,7 +193,12 @@ class UpgradeHandler
 		}
 	}
 
-	public static function upgradeInputScreens()
+	/**
+	 * Upgrade the database to change from closed dca to editable, creatable and deletable.
+	 *
+	 * @return void
+	 */
+	protected static function upgradeClosed()
 	{
 		$objDB = self::DB();
 
@@ -226,6 +231,20 @@ class UpgradeHandler
 
 			TableManipulation::dropColumn('tl_metamodel_dca', 'isclosed', true);
 		}
+	}
+
+	/**
+	 * Upgrade the input screens.
+	 *
+	 * @return void
+	 */
+	protected static function upgradeInputScreenMode()
+	{
+		$objDB = self::DB();
+		if (!$objDB->fieldExists('mode', 'tl_metamodel_dca'))
+		{
+			return;
+		}
 
 		// Create the fields for grouping and sorting and migrate.
 		if (!$objDB->fieldExists('rendermode', 'tl_metamodel_dca'))
@@ -235,56 +254,108 @@ class UpgradeHandler
 				'rendermode',
 				'varchar(10) NOT NULL default \'\''
 			);
-			TableManipulation::createColumn(
-				'tl_metamodel_dca',
-				'rendergrouptype',
-				'varchar(10) NOT NULL default \'none\''
-			);
-			TableManipulation::createColumn(
-				'tl_metamodel_dca',
-				'rendergrouplen',
-				'int(10) unsigned NOT NULL default \'1\''
-			);
-			TableManipulation::createColumn(
-				'tl_metamodel_dca',
-				'rendergroupattr',
-				'int(10) unsigned NOT NULL default \'0\''
-			);
-			TableManipulation::createColumn(
-				'tl_metamodel_dca',
-				'rendersort',
-				'varchar(10) NOT NULL default \'asc\''
-			);
-			TableManipulation::createColumn(
-				'tl_metamodel_dca',
-				'rendersortattr',
-				'int(10) unsigned NOT NULL default \'0\''
-			);
-			TableManipulation::createColumn(
-				'tl_metamodel_dca',
-				'ismanualsort',
-				' char(1) NOT NULL default \'\''
-			);
-
-			$objDB->execute('UPDATE tl_metamodel_dca SET rendermode="flat" WHERE mode IN (0,1,2,3)');
-			$objDB->execute('UPDATE tl_metamodel_dca SET rendermode="parented" WHERE mode IN (4)');
-			$objDB->execute('UPDATE tl_metamodel_dca SET rendermode="hierarchical" WHERE mode IN (5,6)');
-
-			$objDB->execute('UPDATE tl_metamodel_dca SET rendergrouptype="char" WHERE flag IN (1,2,3,4)');
-			$objDB->execute('UPDATE tl_metamodel_dca SET rendergrouptype="digit" WHERE flag IN (11,12)');
-			$objDB->execute('UPDATE tl_metamodel_dca SET rendergrouptype="day" WHERE flag IN (5,6)');
-			$objDB->execute('UPDATE tl_metamodel_dca SET rendergrouptype="month" WHERE flag IN (7,8)');
-			$objDB->execute('UPDATE tl_metamodel_dca SET rendergrouptype="year" WHERE flag IN (9,10)');
-
-			$objDB->execute('UPDATE tl_metamodel_dca SET rendergrouplen="0"');
-			$objDB->execute('UPDATE tl_metamodel_dca SET rendergrouplen="1" WHERE flag IN (1,2)');
-			$objDB->execute('UPDATE tl_metamodel_dca SET rendergrouplen="2" WHERE flag IN (3,4)');
-
-			$objDB->execute('UPDATE tl_metamodel_dca SET rendersort="desc" WHERE flag IN (2,4,6,8,10,12)');
-
-			TableManipulation::dropColumn('tl_metamodel_dca', 'mode', true);
-			TableManipulation::dropColumn('tl_metamodel_dca', 'flag', true);
 		}
+
+		$objDB->execute('UPDATE tl_metamodel_dca SET rendermode="flat" WHERE mode IN (0,1,2,3)');
+		$objDB->execute('UPDATE tl_metamodel_dca SET rendermode="parented" WHERE mode IN (4)');
+		$objDB->execute('UPDATE tl_metamodel_dca SET rendermode="hierarchical" WHERE mode IN (5,6)');
+
+		TableManipulation::dropColumn('tl_metamodel_dca', 'mode', true);
+	}
+
+	/**
+	 * Upgrade the input screens.
+	 *
+	 * @return void
+	 */
+	protected static function upgradeInputScreenFlag()
+	{
+		$objDB = self::DB();
+		if (!$objDB->fieldExists('flag', 'tl_metamodel_dca'))
+		{
+			return;
+		}
+
+		if (!$objDB->tableExists('tl_metamodel_dca_sortgroup', null, true))
+		{
+			$objDB->execute('
+				CREATE TABLE `tl_metamodel_dca_sortgroup` (
+				`id` int(10) unsigned NOT NULL auto_increment,
+				`pid` int(10) unsigned NOT NULL default \'0\',
+				`sorting` int(10) unsigned NOT NULL default \'0\',
+				`tstamp` int(10) unsigned NOT NULL default \'0\',
+				`name` text NULL,
+				`isdefault` char(1) NOT NULL default \'\',
+				`ismanualsort` char(1) NOT NULL default \'\',
+				`rendergrouptype` varchar(10) NOT NULL default \'none\',
+				`rendergrouplen` int(10) unsigned NOT NULL default \'1\',
+				`rendergroupattr` int(10) unsigned NOT NULL default \'0\',
+				`rendersort` varchar(10) NOT NULL default \'asc\',
+				`rendersortattr` int(10) unsigned NOT NULL default \'0\',
+				PRIMARY KEY  (`id`)
+				) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+			');
+		}
+
+		$dca = $objDB->execute('SELECT * FROM tl_metamodel_dca');
+
+		while ($dca->next())
+		{
+			$renderGroupLen = 0;
+			if (in_array($dca->flag, array(1,2,3,4)))
+			{
+				$renderGroupType = 'char';
+				if (in_array($dca->flag, array(1,2)))
+				{
+					$renderGroupLen = 1;
+				}
+				else
+				{
+					$renderGroupLen = 2;
+				}
+			}
+			elseif (in_array($dca->flag, array(5,6)))
+			{
+				$renderGroupType = 'day';
+			}
+			elseif (in_array($dca->flag, array(7,8)))
+			{
+				$renderGroupType = 'month';
+			}
+			elseif (in_array($dca->flag, array(9,10)))
+			{
+				$renderGroupType = 'year';
+			}
+			elseif (in_array($dca->flag, array(11,12)))
+			{
+				$renderGroupType = 'digit';
+			}
+			else
+			{
+				$renderGroupType = 'none';
+			}
+
+			$data = array(
+				'pid'             => $dca->id,
+				'sorting'         => 128,
+				'tstamp'          => time(),
+				'name'            => null,
+				'isdefault'       => '1',
+				'ismanualsort'    => '1',
+				'rendergrouptype' => $renderGroupType,
+				'rendergrouplen'  => $renderGroupLen,
+				'rendergroupattr' => 0,
+				'rendersort'      => in_array($dca->flag, array(2,4,6,8,10,12)) ? 'desc' : 'asc',
+				'rendersortattr'  => 0,
+			);
+
+			$objDB
+				->prepare('INSERT INTO tl_metamodel_dca_sortgroup %s')
+				->set($data)
+				->execute();
+		}
+
+		TableManipulation::dropColumn('tl_metamodel_dca', 'flag', true);
 	}
 
 	/**
@@ -297,6 +368,8 @@ class UpgradeHandler
 		self::upgradeJumpTo();
 		self::upgradeDcaSettingsPublished();
 		self::changeSubPalettesToConditions();
-		self::upgradeInputScreens();
+		self::upgradeClosed();
+		self::upgradeInputScreenMode();
+		self::upgradeInputScreenFlag();
 	}
 }
