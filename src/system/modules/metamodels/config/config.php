@@ -32,6 +32,7 @@ array_insert($GLOBALS['BE_MOD'], (array_search('accounts', array_keys($GLOBALS['
 				'tl_metamodel_rendersettings',
 				'tl_metamodel_rendersetting',
 				'tl_metamodel_dca',
+				'tl_metamodel_dca_sortgroup',
 				'tl_metamodel_dcasetting',
 				'tl_metamodel_dca_combine',
 				'tl_metamodel_dcasetting_condition'

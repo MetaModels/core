@@ -54,19 +54,6 @@ CREATE TABLE `tl_metamodel_dca` (
   `rendertype` varchar(10) NOT NULL default '',
 -- render mode - one of: "flat", "parented" (ctable only), "hierarchical"
   `rendermode` varchar(10) NOT NULL default '',
--- is manual sorting active?
-  `ismanualsort` char(1) NOT NULL default '',
--- the grouping to apply (optional) one of:
--- "none", "char" (see redergrouplen), "digit", "day", "weekday", "week", "month", "year".
-  `rendergrouptype` varchar(10) NOT NULL default 'none',
--- the (optional) length of the grouping to apply
-  `rendergrouplen` int(10) unsigned NOT NULL default '1',
--- attribute to use for grouping, 0 for no grouping, any other is id of an attribute.
-  `rendergroupattr` int(10) unsigned NOT NULL default '0',
--- sorting mode "asc" or "desc"
-  `rendersort` varchar(10) NOT NULL default 'asc',
--- attribute to use for sorting, 0 for no sorting, any other is an id of an attribute.
-  `rendersortattr` int(10) unsigned NOT NULL default '0',
 -- the panel layouts we want to display.
   `panelLayout` blob NULL,
 -- parent table (if rendertype == "ctable")
@@ -83,8 +70,42 @@ CREATE TABLE `tl_metamodel_dca` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+
+-- --------------------------------------------------------
+
 --
--- Table `tl_metamodel_dca`
+-- Table `tl_metamodel_dca_sortgroup`
+--
+
+CREATE TABLE `tl_metamodel_dca_sortgroup` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `pid` int(10) unsigned NOT NULL default '0',
+  `sorting` int(10) unsigned NOT NULL default '0',
+  `tstamp` int(10) unsigned NOT NULL default '0',
+  `name` text NULL,
+-- is default?
+  `isdefault` char(1) NOT NULL default '',
+-- is manual sorting active?
+  `ismanualsort` char(1) NOT NULL default '',
+-- the grouping to apply (optional) one of:
+-- "none", "char" (see redergrouplen), "digit", "day", "weekday", "week", "month", "year".
+  `rendergrouptype` varchar(10) NOT NULL default 'none',
+-- the (optional) length of the grouping to apply
+  `rendergrouplen` int(10) unsigned NOT NULL default '1',
+-- attribute to use for grouping, 0 for no grouping, any other is id of an attribute.
+  `rendergroupattr` int(10) unsigned NOT NULL default '0',
+-- sorting mode "asc" or "desc"
+  `rendersort` varchar(10) NOT NULL default 'asc',
+-- attribute to use for sorting, 0 for no sorting, any other is an id of an attribute.
+  `rendersortattr` int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+-- --------------------------------------------------------
+
+--
+-- Table `tl_metamodel_dcasetting`
 --
 
 CREATE TABLE `tl_metamodel_dcasetting` (

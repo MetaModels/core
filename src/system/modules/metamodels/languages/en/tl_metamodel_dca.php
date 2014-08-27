@@ -36,10 +36,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']  = array('Limit t
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['iseditable']           = array('Allow editing of items', 'If checked, this input screen allows the editing of items.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['iscreatable']          = array('Allow creating of items', 'If checked, this input screen allows the creating of items.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdeleteable']         = array('Allow deleting of items', 'If checked, this input screen allows the deleting of items.');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouptype']      = array('Grouping type', 'The grouping type to use in the item view.');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergroupattr']      = array('Grouping attribute', 'The attribute to use for grouping in the item view.');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouplen']       = array('Grouping length', 'The amount of characters to use for grouping.');
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['ismanualsort']         = array('Enable manual sorting', 'If this is enabled, the user will be able to perform manual sorting.');
 
 /**
  * Legends
@@ -55,12 +51,12 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['permissions_legend']   = 'Data manipula
  * Buttons
  */
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']                  = array('New input screen', 'Create new input screen');
-
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']                 = array('Edit input screen', 'Edit the input screen ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['copy']                 = array('Copy input screen definition', 'Copy definition of input screen ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['delete']               = array('Delete input screen', 'Delete input screen ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['show']                 = array('Input screen details', 'Show details of input screen ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['settings']             = array('Input screen settings', 'Edit the settings of input screen ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['groupsort_settings']   = array('Grouping and sorting', 'Edit the grouping and sorting settings of input screen ID %s');
 
 /**
  * Reference
@@ -71,12 +67,3 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes']['ctable']     = 'As child
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermodes']['flat']         = 'Flat';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermodes']['parented']     = 'Parented';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermodes']['hierarchical'] = 'Hierarchical';
-
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouptypes']['none']    = 'Do not group ';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouptypes']['char']    = 'Group by initial letter(s)';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouptypes']['digit']   = 'Group by numeric order';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouptypes']['day']     = 'Group by day of date';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouptypes']['weekday'] = 'Group by weekday of date';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouptypes']['week']    = 'Group by week of year';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouptypes']['month']   = 'Group by month of date';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendergrouptypes']['year']    = 'Group by year of date';
