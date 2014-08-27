@@ -1409,8 +1409,9 @@ class Builder
 		$property     = $inputScreen->getProperty($propName);
 		$propInfo     = $property['info'];
 		$metaModel    = $this->getMetaModel($container);
+		$attribute    = $metaModel->getAttribute($propName);
 		$isTranslated = $metaModel->isTranslated()
-			&& in_array('MetaModels\Attribute\ITranslated', class_implements($metaModel->getAttribute($propName)));
+			&& in_array('MetaModels\Attribute\ITranslated', class_implements($attribute));
 
 		if ($definition->hasProperty($propName))
 		{
@@ -1433,7 +1434,8 @@ class Builder
 
 				$property->setDescription($description);
 			}
-			else {
+			else
+			{
 				$label = $lang;
 			}
 

@@ -293,9 +293,9 @@ class MetaModelDcaBuilder
 
 		$GLOBALS['BE_MOD'][$section][$strModuleName] = array
 		(
-			'tables'			=> array($metaModel->getTableName()),
-			'icon'				=> $strIcon,
-			'callback'			=> 'MetaModels\BackendIntegration\Module'
+			'tables'   => array($metaModel->getTableName()),
+			'icon'     => $strIcon,
+			'callback' => 'MetaModels\BackendIntegration\Module'
 		);
 
 		$arrCaption = array($strTableCaption);
