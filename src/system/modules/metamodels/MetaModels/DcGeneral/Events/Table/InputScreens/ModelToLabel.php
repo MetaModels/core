@@ -76,7 +76,7 @@ class ModelToLabel
 		$event
 			->setLabel('<div class="field_heading cte_type %s"><strong>%s</strong> <em>[%s]</em></div>
 				<div class="field_type block">
-					%s<strong>%s</strong> <span class="tl_class">%s</span>
+					%s<strong>%s</strong><span class="mandatory">%s</span> <span class="tl_class">%s</span>
 				</div>')
 			->setArgs(array(
 				$model->getProperty('published') ? 'published' : 'unpublished',
@@ -84,6 +84,7 @@ class ModelToLabel
 				$type,
 				$imageEvent->getHtml(),
 				$name,
+				$model->getProperty('mandatory') ? ' ['.$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory'][0].']' : '',
 				$model->getProperty('tl_class') ? sprintf('[%s]', $model->getProperty('tl_class')) : ''
 			));
 	}
