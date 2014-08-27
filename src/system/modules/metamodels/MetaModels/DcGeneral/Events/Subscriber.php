@@ -36,8 +36,6 @@ use MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPTable;
 use MetaModels\DcGeneral\Events\Table\InputScreens\BuildPalette;
 use MetaModels\DcGeneral\Events\Table\RenderSetting\RenderSettingBuildPalette;
 use MetaModels\Factory;
-use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetGlobalButtonEvent;
 
@@ -52,7 +50,7 @@ class Subscriber
 	/**
 	 * Register all listeners to handle creation of a data container.
 	 *
-	 * @param CreateEventDispatcherEvent $event The event.
+	 * @param CreateEventDispatcherEvent $event The event being processed.
 	 *
 	 * @return void
 	 */
@@ -122,11 +120,9 @@ class Subscriber
 	/**
 	 * Register the events for table tl_metamodel.
 	 *
-	 * @param BuildDataDefinitionEvent $event The event being processed.
-	 *
 	 * @return void
 	 */
-	public static function registerTableMetaModelsEvents(BuildDataDefinitionEvent $event)
+	public static function registerTableMetaModelsEvents()
 	{
 		static $registered;
 		if ($registered)
@@ -134,7 +130,7 @@ class Subscriber
 			return;
 		}
 		$registered = true;
-		$dispatcher = $event->getDispatcher();
+		$dispatcher = func_get_arg(2);
 
 		self::registerListeners(
 			array(
@@ -188,11 +184,9 @@ class Subscriber
 	/**
 	 * Register the events for table tl_metamodel_attribute.
 	 *
-	 * @param BuildDataDefinitionEvent $event The event being processed.
-	 *
 	 * @return void
 	 */
-	public static function registerTableMetaModelAttributeEvents(BuildDataDefinitionEvent $event)
+	public static function registerTableMetaModelAttributeEvents()
 	{
 		static $registered;
 		if ($registered)
@@ -200,7 +194,7 @@ class Subscriber
 			return;
 		}
 		$registered = true;
-		$dispatcher = $event->getDispatcher();
+		$dispatcher = func_get_arg(2);
 
 		self::registerListeners(
 			array(
@@ -288,7 +282,7 @@ class Subscriber
 			return;
 		}
 		$registered = true;
-		$dispatcher = $event->getDispatcher();
+		$dispatcher = func_get_arg(2);
 
 		self::registerListeners(
 			array(
@@ -358,11 +352,9 @@ class Subscriber
 	/**
 	 * Register the events for table tl_metamodel_dca_combine.
 	 *
-	 * @param BuildDataDefinitionEvent $event The event being processed.
-	 *
 	 * @return void
 	 */
-	public static function registerTableMetaModelDcaCombineEvents(BuildDataDefinitionEvent $event)
+	public static function registerTableMetaModelDcaCombineEvents()
 	{
 		static $registered;
 		if ($registered)
@@ -370,7 +362,7 @@ class Subscriber
 			return;
 		}
 		$registered = true;
-		$dispatcher = $event->getDispatcher();
+		$dispatcher = func_get_arg(2);
 
 		self::registerListeners(
 			array(
@@ -439,7 +431,7 @@ class Subscriber
 			return;
 		}
 		$registered = true;
-		$dispatcher = $event->getDispatcher();
+		$dispatcher = func_get_arg(2);
 
 		self::registerListeners(
 			array(
@@ -501,11 +493,9 @@ class Subscriber
 	/**
 	 * Register the events for table tl_metamodel_dcasetting_condition.
 	 *
-	 * @param BuildDataDefinitionEvent $event The event being processed.
-	 *
 	 * @return void
 	 */
-	public static function registerTableMetaModelDcaSettingConditionsEvents(BuildDataDefinitionEvent $event)
+	public static function registerTableMetaModelDcaSettingConditionsEvents()
 	{
 		static $registered;
 		if ($registered)
@@ -513,7 +503,7 @@ class Subscriber
 			return;
 		}
 		$registered = true;
-		$dispatcher = $event->getDispatcher();
+		$dispatcher = func_get_arg(2);
 
 		self::registerListeners(
 			array(
@@ -571,11 +561,9 @@ class Subscriber
 	/**
 	 * Register the events for table tl_metamodel_filter.
 	 *
-	 * @param BuildDataDefinitionEvent $event The event being processed.
-	 *
 	 * @return void
 	 */
-	public static function registerTableMetaModelFilterEvents(BuildDataDefinitionEvent $event)
+	public static function registerTableMetaModelFilterEvents()
 	{
 		static $registered;
 		if ($registered)
@@ -583,7 +571,7 @@ class Subscriber
 			return;
 		}
 		$registered = true;
-		$dispatcher = $event->getDispatcher();
+		$dispatcher = func_get_arg(2);
 
 		self::registerListeners(
 			array(
@@ -601,11 +589,9 @@ class Subscriber
 	/**
 	 * Register the events for table tl_metamodel_filtersetting.
 	 *
-	 * @param BuildDataDefinitionEvent $event The event being processed.
-	 *
 	 * @return void
 	 */
-	public static function registerTableMetaModelFilterSettingEvents(BuildDataDefinitionEvent $event)
+	public static function registerTableMetaModelFilterSettingEvents()
 	{
 		static $registered;
 		if ($registered)
@@ -613,7 +599,7 @@ class Subscriber
 			return;
 		}
 		$registered = true;
-		$dispatcher = $event->getDispatcher();
+		$dispatcher = func_get_arg(2);
 
 		self::registerListeners(
 			array(
@@ -701,7 +687,7 @@ class Subscriber
 			return;
 		}
 		$registered = true;
-		$dispatcher = $event->getDispatcher();
+		$dispatcher = func_get_arg(2);
 
 		self::registerListeners(
 			array(
@@ -741,11 +727,9 @@ class Subscriber
 	/**
 	 * Register the events for table tl_metamodel_rendersettings.
 	 *
-	 * @param BuildDataDefinitionEvent $event The event being processed.
-	 *
 	 * @return void
 	 */
-	public static function registerTableMetaModelRenderSettingsEvents(BuildDataDefinitionEvent $event)
+	public static function registerTableMetaModelRenderSettingsEvents()
 	{
 		static $registered;
 		if ($registered)
@@ -753,7 +737,7 @@ class Subscriber
 			return;
 		}
 		$registered = true;
-		$dispatcher = $event->getDispatcher();
+		$dispatcher = func_get_arg(2);
 
 		self::registerListeners(
 			array(
@@ -820,8 +804,9 @@ class Subscriber
 	 */
 	public static function preCreateDcGeneral(PreCreateDcGeneralEvent $event)
 	{
-		$factory = $event->getFactory();
-		$name    = $factory->getContainerName();
+		$factory    = $event->getFactory();
+		$name       = $factory->getContainerName();
+		$dispatcher = func_get_arg(2);
 
 		if (!in_array($name, Factory::getAllTables()))
 		{
@@ -830,12 +815,12 @@ class Subscriber
 
 		$generator = new Builder();
 
-		$event->getDispatcher()->addListener(
+		$dispatcher->addListener(
 			sprintf('%s[%s]', BuildDataDefinitionEvent::NAME, $name),
 			array($generator, 'build'),
 			$generator::PRIORITY
 		);
-		$event->getDispatcher()->addListener(
+		$dispatcher->addListener(
 			sprintf('%s[%s]', PopulateEnvironmentEvent::NAME, $name),
 			array($generator, 'populate'),
 			$generator::PRIORITY

@@ -16,7 +16,6 @@
 
 namespace MetaModels\DcGeneral\Events;
 
-use ContaoCommunityAlliance\Contao\EventDispatcher\Event\CreateEventDispatcherEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -53,10 +52,10 @@ class BaseSubscriber
 	{
 		$dispatcher->addListener(
 			BuildDataDefinitionEvent::NAME,
-			function(BuildDataDefinitionEvent $event) use($name, $callback) {
+			function(BuildDataDefinitionEvent $event, $eventName, $dispatcher) use($name, $callback) {
 				if ($event->getContainer()->getName() == $name)
 				{
-					call_user_func($callback, $event);
+					call_user_func($callback, $event, $eventName, $dispatcher);
 				}
 			},
 			$priority
@@ -97,14 +96,13 @@ class BaseSubscriber
 	 */
 	public static function delayEvent($handler, $priority = 0)
 	{
-		return function(Event $event) use($handler, $priority)
+		return function(Event $event, $eventName, $dispatcher) use($handler, $priority)
 		{
-			$name = $event->getName();
-
-			$chunks = explode('[', $name);
+			/** @var EventDispatcherInterface $dispatcher */
+			$chunks = explode('[', $eventName);
 			array_pop($chunks);
 
-			$event->getDispatcher()->addListener(
+			$dispatcher->addListener(
 				implode('[', $chunks),
 				new DelayedEvent($handler),
 				$priority

@@ -17,6 +17,7 @@
 namespace MetaModels\DcGeneral\Events;
 
 use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Helper class solely for use in BaseSubscriber::delayEvent().
@@ -47,15 +48,18 @@ class DelayedEvent
 	/**
 	 * Invoke the handler.
 	 *
-	 * @param Event $event The event.
+	 * @param Event                    $event      The event.
+	 *
+	 * @param string                   $eventName  The event name.
+	 *
+	 * @param EventDispatcherInterface $dispatcher The dispatcher.
 	 *
 	 * @return void
 	 */
-	public function __invoke(Event $event)
+	public function __invoke(Event $event, $eventName, $dispatcher)
 	{
-		/** @var Event $event */
-		$event->getDispatcher()->removeListener($event->getName(), $this);
+		$dispatcher->removeListener($eventName, $this);
 
-		call_user_func($this->handler, $event);
+		call_user_func($this->handler, $event, $eventName, $dispatcher);
 	}
 }
