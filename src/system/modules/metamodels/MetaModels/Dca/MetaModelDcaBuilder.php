@@ -22,6 +22,7 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\LoadDataContainerEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
+use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\ViewCombinations;
@@ -147,6 +148,10 @@ class MetaModelDcaBuilder
 		}
 
 		$arrTableDCA = &$GLOBALS['TL_DCA'][$strTable];
+
+		$dispatcher = self::getDispatcher();
+		$event      = new LoadLanguageFileEvent('default');
+		$dispatcher->dispatch(ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE, $event);
 
 		$screens = ViewCombinations::getParentedInputScreens();
 
@@ -391,6 +396,7 @@ class MetaModelDcaBuilder
 		{
 			$dispatcher = self::getDispatcher();
 			$event      = new LoadDataContainerEvent('tl_metamodel_item');
+			$dispatcher->dispatch(ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE, new LoadLanguageFileEvent('tl_metamodel_item'));
 			$dispatcher->dispatch(ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER, $event);
 
 			if (!isset($GLOBALS['TL_DCA'][$strTableName]))
