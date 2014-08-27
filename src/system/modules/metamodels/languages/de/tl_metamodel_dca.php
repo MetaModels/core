@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2013-10-29T12:13:25+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']            = 'Backend-Integration';
@@ -75,10 +75,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_2']     = '2 - Date
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_3']     = '3 - Datensätze nach Elterntabelle sortieren';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_4']     = '4 Zeigt die Kindelemente eines Elternelements an (siehe Stylesheet-Modul)';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_5']     = '5 Einträge werden als Baumstruktur dargestellt (siehe Seitenstruktur)';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_6']     = '6 Zeigt die Kindelemente eines Baumelements an (siehe Akrtikel-Modul)';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_6']     = '6 Zeigt die Kindelemente in einer Baumstruktur an (wie im Artikel-Modul)';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['title_legend']              = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']['0']               = 'Aktualisierungsdatum';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']['1']               = 'Datum und Zeit der letzten Aktualisierung.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['use_limitview']['0']        = 'Limitierung anzeigen';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['use_limitview']['1']        = 'Die Limitierungsansicht aktivieren.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['view_legend']               = 'Darstellungsoptionen';
+
