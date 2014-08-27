@@ -34,6 +34,7 @@ use ContaoCommunityAlliance\DcGeneral\Factory\Event\PreCreateDcGeneralEvent;
 use MetaModels\DcGeneral\Dca\Builder\Builder;
 use MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPTable;
 use MetaModels\DcGeneral\Events\Table\InputScreens\BuildPalette;
+use MetaModels\DcGeneral\Events\Table\InputScreenSortGroup\PropertyRenderGroupType;
 use MetaModels\DcGeneral\Events\Table\RenderSetting\RenderSettingBuildPalette;
 use MetaModels\Factory;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
@@ -72,6 +73,11 @@ class Subscriber
 			'tl_metamodel_dca',
 			$dispatcher,
 			__CLASS__ . '::registerTableMetaModelDcaEvents'
+		);
+		self::registerBuildDataDefinitionFor(
+			'tl_metamodel_dca_sortgroup',
+			$dispatcher,
+			__CLASS__ . '::registerTableMetaModelDcaSortGroupEvents'
 		);
 		self::registerBuildDataDefinitionFor(
 			'tl_metamodel_dca_combine',
@@ -355,33 +361,53 @@ class Subscriber
 			array('tl_metamodel_dca', 'rendermode')
 		);
 
-		self::registerListeners(
-			array(
-				GetPropertyOptionsEvent::NAME
-				=> 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyRenderGroupAttribute::getOptions',
-				DecodePropertyValueForWidgetEvent::NAME
-				=> 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyRenderGroupAttribute::decodeValue',
-				EncodePropertyValueFromWidgetEvent::NAME
-				=> 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyRenderGroupAttribute::encodeValue'
-			),
-			$dispatcher,
-			array('tl_metamodel_dca', 'rendergroupattr')
-		);
-
-		self::registerListeners(
-			array(
-				GetPropertyOptionsEvent::NAME
-				=> 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyRenderSortAttribute::getOptions',
-				DecodePropertyValueForWidgetEvent::NAME
-				=> 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyRenderSortAttribute::decodeValue',
-				EncodePropertyValueFromWidgetEvent::NAME
-				=> 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyRenderSortAttribute::encodeValue'
-			),
-			$dispatcher,
-			array('tl_metamodel_dca', 'rendersortattr')
-		);
-
 		PropertyPTable::setVisibility($event);
+	}
+
+	/**
+	 * Register the events for table tl_metamodel_dca.
+	 *
+	 * @param BuildDataDefinitionEvent $event The event being processed.
+	 *
+	 * @return void
+	 */
+	public static function registerTableMetaModelDcaSortGroupEvents(BuildDataDefinitionEvent $event)
+	{
+		static $registered;
+		if ($registered)
+		{
+			return;
+		}
+		$registered = true;
+		$dispatcher = func_get_arg(2);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\InputScreenSortGroup\PropertyRenderGroupAttribute::getOptions',
+				DecodePropertyValueForWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\InputScreenSortGroup\PropertyRenderGroupAttribute::decodeValue',
+				EncodePropertyValueFromWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\InputScreenSortGroup\PropertyRenderGroupAttribute::encodeValue'
+			),
+			$dispatcher,
+			array('tl_metamodel_dca_sortgroup', 'rendergroupattr')
+		);
+
+		self::registerListeners(
+			array(
+				GetPropertyOptionsEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\InputScreenSortGroup\PropertyRenderSortAttribute::getOptions',
+				DecodePropertyValueForWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\InputScreenSortGroup\PropertyRenderSortAttribute::decodeValue',
+				EncodePropertyValueFromWidgetEvent::NAME
+				=> 'MetaModels\DcGeneral\Events\Table\InputScreenSortGroup\PropertyRenderSortAttribute::encodeValue'
+			),
+			$dispatcher,
+			array('tl_metamodel_dca_sortgroup', 'rendersortattr')
+		);
+
+		PropertyRenderGroupType::setVisibility($event);
 	}
 
 	/**
