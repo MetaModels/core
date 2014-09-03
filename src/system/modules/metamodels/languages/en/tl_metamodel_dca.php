@@ -28,6 +28,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']               = array('Parent 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']                 = array('Sorting mode', 'The sorting mode to use in the item view.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']                 = array('Sorting flag', 'The sorting flag to use in the item view.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']       = array('Backend section', 'Select the desired backend section where you want the MetaModel appear. For models that shall be edited by end users, the "content" section most likely will be appropriate.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsectionpos']    = array('Backend section position', 'Enter the position in the backend section where you want the MetaModel appear. This positioning applies only to metamodels with each other (eg, in a completely separate section).');
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon']          = array('Backend icon', 'Select the desired backend icon. This icon will get used to draw an image in the left menu and on the top of the edit view in tree displays.');
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption']       = array('Backend caption', 'The text you specify in here, will get used as the label and description text in the backend menu.');

@@ -61,6 +61,7 @@ CREATE TABLE `tl_metamodel_dca` (
 -- parent table (if mode 3,4,6)
   `ptable` varchar(64) NOT NULL default '',
   `backendsection` varchar(255) NOT NULL default '',
+  `backendsectionpos` int(4) unsigned NOT NULL default '0',
   `backendcaption` text NULL,
   `backendicon` blob NULL,
 -- close the dataset - allow only edit and no delete or create.

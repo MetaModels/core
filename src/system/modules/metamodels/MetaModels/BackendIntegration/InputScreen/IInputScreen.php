@@ -94,6 +94,13 @@ interface IInputScreen
 	public function getBackendSection();
 
 	/**
+	 * Retrieve the position of the input screen inside the backend section.
+	 *
+	 * @return int
+	 */
+	public function getBackendSectionPosition();
+
+	/**
 	 * Retrieve the caption text to be used in the backend.
 	 *
 	 * @return array
