@@ -55,7 +55,7 @@
 		"contao-community-alliance/url-builder": "~1.0"
 	},
 	"require-dev": {
-		"metamodels/php-coding-standard": "dev-master",
+		"metamodels/php-coding-standard": "~2.0",
 		"cyberspectrum/contao-toolbox": "dev-master",
 		"phpunit/phpunit": ">=3.7.10,<4-dev"
 	},
