@@ -30,112 +30,112 @@ use MetaModels\Render\Setting\ICollection as IRenderSettings;
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
 abstract class WithChildren
-	extends Simple
-	implements IWithChildren
+    extends Simple
+    implements IWithChildren
 {
-	/**
-	 * All child settings embedded in this setting.
-	 *
-	 * @var ISimple[]
-	 */
-	protected $arrChildren = array();
+    /**
+     * All child settings embedded in this setting.
+     *
+     * @var ISimple[]
+     */
+    protected $arrChildren = array();
 
-	/**
-	 *
-	 * {@inheritdoc}
-	 *
-	 */
-	public function addChild(ISimple $objFilterSetting)
-	{
-		$this->arrChildren[] = $objFilterSetting;
-	}
+    /**
+     *
+     * {@inheritdoc}
+     *
+     */
+    public function addChild(ISimple $objFilterSetting)
+    {
+        $this->arrChildren[] = $objFilterSetting;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
-	{
-		$arrFilterUrl = array();
-		foreach ($this->arrChildren as $objSetting)
-		{
-			$arrFilterUrl = array_merge($arrFilterUrl, $objSetting->generateFilterUrlFrom($objItem, $objRenderSetting));
-		}
-		return $arrFilterUrl;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
+    {
+        $arrFilterUrl = array();
+        foreach ($this->arrChildren as $objSetting)
+        {
+            $arrFilterUrl = array_merge($arrFilterUrl, $objSetting->generateFilterUrlFrom($objItem, $objRenderSetting));
+        }
+        return $arrFilterUrl;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getParameters()
-	{
-		$arrParams = array();
-		foreach ($this->arrChildren as $objSetting)
-		{
-			$arrParams = array_merge($arrParams, $objSetting->getParameters());
-		}
-		return $arrParams;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameters()
+    {
+        $arrParams = array();
+        foreach ($this->arrChildren as $objSetting)
+        {
+            $arrParams = array_merge($arrParams, $objSetting->getParameters());
+        }
+        return $arrParams;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getParameterDCA()
-	{
-		$arrParams = array();
-		foreach ($this->arrChildren as $objSetting)
-		{
-			$arrParams = array_merge($arrParams, $objSetting->getParameterDCA());
-		}
-		return $arrParams;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameterDCA()
+    {
+        $arrParams = array();
+        foreach ($this->arrChildren as $objSetting)
+        {
+            $arrParams = array_merge($arrParams, $objSetting->getParameterDCA());
+        }
+        return $arrParams;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getParameterFilterWidgets(
-		$arrIds,
-		$arrFilterUrl,
-		$arrJumpTo,
-		FrontendFilterOptions $objFrontendFilterOptions
-	)
-	{
-		$arrParams = array();
-		foreach ($this->arrChildren as $objSetting)
-		{
-			$arrParams = array_merge(
-				$arrParams,
-				$objSetting->getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions)
-			);
-		}
-		return $arrParams;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameterFilterWidgets(
+        $arrIds,
+        $arrFilterUrl,
+        $arrJumpTo,
+        FrontendFilterOptions $objFrontendFilterOptions
+    )
+    {
+        $arrParams = array();
+        foreach ($this->arrChildren as $objSetting)
+        {
+            $arrParams = array_merge(
+                $arrParams,
+                $objSetting->getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions)
+            );
+        }
+        return $arrParams;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getParameterFilterNames()
-	{
-		$arrParams = array();
-		foreach ($this->arrChildren as $objSetting)
-		{
-			$arrParams = array_merge($arrParams, $objSetting->getParameterFilterNames());
-		}
-		return $arrParams;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameterFilterNames()
+    {
+        $arrParams = array();
+        foreach ($this->arrChildren as $objSetting)
+        {
+            $arrParams = array_merge($arrParams, $objSetting->getParameterFilterNames());
+        }
+        return $arrParams;
+    }
 
-	/**
-	 * Retrieve a list of all referenced attributes within the filter setting.
-	 *
-	 * @return array
-	 */
-	public function getReferencedAttributes()
-	{
-		$arrAttributes = array();
-		foreach ($this->arrChildren as $objSetting)
-		{
-			$arrAttributes = array_merge($arrAttributes, $objSetting->getReferencedAttributes());
-		}
-		return $arrAttributes;
-	}
+    /**
+     * Retrieve a list of all referenced attributes within the filter setting.
+     *
+     * @return array
+     */
+    public function getReferencedAttributes()
+    {
+        $arrAttributes = array();
+        foreach ($this->arrChildren as $objSetting)
+        {
+            $arrAttributes = array_merge($arrAttributes, $objSetting->getReferencedAttributes());
+        }
+        return $arrAttributes;
+    }
 }
 

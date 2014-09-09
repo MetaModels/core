@@ -23,24 +23,24 @@ use MetaModels\Filter\Rules\StaticIdList as FilterRuleIdList;
 /**
  * Filter setting implementation of a static list of matching ids.
  *
- * @package	   MetaModels
+ * @package       MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
 class IdList extends Simple
 {
-	/**
-	 * {@inheritDoc}
-	 */
-	public function prepareRules(IFilter $objFilter, $arrFilterUrl)
-	{
-		if ($this->get('items'))
-		{
-			$arrItems = explode(',', (string)$this->get('items'));
-		} else {
-			$arrItems = array();
-		}
-		$objFilter->addFilterRule(new FilterRuleIdList($arrItems));
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function prepareRules(IFilter $objFilter, $arrFilterUrl)
+    {
+        if ($this->get('items'))
+        {
+            $arrItems = explode(',', (string)$this->get('items'));
+        } else {
+            $arrItems = array();
+        }
+        $objFilter->addFilterRule(new FilterRuleIdList($arrItems));
+    }
 }
 

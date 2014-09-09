@@ -32,57 +32,57 @@ namespace MetaModels\Helper;
  */
 class ContaoController extends \Controller
 {
-	/**
-	 * @var ContaoController
-	 */
-	protected static $objInstance = null;
+    /**
+     * @var ContaoController
+     */
+    protected static $objInstance = null;
 
-	/**
-	 * Get the static instance.
-	 *
-	 * @static
-	 * @return ContaoController
-	 */
-	public static function getInstance()
-	{
-		if (self::$objInstance == null) {
-			self::$objInstance = new self();
-		}
-		return self::$objInstance;
-	}
+    /**
+     * Get the static instance.
+     *
+     * @static
+     * @return ContaoController
+     */
+    public static function getInstance()
+    {
+        if (self::$objInstance == null) {
+            self::$objInstance = new self();
+        }
+        return self::$objInstance;
+    }
 
-	/**
-	 * Protected constructor for singleton instance.
-	 */
-	protected function __construct()
-	{
-		parent::__construct();
-		$this->import('Database');
-	}
+    /**
+     * Protected constructor for singleton instance.
+     */
+    protected function __construct()
+    {
+        parent::__construct();
+        $this->import('Database');
+    }
 
-	/**
-	 * Makes all protected methods from class Controller callable publically.
-	 */
-	public function __call($strMethod, $arrArgs)
-	{
-		if (method_exists($this, $strMethod))
-		{
-			return call_user_func_array(array($this, $strMethod), $arrArgs);
-		}
-		throw new \RuntimeException('undefined method: Controller::' . $strMethod);
-	}
+    /**
+     * Makes all protected methods from class Controller callable publically.
+     */
+    public function __call($strMethod, $arrArgs)
+    {
+        if (method_exists($this, $strMethod))
+        {
+            return call_user_func_array(array($this, $strMethod), $arrArgs);
+        }
+        throw new \RuntimeException('undefined method: Controller::' . $strMethod);
+    }
 
-	/**
-	 * Makes all protected methods from class Controller callable publically from static context
-	 * (requires PHP 5.3).
-	 */
-	public static function __callStatic($strMethod, $arrArgs)
-	{
-		if (method_exists(__CLASS__, $strMethod))
-		{
-			return call_user_func_array(array(self::getInstance(), $strMethod), $arrArgs);
-		}
-		throw new \RuntimeException('undefined method: Controller::' . $strMethod);
-	}
+    /**
+     * Makes all protected methods from class Controller callable publically from static context
+     * (requires PHP 5.3).
+     */
+    public static function __callStatic($strMethod, $arrArgs)
+    {
+        if (method_exists(__CLASS__, $strMethod))
+        {
+            return call_user_func_array(array(self::getInstance(), $strMethod), $arrArgs);
+        }
+        throw new \RuntimeException('undefined method: Controller::' . $strMethod);
+    }
 }
 

@@ -26,27 +26,27 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Encod
  */
 class PropertyRows
 {
-	/**
-	 * Handle event to update the sorting for DCA combinations.
-	 *
-	 * @param EncodePropertyValueFromWidgetEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function fixSorting(EncodePropertyValueFromWidgetEvent $event)
-	{
-		$values = $event->getValue();
+    /**
+     * Handle event to update the sorting for DCA combinations.
+     *
+     * @param EncodePropertyValueFromWidgetEvent $event The event.
+     *
+     * @return void
+     */
+    public static function fixSorting(EncodePropertyValueFromWidgetEvent $event)
+    {
+        $values = $event->getValue();
 
-		$i    = 0;
-		$time = time();
-		foreach (array_keys($values) as $key)
-		{
-			$values[$key]['sorting'] = $i;
-			$values[$key]['tstamp']  = $time;
+        $i    = 0;
+        $time = time();
+        foreach (array_keys($values) as $key)
+        {
+            $values[$key]['sorting'] = $i;
+            $values[$key]['tstamp']  = $time;
 
-			$i += 128;
-		}
+            $i += 128;
+        }
 
-		$event->setValue($values);
-	}
+        $event->setValue($values);
+    }
 }

@@ -28,59 +28,59 @@ use MetaModels\Dca\Helper;
  * @package MetaModels\DcGeneral\Events\Table\Attribute
  */
 class PropertyNameAndDescription
-	extends AttributeBase
+    extends AttributeBase
 {
-	/**
-	 * Decode the given value from a serialized language array into the real language array.
-	 *
-	 * @param DecodePropertyValueForWidgetEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function decodeValue(DecodePropertyValueForWidgetEvent $event)
-	{
-		$metaModel = self::getMetaModelFromModel($event->getModel());
+    /**
+     * Decode the given value from a serialized language array into the real language array.
+     *
+     * @param DecodePropertyValueForWidgetEvent $event The event.
+     *
+     * @return void
+     */
+    public static function decodeValue(DecodePropertyValueForWidgetEvent $event)
+    {
+        $metaModel = self::getMetaModelFromModel($event->getModel());
 
-		$values = Helper::decodeLangArray($event->getValue(), $metaModel);
+        $values = Helper::decodeLangArray($event->getValue(), $metaModel);
 
-		$event->setValue($values);
-	}
+        $event->setValue($values);
+    }
 
-	/**
-	 * Encode the given value from a real language array into a serialized language array.
-	 *
-	 * @param EncodePropertyValueFromWidgetEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function encodeValue(EncodePropertyValueFromWidgetEvent $event)
-	{
-		$metaModel = self::getMetaModelFromModel($event->getModel());
+    /**
+     * Encode the given value from a real language array into a serialized language array.
+     *
+     * @param EncodePropertyValueFromWidgetEvent $event The event.
+     *
+     * @return void
+     */
+    public static function encodeValue(EncodePropertyValueFromWidgetEvent $event)
+    {
+        $metaModel = self::getMetaModelFromModel($event->getModel());
 
-		$values = Helper::encodeLangArray($event->getValue(), $metaModel);
+        $values = Helper::encodeLangArray($event->getValue(), $metaModel);
 
-		$event->setValue($values);
-	}
+        $event->setValue($values);
+    }
 
-	/**
-	 * Build the widget for the MCW.
-	 *
-	 * @param BuildWidgetEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function buildWidget(BuildWidgetEvent $event)
-	{
-		$metaModel = self::getMetaModelFromModel($event->getModel());
+    /**
+     * Build the widget for the MCW.
+     *
+     * @param BuildWidgetEvent $event The event.
+     *
+     * @return void
+     */
+    public static function buildWidget(BuildWidgetEvent $event)
+    {
+        $metaModel = self::getMetaModelFromModel($event->getModel());
 
-		Helper::prepareLanguageAwareWidget(
-			$event->getEnvironment(),
-			$event->getProperty(),
-			$metaModel,
-			$event->getEnvironment()->getTranslator()->translate('name_langcode', 'tl_metamodel_attribute'),
-			$event->getEnvironment()->getTranslator()->translate('name_value', 'tl_metamodel_attribute'),
-			false,
-			$event->getModel()->getProperty('legendtitle')
-		);
-	}
+        Helper::prepareLanguageAwareWidget(
+            $event->getEnvironment(),
+            $event->getProperty(),
+            $metaModel,
+            $event->getEnvironment()->getTranslator()->translate('name_langcode', 'tl_metamodel_attribute'),
+            $event->getEnvironment()->getTranslator()->translate('name_value', 'tl_metamodel_attribute'),
+            false,
+            $event->getModel()->getProperty('legendtitle')
+        );
+    }
 }

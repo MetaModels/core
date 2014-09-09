@@ -26,32 +26,32 @@ use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
  */
 class UpdateRenderSettings
 {
-	/**
-	 * Handle the update of a MetaModel and all attached data.
-	 *
-	 * @param PostPersistModelEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function handle(PostPersistModelEvent $event)
-	{
-		$new = $event->getModel();
+    /**
+     * Handle the update of a MetaModel and all attached data.
+     *
+     * @param PostPersistModelEvent $event The event.
+     *
+     * @return void
+     */
+    public static function handle(PostPersistModelEvent $event)
+    {
+        $new = $event->getModel();
 
-		if (!$new->getProperty('isdefault'))
-		{
-			return;
-		}
+        if (!$new->getProperty('isdefault'))
+        {
+            return;
+        }
 
-		$foo =
-		\Database::getInstance()
-			->prepare('UPDATE tl_metamodel_rendersettings
-					SET isdefault = \'\'
-					WHERE pid=?
-						AND id<>?
-						AND isdefault=1')
-			->execute(
-				$new->getProperty('pid'),
-				$new->getId()
-			);
-	}
+        $foo =
+        \Database::getInstance()
+            ->prepare('UPDATE tl_metamodel_rendersettings
+                    SET isdefault = \'\'
+                    WHERE pid=?
+                        AND id<>?
+                        AND isdefault=1')
+            ->execute(
+                $new->getProperty('pid'),
+                $new->getId()
+            );
+    }
 }

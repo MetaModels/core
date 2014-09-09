@@ -26,27 +26,27 @@ namespace MetaModels\Filter;
  */
 interface IFilter
 {
-	/**
-	 * Create an copy of this filter.
-	 *
-	 * @return IFilter
-	 */
-	public function createCopy();
+    /**
+     * Create an copy of this filter.
+     *
+     * @return IFilter
+     */
+    public function createCopy();
 
-	/**
-	 * Adds a filter rule to this filter chain.
-	 *
-	 * @param IFilterRule $objFilterRule The filter rule to add.
-	 *
-	 * @return void
-	 */
-	public function addFilterRule(IFilterRule $objFilterRule);
+    /**
+     * Adds a filter rule to this filter chain.
+     *
+     * @param IFilterRule $objFilterRule The filter rule to add.
+     *
+     * @return void
+     */
+    public function addFilterRule(IFilterRule $objFilterRule);
 
-	/**
-	 * Narrow down the list of Ids that match the given filter.
-	 *
-	 * @return int[]|null all matching Ids or null if all ids did match.
-	 */
-	public function getMatchingIds();
+    /**
+     * Narrow down the list of Ids that match the given filter.
+     *
+     * @return int[]|null all matching Ids or null if all ids did match.
+     */
+    public function getMatchingIds();
 }
 

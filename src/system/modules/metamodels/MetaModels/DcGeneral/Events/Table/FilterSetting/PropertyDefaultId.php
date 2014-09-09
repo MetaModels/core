@@ -25,50 +25,50 @@ use MetaModels\Filter\Setting\Factory as FilterFactory;
  */
 class PropertyDefaultId
 {
-	/**
-	 * Provide options for default selection.
-	 *
-	 * @param GetPropertyOptionsEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function getOptions(GetPropertyOptionsEvent $event)
-	{
-		$model = $event->getModel();
+    /**
+     * Provide options for default selection.
+     *
+     * @param GetPropertyOptionsEvent $event The event.
+     *
+     * @return void
+     */
+    public static function getOptions(GetPropertyOptionsEvent $event)
+    {
+        $model = $event->getModel();
 
-		$event->getEnvironment()->getInputProvider();
+        $event->getEnvironment()->getInputProvider();
 
-		$filterSetting = FilterFactory::byId($model->getProperty('fid'));
-		$metaModel     = $filterSetting->getMetaModel();
+        $filterSetting = FilterFactory::byId($model->getProperty('fid'));
+        $metaModel     = $filterSetting->getMetaModel();
 
-		if (!$metaModel)
-		{
-			return;
-		}
+        if (!$metaModel)
+        {
+            return;
+        }
 
-		$attribute = $metaModel->getAttributeById($model->getProperty('attr_id'));
-		if (!$attribute)
-		{
-			return;
-		}
+        $attribute = $metaModel->getAttributeById($model->getProperty('attr_id'));
+        if (!$attribute)
+        {
+            return;
+        }
 
-		$onlyUsed = $model->getProperty('onlyused') ? true : false;
+        $onlyUsed = $model->getProperty('onlyused') ? true : false;
 
-		$count   = array();
-		$options = $attribute->getFilterOptions(null, $onlyUsed, $count);
+        $count   = array();
+        $options = $attribute->getFilterOptions(null, $onlyUsed, $count);
 
-		// Remove empty values.
-		foreach ($options as $mixKey => $mixValue)
-		{
-			// Remove html/php tags.
-			$mixValue = trim(strip_tags($mixValue));
+        // Remove empty values.
+        foreach ($options as $mixKey => $mixValue)
+        {
+            // Remove html/php tags.
+            $mixValue = trim(strip_tags($mixValue));
 
-			if (($mixValue === '') || ($mixValue === null) || ($onlyUsed && ($count[$mixKey] === 0)))
-			{
-				unset($options[$mixKey]);
-			}
-		}
+            if (($mixValue === '') || ($mixValue === null) || ($onlyUsed && ($count[$mixKey] === 0)))
+            {
+                unset($options[$mixKey]);
+            }
+        }
 
-		$event->setOptions($options);
-	}
+        $event->setOptions($options);
+    }
 }

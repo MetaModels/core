@@ -28,26 +28,26 @@ use MetaModels\Factory;
  */
 class PropertyTemplate
 {
-	/**
-	 * Provide options for template selection.
-	 *
-	 * @param GetPropertyOptionsEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function getOptions(GetPropertyOptionsEvent $event)
-	{
-		$model          = $event->getModel();
-		$parentProvider = $event->getEnvironment()->getDataProvider('tl_metamodel_rendersettings');
-		$renderSettings = $parentProvider->fetch($parentProvider->getEmptyConfig()->setId($model->getProperty('pid')));
-		$objMetaModel   = Factory::byId($renderSettings->getProperty('pid'));
-		$objAttribute   = $objMetaModel->getAttributeById($model->getProperty('attr_id'));
+    /**
+     * Provide options for template selection.
+     *
+     * @param GetPropertyOptionsEvent $event The event.
+     *
+     * @return void
+     */
+    public static function getOptions(GetPropertyOptionsEvent $event)
+    {
+        $model          = $event->getModel();
+        $parentProvider = $event->getEnvironment()->getDataProvider('tl_metamodel_rendersettings');
+        $renderSettings = $parentProvider->fetch($parentProvider->getEmptyConfig()->setId($model->getProperty('pid')));
+        $objMetaModel   = Factory::byId($renderSettings->getProperty('pid'));
+        $objAttribute   = $objMetaModel->getAttributeById($model->getProperty('attr_id'));
 
-		if (!$objAttribute)
-		{
-			return;
-		}
+        if (!$objAttribute)
+        {
+            return;
+        }
 
-		$event->setOptions(Helper::getTemplatesForBase('mm_attr_' . $objAttribute->get('type')));
-	}
+        $event->setOptions(Helper::getTemplatesForBase('mm_attr_' . $objAttribute->get('type')));
+    }
 }

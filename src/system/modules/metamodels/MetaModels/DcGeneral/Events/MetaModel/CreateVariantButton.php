@@ -32,86 +32,86 @@ use MetaModels\DcGeneral\Data\Model;
  * Event handler class to manage the "create variant" button.
  */
 class CreateVariantButton
-	extends BaseView
+    extends BaseView
 {
-	/**
-	 * Check if we have to add the "Create variant" button.
-	 *
-	 * @param GetOperationButtonEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function createButton(GetOperationButtonEvent $event)
-	{
-		/** @var Model $model */
-		$model     = $event->getModel();
-		$metamodel = $model->getItem()->getMetaModel();
+    /**
+     * Check if we have to add the "Create variant" button.
+     *
+     * @param GetOperationButtonEvent $event The event.
+     *
+     * @return void
+     */
+    public static function createButton(GetOperationButtonEvent $event)
+    {
+        /** @var Model $model */
+        $model     = $event->getModel();
+        $metamodel = $model->getItem()->getMetaModel();
 
-		if (!$metamodel->hasVariants() || $model ->getProperty('varbase') === '0')
-		{
-			$event->setHtml('');
-		}
-	}
+        if (!$metamodel->hasVariants() || $model ->getProperty('varbase') === '0')
+        {
+            $event->setHtml('');
+        }
+    }
 
-	/**
-	 * Handle the "create variant" event.
-	 *
-	 * @param ActionEvent $event
-	 *
-	 * @throws \RuntimeException
-	 */
-	public static function handleCreateVariantAction(ActionEvent $event)
-	{
-		$environment   = $event->getEnvironment();
-		$view          = $environment->getView();
-		$dataProvider  = $environment->getDataProvider();
-		$inputProvider = $environment->getInputProvider();
-		$modelId       = $inputProvider->hasParameter('id')
-			? IdSerializer::fromSerialized($inputProvider->getParameter('id'))
-			: null;
+    /**
+     * Handle the "create variant" event.
+     *
+     * @param ActionEvent $event
+     *
+     * @throws \RuntimeException
+     */
+    public static function handleCreateVariantAction(ActionEvent $event)
+    {
+        $environment   = $event->getEnvironment();
+        $view          = $environment->getView();
+        $dataProvider  = $environment->getDataProvider();
+        $inputProvider = $environment->getInputProvider();
+        $modelId       = $inputProvider->hasParameter('id')
+            ? IdSerializer::fromSerialized($inputProvider->getParameter('id'))
+            : null;
 
-		/** @var \MetaModels\DcGeneral\Data\Driver $dataProvider */
-		$model = $dataProvider
-			->createVariant(
-				$dataProvider
-					->getEmptyConfig()
-					->setId($modelId->getId())
-			);
+        /** @var \MetaModels\DcGeneral\Data\Driver $dataProvider */
+        $model = $dataProvider
+            ->createVariant(
+                $dataProvider
+                    ->getEmptyConfig()
+                    ->setId($modelId->getId())
+            );
 
-		if ($model == null)
-		{
-			throw new \RuntimeException(sprintf(
-				'Could not find model with id %s for creating a variant.',
-				$modelId
-			));
-		}
+        if ($model == null)
+        {
+            throw new \RuntimeException(sprintf(
+                'Could not find model with id %s for creating a variant.',
+                $modelId
+            ));
+        }
 
-		$preFunction = function($environment, $model, $originalModel)
-		{
-			/** @var EnvironmentInterface $environment */
-			$copyEvent = new PreCreateModelEvent($environment, $model);
-			$environment->getEventPropagator()->propagate(
-				$copyEvent::NAME,
-				$copyEvent,
-				array(
-					$environment->getDataDefinition()->getName(),
-				)
-			);
-		};
+        $preFunction = function($environment, $model, $originalModel)
+        {
+            /** @var EnvironmentInterface $environment */
+            $copyEvent = new PreCreateModelEvent($environment, $model);
+            $environment->getEventPropagator()->propagate(
+                $copyEvent::NAME,
+                $copyEvent,
+                array(
+                    $environment->getDataDefinition()->getName(),
+                )
+            );
+        };
 
-		$postFunction = function($environment, $model, $originalModel)
-		{
-			/** @var EnvironmentInterface $environment */
-			$copyEvent = new PostCreateModelEvent($environment, $model);
-			$environment->getEventPropagator()->propagate(
-				$copyEvent::NAME,
-				$copyEvent,
-				array(
-					$environment->getDataDefinition()->getName(),
-				)
-			);
-		};
+        $postFunction = function($environment, $model, $originalModel)
+        {
+            /** @var EnvironmentInterface $environment */
+            $copyEvent = new PostCreateModelEvent($environment, $model);
+            $environment->getEventPropagator()->propagate(
+                $copyEvent::NAME,
+                $copyEvent,
+                array(
+                    $environment->getDataDefinition()->getName(),
+                )
+            );
+        };
 
-		$event->setResponse($view->createEditMask($model, null, $preFunction, $postFunction));
-	}
+        $event->setResponse($view->createEditMask($model, null, $preFunction, $postFunction));
+    }
 }

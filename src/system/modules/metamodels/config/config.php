@@ -20,65 +20,65 @@ $arrOld = isset($GLOBALS['BE_MOD']['metamodels']) ? $GLOBALS['BE_MOD']['metamode
 unset($GLOBALS['BE_MOD']['metamodels']);
 array_insert($GLOBALS['BE_MOD'], (array_search('accounts', array_keys($GLOBALS['BE_MOD'])) + 1), array
 (
-	'metamodels' => array_replace_recursive(array
-	(
-		'metamodels' => array
-		(
-			'tables' => array
-			(
-				'tl_metamodel',
-				'tl_metamodel_attribute',
-				'tl_metamodel_filter',
-				'tl_metamodel_filtersetting',
-				'tl_metamodel_rendersettings',
-				'tl_metamodel_rendersetting',
-				'tl_metamodel_dca',
-				'tl_metamodel_dcasetting',
-				'tl_metamodel_dca_combine',
-				'tl_metamodel_dcasetting_condition'
-			),
-			'icon'                  => 'system/modules/metamodels/assets/images/backend/logo.png',
-			'callback'              => 'MetaModels\BackendIntegration\Module'
-		),
-		'support_metamodels' => array
-		(
-			'icon'                  => 'system/modules/metamodels/assets/images/backend/support.png',
-			'callback'              => 'MetaModels\BackendIntegration\Support'
-		)
-	),
-	// Append all previous data here.
-	$arrOld
-	)
+    'metamodels' => array_replace_recursive(array
+    (
+        'metamodels' => array
+        (
+            'tables' => array
+            (
+                'tl_metamodel',
+                'tl_metamodel_attribute',
+                'tl_metamodel_filter',
+                'tl_metamodel_filtersetting',
+                'tl_metamodel_rendersettings',
+                'tl_metamodel_rendersetting',
+                'tl_metamodel_dca',
+                'tl_metamodel_dcasetting',
+                'tl_metamodel_dca_combine',
+                'tl_metamodel_dcasetting_condition'
+            ),
+            'icon'                  => 'system/modules/metamodels/assets/images/backend/logo.png',
+            'callback'              => 'MetaModels\BackendIntegration\Module'
+        ),
+        'support_metamodels' => array
+        (
+            'icon'                  => 'system/modules/metamodels/assets/images/backend/support.png',
+            'callback'              => 'MetaModels\BackendIntegration\Support'
+        )
+    ),
+    // Append all previous data here.
+    $arrOld
+    )
 ));
 
 /*
-	In order to add attribute types into the system, add the following snippet to your extension config.php:
+    In order to add attribute types into the system, add the following snippet to your extension config.php:
 
-	$GLOBALS['METAMODELS']['attributes']['TYPENAME']['class'] = 'TYPECLASS';
-	$GLOBALS['METAMODELS']['attributes']['TYPENAME']['image'] = 'IMAGEPATH';
-	$GLOBALS['METAMODELS']['attributes']['TYPENAME']['factory'] = 'FACTORYCLASS'; // optional
+    $GLOBALS['METAMODELS']['attributes']['TYPENAME']['class'] = 'TYPECLASS';
+    $GLOBALS['METAMODELS']['attributes']['TYPENAME']['image'] = 'IMAGEPATH';
+    $GLOBALS['METAMODELS']['attributes']['TYPENAME']['factory'] = 'FACTORYCLASS'; // optional
 
-	where:
-		TYPENAME     is the internal type name of your attribute.
-		TYPECLASS    is the name of the implementing class.
-		IMAGEPATH    path to an icon (16x16) that represents the attribute type. Based from TL_ROOT.
-		FACTORYCLASS this is optional, if defined, the herein declared classname will be used for instantiation
-		             of attributes of this type instead of plain constructing.
+    where:
+        TYPENAME     is the internal type name of your attribute.
+        TYPECLASS    is the name of the implementing class.
+        IMAGEPATH    path to an icon (16x16) that represents the attribute type. Based from TL_ROOT.
+        FACTORYCLASS this is optional, if defined, the herein declared classname will be used for instantiation
+                     of attributes of this type instead of plain constructing.
 */
 
 /*
-	In order to add filter rule types into the system, add the following snippet to your extension config.php:
+    In order to add filter rule types into the system, add the following snippet to your extension config.php:
 
-	$GLOBALS['METAMODELS']['filters']['TYPENAME']['class']          = 'TYPECLASS';
-	$GLOBALS['METAMODELS']['filters']['TYPENAME']['image']          = 'IMAGEPATH';
-	$GLOBALS['METAMODELS']['filters']['TYPENAME']['info_callback']  = array(CALLBACK_CLASS, CALLBACK_METHOD);
-	$GLOBALS['METAMODELS']['filters']['TYPENAME']['nestingAllowed'] = NESTINGVALUE // optional, default: false
+    $GLOBALS['METAMODELS']['filters']['TYPENAME']['class']          = 'TYPECLASS';
+    $GLOBALS['METAMODELS']['filters']['TYPENAME']['image']          = 'IMAGEPATH';
+    $GLOBALS['METAMODELS']['filters']['TYPENAME']['info_callback']  = array(CALLBACK_CLASS, CALLBACK_METHOD);
+    $GLOBALS['METAMODELS']['filters']['TYPENAME']['nestingAllowed'] = NESTINGVALUE // optional, default: false
 
-	where:
-		TYPENAME     is the internal type name of your filter setting.
-		TYPECLASS    is the name of the implementing class.
-		IMAGEPATH    path to an icon (16x16) that represents the filter rule type. Based from TL_ROOT.
-		NESTINGVALUE boolean true or false. If this is true, you indicate that this rule may contain child rules.
+    where:
+        TYPENAME     is the internal type name of your filter setting.
+        TYPECLASS    is the name of the implementing class.
+        IMAGEPATH    path to an icon (16x16) that represents the filter rule type. Based from TL_ROOT.
+        NESTINGVALUE boolean true or false. If this is true, you indicate that this rule may contain child rules.
 */
 $GLOBALS['METAMODELS']['filters']['idlist']['class']                = 'MetaModels\Filter\Setting\IdList';
 $GLOBALS['METAMODELS']['filters']['simplelookup']['class']          = 'MetaModels\Filter\Setting\SimpleLookup';
@@ -102,9 +102,9 @@ $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionnot']['nestingAllowed
 $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionnot']['maxChildren']                = 1;
 
 /*
-	All system columns that always are defined in a MetaModel table and are not attributes.
-	When you alter this, consider to also change @link{MetaModelTableManipulation::STATEMENT_CREATE_TABLE}.
-	Extensions will have to alter the table on their own as the columns will not get transported then.
+    All system columns that always are defined in a MetaModel table and are not attributes.
+    When you alter this, consider to also change @link{MetaModelTableManipulation::STATEMENT_CREATE_TABLE}.
+    Extensions will have to alter the table on their own as the columns will not get transported then.
 */
 $GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'id';
 $GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'pid';
@@ -124,12 +124,12 @@ define('METAMODELS_ERROR', 1);
 // Back-end module - include only in Backend.
 if (TL_MODE == 'BE')
 {
-	if (version_compare(VERSION,'3.1', '>=') && \Environment::get('scriptName') == (TL_PATH . '/contao/file.php') && \Input::get('mmfilepicker'))
-	{
-		$GLOBALS['BE_FFL']['fileSelector'] = 'MetaModels\Widgets\FileSelectorWidget';
-	}
+    if (version_compare(VERSION,'3.1', '>=') && \Environment::get('scriptName') == (TL_PATH . '/contao/file.php') && \Input::get('mmfilepicker'))
+    {
+        $GLOBALS['BE_FFL']['fileSelector'] = 'MetaModels\Widgets\FileSelectorWidget';
+    }
 
-	$GLOBALS['TL_HOOKS']['initializeSystem'][] = array('MetaModels\BackendIntegration\Boot', 'perform');
+    $GLOBALS['TL_HOOKS']['initializeSystem'][] = array('MetaModels\BackendIntegration\Boot', 'perform');
 }
 
 // Front-end modules.
@@ -170,98 +170,98 @@ $GLOBALS['METAMODELS']['metainformation']['allowedDescription'][] = 'combinedval
 
 array_insert($GLOBALS['BE_FFL'], 15, array
 (
-	'mm_subdca'    => 'MetaModels\Widgets\SubDcaWidget'
+    'mm_subdca'    => 'MetaModels\Widgets\SubDcaWidget'
 ));
 
 // Selectable styles in the palette tl_class definitions.
 $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 (
-	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['w50'],
-	'cssclass' => 'w50',
-	'image' => ''
+    'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['w50'],
+    'cssclass' => 'w50',
+    'image' => ''
 );
 
 $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 (
-	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['w50x'],
-	'cssclass' => 'w50x',
-	'image' => ''
+    'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['w50x'],
+    'cssclass' => 'w50x',
+    'image' => ''
 );
 
 $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 (
-	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['clr'],
-	'cssclass' => 'clr',
-	'image' => ''
+    'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['clr'],
+    'cssclass' => 'clr',
+    'image' => ''
 );
 
 $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 (
-	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['clx'],
-	'cssclass' => 'clx',
-	'image' => ''
+    'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['clx'],
+    'cssclass' => 'clx',
+    'image' => ''
 );
 
 $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 (
-	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['long'],
-	'cssclass' => 'long',
-	'image' => ''
+    'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['long'],
+    'cssclass' => 'long',
+    'image' => ''
 );
 
 $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 (
-	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['wizard'],
-	'cssclass' => 'wizard',
-	'image' => ''
+    'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['wizard'],
+    'cssclass' => 'wizard',
+    'image' => ''
 );
 
 $GLOBALS['PALETTE_STYLE_PICKER'][] = array
 (
-	'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['m12'],
-	'cssclass' => 'm12',
-	'image' => ''
+    'label' => &$GLOBALS['TL_LANG']['MSC']['tl_class']['m12'],
+    'cssclass' => 'm12',
+    'image' => ''
 );
 
 // Selectable panels in the palette panelLayout definitions.
 $GLOBALS['PALETTE_PANEL_PICKER'][] = array
 (
-	'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['search'],
-	'cssclass' => 'search',
-	'image' => ''
+    'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['search'],
+    'cssclass' => 'search',
+    'image' => ''
 );
 
 $GLOBALS['PALETTE_PANEL_PICKER'][] = array
 (
-	'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['sort'],
-	'cssclass' => 'sort',
-	'image' => ''
+    'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['sort'],
+    'cssclass' => 'sort',
+    'image' => ''
 );
 
 $GLOBALS['PALETTE_PANEL_PICKER'][] = array
 (
-	'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['filter'],
-	'cssclass' => 'filter',
-	'image' => ''
+    'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['filter'],
+    'cssclass' => 'filter',
+    'image' => ''
 );
 
 $GLOBALS['PALETTE_PANEL_PICKER'][] = array
 (
-	'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['limit'],
-	'cssclass' => 'limit',
-	'image' => ''
+    'label' => &$GLOBALS['TL_LANG']['MSC']['panelLayout']['limit'],
+    'cssclass' => 'limit',
+    'image' => ''
 );
 
 // Initialize the filter parameters to an empty array if not initialized yet.
 if (!isset($GLOBALS['MM_FILTER_PARAMS']))
 {
-	$GLOBALS['MM_FILTER_PARAMS'] = array();
+    $GLOBALS['MM_FILTER_PARAMS'] = array();
 }
 
 // Attach ourselves to the DIC.
 $GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'MetaModels\Events\DefaultPropertyConditionCreator';
 
 $GLOBALS['TL_EVENTS'][\ContaoCommunityAlliance\Contao\EventDispatcher\Event\CreateEventDispatcherEvent::NAME][] =
-	'MetaModels\DcGeneral\Events\Subscriber::registerEvents';
+    'MetaModels\DcGeneral\Events\Subscriber::registerEvents';
 
 

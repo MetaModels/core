@@ -27,32 +27,32 @@ use MetaModels\IMetaModel;
  */
 class InputScreenBase
 {
-	/**
-	 * Retrieve the MetaModel the given model is attached to.
-	 *
-	 * @param ModelInterface $model The input screen model for which to retrieve the MetaModel.
-	 *
-	 * @return IMetaModel
-	 *
-	 * @throws DcGeneralInvalidArgumentException  When an invalid model has been passed or the model does not have an id.
-	 */
-	protected static function getMetaModelFromModel(ModelInterface $model)
-	{
-		if (!(($model->getProviderName() == 'tl_metamodel_dcasetting') && $model->getProperty('pid')))
-		{
-			throw new DcGeneralInvalidArgumentException(
-				sprintf(
-					'Model must originate from tl_metamodel_dcasetting and be saved, this one originates from %s and has pid %s',
-					$model->getProviderName(),
-					$model->getProperty('pid')
-				)
-			);
-		}
+    /**
+     * Retrieve the MetaModel the given model is attached to.
+     *
+     * @param ModelInterface $model The input screen model for which to retrieve the MetaModel.
+     *
+     * @return IMetaModel
+     *
+     * @throws DcGeneralInvalidArgumentException  When an invalid model has been passed or the model does not have an id.
+     */
+    protected static function getMetaModelFromModel(ModelInterface $model)
+    {
+        if (!(($model->getProviderName() == 'tl_metamodel_dcasetting') && $model->getProperty('pid')))
+        {
+            throw new DcGeneralInvalidArgumentException(
+                sprintf(
+                    'Model must originate from tl_metamodel_dcasetting and be saved, this one originates from %s and has pid %s',
+                    $model->getProviderName(),
+                    $model->getProperty('pid')
+                )
+            );
+        }
 
-		$metaModelId = \Database::getInstance()
-			->prepare('SELECT pid FROM tl_metamodel_dca WHERE id=?')
-			->executeUncached($model->getProperty('pid'));
+        $metaModelId = \Database::getInstance()
+            ->prepare('SELECT pid FROM tl_metamodel_dca WHERE id=?')
+            ->executeUncached($model->getProperty('pid'));
 
-		return Factory::byId($metaModelId->pid);
-	}
+        return Factory::byId($metaModelId->pid);
+    }
 }

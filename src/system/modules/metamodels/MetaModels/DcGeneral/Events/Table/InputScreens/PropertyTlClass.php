@@ -28,43 +28,43 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Manip
  */
 class PropertyTlClass
 {
-	/**
-	 * Build the wizard string.
-	 *
-	 * @param ManipulateWidgetEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function getWizard(ManipulateWidgetEvent $event)
-	{
-		$url = 'system/modules/metamodels/popup.php?tbl=%s&fld=%s&inputName=ctrl_%s&id=%s&item=PALETTE_STYLE_PICKER';
-		if (version_compare(VERSION, '3.0', '<'))
-		{
-			$link = ' <a href="' . $url . '" data-lightbox="files 768 80%%">%s</a>';
-		}
-		else
-		{
-			$link =
-				' <a href="javascript:Backend.openModalIframe({url:\'' . $url . '\',width:790,title:\'Stylepicker\'});">%s</a>';
-		}
+    /**
+     * Build the wizard string.
+     *
+     * @param ManipulateWidgetEvent $event The event.
+     *
+     * @return void
+     */
+    public static function getWizard(ManipulateWidgetEvent $event)
+    {
+        $url = 'system/modules/metamodels/popup.php?tbl=%s&fld=%s&inputName=ctrl_%s&id=%s&item=PALETTE_STYLE_PICKER';
+        if (version_compare(VERSION, '3.0', '<'))
+        {
+            $link = ' <a href="' . $url . '" data-lightbox="files 768 80%%">%s</a>';
+        }
+        else
+        {
+            $link =
+                ' <a href="javascript:Backend.openModalIframe({url:\'' . $url . '\',width:790,title:\'Stylepicker\'});">%s</a>';
+        }
 
-		/** @var GenerateHtmlEvent $imageEvent */
-		$imageEvent = $event->getEnvironment()->getEventPropagator()->propagate(
-			ContaoEvents::IMAGE_GET_HTML,
-			new GenerateHtmlEvent(
-				'system/modules/metamodels/assets/images/icons/dca_wizard.png',
-				$event->getEnvironment()->getTranslator()->translate('stylepicker', 'tl_metamodel_dcasetting'),
-				'style="vertical-align:top;"'
-			)
-		);
+        /** @var GenerateHtmlEvent $imageEvent */
+        $imageEvent = $event->getEnvironment()->getEventPropagator()->propagate(
+            ContaoEvents::IMAGE_GET_HTML,
+            new GenerateHtmlEvent(
+                'system/modules/metamodels/assets/images/icons/dca_wizard.png',
+                $event->getEnvironment()->getTranslator()->translate('stylepicker', 'tl_metamodel_dcasetting'),
+                'style="vertical-align:top;"'
+            )
+        );
 
-		$event->getWidget()->wizard = sprintf(
-			$link,
-			$event->getEnvironment()->getDataDefinition()->getName(),
-			$event->getProperty()->getName(),
-			$event->getProperty()->getName(),
-			$event->getModel()->getId(),
-			$imageEvent->getHtml()
-		);
-	}
+        $event->getWidget()->wizard = sprintf(
+            $link,
+            $event->getEnvironment()->getDataDefinition()->getName(),
+            $event->getProperty()->getName(),
+            $event->getProperty()->getName(),
+            $event->getModel()->getId(),
+            $imageEvent->getHtml()
+        );
+    }
 }

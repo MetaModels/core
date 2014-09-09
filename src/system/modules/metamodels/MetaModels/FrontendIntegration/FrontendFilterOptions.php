@@ -24,90 +24,90 @@ namespace MetaModels\FrontendIntegration;
  */
 class FrontendFilterOptions
 {
-	/**
-	 * Auto submit.
-	 *
-	 * @var bool
-	 */
-	protected $blnAutoSubmit = true;
+    /**
+     * Auto submit.
+     *
+     * @var bool
+     */
+    protected $blnAutoSubmit = true;
 
-	/**
-	 * Hide clear filter.
-	 *
-	 * @var bool
-	 */
-	protected $blnHideClearFilter = false;
+    /**
+     * Hide clear filter.
+     *
+     * @var bool
+     */
+    protected $blnHideClearFilter = false;
 
-	/**
-	 * Show the count values.
-	 *
-	 * @var bool
-	 */
-	protected $blnShowCountValues = false;
+    /**
+     * Show the count values.
+     *
+     * @var bool
+     */
+    protected $blnShowCountValues = false;
 
-	/**
-	 * Check if the filter shall be automatically submitted.
-	 *
-	 * @return bool
-	 */
-	public function isAutoSubmit()
-	{
-		return $this->blnAutoSubmit;
-	}
+    /**
+     * Check if the filter shall be automatically submitted.
+     *
+     * @return bool
+     */
+    public function isAutoSubmit()
+    {
+        return $this->blnAutoSubmit;
+    }
 
-	/**
-	 * Set if the filter shall be automatically submitted.
-	 *
-	 * @param bool $blnAutoSubmit True to auto submit false otherwise.
-	 *
-	 * @return void
-	 */
-	public function setAutoSubmit($blnAutoSubmit)
-	{
-		$this->blnAutoSubmit = $blnAutoSubmit;
-	}
+    /**
+     * Set if the filter shall be automatically submitted.
+     *
+     * @param bool $blnAutoSubmit True to auto submit false otherwise.
+     *
+     * @return void
+     */
+    public function setAutoSubmit($blnAutoSubmit)
+    {
+        $this->blnAutoSubmit = $blnAutoSubmit;
+    }
 
-	/**
-	 * Check if the "clear filter" option shall be hidden or visible.
-	 *
-	 * @return bool
-	 */
-	public function isHideClearFilter()
-	{
-		return $this->blnHideClearFilter;
-	}
+    /**
+     * Check if the "clear filter" option shall be hidden or visible.
+     *
+     * @return bool
+     */
+    public function isHideClearFilter()
+    {
+        return $this->blnHideClearFilter;
+    }
 
-	/**
-	 * Set if the "clear filter" option shall be hidden or visible.
-	 *
-	 * @param bool $blnHideClearFilter True to hide the "clear filter" option, false otherwise.
-	 *
-	 * @return void
-	 */
-	public function setHideClearFilter($blnHideClearFilter)
-	{
-		$this->blnHideClearFilter = $blnHideClearFilter;
-	}
+    /**
+     * Set if the "clear filter" option shall be hidden or visible.
+     *
+     * @param bool $blnHideClearFilter True to hide the "clear filter" option, false otherwise.
+     *
+     * @return void
+     */
+    public function setHideClearFilter($blnHideClearFilter)
+    {
+        $this->blnHideClearFilter = $blnHideClearFilter;
+    }
 
-	/**
-	 * Check if the amount of matches shall be shown for each filter option.
-	 *
-	 * @return bool
-	 */
-	public function isShowCountValues()
-	{
-		return $this->blnShowCountValues;
-	}
+    /**
+     * Check if the amount of matches shall be shown for each filter option.
+     *
+     * @return bool
+     */
+    public function isShowCountValues()
+    {
+        return $this->blnShowCountValues;
+    }
 
-	/**
-	 * Set if the amount of matches shall be shown for each filter option.
-	 *
-	 * @param bool $blnShowCountValues True to show the amount for each option, false otherwise.
-	 *
-	 * @return void
-	 */
-	public function setShowCountValues($blnShowCountValues)
-	{
-		$this->blnShowCountValues = $blnShowCountValues;
-	}
+    /**
+     * Set if the amount of matches shall be shown for each filter option.
+     *
+     * @param bool $blnShowCountValues True to show the amount for each option, false otherwise.
+     *
+     * @return void
+     */
+    public function setShowCountValues($blnShowCountValues)
+    {
+        $this->blnShowCountValues = $blnShowCountValues;
+    }
 }

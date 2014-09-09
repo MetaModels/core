@@ -27,20 +27,20 @@ use MetaModels\Attribute\Factory;
  */
 class DeleteAttribute
 {
-	/**
-	 * Handle the deletion of an attribute and all attached data.
-	 *
-	 * @param PreDeleteModelEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function handle(PreDeleteModelEvent $event)
-	{
-		$newInstance = Factory::createFromArray($event->getModel()->getPropertiesAsArray());
+    /**
+     * Handle the deletion of an attribute and all attached data.
+     *
+     * @param PreDeleteModelEvent $event The event.
+     *
+     * @return void
+     */
+    public static function handle(PreDeleteModelEvent $event)
+    {
+        $newInstance = Factory::createFromArray($event->getModel()->getPropertiesAsArray());
 
-		if ($newInstance)
-		{
-			$newInstance->destroyAUX();
-		}
-	}
+        if ($newInstance)
+        {
+            $newInstance->destroyAUX();
+        }
+    }
 }

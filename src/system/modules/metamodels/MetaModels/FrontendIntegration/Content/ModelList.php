@@ -28,90 +28,90 @@ use MetaModels\ItemList;
  */
 class ModelList extends \ContentElement
 {
-	/**
-	 * The Template instance.
-	 *
-	 * @var string
-	 */
-	protected $strTemplate = 'ce_metamodel_list';
+    /**
+     * The Template instance.
+     *
+     * @var string
+     */
+    protected $strTemplate = 'ce_metamodel_list';
 
-	/**
-	 * Generate the list.
-	 *
-	 * @return string
-	 */
-	public function generate()
-	{
-		if (TL_MODE == 'BE')
-		{
-			$objTemplate           = new \BackendTemplate('be_wildcard');
-			$objTemplate->wildcard = '### METAMODEL LIST ###';
-			$objTemplate->title    = $this->headline;
-			$objTemplate->id       = $this->id;
-			$objTemplate->link     = $this->name;
-			$objTemplate->href     = 'contao/main.php?do=themes&amp;table=tl_content&amp;act=edit&amp;id=' . $this->id;
+    /**
+     * Generate the list.
+     *
+     * @return string
+     */
+    public function generate()
+    {
+        if (TL_MODE == 'BE')
+        {
+            $objTemplate           = new \BackendTemplate('be_wildcard');
+            $objTemplate->wildcard = '### METAMODEL LIST ###';
+            $objTemplate->title    = $this->headline;
+            $objTemplate->id       = $this->id;
+            $objTemplate->link     = $this->name;
+            $objTemplate->href     = 'contao/main.php?do=themes&amp;table=tl_content&amp;act=edit&amp;id=' . $this->id;
 
-			return $objTemplate->parse();
-		}
+            return $objTemplate->parse();
+        }
 
-		// Fallback template.
-		if (!strlen($this->metamodel_layout))
-		{
-			$this->metamodel_layout = $this->strTemplate;
-		}
+        // Fallback template.
+        if (!strlen($this->metamodel_layout))
+        {
+            $this->metamodel_layout = $this->strTemplate;
+        }
 
-		$this->strTemplate = $this->metamodel_layout;
+        $this->strTemplate = $this->metamodel_layout;
 
-		return parent::generate();
-	}
+        return parent::generate();
+    }
 
 
-	/**
-	 * Retrieve all filter parameters from the input class for the specified filter setting.
-	 *
-	 * @param ItemList $objItemRenderer The list renderer instance to be used.
-	 *
-	 * @return string[]
-	 */
-	protected function getFilterParameters($objItemRenderer)
-	{
-		$arrReturn = array();
+    /**
+     * Retrieve all filter parameters from the input class for the specified filter setting.
+     *
+     * @param ItemList $objItemRenderer The list renderer instance to be used.
+     *
+     * @return string[]
+     */
+    protected function getFilterParameters($objItemRenderer)
+    {
+        $arrReturn = array();
 
-		foreach (array_keys($objItemRenderer->getFilterSettings()->getParameterFilterNames()) as $strName)
-		{
-			$varValue = \Input::getInstance()->get($strName);
+        foreach (array_keys($objItemRenderer->getFilterSettings()->getParameterFilterNames()) as $strName)
+        {
+            $varValue = \Input::getInstance()->get($strName);
 
-			if (is_string($varValue))
-			{
-				$arrReturn[$strName] = $varValue;
-			}
-		}
+            if (is_string($varValue))
+            {
+                $arrReturn[$strName] = $varValue;
+            }
+        }
 
-		return $arrReturn;
-	}
+        return $arrReturn;
+    }
 
-	/**
-	 * Compile the content element.
-	 *
-	 * @return void
-	 */
-	protected function compile()
-	{
-		$objItemRenderer = new ItemList();
+    /**
+     * Compile the content element.
+     *
+     * @return void
+     */
+    protected function compile()
+    {
+        $objItemRenderer = new ItemList();
 
-		$this->Template->searchable = !$this->metamodel_donotindex;
+        $this->Template->searchable = !$this->metamodel_donotindex;
 
-		$objItemRenderer
-			->setMetaModel($this->metamodel, $this->metamodel_rendersettings)
-			->setLimit($this->metamodel_use_limit, $this->metamodel_offset, $this->metamodel_limit)
-			->setPageBreak($this->perPage)
-			->setSorting($this->metamodel_sortby, $this->metamodel_sortby_direction)
-			->setFilterSettings($this->metamodel_filtering)
-			->setFilterParameters(deserialize($this->metamodel_filterparams, true), $this->getFilterParameters($objItemRenderer))
-			->setMetaTags($this->metamodel_meta_title, $this->metamodel_meta_description);
+        $objItemRenderer
+            ->setMetaModel($this->metamodel, $this->metamodel_rendersettings)
+            ->setLimit($this->metamodel_use_limit, $this->metamodel_offset, $this->metamodel_limit)
+            ->setPageBreak($this->perPage)
+            ->setSorting($this->metamodel_sortby, $this->metamodel_sortby_direction)
+            ->setFilterSettings($this->metamodel_filtering)
+            ->setFilterParameters(deserialize($this->metamodel_filterparams, true), $this->getFilterParameters($objItemRenderer))
+            ->setMetaTags($this->metamodel_meta_title, $this->metamodel_meta_description);
 
-		$this->Template->items         = $objItemRenderer->render($this->metamodel_noparsing, $this);
-		$this->Template->numberOfItems = $objItemRenderer->getItems()->getCount();
-		$this->Template->pagination    = $objItemRenderer->getPagination();
-	}
+        $this->Template->items         = $objItemRenderer->render($this->metamodel_noparsing, $this);
+        $this->Template->numberOfItems = $objItemRenderer->getItems()->getCount();
+        $this->Template->pagination    = $objItemRenderer->getPagination();
+    }
 }

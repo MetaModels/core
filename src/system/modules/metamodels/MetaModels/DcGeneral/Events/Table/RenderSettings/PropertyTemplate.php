@@ -27,17 +27,17 @@ use MetaModels\Dca\Helper;
  */
 class PropertyTemplate
 {
-	/**
-	 * Provide options for default selection.
-	 *
-	 * @param GetPropertyOptionsEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function getOptions(GetPropertyOptionsEvent $event)
-	{
-		$options = Helper::getTemplatesForBase('metamodel_');
+    /**
+     * Provide options for default selection.
+     *
+     * @param GetPropertyOptionsEvent $event The event.
+     *
+     * @return void
+     */
+    public static function getOptions(GetPropertyOptionsEvent $event)
+    {
+        $options = Helper::getTemplatesForBase('metamodel_');
 
-		$event->setOptions($options);
-	}
+        $event->setOptions($options);
+    }
 }

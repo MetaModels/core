@@ -26,30 +26,30 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Model
  */
 class ModelToLabel
 {
-	/**
-	 * Render the html for the input screen.
-	 *
-	 * @param ModelToLabelEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function render(ModelToLabelEvent $event)
-	{
-		$environment = $event->getEnvironment();
-		$translator  = $environment->getTranslator();
-		$model       = $event->getModel();
+    /**
+     * Render the html for the input screen.
+     *
+     * @param ModelToLabelEvent $event The event.
+     *
+     * @return void
+     */
+    public static function render(ModelToLabelEvent $event)
+    {
+        $environment = $event->getEnvironment();
+        $translator  = $environment->getTranslator();
+        $model       = $event->getModel();
 
-		if (!$model->getProperty('isdefault'))
-		{
-			return;
-		}
+        if (!$model->getProperty('isdefault'))
+        {
+            return;
+        }
 
-		$event->setLabel(
-			sprintf(
-				'%s <span style="color:#b3b3b3; padding-left:3px">[%s]</span>',
-				$event->getLabel(),
-				$translator->translate('MSC.fallback')
-			)
-		);
-	}
+        $event->setLabel(
+            sprintf(
+                '%s <span style="color:#b3b3b3; padding-left:3px">[%s]</span>',
+                $event->getLabel(),
+                $translator->translate('MSC.fallback')
+            )
+        );
+    }
 }

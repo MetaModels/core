@@ -28,22 +28,22 @@ namespace MetaModels\Attribute;
  */
 interface IComplex extends IAttribute
 {
-	/**
-	 * This method is called to retrieve the data for certain items from the database.
-	 *
-	 * @param int[] $arrIds The ids of the items to retrieve.
-	 *
-	 * @return mixed[] The nature of the resulting array is a mapping from id => "native data" where
-	 *                 the definition of "native data" is only of relevance to the given item.
-	 */
-	public function getDataFor($arrIds);
+    /**
+     * This method is called to retrieve the data for certain items from the database.
+     *
+     * @param int[] $arrIds The ids of the items to retrieve.
+     *
+     * @return mixed[] The nature of the resulting array is a mapping from id => "native data" where
+     *                 the definition of "native data" is only of relevance to the given item.
+     */
+    public function getDataFor($arrIds);
 
-	/**
-	 * Remove values for items.
-	 *
-	 * @param int[] $arrIds The ids of the items to retrieve.
-	 *
-	 * @return void
-	 */
-	public function unsetDataFor($arrIds);
+    /**
+     * Remove values for items.
+     *
+     * @param int[] $arrIds The ids of the items to retrieve.
+     *
+     * @return void
+     */
+    public function unsetDataFor($arrIds);
 }

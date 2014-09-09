@@ -26,83 +26,83 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class CreatePropertyConditionEvent extends Event
 {
-	const NAME = 'metamodels.events.create-property-condition-event';
+    const NAME = 'metamodels.events.create-property-condition-event';
 
-	/**
-	 * The array containing the meta information for the instance.
-	 *
-	 * @var array
-	 */
-	protected $data;
+    /**
+     * The array containing the meta information for the instance.
+     *
+     * @var array
+     */
+    protected $data;
 
-	/**
-	 * The MetaModel instance.
-	 *
-	 * @var IMetaModel
-	 */
-	protected $metaModel;
+    /**
+     * The MetaModel instance.
+     *
+     * @var IMetaModel
+     */
+    protected $metaModel;
 
-	/**
-	 * The instance to be returned.
-	 *
-	 * @var PropertyConditionInterface
-	 */
-	protected $instance;
+    /**
+     * The instance to be returned.
+     *
+     * @var PropertyConditionInterface
+     */
+    protected $instance;
 
-	/**
-	 * Create a new instance.
-	 *
-	 * @param array      $data      The meta information for the instance.
-	 *
-	 * @param IMetaModel $metaModel The MetaModel instance the condition applies to.
-	 */
-	public function __construct($data, $metaModel)
-	{
-		$this->data      = $data;
-		$this->metaModel = $metaModel;
-	}
+    /**
+     * Create a new instance.
+     *
+     * @param array      $data      The meta information for the instance.
+     *
+     * @param IMetaModel $metaModel The MetaModel instance the condition applies to.
+     */
+    public function __construct($data, $metaModel)
+    {
+        $this->data      = $data;
+        $this->metaModel = $metaModel;
+    }
 
-	/**
-	 * Retrieve the meta data.
-	 *
-	 * @return array
-	 */
-	public function getData()
-	{
-		return $this->data;
-	}
+    /**
+     * Retrieve the meta data.
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
 
-	/**
-	 * Retrieve the MetaModel instance.
-	 *
-	 * @return IMetaModel
-	 */
-	public function getMetaModel()
-	{
-		return $this->metaModel;
-	}
+    /**
+     * Retrieve the MetaModel instance.
+     *
+     * @return IMetaModel
+     */
+    public function getMetaModel()
+    {
+        return $this->metaModel;
+    }
 
-	/**
-	 * Retrieve the instance.
-	 *
-	 * @return PropertyConditionInterface
-	 */
-	public function getInstance()
-	{
-		return $this->instance;
-	}
+    /**
+     * Retrieve the instance.
+     *
+     * @return PropertyConditionInterface
+     */
+    public function getInstance()
+    {
+        return $this->instance;
+    }
 
-	/**
-	 * Set the instance.
-	 *
-	 * @param PropertyConditionInterface $instance The instance to be set.
-	 *
-	 * @return CreatePropertyConditionEvent
-	 */
-	public function setInstance($instance)
-	{
-		$this->instance = $instance;
+    /**
+     * Set the instance.
+     *
+     * @param PropertyConditionInterface $instance The instance to be set.
+     *
+     * @return CreatePropertyConditionEvent
+     */
+    public function setInstance($instance)
+    {
+        $this->instance = $instance;
 
-		return $this;
-	}
+        return $this;
+    }
 }

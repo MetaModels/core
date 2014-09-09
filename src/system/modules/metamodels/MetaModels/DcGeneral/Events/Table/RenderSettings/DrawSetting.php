@@ -26,21 +26,21 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Model
  */
 class DrawSetting
 {
-	/**
-	 * Draw the render setting.
-	 *
-	 * @param ModelToLabelEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function modelToLabel(ModelToLabelEvent $event)
-	{
-		if ($event->getModel()->getProperty('isdefault'))
-		{
-			$event->setLabel(
-				$event->getLabel() .
-				' <span style="color:#b3b3b3; padding-left:3px">[' . $GLOBALS['TL_LANG']['MSC']['fallback'] . ']</span>'
-			);
-		}
-	}
+    /**
+     * Draw the render setting.
+     *
+     * @param ModelToLabelEvent $event The event.
+     *
+     * @return void
+     */
+    public static function modelToLabel(ModelToLabelEvent $event)
+    {
+        if ($event->getModel()->getProperty('isdefault'))
+        {
+            $event->setLabel(
+                $event->getLabel() .
+                ' <span style="color:#b3b3b3; padding-left:3px">[' . $GLOBALS['TL_LANG']['MSC']['fallback'] . ']</span>'
+            );
+        }
+    }
 }

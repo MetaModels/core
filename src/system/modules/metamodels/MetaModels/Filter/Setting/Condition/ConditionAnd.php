@@ -32,28 +32,28 @@ use MetaModels\Filter\Setting\WithChildren;
  */
 class ConditionAnd extends WithChildren
 {
-	/**
-	 * Generates the filter rules based upon the given filter url.
-	 *
-	 * @param IFilter        $objFilter    The filter to append the rules to.
-	 *
-	 * @param string[string] $arrFilterUrl The parameters to evaluate.
-	 *
-	 * @return void
-	 */
-	public function prepareRules(IFilter $objFilter, $arrFilterUrl)
-	{
-		$objSubFilter = new Filter($this->getMetaModel());
+    /**
+     * Generates the filter rules based upon the given filter url.
+     *
+     * @param IFilter        $objFilter    The filter to append the rules to.
+     *
+     * @param string[string] $arrFilterUrl The parameters to evaluate.
+     *
+     * @return void
+     */
+    public function prepareRules(IFilter $objFilter, $arrFilterUrl)
+    {
+        $objSubFilter = new Filter($this->getMetaModel());
 
-		foreach ($this->arrChildren as $objChildSetting)
-		{
-			$objChildSetting->prepareRules($objSubFilter, $arrFilterUrl);
-		}
+        foreach ($this->arrChildren as $objChildSetting)
+        {
+            $objChildSetting->prepareRules($objSubFilter, $arrFilterUrl);
+        }
 
-		$objFilterRule = new FilterRuleAnd();
-		$objFilterRule->addChild($objSubFilter);
+        $objFilterRule = new FilterRuleAnd();
+        $objFilterRule->addChild($objSubFilter);
 
-		$objFilter->addFilterRule($objFilterRule);
-	}
+        $objFilter->addFilterRule($objFilterRule);
+    }
 }
 

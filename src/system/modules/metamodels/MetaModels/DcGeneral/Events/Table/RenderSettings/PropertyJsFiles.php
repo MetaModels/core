@@ -27,17 +27,17 @@ use MetaModels\Dca\Helper;
  */
 class PropertyJsFiles
 {
-	/**
-	 * Provide options for additional javascript files.
-	 *
-	 * @param GetPropertyOptionsEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function getOptions(GetPropertyOptionsEvent $event)
-	{
-		$options = Helper::searchFiles($GLOBALS['TL_CONFIG']['uploadPath'], '.js');
+    /**
+     * Provide options for additional javascript files.
+     *
+     * @param GetPropertyOptionsEvent $event The event.
+     *
+     * @return void
+     */
+    public static function getOptions(GetPropertyOptionsEvent $event)
+    {
+        $options = Helper::searchFiles($GLOBALS['TL_CONFIG']['uploadPath'], '.js');
 
-		$event->setOptions($options);
-	}
+        $event->setOptions($options);
+    }
 }

@@ -26,14 +26,14 @@ namespace MetaModels\Filter;
  */
 interface IFilterRule
 {
-	/**
-	 * Fetch the ids for all matches for this filter rule.
-	 *
-	 * If no entries have been found, the result is an empty array.
-	 * If no filtering was applied and therefore all ids shall be reported as valid, the return value of NULL is allowed.
-	 *
-	 * @return int[]|null
-	 */
-	public function getMatchingIds();
+    /**
+     * Fetch the ids for all matches for this filter rule.
+     *
+     * If no entries have been found, the result is an empty array.
+     * If no filtering was applied and therefore all ids shall be reported as valid, the return value of NULL is allowed.
+     *
+     * @return int[]|null
+     */
+    public function getMatchingIds();
 }
 

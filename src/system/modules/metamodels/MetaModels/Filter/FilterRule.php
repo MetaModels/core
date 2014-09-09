@@ -26,11 +26,11 @@ namespace MetaModels\Filter;
  */
 abstract class FilterRule implements IFilterRule
 {
-	/**
-	 * Create a new FilterRule instance.
-	 */
-	public function __construct()
-	{
-	}
+    /**
+     * Create a new FilterRule instance.
+     */
+    public function __construct()
+    {
+    }
 }
 

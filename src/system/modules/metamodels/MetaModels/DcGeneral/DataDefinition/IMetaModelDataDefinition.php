@@ -28,28 +28,28 @@ use MetaModels\DcGeneral\DataDefinition\Definition\IMetaModelDefinition;
  * @package MetaModels\DcGeneral\DataDefinition
  */
 interface IMetaModelDataDefinition
-	extends ContainerInterface
+    extends ContainerInterface
 {
-	/**
-	 * Set the MetaModel definition.
-	 *
-	 * @param IMetaModelDefinition $definition The definition.
-	 *
-	 * @return mixed
-	 */
-	public function setMetaModelDefinition(IMetaModelDefinition $definition);
+    /**
+     * Set the MetaModel definition.
+     *
+     * @param IMetaModelDefinition $definition The definition.
+     *
+     * @return mixed
+     */
+    public function setMetaModelDefinition(IMetaModelDefinition $definition);
 
-	/**
-	 * Check if a MetaModel definition has been set.
-	 *
-	 * @return bool
-	 */
-	public function hasMetaModelDefinition();
+    /**
+     * Check if a MetaModel definition has been set.
+     *
+     * @return bool
+     */
+    public function hasMetaModelDefinition();
 
-	/**
-	 * Retrieve the MetaModel definition.
-	 *
-	 * @return IMetaModelDefinition
-	 */
-	public function getMetaModelDefinition();
+    /**
+     * Retrieve the MetaModel definition.
+     *
+     * @return IMetaModelDefinition
+     */
+    public function getMetaModelDefinition();
 }

@@ -27,13 +27,13 @@ namespace MetaModels\Filter\Setting;
  */
 interface IWithChildren extends ISimple
 {
-	/**
-	 * Adds a child setting to this setting.
-	 *
-	 * @param ISimple $objFilterSetting The setting that shall be added as child.
-	 *
-	 * @return void
-	 */
-	public function addChild(ISimple $objFilterSetting);
+    /**
+     * Adds a child setting to this setting.
+     *
+     * @param ISimple $objFilterSetting The setting that shall be added as child.
+     *
+     * @return void
+     */
+    public function addChild(ISimple $objFilterSetting);
 }
 

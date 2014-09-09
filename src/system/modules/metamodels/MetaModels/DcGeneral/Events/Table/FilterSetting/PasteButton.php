@@ -24,35 +24,35 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPa
  */
 class PasteButton
 {
-	/**
-	 * Generate the paste button.
-	 *
-	 * @param GetPasteButtonEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function generate(GetPasteButtonEvent $event)
-	{
-		$environment = $event->getEnvironment();
-		$model       = $event->getModel();
-		$clipboard   = $environment->getClipboard();
+    /**
+     * Generate the paste button.
+     *
+     * @param GetPasteButtonEvent $event The event.
+     *
+     * @return void
+     */
+    public static function generate(GetPasteButtonEvent $event)
+    {
+        $environment = $event->getEnvironment();
+        $model       = $event->getModel();
+        $clipboard   = $environment->getClipboard();
 
-		// Disable all buttons if there is a circular reference.
-		if (($clipboard->isCut()
-			&& ($event->getCircularReference() || in_array($model->getId(), $clipboard->getContainedIds())))
-		)
-		{
-			$event
-				->setPasteAfterDisabled(true)
-				->setPasteIntoDisabled(true);
+        // Disable all buttons if there is a circular reference.
+        if (($clipboard->isCut()
+            && ($event->getCircularReference() || in_array($model->getId(), $clipboard->getContainedIds())))
+        )
+        {
+            $event
+                ->setPasteAfterDisabled(true)
+                ->setPasteIntoDisabled(true);
 
-			return;
-		}
+            return;
+        }
 
-		// If setting does not support children, omit them.
-		if ($model->getId() && (!$GLOBALS['METAMODELS']['filters'][$model->getProperty('type')]['nestingAllowed']))
-		{
-			$event->setPasteIntoDisabled(true);
-		}
-	}
+        // If setting does not support children, omit them.
+        if ($model->getId() && (!$GLOBALS['METAMODELS']['filters'][$model->getProperty('type')]['nestingAllowed']))
+        {
+            $event->setPasteIntoDisabled(true);
+        }
+    }
 }

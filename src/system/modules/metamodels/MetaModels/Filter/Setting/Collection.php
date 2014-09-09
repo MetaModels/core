@@ -28,261 +28,261 @@ use MetaModels\Render\Setting\ICollection as IRenderSettings;
 /**
  * This is the IMetaModelFilterSettings reference implementation.
  *
- * @package	   MetaModels
+ * @package       MetaModels
  * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
 class Collection implements ICollection
 {
-	/**
-	 * The additional meta data for this filter setting collection.
-	 *
-	 * @var array
-	 */
-	protected $arrData = array();
+    /**
+     * The additional meta data for this filter setting collection.
+     *
+     * @var array
+     */
+    protected $arrData = array();
 
-	/**
-	 * The filter settings contained.
-	 *
-	 * @var ISimple[]
-	 */
-	protected $arrSettings = array();
+    /**
+     * The filter settings contained.
+     *
+     * @var ISimple[]
+     */
+    protected $arrSettings = array();
 
-	/**
-	 * Create a new instance.
-	 *
-	 * @param array $arrData The meta data for this filter setting collection.
-	 */
-	public function __construct($arrData)
-	{
-		$this->arrData = $arrData;
-	}
+    /**
+     * Create a new instance.
+     *
+     * @param array $arrData The meta data for this filter setting collection.
+     */
+    public function __construct($arrData)
+    {
+        $this->arrData = $arrData;
+    }
 
-	/**
-	 * Create a new setting.
-	 *
-	 * @param Result $objSettings The information from which to initialize the setting from.
-	 *
-	 * @return ISimple
-	 */
-	protected function newSetting($objSettings)
-	{
-		$strClass = $GLOBALS['METAMODELS']['filters'][$objSettings->type]['class'];
-		// TODO: add factory support here.
-		if ($strClass)
-		{
-			return new $strClass($this, $objSettings->row());
-		}
-		return null;
-	}
+    /**
+     * Create a new setting.
+     *
+     * @param Result $objSettings The information from which to initialize the setting from.
+     *
+     * @return ISimple
+     */
+    protected function newSetting($objSettings)
+    {
+        $strClass = $GLOBALS['METAMODELS']['filters'][$objSettings->type]['class'];
+        // TODO: add factory support here.
+        if ($strClass)
+        {
+            return new $strClass($this, $objSettings->row());
+        }
+        return null;
+    }
 
-	/**
-	 * Fetch all child rules for the given setting.
-	 *
-	 * @param Result        $objBaseSettings The database information of the parent setting.
-	 *
-	 * @param IWithChildren $objSetting      The information from which to initialize the setting from.
-	 *
-	 * @return void
-	 */
-	protected function collectRulesFor($objBaseSettings, $objSetting)
-	{
-		$objDB       = \Database::getInstance();
-		$objSettings = $objDB
-			->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE pid=? AND enabled=1 ORDER BY sorting ASC')
-			->execute($objBaseSettings->id);
+    /**
+     * Fetch all child rules for the given setting.
+     *
+     * @param Result        $objBaseSettings The database information of the parent setting.
+     *
+     * @param IWithChildren $objSetting      The information from which to initialize the setting from.
+     *
+     * @return void
+     */
+    protected function collectRulesFor($objBaseSettings, $objSetting)
+    {
+        $objDB       = \Database::getInstance();
+        $objSettings = $objDB
+            ->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE pid=? AND enabled=1 ORDER BY sorting ASC')
+            ->execute($objBaseSettings->id);
 
-		while ($objSettings->next())
-		{
-			$objNewSetting = $this->newSetting($objSettings);
-			if ($objNewSetting)
-			{
-				$objSetting->addChild($objNewSetting);
-				// Collect next level.
-				if (!empty($GLOBALS['METAMODELS']['filters'][$objNewSetting->get('type')]['nestingAllowed']))
-				{
-					/** @var IWithChildren $objNewSetting */
-					$this->collectRulesFor($objSettings, $objNewSetting);
-				}
-			}
-		}
-	}
+        while ($objSettings->next())
+        {
+            $objNewSetting = $this->newSetting($objSettings);
+            if ($objNewSetting)
+            {
+                $objSetting->addChild($objNewSetting);
+                // Collect next level.
+                if (!empty($GLOBALS['METAMODELS']['filters'][$objNewSetting->get('type')]['nestingAllowed']))
+                {
+                    /** @var IWithChildren $objNewSetting */
+                    $this->collectRulesFor($objSettings, $objNewSetting);
+                }
+            }
+        }
+    }
 
-	/**
-	 * Retrieve the MetaModel this filter belongs to.
-	 *
-	 * @return IMetaModel
-	 *
-	 * @throws \RuntimeException When the MetaModel can not be determined.
-	 */
-	public function getMetaModel()
-	{
-		if (!$this->arrData['pid'])
-		{
-			throw new \RuntimeException(sprintf(
-				'Error: Filtersetting %d not attached to a MetaModel',
-				$this->arrData['id'])
-			);
+    /**
+     * Retrieve the MetaModel this filter belongs to.
+     *
+     * @return IMetaModel
+     *
+     * @throws \RuntimeException When the MetaModel can not be determined.
+     */
+    public function getMetaModel()
+    {
+        if (!$this->arrData['pid'])
+        {
+            throw new \RuntimeException(sprintf(
+                'Error: Filtersetting %d not attached to a MetaModel',
+                $this->arrData['id'])
+            );
 
-		}
-		return ModelFactory::byId($this->arrData['pid']);
-	}
+        }
+        return ModelFactory::byId($this->arrData['pid']);
+    }
 
-	/**
-	 * {@inheritdoc}
-	 *
-	 * @throws \RuntimeException When the filter setting is not created from a database result (holds no id).
-	 */
-	public function collectRules()
-	{
-		if (!$this->arrData['id'])
-		{
-			throw new \RuntimeException('Error: dynamically created FilterSettings can not collect attribute information', 1);
-		}
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \RuntimeException When the filter setting is not created from a database result (holds no id).
+     */
+    public function collectRules()
+    {
+        if (!$this->arrData['id'])
+        {
+            throw new \RuntimeException('Error: dynamically created FilterSettings can not collect attribute information', 1);
+        }
 
-		$objDB       = \Database::getInstance();
-		$objSettings = $objDB
-			->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE fid=? AND pid=0 AND enabled=1 ORDER BY sorting ASC')
-			->execute($this->arrData['id']);
+        $objDB       = \Database::getInstance();
+        $objSettings = $objDB
+            ->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE fid=? AND pid=0 AND enabled=1 ORDER BY sorting ASC')
+            ->execute($this->arrData['id']);
 
-		while ($objSettings->next())
-		{
-			$objNewSetting = $this->newSetting($objSettings);
-			if ($objNewSetting)
-			{
-				$this->arrSettings[] = $objNewSetting;
-				if (!empty($GLOBALS['METAMODELS']['filters'][$objNewSetting->get('type')]['nestingAllowed']))
-				{
-					/** @var IWithChildren $objNewSetting */
-					$this->collectRulesFor($objSettings, $objNewSetting);
-				}
-			}
-		}
-	}
+        while ($objSettings->next())
+        {
+            $objNewSetting = $this->newSetting($objSettings);
+            if ($objNewSetting)
+            {
+                $this->arrSettings[] = $objNewSetting;
+                if (!empty($GLOBALS['METAMODELS']['filters'][$objNewSetting->get('type')]['nestingAllowed']))
+                {
+                    /** @var IWithChildren $objNewSetting */
+                    $this->collectRulesFor($objSettings, $objNewSetting);
+                }
+            }
+        }
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function addRules(IFilter $objFilter, $arrFilterUrl, $arrIgnoredFilter = array())
-	{
-		foreach ($this->arrSettings as $objSetting)
-		{
-			// If the setting is on the ignore list skip it.
-			if (in_array($objSetting->get('id'), $arrIgnoredFilter))
-			{
-				continue;
-			}
+    /**
+     * {@inheritdoc}
+     */
+    public function addRules(IFilter $objFilter, $arrFilterUrl, $arrIgnoredFilter = array())
+    {
+        foreach ($this->arrSettings as $objSetting)
+        {
+            // If the setting is on the ignore list skip it.
+            if (in_array($objSetting->get('id'), $arrIgnoredFilter))
+            {
+                continue;
+            }
 
-			$objSetting->prepareRules($objFilter, $arrFilterUrl);
-		}
-	}
+            $objSetting->prepareRules($objFilter, $arrFilterUrl);
+        }
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
-	{
-		$arrFilterUrl = array();
-		foreach ($this->arrSettings as $objSetting)
-		{
-			$arrFilterUrl = array_merge($arrFilterUrl, $objSetting->generateFilterUrlFrom($objItem, $objRenderSetting));
-		}
-		return $arrFilterUrl;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
+    {
+        $arrFilterUrl = array();
+        foreach ($this->arrSettings as $objSetting)
+        {
+            $arrFilterUrl = array_merge($arrFilterUrl, $objSetting->generateFilterUrlFrom($objItem, $objRenderSetting));
+        }
+        return $arrFilterUrl;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getParameters()
-	{
-		$arrParams = array();
-		foreach ($this->arrSettings as $objSetting)
-		{
-			$arrParams = array_merge($arrParams, $objSetting->getParameters());
-		}
-		return $arrParams;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameters()
+    {
+        $arrParams = array();
+        foreach ($this->arrSettings as $objSetting)
+        {
+            $arrParams = array_merge($arrParams, $objSetting->getParameters());
+        }
+        return $arrParams;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getParameterDCA()
-	{
-		$arrParams = array();
-		foreach ($this->arrSettings as $objSetting)
-		{
-			$arrParams = array_merge($arrParams, $objSetting->getParameterDCA());
-		}
-		return $arrParams;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameterDCA()
+    {
+        $arrParams = array();
+        foreach ($this->arrSettings as $objSetting)
+        {
+            $arrParams = array_merge($arrParams, $objSetting->getParameterDCA());
+        }
+        return $arrParams;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getParameterFilterNames()
-	{
-		$arrParams = array();
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameterFilterNames()
+    {
+        $arrParams = array();
 
-		foreach ($this->arrSettings as $objSetting)
-		{
-			$arrParams = array_merge($arrParams, $objSetting->getParameterFilterNames());
-		}
-		return $arrParams;
-	}
+        foreach ($this->arrSettings as $objSetting)
+        {
+            $arrParams = array_merge($arrParams, $objSetting->getParameterFilterNames());
+        }
+        return $arrParams;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getParameterFilterWidgets(
-		$arrFilterUrl,
-		$arrJumpTo = array(),
-		FrontendFilterOptions $objFrontendFilterOptions
-	)
-	{
-		$arrParams = array();
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameterFilterWidgets(
+        $arrFilterUrl,
+        $arrJumpTo = array(),
+        FrontendFilterOptions $objFrontendFilterOptions
+    )
+    {
+        $arrParams = array();
 
-		// Get the id with all enabled filter.
-		$objFilter = $this->getMetaModel()->getEmptyFilter();
-		$this->addRules($objFilter, $arrFilterUrl);
+        // Get the id with all enabled filter.
+        $objFilter = $this->getMetaModel()->getEmptyFilter();
+        $this->addRules($objFilter, $arrFilterUrl);
 
-		$arrBaseIds = $objFilter->getMatchingIds();
+        $arrBaseIds = $objFilter->getMatchingIds();
 
-		foreach ($this->arrSettings as $objSetting)
-		{
-			if ($objSetting->get('skipfilteroptions'))
-			{
-				$objFilter = $this->getMetaModel()->getEmptyFilter();
-				$this->addRules($objFilter, $arrFilterUrl, array($objSetting->get('id')));
-				$arrIds = $objFilter->getMatchingIds();
-			}
-			else
-			{
-				$arrIds = $arrBaseIds;
-			}
+        foreach ($this->arrSettings as $objSetting)
+        {
+            if ($objSetting->get('skipfilteroptions'))
+            {
+                $objFilter = $this->getMetaModel()->getEmptyFilter();
+                $this->addRules($objFilter, $arrFilterUrl, array($objSetting->get('id')));
+                $arrIds = $objFilter->getMatchingIds();
+            }
+            else
+            {
+                $arrIds = $arrBaseIds;
+            }
 
-			$arrParams = array_merge(
-				$arrParams,
-				$objSetting->getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions)
-			);
-		}
+            $arrParams = array_merge(
+                $arrParams,
+                $objSetting->getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions)
+            );
+        }
 
-		return $arrParams;
-	}
+        return $arrParams;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getReferencedAttributes()
-	{
-		$arrAttributes = array();
+    /**
+     * {@inheritdoc}
+     */
+    public function getReferencedAttributes()
+    {
+        $arrAttributes = array();
 
-		foreach ($this->arrSettings as $objSetting)
-		{
-			$arrAttributes = array_merge($arrAttributes, $objSetting->getReferencedAttributes());
-		}
+        foreach ($this->arrSettings as $objSetting)
+        {
+            $arrAttributes = array_merge($arrAttributes, $objSetting->getReferencedAttributes());
+        }
 
-		return $arrAttributes;
-	}
+        return $arrAttributes;
+    }
 
 }
 

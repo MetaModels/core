@@ -28,13 +28,13 @@ namespace MetaModels\Filter\Setting;
  */
 interface IFactory
 {
-	/**
-	 * Create a IMetaModelFilterSettings instance from the id.
-	 *
-	 * @param int $intId The id of the IMetaModelFilterSettings.
-	 *
-	 * @return ICollection The instance of the filter settings or null if not found.
-	 */
-	public static function byId($intId);
+    /**
+     * Create a IMetaModelFilterSettings instance from the id.
+     *
+     * @param int $intId The id of the IMetaModelFilterSettings.
+     *
+     * @return ICollection The instance of the filter settings or null if not found.
+     */
+    public static function byId($intId);
 }
 

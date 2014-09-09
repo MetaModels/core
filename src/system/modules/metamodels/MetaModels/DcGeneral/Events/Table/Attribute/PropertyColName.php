@@ -26,37 +26,37 @@ use MetaModels\Helper\TableManipulation;
  * @package MetaModels\DcGeneral\Events\Table\Attribute
  */
 class PropertyColName
-	extends AttributeBase
+    extends AttributeBase
 {
-	/**
-	 * Encode the given value from a real language array into a serialized language array.
-	 *
-	 * @param EncodePropertyValueFromWidgetEvent $event The event.
-	 *
-	 * @return void
-	 *
-	 * @throws \RuntimeException When the column name is illegal or duplicate.
-	 */
-	public static function encodeValue(EncodePropertyValueFromWidgetEvent $event)
-	{
-		$oldColumnName = $event->getModel()->getProperty($event->getProperty());
-		$columnName    = $event->getValue();
-		$metaModel     = self::getMetaModelFromModel($event->getModel());
+    /**
+     * Encode the given value from a real language array into a serialized language array.
+     *
+     * @param EncodePropertyValueFromWidgetEvent $event The event.
+     *
+     * @return void
+     *
+     * @throws \RuntimeException When the column name is illegal or duplicate.
+     */
+    public static function encodeValue(EncodePropertyValueFromWidgetEvent $event)
+    {
+        $oldColumnName = $event->getModel()->getProperty($event->getProperty());
+        $columnName    = $event->getValue();
+        $metaModel     = self::getMetaModelFromModel($event->getModel());
 
-		if ((!$columnName) || $oldColumnName !== $columnName)
-		{
-			TableManipulation::checkColumnDoesNotExist($metaModel->getTableName(), $columnName);
+        if ((!$columnName) || $oldColumnName !== $columnName)
+        {
+            TableManipulation::checkColumnDoesNotExist($metaModel->getTableName(), $columnName);
 
-			$colNames = array_keys($metaModel->getAttributes());
-			if (in_array($columnName, $colNames))
-			{
-				throw new \RuntimeException(
-					sprintf($GLOBALS['TL_LANG']['ERR']['columnExists'],
-						$columnName,
-						$metaModel->getTableName()
-					)
-				);
-			}
-		}
-	}
+            $colNames = array_keys($metaModel->getAttributes());
+            if (in_array($columnName, $colNames))
+            {
+                throw new \RuntimeException(
+                    sprintf($GLOBALS['TL_LANG']['ERR']['columnExists'],
+                        $columnName,
+                        $metaModel->getTableName()
+                    )
+                );
+            }
+        }
+    }
 }

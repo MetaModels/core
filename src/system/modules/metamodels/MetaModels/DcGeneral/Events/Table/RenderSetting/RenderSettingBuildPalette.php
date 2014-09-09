@@ -35,144 +35,144 @@ use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Palette\RenderSettingA
  */
 class RenderSettingBuildPalette
 {
-	/**
-	 * Retrieve the legend with the given name.
-	 *
-	 * @param string           $name       Name of the legend.
-	 *
-	 * @param PaletteInterface $palette    The palette.
-	 *
-	 * @param LegendInterface  $prevLegend The previous legend.
-	 *
-	 * @return LegendInterface
-	 */
-	public static function getLegend($name, $palette, $prevLegend = null)
-	{
-		if ($name[0] == '+')
-		{
-			$name = substr($name, 1);
-		}
+    /**
+     * Retrieve the legend with the given name.
+     *
+     * @param string           $name       Name of the legend.
+     *
+     * @param PaletteInterface $palette    The palette.
+     *
+     * @param LegendInterface  $prevLegend The previous legend.
+     *
+     * @return LegendInterface
+     */
+    public static function getLegend($name, $palette, $prevLegend = null)
+    {
+        if ($name[0] == '+')
+        {
+            $name = substr($name, 1);
+        }
 
-		if (!$palette->hasLegend($name))
-		{
-			$palette->addLegend(new Legend($name), $prevLegend);
-		}
+        if (!$palette->hasLegend($name))
+        {
+            $palette->addLegend(new Legend($name), $prevLegend);
+        }
 
-		return $palette->getLegend($name);
-	}
+        return $palette->getLegend($name);
+    }
 
-	/**
-	 * Retrieve a property from a legend or create a new one.
-	 *
-	 * @param string          $name   The legend name.
-	 *
-	 * @param LegendInterface $legend The legend instance.
-	 *
-	 * @return PropertyInterface
-	 */
-	public static function getProperty($name, $legend)
-	{
-		foreach ($legend->getProperties() as $property)
-		{
-			if ($property->getName() == $name)
-			{
-				return $property;
-			}
-		}
+    /**
+     * Retrieve a property from a legend or create a new one.
+     *
+     * @param string          $name   The legend name.
+     *
+     * @param LegendInterface $legend The legend instance.
+     *
+     * @return PropertyInterface
+     */
+    public static function getProperty($name, $legend)
+    {
+        foreach ($legend->getProperties() as $property)
+        {
+            if ($property->getName() == $name)
+            {
+                return $property;
+            }
+        }
 
-		$property = new Property($name);
-		$legend->addProperty($property);
+        $property = new Property($name);
+        $legend->addProperty($property);
 
-		return $property;
-	}
+        return $property;
+    }
 
-	/**
-	 * Add a condition to a property.
-	 *
-	 * @param PropertyInterface  $property  The property.
-	 *
-	 * @param ConditionInterface $condition The condition to add.
-	 *
-	 * @return void
-	 */
-	public static function addCondition($property, $condition)
-	{
-		$currentCondition = $property->getVisibleCondition();
-		if ((!($currentCondition instanceof ConditionChainInterface))
-			|| ($currentCondition->getConjunction() != ConditionChainInterface::OR_CONJUNCTION)
-		)
-		{
-			if ($currentCondition === null)
-			{
-				$currentCondition = new PropertyConditionChain(array($condition));
-			}
-			else
-			{
-				$currentCondition = new PropertyConditionChain(array($currentCondition, $condition));
-			}
-			$currentCondition->setConjunction(ConditionChainInterface::OR_CONJUNCTION);
-			$property->setVisibleCondition($currentCondition);
-		}
-		else
-		{
-			$currentCondition->addCondition($condition);
-		}
-	}
+    /**
+     * Add a condition to a property.
+     *
+     * @param PropertyInterface  $property  The property.
+     *
+     * @param ConditionInterface $condition The condition to add.
+     *
+     * @return void
+     */
+    public static function addCondition($property, $condition)
+    {
+        $currentCondition = $property->getVisibleCondition();
+        if ((!($currentCondition instanceof ConditionChainInterface))
+            || ($currentCondition->getConjunction() != ConditionChainInterface::OR_CONJUNCTION)
+        )
+        {
+            if ($currentCondition === null)
+            {
+                $currentCondition = new PropertyConditionChain(array($condition));
+            }
+            else
+            {
+                $currentCondition = new PropertyConditionChain(array($currentCondition, $condition));
+            }
+            $currentCondition->setConjunction(ConditionChainInterface::OR_CONJUNCTION);
+            $property->setVisibleCondition($currentCondition);
+        }
+        else
+        {
+            $currentCondition->addCondition($condition);
+        }
+    }
 
-	/**
-	 * Build the data definition palettes.
-	 *
-	 * @param BuildDataDefinitionEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function build(BuildDataDefinitionEvent $event)
-	{
-		$palettes = $event->getContainer()->getPalettesDefinition();
-		$legend   = null;
+    /**
+     * Build the data definition palettes.
+     *
+     * @param BuildDataDefinitionEvent $event The event.
+     *
+     * @return void
+     */
+    public static function build(BuildDataDefinitionEvent $event)
+    {
+        $palettes = $event->getContainer()->getPalettesDefinition();
+        $legend   = null;
 
-		foreach ($palettes->getPalettes() as $palette)
-		{
-			if ($palette->getName() !== 'default')
-			{
-				$paletteCondition = $palette->getCondition();
-				if (!($paletteCondition instanceof ConditionChainInterface)
-					|| ($paletteCondition->getConjunction() !== PaletteConditionChain::OR_CONJUNCTION)
-				)
-				{
-					$paletteCondition = new PaletteConditionChain(
-						$paletteCondition ? array($paletteCondition) : array(),
-						PaletteConditionChain::OR_CONJUNCTION
-					);
-					$palette->setCondition($paletteCondition);
-				}
-				$paletteCondition->addCondition(new PaletteCondition($palette->getName()));
-			}
+        foreach ($palettes->getPalettes() as $palette)
+        {
+            if ($palette->getName() !== 'default')
+            {
+                $paletteCondition = $palette->getCondition();
+                if (!($paletteCondition instanceof ConditionChainInterface)
+                    || ($paletteCondition->getConjunction() !== PaletteConditionChain::OR_CONJUNCTION)
+                )
+                {
+                    $paletteCondition = new PaletteConditionChain(
+                        $paletteCondition ? array($paletteCondition) : array(),
+                        PaletteConditionChain::OR_CONJUNCTION
+                    );
+                    $palette->setCondition($paletteCondition);
+                }
+                $paletteCondition->addCondition(new PaletteCondition($palette->getName()));
+            }
 
-			foreach ((array)$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes'] as
-				$typeName => $paletteInfo)
-			{
-				if ($typeName == 'default')
-				{
-					continue;
-				}
+            foreach ((array)$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes'] as
+                $typeName => $paletteInfo)
+            {
+                if ($typeName == 'default')
+                {
+                    continue;
+                }
 
-				if (preg_match('#^(\w+) extends (\w+)$#', $typeName, $matches))
-				{
-					$typeName = $matches[1];
-				}
+                if (preg_match('#^(\w+) extends (\w+)$#', $typeName, $matches))
+                {
+                    $typeName = $matches[1];
+                }
 
-				foreach ($paletteInfo as $legendName => $properties)
-				{
-					foreach ($properties as $propertyName)
-					{
-						$condition = new PropertyCondition($typeName);
-						$legend    = self::getLegend($legendName, $palette);
-						$property  = self::getProperty($propertyName, $legend);
-						self::addCondition($property, $condition);
-					}
-				}
-			}
-		}
-	}
+                foreach ($paletteInfo as $legendName => $properties)
+                {
+                    foreach ($properties as $propertyName)
+                    {
+                        $condition = new PropertyCondition($typeName);
+                        $legend    = self::getLegend($legendName, $palette);
+                        $property  = self::getProperty($propertyName, $legend);
+                        self::addCondition($property, $condition);
+                    }
+                }
+            }
+        }
+    }
 }

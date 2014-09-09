@@ -23,73 +23,73 @@ namespace MetaModels\DcGeneral\DataDefinition\Definition;
  * @package MetaModels\DcGeneral\DataDefinition\Definition
  */
 class MetaModelDefinition
-	implements IMetaModelDefinition
+    implements IMetaModelDefinition
 {
-	/**
-	 * The id of the active render setting.
-	 *
-	 * @var int
-	 */
-	protected $activeRenderSetting;
+    /**
+     * The id of the active render setting.
+     *
+     * @var int
+     */
+    protected $activeRenderSetting;
 
-	/**
-	 * The id of the active input screen.
-	 *
-	 * @var int
-	 */
-	protected $activeInputScreen;
+    /**
+     * The id of the active input screen.
+     *
+     * @var int
+     */
+    protected $activeInputScreen;
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function setActiveRenderSetting($id)
-	{
-		$this->activeRenderSetting = $id;
+    /**
+     * {@inheritdoc}
+     */
+    public function setActiveRenderSetting($id)
+    {
+        $this->activeRenderSetting = $id;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function hasActiveRenderSetting()
-	{
-		return isset($this->activeRenderSetting);
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function hasActiveRenderSetting()
+    {
+        return isset($this->activeRenderSetting);
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getActiveRenderSetting()
-	{
-		return $this->activeRenderSetting;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getActiveRenderSetting()
+    {
+        return $this->activeRenderSetting;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function setActiveInputScreen($id)
-	{
-		$this->activeInputScreen = $id;
+    /**
+     * {@inheritdoc}
+     */
+    public function setActiveInputScreen($id)
+    {
+        $this->activeInputScreen = $id;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function hasActiveInputScreen()
-	{
-		return isset($this->activeInputScreen);
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function hasActiveInputScreen()
+    {
+        return isset($this->activeInputScreen);
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getActiveInputScreen()
-	{
-		return $this->activeInputScreen;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getActiveInputScreen()
+    {
+        return $this->activeInputScreen;
+    }
 }
 
 

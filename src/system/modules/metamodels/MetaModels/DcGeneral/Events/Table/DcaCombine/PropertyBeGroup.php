@@ -25,17 +25,17 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPr
  * @package MetaModels\DcGeneral\Events\Table\DcaCombine
  */
 class PropertyBeGroup
-	extends BaseUserGroups
+    extends BaseUserGroups
 {
-	/**
-	 * Get all options for the frontend user groups.
-	 *
-	 * @param GetPropertyOptionsEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function getOptions(GetPropertyOptionsEvent $event)
-	{
-		self::getUserGroups('tl_user_group', $event);
-	}
+    /**
+     * Get all options for the frontend user groups.
+     *
+     * @param GetPropertyOptionsEvent $event The event.
+     *
+     * @return void
+     */
+    public static function getOptions(GetPropertyOptionsEvent $event)
+    {
+        self::getUserGroups('tl_user_group', $event);
+    }
 }

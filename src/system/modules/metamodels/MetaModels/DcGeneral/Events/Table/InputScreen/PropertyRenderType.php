@@ -27,15 +27,15 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPr
 class PropertyRenderType
 {
 
-	/**
-	 * Populates an array with all valid "rendertype".
-	 *
-	 * @param GetPropertyOptionsEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function getRenderTypes(GetPropertyOptionsEvent $event)
-	{
-		$event->setOptions(array('standalone', 'ctable'));
-	}
+    /**
+     * Populates an array with all valid "rendertype".
+     *
+     * @param GetPropertyOptionsEvent $event The event.
+     *
+     * @return void
+     */
+    public static function getRenderTypes(GetPropertyOptionsEvent $event)
+    {
+        $event->setOptions(array('standalone', 'ctable'));
+    }
 }

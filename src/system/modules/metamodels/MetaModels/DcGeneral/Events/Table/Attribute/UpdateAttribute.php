@@ -27,47 +27,47 @@ use MetaModels\Attribute\Factory;
  */
 class UpdateAttribute
 {
-	/**
-	 * Handle the update of an attribute and all attached data.
-	 *
-	 * @param PostPersistModelEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function handle(PostPersistModelEvent $event)
-	{
-		$old         = $event->getOriginalModel();
-		$new         = $event->getModel();
-		$oldType     = $old ? $old->getProperty('type') : null;
-		$newType     = $new->getProperty('type');
-		$oldName     = $old ? $old->getProperty('colname') : null;
-		$newName     = $new->getProperty('colname');
-		$oldInstance = $old ? Factory::createFromArray($old->getPropertiesAsArray()) : null;
-		$newInstance = Factory::createFromArray($new->getPropertiesAsArray());
+    /**
+     * Handle the update of an attribute and all attached data.
+     *
+     * @param PostPersistModelEvent $event The event.
+     *
+     * @return void
+     */
+    public static function handle(PostPersistModelEvent $event)
+    {
+        $old         = $event->getOriginalModel();
+        $new         = $event->getModel();
+        $oldType     = $old ? $old->getProperty('type') : null;
+        $newType     = $new->getProperty('type');
+        $oldName     = $old ? $old->getProperty('colname') : null;
+        $newName     = $new->getProperty('colname');
+        $oldInstance = $old ? Factory::createFromArray($old->getPropertiesAsArray()) : null;
+        $newInstance = Factory::createFromArray($new->getPropertiesAsArray());
 
-		// If type or column name has been changed, destroy old data and initialize new.
-		if (($oldType !== $newType) || ($oldName !== $newName))
-		{
-			// Destroy old instance.
-			if ($oldInstance)
-			{
-				$oldInstance->destroyAUX();
-			}
+        // If type or column name has been changed, destroy old data and initialize new.
+        if (($oldType !== $newType) || ($oldName !== $newName))
+        {
+            // Destroy old instance.
+            if ($oldInstance)
+            {
+                $oldInstance->destroyAUX();
+            }
 
-			// Create new instance aux info.
-			if ($newInstance)
-			{
-				$newInstance->initializeAUX();
-			}
-		}
+            // Create new instance aux info.
+            if ($newInstance)
+            {
+                $newInstance->initializeAUX();
+            }
+        }
 
-		if ($newInstance)
-		{
-			// Now loop over all values and update the meta in the instance.
-			foreach ($new->getPropertiesAsArray() as $strKey => $varValue)
-			{
-				$newInstance->handleMetaChange($strKey, $varValue);
-			}
-		}
-	}
+        if ($newInstance)
+        {
+            // Now loop over all values and update the meta in the instance.
+            foreach ($new->getPropertiesAsArray() as $strKey => $varValue)
+            {
+                $newInstance->handleMetaChange($strKey, $varValue);
+            }
+        }
+    }
 }

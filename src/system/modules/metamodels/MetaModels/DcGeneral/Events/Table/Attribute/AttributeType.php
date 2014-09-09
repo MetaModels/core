@@ -28,28 +28,28 @@ use MetaModels\Attribute\Factory as AttributeFactory;
  */
 class AttributeType
 {
-	/**
-	 * Provide options for attribute type selection.
-	 *
-	 * @param GetPropertyOptionsEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function getOptions(GetPropertyOptionsEvent $event)
-	{
-		$translator   = $event->getEnvironment()->getTranslator();
-		$objMetaModel = ModelFactory::byId($event->getModel()->getProperty('pid'));
-		$attributes   = AttributeFactory::getAttributeTypes(
-			$objMetaModel->isTranslated(),
-			$objMetaModel->hasVariants()
-		);
+    /**
+     * Provide options for attribute type selection.
+     *
+     * @param GetPropertyOptionsEvent $event The event.
+     *
+     * @return void
+     */
+    public static function getOptions(GetPropertyOptionsEvent $event)
+    {
+        $translator   = $event->getEnvironment()->getTranslator();
+        $objMetaModel = ModelFactory::byId($event->getModel()->getProperty('pid'));
+        $attributes   = AttributeFactory::getAttributeTypes(
+            $objMetaModel->isTranslated(),
+            $objMetaModel->hasVariants()
+        );
 
-		$options = array();
-		foreach ($attributes as $attributeType)
-		{
-			$options[$attributeType] = $translator->translate('typeOptions.' . $attributeType, 'tl_metamodel_attribute');
-		}
+        $options = array();
+        foreach ($attributes as $attributeType)
+        {
+            $options[$attributeType] = $translator->translate('typeOptions.' . $attributeType, 'tl_metamodel_attribute');
+        }
 
-		$event->setOptions($options);
-	}
+        $event->setOptions($options);
+    }
 }

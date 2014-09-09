@@ -28,20 +28,20 @@ use ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent;
  * @package MetaModels\DcGeneral\Events\MetaModel
  */
 class DuplicateModel
-	extends BaseView
+    extends BaseView
 {
-	/**
-	 * Handle the paste into and after event.
-	 *
-	 * @param PostDuplicateModelEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function handle(PostDuplicateModelEvent $event)
-	{
-		$model = $event->getModel();
+    /**
+     * Handle the paste into and after event.
+     *
+     * @param PostDuplicateModelEvent $event The event.
+     *
+     * @return void
+     */
+    public static function handle(PostDuplicateModelEvent $event)
+    {
+        $model = $event->getModel();
 
-		// Set the vargroup to null for auto creating.
-		$model->setProperty('vargroup', null);
-	}
+        // Set the vargroup to null for auto creating.
+        $model->setProperty('vargroup', null);
+    }
 }

@@ -26,125 +26,125 @@ namespace MetaModels\FrontendIntegration\Content;
  */
 class FilterClearAll extends \ContentElement
 {
-	/**
-	 * Template.
-	 *
-	 * @var string
-	 */
-	protected $strTemplate = 'mm_filter_clearall';
+    /**
+     * Template.
+     *
+     * @var string
+     */
+    protected $strTemplate = 'mm_filter_clearall';
 
-	/**
-	 * Display a wildcard in the back end.
-	 *
-	 * @return string
-	 */
-	public function generate()
-	{
-		if (TL_MODE == 'BE')
-		{
-			$objTemplate = new \BackendTemplate('be_wildcard');
+    /**
+     * Display a wildcard in the back end.
+     *
+     * @return string
+     */
+    public function generate()
+    {
+        if (TL_MODE == 'BE')
+        {
+            $objTemplate = new \BackendTemplate('be_wildcard');
 
-			$objTemplate->wildcard = '### METAMODELS FE-CLEAR ALL ###';
-			$objTemplate->title    = $this->headline;
+            $objTemplate->wildcard = '### METAMODELS FE-CLEAR ALL ###';
+            $objTemplate->title    = $this->headline;
 
-			return $objTemplate->parse();
-		}
+            return $objTemplate->parse();
+        }
 
-		// Get template if configured.
-		if ($this->metamodel_fef_template)
-		{
-			$this->strTemplate = $this->metamodel_fef_template;
-		}
+        // Get template if configured.
+        if ($this->metamodel_fef_template)
+        {
+            $this->strTemplate = $this->metamodel_fef_template;
+        }
 
-		return sprintf('[[[metamodelfrontendfilterclearall::ce::%s]]]', $this->id);
-	}
+        return sprintf('[[[metamodelfrontendfilterclearall::ce::%s]]]', $this->id);
+    }
 
-	/**
-	 * Generate the content element.
-	 *
-	 * @return void
-	 */
-	protected function compile()
-	{
-		$blnActiveParam   = false;
-		$arrPage          = $GLOBALS['objPage']->row();
-		$arrGetParameters = array();
+    /**
+     * Generate the content element.
+     *
+     * @return void
+     */
+    protected function compile()
+    {
+        $blnActiveParam   = false;
+        $arrPage          = $GLOBALS['objPage']->row();
+        $arrGetParameters = array();
 
-		// @codingStandardsIgnoreStart - Skip filter params, loop over $_GET to get a list of all keys.
-		foreach (array_keys($_GET) as $mixGetKey)
-		// @codingStandardsIgnoreEnd
-		{
-			if (in_array($mixGetKey, $GLOBALS['MM_FILTER_PARAMS']))
-			{
-				$blnActiveParam = true;
-				continue;
-			}
+        // @codingStandardsIgnoreStart - Skip filter params, loop over $_GET to get a list of all keys.
+        foreach (array_keys($_GET) as $mixGetKey)
+        // @codingStandardsIgnoreEnd
+        {
+            if (in_array($mixGetKey, $GLOBALS['MM_FILTER_PARAMS']))
+            {
+                $blnActiveParam = true;
+                continue;
+            }
 
-			$arrGetParameters[$mixGetKey] = \Input::getInstance()->get($mixGetKey);
-		}
+            $arrGetParameters[$mixGetKey] = \Input::getInstance()->get($mixGetKey);
+        }
 
-		// Check if we have filter and if we have active params.
-		$this->Template->active      = (is_array($GLOBALS['MM_FILTER_PARAMS']) && count($GLOBALS['MM_FILTER_PARAMS']) != 0);
-		$this->Template->activeParam = $blnActiveParam;
+        // Check if we have filter and if we have active params.
+        $this->Template->active      = (is_array($GLOBALS['MM_FILTER_PARAMS']) && count($GLOBALS['MM_FILTER_PARAMS']) != 0);
+        $this->Template->activeParam = $blnActiveParam;
 
-		// Build FE url.
-		$this->Template->href = $this->generateFrontendUrl($arrPage, $this->getJumpToUrl($arrGetParameters));
-	}
+        // Build FE url.
+        $this->Template->href = $this->generateFrontendUrl($arrPage, $this->getJumpToUrl($arrGetParameters));
+    }
 
-	/**
-	 * Call the generate() method from parent class.
-	 *
-	 * @return string
-	 */
-	public function generateReal()
-	{
-		return parent::generate();
-	}
+    /**
+     * Call the generate() method from parent class.
+     *
+     * @return string
+     */
+    public function generateReal()
+    {
+        return parent::generate();
+    }
 
-	/**
-	 * Generate an url determined by the given params and configured jumpTo page.
-	 *
-	 * @param array $arrParams The URL parameters to use.
-	 *
-	 * @return string the generated URL.
-	 */
-	protected function getJumpToUrl($arrParams)
-	{
-		$strFilterAction = '';
-		foreach ($arrParams as $strName => $varParam)
-		{
-			// Skip the magic "language" parameter.
-			if (($strName == 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl'])
-			{
-				continue;
-			}
+    /**
+     * Generate an url determined by the given params and configured jumpTo page.
+     *
+     * @param array $arrParams The URL parameters to use.
+     *
+     * @return string the generated URL.
+     */
+    protected function getJumpToUrl($arrParams)
+    {
+        $strFilterAction = '';
+        foreach ($arrParams as $strName => $varParam)
+        {
+            // Skip the magic "language" parameter.
+            if (($strName == 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl'])
+            {
+                continue;
+            }
 
-			$strValue = $varParam;
+            $strValue = $varParam;
 
-			if (is_array($varParam))
-			{
-				$strValue = implode(',', array_filter($varParam));
-			}
+            if (is_array($varParam))
+            {
+                $strValue = implode(',', array_filter($varParam));
+            }
 
-			$strValue = str_replace(array('/', '\''), array('-slash-', '-apos-'), $strValue);
+            $strValue = str_replace(array('/', '\''), array('-slash-', '-apos-'), $strValue);
 
-			if (strlen($strValue))
-			{
-				// Shift auto_item to the front.
-				if ($strName == 'auto_item')
-				{
-					$strFilterAction = '/' . $strValue . $strFilterAction;
-					continue;
-				}
+            if (strlen($strValue))
+            {
+                // Shift auto_item to the front.
+                if ($strName == 'auto_item')
+                {
+                    $strFilterAction = '/' . $strValue . $strFilterAction;
+                    continue;
+                }
 
-				$strFilterAction .= sprintf(
-					$GLOBALS['TL_CONFIG']['disableAlias'] ? '&amp;%s=%s' : '/%s/%s',
-					$strName,
-					urlencode($strValue)
-				);
-			}
-		}
-		return $strFilterAction;
-	}
+                $strFilterAction .= sprintf(
+                    $GLOBALS['TL_CONFIG']['disableAlias'] ? '&amp;%s=%s' : '/%s/%s',
+                    $strName,
+                    urlencode($strValue)
+                );
+            }
+        }
+        return $strFilterAction;
+    }
 
 }

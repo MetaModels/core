@@ -28,49 +28,49 @@ namespace MetaModels\Attribute;
  */
 interface ITranslated extends IAttribute
 {
-	/**
-	 * Search matches for the given expression.
-	 *
-	 * @param string $strPattern   The text to search for. This may contain wildcards.
-	 *
-	 * @param array  $arrLanguages Array of valid language codes that shall be searched. (optional)
-	 *                             If empty, all languages will be taken into account.
-	 *
-	 * @return int[] the ids of matching items.
-	 */
-	public function searchForInLanguages($strPattern, $arrLanguages = array());
+    /**
+     * Search matches for the given expression.
+     *
+     * @param string $strPattern   The text to search for. This may contain wildcards.
+     *
+     * @param array  $arrLanguages Array of valid language codes that shall be searched. (optional)
+     *                             If empty, all languages will be taken into account.
+     *
+     * @return int[] the ids of matching items.
+     */
+    public function searchForInLanguages($strPattern, $arrLanguages = array());
 
-	/**
-	 * Set a value for an item in a certain language.
-	 *
-	 * @param mixed[int] $arrValues   The values to be set in id => value layout.
-	 *
-	 * @param string     $strLangCode The language code for which the data shall be retrieved.
-	 *
-	 * @return void
-	 */
-	public function setTranslatedDataFor($arrValues, $strLangCode);
+    /**
+     * Set a value for an item in a certain language.
+     *
+     * @param mixed[int] $arrValues   The values to be set in id => value layout.
+     *
+     * @param string     $strLangCode The language code for which the data shall be retrieved.
+     *
+     * @return void
+     */
+    public function setTranslatedDataFor($arrValues, $strLangCode);
 
-	/**
-	 * Get values for the given items in a certain language.
-	 *
-	 * @param int[]  $arrIds      The ids for which values shall be retrieved.
-	 *
-	 * @param string $strLangCode The language code for which the data shall be retrieved.
-	 *
-	 * @return mixed[int] the values.
-	 */
-	public function getTranslatedDataFor($arrIds, $strLangCode);
+    /**
+     * Get values for the given items in a certain language.
+     *
+     * @param int[]  $arrIds      The ids for which values shall be retrieved.
+     *
+     * @param string $strLangCode The language code for which the data shall be retrieved.
+     *
+     * @return mixed[int] the values.
+     */
+    public function getTranslatedDataFor($arrIds, $strLangCode);
 
-	/**
-	 * Remove values for items in a certain language.
-	 *
-	 * @param int[]  $arrIds      The ids for which values shall be removed.
-	 *
-	 * @param string $strLangCode The language code for which the data shall be removed.
-	 *
-	 * @return void
-	 */
-	public function unsetValueFor($arrIds, $strLangCode);
+    /**
+     * Remove values for items in a certain language.
+     *
+     * @param int[]  $arrIds      The ids for which values shall be removed.
+     *
+     * @param string $strLangCode The language code for which the data shall be removed.
+     *
+     * @return void
+     */
+    public function unsetValueFor($arrIds, $strLangCode);
 }
 

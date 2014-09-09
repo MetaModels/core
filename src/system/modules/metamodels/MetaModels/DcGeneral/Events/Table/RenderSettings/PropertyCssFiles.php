@@ -27,17 +27,17 @@ use MetaModels\Dca\Helper;
  */
 class PropertyCssFiles
 {
-	/**
-	 * Provide options for additional css files.
-	 *
-	 * @param GetPropertyOptionsEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function getOptions(GetPropertyOptionsEvent $event)
-	{
-		$options = Helper::searchFiles($GLOBALS['TL_CONFIG']['uploadPath'], '.css');
+    /**
+     * Provide options for additional css files.
+     *
+     * @param GetPropertyOptionsEvent $event The event.
+     *
+     * @return void
+     */
+    public static function getOptions(GetPropertyOptionsEvent $event)
+    {
+        $options = Helper::searchFiles($GLOBALS['TL_CONFIG']['uploadPath'], '.css');
 
-		$event->setOptions($options);
-	}
+        $event->setOptions($options);
+    }
 }

@@ -29,80 +29,80 @@ use MetaModels\Factory;
  * @package MetaModels\DcGeneral\Events\MetaModel
  */
 class PasteButton
-	extends BaseView
+    extends BaseView
 {
-	/**
-	 * Handle the paste into and after buttons.
-	 *
-	 * @param GetPasteButtonEvent $event The event.
-	 *
-	 * @return void
-	 *
-	 * @throws \RuntimeException When more than one model is contained within the clipboard.
-	 */
-	public static function handle(GetPasteButtonEvent $event)
-	{
-		$environment = $event->getEnvironment();
-		$model       = $event->getModel();
-		$clipboard   = $environment->getClipboard();
-		$contained   = $event->getContainedModels();
-		$disablePA   = true;
-		$disablePI   = true;
+    /**
+     * Handle the paste into and after buttons.
+     *
+     * @param GetPasteButtonEvent $event The event.
+     *
+     * @return void
+     *
+     * @throws \RuntimeException When more than one model is contained within the clipboard.
+     */
+    public static function handle(GetPasteButtonEvent $event)
+    {
+        $environment = $event->getEnvironment();
+        $model       = $event->getModel();
+        $clipboard   = $environment->getClipboard();
+        $contained   = $event->getContainedModels();
+        $disablePA   = true;
+        $disablePI   = true;
 
-		if (count($contained) !== 1)
-		{
-			throw new \RuntimeException('Paste multiple is not supported at the moment, sorry.');
-		}
+        if (count($contained) !== 1)
+        {
+            throw new \RuntimeException('Paste multiple is not supported at the moment, sorry.');
+        }
 
-		// We assume we only have either varbase or non varbase items in the clipboard, mixed contents are not supported.
-		$containedModel = $contained->get(0);
+        // We assume we only have either varbase or non varbase items in the clipboard, mixed contents are not supported.
+        $containedModel = $contained->get(0);
 
-		if ($containedModel && $containedModel->getId() && !$event->getCircularReference())
-		{
-			if (Factory::byTableName($model->getProviderName())->hasVariants())
-			{
-				// Insert new items only after bases.
-				// Insert a varbase after any other varbase, for sorting.
-				if ((($containedModel->getProperty('varbase') == 1) || !$containedModel->getId())
-					&& (!$event->getCircularReference())
-					&& $model->getProperty('varbase') == 1
-				)
-				{
-					$disablePA = false;
-				}
-				// Move items in their vargroup and only there.
-				elseif ($containedModel->getProperty('varbase') == 0
-					&& $containedModel->getProperty('vargroup') == $model->getProperty('vargroup')
-					&& $containedModel->getProperty('varbase') != 1
-				)
-				{
-					$disablePA = false;
-				}
+        if ($containedModel && $containedModel->getId() && !$event->getCircularReference())
+        {
+            if (Factory::byTableName($model->getProviderName())->hasVariants())
+            {
+                // Insert new items only after bases.
+                // Insert a varbase after any other varbase, for sorting.
+                if ((($containedModel->getProperty('varbase') == 1) || !$containedModel->getId())
+                    && (!$event->getCircularReference())
+                    && $model->getProperty('varbase') == 1
+                )
+                {
+                    $disablePA = false;
+                }
+                // Move items in their vargroup and only there.
+                elseif ($containedModel->getProperty('varbase') == 0
+                    && $containedModel->getProperty('vargroup') == $model->getProperty('vargroup')
+                    && $containedModel->getProperty('varbase') != 1
+                )
+                {
+                    $disablePA = false;
+                }
 
-				$disablePI = ($model->getProperty('varbase') != 1) || ($containedModel->getProperty('varbase'));
-			}
-			else
-			{
-				$disablePA = ($model->getId() == $containedModel->getId());
-				$disablePI = $event->getCircularReference();
-			}
-		}
-		elseif($model == null && $containedModel->getProperty('varbase') == 0)
-		{
-			$disablePA = true;
-		}
-		else
-		{
-			$disablePA = false;
-			// The following rules apply:
-			// 1. Variant bases must not get pasted into anything.
-			// 2. If we are not in create mode, disable the paste into for the item itself.
-			$disablePI = ($containedModel->getProperty('varbase') == 1)
-				|| ($clipboard->getMode() != 'create' && $containedModel->getId() == $model->getId());
-		}
+                $disablePI = ($model->getProperty('varbase') != 1) || ($containedModel->getProperty('varbase'));
+            }
+            else
+            {
+                $disablePA = ($model->getId() == $containedModel->getId());
+                $disablePI = $event->getCircularReference();
+            }
+        }
+        elseif($model == null && $containedModel->getProperty('varbase') == 0)
+        {
+            $disablePA = true;
+        }
+        else
+        {
+            $disablePA = false;
+            // The following rules apply:
+            // 1. Variant bases must not get pasted into anything.
+            // 2. If we are not in create mode, disable the paste into for the item itself.
+            $disablePI = ($containedModel->getProperty('varbase') == 1)
+                || ($clipboard->getMode() != 'create' && $containedModel->getId() == $model->getId());
+        }
 
-		$event
-			->setPasteAfterDisabled($disablePA)
-			->setPasteIntoDisabled($disablePI);
-	}
+        $event
+            ->setPasteAfterDisabled($disablePA)
+            ->setPasteIntoDisabled($disablePI);
+    }
 }

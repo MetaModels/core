@@ -25,56 +25,56 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefinitionInterf
  * @package MetaModels\DcGeneral\DataDefinition\Definition
  */
 interface IMetaModelDefinition
-	extends DefinitionInterface
+    extends DefinitionInterface
 {
-	/**
-	 * The name of the definition.
-	 */
-	const NAME = 'metamodels';
+    /**
+     * The name of the definition.
+     */
+    const NAME = 'metamodels';
 
-	/**
-	 * Set the id of the active render setting for the MetaModel.
-	 *
-	 * @param string $id The id.
-	 *
-	 * @return IMetaModelDefinition
-	 */
-	public function setActiveRenderSetting($id);
+    /**
+     * Set the id of the active render setting for the MetaModel.
+     *
+     * @param string $id The id.
+     *
+     * @return IMetaModelDefinition
+     */
+    public function setActiveRenderSetting($id);
 
-	/**
-	 * Check if there has been an active render setting defined.
-	 *
-	 * @return bool
-	 */
-	public function hasActiveRenderSetting();
+    /**
+     * Check if there has been an active render setting defined.
+     *
+     * @return bool
+     */
+    public function hasActiveRenderSetting();
 
-	/**
-	 * Retrieve the id of the active render setting.
-	 *
-	 * @return string
-	 */
-	public function getActiveRenderSetting();
+    /**
+     * Retrieve the id of the active render setting.
+     *
+     * @return string
+     */
+    public function getActiveRenderSetting();
 
-	/**
-	 * Set the active input screen for the MetaModel.
-	 *
-	 * @param string $id The id.
-	 *
-	 * @return IMetaModelDefinition
-	 */
-	public function setActiveInputScreen($id);
+    /**
+     * Set the active input screen for the MetaModel.
+     *
+     * @param string $id The id.
+     *
+     * @return IMetaModelDefinition
+     */
+    public function setActiveInputScreen($id);
 
-	/**
-	 * Check if there has an active input screen defined.
-	 *
-	 * @return bool
-	 */
-	public function hasActiveInputScreen();
+    /**
+     * Check if there has an active input screen defined.
+     *
+     * @return bool
+     */
+    public function hasActiveInputScreen();
 
-	/**
-	 * Retrieve the id of the active input screen.
-	 *
-	 * @return string
-	 */
-	public function getActiveInputScreen();
+    /**
+     * Retrieve the id of the active input screen.
+     *
+     * @return string
+     */
+    public function getActiveInputScreen();
 }

@@ -22,50 +22,50 @@
 
 $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
 (
-	'config' => array
-	(
-		'dataContainer'               => 'General',
-		'switchToEdit'                => false,
-		'enableVersioning'            => false,
-	),
-	'dca_config' => array
-	(
-		'data_provider'               => array
-		(
-			'default'                 => array
-			(
-				'class'               => 'MetaModels\DcGeneral\Data\Driver',
-			)
-		),
-		'controller'                  => 'MetaModels\DcGeneral\Controller',
-	),
+    'config' => array
+    (
+        'dataContainer'               => 'General',
+        'switchToEdit'                => false,
+        'enableVersioning'            => false,
+    ),
+    'dca_config' => array
+    (
+        'data_provider'               => array
+        (
+            'default'                 => array
+            (
+                'class'               => 'MetaModels\DcGeneral\Data\Driver',
+            )
+        ),
+        'controller'                  => 'MetaModels\DcGeneral\Controller',
+    ),
 
-	'list' => array
-	(
-		'sorting' => array
-		(
-			// This means: 1 default sorting value, 2 switchable sorting value.
-			'mode'                    => 1,
-			'headerFields'            => array('tstamp'),
-		),
+    'list' => array
+    (
+        'sorting' => array
+        (
+            // This means: 1 default sorting value, 2 switchable sorting value.
+            'mode'                    => 1,
+            'headerFields'            => array('tstamp'),
+        ),
 
-		'label' => array
-		(
-			'fields'                  => array(),
-			'format'                  => '%s',
-		),
-	),
+        'label' => array
+        (
+            'fields'                  => array(),
+            'format'                  => '%s',
+        ),
+    ),
 
-	'fields' => array
-	(
-		'id' => array(),
-		'pid' => array(),
-		'sorting' => array
-		(
-			'sorting'                 => true,
-			'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_item']['sorting'],
-		),
-		'tstamp' => array()
-	)
+    'fields' => array
+    (
+        'id' => array(),
+        'pid' => array(),
+        'sorting' => array
+        (
+            'sorting'                 => true,
+            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_item']['sorting'],
+        ),
+        'tstamp' => array()
+    )
 );
 

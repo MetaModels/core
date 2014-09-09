@@ -28,99 +28,99 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Palette\P
  */
 class RenderSettingAttributeIs implements PaletteConditionInterface
 {
-	/**
-	 * The expected property value.
-	 *
-	 * @var mixed
-	 */
-	protected $attributeType;
+    /**
+     * The expected property value.
+     *
+     * @var mixed
+     */
+    protected $attributeType;
 
-	/**
-	 * Buffer the attribute types to ease lookup.
-	 *
-	 * @var array
-	 */
-	protected static $attributeTypes = array();
+    /**
+     * Buffer the attribute types to ease lookup.
+     *
+     * @var array
+     */
+    protected static $attributeTypes = array();
 
-	/**
-	 * Create a new instance.
-	 *
-	 * @param string $attributeType The attribute type name.
-	 */
-	public function __construct($attributeType)
-	{
-		$this->attributeType = $attributeType;
-	}
+    /**
+     * Create a new instance.
+     *
+     * @param string $attributeType The attribute type name.
+     */
+    public function __construct($attributeType)
+    {
+        $this->attributeType = $attributeType;
+    }
 
-	/**
-	 * Set the attribute type name.
-	 *
-	 * @param string $attributeType The attribute type name.
-	 *
-	 * @return RenderSettingAttributeIs
-	 */
-	public function setAttributeType($attributeType)
-	{
-		$this->attributeType = $attributeType;
+    /**
+     * Set the attribute type name.
+     *
+     * @param string $attributeType The attribute type name.
+     *
+     * @return RenderSettingAttributeIs
+     */
+    public function setAttributeType($attributeType)
+    {
+        $this->attributeType = $attributeType;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Retrieve the attribute type name.
-	 *
-	 * @return mixed
-	 */
-	public function getAttributeType()
-	{
-		return $this->attributeType;
-	}
+    /**
+     * Retrieve the attribute type name.
+     *
+     * @return mixed
+     */
+    public function getAttributeType()
+    {
+        return $this->attributeType;
+    }
 
-	/**
-	 * Retrieve the type name from an attribute.
-	 *
-	 * @param int $value The id of an attribute.
-	 *
-	 * @return string
-	 */
-	public function getTypeOfAttribute($value)
-	{
-		if (!isset(self::$attributeTypes[$value]))
-		{
-			self::$attributeTypes[$value] = \Database::getInstance()
-				->prepare('SELECT type FROM tl_metamodel_attribute WHERE id=?')
-				->limit(1)
-				->executeUncached($value)
-				->type;
-		}
-		return self::$attributeTypes[$value];
-	}
+    /**
+     * Retrieve the type name from an attribute.
+     *
+     * @param int $value The id of an attribute.
+     *
+     * @return string
+     */
+    public function getTypeOfAttribute($value)
+    {
+        if (!isset(self::$attributeTypes[$value]))
+        {
+            self::$attributeTypes[$value] = \Database::getInstance()
+                ->prepare('SELECT type FROM tl_metamodel_attribute WHERE id=?')
+                ->limit(1)
+                ->executeUncached($value)
+                ->type;
+        }
+        return self::$attributeTypes[$value];
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getMatchCount(ModelInterface $model = null, PropertyValueBag $input = null)
-	{
-		if ($input && $input->hasPropertyValue('attr_id'))
-		{
-			$value = $input->getPropertyValue('attr_id');
-		}
-		elseif ($model)
-		{
-			$value = $model->getProperty('attr_id');
-		}
-		else
-		{
-			return false;
-		}
+    /**
+     * {@inheritdoc}
+     */
+    public function getMatchCount(ModelInterface $model = null, PropertyValueBag $input = null)
+    {
+        if ($input && $input->hasPropertyValue('attr_id'))
+        {
+            $value = $input->getPropertyValue('attr_id');
+        }
+        elseif ($model)
+        {
+            $value = $model->getProperty('attr_id');
+        }
+        else
+        {
+            return false;
+        }
 
-		return $this->getTypeOfAttribute($value) == $this->getAttributeType();
-	}
+        return $this->getTypeOfAttribute($value) == $this->getAttributeType();
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __clone()
-	{
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function __clone()
+    {
+    }
 }

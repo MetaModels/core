@@ -25,41 +25,41 @@ use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
  * @package MetaModels\DcGeneral\Events\BreadCrumb
  */
 class BreadCrumbFilterSetting
-	extends BreadCrumbFilter
+    extends BreadCrumbFilter
 {
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
-	{
-		if (!isset($this->filterId))
-		{
-			$this->filterId = $this->extractIdFrom($environment, 'pid');
-		}
+    /**
+     * {@inheritDoc}
+     */
+    public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
+    {
+        if (!isset($this->filterId))
+        {
+            $this->filterId = $this->extractIdFrom($environment, 'pid');
+        }
 
-		if (!isset($this->metamodelId))
-		{
-			$parent = \Database::getInstance()
-				->prepare('SELECT id, pid, name FROM tl_metamodel_filter WHERE id=?')
-				->executeUncached($this->filterId);
+        if (!isset($this->metamodelId))
+        {
+            $parent = \Database::getInstance()
+                ->prepare('SELECT id, pid, name FROM tl_metamodel_filter WHERE id=?')
+                ->executeUncached($this->filterId);
 
-			$this->metamodelId = $parent->pid;
-		}
+            $this->metamodelId = $parent->pid;
+        }
 
-		$filterSetting = $this->getFilter();
+        $filterSetting = $this->getFilter();
 
-		$elements = parent::getBreadcrumbElements($environment, $elements);
+        $elements = parent::getBreadcrumbElements($environment, $elements);
 
-		$elements[] = array(
-			'url' => sprintf(
-				'contao/main.php?do=metamodels&table=%s&pid=%s',
-				'tl_metamodel_filtersetting',
-				$this->seralizeId('tl_metamodel_filter', $this->filterId)
-			),
-			'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_filtersetting'), $filterSetting->name),
-			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/filter_setting.png'
-		);
+        $elements[] = array(
+            'url' => sprintf(
+                'contao/main.php?do=metamodels&table=%s&pid=%s',
+                'tl_metamodel_filtersetting',
+                $this->seralizeId('tl_metamodel_filter', $this->filterId)
+            ),
+            'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_filtersetting'), $filterSetting->name),
+            'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/filter_setting.png'
+        );
 
-		return $elements;
-	}
+        return $elements;
+    }
 }

@@ -26,53 +26,53 @@ namespace MetaModels\Render\Setting;
  */
 interface ISimple
 {
-	/**
-	 * Set the parenting render setting.
-	 *
-	 * @param ICollection $parent The parenting instance.
-	 *
-	 * @return ISimple
-	 */
-	public function setParent($parent);
+    /**
+     * Set the parenting render setting.
+     *
+     * @param ICollection $parent The parenting instance.
+     *
+     * @return ISimple
+     */
+    public function setParent($parent);
 
-	/**
-	 * Retrieve the parenting render setting.
-	 *
-	 * @return ICollection
-	 */
-	public function getParent();
+    /**
+     * Retrieve the parenting render setting.
+     *
+     * @return ICollection
+     */
+    public function getParent();
 
-	/**
-	 * Retrieve a setting from the settings instance.
-	 *
-	 * @param string $strName The name of the setting to retrieve.
-	 *
-	 * @return mixed|null The value or null if not set.
-	 */
-	public function get($strName);
+    /**
+     * Retrieve a setting from the settings instance.
+     *
+     * @param string $strName The name of the setting to retrieve.
+     *
+     * @return mixed|null The value or null if not set.
+     */
+    public function get($strName);
 
-	/**
-	 * Set a base property in the settings object.
-	 *
-	 * @param string $strName    The name of the setting to set.
-	 *
-	 * @param mixed  $varSetting The value to use.
-	 *
-	 * @return ISimple The setting itself.
-	 */
-	public function set($strName, $varSetting);
+    /**
+     * Set a base property in the settings object.
+     *
+     * @param string $strName    The name of the setting to set.
+     *
+     * @param mixed  $varSetting The value to use.
+     *
+     * @return ISimple The setting itself.
+     */
+    public function set($strName, $varSetting);
 
-	/**
-	 * Retrieve the jump to information from the setting.
-	 *
-	 * @return array|null The jump to information or null if none has been set.
-	 */
-	public function getJumpTo();
+    /**
+     * Retrieve the jump to information from the setting.
+     *
+     * @return array|null The jump to information or null if none has been set.
+     */
+    public function getJumpTo();
 
-	/**
-	 * Retrieve the names of all keys in this setting.
-	 *
-	 * @return string[]
-	 */
-	public function getKeys();
+    /**
+     * Retrieve the names of all keys in this setting.
+     *
+     * @return string[]
+     */
+    public function getKeys();
 }

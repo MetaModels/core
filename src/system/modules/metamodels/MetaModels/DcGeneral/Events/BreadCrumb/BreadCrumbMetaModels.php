@@ -27,36 +27,36 @@ use MetaModels\IMetaModel;
  * @package MetaModels\DcGeneral\Events\BreadCrumb
  */
 class BreadCrumbMetaModels
-	extends BreadCrumbBase
+    extends BreadCrumbBase
 {
-	/**
-	 * The id of the MetaModel.
-	 *
-	 * @var int
-	 */
-	protected $metamodelId;
+    /**
+     * The id of the MetaModel.
+     *
+     * @var int
+     */
+    protected $metamodelId;
 
-	/**
-	 * Retrieve the MetaModel instance.
-	 *
-	 * @return IMetaModel
-	 */
-	protected function getMetaModel()
-	{
-		return MetaModelFactory::byId($this->metamodelId);
-	}
+    /**
+     * Retrieve the MetaModel instance.
+     *
+     * @return IMetaModel
+     */
+    protected function getMetaModel()
+    {
+        return MetaModelFactory::byId($this->metamodelId);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
-	{
-		$elements[] = array(
-			'url' => 'contao/main.php?do=metamodels',
-			'text' => $this->getBreadcrumbLabel($environment, 'metamodels'),
-			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/backend/logo.png'
-		);
+    /**
+     * {@inheritDoc}
+     */
+    public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
+    {
+        $elements[] = array(
+            'url' => 'contao/main.php?do=metamodels',
+            'text' => $this->getBreadcrumbLabel($environment, 'metamodels'),
+            'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/backend/logo.png'
+        );
 
-		return $elements;
-	}
+        return $elements;
+    }
 }

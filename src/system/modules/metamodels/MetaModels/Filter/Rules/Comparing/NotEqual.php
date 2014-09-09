@@ -29,43 +29,43 @@ use MetaModels\Filter\IFilterRule;
  */
 class NotEqual implements IFilterRule
 {
-	/**
-	 * The attribute to search in.
-	 *
-	 * @var IAttribute
-	 */
-	protected $objAttribute = null;
+    /**
+     * The attribute to search in.
+     *
+     * @var IAttribute
+     */
+    protected $objAttribute = null;
 
-	/**
-	 * The value to compare with.
-	 *
-	 * @var mixed
-	 */
-	protected $varValue = null;
+    /**
+     * The value to compare with.
+     *
+     * @var mixed
+     */
+    protected $varValue = null;
 
-	/**
-	 * Creates an instance of this class.
-	 *
-	 * @param IAttribute $objAttribute The query that shall be executed.
-	 *
-	 * @param array      $varValue     The value to compare against.
-	 */
-	public function __construct($objAttribute, $varValue)
-	{
-		$this->objAttribute = $objAttribute;
-		$this->varValue     = $varValue;
-	}
+    /**
+     * Creates an instance of this class.
+     *
+     * @param IAttribute $objAttribute The query that shall be executed.
+     *
+     * @param array      $varValue     The value to compare against.
+     */
+    public function __construct($objAttribute, $varValue)
+    {
+        $this->objAttribute = $objAttribute;
+        $this->varValue     = $varValue;
+    }
 
-	/**
-	 * Fetch the ids for all items that hold a value that is not equal to the passed value.
-	 *
-	 * If no entries have been found, the result is an empty array.
-	 *
-	 * @return int[]|null
-	 */
-	public function getMatchingIds()
-	{
-		return $this->objAttribute->filterNotEqual($this->varValue);
-	}
+    /**
+     * Fetch the ids for all items that hold a value that is not equal to the passed value.
+     *
+     * If no entries have been found, the result is an empty array.
+     *
+     * @return int[]|null
+     */
+    public function getMatchingIds()
+    {
+        return $this->objAttribute->filterNotEqual($this->varValue);
+    }
 }
 

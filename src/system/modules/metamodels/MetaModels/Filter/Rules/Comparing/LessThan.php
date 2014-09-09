@@ -29,54 +29,54 @@ use MetaModels\Filter\IFilterRule;
  */
 class LessThan implements IFilterRule
 {
-	/**
-	 * The attribute to search in.
-	 *
-	 * @var IAttribute
-	 */
-	protected $objAttribute = null;
+    /**
+     * The attribute to search in.
+     *
+     * @var IAttribute
+     */
+    protected $objAttribute = null;
 
-	/**
-	 * The value to compare with.
-	 *
-	 * @var mixed
-	 */
-	protected $varValue = null;
+    /**
+     * The value to compare with.
+     *
+     * @var mixed
+     */
+    protected $varValue = null;
 
-	/**
-	 * Determination if the comparison shall be done inclusive or exclusive.
-	 *
-	 * @var boolean
-	 */
-	protected $blnInclusive = false;
+    /**
+     * Determination if the comparison shall be done inclusive or exclusive.
+     *
+     * @var boolean
+     */
+    protected $blnInclusive = false;
 
-	/**
-	 * Creates an instance of this class.
-	 *
-	 * @param IAttribute $objAttribute The attribute that shall be searched.
-	 *
-	 * @param array      $varValue     The value to compare against.
-	 *
-	 * @param bool       $blnInclusive If true, the passed value will be included in the check
-	 *                                 and therefore make the check an less-or-equal test.
-	 */
-	public function __construct($objAttribute, $varValue, $blnInclusive = false)
-	{
-		$this->objAttribute = $objAttribute;
-		$this->varValue     = $varValue;
-		$this->blnInclusive = $blnInclusive;
-	}
+    /**
+     * Creates an instance of this class.
+     *
+     * @param IAttribute $objAttribute The attribute that shall be searched.
+     *
+     * @param array      $varValue     The value to compare against.
+     *
+     * @param bool       $blnInclusive If true, the passed value will be included in the check
+     *                                 and therefore make the check an less-or-equal test.
+     */
+    public function __construct($objAttribute, $varValue, $blnInclusive = false)
+    {
+        $this->objAttribute = $objAttribute;
+        $this->varValue     = $varValue;
+        $this->blnInclusive = $blnInclusive;
+    }
 
-	/**
-	 * Fetch the ids for all items that hold a value that is less than the passed value.
-	 *
-	 * If no entries have been found, the result is an empty array.
-	 *
-	 * @return int[]|null
-	 */
-	public function getMatchingIds()
-	{
-		return $this->objAttribute->filterLessThan($this->varValue, $this->blnInclusive);
-	}
+    /**
+     * Fetch the ids for all items that hold a value that is less than the passed value.
+     *
+     * If no entries have been found, the result is an empty array.
+     *
+     * @return int[]|null
+     */
+    public function getMatchingIds()
+    {
+        return $this->objAttribute->filterLessThan($this->varValue, $this->blnInclusive);
+    }
 }
 

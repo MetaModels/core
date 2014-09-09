@@ -27,15 +27,15 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPr
 
 class PropertyBackendSection
 {
-	/**
-	 * Retrieve a list of all backend sections, like "content", "system" etc.
-	 *
-	 * @param GetPropertyOptionsEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function getSections(GetPropertyOptionsEvent $event)
-	{
-		$event->setOptions(array_keys($GLOBALS['BE_MOD']));
-	}
+    /**
+     * Retrieve a list of all backend sections, like "content", "system" etc.
+     *
+     * @param GetPropertyOptionsEvent $event The event.
+     *
+     * @return void
+     */
+    public static function getSections(GetPropertyOptionsEvent $event)
+    {
+        $event->setOptions(array_keys($GLOBALS['BE_MOD']));
+    }
 }

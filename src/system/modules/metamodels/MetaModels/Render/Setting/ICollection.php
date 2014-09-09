@@ -26,66 +26,66 @@ namespace MetaModels\Render\Setting;
  */
 interface ICollection
 {
-	/**
-	 * Retrieve a setting from the settings instance.
-	 *
-	 * @param string $strName The name of the setting to retrieve.
-	 *
-	 * @return mixed|null The value or null if not set.
-	 */
-	public function get($strName);
+    /**
+     * Retrieve a setting from the settings instance.
+     *
+     * @param string $strName The name of the setting to retrieve.
+     *
+     * @return mixed|null The value or null if not set.
+     */
+    public function get($strName);
 
-	/**
-	 * Set a base property in the settings object.
-	 *
-	 * @param string $strName    The name of the setting to set.
-	 *
-	 * @param mixed  $varSetting The value to use.
-	 *
-	 * @return ICollection The setting itself.
-	 */
-	public function set($strName, $varSetting);
+    /**
+     * Set a base property in the settings object.
+     *
+     * @param string $strName    The name of the setting to set.
+     *
+     * @param mixed  $varSetting The value to use.
+     *
+     * @return ICollection The setting itself.
+     */
+    public function set($strName, $varSetting);
 
-	/**
-	 * Get the render information for an attribute.
-	 *
-	 * @param string $strAttributeName The name of the attribute.
-	 *
-	 * @return ISimple|null An object or null if the information is not available.
-	 */
-	public function getSetting($strAttributeName);
+    /**
+     * Get the render information for an attribute.
+     *
+     * @param string $strAttributeName The name of the attribute.
+     *
+     * @return ISimple|null An object or null if the information is not available.
+     */
+    public function getSetting($strAttributeName);
 
-	/**
-	 * Set the render information for an attribute.
-	 *
-	 * @param string  $strAttributeName The name of the attribute.
-	 *
-	 * @param ISimple $objSetting       The object containing all the information.
-	 *
-	 * @return ICollection The instance itself for chaining.
-	 */
-	public function setSetting($strAttributeName, $objSetting);
+    /**
+     * Set the render information for an attribute.
+     *
+     * @param string  $strAttributeName The name of the attribute.
+     *
+     * @param ISimple $objSetting       The object containing all the information.
+     *
+     * @return ICollection The instance itself for chaining.
+     */
+    public function setSetting($strAttributeName, $objSetting);
 
-	/**
-	 * Retrieve the names of all columns getting rendered via this setting.
-	 *
-	 * @return string[]
-	 */
-	public function getSettingNames();
+    /**
+     * Retrieve the names of all columns getting rendered via this setting.
+     *
+     * @return string[]
+     */
+    public function getSettingNames();
 
-	/**
-	 * Retrieve the jump to information from the setting.
-	 *
-	 * @return array|null The jump to information or null if none has been set.
-	 */
-	public function getJumpTo();
+    /**
+     * Retrieve the jump to information from the setting.
+     *
+     * @return array|null The jump to information or null if none has been set.
+     */
+    public function getJumpTo();
 
-	/**
-	 * Set the jump to information in the settings object.
-	 *
-	 * @param mixed $varSetting The value to use.
-	 *
-	 * @return ISimple The setting itself.
-	 */
-	public function setJumpTo($varSetting);
+    /**
+     * Set the jump to information in the settings object.
+     *
+     * @param mixed $varSetting The value to use.
+     *
+     * @return ISimple The setting itself.
+     */
+    public function setJumpTo($varSetting);
 }

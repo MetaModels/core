@@ -28,43 +28,43 @@ namespace MetaModels\Filter\Setting;
  */
 class Factory implements IFactory
 {
-	/**
-	 * Keeps track of all filter settings instances to save DB lookup queries.
-	 *
-	 * @var ICollection[]
-	 */
-	protected static $arrInstances = array();
+    /**
+     * Keeps track of all filter settings instances to save DB lookup queries.
+     *
+     * @var ICollection[]
+     */
+    protected static $arrInstances = array();
 
-	/**
-	 * Create a IMetaModelFilter instance from the id.
-	 *
-	 * @param int $intId The id of the IMetaModelFilter.
-	 *
-	 * @return ICollection the instance of the IMetaModelFilterSettings or null if not found.
-	 */
-	public static function byId($intId)
-	{
-		if (empty(self::$arrInstances[$intId]))
-		{
-			$objDB = \Database::getInstance();
+    /**
+     * Create a IMetaModelFilter instance from the id.
+     *
+     * @param int $intId The id of the IMetaModelFilter.
+     *
+     * @return ICollection the instance of the IMetaModelFilterSettings or null if not found.
+     */
+    public static function byId($intId)
+    {
+        if (empty(self::$arrInstances[$intId]))
+        {
+            $objDB = \Database::getInstance();
 
-			$arrSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
-				->execute($intId)
-				->row();
+            $arrSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
+                ->execute($intId)
+                ->row();
 
-			if (!empty($arrSettings))
-			{
-				$objSetting = new Collection($arrSettings);
-				$objSetting->collectRules();
-			} else {
-				$objSetting = new Collection(array());
-			}
-			self::$arrInstances[$intId] = $objSetting;
-		} else {
-			$objSetting = self::$arrInstances[$intId];
-		}
+            if (!empty($arrSettings))
+            {
+                $objSetting = new Collection($arrSettings);
+                $objSetting->collectRules();
+            } else {
+                $objSetting = new Collection(array());
+            }
+            self::$arrInstances[$intId] = $objSetting;
+        } else {
+            $objSetting = self::$arrInstances[$intId];
+        }
 
-		return $objSetting;
-	}
+        return $objSetting;
+    }
 }
 

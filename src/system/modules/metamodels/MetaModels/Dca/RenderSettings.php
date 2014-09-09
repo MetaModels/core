@@ -29,56 +29,56 @@ use ContaoCommunityAlliance\DcGeneral\DC_General;
  */
 class RenderSettings
 {
-	/**
-	 * Return the link picker wizard.
-	 *
-	 * @param DC_General $dc The DC_General currently in use.
-	 *
-	 * @return string
-	 */
-	public function pagePicker(DC_General $dc)
-	{
-		$environment = $dc->getEnvironment();
+    /**
+     * Return the link picker wizard.
+     *
+     * @param DC_General $dc The DC_General currently in use.
+     *
+     * @return string
+     */
+    public function pagePicker(DC_General $dc)
+    {
+        $environment = $dc->getEnvironment();
 
-		if (version_compare(VERSION, '3.0', '<'))
-		{
-			$event = new GenerateHtmlEvent(
-				'pickpage.gif',
-				$environment->getTranslator()->translate('MSC.pagepicker'),
-				'style="vertical-align:top;cursor:pointer" onclick="Backend.pickPage(\'ctrl_' . $dc->inputName . '\')"'
-			);
+        if (version_compare(VERSION, '3.0', '<'))
+        {
+            $event = new GenerateHtmlEvent(
+                'pickpage.gif',
+                $environment->getTranslator()->translate('MSC.pagepicker'),
+                'style="vertical-align:top;cursor:pointer" onclick="Backend.pickPage(\'ctrl_' . $dc->inputName . '\')"'
+            );
 
-			$environment->getEventPropagator()->propagate(ContaoEvents::IMAGE_GET_HTML, $event);
+            $environment->getEventPropagator()->propagate(ContaoEvents::IMAGE_GET_HTML, $event);
 
-			return ' ' . $event->getHtml();
-		}
+            return ' ' . $event->getHtml();
+        }
 
-		$url = sprintf('%scontao/page.php?do=metamodels&table=tl_metamodel_rendersettings&field=ctrl_%s',
-			\Environment::get('base'),
-			$dc->inputName
-		);
+        $url = sprintf('%scontao/page.php?do=metamodels&table=tl_metamodel_rendersettings&field=ctrl_%s',
+            \Environment::get('base'),
+            $dc->inputName
+        );
 
-		$options = sprintf(
-			"{'width':765,'title':'%s','url':'%s','id':'%s','tag':'ctrl_%s','self':this}",
-			$environment->getTranslator()->translate('MOD.page.0'),
-			$url,
-			$dc->inputName,
-			$dc->inputName
-		);
+        $options = sprintf(
+            "{'width':765,'title':'%s','url':'%s','id':'%s','tag':'ctrl_%s','self':this}",
+            $environment->getTranslator()->translate('MOD.page.0'),
+            $url,
+            $dc->inputName,
+            $dc->inputName
+        );
 
-		$event = new GenerateHtmlEvent(
-			'pickpage.gif',
-			$environment->getTranslator()->translate('MSC.pagepicker'),
-			'style="vertical-align:top;cursor:pointer"'
-		);
+        $event = new GenerateHtmlEvent(
+            'pickpage.gif',
+            $environment->getTranslator()->translate('MSC.pagepicker'),
+            'style="vertical-align:top;cursor:pointer"'
+        );
 
-		$environment->getEventPropagator()->propagate(ContaoEvents::IMAGE_GET_HTML, $event);
+        $environment->getEventPropagator()->propagate(ContaoEvents::IMAGE_GET_HTML, $event);
 
-		return sprintf(' <a href="%s"%s>%s</a>',
-			$url,
-			' onclick="Backend.openModalSelector(' . $options . '); return false;"',
-			$event->getHtml()
-		);
-	}
+        return sprintf(' <a href="%s"%s>%s</a>',
+            $url,
+            ' onclick="Backend.openModalSelector(' . $options . '); return false;"',
+            $event->getHtml()
+        );
+    }
 }
 

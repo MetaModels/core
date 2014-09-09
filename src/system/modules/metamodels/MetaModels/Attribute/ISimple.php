@@ -29,51 +29,51 @@ namespace MetaModels\Attribute;
 interface ISimple extends IAttribute
 {
 
-	/**
-	 * Returns the SQL primitive type declaration in MySQL notation. i.e. "text NULL".
-	 *
-	 * @return string
-	 */
-	public function getSQLDataType();
+    /**
+     * Returns the SQL primitive type declaration in MySQL notation. i.e. "text NULL".
+     *
+     * @return string
+     */
+    public function getSQLDataType();
 
-	/**
-	 * Creates the underlying database structure for this attribute.
-	 *
-	 * @return void
-	 */
-	public function createColumn();
+    /**
+     * Creates the underlying database structure for this attribute.
+     *
+     * @return void
+     */
+    public function createColumn();
 
-	/**
-	 * Removes the underlying database structure for this attribute.
-	 *
-	 * @return void
-	 */
-	public function deleteColumn();
+    /**
+     * Removes the underlying database structure for this attribute.
+     *
+     * @return void
+     */
+    public function deleteColumn();
 
-	/**
-	 * Renames the underlying database structure for this attribute.
-	 *
-	 * @param string $strNewColumnName The new column name for the attribute.
-	 *
-	 * @return void
-	 */
-	public function renameColumn($strNewColumnName);
+    /**
+     * Renames the underlying database structure for this attribute.
+     *
+     * @param string $strNewColumnName The new column name for the attribute.
+     *
+     * @return void
+     */
+    public function renameColumn($strNewColumnName);
 
-	/**
-	 * Take the raw data from the DB column and unserialize it.
-	 *
-	 * @param string $value The input value.
-	 *
-	 * @return mixed
-	 */
-	public function unserializeData($value);
+    /**
+     * Take the raw data from the DB column and unserialize it.
+     *
+     * @param string $value The input value.
+     *
+     * @return mixed
+     */
+    public function unserializeData($value);
 
-	/**
-	 * Take the unserialized data and serialize it for the native DB column.
-	 *
-	 * @param mixed $value The input value.
-	 *
-	 * @return string
-	 */
-	public function serializeData($value);
+    /**
+     * Take the unserialized data and serialize it for the native DB column.
+     *
+     * @param mixed $value The input value.
+     *
+     * @return string
+     */
+    public function serializeData($value);
 }

@@ -26,58 +26,58 @@ use MetaModels\Factory;
  * @package MetaModels\DcGeneral\Events\BreadCrumb
  */
 class BreadCrumbInputScreen
-	extends BreadCrumbInputScreens
+    extends BreadCrumbInputScreens
 {
-	/**
-	 * Calculate the name of a sub palette attribute.
-	 *
-	 * @param int $pid The id of the input screen.
-	 *
-	 * @return \MetaModels\Attribute\IAttribute|string
-	 */
-	protected function getSubPaletteAttributeName($pid)
-	{
-		$parent = \Database::getInstance()
-			->prepare('SELECT id, pid
-				FROM tl_metamodel_attribute
-				WHERE id=(SELECT attr_id FROM tl_metamodel_dcasetting WHERE id=?)')
-			->executeUncached($pid);
-		if ($parent->id)
-		{
-			return Factory::byId($parent->pid)->getAttributeById($parent->id);
-		}
-		return 'unknown';
-	}
+    /**
+     * Calculate the name of a sub palette attribute.
+     *
+     * @param int $pid The id of the input screen.
+     *
+     * @return \MetaModels\Attribute\IAttribute|string
+     */
+    protected function getSubPaletteAttributeName($pid)
+    {
+        $parent = \Database::getInstance()
+            ->prepare('SELECT id, pid
+                FROM tl_metamodel_attribute
+                WHERE id=(SELECT attr_id FROM tl_metamodel_dcasetting WHERE id=?)')
+            ->executeUncached($pid);
+        if ($parent->id)
+        {
+            return Factory::byId($parent->pid)->getAttributeById($parent->id);
+        }
+        return 'unknown';
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
-	{
-		$input = $environment->getInputProvider();
-		if (!isset($this->inputScreenId))
-		{
-			$this->inputScreenId = $this->extractIdFrom($environment, 'pid');
-		}
+    /**
+     * {@inheritDoc}
+     */
+    public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
+    {
+        $input = $environment->getInputProvider();
+        if (!isset($this->inputScreenId))
+        {
+            $this->inputScreenId = $this->extractIdFrom($environment, 'pid');
+        }
 
-		$inputScreen = $this->getInputScreen();
-		if (!isset($this->metamodelId))
-		{
-			$this->metamodelId = $inputScreen->pid;
-		}
+        $inputScreen = $this->getInputScreen();
+        if (!isset($this->metamodelId))
+        {
+            $this->metamodelId = $inputScreen->pid;
+        }
 
-		$elements = parent::getBreadcrumbElements($environment, $elements);
+        $elements = parent::getBreadcrumbElements($environment, $elements);
 
-		$elements[] = array(
-			'url' => sprintf(
-				'contao/main.php?do=metamodels&table=%s&pid=%s',
-				'tl_metamodel_dcasetting',
-				$this->seralizeId('tl_metamodel_dca', $this->inputScreenId)
-			),
-			'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_dcasetting'), $inputScreen->name),
-			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/dca_setting.png'
-		);
+        $elements[] = array(
+            'url' => sprintf(
+                'contao/main.php?do=metamodels&table=%s&pid=%s',
+                'tl_metamodel_dcasetting',
+                $this->seralizeId('tl_metamodel_dca', $this->inputScreenId)
+            ),
+            'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_dcasetting'), $inputScreen->name),
+            'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/dca_setting.png'
+        );
 
-		return $elements;
-	}
+        return $elements;
+    }
 }

@@ -27,50 +27,50 @@ use MetaModels\Render\Setting\ICollection;
  * @package MetaModels\DcGeneral\Events\BreadCrumb
  */
 class BreadCrumbRenderSettings
-	extends BreadCrumbMetaModels
+    extends BreadCrumbMetaModels
 {
-	/**
-	 * Id of the render setting.
-	 *
-	 * @var int
-	 */
-	protected $renderSettingsId;
+    /**
+     * Id of the render setting.
+     *
+     * @var int
+     */
+    protected $renderSettingsId;
 
-	/**
-	 * Retrieve the render setting.
-	 *
-	 * @return ICollection
-	 */
-	protected function getRenderSettings()
-	{
-		return Factory::byId($this->getMetaModel(), $this->renderSettingsId);
-	}
+    /**
+     * Retrieve the render setting.
+     *
+     * @return ICollection
+     */
+    protected function getRenderSettings()
+    {
+        return Factory::byId($this->getMetaModel(), $this->renderSettingsId);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
-	{
-		if (!isset($this->metamodelId))
-		{
-			$this->metamodelId = $this->extractIdFrom($environment, 'pid');
-		}
+    /**
+     * {@inheritDoc}
+     */
+    public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
+    {
+        if (!isset($this->metamodelId))
+        {
+            $this->metamodelId = $this->extractIdFrom($environment, 'pid');
+        }
 
-		$elements = parent::getBreadcrumbElements($environment, $elements);
+        $elements = parent::getBreadcrumbElements($environment, $elements);
 
-		$elements[] = array(
-			'url' => sprintf(
-				'contao/main.php?do=metamodels&table=%s&pid=%s',
-				'tl_metamodel_rendersettings',
-				$this->seralizeId('tl_metamodel', $this->metamodelId)
-			),
-			'text' => sprintf(
-				$this->getBreadcrumbLabel($environment, 'tl_metamodel_rendersettings'),
-				$this->getMetaModel()->getName()
-			),
-			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/rendersettings.png'
-		);
+        $elements[] = array(
+            'url' => sprintf(
+                'contao/main.php?do=metamodels&table=%s&pid=%s',
+                'tl_metamodel_rendersettings',
+                $this->seralizeId('tl_metamodel', $this->metamodelId)
+            ),
+            'text' => sprintf(
+                $this->getBreadcrumbLabel($environment, 'tl_metamodel_rendersettings'),
+                $this->getMetaModel()->getName()
+            ),
+            'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/rendersettings.png'
+        );
 
-		return $elements;
-	}
+        return $elements;
+    }
 }

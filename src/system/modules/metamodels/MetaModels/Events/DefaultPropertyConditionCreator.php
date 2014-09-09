@@ -28,84 +28,84 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * This class creates the default instances for property conditions when generating input screens.
  */
 class DefaultPropertyConditionCreator
-	implements EventSubscriberInterface
+    implements EventSubscriberInterface
 {
-	/**
-	 * {@inheritDoc}
-	 */
-	public static function getSubscribedEvents()
-	{
-		return array(
-			CreatePropertyConditionEvent::NAME => __CLASS__ . '::handle'
-		);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public static function getSubscribedEvents()
+    {
+        return array(
+            CreatePropertyConditionEvent::NAME => __CLASS__ . '::handle'
+        );
+    }
 
-	/**
-	 * Create the property conditions.
-	 *
-	 * @param CreatePropertyConditionEvent $event The event.
-	 *
-	 * @return void
-	 *
-	 * @throws \RuntimeException When no MetaModel is attached to the event or any other important information could
-	 *                           not be retrieved.
-	 */
-	public function handle(CreatePropertyConditionEvent $event)
-	{
-		$meta      = $event->getData();
-		$metaModel = $event->getMetaModel();
+    /**
+     * Create the property conditions.
+     *
+     * @param CreatePropertyConditionEvent $event The event.
+     *
+     * @return void
+     *
+     * @throws \RuntimeException When no MetaModel is attached to the event or any other important information could
+     *                           not be retrieved.
+     */
+    public function handle(CreatePropertyConditionEvent $event)
+    {
+        $meta      = $event->getData();
+        $metaModel = $event->getMetaModel();
 
-		if (!$metaModel)
-		{
-			throw new \RuntimeException('Could not retrieve MetaModel from event.');
-		}
+        if (!$metaModel)
+        {
+            throw new \RuntimeException('Could not retrieve MetaModel from event.');
+        }
 
-		switch ($meta['type'])
-		{
-			case 'conditionor':
-				$event->setInstance(new PropertyConditionChain(array(), ConditionChainInterface::OR_CONJUNCTION));
-				break;
-			case 'conditionand':
-				$event->setInstance(new PropertyConditionChain(array(), ConditionChainInterface::AND_CONJUNCTION));
-				break;
-			case 'conditionpropertyvalueis':
-				$attribute = $metaModel->getAttributeById($meta['attr_id']);
+        switch ($meta['type'])
+        {
+            case 'conditionor':
+                $event->setInstance(new PropertyConditionChain(array(), ConditionChainInterface::OR_CONJUNCTION));
+                break;
+            case 'conditionand':
+                $event->setInstance(new PropertyConditionChain(array(), ConditionChainInterface::AND_CONJUNCTION));
+                break;
+            case 'conditionpropertyvalueis':
+                $attribute = $metaModel->getAttributeById($meta['attr_id']);
 
-				if (!$attribute)
-				{
-					throw new \RuntimeException(sprintf(
-						'Could not retrieve attribute %s from MetaModel %s.',
-						$meta['attr_id'],
-						$metaModel->getTableName()
-					));
-				}
+                if (!$attribute)
+                {
+                    throw new \RuntimeException(sprintf(
+                        'Could not retrieve attribute %s from MetaModel %s.',
+                        $meta['attr_id'],
+                        $metaModel->getTableName()
+                    ));
+                }
 
-				$event->setInstance(new PropertyValueCondition(
-					$attribute->getColName(),
-					$meta['value']
-				));
-				break;
-			case 'conditionpropertyvisible':
-				$attribute = $metaModel->getAttributeById($meta['attr_id']);
+                $event->setInstance(new PropertyValueCondition(
+                    $attribute->getColName(),
+                    $meta['value']
+                ));
+                break;
+            case 'conditionpropertyvisible':
+                $attribute = $metaModel->getAttributeById($meta['attr_id']);
 
-				if (!$attribute)
-				{
-					throw new \RuntimeException(sprintf(
-						'Could not retrieve attribute %s from MetaModel %s.',
-						$meta['attr_id'],
-						$metaModel->getTableName()
-					));
-				}
+                if (!$attribute)
+                {
+                    throw new \RuntimeException(sprintf(
+                        'Could not retrieve attribute %s from MetaModel %s.',
+                        $meta['attr_id'],
+                        $metaModel->getTableName()
+                    ));
+                }
 
-				$event->setInstance(new PropertyVisibleCondition(
-					$attribute->getColName())
-				);
-				break;
+                $event->setInstance(new PropertyVisibleCondition(
+                    $attribute->getColName())
+                );
+                break;
 
-			case 'conditionnot':
-				$event->setInstance(new NotCondition(new BooleanCondition(false)));
-				break;
-			default:
-		}
-	}
+            case 'conditionnot':
+                $event->setInstance(new NotCondition(new BooleanCondition(false)));
+                break;
+            default:
+        }
+    }
 }

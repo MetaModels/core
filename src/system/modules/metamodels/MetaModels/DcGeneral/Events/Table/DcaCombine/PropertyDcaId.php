@@ -26,25 +26,25 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPr
  */
 class PropertyDcaId
 {
-	/**
-	 * Get all options for the frontend user groups.
-	 *
-	 * @param GetPropertyOptionsEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function getOptions(GetPropertyOptionsEvent $event)
-	{
-		$inputScreens = \Database::getInstance()
-			->prepare('SELECT id,name FROM tl_metamodel_dca WHERE pid=?')
-			->execute($event->getModel()->getProperty('id'));
+    /**
+     * Get all options for the frontend user groups.
+     *
+     * @param GetPropertyOptionsEvent $event The event.
+     *
+     * @return void
+     */
+    public static function getOptions(GetPropertyOptionsEvent $event)
+    {
+        $inputScreens = \Database::getInstance()
+            ->prepare('SELECT id,name FROM tl_metamodel_dca WHERE pid=?')
+            ->execute($event->getModel()->getProperty('id'));
 
-		$result = array();
-		while ($inputScreens->next())
-		{
-			$result[$inputScreens->id] = $inputScreens->name;
-		}
+        $result = array();
+        while ($inputScreens->next())
+        {
+            $result[$inputScreens->id] = $inputScreens->name;
+        }
 
-		$event->setOptions($result);
-	}
+        $event->setOptions($result);
+    }
 }

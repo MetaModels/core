@@ -26,32 +26,32 @@ use MetaModels\DcGeneral\DataDefinition\Definition\IMetaModelDefinition;
  * @package MetaModels\DcGeneral\DataDefinition
  */
 class MetaModelDataDefinition
-	extends DefaultContainer
-	implements IMetaModelDataDefinition
+    extends DefaultContainer
+    implements IMetaModelDataDefinition
 {
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setMetaModelDefinition(IMetaModelDefinition $definition)
-	{
-		$this->setDefinition(IMetaModelDefinition::NAME, $definition);
+    /**
+     * {@inheritDoc}
+     */
+    public function setMetaModelDefinition(IMetaModelDefinition $definition)
+    {
+        $this->setDefinition(IMetaModelDefinition::NAME, $definition);
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function hasMetaModelDefinition()
-	{
-		return $this->hasDefinition(IMetaModelDefinition::NAME);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function hasMetaModelDefinition()
+    {
+        return $this->hasDefinition(IMetaModelDefinition::NAME);
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getMetaModelDefinition()
-	{
-		return $this->getDefinition(IMetaModelDefinition::NAME);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetaModelDefinition()
+    {
+        return $this->getDefinition(IMetaModelDefinition::NAME);
+    }
 }

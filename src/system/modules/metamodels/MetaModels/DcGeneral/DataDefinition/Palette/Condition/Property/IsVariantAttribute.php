@@ -30,36 +30,36 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
  */
 class IsVariantAttribute implements PropertyConditionInterface
 {
-	/**
-	 * {@inheritdoc}
-	 */
-	public function match(
-		ModelInterface $model = null,
-		PropertyValueBag $input = null,
-		PropertyInterface $property = null,
-		LegendInterface $legend = null
-	)
-	{
-		/** @var $model \MetaModels\DcGeneral\Data\Model */
+    /**
+     * {@inheritdoc}
+     */
+    public function match(
+        ModelInterface $model = null,
+        PropertyValueBag $input = null,
+        PropertyInterface $property = null,
+        LegendInterface $legend = null
+    )
+    {
+        /** @var $model \MetaModels\DcGeneral\Data\Model */
 
-		$nativeItem = $model->getItem();
-		$metaModel  = $nativeItem->getMetaModel();
-		$attribute  = $metaModel->getAttribute($property->getName());
+        $nativeItem = $model->getItem();
+        $metaModel  = $nativeItem->getMetaModel();
+        $attribute  = $metaModel->getAttribute($property->getName());
 
-		$attribute->get('isvariant');
+        $attribute->get('isvariant');
 
-		if ($metaModel->hasVariants() && !$nativeItem->isVariantBase())
-		{
-			return !in_array($property->getName(), array_keys($metaModel->getInVariantAttributes()));
-		}
+        if ($metaModel->hasVariants() && !$nativeItem->isVariantBase())
+        {
+            return !in_array($property->getName(), array_keys($metaModel->getInVariantAttributes()));
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function __clone()
-	{
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function __clone()
+    {
+    }
 }

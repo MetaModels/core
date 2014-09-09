@@ -29,30 +29,30 @@ use MetaModels\Filter\FilterRule;
 class StaticIdList extends FilterRule
 {
 
-	/**
-	 * The static id list that shall be applied.
-	 *
-	 * @var int[]
-	 */
-	protected $arrIds = array();
+    /**
+     * The static id list that shall be applied.
+     *
+     * @var int[]
+     */
+    protected $arrIds = array();
 
-	/**
-	 * Create a new FilterRule instance.
-	 *
-	 * @param int[] $arrIds Static list of ids that shall be returned as matches.
-	 */
-	public function __construct($arrIds)
-	{
-		parent::__construct(null);
-		$this->arrIds = $arrIds;
-	}
+    /**
+     * Create a new FilterRule instance.
+     *
+     * @param int[] $arrIds Static list of ids that shall be returned as matches.
+     */
+    public function __construct($arrIds)
+    {
+        parent::__construct(null);
+        $this->arrIds = $arrIds;
+    }
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function getMatchingIds()
-	{
-		return $this->arrIds;
-	}
+    /**
+     * {@inheritdoc}
+     */
+    public function getMatchingIds()
+    {
+        return $this->arrIds;
+    }
 }
 

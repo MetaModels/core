@@ -27,33 +27,33 @@ use MetaModels\Helper\TableManipulation;
  */
 class UpdateMetaModel
 {
-	/**
-	 * Handle the update of a MetaModel and all attached data.
-	 *
-	 * @param PostPersistModelEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function handle(PostPersistModelEvent $event)
-	{
-		$old      = $event->getOriginalModel();
-		$new      = $event->getModel();
-		$oldTable = $old ? $old->getProperty('tableName') : null;
-		$newTable = $new->getProperty('tableName');
+    /**
+     * Handle the update of a MetaModel and all attached data.
+     *
+     * @param PostPersistModelEvent $event The event.
+     *
+     * @return void
+     */
+    public static function handle(PostPersistModelEvent $event)
+    {
+        $old      = $event->getOriginalModel();
+        $new      = $event->getModel();
+        $oldTable = $old ? $old->getProperty('tableName') : null;
+        $newTable = $new->getProperty('tableName');
 
-		// Table name changed?
-		if ($oldTable !== $newTable)
-		{
-			if ($oldTable && \Database::getInstance()->tableExists($oldTable, null, true))
-			{
-				TableManipulation::renameTable($oldTable, $newTable);
-				// TODO: notify attributes that the MetaModel has changed its table name.
+        // Table name changed?
+        if ($oldTable !== $newTable)
+        {
+            if ($oldTable && \Database::getInstance()->tableExists($oldTable, null, true))
+            {
+                TableManipulation::renameTable($oldTable, $newTable);
+                // TODO: notify attributes that the MetaModel has changed its table name.
 
-			} else {
-				TableManipulation::createTable($newTable);
-			}
-		}
+            } else {
+                TableManipulation::createTable($newTable);
+            }
+        }
 
-		TableManipulation::setVariantSupport($newTable, $new->getProperty('varsupport'));
-	}
+        TableManipulation::setVariantSupport($newTable, $new->getProperty('varsupport'));
+    }
 }

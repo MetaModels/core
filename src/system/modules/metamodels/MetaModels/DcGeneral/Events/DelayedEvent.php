@@ -29,38 +29,38 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class DelayedEvent
 {
-	/**
-	 * The event handler to be invoked.
-	 *
-	 * @var callable
-	 */
-	protected $handler;
+    /**
+     * The event handler to be invoked.
+     *
+     * @var callable
+     */
+    protected $handler;
 
-	/**
-	 * Create a new instance.
-	 *
-	 * @param callable $handler The handler to be invoked delayed.
-	 */
-	public function __construct($handler)
-	{
-		$this->handler = $handler;
-	}
+    /**
+     * Create a new instance.
+     *
+     * @param callable $handler The handler to be invoked delayed.
+     */
+    public function __construct($handler)
+    {
+        $this->handler = $handler;
+    }
 
-	/**
-	 * Invoke the handler.
-	 *
-	 * @param Event                    $event      The event.
-	 *
-	 * @param string                   $eventName  The event name.
-	 *
-	 * @param EventDispatcherInterface $dispatcher The dispatcher.
-	 *
-	 * @return void
-	 */
-	public function __invoke(Event $event, $eventName, $dispatcher)
-	{
-		$dispatcher->removeListener($eventName, $this);
+    /**
+     * Invoke the handler.
+     *
+     * @param Event                    $event      The event.
+     *
+     * @param string                   $eventName  The event name.
+     *
+     * @param EventDispatcherInterface $dispatcher The dispatcher.
+     *
+     * @return void
+     */
+    public function __invoke(Event $event, $eventName, $dispatcher)
+    {
+        $dispatcher->removeListener($eventName, $this);
 
-		call_user_func($this->handler, $event, $eventName, $dispatcher);
-	}
+        call_user_func($this->handler, $event, $eventName, $dispatcher);
+    }
 }

@@ -24,23 +24,23 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPr
  */
 class PropertyType
 {
-	/**
-	 * Provide options for default selection.
-	 *
-	 * @param GetPropertyOptionsEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function getOptions(GetPropertyOptionsEvent $event)
-	{
-		$translator = $event->getEnvironment()->getTranslator();
-		$options    = array();
+    /**
+     * Provide options for default selection.
+     *
+     * @param GetPropertyOptionsEvent $event The event.
+     *
+     * @return void
+     */
+    public static function getOptions(GetPropertyOptionsEvent $event)
+    {
+        $translator = $event->getEnvironment()->getTranslator();
+        $options    = array();
 
-		foreach (array_keys((array)$GLOBALS['METAMODELS']['inputscreen_conditions']) as $condition)
-		{
-			$options[$condition] = $translator->translate('conditionnames.' . $condition, 'tl_metamodel_dcasetting_condition');
-		}
+        foreach (array_keys((array)$GLOBALS['METAMODELS']['inputscreen_conditions']) as $condition)
+        {
+            $options[$condition] = $translator->translate('conditionnames.' . $condition, 'tl_metamodel_dcasetting_condition');
+        }
 
-		$event->setOptions($options);
-	}
+        $event->setOptions($options);
+    }
 }

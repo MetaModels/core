@@ -32,184 +32,184 @@ use MetaModels\IMetaModel;
  */
 class ProcessAddAll
 {
-	/**
-	 * Perform the action.
-	 *
-	 * @param IMetaModel $metaModel       The MetaModel.
-	 *
-	 * @param array      $knownAttributes The list of known attributes.
-	 *
-	 * @param int        $startSort       The first sort index.
-	 *
-	 * @param int        $pid             The pid.
-	 *
-	 * @param array      $messages        The output messages.
-	 *
-	 * @return void
-	 */
-	protected static function perform(IMetaModel $metaModel, $knownAttributes, $startSort, $pid, &$messages)
-	{
-		$database = \Database::getInstance();
+    /**
+     * Perform the action.
+     *
+     * @param IMetaModel $metaModel       The MetaModel.
+     *
+     * @param array      $knownAttributes The list of known attributes.
+     *
+     * @param int        $startSort       The first sort index.
+     *
+     * @param int        $pid             The pid.
+     *
+     * @param array      $messages        The output messages.
+     *
+     * @return void
+     */
+    protected static function perform(IMetaModel $metaModel, $knownAttributes, $startSort, $pid, &$messages)
+    {
+        $database = \Database::getInstance();
 
-		// Loop over all attributes now.
-		foreach ($metaModel->getAttributes() as $attribute)
-		{
-			if (!array_key_exists($attribute->get('id'), $knownAttributes))
-			{
-				$arrData = array();
+        // Loop over all attributes now.
+        foreach ($metaModel->getAttributes() as $attribute)
+        {
+            if (!array_key_exists($attribute->get('id'), $knownAttributes))
+            {
+                $arrData = array();
 
-				$objRenderSetting = $attribute->getDefaultRenderSettings();
-				foreach ($objRenderSetting->getKeys() as $key)
-				{
-					$arrData[$key] = $objRenderSetting->get($key);
-				}
+                $objRenderSetting = $attribute->getDefaultRenderSettings();
+                foreach ($objRenderSetting->getKeys() as $key)
+                {
+                    $arrData[$key] = $objRenderSetting->get($key);
+                }
 
-				$arrData = array_replace_recursive(
-					$arrData,
-					array
-					(
-						'pid'      => $pid,
-						'sorting'  => $startSort,
-						'tstamp'   => time(),
-						'attr_id'  => $attribute->get('id'),
-					)
-				);
+                $arrData = array_replace_recursive(
+                    $arrData,
+                    array
+                    (
+                        'pid'      => $pid,
+                        'sorting'  => $startSort,
+                        'tstamp'   => time(),
+                        'attr_id'  => $attribute->get('id'),
+                    )
+                );
 
-				$startSort += 128;
-				$database
-					->prepare('INSERT INTO tl_metamodel_rendersetting %s')
-					->set($arrData)
-					->execute();
-				$messages[] = array
-				(
-					'severity' => 'confirm',
-					'message'  => sprintf(
-						$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_addsuccess'],
-						$attribute->getName()
-					),
-				);
-			}
-		}
-	}
+                $startSort += 128;
+                $database
+                    ->prepare('INSERT INTO tl_metamodel_rendersetting %s')
+                    ->set($arrData)
+                    ->execute();
+                $messages[] = array
+                (
+                    'severity' => 'confirm',
+                    'message'  => sprintf(
+                        $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_addsuccess'],
+                        $attribute->getName()
+                    ),
+                );
+            }
+        }
+    }
 
-	/**
-	 * Handle the add all action event.
-	 *
-	 * @param ActionEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function handleAddAll(ActionEvent $event)
-	{
-		if ($event->getAction()->getName() !== 'rendersetting_addall')
-		{
-			return;
-		}
+    /**
+     * Handle the add all action event.
+     *
+     * @param ActionEvent $event The event.
+     *
+     * @return void
+     */
+    public static function handleAddAll(ActionEvent $event)
+    {
+        if ($event->getAction()->getName() !== 'rendersetting_addall')
+        {
+            return;
+        }
 
-		$environment = $event->getEnvironment();
-		$propagator  = $environment->getEventPropagator();
-		$database    = \Database::getInstance();
-		$input       = $environment->getInputProvider();
-		$pid         = IdSerializer::fromSerialized($input->getParameter('pid'));
+        $environment = $event->getEnvironment();
+        $propagator  = $environment->getEventPropagator();
+        $database    = \Database::getInstance();
+        $input       = $environment->getInputProvider();
+        $pid         = IdSerializer::fromSerialized($input->getParameter('pid'));
 
-		$event->getAction()->getName();
+        $event->getAction()->getName();
 
-		$propagator->propagate(
-			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
-			new LoadLanguageFileEvent('default')
-		);
-		$propagator->propagate(
-			ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
-			new LoadLanguageFileEvent('tl_metamodel_rendersetting')
-		);
-		$referrer = new GetReferrerEvent(true, 'tl_metamodel_rendersetting');
-		$propagator->propagate(
-			ContaoEvents::SYSTEM_GET_REFERRER,
-			$referrer
-		);
+        $propagator->propagate(
+            ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+            new LoadLanguageFileEvent('default')
+        );
+        $propagator->propagate(
+            ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+            new LoadLanguageFileEvent('tl_metamodel_rendersetting')
+        );
+        $referrer = new GetReferrerEvent(true, 'tl_metamodel_rendersetting');
+        $propagator->propagate(
+            ContaoEvents::SYSTEM_GET_REFERRER,
+            $referrer
+        );
 
-		$template = new \BackendTemplate('be_autocreatepalette');
+        $template = new \BackendTemplate('be_autocreatepalette');
 
-		$template->cacheMessage  = '';
-		$template->updateMessage = '';
-		$template->href          = $referrer->getReferrerUrl();
-		$template->headline      = $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall'][1];
+        $template->cacheMessage  = '';
+        $template->updateMessage = '';
+        $template->href          = $referrer->getReferrerUrl();
+        $template->headline      = $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall'][1];
 
-		// Severity is: error, confirm, info, new.
-		$messages = array();
+        // Severity is: error, confirm, info, new.
+        $messages = array();
 
-		$palette = $database
-			->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')
-			->execute($pid->getId());
+        $palette = $database
+            ->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')
+            ->execute($pid->getId());
 
-		$metaModel = ModelFactory::byId($palette->pid);
+        $metaModel = ModelFactory::byId($palette->pid);
 
-		$alreadyExisting = $database
-			->prepare('SELECT * FROM tl_metamodel_rendersetting WHERE pid=?')
-			->execute($pid->getId());
+        $alreadyExisting = $database
+            ->prepare('SELECT * FROM tl_metamodel_rendersetting WHERE pid=?')
+            ->execute($pid->getId());
 
-		$knownAttributes = array();
-		$intMax          = 128;
-		while ($alreadyExisting->next())
-		{
-			$knownAttributes[$alreadyExisting->attr_id] = $alreadyExisting->row();
-			if ($intMax < $alreadyExisting->sorting)
-			{
-				$intMax = $alreadyExisting->sorting;
-			}
-		}
+        $knownAttributes = array();
+        $intMax          = 128;
+        while ($alreadyExisting->next())
+        {
+            $knownAttributes[$alreadyExisting->attr_id] = $alreadyExisting->row();
+            if ($intMax < $alreadyExisting->sorting)
+            {
+                $intMax = $alreadyExisting->sorting;
+            }
+        }
 
-		$blnWantPerform = false;
-		// Perform the labour work.
-		if ($input->getValue('act') == 'perform')
-		{
-			self::perform($metaModel, $knownAttributes, $intMax, $pid->getId(), $arrMessages);
-		}
-		else
-		{
-			// Loop over all attributes now.
-			foreach ($metaModel->getAttributes() as $attribute)
-			{
-				if (array_key_exists($attribute->get('id'), $knownAttributes))
-				{
-					$messages[] = array
-					(
-						'severity' => 'info',
-						'message'  => sprintf(
-							$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_alreadycontained'],
-							$attribute->getName()
-						),
-					);
-				}
-				else
-				{
-					$messages[] = array
-					(
-						'severity' => 'confirm',
-						'message'  => sprintf(
-							$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_willadd'],
-							$attribute->getName()
-						),
-					);
+        $blnWantPerform = false;
+        // Perform the labour work.
+        if ($input->getValue('act') == 'perform')
+        {
+            self::perform($metaModel, $knownAttributes, $intMax, $pid->getId(), $arrMessages);
+        }
+        else
+        {
+            // Loop over all attributes now.
+            foreach ($metaModel->getAttributes() as $attribute)
+            {
+                if (array_key_exists($attribute->get('id'), $knownAttributes))
+                {
+                    $messages[] = array
+                    (
+                        'severity' => 'info',
+                        'message'  => sprintf(
+                            $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_alreadycontained'],
+                            $attribute->getName()
+                        ),
+                    );
+                }
+                else
+                {
+                    $messages[] = array
+                    (
+                        'severity' => 'confirm',
+                        'message'  => sprintf(
+                            $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_willadd'],
+                            $attribute->getName()
+                        ),
+                    );
 
-					$blnWantPerform = true;
-				}
-			}
-		}
+                    $blnWantPerform = true;
+                }
+            }
+        }
 
-		if ($blnWantPerform)
-		{
-			$template->action = ampersand(\Environment::getInstance()->request);
-			$template->submit = $GLOBALS['TL_LANG']['MSC']['continue'];
-		}
-		else
-		{
-			$template->action = ampersand($referrer->getReferrerUrl());
-			$template->submit = $GLOBALS['TL_LANG']['MSC']['saveNclose'];
-		}
+        if ($blnWantPerform)
+        {
+            $template->action = ampersand(\Environment::getInstance()->request);
+            $template->submit = $GLOBALS['TL_LANG']['MSC']['continue'];
+        }
+        else
+        {
+            $template->action = ampersand($referrer->getReferrerUrl());
+            $template->submit = $GLOBALS['TL_LANG']['MSC']['saveNclose'];
+        }
 
-		$template->error = $messages;
+        $template->error = $messages;
 
-		$event->setResponse($template->parse());
-	}
+        $event->setResponse($template->parse());
+    }
 }

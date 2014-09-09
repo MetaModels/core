@@ -30,27 +30,27 @@ use MetaModels\IMetaModel;
  */
 interface IFactory
 {
-	/**
-	 * Load all attribute render information from the database and push the contained information into the settings object.
-	 *
-	 * You should not call this method directly but rather use {@link IFactory::byId} instead.
-	 *
-	 * @param IMetaModel  $objMetaModel The MetaModel information for which the setting shall be retrieved.
-	 *
-	 * @param ICollection $objSetting   The render setting instance to be populated.
-	 *
-	 * @return void
-	 */
-	public static function collectAttributeSettings(IMetaModel $objMetaModel, $objSetting);
+    /**
+     * Load all attribute render information from the database and push the contained information into the settings object.
+     *
+     * You should not call this method directly but rather use {@link IFactory::byId} instead.
+     *
+     * @param IMetaModel  $objMetaModel The MetaModel information for which the setting shall be retrieved.
+     *
+     * @param ICollection $objSetting   The render setting instance to be populated.
+     *
+     * @return void
+     */
+    public static function collectAttributeSettings(IMetaModel $objMetaModel, $objSetting);
 
-	/**
-	 * Create a ICollection instance from the id.
-	 *
-	 * @param IMetaModel $objMetaModel The MetaModel information for which the setting shall be retrieved.
-	 *
-	 * @param int        $intId        The id of the ICollection.
-	 *
-	 * @return ICollection the instance of the render setting collection or null if not found.
-	 */
-	public static function byId(IMetaModel $objMetaModel, $intId = 0);
+    /**
+     * Create a ICollection instance from the id.
+     *
+     * @param IMetaModel $objMetaModel The MetaModel information for which the setting shall be retrieved.
+     *
+     * @param int        $intId        The id of the ICollection.
+     *
+     * @return ICollection the instance of the render setting collection or null if not found.
+     */
+    public static function byId(IMetaModel $objMetaModel, $intId = 0);
 }

@@ -29,29 +29,29 @@ namespace MetaModels;
  */
 interface IFactory
 {
-	/**
-	 * Create a MetaModel instance from the id.
-	 *
-	 * @param int $intId The id of the MetaModel.
-	 *
-	 * @return IMetaModel the instance of the MetaModel or null if not found.
-	 */
-	public static function byId($intId);
+    /**
+     * Create a MetaModel instance from the id.
+     *
+     * @param int $intId The id of the MetaModel.
+     *
+     * @return IMetaModel the instance of the MetaModel or null if not found.
+     */
+    public static function byId($intId);
 
-	/**
-	 * Create a MetaModel instance from the table name.
-	 *
-	 * @param string $strTablename The name of the table.
-	 *
-	 * @return IMetaModel the instance of the MetaModel or null if not found.
-	 */
-	public static function byTableName($strTablename);
+    /**
+     * Create a MetaModel instance from the table name.
+     *
+     * @param string $strTablename The name of the table.
+     *
+     * @return IMetaModel the instance of the MetaModel or null if not found.
+     */
+    public static function byTableName($strTablename);
 
-	/**
-	 * Query for all known MetaModel database tables.
-	 *
-	 * @return string[] all MetaModel table names as string array.
-	 */
-	public static function getAllTables();
+    /**
+     * Query for all known MetaModel database tables.
+     *
+     * @return string[] all MetaModel table names as string array.
+     */
+    public static function getAllTables();
 }
 

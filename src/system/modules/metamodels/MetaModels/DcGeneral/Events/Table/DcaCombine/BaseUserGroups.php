@@ -26,36 +26,36 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPr
  */
 class BaseUserGroups
 {
-	/**
-	 * Get all options for the frontend user groups.
-	 *
-	 * @param string                  $table The source table.
-	 *
-	 * @param GetPropertyOptionsEvent $event The event.
-	 *
-	 * @return void
-	 *
-	 * @throws \RuntimeException When an invalid table name.
-	 */
-	public static function getUserGroups($table, GetPropertyOptionsEvent $event)
-	{
-		if (!in_array($table, array('tl_user_group', 'tl_member_group')))
-		{
-			throw new \RuntimeException('Unexpected table name ' . $table, 1);
-		}
-		$groups = \Database::getInstance()->execute(sprintf('SELECT id,name FROM %s', $table));
+    /**
+     * Get all options for the frontend user groups.
+     *
+     * @param string                  $table The source table.
+     *
+     * @param GetPropertyOptionsEvent $event The event.
+     *
+     * @return void
+     *
+     * @throws \RuntimeException When an invalid table name.
+     */
+    public static function getUserGroups($table, GetPropertyOptionsEvent $event)
+    {
+        if (!in_array($table, array('tl_user_group', 'tl_member_group')))
+        {
+            throw new \RuntimeException('Unexpected table name ' . $table, 1);
+        }
+        $groups = \Database::getInstance()->execute(sprintf('SELECT id,name FROM %s', $table));
 
-		$result = array();
-		if ($table == 'tl_user_group')
-		{
-			$result[-1] = $event->getEnvironment()->getTranslator()->translate('sysadmin', 'tl_metamodel_dca_combine');
-		}
+        $result = array();
+        if ($table == 'tl_user_group')
+        {
+            $result[-1] = $event->getEnvironment()->getTranslator()->translate('sysadmin', 'tl_metamodel_dca_combine');
+        }
 
-		while ($groups->next())
-		{
-			$result[$groups->id] = $groups->name;
-		}
+        while ($groups->next())
+        {
+            $result[$groups->id] = $groups->name;
+        }
 
-		$event->setOptions($result);
-	}
+        $event->setOptions($result);
+    }
 }

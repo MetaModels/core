@@ -27,62 +27,62 @@ use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
  * @package MetaModels\DcGeneral\Events\BreadCrumb
  */
 class BreadCrumbInputScreens
-	extends BreadCrumbMetaModels
+    extends BreadCrumbMetaModels
 {
-	/**
-	 * Id of the input screen.
-	 *
-	 * @var int
-	 */
-	protected $inputScreenId;
+    /**
+     * Id of the input screen.
+     *
+     * @var int
+     */
+    protected $inputScreenId;
 
-	/**
-	 * Retrieve the input screen database information.
-	 *
-	 * @return object
-	 */
-	protected function getInputScreen()
-	{
-		return (object)\Database::getInstance()
-			->prepare('SELECT id, pid, name FROM tl_metamodel_dca WHERE id=?')
-			->executeUncached($this->inputScreenId)
-			->row();
-	}
+    /**
+     * Retrieve the input screen database information.
+     *
+     * @return object
+     */
+    protected function getInputScreen()
+    {
+        return (object)\Database::getInstance()
+            ->prepare('SELECT id, pid, name FROM tl_metamodel_dca WHERE id=?')
+            ->executeUncached($this->inputScreenId)
+            ->row();
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
-	{
-		$input = $environment->getInputProvider();
-		if (!$this->isActiveTable('tl_metamodel_dca', $input))
-		{
-			$this->inputScreenId = $this->extractIdFrom($environment, 'pid');
-		}
-		else
-		{
-			$this->metamodelId = $this->extractIdFrom($environment, 'pid');
-		}
+    /**
+     * {@inheritDoc}
+     */
+    public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
+    {
+        $input = $environment->getInputProvider();
+        if (!$this->isActiveTable('tl_metamodel_dca', $input))
+        {
+            $this->inputScreenId = $this->extractIdFrom($environment, 'pid');
+        }
+        else
+        {
+            $this->metamodelId = $this->extractIdFrom($environment, 'pid');
+        }
 
-		if (!isset($this->metamodelId))
-		{
-			$this->metamodelId = $this->getInputScreen()->pid;
-		}
+        if (!isset($this->metamodelId))
+        {
+            $this->metamodelId = $this->getInputScreen()->pid;
+        }
 
-		$elements = parent::getBreadcrumbElements($environment, $elements);
+        $elements = parent::getBreadcrumbElements($environment, $elements);
 
-		$urlEvent = new AddToUrlEvent(sprintf('do=metamodels&table=%s&pid=%s',
-			'tl_metamodel_dca',
-			$this->seralizeId('tl_metamodel', $this->metamodelId)
-		));
-		$environment->getEventPropagator()->propagate(ContaoEvents::BACKEND_ADD_TO_URL, $urlEvent);
+        $urlEvent = new AddToUrlEvent(sprintf('do=metamodels&table=%s&pid=%s',
+            'tl_metamodel_dca',
+            $this->seralizeId('tl_metamodel', $this->metamodelId)
+        ));
+        $environment->getEventPropagator()->propagate(ContaoEvents::BACKEND_ADD_TO_URL, $urlEvent);
 
-		$elements[] = array(
-			'url'  => $urlEvent->getUrl(),
-			'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_dca'), $this->getMetaModel()->getName()),
-			'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/dca.png'
-		);
+        $elements[] = array(
+            'url'  => $urlEvent->getUrl(),
+            'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_dca'), $this->getMetaModel()->getName()),
+            'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/dca.png'
+        );
 
-		return $elements;
-	}
+        return $elements;
+    }
 }

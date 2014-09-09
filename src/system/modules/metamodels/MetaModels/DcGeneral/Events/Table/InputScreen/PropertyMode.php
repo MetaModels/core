@@ -29,61 +29,61 @@ use MetaModels\Factory;
  */
 class PropertyMode
 {
-	/**
-	 * Return all valid modes for the current MetaModels rendertype.
-	 *
-	 * @param GetPropertyOptionsEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function getValidModes(GetPropertyOptionsEvent $event)
-	{
-		switch ($event->getModel()->getProperty('rendertype'))
-		{
-			case 'ctable':
-				$arrResult = array('mode_3', 'mode_4', 'mode_6');
-				break;
-			case 'standalone':
-				$arrResult = array('mode_0', 'mode_1', 'mode_2', 'mode_5');
+    /**
+     * Return all valid modes for the current MetaModels rendertype.
+     *
+     * @param GetPropertyOptionsEvent $event The event.
+     *
+     * @return void
+     */
+    public static function getValidModes(GetPropertyOptionsEvent $event)
+    {
+        switch ($event->getModel()->getProperty('rendertype'))
+        {
+            case 'ctable':
+                $arrResult = array('mode_3', 'mode_4', 'mode_6');
+                break;
+            case 'standalone':
+                $arrResult = array('mode_0', 'mode_1', 'mode_2', 'mode_5');
 
-				// Allow tree mode only when no variants are in place.
-				if (!Factory::byId($event->getModel()->getProperty('pid'))->hasVariants())
-				{
-					$arrResult[] = 'mode_6';
-				}
+                // Allow tree mode only when no variants are in place.
+                if (!Factory::byId($event->getModel()->getProperty('pid'))->hasVariants())
+                {
+                    $arrResult[] = 'mode_6';
+                }
 
-				break;
-			default:
-				$arrResult = array();
-				break;
-		}
+                break;
+            default:
+                $arrResult = array();
+                break;
+        }
 
-		$event->setOptions($arrResult);
-	}
+        $event->setOptions($arrResult);
+    }
 
-	/**
-	 * Prefix the given value with "mode_" to prevent the DC from using numeric ids.
-	 *
-	 * @param DecodePropertyValueForWidgetEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function decodeMode(DecodePropertyValueForWidgetEvent $event)
-	{
-		$event->setValue('mode_' . $event->getValue('mode'));
-	}
+    /**
+     * Prefix the given value with "mode_" to prevent the DC from using numeric ids.
+     *
+     * @param DecodePropertyValueForWidgetEvent $event The event.
+     *
+     * @return void
+     */
+    public static function decodeMode(DecodePropertyValueForWidgetEvent $event)
+    {
+        $event->setValue('mode_' . $event->getValue('mode'));
+    }
 
-	/**
-	 * Strip the mode prefix from the given value.
-	 *
-	 * @param EncodePropertyValueFromWidgetEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public static function encodeMode(EncodePropertyValueFromWidgetEvent $event)
-	{
-		$arrSplit = explode('_', $event->getValue('mode'));
+    /**
+     * Strip the mode prefix from the given value.
+     *
+     * @param EncodePropertyValueFromWidgetEvent $event The event.
+     *
+     * @return void
+     */
+    public static function encodeMode(EncodePropertyValueFromWidgetEvent $event)
+    {
+        $arrSplit = explode('_', $event->getValue('mode'));
 
-		$event->setValue($arrSplit[1]);
-	}
+        $event->setValue($arrSplit[1]);
+    }
 }

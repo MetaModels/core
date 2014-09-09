@@ -28,14 +28,14 @@ use ContaoCommunityAlliance\DcGeneral\View\DefaultView;
  */
 class View extends DefaultView
 {
-	/**
-	 * Create a new variant based upon the current item loaded in the data container.
-	 *
-	 * @return string
-	 */
-	public function createvariant()
-	{
-		return $this->edit();
-	}
+    /**
+     * Create a new variant based upon the current item loaded in the data container.
+     *
+     * @return string
+     */
+    public function createvariant()
+    {
+        return $this->edit();
+    }
 }
 

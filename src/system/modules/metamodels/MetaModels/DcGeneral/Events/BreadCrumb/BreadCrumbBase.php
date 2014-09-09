@@ -29,108 +29,108 @@ use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
  */
 abstract class BreadCrumbBase
 {
-	/**
-	 * Get for a table the human readable name or a fallback.
-	 *
-	 * @param EnvironmentInterface $environment The environment in use.
-	 *
-	 * @param string               $table       Name of table.
-	 *
-	 * @return string The human readable name.
-	 */
-	protected function getBreadcrumbLabel(EnvironmentInterface $environment, $table)
-	{
-		$shortTable = str_replace('tl_', '', $table);
+    /**
+     * Get for a table the human readable name or a fallback.
+     *
+     * @param EnvironmentInterface $environment The environment in use.
+     *
+     * @param string               $table       Name of table.
+     *
+     * @return string The human readable name.
+     */
+    protected function getBreadcrumbLabel(EnvironmentInterface $environment, $table)
+    {
+        $shortTable = str_replace('tl_', '', $table);
 
-		$label = $environment->getTranslator()->translate($shortTable, 'BRD');
+        $label = $environment->getTranslator()->translate($shortTable, 'BRD');
 
-		if ($label == $shortTable)
-		{
-			$shortTable = str_replace('tl_metamodel_', '', $table);
-			return strtoupper(substr($shortTable, 0, 1)) . substr($shortTable, 1, (strlen($shortTable) - 1)) . ' %s';
-		}
+        if ($label == $shortTable)
+        {
+            $shortTable = str_replace('tl_metamodel_', '', $table);
+            return strtoupper(substr($shortTable, 0, 1)) . substr($shortTable, 1, (strlen($shortTable) - 1)) . ' %s';
+        }
 
-		return specialchars($label);
-	}
+        return specialchars($label);
+    }
 
-	/**
-	 * Retrieve the current base url.
-	 *
-	 * @return string
-	 */
-	protected function getBaseUrl()
-	{
-		return \Environment::getInstance()->base;
-	}
+    /**
+     * Retrieve the current base url.
+     *
+     * @return string
+     */
+    protected function getBaseUrl()
+    {
+        return \Environment::getInstance()->base;
+    }
 
-	/**
-	 * Check if the given table is the current table.
-	 *
-	 * @param string                 $table The name of the table.
-	 *
-	 * @param InputProviderInterface $input The input provider in use.
-	 *
-	 * @return mixed
-	 */
-	protected function isActiveTable($table, InputProviderInterface $input)
-	{
-		return $input->getParameter('table') == $table;
-	}
+    /**
+     * Check if the given table is the current table.
+     *
+     * @param string                 $table The name of the table.
+     *
+     * @param InputProviderInterface $input The input provider in use.
+     *
+     * @return mixed
+     */
+    protected function isActiveTable($table, InputProviderInterface $input)
+    {
+        return $input->getParameter('table') == $table;
+    }
 
-	/**
-	 * Extract the id value from the serialized parameter with the given name.
-	 *
-	 * @param EnvironmentInterface $environment   The environment.
-	 *
-	 * @param string               $parameterName The parameter name containing the id.
-	 *
-	 * @return int
-	 */
-	protected function extractIdFrom(EnvironmentInterface $environment, $parameterName = 'pid')
-	{
-		$parameter = $environment->getInputProvider()->getParameter($parameterName);
+    /**
+     * Extract the id value from the serialized parameter with the given name.
+     *
+     * @param EnvironmentInterface $environment   The environment.
+     *
+     * @param string               $parameterName The parameter name containing the id.
+     *
+     * @return int
+     */
+    protected function extractIdFrom(EnvironmentInterface $environment, $parameterName = 'pid')
+    {
+        $parameter = $environment->getInputProvider()->getParameter($parameterName);
 
-		return IdSerializer::fromSerialized($parameter)->getId();
-	}
+        return IdSerializer::fromSerialized($parameter)->getId();
+    }
 
-	/**
-	 * Create an instance from the passed values.
-	 *
-	 * @param string $dataProviderName The data provider name.
-	 *
-	 * @param mixed  $id               The id.
-	 *
-	 * @return IdSerializer
-	 */
-	public static function seralizeId($dataProviderName, $id)
-	{
-		return IdSerializer::fromValues($dataProviderName, $id)->getSerialized();
-	}
+    /**
+     * Create an instance from the passed values.
+     *
+     * @param string $dataProviderName The data provider name.
+     *
+     * @param mixed  $id               The id.
+     *
+     * @return IdSerializer
+     */
+    public static function seralizeId($dataProviderName, $id)
+    {
+        return IdSerializer::fromValues($dataProviderName, $id)->getSerialized();
+    }
 
-	/**
-	 * Perform the bread crumb generating.
-	 *
-	 * @param EnvironmentInterface $environment The environment in use.
-	 *
-	 * @param array                $elements    The elements generated so far.
-	 *
-	 * @return array
-	 */
-	abstract public function getBreadcrumbElements(EnvironmentInterface $environment, $elements);
+    /**
+     * Perform the bread crumb generating.
+     *
+     * @param EnvironmentInterface $environment The environment in use.
+     *
+     * @param array                $elements    The elements generated so far.
+     *
+     * @return array
+     */
+    abstract public function getBreadcrumbElements(EnvironmentInterface $environment, $elements);
 
-	/**
-	 * Event handler.
-	 *
-	 * @param GetBreadcrumbEvent $event The event.
-	 *
-	 * @return void
-	 */
-	public function getBreadcrumb(GetBreadcrumbEvent $event)
-	{
-		$environment = $event->getEnvironment();
+    /**
+     * Event handler.
+     *
+     * @param GetBreadcrumbEvent $event The event.
+     *
+     * @return void
+     */
+    public function getBreadcrumb(GetBreadcrumbEvent $event)
+    {
+        $environment = $event->getEnvironment();
 
-		$event->setElements($this->getBreadcrumbElements($environment, array()));
+        $event->setElements($this->getBreadcrumbElements($environment, array()));
 
-		$event->stopPropagation();
-	}
+        $event->stopPropagation();
+    }
 }

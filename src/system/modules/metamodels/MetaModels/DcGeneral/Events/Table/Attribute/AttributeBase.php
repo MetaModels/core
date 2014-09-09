@@ -29,25 +29,25 @@ use MetaModels\IMetaModel;
  */
 class AttributeBase
 {
-	/**
-	 * Retrieve the MetaModel the given model is attached to.
-	 *
-	 * @param ModelInterface $model The model being processed.
-	 *
-	 * @return IMetaModel
-	 *
-	 * @throws DcGeneralInvalidArgumentException When an invalid model has been passed.
-	 */
-	public static function getMetaModelFromModel(ModelInterface $model)
-	{
-		if (!(($model->getProviderName() == 'tl_metamodel_attribute') && $model->getProperty('pid')))
-		{
-			throw new DcGeneralInvalidArgumentException(
-				'Model must originate from tl_metamodel_attribute and contain a pid, this one originates from ' .
-				$model->getProviderName() . ' and has pid ' . $model->getProperty('pid')
-			);
-		}
+    /**
+     * Retrieve the MetaModel the given model is attached to.
+     *
+     * @param ModelInterface $model The model being processed.
+     *
+     * @return IMetaModel
+     *
+     * @throws DcGeneralInvalidArgumentException When an invalid model has been passed.
+     */
+    public static function getMetaModelFromModel(ModelInterface $model)
+    {
+        if (!(($model->getProviderName() == 'tl_metamodel_attribute') && $model->getProperty('pid')))
+        {
+            throw new DcGeneralInvalidArgumentException(
+                'Model must originate from tl_metamodel_attribute and contain a pid, this one originates from ' .
+                $model->getProviderName() . ' and has pid ' . $model->getProperty('pid')
+            );
+        }
 
-		return Factory::byId($model->getProperty('pid'));
-	}
+        return Factory::byId($model->getProperty('pid'));
+    }
 }
