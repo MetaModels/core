@@ -6,6 +6,7 @@
  * data in each collection.
  *
  * PHP version 5
+ *
  * @package    MetaModels
  * @subpackage Core
  * @author     David Maack <david.maack@arcor.de>

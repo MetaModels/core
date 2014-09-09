@@ -1,10 +1,20 @@
 <?php
 /**
+ * The MetaModels extension allows the creation of multiple collections of custom items,
+ * each with its own unique set of selectable attributes, with attribute extendability.
+ * The Front-End modules allow you to build powerful listing and filtering of the
+ * data in each collection.
  *
  * PHP version 5
- * @copyright  The MetaModels team.
+ *
+ * @package    MetaModels
+ * @subpackage Core
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Stefan Heimes <cms@men-at-work.de>
+ * @author     David Maack <david.maack@arcor.de>
  * @author     Christoph Wiechert <christoph.wiechert@4wardmedia.de>
- * @package    stylepicker4ward
+ * @copyright  The MetaModels team.
+ * @license    LGPL.
  * @filesource
  */
 

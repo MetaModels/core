@@ -6,8 +6,9 @@
  * data in each collection.
  *
  * PHP version 5
+ *
  * @package    MetaModels
- * @subpackage FrontendClearAll
+ * @subpackage Core
  * @author     Stefan Heimes <cms@men-at-work.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.

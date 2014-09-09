@@ -6,7 +6,8 @@
  * data in each collection.
  *
  * PHP version 5
- * @package	   MetaModels
+ *
+ * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Christian de la Haye <service@delahaye.de>

@@ -7,8 +7,9 @@
  * data in each collection.
  *
  * PHP version 5
+ *
  * @package     MetaModels
- * @subpackage  metamodels_inserttags
+ * @subpackage  Core
  * @author      Tim Gatzky <info@tim-gatzky.de>
  * @author      Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright   The MetaModels team.

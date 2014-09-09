@@ -1,11 +1,17 @@
-<?php if (!defined('TL_ROOT')) die('You cannot access this file directly!');
-
+<?php
 /**
- * Contao Open Source CMS
+ * The MetaModels extension allows the creation of multiple collections of custom items,
+ * each with its own unique set of selectable attributes, with attribute extendability.
+ * The Front-End modules allow you to build powerful listing and filtering of the
+ * data in each collection.
  *
- * @copyright  MEN AT WORK 2013
- * @package    syncCto
- * @license    GNU/LGPL
+ * PHP version 5
+ *
+ * @package    MetaModels
+ * @subpackage Core
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @copyright  The MetaModels team.
+ * @license    LGPL.
  * @filesource
  */
 

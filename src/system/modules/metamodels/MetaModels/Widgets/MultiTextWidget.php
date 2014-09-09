@@ -6,8 +6,9 @@
  * data in each collection.
  *
  * PHP version 5
+ *
  * @package    MetaModels
- * @subpackage FrontendFilter
+ * @subpackage Core
  * @author     Christian de la Haye <service@delahaye.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
