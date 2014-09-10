@@ -64,18 +64,18 @@
 	},
 	"autoload": {
 		"psr-0": {
-			"MetaModels": "src/system/modules/metamodels"
+			"MetaModels": "src"
 		}
 	},
 	"extra": {
 		"contao": {
 			"sources": {
-				"src/system/modules/metamodels": "system/modules/metamodels"
+				"contao": "system/modules/metamodels"
 			},
 			"transifex": {
 				"project": "metamodels",
 				"prefix": "core-",
-				"languages_cto": "src/system/modules/metamodels/languages",
+				"languages_cto": "contao/languages",
 				"languages_tx": ".tx"
 			}
 		},
