@@ -16,7 +16,7 @@
  */
 
 /*
-    This file defines the basic structure of ALL MetaModels.
+    This file defines the basic structure of ALL MetaModel items.
     Note however, that various MetaModel extensions might remove or add stuff here.
 */
 
@@ -46,26 +46,36 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
         (
             // This means: 1 default sorting value, 2 switchable sorting value.
             'mode'                    => 1,
-            'headerFields'            => array('tstamp'),
+            'headerFields'            => array
+            (
+                'tstamp'
+            ),
         ),
 
         'label' => array
         (
-            'fields'                  => array(),
+            'fields'                  => array
+            (
+            ),
             'format'                  => '%s',
         ),
     ),
 
     'fields' => array
     (
-        'id' => array(),
-        'pid' => array(),
+        'id' => array
+        (
+        ),
+        'pid' => array
+        (
+        ),
         'sorting' => array
         (
             'sorting'                 => true,
             'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_item']['sorting'],
         ),
-        'tstamp' => array()
+        'tstamp' => array
+        (
+        )
     )
 );
-

@@ -17,140 +17,136 @@
 
 $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
 (
-    'config' => array
+    'config'                => array
     (
-        'dataContainer' => 'General',
-        'ptable' => 'tl_metamodel',
-        'ctable' => 'tl_metamodel_dcasetting',
-        'switchToEdit' => false,
+        'dataContainer'    => 'General',
+        'ptable'           => 'tl_metamodel',
+        'ctable'           => 'tl_metamodel_dcasetting',
+        'switchToEdit'     => false,
         'enableVersioning' => false,
     ),
-
-    'dca_config'                      => array
+    'dca_config'            => array
     (
-        'data_provider'               => array
+        'data_provider'  => array
         (
-            'default'                 => array
+            'default' => array
             (
-                'source'              => 'tl_metamodel_dca'
+                'source' => 'tl_metamodel_dca'
             ),
-            'parent'                  => array
+            'parent'  => array
             (
-                'source'              => 'tl_metamodel'
+                'source' => 'tl_metamodel'
             )
         ),
-        'childCondition'              => array
+        'childCondition' => array
         (
-            array(
-                'from'                => 'tl_metamodel',
-                'to'                  => 'tl_metamodel_dca',
-                'setOn'               => array
-                (
-                    array(
-                        'to_field'    => 'pid',
-                        'from_field'  => 'id',
-                    ),
-                ),
-                'filter'              => array
+            array
+            (
+                'from'    => 'tl_metamodel',
+                'to'      => 'tl_metamodel_dca',
+                'setOn'   => array
                 (
                     array
                     (
-                        'local'       => 'pid',
-                        'remote'      => 'id',
-                        'operation'   => '=',
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
                     ),
                 ),
-                'inverse'             => array
+                'filter'  => array
                 (
                     array
                     (
-                        'local'       => 'pid',
-                        'remote'      => 'id',
-                        'operation'   => '=',
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                ),
+                'inverse' => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
                     ),
                 )
             )
         ),
     ),
-
-    'list' => array
+    'list'                  => array
     (
-        'sorting' => array
+        'sorting'           => array
         (
-            'mode'                    => 4,
-            'fields'                  => array('name'),
-            'panelLayout'             => 'filter,limit',
-            'headerFields'            => array('name'),
-            'flag'                    => 1,
+            'mode'         => 4,
+            'fields'       => array('name'),
+            'panelLayout'  => 'filter,limit',
+            'headerFields' => array('name'),
+            'flag'         => 1,
         ),
-
-        'label' => array
+        'label'             => array
         (
-            'fields'                  => array('name'),
-            'format'                  => '%s',
+            'fields' => array('name'),
+            'format' => '%s',
         ),
-
         'global_operations' => array
         (
             'all' => array
             (
-                'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
-                'href'                => 'act=select',
-                'class'               => 'header_edit_all',
-                'attributes'          => 'onclick="Backend.getScrollOffset();"'
+                'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
+                'href'       => 'act=select',
+                'class'      => 'header_edit_all',
+                'attributes' => 'onclick="Backend.getScrollOffset();"'
             ),
         ),
-
-        'operations' => array
+        'operations'        => array
         (
-            'edit' => array
+            'edit'     => array
             (
-                'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['edit'],
-                'href'                => 'act=edit',
-                'icon'                => 'edit.gif',
+                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['edit'],
+                'href'  => 'act=edit',
+                'icon'  => 'edit.gif',
             ),
-            'copy' => array
+            'copy'     => array
             (
-                'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['copy'],
-                'href'                => 'act=copy',
-                'icon'                => 'copy.gif',
+                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['copy'],
+                'href'  => 'act=copy',
+                'icon'  => 'copy.gif',
             ),
-            'delete' => array
+            'delete'   => array
             (
-                'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['delete'],
-                'href'                => 'act=delete',
-                'icon'                => 'delete.gif',
-                'attributes'          => sprintf(
+                'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['delete'],
+                'href'       => 'act=delete',
+                'icon'       => 'delete.gif',
+                'attributes' => sprintf(
                     'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
                     $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
                 )
             ),
-            'show' => array
+            'show'     => array
             (
-                'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['show'],
-                'href'                => 'act=show',
-                'icon'                => 'show.gif'
+                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['show'],
+                'href'  => 'act=show',
+                'icon'  => 'show.gif'
             ),
             'settings' => array
             (
-                'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['settings'],
-                'href'                => 'table=tl_metamodel_dcasetting',
-                'icon'                => 'system/modules/metamodels/assets/images/icons/dca_setting.png',
-                'idparam'             => 'pid'
+                'label'   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['settings'],
+                'href'    => 'table=tl_metamodel_dcasetting',
+                'icon'    => 'system/modules/metamodels/assets/images/icons/dca_setting.png',
+                'idparam' => 'pid'
             ),
         )
     ),
-
-    'metapalettes' => array
+    'metapalettes'          => array
     (
         'default' => array
         (
-            'title' => array
+            'title'   => array
             (
                 'name',
                 'isdefault'
             ),
-            'view' => array
+            'view'    => array
             (
                 'panelLayout',
             ),
@@ -161,7 +157,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
             ),
         )
     ),
-
     'metasubselectpalettes' => array
     (
         'rendertype' => array
@@ -173,7 +168,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
                 'backendicon',
                 'backendcaption'
             ),
-            'ctable' => array
+            'ctable'     => array
             (
                 'ptable',
                 'mode',
@@ -181,168 +176,165 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
                 'backendcaption'
             )
         ),
-
-        'mode' => array
+        'mode'       => array
         (
-            '0'  => array(),
-            '1'  => array
+            '0' => array
+            (),
+            '1' => array
             (
                 'backend after mode' => array('flag')
             ),
-            '2'  => array
+            '2' => array
             (
                 'backend after mode' => array('flag')
             ),
-            '3'  => array(),
-            '4'  => array(),
-            '5'  => array(),
-            '6'  => array('ptable'),
+            '3' => array
+            (),
+            '4' => array
+            (),
+            '5' => array
+            (),
+            '6' => array
+            (
+                'ptable'
+            ),
         ),
     ),
-
-    'fields' => array
+    'fields'                => array
     (
-        'name' => array
+        'name'           => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['name'],
-            'exclude'                 => true,
-            'search'                  => true,
-            'inputType'               => 'text',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['name'],
+            'exclude'   => true,
+            'search'    => true,
+            'inputType' => 'text',
+            'eval'      => array
             (
-                'mandatory'           => true,
-                'maxlength'           => 64,
-                'tl_class'            => 'w50'
+                'mandatory' => true,
+                'maxlength' => 64,
+                'tl_class'  => 'w50'
             )
         ),
-
-        'isdefault' => array
+        'isdefault'      => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault'],
-            'exclude'                 => true,
-            'inputType'               => 'checkbox',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault'],
+            'exclude'   => true,
+            'inputType' => 'checkbox',
+            'eval'      => array
             (
-                'maxlength'           => 255,
-                'tl_class'            => 'w50 m12 cbx'
+                'maxlength' => 255,
+                'tl_class'  => 'w50 m12 cbx'
             ),
         ),
-
-        'rendertype' => array
+        'rendertype'     => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype'],
-            'inputType'               => 'select',
-            'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes'],
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype'],
+            'inputType' => 'select',
+            'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes'],
+            'eval'      => array
             (
-                'tl_class'            => 'w50',
-                'submitOnChange'      => true,
-                'includeBlankOption'  => true
+                'tl_class'           => 'w50',
+                'submitOnChange'     => true,
+                'includeBlankOption' => true
             )
         ),
-
-        'ptable' => array
+        'ptable'         => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable'],
-            'inputType'               => 'select',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable'],
+            'inputType' => 'select',
+            'eval'      => array
             (
-                'tl_class'            => 'w50',
-                'submitOnChange'      => true,
-                'includeBlankOption'  => true
+                'tl_class'           => 'w50',
+                'submitOnChange'     => true,
+                'includeBlankOption' => true
             )
         ),
-
-        'mode' => array
+        'mode'           => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['mode'],
-            'inputType'               => 'select',
-            'default'                 => '',
-            'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode'],
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['mode'],
+            'inputType' => 'select',
+            'default'   => '',
+            'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode'],
+            'eval'      => array
             (
-                'tl_class'            => 'w50',
-                'submitOnChange'      => true
+                'tl_class'       => 'w50',
+                'submitOnChange' => true
             )
         ),
-
-        'flag' => array
+        'flag'           => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['flag'],
-            'exclude'                 => true,
-            'inputType'               => 'select',
-            'options'                 => array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
-            'eval'                    => array('tl_class' => 'w50'),
-            'reference'               => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['flag'],
+            'exclude'   => true,
+            'inputType' => 'select',
+            'options'   => array('1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
+            'eval'      => array('tl_class' => 'w50'),
+            'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']
         ),
-
         'backendsection' => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection'],
-            'exclude'                 => true,
-            'inputType'               => 'select',
-            'reference'               => &$GLOBALS['TL_LANG']['MOD'],
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection'],
+            'exclude'   => true,
+            'inputType' => 'select',
+            'reference' => &$GLOBALS['TL_LANG']['MOD'],
+            'eval'      => array
             (
-                'includeBlankOption'  => true,
-                'valign'              => 'top',
-                'chosen'              => true,
-                'tl_class'            => 'w50'
+                'includeBlankOption' => true,
+                'valign'             => 'top',
+                'chosen'             => true,
+                'tl_class'           => 'w50'
             ),
         ),
-
-        'backendicon' => array
+        'backendicon'    => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon'],
-            'exclude'                 => true,
-            'inputType'               => 'fileTree',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon'],
+            'exclude'   => true,
+            'inputType' => 'fileTree',
+            'eval'      => array
             (
-                'fieldType'           => 'radio',
-                'files'               => true,
-                'filesOnly'           => true,
-                'extensions'          => 'jpg,jpeg,gif,png,tif,tiff',
-                'tl_class'            => 'clr'
+                'fieldType'  => 'radio',
+                'files'      => true,
+                'filesOnly'  => true,
+                'extensions' => 'jpg,jpeg,gif,png,tif,tiff',
+                'tl_class'   => 'clr'
             )
         ),
-
         'backendcaption' => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption'],
-            'exclude'                 => true,
-            'inputType'               => 'multiColumnWizard',
-            'eval'             => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption'],
+            'exclude'   => true,
+            'inputType' => 'multiColumnWizard',
+            'eval'      => array
             (
                 'columnFields' => array
                 (
-                    'langcode' => array
+                    'langcode'    => array
                     (
-                        'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_langcode'],
-                        'exclude'               => true,
-                        'inputType'             => 'select',
-                        'options'               => $this->getLanguages(),
-                        'eval'                  => array
+                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_langcode'],
+                        'exclude'   => true,
+                        'inputType' => 'select',
+                        'options'   => $this->getLanguages(),
+                        'eval'      => array
                         (
-                            'style'             => 'width:200px',
-                            'chosen'            => 'true'
+                            'style'  => 'width:200px',
+                            'chosen' => 'true'
                         )
                     ),
-                    'label' => array
+                    'label'       => array
                     (
-                        'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_label'],
-                        'exclude'               => true,
-                        'inputType'             => 'text',
-                        'eval'                  => array
+                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_label'],
+                        'exclude'   => true,
+                        'inputType' => 'text',
+                        'eval'      => array
                         (
                             'style' => 'width:180px',
                         )
                     ),
                     'description' => array
                     (
-                        'label'                 => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_description'],
-                        'exclude'               => true,
-                        'inputType'             => 'text',
-                        'eval'                  => array
+                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_description'],
+                        'exclude'   => true,
+                        'inputType' => 'text',
+                        'eval'      => array
                         (
                             'style' => 'width:200px',
                         )
@@ -350,23 +342,23 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
                 ),
             )
         ),
-        'panelLayout' => array
+        'panelLayout'    => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout'],
-            'exclude'                 => true,
-            'inputType'               => 'text',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => array
             (
-                'tl_class'            => 'clr long wizard',
+                'tl_class' => 'clr long wizard',
             ),
         ),
-        'isclosed' => array
+        'isclosed'       => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed'],
-            'inputType'               => 'checkbox',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed'],
+            'inputType' => 'checkbox',
+            'eval'      => array
             (
-                'tl_class'            => 'w50 m12 cbx',
+                'tl_class' => 'w50 m12 cbx',
             )
         )
     )

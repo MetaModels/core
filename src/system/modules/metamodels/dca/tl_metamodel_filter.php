@@ -69,15 +69,24 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
         'sorting' => array
         (
             'mode'                    => 4,
-            'fields'                  => array('name'),
+            'fields'                  => array
+            (
+                'name'
+            ),
             'panelLayout'             => 'filter,sort,limit',
-            'headerFields'            => array('name'),
+            'headerFields'            => array
+            (
+                'name'
+            ),
             'flag'                    => 1,
         ),
 
         'label' => array
         (
-            'fields'                  => array('name'),
+            'fields'                  => array
+            (
+                'name'
+            ),
             'format'                  => '%s'
         ),
 
@@ -130,13 +139,18 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
     (
         'default'                     => array
         (
-            'title'                   => array('name')
+            'title'                   => array
+            (
+                'name'
+            )
         ),
     ),
 
     'fields' => array
     (
-        'tstamp'                      => array(),
+        'tstamp'                      => array
+        (
+        ),
         'name'                        => array
         (
             'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['name'],

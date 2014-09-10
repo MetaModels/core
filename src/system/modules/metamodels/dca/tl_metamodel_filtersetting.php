@@ -21,101 +21,102 @@
 
 $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
 (
-    'config' => array
+    'config'                => array
     (
-        'dataContainer'               => 'General',
-        'switchToEdit'                => false,
-        'enableVersioning'            => false,
+        'dataContainer'    => 'General',
+        'switchToEdit'     => false,
+        'enableVersioning' => false,
     ),
-    'dca_config'                      => array
+    'dca_config'            => array
     (
-        'data_provider'               => array
+        'data_provider'  => array
         (
-            'root'                    => array
+            'root'   => array
             (
-                'source'              => 'tl_metamodel_filtersetting'
+                'source' => 'tl_metamodel_filtersetting'
             ),
-            'parent'                  => array
+            'parent' => array
             (
-                'source'              => 'tl_metamodel_filter',
+                'source' => 'tl_metamodel_filter',
             ),
         ),
-        'childCondition'              => array
+        'childCondition' => array
         (
             array(
-                'from'                => 'tl_metamodel_filter',
-                'to'                  => 'tl_metamodel_filtersetting',
-                'setOn'               => array
+                'from'   => 'tl_metamodel_filter',
+                'to'     => 'tl_metamodel_filtersetting',
+                'setOn'  => array
                 (
                     array(
-                        'to_field'    => 'fid',
-                        'from_field'  => 'id',
+                        'to_field'   => 'fid',
+                        'from_field' => 'id',
                     )
                 ),
-                'filter'              => array
+                'filter' => array
                 (
                     array
                     (
-                        'local'       => 'fid',
-                        'remote'      => 'id',
-                        'operation'   => '=',
+                        'local'     => 'fid',
+                        'remote'    => 'id',
+                        'operation' => '=',
                     ),
                 )
             ),
-
             array(
-                'from'                => 'tl_metamodel_filtersetting',
-                'to'                  => 'tl_metamodel_filtersetting',
-                'setOn'               => array
-                (
-                    array(
-                        'to_field'    => 'pid',
-                        'from_field'  => 'id',
-                    ),
-                    array(
-                        'to_field'    => 'fid',
-                        'from_field'  => 'fid',
-                    ),
-                ),
-                'filter'              => array
+                'from'   => 'tl_metamodel_filtersetting',
+                'to'     => 'tl_metamodel_filtersetting',
+                'setOn'  => array
                 (
                     array
                     (
-                        'local'       => 'pid',
-                        'remote'      => 'id',
-                        'operation'   => '=',
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
+                    ),
+                    array
+                    (
+                        'to_field'   => 'fid',
+                        'from_field' => 'fid',
+                    ),
+                ),
+                'filter' => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
                     ),
                 )
             )
         ),
-        'rootEntries'                 => array
-        (
-            'tl_metamodel_filtersetting'  => array
-            (
-                'setOn' => array
-                (
-                    array
-                    (
-                        'property'    => 'pid',
-                        'value'       => '0'
-                    ),
-                ),
-                'filter'              => array
-                (
-                    array
-                    (
-                        'property'    => 'pid',
-                        'operation'   => '=',
-                        'value'       => '0'
-                    )
-                )
-            )
-        ),
-        'child_list'                  => array
+        'rootEntries'    => array
         (
             'tl_metamodel_filtersetting' => array
             (
-                'fields'              => array
+                'setOn'  => array
+                (
+                    array
+                    (
+                        'property' => 'pid',
+                        'value'    => '0'
+                    ),
+                ),
+                'filter' => array
+                (
+                    array
+                    (
+                        'property'  => 'pid',
+                        'operation' => '=',
+                        'value'     => '0'
+                    )
+                )
+            )
+        ),
+        'child_list'     => array
+        (
+            'tl_metamodel_filtersetting' => array
+            (
+                'fields' => array
                 (
                     'type',
                     'attr_id',
@@ -123,113 +124,126 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
                     'comment',
                     'enabled'
                 ),
-                'format'              => '%s %s',
+                'format' => '%s %s',
             ),
         )
     ),
-    'list' => array
+    'list'                  => array
     (
-        'sorting' => array
+        'sorting'           => array
         (
-            'mode'                    => 5,
-            'fields'                  => array('sorting'),
-            'headerFields'            => array('type', 'attr_id'),
-            'flag'                    => 1,
-            'icon'                    => 'system/modules/metamodels/assets/images/icons/filter_and.png',
+            'mode'         => 5,
+            'fields'       => array('sorting'),
+            'headerFields' => array('type', 'attr_id'),
+            'flag'         => 1,
+            'icon'         => 'system/modules/metamodels/assets/images/icons/filter_and.png',
         ),
-
-        'label' => array
+        'label'             => array
         (
-            'fields'                  => array('fid', 'type', 'attr_id', 'urlparam', 'comment'),
-            'format'                  => '%s',
+            'fields' => array
+            (
+                'fid',
+                'type',
+                'attr_id',
+                'urlparam',
+                'comment'
+            ),
+            'format' => '%s',
         ),
-
         'global_operations' => array
         (
             'all' => array
             (
-                'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
-                'href'                => 'act=select',
-                'class'               => 'header_edit_all',
-                'attributes'          => 'onclick="Backend.getScrollOffset();"'
+                'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
+                'href'       => 'act=select',
+                'class'      => 'header_edit_all',
+                'attributes' => 'onclick="Backend.getScrollOffset();"'
             )
         ),
-
-        'operations' => array
+        'operations'        => array
         (
-            'edit' => array
+            'edit'   => array
             (
-                'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit'],
-                'href'                => 'act=edit',
-                'icon'                => 'edit.gif'
+                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit'],
+                'href'  => 'act=edit',
+                'icon'  => 'edit.gif'
             ),
-            'copy' => array
+            'copy'   => array
             (
-                'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy'],
-                'href'                => 'act=copy',
-                'icon'                => 'copy.gif'
+                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy'],
+                'href'  => 'act=copy',
+                'icon'  => 'copy.gif'
             ),
-            'cut' => array
+            'cut'    => array
             (
-                'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cut'],
-                'href'                => 'act=paste&amp;mode=cut',
-                'icon'                => 'cut.gif',
-                'attributes'          => 'onclick="Backend.getScrollOffset()"',
+                'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cut'],
+                'href'       => 'act=paste&amp;mode=cut',
+                'icon'       => 'cut.gif',
+                'attributes' => 'onclick="Backend.getScrollOffset()"',
             ),
             'delete' => array
             (
-                'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete'],
-                'href'                => 'act=delete',
-                'icon'                => 'delete.gif',
-                'attributes'          => sprintf(
+                'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete'],
+                'href'       => 'act=delete',
+                'icon'       => 'delete.gif',
+                'attributes' => sprintf(
                     'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
                     $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
                 )
             ),
-            'show' => array
+            'show'   => array
             (
-                'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show'],
-                'href'                => 'act=show',
-                'icon'                => 'show.gif'
+                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show'],
+                'href'  => 'act=show',
+                'icon'  => 'show.gif'
             ),
-
             'toggle' => array
             (
-                'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['toggle'],
-                'icon'                => 'visible.gif',
-                'toggleProperty'      => 'enabled',
+                'label'          => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['toggle'],
+                'icon'           => 'visible.gif',
+                'toggleProperty' => 'enabled',
             )
         )
     ),
-
-    'palettes' => array
+    'palettes'              => array
     (
-        '__selector__' => array('type')
+        '__selector__' => array
+        (
+            'type'
+        )
     ),
-
-    'metapalettes' => array
+    'metapalettes'          => array
     (
-        'default' => array
+        'default'                                      => array
         (
-            'title' => array('type', 'enabled', 'comment'),
+            'title' => array(
+                'type',
+                'enabled',
+                'comment'
+            ),
         ),
-
-        '_attribute_ extends default' => array
+        '_attribute_ extends default'                  => array
         (
-            'config' => array('attr_id')
+            'config' => array
+            (
+                'attr_id'
+            )
         ),
-
-        'conditionor extends default' => array
+        'conditionor extends default'                  => array
         (
-            'config' => array('stop_after_match')
+            'config' => array
+            (
+                'stop_after_match'
+            )
         ),
-
-        'idlist extends default' => array
+        'idlist extends default'                       => array
         (
-            '+config' => array('items'),
+            '+config' => array
+            (
+                'items'
+            ),
         ),
-
-        'simplelookup extends _attribute_' => array
+        'simplelookup extends _attribute_'             => array
         (
             '+config' => array
             (
@@ -245,25 +259,27 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
                 'skipfilteroptions'
             ),
         ),
-
-        'customsql extends default' => array
+        'customsql extends default'                    => array
         (
-            '+config' => array('customsql'),
+            '+config' => array
+            (
+                'customsql'
+            ),
         ),
-
         'simplelookup_translated extends simplelookup' => array
         (
-            '+config' => array('all_langs'),
+            '+config' => array
+            (
+                'all_langs'
+            ),
         ),
     ),
-
     'metasubselectpalettes' => array
     (
         'attr_id' => array
         (
         )
     ),
-
     'simplelookup_palettes' => array
     (
         '_translated_' => array
@@ -271,230 +287,221 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
             'all_langs'
         )
     ),
-    'fields' => array
+    'fields'                => array
     (
-        'fid' => array
+        'fid'               => array
         (
             // Keep this empty but keep it here!
             // needed for act=copy in DC_Table, as otherwise the fid value will not be copied.
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid'],
+            'label' => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid'],
         ),
-
-        'type' => array
+        'type'              => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['type'],
-            'exclude'                 => true,
-            'inputType'               => 'select',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['type'],
+            'exclude'   => true,
+            'inputType' => 'select',
+            'eval'      => array
             (
-                'doNotSaveEmpty'      => true,
-                'alwaysSave'          => true,
-                'submitOnChange'      => true,
-                'includeBlankOption'  => true,
-                'mandatory'           => true,
-                'tl_class'            => 'w50',
-                'chosen'              => true
+                'doNotSaveEmpty'     => true,
+                'alwaysSave'         => true,
+                'submitOnChange'     => true,
+                'includeBlankOption' => true,
+                'mandatory'          => true,
+                'tl_class'           => 'w50',
+                'chosen'             => true
             ),
         ),
-
-        'enabled' => array
+        'enabled'           => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['enabled'],
-            'exclude'                 => true,
-            'inputType'               => 'checkbox',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['enabled'],
+            'exclude'   => true,
+            'inputType' => 'checkbox',
+            'eval'      => array
             (
-                'alwaysSave'          => true,
-                'tl_class'            => 'w50 m12',
+                'alwaysSave' => true,
+                'tl_class'   => 'w50 m12',
             ),
         ),
-
-        'comment'                     => array
+        'comment'           => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['comment'],
-            'exclude'                 => true,
-            'inputType'               => 'text',
-            'eval'                    => array('tl_class' => 'clr long')
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['comment'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => array('tl_class' => 'clr long')
         ),
-
-        'attr_id' => array
+        'attr_id'           => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id'],
-            'exclude'                 => true,
-            'inputType'               => 'select',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id'],
+            'exclude'   => true,
+            'inputType' => 'select',
+            'eval'      => array
             (
-                'doNotSaveEmpty'      => true,
-                'alwaysSave'          => true,
-                'submitOnChange'      => true,
-                'includeBlankOption'  => true,
-                'mandatory'           => true,
-                'tl_class'            => 'w50',
-                'chosen'              => true
+                'doNotSaveEmpty'     => true,
+                'alwaysSave'         => true,
+                'submitOnChange'     => true,
+                'includeBlankOption' => true,
+                'mandatory'          => true,
+                'tl_class'           => 'w50',
+                'chosen'             => true
             ),
         ),
-
-        'all_langs' => array
+        'all_langs'         => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs'],
-            'exclude'                 => true,
-            'inputType'               => 'checkbox',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs'],
+            'exclude'   => true,
+            'inputType' => 'checkbox',
+            'eval'      => array
             (
-                'alwaysSave'          => true,
-                'tl_class'            => 'w50 m12 cbx',
+                'alwaysSave' => true,
+                'tl_class'   => 'w50 m12 cbx',
             ),
         ),
-
-        'items' => array
+        'items'             => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['items'],
-            'exclude'                 => true,
-            'inputType'               => 'textarea',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['items'],
+            'exclude'   => true,
+            'inputType' => 'textarea',
+            'eval'      => array
             (
-                'doNotSaveEmpty'      => true,
-                'alwaysSave'          => true,
-                'mandatory'           => true,
+                'doNotSaveEmpty' => true,
+                'alwaysSave'     => true,
+                'mandatory'      => true,
             ),
         ),
-
-        'urlparam' => array
+        'urlparam'          => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam'],
-            'exclude'                 => true,
-            'inputType'               => 'text',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => array
             (
-                'tl_class'            => 'w50',
+                'tl_class' => 'w50',
             )
         ),
-
-        'predef_param' => array
+        'predef_param'      => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param'],
-            'exclude'                 => true,
-            'inputType'               => 'checkbox',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param'],
+            'exclude'   => true,
+            'inputType' => 'checkbox',
+            'eval'      => array
             (
-                'alwaysSave'          => true,
-                'tl_class'            => 'w50 m12',
+                'alwaysSave' => true,
+                'tl_class'   => 'w50 m12',
             ),
         ),
-
-        'customsql' => array
+        'customsql'         => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql'],
-            'exclude'                 => true,
-            'inputType'               => 'textarea',
-            'eval'                    => array
+            'label'       => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql'],
+            'exclude'     => true,
+            'inputType'   => 'textarea',
+            'eval'        => array
             (
-                'allowHtml'           => true,
-                'preserveTags'        => true,
-                'decodeEntities'      => true,
-                'rte'                 => 'codeMirror|sql',
-                'class'               => 'monospace',
-                'helpwizard'          => true,
+                'allowHtml'      => true,
+                'preserveTags'   => true,
+                'decodeEntities' => true,
+                'rte'            => 'codeMirror|sql',
+                'class'          => 'monospace',
+                'helpwizard'     => true,
             ),
-            'explanation'         => 'customsql'
+            'explanation' => 'customsql'
         ),
-        'allow_empty' => array
+        'allow_empty'       => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['allow_empty'],
-            'exclude'                 => true,
-            'inputType'               => 'checkbox',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['allow_empty'],
+            'exclude'   => true,
+            'inputType' => 'checkbox',
+            'eval'      => array
             (
-                'alwaysSave'          => true,
-                'tl_class'            => 'w50 m12',
-            ),
-        ),
-        'stop_after_match' => array
-        (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match'],
-            'exclude'                 => true,
-            'inputType'               => 'checkbox',
-            'eval'                    => array
-            (
-                'alwaysSave'          => true,
-                'tl_class'            => 'w50 m12',
+                'alwaysSave' => true,
+                'tl_class'   => 'w50 m12',
             ),
         ),
-        'label' => array
+        'stop_after_match'  => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label'],
-            'exclude'                 => true,
-            'inputType'               => 'text',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match'],
+            'exclude'   => true,
+            'inputType' => 'checkbox',
+            'eval'      => array
             (
-                'tl_class'            => 'clr w50',
+                'alwaysSave' => true,
+                'tl_class'   => 'w50 m12',
             ),
         ),
-        'template' => array
+        'label'             => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template'],
-            'default'                 => 'mm_filteritem_default',
-            'exclude'                 => true,
-            'inputType'               => 'select',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => array
             (
-                'tl_class'            => 'w50',
-                'chosen'              => true
+                'tl_class' => 'clr w50',
             ),
         ),
-        'blankoption'                 => array
+        'template'          => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['blankoption'],
-            'exclude'                 => true,
-            'default'                 => true,
-            'inputType'               => 'checkbox',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template'],
+            'default'   => 'mm_filteritem_default',
+            'exclude'   => true,
+            'inputType' => 'select',
+            'eval'      => array
             (
-                'tl_class'            => 'w50 clr',
+                'tl_class' => 'w50',
+                'chosen'   => true
             ),
         ),
-        'onlyused'                    => array
+        'blankoption'       => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused'],
-            'exclude'                 => true,
-            'default'                 => true,
-            'inputType'               => 'checkbox',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['blankoption'],
+            'exclude'   => true,
+            'default'   => true,
+            'inputType' => 'checkbox',
+            'eval'      => array
             (
-                'tl_class'            => 'w50',
+                'tl_class' => 'w50 clr',
             ),
         ),
-        'onlypossible'                => array
+        'onlyused'          => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible'],
-            'exclude'                 => true,
-            'default'                 => true,
-            'inputType'               => 'checkbox',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused'],
+            'exclude'   => true,
+            'default'   => true,
+            'inputType' => 'checkbox',
+            'eval'      => array
             (
-                'tl_class'            => 'w50',
+                'tl_class' => 'w50',
             ),
         ),
-        'skipfilteroptions'                => array
+        'onlypossible'      => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions'],
-            'exclude'                 => true,
-            'default'                 => true,
-            'inputType'               => 'checkbox',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible'],
+            'exclude'   => true,
+            'default'   => true,
+            'inputType' => 'checkbox',
+            'eval'      => array
             (
-                'tl_class'            => 'w50',
+                'tl_class' => 'w50',
             ),
         ),
-        'defaultid'                   => array
+        'skipfilteroptions' => array
         (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid'],
-            'exclude'                 => true,
-            'inputType'               => 'select',
-            'eval'                    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions'],
+            'exclude'   => true,
+            'default'   => true,
+            'inputType' => 'checkbox',
+            'eval'      => array
             (
-                'tl_class'            => 'w50 clr',
-                'includeBlankOption'  => true
+                'tl_class' => 'w50',
+            ),
+        ),
+        'defaultid'         => array
+        (
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid'],
+            'exclude'   => true,
+            'inputType' => 'select',
+            'eval'      => array
+            (
+                'tl_class'           => 'w50 clr',
+                'includeBlankOption' => true
             )
         )
     )

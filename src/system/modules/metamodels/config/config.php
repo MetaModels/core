@@ -18,38 +18,43 @@
 // Preserve values by extensions but insert as first entry after 'system'.
 $arrOld = isset($GLOBALS['BE_MOD']['metamodels']) ? $GLOBALS['BE_MOD']['metamodels'] : array();
 unset($GLOBALS['BE_MOD']['metamodels']);
-array_insert($GLOBALS['BE_MOD'], (array_search('accounts', array_keys($GLOBALS['BE_MOD'])) + 1), array
-(
-    'metamodels' => array_replace_recursive(array
+array_insert(
+    $GLOBALS['BE_MOD'],
+    (array_search('accounts', array_keys($GLOBALS['BE_MOD'])) + 1),
+    array
     (
-        'metamodels' => array
-        (
-            'tables' => array
+        'metamodels' => array_replace_recursive(
+            array
             (
-                'tl_metamodel',
-                'tl_metamodel_attribute',
-                'tl_metamodel_filter',
-                'tl_metamodel_filtersetting',
-                'tl_metamodel_rendersettings',
-                'tl_metamodel_rendersetting',
-                'tl_metamodel_dca',
-                'tl_metamodel_dcasetting',
-                'tl_metamodel_dca_combine',
-                'tl_metamodel_dcasetting_condition'
+                'metamodels' => array
+                (
+                    'tables' => array
+                    (
+                        'tl_metamodel',
+                        'tl_metamodel_attribute',
+                        'tl_metamodel_filter',
+                        'tl_metamodel_filtersetting',
+                        'tl_metamodel_rendersettings',
+                        'tl_metamodel_rendersetting',
+                        'tl_metamodel_dca',
+                        'tl_metamodel_dcasetting',
+                        'tl_metamodel_dca_combine',
+                        'tl_metamodel_dcasetting_condition'
+                    ),
+                    'icon'                  => 'system/modules/metamodels/assets/images/backend/logo.png',
+                    'callback'              => 'MetaModels\BackendIntegration\Module'
+                ),
+                'support_metamodels' => array
+                (
+                    'icon'                  => 'system/modules/metamodels/assets/images/backend/support.png',
+                    'callback'              => 'MetaModels\BackendIntegration\Support'
+                )
             ),
-            'icon'                  => 'system/modules/metamodels/assets/images/backend/logo.png',
-            'callback'              => 'MetaModels\BackendIntegration\Module'
-        ),
-        'support_metamodels' => array
-        (
-            'icon'                  => 'system/modules/metamodels/assets/images/backend/support.png',
-            'callback'              => 'MetaModels\BackendIntegration\Support'
+            // Append all previous data here.
+            $arrOld
         )
-    ),
-    // Append all previous data here.
-    $arrOld
     )
-));
+);
 
 /*
     In order to add attribute types into the system, add the following snippet to your extension config.php:
@@ -80,18 +85,22 @@ array_insert($GLOBALS['BE_MOD'], (array_search('accounts', array_keys($GLOBALS['
         IMAGEPATH    path to an icon (16x16) that represents the filter rule type. Based from TL_ROOT.
         NESTINGVALUE boolean true or false. If this is true, you indicate that this rule may contain child rules.
 */
+
 $GLOBALS['METAMODELS']['filters']['idlist']['class']                = 'MetaModels\Filter\Setting\IdList';
 $GLOBALS['METAMODELS']['filters']['simplelookup']['class']          = 'MetaModels\Filter\Setting\SimpleLookup';
-$GLOBALS['METAMODELS']['filters']['simplelookup']['info_callback']  = 'MetaModels\DcGeneral\Events\Table\FilterSetting\DrawSetting::modelToLabelWithAttributeAndUrlParam';
+$GLOBALS['METAMODELS']['filters']['simplelookup']['info_callback']  =
+    'MetaModels\DcGeneral\Events\Table\FilterSetting\DrawSetting::modelToLabelWithAttributeAndUrlParam';
 $GLOBALS['METAMODELS']['filters']['customsql']['class']             = 'MetaModels\Filter\Setting\CustomSql';
-$GLOBALS['METAMODELS']['filters']['customsql']['image']             = 'system/modules/metamodels/assets/images/icons/filter_customsql.png';
-$GLOBALS['METAMODELS']['filters']['conditionand']['class']          = 'MetaModels\Filter\Setting\Condition\ConditionAnd';
-$GLOBALS['METAMODELS']['filters']['conditionand']['image']          = 'system/modules/metamodels/assets/images/icons/filter_and.png';
-//$GLOBALS['METAMODELS']['filters']['conditionand']['info_callback']  = array('MetaModels\Dca\Filter', 'drawAndCondition');
+$GLOBALS['METAMODELS']['filters']['customsql']['image']             =
+    'system/modules/metamodels/assets/images/icons/filter_customsql.png';
+$GLOBALS['METAMODELS']['filters']['conditionand']['class']          =
+    'MetaModels\Filter\Setting\Condition\ConditionAnd';
+$GLOBALS['METAMODELS']['filters']['conditionand']['image']          =
+    'system/modules/metamodels/assets/images/icons/filter_and.png';
 $GLOBALS['METAMODELS']['filters']['conditionand']['nestingAllowed'] = true;
 $GLOBALS['METAMODELS']['filters']['conditionor']['class']           = 'MetaModels\Filter\Setting\Condition\ConditionOr';
-$GLOBALS['METAMODELS']['filters']['conditionor']['image']           = 'system/modules/metamodels/assets/images/icons/filter_or.png';
-//$GLOBALS['METAMODELS']['filters']['conditionor']['info_callback']   = array('MetaModels\Dca\Filter', 'drawOrCondition');
+$GLOBALS['METAMODELS']['filters']['conditionor']['image']           =
+    'system/modules/metamodels/assets/images/icons/filter_or.png';
 $GLOBALS['METAMODELS']['filters']['conditionor']['nestingAllowed']  = true;
 
 $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionor']['nestingAllowed']              = true;
@@ -106,6 +115,7 @@ $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionnot']['maxChildren'] 
     When you alter this, consider to also change @link{MetaModelTableManipulation::STATEMENT_CREATE_TABLE}.
     Extensions will have to alter the table on their own as the columns will not get transported then.
 */
+
 $GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'id';
 $GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'pid';
 $GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'sorting';
@@ -113,19 +123,17 @@ $GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'tstamp';
 $GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'vargroup';
 $GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'varbase';
 
-// Define our version so dependant extensions can use it in version_compare().
-define('METAMODELS_VERSION', '0.1');
-
 // Define some error levels.
 define('METAMODELS_INFO', 3);
 define('METAMODELS_WARN', 2);
 define('METAMODELS_ERROR', 1);
 
 // Back-end module - include only in Backend.
-if (TL_MODE == 'BE')
-{
-    if (version_compare(VERSION,'3.1', '>=') && \Environment::get('scriptName') == (TL_PATH . '/contao/file.php') && \Input::get('mmfilepicker'))
-    {
+if (TL_MODE == 'BE') {
+    if (version_compare(VERSION, '3.1', '>=')
+        && \Environment::get('scriptName') == (TL_PATH . '/contao/file.php')
+        && \Input::get('mmfilepicker')
+    ) {
         $GLOBALS['BE_FFL']['fileSelector'] = 'MetaModels\Widgets\FileSelectorWidget';
     }
 
@@ -135,12 +143,14 @@ if (TL_MODE == 'BE')
 // Front-end modules.
 $GLOBALS['FE_MOD']['metamodels']['metamodel_list']              = 'MetaModels\FrontendIntegration\Module\ModelList';
 $GLOBALS['FE_MOD']['metamodels']['metamodels_frontendfilter']   = 'MetaModels\FrontendIntegration\Module\Filter';
-$GLOBALS['FE_MOD']['metamodels']['metamodels_frontendclearall'] = 'MetaModels\FrontendIntegration\Module\FilterClearAll';
+$GLOBALS['FE_MOD']['metamodels']['metamodels_frontendclearall'] =
+    'MetaModels\FrontendIntegration\Module\FilterClearAll';
 
 // Content elements.
 $GLOBALS['TL_CTE']['metamodels']['metamodel_content']           = 'MetaModels\FrontendIntegration\Content\ModelList';
 $GLOBALS['TL_CTE']['metamodels']['metamodels_frontendfilter']   = 'MetaModels\FrontendIntegration\Content\Filter';
-$GLOBALS['TL_CTE']['metamodels']['metamodels_frontendclearall'] = 'MetaModels\FrontendIntegration\Content\FilterClearAll';
+$GLOBALS['TL_CTE']['metamodels']['metamodels_frontendclearall'] =
+    'MetaModels\FrontendIntegration\Content\FilterClearAll';
 
 // Frontend widgets.
 $GLOBALS['TL_FFL']['multitext'] = 'MetaModels\Widgets\MultiTextWidget';
@@ -148,7 +158,8 @@ $GLOBALS['TL_FFL']['tags']      = 'MetaModels\Widgets\TagsWidget';
 
 // HOOKS.
 $GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModels\Dca\MetaModelDcaBuilder', 'createDataContainer');
-$GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] = array('MetaModels\FrontendIntegration\FrontendFilter', 'generateClearAll');
+$GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] =
+    array('MetaModels\FrontendIntegration\FrontendFilter', 'generateClearAll');
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][]      = array('MetaModels\FrontendIntegration\InsertTags', 'replaceTags');
 
 // Dependencies we need.
@@ -158,7 +169,7 @@ $GLOBALS['METAMODELS']['dependencies']['multicolumnwizard'] = 'MultiColumnWizard
 $GLOBALS['METAMODELS']['dependencies']['dc-general']        = 'DC_General';
 $GLOBALS['METAMODELS']['dependencies']['justtextwidgets']   = 'JustTextWidgets';
 
-// Meta Informations
+// Meta Information.
 $GLOBALS['METAMODELS']['metainformation']['allowedTitle'][]       = 'text';
 $GLOBALS['METAMODELS']['metainformation']['allowedTitle'][]       = 'select';
 $GLOBALS['METAMODELS']['metainformation']['allowedTitle'][]       = 'translatedtext';
@@ -253,8 +264,7 @@ $GLOBALS['PALETTE_PANEL_PICKER'][] = array
 );
 
 // Initialize the filter parameters to an empty array if not initialized yet.
-if (!isset($GLOBALS['MM_FILTER_PARAMS']))
-{
+if (!isset($GLOBALS['MM_FILTER_PARAMS'])) {
     $GLOBALS['MM_FILTER_PARAMS'] = array();
 }
 
@@ -263,5 +273,3 @@ $GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'MetaModels\Events\DefaultPropertyCondition
 
 $GLOBALS['TL_EVENTS'][\ContaoCommunityAlliance\Contao\EventDispatcher\Event\CreateEventDispatcherEvent::NAME][] =
     'MetaModels\DcGeneral\Events\Subscriber::registerEvents';
-
-
