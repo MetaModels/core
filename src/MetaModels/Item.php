@@ -271,6 +271,38 @@ class Item implements IItem
     }
 
     /**
+     * Register the assets in Contao.
+     *
+     * @param ICollection|null $objSettings The render settings to use.
+     *
+     * @return void
+     */
+    protected function registerAssets($objSettings)
+    {
+        if (!$objSettings) {
+            return;
+        }
+
+        // Include CSS.
+        $arrCss = $objSettings->get('additionalCss');
+
+        foreach ((array)$arrCss as $arrFile) {
+            if ($arrFile['published']) {
+                $GLOBALS['TL_CSS'][md5($arrFile['file'])] = $arrFile['file'];
+            }
+        }
+
+        // Include JS.
+        $arrJs = $objSettings->get('additionalJs');
+
+        foreach ((array)$arrJs as $arrFile) {
+            if ($arrFile['published']) {
+                $GLOBALS['TL_JAVASCRIPT'][md5($arrFile['file'])] = $arrFile['file'];
+            }
+        }
+    }
+
+    /**
      * Renders the item in the given output format.
      *
      * @param string      $strOutputFormat The desired output format (optional - default: text).
@@ -281,25 +313,7 @@ class Item implements IItem
      */
     public function parseValue($strOutputFormat = 'text', $objSettings = null)
     {
-        if ($objSettings != null) {
-            // Include CSS.
-            $arrCss = $objSettings->get('additionalCss');
-
-            foreach ((array)$arrCss as $arrFile) {
-                if ($arrFile['published']) {
-                    $GLOBALS['TL_CSS'][md5($arrFile['file'])] = $arrFile['file'];
-                }
-            }
-
-            // Include JS.
-            $arrJs = $objSettings->get('additionalJs');
-
-            foreach ((array)$arrJs as $arrFile) {
-                if ($arrFile['published']) {
-                    $GLOBALS['TL_JAVASCRIPT'][md5($arrFile['file'])] = $arrFile['file'];
-                }
-            }
-        }
+        $this->registerAssets($objSettings);
 
         $arrResult = array
         (
