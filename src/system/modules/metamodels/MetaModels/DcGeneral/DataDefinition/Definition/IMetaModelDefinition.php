@@ -24,8 +24,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefinitionInterf
  *
  * @package MetaModels\DcGeneral\DataDefinition\Definition
  */
-interface IMetaModelDefinition
-    extends DefinitionInterface
+interface IMetaModelDefinition extends DefinitionInterface
 {
     /**
      * The name of the definition.

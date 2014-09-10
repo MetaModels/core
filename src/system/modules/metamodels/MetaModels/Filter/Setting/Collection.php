@@ -69,8 +69,7 @@ class Collection implements ICollection
     {
         $strClass = $GLOBALS['METAMODELS']['filters'][$objSettings->type]['class'];
         // TODO: add factory support here.
-        if ($strClass)
-        {
+        if ($strClass) {
             return new $strClass($this, $objSettings->row());
         }
         return null;
@@ -92,15 +91,12 @@ class Collection implements ICollection
             ->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE pid=? AND enabled=1 ORDER BY sorting ASC')
             ->execute($objBaseSettings->id);
 
-        while ($objSettings->next())
-        {
+        while ($objSettings->next()) {
             $objNewSetting = $this->newSetting($objSettings);
-            if ($objNewSetting)
-            {
+            if ($objNewSetting) {
                 $objSetting->addChild($objNewSetting);
                 // Collect next level.
-                if (!empty($GLOBALS['METAMODELS']['filters'][$objNewSetting->get('type')]['nestingAllowed']))
-                {
+                if (!empty($GLOBALS['METAMODELS']['filters'][$objNewSetting->get('type')]['nestingAllowed'])) {
                     /** @var IWithChildren $objNewSetting */
                     $this->collectRulesFor($objSettings, $objNewSetting);
                 }
@@ -117,13 +113,13 @@ class Collection implements ICollection
      */
     public function getMetaModel()
     {
-        if (!$this->arrData['pid'])
-        {
-            throw new \RuntimeException(sprintf(
-                'Error: Filtersetting %d not attached to a MetaModel',
-                $this->arrData['id'])
+        if (!$this->arrData['pid']) {
+            throw new \RuntimeException(
+                sprintf(
+                    'Error: Filtersetting %d not attached to a MetaModel',
+                    $this->arrData['id']
+                )
             );
-
         }
         return ModelFactory::byId($this->arrData['pid']);
     }
@@ -135,24 +131,25 @@ class Collection implements ICollection
      */
     public function collectRules()
     {
-        if (!$this->arrData['id'])
-        {
-            throw new \RuntimeException('Error: dynamically created FilterSettings can not collect attribute information', 1);
+        if (!$this->arrData['id']) {
+            throw new \RuntimeException(
+                'Error: dynamically created FilterSettings can not collect attribute information',
+                1
+            );
         }
 
         $objDB       = \Database::getInstance();
         $objSettings = $objDB
-            ->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE fid=? AND pid=0 AND enabled=1 ORDER BY sorting ASC')
+            ->prepare(
+                'SELECT * FROM tl_metamodel_filtersetting WHERE fid=? AND pid=0 AND enabled=1 ORDER BY sorting ASC'
+            )
             ->execute($this->arrData['id']);
 
-        while ($objSettings->next())
-        {
+        while ($objSettings->next()) {
             $objNewSetting = $this->newSetting($objSettings);
-            if ($objNewSetting)
-            {
+            if ($objNewSetting) {
                 $this->arrSettings[] = $objNewSetting;
-                if (!empty($GLOBALS['METAMODELS']['filters'][$objNewSetting->get('type')]['nestingAllowed']))
-                {
+                if (!empty($GLOBALS['METAMODELS']['filters'][$objNewSetting->get('type')]['nestingAllowed'])) {
                     /** @var IWithChildren $objNewSetting */
                     $this->collectRulesFor($objSettings, $objNewSetting);
                 }
@@ -165,11 +162,9 @@ class Collection implements ICollection
      */
     public function addRules(IFilter $objFilter, $arrFilterUrl, $arrIgnoredFilter = array())
     {
-        foreach ($this->arrSettings as $objSetting)
-        {
+        foreach ($this->arrSettings as $objSetting) {
             // If the setting is on the ignore list skip it.
-            if (in_array($objSetting->get('id'), $arrIgnoredFilter))
-            {
+            if (in_array($objSetting->get('id'), $arrIgnoredFilter)) {
                 continue;
             }
 
@@ -183,8 +178,7 @@ class Collection implements ICollection
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
     {
         $arrFilterUrl = array();
-        foreach ($this->arrSettings as $objSetting)
-        {
+        foreach ($this->arrSettings as $objSetting) {
             $arrFilterUrl = array_merge($arrFilterUrl, $objSetting->generateFilterUrlFrom($objItem, $objRenderSetting));
         }
         return $arrFilterUrl;
@@ -196,8 +190,7 @@ class Collection implements ICollection
     public function getParameters()
     {
         $arrParams = array();
-        foreach ($this->arrSettings as $objSetting)
-        {
+        foreach ($this->arrSettings as $objSetting) {
             $arrParams = array_merge($arrParams, $objSetting->getParameters());
         }
         return $arrParams;
@@ -209,8 +202,7 @@ class Collection implements ICollection
     public function getParameterDCA()
     {
         $arrParams = array();
-        foreach ($this->arrSettings as $objSetting)
-        {
+        foreach ($this->arrSettings as $objSetting) {
             $arrParams = array_merge($arrParams, $objSetting->getParameterDCA());
         }
         return $arrParams;
@@ -223,8 +215,7 @@ class Collection implements ICollection
     {
         $arrParams = array();
 
-        foreach ($this->arrSettings as $objSetting)
-        {
+        foreach ($this->arrSettings as $objSetting) {
             $arrParams = array_merge($arrParams, $objSetting->getParameterFilterNames());
         }
         return $arrParams;
@@ -235,10 +226,9 @@ class Collection implements ICollection
      */
     public function getParameterFilterWidgets(
         $arrFilterUrl,
-        $arrJumpTo = array(),
+        $arrJumpTo,
         FrontendFilterOptions $objFrontendFilterOptions
-    )
-    {
+    ) {
         $arrParams = array();
 
         // Get the id with all enabled filter.
@@ -247,16 +237,12 @@ class Collection implements ICollection
 
         $arrBaseIds = $objFilter->getMatchingIds();
 
-        foreach ($this->arrSettings as $objSetting)
-        {
-            if ($objSetting->get('skipfilteroptions'))
-            {
+        foreach ($this->arrSettings as $objSetting) {
+            if ($objSetting->get('skipfilteroptions')) {
                 $objFilter = $this->getMetaModel()->getEmptyFilter();
                 $this->addRules($objFilter, $arrFilterUrl, array($objSetting->get('id')));
                 $arrIds = $objFilter->getMatchingIds();
-            }
-            else
-            {
+            } else {
                 $arrIds = $arrBaseIds;
             }
 
@@ -276,13 +262,10 @@ class Collection implements ICollection
     {
         $arrAttributes = array();
 
-        foreach ($this->arrSettings as $objSetting)
-        {
+        foreach ($this->arrSettings as $objSetting) {
             $arrAttributes = array_merge($arrAttributes, $objSetting->getReferencedAttributes());
         }
 
         return $arrAttributes;
     }
-
 }
-

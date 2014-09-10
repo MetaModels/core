@@ -47,8 +47,7 @@ class PropertyJumpTo
             ->getProperty($event->getProperty());
         $value    = deserialize($event->getValue(), true);
 
-        if (!$value)
-        {
+        if (!$value) {
             return;
         }
 
@@ -57,22 +56,17 @@ class PropertyJumpTo
         $newValues    = array();
         $arrLanguages = $extra['columnFields']['langcode']['options'];
 
-        foreach ($arrLanguages as $key => $lang)
-        {
+        foreach ($arrLanguages as $key => $lang) {
             $newValue  = '';
             $intFilter = 0;
-            if ($value)
-            {
-                foreach ($value as $arr)
-                {
-                    if (!is_array($arr))
-                    {
+            if ($value) {
+                foreach ($value as $arr) {
+                    if (!is_array($arr)) {
                         break;
                     }
 
                     // Set the new value and exit the loop.
-                    if (array_search($key, $arr) !== false)
-                    {
+                    if (array_search($key, $arr) !== false) {
                         $newValue  = '{{link_url::'.$arr['value'].'}}';
                         $intFilter = $arr['filter'];
                         break;
@@ -102,8 +96,7 @@ class PropertyJumpTo
     {
         $value = deserialize($event->getValue(), true);
 
-        foreach ($value as $k => $v)
-        {
+        foreach ($value as $k => $v) {
             $value[$k]['value'] = str_replace(
                 array('{{link_url::', '}}'),
                 array('',''),
@@ -129,11 +122,9 @@ class PropertyJumpTo
 
         $extra = $event->getProperty()->getExtra();
 
-        if ($metaModel->isTranslated())
-        {
+        if ($metaModel->isTranslated()) {
             $arrLanguages = array();
-            foreach ((array)$metaModel->getAvailableLanguages() as $strLangCode)
-            {
+            foreach ((array)$metaModel->getAvailableLanguages() as $strLangCode) {
                 $arrLanguages[$strLangCode] = $translator->translate('LNG.'. $strLangCode, 'languages');
             }
             asort($arrLanguages);
@@ -142,9 +133,7 @@ class PropertyJumpTo
             $extra['maxCount'] = count($arrLanguages);
 
             $extra['columnFields']['langcode']['options'] = $arrLanguages;
-        }
-        else
-        {
+        } else {
             $extra['minCount'] = 1;
             $extra['maxCount'] = 1;
 
@@ -173,8 +162,7 @@ class PropertyJumpTo
             ->execute($model->getProperty('pid'));
 
         $result = array();
-        while ($objFilters->next())
-        {
+        while ($objFilters->next()) {
             $result[$objFilters->id] = $objFilters->name;
         }
 

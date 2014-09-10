@@ -36,9 +36,11 @@ class PropertyType
         $translator = $event->getEnvironment()->getTranslator();
         $options    = array();
 
-        foreach (array_keys((array)$GLOBALS['METAMODELS']['inputscreen_conditions']) as $condition)
-        {
-            $options[$condition] = $translator->translate('conditionnames.' . $condition, 'tl_metamodel_dcasetting_condition');
+        foreach (array_keys((array)$GLOBALS['METAMODELS']['inputscreen_conditions']) as $condition) {
+            $options[$condition] = $translator->translate(
+                'conditionnames.' . $condition,
+                'tl_metamodel_dcasetting_condition'
+            );
         }
 
         $event->setOptions($options);

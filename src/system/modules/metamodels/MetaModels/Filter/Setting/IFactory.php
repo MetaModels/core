@@ -37,4 +37,3 @@ interface IFactory
      */
     public static function byId($intId);
 }
-

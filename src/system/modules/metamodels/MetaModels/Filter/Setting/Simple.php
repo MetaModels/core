@@ -105,8 +105,7 @@ abstract class Simple implements ISimple
     {
         $blnIsActive = isset($arrFilterUrl[$arrWidget['eval']['urlparam']])
             && ($arrFilterUrl[$arrWidget['eval']['urlparam']] == $strKeyOption);
-        if (!$blnIsActive && $this->get('defaultid'))
-        {
+        if (!$blnIsActive && $this->get('defaultid')) {
             $blnIsActive = ($arrFilterUrl[$arrWidget['eval']['urlparam']] == $this->get('defaultid'));
         }
         return $blnIsActive;
@@ -129,8 +128,7 @@ abstract class Simple implements ISimple
     protected function getFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption)
     {
         // Toggle if active.
-        if ($this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption))
-        {
+        if ($this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption)) {
             return '';
         }
         return $strKeyOption;
@@ -139,34 +137,29 @@ abstract class Simple implements ISimple
     /**
      * Add a parameter to the url, if it is auto_item, it will get prepended.
      *
-     * @param string $url    The url built so far.
+     * @param string $url   The url built so far.
      *
-     * @param string $name   The parameter name.
+     * @param string $name  The parameter name.
      *
-     * @param mixed  $value  The parameter value.
+     * @param mixed  $value The parameter value.
      *
      * @return string.
      */
     protected function addUrlParameter($url, $name, $value)
     {
-        if (is_array($value))
-        {
+        if (is_array($value)) {
             $value = implode(',', array_filter($value));
         }
 
         $value = str_replace('%', '%%', urlencode($value));
 
-        if (empty($value))
-        {
+        if (empty($value)) {
             return $url;
         }
 
-        if ($name !== 'auto_item')
-        {
+        if ($name !== 'auto_item') {
             $url .= '/' . $name . '/' . $value;
-        }
-        else
-        {
+        } else {
             $url = '/' . $value . $url;
         }
 
@@ -189,41 +182,30 @@ abstract class Simple implements ISimple
 
         // Create base url containing for preserving the current filter on unrelated widgets and modules.
         // The URL parameter concerning us will be masked via %s to be used later on in a sprintf().
-        foreach ($fragments as $key => $value)
-        {
+        foreach ($fragments as $key => $value) {
             // Skip the magic "language" parameter.
-            if (($key == 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl'])
-            {
+            if (($key == 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl']) {
                 continue;
             }
 
-            if ($key == $searchKey)
-            {
-                if ($key !== 'auto_item')
-                {
+            if ($key == $searchKey) {
+                if ($key !== 'auto_item') {
                     $url .= '%s';
-                }
-                else
-                {
+                } else {
                     $url = '%s' . $url;
                 }
                 $found = true;
-            }
-            else
-            {
+            } else {
                 $url = $this->addUrlParameter($url, $key, $value);
             }
         }
 
-        // If we have not found our parameter in the URL, we add it as %s now to be able to populate it via sprintf() below.
-        if (!$found)
-        {
-            if ($searchKey !== 'auto_item')
-            {
+        // If we have not found our parameter in the URL, we add it as %s now to be able to populate it via sprintf()
+        // below.
+        if (!$found) {
+            if ($searchKey !== 'auto_item') {
                 $url .= '%s';
-            }
-            else
-            {
+            } else {
                 $url = '%s' . $url;
             }
         }
@@ -256,8 +238,7 @@ abstract class Simple implements ISimple
     protected function prepareFrontendFilterOptions($arrWidget, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit)
     {
         $arrOptions = array();
-        if (!isset($arrWidget['options']))
-        {
+        if (!isset($arrWidget['options'])) {
             return $arrOptions;
         }
         $objController = ContaoController::getInstance();
@@ -265,13 +246,11 @@ abstract class Simple implements ISimple
         $strFilterAction = $this->buildFilterUrl($arrFilterUrl, $arrWidget['eval']['urlparam']);
 
         // If no jumpTo-page has been provided, we use the current page.
-        if (!$arrJumpTo)
-        {
+        if (!$arrJumpTo) {
             $arrJumpTo = $GLOBALS['objPage']->row();
         }
 
-        if ($arrWidget['eval']['includeBlankOption'])
-        {
+        if ($arrWidget['eval']['includeBlankOption']) {
             $blnActive = $this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, '');
 
             $arrOptions[] = array
@@ -288,19 +267,14 @@ abstract class Simple implements ISimple
             );
         }
 
-        foreach ($arrWidget['options'] as $strKeyOption => $strOption)
-        {
+        foreach ($arrWidget['options'] as $strKeyOption => $strOption) {
             $strValue  = rawurlencode($this->getFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption));
             $blnActive = $this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption);
 
-            if (!empty($strValue))
-            {
-                if ($arrWidget['eval']['urlparam'] !== 'auto_item')
-                {
+            if (!empty($strValue)) {
+                if ($arrWidget['eval']['urlparam'] !== 'auto_item') {
                     $strValue = '/' . $arrWidget['eval']['urlparam'] . '/' . $strValue;
-                }
-                else
-                {
+                } else {
                     $strValue = '/' . $strValue;
                 }
             }
@@ -352,13 +326,11 @@ abstract class Simple implements ISimple
         $arrFilterUrl,
         $arrJumpTo,
         FrontendFilterOptions $objFrontendFilterOptions
-    )
-    {
+    ) {
         $strClass = $GLOBALS['TL_FFL'][$arrWidget['inputType']];
 
         // No widget? no output! that's it.
-        if (!$strClass)
-        {
+        if (!$strClass) {
             return array();
         }
 
@@ -373,8 +345,7 @@ abstract class Simple implements ISimple
             $arrWidget['value']
         );
 
-        if ($objFrontendFilterOptions->isAutoSubmit() && TL_MODE == 'FE')
-        {
+        if ($objFrontendFilterOptions->isAutoSubmit() && TL_MODE == 'FE') {
             $GLOBALS['TL_JAVASCRIPT']['metamodels'] = 'system/modules/metamodels/assets/js/metamodels.js';
         }
 
@@ -397,11 +368,11 @@ abstract class Simple implements ISimple
             'raw'        => $arrWidget,
             'urlparam'   => $arrWidget['eval']['urlparam'],
             'options'    => $this->prepareFrontendFilterOptions(
-                    $arrWidget,
-                    $arrFilterUrl,
-                    $arrJumpTo,
-                    $objFrontendFilterOptions->isAutoSubmit()
-                ),
+                $arrWidget,
+                $arrFilterUrl,
+                $arrJumpTo,
+                $objFrontendFilterOptions->isAutoSubmit()
+            ),
             'count'      => isset($arrWidget['count']) ? $arrWidget['count'] : null,
             'showCount'  => $objFrontendFilterOptions->isShowCountValues(),
             'autosubmit' => $objFrontendFilterOptions->isAutoSubmit(),
@@ -471,8 +442,7 @@ abstract class Simple implements ISimple
         $arrFilterUrl,
         $arrJumpTo,
         FrontendFilterOptions $objFrontendFilterOptions
-    )
-    {
+    ) {
         return array();
     }
 
@@ -486,4 +456,3 @@ abstract class Simple implements ISimple
         return array();
     }
 }
-

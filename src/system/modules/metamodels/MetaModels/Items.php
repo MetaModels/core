@@ -87,8 +87,7 @@ class Items implements IItems
      */
     public function offsetExists($offset)
     {
-        if (!is_numeric($offset))
-        {
+        if (!is_numeric($offset)) {
             return false;
         }
         return (($this->getCount() > $offset) && ($offset > -1));
@@ -99,8 +98,7 @@ class Items implements IItems
      */
     public function offsetGet($offset)
     {
-        if ($this->offsetExists($offset))
-        {
+        if ($this->offsetExists($offset)) {
             return $this->arrItems[$offset];
         }
 
@@ -136,7 +134,7 @@ class Items implements IItems
      *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function offsetUnset ($offset)
+    public function offsetUnset($offset)
     {
         throw new \RuntimeException('MetaModelItems is a read only class, you can not manipulate the collection.', 1);
     }
@@ -147,14 +145,12 @@ class Items implements IItems
     public function getItem()
     {
         // Implicitly call first when not within "while ($obj->next())" scope.
-        if ($this->intCursor < 0)
-        {
+        if ($this->intCursor < 0) {
             $this->first();
         }
 
         // Beyond bounds? return null.
-        if (!$this->valid())
-        {
+        if (!$this->valid()) {
             return null;
         }
 
@@ -174,8 +170,7 @@ class Items implements IItems
      */
     public function first()
     {
-        if ($this->getCount() > 0)
-        {
+        if ($this->getCount() > 0) {
             $this->intCursor = 0;
             return $this;
         }
@@ -187,8 +182,7 @@ class Items implements IItems
      */
     public function next()
     {
-        if ($this->getCount() == $this->intCursor)
-        {
+        if ($this->getCount() == $this->intCursor) {
             return false;
         }
         // We must advance over the last element.
@@ -203,8 +197,7 @@ class Items implements IItems
      */
     public function prev()
     {
-        if ($this->intCursor == 0)
-        {
+        if ($this->intCursor == 0) {
             return false;
         }
 
@@ -237,18 +230,15 @@ class Items implements IItems
     public function getClass()
     {
         $arrClass = array();
-        if ($this->intCursor == 0)
-        {
+        if ($this->intCursor == 0) {
             $arrClass[] = 'first';
         }
 
-        if ($this->intCursor == ($this->getCount() - 1))
-        {
+        if ($this->intCursor == ($this->getCount() - 1)) {
             $arrClass[] = 'last';
         }
 
-        if (($this->intCursor % 2) == 0)
-        {
+        if (($this->intCursor % 2) == 0) {
             $arrClass[] = 'even';
         } else {
             $arrClass[] = 'odd';
@@ -274,8 +264,7 @@ class Items implements IItems
         // Buffer cursor.
         $intCursor = $this->intCursor;
 
-        foreach ($this as $objItem)
-        {
+        foreach ($this as $objItem) {
             $arrParsedItem          = $this->parseValue($strOutputFormat, $objSettings);
             $arrParsedItem['class'] = $this->getClass();
             $arrResult[]            = $arrParsedItem;
@@ -287,4 +276,3 @@ class Items implements IItems
         return $arrResult;
     }
 }
-

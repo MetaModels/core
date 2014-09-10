@@ -43,8 +43,7 @@ class PropertyAttribute
             ->execute($model->getProperty('pid'));
         $metaModel = Factory::byId($settings->pid);
 
-        if (!$metaModel)
-        {
+        if (!$metaModel) {
             return;
         }
 
@@ -66,10 +65,8 @@ class PropertyAttribute
             )
             ->fetchEach('attr_id');
 
-        foreach ($metaModel->getAttributes() as $attribute)
-        {
-            if (in_array($attribute->get('id'), $alreadyTaken))
-            {
+        foreach ($metaModel->getAttributes() as $attribute) {
+            if (in_array($attribute->get('id'), $alreadyTaken)) {
                 continue;
             }
             $arrResult[$attribute->get('id')] = sprintf(

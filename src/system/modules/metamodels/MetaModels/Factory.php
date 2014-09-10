@@ -30,7 +30,7 @@ class Factory implements IFactory
     /**
      * All MetaModel instances.
      *
-     * Assiciation: id => object
+     * Association: id => object
      *
      * @var array
      */
@@ -39,7 +39,7 @@ class Factory implements IFactory
     /**
      * All MetaModel instances.
      *
-     * Assiciation: tableName => object
+     * Association: tableName => object
      *
      * @var array
      */
@@ -61,11 +61,9 @@ class Factory implements IFactory
      */
     protected static function getUser()
     {
-        if (TL_MODE == 'BE')
-        {
+        if (TL_MODE == 'BE') {
             return \BackendUser::getInstance();
-        } elseif(TL_MODE == 'FE')
-        {
+        } elseif (TL_MODE == 'FE') {
             return \FrontendUser::getInstance();
         }
 
@@ -89,8 +87,7 @@ class Factory implements IFactory
         \Input::getInstance();
 
         // Request token became available in 2.11.
-        if (version_compare(VERSION, '2.11', '>='))
-        {
+        if (version_compare(VERSION, '2.11', '>=')) {
             \RequestToken::getInstance();
         }
 
@@ -109,8 +106,7 @@ class Factory implements IFactory
      */
     protected static function getModelFactory($strTableName)
     {
-        if (isset($GLOBALS['METAMODELS']['factories'][$strTableName]))
-        {
+        if (isset($GLOBALS['METAMODELS']['factories'][$strTableName])) {
             return $GLOBALS['METAMODELS']['factories'][$strTableName];
         }
 
@@ -127,14 +123,12 @@ class Factory implements IFactory
     protected static function createInstance($arrData)
     {
         $objMetaModel = null;
-        if ($arrData)
-        {
+        if ($arrData) {
             // NOTE: we allow other devs to override the factory via a lookup table. This way
             // another (sub)class can be defined to create the instances.
             // reference is via tableName => classname.
             $strFactoryClass = self::getModelFactory($arrData['tableName']);
-            if ($strFactoryClass)
-            {
+            if ($strFactoryClass) {
                 $objMetaModel = call_user_func_array(array($strFactoryClass, 'createInstance'), array($arrData));
             } else {
                 $objMetaModel = new MetaModel($arrData);
@@ -151,8 +145,7 @@ class Factory implements IFactory
      */
     public static function byId($intId)
     {
-        if (array_key_exists($intId, self::$arrInstances))
-        {
+        if (array_key_exists($intId, self::$arrInstances)) {
             return self::$arrInstances[$intId];
         }
         $objData = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel WHERE id=?')
@@ -166,8 +159,7 @@ class Factory implements IFactory
      */
     public static function byTableName($strTablename)
     {
-        if (array_key_exists($strTablename, self::$arrInstancesByTable))
-        {
+        if (array_key_exists($strTablename, self::$arrInstancesByTable)) {
             return self::$arrInstancesByTable[$strTablename];
         }
         $objData = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel WHERE tableName=?')
@@ -181,18 +173,15 @@ class Factory implements IFactory
      */
     public static function getAllTables()
     {
-        if (self::$tableNames !== null)
-        {
+        if (self::$tableNames !== null) {
             return self::$tableNames;
         }
 
         self::initializeContaoObjectStack();
 
         $objDB = \Database::getInstance();
-        if ($objDB)
-        {
-            if (!$objDB->tableExists('tl_metamodel'))
-            {
+        if ($objDB) {
+            if (!$objDB->tableExists('tl_metamodel')) {
                 // I can't work without a properly installed database.
                 return array();
             }
@@ -206,4 +195,3 @@ class Factory implements IFactory
         return array();
     }
 }
-

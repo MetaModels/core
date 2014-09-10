@@ -39,8 +39,7 @@ class PropertyRows
 
         $i    = 0;
         $time = time();
-        foreach (array_keys($values) as $key)
-        {
+        foreach (array_keys($values) as $key) {
             $values[$key]['sorting'] = $i;
             $values[$key]['tstamp']  = $time;
 

@@ -40,8 +40,7 @@ class AttributeBase
      */
     public static function getMetaModelFromModel(ModelInterface $model)
     {
-        if (!(($model->getProviderName() == 'tl_metamodel_attribute') && $model->getProperty('pid')))
-        {
+        if (!(($model->getProviderName() == 'tl_metamodel_attribute') && $model->getProperty('pid'))) {
             throw new DcGeneralInvalidArgumentException(
                 'Model must originate from tl_metamodel_attribute and contain a pid, this one originates from ' .
                 $model->getProviderName() . ' and has pid ' . $model->getProperty('pid')

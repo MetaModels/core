@@ -39,8 +39,7 @@ class ModelToLabel
         $translator  = $environment->getTranslator();
         $model       = $event->getModel();
 
-        if (!$model->getProperty('isdefault'))
-        {
+        if (!$model->getProperty('isdefault')) {
             return;
         }
 

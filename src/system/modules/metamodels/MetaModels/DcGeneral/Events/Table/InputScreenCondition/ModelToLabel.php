@@ -62,11 +62,12 @@ class ModelToLabel
     public static function getLabelText(EnvironmentInterface $environment, $type)
     {
         $label = $environment->getTranslator()->translate('typedesc.' . $type, 'tl_metamodel_dcasetting_condition');
-        if ($label == 'typedesc.' . $type)
-        {
-            $label = $environment->getTranslator()->translate('typedesc._default_', 'tl_metamodel_dcasetting_condition');
-            if ($label == 'typedesc._default_')
-            {
+        if ($label == 'typedesc.' . $type) {
+            $label = $environment->getTranslator()->translate(
+                'typedesc._default_',
+                'tl_metamodel_dcasetting_condition'
+            );
+            if ($label == 'typedesc._default_') {
                 return $type;
             }
         }
@@ -92,8 +93,7 @@ class ModelToLabel
         $name           = $translator->translate('conditionnames.' . $type, 'tl_metamodel_dcasetting_condition');
 
         $image = $GLOBALS['METAMODELS']['attributes'][$type]['image'];
-        if (!$image || !file_exists(TL_ROOT . '/' . $image))
-        {
+        if (!$image || !file_exists(TL_ROOT . '/' . $image)) {
             $image = 'system/modules/metamodels/assets/images/icons/filter_default.png';
         }
 

@@ -34,7 +34,8 @@ class BaseSubscriber
      * The closure checks if the BuildDataDefinitionEvent is for the container with the passed name, if so, the callback
      * will get executed.
      *
-     * @param string                   $name       The name of the data container for which the callback shall be executed.
+     * @param string                   $name       The name of the data container for which the callback shall be
+     *                                             executed.
      *
      * @param EventDispatcherInterface $dispatcher The event dispatcher to which the listener shall be attached.
      *
@@ -49,13 +50,11 @@ class BaseSubscriber
         EventDispatcherInterface $dispatcher,
         $callback,
         $priority = -200
-    )
-    {
+    ) {
         $dispatcher->addListener(
             BuildDataDefinitionEvent::NAME,
-            function(BuildDataDefinitionEvent $event, $eventName, $dispatcher) use($name, $callback) {
-                if ($event->getContainer()->getName() == $name)
-                {
+            function (BuildDataDefinitionEvent $event, $eventName, $dispatcher) use ($name, $callback) {
+                if ($event->getContainer()->getName() == $name) {
                     call_user_func($callback, $event, $eventName, $dispatcher);
                 }
             },
@@ -74,7 +73,7 @@ class BaseSubscriber
      */
     public static function createClosure($class, $method)
     {
-        return function($event) use($class, $method) {
+        return function ($event) use ($class, $method) {
             $reflection = new \ReflectionClass($class);
             $instance   = $reflection->newInstance();
             call_user_func(array($instance, $method), $event);
@@ -97,8 +96,7 @@ class BaseSubscriber
      */
     public static function delayEvent($handler, $priority = 0)
     {
-        return function(Event $event, $eventName, $dispatcher) use($handler, $priority)
-        {
+        return function (Event $event, $eventName, $dispatcher) use ($handler, $priority) {
             /** @var EventDispatcherInterface $dispatcher */
             $chunks = explode('[', $eventName);
             array_pop($chunks);
@@ -127,13 +125,11 @@ class BaseSubscriber
     public static function registerListeners($listeners, $dispatcher, $suffixes = array(), $priority = 200)
     {
         $eventSuffix = '';
-        foreach ($suffixes as $suffix)
-        {
+        foreach ($suffixes as $suffix) {
             $eventSuffix .= sprintf('[%s]', $suffix);
         }
 
-        foreach ($listeners as $event => $listener)
-        {
+        foreach ($listeners as $event => $listener) {
             $dispatcher->addListener($event . $eventSuffix, $listener, $priority);
         }
     }

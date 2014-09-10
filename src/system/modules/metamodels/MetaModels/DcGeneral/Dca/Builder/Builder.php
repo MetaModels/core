@@ -114,7 +114,7 @@ class Builder
     }
 
     /**
-     * Map all translation values from the given array to the given destination domain using the optional given base key.
+     * Map all translation values from the given array to the given destination domain using the optional base key.
      *
      * @param array  $array   The array holding the translation values.
      *
@@ -126,15 +126,11 @@ class Builder
      */
     protected function mapTranslations($array, $domain, $baseKey = '')
     {
-        foreach ($array as $key => $value)
-        {
+        foreach ($array as $key => $value) {
             $newKey = ($baseKey ? $baseKey . '.' : '') . $key;
-            if (is_array($value))
-            {
+            if (is_array($value)) {
                 $this->mapTranslations($value, $domain, $newKey);
-            }
-            else
-            {
+            } else {
                 $this->translator->setValue($newKey, $value, $domain);
             }
         }
@@ -155,8 +151,7 @@ class Builder
     {
         $container = $event->getEnvironment()->getDataDefinition();
 
-        if (!($container instanceof IMetaModelDataDefinition))
-        {
+        if (!($container instanceof IMetaModelDataDefinition)) {
             return;
         }
 
@@ -164,14 +159,11 @@ class Builder
 
         $translator = $event->getEnvironment()->getTranslator();
 
-        if (!$translator instanceof TranslatorChain)
-        {
+        if (!$translator instanceof TranslatorChain) {
             $translatorChain = new TranslatorChain();
             $translatorChain->add($translator);
             $event->getEnvironment()->setTranslator($translatorChain);
-        }
-        else
-        {
+        } else {
             $translatorChain = $translator;
         }
 
@@ -190,8 +182,7 @@ class Builder
 
         $metaModel   = $this->getMetaModel($container);
         $environment = $event->getEnvironment();
-        foreach ($metaModel->getAttributes() as $attribute)
-        {
+        foreach ($metaModel->getAttributes() as $attribute) {
             $event = new PopulateAttributeEvent($metaModel, $attribute, $environment);
             // Trigger BuildAttribute Event.
             $this->dispatcher->dispatch($event::NAME, $event);
@@ -217,8 +208,7 @@ class Builder
         );
 
         // Add some sepcial actions for variants.
-        if ($metaModel->hasVariants())
-        {
+        if ($metaModel->hasVariants()) {
             $this->dispatcher->addListener(
                 sprintf(
                     '%s[%s]',
@@ -274,8 +264,7 @@ class Builder
     protected function getDataProviderDefinition(IMetaModelDataDefinition $container)
     {
         // Parse data provider.
-        if ($container->hasDataProviderDefinition())
-        {
+        if ($container->hasDataProviderDefinition()) {
             return $container->getDataProviderDefinition();
         }
 
@@ -300,8 +289,7 @@ class Builder
         $this->dispatcher = $dispatcher;
         $container        = $event->getContainer();
 
-        if (!($container instanceof IMetaModelDataDefinition))
-        {
+        if (!($container instanceof IMetaModelDataDefinition)) {
             return;
         }
 
@@ -331,26 +319,21 @@ class Builder
     {
         // Check if we have a submit button.
         $hasSubmit = false;
-        foreach ($panelRows as $panelRow)
-        {
-            foreach ($panelRow as $element)
-            {
-                if ($element instanceof SubmitElementInformationInterface)
-                {
+        foreach ($panelRows as $panelRow) {
+            foreach ($panelRow as $element) {
+                if ($element instanceof SubmitElementInformationInterface) {
                     $hasSubmit = true;
                     break;
                 }
 
-                if ($hasSubmit)
-                {
+                if ($hasSubmit) {
                     break;
                 }
             }
         }
 
         // If not add a submit.
-        if (!$hasSubmit && $panelRows->getRowCount())
-        {
+        if (!$hasSubmit && $panelRows->getRowCount()) {
             $row = $panelRows->getRow($panelRows->getRowCount() - 1);
             $row->addElement(new DefaultSubmitElementInformation(), 0);
         }
@@ -366,13 +349,10 @@ class Builder
     protected function parsePanels(IMetaModelDataDefinition $container)
     {
         // Check if we have a BackendViewDef.
-        if ($container->hasDefinition(Contao2BackendViewDefinitionInterface::NAME))
-        {
+        if ($container->hasDefinition(Contao2BackendViewDefinitionInterface::NAME)) {
             /** @var Contao2BackendViewDefinitionInterface $view */
             $view = $container->getDefinition(Contao2BackendViewDefinitionInterface::NAME);
-        }
-        else
-        {
+        } else {
             return;
         }
 
@@ -381,8 +361,7 @@ class Builder
         $panelLayout = $inputScreen->getPanelLayout();
 
         // Check if we have a layout.
-        if (empty($panelLayout))
-        {
+        if (empty($panelLayout)) {
             return;
         }
 
@@ -393,15 +372,11 @@ class Builder
         $panel     = $view->getPanelLayout();
         $panelRows = $panel->getRows();
 
-        foreach ($arrRows as $rowNo => $rowElements)
-        {
+        foreach ($arrRows as $rowNo => $rowElements) {
             // Get the row, if we have one or create a new one.
-            if ($panelRows->getRowCount() < ($rowNo + 1))
-            {
+            if ($panelRows->getRowCount() < ($rowNo + 1)) {
                 $panelRow = $panelRows->addRow();
-            }
-            else
-            {
+            } else {
                 $panelRow = $panelRows->getRow($rowNo);
             }
 
@@ -412,8 +387,7 @@ class Builder
             $this->parsePanelRow($fields, $panelRow, $inputScreen);
 
             // If we have no entries for this row, remove it.
-            if ($panelRow->getCount() == 0)
-            {
+            if ($panelRow->getCount() == 0) {
                 $panelRows->deleteRow($rowNo);
             }
         }
@@ -435,8 +409,7 @@ class Builder
     protected function parsePanelRow($fields, PanelRowInterface $panelRow, IInputScreen $inputScreen)
     {
         // Parse each type.
-        foreach ($fields as $field)
-        {
+        foreach ($fields as $field) {
             switch ($field)
             {
                 case 'sort':
@@ -476,14 +449,11 @@ class Builder
      */
     protected function parsePanelFilter(PanelRowInterface $row, IInputScreen $inputScreen)
     {
-        foreach ($inputScreen->getProperties() as $property => $value)
-        {
-            if (isset($value['info']['filter']))
-            {
+        foreach ($inputScreen->getProperties() as $property => $value) {
+            if (isset($value['info']['filter'])) {
                 $element = new DefaultFilterElementInformation();
                 $element->setPropertyName($property);
-                if (!$row->hasElement($element->getName()))
-                {
+                if (!$row->hasElement($element->getName())) {
                     $row->addElement($element);
                 }
             }
@@ -501,20 +471,15 @@ class Builder
      */
     protected function parsePanelSort(PanelRowInterface $row, IInputScreen $inputScreen)
     {
-        if ($row->hasElement('sort'))
-        {
+        if ($row->hasElement('sort')) {
             $element = $row->getElement('sort');
-        }
-        else
-        {
+        } else {
             $element = new DefaultSortElementInformation();
             $row->addElement($element);
         }
 
-        foreach ($inputScreen->getProperties() as $property => $value)
-        {
-            if (isset($value['info']['sorting']))
-            {
+        foreach ($inputScreen->getProperties() as $property => $value) {
+            if (isset($value['info']['sorting'])) {
                 $element->addProperty($property, (int)$value['info']['flag']);
             }
         }
@@ -531,25 +496,19 @@ class Builder
      */
     protected function parsePanelSearch(PanelRowInterface $row, IInputScreen $inputScreen)
     {
-        if ($row->hasElement('search'))
-        {
+        if ($row->hasElement('search')) {
             $element = $row->getElement('search');
-        }
-        else
-        {
+        } else {
             $element = new DefaultSearchElementInformation();
         }
 
-        foreach ($inputScreen->getProperties() as $property => $value)
-        {
-            if (isset($value['info']['search']))
-            {
+        foreach ($inputScreen->getProperties() as $property => $value) {
+            if (isset($value['info']['search'])) {
                 $element->addProperty($property);
             }
         }
 
-        if ($element->getPropertyNames() && !$row->hasElement('search'))
-        {
+        if ($element->getPropertyNames() && !$row->hasElement('search')) {
             $row->addElement($element);
         }
     }
@@ -565,8 +524,7 @@ class Builder
      */
     protected function parsePanelLimit(PanelRowInterface $row, IInputScreen $inputScreen)
     {
-        if (!$row->hasElement('limit'))
-        {
+        if (!$row->hasElement('limit')) {
             $row->addElement(new DefaultLimitElementInformation());
         }
     }
@@ -582,8 +540,7 @@ class Builder
      */
     protected function parsePanelSubmit(PanelRowInterface $row, IInputScreen $inputScreen)
     {
-        if (!$row->hasElement('submit'))
-        {
+        if (!$row->hasElement('submit')) {
             $row->addElement(new DefaultSubmitElementInformation());
         }
     }
@@ -598,23 +555,18 @@ class Builder
      */
     protected function parseMetaModelDefinition(IMetaModelDataDefinition $container)
     {
-        if ($container->hasMetaModelDefinition())
-        {
+        if ($container->hasMetaModelDefinition()) {
             $definition = $container->getMetaModelDefinition();
-        }
-        else
-        {
+        } else {
             $definition = new MetaModelDefinition();
             $container->setMetaModelDefinition($definition);
         }
 
-        if (!$definition->hasActiveRenderSetting())
-        {
+        if (!$definition->hasActiveRenderSetting()) {
             $definition->setActiveRenderSetting(ViewCombinations::getRenderSetting($container->getName()));
         }
 
-        if (!$definition->hasActiveInputScreen())
-        {
+        if (!$definition->hasActiveInputScreen()) {
             $definition->setActiveInputScreen(ViewCombinations::getInputScreen($container->getName()));
         }
     }
@@ -628,12 +580,9 @@ class Builder
      */
     protected function parseBasicDefinition(IMetaModelDataDefinition $container)
     {
-        if ($container->hasBasicDefinition())
-        {
+        if ($container->hasBasicDefinition()) {
             $config = $container->getBasicDefinition();
-        }
-        else
-        {
+        } else {
             $config = new DefaultBasicDefinition();
             $container->setBasicDefinition($config);
         }
@@ -670,8 +619,7 @@ class Builder
             default:
         }
 
-        if (($value = $inputScreen->isClosed()) !== null)
-        {
+        if (($value = $inputScreen->isClosed()) !== null) {
             $config->setClosed((bool)$value);
         }
 
@@ -687,23 +635,17 @@ class Builder
      */
     protected function calculateConditions(IMetaModelDataDefinition $container)
     {
-        if ($container->hasDefinition(ModelRelationshipDefinitionInterface::NAME))
-        {
+        if ($container->hasDefinition(ModelRelationshipDefinitionInterface::NAME)) {
             $definition = $container->getDefinition(ModelRelationshipDefinitionInterface::NAME);
-        }
-        else
-        {
+        } else {
             $definition = new DefaultModelRelationshipDefinition();
 
             $container->setDefinition(ModelRelationshipDefinitionInterface::NAME, $definition);
         }
 
-        if ($this->getMetaModel($container)->hasVariants())
-        {
+        if ($this->getMetaModel($container)->hasVariants()) {
             $this->calculateConditionsWithVariants($container, $definition);
-        }
-        else
-        {
+        } else {
             $this->calculateConditionsWithoutVariants($container, $definition);
         }
     }
@@ -721,8 +663,7 @@ class Builder
     {
         $rootProvider = $container->getName();
 
-        if (($relationship = $definition->getRootCondition()) === null)
-        {
+        if (($relationship = $definition->getRootCondition()) === null) {
             $relationship = new RootCondition();
             $relationship
                 ->setSourceName($rootProvider);
@@ -744,15 +685,13 @@ class Builder
     protected function addHierarchicalConditions(IMetaModelDataDefinition $container, $definition)
     {
         // Not hierarchical? Get out.
-        if ($container->getBasicDefinition()->getMode() !== BasicDefinitionInterface::MODE_HIERARCHICAL)
-        {
+        if ($container->getBasicDefinition()->getMode() !== BasicDefinitionInterface::MODE_HIERARCHICAL) {
             return;
         }
 
         $relationship = $this->getRootCondition($container, $definition);
 
-        if (!$relationship->getSetters())
-        {
+        if (!$relationship->getSetters()) {
             $relationship
                 ->setSetters(array(array('property' => 'pid', 'value' => '0')));
         }
@@ -769,16 +708,13 @@ class Builder
 
         /** @var ParentChildConditionInterface $relationship */
         $relationship = $definition->getChildCondition($container->getName(), $container->getName());
-        if ($relationship === null)
-        {
+        if ($relationship === null) {
             $relationship = new ParentChildCondition();
             $relationship
                 ->setSourceName($container->getName())
                 ->setDestinationName($container->getName());
             $definition->addChildCondition($relationship);
-        }
-        else
-        {
+        } else {
             $setter  = array_merge_recursive($setter, $relationship->getSetters());
             $inverse = array_merge_recursive($inverse, $relationship->getInverseFilterArray());
         }
@@ -809,8 +745,7 @@ class Builder
     {
         $inputScreen = $this->getInputScreenDetails($container);
 
-        if ($this->getInputScreenDetails($container)->isStandalone())
-        {
+        if ($this->getInputScreenDetails($container)->isStandalone()) {
             return;
         }
 
@@ -819,16 +754,13 @@ class Builder
 
         /** @var ParentChildConditionInterface $relationship */
         $relationship = $definition->getChildCondition($inputScreen->getParentTable(), $container->getName());
-        if (!$relationship instanceof ParentChildConditionInterface)
-        {
+        if (!$relationship instanceof ParentChildConditionInterface) {
             $relationship = new ParentChildCondition();
             $relationship
                 ->setSourceName($inputScreen->getParentTable())
                 ->setDestinationName($container->getName());
             $definition->addChildCondition($relationship);
-        }
-        else
-        {
+        } else {
             $setter  = array_merge_recursive($setter, $relationship->getSetters());
             $inverse = array_merge_recursive($inverse, $relationship->getInverseFilterArray());
         }
@@ -883,16 +815,13 @@ class Builder
         /** @var ParentChildConditionInterface $relationship */
         $relationship = $definition->getChildCondition($container->getName(), $container->getName());
 
-        if ($relationship === null)
-        {
+        if ($relationship === null) {
             $relationship = new ParentChildCondition();
             $relationship
                 ->setSourceName($container->getName())
                 ->setDestinationName($container->getName());
             $definition->addChildCondition($relationship);
-        }
-        else
-        {
+        } else {
             $setter  = array_merge_recursive($setter, $relationship->getSetters());
             $inverse = array_merge_recursive($inverse, $relationship->getInverseFilterArray());
         }
@@ -926,10 +855,8 @@ class Builder
     protected function calculateConditionsWithoutVariants(IMetaModelDataDefinition $container, $definition)
     {
         $inputScreen = $this->getInputScreenDetails($container);
-        if (!$inputScreen->isStandalone())
-        {
-            if ($container->getBasicDefinition()->getMode() == BasicDefinitionInterface::MODE_HIERARCHICAL)
-            {
+        if (!$inputScreen->isStandalone()) {
+            if ($container->getBasicDefinition()->getMode() == BasicDefinitionInterface::MODE_HIERARCHICAL) {
                 // FIXME: if parent table is not the same table, we are screwed here.
                 throw new \RuntimeException('Hierarchical mode with parent table is not supported yet.');
             }
@@ -951,19 +878,15 @@ class Builder
         $config = $this->getDataProviderDefinition($container);
 
         // Check config if it already exists, if not, add it.
-        if (!$config->hasInformation($container->getName()))
-        {
+        if (!$config->hasInformation($container->getName())) {
             $providerInformation = new ContaoDataProviderInformation();
             $providerInformation->setName($container->getName());
             $config->addInformation($providerInformation);
-        }
-        else
-        {
+        } else {
             $providerInformation = $config->getInformation($container->getName());
         }
 
-        if ($providerInformation instanceof ContaoDataProviderInformation)
-        {
+        if ($providerInformation instanceof ContaoDataProviderInformation) {
             $providerInformation
                 ->setTableName($container->getName())
                 ->setClassName('MetaModels\DcGeneral\Data\Driver')
@@ -975,40 +898,34 @@ class Builder
         }
 
         // If in hierarchical mode, set the root provider.
-        if ($container->getBasicDefinition()->getMode() == BasicDefinitionInterface::MODE_HIERARCHICAL)
-        {
+        if ($container->getBasicDefinition()->getMode() == BasicDefinitionInterface::MODE_HIERARCHICAL) {
             $container->getBasicDefinition()->setRootDataProvider($container->getName());
         }
 
         // If not standalone, set the correct parent provider.
-        if (!$this->getInputScreenDetails($container)->isStandalone())
-        {
+        if (!$this->getInputScreenDetails($container)->isStandalone()) {
             $inputScreen = $this->getInputScreenDetails($container);
 
             // Check config if it already exists, if not, add it.
-            if (!$config->hasInformation($inputScreen->getParentTable()))
-            {
+            if (!$config->hasInformation($inputScreen->getParentTable())) {
                 $providerInformation = new ContaoDataProviderInformation();
                 $providerInformation->setName($inputScreen->getParentTable());
                 $config->addInformation($providerInformation);
-            }
-            else
-            {
+            } else {
                 $providerInformation = $config->getInformation($inputScreen->getParentTable());
             }
 
-            if ($providerInformation instanceof ContaoDataProviderInformation)
-            {
+            if ($providerInformation instanceof ContaoDataProviderInformation) {
                 $providerInformation
                     ->setTableName($inputScreen->getParentTable())
-                    ->setInitializationData(array(
+                    ->setInitializationData(
+                        array(
                             'source' => $inputScreen->getParentTable()
                         )
                     );
 
                 // How can we honor other drivers? We do only check for MetaModels and legacy SQL here.
-                if (in_array($inputScreen->getParentTable(), Factory::getAllTables()))
-                {
+                if (in_array($inputScreen->getParentTable(), Factory::getAllTables())) {
                     $providerInformation
                         ->setClassName('MetaModels\DcGeneral\Data\Driver');
                 }
@@ -1029,18 +946,14 @@ class Builder
      */
     protected function parseBackendView(IMetaModelDataDefinition $container)
     {
-        if ($container->hasDefinition(Contao2BackendViewDefinitionInterface::NAME))
-        {
+        if ($container->hasDefinition(Contao2BackendViewDefinitionInterface::NAME)) {
             $view = $container->getDefinition(Contao2BackendViewDefinitionInterface::NAME);
-        }
-        else
-        {
+        } else {
             $view = new Contao2BackendViewDefinition();
             $container->setDefinition(Contao2BackendViewDefinitionInterface::NAME, $view);
         }
 
-        if (!$view instanceof Contao2BackendViewDefinitionInterface)
-        {
+        if (!$view instanceof Contao2BackendViewDefinitionInterface) {
             throw new DcGeneralInvalidArgumentException(
                 'Configured BackendViewDefinition does not implement Contao2BackendViewDefinitionInterface.'
             );
@@ -1064,17 +977,16 @@ class Builder
     {
         $listing = $view->getListingConfig();
 
-        if ($listing->getRootLabel() === null)
-        {
+        if ($listing->getRootLabel() === null) {
             $listing->setRootLabel($this->getMetaModel($container)->get('name'));
         }
 
-        if (($listing->getRootIcon() === null) && (($inputScreen = $this->getInputScreenDetails($container)) !== null))
-        {
+        if (($listing->getRootIcon() === null)
+            && (($inputScreen = $this->getInputScreenDetails($container)) !== null)
+        ) {
             $icon = ToolboxFile::convertValueToPath($inputScreen->getIcon());
             // Determine image to use.
-            if ($icon && file_exists(TL_ROOT . '/' . $icon))
-            {
+            if ($icon && file_exists(TL_ROOT . '/' . $icon)) {
                 $event = new ResizeImageEvent($icon, 16, 16);
                 $this->dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
                 $icon = $event->getResultImage();
@@ -1099,8 +1011,7 @@ class Builder
     public function getBackendIcon($icon)
     {
         // Determine the image to use.
-        if ($icon)
-        {
+        if ($icon) {
             $icon = ToolboxFile::convertValueToPath($icon);
 
             /** @var ResizeImageEvent $event */
@@ -1109,8 +1020,7 @@ class Builder
                 new ResizeImageEvent($icon, 16, 16)
             );
 
-            if (file_exists(TL_ROOT . '/' . $event->getResultImage()))
-            {
+            if (file_exists(TL_ROOT . '/' . $event->getResultImage())) {
                 return $event->getResultImage();
             }
         }
@@ -1150,13 +1060,10 @@ class Builder
     protected function parseListLabel(IMetaModelDataDefinition $container, ListingConfigInterface $listing)
     {
         $providerName = $container->getBasicDefinition()->getDataProvider();
-        if (!$listing->hasLabelFormatter($providerName))
-        {
+        if (!$listing->hasLabelFormatter($providerName)) {
             $formatter = new DefaultModelFormatterConfig();
             $listing->setLabelFormatter($container->getBasicDefinition()->getDataProvider(), $formatter);
-        }
-        else
-        {
+        } else {
             $formatter = $listing->getLabelFormatter($providerName);
         }
 
@@ -1167,8 +1074,7 @@ class Builder
             )
         );
 
-        if (!$formatter->getFormat())
-        {
+        if (!$formatter->getFormat()) {
             $formatter->setFormat(str_repeat('%s ', count($formatter->getPropertyNames())));
         }
     }
@@ -1184,14 +1090,10 @@ class Builder
      */
     protected function getCommandInstance(CommandCollectionInterface $collection, $operationName)
     {
-        if ($collection->hasCommandNamed($operationName))
-        {
+        if ($collection->hasCommandNamed($operationName)) {
             $command = $collection->getCommandNamed($operationName);
-        }
-        else
-        {
-            switch ($operationName)
-            {
+        } else {
+            switch ($operationName) {
                 case 'cut':
                     $command = new CutCommand();
                     break;
@@ -1232,43 +1134,32 @@ class Builder
         $queryParameters,
         $icon,
         $extraValues
-    )
-    {
+    ) {
         $command    = $this->getCommandInstance($collection, $operationName);
         $parameters = $command->getParameters();
-        foreach ($queryParameters as $name => $value)
-        {
-            if (!isset($parameters[$name]))
-            {
+        foreach ($queryParameters as $name => $value) {
+            if (!isset($parameters[$name])) {
                 $parameters[$name] = $value;
             }
         }
 
-        if (!$command->getLabel() && !isset($extraValues['label']))
-        {
+        if (!$command->getLabel() && !isset($extraValues['label'])) {
             $command->setLabel($operationName . '.0');
-        }
-        elseif (!$command->getLabel() && isset($extraValues['label']))
-        {
+        } elseif (!$command->getLabel() && isset($extraValues['label'])) {
             $command->setLabel($extraValues['label']);
         }
 
-        if (!$command->getDescription() && !isset($extraValues['description']))
-        {
+        if (!$command->getDescription() && !isset($extraValues['description'])) {
             $command->setDescription($operationName . '.1');
-        }
-        elseif (!$command->getDescription() && isset($extraValues['description']))
-        {
+        } elseif (!$command->getDescription() && isset($extraValues['description'])) {
             $command->setDescription($extraValues['description']);
         }
 
         $extra         = $command->getExtra();
         $extra['icon'] = $icon;
 
-        foreach ($extraValues as $name => $value)
-        {
-            if (!isset($extra[$name]))
-            {
+        foreach ($extraValues as $name => $value) {
+            if (!isset($extra[$name])) {
                 $extra[$name] = $value;
             }
         }
@@ -1288,27 +1179,23 @@ class Builder
     protected function parseModelOperations(
         Contao2BackendViewDefinitionInterface $view,
         IMetaModelDataDefinition $container
-    )
-    {
+    ) {
         $collection = $view->getModelCommands();
-        $this->createCommand
-        (
+        $this->createCommand(
             $collection,
             'edit',
             array('act' => 'edit'),
             'edit.gif',
             array()
         )
-        ->createCommand
-        (
+        ->createCommand(
             $collection,
             'copy',
             array('act' => ''),
             'copy.gif',
             array('attributes' => 'onclick="Backend.getScrollOffset();"')
         )
-        ->createCommand
-        (
+        ->createCommand(
             $collection,
             'cut',
             array('act' => 'paste', 'mode' => 'cut'),
@@ -1317,8 +1204,7 @@ class Builder
                 'attributes' => 'onclick="Backend.getScrollOffset();"'
             )
         )
-        ->createCommand
-        (
+        ->createCommand(
             $collection,
             'delete',
             array('act' => 'delete'),
@@ -1331,8 +1217,7 @@ class Builder
                 )
             )
         )
-        ->createCommand
-        (
+        ->createCommand(
             $collection,
             'show',
             array('act' => 'show'),
@@ -1340,8 +1225,7 @@ class Builder
             array()
         );
 
-        if ($this->getMetaModel($container)->hasVariants())
-        {
+        if ($this->getMetaModel($container)->hasVariants()) {
             $this->createCommand(
                 $collection,
                 'createvariant',
@@ -1352,11 +1236,9 @@ class Builder
         }
 
         // Check if we have some children.
-        foreach (ViewCombinations::getParentedInputScreens() as $screen)
-        {
+        foreach (ViewCombinations::getParentedInputScreens() as $screen) {
             /** @var \MetaModels\BackendIntegration\InputScreen\IInputScreen $screen */
-            if ($screen->getParentTable() != $container->getName())
-            {
+            if ($screen->getParentTable() != $container->getName()) {
                 continue;
             }
 
@@ -1369,10 +1251,8 @@ class Builder
                 )
             );
 
-            foreach ($screen->getBackendCaption() as $arrLangEntry)
-            {
-                if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == $GLOBALS['TL_LANGUAGE'])
-                {
+            foreach ($screen->getBackendCaption() as $arrLangEntry) {
+                if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == $GLOBALS['TL_LANGUAGE']) {
                     $arrCaption = array($arrLangEntry['description'], $arrLangEntry['label']);
                 }
             }
@@ -1411,8 +1291,7 @@ class Builder
         PropertiesDefinitionInterface $definition,
         $propName,
         IInputScreen $inputScreen
-    )
-    {
+    ) {
         $property     = $inputScreen->getProperty($propName);
         $propInfo     = $property['info'];
         $metaModel    = $this->getMetaModel($container);
@@ -1420,90 +1299,71 @@ class Builder
         $isTranslated = $metaModel->isTranslated()
             && in_array('MetaModels\Attribute\ITranslated', class_implements($attribute));
 
-        if ($definition->hasProperty($propName))
-        {
+        if ($definition->hasProperty($propName)) {
             $property = $definition->getProperty($propName);
-        }
-        else
-        {
+        } else {
             $property = new DefaultProperty($propName);
             $definition->addProperty($property);
         }
 
-        if (!$property->getLabel() && isset($propInfo['label']))
-        {
+        if (!$property->getLabel() && isset($propInfo['label'])) {
             $lang = $propInfo['label'];
 
-            if (is_array($lang))
-            {
+            if (is_array($lang)) {
                 $label       = reset($lang);
                 $description = next($lang);
 
                 $property->setDescription($description);
-            }
-            else
-            {
+            } else {
                 $label = $lang;
             }
 
             $property->setLabel($label);
         }
 
-        if (!$property->getDescription() && isset($propInfo['description']))
-        {
+        if (!$property->getDescription() && isset($propInfo['description'])) {
             $property->setDescription($propInfo['description']);
         }
 
-        if (!$property->getDefaultValue() && isset($propInfo['default']))
-        {
+        if (!$property->getDefaultValue() && isset($propInfo['default'])) {
             $property->setDefaultValue($propInfo['default']);
         }
 
-        if (isset($propInfo['exclude']))
-        {
+        if (isset($propInfo['exclude'])) {
             $property->setExcluded($propInfo['exclude']);
         }
 
-        if (isset($propInfo['search']))
-        {
+        if (isset($propInfo['search'])) {
             $property->setSearchable($propInfo['search']);
         }
 
-        if (isset($propInfo['sorting']))
-        {
+        if (isset($propInfo['sorting'])) {
             $property->setSortable($propInfo['sorting']);
         }
 
-        if (isset($propInfo['filter']))
-        {
+        if (isset($propInfo['filter'])) {
             $property->setFilterable($propInfo['filter']);
         }
 
-        if (!$property->getGroupingLength() && isset($propInfo['length']))
-        {
+        if (!$property->getGroupingLength() && isset($propInfo['length'])) {
             $property->setGroupingLength($propInfo['length']);
         }
 
-        if (!$property->getWidgetType() && isset($propInfo['inputType']))
-        {
+        if (!$property->getWidgetType() && isset($propInfo['inputType'])) {
             $property->setWidgetType($propInfo['inputType']);
         }
 
-        if (!$property->getOptions() && isset($propInfo['options']))
-        {
+        if (!$property->getOptions() && isset($propInfo['options'])) {
             $property->setOptions($propInfo['options']);
         }
 
-        if (!$property->getExplanation() && isset($propInfo['explanation']))
-        {
+        if (!$property->getExplanation() && isset($propInfo['explanation'])) {
             $property->setExplanation($propInfo['explanation']);
         }
 
-        if (!$property->getExtra() && isset($propInfo['eval']))
-        {
+        if (!$property->getExtra() && isset($propInfo['eval'])) {
             $extra = $propInfo['eval'];
-            if ($isTranslated)
-            {
+            if ($isTranslated) {
                 $extra['tl_class'] = 'translat-attr' . (!empty($extra['tl_class']) ? ' ' . $extra['tl_class'] : '');
             }
             $property->setExtra($extra);
@@ -1519,12 +1379,9 @@ class Builder
      */
     protected function parseProperties(IMetaModelDataDefinition $container)
     {
-        if ($container->hasPropertiesDefinition())
-        {
+        if ($container->hasPropertiesDefinition()) {
             $definition = $container->getPropertiesDefinition();
-        }
-        else
-        {
+        } else {
             $definition = new DefaultPropertiesDefinition();
             $container->setPropertiesDefinition($definition);
         }
@@ -1533,14 +1390,12 @@ class Builder
         $inputScreen = $this->getInputScreenDetails($container);
 
         // If the current metamodels has variants add the varbase and vargroup to the definition.
-        if ($metaModel->hasVariants())
-        {
+        if ($metaModel->hasVariants()) {
             $this->buildPropertyFromDca($container, $definition, 'varbase', $inputScreen);
             $this->buildPropertyFromDca($container, $definition, 'vargroup', $inputScreen);
         }
 
-        foreach ($metaModel->getAttributes() as $attribute)
-        {
+        foreach ($metaModel->getAttributes() as $attribute) {
             $this->buildPropertyFromDca($container, $definition, $attribute->getColName(), $inputScreen);
 
             $event = new BuildAttributeEvent($metaModel, $attribute, $container, $inputScreen, $this);
@@ -1561,12 +1416,9 @@ class Builder
         $inputScreen = $this->getInputScreenDetails($container);
         $metaModel   = $this->getMetaModel($container);
 
-        if ($container->hasDefinition(PalettesDefinitionInterface::NAME))
-        {
+        if ($container->hasDefinition(PalettesDefinitionInterface::NAME)) {
             $palettesDefinition = $container->getDefinition(PalettesDefinitionInterface::NAME);
-        }
-        else
-        {
+        } else {
             $palettesDefinition = new DefaultPalettesDefinition();
             $container->setDefinition(PalettesDefinitionInterface::NAME, $palettesDefinition);
         }
@@ -1577,16 +1429,14 @@ class Builder
             ->setCondition(new DefaultPaletteCondition());
         $palettesDefinition->addPalette($palette);
 
-        foreach ($inputScreen->getLegends() as $legendName => $legend)
-        {
+        foreach ($inputScreen->getLegends() as $legendName => $legend) {
             $paletteLegend = new Legend($legendName);
             $paletteLegend->setInitialVisibility($legend['visible']);
             $palette->addLegend($paletteLegend);
 
             $this->translator->setValue($legendName . '_legend', $legend['name'], $container->getName());
 
-            foreach ($legend['properties'] as $propertyName)
-            {
+            foreach ($legend['properties'] as $propertyName) {
                 $property = new Property($propertyName);
                 $paletteLegend->addProperty($property);
                 $propInfo = $inputScreen->getProperty($propertyName);
@@ -1598,8 +1448,7 @@ class Builder
                     !(isset($propInfo['info']['readonly']) && $propInfo['info']['readonly'])
                 ));
 
-                if ($metaModel->hasVariants() && !$metaModel->getAttribute($propertyName)->get('isvariant'))
-                {
+                if ($metaModel->hasVariants() && !$metaModel->getAttribute($propertyName)->get('isvariant')) {
                     $chain->addCondition(new PropertyValueCondition('varbase', 1));
                 }
 
@@ -1612,14 +1461,12 @@ class Builder
                 ));
 
                 $propertyConditions = $inputScreen->getConditionsFor($propertyName);
-                if ($propertyConditions !== null)
-                {
+                if ($propertyConditions !== null) {
                     $chain->addCondition($propertyConditions);
                 }
 
                 // If variants, do show only if allowed.
-                if ($metaModel->hasVariants())
-                {
+                if ($metaModel->hasVariants()) {
                     $chain->addCondition(new IsVariantAttribute());
                 }
             }

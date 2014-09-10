@@ -41,14 +41,12 @@ class PropertyDefaultId
         $filterSetting = FilterFactory::byId($model->getProperty('fid'));
         $metaModel     = $filterSetting->getMetaModel();
 
-        if (!$metaModel)
-        {
+        if (!$metaModel) {
             return;
         }
 
         $attribute = $metaModel->getAttributeById($model->getProperty('attr_id'));
-        if (!$attribute)
-        {
+        if (!$attribute) {
             return;
         }
 
@@ -58,13 +56,11 @@ class PropertyDefaultId
         $options = $attribute->getFilterOptions(null, $onlyUsed, $count);
 
         // Remove empty values.
-        foreach ($options as $mixKey => $mixValue)
-        {
+        foreach ($options as $mixKey => $mixValue) {
             // Remove html/php tags.
             $mixValue = trim(strip_tags($mixValue));
 
-            if (($mixValue === '') || ($mixValue === null) || ($onlyUsed && ($count[$mixKey] === 0)))
-            {
+            if (($mixValue === '') || ($mixValue === null) || ($onlyUsed && ($count[$mixKey] === 0))) {
                 unset($options[$mixKey]);
             }
         }

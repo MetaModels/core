@@ -68,8 +68,7 @@ class MetaModel implements IMetaModel
      */
     public function __construct($arrData)
     {
-        foreach ($arrData as $strKey => $varValue)
-        {
+        foreach ($arrData as $strKey => $varValue) {
             $this->arrData[$strKey] = deserialize($varValue);
         }
     }
@@ -110,11 +109,9 @@ class MetaModel implements IMetaModel
     protected function createAttributes()
     {
         $arrAttributes = AttributeFactory::getAttributesFor($this);
-        foreach ($arrAttributes as $objAttribute)
-        {
+        foreach ($arrAttributes as $objAttribute) {
             /** @var IAttribute $objAttribute */
-            if ($this->hasAttribute($objAttribute->getColName()))
-            {
+            if ($this->hasAttribute($objAttribute->getColName())) {
                 continue;
             }
             $this->addAttribute($objAttribute);
@@ -168,10 +165,8 @@ class MetaModel implements IMetaModel
     protected function getComplexAttributes()
     {
         $arrResult = array();
-        foreach ($this->getAttributes() as $objAttribute)
-        {
-            if ($this->isComplexAttribute($objAttribute))
-            {
+        foreach ($this->getAttributes() as $objAttribute) {
+            if ($this->isComplexAttribute($objAttribute)) {
                 $arrResult[] = $objAttribute;
             }
         }
@@ -186,10 +181,8 @@ class MetaModel implements IMetaModel
     protected function getSimpleAttributes()
     {
         $arrResult = array();
-        foreach ($this->getAttributes() as $objAttribute)
-        {
-            if ($this->isSimpleAttribute($objAttribute))
-            {
+        foreach ($this->getAttributes() as $objAttribute) {
+            if ($this->isSimpleAttribute($objAttribute)) {
                 $arrResult[] = $objAttribute;
             }
         }
@@ -204,10 +197,8 @@ class MetaModel implements IMetaModel
     protected function getTranslatedAttributes()
     {
         $arrResult = array();
-        foreach ($this->getAttributes() as $objAttribute)
-        {
-            if ($this->isTranslatedAttribute($objAttribute))
-            {
+        foreach ($this->getAttributes() as $objAttribute) {
+            if ($this->isTranslatedAttribute($objAttribute)) {
                 $arrResult[] = $objAttribute;
             }
         }
@@ -223,11 +214,9 @@ class MetaModel implements IMetaModel
      */
     protected function getMatchingIds($objFilter)
     {
-        if ($objFilter)
-        {
+        if ($objFilter) {
             $arrFilteredIds = $objFilter->getMatchingIds();
-            if ($arrFilteredIds !== null)
-            {
+            if ($arrFilteredIds !== null) {
                 return $arrFilteredIds;
             }
         }
@@ -264,26 +253,21 @@ class MetaModel implements IMetaModel
             $strIdList
         ));
 
-        if ($objRow->numRows == 0)
-        {
+        if ($objRow->numRows == 0) {
             return array();
         }
 
         // If we have an attribute restriction, make sure we keep the system columns. See #196.
-        if ($arrAttrOnly)
-        {
+        if ($arrAttrOnly) {
             $arrAttrOnly = array_merge($GLOBALS['METAMODELS_SYSTEM_COLUMNS'], $arrAttrOnly);
         }
 
         $arrResult = array();
-        while ($objRow->next())
-        {
+        while ($objRow->next()) {
             $arrData = array();
 
-            foreach ($objRow->row() as $strKey => $varValue)
-            {
-                if ((!$arrAttrOnly) || (in_array($strKey, $arrAttrOnly)))
-                {
+            foreach ($objRow->row() as $strKey => $varValue) {
+                if ((!$arrAttrOnly) || (in_array($strKey, $arrAttrOnly))) {
                     $arrData[$strKey] = deserialize($varValue);
                 }
             }
@@ -307,36 +291,29 @@ class MetaModel implements IMetaModel
      */
     protected function fetchAdditionalAttributes($ids, $result, $attrOnly = array())
     {
-        foreach (array_merge($this->getComplexAttributes(), $this->getTranslatedAttributes()) as $attribute)
-        {
+        foreach (array_merge($this->getComplexAttributes(), $this->getTranslatedAttributes()) as $attribute) {
             /** @var IAttribute $attribute */
             $attributeName = $attribute->getColName();
 
-            if (!in_array($attributeName, $attrOnly))
-            {
+            if (!in_array($attributeName, $attrOnly)) {
                 continue;
             }
 
             // If it is translated, fetch the translated data now.
-            if ($this->isTranslatedAttribute($attribute))
-            {
+            if ($this->isTranslatedAttribute($attribute)) {
                 /** @var ITranslated $attribute */
                 $attributeData = $attribute->getTranslatedDataFor($ids, $this->getActiveLanguage());
                 $missing       = array_diff($ids, array_keys($attributeData));
 
-                if ($missing)
-                {
+                if ($missing) {
                     $attributeData += $attribute->getTranslatedDataFor($missing, $this->getFallbackLanguage());
                 }
-            }
-            else
-            {
+            } else {
                 /** @var IComplex $attribute */
                 $attributeData = $attribute->getDataFor($ids);
             }
 
-            foreach (array_keys($result) as $id)
-            {
+            foreach (array_keys($result) as $id) {
                 $result[$id][$attributeName] = isset($attributeData[$id]) ? $attributeData[$id] : null;
             }
         }
@@ -359,29 +336,24 @@ class MetaModel implements IMetaModel
     {
         $arrIds = array_unique(array_filter($arrIds));
 
-        if (!$arrIds)
-        {
+        if (!$arrIds) {
             return new Items(array());
         }
 
-        if (!$arrAttrOnly)
-        {
+        if (!$arrAttrOnly) {
             $arrAttrOnly = array_keys($this->getAttributes());
         }
 
         $arrResult = $this->fetchRows($arrIds, $arrAttrOnly);
 
         // Give simple attributes the chance for editing the "simple" data.
-        foreach ($this->getSimpleAttributes() as $objAttribute)
-        {
+        foreach ($this->getSimpleAttributes() as $objAttribute) {
             // Get current simple attribute.
             $strColName = $objAttribute->getColName();
 
             // Run each row.
-            foreach (array_keys($arrResult) as $intId)
-            {
-                if (!isset($arrResult[$intId][$strColName]))
-                {
+            foreach (array_keys($arrResult) as $intId) {
+                if (!isset($arrResult[$intId][$strColName])) {
                     continue;
                 }
                 $arrResult[$intId][$strColName] = $objAttribute->unserializeData($arrResult[$intId][$strColName]);
@@ -391,8 +363,7 @@ class MetaModel implements IMetaModel
         // Determine "independent attributes" (complex and translated) and inject their content into the row.
         $arrResult = $this->fetchAdditionalAttributes($arrIds, $arrResult, $arrAttrOnly);
         $arrItems  = array();
-        foreach ($arrResult as $arrEntry)
-        {
+        foreach ($arrResult as $arrEntry) {
             $arrItems[] = new Item($this, $arrEntry);
         }
 
@@ -410,8 +381,7 @@ class MetaModel implements IMetaModel
      */
     protected function copyFilter($objFilter)
     {
-        if ($objFilter)
-        {
+        if ($objFilter) {
             $objNewFilter = $objFilter->createCopy();
         } else {
             $objNewFilter = $this->getEmptyFilter();
@@ -426,14 +396,12 @@ class MetaModel implements IMetaModel
     {
         // Try to retrieve via getter method.
         $strGetter = 'get'.$strKey;
-        if (method_exists($this, $strGetter))
-        {
+        if (method_exists($this, $strGetter)) {
             return $this->$strGetter();
         }
 
         // Return via raw array if available.
-        if (array_key_exists($strKey, $this->arrData))
-        {
+        if (array_key_exists($strKey, $this->arrData)) {
             return $this->arrData[$strKey];
         }
 
@@ -463,8 +431,7 @@ class MetaModel implements IMetaModel
      */
     public function getAttributes()
     {
-        if (!count($this->arrAttributes))
-        {
+        if (!count($this->arrAttributes)) {
             // Instantiate all attributes now.
             $this->createAttributes();
         }
@@ -478,15 +445,12 @@ class MetaModel implements IMetaModel
     public function getInVariantAttributes()
     {
         $arrAttributes = $this->getAttributes();
-        if (!$this->hasVariants())
-        {
+        if (!$this->hasVariants()) {
             return $arrAttributes;
         }
         // Remove all attributes that are selected for overriding.
-        foreach ($arrAttributes as $strAttributeId => $objAttribute)
-        {
-            if ($objAttribute->get('isvariant'))
-            {
+        foreach ($arrAttributes as $strAttributeId => $objAttribute) {
+            if ($objAttribute->get('isvariant')) {
                 unset($arrAttributes[$strAttributeId]);
             }
         }
@@ -515,8 +479,7 @@ class MetaModel implements IMetaModel
      */
     public function getAvailableLanguages()
     {
-        if ($this->isTranslated())
-        {
+        if ($this->isTranslated()) {
             return array_keys((array)$this->arrData['languages']);
         }
 
@@ -528,12 +491,9 @@ class MetaModel implements IMetaModel
      */
     public function getFallbackLanguage()
     {
-        if ($this->isTranslated())
-        {
-            foreach ($this->arrData['languages'] as $strLangCode => $arrData)
-            {
-                if ($arrData['isfallback'])
-                {
+        if ($this->isTranslated()) {
+            foreach ($this->arrData['languages'] as $strLangCode => $arrData) {
+                if ($arrData['isfallback']) {
                     return $strLangCode;
                 }
             }
@@ -566,10 +526,8 @@ class MetaModel implements IMetaModel
      */
     public function getAttributeById($intId)
     {
-        foreach ($this->getAttributes() as $objAttribute)
-        {
-            if ($objAttribute->get('id') == $intId)
-            {
+        foreach ($this->getAttributes() as $objAttribute) {
+            if ($objAttribute->get('id') == $intId) {
                 return $objAttribute;
             }
         }
@@ -581,13 +539,11 @@ class MetaModel implements IMetaModel
      */
     public function findById($intId, $arrAttrOnly = array())
     {
-        if (!$intId)
-        {
+        if (!$intId) {
             return null;
         }
         $objItems = $this->getItemsWithId(array($intId), $arrAttrOnly);
-        if ($objItems && $objItems->first())
-        {
+        if ($objItems && $objItems->first()) {
             return $objItems->getItem();
         }
         return null;
@@ -603,8 +559,7 @@ class MetaModel implements IMetaModel
         $intLimit = 0,
         $strSortOrder = 'ASC',
         $arrAttrOnly = array()
-    )
-    {
+    ) {
         return $this->getItemsWithId(
             $this->getIdsFromFilter(
                 $objFilter,
@@ -625,10 +580,8 @@ class MetaModel implements IMetaModel
         $arrFilteredIds = $this->getMatchingIds($objFilter);
 
         // If desired, sort the entries.
-        if ($arrFilteredIds && $strSortBy != '')
-        {
-            if ($objSortAttribute = $this->getAttribute($strSortBy))
-            {
+        if ($arrFilteredIds && $strSortBy != '') {
+            if ($objSortAttribute = $this->getAttribute($strSortBy)) {
                 $arrFilteredIds = $objSortAttribute->sortIds($arrFilteredIds, $strSortOrder);
             } elseif (in_array($strSortBy, array('id', 'pid', 'tstamp', 'sorting'))) {
                 // Sort by database values.
@@ -647,8 +600,7 @@ class MetaModel implements IMetaModel
         }
 
         // Apply limiting then.
-        if ($intOffset > 0 || $intLimit > 0)
-        {
+        if ($intOffset > 0 || $intLimit > 0) {
             $arrFilteredIds = array_slice($arrFilteredIds, $intOffset, $intLimit);
         }
         return $arrFilteredIds;
@@ -661,8 +613,7 @@ class MetaModel implements IMetaModel
     {
         $objDB          = \Database::getInstance();
         $arrFilteredIds = $this->getMatchingIds($objFilter);
-        if (count($arrFilteredIds) == 0)
-        {
+        if (count($arrFilteredIds) == 0) {
             return 0;
         }
 
@@ -694,8 +645,7 @@ class MetaModel implements IMetaModel
      */
     public function findVariants($arrIds, $objFilter)
     {
-        if (!$arrIds)
-        {
+        if (!$arrIds) {
             // Return an empty result.
             return $this->getItemsWithId(array());
         }
@@ -717,8 +667,7 @@ class MetaModel implements IMetaModel
      */
     public function findVariantsWithBase($arrIds, $objFilter)
     {
-        if (!$arrIds)
-        {
+        if (!$arrIds) {
             // Return an empty result.
             return $this->getItemsWithId(array());
         }
@@ -741,10 +690,8 @@ class MetaModel implements IMetaModel
     public function getAttributeOptions($strAttribute, $objFilter = null)
     {
         $objAttribute = $this->getAttribute($strAttribute);
-        if ($objAttribute)
-        {
-            if ($objFilter)
-            {
+        if ($objAttribute) {
+            if ($objFilter) {
                 $arrFilteredIds = $this->getMatchingIds($objFilter);
                 $arrFilteredIds = $objAttribute->sortIds($arrFilteredIds, 'ASC');
                 return $objAttribute->getFilterOptions($arrFilteredIds, true);
@@ -769,16 +716,18 @@ class MetaModel implements IMetaModel
      */
     protected function saveSimpleColumn($strColumn, $arrIds, $varData)
     {
-        if (is_array($varData))
-        {
+        if (is_array($varData)) {
             $varData = serialize($varData);
         }
 
         \Database::getInstance()
-            ->prepare(sprintf(
-                'UPDATE %s SET %s=? WHERE id IN (%s)', $this->getTableName(),
-                $strColumn,
-                implode(',', $arrIds))
+            ->prepare(
+                sprintf(
+                    'UPDATE %s SET %s=? WHERE id IN (%s)',
+                    $this->getTableName(),
+                    $strColumn,
+                    implode(',', $arrIds)
+                )
             )
             ->execute($varData);
     }
@@ -803,36 +752,29 @@ class MetaModel implements IMetaModel
         $arrInterfaces = class_implements($objAttribute);
 
         // Call the serializeData for all simple attributes.
-        if (in_array('MetaModels\Attribute\ISimple', $arrInterfaces) || in_array('IMetaModelAttributeSimple', $arrInterfaces))
-        {
+        if (in_array('MetaModels\Attribute\ISimple', $arrInterfaces)
+            || in_array('IMetaModelAttributeSimple', $arrInterfaces)
+        ) {
             /** @var \MetaModels\Attribute\ISimple $objAttribute */
             $varData = $objAttribute->serializeData($varData);
         }
 
         $arrData = array();
-        foreach ($arrIds as $intId)
-        {
+        foreach ($arrIds as $intId) {
             $arrData[$intId] = $varData;
         }
 
         // Check for translated fields first, then for complex and save as simple then.
-        if ($strLangCode && $this->isTranslatedAttribute($objAttribute))
-        {
+        if ($strLangCode && $this->isTranslatedAttribute($objAttribute)) {
             /** @var ITranslated $objAttribute */
             $objAttribute->setTranslatedDataFor($arrData, $strLangCode);
-        }
-        elseif($this->isComplexAttribute($objAttribute))
-        {
+        } elseif ($this->isComplexAttribute($objAttribute)) {
             // Complex saving.
             $objAttribute->setDataFor($arrData);
-        }
-        elseif(in_array('MetaModels\Attribute\ISimple', $arrInterfaces)
-            || in_array('IMetaModelAttributeSimple', $arrInterfaces))
-        {
+        } elseif (in_array('MetaModels\Attribute\ISimple', $arrInterfaces)
+            || in_array('IMetaModelAttributeSimple', $arrInterfaces)) {
             $objAttribute->setDataFor($arrData);
-        }
-        else
-        {
+        } else {
             throw new \RuntimeException(
                 'Unknown attribute type, can not save. Interfaces implemented: ' . implode(', ', $arrInterfaces)
             );
@@ -847,20 +789,17 @@ class MetaModel implements IMetaModel
         $objDB = \Database::getInstance();
 
         $objItem->set('tstamp', time());
-        if (!$objItem->get('id'))
-        {
+        if (!$objItem->get('id')) {
             $arrData = array
             (
                 'tstamp' => $objItem->get('tstamp')
             );
 
             $blnNewBaseItem = false;
-            if ($this->hasVariants())
-            {
+            if ($this->hasVariants()) {
                 // No variant group is given, so we have a complete new base item this should be a workaround for these
                 // values should be set by the GeneralDataMetaModel or whoever is calling this method.
-                if (is_null($objItem->get('vargroup')))
-                {
+                if (is_null($objItem->get('vargroup'))) {
                     $objItem->set('varbase', '1');
                     $objItem->set('vargroup', '0');
                     $blnNewBaseItem = true;
@@ -876,36 +815,30 @@ class MetaModel implements IMetaModel
             $objItem->set('id', $intItemId);
 
             // Add the variant group equal to the id.
-            if ($blnNewBaseItem)
-            {
+            if ($blnNewBaseItem) {
                 $this->saveSimpleColumn('vargroup', array($objItem->get('id')), $objItem->get('id'));
             }
         }
 
         // Update system columns.
-        if ($objItem->get('pid') !== null)
-        {
+        if ($objItem->get('pid') !== null) {
             $this->saveSimpleColumn('pid', array($objItem->get('id')), $objItem->get('pid'));
         }
-        if ($objItem->get('sorting') !== null)
-        {
+        if ($objItem->get('sorting') !== null) {
             $this->saveSimpleColumn('sorting', array($objItem->get('id')), $objItem->get('sorting'));
         }
         $this->saveSimpleColumn('tstamp', array($objItem->get('id')), $objItem->get('tstamp'));
 
-        if ($this->isTranslated())
-        {
+        if ($this->isTranslated()) {
             $strActiveLanguage = $this->getActiveLanguage();
         } else {
             $strActiveLanguage = null;
         }
 
         $arrAllIds = array();
-        if ($objItem->isVariantBase())
-        {
+        if ($objItem->isVariantBase()) {
             $objVariants = $this->findVariantsWithBase(array($objItem->get('id')), null);
-            foreach ($objVariants as $objVariant)
-            {
+            foreach ($objVariants as $objVariant) {
                 /** @var IItem $objVariant */
                 $arrAllIds[] = $objVariant->get('id');
             }
@@ -914,16 +847,13 @@ class MetaModel implements IMetaModel
         $blnDenyInvariantSave = $objItem->isVariant();
         $blnOverrideVariants  = $objItem->isVariantBase();
 
-        foreach ($this->getAttributes() as $strAttributeId => $objAttribute)
-        {
-            if ($blnDenyInvariantSave && !($objAttribute->get('isvariant')))
-            {
+        foreach ($this->getAttributes() as $strAttributeId => $objAttribute) {
+            if ($blnDenyInvariantSave && !($objAttribute->get('isvariant'))) {
                 // Base not found, skip attribute.
                 continue;
             }
 
-            if ($blnOverrideVariants && !($objAttribute->get('isvariant')))
-            {
+            if ($blnOverrideVariants && !($objAttribute->get('isvariant'))) {
                 // We have to override in variants.
                 $arrIds = $arrAllIds;
             } else {
@@ -932,8 +862,7 @@ class MetaModel implements IMetaModel
             $this->saveAttribute($objAttribute, $arrIds, $objItem->get($strAttributeId), $strActiveLanguage);
         }
         // Tell all attributes that the model has been saved. Useful for alias fields, edit counters etc.
-        foreach ($this->getAttributes() as $objAttribute)
-        {
+        foreach ($this->getAttributes() as $objAttribute) {
             $objAttribute->modelSaved($objItem);
         }
     }
@@ -945,21 +874,17 @@ class MetaModel implements IMetaModel
     {
         $arrIds = array($objItem->get('id'));
         // Determine if the model is a variant base and if so, fetch the variants additionally.
-        if ($objItem->isVariantBase())
-        {
+        if ($objItem->isVariantBase()) {
             $objVariants = $objItem->getVariants(new Filter($this));
-            foreach ($objVariants as $objVariant)
-            {
+            foreach ($objVariants as $objVariant) {
                 /** @var IItem $objVariant */
                 $arrIds[] = $objVariant->get('id');
             }
         }
 
         // Complex attributes shall delete their values first.
-        foreach ($this->getAttributes() as $objAttribute)
-        {
-            if ($this->isComplexAttribute($objAttribute))
-            {
+        foreach ($this->getAttributes() as $objAttribute) {
+            if ($this->isComplexAttribute($objAttribute)) {
                 /** @var IComplex $objAttribute */
                 $objAttribute->unsetDataFor($arrIds);
             }
@@ -988,8 +913,7 @@ class MetaModel implements IMetaModel
     public function prepareFilter($intFilterSettings, $arrFilterUrl)
     {
         $objFilter = $this->getEmptyFilter();
-        if ($intFilterSettings)
-        {
+        if ($intFilterSettings) {
             $objFilterSettings = FilterFactory::byId($intFilterSettings);
             $objFilterSettings->addRules($objFilter, $arrFilterUrl);
         }

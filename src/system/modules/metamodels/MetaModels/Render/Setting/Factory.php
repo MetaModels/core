@@ -42,26 +42,20 @@ class Factory implements IFactory
      */
     public static function collectAttributeSettings(IMetaModel $objMetaModel, $objSetting)
     {
-        if ($objSetting->get('id'))
-        {
+        if ($objSetting->get('id')) {
             $objViewAttributes = \Database::getInstance()
                 ->prepare('SELECT * FROM tl_metamodel_rendersetting WHERE pid=? AND enabled=1 ORDER BY sorting')
                 ->execute($objSetting->get('id'));
-            while ($objViewAttributes->next())
-            {
+            while ($objViewAttributes->next()) {
                 $objAttr = $objMetaModel->getAttributeById($objViewAttributes->attr_id);
-                if ($objAttr)
-                {
+                if ($objAttr) {
                     $objAttrSetting = $objSetting->getSetting($objAttr->getColName());
-                    if (!$objAttrSetting)
-                    {
+                    if (!$objAttrSetting) {
                         $objAttrSetting = $objAttr->getDefaultRenderSettings();
                     }
 
-                    foreach ($objViewAttributes->row() as $strKey => $varValue)
-                    {
-                        if ($varValue)
-                        {
+                    foreach ($objViewAttributes->row() as $strKey => $varValue) {
+                        if ($varValue) {
                             $objAttrSetting->set($strKey, deserialize($varValue));
                         }
                     }
@@ -76,17 +70,17 @@ class Factory implements IFactory
      */
     public static function byId(IMetaModel $objMetaModel, $intId = 0)
     {
-        if (isset(self::$arrInstances[$intId]))
-        {
+        if (isset(self::$arrInstances[$intId])) {
             return self::$arrInstances[$intId];
         }
 
         $objView = \Database::getInstance()
-            ->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE pid=? AND (id=? OR isdefault=1) ORDER BY isdefault ASC')
+            ->prepare(
+                'SELECT * FROM tl_metamodel_rendersettings WHERE pid=? AND (id=? OR isdefault=1) ORDER BY isdefault ASC'
+            )
             ->limit(1)
             ->execute($objMetaModel->get('id'), $intId);
-        if (!$objView->numRows)
-        {
+        if (!$objView->numRows) {
             $objView = null;
         }
 
@@ -98,4 +92,3 @@ class Factory implements IFactory
         return $objRenderSetting;
     }
 }
-

@@ -62,12 +62,10 @@ class PropertyValue
         $metaModel = self::getMetaModel($event->getEnvironment());
         $attribute = $metaModel->getAttributeById($model->getProperty('attr_id'));
 
-        if ($attribute)
-        {
+        if ($attribute) {
             $options = $attribute->getFilterOptions(null, false);
             $mangled = array();
-            foreach ($options as $key => $option)
-            {
+            foreach ($options as $key => $option) {
                 $mangled['value_' . $key] = $option;
             }
 

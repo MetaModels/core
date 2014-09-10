@@ -33,6 +33,8 @@ namespace MetaModels\Helper;
 class ContaoController extends \Controller
 {
     /**
+     * The instance.
+     *
      * @var ContaoController
      */
     protected static $objInstance = null;
@@ -62,27 +64,39 @@ class ContaoController extends \Controller
 
     /**
      * Makes all protected methods from class Controller callable publically.
+     *
+     * @param string $strMethod The method to call.
+     *
+     * @param array  $arrArgs   The arguments.
+     *
+     * @return mixed
+     *
+     * @throws \RuntimeException When the method is unknown.
      */
     public function __call($strMethod, $arrArgs)
     {
-        if (method_exists($this, $strMethod))
-        {
+        if (method_exists($this, $strMethod)) {
             return call_user_func_array(array($this, $strMethod), $arrArgs);
         }
         throw new \RuntimeException('undefined method: Controller::' . $strMethod);
     }
 
     /**
-     * Makes all protected methods from class Controller callable publically from static context
-     * (requires PHP 5.3).
+     * Makes all protected methods from class Controller callable publically from static context (requires PHP 5.3).
+     *
+     * @param string $strMethod The method to call.
+     *
+     * @param array  $arrArgs   The arguments.
+     *
+     * @return mixed
+     *
+     * @throws \RuntimeException When the method is unknown.
      */
     public static function __callStatic($strMethod, $arrArgs)
     {
-        if (method_exists(__CLASS__, $strMethod))
-        {
+        if (method_exists(__CLASS__, $strMethod)) {
             return call_user_func_array(array(self::getInstance(), $strMethod), $arrArgs);
         }
         throw new \RuntimeException('undefined method: Controller::' . $strMethod);
     }
 }
-

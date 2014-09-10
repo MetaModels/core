@@ -24,8 +24,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPr
  *
  * @package MetaModels\DcGeneral\Events\Table\DcaCombine
  */
-class PropertyBeGroup
-    extends BaseUserGroups
+class PropertyBeGroup extends BaseUserGroups
 {
     /**
      * Get all options for the frontend user groups.

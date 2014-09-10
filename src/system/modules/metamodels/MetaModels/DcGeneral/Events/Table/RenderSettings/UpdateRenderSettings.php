@@ -37,12 +37,10 @@ class UpdateRenderSettings
     {
         $new = $event->getModel();
 
-        if (!$new->getProperty('isdefault'))
-        {
+        if (!$new->getProperty('isdefault')) {
             return;
         }
 
-        $foo =
         \Database::getInstance()
             ->prepare('UPDATE tl_metamodel_rendersettings
                     SET isdefault = \'\'

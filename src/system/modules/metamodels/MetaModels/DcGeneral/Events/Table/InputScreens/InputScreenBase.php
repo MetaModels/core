@@ -34,15 +34,15 @@ class InputScreenBase
      *
      * @return IMetaModel
      *
-     * @throws DcGeneralInvalidArgumentException  When an invalid model has been passed or the model does not have an id.
+     * @throws DcGeneralInvalidArgumentException When an invalid model has been passed or the model does not have an id.
      */
     protected static function getMetaModelFromModel(ModelInterface $model)
     {
-        if (!(($model->getProviderName() == 'tl_metamodel_dcasetting') && $model->getProperty('pid')))
-        {
+        if (!(($model->getProviderName() == 'tl_metamodel_dcasetting') && $model->getProperty('pid'))) {
             throw new DcGeneralInvalidArgumentException(
                 sprintf(
-                    'Model must originate from tl_metamodel_dcasetting and be saved, this one originates from %s and has pid %s',
+                    'Model must originate from tl_metamodel_dcasetting and be saved, this one originates from %s and ' .
+                    'has pid %s',
                     $model->getProviderName(),
                     $model->getProperty('pid')
                 )

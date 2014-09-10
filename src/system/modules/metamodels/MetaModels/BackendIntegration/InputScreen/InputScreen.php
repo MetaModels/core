@@ -103,23 +103,18 @@ class InputScreen implements IInputScreen
     protected function translateLegend($legend, $metaModel)
     {
         $arrLegend = deserialize($legend['legendtitle']);
-        if (is_array($arrLegend))
-        {
+        if (is_array($arrLegend)) {
             // Try to use the language string from the array.
             $strLegend = $arrLegend[$GLOBALS['TL_LANGUAGE']];
-            if (!$strLegend)
-            {
+            if (!$strLegend) {
                 // Use the fallback.
                 $strLegend = $arrLegend[$metaModel->getFallbackLanguage()];
-                if (!$strLegend)
-                {
+                if (!$strLegend) {
                     // Last resort, simply "legend".
                     $strLegend = 'legend';
                 }
             }
-        }
-        else
-        {
+        } else {
             $strLegend = $legend['legendtitle'] ? $legend['legendtitle'] : 'legend';
         }
 
@@ -151,8 +146,7 @@ class InputScreen implements IInputScreen
         $attribute = $metaModel->getAttributeById($property['attr_id']);
 
         // Dead meat.
-        if (!$attribute)
-        {
+        if (!$attribute) {
             return;
         }
 
@@ -173,7 +167,8 @@ class InputScreen implements IInputScreen
      *
      * @return void
      *
-     * @throws \RuntimeException When an unknown palette rendering mode is encountered (neither 'legend' nor 'attribute').
+     * @throws \RuntimeException When an unknown palette rendering mode is encountered
+     *                           (neither 'legend' nor 'attribute').
      */
     protected function translateRows($rows)
     {
@@ -182,16 +177,13 @@ class InputScreen implements IInputScreen
 
         // First pass, fetch all attribute names.
         $columnNames = array();
-        foreach ($rows as $row)
-        {
-            if ($row['dcatype'] != 'attribute')
-            {
+        foreach ($rows as $row) {
+            if ($row['dcatype'] != 'attribute') {
                 continue;
             }
 
             $attribute = $metaModel->getAttributeById($row['attr_id']);
-            if ($attribute)
-            {
+            if ($attribute) {
                 $columnNames[$row['id']] = $attribute->getColName();
             }
         }
@@ -200,16 +192,16 @@ class InputScreen implements IInputScreen
         $this->propertyMap2 = array_flip($columnNames);
 
         // Second pass, translate all information into local properties.
-        foreach ($rows as $row)
-        {
-            switch ($row['dcatype'])
-            {
+        foreach ($rows as $row) {
+            switch ($row['dcatype']) {
                 case 'legend':
                     $activeLegend = $this->translateLegend($row, $metaModel);
                     break;
+
                 case 'attribute':
                     $this->translateProperty($row, $metaModel, $activeLegend);
                     break;
+
                 default:
                     throw new \RuntimeException('Unknown palette rendering mode ' . $row['dcatype']);
             }
@@ -233,8 +225,7 @@ class InputScreen implements IInputScreen
         /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
         $dispatcher->dispatch(CreatePropertyConditionEvent::NAME, $event);
 
-        if ($event->getInstance() === null)
-        {
+        if ($event->getInstance() === null) {
             throw new \RuntimeException(sprintf(
                 'Condition of type %s could not be transformed to an instance.',
                 $condition['type']
@@ -256,27 +247,22 @@ class InputScreen implements IInputScreen
         // First pass, sort them into pid.
         $sorted = array();
         $byPid  = array();
-        foreach ($conditions as $i => $condition)
-        {
+        foreach ($conditions as $i => $condition) {
             $sorted[$condition['id']]   = $conditions[$i];
             $byPid[$condition['pid']][] = $condition['id'];
         }
 
         $instances = array();
         // Second pass, handle them.
-        foreach ($sorted as $id => $condition)
-        {
+        foreach ($sorted as $id => $condition) {
             $instances[$id] = $this->transformCondition($condition);
         }
 
         // Sort all conditions into their parents.
-        foreach ($byPid as $pid => $ids)
-        {
-            foreach ($ids as $id)
-            {
+        foreach ($byPid as $pid => $ids) {
+            foreach ($ids as $id) {
                 $settingId = $sorted[$id]['settingId'];
-                if (!isset($this->conditions[$settingId]))
-                {
+                if (!isset($this->conditions[$settingId])) {
                     $this->conditions[$settingId] = new PropertyConditionChain();
                 }
                 $result    = $this->conditions[$settingId];
@@ -285,12 +271,9 @@ class InputScreen implements IInputScreen
 
                 // TODO: this is better to be done with a new event to sort conditions into their parents as we might
                 // have other classes in the future.
-                if ($parent instanceof ConditionChainInterface)
-                {
+                if ($parent instanceof ConditionChainInterface) {
                     $parent->addCondition($condition);
-                }
-                elseif ($parent instanceof NotCondition)
-                {
+                } elseif ($parent instanceof NotCondition) {
                     $parent->setCondition($condition);
                 }
             }
@@ -351,8 +334,7 @@ class InputScreen implements IInputScreen
     public function getPropertyNames()
     {
         $result = array();
-        foreach ($this->getLegends() as $legend)
-        {
+        foreach ($this->getLegends() as $legend) {
             $result = array_merge($result, $legend['properties']);
         }
 
@@ -382,8 +364,7 @@ class InputScreen implements IInputScreen
     public function getIcon()
     {
         // Determine image to use.
-        if ($this->data['backendicon'])
-        {
+        if ($this->data['backendicon']) {
             return $this->data['backendicon'];
         }
 
@@ -429,8 +410,7 @@ class InputScreen implements IInputScreen
     {
         // If we have variant overwrite all modes and set mode 5 - tree mode.
         $objMetaModels = $this->getMetaModel();
-        if ($objMetaModels->hasVariants())
-        {
+        if ($objMetaModels->hasVariants()) {
             return 5;
         }
 

@@ -46,8 +46,7 @@ class UpgradeHandler
     protected static function upgradeJumpTo()
     {
         $objDB = self::DB();
-        if (!$objDB->fieldExists('metamodel_jumpTo', 'tl_content', true))
-        {
+        if (!$objDB->fieldExists('metamodel_jumpTo', 'tl_content', true)) {
             // Create the column in the database and copy the data over.
             TableManipulation::createColumn(
                 'tl_content',
@@ -56,8 +55,7 @@ class UpgradeHandler
             );
             $objDB->execute('UPDATE tl_content SET metamodel_jumpTo=jumpTo;');
         }
-        if (!$objDB->fieldExists('metamodel_jumpTo', 'tl_module', true))
-        {
+        if (!$objDB->fieldExists('metamodel_jumpTo', 'tl_module', true)) {
             // Create the column in the database and copy the data over.
             TableManipulation::createColumn(
                 'tl_module',
@@ -82,8 +80,7 @@ class UpgradeHandler
     protected static function upgradeDcaSettingsPublished()
     {
         $objDB = self::DB();
-        if (!$objDB->fieldExists('published', 'tl_metamodel_dcasetting', true))
-        {
+        if (!$objDB->fieldExists('published', 'tl_metamodel_dcasetting', true)) {
             // Create the column in the database and copy the data over.
             TableManipulation::createColumn(
                 'tl_metamodel_dcasetting',
@@ -105,8 +102,7 @@ class UpgradeHandler
         $objDB = self::DB();
 
         // Create the table.
-        if (!$objDB->tableExists('tl_metamodel_dcasetting_condition'))
-        {
+        if (!$objDB->tableExists('tl_metamodel_dcasetting_condition')) {
             $objDB->execute(
                 'CREATE TABLE `tl_metamodel_dcasetting_condition` (
                 `id` int(10) unsigned NOT NULL auto_increment,
@@ -124,12 +120,10 @@ class UpgradeHandler
             );
         }
 
-        if ($objDB->fieldExists('subpalette', 'tl_metamodel_dcasetting', true))
-        {
+        if ($objDB->fieldExists('subpalette', 'tl_metamodel_dcasetting', true)) {
             $subpalettes = $objDB->execute('SELECT * FROM tl_metamodel_dcasetting WHERE subpalette!=0');
 
-            if ($subpalettes->numRows)
-            {
+            if ($subpalettes->numRows) {
                 // Get all attribute names and setting ids.
                 $attributes = $objDB
                     ->execute('
@@ -141,8 +135,7 @@ class UpgradeHandler
                     ');
 
                 $attr = array();
-                while ($attributes->next())
-                {
+                while ($attributes->next()) {
                     $attr[$attributes->attr_id] = $attributes->colName;
                 }
 
@@ -155,13 +148,11 @@ class UpgradeHandler
                     ');
 
                 $check = array();
-                while ($checkboxes->next())
-                {
+                while ($checkboxes->next()) {
                     $check[$checkboxes->id] = $checkboxes->attr_id;
                 }
 
-                while ($subpalettes->next())
-                {
+                while ($subpalettes->next()) {
                     // Add property value condition for parent property dependency.
                     $data = array(
                         'pid' => 0,
@@ -171,7 +162,10 @@ class UpgradeHandler
                         'enabled' => '1',
                         'type' => 'conditionpropertyvalueis',
                         'attr_id' => $check[$subpalettes->subpalette],
-                        'comment' => sprintf('Only show when checkbox "%s" is checked', $attr[$check[$subpalettes->subpalette]]),
+                        'comment' => sprintf(
+                            'Only show when checkbox "%s" is checked',
+                            $attr[$check[$subpalettes->subpalette]]
+                        ),
                         'value' => '1',
                     );
 

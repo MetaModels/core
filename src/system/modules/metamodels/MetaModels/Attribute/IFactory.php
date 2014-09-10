@@ -72,4 +72,3 @@ interface IFactory
      */
     public static function isValidAttributeType($strFieldType);
 }
-

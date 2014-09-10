@@ -45,9 +45,11 @@ class AttributeType
         );
 
         $options = array();
-        foreach ($attributes as $attributeType)
-        {
-            $options[$attributeType] = $translator->translate('typeOptions.' . $attributeType, 'tl_metamodel_attribute');
+        foreach ($attributes as $attributeType) {
+            $options[$attributeType] = $translator->translate(
+                'typeOptions.' . $attributeType,
+                'tl_metamodel_attribute'
+            );
         }
 
         $event->setOptions($options);

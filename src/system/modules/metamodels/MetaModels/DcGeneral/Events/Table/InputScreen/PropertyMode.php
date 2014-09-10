@@ -47,8 +47,7 @@ class PropertyMode
                 $arrResult = array('mode_0', 'mode_1', 'mode_2', 'mode_5');
 
                 // Allow tree mode only when no variants are in place.
-                if (!Factory::byId($event->getModel()->getProperty('pid'))->hasVariants())
-                {
+                if (!Factory::byId($event->getModel()->getProperty('pid'))->hasVariants()) {
                     $arrResult[] = 'mode_6';
                 }
 

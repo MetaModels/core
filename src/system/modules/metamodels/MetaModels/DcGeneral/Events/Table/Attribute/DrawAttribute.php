@@ -37,14 +37,12 @@ class DrawAttribute
     public static function modelToLabel(ModelToLabelEvent $event)
     {
         // FIXME: Add language files for the error msg.
-
         $model     = $event->getModel();
         $type      = $model->getProperty('type');
         $image     = '<img src="' . $GLOBALS['METAMODELS']['attributes'][$type]['image'] . '" />';
         $attribute = Factory::createFromArray($model->getPropertiesAsArray());
 
-        if (!$attribute)
-        {
+        if (!$attribute) {
             $event
                 ->setLabel(
                     '<div class="field_heading cte_type"><strong>Unknown attribute!</strong> <em>[%s]</em></div>
@@ -62,11 +60,9 @@ class DrawAttribute
         $colName        = $attribute->getColName();
         $name           = $attribute->getName();
         $arrDescription = deserialize($attribute->get('description'));
-        if (is_array($arrDescription))
-        {
+        if (is_array($arrDescription)) {
             $description = $arrDescription[$attribute->getMetaModel()->getActiveLanguage()];
-            if (!$description)
-            {
+            if (!$description) {
                 $description = $arrDescription[$attribute->getMetaModel()->getFallbackLanguage()];
             }
         } else {

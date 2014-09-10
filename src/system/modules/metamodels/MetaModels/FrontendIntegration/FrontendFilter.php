@@ -58,14 +58,12 @@ class FrontendFilter
 
         $this->objFilterConfig->arrJumpTo = $GLOBALS['objPage']->row();
 
-        if ($this->objFilterConfig->metamodel_jumpTo)
-        {
+        if ($this->objFilterConfig->metamodel_jumpTo) {
             // Page to jump to when filter submit.
             $objPage = \Database::getInstance()->prepare('SELECT id, alias FROM tl_page WHERE id=?')
                 ->limit(1)
                 ->execute($this->objFilterConfig->metamodel_jumpTo);
-            if ($objPage->numRows)
-            {
+            if ($objPage->numRows) {
                 $this->objFilterConfig->arrJumpTo = $objPage->row();
             }
         }
@@ -84,28 +82,23 @@ class FrontendFilter
     protected function getJumpToUrl($arrParams)
     {
         $strFilterAction = '';
-        foreach ($arrParams as $strName => $varParam)
-        {
+        foreach ($arrParams as $strName => $varParam) {
             // Skip the magic "language" parameter.
-            if (($strName == 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl'])
-            {
+            if (($strName == 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl']) {
                 continue;
             }
 
             $strValue = $varParam;
 
-            if (is_array($varParam))
-            {
+            if (is_array($varParam)) {
                 $strValue = implode(',', array_filter($varParam));
             }
 
             $strValue = str_replace(array('/', '\''), array('-slash-', '-apos-'), $strValue);
 
-            if (strlen($strValue))
-            {
+            if (strlen($strValue)) {
                 // Shift auto_item to the front.
-                if ($strName == 'auto_item')
-                {
+                if ($strName == 'auto_item') {
                     $strFilterAction = '/' . $strValue . $strFilterAction;
                     continue;
                 }
@@ -165,18 +158,13 @@ class FrontendFilter
         $arrMyParams = $arrOtherParams = array();
 
         // @codingStandardsIgnoreStart - Loop over $_GET to get a list of all keys.
-        if ($_GET)
-        {
-            foreach (array_keys($_GET) as $strParam)
+        if ($_GET) {
+            foreach (array_keys($_GET) as $strParam) {
             // @codingStandardsIgnoreEnd - Continue with style checking.
-            {
-                if (in_array($strParam, $arrWantedParam))
-                {
+                if (in_array($strParam, $arrWantedParam)) {
                     $arrMyParams[$strParam] = \Input::getInstance()->get($strParam);
-                }
-                // Add only to the array if param is not page.
-                elseif($strParam != 'page')
-                {
+                } elseif ($strParam != 'page') {
+                    // Add only to the array if param is not page.
                     $arrOtherParams[$strParam] = \Input::getInstance()->get($strParam);
                 }
             }
@@ -184,13 +172,10 @@ class FrontendFilter
 
         // if POST, translate to proper GET url
         // @codingStandardsIgnoreStart - Loop over $_POST to get a list of all keys.
-        if ($_POST && (\Input::getInstance()->post('FORM_SUBMIT') == $this->formId))
-        {
-            foreach (array_keys($_POST) as $strParam)
-            // @codingStandardsIgnoreEnd - Continue with style checking.
-            {
-                if (in_array($strParam, $arrWantedParam))
-                {
+        if ($_POST && (\Input::getInstance()->post('FORM_SUBMIT') == $this->formId)) {
+            foreach (array_keys($_POST) as $strParam) {
+                // @codingStandardsIgnoreEnd - Continue with style checking.
+                if (in_array($strParam, $arrWantedParam)) {
                     $arrMyParams[$strParam] = \Input::getInstance()->post($strParam);
                 }
             }
@@ -215,29 +200,34 @@ class FrontendFilter
 
         $objFrontendFilterOptions = new FrontendFilterOptions();
         $objFrontendFilterOptions->setAutoSubmit($this->objFilterConfig->metamodel_fef_autosubmit ? true : false);
-        $objFrontendFilterOptions->setHideClearFilter($this->objFilterConfig->metamodel_fef_hideclearfilter ? true : false);
-        $objFrontendFilterOptions->setShowCountValues($this->objFilterConfig->metamodel_available_values ? true : false);
+        $objFrontendFilterOptions->setHideClearFilter(
+            $this->objFilterConfig->metamodel_fef_hideclearfilter ? true : false
+        );
+        $objFrontendFilterOptions->setShowCountValues(
+            $this->objFilterConfig->metamodel_available_values ? true : false
+        );
 
         $arrJumpTo = $this->objFilterConfig->arrJumpTo;
 
         $arrParams = $this->getParams();
 
-        $arrWidgets = $objFilterSetting->getParameterFilterWidgets($arrParams['all'], $arrJumpTo, $objFrontendFilterOptions);
+        $arrWidgets = $objFilterSetting->getParameterFilterWidgets(
+            $arrParams['all'],
+            $arrJumpTo,
+            $objFrontendFilterOptions
+        );
 
         // Filter the widgets we do not want to show.
         $arrWanted = $this->getWantedNames();
 
         // If we have POST data, we need to redirect now.
         // @codingStandardsIgnoreStart - Test $_POST to check if any data has been submitted.
-        if ($_POST && (\Input::getInstance()->post('FORM_SUBMIT') == $this->formId))
-        // @codingStandardsIgnoreEnd - Continue with style checking.
-        {
+        if ($_POST && (\Input::getInstance()->post('FORM_SUBMIT') == $this->formId)) {
+            // @codingStandardsIgnoreEnd - Continue with style checking.
             $arrRedirectParams = $arrParams['other'];
-            foreach ($arrWanted as $strWidget)
-            {
+            foreach ($arrWanted as $strWidget) {
                 $arrFilter = $arrWidgets[$strWidget];
-                if (!empty($arrFilter['urlvalue']))
-                {
+                if (!empty($arrFilter['urlvalue'])) {
                     $arrRedirectParams[$strWidget] = $arrFilter['urlvalue'];
                 }
             }
@@ -247,8 +237,7 @@ class FrontendFilter
         $arrRendered = array();
 
         // Render the widgets through the filter templates.
-        foreach ($this->getWantedNames() as $strWidget)
-        {
+        foreach ($this->getWantedNames() as $strWidget) {
             $arrFilter      = $arrWidgets[$strWidget];
             $strTemplate    = $arrFilter['raw']['eval']['template'];
             $objSubTemplate = new \FrontendTemplate($strTemplate ? $strTemplate : 'mm_filteritem_default');
@@ -263,9 +252,9 @@ class FrontendFilter
         // Return filter data.
         return array(
             'action'     => ContaoController::getInstance()->generateFrontendUrl(
-                    $arrJumpTo,
-                    $this->getJumpToUrl($arrParams['other'])
-                ),
+                $arrJumpTo,
+                $this->getJumpToUrl($arrParams['other'])
+            ),
             'formid'     => $this->formId,
             'filters'    => $arrRendered,
             'submit'     => (
@@ -294,8 +283,7 @@ class FrontendFilter
             ->execute($id);
 
         // Check if we have a ce element.
-        if ($objDbResult->numRows == 0)
-        {
+        if ($objDbResult->numRows == 0) {
             return str_replace($replace, '', $content);
         }
 
@@ -322,8 +310,7 @@ class FrontendFilter
             ->execute($id);
 
         // Check if we have a ce element.
-        if ($objDbResult->numRows == 0)
-        {
+        if ($objDbResult->numRows == 0) {
             return str_replace($replace, '', $content);
         }
 
@@ -349,17 +336,14 @@ class FrontendFilter
      */
     public function generateClearAll($strContent, $strTemplate)
     {
-        if (substr($strTemplate, 0, 7) === 'fe_page')
-        {
+        if (substr($strTemplate, 0, 7) === 'fe_page') {
             if (preg_match_all(
                 '#\[\[\[metamodelfrontendfilterclearall::(ce|mod)::([^\]]*)\]\]\]#',
                 $strContent,
                 $arrMatches,
                 PREG_SET_ORDER
-            ))
-            {
-                foreach ($arrMatches as $arrMatch)
-                {
+            )) {
+                foreach ($arrMatches as $arrMatch) {
                     switch ($arrMatch[1])
                     {
                         case 'ce':
@@ -379,5 +363,4 @@ class FrontendFilter
 
         return $strContent;
     }
-
 }

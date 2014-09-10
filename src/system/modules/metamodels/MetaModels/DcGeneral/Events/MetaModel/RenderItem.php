@@ -47,14 +47,12 @@ class RenderItem
     {
         $model = $nativeItem->getMetaModel();
 
-        if ($model->hasVariants() && !$nativeItem->isVariantBase())
-        {
+        if ($model->hasVariants() && !$nativeItem->isVariantBase()) {
             // Create a clone to have a separate copy of the object as we are going to manipulate it here.
             $renderSetting = clone $renderSetting;
 
             // Loop over all attributes and remove those from rendering that are not desired.
-            foreach (array_keys($model->getInVariantAttributes()) as $strAttrName)
-            {
+            foreach (array_keys($model->getInVariantAttributes()) as $strAttrName) {
                 $renderSetting->setSetting($strAttrName, null);
             }
         }
@@ -78,8 +76,7 @@ class RenderItem
         /** @var Model $model */
         $model = $event->getModel();
 
-        if (!($model instanceof Model))
-        {
+        if (!($model instanceof Model)) {
             return;
         }
 
@@ -91,8 +88,7 @@ class RenderItem
             $definition->getMetaModelDefinition()->getActiveRenderSetting()
         );
 
-        if (!$renderSetting)
-        {
+        if (!$renderSetting) {
             return;
         }
 

@@ -40,7 +40,6 @@ class ModelToLabel
     {
         // FIXME: in here all language strings and icons are related to filters?
         // FIXME: Add language files for the error msg.
-
         $model        = $event->getModel();
         $objSetting   = \Database::getInstance()
             ->prepare('SELECT * FROM tl_metamodel_dca WHERE id=?')
@@ -49,19 +48,15 @@ class ModelToLabel
 
         $objAttribute = $objMetaModel->getAttributeById($model->getProperty('attr_id'));
 
-        if ($objAttribute)
-        {
+        if ($objAttribute) {
             $type  = $objAttribute->get('type');
             $image = $GLOBALS['METAMODELS']['attributes'][$type]['image'];
-            if (!$image || !file_exists(TL_ROOT . '/' . $image))
-            {
+            if (!$image || !file_exists(TL_ROOT . '/' . $image)) {
                 $image = 'system/modules/metamodels/assets/images/icons/fields.png';
             }
             $name    = $objAttribute->getName();
             $colName = $objAttribute->getColName();
-        }
-        else
-        {
+        } else {
             $type    = 'unknown ID: ' . $model->getProperty('attr_id');
             $image   = 'system/modules/metamodels/assets/images/icons/fields.png';
             $name    = 'unknown attribute';
@@ -85,7 +80,9 @@ class ModelToLabel
                 $type,
                 $imageEvent->getHtml(),
                 $name,
-                $model->getProperty('mandatory') ? ' ['.$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory'][0].']' : '',
+                $model->getProperty('mandatory')
+                    ? ' ['.$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory'][0].']'
+                    : '',
                 $model->getProperty('tl_class') ? sprintf('[%s]', $model->getProperty('tl_class')) : ''
             ));
     }
@@ -102,12 +99,10 @@ class ModelToLabel
         $model = $event->getModel();
 
         $arrLegend = deserialize($model->getProperty('legendtitle'));
-        if (is_array($arrLegend))
-        {
+        if (is_array($arrLegend)) {
             $strLegend = $arrLegend[$GLOBALS['TL_LANGUAGE']];
 
-            if (!$strLegend)
-            {
+            if (!$strLegend) {
                 // TODO: Get the fallback language here.
                 $strLegend = 'legend';
             }

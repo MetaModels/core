@@ -45,8 +45,7 @@ class Factory implements IFactory
      */
     protected static function getAttributeTypeClass($strFieldType)
     {
-        if (isset($GLOBALS['METAMODELS']['attributes'][$strFieldType]['class']))
-        {
+        if (isset($GLOBALS['METAMODELS']['attributes'][$strFieldType]['class'])) {
             return $GLOBALS['METAMODELS']['attributes'][$strFieldType]['class'];
         }
 
@@ -63,8 +62,7 @@ class Factory implements IFactory
      */
     protected static function getAttributeTypeFactory($strFieldType)
     {
-        if (isset($GLOBALS['METAMODELS']['attributes'][$strFieldType]['factory']))
-        {
+        if (isset($GLOBALS['METAMODELS']['attributes'][$strFieldType]['factory'])) {
             return $GLOBALS['METAMODELS']['attributes'][$strFieldType]['factory'];
         }
 
@@ -83,15 +81,11 @@ class Factory implements IFactory
         $strFactoryName = self::getAttributeTypeFactory($arrData['type']);
 
         $objAttribute = null;
-        if ($strFactoryName)
-        {
+        if ($strFactoryName) {
             $objAttribute = call_user_func_array(array($strFactoryName, 'createInstance'), array($arrData));
-        }
-        else
-        {
+        } else {
             $strClassName = self::getAttributeTypeClass($arrData['type']);
-            if ($strClassName)
-            {
+            if ($strClassName) {
                 $objMetaModel = MetaModelFactory::byId($arrData['pid']);
                 $objAttribute = new $strClassName($objMetaModel, $arrData);
             }
@@ -125,17 +119,12 @@ class Factory implements IFactory
             ->execute($objMetaModel->get('id'));
 
         $arrAttributes = array();
-        while ($objAttributes->next())
-        {
-            if (isset(self::$arrAttributes[$objAttributes->id]))
-            {
+        while ($objAttributes->next()) {
+            if (isset(self::$arrAttributes[$objAttributes->id])) {
                 $arrAttributes[] = self::$arrAttributes[$objAttributes->id];
-            }
-            else
-            {
+            } else {
                 $objAttribute = self::createFromDB($objAttributes);
-                if ($objAttribute)
-                {
+                if ($objAttribute) {
                     $arrAttributes[] = $objAttribute;
 
                     self::$arrAttributes[$objAttributes->id] = $objAttribute;
@@ -150,24 +139,20 @@ class Factory implements IFactory
      */
     public static function getAttributeTypes($blnSupportTranslated = false, $blnSupportVariants = false)
     {
-        if ($blnSupportTranslated)
-        {
+        if ($blnSupportTranslated) {
             return array_keys($GLOBALS['METAMODELS']['attributes']);
         }
         $arrRet = array();
-        foreach ($GLOBALS['METAMODELS']['attributes'] as $strKey => $arrInformation)
-        {
+        foreach ($GLOBALS['METAMODELS']['attributes'] as $strKey => $arrInformation) {
             $arrInterfaces = class_implements($arrInformation['class'], true);
             // Skip translated field types if translation is not supported.
-            if ((!$blnSupportTranslated && in_array('MetaModels\Attribute\ITranslated', $arrInterfaces)))
-            {
+            if ((!$blnSupportTranslated && in_array('MetaModels\Attribute\ITranslated', $arrInterfaces))) {
                 continue;
             }
 
             // TODO: will we really ever have some interface like this?
             // Skip variant fields if variants are not supported.
-            if ((!$blnSupportVariants && in_array('MetaModels\Attribute\IVariant', $arrInterfaces)))
-            {
+            if ((!$blnSupportVariants && in_array('MetaModels\Attribute\IVariant', $arrInterfaces))) {
                 continue;
             }
             $arrRet[] = $strKey;
@@ -183,4 +168,3 @@ class Factory implements IFactory
         return array_key_exists($strFieldType, $GLOBALS['METAMODELS']['attributes']);
     }
 }
-

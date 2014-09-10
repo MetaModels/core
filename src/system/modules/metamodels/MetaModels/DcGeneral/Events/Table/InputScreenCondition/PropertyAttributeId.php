@@ -63,8 +63,7 @@ class PropertyAttributeId
         $result    = array();
         $metaModel = self::getMetaModel($event->getEnvironment());
 
-        foreach ($metaModel->getAttributes() as $attribute)
-        {
+        foreach ($metaModel->getAttributes() as $attribute) {
             $typeName              = $attribute->get('type');
             $strSelectVal          = $metaModel->getTableName() .'_' . $attribute->getColName();
             $result[$strSelectVal] = $attribute->getName() . ' [' . $typeName . ']';
@@ -85,14 +84,12 @@ class PropertyAttributeId
         $metaModel = self::getMetaModel($event->getEnvironment());
         $value     = $event->getValue();
 
-        if (!($metaModel && $value))
-        {
+        if (!($metaModel && $value)) {
             return;
         }
 
         $attribute = $metaModel->getAttributeById($value);
-        if ($attribute)
-        {
+        if ($attribute) {
             $event->setValue($metaModel->getTableName() .'_' . $attribute->getColName());
         }
     }
@@ -109,8 +106,7 @@ class PropertyAttributeId
         $metaModel = self::getMetaModel($event->getEnvironment());
         $value     = $event->getValue();
 
-        if (!($metaModel && $value))
-        {
+        if (!($metaModel && $value)) {
             return;
         }
 
@@ -118,8 +114,7 @@ class PropertyAttributeId
 
         $attribute = $metaModel->getAttribute($value);
 
-        if ($attribute)
-        {
+        if ($attribute) {
             $event->setValue($attribute->get('id'));
         }
     }

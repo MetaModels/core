@@ -79,4 +79,3 @@ class LessThan implements IFilterRule
         return $this->objAttribute->filterLessThan($this->varValue, $this->blnInclusive);
     }
 }
-

@@ -17,6 +17,8 @@
 
 namespace MetaModels;
 
+use MetaModels\Render\Setting\ICollection;
+
 /**
  * Interface for a MetaModel item.
  *
@@ -101,9 +103,9 @@ interface IItem
      *
      * For further information {@see IMetaModelAttribute::parseValue()}.
      *
-     * @param string                                 $strOutputFormat Optional, the desired output format (default: text).
+     * @param string      $strOutputFormat Optional, the desired output format (default: text).
      *
-     * @param \MetaModels\Render\Setting\ICollection $objSettings     The render settings to use optional (default: null).
+     * @param ICollection $objSettings     The render settings to use optional (default: null).
      *
      * @return array attribute name => format => value
      */
@@ -114,11 +116,11 @@ interface IItem
      *
      * For further information {@see IMetaModelAttribute::parseValue()}.
      *
-     * @param string                                 $strAttributeName The desired attribute.
+     * @param string      $strAttributeName The desired attribute.
      *
-     * @param string                                 $strOutputFormat  Optional, the desired output format (default: text).
+     * @param string      $strOutputFormat  Optional, the desired output format (default: text).
      *
-     * @param \MetaModels\Render\Setting\ICollection $objSettings      The render settings to use optional (default: null).
+     * @param ICollection $objSettings      The render settings to use optional (default: null).
      *
      * @return array format=>value
      */
@@ -145,4 +147,3 @@ interface IItem
      */
     public function varCopy();
 }
-

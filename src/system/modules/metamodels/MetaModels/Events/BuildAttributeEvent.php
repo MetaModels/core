@@ -27,8 +27,7 @@ use MetaModels\IMetaModel;
 /**
  * This event is triggered for every attribute when the data container is being built.
  */
-class BuildAttributeEvent
-    extends AbstractContainerAwareEvent
+class BuildAttributeEvent extends AbstractContainerAwareEvent
 {
     /**
      * The event name.
@@ -82,8 +81,7 @@ class BuildAttributeEvent
         ContainerInterface $dataContainer,
         IInputScreen $inputScreen,
         Builder $builder
-    )
-    {
+    ) {
         parent::__construct($dataContainer);
 
         $this->metaModel   = $metaModel;

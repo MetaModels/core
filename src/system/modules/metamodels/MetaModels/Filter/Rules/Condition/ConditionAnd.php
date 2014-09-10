@@ -55,37 +55,28 @@ class ConditionAnd extends FilterRule
     {
         $arrIds   = null;
         $blnEmpty = true;
-        foreach ($this->arrChildFilters as $objChildFilter)
-        {
+        foreach ($this->arrChildFilters as $objChildFilter) {
             $arrChildMatches = $objChildFilter->getMatchingIds();
             // If null => all items allowed by this rule.
-            if (is_null($arrChildMatches))
-            {
+            if (is_null($arrChildMatches)) {
                 continue;
             }
 
-            if ($arrChildMatches)
-            {
+            if ($arrChildMatches) {
                 $blnEmpty = false;
-                if (is_null($arrIds))
-                {
+                if (is_null($arrIds)) {
                     $arrIds = $arrChildMatches;
                 } else {
                     $arrIds = array_intersect($arrIds, $arrChildMatches);
                 }
-            }
-            else
-            {
+            } else {
                 // Empty array, no items allowed by this rule, break out.
-                $arrIds = array();
-                break;
+                return array();
             }
         }
-        if ($blnEmpty)
-        {
+        if ($blnEmpty) {
             return array();
         }
         return $arrIds;
     }
 }
-

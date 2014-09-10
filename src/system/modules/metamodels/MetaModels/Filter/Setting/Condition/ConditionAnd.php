@@ -45,8 +45,7 @@ class ConditionAnd extends WithChildren
     {
         $objSubFilter = new Filter($this->getMetaModel());
 
-        foreach ($this->arrChildren as $objChildSetting)
-        {
+        foreach ($this->arrChildren as $objChildSetting) {
             $objChildSetting->prepareRules($objSubFilter, $arrFilterUrl);
         }
 
@@ -56,4 +55,3 @@ class ConditionAnd extends WithChildren
         $objFilter->addFilterRule($objFilterRule);
     }
 }
-

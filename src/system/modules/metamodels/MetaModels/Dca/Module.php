@@ -56,8 +56,7 @@ class Module
             ->limit(1)
             ->execute($objDC->id, 'metamodel_list');
 
-        if (!$objModule->metamodel_filtering)
-        {
+        if (!$objModule->metamodel_filtering) {
             unset($GLOBALS['TL_DCA']['tl_module']['fields']['metamodel_filterparams']);
             return;
         }
@@ -105,10 +104,8 @@ class Module
         );
         $objMetaModel      = MetaModelFactory::byId($objDc->activeRecord->metamodel);
 
-        if ($objMetaModel)
-        {
-            foreach ($objMetaModel->getAttributes() as $objAttribute)
-            {
+        if ($objMetaModel) {
+            foreach ($objMetaModel->getAttributes() as $objAttribute) {
                 $arrAttributeNames[$objAttribute->getColName()] = $objAttribute->getName();
             }
         }
@@ -127,8 +124,7 @@ class Module
     {
         $return = array();
 
-        if (!$objDc->activeRecord->metamodel_filtering)
-        {
+        if (!$objDc->activeRecord->metamodel_filtering) {
             return $return;
         }
 
@@ -147,8 +143,7 @@ class Module
      */
     public function editMetaModel(\DC_Table $dc)
     {
-        if ($dc->value < 1)
-        {
+        if ($dc->value < 1) {
             return '';
         }
 
@@ -183,8 +178,7 @@ class Module
      */
     public function editFilterSetting(\DC_Table $dc)
     {
-        if ($dc->value < 1)
-        {
+        if ($dc->value < 1) {
             return '';
         }
 
@@ -219,8 +213,7 @@ class Module
      */
     public function editRenderSetting(\DC_Table $dc)
     {
-        if ($dc->value < 1)
-        {
+        if ($dc->value < 1) {
             return '';
         }
 
@@ -236,7 +229,10 @@ class Module
         $dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
 
         $url = BackendUrlBuilder::fromUrl('contao/main.php?do=metamodels&table=tl_metamodel_rendersetting')
-            ->setQueryParameter('pid', IdSerializer::fromValues('tl_metamodel_rendersettings', $dc->value)->getSerialized());
+            ->setQueryParameter(
+                'pid',
+                IdSerializer::fromValues('tl_metamodel_rendersettings', $dc->value)->getSerialized()
+            );
 
         return sprintf(
             '<a href="%s" title="%s" style="padding-left:3px">%s</a>',
@@ -261,8 +257,7 @@ class Module
             ->execute($objDC->activeRecord->metamodel);
         $arrSettings       = array();
 
-        while ($objFilterSettings->next())
-        {
+        while ($objFilterSettings->next()) {
             $arrSettings[$objFilterSettings->id] = $objFilterSettings->name;
         }
 
@@ -286,8 +281,7 @@ class Module
             ->execute($objDC->activeRecord->metamodel);
 
         $arrSettings = array();
-        while ($objFilterSettings->next())
-        {
+        while ($objFilterSettings->next()) {
             $arrSettings[$objFilterSettings->id] = $objFilterSettings->name;
         }
 
@@ -326,4 +320,3 @@ class Module
         );
     }
 }
-

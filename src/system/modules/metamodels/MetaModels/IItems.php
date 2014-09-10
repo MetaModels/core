@@ -107,6 +107,4 @@ interface IItems extends \Iterator, \ArrayAccess
      * @return array the parsed information.
      */
     public function parseAll($strOutputFormat = 'text', $objSettings = null);
-
 }
-

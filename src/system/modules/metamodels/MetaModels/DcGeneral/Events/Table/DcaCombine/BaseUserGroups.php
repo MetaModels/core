@@ -39,20 +39,17 @@ class BaseUserGroups
      */
     public static function getUserGroups($table, GetPropertyOptionsEvent $event)
     {
-        if (!in_array($table, array('tl_user_group', 'tl_member_group')))
-        {
+        if (!in_array($table, array('tl_user_group', 'tl_member_group'))) {
             throw new \RuntimeException('Unexpected table name ' . $table, 1);
         }
         $groups = \Database::getInstance()->execute(sprintf('SELECT id,name FROM %s', $table));
 
         $result = array();
-        if ($table == 'tl_user_group')
-        {
+        if ($table == 'tl_user_group') {
             $result[-1] = $event->getEnvironment()->getTranslator()->translate('sysadmin', 'tl_metamodel_dca_combine');
         }
 
-        while ($groups->next())
-        {
+        while ($groups->next()) {
             $result[$groups->id] = $groups->name;
         }
 

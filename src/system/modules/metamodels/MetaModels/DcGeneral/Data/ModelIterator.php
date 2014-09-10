@@ -71,8 +71,7 @@ class ModelIterator implements \Iterator
         $objMetaModel      = $this->objModel->getItem()->getMetaModel();
 
         $arrKeys = array();
-        if ($objMetaModel->hasVariants())
-        {
+        if ($objMetaModel->hasVariants()) {
             $arrKeys[] = 'varbase';
             $arrKeys[] = 'vargroup';
         }

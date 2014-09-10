@@ -108,8 +108,7 @@ class Template
      */
     public function __get($strKey)
     {
-        if (!array_key_exists($strKey, $this->arrData))
-        {
+        if (!array_key_exists($strKey, $this->arrData)) {
             trigger_error($this->getName() . ': Undefined template variable: ' . $strKey, E_USER_WARNING);
 
             return null;
@@ -220,15 +219,12 @@ class Template
         $strTemplate = basename($strTemplate);
 
         // Contao 3.X only.
-        if (version_compare(VERSION, '3.0', '>='))
-        {
+        if (version_compare(VERSION, '3.0', '>=')) {
             // Check for a theme folder.
-            if (TL_MODE == 'FE')
-            {
+            if (TL_MODE == 'FE') {
                 $strCustom = str_replace('../', '', $GLOBALS['objPage']->templateGroup);
 
-                if ($strCustom != '')
-                {
+                if ($strCustom != '') {
                     return \TemplateLoader::getPath($strTemplate, $strFormat, $strCustom);
                 }
             }
@@ -241,12 +237,10 @@ class Template
 
         $strTemplateGroup = '';
         // Check for a theme folder.
-        if (TL_MODE == 'FE')
-        {
+        if (TL_MODE == 'FE') {
             $strTemplateGroup = str_replace(array('../', 'templates/'), '', $GLOBALS['objPage']->templateGroup);
 
-            if ($strTemplateGroup != '')
-            {
+            if ($strTemplateGroup != '') {
                 $strKey = $strTemplateGroup . '/' . $strKey;
             }
         }
@@ -254,14 +248,10 @@ class Template
         $objCache = \FileCache::getInstance('templates');
 
         // Try to load the template path from the cache.
-        if (!$GLOBALS['TL_CONFIG']['debugMode'] && isset($objCache->$strKey))
-        {
-            if (file_exists(TL_ROOT . '/' . $objCache->$strKey))
-            {
+        if (!$GLOBALS['TL_CONFIG']['debugMode'] && isset($objCache->$strKey)) {
+            if (file_exists(TL_ROOT . '/' . $objCache->$strKey)) {
                 return TL_ROOT . '/' . $objCache->$strKey;
-            }
-            else
-            {
+            } else {
                 unset($objCache->$strKey);
             }
         }
@@ -269,12 +259,10 @@ class Template
         $strPath = TL_ROOT . '/templates';
 
         // Check the theme folder first.
-        if (TL_MODE == 'FE' && $strTemplateGroup != '')
-        {
+        if (TL_MODE == 'FE' && $strTemplateGroup != '') {
             $strFile = $strPath . '/' . $strTemplateGroup . '/' . $strFilename;
 
-            if (file_exists($strFile))
-            {
+            if (file_exists($strFile)) {
                 $objCache->$strKey = 'templates/' . $strTemplateGroup . '/' . $strFilename;
                 return $strFile;
             }
@@ -283,26 +271,22 @@ class Template
         // Then check the global templates directory.
         $strFile = $strPath . '/' . $strFilename;
 
-        if (file_exists($strFile))
-        {
+        if (file_exists($strFile)) {
             $objCache->$strKey = 'templates/' . $strFilename;
             return $strFile;
         }
 
         // At last browse all module folders in reverse order.
-        foreach (array_reverse(\Config::getInstance()->getActiveModules()) as $strModule)
-        {
+        foreach (array_reverse(\Config::getInstance()->getActiveModules()) as $strModule) {
             $strFile = TL_ROOT . '/system/modules/' . $strModule . '/templates/' . $strFilename;
 
-            if (file_exists($strFile))
-            {
+            if (file_exists($strFile)) {
                 $objCache->$strKey = 'system/modules/' . $strModule . '/templates/' . $strFilename;
                 return $strFile;
             }
         }
 
-        if ($blnFailIfNotFound)
-        {
+        if ($blnFailIfNotFound) {
             throw new \Exception('Could not find template file "' . $strFilename . '"');
         }
 
@@ -316,10 +300,10 @@ class Template
      */
     protected function callParseTemplateHook()
     {
-        if (isset($GLOBALS['METAMODEL_HOOKS']['parseTemplate']) && is_array($GLOBALS['METAMODEL_HOOKS']['parseTemplate']))
-        {
-            foreach ($GLOBALS['METAMODEL_HOOKS']['parseTemplate'] as $callback)
-            {
+        if (isset($GLOBALS['METAMODEL_HOOKS']['parseTemplate'])
+            && is_array($GLOBALS['METAMODEL_HOOKS']['parseTemplate'])
+        ) {
+            foreach ($GLOBALS['METAMODEL_HOOKS']['parseTemplate'] as $callback) {
                 list($strClass, $strMethod) = $callback;
 
                 $objCallback = (in_array('getInstance', get_class_methods($strClass)))
@@ -343,8 +327,7 @@ class Template
      */
     public function parse($strOutputFormat, $blnFailIfNotFound = false)
     {
-        if ($this->strTemplate == '')
-        {
+        if ($this->strTemplate == '') {
             return '';
         }
 
@@ -352,8 +335,7 @@ class Template
         $this->callParseTemplateHook();
 
         $strTplFile = $this->getTemplate($this->strTemplate, $strOutputFormat, $blnFailIfNotFound);
-        if ($strTplFile)
-        {
+        if ($strTplFile) {
             $this->strFormat = $strOutputFormat;
 
             ob_start();

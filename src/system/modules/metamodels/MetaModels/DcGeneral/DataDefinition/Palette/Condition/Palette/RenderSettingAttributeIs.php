@@ -85,8 +85,7 @@ class RenderSettingAttributeIs implements PaletteConditionInterface
      */
     public function getTypeOfAttribute($value)
     {
-        if (!isset(self::$attributeTypes[$value]))
-        {
+        if (!isset(self::$attributeTypes[$value])) {
             self::$attributeTypes[$value] = \Database::getInstance()
                 ->prepare('SELECT type FROM tl_metamodel_attribute WHERE id=?')
                 ->limit(1)
@@ -101,16 +100,11 @@ class RenderSettingAttributeIs implements PaletteConditionInterface
      */
     public function getMatchCount(ModelInterface $model = null, PropertyValueBag $input = null)
     {
-        if ($input && $input->hasPropertyValue('attr_id'))
-        {
+        if ($input && $input->hasPropertyValue('attr_id')) {
             $value = $input->getPropertyValue('attr_id');
-        }
-        elseif ($model)
-        {
+        } elseif ($model) {
             $value = $model->getProperty('attr_id');
-        }
-        else
-        {
+        } else {
             return false;
         }
 

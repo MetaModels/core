@@ -44,16 +44,14 @@ class Factory implements IFactory
      */
     public static function byId($intId)
     {
-        if (empty(self::$arrInstances[$intId]))
-        {
+        if (empty(self::$arrInstances[$intId])) {
             $objDB = \Database::getInstance();
 
             $arrSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
                 ->execute($intId)
                 ->row();
 
-            if (!empty($arrSettings))
-            {
+            if (!empty($arrSettings)) {
                 $objSetting = new Collection($arrSettings);
                 $objSetting->collectRules();
             } else {
@@ -67,4 +65,3 @@ class Factory implements IFactory
         return $objSetting;
     }
 }
-

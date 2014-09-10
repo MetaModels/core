@@ -55,8 +55,7 @@ class Model implements ModelInterface
     {
         $propertyNames = array('id', 'pid', 'tstamp', 'sorting');
 
-        if ($this->getItem()->getMetaModel()->hasVariants())
-        {
+        if ($this->getItem()->getMetaModel()->hasVariants()) {
             $propertyNames[] = 'varbase';
             $propertyNames[] = 'vargroup';
         }
@@ -105,13 +104,11 @@ class Model implements ModelInterface
      */
     public function getProperty($strPropertyName)
     {
-        if ($this->getItem())
-        {
+        if ($this->getItem()) {
             $varValue = $this->getItem()->get($strPropertyName);
             // Test if it is an attribute, if so, let it transform the data for the widget.
             $objAttribute = $this->getItem()->getAttribute($strPropertyName);
-            if ($objAttribute)
-            {
+            if ($objAttribute) {
                 $varValue = $objAttribute->valueToWidget($varValue);
             }
             return $varValue;
@@ -126,8 +123,7 @@ class Model implements ModelInterface
     {
         $arrResult = array();
 
-        foreach ($this->getPropertyNames() as $strKey)
-        {
+        foreach ($this->getPropertyNames() as $strKey) {
             $arrResult[$strKey] = $this->getProperty($strKey);
         }
         return $arrResult;
@@ -138,8 +134,7 @@ class Model implements ModelInterface
      */
     public function getMeta($strMetaName)
     {
-        if (array_key_exists($strMetaName, $this->arrMetaInformation))
-        {
+        if (array_key_exists($strMetaName, $this->arrMetaInformation)) {
             return $this->arrMetaInformation[$strMetaName];
         }
         return null;
@@ -158,12 +153,10 @@ class Model implements ModelInterface
      */
     public function setProperty($strPropertyName, $varValue)
     {
-        if ($this->getItem())
-        {
+        if ($this->getItem()) {
             // Test if it is an attribute, if so, let it transform the data for the widget.
             $objAttribute = $this->getItem()->getAttribute($strPropertyName);
-            if ($objAttribute)
-            {
+            if ($objAttribute) {
                 $varValue = $objAttribute->widgetToValue($varValue, $this->getItem()->get('id'));
             }
             $this->getItem()->set($strPropertyName, $varValue);
@@ -175,8 +168,7 @@ class Model implements ModelInterface
      */
     public function setPropertiesAsArray($arrProperties)
     {
-        foreach ($arrProperties as $strKey => $varValue)
-        {
+        foreach ($arrProperties as $strKey => $varValue) {
             $this->setProperty($strKey, $varValue);
         }
     }
@@ -220,15 +212,12 @@ class Model implements ModelInterface
      */
     public function readFromPropertyValueBag(PropertyValueBagInterface $valueBag)
     {
-        foreach ($this->getPropertyNames() as $property)
-        {
-            if (!$valueBag->hasPropertyValue($property))
-            {
+        foreach ($this->getPropertyNames() as $property) {
+            if (!$valueBag->hasPropertyValue($property)) {
                 continue;
             }
 
-            if ($valueBag->isPropertyValueInvalid($property))
-            {
+            if ($valueBag->isPropertyValueInvalid($property)) {
                 throw new DcGeneralInvalidArgumentException('The value for property ' . $property . ' is invalid.');
             }
 
@@ -241,10 +230,8 @@ class Model implements ModelInterface
      */
     public function writeToPropertyValueBag(PropertyValueBagInterface $valueBag)
     {
-        foreach ($this->getPropertyNames() as $property)
-        {
-            if (!$valueBag->hasPropertyValue($property))
-            {
+        foreach ($this->getPropertyNames() as $property) {
+            if (!$valueBag->hasPropertyValue($property)) {
                 continue;
             }
 

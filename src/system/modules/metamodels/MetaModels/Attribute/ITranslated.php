@@ -73,4 +73,3 @@ interface ITranslated extends IAttribute
      */
     public function unsetValueFor($arrIds, $strLangCode);
 }
-

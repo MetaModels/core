@@ -42,8 +42,7 @@ class Filter extends \ContentElement
      */
     public function generate()
     {
-        if (TL_MODE == 'BE')
-        {
+        if (TL_MODE == 'BE') {
             $objTemplate           = new \BackendTemplate('be_wildcard');
             $objTemplate->wildcard = '### METAMODELS FE-FILTERBLOCK ###';
             $objTemplate->title    = $this->headline;
@@ -52,8 +51,7 @@ class Filter extends \ContentElement
         }
 
         // Get template if configured.
-        if ($this->metamodel_fef_template)
-        {
+        if ($this->metamodel_fef_template) {
             $this->strTemplate = $this->metamodel_fef_template;
         }
 
@@ -74,4 +72,3 @@ class Filter extends \ContentElement
         $this->Template->submit = $arrFilter['submit'];
     }
 }
-

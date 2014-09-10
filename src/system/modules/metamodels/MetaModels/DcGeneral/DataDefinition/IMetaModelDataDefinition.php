@@ -27,8 +27,7 @@ use MetaModels\DcGeneral\DataDefinition\Definition\IMetaModelDefinition;
  *
  * @package MetaModels\DcGeneral\DataDefinition
  */
-interface IMetaModelDataDefinition
-    extends ContainerInterface
+interface IMetaModelDataDefinition extends ContainerInterface
 {
     /**
      * Set the MetaModel definition.

@@ -25,8 +25,7 @@ use MetaModels\IMetaModel;
 /**
  * This event is triggered for every attribute when the data container is being built.
  */
-class PopulateAttributeEvent
-    extends AbstractEnvironmentAwareEvent
+class PopulateAttributeEvent extends AbstractEnvironmentAwareEvent
 {
     /**
      * The event name.

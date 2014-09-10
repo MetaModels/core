@@ -42,8 +42,7 @@ class DrawSetting
      */
     public static function getLabelComment(ModelInterface $model, EnvironmentInterface $environment)
     {
-        if ($model->getProperty('comment'))
-        {
+        if ($model->getProperty('comment')) {
             return sprintf(
                 $environment->getTranslator()->translate('typedesc._comment_', 'tl_metamodel_filtersetting'),
                 specialchars($model->getProperty('comment'))
@@ -66,16 +65,13 @@ class DrawSetting
         $type  = $model->getProperty('type');
         $image = $GLOBALS['METAMODELS']['filters'][$type]['image'];
 
-        if (!$image || !file_exists(TL_ROOT . '/' . $image))
-        {
+        if (!$image || !file_exists(TL_ROOT . '/' . $image)) {
             $image = 'system/modules/metamodels/assets/images/icons/filter_default.png';
         }
 
-        if (!$model->getProperty('enabled'))
-        {
+        if (!$model->getProperty('enabled')) {
             $intPos = strrpos($image, '.');
-            if ($intPos !== false)
-            {
+            if ($intPos !== false) {
                 $image = substr_replace($image, '_1', $intPos, 0);
             }
         }
@@ -112,8 +108,7 @@ class DrawSetting
     {
         $type  = $model->getProperty('type');
         $label = $environment->getTranslator()->translate('typenames.' . $type, 'tl_metamodel_filtersetting');
-        if ($label == 'typenames.' . $type)
-        {
+        if ($label == 'typenames.' . $type) {
             return $type;
         }
         return $label;
@@ -134,8 +129,7 @@ class DrawSetting
         $translator = $environment->getTranslator();
         $combined   = 'typedesc.' . $type;
 
-        if (($resultPattern = $translator->translate($combined, 'tl_metamodel_filtersetting')) == $combined)
-        {
+        if (($resultPattern = $translator->translate($combined, 'tl_metamodel_filtersetting')) == $combined) {
             $resultPattern = $translator->translate('typedesc._default_', 'tl_metamodel_filtersetting');
         }
 
@@ -156,8 +150,7 @@ class DrawSetting
         $metamodel   = Factory::byId($model->getProperty('fid'))->getMetaModel();
         $attribute   = $metamodel->getAttributeById($model->getProperty('attr_id'));
 
-        if ($attribute)
-        {
+        if ($attribute) {
             $attributeName = $attribute->getColName();
         } else {
             $attributeName = $model->getProperty('attr_id');
@@ -218,8 +211,7 @@ class DrawSetting
                 $environment->getDataDefinition()->getName(),
                 $type
             )
-        )->isPropagationStopped())
-        {
+        )->isPropagationStopped()) {
             // Handle with default drawing if no one wants to handle.
             self::modelToLabelDefault($event);
         }

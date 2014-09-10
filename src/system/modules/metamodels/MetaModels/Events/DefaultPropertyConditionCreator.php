@@ -27,8 +27,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * This class creates the default instances for property conditions when generating input screens.
  */
-class DefaultPropertyConditionCreator
-    implements EventSubscriberInterface
+class DefaultPropertyConditionCreator implements EventSubscriberInterface
 {
     /**
      * {@inheritDoc}
@@ -55,13 +54,11 @@ class DefaultPropertyConditionCreator
         $meta      = $event->getData();
         $metaModel = $event->getMetaModel();
 
-        if (!$metaModel)
-        {
+        if (!$metaModel) {
             throw new \RuntimeException('Could not retrieve MetaModel from event.');
         }
 
-        switch ($meta['type'])
-        {
+        switch ($meta['type']) {
             case 'conditionor':
                 $event->setInstance(new PropertyConditionChain(array(), ConditionChainInterface::OR_CONJUNCTION));
                 break;
@@ -71,8 +68,7 @@ class DefaultPropertyConditionCreator
             case 'conditionpropertyvalueis':
                 $attribute = $metaModel->getAttributeById($meta['attr_id']);
 
-                if (!$attribute)
-                {
+                if (!$attribute) {
                     throw new \RuntimeException(sprintf(
                         'Could not retrieve attribute %s from MetaModel %s.',
                         $meta['attr_id'],
@@ -88,8 +84,7 @@ class DefaultPropertyConditionCreator
             case 'conditionpropertyvisible':
                 $attribute = $metaModel->getAttributeById($meta['attr_id']);
 
-                if (!$attribute)
-                {
+                if (!$attribute) {
                     throw new \RuntimeException(sprintf(
                         'Could not retrieve attribute %s from MetaModel %s.',
                         $meta['attr_id'],
@@ -97,9 +92,7 @@ class DefaultPropertyConditionCreator
                     ));
                 }
 
-                $event->setInstance(new PropertyVisibleCondition(
-                    $attribute->getColName())
-                );
+                $event->setInstance(new PropertyVisibleCondition($attribute->getColName()));
                 break;
 
             case 'conditionnot':

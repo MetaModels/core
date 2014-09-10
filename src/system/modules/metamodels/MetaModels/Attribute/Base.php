@@ -62,10 +62,8 @@ abstract class Base implements IAttribute
     public function __construct(IMetaModel $objMetaModel, $arrData = array())
     {
         // Meta information.
-        foreach ($this->getAttributeSettingNames() as $strSettingName)
-        {
-            if (isset($arrData[$strSettingName]))
-            {
+        foreach ($this->getAttributeSettingNames() as $strSettingName) {
+            if (isset($arrData[$strSettingName])) {
                 $this->set($strSettingName, $arrData[$strSettingName]);
             }
         }
@@ -82,8 +80,7 @@ abstract class Base implements IAttribute
      */
     public function getName()
     {
-        if (is_array($this->arrData['name']))
-        {
+        if (is_array($this->arrData['name'])) {
             return $this->getLangValue($this->get('name'));
         }
         return $this->arrData['name'];
@@ -92,8 +89,8 @@ abstract class Base implements IAttribute
     /**
      * This extracts the value for the given language from the given language array.
      *
-     * If the language is not contained within the value array, the fallback language from the parenting {@link IMetaModel}
-     * instance is tried as well.
+     * If the language is not contained within the value array, the fallback language from the parenting
+     * {@link IMetaModel} instance is tried as well.
      *
      * @param array  $arrValues   The array holding all language values in the form array('langcode' => $varValue).
      *
@@ -104,18 +101,15 @@ abstract class Base implements IAttribute
      */
     protected function getLangValue($arrValues, $strLangCode = null)
     {
-        if (!($this->getMetaModel()->isTranslated() && is_array($arrValues)))
-        {
+        if (!($this->getMetaModel()->isTranslated() && is_array($arrValues))) {
             return $arrValues;
         }
 
-        if ($strLangCode === null)
-        {
+        if ($strLangCode === null) {
             return $this->getLangValue($arrValues, $GLOBALS['TL_LANGUAGE']);
         }
 
-        if (array_key_exists($strLangCode, $arrValues))
-        {
+        if (array_key_exists($strLangCode, $arrValues)) {
             return $arrValues[$strLangCode];
         }
 
@@ -140,17 +134,21 @@ abstract class Base implements IAttribute
     {
         $arrResult = $arrBaseFormatted;
 
-        if (isset($GLOBALS['METAMODEL_HOOKS']['parseValue']) && is_array($GLOBALS['METAMODEL_HOOKS']['parseValue']))
-        {
-            foreach ($GLOBALS['METAMODEL_HOOKS']['parseValue'] as $callback)
-            {
+        if (isset($GLOBALS['METAMODEL_HOOKS']['parseValue']) && is_array($GLOBALS['METAMODEL_HOOKS']['parseValue'])) {
+            foreach ($GLOBALS['METAMODEL_HOOKS']['parseValue'] as $callback) {
                 list($strClass, $strMethod) = $callback;
 
                 $objCallback = (in_array('getInstance', get_class_methods($strClass)))
                     ? call_user_func(array($strClass, 'getInstance'))
                     : new $strClass();
 
-                $arrResult = $objCallback->$strMethod($this, $arrBaseFormatted, $arrRowData, $strOutputFormat, $objSettings);
+                $arrResult = $objCallback->$strMethod(
+                    $this,
+                    $arrBaseFormatted,
+                    $arrRowData,
+                    $strOutputFormat,
+                    $objSettings
+                );
             }
         }
 
@@ -208,8 +206,7 @@ abstract class Base implements IAttribute
      */
     public function set($strKey, $varValue)
     {
-        if (in_array($strKey, $this->getAttributeSettingNames()))
-        {
+        if (in_array($strKey, $this->getAttributeSettingNames())) {
             $this->arrData[$strKey] = deserialize($varValue);
         }
         return $this;
@@ -261,8 +258,7 @@ abstract class Base implements IAttribute
     {
         $strTableName = $this->getMetaModel()->getTableName();
         // Only overwrite the language if not already set.
-        if (empty($GLOBALS['TL_LANG'][$strTableName][$this->getColName()]))
-        {
+        if (empty($GLOBALS['TL_LANG'][$strTableName][$this->getColName()])) {
             $GLOBALS['TL_LANG'][$strTableName][$this->getColName()] = array
             (
                 $this->getLangValue($this->get('name')),
@@ -271,13 +267,13 @@ abstract class Base implements IAttribute
         }
 
         $arrFieldDef = array();
-        if (isset($GLOBALS['TL_DCA'][$strTableName]['fields'][$this->getColName()]))
-        {
+        if (isset($GLOBALS['TL_DCA'][$strTableName]['fields'][$this->getColName()])) {
             $arrFieldDef = $GLOBALS['TL_DCA'][$strTableName]['fields'][$this->getColName()];
         }
 
         $arrFieldDef = array_replace_recursive(
-            array(
+            array
+            (
                 'label' => &$GLOBALS['TL_LANG'][$strTableName][$this->getColName()],
                 'eval'  => array()
             ),
@@ -292,7 +288,8 @@ abstract class Base implements IAttribute
         $arrFieldDef['eval']['alwaysSave'] = (!empty($arrFieldDef['eval']['alwaysSave']))
             || ($this->get('alwaysSave') && in_array('alwaysSave', $arrSettingNames));
 
-        foreach (array(
+        foreach (array
+        (
             'tl_class',
             'mandatory',
             'alwaysSave',
@@ -307,35 +304,28 @@ abstract class Base implements IAttribute
             'includeBlankOption',
             'submitOnChange',
             'readonly'
-        ) as $strEval)
-        {
-            if (in_array($strEval, $arrSettingNames) && $arrOverrides[$strEval])
-            {
+        ) as $strEval) {
+            if (in_array($strEval, $arrSettingNames) && $arrOverrides[$strEval]) {
                 $arrFieldDef['eval'][$strEval] = $arrOverrides[$strEval];
             }
         }
 
-        if (in_array('trailingSlash', $arrSettingNames) && ($arrOverrides['trailingSlash'] != 2))
-        {
+        if (in_array('trailingSlash', $arrSettingNames) && ($arrOverrides['trailingSlash'] != 2)) {
             $arrFieldDef['eval']['trailingSlash'] = (bool)$arrOverrides['trailingSlash'];
         }
 
         // Sorting flag override.
-        if (in_array('flag', $arrSettingNames) && $arrOverrides['flag'])
-        {
+        if (in_array('flag', $arrSettingNames) && $arrOverrides['flag']) {
             $arrFieldDef['flag'] = $arrOverrides['flag'];
         }
         // Panel conditions.
-        if (in_array('filterable', $arrSettingNames) && $arrOverrides['filterable'])
-        {
+        if (in_array('filterable', $arrSettingNames) && $arrOverrides['filterable']) {
             $arrFieldDef['filter'] = true;
         }
-        if (in_array('searchable', $arrSettingNames) && $arrOverrides['searchable'])
-        {
+        if (in_array('searchable', $arrSettingNames) && $arrOverrides['searchable']) {
             $arrFieldDef['search'] = true;
         }
-        if (in_array('sortable', $arrSettingNames) && $arrOverrides['sortable'])
-        {
+        if (in_array('sortable', $arrSettingNames) && $arrOverrides['sortable']) {
             $arrFieldDef['sorting'] = true;
         }
         return $arrFieldDef;
@@ -354,8 +344,7 @@ abstract class Base implements IAttribute
             ),
         );
         // Add sorting fields.
-        if (in_array('sortable', $this->getAttributeSettingNames()) && $arrOverrides['sortable'])
-        {
+        if (in_array('sortable', $this->getAttributeSettingNames()) && $arrOverrides['sortable']) {
             $arrReturn['list']['sorting']['fields'][] = $this->getColName();
         }
         return $arrReturn;
@@ -382,10 +371,12 @@ abstract class Base implements IAttribute
      */
     public function getDefaultRenderSettings()
     {
-        $objSetting = new Simple(array
-        (
-            'template' => 'mm_attr_' . $this->get('type')
-        ));
+        $objSetting = new Simple(
+            array
+            (
+                'template' => 'mm_attr_' . $this->get('type')
+            )
+        );
         return $objSetting;
     }
 
@@ -398,8 +389,7 @@ abstract class Base implements IAttribute
             'raw' => $arrRowData[$this->getColName()],
         );
 
-        if ($objSettings && $objSettings->get('template'))
-        {
+        if ($objSettings && $objSettings->get('template')) {
             $strTemplate = $objSettings->get('template');
 
             $objTemplate = new Template($strTemplate);
@@ -407,8 +397,7 @@ abstract class Base implements IAttribute
             $this->prepareTemplate($objTemplate, $arrRowData, $objSettings);
 
             // Now the desired format.
-            if ($strValue = $objTemplate->parse($strOutputFormat, false))
-            {
+            if ($strValue = $objTemplate->parse($strOutputFormat, false)) {
                 $arrResult[$strOutputFormat] = $strValue;
             }
 
@@ -426,8 +415,7 @@ abstract class Base implements IAttribute
                 $arrResult['text'] = $objTemplate->parse('text', true);
             }
 
-        }
-        else {
+        } else {
             // Text rendering is mandatory, therefore render using default render settings.
             $arrResult = $this->parseValue($arrRowData, 'text', $this->getDefaultRenderSettings());
         }
@@ -468,10 +456,12 @@ abstract class Base implements IAttribute
      * {@inheritdoc}
      * Base implementation, do not perform any search;
      */
+    // @codingStandardsIgnoreStart - empty base implementation, therefore parameter not used.
     public function searchFor($strPattern)
     {
         return array();
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * Filter all values greater than the passed value.
@@ -484,10 +474,12 @@ abstract class Base implements IAttribute
      *
      * @return int[] The list of item ids of all items matching the condition.
      */
+    // @codingStandardsIgnoreStart - empty base implementation, therefore parameter not used.
     public function filterGreaterThan($varValue, $blnInclusive = false)
     {
         return array();
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * Filter all values less than the passed value.
@@ -500,10 +492,12 @@ abstract class Base implements IAttribute
      *
      * @return int[] The list of item ids of all items matching the condition.
      */
+    // @codingStandardsIgnoreStart - empty base implementation, therefore parameter not used.
     public function filterLessThan($varValue, $blnInclusive = false)
     {
         return array();
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * Filter all values not having the passed value.
@@ -528,4 +522,3 @@ abstract class Base implements IAttribute
         // No-op.
     }
 }
-

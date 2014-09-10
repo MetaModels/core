@@ -24,8 +24,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPr
  *
  * @package MetaModels\DcGeneral\Events\Table\InputScreens
  */
-class PropertyAttribute
-    extends InputScreenBase
+class PropertyAttribute extends InputScreenBase
 {
     /**
      * Retrieve the options for the attributes.
@@ -39,8 +38,7 @@ class PropertyAttribute
         $model     = $event->getModel();
         $metaModel = self::getMetaModelFromModel($model);
 
-        if (!$metaModel)
-        {
+        if (!$metaModel) {
             return;
         }
 
@@ -63,10 +61,8 @@ class PropertyAttribute
             )
             ->fetchEach('attr_id');
 
-        foreach ($metaModel->getAttributes() as $attribute)
-        {
-            if (in_array($attribute->get('id'), $alreadyTaken))
-            {
+        foreach ($metaModel->getAttributes() as $attribute) {
+            if (in_array($attribute->get('id'), $alreadyTaken)) {
                 continue;
             }
             $arrResult[$attribute->get('id')] = sprintf(

@@ -232,7 +232,8 @@ interface IMetaModel
      *
      * @param IFilter $objFilter    The filter to use or null if no filtering.
      *
-     * @return array all options matching the given filter for the given attribute to be usable in a filter select widget.
+     * @return array all options matching the given filter for the given attribute to be usable in a filter select
+     *               widget.
      */
     public function getAttributeOptions($strAttribute, $objFilter = null);
 
@@ -281,4 +282,3 @@ interface IMetaModel
      */
     public function getView($intViewId = 0);
 }
-

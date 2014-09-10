@@ -54,4 +54,3 @@ interface IFactory
      */
     public static function getAllTables();
 }
-

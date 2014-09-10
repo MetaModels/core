@@ -27,8 +27,7 @@ use MetaModels\Dca\Helper;
  *
  * @package MetaModels\DcGeneral\Events\Table\InputScreens
  */
-class PropertyLegendTitle
-    extends InputScreenBase
+class PropertyLegendTitle extends InputScreenBase
 {
     /**
      * Decode the title value.

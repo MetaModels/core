@@ -60,13 +60,11 @@ class InsertTags extends \Controller
         $arrElements = explode('::', $strTag);
 
         // Check if we have the mm tags.
-        if ($arrElements[0] != 'mm')
-        {
+        if ($arrElements[0] != 'mm') {
             return false;
         }
 
-        try
-        {
+        try {
             // Call the fitting function.
             switch ($arrElements[1])
             {
@@ -87,9 +85,7 @@ class InsertTags extends \Controller
 
                 default:
             }
-        }
-        catch (\Exception $exc)
-        {
+        } catch (\Exception $exc) {
             $this->log('Error by replace tags: ' . $exc->getMessage(), __CLASS__ . ' | ' . __FUNCTION__, TL_ERROR);
         }
 
@@ -112,53 +108,44 @@ class InsertTags extends \Controller
     protected function jumpTo($mixMetaModel, $mixDataId, $intIdRenderSetting, $strParam = 'url')
     {
         // Set the param to url if empty.
-        if (empty($strParam))
-        {
+        if (empty($strParam)) {
             $strParam = 'url';
         }
 
         // Get the MetaModel. Return if we can not find one.
         $objMetaModel = $this->loadMetaModel($mixMetaModel);
-        if ($objMetaModel == null)
-        {
+        if ($objMetaModel == null) {
             return false;
         }
 
         // Get the render setting.
         $objRenderSettings = SettingFactory::byId($objMetaModel, $intIdRenderSetting);
-        if ($objRenderSettings == null)
-        {
+        if ($objRenderSettings == null) {
             return false;
         }
 
         // Get the data row.
         $objItem = $objMetaModel->findById($mixDataId);
-        if ($objItem == null)
-        {
+        if ($objItem == null) {
             return false;
         }
 
         // Render the item and check if we have a jump to.
         $arrRenderedItem = $objItem->parseValue('text', $objRenderSettings);
-        if (!isset($arrRenderedItem['jumpTo']))
-        {
+        if (!isset($arrRenderedItem['jumpTo'])) {
             return false;
         }
 
         // Check if someone want the sub params.
-        if (stripos($strParam, 'params.') !== false)
-        {
-            $mixAttName    = trimsplit('.', $strParam);
-            $mixAttName    = array_pop($mixAttName);
+        if (stripos($strParam, 'params.') !== false) {
+            $mixAttName = trimsplit('.', $strParam);
+            $mixAttName = array_pop($mixAttName);
 
-            if (isset($arrRenderedItem['jumpTo']['params'][$mixAttName]))
-            {
+            if (isset($arrRenderedItem['jumpTo']['params'][$mixAttName])) {
                 return $arrRenderedItem['jumpTo']['params'][$mixAttName];
             }
-        }
-        // Else just return the ask param.
-        elseif (isset($arrRenderedItem['jumpTo'][$strParam]))
-        {
+        } elseif (isset($arrRenderedItem['jumpTo'][$strParam])) {
+            // Else just return the ask param.
             return $arrRenderedItem['jumpTo'][$strParam];
         }
 
@@ -183,14 +170,12 @@ class InsertTags extends \Controller
     {
         // Get the MetaModel. Return if we can not find one.
         $objMetaModel = $this->loadMetaModel($metaModelIdOrName);
-        if ($objMetaModel == null)
-        {
+        if ($objMetaModel == null) {
             return false;
         }
 
         // Set output to default if not set.
-        if (empty($strOutput))
-        {
+        if (empty($strOutput)) {
             $strOutput = 'html5';
         }
 
@@ -203,18 +188,15 @@ class InsertTags extends \Controller
         $arrIds = trimsplit(',', $mixDataId);
 
         // Check each id if published.
-        foreach ($arrIds as $intKey => $intId)
-        {
-            if (!$this->isPublishedItem($objMetaModel, $intId))
-            {
+        foreach ($arrIds as $intKey => $intId) {
+            if (!$this->isPublishedItem($objMetaModel, $intId)) {
                 unset($arrIds[$intKey]);
             }
         }
 
         // Render an empty insert tag rather than displaying a list with an empty.
         // result information. do not return false here because the insert tag itself is correct.
-        if (count($arrIds) < 1)
-        {
+        if (count($arrIds) < 1) {
             return '';
         }
 
@@ -239,14 +221,12 @@ class InsertTags extends \Controller
     {
         // Get the MM.
         $objMM = $this->loadMetaModel($metaModelIdOrName);
-        if ($objMM == null)
-        {
+        if ($objMM == null) {
             return false;
         }
 
         // Set output to default if not set.
-        if (empty($strOutput))
-        {
+        if (empty($strOutput)) {
             $strOutput = 'raw';
         }
 
@@ -289,8 +269,7 @@ class InsertTags extends \Controller
         }
 
         // Check if we have data.
-        if ($objMetaModelResult != null)
-        {
+        if ($objMetaModelResult != null) {
             return $this->getCountFor($objMetaModelResult->metamodel, $objMetaModelResult->metamodel_filtering);
         }
 
@@ -306,14 +285,11 @@ class InsertTags extends \Controller
      */
     protected function loadMetaModel($nameOrId)
     {
-        // ID.
-        if (is_numeric($nameOrId))
-        {
+        if (is_numeric($nameOrId)) {
+            // ID.
             return Factory::byId($nameOrId);
-        }
-        // Name.
-        elseif (is_string($nameOrId))
-        {
+        } elseif (is_string($nameOrId)) {
+            // Name.
             return Factory::byTableName($nameOrId);
         }
 
@@ -335,8 +311,7 @@ class InsertTags extends \Controller
         $objDB = \Database::getInstance();
 
         // Check if we know the table.
-        if (!$objDB->tableExists($strTable))
-        {
+        if (!$objDB->tableExists($strTable)) {
             return null;
         }
 
@@ -347,8 +322,7 @@ class InsertTags extends \Controller
                 ->execute($intID);
 
         // Check if we have some data.
-        if ($objResult->numRows < 1)
-        {
+        if ($objResult->numRows < 1) {
             return null;
         }
 
@@ -367,8 +341,7 @@ class InsertTags extends \Controller
     protected function getCountFor($intMetaModelId, $intFilterId)
     {
         $objMetaModel = $this->loadMetaModel($intMetaModelId);
-        if ($objMetaModel == null)
-        {
+        if ($objMetaModel == null) {
             return false;
         }
 
@@ -394,11 +367,9 @@ class InsertTags extends \Controller
                 ->limit(1)
                 ->execute($objMetaModel->get('id'));
 
-        if ($objAttrCheckPublish->numRows > 0)
-        {
+        if ($objAttrCheckPublish->numRows > 0) {
             $objItem = $objMetaModel->findById($intItemId);
-            if (!$objItem->get($objAttrCheckPublish->colname))
-            {
+            if (!$objItem->get($objAttrCheckPublish->colname)) {
                 return false;
             }
         }

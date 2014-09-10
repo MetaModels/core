@@ -49,4 +49,3 @@ interface IFilter
      */
     public function getMatchingIds();
 }
-

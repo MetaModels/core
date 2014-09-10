@@ -45,8 +45,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetGl
  *
  * @package MetaModels\DcGeneral\Events
  */
-class Subscriber
-    extends BaseSubscriber
+class Subscriber extends BaseSubscriber
 {
     /**
      * Register all listeners to handle creation of a data container.
@@ -126,8 +125,7 @@ class Subscriber
     public static function registerTableMetaModelsEvents()
     {
         static $registered;
-        if ($registered)
-        {
+        if ($registered) {
             return;
         }
         $registered = true;
@@ -135,13 +133,16 @@ class Subscriber
 
         self::registerListeners(
             array(
-                GetOperationButtonEvent::NAME => 'MetaModels\DcGeneral\Events\Table\MetaModels\Subscriber::getOperationButton',
-                GetGlobalButtonEvent::NAME    => 'MetaModels\DcGeneral\Events\Table\MetaModels\Subscriber::getGlobalButton',
-                ModelToLabelEvent::NAME       => 'MetaModels\DcGeneral\Events\Table\MetaModels\Subscriber::modelToLabel',
-                GetBreadcrumbEvent::NAME      => self::createClosure(
-                        'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbMetaModels',
-                        'getBreadcrumb'
-                    ),
+                GetOperationButtonEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\MetaModels\Subscriber::getOperationButton',
+                GetGlobalButtonEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\MetaModels\Subscriber::getGlobalButton',
+                ModelToLabelEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\MetaModels\Subscriber::modelToLabel',
+                GetBreadcrumbEvent::NAME => self::createClosure(
+                    'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbMetaModels',
+                    'getBreadcrumb'
+                ),
             ),
             $dispatcher,
             array('tl_metamodel')
@@ -173,9 +174,9 @@ class Subscriber
         self::registerListeners(
             array(
                 PostPersistModelEvent::NAME
-                => 'MetaModels\DcGeneral\Events\Table\MetaModels\UpdateMetaModel::handle',
+                    => 'MetaModels\DcGeneral\Events\Table\MetaModels\UpdateMetaModel::handle',
                 PreDeleteModelEvent::NAME
-                => 'MetaModels\DcGeneral\Events\Table\MetaModels\DeleteMetaModel::handle',
+                    => 'MetaModels\DcGeneral\Events\Table\MetaModels\DeleteMetaModel::handle',
             ),
             $dispatcher,
             array('tl_metamodel')
@@ -190,8 +191,7 @@ class Subscriber
     public static function registerTableMetaModelAttributeEvents()
     {
         static $registered;
-        if ($registered)
-        {
+        if ($registered) {
             return;
         }
         $registered = true;
@@ -200,7 +200,10 @@ class Subscriber
         self::registerListeners(
             array(
                 GetBreadcrumbEvent::NAME
-                    => self::createClosure('MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbAttributes', 'getBreadcrumb'),
+                    => self::createClosure(
+                        'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbAttributes',
+                        'getBreadcrumb'
+                    ),
                 ModelToLabelEvent::NAME
                     => 'MetaModels\DcGeneral\Events\Table\Attribute\DrawAttribute::modelToLabel',
             ),
@@ -210,7 +213,8 @@ class Subscriber
 
         self::registerListeners(
             array(
-                GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\Attribute\AttributeType::getOptions',
+                GetPropertyOptionsEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\Attribute\AttributeType::getOptions',
             ),
             $dispatcher,
             array('tl_metamodel_attribute', 'type')
@@ -278,8 +282,7 @@ class Subscriber
     public static function registerTableMetaModelDcaEvents(BuildDataDefinitionEvent $event)
     {
         static $registered;
-        if ($registered)
-        {
+        if ($registered) {
             return;
         }
         $registered = true;
@@ -303,7 +306,8 @@ class Subscriber
 
         self::registerListeners(
             array(
-                ManipulateWidgetEvent::NAME => 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPanelLayout::getWizard',
+                ManipulateWidgetEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPanelLayout::getWizard',
             ),
             $dispatcher,
             array('tl_metamodel_dca', 'panelLayout')
@@ -320,7 +324,8 @@ class Subscriber
 
         self::registerListeners(
             array(
-                GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyMode::getValidModes',
+                GetPropertyOptionsEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyMode::getValidModes',
                 DecodePropertyValueForWidgetEvent::NAME
                     => 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyMode::decodeMode',
                 EncodePropertyValueFromWidgetEvent::NAME
@@ -332,7 +337,8 @@ class Subscriber
 
         self::registerListeners(
             array(
-                GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPTable::getTables',
+                GetPropertyOptionsEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPTable::getTables',
             ),
             $dispatcher,
             array('tl_metamodel_dca', 'ptable')
@@ -358,8 +364,7 @@ class Subscriber
     public static function registerTableMetaModelDcaCombineEvents()
     {
         static $registered;
-        if ($registered)
-        {
+        if ($registered) {
             return;
         }
         $registered = true;
@@ -378,7 +383,8 @@ class Subscriber
 
         self::registerListeners(
             array(
-                GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyFeGroup::getOptions',
+                GetPropertyOptionsEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyFeGroup::getOptions',
             ),
             $dispatcher,
             array('tl_metamodel_dca_combine', 'rows', 'fe_group')
@@ -386,7 +392,8 @@ class Subscriber
 
         self::registerListeners(
             array(
-                GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyBeGroup::getOptions',
+                GetPropertyOptionsEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyBeGroup::getOptions',
             ),
             $dispatcher,
             array('tl_metamodel_dca_combine', 'rows', 'be_group')
@@ -394,7 +401,8 @@ class Subscriber
 
         self::registerListeners(
             array(
-                GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyDcaId::getOptions',
+                GetPropertyOptionsEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyDcaId::getOptions',
             ),
             $dispatcher,
             array('tl_metamodel_dca_combine', 'rows', 'dca_id')
@@ -402,7 +410,8 @@ class Subscriber
 
         self::registerListeners(
             array(
-                GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyViewId::getOptions',
+                GetPropertyOptionsEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyViewId::getOptions',
             ),
             $dispatcher,
             array('tl_metamodel_dca_combine', 'rows', 'view_id')
@@ -410,7 +419,8 @@ class Subscriber
 
         self::registerListeners(
             array(
-                EncodePropertyValueFromWidgetEvent::NAME => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyRows::fixSorting',
+                EncodePropertyValueFromWidgetEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyRows::fixSorting',
             ),
             $dispatcher,
             array('tl_metamodel_dca_combine', 'rows')
@@ -427,8 +437,7 @@ class Subscriber
     public static function registerTableMetaModelDcaSettingEvents(BuildDataDefinitionEvent $event)
     {
         static $registered;
-        if ($registered)
-        {
+        if ($registered) {
             return;
         }
         $registered = true;
@@ -466,7 +475,8 @@ class Subscriber
 
         self::registerListeners(
             array(
-                GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\InputScreens\PropertyAttribute::getOptions',
+                GetPropertyOptionsEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\InputScreens\PropertyAttribute::getOptions',
             ),
             $dispatcher,
             array('tl_metamodel_dcasetting', 'attr_id')
@@ -474,7 +484,8 @@ class Subscriber
 
         self::registerListeners(
             array(
-                ManipulateWidgetEvent::NAME => 'MetaModels\DcGeneral\Events\Table\InputScreens\PropertyTlClass::getWizard',
+                ManipulateWidgetEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\InputScreens\PropertyTlClass::getWizard',
             ),
             $dispatcher,
             array('tl_metamodel_dcasetting', 'tl_class')
@@ -482,7 +493,8 @@ class Subscriber
 
         self::registerListeners(
             array(
-                GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\InputScreens\PropertyRte::getOptions',
+                GetPropertyOptionsEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\InputScreens\PropertyRte::getOptions',
             ),
             $dispatcher,
             array('tl_metamodel_dcasetting', 'rte')
@@ -499,8 +511,7 @@ class Subscriber
     public static function registerTableMetaModelDcaSettingConditionsEvents()
     {
         static $registered;
-        if ($registered)
-        {
+        if ($registered) {
             return;
         }
         $registered = true;
@@ -517,7 +528,8 @@ class Subscriber
 
         self::registerListeners(
             array(
-                GetPasteButtonEvent::NAME => 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PasteButton::generate',
+                GetPasteButtonEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PasteButton::generate',
             ),
             $dispatcher,
             array('tl_metamodel_dcasetting_condition')
@@ -525,7 +537,8 @@ class Subscriber
 
         self::registerListeners(
             array(
-                GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PropertyType::getOptions',
+                GetPropertyOptionsEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PropertyType::getOptions',
             ),
             $dispatcher,
             array('tl_metamodel_dcasetting_condition', 'type')
@@ -567,8 +580,7 @@ class Subscriber
     public static function registerTableMetaModelFilterEvents()
     {
         static $registered;
-        if ($registered)
-        {
+        if ($registered) {
             return;
         }
         $registered = true;
@@ -595,8 +607,7 @@ class Subscriber
     public static function registerTableMetaModelFilterSettingEvents()
     {
         static $registered;
-        if ($registered)
-        {
+        if ($registered) {
             return;
         }
         $registered = true;
@@ -612,7 +623,8 @@ class Subscriber
 
         self::registerListeners(
             array(
-                GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\FilterSetting\PropertyDefaultId::getOptions',
+                GetPropertyOptionsEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\FilterSetting\PropertyDefaultId::getOptions',
             ),
             $dispatcher,
             array('tl_metamodel_filtersetting', 'defaultid')
@@ -620,7 +632,8 @@ class Subscriber
 
         self::registerListeners(
             array(
-                GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\FilterSetting\PropertyType::getOptions',
+                GetPropertyOptionsEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\FilterSetting\PropertyType::getOptions',
             ),
             $dispatcher,
             array('tl_metamodel_filtersetting', 'type')
@@ -628,7 +641,8 @@ class Subscriber
 
         self::registerListeners(
             array(
-                GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\FilterSetting\PropertyTemplate::getOptions',
+                GetPropertyOptionsEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\FilterSetting\PropertyTemplate::getOptions',
             ),
             $dispatcher,
             array('tl_metamodel_filtersetting', 'template')
@@ -647,10 +661,8 @@ class Subscriber
             array('tl_metamodel_filtersetting', 'attr_id')
         );
 
-        foreach ($GLOBALS['METAMODELS']['filters'] as $typeName => $information)
-        {
-            if (isset($information['info_callback']))
-            {
+        foreach ($GLOBALS['METAMODELS']['filters'] as $typeName => $information) {
+            if (isset($information['info_callback'])) {
                 self::registerListeners(
                     array(
                         ModelToLabelEvent::NAME => $information['info_callback']
@@ -666,7 +678,10 @@ class Subscriber
                 ModelToLabelEvent::NAME
                     => 'MetaModels\DcGeneral\Events\Table\FilterSetting\DrawSetting::modelToLabel',
                 GetBreadcrumbEvent::NAME
-                    => self::createClosure('MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbFilterSetting', 'getBreadcrumb')
+                    => self::createClosure(
+                        'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbFilterSetting',
+                        'getBreadcrumb'
+                    )
             ),
             $dispatcher,
             array('tl_metamodel_filtersetting')
@@ -683,8 +698,7 @@ class Subscriber
     public static function registerTableMetaModelRenderSettingEvents(BuildDataDefinitionEvent $event)
     {
         static $registered;
-        if ($registered)
-        {
+        if ($registered) {
             return;
         }
         $registered = true;
@@ -708,7 +722,8 @@ class Subscriber
 
         self::registerListeners(
             array(
-                GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\RenderSetting\PropertyTemplate::getOptions',
+                GetPropertyOptionsEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\RenderSetting\PropertyTemplate::getOptions',
             ),
             $dispatcher,
             array('tl_metamodel_rendersetting', 'template')
@@ -716,7 +731,8 @@ class Subscriber
 
         self::registerListeners(
             array(
-                GetPropertyOptionsEvent::NAME => 'MetaModels\DcGeneral\Events\Table\RenderSetting\PropertyAttribute::getOptions',
+                GetPropertyOptionsEvent::NAME
+                    => 'MetaModels\DcGeneral\Events\Table\RenderSetting\PropertyAttribute::getOptions',
             ),
             $dispatcher,
             array('tl_metamodel_rendersetting', 'attr_id')
@@ -733,8 +749,7 @@ class Subscriber
     public static function registerTableMetaModelRenderSettingsEvents()
     {
         static $registered;
-        if ($registered)
-        {
+        if ($registered) {
             return;
         }
         $registered = true;
@@ -809,8 +824,7 @@ class Subscriber
         $name       = $factory->getContainerName();
         $dispatcher = func_get_arg(2);
 
-        if (!in_array($name, Factory::getAllTables()))
-        {
+        if (!in_array($name, Factory::getAllTables())) {
             return;
         }
 

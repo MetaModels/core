@@ -44,8 +44,7 @@ class ConditionOr extends WithChildren
     public function prepareRules(IFilter $objFilter, $arrFilterUrl)
     {
         $objFilterRule = new FilterRuleOr($this->get('stop_after_match'));
-        foreach ($this->arrChildren as $objChildSetting)
-        {
+        foreach ($this->arrChildren as $objChildSetting) {
             $objSubFilter = new Filter($this->getMetaModel());
             $objChildSetting->prepareRules($objSubFilter, $arrFilterUrl);
             $objFilterRule->addChild($objSubFilter);
@@ -53,4 +52,3 @@ class ConditionOr extends WithChildren
         $objFilter->addFilterRule($objFilterRule);
     }
 }
-

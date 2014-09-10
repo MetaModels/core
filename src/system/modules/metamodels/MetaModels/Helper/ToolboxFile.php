@@ -136,8 +136,7 @@ class ToolboxFile
         // We must not allow file extensions that are globally disabled.
         $allowedDownload = trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']);
 
-        if (!is_array($acceptedExtensions))
-        {
+        if (!is_array($acceptedExtensions)) {
             $acceptedExtensions = trimsplit(',', $acceptedExtensions);
         }
 
@@ -283,16 +282,12 @@ class ToolboxFile
      */
     public function addPath($strPath)
     {
-        if (is_file(TL_ROOT . DIRECTORY_SEPARATOR . $strPath))
-        {
-            $strExtension = pathinfo (TL_ROOT . DIRECTORY_SEPARATOR . $strPath, PATHINFO_EXTENSION);
-            if (in_array(strtolower($strExtension), $this->acceptedExtensions))
-            {
+        if (is_file(TL_ROOT . DIRECTORY_SEPARATOR . $strPath)) {
+            $strExtension = pathinfo(TL_ROOT . DIRECTORY_SEPARATOR . $strPath, PATHINFO_EXTENSION);
+            if (in_array(strtolower($strExtension), $this->acceptedExtensions)) {
                 $this->foundFiles[] = $strPath;
             }
-        }
-        elseif(is_dir(TL_ROOT . DIRECTORY_SEPARATOR . $strPath))
-        {
+        } elseif (is_dir(TL_ROOT . DIRECTORY_SEPARATOR . $strPath)) {
             $this->foundFolders[] = $strPath;
         }
 
@@ -310,16 +305,14 @@ class ToolboxFile
      */
     public function addPathById($strID)
     {
-        if (version_compare(VERSION, '3.0', '<'))
-        {
+        if (version_compare(VERSION, '3.0', '<')) {
             throw new \RuntimeException('You cannot use a contao 3 function in a contao 2.x context.');
         }
 
         $objFile = \FilesModel::findByPk($strID);
 
         // ToDo: Should we throw a exception or just return if we have no file.
-        if ($objFile !== null)
-        {
+        if ($objFile !== null) {
             $this->addPath($objFile->path);
         }
 
@@ -333,12 +326,9 @@ class ToolboxFile
      */
     protected function collectFiles()
     {
-        if (count($this->foundFolders))
-        {
-            while ($strPath = array_pop($this->foundFolders))
-            {
-                foreach (scan(TL_ROOT . DIRECTORY_SEPARATOR . $strPath) as $strSubfile)
-                {
+        if (count($this->foundFolders)) {
+            while ($strPath = array_pop($this->foundFolders)) {
+                foreach (scan(TL_ROOT . DIRECTORY_SEPARATOR . $strPath) as $strSubfile) {
                     $this->addPath($strPath . DIRECTORY_SEPARATOR . $strSubfile);
                 }
             }
@@ -362,8 +352,7 @@ class ToolboxFile
     {
         $strFile = $strPath . DIRECTORY_SEPARATOR . 'meta' . (strlen($strLanguage) ? '_' . $strLanguage : '') . '.txt';
 
-        if (!file_exists(TL_ROOT . DIRECTORY_SEPARATOR . $strFile))
-        {
+        if (!file_exists(TL_ROOT . DIRECTORY_SEPARATOR . $strFile)) {
             return;
         }
 
@@ -371,8 +360,7 @@ class ToolboxFile
         $strBuffer = utf8_convert_encoding($strBuffer, $GLOBALS['TL_CONFIG']['characterSet']);
         $arrBuffer = array_filter(trimsplit('[\n\r]+', $strBuffer));
 
-        foreach ($arrBuffer as $v)
-        {
+        foreach ($arrBuffer as $v) {
             // Schema: filename.ext = title | url | caption.
             list($strLabel, $strValue) = array_map('trim', explode('=', $v, 2));
 
@@ -381,8 +369,7 @@ class ToolboxFile
             $this->metaInformation[$strPath][$strLabel]['link']    = $this->metaInformation[$strPath][$strLabel][1];
             $this->metaInformation[$strPath][$strLabel]['caption'] = $this->metaInformation[$strPath][$strLabel][2];
 
-            if (!in_array($strPath . DIRECTORY_SEPARATOR . $strLabel, $this->metaSort))
-            {
+            if (!in_array($strPath . DIRECTORY_SEPARATOR . $strLabel, $this->metaSort)) {
                 $this->metaSort[] = $strPath . DIRECTORY_SEPARATOR . $strLabel;
             }
         }
@@ -400,18 +387,15 @@ class ToolboxFile
         $this->metaInformation = array();
         $this->metaSort        = array();
 
-        if (!$this->foundFiles)
-        {
+        if (!$this->foundFiles) {
             return;
         }
 
         $arrProcessed = array();
 
-        foreach ($this->foundFiles as $strFile)
-        {
+        foreach ($this->foundFiles as $strFile) {
             $strDir = dirname($strFile);
-            if (in_array($strDir, $arrProcessed))
-            {
+            if (in_array($strDir, $arrProcessed)) {
                 continue;
             }
 
@@ -432,22 +416,17 @@ class ToolboxFile
     {
         $files = \FilesModel::findMultipleByPaths($this->foundFiles);
 
-        if (!$files)
-        {
+        if (!$files) {
             return;
         }
 
-        while ($files->next())
-        {
+        while ($files->next()) {
             $path = $files->path;
             $meta = deserialize($files->meta, true);
 
-            if (isset($meta[$this->getBaseLanguage()]))
-            {
+            if (isset($meta[$this->getBaseLanguage()])) {
                 $this->metaInformation[dirname($path)][basename($path)] = $meta[$this->getBaseLanguage()];
-            }
-            elseif (isset($meta[$this->getFallbackLanguage()]))
-            {
+            } elseif (isset($meta[$this->getFallbackLanguage()])) {
                 $this->metaInformation[dirname($path)][basename($path)] = $meta[$this->getFallbackLanguage()];
             }
         }
@@ -463,8 +442,7 @@ class ToolboxFile
     protected function getDownloadLink($strFile)
     {
         $strRequest = \Environment::getInstance()->request;
-        if (($intPos = strpos($strRequest, '?')) !== false)
-        {
+        if (($intPos = strpos($strRequest, '?')) !== false) {
             $strRequest = str_replace('?&', '?', preg_replace('/&?file=[^&]&*/', '', $strRequest));
         }
         $strRequest .= (strpos($strRequest, '?') === false ? '?' : '&');
@@ -483,8 +461,7 @@ class ToolboxFile
         $this->modifiedTime = array();
         $this->outputBuffer = array();
 
-        if (!$this->foundFiles)
-        {
+        if (!$this->foundFiles) {
             return;
         }
 
@@ -499,23 +476,18 @@ class ToolboxFile
         $intHeight   = $resizeInfo[1] ? $resizeInfo[1] : '';
         $strMode     = $resizeInfo[2] ? $resizeInfo[2] : '';
 
-        foreach ($this->foundFiles as $strFile)
-        {
+        foreach ($this->foundFiles as $strFile) {
             $objFile = new \File($strFile);
 
             $arrMeta     = $this->metaInformation[dirname($strFile)][$objFile->basename];
             $strBasename = strlen($arrMeta['title']) ? $arrMeta['title'] : specialchars($objFile->basename);
-            if (strlen($arrMeta['caption']))
-            {
+            if (strlen($arrMeta['caption'])) {
                 $strAltText = $arrMeta['caption'];
-            }
-            else
-            {
+            } else {
                 $strAltText = ucfirst(str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $objFile->filename)));
             }
 
-            if (version_compare(VERSION, '3.0', '<'))
-            {
+            if (version_compare(VERSION, '3.0', '<')) {
                 $strIcon = 'system/themes/' . $strThemeDir . '/images/' . $objFile->icon;
             } else {
                 $strIcon = 'assets/contao/images/' . $objFile->icon;
@@ -531,21 +503,20 @@ class ToolboxFile
                 'metafile' => $arrMeta,
                 'icon'     => $strIcon,
                 'size'     => $objFile->filesize,
-                'sizetext' => sprintf('(%s)', \MetaModels\Helper\ContaoController::getInstance()->getReadableSize($objFile->filesize, 2)),
+                'sizetext' => sprintf(
+                    '(%s)',
+                    \MetaModels\Helper\ContaoController::getInstance()->getReadableSize($objFile->filesize, 2)
+                ),
                 'url'      => specialchars($this->getDownloadLink($strFile))
             );
 
             // Prepare images.
-            if ($arrSource['isGdImage'] = $objFile->isGdImage)
-            {
-                if ($this->getShowImages() && ($intWidth || $intHeight || $strMode))
-                {
+            if ($arrSource['isGdImage'] = $objFile->isGdImage) {
+                if ($this->getShowImages() && ($intWidth || $intHeight || $strMode)) {
                     $event = new ResizeImageEvent($strFile, $intWidth, $intHeight, $strMode);
                     $dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
                     $strSrc = $event->getResultImage();
-                }
-                else
-                {
+                } else {
                     $strSrc = $strFile;
                 }
                 $arrSource['src'] = $strSrc;
@@ -582,8 +553,7 @@ class ToolboxFile
         $files  = array();
         $source = array();
 
-        foreach ($arrFiles as $k => $v)
-        {
+        foreach ($arrFiles as $k => $v) {
             $files[]  = $arrFiles[$k];
             $source[] = $arrSource[$k];
         }
@@ -651,8 +621,7 @@ class ToolboxFile
     protected function addClasses(&$arrSource)
     {
         $countFiles = count($arrSource);
-        foreach ($arrSource as $k => $v)
-        {
+        foreach ($arrSource as $k => $v) {
             $arrSource[$k]['class'] = (($k == 0) ? ' first' : '') .
                 (($k == ($countFiles - 1)) ? ' last' : '') .
                 ((($k % 2) == 0) ? ' even' : ' odd');
@@ -670,17 +639,13 @@ class ToolboxFile
     {
         $arrFiles = $this->foundFiles;
 
-        if (!$arrFiles)
-        {
+        if (!$arrFiles) {
             return array('files' => array(), 'source' => array());
         }
 
-        if ($blnAscending)
-        {
+        if ($blnAscending) {
             uksort($arrFiles, 'basename_natcasecmp');
-        }
-        else
-        {
+        } else {
             uksort($arrFiles, 'basename_natcasercmp');
         }
 
@@ -699,17 +664,13 @@ class ToolboxFile
         $arrFiles = $this->foundFiles;
         $arrDates = $this->modifiedTime;
 
-        if (!$arrFiles)
-        {
+        if (!$arrFiles) {
             return array('files' => array(), 'source' => array());
         }
 
-        if ($blnAscending)
-        {
+        if ($blnAscending) {
             array_multisort($arrFiles, SORT_NUMERIC, $arrDates, SORT_ASC);
-        }
-        else
-        {
+        } else {
             array_multisort($arrFiles, SORT_NUMERIC, $arrDates, SORT_DESC);
         }
 
@@ -729,20 +690,17 @@ class ToolboxFile
         $arrSource = $this->outputBuffer;
         $arrMeta   = $this->metaSort;
 
-        if (!$arrMeta)
-        {
+        if (!$arrMeta) {
             return array('files' => array(), 'source' => array());
         }
 
         $files  = array();
         $source = array();
 
-        foreach ($arrMeta as $aux)
-        {
+        foreach ($arrMeta as $aux) {
             $k = array_search($aux, $arrFiles);
 
-            if ($k !== false)
-            {
+            if ($k !== false) {
                 $files[]  = $arrFiles[$k];
                 $source[] = $arrSource[$k];
             }
@@ -767,15 +725,13 @@ class ToolboxFile
         $arrFiles  = $this->foundFiles;
         $arrSource = $this->outputBuffer;
 
-        if (!$arrFiles)
-        {
+        if (!$arrFiles) {
             return array('files' => array(), 'source' => array());
         }
 
         $keys = array_keys($arrFiles);
         shuffle($keys);
-        foreach ($keys as $key)
-        {
+        foreach ($keys as $key) {
             $files[$key] = $arrFiles[$key];
         }
 
@@ -808,18 +764,14 @@ class ToolboxFile
         // See https://github.com/MetaModels/attribute_file/issues/6 for details of how to implement this.
         if ((!$this->getShowImages())
             && ($strFile = \Input::getInstance()->get('file')) && in_array($strFile, $this->foundFiles)
-        )
-        {
+        ) {
             \MetaModels\Helper\ContaoController::getInstance()->sendFileToBrowser($strFile);
         }
 
         // Step 2.: Fetch all meta data for the found files.
-        if (version_compare(VERSION, '3', '<'))
-        {
+        if (version_compare(VERSION, '3', '<')) {
             $this->parseMetaFilesPre3();
-        }
-        else
-        {
+        } else {
             $this->parseMetaFiles();
         }
 
@@ -838,15 +790,13 @@ class ToolboxFile
      */
     public static function convertValueToPath($varValue)
     {
-        if (version_compare(VERSION, '3', '<'))
-        {
+        if (version_compare(VERSION, '3', '<')) {
             return $varValue;
         }
 
         $objFiles = \FilesModel::findByPk($varValue);
 
-        if ($objFiles !== null)
-        {
+        if ($objFiles !== null) {
             return $objFiles->path;
         }
         return '';

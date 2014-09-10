@@ -31,8 +31,7 @@ use MetaModels\DcGeneral\Data\Model;
 /**
  * Event handler class to manage the "create variant" button.
  */
-class CreateVariantButton
-    extends BaseView
+class CreateVariantButton extends BaseView
 {
     /**
      * Check if we have to add the "Create variant" button.
@@ -47,8 +46,7 @@ class CreateVariantButton
         $model     = $event->getModel();
         $metamodel = $model->getItem()->getMetaModel();
 
-        if (!$metamodel->hasVariants() || $model ->getProperty('varbase') === '0')
-        {
+        if (!$metamodel->hasVariants() || $model ->getProperty('varbase') === '0') {
             $event->setHtml('');
         }
     }
@@ -78,16 +76,14 @@ class CreateVariantButton
                     ->setId($modelId->getId())
             );
 
-        if ($model == null)
-        {
+        if ($model == null) {
             throw new \RuntimeException(sprintf(
                 'Could not find model with id %s for creating a variant.',
                 $modelId
             ));
         }
 
-        $preFunction = function($environment, $model, $originalModel)
-        {
+        $preFunction = function ($environment, $model, $originalModel) {
             /** @var EnvironmentInterface $environment */
             $copyEvent = new PreCreateModelEvent($environment, $model);
             $environment->getEventPropagator()->propagate(
@@ -99,8 +95,7 @@ class CreateVariantButton
             );
         };
 
-        $postFunction = function($environment, $model, $originalModel)
-        {
+        $postFunction = function ($environment, $model, $originalModel) {
             /** @var EnvironmentInterface $environment */
             $copyEvent = new PostCreateModelEvent($environment, $model);
             $environment->getEventPropagator()->propagate(

@@ -38,8 +38,7 @@ class DeleteAttribute
     {
         $newInstance = Factory::createFromArray($event->getModel()->getPropertiesAsArray());
 
-        if ($newInstance)
-        {
+        if ($newInstance) {
             $newInstance->destroyAUX();
         }
     }

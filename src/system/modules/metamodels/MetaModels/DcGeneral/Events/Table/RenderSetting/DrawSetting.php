@@ -40,7 +40,6 @@ class DrawSetting
     {
         // FIXME: in here all language strings and icons are related to filters?
         // FIXME: Add language files for the error msg.
-
         $model        = $event->getModel();
         $objSetting   = \Database::getInstance()
             ->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')
@@ -49,19 +48,15 @@ class DrawSetting
 
         $objAttribute = $objMetaModel->getAttributeById($model->getProperty('attr_id'));
 
-        if ($objAttribute)
-        {
+        if ($objAttribute) {
             $type  = $objAttribute->get('type');
             $image = $GLOBALS['METAMODELS']['attributes'][$type]['image'];
-            if (!$image || !file_exists(TL_ROOT . '/' . $image))
-            {
+            if (!$image || !file_exists(TL_ROOT . '/' . $image)) {
                 $image = 'system/modules/metamodels/assets/images/icons/fields.png';
             }
             $name    = $objAttribute->getName();
             $colName = $objAttribute->getColName();
-        }
-        else
-        {
+        } else {
             $type    = 'unknown ID: ' . $model->getProperty('attr_id');
             $image   = 'system/modules/metamodels/assets/images/icons/fields.png';
             $name    = 'unknown attribute';

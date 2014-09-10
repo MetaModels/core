@@ -54,8 +54,7 @@ class Collection implements ICollection
      */
     public function __construct($arrInformation = array())
     {
-        foreach ($arrInformation as $strKey => $varValue)
-        {
+        foreach ($arrInformation as $strKey => $varValue) {
             $this->set($strKey, deserialize($varValue));
         }
     }
@@ -110,8 +109,7 @@ class Collection implements ICollection
      */
     public function setSetting($strAttributeName, $objSetting)
     {
-        if ($objSetting)
-        {
+        if ($objSetting) {
             $this->arrSettings[$strAttributeName] = $objSetting->setParent($this);
         } else {
             unset($this->arrSettings[$strAttributeName]);
@@ -152,4 +150,3 @@ class Collection implements ICollection
         return $this;
     }
 }
-

@@ -70,8 +70,7 @@ class MetaModelDcaBuilder
      */
     public static function getInstance()
     {
-        if (!self::$objInstance)
-        {
+        if (!self::$objInstance) {
             self::$objInstance = new MetaModelDcaBuilder();
         }
         return self::$objInstance;
@@ -109,12 +108,10 @@ class MetaModelDcaBuilder
     public static function getBackendIcon(
         $icon,
         $defaultIcon = 'system/modules/metamodels/assets/images/icons/metamodels.png'
-    )
-    {
+    ) {
         $dispatcher = self::getDispatcher();
         // Determine image to use.
-        if ($icon && file_exists(TL_ROOT . '/' . $icon))
-        {
+        if ($icon && file_exists(TL_ROOT . '/' . $icon)) {
             $event = new ResizeImageEvent($icon, 16, 16);
             $dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
             return $event->getResultImage();
@@ -132,19 +129,15 @@ class MetaModelDcaBuilder
      */
     public function injectChildTablesIntoDCA($strTable)
     {
-        try
-        {
+        try {
             $objDB = \Database::getInstance();
             if (!($objDB
                 && $objDB->tableExists('tl_metamodel', null)
                 && $objDB->tableExists('tl_metamodel_dcasetting_condition', null)
-            ))
-            {
+            )) {
                 return;
             }
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             return;
         }
 
@@ -156,10 +149,8 @@ class MetaModelDcaBuilder
 
         $screens = ViewCombinations::getParentedInputScreens();
 
-        foreach ($screens as $screen)
-        {
-            if ($screen->getParentTable() !== $strTable)
-            {
+        foreach ($screens as $screen) {
+            if ($screen->getParentTable() !== $strTable) {
                 continue;
             }
 
@@ -173,10 +164,8 @@ class MetaModelDcaBuilder
                 ''
             );
 
-            foreach ($screen->getBackendCaption() as $arrLangEntry)
-            {
-                if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == $GLOBALS['TL_LANGUAGE'])
-                {
+            foreach ($screen->getBackendCaption() as $arrLangEntry) {
+                if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == $GLOBALS['TL_LANGUAGE']) {
                     $arrCaption = array($arrLangEntry['label'], $arrLangEntry['description']);
                 }
             }
@@ -190,18 +179,14 @@ class MetaModelDcaBuilder
             );
 
             // Is the destination table a metamodel with variants?
-            if ($metaModel->hasVariants())
-            {
+            if ($metaModel->hasVariants()) {
                 $arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['idparam'] = 'id_'.$strTable;
-            }
-            else
-            {
+            } else {
                 $arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['idparam'] = 'pid';
             }
 
             // Compatibility with DC_Table.
-            if ($arrTableDCA['config']['dataContainer'] !== 'General')
-            {
+            if ($arrTableDCA['config']['dataContainer'] !== 'General') {
                 $arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['button_callback'] =
                     array(
                         __CLASS__,
@@ -232,12 +217,9 @@ class MetaModelDcaBuilder
      */
     public function buildChildButton($arrRow, $href, $label, $name, $icon, $attributes, $table)
     {
-        if (preg_match('#class="([^"]*)"#i', $attributes, $matches))
-        {
+        if (preg_match('#class="([^"]*)"#i', $attributes, $matches)) {
             $operation = $matches[1];
-        }
-        else
-        {
+        } else {
             $operation = $name;
         }
 
@@ -275,8 +257,7 @@ class MetaModelDcaBuilder
 
         $icon = ToolboxFile::convertValueToPath($inputScreen->getIcon());
         // Determine image to use.
-        if ($icon && file_exists(TL_ROOT . '/' . $icon))
-        {
+        if ($icon && file_exists(TL_ROOT . '/' . $icon)) {
             $event = new ResizeImageEvent($icon, 16, 16);
             /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
             $dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
@@ -287,8 +268,7 @@ class MetaModelDcaBuilder
 
         $section = $inputScreen->getBackendSection();
 
-        if (!$section)
-        {
+        if (!$section) {
             $section = 'metamodels';
         }
 
@@ -300,15 +280,12 @@ class MetaModelDcaBuilder
         );
 
         $arrCaption = array($strTableCaption);
-        foreach (deserialize($inputScreen->getBackendCaption(), true) as $arrLangEntry)
-        {
-            if ($arrLangEntry['langcode'] == 'en')
-            {
+        foreach (deserialize($inputScreen->getBackendCaption(), true) as $arrLangEntry) {
+            if ($arrLangEntry['langcode'] == 'en') {
                 $arrCaption = array($arrLangEntry['label'], $arrLangEntry['description']);
             }
 
-            if (!empty($arrLangEntry['label']) && ($arrLangEntry['langcode'] == $GLOBALS['TL_LANGUAGE']))
-            {
+            if (!empty($arrLangEntry['label']) && ($arrLangEntry['langcode'] == $GLOBALS['TL_LANGUAGE'])) {
                 $arrCaption = array($arrLangEntry['label'], $arrLangEntry['description']);
                 break;
             }
@@ -323,8 +300,7 @@ class MetaModelDcaBuilder
      */
     public function injectBackendMenu()
     {
-        foreach (ViewCombinations::getStandaloneInputScreens() as $inputScreen)
-        {
+        foreach (ViewCombinations::getStandaloneInputScreens() as $inputScreen) {
             $this->handleStandalone($inputScreen);
         }
     }
@@ -339,8 +315,7 @@ class MetaModelDcaBuilder
         $screens = ViewCombinations::getParentedInputScreens();
 
         $pTables = array();
-        foreach ($screens as $screen)
-        {
+        foreach ($screens as $screen) {
             $ptable = $screen->getParentTable();
 
             $pTables[$ptable][] = $screen->getMetaModel();
@@ -351,19 +326,13 @@ class MetaModelDcaBuilder
         $intCount = count($pTables);
         // Loop until all tables are injected or until there was no injection during one run.
         // This is important, as we might have models that are child of another model.
-        while ($pTables)
-        {
-            foreach ($pTables as $strTable => $arrModels)
-            {
-                foreach ($GLOBALS['BE_MOD'] as $strGroup => $arrModules)
-                {
-                    foreach ($arrModules as $strModule => $arrConfig)
-                    {
-                        if (isset($arrConfig['tables']) && in_array($strTable, $arrConfig['tables']))
-                        {
+        while ($pTables) {
+            foreach ($pTables as $strTable => $arrModels) {
+                foreach ($GLOBALS['BE_MOD'] as $strGroup => $arrModules) {
+                    foreach ($arrModules as $strModule => $arrConfig) {
+                        if (isset($arrConfig['tables']) && in_array($strTable, $arrConfig['tables'])) {
                             $arrSubTables = array();
-                            foreach ($arrModels as $metaModel)
-                            {
+                            foreach ($arrModels as $metaModel) {
                                 /** @var IMetaModel $metaModel */
                                 $arrSubTables[] = $metaModel->getTableName();
                             }
@@ -376,8 +345,7 @@ class MetaModelDcaBuilder
                     }
                 }
             }
-            if (count($pTables) == $intCount)
-            {
+            if (count($pTables) == $intCount) {
                 break;
             }
             $intCount = count($pTables);
@@ -393,15 +361,16 @@ class MetaModelDcaBuilder
      */
     public function createDataContainer($strTableName)
     {
-        if (in_array($strTableName, Factory::getAllTables()))
-        {
+        if (in_array($strTableName, Factory::getAllTables())) {
             $dispatcher = self::getDispatcher();
             $event      = new LoadDataContainerEvent('tl_metamodel_item');
-            $dispatcher->dispatch(ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE, new LoadLanguageFileEvent('tl_metamodel_item'));
+            $dispatcher->dispatch(
+                ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+                new LoadLanguageFileEvent('tl_metamodel_item')
+            );
             $dispatcher->dispatch(ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER, $event);
 
-            if (!isset($GLOBALS['TL_DCA'][$strTableName]))
-            {
+            if (!isset($GLOBALS['TL_DCA'][$strTableName])) {
                 $GLOBALS['TL_DCA'][$strTableName] = array();
             }
 

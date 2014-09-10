@@ -308,4 +308,3 @@ interface IAttribute
      */
     public function modelSaved($objItem);
 }
-

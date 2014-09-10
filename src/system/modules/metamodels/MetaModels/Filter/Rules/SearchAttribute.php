@@ -74,12 +74,10 @@ class SearchAttribute extends FilterRule
      */
     public function getMatchingIds()
     {
-        if (in_array('MetaModels\Attribute\ITranslated', class_implements($this->objAttribute)))
-        {
+        if (in_array('MetaModels\Attribute\ITranslated', class_implements($this->objAttribute))) {
             return $this->objAttribute->searchForInLanguages($this->strValue, $this->arrValidLanguages);
         }
 
         return $this->objAttribute->searchFor($this->strValue);
     }
 }
-

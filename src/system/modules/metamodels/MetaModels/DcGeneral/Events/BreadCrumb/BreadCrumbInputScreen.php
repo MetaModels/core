@@ -25,8 +25,7 @@ use MetaModels\Factory;
  *
  * @package MetaModels\DcGeneral\Events\BreadCrumb
  */
-class BreadCrumbInputScreen
-    extends BreadCrumbInputScreens
+class BreadCrumbInputScreen extends BreadCrumbInputScreens
 {
     /**
      * Calculate the name of a sub palette attribute.
@@ -42,8 +41,7 @@ class BreadCrumbInputScreen
                 FROM tl_metamodel_attribute
                 WHERE id=(SELECT attr_id FROM tl_metamodel_dcasetting WHERE id=?)')
             ->executeUncached($pid);
-        if ($parent->id)
-        {
+        if ($parent->id) {
             return Factory::byId($parent->pid)->getAttributeById($parent->id);
         }
         return 'unknown';
@@ -54,15 +52,12 @@ class BreadCrumbInputScreen
      */
     public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
     {
-        $input = $environment->getInputProvider();
-        if (!isset($this->inputScreenId))
-        {
+        if (!isset($this->inputScreenId)) {
             $this->inputScreenId = $this->extractIdFrom($environment, 'pid');
         }
 
         $inputScreen = $this->getInputScreen();
-        if (!isset($this->metamodelId))
-        {
+        if (!isset($this->metamodelId)) {
             $this->metamodelId = $inputScreen->pid;
         }
 

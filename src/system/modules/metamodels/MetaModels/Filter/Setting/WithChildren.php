@@ -29,9 +29,7 @@ use MetaModels\Render\Setting\ICollection as IRenderSettings;
  * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-abstract class WithChildren
-    extends Simple
-    implements IWithChildren
+abstract class WithChildren extends Simple implements IWithChildren
 {
     /**
      * All child settings embedded in this setting.
@@ -56,8 +54,7 @@ abstract class WithChildren
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
     {
         $arrFilterUrl = array();
-        foreach ($this->arrChildren as $objSetting)
-        {
+        foreach ($this->arrChildren as $objSetting) {
             $arrFilterUrl = array_merge($arrFilterUrl, $objSetting->generateFilterUrlFrom($objItem, $objRenderSetting));
         }
         return $arrFilterUrl;
@@ -69,8 +66,7 @@ abstract class WithChildren
     public function getParameters()
     {
         $arrParams = array();
-        foreach ($this->arrChildren as $objSetting)
-        {
+        foreach ($this->arrChildren as $objSetting) {
             $arrParams = array_merge($arrParams, $objSetting->getParameters());
         }
         return $arrParams;
@@ -82,8 +78,7 @@ abstract class WithChildren
     public function getParameterDCA()
     {
         $arrParams = array();
-        foreach ($this->arrChildren as $objSetting)
-        {
+        foreach ($this->arrChildren as $objSetting) {
             $arrParams = array_merge($arrParams, $objSetting->getParameterDCA());
         }
         return $arrParams;
@@ -97,11 +92,9 @@ abstract class WithChildren
         $arrFilterUrl,
         $arrJumpTo,
         FrontendFilterOptions $objFrontendFilterOptions
-    )
-    {
+    ) {
         $arrParams = array();
-        foreach ($this->arrChildren as $objSetting)
-        {
+        foreach ($this->arrChildren as $objSetting) {
             $arrParams = array_merge(
                 $arrParams,
                 $objSetting->getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions)
@@ -116,8 +109,7 @@ abstract class WithChildren
     public function getParameterFilterNames()
     {
         $arrParams = array();
-        foreach ($this->arrChildren as $objSetting)
-        {
+        foreach ($this->arrChildren as $objSetting) {
             $arrParams = array_merge($arrParams, $objSetting->getParameterFilterNames());
         }
         return $arrParams;
@@ -131,11 +123,9 @@ abstract class WithChildren
     public function getReferencedAttributes()
     {
         $arrAttributes = array();
-        foreach ($this->arrChildren as $objSetting)
-        {
+        foreach ($this->arrChildren as $objSetting) {
             $arrAttributes = array_merge($arrAttributes, $objSetting->getReferencedAttributes());
         }
         return $arrAttributes;
     }
 }
-

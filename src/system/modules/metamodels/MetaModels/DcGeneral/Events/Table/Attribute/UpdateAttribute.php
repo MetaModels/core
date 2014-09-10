@@ -46,26 +46,21 @@ class UpdateAttribute
         $newInstance = Factory::createFromArray($new->getPropertiesAsArray());
 
         // If type or column name has been changed, destroy old data and initialize new.
-        if (($oldType !== $newType) || ($oldName !== $newName))
-        {
+        if (($oldType !== $newType) || ($oldName !== $newName)) {
             // Destroy old instance.
-            if ($oldInstance)
-            {
+            if ($oldInstance) {
                 $oldInstance->destroyAUX();
             }
 
             // Create new instance aux info.
-            if ($newInstance)
-            {
+            if ($newInstance) {
                 $newInstance->initializeAUX();
             }
         }
 
-        if ($newInstance)
-        {
+        if ($newInstance) {
             // Now loop over all values and update the meta in the instance.
-            foreach ($new->getPropertiesAsArray() as $strKey => $varValue)
-            {
+            foreach ($new->getPropertiesAsArray() as $strKey => $varValue) {
                 $newInstance->handleMetaChange($strKey, $varValue);
             }
         }

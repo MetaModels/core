@@ -101,8 +101,7 @@ class Module
      */
     protected function checkPHPVersion()
     {
-        if (version_compare(PHP_VERSION, '5.3') < 0)
-        {
+        if (version_compare(PHP_VERSION, '5.3') < 0) {
             $this->addMessageEntry(
                 sprintf($GLOBALS['TL_LANG']['ERR']['upgrade_php_version'], '5.3', PHP_VERSION),
                 METAMODELS_ERROR,
@@ -122,12 +121,9 @@ class Module
         $arrInactiveModules = deserialize($GLOBALS['TL_CONFIG']['inactiveModules']);
 
         // Check if all prerequsities are met.
-        foreach ($GLOBALS['METAMODELS']['dependencies'] as $strExtension => $strDisplay)
-        {
-            if (!in_array($strExtension, $arrActiveModules))
-            {
-                if (is_array($arrInactiveModules) && in_array($strExtension, $arrInactiveModules))
-                {
+        foreach ($GLOBALS['METAMODELS']['dependencies'] as $strExtension => $strDisplay) {
+            if (!in_array($strExtension, $arrActiveModules)) {
+                if (is_array($arrInactiveModules) && in_array($strExtension, $arrInactiveModules)) {
                     $this->addMessageEntry(
                         sprintf($GLOBALS['TL_LANG']['ERR']['activate_extension'], $strDisplay, $strExtension),
                         METAMODELS_ERROR,
@@ -151,8 +147,7 @@ class Module
      */
     protected function hasAttributes()
     {
-        if (!$GLOBALS['METAMODELS']['attributes'])
-        {
+        if (!$GLOBALS['METAMODELS']['attributes']) {
             $this->addMessageEntry(
                 $GLOBALS['TL_LANG']['ERR']['no_attribute_extension'],
                 METAMODELS_INFO,
@@ -173,11 +168,9 @@ class Module
         $this->checkDependencies();
         $this->hasAttributes();
 
-        if (!empty($GLOBALS['METAMODELS']['CHECK']))
-        {
+        if (!empty($GLOBALS['METAMODELS']['CHECK'])) {
             // Loop through all metamodel backend checkers.
-            foreach ($GLOBALS['METAMODELS']['CHECK'] as $strClass)
-            {
+            foreach ($GLOBALS['METAMODELS']['CHECK'] as $strClass) {
                 Callbacks::call(array($strClass, 'perform'), $this);
             }
         }
@@ -204,20 +197,14 @@ class Module
             ->setEventPropagator($propagator)
             ->setTranslator($translator);
 
-        if ($backendModule == 'metamodels')
-        {
+        if ($backendModule == 'metamodels') {
             $name = \Input::getInstance()->get('table');
-            if (!$name)
-            {
+            if (!$name) {
                 $name = 'tl_metamodel';
             }
-        }
-        elseif(\Input::getInstance()->get('table'))
-        {
+        } elseif (\Input::getInstance()->get('table')) {
             $name = \Input::getInstance()->get('table');
-        }
-        else
-        {
+        } else {
             $name = substr($backendModule, 10);
         }
 
@@ -226,8 +213,7 @@ class Module
             ->createDcGeneral();
 
         $act = \Input::getInstance()->get('act');
-        if (!strlen($act))
-        {
+        if (!strlen($act)) {
             $act = 'showAll';
         }
 
@@ -250,8 +236,7 @@ class Module
     {
         $arrModule = $GLOBALS['BE_MOD']['metamodels']['metamodels'];
         // Custom action (if key is not defined in config.php the default action will be called).
-        if (\Input::getInstance()->get('key') && isset($arrModule[\Input::getInstance()->get('key')]))
-        {
+        if (\Input::getInstance()->get('key') && isset($arrModule[\Input::getInstance()->get('key')])) {
             Callbacks::call($arrModule[\Input::getInstance()->get('key')], $this, $arrModule);
         }
         return $this->runDC();
@@ -265,8 +250,7 @@ class Module
     public function generate()
     {
         $GLOBALS['TL_CSS'][] = 'system/modules/metamodels/assets/css/style.css';
-        if ($this->needUserAction())
-        {
+        if ($this->needUserAction()) {
             $this->Template = new \BackendTemplate($this->strTemplate);
             $this->compile();
 

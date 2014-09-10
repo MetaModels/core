@@ -24,8 +24,7 @@ use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
  *
  * @package MetaModels\DcGeneral\Events\BreadCrumb
  */
-class BreadCrumbFilter
-    extends BreadCrumbMetaModels
+class BreadCrumbFilter extends BreadCrumbMetaModels
 {
     /**
      * The id of the filter setting.
@@ -53,17 +52,13 @@ class BreadCrumbFilter
     public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
     {
         $input = $environment->getInputProvider();
-        if (!$this->isActiveTable('tl_metamodel_filter', $input))
-        {
+        if (!$this->isActiveTable('tl_metamodel_filter', $input)) {
             $this->filterId = $this->extractIdFrom($environment, 'pid');
-        }
-        else
-        {
+        } else {
             $this->metamodelId = $this->extractIdFrom($environment, 'pid');
         }
 
-        if (!isset($this->metamodelId))
-        {
+        if (!isset($this->metamodelId)) {
             $this->metamodelId = $this->getFilter()->pid;
         }
 
@@ -75,7 +70,10 @@ class BreadCrumbFilter
                 'tl_metamodel_filter',
                 $this->seralizeId('tl_metamodel', $this->metamodelId)
             ),
-            'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_filter'), $this->getMetaModel()->getName()),
+            'text' => sprintf(
+                $this->getBreadcrumbLabel($environment, 'tl_metamodel_filter'),
+                $this->getMetaModel()->getName()
+            ),
             'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/filter.png'
         );
 

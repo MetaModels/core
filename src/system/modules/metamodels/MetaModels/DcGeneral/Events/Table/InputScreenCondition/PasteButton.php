@@ -40,8 +40,7 @@ class PasteButton
         // Disable all buttons if there is a circular reference.
         if (($clipboard->isCut()
             && ($event->getCircularReference() || in_array($model->getId(), $clipboard->getContainedIds())))
-        )
-        {
+        ) {
             $event
                 ->setPasteAfterDisabled(true)
                 ->setPasteIntoDisabled(true);
@@ -53,16 +52,14 @@ class PasteButton
         // If setting does not support children, omit them.
         if ($model->getId() &&
             (!$flags['nestingAllowed'])
-        )
-        {
+        ) {
             $event->setPasteIntoDisabled(true);
             return;
         }
 
         if (isset($flags['maxChildren'])
             && count($event->getEnvironment()->getController()->assembleAllChildrenFrom($model)) > $flags['maxChildren']
-        )
-        {
+        ) {
             $event->setPasteIntoDisabled(true);
         }
     }

@@ -36,4 +36,3 @@ interface IWithChildren extends ISimple
      */
     public function addChild(ISimple $objFilterSetting);
 }
-

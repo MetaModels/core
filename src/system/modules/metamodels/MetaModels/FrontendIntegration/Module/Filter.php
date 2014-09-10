@@ -43,8 +43,7 @@ class Filter extends \Module
      */
     public function generate()
     {
-        if (TL_MODE == 'BE')
-        {
+        if (TL_MODE == 'BE') {
             $objTemplate           = new \BackendTemplate('be_wildcard');
             $objTemplate->wildcard = '### METAMODELS FE-FILTERBLOCK ###';
             $objTemplate->title    = $this->headline;
@@ -56,8 +55,7 @@ class Filter extends \Module
         }
 
         // Get template if configured.
-        if ($this->metamodel_fef_template)
-        {
+        if ($this->metamodel_fef_template) {
             $this->strTemplate = $this->metamodel_fef_template;
         }
 
@@ -79,4 +77,3 @@ class Filter extends \Module
         $this->Template->submit = $arrFilter['submit'];
     }
 }
-

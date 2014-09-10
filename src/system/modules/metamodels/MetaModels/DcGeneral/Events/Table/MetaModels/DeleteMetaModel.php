@@ -38,8 +38,7 @@ class DeleteMetaModel
      */
     protected static function destroyAttributes(IMetaModel $metaModel)
     {
-        foreach ($metaModel->getAttributes() as $attribute)
-        {
+        foreach ($metaModel->getAttributes() as $attribute) {
             $attribute->destroyAUX();
         }
 
@@ -77,12 +76,13 @@ class DeleteMetaModel
             ->executeUncached($metaModel->get('id'))
             ->fetchEach('id');
 
-        if ($arrIds)
-        {
+        if ($arrIds) {
             \Database::getInstance()
-                ->prepare(sprintf(
-                    'DELETE FROM tl_metamodel_dcasetting WHERE pid IN (%s)',
-                    implode(',', $arrIds))
+                ->prepare(
+                    sprintf(
+                        'DELETE FROM tl_metamodel_dcasetting WHERE pid IN (%s)',
+                        implode(',', $arrIds)
+                    )
                 )
                 ->executeUncached();
         }
@@ -107,11 +107,13 @@ class DeleteMetaModel
             ->executeUncached($metaModel->get('id'))
             ->fetchEach('id');
 
-        if ($arrIds)
-        {
+        if ($arrIds) {
             \Database::getInstance()
-                ->prepare(sprintf(
-                    'DELETE FROM tl_metamodel_rendersetting WHERE pid IN (%s)', implode(',', $arrIds))
+                ->prepare(
+                    sprintf(
+                        'DELETE FROM tl_metamodel_rendersetting WHERE pid IN (%s)',
+                        implode(',', $arrIds)
+                    )
                 )
                 ->executeUncached();
         }
@@ -136,12 +138,13 @@ class DeleteMetaModel
             ->prepare('SELECT id FROM tl_metamodel_filter WHERE pid=?')
             ->executeUncached($metaModel->get('id'))
             ->fetchEach('id');
-        if ($arrIds)
-        {
+        if ($arrIds) {
             \Database::getInstance()
-                ->prepare(sprintf(
-                    'DELETE FROM tl_metamodel_filtersetting WHERE pid IN (%s)',
-                    implode(',', $arrIds))
+                ->prepare(
+                    sprintf(
+                        'DELETE FROM tl_metamodel_filtersetting WHERE pid IN (%s)',
+                        implode(',', $arrIds)
+                    )
                 )
                 ->executeUncached();
         }
@@ -160,8 +163,7 @@ class DeleteMetaModel
     public static function handle(PreDeleteModelEvent $event)
     {
         $metaModel = Factory::byId($event->getModel()->getId());
-        if ($metaModel)
-        {
+        if ($metaModel) {
             self::destroyAttributes($metaModel);
             self::destroyDcaCombinations($metaModel);
             self::destroyInputScreens($metaModel);

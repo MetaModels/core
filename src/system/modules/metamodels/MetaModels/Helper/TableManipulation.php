@@ -86,24 +86,25 @@ class TableManipulation
         'COLUMN', 'CONDITION', 'CONSTRAINT', 'CONTINUE', 'CONVERT', 'CREATE', 'CROSS', 'CURRENT_DATE', 'CURRENT_TIME',
         'CURRENT_TIMESTAMP', 'CURRENT_USER', 'CURSOR', 'DATABASE', 'DATABASES', 'DAY_HOUR', 'DAY_MICROSECOND',
         'DAY_MINUTE', 'DAY_SECOND', 'DEC', 'DECIMAL', 'DECLARE', 'DEFAULT', 'DELAYED', 'DELETE', 'DESC', 'DESCRIBE',
-        'DETERMINISTIC', 'DISTINCT', 'DISTINCTROW', 'DIV', 'DOUBLE', 'DROP', 'DUAL', 'EACH', 'ELSE', 'ELSEIF', 'ENCLOSED',
-        'ESCAPED', 'EXISTS', 'EXIT', 'EXPLAIN', 'FALSE', 'FETCH', 'FLOAT', 'FLOAT4', 'FLOAT8', 'FOR', 'FORCE', 'FOREIGN',
-        'FROM', 'FULLTEXT', 'GENERAL', 'GRANT', 'GROUP', 'HAVING', 'HIGH_PRIORITY', 'HOUR_MICROSECOND', 'HOUR_MINUTE',
-        'HOUR_SECOND', 'IF', 'IGNORE', 'IGNORE_SERVER_IDS', 'IN', 'INDEX', 'INFILE', 'INNER', 'INOUT', 'INSENSITIVE',
-        'INSERT', 'INT', 'INT1', 'INT2', 'INT3', 'INT4', 'INT8', 'INTEGER', 'INTERVAL', 'INTO', 'IS', 'ITERATE', 'JOIN',
-        'KEY', 'KEYS', 'KILL', 'LEADING', 'LEAVE', 'LEFT', 'LIKE', 'LIMIT', 'LINEAR', 'LINES', 'LOAD', 'LOCALTIME',
-        'LOCALTIMESTAMP', 'LOCK', 'LONG', 'LONGBLOB', 'LONGTEXT', 'LOOP', 'LOW_PRIORITY', 'MASTER_HEARTBEAT_PERIOD',
-        'MASTER_SSL_VERIFY_SERVER_CERT', 'MATCH', 'MAXVALUE', 'MEDIUMBLOB', 'MEDIUMINT', 'MEDIUMTEXT', 'MIDDLEINT',
-        'MINUTE_MICROSECOND', 'MINUTE_SECOND', 'MOD', 'MODIFIES', 'NATURAL', 'NOT', 'NO_WRITE_TO_BINLOG', 'NULL', 'NUMERIC',
-        'ON', 'OPTIMIZE', 'OPTION', 'OPTIONALLY', 'OR', 'ORDER', 'OUT', 'OUTER', 'OUTFILE', 'PRECISION', 'PRIMARY',
-        'PROCEDURE', 'PURGE', 'RANGE', 'READ', 'READS', 'READ_WRITE', 'REAL', 'REFERENCES', 'REGEXP', 'RELEASE', 'RENAME',
-        'REPEAT', 'REPLACE', 'REQUIRE', 'RESIGNAL', 'RESTRICT', 'RETURN', 'REVOKE', 'RIGHT', 'RLIKE', 'SCHEMA', 'SCHEMAS',
-        'SECOND_MICROSECOND', 'SELECT', 'SENSITIVE', 'SEPARATOR', 'SET', 'SHOW', 'SIGNAL', 'SLOW', 'SMALLINT', 'SPATIAL',
-        'SPECIFIC', 'SQL', 'SQLEXCEPTION', 'SQLSTATE', 'SQLWARNING', 'SQL_BIG_RESULT', 'SQL_CALC_FOUND_ROWS',
-        'SQL_SMALL_RESULT', 'SSL', 'STARTING', 'STRAIGHT_JOIN', 'TABLE', 'TERMINATED', 'THEN', 'TINYBLOB', 'TINYINT',
-        'TINYTEXT', 'TO', 'TRAILING', 'TRIGGER', 'TRUE', 'UNDO', 'UNION', 'UNIQUE', 'UNLOCK', 'UNSIGNED', 'UPDATE', 'USAGE',
-        'USE', 'USING', 'UTC_DATE', 'UTC_TIME', 'UTC_TIMESTAMP', 'VALUES', 'VARBINARY', 'VARCHAR', 'VARCHARACTER', 'VARYING',
-        'WHEN', 'WHERE', 'WHILE', 'WITH', 'WRITE', 'XOR', 'YEAR_MONTH', 'ZEROFILL',
+        'DETERMINISTIC', 'DISTINCT', 'DISTINCTROW', 'DIV', 'DOUBLE', 'DROP', 'DUAL', 'EACH', 'ELSE', 'ELSEIF',
+        'ENCLOSED', 'ESCAPED', 'EXISTS', 'EXIT', 'EXPLAIN', 'FALSE', 'FETCH', 'FLOAT', 'FLOAT4', 'FLOAT8', 'FOR',
+        'FORCE', 'FOREIGN', 'FROM', 'FULLTEXT', 'GENERAL', 'GRANT', 'GROUP', 'HAVING', 'HIGH_PRIORITY',
+        'HOUR_MICROSECOND', 'HOUR_MINUTE', 'HOUR_SECOND', 'IF', 'IGNORE', 'IGNORE_SERVER_IDS', 'IN', 'INDEX', 'INFILE',
+        'INNER', 'INOUT', 'INSENSITIVE', 'INSERT', 'INT', 'INT1', 'INT2', 'INT3', 'INT4', 'INT8', 'INTEGER', 'INTERVAL',
+        'INTO', 'IS', 'ITERATE', 'JOIN', 'KEY', 'KEYS', 'KILL', 'LEADING', 'LEAVE', 'LEFT', 'LIKE', 'LIMIT', 'LINEAR',
+        'LINES', 'LOAD', 'LOCALTIME', 'LOCALTIMESTAMP', 'LOCK', 'LONG', 'LONGBLOB', 'LONGTEXT', 'LOOP', 'LOW_PRIORITY',
+        'MASTER_HEARTBEAT_PERIOD', 'MASTER_SSL_VERIFY_SERVER_CERT', 'MATCH', 'MAXVALUE', 'MEDIUMBLOB', 'MEDIUMINT',
+        'MEDIUMTEXT', 'MIDDLEINT', 'MINUTE_MICROSECOND', 'MINUTE_SECOND', 'MOD', 'MODIFIES', 'NATURAL', 'NOT',
+        'NO_WRITE_TO_BINLOG', 'NULL', 'NUMERIC', 'ON', 'OPTIMIZE', 'OPTION', 'OPTIONALLY', 'OR', 'ORDER', 'OUT',
+        'OUTER', 'OUTFILE', 'PRECISION', 'PRIMARY', 'PROCEDURE', 'PURGE', 'RANGE', 'READ', 'READS', 'READ_WRITE',
+        'REAL', 'REFERENCES', 'REGEXP', 'RELEASE', 'RENAME', 'REPEAT', 'REPLACE', 'REQUIRE', 'RESIGNAL', 'RESTRICT',
+        'RETURN', 'REVOKE', 'RIGHT', 'RLIKE', 'SCHEMA', 'SCHEMAS', 'SECOND_MICROSECOND', 'SELECT', 'SENSITIVE',
+        'SEPARATOR', 'SET', 'SHOW', 'SIGNAL', 'SLOW', 'SMALLINT', 'SPATIAL', 'SPECIFIC', 'SQL', 'SQLEXCEPTION',
+        'SQLSTATE', 'SQLWARNING', 'SQL_BIG_RESULT', 'SQL_CALC_FOUND_ROWS', 'SQL_SMALL_RESULT', 'SSL', 'STARTING',
+        'STRAIGHT_JOIN', 'TABLE', 'TERMINATED', 'THEN', 'TINYBLOB', 'TINYINT', 'TINYTEXT', 'TO', 'TRAILING', 'TRIGGER',
+        'TRUE', 'UNDO', 'UNION', 'UNIQUE', 'UNLOCK', 'UNSIGNED', 'UPDATE', 'USAGE', 'USE', 'USING', 'UTC_DATE',
+        'UTC_TIME', 'UTC_TIMESTAMP', 'VALUES', 'VARBINARY', 'VARCHAR', 'VARCHARACTER', 'VARYING', 'WHEN', 'WHERE',
+        'WHILE', 'WITH', 'WRITE', 'XOR', 'YEAR_MONTH', 'ZEROFILL',
         // New in MySQL 5.6.
         'GET', 'IO_AFTER_GTIDS', 'IO_BEFORE_GTIDS, MASTER_BIND', 'ONE_SHOT', 'PARTITION', 'SQL_AFTER_GTIDS',
         'SQL_BEFORE_GTIDS',
@@ -203,14 +204,13 @@ class TableManipulation
      */
     public static function checkTablename($strTableName)
     {
-        if (!self::isValidTablename($strTableName))
-        {
+        if (!self::isValidTablename($strTableName)) {
             throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['invalidTableName'], $strTableName));
         }
     }
 
     /**
-     * Checks whether the column with the given name is not a MetaModel system column and is a valid Database column name.
+     * Checks whether the column with the given name is not a MetaModel system column and is a valid column name.
      *
      * If there is any problem, an Exception is raised, stating the nature of the error in the Exception message.
      *
@@ -226,13 +226,11 @@ class TableManipulation
      */
     public static function checkColumnName($strColName, $blnAllowSystemCol = false)
     {
-        if (!self::isValidColumnName($strColName))
-        {
+        if (!self::isValidColumnName($strColName)) {
             throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['invalidColumnName'], $strColName));
         }
 
-        if ((!$blnAllowSystemCol) && self::isSystemColumn($strColName))
-        {
+        if ((!$blnAllowSystemCol) && self::isSystemColumn($strColName)) {
             throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['systemColumn'], $strColName));
         }
     }
@@ -249,8 +247,7 @@ class TableManipulation
     public static function checkTableExists($strTableName)
     {
         self::checkTablename($strTableName);
-        if (!self::getDB()->tableExists($strTableName, null, true))
-        {
+        if (!self::getDB()->tableExists($strTableName, null, true)) {
             throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['tableDoesNotExist'], $strTableName));
         }
     }
@@ -267,8 +264,7 @@ class TableManipulation
     public static function checkTableDoesNotExist($strTableName)
     {
         self::checkTablename($strTableName);
-        if (self::getDB()->tableExists($strTableName, null, true))
-        {
+        if (self::getDB()->tableExists($strTableName, null, true)) {
             throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['tableExists'], $strTableName));
         }
     }
@@ -341,8 +337,7 @@ class TableManipulation
     {
         self::checkTableExists($strTableName);
         self::checkColumnName($strColName, $blnAllowSystemCol);
-        if (!self::getDB()->fieldExists($strColName, $strTableName, true))
-        {
+        if (!self::getDB()->fieldExists($strColName, $strTableName, true)) {
             throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['columnDoesNotExist'], $strColName, $strTableName));
         }
     }
@@ -365,8 +360,7 @@ class TableManipulation
     {
         self::checkTableExists($strTableName);
         self::checkColumnName($strColName, $blnAllowSystemCol);
-        if (self::getDB()->fieldExists($strColName, $strTableName, true))
-        {
+        if (self::getDB()->fieldExists($strColName, $strTableName, true)) {
             throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['columnExists'], $strColName, $strTableName));
         }
     }
@@ -424,10 +418,8 @@ class TableManipulation
         $strNewColumnName,
         $strNewType,
         $blnAllowSystemCol = false
-    )
-    {
-        if ($strColumnName != $strNewColumnName)
-        {
+    ) {
+        if ($strColumnName != $strNewColumnName) {
             self::checkColumnExists($strTableName, $strColumnName, $blnAllowSystemCol);
             self::checkColumnDoesNotExist($strTableName, $strNewColumnName, $blnAllowSystemCol);
         }
@@ -478,29 +470,24 @@ class TableManipulation
      */
     public static function setVariantSupport($strTableName, $blnVariantSupport)
     {
-        if ($blnVariantSupport)
-        {
+        if ($blnVariantSupport) {
             if (self::getDB()->tableExists($strTableName, null, true)
                 && (!self::getDB()->fieldExists('varbase', $strTableName, true))
-            )
-            {
+            ) {
                 self::createColumn($strTableName, 'varbase', 'char(1) NOT NULL default \'\'', true);
                 self::createColumn($strTableName, 'vargroup', 'int(11) NOT NULL default 0', true);
                 // TODO: we should also apply an index on vargroup here.
-
-                // If there is pre-existing data in the table, we need to provide a separate 'vargroup' value to all of them,
-                // we can do this safely by setting all vargroups to the id of the base item.
+                // If there is pre-existing data in the table, we need to provide a separate 'vargroup' value to all of
+                // them, we can do this safely by setting all vargroups to the id of the base item.
                 self::getDB()->execute(sprintf('UPDATE %s SET vargroup=id, varbase=1', $strTableName));
             }
         } else {
             if (self::getDB()->tableExists($strTableName, null, true)
                 && self::getDB()->fieldExists('varbase', $strTableName, true)
-            )
-            {
+            ) {
                 self::dropColumn($strTableName, 'varbase', true);
                 self::dropColumn($strTableName, 'vargroup', true);
             }
         }
     }
 }
-

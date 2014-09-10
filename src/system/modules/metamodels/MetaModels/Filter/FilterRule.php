@@ -33,4 +33,3 @@ abstract class FilterRule implements IFilterRule
     {
     }
 }
-

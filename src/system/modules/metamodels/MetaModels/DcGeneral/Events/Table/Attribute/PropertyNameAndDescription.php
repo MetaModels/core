@@ -27,8 +27,7 @@ use MetaModels\Dca\Helper;
  *
  * @package MetaModels\DcGeneral\Events\Table\Attribute
  */
-class PropertyNameAndDescription
-    extends AttributeBase
+class PropertyNameAndDescription extends AttributeBase
 {
     /**
      * Decode the given value from a serialized language array into the real language array.

@@ -88,14 +88,12 @@ class Driver implements MultiLanguageDataProviderInterface
     {
         $objModelItem = null;
         // Determine the id.
-        if (is_object($varItem) && ($varItem instanceof Model))
-        {
+        if (is_object($varItem) && ($varItem instanceof Model)) {
             $objModelItem = $varItem->getItem();
         } else {
             $objModelItem = $this->objMetaModel->findById($varItem);
         }
-        if ($objModelItem)
-        {
+        if ($objModelItem) {
             $this->objMetaModel->delete($objModelItem);
         }
     }
@@ -176,23 +174,19 @@ class Driver implements MultiLanguageDataProviderInterface
     public function fetch(ConfigInterface $objConfig)
     {
         // TODO: implement find first item by filter here.
-
         $strBackupLanguage = '';
-        if ($this->strCurrentLanguage != '')
-        {
+        if ($this->strCurrentLanguage != '') {
             $strBackupLanguage      = $GLOBALS['TL_LANGUAGE'];
             $GLOBALS['TL_LANGUAGE'] = $this->strCurrentLanguage;
         }
 
         $objItem = $this->objMetaModel->findById($objConfig->getId());
 
-        if ($strBackupLanguage != '')
-        {
+        if ($strBackupLanguage != '') {
             $GLOBALS['TL_LANGUAGE'] = $strBackupLanguage;
         }
 
-        if (!$objItem)
-        {
+        if (!$objItem) {
             return null;
         }
         return new Model($objItem);
@@ -209,8 +203,7 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     public function setBaseConfig(array $arrConfig)
     {
-        if (!$arrConfig['source'])
-        {
+        if (!$arrConfig['source']) {
             throw new \RuntimeException('Missing table name.');
         }
 
@@ -270,8 +263,7 @@ class Driver implements MultiLanguageDataProviderInterface
     protected function getAttributeFromFilterOperation($operation)
     {
         $attribute = null;
-        if ($operation['property'])
-        {
+        if ($operation['property']) {
             $attribute = $this->objMetaModel->getAttribute($operation['property']);
         }
 
@@ -290,28 +282,27 @@ class Driver implements MultiLanguageDataProviderInterface
     protected function getAndOrFilter(IFilter $filter, $operation)
     {
         // FIXME: backwards compat - remove when done.
-        if (is_array($operation['childs']))
-        {
-            trigger_error('Filter array uses deprecated entry "childs", please use "children" instead.', E_USER_DEPRECATED);
+        if (is_array($operation['childs'])) {
+            trigger_error(
+                'Filter array uses deprecated entry "childs", please use "children" instead.',
+                E_USER_DEPRECATED
+            );
             $operation['children'] = $operation['childs'];
             unset($operation['childs']);
         }
 
-        if (!$operation['children'])
-        {
+        if (!$operation['children']) {
             return;
         }
 
-        if ($operation['operation'] == 'AND')
-        {
+        if ($operation['operation'] == 'AND') {
             $filterRule = new ConditionAnd();
         } else {
             $filterRule = new ConditionOr();
         }
         $filter->addFilterRule($filterRule);
 
-        foreach ($operation['children'] as $child)
-        {
+        foreach ($operation['children'] as $child) {
             $subFilter = new Filter($this->objMetaModel);
             $filterRule->addChild($subFilter);
             $this->calculateSubfilter($child, $subFilter);
@@ -334,10 +325,8 @@ class Driver implements MultiLanguageDataProviderInterface
     protected function getFilterForComparingOperator($attribute, IFilter $filter, $operation)
     {
         $filterRule = null;
-        if ($attribute)
-        {
-            switch ($operation['operation'])
-            {
+        if ($attribute) {
+            switch ($operation['operation']) {
                 case '=':
                     $filterRule = new SearchAttribute(
                         $attribute,
@@ -362,13 +351,12 @@ class Driver implements MultiLanguageDataProviderInterface
 
                 default:
                     throw new \RuntimeException(
-                        'Error processing filter array - unknown operation ' . var_export($operation['operation'], true),
+                        'Error processing filter array - unknown operation ' .
+                        var_export($operation['operation'], true),
                         1
                     );
             }
-        }
-        elseif(\Database::getInstance()->fieldExists($operation['property'], $this->objMetaModel->getTableName()))
-        {
+        } elseif (\Database::getInstance()->fieldExists($operation['property'], $this->objMetaModel->getTableName())) {
             // System column?
             $filterRule = new SimpleQuery(sprintf(
                 'SELECT id FROM %s WHERE %s %s %s',
@@ -379,8 +367,7 @@ class Driver implements MultiLanguageDataProviderInterface
             ));
         }
 
-        if (!$filterRule)
-        {
+        if (!$filterRule) {
             throw new \RuntimeException(
                 'Error processing filter array - unknown property ' . var_export($operation['property'], true),
                 1
@@ -405,8 +392,7 @@ class Driver implements MultiLanguageDataProviderInterface
     {
         // Rewrite the IN operation to a rephrased term: "(x=a) OR (x=b) OR ...".
         $subRules = array();
-        foreach ($operation['values'] as $varValue)
-        {
+        foreach ($operation['values'] as $varValue) {
             $subRules[] = array(
                 'property'  => $operation['property'],
                 'operation' => '=',
@@ -437,27 +423,25 @@ class Driver implements MultiLanguageDataProviderInterface
     protected function getFilterForLike($attribute, IFilter $filter, $operation)
     {
         $objFilterRule = null;
-        if ($attribute)
-        {
+        if ($attribute) {
             $objFilterRule = new SearchAttribute(
                 $attribute,
                 $operation['value'],
                 $this->objMetaModel->getAvailableLanguages()
             );
-        }
-        elseif (\Database::getInstance()->fieldExists($operation['property'], $this->objMetaModel->getTableName()))
-        {
+        } elseif (\Database::getInstance()->fieldExists($operation['property'], $this->objMetaModel->getTableName())) {
             // System column?
-            $objFilterRule = new SimpleQuery(sprintf(
+            $objFilterRule = new SimpleQuery(
+                sprintf(
                     'SELECT id FROM %s WHERE %s LIKE ?',
                     $this->objMetaModel->getTableName(),
                     $operation['property']
                 ),
-                array($operation['value']));
+                array($operation['value'])
+            );
         }
 
-        if (!$objFilterRule)
-        {
+        if (!$objFilterRule) {
             throw new \RuntimeException(
                 'Error processing filter array - unknown property ' . var_export($operation['property'], true),
                 1
@@ -498,13 +482,11 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     protected function calculateSubfilter($operation, IFilter $filter)
     {
-        if (!is_array($operation))
-        {
+        if (!is_array($operation)) {
             throw new \RuntimeException('Error Processing subfilter: ' . var_export($operation, true), 1);
         }
 
-        switch ($operation['operation'])
-        {
+        switch ($operation['operation']) {
             case 'AND':
             case 'OR':
                 $this->getAndOrFilter($filter, $operation);
@@ -533,7 +515,10 @@ class Driver implements MultiLanguageDataProviderInterface
                 break;
 
             default:
-                throw new \RuntimeException('Error processing filter array - unknown operation ' . var_export($operation, true), 1);
+                throw new \RuntimeException(
+                    'Error processing filter array - unknown operation ' . var_export($operation, true),
+                    1
+                );
         }
     }
 
@@ -548,8 +533,7 @@ class Driver implements MultiLanguageDataProviderInterface
     {
         $objFilter = $this->objMetaModel->getEmptyFilter();
 
-        if ($arrFilter)
-        {
+        if ($arrFilter) {
             $this->calculateSubfilter(
                 array
                 (
@@ -572,8 +556,7 @@ class Driver implements MultiLanguageDataProviderInterface
     public function fetchAll(ConfigInterface $objConfig)
     {
         $strBackupLanguage = '';
-        if ($this->strCurrentLanguage != '')
-        {
+        if ($this->strCurrentLanguage != '') {
             $strBackupLanguage      = $GLOBALS['TL_LANGUAGE'];
             $GLOBALS['TL_LANGUAGE'] = $this->strCurrentLanguage;
         }
@@ -584,18 +567,15 @@ class Driver implements MultiLanguageDataProviderInterface
 
         $strSortBy  = '';
         $strSortDir = '';
-        if ($arrSorting)
-        {
+        if ($arrSorting) {
             list($strSortBy, $strSortDir) = each($arrSorting);
         }
-        if (!$strSortDir)
-        {
+        if (!$strSortDir) {
             $strSortDir = DCGE::MODEL_SORTING_ASC;
         }
 
         $objFilter = $this->prepareFilter($objConfig->getFilter());
-        if ($objConfig->getIdOnly())
-        {
+        if ($objConfig->getIdOnly()) {
             $varResult = $this->objMetaModel->getIdsFromFilter(
                 $objFilter,
                 ($strSortBy?$strSortBy:''),
@@ -613,15 +593,13 @@ class Driver implements MultiLanguageDataProviderInterface
             );
 
             $objResultCollection = $this->getEmptyCollection();
-            foreach ($objItems as $objItem)
-            {
+            foreach ($objItems as $objItem) {
                 $objResultCollection->push(new Model($objItem));
             }
             $varResult = $objResultCollection;
         }
 
-        if ($strBackupLanguage != '')
-        {
+        if ($strBackupLanguage != '') {
             $GLOBALS['TL_LANGUAGE'] = $strBackupLanguage;
         }
         return $varResult;
@@ -647,8 +625,7 @@ class Driver implements MultiLanguageDataProviderInterface
     public function getFilterOptions(ConfigInterface $objConfig)
     {
         $arrProperties = $objConfig->getFields();
-        if (count($arrProperties) <> 1)
-        {
+        if (count($arrProperties) <> 1) {
             throw new \RuntimeException('objConfig must contain exactly one property to be retrieved.');
         }
 
@@ -659,8 +636,7 @@ class Driver implements MultiLanguageDataProviderInterface
             ->getFilterOptions($objFilter->getMatchingIds(), true);
 
         $objCollection = $this->getEmptyFilterOptionCollection();
-        foreach ($arrValues as $strKey => $strValue)
-        {
+        foreach ($arrValues as $strKey => $strValue) {
             $objCollection->add($strKey, $strValue);
         }
 
@@ -712,8 +688,7 @@ class Driver implements MultiLanguageDataProviderInterface
         $objFilter = $this->objMetaModel->getEmptyFilter();
 
         $objAttribute = $this->objMetaModel->getAttribute($strField);
-        if ($objAttribute)
-        {
+        if ($objAttribute) {
             $this->calculateSubfilter(array(
                 'operation' => '=',
                 'property' => $objAttribute->getColName(),
@@ -754,19 +729,16 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     public function save(ModelInterface $objItem)
     {
-        if ($objItem instanceof Model)
-        {
+        if ($objItem instanceof Model) {
             $strBackupLanguage = '';
-            if ($this->strCurrentLanguage != '')
-            {
+            if ($this->strCurrentLanguage != '') {
                 $strBackupLanguage      = $GLOBALS['TL_LANGUAGE'];
                 $GLOBALS['TL_LANGUAGE'] = $this->strCurrentLanguage;
             }
 
             $objItem->getItem()->save();
 
-            if ($strBackupLanguage != '')
-            {
+            if ($strBackupLanguage != '') {
                 $GLOBALS['TL_LANGUAGE'] = $strBackupLanguage;
             }
 
@@ -786,8 +758,7 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     public function saveEach(CollectionInterface $objItems)
     {
-        foreach ($objItems as $objItem)
-        {
+        foreach ($objItems as $objItem) {
             $this->save($objItem);
         }
     }
@@ -822,14 +793,11 @@ class Driver implements MultiLanguageDataProviderInterface
         /** @var Model $objModel2 */
         $objNative1 = $objModel1->getItem();
         $objNative2 = $objModel2->getItem();
-        if ($objNative1->getMetaModel() != $objNative2->getMetaModel())
-        {
+        if ($objNative1->getMetaModel() != $objNative2->getMetaModel()) {
             return false;
         }
-        foreach ($objNative1->getMetaModel()->getAttributes() as $objAttribute)
-        {
-            if ($objNative1->get($objAttribute->getColName()) != $objNative2->get($objAttribute->getColName()))
-            {
+        foreach ($objNative1->getMetaModel()->getAttributes() as $objAttribute) {
+            if ($objNative1->get($objAttribute->getColName()) != $objNative2->get($objAttribute->getColName())) {
                 return false;
             }
         }
@@ -847,8 +815,7 @@ class Driver implements MultiLanguageDataProviderInterface
     {
         $objItem = $this->objMetaModel->findById($objConfig->getId())->varCopy();
 
-        if (!$objItem)
-        {
+        if (!$objItem) {
             return null;
         }
         return new Model($objItem);
@@ -863,21 +830,18 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     public function getLanguages($mixID)
     {
-        if (!$this->objMetaModel->isTranslated())
-        {
+        if (!$this->objMetaModel->isTranslated()) {
             return null;
         }
 
         $collection = new DefaultLanguageInformationCollection();
 
-        foreach ($this->objMetaModel->getAvailableLanguages() as $langCode)
-        {
+        foreach ($this->objMetaModel->getAvailableLanguages() as $langCode) {
             // TODO: support country code.
             $collection->add(new DefaultLanguageInformation($langCode, null));
         }
 
-        if (count($collection) > 0)
-        {
+        if (count($collection) > 0) {
             return $collection;
         }
 
@@ -893,8 +857,7 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     public function getFallbackLanguage($mixID)
     {
-        if ($this->objMetaModel->isTranslated())
-        {
+        if ($this->objMetaModel->isTranslated()) {
             $langCode = $this->objMetaModel->getFallbackLanguage();
             // TODO: support country code.
             return new DefaultLanguageInformation($langCode, null);

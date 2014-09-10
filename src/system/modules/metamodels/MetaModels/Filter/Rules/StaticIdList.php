@@ -55,4 +55,3 @@ class StaticIdList extends FilterRule
         return $this->arrIds;
     }
 }
-

@@ -92,26 +92,21 @@ class ConditionOr extends FilterRule
     public function getMatchingIds()
     {
         $arrIds = array();
-        foreach ($this->arrChildFilters as $objChildFilter)
-        {
+        foreach ($this->arrChildFilters as $objChildFilter) {
             $arrChildMatches = $objChildFilter->getMatchingIds();
             // NULL => all items - for OR conditions, this can never be more than all so we are already satisfied here.
-            if ($arrChildMatches === null)
-            {
+            if ($arrChildMatches === null) {
                 return null;
             }
 
-            if ($arrChildMatches && $this->stopAfterMatch)
-            {
+            if ($arrChildMatches && $this->stopAfterMatch) {
                 return $arrChildMatches;
             }
 
-            if ($arrChildMatches)
-            {
+            if ($arrChildMatches) {
                 $arrIds = array_merge($arrIds, $arrChildMatches);
             }
         }
         return $arrIds;
     }
 }
-

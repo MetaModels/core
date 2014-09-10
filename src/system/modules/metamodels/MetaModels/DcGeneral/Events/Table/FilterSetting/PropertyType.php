@@ -36,8 +36,7 @@ class PropertyType
         $translator = $event->getEnvironment()->getTranslator();
         $options    = array();
 
-        foreach (array_keys($GLOBALS['METAMODELS']['filters']) as $filter)
-        {
+        foreach (array_keys($GLOBALS['METAMODELS']['filters']) as $filter) {
             $options[$filter] = $translator->translate('typenames.' . $filter, 'tl_metamodel_filtersetting');
         }
 

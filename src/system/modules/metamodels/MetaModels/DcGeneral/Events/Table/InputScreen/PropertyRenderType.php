@@ -26,7 +26,6 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPr
  */
 class PropertyRenderType
 {
-
     /**
      * Populates an array with all valid "rendertype".
      *

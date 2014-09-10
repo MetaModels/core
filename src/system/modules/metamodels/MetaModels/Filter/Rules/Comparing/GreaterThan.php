@@ -79,4 +79,3 @@ class GreaterThan implements IFilterRule
         return $this->objAttribute->filterGreaterThan($this->varValue, $this->blnInclusive);
     }
 }
-

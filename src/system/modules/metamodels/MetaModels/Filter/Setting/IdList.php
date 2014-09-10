@@ -34,8 +34,7 @@ class IdList extends Simple
      */
     public function prepareRules(IFilter $objFilter, $arrFilterUrl)
     {
-        if ($this->get('items'))
-        {
+        if ($this->get('items')) {
             $arrItems = explode(',', (string)$this->get('items'));
         } else {
             $arrItems = array();
@@ -43,4 +42,3 @@ class IdList extends Simple
         $objFilter->addFilterRule(new FilterRuleIdList($arrItems));
     }
 }
-

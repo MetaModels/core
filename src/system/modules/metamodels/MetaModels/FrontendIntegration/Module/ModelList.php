@@ -42,8 +42,7 @@ class ModelList extends \Module
      */
     public function generate()
     {
-        if (TL_MODE == 'BE')
-        {
+        if (TL_MODE == 'BE') {
             $objTemplate           = new \BackendTemplate('be_wildcard');
             $objTemplate->wildcard = '### METAMODEL LIST ###';
             $objTemplate->title    = $this->headline;
@@ -55,8 +54,7 @@ class ModelList extends \Module
         }
 
         // Fallback template.
-        if (!strlen($this->metamodel_layout))
-        {
+        if (!strlen($this->metamodel_layout)) {
             $this->metamodel_layout = $this->strTemplate;
         }
 
@@ -77,11 +75,9 @@ class ModelList extends \Module
     {
         $arrReturn = array();
 
-        foreach (array_keys($objItemRenderer->getFilterSettings()->getParameterFilterNames()) as $strName)
-        {
+        foreach (array_keys($objItemRenderer->getFilterSettings()->getParameterFilterNames()) as $strName) {
             $varValue = \Input::getInstance()->get($strName);
-            if (is_string($varValue))
-            {
+            if (is_string($varValue)) {
                 $arrReturn[$strName] = $varValue;
             }
         }
@@ -106,7 +102,10 @@ class ModelList extends \Module
             ->setPageBreak($this->perPage)
             ->setSorting($this->metamodel_sortby, $this->metamodel_sortby_direction)
             ->setFilterSettings($this->metamodel_filtering)
-            ->setFilterParameters(deserialize($this->metamodel_filterparams, true), $this->getFilterParameters($objItemRenderer))
+            ->setFilterParameters(
+                deserialize($this->metamodel_filterparams, true),
+                $this->getFilterParameters($objItemRenderer)
+            )
             ->setMetaTags($this->metamodel_meta_title, $this->metamodel_meta_description);
 
         $this->Template->items         = $objItemRenderer->render($this->metamodel_noparsing, $this);

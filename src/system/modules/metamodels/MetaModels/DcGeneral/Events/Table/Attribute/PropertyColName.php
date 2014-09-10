@@ -25,8 +25,7 @@ use MetaModels\Helper\TableManipulation;
  *
  * @package MetaModels\DcGeneral\Events\Table\Attribute
  */
-class PropertyColName
-    extends AttributeBase
+class PropertyColName extends AttributeBase
 {
     /**
      * Encode the given value from a real language array into a serialized language array.
@@ -43,15 +42,14 @@ class PropertyColName
         $columnName    = $event->getValue();
         $metaModel     = self::getMetaModelFromModel($event->getModel());
 
-        if ((!$columnName) || $oldColumnName !== $columnName)
-        {
+        if ((!$columnName) || $oldColumnName !== $columnName) {
             TableManipulation::checkColumnDoesNotExist($metaModel->getTableName(), $columnName);
 
             $colNames = array_keys($metaModel->getAttributes());
-            if (in_array($columnName, $colNames))
-            {
+            if (in_array($columnName, $colNames)) {
                 throw new \RuntimeException(
-                    sprintf($GLOBALS['TL_LANG']['ERR']['columnExists'],
+                    sprintf(
+                        $GLOBALS['TL_LANG']['ERR']['columnExists'],
                         $columnName,
                         $metaModel->getTableName()
                     )

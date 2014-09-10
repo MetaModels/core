@@ -40,12 +40,9 @@ class Boot
      */
     protected static function getUser()
     {
-        if (TL_MODE == 'BE')
-        {
+        if (TL_MODE == 'BE') {
             return \BackendUser::getInstance();
-        }
-        elseif (TL_MODE == 'FE')
-        {
+        } elseif (TL_MODE == 'FE') {
             return \FrontendUser::getInstance();
         }
         return null;
@@ -60,8 +57,7 @@ class Boot
      */
     protected static function initializeContaoObjectStack()
     {
-        if (!file_exists(TL_ROOT . '/system/config/localconfig.php'))
-        {
+        if (!file_exists(TL_ROOT . '/system/config/localconfig.php')) {
             return false;
         }
 
@@ -88,15 +84,12 @@ class Boot
     {
         // When coming from install.php or somewhere else when localconfig.php
         // has not yet completely been initialized, we will run into an exception here.
-        try
-        {
+        try {
             $objDB = \Database::getInstance();
             return $objDB
                 && $objDB->tableExists('tl_metamodel', null)
                 && $objDB->tableExists('tl_metamodel_dcasetting_condition', null);
-        }
-        catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             // Swallow the exceptions and return false below.
         }
 
@@ -119,8 +112,7 @@ class Boot
         $Env = \Environment::getInstance();
 
         // Issue #66 - contao/install.php is not working anymore. Thanks to Stefan Lindecke (@lindesbs).
-        if (strpos($Env->request, 'install.php') !== false)
-        {
+        if (strpos($Env->request, 'install.php') !== false) {
             return;
         }
 
@@ -136,8 +128,7 @@ class Boot
         // Bugfix: If the user is not authenticated, contao will redirect to contao/index.php
         // But in this moment the TL_PATH is not defined, so the $this->Environment->request
         // generate a url without replacing the basepath(TL_PATH) with an empty string.
-        if (!defined('TL_PATH'))
-        {
+        if (!defined('TL_PATH')) {
             define('TL_PATH', $path);
         }
 
@@ -154,14 +145,12 @@ class Boot
      */
     public static function perform()
     {
-        // Do not execute anything if we are on the index page because no User is logged in
-        if (strpos(\Environment::getInstance()->script, 'contao/index.php') !== false)
-        {
+        // Do not execute anything if we are on the index page because no User is logged in.
+        if (strpos(\Environment::getInstance()->script, 'contao/index.php') !== false) {
             return;
         }
 
-        if (!(self::initializeContaoObjectStack() && self::isDBInitialized()))
-        {
+        if (!(self::initializeContaoObjectStack() && self::isDBInitialized())) {
             return;
         }
 

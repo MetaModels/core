@@ -17,7 +17,6 @@
 
 namespace MetaModels\Filter;
 
-use MetaModels\Filter\IFilterRule;
 use MetaModels\IMetaModel;
 
 /**
@@ -58,8 +57,7 @@ class Filter implements IFilter
      */
     public function __construct(IMetaModel $objMetaModel)
     {
-        if ($objMetaModel)
-        {
+        if ($objMetaModel) {
             $this->strMetaModel = $objMetaModel->getTableName();
         }
     }
@@ -74,8 +72,7 @@ class Filter implements IFilter
         $this->arrMatches     = null;
         $arrOld               = $this->arrFilterRules;
         $this->arrFilterRules = array();
-        foreach ($arrOld as $objFilterRule)
-        {
+        foreach ($arrOld as $objFilterRule) {
             $this->addFilterRule(clone $objFilterRule);
         }
     }
@@ -107,32 +104,25 @@ class Filter implements IFilter
      */
     public function getMatchingIds()
     {
-        if ($this->arrMatches !== null)
-        {
+        if ($this->arrMatches !== null) {
             return $this->arrMatches;
         }
 
         $arrIds = null;
-        foreach ($this->arrFilterRules as $objFilterRule)
-        {
+        foreach ($this->arrFilterRules as $objFilterRule) {
             /** @var IFilterRule $objFilterRule */
             $arrRuleIds = $objFilterRule->getMatchingIds();
-            if ($arrRuleIds === null)
-            {
+            if ($arrRuleIds === null) {
                 continue;
             }
             // The first rule determines the master ids.
-            if ($arrIds === null)
-            {
+            if ($arrIds === null) {
                 $arrIds = $arrRuleIds;
-            }
-            else
-            {
+            } else {
                 // NOTE: all rules are implicitely "AND"-ed together.
                 $arrIds = array_intersect($arrIds, $arrRuleIds);
                 // When no ids are left any more, the result will stay empty, do not evaluate any further rules.
-                if (count($arrIds) == 0)
-                {
+                if (count($arrIds) == 0) {
                     break;
                 }
             }
@@ -141,4 +131,3 @@ class Filter implements IFilter
         return $arrIds;
     }
 }
-

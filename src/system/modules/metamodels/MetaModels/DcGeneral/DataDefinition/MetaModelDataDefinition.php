@@ -25,9 +25,7 @@ use MetaModels\DcGeneral\DataDefinition\Definition\IMetaModelDefinition;
  *
  * @package MetaModels\DcGeneral\DataDefinition
  */
-class MetaModelDataDefinition
-    extends DefaultContainer
-    implements IMetaModelDataDefinition
+class MetaModelDataDefinition extends DefaultContainer implements IMetaModelDataDefinition
 {
     /**
      * {@inheritDoc}

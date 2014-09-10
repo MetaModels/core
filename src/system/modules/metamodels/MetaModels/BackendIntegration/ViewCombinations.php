@@ -61,12 +61,9 @@ class ViewCombinations
      */
     protected static function getUser()
     {
-        if (TL_MODE == 'BE')
-        {
+        if (TL_MODE == 'BE') {
             return \BackendUser::getInstance();
-        }
-        elseif (TL_MODE == 'FE')
-        {
+        } elseif (TL_MODE == 'FE') {
             return \FrontendUser::getInstance();
         }
         return null;
@@ -92,8 +89,7 @@ class ViewCombinations
         $metaModels = self::getDb()
             ->executeUncached('SELECT id, tableName FROM tl_metamodel order by sorting');
 
-        while ($metaModels->next())
-        {
+        while ($metaModels->next()) {
             self::$information[$metaModels->id] = array
             (
                 self::COMBINATION     => null,
@@ -120,8 +116,7 @@ class ViewCombinations
         $groups = $user->groups ? array_filter($user->groups) : array();
 
         // Special case in combinations, admins have the implicit group id -1.
-        if ((TL_MODE == 'BE') && $user->admin)
-        {
+        if ((TL_MODE == 'BE') && $user->admin) {
             $groups[] = -1;
         }
         return $groups;
@@ -140,8 +135,7 @@ class ViewCombinations
         $groupColumn = (TL_MODE == 'BE') ? 'be_group' : 'fe_group';
         $groups      = self::getUserGroups();
 
-        if (!$groups)
-        {
+        if (!$groups) {
             return array();
         }
 
@@ -155,11 +149,9 @@ class ViewCombinations
 
         $success = array();
 
-        while ($objCombinations->next())
-        {
+        while ($objCombinations->next()) {
             // Already a combination present, continue with next one.
-            if (!empty(self::$information[$objCombinations->pid][self::COMBINATION]))
-            {
+            if (!empty(self::$information[$objCombinations->pid][self::COMBINATION])) {
                 continue;
             }
             self::$information[$objCombinations->pid][self::COMBINATION] = $objCombinations->row();
@@ -186,8 +178,7 @@ class ViewCombinations
             ))
             ->executeUncached();
 
-        while ($inputScreen->next())
-        {
+        while ($inputScreen->next()) {
             self::$information[$inputScreen->pid][self::COMBINATION]['dca_id'] = $inputScreen->id;
         }
 
@@ -198,8 +189,7 @@ class ViewCombinations
             ))
             ->executeUncached();
 
-        while ($renderSetting->next())
-        {
+        while ($renderSetting->next()) {
             self::$information[$renderSetting->pid][self::COMBINATION]['view_id'] = $renderSetting->id;
         }
     }
@@ -212,16 +202,13 @@ class ViewCombinations
     protected static function fetchInputScreenDetails()
     {
         $inputScreenIds = array();
-        foreach (self::$information as $info)
-        {
-            if (!empty($info[self::COMBINATION]['dca_id']))
-            {
+        foreach (self::$information as $info) {
+            if (!empty($info[self::COMBINATION]['dca_id'])) {
                 $inputScreenIds[] = $info[self::COMBINATION]['dca_id'];
             }
         }
 
-        if (!$inputScreenIds)
-        {
+        if (!$inputScreenIds) {
             return;
         }
 
@@ -232,13 +219,11 @@ class ViewCombinations
             ))
             ->executeUncached();
 
-        if (!$inputScreens->numRows)
-        {
+        if (!$inputScreens->numRows) {
             return;
         }
 
-        while ($inputScreens->next())
-        {
+        while ($inputScreens->next()) {
             $propertyRows = self::getDb()
                 ->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=? AND published=1 ORDER BY sorting ASC')
                 ->executeUncached($inputScreens->id);
@@ -272,16 +257,13 @@ class ViewCombinations
     protected static function fetchRenderSettingDetails()
     {
         $renderSettingIds = array();
-        foreach (self::$information as $info)
-        {
-            if (!empty($info[self::COMBINATION]['view_id']))
-            {
+        foreach (self::$information as $info) {
+            if (!empty($info[self::COMBINATION]['view_id'])) {
                 $renderSettingIds[] = $info[self::COMBINATION]['view_id'];
             }
         }
 
-        if (!$renderSettingIds)
-        {
+        if (!$renderSettingIds) {
             return;
         }
 
@@ -292,8 +274,7 @@ class ViewCombinations
             ))
             ->executeUncached();
 
-        while ($renderSettings->next())
-        {
+        while ($renderSettings->next()) {
             self::$information[$renderSettings->pid][self::RENDERSETTING] = $renderSettings->row();
         }
     }
@@ -308,13 +289,11 @@ class ViewCombinations
      */
     protected static function bufferModels()
     {
-        if (!empty(self::$information))
-        {
+        if (!empty(self::$information)) {
             return;
         }
 
-        if (!\Database::getInstance()->tableExists('tl_metamodel', null))
-        {
+        if (!\Database::getInstance()->tableExists('tl_metamodel', null)) {
             return;
         }
 
@@ -322,21 +301,17 @@ class ViewCombinations
 
         $fallback = self::getPaletteCombinationRows();
 
-        if (!$fallback)
-        {
+        if (!$fallback) {
             $fallback = array_keys(self::$information);
         }
 
-        if ($fallback)
-        {
+        if ($fallback) {
             self::getPaletteCombinationDefault($fallback);
         }
 
         // Clean any undefined.
-        foreach (array_keys(self::$information) as $id)
-        {
-            if (empty(self::$information[$id][self::COMBINATION]))
-            {
+        foreach (array_keys(self::$information) as $id) {
+            if (empty(self::$information[$id][self::COMBINATION])) {
                 unset(self::$tableMap[self::$information[$id][self::MODELNAME]]);
                 unset(self::$information[$id][self::COMBINATION]);
             }
@@ -384,8 +359,7 @@ class ViewCombinations
     {
         self::bufferModels();
 
-        if (!is_numeric($metaModel))
-        {
+        if (!is_numeric($metaModel)) {
             $metaModel = self::$tableMap[$metaModel];
         }
 
@@ -403,8 +377,7 @@ class ViewCombinations
     {
         self::bufferModels();
 
-        if (!is_numeric($metaModel))
-        {
+        if (!is_numeric($metaModel)) {
             $metaModel = self::$tableMap[$metaModel];
         }
 
@@ -421,12 +394,10 @@ class ViewCombinations
         self::bufferModels();
 
         $result = array();
-        foreach (self::$information as $information)
-        {
+        foreach (self::$information as $information) {
             /** @var IInputScreen $inputScreen */
             $inputScreen = isset($information[self::INPUTSCREEN]) ? $information[self::INPUTSCREEN] : null;
-            if ($inputScreen && $inputScreen->isStandalone())
-            {
+            if ($inputScreen && $inputScreen->isStandalone()) {
                 $result[] = $information[self::INPUTSCREEN];
             }
         }
@@ -444,12 +415,10 @@ class ViewCombinations
         self::bufferModels();
 
         $result = array();
-        foreach (self::$information as $information)
-        {
+        foreach (self::$information as $information) {
             /** @var IInputScreen $inputScreen */
             $inputScreen = isset($information[self::INPUTSCREEN]) ? $information[self::INPUTSCREEN] : null;
-            if ($inputScreen && !$inputScreen->isStandalone())
-            {
+            if ($inputScreen && !$inputScreen->isStandalone()) {
                 $result[] = $information[self::INPUTSCREEN];
             }
         }

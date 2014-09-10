@@ -29,4 +29,3 @@ namespace MetaModels\Attribute;
 abstract class BaseComplex extends Base implements IComplex
 {
 }
-

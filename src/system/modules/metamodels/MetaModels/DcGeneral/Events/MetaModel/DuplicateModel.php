@@ -27,8 +27,7 @@ use ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent;
  *
  * @package MetaModels\DcGeneral\Events\MetaModel
  */
-class DuplicateModel
-    extends BaseView
+class DuplicateModel extends BaseView
 {
     /**
      * Handle the paste into and after event.

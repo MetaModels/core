@@ -79,4 +79,3 @@ class SimpleQuery extends FilterRule
         return ($objMatches->numRows == 0) ? array() : $objMatches->fetchEach($this->strIdColumn);
     }
 }
-

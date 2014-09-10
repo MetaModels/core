@@ -46,8 +46,7 @@ class CustomSql extends Simple
         $arrParams = array();
         $strSql    = $this->generateSql($arrParams, $arrFilterUrl);
 
-        if (!strlen($strSql))
-        {
+        if (!strlen($strSql)) {
             return;
         }
 
@@ -103,8 +102,7 @@ class CustomSql extends Simple
     {
         return preg_replace_callback(
             '@\{\{param::([^}]*)\}\}@',
-            function($arrMatch) use(&$arrParams, $arrFilterUrl)
-            {
+            function ($arrMatch) use (&$arrParams, $arrFilterUrl) {
                 list($strSource, $strQuery) = explode('?', $arrMatch[1], 2);
                 parse_str($strQuery, $arrArgs);
                 $arrName = (array)$arrArgs['name'];
@@ -126,8 +124,7 @@ class CustomSql extends Simple
                         break;
 
                     case 'filter':
-                        if ($arrFilterUrl)
-                        {
+                        if ($arrFilterUrl) {
                             $var = $arrFilterUrl[array_shift($arrName)];
                         }
                         break;
@@ -139,27 +136,21 @@ class CustomSql extends Simple
 
                 $i     = 0;
                 $count = count($arrName);
-                while ($i < $count && is_array($var))
-                {
+                while ($i < $count && is_array($var)) {
                     $var = $var[$arrName[$i++]];
                 }
 
-                if ($i != count($arrName) || $var === null)
-                {
-                    if (isset($arrArgs['default']))
-                    {
+                if ($i != count($arrName) || $var === null) {
+                    if (isset($arrArgs['default'])) {
                         $arrParams[] = $arrArgs['default'];
                         return '?';
-                    }
-                    else
-                    {
+                    } else {
                         return 'NULL';
                     }
                 }
 
                 // Treat as scalar value.
-                if (empty($arrArgs['aggregate']))
-                {
+                if (empty($arrArgs['aggregate'])) {
                     $arrParams[] = $var;
                     return '?';
                 }
@@ -167,8 +158,7 @@ class CustomSql extends Simple
                 // Treat as list.
                 $var = (array)$var;
 
-                if (!empty($arrArgs['recursive']))
-                {
+                if (!empty($arrArgs['recursive'])) {
                     $var = iterator_to_array(
                         new \RecursiveIteratorIterator(
                             new \RecursiveArrayIterator(
@@ -178,28 +168,21 @@ class CustomSql extends Simple
                     );
                 }
 
-                if (!$var)
-                {
+                if (!$var) {
                     return 'NULL';
                 }
 
-                if ($arrArgs['key'])
-                {
+                if ($arrArgs['key']) {
                     $var = array_keys($var);
-                }
-                else
-                {
+                } else {
                     // Use values.
                     $var = array_values($var);
                 }
 
-                if ($arrArgs['aggregate'] == 'set')
-                {
+                if ($arrArgs['aggregate'] == 'set') {
                     $arrParams[] = implode(',', $var);
                     return '?';
-                }
-                else
-                {
+                } else {
                     $arrParams = array_merge($arrParams, $var);
                     return rtrim(str_repeat('?,', count($var)), ',');
                 }
@@ -222,8 +205,7 @@ class CustomSql extends Simple
         $objMe = $this;
         return preg_replace_callback(
             '@\{\{secure::([^}]+)\}\}@',
-            function($arrMatch) use(&$arrParams, $objMe)
-            {
+            function ($arrMatch) use (&$arrParams, $objMe) {
                 $arrParams[] = $objMe->parseInsertTags('{{' . $arrMatch[1] . '}}', $arrParams);
                 return '?';
             },
@@ -253,11 +235,9 @@ class CustomSql extends Simple
         $arrParams = array();
 
         preg_match_all('@\{\{param::filter\?([^}]*)\}\}@', $this->get('customsql'), $arrMatches);
-        foreach ($arrMatches[1] as $strQuery)
-        {
+        foreach ($arrMatches[1] as $strQuery) {
             parse_str($strQuery, $arrArgs);
-            if (isset($arrArgs['name']))
-            {
+            if (isset($arrArgs['name'])) {
                 $arrName     = (array)$arrArgs['name'];
                 $arrParams[] = $arrName[0];
             }

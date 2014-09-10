@@ -48,13 +48,11 @@ class RenderSettingBuildPalette
      */
     public static function getLegend($name, $palette, $prevLegend = null)
     {
-        if ($name[0] == '+')
-        {
+        if ($name[0] == '+') {
             $name = substr($name, 1);
         }
 
-        if (!$palette->hasLegend($name))
-        {
+        if (!$palette->hasLegend($name)) {
             $palette->addLegend(new Legend($name), $prevLegend);
         }
 
@@ -72,10 +70,8 @@ class RenderSettingBuildPalette
      */
     public static function getProperty($name, $legend)
     {
-        foreach ($legend->getProperties() as $property)
-        {
-            if ($property->getName() == $name)
-            {
+        foreach ($legend->getProperties() as $property) {
+            if ($property->getName() == $name) {
                 return $property;
             }
         }
@@ -100,21 +96,15 @@ class RenderSettingBuildPalette
         $currentCondition = $property->getVisibleCondition();
         if ((!($currentCondition instanceof ConditionChainInterface))
             || ($currentCondition->getConjunction() != ConditionChainInterface::OR_CONJUNCTION)
-        )
-        {
-            if ($currentCondition === null)
-            {
+        ) {
+            if ($currentCondition === null) {
                 $currentCondition = new PropertyConditionChain(array($condition));
-            }
-            else
-            {
+            } else {
                 $currentCondition = new PropertyConditionChain(array($currentCondition, $condition));
             }
             $currentCondition->setConjunction(ConditionChainInterface::OR_CONJUNCTION);
             $property->setVisibleCondition($currentCondition);
-        }
-        else
-        {
+        } else {
             $currentCondition->addCondition($condition);
         }
     }
@@ -131,15 +121,12 @@ class RenderSettingBuildPalette
         $palettes = $event->getContainer()->getPalettesDefinition();
         $legend   = null;
 
-        foreach ($palettes->getPalettes() as $palette)
-        {
-            if ($palette->getName() !== 'default')
-            {
+        foreach ($palettes->getPalettes() as $palette) {
+            if ($palette->getName() !== 'default') {
                 $paletteCondition = $palette->getCondition();
                 if (!($paletteCondition instanceof ConditionChainInterface)
                     || ($paletteCondition->getConjunction() !== PaletteConditionChain::OR_CONJUNCTION)
-                )
-                {
+                ) {
                     $paletteCondition = new PaletteConditionChain(
                         $paletteCondition ? array($paletteCondition) : array(),
                         PaletteConditionChain::OR_CONJUNCTION
@@ -150,22 +137,17 @@ class RenderSettingBuildPalette
             }
 
             foreach ((array)$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes'] as
-                $typeName => $paletteInfo)
-            {
-                if ($typeName == 'default')
-                {
+                $typeName => $paletteInfo) {
+                if ($typeName == 'default') {
                     continue;
                 }
 
-                if (preg_match('#^(\w+) extends (\w+)$#', $typeName, $matches))
-                {
+                if (preg_match('#^(\w+) extends (\w+)$#', $typeName, $matches)) {
                     $typeName = $matches[1];
                 }
 
-                foreach ($paletteInfo as $legendName => $properties)
-                {
-                    foreach ($properties as $propertyName)
-                    {
+                foreach ($paletteInfo as $legendName => $properties) {
+                    foreach ($properties as $propertyName) {
                         $condition = new PropertyCondition($typeName);
                         $legend    = self::getLegend($legendName, $palette);
                         $property  = self::getProperty($propertyName, $legend);

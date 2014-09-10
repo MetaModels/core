@@ -18,7 +18,6 @@
 namespace MetaModels\DcGeneral\Events\Table\MetaModels;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
@@ -45,14 +44,12 @@ class Subscriber
      */
     public static function getOperationButton(GetOperationButtonEvent $event)
     {
-        if (!\BackendUser::getInstance()->isAdmin)
-        {
+        if (!\BackendUser::getInstance()->isAdmin) {
             $event->setHtml('');
         }
 
         $command = $event->getCommand();
-        if ($command->getName() == 'dca_combine')
-        {
+        if ($command->getName() == 'dca_combine') {
             $event->setHref(
                 UrlBuilder::fromUrl($event->getHref())
                     ->setQueryParameter(
@@ -75,8 +72,7 @@ class Subscriber
      */
     public static function getGlobalButton(GetGlobalButtonEvent $event)
     {
-        if (!\BackendUser::getInstance()->isAdmin)
-        {
+        if (!\BackendUser::getInstance()->isAdmin) {
             $event->setHtml('');
         }
     }
@@ -94,22 +90,21 @@ class Subscriber
 
         $translator = $event->getEnvironment()->getTranslator();
 
-        if (!($model && \Database::getInstance()->tableExists($model->getProviderName(), null, true)))
-        {
+        if (!($model && \Database::getInstance()->tableExists($model->getProviderName(), null, true))) {
             return;
         }
 
         $strLabel = vsprintf($event->getLabel(), $event->getArgs());
 
         $strImage = '';
-        if ($model->getProperty('addImage'))
-        {
+        if ($model->getProperty('addImage')) {
             $arrSize    = deserialize($model->getProperty('size'));
             $imageEvent = new ResizeImageEvent($model->getProperty('singleSRC'), $arrSize[0], $arrSize[1], $arrSize[2]);
 
             $event->getEnvironment()->getEventPropagator()->propagate(ContaoEvents::IMAGE_RESIZE, $event);
 
-            $strImage = sprintf('<div class="image" style="padding-top:3px"><img src="%s" alt="%%1$s" /></div> ',
+            $strImage = sprintf(
+                '<div class="image" style="padding-top:3px"><img src="%s" alt="%%1$s" /></div> ',
                 $imageEvent->getImage(),
                 htmlspecialchars($strLabel)
             );
@@ -144,10 +139,8 @@ class Subscriber
     {
         $langValues = (array)$event->getValue();
         $output     = array();
-        foreach ($langValues as $langCode => $subValue)
-        {
-            if (is_array($subValue))
-            {
+        foreach ($langValues as $langCode => $subValue) {
+            if (is_array($subValue)) {
                 $output[] = array_merge($subValue, array('langcode' => $langCode));
             }
         }
@@ -167,19 +160,16 @@ class Subscriber
         $langValues  = (array)$event->getValue();
         $hasFallback = false;
         $output      = array();
-        foreach ($langValues as $subValue)
-        {
+        foreach ($langValues as $subValue) {
             $langCode = $subValue['langcode'];
             unset($subValue['langcode']);
 
             // We clear all subsequent fallbacks after we have found one.
-            if ($hasFallback)
-            {
+            if ($hasFallback) {
                 $varSubValue['isfallback'] = '';
             }
 
-            if ($subValue['isfallback'])
-            {
+            if ($subValue['isfallback']) {
                 $hasFallback = true;
             }
 
@@ -187,8 +177,7 @@ class Subscriber
         }
 
         // If no fallback has been set, use the first language available.
-        if ((!$hasFallback) && count($output))
-        {
+        if ((!$hasFallback) && count($output)) {
             $output[$langValues[0]['langcode']]['isfallback'] = '1';
         }
 
@@ -212,31 +201,25 @@ class Subscriber
         // See #49.
         $tableName = strtolower($event->getValue());
 
-        if (!strlen($tableName))
-        {
+        if (!strlen($tableName)) {
             throw new \RuntimeException('Table name not given');
         }
 
         // Force mm_ prefix.
-        if (substr($tableName, 0, 3) !== 'mm_')
-        {
+        if (substr($tableName, 0, 3) !== 'mm_') {
             $tableName = 'mm_' . $tableName;
         }
 
         $dataProvider = $event->getEnvironment()->getDataProvider('tl_metamodel');
 
         // New model, ensure the table does not exist.
-        if (!$event->getModel()->getId())
-        {
+        if (!$event->getModel()->getId()) {
             TableManipulation::checkTableDoesNotExist($tableName);
-        }
-        else
-        {
+        } else {
             // Edited model, ensure the value is unique and then that the table does not exist.
             $oldVersion = $dataProvider->fetch($dataProvider->getEmptyConfig()->setId($event->getModel()->getId()));
 
-            if ($oldVersion->getProperty('tableName') !== $event->getModel()->getProperty('tableName'))
-            {
+            if ($oldVersion->getProperty('tableName') !== $event->getModel()->getProperty('tableName')) {
                 TableManipulation::checkTableDoesNotExist($tableName);
             }
         }

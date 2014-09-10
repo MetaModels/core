@@ -43,8 +43,7 @@ class PropertyTemplate
         $objMetaModel   = Factory::byId($renderSettings->getProperty('pid'));
         $objAttribute   = $objMetaModel->getAttributeById($model->getProperty('attr_id'));
 
-        if (!$objAttribute)
-        {
+        if (!$objAttribute) {
             return;
         }
 

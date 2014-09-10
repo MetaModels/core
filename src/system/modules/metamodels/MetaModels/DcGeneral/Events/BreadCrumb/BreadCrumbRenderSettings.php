@@ -26,8 +26,7 @@ use MetaModels\Render\Setting\ICollection;
  *
  * @package MetaModels\DcGeneral\Events\BreadCrumb
  */
-class BreadCrumbRenderSettings
-    extends BreadCrumbMetaModels
+class BreadCrumbRenderSettings extends BreadCrumbMetaModels
 {
     /**
      * Id of the render setting.
@@ -51,8 +50,7 @@ class BreadCrumbRenderSettings
      */
     public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
     {
-        if (!isset($this->metamodelId))
-        {
+        if (!isset($this->metamodelId)) {
             $this->metamodelId = $this->extractIdFrom($environment, 'pid');
         }
 

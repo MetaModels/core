@@ -49,10 +49,8 @@ class BaseSimple extends Base implements ISimple
     public function handleMetaChange($strMetaName, $varNewValue)
     {
         // By default we accept any change of meta information.
-        if ($strMetaName == 'colname')
-        {
-            if ($this->get($strMetaName) != $varNewValue)
-            {
+        if ($strMetaName == 'colname') {
+            if ($this->get($strMetaName) != $varNewValue) {
                 $this->renameColumn($varNewValue);
             }
             return $this;
@@ -71,10 +69,8 @@ class BaseSimple extends Base implements ISimple
     {
         $strTable   = $this->getMetaModel()->getTableName();
         $strColName = $this->getColName();
-        foreach ($arrValues as $intId => $varData)
-        {
-            if (is_array($varData))
-            {
+        foreach ($arrValues as $intId => $varData) {
+            if (is_array($varData)) {
                 $varData = serialize($varData);
             }
             \Database::getInstance()
@@ -106,36 +102,30 @@ class BaseSimple extends Base implements ISimple
     public function getFilterOptions($arrIds, $usedOnly, &$arrCount = null)
     {
         $strCol = $this->getColName();
-        if ($arrIds)
-        {
+        if ($arrIds) {
             // Ensure proper integer ids for SQL injection safety reasons.
             $strIdList = implode(',', array_map('intval', $arrIds));
-            $objRow    = \Database::getInstance()->execute('
-                SELECT ' . $strCol . ', COUNT(' . $strCol . ') as mm_count
+            $objRow    = \Database::getInstance()->execute(
+                'SELECT ' . $strCol . ', COUNT(' . $strCol . ') as mm_count
                 FROM ' . $this->getMetaModel()->getTableName() .
                 ' WHERE id IN (' . $strIdList . ')
                 GROUP BY ' . $strCol . '
-                ORDER BY FIELD(id,' . $strIdList . ')');
-        }
-        elseif ($usedOnly)
-        {
-            $objRow = \Database::getInstance()->execute('
-                SELECT ' . $strCol . ', COUNT(' . $strCol . ') as mm_count
+                ORDER BY FIELD(id,' . $strIdList . ')'
+            );
+        } elseif ($usedOnly) {
+            $objRow = \Database::getInstance()->execute(
+                'SELECT ' . $strCol . ', COUNT(' . $strCol . ') as mm_count
                 FROM ' . $this->getMetaModel()->getTableName() . '
                 GROUP BY ' . $strCol
             );
-        }
-        else
-        {
+        } else {
             // We can not do anything here, must be handled by the derived attribute class.
             return array();
         }
 
         $arrResult = array();
-        while ($objRow->next())
-        {
-            if (is_array($arrCount))
-            {
+        while ($objRow->next()) {
+            if (is_array($arrCount)) {
                 $arrCount[$objRow->$strCol] = $objRow->mm_count;
             }
 
@@ -158,12 +148,16 @@ class BaseSimple extends Base implements ISimple
     public function sortIds($arrIds, $strDirection)
     {
         // Base implementation, do a simple sorting on given column.
-        $arrIds = \Database::getInstance()->prepare(sprintf(
-            'SELECT id FROM %s WHERE id IN (%s) ORDER BY %s %s',
-            $this->getMetaModel()->getTableName(),
-            implode(',', $arrIds),
-            $this->getColName(),
-            $strDirection))
+        $arrIds = \Database::getInstance()
+            ->prepare(
+                sprintf(
+                    'SELECT id FROM %s WHERE id IN (%s) ORDER BY %s %s',
+                    $this->getMetaModel()->getTableName(),
+                    implode(',', $arrIds),
+                    $this->getColName(),
+                    $strDirection
+                )
+            )
             ->execute()
             ->fetchEach('id');
         return $arrIds;
@@ -182,11 +176,14 @@ class BaseSimple extends Base implements ISimple
     public function searchFor($strPattern)
     {
         // Base implementation, do a simple search on given column.
-        $objQuery = \Database::getInstance()->prepare(sprintf(
-            'SELECT id FROM %s WHERE %s LIKE ?',
-            $this->getMetaModel()->getTableName(),
-            $this->getColName()
-            ))
+        $objQuery = \Database::getInstance()
+            ->prepare(
+                sprintf(
+                    'SELECT id FROM %s WHERE %s LIKE ?',
+                    $this->getMetaModel()->getTableName(),
+                    $this->getColName()
+                )
+            )
             ->executeUncached(str_replace(array('*', '?'), array('%', '_'), $strPattern));
 
         $arrIds = $objQuery->fetchEach('id');
@@ -237,8 +234,7 @@ class BaseSimple extends Base implements ISimple
      */
     public function createColumn()
     {
-        if ($this->getColName())
-        {
+        if ($this->getColName()) {
             TableManipulation::createColumn(
                 $this->getMetaModel()->getTableName(),
                 $this->getColName(),
@@ -256,8 +252,8 @@ class BaseSimple extends Base implements ISimple
     {
         // Try to delete the column. If it does not exist as we can assume it has been deleted already then.
         if ($this->getColName()
-        && \Database::getInstance()->fieldExists($this->getColName(), $this->getMetaModel()->getTableName(), true))
-        {
+            && \Database::getInstance()->fieldExists($this->getColName(), $this->getMetaModel()->getTableName(), true)
+        ) {
             TableManipulation::dropColumn($this->getMetaModel()->getTableName(), $this->getColName());
         }
     }
@@ -273,8 +269,8 @@ class BaseSimple extends Base implements ISimple
     {
         TableManipulation::checkColumnName($strNewColumnName);
         if ($this->getColName()
-        && \Database::getInstance()->fieldExists($this->getColName(), $this->getMetaModel()->getTableName(), true))
-        {
+            && \Database::getInstance()->fieldExists($this->getColName(), $this->getMetaModel()->getTableName(), true)
+        ) {
             TableManipulation::renameColumn(
                 $this->getMetaModel()->getTableName(),
                 $this->getColName(),
@@ -313,4 +309,3 @@ class BaseSimple extends Base implements ISimple
         return $value;
     }
 }
-

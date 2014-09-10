@@ -44,8 +44,7 @@ abstract class BreadCrumbBase
 
         $label = $environment->getTranslator()->translate($shortTable, 'BRD');
 
-        if ($label == $shortTable)
-        {
+        if ($label == $shortTable) {
             $shortTable = str_replace('tl_metamodel_', '', $table);
             return strtoupper(substr($shortTable, 0, 1)) . substr($shortTable, 1, (strlen($shortTable) - 1)) . ' %s';
         }

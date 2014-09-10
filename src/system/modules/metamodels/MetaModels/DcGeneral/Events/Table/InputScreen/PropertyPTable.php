@@ -41,8 +41,7 @@ class PropertyPTable
      */
     protected static function getMetaModel(ModelInterface $model)
     {
-        if ($model->getProperty('pid'))
-        {
+        if ($model->getProperty('pid')) {
             return Factory::byId($model->getProperty('pid'));
         }
 
@@ -61,16 +60,13 @@ class PropertyPTable
     public static function getTables(GetPropertyOptionsEvent $event)
     {
         $currentTable = '';
-        if ($event->getModel()->getProperty('rendertype') == 'ctable')
-        {
+        if ($event->getModel()->getProperty('rendertype') == 'ctable') {
             $currentTable = self::getMetaModel($event->getModel())->getTableName();
         }
 
         $tables = array();
-        foreach (\Database::getInstance()->listTables() as $table)
-        {
-            if (!($currentTable && ($currentTable == $table)))
-            {
+        foreach (\Database::getInstance()->listTables() as $table) {
+            if (!($currentTable && ($currentTable == $table))) {
                 $tables[$table] = $table;
             }
         }
@@ -87,12 +83,9 @@ class PropertyPTable
      */
     public static function setVisibility(BuildDataDefinitionEvent $event)
     {
-        foreach ($event->getContainer()->getPalettesDefinition()->getPalettes() as $palette)
-        {
-            foreach ($palette->getProperties() as $property)
-            {
-                if ($property->getName() != 'ptable')
-                {
+        foreach ($event->getContainer()->getPalettesDefinition()->getPalettes() as $palette) {
+            foreach ($palette->getProperties() as $property) {
+                if ($property->getName() != 'ptable') {
                     continue;
                 }
 
@@ -100,8 +93,7 @@ class PropertyPTable
                 if (!($chain
                     && ($chain instanceof PropertyConditionChain)
                     && $chain->getConjunction() == PropertyConditionChain::AND_CONJUNCTION
-                ))
-                {
+                )) {
                     $chain = new PropertyConditionChain(
                         array($property->getVisibleCondition()),
                         PropertyConditionChain::AND_CONJUNCTION

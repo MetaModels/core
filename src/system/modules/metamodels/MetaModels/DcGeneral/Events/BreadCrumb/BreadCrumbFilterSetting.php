@@ -24,21 +24,18 @@ use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
  *
  * @package MetaModels\DcGeneral\Events\BreadCrumb
  */
-class BreadCrumbFilterSetting
-    extends BreadCrumbFilter
+class BreadCrumbFilterSetting extends BreadCrumbFilter
 {
     /**
      * {@inheritDoc}
      */
     public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
     {
-        if (!isset($this->filterId))
-        {
+        if (!isset($this->filterId)) {
             $this->filterId = $this->extractIdFrom($environment, 'pid');
         }
 
-        if (!isset($this->metamodelId))
-        {
+        if (!isset($this->metamodelId)) {
             $parent = \Database::getInstance()
                 ->prepare('SELECT id, pid, name FROM tl_metamodel_filter WHERE id=?')
                 ->executeUncached($this->filterId);
@@ -56,7 +53,10 @@ class BreadCrumbFilterSetting
                 'tl_metamodel_filtersetting',
                 $this->seralizeId('tl_metamodel_filter', $this->filterId)
             ),
-            'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_filtersetting'), $filterSetting->name),
+            'text' => sprintf(
+                $this->getBreadcrumbLabel($environment, 'tl_metamodel_filtersetting'),
+                $filterSetting->name
+            ),
             'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/filter_setting.png'
         );
 

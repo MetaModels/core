@@ -24,21 +24,18 @@ use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
  *
  * @package MetaModels\DcGeneral\Events\BreadCrumb
  */
-class BreadCrumbRenderSetting
-    extends BreadCrumbRenderSettings
+class BreadCrumbRenderSetting extends BreadCrumbRenderSettings
 {
     /**
      * {@inheritDoc}
      */
     public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
     {
-        if (!isset($this->renderSettingsId))
-        {
+        if (!isset($this->renderSettingsId)) {
             $this->renderSettingsId = $this->extractIdFrom($environment, 'pid');
         }
 
-        if (!isset($this->metamodelId))
-        {
+        if (!isset($this->metamodelId)) {
             $parent = \Database::getInstance()
                 ->prepare('SELECT id, pid, name FROM tl_metamodel_rendersettings WHERE id=?')
                 ->executeUncached($this->renderSettingsId);

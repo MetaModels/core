@@ -47,8 +47,7 @@ class Simple implements ISimple
      */
     public function __construct($arrInformation = array())
     {
-        foreach ($arrInformation as $strKey => $varValue)
-        {
+        foreach ($arrInformation as $strKey => $varValue) {
             $this->set($strKey, deserialize($varValue));
         }
     }
@@ -64,9 +63,11 @@ class Simple implements ISimple
      */
     public function __set($key, $value)
     {
-        if ($GLOBALS['TL_DEBUG'])
-        {
-            user_error('Please don\'t do magic access to \MetaModels\Render\Setting\Interfaces\Simple.', E_USER_DEPRECATED);
+        if ($GLOBALS['TL_DEBUG']) {
+            user_error(
+                'Please don\'t do magic access to \MetaModels\Render\Setting\Interfaces\Simple.',
+                E_USER_DEPRECATED
+            );
         }
         $this->set($key, $value);
     }
@@ -80,9 +81,11 @@ class Simple implements ISimple
      */
     public function __get($key)
     {
-        if ($GLOBALS['TL_DEBUG'])
-        {
-            user_error('Please don\'t do magic access to \MetaModels\Render\Setting\Interfaces\Simple.', E_USER_DEPRECATED);
+        if ($GLOBALS['TL_DEBUG']) {
+            user_error(
+                'Please don\'t do magic access to \MetaModels\Render\Setting\Interfaces\Simple.',
+                E_USER_DEPRECATED
+            );
         }
         return $this->get($key);
     }
@@ -158,4 +161,3 @@ class Simple implements ISimple
         return array_keys($this->arrBase);
     }
 }
-

@@ -26,9 +26,7 @@ use MetaModels\Filter\Rules\SimpleQuery;
  * @subpackage  Core
  * @author      Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-abstract class TranslatedReference
-    extends BaseComplex
-    implements ITranslated
+abstract class TranslatedReference extends BaseComplex implements ITranslated
 {
 
     /**
@@ -50,10 +48,8 @@ abstract class TranslatedReference
     protected function getWhere($mixIds, $mixLangCode = '')
     {
         $strWhereIds = '';
-        if ($mixIds)
-        {
-            if (is_array($mixIds))
-            {
+        if ($mixIds) {
+            if (is_array($mixIds)) {
                 $strWhereIds = ' AND item_id IN (' . implode(',', $mixIds) . ')';
             } else {
                 $strWhereIds = ' AND item_id='. $mixIds;
@@ -64,12 +60,9 @@ abstract class TranslatedReference
             'params' => array(intval($this->get('id')))
         );
 
-        if (is_array($mixLangCode) && !empty($mixLangCode))
-        {
+        if (is_array($mixLangCode) && !empty($mixLangCode)) {
             $arrReturn['procedure'] .= ' AND langcode IN ("' . implode('","', $mixLangCode) . '")';
-        }
-        elseif ($mixLangCode)
-        {
+        } elseif ($mixLangCode) {
             $arrReturn['procedure'] .=  ' AND langcode=?';
             $arrReturn['params'][]   = $mixLangCode;
         }
@@ -127,15 +120,17 @@ abstract class TranslatedReference
     /**
      * {@inheritDoc}
      */
+    // @codingStandardsIgnoreStart - We do not need $intId in here, therefore it is unused.
     public function widgetToValue($varValue, $intId)
     {
         return array
         (
             'tstamp' => time(),
-            'value' => $varValue,
+            'value'  => $varValue,
             'att_id' => $this->get('id'),
         );
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * {@inheritDoc}
@@ -148,23 +143,18 @@ abstract class TranslatedReference
         $arrReturn = $this->getTranslatedDataFor($arrIds, $strActiveLanguage);
 
         // Second round, fetch fallback languages if not all items could be resolved.
-        if ((count($arrReturn) < count($arrIds)) && ($strActiveLanguage != $strFallbackLanguage))
-        {
+        if ((count($arrReturn) < count($arrIds)) && ($strActiveLanguage != $strFallbackLanguage)) {
             $arrFallbackIds = array();
-            foreach ($arrIds as $intId)
-            {
-                if (empty($arrReturn[$intId]))
-                {
+            foreach ($arrIds as $intId) {
+                if (empty($arrReturn[$intId])) {
                     $arrFallbackIds[] = $intId;
                 }
             }
 
-            if ($arrFallbackIds)
-            {
+            if ($arrFallbackIds) {
                 $arrFallbackData = $this->getTranslatedDataFor($arrFallbackIds, $strFallbackLanguage);
                 // Cannot use array_merge here as it would renumber the keys.
-                foreach ($arrFallbackData as $intId => $arrValue)
-                {
+                foreach ($arrFallbackData as $intId => $arrValue) {
                     $arrReturn[$intId] = $arrValue;
                 }
             }
@@ -177,8 +167,7 @@ abstract class TranslatedReference
      */
     public function setDataFor($arrValues)
     {
-        foreach ($this->getMetaModel()->getAvailableLanguages() as $strLangCode)
-        {
+        foreach ($this->getMetaModel()->getAvailableLanguages() as $strLangCode) {
             $this->setTranslatedDataFor($arrValues, $strLangCode);
         }
     }
@@ -188,8 +177,7 @@ abstract class TranslatedReference
      */
     public function unsetDataFor($arrIds)
     {
-        foreach ($this->getMetaModel()->getAvailableLanguages() as $strLangCode)
-        {
+        foreach ($this->getMetaModel()->getAvailableLanguages() as $strLangCode) {
             $this->unsetValueFor($arrIds, $strLangCode);
         }
     }
@@ -212,8 +200,7 @@ abstract class TranslatedReference
 
         $arrOptionizer = $this->getOptionizer();
 
-        if ($arrWhere)
-        {
+        if ($arrWhere) {
             $arrParams = array_merge($arrParams, $arrWhere['params']);
         }
 
@@ -245,7 +232,8 @@ abstract class TranslatedReference
             $this->getMetaModel()->getFallbackLanguage()
         ));
 
-        $strQuery = sprintf('SELECT item_id FROM %s %s GROUP BY item_id',
+        $strQuery = sprintf(
+            'SELECT item_id FROM %s %s GROUP BY item_id',
             $this->getValueTable(),
             ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '')
         );
@@ -265,7 +253,6 @@ abstract class TranslatedReference
     {
         $objDB = \Database::getInstance();
         // TODO: implement $arrIds and $usedOnly handling here.
-
         $arrWhere = $this->getWhere($arrIds, $this->getMetaModel()->getActiveLanguage());
         $strQuery = 'SELECT * FROM ' . $this->getValueTable() . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '');
 
@@ -275,8 +262,7 @@ abstract class TranslatedReference
         $arrOptionizer = $this->getOptionizer();
 
         $arrReturn = array();
-        while ($objValue->next())
-        {
+        while ($objValue->next()) {
             $arrReturn[$objValue->$arrOptionizer['key']] = $objValue->$arrOptionizer['value'];
         }
         return $arrReturn;
@@ -295,8 +281,7 @@ abstract class TranslatedReference
 
         // Update existing values.
         $strQuery = 'UPDATE ' . $this->getValueTable() . ' %s';
-        foreach ($arrExisting as $intId)
-        {
+        foreach ($arrExisting as $intId) {
             $arrWhere = $this->getWhere($intId, $strLangCode);
             $objDB->prepare($strQuery . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : ''))
                 ->set($this->getSetValues($arrValues[$intId], $intId, $strLangCode))
@@ -305,8 +290,7 @@ abstract class TranslatedReference
 
         // Insert the new values.
         $strQuery = 'INSERT INTO ' . $this->getValueTable() . ' %s';
-        foreach ($arrNewIds as $intId)
-        {
+        foreach ($arrNewIds as $intId) {
             $objDB->prepare($strQuery)
                 ->set($this->getSetValues($arrValues[$intId], $intId, $strLangCode))
                 ->execute();
@@ -327,8 +311,7 @@ abstract class TranslatedReference
             ->executeUncached(($arrWhere ? $arrWhere['params'] : null));
 
         $arrReturn = array();
-        while ($objValue->next())
-        {
+        while ($objValue->next()) {
             $arrReturn[$objValue->item_id] = $objValue->row();
         }
         return $arrReturn;
@@ -348,4 +331,3 @@ abstract class TranslatedReference
             ->execute(($arrWhere ? $arrWhere['params'] : null));
     }
 }
-

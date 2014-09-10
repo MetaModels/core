@@ -24,18 +24,14 @@ use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
  *
  * @package MetaModels\DcGeneral\Events\BreadCrumb
  */
-class BreadCrumbAttributes
-    extends BreadCrumbMetaModels
+class BreadCrumbAttributes extends BreadCrumbMetaModels
 {
     /**
      * {@inheritDoc}
      */
     public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
     {
-        if (!isset($this->metamodelId))
-        {
-            $input = $environment->getInputProvider();
-
+        if (!isset($this->metamodelId)) {
             $this->metamodelId = $this->extractIdFrom($environment, 'pid');
         }
 

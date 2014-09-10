@@ -19,7 +19,6 @@ namespace MetaModels\Dca;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use ContaoCommunityAlliance\UrlBuilder\Contao\BackendUrlBuilder;
 use MetaModels\Filter\Setting\Factory as FilterFactory;
@@ -54,8 +53,7 @@ class Content
             ->limit(1)
             ->execute($objDC->id, 'metamodel_content');
 
-        if (!$objContent->metamodel_filtering)
-        {
+        if (!$objContent->metamodel_filtering) {
             unset($GLOBALS['TL_DCA']['tl_content']['fields']['metamodel_filterparams']);
             return;
         }
@@ -76,8 +74,7 @@ class Content
     public function getModuleTemplates(\DC_Table $objDC)
     {
         $type = $objDC->activeRecord->type;
-        if ($type == 'metamodel_content')
-        {
+        if ($type == 'metamodel_content') {
             $type = 'metamodel_list';
         }
 
@@ -109,10 +106,8 @@ class Content
         );
         $objMetaModel      = MetaModelFactory::byId($objDc->activeRecord->metamodel);
 
-        if ($objMetaModel)
-        {
-            foreach ($objMetaModel->getAttributes() as $objAttribute)
-            {
+        if ($objMetaModel) {
+            foreach ($objMetaModel->getAttributes() as $objAttribute) {
                 $arrAttributeNames[$objAttribute->getColName()] = $objAttribute->getName();
             }
         }
@@ -131,8 +126,7 @@ class Content
     {
         $return = array();
 
-        if (!$objDc->activeRecord->metamodel_filtering)
-        {
+        if (!$objDc->activeRecord->metamodel_filtering) {
             return $return;
         }
 
@@ -151,8 +145,7 @@ class Content
      */
     public function editMetaModel(\DC_Table $dc)
     {
-        if ($dc->value < 1)
-        {
+        if ($dc->value < 1) {
             return '';
         }
 
@@ -187,8 +180,7 @@ class Content
      */
     public function editFilterSetting(\DC_Table $dc)
     {
-        if ($dc->value < 1)
-        {
+        if ($dc->value < 1) {
             return '';
         }
 
@@ -223,8 +215,7 @@ class Content
      */
     public function editRenderSetting(\DC_Table $dc)
     {
-        if ($dc->value < 1)
-        {
+        if ($dc->value < 1) {
             return '';
         }
 
@@ -240,7 +231,10 @@ class Content
         $dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
 
         $url = BackendUrlBuilder::fromUrl('contao/main.php?do=metamodels&table=tl_metamodel_rendersetting')
-            ->setQueryParameter('pid', IdSerializer::fromValues('tl_metamodel_rendersettings', $dc->value)->getSerialized());
+            ->setQueryParameter(
+                'pid',
+                IdSerializer::fromValues('tl_metamodel_rendersettings', $dc->value)->getSerialized()
+            );
 
         return sprintf(
             '<a href="%s" title="%s" style="padding-left:3px">%s</a>',
@@ -265,8 +259,7 @@ class Content
             ->execute($objDC->activeRecord->metamodel);
         $arrSettings       = array();
 
-        while ($objFilterSettings->next())
-        {
+        while ($objFilterSettings->next()) {
             $arrSettings[$objFilterSettings->id] = $objFilterSettings->name;
         }
 
@@ -290,8 +283,7 @@ class Content
             ->execute($objDC->activeRecord->metamodel);
 
         $arrSettings = array();
-        while ($objFilterSettings->next())
-        {
+        while ($objFilterSettings->next()) {
             $arrSettings[$objFilterSettings->id] = $objFilterSettings->name;
         }
 
@@ -310,9 +302,9 @@ class Content
     public function getMetaTitleAttributes(\DC_Table $objDC)
     {
         return Helper::getAttributeNamesForModel(
-                $objDC->activeRecord->metamodel,
-                (array)$GLOBALS['METAMODELS']['metainformation']['allowedTitle']
-            );
+            $objDC->activeRecord->metamodel,
+            (array)$GLOBALS['METAMODELS']['metainformation']['allowedTitle']
+        );
     }
 
     /**
@@ -325,8 +317,8 @@ class Content
     public function getMetaDescriptionAttributes(\DC_Table $objDC)
     {
         return Helper::getAttributeNamesForModel(
-                $objDC->activeRecord->metamodel,
-                (array)$GLOBALS['METAMODELS']['metainformation']['allowedDescription']
-            );
+            $objDC->activeRecord->metamodel,
+            (array)$GLOBALS['METAMODELS']['metainformation']['allowedDescription']
+        );
     }
 }

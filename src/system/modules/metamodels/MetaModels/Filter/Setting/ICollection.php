@@ -57,7 +57,8 @@ interface ICollection
      *
      * @param array   $arrFilterUrl     The filter url to be applied.
      *
-     * @param array   $arrIgnoredFilter An optional list with filter ids that should be ignored. Defaults to empty array.
+     * @param array   $arrIgnoredFilter An optional list with filter ids that should be ignored.
+     *                                  Defaults to empty array.
      *
      * @return void
      */
@@ -73,7 +74,7 @@ interface ICollection
      *
      * @return array The filter url parameters.
      *
-     * @todo     this way of generating jump to urls is not as elegant as it could be and therefore we might want to refactor it.
+     * @todo this way of generating jump to urls is not as elegant as it could be we might want to refactor it.
      */
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting);
 
@@ -104,7 +105,7 @@ interface ICollection
      */
     public function getParameterFilterWidgets(
         $arrFilterUrl,
-        $arrJumpTo = array(),
+        $arrJumpTo,
         FrontendFilterOptions $objFrontendFilterOptions
     );
 

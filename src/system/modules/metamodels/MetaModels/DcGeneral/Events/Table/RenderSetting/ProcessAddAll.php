@@ -52,15 +52,12 @@ class ProcessAddAll
         $database = \Database::getInstance();
 
         // Loop over all attributes now.
-        foreach ($metaModel->getAttributes() as $attribute)
-        {
-            if (!array_key_exists($attribute->get('id'), $knownAttributes))
-            {
+        foreach ($metaModel->getAttributes() as $attribute) {
+            if (!array_key_exists($attribute->get('id'), $knownAttributes)) {
                 $arrData = array();
 
                 $objRenderSetting = $attribute->getDefaultRenderSettings();
-                foreach ($objRenderSetting->getKeys() as $key)
-                {
+                foreach ($objRenderSetting->getKeys() as $key) {
                     $arrData[$key] = $objRenderSetting->get($key);
                 }
 
@@ -101,8 +98,7 @@ class ProcessAddAll
      */
     public static function handleAddAll(ActionEvent $event)
     {
-        if ($event->getAction()->getName() !== 'rendersetting_addall')
-        {
+        if ($event->getAction()->getName() !== 'rendersetting_addall') {
             return;
         }
 
@@ -150,28 +146,21 @@ class ProcessAddAll
 
         $knownAttributes = array();
         $intMax          = 128;
-        while ($alreadyExisting->next())
-        {
+        while ($alreadyExisting->next()) {
             $knownAttributes[$alreadyExisting->attr_id] = $alreadyExisting->row();
-            if ($intMax < $alreadyExisting->sorting)
-            {
+            if ($intMax < $alreadyExisting->sorting) {
                 $intMax = $alreadyExisting->sorting;
             }
         }
 
         $blnWantPerform = false;
         // Perform the labour work.
-        if ($input->getValue('act') == 'perform')
-        {
+        if ($input->getValue('act') == 'perform') {
             self::perform($metaModel, $knownAttributes, $intMax, $pid->getId(), $arrMessages);
-        }
-        else
-        {
+        } else {
             // Loop over all attributes now.
-            foreach ($metaModel->getAttributes() as $attribute)
-            {
-                if (array_key_exists($attribute->get('id'), $knownAttributes))
-                {
+            foreach ($metaModel->getAttributes() as $attribute) {
+                if (array_key_exists($attribute->get('id'), $knownAttributes)) {
                     $messages[] = array
                     (
                         'severity' => 'info',
@@ -180,9 +169,7 @@ class ProcessAddAll
                             $attribute->getName()
                         ),
                     );
-                }
-                else
-                {
+                } else {
                     $messages[] = array
                     (
                         'severity' => 'confirm',
@@ -197,13 +184,10 @@ class ProcessAddAll
             }
         }
 
-        if ($blnWantPerform)
-        {
+        if ($blnWantPerform) {
             $template->action = ampersand(\Environment::getInstance()->request);
             $template->submit = $GLOBALS['TL_LANG']['MSC']['continue'];
-        }
-        else
-        {
+        } else {
             $template->action = ampersand($referrer->getReferrerUrl());
             $template->submit = $GLOBALS['TL_LANG']['MSC']['saveNclose'];
         }

@@ -42,13 +42,10 @@ class UpdateMetaModel
         $newTable = $new->getProperty('tableName');
 
         // Table name changed?
-        if ($oldTable !== $newTable)
-        {
-            if ($oldTable && \Database::getInstance()->tableExists($oldTable, null, true))
-            {
+        if ($oldTable !== $newTable) {
+            if ($oldTable && \Database::getInstance()->tableExists($oldTable, null, true)) {
                 TableManipulation::renameTable($oldTable, $newTable);
                 // TODO: notify attributes that the MetaModel has changed its table name.
-
             } else {
                 TableManipulation::createTable($newTable);
             }

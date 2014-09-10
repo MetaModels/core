@@ -47,8 +47,7 @@ class BuildPalette
      */
     public static function getLegend($name, $palette, $prevLegend = null)
     {
-        if (!$palette->hasLegend($name))
-        {
+        if (!$palette->hasLegend($name)) {
             $palette->addLegend(new Legend($name), $prevLegend);
         }
 
@@ -66,10 +65,8 @@ class BuildPalette
      */
     public static function getProperty($name, $legend)
     {
-        foreach ($legend->getProperties() as $property)
-        {
-            if ($property->getName() == $name)
-            {
+        foreach ($legend->getProperties() as $property) {
+            if ($property->getName() == $name) {
                 return $property;
             }
         }
@@ -94,21 +91,15 @@ class BuildPalette
         $currentCondition = $property->getVisibleCondition();
         if ((!($currentCondition instanceof ConditionChainInterface))
             || ($currentCondition->getConjunction() != ConditionChainInterface::OR_CONJUNCTION)
-        )
-        {
-            if ($currentCondition === null)
-            {
+        ) {
+            if ($currentCondition === null) {
                 $currentCondition = new PropertyConditionChain(array($condition));
-            }
-            else
-            {
+            } else {
                 $currentCondition = new PropertyConditionChain(array($currentCondition, $condition));
             }
             $currentCondition->setConjunction(ConditionChainInterface::OR_CONJUNCTION);
             $property->setVisibleCondition($currentCondition);
-        }
-        else
-        {
+        } else {
             $currentCondition->addCondition($condition);
         }
     }
@@ -125,8 +116,7 @@ class BuildPalette
         $palettes = $event->getContainer()->getPalettesDefinition();
         $legend   = null;
 
-        foreach ($palettes->getPalettes() as $palette)
-        {
+        foreach ($palettes->getPalettes() as $palette) {
             $condition = new PropertyValueCondition('dcatype', 'attribute');
             $legend    = self::getLegend('functions', $palette, $legend);
             $property  = self::getProperty('readonly', $legend);
@@ -144,12 +134,9 @@ class BuildPalette
             self::addCondition($property, $condition);
 
             foreach ((array)$GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id'] as
-                $typeName => $paletteInfo)
-            {
-                foreach ($paletteInfo as $legendName => $properties)
-                {
-                    foreach ($properties as $propertyName)
-                    {
+                $typeName => $paletteInfo) {
+                foreach ($paletteInfo as $legendName => $properties) {
+                    foreach ($properties as $propertyName) {
                         $condition = new InputScreenAttributeIs($typeName);
                         $legend    = self::getLegend($legendName, $palette);
                         $property  = self::getProperty($propertyName, $legend);

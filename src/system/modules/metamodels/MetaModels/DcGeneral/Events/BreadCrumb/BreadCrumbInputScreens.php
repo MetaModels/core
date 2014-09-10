@@ -26,8 +26,7 @@ use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
  *
  * @package MetaModels\DcGeneral\Events\BreadCrumb
  */
-class BreadCrumbInputScreens
-    extends BreadCrumbMetaModels
+class BreadCrumbInputScreens extends BreadCrumbMetaModels
 {
     /**
      * Id of the input screen.
@@ -55,31 +54,33 @@ class BreadCrumbInputScreens
     public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
     {
         $input = $environment->getInputProvider();
-        if (!$this->isActiveTable('tl_metamodel_dca', $input))
-        {
+        if (!$this->isActiveTable('tl_metamodel_dca', $input)) {
             $this->inputScreenId = $this->extractIdFrom($environment, 'pid');
-        }
-        else
-        {
+        } else {
             $this->metamodelId = $this->extractIdFrom($environment, 'pid');
         }
 
-        if (!isset($this->metamodelId))
-        {
+        if (!isset($this->metamodelId)) {
             $this->metamodelId = $this->getInputScreen()->pid;
         }
 
         $elements = parent::getBreadcrumbElements($environment, $elements);
 
-        $urlEvent = new AddToUrlEvent(sprintf('do=metamodels&table=%s&pid=%s',
-            'tl_metamodel_dca',
-            $this->seralizeId('tl_metamodel', $this->metamodelId)
-        ));
+        $urlEvent = new AddToUrlEvent(
+            sprintf(
+                'do=metamodels&table=%s&pid=%s',
+                'tl_metamodel_dca',
+                $this->seralizeId('tl_metamodel', $this->metamodelId)
+            )
+        );
         $environment->getEventPropagator()->propagate(ContaoEvents::BACKEND_ADD_TO_URL, $urlEvent);
 
         $elements[] = array(
             'url'  => $urlEvent->getUrl(),
-            'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_dca'), $this->getMetaModel()->getName()),
+            'text' => sprintf(
+                $this->getBreadcrumbLabel($environment, 'tl_metamodel_dca'),
+                $this->getMetaModel()->getName()
+            ),
             'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/dca.png'
         );
 

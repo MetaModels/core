@@ -196,8 +196,7 @@ class ItemList
     public function overrideOutputFormat($strOutputFormat = null)
     {
         $strOutputFormat = strval($strOutputFormat);
-        if (strlen($strOutputFormat))
-        {
+        if (strlen($strOutputFormat)) {
             $this->strOutputFormat = $strOutputFormat;
         } else {
             unset($this->strOutputFormat);
@@ -309,8 +308,7 @@ class ItemList
     protected function prepareMetaModel()
     {
         $this->objMetaModel = ModelFactory::byId($this->intMetaModel);
-        if (!$this->objMetaModel)
-        {
+        if (!$this->objMetaModel) {
             throw new \RuntimeException('Could get metamodel id: ' . $this->intMetaModel);
         }
     }
@@ -325,8 +323,7 @@ class ItemList
     {
         $this->objView = $this->objMetaModel->getView($this->intView);
 
-        if ($this->objView)
-        {
+        if ($this->objView) {
             $this->objTemplate       = new Template($this->objView->get('template'));
             $this->objTemplate->view = $this->objView;
         } else {
@@ -350,8 +347,7 @@ class ItemList
 
         $this->objFilterSettings = FilterFactory::byId($this->intFilter);
 
-        if (!$this->objFilterSettings)
-        {
+        if (!$this->objFilterSettings) {
             throw new \RuntimeException('Error: no filter object defined.');
         }
 
@@ -371,8 +367,7 @@ class ItemList
      */
     public function setFilterParameters($arrPresets, $arrValues)
     {
-        if (!$this->objFilterSettings)
-        {
+        if (!$this->objFilterSettings) {
             throw new \RuntimeException(
                 'Error: no filter object defined, call setFilterSettings() before setFilterParameters().'
             );
@@ -384,10 +379,8 @@ class ItemList
         $arrProcessed = array();
 
         // We have to use all the preset values we want first.
-        foreach ($arrPresets as $strPresetName => $arrPreset)
-        {
-            if (in_array($strPresetName, $arrPresetNames))
-            {
+        foreach ($arrPresets as $strPresetName => $arrPreset) {
+            if (in_array($strPresetName, $arrPresetNames)) {
                 $arrProcessed[$strPresetName] = $arrPreset['value'];
             }
         }
@@ -395,17 +388,14 @@ class ItemList
         // Now we have to use all FE filter params, that are either:
         // * not contained within the presets
         // * or are overridable.
-        foreach ($arrFEFilterParams as $strParameter)
-        {
+        foreach ($arrFEFilterParams as $strParameter) {
             // Unknown parameter? - next please.
-            if (!array_key_exists($strParameter, $arrValues))
-            {
+            if (!array_key_exists($strParameter, $arrValues)) {
                 continue;
             }
 
             // Not a preset or allowed to override? - use value.
-            if ((!array_key_exists($strParameter, $arrPresets)) || $arrPresets[$strParameter]['use_get'])
-            {
+            if ((!array_key_exists($strParameter, $arrPresets)) || $arrPresets[$strParameter]['use_get']) {
                 $arrProcessed[$strParameter] = $arrValues[$strParameter];
             }
         }
@@ -455,23 +445,18 @@ class ItemList
         $intLimit  = null;
 
         // If defined, we override the pagination here.
-        if ($this->blnUseLimit && ($this->intLimit || $this->intOffset))
-        {
-            if ($this->intLimit)
-            {
+        if ($this->blnUseLimit && ($this->intLimit || $this->intOffset)) {
+            if ($this->intLimit) {
                 $intLimit = $this->intLimit;
             }
-            if ($this->intOffset)
-            {
+            if ($this->intOffset) {
                 $intOffset = $this->intOffset;
             }
         }
 
-        if ($this->intPerPage > 0)
-        {
+        if ($this->intPerPage > 0) {
             // If a total limit has been defined, we need to honor that.
-            if (!is_null($intLimit) && ($intTotal > $intLimit))
-            {
+            if (!is_null($intLimit) && ($intTotal > $intLimit)) {
                 $intTotal -= $intLimit;
             }
             $intTotal -= $intOffset;
@@ -479,16 +464,14 @@ class ItemList
             // Get the current page.
             $intPage = \Input::getInstance()->get('page') ? \Input::getInstance()->get('page') : 1;
 
-            if ($intPage > ($intTotal / $this->intPerPage))
-            {
+            if ($intPage > ($intTotal / $this->intPerPage)) {
                 $intPage = (int)ceil($intTotal / $this->intPerPage);
             }
 
             // Set limit and offset.
             $pageOffset = ((max($intPage, 1) - 1) * $this->intPerPage);
             $intOffset += $pageOffset;
-            if (is_null($intLimit))
-            {
+            if (is_null($intLimit)) {
                 $intLimit = $this->intPerPage;
             } else {
                 $intLimit = min(($intLimit - $intOffset), $this->intPerPage);
@@ -499,12 +482,10 @@ class ItemList
 
             $this->strPagination = $objPagination->generate("\n  ");
         } else {
-            if (is_null($intLimit))
-            {
+            if (is_null($intLimit)) {
                 $intLimit = 0;
             }
-            if (is_null($intOffset))
-            {
+            if (is_null($intOffset)) {
                 $intOffset = 0;
             }
         }
@@ -540,8 +521,7 @@ class ItemList
      */
     public function addFilterRule($objFilterRule)
     {
-        if (!$this->objFilter)
-        {
+        if (!$this->objFilter) {
             $this->objFilter = $this->objMetaModel->getEmptyFilter();
         }
 
@@ -567,24 +547,20 @@ class ItemList
 
         $intFilterSettings = 0;
 
-        foreach ((array)$this->getView()->get('jumpTo') as $arrJumpTo)
-        {
+        foreach ((array)$this->getView()->get('jumpTo') as $arrJumpTo) {
             // If either desired language or fallback, keep the result.
             if (!$this->getMetaModel()->isTranslated()
                 || $arrJumpTo['langcode'] == $strDesiredLanguage
-                || $arrJumpTo['langcode'] == $strFallbackLanguage)
-            {
+                || $arrJumpTo['langcode'] == $strFallbackLanguage) {
                 $intFilterSettings = $arrJumpTo['filter'];
                 // If the desired language, break. Otherwise try to get the desired one until all have been evaluated.
-                if ($strDesiredLanguage == $arrJumpTo['langcode'])
-                {
+                if ($strDesiredLanguage == $arrJumpTo['langcode']) {
                     break;
                 }
             }
         }
 
-        if ($intFilterSettings)
-        {
+        if ($intFilterSettings) {
             $objFilterSettings = FilterFactory::byId($intFilterSettings);
             $arrAttributes     = array_merge($objFilterSettings->getReferencedAttributes(), $arrAttributes);
         }
@@ -599,19 +575,16 @@ class ItemList
      */
     public function prepare()
     {
-        if ($this->objItems)
-        {
+        if ($this->objItems) {
             return $this;
         }
 
         // Create an empty filter object if not done before.
-        if (!$this->objFilter)
-        {
+        if (!$this->objFilter) {
             $this->objFilter = $this->objMetaModel->getEmptyFilter();
         }
 
-        if ($this->objFilterSettings)
-        {
+        if ($this->objFilterSettings) {
             $this->objFilterSettings->addRules($this->objFilter, $this->arrParam);
         }
 
@@ -682,18 +655,15 @@ class ItemList
      */
     public function getOutputFormat()
     {
-        if (isset($this->strOutputFormat))
-        {
+        if (isset($this->strOutputFormat)) {
             return $this->strOutputFormat;
         }
 
-        if (isset($this->objView) && $this->objView->get('format'))
-        {
+        if (isset($this->objView) && $this->objView->get('format')) {
             return $this->objView->get('format');
         }
 
-        if (TL_MODE == 'FE' && is_object($GLOBALS['objPage']) && $GLOBALS['objPage']->outputFormat)
-        {
+        if (TL_MODE == 'FE' && is_object($GLOBALS['objPage']) && $GLOBALS['objPage']->outputFormat) {
             return $GLOBALS['objPage']->outputFormat;
         }
 
@@ -713,12 +683,10 @@ class ItemList
     protected function getNoItemsCaption()
     {
         if (isset($this->objView)
-            && isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['noItemsMsg']))
-        {
+            && isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['noItemsMsg'])
+        ) {
             return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['noItemsMsg'];
-        }
-        elseif (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['noItemsMsg']))
-        {
+        } elseif (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['noItemsMsg'])) {
             return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['noItemsMsg'];
         }
 
@@ -738,12 +706,10 @@ class ItemList
     protected function getDetailsCaption()
     {
         if (isset($this->objView)
-            && isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['details']))
-        {
+            && isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['details'])
+        ) {
             return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['details'];
-        }
-        elseif (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details']))
-        {
+        } elseif (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details'])) {
             return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details'];
         }
 
@@ -768,23 +734,19 @@ class ItemList
         $this->prepare();
         $strOutputFormat = $this->getOutputFormat();
 
-        if ($this->objItems->getCount() && !$blnNoNativeParsing)
-        {
+        if ($this->objItems->getCount() && !$blnNoNativeParsing) {
             $this->objTemplate->data = $this->objItems->parseAll($strOutputFormat, $this->objView);
         } else {
             $this->objTemplate->data = array();
         }
 
         // Add title if needed.
-        if ($GLOBALS['objPage'] && $this->objItems->getCount() && !empty($this->strTitleAttribute))
-        {
-            while ($this->objItems->next())
-            {
+        if ($GLOBALS['objPage'] && $this->objItems->getCount() && !empty($this->strTitleAttribute)) {
+            while ($this->objItems->next()) {
                 $objCurrentItem = $this->objItems->current();
                 $arrTitle       = $objCurrentItem->parseAttribute($this->strTitleAttribute, 'text');
 
-                if (isset($arrTitle['text']) && !empty($arrTitle['text']))
-                {
+                if (isset($arrTitle['text']) && !empty($arrTitle['text'])) {
                     $GLOBALS['objPage']->pageTitle = strip_tags($arrTitle['text']);
                     break;
                 }
@@ -794,15 +756,12 @@ class ItemList
         }
 
         // Add description if needed.
-        if ($GLOBALS['objPage'] && $this->objItems->getCount() && !empty($this->strDescriptionAttribute))
-        {
-            while ($this->objItems->next())
-            {
+        if ($GLOBALS['objPage'] && $this->objItems->getCount() && !empty($this->strDescriptionAttribute)) {
+            while ($this->objItems->next()) {
                 $objCurrentItem = $this->objItems->current();
                 $arrDescription = $objCurrentItem->parseAttribute($this->strDescriptionAttribute, 'text');
 
-                if (isset($arrDescription['text']) && !empty($arrDescription['text']))
-                {
+                if (isset($arrDescription['text']) && !empty($arrDescription['text'])) {
                     $GLOBALS['objPage']->description = \String::getInstance()->substr($arrDescription['text'], 120);
                     break;
                 }
@@ -817,5 +776,4 @@ class ItemList
 
         return $this->objTemplate->parse($strOutputFormat);
     }
-
 }

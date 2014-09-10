@@ -22,8 +22,7 @@ namespace MetaModels\DcGeneral\DataDefinition\Definition;
  *
  * @package MetaModels\DcGeneral\DataDefinition\Definition
  */
-class MetaModelDefinition
-    implements IMetaModelDefinition
+class MetaModelDefinition implements IMetaModelDefinition
 {
     /**
      * The id of the active render setting.
@@ -91,6 +90,3 @@ class MetaModelDefinition
         return $this->activeInputScreen;
     }
 }
-
-
-

@@ -68,4 +68,3 @@ class NotEqual implements IFilterRule
         return $this->objAttribute->filterNotEqual($this->varValue);
     }
 }
-

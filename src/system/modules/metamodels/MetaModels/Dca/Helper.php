@@ -43,8 +43,7 @@ class Helper
     public static function decodeLangArray($varValue, IMetaModel $objMetaModel)
     {
         $arrLangValues = deserialize($varValue);
-        if (!$objMetaModel->isTranslated())
-        {
+        if (!$objMetaModel->isTranslated()) {
             // If we have an array, return the first value and exit, if not an array, return the value itself.
             return is_array($arrLangValues) ? $arrLangValues[key($arrLangValues)] : $arrLangValues;
         }
@@ -53,19 +52,15 @@ class Helper
         $arrLanguages = $objMetaModel->getAvailableLanguages();
         $arrOutput    = array();
 
-        if ($arrLanguages)
-        {
-            foreach ($arrLanguages as $strLangCode)
-            {
-                if (is_array($arrLangValues))
-                {
+        if ($arrLanguages) {
+            foreach ($arrLanguages as $strLangCode) {
+                if (is_array($arrLangValues)) {
                     $varSubValue = $arrLangValues[$strLangCode];
                 } else {
                     $varSubValue = $arrLangValues;
                 }
 
-                if (is_array($varSubValue))
-                {
+                if (is_array($varSubValue)) {
                     $arrOutput[] = array_merge($varSubValue, array('langcode' => $strLangCode));
                 } else {
                     $arrOutput[] = array('langcode' => $strLangCode, 'value' => $varSubValue);
@@ -87,22 +82,17 @@ class Helper
     public static function encodeLangArray($varValue, IMetaModel $objMetaModel)
     {
         // Not translated, make it a plain string.
-        if (!$objMetaModel->isTranslated())
-        {
+        if (!$objMetaModel->isTranslated()) {
             return $varValue;
         }
         $arrLangValues = deserialize($varValue);
         $arrOutput     = array();
-        foreach ($arrLangValues as $varSubValue)
-        {
+        foreach ($arrLangValues as $varSubValue) {
             $strLangCode = $varSubValue['langcode'];
             unset($varSubValue['langcode']);
-            if (count($varSubValue) > 1)
-            {
+            if (count($varSubValue) > 1) {
                 $arrOutput[$strLangCode] = $varSubValue;
-            }
-            else
-            {
+            } else {
                 $arrKeys                 = array_keys($varSubValue);
                 $arrOutput[$strLangCode] = $varSubValue[$arrKeys[0]];
             }
@@ -136,10 +126,9 @@ class Helper
         $languageLabel,
         $valueLabel,
         $isTextArea,
-        $arrValues)
-    {
-        if (!$metaModel->isTranslated())
-        {
+        $arrValues
+    ) {
+        if (!$metaModel->isTranslated()) {
             $extra = $property->getExtra();
 
             $extra['tl_class'] .= 'w50';
@@ -154,24 +143,20 @@ class Helper
         $fallback = $metaModel->getFallbackLanguage();
 
         $languages = array();
-        foreach ((array)$metaModel->getAvailableLanguages() as $langCode)
-        {
+        foreach ((array)$metaModel->getAvailableLanguages() as $langCode) {
             $languages[$langCode] = $environment->getTranslator()->translate('LNG.' . $langCode, 'languages');
         }
         asort($languages);
 
         // Ensure we have the values present.
-        if (empty($arrValues))
-        {
-            foreach (array_keys($languages) as $langCode)
-            {
+        if (empty($arrValues)) {
+            foreach (array_keys($languages) as $langCode) {
                 $arrValues[$langCode] = '';
             }
         }
 
         $rowClasses = array();
-        foreach (array_keys($arrValues) as $langCode)
-        {
+        foreach (array_keys($arrValues) as $langCode) {
             $rowClasses[] = ($langCode == $fallback) ? 'fallback_language' : 'normal_language';
         }
 
@@ -181,7 +166,8 @@ class Helper
         $extra['maxCount']       = count($languages);
         $extra['disableSorting'] = true;
         $extra['tl_class']       = 'clr';
-        $extra['columnFields']   = array(
+        $extra['columnFields']   = array
+        (
             'langcode' => array
             (
                 'label'                 => $languageLabel,
@@ -231,15 +217,13 @@ class Helper
         // Add the templates root directory.
         $themeTemplates = glob($folder . '/' . $base . '*');
 
-        if (!$themeTemplates)
-        {
+        if (!$themeTemplates) {
             return array();
         }
 
         $templates = array();
 
-        foreach ($themeTemplates as $template)
-        {
+        foreach ($themeTemplates as $template) {
             $template = basename($template, strrchr($template, '.'));
 
             $templates[$template] = sprintf(
@@ -273,10 +257,8 @@ class Helper
             ->execute();
 
         // Add all the theme templates folders.
-        while ($objThemes->next())
-        {
-            if ($objThemes->templates != '')
-            {
+        while ($objThemes->next()) {
+            if ($objThemes->templates != '') {
                 $arrTemplates = array_merge(
                     $arrTemplates,
                     self::getTemplatesForBaseFrom(
@@ -289,8 +271,7 @@ class Helper
         }
 
         // Add the module templates folders if they exist.
-        foreach (\Config::getInstance()->getActiveModules() as $strModule)
-        {
+        foreach (\Config::getInstance()->getActiveModules() as $strModule) {
             $arrTemplates = array_merge(
                 $arrTemplates,
                 self::getTemplatesForBaseFrom(
@@ -322,14 +303,12 @@ class Helper
         $arrAttributeNames = array();
 
         $objMetaModel = MetaModelFactory::byId($intMetaModel);
-        if ($objMetaModel)
-        {
-            foreach ($objMetaModel->getAttributes() as $objAttribute)
-            {
-                if (empty($arrTypes) || in_array($objAttribute->get('type'), $arrTypes))
-                {
+        if ($objMetaModel) {
+            foreach ($objMetaModel->getAttributes() as $objAttribute) {
+                if (empty($arrTypes) || in_array($objAttribute->get('type'), $arrTypes)) {
                     $arrAttributeNames[$objAttribute->getColName()] =
-                        sprintf('%s [%s]',
+                        sprintf(
+                            '%s [%s]',
                             $objAttribute->getName(),
                             $objAttribute->getColName()
                         );
@@ -354,22 +333,16 @@ class Helper
         $scanResult = array();
         $result     = array();
         // Check if we have a file or folder.
-        if (is_dir(TL_ROOT . '/' . $folder))
-        {
+        if (is_dir(TL_ROOT . '/' . $folder)) {
             $scanResult = scan(TL_ROOT . '/' . $folder);
         }
 
         // Run each value.
-        foreach ($scanResult as $value)
-        {
-            if (!is_file(TL_ROOT . '/' . $folder . '/' . $value))
-            {
+        foreach ($scanResult as $value) {
+            if (!is_file(TL_ROOT . '/' . $folder . '/' . $value)) {
                 $result += self::searchFiles($folder . '/' . $value, $extension);
-            }
-            else
-            {
-                if (preg_match('/'.$extension.'$/i', $value))
-                {
+            } else {
+                if (preg_match('/'.$extension.'$/i', $value)) {
                     $result[$folder][$folder . '/' . $value] = $value;
                 }
             }

@@ -60,12 +60,10 @@ class PropertyAttributeId
         $metaModel  = self::getMetaModel($model);
         $typeFilter = $GLOBALS['METAMODELS']['filters'][$model->getProperty('type')]['attr_filter'];
 
-        foreach ($metaModel->getAttributes() as $attribute)
-        {
+        foreach ($metaModel->getAttributes() as $attribute) {
             $typeName = $attribute->get('type');
 
-            if ($typeFilter && (!in_array($typeName, $typeFilter)))
-            {
+            if ($typeFilter && (!in_array($typeName, $typeFilter))) {
                 continue;
             }
 
@@ -89,14 +87,12 @@ class PropertyAttributeId
         $metaModel = self::getMetaModel($model);
         $value     = $event->getValue();
 
-        if (!($metaModel && $value))
-        {
+        if (!($metaModel && $value)) {
             return;
         }
 
         $attribute = $metaModel->getAttributeById($value);
-        if ($attribute)
-        {
+        if ($attribute) {
             $event->setValue($metaModel->getTableName() .'_' . $attribute->getColName());
         }
     }
@@ -114,8 +110,7 @@ class PropertyAttributeId
         $metaModel = self::getMetaModel($model);
         $value     = $event->getValue();
 
-        if (!($metaModel && $value))
-        {
+        if (!($metaModel && $value)) {
             return;
         }
 
@@ -123,8 +118,7 @@ class PropertyAttributeId
 
         $attribute = $metaModel->getAttribute($value);
 
-        if ($attribute)
-        {
+        if ($attribute) {
             $event->setValue($attribute->get('id'));
         }
     }

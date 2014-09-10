@@ -54,19 +54,15 @@ class MultiTextWidget extends \Widget
         switch ($strKey)
         {
             case 'maxlength':
-                if ($varValue > 0)
-                {
+                if ($varValue > 0) {
                     $this->arrAttributes['maxlength'] =  $varValue;
                 }
                 break;
 
             case 'mandatory':
-                if ($varValue)
-                {
+                if ($varValue) {
                     $this->arrAttributes['required'] = 'required';
-                }
-                else
-                {
+                } else {
                     unset($this->arrAttributes['required']);
                 }
                 parent::__set($strKey, $varValue);
@@ -91,8 +87,7 @@ class MultiTextWidget extends \Widget
      */
     protected function validator($varInput)
     {
-        if (is_array($varInput))
-        {
+        if (is_array($varInput)) {
             return parent::validator($varInput);
         }
 
@@ -108,9 +103,9 @@ class MultiTextWidget extends \Widget
     public function generate()
     {
         $return = '';
-        for ($i = 0; $i < $this->size; $i++)
-        {
-            $return .= sprintf('<input type="%s" name="%s[]" id="ctrl_%s_%s" class="text%s%s" value="%s"%s%s',
+        for ($i = 0; $i < $this->size; $i++) {
+            $return .= sprintf(
+                '<input type="%s" name="%s[]" id="ctrl_%s_%s" class="text%s%s" value="%s"%s%s',
                 'text',
                 $this->strName,
                 $this->strId,
@@ -119,7 +114,8 @@ class MultiTextWidget extends \Widget
                 (strlen($this->strClass) ? ' ' . $this->strClass : ''),
                 specialchars($this->varValue[$i]),
                 $this->getAttributes(),
-                $this->strTagEnding);
+                $this->strTagEnding
+            );
         }
 
         return $return;

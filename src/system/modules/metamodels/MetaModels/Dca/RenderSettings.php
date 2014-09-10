@@ -40,8 +40,7 @@ class RenderSettings
     {
         $environment = $dc->getEnvironment();
 
-        if (version_compare(VERSION, '3.0', '<'))
-        {
+        if (version_compare(VERSION, '3.0', '<')) {
             $event = new GenerateHtmlEvent(
                 'pickpage.gif',
                 $environment->getTranslator()->translate('MSC.pagepicker'),
@@ -53,7 +52,8 @@ class RenderSettings
             return ' ' . $event->getHtml();
         }
 
-        $url = sprintf('%scontao/page.php?do=metamodels&table=tl_metamodel_rendersettings&field=ctrl_%s',
+        $url = sprintf(
+            '%scontao/page.php?do=metamodels&table=tl_metamodel_rendersettings&field=ctrl_%s',
             \Environment::get('base'),
             $dc->inputName
         );
@@ -74,11 +74,11 @@ class RenderSettings
 
         $environment->getEventPropagator()->propagate(ContaoEvents::IMAGE_GET_HTML, $event);
 
-        return sprintf(' <a href="%s"%s>%s</a>',
+        return sprintf(
+            ' <a href="%s"%s>%s</a>',
             $url,
             ' onclick="Backend.openModalSelector(' . $options . '); return false;"',
             $event->getHtml()
         );
     }
 }
-

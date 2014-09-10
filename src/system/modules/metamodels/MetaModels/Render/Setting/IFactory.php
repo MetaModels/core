@@ -31,7 +31,7 @@ use MetaModels\IMetaModel;
 interface IFactory
 {
     /**
-     * Load all attribute render information from the database and push the contained information into the settings object.
+     * Load all render information from the database and push the contained information into the settings object.
      *
      * You should not call this method directly but rather use {@link IFactory::byId} instead.
      *

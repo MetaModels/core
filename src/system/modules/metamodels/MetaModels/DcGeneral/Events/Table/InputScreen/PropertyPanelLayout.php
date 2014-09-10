@@ -37,17 +37,22 @@ class PropertyPanelLayout
      */
     public static function getWizard(ManipulateWidgetEvent $event)
     {
-        $url = 'system/modules/metamodels/popup.php?tbl=%1$s&fld=%2$s&inputName=ctrl_%3$s&id=%4$s&item=PALETTE_PANEL_PICKER';
+        $url = 'system/modules/metamodels/popup.php?' .
+            'tbl=%1$s' .
+            '&fld=%2$s' .
+            '&inputName=ctrl_%3$s' .
+            '&id=%4$s' .
+            '&item=PALETTE_PANEL_PICKER';
 
-        if (version_compare(VERSION, '3.0', '<'))
-        {
+        if (version_compare(VERSION, '3.0', '<')) {
             $link = ' <a href="' . $url . '" rel="lightbox[files 765 60%%]" data-lightbox="files 765 60%%">%5$s</a>';
-        }
-        else
-        {
-            // @codingStandardsIgnoreStart - I know, this line is long but there is nothing I can do about it.
-            $link = ' <a href="' . $url . '" onclick="Backend.getScrollOffset();Backend.openModalIframe({\'width\':765,\'title\':\'%6$s\',\'url\':this.href,\'id\':\'%4$s\'});return false">%5$s</a>';
-            // @codingStandardsIgnoreEnd
+        } else {
+            $link = ' <a href="' . $url . '" onclick="Backend.getScrollOffset();Backend.openModalIframe({' .
+                '\'width\':765,' .
+                '\'title\':\'%6$s\',' .
+                '\'url\':this.href,' .
+                '\'id\':\'%4$s\'' .
+                '});return false">%5$s</a>';
         }
 
         $imageEvent = new GenerateHtmlEvent(

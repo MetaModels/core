@@ -41,8 +41,7 @@ class FilterClearAll extends \Module
      */
     public function generate()
     {
-        if (TL_MODE == 'BE')
-        {
+        if (TL_MODE == 'BE') {
             $objTemplate           = new \BackendTemplate('be_wildcard');
             $objTemplate->wildcard = '### METAMODELS FE-FILTERBLOCK ###';
             $objTemplate->title    = $this->headline;
@@ -54,8 +53,7 @@ class FilterClearAll extends \Module
         }
 
         // Get template if configured.
-        if ($this->metamodel_fef_template)
-        {
+        if ($this->metamodel_fef_template) {
             $this->strTemplate = $this->metamodel_fef_template;
         }
 
@@ -78,8 +76,7 @@ class FilterClearAll extends \Module
         foreach (array_keys($_GET) as $mixGetKey)
         // @codingStandardsIgnoreEnd - Continue with style checking.
         {
-            if (in_array($mixGetKey, $GLOBALS['MM_FILTER_PARAMS']))
-            {
+            if (in_array($mixGetKey, $GLOBALS['MM_FILTER_PARAMS'])) {
                 $blnActiveParam = true;
                 continue;
             }
@@ -88,7 +85,10 @@ class FilterClearAll extends \Module
         }
 
         // Check if we have filter and if we have active params.
-        $this->Template->active      = (!is_array($GLOBALS['MM_FILTER_PARAMS']) || count($GLOBALS['MM_FILTER_PARAMS']) == 0);
+        $this->Template->active      = (
+            !is_array($GLOBALS['MM_FILTER_PARAMS'])
+            || count($GLOBALS['MM_FILTER_PARAMS']) == 0
+        );
         $this->Template->activeParam = $blnActiveParam;
 
         // Build FE url.
@@ -115,28 +115,23 @@ class FilterClearAll extends \Module
     protected function getJumpToUrl($arrParams)
     {
         $strFilterAction = '';
-        foreach ($arrParams as $strName => $varParam)
-        {
+        foreach ($arrParams as $strName => $varParam) {
             // Skip the magic "language" parameter.
-            if (($strName == 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl'])
-            {
+            if (($strName == 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl']) {
                 continue;
             }
 
             $strValue = $varParam;
 
-            if (is_array($varParam))
-            {
+            if (is_array($varParam)) {
                 $strValue = implode(',', array_filter($varParam));
             }
 
             $strValue = str_replace(array('/', '\''), array('-slash-', '-apos-'), $strValue);
 
-            if (strlen($strValue))
-            {
+            if (strlen($strValue)) {
                 // Shift auto_item to the front.
-                if ($strName == 'auto_item')
-                {
+                if ($strName == 'auto_item') {
                     $strFilterAction = '/' . $strValue . $strFilterAction;
                     continue;
                 }
@@ -151,4 +146,3 @@ class FilterClearAll extends \Module
         return $strFilterAction;
     }
 }
-

@@ -40,8 +40,7 @@ class PropertyDcaId
             ->execute($event->getModel()->getProperty('id'));
 
         $result = array();
-        while ($inputScreens->next())
-        {
+        while ($inputScreens->next()) {
             $result[$inputScreens->id] = $inputScreens->name;
         }
 

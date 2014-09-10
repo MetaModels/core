@@ -74,19 +74,18 @@ class Item implements IItem
     public function internalParseAttribute($objAttribute, $strOutputFormat, $objSettings)
     {
         $arrResult = array();
-        if ($objAttribute)
-        {
+        if ($objAttribute) {
             // Extract view settings for this attribute.
-            if ($objSettings)
-            {
+            if ($objSettings) {
                 $objAttributeSettings = $objSettings->getSetting($objAttribute->getColName());
-            }
-            else
-            {
+            } else {
                 $objAttributeSettings = null;
             }
-            foreach ($objAttribute->parseValue($this->arrData, $strOutputFormat, $objAttributeSettings) as $strKey => $varValue)
-            {
+            foreach ($objAttribute->parseValue(
+                $this->arrData,
+                $strOutputFormat,
+                $objAttributeSettings
+            ) as $strKey => $varValue) {
                 $arrResult[$strKey] = $varValue;
             }
             // TODO: Add parseValue HOOK?
@@ -96,8 +95,7 @@ class Item implements IItem
         if (!is_null($objSettings)
             && $objSettings->get('hideEmptyValues')
             && $this->isEmptyValue($arrResult['raw'])
-        )
-        {
+        ) {
             unset($arrResult[$strOutputFormat]);
             unset($arrResult['text']);
         }
@@ -114,16 +112,11 @@ class Item implements IItem
      */
     protected function isEmptyValue($mixValue)
     {
-        if (is_array($mixValue))
-        {
+        if (is_array($mixValue)) {
             return $this->isArrayEmpty($mixValue);
-        }
-        elseif ($mixValue === '')
-        {
+        } elseif ($mixValue === '') {
             return true;
-        }
-        elseif ($mixValue === null)
-        {
+        } elseif ($mixValue === null) {
             return true;
         }
 
@@ -139,29 +132,19 @@ class Item implements IItem
      */
     protected function isArrayEmpty($arrArray)
     {
-        if (is_array($arrArray) && array_key_exists('value', $arrArray))
-        {
-            if (!empty($arrArray['value']))
-            {
+        if (is_array($arrArray) && array_key_exists('value', $arrArray)) {
+            if (!empty($arrArray['value'])) {
                 return false;
             }
-        }
-        elseif (is_array($arrArray))
-        {
-            foreach ($arrArray as $value)
-            {
-                if (is_array($value))
-                {
+        } elseif (is_array($arrArray)) {
+            foreach ($arrArray as $value) {
+                if (is_array($value)) {
                     return $this->isArrayEmpty($value);
-                }
-                elseif ($value !== '' && $value !== null)
-                {
+                } elseif ($value !== '' && $value !== null) {
                     return false;
                 }
             }
-        }
-        elseif (($arrArray !== '') && ($arrArray !== null))
-        {
+        } elseif (($arrArray !== '') && ($arrArray !== null)) {
             return false;
         }
 
@@ -251,8 +234,7 @@ class Item implements IItem
      */
     public function getVariants($objFilter)
     {
-        if ($this->isVariantBase())
-        {
+        if ($this->isVariantBase()) {
             return $this->getMetaModel()->findVariants(array($this->get('id')), $objFilter);
         }
 
@@ -270,8 +252,7 @@ class Item implements IItem
      */
     public function getSiblings($objFilter)
     {
-        if (!$this->getMetaModel()->hasVariants())
-        {
+        if (!$this->getMetaModel()->hasVariants()) {
             return null;
         }
         return $this->getMetaModel()->findVariantsWithBase(array($this->get('id')), $objFilter);
@@ -300,15 +281,12 @@ class Item implements IItem
      */
     public function parseValue($strOutputFormat = 'text', $objSettings = null)
     {
-        if ($objSettings != null)
-        {
+        if ($objSettings != null) {
             // Include CSS.
             $arrCss = $objSettings->get('additionalCss');
 
-            foreach ((array)$arrCss as $arrFile)
-            {
-                if ($arrFile['published'])
-                {
+            foreach ((array)$arrCss as $arrFile) {
+                if ($arrFile['published']) {
                     $GLOBALS['TL_CSS'][md5($arrFile['file'])] = $arrFile['file'];
                 }
             }
@@ -316,10 +294,8 @@ class Item implements IItem
             // Include JS.
             $arrJs = $objSettings->get('additionalJs');
 
-            foreach ((array)$arrJs as $arrFile)
-            {
-                if ($arrFile['published'])
-                {
+            foreach ((array)$arrJs as $arrFile) {
+                if ($arrFile['published']) {
                     $GLOBALS['TL_JAVASCRIPT'][md5($arrFile['file'])] = $arrFile['file'];
                 }
             }
@@ -335,13 +311,10 @@ class Item implements IItem
         );
 
         // No render settings, parse "normal" and hope the best - not all attribute types must provide usable output.
-        if (!$objSettings)
-        {
-            foreach ($this->getMetaModel()->getAttributes() as $objAttribute)
-            {
+        if (!$objSettings) {
+            foreach ($this->getMetaModel()->getAttributes() as $objAttribute) {
                 $arrResult['attributes'][$objAttribute->getColName()] = $objAttribute->getName();
-                foreach ($this->internalParseAttribute($objAttribute, $strOutputFormat, null) as $strKey => $varValue)
-                {
+                foreach ($this->internalParseAttribute($objAttribute, $strOutputFormat, null) as $strKey => $varValue) {
                     $arrResult[$strKey][$objAttribute->getColName()] = $varValue;
                 }
             }
@@ -352,14 +325,15 @@ class Item implements IItem
         $objSettings->setJumpTo($arrResult['jumpTo']);
 
         // First, parse the values in the same order as they are in the render settings.
-        foreach ($objSettings->getSettingNames() as $strAttrName)
-        {
+        foreach ($objSettings->getSettingNames() as $strAttrName) {
             $objAttribute = $this->getMetaModel()->getAttribute($strAttrName);
-            if ($objAttribute)
-            {
+            if ($objAttribute) {
                 $arrResult['attributes'][$objAttribute->getColName()] = $objAttribute->getName();
-                foreach ($this->internalParseAttribute($objAttribute, $strOutputFormat, $objSettings) as $strKey => $varValue)
-                {
+                foreach ($this->internalParseAttribute(
+                    $objAttribute,
+                    $strOutputFormat,
+                    $objSettings
+                ) as $strKey => $varValue) {
                     $arrResult[$strKey][$objAttribute->getColName()] = $varValue;
                 }
             }
@@ -387,15 +361,12 @@ class Item implements IItem
         // HOOK: let third party extensions manipulate the generated data.
         if (!empty($GLOBALS['METAMODEL_HOOKS']['MetaModelItem::parseValue'])
             && is_array($GLOBALS['METAMODEL_HOOKS']['MetaModelItem::parseValue'])
-        )
-        {
-            foreach ($GLOBALS['METAMODEL_HOOKS']['MetaModelItem::parseValue'] as $arrHook)
-            {
+        ) {
+            foreach ($GLOBALS['METAMODEL_HOOKS']['MetaModelItem::parseValue'] as $arrHook) {
                 $strClass  = $arrHook[0];
                 $strMethod = $arrHook[1];
 
-                if (in_array('getInstance', get_class_methods($strClass)))
-                {
+                if (in_array('getInstance', get_class_methods($strClass))) {
                     $objHook = call_user_func(array($strClass, 'getInstance'));
                 } else {
                     $objHook = new $strClass();
@@ -420,8 +391,7 @@ class Item implements IItem
      */
     public function buildJumpToLink($objSettings)
     {
-        if (!$objSettings)
-        {
+        if (!$objSettings) {
             return null;
         }
 
@@ -432,18 +402,15 @@ class Item implements IItem
         $intJumpTo         = 0;
         $intFilterSettings = 0;
 
-        foreach ((array)$objSettings->get('jumpTo') as $arrJumpTo)
-        {
+        foreach ((array)$objSettings->get('jumpTo') as $arrJumpTo) {
             // If either desired language or fallback, keep the result.
             if (!$this->getMetaModel()->isTranslated()
                 || $arrJumpTo['langcode'] == $strDesiredLanguage
-                || $arrJumpTo['langcode'] == $strFallbackLanguage)
-            {
+                || $arrJumpTo['langcode'] == $strFallbackLanguage) {
                 $intJumpTo         = $arrJumpTo['value'];
                 $intFilterSettings = $arrJumpTo['filter'];
                 // If the desired language, break. Otherwise try to get the desired one until all have been evaluated.
-                if ($strDesiredLanguage == $arrJumpTo['langcode'])
-                {
+                if ($strDesiredLanguage == $arrJumpTo['langcode']) {
                     break;
                 }
             }
@@ -451,23 +418,19 @@ class Item implements IItem
 
         // Apply jumpTo urls based upon the filter defined in the render settings.
         $objPage = ContaoController::getPageDetails($intJumpTo);
-        if (!$objPage)
-        {
+        if (!$objPage) {
             return null;
         }
 
         $arrJumpTo = array();
         $strParams = '';
 
-        if ($intFilterSettings)
-        {
+        if ($intFilterSettings) {
             $objFilterSettings = FilterSettingsFactory::byId($intFilterSettings);
             $arrParams         = $objFilterSettings->generateFilterUrlFrom($this, $objSettings);
 
-            foreach ($arrParams as $strKey => $strValue)
-            {
-                if ($strKey == 'auto_item')
-                {
+            foreach ($arrParams as $strKey => $strValue) {
+                if ($strKey == 'auto_item') {
                     $strParams = '/' . $strValue . $strParams;
                 } else {
                     $strParams .= sprintf('/%s/%s', $strKey, $strValue);
@@ -476,17 +439,11 @@ class Item implements IItem
 
             $arrJumpTo['params'] = $arrParams;
             $arrJumpTo['deep']   = (strlen($strParams) > 0);
-            if (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$objSettings->get('id')]['details']))
-            {
-                $arrJumpTo['label'] =
-                    $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$objSettings->get('id')]['details'];
-            }
-            elseif (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details']))
-            {
+            if (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$objSettings->get('id')]['details'])) {
+                $arrJumpTo['label'] = $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$objSettings->get('id')]['details'];
+            } elseif (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details'])) {
                 $arrJumpTo['label'] = $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details'];
-            }
-            else
-            {
+            } else {
                 $arrJumpTo['label'] = $GLOBALS['TL_LANG']['MSC']['details'];
             }
         }
@@ -542,8 +499,7 @@ class Item implements IItem
     {
         $objNewItem = $this->copy();
         // If this item is a variant base, we need to clean the variant base and set ourselves as the base.
-        if ($this->isVariantBase())
-        {
+        if ($this->isVariantBase()) {
             $objNewItem->set('vargroup', $this->get('id'));
             $objNewItem->set('varbase', 0);
         } else {
@@ -553,4 +509,3 @@ class Item implements IItem
         return $objNewItem;
     }
 }
-

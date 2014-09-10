@@ -26,8 +26,7 @@ use MetaModels\IMetaModel;
  *
  * @package MetaModels\DcGeneral\Events\BreadCrumb
  */
-class BreadCrumbMetaModels
-    extends BreadCrumbBase
+class BreadCrumbMetaModels extends BreadCrumbBase
 {
     /**
      * The id of the MetaModel.
