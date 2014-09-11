@@ -39,8 +39,7 @@ class IsVariantAttribute implements PropertyConditionInterface
         PropertyValueBag $input = null,
         PropertyInterface $property = null,
         LegendInterface $legend = null
-    )
-    {
+    ) {
         /** @var $model \MetaModels\DcGeneral\Data\Model */
 
         $nativeItem = $model->getItem();
