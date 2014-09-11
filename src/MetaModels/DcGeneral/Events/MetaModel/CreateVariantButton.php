@@ -54,9 +54,11 @@ class CreateVariantButton extends BaseView
     /**
      * Handle the "create variant" event.
      *
-     * @param ActionEvent $event
+     * @param ActionEvent $event The action Event being executed.
      *
-     * @throws \RuntimeException
+     * @return void
+     *
+     * @throws \RuntimeException When the base model can not be found.
      */
     public static function handleCreateVariantAction(ActionEvent $event)
     {
