@@ -281,16 +281,6 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     protected function getAndOrFilter(IFilter $filter, $operation)
     {
-        // FIXME: backwards compat - remove when done.
-        if (is_array($operation['childs'])) {
-            trigger_error(
-                'Filter array uses deprecated entry "childs", please use "children" instead.',
-                E_USER_DEPRECATED
-            );
-            $operation['children'] = $operation['childs'];
-            unset($operation['childs']);
-        }
-
         if (!$operation['children']) {
             return;
         }
