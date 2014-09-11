@@ -159,7 +159,7 @@ class TagsWidget extends \Widget
                             $GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations'] .
                             '</span>'
                     ),
-                    $count++
+                    $count
                 );
             }
         }
