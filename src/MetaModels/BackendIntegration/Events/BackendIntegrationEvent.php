@@ -19,6 +19,9 @@ namespace MetaModels\BackendIntegration\Events;
 
 use Symfony\Component\EventDispatcher\Event;
 
+/**
+ * This event is fired when MetaModels boots and is about to inject itself into the backend menu.
+ */
 class BackendIntegrationEvent extends Event
 {
     const NAME = 'metamodels.backend-integration';
