@@ -52,7 +52,7 @@
 		"menatwork/contao-multicolumnwizard": "3.2.*@dev",
 		"bit3/contao-meta-palettes": "~1.7",
 		"discordier/justtextwidgets": ">=0.5",
-		"contao-community-alliance/url-builder": "~1.0"
+		"contao-community-alliance/url-builder": "~1.1"
 	},
 	"require-dev": {
 		"metamodels/php-coding-standard": "~2.0",
