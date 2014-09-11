@@ -57,6 +57,7 @@
 	"require-dev": {
 		"metamodels/php-coding-standard": "~2.0",
 		"cyberspectrum/contao-toolbox": "dev-master",
+		"contao-community-alliance/build-system": "~1.0",
 		"phpunit/phpunit": ">=3.7.10,<4-dev"
 	},
 	"conflict": {

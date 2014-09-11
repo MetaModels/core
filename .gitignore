@@ -16,3 +16,4 @@ vendor/
 
 # build
 build/
+build.properties
