@@ -101,7 +101,6 @@ class Item implements IItem
             ) as $strKey => $varValue) {
                 $arrResult[$strKey] = $varValue;
             }
-            // TODO: Add parseValue HOOK?
         }
 
         // If "hideEmptyValues" is true and the raw is empty remove text and output format.
