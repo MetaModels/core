@@ -418,7 +418,7 @@ class Builder
                     break;
 
                 case 'limit':
-                    $this->parsePanelLimit($panelRow, $inputScreen);
+                    $this->parsePanelLimit($panelRow);
                     break;
 
                 case 'filter':
@@ -430,7 +430,7 @@ class Builder
                     break;
 
                 case 'submit':
-                    $this->parsePanelSubmit($panelRow, $inputScreen);
+                    $this->parsePanelSubmit($panelRow);
                     break;
 
                 default:
@@ -509,13 +509,11 @@ class Builder
     /**
      * Add  elements to the panel.
      *
-     * @param PanelRowInterface $row         The row to which the element shall get added to.
-     *
-     * @param IInputScreen      $inputScreen The Input screen with some information.
+     * @param PanelRowInterface $row The row to which the element shall get added to.
      *
      * @return void
      */
-    protected function parsePanelLimit(PanelRowInterface $row, IInputScreen $inputScreen)
+    protected function parsePanelLimit(PanelRowInterface $row)
     {
         if (!$row->hasElement('limit')) {
             $row->addElement(new DefaultLimitElementInformation());
@@ -525,19 +523,16 @@ class Builder
     /**
      * Add  elements to the panel.
      *
-     * @param PanelRowInterface $row         The row to which the element shall get added to.
-     *
-     * @param IInputScreen      $inputScreen The Input screen with some information.
+     * @param PanelRowInterface $row The row to which the element shall get added to.
      *
      * @return void
      */
-    protected function parsePanelSubmit(PanelRowInterface $row, IInputScreen $inputScreen)
+    protected function parsePanelSubmit(PanelRowInterface $row)
     {
         if (!$row->hasElement('submit')) {
             $row->addElement(new DefaultSubmitElementInformation());
         }
     }
-
 
     /**
      * Parse the basic configuration and populate the definition.

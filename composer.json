@@ -51,12 +51,13 @@
 		"contao-community-alliance/backports-initialize-system": "~1.0",
 		"menatwork/contao-multicolumnwizard": "3.2.*@dev",
 		"bit3/contao-meta-palettes": "~1.7",
-		"discordier/justtextwidgets": ">=0.5",
-		"contao-community-alliance/url-builder": "~1.0"
+		"discordier/justtextwidgets": "~0.5",
+		"contao-community-alliance/url-builder": "~1.1"
 	},
 	"require-dev": {
 		"metamodels/php-coding-standard": "~2.0",
 		"cyberspectrum/contao-toolbox": "dev-master",
+		"contao-community-alliance/build-system": "~1.0",
 		"phpunit/phpunit": ">=3.7.10,<4-dev"
 	},
 	"conflict": {

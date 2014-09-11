@@ -214,25 +214,9 @@ class Template
      *
      * @return string
      */
-    protected function getTemplate($strTemplate, $strFormat = 'html5', $blnFailIfNotFound = false)
+    // @codingStandardsIgnoreStart - This method is complex but subject to be phased out along wih Contao 2.11
+    protected function getTemplate211($strTemplate, $strFormat = 'html5', $blnFailIfNotFound = false)
     {
-        $strTemplate = basename($strTemplate);
-
-        // Contao 3.X only.
-        if (version_compare(VERSION, '3.0', '>=')) {
-            // Check for a theme folder.
-            if (TL_MODE == 'FE') {
-                $strCustom = str_replace('../', '', $GLOBALS['objPage']->templateGroup);
-
-                if ($strCustom != '') {
-                    return \TemplateLoader::getPath($strTemplate, $strFormat, $strCustom);
-                }
-            }
-
-            return \TemplateLoader::getPath($strTemplate, $strFormat);
-        }
-
-        // Contao 2.X from here on.
         $strKey = $strFilename = $strTemplate . '.' . $strFormat;
 
         $strTemplateGroup = '';
@@ -291,6 +275,42 @@ class Template
         }
 
         return null;
+    }
+    // @codingStandardsIgnoreEnd
+
+    /**
+     * Find a particular template file and return its path.
+     *
+     * @param string $strTemplate       Name of the template file.
+     *
+     * @param string $strFormat         The format to search for.
+     *
+     * @param bool   $blnFailIfNotFound Boolean flag telling if an Exception shall be thrown when the file can not
+     *                                  be found.
+     *
+     * @throws \Exception When the flag has been set and the file has not been found.
+     *
+     * @return string
+     */
+    protected function getTemplate($strTemplate, $strFormat = 'html5', $blnFailIfNotFound = false)
+    {
+        $strTemplate = basename($strTemplate);
+
+        // Contao 2.X only.
+        if (version_compare(VERSION, '3.0', '<')) {
+            return $this->getTemplate211($strTemplate, $strFormat, $blnFailIfNotFound);
+        }
+
+        // Check for a theme folder.
+        if (TL_MODE == 'FE') {
+            $strCustom = str_replace('../', '', $GLOBALS['objPage']->templateGroup);
+
+            if ($strCustom != '') {
+                return \TemplateLoader::getPath($strTemplate, $strFormat, $strCustom);
+            }
+        }
+
+        return \TemplateLoader::getPath($strTemplate, $strFormat);
     }
 
     /**

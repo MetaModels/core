@@ -79,7 +79,15 @@ class TagsWidget extends \Widget
         return parent::validator(trim($varInput));
     }
 
-
+    /**
+     * Generate a single checkbox.
+     *
+     * @param array $val   The value array (needs keys "value" and "label").
+     *
+     * @param int   $count The sequence number of this option (used for even/odd determination).
+     *
+     * @return string
+     */
     protected function generateOption($val, $count)
     {
         // If true we need another offset.
@@ -151,7 +159,7 @@ class TagsWidget extends \Widget
                             $GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations'] .
                             '</span>'
                     ),
-                    $count++
+                    $count
                 );
             }
         }

@@ -17,12 +17,15 @@
 
 namespace MetaModels;
 
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GetPageDetailsEvent;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\Filter\IFilter;
 use MetaModels\Helper\ContaoController;
 use MetaModels\Factory as MetaModelFactory;
 use MetaModels\Filter\Setting\Factory as FilterSettingsFactory;
 use MetaModels\Render\Setting\ICollection;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Interface for a MetaModel item.
@@ -61,6 +64,16 @@ class Item implements IItem
     }
 
     /**
+     * Retrieve the event dispatcher.
+     *
+     * @return EventDispatcherInterface
+     */
+    protected function getEventDispatcher()
+    {
+        return $GLOBALS['container']['event-dispatcher'];
+    }
+
+    /**
      * Helper function for {@see MetaModelItem::parseValue()} and {@see MetaModelItem::parseAttribute()}.
      *
      * @param IAttribute  $objAttribute    The attribute to parse.
@@ -88,7 +101,6 @@ class Item implements IItem
             ) as $strKey => $varValue) {
                 $arrResult[$strKey] = $varValue;
             }
-            // TODO: Add parseValue HOOK?
         }
 
         // If "hideEmptyValues" is true and the raw is empty remove text and output format.
@@ -271,6 +283,38 @@ class Item implements IItem
     }
 
     /**
+     * Register the assets in Contao.
+     *
+     * @param ICollection|null $objSettings The render settings to use.
+     *
+     * @return void
+     */
+    protected function registerAssets($objSettings)
+    {
+        if (!$objSettings) {
+            return;
+        }
+
+        // Include CSS.
+        $arrCss = $objSettings->get('additionalCss');
+
+        foreach ((array)$arrCss as $arrFile) {
+            if ($arrFile['published']) {
+                $GLOBALS['TL_CSS'][md5($arrFile['file'])] = $arrFile['file'];
+            }
+        }
+
+        // Include JS.
+        $arrJs = $objSettings->get('additionalJs');
+
+        foreach ((array)$arrJs as $arrFile) {
+            if ($arrFile['published']) {
+                $GLOBALS['TL_JAVASCRIPT'][md5($arrFile['file'])] = $arrFile['file'];
+            }
+        }
+    }
+
+    /**
      * Renders the item in the given output format.
      *
      * @param string      $strOutputFormat The desired output format (optional - default: text).
@@ -281,25 +325,7 @@ class Item implements IItem
      */
     public function parseValue($strOutputFormat = 'text', $objSettings = null)
     {
-        if ($objSettings != null) {
-            // Include CSS.
-            $arrCss = $objSettings->get('additionalCss');
-
-            foreach ((array)$arrCss as $arrFile) {
-                if ($arrFile['published']) {
-                    $GLOBALS['TL_CSS'][md5($arrFile['file'])] = $arrFile['file'];
-                }
-            }
-
-            // Include JS.
-            $arrJs = $objSettings->get('additionalJs');
-
-            foreach ((array)$arrJs as $arrFile) {
-                if ($arrFile['published']) {
-                    $GLOBALS['TL_JAVASCRIPT'][md5($arrFile['file'])] = $arrFile['file'];
-                }
-            }
-        }
+        $this->registerAssets($objSettings);
 
         $arrResult = array
         (
@@ -377,6 +403,56 @@ class Item implements IItem
     }
 
     /**
+     * Build the jump to array for the given values.
+     *
+     * @param array|null  $page             The page model of the jumpTo page.
+     *
+     * @param int         $filterSettingsId The id of the filter settings to use.
+     *
+     * @param ICollection $renderSettings   The render settings to use.
+     *
+     * @return array
+     */
+    protected function buildJumpToParametersAndUrl($page, $filterSettingsId, $renderSettings)
+    {
+        if (!$page) {
+            return null;
+        }
+
+        $result     = array();
+        $parameters = '';
+
+        if ($filterSettingsId) {
+            $filterSettings = FilterSettingsFactory::byId($filterSettingsId);
+            $parameterList  = $filterSettings->generateFilterUrlFrom($this, $renderSettings);
+
+            foreach ($parameterList as $strKey => $strValue) {
+                if ($strKey == 'auto_item') {
+                    $parameters = '/' . $strValue . $parameters;
+                } else {
+                    $parameters .= sprintf('/%s/%s', $strKey, $strValue);
+                }
+            }
+
+            $tableName        = $this->getMetaModel()->getTableName();
+            $result['params'] = $parameterList;
+            $result['deep']   = (strlen($parameters) > 0);
+            if (isset($GLOBALS['TL_LANG']['MSC'][$tableName][$renderSettings->get('id')]['details'])) {
+                $result['label'] = $GLOBALS['TL_LANG']['MSC'][$tableName][$renderSettings->get('id')]['details'];
+            } elseif (isset($GLOBALS['TL_LANG']['MSC'][$tableName]['details'])) {
+                $result['label'] = $GLOBALS['TL_LANG']['MSC'][$tableName]['details'];
+            } else {
+                $result['label'] = $GLOBALS['TL_LANG']['MSC']['details'];
+            }
+        }
+
+        $result['page'] = $page['id'];
+        $result['url']  = ContaoController::generateFrontendUrl($page, $parameters);
+
+        return $result;
+    }
+
+    /**
      * Build the jumpTo link for use in templates.
      *
      * The returning array will hold the following keys:
@@ -416,41 +492,15 @@ class Item implements IItem
             }
         }
 
+        $event = new GetPageDetailsEvent($intJumpTo);
+        $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
+
         // Apply jumpTo urls based upon the filter defined in the render settings.
-        $objPage = ContaoController::getPageDetails($intJumpTo);
-        if (!$objPage) {
-            return null;
-        }
-
-        $arrJumpTo = array();
-        $strParams = '';
-
-        if ($intFilterSettings) {
-            $objFilterSettings = FilterSettingsFactory::byId($intFilterSettings);
-            $arrParams         = $objFilterSettings->generateFilterUrlFrom($this, $objSettings);
-
-            foreach ($arrParams as $strKey => $strValue) {
-                if ($strKey == 'auto_item') {
-                    $strParams = '/' . $strValue . $strParams;
-                } else {
-                    $strParams .= sprintf('/%s/%s', $strKey, $strValue);
-                }
-            }
-
-            $arrJumpTo['params'] = $arrParams;
-            $arrJumpTo['deep']   = (strlen($strParams) > 0);
-            if (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$objSettings->get('id')]['details'])) {
-                $arrJumpTo['label'] = $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$objSettings->get('id')]['details'];
-            } elseif (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details'])) {
-                $arrJumpTo['label'] = $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details'];
-            } else {
-                $arrJumpTo['label'] = $GLOBALS['TL_LANG']['MSC']['details'];
-            }
-        }
-
-        $arrJumpTo['page'] = $intJumpTo;
-        $arrJumpTo['url']  = ContaoController::generateFrontendUrl($objPage->row(), $strParams);
-        return $arrJumpTo;
+        return $this->buildJumpToParametersAndUrl(
+            $event->getPageDetails(),
+            $intFilterSettings,
+            $objSettings
+        );
     }
 
     /**

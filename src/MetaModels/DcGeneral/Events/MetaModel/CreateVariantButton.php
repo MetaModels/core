@@ -54,9 +54,11 @@ class CreateVariantButton extends BaseView
     /**
      * Handle the "create variant" event.
      *
-     * @param ActionEvent $event
+     * @param ActionEvent $event The action Event being executed.
      *
-     * @throws \RuntimeException
+     * @return void
+     *
+     * @throws \RuntimeException When the base model can not be found.
      */
     public static function handleCreateVariantAction(ActionEvent $event)
     {
@@ -83,7 +85,7 @@ class CreateVariantButton extends BaseView
             ));
         }
 
-        $preFunction = function ($environment, $model, $originalModel) {
+        $preFunction = function ($environment, $model) {
             /** @var EnvironmentInterface $environment */
             $copyEvent = new PreCreateModelEvent($environment, $model);
             $environment->getEventPropagator()->propagate(
@@ -95,7 +97,7 @@ class CreateVariantButton extends BaseView
             );
         };
 
-        $postFunction = function ($environment, $model, $originalModel) {
+        $postFunction = function ($environment, $model) {
             /** @var EnvironmentInterface $environment */
             $copyEvent = new PostCreateModelEvent($environment, $model);
             $environment->getEventPropagator()->propagate(
