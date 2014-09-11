@@ -51,7 +51,7 @@
 		"contao-community-alliance/backports-initialize-system": "~1.0",
 		"menatwork/contao-multicolumnwizard": "3.2.*@dev",
 		"bit3/contao-meta-palettes": "~1.7",
-		"discordier/justtextwidgets": ">=0.5",
+		"discordier/justtextwidgets": "~0.5",
 		"contao-community-alliance/url-builder": "~1.1"
 	},
 	"require-dev": {
