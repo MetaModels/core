@@ -33,6 +33,7 @@ class IsVariantAttribute implements PropertyConditionInterface
     /**
      * {@inheritdoc}
      */
+    // @codingStandardsIgnoreStart - we have unused variables here.
     public function match(
         ModelInterface $model = null,
         PropertyValueBag $input = null,
@@ -54,6 +55,7 @@ class IsVariantAttribute implements PropertyConditionInterface
 
         return true;
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * {@inheritdoc}

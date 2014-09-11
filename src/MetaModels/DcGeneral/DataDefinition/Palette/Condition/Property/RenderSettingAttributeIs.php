@@ -100,6 +100,7 @@ class RenderSettingAttributeIs implements PropertyConditionInterface
     /**
      * {@inheritdoc}
      */
+    // @codingStandardsIgnoreStart - we have unused variables here.
     public function match(
         ModelInterface $model = null,
         PropertyValueBag $input = null,
@@ -116,6 +117,7 @@ class RenderSettingAttributeIs implements PropertyConditionInterface
 
         return $this->getTypeOfAttribute($value) == $this->getAttributeType();
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * {@inheritdoc}

@@ -389,10 +389,12 @@ abstract class Simple implements ISimple
      *
      * @return array An empty array.
      */
+    // @codingStandardsIgnoreStart - empty no op implementation - it's ok to have unused parameters here.
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
     {
         return array();
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * This base implementation returns an empty array.
@@ -437,6 +439,7 @@ abstract class Simple implements ISimple
      *
      * @return array
      */
+    // @codingStandardsIgnoreStart - empty no op implementation - it's ok to have unused parameters here.
     public function getParameterFilterWidgets(
         $arrIds,
         $arrFilterUrl,
@@ -445,6 +448,7 @@ abstract class Simple implements ISimple
     ) {
         return array();
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * Retrieve a list of all referenced attributes within the filter setting.
