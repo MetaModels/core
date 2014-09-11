@@ -23,6 +23,7 @@ use MetaModels\Helper\ContaoController;
 use MetaModels\Factory as MetaModelFactory;
 use MetaModels\Filter\Setting\Factory as FilterSettingsFactory;
 use MetaModels\Render\Setting\ICollection;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Interface for a MetaModel item.
@@ -58,6 +59,16 @@ class Item implements IItem
     {
         $this->arrData      = $arrData;
         $this->strModelName = $objMetaModel->getTableName();
+    }
+
+    /**
+     * Retrieve the event dispatcher.
+     *
+     * @return EventDispatcherInterface
+     */
+    protected function getEventDispatcher()
+    {
+        return $GLOBALS['container']['event-dispatcher'];
     }
 
     /**
