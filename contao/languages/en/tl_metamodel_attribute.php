@@ -44,3 +44,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['delete']               = array('D
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']                 = array('Attribute details', 'Show details of attribute ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['editheader']           = array('Edit attribute', 'Edit the attribute');
 
+// Error messages.
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['error_unknown_attribute'][0] = 'Unknown attribute!';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['error_unknown_attribute'][1] =
+    'Extension missing? The attribute type "%s" is not installed.';

@@ -38,8 +38,6 @@ class DrawSetting
      */
     public static function modelToLabel(ModelToLabelEvent $event)
     {
-        // FIXME: in here all language strings and icons are related to filters?
-        // FIXME: Add language files for the error msg.
         $model        = $event->getModel();
         $objSetting   = \Database::getInstance()
             ->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')
@@ -57,10 +55,15 @@ class DrawSetting
             $name    = $objAttribute->getName();
             $colName = $objAttribute->getColName();
         } else {
-            $type    = 'unknown ID: ' . $model->getProperty('attr_id');
-            $image   = 'system/modules/metamodels/assets/images/icons/fields.png';
-            $name    = 'unknown attribute';
-            $colName = 'unknown column';
+            $translator = $event->getEnvironment()->getTranslator();
+            $image      = 'system/modules/metamodels/assets/images/icons/fields.png';
+            $name       = $translator->translate('error_unknown_id', 'error_unknown_attribute');
+            $colName    = $translator->translate('error_unknown_column', 'error_unknown_attribute');
+            $type       = $translator->translate(
+                'error_unknown_id',
+                'tl_metamodel_rendersettings',
+                array($model->getProperty('attr_id'))
+            );
         }
 
         /** @var GenerateHtmlEvent $imageEvent */
