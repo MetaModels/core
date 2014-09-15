@@ -205,9 +205,7 @@ class Driver implements MultiLanguageDataProviderInterface
             $id = reset($ids);
         }
 
-        if ($id) {
-            $objItem = $this->objMetaModel->findById($id);
-        }
+        $objItem = $id ? $this->objMetaModel->findById($id) : null;
 
         if ($strBackupLanguage != '') {
             $GLOBALS['TL_LANGUAGE'] = $strBackupLanguage;
