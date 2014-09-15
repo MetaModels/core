@@ -36,24 +36,31 @@ class DrawAttribute
      */
     public static function modelToLabel(ModelToLabelEvent $event)
     {
-        // FIXME: Add language files for the error msg.
         $model     = $event->getModel();
         $type      = $model->getProperty('type');
         $image     = '<img src="' . $GLOBALS['METAMODELS']['attributes'][$type]['image'] . '" />';
         $attribute = Factory::createFromArray($model->getPropertiesAsArray());
 
         if (!$attribute) {
+            $translator = $event
+                ->getEnvironment()
+                ->getTranslator();
+
             $event
                 ->setLabel(
-                    '<div class="field_heading cte_type"><strong>Unknown attribute!</strong> <em>[%s]</em></div>
+                    '<div class="field_heading cte_type"><strong>%s</strong> <em>[%s]</em></div>
                     <div class="field_type block">
-                        <strong>Extension missing? The attribute type "%s" is not installed.</strong><br />
+                        <strong>%s</strong><br />
                     </div>'
                 )
-                ->setArgs(array(
-                    $type,
-                    $type
-                ));
+                ->setArgs(
+                    array
+                    (
+                        $translator->translate('error_unknown_attribute.0', 'tl_metamodel_attribute'),
+                        $type,
+                        $translator->translate('error_unknown_attribute.1', 'tl_metamodel_attribute', array($type)),
+                    )
+                );
             return;
         }
 

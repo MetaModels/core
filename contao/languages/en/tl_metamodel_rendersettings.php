@@ -54,3 +54,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['copy']                 = arr
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['delete']               = array('Delete setting', 'Delete setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']                 = array('Filter details', 'Show details of setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']             = array('Define attribute settings', 'Define attribute settings for setting ID %s');
+
+// Error message content.
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['error_unknown_id']        = 'unknown ID: %s';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['error_unknown_attribute'] = 'unknown attribute';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['error_unknown_column']    = 'unknown column';
