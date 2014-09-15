@@ -78,12 +78,23 @@ class FileSelectorWidget extends \FileSelector
     }
 
     /**
-     * Generate a particular subpart of the file tree and return it as HTML string.
+     * Generate a particular sub part of the file tree and return it as HTML string.
+     *
+     * @param string $folder   The folder name.
+     *
+     * @param string $strField The property name.
+     *
+     * @param int    $level    The level where the given folder shall be rendered within.
+     *
+     * @param bool   $mount    Flag determining if the passed folder shall be handled as root level
+     *                         (optional, default: no).
      *
      * @return string
      */
+    // @codingStandardsIgnoreStart - We can not omit parameter $strField as it is in the middle.
     public function generateAjax($folder, $strField, $level, $mount=false)
     {
         return parent::generateAjax($folder, $this->strField, $level, $mount);
     }
+    // @codingStandardsIgnoreEnd
 }
