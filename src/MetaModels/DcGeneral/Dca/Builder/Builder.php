@@ -1287,10 +1287,15 @@ class Builder
         $propName,
         IInputScreen $inputScreen
     ) {
-        $property     = $inputScreen->getProperty($propName);
-        $propInfo     = $property['info'];
-        $metaModel    = $this->getMetaModel($container);
-        $attribute    = $metaModel->getAttribute($propName);
+        $property  = $inputScreen->getProperty($propName);
+        $propInfo  = $property['info'];
+        $metaModel = $this->getMetaModel($container);
+        $attribute = $metaModel->getAttribute($propName);
+
+        if (!$attribute) {
+            return;
+        }
+
         $isTranslated = $metaModel->isTranslated()
             && in_array('MetaModels\Attribute\ITranslated', class_implements($attribute));
 
