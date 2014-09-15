@@ -173,14 +173,39 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     public function fetch(ConfigInterface $objConfig)
     {
-        // TODO: implement find first item by filter here.
         $strBackupLanguage = '';
         if ($this->strCurrentLanguage != '') {
             $strBackupLanguage      = $GLOBALS['TL_LANGUAGE'];
             $GLOBALS['TL_LANGUAGE'] = $this->strCurrentLanguage;
         }
 
-        $objItem = $this->objMetaModel->findById($objConfig->getId());
+        if ($objConfig->getId()) {
+            $id = $objConfig->getId();
+        } else {
+            $sortings = $objConfig->getSorting();
+
+            $sortBy    = '';
+            $direction = '';
+            if ($sortings) {
+                list($sortBy, $direction) = each($sortings);
+            }
+            if (!$direction) {
+                $direction = DCGE::MODEL_SORTING_ASC;
+            }
+
+            $filter = $this->prepareFilter($objConfig->getFilter());
+            $ids    = $this->objMetaModel->getIdsFromFilter(
+                $filter,
+                $sortBy,
+                $objConfig->getStart(),
+                $objConfig->getAmount(),
+                ($sortBy ? $direction : '')
+            );
+
+            $id = reset($ids);
+        }
+
+        $objItem = $id ? $this->objMetaModel->findById($id) : null;
 
         if ($strBackupLanguage != '') {
             $GLOBALS['TL_LANGUAGE'] = $strBackupLanguage;

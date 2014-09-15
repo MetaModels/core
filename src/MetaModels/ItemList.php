@@ -673,6 +673,9 @@ class ItemList
     /**
      * Retrieve the caption text for "No items found" message.
      *
+     * In order to achieve the correct caption text, the function tries several translation strings sequentially.
+     * The first language key that is set will win, even if it is to be considered empty.
+     *
      * This message is looked up in the following order:
      * 1. $GLOBALS['TL_LANG']['MSC'][<mm tablename>][<render settings id>]['noItemsMsg']
      * 2. $GLOBALS['TL_LANG']['MSC'][<mm tablename>]['noItemsMsg']
@@ -682,12 +685,13 @@ class ItemList
      */
     protected function getNoItemsCaption()
     {
+        $tableName = $this->getMetaModel()->getTableName();
         if (isset($this->objView)
-            && isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['noItemsMsg'])
+            && isset($GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')]['noItemsMsg'])
         ) {
-            return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['noItemsMsg'];
-        } elseif (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['noItemsMsg'])) {
-            return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['noItemsMsg'];
+            return $GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')]['noItemsMsg'];
+        } elseif (isset($GLOBALS['TL_LANG']['MSC'][$tableName]['noItemsMsg'])) {
+            return $GLOBALS['TL_LANG']['MSC'][$tableName]['noItemsMsg'];
         }
 
         return $GLOBALS['TL_LANG']['MSC']['noItemsMsg'];
@@ -695,6 +699,9 @@ class ItemList
 
     /**
      * Retrieve the caption text for the "Show details" link.
+     *
+     * In order to achieve the correct caption text, the function tries several translation strings sequentially.
+     * The first language key that is set will win, even if it is to be considered empty.
      *
      * This message is looked up in the following order:
      * 1. $GLOBALS['TL_LANG']['MSC'][<mm tablename>][<render settings id>]['details']
@@ -705,12 +712,13 @@ class ItemList
      */
     protected function getDetailsCaption()
     {
+        $tableName = $this->getMetaModel()->getTableName();
         if (isset($this->objView)
-            && isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['details'])
+            && isset($GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')]['details'])
         ) {
-            return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()][$this->objView->get('id')]['details'];
-        } elseif (isset($GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details'])) {
-            return $GLOBALS['TL_LANG']['MSC'][$this->getMetaModel()->getTableName()]['details'];
+            return $GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')]['details'];
+        } elseif (isset($GLOBALS['TL_LANG']['MSC'][$tableName]['details'])) {
+            return $GLOBALS['TL_LANG']['MSC'][$tableName]['details'];
         }
 
         return $GLOBALS['TL_LANG']['MSC']['details'];
