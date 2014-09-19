@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2013-07-10T10:02:32+02:00
  */
-
 
 $GLOBALS['TL_LANG']['XPL']['customsql']['0']['0'] = 'Zusammenfassung';
 $GLOBALS['TL_LANG']['XPL']['customsql']['0']['1'] = 'Geben Sie eine SQL-Abfrage ein die ausgeführt werden soll.<br />⏎
@@ -32,24 +31,25 @@ Eine unbedachte Nutzung kann daher zu unerwartenen Ergebnissen führen.<br />
 Die Notation für sichere Insert-Tags ist wie folgt:<br />
 <pre>{{secure::page::id}}</pre>';
 $GLOBALS['TL_LANG']['XPL']['customsql']['5']['0'] = 'Parameterquellen';
-$GLOBALS['TL_LANG']['XPL']['customsql']['5']['1'] = 'Parameter sources have the normal layout of:⏎
-»»<pre>{{param::[source]?[query string]}}</pre>⏎
-»»Where the source may be any of:⏎
-»»<ul>⏎
-»»<li><strong>get</strong> - HTTP GET query string</li>⏎
-»»<li><strong>post</strong> - HTTP POST fields</li>⏎
-»»<li><strong>session</strong> - any field in the Contao session</li>⏎
-»»<li><strong>filter</strong> - any of the passed filter parameters (for sharing paramters between filter settings).</li>⏎
-»»</ul>⏎
-»»The Query string is built like a normal HTTP query string as "name=value" pairs which are combined using the & char and must at least contain the field "name".⏎
-»»One or more of the following optional keys may be used in addition:⏎
-»»<ul>⏎
-»»<li><strong>default</strong> - the default value to use, if there is no value available.</li>⏎
-»»<li><strong>aggregate</strong> - either "list" or "set"</li>⏎
-»»<li><strong>key</strong> - set to 1 to read the key of arrays (needs aggregate set).</li>⏎
-»»<li><strong>recursive</strong> - set to 1 to read arrays recursive (needs aggregate set).</li>⏎
-»»</ul>⏎
-»»';
+$GLOBALS['TL_LANG']['XPL']['customsql']['5']['1'] = 'Parameterquellen sind nach diesem Muster aufgebaut:
+<pre>{{param::[source]?[query string]}}</pre>
+
+Eine Quelle kann bestehen aus
+<ul>
+<li><strong>get</strong> - HTTP GET Query-String</li>
+<li><strong>post</strong> - HTTP POST Feldern</li>
+<li><strong>session</strong> - einem beliebigen Feld aus der Contao-Session</li>
+<li><strong>filter</strong> - einen beliebigen ausgeführten Filterparameter (um Filterparameter zwischen Filtereinstellungen zu teilen).</li>
+</ul>
+Der Abfragestring wird wie ein normaler HTTP-Query-String als "name=wert"-Paar aufgebaut kann mit dem Zeichen & kombibiert werden und muss mindestens das Feld \'name\' enthalten.
+
+Einer oder mehrere der folgenden optionalen Schlüsselwörter können zusätzlich benutzt werden;
+<ul>
+<li><strong>default</strong> - der zu benutzende Standardwert falls kein anderer zur Verfügung steht</li>
+<li><strong>aggregate</strong> - entweder "list" oder "set"</li>
+<li><strong>key</strong> - auf 1 setzen um den Schlüssel eines Array auszulesen (benötigt "aggregate").</li>
+<li><strong>recursive</strong> - auf 1 setzen um Arrays rekursiv auszulesen (benötigt "aggregate").</li>
+</ul>';
 $GLOBALS['TL_LANG']['XPL']['customsql']['6']['0'] = 'Beispiel 3<br />
 Komplexe Filter, Parameter und Quellen nutzen';
 $GLOBALS['TL_LANG']['XPL']['customsql']['6']['1'] = '<pre>SELECT id
@@ -66,3 +66,4 @@ $GLOBALS['TL_LANG']['XPL']['customsql']['6']['1'] = '<pre>SELECT id
 		Falls die URL  "http://example.org/list.html" lauten soll müsste die Abfrage dann "SELECT id FROM mm_demo WHERE catname=\'defaultcat\'" lauten.
 		</p>
 		';
+
