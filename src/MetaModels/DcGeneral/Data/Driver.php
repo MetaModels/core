@@ -607,18 +607,18 @@ class Driver implements MultiLanguageDataProviderInterface
         if ($objConfig->getIdOnly()) {
             $varResult = $this->objMetaModel->getIdsFromFilter(
                 $objFilter,
-                ($strSortBy?$strSortBy:''),
+                ($strSortBy ? $strSortBy : ''),
                 $objConfig->getStart(),
                 $objConfig->getAmount(),
-                ($strSortBy?$strSortDir:'')
+                ($strSortBy ? $strSortDir : '')
             );
         } else {
             $objItems = $this->objMetaModel->findByFilter(
                 $objFilter,
-                ($strSortBy?$strSortBy:''),
+                ($strSortBy ? $strSortBy : ''),
                 $objConfig->getStart(),
                 $objConfig->getAmount(),
-                ($strSortBy?$strSortDir:'')
+                ($strSortBy ? $strSortDir : '')
             );
 
             $objResultCollection = $this->getEmptyCollection();

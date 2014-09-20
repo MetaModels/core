@@ -524,7 +524,9 @@ class MetaModel implements IMetaModel
     public function getAttribute($strAttributeName)
     {
         $arrAttributes = $this->getAttributes();
-        return array_key_exists($strAttributeName, $arrAttributes)?$arrAttributes[$strAttributeName]:null;
+        return array_key_exists($strAttributeName, $arrAttributes)
+            ? $arrAttributes[$strAttributeName]
+            : null;
     }
 
     /**

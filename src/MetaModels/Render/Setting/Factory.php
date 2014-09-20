@@ -84,7 +84,7 @@ class Factory implements IFactory
             $objView = null;
         }
 
-        $objRenderSetting = new Collection($objView ? $objView->row(): array());
+        $objRenderSetting = new Collection($objView ? $objView->row() : array());
         self::collectAttributeSettings($objMetaModel, $objRenderSetting);
 
         self::$arrInstances[$intId] = $objRenderSetting;

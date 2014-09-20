@@ -63,7 +63,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         if (is_array($mixLangCode) && !empty($mixLangCode)) {
             $arrReturn['procedure'] .= ' AND langcode IN ("' . implode('","', $mixLangCode) . '")';
         } elseif ($mixLangCode) {
-            $arrReturn['procedure'] .=  ' AND langcode=?';
+            $arrReturn['procedure'] .= ' AND langcode=?';
             $arrReturn['params'][]   = $mixLangCode;
         }
 

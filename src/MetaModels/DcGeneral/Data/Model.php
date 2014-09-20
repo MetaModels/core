@@ -186,7 +186,7 @@ class Model implements ModelInterface
      */
     public function hasProperties()
     {
-        return ($this->getItem())?true:false;
+        return ($this->getItem()) ? true : false;
     }
 
     /**

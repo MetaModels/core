@@ -155,7 +155,7 @@ class Factory implements IFactory
         $objData = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel WHERE id=?')
             ->limit(1)
             ->execute($intId);
-        return ($objData->numRows)?self::createInstance($objData->row()):null;
+        return ($objData->numRows) ? self::createInstance($objData->row()) : null;
     }
 
     /**
@@ -169,7 +169,7 @@ class Factory implements IFactory
         $objData = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel WHERE tableName=?')
             ->limit(1)
             ->execute($strTablename);
-        return ($objData->numRows)?self::createInstance($objData->row()):null;
+        return ($objData->numRows) ? self::createInstance($objData->row()) : null;
     }
 
     /**
