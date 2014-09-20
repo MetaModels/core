@@ -18,6 +18,7 @@
 namespace MetaModels\DcGeneral\Events\MetaModel;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
+use ContaoCommunityAlliance\DcGeneral\View\Event\RenderReadablePropertyValueEvent;
 use MetaModels\DcGeneral\Data\Model;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\IItem;
@@ -104,6 +105,42 @@ class RenderItem
     }
 
     /**
+     * Render a model for use in a group header.
+     *
+     * @param RenderReadablePropertyValueEvent $event The event.
+     *
+     * @return void
+     */
+    public static function getReadableValue(RenderReadablePropertyValueEvent $event)
+    {
+        $environment = $event->getEnvironment();
+        /** @var IMetaModelDataDefinition $definition */
+        $definition = $environment->getDataDefinition();
+
+        /** @var Model $model */
+        $model = $event->getModel();
+
+        if (!($model instanceof Model)) {
+            return;
+        }
+
+        $nativeItem = $model->getItem();
+        $metaModel  = $nativeItem->getMetaModel();
+
+        $renderSetting = Factory::byId(
+            $metaModel,
+            $definition->getMetaModelDefinition()->getActiveRenderSetting()
+        );
+
+        if (!$renderSetting) {
+            return;
+        }
+
+        $result = $nativeItem->parseAttribute($event->getProperty()->getName(), 'text', $renderSetting);
+        $event->setRendered($result['text']);
+    }
+
+    /**
      * Register to the event dispatcher.
      *
      * @param EventDispatcherInterface $dispatcher The event dispatcher.
@@ -113,5 +150,6 @@ class RenderItem
     public static function register($dispatcher)
     {
         $dispatcher->addListener(ModelToLabelEvent::NAME, array(__CLASS__, 'render'));
+        $dispatcher->addListener(RenderReadablePropertyValueEvent::NAME, array(__CLASS__, 'getReadableValue'));
     }
 }
