@@ -456,7 +456,7 @@ class ItemList
 
         if ($this->intPerPage > 0) {
             // If a total limit has been defined, we need to honor that.
-            if (!is_null($intLimit) && ($intTotal > $intLimit)) {
+            if (($intLimit !== null) && ($intTotal > $intLimit)) {
                 $intTotal -= $intLimit;
             }
             $intTotal -= $intOffset;
@@ -471,7 +471,7 @@ class ItemList
             // Set limit and offset.
             $pageOffset = ((max($intPage, 1) - 1) * $this->intPerPage);
             $intOffset += $pageOffset;
-            if (is_null($intLimit)) {
+            if ($intLimit === null) {
                 $intLimit = $this->intPerPage;
             } else {
                 $intLimit = min(($intLimit - $intOffset), $this->intPerPage);
@@ -482,10 +482,10 @@ class ItemList
 
             $this->strPagination = $objPagination->generate("\n  ");
         } else {
-            if (is_null($intLimit)) {
+            if ($intLimit === null) {
                 $intLimit = 0;
             }
-            if (is_null($intOffset)) {
+            if ($intOffset === null) {
                 $intOffset = 0;
             }
         }
