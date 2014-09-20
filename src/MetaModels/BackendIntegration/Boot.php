@@ -112,20 +112,20 @@ class Boot
         // If no user is properly logged in (note the missing slash in the middle right after .tld).
         // We also have to fix up the "script" parameter, as this one will otherwise try to redirect from
         // "contao/index.php" to "/contao/index.php" therefore creating an infinite redirect loop.
-        $Env = \Environment::getInstance();
+        $env = \Environment::getInstance();
 
         // Issue #66 - contao/install.php is not working anymore. Thanks to Stefan Lindecke (@lindesbs).
-        if (strpos($Env->request, 'install.php') !== false) {
+        if (strpos($env->request, 'install.php') !== false) {
             return;
         }
 
         // Fix issue #397 - the security patch rendered our redirect method non working (websitePath can now be null).
         $path        = constant('TL_PATH') ?: $GLOBALS['TL_CONFIG']['websitePath'];
-        $Env->base   = $Env->url . $path . '/';
-        $Env->script = preg_replace(
+        $env->base   = $env->url . $path . '/';
+        $env->script = preg_replace(
             '/^' . preg_quote($path, '/') . '\/?/i',
             '',
-            $Env->scriptName
+            $env->scriptName
         );
 
         // Bugfix: If the user is not authenticated, contao will redirect to contao/index.php
@@ -137,8 +137,8 @@ class Boot
 
         $objUser->authenticate();
         // Restore initial settings.
-        $Env->base   = null;
-        $Env->script = null;
+        $env->base   = null;
+        $env->script = null;
     }
 
     /**
