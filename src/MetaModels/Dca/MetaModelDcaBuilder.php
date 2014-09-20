@@ -90,6 +90,9 @@ class MetaModelDcaBuilder
      * Retrieve the event dispatcher from the DIC.
      *
      * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected static function getDispatcher()
     {
@@ -126,6 +129,9 @@ class MetaModelDcaBuilder
      * @param string $strTable The table to inject into.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function injectChildTablesIntoDCA($strTable)
     {
@@ -214,6 +220,9 @@ class MetaModelDcaBuilder
      * @param string $table      The table name.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function buildChildButton($arrRow, $href, $label, $name, $icon, $attributes, $table)
     {
@@ -245,6 +254,9 @@ class MetaModelDcaBuilder
      * @param IInputScreen $inputScreen The input screen containing the information.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function handleStandalone($inputScreen)
     {
@@ -309,6 +321,9 @@ class MetaModelDcaBuilder
      * Inject all meta models into their corresponding parent tables.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function injectIntoBackendModules()
     {
@@ -358,6 +373,9 @@ class MetaModelDcaBuilder
      * @param string $strTableName The name of the meta model table that shall be created.
      *
      * @return bool true on success, false otherwise.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function createDataContainer($strTableName)
     {

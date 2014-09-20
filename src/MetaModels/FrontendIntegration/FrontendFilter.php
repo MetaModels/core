@@ -23,7 +23,7 @@ use MetaModels\FrontendIntegration\Module\FilterClearAll as ModuleFilterClearAll
 use MetaModels\Helper\ContaoController;
 
 /**
- * FE-filtering for Contao MetaModels
+ * FE-filtering for Contao MetaModels.
  *
  * @package    MetaModels
  * @subpackage FrontendFilter
@@ -51,6 +51,9 @@ class FrontendFilter
      * @param \ContentElement|\Module $objFilterConfig The content element or module using this filter.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getMetaModelFrontendFilter($objFilterConfig)
     {
@@ -78,6 +81,9 @@ class FrontendFilter
      * @param array $arrParams The URL parameters to use.
      *
      * @return string the generated URL.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getJumpToUrl($arrParams)
     {
@@ -150,6 +156,9 @@ class FrontendFilter
      * Retrieve the parameter values.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getParams()
     {
@@ -193,6 +202,9 @@ class FrontendFilter
      * Get the filters.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getFilters()
     {

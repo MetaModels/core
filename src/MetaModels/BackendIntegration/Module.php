@@ -82,6 +82,9 @@ class Module
      * @param string $suffix The suffix to add.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function addToUrl($suffix)
     {
@@ -98,6 +101,9 @@ class Module
      * Ensure we have at least PHP 5.3.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function checkPHPVersion()
     {
@@ -114,6 +120,9 @@ class Module
      * Check if all dependencies are present.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function checkDependencies()
     {
@@ -144,6 +153,9 @@ class Module
      * Check if at least one attribute extension is installed and activated, if not display link to ER catalog.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function hasAttributes()
     {
@@ -160,6 +172,9 @@ class Module
      * Check if user action is needed.
      *
      * @return bool
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function needUserAction()
     {
@@ -181,6 +196,9 @@ class Module
      * Run the data container.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function runDC()
     {
@@ -231,6 +249,9 @@ class Module
      * Perform the normal operation, no user action is required.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function performNormal()
     {
@@ -246,6 +267,9 @@ class Module
      * Parse the template.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function generate()
     {
@@ -263,6 +287,9 @@ class Module
      * Compile the current element.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function compile()
     {

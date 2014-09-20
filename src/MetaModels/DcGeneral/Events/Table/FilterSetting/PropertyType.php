@@ -30,6 +30,9 @@ class PropertyType
      * @param GetPropertyOptionsEvent $event The event.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function getOptions(GetPropertyOptionsEvent $event)
     {

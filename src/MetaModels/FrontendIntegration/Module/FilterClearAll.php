@@ -18,7 +18,7 @@
 namespace MetaModels\FrontendIntegration\Module;
 
 /**
- * Content element clearing the FE-filter
+ * Content element clearing the FE-filter.
  *
  * @package    MetaModels
  * @subpackage FrontendClearAll
@@ -65,6 +65,9 @@ class FilterClearAll extends \Module
      * Generate the module.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function compile()
     {
@@ -111,6 +114,9 @@ class FilterClearAll extends \Module
      * @param array $arrParams The URL parameters to use.
      *
      * @return string the generated URL.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getJumpToUrl($arrParams)
     {

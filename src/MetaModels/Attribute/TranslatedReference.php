@@ -119,8 +119,9 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
 
     /**
      * {@inheritDoc}
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    // @codingStandardsIgnoreStart - We do not need $intId in here, therefore it is unused.
     public function widgetToValue($varValue, $intId)
     {
         return array
@@ -130,7 +131,6 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
             'att_id' => $this->get('id'),
         );
     }
-    // @codingStandardsIgnoreEnd
 
     /**
      * {@inheritDoc}

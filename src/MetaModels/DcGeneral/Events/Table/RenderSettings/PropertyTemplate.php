@@ -21,7 +21,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPr
 use MetaModels\Dca\Helper;
 
 /**
- * Handle events related to tl_metamodel_rendersettings.template
+ * Handle events related to tl_metamodel_rendersettings.template.
  *
  * @package MetaModels\DcGeneral\Events\Table\RenderSettings
  */

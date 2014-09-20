@@ -113,6 +113,9 @@ class PropertyJumpTo
      * @param BuildWidgetEvent $event The event.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function buildWidget(BuildWidgetEvent $event)
     {

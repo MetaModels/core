@@ -93,6 +93,8 @@ class BaseSubscriber
      * @param int      $priority The priority.
      *
      * @return callable
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public static function delayEvent($handler, $priority = 0)
     {

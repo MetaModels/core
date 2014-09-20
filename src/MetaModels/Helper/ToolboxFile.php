@@ -117,6 +117,9 @@ class ToolboxFile
 
     /**
      * Create a new instance.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function __construct()
     {
@@ -130,6 +133,9 @@ class ToolboxFile
      * @param string|array $acceptedExtensions The list of accepted file extensions.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function setAcceptedExtensions($acceptedExtensions)
     {
@@ -219,6 +225,8 @@ class ToolboxFile
      * Retrieve the flag if images shall be rendered as images.
      *
      * @return boolean
+     *
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getShowImages()
     {
@@ -347,6 +355,9 @@ class ToolboxFile
      * @return void
      *
      * @deprecated Remove when we drop support for Contao 2.11.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function parseMetaFile($strPath, $strLanguage = '')
     {
@@ -455,6 +466,9 @@ class ToolboxFile
      * Walk all files and fetch desired additional information like image sizes etc.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function fetchAdditionalData()
     {

@@ -652,6 +652,9 @@ class ItemList
      * Retrieve the output format used by this list.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getOutputFormat()
     {
@@ -682,6 +685,9 @@ class ItemList
      * 3. $GLOBALS['TL_LANG']['MSC']['noItemsMsg']
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getNoItemsCaption()
     {
@@ -709,6 +715,9 @@ class ItemList
      * 3. $GLOBALS['TL_LANG']['MSC']['details']
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getDetailsCaption()
     {
@@ -733,6 +742,9 @@ class ItemList
      * @param object $objCaller          The object calling us, might be a Module or ContentElement or anything else.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function render($blnNoNativeParsing, $objCaller)
     {

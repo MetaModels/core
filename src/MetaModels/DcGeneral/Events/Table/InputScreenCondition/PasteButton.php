@@ -30,6 +30,9 @@ class PasteButton
      * @param GetPasteButtonEvent $event The event.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function generate(GetPasteButtonEvent $event)
     {

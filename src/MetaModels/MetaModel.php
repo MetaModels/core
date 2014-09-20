@@ -239,6 +239,9 @@ class MetaModel implements IMetaModel
      *                              which means all attributes.
      *
      * @return array an array containing the database rows with each column "deserialized".
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function fetchRows($arrIds, $arrAttrOnly = array())
     {
@@ -506,6 +509,9 @@ class MetaModel implements IMetaModel
      * {@inheritdoc}
      *
      * The value is taken from $GLOBALS['TL_LANGUAGE']
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getActiveLanguage()
     {

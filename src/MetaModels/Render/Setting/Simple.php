@@ -18,7 +18,7 @@
 namespace MetaModels\Render\Setting;
 
 /**
- * base implementation for render settings.
+ * Base implementation for render settings.
  *
  * @package    MetaModels
  * @subpackage Core
@@ -60,6 +60,9 @@ class Simple implements ISimple
      * @param mixed  $value The value to set.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function __set($key, $value)
     {
@@ -78,6 +81,9 @@ class Simple implements ISimple
      * @param string $key The key to set.
      *
      * @return mixed
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function __get($key)
     {

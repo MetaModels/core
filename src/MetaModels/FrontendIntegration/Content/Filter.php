@@ -20,7 +20,7 @@ namespace MetaModels\FrontendIntegration\Content;
 use MetaModels\FrontendIntegration\FrontendFilter;
 
 /**
- * Content element for FE-filtering
+ * Content element for FE-filtering.
  *
  * @package    MetaModels
  * @subpackage FrontendFilter

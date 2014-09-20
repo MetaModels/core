@@ -100,6 +100,9 @@ class Boot
      * Authenticate the BackendUser.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected static function authenticateBackendUser()
     {
@@ -142,6 +145,9 @@ class Boot
      * Perform the backend module booting.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function perform()
     {

@@ -174,6 +174,9 @@ abstract class Simple implements ISimple
      * @param string $searchKey The param key to handle for "this".
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function buildFilterUrl($fragments, $searchKey)
     {
@@ -234,6 +237,10 @@ abstract class Simple implements ISimple
      *                             or not.
      *
      * @return array The filter option values to use in the mm_filteritem_* templates.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function prepareFrontendFilterOptions($arrWidget, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit)
     {
@@ -320,6 +327,9 @@ abstract class Simple implements ISimple
      * @param FrontendFilterOptions $objFrontendFilterOptions The options to use.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function prepareFrontendFilterWidget(
         $arrWidget,
@@ -388,13 +398,13 @@ abstract class Simple implements ISimple
      * @param IRenderSettings $objRenderSetting The render setting to be applied.
      *
      * @return array An empty array.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    // @codingStandardsIgnoreStart - empty no op implementation - it's ok to have unused parameters here.
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
     {
         return array();
     }
-    // @codingStandardsIgnoreEnd
 
     /**
      * This base implementation returns an empty array.
@@ -438,8 +448,9 @@ abstract class Simple implements ISimple
      * @param FrontendFilterOptions $objFrontendFilterOptions The frontend filter options.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    // @codingStandardsIgnoreStart - empty no op implementation - it's ok to have unused parameters here.
     public function getParameterFilterWidgets(
         $arrIds,
         $arrFilterUrl,
@@ -448,7 +459,6 @@ abstract class Simple implements ISimple
     ) {
         return array();
     }
-    // @codingStandardsIgnoreEnd
 
     /**
      * Retrieve a list of all referenced attributes within the filter setting.

@@ -21,7 +21,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPr
 use MetaModels\Dca\Helper;
 
 /**
- * Handle events related to tl_metamodel_rendersettings.additionalCss
+ * Handle events related to tl_metamodel_rendersettings.additionalCss.
  *
  * @package MetaModels\DcGeneral\Events\Table\RenderSettings
  */
@@ -33,6 +33,9 @@ class PropertyCssFiles
      * @param GetPropertyOptionsEvent $event The event.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function getOptions(GetPropertyOptionsEvent $event)
     {

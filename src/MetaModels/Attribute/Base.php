@@ -129,6 +129,9 @@ abstract class Base implements IAttribute
      * @param ISimple $objSettings      The output format settings.
      *
      * @return mixed
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function hookAdditionalFormatters($arrBaseFormatted, $arrRowData, $strOutputFormat, $objSettings)
     {
@@ -253,6 +256,9 @@ abstract class Base implements IAttribute
 
     /**
      * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getFieldDefinition($arrOverrides = array())
     {
@@ -333,6 +339,9 @@ abstract class Base implements IAttribute
 
     /**
      * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getItemDCA($arrOverrides = array())
     {
@@ -473,13 +482,13 @@ abstract class Base implements IAttribute
      * @param bool  $blnInclusive If true, the passed value will be included, if false, it will be excluded.
      *
      * @return int[] The list of item ids of all items matching the condition.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    // @codingStandardsIgnoreStart - empty base implementation, therefore parameter not used.
     public function filterGreaterThan($varValue, $blnInclusive = false)
     {
         return array();
     }
-    // @codingStandardsIgnoreEnd
 
     /**
      * Filter all values less than the passed value.
@@ -491,13 +500,13 @@ abstract class Base implements IAttribute
      * @param bool  $blnInclusive If true, the passed value will be included, if false, it will be excluded.
      *
      * @return int[] The list of item ids of all items matching the condition.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    // @codingStandardsIgnoreStart - empty base implementation, therefore parameter not used.
     public function filterLessThan($varValue, $blnInclusive = false)
     {
         return array();
     }
-    // @codingStandardsIgnoreEnd
 
     /**
      * Filter all values not having the passed value.

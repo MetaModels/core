@@ -46,6 +46,9 @@ class ProcessAddAll
      * @param array      $messages        The messages array.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected static function perform(IMetaModel $metaModel, $knownAttributes, $startSort, $pid, &$messages)
     {
@@ -88,6 +91,9 @@ class ProcessAddAll
      * @param ActionEvent $event The event.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function handleAddAll(ActionEvent $event)
     {

@@ -187,6 +187,9 @@ class TableManipulation
      * @param string $strColName The name of the column.
      *
      * @return bool true if the column is a system column, false otherwise.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function isSystemColumn($strColName)
     {
@@ -201,6 +204,9 @@ class TableManipulation
      * @return void
      *
      * @throws \Exception If an invalid table name has been passed.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function checkTablename($strTableName)
     {
@@ -223,6 +229,9 @@ class TableManipulation
      * @throws \Exception If an invalid column name has been passed.
      *
      * @see{MetaModelTableManipulation::isSystemColumn()} and @see{MetaModelTableManipulation::isValidColumnName()}.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function checkColumnName($strColName, $blnAllowSystemCol = false)
     {
@@ -243,6 +252,9 @@ class TableManipulation
      * @return void
      *
      * @throws \Exception If an invalid table name has been passed or the table does not exist.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function checkTableExists($strTableName)
     {
@@ -260,6 +272,9 @@ class TableManipulation
      * @return void
      *
      * @throws \Exception If an invalid table name has been passed or a table with the given name exists.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function checkTableDoesNotExist($strTableName)
     {
@@ -332,6 +347,9 @@ class TableManipulation
      *
      * @throws \Exception If an invalid table name has been passed or the table does not exist, the column name is
      *                    invalid or the column does not exist.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function checkColumnExists($strTableName, $strColName, $blnAllowSystemCol = false)
     {
@@ -355,6 +373,9 @@ class TableManipulation
      *
      * @throws \Exception If an invalid table name has been passed or the table does not exist, the column name is
      *                    invalid or the column does not exist.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function checkColumnDoesNotExist($strTableName, $strColName, $blnAllowSystemCol = false)
     {
@@ -364,8 +385,6 @@ class TableManipulation
             throw new \Exception(sprintf($GLOBALS['TL_LANG']['ERR']['columnExists'], $strColName, $strTableName));
         }
     }
-
-
 
     /**
      * Add a column to a table.

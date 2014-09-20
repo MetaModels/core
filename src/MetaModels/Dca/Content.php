@@ -34,11 +34,17 @@ use MetaModels\Factory as MetaModelFactory;
 class Content
 {
     /**
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      * Called from tl_content.onload_callback.
      *
      * @param \DC_Table $objDC The data container calling this method.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function buildCustomFilter(\DC_Table $objDC)
     {
@@ -97,6 +103,9 @@ class Content
      * @param \DC_Table $objDc The data container calling this method.
      *
      * @return string[string] array of all attributes as colName => human name
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getAttributeNames(\DC_Table $objDc)
     {
@@ -142,6 +151,9 @@ class Content
      * @param \DC_Table $dc The data container.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function editMetaModel(\DC_Table $dc)
     {
@@ -177,6 +189,9 @@ class Content
      * @param \DC_Table $dc The data container.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function editFilterSetting(\DC_Table $dc)
     {
@@ -212,6 +227,9 @@ class Content
      * @param \DC_Table $dc The data container.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function editRenderSetting(\DC_Table $dc)
     {
@@ -298,6 +316,9 @@ class Content
      * @param \DC_Table $objDC The data container calling this method.
      *
      * @return array A list with all found attributes.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getMetaTitleAttributes(\DC_Table $objDC)
     {
@@ -313,6 +334,9 @@ class Content
      * @param \DC_Table $objDC The data container calling this method.
      *
      * @return array A list with all found attributes.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getMetaDescriptionAttributes(\DC_Table $objDC)
     {

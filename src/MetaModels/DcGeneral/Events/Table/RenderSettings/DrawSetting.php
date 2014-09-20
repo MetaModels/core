@@ -32,6 +32,9 @@ class DrawSetting
      * @param ModelToLabelEvent $event The event.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function modelToLabel(ModelToLabelEvent $event)
     {

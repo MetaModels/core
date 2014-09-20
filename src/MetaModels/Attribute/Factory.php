@@ -42,6 +42,9 @@ class Factory implements IFactory
      * @param string $strFieldType The field type of which the class shall be fetched from.
      *
      * @return string the class name which handles the field type or NULL if no class could be found.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected static function getAttributeTypeClass($strFieldType)
     {
@@ -59,6 +62,9 @@ class Factory implements IFactory
      *
      * @return string The factory class name which handles instantiation of the field type or NULL if no class could
      *                be found.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected static function getAttributeTypeFactory($strFieldType)
     {
@@ -136,6 +142,9 @@ class Factory implements IFactory
 
     /**
      * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function getAttributeTypes($blnSupportTranslated = false, $blnSupportVariants = false)
     {
@@ -162,6 +171,9 @@ class Factory implements IFactory
 
     /**
      * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function isValidAttributeType($strFieldType)
     {
