@@ -107,7 +107,7 @@ class Item implements IItem
         }
 
         // If "hideEmptyValues" is true and the raw is empty remove text and output format.
-        if (!is_null($objSettings)
+        if (($objSettings instanceof ICollection)
             && $objSettings->get('hideEmptyValues')
             && $this->isEmptyValue($arrResult['raw'])
         ) {
