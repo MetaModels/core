@@ -106,7 +106,7 @@ abstract class Base implements IAttribute
         }
 
         if ($strLangCode === null) {
-            return $this->getLangValue($arrValues, $GLOBALS['TL_LANGUAGE']);
+            return $this->getLangValue($arrValues, $this->getMetaModel()->getActiveLanguage());
         }
 
         if (array_key_exists($strLangCode, $arrValues)) {
