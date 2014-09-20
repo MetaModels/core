@@ -44,7 +44,7 @@ use MetaModels\IMetaModel;
 use MetaModels\Item;
 
 /**
- * Data driver class for DC_General
+ * Data driver class for DC_General.
  *
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @package    MetaModels

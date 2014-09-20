@@ -34,7 +34,7 @@ interface IMetaModelDefinition extends DefinitionInterface
     /**
      * Set the id of the active render setting for the MetaModel.
      *
-     * @param string $id The id.
+     * @param string $renderSettingId The id.
      *
      * @return IMetaModelDefinition
      */

@@ -23,7 +23,7 @@ use MetaModels\Dca\MetaModelDcaBuilder;
 
 /**
  * This class is the abstract base class used in the backend to build the menu.
- * See the concrete implementation in the ContaoX folders (depending on Contao Core version)
+ * See the concrete implementation in the ContaoX folders (depending on Contao Core version).
  *
  * @package    MetaModels
  * @subpackage Core

@@ -23,7 +23,7 @@ use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentExceptio
 use MetaModels\IItem;
 
 /**
- * Data model class for DC_General <-> MetaModel adaption
+ * Data model class for DC_General <-> MetaModel adaption.
  *
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @package    MetaModels

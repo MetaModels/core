@@ -149,7 +149,7 @@ interface IAttribute
      *
      * @link IAttribute::getFieldDefinition() is used internally for generating the result.
      *
-     * @deprecated Use DataDefinition builders in DC_General 1.0.0
+     * @deprecated Use DataDefinition builders in DC_General 2.0.0
      */
     public function getItemDCA($arrOverrides = array());
 
