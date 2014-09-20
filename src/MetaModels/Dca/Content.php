@@ -23,6 +23,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerialize
 use ContaoCommunityAlliance\UrlBuilder\Contao\BackendUrlBuilder;
 use MetaModels\Filter\Setting\Factory as FilterFactory;
 use MetaModels\Factory as MetaModelFactory;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Provides backend functionality.
@@ -34,9 +35,19 @@ use MetaModels\Factory as MetaModelFactory;
 class Content
 {
     /**
+     * Retrieve the event dispatcher.
+     *
+     * @return EventDispatcherInterface
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    public function getEventDispatcher()
+    {
+        return $GLOBALS['container']['event-dispatcher'];
+    }
+
+    /**
      * Called from tl_content.onload_callback.
      *
      * @param \DC_Table $objDC The data container calling this method.
@@ -167,9 +178,7 @@ class Content
             'style="vertical-align:top"'
         );
 
-        /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
-        $dispatcher = $GLOBALS['container']['event-dispatcher'];
-
+        $dispatcher = $this->getEventDispatcher();
         $dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
 
         $url = BackendUrlBuilder::fromUrl('contao/main.php?do=metamodels&act=edit')
@@ -205,9 +214,7 @@ class Content
             'style="vertical-align:top"'
         );
 
-        /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
-        $dispatcher = $GLOBALS['container']['event-dispatcher'];
-
+        $dispatcher = $this->getEventDispatcher();
         $dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
 
         $url = BackendUrlBuilder::fromUrl('contao/main.php?do=metamodels&table=tl_metamodel_filtersetting')
@@ -243,8 +250,7 @@ class Content
             'style="vertical-align:top"'
         );
 
-        /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
-        $dispatcher = $GLOBALS['container']['event-dispatcher'];
+        $dispatcher = $this->getEventDispatcher();
 
         $dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
 

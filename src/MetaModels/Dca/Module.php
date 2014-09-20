@@ -23,6 +23,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerialize
 use ContaoCommunityAlliance\UrlBuilder\Contao\BackendUrlBuilder;
 use MetaModels\Factory as MetaModelFactory;
 use MetaModels\Filter\Setting\Factory as FilterFactory;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Complementary methods needed by the DCA.
@@ -37,9 +38,19 @@ use MetaModels\Filter\Setting\Factory as FilterFactory;
 class Module
 {
     /**
+     * Retrieve the event dispatcher.
+     *
+     * @return EventDispatcherInterface
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    public function getEventDispatcher()
+    {
+        return $GLOBALS['container']['event-dispatcher'];
+    }
+
+    /**
      * Called from tl_module.onload_callback.
      *
      * @param \DC_Table $objDC The data container calling this method.
@@ -165,8 +176,7 @@ class Module
             'style="vertical-align:top"'
         );
 
-        /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
-        $dispatcher = $GLOBALS['container']['event-dispatcher'];
+        $dispatcher = $this->getEventDispatcher();
 
         $dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
 
@@ -203,8 +213,7 @@ class Module
             'style="vertical-align:top"'
         );
 
-        /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
-        $dispatcher = $GLOBALS['container']['event-dispatcher'];
+        $dispatcher = $this->getEventDispatcher();
 
         $dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
 
@@ -244,8 +253,7 @@ class Module
             'style="vertical-align:top"'
         );
 
-        /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
-        $dispatcher = $GLOBALS['container']['event-dispatcher'];
+        $dispatcher = $this->getEventDispatcher();
 
         $dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
 
