@@ -42,7 +42,7 @@ class PasteButton
 
         // Disable all buttons if there is a circular reference.
         if (($clipboard->isCut()
-            && ($event->getCircularReference() || in_array($model->getId(), $clipboard->getContainedIds())))
+            && ($event->isCircularReference() || in_array($model->getId(), $clipboard->getContainedIds())))
         ) {
             $event
                 ->setPasteAfterDisabled(true)
