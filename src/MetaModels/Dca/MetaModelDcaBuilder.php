@@ -234,9 +234,9 @@ class MetaModelDcaBuilder
 
         $dispatcher = self::getDispatcher();
         $idparam    = $GLOBALS['TL_DCA'][$table]['list']['operations'][$operation]['idparam'];
-        $id         = IdSerializer::fromValues($table, $arrRow['id']);
-        $urlEvent   = new AddToUrlEvent($href. '&amp;' . $idparam . '=' . $id->getSerialized());
-        /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+        $modelId    = IdSerializer::fromValues($table, $arrRow['id']);
+        $urlEvent   = new AddToUrlEvent($href. '&amp;' . $idparam . '=' . $modelId->getSerialized());
+
         $dispatcher->dispatch(ContaoEvents::BACKEND_ADD_TO_URL, $urlEvent);
 
         $imageEvent = new GenerateHtmlEvent($this->getBackendIcon($icon), $label);
@@ -271,7 +271,7 @@ class MetaModelDcaBuilder
         // Determine image to use.
         if ($icon && file_exists(TL_ROOT . '/' . $icon)) {
             $event = new ResizeImageEvent($icon, 16, 16);
-            /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
+
             $dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
             $strIcon = $event->getResultImage();
         } else {

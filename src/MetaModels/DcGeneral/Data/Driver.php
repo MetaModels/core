@@ -191,14 +191,14 @@ class Driver implements MultiLanguageDataProviderInterface
         }
 
         if ($objConfig->getId()) {
-            $id = $objConfig->getId();
+            $modelId = $objConfig->getId();
         } else {
-            $sortings = $objConfig->getSorting();
+            $sorting = $objConfig->getSorting();
 
             $sortBy    = '';
             $direction = '';
-            if ($sortings) {
-                list($sortBy, $direction) = each($sortings);
+            if ($sorting) {
+                list($sortBy, $direction) = each($sorting);
             }
             if (!$direction) {
                 $direction = DCGE::MODEL_SORTING_ASC;
@@ -213,10 +213,10 @@ class Driver implements MultiLanguageDataProviderInterface
                 ($sortBy ? $direction : '')
             );
 
-            $id = reset($ids);
+            $modelId = reset($ids);
         }
 
-        $objItem = $id ? $this->objMetaModel->findById($id) : null;
+        $objItem = $modelId ? $this->objMetaModel->findById($modelId) : null;
 
         if ($strBackupLanguage != '') {
             $GLOBALS['TL_LANGUAGE'] = $strBackupLanguage;

@@ -97,13 +97,13 @@ abstract class BreadCrumbBase
      *
      * @param string $dataProviderName The data provider name.
      *
-     * @param mixed  $id               The id.
+     * @param mixed  $modelId          The id.
      *
      * @return IdSerializer
      */
-    public static function seralizeId($dataProviderName, $id)
+    public static function seralizeId($dataProviderName, $modelId)
     {
-        return IdSerializer::fromValues($dataProviderName, $id)->getSerialized();
+        return IdSerializer::fromValues($dataProviderName, $modelId)->getSerialized();
     }
 
     /**
