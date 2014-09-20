@@ -28,6 +28,25 @@ use MetaModels\Attribute\Factory;
 class UpdateAttribute
 {
     /**
+     * Check if either type or colname have been changed within the model.
+     *
+     * @param PostPersistModelEvent $event The event.
+     *
+     * @return bool
+     */
+    protected static function isModelChanged($event)
+    {
+        $old     = $event->getOriginalModel();
+        $new     = $event->getModel();
+        $oldType = $old ? $old->getProperty('type') : null;
+        $newType = $new->getProperty('type');
+        $oldName = $old ? $old->getProperty('colname') : null;
+        $newName = $new->getProperty('colname');
+
+        return ($oldType !== $newType) || ($oldName !== $newName);
+    }
+
+    /**
      * Handle the update of an attribute and all attached data.
      *
      * @param PostPersistModelEvent $event The event.
@@ -38,15 +57,11 @@ class UpdateAttribute
     {
         $old         = $event->getOriginalModel();
         $new         = $event->getModel();
-        $oldType     = $old ? $old->getProperty('type') : null;
-        $newType     = $new->getProperty('type');
-        $oldName     = $old ? $old->getProperty('colname') : null;
-        $newName     = $new->getProperty('colname');
         $oldInstance = $old ? Factory::createFromArray($old->getPropertiesAsArray()) : null;
         $newInstance = Factory::createFromArray($new->getPropertiesAsArray());
 
         // If type or column name has been changed, destroy old data and initialize new.
-        if (($oldType !== $newType) || ($oldName !== $newName)) {
+        if (self::isModelChanged($event)) {
             // Destroy old instance.
             if ($oldInstance) {
                 $oldInstance->destroyAUX();
