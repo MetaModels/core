@@ -135,13 +135,13 @@ class CustomSql extends Simple
                         return 'NULL';
                 }
 
-                $i     = 0;
+                $index = 0;
                 $count = count($arrName);
-                while ($i < $count && is_array($var)) {
-                    $var = $var[$arrName[$i++]];
+                while ($index < $count && is_array($var)) {
+                    $var = $var[$arrName[$index++]];
                 }
 
-                if ($i != count($arrName) || $var === null) {
+                if ($index != count($arrName) || $var === null) {
                     if (isset($arrArgs['default'])) {
                         $arrParams[] = $arrArgs['default'];
                         return '?';
