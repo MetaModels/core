@@ -51,7 +51,7 @@ class Module
      *
      * @var \BackendTemplate
      */
-    protected $Template;
+    protected $template;
 
     /**
      * The message log.
@@ -275,10 +275,10 @@ class Module
     {
         $GLOBALS['TL_CSS'][] = 'system/modules/metamodels/assets/css/style.css';
         if ($this->needUserAction()) {
-            $this->Template = new \BackendTemplate($this->strTemplate);
+            $this->template = new \BackendTemplate($this->strTemplate);
             $this->compile();
 
-            return $this->Template->parse();
+            return $this->template->parse();
         }
         return $this->performNormal();
     }
@@ -299,7 +299,7 @@ class Module
 
         $dispatcher->dispatch(ContaoEvents::SYSTEM_GET_REFERRER, $event);
 
-        $this->Template->href     = $event->getReferrerUrl();
-        $this->Template->problems = self::$arrMessages;
+        $this->template->href     = $event->getReferrerUrl();
+        $this->template->problems = self::$arrMessages;
     }
 }
