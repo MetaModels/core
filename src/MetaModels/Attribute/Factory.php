@@ -21,6 +21,7 @@ use MetaModels\Factory as MetaModelFactory;
 
 /**
  * This is the implementation of the Field factory to query instances of fields.
+ *
  * Usually this is only used internally by {@link MetaModel}
  *
  * @package    MetaModels
@@ -159,11 +160,6 @@ class Factory implements IFactory
                 continue;
             }
 
-            // TODO: will we really ever have some interface like this?
-            // Skip variant fields if variants are not supported.
-            if ((!$blnSupportVariants && in_array('MetaModels\Attribute\IVariant', $arrInterfaces))) {
-                continue;
-            }
             $arrRet[] = $strKey;
         }
         return $arrRet;
