@@ -743,13 +743,14 @@ class ToolboxFile
             return array('files' => array(), 'source' => array());
         }
 
-        $keys = array_keys($arrFiles);
+        $keys  = array_keys($arrFiles);
+        $files = array();
         shuffle($keys);
         foreach ($keys as $key) {
             $files[$key] = $arrFiles[$key];
         }
 
-        return $this->remapSorting($arrFiles, $arrSource);
+        return $this->remapSorting($files, $arrSource);
     }
 
     /**
