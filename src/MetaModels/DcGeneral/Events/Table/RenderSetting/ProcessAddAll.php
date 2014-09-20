@@ -162,7 +162,7 @@ class ProcessAddAll
         $blnWantPerform = false;
         // Perform the labour work.
         if ($input->getValue('act') == 'perform') {
-            self::perform($metaModel, $knownAttributes, $intMax, $pid->getId(), $arrMessages);
+            self::perform($metaModel, $knownAttributes, $intMax, $pid->getId(), $messages);
         } else {
             // Loop over all attributes now.
             foreach ($metaModel->getAttributes() as $attribute) {
