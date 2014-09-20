@@ -146,16 +146,16 @@ class Module
     /**
      * Return the edit wizard.
      *
-     * @param \DC_Table $dc The data container.
+     * @param \DC_Table $dataContainer The data container.
      *
      * @return string
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function editMetaModel(\DC_Table $dc)
+    public function editMetaModel(\DC_Table $dataContainer)
     {
-        if ($dc->value < 1) {
+        if ($dataContainer->value < 1) {
             return '';
         }
 
@@ -171,12 +171,12 @@ class Module
         $dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
 
         $url = BackendUrlBuilder::fromUrl('contao/main.php?do=metamodels&act=edit')
-            ->setQueryParameter('id', IdSerializer::fromValues('tl_metamodel', $dc->value)->getSerialized());
+            ->setQueryParameter('id', IdSerializer::fromValues('tl_metamodel', $dataContainer->value)->getSerialized());
 
         return sprintf(
             '<a href="%s" title="%s" style="padding-left:3px">%s</a>',
             $url->getUrl(),
-            sprintf(specialchars($GLOBALS['TL_LANG']['tl_module']['editmetamodel'][1]), $dc->value),
+            sprintf(specialchars($GLOBALS['TL_LANG']['tl_module']['editmetamodel'][1]), $dataContainer->value),
             $event->getHtml()
         );
     }
@@ -184,16 +184,16 @@ class Module
     /**
      * Return the edit wizard.
      *
-     * @param \DC_Table $dc The data container.
+     * @param \DC_Table $dataContainer The data container.
      *
      * @return string
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function editFilterSetting(\DC_Table $dc)
+    public function editFilterSetting(\DC_Table $dataContainer)
     {
-        if ($dc->value < 1) {
+        if ($dataContainer->value < 1) {
             return '';
         }
 
@@ -209,12 +209,15 @@ class Module
         $dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
 
         $url = BackendUrlBuilder::fromUrl('contao/main.php?do=metamodels&table=tl_metamodel_filtersetting')
-            ->setQueryParameter('pid', IdSerializer::fromValues('tl_metamodel_filter', $dc->value)->getSerialized());
+            ->setQueryParameter(
+                'pid',
+                IdSerializer::fromValues('tl_metamodel_filter', $dataContainer->value)->getSerialized()
+            );
 
         return sprintf(
             '<a href="%s" title="%s" style="padding-left:3px">%s</a>',
             $url->getUrl(),
-            sprintf(specialchars($GLOBALS['TL_LANG']['tl_module']['editfiltersetting'][1]), $dc->value),
+            sprintf(specialchars($GLOBALS['TL_LANG']['tl_module']['editfiltersetting'][1]), $dataContainer->value),
             $event->getHtml()
         );
     }
@@ -222,16 +225,16 @@ class Module
     /**
      * Return the edit wizard.
      *
-     * @param \DC_Table $dc The data container.
+     * @param \DC_Table $dataContainer The data container.
      *
      * @return string
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function editRenderSetting(\DC_Table $dc)
+    public function editRenderSetting(\DC_Table $dataContainer)
     {
-        if ($dc->value < 1) {
+        if ($dataContainer->value < 1) {
             return '';
         }
 
@@ -249,13 +252,13 @@ class Module
         $url = BackendUrlBuilder::fromUrl('contao/main.php?do=metamodels&table=tl_metamodel_rendersetting')
             ->setQueryParameter(
                 'pid',
-                IdSerializer::fromValues('tl_metamodel_rendersettings', $dc->value)->getSerialized()
+                IdSerializer::fromValues('tl_metamodel_rendersettings', $dataContainer->value)->getSerialized()
             );
 
         return sprintf(
             '<a href="%s" title="%s" style="padding-left:3px">%s</a>',
             $url->getUrl(),
-            sprintf(specialchars($GLOBALS['TL_LANG']['tl_module']['editrendersetting'][1]), $dc->value),
+            sprintf(specialchars($GLOBALS['TL_LANG']['tl_module']['editrendersetting'][1]), $dataContainer->value),
             $event->getHtml()
         );
     }

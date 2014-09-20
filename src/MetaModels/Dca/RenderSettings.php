@@ -32,19 +32,19 @@ class RenderSettings
     /**
      * Return the link picker wizard.
      *
-     * @param DC_General $dc The DC_General currently in use.
+     * @param DC_General $dataContainer The DC_General currently in use.
      *
      * @return string
      */
-    public function pagePicker(DC_General $dc)
+    public function pagePicker(DC_General $dataContainer)
     {
-        $environment = $dc->getEnvironment();
+        $environment = $dataContainer->getEnvironment();
 
         if (version_compare(VERSION, '3.0', '<')) {
             $event = new GenerateHtmlEvent(
                 'pickpage.gif',
                 $environment->getTranslator()->translate('MSC.pagepicker'),
-                'style="vertical-align:top;cursor:pointer" onclick="Backend.pickPage(\'ctrl_' . $dc->inputName . '\')"'
+                'style="vertical-align:top;cursor:pointer" onclick="Backend.pickPage(\'ctrl_' . $dataContainer->inputName . '\')"'
             );
 
             $environment->getEventPropagator()->propagate(ContaoEvents::IMAGE_GET_HTML, $event);
@@ -55,15 +55,15 @@ class RenderSettings
         $url = sprintf(
             '%scontao/page.php?do=metamodels&table=tl_metamodel_rendersettings&field=ctrl_%s',
             \Environment::get('base'),
-            $dc->inputName
+            $dataContainer->inputName
         );
 
         $options = sprintf(
             "{'width':765,'title':'%s','url':'%s','id':'%s','tag':'ctrl_%s','self':this}",
             $environment->getTranslator()->translate('MOD.page.0'),
             $url,
-            $dc->inputName,
-            $dc->inputName
+            $dataContainer->inputName,
+            $dataContainer->inputName
         );
 
         $event = new GenerateHtmlEvent(
