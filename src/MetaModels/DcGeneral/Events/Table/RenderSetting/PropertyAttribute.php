@@ -36,9 +36,9 @@ class PropertyAttribute
      */
     public static function getOptions(GetPropertyOptionsEvent $event)
     {
-        $db        = \Database::getInstance();
+        $database  = \Database::getInstance();
         $model     = $event->getModel();
-        $settings  = $db
+        $settings  = $database
             ->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')
             ->execute($model->getProperty('pid'));
         $metaModel = Factory::byId($settings->pid);
@@ -50,7 +50,7 @@ class PropertyAttribute
         $arrResult = array();
 
         // Fetch all attributes that exist in other settings.
-        $alreadyTaken = $db
+        $alreadyTaken = $database
             ->prepare('
             SELECT
                 attr_id
