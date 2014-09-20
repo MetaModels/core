@@ -456,7 +456,7 @@ class ToolboxFile
         if (($intPos = strpos($strRequest, '?')) !== false) {
             $strRequest = str_replace('?&', '?', preg_replace('/&?file=[^&]&*/', '', $strRequest));
         }
-        $strRequest .= (strpos($strRequest, '?') === false ? '?' : '&');
+        $strRequest .= ($intPos === false ? '?' : '&');
         $strRequest .= 'file=' . urlencode($strFile);
 
         return $strRequest;
@@ -567,7 +567,7 @@ class ToolboxFile
         $files  = array();
         $source = array();
 
-        foreach ($arrFiles as $k => $v) {
+        foreach (array_keys($arrFiles) as $k) {
             $files[]  = $arrFiles[$k];
             $source[] = $arrSource[$k];
         }
@@ -635,7 +635,7 @@ class ToolboxFile
     protected function addClasses(&$arrSource)
     {
         $countFiles = count($arrSource);
-        foreach ($arrSource as $k => $v) {
+        foreach (array_keys($arrSource) as $k) {
             $arrSource[$k]['class'] = (($k == 0) ? ' first' : '') .
                 (($k == ($countFiles - 1)) ? ' last' : '') .
                 ((($k % 2) == 0) ? ' even' : ' odd');

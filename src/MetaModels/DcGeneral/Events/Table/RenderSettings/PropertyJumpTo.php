@@ -56,7 +56,7 @@ class PropertyJumpTo
         $newValues    = array();
         $arrLanguages = $extra['columnFields']['langcode']['options'];
 
-        foreach ($arrLanguages as $key => $lang) {
+        foreach (array_keys($arrLanguages) as $key) {
             $newValue  = '';
             $intFilter = 0;
             if ($value) {
