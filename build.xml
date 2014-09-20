@@ -6,6 +6,6 @@
        https://github.com/contao-community-alliance/build-system
 
     -->
-<project name="my-project" default="build">
+<project name="metamodels-core" default="build">
     <import file="vendor/contao-community-alliance/build-system/ccabs.main.xml" />
 </project>
