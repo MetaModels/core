@@ -17,10 +17,13 @@
 
 namespace MetaModels\Filter\Setting;
 
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Widget\GetAttributesFromDcaEvent;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
-use MetaModels\Helper\ContaoController;
 use MetaModels\IItem;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Base class for filter setting implementation.
@@ -56,6 +59,19 @@ abstract class Simple implements ISimple
     {
         $this->objFilterSetting = $objFilterSetting;
         $this->arrData          = $arrData;
+    }
+
+    /**
+     * Retrieve the event dispatcher.
+     *
+     * @return EventDispatcherInterface
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    public function getEventDispatcher()
+    {
+        return $GLOBALS['container']['event-dispatcher'];
     }
 
     /**
@@ -248,7 +264,7 @@ abstract class Simple implements ISimple
         if (!isset($arrWidget['options'])) {
             return $arrOptions;
         }
-        $objController = ContaoController::getInstance();
+        $dispatcher = $this->getEventDispatcher();
 
         $strFilterAction = $this->buildFilterUrl($arrFilterUrl, $arrWidget['eval']['urlparam']);
 
@@ -260,6 +276,12 @@ abstract class Simple implements ISimple
         if ($arrWidget['eval']['includeBlankOption']) {
             $blnActive = $this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, '');
 
+            $event = new GenerateFrontendUrlEvent(
+                $arrJumpTo,
+                sprintf($strFilterAction, '')
+            );
+            $dispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
+
             $arrOptions[] = array
             (
                 'key'    => '',
@@ -268,7 +290,7 @@ abstract class Simple implements ISimple
                     ? $arrWidget['eval']['blankOptionLabel']
                     : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter']
                 ),
-                'href'   => $objController->generateFrontendUrl($arrJumpTo, sprintf($strFilterAction, '')),
+                'href'   => $event->getUrl(),
                 'active' => $blnActive,
                 'class'  => 'doNotFilter'.($blnActive ? ' active' : ''),
             );
@@ -286,14 +308,17 @@ abstract class Simple implements ISimple
                 }
             }
 
+            $event = new GenerateFrontendUrlEvent(
+                $arrJumpTo,
+                sprintf($strFilterAction, $strValue)
+            );
+            $dispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
+
             $arrOptions[] = array
             (
                 'key'    => $strKeyOption,
                 'value'  => $strOption,
-                'href'   => $objController->generateFrontendUrl(
-                    $arrJumpTo,
-                    sprintf($strFilterAction, $strValue)
-                ),
+                'href'   => $event->getUrl(),
                 'active' => $blnActive,
                 'class'  => standardize($strKeyOption) . ($blnActive ? ' active' : '')
             );
@@ -349,10 +374,16 @@ abstract class Simple implements ISimple
             ? $arrFilterUrl[$arrWidget['eval']['urlparam']]
             : null;
 
-        $arrData = ContaoController::getInstance()->prepareForWidget(
+        $dispatcher = $this->getEventDispatcher();
+        $event      = new GetAttributesFromDcaEvent(
             $arrWidget,
             $arrWidget['eval']['urlparam'],
             $arrWidget['value']
+        );
+
+        $dispatcher->dispatch(
+            ContaoEvents::WIDGET_GET_ATTRIBUTES_FROM_DCA,
+            $event
         );
 
         if ($objFrontendFilterOptions->isAutoSubmit() && TL_MODE == 'FE') {
@@ -360,7 +391,7 @@ abstract class Simple implements ISimple
         }
 
         /** @var \Widget $objWidget */
-        $objWidget = new $strClass($arrData);
+        $objWidget = new $strClass($event->getResult());
 
         $strField = $objWidget->generate();
 
@@ -370,7 +401,7 @@ abstract class Simple implements ISimple
                 'mm_%s %s%s%s',
                 $arrWidget['inputType'],
                 $arrWidget['eval']['urlparam'],
-                (($arrWidget['value'] !== null) ? ' used':' unused'),
+                (($arrWidget['value'] !== null) ? ' used' : ' unused'),
                 ($objFrontendFilterOptions->isAutoSubmit() ? ' submitonchange' : '')
             ),
             'label'      => $objWidget->generateLabel(),
