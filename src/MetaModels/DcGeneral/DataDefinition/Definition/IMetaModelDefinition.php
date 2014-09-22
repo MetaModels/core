@@ -34,11 +34,11 @@ interface IMetaModelDefinition extends DefinitionInterface
     /**
      * Set the id of the active render setting for the MetaModel.
      *
-     * @param string $id The id.
+     * @param string $renderSettingId The id.
      *
      * @return IMetaModelDefinition
      */
-    public function setActiveRenderSetting($id);
+    public function setActiveRenderSetting($renderSettingId);
 
     /**
      * Check if there has been an active render setting defined.
@@ -57,11 +57,11 @@ interface IMetaModelDefinition extends DefinitionInterface
     /**
      * Set the active input screen for the MetaModel.
      *
-     * @param string $id The id.
+     * @param string $renderSettingId The id.
      *
      * @return IMetaModelDefinition
      */
-    public function setActiveInputScreen($id);
+    public function setActiveInputScreen($renderSettingId);
 
     /**
      * Check if there has an active input screen defined.

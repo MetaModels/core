@@ -27,6 +27,9 @@ class UpgradeHandler
      * Retrieve the database instance from Contao.
      *
      * @return \Database
+     *
+     * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     protected static function DB()
     {

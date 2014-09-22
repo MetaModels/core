@@ -663,6 +663,9 @@ class Subscriber extends BaseSubscriber
      * Register the events for table tl_metamodel_filtersetting.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function registerTableMetaModelFilterSettingEvents()
     {

@@ -59,6 +59,9 @@ class DrawSetting
      * @param EventDispatcherInterface $dispatcher The event dispatcher.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function getLabelImage(ModelInterface $model, EventDispatcherInterface $dispatcher)
     {

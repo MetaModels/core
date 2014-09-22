@@ -18,7 +18,7 @@
 namespace MetaModels\FrontendIntegration\Content;
 
 /**
- * Content element clearing the FE-filter
+ * Content element clearing the FE-filter.
  *
  * @package    MetaModels
  * @subpackage FrontendClearAll
@@ -61,6 +61,9 @@ class FilterClearAll extends \ContentElement
      * Generate the content element.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function compile()
     {
@@ -107,6 +110,9 @@ class FilterClearAll extends \ContentElement
      * @param array $arrParams The URL parameters to use.
      *
      * @return string the generated URL.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getJumpToUrl($arrParams)
     {

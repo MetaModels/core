@@ -35,6 +35,9 @@ class ModelToLabel
      * @param ModelToLabelEvent $event The event.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected static function drawAttribute(ModelToLabelEvent $event)
     {
@@ -93,6 +96,9 @@ class ModelToLabel
      * @param ModelToLabelEvent $event The event.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected static function drawLegend(ModelToLabelEvent $event)
     {

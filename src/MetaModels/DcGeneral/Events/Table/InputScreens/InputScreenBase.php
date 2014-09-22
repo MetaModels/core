@@ -23,7 +23,7 @@ use MetaModels\Factory;
 use MetaModels\IMetaModel;
 
 /**
- * Base class to be used in event listeners
+ * Base class to be used in event listeners for table tl_metamodel_dcasetting.
  */
 class InputScreenBase
 {

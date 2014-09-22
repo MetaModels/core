@@ -18,7 +18,7 @@
 namespace MetaModels\Render\Setting;
 
 /**
- * base implementation for render settings.
+ * Base implementation for render settings.
  *
  * @package    MetaModels
  * @subpackage Core

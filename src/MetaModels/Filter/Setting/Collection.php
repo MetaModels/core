@@ -64,6 +64,9 @@ class Collection implements ICollection
      * @param Result $objSettings The information from which to initialize the setting from.
      *
      * @return ISimple
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function newSetting($objSettings)
     {
@@ -83,6 +86,9 @@ class Collection implements ICollection
      * @param IWithChildren $objSetting      The information from which to initialize the setting from.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function collectRulesFor($objBaseSettings, $objSetting)
     {
@@ -128,6 +134,9 @@ class Collection implements ICollection
      * {@inheritdoc}
      *
      * @throws \RuntimeException When the filter setting is not created from a database result (holds no id).
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function collectRules()
     {

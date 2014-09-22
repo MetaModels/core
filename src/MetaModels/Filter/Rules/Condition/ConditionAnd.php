@@ -58,13 +58,13 @@ class ConditionAnd extends FilterRule
         foreach ($this->arrChildFilters as $objChildFilter) {
             $arrChildMatches = $objChildFilter->getMatchingIds();
             // If null => all items allowed by this rule.
-            if (is_null($arrChildMatches)) {
+            if ($arrChildMatches === null) {
                 continue;
             }
 
             if ($arrChildMatches) {
                 $blnEmpty = false;
-                if (is_null($arrIds)) {
+                if ($arrIds === null) {
                     $arrIds = $arrChildMatches;
                 } else {
                     $arrIds = array_intersect($arrIds, $arrChildMatches);

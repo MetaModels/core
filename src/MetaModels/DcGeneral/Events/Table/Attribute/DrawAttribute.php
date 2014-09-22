@@ -21,7 +21,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Model
 use MetaModels\Attribute\Factory;
 
 /**
- * Class DrawAttribute
+ * Class DrawAttribute.
  *
  * @package MetaModels\DcGeneral\Events\Table\Attribute
  */
@@ -33,6 +33,9 @@ class DrawAttribute
      * @param ModelToLabelEvent $event The event.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function modelToLabel(ModelToLabelEvent $event)
     {

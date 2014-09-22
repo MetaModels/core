@@ -35,6 +35,9 @@ class FileSelectorWidget extends \FileSelector
      *                                 (Removed for Contao 3.3 in there we have $arrAttributes['dataContainer']).
      *
      * @throws DcGeneralInvalidArgumentException When the property could not be retrieved from the DcGeneral.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function __construct($arrAttributes = null, $objDca = null)
     {
@@ -90,11 +93,11 @@ class FileSelectorWidget extends \FileSelector
      *                         (optional, default: no).
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    // @codingStandardsIgnoreStart - We can not omit parameter $strField as it is in the middle.
-    public function generateAjax($folder, $strField, $level, $mount=false)
+    public function generateAjax($folder, $strField, $level, $mount = false)
     {
         return parent::generateAjax($folder, $this->strField, $level, $mount);
     }
-    // @codingStandardsIgnoreEnd
 }

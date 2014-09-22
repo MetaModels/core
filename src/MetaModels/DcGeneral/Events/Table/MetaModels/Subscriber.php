@@ -114,7 +114,7 @@ class Subscriber
             ->prepare('SELECT count(*) AS itemCount FROM ' . $model->getProperty('tableName'))
             ->execute();
 
-        $itemCount =  sprintf(
+        $itemCount = sprintf(
             '<span style="color:#b3b3b3; padding-left:3px">[%s]</span>',
             $translator->translatePluralized(
                 'itemFormatCount',
@@ -166,7 +166,7 @@ class Subscriber
 
             // We clear all subsequent fallbacks after we have found one.
             if ($hasFallback) {
-                $varSubValue['isfallback'] = '';
+                $subValue['isfallback'] = '';
             }
 
             if ($subValue['isfallback']) {

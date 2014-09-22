@@ -67,6 +67,9 @@ class Item implements IItem
      * Retrieve the event dispatcher.
      *
      * @return EventDispatcherInterface
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getEventDispatcher()
     {
@@ -104,7 +107,7 @@ class Item implements IItem
         }
 
         // If "hideEmptyValues" is true and the raw is empty remove text and output format.
-        if (!is_null($objSettings)
+        if (($objSettings instanceof ICollection)
             && $objSettings->get('hideEmptyValues')
             && $this->isEmptyValue($arrResult['raw'])
         ) {
@@ -288,6 +291,9 @@ class Item implements IItem
      * @param ICollection|null $objSettings The render settings to use.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function registerAssets($objSettings)
     {
@@ -381,6 +387,9 @@ class Item implements IItem
      * @param ICollection $objSettings The render settings to use.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function parseValueHook(&$arrResult, $strFormat, $objSettings)
     {
@@ -412,6 +421,9 @@ class Item implements IItem
      * @param ICollection $renderSettings   The render settings to use.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function buildJumpToParametersAndUrl($page, $filterSettingsId, $renderSettings)
     {

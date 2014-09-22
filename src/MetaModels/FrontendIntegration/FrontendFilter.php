@@ -23,7 +23,7 @@ use MetaModels\FrontendIntegration\Module\FilterClearAll as ModuleFilterClearAll
 use MetaModels\Helper\ContaoController;
 
 /**
- * FE-filtering for Contao MetaModels
+ * FE-filtering for Contao MetaModels.
  *
  * @package    MetaModels
  * @subpackage FrontendFilter
@@ -51,6 +51,9 @@ class FrontendFilter
      * @param \ContentElement|\Module $objFilterConfig The content element or module using this filter.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getMetaModelFrontendFilter($objFilterConfig)
     {
@@ -78,6 +81,9 @@ class FrontendFilter
      * @param array $arrParams The URL parameters to use.
      *
      * @return string the generated URL.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getJumpToUrl($arrParams)
     {
@@ -150,6 +156,9 @@ class FrontendFilter
      * Retrieve the parameter values.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getParams()
     {
@@ -193,6 +202,9 @@ class FrontendFilter
      * Get the filters.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getFilters()
     {
@@ -268,19 +280,19 @@ class FrontendFilter
     /**
      * Render a content element.
      *
-     * @param string $content The html content in which to replace.
+     * @param string $content   The html content in which to replace.
      *
-     * @param string $replace The string within the html to be replaced.
+     * @param string $replace   The string within the html to be replaced.
      *
-     * @param int    $id      The id of the content element to be inserted for the replace string.
+     * @param int    $contentId The id of the content element to be inserted for the replace string.
      *
      * @return string
      */
-    protected function generateContentElement($content, $replace, $id)
+    protected function generateContentElement($content, $replace, $contentId)
     {
         $objDbResult = \Database::getInstance()
             ->prepare('SELECT * FROM tl_content WHERE id=? AND type="metamodels_frontendclearall"')
-            ->execute($id);
+            ->execute($contentId);
 
         // Check if we have a ce element.
         if ($objDbResult->numRows == 0) {
@@ -295,19 +307,19 @@ class FrontendFilter
     /**
      * Render a module.
      *
-     * @param string $content The html content in which to replace.
+     * @param string $content  The html content in which to replace.
      *
-     * @param string $replace The string within the html to be replaced.
+     * @param string $replace  The string within the html to be replaced.
      *
-     * @param int    $id      The id of the module to be inserted for the replace string.
+     * @param int    $moduleId The id of the module to be inserted for the replace string.
      *
      * @return string
      */
-    protected function generateModule($content, $replace, $id)
+    protected function generateModule($content, $replace, $moduleId)
     {
         $objDbResult = \Database::getInstance()
             ->prepare('SELECT * FROM tl_module WHERE id=? AND type="metamodels_frontendclearall"')
-            ->execute($id);
+            ->execute($moduleId);
 
         // Check if we have a ce element.
         if ($objDbResult->numRows == 0) {

@@ -116,7 +116,7 @@ class Items implements IItems
      *
      * @throws \RuntimeException Always in this base class.
      *
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function offsetSet($offset, $value)
     {
@@ -132,7 +132,7 @@ class Items implements IItems
      *
      * @throws \RuntimeException Always in this base class.
      *
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function offsetUnset($offset)
     {
@@ -256,6 +256,7 @@ class Items implements IItems
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function parseAll($strOutputFormat = 'text', $objSettings = null)
     {

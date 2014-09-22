@@ -44,7 +44,7 @@ use MetaModels\IMetaModel;
 use MetaModels\Item;
 
 /**
- * Data driver class for DC_General
+ * Data driver class for DC_General.
  *
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @package    MetaModels
@@ -108,6 +108,8 @@ class Driver implements MultiLanguageDataProviderInterface
      * @return void
      *
      * @throws \RuntimeException As this is currently unimplemented, an Exception is thrown.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function saveVersion(ModelInterface $objModel, $strUsername)
     {
@@ -124,6 +126,8 @@ class Driver implements MultiLanguageDataProviderInterface
      * @return void
      *
      * @throws \RuntimeException As this is currently unimplemented, an Exception is thrown.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getVersion($mixID, $mixVersion)
     {
@@ -140,6 +144,8 @@ class Driver implements MultiLanguageDataProviderInterface
      * @return void
      *
      * @throws \RuntimeException As this is currently unimplemented, an Exception is thrown.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setVersionActive($mixID, $mixVersion)
     {
@@ -154,6 +160,8 @@ class Driver implements MultiLanguageDataProviderInterface
      * @return void
      *
      * @throws \RuntimeException As this is currently unimplemented, an Exception is thrown.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getActiveVersion($mixID)
     {
@@ -170,6 +178,9 @@ class Driver implements MultiLanguageDataProviderInterface
      * @param ConfigInterface $objConfig The config to use.
      *
      * @return ModelInterface
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function fetch(ConfigInterface $objConfig)
     {
@@ -180,14 +191,14 @@ class Driver implements MultiLanguageDataProviderInterface
         }
 
         if ($objConfig->getId()) {
-            $id = $objConfig->getId();
+            $modelId = $objConfig->getId();
         } else {
-            $sortings = $objConfig->getSorting();
+            $sorting = $objConfig->getSorting();
 
             $sortBy    = '';
             $direction = '';
-            if ($sortings) {
-                list($sortBy, $direction) = each($sortings);
+            if ($sorting) {
+                list($sortBy, $direction) = each($sorting);
             }
             if (!$direction) {
                 $direction = DCGE::MODEL_SORTING_ASC;
@@ -202,10 +213,10 @@ class Driver implements MultiLanguageDataProviderInterface
                 ($sortBy ? $direction : '')
             );
 
-            $id = reset($ids);
+            $modelId = reset($ids);
         }
 
-        $objItem = $id ? $this->objMetaModel->findById($id) : null;
+        $objItem = $modelId ? $this->objMetaModel->findById($modelId) : null;
 
         if ($strBackupLanguage != '') {
             $GLOBALS['TL_LANGUAGE'] = $strBackupLanguage;
@@ -567,6 +578,9 @@ class Driver implements MultiLanguageDataProviderInterface
      * @param ConfigInterface $objConfig The configuration to be applied.
      *
      * @return CollectionInterface
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function fetchAll(ConfigInterface $objConfig)
     {
@@ -593,18 +607,18 @@ class Driver implements MultiLanguageDataProviderInterface
         if ($objConfig->getIdOnly()) {
             $varResult = $this->objMetaModel->getIdsFromFilter(
                 $objFilter,
-                ($strSortBy?$strSortBy:''),
+                ($strSortBy ? $strSortBy : ''),
                 $objConfig->getStart(),
                 $objConfig->getAmount(),
-                ($strSortBy?$strSortDir:'')
+                ($strSortBy ? $strSortDir : '')
             );
         } else {
             $objItems = $this->objMetaModel->findByFilter(
                 $objFilter,
-                ($strSortBy?$strSortBy:''),
+                ($strSortBy ? $strSortBy : ''),
                 $objConfig->getStart(),
                 $objConfig->getAmount(),
-                ($strSortBy?$strSortDir:'')
+                ($strSortBy ? $strSortDir : '')
             );
 
             $objResultCollection = $this->getEmptyCollection();
@@ -680,6 +694,8 @@ class Driver implements MultiLanguageDataProviderInterface
      *                               returned.
      *
      * @return CollectionInterface
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getVersions($mixID, $blnOnlyActive = false)
     {
@@ -741,6 +757,9 @@ class Driver implements MultiLanguageDataProviderInterface
      * @return ModelInterface The passed model.
      *
      * @throws \RuntimeException When an incompatible item was passed, an Exception is being thrown.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function save(ModelInterface $objItem)
     {
@@ -842,6 +861,8 @@ class Driver implements MultiLanguageDataProviderInterface
      * @param mixed $mixID The ID of the record to retrieve.
      *
      * @return LanguageInformationCollectionInterface
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getLanguages($mixID)
     {
@@ -869,6 +890,8 @@ class Driver implements MultiLanguageDataProviderInterface
      * @param mixed $mixID The ID of the record to retrieve.
      *
      * @return LanguageInformationInterface|null
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getFallbackLanguage($mixID)
     {

@@ -33,6 +33,9 @@ class PropertyBackendSection
      * @param GetPropertyOptionsEvent $event The event.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function getSections(GetPropertyOptionsEvent $event)
     {

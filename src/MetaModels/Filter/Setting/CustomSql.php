@@ -17,9 +17,10 @@
 
 namespace MetaModels\Filter\Setting;
 
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\ReplaceInsertTagsEvent;
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Rules\SimpleQuery;
-use MetaModels\Helper\ContaoController;
 
 /**
  * This filter condition generates a filter rule for a predefined SQL query.
@@ -134,13 +135,13 @@ class CustomSql extends Simple
                         return 'NULL';
                 }
 
-                $i     = 0;
+                $index = 0;
                 $count = count($arrName);
-                while ($i < $count && is_array($var)) {
-                    $var = $var[$arrName[$i++]];
+                while ($index < $count && is_array($var)) {
+                    $var = $var[$arrName[$index++]];
                 }
 
-                if ($i != count($arrName) || $var === null) {
+                if ($index != count($arrName) || $var === null) {
                     if (isset($arrArgs['default'])) {
                         $arrParams[] = $arrArgs['default'];
                         return '?';
@@ -221,10 +222,16 @@ class CustomSql extends Simple
      * @param array  $arrParams Query param stack.
      *
      * @return string Parsed SQL
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function parseInsertTags($strSQL, array &$arrParams)
     {
-        return ContaoController::getInstance()->replaceInsertTags($strSQL);
+        $dispatcher = $this->getEventDispatcher();
+        $event      = new ReplaceInsertTagsEvent($strSQL);
+        $dispatcher->dispatch(ContaoEvents::CONTROLLER_REPLACE_INSERT_TAGS, $event);
+
+        return $event->getBuffer();
     }
 
     /**

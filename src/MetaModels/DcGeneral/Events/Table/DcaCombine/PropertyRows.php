@@ -37,13 +37,13 @@ class PropertyRows
     {
         $values = $event->getValue();
 
-        $i    = 0;
-        $time = time();
+        $index = 0;
+        $time  = time();
         foreach (array_keys($values) as $key) {
-            $values[$key]['sorting'] = $i;
+            $values[$key]['sorting'] = $index;
             $values[$key]['tstamp']  = $time;
 
-            $i += 128;
+            $index += 128;
         }
 
         $event->setValue($values);

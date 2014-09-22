@@ -41,9 +41,9 @@ class MetaModelDefinition implements IMetaModelDefinition
     /**
      * {@inheritdoc}
      */
-    public function setActiveRenderSetting($id)
+    public function setActiveRenderSetting($renderSettingId)
     {
-        $this->activeRenderSetting = $id;
+        $this->activeRenderSetting = $renderSettingId;
 
         return $this;
     }
@@ -67,9 +67,9 @@ class MetaModelDefinition implements IMetaModelDefinition
     /**
      * {@inheritdoc}
      */
-    public function setActiveInputScreen($id)
+    public function setActiveInputScreen($renderSettingId)
     {
-        $this->activeInputScreen = $id;
+        $this->activeInputScreen = $renderSettingId;
 
         return $this;
     }

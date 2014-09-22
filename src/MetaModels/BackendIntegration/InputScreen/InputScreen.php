@@ -109,6 +109,9 @@ class InputScreen implements IInputScreen
      * @param IMetaModel $metaModel The metamodel the legend belongs to.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function translateLegend($legend, $metaModel)
     {
@@ -226,6 +229,9 @@ class InputScreen implements IInputScreen
      * @return PropertyConditionInterface
      *
      * @throws \RuntimeException When a condition has not been transformed into a valid handling instance.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function transformCondition($condition)
     {

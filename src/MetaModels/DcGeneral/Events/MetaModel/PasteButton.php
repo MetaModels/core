@@ -56,13 +56,13 @@ class PasteButton extends BaseView
         // mixed contents are not supported.
         $containedModel = $contained->get(0);
 
-        if ($containedModel && $containedModel->getId() && !$event->getCircularReference()) {
+        if ($containedModel && $containedModel->getId() && !$event->isCircularReference()) {
             if (Factory::byTableName($model->getProviderName())->hasVariants()) {
                 if ((
                         ($containedModel->getProperty('varbase') == 1)
                         || !$containedModel->getId()
                     )
-                    && (!$event->getCircularReference())
+                    && (!$event->isCircularReference())
                     && $model->getProperty('varbase') == 1
                 ) {
                     // Insert new items only after bases.
@@ -79,7 +79,7 @@ class PasteButton extends BaseView
                 $disablePI = ($model->getProperty('varbase') != 1) || ($containedModel->getProperty('varbase'));
             } else {
                 $disablePA = ($model->getId() == $containedModel->getId());
-                $disablePI = $event->getCircularReference();
+                $disablePI = $event->isCircularReference();
             }
         } elseif ($model == null && $containedModel->getProperty('varbase') == 0) {
             $disablePA = true;

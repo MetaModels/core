@@ -19,6 +19,7 @@ namespace MetaModels;
 
 /**
  * This is the MetaModel factory interface.
+ *
  * To create a MetaModel instance, either call @link{MetaModelFactory::byId()} or @link{MetaModelFactory::byTableName()}
  *
  * @package    MetaModels
@@ -103,6 +104,9 @@ class Factory implements IFactory
      *
      * @return string The factory class name which handles instantiation of the MetaModel or NULL if no class could
      *                be found.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected static function getModelFactory($strTableName)
     {
@@ -151,7 +155,7 @@ class Factory implements IFactory
         $objData = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel WHERE id=?')
             ->limit(1)
             ->execute($intId);
-        return ($objData->numRows)?self::createInstance($objData->row()):null;
+        return ($objData->numRows) ? self::createInstance($objData->row()) : null;
     }
 
     /**
@@ -165,7 +169,7 @@ class Factory implements IFactory
         $objData = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel WHERE tableName=?')
             ->limit(1)
             ->execute($strTablename);
-        return ($objData->numRows)?self::createInstance($objData->row()):null;
+        return ($objData->numRows) ? self::createInstance($objData->row()) : null;
     }
 
     /**

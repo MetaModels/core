@@ -115,6 +115,9 @@ class RenderSettingBuildPalette
      * @param BuildDataDefinitionEvent $event The event.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function build(BuildDataDefinitionEvent $event)
     {

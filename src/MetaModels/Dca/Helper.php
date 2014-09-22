@@ -211,6 +211,9 @@ class Helper
      *                          text).
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function getTemplatesForBaseFrom($base, $folder, $themeName)
     {
@@ -242,6 +245,9 @@ class Helper
      * @param string $strBase The base for the templates to retrieve.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function getTemplatesForBase($strBase)
     {

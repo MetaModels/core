@@ -143,6 +143,9 @@ class Builder
      * @param PopulateEnvironmentEvent $event The event payload.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function populate(PopulateEnvironmentEvent $event)
     {
@@ -1201,6 +1204,9 @@ class Builder
      * @param IMetaModelDataDefinition              $container The data container.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function parseModelOperations(
         Contao2BackendViewDefinitionInterface $view,

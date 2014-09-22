@@ -213,8 +213,10 @@ class Template
      * @throws \Exception When the flag has been set and the file has not been found.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    // @codingStandardsIgnoreStart - This method is complex but subject to be phased out along wih Contao 2.11
     protected function getTemplate211($strTemplate, $strFormat = 'html5', $blnFailIfNotFound = false)
     {
         $strKey = $strFilename = $strTemplate . '.' . $strFormat;
@@ -276,7 +278,6 @@ class Template
 
         return null;
     }
-    // @codingStandardsIgnoreEnd
 
     /**
      * Find a particular template file and return its path.
@@ -291,6 +292,9 @@ class Template
      * @throws \Exception When the flag has been set and the file has not been found.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getTemplate($strTemplate, $strFormat = 'html5', $blnFailIfNotFound = false)
     {
@@ -317,6 +321,9 @@ class Template
      * Call the parse Template HOOK.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function callParseTemplateHook()
     {
@@ -359,10 +366,7 @@ class Template
             $this->strFormat = $strOutputFormat;
 
             ob_start();
-            // @codingStandardsIgnoreStart - We really want to keep this include, as we might end up using the same file
-            // more than once.
             include($strTplFile);
-            // @codingStandardsIgnoreEnd
             $strBuffer = ob_get_contents();
             ob_end_clean();
 

@@ -35,6 +35,9 @@ class PropertyColName extends AttributeBase
      * @return void
      *
      * @throws \RuntimeException When the column name is illegal or duplicate.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function encodeValue(EncodePropertyValueFromWidgetEvent $event)
     {

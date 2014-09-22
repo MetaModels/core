@@ -56,7 +56,7 @@ class PropertyJumpTo
         $newValues    = array();
         $arrLanguages = $extra['columnFields']['langcode']['options'];
 
-        foreach ($arrLanguages as $key => $lang) {
+        foreach (array_keys($arrLanguages) as $key) {
             $newValue  = '';
             $intFilter = 0;
             if ($value) {
@@ -113,6 +113,9 @@ class PropertyJumpTo
      * @param BuildWidgetEvent $event The event.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function buildWidget(BuildWidgetEvent $event)
     {

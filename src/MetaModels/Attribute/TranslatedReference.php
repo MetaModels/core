@@ -63,7 +63,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         if (is_array($mixLangCode) && !empty($mixLangCode)) {
             $arrReturn['procedure'] .= ' AND langcode IN ("' . implode('","', $mixLangCode) . '")';
         } elseif ($mixLangCode) {
-            $arrReturn['procedure'] .=  ' AND langcode=?';
+            $arrReturn['procedure'] .= ' AND langcode=?';
             $arrReturn['params'][]   = $mixLangCode;
         }
 
@@ -119,8 +119,9 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
 
     /**
      * {@inheritDoc}
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    // @codingStandardsIgnoreStart - We do not need $intId in here, therefore it is unused.
     public function widgetToValue($varValue, $intId)
     {
         return array
@@ -130,7 +131,6 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
             'att_id' => $this->get('id'),
         );
     }
-    // @codingStandardsIgnoreEnd
 
     /**
      * {@inheritDoc}

@@ -62,11 +62,14 @@ abstract class Simple implements ISimple
     }
 
     /**
-     * Get the event dispatcher.
+     * Retrieve the event dispatcher.
      *
      * @return EventDispatcherInterface
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    protected function getDispatcher()
+    public function getEventDispatcher()
     {
         return $GLOBALS['container']['event-dispatcher'];
     }
@@ -187,6 +190,9 @@ abstract class Simple implements ISimple
      * @param string $searchKey The param key to handle for "this".
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function buildFilterUrl($fragments, $searchKey)
     {
@@ -247,6 +253,10 @@ abstract class Simple implements ISimple
      *                             or not.
      *
      * @return array The filter option values to use in the mm_filteritem_* templates.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function prepareFrontendFilterOptions($arrWidget, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit)
     {
@@ -254,6 +264,7 @@ abstract class Simple implements ISimple
         if (!isset($arrWidget['options'])) {
             return $arrOptions;
         }
+        $dispatcher = $this->getEventDispatcher();
 
         $strFilterAction = $this->buildFilterUrl($arrFilterUrl, $arrWidget['eval']['urlparam']);
 
@@ -265,7 +276,7 @@ abstract class Simple implements ISimple
         if ($arrWidget['eval']['includeBlankOption']) {
             $blnActive = $this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, '');
             $event     = new GenerateFrontendUrlEvent($arrJumpTo, sprintf($strFilterAction, ''));
-            $this->getDispatcher(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
+            $dispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
 
             $arrOptions[] = array
             (
@@ -293,7 +304,7 @@ abstract class Simple implements ISimple
                 }
             }
             $event = new GenerateFrontendUrlEvent($arrJumpTo, sprintf($strFilterAction, $strValue));
-            $this->getDispatcher(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
+            $dispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
 
             $arrOptions[] = array
             (
@@ -333,6 +344,9 @@ abstract class Simple implements ISimple
      * @param FrontendFilterOptions $objFrontendFilterOptions The options to use.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function prepareFrontendFilterWidget(
         $arrWidget,
@@ -352,20 +366,24 @@ abstract class Simple implements ISimple
             ? $arrFilterUrl[$arrWidget['eval']['urlparam']]
             : null;
 
-        $event = new GetAttributesFromDcaEvent(
+        $dispatcher = $this->getEventDispatcher();
+        $event      = new GetAttributesFromDcaEvent(
             $arrWidget,
             $arrWidget['eval']['urlparam'],
             $arrWidget['value']
         );
-        $this->getDispatcher()->dispatch(ContaoEvents::WIDGET_GET_ATTRIBUTES_FROM_DCA, $event);
-        $arrData = $event->getResult();
+
+        $dispatcher->dispatch(
+            ContaoEvents::WIDGET_GET_ATTRIBUTES_FROM_DCA,
+            $event
+        );
 
         if ($objFrontendFilterOptions->isAutoSubmit() && TL_MODE == 'FE') {
             $GLOBALS['TL_JAVASCRIPT']['metamodels'] = 'system/modules/metamodels/assets/js/metamodels.js';
         }
 
         /** @var \Widget $objWidget */
-        $objWidget = new $strClass($arrData);
+        $objWidget = new $strClass($event->getResult());
 
         $strField = $objWidget->generate();
 
@@ -375,7 +393,7 @@ abstract class Simple implements ISimple
                 'mm_%s %s%s%s',
                 $arrWidget['inputType'],
                 $arrWidget['eval']['urlparam'],
-                (($arrWidget['value'] !== null) ? ' used':' unused'),
+                (($arrWidget['value'] !== null) ? ' used' : ' unused'),
                 ($objFrontendFilterOptions->isAutoSubmit() ? ' submitonchange' : '')
             ),
             'label'      => $objWidget->generateLabel(),
@@ -403,13 +421,13 @@ abstract class Simple implements ISimple
      * @param IRenderSettings $objRenderSetting The render setting to be applied.
      *
      * @return array An empty array.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    // @codingStandardsIgnoreStart - empty no op implementation - it's ok to have unused parameters here.
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
     {
         return array();
     }
-    // @codingStandardsIgnoreEnd
 
     /**
      * This base implementation returns an empty array.
@@ -453,8 +471,9 @@ abstract class Simple implements ISimple
      * @param FrontendFilterOptions $objFrontendFilterOptions The frontend filter options.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    // @codingStandardsIgnoreStart - empty no op implementation - it's ok to have unused parameters here.
     public function getParameterFilterWidgets(
         $arrIds,
         $arrFilterUrl,
@@ -463,7 +482,6 @@ abstract class Simple implements ISimple
     ) {
         return array();
     }
-    // @codingStandardsIgnoreEnd
 
     /**
      * Retrieve a list of all referenced attributes within the filter setting.

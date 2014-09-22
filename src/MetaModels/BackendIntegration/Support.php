@@ -37,6 +37,9 @@ class Support extends \BackendModule
      * Compile the current element.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function compile()
     {

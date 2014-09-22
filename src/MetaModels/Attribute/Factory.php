@@ -21,6 +21,7 @@ use MetaModels\Factory as MetaModelFactory;
 
 /**
  * This is the implementation of the Field factory to query instances of fields.
+ *
  * Usually this is only used internally by {@link MetaModel}
  *
  * @package    MetaModels
@@ -42,6 +43,9 @@ class Factory implements IFactory
      * @param string $strFieldType The field type of which the class shall be fetched from.
      *
      * @return string the class name which handles the field type or NULL if no class could be found.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected static function getAttributeTypeClass($strFieldType)
     {
@@ -59,6 +63,9 @@ class Factory implements IFactory
      *
      * @return string The factory class name which handles instantiation of the field type or NULL if no class could
      *                be found.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected static function getAttributeTypeFactory($strFieldType)
     {
@@ -136,6 +143,9 @@ class Factory implements IFactory
 
     /**
      * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function getAttributeTypes($blnSupportTranslated = false, $blnSupportVariants = false)
     {
@@ -150,11 +160,6 @@ class Factory implements IFactory
                 continue;
             }
 
-            // TODO: will we really ever have some interface like this?
-            // Skip variant fields if variants are not supported.
-            if ((!$blnSupportVariants && in_array('MetaModels\Attribute\IVariant', $arrInterfaces))) {
-                continue;
-            }
             $arrRet[] = $strKey;
         }
         return $arrRet;
@@ -162,6 +167,9 @@ class Factory implements IFactory
 
     /**
      * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function isValidAttributeType($strFieldType)
     {

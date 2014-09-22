@@ -239,6 +239,9 @@ class MetaModel implements IMetaModel
      *                              which means all attributes.
      *
      * @return array an array containing the database rows with each column "deserialized".
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function fetchRows($arrIds, $arrAttrOnly = array())
     {
@@ -506,6 +509,9 @@ class MetaModel implements IMetaModel
      * {@inheritdoc}
      *
      * The value is taken from $GLOBALS['TL_LANGUAGE']
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getActiveLanguage()
     {
@@ -518,7 +524,9 @@ class MetaModel implements IMetaModel
     public function getAttribute($strAttributeName)
     {
         $arrAttributes = $this->getAttributes();
-        return array_key_exists($strAttributeName, $arrAttributes)?$arrAttributes[$strAttributeName]:null;
+        return array_key_exists($strAttributeName, $arrAttributes)
+            ? $arrAttributes[$strAttributeName]
+            : null;
     }
 
     /**
@@ -799,7 +807,7 @@ class MetaModel implements IMetaModel
             if ($this->hasVariants()) {
                 // No variant group is given, so we have a complete new base item this should be a workaround for these
                 // values should be set by the GeneralDataMetaModel or whoever is calling this method.
-                if (is_null($objItem->get('vargroup'))) {
+                if ($objItem->get('vargroup') === null) {
                     $objItem->set('varbase', '1');
                     $objItem->set('vargroup', '0');
                     $blnNewBaseItem = true;

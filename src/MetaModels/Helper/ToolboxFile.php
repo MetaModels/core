@@ -117,6 +117,9 @@ class ToolboxFile
 
     /**
      * Create a new instance.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function __construct()
     {
@@ -130,6 +133,9 @@ class ToolboxFile
      * @param string|array $acceptedExtensions The list of accepted file extensions.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function setAcceptedExtensions($acceptedExtensions)
     {
@@ -219,6 +225,8 @@ class ToolboxFile
      * Retrieve the flag if images shall be rendered as images.
      *
      * @return boolean
+     *
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getShowImages()
     {
@@ -347,6 +355,9 @@ class ToolboxFile
      * @return void
      *
      * @deprecated Remove when we drop support for Contao 2.11.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function parseMetaFile($strPath, $strLanguage = '')
     {
@@ -445,7 +456,7 @@ class ToolboxFile
         if (($intPos = strpos($strRequest, '?')) !== false) {
             $strRequest = str_replace('?&', '?', preg_replace('/&?file=[^&]&*/', '', $strRequest));
         }
-        $strRequest .= (strpos($strRequest, '?') === false ? '?' : '&');
+        $strRequest .= ($intPos === false ? '?' : '&');
         $strRequest .= 'file=' . urlencode($strFile);
 
         return $strRequest;
@@ -455,6 +466,9 @@ class ToolboxFile
      * Walk all files and fetch desired additional information like image sizes etc.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function fetchAdditionalData()
     {
@@ -553,7 +567,7 @@ class ToolboxFile
         $files  = array();
         $source = array();
 
-        foreach ($arrFiles as $k => $v) {
+        foreach (array_keys($arrFiles) as $k) {
             $files[]  = $arrFiles[$k];
             $source[] = $arrSource[$k];
         }
@@ -621,7 +635,7 @@ class ToolboxFile
     protected function addClasses(&$arrSource)
     {
         $countFiles = count($arrSource);
-        foreach ($arrSource as $k => $v) {
+        foreach (array_keys($arrSource) as $k) {
             $arrSource[$k]['class'] = (($k == 0) ? ' first' : '') .
                 (($k == ($countFiles - 1)) ? ' last' : '') .
                 ((($k % 2) == 0) ? ' even' : ' odd');
@@ -729,13 +743,14 @@ class ToolboxFile
             return array('files' => array(), 'source' => array());
         }
 
-        $keys = array_keys($arrFiles);
+        $keys  = array_keys($arrFiles);
+        $files = array();
         shuffle($keys);
         foreach ($keys as $key) {
             $files[$key] = $arrFiles[$key];
         }
 
-        return $this->remapSorting($arrFiles, $arrSource);
+        return $this->remapSorting($files, $arrSource);
     }
 
     /**

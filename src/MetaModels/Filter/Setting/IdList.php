@@ -31,6 +31,8 @@ class IdList extends Simple
 {
     /**
      * {@inheritDoc}
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function prepareRules(IFilter $objFilter, $arrFilterUrl)
     {
