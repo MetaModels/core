@@ -53,7 +53,7 @@ CREATE TABLE `tl_metamodel_dca` (
 -- type, either "standalone" or "ctable".
   `rendertype` varchar(10) NOT NULL default '',
 -- render mode - one of: "flat", "parented" (ctable only), "hierarchical"
-  `rendermode` varchar(10) NOT NULL default '',
+  `rendermode` varchar(12) NOT NULL default '',
 -- the panel layouts we want to display.
   `panelLayout` blob NULL,
 -- parent table (if rendertype == "ctable")
