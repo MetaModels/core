@@ -247,7 +247,7 @@ class UpgradeHandler
             TableManipulation::createColumn(
                 'tl_metamodel_dca',
                 'rendermode',
-                'varchar(10) NOT NULL default \'\''
+                'varchar(12) NOT NULL default \'\''
             );
         }
 
