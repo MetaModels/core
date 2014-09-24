@@ -17,6 +17,11 @@
 
 namespace MetaModels\Widgets;
 
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Widget\GetAttributesFromDcaEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 /**
  * Provide methods to handle multiple widgets in one.
  *
@@ -128,6 +133,131 @@ class SubDcaWidget extends \Widget
     }
 
     /**
+     * Retrieve the event dispatcher.
+     *
+     * @return EventDispatcherInterface
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    public function getEventDispatcher()
+    {
+        return $GLOBALS['container']['event-dispatcher'];
+    }
+
+    /**
+     * Generate an help wizard if needed.
+     *
+     * @param string $key   The widget name.
+     *
+     * @param array  $field The field DCA - might get changed within this routine.
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    protected function getHelpWizard($key, $field)
+    {
+        // Add the help wizard.
+        if (empty($field['eval']['helpwizard'])) {
+            return '';
+        }
+
+        $event = new GenerateHtmlEvent(
+            'about.gif',
+            $GLOBALS['TL_LANG']['MSC']['helpWizard'],
+            'style="vertical-align:text-bottom;"'
+        );
+        $this->getEventDispatcher()->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
+
+        return sprintf(
+            ' <a href="%shelp.php?table=%s&amp;field=%s_%s" title="%s" rel="lightbox[help 610 80%]">%s</a>',
+            TL_PATH . 'contao/',
+            $this->strTable,
+            $this->strName,
+            $key,
+            specialchars($GLOBALS['TL_LANG']['MSC']['helpWizard']),
+            $event->getHtml()
+        );
+    }
+
+    /**
+     * Make fields mandatory if necessary.
+     *
+     * @param array  $field The field DCA.
+     *
+     * @param string $row   The setting name.
+     *
+     * @param string $key   The widget name.
+     *
+     * @return array
+     */
+    protected function makeMandatory($field, $row, $key)
+    {
+        $field['eval']['required'] = false;
+        // Use strlen() here (see contao core issue #3277).
+        if (empty($field['eval']['mandatory'])) {
+            return $field;
+        }
+
+        if (is_array($this->varValue[$row][$key])) {
+            if (empty($this->varValue[$row][$key])) {
+                $field['eval']['required'] = true;
+            }
+        } else {
+            if (!strlen($this->varValue[$row][$key])) {
+                $field['eval']['required'] = true;
+            }
+        }
+
+        return $field;
+    }
+
+    /**
+     * Retrieve the widget class if it is valid.
+     *
+     * @param array $field The field information.
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    protected function getWidgetClass($field)
+    {
+        $className = $GLOBALS[(TL_MODE == 'BE' ? 'BE_FFL' : 'TL_FFL')][$field['inputType']];
+
+        if (($className !== '') && class_exists($className)) {
+            return $className;
+        }
+
+        return null;
+    }
+
+    /**
+     * Handle the onload_callback.
+     *
+     * @param array $field The field information.
+     *
+     * @param mixed $value The value.
+     *
+     * @return mixed
+     */
+    protected function handleLoadCallback($field, $value)
+    {
+        // Load callback.
+        if (is_array($field['load_callback'])) {
+            foreach ($field['load_callback'] as $callback) {
+                $this->import($callback[0]);
+                $value = $this->$callback[0]->$callback[1]($value, $this);
+            }
+        }
+
+        return $value;
+    }
+
+    /**
      * Initialize widget.
      *
      * Based on DataContainer::row() from Contao 2.10.1.
@@ -144,25 +274,7 @@ class SubDcaWidget extends \Widget
      */
     protected function initializeWidget(&$arrField, $strRow, $strKey, $varValue)
     {
-        $xlabel          = '';
-        $strContaoPrefix = TL_PATH . 'contao/';
-
-        // Add the help wizard.
-        if ($arrField['eval']['helpwizard']) {
-            $xlabel .= sprintf(
-                ' <a href="%shelp.php?table=%s&amp;field=%s_%s" title="%s" rel="lightbox[help 610 80%]">%s</a>',
-                $strContaoPrefix,
-                $this->strTable,
-                $this->strName,
-                $strKey,
-                specialchars($GLOBALS['TL_LANG']['MSC']['helpWizard']),
-                $this->generateImage(
-                    'about.gif',
-                    $GLOBALS['TL_LANG']['MSC']['helpWizard'],
-                    'style="vertical-align:text-bottom;"'
-                )
-            );
-        }
+        $xlabel = $this->getHelpWizard($strKey, $arrField);
 
         // Input field callback.
         if (is_array($arrField['input_field_callback'])) {
@@ -173,47 +285,32 @@ class SubDcaWidget extends \Widget
             return $this->$arrField['input_field_callback'][0]->$arrField['input_field_callback'][1]($this, $xlabel);
         }
 
-        $strClass = $GLOBALS[(TL_MODE == 'BE' ? 'BE_FFL' : 'TL_FFL')][$arrField['inputType']];
+        $strClass = $this->getWidgetClass($arrField);
 
-        if ($strClass == '' || !class_exists($strClass)) {
+        if (empty($strClass)) {
             return null;
         }
 
-        $arrField['eval']['required'] = false;
-
-        // Use strlen() here (see contao core issue #3277).
-        if ($arrField['eval']['mandatory']) {
-            if (is_array($this->varValue[$strRow][$strKey])) {
-                if (empty($this->varValue[$strRow][$strKey])) {
-                    $arrField['eval']['required'] = true;
-                }
-            } else {
-                if (!strlen($this->varValue[$strRow][$strKey])) {
-                    $arrField['eval']['required'] = true;
-                }
-            }
-        }
-
-        // Load callback.
-        if (is_array($arrField['load_callback'])) {
-            foreach ($arrField['load_callback'] as $callback) {
-                $this->import($callback[0]);
-                $varValue = $this->$callback[0]->$callback[1]($varValue, $this);
-            }
-        }
+        $varValue = $this->handleLoadCallback($arrField, $varValue);
+        $arrField = $this->makeMandatory($arrField, $strRow, $strKey);
 
         $arrField['name']              = $this->strName . '[' . $strRow . '][' . $strKey . ']';
         $arrField['id']                = $this->strId . '_' . $strRow . '_' . $strKey;
         $arrField['value']             = ($varValue !== '') ? $varValue : $arrField['default'];
         $arrField['eval']['tableless'] = true;
 
-        $objWidget = new $strClass($this->prepareForWidget(
+        $event = new GetAttributesFromDcaEvent(
             $arrField,
             $arrField['name'],
             $arrField['value'],
             null,
-            $this->strTable
-        ));
+            $this->strTable,
+            $this->objDca
+        );
+
+        $this->getEventDispatcher()->dispatch(ContaoEvents::WIDGET_GET_ATTRIBUTES_FROM_DCA, $event);
+
+        $objWidget = new $strClass($event->getResult());
 
         $objWidget->strId       = $arrField['id'];
         $objWidget->storeValues = true;
