@@ -363,7 +363,40 @@ class SubDcaWidget extends \Widget
     }
 
     /**
-     * Initialize widget.
+     * Handle the onsave_callback for a widget.
+     *
+     * @param array   $field  The field DCA.
+     *
+     * @param \Widget $widget The widget to validate.
+     *
+     * @param mixed   $value  The value.
+     *
+     * @return mixed
+     */
+    protected function handleSaveCallback($field, $widget, $value)
+    {
+        $newValue = $value;
+
+        if (is_array($field['save_callback'])) {
+            foreach ($field['save_callback'] as $callback) {
+                $this->import($callback[0]);
+
+                try {
+                    $newValue = $this->$callback[0]->$callback[1]($newValue, $this);
+                } catch (\Exception $e) {
+                    $widget->addError($e->getMessage());
+                    $this->blnSubmitInput = false;
+
+                    return $value;
+                }
+            }
+        }
+
+        return $newValue;
+    }
+
+    /**
+     * Validate the value of the widget.
      *
      * Based on DataContainer::row() from Contao 2.10.1
      *
@@ -375,14 +408,17 @@ class SubDcaWidget extends \Widget
      *
      * @param mixed  $varInput The overall input value.
      *
-     * @return \Widget|null
+     * @return bool
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function validateWidget(&$arrField, $strRow, $strKey, &$varInput)
     {
         $varValue  = $varInput[$strRow][$strKey];
         $objWidget = $this->initializeWidget($arrField, $strRow, $strKey, $varValue);
         if (!is_object($objWidget)) {
-            return null;
+            return false;
         }
 
         // Hack for checkboxes.
@@ -401,29 +437,15 @@ class SubDcaWidget extends \Widget
             $varValue = $objDate->tstamp;
         }
 
-        // Save callback.
-        if (is_array($arrField['save_callback'])) {
-            foreach ($arrField['save_callback'] as $callback) {
-                $this->import($callback[0]);
-
-                try {
-                    $varValue = $this->$callback[0]->$callback[1]($varValue, $this);
-                } catch (\Exception $e) {
-                    $objWidget->class = 'error';
-                    $objWidget->addError($e->getMessage());
-                }
-            }
-        }
+        $varValue = $this->handleSaveCallback($arrField, $objWidget, $varValue);
 
         $varInput[$strRow][$strKey] = $varValue;
 
         // Do not submit if there are errors.
         if ($objWidget->hasErrors()) {
-            // Store the errors.
-            $this->arrWidgetErrors[$strKey][$strRow] = $objWidget->getErrors();
-
             return false;
         }
+
         return true;
     }
 
@@ -433,6 +455,9 @@ class SubDcaWidget extends \Widget
      * @param mixed $varInput The value to validate.
      *
      * @return mixed The validated data.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function validator($varInput)
     {
@@ -457,6 +482,61 @@ class SubDcaWidget extends \Widget
     }
 
     /**
+     * Generate the help tag for a widget if needed.
+     *
+     * @param \Widget $widget The widget.
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    protected function getHelpForWidget($widget)
+    {
+        if ($GLOBALS['TL_CONFIG']['showHelp'] && $widget->description) {
+            return sprintf(
+                '<p class="tl_help tl_tip%s">%s</p>',
+                $widget->tl_class,
+                $widget->description
+            );
+        }
+
+        return '';
+    }
+
+    /**
+     *  Build the options for a widget.
+     *
+     * @return array.
+     */
+    protected function buildOptions()
+    {
+        $options = array();
+        foreach ($this->arrWidgets as $widgetRow) {
+            $columns = array();
+            foreach ($widgetRow as $widget) {
+                /** @var \Widget $widget */
+                $valign = ($widget->valign != '' ? ' valign="' . $widget->valign . '"' : '');
+                $class  = ($widget->tl_class != '' ? ' class="' . $widget->tl_class . '"' : '');
+                $style  = ($widget->style != '' ? ' style="' . $widget->style . '"' : '');
+                $help   = $this->getHelpForWidget($widget);
+
+                $columns[] = sprintf(
+                    '<td %1$s%2$s%3$s>%4$s%5$s</td>',
+                    $valign,
+                    $class,
+                    $style,
+                    $widget->parse(),
+                    $help
+                );
+            }
+            $options[] = implode('', $columns);
+        }
+
+        return $options;
+    }
+
+    /**
      * Generate the widget and return it as string.
      *
      * @return string
@@ -470,28 +550,7 @@ class SubDcaWidget extends \Widget
 
         $this->prepareWidgets();
 
-        $arrOptions = array();
-        foreach ($this->arrWidgets as $arrWidgetRow) {
-            $arrColumns = array();
-            foreach ($arrWidgetRow as $objWidget) {
-                /** @var \Widget $objWidget */
-                $arrColumns[] = sprintf(
-                    '<td %1$s%2$s%3$s>%4$s%5$s</td>',
-                    ($objWidget->valign != '' ? ' valign="' . $objWidget->valign . '"' : ''),
-                    ($objWidget->tl_class != '' ? ' class="' . $objWidget->tl_class . '"' : ''),
-                    ($objWidget->style != '' ? ' style="' . $objWidget->style . '"' : ''),
-                    $objWidget->parse(),
-                    ($GLOBALS['TL_CONFIG']['showHelp'] && $objWidget->description)
-                    ? sprintf(
-                        '<p class="tl_help tl_tip%s">%s</p>',
-                        $objWidget->tl_class,
-                        $objWidget->description
-                    )
-                    : ''
-                );
-            }
-            $arrOptions[] = implode('', $arrColumns);
-        }
+        $arrOptions = $this->buildOptions();
 
         // Add a "no entries found" message if there are no sub widgets.
         if (!count($arrOptions)) {
