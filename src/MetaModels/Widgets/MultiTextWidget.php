@@ -18,7 +18,7 @@
 namespace MetaModels\Widgets;
 
 /**
- * Form field with more than 1 input, based on form field by Leo Feyer
+ * Form field with more than 1 input, based on form field by Leo Feyer.
  *
  * @package       MetaModels
  * @subpackage FrontendFilter
@@ -55,7 +55,7 @@ class MultiTextWidget extends \Widget
         {
             case 'maxlength':
                 if ($varValue > 0) {
-                    $this->arrAttributes['maxlength'] =  $varValue;
+                    $this->arrAttributes['maxlength'] = $varValue;
                 }
                 break;
 
