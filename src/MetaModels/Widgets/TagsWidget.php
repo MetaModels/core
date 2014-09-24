@@ -18,7 +18,7 @@
 namespace MetaModels\Widgets;
 
 /**
- * Form field "tags", based on form field by Leo Feyer
+ * Form field "tags", based on form field by Leo Feyer.
  *
  * @package    MetaModels
  * @subpackage FrontendFilter
@@ -43,7 +43,7 @@ class TagsWidget extends \Widget
         {
             case 'maxlength':
                 if ($varValue > 0) {
-                    $this->arrAttributes['maxlength'] =  $varValue;
+                    $this->arrAttributes['maxlength'] = $varValue;
                 }
                 break;
 
@@ -80,44 +80,71 @@ class TagsWidget extends \Widget
     }
 
     /**
+     * Get the css class for an option.
+     *
+     * @param int $index The sequence number of the current option.
+     *
+     * @return string
+     */
+    protected function getClassForOption($index)
+    {
+        // If true we need another offset.
+        $intSub   = ($this->arrConfiguration['includeBlankOption'] ? -1 : 1);
+        $strClass = $this->strName;
+
+        if ($index == 0) {
+            $strClass .= ' first';
+        } elseif ($index === (count($this->options) - $intSub)) {
+            $strClass .= ' last';
+        }
+
+        if (($index % 2) == 1) {
+            $strClass .= ' even';
+        } else {
+            $strClass .= ' odd';
+        }
+
+        $strClass .= (strlen($this->strClass)) ? ' ' . $this->strClass : '';
+    }
+
+    /**
      * Generate a single checkbox.
      *
      * @param array $val   The value array (needs keys "value" and "label").
      *
-     * @param int   $count The sequence number of this option (used for even/odd determination).
+     * @param int   $index The sequence number of this option (used for even/odd determination).
      *
      * @return string
      */
-    protected function generateOption($val, $count)
+    protected function generateOption($val, $index)
     {
-        // If true we need another offset.
-        $intSub = ($this->arrConfiguration['includeBlankOption'] ? -1 : 1);
-
-        $strClass  = $this->strName;
-        $strClass .= ($count == 0) ? ' first' : '';
-        $strClass .= ($count == count($this->options) - $intSub ) ? ' last' : '';
-        $strClass .= ($count % 2 == 1) ? ' even' : ' odd';
-        $strClass .= (strlen($this->strClass)) ? ' ' . $this->strClass : '';
+        $checked = '';
+        if (is_array($this->varValue) && in_array($val['value'], $this->varValue)) {
+            $checked = ' checked="checked"';
+        }
 
         return sprintf(
             '<span class="%1$s opt_%2$s">' .
             '<input type="checkbox" name="%8$s[]" id="opt_%3$s" class="checkbox" value="%4$s"%5$s%6$s ' .
             '<label id="lbl_%3$s" for="opt_%3$s">%7$s</label></span>',
             // @codingStandardsIgnoreStart - Keep the comments.
-            $strClass,                                                                                              // 1
-            $count,                                                                                                 // 2
-            $this->strName.'_'.$count,                                                                              // 3
-            $val['value'],                                                                                          // 4
-            (is_array($this->varValue) ? (in_array($val['value'],$this->varValue) ? ' checked="checked"' : ''):''), // 5
-            $this->getAttributes() . $this->strTagEnding,                                                           // 6
-            $val['label'],                                                                                          // 7
-            $this->strName                                                                                          // 8
+            $this->getClassForOption($index),             // 1
+            $index,                                       // 2
+            $this->strName.'_'.$index,                    // 3
+            $val['value'],                                // 4
+            $checked,                                     // 5
+            $this->getAttributes() . $this->strTagEnding, // 6
+            $val['label'],                                // 7
+            $this->strName                                // 8
             // @codingStandardsIgnoreEnd
         );
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function generate()
     {
