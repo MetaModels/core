@@ -18,8 +18,6 @@
 namespace MetaModels\Widgets;
 
 /**
- * Class multiWidget
- *
  * Provide methods to handle multiple widgets in one.
  *
  * @package    MetaModels
@@ -30,7 +28,6 @@ namespace MetaModels\Widgets;
  */
 class SubDcaWidget extends \Widget
 {
-
     /**
      * Submit user input.
      *
@@ -148,22 +145,7 @@ class SubDcaWidget extends \Widget
     protected function initializeWidget(&$arrField, $strRow, $strKey, $varValue)
     {
         $xlabel          = '';
-        $strContaoPrefix = 'contao/';
-
-        // Toggle line wrap (textarea).
-        if ($arrField['inputType'] == 'textarea' && $arrField['eval']['rte'] == '') {
-            $xlabel .= ' ' . $this->generateImage(
-                'wrap.gif',
-                $GLOBALS['TL_LANG']['MSC']['wordWrap'],
-                sprintf(
-                    'title="%s" class="toggleWrap" onclick="Backend.toggleWrap(\'ctrl_%s_%s_%s\');"',
-                    specialchars($GLOBALS['TL_LANG']['MSC']['wordWrap']),
-                    $this->strId,
-                    $strRow,
-                    $strKey
-                )
-            );
-        }
+        $strContaoPrefix = TL_PATH . 'contao/';
 
         // Add the help wizard.
         if ($arrField['eval']['helpwizard']) {
@@ -177,72 +159,6 @@ class SubDcaWidget extends \Widget
                 $this->generateImage(
                     'about.gif',
                     $GLOBALS['TL_LANG']['MSC']['helpWizard'],
-                    'style="vertical-align:text-bottom;"'
-                )
-            );
-        }
-
-        // Add the popup file manager.
-        if ($arrField['inputType'] == 'fileTree') {
-            $path = '';
-
-            if (isset($arrField['eval']['path'])) {
-                $path = '?node=' . $arrField['eval']['path'];
-            }
-
-            $xlabel .= sprintf(
-                ' <a href="%sfiles.php%s" title="%s" rel="lightbox[files 765 80%]">%s</a>',
-                $strContaoPrefix,
-                $path,
-                specialchars($GLOBALS['TL_LANG']['MSC']['fileManager']),
-                $this->generateImage(
-                    'filemanager.gif',
-                    $GLOBALS['TL_LANG']['MSC']['fileManager'],
-                    'style="vertical-align:text-bottom;"'
-                )
-            );
-        } elseif ($arrField['inputType'] == 'tableWizard') {
-            // Add the table import wizard.
-            $xlabel .= sprintf(
-                ' <a href="%s" title="%s" onclick="Backend.getScrollOffset();">%s</a>',
-                $this->addToUrl('key=table'),
-                specialchars($GLOBALS['TL_LANG']['MSC']['tw_import'][1]),
-                $this->generateImage(
-                    'tablewizard.gif',
-                    $GLOBALS['TL_LANG']['MSC']['tw_import'][0],
-                    'style="vertical-align:text-bottom;"'
-                )
-            );
-            $xlabel .= ' ' .
-                $this->generateImage(
-                    'demagnify.gif',
-                    '',
-                    sprintf(
-                        'title="%s" ' .
-                        'style="vertical-align:text-bottom; cursor:pointer;" ' .
-                        'onclick="Backend.tableWizardResize(0.9);"',
-                        specialchars($GLOBALS['TL_LANG']['MSC']['tw_shrink'])
-                    )
-                ) .
-                $this->generateImage(
-                    'magnify.gif',
-                    '',
-                    sprintf(
-                        'title="%s"' .
-                        ' style="vertical-align:text-bottom; cursor:pointer;"' .
-                        ' onclick="Backend.tableWizardResize(1.1);"',
-                        specialchars($GLOBALS['TL_LANG']['MSC']['tw_expand'])
-                    )
-                );
-        } elseif ($arrField['inputType'] == 'listWizard') {
-            // Add the list import wizard.
-            $xlabel .= sprintf(
-                ' <a href="%s" title="%s" onclick="Backend.getScrollOffset();">%s</a>',
-                $this->addToUrl('key=list'),
-                specialchars($GLOBALS['TL_LANG']['MSC']['lw_import'][1]),
-                $this->generateImage(
-                    'tablewizard.gif',
-                    $GLOBALS['TL_LANG']['MSC']['tw_import'][0],
                     'style="vertical-align:text-bottom;"'
                 )
             );
@@ -286,7 +202,6 @@ class SubDcaWidget extends \Widget
             }
         }
 
-        // TODO: add initialization of tinyMCE, datepicker, colorpicker etc.
         $arrField['name']              = $this->strName . '[' . $strRow . '][' . $strKey . ']';
         $arrField['id']                = $this->strId . '_' . $strRow . '_' . $strKey;
         $arrField['value']             = ($varValue !== '') ? $varValue : $arrField['default'];
@@ -375,9 +290,7 @@ class SubDcaWidget extends \Widget
 
         // Hack for checkboxes.
         if (($arrField['inputType'] == 'checkbox') && isset($varInput[$strRow][$strKey])) {
-            // @codingStandardsIgnoreStart - we know that access to $_POST is discouraged.
             $_POST[$objWidget->name] = $varValue;
-            // @codingStandardsIgnoreEnd
         }
 
         $objWidget->validate();
@@ -450,6 +363,9 @@ class SubDcaWidget extends \Widget
      * Generate the widget and return it as string.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function generate()
     {
