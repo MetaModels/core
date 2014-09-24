@@ -144,7 +144,7 @@ class TagsWidget extends \Widget
                 $count++
             );
 
-            foreach ($this->options as $key => $val) {
+            foreach ($this->options as $val) {
                 $return .= $this->generateOption($val, $count++);
             }
         } else {
