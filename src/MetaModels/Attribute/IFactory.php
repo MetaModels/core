@@ -30,11 +30,82 @@ use MetaModels\IMetaModel;
 interface IFactory
 {
     /**
+     * Create an attribute instance from an information array.
+     *
+     * @param array      $information The attribute information.
+     *
+     * @param IMetaModel $metaModel   The MetaModel instance for which the attribute shall be created.
+     *
+     * @return IAttribute|null
+     */
+    public function createAttribute($information, $metaModel);
+
+    /**
+     * Add a type factory to this factory.
+     *
+     * @param IAttributeTypeFactory $typeFactory The type factory to add.
+     *
+     * @return IFactory
+     */
+    public function addTypeFactory(IAttributeTypeFactory $typeFactory);
+
+    /**
+     * Retrieve a type factory from this factory.
+     *
+     * @param string $typeFactory The name of the type factory to retrieve.
+     *
+     * @return IAttributeTypeFactory
+     */
+    public function getTypeFactory($typeFactory);
+
+    /**
+     * Check if the attribute matches the flags.
+     *
+     * @param string $factory The name of the factory to check.
+     *
+     * @param int    $flags   The flags to match.
+     *
+     * @return bool
+     */
+    public function attributeTypeMatchesFlags($factory, $flags);
+
+    /**
+     * Retrieve the type names registered in the factory.
+     *
+     * @param bool|int $flags The flags for retrieval. See the interface constants for the different values.
+     *
+     * @return string[]
+     */
+    public function getTypeNames($flags = false);
+
+    /**
+     * Collect all attribute information for a MetaModel.
+     *
+     * The resulting information will then get passed to the attribute factories to create attribute instances.
+     *
+     * @param IMetaModel $metaModel The MetaModel for which attribute information shall be retrieved.
+     *
+     * @return array
+     */
+    public function collectAttributeInformation(IMetaModel $metaModel);
+
+    /**
+     * Create all attribute instances for the given MetaModel.
+     *
+     * @param IMetaModel $metaModel The MetaModel to create the attributes for.
+     *
+     * @return IAttribute[]
+     */
+    public function createAttributesForMetaModel($metaModel);
+
+    /**
      * Instantiate a attribute from an array.
      *
      * @param array $arrData The attribute information data.
      *
      * @return IAttribute|null The instance of the attribute or NULL if the class could not be determined
+     *
+     * @deprecated Use an instance of the factory and method createAttribute().
      */
     public static function createFromArray($arrData);
 
@@ -44,6 +115,8 @@ interface IFactory
      * @param \Database\Result $objRow The attribute information data.
      *
      * @return IAttribute|null The instance of the attribute or NULL if the class could not be determined.
+     *
+     * @deprecated Use an instance of the factory and method createAttribute().
      */
     public static function createFromDB($objRow);
 
@@ -53,6 +126,8 @@ interface IFactory
      * @param IMetaModel $objMetaModel The MetaModel instance for which all attributes shall be returned.
      *
      * @return IAttribute[] The instances of the attributes.
+     *
+     * @deprecated Use an instance of the factory and method createAttribute().
      */
     public static function getAttributesFor($objMetaModel);
 
@@ -60,6 +135,8 @@ interface IFactory
      * Returns an array of all registered attribute types.
      *
      * @return string[] All attribute types.
+     *
+     * @deprecated Will not be in available anymore - if you need this, file a ticket.
      */
     public static function getAttributeTypes();
 
@@ -69,6 +146,8 @@ interface IFactory
      * @param string $strFieldType The attribute type name to check.
      *
      * @return bool True if the attribute type is valid, false otherwise.
+     *
+     * @deprecated Will not be in available anymore - if you need this, file a ticket.
      */
     public static function isValidAttributeType($strFieldType);
 }

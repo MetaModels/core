@@ -22,7 +22,6 @@ use MetaModels\Attribute\ISimple;
 use MetaModels\Attribute\ITranslated;
 use MetaModels\Filter\Filter;
 use MetaModels\Attribute\IAttribute;
-use MetaModels\Attribute\Factory as AttributeFactory;
 use MetaModels\Filter\IFilter;
 use MetaModels\Render\Setting\Factory as RenderSettingFactory;
 use MetaModels\Filter\Rules\StaticIdList;
@@ -80,9 +79,11 @@ class MetaModel implements IMetaModel
      *
      * @return IMetaModel Self for fluent coding.
      */
-    protected function addAttribute(IAttribute $objAttribute)
+    public function addAttribute(IAttribute $objAttribute)
     {
-        $this->arrAttributes[$objAttribute->getColName()] = $objAttribute;
+        if (!$this->hasAttribute($objAttribute->getColName())) {
+            $this->arrAttributes[$objAttribute->getColName()] = $objAttribute;
+        }
 
         return $this;
     }
@@ -94,28 +95,9 @@ class MetaModel implements IMetaModel
      *
      * @return bool
      */
-    protected function hasAttribute($strAttributeName)
+    public function hasAttribute($strAttributeName)
     {
         return array_key_exists($strAttributeName, $this->arrAttributes);
-    }
-
-    /**
-     * Create instances of all attributes that are defined for this MetaModel instance.
-     *
-     * This is called internally by the first query of MetaModel::getAttributes().
-     *
-     * @return void
-     */
-    protected function createAttributes()
-    {
-        $arrAttributes = AttributeFactory::getAttributesFor($this);
-        foreach ($arrAttributes as $objAttribute) {
-            /** @var IAttribute $objAttribute */
-            if ($this->hasAttribute($objAttribute->getColName())) {
-                continue;
-            }
-            $this->addAttribute($objAttribute);
-        }
     }
 
     /**
@@ -426,15 +408,9 @@ class MetaModel implements IMetaModel
 
     /**
      * {@inheritdoc}
-     *
-     * {@link MetaModel::createAttributes()} is called internally when the attributes are requested the first time.
      */
     public function getAttributes()
     {
-        if (!count($this->arrAttributes)) {
-            // Instantiate all attributes now.
-            $this->createAttributes();
-        }
         return $this->arrAttributes;
     }
 

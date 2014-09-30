@@ -17,6 +17,13 @@
 
 namespace MetaModels;
 
+use MetaModels\Events\CollectMetaModelTableNamesEvent;
+use MetaModels\Events\CreateMetaModelEvent;
+use MetaModels\Events\GetMetaModelNameFromIdEvent;
+use MetaModels\Attribute\IFactory as IAttributeFactory;
+use MetaModels\Attribute\Factory as AttributeFactory;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 /**
  * This is the MetaModel factory interface.
  *
@@ -29,119 +36,146 @@ namespace MetaModels;
 class Factory implements IFactory
 {
     /**
-     * All MetaModel instances.
+     * The default factory instance.
      *
-     * Association: id => object
-     *
-     * @var array
+     * @var IFactory
      */
-    protected static $arrInstances = array();
+    protected static $defaultFactory;
 
     /**
-     * All MetaModel instances.
+     * The event dispatcher.
      *
-     * Association: tableName => object
-     *
-     * @var array
+     * @var EventDispatcherInterface
      */
-    protected static $arrInstancesByTable = array();
+    protected $eventDispatcher;
 
     /**
-     * The table names.
+     * The attribute factory to use.
      *
-     * @var array
+     * @var IAttributeFactory
      */
-    protected static $tableNames = null;
+    protected $attributeFactory;
 
     /**
-     * Returns the proper user object for the current context.
+     * Create a new instance.
      *
-     * @return \BackendUser|\FrontendUser|null The BackendUser when TL_MODE == 'BE',
-     *                                         the FrontendUser when TL_MODE == 'FE'
-     *                                         or null otherwise
+     * @param EventDispatcherInterface $eventDispatcher  The event dispatcher to use.
+     *
+     * @param IAttributeFactory        $attributeFactory The attribute factory to use.
      */
-    protected static function getUser()
+    public function __construct(EventDispatcherInterface $eventDispatcher, IAttributeFactory $attributeFactory)
     {
-        if (TL_MODE == 'BE') {
-            return \BackendUser::getInstance();
-        } elseif (TL_MODE == 'FE') {
-            return \FrontendUser::getInstance();
-        }
+        $this->setEventDispatcher($eventDispatcher);
 
-        return null;
+        $this->attributeFactory = $attributeFactory;
     }
 
     /**
-     * This initializes the Contao Singleton object stack as it must be.
+     * Retrieve the event dispatcher.
      *
-     * When using singletons within the config.php file of an Extension.
-     *
-     * @return void
+     * @return EventDispatcherInterface
      */
-    protected static function initializeContaoObjectStack()
+    public function getEventDispatcher()
     {
-        // All of these getInstance calls are necessary to keep the instance stack intact
-        // and therefore prevent an Exception in unknown on line 0.
-        // Hopefully this will get fixed with Contao Reloaded or Contao 3.
-        \Config::getInstance();
-        \Environment::getInstance();
-        \Input::getInstance();
-
-        // Request token became available in 2.11.
-        if (version_compare(VERSION, '2.11', '>=')) {
-            \RequestToken::getInstance();
-        }
-
-        self::getUser();
-
-        \Database::getInstance();
+        return $this->eventDispatcher;
     }
 
     /**
-     * Determines the correct factory from a metamodel table name.
+     * Set the event dispatcher.
      *
-     * @param string $strTableName The table name of the metamodel for which the factory class shall be fetched for.
+     * @param EventDispatcherInterface $eventDispatcher The event dispatcher to set.
      *
-     * @return string The factory class name which handles instantiation of the MetaModel or NULL if no class could
-     *                be found.
+     * @return Factory
+     */
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the attribute factory.
+     *
+     * @return IAttributeFactory
+     */
+    public function getAttributeFactory()
+    {
+        return $this->attributeFactory;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function translateIdToMetaModelName($metaModelId)
+    {
+        $event = new GetMetaModelNameFromIdEvent($metaModelId);
+
+        $this->getEventDispatcher()->dispatch($event::NAME, $event);
+
+        return $event->getMetaModelName();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMetaModel($metaModelName)
+    {
+        $event = new CreateMetaModelEvent($this, $metaModelName);
+
+        $this->getEventDispatcher()->dispatch($event::NAME, $event);
+
+        $metaModel = $event->getMetaModel();
+
+        if ($metaModel) {
+            $attributeFactory = $this->getAttributeFactory();
+            foreach ($attributeFactory->createAttributesForMetaModel($metaModel) as $attribute) {
+                $metaModel->addAttribute($attribute);
+            }
+        }
+
+        return $metaModel;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function collectNames()
+    {
+        $event = new CollectMetaModelTableNamesEvent($this);
+
+        $this->getEventDispatcher()->dispatch($event::NAME, $event);
+
+        return $event->getMetaModelNames();
+    }
+
+    /**
+     * Inline create an instance of this factory.
+     *
+     * @return IFactory
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    protected static function getModelFactory($strTableName)
+    private static function createDefaultFactory()
     {
-        if (isset($GLOBALS['METAMODELS']['factories'][$strTableName])) {
-            return $GLOBALS['METAMODELS']['factories'][$strTableName];
-        }
-
-        return null;
+        $eventDispatcher  = $GLOBALS['container']['event-dispatcher'];
+        $attributeFactory = new AttributeFactory($eventDispatcher);
+        return new static($eventDispatcher, $attributeFactory);
     }
 
     /**
-     * Create a MetaModel instance with the given information.
+     * Inline create an instance of this factory.
      *
-     * @param array $arrData The meta information for the MetaModel.
-     *
-     * @return \MetaModels\IMetaModel the meta model
+     * @return IFactory
      */
-    protected static function createInstance($arrData)
+    public static function getDefaultFactory()
     {
-        $objMetaModel = null;
-        if ($arrData) {
-            // NOTE: we allow other devs to override the factory via a lookup table. This way
-            // another (sub)class can be defined to create the instances.
-            // reference is via tableName => classname.
-            $strFactoryClass = self::getModelFactory($arrData['tableName']);
-            if ($strFactoryClass) {
-                $objMetaModel = call_user_func_array(array($strFactoryClass, 'createInstance'), array($arrData));
-            } else {
-                $objMetaModel = new MetaModel($arrData);
-            }
-            self::$arrInstances[$arrData['id']] =
-            self::$arrInstancesByTable[$arrData['tableName']] =
-                $objMetaModel;
+        if (!self::$defaultFactory) {
+            self::$defaultFactory = self::createDefaultFactory();
         }
-        return $objMetaModel;
+
+        return self::$defaultFactory;
     }
 
     /**
@@ -149,27 +183,20 @@ class Factory implements IFactory
      */
     public static function byId($intId)
     {
-        if (array_key_exists($intId, self::$arrInstances)) {
-            return self::$arrInstances[$intId];
-        }
-        $objData = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel WHERE id=?')
-            ->limit(1)
-            ->execute($intId);
-        return ($objData->numRows) ? self::createInstance($objData->row()) : null;
+        $factory = static::getDefaultFactory();
+        $name    = $factory->translateIdToMetaModelName($intId);
+
+        return $factory->getMetaModel($name);
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function byTableName($strTablename)
+    public static function byTableName($strTableName)
     {
-        if (array_key_exists($strTablename, self::$arrInstancesByTable)) {
-            return self::$arrInstancesByTable[$strTablename];
-        }
-        $objData = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel WHERE tableName=?')
-            ->limit(1)
-            ->execute($strTablename);
-        return ($objData->numRows) ? self::createInstance($objData->row()) : null;
+        $factory = static::getDefaultFactory();
+
+        return $factory->getMetaModel($strTableName);
     }
 
     /**
@@ -177,25 +204,8 @@ class Factory implements IFactory
      */
     public static function getAllTables()
     {
-        if (self::$tableNames !== null) {
-            return self::$tableNames;
-        }
+        $factory = static::getDefaultFactory();
 
-        self::initializeContaoObjectStack();
-
-        $objDB = \Database::getInstance();
-        if ($objDB) {
-            if (!$objDB->tableExists('tl_metamodel')) {
-                // I can't work without a properly installed database.
-                return array();
-            }
-
-            self::$tableNames = $objDB->execute('SELECT * FROM tl_metamodel')
-                ->fetchEach('tableName');
-
-            return self::$tableNames;
-        }
-
-        return array();
+        return $factory->collectNames();
     }
 }
