@@ -16,12 +16,31 @@
 
 namespace MetaModels\Test\Contao;
 
+/**
+ * Mock-up micro class to simulate the Contao Input class.
+ */
 class Input
 {
+
+    /**
+     * The get parameters.
+     *
+     * @var array
+     */
     public static $get;
 
+    /**
+     * The post values.
+     *
+     * @var array
+     */
     public static $post;
 
+    /**
+     * The cookies.
+     *
+     * @var array
+     */
     public static $cookie;
 
 
@@ -139,10 +158,13 @@ class Input
 
 
     /**
-     * Set a $_COOKIE variable
+     * Set a $_COOKIE variable.
      *
-     * @param string $strKey   The variable name
-     * @param mixed  $varValue The variable value
+     * @param string $strKey   The variable name.
+     *
+     * @param mixed  $varValue The variable value.
+     *
+     * @return void
      */
     public static function setCookie($strKey, $varValue)
     {
@@ -155,11 +177,11 @@ class Input
 
 
     /**
-     * Fallback to the session form data if there is no post data
+     * Fallback to the session form data if there is no post data.
      *
-     * @param string $strKey The variable name
+     * @param string $strKey The variable name.
      *
-     * @return mixed The variable value
+     * @return mixed The variable value.
      */
     public static function findPost($strKey)
     {
@@ -170,9 +192,9 @@ class Input
     /**
      * Return the object instance (Singleton).
      *
-     * @return \Input The object instance
+     * @return \Input The object instance.
      *
-     * @deprecated Input is now a static class
+     * @deprecated Input is now a static class.
      */
     public static function getInstance()
     {

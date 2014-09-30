@@ -16,8 +16,16 @@
 
 namespace MetaModels\Test\Contao;
 
+/**
+ * Simulate the Contao Session class.
+ */
 class Session
 {
+    /**
+     * The values.
+     *
+     * @var array
+     */
     public static $values;
 
     /**

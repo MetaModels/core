@@ -19,10 +19,15 @@ namespace MetaModels\Test\Filter\Setting;
 use MetaModels\Filter\Setting\ICollection;
 use MetaModels\IMetaModel;
 
+/**
+ * Abstract base class for testing filter settings.
+ */
 abstract class TestCase extends \MetaModels\Test\TestCase
 {
     /**
      * Mock a MetaModel.
+     *
+     * @param string $tableName The table name of the MetaModel to mock (optional, defaults to "mm_unittest").
      *
      * @return IMetaModel
      */
@@ -44,6 +49,8 @@ abstract class TestCase extends \MetaModels\Test\TestCase
 
     /**
      * Mock an ICollection.
+     *
+     * @param string $tableName The table name of the MetaModel to mock (optional, defaults to "mm_unittest").
      *
      * @return ICollection
      */

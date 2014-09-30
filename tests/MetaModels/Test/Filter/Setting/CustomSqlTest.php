@@ -18,6 +18,9 @@ namespace MetaModels\Test\Filter\Setting;
 
 use MetaModels\Filter\Setting\CustomSql;
 
+/**
+ * Unit test for testing the CustomSql filter setting.
+ */
 class CustomSqlTest extends TestCase
 {
     /**
@@ -55,7 +58,9 @@ class CustomSqlTest extends TestCase
      * Internal convenience method to call the protected generateSql method on the customSql instance.
      *
      * @param CustomSql $instance  The instance.
+     *
      * @param array     $params    The result parameter array.
+     *
      * @param array     $filterUrl The filter url to process.
      *
      * @return mixed

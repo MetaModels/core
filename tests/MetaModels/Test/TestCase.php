@@ -16,14 +16,21 @@
 
 namespace MetaModels\Test;
 
+/**
+ * Abstract base class for test cases.
+ */
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param $post
+     * Initialize the input instance with the given values.
      *
-     * @param $get
+     * @param array $get     The GET values to use.
      *
-     * @param $cookies
+     * @param array $post    The POST values to use.
+     *
+     * @param array $cookies The COOKIE values to use.
+     *
+     * @return void
      */
     protected function initializeContaoInputClass($get = null, $post = null, $cookies = null)
     {
