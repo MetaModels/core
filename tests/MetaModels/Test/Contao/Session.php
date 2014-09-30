@@ -29,8 +29,7 @@ class Session
      */
     public static function get($strKey)
     {
-        if (!isset(static::$values[$strKey]))
-        {
+        if (!isset(static::$values[$strKey])) {
             return null;
         }
 
@@ -49,8 +48,7 @@ class Session
     {
         unset(static::$values[$strKey]);
 
-        if ($varValue !== null)
-        {
+        if ($varValue !== null) {
             static::$values[$strKey] = $varValue;
         }
     }

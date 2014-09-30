@@ -95,15 +95,18 @@ class SimpleTest extends TestCase
             $this->addUrlParameter($setting, '/a/A/b/B', 'auto_item', 'foo'),
             'auto_item'
         );
-        $this->assertEquals('/a/A/b/B/bar/foo',
+        $this->assertEquals(
+            '/a/A/b/B/bar/foo',
             $this->addUrlParameter($setting, '/a/A/b/B', 'bar', 'foo'),
             'bar'
         );
-        $this->assertEquals('/a/A/b/B/bar/%%25foo',
+        $this->assertEquals(
+            '/a/A/b/B/bar/%%25foo',
             $this->addUrlParameter($setting, '/a/A/b/B', 'bar', '%foo'),
             'bar with percent'
         );
-        $this->assertEquals('/a/A/b/B/bar/%%24foo',
+        $this->assertEquals(
+            '/a/A/b/B/bar/%%24foo',
             $this->addUrlParameter($setting, '/a/A/b/B', 'bar', '$foo'),
             'bar with dollar'
         );

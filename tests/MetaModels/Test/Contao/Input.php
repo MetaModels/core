@@ -34,8 +34,7 @@ class Input
      */
     public static function get($strKey)
     {
-        if (!isset(static::$get[$strKey]))
-        {
+        if (!isset(static::$get[$strKey])) {
             return null;
         }
 
@@ -52,8 +51,7 @@ class Input
      */
     public static function post($strKey)
     {
-        if (!isset(static::$post[$strKey]))
-        {
+        if (!isset(static::$post[$strKey])) {
             return null;
         }
 
@@ -95,8 +93,7 @@ class Input
      */
     public static function cookie($strKey)
     {
-        if (!isset(static::$cookie[$strKey]))
-        {
+        if (!isset(static::$cookie[$strKey])) {
             return null;
         }
 
@@ -116,8 +113,7 @@ class Input
     {
         unset(static::$get[$strKey]);
 
-        if ($varValue !== null)
-        {
+        if ($varValue !== null) {
             static::$get[$strKey] = $varValue;
         }
     }
@@ -136,8 +132,7 @@ class Input
     {
         unset(static::$post[$strKey]);
 
-        if ($varValue !== null)
-        {
+        if ($varValue !== null) {
             static::$post[$strKey] = $varValue;
         }
     }
@@ -153,8 +148,7 @@ class Input
     {
         unset(static::$cookie[$strKey]);
 
-        if ($varValue !== null)
-        {
+        if ($varValue !== null) {
             static::$cookie[$strKey] = $varValue;
         }
     }

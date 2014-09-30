@@ -40,7 +40,7 @@ class CustomSqlTest extends TestCase
         $setting
             ->expects($this->any())
             ->method('parseInsertTags')
-            ->will($this->returnCallback(function ($sql){
+            ->will($this->returnCallback(function ($sql) {
                 return str_replace(
                     array('{{', '::', '}}'),
                     '__',
