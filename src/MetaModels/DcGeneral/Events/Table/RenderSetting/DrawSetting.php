@@ -30,6 +30,13 @@ use MetaModels\Factory;
 class DrawSetting
 {
     /**
+     * Internal cache to speed up lookup of the render settings.
+     *
+     * @var array
+     */
+    protected static $renderSettingsCache = array();
+
+    /**
      * Draw the render setting.
      *
      * @param ModelToLabelEvent $event The event.
@@ -41,11 +48,16 @@ class DrawSetting
      */
     public static function modelToLabel(ModelToLabelEvent $event)
     {
-        $model        = $event->getModel();
-        $objSetting   = \Database::getInstance()
-            ->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')
-            ->execute($model->getProperty('pid'));
-        $objMetaModel = Factory::byId($objSetting->pid);
+        $model = $event->getModel();
+
+        if (!isset(self::$renderSettingsCache[$model->getProperty('pid')])) {
+            $objSetting = \Database::getInstance()
+                ->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')
+                ->execute($model->getProperty('pid'));
+
+            self::$renderSettingsCache[$model->getProperty('pid')] = $objSetting->row();
+        }
+        $objMetaModel = Factory::byId(self::$renderSettingsCache[$model->getProperty('pid')]['pid']);
 
         $objAttribute = $objMetaModel->getAttributeById($model->getProperty('attr_id'));
 

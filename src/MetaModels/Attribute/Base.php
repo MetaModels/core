@@ -17,7 +17,6 @@
 
 namespace MetaModels\Attribute;
 
-use MetaModels\Factory as ModelFactory;
 use MetaModels\IMetaModel;
 use MetaModels\Render\Setting\ISimple;
 use MetaModels\Render\Setting\Simple;
@@ -35,11 +34,11 @@ use MetaModels\Render\Template;
 abstract class Base implements IAttribute
 {
     /**
-     * Name of the MetaModel instance this object belongs to.
+     * The MetaModel instance this object belongs to.
      *
-     * @var string
+     * @var IMetaModel
      */
-    private $strMetaModel = '';
+    private $metaModel;
 
     /**
      * The meta information of this attribute.
@@ -67,7 +66,7 @@ abstract class Base implements IAttribute
                 $this->set($strSettingName, $arrData[$strSettingName]);
             }
         }
-        $this->strMetaModel = $objMetaModel->getTableName();
+        $this->metaModel = $objMetaModel;
     }
 
     /**
@@ -193,7 +192,7 @@ abstract class Base implements IAttribute
      */
     public function getMetaModel()
     {
-        return ModelFactory::byTableName($this->strMetaModel);
+        return $this->metaModel;
     }
 
     /**

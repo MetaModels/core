@@ -19,47 +19,54 @@ namespace MetaModels\Test\Filter\Setting;
 use MetaModels\Filter\Setting\ICollection;
 use MetaModels\IMetaModel;
 
+/**
+ * Abstract base class for testing filter settings.
+ */
 abstract class TestCase extends \MetaModels\Test\TestCase
 {
-	/**
-	 * Mock a MetaModel.
-	 *
-	 * @return IMetaModel
-	 */
-	protected function mockMetaModel($tableName = 'mm_unittest')
-	{
-		$metaModel = $this->getMock(
-			'MetaModels\MetaModel',
-			array(),
-			array(array())
-		);
+    /**
+     * Mock a MetaModel.
+     *
+     * @param string $tableName The table name of the MetaModel to mock (optional, defaults to "mm_unittest").
+     *
+     * @return IMetaModel
+     */
+    protected function mockMetaModel($tableName = 'mm_unittest')
+    {
+        $metaModel = $this->getMock(
+            'MetaModels\MetaModel',
+            array(),
+            array(array())
+        );
 
-		$metaModel
-			->expects($this->any())
-			->method('getTableName')
-			->will($this->returnValue($tableName));
+        $metaModel
+            ->expects($this->any())
+            ->method('getTableName')
+            ->will($this->returnValue($tableName));
 
-		return $metaModel;
-	}
+        return $metaModel;
+    }
 
-	/**
-	 * Mock an ICollection.
-	 *
-	 * @return ICollection
-	 */
-	protected function mockFilterSetting($tableName = 'mm_unittest')
-	{
-		$filterSetting = $this->getMock(
-			'MetaModels\Filter\Setting\Collection',
-			array('getMetaModel'),
-			array(array())
-		);
+    /**
+     * Mock an ICollection.
+     *
+     * @param string $tableName The table name of the MetaModel to mock (optional, defaults to "mm_unittest").
+     *
+     * @return ICollection
+     */
+    protected function mockFilterSetting($tableName = 'mm_unittest')
+    {
+        $filterSetting = $this->getMock(
+            'MetaModels\Filter\Setting\Collection',
+            array('getMetaModel'),
+            array(array())
+        );
 
-		$filterSetting
-			->expects($this->any())
-			->method('getMetaModel')
-			->will($this->returnValue($this->mockMetaModel($tableName)));
+        $filterSetting
+            ->expects($this->any())
+            ->method('getMetaModel')
+            ->will($this->returnValue($this->mockMetaModel($tableName)));
 
-		return $filterSetting;
-	}
+        return $filterSetting;
+    }
 }

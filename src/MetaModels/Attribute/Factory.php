@@ -17,12 +17,16 @@
 
 namespace MetaModels\Attribute;
 
-use MetaModels\Factory as MetaModelFactory;
+use MetaModels\Attribute\Events\CollectMetaModelAttributeInformationEvent;
+use MetaModels\Attribute\Events\CreateAttributeEvent;
+use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
+use MetaModels\IMetaModel;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This is the implementation of the Field factory to query instances of fields.
  *
- * Usually this is only used internally by {@link MetaModel}
+ * Usually this is only used internally by {@link MetaModels\Factory}
  *
  * @package    MetaModels
  * @subpackage Core
@@ -31,73 +35,213 @@ use MetaModels\Factory as MetaModelFactory;
 class Factory implements IFactory
 {
     /**
-     * All attribute instances for all MetaModels that are created via this factory.
+     * The default factory instance.
      *
-     * @var IAttribute[]
+     * @var IFactory
      */
-    protected static $arrAttributes = array();
+    protected static $defaultFactory;
 
     /**
-     * Determines the correct class from a field type name.
+     * The event dispatcher.
      *
-     * @param string $strFieldType The field type of which the class shall be fetched from.
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
+     * The registered type factories.
      *
-     * @return string the class name which handles the field type or NULL if no class could be found.
+     * @var IAttributeTypeFactory[]
+     */
+    protected $typeFactories = array();
+
+    /**
+     * Create a new instance.
+     *
+     * @param EventDispatcherInterface $eventDispatcher The event dispatcher to use.
+     */
+    public function __construct(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->setEventDispatcher($eventDispatcher);
+
+        $eventDispatcher->dispatch(CreateAttributeFactoryEvent::NAME, new CreateAttributeFactoryEvent($this));
+    }
+
+    /**
+     * Retrieve the event dispatcher.
+     *
+     * @return EventDispatcherInterface
+     */
+    public function getEventDispatcher()
+    {
+        return $this->eventDispatcher;
+    }
+
+    /**
+     * Set the event dispatcher.
+     *
+     * @param EventDispatcherInterface $eventDispatcher The event dispatcher to set.
+     *
+     * @return Factory
+     */
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+
+        return $this;
+    }
+
+    /**
+     * Create an attribute instance from an information array.
+     *
+     * @param array      $information The attribute information.
+     *
+     * @param IMetaModel $metaModel   The MetaModel instance for which the attribute shall be created.
+     *
+     * @return IAttribute|null
+     */
+    public function createAttribute($information, $metaModel)
+    {
+        $event = new CreateAttributeEvent($information, $metaModel);
+        $this->getEventDispatcher()->dispatch(CreateAttributeEvent::NAME, $event);
+
+        if ($event->getAttribute()) {
+            return $event->getAttribute();
+        }
+
+        $factory = $this->getTypeFactory($information['type']);
+
+        return $factory->createInstance($information, $metaModel);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @throws \RuntimeException When the type is already registered.
+     */
+    public function addTypeFactory(IAttributeTypeFactory $typeFactory)
+    {
+        $typeName = $typeFactory->getTypeName();
+        if (isset($this->typeFactories[$typeName])) {
+            throw new \RuntimeException('Attribute type ' . $typeName . ' is already registered.');
+        }
+
+        $this->typeFactories[$typeName] = $typeFactory;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypeFactory($typeFactory)
+    {
+        return isset($this->typeFactories[(string)$typeFactory]) ? $this->typeFactories[(string)$typeFactory] : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeTypeMatchesFlags($name, $flags)
+    {
+        $factory = $this->getTypeFactory($name);
+
+        // Shortcut, if all are valid, return all. :)
+        if ($flags === IAttributeTypeFactory::FLAG_ALL) {
+            return true;
+        }
+
+        if (!($flags & IAttributeTypeFactory::FLAG_INCLUDE_SIMPLE) && $factory->isSimpleType()) {
+            return false;
+        }
+
+        if (!($flags & IAttributeTypeFactory::FLAG_INCLUDE_COMPLEX) && $factory->isComplexType()) {
+            return false;
+        }
+
+        if (!($flags & IAttributeTypeFactory::FLAG_INCLUDE_TRANSLATED) && $factory->isTranslatedType()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypeNames($flags = false)
+    {
+        if ($flags === false) {
+            $flags = IAttributeTypeFactory::FLAG_ALL;
+        }
+
+        $result = array();
+        foreach (array_keys($this->typeFactories) as $name) {
+            if (!$this->attributeTypeMatchesFlags($name, $flags)) {
+                continue;
+            }
+
+            $result[] = $name;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Inline create an instance of this factory.
+     *
+     * @return IFactory
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    protected static function getAttributeTypeClass($strFieldType)
+    private static function createDefaultFactory()
     {
-        if (isset($GLOBALS['METAMODELS']['attributes'][$strFieldType]['class'])) {
-            return $GLOBALS['METAMODELS']['attributes'][$strFieldType]['class'];
-        }
-
-        return null;
+        return new static($GLOBALS['container']['event-dispatcher']);
     }
 
     /**
-     * Determines the correct factory from a field type name.
+     * Inline create an instance of this factory.
      *
-     * @param string $strFieldType The field type of which the factory class shall be fetched from.
+     * @return IFactory
      *
-     * @return string The factory class name which handles instantiation of the field type or NULL if no class could
-     *                be found.
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @deprecated You should not use this method it is part of the backward compatibility layer.
      */
-    protected static function getAttributeTypeFactory($strFieldType)
+    public static function getDefaultFactory()
     {
-        if (isset($GLOBALS['METAMODELS']['attributes'][$strFieldType]['factory'])) {
-            return $GLOBALS['METAMODELS']['attributes'][$strFieldType]['factory'];
+        if (!self::$defaultFactory) {
+            self::$defaultFactory = self::createDefaultFactory();
         }
 
-        return null;
+        return self::$defaultFactory;
     }
 
     /**
-     * Create a MetaModelAttribute instance with the given information.
-     *
-     * @param array $arrData The meta information for the attribute.
-     *
-     * @return IAttribute|null the created instance or null if unable to construct.
+     * {@inheritdoc}
      */
-    protected static function createInstance($arrData)
+    public function collectAttributeInformation(IMetaModel $metaModel)
     {
-        $strFactoryName = self::getAttributeTypeFactory($arrData['type']);
+        $event = new CollectMetaModelAttributeInformationEvent($metaModel);
 
-        $objAttribute = null;
-        if ($strFactoryName) {
-            $objAttribute = call_user_func_array(array($strFactoryName, 'createInstance'), array($arrData));
-        } else {
-            $strClassName = self::getAttributeTypeClass($arrData['type']);
-            if ($strClassName) {
-                $objMetaModel = MetaModelFactory::byId($arrData['pid']);
-                $objAttribute = new $strClassName($objMetaModel, $arrData);
+        $this->getEventDispatcher()->dispatch($event::NAME, $event);
+
+        return $event->getAttributeInformation();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createAttributesForMetaModel($metaModel)
+    {
+        $attributes = array();
+        foreach ($this->collectAttributeInformation($metaModel) as $information) {
+            $attribute = $this->createAttribute($information, $metaModel);
+            if ($attribute) {
+                $attributes[] = $attribute;
             }
         }
-        return $objAttribute;
+
+        return $attributes;
     }
 
     /**
@@ -105,7 +249,7 @@ class Factory implements IFactory
      */
     public static function createFromArray($arrData)
     {
-        return self::createInstance($arrData);
+        return self::getDefaultFactory()->createAttribute($arrData, \MetaModels\Factory::byId($arrData['pid']));
     }
 
     /**
@@ -113,66 +257,43 @@ class Factory implements IFactory
      */
     public static function createFromDB($objRow)
     {
-        return self::createInstance($objRow->row());
+        return self::createFromArray($objRow->row());
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Use an instance of the factory and method createAttribute().
      */
     public static function getAttributesFor($objMetaModel)
     {
-        $objDB         = \Database::getInstance();
-        $objAttributes = $objDB->prepare('SELECT * FROM tl_metamodel_attribute WHERE pid=?')
-            ->execute($objMetaModel->get('id'));
-
-        $arrAttributes = array();
-        while ($objAttributes->next()) {
-            if (isset(self::$arrAttributes[$objAttributes->id])) {
-                $arrAttributes[] = self::$arrAttributes[$objAttributes->id];
-            } else {
-                $objAttribute = self::createFromDB($objAttributes);
-                if ($objAttribute) {
-                    $arrAttributes[] = $objAttribute;
-
-                    self::$arrAttributes[$objAttributes->id] = $objAttribute;
-                }
-            }
-        }
-        return $arrAttributes;
+        return self::getDefaultFactory()->createAttributesForMetaModel($objMetaModel);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function getAttributeTypes($blnSupportTranslated = false, $blnSupportVariants = false)
     {
+        $flags = IAttributeTypeFactory::FLAG_ALL_UNTRANSLATED;
         if ($blnSupportTranslated) {
-            return array_keys($GLOBALS['METAMODELS']['attributes']);
+            $flags |= IAttributeTypeFactory::FLAG_INCLUDE_TRANSLATED;
         }
-        $arrRet = array();
-        foreach ($GLOBALS['METAMODELS']['attributes'] as $strKey => $arrInformation) {
-            $arrInterfaces = class_implements($arrInformation['class'], true);
-            // Skip translated field types if translation is not supported.
-            if ((!$blnSupportTranslated && in_array('MetaModels\Attribute\ITranslated', $arrInterfaces))) {
-                continue;
-            }
 
-            $arrRet[] = $strKey;
-        }
-        return $arrRet;
+        return self::getDefaultFactory()->getTypeNames($flags);
     }
 
     /**
      * {@inheritdoc}
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function isValidAttributeType($strFieldType)
     {
-        return array_key_exists($strFieldType, $GLOBALS['METAMODELS']['attributes']);
+        trigger_error(
+            'WARNING: isValidAttributeType is deprecated Will not be in available anymore - ' .
+            'if you need this, file a ticket.',
+            E_USER_WARNING
+        );
+
+        return (bool)self::getDefaultFactory()->getTypeFactory($strFieldType);
     }
 }
