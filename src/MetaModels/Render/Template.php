@@ -105,10 +105,13 @@ class Template
      * @param string $strKey The name of the property.
      *
      * @return mixed
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function __get($strKey)
     {
-        if (!array_key_exists($strKey, $this->arrData)) {
+        if ($GLOBALS['TL_CONFIG']['debugMode'] && !array_key_exists($strKey, $this->arrData)) {
             trigger_error($this->getName() . ': Undefined template variable: ' . $strKey, E_USER_WARNING);
 
             return null;
