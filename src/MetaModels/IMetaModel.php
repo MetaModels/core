@@ -35,6 +35,24 @@ use MetaModels\Filter\IFilter;
 interface IMetaModel
 {
     /**
+     * Adds an attribute to the internal list of attributes.
+     *
+     * @param IAttribute $objAttribute The attribute instance to add.
+     *
+     * @return IMetaModel
+     */
+    public function addAttribute(IAttribute $objAttribute);
+
+    /**
+     * Checks if an attribute with the given name has been added to the internal list.
+     *
+     * @param string $strAttributeName The name of the attribute to search.
+     *
+     * @return bool
+     */
+    public function hasAttribute($strAttributeName);
+
+    /**
      * Get a configuration setting.
      *
      * @param string $strKey The key of the property that shall be fetched.
