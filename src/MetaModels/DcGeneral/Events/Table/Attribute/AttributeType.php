@@ -18,6 +18,7 @@
 namespace MetaModels\DcGeneral\Events\Table\Attribute;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use MetaModels\Attribute\IAttributeTypeFactory;
 use MetaModels\Factory as ModelFactory;
 use MetaModels\Attribute\Factory as AttributeFactory;
 
@@ -37,15 +38,18 @@ class AttributeType
      */
     public static function getOptions(GetPropertyOptionsEvent $event)
     {
-        $translator   = $event->getEnvironment()->getTranslator();
-        $objMetaModel = ModelFactory::byId($event->getModel()->getProperty('pid'));
-        $attributes   = AttributeFactory::getAttributeTypes(
-            $objMetaModel->isTranslated(),
-            $objMetaModel->hasVariants()
-        );
+        $translator       = $event->getEnvironment()->getTranslator();
+        $attributeFactory = new AttributeFactory(func_get_arg(2));
+        $modelFactory     = new ModelFactory($attributeFactory->getEventDispatcher(), $attributeFactory);
+        $metaModelName    = $modelFactory->translateIdToMetaModelName($event->getModel()->getProperty('pid'));
+        $objMetaModel     = $modelFactory->getMetaModel($metaModelName);
+        $flags            = IAttributeTypeFactory::FLAG_ALL_UNTRANSLATED;
+        if ($objMetaModel->isTranslated()) {
+            $flags |= IAttributeTypeFactory::FLAG_INCLUDE_TRANSLATED;
+        }
 
         $options = array();
-        foreach ($attributes as $attributeType) {
+        foreach ($attributeFactory->getTypeNames($flags) as $attributeType) {
             $options[$attributeType] = $translator->translate(
                 'typeOptions.' . $attributeType,
                 'tl_metamodel_attribute'
