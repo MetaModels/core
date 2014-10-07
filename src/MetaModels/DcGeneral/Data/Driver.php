@@ -618,7 +618,8 @@ class Driver implements MultiLanguageDataProviderInterface
                 ($strSortBy ? $strSortBy : ''),
                 $objConfig->getStart(),
                 $objConfig->getAmount(),
-                ($strSortBy ? $strSortDir : '')
+                ($strSortBy ? $strSortDir : ''),
+                $objConfig->getFields() ?: array()
             );
 
             $objResultCollection = $this->getEmptyCollection();
