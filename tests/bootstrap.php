@@ -31,7 +31,3 @@ if (
         'php composer.phar install'.PHP_EOL;
     exit(1);
 }
-
-$loader->add('MetaModels\Test', __DIR__);
-
-require __DIR__.'/MetaModels/Test/TestCase.php';
