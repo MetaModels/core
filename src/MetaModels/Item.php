@@ -23,6 +23,7 @@ use MetaModels\Attribute\IAttribute;
 use MetaModels\Filter\IFilter;
 use MetaModels\Helper\ContaoController;
 use MetaModels\Factory as MetaModelFactory;
+use MetaModels\Attribute\Factory as AttributeFactory;
 use MetaModels\Filter\Setting\Factory as FilterSettingsFactory;
 use MetaModels\Render\Setting\ICollection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -42,6 +43,15 @@ class Item implements IItem
      * @var string
      */
     protected $strModelName = null;
+
+    /**
+     * The MetaModel instance attached to the item.
+     *
+     * Get's populated with the first call to getMetaModel() (lazy initialization).
+     *
+     * @var IMetaModel
+     */
+    protected $metaModel;
 
     /**
      * The data array containing the raw values obtained from the attributes.
@@ -201,7 +211,13 @@ class Item implements IItem
      */
     public function getMetaModel()
     {
-        return MetaModelFactory::byTableName($this->strModelName);
+        if (!$this->metaModel) {
+            $dispatcher      = $this->getEventDispatcher();
+            $factory         = new MetaModelFactory($dispatcher, new AttributeFactory($dispatcher));
+            $this->metaModel = $factory->getMetaModel($this->strModelName);
+        }
+
+        return $this->metaModel;
     }
 
     /**
