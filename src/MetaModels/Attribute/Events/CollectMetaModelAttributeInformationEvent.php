@@ -42,7 +42,7 @@ class CollectMetaModelAttributeInformationEvent extends Event
      *
      * @var array[]
      */
-    protected $attributeInformation;
+    protected $attributeInformation = array();
 
     /**
      * Create a new instance.
