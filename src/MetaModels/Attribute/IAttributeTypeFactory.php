@@ -30,31 +30,6 @@ use MetaModels\IMetaModel;
 interface IAttributeTypeFactory
 {
     /**
-     * Flag for filtering translated attributes.
-     */
-    const FLAG_INCLUDE_TRANSLATED = 1;
-
-    /**
-     * Flag for translated attributes.
-     */
-    const FLAG_INCLUDE_SIMPLE = 2;
-
-    /**
-     * Flag for complex attributes.
-     */
-    const FLAG_INCLUDE_COMPLEX = 4;
-
-    /**
-     * Flag for retrieving all attribute types.
-     */
-    const FLAG_ALL = 7;
-
-    /**
-     * Flag for filtering untranslated attributes.
-     */
-    const FLAG_ALL_UNTRANSLATED = 6;
-
-    /**
      * Return the type name - this is the internal type name used by MetaModels.
      *
      * @return string

@@ -45,19 +45,6 @@ class AttributeTypeFactoryTest extends TestCase
      */
     public function attributeTypeInformationMakesSense($attributeFactory)
     {
-        $this->assertFalse(
-            $attributeFactory->isTranslatedType() && $attributeFactory->isComplexType(),
-            $attributeFactory->getTypeName() . ' is translated and complex. But must bei either one or the other.'
-        );
-        $this->assertFalse(
-            $attributeFactory->isTranslatedType() && $attributeFactory->isSimpleType(),
-            $attributeFactory->getTypeName() . ' is translated and simple. But must bei either one or the other.'
-        );
-        $this->assertFalse(
-            $attributeFactory->isSimpleType() && $attributeFactory->isComplexType(),
-            $attributeFactory->getTypeName() . ' is simple and complex. But must bei either one or the other.'
-        );
-
         $this->assertTrue(
             $attributeFactory->isTranslatedType()
             || $attributeFactory->isSimpleType()

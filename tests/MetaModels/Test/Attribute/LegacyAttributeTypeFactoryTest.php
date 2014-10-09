@@ -20,7 +20,6 @@ use MetaModels\Attribute\Events\LegacyListener;
 use MetaModels\Attribute\Factory;
 use MetaModels\Attribute\IAttributeTypeFactory;
 use MetaModels\Test\Attribute\Mock\AttributeFactoryMocker;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**

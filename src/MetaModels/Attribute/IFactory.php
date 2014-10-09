@@ -30,6 +30,33 @@ use MetaModels\IMetaModel;
 interface IFactory
 {
     /**
+     * Flag for filtering translated attributes.
+     */
+    const FLAG_INCLUDE_TRANSLATED = 1;
+
+    /**
+     * Flag for translated attributes.
+     */
+    const FLAG_INCLUDE_SIMPLE = 2;
+
+    /**
+     * Flag for complex attributes.
+     */
+    const FLAG_INCLUDE_COMPLEX = 4;
+
+    /**
+     * Flag for retrieving all attribute types.
+     */
+    const FLAG_ALL = 7;
+
+    /**
+     * Flag for filtering untranslated attributes.
+     *
+     * NOTE: When using this flag, translated complex and translated simple types will also get returned.
+     */
+    const FLAG_ALL_UNTRANSLATED = 6;
+
+    /**
      * Create an attribute instance from an information array.
      *
      * @param array      $information The attribute information.

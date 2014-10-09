@@ -85,7 +85,7 @@ class FactoryTest extends TestCase
             true,
             $factory->attributeTypeMatchesFlags(
                 $attributeFactory,
-                IAttributeTypeFactory::FLAG_ALL
+                IFactory::FLAG_ALL
             ),
             $attributeFactory . '.FLAG_ALL'
         );
@@ -94,7 +94,7 @@ class FactoryTest extends TestCase
             $shouldTranslated,
             $factory->attributeTypeMatchesFlags(
                 $attributeFactory,
-                IAttributeTypeFactory::FLAG_INCLUDE_TRANSLATED
+                IFactory::FLAG_INCLUDE_TRANSLATED
             ),
             $attributeFactory . '.FLAG_INCLUDE_TRANSLATED'
         );
@@ -103,7 +103,7 @@ class FactoryTest extends TestCase
             $shouldSimple,
             $factory->attributeTypeMatchesFlags(
                 $attributeFactory,
-                IAttributeTypeFactory::FLAG_INCLUDE_SIMPLE
+                IFactory::FLAG_INCLUDE_SIMPLE
             ),
             $attributeFactory . '.FLAG_INCLUDE_SIMPLE'
         );
@@ -112,7 +112,7 @@ class FactoryTest extends TestCase
             $shouldComplex,
             $factory->attributeTypeMatchesFlags(
                 $attributeFactory,
-                IAttributeTypeFactory::FLAG_INCLUDE_COMPLEX
+                IFactory::FLAG_INCLUDE_COMPLEX
             ),
             $attributeFactory . '.FLAG_INCLUDE_COMPLEX'
         );
@@ -129,10 +129,18 @@ class FactoryTest extends TestCase
         $factory->addTypeFactory($this->mockAttributeFactory('test_translated', true, false, false));
         $factory->addTypeFactory($this->mockAttributeFactory('test_simple', false, true, false));
         $factory->addTypeFactory($this->mockAttributeFactory('test_complex', false, false, true));
+        $factory->addTypeFactory($this->mockAttributeFactory('test_simplecomplex', false, true, true));
+        $factory->addTypeFactory($this->mockAttributeFactory('test_translatedsimple', true, true, false));
+        $factory->addTypeFactory($this->mockAttributeFactory('test_translatedcomplex', true, false, true));
+        $factory->addTypeFactory($this->mockAttributeFactory('test_translatedsimplecomplex', true, true, true));
 
         $this->mockFactoryTester($factory, 'test_translated', true, false, false);
         $this->mockFactoryTester($factory, 'test_simple', false, true, false);
         $this->mockFactoryTester($factory, 'test_complex', false, false, true);
+        $this->mockFactoryTester($factory, 'test_simplecomplex', false, true, true);
+        $this->mockFactoryTester($factory, 'test_translatedsimple', true, true, false);
+        $this->mockFactoryTester($factory, 'test_translatedcomplex', true, false, true);
+        $this->mockFactoryTester($factory, 'test_translatedsimplecomplex', true, true, true);
     }
 
     /**
@@ -146,69 +154,86 @@ class FactoryTest extends TestCase
 
         $this->assertSame(
             array(),
-            $factory->getTypeNames(IAttributeTypeFactory::FLAG_ALL),
+            $factory->getTypeNames(IFactory::FLAG_ALL),
             'FLAG_ALL'
         );
 
         $this->assertSame(
             array(),
-            $factory->getTypeNames(IAttributeTypeFactory::FLAG_INCLUDE_TRANSLATED),
+            $factory->getTypeNames(IFactory::FLAG_INCLUDE_TRANSLATED),
             'FLAG_INCLUDE_TRANSLATED'
         );
 
         $this->assertSame(
             array(),
-            $factory->getTypeNames(IAttributeTypeFactory::FLAG_INCLUDE_SIMPLE),
+            $factory->getTypeNames(IFactory::FLAG_INCLUDE_SIMPLE),
             'FLAG_INCLUDE_SIMPLE'
         );
 
         $this->assertSame(
             array(),
-            $factory->getTypeNames(IAttributeTypeFactory::FLAG_INCLUDE_COMPLEX),
+            $factory->getTypeNames(IFactory::FLAG_INCLUDE_COMPLEX),
             'FLAG_INCLUDE_COMPLEX'
         );
 
         $this->assertSame(
             array(),
-            $factory->getTypeNames(IAttributeTypeFactory::FLAG_ALL_UNTRANSLATED),
+            $factory->getTypeNames(IFactory::FLAG_ALL_UNTRANSLATED),
             'FLAG_ALL_UNTRANSLATED'
         );
 
         $factory->addTypeFactory($this->mockAttributeFactory('test_translated', true, false, false));
         $factory->addTypeFactory($this->mockAttributeFactory('test_simple', false, true, false));
         $factory->addTypeFactory($this->mockAttributeFactory('test_complex', false, false, true));
+        $factory->addTypeFactory($this->mockAttributeFactory('test_simplecomplex', false, true, true));
+        $factory->addTypeFactory($this->mockAttributeFactory('test_translatedsimple', true, true, false));
+        $factory->addTypeFactory($this->mockAttributeFactory('test_translatedcomplex', true, false, true));
+        $factory->addTypeFactory($this->mockAttributeFactory('test_translatedsimplecomplex', true, true, true));
 
         $this->assertSame(
             array(
                 'test_translated',
                 'test_simple',
                 'test_complex',
+                'test_simplecomplex',
+                'test_translatedsimple',
+                'test_translatedcomplex',
+                'test_translatedsimplecomplex',
             ),
-            $factory->getTypeNames(IAttributeTypeFactory::FLAG_ALL),
+            $factory->getTypeNames(IFactory::FLAG_ALL),
             'FLAG_ALL'
         );
 
         $this->assertSame(
             array(
                 'test_translated',
+                'test_translatedsimple',
+                'test_translatedcomplex',
+                'test_translatedsimplecomplex',
             ),
-            $factory->getTypeNames(IAttributeTypeFactory::FLAG_INCLUDE_TRANSLATED),
+            $factory->getTypeNames(IFactory::FLAG_INCLUDE_TRANSLATED),
             'FLAG_INCLUDE_TRANSLATED'
         );
 
         $this->assertSame(
             array(
                 'test_simple',
+                'test_simplecomplex',
+                'test_translatedsimple',
+                'test_translatedsimplecomplex',
             ),
-            $factory->getTypeNames(IAttributeTypeFactory::FLAG_INCLUDE_SIMPLE),
+            $factory->getTypeNames(IFactory::FLAG_INCLUDE_SIMPLE),
             'FLAG_INCLUDE_SIMPLE'
         );
 
         $this->assertSame(
             array(
                 'test_complex',
+                'test_simplecomplex',
+                'test_translatedcomplex',
+                'test_translatedsimplecomplex',
             ),
-            $factory->getTypeNames(IAttributeTypeFactory::FLAG_INCLUDE_COMPLEX),
+            $factory->getTypeNames(IFactory::FLAG_INCLUDE_COMPLEX),
             'FLAG_INCLUDE_COMPLEX'
         );
 
@@ -216,8 +241,12 @@ class FactoryTest extends TestCase
             array(
                 'test_simple',
                 'test_complex',
+                'test_simplecomplex',
+                'test_translatedsimple',
+                'test_translatedcomplex',
+                'test_translatedsimplecomplex',
             ),
-            $factory->getTypeNames(IAttributeTypeFactory::FLAG_ALL_UNTRANSLATED),
+            $factory->getTypeNames(IFactory::FLAG_ALL_UNTRANSLATED),
             'FLAG_ALL_UNTRANSLATED'
         );
     }
