@@ -18,9 +18,9 @@
 namespace MetaModels\DcGeneral\Events\Table\Attribute;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
-use MetaModels\Attribute\IAttributeTypeFactory;
+use MetaModels\Attribute\IFactory;
 use MetaModels\Factory as ModelFactory;
-use MetaModels\Attribute\Factory as AttributeFactory;
+use MetaModels\Attribute\Factory;
 
 /**
  * Event handler to populate the options array of the attribute type select widget.
@@ -39,13 +39,13 @@ class AttributeType
     public static function getOptions(GetPropertyOptionsEvent $event)
     {
         $translator       = $event->getEnvironment()->getTranslator();
-        $attributeFactory = new AttributeFactory(func_get_arg(2));
+        $attributeFactory = new Factory(func_get_arg(2));
         $modelFactory     = new ModelFactory($attributeFactory->getEventDispatcher(), $attributeFactory);
         $metaModelName    = $modelFactory->translateIdToMetaModelName($event->getModel()->getProperty('pid'));
         $objMetaModel     = $modelFactory->getMetaModel($metaModelName);
-        $flags            = IAttributeTypeFactory::FLAG_ALL_UNTRANSLATED;
+        $flags            = IFactory::FLAG_ALL_UNTRANSLATED;
         if ($objMetaModel->isTranslated()) {
-            $flags |= IAttributeTypeFactory::FLAG_INCLUDE_TRANSLATED;
+            $flags |= IFactory::FLAG_INCLUDE_TRANSLATED;
         }
 
         $options = array();
