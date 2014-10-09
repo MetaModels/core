@@ -147,23 +147,13 @@ class Factory implements IFactory
         $factory = $this->getTypeFactory($name);
 
         // Shortcut, if all are valid, return all. :)
-        if ($flags === IAttributeTypeFactory::FLAG_ALL) {
+        if ($flags === self::FLAG_ALL) {
             return true;
         }
 
-        if (!($flags & IAttributeTypeFactory::FLAG_INCLUDE_SIMPLE) && $factory->isSimpleType()) {
-            return false;
-        }
-
-        if (!($flags & IAttributeTypeFactory::FLAG_INCLUDE_COMPLEX) && $factory->isComplexType()) {
-            return false;
-        }
-
-        if (!($flags & IAttributeTypeFactory::FLAG_INCLUDE_TRANSLATED) && $factory->isTranslatedType()) {
-            return false;
-        }
-
-        return true;
+        return (($flags & self::FLAG_INCLUDE_TRANSLATED) && $factory->isTranslatedType())
+            || (($flags & self::FLAG_INCLUDE_SIMPLE) && $factory->isSimpleType())
+            || (($flags & self::FLAG_INCLUDE_COMPLEX) && $factory->isComplexType());
     }
 
     /**
@@ -172,7 +162,7 @@ class Factory implements IFactory
     public function getTypeNames($flags = false)
     {
         if ($flags === false) {
-            $flags = IAttributeTypeFactory::FLAG_ALL;
+            $flags = self::FLAG_ALL;
         }
 
         $result = array();
@@ -275,9 +265,9 @@ class Factory implements IFactory
      */
     public static function getAttributeTypes($blnSupportTranslated = false, $blnSupportVariants = false)
     {
-        $flags = IAttributeTypeFactory::FLAG_ALL_UNTRANSLATED;
+        $flags = self::FLAG_ALL_UNTRANSLATED;
         if ($blnSupportTranslated) {
-            $flags |= IAttributeTypeFactory::FLAG_INCLUDE_TRANSLATED;
+            $flags |= self::FLAG_INCLUDE_TRANSLATED;
         }
 
         return self::getDefaultFactory()->getTypeNames($flags);

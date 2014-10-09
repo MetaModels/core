@@ -31,7 +31,29 @@ class AttributeTypeFactoryTestTest extends AttributeTypeFactoryTest
      */
     protected function getAttributeFactories()
     {
-        return $this->mockAttributeFactory('AttributeTypeFactoryTestTest\AttributeTypeFactory', true, false, false);
+        return array(
+            $this->mockAttributeFactory('AttributeTypeFactoryTestTest\AttributeTypeFactory', true, false, false)
+        );
+    }
+
+    /**
+     * Mock a factory with the given name and check that attributeTypeInformationMakesSense() works correctly.
+     *
+     * @param string $name       The type name to mock.
+     *
+     * @param bool   $translated Translation flag.
+     *
+     * @param bool   $simple     Simple flag.
+     *
+     * @param bool   $complex    Complex flag.
+     *
+     * @return void
+     */
+    protected function checkMockedFactory($name, $translated, $simple, $complex)
+    {
+        $this->attributeTypeInformationMakesSense(
+            $this->mockAttributeFactory($name, $translated, $simple, $complex)
+        );
     }
 
     /**
@@ -41,49 +63,19 @@ class AttributeTypeFactoryTestTest extends AttributeTypeFactoryTest
      */
     public function testSelf()
     {
-        $this->attributeTypeInformationMakesSense($this->mockAttributeFactory('test_translated', true, false, false));
-        $this->attributeTypeInformationMakesSense($this->mockAttributeFactory('test_simple', false, true, false));
-        $this->attributeTypeInformationMakesSense($this->mockAttributeFactory('test_complex', false, false, true));
+        $this->checkMockedFactory('test_translated', true, false, false);
+        $this->checkMockedFactory('test_simple', false, true, false);
+        $this->checkMockedFactory('test_complex', false, false, true);
+        $this->checkMockedFactory('test_simplecomplex', false, true, true);
+        $this->checkMockedFactory('test_translatedsimple', true, true, false);
+        $this->checkMockedFactory('test_translatedcomplex', true, false, true);
+        $this->checkMockedFactory('test_translatedsimplecomplex', true, true, true);
 
         // Now we want to produce some error here to ensure our self test really also produces failures for nonsense.
-        $failed = false;
-        try {
-            $this->attributeTypeInformationMakesSense(
-                $this->mockAttributeFactory('test_translated_simple', true, true, false)
-            );
-        } catch (\PHPUnit_Framework_ExpectationFailedException $ex) {
-            // As expected the assertion failed.
-            $failed = true;
-        }
-        $this->assertTrue($failed, 'Self test failed: translated and simple is possible but should not.');
 
         $failed = false;
         try {
-            $this->attributeTypeInformationMakesSense(
-                $this->mockAttributeFactory('test_translated_complex', true, true, false)
-            );
-        } catch (\PHPUnit_Framework_ExpectationFailedException $ex) {
-            // As expected the assertion failed.
-            $failed = true;
-        }
-        $this->assertTrue($failed, 'Self test failed: translated and complex is possible but should not.');
-
-        $failed = false;
-        try {
-            $this->attributeTypeInformationMakesSense(
-                $this->mockAttributeFactory('test_simple_complex', false, true, true)
-            );
-        } catch (\PHPUnit_Framework_ExpectationFailedException $ex) {
-            // As expected the assertion failed.
-            $failed = true;
-        }
-        $this->assertTrue($failed, 'Self test failed: translated and complex is possible but should not.');
-
-        $failed = false;
-        try {
-            $this->attributeTypeInformationMakesSense(
-                $this->mockAttributeFactory('test_none', false, false, false)
-            );
+            $this->checkMockedFactory('test_none', false, false, false);
         } catch (\PHPUnit_Framework_ExpectationFailedException $ex) {
             // As expected the assertion failed.
             $failed = true;
