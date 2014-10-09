@@ -1,0 +1,128 @@
+<?php
+
+namespace MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property;
+
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
+use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBag;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
+
+/**
+ * Condition to check if the current table in the model is a metamodel or not.
+ */
+class ConditionTableNameIsMetaModel implements PropertyConditionInterface
+{
+    /**
+     * The name of the property in the passed model which contains the table name.
+     *
+     * @var string
+     */
+    protected $tablePropertyName;
+
+    /**
+     * The expected property value.
+     *
+     * @var mixed
+     */
+    protected $desiredValue;
+
+    /**
+     * Create a new instance.
+     *
+     * @param string $tableProperty The name of the property in the passed model which contains the table name.
+     *
+     * @param string $desiredValue  The desired value, true if the table shall be a MetaModel, false otherwise.
+     */
+    public function __construct($tableProperty, $desiredValue)
+    {
+        $this->tablePropertyName = $tableProperty;
+        $this->desiredValue      = $desiredValue;
+    }
+
+    /**
+     * Set the desired value.
+     *
+     * @param string $desiredValue The desired value.
+     *
+     * @return ConditionTableNameIsMetaModel
+     */
+    public function setDesiredValue($desiredValue)
+    {
+        $this->desiredValue = $desiredValue;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the desired value.
+     *
+     * @return mixed
+     */
+    public function getDesiredValue()
+    {
+        return $this->desiredValue;
+    }
+
+    /**
+     * Set the name of the property in the passed model which contains the table name.
+     *
+     * @param string $tablePropertyName The name of the property.
+     *
+     * @return ConditionTableNameIsMetaModel
+     */
+    public function setTablePropertyName($tablePropertyName)
+    {
+        $this->tablePropertyName = $tablePropertyName;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the name of the property in the passed model which contains the table name.
+     *
+     * @return string
+     */
+    public function getTablePropertyName()
+    {
+        return $this->tablePropertyName;
+    }
+
+    /**
+     * Retrieve the type name from an attribute.
+     *
+     * @param int $value The id of an attribute.
+     *
+     * @return string
+     */
+    public function getTypeOfAttribute($value)
+    {
+        if (!isset(self::$attributeTypes[$value])) {
+            self::$attributeTypes[$value] = \Database::getInstance()
+                ->prepare('SELECT type FROM tl_metamodel_attribute WHERE id=?')
+                ->limit(1)
+                ->executeUncached($value)
+                ->type;
+        }
+        return self::$attributeTypes[$value];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function match(
+        ModelInterface $model = null,
+        PropertyValueBag $input = null,
+        PropertyInterface $property = null,
+        LegendInterface $legend = null
+    ) {
+        return $this->desiredValue == (substr($model->getProperty($this->getTablePropertyName()), 0, 3) === 'mm_');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __clone()
+    {
+    }
+}
