@@ -102,26 +102,20 @@ class ProcessAddAll
         }
 
         $environment = $event->getEnvironment();
-        $propagator  = $environment->getEventPropagator();
+        $dispatcher  = $environment->getEventDispatcher();
         $database    = \Database::getInstance();
         $input       = $environment->getInputProvider();
         $pid         = IdSerializer::fromSerialized($input->getParameter('pid'));
 
         $event->getAction()->getName();
 
-        $propagator->propagate(
-            ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
-            new LoadLanguageFileEvent('default')
-        );
-        $propagator->propagate(
+        $dispatcher->dispatch(ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE, new LoadLanguageFileEvent('default'));
+        $dispatcher->dispatch(
             ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
             new LoadLanguageFileEvent('tl_metamodel_dcasetting')
         );
         $referrer = new GetReferrerEvent(true, 'tl_metamodel_dcasetting');
-        $propagator->propagate(
-            ContaoEvents::SYSTEM_GET_REFERRER,
-            $referrer
-        );
+        $dispatcher->dispatch(ContaoEvents::SYSTEM_GET_REFERRER, $referrer);
 
         $template = new \BackendTemplate('be_autocreatepalette');
 

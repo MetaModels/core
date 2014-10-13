@@ -88,25 +88,13 @@ class CreateVariantButton extends BaseView
         $preFunction = function ($environment, $model) {
             /** @var EnvironmentInterface $environment */
             $copyEvent = new PreCreateModelEvent($environment, $model);
-            $environment->getEventPropagator()->propagate(
-                $copyEvent::NAME,
-                $copyEvent,
-                array(
-                    $environment->getDataDefinition()->getName(),
-                )
-            );
+            $environment->getEventDispatcher()->dispatch($copyEvent::NAME, $copyEvent);
         };
 
         $postFunction = function ($environment, $model) {
             /** @var EnvironmentInterface $environment */
             $copyEvent = new PostCreateModelEvent($environment, $model);
-            $environment->getEventPropagator()->propagate(
-                $copyEvent::NAME,
-                $copyEvent,
-                array(
-                    $environment->getDataDefinition()->getName(),
-                )
-            );
+            $environment->getEventDispatcher()->dispatch($copyEvent::NAME, $copyEvent);
         };
 
         $event->setResponse($view->createEditMask($model, null, $preFunction, $postFunction));

@@ -39,6 +39,7 @@ use MetaModels\DcGeneral\Events\Table\RenderSetting\RenderSettingBuildPalette;
 use MetaModels\Factory;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetGlobalButtonEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Central event subscriber implementation.
@@ -826,20 +827,21 @@ class Subscriber extends BaseSubscriber
         $factory    = $event->getFactory();
         $name       = $factory->getContainerName();
         $dispatcher = func_get_arg(2);
+        /** @var EventDispatcherInterface $dispatcher */
 
         if (!in_array($name, Factory::getAllTables())) {
             return;
         }
 
-        $generator = new Builder();
+        $generator = new Builder($name);
 
         $dispatcher->addListener(
-            sprintf('%s[%s]', BuildDataDefinitionEvent::NAME, $name),
+            BuildDataDefinitionEvent::NAME,
             array($generator, 'build'),
             $generator::PRIORITY
         );
         $dispatcher->addListener(
-            sprintf('%s[%s]', PopulateEnvironmentEvent::NAME, $name),
+            PopulateEnvironmentEvent::NAME,
             array($generator, 'populate'),
             $generator::PRIORITY
         );

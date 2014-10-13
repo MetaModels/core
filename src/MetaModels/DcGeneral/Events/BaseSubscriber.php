@@ -94,6 +94,8 @@ class BaseSubscriber
      *
      * @return callable
      *
+     * @deprecated Non working in the future when the EventPropagator has been removed.
+     *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public static function delayEvent($handler, $priority = 0)
@@ -129,6 +131,14 @@ class BaseSubscriber
         $eventSuffix = '';
         foreach ($suffixes as $suffix) {
             $eventSuffix .= sprintf('[%s]', $suffix);
+        }
+
+        if ($eventSuffix && $GLOBALS['TL_CONFIG']['debugMode']) {
+            trigger_error(
+                'WARNING, the event delegator will be removed from DcGeneral, you should not register event names ' .
+                'with suffix but only plain events.',
+                E_USER_WARNING
+            );
         }
 
         foreach ($listeners as $event => $listener) {

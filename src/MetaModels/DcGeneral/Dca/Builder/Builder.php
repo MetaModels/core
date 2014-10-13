@@ -106,11 +106,21 @@ class Builder
     protected $dispatcher;
 
     /**
-     * Create a new instance and instantiate the translator.
+     * The MetaModel this builder is responsible for.
+     *
+     * @var string
      */
-    public function __construct()
+    protected $metaModelName;
+
+    /**
+     * Create a new instance and instantiate the translator.
+     *
+     * @param string $metaModelName The name of the MetaModel being created.
+     */
+    public function __construct($metaModelName)
     {
-        $this->translator = new StaticTranslator();
+        $this->metaModelName = $metaModelName;
+        $this->translator    = new StaticTranslator();
     }
 
     /**
@@ -150,7 +160,7 @@ class Builder
     {
         $container = $event->getEnvironment()->getDataDefinition();
 
-        if (!($container instanceof IMetaModelDataDefinition)) {
+        if (!(($container instanceof IMetaModelDataDefinition) && ($container->getName() == $this->metaModelName))) {
             return;
         }
 
@@ -284,7 +294,7 @@ class Builder
         $this->dispatcher = func_get_arg(2);
         $container        = $event->getContainer();
 
-        if (!($container instanceof IMetaModelDataDefinition)) {
+        if (!(($container instanceof IMetaModelDataDefinition) && ($container->getName() == $this->metaModelName))) {
             return;
         }
 

@@ -207,14 +207,17 @@ class DrawSetting
         $type        = $model->getProperty('type');
 
         // Delegate the event further to the type handlers.
-        if (!$environment->getEventPropagator()->propagateExact(
-            $event::NAME,
-            $event,
-            array(
-                $environment->getDataDefinition()->getName(),
-                $type
-            )
-        )->isPropagationStopped()) {
+
+        $environment->getEventDispatcher()->dispatch(
+            sprintf('%s[%s][%s]', $event::NAME, $environment->getDataDefinition()->getName(), $type),
+            $event
+        );
+        $environment->getEventDispatcher()->dispatch(
+            sprintf('%s[%s]', $event::NAME, $environment->getDataDefinition()->getName()),
+            $event
+        );
+
+        if (!$event->isPropagationStopped()) {
             // Handle with default drawing if no one wants to handle.
             self::modelToLabelDefault($event);
         }

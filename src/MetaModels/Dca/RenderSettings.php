@@ -44,10 +44,11 @@ class RenderSettings
             $event = new GenerateHtmlEvent(
                 'pickpage.gif',
                 $environment->getTranslator()->translate('MSC.pagepicker'),
-                'style="vertical-align:top;cursor:pointer" onclick="Backend.pickPage(\'ctrl_' . $dataContainer->inputName . '\')"'
+                'style="vertical-align:top;cursor:pointer" onclick="Backend.pickPage(\'ctrl_' .
+                $dataContainer->inputName . '\')"'
             );
 
-            $environment->getEventPropagator()->propagate(ContaoEvents::IMAGE_GET_HTML, $event);
+            $environment->getEventDispatcher()->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
 
             return ' ' . $event->getHtml();
         }
@@ -72,7 +73,7 @@ class RenderSettings
             'style="vertical-align:top;cursor:pointer"'
         );
 
-        $environment->getEventPropagator()->propagate(ContaoEvents::IMAGE_GET_HTML, $event);
+        $environment->getEventDispatcher()->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
 
         return sprintf(
             ' <a href="%s"%s>%s</a>',
