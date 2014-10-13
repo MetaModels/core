@@ -101,7 +101,7 @@ class Subscriber
             $arrSize    = deserialize($model->getProperty('size'));
             $imageEvent = new ResizeImageEvent($model->getProperty('singleSRC'), $arrSize[0], $arrSize[1], $arrSize[2]);
 
-            $event->getEnvironment()->getEventPropagator()->propagate(ContaoEvents::IMAGE_RESIZE, $event);
+            $event->getEnvironment()->getEventDispatcher()->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
 
             $strImage = sprintf(
                 '<div class="image" style="padding-top:3px"><img src="%s" alt="%%1$s" /></div> ',

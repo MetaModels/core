@@ -73,7 +73,7 @@ class BreadCrumbInputScreens extends BreadCrumbMetaModels
                 $this->seralizeId('tl_metamodel', $this->metamodelId)
             )
         );
-        $environment->getEventPropagator()->propagate(ContaoEvents::BACKEND_ADD_TO_URL, $urlEvent);
+        $environment->getEventDispatcher()->dispatch(ContaoEvents::BACKEND_ADD_TO_URL, $urlEvent);
 
         $elements[] = array(
             'url'  => $urlEvent->getUrl(),

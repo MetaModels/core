@@ -61,7 +61,7 @@ class PropertyPanelLayout
             'style="vertical-align:top;"'
         );
 
-        $event->getEnvironment()->getEventPropagator()->propagate(ContaoEvents::IMAGE_GET_HTML, $imageEvent);
+        $event->getEnvironment()->getEventDispatcher()->dispatch(ContaoEvents::IMAGE_GET_HTML, $imageEvent);
 
         $event->getWidget()->wizard = sprintf(
             $link,

@@ -180,6 +180,8 @@ class Factory implements IFactory
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated To create an instance use methods translateIdToMetaModelName() and createMetaModel().
      */
     public static function byId($intId)
     {
@@ -191,6 +193,8 @@ class Factory implements IFactory
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated To create an instance use method createMetaModel().
      */
     public static function byTableName($strTableName)
     {
@@ -201,6 +205,8 @@ class Factory implements IFactory
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated To retrieve all names use method collectNames().
      */
     public static function getAllTables()
     {

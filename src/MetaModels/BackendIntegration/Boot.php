@@ -20,6 +20,7 @@ namespace MetaModels\BackendIntegration;
 use ContaoCommunityAlliance\DcGeneral\Event\EventPropagator;
 use MetaModels\BackendIntegration\Events\BackendIntegrationEvent;
 use MetaModels\Dca\MetaModelDcaBuilder;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This class is the abstract base class used in the backend to build the menu.
@@ -164,12 +165,9 @@ class Boot
         // If no backend user authenticated, we will get redirected.
         self::authenticateBackendUser();
 
-        $propagator = new EventPropagator($GLOBALS['container']['event-dispatcher']);
-
-        $propagator->propagate(
-            BackendIntegrationEvent::NAME,
-            new BackendIntegrationEvent()
-        );
+        /** @var EventDispatcherInterface $dispatcher */
+        $dispatcher = $GLOBALS['container']['event-dispatcher'];
+        $dispatcher->dispatch(BackendIntegrationEvent::NAME, new BackendIntegrationEvent());
 
         MetaModelDcaBuilder::getInstance()->injectBackendMenu();
         MetaModelDcaBuilder::getInstance()->injectIntoBackendModules();

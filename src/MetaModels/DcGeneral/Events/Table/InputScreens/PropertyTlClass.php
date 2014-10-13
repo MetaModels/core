@@ -47,7 +47,7 @@ class PropertyTlClass
         }
 
         /** @var GenerateHtmlEvent $imageEvent */
-        $imageEvent = $event->getEnvironment()->getEventPropagator()->propagate(
+        $imageEvent = $event->getEnvironment()->getEventDispatcher()->dispatch(
             ContaoEvents::IMAGE_GET_HTML,
             new GenerateHtmlEvent(
                 'system/modules/metamodels/assets/images/icons/dca_wizard.png',

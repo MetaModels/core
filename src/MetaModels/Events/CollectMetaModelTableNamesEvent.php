@@ -68,7 +68,7 @@ class CollectMetaModelTableNamesEvent extends Event
     /**
      * Retrieve the MetaModel name to be created.
      *
-     * @return string
+     * @return string[]
      */
     public function getMetaModelNames()
     {
