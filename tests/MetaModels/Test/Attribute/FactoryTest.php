@@ -252,6 +252,20 @@ class FactoryTest extends TestCase
     }
 
     /**
+     * Test the icon retrieval.
+     *
+     * @return void
+     */
+    public function testGetTypeIcon()
+    {
+        $factory     = new Factory($this->mockEventDispatcher());
+        $typeFactory = $this->mockAttributeFactory('test', true, false, false, new \stdClass, 'icon.png');
+        $factory->addTypeFactory($typeFactory);
+
+        $this->assertEquals($typeFactory->getTypeIcon(), $factory->getIconForType('test'));
+    }
+
+    /**
      * Mock an attribute type factory.
      *
      * @param string $typeName   The type name to mock.
@@ -264,11 +278,27 @@ class FactoryTest extends TestCase
      *
      * @param string $class      Name of the class to instantiate when createInstance() is called.
      *
+     * @param string $typeIcon   The icon of the type to mock.
+     *
      * @return IAttributeTypeFactory
      */
-    protected function mockAttributeFactory($typeName, $translated, $simple, $complex, $class = 'stdClass')
-    {
-        return AttributeFactoryMocker::mockAttributeFactory($this, $typeName, $translated, $simple, $complex, $class);
+    protected function mockAttributeFactory(
+        $typeName,
+        $translated,
+        $simple,
+        $complex,
+        $class = 'stdClass',
+        $typeIcon = 'icon.png'
+    ) {
+        return AttributeFactoryMocker::mockAttributeFactory(
+            $this,
+            $typeName,
+            $translated,
+            $simple,
+            $complex,
+            $class,
+            $typeIcon
+        );
     }
 
     /**

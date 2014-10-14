@@ -126,6 +126,15 @@ interface IFactory
     public function createAttributesForMetaModel($metaModel);
 
     /**
+     * Retrieve the icon for a certain attribute type.
+     *
+     * @param string $type The name of the type to retrieve the icon for.
+     *
+     * @return string
+     */
+    public function getIconForType($type);
+
+    /**
      * Instantiate a attribute from an array.
      *
      * @param array $arrData The attribute information data.

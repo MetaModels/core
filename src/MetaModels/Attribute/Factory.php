@@ -241,6 +241,14 @@ class Factory implements IFactory
     /**
      * {@inheritdoc}
      */
+    public function getIconForType($type)
+    {
+        return isset($this->typeFactories[(string)$type]) ? $this->typeFactories[(string)$type]->getTypeIcon() : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public static function createFromArray($arrData)
     {
         return self::getDefaultFactory()->createAttribute($arrData, \MetaModels\Factory::byId($arrData['pid']));

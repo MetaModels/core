@@ -70,7 +70,7 @@ class LegacyAttributeTypeFactory extends AbstractAttributeTypeFactory
      *
      * @param string $typeName             The name of the type.
      *
-     * @param array  $attributeInformation The attribute type information (keys: "class", "factory").
+     * @param array  $attributeInformation The attribute type information (keys: "class", "factory", "icon").
      *
      * @return LegacyAttributeTypeFactory
      *
@@ -80,6 +80,9 @@ class LegacyAttributeTypeFactory extends AbstractAttributeTypeFactory
     {
         $typeFactory           = new static();
         $typeFactory->typeName = $typeName;
+        $typeFactory->typeIcon = isset($attributeInformation['icon'])
+            ? $attributeInformation['icon']
+            : 'system/modules/metamodels/assets/images/icons/fields';
 
         if (isset($attributeInformation['class'])) {
             $typeFactory->typeClass = $attributeInformation['class'];
