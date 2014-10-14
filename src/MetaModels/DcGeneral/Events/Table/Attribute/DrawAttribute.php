@@ -33,15 +33,13 @@ class DrawAttribute
      * @param ModelToLabelEvent $event The event.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function modelToLabel(ModelToLabelEvent $event)
     {
+        $factory   = new Factory(func_get_arg(2));
         $model     = $event->getModel();
         $type      = $model->getProperty('type');
-        $image     = '<img src="' . $GLOBALS['METAMODELS']['attributes'][$type]['image'] . '" />';
+        $image     = '<img src="' . $factory->getIconForType($type) . '" />';
         $attribute = Factory::createFromArray($model->getPropertiesAsArray());
 
         if (!$attribute) {
