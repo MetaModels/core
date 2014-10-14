@@ -45,6 +45,8 @@ class AttributeFactoryMocker
      *
      * @param string                     $class      Name of the class to instantiate when createInstance() is called.
      *
+     * @param string                     $typeIcon   The icon of the type to mock.
+     *
      * @return IAttributeTypeFactory
      */
     public static function mockAttributeFactory(
@@ -53,11 +55,12 @@ class AttributeFactoryMocker
         $translated,
         $simple,
         $complex,
-        $class = 'stdClass'
+        $class = 'stdClass',
+        $typeIcon = 'icon.png'
     ) {
         $mockTypeFactory = $testCase->getMock(
             'MetaModels\Attribute\IAttributeTypeFactory',
-            array('getTypeName', 'createInstance', 'isTranslatedType', 'isSimpleType', 'isComplexType'),
+            array('getTypeName', 'getTypeIcon', 'createInstance', 'isTranslatedType', 'isSimpleType', 'isComplexType'),
             array()
         );
 
@@ -67,6 +70,15 @@ class AttributeFactoryMocker
             ->will(
                 $testCase->returnCallback(function () use ($typeName) {
                         return $typeName;
+                })
+            );
+
+        $mockTypeFactory
+            ->expects($testCase->any())
+            ->method('getTypeIcon')
+            ->will(
+                $testCase->returnCallback(function () use ($typeIcon) {
+                        return $typeIcon;
                 })
             );
 

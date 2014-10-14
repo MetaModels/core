@@ -52,8 +52,10 @@ class LegacyAttributeTypeFactoryTest extends AttributeTypeFactoryTest
         $reflection    = new \ReflectionClass('MetaModels\Attribute\LegacyAttributeTypeFactory');
         $typeNameProp  = $reflection->getProperty('typeName');
         $typeClassProp = $reflection->getProperty('typeClass');
+        $typeIconProp  = $reflection->getProperty('typeIcon');
         $typeNameProp->setAccessible(true);
         $typeClassProp->setAccessible(true);
+        $typeIconProp->setAccessible(true);
 
         foreach (array
         (
@@ -68,6 +70,7 @@ class LegacyAttributeTypeFactoryTest extends AttributeTypeFactoryTest
             $instance = $reflection->newInstanceWithoutConstructor();
             $typeNameProp->setValue($instance, $typeName);
             $typeClassProp->setValue($instance, get_class($mockAttributeClass));
+            $typeIconProp->setValue($instance, $typeName . '.png');
 
             $this->testFactories[$typeName] = $instance;
         }
@@ -190,6 +193,41 @@ class LegacyAttributeTypeFactoryTest extends AttributeTypeFactoryTest
             $this->assertInstanceOf(
                 $typeClassProp->getValue($instance),
                 $factory->createAttribute(array('type' => $typeName), null)
+            );
+        }
+
+        unset($GLOBALS['METAMODELS']);
+    }
+
+    /**
+     * Test the addFactoriesToFactory method.
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    public function testGetTypeIconsFromFactory()
+    {
+        $reflection    = new \ReflectionClass('MetaModels\Attribute\LegacyAttributeTypeFactory');
+        $typeClassProp = $reflection->getProperty('typeClass');
+        $typeIconProp  = $reflection->getProperty('typeIcon');
+        $typeClassProp->setAccessible(true);
+        $typeIconProp->setAccessible(true);
+
+        foreach ($this->testFactories as $typeName => $instance) {
+            $GLOBALS['METAMODELS']['attributes'][$typeName]['class'] = $typeClassProp->getValue($instance);
+            $GLOBALS['METAMODELS']['attributes'][$typeName]['icon']  = $typeIconProp->getValue($instance);
+        }
+
+        $factory = new Factory($this->mockEventDispatcher());
+
+        $this->assertEquals(array_keys($this->testFactories), $factory->getTypeNames());
+
+        foreach ($this->testFactories as $typeName => $instance) {
+            $this->assertEquals(
+                $typeIconProp->getValue($instance),
+                $factory->getIconForType($typeName)
             );
         }
 
