@@ -217,7 +217,7 @@ class LegacyAttributeTypeFactoryTest extends AttributeTypeFactoryTest
 
         foreach ($this->testFactories as $typeName => $instance) {
             $GLOBALS['METAMODELS']['attributes'][$typeName]['class'] = $typeClassProp->getValue($instance);
-            $GLOBALS['METAMODELS']['attributes'][$typeName]['icon']  = $typeIconProp->getValue($instance);
+            $GLOBALS['METAMODELS']['attributes'][$typeName]['image'] = $typeIconProp->getValue($instance);
         }
 
         $factory = new Factory($this->mockEventDispatcher());
