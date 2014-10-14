@@ -111,6 +111,10 @@ class Factory implements IFactory
 
         $factory = $this->getTypeFactory($information['type']);
 
+        if (!$factory) {
+            return null;
+        }
+
         return $factory->createInstance($information, $metaModel);
     }
 
