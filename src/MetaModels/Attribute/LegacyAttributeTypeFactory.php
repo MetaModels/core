@@ -80,9 +80,9 @@ class LegacyAttributeTypeFactory extends AbstractAttributeTypeFactory
     {
         $typeFactory           = new static();
         $typeFactory->typeName = $typeName;
-        $typeFactory->typeIcon = isset($attributeInformation['icon'])
-            ? $attributeInformation['icon']
-            : 'system/modules/metamodels/assets/images/icons/fields';
+        $typeFactory->typeIcon = isset($attributeInformation['image'])
+            ? $attributeInformation['image']
+            : 'system/modules/metamodels/assets/images/icons/fields.png';
 
         if (isset($attributeInformation['class'])) {
             $typeFactory->typeClass = $attributeInformation['class'];
