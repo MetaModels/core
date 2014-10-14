@@ -44,11 +44,26 @@ abstract class AbstractAttributeTypeFactory implements IAttributeTypeFactory
     protected $typeClass;
 
     /**
+     * The icon representing this attributy type.
+     *
+     * @var string
+     */
+    protected $typeIcon;
+
+    /**
      * {@inheritdoc}
      */
     public function getTypeName()
     {
         return $this->typeName;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypeIcon()
+    {
+        return $this->typeIcon;
     }
 
     /**

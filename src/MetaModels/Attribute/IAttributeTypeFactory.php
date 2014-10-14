@@ -37,6 +37,13 @@ interface IAttributeTypeFactory
     public function getTypeName();
 
     /**
+     * Retrieve the (relative to TL_ROOT) path to a icon for the type.
+     *
+     * @return string
+     */
+    public function getTypeIcon();
+
+    /**
      * Create a new instance with the given information.
      *
      * @param array      $information The attribute information.
