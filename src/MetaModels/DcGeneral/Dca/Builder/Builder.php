@@ -78,9 +78,10 @@ use MetaModels\BackendIntegration\ViewCombinations;
 use MetaModels\DcGeneral\DataDefinition\Definition\MetaModelDefinition;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\IsVariantAttribute;
+use MetaModels\DcGeneral\Events\MetaModel\BuildAttributeEvent;
+use MetaModels\DcGeneral\Events\MetaModel\BuildMetaModelOperationsEvent;
+use MetaModels\DcGeneral\Events\MetaModel\PopulateAttributeEvent;
 use MetaModels\DcGeneral\Events\MetaModel\RenderItem;
-use MetaModels\Events\BuildAttributeEvent;
-use MetaModels\Events\PopulateAttributeEvent;
 use MetaModels\Factory;
 use MetaModels\Helper\ToolboxFile;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -1313,6 +1314,14 @@ class Builder
                 )
             );
         }
+
+        $event = new BuildMetaModelOperationsEvent(
+            $this->getMetaModel($container),
+            $container,
+            $this->getInputScreenDetails($container),
+            $this
+        );
+        $this->dispatcher->dispatch($event::NAME, $event);
     }
 
     /**
