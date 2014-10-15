@@ -212,10 +212,6 @@ class DrawSetting
             sprintf('%s[%s][%s]', $event::NAME, $environment->getDataDefinition()->getName(), $type),
             $event
         );
-        $environment->getEventDispatcher()->dispatch(
-            sprintf('%s[%s]', $event::NAME, $environment->getDataDefinition()->getName()),
-            $event
-        );
 
         if (!$event->isPropagationStopped()) {
             // Handle with default drawing if no one wants to handle.
