@@ -173,7 +173,7 @@ interface IMetaModel
      * @param string[]     $arrAttrOnly  Names of the attributes that shall be enclosed in the result, defaults to
      *                                   empty which means all attributes.
      *
-     * @return IItems The collection of IItem instances that match the given filter.
+     * @return IItems|IItem[] The collection of IItem instances that match the given filter.
      */
     public function findByFilter(
         $objFilter,

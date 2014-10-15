@@ -18,10 +18,10 @@
 namespace MetaModels;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GetPageDetailsEvent;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\Filter\IFilter;
-use MetaModels\Helper\ContaoController;
 use MetaModels\Factory as MetaModelFactory;
 use MetaModels\Attribute\Factory as AttributeFactory;
 use MetaModels\Filter\Setting\Factory as FilterSettingsFactory;
@@ -441,7 +441,7 @@ class Item implements IItem
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    protected function buildJumpToParametersAndUrl($page, $filterSettingsId, $renderSettings)
+    protected function buildJumpToParametersAndUrl($page, $filterSettingsId, $renderSettings, $language)
     {
         if (!$page) {
             return null;
@@ -475,7 +475,10 @@ class Item implements IItem
         }
 
         $result['page'] = $page['id'];
-        $result['url']  = ContaoController::generateFrontendUrl($page, $parameters);
+
+        $event = new GenerateFrontendUrlEvent($page, $parameters, $language);
+        $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
+        $result['url']  = $event->getUrl();
 
         return $result;
     }
@@ -505,6 +508,7 @@ class Item implements IItem
 
         $intJumpTo         = 0;
         $intFilterSettings = 0;
+        $language          = null;
 
         foreach ((array)$objSettings->get('jumpTo') as $arrJumpTo) {
             // If either desired language or fallback, keep the result.
@@ -513,6 +517,7 @@ class Item implements IItem
                 || $arrJumpTo['langcode'] == $strFallbackLanguage) {
                 $intJumpTo         = $arrJumpTo['value'];
                 $intFilterSettings = $arrJumpTo['filter'];
+                $language          = $arrJumpTo['langcode'];
                 // If the desired language, break. Otherwise try to get the desired one until all have been evaluated.
                 if ($strDesiredLanguage == $arrJumpTo['langcode']) {
                     break;
@@ -527,7 +532,8 @@ class Item implements IItem
         return $this->buildJumpToParametersAndUrl(
             $event->getPageDetails(),
             $intFilterSettings,
-            $objSettings
+            $objSettings,
+            $language
         );
     }
 
