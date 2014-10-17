@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-05-22T12:13:44+02:00
+ * last-updated: 2014-05-23T20:13:35+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['copy']['0']        = 'Копировать определение атрибута';
@@ -22,6 +22,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['edit']['0']        = 'Редак�
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['edit']['1']        = 'Редактировать атрибут ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['editheader']['0']  = 'Редактировать атрибут';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['editheader']['1']  = 'Редактировать атрибут';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name']['0']        = 'Имя';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode']    = 'Язык';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value']       = 'Описание';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']['0']         = 'Новый атрибут';
