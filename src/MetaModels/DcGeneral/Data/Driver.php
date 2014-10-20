@@ -384,13 +384,15 @@ class Driver implements MultiLanguageDataProviderInterface
             }
         } elseif (\Database::getInstance()->fieldExists($operation['property'], $this->objMetaModel->getTableName())) {
             // System column?
-            $filterRule = new SimpleQuery(sprintf(
-                'SELECT id FROM %s WHERE %s %s %s',
-                $this->objMetaModel->getTableName(),
-                $operation['property'],
-                $operation['operation'],
-                $operation['value']
-            ));
+            $filterRule = new SimpleQuery(
+                sprintf(
+                    'SELECT id FROM %s WHERE %s %s?',
+                    $this->objMetaModel->getTableName(),
+                    $operation['property'],
+                    $operation['operation']
+                ),
+                array($operation['value'])
+            );
         }
 
         if (!$filterRule) {
