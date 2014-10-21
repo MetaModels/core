@@ -228,7 +228,7 @@ class CustomSql extends Simple
     public function parseInsertTags($strSQL, array &$arrParams)
     {
         $dispatcher = $this->getEventDispatcher();
-        $event      = new ReplaceInsertTagsEvent($strSQL);
+        $event      = new ReplaceInsertTagsEvent($strSQL, false);
         $dispatcher->dispatch(ContaoEvents::CONTROLLER_REPLACE_INSERT_TAGS, $event);
 
         return $event->getBuffer();
