@@ -113,9 +113,10 @@ class MetaModelDcaBuilder
         $defaultIcon = 'system/modules/metamodels/assets/images/icons/metamodels.png'
     ) {
         $dispatcher = self::getDispatcher();
+        $realIcon   = ToolboxFile::convertValueToPath($icon);
         // Determine image to use.
-        if ($icon && file_exists(TL_ROOT . '/' . $icon)) {
-            $event = new ResizeImageEvent($icon, 16, 16);
+        if ($realIcon && file_exists(TL_ROOT . '/' . $realIcon)) {
+            $event = new ResizeImageEvent($realIcon, 16, 16);
             $dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
             return $event->getResultImage();
         }
@@ -239,7 +240,7 @@ class MetaModelDcaBuilder
 
         $dispatcher->dispatch(ContaoEvents::BACKEND_ADD_TO_URL, $urlEvent);
 
-        $imageEvent = new GenerateHtmlEvent($this->getBackendIcon($icon), $label);
+        $imageEvent = new GenerateHtmlEvent($icon, $label);
         $dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $imageEvent);
 
         $title = sprintf($label ?: $name, $arrRow['id']);
