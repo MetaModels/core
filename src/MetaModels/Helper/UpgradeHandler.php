@@ -83,7 +83,9 @@ class UpgradeHandler
     protected static function upgradeDcaSettingsPublished()
     {
         $objDB = self::DB();
-        if (!$objDB->fieldExists('published', 'tl_metamodel_dcasetting', true)) {
+        if (!($objDB->tableExists('tl_metamodel_dcasetting', null, true)
+            && $objDB->fieldExists('published', 'tl_metamodel_dcasetting', true))
+        ) {
             // Create the column in the database and copy the data over.
             TableManipulation::createColumn(
                 'tl_metamodel_dcasetting',
@@ -123,7 +125,9 @@ class UpgradeHandler
             );
         }
 
-        if ($objDB->fieldExists('subpalette', 'tl_metamodel_dcasetting', true)) {
+        if (!($objDB->tableExists('tl_metamodel_dcasetting', null, true)
+            && $objDB->fieldExists('subpalette', 'tl_metamodel_dcasetting', true))
+        ) {
             $subpalettes = $objDB->execute('SELECT * FROM tl_metamodel_dcasetting WHERE subpalette!=0');
 
             if ($subpalettes->numRows) {
