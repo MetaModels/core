@@ -49,7 +49,9 @@ class UpgradeHandler
     protected static function upgradeJumpTo()
     {
         $objDB = self::DB();
-        if (!$objDB->fieldExists('metamodel_jumpTo', 'tl_content', true)) {
+        if ($objDB->tableExists('tl_content', null, true)
+            && !$objDB->fieldExists('metamodel_jumpTo', 'tl_content', true)
+        ) {
             // Create the column in the database and copy the data over.
             TableManipulation::createColumn(
                 'tl_content',
@@ -58,7 +60,9 @@ class UpgradeHandler
             );
             $objDB->execute('UPDATE tl_content SET metamodel_jumpTo=jumpTo;');
         }
-        if (!$objDB->fieldExists('metamodel_jumpTo', 'tl_module', true)) {
+        if ($objDB->tableExists('tl_module', null, true)
+            && !$objDB->fieldExists('metamodel_jumpTo', 'tl_module', true)
+        ) {
             // Create the column in the database and copy the data over.
             TableManipulation::createColumn(
                 'tl_module',
@@ -83,8 +87,8 @@ class UpgradeHandler
     protected static function upgradeDcaSettingsPublished()
     {
         $objDB = self::DB();
-        if (!($objDB->tableExists('tl_metamodel_dcasetting', null, true)
-            && $objDB->fieldExists('published', 'tl_metamodel_dcasetting', true))
+        if ($objDB->tableExists('tl_metamodel_dcasetting', null, true)
+            && !$objDB->fieldExists('published', 'tl_metamodel_dcasetting', true)
         ) {
             // Create the column in the database and copy the data over.
             TableManipulation::createColumn(
@@ -125,8 +129,8 @@ class UpgradeHandler
             );
         }
 
-        if (!($objDB->tableExists('tl_metamodel_dcasetting', null, true)
-            && $objDB->fieldExists('subpalette', 'tl_metamodel_dcasetting', true))
+        if ($objDB->tableExists('tl_metamodel_dcasetting', null, true)
+            && !$objDB->fieldExists('subpalette', 'tl_metamodel_dcasetting', true)
         ) {
             $subpalettes = $objDB->execute('SELECT * FROM tl_metamodel_dcasetting WHERE subpalette!=0');
 
