@@ -230,11 +230,12 @@ class UpgradeHandler
             );
 
             $objDB->execute('
-				UPDATE tl_metamodel_dca
-				SET
-					iseditable=isclosed^1,
-					iscreatable=isclosed^1,
-					isdeleteable=isclosed^1');
+                UPDATE tl_metamodel_dca
+                SET
+                    iseditable=isclosed^1,
+                    iscreatable=isclosed^1,
+                    isdeleteable=isclosed^1
+            ');
 
             TableManipulation::dropColumn('tl_metamodel_dca', 'isclosed', true);
         }
@@ -289,22 +290,22 @@ class UpgradeHandler
 
         if (!$objDB->tableExists('tl_metamodel_dca_sortgroup', null, true)) {
             $objDB->execute('
-				CREATE TABLE `tl_metamodel_dca_sortgroup` (
-				`id` int(10) unsigned NOT NULL auto_increment,
-				`pid` int(10) unsigned NOT NULL default \'0\',
-				`sorting` int(10) unsigned NOT NULL default \'0\',
-				`tstamp` int(10) unsigned NOT NULL default \'0\',
-				`name` text NULL,
-				`isdefault` char(1) NOT NULL default \'\',
-				`ismanualsort` char(1) NOT NULL default \'\',
-				`rendergrouptype` varchar(10) NOT NULL default \'none\',
-				`rendergrouplen` int(10) unsigned NOT NULL default \'1\',
-				`rendergroupattr` int(10) unsigned NOT NULL default \'0\',
-				`rendersort` varchar(10) NOT NULL default \'asc\',
-				`rendersortattr` int(10) unsigned NOT NULL default \'0\',
-				PRIMARY KEY  (`id`)
-				) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-			');
+                CREATE TABLE `tl_metamodel_dca_sortgroup` (
+                `id` int(10) unsigned NOT NULL auto_increment,
+                `pid` int(10) unsigned NOT NULL default \'0\',
+                `sorting` int(10) unsigned NOT NULL default \'0\',
+                `tstamp` int(10) unsigned NOT NULL default \'0\',
+                `name` text NULL,
+                `isdefault` char(1) NOT NULL default \'\',
+                `ismanualsort` char(1) NOT NULL default \'\',
+                `rendergrouptype` varchar(10) NOT NULL default \'none\',
+                `rendergrouplen` int(10) unsigned NOT NULL default \'1\',
+                `rendergroupattr` int(10) unsigned NOT NULL default \'0\',
+                `rendersort` varchar(10) NOT NULL default \'asc\',
+                `rendersortattr` int(10) unsigned NOT NULL default \'0\',
+                PRIMARY KEY  (`id`)
+                ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+            ');
         }
 
         $dca = $objDB->execute('SELECT * FROM tl_metamodel_dca');
