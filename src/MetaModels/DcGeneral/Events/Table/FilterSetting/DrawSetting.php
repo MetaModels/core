@@ -182,11 +182,12 @@ class DrawSetting
     {
         $environment = $event->getEnvironment();
         $model       = $event->getModel();
+        $dispatcher  = func_get_arg(2);
 
         $event
             ->setLabel(self::getLabelPattern($environment, $model))
             ->setArgs(array(
-                self::getLabelImage($model, $event->getDispatcher()),
+                self::getLabelImage($model, $dispatcher),
                 self::getLabelText($environment, $model),
                 self::getLabelComment($model, $environment),
                 $model->getProperty('type')
