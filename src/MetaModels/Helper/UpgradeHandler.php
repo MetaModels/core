@@ -131,7 +131,7 @@ class UpgradeHandler
         }
 
         if ($objDB->tableExists('tl_metamodel_dcasetting', null, true)
-            && !$objDB->fieldExists('subpalette', 'tl_metamodel_dcasetting', true)
+            && $objDB->fieldExists('subpalette', 'tl_metamodel_dcasetting', true)
         ) {
             $subpalettes = $objDB->execute('SELECT * FROM tl_metamodel_dcasetting WHERE subpalette!=0');
 

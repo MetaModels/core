@@ -15,7 +15,7 @@ foreach($this->options as $option):
 		$this->urlparam,
 		$count,
 		$this->submit ? ' submitonchange' : '',
-		$option['key'],
+		empty($option['key']) ? '--none--' : $option['key'],
 		($option['active'] ? ' checked="checked"':'')
 	);
 	$label = sprintf('<label id="lbl_%s_%s" for="opt_%s_%s">%s%s</label>',
