@@ -15,7 +15,7 @@
  * @filesource
  */
 
-var Stylepicker4ward = new Class(
+var MetaModelsPicker = new Class(
 {
 	
 	initialize: function(cont,parentField)
