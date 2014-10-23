@@ -81,7 +81,7 @@ class popup extends Backend
      */
     public function generate()
     {
-        $this->Template->headline = $GLOBALS['TL_LANG']['MSC']['stylepicker4ward'];
+        $this->Template->headline = $GLOBALS['TL_LANG']['MSC']['metamodelspicker'];
 
         $inputName = $this->Input->get('inputName');
         if (!preg_match('~^[a-z\-_0-9]+$~i', $inputName))

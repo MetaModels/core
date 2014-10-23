@@ -96,13 +96,13 @@ parent.REQUEST_TOKEN = REQUEST_TOKEN;
 
 <?php endforeach;?>
 <?php else:?>
-	<p class="error"><?php echo $GLOBALS['TL_LANG']['MSC']['stylepicker4ward_noItems'];?></p>
+	<p class="error"><?php echo $GLOBALS['TL_LANG']['MSC']['metamodelspicker_noItems'];?></p>
 <?php endif;?>
 </div>
 <script>
 /* <![CDATA[ */
 window.addEvent('domready',function(){
-	new Stylepicker4ward($('styleItems'),'<?php echo $this->field;?>');
+	new MetaModelsPicker($('styleItems'),'<?php echo $this->field;?>');
 });
 /* ]]> */
 </script>
