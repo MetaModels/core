@@ -535,11 +535,13 @@ class ToolboxFile
                 }
                 $arrSource['src'] = $strSrc;
 
-                $size            = getimagesize(TL_ROOT . '/' . urldecode($strSrc));
-                $arrSource['lb'] = 'lb'.$this->getLightboxId();
-                $arrSource['w']  = $size[0];
-                $arrSource['h']  = $size[1];
-                $arrSource['wh'] = $size[3];
+                if (file_exists(TL_ROOT . '/' . urldecode($strSrc))) {
+                    $size            = getimagesize(TL_ROOT . '/' . urldecode($strSrc));
+                    $arrSource['lb'] = 'lb'.$this->getLightboxId();
+                    $arrSource['w']  = $size[0];
+                    $arrSource['h']  = $size[1];
+                    $arrSource['wh'] = $size[3];
+                }
             }
 
             $this->modifiedTime[] = $objFile->mtime;
