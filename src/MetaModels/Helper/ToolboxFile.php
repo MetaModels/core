@@ -535,8 +535,7 @@ class ToolboxFile
                 }
                 $arrSource['src'] = $strSrc;
 
-                if (file_exists(TL_ROOT . '/' . urldecode($strSrc)))
-                {
+                if (file_exists(TL_ROOT . '/' . urldecode($strSrc))) {
                     $size            = getimagesize(TL_ROOT . '/' . urldecode($strSrc));
                     $arrSource['lb'] = 'lb'.$this->getLightboxId();
                     $arrSource['w']  = $size[0];
