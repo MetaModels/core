@@ -17,7 +17,6 @@
 
 namespace MetaModels\BackendIntegration;
 
-use ContaoCommunityAlliance\DcGeneral\Event\EventPropagator;
 use MetaModels\BackendIntegration\Events\BackendIntegrationEvent;
 use MetaModels\Dca\MetaModelDcaBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
