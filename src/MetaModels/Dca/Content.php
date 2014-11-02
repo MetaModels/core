@@ -330,7 +330,7 @@ class Content
     {
         return Helper::getAttributeNamesForModel(
             $objDC->activeRecord->metamodel,
-            (array)$GLOBALS['METAMODELS']['metainformation']['allowedTitle']
+            (array) $GLOBALS['METAMODELS']['metainformation']['allowedTitle']
         );
     }
 
@@ -348,7 +348,7 @@ class Content
     {
         return Helper::getAttributeNamesForModel(
             $objDC->activeRecord->metamodel,
-            (array)$GLOBALS['METAMODELS']['metainformation']['allowedDescription']
+            (array) $GLOBALS['METAMODELS']['metainformation']['allowedDescription']
         );
     }
 }

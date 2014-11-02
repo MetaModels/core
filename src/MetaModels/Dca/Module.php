@@ -333,7 +333,7 @@ class Module
     {
         return Helper::getAttributeNamesForModel(
             $objDC->activeRecord->metamodel,
-            (array)$GLOBALS['METAMODELS']['metainformation']['allowedTitle']
+            (array) $GLOBALS['METAMODELS']['metainformation']['allowedTitle']
         );
     }
 
@@ -351,7 +351,7 @@ class Module
     {
         return Helper::getAttributeNamesForModel(
             $objDC->activeRecord->metamodel,
-            (array)$GLOBALS['METAMODELS']['metainformation']['allowedDescription']
+            (array) $GLOBALS['METAMODELS']['metainformation']['allowedDescription']
         );
     }
 }

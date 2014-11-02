@@ -59,7 +59,7 @@ class SimpleLookup extends Simple
      */
     public function allowEmpty()
     {
-        return (bool)$this->get('allow_empty');
+        return (bool) $this->get('allow_empty');
     }
 
     /**
@@ -77,7 +77,7 @@ class SimpleLookup extends Simple
     {
         $arrOptions = $objAttribute->getFilterOptions(
             $this->get('onlypossible') ? $arrIds : null,
-            (bool)$this->get('onlyused'),
+            (bool) $this->get('onlyused'),
             $arrCount
         );
 
@@ -103,7 +103,7 @@ class SimpleLookup extends Simple
     public function enableFEFilterWidget()
     {
         // TODO: better use a seperate checkbox or the like? For the moment, this has to be overridden by sub classes.
-        return (bool)$this->get('predef_param');
+        return (bool) $this->get('predef_param');
     }
 
     /**

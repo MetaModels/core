@@ -140,7 +140,7 @@ class Factory implements IFactory
      */
     public function getTypeFactory($typeFactory)
     {
-        return isset($this->typeFactories[(string)$typeFactory]) ? $this->typeFactories[(string)$typeFactory] : null;
+        return isset($this->typeFactories[(string) $typeFactory]) ? $this->typeFactories[(string) $typeFactory] : null;
     }
 
     /**
@@ -243,7 +243,7 @@ class Factory implements IFactory
      */
     public function getIconForType($type)
     {
-        return isset($this->typeFactories[(string)$type]) ? $this->typeFactories[(string)$type]->getTypeIcon() : null;
+        return isset($this->typeFactories[(string) $type]) ? $this->typeFactories[(string) $type]->getTypeIcon() : null;
     }
 
     /**
@@ -296,6 +296,6 @@ class Factory implements IFactory
             E_USER_WARNING
         );
 
-        return (bool)self::getDefaultFactory()->getTypeFactory($strFieldType);
+        return (bool) self::getDefaultFactory()->getTypeFactory($strFieldType);
     }
 }

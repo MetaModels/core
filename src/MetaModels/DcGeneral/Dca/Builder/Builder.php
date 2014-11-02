@@ -486,7 +486,7 @@ class Builder
 
         foreach ($inputScreen->getProperties() as $property => $value) {
             if (isset($value['info']['sorting'])) {
-                $element->addProperty($property, (int)$value['info']['flag']);
+                $element->addProperty($property, (int) $value['info']['flag']);
             }
         }
     }
@@ -621,7 +621,7 @@ class Builder
         }
 
         if (($value = $inputScreen->isClosed()) !== null) {
-            $config->setClosed((bool)$value);
+            $config->setClosed((bool) $value);
         }
 
         $this->calculateConditions($container);
@@ -697,7 +697,7 @@ class Builder
                 ->setSetters(array(array('property' => 'pid', 'value' => '0')));
         }
 
-        $builder = FilterBuilder::fromArrayForRoot((array)$relationship->getFilterArray())->getFilter();
+        $builder = FilterBuilder::fromArrayForRoot((array) $relationship->getFilterArray())->getFilter();
 
         $builder->andPropertyEquals('pid', 0);
 
@@ -801,7 +801,7 @@ class Builder
             $relationship->getSetters()
         ));
 
-        $builder = FilterBuilder::fromArrayForRoot((array)$relationship->getFilterArray())->getFilter();
+        $builder = FilterBuilder::fromArrayForRoot((array) $relationship->getFilterArray())->getFilter();
 
         $builder->andPropertyEquals('varbase', 1);
 
@@ -1044,7 +1044,7 @@ class Builder
 
         $listing->setRootIcon($this->getBackendIcon($inputScreen->getIcon()));
         $listing->setDefaultSortingFields(array_merge(
-            (array)$listing->getDefaultSortingFields(),
+            (array) $listing->getDefaultSortingFields(),
             array('sorting' => 'ASC')
         ));
     }

@@ -316,7 +316,7 @@ abstract class Base implements IAttribute
         }
 
         if (in_array('trailingSlash', $arrSettingNames) && ($arrOverrides['trailingSlash'] != 2)) {
-            $arrFieldDef['eval']['trailingSlash'] = (bool)$arrOverrides['trailingSlash'];
+            $arrFieldDef['eval']['trailingSlash'] = (bool) $arrOverrides['trailingSlash'];
         }
 
         // Sorting flag override.
@@ -348,7 +348,7 @@ abstract class Base implements IAttribute
         (
             'fields' => array_merge(
                 array($this->getColName() => $this->getFieldDefinition($arrOverrides)),
-                (array)$GLOBALS['TL_DCA'][$this->getMetaModel()->getTableName()]['fields'][$this->getColName()]
+                (array) $GLOBALS['TL_DCA'][$this->getMetaModel()->getTableName()]['fields'][$this->getColName()]
             ),
         );
         // Add sorting fields.

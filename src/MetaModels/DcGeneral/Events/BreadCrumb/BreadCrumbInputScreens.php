@@ -42,7 +42,7 @@ class BreadCrumbInputScreens extends BreadCrumbMetaModels
      */
     protected function getInputScreen()
     {
-        return (object)\Database::getInstance()
+        return (object) \Database::getInstance()
             ->prepare('SELECT id, pid, name FROM tl_metamodel_dca WHERE id=?')
             ->executeUncached($this->inputScreenId)
             ->row();

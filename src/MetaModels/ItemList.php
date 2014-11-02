@@ -465,7 +465,7 @@ class ItemList
             $intPage = \Input::getInstance()->get('page') ? \Input::getInstance()->get('page') : 1;
 
             if ($intPage > ($intTotal / $this->intPerPage)) {
-                $intPage = (int)ceil($intTotal / $this->intPerPage);
+                $intPage = (int) ceil($intTotal / $this->intPerPage);
             }
 
             // Set limit and offset.
@@ -547,7 +547,7 @@ class ItemList
 
         $intFilterSettings = 0;
 
-        foreach ((array)$this->getView()->get('jumpTo') as $arrJumpTo) {
+        foreach ((array) $this->getView()->get('jumpTo') as $arrJumpTo) {
             // If either desired language or fallback, keep the result.
             if (!$this->getMetaModel()->isTranslated()
                 || $arrJumpTo['langcode'] == $strDesiredLanguage

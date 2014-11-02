@@ -137,7 +137,7 @@ class Subscriber
      */
     public static function fixLangArray(DecodePropertyValueForWidgetEvent $event)
     {
-        $langValues = (array)$event->getValue();
+        $langValues = (array) $event->getValue();
         $output     = array();
         foreach ($langValues as $langCode => $subValue) {
             if (is_array($subValue)) {
@@ -157,7 +157,7 @@ class Subscriber
      */
     public static function unfixLangArray(EncodePropertyValueFromWidgetEvent $event)
     {
-        $langValues  = (array)$event->getValue();
+        $langValues  = (array) $event->getValue();
         $hasFallback = false;
         $output      = array();
         foreach ($langValues as $subValue) {

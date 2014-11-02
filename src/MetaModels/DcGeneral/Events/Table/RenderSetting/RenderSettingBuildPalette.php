@@ -139,7 +139,7 @@ class RenderSettingBuildPalette
                 $paletteCondition->addCondition(new PaletteCondition($palette->getName()));
             }
 
-            foreach ((array)$GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes'] as
+            foreach ((array) $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes'] as
                 $typeName => $paletteInfo) {
                 if ($typeName == 'default') {
                     continue;

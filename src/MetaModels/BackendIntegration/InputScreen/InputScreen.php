@@ -126,7 +126,7 @@ class InputScreen implements IInputScreen
         $this->legends[$legendName] = array
         (
             'name'       => $strLegend,
-            'visible'    => (bool)$legend['legendhide'],
+            'visible'    => (bool) $legend['legendhide'],
             'properties' => array()
         );
 

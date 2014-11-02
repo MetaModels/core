@@ -394,8 +394,8 @@ class MetaModelDcaBuilder
             }
 
             $GLOBALS['TL_DCA'][$strTableName] = array_replace_recursive(
-                (array)$GLOBALS['TL_DCA']['tl_metamodel_item'],
-                (array)$GLOBALS['TL_DCA'][$strTableName]
+                (array) $GLOBALS['TL_DCA']['tl_metamodel_item'],
+                (array) $GLOBALS['TL_DCA'][$strTableName]
             );
 
             return true;

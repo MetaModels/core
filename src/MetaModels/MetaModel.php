@@ -456,7 +456,7 @@ class MetaModel implements IMetaModel
     public function getAvailableLanguages()
     {
         if ($this->isTranslated()) {
-            return array_keys((array)$this->arrData['languages']);
+            return array_keys((array) $this->arrData['languages']);
         }
 
         return null;

@@ -106,7 +106,7 @@ class CustomSql extends Simple
             function ($arrMatch) use (&$arrParams, $arrFilterUrl) {
                 list($strSource, $strQuery) = explode('?', $arrMatch[1], 2);
                 parse_str($strQuery, $arrArgs);
-                $arrName = (array)$arrArgs['name'];
+                $arrName = (array) $arrArgs['name'];
 
                 $var = null;
 
@@ -157,7 +157,7 @@ class CustomSql extends Simple
                 }
 
                 // Treat as list.
-                $var = (array)$var;
+                $var = (array) $var;
 
                 if (!empty($arrArgs['recursive'])) {
                     $var = iterator_to_array(
@@ -245,7 +245,7 @@ class CustomSql extends Simple
         foreach ($arrMatches[1] as $strQuery) {
             parse_str($strQuery, $arrArgs);
             if (isset($arrArgs['name'])) {
-                $arrName     = (array)$arrArgs['name'];
+                $arrName     = (array) $arrArgs['name'];
                 $arrParams[] = $arrName[0];
             }
         }
