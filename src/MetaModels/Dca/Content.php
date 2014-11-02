@@ -218,7 +218,10 @@ class Content
         $dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
 
         $url = BackendUrlBuilder::fromUrl('contao/main.php?do=metamodels&table=tl_metamodel_filtersetting')
-            ->setQueryParameter('pid', IdSerializer::fromValues('tl_metamodel_filter', $dataContainer->value)->getSerialized());
+            ->setQueryParameter(
+                'pid',
+                IdSerializer::fromValues('tl_metamodel_filter', $dataContainer->value)->getSerialized()
+            );
 
         return sprintf(
             '<a href="%s" title="%s" style="padding-left:3px">%s</a>',
