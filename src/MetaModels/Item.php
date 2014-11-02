@@ -320,7 +320,7 @@ class Item implements IItem
         // Include CSS.
         $arrCss = $objSettings->get('additionalCss');
 
-        foreach ((array)$arrCss as $arrFile) {
+        foreach ((array) $arrCss as $arrFile) {
             if ($arrFile['published']) {
                 $GLOBALS['TL_CSS'][md5($arrFile['file'])] = $arrFile['file'];
             }
@@ -329,7 +329,7 @@ class Item implements IItem
         // Include JS.
         $arrJs = $objSettings->get('additionalJs');
 
-        foreach ((array)$arrJs as $arrFile) {
+        foreach ((array) $arrJs as $arrFile) {
             if ($arrFile['published']) {
                 $GLOBALS['TL_JAVASCRIPT'][md5($arrFile['file'])] = $arrFile['file'];
             }
@@ -436,6 +436,8 @@ class Item implements IItem
      *
      * @param ICollection $renderSettings   The render settings to use.
      *
+     * @param string      $language         The language to use.
+     *
      * @return array
      *
      * @SuppressWarnings(PHPMD.Superglobals)
@@ -478,7 +480,7 @@ class Item implements IItem
 
         $event = new GenerateFrontendUrlEvent($page, $parameters, $language);
         $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
-        $result['url']  = $event->getUrl();
+        $result['url'] = $event->getUrl();
 
         return $result;
     }
@@ -510,7 +512,7 @@ class Item implements IItem
         $intFilterSettings = 0;
         $language          = null;
 
-        foreach ((array)$objSettings->get('jumpTo') as $arrJumpTo) {
+        foreach ((array) $objSettings->get('jumpTo') as $arrJumpTo) {
             // If either desired language or fallback, keep the result.
             if (!$this->getMetaModel()->isTranslated()
                 || $arrJumpTo['langcode'] == $strDesiredLanguage
