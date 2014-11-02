@@ -157,20 +157,23 @@ class Item implements IItem
      */
     protected function isArrayEmpty($arrArray)
     {
+        // First off check for simple types.
+        if (empty($arrArray)) {
+            return true;
+        }
+        // Next check for a value array.
         if (is_array($arrArray) && array_key_exists('value', $arrArray)) {
-            if (!empty($arrArray['value'])) {
-                return false;
-            }
-        } elseif (is_array($arrArray)) {
+            return $this->isArrayEmpty($arrArray['value']);
+        }
+        // Now check sub arrays.
+        if (is_array($arrArray)) {
             foreach ($arrArray as $value) {
                 if (is_array($value)) {
                     return $this->isArrayEmpty($value);
-                } elseif ($value !== '' && $value !== null) {
+                } elseif (!empty($value)) {
                     return false;
                 }
             }
-        } elseif (($arrArray !== '') && ($arrArray !== null)) {
-            return false;
         }
 
         return true;
