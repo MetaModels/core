@@ -88,7 +88,7 @@ class Boot
         // Work around the fact that Contao\Database::getInstance() always creates an instance, even when no driver is
         // configured.
         if (empty($GLOBALS['TL_CONFIG']['dbDriver'])) {
-            false;
+            return false;
         }
 
         // When coming from install.php or somewhere else when localconfig.php
