@@ -435,13 +435,9 @@ abstract class Base implements IAttribute
     }
 
     /**
-     * Convert a native attribute value into a value to be used in a filter Url.
+     * {@inheritdoc}
      *
      * This base implementation returns the value itself.
-     *
-     * @param mixed $varValue The source value.
-     *
-     * @return string
      */
     public function getFilterUrlValue($varValue)
     {
@@ -464,24 +460,15 @@ abstract class Base implements IAttribute
      * {@inheritdoc}
      * Base implementation, do not perform any search;
      */
-    // @codingStandardsIgnoreStart - empty base implementation, therefore parameter not used.
     public function searchFor($strPattern)
     {
         return array();
     }
-    // @codingStandardsIgnoreEnd
 
     /**
-     * Filter all values greater than the passed value.
+     * {@inheritdoc}
      *
-     * This base implementation does not perform any search.
-     *
-     * @param mixed $varValue     The value to use as lower end.
-     *
-     * @param bool  $blnInclusive If true, the passed value will be included, if false, it will be excluded.
-     *
-     * @return int[] The list of item ids of all items matching the condition.
-     *
+     * Base implementation, return empty array.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function filterGreaterThan($varValue, $blnInclusive = false)
@@ -490,16 +477,9 @@ abstract class Base implements IAttribute
     }
 
     /**
-     * Filter all values less than the passed value.
+     * {@inheritdoc}
      *
-     * This base implementation does not perform any search.
-     *
-     * @param mixed $varValue     The value to use as upper end.
-     *
-     * @param bool  $blnInclusive If true, the passed value will be included, if false, it will be excluded.
-     *
-     * @return int[] The list of item ids of all items matching the condition.
-     *
+     * Base implementation, return empty array.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function filterLessThan($varValue, $blnInclusive = false)
@@ -508,13 +488,8 @@ abstract class Base implements IAttribute
     }
 
     /**
-     * Filter all values not having the passed value.
-     *
-     * This base implementation does an array_merge() on the return values of filterLessThan() and filterGreaterThan().
-     *
-     * @param mixed $varValue The value to use as upper end.
-     *
-     * @return int[] The list of item ids of all items matching the condition.
+     * {@inheritdoc}
+     * Base implementation, merge the result of filterLessThan() and filterGreaterThan().
      */
     public function filterNotEqual($varValue)
     {
