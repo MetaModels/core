@@ -209,8 +209,17 @@ abstract class Base implements IAttribute
     public function set($strKey, $varValue)
     {
         if (in_array($strKey, $this->getAttributeSettingNames())) {
-            $this->arrData[$strKey] = unserialize($varValue);
+            // @codingStandardsIgnoreStart
+            $unSerialized = @unserialize($varValue);
+            // @codingStandardsIgnoreEnd
+
+            if (is_array($unSerialized)) {
+                $this->arrData[$strKey] = $unSerialized;
+            } else {
+                $this->arrData[$strKey] = $varValue;
+            }
         }
+
         return $this;
     }
 

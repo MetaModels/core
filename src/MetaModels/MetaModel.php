@@ -68,7 +68,15 @@ class MetaModel implements IMetaModel
     public function __construct($arrData)
     {
         foreach ($arrData as $strKey => $varValue) {
-            $this->arrData[$strKey] = unserialize($varValue);
+            // @codingStandardsIgnoreStart
+            $unSerialized = @unserialize($varValue);
+            // @codingStandardsIgnoreEnd
+
+            if (is_array($unSerialized)) {
+                $this->arrData[$strKey] = $unSerialized;
+            } else {
+                $this->arrData[$strKey] = $varValue;
+            }
         }
     }
 
@@ -250,7 +258,15 @@ class MetaModel implements IMetaModel
 
             foreach ($objRow->row() as $strKey => $varValue) {
                 if ((!$arrAttrOnly) || (in_array($strKey, $arrAttrOnly))) {
-                    $arrData[$strKey] = unserialize($varValue);
+                    // @codingStandardsIgnoreStart
+                    $unSerialized = @unserialize($varValue);
+                    // @codingStandardsIgnoreEnd
+
+                    if (is_array($unSerialized)) {
+                        $arrData[$strKey] = $unSerialized;
+                    } else {
+                        $arrData[$strKey] = $unSerialized;
+                    }
                 }
             }
             $arrResult[$objRow->id] = $arrData;
