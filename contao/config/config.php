@@ -39,7 +39,8 @@ array_insert(
                         'tl_metamodel_dca',
                         'tl_metamodel_dcasetting',
                         'tl_metamodel_dca_combine',
-                        'tl_metamodel_dcasetting_condition'
+                        'tl_metamodel_dcasetting_condition',
+                        'tl_metamodel_searchable_pages'
                     ),
                     'icon'                  => 'system/modules/metamodels/assets/images/backend/logo.png',
                     'callback'              => 'MetaModels\BackendIntegration\Module'
