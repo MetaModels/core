@@ -72,7 +72,7 @@ class MetaModel implements IMetaModel
             $unSerialized = @unserialize($varValue);
             // @codingStandardsIgnoreEnd
 
-            if (is_array($varValue)) {
+            if (is_array($unSerialized)) {
                 $this->arrData[$strKey] = $unSerialized;
             } else {
                 $this->arrData[$strKey] = $varValue;
@@ -262,7 +262,7 @@ class MetaModel implements IMetaModel
                     $unSerialized = @unserialize($varValue);
                     // @codingStandardsIgnoreEnd
 
-                    if (is_array($varValue)) {
+                    if (is_array($unSerialized)) {
                         $arrData[$strKey] = $unSerialized;
                     } else {
                         $arrData[$strKey] = $varValue;
