@@ -129,7 +129,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
                 'href'  => 'act=show',
                 'icon'  => 'show.gif'
             ),
-
             'settings' => array
             (
                 'label'   => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['settings'],
@@ -139,22 +138,20 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
             ),
         )
     ),
-    'metapalettes' => array
+    'metapalettes'          => array
     (
         'default' => array
         (
-            'title' => array
+            'title'   => array
             (
                 'name',
                 'isdefault'
             ),
-            'view' => array
+            'general'    => array
             (
-                'panelLayout',
-            ),
-            'backend' => array
-            (
-                'backendcaption',
+                'jumpTo',
+                'rendersetting',
+                'showEmptyValues',
             ),
         )
     ),
@@ -166,14 +163,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
             (
                 'backend after rendertype' => array('backendsection'),
             ),
-            'ctable' => array
+            'ctable'     => array
             (
                 'backend after rendertype' => array('ptable'),
             )
         ),
         'rendermode' => array
         (
-            'flat' => array
+            'flat'     => array
             (
                 'display after rendermode' => array(),
             ),
@@ -185,7 +182,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
     ),
     'fields'                => array
     (
-        'name'           => array
+        'name'            => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['name'],
             'exclude'   => true,
@@ -198,7 +195,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
                 'tl_class'  => 'w50'
             )
         ),
-        'isdefault'      => array
+        'isdefault'       => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['isdefault'],
             'exclude'   => true,
@@ -210,61 +207,96 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
             ),
         ),
 
-
-
-        'backendcaption' => array
+        // Maybe this is usefull?
+        'showEmptyValues' => array
         (
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['backendcaption'],
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['showEmptyValues'],
             'exclude'   => true,
-            'inputType' => 'multiColumnWizard',
+            'inputType' => 'checkbox',
             'eval'      => array
             (
+                'tl_class' => 'w50'
+            )
+        ),
+        'rendersetting'        => array
+        (
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['rendersetting'],
+            // Todo: Catch the default rendersetting of parent MetaModel
+            //'default'   => 'metamodel_prerendered',
+            'exclude'   => true,
+            'inputType' => 'select',
+            'eval'      => array
+            (
+                'includeBlankOption' => true,
+                'tl_class'           => 'w50',
+                'mandatory'          => true,
+                'chosen'             => true
+            )
+        ),
+        // Todo: Should we leave this as jumpTo or better renderPage ?
+        'jumpTo'          => array
+        (
+            'label'          => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['jumpTo'],
+            'exclude'        => true,
+            'minCount'       => 1,
+            'maxCount'       => 1,
+            'disableSorting' => '1',
+            'inputType'      => 'multiColumnWizard',
+            'eval'           => array
+            (
+                'style'        => 'width:100%;',
                 'columnFields' => array
                 (
-                    'langcode'    => array
+                    'langcode' => array
                     (
-                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['becap_langcode'],
+                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['jumpTo_language'],
+                        'exclude'   => true,
+                        'inputType' => 'justtextoption',
+                        'options'   => array
+                        (
+                            'xx' => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['jumpTo_allLanguages']
+                        ),
+                        'eval'      => array
+                        (
+                            'valign' => 'center'
+                        )
+                    ),
+                    'value'    => array(
+                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['jumpTo_page'],
+                        'exclude'   => true,
+                        'inputType' => 'text',
+                        // TODO: change callbacks to event handlers.
+                        'wizard'    => array
+                        (
+                            array('MetaModels\Dca\RenderSettings', 'pagePicker')
+                        ),
+                        'eval'      => array
+                        (
+                            'style' => 'width:317px;'
+                        )
+                    ),
+                    'filter'   => array
+                    (
+                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['jumpTo_filter'],
                         'exclude'   => true,
                         'inputType' => 'select',
-                        'options'   => $this->getLanguages(),
                         'eval'      => array
                         (
-                            'style'  => 'width:200px',
-                            'chosen' => 'true'
-                        )
-                    ),
-                    'label'       => array
-                    (
-                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['becap_label'],
-                        'exclude'   => true,
-                        'inputType' => 'text',
-                        'eval'      => array
-                        (
-                            'style' => 'width:180px',
-                        )
-                    ),
-                    'description' => array
-                    (
-                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['becap_description'],
-                        'exclude'   => true,
-                        'inputType' => 'text',
-                        'eval'      => array
-                        (
-                            'style' => 'width:200px',
+                            'style'              => 'width:200px;',
+                            'includeBlankOption' => true,
+                            'chosen'             => true
                         )
                     ),
                 ),
+                'buttons'      => array
+                (
+                    'copy'   => false,
+                    'delete' => false,
+                    'up'     => false,
+                    'down'   => false
+                ),
+                'tl_class'     => 'clr clx',
             )
-        ),
-        'panelLayout'    => array
-        (
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['panelLayout'],
-            'exclude'   => true,
-            'inputType' => 'text',
-            'eval'      => array
-            (
-                'tl_class' => 'clr long wizard',
-            ),
         )
     )
 );
