@@ -265,7 +265,7 @@ class MetaModel implements IMetaModel
                     if (is_array($unSerialized)) {
                         $arrData[$strKey] = $unSerialized;
                     } else {
-                        $arrData[$strKey] = $unSerialized;
+                        $arrData[$strKey] = $varValue;
                     }
                 }
             }
