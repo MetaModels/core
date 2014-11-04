@@ -38,13 +38,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class Item implements IItem
 {
     /**
-     * Name of the model this item originates from.
-     *
-     * @var string
-     */
-    protected $strModelName = null;
-
-    /**
      * The MetaModel instance attached to the item.
      *
      * Get's populated with the first call to getMetaModel() (lazy initialization).
@@ -69,8 +62,8 @@ class Item implements IItem
      */
     public function __construct(IMetaModel $objMetaModel, $arrData)
     {
-        $this->arrData      = $arrData;
-        $this->strModelName = $objMetaModel->getTableName();
+        $this->arrData   = $arrData;
+        $this->metaModel = $objMetaModel;
     }
 
     /**
@@ -214,12 +207,6 @@ class Item implements IItem
      */
     public function getMetaModel()
     {
-        if (!$this->metaModel) {
-            $dispatcher      = $this->getEventDispatcher();
-            $factory         = new MetaModelFactory($dispatcher, new AttributeFactory($dispatcher));
-            $this->metaModel = $factory->getMetaModel($this->strModelName);
-        }
-
         return $this->metaModel;
     }
 
