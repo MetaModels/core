@@ -16,7 +16,7 @@
  * @filesource
  */
 
-$GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
+$GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
 (
     'config'                => array
     (
