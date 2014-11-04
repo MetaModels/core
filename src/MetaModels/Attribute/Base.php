@@ -213,7 +213,7 @@ abstract class Base implements IAttribute
             $unSerialized = @unserialize($varValue);
             // @codingStandardsIgnoreEnd
 
-            if (is_array($unSerialized)) {
+            if (is_array($varValue)) {
                 $this->arrData[$strKey] = $unSerialized;
             } else {
                 $this->arrData[$strKey] = $varValue;
