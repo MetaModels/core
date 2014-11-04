@@ -287,6 +287,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
                             'chosen'             => true
                         )
                     ),
+                    'fallback' => array
+                    (
+                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['fallback'],
+                        'exclude'   => true,
+                        'inputType' => 'radio',
+                        'eval'      => array
+                        (
+                            'style' => 'width:40px;'
+                        )
+                    ),
                 ),
                 'buttons'      => array
                 (
