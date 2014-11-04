@@ -10,7 +10,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     Tim Becker <please.tim@metamodels.me>
+ * @author     Tim Becker <please.tim@metamodel.me>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -272,7 +272,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
                         ),
                         'eval'      => array
                         (
-                            'style' => 'width:317px;'
+                            'style' => 'width:270px;'
                         )
                     ),
                     'filter'   => array
@@ -291,10 +291,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
                     (
                         'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['fallback'],
                         'exclude'   => true,
-                        'inputType' => 'radio',
+                        'inputType' => 'checkbox',
                         'eval'      => array
                         (
-                            'style' => 'width:40px;'
+                            'style' => 'width:50px;'
                         )
                     ),
                 ),

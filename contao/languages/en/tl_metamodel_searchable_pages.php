@@ -10,6 +10,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Tim Becker <please.tim@metamodel.me>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
