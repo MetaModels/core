@@ -154,19 +154,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
             ),
             'backend' => array
             (
-                'rendertype',
                 'backendcaption',
-                'backendicon',
-            ),
-            'display' => array
-            (
-                'rendermode',
-            ),
-            'permissions' => array
-            (
-                'iseditable',
-                'iscreatable',
-                'isdeleteable',
             ),
         )
     ),
