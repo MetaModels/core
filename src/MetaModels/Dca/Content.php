@@ -43,7 +43,7 @@ class Content extends ContentElementModuleBase
      */
     public function buildCustomFilter(\DC_Table $dataContainer)
     {
-        parent::buildFilterParams($dataContainer, 'tl_content', 'metamodel_content');
+        parent::buildFilterParamsFor($dataContainer, 'tl_content', 'metamodel_content');
     }
 
     /**
@@ -72,7 +72,7 @@ class Content extends ContentElementModuleBase
      */
     public function editMetaModel(\DC_Table $dataContainer)
     {
-        return parent::editMetaModel($dataContainer, 'tl_content');
+        return parent::editMetaModelButton($dataContainer, 'tl_content');
     }
 
     /**
@@ -84,7 +84,7 @@ class Content extends ContentElementModuleBase
      */
     public function editFilterSetting(\DC_Table $dataContainer)
     {
-        return parent::editFilterSetting($dataContainer, 'tl_content');
+        return parent::editFilterSettingButton($dataContainer, 'tl_content');
     }
 
     /**
@@ -96,6 +96,6 @@ class Content extends ContentElementModuleBase
      */
     public function editRenderSetting(\DC_Table $dataContainer)
     {
-        return parent::editRenderSetting($dataContainer, 'tl_content');
+        return parent::editRenderSettingButton($dataContainer, 'tl_content');
     }
 }
