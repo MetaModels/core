@@ -148,7 +148,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
             ),
             'general'    => array
             (
-                'jumpTo',
+                'setFilter',
+                'setRendersetting',
             ),
         )
     ),
@@ -193,80 +194,44 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
             )
         ),
 
-        // Todo: Should we leave this as jumpTo or better renderPage ?
-        'jumpTo'          => array
+        // Maybe this is usefull?
+        'showEmptyValues' => array
         (
-            'label'          => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['jumpTo'],
-            'exclude'        => true,
-            'minCount'       => 1,
-            'maxCount'       => 1,
-            'disableSorting' => '1',
-            'inputType'      => 'multiColumnWizard',
-            'eval'           => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['showEmptyValues'],
+            'exclude'   => true,
+            'inputType' => 'checkbox',
+            'eval'      => array
             (
-                'style'        => 'width:100%;',
-                'columnFields' => array
-                (
-                    'langcode' => array
-                    (
-                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['jumpTo_language'],
-                        'exclude'   => true,
-                        'inputType' => 'justtextoption',
-                        'options'   => array
-                        (
-                            'xx' => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['jumpTo_allLanguages']
-                        ),
-                        'eval'      => array
-                        (
-                            'valign' => 'center'
-                        )
-                    ),
-                    'value'    => array(
-                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['jumpTo_page'],
-                        'exclude'   => true,
-                        'inputType' => 'text',
-                        // TODO: change callbacks to event handlers.
-                        'wizard'    => array
-                        (
-                            array('MetaModels\Dca\RenderSettings', 'pagePicker')
-                        ),
-                        'eval'      => array
-                        (
-                            'style' => 'width:270px;'
-                        )
-                    ),
-                    'filter'   => array
-                    (
-                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['jumpTo_filter'],
-                        'exclude'   => true,
-                        'inputType' => 'select',
-                        'eval'      => array
-                        (
-                            'style'              => 'width:200px;',
-                            'includeBlankOption' => true,
-                            'chosen'             => true
-                        )
-                    ),
-                    'fallback' => array
-                    (
-                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['fallback'],
-                        'exclude'   => true,
-                        'inputType' => 'checkbox',
-                        'eval'      => array
-                        (
-                            'style' => 'width:50px;'
-                        )
-                    ),
-                ),
-                'buttons'      => array
-                (
-                    'copy'   => false,
-                    'delete' => false,
-                    'up'     => false,
-                    'down'   => false
-                ),
-                'tl_class'     => 'clr clx',
+                'tl_class' => 'w50'
             )
-        )
+        ),
+        'setFilter'        => array
+        (
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['setFilter'],
+            'exclude'   => true,
+            'inputType' => 'select',
+            'eval'      => array
+            (
+                'includeBlankOption' => true,
+                'tl_class'           => 'w50',
+                'mandatory'          => true,
+                'chosen'             => true
+            )
+        ),
+
+        'setRendersetting'        => array
+        (
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['setRendersetting'],
+            'exclude'   => true,
+            'inputType' => 'select',
+            'eval'      => array
+            (
+                'includeBlankOption' => true,
+                'tl_class'           => 'w50',
+                'mandatory'          => true,
+                'chosen'             => true
+            )
+        ),
+
     )
 );
