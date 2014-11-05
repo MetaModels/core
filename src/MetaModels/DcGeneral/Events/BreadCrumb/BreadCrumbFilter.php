@@ -40,7 +40,7 @@ class BreadCrumbFilter extends BreadCrumbMetaModels
      */
     protected function getFilter()
     {
-        return (object)\Database::getInstance()
+        return (object) \Database::getInstance()
             ->prepare('SELECT id, pid, name FROM tl_metamodel_filter WHERE id=?')
             ->executeUncached($this->filterId)
             ->row();

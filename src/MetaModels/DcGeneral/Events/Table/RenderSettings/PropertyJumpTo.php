@@ -127,7 +127,7 @@ class PropertyJumpTo
 
         if ($metaModel->isTranslated()) {
             $arrLanguages = array();
-            foreach ((array)$metaModel->getAvailableLanguages() as $strLangCode) {
+            foreach ((array) $metaModel->getAvailableLanguages() as $strLangCode) {
                 $arrLanguages[$strLangCode] = $translator->translate('LNG.'. $strLangCode, 'languages');
             }
             asort($arrLanguages);

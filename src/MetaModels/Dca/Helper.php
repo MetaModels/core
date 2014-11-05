@@ -143,7 +143,7 @@ class Helper
         $fallback = $metaModel->getFallbackLanguage();
 
         $languages = array();
-        foreach ((array)$metaModel->getAvailableLanguages() as $langCode) {
+        foreach ((array) $metaModel->getAvailableLanguages() as $langCode) {
             $languages[$langCode] = $environment->getTranslator()->translate('LNG.' . $langCode, 'languages');
         }
         asort($languages);

@@ -674,7 +674,7 @@ class Builder
                 ->setSetters(array(array('property' => 'pid', 'value' => '0')));
         }
 
-        $builder = FilterBuilder::fromArrayForRoot((array)$relationship->getFilterArray())->getFilter();
+        $builder = FilterBuilder::fromArrayForRoot((array) $relationship->getFilterArray())->getFilter();
 
         $builder->andPropertyEquals('pid', 0);
 
@@ -778,7 +778,7 @@ class Builder
             $relationship->getSetters()
         ));
 
-        $builder = FilterBuilder::fromArrayForRoot((array)$relationship->getFilterArray())->getFilter();
+        $builder = FilterBuilder::fromArrayForRoot((array) $relationship->getFilterArray())->getFilter();
 
         $builder->andPropertyEquals('varbase', 1);
 

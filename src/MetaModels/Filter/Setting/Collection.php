@@ -18,6 +18,7 @@
 namespace MetaModels\Filter\Setting;
 
 use Database\Result;
+use MetaModels\Attribute\Factory as AttributeFactory;
 use MetaModels\Factory as ModelFactory;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use MetaModels\IItem;
@@ -47,6 +48,13 @@ class Collection implements ICollection
      * @var ISimple[]
      */
     protected $arrSettings = array();
+
+    /**
+     * The attached MetaModel.
+     *
+     * @var IMetaModel
+     */
+     protected $metaModel;
 
     /**
      * Create a new instance.
@@ -111,14 +119,35 @@ class Collection implements ICollection
     }
 
     /**
+     * Set the MetaModel.
+     *
+     * @param IMetaModel $metaModel The MetaModel instance.
+     *
+     * @return Collection
+     */
+    public function setMetaModel($metaModel)
+    {
+        $this->metaModel = $metaModel;
+
+        return $this;
+    }
+
+    /**
      * Retrieve the MetaModel this filter belongs to.
      *
      * @return IMetaModel
      *
      * @throws \RuntimeException When the MetaModel can not be determined.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getMetaModel()
     {
+        if ($this->metaModel) {
+            return $this->metaModel;
+        }
+
         if (!$this->arrData['pid']) {
             throw new \RuntimeException(
                 sprintf(
@@ -127,7 +156,14 @@ class Collection implements ICollection
                 )
             );
         }
-        return ModelFactory::byId($this->arrData['pid']);
+
+        $dispatcher = $GLOBALS['container']['event-dispatcher'];
+        $factory    = new ModelFactory($dispatcher, new AttributeFactory($dispatcher));
+        $model      = $factory->getMetaModel($factory->translateIdToMetaModelName($this->arrData['pid']));
+
+        $this->setMetaModel($model);
+
+        return $this->metaModel;
     }
 
     /**

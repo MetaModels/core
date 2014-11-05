@@ -149,7 +149,7 @@ class FrontendFilter
      */
     protected function getWantedNames()
     {
-        return (array)unserialize($this->objFilterConfig->metamodel_fef_params);
+        return (array) unserialize($this->objFilterConfig->metamodel_fef_params);
     }
 
     /**

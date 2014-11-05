@@ -38,13 +38,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class Item implements IItem
 {
     /**
-     * Name of the model this item originates from.
-     *
-     * @var string
-     */
-    protected $strModelName = null;
-
-    /**
      * The MetaModel instance attached to the item.
      *
      * Get's populated with the first call to getMetaModel() (lazy initialization).
@@ -69,8 +62,8 @@ class Item implements IItem
      */
     public function __construct(IMetaModel $objMetaModel, $arrData)
     {
-        $this->arrData      = $arrData;
-        $this->strModelName = $objMetaModel->getTableName();
+        $this->arrData   = $arrData;
+        $this->metaModel = $objMetaModel;
     }
 
     /**
@@ -157,20 +150,23 @@ class Item implements IItem
      */
     protected function isArrayEmpty($arrArray)
     {
+        // First off check for simple types.
+        if (empty($arrArray)) {
+            return true;
+        }
+        // Next check for a value array.
         if (is_array($arrArray) && array_key_exists('value', $arrArray)) {
-            if (!empty($arrArray['value'])) {
-                return false;
-            }
-        } elseif (is_array($arrArray)) {
+            return $this->isArrayEmpty($arrArray['value']);
+        }
+        // Now check sub arrays.
+        if (is_array($arrArray)) {
             foreach ($arrArray as $value) {
                 if (is_array($value)) {
                     return $this->isArrayEmpty($value);
-                } elseif ($value !== '' && $value !== null) {
+                } elseif (!empty($value)) {
                     return false;
                 }
             }
-        } elseif (($arrArray !== '') && ($arrArray !== null)) {
-            return false;
         }
 
         return true;
@@ -211,12 +207,6 @@ class Item implements IItem
      */
     public function getMetaModel()
     {
-        if (!$this->metaModel) {
-            $dispatcher      = $this->getEventDispatcher();
-            $factory         = new MetaModelFactory($dispatcher, new AttributeFactory($dispatcher));
-            $this->metaModel = $factory->getMetaModel($this->strModelName);
-        }
-
         return $this->metaModel;
     }
 
@@ -320,7 +310,7 @@ class Item implements IItem
         // Include CSS.
         $arrCss = $objSettings->get('additionalCss');
 
-        foreach ((array)$arrCss as $arrFile) {
+        foreach ((array) $arrCss as $arrFile) {
             if ($arrFile['published']) {
                 $GLOBALS['TL_CSS'][md5($arrFile['file'])] = $arrFile['file'];
             }
@@ -329,7 +319,7 @@ class Item implements IItem
         // Include JS.
         $arrJs = $objSettings->get('additionalJs');
 
-        foreach ((array)$arrJs as $arrFile) {
+        foreach ((array) $arrJs as $arrFile) {
             if ($arrFile['published']) {
                 $GLOBALS['TL_JAVASCRIPT'][md5($arrFile['file'])] = $arrFile['file'];
             }
@@ -436,6 +426,8 @@ class Item implements IItem
      *
      * @param ICollection $renderSettings   The render settings to use.
      *
+     * @param string      $language         The language to use.
+     *
      * @return array
      *
      * @SuppressWarnings(PHPMD.Superglobals)
@@ -478,7 +470,7 @@ class Item implements IItem
 
         $event = new GenerateFrontendUrlEvent($page, $parameters, $language);
         $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
-        $result['url']  = $event->getUrl();
+        $result['url'] = $event->getUrl();
 
         return $result;
     }
@@ -510,7 +502,7 @@ class Item implements IItem
         $intFilterSettings = 0;
         $language          = null;
 
-        foreach ((array)$objSettings->get('jumpTo') as $arrJumpTo) {
+        foreach ((array) $objSettings->get('jumpTo') as $arrJumpTo) {
             // If either desired language or fallback, keep the result.
             if (!$this->getMetaModel()->isTranslated()
                 || $arrJumpTo['langcode'] == $strDesiredLanguage

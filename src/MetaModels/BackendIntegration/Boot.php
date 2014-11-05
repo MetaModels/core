@@ -17,7 +17,6 @@
 
 namespace MetaModels\BackendIntegration;
 
-use ContaoCommunityAlliance\DcGeneral\Event\EventPropagator;
 use MetaModels\BackendIntegration\Events\BackendIntegrationEvent;
 use MetaModels\Dca\MetaModelDcaBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -80,11 +79,20 @@ class Boot
      * Check if the database has been correctly configured.
      *
      * @return bool
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected static function isDBInitialized()
     {
+        // Work around the fact that Contao\Database::getInstance() always creates an instance, even when no driver is
+        // configured.
+        if (empty($GLOBALS['TL_CONFIG']['dbDriver'])) {
+            return false;
+        }
+
         // When coming from install.php or somewhere else when localconfig.php
-        // has not yet completely been initialized, we will run into an exception here.
+        // has not yet completely been initialized, we will run into an exception here (see Contao/core#6088).
         try {
             $objDB = \Database::getInstance();
             return $objDB

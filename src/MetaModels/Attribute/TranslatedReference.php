@@ -86,7 +86,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         return array
         (
             'tstamp' => time(),
-            'value' => (string)$arrValue['value'],
+            'value' => (string) $arrValue['value'],
             'att_id' => $this->get('id'),
             'langcode' => $strLangCode,
             'item_id' => $intId,

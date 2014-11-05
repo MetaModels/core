@@ -68,7 +68,15 @@ class MetaModel implements IMetaModel
     public function __construct($arrData)
     {
         foreach ($arrData as $strKey => $varValue) {
-            $this->arrData[$strKey] = deserialize($varValue);
+            // @codingStandardsIgnoreStart
+            $unSerialized = @unserialize($varValue);
+            // @codingStandardsIgnoreEnd
+
+            if (is_array($unSerialized)) {
+                $this->arrData[$strKey] = $unSerialized;
+            } else {
+                $this->arrData[$strKey] = $varValue;
+            }
         }
     }
 
@@ -250,7 +258,15 @@ class MetaModel implements IMetaModel
 
             foreach ($objRow->row() as $strKey => $varValue) {
                 if ((!$arrAttrOnly) || (in_array($strKey, $arrAttrOnly))) {
-                    $arrData[$strKey] = deserialize($varValue);
+                    // @codingStandardsIgnoreStart
+                    $unSerialized = @unserialize($varValue);
+                    // @codingStandardsIgnoreEnd
+
+                    if (is_array($unSerialized)) {
+                        $arrData[$strKey] = $unSerialized;
+                    } else {
+                        $arrData[$strKey] = $varValue;
+                    }
                 }
             }
             $arrResult[$objRow->id] = $arrData;
@@ -456,7 +472,7 @@ class MetaModel implements IMetaModel
     public function getAvailableLanguages()
     {
         if ($this->isTranslated()) {
-            return array_keys((array)$this->arrData['languages']);
+            return array_keys((array) $this->arrData['languages']);
         }
 
         return null;

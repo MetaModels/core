@@ -104,7 +104,7 @@ class TagsWidget extends \Widget
             $strClass .= ' odd';
         }
 
-        $strClass .= (strlen($this->strClass)) ? ' ' . $this->strClass : '';
+        return ((strlen($this->strClass)) ? ' ' . $this->strClass : '') . $strClass;
     }
 
     /**

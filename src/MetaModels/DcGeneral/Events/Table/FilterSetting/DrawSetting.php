@@ -152,6 +152,7 @@ class DrawSetting
         $model       = $event->getModel();
         $metamodel   = Factory::byId($model->getProperty('fid'))->getMetaModel();
         $attribute   = $metamodel->getAttributeById($model->getProperty('attr_id'));
+        $dispatcher  = func_get_arg(2);
 
         if ($attribute) {
             $attributeName = $attribute->getColName();
@@ -162,7 +163,7 @@ class DrawSetting
         $event
             ->setLabel(self::getLabelPattern($environment, $model))
             ->setArgs(array(
-                self::getLabelImage($model, $event->getDispatcher()),
+                self::getLabelImage($model, $dispatcher),
                 self::getLabelText($environment, $model),
                 self::getLabelComment($model, $environment),
                 $attributeName,
@@ -197,11 +198,15 @@ class DrawSetting
     /**
      * Render a filter setting into html.
      *
-     * @param ModelToLabelEvent $event The event.
+     * @param ModelToLabelEvent        $event      The event.
+     *
+     * @param string                   $eventName  The event name.
+     *
+     * @param EventDispatcherInterface $dispatcher The event dispatcher.
      *
      * @return void
      */
-    public static function modelToLabel(ModelToLabelEvent $event)
+    public static function modelToLabel(ModelToLabelEvent $event, $eventName, EventDispatcherInterface $dispatcher)
     {
         $environment = $event->getEnvironment();
         $model       = $event->getModel();
@@ -216,7 +221,7 @@ class DrawSetting
 
         if (!$event->isPropagationStopped()) {
             // Handle with default drawing if no one wants to handle.
-            self::modelToLabelDefault($event);
+            self::modelToLabelDefault($event, $eventName, $dispatcher);
         }
     }
 }
