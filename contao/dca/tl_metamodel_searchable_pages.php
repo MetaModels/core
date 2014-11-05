@@ -149,8 +149,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
             'general'    => array
             (
                 'jumpTo',
-                'rendersetting',
-                'showEmptyValues',
             ),
         )
     ),
@@ -192,18 +190,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
                 'mandatory' => true,
                 'maxlength' => 255,
                 'tl_class'  => 'w50'
-            )
-        ),
-
-        // Maybe this is usefull?
-        'showEmptyValues' => array
-        (
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['showEmptyValues'],
-            'exclude'   => true,
-            'inputType' => 'checkbox',
-            'eval'      => array
-            (
-                'tl_class' => 'w50'
             )
         ),
 
