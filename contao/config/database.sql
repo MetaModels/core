@@ -332,12 +332,10 @@ CREATE TABLE `tl_metamodel_searchable_pages` (
 
   `pid` int(10) unsigned NOT NULL default '0',
   `tstamp` int(10) unsigned NOT NULL default '0',
--- corresponding tl_metamodel_dca
-  `dca_settingId` int(10) unsigned NOT NULL default '0',
 -- active or disabled
   `enabled` char(1) NOT NULL default '',
--- human readable name of the searchable page setting for internal use only.
-  `name` varchar(64) NOT NULL default '',
+-- human readable description of the searchable page setting for internal use only.
+  `name` varchar(255) NOT NULL default '',
 -- corresponding tl_metamodel_filtersetting
   `filter_settingId` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`),
