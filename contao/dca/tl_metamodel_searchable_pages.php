@@ -145,7 +145,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
             'title'   => array
             (
                 'name',
-                'isdefault'
             ),
             'general'    => array
             (
@@ -191,20 +190,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
             'eval'      => array
             (
                 'mandatory' => true,
-                'maxlength' => 64,
+                'maxlength' => 255,
                 'tl_class'  => 'w50'
             )
-        ),
-        'isdefault'       => array
-        (
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['isdefault'],
-            'exclude'   => true,
-            'inputType' => 'checkbox',
-            'eval'      => array
-            (
-                'maxlength' => 255,
-                'tl_class'  => 'w50 m12 cbx'
-            ),
         ),
 
         // Maybe this is usefull?
@@ -218,21 +206,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
                 'tl_class' => 'w50'
             )
         ),
-        'rendersetting'        => array
-        (
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['rendersetting'],
-            // Todo: Catch the default rendersetting of parent MetaModel
-            //'default'   => 'metamodel_prerendered',
-            'exclude'   => true,
-            'inputType' => 'select',
-            'eval'      => array
-            (
-                'includeBlankOption' => true,
-                'tl_class'           => 'w50',
-                'mandatory'          => true,
-                'chosen'             => true
-            )
-        ),
+
         // Todo: Should we leave this as jumpTo or better renderPage ?
         'jumpTo'          => array
         (
