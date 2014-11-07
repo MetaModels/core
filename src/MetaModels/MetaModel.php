@@ -136,7 +136,7 @@ class MetaModel implements IMetaModel
      */
     protected function isComplexAttribute($objAttribute)
     {
-        return in_array('MetaModels\Attribute\IComplex', class_implements($objAttribute));
+        return $objAttribute instanceof IComplex;
     }
 
     /**
@@ -148,7 +148,7 @@ class MetaModel implements IMetaModel
      */
     protected function isSimpleAttribute($objAttribute)
     {
-        return in_array('MetaModels\Attribute\ISimple', class_implements($objAttribute));
+        return $objAttribute instanceof ISimple;
     }
 
     /**
@@ -160,7 +160,7 @@ class MetaModel implements IMetaModel
      */
     protected function isTranslatedAttribute($objAttribute)
     {
-        return in_array('MetaModels\Attribute\ITranslated', class_implements($objAttribute));
+        return $objAttribute instanceof ITranslated;
     }
 
     /**
