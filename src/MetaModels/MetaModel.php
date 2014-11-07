@@ -346,13 +346,14 @@ class MetaModel implements IMetaModel
      */
     protected function fetchAdditionalAttributes($ids, $result, $attrOnly = array())
     {
-        foreach (array_merge($this->getComplexAttributes(), $this->getTranslatedAttributes()) as $attribute) {
+        $attributes = array_intersect(
+            $this->getAttributeByNames($attrOnly),
+            array_merge($this->getComplexAttributes(), $this->getTranslatedAttributes())
+        );
+
+        foreach ($attributes as $attribute) {
             /** @var IAttribute $attribute */
             $attributeName = $attribute->getColName();
-
-            if (!in_array($attributeName, $attrOnly)) {
-                continue;
-            }
 
             // If it is translated, fetch the translated data now.
             if ($this->isTranslatedAttribute($attribute)) {
@@ -580,6 +581,27 @@ class MetaModel implements IMetaModel
             }
         }
         return null;
+    }
+
+    /**
+     * Retrieve all attributes with the given names.
+     *
+     * @param string[] $attrNames The attribute names, if empty all attributes will be returned.
+     *
+     * @return IAttribute[]
+     */
+    protected function getAttributeByNames($attrNames = array())
+    {
+        if (empty($attrNames)) {
+            return $this->arrAttributes;
+        }
+
+        $result = array();
+        foreach ($attrNames as $attributeName) {
+            $result[$attributeName] = $this->arrAttributes[$attributeName];
+        }
+
+        return $result;
     }
 
     /**
