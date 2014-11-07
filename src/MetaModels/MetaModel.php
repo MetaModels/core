@@ -774,12 +774,8 @@ class MetaModel implements IMetaModel
      */
     protected function saveAttribute($objAttribute, $arrIds, $varData, $strLangCode)
     {
-        $arrInterfaces = class_implements($objAttribute);
-
         // Call the serializeData for all simple attributes.
-        if (in_array('MetaModels\Attribute\ISimple', $arrInterfaces)
-            || in_array('IMetaModelAttributeSimple', $arrInterfaces)
-        ) {
+        if ($this->isSimpleAttribute($objAttribute)) {
             /** @var \MetaModels\Attribute\ISimple $objAttribute */
             $varData = $objAttribute->serializeData($varData);
         }
@@ -796,12 +792,12 @@ class MetaModel implements IMetaModel
         } elseif ($this->isComplexAttribute($objAttribute)) {
             // Complex saving.
             $objAttribute->setDataFor($arrData);
-        } elseif (in_array('MetaModels\Attribute\ISimple', $arrInterfaces)
-            || in_array('IMetaModelAttributeSimple', $arrInterfaces)) {
+        } elseif ($this->isSimpleAttribute($objAttribute)) {
             $objAttribute->setDataFor($arrData);
         } else {
             throw new \RuntimeException(
-                'Unknown attribute type, can not save. Interfaces implemented: ' . implode(', ', $arrInterfaces)
+                'Unknown attribute type, can not save. Interfaces implemented: ' .
+                implode(', ', class_implements($objAttribute))
             );
         }
     }
