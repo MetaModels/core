@@ -75,15 +75,7 @@ class MetaModel implements IMetaModel
     public function __construct($arrData)
     {
         foreach ($arrData as $strKey => $varValue) {
-            // @codingStandardsIgnoreStart
-            $unSerialized = @unserialize($varValue);
-            // @codingStandardsIgnoreEnd
-
-            if (is_array($unSerialized)) {
-                $this->arrData[$strKey] = $unSerialized;
-            } else {
-                $this->arrData[$strKey] = $varValue;
-            }
+            $this->arrData[$strKey] = $this->tryUnserialize($varValue);
         }
 
         $this->database = \Database::getInstance();
@@ -97,6 +89,26 @@ class MetaModel implements IMetaModel
     protected function getDatabase()
     {
         return $this->database;
+    }
+
+    /**
+     * Try to unserialize a value.
+     *
+     * @param string $value The string to process.
+     *
+     * @return mixed
+     */
+    protected function tryUnserialize($value)
+    {
+        // @codingStandardsIgnoreStart
+        $unSerialized = @unserialize($value);
+        // @codingStandardsIgnoreEnd
+
+        if (is_array($unSerialized)) {
+            return $unSerialized;
+        }
+
+        return $value;
     }
 
     /**
@@ -253,15 +265,7 @@ class MetaModel implements IMetaModel
 
             foreach ($objRow->row() as $strKey => $varValue) {
                 if ((!$arrAttrOnly) || (in_array($strKey, $arrAttrOnly))) {
-                    // @codingStandardsIgnoreStart
-                    $unSerialized = @unserialize($varValue);
-                    // @codingStandardsIgnoreEnd
-
-                    if (is_array($unSerialized)) {
-                        $arrData[$strKey] = $unSerialized;
-                    } else {
-                        $arrData[$strKey] = $varValue;
-                    }
+                    $arrData[$strKey] = $this->tryUnserialize($varValue);
                 }
             }
             $arrResult[$objRow->id] = $arrData;
