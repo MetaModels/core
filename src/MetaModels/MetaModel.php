@@ -235,6 +235,41 @@ class MetaModel implements IMetaModel
     }
 
     /**
+     * Convert a database result to a result array.
+     *
+     * @param \Database\Result $objRow      The database result.
+     *
+     * @param array            $arrAttrOnly The list of attributes to return, if any.
+     *
+     * @return array
+     */
+    protected function convertRowsToResult($objRow, $arrAttrOnly = array())
+    {
+        $arrResult = array();
+
+        while ($objRow->next()) {
+            $arrData = array();
+
+            foreach ($objRow->row() as $strKey => $varValue) {
+                if ((!$arrAttrOnly) || (in_array($strKey, $arrAttrOnly))) {
+                    // @codingStandardsIgnoreStart
+                    $unSerialized = @unserialize($varValue);
+                    // @codingStandardsIgnoreEnd
+
+                    if (is_array($unSerialized)) {
+                        $arrData[$strKey] = $unSerialized;
+                    } else {
+                        $arrData[$strKey] = $varValue;
+                    }
+                }
+            }
+            $arrResult[$objRow->id] = $arrData;
+        }
+
+        return $arrResult;
+    }
+
+    /**
      * Fetch the "native" database rows with the given ids.
      *
      * @param int[]    $arrIds      The ids of the items to retrieve the order of ids is used for sorting of the return
@@ -268,26 +303,7 @@ class MetaModel implements IMetaModel
             $arrAttrOnly = array_merge($GLOBALS['METAMODELS_SYSTEM_COLUMNS'], $arrAttrOnly);
         }
 
-        $arrResult = array();
-        while ($objRow->next()) {
-            $arrData = array();
-
-            foreach ($objRow->row() as $strKey => $varValue) {
-                if ((!$arrAttrOnly) || (in_array($strKey, $arrAttrOnly))) {
-                    // @codingStandardsIgnoreStart
-                    $unSerialized = @unserialize($varValue);
-                    // @codingStandardsIgnoreEnd
-
-                    if (is_array($unSerialized)) {
-                        $arrData[$strKey] = $unSerialized;
-                    } else {
-                        $arrData[$strKey] = $varValue;
-                    }
-                }
-            }
-            $arrResult[$objRow->id] = $arrData;
-        }
-        return $arrResult;
+        return $this->convertRowsToResult($objRow, $arrAttrOnly);
     }
 
     /**
