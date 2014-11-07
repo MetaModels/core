@@ -791,41 +791,82 @@ class MetaModel implements IMetaModel
     }
 
     /**
+     * Update the variants with the value if needed.
+     *
+     * @param IItem  $item           The item to save.
+     *
+     * @param string $activeLanguage The language the values are in.
+     *
+     * @param int[]  $allIds         The ids of all variants.
+     *
+     * @return void
+     */
+    protected function updateVariants($item, $activeLanguage, $allIds)
+    {
+        foreach ($this->getAttributes() as $strAttributeId => $objAttribute) {
+            if ($item->isVariant() && !($objAttribute->get('isvariant'))) {
+                // Base not found, skip attribute.
+                continue;
+            }
+
+            if ($item->isVariantBase() && !($objAttribute->get('isvariant'))) {
+                // We have to override in variants.
+                $arrIds = $allIds;
+            } else {
+                $arrIds = array($item->get('id'));
+            }
+            $this->saveAttribute($objAttribute, $arrIds, $item->get($strAttributeId), $activeLanguage);
+        }
+    }
+
+    /**
+     * Create a new item in the database.
+     *
+     * @param IItem $item The item to be created.
+     *
+     * @return void
+     */
+    protected function createNewItem($item)
+    {
+        $arrData = array
+        (
+            'tstamp' => $item->get('tstamp')
+        );
+
+        $blnNewBaseItem = false;
+        if ($this->hasVariants()) {
+            // No variant group is given, so we have a complete new base item this should be a workaround for these
+            // values should be set by the GeneralDataMetaModel or whoever is calling this method.
+            if ($item->get('vargroup') === null) {
+                $item->set('varbase', '1');
+                $item->set('vargroup', '0');
+                $blnNewBaseItem = true;
+            }
+            $arrData['varbase']  = $item->get('varbase');
+            $arrData['vargroup'] = $item->get('vargroup');
+        }
+
+        $intItemId = $this->getDatabase()
+            ->prepare('INSERT INTO ' . $this->getTableName() . ' %s')
+            ->set($arrData)
+            ->execute()
+            ->insertId;
+        $item->set('id', $intItemId);
+
+        // Add the variant group equal to the id.
+        if ($blnNewBaseItem) {
+            $this->saveSimpleColumn('vargroup', array($item->get('id')), $item->get('id'));
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function saveItem($objItem)
     {
         $objItem->set('tstamp', time());
         if (!$objItem->get('id')) {
-            $arrData = array
-            (
-                'tstamp' => $objItem->get('tstamp')
-            );
-
-            $blnNewBaseItem = false;
-            if ($this->hasVariants()) {
-                // No variant group is given, so we have a complete new base item this should be a workaround for these
-                // values should be set by the GeneralDataMetaModel or whoever is calling this method.
-                if ($objItem->get('vargroup') === null) {
-                    $objItem->set('varbase', '1');
-                    $objItem->set('vargroup', '0');
-                    $blnNewBaseItem = true;
-                }
-                $arrData['varbase']  = $objItem->get('varbase');
-                $arrData['vargroup'] = $objItem->get('vargroup');
-            }
-
-            $intItemId = $this->getDatabase()
-                ->prepare('INSERT INTO ' . $this->getTableName() . ' %s')
-                ->set($arrData)
-                ->execute()
-                ->insertId;
-            $objItem->set('id', $intItemId);
-
-            // Add the variant group equal to the id.
-            if ($blnNewBaseItem) {
-                $this->saveSimpleColumn('vargroup', array($objItem->get('id')), $objItem->get('id'));
-            }
+            $this->createNewItem($objItem);
         }
 
         // Update system columns.
@@ -852,23 +893,8 @@ class MetaModel implements IMetaModel
             }
         }
 
-        $blnDenyInvariantSave = $objItem->isVariant();
-        $blnOverrideVariants  = $objItem->isVariantBase();
+        $this->updateVariants($objItem, $strActiveLanguage, $arrAllIds);
 
-        foreach ($this->getAttributes() as $strAttributeId => $objAttribute) {
-            if ($blnDenyInvariantSave && !($objAttribute->get('isvariant'))) {
-                // Base not found, skip attribute.
-                continue;
-            }
-
-            if ($blnOverrideVariants && !($objAttribute->get('isvariant'))) {
-                // We have to override in variants.
-                $arrIds = $arrAllIds;
-            } else {
-                $arrIds = array($objItem->get('id'));
-            }
-            $this->saveAttribute($objAttribute, $arrIds, $objItem->get($strAttributeId), $strActiveLanguage);
-        }
         // Tell all attributes that the model has been saved. Useful for alias fields, edit counters etc.
         foreach ($this->getAttributes() as $objAttribute) {
             $objAttribute->modelSaved($objItem);
