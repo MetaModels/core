@@ -60,6 +60,13 @@ class MetaModel implements IMetaModel
     protected $arrAttributes = array();
 
     /**
+     * The attached Database instance.
+     *
+     * @var \Database
+     */
+    protected $database;
+
+    /**
      * Instantiate a MetaModel.
      *
      * @param array $arrData The information array, for information on the available columns, refer to
@@ -78,6 +85,18 @@ class MetaModel implements IMetaModel
                 $this->arrData[$strKey] = $varValue;
             }
         }
+
+        $this->database = \Database::getInstance();
+    }
+
+    /**
+     * Retrieve the database instance to use.
+     *
+     * @return \Database
+     */
+    protected function getDatabase()
+    {
+        return $this->database;
     }
 
     /**
@@ -210,8 +229,7 @@ class MetaModel implements IMetaModel
 
         // Either no filter object or all ids allowed => return all ids.
         // if no id filter is passed, we assume all ids are provided.
-        $objDB  = \Database::getInstance();
-        $objRow = $objDB->execute('SELECT id FROM ' . $this->getTableName());
+        $objRow = $this->getDatabase()->execute('SELECT id FROM ' . $this->getTableName());
 
         return $objRow->fetchEach('id');
     }
@@ -232,11 +250,9 @@ class MetaModel implements IMetaModel
      */
     protected function fetchRows($arrIds, $arrAttrOnly = array())
     {
-        $objDB = \Database::getInstance();
-
         // Ensure proper integer ids for SQL injection safety reasons.
         $strIdList = implode(',', array_map('intval', $arrIds));
-        $objRow    = $objDB->executeUncached(sprintf(
+        $objRow    = $this->getDatabase()->executeUncached(sprintf(
             'SELECT * FROM %s WHERE id IN (%s) ORDER BY FIELD(id,%s)',
             $this->getTableName(),
             $strIdList,
@@ -582,7 +598,7 @@ class MetaModel implements IMetaModel
                 $arrFilteredIds = $objSortAttribute->sortIds($arrFilteredIds, $strSortOrder);
             } elseif (in_array($strSortBy, array('id', 'pid', 'tstamp', 'sorting'))) {
                 // Sort by database values.
-                $arrFilteredIds = \Database::getInstance()->execute(
+                $arrFilteredIds = $this->getDatabase()->execute(
                     sprintf(
                         'SELECT id FROM %s WHERE id IN(%s) ORDER BY %s %s',
                         $this->getTableName(),
@@ -608,13 +624,12 @@ class MetaModel implements IMetaModel
      */
     public function getCount($objFilter)
     {
-        $objDB          = \Database::getInstance();
         $arrFilteredIds = $this->getMatchingIds($objFilter);
         if (count($arrFilteredIds) == 0) {
             return 0;
         }
 
-        $objRow = $objDB->execute(sprintf(
+        $objRow = $this->getDatabase()->execute(sprintf(
             'SELECT COUNT(id) AS count FROM %s WHERE id IN(%s)',
             $this->getTableName(),
             implode(',', $arrFilteredIds)
@@ -630,8 +645,7 @@ class MetaModel implements IMetaModel
     {
         $objNewFilter = $this->copyFilter($objFilter);
 
-        $objDB  = \Database::getInstance();
-        $objRow = $objDB->execute('SELECT id FROM ' . $this->getTableName() . ' WHERE varbase=1');
+        $objRow = $this->getDatabase()->execute('SELECT id FROM ' . $this->getTableName() . ' WHERE varbase=1');
 
         $objNewFilter->addFilterRule(new StaticIdList($objRow->fetchEach('id')));
         return $this->findByFilter($objNewFilter);
@@ -648,8 +662,7 @@ class MetaModel implements IMetaModel
         }
         $objNewFilter = $this->copyFilter($objFilter);
 
-        $objDB  = \Database::getInstance();
-        $objRow = $objDB->execute(sprintf(
+        $objRow = $this->getDatabase()->execute(sprintf(
             'SELECT id,vargroup FROM %s WHERE varbase=0 AND vargroup IN (%s)',
             $this->getTableName(),
             implode(',', $arrIds)
@@ -670,8 +683,7 @@ class MetaModel implements IMetaModel
         }
         $objNewFilter = $this->copyFilter($objFilter);
 
-        $objDB  = \Database::getInstance();
-        $objRow = $objDB->execute(sprintf(
+        $objRow = $this->getDatabase()->execute(sprintf(
             'SELECT id,vargroup FROM %s WHERE vargroup IN (SELECT vargroup FROM %s WHERE id IN (%s))',
             $this->getTableName(),
             $this->getTableName(),
@@ -717,7 +729,7 @@ class MetaModel implements IMetaModel
             $varData = serialize($varData);
         }
 
-        \Database::getInstance()
+        $this->getDatabase()
             ->prepare(
                 sprintf(
                     'UPDATE %s SET %s=? WHERE id IN (%s)',
@@ -783,8 +795,6 @@ class MetaModel implements IMetaModel
      */
     public function saveItem($objItem)
     {
-        $objDB = \Database::getInstance();
-
         $objItem->set('tstamp', time());
         if (!$objItem->get('id')) {
             $arrData = array
@@ -805,7 +815,8 @@ class MetaModel implements IMetaModel
                 $arrData['vargroup'] = $objItem->get('vargroup');
             }
 
-            $intItemId = $objDB->prepare('INSERT INTO ' . $this->getTableName() . ' %s')
+            $intItemId = $this->getDatabase()
+                ->prepare('INSERT INTO ' . $this->getTableName() . ' %s')
                 ->set($arrData)
                 ->execute()
                 ->insertId;
@@ -887,7 +898,7 @@ class MetaModel implements IMetaModel
             }
         }
         // Now make the real row disappear.
-        \Database::getInstance()->execute(sprintf(
+        $this->getDatabase()->execute(sprintf(
             'DELETE FROM %s WHERE id IN (%s)',
             $this->getTableName(),
             implode(',', $arrIds)
