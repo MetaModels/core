@@ -164,19 +164,32 @@ class MetaModel implements IMetaModel
     }
 
     /**
+     * Retrieve all attributes implementing the given interface.
+     *
+     * @param string $interface The interface name.
+     *
+     * @return array
+     */
+    protected function getAttributeImplementing($interface)
+    {
+        $result = array();
+        foreach ($this->getAttributes() as $attribute) {
+            if ($attribute instanceof $interface) {
+                $result[] = $attribute;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * This method retrieves all complex attributes from the current MetaModel.
      *
      * @return IComplex[] all complex attributes defined for this instance.
      */
     protected function getComplexAttributes()
     {
-        $arrResult = array();
-        foreach ($this->getAttributes() as $objAttribute) {
-            if ($this->isComplexAttribute($objAttribute)) {
-                $arrResult[] = $objAttribute;
-            }
-        }
-        return $arrResult;
+        return $this->getAttributeImplementing('MetaModels\Attribute\IComplex');
     }
 
     /**
@@ -186,13 +199,7 @@ class MetaModel implements IMetaModel
      */
     protected function getSimpleAttributes()
     {
-        $arrResult = array();
-        foreach ($this->getAttributes() as $objAttribute) {
-            if ($this->isSimpleAttribute($objAttribute)) {
-                $arrResult[] = $objAttribute;
-            }
-        }
-        return $arrResult;
+        return $this->getAttributeImplementing('MetaModels\Attribute\ISimple');
     }
 
     /**
@@ -202,13 +209,7 @@ class MetaModel implements IMetaModel
      */
     protected function getTranslatedAttributes()
     {
-        $arrResult = array();
-        foreach ($this->getAttributes() as $objAttribute) {
-            if ($this->isTranslatedAttribute($objAttribute)) {
-                $arrResult[] = $objAttribute;
-            }
-        }
-        return $arrResult;
+        return $this->getAttributeImplementing('MetaModels\Attribute\ITranslated');
     }
 
     /**
