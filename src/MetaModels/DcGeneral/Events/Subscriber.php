@@ -522,6 +522,11 @@ class Subscriber extends BaseSubscriber
             array(
                 ModelToLabelEvent::NAME
                 => 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\ModelToLabel::handleModelToLabel',
+                GetBreadcrumbEvent::NAME
+                => self::createClosure(
+                    'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbInputScreenCondition',
+                    'getBreadcrumb'
+                ),
             ),
             $dispatcher,
             array('tl_metamodel_dcasetting_condition')
