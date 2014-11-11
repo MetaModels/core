@@ -17,10 +17,13 @@
 
 namespace MetaModels\FrontendIntegration;
 
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use MetaModels\Filter\Setting\Factory as FilterFactory;
 use MetaModels\FrontendIntegration\Content\FilterClearAll as ContentElementFilterClearAll;
 use MetaModels\FrontendIntegration\Module\FilterClearAll as ModuleFilterClearAll;
-use MetaModels\Helper\ContaoController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * FE-filtering for Contao MetaModels.
@@ -44,6 +47,19 @@ class FrontendFilter
      * @var string
      */
     protected $formId = 'mm_filter_';
+
+    /**
+     * Retrieve the event dispatcher.
+     *
+     * @return EventDispatcherInterface
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    protected function getDispatcher()
+    {
+        return $GLOBALS['container']['event-dispatcher'];
+    }
 
     /**
      * Configure the filter module.
@@ -130,16 +146,19 @@ class FrontendFilter
      */
     protected function redirectPost($arrParams)
     {
-        // Translate all params to a valid url and redirect us to it.
-        ContaoController::getInstance()
-            ->redirect(
-                \Environment::getInstance()->base .
-                ContaoController::getInstance()
-                    ->generateFrontendUrl(
-                        $this->objFilterConfig->arrJumpTo,
-                        $this->getJumpToUrl($arrParams)
-                    )
-            );
+        $dispatcher = $this->getDispatcher();
+        $event      = new GenerateFrontendUrlEvent(
+            $this->objFilterConfig->arrJumpTo,
+            $this->getJumpToUrl($arrParams)
+        );
+        $dispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
+
+        $dispatcher->dispatch(
+            ContaoEvents::CONTROLLER_REDIRECT,
+            new RedirectEvent(
+                \Environment::getInstance()->base . $event->getUrl()
+            )
+        );
     }
 
     /**
@@ -162,30 +181,26 @@ class FrontendFilter
      */
     protected function getParams()
     {
+        $input          = \Input::getInstance();
         $arrWantedParam = $this->getWantedNames();
+        $arrMyParams    = $arrOtherParams = array();
 
-        $arrMyParams = $arrOtherParams = array();
-
-        // @codingStandardsIgnoreStart - Loop over $_GET to get a list of all keys.
         if ($_GET) {
             foreach (array_keys($_GET) as $strParam) {
-            // @codingStandardsIgnoreEnd - Continue with style checking.
                 if (in_array($strParam, $arrWantedParam)) {
-                    $arrMyParams[$strParam] = \Input::getInstance()->get($strParam);
+                    $arrMyParams[$strParam] = $input->get($strParam);
                 } elseif ($strParam != 'page') {
                     // Add only to the array if param is not page.
-                    $arrOtherParams[$strParam] = \Input::getInstance()->get($strParam);
+                    $arrOtherParams[$strParam] = $input->get($strParam);
                 }
             }
         }
 
         // if POST, translate to proper GET url
-        // @codingStandardsIgnoreStart - Loop over $_POST to get a list of all keys.
-        if ($_POST && (\Input::getInstance()->post('FORM_SUBMIT') == $this->formId)) {
+        if ($_POST && ($input->post('FORM_SUBMIT') == $this->formId)) {
             foreach (array_keys($_POST) as $strParam) {
-                // @codingStandardsIgnoreEnd - Continue with style checking.
                 if (in_array($strParam, $arrWantedParam)) {
-                    $arrMyParams[$strParam] = \Input::getInstance()->post($strParam);
+                    $arrMyParams[$strParam] = $input->post($strParam);
                 }
             }
         }
@@ -199,17 +214,62 @@ class FrontendFilter
     }
 
     /**
-     * Get the filters.
+     * Parse a single filter widget.
+     *
+     * @param array                 $widget        The widget configuration.
+     *
+     * @param FrontendFilterOptions $filterOptions The filter options to apply.
      *
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    protected function getFilters()
+    protected function renderWidget($widget, $filterOptions)
     {
-        $objFilterSetting = FilterFactory::byId($this->objFilterConfig->metamodel_filtering);
+        $filter       = $widget;
+        $templateName = $filter['raw']['eval']['template'];
+        $template     = new \FrontendTemplate($templateName ? $templateName : 'mm_filteritem_default');
 
+        $template->setData($filter);
+
+        $template->submit = $filterOptions->isAutoSubmit();
+        $filter['value']  = $template->parse();
+
+        return $filter;
+    }
+
+    /**
+     * Check if we want to redirect to another url.
+     *
+     * @param array $widgets         The widgets.
+     *
+     * @param array $wantedParameter The wanted parameters.
+     *
+     * @param array $allParameter    The current parameters.
+     *
+     * @return void
+     */
+    protected function checkRedirect($widgets, $wantedParameter, $allParameter)
+    {
+        // If we have POST data, we need to redirect now.
+        if (\Input::getInstance()->post('FORM_SUBMIT') != $this->formId) {
+            return;
+        }
+        $redirectParameters = $allParameter['other'];
+        foreach ($wantedParameter as $widgetName) {
+            $filter = $widgets[$widgetName];
+            if (!empty($filter['urlvalue'])) {
+                $redirectParameters[$widgetName] = $filter['urlvalue'];
+            }
+        }
+        $this->redirectPost($redirectParameters);
+    }
+
+    /**
+     * Get the frontend filter options to use.
+     *
+     * @return FrontendFilterOptions
+     */
+    protected function getFrontendFilterOptions()
+    {
         $objFrontendFilterOptions = new FrontendFilterOptions();
         $objFrontendFilterOptions->setAutoSubmit($this->objFilterConfig->metamodel_fef_autosubmit ? true : false);
         $objFrontendFilterOptions->setHideClearFilter(
@@ -219,58 +279,52 @@ class FrontendFilter
             $this->objFilterConfig->metamodel_available_values ? true : false
         );
 
-        $arrJumpTo = $this->objFilterConfig->arrJumpTo;
+        return $objFrontendFilterOptions;
+    }
 
-        $arrParams = $this->getParams();
+    /**
+     * Get the filters.
+     *
+     * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    protected function getFilters()
+    {
+        $filterSetting     = FilterFactory::byId($this->objFilterConfig->metamodel_filtering);
+        $filterOptions     = $this->getFrontendFilterOptions();
+        $jumpToInformation = $this->objFilterConfig->arrJumpTo;
+        $filterParameters  = $this->getParams();
 
-        $arrWidgets = $objFilterSetting->getParameterFilterWidgets(
-            $arrParams['all'],
-            $arrJumpTo,
-            $objFrontendFilterOptions
+        $arrWidgets = $filterSetting->getParameterFilterWidgets(
+            $filterParameters['all'],
+            $jumpToInformation,
+            $filterOptions
         );
 
         // Filter the widgets we do not want to show.
-        $arrWanted = $this->getWantedNames();
+        $wantedNames = $this->getWantedNames();
 
-        // If we have POST data, we need to redirect now.
-        // @codingStandardsIgnoreStart - Test $_POST to check if any data has been submitted.
-        if ($_POST && (\Input::getInstance()->post('FORM_SUBMIT') == $this->formId)) {
-            // @codingStandardsIgnoreEnd - Continue with style checking.
-            $arrRedirectParams = $arrParams['other'];
-            foreach ($arrWanted as $strWidget) {
-                $arrFilter = $arrWidgets[$strWidget];
-                if (!empty($arrFilter['urlvalue'])) {
-                    $arrRedirectParams[$strWidget] = $arrFilter['urlvalue'];
-                }
-            }
-            $this->redirectPost($arrRedirectParams);
-        }
+        $this->checkRedirect($arrWidgets, $wantedNames, $filterParameters);
 
-        $arrRendered = array();
+        $renderedWidgets = array();
 
         // Render the widgets through the filter templates.
-        foreach ($this->getWantedNames() as $strWidget) {
-            $arrFilter      = $arrWidgets[$strWidget];
-            $strTemplate    = $arrFilter['raw']['eval']['template'];
-            $objSubTemplate = new \FrontendTemplate($strTemplate ? $strTemplate : 'mm_filteritem_default');
-
-            $objSubTemplate->setData($arrFilter);
-
-            $objSubTemplate->submit  = $objFrontendFilterOptions->isAutoSubmit();
-            $arrFilter['value']      = $objSubTemplate->parse();
-            $arrRendered[$strWidget] = $arrFilter;
+        foreach ($wantedNames as $strWidget) {
+            $renderedWidgets[$strWidget] = $this->renderWidget($arrWidgets[$strWidget], $filterOptions);
         }
+
+        $event = new GenerateFrontendUrlEvent($jumpToInformation, $this->getJumpToUrl($filterParameters['other']));
+        $this->getDispatcher()->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
 
         // Return filter data.
         return array(
-            'action'     => ContaoController::getInstance()->generateFrontendUrl(
-                $arrJumpTo,
-                $this->getJumpToUrl($arrParams['other'])
-            ),
+            'action'     => $event->getUrl(),
             'formid'     => $this->formId,
-            'filters'    => $arrRendered,
+            'filters'    => $renderedWidgets,
             'submit'     => (
-                $objFrontendFilterOptions->isAutoSubmit()
+                $filterOptions->isAutoSubmit()
                     ? ''
                     : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']
                 )

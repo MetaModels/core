@@ -16,11 +16,23 @@
 
 namespace MetaModels\Test;
 
+use MetaModels\Test\Contao\Database;
+
 /**
  * Abstract base class for test cases.
  */
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Set our database.
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        Database::register();
+    }
+
     /**
      * Initialize the input instance with the given values.
      *
