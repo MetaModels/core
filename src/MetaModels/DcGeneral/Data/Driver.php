@@ -346,30 +346,29 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     protected function getFilterForComparingOperator($attribute, IFilter $filter, $operation)
     {
-        $filterRule = null;
         if ($attribute) {
             switch ($operation['operation']) {
                 case '=':
-                    $filterRule = new SearchAttribute(
+                    $filter->addFilterRule(new SearchAttribute(
                         $attribute,
                         $operation['value'],
                         $this->objMetaModel->getAvailableLanguages()
-                    );
-                    break;
+                    ));
+                    return;
 
                 case '>':
-                    $filterRule = new GreaterThan(
+                    $filter->addFilterRule(new GreaterThan(
                         $attribute,
                         $operation['value']
-                    );
-                    break;
+                    ));
+                    return;
 
                 case '<':
-                    $filterRule = new LessThan(
+                    $filter->addFilterRule(new LessThan(
                         $attribute,
                         $operation['value']
-                    );
-                    break;
+                    ));
+                    return;
 
                 default:
                     throw new \RuntimeException(
@@ -378,9 +377,11 @@ class Driver implements MultiLanguageDataProviderInterface
                         1
                     );
             }
-        } elseif (\Database::getInstance()->fieldExists($operation['property'], $this->objMetaModel->getTableName())) {
+        }
+
+        if (\Database::getInstance()->fieldExists($operation['property'], $this->objMetaModel->getTableName())) {
             // System column?
-            $filterRule = new SimpleQuery(
+            $filter->addFilterRule(new SimpleQuery(
                 sprintf(
                     'SELECT id FROM %s WHERE %s %s?',
                     $this->objMetaModel->getTableName(),
@@ -388,17 +389,15 @@ class Driver implements MultiLanguageDataProviderInterface
                     $operation['operation']
                 ),
                 array($operation['value'])
-            );
+            ));
+
+            return;
         }
 
-        if (!$filterRule) {
-            throw new \RuntimeException(
-                'Error processing filter array - unknown property ' . var_export($operation['property'], true),
-                1
-            );
-        }
-
-        $filter->addFilterRule($filterRule);
+        throw new \RuntimeException(
+            'Error processing filter array - unknown property ' . var_export($operation['property'], true),
+            1
+        );
     }
 
     /**
@@ -446,32 +445,34 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     protected function getFilterForLike($attribute, IFilter $filter, $operation)
     {
-        $objFilterRule = null;
         if ($attribute) {
-            $objFilterRule = new SearchAttribute(
+            $filter->addFilterRule(new SearchAttribute(
                 $attribute,
                 $operation['value'],
                 $this->objMetaModel->getAvailableLanguages()
-            );
-        } elseif (\Database::getInstance()->fieldExists($operation['property'], $this->objMetaModel->getTableName())) {
+            ));
+
+            return;
+        }
+
+        if (\Database::getInstance()->fieldExists($operation['property'], $this->objMetaModel->getTableName())) {
             // System column?
-            $objFilterRule = new SimpleQuery(
+            $filter->addFilterRule(new SimpleQuery(
                 sprintf(
                     'SELECT id FROM %s WHERE %s LIKE ?',
                     $this->objMetaModel->getTableName(),
                     $operation['property']
                 ),
                 array($operation['value'])
-            );
+            ));
+
+            return;
         }
 
-        if (!$objFilterRule) {
-            throw new \RuntimeException(
-                'Error processing filter array - unknown property ' . var_export($operation['property'], true),
-                1
-            );
-        }
-        $filter->addFilterRule($objFilterRule);
+        throw new \RuntimeException(
+            'Error processing filter array - unknown property ' . var_export($operation['property'], true),
+            1
+        );
     }
 
     /**
