@@ -181,30 +181,26 @@ class FrontendFilter
      */
     protected function getParams()
     {
+        $input          = \Input::getInstance();
         $arrWantedParam = $this->getWantedNames();
+        $arrMyParams    = $arrOtherParams = array();
 
-        $arrMyParams = $arrOtherParams = array();
-
-        // @codingStandardsIgnoreStart - Loop over $_GET to get a list of all keys.
         if ($_GET) {
             foreach (array_keys($_GET) as $strParam) {
-            // @codingStandardsIgnoreEnd - Continue with style checking.
                 if (in_array($strParam, $arrWantedParam)) {
-                    $arrMyParams[$strParam] = \Input::getInstance()->get($strParam);
+                    $arrMyParams[$strParam] = $input->get($strParam);
                 } elseif ($strParam != 'page') {
                     // Add only to the array if param is not page.
-                    $arrOtherParams[$strParam] = \Input::getInstance()->get($strParam);
+                    $arrOtherParams[$strParam] = $input->get($strParam);
                 }
             }
         }
 
         // if POST, translate to proper GET url
-        // @codingStandardsIgnoreStart - Loop over $_POST to get a list of all keys.
-        if ($_POST && (\Input::getInstance()->post('FORM_SUBMIT') == $this->formId)) {
+        if ($_POST && ($input->post('FORM_SUBMIT') == $this->formId)) {
             foreach (array_keys($_POST) as $strParam) {
-                // @codingStandardsIgnoreEnd - Continue with style checking.
                 if (in_array($strParam, $arrWantedParam)) {
-                    $arrMyParams[$strParam] = \Input::getInstance()->post($strParam);
+                    $arrMyParams[$strParam] = $input->post($strParam);
                 }
             }
         }
