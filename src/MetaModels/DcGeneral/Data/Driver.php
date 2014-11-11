@@ -195,26 +195,8 @@ class Driver implements MultiLanguageDataProviderInterface
         if ($objConfig->getId()) {
             $modelId = $objConfig->getId();
         } else {
-            $sorting = $objConfig->getSorting();
-
-            $sortBy    = '';
-            $direction = '';
-            if ($sorting) {
-                list($sortBy, $direction) = each($sorting);
-            }
-            if (!$direction) {
-                $direction = DCGE::MODEL_SORTING_ASC;
-            }
-
-            $filter = $this->prepareFilter($objConfig->getFilter());
-            $ids    = $this->objMetaModel->getIdsFromFilter(
-                $filter,
-                $sortBy,
-                $objConfig->getStart(),
-                $objConfig->getAmount(),
-                ($sortBy ? $direction : '')
-            );
-
+            $filter  = $this->prepareFilter($objConfig->getFilter());
+            $ids     = $this->getIdsFromFilter($filter, $objConfig);
             $modelId = reset($ids);
         }
 
@@ -227,6 +209,7 @@ class Driver implements MultiLanguageDataProviderInterface
         if (!$objItem) {
             return null;
         }
+
         return new Model($objItem);
     }
 
@@ -577,50 +560,63 @@ class Driver implements MultiLanguageDataProviderInterface
     }
 
     /**
+     * Extract the sorting from the given config.
+     *
+     * @param ConfigInterface $config The configuration to be applied.
+     *
+     * @return array
+     */
+    protected function extractSorting($config)
+    {
+        $sorting = $config->getSorting();
+
+        $sortBy  = key($sorting);
+        $sortDir = current($sorting) ?: DCGE::MODEL_SORTING_ASC;
+
+        return array($sortBy, $sortDir);
+    }
+
+    /**
      * Fetch the ids via the given filter.
      *
-     * @param IFilter         $filter  The filter.
+     * @param IFilter         $filter The filter.
      *
-     * @param ConfigInterface $config  The configuration to be applied.
-     *
-     * @param string          $sortBy  The attribute to sort by.
-     *
-     * @param string          $sortDir The sort direction.
+     * @param ConfigInterface $config The configuration to be applied.
      *
      * @return \int[]
      */
-    protected function getIdsFromFilter($filter, $config, $sortBy, $sortDir)
+    protected function getIdsFromFilter($filter, $config)
     {
+        $sorting = $this->extractSorting($config);
+
         return $this->objMetaModel->getIdsFromFilter(
             $filter,
-            ($sortBy ? $sortBy : ''),
+            $sorting[0],
             $config->getStart(),
             $config->getAmount(),
-            $sortDir
+            $sorting[1]
         );
     }
 
     /**
      * Fetch the items via the given filter.
      *
-     * @param IFilter         $filter  The filter.
+     * @param IFilter         $filter The filter.
      *
-     * @param ConfigInterface $config  The configuration to be applied.
-     *
-     * @param string          $sortBy  The attribute to sort by.
-     *
-     * @param string          $sortDir The sort direction.
+     * @param ConfigInterface $config The configuration to be applied.
      *
      * @return IItems|IItem[] The collection of IItem instances that match the given filter.
      */
-    protected function getItemsFromFilter($filter, $config, $sortBy, $sortDir)
+    protected function getItemsFromFilter($filter, $config)
     {
+        $sorting = $this->extractSorting($config);
+
         return $this->objMetaModel->findByFilter(
             $filter,
-            ($sortBy ? $sortBy : ''),
+            $sorting[0],
             $config->getStart(),
             $config->getAmount(),
-            $sortDir,
+            $sorting[1],
             $config->getFields() ?: array()
         );
     }
@@ -644,23 +640,11 @@ class Driver implements MultiLanguageDataProviderInterface
         }
 
         $varResult = null;
-
-        $arrSorting = $objConfig->getSorting();
-
-        $strSortBy  = '';
-        $strSortDir = '';
-        if ($arrSorting) {
-            list($strSortBy, $strSortDir) = each($arrSorting);
-        }
-        if (!$strSortDir) {
-            $strSortDir = DCGE::MODEL_SORTING_ASC;
-        }
-
         $objFilter = $this->prepareFilter($objConfig->getFilter());
         if ($objConfig->getIdOnly()) {
-            $varResult = $this->getIdsFromFilter($objFilter, $objConfig, $strSortBy, $strSortDir);
+            $varResult = $this->getIdsFromFilter($objFilter, $objConfig);
         } else {
-            $objItems = $this->getItemsFromFilter($objFilter, $objConfig, $strSortBy, $strSortDir);
+            $objItems = $this->getItemsFromFilter($objFilter, $objConfig);
 
             $objResultCollection = $this->getEmptyCollection();
             foreach ($objItems as $objItem) {
