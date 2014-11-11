@@ -171,6 +171,26 @@ class Driver implements MultiLanguageDataProviderInterface
     }
 
     /**
+     * Set a language as active language in Contao and return the previous language.
+     *
+     * @param string $language The language to set (if any).
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    protected function setLanguage($language = '')
+    {
+        $previousLanguage = $GLOBALS['TL_LANGUAGE'];
+        if (!empty($language) && ($GLOBALS['TL_LANGUAGE'] !== $previousLanguage)) {
+            $GLOBALS['TL_LANGUAGE'] = $previousLanguage;
+        }
+
+        return $previousLanguage;
+    }
+
+    /**
      * Fetch a single or first record by id or filter.
      *
      * If the model shall be retrieved by id, use $objConfig->setId() to populate the config with an Id.
@@ -180,17 +200,10 @@ class Driver implements MultiLanguageDataProviderInterface
      * @param ConfigInterface $objConfig The config to use.
      *
      * @return ModelInterface
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function fetch(ConfigInterface $objConfig)
     {
-        $strBackupLanguage = '';
-        if ($this->strCurrentLanguage != '') {
-            $strBackupLanguage      = $GLOBALS['TL_LANGUAGE'];
-            $GLOBALS['TL_LANGUAGE'] = $this->strCurrentLanguage;
-        }
+        $backupLanguage = $this->setLanguage($this->getCurrentLanguage());
 
         if ($objConfig->getId()) {
             $modelId = $objConfig->getId();
@@ -202,9 +215,7 @@ class Driver implements MultiLanguageDataProviderInterface
 
         $objItem = $modelId ? $this->objMetaModel->findById($modelId) : null;
 
-        if ($strBackupLanguage != '') {
-            $GLOBALS['TL_LANGUAGE'] = $strBackupLanguage;
-        }
+        $this->setLanguage($backupLanguage);
 
         if (!$objItem) {
             return null;
@@ -627,36 +638,26 @@ class Driver implements MultiLanguageDataProviderInterface
      * @param ConfigInterface $objConfig The configuration to be applied.
      *
      * @return CollectionInterface
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function fetchAll(ConfigInterface $objConfig)
     {
-        $strBackupLanguage = '';
-        if ($this->strCurrentLanguage != '') {
-            $strBackupLanguage      = $GLOBALS['TL_LANGUAGE'];
-            $GLOBALS['TL_LANGUAGE'] = $this->strCurrentLanguage;
-        }
+        $backupLanguage = $this->setLanguage($this->getCurrentLanguage());
 
-        $varResult = null;
-        $objFilter = $this->prepareFilter($objConfig->getFilter());
+        $filter = $this->prepareFilter($objConfig->getFilter());
         if ($objConfig->getIdOnly()) {
-            $varResult = $this->getIdsFromFilter($objFilter, $objConfig);
-        } else {
-            $objItems = $this->getItemsFromFilter($objFilter, $objConfig);
+            $this->setLanguage($backupLanguage);
 
-            $objResultCollection = $this->getEmptyCollection();
-            foreach ($objItems as $objItem) {
-                $objResultCollection->push(new Model($objItem));
-            }
-            $varResult = $objResultCollection;
+            return $this->getIdsFromFilter($filter, $objConfig);
         }
 
-        if ($strBackupLanguage != '') {
-            $GLOBALS['TL_LANGUAGE'] = $strBackupLanguage;
+        $items      = $this->getItemsFromFilter($filter, $objConfig);
+        $collection = $this->getEmptyCollection();
+        foreach ($items as $objItem) {
+            $collection->push(new Model($objItem));
         }
-        return $varResult;
+        $this->setLanguage($backupLanguage);
+
+        return $collection;
     }
 
     /**
@@ -782,27 +783,19 @@ class Driver implements MultiLanguageDataProviderInterface
      * @return ModelInterface The passed model.
      *
      * @throws \RuntimeException When an incompatible item was passed, an Exception is being thrown.
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function save(ModelInterface $objItem)
     {
         if ($objItem instanceof Model) {
-            $strBackupLanguage = '';
-            if ($this->strCurrentLanguage != '') {
-                $strBackupLanguage      = $GLOBALS['TL_LANGUAGE'];
-                $GLOBALS['TL_LANGUAGE'] = $this->strCurrentLanguage;
-            }
+            $backupLanguage = $this->setLanguage($this->getCurrentLanguage());
 
             $objItem->getItem()->save();
 
-            if ($strBackupLanguage != '') {
-                $GLOBALS['TL_LANGUAGE'] = $strBackupLanguage;
-            }
+            $this->setLanguage($backupLanguage);
 
             return $objItem;
         }
+
         throw new \RuntimeException('ERROR: incompatible object passed to GeneralDataMetaModel::save()');
     }
 
