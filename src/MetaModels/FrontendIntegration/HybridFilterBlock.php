@@ -15,18 +15,16 @@
  * @filesource
  */
 
-namespace MetaModels\FrontendIntegration\Content;
-
-use MetaModels\FrontendIntegration\HybridFilterBlock;
+namespace MetaModels\FrontendIntegration;
 
 /**
- * Content element for FE-filtering.
+ * FE-module for FE-filtering.
  *
  * @package    MetaModels
  * @subpackage FrontendFilter
  * @author     Christian de la Haye <service@delahaye.de>
  */
-class Filter extends HybridFilterBlock
+class HybridFilterBlock extends MetaModelHybrid
 {
     /**
      * Template.
@@ -36,16 +34,31 @@ class Filter extends HybridFilterBlock
     protected $strTemplate = 'mm_filter_default';
 
     /**
-     * The link to use in the wildcard.
+     * Display a wildcard in the back end.
      *
-     * @var string
+     * @return string
      */
-    protected $wildCardLink = 'contao/main.php?do=themes&amp;table=tl_content&amp;act=edit&amp;id=%s';
+    public function generate()
+    {
+        // Get template if configured.
+        if ($this->metamodel_fef_template) {
+            $this->strTemplate = $this->metamodel_fef_template;
+        }
+
+        return parent::generate();
+    }
 
     /**
-     * The link to use in the wildcard.
+     * Generate the module.
      *
-     * @var string
+     * @return void
      */
-    protected $typePrefix = 'ce_';
+    protected function compile()
+    {
+        $objFilter = new FrontendFilter();
+        $arrFilter = $objFilter->getMetaModelFrontendFilter($this);
+
+        $this->Template->setData($arrFilter);
+        $this->Template->submit = $arrFilter['submit'];
+    }
 }
