@@ -172,7 +172,9 @@ class DatabaseBackedListener implements EventSubscriberInterface
     protected function createInstance(CreateMetaModelEvent $event, $arrData)
     {
         if (!$this->createInstanceViaLegacyFactory($event, $arrData)) {
-            $event->setMetaModel(new MetaModel($arrData));
+            $metaModel = new MetaModel($arrData);
+            $metaModel->setDatabase(\Database::getInstance());
+            $event->setMetaModel($metaModel);
         }
 
         if ($event->getMetaModel()) {

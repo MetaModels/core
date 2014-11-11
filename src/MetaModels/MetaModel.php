@@ -77,8 +77,6 @@ class MetaModel implements IMetaModel
         foreach ($arrData as $strKey => $varValue) {
             $this->arrData[$strKey] = $this->tryUnserialize($varValue);
         }
-
-        $this->database = \Database::getInstance();
     }
 
     /**
@@ -89,6 +87,20 @@ class MetaModel implements IMetaModel
     protected function getDatabase()
     {
         return $this->database;
+    }
+
+    /**
+     * Retrieve the database instance to use.
+     *
+     * @param \Database $database The database to use.
+     *
+     * @return MetaModel
+     */
+    public function setDatabase($database)
+    {
+        $this->database = $database;
+
+        return $this;
     }
 
     /**
