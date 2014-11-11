@@ -40,6 +40,8 @@ use MetaModels\Filter\Rules\Comparing\LessThan;
 use MetaModels\Filter\Rules\SearchAttribute;
 use MetaModels\Filter\Filter;
 use MetaModels\Filter\Rules\SimpleQuery;
+use MetaModels\IItem;
+use MetaModels\IItems;
 use MetaModels\IMetaModel;
 use MetaModels\Item;
 
@@ -575,6 +577,55 @@ class Driver implements MultiLanguageDataProviderInterface
     }
 
     /**
+     * Fetch the ids via the given filter.
+     *
+     * @param IFilter         $filter  The filter.
+     *
+     * @param ConfigInterface $config  The configuration to be applied.
+     *
+     * @param string          $sortBy  The attribute to sort by.
+     *
+     * @param string          $sortDir The sort direction.
+     *
+     * @return \int[]
+     */
+    protected function getIdsFromFilter($filter, $config, $sortBy, $sortDir)
+    {
+        return $this->objMetaModel->getIdsFromFilter(
+            $filter,
+            ($sortBy ? $sortBy : ''),
+            $config->getStart(),
+            $config->getAmount(),
+            $sortDir
+        );
+    }
+
+    /**
+     * Fetch the items via the given filter.
+     *
+     * @param IFilter         $filter  The filter.
+     *
+     * @param ConfigInterface $config  The configuration to be applied.
+     *
+     * @param string          $sortBy  The attribute to sort by.
+     *
+     * @param string          $sortDir The sort direction.
+     *
+     * @return IItems|IItem[] The collection of IItem instances that match the given filter.
+     */
+    protected function getItemsFromFilter($filter, $config, $sortBy, $sortDir)
+    {
+        return $this->objMetaModel->findByFilter(
+            $filter,
+            ($sortBy ? $sortBy : ''),
+            $config->getStart(),
+            $config->getAmount(),
+            $sortDir,
+            $config->getFields() ?: array()
+        );
+    }
+
+    /**
      * Fetch all records (optional filtered, sorted and limited).
      *
      * @param ConfigInterface $objConfig The configuration to be applied.
@@ -607,22 +658,9 @@ class Driver implements MultiLanguageDataProviderInterface
 
         $objFilter = $this->prepareFilter($objConfig->getFilter());
         if ($objConfig->getIdOnly()) {
-            $varResult = $this->objMetaModel->getIdsFromFilter(
-                $objFilter,
-                ($strSortBy ? $strSortBy : ''),
-                $objConfig->getStart(),
-                $objConfig->getAmount(),
-                ($strSortBy ? $strSortDir : '')
-            );
+            $varResult = $this->getIdsFromFilter($objFilter, $objConfig, $strSortBy, $strSortDir);
         } else {
-            $objItems = $this->objMetaModel->findByFilter(
-                $objFilter,
-                ($strSortBy ? $strSortBy : ''),
-                $objConfig->getStart(),
-                $objConfig->getAmount(),
-                ($strSortBy ? $strSortDir : ''),
-                $objConfig->getFields() ?: array()
-            );
+            $objItems = $this->getItemsFromFilter($objFilter, $objConfig, $strSortBy, $strSortDir);
 
             $objResultCollection = $this->getEmptyCollection();
             foreach ($objItems as $objItem) {
