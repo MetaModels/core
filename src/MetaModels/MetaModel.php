@@ -314,14 +314,17 @@ class MetaModel implements IMetaModel
      */
     protected function fetchRows($arrIds, $arrAttrOnly = array())
     {
-        // Ensure proper integer ids for SQL injection safety reasons.
-        $strIdList = implode(',', array_map('intval', $arrIds));
-        $objRow    = $this->getDatabase()->executeUncached(sprintf(
-            'SELECT * FROM %s WHERE id IN (%s) ORDER BY FIELD(id,%s)',
-            $this->getTableName(),
-            $strIdList,
-            $strIdList
-        ));
+        $parameters = array_merge($arrIds, $arrIds);
+        $objRow     = $this->getDatabase()
+            ->prepare(
+                sprintf(
+                    'SELECT * FROM %s WHERE id IN (%s) ORDER BY FIELD(id,%s)',
+                    $this->getTableName(),
+                    $this->buildDatabaseParameterList($arrIds),
+                    $this->buildDatabaseParameterList($arrIds)
+                )
+            )
+            ->executeUncached($parameters);
 
         if ($objRow->numRows == 0) {
             return array();
@@ -506,7 +509,6 @@ class MetaModel implements IMetaModel
         return $this->arrAttributes;
     }
 
-
     /**
      * {@inheritdoc}
      */
@@ -524,7 +526,6 @@ class MetaModel implements IMetaModel
         }
         return $arrAttributes;
     }
-
 
     /**
      * {@inheritdoc}
@@ -679,15 +680,18 @@ class MetaModel implements IMetaModel
                 $arrFilteredIds = $objSortAttribute->sortIds($arrFilteredIds, $strSortOrder);
             } elseif (in_array($strSortBy, array('id', 'pid', 'tstamp', 'sorting'))) {
                 // Sort by database values.
-                $arrFilteredIds = $this->getDatabase()->execute(
-                    sprintf(
-                        'SELECT id FROM %s WHERE id IN(%s) ORDER BY %s %s',
-                        $this->getTableName(),
-                        implode(',', $arrFilteredIds),
-                        $strSortBy,
-                        $strSortOrder
+                $arrFilteredIds = $this->getDatabase()
+                    ->prepare(
+                        sprintf(
+                            'SELECT id FROM %s WHERE id IN(%s) ORDER BY %s %s',
+                            $this->getTableName(),
+                            $this->buildDatabaseParameterList($arrFilteredIds),
+                            $strSortBy,
+                            $strSortOrder
+                        )
                     )
-                )->fetchEach('id');
+                    ->execute($arrFilteredIds)
+                    ->fetchEach('id');
             } elseif ($strSortBy == 'random') {
                 shuffle($arrFilteredIds);
             }
@@ -710,11 +714,13 @@ class MetaModel implements IMetaModel
             return 0;
         }
 
-        $objRow = $this->getDatabase()->execute(sprintf(
-            'SELECT COUNT(id) AS count FROM %s WHERE id IN(%s)',
-            $this->getTableName(),
-            implode(',', $arrFilteredIds)
-        ));
+        $objRow = $this->getDatabase()
+            ->prepare(sprintf(
+                'SELECT COUNT(id) AS count FROM %s WHERE id IN(%s)',
+                $this->getTableName(),
+                $this->buildDatabaseParameterList($arrFilteredIds)
+            ))
+            ->execute($arrFilteredIds);
 
         return $objRow->count;
     }
@@ -743,11 +749,13 @@ class MetaModel implements IMetaModel
         }
         $objNewFilter = $this->copyFilter($objFilter);
 
-        $objRow = $this->getDatabase()->execute(sprintf(
-            'SELECT id,vargroup FROM %s WHERE varbase=0 AND vargroup IN (%s)',
-            $this->getTableName(),
-            implode(',', $arrIds)
-        ));
+        $objRow = $this->getDatabase()
+            ->prepare(sprintf(
+                'SELECT id,vargroup FROM %s WHERE varbase=0 AND vargroup IN (%s)',
+                $this->getTableName(),
+                $this->buildDatabaseParameterList($arrIds)
+            ))
+            ->execute($arrIds);
 
         $objNewFilter->addFilterRule(new StaticIdList($objRow->fetchEach('id')));
         return $this->findByFilter($objNewFilter);
@@ -764,12 +772,14 @@ class MetaModel implements IMetaModel
         }
         $objNewFilter = $this->copyFilter($objFilter);
 
-        $objRow = $this->getDatabase()->execute(sprintf(
-            'SELECT id,vargroup FROM %s WHERE vargroup IN (SELECT vargroup FROM %s WHERE id IN (%s))',
-            $this->getTableName(),
-            $this->getTableName(),
-            implode(',', $arrIds)
-        ));
+        $objRow = $this->getDatabase()
+            ->prepare(sprintf(
+                'SELECT id,vargroup FROM %1$s WHERE vargroup IN (SELECT vargroup FROM %1$s WHERE id IN (%2$s))',
+                $this->getTableName(),
+                $this->buildDatabaseParameterList($arrIds)
+            ))
+            ->execute($arrIds);
+
         $objNewFilter->addFilterRule(new StaticIdList($objRow->fetchEach('id')));
         return $this->findByFilter($objNewFilter);
     }
@@ -1001,11 +1011,13 @@ class MetaModel implements IMetaModel
             }
         }
         // Now make the real row disappear.
-        $this->getDatabase()->execute(sprintf(
-            'DELETE FROM %s WHERE id IN (%s)',
-            $this->getTableName(),
-            implode(',', $arrIds)
-        ));
+        $this->getDatabase()
+            ->prepare(sprintf(
+                'DELETE FROM %s WHERE id IN (%s)',
+                $this->getTableName(),
+                $this->buildDatabaseParameterList($arrIds)
+            ))
+        ->execute($arrIds);
     }
 
     /**
