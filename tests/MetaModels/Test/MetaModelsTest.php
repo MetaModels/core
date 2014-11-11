@@ -15,6 +15,7 @@
  */
 
 namespace MetaModels\Test;
+
 use MetaModels\MetaModel;
 
 /**
@@ -58,6 +59,22 @@ class MetaModelsTest extends TestCase
         foreach ($values as $key => $value) {
             $this->assertEquals($value, $metaModel->get($key), $key);
         }
+    /**
+     * Ensure the buildDatabaseParameterList works correctly.
+     *
+     * @return void
+     */
+    public function testBuildDatabaseParameterList()
+    {
+        $metaModel = new MetaModel(array());
+
+        $reflection = new \ReflectionMethod($metaModel, 'buildDatabaseParameterList');
+        $reflection->setAccessible(true);
+        $this->assertEquals('?', $reflection->invoke($metaModel, array(1)));
+        $this->assertEquals('?,?', $reflection->invoke($metaModel, array(1,2)));
+        $this->assertEquals('?,?,?,?,?,?', $reflection->invoke($metaModel, array(1, 2, 'fooo', 'bar', null, 'test')));
+    }
+
     }
 }
 

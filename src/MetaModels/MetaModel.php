@@ -287,6 +287,18 @@ class MetaModel implements IMetaModel
     }
 
     /**
+     * Build a list of the correct amount of "?" for use in a db query.
+     *
+     * @param array $parameters The parameters.
+     *
+     * @return string
+     */
+    protected function buildDatabaseParameterList($parameters)
+    {
+        return implode(',', array_fill(0, count($parameters), '?'));
+    }
+
+    /**
      * Fetch the "native" database rows with the given ids.
      *
      * @param int[]    $arrIds      The ids of the items to retrieve the order of ids is used for sorting of the return
