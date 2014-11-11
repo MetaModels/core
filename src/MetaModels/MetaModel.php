@@ -341,13 +341,15 @@ class MetaModel implements IMetaModel
     /**
      * This method is called to retrieve the data for certain items from the database.
      *
-     * @param int[] $ids The ids of the items to retrieve the order of ids is used for sorting of the return values.
+     * @param ITranslated $attribute The attribute to fetch the values for.
+     *
+     * @param int[]       $ids       The ids of the items to retrieve the order of ids is used for sorting of the return
+     *                               values.
      *
      * @return array an array of all matched items, sorted by the id list.
      */
-    protected function fetchTranslatedAttributeValues($ids)
+    protected function fetchTranslatedAttributeValues(ITranslated $attribute, $ids)
     {
-        /** @var ITranslated $attribute */
         $attributeData = $attribute->getTranslatedDataFor($ids, $this->getActiveLanguage());
         $missing       = array_diff($ids, array_keys($attributeData));
 
@@ -384,7 +386,8 @@ class MetaModel implements IMetaModel
 
             // If it is translated, fetch the translated data now.
             if ($this->isTranslatedAttribute($attribute)) {
-                $attributeData = $this->fetchTranslatedAttributeValues($ids);
+                /** @var ITranslated $attribute */
+                $attributeData = $this->fetchTranslatedAttributeValues($attribute, $ids);
             } else {
                 /** @var IComplex $attribute */
                 $attributeData = $attribute->getDataFor($ids);
