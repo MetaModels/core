@@ -17,10 +17,13 @@
 
 namespace MetaModels\FrontendIntegration;
 
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use MetaModels\Filter\Setting\Factory as FilterFactory;
 use MetaModels\FrontendIntegration\Content\FilterClearAll as ContentElementFilterClearAll;
 use MetaModels\FrontendIntegration\Module\FilterClearAll as ModuleFilterClearAll;
-use MetaModels\Helper\ContaoController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * FE-filtering for Contao MetaModels.
@@ -44,6 +47,19 @@ class FrontendFilter
      * @var string
      */
     protected $formId = 'mm_filter_';
+
+    /**
+     * Retrieve the event dispatcher.
+     *
+     * @return EventDispatcherInterface
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    protected function getDispatcher()
+    {
+        return $GLOBALS['container']['event-dispatcher'];
+    }
 
     /**
      * Configure the filter module.
@@ -130,16 +146,19 @@ class FrontendFilter
      */
     protected function redirectPost($arrParams)
     {
-        // Translate all params to a valid url and redirect us to it.
-        ContaoController::getInstance()
-            ->redirect(
-                \Environment::getInstance()->base .
-                ContaoController::getInstance()
-                    ->generateFrontendUrl(
-                        $this->objFilterConfig->arrJumpTo,
-                        $this->getJumpToUrl($arrParams)
-                    )
-            );
+        $dispatcher = $this->getDispatcher();
+        $event      = new GenerateFrontendUrlEvent(
+            $this->objFilterConfig->arrJumpTo,
+            $this->getJumpToUrl($arrParams)
+        );
+        $dispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
+
+        $dispatcher->dispatch(
+            ContaoEvents::CONTROLLER_REDIRECT,
+            new RedirectEvent(
+                \Environment::getInstance()->base . $event->getUrl()
+            )
+        );
     }
 
     /**
@@ -300,12 +319,12 @@ class FrontendFilter
             $renderedWidgets[$strWidget] = $this->renderWidget($arrWidgets[$strWidget], $filterOptions);
         }
 
+        $event = new GenerateFrontendUrlEvent($jumpToInformation, $this->getJumpToUrl($filterParameters['other']));
+        $this->getDispatcher()->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
+
         // Return filter data.
         return array(
-            'action'     => ContaoController::getInstance()->generateFrontendUrl(
-                $jumpToInformation,
-                $this->getJumpToUrl($filterParameters['other'])
-            ),
+            'action'     => $event->getUrl(),
             'formid'     => $this->formId,
             'filters'    => $renderedWidgets,
             'submit'     => (
