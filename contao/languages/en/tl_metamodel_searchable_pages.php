@@ -19,30 +19,31 @@
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['name']                = array(
+$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['name']              = array(
     'Name',
     'Name of the searchable page setting'
 );
-$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['tstamp']              = array(
+$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['tstamp']            = array(
     'Revision date',
     'Date and time of the latest revision.'
 );
-$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['isdefault']           = array(
+$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['isdefault']         = array(
     'Is default',
     'Determines that this searchable page setting shall be used as default for the parenting MetaModel.'
 );
-$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['becap_description']   = array(
+$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['becap_description'] = array(
     'Description text',
     'The text you specify in here, will get used as the description (hover title) in the backend menu.'
 );
-$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['setRendersetting']       = array(
+$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['setRendersetting']  = array(
     'Rendersetting',
     'Choose the rendersetting which will be used for the search rendering.'
 );
-$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['setFilter']       = array(
+$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['setFilter']         = array(
     'Filtersetting',
     'Choose the filtersetting which will be used for the search rendering.'
 );
+$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['filterparams']      = array('Filter parameter override');
 
 
 /**
