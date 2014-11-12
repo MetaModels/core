@@ -66,7 +66,7 @@ class ContentElementModuleBase
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    protected function buildFilterParams(\DC_Table $dataContainer, $table, $elementName)
+    protected function buildFilterParamsFor(\DC_Table $dataContainer, $table, $elementName)
     {
         $element = \Database::getInstance()
             ->prepare(
@@ -102,7 +102,7 @@ class ContentElementModuleBase
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function editMetaModel(\DC_Table $dataContainer, $table)
+    public function editMetaModelButton(\DC_Table $dataContainer, $table)
     {
         if ($dataContainer->value < 1) {
             return '';
@@ -140,7 +140,7 @@ class ContentElementModuleBase
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function editFilterSetting(\DC_Table $dataContainer, $table)
+    public function editFilterSettingButton(\DC_Table $dataContainer, $table)
     {
         if ($dataContainer->value < 1) {
             return '';
@@ -182,7 +182,7 @@ class ContentElementModuleBase
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function editRenderSetting(\DC_Table $dataContainer, $table)
+    public function editRenderSettingButton(\DC_Table $dataContainer, $table)
     {
         if ($dataContainer->value < 1) {
             return '';

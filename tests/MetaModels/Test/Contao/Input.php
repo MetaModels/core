@@ -21,7 +21,6 @@ namespace MetaModels\Test\Contao;
  */
 class Input
 {
-
     /**
      * The get parameters.
      *
@@ -43,7 +42,6 @@ class Input
      */
     public static $cookie;
 
-
     /**
      * Return a get variable. NOTE: this only mimics the real class - this stub does not encode.
      *
@@ -60,7 +58,6 @@ class Input
         return static::$get[$strKey];
     }
 
-
     /**
      * Return a post variable. NOTE: this only mimics the real class - this stub does not encode.
      *
@@ -76,7 +73,6 @@ class Input
 
         return static::$post[$strKey];
     }
-
 
     /**
      * Return a post variable. NOTE: this only mimics the real class - this stub does not encode.
@@ -101,7 +97,6 @@ class Input
     {
         return static::post($strKey);
     }
-
 
     /**
      * Return a cookie variable. NOTE: this only mimics the real class - this stub does not encode.
@@ -137,7 +132,6 @@ class Input
         }
     }
 
-
     /**
      * Set a post variable. NOTE: this only mimics the real class - this stub does not encode.
      *
@@ -155,7 +149,6 @@ class Input
             static::$post[$strKey] = $varValue;
         }
     }
-
 
     /**
      * Set a $_COOKIE variable.
@@ -175,7 +168,6 @@ class Input
         }
     }
 
-
     /**
      * Fallback to the session form data if there is no post data.
      *
@@ -187,7 +179,6 @@ class Input
     {
         return static::post($strKey);
     }
-
 
     /**
      * Return the object instance (Singleton).
