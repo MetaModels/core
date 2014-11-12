@@ -62,8 +62,13 @@ class ViewCombinations
     protected static function getUser()
     {
         if (TL_MODE == 'BE') {
-            return \BackendUser::getInstance();
+            $user = \BackendUser::getInstance();
+            if (empty($user->id)) {
+                $user->authenticate();
+            }
+            return $user;
         } elseif (TL_MODE == 'FE') {
+            // TODO maybe here is $user->authenticate() required too?
             return \FrontendUser::getInstance();
         }
         return null;
