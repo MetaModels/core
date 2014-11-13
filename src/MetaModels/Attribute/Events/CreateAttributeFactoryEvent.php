@@ -17,7 +17,7 @@
 
 namespace MetaModels\Attribute\Events;
 
-use MetaModels\Attribute\IFactory;
+use MetaModels\Attribute\IAttributeFactory;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -33,14 +33,14 @@ class CreateAttributeFactoryEvent extends Event
     /**
      * The factory that has been created.
      *
-     * @var IFactory
+     * @var IAttributeFactory
      */
     protected $factory;
 
     /**
      * Create a new instance.
      *
-     * @param IFactory $factory The factory that has been created.
+     * @param IAttributeFactory $factory The factory that has been created.
      */
     public function __construct($factory)
     {
@@ -50,7 +50,7 @@ class CreateAttributeFactoryEvent extends Event
     /**
      * Retrieve the attribute information array.
      *
-     * @return IFactory
+     * @return IAttributeFactory
      */
     public function getFactory()
     {

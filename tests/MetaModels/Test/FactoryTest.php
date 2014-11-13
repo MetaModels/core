@@ -19,7 +19,7 @@ namespace MetaModels\Test;
 use MetaModels\Events\CreateMetaModelEvent;
 use MetaModels\Events\GetMetaModelNameFromIdEvent;
 use MetaModels\Factory;
-use MetaModels\Attribute\IFactory as IAttributeFactory;
+use MetaModels\Attribute\IAttributeFactory;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -101,7 +101,7 @@ class FactoryTest extends TestCase
      */
     protected function mockAttributeFactory()
     {
-        $factory = $this->getMock('MetaModels\Attribute\IFactory');
+        $factory = $this->getMock('MetaModels\Attribute\IAttributeFactory');
 
         return $factory;
     }

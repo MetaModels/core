@@ -17,6 +17,8 @@
 
 namespace MetaModels;
 
+use MetaModels\Attribute\IAttributeFactory;
+
 /**
  * This is the MetaModel factory interface.
  *
@@ -62,6 +64,13 @@ interface IFactory
      * @deprecated To retrieve all names use method collectNames().
      */
     public static function getAllTables();
+
+    /**
+     * Retrieve the attribute factory.
+     *
+     * @return IAttributeFactory
+     */
+    public function getAttributeFactory();
 
     /**
      * Translate a MetaModel id to the corresponding name of the MetaModel.

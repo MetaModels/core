@@ -20,8 +20,8 @@ namespace MetaModels;
 use MetaModels\Events\CollectMetaModelTableNamesEvent;
 use MetaModels\Events\CreateMetaModelEvent;
 use MetaModels\Events\GetMetaModelNameFromIdEvent;
-use MetaModels\Attribute\IFactory as IAttributeFactory;
-use MetaModels\Attribute\Factory as AttributeFactory;
+use MetaModels\Attribute\IAttributeFactory;
+use MetaModels\Attribute\AttributeFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -95,9 +95,7 @@ class Factory implements IFactory
     }
 
     /**
-     * Retrieve the attribute factory.
-     *
-     * @return IAttributeFactory
+     * {@inheritdoc}
      */
     public function getAttributeFactory()
     {

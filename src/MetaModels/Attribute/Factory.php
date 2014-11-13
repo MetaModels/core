@@ -18,10 +18,7 @@
 namespace MetaModels\Attribute;
 
 use MetaModels\Attribute\Events\CollectMetaModelAttributeInformationEvent;
-use MetaModels\Attribute\Events\CreateAttributeEvent;
-use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
 use MetaModels\IMetaModel;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This is the implementation of the Field factory to query instances of fields.
@@ -31,8 +28,10 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ *
+ * @deprecated Use AttributeFactory instead.
  */
-class Factory implements IFactory
+class Factory extends AttributeFactory implements IFactory
 {
     /**
      * The default factory instance.
@@ -40,146 +39,6 @@ class Factory implements IFactory
      * @var IFactory
      */
     protected static $defaultFactory;
-
-    /**
-     * The event dispatcher.
-     *
-     * @var EventDispatcherInterface
-     */
-    protected $eventDispatcher;
-
-    /**
-     * The registered type factories.
-     *
-     * @var IAttributeTypeFactory[]
-     */
-    protected $typeFactories = array();
-
-    /**
-     * Create a new instance.
-     *
-     * @param EventDispatcherInterface $eventDispatcher The event dispatcher to use.
-     */
-    public function __construct(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->setEventDispatcher($eventDispatcher);
-
-        $eventDispatcher->dispatch(CreateAttributeFactoryEvent::NAME, new CreateAttributeFactoryEvent($this));
-    }
-
-    /**
-     * Retrieve the event dispatcher.
-     *
-     * @return EventDispatcherInterface
-     */
-    public function getEventDispatcher()
-    {
-        return $this->eventDispatcher;
-    }
-
-    /**
-     * Set the event dispatcher.
-     *
-     * @param EventDispatcherInterface $eventDispatcher The event dispatcher to set.
-     *
-     * @return Factory
-     */
-    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->eventDispatcher = $eventDispatcher;
-
-        return $this;
-    }
-
-    /**
-     * Create an attribute instance from an information array.
-     *
-     * @param array      $information The attribute information.
-     *
-     * @param IMetaModel $metaModel   The MetaModel instance for which the attribute shall be created.
-     *
-     * @return IAttribute|null
-     */
-    public function createAttribute($information, $metaModel)
-    {
-        $event = new CreateAttributeEvent($information, $metaModel);
-        $this->getEventDispatcher()->dispatch(CreateAttributeEvent::NAME, $event);
-
-        if ($event->getAttribute()) {
-            return $event->getAttribute();
-        }
-
-        $factory = $this->getTypeFactory($information['type']);
-
-        if (!$factory) {
-            return null;
-        }
-
-        return $factory->createInstance($information, $metaModel);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @throws \RuntimeException When the type is already registered.
-     */
-    public function addTypeFactory(IAttributeTypeFactory $typeFactory)
-    {
-        $typeName = $typeFactory->getTypeName();
-        if (isset($this->typeFactories[$typeName])) {
-            throw new \RuntimeException('Attribute type ' . $typeName . ' is already registered.');
-        }
-
-        $this->typeFactories[$typeName] = $typeFactory;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTypeFactory($typeFactory)
-    {
-        return isset($this->typeFactories[(string) $typeFactory]) ? $this->typeFactories[(string) $typeFactory] : null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeTypeMatchesFlags($name, $flags)
-    {
-        $factory = $this->getTypeFactory($name);
-
-        // Shortcut, if all are valid, return all. :)
-        if ($flags === self::FLAG_ALL) {
-            return true;
-        }
-
-        return (($flags & self::FLAG_INCLUDE_TRANSLATED) && $factory->isTranslatedType())
-            || (($flags & self::FLAG_INCLUDE_SIMPLE) && $factory->isSimpleType())
-            || (($flags & self::FLAG_INCLUDE_COMPLEX) && $factory->isComplexType());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTypeNames($flags = false)
-    {
-        if ($flags === false) {
-            $flags = self::FLAG_ALL;
-        }
-
-        $result = array();
-        foreach (array_keys($this->typeFactories) as $name) {
-            if (!$this->attributeTypeMatchesFlags($name, $flags)) {
-                continue;
-            }
-
-            $result[] = $name;
-        }
-
-        return $result;
-    }
 
     /**
      * Inline create an instance of this factory.
@@ -240,14 +99,8 @@ class Factory implements IFactory
 
     /**
      * {@inheritdoc}
-     */
-    public function getIconForType($type)
-    {
-        return isset($this->typeFactories[(string) $type]) ? $this->typeFactories[(string) $type]->getTypeIcon() : null;
-    }
-
-    /**
-     * {@inheritdoc}
+     *
+     * @deprecated Use an instance of the factory and method createAttribute().
      */
     public static function createFromArray($arrData)
     {
@@ -256,6 +109,8 @@ class Factory implements IFactory
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Use an instance of the factory and method createAttribute().
      */
     public static function createFromDB($objRow)
     {
@@ -274,6 +129,8 @@ class Factory implements IFactory
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Will not be in available anymore - if you need this, file a ticket.
      */
     public static function getAttributeTypes($blnSupportTranslated = false, $blnSupportVariants = false)
     {
@@ -287,6 +144,8 @@ class Factory implements IFactory
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Will not be in available anymore - if you need this, file a ticket.
      */
     public static function isValidAttributeType($strFieldType)
     {

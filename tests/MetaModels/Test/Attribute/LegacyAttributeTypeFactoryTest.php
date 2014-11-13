@@ -17,7 +17,7 @@
 namespace MetaModels\Test\Attribute;
 
 use MetaModels\Attribute\Events\LegacyListener;
-use MetaModels\Attribute\Factory;
+use MetaModels\Attribute\AttributeFactory;
 use MetaModels\Attribute\IAttributeTypeFactory;
 use MetaModels\Test\Attribute\Mock\AttributeFactoryMocker;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -95,7 +95,7 @@ class LegacyAttributeTypeFactoryTest extends AttributeTypeFactoryTest
     {
         $eventDispatcher = $this->mockEventDispatcher();
 
-        $factory = new Factory($eventDispatcher);
+        $factory = new AttributeFactory($eventDispatcher);
 
 
         $this->assertEquals(array(), $factory->getTypeNames());
@@ -118,6 +118,7 @@ class LegacyAttributeTypeFactoryTest extends AttributeTypeFactoryTest
         $factoryReflection = new \ReflectionClass('MetaModels\Attribute\IFactory');
         $methods           = array_map(
             function ($method) {
+                /** @var \ReflectionMethod $method */
                 return $method->getName();
             },
             $factoryReflection->getMethods(\ReflectionMethod::IS_ABSTRACT)
@@ -141,7 +142,7 @@ class LegacyAttributeTypeFactoryTest extends AttributeTypeFactoryTest
             $GLOBALS['METAMODELS']['attributes'][$typeName]['class']   = $typeClassProp->getValue($instance);
         }
 
-        $factory = new Factory($this->mockEventDispatcher());
+        $factory = new AttributeFactory($this->mockEventDispatcher());
 
         $this->assertEquals(array_keys($this->testFactories), $factory->getTypeNames());
 
@@ -157,6 +158,7 @@ class LegacyAttributeTypeFactoryTest extends AttributeTypeFactoryTest
                 $factory->createAttribute(array('type' => $typeName), null)
             );
             */
+
         }
 
         unset($GLOBALS['METAMODELS']);
@@ -180,7 +182,7 @@ class LegacyAttributeTypeFactoryTest extends AttributeTypeFactoryTest
             $GLOBALS['METAMODELS']['attributes'][$typeName]['class'] = $typeClassProp->getValue($instance);
         }
 
-        $factory = new Factory($this->mockEventDispatcher());
+        $factory = new AttributeFactory($this->mockEventDispatcher());
 
         $this->assertEquals(array_keys($this->testFactories), $factory->getTypeNames());
 
@@ -220,7 +222,7 @@ class LegacyAttributeTypeFactoryTest extends AttributeTypeFactoryTest
             $GLOBALS['METAMODELS']['attributes'][$typeName]['image'] = $typeIconProp->getValue($instance);
         }
 
-        $factory = new Factory($this->mockEventDispatcher());
+        $factory = new AttributeFactory($this->mockEventDispatcher());
 
         $this->assertEquals(array_keys($this->testFactories), $factory->getTypeNames());
 
@@ -256,6 +258,7 @@ class LegacyAttributeTypeFactoryTest extends AttributeTypeFactoryTest
                 ->method('dispatch')
                 ->with($this->equalTo($expectedEvent));
         }
+        /** @var EventDispatcherInterface $eventDispatcher */
         $eventDispatcher->addSubscriber(new LegacyListener());
 
         return $eventDispatcher;

@@ -53,10 +53,10 @@ class LegacyAttributeTypeFactory extends AbstractAttributeTypeFactory
                         return call_user_func_array(array($this->factoryName, 'createInstance'), array($information));
                     }
 
+                    /** @var LegacyAttributeTypeFactory $instance */
                     $instance = new $this->factoryName();
-                    return $instance->createInstance($information);
+                    return $instance->createInstance($information, $metaModel);
                 }
-
             }
             return null;
         }

@@ -17,9 +17,9 @@
 namespace MetaModels\Test\Attribute;
 
 use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
-use MetaModels\Attribute\Factory;
+use MetaModels\Attribute\AttributeFactory;
 use MetaModels\Attribute\IAttributeTypeFactory;
-use MetaModels\Attribute\IFactory;
+use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\Test\Attribute\Mock\AttributeFactoryMocker;
 use MetaModels\Test\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -29,7 +29,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  *
  * @package MetaModels\Test\Filter\Setting
  */
-class FactoryTest extends TestCase
+class AttributeFactoryTest extends TestCase
 {
     /**
      * Test to add an attribute factory to a factory and retrieve it again.
@@ -39,7 +39,7 @@ class FactoryTest extends TestCase
     public function testCreateFactoryFiresEvent()
     {
         $eventDispatcher = $this->mockEventDispatcher(CreateAttributeFactoryEvent::NAME, 1);
-        $factory         = new Factory($eventDispatcher);
+        $factory         = new AttributeFactory($eventDispatcher);
 
         $this->assertSame($eventDispatcher, $factory->getEventDispatcher());
     }
@@ -51,7 +51,7 @@ class FactoryTest extends TestCase
      */
     public function testAddTypeFactoryAndGetTypeFactory()
     {
-        $factory = new Factory($this->mockEventDispatcher());
+        $factory = new AttributeFactory($this->mockEventDispatcher());
 
         $this->assertNull($factory->getTypeFactory('test'));
         $attributeFactory = $this->mockAttributeFactory('test', true, false, false);
@@ -67,15 +67,15 @@ class FactoryTest extends TestCase
     /**
      * Test a single attribute type mock.
      *
-     * @param IFactory $factory          The factory to test.
+     * @param IAttributeFactory $factory          The factory to test.
      *
-     * @param string   $attributeFactory The attribute type factory to test.
+     * @param string            $attributeFactory The attribute type factory to test.
      *
-     * @param bool     $shouldTranslated Flag if the attribute factory should say the type is translated.
+     * @param bool              $shouldTranslated Flag if the attribute factory should say the type is translated.
      *
-     * @param bool     $shouldSimple     Flag if the attribute factory should say the type is simple.
+     * @param bool              $shouldSimple     Flag if the attribute factory should say the type is simple.
      *
-     * @param bool     $shouldComplex    Flag if the attribute factory should say the type is complex.
+     * @param bool              $shouldComplex    Flag if the attribute factory should say the type is complex.
      *
      * @return void
      */
@@ -85,7 +85,7 @@ class FactoryTest extends TestCase
             true,
             $factory->attributeTypeMatchesFlags(
                 $attributeFactory,
-                IFactory::FLAG_ALL
+                IAttributeFactory::FLAG_ALL
             ),
             $attributeFactory . '.FLAG_ALL'
         );
@@ -94,7 +94,7 @@ class FactoryTest extends TestCase
             $shouldTranslated,
             $factory->attributeTypeMatchesFlags(
                 $attributeFactory,
-                IFactory::FLAG_INCLUDE_TRANSLATED
+                IAttributeFactory::FLAG_INCLUDE_TRANSLATED
             ),
             $attributeFactory . '.FLAG_INCLUDE_TRANSLATED'
         );
@@ -103,7 +103,7 @@ class FactoryTest extends TestCase
             $shouldSimple,
             $factory->attributeTypeMatchesFlags(
                 $attributeFactory,
-                IFactory::FLAG_INCLUDE_SIMPLE
+                IAttributeFactory::FLAG_INCLUDE_SIMPLE
             ),
             $attributeFactory . '.FLAG_INCLUDE_SIMPLE'
         );
@@ -112,7 +112,7 @@ class FactoryTest extends TestCase
             $shouldComplex,
             $factory->attributeTypeMatchesFlags(
                 $attributeFactory,
-                IFactory::FLAG_INCLUDE_COMPLEX
+                IAttributeFactory::FLAG_INCLUDE_COMPLEX
             ),
             $attributeFactory . '.FLAG_INCLUDE_COMPLEX'
         );
@@ -125,7 +125,7 @@ class FactoryTest extends TestCase
      */
     public function testAttributeTypeMatchesFlags()
     {
-        $factory = new Factory($this->mockEventDispatcher());
+        $factory = new AttributeFactory($this->mockEventDispatcher());
         $factory->addTypeFactory($this->mockAttributeFactory('test_translated', true, false, false));
         $factory->addTypeFactory($this->mockAttributeFactory('test_simple', false, true, false));
         $factory->addTypeFactory($this->mockAttributeFactory('test_complex', false, false, true));
@@ -150,35 +150,35 @@ class FactoryTest extends TestCase
      */
     public function testGetTypeNames()
     {
-        $factory = new Factory($this->mockEventDispatcher());
+        $factory = new AttributeFactory($this->mockEventDispatcher());
 
         $this->assertSame(
             array(),
-            $factory->getTypeNames(IFactory::FLAG_ALL),
+            $factory->getTypeNames(IAttributeFactory::FLAG_ALL),
             'FLAG_ALL'
         );
 
         $this->assertSame(
             array(),
-            $factory->getTypeNames(IFactory::FLAG_INCLUDE_TRANSLATED),
+            $factory->getTypeNames(IAttributeFactory::FLAG_INCLUDE_TRANSLATED),
             'FLAG_INCLUDE_TRANSLATED'
         );
 
         $this->assertSame(
             array(),
-            $factory->getTypeNames(IFactory::FLAG_INCLUDE_SIMPLE),
+            $factory->getTypeNames(IAttributeFactory::FLAG_INCLUDE_SIMPLE),
             'FLAG_INCLUDE_SIMPLE'
         );
 
         $this->assertSame(
             array(),
-            $factory->getTypeNames(IFactory::FLAG_INCLUDE_COMPLEX),
+            $factory->getTypeNames(IAttributeFactory::FLAG_INCLUDE_COMPLEX),
             'FLAG_INCLUDE_COMPLEX'
         );
 
         $this->assertSame(
             array(),
-            $factory->getTypeNames(IFactory::FLAG_ALL_UNTRANSLATED),
+            $factory->getTypeNames(IAttributeFactory::FLAG_ALL_UNTRANSLATED),
             'FLAG_ALL_UNTRANSLATED'
         );
 
@@ -200,7 +200,7 @@ class FactoryTest extends TestCase
                 'test_translatedcomplex',
                 'test_translatedsimplecomplex',
             ),
-            $factory->getTypeNames(IFactory::FLAG_ALL),
+            $factory->getTypeNames(IAttributeFactory::FLAG_ALL),
             'FLAG_ALL'
         );
 
@@ -211,7 +211,7 @@ class FactoryTest extends TestCase
                 'test_translatedcomplex',
                 'test_translatedsimplecomplex',
             ),
-            $factory->getTypeNames(IFactory::FLAG_INCLUDE_TRANSLATED),
+            $factory->getTypeNames(IAttributeFactory::FLAG_INCLUDE_TRANSLATED),
             'FLAG_INCLUDE_TRANSLATED'
         );
 
@@ -222,7 +222,7 @@ class FactoryTest extends TestCase
                 'test_translatedsimple',
                 'test_translatedsimplecomplex',
             ),
-            $factory->getTypeNames(IFactory::FLAG_INCLUDE_SIMPLE),
+            $factory->getTypeNames(IAttributeFactory::FLAG_INCLUDE_SIMPLE),
             'FLAG_INCLUDE_SIMPLE'
         );
 
@@ -233,7 +233,7 @@ class FactoryTest extends TestCase
                 'test_translatedcomplex',
                 'test_translatedsimplecomplex',
             ),
-            $factory->getTypeNames(IFactory::FLAG_INCLUDE_COMPLEX),
+            $factory->getTypeNames(IAttributeFactory::FLAG_INCLUDE_COMPLEX),
             'FLAG_INCLUDE_COMPLEX'
         );
 
@@ -246,7 +246,7 @@ class FactoryTest extends TestCase
                 'test_translatedcomplex',
                 'test_translatedsimplecomplex',
             ),
-            $factory->getTypeNames(IFactory::FLAG_ALL_UNTRANSLATED),
+            $factory->getTypeNames(IAttributeFactory::FLAG_ALL_UNTRANSLATED),
             'FLAG_ALL_UNTRANSLATED'
         );
     }
@@ -258,7 +258,7 @@ class FactoryTest extends TestCase
      */
     public function testGetTypeIcon()
     {
-        $factory     = new Factory($this->mockEventDispatcher());
+        $factory     = new AttributeFactory($this->mockEventDispatcher());
         $typeFactory = $this->mockAttributeFactory('test', true, false, false, new \stdClass, 'icon.png');
         $factory->addTypeFactory($typeFactory);
 
