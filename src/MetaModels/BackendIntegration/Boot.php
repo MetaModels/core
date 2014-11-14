@@ -170,7 +170,7 @@ class Boot
      *
      * @return void
      */
-    public static function perform(MetaModelsBootEvent $event)
+    public function perform(MetaModelsBootEvent $event)
     {
         // FIXME: is initialization of Contao Object stack still necessary?
         // Do not execute anything if we are on the index page because no User is logged in.
