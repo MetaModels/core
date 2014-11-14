@@ -91,7 +91,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function setAttributeFactory(IAttributeFactory $factory)
     {
-        $this->factory = $factory;
+        $this->attributeFactory = $factory;
 
         return $this;
     }
