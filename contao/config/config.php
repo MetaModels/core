@@ -263,15 +263,11 @@ $GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'MetaModels\Events\DatabaseBackedListener';
 $GLOBALS['TL_EVENTS'][\ContaoCommunityAlliance\Contao\EventDispatcher\Event\CreateEventDispatcherEvent::NAME][] =
     'MetaModels\DcGeneral\Events\Subscriber::registerEvents';
 
-
-$GLOBALS['TL_EVENTS'][\ContaoCommunityAlliance\Contao\EventDispatcher\Event\CreateEventDispatcherEvent::NAME][] =
-function (
-    ContaoCommunityAlliance\Contao\EventDispatcher\Event\CreateEventDispatcherEvent $event,
-    $eventName,
-    Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+$GLOBALS['TL_HOOKS']['initializeDependencyContainer'][] = function (
+    \Pimple $container
 ) {
     $handler = new MetaModels\Helper\SubSystemBoot();
-    $handler->boot($event, $eventName, $dispatcher);
+    $handler->boot($container);
 };
 
 $GLOBALS['TL_EVENTS'][\MetaModels\MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND][] = function (

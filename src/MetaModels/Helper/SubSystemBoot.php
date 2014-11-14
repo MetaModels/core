@@ -18,7 +18,6 @@
 namespace MetaModels\Helper;
 
 use MetaModels\Events\MetaModelsBootEvent;
-use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsEvents;
 
 /**
@@ -51,26 +50,15 @@ class SubSystemBoot
     }
 
     /**
-     * Retrieve the service container from the global DIC.
-     *
-     * @return IMetaModelsServiceContainer
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    protected function getServiceContainer()
-    {
-        return $GLOBALS['container']['metamodels-service-container'];
-    }
-
-    /**
      * Boot up the system and initialize a service container.
+     *
+     * @param \Pimple $container The dependency injection container.
      *
      * @return void
      */
-    public function boot()
+    public function boot(\Pimple $container)
     {
-        $container  = $this->getServiceContainer();
+        $container  = $container['metamodels-service-container'];
         $dispatcher = $container->getEventDispatcher();
         $event      = new MetaModelsBootEvent($container);
 

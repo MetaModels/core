@@ -83,29 +83,6 @@ class SubSystemBootTest extends TestCase
      * Test that getDatabase() returns the correct instance.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    public function testServiceContainer()
-    {
-        $boot   = new SubSystemBoot();
-        $class  = new \ReflectionClass($boot);
-        $method = $class->getMethod('getServiceContainer');
-        $method->setAccessible(true);
-
-        $GLOBALS['container']['metamodels-service-container'] = new MetaModelsServiceContainer();
-
-        /** @var SubSystemBoot $boot */
-        $this->assertEquals(
-            $GLOBALS['container']['metamodels-service-container'],
-            $method->invoke($boot)
-        );
-    }
-    /**
-     * Test that getDatabase() returns the correct instance.
-     *
-     * @return void
      */
     public function testGetDatabase()
     {
@@ -139,15 +116,11 @@ class SubSystemBootTest extends TestCase
         $container = new MetaModelsServiceContainer();
         $container->setEventDispatcher($dispatcher);
 
-        $boot = $this->getMock('MetaModels\Helper\SubSystemBoot', array('getMode', 'getServiceContainer'));
+        $boot = $this->getMock('MetaModels\Helper\SubSystemBoot', array('getMode'));
         $boot
             ->expects($this->any())
             ->method('getMode')
             ->will($this->returnValue('FE'));
-        $boot
-            ->expects($this->any())
-            ->method('getServiceContainer')
-            ->will($this->returnValue($container));
 
         $class   = new \ReflectionClass($boot);
         $getMode = $class->getMethod('getMode');
@@ -156,7 +129,7 @@ class SubSystemBootTest extends TestCase
         /** @var SubSystemBoot $boot */
         $this->assertEquals('FE', $getMode->invoke($boot));
 
-        $boot->boot(new CreateEventDispatcherEvent($dispatcher));
+        $boot->boot(new \Pimple(array('metamodels-service-container' => $container)));
     }
 
     /**
@@ -177,15 +150,11 @@ class SubSystemBootTest extends TestCase
         $container = new MetaModelsServiceContainer();
         $container->setEventDispatcher($dispatcher);
 
-        $boot = $this->getMock('MetaModels\Helper\SubSystemBoot', array('getMode', 'getServiceContainer'));
+        $boot = $this->getMock('MetaModels\Helper\SubSystemBoot', array('getMode'));
         $boot
             ->expects($this->any())
             ->method('getMode')
             ->will($this->returnValue('BE'));
-        $boot
-            ->expects($this->any())
-            ->method('getServiceContainer')
-            ->will($this->returnValue($container));
 
         $class   = new \ReflectionClass($boot);
         $getMode = $class->getMethod('getMode');
@@ -194,7 +163,7 @@ class SubSystemBootTest extends TestCase
         /** @var SubSystemBoot $boot */
         $this->assertEquals('BE', $getMode->invoke($boot));
 
-        $boot->boot(new CreateEventDispatcherEvent($dispatcher));
+        $boot->boot(new \Pimple(array('metamodels-service-container' => $container)));
     }
 
     /**
