@@ -30,6 +30,98 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class SubSystemBootTest extends TestCase
 {
     /**
+     * Test that getMode() returns empty string when no mode has been defined.
+     *
+     * @return void
+     */
+    public function testGetModeUndefined()
+    {
+        if (defined('TL_MODE')) {
+            $this->markTestSkipped('TL_MODE is defined');
+            return;
+        }
+
+        $boot    = new SubSystemBoot();
+        $class   = new \ReflectionClass($boot);
+        $getMode = $class->getMethod('getMode');
+        $getMode->setAccessible(true);
+
+        /** @var SubSystemBoot $boot */
+        $this->assertEquals(
+            '',
+            $getMode->invoke($boot)
+        );
+    }
+
+    /**
+     * Test that getMode() returns the correct constant.
+     *
+     * @return void
+     */
+    public function testGetMode()
+    {
+        if (defined('TL_MODE')) {
+            $this->markTestSkipped('TL_MODE is defined');
+            return;
+        }
+
+        define('TL_MODE', 'TESTS');
+
+        $boot    = new SubSystemBoot();
+        $class   = new \ReflectionClass($boot);
+        $getMode = $class->getMethod('getMode');
+        $getMode->setAccessible(true);
+
+        /** @var SubSystemBoot $boot */
+        $this->assertEquals(
+            'TESTS',
+            $getMode->invoke($boot)
+        );
+    }
+
+    /**
+     * Test that getDatabase() returns the correct instance.
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    public function testServiceContainer()
+    {
+        $boot   = new SubSystemBoot();
+        $class  = new \ReflectionClass($boot);
+        $method = $class->getMethod('getServiceContainer');
+        $method->setAccessible(true);
+
+        $GLOBALS['container']['metamodels-service-container'] = new MetaModelsServiceContainer();
+
+        /** @var SubSystemBoot $boot */
+        $this->assertEquals(
+            $GLOBALS['container']['metamodels-service-container'],
+            $method->invoke($boot)
+        );
+    }
+    /**
+     * Test that getDatabase() returns the correct instance.
+     *
+     * @return void
+     */
+    public function testGetDatabase()
+    {
+        $boot   = new SubSystemBoot();
+        $class  = new \ReflectionClass($boot);
+        $method = $class->getMethod('getDatabase');
+        $method->setAccessible(true);
+
+        /** @var SubSystemBoot $boot */
+        $this->assertEquals(
+            \Database::getInstance(),
+            $method->invoke($boot)
+        );
+    }
+
+    /**
      * Test the booting in the frontend.
      *
      * @return void
