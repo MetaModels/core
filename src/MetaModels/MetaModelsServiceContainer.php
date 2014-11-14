@@ -82,7 +82,6 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
         return $this->factory;
     }
 
-
     /**
      * Set the factory to use.
      *
@@ -112,7 +111,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      *
      * @return MetaModelsServiceContainer
      */
-    public function setDispatcher($dispatcher)
+    public function setEventDispatcher($dispatcher)
     {
         $this->dispatcher = $dispatcher;
 
