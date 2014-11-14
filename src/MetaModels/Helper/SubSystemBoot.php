@@ -17,7 +17,6 @@
 
 namespace MetaModels\Helper;
 
-use ContaoCommunityAlliance\Contao\EventDispatcher\Event\CreateEventDispatcherEvent;
 use MetaModels\Events\MetaModelsBootEvent;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsEvents;
@@ -36,7 +35,7 @@ class SubSystemBoot
      *
      * @return string
      */
-    public function getMode()
+    protected function getMode()
     {
         return defined('TL_MODE') ? TL_MODE : '';
     }
@@ -46,7 +45,7 @@ class SubSystemBoot
      *
      * @return \Contao\Database
      */
-    public function getDatabase()
+    protected function getDatabase()
     {
         return \Database::getInstance();
     }
@@ -59,24 +58,23 @@ class SubSystemBoot
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function getServiceContainer()
+    protected function getServiceContainer()
     {
-        return $GLOBALS['container']['metamodelsServiceContainer'];
+        return $GLOBALS['container']['metamodels-service-container'];
     }
 
     /**
      * Boot up the system and initialize a service container.
      *
-     * @param CreateEventDispatcherEvent $event The event being processed.
-     *
      * @return void
      */
-    public function boot(CreateEventDispatcherEvent $event)
+    public function boot()
     {
-        $dispatcher = $event->getEventDispatcher();
         $container  = $this->getServiceContainer();
+        $dispatcher = $container->getEventDispatcher();
+        $event      = new MetaModelsBootEvent($container);
 
-        $dispatcher->dispatch(MetaModelsEvents::SUBSYSTEM_BOOT, new MetaModelsBootEvent($container));
+        $dispatcher->dispatch(MetaModelsEvents::SUBSYSTEM_BOOT, $event);
 
         if ($mode = $this->getMode()) {
             $eventName = MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND;
@@ -85,7 +83,7 @@ class SubSystemBoot
                 $eventName = MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND;
             }
 
-            $dispatcher->dispatch($eventName, new MetaModelsBootEvent($container));
+            $dispatcher->dispatch($eventName, $event);
         }
     }
 }

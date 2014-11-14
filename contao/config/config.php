@@ -263,11 +263,31 @@ $GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'MetaModels\Events\DatabaseBackedListener';
 $GLOBALS['TL_EVENTS'][\ContaoCommunityAlliance\Contao\EventDispatcher\Event\CreateEventDispatcherEvent::NAME][] =
     'MetaModels\DcGeneral\Events\Subscriber::registerEvents';
 
+
 $GLOBALS['TL_EVENTS'][\ContaoCommunityAlliance\Contao\EventDispatcher\Event\CreateEventDispatcherEvent::NAME][] =
-    'MetaModels\Helper\SubSystemBoot::boot';
+function (
+    ContaoCommunityAlliance\Contao\EventDispatcher\Event\CreateEventDispatcherEvent $event,
+    $eventName,
+    Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+) {
+    $handler = new MetaModels\Helper\SubSystemBoot();
+    $handler->boot($event, $eventName, $dispatcher);
+};
 
-$GLOBALS['TL_EVENTS'][\MetaModels\MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND][] =
-    'MetaModels\BackendIntegration\Boot::perform';
+$GLOBALS['TL_EVENTS'][\MetaModels\MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND][] = function (
+    MetaModels\Events\MetaModelsBootEvent $event,
+    $eventName,
+    Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+) {
+    $handler = new MetaModels\BackendIntegration\Boot();
+    $handler->perform($event, $eventName, $dispatcher);
+};
 
-$GLOBALS['TL_EVENTS'][\MetaModels\MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND][] =
-    'MetaModels\FrontendIntegration\Boot::perform';
+$GLOBALS['TL_EVENTS'][\MetaModels\MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND][] = function (
+    MetaModels\Events\MetaModelsBootEvent $event,
+    $eventName,
+    Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+) {
+    $handler = new MetaModels\FrontendIntegration\Boot();
+    $handler->perform($event, $eventName, $dispatcher);
+};

@@ -18,7 +18,6 @@
 namespace MetaModels\Test\Helper;
 
 use ContaoCommunityAlliance\Contao\EventDispatcher\Event\CreateEventDispatcherEvent;
-use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
 use MetaModels\Helper\SubSystemBoot;
 use MetaModels\MetaModelsEvents;
 use MetaModels\MetaModelsServiceContainer;
@@ -45,6 +44,9 @@ class SubSystemBootTest extends TestCase
             1
         );
 
+        $container = new MetaModelsServiceContainer();
+        $container->setEventDispatcher($dispatcher);
+
         $boot = $this->getMock('MetaModels\Helper\SubSystemBoot', array('getMode', 'getServiceContainer'));
         $boot
             ->expects($this->any())
@@ -53,10 +55,15 @@ class SubSystemBootTest extends TestCase
         $boot
             ->expects($this->any())
             ->method('getServiceContainer')
-            ->will($this->returnValue(new MetaModelsServiceContainer()));
+            ->will($this->returnValue($container));
+
+        $class   = new \ReflectionClass($boot);
+        $getMode = $class->getMethod('getMode');
+        $getMode->setAccessible(true);
 
         /** @var SubSystemBoot $boot */
-        $this->assertEquals('FE', $boot->getMode());
+        $this->assertEquals('FE', $getMode->invoke($boot));
+
         $boot->boot(new CreateEventDispatcherEvent($dispatcher));
     }
 
@@ -75,6 +82,9 @@ class SubSystemBootTest extends TestCase
             1
         );
 
+        $container = new MetaModelsServiceContainer();
+        $container->setEventDispatcher($dispatcher);
+
         $boot = $this->getMock('MetaModels\Helper\SubSystemBoot', array('getMode', 'getServiceContainer'));
         $boot
             ->expects($this->any())
@@ -83,10 +93,15 @@ class SubSystemBootTest extends TestCase
         $boot
             ->expects($this->any())
             ->method('getServiceContainer')
-            ->will($this->returnValue(new MetaModelsServiceContainer()));
+            ->will($this->returnValue($container));
+
+        $class   = new \ReflectionClass($boot);
+        $getMode = $class->getMethod('getMode');
+        $getMode->setAccessible(true);
 
         /** @var SubSystemBoot $boot */
-        $this->assertEquals('BE', $boot->getMode());
+        $this->assertEquals('BE', $getMode->invoke($boot));
+
         $boot->boot(new CreateEventDispatcherEvent($dispatcher));
     }
 
