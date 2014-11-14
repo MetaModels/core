@@ -25,7 +25,7 @@
 
 	<filter>
 		<whitelist>
-			<directory>./src/system/modules/metamodels/MetaModels/</directory>
+			<directory>./src/</directory>
 		</whitelist>
 	</filter>
 </phpunit>
