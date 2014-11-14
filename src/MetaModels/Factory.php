@@ -20,7 +20,6 @@ namespace MetaModels;
 use MetaModels\Events\CollectMetaModelTableNamesEvent;
 use MetaModels\Events\CreateMetaModelEvent;
 use MetaModels\Events\GetMetaModelNameFromIdEvent;
-use MetaModels\Attribute\AttributeFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
