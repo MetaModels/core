@@ -123,22 +123,6 @@ $GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'tstamp';
 $GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'vargroup';
 $GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'varbase';
 
-// Define some error levels.
-define('METAMODELS_INFO', 3);
-define('METAMODELS_WARN', 2);
-define('METAMODELS_ERROR', 1);
-
-// Back-end module - include only in Backend.
-if (TL_MODE == 'BE') {
-    if (version_compare(VERSION, '3.1', '>=')
-        && \Environment::get('scriptName') == (TL_PATH . '/contao/file.php')
-        && \Input::get('mmfilepicker')
-    ) {
-        $GLOBALS['BE_FFL']['fileSelector'] = 'MetaModels\Widgets\FileSelectorWidget';
-    }
-
-}
-
 // Front-end modules.
 $GLOBALS['FE_MOD']['metamodels']['metamodel_list']              = 'MetaModels\FrontendIntegration\Module\ModelList';
 $GLOBALS['FE_MOD']['metamodels']['metamodels_frontendfilter']   = 'MetaModels\FrontendIntegration\Module\Filter';

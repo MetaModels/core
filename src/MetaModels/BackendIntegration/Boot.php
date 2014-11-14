@@ -146,6 +146,24 @@ class Boot
     }
 
     /**
+     * When we are within Contao >= 3.1, we have to override the file picker class.
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    protected function overrideFilePicker()
+    {
+        if (version_compare(VERSION, '3.1', '>=')
+            && \Environment::get('scriptName') == (TL_PATH . '/contao/file.php')
+            && \Input::get('mmfilepicker')
+        ) {
+            $GLOBALS['BE_FFL']['fileSelector'] = 'MetaModels\Widgets\FileSelectorWidget';
+        }
+    }
+
+    /**
      * Boot the system in the backend.
      *
      * @param MetaModelsBootEvent $event The event.
@@ -167,7 +185,13 @@ class Boot
         // If no backend user authenticated, we will get redirected.
         self::authenticateBackendUser();
 
+        // Define some error levels.
+        // FIXME: we should deprecate these constants.
+        define('METAMODELS_INFO', 3);
+        define('METAMODELS_WARN', 2);
+        define('METAMODELS_ERROR', 1);
 
+        self::overrideFilePicker();
 
         $container = $event->getServiceContainer();
         $container->getEventDispatcher()->dispatch(BackendIntegrationEvent::NAME, new BackendIntegrationEvent());
