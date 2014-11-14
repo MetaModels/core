@@ -19,15 +19,10 @@ namespace MetaModels\BackendIntegration;
 
 use MetaModels\BackendIntegration\Events\BackendIntegrationEvent;
 use MetaModels\Dca\MetaModelDcaBuilder;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use MetaModels\Events\MetaModelsBootEvent;
 
 /**
- * This class is the abstract base class used in the backend to build the menu.
- * See the concrete implementation in the ContaoX folders (depending on Contao Core version).
- *
- * @package    MetaModels
- * @subpackage Core
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * This class is used in the backend to build the menu etc.
  */
 class Boot
 {
@@ -151,15 +146,15 @@ class Boot
     }
 
     /**
-     * Perform the backend module booting.
+     * Boot the system in the backend.
+     *
+     * @param MetaModelsBootEvent $event The event.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public static function perform()
+    public static function perform(MetaModelsBootEvent $event)
     {
+        // FIXME: is initialization of Contao Object stack still necessary?
         // Do not execute anything if we are on the index page because no User is logged in.
         if (strpos(\Environment::getInstance()->script, 'contao/index.php') !== false) {
             return;
@@ -172,11 +167,14 @@ class Boot
         // If no backend user authenticated, we will get redirected.
         self::authenticateBackendUser();
 
-        /** @var EventDispatcherInterface $dispatcher */
-        $dispatcher = $GLOBALS['container']['event-dispatcher'];
-        $dispatcher->dispatch(BackendIntegrationEvent::NAME, new BackendIntegrationEvent());
 
-        MetaModelDcaBuilder::getInstance()->injectBackendMenu();
-        MetaModelDcaBuilder::getInstance()->injectIntoBackendModules();
+
+        $container = $event->getServiceContainer();
+        $container->getEventDispatcher()->dispatch(BackendIntegrationEvent::NAME, new BackendIntegrationEvent());
+
+        // TODO: we should move these tasks into this class as it is only relevant to the backend.
+        $builder = new MetaModelDcaBuilder($container);
+        $builder->injectBackendMenu();
+        $builder->injectIntoBackendModules();
     }
 }

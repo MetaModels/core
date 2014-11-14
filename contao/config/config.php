@@ -137,7 +137,6 @@ if (TL_MODE == 'BE') {
         $GLOBALS['BE_FFL']['fileSelector'] = 'MetaModels\Widgets\FileSelectorWidget';
     }
 
-    $GLOBALS['TL_HOOKS']['initializeSystem'][] = array('MetaModels\BackendIntegration\Boot', 'perform');
 }
 
 // Front-end modules.
@@ -282,3 +281,9 @@ $GLOBALS['TL_EVENTS'][\ContaoCommunityAlliance\Contao\EventDispatcher\Event\Crea
 
 $GLOBALS['TL_EVENTS'][\ContaoCommunityAlliance\Contao\EventDispatcher\Event\CreateEventDispatcherEvent::NAME][] =
     'MetaModels\Helper\SubSystemBoot::boot';
+
+$GLOBALS['TL_EVENTS'][\MetaModels\MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND][] =
+    'MetaModels\BackendIntegration\Boot::perform';
+
+$GLOBALS['TL_EVENTS'][\MetaModels\MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND][] =
+    'MetaModels\FrontendIntegration\Boot::perform';

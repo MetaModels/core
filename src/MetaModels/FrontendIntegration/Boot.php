@@ -15,18 +15,24 @@
  * @filesource
  */
 
-namespace MetaModels\BackendIntegration\Events;
+namespace MetaModels\FrontendIntegration;
 
-use Symfony\Component\EventDispatcher\Event;
+use MetaModels\Events\MetaModelsBootEvent;
 
 /**
- * This event is fired when MetaModels boots and is about to inject itself into the backend menu.
- *
- * @see \MetaModels\MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND Which is the replacement.
- *
- * @deprecated Not in use anymore
+ * This class is used in the frontend to build the menu.
  */
-class BackendIntegrationEvent extends Event
+class Boot
 {
-    const NAME = 'metamodels.backend-integration';
+    /**
+     * Boot the system in the frontend.
+     *
+     * @param MetaModelsBootEvent $event The event.
+     *
+     * @return void
+     */
+    public function perform(MetaModelsBootEvent $event)
+    {
+        // Perform frontend boot tasks.
+    }
 }
