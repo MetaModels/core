@@ -8,10 +8,11 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T06:40:07+02:00
+ * last-updated: 2014-05-22T12:13:44+02:00
  */
 
-
-$GLOBALS['TL_LANG']['tl_metamodel_filter']['tstamp']['0'] = 'Дата изменения';
-$GLOBALS['TL_LANG']['tl_metamodel_filter']['tstamp']['1'] = 'Дата и время последнего изменения';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['name']['0']    = 'Имя';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['title_legend'] = 'Имя';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['tstamp']['0']  = 'Дата изменения';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['tstamp']['1']  = 'Дата и время последнего изменения';
 

@@ -8,10 +8,11 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-05-28T20:13:10+02:00
+ * last-updated: 2014-06-06T08:13:38+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']['0']          = 'Атрибут';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype']['0']          = 'Тип';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['attribute'] = 'Атрибут';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']         = 'Язык';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['11']     = 'Сортировать по возрастанию';
@@ -20,4 +21,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['5']      = 'Со�
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['6']      = 'Сортировать по убыванию дней';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['7']      = 'Сортировать по возрастанию месяцев';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['8']      = 'Сортировать по убыванию месяцев';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']          = 'Тип';
 
