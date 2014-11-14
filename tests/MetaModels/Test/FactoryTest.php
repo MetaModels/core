@@ -20,8 +20,8 @@ use MetaModels\Events\CreateMetaModelEvent;
 use MetaModels\Events\GetMetaModelNameFromIdEvent;
 use MetaModels\Factory;
 use MetaModels\Attribute\IAttributeFactory;
+use MetaModels\IMetaModelsServiceContainer;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Test the attribute factory.
@@ -37,13 +37,17 @@ class FactoryTest extends TestCase
      */
     public function testCreateMetaModelFiresEvent()
     {
-        $eventDispatcher = $this->mockEventDispatcher(CreateMetaModelEvent::NAME, 1);
-        $factory         = new Factory($eventDispatcher, $this->mockAttributeFactory());
+        $serviceContainer = $this->mockServiceContainer(true);
+        $factory          = new Factory($serviceContainer);
 
-        $this->assertSame($eventDispatcher, $factory->getEventDispatcher());
+        $serviceContainer->getEventDispatcher()
+            ->expects($this->exactly(1))
+            ->method('dispatch')
+            ->with($this->equalTo(CreateMetaModelEvent::NAME));
+
+        $this->assertSame($serviceContainer, $factory->getServiceContainer());
 
         $factory->getMetaModel('mm_test');
-
     }
 
     /**
@@ -53,45 +57,44 @@ class FactoryTest extends TestCase
      */
     public function testGetMetaModelNameFromId()
     {
-        $eventDispatcher = new EventDispatcher();
-        $factory         = new Factory($eventDispatcher, $this->mockAttributeFactory());
+        $serviceContainer = $this->mockServiceContainer();
+        $factory          = new Factory($serviceContainer);
 
-        $eventDispatcher->addListener(
+        $serviceContainer->getEventDispatcher()->addListener(
             GetMetaModelNameFromIdEvent::NAME,
             function (GetMetaModelNameFromIdEvent $event) {
                 $event->setMetaModelName('mm_with_id_' . $event->getMetaModelId());
             }
         );
 
-        $this->assertSame($eventDispatcher, $factory->getEventDispatcher());
         $this->assertSame('mm_with_id_10', $factory->translateIdToMetaModelName(10));
 
         $factory->getMetaModel('mm_test');
-
     }
 
-
     /**
-     * Mock an event dispatcher.
+     * Mock a service container.
      *
-     * @param string $expectedEvent The name of the expected event.
+     * @param bool $mockEventDispatcher If true, a mock of the event dispatcher will be used, if false, a real instance.
      *
-     * @param int    $expectedCount The amount how often this event shall get dispatched.
-     *
-     * @return EventDispatcherInterface
+     * @return IMetaModelsServiceContainer
      */
-    protected function mockEventDispatcher($expectedEvent = '', $expectedCount = 0)
+    protected function mockServiceContainer($mockEventDispatcher = false)
     {
-        $eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcher');
+        $serviceContainer = $this->getMock('MetaModels\IMetaModelsServiceContainer');
 
-        if ($expectedEvent) {
-            $eventDispatcher
-                ->expects($this->exactly($expectedCount))
-                ->method('dispatch')
-                ->with($this->equalTo($expectedEvent));
-        }
+        $serviceContainer
+            ->expects($this->any())
+            ->method('getEventDispatcher')
+            ->will(
+                $this->returnValue(
+                    $mockEventDispatcher
+                    ? $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface')
+                    : new EventDispatcher()
+                )
+            );
 
-        return $eventDispatcher;
+        return $serviceContainer;
     }
 
     /**

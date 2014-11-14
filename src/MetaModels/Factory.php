@@ -20,7 +20,6 @@ namespace MetaModels;
 use MetaModels\Events\CollectMetaModelTableNamesEvent;
 use MetaModels\Events\CreateMetaModelEvent;
 use MetaModels\Events\GetMetaModelNameFromIdEvent;
-use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\Attribute\AttributeFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -36,38 +35,44 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class Factory implements IFactory
 {
     /**
-     * The default factory instance.
-     *
-     * @var IFactory
-     */
-    protected static $defaultFactory;
-
-    /**
      * The event dispatcher.
      *
-     * @var EventDispatcherInterface
+     * @var IMetaModelsServiceContainer
      */
-    protected $eventDispatcher;
-
-    /**
-     * The attribute factory to use.
-     *
-     * @var IAttributeFactory
-     */
-    protected $attributeFactory;
+    protected $serviceContainer;
 
     /**
      * Create a new instance.
      *
-     * @param EventDispatcherInterface $eventDispatcher  The event dispatcher to use.
-     *
-     * @param IAttributeFactory        $attributeFactory The attribute factory to use.
+     * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
      */
-    public function __construct(EventDispatcherInterface $eventDispatcher, IAttributeFactory $attributeFactory)
+    public function __construct(IMetaModelsServiceContainer $serviceContainer)
     {
-        $this->setEventDispatcher($eventDispatcher);
+        $this->setServiceContainer($serviceContainer);
+    }
 
-        $this->attributeFactory = $attributeFactory;
+    /**
+     * Set the event dispatcher.
+     *
+     * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
+     *
+     * @return Factory
+     */
+    public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer)
+    {
+        $this->serviceContainer = $serviceContainer;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the event dispatcher.
+     *
+     * @return IMetaModelsServiceContainer
+     */
+    public function getServiceContainer()
+    {
+        return $this->serviceContainer;
     }
 
     /**
@@ -75,31 +80,9 @@ class Factory implements IFactory
      *
      * @return EventDispatcherInterface
      */
-    public function getEventDispatcher()
+    protected function getEventDispatcher()
     {
-        return $this->eventDispatcher;
-    }
-
-    /**
-     * Set the event dispatcher.
-     *
-     * @param EventDispatcherInterface $eventDispatcher The event dispatcher to set.
-     *
-     * @return Factory
-     */
-    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->eventDispatcher = $eventDispatcher;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAttributeFactory()
-    {
-        return $this->attributeFactory;
+        return $this->getServiceContainer()->getEventDispatcher();
     }
 
     /**
@@ -126,7 +109,7 @@ class Factory implements IFactory
         $metaModel = $event->getMetaModel();
 
         if ($metaModel) {
-            $attributeFactory = $this->getAttributeFactory();
+            $attributeFactory = $this->getServiceContainer()->getAttributeFactory();
             foreach ($attributeFactory->createAttributesForMetaModel($metaModel) as $attribute) {
                 $metaModel->addAttribute($attribute);
             }
@@ -148,32 +131,19 @@ class Factory implements IFactory
     }
 
     /**
-     * Inline create an instance of this factory.
+     * Retrieve the default factory from the default container.
      *
      * @return IFactory
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    private static function createDefaultFactory()
-    {
-        $eventDispatcher  = $GLOBALS['container']['event-dispatcher'];
-        $attributeFactory = new AttributeFactory($eventDispatcher);
-        return new static($eventDispatcher, $attributeFactory);
-    }
-
-    /**
-     * Inline create an instance of this factory.
-     *
-     * @return IFactory
-     */
     public static function getDefaultFactory()
     {
-        if (!self::$defaultFactory) {
-            self::$defaultFactory = self::createDefaultFactory();
-        }
+        /** @var IMetaModelsServiceContainer $serviceContainer */
+        $serviceContainer = $GLOBALS['container']['metamodels-service-container'];
 
-        return self::$defaultFactory;
+        return $serviceContainer->getFactory();
     }
 
     /**

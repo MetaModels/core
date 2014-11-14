@@ -19,6 +19,7 @@ namespace MetaModels\Attribute;
 
 use MetaModels\Attribute\Events\CollectMetaModelAttributeInformationEvent;
 use MetaModels\IMetaModel;
+use MetaModels\IMetaModelsServiceContainer;
 
 /**
  * This is the implementation of the Field factory to query instances of fields.
@@ -34,39 +35,19 @@ use MetaModels\IMetaModel;
 class Factory extends AttributeFactory implements IFactory
 {
     /**
-     * The default factory instance.
-     *
-     * @var IFactory
-     */
-    protected static $defaultFactory;
-
-    /**
-     * Inline create an instance of this factory.
+     * Retrieve the default factory from the default container.
      *
      * @return IFactory
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    private static function createDefaultFactory()
-    {
-        return new static($GLOBALS['container']['event-dispatcher']);
-    }
-
-    /**
-     * Inline create an instance of this factory.
-     *
-     * @return IFactory
-     *
-     * @deprecated You should not use this method it is part of the backward compatibility layer.
-     */
     public static function getDefaultFactory()
     {
-        if (!self::$defaultFactory) {
-            self::$defaultFactory = self::createDefaultFactory();
-        }
+        /** @var IMetaModelsServiceContainer $serviceContainer */
+        $serviceContainer = $GLOBALS['container']['metamodels-service-container'];
 
-        return self::$defaultFactory;
+        return $serviceContainer->getAttributeFactory();
     }
 
     /**

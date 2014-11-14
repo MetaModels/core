@@ -16,10 +16,11 @@
 
 namespace MetaModels\Test\Attribute;
 
-use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
 use MetaModels\Attribute\AttributeFactory;
+use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
 use MetaModels\Attribute\IAttributeTypeFactory;
 use MetaModels\Attribute\IAttributeFactory;
+use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\Test\Attribute\Mock\AttributeFactoryMocker;
 use MetaModels\Test\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -32,16 +33,21 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class AttributeFactoryTest extends TestCase
 {
     /**
-     * Test to add an attribute factory to a factory and retrieve it again.
+     * Test that the attribute factory creation fires an event.
      *
      * @return void
      */
     public function testCreateFactoryFiresEvent()
     {
-        $eventDispatcher = $this->mockEventDispatcher(CreateAttributeFactoryEvent::NAME, 1);
-        $factory         = new AttributeFactory($eventDispatcher);
+        $serviceContainer = $this->mockServiceContainer();
+        $serviceContainer->getEventDispatcher()
+            ->expects($this->exactly(1))
+            ->method('dispatch')
+            ->with($this->equalTo(CreateAttributeFactoryEvent::NAME));
 
-        $this->assertSame($eventDispatcher, $factory->getEventDispatcher());
+        $factory = new AttributeFactory($serviceContainer);
+
+        $this->assertSame($serviceContainer, $factory->getServiceContainer());
     }
 
     /**
@@ -51,7 +57,7 @@ class AttributeFactoryTest extends TestCase
      */
     public function testAddTypeFactoryAndGetTypeFactory()
     {
-        $factory = new AttributeFactory($this->mockEventDispatcher());
+        $factory = new AttributeFactory($this->mockServiceContainer());
 
         $this->assertNull($factory->getTypeFactory('test'));
         $attributeFactory = $this->mockAttributeFactory('test', true, false, false);
@@ -125,7 +131,7 @@ class AttributeFactoryTest extends TestCase
      */
     public function testAttributeTypeMatchesFlags()
     {
-        $factory = new AttributeFactory($this->mockEventDispatcher());
+        $factory = new AttributeFactory($this->mockServiceContainer());
         $factory->addTypeFactory($this->mockAttributeFactory('test_translated', true, false, false));
         $factory->addTypeFactory($this->mockAttributeFactory('test_simple', false, true, false));
         $factory->addTypeFactory($this->mockAttributeFactory('test_complex', false, false, true));
@@ -150,7 +156,7 @@ class AttributeFactoryTest extends TestCase
      */
     public function testGetTypeNames()
     {
-        $factory = new AttributeFactory($this->mockEventDispatcher());
+        $factory = new AttributeFactory($this->mockServiceContainer());
 
         $this->assertSame(
             array(),
@@ -258,7 +264,7 @@ class AttributeFactoryTest extends TestCase
      */
     public function testGetTypeIcon()
     {
-        $factory     = new AttributeFactory($this->mockEventDispatcher());
+        $factory     = new AttributeFactory($this->mockServiceContainer());
         $typeFactory = $this->mockAttributeFactory('test', true, false, false, new \stdClass, 'icon.png');
         $factory->addTypeFactory($typeFactory);
 
@@ -299,6 +305,23 @@ class AttributeFactoryTest extends TestCase
             $class,
             $typeIcon
         );
+    }
+
+    /**
+     * Mock a service container.
+     *
+     * @return IMetaModelsServiceContainer
+     */
+    protected function mockServiceContainer()
+    {
+        $serviceContainer = $this->getMock('MetaModels\IMetaModelsServiceContainer');
+
+        $serviceContainer
+            ->expects($this->any())
+            ->method('getEventDispatcher')
+            ->will($this->returnValue($this->mockEventDispatcher()));
+
+        return $serviceContainer;
     }
 
     /**

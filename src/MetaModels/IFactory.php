@@ -17,8 +17,6 @@
 
 namespace MetaModels;
 
-use MetaModels\Attribute\IAttributeFactory;
-
 /**
  * This is the MetaModel factory interface.
  *
@@ -66,11 +64,11 @@ interface IFactory
     public static function getAllTables();
 
     /**
-     * Retrieve the attribute factory.
+     * Retrieve the event dispatcher.
      *
-     * @return IAttributeFactory
+     * @return IMetaModelsServiceContainer
      */
-    public function getAttributeFactory();
+    public function getServiceContainer();
 
     /**
      * Translate a MetaModel id to the corresponding name of the MetaModel.

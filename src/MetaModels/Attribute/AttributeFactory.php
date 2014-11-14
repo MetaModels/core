@@ -21,6 +21,7 @@ use MetaModels\Attribute\Events\CollectMetaModelAttributeInformationEvent;
 use MetaModels\Attribute\Events\CreateAttributeEvent;
 use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
 use MetaModels\IMetaModel;
+use MetaModels\IMetaModelsServiceContainer;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -37,9 +38,9 @@ class AttributeFactory implements IAttributeFactory
     /**
      * The event dispatcher.
      *
-     * @var EventDispatcherInterface
+     * @var IMetaModelsServiceContainer
      */
-    protected $eventDispatcher;
+    protected $serviceContainer;
 
     /**
      * The registered type factories.
@@ -51,13 +52,40 @@ class AttributeFactory implements IAttributeFactory
     /**
      * Create a new instance.
      *
-     * @param EventDispatcherInterface $eventDispatcher The event dispatcher to use.
+     * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
      */
-    public function __construct(EventDispatcherInterface $eventDispatcher)
+    public function __construct(IMetaModelsServiceContainer $serviceContainer)
     {
-        $this->setEventDispatcher($eventDispatcher);
+        $this->setServiceContainer($serviceContainer);
 
-        $eventDispatcher->dispatch(CreateAttributeFactoryEvent::NAME, new CreateAttributeFactoryEvent($this));
+        $this->getEventDispatcher()->dispatch(
+            CreateAttributeFactoryEvent::NAME,
+            new CreateAttributeFactoryEvent($this)
+        );
+    }
+
+    /**
+     * Set the event dispatcher.
+     *
+     * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
+     *
+     * @return Factory
+     */
+    public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer)
+    {
+        $this->serviceContainer = $serviceContainer;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the event dispatcher.
+     *
+     * @return IMetaModelsServiceContainer
+     */
+    public function getServiceContainer()
+    {
+        return $this->serviceContainer;
     }
 
     /**
@@ -65,23 +93,9 @@ class AttributeFactory implements IAttributeFactory
      *
      * @return EventDispatcherInterface
      */
-    public function getEventDispatcher()
+    protected function getEventDispatcher()
     {
-        return $this->eventDispatcher;
-    }
-
-    /**
-     * Set the event dispatcher.
-     *
-     * @param EventDispatcherInterface $eventDispatcher The event dispatcher to set.
-     *
-     * @return Factory
-     */
-    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->eventDispatcher = $eventDispatcher;
-
-        return $this;
+        return $this->getServiceContainer()->getEventDispatcher();
     }
 
     /**
