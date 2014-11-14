@@ -19,10 +19,6 @@ install:
 
 script: ant -keep-going
 
-branches:
-  only:
-    - tng
-
 matrix:
   allow_failures:
     - env: CONTAO_VERSION=~3.4.0
