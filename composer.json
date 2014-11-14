@@ -52,7 +52,9 @@
 		"menatwork/contao-multicolumnwizard": "3.2.*@dev",
 		"bit3/contao-meta-palettes": "~1.7",
 		"discordier/justtextwidgets": "~0.5",
-		"contao-community-alliance/url-builder": "~1.1"
+		"contao-community-alliance/url-builder": "~1.1",
+		"contao-community-alliance/dependency-container": "~1.5",
+		"contao-community-alliance/event-dispatcher": "~1.2"
 	},
 	"require-dev": {
 		"cyberspectrum/contao-toolbox": "dev-master",
