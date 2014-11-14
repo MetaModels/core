@@ -8,13 +8,15 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-06-06T08:13:38+02:00
+ * last-updated: 2014-06-26T00:13:08+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['file']                  = 'Файл';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['text'] = 'Текст';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['0']  = 'Язык';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']['0']             = 'Имя';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['0']         = 'Шаблон';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']          = 'Имя';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['0']           = 'Дата изменения';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['1']           = 'Дата и время последнего изменения';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['view_legend']           = 'Параметры просмотра';
