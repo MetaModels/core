@@ -29,8 +29,7 @@ $container['metamodels-service-container.factory.default'] = $container->protect
         $serviceContainer
             ->setAttributeFactory($attributeFactory)
             ->setFactory($factory)
-            // TODO: this is maybe better suited to be in an own factory function?
-            ->setDatabase(\Database::getInstance());
+            ->setDatabase($container['database.connection']);
 
         return $serviceContainer;
     }
