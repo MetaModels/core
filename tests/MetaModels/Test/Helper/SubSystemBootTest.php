@@ -17,7 +17,6 @@
 
 namespace MetaModels\Test\Helper;
 
-use ContaoCommunityAlliance\Contao\EventDispatcher\Event\CreateEventDispatcherEvent;
 use MetaModels\Helper\SubSystemBoot;
 use MetaModels\MetaModelsEvents;
 use MetaModels\MetaModelsServiceContainer;
@@ -76,25 +75,6 @@ class SubSystemBootTest extends TestCase
         $this->assertEquals(
             'TESTS',
             $getMode->invoke($boot)
-        );
-    }
-
-    /**
-     * Test that getDatabase() returns the correct instance.
-     *
-     * @return void
-     */
-    public function testGetDatabase()
-    {
-        $boot   = new SubSystemBoot();
-        $class  = new \ReflectionClass($boot);
-        $method = $class->getMethod('getDatabase');
-        $method->setAccessible(true);
-
-        /** @var SubSystemBoot $boot */
-        $this->assertEquals(
-            \Database::getInstance(),
-            $method->invoke($boot)
         );
     }
 
