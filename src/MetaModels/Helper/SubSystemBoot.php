@@ -40,16 +40,6 @@ class SubSystemBoot
     }
 
     /**
-     * Get the Contao database instance.
-     *
-     * @return \Contao\Database
-     */
-    protected function getDatabase()
-    {
-        return \Database::getInstance();
-    }
-
-    /**
      * Boot up the system and initialize a service container.
      *
      * @param \Pimple $container The dependency injection container.
@@ -58,6 +48,7 @@ class SubSystemBoot
      */
     public function boot(\Pimple $container)
     {
+        /** @var \MetaModels\IMetaModelsServiceContainer $container */
         $container  = $container['metamodels-service-container'];
         $dispatcher = $container->getEventDispatcher();
         $event      = new MetaModelsBootEvent($container);
