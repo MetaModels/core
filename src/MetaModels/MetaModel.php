@@ -197,9 +197,9 @@ class MetaModel implements IMetaModel
     protected function getAttributeImplementing($interface)
     {
         $result = array();
-        foreach ($this->getAttributes() as $attribute) {
+        foreach ($this->getAttributes() as $colName => $attribute) {
             if ($attribute instanceof $interface) {
-                $result[] = $attribute;
+                $result[$colName] = $attribute;
             }
         }
 
