@@ -197,9 +197,9 @@ class MetaModel implements IMetaModel
     protected function getAttributeImplementing($interface)
     {
         $result = array();
-        foreach ($this->getAttributes() as $attribute) {
+        foreach ($this->getAttributes() as $colName => $attribute) {
             if ($attribute instanceof $interface) {
-                $result[] = $attribute;
+                $result[$colName] = $attribute;
             }
         }
 
@@ -375,12 +375,15 @@ class MetaModel implements IMetaModel
      */
     protected function fetchAdditionalAttributes($ids, $result, $attrOnly = array())
     {
-        $attributes = array_intersect(
-            $this->getAttributeByNames($attrOnly),
-            array_merge($this->getComplexAttributes(), $this->getTranslatedAttributes())
+        $attributes = $this->getAttributeByNames($attrOnly);
+        $attributeNames = array_intersect(
+            array_keys($attributes),
+            array_keys(array_merge($this->getComplexAttributes(), $this->getTranslatedAttributes()))
         );
 
-        foreach ($attributes as $attribute) {
+        foreach ($attributeNames as $attributeName) {
+            $attribute = $attributes[$attributeName];
+
             /** @var IAttribute $attribute */
             $attributeName = $attribute->getColName();
 
