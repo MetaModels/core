@@ -140,7 +140,6 @@ $GLOBALS['TL_FFL']['multitext'] = 'MetaModels\Widgets\MultiTextWidget';
 $GLOBALS['TL_FFL']['tags']      = 'MetaModels\Widgets\TagsWidget';
 
 // HOOKS.
-$GLOBALS['TL_HOOKS']['loadDataContainer'][]      = array('MetaModels\Dca\MetaModelDcaBuilder', 'createDataContainer');
 $GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] =
     array('MetaModels\FrontendIntegration\FrontendFilter', 'generateClearAll');
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][]      = array('MetaModels\FrontendIntegration\InsertTags', 'replaceTags');

@@ -31,6 +31,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
+// FIXME: Class must be turned into event listeners registered with service container present.
 class DatabaseBackedListener implements EventSubscriberInterface
 {
     /**
@@ -232,7 +233,7 @@ class DatabaseBackedListener implements EventSubscriberInterface
             return;
         }
 
-        self::$tableNames = $objDB->execute('SELECT * FROM tl_metamodel')
+        self::$tableNames = $objDB->execute('SELECT * FROM tl_metamodel order by sorting')
             ->fetchEach('tableName');
 
         $event->addMetaModelNames(self::$tableNames);

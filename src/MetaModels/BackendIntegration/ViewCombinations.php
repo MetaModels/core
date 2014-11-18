@@ -20,6 +20,7 @@ namespace MetaModels\BackendIntegration;
 
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\InputScreen\InputScreen;
+use MetaModels\IMetaModelsServiceContainer;
 
 /**
  * Class ViewCombinations.
@@ -40,33 +41,173 @@ class ViewCombinations
      *
      * @var array
      */
-    protected static $information = array();
+    protected $information = array();
 
     /**
      * All MetaModel combinations for lookup.
      *
      * @var array
      */
-    protected static $tableMap = array();
+    protected $tableMap = array();
 
     /**
-     * Returns the proper user object for the current context.
+     * MetaModel by their parent table.
      *
-     * Returns:
-     * - the BackendUser when TL_MODE == 'BE',
-     * - the FrontendUser when TL_MODE == 'FE'
-     * - null otherwise
-     *
-     * @return \BackendUser|\FrontendUser|null
+     * @var array
      */
-    protected static function getUser()
+    protected $parentMap = array();
+
+    /**
+     * The service container.
+     *
+     * @var IMetaModelsServiceContainer
+     */
+    protected $container;
+
+    /**
+     * The Contao user.
+     *
+     * @var \User
+     */
+    protected $user;
+
+    /**
+     * Create a new instance.
+     *
+     * @param IMetaModelsServiceContainer $container The service container.
+     *
+     * @param \User                       $user      The current user.
+     *
+     * @param string                      $cacheDir  The cache directory.
+     */
+    public function __construct(IMetaModelsServiceContainer $container, \User $user, $cacheDir = '')
     {
-        if (TL_MODE == 'BE') {
-            return \BackendUser::getInstance();
-        } elseif (TL_MODE == 'FE') {
-            return \FrontendUser::getInstance();
+        $this->container = $container;
+        $this->user      = $user;
+
+        // FIXME: disabled for the moment.
+        $cacheDir = null;
+
+        if (!$this->loadFromCache($cacheDir)) {
+            $this->resolve();
+            $this->saveToCache($cacheDir);
         }
-        return null;
+    }
+
+    /**
+     * Try to load the combinations from cache.
+     *
+     * @param string $cacheDir The cache directory.
+     *
+     * @return string|null
+     */
+    protected function calculateCacheFileName($cacheDir)
+    {
+        if (!$cacheDir) {
+            return null;
+        }
+
+        $key = 'metamodels_user_information_' . md5(get_class($this->user));
+        // Determine file key.
+        if ($this->user->id) {
+            $key .= '_' . $this->user->id;
+        } else {
+            $key .= '_anonymous';
+        }
+
+        return $cacheDir . '/' . $key . '.json';
+    }
+
+    /**
+     * Try to load the combinations from cache.
+     *
+     * @param string $cacheDir The cache directory.
+     *
+     * @return bool
+     */
+    protected function loadFromCache($cacheDir)
+    {
+        $fileName = $this->calculateCacheFileName($cacheDir);
+
+        if (!($fileName && file_exists($fileName))) {
+            return false;
+        }
+
+        // Perform loading now.
+        $this->information = json_decode(file_get_contents($fileName));
+
+        return true;
+    }
+
+    /**
+     * Try to load the combinations from cache.
+     *
+     * @param string $cacheDir The cache directory.
+     *
+     * @return bool
+     */
+    protected function saveToCache($cacheDir)
+    {
+        $fileName = $this->calculateCacheFileName($cacheDir);
+
+        if (!($fileName && is_dir(dirname($fileName)))) {
+            return false;
+        }
+
+        // Perform saving now.
+        file_put_contents($fileName, json_encode($this->information, JSON_PRETTY_PRINT));
+
+        return true;
+    }
+
+    /**
+     * Resolve all combinations available.
+     *
+     * @return void
+     */
+    protected function resolve()
+    {
+        $factory = $this->container->getFactory();
+
+        $names = $factory->collectNames();
+
+        $metaModels = array();
+
+        foreach ($names as $name) {
+            $metaModel         = $factory->getMetaModel($name);
+            $metaModels[$name] = $metaModel;
+
+            $this->information[$metaModel->get('id')] = array
+            (
+                self::COMBINATION     => null,
+                self::INPUTSCREEN     => null,
+                self::RENDERSETTING   => null,
+                self::MODELNAME       => $name,
+            );
+
+            $this->tableMap[$name] = $metaModel->get('id');
+        }
+
+        $fallback = $this->getPaletteCombinationRows();
+
+        if (!$fallback) {
+            $fallback = array_keys($this->information);
+        }
+
+        if ($fallback) {
+            $this->getPaletteCombinationDefault($fallback);
+        }
+
+        // Clean any undefined.
+        foreach (array_keys($this->information) as $id) {
+            if (empty($this->information[$id][self::COMBINATION])) {
+                unset($this->tableMap[$this->information[$id][self::MODELNAME]]);
+                unset($this->information[$id][self::COMBINATION]);
+            }
+        }
+
+        $this->fetchInputScreenDetails();
+        $this->fetchRenderSettingDetails();
     }
 
     /**
@@ -74,32 +215,9 @@ class ViewCombinations
      *
      * @return \Database
      */
-    protected static function getDb()
+    protected function getDatabase()
     {
-        return \Database::getInstance();
-    }
-
-    /**
-     * Initialize the class properties.
-     *
-     * @return void
-     */
-    protected static function initialize()
-    {
-        $metaModels = self::getDb()
-            ->executeUncached('SELECT id, tableName FROM tl_metamodel order by sorting');
-
-        while ($metaModels->next()) {
-            self::$information[$metaModels->id] = array
-            (
-                self::COMBINATION     => null,
-                self::INPUTSCREEN     => null,
-                self::RENDERSETTING   => null,
-                self::MODELNAME       => $metaModels->tableName,
-            );
-
-            self::$tableMap[$metaModels->tableName] = $metaModels->id;
-        }
+        return $this->container->getDatabase();
     }
 
     /**
@@ -107,18 +225,18 @@ class ViewCombinations
      *
      * @return array
      */
-    protected static function getUserGroups()
+    protected function getUserGroups()
     {
-        $user = self::getUser();
         // Try to get the group(s)
-        // there might be a NULL in there as BE admins have no groups and user might have one but it is a not must have.
+        // there might be a NULL in there as BE admins have no groups and user might have one but it is not mandatory.
         // I would prefer a default group for both, fe and be groups.
-        $groups = $user->groups ? array_filter($user->groups) : array();
+        $groups = $this->user->groups ? array_filter($this->user->groups) : array();
 
         // Special case in combinations, admins have the implicit group id -1.
-        if ((TL_MODE == 'BE') && $user->admin) {
+        if (($this->user instanceof \BackendUser) && $this->user->admin) {
             $groups[] = -1;
         }
+
         return $groups;
     }
 
@@ -130,36 +248,35 @@ class ViewCombinations
      *
      * @return int[]
      */
-    protected static function getPaletteCombinationRows()
+    protected function getPaletteCombinationRows()
     {
-        $groupColumn = (TL_MODE == 'BE') ? 'be_group' : 'fe_group';
-        $groups      = self::getUserGroups();
-
+        $groups = $this->getUserGroups();
         if (!$groups) {
             return array();
         }
 
-        $objCombinations = self::getDb()
+        $groupColumn     = ($this->user instanceof \BackendUser) ? 'be_group' : 'fe_group';
+        $objCombinations = $this->getDatabase()
             ->prepare(sprintf(
                 'SELECT * FROM tl_metamodel_dca_combine WHERE %s IN (%s) ORDER BY pid,sorting ASC',
                 $groupColumn,
                 implode(',', $groups)
             ))
-            ->executeUncached();
+            ->execute();
 
         $success = array();
 
         while ($objCombinations->next()) {
             // Already a combination present, continue with next one.
-            if (!empty(self::$information[$objCombinations->pid][self::COMBINATION])) {
+            if (!empty($this->information[$objCombinations->pid][self::COMBINATION])) {
                 continue;
             }
-            self::$information[$objCombinations->pid][self::COMBINATION] = $objCombinations->row();
+            $this->information[$objCombinations->pid][self::COMBINATION] = $objCombinations->row();
 
             $success[] = $objCombinations->pid;
         }
 
-        return array_diff(array_keys(self::$information), $success);
+        return array_diff(array_keys($this->information), $success);
     }
 
     /**
@@ -169,28 +286,28 @@ class ViewCombinations
      *
      * @return void
      */
-    protected static function getPaletteCombinationDefault($metaModelIds)
+    protected function getPaletteCombinationDefault($metaModelIds)
     {
-        $inputScreen = self::getDb()
+        $inputScreen = $this->getDatabase()
             ->prepare(sprintf(
                 'SELECT * FROM tl_metamodel_dca WHERE pid IN (%s) AND isdefault=1',
                 implode(',', $metaModelIds)
             ))
-            ->executeUncached();
+            ->execute();
 
         while ($inputScreen->next()) {
-            self::$information[$inputScreen->pid][self::COMBINATION]['dca_id'] = $inputScreen->id;
+            $this->information[$inputScreen->pid][self::COMBINATION]['dca_id'] = $inputScreen->id;
         }
 
-        $renderSetting = self::getDb()
+        $renderSetting = $this->getDatabase()
             ->prepare(sprintf(
                 'SELECT * FROM tl_metamodel_rendersettings WHERE pid IN (%s) AND isdefault=1',
                 implode(',', $metaModelIds)
             ))
-            ->executeUncached();
+            ->execute();
 
         while ($renderSetting->next()) {
-            self::$information[$renderSetting->pid][self::COMBINATION]['view_id'] = $renderSetting->id;
+            $this->information[$renderSetting->pid][self::COMBINATION]['view_id'] = $renderSetting->id;
         }
     }
 
@@ -199,10 +316,10 @@ class ViewCombinations
      *
      * @return void
      */
-    protected static function fetchInputScreenDetails()
+    protected function fetchInputScreenDetails()
     {
         $inputScreenIds = array();
-        foreach (self::$information as $info) {
+        foreach ($this->information as $info) {
             if (!empty($info[self::COMBINATION]['dca_id'])) {
                 $inputScreenIds[] = $info[self::COMBINATION]['dca_id'];
             }
@@ -212,23 +329,23 @@ class ViewCombinations
             return;
         }
 
-        $inputScreens = self::getDb()
+        $inputScreens = $this->getDatabase()
             ->prepare(sprintf(
                 'SELECT * FROM tl_metamodel_dca WHERE id IN (%s)',
                 implode(',', $inputScreenIds)
             ))
-            ->executeUncached();
+            ->execute();
 
         if (!$inputScreens->numRows) {
             return;
         }
 
         while ($inputScreens->next()) {
-            $propertyRows = self::getDb()
+            $propertyRows = $this->getDatabase()
                 ->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=? AND published=1 ORDER BY sorting ASC')
-                ->executeUncached($inputScreens->id);
+                ->execute($inputScreens->id);
 
-            $conditions = self::getDb()
+            $conditions = $this->getDatabase()
                 ->prepare('
                     SELECT cond.*, setting.attr_id AS setting_attr_id
                     FROM tl_metamodel_dcasetting_condition AS cond
@@ -239,13 +356,21 @@ class ViewCombinations
                     WHERE dca.id=? AND setting.published=1 AND cond.enabled=1
                     ORDER BY sorting ASC
                 ')
-                ->executeUncached($inputScreens->id);
+                ->execute($inputScreens->id);
 
-            self::$information[$inputScreens->pid][self::INPUTSCREEN] = new InputScreen(
+            $inputScreen = $this->information[$inputScreens->pid][self::INPUTSCREEN] = new InputScreen(
+                $this->container,
                 $inputScreens->row(),
                 $propertyRows->fetchAllAssoc(),
                 $conditions->fetchAllAssoc()
             );
+
+            $parentTable = $inputScreen->getParentTable();
+            if ($parentTable) {
+                $this->parentMap[$parentTable][] = $this->information[$inputScreens->pid][self::MODELNAME];
+            }
+
+            $this->information[$inputScreens->pid][self::INPUTSCREEN] = $inputScreen;
         }
     }
 
@@ -254,10 +379,10 @@ class ViewCombinations
      *
      * @return void
      */
-    protected static function fetchRenderSettingDetails()
+    protected function fetchRenderSettingDetails()
     {
         $renderSettingIds = array();
-        foreach (self::$information as $info) {
+        foreach ($this->information as $info) {
             if (!empty($info[self::COMBINATION]['view_id'])) {
                 $renderSettingIds[] = $info[self::COMBINATION]['view_id'];
             }
@@ -267,58 +392,16 @@ class ViewCombinations
             return;
         }
 
-        $renderSettings = self::getDb()
+        $renderSettings = $this->getDatabase()
             ->prepare(sprintf(
                 'SELECT * FROM tl_metamodel_rendersettings WHERE id IN (%s)',
                 implode(',', $renderSettingIds)
             ))
-            ->executeUncached();
+            ->execute();
 
         while ($renderSettings->next()) {
-            self::$information[$renderSettings->pid][self::RENDERSETTING] = $renderSettings->row();
+            $this->information[$renderSettings->pid][self::RENDERSETTING] = $renderSettings->row();
         }
-    }
-
-    /**
-     * Collect information for all metamodels from the Database having an relation to the current user and buffer them.
-     *
-     * The metamodels are buffered in class local lists to have them handy when a corresponding parent table is being
-     * instantiated etc.
-     *
-     * @return void
-     */
-    protected static function bufferModels()
-    {
-        if (!empty(self::$information)) {
-            return;
-        }
-
-        if (!\Database::getInstance()->tableExists('tl_metamodel', null)) {
-            return;
-        }
-
-        self::initialize();
-
-        $fallback = self::getPaletteCombinationRows();
-
-        if (!$fallback) {
-            $fallback = array_keys(self::$information);
-        }
-
-        if ($fallback) {
-            self::getPaletteCombinationDefault($fallback);
-        }
-
-        // Clean any undefined.
-        foreach (array_keys(self::$information) as $id) {
-            if (empty(self::$information[$id][self::COMBINATION])) {
-                unset(self::$tableMap[self::$information[$id][self::MODELNAME]]);
-                unset(self::$information[$id][self::COMBINATION]);
-            }
-        }
-
-        self::fetchInputScreenDetails();
-        self::fetchRenderSettingDetails();
     }
 
     /**
@@ -328,9 +411,9 @@ class ViewCombinations
      *
      * @return int
      */
-    public static function getRenderSetting($metaModel)
+    public function getRenderSetting($metaModel)
     {
-        $renderSetting = self::getRenderSettingDetails($metaModel);
+        $renderSetting = $this->getRenderSettingDetails($metaModel);
 
         return $renderSetting ? $renderSetting['id'] : null;
     }
@@ -342,9 +425,9 @@ class ViewCombinations
      *
      * @return int
      */
-    public static function getInputScreen($metaModel)
+    public function getInputScreen($metaModel)
     {
-        $inputScreen = self::getInputScreenDetails($metaModel);
+        $inputScreen = $this->getInputScreenDetails($metaModel);
         return $inputScreen ? $inputScreen->getId() : null;
     }
 
@@ -355,15 +438,13 @@ class ViewCombinations
      *
      * @return IInputScreen
      */
-    public static function getInputScreenDetails($metaModel)
+    public function getInputScreenDetails($metaModel)
     {
-        self::bufferModels();
-
         if (!is_numeric($metaModel)) {
-            $metaModel = self::$tableMap[$metaModel];
+            $metaModel = $this->tableMap[$metaModel];
         }
 
-        return self::$information[$metaModel][self::INPUTSCREEN];
+        return $this->information[$metaModel][self::INPUTSCREEN];
     }
 
     /**
@@ -373,15 +454,13 @@ class ViewCombinations
      *
      * @return array
      */
-    public static function getRenderSettingDetails($metaModel)
+    public function getRenderSettingDetails($metaModel)
     {
-        self::bufferModels();
-
         if (!is_numeric($metaModel)) {
-            $metaModel = self::$tableMap[$metaModel];
+            $metaModel = $this->tableMap[$metaModel];
         }
 
-        return self::$information[$metaModel][self::RENDERSETTING];
+        return $this->information[$metaModel][self::RENDERSETTING];
     }
 
     /**
@@ -389,12 +468,10 @@ class ViewCombinations
      *
      * @return IInputScreen[]
      */
-    public static function getStandaloneInputScreens()
+    public function getStandaloneInputScreens()
     {
-        self::bufferModels();
-
         $result = array();
-        foreach (self::$information as $information) {
+        foreach ($this->information as $information) {
             /** @var IInputScreen $inputScreen */
             $inputScreen = isset($information[self::INPUTSCREEN]) ? $information[self::INPUTSCREEN] : null;
             if ($inputScreen && $inputScreen->isStandalone()) {
@@ -406,16 +483,28 @@ class ViewCombinations
     }
 
     /**
-     * Retrieve all standalone input screens.
+     * Retrieve all standalone input screens or optionally the children of a given parent.
+     *
+     * @param string|null $parent The parent table for which the children shall be returned.
      *
      * @return IInputScreen[]
      */
-    public static function getParentedInputScreens()
+    public function getParentedInputScreens($parent = null)
     {
-        self::bufferModels();
-
         $result = array();
-        foreach (self::$information as $information) {
+
+        if ($parent) {
+            if (!isset($this->parentMap[$parent])) {
+                return array();
+            }
+            foreach ($this->parentMap[$parent] as $child) {
+                $result[] = $this->getInputScreenDetails($child);
+            }
+
+            return $result;
+        }
+
+        foreach ($this->information as $information) {
             /** @var IInputScreen $inputScreen */
             $inputScreen = isset($information[self::INPUTSCREEN]) ? $information[self::INPUTSCREEN] : null;
             if ($inputScreen && !$inputScreen->isStandalone()) {

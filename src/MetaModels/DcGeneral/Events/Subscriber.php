@@ -109,13 +109,6 @@ class Subscriber extends BaseSubscriber
             $dispatcher,
             __CLASS__ . '::registerTableMetaModelRenderSettingsEvents'
         );
-
-        self::registerListeners(
-            array(
-                PreCreateDcGeneralEvent::NAME => __CLASS__ . '::preCreateDcGeneral'
-            ),
-            $dispatcher
-        );
     }
 
     /**
@@ -813,39 +806,5 @@ class Subscriber extends BaseSubscriber
             $dispatcher,
             array('tl_metamodel_rendersettings', 'additionalJs', 'file')
         );
-    }
-
-    /**
-     * Determine if a MetaModel is being loaded and if so, populate the container.
-     *
-     * @param PreCreateDcGeneralEvent $event The event.
-     *
-     * @return void
-     */
-    public static function preCreateDcGeneral(PreCreateDcGeneralEvent $event)
-    {
-        $factory    = $event->getFactory();
-        $name       = $factory->getContainerName();
-        $dispatcher = func_get_arg(2);
-        /** @var EventDispatcherInterface $dispatcher */
-
-        if (!in_array($name, Factory::getAllTables())) {
-            return;
-        }
-
-        $generator = new Builder($name);
-
-        $dispatcher->addListener(
-            BuildDataDefinitionEvent::NAME,
-            array($generator, 'build'),
-            $generator::PRIORITY
-        );
-        $dispatcher->addListener(
-            PopulateEnvironmentEvent::NAME,
-            array($generator, 'populate'),
-            $generator::PRIORITY
-        );
-
-        $factory->setContainerClassName('MetaModels\DcGeneral\DataDefinition\MetaModelDataDefinition');
     }
 }

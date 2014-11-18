@@ -81,9 +81,8 @@ use MetaModels\DcGeneral\Events\MetaModel\BuildAttributeEvent;
 use MetaModels\DcGeneral\Events\MetaModel\BuildMetaModelOperationsEvent;
 use MetaModels\DcGeneral\Events\MetaModel\PopulateAttributeEvent;
 use MetaModels\DcGeneral\Events\MetaModel\RenderItem;
-use MetaModels\Factory;
 use MetaModels\Helper\ToolboxFile;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use MetaModels\IMetaModelsServiceContainer;
 
 /**
  * Build the container config from MetaModels information.
@@ -100,28 +99,31 @@ class Builder
     protected $translator;
 
     /**
-     * The event dispatcher currently in use.
-     *
-     * @var EventDispatcherInterface
-     */
-    protected $dispatcher;
-
-    /**
      * The MetaModel this builder is responsible for.
      *
-     * @var string
+     * @var IMetaModelsServiceContainer
      */
-    protected $metaModelName;
+    protected $serviceContainer;
+
+    /**
+     * The input screen to use.
+     *
+     * @var IInputScreen
+     */
+    protected $inputScreen;
 
     /**
      * Create a new instance and instantiate the translator.
      *
-     * @param string $metaModelName The name of the MetaModel being created.
+     * @param IMetaModelsServiceContainer $serviceContainer The name of the MetaModel being created.
+     *
+     * @param IInputScreen                $inputScreen      The input screen to use.
      */
-    public function __construct($metaModelName)
+    public function __construct($serviceContainer, $inputScreen)
     {
-        $this->metaModelName = $metaModelName;
-        $this->translator    = new StaticTranslator();
+        $this->serviceContainer = $serviceContainer;
+        $this->inputScreen      = $inputScreen;
+        $this->translator       = new StaticTranslator();
     }
 
     /**
@@ -159,15 +161,8 @@ class Builder
      */
     public function populate(PopulateEnvironmentEvent $event)
     {
-        $container = $event->getEnvironment()->getDataDefinition();
-
-        if (!(($container instanceof IMetaModelDataDefinition) && ($container->getName() == $this->metaModelName))) {
-            return;
-        }
-
-        $this->dispatcher = func_get_arg(2);
-
         $translator = $event->getEnvironment()->getTranslator();
+        $dispatcher = $this->serviceContainer->getEventDispatcher();
 
         if (!$translator instanceof TranslatorChain) {
             $translatorChain = new TranslatorChain();
@@ -178,7 +173,7 @@ class Builder
         }
 
         // Map the tl_metamodel_item domain over to this domain.
-        $this->dispatcher->dispatch(
+        $dispatcher->dispatch(
             ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
             new LoadLanguageFileEvent('tl_metamodel_item')
         );
@@ -190,15 +185,15 @@ class Builder
 
         $translatorChain->add($this->translator);
 
-        $metaModel   = $this->getMetaModel($container);
+        $metaModel   = $this->getMetaModel();
         $environment = $event->getEnvironment();
         foreach ($metaModel->getAttributes() as $attribute) {
             $event = new PopulateAttributeEvent($metaModel, $attribute, $environment);
             // Trigger BuildAttribute Event.
-            $this->dispatcher->dispatch($event::NAME, $event);
+            $dispatcher->dispatch($event::NAME, $event);
         }
 
-        $this->dispatcher->addListener(
+        $dispatcher->addListener(
             sprintf(
                 '%s[%s][%s]',
                 GetOperationButtonEvent::NAME,
@@ -208,7 +203,7 @@ class Builder
             'MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton::createButton'
         );
 
-        $this->dispatcher->addListener(
+        $dispatcher->addListener(
             sprintf(
                 '%s[%s]',
                 GetPasteButtonEvent::NAME,
@@ -219,7 +214,7 @@ class Builder
 
         // Add some sepcial actions for variants.
         if ($metaModel->hasVariants()) {
-            $this->dispatcher->addListener(
+            $dispatcher->addListener(
                 sprintf(
                     '%s[%s]',
                     PostDuplicateModelEvent::NAME,
@@ -228,7 +223,7 @@ class Builder
                 'MetaModels\DcGeneral\Events\MetaModel\DuplicateModel::handle'
             );
 
-            $this->dispatcher->addListener(
+            $dispatcher->addListener(
                 sprintf(
                     '%s[%s][%s]',
                     DcGeneralEvents::ACTION,
@@ -243,25 +238,31 @@ class Builder
     /**
      * Return the input screen details.
      *
-     * @param IMetaModelDataDefinition $container The data container.
-     *
      * @return IInputScreen
      */
-    protected function getInputScreenDetails(IMetaModelDataDefinition $container)
+    protected function getInputScreenDetails()
     {
-        return ViewCombinations::getInputScreenDetails($container->getName());
+        return $this->inputScreen;
     }
 
     /**
-     * Retrieve the MetaModel for the data container.
-     *
-     * @param IMetaModelDataDefinition $container The data container.
+     * Retrieve the MetaModel.
      *
      * @return \MetaModels\IMetaModel|null
      */
-    protected function getMetaModel(IMetaModelDataDefinition $container)
+    protected function getMetaModel()
     {
-        return Factory::byTableName($container->getName());
+        return $this->getInputScreenDetails()->getMetaModel();
+    }
+
+    /**
+     * Retrieve the MetaModel.
+     *
+     * @return ViewCombinations|null
+     */
+    protected function getViewCombinations()
+    {
+        return $this->serviceContainer->getService('metamodels-view-combinations');
     }
 
     /**
@@ -292,12 +293,8 @@ class Builder
      */
     public function build(BuildDataDefinitionEvent $event)
     {
-        $this->dispatcher = func_get_arg(2);
-        $container        = $event->getContainer();
-
-        if (!(($container instanceof IMetaModelDataDefinition) && ($container->getName() == $this->metaModelName))) {
-            return;
-        }
+        $dispatcher = $this->serviceContainer->getEventDispatcher();
+        $container  = $event->getContainer();
 
         $this->parseMetaModelDefinition($container);
         $this->parseProperties($container);
@@ -309,7 +306,7 @@ class Builder
         $this->parsePalettes($container);
 
         // Attach renderer to event.
-        RenderItem::register($this->dispatcher);
+        RenderItem::register($dispatcher);
     }
 
     /**
@@ -363,7 +360,7 @@ class Builder
         }
 
         // Get the panel layout.
-        $inputScreen = $this->getInputScreenDetails($container);
+        $inputScreen = $this->getInputScreenDetails();
         $panelLayout = $inputScreen->getPanelLayout();
 
         // Check if we have a layout.
@@ -564,11 +561,11 @@ class Builder
         }
 
         if (!$definition->hasActiveRenderSetting()) {
-            $definition->setActiveRenderSetting(ViewCombinations::getRenderSetting($container->getName()));
+            $definition->setActiveRenderSetting($this->getViewCombinations()->getRenderSetting($container->getName()));
         }
 
         if (!$definition->hasActiveInputScreen()) {
-            $definition->setActiveInputScreen(ViewCombinations::getInputScreen($container->getName()));
+            $definition->setActiveInputScreen($this->getInputScreenDetails());
         }
     }
 
@@ -590,7 +587,7 @@ class Builder
 
         $config->setDataProvider($container->getName());
 
-        $inputScreen = $this->getInputScreenDetails($container);
+        $inputScreen = $this->getInputScreenDetails();
 
         switch ($inputScreen->getMode())
         {
@@ -644,7 +641,7 @@ class Builder
             $container->setDefinition(ModelRelationshipDefinitionInterface::NAME, $definition);
         }
 
-        if ($this->getMetaModel($container)->hasVariants()) {
+        if ($this->getMetaModel()->hasVariants()) {
             $this->calculateConditionsWithVariants($container, $definition);
         } else {
             $this->calculateConditionsWithoutVariants($container, $definition);
@@ -744,9 +741,9 @@ class Builder
      */
     protected function addParentCondition(IMetaModelDataDefinition $container, $definition)
     {
-        $inputScreen = $this->getInputScreenDetails($container);
+        $inputScreen = $this->getInputScreenDetails();
 
-        if ($this->getInputScreenDetails($container)->isStandalone()) {
+        if ($inputScreen->isStandalone()) {
             return;
         }
 
@@ -855,7 +852,7 @@ class Builder
      */
     protected function calculateConditionsWithoutVariants(IMetaModelDataDefinition $container, $definition)
     {
-        $inputScreen = $this->getInputScreenDetails($container);
+        $inputScreen = $this->getInputScreenDetails();
         if (!$inputScreen->isStandalone()) {
             if ($container->getBasicDefinition()->getMode() == BasicDefinitionInterface::MODE_HIERARCHICAL) {
                 // FIXME: if parent table is not the same table, we are screwed here.
@@ -903,9 +900,9 @@ class Builder
             $container->getBasicDefinition()->setRootDataProvider($container->getName());
         }
 
+        $inputScreen = $this->getInputScreenDetails();
         // If not standalone, set the correct parent provider.
-        if (!$this->getInputScreenDetails($container)->isStandalone()) {
-            $inputScreen = $this->getInputScreenDetails($container);
+        if (!$inputScreen->isStandalone()) {
 
             // Check config if it already exists, if not, add it.
             if (!$config->hasInformation($inputScreen->getParentTable())) {
@@ -926,7 +923,7 @@ class Builder
                     );
 
                 // How can we honor other drivers? We do only check for MetaModels and legacy SQL here.
-                if (in_array($inputScreen->getParentTable(), Factory::getAllTables())) {
+                if (in_array($inputScreen->getParentTable(), $this->serviceContainer->getFactory()->collectNames())) {
                     $providerInformation
                         ->setClassName('MetaModels\DcGeneral\Data\Driver');
                 }
@@ -979,17 +976,17 @@ class Builder
         $listing = $view->getListingConfig();
 
         if ($listing->getRootLabel() === null) {
-            $listing->setRootLabel($this->getMetaModel($container)->get('name'));
+            $listing->setRootLabel($this->getMetaModel()->get('name'));
         }
 
         if (($listing->getRootIcon() === null)
-            && (($inputScreen = $this->getInputScreenDetails($container)) !== null)
+            && (($inputScreen = $this->getInputScreenDetails()) !== null)
         ) {
             $icon = ToolboxFile::convertValueToPath($inputScreen->getIcon());
             // Determine image to use.
             if ($icon && file_exists(TL_ROOT . '/' . $icon)) {
                 $event = new ResizeImageEvent($icon, 16, 16);
-                $this->dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
+                $this->serviceContainer->getEventDispatcher()->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
                 $icon = $event->getResultImage();
             } else {
                 $icon = 'system/modules/metamodels/assets/images/icons/metamodels.png';
@@ -998,7 +995,7 @@ class Builder
             $listing->setRootIcon($icon);
         }
 
-        $this->parseListSorting($container, $listing);
+        $this->parseListSorting($listing);
         $this->parseListLabel($container, $listing);
     }
 
@@ -1016,7 +1013,7 @@ class Builder
             $icon = ToolboxFile::convertValueToPath($icon);
 
             /** @var ResizeImageEvent $event */
-            $event = $this->dispatcher->dispatch(
+            $event = $this->serviceContainer->getEventDispatcher()->dispatch(
                 ContaoEvents::IMAGE_RESIZE,
                 new ResizeImageEvent($icon, 16, 16)
             );
@@ -1032,17 +1029,13 @@ class Builder
     /**
      * Parse the sorting part of listing configuration.
      *
-     * @param IMetaModelDataDefinition $container The data container.
-     *
-     * @param ListingConfigInterface   $listing   The listing configuration.
+     * @param ListingConfigInterface $listing The listing configuration.
      *
      * @return void
      */
-    protected function parseListSorting(IMetaModelDataDefinition $container, ListingConfigInterface $listing)
+    protected function parseListSorting(ListingConfigInterface $listing)
     {
-        $inputScreen = ViewCombinations::getInputScreenDetails($container->getName());
-
-        $listing->setRootIcon($this->getBackendIcon($inputScreen->getIcon()));
+        $listing->setRootIcon($this->getBackendIcon($this->getInputScreenDetails()->getIcon()));
         $listing->setDefaultSortingFields(array_merge(
             (array) $listing->getDefaultSortingFields(),
             array('sorting' => 'ASC')
@@ -1229,7 +1222,7 @@ class Builder
             array()
         );
 
-        if ($this->getMetaModel($container)->hasVariants()) {
+        if ($this->getMetaModel()->hasVariants()) {
             $this->createCommand(
                 $collection,
                 'createvariant',
@@ -1240,12 +1233,7 @@ class Builder
         }
 
         // Check if we have some children.
-        foreach (ViewCombinations::getParentedInputScreens() as $screen) {
-            /** @var \MetaModels\BackendIntegration\InputScreen\IInputScreen $screen */
-            if ($screen->getParentTable() != $container->getName()) {
-                continue;
-            }
-
+        foreach ($this->getViewCombinations()->getParentedInputScreens($container->getName()) as $screen) {
             $metaModel  = $screen->getMetaModel();
             $arrCaption = array(
                 '',
@@ -1277,18 +1265,16 @@ class Builder
         }
 
         $event = new BuildMetaModelOperationsEvent(
-            $this->getMetaModel($container),
+            $this->getMetaModel(),
             $container,
-            $this->getInputScreenDetails($container),
+            $this->getInputScreenDetails(),
             $this
         );
-        $this->dispatcher->dispatch($event::NAME, $event);
+        $this->serviceContainer->getEventDispatcher()->dispatch($event::NAME, $event);
     }
 
     /**
      * Build the property information for a certain property from the data container array.
-     *
-     * @param IMetaModelDataDefinition      $container   The MetaModel data definition.
      *
      * @param PropertiesDefinitionInterface $definition  The property collection definition.
      *
@@ -1299,14 +1285,13 @@ class Builder
      * @return void
      */
     protected function buildPropertyFromDca(
-        IMetaModelDataDefinition $container,
         PropertiesDefinitionInterface $definition,
         $propName,
         IInputScreen $inputScreen
     ) {
         $property  = $inputScreen->getProperty($propName);
         $propInfo  = $property['info'];
-        $metaModel = $this->getMetaModel($container);
+        $metaModel = $this->getMetaModel();
         $attribute = $metaModel->getAttribute($propName);
 
         if (!$attribute) {
@@ -1403,21 +1388,21 @@ class Builder
             $container->setPropertiesDefinition($definition);
         }
 
-        $metaModel   = Factory::byTableName($container->getName());
-        $inputScreen = $this->getInputScreenDetails($container);
+        $metaModel   = $this->getMetaModel();
+        $inputScreen = $this->getInputScreenDetails();
 
         // If the current metamodels has variants add the varbase and vargroup to the definition.
         if ($metaModel->hasVariants()) {
-            $this->buildPropertyFromDca($container, $definition, 'varbase', $inputScreen);
-            $this->buildPropertyFromDca($container, $definition, 'vargroup', $inputScreen);
+            $this->buildPropertyFromDca($definition, 'varbase', $inputScreen);
+            $this->buildPropertyFromDca($definition, 'vargroup', $inputScreen);
         }
 
         foreach ($metaModel->getAttributes() as $attribute) {
-            $this->buildPropertyFromDca($container, $definition, $attribute->getColName(), $inputScreen);
+            $this->buildPropertyFromDca($definition, $attribute->getColName(), $inputScreen);
 
             $event = new BuildAttributeEvent($metaModel, $attribute, $container, $inputScreen, $this);
             // Trigger BuildAttribute Event.
-            $this->dispatcher->dispatch($event::NAME, $event);
+            $this->serviceContainer->getEventDispatcher()->dispatch($event::NAME, $event);
         }
     }
 
@@ -1430,8 +1415,8 @@ class Builder
      */
     protected function parsePalettes(IMetaModelDataDefinition $container)
     {
-        $inputScreen = $this->getInputScreenDetails($container);
-        $metaModel   = $this->getMetaModel($container);
+        $inputScreen = $this->getInputScreenDetails();
+        $metaModel   = $this->getMetaModel();
 
         if ($container->hasDefinition(PalettesDefinitionInterface::NAME)) {
             $palettesDefinition = $container->getDefinition(PalettesDefinitionInterface::NAME);

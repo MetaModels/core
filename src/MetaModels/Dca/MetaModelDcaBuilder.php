@@ -20,16 +20,14 @@ namespace MetaModels\Dca;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\LoadDataContainerEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
-use MetaModels\BackendIntegration\ViewCombinations;
-use MetaModels\Factory;
+use MetaModels\Helper\OperationButtonCallbackListener;
 use MetaModels\Helper\ToolboxFile;
-use MetaModels\IMetaModel;
+use MetaModels\IMetaModelsServiceContainer;
 
 /**
  * Collects the dca combinations for each MetaModel, that is matching the current user.
@@ -41,39 +39,20 @@ use MetaModels\IMetaModel;
 class MetaModelDcaBuilder
 {
     /**
-     * Cache for "dcasetting id" <=> "MM attribute colname" mapping.
+     * The service container.
      *
-     * @var array
+     * @var IMetaModelsServiceContainer
      */
-    protected static $arrColNameChache = array();
+    protected $container;
 
     /**
-     * All parent tables.
+     * Create a new instance.
      *
-     * Key is table name.
-     *
-     * @var IMetaModel[]
+     * @param IMetaModelsServiceContainer $container The container.
      */
-    protected $arrPTables = array();
-
-    /**
-     * The singleton instance.
-     *
-     * @var MetaModelDcaBuilder
-     */
-    protected static $objInstance;
-
-    /**
-     * Retrieve the singleton.
-     *
-     * @return MetaModelDcaBuilder
-     */
-    public static function getInstance()
+    public function __construct($container)
     {
-        if (!self::$objInstance) {
-            self::$objInstance = new MetaModelDcaBuilder();
-        }
-        return self::$objInstance;
+        $this->container = $container;
     }
 
     /**
@@ -81,9 +60,9 @@ class MetaModelDcaBuilder
      *
      * @return \Database
      */
-    protected static function getDB()
+    protected function getDB()
     {
-        return \Database::getInstance();
+        return $this->container->getDatabase();
     }
 
     /**
@@ -94,9 +73,9 @@ class MetaModelDcaBuilder
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    protected static function getDispatcher()
+    protected function getDispatcher()
     {
-        return $GLOBALS['container']['event-dispatcher'];
+        return $this->container->getEventDispatcher();
     }
 
     /**
@@ -108,7 +87,7 @@ class MetaModelDcaBuilder
      *
      * @return string
      */
-    public static function getBackendIcon(
+    public function getBackendIcon(
         $icon,
         $defaultIcon = 'system/modules/metamodels/assets/images/icons/metamodels.png'
     ) {
@@ -125,118 +104,105 @@ class MetaModelDcaBuilder
     }
 
     /**
-     * Inject child tables for the given table name as operations.
+     * Inject an input screen into the DCA of a table.
      *
-     * @param string $strTable The table to inject into.
+     * @param IInputScreen $screen The input screen that shall get injected.
      *
      * @return void
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function injectChildTablesIntoDCA($strTable)
+    public function injectOperationButton($screen)
     {
-        try {
-            $objDB = \Database::getInstance();
-            if (!($objDB
-                && $objDB->tableExists('tl_metamodel', null)
-                && $objDB->tableExists('tl_metamodel_dcasetting_condition', null)
-            )) {
-                return;
-            }
-        } catch (\Exception $e) {
-            return;
-        }
-
-        $arrTableDCA = &$GLOBALS['TL_DCA'][$strTable];
-
-        $dispatcher = self::getDispatcher();
-        $event      = new LoadLanguageFileEvent('default');
+        $parentTable = $screen->getParentTable();
+        $parentDCA   = &$GLOBALS['TL_DCA'][$parentTable];
+        $dispatcher  = self::getDispatcher();
+        $metaModel   = $screen->getMetaModel();
+        $event       = new LoadLanguageFileEvent('default');
         $dispatcher->dispatch(ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE, $event);
 
-        $screens = ViewCombinations::getParentedInputScreens();
+        $arrCaption = array(
+            sprintf(
+                $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'],
+                $metaModel->getName()
+            ),
+            ''
+        );
 
-        foreach ($screens as $screen) {
-            if ($screen->getParentTable() !== $strTable) {
-                continue;
+        foreach ($screen->getBackendCaption() as $arrLangEntry) {
+            if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == $GLOBALS['TL_LANGUAGE']) {
+                $arrCaption = array($arrLangEntry['label'], $arrLangEntry['description']);
             }
+        }
 
-            $metaModel = $screen->getMetaModel();
+        $parentDCA['list']['operations']['edit_' . $metaModel->getTableName()] = array
+        (
+            'label'               => &$arrCaption,
+            'href'                => 'table='.$metaModel->getTableName(),
+            'icon'                => self::getBackendIcon($screen->getIcon()),
+            'attributes'          => 'onclick="Backend.getScrollOffset()"',
+        );
 
-            $arrCaption = array(
-                sprintf(
-                    $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'],
-                    $metaModel->getName()
-                ),
-                ''
-            );
+        $operationName = 'edit_' . $metaModel->getTableName();
+        // Is the destination table a metamodel with variants?
+        if ($metaModel->hasVariants()) {
+            $parentDCA['list']['operations'][$operationName]['idparam'] = 'id_' . $parentTable;
+        } else {
+            $parentDCA['list']['operations'][$operationName]['idparam'] = 'pid';
+        }
 
-            foreach ($screen->getBackendCaption() as $arrLangEntry) {
-                if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == $GLOBALS['TL_LANGUAGE']) {
-                    $arrCaption = array($arrLangEntry['label'], $arrLangEntry['description']);
-                }
-            }
+        // Compatibility with DC_Table.
+        if ($parentDCA['config']['dataContainer'] !== 'General') {
+            $handler     = $this;
+            $idParameter = $parentDCA['list']['operations'][$operationName]['idparam'];
 
-            $arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()] = array
-            (
-                'label'               => &$arrCaption,
-                'href'                => 'table='.$metaModel->getTableName(),
-                'icon'                => self::getBackendIcon($screen->getIcon()),
-                'attributes'          => 'onclick="Backend.getScrollOffset()"',
-            );
-
-            // Is the destination table a metamodel with variants?
-            if ($metaModel->hasVariants()) {
-                $arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['idparam'] = 'id_'.$strTable;
-            } else {
-                $arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['idparam'] = 'pid';
-            }
-
-            // Compatibility with DC_Table.
-            if ($arrTableDCA['config']['dataContainer'] !== 'General') {
-                $arrTableDCA['list']['operations']['edit_' . $metaModel->getTableName()]['button_callback'] =
-                    array(
-                        __CLASS__,
-                        'buildChildButton'
-                    );
-            }
+            $parentDCA['list']['operations'][$operationName]['button_callback'] =
+                OperationButtonCallbackListener::generateFor(
+                    $parentTable,
+                    $operationName,
+                    function ($row, $href, $label, $name, $icon, $attributes, $table) use ($handler, $idParameter) {
+                        return $handler->buildChildOperationButton(
+                            $idParameter,
+                            $row,
+                            $href,
+                            $label,
+                            $name,
+                            $icon,
+                            $attributes,
+                            $table
+                        );
+                    }
+                );
         }
     }
 
     /**
      * This method exists only for being compatible when MetaModels are being used as child table from DC_Table context.
      *
-     * @param array  $arrRow     The current data row.
+     * @param string $idParameter The id parameter in use.
      *
-     * @param string $href       The href to be appended.
+     * @param array  $arrRow      The current data row.
      *
-     * @param string $label      The operation label.
+     * @param string $href        The href to be appended.
      *
-     * @param string $name       The operation name.
+     * @param string $label       The operation label.
      *
-     * @param string $icon       The icon path.
+     * @param string $name        The operation name.
      *
-     * @param string $attributes The button attributes.
+     * @param string $icon        The icon path.
      *
-     * @param string $table      The table name.
+     * @param string $attributes  The button attributes.
+     *
+     * @param string $table       The table name.
      *
      * @return string
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function buildChildButton($arrRow, $href, $label, $name, $icon, $attributes, $table)
+    public function buildChildOperationButton($idParameter, $arrRow, $href, $label, $name, $icon, $attributes, $table)
     {
-        if (preg_match('#class="([^"]*)"#i', $attributes, $matches)) {
-            $operation = $matches[1];
-        } else {
-            $operation = $name;
-        }
-
         $dispatcher = self::getDispatcher();
-        $idparam    = $GLOBALS['TL_DCA'][$table]['list']['operations'][$operation]['idparam'];
         $modelId    = IdSerializer::fromValues($table, $arrRow['id']);
-        $urlEvent   = new AddToUrlEvent($href. '&amp;' . $idparam . '=' . $modelId->getSerialized());
+        $urlEvent   = new AddToUrlEvent($href. '&amp;' . $idParameter . '=' . $modelId->getSerialized());
 
         $dispatcher->dispatch(ContaoEvents::BACKEND_ADD_TO_URL, $urlEvent);
 
@@ -247,162 +213,5 @@ class MetaModelDcaBuilder
         return '<a href="' . $urlEvent->getUrl() . '" title="' .
             specialchars($title) . '"' . $attributes . '>' . $imageEvent->getHtml() .
         '</a> ';
-    }
-
-    /**
-     * Handle stand alone integration in the backend.
-     *
-     * @param IInputScreen $inputScreen The input screen containing the information.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    protected function handleStandalone($inputScreen)
-    {
-        $metaModel  = $inputScreen->getMetaModel();
-        $dispatcher = self::getDispatcher();
-
-        $strModuleName = 'metamodel_' . $metaModel->getTableName();
-
-        $strTableCaption = $metaModel->getName();
-
-        $icon = ToolboxFile::convertValueToPath($inputScreen->getIcon());
-        // Determine image to use.
-        if ($icon && file_exists(TL_ROOT . '/' . $icon)) {
-            $event = new ResizeImageEvent($icon, 16, 16);
-
-            $dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
-            $strIcon = $event->getResultImage();
-        } else {
-            $strIcon = 'system/modules/metamodels/assets/images/icons/metamodels.png';
-        }
-
-        $section = $inputScreen->getBackendSection();
-
-        if (!$section) {
-            $section = 'metamodels';
-        }
-
-        $GLOBALS['BE_MOD'][$section][$strModuleName] = array
-        (
-            'tables'   => array($metaModel->getTableName()),
-            'icon'     => $strIcon,
-            'callback' => 'MetaModels\BackendIntegration\Module'
-        );
-
-        $arrCaption = array($strTableCaption);
-        foreach (deserialize($inputScreen->getBackendCaption(), true) as $arrLangEntry) {
-            if ($arrLangEntry['langcode'] == 'en') {
-                $arrCaption = array($arrLangEntry['label'], $arrLangEntry['description']);
-            }
-
-            if (!empty($arrLangEntry['label']) && ($arrLangEntry['langcode'] == $GLOBALS['TL_LANGUAGE'])) {
-                $arrCaption = array($arrLangEntry['label'], $arrLangEntry['description']);
-                break;
-            }
-        }
-        $GLOBALS['TL_LANG']['MOD'][$strModuleName] = $arrCaption;
-    }
-
-    /**
-     * Inject MetaModels in the backend menu.
-     *
-     * @return void
-     */
-    public function injectBackendMenu()
-    {
-        foreach (ViewCombinations::getStandaloneInputScreens() as $inputScreen) {
-            $this->handleStandalone($inputScreen);
-        }
-    }
-
-    /**
-     * Inject all meta models into their corresponding parent tables.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    public function injectIntoBackendModules()
-    {
-        $screens = ViewCombinations::getParentedInputScreens();
-
-        $pTables = array();
-        foreach ($screens as $screen) {
-            $ptable = $screen->getParentTable();
-
-            $pTables[$ptable][] = $screen->getMetaModel();
-        }
-
-        $this->arrPTables = $pTables;
-
-        $intCount = count($pTables);
-        // Loop until all tables are injected or until there was no injection during one run.
-        // This is important, as we might have models that are child of another model.
-        while ($pTables) {
-            foreach ($pTables as $strTable => $arrModels) {
-                foreach ($GLOBALS['BE_MOD'] as $strGroup => $arrModules) {
-                    foreach ($arrModules as $strModule => $arrConfig) {
-                        if (isset($arrConfig['tables']) && in_array($strTable, $arrConfig['tables'])) {
-                            $arrSubTables = array();
-                            foreach ($arrModels as $metaModel) {
-                                /** @var IMetaModel $metaModel */
-                                $arrSubTables[] = $metaModel->getTableName();
-                            }
-                            $GLOBALS['BE_MOD'][$strGroup][$strModule]['tables'] = array_merge(
-                                $GLOBALS['BE_MOD'][$strGroup][$strModule]['tables'],
-                                $arrSubTables
-                            );
-                            unset($pTables[$strTable]);
-                        }
-                    }
-                }
-            }
-            if (count($pTables) == $intCount) {
-                break;
-            }
-            $intCount = count($pTables);
-        }
-    }
-
-    /**
-     * Create the data container of a metamodel table.
-     *
-     * @param string $strTableName The name of the meta model table that shall be created.
-     *
-     * @return bool true on success, false otherwise.
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    public function createDataContainer($strTableName)
-    {
-        if (in_array($strTableName, Factory::getAllTables())) {
-            $dispatcher = self::getDispatcher();
-            $event      = new LoadDataContainerEvent('tl_metamodel_item');
-            $dispatcher->dispatch(
-                ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
-                new LoadLanguageFileEvent('tl_metamodel_item')
-            );
-            $dispatcher->dispatch(ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER, $event);
-
-            if (!isset($GLOBALS['TL_DCA'][$strTableName])) {
-                $GLOBALS['TL_DCA'][$strTableName] = array();
-            }
-
-            $GLOBALS['TL_DCA'][$strTableName] = array_replace_recursive(
-                (array) $GLOBALS['TL_DCA']['tl_metamodel_item'],
-                (array) $GLOBALS['TL_DCA'][$strTableName]
-            );
-
-            return true;
-        }
-
-        $this->injectChildTablesIntoDCA($strTableName);
-
-        return true;
     }
 }

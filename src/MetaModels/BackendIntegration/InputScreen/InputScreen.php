@@ -22,8 +22,8 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
 use MetaModels\Events\CreatePropertyConditionEvent;
-use MetaModels\Factory;
 use MetaModels\IMetaModel;
+use MetaModels\IMetaModelsServiceContainer;
 
 /**
  * Implementation of IInputScreen.
@@ -32,6 +32,13 @@ use MetaModels\IMetaModel;
  */
 class InputScreen implements IInputScreen
 {
+    /**
+     * The service container.
+     *
+     * @var IMetaModelsServiceContainer
+     */
+    protected $container;
+
     /**
      * The data for the input screen.
      *
@@ -77,15 +84,18 @@ class InputScreen implements IInputScreen
     /**
      * Create a new instance.
      *
-     * @param array $data         The information about the input screen.
+     * @param IMetaModelsServiceContainer $container    The service container.
      *
-     * @param array $propertyRows The information about all contained properties.
+     * @param array                       $data         The information about the input screen.
      *
-     * @param array $conditions   The property condition information.
+     * @param array                       $propertyRows The information about all contained properties.
+     *
+     * @param array                       $conditions   The property condition information.
      */
-    public function __construct($data, $propertyRows, $conditions)
+    public function __construct($container, $data, $propertyRows, $conditions)
     {
-        $this->data = $data;
+        $this->data      = $data;
+        $this->container = $container;
 
         $this->transformConditions($conditions);
         $this->translateRows($propertyRows);
@@ -361,7 +371,9 @@ class InputScreen implements IInputScreen
      */
     public function getMetaModel()
     {
-        return Factory::byId($this->data['pid']);
+        $factory = $this->container->getFactory();
+
+        return $factory->getMetaModel($factory->translateIdToMetaModelName($this->data['pid']));
     }
 
     /**
