@@ -54,13 +54,8 @@ class Subscriber extends BaseSubscriber
      */
     protected function registerEventsInDispatcher()
     {
+        $this->registerTableMetaModelsEvents();
         $dispatcher = $this->serviceContainer->getEventDispatcher();
-        // Handlers for build data definition.
-        self::registerBuildDataDefinitionFor(
-            'tl_metamodel',
-            $dispatcher,
-            __CLASS__ . '::registerTableMetaModelsEvents'
-        );
         self::registerBuildDataDefinitionFor(
             'tl_metamodel_attribute',
             $dispatcher,
@@ -115,63 +110,7 @@ class Subscriber extends BaseSubscriber
      */
     private function registerTableMetaModelsEvents()
     {
-        static $registered;
-        if ($registered) {
-            return;
-        }
-        $registered = true;
-        $dispatcher = func_get_arg(2);
-
-        self::registerListeners(
-            array(
-                GetOperationButtonEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\MetaModels\Subscriber::getOperationButton',
-                GetGlobalButtonEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\MetaModels\Subscriber::getGlobalButton',
-                ModelToLabelEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\MetaModels\Subscriber::modelToLabel',
-                GetBreadcrumbEvent::NAME => self::createClosure(
-                    'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbMetaModels',
-                    'getBreadcrumb'
-                ),
-            ),
-            $dispatcher,
-            array('tl_metamodel')
-        );
-
-        // Save and load callbacks.
-        self::registerListeners(
-            array(
-                DecodePropertyValueForWidgetEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\MetaModels\Subscriber::fixLangArray',
-                EncodePropertyValueFromWidgetEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\MetaModels\Subscriber::unfixLangArray',
-            ),
-            $dispatcher,
-            array('tl_metamodel', 'languages')
-        );
-
-        // Save callbacks.
-        self::registerListeners(
-            array(
-                EncodePropertyValueFromWidgetEvent::NAME
-                => 'MetaModels\DcGeneral\Events\Table\MetaModels\Subscriber::ensureTableNamePrefix',
-            ),
-            $dispatcher,
-            array('tl_metamodel', 'tableName')
-        );
-
-        // Global table events.
-        self::registerListeners(
-            array(
-                PostPersistModelEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\MetaModels\UpdateMetaModel::handle',
-                PreDeleteModelEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\MetaModels\DeleteMetaModel::handle',
-            ),
-            $dispatcher,
-            array('tl_metamodel')
-        );
+        new \MetaModels\DcGeneral\Events\Table\MetaModels\Subscriber($this->getServiceContainer());
     }
 
     /**
