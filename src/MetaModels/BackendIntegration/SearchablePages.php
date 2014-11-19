@@ -34,13 +34,6 @@ use MetaModels\Render\Setting\ICollection;
 class SearchablePages
 {
     /**
-     * The configuration
-     *
-     * @var array|null
-     */
-    protected $arrConfig = null;
-
-    /**
      * A list with all pages found by Contao.
      *
      * @var array
@@ -60,17 +53,6 @@ class SearchablePages
      * @var array
      */
     protected static $arrCache = array();
-
-    /**
-     * Construct.
-     */
-    public function __construct()
-    {
-        // Set the config.
-        if (isset($GLOBALS['FooBaa']['SearchablePages']) && count($GLOBALS['FooBaa']['SearchablePages']) != 0) {
-            $this->arrConfig = $GLOBALS['FooBaa']['SearchablePages'];
-        }
-    }
 
     /**
      * Get the event Dispatcher.
