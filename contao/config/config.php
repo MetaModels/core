@@ -117,6 +117,7 @@ $GLOBALS['TL_FFL']['tags']      = 'MetaModels\Widgets\TagsWidget';
 $GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] =
     array('MetaModels\FrontendIntegration\FrontendFilter', 'generateClearAll');
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][]      = array('MetaModels\FrontendIntegration\InsertTags', 'replaceTags');
+$GLOBALS['TL_HOOKS']['getSearchablePages'][]     = array('MetaModels\BackendIntegration\SearchablePages', 'addPages');
 
 $GLOBALS['TL_PURGE']['folders']['metamodels']['affected'][] = 'system/cache/metamodels';
 $GLOBALS['TL_PURGE']['folders']['metamodels']['callback']   =
