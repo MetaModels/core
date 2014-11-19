@@ -55,12 +55,8 @@ class Subscriber extends BaseSubscriber
     protected function registerEventsInDispatcher()
     {
         $this->registerTableMetaModelsEvents();
+        $this->registerTableMetaModelAttributeEvents();
         $dispatcher = $this->serviceContainer->getEventDispatcher();
-        self::registerBuildDataDefinitionFor(
-            'tl_metamodel_attribute',
-            $dispatcher,
-            __CLASS__ . '::registerTableMetaModelAttributeEvents'
-        );
         self::registerBuildDataDefinitionFor(
             'tl_metamodel_dca',
             $dispatcher,
@@ -120,86 +116,7 @@ class Subscriber extends BaseSubscriber
      */
     private function registerTableMetaModelAttributeEvents()
     {
-        static $registered;
-        if ($registered) {
-            return;
-        }
-        $registered = true;
-        $dispatcher = func_get_arg(2);
-
-        self::registerListeners(
-            array(
-                GetBreadcrumbEvent::NAME
-                    => self::createClosure(
-                        'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbAttributes',
-                        'getBreadcrumb'
-                    ),
-                ModelToLabelEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\Attribute\DrawAttribute::modelToLabel',
-            ),
-            $dispatcher,
-            array('tl_metamodel_attribute')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\Attribute\AttributeType::getOptions',
-            ),
-            $dispatcher,
-            array('tl_metamodel_attribute', 'type')
-        );
-
-        // Save and load callbacks.
-        self::registerListeners(
-            array(
-                DecodePropertyValueForWidgetEvent::NAME
-                => 'MetaModels\DcGeneral\Events\Table\Attribute\PropertyNameAndDescription::decodeValue',
-                EncodePropertyValueFromWidgetEvent::NAME
-                => 'MetaModels\DcGeneral\Events\Table\Attribute\PropertyNameAndDescription::encodeValue',
-                BuildWidgetEvent::NAME
-                => 'MetaModels\DcGeneral\Events\Table\Attribute\PropertyNameAndDescription::buildWidget',
-            ),
-            $dispatcher,
-            array('tl_metamodel_attribute', 'name')
-        );
-
-        // Save and load callbacks.
-        self::registerListeners(
-            array(
-                DecodePropertyValueForWidgetEvent::NAME
-                => 'MetaModels\DcGeneral\Events\Table\Attribute\PropertyNameAndDescription::decodeValue',
-                EncodePropertyValueFromWidgetEvent::NAME
-                => 'MetaModels\DcGeneral\Events\Table\Attribute\PropertyNameAndDescription::encodeValue',
-                BuildWidgetEvent::NAME
-                => 'MetaModels\DcGeneral\Events\Table\Attribute\PropertyNameAndDescription::buildWidget',
-            ),
-            $dispatcher,
-            array('tl_metamodel_attribute', 'description')
-        );
-
-        // Save and load callbacks.
-        self::registerListeners(
-            array(
-                EncodePropertyValueFromWidgetEvent::NAME
-                => 'MetaModels\DcGeneral\Events\Table\Attribute\PropertyColName::encodeValue',
-            ),
-            $dispatcher,
-            array('tl_metamodel_attribute', 'colname')
-        );
-
-        // Global table events.
-        self::registerListeners(
-            array(
-                PostPersistModelEvent::NAME
-                => 'MetaModels\DcGeneral\Events\Table\Attribute\UpdateAttribute::handle',
-                PreDeleteModelEvent::NAME
-                => 'MetaModels\DcGeneral\Events\Table\Attribute\DeleteAttribute::handle',
-
-            ),
-            $dispatcher,
-            array('tl_metamodel_attribute')
-        );
+        new \MetaModels\DcGeneral\Events\Table\Attribute\Subscriber($this->getServiceContainer());
     }
 
     /**

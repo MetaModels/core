@@ -25,7 +25,7 @@ use MetaModels\IMetaModel;
 /**
  * Base class for providing methods to retrieve various stuff related to a tl_metamodel_attribute model.
  *
- * @package MetaModels\DcGeneral\Events\Table\Attribute
+ * @deprecated This is static and not service container aware, avoid to use. Will get removed.
  */
 class AttributeBase
 {
@@ -37,6 +37,8 @@ class AttributeBase
      * @return IMetaModel
      *
      * @throws DcGeneralInvalidArgumentException When an invalid model has been passed.
+     *
+     * @deprecated We must rework this method to handle the service container.
      */
     public static function getMetaModelFromModel(ModelInterface $model)
     {
@@ -47,6 +49,7 @@ class AttributeBase
             );
         }
 
+        // FIXME: deprecated usage.
         return Factory::byId($model->getProperty('pid'));
     }
 }
