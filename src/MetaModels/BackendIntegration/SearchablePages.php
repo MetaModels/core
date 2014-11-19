@@ -61,10 +61,10 @@ class SearchablePages
      */
     protected function getEventDispatcher()
     {
-        if (!isset($arrEnv['EventDispatcher'])) {
-            $arrEnv['EventDispatcher'] = $GLOBALS['container']['event-dispatcher'];
+        if (!isset($this->arrEnv['EventDispatcher'])) {
+            $this->arrEnv['EventDispatcher'] = $GLOBALS['container']['event-dispatcher'];
         }
-        return $arrEnv['EventDispatcher'];
+        return $this->arrEnv['EventDispatcher'];
     }
 
     /**
@@ -74,10 +74,10 @@ class SearchablePages
      */
     protected function getAttributeFactory()
     {
-        if (!isset($arrEnv['AttributeFactory'])) {
-            $arrEnv['AttributeFactory'] = new AttributeFactory($this->getEventDispatcher());
+        if (!isset($this->arrEnv['AttributeFactory'])) {
+            $this->arrEnv['AttributeFactory'] = new AttributeFactory($this->getEventDispatcher());
         }
-        return $arrEnv['AttributeFactory'];
+        return $this->arrEnv['AttributeFactory'];
     }
 
     /**
@@ -87,11 +87,11 @@ class SearchablePages
      */
     protected function getMetaModelsFactory()
     {
-        if (!isset($arrEnv['MetaModelsFactory'])) {
-            $arrEnv['MetaModelsFactory'] = new MetaModelFactory($this->getEventDispatcher(),
+        if (!isset($this->arrEnv['MetaModelsFactory'])) {
+            $this->arrEnv['MetaModelsFactory'] = new MetaModelFactory($this->getEventDispatcher(),
                 $this->getAttributeFactory());
         }
-        return $arrEnv['MetaModelsFactory'];
+        return $this->arrEnv['MetaModelsFactory'];
     }
 
     /**
