@@ -17,7 +17,10 @@
 
 namespace MetaModels\DcGeneral\Events;
 
+use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
+use MetaModels\IMetaModel;
+use MetaModels\IMetaModelsServiceContainer;
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -28,6 +31,93 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class BaseSubscriber
 {
+    /**
+     * The MetaModel service container.
+     *
+     * @var IMetaModelsServiceContainer
+     */
+    protected $serviceContainer;
+
+    /**
+     * Create a new instance.
+     *
+     * @param IMetaModelsServiceContainer $serviceContainer The MetaModel service container.
+     */
+    public function __construct(IMetaModelsServiceContainer $serviceContainer)
+    {
+        $this->serviceContainer = $serviceContainer;
+
+        $this->registerEventsInDispatcher();
+    }
+
+    /**
+     * Retrieve the service container.
+     *
+     * @return IMetaModelsServiceContainer
+     */
+    protected function getServiceContainer()
+    {
+        return $this->serviceContainer;
+    }
+
+    /**
+     * Retrieve the database.
+     *
+     * @return \Contao\Database
+     */
+    protected function getDatabase()
+    {
+        return $this->getServiceContainer()->getDatabase();
+    }
+
+    /**
+     * Register all listeners.
+     *
+     * @return void
+     */
+    protected function registerEventsInDispatcher()
+    {
+        // No op.
+    }
+
+    /**
+     * Register multiple event listeners.
+     *
+     * @param array    $eventName The event name to register.
+     *
+     * @param callable $listener  The listener to register.
+     *
+     * @param int      $priority  The priority.
+     *
+     * @return BaseSubscriber
+     */
+    public function addListener($eventName, $listener, $priority = 200)
+    {
+        $dispatcher = $this->getServiceContainer()->getEventDispatcher();
+        $dispatcher->addListener($eventName, $listener, $priority);
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the MetaModel with the given id.
+     *
+     * @param int $modelId The model being processed.
+     *
+     * @return IMetaModel
+     *
+     * @throws DcGeneralInvalidArgumentException When an invalid model has been passed.
+     */
+    protected function getMetaModelById($modelId)
+    {
+        $services     = $this->getServiceContainer();
+        $modelFactory = $services->getFactory();
+        $name         = $modelFactory->translateIdToMetaModelName($modelId);
+
+        return $modelFactory->getMetaModel($name);
+    }
+
+
     /**
      * Register a closure to the event dispatcher which will only be executed for the given container name.
      *
@@ -44,6 +134,8 @@ class BaseSubscriber
      * @param int                      $priority   The priority, defaults to -200.
      *
      * @return void
+     *
+     * @deprecated Extend this class instead.
      */
     public static function registerBuildDataDefinitionFor(
         $name,
@@ -70,6 +162,8 @@ class BaseSubscriber
      * @param string $method The method name.
      *
      * @return callable
+     *
+     * @deprecated Will not be needed anymore.
      */
     public static function createClosure($class, $method)
     {
@@ -125,6 +219,11 @@ class BaseSubscriber
      * @param int                      $priority   The priority.
      *
      * @return void
+     *
+     * @deprecated Extend this class instead.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function registerListeners($listeners, $dispatcher, $suffixes = array(), $priority = 200)
     {
@@ -136,7 +235,7 @@ class BaseSubscriber
         if ($eventSuffix && $GLOBALS['TL_CONFIG']['debugMode']) {
             trigger_error(
                 'WARNING, the event delegator will be removed from DcGeneral, you should not register event names ' .
-                'with suffix but only plain events.',
+                'with suffix but only plain events (suffixes: ' . $eventSuffix . ').',
                 E_USER_WARNING
             );
         }

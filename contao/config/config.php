@@ -259,9 +259,6 @@ $GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'MetaModels\Events\DefaultPropertyCondition
 $GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'MetaModels\Attribute\Events\LegacyListener';
 $GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'MetaModels\Events\DatabaseBackedListener';
 
-$GLOBALS['TL_EVENTS'][\ContaoCommunityAlliance\Contao\EventDispatcher\Event\CreateEventDispatcherEvent::NAME][] =
-    'MetaModels\DcGeneral\Events\Subscriber::registerEvents';
-
 $GLOBALS['TL_HOOKS']['initializeDependencyContainer'][] = function (
     \Pimple $container
 ) {

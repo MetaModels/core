@@ -27,6 +27,7 @@ use ContaoCommunityAlliance\DcGeneral\Factory\Event\PreCreateDcGeneralEvent;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\Dca\MetaModelDcaBuilder;
 use MetaModels\DcGeneral\Dca\Builder\Builder;
+use MetaModels\DcGeneral\Events\Subscriber;
 use MetaModels\Events\MetaModelsBootEvent;
 use MetaModels\Helper\LoadDataContainerHookListener;
 use MetaModels\Helper\ToolboxFile;
@@ -291,6 +292,9 @@ class Boot
                 }
             );
         }
+
+        // Register the global subscriber.
+        new Subscriber($container);
 
         $this->overrideFilePicker();
     }

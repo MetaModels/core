@@ -17,7 +17,6 @@
 
 namespace MetaModels\DcGeneral\Events;
 
-use ContaoCommunityAlliance\Contao\EventDispatcher\Event\CreateEventDispatcherEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
@@ -51,13 +50,11 @@ class Subscriber extends BaseSubscriber
     /**
      * Register all listeners to handle creation of a data container.
      *
-     * @param CreateEventDispatcherEvent $event The event being processed.
-     *
      * @return void
      */
-    public static function registerEvents(CreateEventDispatcherEvent $event)
+    protected function registerEventsInDispatcher()
     {
-        $dispatcher = $event->getEventDispatcher();
+        $dispatcher = $this->serviceContainer->getEventDispatcher();
         // Handlers for build data definition.
         self::registerBuildDataDefinitionFor(
             'tl_metamodel',
@@ -82,32 +79,32 @@ class Subscriber extends BaseSubscriber
         self::registerBuildDataDefinitionFor(
             'tl_metamodel_dcasetting',
             $dispatcher,
-            __CLASS__ . '::registerTableMetaModelDcaSettingEvents'
+            array($this, 'registerTableMetaModelDcaSettingEvents')
         );
         self::registerBuildDataDefinitionFor(
             'tl_metamodel_dcasetting_condition',
             $dispatcher,
-            __CLASS__ . '::registerTableMetaModelDcaSettingConditionsEvents'
+            array($this, 'registerTableMetaModelDcaSettingConditionsEvents')
         );
         self::registerBuildDataDefinitionFor(
             'tl_metamodel_filter',
             $dispatcher,
-            __CLASS__ . '::registerTableMetaModelFilterEvents'
+            array($this, 'registerTableMetaModelFilterEvents')
         );
         self::registerBuildDataDefinitionFor(
             'tl_metamodel_filtersetting',
             $dispatcher,
-            __CLASS__ . '::registerTableMetaModelFilterSettingEvents'
+            array($this, 'registerTableMetaModelFilterSettingEvents')
         );
         self::registerBuildDataDefinitionFor(
             'tl_metamodel_rendersetting',
             $dispatcher,
-            __CLASS__ . '::registerTableMetaModelRenderSettingEvents'
+            array($this, 'registerTableMetaModelRenderSettingEvents')
         );
         self::registerBuildDataDefinitionFor(
             'tl_metamodel_rendersettings',
             $dispatcher,
-            __CLASS__ . '::registerTableMetaModelRenderSettingsEvents'
+            array($this, 'registerTableMetaModelRenderSettingsEvents')
         );
     }
 
@@ -116,7 +113,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public static function registerTableMetaModelsEvents()
+    private function registerTableMetaModelsEvents()
     {
         static $registered;
         if ($registered) {
@@ -182,7 +179,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public static function registerTableMetaModelAttributeEvents()
+    private function registerTableMetaModelAttributeEvents()
     {
         static $registered;
         if ($registered) {
@@ -269,11 +266,9 @@ class Subscriber extends BaseSubscriber
     /**
      * Register the events for table tl_metamodel_dca.
      *
-     * @param BuildDataDefinitionEvent $event The event being processed.
-     *
      * @return void
      */
-    public static function registerTableMetaModelDcaEvents(BuildDataDefinitionEvent $event)
+    public function registerTableMetaModelDcaEvents()
     {
         static $registered;
         if ($registered) {
@@ -355,7 +350,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public static function registerTableMetaModelDcaCombineEvents()
+    public function registerTableMetaModelDcaCombineEvents()
     {
         static $registered;
         if ($registered) {
@@ -428,7 +423,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public static function registerTableMetaModelDcaSettingEvents(BuildDataDefinitionEvent $event)
+    public function registerTableMetaModelDcaSettingEvents(BuildDataDefinitionEvent $event)
     {
         static $registered;
         if ($registered) {
@@ -502,7 +497,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public static function registerTableMetaModelDcaSettingConditionsEvents()
+    public function registerTableMetaModelDcaSettingConditionsEvents()
     {
         static $registered;
         if ($registered) {
@@ -571,7 +566,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public static function registerTableMetaModelFilterEvents()
+    public function registerTableMetaModelFilterEvents()
     {
         static $registered;
         if ($registered) {
@@ -601,7 +596,7 @@ class Subscriber extends BaseSubscriber
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public static function registerTableMetaModelFilterSettingEvents()
+    public function registerTableMetaModelFilterSettingEvents()
     {
         static $registered;
         if ($registered) {
@@ -692,7 +687,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public static function registerTableMetaModelRenderSettingEvents(BuildDataDefinitionEvent $event)
+    public function registerTableMetaModelRenderSettingEvents(BuildDataDefinitionEvent $event)
     {
         static $registered;
         if ($registered) {
@@ -743,7 +738,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public static function registerTableMetaModelRenderSettingsEvents()
+    public function registerTableMetaModelRenderSettingsEvents()
     {
         static $registered;
         if ($registered) {
