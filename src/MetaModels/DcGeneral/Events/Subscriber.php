@@ -57,13 +57,9 @@ class Subscriber extends BaseSubscriber
         $this->registerTableMetaModelsEvents();
         $this->registerTableMetaModelAttributeEvents();
         $this->registerTableMetaModelDcaEvents();
+        $this->registerTableMetaModelDcaCombineEvents();
 
         $dispatcher = $this->serviceContainer->getEventDispatcher();
-        self::registerBuildDataDefinitionFor(
-            'tl_metamodel_dca_combine',
-            $dispatcher,
-            __CLASS__ . '::registerTableMetaModelDcaCombineEvents'
-        );
         self::registerBuildDataDefinitionFor(
             'tl_metamodel_dcasetting',
             $dispatcher,
@@ -133,68 +129,7 @@ class Subscriber extends BaseSubscriber
      */
     public function registerTableMetaModelDcaCombineEvents()
     {
-        static $registered;
-        if ($registered) {
-            return;
-        }
-        $registered = true;
-        $dispatcher = func_get_arg(2);
-
-        self::registerListeners(
-            array(
-                GetBreadcrumbEvent::NAME => self::createClosure(
-                    'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbDcaCombine',
-                    'getBreadcrumb'
-                ),
-            ),
-            $dispatcher,
-            array('tl_metamodel_dca_combine')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyFeGroup::getOptions',
-            ),
-            $dispatcher,
-            array('tl_metamodel_dca_combine', 'rows', 'fe_group')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyBeGroup::getOptions',
-            ),
-            $dispatcher,
-            array('tl_metamodel_dca_combine', 'rows', 'be_group')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyDcaId::getOptions',
-            ),
-            $dispatcher,
-            array('tl_metamodel_dca_combine', 'rows', 'dca_id')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyViewId::getOptions',
-            ),
-            $dispatcher,
-            array('tl_metamodel_dca_combine', 'rows', 'view_id')
-        );
-
-        self::registerListeners(
-            array(
-                EncodePropertyValueFromWidgetEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\DcaCombine\PropertyRows::fixSorting',
-            ),
-            $dispatcher,
-            array('tl_metamodel_dca_combine', 'rows')
-        );
+        new \MetaModels\DcGeneral\Events\Table\DcaCombine\Subscriber($this->getServiceContainer());
     }
 
     /**
