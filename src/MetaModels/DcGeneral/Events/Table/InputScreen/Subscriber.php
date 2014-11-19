@@ -1,0 +1,381 @@
+<?php
+/**
+ * The MetaModels extension allows the creation of multiple collections of custom items,
+ * each with its own unique set of selectable attributes, with attribute extendability.
+ * The Front-End modules allow you to build powerful listing and filtering of the
+ * data in each collection.
+ *
+ * PHP version 5
+ *
+ * @package    MetaModels
+ * @subpackage Core
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  The MetaModels team.
+ * @license    LGPL.
+ * @filesource
+ */
+
+namespace MetaModels\DcGeneral\Events\Table\InputScreen;
+
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition;
+use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
+use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
+use MetaModels\DcGeneral\Events\BaseSubscriber;
+use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbInputScreens;
+
+/**
+ * Handles event operations on tl_metamodel_dca.
+ */
+class Subscriber extends BaseSubscriber
+{
+    /**
+     * Register all listeners to handle creation of a data container.
+     *
+     * @return void
+     */
+    protected function registerEventsInDispatcher()
+    {
+        $serviceContainer = $this->getServiceContainer();
+        $this
+            ->addListener(
+                GetBreadcrumbEvent::NAME,
+                function (GetBreadcrumbEvent $event) use ($serviceContainer) {
+                    if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca')) {
+                        return;
+                    }
+                    $subscriber = new BreadCrumbInputScreens($serviceContainer);
+                    $subscriber->getBreadcrumb($event);
+                }
+            )
+            ->addListener(
+                BuildDataDefinitionEvent::NAME,
+                array($this, 'setParentTableVisibility')
+            )
+            ->addListener(
+                ModelToLabelEvent::NAME,
+                array($this, 'modelToLabel')
+            )
+            ->addListener(
+                ManipulateWidgetEvent::NAME,
+                array($this, 'getPanelLayoutWizard')
+            )
+            ->addListener(
+                GetPropertyOptionsEvent::NAME,
+                array($this, 'getBackendSections')
+            )
+            ->addListener(
+                GetPropertyOptionsEvent::NAME,
+                array($this, 'getParentTables')
+            )
+            ->addListener(
+                GetPropertyOptionsEvent::NAME,
+                array($this, 'getRenderTypes')
+            )
+            ->addListener(
+                DecodePropertyValueForWidgetEvent::NAME,
+                array($this, 'decodeModeValue')
+            )
+            ->addListener(
+                EncodePropertyValueFromWidgetEvent::NAME,
+                array($this, 'encodeModeValue')
+            )
+            ->addListener(
+                GetPropertyOptionsEvent::NAME,
+                array($this, 'getModes')
+            );
+    }
+
+    /**
+     * Set the visibility condition for the widget.
+     *
+     * @param BuildDataDefinitionEvent $event The event.
+     *
+     * @return void
+     */
+    public function setParentTableVisibility(BuildDataDefinitionEvent $event)
+    {
+        foreach ($event->getContainer()->getPalettesDefinition()->getPalettes() as $palette) {
+            foreach ($palette->getProperties() as $property) {
+                if ($property->getName() != 'ptable') {
+                    continue;
+                }
+
+                $chain = $property->getVisibleCondition();
+                if (!($chain
+                    && ($chain instanceof PropertyConditionChain)
+                    && $chain->getConjunction() == PropertyConditionChain::AND_CONJUNCTION
+                )) {
+                    $chain = new PropertyConditionChain(
+                        array($property->getVisibleCondition()),
+                        PropertyConditionChain::AND_CONJUNCTION
+                    );
+
+                    $property->setVisibleCondition($chain);
+                }
+
+                $chain->addCondition(new PropertyValueCondition('rendertype', 'ctable'));
+            }
+        }
+    }
+
+    /**
+     * Render the html for the input screen.
+     *
+     * @param ModelToLabelEvent $event The event.
+     *
+     * @return void
+     */
+    public function modelToLabel(ModelToLabelEvent $event)
+    {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca')) {
+            return;
+        }
+
+        $environment = $event->getEnvironment();
+        $translator  = $environment->getTranslator();
+        $model       = $event->getModel();
+
+        if (!$model->getProperty('isdefault')) {
+            return;
+        }
+
+        $event
+            ->setArgs(array_merge($event->getArgs(), array($translator->translate('MSC.fallback'))))
+            ->setLabel(sprintf('%s <span style="color:#b3b3b3; padding-left:3px">[%%s]</span>', $event->getLabel()));
+    }
+
+    /**
+     * Calculate the wizard.
+     *
+     * @param ManipulateWidgetEvent $event The event.
+     *
+     * @return void
+     */
+    public function getPanelLayoutWizard(ManipulateWidgetEvent $event)
+    {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca')
+        || ($event->getProperty()->getName() !== 'panelLayout')) {
+            return;
+        }
+
+        $url = 'system/modules/metamodels/popup.php?' .
+            'tbl=%1$s' .
+            '&fld=%2$s' .
+            '&inputName=ctrl_%3$s' .
+            '&id=%4$s' .
+            '&item=PALETTE_PANEL_PICKER';
+
+        if (version_compare(VERSION, '3.0', '<')) {
+            $link = ' <a href="' . $url . '" rel="lightbox[files 765 60%%]" data-lightbox="files 765 60%%">%5$s</a>';
+        } else {
+            $link = ' <a href="' . $url . '" onclick="Backend.getScrollOffset();Backend.openModalIframe({' .
+                '\'width\':765,' .
+                '\'title\':\'%6$s\',' .
+                '\'url\':this.href,' .
+                '\'id\':\'%4$s\'' .
+                '});return false">%5$s</a>';
+        }
+
+        $imageEvent = new GenerateHtmlEvent(
+            'system/modules/metamodels/assets/images/icons/panel_layout.png',
+            $event->getEnvironment()->getTranslator()->translate('panelpicker', 'tl_metamodel_dca'),
+            'style="vertical-align:top;"'
+        );
+
+        $event->getEnvironment()->getEventDispatcher()->dispatch(ContaoEvents::IMAGE_GET_HTML, $imageEvent);
+
+        $event->getWidget()->wizard = sprintf(
+            $link,
+            $event->getEnvironment()->getDataDefinition()->getName(),
+            $event->getProperty()->getName(),
+            $event->getProperty()->getName(),
+            $event->getModel()->getId(),
+            $imageEvent->getHtml(),
+            addslashes($event->getEnvironment()->getTranslator()->translate('panelpicker', 'tl_metamodel_dca'))
+        );
+    }
+
+    /**
+     * Retrieve a list of all backend sections, like "content", "system" etc.
+     *
+     * @param GetPropertyOptionsEvent $event The event.
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    public function getBackendSections(GetPropertyOptionsEvent $event)
+    {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca')
+            || ($event->getPropertyName() !== 'backendsection')) {
+            return;
+        }
+
+        $event->setOptions(array_keys($GLOBALS['BE_MOD']));
+    }
+
+    /**
+     * Returns an array with all valid tables that can be used as parent table.
+     *
+     * Excludes the metamodel table itself in ctable mode, as that one would be "selftree" then and not ctable.
+     *
+     * @param GetPropertyOptionsEvent $event The event.
+     *
+     * @return void
+     */
+    public function getParentTables(GetPropertyOptionsEvent $event)
+    {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca')
+            || ($event->getPropertyName() !== 'ptable')) {
+            return;
+        }
+
+        $currentTable = '';
+        if ($event->getModel()->getProperty('rendertype') == 'ctable') {
+            $currentTable = $this
+                ->getServiceContainer()
+                ->getFactory()
+                ->translateIdToMetaModelName($event->getModel()->getProperty('pid'));
+        }
+
+        $tables = array();
+        foreach ($this->getServiceContainer()->getDatabase()->listTables() as $table) {
+            if (!($currentTable && ($currentTable == $table))) {
+                $tables[$table] = $table;
+            }
+        }
+
+        $event->setOptions($tables);
+    }
+
+    /**
+     * Populates an array with all valid "rendertype".
+     *
+     * @param GetPropertyOptionsEvent $event The event.
+     *
+     * @return void
+     */
+    public function getRenderTypes(GetPropertyOptionsEvent $event)
+    {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca')
+            || ($event->getPropertyName() !== 'rendertype')) {
+            return;
+        }
+
+        $event->setOptions(array('standalone', 'ctable'));
+    }
+
+    /**
+     * Handle the update of a MetaModel and all attached data.
+     *
+     * @param PostPersistModelEvent $event The event.
+     *
+     * @return void
+     */
+    public function handleUpdateInputScreen(PostPersistModelEvent $event)
+    {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca')) {
+            return;
+        }
+
+        $new = $event->getModel();
+
+        if (!$new->getProperty('isdefault')) {
+            return;
+        }
+
+        $this
+            ->getDatabase()
+            ->prepare('UPDATE tl_metamodel_dca
+                SET isdefault = \'\'
+                WHERE pid=?
+                    AND id<>?
+                    AND isdefault=1')
+            ->execute(
+                $new->getProperty('pid'),
+                $new->getId()
+            );
+    }
+
+    /**
+     * Prefix the given value with "mode_" to prevent the DC from using numeric ids.
+     *
+     * @param DecodePropertyValueForWidgetEvent $event The event.
+     *
+     * @return void
+     */
+    public function decodeModeValue(DecodePropertyValueForWidgetEvent $event)
+    {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca')
+            || ($event->getProperty() !== 'mode')) {
+            return;
+        }
+
+        $event->setValue('mode_' . $event->getValue('mode'));
+    }
+
+    /**
+     * Strip the mode prefix from the given value.
+     *
+     * @param EncodePropertyValueFromWidgetEvent $event The event.
+     *
+     * @return void
+     */
+    public function encodeModeValue(EncodePropertyValueFromWidgetEvent $event)
+    {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca')
+            || ($event->getProperty() !== 'mode')) {
+            return;
+        }
+
+        $arrSplit = explode('_', $event->getValue('mode'));
+
+        $event->setValue($arrSplit[1]);
+    }
+
+    /**
+     * Return all valid modes for the current MetaModels rendertype.
+     *
+     * @param GetPropertyOptionsEvent $event The event.
+     *
+     * @return void
+     */
+    public function getModes(GetPropertyOptionsEvent $event)
+    {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca')
+            || ($event->getPropertyName() !== 'mode')) {
+            return;
+        }
+
+        switch ($event->getModel()->getProperty('rendertype'))
+        {
+            case 'ctable':
+                $arrResult = array('mode_3', 'mode_4', 'mode_6');
+                break;
+            case 'standalone':
+                $arrResult = array('mode_0', 'mode_1', 'mode_2', 'mode_5');
+
+                // Allow tree mode only when no variants are in place.
+                if (!$this->getMetaModelById($event->getModel()->getProperty('pid'))->hasVariants()) {
+                    $arrResult[] = 'mode_6';
+                }
+
+                break;
+            default:
+                $arrResult = array();
+                break;
+        }
+
+        $event->setOptions($arrResult);
+    }
+}

@@ -56,12 +56,9 @@ class Subscriber extends BaseSubscriber
     {
         $this->registerTableMetaModelsEvents();
         $this->registerTableMetaModelAttributeEvents();
+        $this->registerTableMetaModelDcaEvents();
+
         $dispatcher = $this->serviceContainer->getEventDispatcher();
-        self::registerBuildDataDefinitionFor(
-            'tl_metamodel_dca',
-            $dispatcher,
-            __CLASS__ . '::registerTableMetaModelDcaEvents'
-        );
         self::registerBuildDataDefinitionFor(
             'tl_metamodel_dca_combine',
             $dispatcher,
@@ -126,79 +123,7 @@ class Subscriber extends BaseSubscriber
      */
     public function registerTableMetaModelDcaEvents()
     {
-        static $registered;
-        if ($registered) {
-            return;
-        }
-        $registered = true;
-        $dispatcher = func_get_arg(2);
-
-        self::registerListeners(
-            array(
-                ModelToLabelEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\InputScreen\ModelToLabel::render',
-                PostPersistModelEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\InputScreen\UpdateInputScreen::handle',
-                GetBreadcrumbEvent::NAME
-                    => self::createClosure(
-                        'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbInputScreens',
-                        'getBreadcrumb'
-                    ),
-            ),
-            $dispatcher,
-            array('tl_metamodel_dca')
-        );
-
-        self::registerListeners(
-            array(
-                ManipulateWidgetEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPanelLayout::getWizard',
-            ),
-            $dispatcher,
-            array('tl_metamodel_dca', 'panelLayout')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyBackendSection::getSections',
-            ),
-            $dispatcher,
-            array('tl_metamodel_dca', 'backendsection')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyMode::getValidModes',
-                DecodePropertyValueForWidgetEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyMode::decodeMode',
-                EncodePropertyValueFromWidgetEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyMode::encodeMode',
-            ),
-            $dispatcher,
-            array('tl_metamodel_dca', 'mode')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPTable::getTables',
-            ),
-            $dispatcher,
-            array('tl_metamodel_dca', 'ptable')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\InputScreen\PropertyRenderType::getRenderTypes',
-            ),
-            $dispatcher,
-            array('tl_metamodel_dca', 'rendertype')
-        );
-
-        PropertyPTable::setVisibility($event);
+        new \MetaModels\DcGeneral\Events\Table\InputScreen\Subscriber($this->getServiceContainer());
     }
 
     /**
