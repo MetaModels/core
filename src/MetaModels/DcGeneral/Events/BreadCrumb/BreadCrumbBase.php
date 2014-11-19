@@ -21,6 +21,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBr
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
+use MetaModels\IMetaModelsServiceContainer;
 
 /**
  * Base class for calculating hierarchical breadcrumbs.
@@ -29,6 +30,43 @@ use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
  */
 abstract class BreadCrumbBase
 {
+    /**
+     * The MetaModel service container.
+     *
+     * @var IMetaModelsServiceContainer
+     */
+    protected $serviceContainer;
+
+    /**
+     * Create a new instance.
+     *
+     * @param IMetaModelsServiceContainer $serviceContainer The MetaModel service container.
+     */
+    public function __construct(IMetaModelsServiceContainer $serviceContainer)
+    {
+        $this->serviceContainer = $serviceContainer;
+    }
+
+    /**
+     * Retrieve the service container.
+     *
+     * @return IMetaModelsServiceContainer
+     */
+    protected function getServiceContainer()
+    {
+        return $this->serviceContainer;
+    }
+
+    /**
+     * Retrieve the database.
+     *
+     * @return \Contao\Database
+     */
+    protected function getDatabase()
+    {
+        return $this->getServiceContainer()->getDatabase();
+    }
+
     /**
      * Get for a table the human readable name or a fallback.
      *
@@ -59,6 +97,7 @@ abstract class BreadCrumbBase
      */
     protected function getBaseUrl()
     {
+        // FIXME: need the environment here.
         return \Environment::getInstance()->base;
     }
 

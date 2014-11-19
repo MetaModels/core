@@ -18,7 +18,6 @@
 namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
-use MetaModels\Factory as MetaModelFactory;
 use MetaModels\IMetaModel;
 
 /**
@@ -42,7 +41,11 @@ class BreadCrumbMetaModels extends BreadCrumbBase
      */
     protected function getMetaModel()
     {
-        return MetaModelFactory::byId($this->metamodelId);
+        $services      = $this->getServiceContainer();
+        $modelFactory  = $services->getFactory();
+        $metaModelName = $modelFactory->translateIdToMetaModelName($this->metamodelId);
+
+        return $modelFactory->getMetaModel($metaModelName);
     }
 
     /**
