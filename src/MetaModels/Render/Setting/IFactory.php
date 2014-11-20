@@ -28,6 +28,7 @@ use MetaModels\IMetaModel;
  * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
+// FIXME: make this a real factory, like the MetaModels factory and attribute factory.
 interface IFactory
 {
     /**
@@ -51,6 +52,8 @@ interface IFactory
      * @param int        $intId        The id of the ICollection.
      *
      * @return ICollection the instance of the render setting collection or null if not found.
+     *
+     * @deprecated Will get moved to a real factory.
      */
     public static function byId(IMetaModel $objMetaModel, $intId = 0);
 }

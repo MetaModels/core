@@ -34,6 +34,8 @@ interface IFactory
      * @param int $intId The id of the IMetaModelFilterSettings.
      *
      * @return ICollection The instance of the filter settings or null if not found.
+     *
+     * @deprecated Will get moved to a real factory.
      */
     public static function byId($intId);
 }

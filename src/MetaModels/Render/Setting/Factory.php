@@ -28,6 +28,7 @@ use MetaModels\IMetaModel;
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
+// FIXME: make this a real factory, like the MetaModels factory and attribute factory.
 class Factory implements IFactory
 {
     /**

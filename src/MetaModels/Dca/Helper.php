@@ -308,6 +308,7 @@ class Helper
     {
         $arrAttributeNames = array();
 
+        // FIXME: usage of deprecated factory.
         $objMetaModel = MetaModelFactory::byId($intMetaModel);
         if ($objMetaModel) {
             foreach ($objMetaModel->getAttributes() as $objAttribute) {

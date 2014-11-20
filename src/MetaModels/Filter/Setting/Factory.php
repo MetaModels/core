@@ -26,6 +26,7 @@ namespace MetaModels\Filter\Setting;
  * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
+// FIXME: make this a real factory, like the MetaModels factory and attribute factory.
 class Factory implements IFactory
 {
     /**
@@ -41,6 +42,8 @@ class Factory implements IFactory
      * @param int $intId The id of the IMetaModelFilter.
      *
      * @return ICollection the instance of the IMetaModelFilterSettings or null if not found.
+     *
+     * @deprecated Will get moved to a real factory.
      */
     public static function byId($intId)
     {
