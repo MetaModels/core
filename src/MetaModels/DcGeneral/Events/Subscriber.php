@@ -59,13 +59,9 @@ class Subscriber extends BaseSubscriber
         $this->registerTableMetaModelDcaEvents();
         $this->registerTableMetaModelDcaCombineEvents();
         $this->registerTableMetaModelDcaSettingEvents();
+        $this->registerTableMetaModelDcaSettingConditionsEvents();
 
         $dispatcher = $this->serviceContainer->getEventDispatcher();
-        self::registerBuildDataDefinitionFor(
-            'tl_metamodel_dcasetting_condition',
-            $dispatcher,
-            array($this, 'registerTableMetaModelDcaSettingConditionsEvents')
-        );
         self::registerBuildDataDefinitionFor(
             'tl_metamodel_filter',
             $dispatcher,
@@ -145,65 +141,7 @@ class Subscriber extends BaseSubscriber
      */
     public function registerTableMetaModelDcaSettingConditionsEvents()
     {
-        static $registered;
-        if ($registered) {
-            return;
-        }
-        $registered = true;
-        $dispatcher = func_get_arg(2);
-
-        self::registerListeners(
-            array(
-                ModelToLabelEvent::NAME
-                => 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\ModelToLabel::handleModelToLabel',
-            ),
-            $dispatcher,
-            array('tl_metamodel_dcasetting_condition')
-        );
-
-        self::registerListeners(
-            array(
-                GetPasteButtonEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PasteButton::generate',
-            ),
-            $dispatcher,
-            array('tl_metamodel_dcasetting_condition')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PropertyType::getOptions',
-            ),
-            $dispatcher,
-            array('tl_metamodel_dcasetting_condition', 'type')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                => 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PropertyAttributeId::getOptions',
-                DecodePropertyValueForWidgetEvent::NAME
-                => 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PropertyAttributeId::decodeValue',
-                EncodePropertyValueFromWidgetEvent::NAME
-                => 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PropertyAttributeId::encodeValue'
-            ),
-            $dispatcher,
-            array('tl_metamodel_dcasetting_condition', 'attr_id')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                => 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PropertyValue::getOptions',
-                DecodePropertyValueForWidgetEvent::NAME
-                => 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PropertyValue::decodeValue',
-                EncodePropertyValueFromWidgetEvent::NAME
-                => 'MetaModels\DcGeneral\Events\Table\InputScreenCondition\PropertyValue::encodeValue',
-            ),
-            $dispatcher,
-            array('tl_metamodel_dcasetting_condition', 'value')
-        );
+        new \MetaModels\DcGeneral\Events\Table\InputScreenCondition\Subscriber($this->getServiceContainer());
     }
 
 
