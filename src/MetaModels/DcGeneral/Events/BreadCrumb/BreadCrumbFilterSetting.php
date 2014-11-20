@@ -36,9 +36,10 @@ class BreadCrumbFilterSetting extends BreadCrumbFilter
         }
 
         if (!isset($this->metamodelId)) {
-            $parent = \Database::getInstance()
+            $parent = $this
+                ->getDatabase()
                 ->prepare('SELECT id, pid, name FROM tl_metamodel_filter WHERE id=?')
-                ->executeUncached($this->filterId);
+                ->execute($this->filterId);
 
             $this->metamodelId = $parent->pid;
         }

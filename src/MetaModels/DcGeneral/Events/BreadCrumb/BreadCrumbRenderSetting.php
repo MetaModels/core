@@ -36,9 +36,10 @@ class BreadCrumbRenderSetting extends BreadCrumbRenderSettings
         }
 
         if (!isset($this->metamodelId)) {
-            $parent = \Database::getInstance()
+            $parent = $this
+                ->getDatabase()
                 ->prepare('SELECT id, pid, name FROM tl_metamodel_rendersettings WHERE id=?')
-                ->executeUncached($this->renderSettingsId);
+                ->execute($this->renderSettingsId);
 
             $this->metamodelId = $parent->pid;
         }
