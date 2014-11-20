@@ -64,13 +64,7 @@ class Subscriber extends BaseSubscriber
         $this->registerTableMetaModelFilterEvents();
         $this->registerTableMetaModelFilterSettingEvents();
         $this->registerTableMetaModelRenderSettingEvents();
-
-        $dispatcher = $this->serviceContainer->getEventDispatcher();
-        self::registerBuildDataDefinitionFor(
-            'tl_metamodel_rendersettings',
-            $dispatcher,
-            array($this, 'registerTableMetaModelRenderSettingsEvents')
-        );
+        $this->registerTableMetaModelRenderSettingsEvents();
     }
 
     /**
@@ -184,66 +178,6 @@ class Subscriber extends BaseSubscriber
      */
     public function registerTableMetaModelRenderSettingsEvents()
     {
-        static $registered;
-        if ($registered) {
-            return;
-        }
-        $registered = true;
-        $dispatcher = func_get_arg(2);
-
-        self::registerListeners(
-            array(
-                GetBreadcrumbEvent::NAME
-                    => self::createClosure(
-                        'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbRenderSettings',
-                        'getBreadcrumb'
-                    ),
-                PostPersistModelEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\RenderSettings\UpdateRenderSettings::handle',
-                ModelToLabelEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\RenderSettings\DrawSetting::modelToLabel'
-            ),
-            $dispatcher,
-            array('tl_metamodel_rendersettings')
-        );
-
-        self::registerListeners(
-            array(
-                DecodePropertyValueForWidgetEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\RenderSettings\PropertyJumpTo::decodeValue',
-                EncodePropertyValueFromWidgetEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\RenderSettings\PropertyJumpTo::encodeValue',
-                BuildWidgetEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\RenderSettings\PropertyJumpTo::buildWidget',
-            ),
-            $dispatcher,
-            array('tl_metamodel_rendersettings', 'jumpTo')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\RenderSettings\PropertyTemplate::getOptions',
-            ),
-            $dispatcher,
-            array('tl_metamodel_rendersettings', 'template')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\RenderSettings\PropertyCssFiles::getOptions',
-            ),
-            $dispatcher,
-            array('tl_metamodel_rendersettings', 'additionalCss', 'file')
-        );
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\RenderSettings\PropertyJsFiles::getOptions',
-            ),
-            $dispatcher,
-            array('tl_metamodel_rendersettings', 'additionalJs', 'file')
-        );
+        new \MetaModels\DcGeneral\Events\Table\RenderSettings\Subscriber($this->getServiceContainer());
     }
 }
