@@ -25,6 +25,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPr
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
+use MenAtWork\MultiColumnWizard\Event\GetOptionsEvent;
 use MetaModels\Dca\Helper;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbRenderSettings;
@@ -78,11 +79,11 @@ class Subscriber extends BaseSubscriber
                 array($this, 'getTemplateOptions')
             )
             ->addListener(
-                GetPropertyOptionsEvent::NAME,
+                GetOptionsEvent::NAME,
                 array($this, 'getCssFilesOptions')
             )
             ->addListener(
-                GetPropertyOptionsEvent::NAME,
+                GetOptionsEvent::NAME,
                 array($this, 'getJsFilesOptions')
             );
     }
@@ -324,17 +325,18 @@ class Subscriber extends BaseSubscriber
     /**
      * Provide options for additional css files.
      *
-     * @param GetPropertyOptionsEvent $event The event.
+     * @param GetOptionsEvent $event The event.
      *
      * @return void
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public static function getCssFilesOptions(GetPropertyOptionsEvent $event)
+    public static function getCssFilesOptions(GetOptionsEvent $event)
     {
         if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersetting')
-            || ($event->getPropertyName() !== 'additionalCss')) {
+            || ($event->getPropertyName() !== 'additionalCss')
+            || ($event->getSubPropertyName() !== 'file')) {
             return;
         }
 
@@ -346,15 +348,21 @@ class Subscriber extends BaseSubscriber
     /**
      * Provide options for additional javascript files.
      *
-     * @param GetPropertyOptionsEvent $event The event.
+     * @param GetOptionsEvent $event The event.
      *
      * @return void
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public static function getJsFilesOptions(GetPropertyOptionsEvent $event)
+    public static function getJsFilesOptions(GetOptionsEvent $event)
     {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersetting')
+            || ($event->getPropertyName() !== 'additionalJs')
+            || ($event->getSubPropertyName() !== 'file')) {
+            return;
+        }
+
         $options = Helper::searchFiles($GLOBALS['TL_CONFIG']['uploadPath'], '.js');
 
         $event->setOptions($options);

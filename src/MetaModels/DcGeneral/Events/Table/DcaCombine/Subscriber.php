@@ -19,7 +19,7 @@ namespace MetaModels\DcGeneral\Events\Table\DcaCombine;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use MenAtWork\MultiColumnWizard\Event\GetOptionsEvent;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbDcaCombine;
 
@@ -48,19 +48,19 @@ class Subscriber extends BaseSubscriber
                 }
             )
             ->addListener(
-                GetPropertyOptionsEvent::NAME,
+                GetOptionsEvent::NAME,
                 array($this, 'getBackendUserGroupOptions')
             )
             ->addListener(
-                GetPropertyOptionsEvent::NAME,
+                GetOptionsEvent::NAME,
                 array($this, 'getFrontendUserGroupOptions')
             )
             ->addListener(
-                GetPropertyOptionsEvent::NAME,
+                GetOptionsEvent::NAME,
                 array($this, 'getInputScreenOptions')
             )
             ->addListener(
-                GetPropertyOptionsEvent::NAME,
+                GetOptionsEvent::NAME,
                 array($this, 'getRenderSettingsOptions')
             )
             ->addListener(
@@ -72,15 +72,15 @@ class Subscriber extends BaseSubscriber
     /**
      * Get all options for the frontend user groups.
      *
-     * @param string                  $table The source table.
+     * @param string          $table The source table.
      *
-     * @param GetPropertyOptionsEvent $event The event.
+     * @param GetOptionsEvent $event The event.
      *
      * @return void
      *
      * @throws \RuntimeException When an invalid table name.
      */
-    public function getUserGroups($table, GetPropertyOptionsEvent $event)
+    public function getUserGroups($table, GetOptionsEvent $event)
     {
         if (!in_array($table, array('tl_user_group', 'tl_member_group'))) {
             throw new \RuntimeException('Unexpected table name ' . $table, 1);
@@ -102,14 +102,15 @@ class Subscriber extends BaseSubscriber
     /**
      * Get all options for the backend user groups.
      *
-     * @param GetPropertyOptionsEvent $event The event.
+     * @param GetOptionsEvent $event The event.
      *
      * @return void
      */
-    public function getBackendUserGroupOptions(GetPropertyOptionsEvent $event)
+    public function getBackendUserGroupOptions(GetOptionsEvent $event)
     {
         if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca_combine')
-            || ($event->getPropertyName() !== 'be_group')) {
+            || ($event->getPropertyName() !== 'rows')
+            || ($event->getSubPropertyName() !== 'be_group')) {
             return;
         }
 
@@ -119,14 +120,15 @@ class Subscriber extends BaseSubscriber
     /**
      * Get all options for the frontend user groups.
      *
-     * @param GetPropertyOptionsEvent $event The event.
+     * @param GetOptionsEvent $event The event.
      *
      * @return void
      */
-    public function getFrontendUserGroupOptions(GetPropertyOptionsEvent $event)
+    public function getFrontendUserGroupOptions(GetOptionsEvent $event)
     {
         if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca_combine')
-            || ($event->getPropertyName() !== 'fe_group')) {
+            || ($event->getPropertyName() !== 'rows')
+            || ($event->getSubPropertyName() !== 'fe_group')) {
             return;
         }
 
@@ -136,14 +138,15 @@ class Subscriber extends BaseSubscriber
     /**
      * Get all options for the frontend user groups.
      *
-     * @param GetPropertyOptionsEvent $event The event.
+     * @param GetOptionsEvent $event The event.
      *
      * @return void
      */
-    public function getInputScreenOptions(GetPropertyOptionsEvent $event)
+    public function getInputScreenOptions(GetOptionsEvent $event)
     {
         if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca_combine')
-            || ($event->getPropertyName() !== 'dca_id')) {
+            || ($event->getPropertyName() !== 'rows')
+            || ($event->getSubPropertyName() !== 'dca_id')) {
             return;
         }
 
@@ -163,14 +166,15 @@ class Subscriber extends BaseSubscriber
     /**
      * Get all options for the render settings.
      *
-     * @param GetPropertyOptionsEvent $event The event.
+     * @param GetOptionsEvent $event The event.
      *
      * @return void
      */
-    public function getRenderSettingsOptions(GetPropertyOptionsEvent $event)
+    public function getRenderSettingsOptions(GetOptionsEvent $event)
     {
         if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca_combine')
-            || ($event->getPropertyName() !== 'view_id')) {
+            || ($event->getPropertyName() !== 'rows')
+            || ($event->getSubPropertyName() !== 'view_id')) {
             return;
         }
 
