@@ -62,13 +62,9 @@ class Subscriber extends BaseSubscriber
         $this->registerTableMetaModelDcaSettingEvents();
         $this->registerTableMetaModelDcaSettingConditionsEvents();
         $this->registerTableMetaModelFilterEvents();
+        $this->registerTableMetaModelFilterSettingEvents();
 
         $dispatcher = $this->serviceContainer->getEventDispatcher();
-        self::registerBuildDataDefinitionFor(
-            'tl_metamodel_filtersetting',
-            $dispatcher,
-            array($this, 'registerTableMetaModelFilterSettingEvents')
-        );
         self::registerBuildDataDefinitionFor(
             'tl_metamodel_rendersetting',
             $dispatcher,
@@ -172,86 +168,7 @@ class Subscriber extends BaseSubscriber
      */
     public function registerTableMetaModelFilterSettingEvents()
     {
-        static $registered;
-        if ($registered) {
-            return;
-        }
-        $registered = true;
-        $dispatcher = func_get_arg(2);
-
-        self::registerListeners(
-            array(
-                GetPasteButtonEvent::NAME => 'MetaModels\DcGeneral\Events\Table\FilterSetting\PasteButton::generate',
-            ),
-            $dispatcher,
-            array('tl_metamodel_filtersetting')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\FilterSetting\PropertyDefaultId::getOptions',
-            ),
-            $dispatcher,
-            array('tl_metamodel_filtersetting', 'defaultid')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\FilterSetting\PropertyType::getOptions',
-            ),
-            $dispatcher,
-            array('tl_metamodel_filtersetting', 'type')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\FilterSetting\PropertyTemplate::getOptions',
-            ),
-            $dispatcher,
-            array('tl_metamodel_filtersetting', 'template')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\FilterSetting\PropertyAttributeId::getOptions',
-                DecodePropertyValueForWidgetEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\FilterSetting\PropertyAttributeId::decodeValue',
-                EncodePropertyValueFromWidgetEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\FilterSetting\PropertyAttributeId::encodeValue'
-            ),
-            $dispatcher,
-            array('tl_metamodel_filtersetting', 'attr_id')
-        );
-
-        foreach ($GLOBALS['METAMODELS']['filters'] as $typeName => $information) {
-            if (isset($information['info_callback'])) {
-                self::registerListeners(
-                    array(
-                        ModelToLabelEvent::NAME => $information['info_callback']
-                    ),
-                    $dispatcher,
-                    array('tl_metamodel_filtersetting', $typeName)
-                );
-            }
-        }
-
-        self::registerListeners(
-            array(
-                ModelToLabelEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\FilterSetting\DrawSetting::modelToLabel',
-                GetBreadcrumbEvent::NAME
-                    => self::createClosure(
-                        'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbFilterSetting',
-                        'getBreadcrumb'
-                    )
-            ),
-            $dispatcher,
-            array('tl_metamodel_filtersetting')
-        );
+        new \MetaModels\DcGeneral\Events\Table\FilterSetting\Subscriber($this->getServiceContainer());
     }
 
     /**
