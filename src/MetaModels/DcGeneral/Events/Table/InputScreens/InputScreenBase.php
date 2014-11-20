@@ -24,6 +24,8 @@ use MetaModels\IMetaModel;
 
 /**
  * Base class to be used in event listeners for table tl_metamodel_dcasetting.
+ *
+ * @deprecated This is static and not service container aware, avoid to use. Will get removed.
  */
 class InputScreenBase
 {

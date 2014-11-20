@@ -18,35 +18,14 @@
 namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
-use MetaModels\Factory;
 
 /**
  * Generate a breadcrumb for table tl_metamodel_dcasetting.
  *
  * @package MetaModels\DcGeneral\Events\BreadCrumb
  */
-class BreadCrumbInputScreen extends BreadCrumbInputScreens
+class BreadCrumbInputScreenSetting extends BreadCrumbInputScreens
 {
-    /**
-     * Calculate the name of a sub palette attribute.
-     *
-     * @param int $pid The id of the input screen.
-     *
-     * @return \MetaModels\Attribute\IAttribute|string
-     */
-    protected function getSubPaletteAttributeName($pid)
-    {
-        $parent = \Database::getInstance()
-            ->prepare('SELECT id, pid
-                FROM tl_metamodel_attribute
-                WHERE id=(SELECT attr_id FROM tl_metamodel_dcasetting WHERE id=?)')
-            ->executeUncached($pid);
-        if ($parent->id) {
-            return Factory::byId($parent->pid)->getAttributeById($parent->id);
-        }
-        return 'unknown';
-    }
-
     /**
      * {@inheritDoc}
      */

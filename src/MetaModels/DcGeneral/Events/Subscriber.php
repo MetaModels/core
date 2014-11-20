@@ -58,13 +58,9 @@ class Subscriber extends BaseSubscriber
         $this->registerTableMetaModelAttributeEvents();
         $this->registerTableMetaModelDcaEvents();
         $this->registerTableMetaModelDcaCombineEvents();
+        $this->registerTableMetaModelDcaSettingEvents();
 
         $dispatcher = $this->serviceContainer->getEventDispatcher();
-        self::registerBuildDataDefinitionFor(
-            'tl_metamodel_dcasetting',
-            $dispatcher,
-            array($this, 'registerTableMetaModelDcaSettingEvents')
-        );
         self::registerBuildDataDefinitionFor(
             'tl_metamodel_dcasetting_condition',
             $dispatcher,
@@ -135,77 +131,11 @@ class Subscriber extends BaseSubscriber
     /**
      * Register the events for table tl_metamodel_dcasetting.
      *
-     * @param BuildDataDefinitionEvent $event The event being processed.
-     *
      * @return void
      */
-    public function registerTableMetaModelDcaSettingEvents(BuildDataDefinitionEvent $event)
+    public function registerTableMetaModelDcaSettingEvents()
     {
-        static $registered;
-        if ($registered) {
-            return;
-        }
-        $registered = true;
-        $dispatcher = func_get_arg(2);
-
-        self::registerListeners(
-            array(
-                ModelToLabelEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\InputScreens\ModelToLabel::handleModelToLabel',
-                GetBreadcrumbEvent::NAME
-                    => self::createClosure(
-                        'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbInputScreen',
-                        'getBreadcrumb'
-                    ),
-                DcGeneralEvents::ACTION
-                    => 'MetaModels\DcGeneral\Events\Table\InputScreens\ProcessAddAll::handleAddAll',
-            ),
-            $dispatcher,
-            array('tl_metamodel_dcasetting')
-        );
-
-        // Save and load callbacks.
-        self::registerListeners(
-            array(
-                DecodePropertyValueForWidgetEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\InputScreens\PropertyLegendTitle::decodeValue',
-                EncodePropertyValueFromWidgetEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\InputScreens\PropertyLegendTitle::encodeValue',
-                BuildWidgetEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\InputScreens\PropertyLegendTitle::buildWidget',
-            ),
-            $dispatcher,
-            array('tl_metamodel_dcasetting', 'legendtitle')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\InputScreens\PropertyAttribute::getOptions',
-            ),
-            $dispatcher,
-            array('tl_metamodel_dcasetting', 'attr_id')
-        );
-
-        self::registerListeners(
-            array(
-                ManipulateWidgetEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\InputScreens\PropertyTlClass::getWizard',
-            ),
-            $dispatcher,
-            array('tl_metamodel_dcasetting', 'tl_class')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\InputScreens\PropertyRte::getOptions',
-            ),
-            $dispatcher,
-            array('tl_metamodel_dcasetting', 'rte')
-        );
-
-        BuildPalette::build($event);
+        new \MetaModels\DcGeneral\Events\Table\InputScreens\Subscriber($this->getServiceContainer());
     }
 
     /**
