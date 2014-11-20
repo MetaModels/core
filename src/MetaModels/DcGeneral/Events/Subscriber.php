@@ -17,29 +17,8 @@
 
 namespace MetaModels\DcGeneral\Events;
 
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
-use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
-use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
-use ContaoCommunityAlliance\DcGeneral\Event\PreDeleteModelEvent;
-use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
-use ContaoCommunityAlliance\DcGeneral\Factory\Event\PopulateEnvironmentEvent;
-use ContaoCommunityAlliance\DcGeneral\Factory\Event\PreCreateDcGeneralEvent;
-use MetaModels\DcGeneral\Dca\Builder\Builder;
-use MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPTable;
-use MetaModels\DcGeneral\Events\Table\InputScreens\BuildPalette;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbFilter;
-use MetaModels\DcGeneral\Events\Table\RenderSetting\RenderSettingBuildPalette;
-use MetaModels\Factory;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetGlobalButtonEvent;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Central event subscriber implementation.
