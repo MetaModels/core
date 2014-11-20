@@ -63,13 +63,9 @@ class Subscriber extends BaseSubscriber
         $this->registerTableMetaModelDcaSettingConditionsEvents();
         $this->registerTableMetaModelFilterEvents();
         $this->registerTableMetaModelFilterSettingEvents();
+        $this->registerTableMetaModelRenderSettingEvents();
 
         $dispatcher = $this->serviceContainer->getEventDispatcher();
-        self::registerBuildDataDefinitionFor(
-            'tl_metamodel_rendersetting',
-            $dispatcher,
-            array($this, 'registerTableMetaModelRenderSettingEvents')
-        );
         self::registerBuildDataDefinitionFor(
             'tl_metamodel_rendersettings',
             $dispatcher,
@@ -174,54 +170,11 @@ class Subscriber extends BaseSubscriber
     /**
      * Register the events for table tl_metamodel_rendersetting.
      *
-     * @param BuildDataDefinitionEvent $event The event being processed.
-     *
      * @return void
      */
-    public function registerTableMetaModelRenderSettingEvents(BuildDataDefinitionEvent $event)
+    public function registerTableMetaModelRenderSettingEvents()
     {
-        static $registered;
-        if ($registered) {
-            return;
-        }
-        $registered = true;
-        $dispatcher = func_get_arg(2);
-
-        self::registerListeners(
-            array(
-                GetBreadcrumbEvent::NAME
-                    => self::createClosure(
-                        'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbRenderSetting',
-                        'getBreadcrumb'
-                    ),
-                ModelToLabelEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\RenderSetting\DrawSetting::modelToLabel',
-                DcGeneralEvents::ACTION
-                    => 'MetaModels\DcGeneral\Events\Table\RenderSetting\ProcessAddAll::handleAddAll',
-            ),
-            $dispatcher,
-            array('tl_metamodel_rendersetting')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\RenderSetting\PropertyTemplate::getOptions',
-            ),
-            $dispatcher,
-            array('tl_metamodel_rendersetting', 'template')
-        );
-
-        self::registerListeners(
-            array(
-                GetPropertyOptionsEvent::NAME
-                    => 'MetaModels\DcGeneral\Events\Table\RenderSetting\PropertyAttribute::getOptions',
-            ),
-            $dispatcher,
-            array('tl_metamodel_rendersetting', 'attr_id')
-        );
-
-        RenderSettingBuildPalette::build($event);
+        new \MetaModels\DcGeneral\Events\Table\RenderSetting\Subscriber($this->getServiceContainer());
     }
 
     /**
