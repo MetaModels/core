@@ -34,6 +34,7 @@ use ContaoCommunityAlliance\DcGeneral\Factory\Event\PreCreateDcGeneralEvent;
 use MetaModels\DcGeneral\Dca\Builder\Builder;
 use MetaModels\DcGeneral\Events\Table\InputScreen\PropertyPTable;
 use MetaModels\DcGeneral\Events\Table\InputScreens\BuildPalette;
+use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbFilter;
 use MetaModels\DcGeneral\Events\Table\RenderSetting\RenderSettingBuildPalette;
 use MetaModels\Factory;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
@@ -60,13 +61,9 @@ class Subscriber extends BaseSubscriber
         $this->registerTableMetaModelDcaCombineEvents();
         $this->registerTableMetaModelDcaSettingEvents();
         $this->registerTableMetaModelDcaSettingConditionsEvents();
+        $this->registerTableMetaModelFilterEvents();
 
         $dispatcher = $this->serviceContainer->getEventDispatcher();
-        self::registerBuildDataDefinitionFor(
-            'tl_metamodel_filter',
-            $dispatcher,
-            array($this, 'registerTableMetaModelFilterEvents')
-        );
         self::registerBuildDataDefinitionFor(
             'tl_metamodel_filtersetting',
             $dispatcher,
@@ -144,7 +141,6 @@ class Subscriber extends BaseSubscriber
         new \MetaModels\DcGeneral\Events\Table\InputScreenCondition\Subscriber($this->getServiceContainer());
     }
 
-
     /**
      * Register the events for table tl_metamodel_filter.
      *
@@ -152,24 +148,18 @@ class Subscriber extends BaseSubscriber
      */
     public function registerTableMetaModelFilterEvents()
     {
-        static $registered;
-        if ($registered) {
-            return;
-        }
-        $registered = true;
-        $dispatcher = func_get_arg(2);
-
-        self::registerListeners(
-            array(
-                GetBreadcrumbEvent::NAME
-                    => self::createClosure(
-                        'MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbFilter',
-                        'getBreadcrumb'
-                    ),
-            ),
-            $dispatcher,
-            array('tl_metamodel_filter')
-        );
+        $serviceContainer = $this->getServiceContainer();
+        $this
+            ->addListener(
+                GetBreadcrumbEvent::NAME,
+                function (GetBreadcrumbEvent $event) use ($serviceContainer) {
+                    if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_filter')) {
+                        return;
+                    }
+                    $subscriber = new BreadCrumbFilter($serviceContainer);
+                    $subscriber->getBreadcrumb($event);
+                }
+            );
     }
 
     /**
