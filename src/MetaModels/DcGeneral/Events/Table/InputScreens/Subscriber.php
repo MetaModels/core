@@ -572,6 +572,11 @@ class Subscriber extends BaseSubscriber
      */
     public function getRichTextEditorOptions(GetPropertyOptionsEvent $event)
     {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dcasetting')
+            || ($event->getPropertyName() !== 'rte')) {
+            return;
+        }
+
         $configs = array();
         foreach (glob(TL_ROOT . '/system/config/tiny*.php') as $name) {
             $name = basename($name);
