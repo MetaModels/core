@@ -707,6 +707,10 @@ class Subscriber extends BaseSubscriber
      */
     public function buildPaletteRestrictions(BuildDataDefinitionEvent $event)
     {
+        if (($event->getContainer()->getName() !== 'tl_metamodel_dcasetting')) {
+            return;
+        }
+
         $palettes = $event->getContainer()->getPalettesDefinition();
         $legend   = null;
 
@@ -726,6 +730,10 @@ class Subscriber extends BaseSubscriber
             $this->addCondition($property, $condition);
             $property = $this->getProperty('legendhide', $legend);
             $this->addCondition($property, $condition);
+
+            if (!isset($GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id'])) {
+                continue;
+            }
 
             foreach ((array) $GLOBALS['TL_DCA']['tl_metamodel_dcasetting']['metasubselectpalettes']['attr_id'] as
                      $typeName => $paletteInfo) {
