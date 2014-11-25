@@ -49,7 +49,7 @@
 		"contao-community-alliance/composer-plugin": "~2.0",
 		"contao-community-alliance/dc-general": "2.0.*@dev",
 		"contao-community-alliance/backports-initialize-system": "~1.0",
-		"menatwork/contao-multicolumnwizard": "3.2.*@dev",
+		"menatwork/contao-multicolumnwizard": "~3.3.0",
 		"bit3/contao-meta-palettes": "~1.7",
 		"discordier/justtextwidgets": "~0.5",
 		"contao-community-alliance/url-builder": "~1.1"
