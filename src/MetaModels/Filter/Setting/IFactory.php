@@ -26,7 +26,7 @@ namespace MetaModels\Filter\Setting;
  * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-interface IFactory
+interface IFactory extends IFilterSettingFactory
 {
     /**
      * Create a IMetaModelFilterSettings instance from the id.

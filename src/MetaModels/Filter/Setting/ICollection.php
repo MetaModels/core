@@ -33,6 +33,15 @@ use MetaModels\Render\Setting\ICollection as IRenderSettings;
 interface ICollection
 {
     /**
+     * Get the named property from the filter setting.
+     *
+     * @param string $key The name of the property to retrieve.
+     *
+     * @return mixed|null
+     */
+    public function get($key);
+
+    /**
      * Retrieve the MetaModel this filter belongs to.
      *
      * @return IMetaModel
@@ -40,15 +49,6 @@ interface ICollection
      * @throws \RuntimeException When the MetaModel can not be determined.
      */
     public function getMetaModel();
-
-    /**
-     * Retrieve all settings that shall be contained within this collection from the database.
-     *
-     * @todo deprecate this and inject the settings in favor of pulling them.
-     *
-     * @return void
-     */
-    public function collectRules();
 
     /**
      * Generates all filter rules from the contained filter settings.

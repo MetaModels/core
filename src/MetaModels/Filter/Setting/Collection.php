@@ -17,9 +17,6 @@
 
 namespace MetaModels\Filter\Setting;
 
-use Database\Result;
-use MetaModels\Attribute\Factory as AttributeFactory;
-use MetaModels\Factory as ModelFactory;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use MetaModels\IItem;
 use MetaModels\Filter\IFilter;
@@ -27,11 +24,7 @@ use MetaModels\IMetaModel;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
 
 /**
- * This is the IMetaModelFilterSettings reference implementation.
- *
- * @package       MetaModels
- * @subpackage Interfaces
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * This is the ICollection reference implementation.
  */
 class Collection implements ICollection
 {
@@ -67,55 +60,11 @@ class Collection implements ICollection
     }
 
     /**
-     * Create a new setting.
-     *
-     * @param Result $objSettings The information from which to initialize the setting from.
-     *
-     * @return ISimple
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * {@inheritdoc}
      */
-    protected function newSetting($objSettings)
+    public function get($key)
     {
-        $strClass = $GLOBALS['METAMODELS']['filters'][$objSettings->type]['class'];
-        // TODO: add factory support here.
-        if ($strClass) {
-            return new $strClass($this, $objSettings->row());
-        }
-        return null;
-    }
-
-    /**
-     * Fetch all child rules for the given setting.
-     *
-     * @param Result        $objBaseSettings The database information of the parent setting.
-     *
-     * @param IWithChildren $objSetting      The information from which to initialize the setting from.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    protected function collectRulesFor($objBaseSettings, $objSetting)
-    {
-        $objDB       = \Database::getInstance();
-        $objSettings = $objDB
-            ->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE pid=? AND enabled=1 ORDER BY sorting ASC')
-            ->execute($objBaseSettings->id);
-
-        while ($objSettings->next()) {
-            $objNewSetting = $this->newSetting($objSettings);
-            if ($objNewSetting) {
-                $objSetting->addChild($objNewSetting);
-                // Collect next level.
-                if (!empty($GLOBALS['METAMODELS']['filters'][$objNewSetting->get('type')]['nestingAllowed'])) {
-                    /** @var IWithChildren $objNewSetting */
-                    $this->collectRulesFor($objSettings, $objNewSetting);
-                }
-            }
-        }
+        return isset($this->arrData[$key]) ? $this->arrData[$key] : null;
     }
 
     /**
@@ -138,9 +87,6 @@ class Collection implements ICollection
      * @return IMetaModel
      *
      * @throws \RuntimeException When the MetaModel can not be determined.
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getMetaModel()
     {
@@ -148,58 +94,23 @@ class Collection implements ICollection
             return $this->metaModel;
         }
 
-        if (!$this->arrData['pid']) {
-            throw new \RuntimeException(
-                sprintf(
-                    'Error: Filtersetting %d not attached to a MetaModel',
-                    $this->arrData['id']
-                )
-            );
-        }
-
-        $dispatcher = $GLOBALS['container']['event-dispatcher'];
-        $factory    = new ModelFactory($dispatcher, new AttributeFactory($dispatcher));
-        $model      = $factory->getMetaModel($factory->translateIdToMetaModelName($this->arrData['pid']));
-
-        $this->setMetaModel($model);
-
-        return $this->metaModel;
+        throw new \RuntimeException(
+            sprintf('Error: Filter setting %d not attached to a MetaModel', $this->arrData['id'])
+        );
     }
 
     /**
-     * {@inheritdoc}
+     * Add a setting to the collection.
      *
-     * @throws \RuntimeException When the filter setting is not created from a database result (holds no id).
+     * @param ISimple|IWithChildren $setting The setting to add.
      *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @return Collection
      */
-    public function collectRules()
+    public function addSetting($setting)
     {
-        if (!$this->arrData['id']) {
-            throw new \RuntimeException(
-                'Error: dynamically created FilterSettings can not collect attribute information',
-                1
-            );
-        }
+        $this->arrSettings[] = $setting;
 
-        $objDB       = \Database::getInstance();
-        $objSettings = $objDB
-            ->prepare(
-                'SELECT * FROM tl_metamodel_filtersetting WHERE fid=? AND pid=0 AND enabled=1 ORDER BY sorting ASC'
-            )
-            ->execute($this->arrData['id']);
-
-        while ($objSettings->next()) {
-            $objNewSetting = $this->newSetting($objSettings);
-            if ($objNewSetting) {
-                $this->arrSettings[] = $objNewSetting;
-                if (!empty($GLOBALS['METAMODELS']['filters'][$objNewSetting->get('type')]['nestingAllowed'])) {
-                    /** @var IWithChildren $objNewSetting */
-                    $this->collectRulesFor($objSettings, $objNewSetting);
-                }
-            }
-        }
+        return $this;
     }
 
     /**

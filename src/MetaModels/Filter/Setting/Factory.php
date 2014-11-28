@@ -17,17 +17,16 @@
 
 namespace MetaModels\Filter\Setting;
 
+use MetaModels\IMetaModelsServiceContainer;
+
 /**
  * This is the IMetaModelFilter factory interface.
  *
  * To create a IMetaModelFilter instance, call {@link MetaModelFilter::byId()}
  *
- * @package    MetaModels
- * @subpackage Interfaces
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @deprecated use the factory from the service container.
  */
-// FIXME: make this a real factory, like the MetaModels factory and attribute factory.
-class Factory implements IFactory
+class Factory extends FilterSettingFactory implements IFactory
 {
     /**
      * Keeps track of all filter settings instances to save DB lookup queries.
@@ -43,28 +42,16 @@ class Factory implements IFactory
      *
      * @return ICollection the instance of the IMetaModelFilterSettings or null if not found.
      *
-     * @deprecated Will get moved to a real factory.
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     *
+     * @deprecated use the factory from the service container.
      */
     public static function byId($intId)
     {
-        if (empty(self::$arrInstances[$intId])) {
-            $objDB = \Database::getInstance();
+        /** @var IMetaModelsServiceContainer $serviceContainer */
+        $serviceContainer = $GLOBALS['container']['metamodels-service-container'];
 
-            $arrSettings = $objDB->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
-                ->execute($intId)
-                ->row();
-
-            if (!empty($arrSettings)) {
-                $objSetting = new Collection($arrSettings);
-                $objSetting->collectRules();
-            } else {
-                $objSetting = new Collection(array());
-            }
-            self::$arrInstances[$intId] = $objSetting;
-        } else {
-            $objSetting = self::$arrInstances[$intId];
-        }
-
-        return $objSetting;
+        return $serviceContainer->getFilterFactory()->createCollection($intId);
     }
 }
