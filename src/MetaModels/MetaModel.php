@@ -25,7 +25,6 @@ use MetaModels\Attribute\IAttribute;
 use MetaModels\Filter\IFilter;
 use MetaModels\Render\Setting\Factory as RenderSettingFactory;
 use MetaModels\Filter\Rules\StaticIdList;
-use MetaModels\Filter\Setting\Factory as FilterFactory;
 
 /**
  * This is the main MetaModel class.
@@ -60,11 +59,11 @@ class MetaModel implements IMetaModel
     protected $arrAttributes = array();
 
     /**
-     * The attached Database instance.
+     * The service container.
      *
-     * @var \Database
+     * @var IMetaModelsServiceContainer
      */
-    protected $database;
+    protected $serviceContainer;
 
     /**
      * Instantiate a MetaModel.
@@ -80,27 +79,37 @@ class MetaModel implements IMetaModel
     }
 
     /**
+     * Retrieve the service container.
+     *
+     * @return IMetaModelsServiceContainer
+     */
+    public function getServiceContainer()
+    {
+        return $this->serviceContainer;
+    }
+
+    /**
+     * Set the service container.
+     *
+     * @param IMetaModelsServiceContainer $serviceContainer The service container.
+     *
+     * @return MetaModel
+     */
+    public function setServiceContainer($serviceContainer)
+    {
+        $this->serviceContainer = $serviceContainer;
+
+        return $this;
+    }
+
+    /**
      * Retrieve the database instance to use.
      *
      * @return \Database
      */
     protected function getDatabase()
     {
-        return $this->database;
-    }
-
-    /**
-     * Retrieve the database instance to use.
-     *
-     * @param \Database $database The database to use.
-     *
-     * @return MetaModel
-     */
-    public function setDatabase($database)
-    {
-        $this->database = $database;
-
-        return $this;
+        return $this->serviceContainer->getDatabase();
     }
 
     /**
@@ -1043,7 +1052,7 @@ class MetaModel implements IMetaModel
     {
         $objFilter = $this->getEmptyFilter();
         if ($intFilterSettings) {
-            $objFilterSettings = FilterFactory::byId($intFilterSettings);
+            $objFilterSettings = $this->getServiceContainer()->getFilterFactory()->createCollection($intFilterSettings);
             $objFilterSettings->addRules($objFilter, $arrFilterUrl);
         }
         return $objFilter;

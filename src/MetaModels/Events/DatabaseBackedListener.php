@@ -19,8 +19,8 @@ namespace MetaModels\Events;
 
 use MetaModels\Attribute\Events\CollectMetaModelAttributeInformationEvent;
 use MetaModels\IMetaModel;
+use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModel;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * This is the MetaModel factory interface.
@@ -31,8 +31,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-// FIXME: Class must be turned into event listeners registered with service container present.
-class DatabaseBackedListener implements EventSubscriberInterface
+class DatabaseBackedListener
 {
     /**
      * All MetaModel instances created via this listener.
@@ -74,34 +73,61 @@ class DatabaseBackedListener implements EventSubscriberInterface
     protected static $attributeInformation = array();
 
     /**
-     * Returns an array of event names this subscriber wants to listen to.
+     * The service container.
      *
-     * The array keys are event names and the value can be:
-     *
-     *  * The method name to call (priority defaults to 0)
-     *  * An array composed of the method name to call and the priority
-     *  * An array of arrays composed of the method names to call and respective
-     *    priorities, or 0 if unset
-     *
-     * For instance:
-     *
-     *  * array('eventName' => 'methodName')
-     *  * array('eventName' => array('methodName', $priority))
-     *  * array('eventName' => array(array('methodName1', $priority), array('methodName2'))
-     *
-     * @return array The event names to listen to
-     *
-     * @api
+     * @var IMetaModelsServiceContainer
      */
-    public static function getSubscribedEvents()
+    protected $serviceContainer;
+
+    /**
+     * Register to the event dispatcher in the provided service container.
+     *
+     * @param MetaModelsBootEvent $event The event.
+     *
+     * @return void
+     */
+    public function handleEvent(MetaModelsBootEvent $event)
     {
-        return array
-        (
-            CollectMetaModelAttributeInformationEvent::NAME => 'collectMetaModelAttributeInformation',
-            CollectMetaModelTableNamesEvent::NAME           => 'collectMetaModelTableNames',
-            CreateMetaModelEvent::NAME                      => 'createMetaModel',
-            GetMetaModelNameFromIdEvent::NAME               => 'getMetaModelNameFromId',
+        $this->serviceContainer = $event->getServiceContainer();
+
+        $dispatcher = $this->getServiceContainer()->getEventDispatcher();
+
+        $dispatcher->addListener(
+            CollectMetaModelAttributeInformationEvent::NAME,
+            array($this, 'collectMetaModelAttributeInformation')
         );
+        $dispatcher->addListener(
+            CollectMetaModelTableNamesEvent::NAME,
+            array($this, 'collectMetaModelTableNames')
+        );
+        $dispatcher->addListener(
+            CreateMetaModelEvent::NAME,
+            array($this, 'createMetaModel')
+        );
+        $dispatcher->addListener(
+            GetMetaModelNameFromIdEvent::NAME,
+            array($this, 'getMetaModelNameFromId')
+        );
+    }
+
+    /**
+     * Retrieve the service container.
+     *
+     * @return IMetaModelsServiceContainer
+     */
+    public function getServiceContainer()
+    {
+        return $this->serviceContainer;
+    }
+
+    /**
+     * Retrieve the system database.
+     *
+     * @return \Contao\Database
+     */
+    protected function getDatabase()
+    {
+        return $this->getServiceContainer()->getDatabase();
     }
 
     /**
@@ -126,7 +152,7 @@ class DatabaseBackedListener implements EventSubscriberInterface
         }
 
         if (!self::$tableNamesCollected) {
-            $objData = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel WHERE id=?')
+            $objData = $this->getDatabase()->prepare('SELECT * FROM tl_metamodel WHERE id=?')
                 ->limit(1)
                 ->execute($event->getMetaModelId());
             if ($objData->numRows) {
@@ -174,7 +200,7 @@ class DatabaseBackedListener implements EventSubscriberInterface
     {
         if (!$this->createInstanceViaLegacyFactory($event, $arrData)) {
             $metaModel = new MetaModel($arrData);
-            $metaModel->setDatabase(\Database::getInstance());
+            $metaModel->setServiceContainer($this->getServiceContainer());
             $event->setMetaModel($metaModel);
         }
 
@@ -227,7 +253,7 @@ class DatabaseBackedListener implements EventSubscriberInterface
             return;
         }
 
-        $objDB = \Database::getInstance();
+        $objDB = $this->getDatabase();
         if (!$objDB->tableExists('tl_metamodel')) {
             // I can't work without a properly installed database.
             return;
@@ -257,7 +283,7 @@ class DatabaseBackedListener implements EventSubscriberInterface
             return;
         }
 
-        $database   = \Database::getInstance();
+        $database   = $this->getDatabase();
         $attributes = $database->prepare('SELECT * FROM tl_metamodel_attribute WHERE pid=?')
             ->execute($event->getMetaModel()->get('id'));
 

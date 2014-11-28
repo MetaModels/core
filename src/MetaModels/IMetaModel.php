@@ -35,6 +35,13 @@ use MetaModels\Filter\IFilter;
 interface IMetaModel
 {
     /**
+     * Retrieve the service container.
+     *
+     * @return IMetaModelsServiceContainer
+     */
+    public function getServiceContainer();
+
+    /**
      * Adds an attribute to the internal list of attributes.
      *
      * @param IAttribute $objAttribute The attribute instance to add.

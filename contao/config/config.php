@@ -266,6 +266,15 @@ $GLOBALS['TL_HOOKS']['initializeDependencyContainer'][] = function (
     $handler->boot($container);
 };
 
+$GLOBALS['TL_EVENTS'][\MetaModels\MetaModelsEvents::SUBSYSTEM_BOOT][] = function (
+    MetaModels\Events\MetaModelsBootEvent $event,
+    $eventName,
+    Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
+) {
+    $handler = new MetaModels\Events\DatabaseBackedListener();
+    $handler->handleEvent($event, $eventName, $dispatcher);
+};
+
 $GLOBALS['TL_EVENTS'][\MetaModels\MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND][] = function (
     MetaModels\Events\MetaModelsBootEvent $event,
     $eventName,
