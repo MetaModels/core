@@ -134,7 +134,7 @@ class Subscriber extends BaseSubscriber
         }
 
         $this->addListener(
-            EncodePropertyValueFromWidgetEvent::NAME,
+            ModelToLabelEvent::NAME,
             array($this, 'modelToLabel')
         );
     }
