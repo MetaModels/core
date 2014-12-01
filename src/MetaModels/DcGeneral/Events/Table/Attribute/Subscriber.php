@@ -97,7 +97,7 @@ class Subscriber extends BaseSubscriber
                 array($this, 'handleUpdateAttribute')
             )
             ->addListener(
-                PostPersistModelEvent::NAME,
+                PreDeleteModelEvent::NAME,
                 array($this, 'handleDeleteAttribute')
             );
     }
