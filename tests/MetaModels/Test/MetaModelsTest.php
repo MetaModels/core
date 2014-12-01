@@ -16,7 +16,9 @@
 
 namespace MetaModels\Test;
 
+use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModel;
+use MetaModels\MetaModelsServiceContainer;
 use MetaModels\Test\Contao\Database;
 
 /**
@@ -24,6 +26,21 @@ use MetaModels\Test\Contao\Database;
  */
 class MetaModelsTest extends TestCase
 {
+    /**
+     * Mock a service container with the given database.
+     *
+     * @param \Contao\Database $database The contao database instance.
+     *
+     * @return IMetaModelsServiceContainer
+     */
+    protected function mockServiceContainer($database)
+    {
+        $serviceContainer = new MetaModelsServiceContainer();
+        $serviceContainer->setDatabase($database);
+
+        return $serviceContainer;
+    }
+
     /**
      * Test instantiation of a MetaModel.
      *
@@ -103,7 +120,7 @@ class MetaModelsTest extends TestCase
         );
 
         $database = Database::getNewTestInstance();
-        $metaModel->setDatabase($database);
+        $metaModel->setServiceContainer($this->mockServiceContainer($database));
 
         $database
             ->getQueryCollection()
@@ -164,7 +181,7 @@ class MetaModelsTest extends TestCase
         );
 
         $database = Database::getNewTestInstance();
-        $metaModel->setDatabase($database);
+        $metaModel->setServiceContainer($this->mockServiceContainer($database));
 
         $database
             ->getQueryCollection()
@@ -204,7 +221,7 @@ class MetaModelsTest extends TestCase
 
         /** @var MetaModel $metaModel */
         $database = Database::getNewTestInstance();
-        $metaModel->setDatabase($database);
+        $metaModel->setServiceContainer($this->mockServiceContainer($database));
 
         $database
             ->getQueryCollection()
@@ -254,7 +271,7 @@ class MetaModelsTest extends TestCase
 
         /** @var MetaModel $metaModel */
         $database = Database::getNewTestInstance();
-        $metaModel->setDatabase($database);
+        $metaModel->setServiceContainer($this->mockServiceContainer($database));
 
         $database
             ->getQueryCollection()
