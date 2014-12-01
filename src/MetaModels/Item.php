@@ -22,9 +22,6 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUr
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GetPageDetailsEvent;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\Filter\IFilter;
-use MetaModels\Factory as MetaModelFactory;
-use MetaModels\Attribute\Factory as AttributeFactory;
-use MetaModels\Filter\Setting\Factory as FilterSettingsFactory;
 use MetaModels\Render\Setting\ICollection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -67,16 +64,23 @@ class Item implements IItem
     }
 
     /**
+     * Retrieve the service container.
+     *
+     * @return IMetaModelsServiceContainer
+     */
+    public function getServiceContainer()
+    {
+        return $this->getMetaModel()->getServiceContainer();
+    }
+
+    /**
      * Retrieve the event dispatcher.
      *
      * @return EventDispatcherInterface
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getEventDispatcher()
     {
-        return $GLOBALS['container']['event-dispatcher'];
+        return $this->getServiceContainer()->getEventDispatcher();
     }
 
     /**
@@ -443,7 +447,7 @@ class Item implements IItem
         $parameters = '';
 
         if ($filterSettingsId) {
-            $filterSettings = FilterSettingsFactory::byId($filterSettingsId);
+            $filterSettings = $this->getServiceContainer()->getFilterFactory()->createCollection($filterSettingsId);
             $parameterList  = $filterSettings->generateFilterUrlFrom($this, $renderSettings);
 
             foreach ($parameterList as $strKey => $strValue) {
