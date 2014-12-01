@@ -21,15 +21,18 @@ $container['metamodels-service-container.factory.default'] = $container->protect
     function ($container) {
         $serviceContainer = new MetaModels\MetaModelsServiceContainer();
         $dispatcher       = $container['event-dispatcher'];
-        $serviceContainer->setEventDispatcher($dispatcher);
+        $serviceContainer
+            ->setEventDispatcher($dispatcher)
+            ->setDatabase($container['database.connection']);
 
         $attributeFactory = new MetaModels\Attribute\AttributeFactory($serviceContainer);
         $factory          = new MetaModels\Factory($serviceContainer);
+        $filterFactory    = new MetaModels\Filter\Setting\FilterSettingFactory($serviceContainer);
 
         $serviceContainer
             ->setAttributeFactory($attributeFactory)
             ->setFactory($factory)
-            ->setDatabase($container['database.connection']);
+            ->setFilterFactory($filterFactory);
 
         return $serviceContainer;
     }

@@ -50,4 +50,11 @@ class MetaModelsEvents
      * @see \MetaModels\Events\MetaModelsBootEvent
      */
     const SUBSYSTEM_BOOT_BACKEND = 'metamodels.boot.backend';
+
+    /**
+     * Event when a filter setting factory is created.
+     *
+     * @see \MetaModels\Filter\Setting\Events\CreateFilterSettingFactoryEvent
+     */
+    const FILTER_SETTING_FACTORY_CREATE = 'metamodels.filter-setting.factory.create';
 }

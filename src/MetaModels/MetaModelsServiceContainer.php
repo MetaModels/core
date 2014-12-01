@@ -18,6 +18,7 @@
 namespace MetaModels;
 
 use MetaModels\Attribute\IAttributeFactory;
+use MetaModels\Filter\Setting\IFilterSettingFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -38,6 +39,13 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      * @var IFactory
      */
     protected $attributeFactory;
+
+    /**
+     * The filter setting factory.
+     *
+     * @var IFilterSettingFactory
+     */
+    protected $filterFactory;
 
     /**
      * The event dispatcher.
@@ -102,6 +110,28 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     public function getAttributeFactory()
     {
         return $this->attributeFactory;
+    }
+
+    /**
+     * Set the filter setting factory.
+     *
+     * @param IFilterSettingFactory $filterFactory The factory.
+     *
+     * @return MetaModelsServiceContainer
+     */
+    public function setFilterFactory($filterFactory)
+    {
+        $this->filterFactory = $filterFactory;
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFilterFactory()
+    {
+        return $this->filterFactory;
     }
 
     /**

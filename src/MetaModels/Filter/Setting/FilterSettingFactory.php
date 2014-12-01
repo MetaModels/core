@@ -18,8 +18,10 @@
 namespace MetaModels\Filter\Setting;
 
 use Database\Result;
+use MetaModels\Filter\Setting\Events\CreateFilterSettingFactoryEvent;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
+use MetaModels\MetaModelsEvents;
 
 /**
  * This is the filter settings factory interface.
@@ -48,6 +50,11 @@ class FilterSettingFactory implements IFilterSettingFactory
     public function __construct(IMetaModelsServiceContainer $serviceContainer)
     {
         $this->serviceContainer = $serviceContainer;
+
+        $this->serviceContainer->getEventDispatcher()->dispatch(
+            MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE,
+            new CreateFilterSettingFactoryEvent($this)
+        );
     }
 
     /**
@@ -110,6 +117,7 @@ class FilterSettingFactory implements IFilterSettingFactory
      */
     protected function collectRulesFor($parentSetting, $metaModel)
     {
+        // TODO: we should provide a collector like for attributes.
         $childInformation = $this->serviceContainer->getDatabase()
             ->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE pid=? AND enabled=1 ORDER BY sorting ASC')
             ->execute($parentSetting->get('id'));
@@ -133,6 +141,7 @@ class FilterSettingFactory implements IFilterSettingFactory
      */
     public function collectRules($collection, $metaModel)
     {
+        // TODO: we should provide a collector like for attributes.
         $database    = $this->serviceContainer->getDatabase();
         $information = $database
             ->prepare(
@@ -153,6 +162,7 @@ class FilterSettingFactory implements IFilterSettingFactory
      */
     public function createCollection($settingId)
     {
+        // TODO: we should provide a collector like for attributes.
         $information = $this->serviceContainer->getDatabase()
             ->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
             ->execute($settingId)
