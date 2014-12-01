@@ -257,7 +257,6 @@ if (!isset($GLOBALS['MM_FILTER_PARAMS'])) {
 // Attach ourselves to the DIC.
 $GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'MetaModels\Events\DefaultPropertyConditionCreator';
 $GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'MetaModels\Attribute\Events\LegacyListener';
-$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'MetaModels\Events\DatabaseBackedListener';
 $GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'MetaModels\Filter\Setting\Events\LegacyListener';
 
 $GLOBALS['TL_HOOKS']['initializeDependencyContainer'][] = function (
