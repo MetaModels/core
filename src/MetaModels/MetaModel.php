@@ -23,7 +23,6 @@ use MetaModels\Attribute\ITranslated;
 use MetaModels\Filter\Filter;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\Filter\IFilter;
-use MetaModels\Render\Setting\Factory as RenderSettingFactory;
 use MetaModels\Filter\Rules\StaticIdList;
 
 /**
@@ -1063,6 +1062,6 @@ class MetaModel implements IMetaModel
      */
     public function getView($intViewId = 0)
     {
-        return RenderSettingFactory::byId($this, $intViewId);
+        $this->getServiceContainer()->getRenderSettingFactory()->createCollection($this, $intViewId);
     }
 }

@@ -24,11 +24,8 @@ use MetaModels\IMetaModel;
  *
  * To create a IFactory instance, call {@link Factory::byId()}
  *
- * @package    MetaModels
- * @subpackage Interfaces
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @deprecated Use the render setting factory from the service container.
  */
-// FIXME: make this a real factory, like the MetaModels factory and attribute factory.
 interface IFactory
 {
     /**
@@ -41,6 +38,8 @@ interface IFactory
      * @param ICollection $objSetting   The render setting instance to be populated.
      *
      * @return void
+     *
+     * @deprecated Utilize the factory from the service container.
      */
     public static function collectAttributeSettings(IMetaModel $objMetaModel, $objSetting);
 
@@ -53,7 +52,7 @@ interface IFactory
      *
      * @return ICollection the instance of the render setting collection or null if not found.
      *
-     * @deprecated Will get moved to a real factory.
+     * @deprecated Utilize the factory from the service container.
      */
     public static function byId(IMetaModel $objMetaModel, $intId = 0);
 }

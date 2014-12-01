@@ -18,6 +18,7 @@
 namespace MetaModels\Render\Setting;
 
 use MetaModels\IMetaModel;
+use MetaModels\IMetaModelsServiceContainer;
 
 /**
  * This is the factory implementation.
@@ -27,69 +28,43 @@ use MetaModels\IMetaModel;
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ *
+ * @deprecated Utilize the factory from the service container.
  */
-// FIXME: make this a real factory, like the MetaModels factory and attribute factory.
 class Factory implements IFactory
 {
     /**
-     * The instances of created collections..
-     *
-     * @var ICollection[]
-     */
-    protected static $arrInstances = array();
-
-    /**
      * {@inheritdoc}
+     *
+     * @deprecated Utilize the factory from the service container.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function collectAttributeSettings(IMetaModel $objMetaModel, $objSetting)
     {
-        if ($objSetting->get('id')) {
-            $objViewAttributes = \Database::getInstance()
-                ->prepare('SELECT * FROM tl_metamodel_rendersetting WHERE pid=? AND enabled=1 ORDER BY sorting')
-                ->execute($objSetting->get('id'));
-            while ($objViewAttributes->next()) {
-                $objAttr = $objMetaModel->getAttributeById($objViewAttributes->attr_id);
-                if ($objAttr) {
-                    $objAttrSetting = $objSetting->getSetting($objAttr->getColName());
-                    if (!$objAttrSetting) {
-                        $objAttrSetting = $objAttr->getDefaultRenderSettings();
-                    }
+        /** @var IMetaModelsServiceContainer $serviceContainer */
+        $serviceContainer = $GLOBALS['container']['metamodels-service-container'];
 
-                    foreach ($objViewAttributes->row() as $strKey => $varValue) {
-                        if ($varValue) {
-                            $objAttrSetting->set($strKey, deserialize($varValue));
-                        }
-                    }
-                    $objSetting->setSetting($objAttr->getColName(), $objAttrSetting);
-                }
-            }
-        }
+        return $serviceContainer->getRenderSettingFactory()->collectAttributeSettings($objMetaModel, $objSetting);
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Utilize the factory from the service container.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function byId(IMetaModel $objMetaModel, $intId = 0)
     {
-        if (isset(self::$arrInstances[$intId])) {
-            return self::$arrInstances[$intId];
-        }
+        /** @var IMetaModelsServiceContainer $serviceContainer */
+        $serviceContainer = $GLOBALS['container']['metamodels-service-container'];
 
-        $objView = \Database::getInstance()
-            ->prepare(
-                'SELECT * FROM tl_metamodel_rendersettings WHERE pid=? AND (id=? OR isdefault=1) ORDER BY isdefault ASC'
-            )
-            ->limit(1)
-            ->execute($objMetaModel->get('id'), $intId);
-        if (!$objView->numRows) {
-            $objView = null;
-        }
-
-        $objRenderSetting = new Collection($objView ? $objView->row() : array());
-        self::collectAttributeSettings($objMetaModel, $objRenderSetting);
-
-        self::$arrInstances[$intId] = $objRenderSetting;
-
-        return $objRenderSetting;
+        return $serviceContainer->getRenderSettingFactory()->createCollection(
+            $objMetaModel,
+            $intId === 0 ? '' : $intId
+        );
     }
 }

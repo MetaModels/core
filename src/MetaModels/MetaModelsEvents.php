@@ -57,4 +57,11 @@ class MetaModelsEvents
      * @see \MetaModels\Filter\Setting\Events\CreateFilterSettingFactoryEvent
      */
     const FILTER_SETTING_FACTORY_CREATE = 'metamodels.filter-setting.factory.create';
+
+    /**
+     * Event when a filter setting factory is created.
+     *
+     * @see \MetaModels\Filter\Setting\Events\CreateRenderSettingFactoryEvent
+     */
+    const RENDER_SETTING_FACTORY_CREATE = 'metamodels.render-setting.factory.create';
 }

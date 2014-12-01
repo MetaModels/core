@@ -18,7 +18,6 @@
 namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
-use MetaModels\Render\Setting\Factory;
 use MetaModels\Render\Setting\ICollection;
 
 /**
@@ -42,7 +41,10 @@ class BreadCrumbRenderSettings extends BreadCrumbMetaModels
      */
     protected function getRenderSettings()
     {
-        return Factory::byId($this->getMetaModel(), $this->renderSettingsId);
+        return $this->getServiceContainer()->getRenderSettingFactory()->createCollection(
+            $this->getMetaModel(),
+            $this->renderSettingsId
+        );
     }
 
     /**

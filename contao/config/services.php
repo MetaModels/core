@@ -28,11 +28,13 @@ $container['metamodels-service-container.factory.default'] = $container->protect
         $attributeFactory = new MetaModels\Attribute\AttributeFactory($serviceContainer);
         $factory          = new MetaModels\Factory($serviceContainer);
         $filterFactory    = new MetaModels\Filter\Setting\FilterSettingFactory($serviceContainer);
+        $renderFactory    = new MetaModels\Render\Setting\RenderSettingFactory($serviceContainer);
 
         $serviceContainer
             ->setAttributeFactory($attributeFactory)
             ->setFactory($factory)
-            ->setFilterFactory($filterFactory);
+            ->setFilterFactory($filterFactory)
+            ->setRenderSettingFactory($renderFactory);
 
         return $serviceContainer;
     }
