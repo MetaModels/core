@@ -384,7 +384,7 @@ class MetaModel implements IMetaModel
      */
     protected function fetchAdditionalAttributes($ids, $result, $attrOnly = array())
     {
-        $attributes = $this->getAttributeByNames($attrOnly);
+        $attributes     = $this->getAttributeByNames($attrOnly);
         $attributeNames = array_intersect(
             array_keys($attributes),
             array_keys(array_merge($this->getComplexAttributes(), $this->getTranslatedAttributes()))
