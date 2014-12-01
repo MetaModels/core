@@ -47,7 +47,7 @@ class Subscriber extends BaseSubscriber
             ->addListener(
                 GetBreadcrumbEvent::NAME,
                 function (GetBreadcrumbEvent $event) use ($serviceContainer) {
-                    if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersetting')) {
+                    if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersettings')) {
                         return;
                     }
                     $subscriber = new BreadCrumbRenderSettings($serviceContainer);
@@ -100,7 +100,7 @@ class Subscriber extends BaseSubscriber
      */
     public function modelToLabel(ModelToLabelEvent $event)
     {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersetting')) {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersettings')) {
             return;
         }
 
@@ -123,7 +123,7 @@ class Subscriber extends BaseSubscriber
      */
     public function handleUpdate(PostPersistModelEvent $event)
     {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersetting')) {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersettings')) {
             return;
         }
 
@@ -155,7 +155,7 @@ class Subscriber extends BaseSubscriber
      */
     public function decodeJumpToValue(DecodePropertyValueForWidgetEvent $event)
     {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersetting')
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersettings')
         || ($event->getProperty() !== 'jumpTo')) {
             return;
         }
@@ -214,7 +214,7 @@ class Subscriber extends BaseSubscriber
      */
     public function encodeJumpToValue(EncodePropertyValueFromWidgetEvent $event)
     {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersetting')
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersettings')
             || ($event->getProperty() !== 'jumpTo')) {
             return;
         }
@@ -266,7 +266,7 @@ class Subscriber extends BaseSubscriber
      */
     public function buildJumpToWidget(BuildWidgetEvent $event)
     {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersetting')
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersettings')
             || ($event->getProperty() !== 'jumpTo')) {
             return;
         }
@@ -312,7 +312,7 @@ class Subscriber extends BaseSubscriber
      */
     public function getTemplateOptions(GetPropertyOptionsEvent $event)
     {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersetting')
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersettings')
             || ($event->getPropertyName() !== 'template')) {
             return;
         }
@@ -334,7 +334,7 @@ class Subscriber extends BaseSubscriber
      */
     public static function getCssFilesOptions(GetOptionsEvent $event)
     {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersetting')
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersettings')
             || ($event->getPropertyName() !== 'additionalCss')
             || ($event->getSubPropertyName() !== 'file')) {
             return;
@@ -357,7 +357,7 @@ class Subscriber extends BaseSubscriber
      */
     public static function getJsFilesOptions(GetOptionsEvent $event)
     {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersetting')
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersettings')
             || ($event->getPropertyName() !== 'additionalJs')
             || ($event->getSubPropertyName() !== 'file')) {
             return;
