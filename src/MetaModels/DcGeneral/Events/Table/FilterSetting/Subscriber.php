@@ -31,7 +31,6 @@ use ContaoCommunityAlliance\Translator\TranslatorInterface;
 use MetaModels\Dca\Helper;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbFilterSetting;
-use MetaModels\Filter\Setting\Factory;
 use MetaModels\IMetaModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -185,7 +184,7 @@ class Subscriber extends BaseSubscriber
      */
     public function getMetaModel(ModelInterface $model)
     {
-        $filterSetting = Factory::byId($model->getProperty('fid'));
+        $filterSetting = $this->getServiceContainer()->getFilterFactory()->createCollection($model->getProperty('fid'));
 
         return $filterSetting->getMetaModel();
     }
