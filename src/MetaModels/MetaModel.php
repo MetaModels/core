@@ -1062,6 +1062,6 @@ class MetaModel implements IMetaModel
      */
     public function getView($intViewId = 0)
     {
-        $this->getServiceContainer()->getRenderSettingFactory()->createCollection($this, $intViewId);
+        return $this->getServiceContainer()->getRenderSettingFactory()->createCollection($this, $intViewId);
     }
 }

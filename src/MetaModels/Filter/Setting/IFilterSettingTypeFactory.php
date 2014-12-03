@@ -17,8 +17,6 @@
 
 namespace MetaModels\Filter\Setting;
 
-use MetaModels\IMetaModel;
-
 /**
  * This is the factory interface to query instances of filter settings.
  * Usually this is only used internally from within the MetaModel class.
@@ -42,13 +40,13 @@ interface IFilterSettingTypeFactory
     /**
      * Create a new instance with the given information.
      *
-     * @param array      $information The filter setting information.
+     * @param array       $information    The filter setting information.
      *
-     * @param IMetaModel $metaModel   The MetaModel instance the filter setting shall be created for.
+     * @param ICollection $filterSettings The filter setting instance the filter setting shall be created for.
      *
      * @return ISimple|null
      */
-    public function createInstance($information, $metaModel);
+    public function createInstance($information, $filterSettings);
 
     /**
      * Check if the type allows children.

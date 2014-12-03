@@ -86,9 +86,9 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
     /**
      * {@inheritdoc}
      */
-    public function createInstance($information, $metaModel)
+    public function createInstance($information, $filterSettings)
     {
-        return new $this->typeClass($metaModel, $information);
+        return new $this->typeClass($filterSettings, $information);
     }
 
     /**

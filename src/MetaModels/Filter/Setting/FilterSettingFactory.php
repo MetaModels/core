@@ -19,7 +19,6 @@ namespace MetaModels\Filter\Setting;
 
 use Database\Result;
 use MetaModels\Filter\Setting\Events\CreateFilterSettingFactoryEvent;
-use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsEvents;
 
@@ -78,17 +77,17 @@ class FilterSettingFactory implements IFilterSettingFactory
     /**
      * Create a new setting.
      *
-     * @param Result     $objSettings The information from which to initialize the setting from.
+     * @param Result      $dbResult       The information from which to initialize the setting from.
      *
-     * @param IMetaModel $metaModel   The MetaModel instance.
+     * @param ICollection $filterSettings The MetaModel filter settings.
      *
      * @return ISimple
      */
-    protected function createSetting($objSettings, $metaModel)
+    protected function createSetting($dbResult, $filterSettings)
     {
-        $factory = $this->getTypeFactory($objSettings->type);
+        $factory = $this->getTypeFactory($dbResult->type);
         if ($factory) {
-            $setting = $factory->createInstance($objSettings->row(), $metaModel);
+            $setting = $factory->createInstance($dbResult->row(), $filterSettings);
 
             if (!$setting) {
                 return null;
@@ -97,7 +96,7 @@ class FilterSettingFactory implements IFilterSettingFactory
             // Collect next level.
             if ($factory->isNestedType()) {
                 /** @var IWithChildren $setting */
-                $this->collectRulesFor($setting, $metaModel);
+                $this->collectRulesFor($setting, $filterSettings);
             }
 
             return $setting;
@@ -109,13 +108,13 @@ class FilterSettingFactory implements IFilterSettingFactory
     /**
      * Fetch all child rules for the given setting.
      *
-     * @param IWithChildren $parentSetting The information from which to initialize the setting from.
+     * @param IWithChildren $parentSetting  The information from which to initialize the setting from.
      *
-     * @param IMetaModel    $metaModel     The MetaModel instance.
+     * @param ICollection   $filterSettings The filter setting instance.
      *
      * @return void
      */
-    protected function collectRulesFor($parentSetting, $metaModel)
+    protected function collectRulesFor($parentSetting, $filterSettings)
     {
         // TODO: we should provide a collector like for attributes.
         $childInformation = $this->serviceContainer->getDatabase()
@@ -123,7 +122,7 @@ class FilterSettingFactory implements IFilterSettingFactory
             ->execute($parentSetting->get('id'));
 
         while ($childInformation->next()) {
-            $childSetting = $this->createSetting($childInformation, $metaModel);
+            $childSetting = $this->createSetting($childInformation, $filterSettings);
             if ($childSetting) {
                 $parentSetting->addChild($childSetting);
             }
@@ -133,13 +132,11 @@ class FilterSettingFactory implements IFilterSettingFactory
     /**
      * Collect the rules for a filter setting.
      *
-     * @param Collection $collection The collection.
-     *
-     * @param IMetaModel $metaModel  The MetaModel instance.
+     * @param Collection $filterSettings The filter settings instance.
      *
      * @return void
      */
-    public function collectRules($collection, $metaModel)
+    public function collectRules($filterSettings)
     {
         // TODO: we should provide a collector like for attributes.
         $database    = $this->serviceContainer->getDatabase();
@@ -147,12 +144,12 @@ class FilterSettingFactory implements IFilterSettingFactory
             ->prepare(
                 'SELECT * FROM tl_metamodel_filtersetting WHERE fid=? AND pid=0 AND enabled=1 ORDER BY sorting ASC'
             )
-            ->execute($collection->get('id'));
+            ->execute($filterSettings->get('id'));
 
         while ($information->next()) {
-            $newSetting = $this->createSetting($information, $metaModel);
+            $newSetting = $this->createSetting($information, $filterSettings);
             if ($newSetting) {
-                $collection->addSetting($newSetting);
+                $filterSettings->addSetting($newSetting);
             }
         }
     }
@@ -174,7 +171,7 @@ class FilterSettingFactory implements IFilterSettingFactory
             $collection   = new Collection($information);
 
             $collection->setMetaModel($metaModel);
-            $this->collectRules($collection, $metaModel);
+            $this->collectRules($collection, $collection);
 
             return $collection;
         }
