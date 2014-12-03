@@ -197,6 +197,43 @@ class Boot
     }
 
     /**
+     * Register the loadDataContainer HOOK for the given table name to create the DcGeneral etc.
+     *
+     * @param string                      $tableName The name of the table to be loaded.
+     *
+     * @param IMetaModelsServiceContainer $container The MetaModels service container.
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    private function attachLoadDataContainerHook($tableName, $container)
+    {
+        LoadDataContainerHookListener::attachFor(
+            $tableName,
+            function ($tableName) use ($container) {
+                $dispatcher = $container->getEventDispatcher();
+                $event      = new LoadDataContainerEvent('tl_metamodel_item');
+                $dispatcher->dispatch(
+                    ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
+                    new LoadLanguageFileEvent('tl_metamodel_item')
+                );
+                $dispatcher->dispatch(ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER, $event);
+
+                if (!isset($GLOBALS['TL_DCA'][$tableName])) {
+                    $GLOBALS['TL_DCA'][$tableName] = array();
+                }
+
+                $GLOBALS['TL_DCA'][$tableName] = array_replace_recursive(
+                    (array) $GLOBALS['TL_DCA']['tl_metamodel_item'],
+                    (array) $GLOBALS['TL_DCA'][$tableName]
+                );
+            }
+        );
+    }
+
+    /**
      * Boot the system in the backend.
      *
      * @param MetaModelsBootEvent $event The event.
@@ -221,27 +258,7 @@ class Boot
 
         // Prepare lazy loading of the data containers.
         foreach ($viewCombinations->getParentedInputScreens() as $inputScreen) {
-            LoadDataContainerHookListener::attachFor(
-                $inputScreen->getMetaModel()->getTableName(),
-                function ($tableName) use ($container) {
-                    $dispatcher = $container->getEventDispatcher();
-                    $event      = new LoadDataContainerEvent('tl_metamodel_item');
-                    $dispatcher->dispatch(
-                        ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
-                        new LoadLanguageFileEvent('tl_metamodel_item')
-                    );
-                    $dispatcher->dispatch(ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER, $event);
-
-                    if (!isset($GLOBALS['TL_DCA'][$tableName])) {
-                        $GLOBALS['TL_DCA'][$tableName] = array();
-                    }
-
-                    $GLOBALS['TL_DCA'][$tableName] = array_replace_recursive(
-                        (array) $GLOBALS['TL_DCA']['tl_metamodel_item'],
-                        (array) $GLOBALS['TL_DCA'][$tableName]
-                    );
-                }
-            );
+            $this->attachLoadDataContainerHook($inputScreen->getMetaModel()->getTableName(), $container);
 
             LoadDataContainerHookListener::attachFor(
                 $inputScreen->getParentTable(),
@@ -255,6 +272,8 @@ class Boot
         $dispatcher = $container->getEventDispatcher();
         foreach ($container->getFactory()->collectNames() as $metaModelName) {
             $inputScreen = $viewCombinations->getInputScreenDetails($metaModelName);
+            $this->attachLoadDataContainerHook($inputScreen->getMetaModel()->getTableName(), $container);
+
             $dispatcher->addListener(
                 PreCreateDcGeneralEvent::NAME,
                 function (PreCreateDcGeneralEvent $event) use ($metaModelName, $inputScreen, $container) {
