@@ -272,7 +272,9 @@ class Boot
         $dispatcher = $container->getEventDispatcher();
         foreach ($container->getFactory()->collectNames() as $metaModelName) {
             $inputScreen = $viewCombinations->getInputScreenDetails($metaModelName);
-            $this->attachLoadDataContainerHook($inputScreen->getMetaModel()->getTableName(), $container);
+            if ($inputScreen) {
+                $this->attachLoadDataContainerHook($inputScreen->getMetaModel()->getTableName(), $container);
+            }
 
             $dispatcher->addListener(
                 PreCreateDcGeneralEvent::NAME,
