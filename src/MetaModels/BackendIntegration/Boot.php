@@ -101,17 +101,19 @@ class Boot
     /**
      * Retrieve the table names from a list of input screens.
      *
-     * @param IInputScreen[] $inputScreens The input screens containing the information.
+     * @param string[]         $metaModelNames   The names of the MetaModels for which input screens are to be added.
+     *
+     * @param ViewCombinations $viewCombinations The view combinations.
      *
      * @return string[]
      */
-    private function getTableNamesFromInputScreens($inputScreens)
+    private function getTableNamesFromInputScreens($metaModelNames, $viewCombinations)
     {
         $parentTables = array();
-        foreach ($inputScreens as $screen) {
-            $parentTable = $screen->getParentTable();
+        foreach ($metaModelNames as $metaModelName) {
+            $parentTable = $viewCombinations->getParentOf($metaModelName);
 
-            $parentTables[$parentTable][] = $screen->getMetaModel()->getTableName();
+            $parentTables[$parentTable][] = $metaModelName;
         }
 
         return $parentTables;
@@ -120,17 +122,16 @@ class Boot
     /**
      * Inject all meta models into their corresponding parent tables.
      *
-     * @param IInputScreen[] $inputScreens The input screens to be added.
+     * @param string[] $parentTables The names of the MetaModels for which input screens are to be added.
      *
      * @return void
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    private function addChildTablesToBackendModules($inputScreens)
+    private function addChildTablesToBackendModules($parentTables)
     {
-        $parentTables = $this->getTableNamesFromInputScreens($inputScreens);
-        $lastCount    = count($parentTables);
+        $lastCount = count($parentTables);
         // Loop until all tables are injected or until there was no injection during one run.
         // This is important, as we might have models that are child of another model.
         while ($parentTables) {
@@ -175,7 +176,11 @@ class Boot
             $this->addModuleToBackendMenu($container, $inputScreen);
         }
 
-        $this->addChildTablesToBackendModules($viewCombinations->getParentedInputScreens());
+        $parentTables = $this->getTableNamesFromInputScreens(
+            $viewCombinations->getParentedInputScreenNames(),
+            $viewCombinations
+        );
+        $this->addChildTablesToBackendModules($parentTables);
     }
 
     /**
@@ -257,30 +262,29 @@ class Boot
         $this->buildBackendMenu($container, $viewCombinations);
 
         // Prepare lazy loading of the data containers.
-        foreach ($viewCombinations->getParentedInputScreens() as $inputScreen) {
-            $this->attachLoadDataContainerHook($inputScreen->getMetaModel()->getTableName(), $container);
+        foreach ($viewCombinations->getParentedInputScreenNames() as $metaModelName) {
+            $this->attachLoadDataContainerHook($metaModelName, $container);
 
             LoadDataContainerHookListener::attachFor(
-                $inputScreen->getParentTable(),
-                function () use ($inputScreen, $container) {
-                    $builder = new MetaModelDcaBuilder($container);
-                    $builder->injectOperationButton($inputScreen);
+                $viewCombinations->getParentOf($metaModelName),
+                function () use ($metaModelName, $viewCombinations, $container) {
+                    $metaModelName = $viewCombinations->getInputScreenDetails($metaModelName);
+                    $builder       = new MetaModelDcaBuilder($container);
+                    $builder->injectOperationButton($metaModelName);
                 }
             );
         }
 
         $dispatcher = $container->getEventDispatcher();
         foreach ($container->getFactory()->collectNames() as $metaModelName) {
-            $inputScreen = $viewCombinations->getInputScreenDetails($metaModelName);
-            if ($inputScreen) {
-                $this->attachLoadDataContainerHook($inputScreen->getMetaModel()->getTableName(), $container);
-            }
+            $this->attachLoadDataContainerHook($metaModelName, $container);
 
             $dispatcher->addListener(
                 PreCreateDcGeneralEvent::NAME,
-                function (PreCreateDcGeneralEvent $event) use ($metaModelName, $inputScreen, $container) {
-                    $factory = $event->getFactory();
-                    $name    = $factory->getContainerName();
+                function (PreCreateDcGeneralEvent $event) use ($metaModelName, $viewCombinations, $container) {
+                    $factory     = $event->getFactory();
+                    $name        = $factory->getContainerName();
+                    $inputScreen = $viewCombinations->getInputScreenDetails($metaModelName);
 
                     if ($name !== $metaModelName) {
                         return;
