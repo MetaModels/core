@@ -120,11 +120,12 @@ class MetaModel implements IMetaModel
      */
     protected function tryUnserialize($value)
     {
-        $unSerialized = @unserialize($value);
-        // @codingStandardsIgnoreEnd
+        if (!is_array($value) && (substr($value, 0, 2) == 'a:')) {
+            $unSerialized = unserialize($value);
+        }
 
-        if (is_array($unSerialized)) {
-            return $unSerialized;
+        if (isset ($unSerialized) && is_array($unSerialized)) {
+            return  $unSerialized;
         }
 
         return $value;
