@@ -120,7 +120,6 @@ class MetaModel implements IMetaModel
      */
     protected function tryUnserialize($value)
     {
-        // @codingStandardsIgnoreStart
         $unSerialized = @unserialize($value);
         // @codingStandardsIgnoreEnd
 
@@ -332,7 +331,7 @@ class MetaModel implements IMetaModel
                     $this->buildDatabaseParameterList($arrIds)
                 )
             )
-            ->executeUncached($parameters);
+            ->execute($parameters);
 
         if ($objRow->numRows == 0) {
             return array();
@@ -694,7 +693,8 @@ class MetaModel implements IMetaModel
                 $arrFilteredIds = $objSortAttribute->sortIds($arrFilteredIds, $strSortOrder);
             } elseif (in_array($strSortBy, array('id', 'pid', 'tstamp', 'sorting'))) {
                 // Sort by database values.
-                $arrFilteredIds = $this->getDatabase()
+                $arrFilteredIds = $this
+                    ->getDatabase()
                     ->prepare(
                         sprintf(
                             'SELECT id FROM %s WHERE id IN(%s) ORDER BY %s %s',
@@ -728,7 +728,8 @@ class MetaModel implements IMetaModel
             return 0;
         }
 
-        $objRow = $this->getDatabase()
+        $objRow = $this
+            ->getDatabase()
             ->prepare(sprintf(
                 'SELECT COUNT(id) AS count FROM %s WHERE id IN(%s)',
                 $this->getTableName(),
@@ -763,7 +764,8 @@ class MetaModel implements IMetaModel
         }
         $objNewFilter = $this->copyFilter($objFilter);
 
-        $objRow = $this->getDatabase()
+        $objRow = $this
+            ->getDatabase()
             ->prepare(sprintf(
                 'SELECT id,vargroup FROM %s WHERE varbase=0 AND vargroup IN (%s)',
                 $this->getTableName(),
@@ -786,7 +788,8 @@ class MetaModel implements IMetaModel
         }
         $objNewFilter = $this->copyFilter($objFilter);
 
-        $objRow = $this->getDatabase()
+        $objRow = $this
+            ->getDatabase()
             ->prepare(sprintf(
                 'SELECT id,vargroup FROM %1$s WHERE vargroup IN (SELECT vargroup FROM %1$s WHERE id IN (%2$s))',
                 $this->getTableName(),
@@ -834,7 +837,8 @@ class MetaModel implements IMetaModel
             $varData = serialize($varData);
         }
 
-        $this->getDatabase()
+        $this
+            ->getDatabase()
             ->prepare(
                 sprintf(
                     'UPDATE %s SET %s=? WHERE id IN (%s)',
@@ -947,7 +951,8 @@ class MetaModel implements IMetaModel
             $arrData['vargroup'] = $item->get('vargroup');
         }
 
-        $intItemId = $this->getDatabase()
+        $intItemId = $this
+            ->getDatabase()
             ->prepare('INSERT INTO ' . $this->getTableName() . ' %s')
             ->set($arrData)
             ->execute()
@@ -1025,7 +1030,8 @@ class MetaModel implements IMetaModel
             }
         }
         // Now make the real row disappear.
-        $this->getDatabase()
+        $this
+            ->getDatabase()
             ->prepare(sprintf(
                 'DELETE FROM %s WHERE id IN (%s)',
                 $this->getTableName(),

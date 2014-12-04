@@ -295,7 +295,7 @@ class Builder
     {
         $dispatcher = $this->serviceContainer->getEventDispatcher();
         $container  = $event->getContainer();
-
+        /** @var $container IMetaModelDataDefinition */
         $this->parseMetaModelDefinition($container);
         $this->parseProperties($container);
         $this->parseBasicDefinition($container);
@@ -889,7 +889,8 @@ class Builder
                 ->setTableName($container->getName())
                 ->setClassName('MetaModels\DcGeneral\Data\Driver')
                 ->setInitializationData(array(
-                    'source' => $container->getName()
+                    'source'            => $container->getName(),
+                    'service-container' => $this->serviceContainer
                 ))
                 ->isVersioningEnabled(false);
             $container->getBasicDefinition()->setDataProvider($container->getName());
@@ -903,7 +904,6 @@ class Builder
         $inputScreen = $this->getInputScreenDetails();
         // If not standalone, set the correct parent provider.
         if (!$inputScreen->isStandalone()) {
-
             // Check config if it already exists, if not, add it.
             if (!$config->hasInformation($inputScreen->getParentTable())) {
                 $providerInformation = new ContaoDataProviderInformation();
@@ -918,7 +918,8 @@ class Builder
                     ->setTableName($inputScreen->getParentTable())
                     ->setInitializationData(
                         array(
-                            'source' => $inputScreen->getParentTable()
+                            'source'            => $inputScreen->getParentTable(),
+                            'service-container' => $this->serviceContainer
                         )
                     );
 
