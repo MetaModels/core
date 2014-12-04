@@ -49,7 +49,11 @@ class SubSystemBoot
     public function boot(\Pimple $container)
     {
         /** @var \MetaModels\IMetaModelsServiceContainer $container */
-        $container  = $container['metamodels-service-container'];
+        try {
+            $container = $container['metamodels-service-container'];
+        } catch (\Exception $e) {
+            return;
+        }
         $dispatcher = $container->getEventDispatcher();
         $event      = new MetaModelsBootEvent($container);
 
