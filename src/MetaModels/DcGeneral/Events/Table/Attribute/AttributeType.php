@@ -50,6 +50,13 @@ class AttributeType
 
         $options = array();
         foreach ($attributeFactory->getTypeNames($flags) as $attributeType) {
+            // Might be translated+complex or translated+simple.
+            if ($attributeFactory->getTypeFactory($attributeType)->isTranslatedType()
+                && !$objMetaModel->isTranslated()
+            ) {
+                continue;
+            }
+
             $options[$attributeType] = $translator->translate(
                 'typeOptions.' . $attributeType,
                 'tl_metamodel_attribute'
