@@ -41,6 +41,13 @@ class Factory implements IFactory
     protected $serviceContainer;
 
     /**
+     * The already translated MetaModel names.
+     *
+     * @var string[]
+     */
+    private $lookupMap = array();
+
+    /**
      * Create a new instance.
      *
      * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
@@ -89,11 +96,15 @@ class Factory implements IFactory
      */
     public function translateIdToMetaModelName($metaModelId)
     {
-        $event = new GetMetaModelNameFromIdEvent($metaModelId);
+        if (!isset($this->lookupMap[$metaModelId])) {
+            $event = new GetMetaModelNameFromIdEvent($metaModelId);
 
-        $this->getEventDispatcher()->dispatch($event::NAME, $event);
+            $this->getEventDispatcher()->dispatch($event::NAME, $event);
 
-        return $event->getMetaModelName();
+            $this->lookupMap[$metaModelId] = $event->getMetaModelName();
+        }
+
+        return $this->lookupMap[$metaModelId];
     }
 
     /**
