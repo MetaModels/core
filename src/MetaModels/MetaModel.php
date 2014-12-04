@@ -288,6 +288,8 @@ class MetaModel implements IMetaModel
                     $arrData[$strKey] = $this->tryUnserialize($varValue);
                 }
             }
+
+            /** @noinspection PhpUndefinedFieldInspection */
             $arrResult[$objRow->id] = $arrData;
         }
 
@@ -334,6 +336,7 @@ class MetaModel implements IMetaModel
             )
             ->execute($parameters);
 
+        /** @noinspection PhpUndefinedFieldInspection */
         if ($objRow->numRows == 0) {
             return array();
         }
@@ -486,7 +489,7 @@ class MetaModel implements IMetaModel
     public function get($strKey)
     {
         // Try to retrieve via getter method.
-        $strGetter = 'get'.$strKey;
+        $strGetter = 'get' . $strKey;
         if (method_exists($this, $strGetter)) {
             return $this->$strGetter();
         }
@@ -738,6 +741,7 @@ class MetaModel implements IMetaModel
             ))
             ->execute($arrFilteredIds);
 
+        /** @noinspection PhpUndefinedFieldInspection */
         return $objRow->count;
     }
 
@@ -952,6 +956,7 @@ class MetaModel implements IMetaModel
             $arrData['vargroup'] = $item->get('vargroup');
         }
 
+        /** @noinspection PhpUndefinedFieldInspection */
         $intItemId = $this
             ->getDatabase()
             ->prepare('INSERT INTO ' . $this->getTableName() . ' %s')

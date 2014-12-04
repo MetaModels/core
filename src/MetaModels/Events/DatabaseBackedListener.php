@@ -155,7 +155,9 @@ class DatabaseBackedListener
             $objData = $this->getDatabase()->prepare('SELECT * FROM tl_metamodel WHERE id=?')
                 ->limit(1)
                 ->execute($event->getMetaModelId());
+            /** @noinspection PhpUndefinedFieldInspection */
             if ($objData->numRows) {
+                /** @noinspection PhpUndefinedFieldInspection */
                 self::$tableNames[$event->getMetaModelId()] = $objData->tableName;
                 $event->setMetaModelName(self::$tableNames[$event->getMetaModelId()]);
             }
@@ -233,6 +235,7 @@ class DatabaseBackedListener
             ->limit(1)
             ->execute($event->getMetaModelName());
 
+        /** @noinspection PhpUndefinedFieldInspection */
         if ($objData->numRows) {
             $this->createInstance($event, $objData->row());
         }
@@ -289,8 +292,11 @@ class DatabaseBackedListener
 
         $metaModelName = $event->getMetaModel()->getTableName();
         while ($attributes->next()) {
-            self::$attributeInformation[$metaModelName][$attributes->colname] = $attributes->row();
-            $event->addAttributeInformation($attributes->colname, $attributes->row());
+            /** @noinspection PhpUndefinedFieldInspection */
+            $colName = $attributes->colname;
+
+            self::$attributeInformation[$metaModelName][$colName] = $attributes->row();
+            $event->addAttributeInformation($colName, $attributes->row());
         }
     }
 }
