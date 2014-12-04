@@ -94,15 +94,7 @@ abstract class ViewCombinations
         $this->container = $container;
         $this->user      = $user;
 
-        // FIXME: disabled for the moment.
-        $cacheDir = null;
-
         if (!$this->loadFromCache($cacheDir)) {
-            // Authenticate the user - if this fails, we stop everything.
-            if (!$this->authenticateUser()) {
-                return;
-            }
-
             $this->resolve();
             $this->saveToCache($cacheDir);
         }
@@ -124,8 +116,8 @@ abstract class ViewCombinations
         $key = 'metamodels_user_information_' . md5(get_class($this->user));
         // Determine file key.
 
-        /** @noinspection PhpUndefinedFieldInspection */
-        if ($this->user->id) {
+        // Authenticate the user - if this fails, we use an anonymous cache file.
+        if ($this->authenticateUser()) {
             /** @noinspection PhpUndefinedFieldInspection */
             $key .= '_' . $this->user->id;
         } else {
@@ -151,7 +143,12 @@ abstract class ViewCombinations
         }
 
         // Perform loading now.
-        $this->information = json_decode(file_get_contents($fileName));
+        $data = json_decode(file_get_contents($fileName), true);
+
+        $this->information = $data['information'];
+        $this->tableMap    = $data['tableMap'];
+        $this->parentMap   = $data['parentMap'];
+        $this->childMap    = $data['childMap'];
 
         return true;
     }
@@ -172,7 +169,15 @@ abstract class ViewCombinations
         }
 
         // Perform saving now.
-        file_put_contents($fileName, json_encode($this->information, JSON_PRETTY_PRINT));
+        file_put_contents($fileName, json_encode(
+            array(
+                'information' => $this->information,
+                'tableMap'    => $this->tableMap,
+                'parentMap'   => $this->parentMap,
+                'childMap'    => $this->childMap
+            ),
+            JSON_PRETTY_PRINT
+        ));
 
         return true;
     }
