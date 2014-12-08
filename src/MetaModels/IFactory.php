@@ -30,7 +30,7 @@ namespace MetaModels;
  * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-interface IFactory
+interface IFactory extends IServiceContainerAware
 {
     /**
      * Create a MetaModel instance from the id.

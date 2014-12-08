@@ -34,7 +34,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class Factory implements IFactory
 {
     /**
-     * The event dispatcher.
+     * The service container.
      *
      * @var IMetaModelsServiceContainer
      */
@@ -48,17 +48,7 @@ class Factory implements IFactory
     private $lookupMap = array();
 
     /**
-     * Create a new instance.
-     *
-     * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
-     */
-    public function __construct(IMetaModelsServiceContainer $serviceContainer)
-    {
-        $this->setServiceContainer($serviceContainer);
-    }
-
-    /**
-     * Set the event dispatcher.
+     * Set the service container.
      *
      * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
      *
@@ -72,7 +62,7 @@ class Factory implements IFactory
     }
 
     /**
-     * Retrieve the event dispatcher.
+     * Retrieve the service container.
      *
      * @return IMetaModelsServiceContainer
      */

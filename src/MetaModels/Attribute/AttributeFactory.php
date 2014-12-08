@@ -36,7 +36,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class AttributeFactory implements IAttributeFactory
 {
     /**
-     * The event dispatcher.
+     * The service container.
      *
      * @var IMetaModelsServiceContainer
      */
@@ -50,22 +50,7 @@ class AttributeFactory implements IAttributeFactory
     protected $typeFactories = array();
 
     /**
-     * Create a new instance.
-     *
-     * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
-     */
-    public function __construct(IMetaModelsServiceContainer $serviceContainer)
-    {
-        $this->setServiceContainer($serviceContainer);
-
-        $this->getEventDispatcher()->dispatch(
-            CreateAttributeFactoryEvent::NAME,
-            new CreateAttributeFactoryEvent($this)
-        );
-    }
-
-    /**
-     * Set the event dispatcher.
+     * Set the service container.
      *
      * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
      *
@@ -75,11 +60,17 @@ class AttributeFactory implements IAttributeFactory
     {
         $this->serviceContainer = $serviceContainer;
 
+        $this->typeFactories = array();
+        $this->getEventDispatcher()->dispatch(
+            CreateAttributeFactoryEvent::NAME,
+            new CreateAttributeFactoryEvent($this)
+        );
+
         return $this;
     }
 
     /**
-     * Retrieve the event dispatcher.
+     * Retrieve the service container.
      *
      * @return IMetaModelsServiceContainer
      */

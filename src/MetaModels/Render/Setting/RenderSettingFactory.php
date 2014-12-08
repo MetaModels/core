@@ -35,11 +35,13 @@ class RenderSettingFactory implements IRenderSettingFactory
     protected $serviceContainer;
 
     /**
-     * Create a new instance.
+     * Set the service container.
      *
      * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
+     *
+     * @return RenderSettingFactory
      */
-    public function __construct(IMetaModelsServiceContainer $serviceContainer)
+    public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer)
     {
         $this->serviceContainer = $serviceContainer;
 
@@ -47,6 +49,17 @@ class RenderSettingFactory implements IRenderSettingFactory
             MetaModelsEvents::RENDER_SETTING_FACTORY_CREATE,
             new CreateRenderSettingFactoryEvent($this)
         );
+        return $this;
+    }
+
+    /**
+     * Retrieve the service container.
+     *
+     * @return IMetaModelsServiceContainer
+     */
+    public function getServiceContainer()
+    {
+        return $this->serviceContainer;
     }
 
     /**

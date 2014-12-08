@@ -18,13 +18,14 @@
 namespace MetaModels\Render\Setting;
 
 use MetaModels\IMetaModel;
+use MetaModels\IServiceContainerAware;
 
 /**
  * This is the filter settings factory interface.
  *
  * @see IRenderSettingFactory::createCollection() to create a render setting collection instance.
  */
-interface IRenderSettingFactory
+interface IRenderSettingFactory extends IServiceContainerAware
 {
     /**
      * Create a ICollection instance from the id.

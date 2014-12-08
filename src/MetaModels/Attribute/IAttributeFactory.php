@@ -18,6 +18,7 @@
 namespace MetaModels\Attribute;
 
 use MetaModels\IMetaModel;
+use MetaModels\IServiceContainerAware;
 
 /**
  * This is the factory interface to query instances of attributes.
@@ -27,7 +28,7 @@ use MetaModels\IMetaModel;
  * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-interface IAttributeFactory
+interface IAttributeFactory extends IServiceContainerAware
 {
     /**
      * Flag for filtering translated attributes.

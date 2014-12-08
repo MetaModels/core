@@ -37,7 +37,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     /**
      * The factory to use.
      *
-     * @var IFactory
+     * @var IAttributeFactory
      */
     protected $attributeFactory;
 
@@ -86,6 +86,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     public function setFactory(IFactory $factory)
     {
         $this->factory = $factory;
+        $factory->setServiceContainer($this);
 
         return $this;
     }
@@ -108,6 +109,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     public function setAttributeFactory(IAttributeFactory $factory)
     {
         $this->attributeFactory = $factory;
+        $factory->setServiceContainer($this);
 
         return $this;
     }
@@ -130,6 +132,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     public function setFilterFactory($filterFactory)
     {
         $this->filterFactory = $filterFactory;
+        $filterFactory->setServiceContainer($this);
 
         return $this;
     }
@@ -152,6 +155,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     public function setRenderSettingFactory($renderFactory)
     {
         $this->renderFactory = $renderFactory;
+        $renderFactory->setServiceContainer($this);
 
         return $this;
     }

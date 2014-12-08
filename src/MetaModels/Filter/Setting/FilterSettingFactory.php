@@ -42,18 +42,33 @@ class FilterSettingFactory implements IFilterSettingFactory
     protected $typeFactories;
 
     /**
-     * Create a new instance.
+     * Set the service container.
      *
      * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
+     *
+     * @return FilterSettingFactory
      */
-    public function __construct(IMetaModelsServiceContainer $serviceContainer)
+    public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer)
     {
         $this->serviceContainer = $serviceContainer;
 
+        $this->typeFactories = array();
         $this->serviceContainer->getEventDispatcher()->dispatch(
             MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE,
             new CreateFilterSettingFactoryEvent($this)
         );
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the service container.
+     *
+     * @return IMetaModelsServiceContainer
+     */
+    public function getServiceContainer()
+    {
+        return $this->serviceContainer;
     }
 
     /**

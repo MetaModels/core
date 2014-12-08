@@ -17,12 +17,14 @@
 
 namespace MetaModels\Filter\Setting;
 
+use MetaModels\IServiceContainerAware;
+
 /**
  * This is the filter settings factory interface.
  *
  * @see IFilterSettingFactory::createCollection() to create a Filter setting collection instance.
  */
-interface IFilterSettingFactory
+interface IFilterSettingFactory extends IServiceContainerAware
 {
     /**
      * Register a type factory.

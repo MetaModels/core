@@ -17,6 +17,50 @@
 
 /** @var Pimple $container */
 
+$container['metamodels-attribute-factory.factory.default'] = $container->protect(
+    function () {
+        return new MetaModels\Attribute\AttributeFactory();
+    }
+);
+
+if (!isset($container['metamodels-attribute-factory.factory'])) {
+    $container['metamodels-attribute-factory.factory'] =
+        $container->raw('metamodels-attribute-factory.factory.default');
+}
+
+$container['metamodels-factory.factory.default'] = $container->protect(
+    function () {
+        return new MetaModels\Factory();
+    }
+);
+
+if (!isset($container['metamodels-factory.factory'])) {
+    $container['metamodels-factory.factory'] =
+        $container->raw('metamodels-factory.factory.default');
+}
+
+$container['metamodels-filter-setting-factory.factory.default'] = $container->protect(
+    function () {
+        return new MetaModels\Filter\Setting\FilterSettingFactory();
+    }
+);
+
+if (!isset($container['metamodels-filter-setting-factory.factory'])) {
+    $container['metamodels-filter-setting-factory.factory'] =
+        $container->raw('metamodels-filter-setting-factory.factory.default');
+}
+
+$container['metamodels-render-setting-factory.factory.default'] = $container->protect(
+    function () {
+        return new MetaModels\Render\Setting\RenderSettingFactory();
+    }
+);
+
+if (!isset($container['metamodels-render-setting-factory.factory'])) {
+    $container['metamodels-render-setting-factory.factory'] =
+        $container->raw('metamodels-render-setting-factory.factory.default');
+}
+
 $container['metamodels-service-container.factory.default'] = $container->protect(
     function ($container) {
         $serviceContainer = new MetaModels\MetaModelsServiceContainer();
@@ -25,16 +69,12 @@ $container['metamodels-service-container.factory.default'] = $container->protect
             ->setEventDispatcher($dispatcher)
             ->setDatabase($container['database.connection']);
 
-        $attributeFactory = new MetaModels\Attribute\AttributeFactory($serviceContainer);
-        $factory          = new MetaModels\Factory($serviceContainer);
-        $filterFactory    = new MetaModels\Filter\Setting\FilterSettingFactory($serviceContainer);
-        $renderFactory    = new MetaModels\Render\Setting\RenderSettingFactory($serviceContainer);
-
         $serviceContainer
-            ->setAttributeFactory($attributeFactory)
-            ->setFactory($factory)
-            ->setFilterFactory($filterFactory)
-            ->setRenderSettingFactory($renderFactory);
+            ->setAttributeFactory($container['metamodels-attribute-factory.factory']())
+            ->setFactory($container['metamodels-factory.factory']())
+            ->setFilterFactory($container['metamodels-filter-setting-factory.factory']())
+            ->setRenderSettingFactory($container['metamodels-render-setting-factory.factory']())
+            ->setCache($container['metamodels-cache.factory']());
 
         return $serviceContainer;
     }
