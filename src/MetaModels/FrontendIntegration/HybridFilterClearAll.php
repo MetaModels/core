@@ -56,7 +56,10 @@ abstract class HybridFilterClearAll extends MetaModelHybrid
             $this->strTemplate = $this->metamodel_fef_template;
         }
 
-        return sprintf('[[[metamodelfrontendfilterclearall::mod::%s]]]', $this->id);
+        return parent::generate();
+        
+        // ToDo: We have to check if we need this anymore.
+        // return sprintf('[[[metamodelfrontendfilterclearall::mod::%s]]]', $this->id);
     }
 
     /**
