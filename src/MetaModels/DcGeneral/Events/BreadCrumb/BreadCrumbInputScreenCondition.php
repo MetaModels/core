@@ -27,28 +27,57 @@ use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 class BreadCrumbInputScreenCondition extends BreadCrumbInputScreenSetting
 {
     /**
+     * The id of the condition.
+     *
+     * @var int
+     */
+    protected $inputScreenSettingConditionId;
+
+    /**
      * Calculate the name of a sub palette attribute.
      *
-     * @param int $pid The id of the input screen.
-     *
-     * @return \MetaModels\Attribute\IAttribute|string
+     * @return object
      */
-    protected function getConditionAttribute($pid)
+    protected function getInputScreenSettingCondition()
     {
-        $parent = $this
+        return (object) $this
             ->getDatabase()
-            ->prepare('SELECT id, pid
-                FROM tl_metamodel_attribute
-                WHERE id=(SELECT attr_id FROM tl_metamodel_dcasetting WHERE id=?)')
-            ->execute($pid);
+            ->prepare('SELECT * FROM tl_metamodel_dcasetting_condition WHERE id=?)')
+            ->execute($this->inputScreenSettingConditionId)
+            ->row();
+    }
 
-        if ($parent->id) {
+    /**
+     * Calculate the name of a sub palette attribute.
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    protected function getConditionAttribute()
+    {
+        $setting = $this->getInputScreenSetting();
+
+        if ($setting->dcatype == 'attribute') {
+            $attribute = (object) $this
+                ->getDatabase()
+                ->prepare('SELECT * FROM tl_metamodel_attribute WHERE id=?')
+                ->execute($setting->attr_id)
+                ->row();
+
             $factory       = $this->getServiceContainer()->getFactory();
-            $metaModelName = $factory->translateIdToMetaModelName($parent->pid);
-
-            return $factory->getMetaModel($metaModelName)->getAttributeById($parent->id);
+            $metaModelName = $factory->translateIdToMetaModelName($attribute->pid);
+            $attribute     = $factory->getMetaModel($metaModelName)->getAttributeById($attribute->id);
+            if ($attribute) {
+                return $attribute->getName();
+            }
+        } else {
+            $title = deserialize($setting->legendtitle);
+            return isset($title[$GLOBALS['TL_LANGUAGE']]) ? $title[$GLOBALS['TL_LANGUAGE']] : current($title);
         }
-        return 'unknown';
+
+        return 'unknown ' . $setting->dcatype;
     }
 
     /**
@@ -56,19 +85,12 @@ class BreadCrumbInputScreenCondition extends BreadCrumbInputScreenSetting
      */
     public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
     {
-        $pid = $this->extractIdFrom($environment, 'pid');
-
         if (!isset($this->inputScreenSettingId)) {
-            $this->inputScreenSettingId = $pid;
-        }
-        $attribute = $this->getConditionAttribute($this->inputScreenSettingId);
-
-        if (!isset($this->inputScreenId)) {
-            $this->inputScreenId = $this
-                ->getDatabase()
-                ->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE id=?')
-                ->execute($this->inputScreenSettingId)
-                ->pid;
+            if (!isset($this->inputScreenSettingConditionId)) {
+                $this->inputScreenSettingId = $this->extractIdFrom($environment, 'pid');
+            } else {
+                $this->inputScreenSettingId = $this->getInputScreenSettingCondition()->pid;
+            }
         }
 
         $elements   = parent::getBreadcrumbElements($environment, $elements);
@@ -79,7 +101,7 @@ class BreadCrumbInputScreenCondition extends BreadCrumbInputScreenSetting
             ),
             'text' => sprintf(
                 $this->getBreadcrumbLabel($environment, 'tl_metamodel_dcasetting_condition'),
-                $attribute->getName()
+                $this->getConditionAttribute()
             ),
             'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/dca_condition.png'
         );

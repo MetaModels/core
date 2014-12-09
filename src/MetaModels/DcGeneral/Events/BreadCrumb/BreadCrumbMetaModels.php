@@ -44,8 +44,9 @@ class BreadCrumbMetaModels extends BreadCrumbBase
         $services      = $this->getServiceContainer();
         $modelFactory  = $services->getFactory();
         $metaModelName = $modelFactory->translateIdToMetaModelName($this->metamodelId);
+        $metaModel     = $modelFactory->getMetaModel($metaModelName);
 
-        return $modelFactory->getMetaModel($metaModelName);
+        return $metaModel;
     }
 
     /**

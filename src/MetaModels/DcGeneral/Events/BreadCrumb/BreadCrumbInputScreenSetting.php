@@ -34,17 +34,30 @@ class BreadCrumbInputScreenSetting extends BreadCrumbInputScreens
     protected $inputScreenSettingId;
 
     /**
+     * Retrieve the input screen database information.
+     *
+     * @return object
+     */
+    protected function getInputScreenSetting()
+    {
+        return (object) $this
+            ->getDatabase()
+            ->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE id=?')
+            ->execute($this->inputScreenSettingId)
+            ->row();
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
     {
         if (!isset($this->inputScreenId)) {
-            $this->inputScreenId = $this->extractIdFrom($environment, 'pid');
-        }
-
-        $inputScreen = $this->getInputScreen();
-        if (!isset($this->metamodelId)) {
-            $this->metamodelId = $inputScreen->pid;
+            if (!isset($this->inputScreenSettingId)) {
+                $this->inputScreenId = $this->extractIdFrom($environment, 'pid');
+            } else {
+                $this->inputScreenId = $this->getInputScreenSetting()->pid;
+            }
         }
 
         $elements   = parent::getBreadcrumbElements($environment, $elements);
@@ -53,7 +66,10 @@ class BreadCrumbInputScreenSetting extends BreadCrumbInputScreens
                 'tl_metamodel_dcasetting',
                 $this->seralizeId('tl_metamodel_dca', $this->inputScreenId)
             ),
-            'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_dcasetting'), $inputScreen->name),
+            'text' => sprintf(
+                $this->getBreadcrumbLabel($environment, 'tl_metamodel_dcasetting'),
+                $this->getInputScreen()->name
+            ),
             'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/dca_setting.png'
         );
 

@@ -18,7 +18,6 @@
 namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
-use MetaModels\Render\Setting\ICollection;
 
 /**
  * Generate a breadcrumb for table tl_metamodel_rendersettings.
@@ -37,14 +36,16 @@ class BreadCrumbRenderSettings extends BreadCrumbMetaModels
     /**
      * Retrieve the render setting.
      *
-     * @return ICollection
+     * @return object
      */
     protected function getRenderSettings()
     {
-        return $this->getServiceContainer()->getRenderSettingFactory()->createCollection(
-            $this->getMetaModel(),
-            $this->renderSettingsId
-        );
+        return (object) $this
+            ->getServiceContainer()
+            ->getDatabase()
+            ->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')
+            ->execute($this->renderSettingsId)
+            ->row();
     }
 
     /**
@@ -52,12 +53,12 @@ class BreadCrumbRenderSettings extends BreadCrumbMetaModels
      */
     public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
     {
-        if (!isset($this->renderSettingsId)) {
-            $this->renderSettingsId = $this->extractIdFrom($environment, 'pid');
-        }
-
         if (!isset($this->metamodelId)) {
-            $this->metamodelId = $this->extractIdFrom($environment, 'pid');
+            if (!isset($this->renderSettingsId)) {
+                $this->metamodelId = $this->extractIdFrom($environment, 'pid');
+            } else {
+                $this->metamodelId = $this->getRenderSettings()->pid;
+            }
         }
 
         $elements   = parent::getBreadcrumbElements($environment, $elements);

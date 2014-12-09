@@ -34,21 +34,31 @@ class BreadCrumbRenderSetting extends BreadCrumbRenderSettings
     protected $renderSettingId;
 
     /**
+     * Retrieve the render setting.
+     *
+     * @return object
+     */
+    protected function getRenderSettingItem()
+    {
+        return (object) $this
+            ->getServiceContainer()
+            ->getDatabase()
+            ->prepare('SELECT * FROM tl_metamodel_rendersetting WHERE id=?')
+            ->execute($this->renderSettingId)
+            ->row();
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
     {
-        if (!isset($this->renderSettingId)) {
-            $this->renderSettingId = $this->extractIdFrom($environment, 'pid');
-        }
-
         if (!isset($this->renderSettingsId)) {
-            $parent = $this
-                ->getDatabase()
-                ->prepare('SELECT pid, name FROM tl_metamodel_rendersettings WHERE id=?')
-                ->execute($this->renderSettingId);
-
-            $this->renderSettingsId = $parent->pid;
+            if (!isset($this->renderSettingId)) {
+                $this->renderSettingsId = $this->extractIdFrom($environment, 'pid');
+            } else {
+                $this->renderSettingsId = $this->getRenderSettingItem()->pid;
+            }
         }
 
         $elements       = parent::getBreadcrumbElements($environment, $elements);
@@ -57,11 +67,11 @@ class BreadCrumbRenderSetting extends BreadCrumbRenderSettings
         $elements[] = array(
             'url' => $this->generateUrl(
                 'tl_metamodel_rendersetting',
-                $this->seralizeId('tl_metamodel_rendersetting', $this->renderSettingId)
+                $this->seralizeId('tl_metamodel_rendersettings', $this->renderSettingsId)
             ),
             'text' => sprintf(
                 $this->getBreadcrumbLabel($environment, 'tl_metamodel_rendersetting'),
-                $renderSettings->get('name')
+                $renderSettings->name
             ),
             'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/rendersetting.png'
         );
