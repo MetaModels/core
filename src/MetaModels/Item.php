@@ -173,7 +173,7 @@ class Item implements IItem
             }
         }
 
-        return true;
+        return false;
     }
 
     /**
