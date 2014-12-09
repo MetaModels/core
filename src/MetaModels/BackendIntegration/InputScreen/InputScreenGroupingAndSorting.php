@@ -22,7 +22,6 @@ namespace MetaModels\BackendIntegration\InputScreen;
  */
 class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
 {
-
     /**
      * The parenting input screen.
      *
@@ -71,7 +70,7 @@ class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
      */
     public function getRenderGroupLength()
     {
-        return (int)$this->data['rendergrouplen'];
+        return (int) $this->data['rendergrouplen'];
     }
 
     /**
@@ -123,7 +122,7 @@ class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
      */
     public function isManualSorting()
     {
-        return (bool)$this->data['ismanualsort'];
+        return (bool) $this->data['ismanualsort'];
     }
 
     /**
@@ -131,7 +130,7 @@ class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
      */
     public function isDefault()
     {
-        return (bool)$this->data['isdefault'];
+        return (bool) $this->data['isdefault'];
     }
 
     /**
