@@ -40,6 +40,36 @@ class SubSystemBoot
     }
 
     /**
+     * Check if all MetaModels tables are installed.
+     *
+     * @param \Contao\Database $database The database.
+     *
+     * @return bool
+     */
+    protected function metaModelsTablesPresent($database)
+    {
+        $tables = array_flip($database->listTables());
+
+        if (!(
+            isset($tables['tl_metamodel'])
+            && isset($tables['tl_metamodel_dca'])
+            && isset($tables['tl_metamodel_dca_sortgroup'])
+            && isset($tables['tl_metamodel_dcasetting'])
+            && isset($tables['tl_metamodel_dcasetting_condition'])
+            && isset($tables['tl_metamodel_attribute'])
+            && isset($tables['tl_metamodel_filter'])
+            && isset($tables['tl_metamodel_filtersetting'])
+            && isset($tables['tl_metamodel_rendersettings'])
+            && isset($tables['tl_metamodel_rendersetting'])
+            && isset($tables['tl_metamodel_dca_combine'])
+        )) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Boot up the system and initialize a service container.
      *
      * @param \Pimple $container The dependency injection container.
@@ -63,7 +93,9 @@ class SubSystemBoot
             return;
         }
 
-        if (!$container->getDatabase()->tableExists('tl_metamodel_dca_sortgroup')) {
+        // Ensure all tables are created.
+        if (!$this->metaModelsTablesPresent($container->getDatabase())
+        ) {
             return;
         }
 
