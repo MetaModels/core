@@ -139,13 +139,14 @@ class Boot
             $dispatcher->addListener(
                 PreCreateDcGeneralEvent::NAME,
                 function (PreCreateDcGeneralEvent $event) use ($metaModelName, $viewCombinations, $container) {
-                    $factory     = $event->getFactory();
-                    $name        = $factory->getContainerName();
-                    $inputScreen = $viewCombinations->getInputScreenDetails($metaModelName);
-
+                    $factory = $event->getFactory();
+                    $name    = $factory->getContainerName();
                     if ($name !== $metaModelName) {
                         return;
                     }
+
+                    $inputScreen = $viewCombinations->getInputScreenDetails($metaModelName);
+
                     $factory->setContainerClassName('MetaModels\DcGeneral\DataDefinition\MetaModelDataDefinition');
 
                     $dispatcher = $container->getEventDispatcher();
