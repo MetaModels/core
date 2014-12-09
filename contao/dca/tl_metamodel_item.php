@@ -37,7 +37,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
                 'class'               => 'MetaModels\DcGeneral\Data\Driver',
             )
         ),
-        'controller'                  => 'MetaModels\DcGeneral\Controller',
     ),
 
     'list' => array
