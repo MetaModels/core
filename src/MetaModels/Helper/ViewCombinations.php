@@ -374,14 +374,15 @@ abstract class ViewCombinations
 
         while ($inputScreen->next()) {
             /** @noinspection PhpUndefinedFieldInspection */
-            $modelId = $inputScreen->pid;
+            $modelId   = $inputScreen->pid;
+            $modelName = $this->tableNameFromId($modelId);
 
             if (!isset($this->tableMap[$modelId])) {
-                $this->setTableMapping($modelId, $this->tableNameFromId($modelId));
+                $this->setTableMapping($modelId, $modelName);
             }
 
             /** @noinspection PhpUndefinedFieldInspection */
-            $this->information[$modelId][self::COMBINATION]['dca_id'] = $inputScreen->id;
+            $this->information[$modelName][self::COMBINATION]['dca_id'] = $inputScreen->id;
         }
     }
 
@@ -403,14 +404,15 @@ abstract class ViewCombinations
 
         while ($renderSetting->next()) {
             /** @noinspection PhpUndefinedFieldInspection */
-            $modelId = $renderSetting->pid;
+            $modelId   = $renderSetting->pid;
+            $modelName = $this->tableNameFromId($modelId);
 
             if (!isset($this->tableMap[$modelId])) {
-                $this->setTableMapping($modelId, $this->tableNameFromId($modelId));
+                $this->setTableMapping($modelId, $modelName);
             }
 
             /** @noinspection PhpUndefinedFieldInspection */
-            $this->information[$modelId][self::COMBINATION]['view_id'] = $renderSetting->id;
+            $this->information[$modelName][self::COMBINATION]['view_id'] = $renderSetting->id;
         }
     }
 
