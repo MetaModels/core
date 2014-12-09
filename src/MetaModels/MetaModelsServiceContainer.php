@@ -17,6 +17,7 @@
 
 namespace MetaModels;
 
+use Doctrine\Common\Cache\Cache;
 use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\Render\Setting\IRenderSettingFactory;
@@ -68,6 +69,13 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      * @var \Contao\Database
      */
     protected $database;
+
+    /**
+     * The cache in use.
+     *
+     * @var Cache
+     */
+    protected $cache;
 
     /**
      * Registered services.
@@ -210,6 +218,30 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     public function getDatabase()
     {
         return $this->database;
+    }
+
+    /**
+     * Retrieve the cache to use.
+     *
+     * @return Cache
+     */
+    public function getCache()
+    {
+        return $this->cache;
+    }
+
+    /**
+     * Set the cache to use.
+     *
+     * @param Cache $cache The cache instance.
+     *
+     * @return MetaModelsServiceContainer
+     */
+    public function setCache($cache)
+    {
+        $this->cache = $cache;
+
+        return $this;
     }
 
     /**

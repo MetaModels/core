@@ -34,6 +34,6 @@ class ViewCombinations extends \MetaModels\Helper\ViewCombinations
      */
     protected function authenticateUser()
     {
-        return $this->user->authenticate();
+        return $this->getUser()->authenticate();
     }
 }

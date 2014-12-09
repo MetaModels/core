@@ -50,7 +50,7 @@ class ViewCombinations extends \MetaModels\Helper\ViewCombinations
         // Bug fix: If the user is not authenticated, contao will redirect to contao/index.php
         // But in this moment the TL_PATH is not defined, so the $this->Environment->request
         // generate a url without replacing the basepath(TL_PATH) with an empty string.
-        $authResult = $this->user->authenticate();
+        $authResult = $this->getUser()->authenticate();
 
         return ($authResult === true || $authResult === null) ? true : false;
     }
@@ -67,7 +67,7 @@ class ViewCombinations extends \MetaModels\Helper\ViewCombinations
 
         /** @noinspection PhpUndefinedFieldInspection */
         // Special case in combinations, admins have the implicit group id -1.
-        if ($this->user->admin) {
+        if ($this->getUser()->admin) {
             $groups[] = -1;
         }
 

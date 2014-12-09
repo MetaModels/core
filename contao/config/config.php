@@ -144,6 +144,10 @@ $GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] =
     array('MetaModels\FrontendIntegration\FrontendFilter', 'generateClearAll');
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][]      = array('MetaModels\FrontendIntegration\InsertTags', 'replaceTags');
 
+$GLOBALS['TL_PURGE']['folders']['metamodels']['affected'][] = 'system/cache/metamodels';
+$GLOBALS['TL_PURGE']['folders']['metamodels']['callback']   =
+    array('MetaModels\BackendIntegration\PurgeCache', 'purge');
+
 // Dependencies we need.
 // Mapping: extension folder => ER name.
 $GLOBALS['METAMODELS']['dependencies']['metapalettes']      = 'MetaPalettes';

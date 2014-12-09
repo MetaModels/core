@@ -19,18 +19,15 @@ namespace MetaModels\BackendIntegration;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\LoadDataContainerEvent;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\PopulateEnvironmentEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\PreCreateDcGeneralEvent;
-use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\Dca\MetaModelDcaBuilder;
 use MetaModels\DcGeneral\Dca\Builder\Builder;
 use MetaModels\DcGeneral\Events\Subscriber;
 use MetaModels\Events\MetaModelsBootEvent;
 use MetaModels\Helper\LoadDataContainerHookListener;
-use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModelsServiceContainer;
 
 /**
@@ -38,151 +35,6 @@ use MetaModels\IMetaModelsServiceContainer;
  */
 class Boot
 {
-    /**
-     * Handle stand alone integration in the backend.
-     *
-     * @param IMetaModelsServiceContainer $container   The service container.
-     *
-     * @param IInputScreen                $inputScreen The input screen containing the information.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    private function addModuleToBackendMenu($container, $inputScreen)
-    {
-        $metaModel  = $inputScreen->getMetaModel();
-        $dispatcher = $container->getEventDispatcher();
-
-        $moduleName = 'metamodel_' . $metaModel->getTableName();
-
-        $tableCaption = $metaModel->getName();
-
-        $icon = ToolboxFile::convertValueToPath($inputScreen->getIcon());
-        // Determine image to use.
-        if ($icon && file_exists(TL_ROOT . '/' . $icon)) {
-            $event = new ResizeImageEvent($icon, 16, 16);
-
-            $dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
-            $icon = $event->getResultImage();
-        } else {
-            $icon = 'system/modules/metamodels/assets/images/icons/metamodels.png';
-        }
-
-        $section = $inputScreen->getBackendSection();
-
-        if (!$section) {
-            $section = 'metamodels';
-        }
-
-        $GLOBALS['BE_MOD'][$section][$moduleName] = array
-        (
-            'tables'   => array($metaModel->getTableName()),
-            'icon'     => $icon,
-            'callback' => 'MetaModels\BackendIntegration\Module'
-        );
-
-        $caption = array($tableCaption);
-        foreach ($inputScreen->getBackendCaption() as $languageEntry) {
-            if ($languageEntry['langcode'] == 'en') {
-                $caption = array($languageEntry['label'], $languageEntry['description']);
-            }
-
-            if (!empty($languageEntry['label']) && ($languageEntry['langcode'] == $GLOBALS['TL_LANGUAGE'])) {
-                $caption = array($languageEntry['label'], $languageEntry['description']);
-                break;
-            }
-        }
-
-        $GLOBALS['TL_LANG']['MOD'][$moduleName] = $caption;
-    }
-
-    /**
-     * Retrieve the table names from a list of input screens.
-     *
-     * @param string[]         $metaModelNames   The names of the MetaModels for which input screens are to be added.
-     *
-     * @param ViewCombinations $viewCombinations The view combinations.
-     *
-     * @return string[]
-     */
-    private function getTableNamesFromInputScreens($metaModelNames, $viewCombinations)
-    {
-        $parentTables = array();
-        foreach ($metaModelNames as $metaModelName) {
-            $parentTable = $viewCombinations->getParentOf($metaModelName);
-
-            $parentTables[$parentTable][] = $metaModelName;
-        }
-
-        return $parentTables;
-    }
-
-    /**
-     * Inject all meta models into their corresponding parent tables.
-     *
-     * @param string[] $parentTables The names of the MetaModels for which input screens are to be added.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    private function addChildTablesToBackendModules($parentTables)
-    {
-        $lastCount = count($parentTables);
-        // Loop until all tables are injected or until there was no injection during one run.
-        // This is important, as we might have models that are child of another model.
-        while ($parentTables) {
-            foreach ($parentTables as $parentTable => $childTables) {
-                foreach ($GLOBALS['BE_MOD'] as $groupName => $modules) {
-                    foreach ($modules as $moduleName => $moduleConfiguration) {
-                        if (
-                            isset($moduleConfiguration['tables'])
-                            && in_array($parentTable, $moduleConfiguration['tables'])
-                        ) {
-                            $GLOBALS['BE_MOD'][$groupName][$moduleName]['tables'] = array_merge(
-                                $GLOBALS['BE_MOD'][$groupName][$moduleName]['tables'],
-                                $childTables
-                            );
-                            unset($parentTables[$parentTable]);
-
-                            break;
-                        }
-                    }
-                }
-            }
-            if (count($parentTables) == $lastCount) {
-                break;
-            }
-            $lastCount = count($parentTables);
-        }
-    }
-
-    /**
-     * Inject MetaModels in the backend menu.
-     *
-     * @param IMetaModelsServiceContainer $container        The service container.
-     *
-     * @param ViewCombinations            $viewCombinations The view combinations.
-     *
-     * @return void
-     */
-    private function buildBackendMenu($container, $viewCombinations)
-    {
-        // TODO: we can cache all this here and speed up things big time.
-        foreach ($viewCombinations->getStandaloneInputScreens() as $inputScreen) {
-            $this->addModuleToBackendMenu($container, $inputScreen);
-        }
-
-        $parentTables = $this->getTableNamesFromInputScreens(
-            $viewCombinations->getParentedInputScreenNames(),
-            $viewCombinations
-        );
-        $this->addChildTablesToBackendModules($parentTables);
-    }
-
     /**
      * When we are within Contao >= 3.1, we have to override the file picker class.
      *
@@ -250,27 +102,32 @@ class Boot
      */
     public function perform(MetaModelsBootEvent $event)
     {
+        // There is no need to boot in login or install screen.
+        if (($GLOBALS['container']['environment']->script == 'contao/index.php')
+        || ($GLOBALS['container']['environment']->script == 'contao/install.php')) {
+            return;
+        }
+
         $container = $event->getServiceContainer();
 
         if (!$container->getDatabase()->tableExists('tl_metamodel', null)) {
             return;
         }
 
-        $viewCombinations = new ViewCombinations($container, $GLOBALS['container']['user'], TL_ROOT . '/system/cache');
+        $viewCombinations = new ViewCombinations($container, $GLOBALS['container']['user']);
         $container->setService($viewCombinations, 'metamodels-view-combinations');
 
-        $this->buildBackendMenu($container, $viewCombinations);
+        $menuBuilder = new BackendModuleBuilder($container, $viewCombinations);
+        $menuBuilder->export();
 
         // Prepare lazy loading of the data containers.
         foreach ($viewCombinations->getParentedInputScreenNames() as $metaModelName) {
-            $this->attachLoadDataContainerHook($metaModelName, $container);
-
             LoadDataContainerHookListener::attachFor(
                 $viewCombinations->getParentOf($metaModelName),
                 function () use ($metaModelName, $viewCombinations, $container) {
-                    $metaModelName = $viewCombinations->getInputScreenDetails($metaModelName);
-                    $builder       = new MetaModelDcaBuilder($container);
-                    $builder->injectOperationButton($metaModelName);
+                    $inputScreen = $viewCombinations->getInputScreenDetails($metaModelName);
+                    $builder     = new MetaModelDcaBuilder($container);
+                    $builder->injectOperationButton($inputScreen);
                 }
             );
         }

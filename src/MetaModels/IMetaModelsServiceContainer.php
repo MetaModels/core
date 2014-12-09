@@ -17,6 +17,7 @@
 
 namespace MetaModels;
 
+use Doctrine\Common\Cache\Cache;
 use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\Render\Setting\IRenderSettingFactory;
@@ -70,6 +71,13 @@ interface IMetaModelsServiceContainer
      * @return \Contao\Database
      */
     public function getDatabase();
+
+    /**
+     * The cache in use.
+     *
+     * @return Cache
+     */
+    public function getCache();
 
     /**
      * Add a service to the container.

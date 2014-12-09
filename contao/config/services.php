@@ -61,6 +61,17 @@ if (!isset($container['metamodels-render-setting-factory.factory'])) {
         $container->raw('metamodels-render-setting-factory.factory.default');
 }
 
+$container['metamodels-cache.factory.default'] = $container->protect(
+    function () {
+        return new \Doctrine\Common\Cache\FilesystemCache(TL_ROOT . '/system/cache/metamodels');
+    }
+);
+
+if (!isset($container['metamodels-cache.factory'])) {
+    $container['metamodels-cache.factory'] =
+        $container->raw('metamodels-cache.factory.default');
+}
+
 $container['metamodels-service-container.factory.default'] = $container->protect(
     function ($container) {
         $serviceContainer = new MetaModels\MetaModelsServiceContainer();
@@ -70,11 +81,11 @@ $container['metamodels-service-container.factory.default'] = $container->protect
             ->setDatabase($container['database.connection']);
 
         $serviceContainer
-            ->setAttributeFactory($container['metamodels-attribute-factory.factory']())
-            ->setFactory($container['metamodels-factory.factory']())
-            ->setFilterFactory($container['metamodels-filter-setting-factory.factory']())
-            ->setRenderSettingFactory($container['metamodels-render-setting-factory.factory']())
-            ->setCache($container['metamodels-cache.factory']());
+            ->setAttributeFactory($container['metamodels-attribute-factory.factory']($container))
+            ->setFactory($container['metamodels-factory.factory']($container))
+            ->setFilterFactory($container['metamodels-filter-setting-factory.factory']($container))
+            ->setRenderSettingFactory($container['metamodels-render-setting-factory.factory']($container))
+            ->setCache($container['metamodels-cache.factory']($container));
 
         return $serviceContainer;
     }

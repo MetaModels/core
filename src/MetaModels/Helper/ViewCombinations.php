@@ -18,6 +18,7 @@
 
 namespace MetaModels\Helper;
 
+use Contao\User;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\InputScreen\InputScreen;
 use MetaModels\IMetaModelsServiceContainer;
@@ -76,74 +77,79 @@ abstract class ViewCombinations
     /**
      * The Contao user.
      *
-     * @var \User
+     * @var User
      */
-    protected $user;
+    private $user;
 
     /**
      * Create a new instance.
      *
      * @param IMetaModelsServiceContainer $container The service container.
      *
-     * @param \User                       $user      The current user.
-     *
-     * @param string                      $cacheDir  The cache directory.
+     * @param User                        $user      The current user.
      */
-    public function __construct(IMetaModelsServiceContainer $container, \User $user, $cacheDir = '')
+    public function __construct(IMetaModelsServiceContainer $container, User $user)
     {
         $this->container = $container;
         $this->user      = $user;
 
-        if (!$this->loadFromCache($cacheDir)) {
+        if (!$this->loadFromCache()) {
             $this->resolve();
-            $this->saveToCache($cacheDir);
+            $this->saveToCache();
         }
     }
 
     /**
      * Try to load the combinations from cache.
      *
-     * @param string $cacheDir The cache directory.
-     *
      * @return string|null
      */
-    protected function calculateCacheFileName($cacheDir)
+    protected function calculateCacheKey()
     {
-        if (!$cacheDir) {
-            return null;
-        }
-
-        $key = 'metamodels_user_information_' . md5(get_class($this->user));
+        $key = 'view_combination_' . strtolower(TL_MODE);
         // Determine file key.
 
         // Authenticate the user - if this fails, we use an anonymous cache file.
         if ($this->authenticateUser()) {
             /** @noinspection PhpUndefinedFieldInspection */
-            $key .= '_' . $this->user->id;
+            $key .= '_' . $this->getUser()->id;
         } else {
             $key .= '_anonymous';
         }
 
-        return $cacheDir . '/' . $key . '.json';
+        return $key;
+    }
+
+    /**
+     * Retrieve the current user.
+     *
+     * @return User
+     */
+    public function getUser()
+    {
+        static $authenticated;
+        if (!isset($authenticated)) {
+            $authenticated = true;
+            $this->authenticateUser();
+        }
+
+        return $this->user;
     }
 
     /**
      * Try to load the combinations from cache.
      *
-     * @param string $cacheDir The cache directory.
-     *
      * @return bool
      */
-    protected function loadFromCache($cacheDir)
+    protected function loadFromCache()
     {
-        $fileName = $this->calculateCacheFileName($cacheDir);
-
-        if (!($fileName && file_exists($fileName))) {
+        $key = $this->calculateCacheKey();
+        if (!$this->container->getCache()->contains($key)) {
             return false;
         }
 
         // Perform loading now.
-        $data = json_decode(file_get_contents($fileName), true);
+        $data = json_decode($this->container->getCache()->fetch($key), true);
 
         $this->information = $data['information'];
         $this->tableMap    = $data['tableMap'];
@@ -156,30 +162,22 @@ abstract class ViewCombinations
     /**
      * Try to load the combinations from cache.
      *
-     * @param string $cacheDir The cache directory.
-     *
      * @return bool
      */
-    protected function saveToCache($cacheDir)
+    protected function saveToCache()
     {
-        $fileName = $this->calculateCacheFileName($cacheDir);
-
-        if (!($fileName && is_dir(dirname($fileName)))) {
-            return false;
-        }
-
-        // Perform saving now.
-        file_put_contents($fileName, json_encode(
-            array(
-                'information' => $this->information,
-                'tableMap'    => $this->tableMap,
-                'parentMap'   => $this->parentMap,
-                'childMap'    => $this->childMap
-            ),
-            JSON_PRETTY_PRINT
-        ));
-
-        return true;
+        return $this->container->getCache()->save(
+            $this->calculateCacheKey(),
+            json_encode(
+                array(
+                    'information' => $this->information,
+                    'tableMap'    => $this->tableMap,
+                    'parentMap'   => $this->parentMap,
+                    'childMap'    => $this->childMap
+                ),
+                JSON_PRETTY_PRINT
+            )
+        );
     }
 
     /**
