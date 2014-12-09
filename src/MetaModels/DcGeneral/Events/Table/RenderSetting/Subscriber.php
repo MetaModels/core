@@ -38,7 +38,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
 use ContaoCommunityAlliance\DcGeneral\Event\ActionEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
-use MetaModels\Dca\Helper;
+use MetaModels\BackendIntegration\TemplateList;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\RenderSettingAttributeIs as PropertyCondition;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Palette\RenderSettingAttributeIs as PaletteCondition;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
@@ -205,9 +205,9 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        $options = Helper::getTemplatesForBase('mm_attr_' . $attribute->get('type'));
-
-        $event->setOptions($options);
+        $list = new TemplateList();
+        $list->setServiceContainer($this->getServiceContainer());
+        $event->setOptions($list->getTemplatesForBase('mm_attr_' . $attribute->get('type')));
     }
 
     /**

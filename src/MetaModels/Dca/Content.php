@@ -18,6 +18,8 @@
 
 namespace MetaModels\Dca;
 
+use MetaModels\BackendIntegration\TemplateList;
+
 /**
  * Complementary methods needed by the DCA in tl_content.
  *
@@ -60,7 +62,10 @@ class Content extends ContentElementModuleBase
             $type = 'metamodel_list';
         }
 
-        return Helper::getTemplatesForBase('ce_' . $type);
+        $list = new TemplateList();
+        $list->setServiceContainer($GLOBALS['container']['metamodels-service-container']);
+
+        return $list->getTemplatesForBase('ce_' . $type);
     }
 
     /**

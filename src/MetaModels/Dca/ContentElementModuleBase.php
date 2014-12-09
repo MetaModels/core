@@ -22,6 +22,7 @@ use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use ContaoCommunityAlliance\UrlBuilder\Contao\BackendUrlBuilder;
+use MetaModels\BackendIntegration\TemplateList;
 use MetaModels\Factory as MetaModelFactory;
 use MetaModels\Filter\Setting\Factory as FilterFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -264,10 +265,16 @@ class ContentElementModuleBase
      * Get frontend templates for filters.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getFilterTemplates()
     {
-        return Helper::getTemplatesForBase('mm_filter_');
+        $list = new TemplateList();
+        $list->setServiceContainer($GLOBALS['container']['metamodels-service-container']);
+
+        return $list->getTemplatesForBase('mm_filter_');
     }
 
     /**

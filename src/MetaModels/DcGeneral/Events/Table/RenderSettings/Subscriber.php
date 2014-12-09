@@ -26,6 +26,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Model
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use MenAtWork\MultiColumnWizard\Event\GetOptionsEvent;
+use MetaModels\BackendIntegration\TemplateList;
 use MetaModels\Dca\Helper;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbRenderSettings;
@@ -317,9 +318,9 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        $options = Helper::getTemplatesForBase('metamodel_');
-
-        $event->setOptions($options);
+        $list = new TemplateList();
+        $list->setServiceContainer($this->getServiceContainer());
+        $event->setOptions($list->getTemplatesForBase('metamodel_'));
     }
 
     /**
