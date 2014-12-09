@@ -62,7 +62,11 @@ if (!isset($container['metamodels-render-setting-factory.factory'])) {
 }
 
 $container['metamodels-cache.factory.default'] = $container->protect(
-    function () {
+    function ($container) {
+        if ($container['config']->get('bypassCache')) {
+            return new \Doctrine\Common\Cache\ArrayCache();
+        }
+
         return new \Doctrine\Common\Cache\FilesystemCache(TL_ROOT . '/system/cache/metamodels');
     }
 );
