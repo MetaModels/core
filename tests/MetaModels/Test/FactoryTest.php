@@ -38,7 +38,8 @@ class FactoryTest extends TestCase
     public function testCreateMetaModelFiresEvent()
     {
         $serviceContainer = $this->mockServiceContainer(true);
-        $factory          = new Factory($serviceContainer);
+        $factory          = new Factory();
+        $factory->setServiceContainer($serviceContainer);
 
         $serviceContainer->getEventDispatcher()
             ->expects($this->exactly(1))
@@ -58,7 +59,8 @@ class FactoryTest extends TestCase
     public function testGetMetaModelNameFromId()
     {
         $serviceContainer = $this->mockServiceContainer();
-        $factory          = new Factory($serviceContainer);
+        $factory          = new Factory();
+        $factory->setServiceContainer($serviceContainer);
 
         $serviceContainer->getEventDispatcher()->addListener(
             GetMetaModelNameFromIdEvent::NAME,

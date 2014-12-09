@@ -45,7 +45,8 @@ class AttributeFactoryTest extends TestCase
             ->method('dispatch')
             ->with($this->equalTo(CreateAttributeFactoryEvent::NAME));
 
-        $factory = new AttributeFactory($serviceContainer);
+        $factory = new AttributeFactory();
+        $factory->setServiceContainer($serviceContainer);
 
         $this->assertSame($serviceContainer, $factory->getServiceContainer());
     }
@@ -57,7 +58,7 @@ class AttributeFactoryTest extends TestCase
      */
     public function testAddTypeFactoryAndGetTypeFactory()
     {
-        $factory = new AttributeFactory($this->mockServiceContainer());
+        $factory = new AttributeFactory();
 
         $this->assertNull($factory->getTypeFactory('test'));
         $attributeFactory = $this->mockAttributeFactory('test', true, false, false);
@@ -131,7 +132,7 @@ class AttributeFactoryTest extends TestCase
      */
     public function testAttributeTypeMatchesFlags()
     {
-        $factory = new AttributeFactory($this->mockServiceContainer());
+        $factory = new AttributeFactory();
         $factory->addTypeFactory($this->mockAttributeFactory('test_translated', true, false, false));
         $factory->addTypeFactory($this->mockAttributeFactory('test_simple', false, true, false));
         $factory->addTypeFactory($this->mockAttributeFactory('test_complex', false, false, true));
@@ -156,7 +157,7 @@ class AttributeFactoryTest extends TestCase
      */
     public function testGetTypeNames()
     {
-        $factory = new AttributeFactory($this->mockServiceContainer());
+        $factory = new AttributeFactory();
 
         $this->assertSame(
             array(),
@@ -264,7 +265,7 @@ class AttributeFactoryTest extends TestCase
      */
     public function testGetTypeIcon()
     {
-        $factory     = new AttributeFactory($this->mockServiceContainer());
+        $factory     = new AttributeFactory();
         $typeFactory = $this->mockAttributeFactory('test', true, false, false, new \stdClass, 'icon.png');
         $factory->addTypeFactory($typeFactory);
 

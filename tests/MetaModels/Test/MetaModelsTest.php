@@ -167,7 +167,7 @@ class MetaModelsTest extends TestCase
             'name'       => 'Test RetrieveSystemColumns',
             'tableName'  => 'mm_test_retrieve',
             'translated' => '1',
-            'languages'  => 'a:2:{s:2:"en";a:1:{s:10:"isfallback"; s:1:"1";}s:2:"de"; a:1:{s:10:"isfallback";s:0:"";}}',
+            'languages'  => serialize(array('en' => array('isfallback' => '1'), 'de' => array('isfallback' => '0'))),
             'varsupport' => '',
         ));
 

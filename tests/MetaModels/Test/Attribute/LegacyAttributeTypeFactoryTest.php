@@ -94,7 +94,7 @@ class LegacyAttributeTypeFactoryTest extends AttributeTypeFactoryTest
      */
     public function testAddFactoriesToFactoryNone()
     {
-        $factory = new AttributeFactory($this->mockServiceContainer());
+        $factory = new AttributeFactory();
 
         $this->assertEquals(array(), $factory->getTypeNames());
     }
@@ -140,7 +140,8 @@ class LegacyAttributeTypeFactoryTest extends AttributeTypeFactoryTest
             $GLOBALS['METAMODELS']['attributes'][$typeName]['class']   = $typeClassProp->getValue($instance);
         }
 
-        $factory = new AttributeFactory($this->mockServiceContainer());
+        $factory = new AttributeFactory();
+        $factory->setServiceContainer($this->mockServiceContainer());
 
         $this->assertEquals(array_keys($this->testFactories), $factory->getTypeNames());
 
@@ -180,7 +181,8 @@ class LegacyAttributeTypeFactoryTest extends AttributeTypeFactoryTest
             $GLOBALS['METAMODELS']['attributes'][$typeName]['class'] = $typeClassProp->getValue($instance);
         }
 
-        $factory = new AttributeFactory($this->mockServiceContainer());
+        $factory = new AttributeFactory();
+        $factory->setServiceContainer($this->mockServiceContainer());
 
         $this->assertEquals(array_keys($this->testFactories), $factory->getTypeNames());
 
@@ -220,7 +222,8 @@ class LegacyAttributeTypeFactoryTest extends AttributeTypeFactoryTest
             $GLOBALS['METAMODELS']['attributes'][$typeName]['image'] = $typeIconProp->getValue($instance);
         }
 
-        $factory = new AttributeFactory($this->mockServiceContainer());
+        $factory = new AttributeFactory();
+        $factory->setServiceContainer($this->mockServiceContainer());
 
         $this->assertEquals(array_keys($this->testFactories), $factory->getTypeNames());
 

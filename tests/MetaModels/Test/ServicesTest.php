@@ -36,6 +36,15 @@ class ServicesTest extends TestCase
 
         $container['event-dispatcher']    = new EventDispatcher();
         $container['database.connection'] = \Database::getInstance();
+        $container['config']              = $this
+            ->getMockBuilder('stdClass')
+            ->setMethods(array('get'))
+            ->getMock();
+        $container['config']
+            ->expects($this->any())
+            ->method('get')
+            ->with('bypassCache')
+            ->will($this->returnValue(true));
 
         include_once __DIR__ . '/../../../contao/config/services.php';
 

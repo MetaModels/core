@@ -93,14 +93,19 @@ class SubSystemBootTest extends TestCase
             1
         );
 
-        $container = new MetaModelsServiceContainer();
+        $environment = $this->getMock('Contao\Environment', array(), array(), '', false);
+        $container   = new MetaModelsServiceContainer();
         $container->setEventDispatcher($dispatcher);
 
-        $boot = $this->getMock('MetaModels\Helper\SubSystemBoot', array('getMode'));
+        $boot = $this->getMock('MetaModels\Helper\SubSystemBoot', array('getMode', 'metaModelsTablesPresent'));
         $boot
             ->expects($this->any())
             ->method('getMode')
             ->will($this->returnValue('FE'));
+        $boot
+            ->expects($this->any())
+            ->method('metaModelsTablesPresent')
+            ->will($this->returnValue(true));
 
         $class   = new \ReflectionClass($boot);
         $getMode = $class->getMethod('getMode');
@@ -109,7 +114,14 @@ class SubSystemBootTest extends TestCase
         /** @var SubSystemBoot $boot */
         $this->assertEquals('FE', $getMode->invoke($boot));
 
-        $boot->boot(new \Pimple(array('metamodels-service-container' => $container)));
+        $boot->boot(
+            new \Pimple(
+                array(
+                    'environment' => $environment,
+                    'metamodels-service-container' => $container
+                )
+            )
+        );
     }
 
     /**
@@ -127,14 +139,19 @@ class SubSystemBootTest extends TestCase
             1
         );
 
-        $container = new MetaModelsServiceContainer();
+        $environment = $this->getMock('Contao\Environment', array(), array(), '', false);
+        $container   = new MetaModelsServiceContainer();
         $container->setEventDispatcher($dispatcher);
 
-        $boot = $this->getMock('MetaModels\Helper\SubSystemBoot', array('getMode'));
+        $boot = $this->getMock('MetaModels\Helper\SubSystemBoot', array('getMode', 'metaModelsTablesPresent'));
         $boot
             ->expects($this->any())
             ->method('getMode')
             ->will($this->returnValue('BE'));
+        $boot
+            ->expects($this->any())
+            ->method('metaModelsTablesPresent')
+            ->will($this->returnValue(true));
 
         $class   = new \ReflectionClass($boot);
         $getMode = $class->getMethod('getMode');
@@ -143,7 +160,14 @@ class SubSystemBootTest extends TestCase
         /** @var SubSystemBoot $boot */
         $this->assertEquals('BE', $getMode->invoke($boot));
 
-        $boot->boot(new \Pimple(array('metamodels-service-container' => $container)));
+        $boot->boot(
+            new \Pimple(
+                array(
+                    'environment' => $environment,
+                    'metamodels-service-container' => $container
+                )
+            )
+        );
     }
 
     /**
