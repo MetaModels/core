@@ -52,15 +52,17 @@ class BreadCrumbRenderSettings extends BreadCrumbMetaModels
      */
     public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
     {
+        if (!isset($this->renderSettingsId)) {
+            $this->renderSettingsId = $this->extractIdFrom($environment, 'pid');
+        }
+
         if (!isset($this->metamodelId)) {
             $this->metamodelId = $this->extractIdFrom($environment, 'pid');
         }
 
-        $elements = parent::getBreadcrumbElements($environment, $elements);
-
+        $elements   = parent::getBreadcrumbElements($environment, $elements);
         $elements[] = array(
-            'url' => sprintf(
-                'contao/main.php?do=metamodels&table=%s&pid=%s',
+            'url' => $this->generateUrl(
                 'tl_metamodel_rendersettings',
                 $this->seralizeId('tl_metamodel', $this->metamodelId)
             ),

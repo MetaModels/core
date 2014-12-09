@@ -35,11 +35,9 @@ class BreadCrumbAttributes extends BreadCrumbMetaModels
             $this->metamodelId = $this->extractIdFrom($environment, 'pid');
         }
 
-        $elements = parent::getBreadcrumbElements($environment, $elements);
-
+        $elements   = parent::getBreadcrumbElements($environment, $elements);
         $elements[] = array(
-            'url' => sprintf(
-                'contao/main.php?do=metamodels&table=%s&pid=%s',
+            'url' => $this->generateUrl(
                 'tl_metamodel_attribute',
                 $this->seralizeId('tl_metamodel', $this->metamodelId)
             ),

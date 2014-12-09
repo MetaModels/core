@@ -63,11 +63,9 @@ class BreadCrumbFilter extends BreadCrumbMetaModels
             $this->metamodelId = $this->getFilter()->pid;
         }
 
-        $elements = parent::getBreadcrumbElements($environment, $elements);
-
+        $elements   = parent::getBreadcrumbElements($environment, $elements);
         $elements[] = array(
-            'url' => sprintf(
-                'contao/main.php?do=metamodels&table=%s&pid=%s',
+            'url' => $this->generateUrl(
                 'tl_metamodel_filter',
                 $this->seralizeId('tl_metamodel', $this->metamodelId)
             ),

@@ -17,8 +17,6 @@
 
 namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
-use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 
 /**
@@ -28,6 +26,13 @@ use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
  */
 class BreadCrumbInputScreenCondition extends BreadCrumbInputScreenSetting
 {
+    /**
+     * Id of the input screen setting.
+     *
+     * @var int
+     */
+    protected $inputScreenSettingId;
+
     /**
      * Calculate the name of a sub palette attribute.
      *
@@ -58,34 +63,27 @@ class BreadCrumbInputScreenCondition extends BreadCrumbInputScreenSetting
      */
     public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
     {
-        $pid       = $this->extractIdFrom($environment, 'pid');
-        $attribute = $this->getConditionAttribute($pid);
+        $pid = $this->extractIdFrom($environment, 'pid');
+
+        if (!isset($this->inputScreenSettingId)) {
+            $this->inputScreenSettingId = $pid;
+        }
+        $attribute = $this->getConditionAttribute($this->inputScreenSettingId);
 
         if (!isset($this->inputScreenId)) {
             $this->inputScreenId = $this
                 ->getDatabase()
-                ->prepare('SELECT pid FROM tl_metamodel_dcasetting WHERE id=?')
-                ->execute($pid)
+                ->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE id=?')
+                ->execute($this->inputScreenSettingId)
                 ->pid;
         }
 
-        $inputScreen = $this->getInputScreen();
-        if (!isset($this->metamodelId)) {
-            $this->metamodelId = $inputScreen->pid;
-        }
-
-        $elements = parent::getBreadcrumbElements($environment, $elements);
-        $urlEvent = new AddToUrlEvent(
-            sprintf(
-                'do=metamodels&table=%s&pid=%s',
-                'tl_metamodel_dcasetting_condition',
-                $this->seralizeId('tl_metamodel_dcasetting', $this->metamodelId)
-            )
-        );
-        $environment->getEventDispatcher()->dispatch(ContaoEvents::BACKEND_ADD_TO_URL, $urlEvent);
-
+        $elements   = parent::getBreadcrumbElements($environment, $elements);
         $elements[] = array(
-            'url'  => $urlEvent->getUrl(),
+            'url'  => $this->generateUrl(
+                'tl_metamodel_dcasetting_condition',
+                $this->seralizeId('tl_metamodel_dcasetting', $this->inputScreenSettingId)
+            ),
             'text' => sprintf(
                 $this->getBreadcrumbLabel($environment, 'tl_metamodel_dcasetting_condition'),
                 $attribute->getName()

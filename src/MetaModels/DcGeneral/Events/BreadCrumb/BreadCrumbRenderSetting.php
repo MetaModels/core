@@ -27,32 +27,37 @@ use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 class BreadCrumbRenderSetting extends BreadCrumbRenderSettings
 {
     /**
+     * Id of the render setting.
+     *
+     * @var int
+     */
+    protected $renderSettingId;
+
+    /**
      * {@inheritDoc}
      */
     public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
     {
-        if (!isset($this->renderSettingsId)) {
-            $this->renderSettingsId = $this->extractIdFrom($environment, 'pid');
+        if (!isset($this->renderSettingId)) {
+            $this->renderSettingId = $this->extractIdFrom($environment, 'pid');
         }
 
-        if (!isset($this->metamodelId)) {
+        if (!isset($this->renderSettingsId)) {
             $parent = $this
                 ->getDatabase()
-                ->prepare('SELECT id, pid, name FROM tl_metamodel_rendersettings WHERE id=?')
-                ->execute($this->renderSettingsId);
+                ->prepare('SELECT pid, name FROM tl_metamodel_rendersettings WHERE id=?')
+                ->execute($this->renderSettingId);
 
-            $this->metamodelId = $parent->pid;
+            $this->renderSettingsId = $parent->pid;
         }
 
+        $elements       = parent::getBreadcrumbElements($environment, $elements);
         $renderSettings = $this->getRenderSettings();
 
-        $elements = parent::getBreadcrumbElements($environment, $elements);
-
         $elements[] = array(
-            'url' => sprintf(
-                'contao/main.php?do=metamodels&table=%s&pid=%s',
+            'url' => $this->generateUrl(
                 'tl_metamodel_rendersetting',
-                $this->seralizeId('tl_metamodel_rendersetting', $this->renderSettingsId)
+                $this->seralizeId('tl_metamodel_rendersetting', $this->renderSettingId)
             ),
             'text' => sprintf(
                 $this->getBreadcrumbLabel($environment, 'tl_metamodel_rendersetting'),

@@ -17,8 +17,6 @@
 
 namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
-use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 
 /**
@@ -37,27 +35,15 @@ class BreadCrumbInputScreenSortGroup extends BreadCrumbInputScreens
             $this->inputScreenId = $this->extractIdFrom($environment, 'pid');
         }
 
-        $inputScreen = $this->getInputScreen();
-        if (!isset($this->metamodelId)) {
-            $this->metamodelId = $inputScreen->pid;
-        }
-
-        $elements = parent::getBreadcrumbElements($environment, $elements);
-
-        $urlEvent = new AddToUrlEvent(
-            sprintf(
-                'do=metamodels&table=%s&pid=%s',
+        $elements   = parent::getBreadcrumbElements($environment, $elements);
+        $elements[] = array(
+            'url' => $this->generateUrl(
                 'tl_metamodel_dca_sortgroup',
                 $this->seralizeId('tl_metamodel_dca', $this->inputScreenId)
-            )
-        );
-        $environment->getEventDispatcher()->dispatch(ContaoEvents::BACKEND_ADD_TO_URL, $urlEvent);
-
-        $elements[] = array(
-            'url' => $urlEvent->getUrl(),
+            ),
             'text' => sprintf(
                 $this->getBreadcrumbLabel($environment, 'tl_metamodel_dca_sortgroup'),
-                $inputScreen->name
+                $this->getInputScreen()->name
             ),
             'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/dca_groupsortsettings.png'
         );

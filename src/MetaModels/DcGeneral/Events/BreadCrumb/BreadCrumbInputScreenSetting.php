@@ -40,11 +40,9 @@ class BreadCrumbInputScreenSetting extends BreadCrumbInputScreens
             $this->metamodelId = $inputScreen->pid;
         }
 
-        $elements = parent::getBreadcrumbElements($environment, $elements);
-
+        $elements   = parent::getBreadcrumbElements($environment, $elements);
         $elements[] = array(
-            'url' => sprintf(
-                'contao/main.php?do=metamodels&table=%s&pid=%s',
+            'url' => $this->generateUrl(
                 'tl_metamodel_dcasetting',
                 $this->seralizeId('tl_metamodel_dca', $this->inputScreenId)
             ),

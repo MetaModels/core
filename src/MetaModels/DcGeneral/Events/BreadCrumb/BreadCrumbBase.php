@@ -17,6 +17,8 @@
 
 namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
@@ -140,9 +142,33 @@ abstract class BreadCrumbBase
      *
      * @return IdSerializer
      */
-    public static function seralizeId($dataProviderName, $modelId)
+    public function seralizeId($dataProviderName, $modelId)
     {
         return IdSerializer::fromValues($dataProviderName, $modelId)->getSerialized();
+    }
+
+    /**
+     * Generate an url from the given parameters.
+     *
+     * @param string $tableName The name of the table to link to.
+     *
+     * @param string $itemId    The id of the item in the given table.
+     *
+     * @return string The generated URL.
+     */
+    public function generateUrl($tableName, $itemId)
+    {
+        $urlEvent = new AddToUrlEvent(
+            sprintf(
+                'do=metamodels&table=%s&pid=%s',
+                $tableName,
+                $itemId
+            )
+        );
+
+        $this->getServiceContainer()->getEventDispatcher()->dispatch(ContaoEvents::BACKEND_ADD_TO_URL, $urlEvent);
+
+        return $urlEvent->getUrl();
     }
 
     /**
