@@ -211,13 +211,10 @@ class Helper
      *                          text).
      *
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public static function getTemplatesForBaseFrom($base, $folder, $themeName)
     {
-        // Add the templates root directory.
+        $themeName      = trim($themeName);
         $themeTemplates = glob($folder . '/' . $base . '*');
 
         if (!$themeTemplates) {
@@ -229,11 +226,7 @@ class Helper
         foreach ($themeTemplates as $template) {
             $template = basename($template, strrchr($template, '.'));
 
-            $templates[$template] = sprintf(
-                $GLOBALS['TL_LANG']['MSC']['template_in_theme'],
-                $template,
-                $themeName
-            );
+            $templates[$template] = array($themeName => $themeName);
         }
 
         return $templates;
@@ -242,18 +235,18 @@ class Helper
     /**
      * Fetch the template group for the detail view of the current MetaModel module.
      *
-     * @param string $strBase The base for the templates to retrieve.
+     * @param string $templateBaseName The base name for the templates to retrieve.
      *
      * @return array
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public static function getTemplatesForBase($strBase)
+    public static function getTemplatesForBase($templateBaseName)
     {
         // Add the templates root directory.
-        $arrTemplates = self::getTemplatesForBaseFrom(
-            $strBase,
+        $allTemplates = self::getTemplatesForBaseFrom(
+            $templateBaseName,
             TL_ROOT . '/templates',
             $GLOBALS['TL_LANG']['MSC']['no_theme']
         );
@@ -265,10 +258,10 @@ class Helper
         // Add all the theme templates folders.
         while ($objThemes->next()) {
             if ($objThemes->templates != '') {
-                $arrTemplates = array_merge(
-                    $arrTemplates,
+                $allTemplates = array_replace_recursive(
+                    $allTemplates,
                     self::getTemplatesForBaseFrom(
-                        $strBase,
+                        $templateBaseName,
                         TL_ROOT . '/' . $objThemes->templates,
                         $objThemes->name
                     )
@@ -278,19 +271,28 @@ class Helper
 
         // Add the module templates folders if they exist.
         foreach (\Config::getInstance()->getActiveModules() as $strModule) {
-            $arrTemplates = array_merge(
-                $arrTemplates,
+            $allTemplates = array_replace_recursive(
+                $allTemplates,
                 self::getTemplatesForBaseFrom(
-                    $strBase,
+                    $templateBaseName,
                     TL_ROOT . '/system/modules/' . $strModule . '/templates',
                     $GLOBALS['TL_LANG']['MSC']['no_theme']
                 )
             );
         }
 
-        ksort($arrTemplates);
+        $templateList = array();
+        foreach ($allTemplates as $template => $themeList) {
+            $templateList[$template] = sprintf(
+                $GLOBALS['TL_LANG']['MSC']['template_in_theme'],
+                $template,
+                implode(', ', $themeList)
+            );
+        }
 
-        return array_unique($arrTemplates);
+        ksort($templateList);
+
+        return array_unique($templateList);
     }
 
     /**

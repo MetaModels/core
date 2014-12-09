@@ -213,7 +213,7 @@ class Template
      * @param bool   $blnFailIfNotFound Boolean flag telling if an Exception shall be thrown when the file can not
      *                                  be found.
      *
-     * @throws \Exception When the flag has been set and the file has not been found.
+     * @throws \RuntimeException When the flag has been set and the file has not been found.
      *
      * @return string
      *
@@ -276,7 +276,7 @@ class Template
         }
 
         if ($blnFailIfNotFound) {
-            throw new \Exception('Could not find template file "' . $strFilename . '"');
+            throw new \RuntimeException('Could not find template file "' . $strFilename . '"');
         }
 
         return null;
@@ -292,7 +292,7 @@ class Template
      * @param bool   $blnFailIfNotFound Boolean flag telling if an Exception shall be thrown when the file can not
      *                                  be found.
      *
-     * @throws \Exception When the flag has been set and the file has not been found.
+     * @throws \RuntimeException When the flag has been set and the file has not been found.
      *
      * @return string
      *
@@ -313,7 +313,17 @@ class Template
             $strCustom = str_replace('../', '', $GLOBALS['objPage']->templateGroup);
 
             if ($strCustom != '') {
-                return \TemplateLoader::getPath($strTemplate, $strFormat, $strCustom);
+                try {
+                    return \TemplateLoader::getPath($strTemplate, $strFormat, $strCustom);
+                } catch (\Exception $exception) {
+                    if ($blnFailIfNotFound) {
+                        throw new \RuntimeException(
+                            sprintf('Could not find template %s.%s', $strTemplate, $strFormat),
+                            1,
+                            $exception
+                        );
+                    }
+                }
             }
         }
 
@@ -377,7 +387,8 @@ class Template
 
             return $strBuffer;
         }
-        return '';
+
+        return sprintf('Template %s not found (it is maybe within a unreachable theme folder?).');
     }
 
     /**
