@@ -23,8 +23,7 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use ContaoCommunityAlliance\UrlBuilder\Contao\BackendUrlBuilder;
 use MetaModels\BackendIntegration\TemplateList;
-use MetaModels\Factory as MetaModelFactory;
-use MetaModels\Filter\Setting\Factory as FilterFactory;
+use MetaModels\IMetaModelsServiceContainer;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -44,13 +43,32 @@ class ContentElementModuleBase
      * Retrieve the event dispatcher.
      *
      * @return EventDispatcherInterface
+     */
+    public function getEventDispatcher()
+    {
+        return $this->getServiceContainer()->getEventDispatcher();
+    }
+    /**
+     * Retrieve the service container.
+     *
+     * @return IMetaModelsServiceContainer
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function getEventDispatcher()
+    public function getServiceContainer()
     {
-        return $GLOBALS['container']['event-dispatcher'];
+        return $GLOBALS['container']['metamodels-service-container'];
+    }
+
+    /**
+     * Retrieve the database instance.
+     *
+     * @return \Contao\Database
+     */
+    protected function getDatabase()
+    {
+        return $this->getServiceContainer()->getDatabase();
     }
 
     /**
@@ -69,7 +87,8 @@ class ContentElementModuleBase
      */
     protected function buildFilterParamsFor(\DC_Table $dataContainer, $table, $elementName)
     {
-        $element = \Database::getInstance()
+        $container = $this->getServiceContainer();
+        $element   = $this->getDatabase()
             ->prepare(
                 'SELECT    c.metamodel_filtering
                 FROM    ' . $table . ' AS c
@@ -85,7 +104,9 @@ class ContentElementModuleBase
             return;
         }
 
-        $objFilterSettings = FilterFactory::byId($element->metamodel_filtering);
+        $objFilterSettings = $container->getFilterFactory()->createCollection(
+            $element->metamodel_filtering
+        );
 
         $GLOBALS['TL_DCA'][$table]['fields']['metamodel_filterparams']['eval']['subfields'] =
             $objFilterSettings->getParameterDCA();
@@ -222,8 +243,8 @@ class ContentElementModuleBase
      */
     public function getFilterSettings(\DC_Table $objDC)
     {
-        $objDB             = \Database::getInstance();
-        $objFilterSettings = $objDB
+        $objFilterSettings = $this
+            ->getDatabase()
             ->prepare('SELECT * FROM tl_metamodel_filter WHERE pid=?')
             ->execute($objDC->activeRecord->metamodel);
         $arrSettings       = array();
@@ -247,7 +268,8 @@ class ContentElementModuleBase
      */
     public function getRenderSettings(\DC_Table $objDC)
     {
-        $objFilterSettings = \Database::getInstance()
+        $objFilterSettings = $this
+            ->getDatabase()
             ->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE pid=?')
             ->execute($objDC->activeRecord->metamodel);
 
@@ -293,7 +315,10 @@ class ContentElementModuleBase
             'sorting' => $GLOBALS['TL_LANG']['MSC']['sorting'],
             'random'  => $GLOBALS['TL_LANG']['MSC']['random']
         );
-        $objMetaModel      = MetaModelFactory::byId($objDc->activeRecord->metamodel);
+
+        $factory       = $this->getServiceContainer()->getFactory();
+        $metaModelName = $factory->translateIdToMetaModelName($objDc->activeRecord->metamodel);
+        $objMetaModel  = $factory->getMetaModel($metaModelName);
 
         if ($objMetaModel) {
             foreach ($objMetaModel->getAttributes() as $objAttribute) {
@@ -350,12 +375,13 @@ class ContentElementModuleBase
     public function getFilterParameterNames(\DC_Table $objDc)
     {
         $return = array();
+        $filter = $objDc->activeRecord->metamodel_filtering;
 
-        if (!$objDc->activeRecord->metamodel_filtering) {
+        if (!$filter) {
             return $return;
         }
 
-        $objFilterSetting = FilterFactory::byId($objDc->activeRecord->metamodel_filtering);
+        $objFilterSetting = $this->getServiceContainer()->getFilterFactory()->createCollection($filter);
         $arrParameterDca  = $objFilterSetting->getParameterFilterNames();
 
         return $arrParameterDca;
