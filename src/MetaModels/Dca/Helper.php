@@ -19,9 +19,7 @@ namespace MetaModels\Dca;
 
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
-use MetaModels\BackendIntegration\TemplateList;
 use MetaModels\IMetaModel;
-use MetaModels\Factory as MetaModelFactory;
 
 /**
  * This class is used as base class from dca handler classes for various callbacks.
@@ -199,26 +197,6 @@ class Helper
         $property
             ->setWidgetType('multiColumnWizard')
             ->setExtra($extra);
-    }
-
-    /**
-     * Fetch the template group for the detail view of the current MetaModel module.
-     *
-     * @param string $templateBaseName The base name for the templates to retrieve.
-     *
-     * @return array
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     *
-     * @deprecated Use non static class MetaModels\BackendIntegration\TemplateList instead.
-     */
-    public static function getTemplatesForBase($templateBaseName)
-    {
-        $list = new TemplateList();
-        $list->setServiceContainer($GLOBALS['container']['metamodels-service-container']);
-
-        return $list->getTemplatesForBase($templateBaseName);
     }
 
     /**
