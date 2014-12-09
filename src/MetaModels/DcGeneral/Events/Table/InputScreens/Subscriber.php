@@ -491,7 +491,7 @@ class Subscriber extends BaseSubscriber
     public function buildLegendTitleWidget(BuildWidgetEvent $event)
     {
         if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dcasetting')
-            || ($event->getProperty() !== 'legendtitle')) {
+            || ($event->getProperty()->getName() !== 'legendtitle')) {
             return;
         }
 
