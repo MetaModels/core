@@ -27,6 +27,13 @@ use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 class BreadCrumbInputScreenSetting extends BreadCrumbInputScreens
 {
     /**
+     * Id of the input screen setting.
+     *
+     * @var int
+     */
+    protected $inputScreenSettingId;
+
+    /**
      * {@inheritDoc}
      */
     public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)

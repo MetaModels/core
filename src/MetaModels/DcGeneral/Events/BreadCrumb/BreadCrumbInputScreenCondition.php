@@ -27,13 +27,6 @@ use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 class BreadCrumbInputScreenCondition extends BreadCrumbInputScreenSetting
 {
     /**
-     * Id of the input screen setting.
-     *
-     * @var int
-     */
-    protected $inputScreenSettingId;
-
-    /**
      * Calculate the name of a sub palette attribute.
      *
      * @param int $pid The id of the input screen.
