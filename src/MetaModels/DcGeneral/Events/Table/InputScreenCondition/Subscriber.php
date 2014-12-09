@@ -32,7 +32,7 @@ use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbInputScreenCondition;
 
 /**
- * Handles event operations on tl_metamodel_dca_combine.
+ * Handles event operations on tl_metamodel_dcasetting_condition.
  */
 class Subscriber extends BaseSubscriber
 {
@@ -48,7 +48,9 @@ class Subscriber extends BaseSubscriber
             ->addListener(
                 GetBreadcrumbEvent::NAME,
                 function (GetBreadcrumbEvent $event) use ($serviceContainer) {
-                    if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca_combine')) {
+                    if (($event->getEnvironment()->getDataDefinition()->getName()
+                        !== 'tl_metamodel_dcasetting_condition')
+                    ) {
                         return;
                     }
                     $subscriber = new BreadCrumbInputScreenCondition($serviceContainer);
