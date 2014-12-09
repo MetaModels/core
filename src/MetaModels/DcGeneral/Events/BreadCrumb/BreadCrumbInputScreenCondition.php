@@ -25,7 +25,7 @@ use MetaModels\Factory;
  *
  * @package MetaModels\DcGeneral\Events\BreadCrumb
  */
-class BreadCrumbInputScreen extends BreadCrumbInputScreens
+class BreadCrumbInputScreenCondition extends BreadCrumbInputScreen
 {
     /**
      * Calculate the name of a sub palette attribute.
@@ -34,7 +34,7 @@ class BreadCrumbInputScreen extends BreadCrumbInputScreens
      *
      * @return \MetaModels\Attribute\IAttribute|string
      */
-    protected function getSubPaletteAttributeName($pid)
+    protected function getConditionAttribute($pid)
     {
         $parent = \Database::getInstance()
             ->prepare('SELECT id, pid
@@ -52,8 +52,11 @@ class BreadCrumbInputScreen extends BreadCrumbInputScreens
      */
     public function getBreadcrumbElements(EnvironmentInterface $environment, $elements)
     {
-        if (!isset($this->inputScreenId)) {
-            $this->inputScreenId = $this->extractIdFrom($environment, 'pid');
+        $pid       = $this->extractIdFrom($environment, 'pid');
+        $attribute = $this->getConditionAttribute($pid);
+
+        if (!isset($this->inputScreenId) && $attribute->get('pid')) {
+            $this->inputScreenId = $attribute->get('pid');
         }
 
         $inputScreen = $this->getInputScreen();
@@ -64,13 +67,14 @@ class BreadCrumbInputScreen extends BreadCrumbInputScreens
         $elements = parent::getBreadcrumbElements($environment, $elements);
 
         $elements[] = array(
-            'url' => sprintf(
+            'url'  => sprintf(
                 'contao/main.php?do=metamodels&table=%s&pid=%s',
-                'tl_metamodel_dcasetting',
-                $this->seralizeId('tl_metamodel_dca', $inputScreen->id)
+                'tl_metamodel_dcasetting_condition',
+                $this->seralizeId('tl_metamodel_dcasetting', $pid)
             ),
-            'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_dcasetting'), $inputScreen->name),
-            'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/dca_setting.png'
+            'text' => sprintf($this->getBreadcrumbLabel($environment, 'tl_metamodel_dcasetting_condition'),
+                $attribute->get('name')),
+            'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/dca_condition.png'
         );
 
         return $elements;
