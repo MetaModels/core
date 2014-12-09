@@ -37,7 +37,7 @@ $GLOBALS['TL_LANG']['BRD']['metamodel_rendersettings']                = 'All ren
 $GLOBALS['TL_LANG']['BRD']['metamodel_rendersetting']                 = 'Render settings in "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dca']                           = 'All input screens of "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting']                    = 'Input screens in "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting_subpalette']         = 'Sub areas for "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting_condition']          = 'Sub areas for "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_filter']                        = 'All filter of "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_filtersetting']                 = 'Filter settings in "%s"';
 
