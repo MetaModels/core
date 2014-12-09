@@ -18,6 +18,8 @@
 
 namespace MetaModels\Dca;
 
+use MetaModels\BackendIntegration\TemplateList;
+
 /**
  * Complementary methods needed by the DCA in tl_module.
  *
@@ -37,9 +39,6 @@ class Module extends ContentElementModuleBase
      * @param \DC_Table $dataContainer The data container calling this method.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function buildFilterParams(\DC_Table $dataContainer)
     {
@@ -52,10 +51,18 @@ class Module extends ContentElementModuleBase
      * @param \DC_Table $objDC The data container calling this method.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getModuleTemplates(\DC_Table $objDC)
     {
-        return Helper::getTemplatesForBase('mod_' . $objDC->activeRecord->type);
+        /** @noinspection PhpUndefinedFieldInspection */
+        $type = $objDC->activeRecord->type;
+        $list = new TemplateList();
+        $list->setServiceContainer($GLOBALS['container']['metamodels-service-container']);
+
+        return $list->getTemplatesForBase('mod_' . $type);
     }
 
     /**

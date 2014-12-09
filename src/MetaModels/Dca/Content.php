@@ -39,9 +39,6 @@ class Content extends ContentElementModuleBase
      * @param \DC_Table $dataContainer The data container calling this method.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function buildCustomFilter(\DC_Table $dataContainer)
     {
@@ -54,9 +51,13 @@ class Content extends ContentElementModuleBase
      * @param \DC_Table $objDC The data container calling this method.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getModuleTemplates(\DC_Table $objDC)
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         $type = $objDC->activeRecord->type;
         if ($type == 'metamodel_content') {
             $type = 'metamodel_list';

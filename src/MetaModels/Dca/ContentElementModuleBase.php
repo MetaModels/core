@@ -330,6 +330,39 @@ class ContentElementModuleBase
     }
 
     /**
+     * Get a list with all allowed attributes for meta description.
+     *
+     * If the optional parameter arrTypes is not given, all attributes will be retrieved.
+     *
+     * @param int      $metaModelId  The id of the MetaModel from which the attributes shall be retrieved from.
+     *
+     * @param string[] $allowedTypes The attribute type names that shall be retrieved (optional).
+     *
+     * @return array A list with all found attributes.
+     */
+    public function getAttributeNamesForModel($metaModelId, $allowedTypes = array())
+    {
+        $attributeNames = array();
+
+        $factory   = $this->getServiceContainer()->getFactory();
+        $metaModel = $factory->getMetaModel($factory->translateIdToMetaModelName($metaModelId));
+        if ($metaModel) {
+            foreach ($metaModel->getAttributes() as $attribute) {
+                if (empty($allowedTypes) || in_array($attribute->get('type'), $allowedTypes)) {
+                    $attributeNames[$attribute->getColName()] =
+                        sprintf(
+                            '%s [%s]',
+                            $attribute->getName(),
+                            $attribute->getColName()
+                        );
+                }
+            }
+        }
+
+        return $attributeNames;
+    }
+
+    /**
      * Get a list with all allowed attributes for meta title.
      *
      * @param \DC_Table $objDC The data container calling this method.
@@ -341,7 +374,7 @@ class ContentElementModuleBase
      */
     public function getMetaTitleAttributes(\DC_Table $objDC)
     {
-        return Helper::getAttributeNamesForModel(
+        return $this->getAttributeNamesForModel(
             $objDC->activeRecord->metamodel,
             (array) $GLOBALS['METAMODELS']['metainformation']['allowedTitle']
         );
@@ -359,7 +392,7 @@ class ContentElementModuleBase
      */
     public function getMetaDescriptionAttributes(\DC_Table $objDC)
     {
-        return Helper::getAttributeNamesForModel(
+        return $this->getAttributeNamesForModel(
             $objDC->activeRecord->metamodel,
             (array) $GLOBALS['METAMODELS']['metainformation']['allowedDescription']
         );

@@ -222,39 +222,6 @@ class Helper
     }
 
     /**
-     * Get a list with all allowed attributes for meta description.
-     *
-     * If the optional parameter arrTypes is not given, all attributes will be retrieved.
-     *
-     * @param int      $intMetaModel The id of the MetaModel from which the attributes shall be retrieved from.
-     *
-     * @param string[] $arrTypes     The attribute type names that shall be retrieved (optional).
-     *
-     * @return array A list with all found attributes.
-     */
-    public static function getAttributeNamesForModel($intMetaModel, $arrTypes = array())
-    {
-        $arrAttributeNames = array();
-
-        // FIXME: usage of deprecated factory.
-        $objMetaModel = MetaModelFactory::byId($intMetaModel);
-        if ($objMetaModel) {
-            foreach ($objMetaModel->getAttributes() as $objAttribute) {
-                if (empty($arrTypes) || in_array($objAttribute->get('type'), $arrTypes)) {
-                    $arrAttributeNames[$objAttribute->getColName()] =
-                        sprintf(
-                            '%s [%s]',
-                            $objAttribute->getName(),
-                            $objAttribute->getColName()
-                        );
-                }
-            }
-        }
-
-        return $arrAttributeNames;
-    }
-
-    /**
      * Search all files with the given file extension below the given path.
      *
      * @param string $folder    The folder to scan.
