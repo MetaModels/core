@@ -68,6 +68,13 @@ class InputScreen implements IInputScreen
     protected $conditions = array();
 
     /**
+     * Grouping and sorting information.
+     *
+     * @var IInputScreenGroupingAndSorting
+     */
+    protected $groupSort = array();
+
+    /**
      * Simple map from property setting id to property name.
      *
      * @var array
@@ -91,14 +98,17 @@ class InputScreen implements IInputScreen
      * @param array                       $propertyRows The information about all contained properties.
      *
      * @param array                       $conditions   The property condition information.
+     *
+     * @param array                       $groupSort    The grouping and sorting information.
      */
-    public function __construct($container, $data, $propertyRows, $conditions)
+    public function __construct($container, $data, $propertyRows, $conditions, $groupSort)
     {
         $this->data      = $data;
         $this->container = $container;
 
         $this->transformConditions($conditions);
         $this->translateRows($propertyRows);
+        $this->transformGroupSort($groupSort);
     }
 
     /**
@@ -297,6 +307,20 @@ class InputScreen implements IInputScreen
     }
 
     /**
+     * Transform the grouping and sorting modes.
+     *
+     * @param array $rows The rows from the Database to convert.
+     *
+     * @return void
+     */
+    protected function transformGroupSort($rows)
+    {
+        foreach ($rows as $row) {
+            $this->groupSort[] = new InputScreenGroupingAndSorting($row, $this);
+        }
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getId()
@@ -369,6 +393,14 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
+    public function getGroupingAndSorting()
+    {
+        return $this->groupSort;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getMetaModel()
     {
         $factory = $this->container->getFactory();
@@ -424,15 +456,39 @@ class InputScreen implements IInputScreen
     /**
      * {@inheritDoc}
      */
-    public function getMode()
+    public function getRenderMode()
     {
         // If we have variant overwrite all modes and set mode 5 - tree mode.
         $objMetaModels = $this->getMetaModel();
         if ($objMetaModels->hasVariants()) {
-            return 5;
+            return 'hierarchical';
         }
 
-        return $this->data['mode'];
+        return $this->data['rendermode'];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isHierarchical()
+    {
+        return $this->getRenderMode() === 'hierarchical';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isParented()
+    {
+        return $this->getRenderMode() === 'parented';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isFlat()
+    {
+        return $this->getRenderMode() === 'flat';
     }
 
     /**
@@ -440,7 +496,31 @@ class InputScreen implements IInputScreen
      */
     public function isClosed()
     {
-        return $this->data['closed'];
+        return !($this->isCreatable() || $this->isEditable() || $this->isDeletable());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isEditable()
+    {
+        return (bool) $this->data['iseditable'];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isCreatable()
+    {
+        return (bool) $this->data['iscreatable'];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isDeletable()
+    {
+        return (bool) $this->data['isdeleteable'];
     }
 
     /**

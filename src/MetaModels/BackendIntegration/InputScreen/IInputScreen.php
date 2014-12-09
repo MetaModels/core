@@ -88,6 +88,13 @@ interface IInputScreen
     public function getConditionsFor($name);
 
     /**
+     * Retrieve the conditions for the given property name.
+     *
+     * @return IInputScreenGroupingAndSorting[]
+     */
+    public function getGroupingAndSorting();
+
+    /**
      * Get the MetaModel the input screen belongs to.
      *
      * @return IMetaModel
@@ -130,18 +137,62 @@ interface IInputScreen
     public function isStandalone();
 
     /**
-     * Retrieve the default sorting mode for this input screen.
+     * Retrieve the render mode.
      *
-     * @return int
+     * @return string
      */
-    public function getMode();
+    public function getRenderMode();
+
+    /**
+     * Check if the render mode is hierarchical.
+     *
+     * @return bool
+     */
+    public function isHierarchical();
+
+    /**
+     * Check if the render mode is parent mode.
+     *
+     * @return bool
+     */
+    public function isParented();
+
+    /**
+     * Check if the render mode is flat mode.
+     *
+     * @return bool
+     */
+    public function isFlat();
 
     /**
      * Check if the MetaModel is closed.
      *
      * @return bool
+     *
+     * @deprecated use isEditable() and isCreatable() and isDeletable().
      */
     public function isClosed();
+
+    /**
+     * Check if the MetaModel is editable.
+     *
+     * @return bool
+     */
+    public function isEditable();
+
+    /**
+     * Check if the MetaModel is creatable.
+     *
+     * @return bool
+     */
+    public function isCreatable();
+
+    /**
+     * Check if the MetaModel is deletable.
+     *
+     * @return bool
+     */
+    public function isDeletable();
 
     /**
      * Get a string with the panel layout.

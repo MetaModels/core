@@ -275,11 +275,7 @@ abstract class Simple implements ISimple
 
         if ($arrWidget['eval']['includeBlankOption']) {
             $blnActive = $this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, '');
-
-            $event = new GenerateFrontendUrlEvent(
-                $arrJumpTo,
-                sprintf($strFilterAction, '')
-            );
+            $event     = new GenerateFrontendUrlEvent($arrJumpTo, sprintf($strFilterAction, ''));
             $dispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
 
             $arrOptions[] = array
@@ -307,11 +303,7 @@ abstract class Simple implements ISimple
                     $strValue = '/' . $strValue;
                 }
             }
-
-            $event = new GenerateFrontendUrlEvent(
-                $arrJumpTo,
-                sprintf($strFilterAction, $strValue)
-            );
+            $event = new GenerateFrontendUrlEvent($arrJumpTo, sprintf($strFilterAction, $strValue));
             $dispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
 
             $arrOptions[] = array

@@ -480,10 +480,20 @@ abstract class ViewCombinations
                 ')
                 ->execute($screenId);
 
-            $inputScreen = $this->information[$metaModelName][self::INPUTSCREEN] = array(
+            $groupSort = $this->getDatabase()
+                ->prepare('
+                    SELECT *
+                    FROM tl_metamodel_dca_sortgroup
+                    WHERE pid=?
+                    ORDER BY sorting ASC
+                ')
+                ->execute($screenId);
+
+            $inputScreen = array(
                 'row'        => $inputScreens->row(),
                 'properties' => $propertyRows->fetchAllAssoc(),
-                'conditions' => $conditions->fetchAllAssoc()
+                'conditions' => $conditions->fetchAllAssoc(),
+                'groupSort'  => $groupSort->fetchAllAssoc()
             );
 
             $this->information[$metaModelName][self::MODELID] = $metaModelId;
@@ -515,7 +525,8 @@ abstract class ViewCombinations
                 $this->container,
                 $inputScreen['row'],
                 $inputScreen['properties'],
-                $inputScreen['conditions']
+                $inputScreen['conditions'],
+                $inputScreen['groupSort']
             );
         }
 

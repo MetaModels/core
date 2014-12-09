@@ -102,12 +102,6 @@ class Boot
      */
     public function perform(MetaModelsBootEvent $event)
     {
-        // There is no need to boot in login or install screen.
-        if (($GLOBALS['container']['environment']->script == 'contao/index.php')
-        || ($GLOBALS['container']['environment']->script == 'contao/install.php')) {
-            return;
-        }
-
         $container = $event->getServiceContainer();
 
         if (!$container->getDatabase()->tableExists('tl_metamodel', null)) {

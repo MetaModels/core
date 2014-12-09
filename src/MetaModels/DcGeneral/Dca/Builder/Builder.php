@@ -29,6 +29,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\ModelRelationshi
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CommandInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CopyCommand;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CutCommand;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\GroupAndSortingInformationInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultFilterElementInformation;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultLimitElementInformation;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultSearchElementInformation;
@@ -474,17 +475,9 @@ class Builder
      */
     protected function parsePanelSort(PanelRowInterface $row, IInputScreen $inputScreen)
     {
-        if ($row->hasElement('sort')) {
-            $element = $row->getElement('sort');
-        } else {
+        if (!$row->hasElement('sort')) {
             $element = new DefaultSortElementInformation();
             $row->addElement($element);
-        }
-
-        foreach ($inputScreen->getProperties() as $property => $value) {
-            if (isset($value['info']['sorting'])) {
-                $element->addProperty($property, (int) $value['info']['flag']);
-            }
         }
     }
 
@@ -589,37 +582,21 @@ class Builder
 
         $inputScreen = $this->getInputScreenDetails();
 
-        switch ($inputScreen->getMode())
-        {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-                // Flat mode.
-                // 0 Records are not sorted.
-                // 1 Records are sorted by a fixed field.
-                // 2 Records are sorted by a switchable field.
-                // 3 Records are sorted by the parent table.
-                $config->setMode(BasicDefinitionInterface::MODE_FLAT);
-                break;
-            case 4:
-                // Displays the child records of a parent record (see style sheets module).
-                $config->setMode(BasicDefinitionInterface::MODE_PARENTEDLIST);
-                break;
-            case 5:
-            case 6:
-                // Hierarchical mode.
-                // 5 Records are displayed as tree (see site structure).
-                // 6 Displays the child records within a tree structure (see articles module).
-                $config->setMode(BasicDefinitionInterface::MODE_HIERARCHICAL);
-
-                break;
-            default:
+        if ($inputScreen->isHierarchical()) {
+            // Hierarchical mode - Records are displayed as tree (see site structure).
+            $config->setMode(BasicDefinitionInterface::MODE_HIERARCHICAL);
+        } elseif ($inputScreen->isParented()) {
+            // Displays the child records of a parent record (see style sheets module).
+            $config->setMode(BasicDefinitionInterface::MODE_PARENTEDLIST);
+        } elseif ($inputScreen->isFlat()) {
+            // Flat mode.
+            $config->setMode(BasicDefinitionInterface::MODE_FLAT);
         }
 
-        if (($value = $inputScreen->isClosed()) !== null) {
-            $config->setClosed((bool) $value);
-        }
+        $config
+            ->setEditable($inputScreen->isEditable())
+            ->setCreatable($inputScreen->isCreatable())
+            ->setDeletable($inputScreen->isDeletable());
 
         $this->calculateConditions($container);
     }
@@ -1028,6 +1005,43 @@ class Builder
     }
 
     /**
+     * Convert a render group type from InputScreen value to GroupAndSortingInformationInterface value.
+     *
+     * @param string $type The group type.
+     *
+     * @return string
+     */
+    protected function convertRenderGroupType($type)
+    {
+        switch ($type) {
+            case 'char':
+                return GroupAndSortingInformationInterface::GROUP_CHAR;
+
+            case 'digit':
+                return GroupAndSortingInformationInterface::GROUP_DIGIT;
+
+            case 'day':
+                return GroupAndSortingInformationInterface::GROUP_DAY;
+
+            case 'weekday':
+                return GroupAndSortingInformationInterface::GROUP_WEEKDAY;
+
+            case 'week':
+                return GroupAndSortingInformationInterface::GROUP_WEEK;
+
+            case 'month':
+                return GroupAndSortingInformationInterface::GROUP_MONTH;
+
+            case 'year':
+                return GroupAndSortingInformationInterface::GROUP_YEAR;
+
+            default:
+        }
+
+        return GroupAndSortingInformationInterface::GROUP_NONE;
+    }
+
+    /**
      * Parse the sorting part of listing configuration.
      *
      * @param ListingConfigInterface $listing The listing configuration.
@@ -1036,11 +1050,38 @@ class Builder
      */
     protected function parseListSorting(ListingConfigInterface $listing)
     {
-        $listing->setRootIcon($this->getBackendIcon($this->getInputScreenDetails()->getIcon()));
-        $listing->setDefaultSortingFields(array_merge(
-            (array) $listing->getDefaultSortingFields(),
-            array('sorting' => 'ASC')
-        ));
+        $inputScreen = $this->getInputScreenDetails();
+
+        $listing->setRootIcon($this->getBackendIcon($inputScreen->getIcon()));
+
+        $definitions = $listing->getGroupAndSortingDefinition();
+        foreach ($inputScreen->getGroupingAndSorting() as $information) {
+            $definition = $definitions->add();
+            $definition->setName($information->getName());
+            if ($information->isDefault() && !$definitions->hasDefault()) {
+                $definitions->markDefault($definition);
+            }
+
+            if ($information->isManualSorting()) {
+                $propertyInformation = $definition->add();
+                $propertyInformation
+                    ->setProperty('sorting')
+                    ->setSortingMode('ASC');
+            } elseif ($information->getRenderSortAttribute()) {
+                $propertyInformation = $definition->add();
+                $propertyInformation
+                    ->setProperty($information->getRenderSortAttribute())
+                    ->setSortingMode($information->getRenderSortDirection());
+            }
+
+            if ($information->getRenderGroupAttribute()) {
+                $propertyInformation = $definition->add(0);
+                $propertyInformation
+                    ->setProperty($information->getRenderGroupAttribute())
+                    ->setGroupingMode($this->convertRenderGroupType($information->getRenderGroupType()))
+                    ->setGroupingLength($information->getRenderGroupLength());
+            }
+        }
     }
 
     /**
@@ -1346,10 +1387,6 @@ class Builder
 
         if (isset($propInfo['filter'])) {
             $property->setFilterable($propInfo['filter']);
-        }
-
-        if (!$property->getGroupingLength() && isset($propInfo['length'])) {
-            $property->setGroupingLength($propInfo['length']);
         }
 
         if (!$property->getWidgetType() && isset($propInfo['inputType'])) {

@@ -48,12 +48,25 @@ class SubSystemBoot
      */
     public function boot(\Pimple $container)
     {
+        /** @var \Contao\Environment $environment */
+        $environment = $container['environment'];
+        // There is no need to boot in login or install screen.
+        if (($environment->get('script') == 'contao/index.php')
+            || ($environment->get('script') == 'contao/install.php')) {
+            return;
+        }
+
         /** @var \MetaModels\IMetaModelsServiceContainer $container */
         try {
             $container = $container['metamodels-service-container'];
         } catch (\Exception $e) {
             return;
         }
+
+        if (!$container->getDatabase()->tableExists('tl_metamodel_dca_sortgroup')) {
+            return;
+        }
+
         $dispatcher = $container->getEventDispatcher();
         $event      = new MetaModelsBootEvent($container);
 

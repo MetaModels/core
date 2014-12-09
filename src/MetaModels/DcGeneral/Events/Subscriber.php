@@ -44,6 +44,7 @@ class Subscriber extends BaseSubscriber
         $this->registerTableMetaModelFilterSettingEvents();
         $this->registerTableMetaModelRenderSettingEvents();
         $this->registerTableMetaModelRenderSettingsEvents();
+        $this->registerTableMetaModelDcaSortGroupEvents();
     }
 
     /**
@@ -74,6 +75,16 @@ class Subscriber extends BaseSubscriber
     public function registerTableMetaModelDcaEvents()
     {
         new \MetaModels\DcGeneral\Events\Table\InputScreen\Subscriber($this->getServiceContainer());
+    }
+
+    /**
+     * Register the events for table tl_metamodel_dca_sortgroup.
+     *
+     * @return void
+     */
+    public function registerTableMetaModelDcaSortGroupEvents()
+    {
+        new \MetaModels\DcGeneral\Events\Table\InputScreenSortGroup\Subscriber($this->getServiceContainer());
     }
 
     /**
@@ -131,9 +142,6 @@ class Subscriber extends BaseSubscriber
      * Register the events for table tl_metamodel_filtersetting.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function registerTableMetaModelFilterSettingEvents()
     {

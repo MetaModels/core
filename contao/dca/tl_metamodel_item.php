@@ -71,7 +71,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_item'] = array
         ),
         'sorting' => array
         (
-            'sorting'                 => true,
             'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_item']['sorting'],
         ),
         'tstamp' => array
