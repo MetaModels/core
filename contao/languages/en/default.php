@@ -35,6 +35,7 @@ $GLOBALS['TL_LANG']['BRD']['metamodels']                              = 'MetaMod
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                     = 'Attributes of "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_rendersettings']                = 'All render setting of "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_rendersetting']                 = 'Render settings in "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_dca_sortgroup']                 = 'Sorting and grouping in "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dca']                           = 'All input screens of "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting']                    = 'Input screens in "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting_subpalette']         = 'Sub areas for "%s"';
