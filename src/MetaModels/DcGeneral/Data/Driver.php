@@ -246,7 +246,7 @@ class Driver implements MultiLanguageDataProviderInterface
     {
         $backupLanguage = $this->setLanguage($this->getCurrentLanguage());
 
-        if ($objConfig->getId()) {
+        if ($objConfig->getId() !== null) {
             $modelId = $objConfig->getId();
         } else {
             $filter  = $this->prepareFilter($objConfig->getFilter());
