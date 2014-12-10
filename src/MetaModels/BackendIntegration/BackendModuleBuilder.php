@@ -227,7 +227,7 @@ class BackendModuleBuilder
      */
     private function addChildTablesToBackendModules($parentTables)
     {
-        $localMenu = $GLOBALS['BE_MOD'];
+        $localMenu = array_replace_recursive($GLOBALS['BE_MOD'], $this->backendMenu);
         $lastCount = count($parentTables);
         // Loop until all tables are injected or until there was no injection during one run.
         // This is important, as we might have models that are child of another model.

@@ -104,10 +104,6 @@ class Boot
     {
         $container = $event->getServiceContainer();
 
-        if (!$container->getDatabase()->tableExists('tl_metamodel', null)) {
-            return;
-        }
-
         $viewCombinations = new ViewCombinations($container, $GLOBALS['container']['user']);
         $container->setService($viewCombinations, 'metamodels-view-combinations');
 
@@ -116,8 +112,12 @@ class Boot
 
         // Prepare lazy loading of the data containers.
         foreach ($viewCombinations->getParentedInputScreenNames() as $metaModelName) {
+            $parent = $viewCombinations->getParentOf($metaModelName);
+            if (substr($parent, 0, 3) === 'mm_') {
+                continue;
+            }
             LoadDataContainerHookListener::attachFor(
-                $viewCombinations->getParentOf($metaModelName),
+                $parent,
                 function () use ($metaModelName, $viewCombinations, $container) {
                     $inputScreen = $viewCombinations->getInputScreenDetails($metaModelName);
                     $builder     = new MetaModelDcaBuilder($container);
