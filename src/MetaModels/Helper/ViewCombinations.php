@@ -213,14 +213,14 @@ abstract class ViewCombinations
             );
         }
 
-        $fallback = $this->getPaletteCombinationRows();
+        $found = $this->getPaletteCombinationRows();
 
-        if (!$fallback) {
-            $fallback = array_keys($this->information);
+        if (!$found) {
+            $found = array();
         }
 
-        if ($fallback) {
-            $this->getPaletteCombinationDefault($fallback);
+        if ($found) {
+            $this->getPaletteCombinationDefault($found);
         }
 
         // Clean any undefined.
@@ -368,9 +368,9 @@ abstract class ViewCombinations
         $inputScreen = $this->getDatabase()
             ->prepare(sprintf(
                 'SELECT * FROM tl_metamodel_dca WHERE pid NOT IN (%s) AND isdefault=1',
-                implode(',', $metaModelIds)
+                implode(',', array_fill(0, count($metaModelIds), '?'))
             ))
-            ->execute();
+            ->execute($metaModelIds);
 
         while ($inputScreen->next()) {
             /** @noinspection PhpUndefinedFieldInspection */
@@ -398,9 +398,9 @@ abstract class ViewCombinations
         $renderSetting = $this->getDatabase()
             ->prepare(sprintf(
                 'SELECT * FROM tl_metamodel_rendersettings WHERE pid NOT IN (%s) AND isdefault=1',
-                implode(',', $metaModelIds)
+                implode(',', array_fill(0, count($metaModelIds), '?'))
             ))
-            ->execute();
+            ->execute($metaModelIds);
 
         while ($renderSetting->next()) {
             /** @noinspection PhpUndefinedFieldInspection */
