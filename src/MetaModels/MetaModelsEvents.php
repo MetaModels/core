@@ -52,6 +52,13 @@ class MetaModelsEvents
     const SUBSYSTEM_BOOT_BACKEND = 'metamodels.boot.backend';
 
     /**
+     * Event when a attribute factory is created.
+     *
+     * @see \MetaModels\Attribute\Events\CreateAttributeFactoryEvent
+     */
+    const ATTRIBUTE_FACTORY_CREATE = 'metamodels.attribute.factory.create';
+
+    /**
      * Event when a filter setting factory is created.
      *
      * @see \MetaModels\Filter\Setting\Events\CreateFilterSettingFactoryEvent

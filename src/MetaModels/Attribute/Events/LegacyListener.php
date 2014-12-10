@@ -18,6 +18,7 @@
 namespace MetaModels\Attribute\Events;
 
 use MetaModels\Attribute\LegacyAttributeTypeFactory;
+use MetaModels\MetaModelsEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -52,7 +53,7 @@ class LegacyListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            CreateAttributeFactoryEvent::NAME => 'registerLegacyAttributeFactoryEvents'
+            MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE => 'registerLegacyAttributeFactoryEvents'
         );
     }
 

@@ -21,6 +21,7 @@ use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
 use MetaModels\Attribute\IAttributeTypeFactory;
 use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\IMetaModelsServiceContainer;
+use MetaModels\MetaModelsEvents;
 use MetaModels\Test\Attribute\Mock\AttributeFactoryMocker;
 use MetaModels\Test\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -43,7 +44,7 @@ class AttributeFactoryTest extends TestCase
         $serviceContainer->getEventDispatcher()
             ->expects($this->exactly(1))
             ->method('dispatch')
-            ->with($this->equalTo(CreateAttributeFactoryEvent::NAME));
+            ->with($this->equalTo(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE));
 
         $factory = new AttributeFactory();
         $factory->setServiceContainer($serviceContainer);

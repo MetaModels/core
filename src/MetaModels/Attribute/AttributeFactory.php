@@ -22,6 +22,7 @@ use MetaModels\Attribute\Events\CreateAttributeEvent;
 use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
+use MetaModels\MetaModelsEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -62,7 +63,7 @@ class AttributeFactory implements IAttributeFactory
 
         $this->typeFactories = array();
         $this->getEventDispatcher()->dispatch(
-            CreateAttributeFactoryEvent::NAME,
+            MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE,
             new CreateAttributeFactoryEvent($this)
         );
 

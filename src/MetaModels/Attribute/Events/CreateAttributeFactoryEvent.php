@@ -27,6 +27,10 @@ class CreateAttributeFactoryEvent extends Event
 {
     /**
      * The event name.
+     *
+     * @deprecated Use MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE
+     *
+     * @see \MetaModels\MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE
      */
     const NAME = 'metamodels.attribute.factory.create';
 
