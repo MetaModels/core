@@ -304,8 +304,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
                         'options'   => $this->getLanguages(),
                         'eval'      => array
                         (
-                            'style'  => 'width:200px',
-                            'chosen' => 'true'
+                            'tl_class' => 'clr',
+                            'style'    => 'width:200px',
+                            'chosen'   => 'true'
                         )
                     ),
                     'label'       => array
