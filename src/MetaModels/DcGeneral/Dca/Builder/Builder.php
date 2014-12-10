@@ -1065,6 +1065,7 @@ class Builder
             if ($information->isManualSorting()) {
                 $propertyInformation = $definition->add();
                 $propertyInformation
+                    ->setManualSorting()
                     ->setProperty('sorting')
                     ->setSortingMode('ASC');
             } elseif ($information->getRenderSortAttribute()) {
