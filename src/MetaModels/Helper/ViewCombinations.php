@@ -219,13 +219,14 @@ abstract class ViewCombinations
             $found = array();
         }
 
-        if ($found) {
-            $this->getPaletteCombinationDefault($found);
-        }
+        $this->getPaletteCombinationDefault($found);
 
         // Clean any undefined.
         foreach (array_keys($this->information) as $tableName) {
-            if (empty($this->information[$tableName][self::COMBINATION])) {
+            if (empty($this->information[$tableName][self::COMBINATION])
+                || empty($this->information[$tableName][self::COMBINATION]['dca_id'])
+                || empty($this->information[$tableName][self::COMBINATION]['view_id'])
+            ) {
                 unset($this->information[$tableName]);
             }
         }
@@ -365,11 +366,13 @@ abstract class ViewCombinations
      */
     protected function getDefaultInputScreens($metaModelIds)
     {
+        $sqlWhere = '';
+        if ($metaModelIds) {
+            $sqlWhere = sprintf('pid NOT IN (%s) AND', implode(',', array_fill(0, count($metaModelIds), '?')));
+        }
+
         $inputScreen = $this->getDatabase()
-            ->prepare(sprintf(
-                'SELECT * FROM tl_metamodel_dca WHERE pid NOT IN (%s) AND isdefault=1',
-                implode(',', array_fill(0, count($metaModelIds), '?'))
-            ))
+            ->prepare(sprintf('SELECT * FROM tl_metamodel_dca WHERE %s isdefault=1', $sqlWhere))
             ->execute($metaModelIds);
 
         while ($inputScreen->next()) {
@@ -395,10 +398,15 @@ abstract class ViewCombinations
      */
     protected function getDefaultRenderSettings($metaModelIds)
     {
+        $sqlWhere = '';
+        if ($metaModelIds) {
+            $sqlWhere = sprintf('pid NOT IN (%s) AND', implode(',', array_fill(0, count($metaModelIds), '?')));
+        }
+
         $renderSetting = $this->getDatabase()
             ->prepare(sprintf(
-                'SELECT * FROM tl_metamodel_rendersettings WHERE pid NOT IN (%s) AND isdefault=1',
-                implode(',', array_fill(0, count($metaModelIds), '?'))
+                'SELECT * FROM tl_metamodel_rendersettings WHERE %s isdefault=1',
+                $sqlWhere
             ))
             ->execute($metaModelIds);
 
