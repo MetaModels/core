@@ -189,9 +189,9 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     protected function setLanguage($language = '')
     {
-        $previousLanguage = $GLOBALS['TL_LANGUAGE'];
-        if (!empty($language) && ($GLOBALS['TL_LANGUAGE'] !== $previousLanguage)) {
-            $GLOBALS['TL_LANGUAGE'] = $previousLanguage;
+        $previousLanguage = $GLOBALS['TL_LANGUAGE'];		
+        if (!empty($language) && ($GLOBALS['TL_LANGUAGE'] !== $language)) {
+            $GLOBALS['TL_LANGUAGE'] = $language;
         }
 
         return $previousLanguage;
