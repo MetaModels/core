@@ -91,6 +91,10 @@ class Subscriber extends BaseSubscriber
             ->addListener(
                 GetPropertyOptionsEvent::NAME,
                 array($this, 'getModes')
+            )
+            ->addListener(
+                GetPropertyOptionsEvent::NAME,
+                array($this, 'getRenderModes')
             );
     }
 
@@ -377,5 +381,32 @@ class Subscriber extends BaseSubscriber
         }
 
         $event->setOptions($arrResult);
+    }
+
+    /**
+     * Retrieve a list of all render modes.
+     *
+     * @param GetPropertyOptionsEvent $event The event.
+     *
+     * @return void
+     */
+    public function getRenderModes(GetPropertyOptionsEvent $event)
+    {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca')
+            || ($event->getPropertyName() !== 'rendermode')) {
+            return;
+        }
+
+        $translator = $event->getEnvironment()->getTranslator();
+        $options    = array(
+            'flat'         => $translator->translate('rendermodes.flat', 'tl_metamodel_dca'),
+            'hierarchical' => $translator->translate('rendermodes.hierarchical', 'tl_metamodel_dca'),
+        );
+
+        if ($event->getModel()->getProperty('rendertype') == 'ctable') {
+            $options['parented'] = $translator->translate('rendermodes.parented', 'tl_metamodel_dca');
+        }
+
+        $event->setOptions($options);
     }
 }
