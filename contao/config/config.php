@@ -57,53 +57,6 @@ array_insert(
     )
 );
 
-/*
-    In order to add attribute types into the system, add the following snippet to your extension config.php:
-
-    $GLOBALS['METAMODELS']['attributes']['TYPENAME']['class'] = 'TYPECLASS';
-    $GLOBALS['METAMODELS']['attributes']['TYPENAME']['image'] = 'IMAGEPATH';
-    $GLOBALS['METAMODELS']['attributes']['TYPENAME']['factory'] = 'FACTORYCLASS'; // optional
-
-    where:
-        TYPENAME     is the internal type name of your attribute.
-        TYPECLASS    is the name of the implementing class.
-        IMAGEPATH    path to an icon (16x16) that represents the attribute type. Based from TL_ROOT.
-        FACTORYCLASS this is optional, if defined, the herein declared classname will be used for instantiation
-                     of attributes of this type instead of plain constructing.
-*/
-
-/*
-    In order to add filter rule types into the system, add the following snippet to your extension config.php:
-
-    $GLOBALS['METAMODELS']['filters']['TYPENAME']['class']          = 'TYPECLASS';
-    $GLOBALS['METAMODELS']['filters']['TYPENAME']['image']          = 'IMAGEPATH';
-    $GLOBALS['METAMODELS']['filters']['TYPENAME']['info_callback']  = array(CALLBACK_CLASS, CALLBACK_METHOD);
-    $GLOBALS['METAMODELS']['filters']['TYPENAME']['nestingAllowed'] = NESTINGVALUE // optional, default: false
-
-    where:
-        TYPENAME     is the internal type name of your filter setting.
-        TYPECLASS    is the name of the implementing class.
-        IMAGEPATH    path to an icon (16x16) that represents the filter rule type. Based from TL_ROOT.
-        NESTINGVALUE boolean true or false. If this is true, you indicate that this rule may contain child rules.
-*/
-
-$GLOBALS['METAMODELS']['filters']['idlist']['class']                = 'MetaModels\Filter\Setting\IdList';
-$GLOBALS['METAMODELS']['filters']['simplelookup']['class']          = 'MetaModels\Filter\Setting\SimpleLookup';
-$GLOBALS['METAMODELS']['filters']['simplelookup']['info_callback']  =
-    'MetaModels\DcGeneral\Events\Table\FilterSetting\DrawSetting::modelToLabelWithAttributeAndUrlParam';
-$GLOBALS['METAMODELS']['filters']['customsql']['class']             = 'MetaModels\Filter\Setting\CustomSql';
-$GLOBALS['METAMODELS']['filters']['customsql']['image']             =
-    'system/modules/metamodels/assets/images/icons/filter_customsql.png';
-$GLOBALS['METAMODELS']['filters']['conditionand']['class']          =
-    'MetaModels\Filter\Setting\Condition\ConditionAnd';
-$GLOBALS['METAMODELS']['filters']['conditionand']['image']          =
-    'system/modules/metamodels/assets/images/icons/filter_and.png';
-$GLOBALS['METAMODELS']['filters']['conditionand']['nestingAllowed'] = true;
-$GLOBALS['METAMODELS']['filters']['conditionor']['class']           = 'MetaModels\Filter\Setting\Condition\ConditionOr';
-$GLOBALS['METAMODELS']['filters']['conditionor']['image']           =
-    'system/modules/metamodels/assets/images/icons/filter_or.png';
-$GLOBALS['METAMODELS']['filters']['conditionor']['nestingAllowed']  = true;
-
 $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionor']['nestingAllowed']              = true;
 $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionand']['nestingAllowed']             = true;
 $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvalueis']['nestingAllowed'] = false;
@@ -287,6 +240,7 @@ $GLOBALS['TL_EVENTS'][\MetaModels\MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND][] = 
 ) {
     $handler = new MetaModels\BackendIntegration\Boot();
     $handler->perform($event, $eventName, $dispatcher);
+    new MetaModels\DcGeneral\Events\Table\FilterSetting\FilterSettingTypeRendererCore($event->getServiceContainer());
 };
 
 $GLOBALS['TL_EVENTS'][\MetaModels\MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND][] = function (
@@ -296,4 +250,16 @@ $GLOBALS['TL_EVENTS'][\MetaModels\MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND][] =
 ) {
     $handler = new MetaModels\FrontendIntegration\Boot();
     $handler->perform($event, $eventName, $dispatcher);
+};
+
+$GLOBALS['TL_EVENTS'][\MetaModels\MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE][] = function (
+    \MetaModels\Filter\Setting\Events\CreateFilterSettingFactoryEvent $event
+) {
+    $factory = $event->getFactory();
+    $factory
+        ->addTypeFactory(new MetaModels\Filter\Setting\StaticIdListFilterSettingTypeFactory())
+        ->addTypeFactory(new MetaModels\Filter\Setting\SimpleLookupFilterSettingTypeFactory())
+        ->addTypeFactory(new MetaModels\Filter\Setting\CustomSqlFilterSettingTypeFactory())
+        ->addTypeFactory(new MetaModels\Filter\Setting\ConditionAndFilterSettingTypeFactory())
+        ->addTypeFactory(new MetaModels\Filter\Setting\ConditionOrFilterSettingTypeFactory());
 };

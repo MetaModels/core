@@ -17,9 +17,6 @@
 
 namespace MetaModels\DcGeneral\Events\Table\FilterSetting;
 
-use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
@@ -27,7 +24,6 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPa
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
-use ContaoCommunityAlliance\Translator\TranslatorInterface;
 use MetaModels\BackendIntegration\TemplateList;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbFilterSetting;
@@ -97,6 +93,8 @@ class Subscriber extends BaseSubscriber
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     *
+     * @deprecated This is only present to support legacy drawing.
      */
     protected function registerModelRenderers()
     {
@@ -131,11 +129,6 @@ class Subscriber extends BaseSubscriber
                 );
             }
         }
-
-        $this->addListener(
-            ModelToLabelEvent::NAME,
-            array($this, 'modelToLabel')
-        );
     }
 
     /**
@@ -311,12 +304,16 @@ class Subscriber extends BaseSubscriber
         $result = array();
         $model  = $event->getModel();
 
-        $metaModel  = $this->getMetaModel($model);
-        $typeFilter = $this
+        $metaModel   = $this->getMetaModel($model);
+        $typeFactory = $this
             ->getServiceContainer()
             ->getFilterFactory()
-            ->getTypeFactory($model->getProperty('type'))
-            ->getKnownAttributeTypes();
+            ->getTypeFactory($model->getProperty('type'));
+
+        $typeFilter = null;
+        if ($typeFactory) {
+            $typeFilter = $typeFactory->getKnownAttributeTypes();
+        }
 
         foreach ($metaModel->getAttributes() as $attribute) {
             $typeName = $attribute->get('type');
@@ -389,173 +386,5 @@ class Subscriber extends BaseSubscriber
         if ($attribute) {
             $event->setValue($attribute->get('id'));
         }
-    }
-
-    /**
-     * Retrieve the comment for the label.
-     *
-     * @param ModelInterface      $model      The filter setting to render.
-     *
-     * @param TranslatorInterface $translator The translator in use.
-     *
-     * @return string
-     */
-    public function getLabelComment(ModelInterface $model, TranslatorInterface $translator)
-    {
-        if ($model->getProperty('comment')) {
-            return sprintf(
-                $translator->translate('typedesc._comment_', 'tl_metamodel_filtersetting'),
-                specialchars($model->getProperty('comment'))
-            );
-        }
-        return '';
-    }
-
-    /**
-     * Retrieve the image for the label.
-     *
-     * @param ModelInterface $model The filter setting to render.
-     *
-     * @return string
-     */
-    protected function getLabelImage(ModelInterface $model)
-    {
-        $image = $this
-            ->getServiceContainer()
-            ->getFilterFactory()
-            ->getTypeFactory($model->getProperty('type'))
-            ->getTypeIcon();
-
-        if (!$image || !file_exists(TL_ROOT . '/' . $image)) {
-            $image = 'system/modules/metamodels/assets/images/icons/filter_default.png';
-        }
-
-        if (!$model->getProperty('enabled')) {
-            $intPos = strrpos($image, '.');
-            if ($intPos !== false) {
-                $image = substr_replace($image, '_1', $intPos, 0);
-            }
-        }
-        $dispatcher = $this->getServiceContainer()->getEventDispatcher();
-
-        /** @var AddToUrlEvent $urlEvent */
-        $urlEvent = $dispatcher->dispatch(
-            ContaoEvents::BACKEND_ADD_TO_URL,
-            new AddToUrlEvent('act=edit&amp;id='.$model->getId())
-        );
-
-        /** @var GenerateHtmlEvent $imageEvent */
-        $imageEvent = $dispatcher->dispatch(
-            ContaoEvents::IMAGE_GET_HTML,
-            new GenerateHtmlEvent($image)
-        );
-
-        return sprintf(
-            '<a href="%s">%s</a>',
-            $urlEvent->getUrl(),
-            $imageEvent->getHtml()
-        );
-    }
-
-    /**
-     * Retrieve the label text for a filter setting.
-     *
-     * @param TranslatorInterface $translator The translator in use.
-     *
-     * @param ModelInterface      $model      The filter setting to render.
-     *
-     * @return mixed|string
-     */
-    public function getLabelText(TranslatorInterface $translator, ModelInterface $model)
-    {
-        $type  = $model->getProperty('type');
-        $label = $translator->translate('typenames.' . $type, 'tl_metamodel_filtersetting');
-        if ($label == 'typenames.' . $type) {
-            return $type;
-        }
-        return $label;
-    }
-
-    /**
-     * Retrieve the label pattern.
-     *
-     * @param TranslatorInterface $translator The translator in use.
-     *
-     * @param ModelInterface      $model      The filter setting to render.
-     *
-     * @return string
-     */
-    public function getLabelPattern(TranslatorInterface $translator, ModelInterface $model)
-    {
-        $type     = $model->getProperty('type');
-        $combined = 'typedesc.' . $type;
-
-        if (($resultPattern = $translator->translate($combined, 'tl_metamodel_filtersetting')) == $combined) {
-            $resultPattern = $translator->translate('typedesc._default_', 'tl_metamodel_filtersetting');
-        }
-
-        return $resultPattern;
-    }
-
-    /**
-     * Render a model that has an attribute and url param attached.
-     *
-     * @param ModelToLabelEvent $event The Event.
-     *
-     * @return void
-     */
-    public function modelToLabelWithAttributeAndUrlParam(ModelToLabelEvent $event)
-    {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_filtersetting')) {
-            return;
-        }
-
-        $translator = $event->getEnvironment()->getTranslator();
-        $model      = $event->getModel();
-        $metamodel  = $this->getMetaModel($model->getProperty('fid'));
-        $attribute  = $metamodel->getAttributeById($model->getProperty('attr_id'));
-
-        if ($attribute) {
-            $attributeName = $attribute->getColName();
-        } else {
-            $attributeName = $model->getProperty('attr_id');
-        }
-
-        $event
-            ->setLabel($this->getLabelPattern($translator, $model))
-            ->setArgs(array(
-                $this->getLabelImage($model),
-                $this->getLabelText($translator, $model),
-                $this->getLabelComment($model, $translator),
-                $attributeName,
-                ($model->getProperty('urlparam') ? $model->getProperty('urlparam') : $attributeName)
-            ))
-            ->stopPropagation();
-    }
-
-    /**
-     * Render a filter setting into html.
-     *
-     * @param ModelToLabelEvent $event The event.
-     *
-     * @return void
-     */
-    public function modelToLabel(ModelToLabelEvent $event)
-    {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_filtersetting')) {
-            return;
-        }
-
-        $translator = $event->getEnvironment()->getTranslator();
-        $model      = $event->getModel();
-
-        $event
-            ->setLabel($this->getLabelPattern($translator, $model))
-            ->setArgs(array(
-                $this->getLabelImage($model),
-                $this->getLabelText($translator, $model),
-                $this->getLabelComment($model, $translator),
-                $model->getProperty('type')
-            ));
     }
 }
