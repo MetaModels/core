@@ -34,21 +34,21 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
      *
      * @var string
      */
-    protected $typeName;
+    private $typeName;
 
     /**
      * The name of the attribute class of this type.
      *
      * @var string
      */
-    protected $typeClass;
+    private $typeClass;
 
     /**
      * The icon representing this filter setting type.
      *
      * @var string
      */
-    protected $typeIcon;
+    private $typeIcon;
 
     /**
      * The maximum amount of children allowed.
@@ -57,7 +57,21 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
      *
      * @var int|null
      */
-    protected $maxChildren;
+    private $maxChildren;
+
+    /**
+     * List of valid attribute types that can be filtered with this filter.
+     *
+     * @var string[]
+     */
+    private $attributeTypes;
+
+    /**
+     * Cache lookup variable.
+     *
+     * @var bool
+     */
+    private $isNestedType;
 
     /**
      * Create a new instance.
@@ -68,11 +82,53 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
     }
 
     /**
+     * Set the type class.
+     *
+     * @param string $typeClass The name of the class.
+     *
+     * @return AbstractFilterSettingTypeFactory
+     */
+    protected function setTypeClass($typeClass)
+    {
+        $this->typeClass = $typeClass;
+
+        return $this;
+    }
+
+    /**
+     * Set the type name.
+     *
+     * @param string $typeName The type name.
+     *
+     * @return AbstractFilterSettingTypeFactory
+     */
+    protected function setTypeName($typeName)
+    {
+        $this->typeName = $typeName;
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getTypeName()
     {
         return $this->typeName;
+    }
+
+    /**
+     * Set the type icon.
+     *
+     * @param string $typeIcon The type icon to use.
+     *
+     * @return AbstractFilterSettingTypeFactory
+     */
+    protected function setTypeIcon($typeIcon)
+    {
+        $this->typeIcon = $typeIcon;
+
+        return $this;
     }
 
     /**
@@ -98,7 +154,34 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
      */
     public function isNestedType()
     {
-        return in_array('MetaModels\Filter\Setting\IWithChildren', class_implements($this->typeClass, true));
+        if (!isset($this->isNestedType)) {
+            $this->isNestedType = in_array(
+                'MetaModels\Filter\Setting\IWithChildren',
+                class_implements($this->typeClass, true)
+            );
+        }
+
+        return $this->isNestedType;
+    }
+
+    /**
+     * Set the maximum amount of allowed children (only valid when isNestedType() == true).
+     *
+     * @param int|null $maxChildren The amount of children.
+     *
+     * @return AbstractFilterSettingTypeFactory
+     *
+     * @throws \LogicException When the filter setting can not handle children (is not nested type).
+     */
+    protected function setMaxChildren($maxChildren)
+    {
+        if (!$this->isNestedType()) {
+            throw new \LogicException('Filter setting ' . $this->typeClass . ' can not handle children.');
+        }
+
+        $this->maxChildren = $maxChildren;
+
+        return $this;
     }
 
     /**
@@ -106,6 +189,56 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
      */
     public function getMaxChildren()
     {
-        return $this->maxChildren;
+        return $this->isNestedType() ? $this->maxChildren : 0;
+    }
+
+    /**
+     * Setup the allowance of attribute types to be added to this factory.
+     *
+     * This must be called before any calls to addKnownAttributeType() is allowed.
+     *
+     * You can pass as many parameters as you need.
+     *
+     * @param string $initialType One or more attribute type names to be available initially.
+     *
+     * @return AbstractFilterSettingTypeFactory
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function allowAttributeTypes($initialType)
+    {
+        $this->attributeTypes = func_get_args();
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the list of known attribute types.
+     *
+     * @return string[] The list of attribute names or null if no attributes are allowed.
+     */
+    public function getKnownAttributeTypes()
+    {
+        return $this->attributeTypes;
+    }
+
+    /**
+     * Retrieve the list of known attribute types.
+     *
+     * @param string $typeName The attribute type name.
+     *
+     * @return IFilterSettingTypeFactory
+     *
+     * @throws \LogicException When the filter setting can not handle attributes.
+     */
+    public function addKnownAttributeType($typeName)
+    {
+        if (!is_array($this->attributeTypes)) {
+            throw new \LogicException('Filter setting ' . $this->typeClass . ' can not handle attributes.');
+        }
+
+        $this->attributeTypes[] = $typeName;
+
+        return $this;
     }
 }

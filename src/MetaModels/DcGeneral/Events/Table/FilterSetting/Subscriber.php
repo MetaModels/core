@@ -144,9 +144,6 @@ class Subscriber extends BaseSubscriber
      * @param GetPasteButtonEvent $event The event.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function generatePasteButton(GetPasteButtonEvent $event)
     {
@@ -168,9 +165,10 @@ class Subscriber extends BaseSubscriber
 
             return;
         }
+        $factory = $this->getServiceContainer()->getFilterFactory()->getTypeFactory($model->getProperty('type'));
 
         // If setting does not support children, omit them.
-        if ($model->getId() && (!$GLOBALS['METAMODELS']['filters'][$model->getProperty('type')]['nestingAllowed'])) {
+        if ($model->getId() && !$factory->isNestedType()) {
             $event->setPasteIntoDisabled(true);
         }
     }
@@ -256,9 +254,6 @@ class Subscriber extends BaseSubscriber
      * @param GetPropertyOptionsEvent $event The event.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getTypeOptions(GetPropertyOptionsEvent $event)
     {
@@ -269,8 +264,9 @@ class Subscriber extends BaseSubscriber
 
         $translator = $event->getEnvironment()->getTranslator();
         $options    = array();
+        $factory    = $this->getServiceContainer()->getFilterFactory();
 
-        foreach (array_keys($GLOBALS['METAMODELS']['filters']) as $filter) {
+        foreach ($factory->getTypeNames() as $filter) {
             $options[$filter] = $translator->translate('typenames.' . $filter, 'tl_metamodel_filtersetting');
         }
 
@@ -304,9 +300,6 @@ class Subscriber extends BaseSubscriber
      * @param GetPropertyOptionsEvent $event The event.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getAttributeIdOptions(GetPropertyOptionsEvent $event)
     {
@@ -319,7 +312,11 @@ class Subscriber extends BaseSubscriber
         $model  = $event->getModel();
 
         $metaModel  = $this->getMetaModel($model);
-        $typeFilter = $GLOBALS['METAMODELS']['filters'][$model->getProperty('type')]['attr_filter'];
+        $typeFilter = $this
+            ->getServiceContainer()
+            ->getFilterFactory()
+            ->getTypeFactory($model->getProperty('type'))
+            ->getKnownAttributeTypes();
 
         foreach ($metaModel->getAttributes() as $attribute) {
             $typeName = $attribute->get('type');
@@ -420,14 +417,14 @@ class Subscriber extends BaseSubscriber
      * @param ModelInterface $model The filter setting to render.
      *
      * @return string
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getLabelImage(ModelInterface $model)
     {
-        $type  = $model->getProperty('type');
-        $image = $GLOBALS['METAMODELS']['filters'][$type]['image'];
+        $image = $this
+            ->getServiceContainer()
+            ->getFilterFactory()
+            ->getTypeFactory($model->getProperty('type'))
+            ->getTypeIcon();
 
         if (!$image || !file_exists(TL_ROOT . '/' . $image)) {
             $image = 'system/modules/metamodels/assets/images/icons/filter_default.png';

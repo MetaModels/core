@@ -193,4 +193,12 @@ class FilterSettingFactory implements IFilterSettingFactory
 
         return new Collection(array());
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTypeNames()
+    {
+        return array_keys($this->typeFactories);
+    }
 }

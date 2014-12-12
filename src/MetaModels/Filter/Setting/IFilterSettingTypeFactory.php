@@ -61,4 +61,20 @@ interface IFilterSettingTypeFactory
      * @return int|null
      */
     public function getMaxChildren();
+
+    /**
+     * Retrieve the list of known attribute types.
+     *
+     * @return string[] The list of attribute names or null if no attributes are allowed.
+     */
+    public function getKnownAttributeTypes();
+
+    /**
+     * Retrieve the list of known attribute types.
+     *
+     * @param string $typeName The attribute type name.
+     *
+     * @return IFilterSettingTypeFactory
+     */
+    public function addKnownAttributeType($typeName);
 }

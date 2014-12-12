@@ -52,4 +52,11 @@ interface IFilterSettingFactory extends IServiceContainerAware
      * @return ICollection The instance of the filter settings or null if not found.
      */
     public function createCollection($settingId);
+
+    /**
+     * Retrieve the list of registered filter setting type factories.
+     *
+     * @return string[]
+     */
+    public function getTypeNames();
 }
