@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-10-17T12:13:43+02:00
+ * last-updated: 2014-12-14T12:13:42+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['advanced_legend']  = 'Дополнительные параметры';
@@ -21,6 +21,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['cut']['1']         = 'Вырез�
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['delete']['0']      = 'Удалить атрибут';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['delete']['1']      = 'Удалить атрибут ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['description']['0'] = 'Описание';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['description']['1'] = 'Понятное для человека описание';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['edit']['0']        = 'Редактировать атрибут';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['edit']['1']        = 'Редактировать атрибут ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['editheader']['0']  = 'Редактировать атрибут';
