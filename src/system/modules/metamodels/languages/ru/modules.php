@@ -8,9 +8,15 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T06:40:07+02:00
+ * last-updated: 2014-05-20T12:13:29+02:00
  */
 
-
-$GLOBALS['TL_LANG']['FMD']['metamodel_list']['0'] = 'MetaModel список';
+$GLOBALS['TL_LANG']['FMD']['metamodel_list']['0']            = 'MetaModel список';
+$GLOBALS['TL_LANG']['FMD']['metamodels']['0']                = 'MetaModels';
+$GLOBALS['TL_LANG']['FMD']['metamodels']['1']                = 'Расширение MetaModels позволяет создавать собственные модели данных.';
+$GLOBALS['TL_LANG']['FMD']['metamodels_frontendfilter']['0'] = 'MetaModel фильтр внешнего интерфейса';
+$GLOBALS['TL_LANG']['MOD']['metamodels']['0']                = 'MetaModels';
+$GLOBALS['TL_LANG']['MOD']['metamodels']['1']                = 'Расширение MetaModels позволяет создавать собственные модели данных.';
+$GLOBALS['TL_LANG']['MOD']['support_metamodels']['0']        = 'Поддержка MetaModel';
+$GLOBALS['TL_LANG']['MOD']['support_metamodels']['1']        = 'Информация о поддержке расширения MetaModel.';
 
