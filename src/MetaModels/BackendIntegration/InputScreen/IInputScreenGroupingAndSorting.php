@@ -32,28 +32,28 @@ interface IInputScreenGroupingAndSorting
     public function getMetaModel();
 
     /**
-     * Retrieve the render group name.
+     * Retrieve the grouping type.
      *
      * @return string
      */
     public function getRenderGroupType();
 
     /**
-     * Retrieve the render group name.
+     * Retrieve the amount of chars to use for grouping.
      *
      * @return string
      */
     public function getRenderGroupLength();
 
     /**
-     * Retrieve the render group name.
+     * Retrieve the name of the attribute to use for grouping.
      *
      * @return string
      */
     public function getRenderGroupAttribute();
 
     /**
-     * Retrieve the render sorting direction.
+     * Retrieve the sorting direction.
      *
      * @return string
      */
