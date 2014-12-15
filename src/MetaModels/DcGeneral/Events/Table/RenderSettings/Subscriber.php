@@ -268,7 +268,7 @@ class Subscriber extends BaseSubscriber
     public function buildJumpToWidget(BuildWidgetEvent $event)
     {
         if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersettings')
-            || ($event->getProperty() !== 'jumpTo')) {
+            || ($event->getProperty()->getName() !== 'jumpTo')) {
             return;
         }
 
