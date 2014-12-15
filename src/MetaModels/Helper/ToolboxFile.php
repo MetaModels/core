@@ -23,7 +23,6 @@
 namespace MetaModels\Helper;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\GetThemeEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -312,15 +311,9 @@ class ToolboxFile
      * @param string $strID Id of the file.
      *
      * @return ToolboxFile
-     *
-     * @throws \RuntimeException When being called in Contao 2.X.
      */
     public function addPathById($strID)
     {
-        if (version_compare(VERSION, '3.0', '<')) {
-            throw new \RuntimeException('You cannot use a contao 3 function in a contao 2.x context.');
-        }
-
         $objFile = \FilesModel::findByPk($strID);
 
         // ToDo: Should we throw a exception or just return if we have no file.
@@ -344,81 +337,6 @@ class ToolboxFile
                     $this->addPath($strPath . DIRECTORY_SEPARATOR . $strSubfile);
                 }
             }
-        }
-    }
-
-    /**
-     * Parse the meta.txt file of a folder.
-     *
-     * This is an altered version and differs from the Contao core function as it also checks the fallback language.
-     *
-     * @param string $strPath     The path where to look for the meta.txt.
-     *
-     * @param string $strLanguage The language of the meta.txt to be searched.
-     *
-     * @return void
-     *
-     * @deprecated Remove when we drop support for Contao 2.11.
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    protected function parseMetaFile($strPath, $strLanguage = '')
-    {
-        $strFile = $strPath . DIRECTORY_SEPARATOR . 'meta' . (strlen($strLanguage) ? '_' . $strLanguage : '') . '.txt';
-
-        if (!file_exists(TL_ROOT . DIRECTORY_SEPARATOR . $strFile)) {
-            return;
-        }
-
-        $strBuffer = file_get_contents(TL_ROOT . DIRECTORY_SEPARATOR . $strFile);
-        $strBuffer = utf8_convert_encoding($strBuffer, $GLOBALS['TL_CONFIG']['characterSet']);
-        $arrBuffer = array_filter(trimsplit('[\n\r]+', $strBuffer));
-
-        foreach ($arrBuffer as $v) {
-            // Schema: filename.ext = title | url | caption.
-            list($strLabel, $strValue) = array_map('trim', explode('=', $v, 2));
-
-            $this->metaInformation[$strPath][$strLabel]            = array_map('trim', explode('|', $strValue));
-            $this->metaInformation[$strPath][$strLabel]['title']   = $this->metaInformation[$strPath][$strLabel][0];
-            $this->metaInformation[$strPath][$strLabel]['link']    = $this->metaInformation[$strPath][$strLabel][1];
-            $this->metaInformation[$strPath][$strLabel]['caption'] = $this->metaInformation[$strPath][$strLabel][2];
-
-            if (!in_array($strPath . DIRECTORY_SEPARATOR . $strLabel, $this->metaSort)) {
-                $this->metaSort[] = $strPath . DIRECTORY_SEPARATOR . $strLabel;
-            }
-        }
-    }
-
-    /**
-     * Loops all found files and parses the corresponding metafile (pre Contao 3).
-     *
-     * @return void
-     *
-     * @deprecated Remove when we drop support for Contao 2.11.
-     */
-    protected function parseMetaFilesPre3()
-    {
-        $this->metaInformation = array();
-        $this->metaSort        = array();
-
-        if (!$this->foundFiles) {
-            return;
-        }
-
-        $arrProcessed = array();
-
-        foreach ($this->foundFiles as $strFile) {
-            $strDir = dirname($strFile);
-            if (in_array($strDir, $arrProcessed)) {
-                continue;
-            }
-
-            $arrProcessed[] = $strDir;
-
-            $this->parseMetaFile($strDir, $this->getFallbackLanguage());
-            $this->parseMetaFile($strDir, $this->getBaseLanguage());
-            $this->parseMetaFile($strDir);
         }
     }
 
@@ -485,14 +403,10 @@ class ToolboxFile
 
         /** @var EventDispatcherInterface $dispatcher */
         $dispatcher = $GLOBALS['container']['event-dispatcher'];
-        $event      = new GetThemeEvent();
-        $dispatcher->dispatch(ContaoEvents::BACKEND_GET_THEME, $event);
-
-        $strThemeDir = $event->getTheme();
-        $resizeInfo  = $this->getResizeImages();
-        $intWidth    = $resizeInfo[0] ? $resizeInfo[0] : '';
-        $intHeight   = $resizeInfo[1] ? $resizeInfo[1] : '';
-        $strMode     = $resizeInfo[2] ? $resizeInfo[2] : '';
+        $resizeInfo = $this->getResizeImages();
+        $intWidth   = $resizeInfo[0] ? $resizeInfo[0] : '';
+        $intHeight  = $resizeInfo[1] ? $resizeInfo[1] : '';
+        $strMode    = $resizeInfo[2] ? $resizeInfo[2] : '';
 
         foreach ($this->foundFiles as $strFile) {
             $objFile = new \File($strFile);
@@ -505,11 +419,7 @@ class ToolboxFile
                 $strAltText = ucfirst(str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $objFile->filename)));
             }
 
-            if (version_compare(VERSION, '3.0', '<')) {
-                $strIcon = 'system/themes/' . $strThemeDir . '/images/' . $objFile->icon;
-            } else {
-                $strIcon = 'assets/contao/images/' . $objFile->icon;
-            }
+            $strIcon = 'assets/contao/images/' . $objFile->icon;
 
             $arrSource = array
             (
@@ -603,8 +513,6 @@ class ToolboxFile
      * @param string $sortType The sort condition to be applied.
      *
      * @return array The sorted file list.
-     *
-     * @deprecated Remove sort by "meta" when we drop support for Contao 2.11.
      */
     public function sortFiles($sortType)
     {
@@ -618,9 +526,6 @@ class ToolboxFile
 
             case 'date_desc':
                 return $this->sortByDate(false);
-
-            case 'meta':
-                return $this->sortByMeta();
 
             case 'random':
                 return $this->sortByRandom();
@@ -698,44 +603,6 @@ class ToolboxFile
     }
 
     /**
-     * Sort by meta.txt.
-     *
-     * @return array
-     *
-     * @deprecated Remove when we drop support for Contao 2.11.
-     */
-    protected function sortByMeta()
-    {
-        $arrFiles  = $this->foundFiles;
-        $arrSource = $this->outputBuffer;
-        $arrMeta   = $this->metaSort;
-
-        if (!$arrMeta) {
-            return array('files' => array(), 'source' => array());
-        }
-
-        $files  = array();
-        $source = array();
-
-        foreach ($arrMeta as $aux) {
-            $k = array_search($aux, $arrFiles);
-
-            if ($k !== false) {
-                $files[]  = $arrFiles[$k];
-                $source[] = $arrSource[$k];
-            }
-        }
-
-        $this->addClasses($source);
-
-        return array
-        (
-            'files' => $files,
-            'source' => $source
-        );
-    }
-
-    /**
      * Shuffle the file list.
      *
      * @return array
@@ -790,11 +657,7 @@ class ToolboxFile
         }
 
         // Step 2.: Fetch all meta data for the found files.
-        if (version_compare(VERSION, '3', '<')) {
-            $this->parseMetaFilesPre3();
-        } else {
-            $this->parseMetaFiles();
-        }
+        $this->parseMetaFiles();
 
         // Step 3.: fetch additional information like modification time etc. and prepare the output buffer.
         $this->fetchAdditionalData();
@@ -811,10 +674,6 @@ class ToolboxFile
      */
     public static function convertValueToPath($varValue)
     {
-        if (version_compare(VERSION, '3', '<')) {
-            return $varValue;
-        }
-
         $objFiles = \FilesModel::findByPk($varValue);
 
         if ($objFiles !== null) {
