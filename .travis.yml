@@ -11,6 +11,8 @@ env:
     - CONTAO_VERSION=~3.2.0
     - CONTAO_VERSION=~3.3.0
 
+sudo: false
+
 install:
   - composer require contao/core $CONTAO_VERSION --prefer-dist --dev
   - composer install --prefer-dist --dev
