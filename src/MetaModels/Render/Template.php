@@ -221,93 +221,9 @@ class Template
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    protected function getTemplate211($strTemplate, $strFormat = 'html5', $blnFailIfNotFound = false)
-    {
-        $strKey = $strFilename = $strTemplate . '.' . $strFormat;
-
-        $strTemplateGroup = '';
-        // Check for a theme folder.
-        if (TL_MODE == 'FE') {
-            $strTemplateGroup = str_replace(array('../', 'templates/'), '', $GLOBALS['objPage']->templateGroup);
-
-            if ($strTemplateGroup != '') {
-                $strKey = $strTemplateGroup . '/' . $strKey;
-            }
-        }
-
-        $objCache = \FileCache::getInstance('templates');
-
-        // Try to load the template path from the cache.
-        if (!$GLOBALS['TL_CONFIG']['debugMode'] && isset($objCache->$strKey)) {
-            if (file_exists(TL_ROOT . '/' . $objCache->$strKey)) {
-                return TL_ROOT . '/' . $objCache->$strKey;
-            } else {
-                unset($objCache->$strKey);
-            }
-        }
-
-        $strPath = TL_ROOT . '/templates';
-
-        // Check the theme folder first.
-        if (TL_MODE == 'FE' && $strTemplateGroup != '') {
-            $strFile = $strPath . '/' . $strTemplateGroup . '/' . $strFilename;
-
-            if (file_exists($strFile)) {
-                $objCache->$strKey = 'templates/' . $strTemplateGroup . '/' . $strFilename;
-                return $strFile;
-            }
-        }
-
-        // Then check the global templates directory.
-        $strFile = $strPath . '/' . $strFilename;
-
-        if (file_exists($strFile)) {
-            $objCache->$strKey = 'templates/' . $strFilename;
-            return $strFile;
-        }
-
-        // At last browse all module folders in reverse order.
-        foreach (array_reverse(\Config::getInstance()->getActiveModules()) as $strModule) {
-            $strFile = TL_ROOT . '/system/modules/' . $strModule . '/templates/' . $strFilename;
-
-            if (file_exists($strFile)) {
-                $objCache->$strKey = 'system/modules/' . $strModule . '/templates/' . $strFilename;
-                return $strFile;
-            }
-        }
-
-        if ($blnFailIfNotFound) {
-            throw new \RuntimeException('Could not find template file "' . $strFilename . '"');
-        }
-
-        return null;
-    }
-
-    /**
-     * Find a particular template file and return its path.
-     *
-     * @param string $strTemplate       Name of the template file.
-     *
-     * @param string $strFormat         The format to search for.
-     *
-     * @param bool   $blnFailIfNotFound Boolean flag telling if an Exception shall be thrown when the file can not
-     *                                  be found.
-     *
-     * @throws \RuntimeException When the flag has been set and the file has not been found.
-     *
-     * @return string
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
     protected function getTemplate($strTemplate, $strFormat = 'html5', $blnFailIfNotFound = false)
     {
         $strTemplate = basename($strTemplate);
-
-        // Contao 2.X only.
-        if (version_compare(VERSION, '3.0', '<')) {
-            return $this->getTemplate211($strTemplate, $strFormat, $blnFailIfNotFound);
-        }
 
         // Check for a theme folder.
         if (TL_MODE == 'FE') {
