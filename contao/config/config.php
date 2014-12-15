@@ -212,54 +212,9 @@ if (!isset($GLOBALS['MM_FILTER_PARAMS'])) {
     $GLOBALS['MM_FILTER_PARAMS'] = array();
 }
 
-// Attach ourselves to the DIC.
-$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'MetaModels\Events\DefaultPropertyConditionCreator';
-$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'MetaModels\Attribute\Events\LegacyListener';
-$GLOBALS['TL_EVENT_SUBSCRIBERS'][] = 'MetaModels\Filter\Setting\Events\LegacyListener';
-
 $GLOBALS['TL_HOOKS']['initializeDependencyContainer'][] = function (
     \Pimple $container
 ) {
     $handler = new MetaModels\Helper\SubSystemBoot();
     $handler->boot($container);
-};
-
-$GLOBALS['TL_EVENTS'][\MetaModels\MetaModelsEvents::SUBSYSTEM_BOOT][] = function (
-    MetaModels\Events\MetaModelsBootEvent $event,
-    $eventName,
-    Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
-) {
-    $handler = new MetaModels\Events\DatabaseBackedListener();
-    $handler->handleEvent($event, $eventName, $dispatcher);
-};
-
-$GLOBALS['TL_EVENTS'][\MetaModels\MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND][] = function (
-    MetaModels\Events\MetaModelsBootEvent $event,
-    $eventName,
-    Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
-) {
-    $handler = new MetaModels\BackendIntegration\Boot();
-    $handler->perform($event, $eventName, $dispatcher);
-    new MetaModels\DcGeneral\Events\Table\FilterSetting\FilterSettingTypeRendererCore($event->getServiceContainer());
-};
-
-$GLOBALS['TL_EVENTS'][\MetaModels\MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND][] = function (
-    MetaModels\Events\MetaModelsBootEvent $event,
-    $eventName,
-    Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher
-) {
-    $handler = new MetaModels\FrontendIntegration\Boot();
-    $handler->perform($event, $eventName, $dispatcher);
-};
-
-$GLOBALS['TL_EVENTS'][\MetaModels\MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE][] = function (
-    \MetaModels\Filter\Setting\Events\CreateFilterSettingFactoryEvent $event
-) {
-    $factory = $event->getFactory();
-    $factory
-        ->addTypeFactory(new MetaModels\Filter\Setting\StaticIdListFilterSettingTypeFactory())
-        ->addTypeFactory(new MetaModels\Filter\Setting\SimpleLookupFilterSettingTypeFactory())
-        ->addTypeFactory(new MetaModels\Filter\Setting\CustomSqlFilterSettingTypeFactory())
-        ->addTypeFactory(new MetaModels\Filter\Setting\ConditionAndFilterSettingTypeFactory())
-        ->addTypeFactory(new MetaModels\Filter\Setting\ConditionOrFilterSettingTypeFactory());
 };

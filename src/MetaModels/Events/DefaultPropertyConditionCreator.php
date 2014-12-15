@@ -22,23 +22,12 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyVisibleCondition;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * This class creates the default instances for property conditions when generating input screens.
  */
-class DefaultPropertyConditionCreator implements EventSubscriberInterface
+class DefaultPropertyConditionCreator
 {
-    /**
-     * {@inheritDoc}
-     */
-    public static function getSubscribedEvents()
-    {
-        return array(
-            CreatePropertyConditionEvent::NAME => __CLASS__ . '::handle'
-        );
-    }
-
     /**
      * Create the property conditions.
      *
