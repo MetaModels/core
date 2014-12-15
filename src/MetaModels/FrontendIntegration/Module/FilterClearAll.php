@@ -9,7 +9,8 @@
  *
  * @package    MetaModels
  * @subpackage Core
- * @author     Stefan Heimes <cms@men-at-work.de>
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -21,10 +22,6 @@ use MetaModels\FrontendIntegration\HybridFilterClearAll;
 
 /**
  * Content element clearing the FE-filter.
- *
- * @package    MetaModels
- * @subpackage FrontendClearAll
- * @author     Stefan Heimes <cms@men-at-work.de>
  */
 class FilterClearAll extends HybridFilterClearAll
 {

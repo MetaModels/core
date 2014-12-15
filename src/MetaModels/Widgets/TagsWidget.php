@@ -9,7 +9,8 @@
  *
  * @package    MetaModels
  * @subpackage FrontendFilter
- * @author     Christian de la Haye <service@delahaye.de>
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource

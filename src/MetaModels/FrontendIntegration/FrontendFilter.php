@@ -9,7 +9,11 @@
  *
  * @package    MetaModels
  * @subpackage Core
- * @author     Christian de la Haye <service@delahaye.de>
+ * @author     Andreas Isaak <info@andreas-isaak.de>
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Christopher Bölter <c.boelter@cogizz.de>
+ * @author     Christopher Boelter <c.boelter@cogizz.de>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource

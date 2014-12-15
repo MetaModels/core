@@ -10,7 +10,9 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     Christian de la Haye <service@delahaye.de>
+ * @author     Christopher Boelter <c.boelter@cogizz.de>
+ * @author     Oliver Hoff <oliver@hofff.com>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -28,14 +30,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Complementary methods needed by the DCA in tl_module and tl_content.
- *
- * @package    MetaModels
- * @subpackage Backend
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     Christian de la Haye <service@delahaye.de>
- * @copyright  The MetaModels team.
- * @license    LGPL.
- * @filesource
  */
 class ContentElementModuleBase
 {

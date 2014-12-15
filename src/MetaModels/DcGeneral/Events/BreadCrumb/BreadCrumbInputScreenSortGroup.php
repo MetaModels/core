@@ -10,6 +10,8 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Christopher Boelter <c.boelter@cogizz.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource

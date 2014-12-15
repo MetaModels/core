@@ -1,0 +1,21 @@
+ignore:
+#  Mini Model <minimodel@metamodel.me>
+
+exclude:
+  languages
+
+mapping:
+  "Andreas Isaak <info@andreas-isaak.de>": "Andreas Isaak <andy.jared@googlemail.com>"
+  "Stefan Heimes <stefan_heimes@hotmail.com>":
+    - "Stefan heimes <stefan_heimes@hotmail.com>"
+    - "chibineko <stefan_heimes@hotmail.com>"
+  "David Maack <david.maack@arcor.de>":
+    - "David Maack <maack@men-at-work.de>"
+    - "davidmaack <david.maack@arcor.de>"
+  "Christopher Boelter <c.boelter@cogizz.de>":
+    - "cogizz <c.boelter@cogizz.de>"
+    - "cboelter <christopher@boelter.eu>"
+  "Martin Treml <github@r2pi.net>": "MrTool <github@r2pi.net>"
+
+copy-left:
+  "Christoph Wiechert <christoph.wiechert@4wardmedia.de>": popup.php

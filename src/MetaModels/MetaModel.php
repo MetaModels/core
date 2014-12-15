@@ -10,6 +10,11 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Christopher Boelter <c.boelter@cogizz.de>
+ * @author     David Greminger <david.greminger@1up.io>
+ * @author     David Maack <david.maack@arcor.de>
+ * @author     Martin Treml <github@r2pi.net>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource

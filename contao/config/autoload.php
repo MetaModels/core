@@ -10,6 +10,10 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Andreas Isaak <info@andreas-isaak.de>
+ * @author     Christopher Bölter <c.boelter@cogizz.de>
+ * @author     Ondrej <Sam256@web.de>
+ * @author     Tim Gatzky <info@tim-gatzky.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource

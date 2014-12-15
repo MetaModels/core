@@ -9,6 +9,10 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Andreas Isaak <info@andreas-isaak.de>
+ * @author     David Maack <david.maack@arcor.de>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ *
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -22,10 +26,6 @@ use ContaoCommunityAlliance\DcGeneral\DC_General;
 
 /**
  * This class is used from DCA tl_metamodel_rendersetting for various callbacks.
- *
- * @package    MetaModels
- * @subpackage Backend
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
 class RenderSettings
 {

@@ -9,7 +9,7 @@
  *
  * @package    MetaModels
  * @subpackage Core
- * @author     Christian de la Haye <service@delahaye.de>
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource

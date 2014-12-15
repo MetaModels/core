@@ -10,6 +10,9 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     David Maack <david.maack@arcor.de>
+ * @author     Jan Malte Gerth <anmeldungen@malte-gerth.de>
+ * @author     Oliver Hoff <oliver@hofff.com>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource

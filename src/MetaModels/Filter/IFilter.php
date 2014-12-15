@@ -10,6 +10,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     David Maack <david.maack@arcor.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -19,10 +20,6 @@ namespace MetaModels\Filter;
 
 /**
  * This is the MetaModel filter interface.
- *
- * @package    MetaModels
- * @subpackage Interfaces
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
 interface IFilter
 {
