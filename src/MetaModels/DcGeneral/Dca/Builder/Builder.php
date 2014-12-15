@@ -388,7 +388,7 @@ class Builder
             $fields = trimsplit(',', $rowElements);
             $fields = array_reverse($fields);
 
-            $this->parsePanelRow($fields, $panelRow, $inputScreen);
+            $this->parsePanelRow($fields, $panelRow);
 
             // If we have no entries for this row, remove it.
             if ($panelRow->getCount() == 0) {
@@ -402,22 +402,20 @@ class Builder
     /**
      * Parse a single row with all elements.
      *
-     * @param array             $fields      A list of fields for adding to the row.
+     * @param array             $fields   A list of fields for adding to the row.
      *
-     * @param PanelRowInterface $panelRow    The row container itself.
-     *
-     * @param IInputScreen      $inputScreen The input screen with information about the attributes.
+     * @param PanelRowInterface $panelRow The row container itself.
      *
      * @return void
      */
-    protected function parsePanelRow($fields, PanelRowInterface $panelRow, IInputScreen $inputScreen)
+    protected function parsePanelRow($fields, PanelRowInterface $panelRow)
     {
         // Parse each type.
         foreach ($fields as $field) {
             switch ($field)
             {
                 case 'sort':
-                    $this->parsePanelSort($panelRow, $inputScreen);
+                    $this->parsePanelSort($panelRow);
                     break;
 
                 case 'limit':
@@ -425,11 +423,11 @@ class Builder
                     break;
 
                 case 'filter':
-                    $this->parsePanelFilter($panelRow, $inputScreen);
+                    $this->parsePanelFilter($panelRow);
                     break;
 
                 case 'search':
-                    $this->parsePanelSearch($panelRow, $inputScreen);
+                    $this->parsePanelSearch($panelRow);
                     break;
 
                 case 'submit':
@@ -445,15 +443,13 @@ class Builder
     /**
      * Add filter elements to the panel.
      *
-     * @param PanelRowInterface $row         The row to which the element shall get added to.
-     *
-     * @param IInputScreen      $inputScreen The Input screen with some information.
+     * @param PanelRowInterface $row The row to which the element shall get added to.
      *
      * @return void
      */
-    protected function parsePanelFilter(PanelRowInterface $row, IInputScreen $inputScreen)
+    protected function parsePanelFilter(PanelRowInterface $row)
     {
-        foreach ($inputScreen->getProperties() as $property => $value) {
+        foreach ($this->getInputScreenDetails()->getProperties() as $property => $value) {
             if (isset($value['info']['filter'])) {
                 $element = new DefaultFilterElementInformation();
                 $element->setPropertyName($property);
@@ -467,13 +463,11 @@ class Builder
     /**
      * Add sort element to the panel.
      *
-     * @param PanelRowInterface $row         The row to which the element shall get added to.
-     *
-     * @param IInputScreen      $inputScreen The Input screen with some information.
+     * @param PanelRowInterface $row The row to which the element shall get added to.
      *
      * @return void
      */
-    protected function parsePanelSort(PanelRowInterface $row, IInputScreen $inputScreen)
+    protected function parsePanelSort(PanelRowInterface $row)
     {
         if (!$row->hasElement('sort')) {
             $element = new DefaultSortElementInformation();
@@ -484,13 +478,11 @@ class Builder
     /**
      * Add search element to the panel.
      *
-     * @param PanelRowInterface $row         The row to which the element shall get added to.
-     *
-     * @param IInputScreen      $inputScreen The Input screen with some information.
+     * @param PanelRowInterface $row The row to which the element shall get added to.
      *
      * @return void
      */
-    protected function parsePanelSearch(PanelRowInterface $row, IInputScreen $inputScreen)
+    protected function parsePanelSearch(PanelRowInterface $row)
     {
         if ($row->hasElement('search')) {
             $element = $row->getElement('search');
@@ -498,7 +490,7 @@ class Builder
             $element = new DefaultSearchElementInformation();
         }
 
-        foreach ($inputScreen->getProperties() as $property => $value) {
+        foreach ($this->getInputScreenDetails()->getProperties() as $property => $value) {
             if (isset($value['info']['search'])) {
                 $element->addProperty($property);
             }
