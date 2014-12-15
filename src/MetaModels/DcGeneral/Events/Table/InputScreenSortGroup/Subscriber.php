@@ -86,6 +86,7 @@ class Subscriber extends BaseSubscriber
             ->prepare('SELECT id FROM tl_metamodel WHERE id=(SELECT pid FROM tl_metamodel_dca WHERE id=?)')
             ->execute(IdSerializer::fromSerialized($environment->getInputProvider()->getParameter('pid'))->getId());
 
+        /** @noinspection PhpUndefinedFieldInspection */
         return $this->getMetaModelById($metaModelId->id);
     }
 
