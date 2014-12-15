@@ -43,7 +43,12 @@ class LegacyFilterSettingTypeFactory extends AbstractFilterSettingTypeFactory
      */
     public static function createLegacyFactory($typeName, $filterSettingInformation)
     {
+        if (!isset($filterSettingInformation['class'])) {
+            throw new \RuntimeException('Filter setting type ' . $typeName . ' has no class defined.');
+        }
+
         $typeFactory = new static();
+        $typeFactory->setTypeClass($filterSettingInformation['class']);
         $typeFactory->setTypeName($typeName);
         $typeFactory->setTypeIcon(
             isset($filterSettingInformation['image'])
@@ -55,10 +60,8 @@ class LegacyFilterSettingTypeFactory extends AbstractFilterSettingTypeFactory
             $typeFactory->setMaxChildren($filterSettingInformation['maxChildren']);
         }
 
-        if (isset($filterSettingInformation['class'])) {
-            $typeFactory->setTypeClass($filterSettingInformation['class']);
-        } else {
-            throw new \RuntimeException('Filter setting type ' . $typeName . ' has no class defined.');
+        if (isset($filterSettingInformation['attr_filter'])) {
+            $typeFactory->allowAttributeTypes();
         }
 
         return $typeFactory;

@@ -237,7 +237,7 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
             throw new \LogicException('Filter setting ' . $this->typeClass . ' can not handle attributes.');
         }
 
-        $this->attributeTypes[] = $typeName;
+        $this->attributeTypes[$typeName] = $typeName;
 
         return $this;
     }

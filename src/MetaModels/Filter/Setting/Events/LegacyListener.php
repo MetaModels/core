@@ -46,9 +46,23 @@ class LegacyListener
         $factory = $event->getFactory();
 
         foreach ($GLOBALS['METAMODELS']['filters'] as $typeName => $filterSettingInformation) {
-            $typeFactory = LegacyFilterSettingTypeFactory::createLegacyFactory($typeName, $filterSettingInformation);
+            if (isset($filterSettingInformation['class'])) {
+                $typeFactory = LegacyFilterSettingTypeFactory::createLegacyFactory(
+                    $typeName,
+                    $filterSettingInformation
+                );
+                $factory->addTypeFactory($typeFactory);
+            }
 
-            $factory->addTypeFactory($typeFactory);
+            // Add legacy notation for adding attribute types to a filter setting factory.
+            if (isset($filterSettingInformation['attr_filter'])) {
+                $typeFactory = $factory->getTypeFactory($typeName);
+                if ($typeFactory) {
+                    foreach ($filterSettingInformation['attr_filter'] as $attributeType) {
+                        $typeFactory->addKnownAttributeType($attributeType);
+                    }
+                }
+            }
         }
     }
 }
