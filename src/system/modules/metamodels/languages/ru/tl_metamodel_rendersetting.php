@@ -8,9 +8,13 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-05-28T20:13:10+02:00
+ * last-updated: 2014-10-17T12:13:43+02:00
  */
 
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id']['0'] = 'Атрибут';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['title_legend'] = 'Тип';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_addsuccess']       = 'Добавлен атрибут %s к настройкам отображения.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_alreadycontained'] = 'Атрибут %s уже присутствует в настройках отображения.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_willadd']          = 'Добавить атрибут %s к настройкам отображения.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']['1']             = 'Добавить все атрибуты к настройкам отображения';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id']['0']            = 'Атрибут';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['title_legend']            = 'Тип';
 

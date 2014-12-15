@@ -8,12 +8,13 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T06:40:07+02:00
+ * last-updated: 2014-12-14T12:13:42+01:00
  */
 
-
-$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel']               = 'MetaModels';
-$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_attribute']     = 'MetaModels атрибут';
-$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_filter']        = 'MetaModels фильтр';
-$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_filtersetting'] = 'MetaModels настройки фильтра';
+$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel']                = 'MetaModels';
+$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_attribute']      = 'MetaModels атрибут';
+$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_filter']         = 'MetaModels фильтр';
+$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_filtersetting']  = 'MetaModels настройки фильтра';
+$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_rendersetting']  = 'Настройка отображения MetaModels';
+$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_rendersettings'] = 'Настройка отображения MetaModels';
 

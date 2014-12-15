@@ -8,13 +8,14 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-06-06T08:13:38+02:00
+ * last-updated: 2014-10-17T12:13:43+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_description']['0']    = 'Текст описания';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_label']['0']          = 'Текст метки';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_langcode']['0']       = 'Язык';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_langcode']['1']       = 'Выберите языки, которые хотите предоставить.';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['0']  = 'Ограничение настроек отображения';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']['0']                 = 'Режим сортировки';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']['1']                 = 'Режим сортировки для использования в представлении элемента.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['name']['0']                 = 'Имя';
