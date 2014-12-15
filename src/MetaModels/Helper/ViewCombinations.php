@@ -504,15 +504,14 @@ abstract class ViewCombinations
                 'groupSort'  => $groupSort->fetchAllAssoc()
             );
 
-            $this->information[$metaModelName][self::MODELID] = $metaModelId;
+            $this->information[$metaModelName][self::INPUTSCREEN] = $inputScreen;
+            $this->information[$metaModelName][self::MODELID]     = $metaModelId;
 
             $parentTable = $inputScreen['row']['ptable'];
-            if ($parentTable) {
+            if ($parentTable && !$this->isInputScreenStandalone($metaModelName)) {
                 $this->parentMap[$parentTable][] = $this->information[$metaModelName][self::MODELID];
                 $this->childMap[$metaModelName]  = $parentTable;
             }
-
-            $this->information[$metaModelName][self::INPUTSCREEN] = $inputScreen;
         }
     }
 
