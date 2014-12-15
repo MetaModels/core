@@ -45,6 +45,8 @@ class SubSystemBoot
      * @param \Contao\Database $database The database.
      *
      * @return bool
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function metaModelsTablesPresent($database)
     {
