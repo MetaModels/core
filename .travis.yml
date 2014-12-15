@@ -19,6 +19,10 @@ install:
 
 script: ant -keep-going
 
+# Hack to make things work again - we can not use a shallow repository.
+git:
+  depth: 2147483647
+
 matrix:
   allow_failures:
     - env: CONTAO_VERSION=~3.4.0
