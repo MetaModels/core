@@ -90,6 +90,17 @@ class SubSystemBoot
         try {
             $container = $container['metamodels-service-container'];
         } catch (\Exception $e) {
+            error_log(
+                sprintf(
+                    'MetaModels startup interrupted: Uncaught exception \'%s\' with message \'%s\' thrown in %s ' .
+                    "on line %s\n%s",
+                    get_class($e),
+                    $e->getMessage(),
+                    $e->getFile(),
+                    $e->getLine(),
+                    $e->getTraceAsString()
+                )
+            );
             return;
         }
 
