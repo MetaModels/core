@@ -31,48 +31,58 @@ use MetaModels\MetaModelsEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 return array(
-    MetaModelsEvents::SUBSYSTEM_BOOT => function (
-        MetaModelsBootEvent $event,
-        $eventName,
-        EventDispatcherInterface $dispatcher
-    ) {
-        $handler = new DatabaseBackedListener();
-        $handler->handleEvent($event, $eventName, $dispatcher);
-    },
-    MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND => function (
-        MetaModelsBootEvent $event,
-        $eventName,
-        EventDispatcherInterface $dispatcher
-    ) {
-        $handler = new MetaModels\FrontendIntegration\Boot();
-        $handler->perform($event, $eventName, $dispatcher);
-    },
-    MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND => function (
-        MetaModelsBootEvent $event,
-        $eventName,
-        EventDispatcherInterface $dispatcher
-    ) {
-        $handler = new MetaModels\BackendIntegration\Boot();
-        $handler->perform($event, $eventName, $dispatcher);
-        new FilterSettingTypeRendererCore($event->getServiceContainer());
+    MetaModelsEvents::SUBSYSTEM_BOOT => array(
+        function (
+            MetaModelsBootEvent $event,
+            $eventName,
+            EventDispatcherInterface $dispatcher
+        ) {
+            $handler = new DatabaseBackedListener();
+            $handler->handleEvent($event, $eventName, $dispatcher);
+        }
+    ),
+    MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND => array(
+        function (
+            MetaModelsBootEvent $event,
+            $eventName,
+            EventDispatcherInterface $dispatcher
+        ) {
+            $handler = new MetaModels\FrontendIntegration\Boot();
+            $handler->perform($event, $eventName, $dispatcher);
+        }
+    ),
+    MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND => array(
+        function (
+            MetaModelsBootEvent $event,
+            $eventName,
+            EventDispatcherInterface $dispatcher
+        ) {
+            $handler = new MetaModels\BackendIntegration\Boot();
+            $handler->perform($event, $eventName, $dispatcher);
+            new FilterSettingTypeRendererCore($event->getServiceContainer());
 
-        $dispatcher->addListener(
-            CreatePropertyConditionEvent::NAME,
-            array(new DefaultPropertyConditionCreator(), 'handle')
-        );
-    },
-    MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE => function (CreateAttributeFactoryEvent $event) {
-        \MetaModels\Attribute\Events\LegacyListener::registerLegacyAttributeFactoryEvents($event);
-    },
-    MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE => function (CreateFilterSettingFactoryEvent $event) {
-        $factory = $event->getFactory();
-        $factory
-            ->addTypeFactory(new StaticIdListFilterSettingTypeFactory())
-            ->addTypeFactory(new SimpleLookupFilterSettingTypeFactory())
-            ->addTypeFactory(new CustomSqlFilterSettingTypeFactory())
-            ->addTypeFactory(new ConditionAndFilterSettingTypeFactory())
-            ->addTypeFactory(new ConditionOrFilterSettingTypeFactory());
+            $dispatcher->addListener(
+                CreatePropertyConditionEvent::NAME,
+                array(new DefaultPropertyConditionCreator(), 'handle')
+            );
+        }
+    ),
+    MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE => array(
+        function (CreateAttributeFactoryEvent $event) {
+            \MetaModels\Attribute\Events\LegacyListener::registerLegacyAttributeFactoryEvents($event);
+        }
+    ),
+    MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE => array(
+        function (CreateFilterSettingFactoryEvent $event) {
+            $factory = $event->getFactory();
+            $factory
+                ->addTypeFactory(new StaticIdListFilterSettingTypeFactory())
+                ->addTypeFactory(new SimpleLookupFilterSettingTypeFactory())
+                ->addTypeFactory(new CustomSqlFilterSettingTypeFactory())
+                ->addTypeFactory(new ConditionAndFilterSettingTypeFactory())
+                ->addTypeFactory(new ConditionOrFilterSettingTypeFactory());
 
-        \MetaModels\Filter\Setting\Events\LegacyListener::registerLegacyFactories($event);
-    },
+            \MetaModels\Filter\Setting\Events\LegacyListener::registerLegacyFactories($event);
+        }
+    )
 );
