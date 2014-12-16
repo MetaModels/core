@@ -20,6 +20,7 @@ use MetaModels\Attribute\Events\LegacyListener;
 use MetaModels\Attribute\AttributeFactory;
 use MetaModels\Attribute\IAttributeTypeFactory;
 use MetaModels\IMetaModelsServiceContainer;
+use MetaModels\MetaModelsEvents;
 use MetaModels\Test\Attribute\Mock\AttributeFactoryMocker;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -277,7 +278,10 @@ class LegacyAttributeTypeFactoryTest extends AttributeTypeFactoryTest
                 ->with($this->equalTo($expectedEvent));
         }
         /** @var EventDispatcherInterface $eventDispatcher */
-        $eventDispatcher->addSubscriber(new LegacyListener());
+        $eventDispatcher->addListener(
+            MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE,
+            array(new LegacyListener(), 'registerLegacyAttributeFactoryEvents')
+        );
 
         return $eventDispatcher;
     }
