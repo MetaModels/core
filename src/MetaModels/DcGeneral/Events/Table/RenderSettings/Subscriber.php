@@ -250,6 +250,7 @@ class Subscriber extends BaseSubscriber
 
         $result = array();
         while ($objFilters->next()) {
+            /** @noinspection PhpUndefinedFieldInspection */
             $result[$objFilters->id] = $objFilters->name;
         }
 
