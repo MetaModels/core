@@ -109,6 +109,7 @@ class SubSystemBoot
         // Ensure all tables are created.
         if (!$this->metaModelsTablesPresent($container->getDatabase())
         ) {
+            error_log('MetaModels startup interrupted: Not all MetaModels tables have been created.');
             return;
         }
 
