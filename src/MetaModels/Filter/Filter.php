@@ -94,6 +94,8 @@ class Filter implements IFilter
         $this->arrMatches = null;
 
         $this->arrFilterRules[] = $objFilterRule;
+
+        return $this;
     }
 
     /**

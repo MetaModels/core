@@ -35,7 +35,7 @@ interface IFilter
      *
      * @param IFilterRule $objFilterRule The filter rule to add.
      *
-     * @return void
+     * @return IFilter
      */
     public function addFilterRule(IFilterRule $objFilterRule);
 

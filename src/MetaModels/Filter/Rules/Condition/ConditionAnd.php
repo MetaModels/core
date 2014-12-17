@@ -42,11 +42,13 @@ class ConditionAnd extends FilterRule
      *
      * @param IFilter $objFilter The filter to add as child.
      *
-     * @return void
+     * @return ConditionAnd
      */
     public function addChild(IFilter $objFilter)
     {
         $this->arrChildFilters[] = $objFilter;
+
+        return $this;
     }
 
     /**

@@ -66,11 +66,13 @@ class ConditionOr extends FilterRule
      *
      * @param IFilter $objFilter The filter to add as child.
      *
-     * @return void
+     * @return ConditionOr
      */
     public function addChild(IFilter $objFilter)
     {
         $this->arrChildFilters[] = $objFilter;
+
+        return $this;
     }
 
     /**
