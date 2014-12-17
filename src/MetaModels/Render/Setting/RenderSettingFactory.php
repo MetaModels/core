@@ -35,6 +35,13 @@ class RenderSettingFactory implements IRenderSettingFactory
     protected $serviceContainer;
 
     /**
+     * The already created render settings.
+     *
+     * @var ICollection[]
+     */
+    protected $renderSettings;
+
+    /**
      * Set the service container.
      *
      * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
@@ -99,9 +106,15 @@ class RenderSettingFactory implements IRenderSettingFactory
     }
 
     /**
-     * {@inheritdoc}
+     * Create a ICollection instance from the id.
+     *
+     * @param IMetaModel $metaModel The MetaModel for which to retrieve the render setting.
+     *
+     * @param string     $settingId The id of the ICollection.
+     *
+     * @return ICollection The instance or null if not found.
      */
-    public function createCollection(IMetaModel $metaModel, $settingId = '')
+    protected function internalCreateRenderSetting(IMetaModel $metaModel, $settingId)
     {
         $row = $this->serviceContainer->getDatabase()
             ->prepare(
@@ -110,6 +123,7 @@ class RenderSettingFactory implements IRenderSettingFactory
             ->limit(1)
             ->execute($metaModel->get('id'), $settingId ?: 0);
 
+        /** @noinspection PhpUndefinedFieldInspection */
         if (!$row->numRows) {
             $row = null;
         }
@@ -121,5 +135,22 @@ class RenderSettingFactory implements IRenderSettingFactory
         }
 
         return $renderSetting;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createCollection(IMetaModel $metaModel, $settingId = '')
+    {
+        $tableName = $metaModel->getTableName();
+        if (!isset($this->renderSettings[$tableName])) {
+            $this->renderSettings[$tableName] = array();
+        }
+
+        if (!isset($this->renderSettings[$tableName][$settingId])) {
+            $this->renderSettings[$tableName][$settingId] = $this->internalCreateRenderSetting($metaModel, $settingId);
+        }
+
+        return $this->renderSettings[$tableName][$settingId];
     }
 }
