@@ -49,27 +49,33 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     protected function getWhere($mixIds, $mixLangCode = '')
     {
-        $strWhereIds = '';
-        if ($mixIds) {
+        $procedure  = 'att_id=?';
+        $parameters = array($this->get('id'));
+
+        if (!empty($mixIds)) {
             if (is_array($mixIds)) {
-                $strWhereIds = ' AND item_id IN (' . implode(',', $mixIds) . ')';
+                $procedure .= ' AND item_id IN (' . $this->parameterMask($mixIds) . ')';
+                $parameters = array_merge($parameters, $mixIds);
             } else {
-                $strWhereIds = ' AND item_id='. $mixIds;
+                $procedure   .= ' AND item_id=?';
+                $parameters[] = $mixIds;
             }
         }
-        $arrReturn = array(
-            'procedure' => 'att_id=?' . $strWhereIds,
-            'params' => array(intval($this->get('id')))
-        );
 
-        if (is_array($mixLangCode) && !empty($mixLangCode)) {
-            $arrReturn['procedure'] .= ' AND langcode IN ("' . implode('","', $mixLangCode) . '")';
-        } elseif ($mixLangCode) {
-            $arrReturn['procedure'] .= ' AND langcode=?';
-            $arrReturn['params'][]   = $mixLangCode;
+        if (!empty($mixLangCode)) {
+            if (is_array($mixLangCode)) {
+                $procedure .= ' AND langcode IN (' . $this->parameterMask($mixLangCode) . ')';
+                $parameters = array_merge($parameters, $mixLangCode);
+            } else {
+                $procedure   .= ' AND langcode=?';
+                $parameters[] = $mixLangCode;
+            }
         }
 
-        return $arrReturn;
+        return array(
+            'procedure' => $procedure,
+            'params'    => $parameters
+        );
     }
 
     /**
@@ -197,29 +203,23 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function searchForInLanguages($strPattern, $arrLanguages = array())
     {
-        $arrWhere  = $this->getWhere(null);
-        $arrParams = array(str_replace(array('*', '?'), array('%', '_'), $strPattern));
-
-        $arrOptionizer = $this->getOptionizer();
+        $optionizer = $this->getOptionizer();
+        $procedure  = $optionizer['value'] . 'LIKE ?';
+        $parameters = array(str_replace(array('*', '?'), array('%', '_'), $strPattern));
+        $arrWhere   = $this->getWhere(null, $arrLanguages);
 
         if ($arrWhere) {
-            $arrParams = array_merge($arrParams, $arrWhere['params']);
+            $procedure .= ' AND ' . $arrWhere['procedure'];
+            $parameters = array_merge($parameters, $arrWhere['params']);
         }
 
-        $objFilterRule = new SimpleQuery(
-            sprintf(
-                'SELECT DISTINCT %s FROM %s WHERE %s LIKE ? %s%s',
-                'item_id',
-                $this->getValueTable(),
-                $arrOptionizer['value'],
-                ($arrWhere ? ' AND ' . $arrWhere['procedure'] : ''),
-                $arrLanguages ? sprintf(' AND langcode IN (\'%s\')', implode('\',\'', $arrLanguages)) : ''
-            ),
-            $arrParams,
+        $filterRule = new SimpleQuery(
+            sprintf('SELECT DISTINCT %1$s FROM %2$s WHERE %3$s', 'item_id', $this->getValueTable(), $procedure),
+            $parameters,
             'item_id'
         );
 
-        return $objFilterRule->getMatchingIds();
+        return $filterRule->getMatchingIds();
     }
 
     /**
@@ -227,7 +227,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function sortIds($arrIds, $strDirection)
     {
-        $objDB = \Database::getInstance();
+        $objDB = $this->getMetaModel()->getServiceContainer()->getDatabase();
 
         $arrWhere = $this->getWhere($arrIds, array(
             $this->getMetaModel()->getActiveLanguage(),
@@ -253,7 +253,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function getFilterOptions($arrIds, $usedOnly, &$arrCount = null)
     {
-        $objDB = \Database::getInstance();
+        $objDB = $this->getMetaModel()->getServiceContainer()->getDatabase();
         // TODO: implement $arrIds and $usedOnly handling here.
         $arrWhere = $this->getWhere($arrIds, $this->getMetaModel()->getActiveLanguage());
         $strQuery = 'SELECT * FROM ' . $this->getValueTable() . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '');
@@ -275,7 +275,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function setTranslatedDataFor($arrValues, $strLangCode)
     {
-        $objDB = \Database::getInstance();
+        $objDB = $this->getMetaModel()->getServiceContainer()->getDatabase();
         // First off determine those to be updated and those to be inserted.
         $arrIds      = array_keys($arrValues);
         $arrExisting = array_keys($this->getTranslatedDataFor($arrIds, $strLangCode));
@@ -304,16 +304,17 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function getTranslatedDataFor($arrIds, $strLangCode)
     {
-        $objDB = \Database::getInstance();
+        $objDB = $this->getMetaModel()->getServiceContainer()->getDatabase();
 
         $arrWhere = $this->getWhere($arrIds, $strLangCode);
         $strQuery = 'SELECT * FROM ' . $this->getValueTable() . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '');
 
         $objValue = $objDB->prepare($strQuery)
-            ->executeUncached(($arrWhere ? $arrWhere['params'] : null));
+            ->execute(($arrWhere ? $arrWhere['params'] : null));
 
         $arrReturn = array();
         while ($objValue->next()) {
+            /** @noinspection PhpUndefinedFieldInspection */
             $arrReturn[$objValue->item_id] = $objValue->row();
         }
         return $arrReturn;
@@ -324,7 +325,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function unsetValueFor($arrIds, $strLangCode)
     {
-        $objDB = \Database::getInstance();
+        $objDB = $this->getMetaModel()->getServiceContainer()->getDatabase();
 
         $arrWhere = $this->getWhere($arrIds, $strLangCode);
         $strQuery = 'DELETE FROM ' . $this->getValueTable() . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '');
