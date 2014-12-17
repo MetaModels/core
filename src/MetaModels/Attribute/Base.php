@@ -74,6 +74,24 @@ abstract class Base implements IAttribute
     }
 
     /**
+     * Helper method for generating a list of "?" to be used in a Contao query.
+     *
+     * Usage:
+     *  $params = array('1', '2', 'potential SQL injection string');
+     *  $result = $database
+     *       ->prepare('SELECT * FROM tl_something WHERE id IN (' . $this->parameterMask($params) . ')')
+     *       ->execute($params);
+     *
+     * @param array $parameters The parameters to be used in a query.
+     *
+     * @return string
+     */
+    protected function parameterMask($parameters)
+    {
+        return implode(',', array_fill(0, count($parameters), '?'));
+    }
+
+    /**
      * Retrieve the human readable name (or title) from the attribute.
      *
      * If the MetaModel is translated, the currently active language is used,
