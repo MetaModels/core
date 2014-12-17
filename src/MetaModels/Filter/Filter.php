@@ -25,7 +25,6 @@ use MetaModels\IMetaModel;
  */
 class Filter implements IFilter
 {
-
     /**
      * The corresponding MetaModel.
      *
@@ -82,6 +81,7 @@ class Filter implements IFilter
     public function createCopy()
     {
         $objCopy = clone $this;
+
         return $objCopy;
     }
 
@@ -127,6 +127,7 @@ class Filter implements IFilter
             }
         }
         $this->arrMatches = $arrIds;
+
         return $arrIds;
     }
 }
