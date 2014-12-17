@@ -430,6 +430,7 @@ abstract class Base implements IAttribute
             'raw' => $arrRowData[$this->getColName()],
         );
 
+        /** @var ISimple $objSettings */
         if ($objSettings && $objSettings->get('template')) {
             $strTemplate = $objSettings->get('template');
 
