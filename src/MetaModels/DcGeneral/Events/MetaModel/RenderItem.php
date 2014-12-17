@@ -23,7 +23,6 @@ use MetaModels\DcGeneral\Data\Model;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\IItem;
 use MetaModels\Items;
-use MetaModels\Render\Setting\Factory;
 use MetaModels\Render\Setting\ICollection;
 use MetaModels\Render\Template;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -84,10 +83,10 @@ class RenderItem
         $nativeItem = $model->getItem();
         $metaModel  = $nativeItem->getMetaModel();
 
-        $renderSetting = Factory::byId(
-            $metaModel,
-            $definition->getMetaModelDefinition()->getActiveRenderSetting()
-        );
+        $renderSetting = $metaModel
+            ->getServiceContainer()
+            ->getRenderSettingFactory()
+            ->createCollection($metaModel, $definition->getMetaModelDefinition()->getActiveRenderSetting());
 
         if (!$renderSetting) {
             return;
@@ -127,10 +126,10 @@ class RenderItem
         $nativeItem = $model->getItem();
         $metaModel  = $nativeItem->getMetaModel();
 
-        $renderSetting = Factory::byId(
-            $metaModel,
-            $definition->getMetaModelDefinition()->getActiveRenderSetting()
-        );
+        $renderSetting = $metaModel
+            ->getServiceContainer()
+            ->getRenderSettingFactory()
+            ->createCollection($metaModel, $definition->getMetaModelDefinition()->getActiveRenderSetting());
 
         if (!$renderSetting) {
             return;
