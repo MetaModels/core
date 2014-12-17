@@ -20,6 +20,8 @@
 namespace MetaModels\DcGeneral\Events;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
+use MetaModels\BackendIntegration\PurgeCache;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbFilter;
 
 /**
@@ -47,6 +49,8 @@ class Subscriber extends BaseSubscriber
         $this->registerTableMetaModelRenderSettingEvents();
         $this->registerTableMetaModelRenderSettingsEvents();
         $this->registerTableMetaModelDcaSortGroupEvents();
+
+        $this->registerTableWatcher();
     }
 
     /**
@@ -168,5 +172,37 @@ class Subscriber extends BaseSubscriber
     public function registerTableMetaModelRenderSettingsEvents()
     {
         new \MetaModels\DcGeneral\Events\Table\RenderSettings\Subscriber($this->getServiceContainer());
+    }
+
+    /**
+     * Register event to clear the cache when a relevant data model has been saved.
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function registerTableWatcher()
+    {
+        $this->addListener(
+            PostPersistModelEvent::NAME,
+            function (PostPersistModelEvent $event) {
+                $table = $event->getModel()->getProviderName();
+                if (($table == 'tl_metamodel') ||
+                    ($table == 'tl_metamodel_dca') ||
+                    ($table == 'tl_metamodel_dca_sortgroup') ||
+                    ($table == 'tl_metamodel_dcasetting') ||
+                    ($table == 'tl_metamodel_dcasetting_condition') ||
+                    ($table == 'tl_metamodel_attribute') ||
+                    ($table == 'tl_metamodel_filter') ||
+                    ($table == 'tl_metamodel_filtersetting') ||
+                    ($table == 'tl_metamodel_rendersettings') ||
+                    ($table == 'tl_metamodel_rendersetting') ||
+                    ($table == 'tl_metamodel_dca_combine')
+                ) {
+                    $purger = new PurgeCache();
+                    $purger->purge();
+                }
+            }
+        );
     }
 }
