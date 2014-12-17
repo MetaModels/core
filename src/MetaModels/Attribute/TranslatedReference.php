@@ -204,7 +204,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     public function searchForInLanguages($strPattern, $arrLanguages = array())
     {
         $optionizer = $this->getOptionizer();
-        $procedure  = $optionizer['value'] . 'LIKE ?';
+        $procedure  = $optionizer['value'] . ' LIKE ?';
         $parameters = array(str_replace(array('*', '?'), array('%', '_'), $strPattern));
         $arrWhere   = $this->getWhere(null, $arrLanguages);
 
