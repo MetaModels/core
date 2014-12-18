@@ -57,14 +57,14 @@ return array(
             $eventName,
             EventDispatcherInterface $dispatcher
         ) {
-            $handler = new MetaModels\BackendIntegration\Boot();
-            $handler->perform($event, $eventName, $dispatcher);
-            new FilterSettingTypeRendererCore($event->getServiceContainer());
-
             $dispatcher->addListener(
                 CreatePropertyConditionEvent::NAME,
                 array(new DefaultPropertyConditionCreator(), 'handle')
             );
+            
+            $handler = new MetaModels\BackendIntegration\Boot();
+            $handler->perform($event, $eventName, $dispatcher);
+            new FilterSettingTypeRendererCore($event->getServiceContainer());
         }
     ),
     MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE => array(
