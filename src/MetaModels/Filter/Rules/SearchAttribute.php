@@ -57,11 +57,11 @@ class SearchAttribute extends FilterRule
      *
      * @param IAttribute $objAttribute      The attribute to be searched.
      *
-     * @param array      $strValue          The value to be searched for. Wildcards (* and ? allowed).
+     * @param string     $strValue          The value to be searched for. Wildcards (* and ? allowed).
      *
      * @param array      $arrValidLanguages The list of valid languages to be searched in.
      */
-    public function __construct($objAttribute, $strValue = array(), $arrValidLanguages = array())
+    public function __construct($objAttribute, $strValue = '', $arrValidLanguages = array())
     {
         parent::__construct(null);
         $this->objAttribute      = $objAttribute;
