@@ -150,6 +150,10 @@ abstract class ViewCombinations
         // Perform loading now.
         $data = json_decode($this->container->getCache()->fetch($key), true);
 
+        if (empty($data)) {
+            return false;
+        }
+
         $this->information = $data['information'];
         $this->tableMap    = $data['tableMap'];
         $this->parentMap   = $data['parentMap'];

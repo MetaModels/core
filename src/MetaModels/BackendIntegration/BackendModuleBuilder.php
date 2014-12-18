@@ -90,6 +90,10 @@ class BackendModuleBuilder
         // Perform loading now.
         $data = json_decode($this->container->getCache()->fetch($key), true);
 
+        if (empty($data)) {
+            return false;
+        }
+
         $this->backendMenu     = $data['backendMenu'];
         $this->languageStrings = $data['languageStrings'];
 
