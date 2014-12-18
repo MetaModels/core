@@ -8,13 +8,21 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-10-17T12:13:43+02:00
+ * last-updated: 2014-12-15T12:12:42+01:00
  */
 
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['copy']['1']             = 'Копировать настройки ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['delete']['0']           = 'Удалить настройки';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['edit']['0']             = 'Редактировать настройки';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['edit']['1']             = 'Редактировать настройки ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['file']                  = 'Файл';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['text'] = 'Текст';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['0']  = 'Язык';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']['0']             = 'Имя';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']['0']              = 'Новый';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']['1']              = 'Создать новую настройку';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']['0']         = 'Определить настройки атрибутов';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']['1']         = 'Определить настройки атрибутов ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['0']         = 'Шаблон';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['1']         = 'Шаблон, используемый для отображения элементов.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']          = 'Имя';

@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-12-14T12:13:42+01:00
+ * last-updated: 2014-12-15T12:12:42+01:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Атрибуты "%s"';
@@ -29,6 +29,13 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord']             
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']                        = 'Настройка отображения "%s" в MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodels_contributor']                                  = 'Благодарим этих пользователей за тикеты, предложения и переводы';
 $GLOBALS['TL_LANG']['MSC']['metamodels_help']                                         = 'Мы просим оказать нам помощь!';
+$GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']['0']                              = 'Фильтр';
+$GLOBALS['TL_LANG']['MSC']['panelLayout']['search']['0']                              = 'Поиск';
 $GLOBALS['TL_LANG']['MSC']['sorting']                                                 = 'Сортировка';
+$GLOBALS['TL_LANG']['MSC']['tl_class']['w50x']['0']                                   = 'w50x';
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['action_add']                        = '+';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['action_remove']                     = '-';
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['clear_all']                         = 'Очистить все фильтры';
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['select_all']                        = 'Выбрать все';
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']                            = 'Фильтр';
 
