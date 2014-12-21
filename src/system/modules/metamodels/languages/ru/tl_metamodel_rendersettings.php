@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-12-15T12:12:42+01:00
+ * last-updated: 2014-12-18T08:12:14+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['copy']['1']             = 'Копировать настройки ID %s.';
@@ -17,6 +17,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['edit']['0']             = '�
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['edit']['1']             = 'Редактировать настройки ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['file']                  = 'Файл';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['text'] = 'Текст';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['general_legend']        = 'Основные параметры';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['0']  = 'Язык';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']['0']             = 'Имя';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']['0']              = 'Новый';

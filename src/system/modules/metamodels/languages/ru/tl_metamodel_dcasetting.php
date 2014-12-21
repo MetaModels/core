@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-10-17T12:13:43+02:00
+ * last-updated: 2014-12-18T08:12:14+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']           = 'Добавить все';
@@ -18,6 +18,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']['1']          = 'Ат�
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['config_legend']         = 'Конфигурация';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy']['1']             = 'Копировать настройки ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype']['0']          = 'Тип';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype']['1']          = 'Выберите тип атрибута.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['attribute'] = 'Атрибут';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['legend']    = 'Легенда';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete']['0']           = 'Удалить настройки';
@@ -30,6 +31,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']            = 'На�
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['0']              = 'Новый';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['1']              = 'Создать новую настройку';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['0']     = 'Не кодировать HTML-теги.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['0']         = 'Только чтение';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['11']     = 'Сортировать по возрастанию';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['12']     = 'Сортировать по убыванию';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['5']      = 'Сортировать по возрастанию дней';
