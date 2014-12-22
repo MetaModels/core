@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-12-18T08:12:14+01:00
+ * last-updated: 2014-12-22T16:12:22+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']            = 'Интеграция в панель управления';
@@ -40,6 +40,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['name']['1']                 = 'Имя �
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']['0']                  = 'Новый входной экран';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']['1']                  = 'Создать новый входной экран';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['0']          = 'Макет панели';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker']               = 'Выбор панели';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['0']               = 'Имя родительской таблицы (если есть)';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['1']               = 'Имя таблицы базы данных, которая должна передаваться в качестве родительской таблицы.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype']['0']           = 'Интеграция';
