@@ -54,7 +54,12 @@ class CustomSql extends Simple
             return;
         }
 
-        $objFilterRule = new SimpleQuery($strSql, $arrParams);
+        $objFilterRule = new SimpleQuery(
+            $strSql,
+            $arrParams,
+            'id',
+            $this->getMetaModel()->getServiceContainer()->getDatabase()
+        );
         $objFilter->addFilterRule($objFilterRule);
     }
 

@@ -148,7 +148,9 @@ class FilterBuilder
                     $operation['property'],
                     $operation['operation']
                 ),
-                array($operation['value'])
+                array($operation['value']),
+                'id',
+                $this->getDatabase()
             ));
 
             return;
@@ -223,7 +225,8 @@ class FilterBuilder
                     $this->getMetaModel()->getTableName(),
                     $operation['property']
                 ),
-                array($operation['value'])
+                array($operation['value']),
+                $this->getDatabase()
             ));
 
             return;

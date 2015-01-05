@@ -216,7 +216,8 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         $filterRule = new SimpleQuery(
             sprintf('SELECT DISTINCT %1$s FROM %2$s WHERE %3$s', 'item_id', $this->getValueTable(), $procedure),
             $parameters,
-            'item_id'
+            'item_id',
+            $this->getMetaModel()->getServiceContainer()->getDatabase()
         );
 
         return $filterRule->getMatchingIds();

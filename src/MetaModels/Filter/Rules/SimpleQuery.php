@@ -17,6 +17,7 @@
 
 namespace MetaModels\Filter\Rules;
 
+use Contao\Database;
 use MetaModels\Filter\FilterRule;
 
 /**
@@ -50,20 +51,34 @@ class SimpleQuery extends FilterRule
     protected $strIdColumn = null;
 
     /**
+     * The database instance to use.
+     *
+     * @var Database
+     */
+    private $dataBase = null;
+
+    /**
      * Creates an instance of a simple query filter rule.
      *
-     * @param string $strQueryString The query that shall be executed.
+     * @param string   $strQueryString The query that shall be executed.
      *
-     * @param array  $arrParams      The query parameters that shall be used.
+     * @param array    $arrParams      The query parameters that shall be used.
      *
-     * @param string $strIdColumn    The column where the item id is stored in.
+     * @param string   $strIdColumn    The column where the item id is stored in.
+     *
+     * @param Database $dataBase       The database to use.
      */
-    public function __construct($strQueryString, $arrParams = array(), $strIdColumn = 'id')
+    public function __construct($strQueryString, $arrParams = array(), $strIdColumn = 'id', $dataBase = null)
     {
         parent::__construct(null);
+
+        if ($dataBase === null) {
+            $dataBase = \Database::getInstance();
+        }
         $this->strQueryString = $strQueryString;
         $this->arrParams      = $arrParams;
         $this->strIdColumn    = $strIdColumn;
+        $this->dataBase       = $dataBase;
     }
 
     /**
@@ -71,8 +86,7 @@ class SimpleQuery extends FilterRule
      */
     public function getMatchingIds()
     {
-        $objDB      = \Database::getInstance();
-        $objMatches = $objDB
+        $objMatches = $this->dataBase
             ->prepare($this->strQueryString)
             ->execute($this->arrParams);
 
