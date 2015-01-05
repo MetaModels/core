@@ -526,7 +526,10 @@ class Item implements IItem
         }
 
         $event = new GetPageDetailsEvent($intJumpTo);
-        $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
+
+        if ($intJumpTo) {
+            $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
+        }
 
         // Apply jumpTo urls based upon the filter defined in the render settings.
         return $this->buildJumpToParametersAndUrl(
