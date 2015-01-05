@@ -17,12 +17,14 @@
 
 namespace MetaModels\DcGeneral\Events\Table\FilterSetting;
 
+use ContaoCommunityAlliance\DcGeneral\Clipboard\Filter;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use MetaModels\BackendIntegration\TemplateList;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
@@ -152,10 +154,13 @@ class Subscriber extends BaseSubscriber
         $model       = $event->getModel();
         $clipboard   = $environment->getClipboard();
 
+        $filter = new Filter();
+        $filter
+            ->andModelIs(IdSerializer::fromModel($model))
+            ->andActionIs($clipboard::MODE_CUT);
+
         // Disable all buttons if there is a circular reference.
-        if (($clipboard->isCut()
-            && ($event->isCircularReference() || in_array($model->getId(), $clipboard->getContainedIds())))
-        ) {
+        if ($event->isCircularReference() || !$clipboard->isEmpty($filter)) {
             $event
                 ->setPasteAfterDisabled(true)
                 ->setPasteIntoDisabled(true);
@@ -165,7 +170,7 @@ class Subscriber extends BaseSubscriber
         $factory = $this->getServiceContainer()->getFilterFactory()->getTypeFactory($model->getProperty('type'));
 
         // If setting does not support children, omit them.
-        if ($model->getId() && !$factory->isNestedType()) {
+        if ($model->getId() && !($factory && $factory->isNestedType())) {
             $event->setPasteIntoDisabled(true);
         }
     }
