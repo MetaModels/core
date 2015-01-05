@@ -98,6 +98,10 @@ class Subscriber extends BaseSubscriber
      */
     protected function registerModelRenderers()
     {
+        if (empty($GLOBALS['METAMODELS']['filters'])) {
+            return;
+        }
+
         $serviceContainer = $this->getServiceContainer();
         foreach ($GLOBALS['METAMODELS']['filters'] as $typeName => $information) {
             if (isset($information['info_callback'])) {
