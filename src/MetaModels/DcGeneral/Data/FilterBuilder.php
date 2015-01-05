@@ -239,6 +239,73 @@ class FilterBuilder
     }
 
     /**
+     * Calculate a native SQL sub procedure.
+     *
+     * @param FilterBuilderSql $procedure The procedure to which to append to.
+     *
+     * @param array            $children  The children to calculate.
+     *
+     * @return array
+     */
+    protected function buildNativeSqlProcedure(FilterBuilderSql $procedure, $children)
+    {
+        $skipped   = array();
+        $tableName = $this->getMetaModel()->getTableName();
+        foreach ($children as $child) {
+            // If there is an attribute contained within this rule, skip it.
+            if ($this->getAttributeFromFilterOperation($child)) {
+                $skipped[] = $child;
+
+                continue;
+            }
+
+            // Try to parse the sub procedure and extract as much as possible.
+            if (($child['operation'] == 'AND') || ($child['operation'] == 'OR')) {
+                $subProcedure = new FilterBuilderSql($tableName, $child['operation'], $this->getDatabase());
+                $subSkipped   = $this->buildNativeSqlProcedure($subProcedure, $child['children']);
+
+                if (count($subSkipped) !== count($child['operation'])) {
+                    $procedure->addSubProcedure($subProcedure);
+                }
+
+                if (!empty($subSkipped)) {
+                    $skipped[] = $subSkipped;
+                }
+
+                continue;
+            }
+
+            $procedure->addChild($child);
+        }
+
+        return $skipped;
+
+    }
+
+    /**
+     * Method to optimize as many system column lookup filters as possible into a combined filter rule.
+     *
+     * @param ConditionAnd|ConditionOr $filterRule The filter to which the optimized rule shall be added to.
+     *
+     * @param array                    $children   The children to parse.
+     *
+     * @param string                   $operation  The operation to parse (AND or OR).
+     *
+     * @return array
+     */
+    protected function optimizedFilter($filterRule, $children, $operation)
+    {
+        $procedure = new FilterBuilderSql($this->getMetaModel()->getTableName(), $operation, $this->getDatabase());
+        $skipped   = $this->buildNativeSqlProcedure($procedure, $children);
+
+        if (!$procedure->isEmpty()) {
+            $filterRule->addChild($this->getMetaModel()->getEmptyFilter()->addFilterRule($procedure->build()));
+        }
+
+        return $skipped;
+    }
+
+    /**
      * Build an AND or OR query.
      *
      * @param IFilter $filter    The filter to add the operations to.
@@ -253,8 +320,6 @@ class FilterBuilder
             return;
         }
 
-        // TODO: add filter optimizer here.
-
         if ($operation['operation'] == 'AND') {
             $filterRule = new ConditionAnd();
         } else {
@@ -262,7 +327,9 @@ class FilterBuilder
         }
         $filter->addFilterRule($filterRule);
 
-        foreach ($operation['children'] as $child) {
+        $children = $this->optimizedFilter($filterRule, $operation['children'], $operation['operation']);
+
+        foreach ($children as $child) {
             $subFilter = $this->getMetaModel()->getEmptyFilter();
             $filterRule->addChild($subFilter);
             $this->calculateSubfilter($child, $subFilter);
@@ -279,7 +346,7 @@ class FilterBuilder
     protected function getAttributeFromFilterOperation($operation)
     {
         $attribute = null;
-        if ($operation['property']) {
+        if (!empty($operation['property'])) {
             $attribute = $this->getMetaModel()->getAttribute($operation['property']);
         }
 
