@@ -65,16 +65,19 @@ $GLOBALS['TL_LANG']['XPL']['customsql'] = array
         <ul>
         <li><strong>get</strong> - HTTP GET query string</li>
         <li><strong>post</strong> - HTTP POST fields</li>
+        <li><strong>cookie</strong> - HTTP COOKIE values</li>
         <li><strong>session</strong> - any field in the Contao session</li>
         <li><strong>filter</strong> - any of the passed filter parameters (for sharing paramters between filter settings).</li>
+        <li><strong>container</strong> - Name of a callable service in the MetaModels service container (this requires additional PHP coding from your side).</li>
         </ul>
         The Query string is built like a normal HTTP query string as "name=value" pairs which are combined using the & char and must at least contain the field "name".
         One or more of the following optional keys may be used in addition:
         <ul>
         <li><strong>default</strong> - the default value to use, if there is no value available.</li>
         <li><strong>aggregate</strong> - either "list" or "set"</li>
-        <li><strong>key</strong> - set to 1 to read the key of arrays (needs aggregate set).</li>
-        <li><strong>recursive</strong> - set to 1 to read arrays recursive (needs aggregate set).</li>
+        <li><strong>key</strong> - set to 1 to read the key of arrays (needs aggregate "set").</li>
+        <li><strong>recursive</strong> - set to 1 to read arrays recursive (needs aggregate "set").</li>
+        <li><strong>service</strong>  - The name of the service to retrieve (needs source "service").</li>
         </ul>
         '
     ),
@@ -98,4 +101,3 @@ $GLOBALS['TL_LANG']['XPL']['customsql'] = array
         '
     )
 );
-

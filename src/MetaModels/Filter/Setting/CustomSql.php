@@ -24,18 +24,36 @@ use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\ReplaceInsertTagsEvent;
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Rules\SimpleQuery;
+use MetaModels\IMetaModelsServiceContainer;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This filter condition generates a filter rule for a predefined SQL query.
  * The generated rule will only return ids that are returned from this query.
- *
- * @package    MetaModels
- * @subpackage Core
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     Oliver Hoff <oliver@hofff.com>
  */
 class CustomSql extends Simple
 {
+    /**
+     * The filter params (should be array or null).
+     *
+     * @var array
+     */
+    private $filterParameters;
+
+    /**
+     * The query string.
+     *
+     * @var string
+     */
+    private $queryString;
+
+    /**
+     * The query parameters.
+     *
+     * @var array
+     */
+    private $queryParameter;
+
     /**
      * Generates the filter rules based upon the given filter url.
      *
@@ -47,199 +65,15 @@ class CustomSql extends Simple
      */
     public function prepareRules(IFilter $objFilter, $arrFilterUrl)
     {
-        $arrParams = array();
-        $strSql    = $this->generateSql($arrParams, $arrFilterUrl);
+        $this->filterParameters = $arrFilterUrl;
+        $this->queryString      = $this->get('customsql');
+        $this->queryParameter   = array();
 
-        if (!strlen($strSql)) {
-            return;
-        }
+        $objFilter->addFilterRule($this->getFilterRule());
 
-        $objFilterRule = new SimpleQuery(
-            $strSql,
-            $arrParams,
-            'id',
-            $this->getMetaModel()->getServiceContainer()->getDatabase()
-        );
-        $objFilter->addFilterRule($objFilterRule);
-    }
-
-    /**
-     * Build the SQL query string.
-     *
-     * @param array            $arrParams    Query param stack.
-     *
-     * @param mixed|array|null $arrFilterUrl The filter params (should be array or null).
-     *
-     * @return string
-     */
-    public function generateSql(array &$arrParams, $arrFilterUrl)
-    {
-        $strSQL = $this->get('customsql');
-
-        $strSQL = $this->parseTable($strSQL);
-        $strSQL = $this->parseRequestVars($strSQL, $arrParams, $arrFilterUrl);
-        $strSQL = $this->parseSecureInsertTags($strSQL, $arrParams);
-        $strSQL = $this->parseInsertTags($strSQL, $arrParams);
-
-        return $strSQL;
-    }
-
-    /**
-     * Replace the table name in the query string.
-     *
-     * @param string $strSQL SQL to parse.
-     *
-     * @return string Parsed SQL.
-     */
-    public function parseTable($strSQL)
-    {
-        return str_replace('{{table}}', $this->getMetaModel()->getTableName(), $strSQL);
-    }
-
-    /**
-     * Parse a request var insert tag within the SQL.
-     *
-     * @param string           $strSQL       SQL to parse.
-     *
-     * @param array            $arrParams    Query param stack.
-     *
-     * @param mixed|array|null $arrFilterUrl The filter params (should be array or null).
-     *
-     * @return string Parsed SQL.
-     */
-    public function parseRequestVars($strSQL, array &$arrParams, $arrFilterUrl)
-    {
-        return preg_replace_callback(
-            '@\{\{param::([^}]*)\}\}@',
-            function ($arrMatch) use (&$arrParams, $arrFilterUrl) {
-                list($strSource, $strQuery) = explode('?', $arrMatch[1], 2);
-                parse_str($strQuery, $arrArgs);
-                $arrName = (array) $arrArgs['name'];
-
-                $var = null;
-
-                switch($strSource)
-                {
-                    case 'get':
-                        $var = \Input::getInstance()->get(array_shift($arrName));
-                        break;
-
-                    case 'post':
-                        $var = \Input::getInstance()->post(array_shift($arrName));
-                        break;
-
-                    case 'session':
-                        $var = \Session::getInstance()->get(array_shift($arrName));
-                        break;
-
-                    case 'filter':
-                        if ($arrFilterUrl) {
-                            $var = $arrFilterUrl[array_shift($arrName)];
-                        }
-                        break;
-
-                    default:
-                        // This should never occur.
-                        return 'NULL';
-                }
-
-                $index = 0;
-                $count = count($arrName);
-                while ($index < $count && is_array($var)) {
-                    $var = $var[$arrName[$index++]];
-                }
-
-                if ($index != count($arrName) || $var === null) {
-                    if (isset($arrArgs['default'])) {
-                        $arrParams[] = $arrArgs['default'];
-                        return '?';
-                    } else {
-                        return 'NULL';
-                    }
-                }
-
-                // Treat as scalar value.
-                if (empty($arrArgs['aggregate'])) {
-                    $arrParams[] = $var;
-                    return '?';
-                }
-
-                // Treat as list.
-                $var = (array) $var;
-
-                if (!empty($arrArgs['recursive'])) {
-                    $var = iterator_to_array(
-                        new \RecursiveIteratorIterator(
-                            new \RecursiveArrayIterator(
-                                $var
-                            )
-                        )
-                    );
-                }
-
-                if (!$var) {
-                    return 'NULL';
-                }
-
-                if ($arrArgs['key']) {
-                    $var = array_keys($var);
-                } else {
-                    // Use values.
-                    $var = array_values($var);
-                }
-
-                if ($arrArgs['aggregate'] == 'set') {
-                    $arrParams[] = implode(',', $var);
-                    return '?';
-                } else {
-                    $arrParams = array_merge($arrParams, $var);
-                    return rtrim(str_repeat('?,', count($var)), ',');
-                }
-            },
-            $strSQL
-        );
-    }
-
-    /**
-     * Replace all secure insert tags.
-     *
-     * @param string $strSQL    SQL to parse.
-     *
-     * @param array  $arrParams Query param stack.
-     *
-     * @return string Parsed SQL.
-     */
-    public function parseSecureInsertTags($strSQL, array &$arrParams)
-    {
-        $objMe = $this;
-        return preg_replace_callback(
-            '@\{\{secure::([^}]+)\}\}@',
-            function ($arrMatch) use (&$arrParams, $objMe) {
-                $arrParams[] = $objMe->parseInsertTags('{{' . $arrMatch[1] . '}}', $arrParams);
-                return '?';
-            },
-            $strSQL
-        );
-    }
-
-    /**
-     * Replace all insert tags in the query string.
-     *
-     * @param string $strSQL    SQL to parse.
-     *
-     * @param array  $arrParams Query param stack.
-     *
-     * @return string Parsed SQL
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function parseInsertTags($strSQL, array &$arrParams)
-    {
-        $dispatcher = $this->getEventDispatcher();
-        $event      = new ReplaceInsertTagsEvent($strSQL, false);
-        $dispatcher->dispatch(ContaoEvents::CONTROLLER_REPLACE_INSERT_TAGS, $event);
-
-        return $event->getBuffer();
+        unset($this->filterParameters);
+        unset($this->queryString);
+        unset($this->queryParameter);
     }
 
     /**
@@ -259,5 +93,325 @@ class CustomSql extends Simple
         }
 
         return $arrParams;
+    }
+
+    /**
+     * Retrieve the service container.
+     *
+     * @return IMetaModelsServiceContainer
+     */
+    public function getServiceContainer()
+    {
+        return $this->getMetaModel()->getServiceContainer();
+    }
+
+    /**
+     * Retrieve the event dispatcher.
+     *
+     * @return EventDispatcherInterface
+     */
+    public function getEventDispatcher()
+    {
+        return $this->getServiceContainer()->getEventDispatcher();
+    }
+
+    /**
+     * Compile the query and the parameters.
+     *
+     * @return void
+     */
+    private function compile()
+    {
+        $this->parseTable();
+        $this->parseRequestVars();
+        $this->parseSecureInsertTags();
+        $this->parseInsertTags();
+    }
+
+    /**
+     * Retrieve the simple query.
+     *
+     * @return SimpleQuery
+     */
+    private function getFilterRule()
+    {
+        $this->compile();
+
+        return new SimpleQuery(
+            $this->queryString,
+            $this->queryParameter,
+            'id',
+            $this->getMetaModel()->getServiceContainer()->getDatabase()
+        );
+    }
+
+    /**
+     * Add parameters to the list.
+     *
+     * @param array $parameters The parameters to add.
+     *
+     * @return void
+     */
+    private function addParameters($parameters)
+    {
+        if (empty($parameters)) {
+            return;
+        }
+
+        $this->queryParameter = array_merge($this->queryParameter, $parameters);
+    }
+
+    /**
+     * Add a parameter to the list.
+     *
+     * @param string $parameter The parameter to add.
+     *
+     * @return void
+     */
+    private function addParameter($parameter)
+    {
+        if (empty($parameter)) {
+            return;
+        }
+
+        $this->queryParameter[] = $parameter;
+    }
+
+    /**
+     * Replace the table name in the query string.
+     *
+     * @return void
+     */
+    private function parseTable()
+    {
+        $this->queryString = str_replace('{{table}}', $this->getMetaModel()->getTableName(), $this->queryString);
+    }
+
+    /**
+     * Retrieve the value with the given name from the service container.
+     *
+     * @param string $valueName The name of the value in the source to retrieve.
+     *
+     * @param array  $arguments The arguments of the parameter.
+     *
+     * @return mixed
+     */
+    private function getValueFromServiceContainer($valueName, $arguments)
+    {
+        if (!empty($arguments['service'])) {
+            $serviceName = $arguments['service'];
+        } else {
+            $serviceName = $valueName;
+        }
+
+        $service = $this->getServiceContainer()->getService($serviceName);
+        if (is_callable($service)) {
+            return call_user_func($service, $valueName, $arguments);
+        }
+
+        return 'NULL';
+    }
+
+    /**
+     * Retrieve the value with the given name from the source with the given name.
+     *
+     * @param string $source    The source to retrieve the value from.
+     *                          Valid values are: ('get', 'post', 'cookie', 'session', 'filter' or 'container').
+     *
+     * @param string $valueName The name of the value in the source to retrieve.
+     *
+     * @param array  $arguments The arguments of the parameter.
+     *
+     * @return mixed
+     */
+    private function getValueFromSource($source, $valueName, $arguments)
+    {
+        switch(strtolower($source))
+        {
+            case 'get':
+                return \Input::getInstance()->get($valueName);
+
+            case 'post':
+                return \Input::getInstance()->post($valueName);
+
+            case 'cookie':
+                return \Input::getInstance()->cookie($valueName);
+
+            case 'session':
+                return \Session::getInstance()->get($valueName);
+
+            case 'filter':
+                if (isset($this->filterParameters)) {
+                    return $this->filterParameters[$valueName];
+                }
+                break;
+
+            case 'container':
+                return $this->getValueFromServiceContainer($valueName, $arguments);
+
+            default:
+        }
+
+        // This should never occur.
+        return 'NULL';
+    }
+
+    /**
+     * Convert a parameter using an aggregate function.
+     *
+     * @param string $var       The parameter value.
+     *
+     * @param array  $arguments The arguments of the parameter.
+     *
+     * @return string
+     */
+    private function convertParameterAggregate($var, $arguments)
+    {
+        // Treat as list.
+        $var = (array) $var;
+
+        if (!empty($arguments['recursive'])) {
+            $var = iterator_to_array(
+                new \RecursiveIteratorIterator(
+                    new \RecursiveArrayIterator(
+                        $var
+                    )
+                )
+            );
+        }
+
+        if (!$var) {
+            return 'NULL';
+        }
+
+        if (!empty($arguments['key'])) {
+            $var = array_keys($var);
+        } else {
+            // Use values.
+            $var = array_values($var);
+        }
+
+        if ($arguments['aggregate'] == 'set') {
+            $this->addParameter(implode(',', $var));
+
+            return '?';
+        }
+
+        $this->addParameters($var);
+
+        return rtrim(str_repeat('?,', count($var)), ',');
+    }
+
+    /**
+     * Convert a parameter in the query string.
+     *
+     * @param array $arrMatch The match from the preg_replace_all call in parseRequestVars().
+     *
+     * @return string
+     *
+     * @internal Only to be used via parseRequestVars().
+     */
+    public function convertParameter($arrMatch)
+    {
+        list($strSource, $strQuery) = explode('?', $arrMatch[1], 2);
+        parse_str($strQuery, $arrArgs);
+        $arrName = (array) $arrArgs['name'];
+
+        $var = $this->getValueFromSource($strSource, array_shift($arrName), $arrArgs);
+
+        $index = 0;
+        $count = count($arrName);
+        while ($index < $count && is_array($var)) {
+            $var = $var[$arrName[$index++]];
+        }
+
+        if ($index != $count || $var === null) {
+            if (isset($arrArgs['default'])) {
+                $this->addParameter($arrArgs['default']);
+
+                return '?';
+            } else {
+                return 'NULL';
+            }
+        }
+
+        // Treat as scalar value.
+        if (!isset($arrArgs['aggregate'])) {
+            $this->addParameter($var);
+
+            return '?';
+        }
+
+        return $this->convertParameterAggregate($var, $arrArgs);
+    }
+
+    /**
+     * Parse a request var insert tag within the SQL.
+     *
+     * @return void
+     */
+    private function parseRequestVars()
+    {
+        $this->queryString = preg_replace_callback(
+            '@\{\{param::([^}]*)\}\}@',
+            array($this, 'convertParameter'),
+            $this->queryString
+        );
+    }
+
+    /**
+     * Replace all insert tags in the query string.
+     *
+     * @param string $queryString The string to replace insert tags within.
+     *
+     * @return string
+     */
+    private function parseInsertTagsInternal($queryString)
+    {
+        $dispatcher = $this->getEventDispatcher();
+        $event      = new ReplaceInsertTagsEvent($queryString, false);
+        $dispatcher->dispatch(ContaoEvents::CONTROLLER_REPLACE_INSERT_TAGS, $event);
+
+        return $event->getBuffer();
+    }
+
+    /**
+     * Replace all insert tags in the query string.
+     *
+     * @param string $arrMatch The match from the preg_replace call.
+     *
+     * @return string
+     *
+     * @internal Only to be used internal as callback from parseSecureInsertTags().
+     */
+    public function parseAndAddSecureInsertTagAsParameter($arrMatch)
+    {
+        $this->addParameter($this->parseInsertTagsInternal('{{' . $arrMatch[1] . '}}'));
+
+        return '?';
+    }
+
+    /**
+     * Replace all secure insert tags.
+     *
+     * @return void
+     */
+    private function parseSecureInsertTags()
+    {
+        $this->queryString = preg_replace_callback(
+            '@\{\{secure::([^}]+)\}\}@',
+            array($this, 'parseAndAddSecureInsertTagAsParameter'),
+            $this->queryString
+        );
+    }
+
+    /**
+     * Replace all insert tags in the query string.
+     *
+     * @return void
+     */
+    private function parseInsertTags()
+    {
+        $this->queryString = $this->parseInsertTagsInternal($this->queryString);
     }
 }
