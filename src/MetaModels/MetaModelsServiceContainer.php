@@ -246,10 +246,18 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \InvalidArgumentException When the passed service is not an object and no service name has been passed.
      */
     public function setService($service, $serviceName = null)
     {
         if ($serviceName === null) {
+            if (!is_object($service) || $service instanceof \Closure) {
+                throw new \InvalidArgumentException(
+                    'Service name must be given to ' . __CLASS__ . '::setService when not passing a class instance.'
+                );
+            }
+
             $serviceName = get_class($service);
         }
 

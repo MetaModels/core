@@ -84,10 +84,10 @@ interface IMetaModelsServiceContainer
      *
      * Using this method you can store custom services in the container that are unknown to the MetaModels subsystem.
      *
-     * @param object      $service     The service to add.
+     * @param object|callable|mixed $service     The service to add.
      *
-     * @param null|string $serviceName The service name to use (defaults to null in which case the class name of the
-     *                                 service will get used).
+     * @param null|string           $serviceName The service name to use (defaults to null in which case the class name
+     *                                           of the service will get used if the passed service is an object).
      *
      * @return MetaModelsServiceContainer
      */
@@ -101,7 +101,7 @@ interface IMetaModelsServiceContainer
      *
      * @param string $serviceName The name of the service to retrieve.
      *
-     * @return object
+     * @return object|callable|mixed
      */
     public function getService($serviceName);
 }
