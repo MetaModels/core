@@ -67,13 +67,10 @@ abstract class Simple implements ISimple
      * Retrieve the event dispatcher.
      *
      * @return EventDispatcherInterface
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getEventDispatcher()
     {
-        return $GLOBALS['container']['event-dispatcher'];
+        return $this->getMetaModel()->getServiceContainer()->getEventDispatcher();
     }
 
     /**
@@ -93,7 +90,7 @@ abstract class Simple implements ISimple
      *
      * @return \MetaModels\Filter\Setting\ICollection The parent.
      */
-    protected function getFilterSettings()
+    public function getFilterSettings()
     {
         return $this->objFilterSetting;
     }
@@ -103,7 +100,7 @@ abstract class Simple implements ISimple
      *
      * @return \MetaModels\IMetaModel
      */
-    protected function getMetaModel()
+    public function getMetaModel()
     {
         return $this->getFilterSettings()->getMetaModel();
     }
