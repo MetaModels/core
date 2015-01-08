@@ -536,7 +536,8 @@ class Item implements IItem
             $event->getPageDetails(),
             $intFilterSettings,
             $objSettings,
-            $language
+            // Mask out the "all languages" language key (See #687).
+            ($language !== 'xx') ? $language : null
         );
     }
 
