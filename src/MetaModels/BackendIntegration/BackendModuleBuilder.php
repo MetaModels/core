@@ -314,7 +314,15 @@ class BackendModuleBuilder
      */
     public function export()
     {
-        $GLOBALS['BE_MOD']  = array_merge_recursive($this->backendMenu, $GLOBALS['BE_MOD']);
+        // Do not replace the array. See #684.
+        foreach ($this->backendMenu as $section => $entries) {
+            if (!isset($GLOBALS['BE_MOD'][$section])) {
+                $GLOBALS['BE_MOD'][$section] = array();
+            }
+
+            $GLOBALS['BE_MOD'][$section] = array_merge_recursive($entries, $GLOBALS['BE_MOD'][$section]);
+        }
+
         $GLOBALS['TL_LANG'] = array_merge_recursive($this->languageStrings, $GLOBALS['TL_LANG']);
     }
 }
