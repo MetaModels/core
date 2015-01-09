@@ -62,12 +62,13 @@ array_insert(
     )
 );
 
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionor']['nestingAllowed']              = true;
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionand']['nestingAllowed']             = true;
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvalueis']['nestingAllowed'] = false;
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvisible']['nestingAllowed'] = false;
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionnot']['nestingAllowed']             = true;
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionnot']['maxChildren']                = 1;
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionor']['nestingAllowed']                      = true;
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionand']['nestingAllowed']                     = true;
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvalueis']['nestingAllowed']         = false;
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertymultiplevalueis']['nestingAllowed'] = false;
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvisible']['nestingAllowed']         = false;
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionnot']['nestingAllowed']                     = true;
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionnot']['maxChildren']                        = 1;
 
 /*
     All system columns that always are defined in a MetaModel table and are not attributes.

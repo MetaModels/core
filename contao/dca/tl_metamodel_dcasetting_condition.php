@@ -249,6 +249,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
                 'value'
             )
         ),
+        'conditionpropertymultiplevalueis extends _attribute_' => array
+        (
+            '+config' => array
+            (
+                'value'
+            )
+        ),
         'conditionpropertyvisible extends _attribute_' => array
         (
         ),
