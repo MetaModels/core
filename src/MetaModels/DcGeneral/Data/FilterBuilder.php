@@ -269,7 +269,7 @@ class FilterBuilder
                 }
 
                 if (!empty($subSkipped)) {
-                    $skipped[] = $subSkipped;
+                    $skipped += $subSkipped;
                 }
 
                 continue;

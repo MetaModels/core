@@ -151,4 +151,84 @@ class FilterBuilderTest extends TestCase
 
         $this->assertEquals(array(0, 1, 2, 3), $filter->getMatchingIds());
     }
+
+    /**
+     * Test the build process.
+     *
+     * @link https://github.com/MetaModels/core/issues/700
+     *
+     * @return void
+     */
+    public function testIssue700()
+    {
+        $metaModel = $this->mockMetaModel();
+        $dataBase  = $metaModel->getServiceContainer()->getDatabase();
+
+        $attribute = $this
+            ->getMockForAbstractClass(
+                'MetaModels\Attribute\Base',
+                array(
+                    $metaModel,
+                    array(
+                        'colname' => 'test1',
+                    )
+                ),
+                '',
+                true,
+                true,
+                true,
+                array('searchFor')
+            );
+        $attribute
+            ->expects($this->any())
+            ->method('searchFor')
+            ->with('*test*')
+            ->will($this->returnValue(array(0, 1, 2, 3)));
+
+        /** @var \MetaModels\Attribute\Base $attribute */
+        $metaModel->addAttribute($attribute);
+
+        $config = DefaultConfig::init();
+
+        $config->setFilter(
+            array(
+                array(
+                    'operation' => 'AND',
+                    'children'  => array(
+                        array(
+                            'operation' => 'AND',
+                            'children'  => array(
+                                array(
+                                    'operation' => 'LIKE',
+                                    'property'  => 'test1',
+                                    'value'     => '*test*'
+                                )
+                            )
+                        ),
+                    )
+                )
+            )
+        );
+
+        /** @var Database $dataBase */
+        $dataBase
+            ->getQueryCollection()
+            ->theQuery('SELECT id FROM mm_test WHERE ((foo = ?))')
+            ->with(0)
+            ->result()
+            ->addRows(array(
+                array('id' => 0),
+                array('id' => 1),
+                array('id' => 2),
+                array('id' => 3),
+                array('id' => 4),
+                array('id' => 5),
+            ));
+
+        $builder = new FilterBuilder($metaModel, $config);
+
+        $filter = $builder->build();
+
+        $this->assertEquals(array(0, 1, 2, 3), $filter->getMatchingIds());
+    }
 }
