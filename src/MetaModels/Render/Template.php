@@ -224,27 +224,28 @@ class Template
     protected function getTemplate($strTemplate, $strFormat = 'html5', $blnFailIfNotFound = false)
     {
         $strTemplate = basename($strTemplate);
-
+        $strCustom   = 'templates';
         // Check for a theme folder.
         if (TL_MODE == 'FE') {
-            $strCustom = str_replace('../', '', $GLOBALS['objPage']->templateGroup);
-
-            if ($strCustom != '') {
-                try {
-                    return \TemplateLoader::getPath($strTemplate, $strFormat, $strCustom);
-                } catch (\Exception $exception) {
-                    if ($blnFailIfNotFound) {
-                        throw new \RuntimeException(
-                            sprintf('Could not find template %s.%s', $strTemplate, $strFormat),
-                            1,
-                            $exception
-                        );
-                    }
-                }
+            $tmpDir = str_replace('../', '', $GLOBALS['objPage']->templateGroup);
+            if (!empty($tmpDir)) {
+                $strCustom = $tmpDir;
             }
         }
 
-        return \TemplateLoader::getPath($strTemplate, $strFormat);
+        try {
+            return \TemplateLoader::getPath($strTemplate, $strFormat, $strCustom);
+        } catch (\Exception $exception) {
+            if ($blnFailIfNotFound) {
+                throw new \RuntimeException(
+                    sprintf('Could not find template %s.%s', $strTemplate, $strFormat),
+                    1,
+                    $exception
+                );
+            }
+        }
+
+        return null;
     }
 
     /**
