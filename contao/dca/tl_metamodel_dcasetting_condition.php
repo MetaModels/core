@@ -13,6 +13,7 @@
  * @author     Andreas Isaak <info@andreas-isaak.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Christopher Boelter <christopher@boelter.eu>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource

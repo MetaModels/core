@@ -15,6 +15,7 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Tim Becker <tim@westwerk.ac>
  * @author     Tim Gatzky <info@tim-gatzky.de>
+ * @author     Christopher Boelter <christopher@boelter.eu>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
