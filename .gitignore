@@ -13,6 +13,7 @@ nbproject/
 
 # composer related
 vendor/
+composer.lock
 
 # build
 build/

@@ -303,17 +303,16 @@ class Subscriber extends BaseSubscriber
      */
     public function setValueOptionsMultiple(ManipulateWidgetEvent $event)
     {
-        $metaModel = $this->getMetaModel($event->getEnvironment());
-        $attribute = $metaModel->getAttributeById($event->getModel()->getProperty('attr_id'));
-
-        if(!$attribute) {
+        if (!(($event->getEnvironment()->getDataDefinition()->getName() == 'tl_metamodel_dcasetting_condition')
+            && ($event->getProperty()->getName() == 'value')
+            && $event->getModel()->getProperty('type') == 'conditionpropertymultiplevalueis')) {
             return;
         }
 
-        if (!(($event->getEnvironment()->getDataDefinition()->getName() == 'tl_metamodel_dcasetting_condition')
-            && ($attribute->get('type') == 'tags')
-            && ($event->getProperty()->getName() == 'value')
-            && $event->getModel()->getProperty('type') == 'conditionpropertymultiplevalueis')) {
+        $metaModel = $this->getMetaModel($event->getEnvironment());
+        $attribute = $metaModel->getAttributeById($event->getModel()->getProperty('attr_id'));
+
+        if(!($attribute && ($attribute->get('type') == 'tags'))) {
             return;
         }
 
