@@ -284,10 +284,17 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
+
         $result    = array();
         $metaModel = $this->getMetaModel($event->getEnvironment());
+        $allowedAttributes = $GLOBALS['METAMODELS']['inputscreen_conditions'][$event->getModel()->getProperty('type')]['attributes'];
 
         foreach ($metaModel->getAttributes() as $attribute) {
+
+            if (!in_array($attribute->get('type'), $allowedAttributes) && is_array($allowedAttributes)) {
+               continue;
+            }
+
             $typeName              = $attribute->get('type');
             $strSelectVal          = $metaModel->getTableName() .'_' . $attribute->getColName();
             $result[$strSelectVal] = $attribute->getName() . ' [' . $typeName . ']';
