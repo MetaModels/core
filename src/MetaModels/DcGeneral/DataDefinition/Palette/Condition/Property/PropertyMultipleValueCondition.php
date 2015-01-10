@@ -148,7 +148,7 @@ class PropertyMultipleValueCondition implements PropertyConditionInterface
             return false;
         }
 
-        if (!$values) {
+        if (!$values || !is_array($values)) {
             return false;
         }
 
