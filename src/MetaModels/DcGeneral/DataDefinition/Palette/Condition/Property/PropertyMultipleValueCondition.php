@@ -2,10 +2,8 @@
 /**
  * PHP version 5
  *
- * @package    generalDriver
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @author     Tristan Lins <tristan.lins@bit3.de>
+ * @package    MetaModels
+ * @author     Christopher Boelter <christopher@boelter.eu>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -57,9 +55,9 @@ class PropertyMultipleValueCondition implements PropertyConditionInterface
      */
     public function __construct($propertyName = '', $propertyValue = null, $strict = false)
     {
-        $this->propertyName  = (string)$propertyName;
+        $this->propertyName  = (string) $propertyName;
         $this->propertyValue = $propertyValue;
-        $this->strict        = (bool)$strict;
+        $this->strict        = (bool) $strict;
     }
 
     /**
@@ -71,7 +69,7 @@ class PropertyMultipleValueCondition implements PropertyConditionInterface
      */
     public function setPropertyName($propertyName)
     {
-        $this->propertyName = (string)$propertyName;
+        $this->propertyName = (string) $propertyName;
         return $this;
     }
 
@@ -117,7 +115,7 @@ class PropertyMultipleValueCondition implements PropertyConditionInterface
      */
     public function setStrict($strict)
     {
-        $this->strict = (bool)$strict;
+        $this->strict = (bool) $strict;
         return $this;
     }
 
@@ -150,12 +148,12 @@ class PropertyMultipleValueCondition implements PropertyConditionInterface
             return false;
         }
 
-        if(!$values) {
+        if (!$values) {
             return false;
         }
 
-        foreach($values as $value) {
-            if(in_array($value, $this->propertyValue, $this->strict)) {
+        foreach ($values as $value) {
+            if (in_array($value, $this->propertyValue, $this->strict)) {
                 return true;
             }
         }

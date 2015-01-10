@@ -166,7 +166,8 @@ class Subscriber extends BaseSubscriber
         $metaModels     = $this->getMetaModel($environment);
         $attribute      = $metaModels->getAttributeById($model->getProperty('attr_id'));
         $type           = $model->getProperty('type');
-        $parameterValue = (is_array($model->getProperty('value')) ? implode(', ', $model->getProperty('value')) : $model->getProperty('value'));
+        $parameterValue = (is_array($model->getProperty('value')) ? implode(', ', $model->getProperty('value'))
+            : $model->getProperty('value'));
         $name           = $translator->translate('conditionnames.' . $type, 'tl_metamodel_dcasetting_condition');
 
         $image = $GLOBALS['METAMODELS']['attributes'][$type]['image'];
@@ -313,7 +314,7 @@ class Subscriber extends BaseSubscriber
         $metaModel = $this->getMetaModel($event->getEnvironment());
         $attribute = $metaModel->getAttributeById($event->getModel()->getProperty('attr_id'));
 
-        if(!($attribute && ($attribute->get('type') == 'tags'))) {
+        if (!($attribute && ($attribute->get('type') == 'tags'))) {
             return;
         }
 
@@ -423,10 +424,10 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        if(is_array($event->getValue())) {
+        if (is_array($event->getValue())) {
             $values = array();
 
-            foreach($event->getValue() as $value) {
+            foreach ($event->getValue() as $value) {
                 $values[] = 'value_' . $value;
             }
 
@@ -451,10 +452,10 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        if(is_array($event->getValue())) {
+        if (is_array($event->getValue())) {
             $values = array();
 
-            foreach($event->getValue() as $value) {
+            foreach ($event->getValue() as $value) {
                 $values[] = substr($value, 6);
             }
 
