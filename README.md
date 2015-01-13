@@ -44,8 +44,8 @@ http://now.metamodel.me/
 Docs:
 -----------
 
-[The official MetaModel Documentation (en)](http://metamodels.readthedocs.org/en/latest/index.html)
-[The official MetaModel Documentation - feel free to contribute!](https://github.com/MetaModels/docs)
+* [The official MetaModel Documentation (en)](http://metamodels.readthedocs.org/en/latest/index.html)
+* [The official MetaModel Documentation - feel free to contribute!](https://github.com/MetaModels/docs)
 
 Ressources:
 -----------
