@@ -12,7 +12,7 @@ Team member
 * Andreas Isaak <please.andi@metamodel.me>
 * Stefan Heimes <heimes@men-at-work.de>
 * Christian de la Haye <service@delahaye.de>
-
+* Tim Becker <tim@westwerk.ac>
 
 Official contributors
 ---------------------
@@ -21,5 +21,6 @@ Official contributors
 * Oliver Hoff <oliver@hofff.com>
 * Carolina M. Koehn <office@kikmedia.de>
 * Stefan Lindecke <hallo@lindesbs.de>
+* Christopher Bölter <c.boelter@cogizz.de>
 
 If you think your name is missing here, please file an issue.
