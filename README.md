@@ -21,14 +21,6 @@ As the catalog extension was growing too complex too maintain and most support f
 As development did go on nicely, we realized that an easy migration from Catalog to the new version will not very likely be possible both in implementation and learning curve but that this will be a very own and unique extension reensembling only of the name with it's ancestor.
 Therefore we rebranded everything as "MetaModels".
 
-
-Known limitations:
-------------------
-
-* We have only a German manual so far. Bummer! :/
-* We have not tested it all yet, so please give it a try yourself.
-
-
 How to use it.
 --------------
 
@@ -48,6 +40,12 @@ If you do not need all attributes & filters, feel free to just install the core 
 Use the nightly package from our project website:
 
 http://now.metamodel.me/
+
+Docs:
+-----------
+
+[The official MetaModel Documentation (en)](http://metamodels.readthedocs.org/en/latest/index.html)
+[The official MetaModel Documentation - feel free to contribute!](https://github.com/MetaModels/docs)
 
 Ressources:
 -----------
