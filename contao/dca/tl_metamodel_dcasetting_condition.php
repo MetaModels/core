@@ -137,7 +137,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
         'sorting'           => array
         (
             'mode'         => 5,
-            'fields'       => array('attr_id'),
+            'fields'       => array('sorting'),
             'headerFields' => array
             (
                 'type',
