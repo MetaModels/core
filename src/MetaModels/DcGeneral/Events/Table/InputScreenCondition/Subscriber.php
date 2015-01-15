@@ -364,7 +364,7 @@ class Subscriber extends BaseSubscriber
         }
 
         $model     = $event->getModel();
-        $metaModel = self::getMetaModel($event->getEnvironment());
+        $metaModel = $this->getMetaModel($event->getEnvironment());
         $attribute = $metaModel->getAttributeById($model->getProperty('attr_id'));
 
         if ($attribute) {
