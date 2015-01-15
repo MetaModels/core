@@ -115,12 +115,12 @@ abstract class FilterSettingTypeRenderer
      */
     protected function getLabelImage(ModelInterface $model)
     {
-        $image = $this
+        $typeFactory = $this
             ->getServiceContainer()
             ->getFilterFactory()
-            ->getTypeFactory($model->getProperty('type'))
-            ->getTypeIcon();
+            ->getTypeFactory($model->getProperty('type'));
 
+        $image = $typeFactory ? $typeFactory->getTypeIcon() : null;
         if (!$image || !file_exists(TL_ROOT . '/' . $image)) {
             $image = 'system/modules/metamodels/assets/images/icons/filter_default.png';
         }
