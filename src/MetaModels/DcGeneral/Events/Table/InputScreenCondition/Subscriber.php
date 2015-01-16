@@ -285,9 +285,10 @@ class Subscriber extends BaseSubscriber
         }
 
 
-        $result    = array();
-        $metaModel = $this->getMetaModel($event->getEnvironment());
-        $allowedAttributes = $GLOBALS['METAMODELS']['inputscreen_conditions'][$event->getModel()->getProperty('type')]['attributes'];
+        $result            = array();
+        $metaModel         = $this->getMetaModel($event->getEnvironment());
+        $allowedAttributes =
+            $GLOBALS['METAMODELS']['inputscreen_conditions'][$event->getModel()->getProperty('type')]['attributes'];
 
         foreach ($metaModel->getAttributes() as $attribute) {
 
