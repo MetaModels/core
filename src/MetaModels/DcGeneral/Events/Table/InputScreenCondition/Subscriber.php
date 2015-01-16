@@ -314,7 +314,7 @@ class Subscriber extends BaseSubscriber
     {
         if (!(($event->getEnvironment()->getDataDefinition()->getName() == 'tl_metamodel_dcasetting_condition')
             && ($event->getProperty()->getName() == 'value')
-            && $event->getModel()->getProperty('type') == 'conditionpropertymultiplevalueis')) {
+            && $event->getModel()->getProperty('type') == 'conditionpropertycontainanyof')) {
             return;
         }
 

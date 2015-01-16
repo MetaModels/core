@@ -13,7 +13,6 @@
  * @author     Andreas Isaak <info@andreas-isaak.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @author     Christopher Boelter <christopher@boelter.eu>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -138,7 +137,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
         'sorting'           => array
         (
             'mode'         => 5,
-            'fields'       => array('attr_id'),
+            'fields'       => array('sorting'),
             'headerFields' => array
             (
                 'type',
@@ -244,13 +243,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
         (
         ),
         'conditionpropertyvalueis extends _attribute_' => array
-        (
-            '+config' => array
-            (
-                'value'
-            )
-        ),
-        'conditionpropertymultiplevalueis extends _attribute_' => array
         (
             '+config' => array
             (

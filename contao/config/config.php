@@ -15,7 +15,6 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Tim Becker <tim@westwerk.ac>
  * @author     Tim Gatzky <info@tim-gatzky.de>
- * @author     Christopher Boelter <christopher@boelter.eu>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -63,25 +62,12 @@ array_insert(
     )
 );
 
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionor']['nestingAllowed']                      = true;
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionand']['nestingAllowed']                     = true;
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvalueis']['nestingAllowed']         = false;
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvalueis']['attributes'][]           = 'select';
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvalueis']['attributes'][]           =
-    'translatedselect';
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvalueis']['attributes'][]           = 'checkbox';
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvalueis']['attributes'][]           =
-    'translatedcheckbox';
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertymultiplevalueis']['nestingAllowed'] = false;
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertymultiplevalueis']['attributes'][]   = 'tags';
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertymultiplevalueis']['attributes'][]   =
-    'translatedtags';
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvisible']['nestingAllowed']         = false;
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvisible']['attributes'][]           = 'checkbox';
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvisible']['attributes'][]           =
-    'translatedcheckbox';
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionnot']['nestingAllowed']                     = true;
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionnot']['maxChildren']                        = 1;
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionor']['nestingAllowed']              = true;
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionand']['nestingAllowed']             = true;
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvalueis']['nestingAllowed'] = false;
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvisible']['nestingAllowed'] = false;
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionnot']['nestingAllowed']             = true;
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionnot']['maxChildren']                = 1;
 
 /*
     All system columns that always are defined in a MetaModel table and are not attributes.

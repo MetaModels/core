@@ -42,12 +42,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show']       = array('
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['addall']     = array('Add all', 'Add all attributes to input screen');
 
 // filter condition names.
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionor']                      = 'OR';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionand']                     = 'AND';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionpropertyvalueis']         = 'Property value is';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionpropertymultiplevalueis'] = 'Property values are';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionpropertyvisible']         = 'Property is visible';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionnot']                     = 'Not';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionor']              = 'OR';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionand']             = 'AND';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionpropertyvalueis'] = 'Property value is';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionpropertyvisible'] = 'Property is visible';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionnot']             = 'Not';
 
 /**
  * Reference
