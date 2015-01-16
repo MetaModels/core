@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/MetaModels/core.png?branch=tng)](https://travis-ci.org/MetaModels/core)
+[![Dependency Status](https://www.versioneye.com/user/projects/54b90e4f8d55087422000002/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54b90e4f8d55087422000002)
 
 MetaModels
 ==========
