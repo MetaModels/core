@@ -9,6 +9,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Christopher Boelter <christopher@boelter.eu>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -22,6 +23,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyVisibleCondition;
+use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyContainAnyOfCondition;
 
 /**
  * This class creates the default instances for property conditions when generating input screens.
@@ -68,6 +70,22 @@ class DefaultPropertyConditionCreator
                 $event->setInstance(new PropertyValueCondition(
                     $attribute->getColName(),
                     $meta['value']
+                ));
+                break;
+            case 'conditionpropertycontainanyof':
+                $attribute = $metaModel->getAttributeById($meta['attr_id']);
+
+                if (!$attribute) {
+                    throw new \RuntimeException(sprintf(
+                        'Could not retrieve attribute %s from MetaModel %s.',
+                        $meta['attr_id'],
+                        $metaModel->getTableName()
+                    ));
+                }
+
+                $event->setInstance(new PropertyContainAnyOfCondition(
+                    $attribute->getColName(),
+                    deserialize($meta['value'])
                 ));
                 break;
             case 'conditionpropertyvisible':

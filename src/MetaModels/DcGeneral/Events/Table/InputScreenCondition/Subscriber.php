@@ -10,6 +10,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Christopher Boelter <christopher@boelter.eu>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -25,6 +26,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBr
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\Translator\TranslatorInterface;
@@ -72,6 +74,10 @@ class Subscriber extends BaseSubscriber
             ->addListener(
                 GetPropertyOptionsEvent::NAME,
                 array($this, 'getAttributeOptions')
+            )
+            ->addListener(
+                ManipulateWidgetEvent::NAME,
+                array($this, 'setValueOptionsMultiple')
             )
             ->addListener(
                 DecodePropertyValueForWidgetEvent::NAME,
@@ -160,7 +166,8 @@ class Subscriber extends BaseSubscriber
         $metaModels     = $this->getMetaModel($environment);
         $attribute      = $metaModels->getAttributeById($model->getProperty('attr_id'));
         $type           = $model->getProperty('type');
-        $parameterValue = $model->getProperty('value');
+        $parameterValue = (is_array($model->getProperty('value')) ? implode(', ', $model->getProperty('value'))
+            : $model->getProperty('value'));
         $name           = $translator->translate('conditionnames.' . $type, 'tl_metamodel_dcasetting_condition');
 
         $image = $GLOBALS['METAMODELS']['attributes'][$type]['image'];
@@ -277,16 +284,49 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        $result    = array();
-        $metaModel = $this->getMetaModel($event->getEnvironment());
+
+        $result            = array();
+        $metaModel         = $this->getMetaModel($event->getEnvironment());
+        $allowedAttributes =
+            $GLOBALS['METAMODELS']['inputscreen_conditions'][$event->getModel()->getProperty('type')]['attributes'];
 
         foreach ($metaModel->getAttributes() as $attribute) {
+
+            if (!in_array($attribute->get('type'), $allowedAttributes) && is_array($allowedAttributes)) {
+               continue;
+            }
+
             $typeName              = $attribute->get('type');
             $strSelectVal          = $metaModel->getTableName() .'_' . $attribute->getColName();
             $result[$strSelectVal] = $attribute->getName() . ' [' . $typeName . ']';
         }
 
         $event->setOptions($result);
+    }
+
+    /**
+     * Set the the value select to multiple.
+     *
+     * @param ManipulateWidgetEvent $event The event.
+     *
+     * @return void
+     */
+    public function setValueOptionsMultiple(ManipulateWidgetEvent $event)
+    {
+        if (!(($event->getEnvironment()->getDataDefinition()->getName() == 'tl_metamodel_dcasetting_condition')
+            && ($event->getProperty()->getName() == 'value')
+            && $event->getModel()->getProperty('type') == 'conditionpropertycontainanyof')) {
+            return;
+        }
+
+        $metaModel = $this->getMetaModel($event->getEnvironment());
+        $attribute = $metaModel->getAttributeById($event->getModel()->getProperty('attr_id'));
+
+        if (!($attribute && ($attribute->get('type') == 'tags'))) {
+            return;
+        }
+
+        $event->getWidget()->multiple = true;
     }
 
     /**
@@ -392,7 +432,18 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        $event->setValue('value_' . $event->getValue());
+        if (is_array($event->getValue())) {
+            $values = array();
+
+            foreach ($event->getValue() as $value) {
+                $values[] = 'value_' . $value;
+            }
+
+            // Cut off the 'value_' prefix.
+            $event->setValue($values);
+        } else {
+            $event->setValue('value_' . $event->getValue());
+        }
     }
 
     /**
@@ -409,7 +460,18 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        // Cut off the 'value_' prefix.
-        $event->setValue(substr($event->getValue(), 6));
+        if (is_array($event->getValue())) {
+            $values = array();
+
+            foreach ($event->getValue() as $value) {
+                $values[] = substr($value, 6);
+            }
+
+            // Cut off the 'value_' prefix.
+            $event->setValue($values);
+        } else {
+            // Cut off the 'value_' prefix.
+            $event->setValue(substr($event->getValue(), 6));
+        }
     }
 }
