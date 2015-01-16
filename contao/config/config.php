@@ -121,13 +121,6 @@ $GLOBALS['TL_PURGE']['folders']['metamodels']['affected'][] = 'system/cache/meta
 $GLOBALS['TL_PURGE']['folders']['metamodels']['callback']   =
     array('MetaModels\BackendIntegration\PurgeCache', 'purge');
 
-// Dependencies we need.
-// Mapping: extension folder => ER name.
-$GLOBALS['METAMODELS']['dependencies']['metapalettes']      = 'MetaPalettes';
-$GLOBALS['METAMODELS']['dependencies']['multicolumnwizard'] = 'MultiColumnWizard';
-$GLOBALS['METAMODELS']['dependencies']['dc-general']        = 'DC_General';
-$GLOBALS['METAMODELS']['dependencies']['justtextwidgets']   = 'JustTextWidgets';
-
 // Meta Information.
 $GLOBALS['METAMODELS']['metainformation']['allowedTitle'][]       = 'text';
 $GLOBALS['METAMODELS']['metainformation']['allowedTitle'][]       = 'select';

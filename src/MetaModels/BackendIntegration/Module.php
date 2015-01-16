@@ -19,20 +19,14 @@
 
 namespace MetaModels\BackendIntegration;
 
-use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\AddToUrlEvent;
-use ContaoCommunityAlliance\Contao\Bindings\Events\System\GetReferrerEvent;
 use ContaoCommunityAlliance\DcGeneral\Action;
-use ContaoCommunityAlliance\Translator\Contao\LangArrayTranslator;
-use ContaoCommunityAlliance\Translator\TranslatorChain;
+use ContaoCommunityAlliance\DcGeneral\DataContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\Callback\Callbacks;
-use ContaoCommunityAlliance\DcGeneral\Event\EventPropagator;
-use ContaoCommunityAlliance\DcGeneral\Factory\DcGeneralFactory;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Implementation of the MetaModel Backend Module that performs system checks
- * before allowing access to MetaModel configuration etc. Everything below
+ * Implementation of the MetaModel Backend Module that allowing access to MetaModel configuration etc. Everything below
  * http://..../contao/main.php?do=metamodels&.... ends up here.
  *
  * @package    MetaModels
@@ -42,227 +36,20 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class Module
 {
     /**
-     * The template to use.
+     * The data container.
      *
-     * @var string
+     * @var DataContainerInterface
      */
-    protected $strTemplate = 'be_detectedproblems';
+    private $dataContainer;
 
     /**
-     * The current BackendTemplate instance.
+     * Create a new instance.
      *
-     * @var \BackendTemplate
+     * @param DataContainerInterface $dataContainer The data container.
      */
-    protected $template;
-
-    /**
-     * The message log.
-     *
-     * @var array
-     */
-    protected static $arrMessages = array();
-
-    /**
-     * Buffer a message in the stack.
-     *
-     * @param string $strOutput      The message to be displayed (HTML welcome).
-     *
-     * @param int    $intSeverity    May be METAMODELS_INFO, METAMODELS_WARN, METAMODELS_ERROR.
-     *
-     * @param string $strHelpfulLink The (backend)-link to some location to resolve the problem.
-     *
-     * @return void
-     */
-    public static function addMessageEntry($strOutput, $intSeverity = METAMODELS_INFO, $strHelpfulLink = '')
+    public function __construct(DataContainerInterface $dataContainer)
     {
-        self::$arrMessages[$intSeverity][] = array('message' => $strOutput, 'link' => $strHelpfulLink);
-    }
-
-    /**
-     * Add a suffix to the current url.
-     *
-     * @param string $suffix The suffix to add.
-     *
-     * @return string
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    public function addToUrl($suffix)
-    {
-        /** @var EventDispatcherInterface $dispatcher */
-        $dispatcher = $GLOBALS['container']['event-dispatcher'];
-        $event      = new AddToUrlEvent($suffix);
-
-        $dispatcher->dispatch(ContaoEvents::BACKEND_ADD_TO_URL, $event);
-
-        return $event->getUrl();
-    }
-
-    /**
-     * Ensure we have at least PHP 5.3.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    protected function checkPHPVersion()
-    {
-        if (version_compare(PHP_VERSION, '5.3') < 0) {
-            $this->addMessageEntry(
-                sprintf($GLOBALS['TL_LANG']['ERR']['upgrade_php_version'], '5.3', PHP_VERSION),
-                METAMODELS_ERROR,
-                'http://www.php.org/'
-            );
-        }
-    }
-
-    /**
-     * Check if all dependencies are present.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    protected function checkDependencies()
-    {
-        $arrActiveModules   = \Config::getInstance()->getActiveModules();
-        $arrInactiveModules = deserialize($GLOBALS['TL_CONFIG']['inactiveModules']);
-
-        // Check if all prerequsities are met.
-        foreach ($GLOBALS['METAMODELS']['dependencies'] as $strExtension => $strDisplay) {
-            if (!in_array($strExtension, $arrActiveModules)) {
-                if (is_array($arrInactiveModules) && in_array($strExtension, $arrInactiveModules)) {
-                    $this->addMessageEntry(
-                        sprintf($GLOBALS['TL_LANG']['ERR']['activate_extension'], $strDisplay, $strExtension),
-                        METAMODELS_ERROR,
-                        $this->addToUrl('do=settings')
-                    );
-                } else {
-                    $this->addMessageEntry(
-                        sprintf($GLOBALS['TL_LANG']['ERR']['install_extension'], $strDisplay, $strExtension),
-                        METAMODELS_ERROR,
-                        $this->addToUrl('do=repository_catalog&view=' . $strDisplay)
-                    );
-                }
-            }
-        }
-    }
-
-    /**
-     * Check if at least one attribute extension is installed and activated, if not display link to ER catalog.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    protected function hasAttributes()
-    {
-        if (!$GLOBALS['METAMODELS']['attributes']) {
-            $this->addMessageEntry(
-                $GLOBALS['TL_LANG']['ERR']['no_attribute_extension'],
-                METAMODELS_INFO,
-                $this->addToUrl('do=repository_catalog')
-            );
-        }
-    }
-
-    /**
-     * Check if user action is needed.
-     *
-     * @return bool
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    protected function needUserAction()
-    {
-        // Run the embedded methods now.
-        $this->checkPHPVersion();
-        $this->checkDependencies();
-        $this->hasAttributes();
-
-        if (!empty($GLOBALS['METAMODELS']['CHECK'])) {
-            // Loop through all metamodel backend checkers.
-            foreach ($GLOBALS['METAMODELS']['CHECK'] as $strClass) {
-                Callbacks::call(array($strClass, 'perform'), $this);
-            }
-        }
-        return count(self::$arrMessages) > 0;
-    }
-
-    /**
-     * Run the data container.
-     *
-     * @return string
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    protected function runDC()
-    {
-        /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
-        $dispatcher    = $GLOBALS['container']['event-dispatcher'];
-        $propagator    = new EventPropagator($dispatcher);
-        $translator    = new TranslatorChain();
-        $factory       = new DcGeneralFactory();
-        $backendModule = \Input::getInstance()->get('do');
-
-        $translator->add(new LangArrayTranslator($dispatcher));
-
-        $factory
-            ->setEventPropagator($propagator)
-            ->setTranslator($translator);
-
-        if ($backendModule == 'metamodels') {
-            $name = \Input::getInstance()->get('table');
-            if (!$name) {
-                $name = 'tl_metamodel';
-            }
-        } elseif (\Input::getInstance()->get('table')) {
-            $name = \Input::getInstance()->get('table');
-        } else {
-            $name = substr($backendModule, 10);
-        }
-
-        $dcg = $factory
-            ->setContainerName($name)
-            ->createDcGeneral();
-
-        $act = \Input::getInstance()->get('act');
-        if (!strlen($act)) {
-            $act = 'showAll';
-        }
-
-        return $dcg->getEnvironment()->getController()->handle(new Action($act));
-    }
-
-    /**
-     * Handler object for key operation.
-     *
-     * @var object
-     */
-    protected $objKeyHandler = null;
-
-    /**
-     * Perform the normal operation, no user action is required.
-     *
-     * @return string
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    protected function performNormal()
-    {
-        $arrModule = $GLOBALS['BE_MOD']['metamodels']['metamodels'];
-        // Custom action (if key is not defined in config.php the default action will be called).
-        if (\Input::getInstance()->get('key') && isset($arrModule[\Input::getInstance()->get('key')])) {
-            Callbacks::call($arrModule[\Input::getInstance()->get('key')], $this, $arrModule);
-        }
-        return $this->runDC();
+        $this->dataContainer = $dataContainer;
     }
 
     /**
@@ -276,32 +63,17 @@ class Module
     public function generate()
     {
         $GLOBALS['TL_CSS'][] = 'system/modules/metamodels/assets/css/style.css';
-        if ($this->needUserAction()) {
-            $this->template = new \BackendTemplate($this->strTemplate);
-            $this->compile();
-
-            return $this->template->parse();
+        $arrModule           = $GLOBALS['BE_MOD']['metamodels']['metamodels'];
+        // Custom action (if key is not defined in config.php the default action will be called).
+        if (\Input::get('key') && isset($arrModule[\Input::get('key')])) {
+            Callbacks::call($arrModule[\Input::get('key')], $this, $arrModule);
         }
-        return $this->performNormal();
-    }
 
-    /**
-     * Compile the current element.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    protected function compile()
-    {
-        /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
-        $dispatcher = $GLOBALS['container']['event-dispatcher'];
-        $event      = new GetReferrerEvent(true);
+        $act = \Input::get('act');
+        if (!strlen($act)) {
+            $act = 'showAll';
+        }
 
-        $dispatcher->dispatch(ContaoEvents::SYSTEM_GET_REFERRER, $event);
-
-        $this->template->href     = $event->getReferrerUrl();
-        $this->template->problems = self::$arrMessages;
+        return $this->dataContainer->getEnvironment()->getController()->handle(new Action($act));
     }
 }
