@@ -43,9 +43,9 @@ interface ITranslated extends IAttribute
     /**
      * Set a value for an item in a certain language.
      *
-     * @param mixed[int] $arrValues   The values to be set in id => value layout.
+     * @param mixed[] $arrValues   The values to be set in id => value layout.
      *
-     * @param string     $strLangCode The language code for which the data shall be retrieved.
+     * @param string  $strLangCode The language code for which the data shall be retrieved.
      *
      * @return void
      */
@@ -58,7 +58,7 @@ interface ITranslated extends IAttribute
      *
      * @param string $strLangCode The language code for which the data shall be retrieved.
      *
-     * @return mixed[int] the values.
+     * @return mixed[] the values.
      */
     public function getTranslatedDataFor($arrIds, $strLangCode);
 

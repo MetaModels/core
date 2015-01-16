@@ -52,34 +52,6 @@ class Factory extends AttributeFactory implements IFactory
 
     /**
      * {@inheritdoc}
-     */
-    public function collectAttributeInformation(IMetaModel $metaModel)
-    {
-        $event = new CollectMetaModelAttributeInformationEvent($metaModel);
-
-        $this->getEventDispatcher()->dispatch($event::NAME, $event);
-
-        return $event->getAttributeInformation();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createAttributesForMetaModel($metaModel)
-    {
-        $attributes = array();
-        foreach ($this->collectAttributeInformation($metaModel) as $information) {
-            $attribute = $this->createAttribute($information, $metaModel);
-            if ($attribute) {
-                $attributes[] = $attribute;
-            }
-        }
-
-        return $attributes;
-    }
-
-    /**
-     * {@inheritdoc}
      *
      * @deprecated Use an instance of the factory and method createAttribute().
      */

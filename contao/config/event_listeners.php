@@ -33,38 +33,26 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 return array(
     MetaModelsEvents::SUBSYSTEM_BOOT => array(
-        function (
-            MetaModelsBootEvent $event,
-            $eventName,
-            EventDispatcherInterface $dispatcher
-        ) {
+        function (MetaModelsBootEvent $event) {
             $handler = new DatabaseBackedListener();
-            $handler->handleEvent($event, $eventName, $dispatcher);
+            $handler->handleEvent($event);
         }
     ),
     MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND => array(
-        function (
-            MetaModelsBootEvent $event,
-            $eventName,
-            EventDispatcherInterface $dispatcher
-        ) {
+        function (MetaModelsBootEvent $event) {
             $handler = new MetaModels\FrontendIntegration\Boot();
-            $handler->perform($event, $eventName, $dispatcher);
+            $handler->perform($event);
         }
     ),
     MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND => array(
-        function (
-            MetaModelsBootEvent $event,
-            $eventName,
-            EventDispatcherInterface $dispatcher
-        ) {
+        function (MetaModelsBootEvent $event, $eventName, $dispatcher) {
             $dispatcher->addListener(
                 CreatePropertyConditionEvent::NAME,
                 array(new DefaultPropertyConditionCreator(), 'handle')
             );
-            
+
             $handler = new MetaModels\BackendIntegration\Boot();
-            $handler->perform($event, $eventName, $dispatcher);
+            $handler->perform($event);
             new FilterSettingTypeRendererCore($event->getServiceContainer());
         }
     ),

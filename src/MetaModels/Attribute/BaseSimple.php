@@ -63,7 +63,7 @@ class BaseSimple extends Base implements ISimple
     /**
      * This method is called to store the data for certain items to the database.
      *
-     * @param mixed[int] $arrValues The values to be stored into database. Mapping is item id=>value.
+     * @param mixed $arrValues The values to be stored into database. Mapping is item id=>value.
      *
      * @return void
      */
@@ -186,7 +186,7 @@ class BaseSimple extends Base implements ISimple
                     $this->getColName()
                 )
             )
-            ->executeUncached(str_replace(array('*', '?'), array('%', '_'), $strPattern));
+            ->execute(str_replace(array('*', '?'), array('%', '_'), $strPattern));
 
         $arrIds = $objQuery->fetchEach('id');
         return $arrIds;

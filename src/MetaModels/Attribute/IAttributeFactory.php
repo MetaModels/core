@@ -73,7 +73,7 @@ interface IAttributeFactory extends IServiceContainerAware
      *
      * @param IAttributeTypeFactory $typeFactory The type factory to add.
      *
-     * @return IFactory
+     * @return IAttributeTypeFactory
      */
     public function addTypeFactory(IAttributeTypeFactory $typeFactory);
 
