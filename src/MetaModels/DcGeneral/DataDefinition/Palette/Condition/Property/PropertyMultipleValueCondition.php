@@ -20,7 +20,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
 /**
  * Condition checking that the value of a property is the same as a passed value.
  */
-class PropertyContainAnyOfCondition implements PropertyConditionInterface
+class PropertyMultipleValueCondition implements PropertyConditionInterface
 {
 
     /**

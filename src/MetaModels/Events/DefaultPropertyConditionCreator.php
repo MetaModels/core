@@ -23,7 +23,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyVisibleCondition;
-use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyContainAnyOfCondition;
+use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyMultipleValueCondition;
 
 /**
  * This class creates the default instances for property conditions when generating input screens.
@@ -72,7 +72,7 @@ class DefaultPropertyConditionCreator
                     $meta['value']
                 ));
                 break;
-            case 'conditionpropertycontainanyof':
+            case 'conditionpropertymultiplevalueis':
                 $attribute = $metaModel->getAttributeById($meta['attr_id']);
 
                 if (!$attribute) {
@@ -83,7 +83,7 @@ class DefaultPropertyConditionCreator
                     ));
                 }
 
-                $event->setInstance(new PropertyContainAnyOfCondition(
+                $event->setInstance(new PropertyMultipleValueCondition(
                     $attribute->getColName(),
                     deserialize($meta['value'])
                 ));

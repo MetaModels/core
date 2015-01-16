@@ -8,8 +8,9 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-05-22T12:13:44+02:00
+ * last-updated: 2013-05-13T06:40:07+02:00
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_item']['copy']['0']          = 'Копировать элемент';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['copy']['1']          = 'Копировать элемент ID %s';
@@ -24,7 +25,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['edit']['1']          = 'Редакти
 $GLOBALS['TL_LANG']['tl_metamodel_item']['editheader']['0']    = 'Редактировать тип элемента';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['editheader']['1']    = 'Редактировать тип элемента';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['fields']['0']        = 'Управление атрибутами';
-$GLOBALS['TL_LANG']['tl_metamodel_item']['fields']['1']        = 'Управление атрибутами MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['new']['0']           = 'Новый элемент';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['new']['1']           = 'Создать новый элемент';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']['0']      = 'Создать новый элемент';
@@ -32,5 +32,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']['1']      = 'Создайт
 $GLOBALS['TL_LANG']['tl_metamodel_item']['show']['0']          = 'Детали элемента';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['show']['1']          = 'Показать детали элемента ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['varbase']['0']       = 'Это базовый вариант';
-$GLOBALS['TL_LANG']['tl_metamodel_item']['varbase']['1']       = 'Выберите, если хотите, создать базу для текущего варианта группы';
 
