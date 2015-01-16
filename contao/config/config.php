@@ -72,9 +72,9 @@ $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvalueis']['at
 $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvalueis']['attributes'][]           = 'checkbox';
 $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvalueis']['attributes'][]           =
     'translatedcheckbox';
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertymultiplevalueis']['nestingAllowed'] = false;
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertymultiplevalueis']['attributes'][]   = 'tags';
-$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertymultiplevalueis']['attributes'][]   =
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertycontainanyof']['nestingAllowed'] = false;
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertycontainanyof']['attributes'][]   = 'tags';
+$GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertycontainanyof']['attributes'][]   =
     'translatedtags';
 $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvisible']['nestingAllowed']         = false;
 $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvisible']['attributes'][]           = 'checkbox';
