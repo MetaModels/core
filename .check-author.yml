@@ -19,6 +19,8 @@ mapping:
     - "cboelter <christopher@boelter.eu>"
     - "Christopher Boelter <c.boelter@cogizz.de>"
   "Martin Treml <github@r2pi.net>": "MrTool <github@r2pi.net>"
+  "Zeromax <zero@brothers-project.de>": "Andreas Nölke <zero@brothers-project.de>"
 
 copy-left:
-  "Christoph Wiechert <christoph.wiechert@4wardmedia.de>": popup.php
+  "Christoph Wiechert <christoph.wiechert@4wardmedia.de>": MetaModels/Widgets/PickerWidget.php
+  "Andreas Nölke <zero@brothers-project.de>": MetaModels/Widgets/PickerWidget.php
