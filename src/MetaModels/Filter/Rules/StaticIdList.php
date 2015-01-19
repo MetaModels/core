@@ -40,7 +40,7 @@ class StaticIdList extends FilterRule
     /**
      * Create a new FilterRule instance.
      *
-     * @param int[] $arrIds Static list of ids that shall be returned as matches.
+     * @param int[]|null $arrIds Static list of ids that shall be returned as matches.
      */
     public function __construct($arrIds)
     {
