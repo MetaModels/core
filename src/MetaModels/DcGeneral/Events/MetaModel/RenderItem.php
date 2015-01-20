@@ -140,6 +140,17 @@ class RenderItem
         }
 
         $result = $nativeItem->parseAttribute($event->getProperty()->getName(), 'text', $renderSetting);
+
+        if (!isset($result['text'])) {
+            $event->setRendered(
+                sprintf(
+                    'Unexpected behaviour, attribute %s text representation was not rendered.',
+                    $event->getProperty()->getName()
+                )
+            );
+            return;
+        }
+
         $event->setRendered($result['text']);
     }
 
