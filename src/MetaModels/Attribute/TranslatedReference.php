@@ -170,11 +170,13 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     }
 
     /**
-     * {@inheritDoc}
+     * Determine the available languages.
+     *
+     * @return null|\string[]
      *
      * @throws \RuntimeException When an untranslated MetaModel is encountered.
      */
-    public function setDataFor($arrValues)
+    private function determineLanguages()
     {
         $languages = $this->getMetaModel()->getAvailableLanguages();
         if ($languages === null) {
@@ -182,27 +184,25 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
                 'MetaModel ' . $this->getMetaModel()->getName() . ' does not seem to be translated.'
             );
         }
+        return $languages;
+    }
 
-        foreach ($languages as $strLangCode) {
+    /**
+     * {@inheritDoc}
+     */
+    public function setDataFor($arrValues)
+    {
+        foreach ($this->determineLanguages() as $strLangCode) {
             $this->setTranslatedDataFor($arrValues, $strLangCode);
         }
     }
 
     /**
      * {@inheritDoc}
-     *
-     * @throws \RuntimeException When an untranslated MetaModel is encountered.
      */
     public function unsetDataFor($arrIds)
     {
-        $languages = $this->getMetaModel()->getAvailableLanguages();
-        if ($languages === null) {
-            throw new \RuntimeException(
-                'MetaModel ' . $this->getMetaModel()->getName() . ' does not seem to be translated.'
-            );
-        }
-
-        foreach ($languages as $strLangCode) {
+        foreach ($this->determineLanguages() as $strLangCode) {
             $this->unsetValueFor($arrIds, $strLangCode);
         }
     }

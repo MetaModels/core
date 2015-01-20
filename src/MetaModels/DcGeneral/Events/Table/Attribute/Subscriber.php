@@ -23,6 +23,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Encod
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PreDeleteModelEvent;
 use MetaModels\Attribute\IAttribute;
@@ -31,6 +32,7 @@ use MetaModels\Dca\Helper;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbAttributes;
 use MetaModels\Helper\TableManipulation;
+use MetaModels\IMetaModel;
 
 /**
  * Handles event operations on tl_metamodel_attribute.
@@ -103,6 +105,26 @@ class Subscriber extends BaseSubscriber
     }
 
     /**
+     * Get the MetaModel instance referenced in the pid property of the Model.
+     *
+     * @param ModelInterface $model The model.
+     *
+     * @return IMetaModel
+     *
+     * @throws \InvalidArgumentException When the MetaModel could not be retrieved.
+     */
+    private function getMetaModelByModelPid($model)
+    {
+        $metaModel = $this->getMetaModelById($model->getProperty('pid'));
+
+        if ($metaModel === null) {
+            throw new \InvalidArgumentException('Could not retrieve MetaModel ' . $model->getProperty('pid'));
+        }
+
+        return $metaModel;
+    }
+
+    /**
      * Draw the attribute in the backend listing.
      *
      * @param ModelToLabelEvent $event The event.
@@ -115,19 +137,12 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        $services     = $this->getServiceContainer();
-        $factory      = $services->getAttributeFactory();
-        $modelFactory = $services->getFactory();
-        $model        = $event->getModel();
-        $type         = $model->getProperty('type');
-        $image        = '<img src="' . $factory->getIconForType($type) . '" />';
-        $metaModel    = $modelFactory->getMetaModel(
-            $modelFactory->translateIdToMetaModelName($model->getProperty('pid'))
-        );
-
-        if ($metaModel === null) {
-            throw new \InvalidArgumentException('Could not retrieve MetaModel ' . $model->getProperty('pid'));
-        }
+        $services  = $this->getServiceContainer();
+        $factory   = $services->getAttributeFactory();
+        $model     = $event->getModel();
+        $type      = $model->getProperty('type');
+        $image     = '<img src="' . $factory->getIconForType($type) . '" />';
+        $metaModel = $this->getMetaModelByModelPid($model);
 
         $attribute = $factory->createAttribute($model->getPropertiesAsArray(), $metaModel);
 
@@ -199,10 +214,9 @@ class Subscriber extends BaseSubscriber
         $services         = $this->getServiceContainer();
         $translator       = $event->getEnvironment()->getTranslator();
         $attributeFactory = $services->getAttributeFactory();
-        $modelFactory     = $services->getFactory();
-        $metaModelName    = $modelFactory->translateIdToMetaModelName($event->getModel()->getProperty('pid'));
-        $objMetaModel     = $modelFactory->getMetaModel($metaModelName);
+        $objMetaModel     = $this->getMetaModelByModelPid($event->getModel());
         $flags            = IAttributeFactory::FLAG_ALL_UNTRANSLATED;
+
         if ($objMetaModel->isTranslated()) {
             $flags |= IAttributeFactory::FLAG_INCLUDE_TRANSLATED;
         }
@@ -231,18 +245,10 @@ class Subscriber extends BaseSubscriber
      * @param DecodePropertyValueForWidgetEvent $event The event.
      *
      * @return void
-     *
-     * @throws \InvalidArgumentException When the MetaModel could not be retrieved.
      */
     protected function decodeValue(DecodePropertyValueForWidgetEvent $event)
     {
-        $metaModel = $this->getMetaModelById($event->getModel()->getProperty('pid'));
-
-        if ($metaModel === null) {
-            throw new \InvalidArgumentException(
-                'Could not retrieve MetaModel ' . $event->getModel()->getProperty('pid')
-            );
-        }
+        $metaModel = $this->getMetaModelByModelPid($event->getModel());
 
         $values = Helper::decodeLangArray($event->getValue(), $metaModel);
 
@@ -255,18 +261,10 @@ class Subscriber extends BaseSubscriber
      * @param EncodePropertyValueFromWidgetEvent $event The event.
      *
      * @return void
-     *
-     * @throws \InvalidArgumentException When the MetaModel could not be retrieved.
      */
     protected function encodeValue(EncodePropertyValueFromWidgetEvent $event)
     {
-        $metaModel = $this->getMetaModelById($event->getModel()->getProperty('pid'));
-
-        if ($metaModel === null) {
-            throw new \InvalidArgumentException(
-                'Could not retrieve MetaModel ' . $event->getModel()->getProperty('pid')
-            );
-        }
+        $metaModel = $this->getMetaModelByModelPid($event->getModel());
 
         $values = Helper::encodeLangArray($event->getValue(), $metaModel);
 
@@ -279,18 +277,10 @@ class Subscriber extends BaseSubscriber
      * @param BuildWidgetEvent $event The event.
      *
      * @return void
-     *
-     * @throws \InvalidArgumentException When the MetaModel could not be retrieved.
      */
     protected function buildWidget(BuildWidgetEvent $event)
     {
-        $metaModel = $this->getMetaModelById($event->getModel()->getProperty('pid'));
-
-        if ($metaModel === null) {
-            throw new \InvalidArgumentException(
-                'Could not retrieve MetaModel ' . $event->getModel()->getProperty('pid')
-            );
-        }
+        $metaModel = $this->getMetaModelByModelPid($event->getModel()->getProperty('pid'));
 
         Helper::prepareLanguageAwareWidget(
             $event->getEnvironment(),
@@ -423,7 +413,7 @@ class Subscriber extends BaseSubscriber
 
         $oldColumnName = $event->getModel()->getProperty($event->getProperty());
         $columnName    = $event->getValue();
-        $metaModel     = $this->getMetaModelById($event->getModel()->getProperty('pid'));
+        $metaModel     = $this->getMetaModelByModelPid($event->getModel());
 
         if ((!$columnName) || $oldColumnName !== $columnName) {
             TableManipulation::checkColumnDoesNotExist($metaModel->getTableName(), $columnName);
@@ -477,14 +467,10 @@ class Subscriber extends BaseSubscriber
 
         $services         = $this->getServiceContainer();
         $attributeFactory = $services->getAttributeFactory();
-        $modelFactory     = $services->getFactory();
-        $name             = $modelFactory->translateIdToMetaModelName($information['pid']);
-        $metaModel        = $modelFactory->getMetaModel($name);
+        $metaModel        = $this->getMetaModelById($information['pid']);
 
         if ($metaModel === null) {
-            throw new \InvalidArgumentException(
-                'Could not retrieve MetaModel ' . $information['pid']
-            );
+            throw new \InvalidArgumentException('Could not retrieve MetaModel ' . $information['pid']);
         }
 
         return $attributeFactory->createAttribute($information, $metaModel);

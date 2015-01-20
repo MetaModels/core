@@ -105,8 +105,6 @@ class BaseSubscriber
      * @param int $modelId The model being processed.
      *
      * @return IMetaModel
-     *
-     * @throws DcGeneralInvalidArgumentException When an invalid model has been passed.
      */
     protected function getMetaModelById($modelId)
     {
