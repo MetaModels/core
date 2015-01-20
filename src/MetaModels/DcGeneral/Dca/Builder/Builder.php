@@ -860,7 +860,7 @@ class Builder
                     'source'            => $container->getName(),
                     'service-container' => $this->serviceContainer
                 ))
-                ->isVersioningEnabled(false);
+                ->setVersioningEnabled(false);
             $container->getBasicDefinition()->setDataProvider($container->getName());
         }
 
