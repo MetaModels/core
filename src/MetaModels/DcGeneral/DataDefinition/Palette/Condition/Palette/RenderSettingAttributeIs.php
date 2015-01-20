@@ -19,12 +19,12 @@ namespace MetaModels\DcGeneral\DataDefinition\Palette\Condition\Palette;
 
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBag;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Palette\PaletteConditionInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Palette\AbstractWeightAwarePaletteCondition;
 
 /**
  * Condition for the default palette.
  */
-class RenderSettingAttributeIs implements PaletteConditionInterface
+class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
 {
     /**
      * The expected property value.
@@ -44,10 +44,13 @@ class RenderSettingAttributeIs implements PaletteConditionInterface
      * Create a new instance.
      *
      * @param string $attributeType The attribute type name.
+     *
+     * @param int    $weight        The weight of this condition to apply.
      */
-    public function __construct($attributeType)
+    public function __construct($attributeType, $weight = 1)
     {
         $this->attributeType = $attributeType;
+        $this->setWeight($weight);
     }
 
     /**
@@ -87,7 +90,7 @@ class RenderSettingAttributeIs implements PaletteConditionInterface
             self::$attributeTypes[$value] = \Database::getInstance()
                 ->prepare('SELECT type FROM tl_metamodel_attribute WHERE id=?')
                 ->limit(1)
-                ->executeUncached($value)
+                ->execute($value)
                 ->type;
         }
         return self::$attributeTypes[$value];
@@ -103,10 +106,10 @@ class RenderSettingAttributeIs implements PaletteConditionInterface
         } elseif ($model) {
             $value = $model->getProperty('attr_id');
         } else {
-            return false;
+            return 0;
         }
 
-        return $this->getTypeOfAttribute($value) == $this->getAttributeType();
+        return $this->getTypeOfAttribute($value) == $this->getAttributeType() ? $this->getWeight() : 0;
     }
 
     /**
