@@ -433,7 +433,7 @@ class ToolboxFile
                 'size'     => $objFile->filesize,
                 'sizetext' => sprintf(
                     '(%s)',
-                    \MetaModels\Helper\ContaoController::getInstance()->getReadableSize($objFile->filesize, 2)
+                    \Controller::getReadableSize($objFile->filesize, 2)
                 ),
                 'url'      => specialchars($this->getDownloadLink($strFile))
             );
@@ -651,9 +651,9 @@ class ToolboxFile
         // TODO: check if downloading is allowed and send file to browser then
         // See https://github.com/MetaModels/attribute_file/issues/6 for details of how to implement this.
         if ((!$this->getShowImages())
-            && ($strFile = \Input::getInstance()->get('file')) && in_array($strFile, $this->foundFiles)
+            && ($strFile = \Input::get('file')) && in_array($strFile, $this->foundFiles)
         ) {
-            \MetaModels\Helper\ContaoController::getInstance()->sendFileToBrowser($strFile);
+            \Controller::sendFileToBrowser($strFile);
         }
 
         // Step 2.: Fetch all meta data for the found files.
