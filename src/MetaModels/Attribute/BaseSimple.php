@@ -82,38 +82,21 @@ class BaseSimple extends Base implements ISimple
     }
 
     /**
-     * Retrieve the filter options of this attribute.
-     *
-     * Retrieve values for use in filter options, that will be understood by DC_ filter
-     * panels and frontend filter select boxes.
-     * One can influence the amount of returned entries with the two parameters.
-     * For the id list, the value "null" represents (as everywhere in MetaModels) all entries.
-     * An empty array will return no entries at all.
-     * The parameter "used only" determines, if only really attached values shall be returned.
-     * This is only relevant, when using "null" as id list for attributes that have pre configured
-     * values like select lists and tags i.e.
-     *
-     * @param array $idList   The ids of items that the values shall be fetched from.
-     *
-     * @param bool  $usedOnly Determines if only "used" values shall be returned.
-     *
-     * @param null  $arrCount By default null, pass an array to get the count of items per option for each id.
-     *
-     * @return array All options matching the given conditions as name => value.
+     * {@inheritDoc}
      */
     public function getFilterOptions($idList, $usedOnly, &$arrCount = null)
     {
         $strCol = $this->getColName();
         if ($idList) {
-            // Ensure proper integer ids for SQL injection safety reasons.
-            $strIdList = implode(',', array_map('intval', $idList));
-            $objRow    = $this->getMetaModel()->getServiceContainer()->getDatabase()->execute(
-                'SELECT ' . $strCol . ', COUNT(' . $strCol . ') as mm_count
-                FROM ' . $this->getMetaModel()->getTableName() .
-                ' WHERE id IN (' . $strIdList . ')
-                GROUP BY ' . $strCol . '
-                ORDER BY FIELD(id,' . $strIdList . ')'
-            );
+            $objRow = $this->getMetaModel()->getServiceContainer()->getDatabase()
+                ->prepare(
+                    'SELECT ' . $strCol . ', COUNT(' . $strCol . ') as mm_count
+                    FROM ' . $this->getMetaModel()->getTableName() .
+                    ' WHERE id IN (' . $this->parameterMask($idList) . ')
+                    GROUP BY ' . $strCol . '
+                    ORDER BY FIELD(id,' . $this->parameterMask($idList). ')'
+                )
+                ->execute(array_merge($idList, $idList));
         } elseif ($usedOnly) {
             $objRow = $this->getMetaModel()->getServiceContainer()->getDatabase()->execute(
                 'SELECT ' . $strCol . ', COUNT(' . $strCol . ') as mm_count
@@ -149,12 +132,12 @@ class BaseSimple extends Base implements ISimple
                 sprintf(
                     'SELECT id FROM %s WHERE id IN (%s) ORDER BY %s %s',
                     $this->getMetaModel()->getTableName(),
-                    implode(',', $idList),
+                    $this->parameterMask($idList),
                     $this->getColName(),
                     $strDirection
                 )
             )
-            ->execute()
+            ->execute($idList)
             ->fetchEach('id');
         return $idList;
     }
