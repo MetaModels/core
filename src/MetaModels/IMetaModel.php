@@ -145,11 +145,11 @@ interface IMetaModel
     public function getAttribute($strAttributeName);
 
     /**
-     * Fetches the instance of the attribute with the given name.
+     * Fetches the instance of the attribute with the given id.
      *
      * @param int $intId The id of the attribute to search.
      *
-     * @return IAttribute|null the instance or null if not found.
+     * @return null|IAttribute the instance or null if not found.
      */
     public function getAttributeById($intId);
 
