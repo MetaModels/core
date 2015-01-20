@@ -19,8 +19,6 @@ namespace MetaModels\DcGeneral\Events\Table\InputScreen;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
@@ -79,18 +77,6 @@ class Subscriber extends BaseSubscriber
             ->addListener(
                 GetPropertyOptionsEvent::NAME,
                 array($this, 'getRenderTypes')
-            )
-            ->addListener(
-                DecodePropertyValueForWidgetEvent::NAME,
-                array($this, 'decodeModeValue')
-            )
-            ->addListener(
-                EncodePropertyValueFromWidgetEvent::NAME,
-                array($this, 'encodeModeValue')
-            )
-            ->addListener(
-                GetPropertyOptionsEvent::NAME,
-                array($this, 'getModes')
             )
             ->addListener(
                 GetPropertyOptionsEvent::NAME,
@@ -309,78 +295,6 @@ class Subscriber extends BaseSubscriber
                 $new->getProperty('pid'),
                 $new->getId()
             );
-    }
-
-    /**
-     * Prefix the given value with "mode_" to prevent the DC from using numeric ids.
-     *
-     * @param DecodePropertyValueForWidgetEvent $event The event.
-     *
-     * @return void
-     */
-    public function decodeModeValue(DecodePropertyValueForWidgetEvent $event)
-    {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca')
-            || ($event->getProperty() !== 'mode')) {
-            return;
-        }
-
-        $event->setValue('mode_' . $event->getValue('mode'));
-    }
-
-    /**
-     * Strip the mode prefix from the given value.
-     *
-     * @param EncodePropertyValueFromWidgetEvent $event The event.
-     *
-     * @return void
-     */
-    public function encodeModeValue(EncodePropertyValueFromWidgetEvent $event)
-    {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca')
-            || ($event->getProperty() !== 'mode')) {
-            return;
-        }
-
-        $arrSplit = explode('_', $event->getValue('mode'));
-
-        $event->setValue($arrSplit[1]);
-    }
-
-    /**
-     * Return all valid modes for the current MetaModels rendertype.
-     *
-     * @param GetPropertyOptionsEvent $event The event.
-     *
-     * @return void
-     */
-    public function getModes(GetPropertyOptionsEvent $event)
-    {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca')
-            || ($event->getPropertyName() !== 'mode')) {
-            return;
-        }
-
-        switch ($event->getModel()->getProperty('rendertype'))
-        {
-            case 'ctable':
-                $arrResult = array('mode_3', 'mode_4', 'mode_6');
-                break;
-            case 'standalone':
-                $arrResult = array('mode_0', 'mode_1', 'mode_2', 'mode_5');
-
-                // Allow tree mode only when no variants are in place.
-                if (!$this->getMetaModelById($event->getModel()->getProperty('pid'))->hasVariants()) {
-                    $arrResult[] = 'mode_6';
-                }
-
-                break;
-            default:
-                $arrResult = array();
-                break;
-        }
-
-        $event->setOptions($arrResult);
     }
 
     /**
