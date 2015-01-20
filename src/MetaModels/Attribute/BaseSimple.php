@@ -75,7 +75,7 @@ class BaseSimple extends Base implements ISimple
             if (is_array($varData)) {
                 $varData = serialize($varData);
             }
-            \Database::getInstance()
+            $this->getMetaModel()->getServiceContainer()->getDatabase()
                 ->prepare(sprintf('UPDATE %s SET %s=? WHERE id=%s', $strTable, $strColName, $intId))
                 ->execute($varData);
         }
@@ -107,7 +107,7 @@ class BaseSimple extends Base implements ISimple
         if ($idList) {
             // Ensure proper integer ids for SQL injection safety reasons.
             $strIdList = implode(',', array_map('intval', $idList));
-            $objRow    = \Database::getInstance()->execute(
+            $objRow    = $this->getMetaModel()->getServiceContainer()->getDatabase()->execute(
                 'SELECT ' . $strCol . ', COUNT(' . $strCol . ') as mm_count
                 FROM ' . $this->getMetaModel()->getTableName() .
                 ' WHERE id IN (' . $strIdList . ')
@@ -115,7 +115,7 @@ class BaseSimple extends Base implements ISimple
                 ORDER BY FIELD(id,' . $strIdList . ')'
             );
         } elseif ($usedOnly) {
-            $objRow = \Database::getInstance()->execute(
+            $objRow = $this->getMetaModel()->getServiceContainer()->getDatabase()->execute(
                 'SELECT ' . $strCol . ', COUNT(' . $strCol . ') as mm_count
                 FROM ' . $this->getMetaModel()->getTableName() . '
                 GROUP BY ' . $strCol
@@ -144,7 +144,7 @@ class BaseSimple extends Base implements ISimple
     public function sortIds($idList, $strDirection)
     {
         // Base implementation, do a simple sorting on given column.
-        $idList = \Database::getInstance()
+        $idList = $this->getMetaModel()->getServiceContainer()->getDatabase()
             ->prepare(
                 sprintf(
                     'SELECT id FROM %s WHERE id IN (%s) ORDER BY %s %s',
@@ -172,7 +172,7 @@ class BaseSimple extends Base implements ISimple
     public function searchFor($strPattern)
     {
         // Base implementation, do a simple search on given column.
-        $objQuery = \Database::getInstance()
+        $objQuery = $this->getMetaModel()->getServiceContainer()->getDatabase()
             ->prepare(
                 sprintf(
                     'SELECT id FROM %s WHERE %s LIKE ?',
@@ -248,7 +248,11 @@ class BaseSimple extends Base implements ISimple
     {
         // Try to delete the column. If it does not exist as we can assume it has been deleted already then.
         if ($this->getColName()
-            && \Database::getInstance()->fieldExists($this->getColName(), $this->getMetaModel()->getTableName(), true)
+            && $this->getMetaModel()->getServiceContainer()->getDatabase()->fieldExists(
+                $this->getColName(),
+                $this->getMetaModel()->getTableName(),
+                true
+            )
         ) {
             TableManipulation::dropColumn($this->getMetaModel()->getTableName(), $this->getColName());
         }
@@ -265,7 +269,11 @@ class BaseSimple extends Base implements ISimple
     {
         TableManipulation::checkColumnName($strNewColumnName);
         if ($this->getColName()
-            && \Database::getInstance()->fieldExists($this->getColName(), $this->getMetaModel()->getTableName(), true)
+            && $this->getMetaModel()->getServiceContainer()->getDatabase()->fieldExists(
+                $this->getColName(),
+                $this->getMetaModel()->getTableName(),
+                true
+            )
         ) {
             TableManipulation::renameColumn(
                 $this->getMetaModel()->getTableName(),
