@@ -20,11 +20,10 @@
 namespace MetaModels\FrontendIntegration;
 
 use Database\Result;
-use MetaModels\Factory;
 use MetaModels\Filter\Rules\StaticIdList;
 use MetaModels\IMetaModel;
+use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\ItemList;
-use MetaModels\Render\Setting\Factory as SettingFactory;
 
 /**
  * MetaModelInsertTags.
@@ -47,6 +46,18 @@ use MetaModels\Render\Setting\Factory as SettingFactory;
  */
 class InsertTags extends \Controller
 {
+    /**
+     * Retrieve the service container.
+     *
+     * @return IMetaModelsServiceContainer
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    public function getServiceContainer()
+    {
+        return $GLOBALS['container']['metamodels-service-container'];
+    }
 
     /**
      * Evaluate an insert tag.
@@ -119,7 +130,10 @@ class InsertTags extends \Controller
         }
 
         // Get the render setting.
-        $objRenderSettings = SettingFactory::byId($objMetaModel, $intIdRenderSetting);
+        $objRenderSettings = $this
+            ->getServiceContainer()
+            ->getRenderSettingFactory()
+            ->createCollection($objMetaModel, $intIdRenderSetting);
         if ($objRenderSettings == null) {
             return false;
         }
@@ -181,6 +195,7 @@ class InsertTags extends \Controller
 
         $objMetaModelList = new ItemList();
         $objMetaModelList
+            ->setServiceContainer($this->getServiceContainer())
             ->setMetaModel($objMetaModel->get('id'), $intIdRenderSetting)
             ->overrideOutputFormat($strOutput);
 
@@ -287,10 +302,14 @@ class InsertTags extends \Controller
     {
         if (is_numeric($nameOrId)) {
             // ID.
-            return Factory::byId($nameOrId);
+            $tableName = $this->getServiceContainer()->getFactory()->translateIdToMetaModelName($nameOrId);
         } elseif (is_string($nameOrId)) {
             // Name.
-            return Factory::byTableName($nameOrId);
+            $tableName = $nameOrId;
+        }
+
+        if (isset($tableName)) {
+            return $this->getServiceContainer()->getFactory()->getMetaModel($tableName);
         }
 
         // Unknown.
@@ -308,7 +327,7 @@ class InsertTags extends \Controller
      */
     protected function getMetaModelDataFrom($strTable, $intID)
     {
-        $objDB = \Database::getInstance();
+        $objDB = $this->getServiceContainer()->getDatabase();
 
         // Check if we know the table.
         if (!$objDB->tableExists($strTable)) {
@@ -337,6 +356,9 @@ class InsertTags extends \Controller
      * @param int $intFilterId    ID of the filter.
      *
      * @return boolean|int False for no data or integer for the count result.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getCountFor($intMetaModelId, $intFilterId)
     {
@@ -362,10 +384,12 @@ class InsertTags extends \Controller
     protected function isPublishedItem($objMetaModel, $intItemId)
     {
         // Check publish state of an item.
-        $objAttrCheckPublish = \Database::getInstance()
-                ->prepare('SELECT colname FROM tl_metamodel_attribute WHERE pid=? AND check_publish=1')
-                ->limit(1)
-                ->execute($objMetaModel->get('id'));
+        $objAttrCheckPublish = $this
+            ->getServiceContainer()
+            ->getDatabase()
+            ->prepare('SELECT colname FROM tl_metamodel_attribute WHERE pid=? AND check_publish=1')
+            ->limit(1)
+            ->execute($objMetaModel->get('id'));
 
         if ($objAttrCheckPublish->numRows > 0) {
             $objItem = $objMetaModel->findById($intItemId);

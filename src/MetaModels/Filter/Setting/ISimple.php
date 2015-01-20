@@ -50,9 +50,9 @@ interface ISimple
      * A filter url hereby is a simple hash of name => value layout, it may eventually be interpreted
      * by attributes via IMetaModelAttribute::searchFor() method.
      *
-     * @param IFilter        $objFilter    The filter to append the rules to.
+     * @param IFilter  $objFilter    The filter to append the rules to.
      *
-     * @param string[string] $arrFilterUrl The parameters to evaluate.
+     * @param string[] $arrFilterUrl The parameters to evaluate.
      *
      * @todo: we might want to change the name $arrFilterUrl to $arrFilterParams or something like that.
      *
@@ -93,14 +93,14 @@ interface ISimple
     /**
      * Retrieve the names of all parameters for listing in frontend filter configuration.
      *
-     * @return string[string] the parameters as array. parametername => label
+     * @return string[] the parameters as array. parametername => label
      */
     public function getParameterFilterNames();
 
     /**
      * Retrieve a list of filter widgets for all registered parameters as form field arrays.
      *
-     * @param array                 $arrIds                   The ids matching the current filter values.
+     * @param string[]|null         $arrIds                   The ids matching the current filter values.
      *
      * @param array                 $arrFilterUrl             The current filter url.
      *

@@ -42,11 +42,7 @@ class FilterSettingFactory implements IFilterSettingFactory
     protected $typeFactories;
 
     /**
-     * Set the service container.
-     *
-     * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
-     *
-     * @return FilterSettingFactory
+     * {@inheritdoc}
      */
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer)
     {
@@ -62,9 +58,7 @@ class FilterSettingFactory implements IFilterSettingFactory
     }
 
     /**
-     * Retrieve the service container.
-     *
-     * @return IMetaModelsServiceContainer
+     * {@inheritdoc}
      */
     public function getServiceContainer()
     {
@@ -96,7 +90,7 @@ class FilterSettingFactory implements IFilterSettingFactory
      *
      * @param ICollection $filterSettings The MetaModel filter settings.
      *
-     * @return ISimple
+     * @return ISimple|null
      */
     protected function createSetting($dbResult, $filterSettings)
     {
@@ -171,6 +165,8 @@ class FilterSettingFactory implements IFilterSettingFactory
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \RuntimeException When the MetaModel could not be retrieved.
      */
     public function createCollection($settingId)
     {
@@ -185,8 +181,12 @@ class FilterSettingFactory implements IFilterSettingFactory
             $metaModel    = $modelFactory->getMetaModel($modelFactory->translateIdToMetaModelName($information['pid']));
             $collection   = new Collection($information);
 
+            if ($metaModel === null) {
+                throw new \RuntimeException('Could not retrieve MetaModel ' . $information['pid']);
+            }
+
             $collection->setMetaModel($metaModel);
-            $this->collectRules($collection, $collection);
+            $this->collectRules($collection);
 
             return $collection;
         }

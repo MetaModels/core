@@ -104,25 +104,6 @@ class ConditionTableNameIsMetaModel implements PropertyConditionInterface
     }
 
     /**
-     * Retrieve the type name from an attribute.
-     *
-     * @param int $value The id of an attribute.
-     *
-     * @return string
-     */
-    public function getTypeOfAttribute($value)
-    {
-        if (!isset(self::$attributeTypes[$value])) {
-            self::$attributeTypes[$value] = \Database::getInstance()
-                ->prepare('SELECT type FROM tl_metamodel_attribute WHERE id=?')
-                ->limit(1)
-                ->executeUncached($value)
-                ->type;
-        }
-        return self::$attributeTypes[$value];
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function match(
@@ -131,7 +112,16 @@ class ConditionTableNameIsMetaModel implements PropertyConditionInterface
         PropertyInterface $property = null,
         LegendInterface $legend = null
     ) {
-        return $this->desiredValue == (substr($model->getProperty($this->getTablePropertyName()), 0, 3) === 'mm_');
+        $propertyName = $this->getTablePropertyName();
+        if ($input && $input->hasPropertyValue($propertyName)) {
+            $value = $input->getPropertyValue($propertyName);
+        } elseif ($model) {
+            $value = $model->getProperty($propertyName);
+        } else {
+            return false;
+        }
+
+        return $this->desiredValue == (substr($value, 0, 3) === 'mm_');
     }
 
     /**

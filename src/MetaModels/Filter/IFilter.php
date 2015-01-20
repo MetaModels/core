@@ -42,7 +42,7 @@ interface IFilter
     /**
      * Narrow down the list of Ids that match the given filter.
      *
-     * @return int[]|null all matching Ids or null if all ids did match.
+     * @return string[]|null all matching Ids or null if all ids did match.
      */
     public function getMatchingIds();
 }

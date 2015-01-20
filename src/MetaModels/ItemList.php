@@ -22,8 +22,6 @@
 
 namespace MetaModels;
 
-use MetaModels\Factory as ModelFactory;
-use MetaModels\Filter\Setting\Factory as FilterFactory;
 use MetaModels\Render\Template;
 
 /**
@@ -33,7 +31,7 @@ use MetaModels\Render\Template;
  * @subpackage Frontend
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
-class ItemList
+class ItemList implements IServiceContainerAware
 {
     /**
      * Use limit.
@@ -125,6 +123,37 @@ class ItemList
      * @var string
      */
     protected $strDescriptionAttribute = '';
+
+    /**
+     * The service container.
+     *
+     * @var IMetaModelsServiceContainer
+     */
+    private $serviceContainer;
+
+    /**
+     * Set the service container to use.
+     *
+     * @param IMetaModelsServiceContainer $serviceContainer The service container.
+     *
+     * @return ItemList
+     */
+    public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer)
+    {
+        $this->serviceContainer = $serviceContainer;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the service container in use.
+     *
+     * @return IMetaModelsServiceContainer|null
+     */
+    public function getServiceContainer()
+    {
+        return $this->serviceContainer;
+    }
 
     /**
      * Set the limit.
@@ -312,7 +341,8 @@ class ItemList
      */
     protected function prepareMetaModel()
     {
-        $this->objMetaModel = ModelFactory::byId($this->intMetaModel);
+        $factory            = $this->getServiceContainer()->getFactory();
+        $this->objMetaModel = $factory->getMetaModel($factory->translateIdToMetaModelName($this->intMetaModel));
         if (!$this->objMetaModel) {
             throw new \RuntimeException('Could get metamodel id: ' . $this->intMetaModel);
         }
@@ -350,7 +380,7 @@ class ItemList
     {
         $this->intFilter = $intFilter;
 
-        $this->objFilterSettings = FilterFactory::byId($this->intFilter);
+        $this->objFilterSettings = $this->getServiceContainer()->getFilterFactory()->createCollection($this->intFilter);
 
         if (!$this->objFilterSettings) {
             throw new \RuntimeException('Error: no filter object defined.');
@@ -467,7 +497,7 @@ class ItemList
             $intTotal -= $intOffset;
 
             // Get the current page.
-            $intPage = \Input::getInstance()->get('page') ? \Input::getInstance()->get('page') : 1;
+            $intPage = \Input::get('page') ?: 1;
 
             if ($intPage > ($intTotal / $this->intPerPage)) {
                 $intPage = (int) ceil($intTotal / $this->intPerPage);
@@ -566,7 +596,7 @@ class ItemList
         }
 
         if ($intFilterSettings) {
-            $objFilterSettings = FilterFactory::byId($intFilterSettings);
+            $objFilterSettings = $this->getServiceContainer()->getFilterFactory()->createCollection($intFilterSettings);
             $arrAttributes     = array_merge($objFilterSettings->getReferencedAttributes(), $arrAttributes);
         }
 
@@ -787,7 +817,7 @@ class ItemList
                 $arrDescription = $objCurrentItem->parseAttribute($this->strDescriptionAttribute, 'text');
 
                 if (isset($arrDescription['text']) && !empty($arrDescription['text'])) {
-                    $GLOBALS['objPage']->description = \String::getInstance()->substr($arrDescription['text'], 120);
+                    $GLOBALS['objPage']->description = \String::substr($arrDescription['text'], 120);
                     break;
                 }
             }

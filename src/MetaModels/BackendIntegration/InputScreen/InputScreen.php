@@ -401,12 +401,19 @@ class InputScreen implements IInputScreen
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \RuntimeException When the instance could not be retrieved.
      */
     public function getMetaModel()
     {
-        $factory = $this->container->getFactory();
+        $factory   = $this->container->getFactory();
+        $metaModel = $factory->getMetaModel($factory->translateIdToMetaModelName($this->data['pid']));
 
-        return $factory->getMetaModel($factory->translateIdToMetaModelName($this->data['pid']));
+        if ($metaModel === null) {
+            throw new \RuntimeException('Could not retrieve MetaModel with id ' . $this->data['pid']);
+        }
+
+        return $metaModel;
     }
 
     /**

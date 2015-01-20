@@ -34,13 +34,7 @@ use MetaModels\Filter\Setting\WithChildren;
 class ConditionOr extends WithChildren
 {
     /**
-     * Generates the filter rules based upon the given filter url.
-     *
-     * @param IFilter        $objFilter    The filter to append the rules to.
-     *
-     * @param string[string] $arrFilterUrl The parameters to evaluate.
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function prepareRules(IFilter $objFilter, $arrFilterUrl)
     {

@@ -90,7 +90,7 @@ interface ICollection
     /**
      * Retrieve the names of all parameters for listing in frontend filter configuration.
      *
-     * @return string[string] the parameters as array. parametername => label
+     * @return string[] the parameters as array. parametername => label
      */
     public function getParameterFilterNames();
 

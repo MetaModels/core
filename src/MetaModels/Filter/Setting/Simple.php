@@ -24,6 +24,7 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUr
 use ContaoCommunityAlliance\Contao\Bindings\Events\Widget\GetAttributesFromDcaEvent;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use MetaModels\IItem;
+use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -39,28 +40,38 @@ abstract class Simple implements ISimple
     /**
      * The parenting filter setting container this setting belongs to.
      *
-     * @var \MetaModels\Filter\Setting\ICollection
+     * @var ICollection
      */
-    protected $objFilterSettings = null;
+    private $collection = null;
 
     /**
      * The attributes of this filter setting.
      *
      * @var array
      */
-    protected $arrData = array();
+    private $data = array();
 
     /**
      * Constructor - initialize the object and store the parameters.
      *
-     * @param \MetaModels\Filter\Setting\ICollection $objFilterSetting The parenting filter settings object.
+     * @param ICollection $collection The parenting filter settings object.
      *
-     * @param array                                  $arrData          The attributes for this filter setting.
+     * @param array       $data       The attributes for this filter setting.
      */
-    public function __construct($objFilterSetting, $arrData)
+    public function __construct($collection, $data)
     {
-        $this->objFilterSetting = $objFilterSetting;
-        $this->arrData          = $arrData;
+        $this->collection = $collection;
+        $this->data       = $data;
+    }
+
+    /**
+     * Retrieve the service container.
+     *
+     * @return IMetaModelsServiceContainer
+     */
+    public function getServiceContainer()
+    {
+        return $this->getMetaModel()->getServiceContainer();
     }
 
     /**
@@ -70,29 +81,25 @@ abstract class Simple implements ISimple
      */
     public function getEventDispatcher()
     {
-        return $this->getMetaModel()->getServiceContainer()->getEventDispatcher();
+        return $this->getServiceContainer()->getEventDispatcher();
     }
 
     /**
-     * Return the value of the requested attribute.
-     *
-     * @param string $strKey Name of the attribute to retrieve.
-     *
-     * @return mixed The stored value, if any.
+     * {@inheritdoc}
      */
     public function get($strKey)
     {
-        return $this->arrData[$strKey];
+        return $this->data[$strKey];
     }
 
     /**
      * Get the parenting collection instance.
      *
-     * @return \MetaModels\Filter\Setting\ICollection The parent.
+     * @return ICollection The parent.
      */
     public function getFilterSettings()
     {
-        return $this->objFilterSetting;
+        return $this->collection;
     }
 
     /**
@@ -413,15 +420,7 @@ abstract class Simple implements ISimple
     }
 
     /**
-     * This base implementation returns an empty array.
-     *
-     * @param IItem           $objItem          The item to fetch the values from.
-     *
-     * @param IRenderSettings $objRenderSetting The render setting to be applied.
-     *
-     * @return array An empty array.
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * {@inheritdoc}
      */
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
     {
@@ -429,9 +428,7 @@ abstract class Simple implements ISimple
     }
 
     /**
-     * This base implementation returns an empty array.
-     *
-     * @return array Empty array.
+     * {@inheritdoc}
      */
     public function getParameters()
     {
@@ -439,9 +436,7 @@ abstract class Simple implements ISimple
     }
 
     /**
-     * This base implementation returns an empty array.
-     *
-     * @return array Empty array.
+     * {@inheritdoc}
      */
     public function getParameterDCA()
     {
@@ -449,9 +444,7 @@ abstract class Simple implements ISimple
     }
 
     /**
-     * This base implementation returns an empty array.
-     *
-     * @return array Empty array.
+     * {@inheritdoc}
      */
     public function getParameterFilterNames()
     {
@@ -459,19 +452,7 @@ abstract class Simple implements ISimple
     }
 
     /**
-     * Retrieve a list of filter widgets for all registered parameters as form field arrays.
-     *
-     * @param array                 $arrIds                   The ids matching the current filter values.
-     *
-     * @param array                 $arrFilterUrl             The current filter url.
-     *
-     * @param array                 $arrJumpTo                The jumpTo page (array, row data from tl_page).
-     *
-     * @param FrontendFilterOptions $objFrontendFilterOptions The frontend filter options.
-     *
-     * @return array
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * {@inheritdoc}
      */
     public function getParameterFilterWidgets(
         $arrIds,
@@ -483,9 +464,7 @@ abstract class Simple implements ISimple
     }
 
     /**
-     * Retrieve a list of all referenced attributes within the filter setting.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getReferencedAttributes()
     {

@@ -149,7 +149,7 @@ interface IMetaModel
      *
      * @param int $intId The id of the attribute to search.
      *
-     * @return IAttribute the instance or null if not found.
+     * @return IAttribute|null the instance or null if not found.
      */
     public function getAttributeById($intId);
 
@@ -243,9 +243,9 @@ interface IMetaModel
      *
      * This methods makes no difference between the variant base item and other variants.
      *
-     * @param array   $arrIds    The Ids of the base elements.
+     * @param array        $arrIds    The Ids of the base elements.
      *
-     * @param IFilter $objFilter The filter to use or null if no filtering.
+     * @param IFilter|null $objFilter The filter to use or null if no filtering.
      *
      * @return IItems the collection of IItem instances that match the given filter.
      */

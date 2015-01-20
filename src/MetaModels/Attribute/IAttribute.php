@@ -22,6 +22,7 @@ namespace MetaModels\Attribute;
 use MetaModels\IItem;
 use MetaModels\IMetaModel;
 use MetaModels\Render\Setting\ISimple;
+use MetaModels\Render\Setting\Simple;
 
 /**
  * This is the main MetaModels attribute interface.
@@ -118,8 +119,8 @@ interface IAttribute
     /**
      * Returns all valid settings for the attribute type.
      *
-     * @return array All valid setting names, this re-ensembles the columns in tl_metamodel_attribute
-     *               this attribute class understands.
+     * @return string[] All valid setting names, this re-ensembles the columns in tl_metamodel_attribute
+     *                  this attribute class understands.
      */
     public function getAttributeSettingNames();
 
@@ -194,7 +195,7 @@ interface IAttribute
     /**
      * Retrieve an instance containing the default render settings for an attribute of this type.
      *
-     * @return object
+     * @return Simple
      */
     public function getDefaultRenderSettings();
 
@@ -205,11 +206,11 @@ interface IAttribute
      * useful when being echo'ed in a template and the raw value in the section 'raw'.
      * Each attribute class MAY return as many other values in this array with custom keys as it wants.
      *
-     * @param array   $arrRowData      The (native) row data from the MetaModel table.
+     * @param array        $arrRowData      The (native) row data from the MetaModel table.
      *
-     * @param string  $strOutputFormat The desired output format.
+     * @param string       $strOutputFormat The desired output format.
      *
-     * @param ISimple $objSettings     Custom settings to be passed to the renderer.
+     * @param ISimple|null $objSettings     Custom settings to be passed to the renderer.
      *
      * @return array An array with all the converted data.
      */

@@ -83,9 +83,7 @@ class MetaModel implements IMetaModel
     }
 
     /**
-     * Retrieve the service container.
-     *
-     * @return IMetaModelsServiceContainer
+     * {@inheritdoc}
      */
     public function getServiceContainer()
     {
@@ -137,11 +135,7 @@ class MetaModel implements IMetaModel
     }
 
     /**
-     * Adds an attribute to the internal list of attributes.
-     *
-     * @param IAttribute $objAttribute The attribute instance to add.
-     *
-     * @return IMetaModel Self for fluent coding.
+     * {@inheritdoc}
      */
     public function addAttribute(IAttribute $objAttribute)
     {
@@ -153,11 +147,7 @@ class MetaModel implements IMetaModel
     }
 
     /**
-     * Checks if an attribute with the given name has been added to the internal list.
-     *
-     * @param string $strAttributeName The name of the attribute to search.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasAttribute($strAttributeName)
     {
@@ -252,7 +242,7 @@ class MetaModel implements IMetaModel
     /**
      * Narrow down the list of Ids that match the given filter.
      *
-     * @param IFilter $objFilter The filter to search the matching ids for.
+     * @param IFilter|null $objFilter The filter to search the matching ids for.
      *
      * @return array all matching Ids.
      */
@@ -277,7 +267,7 @@ class MetaModel implements IMetaModel
      *
      * @param \Database\Result $objRow      The database result.
      *
-     * @param array            $arrAttrOnly The list of attributes to return, if any.
+     * @param string[]         $arrAttrOnly The list of attributes to return, if any.
      *
      * @return array
      */
@@ -316,7 +306,7 @@ class MetaModel implements IMetaModel
     /**
      * Fetch the "native" database rows with the given ids.
      *
-     * @param int[]    $arrIds      The ids of the items to retrieve the order of ids is used for sorting of the return
+     * @param string[] $arrIds      The ids of the items to retrieve the order of ids is used for sorting of the return
      *                              values.
      *
      * @param string[] $arrAttrOnly Names of the attributes that shall be contained in the result, defaults to array()
@@ -359,7 +349,7 @@ class MetaModel implements IMetaModel
      *
      * @param ITranslated $attribute The attribute to fetch the values for.
      *
-     * @param int[]       $ids       The ids of the items to retrieve the order of ids is used for sorting of the return
+     * @param string[]    $ids       The ids of the items to retrieve the order of ids is used for sorting of the return
      *                               values.
      *
      * @return array an array of all matched items, sorted by the id list.
@@ -379,7 +369,7 @@ class MetaModel implements IMetaModel
     /**
      * This method is called to retrieve the data for certain items from the database.
      *
-     * @param int[]    $ids      The ids of the items to retrieve the order of ids is used for sorting of the
+     * @param string[] $ids      The ids of the items to retrieve the order of ids is used for sorting of the
      *                           return values.
      *
      * @param array    $result   The current values.

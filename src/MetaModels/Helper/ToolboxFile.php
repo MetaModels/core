@@ -374,7 +374,7 @@ class ToolboxFile
      */
     protected function getDownloadLink($strFile)
     {
-        $strRequest = \Environment::getInstance()->request;
+        $strRequest = \Environment::get('request');
         if (($intPos = strpos($strRequest, '?')) !== false) {
             $strRequest = str_replace('?&', '?', preg_replace('/&?file=[^&]&*/', '', $strRequest));
         }

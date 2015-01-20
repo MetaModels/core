@@ -17,7 +17,6 @@
 namespace MetaModels\Test\Attribute;
 
 use MetaModels\Attribute\AttributeFactory;
-use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
 use MetaModels\Attribute\IAttributeTypeFactory;
 use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\IMetaModelsServiceContainer;

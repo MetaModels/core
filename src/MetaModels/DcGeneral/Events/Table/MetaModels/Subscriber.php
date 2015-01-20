@@ -186,19 +186,21 @@ class Subscriber extends BaseSubscriber
         $objCount = $database
             ->prepare('SELECT count(*) AS itemCount FROM ' . $model->getProperty('tableName'))
             ->execute();
+        /** @noinspection PhpUndefinedFieldInspection */
+        $count = $objCount->itemCount;
 
         $itemCount = sprintf(
             '<span style="color:#b3b3b3; padding-left:3px">[%s]</span>',
             $translator->translatePluralized(
                 'itemFormatCount',
-                $objCount->itemCount,
+                $count,
                 'tl_metamodel',
-                array($objCount->itemCount)
+                array($count)
             )
         );
         $tableName = '<span style="color:#b3b3b3; padding-left:3px">(' . $model->getProperty('tableName') . ')</span>';
 
-        $event->setArgs('<span class="name">' . $strLabel . $tableName . $itemCount . '</span>' . $strImage);
+        $event->setArgs(array('<span class="name">' . $strLabel . $tableName . $itemCount . '</span>' . $strImage));
     }
 
     /**
@@ -354,7 +356,7 @@ class Subscriber extends BaseSubscriber
 
         $this->getDatabase()
             ->prepare('DELETE FROM tl_metamodel_attribute WHERE pid=?')
-            ->executeUncached($metaModel->get('id'));
+            ->execute($metaModel->get('id'));
     }
 
     /**
@@ -368,7 +370,7 @@ class Subscriber extends BaseSubscriber
     {
         $this->getDatabase()
             ->prepare('DELETE FROM tl_metamodel_dca_combine WHERE pid=?')
-            ->executeUncached($metaModel->get('id'));
+            ->execute($metaModel->get('id'));
     }
 
     /**
@@ -384,7 +386,7 @@ class Subscriber extends BaseSubscriber
         // Delete everything from dca settings.
         $idList = $database
             ->prepare('SELECT id FROM tl_metamodel_dca WHERE pid=?')
-            ->executeUncached($metaModel->get('id'))
+            ->execute($metaModel->get('id'))
             ->fetchEach('id');
 
         if ($idList) {
@@ -395,13 +397,13 @@ class Subscriber extends BaseSubscriber
                         implode(',', $idList)
                     )
                 )
-                ->executeUncached();
+                ->execute();
         }
 
         // Delete the input screens.
         $database
             ->prepare('DELETE FROM tl_metamodel_dca WHERE pid=?')
-            ->executeUncached($metaModel->get('id'));
+            ->execute($metaModel->get('id'));
     }
 
     /**
@@ -417,7 +419,7 @@ class Subscriber extends BaseSubscriber
         // Delete everything from render settings.
         $arrIds = $database
             ->prepare('SELECT id FROM tl_metamodel_rendersettings WHERE pid=?')
-            ->executeUncached($metaModel->get('id'))
+            ->execute($metaModel->get('id'))
             ->fetchEach('id');
 
         if ($arrIds) {
@@ -428,13 +430,13 @@ class Subscriber extends BaseSubscriber
                         implode(',', $arrIds)
                     )
                 )
-                ->executeUncached();
+                ->execute();
         }
 
         // Delete the render settings.
         $database
             ->prepare('DELETE FROM tl_metamodel_rendersettings WHERE pid=?')
-            ->executeUncached($metaModel->get('id'));
+            ->execute($metaModel->get('id'));
     }
 
     /**
@@ -450,7 +452,7 @@ class Subscriber extends BaseSubscriber
         // Delete everything from filter settings.
         $arrIds = $database
             ->prepare('SELECT id FROM tl_metamodel_filter WHERE pid=?')
-            ->executeUncached($metaModel->get('id'))
+            ->execute($metaModel->get('id'))
             ->fetchEach('id');
         if ($arrIds) {
             $database
@@ -460,11 +462,11 @@ class Subscriber extends BaseSubscriber
                         implode(',', $arrIds)
                     )
                 )
-                ->executeUncached();
+                ->execute();
         }
         $database
             ->prepare('DELETE FROM tl_metamodel_filter WHERE pid=?')
-            ->executeUncached($metaModel->get('id'));
+            ->execute($metaModel->get('id'));
     }
 
     /**

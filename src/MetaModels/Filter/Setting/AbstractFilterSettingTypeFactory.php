@@ -199,15 +199,21 @@ abstract class AbstractFilterSettingTypeFactory implements IFilterSettingTypeFac
      *
      * You can pass as many parameters as you need.
      *
-     * @param string $initialType One or more attribute type names to be available initially (optional).
+     * Either pass one parameter as array of string or pass 1 to n parameters as string.
+     *
+     * @param string|string[] $initialType1toN One or more attribute type names to be available initially (optional).
      *
      * @return AbstractFilterSettingTypeFactory
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function allowAttributeTypes($initialType = null)
+    protected function allowAttributeTypes($initialType1toN = null)
     {
-        $this->attributeTypes = func_get_args();
+        if (is_array($initialType1toN)) {
+            $this->attributeTypes = $initialType1toN;
+        } else {
+            $this->attributeTypes = func_get_args();
+        }
 
         return $this;
     }

@@ -204,11 +204,17 @@ class Driver implements MultiLanguageDataProviderInterface
      * Retrieve the MetaModel.
      *
      * @return IMetaModel
+     *
+     * @throws \RuntimeException When the MetaModel could not be retrieved.
      */
     protected function getMetaModel()
     {
         if (!$this->metaModel) {
             $this->metaModel = $this->getServiceContainer()->getFactory()->getMetaModel($this->strTable);
+
+            if ($this->metaModel === null) {
+                throw new \RuntimeException('Could not retrieve MetaModel ' . $this->strTable);
+            }
         }
 
         return $this->metaModel;
@@ -233,7 +239,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @param ConfigInterface $objConfig The config to use.
      *
-     * @return ModelInterface
+     * @return null|ModelInterface
      */
     public function fetch(ConfigInterface $objConfig)
     {
@@ -354,7 +360,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @param ConfigInterface $config The configuration to be applied.
      *
-     * @return \int[]
+     * @return string[]
      */
     protected function getIdsFromFilter($filter, $config)
     {
@@ -602,11 +608,15 @@ class Driver implements MultiLanguageDataProviderInterface
      * @param ModelInterface $objModel2 The second model to compare.
      *
      * @return boolean True - If both models are same, false if not.
+     *
+     * @throws \InvalidArgumentException If not both models are compatible with this data provider.
      */
     public function sameModels($objModel1, $objModel2)
     {
-        /** @var Model $objModel1 */
-        /** @var Model $objModel2 */
+        if (!($objModel1 instanceof Model && $objModel2 instanceof Model)) {
+            throw new \InvalidArgumentException('Passed models are not valid.');
+        }
+
         $objNative1 = $objModel1->getItem();
         $objNative2 = $objModel2->getItem();
         if ($objNative1->getMetaModel() != $objNative2->getMetaModel()) {
@@ -625,7 +635,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @param ConfigInterface $objConfig The config holding the id of the base model.
      *
-     * @return ModelInterface
+     * @return null|ModelInterface
      */
     public function createVariant(ConfigInterface $objConfig)
     {
@@ -638,11 +648,7 @@ class Driver implements MultiLanguageDataProviderInterface
     }
 
     /**
-     * Get all available languages of a certain record.
-     *
-     * @param mixed $mixID The ID of the record to retrieve.
-     *
-     * @return LanguageInformationCollectionInterface
+     * {@inheritdoc}
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -667,11 +673,7 @@ class Driver implements MultiLanguageDataProviderInterface
     }
 
     /**
-     * Get the fallback language of a certain record.
-     *
-     * @param mixed $mixID The ID of the record to retrieve.
-     *
-     * @return LanguageInformationInterface|null
+     * {@inheritdoc}
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

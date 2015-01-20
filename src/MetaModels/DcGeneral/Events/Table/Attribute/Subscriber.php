@@ -121,9 +121,15 @@ class Subscriber extends BaseSubscriber
         $model        = $event->getModel();
         $type         = $model->getProperty('type');
         $image        = '<img src="' . $factory->getIconForType($type) . '" />';
-        $data         = $model->getPropertiesAsArray();
-        $metaModel    = $modelFactory->getMetaModel($modelFactory->translateIdToMetaModelName($data['pid']));
-        $attribute    = $factory->createAttribute($data, $metaModel);
+        $metaModel    = $modelFactory->getMetaModel(
+            $modelFactory->translateIdToMetaModelName($model->getProperty('pid'))
+        );
+
+        if ($metaModel === null) {
+            throw new \InvalidArgumentException('Could not retrieve MetaModel ' . $model->getProperty('pid'));
+        }
+
+        $attribute = $factory->createAttribute($model->getPropertiesAsArray(), $metaModel);
 
         if (!$attribute) {
             $translator = $event
@@ -225,10 +231,18 @@ class Subscriber extends BaseSubscriber
      * @param DecodePropertyValueForWidgetEvent $event The event.
      *
      * @return void
+     *
+     * @throws \InvalidArgumentException When the MetaModel could not be retrieved.
      */
     protected function decodeValue(DecodePropertyValueForWidgetEvent $event)
     {
         $metaModel = $this->getMetaModelById($event->getModel()->getProperty('pid'));
+
+        if ($metaModel === null) {
+            throw new \InvalidArgumentException(
+                'Could not retrieve MetaModel ' . $event->getModel()->getProperty('pid')
+            );
+        }
 
         $values = Helper::decodeLangArray($event->getValue(), $metaModel);
 
@@ -241,10 +255,18 @@ class Subscriber extends BaseSubscriber
      * @param EncodePropertyValueFromWidgetEvent $event The event.
      *
      * @return void
+     *
+     * @throws \InvalidArgumentException When the MetaModel could not be retrieved.
      */
     protected function encodeValue(EncodePropertyValueFromWidgetEvent $event)
     {
         $metaModel = $this->getMetaModelById($event->getModel()->getProperty('pid'));
+
+        if ($metaModel === null) {
+            throw new \InvalidArgumentException(
+                'Could not retrieve MetaModel ' . $event->getModel()->getProperty('pid')
+            );
+        }
 
         $values = Helper::encodeLangArray($event->getValue(), $metaModel);
 
@@ -257,10 +279,18 @@ class Subscriber extends BaseSubscriber
      * @param BuildWidgetEvent $event The event.
      *
      * @return void
+     *
+     * @throws \InvalidArgumentException When the MetaModel could not be retrieved.
      */
     protected function buildWidget(BuildWidgetEvent $event)
     {
         $metaModel = $this->getMetaModelById($event->getModel()->getProperty('pid'));
+
+        if ($metaModel === null) {
+            throw new \InvalidArgumentException(
+                'Could not retrieve MetaModel ' . $event->getModel()->getProperty('pid')
+            );
+        }
 
         Helper::prepareLanguageAwareWidget(
             $event->getEnvironment(),
@@ -436,6 +466,8 @@ class Subscriber extends BaseSubscriber
      * @param array|null $information The information.
      *
      * @return IAttribute|null
+     *
+     * @throws \InvalidArgumentException When the MetaModel could not be retrieved.
      */
     protected function createAttributeInstance($information)
     {
@@ -447,8 +479,15 @@ class Subscriber extends BaseSubscriber
         $attributeFactory = $services->getAttributeFactory();
         $modelFactory     = $services->getFactory();
         $name             = $modelFactory->translateIdToMetaModelName($information['pid']);
+        $metaModel        = $modelFactory->getMetaModel($name);
 
-        return $attributeFactory->createAttribute($information, $modelFactory->getMetaModel($name));
+        if ($metaModel === null) {
+            throw new \InvalidArgumentException(
+                'Could not retrieve MetaModel ' . $information['pid']
+            );
+        }
+
+        return $attributeFactory->createAttribute($information, $metaModel);
     }
 
     /**

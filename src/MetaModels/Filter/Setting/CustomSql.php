@@ -24,8 +24,6 @@ use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\ReplaceInsertTagsEvent;
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Rules\SimpleQuery;
-use MetaModels\IMetaModelsServiceContainer;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This filter condition generates a filter rule for a predefined SQL query.
@@ -55,13 +53,7 @@ class CustomSql extends Simple
     private $queryParameter;
 
     /**
-     * Generates the filter rules based upon the given filter url.
-     *
-     * @param IFilter        $objFilter    The filter to append the rules to.
-     *
-     * @param string[string] $arrFilterUrl The parameters to evaluate.
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function prepareRules(IFilter $objFilter, $arrFilterUrl)
     {
@@ -93,26 +85,6 @@ class CustomSql extends Simple
         }
 
         return $arrParams;
-    }
-
-    /**
-     * Retrieve the service container.
-     *
-     * @return IMetaModelsServiceContainer
-     */
-    public function getServiceContainer()
-    {
-        return $this->getMetaModel()->getServiceContainer();
-    }
-
-    /**
-     * Retrieve the event dispatcher.
-     *
-     * @return EventDispatcherInterface
-     */
-    public function getEventDispatcher()
-    {
-        return $this->getServiceContainer()->getEventDispatcher();
     }
 
     /**
@@ -229,13 +201,13 @@ class CustomSql extends Simple
         switch(strtolower($source))
         {
             case 'get':
-                return \Input::getInstance()->get($valueName);
+                return \Input::get($valueName);
 
             case 'post':
-                return \Input::getInstance()->post($valueName);
+                return \Input::post($valueName);
 
             case 'cookie':
-                return \Input::getInstance()->cookie($valueName);
+                return \Input::cookie($valueName);
 
             case 'session':
                 return \Session::getInstance()->get($valueName);

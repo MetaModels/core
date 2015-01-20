@@ -300,6 +300,8 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      *
+     * @throws \RuntimeException When the MetaModel can not be retrieved.
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
@@ -343,6 +345,10 @@ class Subscriber extends BaseSubscriber
 
         $metaModel = $this->getMetaModelById($palette->pid);
 
+        if (!$metaModel) {
+            throw new \RuntimeException('Could not retrieve MetaModel ' . $palette->pid);
+        }
+
         $alreadyExisting = $database
             ->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=?')
             ->execute($pid->getId());
@@ -359,7 +365,7 @@ class Subscriber extends BaseSubscriber
         $blnWantPerform = false;
         // Perform the labour work.
         if ($input->getValue('act') == 'perform') {
-            self::perform(
+            $this->perform(
                 $metaModel,
                 $knownAttributes,
                 $intMax,
@@ -394,8 +400,7 @@ class Subscriber extends BaseSubscriber
         }
 
         if ($blnWantPerform) {
-            // FIXME: need environment here.
-            $template->action = ampersand(\Environment::getInstance()->request);
+            $template->action = ampersand(\Environment::get('request'));
             $template->submit = $GLOBALS['TL_LANG']['MSC']['continue'];
         } else {
             $template->action = ampersand($referrer->getReferrerUrl());

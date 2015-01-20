@@ -61,11 +61,7 @@ class Collection implements ICollection
     }
 
     /**
-     * Retrieve a setting from the settings instance.
-     *
-     * @param string $strName The name of the setting to retrieve.
-     *
-     * @return mixed|null The value or null if not set.
+     * {@inheritdoc}
      */
     public function get($strName)
     {
@@ -73,26 +69,17 @@ class Collection implements ICollection
     }
 
     /**
-     * Set a base property in the settings object.
-     *
-     * @param string $strName    The name of the setting to set.
-     *
-     * @param mixed  $varSetting The value to use.
-     *
-     * @return ICollection The setting itself.
+     * {@inheritdoc}
      */
     public function set($strName, $varSetting)
     {
         $this->arrBase[$strName] = $varSetting;
+
         return $this;
     }
 
     /**
-     * Get the render information for an attribute.
-     *
-     * @param string $strAttributeName The name of the attribute.
-     *
-     * @return ISimple|null An object or null if the information is not available.
+     * {@inheritdoc}
      */
     public function getSetting($strAttributeName)
     {
@@ -100,13 +87,7 @@ class Collection implements ICollection
     }
 
     /**
-     * Set the render information for an attribute.
-     *
-     * @param string  $strAttributeName The name of the attribute.
-     *
-     * @param ISimple $objSetting       The object containing all the information.
-     *
-     * @return ICollection The instance itself for chaining.
+     * {@inheritdoc}
      */
     public function setSetting($strAttributeName, $objSetting)
     {
@@ -115,13 +96,12 @@ class Collection implements ICollection
         } else {
             unset($this->arrSettings[$strAttributeName]);
         }
+
         return $this;
     }
 
     /**
-     * Retrieve the names of all columns getting rendered via this setting.
-     *
-     * @return string[]
+     * {@inheritdoc}
      */
     public function getSettingNames()
     {
@@ -129,9 +109,7 @@ class Collection implements ICollection
     }
 
     /**
-     * Retrieve the jump to information from the setting.
-     *
-     * @return array|null The jump to information or null if none has been set.
+     * {@inheritdoc}
      */
     public function getJumpTo()
     {
@@ -139,15 +117,12 @@ class Collection implements ICollection
     }
 
     /**
-     * Set the jump to information in the settings object.
-     *
-     * @param mixed $varSetting The value to use.
-     *
-     * @return ICollection The setting itself.
+     * {@inheritdoc}
      */
     public function setJumpTo($varSetting)
     {
         $this->arrJumpTo = $varSetting;
+
         return $this;
     }
 }

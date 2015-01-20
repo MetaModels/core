@@ -34,28 +34,28 @@ class SimpleQuery extends FilterRule
      *
      * @var string
      */
-    protected $strQueryString = null;
+    protected $strQueryString;
 
     /**
      * The query parameters.
      *
      * @var array
      */
-    protected $arrParams = null;
+    protected $arrParams;
 
     /**
      * The name of the id column in the query.
      *
-     * @var array
+     * @var string
      */
-    protected $strIdColumn = null;
+    protected $strIdColumn;
 
     /**
      * The database instance to use.
      *
      * @var Database
      */
-    private $dataBase = null;
+    private $dataBase;
 
     /**
      * Creates an instance of a simple query filter rule.

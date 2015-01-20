@@ -18,7 +18,6 @@
 namespace MetaModels\Events;
 
 use MetaModels\IFactory;
-use MetaModels\IMetaModel;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -78,7 +77,7 @@ class CollectMetaModelTableNamesEvent extends Event
     /**
      * Set the MetaModel instance.
      *
-     * @param IMetaModel $metaModelNames The MetaModel names.
+     * @param string[] $metaModelNames The MetaModel names.
      *
      * @return CollectMetaModelTableNamesEvent
      */

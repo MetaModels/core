@@ -42,7 +42,7 @@ class Filter implements IFilter
     /**
      * The cached result after this filter has been evaluated.
      *
-     * @var int[]
+     * @var string[]|null
      */
     protected $arrMatches = null;
 

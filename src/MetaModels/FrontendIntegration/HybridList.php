@@ -27,6 +27,8 @@ use MetaModels\ItemList;
  * @package    MetaModels
  * @subpackage Frontend
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ *
+ * @property \FrontendTemplate $Template
  */
 class HybridList extends MetaModelHybrid
 {
@@ -65,7 +67,7 @@ class HybridList extends MetaModelHybrid
         $arrReturn = array();
 
         foreach (array_keys($objItemRenderer->getFilterSettings()->getParameterFilterNames()) as $strName) {
-            $varValue = \Input::getInstance()->get($strName);
+            $varValue = \Input::get($strName);
 
             if (is_string($varValue)) {
                 $arrReturn[$strName] = $varValue;
@@ -87,6 +89,7 @@ class HybridList extends MetaModelHybrid
         $this->Template->searchable = !$this->metamodel_donotindex;
 
         $objItemRenderer
+            ->setServiceContainer($this->getServiceContainer())
             ->setMetaModel($this->metamodel, $this->metamodel_rendersettings)
             ->setLimit($this->metamodel_use_limit, $this->metamodel_offset, $this->metamodel_limit)
             ->setPageBreak($this->perPage)

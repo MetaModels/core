@@ -18,7 +18,9 @@
 
 namespace MetaModels\DcGeneral\Events\MetaModel;
 
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\BackendViewInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\BaseView;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\EditMask;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
@@ -58,6 +60,7 @@ class CreateVariantButton extends BaseView
      * @return void
      *
      * @throws \RuntimeException When the base model can not be found.
+     * @throws \InvalidArgumentException When the view in the environment is incompatible.
      */
     public static function handleCreateVariantAction(ActionEvent $event)
     {
@@ -96,6 +99,10 @@ class CreateVariantButton extends BaseView
             $environment->getEventDispatcher()->dispatch($copyEvent::NAME, $copyEvent);
         };
 
-        $event->setResponse($view->createEditMask($model, null, $preFunction, $postFunction));
+        if (!$view instanceof BackendViewInterface) {
+            throw new \InvalidArgumentException('Invalid view registered in environment.');
+        }
+        $editMask = new EditMask($view, $model, null, $preFunction, $postFunction);
+        $event->setResponse($editMask->execute());
     }
 }

@@ -24,7 +24,6 @@ namespace MetaModels\FrontendIntegration;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
-use MetaModels\Filter\Setting\Factory as FilterFactory;
 use MetaModels\FrontendIntegration\Content\FilterClearAll as ContentElementFilterClearAll;
 use MetaModels\FrontendIntegration\Module\FilterClearAll as ModuleFilterClearAll;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -41,7 +40,7 @@ class FrontendFilter
     /**
      * Filter config.
      *
-     * @var \ContentElement|\Module
+     * @var HybridFilterBlock
      */
     protected $objFilterConfig;
 
@@ -71,25 +70,10 @@ class FrontendFilter
      * @param HybridFilterBlock $objFilterConfig The content element or module using this filter.
      *
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getMetaModelFrontendFilter(HybridFilterBlock $objFilterConfig)
     {
         $this->objFilterConfig = $objFilterConfig;
-
-        $this->objFilterConfig->arrJumpTo = $GLOBALS['objPage']->row();
-
-        if ($this->objFilterConfig->metamodel_jumpTo) {
-            // Page to jump to when filter submit.
-            $objPage = \Database::getInstance()->prepare('SELECT id, alias FROM tl_page WHERE id=?')
-                ->limit(1)
-                ->execute($this->objFilterConfig->metamodel_jumpTo);
-            if ($objPage->numRows) {
-                $this->objFilterConfig->arrJumpTo = $objPage->row();
-            }
-        }
 
         $this->formId .= $this->objFilterConfig->id;
         return $this->getFilters();
@@ -152,7 +136,7 @@ class FrontendFilter
     {
         $dispatcher = $this->getDispatcher();
         $event      = new GenerateFrontendUrlEvent(
-            $this->objFilterConfig->arrJumpTo,
+            $this->objFilterConfig->getJumpTo(),
             $this->getJumpToUrl($arrParams)
         );
         $dispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
@@ -160,7 +144,7 @@ class FrontendFilter
         $dispatcher->dispatch(
             ContaoEvents::CONTROLLER_REDIRECT,
             new RedirectEvent(
-                \Environment::getInstance()->base . $event->getUrl()
+                \Environment::get('base') . $event->getUrl()
             )
         );
     }
@@ -185,26 +169,25 @@ class FrontendFilter
      */
     protected function getParams()
     {
-        $input          = \Input::getInstance();
         $arrWantedParam = $this->getWantedNames();
         $arrMyParams    = $arrOtherParams = array();
 
         if ($_GET) {
             foreach (array_keys($_GET) as $strParam) {
                 if (in_array($strParam, $arrWantedParam)) {
-                    $arrMyParams[$strParam] = $input->get($strParam);
+                    $arrMyParams[$strParam] = \Input::get($strParam);
                 } elseif ($strParam != 'page') {
                     // Add only to the array if param is not page.
-                    $arrOtherParams[$strParam] = $input->get($strParam);
+                    $arrOtherParams[$strParam] = \Input::get($strParam);
                 }
             }
         }
 
         // if POST, translate to proper GET url
-        if ($_POST && ($input->post('FORM_SUBMIT') == $this->formId)) {
+        if ($_POST && (\Input::post('FORM_SUBMIT') == $this->formId)) {
             foreach (array_keys($_POST) as $strParam) {
                 if (in_array($strParam, $arrWantedParam)) {
-                    $arrMyParams[$strParam] = $input->post($strParam);
+                    $arrMyParams[$strParam] = \Input::post($strParam);
                 }
             }
         }
@@ -254,7 +237,7 @@ class FrontendFilter
     protected function checkRedirect($widgets, $wantedParameter, $allParameter)
     {
         // If we have POST data, we need to redirect now.
-        if (\Input::getInstance()->post('FORM_SUBMIT') != $this->formId) {
+        if (\Input::post('FORM_SUBMIT') != $this->formId) {
             return;
         }
         $redirectParameters = $allParameter['other'];
@@ -296,10 +279,10 @@ class FrontendFilter
      */
     protected function getFilters()
     {
-        $filterSetting     = FilterFactory::byId($this->objFilterConfig->metamodel_filtering);
         $filterOptions     = $this->getFrontendFilterOptions();
-        $jumpToInformation = $this->objFilterConfig->arrJumpTo;
+        $jumpToInformation = $this->objFilterConfig->getJumpTo();
         $filterParameters  = $this->getParams();
+        $filterSetting     = $this->objFilterConfig->getFilterCollection();
 
         $arrWidgets = $filterSetting->getParameterFilterWidgets(
             $filterParameters['all'],
@@ -348,7 +331,10 @@ class FrontendFilter
      */
     protected function generateContentElement($content, $replace, $contentId)
     {
-        $objDbResult = \Database::getInstance()
+        $objDbResult = $this
+            ->objFilterConfig
+            ->getServiceContainer()
+            ->getDatabase()
             ->prepare('SELECT * FROM tl_content WHERE id=? AND type="metamodels_frontendclearall"')
             ->execute($contentId);
 
@@ -375,7 +361,10 @@ class FrontendFilter
      */
     protected function generateModule($content, $replace, $moduleId)
     {
-        $objDbResult = \Database::getInstance()
+        $objDbResult = $this
+            ->objFilterConfig
+            ->getServiceContainer()
+            ->getDatabase()
             ->prepare('SELECT * FROM tl_module WHERE id=? AND type="metamodels_frontendclearall"')
             ->execute($moduleId);
 

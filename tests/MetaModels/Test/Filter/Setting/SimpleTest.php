@@ -52,7 +52,7 @@ class SimpleTest extends TestCase
      *
      * @param string $name     The parameter name.
      *
-     * @param mixed  $value    The parameter value.
+     * @param string $value    The parameter value.
      *
      * @return string.
      */

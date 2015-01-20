@@ -66,7 +66,7 @@ class DefaultPropertyConditionCreator
                         $metaModel->getTableName()
                     ));
                 }
-
+                // FIXME: For checkboxes the meta value is wrong here as it will compare "" == "0".
                 $event->setInstance(new PropertyValueCondition(
                     $attribute->getColName(),
                     $meta['value']

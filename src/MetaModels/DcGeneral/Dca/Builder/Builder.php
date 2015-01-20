@@ -34,6 +34,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\Defau
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultSearchElementInformation;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultSortElementInformation;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultSubmitElementInformation;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\SearchElementInformationInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\SubmitElementInformationInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\PanelRowCollectionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\PanelRowInterface;
@@ -193,6 +194,7 @@ class Builder
             $dispatcher->dispatch($event::NAME, $event);
         }
 
+        // FIXME: propagator
         $dispatcher->addListener(
             sprintf(
                 '%s[%s][%s]',
@@ -200,29 +202,32 @@ class Builder
                 $metaModel->getTableName(),
                 'createvariant'
             ),
-            'MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton::createButton'
+            array('MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton', 'createButton')
         );
 
+        // FIXME: propagator
         $dispatcher->addListener(
             sprintf(
                 '%s[%s]',
                 GetPasteButtonEvent::NAME,
                 $metaModel->getTableName()
             ),
-            'MetaModels\DcGeneral\Events\MetaModel\PasteButton::handle'
+            array('MetaModels\DcGeneral\Events\MetaModel\PasteButton', 'handle')
         );
 
         // Add some sepcial actions for variants.
         if ($metaModel->hasVariants()) {
+            // FIXME: propagator
             $dispatcher->addListener(
                 sprintf(
                     '%s[%s]',
                     PostDuplicateModelEvent::NAME,
                     $metaModel->getTableName()
                 ),
-                'MetaModels\DcGeneral\Events\MetaModel\DuplicateModel::handle'
+                array('MetaModels\DcGeneral\Events\MetaModel\DuplicateModel', 'handle')
             );
 
+            // FIXME: propagator
             $dispatcher->addListener(
                 sprintf(
                     '%s[%s][%s]',
@@ -230,7 +235,7 @@ class Builder
                     $metaModel->getTableName(),
                     'createvariant'
                 ),
-                'MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton::handleCreateVariantAction'
+                array('MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton', 'handleCreateVariantAction')
             );
         }
     }
@@ -480,6 +485,8 @@ class Builder
      * @param PanelRowInterface $row The row to which the element shall get added to.
      *
      * @return void
+     *
+     * @throws \InvalidArgumentException When the search element does not implement the correct interface.
      */
     protected function parsePanelSearch(PanelRowInterface $row)
     {
@@ -487,6 +494,10 @@ class Builder
             $element = $row->getElement('search');
         } else {
             $element = new DefaultSearchElementInformation();
+        }
+
+        if (!$element instanceof SearchElementInformationInterface) {
+            throw new \InvalidArgumentException('Search element does not implement the correct interface.');
         }
 
         foreach ($this->getInputScreenDetails()->getProperties() as $property => $value) {
@@ -598,6 +609,8 @@ class Builder
      * @param IMetaModelDataDefinition $container The data container.
      *
      * @return void
+     *
+     * @throws \InvalidArgumentException When the stored definition does not implement the correct interface.
      */
     protected function calculateConditions(IMetaModelDataDefinition $container)
     {
@@ -607,6 +620,10 @@ class Builder
             $definition = new DefaultModelRelationshipDefinition();
 
             $container->setDefinition(ModelRelationshipDefinitionInterface::NAME, $definition);
+        }
+
+        if (!$definition instanceof ModelRelationshipDefinitionInterface) {
+            throw new \InvalidArgumentException('Search element does not implement the correct interface.');
         }
 
         if ($this->getMetaModel()->hasVariants()) {
@@ -823,7 +840,6 @@ class Builder
         $inputScreen = $this->getInputScreenDetails();
         if (!$inputScreen->isStandalone()) {
             if ($container->getBasicDefinition()->getMode() == BasicDefinitionInterface::MODE_HIERARCHICAL) {
-                // FIXME: if parent table is not the same table, we are screwed here.
                 throw new \RuntimeException('Hierarchical mode with parent table is not supported yet.');
             }
         }

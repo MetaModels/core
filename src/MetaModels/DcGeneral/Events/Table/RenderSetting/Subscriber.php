@@ -331,6 +331,8 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      *
+     * @throws \RuntimeException When the MetaModel can not be retrieved.
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
@@ -374,6 +376,10 @@ class Subscriber extends BaseSubscriber
 
         $metaModel = $this->getMetaModelById($palette->pid);
 
+        if (!$metaModel) {
+            throw new \RuntimeException('Could not retrieve MetaModel ' . $palette->pid);
+        }
+
         $alreadyExisting = $database
             ->prepare('SELECT * FROM tl_metamodel_rendersetting WHERE pid=?')
             ->execute($pid->getId());
@@ -390,7 +396,7 @@ class Subscriber extends BaseSubscriber
         $blnWantPerform = false;
         // Perform the labour work.
         if ($input->getValue('act') == 'perform') {
-            self::perform($metaModel, $knownAttributes, $intMax, $pid->getId(), $messages);
+            $this->perform($metaModel, $knownAttributes, $intMax, $pid->getId(), $messages);
         } else {
             // Loop over all attributes now.
             foreach ($metaModel->getAttributes() as $attribute) {
@@ -419,7 +425,7 @@ class Subscriber extends BaseSubscriber
         }
 
         if ($blnWantPerform) {
-            $template->action = ampersand(\Environment::getInstance()->request);
+            $template->action = ampersand(\Environment::get('request'));
             $template->submit = $GLOBALS['TL_LANG']['MSC']['continue'];
         } else {
             $template->action = ampersand($referrer->getReferrerUrl());
@@ -508,16 +514,14 @@ class Subscriber extends BaseSubscriber
     /**
      * Apply conditions for meta palettes of the certain render setting types.
      *
-     * @param LegendInterface  $legend  The legend.
-     *
      * @param PaletteInterface $palette The palette.
      *
-     * @return LegendInterface
+     * @return void
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    protected function buildMetaPaletteConditions($legend, $palette)
+    protected function buildMetaPaletteConditions($palette)
     {
         foreach ((array) $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes'] as
                  $typeName => $paletteInfo) {
@@ -532,14 +536,12 @@ class Subscriber extends BaseSubscriber
             foreach ($paletteInfo as $legendName => $properties) {
                 foreach ($properties as $propertyName) {
                     $condition = new PropertyCondition($typeName);
-                    $legend    = self::getLegend($legendName, $palette);
-                    $property  = self::getProperty($propertyName, $legend);
+                    $legend    = $this->getLegend($legendName, $palette);
+                    $property  = $this->getProperty($propertyName, $legend);
                     $this->addCondition($property, $condition);
                 }
             }
         }
-
-        return $legend;
     }
 
     /**
@@ -556,7 +558,6 @@ class Subscriber extends BaseSubscriber
         }
 
         $palettes = $event->getContainer()->getPalettesDefinition();
-        $legend   = null;
 
         foreach ($palettes->getPalettes() as $palette) {
             if ($palette->getName() !== 'default') {
@@ -573,7 +574,7 @@ class Subscriber extends BaseSubscriber
                 $paletteCondition->addCondition(new PaletteCondition($palette->getName()));
             }
 
-            $legend = $this->buildMetaPaletteConditions($legend, $palette);
+            $this->buildMetaPaletteConditions($palette);
         }
     }
 }

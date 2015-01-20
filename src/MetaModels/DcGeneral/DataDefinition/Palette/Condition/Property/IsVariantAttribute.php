@@ -32,13 +32,16 @@ class IsVariantAttribute implements PropertyConditionInterface
     /**
      * {@inheritdoc}
      */
-    // @codingStandardsIgnoreStart - we have unused variables here.
     public function match(
         ModelInterface $model = null,
         PropertyValueBag $input = null,
         PropertyInterface $property = null,
         LegendInterface $legend = null
     ) {
+        if ($property === null) {
+            return false;
+        }
+
         /** @var $model \MetaModels\DcGeneral\Data\Model */
 
         $nativeItem = $model->getItem();
@@ -53,7 +56,6 @@ class IsVariantAttribute implements PropertyConditionInterface
 
         return true;
     }
-    // @codingStandardsIgnoreEnd
 
     /**
      * {@inheritdoc}

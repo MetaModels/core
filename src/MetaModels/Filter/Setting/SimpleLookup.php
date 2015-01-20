@@ -38,7 +38,9 @@ use MetaModels\Render\Setting\ICollection as IRenderSettings;
 class SimpleLookup extends Simple
 {
     /**
-     * {@inheritdoc}
+     * Retrieve the filter parameter name to react on.
+     *
+     * @return string|null
      */
     protected function getParamName()
     {
@@ -67,11 +69,11 @@ class SimpleLookup extends Simple
     /**
      * Internal helper function for descendant classes to retrieve the options.
      *
-     * @param IAttribute $objAttribute The attribute to search.
+     * @param IAttribute    $objAttribute The attribute to search.
      *
-     * @param array      $arrIds       The Id list of items for which to retrieve the options.
+     * @param string[]|null $arrIds       The Id list of items for which to retrieve the options.
      *
-     * @param array      $arrCount     If non null, the amount of matches will get returned.
+     * @param array         $arrCount     If non null, the amount of matches will get returned.
      *
      * @return array
      */
@@ -295,12 +297,13 @@ class SimpleLookup extends Simple
      */
     public function getReferencedAttributes()
     {
-        if (!($this->get('attr_id')
-            && ($objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'))))
-        ) {
-            return array();
+        if ($this->get('attr_id')) {
+            $attribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
+            if ($attribute instanceof IAttribute) {
+                return array($attribute->getColName());
+            }
         }
 
-        return array($objAttribute->getColName());
+        return array();
     }
 }

@@ -112,7 +112,7 @@ class FilterBuilder
                     $filter->addFilterRule(new SearchAttribute(
                         $attribute,
                         $operation['value'],
-                        $this->getMetaModel()->getAvailableLanguages()
+                        $this->getMetaModel()->getAvailableLanguages() ?: array()
                     ));
                     return;
 
@@ -211,7 +211,7 @@ class FilterBuilder
             $filter->addFilterRule(new SearchAttribute(
                 $attribute,
                 $operation['value'],
-                $this->getMetaModel()->getAvailableLanguages()
+                $this->getMetaModel()->getAvailableLanguages() ?: array()
             ));
 
             return;
@@ -251,10 +251,11 @@ class FilterBuilder
     protected function buildNativeSqlProcedure(FilterBuilderSql $procedure, $children)
     {
         $skipped   = array();
-        $tableName = $this->getMetaModel()->getTableName();
+        $metaModel = $this->getMetaModel();
+        $tableName = $metaModel->getTableName();
         foreach ($children as $child) {
             // If there is an attribute contained within this rule, skip it.
-            if ($this->getAttributeFromFilterOperation($child)) {
+            if (isset($child['property']) && $metaModel->hasAttribute($child['property'])) {
                 $skipped[] = $child;
 
                 continue;
@@ -342,13 +343,19 @@ class FilterBuilder
      *
      * @param array $operation The operation to retrieve the attribute for.
      *
-     * @return IAttribute|null
+     * @return IAttribute
+     *
+     * @throws \InvalidArgumentException When the attribute can not be retrieved.
      */
     protected function getAttributeFromFilterOperation($operation)
     {
         $attribute = null;
         if (!empty($operation['property'])) {
             $attribute = $this->getMetaModel()->getAttribute($operation['property']);
+        }
+
+        if ($attribute === null) {
+            throw new \InvalidArgumentException('Attribute ' . $operation['property'] . ' not found.');
         }
 
         return $attribute;

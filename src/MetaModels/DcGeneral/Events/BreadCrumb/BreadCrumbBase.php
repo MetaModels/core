@@ -99,8 +99,7 @@ abstract class BreadCrumbBase
      */
     protected function getBaseUrl()
     {
-        // FIXME: need the environment here.
-        return \Environment::getInstance()->base;
+        return \Environment::get('base');
     }
 
     /**

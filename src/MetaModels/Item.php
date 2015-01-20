@@ -90,11 +90,11 @@ class Item implements IItem
     /**
      * Helper function for {@see MetaModelItem::parseValue()} and {@see MetaModelItem::parseAttribute()}.
      *
-     * @param IAttribute  $objAttribute    The attribute to parse.
+     * @param IAttribute       $objAttribute    The attribute to parse.
      *
-     * @param string      $strOutputFormat The desired output format.
+     * @param string           $strOutputFormat The desired output format.
      *
-     * @param ICollection $objSettings     The settings object to be applied.
+     * @param ICollection|null $objSettings     The settings object to be applied.
      *
      * @return array The parsed information for the given attribute.
      */
@@ -407,6 +407,7 @@ class Item implements IItem
      */
     protected function parseValueHook(&$arrResult, $strFormat, $objSettings)
     {
+        // TODO: fire an event instead.
         // HOOK: let third party extensions manipulate the generated data.
         if (!empty($GLOBALS['METAMODEL_HOOKS']['MetaModelItem::parseValue'])
             && is_array($GLOBALS['METAMODEL_HOOKS']['MetaModelItem::parseValue'])

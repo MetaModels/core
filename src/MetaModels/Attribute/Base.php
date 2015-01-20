@@ -190,7 +190,7 @@ abstract class Base implements IAttribute
      *
      * @return void
      */
-    protected function prepareTemplate(Template $objTemplate, $arrRowData, $objSettings = null)
+    protected function prepareTemplate(Template $objTemplate, $arrRowData, $objSettings)
     {
         $objTemplate->setData(array(
             'attribute'        => $this,

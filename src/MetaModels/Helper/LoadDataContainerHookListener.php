@@ -25,7 +25,7 @@ class LoadDataContainerHookListener
     /**
      * The list of instances by table name.
      *
-     * @var callable[]
+     * @var \Closure[]
      */
     protected static $tableMap = array();
 

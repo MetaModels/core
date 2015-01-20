@@ -120,9 +120,9 @@ class BackendModuleBuilder
     }
 
     /**
-     * Try to load the combinations from cache.
+     * Calculate the cache key to use.
      *
-     * @return string|null
+     * @return string
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)

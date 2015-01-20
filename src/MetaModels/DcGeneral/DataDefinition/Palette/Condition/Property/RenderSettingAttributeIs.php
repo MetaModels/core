@@ -89,16 +89,16 @@ class RenderSettingAttributeIs implements PropertyConditionInterface
             self::$attributeTypes[$value] = \Database::getInstance()
                 ->prepare('SELECT type FROM tl_metamodel_attribute WHERE id=?')
                 ->limit(1)
-                ->executeUncached($value)
+                ->execute($value)
                 ->type;
         }
+
         return self::$attributeTypes[$value];
     }
 
     /**
      * {@inheritdoc}
      */
-    // @codingStandardsIgnoreStart - we have unused variables here.
     public function match(
         ModelInterface $model = null,
         PropertyValueBag $input = null,
@@ -115,7 +115,6 @@ class RenderSettingAttributeIs implements PropertyConditionInterface
 
         return $this->getTypeOfAttribute($value) == $this->getAttributeType();
     }
-    // @codingStandardsIgnoreEnd
 
     /**
      * {@inheritdoc}

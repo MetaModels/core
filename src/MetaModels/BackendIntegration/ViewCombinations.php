@@ -33,16 +33,13 @@ class ViewCombinations extends \MetaModels\Helper\ViewCombinations
      */
     protected function authenticateUser()
     {
-        $env = \Environment::getInstance();
         // Do not execute anything if we are on the index page because no User is logged in.
-        /** @noinspection PhpUndefinedFieldInspection */
-        if (strpos($env->script, 'contao/index.php') !== false) {
+        if (strpos(\Environment::get('script'), 'contao/index.php') !== false) {
             return false;
         }
 
         // Issue #66 - contao/install.php is not working anymore. Thanks to Stefan Lindecke (@lindesbs).
-        /** @noinspection PhpUndefinedFieldInspection */
-        if (strpos($env->request, 'install.php') !== false) {
+        if (strpos(\Environment::get('request'), 'install.php') !== false) {
             return false;
         }
 

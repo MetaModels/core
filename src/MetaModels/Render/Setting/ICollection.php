@@ -58,9 +58,9 @@ interface ICollection
     /**
      * Set the render information for an attribute.
      *
-     * @param string  $strAttributeName The name of the attribute.
+     * @param string       $strAttributeName The name of the attribute.
      *
-     * @param ISimple $objSetting       The object containing all the information.
+     * @param ISimple|null $objSetting       The object containing all the information or null to clear the setting.
      *
      * @return ICollection The instance itself for chaining.
      */
@@ -83,9 +83,9 @@ interface ICollection
     /**
      * Set the jump to information in the settings object.
      *
-     * @param mixed $varSetting The value to use.
+     * @param array $varSetting The value to use.
      *
-     * @return ISimple The setting itself.
+     * @return ICollection The setting itself.
      */
     public function setJumpTo($varSetting);
 }

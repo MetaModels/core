@@ -17,12 +17,10 @@
 
 namespace MetaModels\FrontendIntegration;
 
+use MetaModels\IMetaModelsServiceContainer;
+
 /**
- * Implementation of the MetaModel content element.
- *
- * @package    MetaModels
- * @subpackage Frontend
- * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * Base implementation of a MetaModel Hybrid element.
  */
 abstract class MetaModelHybrid extends \Hybrid
 {
@@ -46,6 +44,19 @@ abstract class MetaModelHybrid extends \Hybrid
      * @var string
      */
     protected $typePrefix;
+
+    /**
+     * Retrieve the service container.
+     *
+     * @return IMetaModelsServiceContainer
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    public function getServiceContainer()
+    {
+        return $GLOBALS['container']['metamodels-service-container'];
+    }
 
     /**
      * Create a new instance.

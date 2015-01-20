@@ -40,6 +40,7 @@ class PasteButton extends BaseView
      */
     public static function handle(GetPasteButtonEvent $event)
     {
+        // FIXME: make non static and use service container.
         $environment = $event->getEnvironment();
         $model       = $event->getModel();
         $clipboard   = $environment->getClipboard();

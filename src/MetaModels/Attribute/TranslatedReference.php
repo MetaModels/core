@@ -171,20 +171,38 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \RuntimeException When an untranslated MetaModel is encountered.
      */
     public function setDataFor($arrValues)
     {
-        foreach ($this->getMetaModel()->getAvailableLanguages() as $strLangCode) {
+        $languages = $this->getMetaModel()->getAvailableLanguages();
+        if ($languages === null) {
+            throw new \RuntimeException(
+                'MetaModel ' . $this->getMetaModel()->getName() . ' does not seem to be translated.'
+            );
+        }
+
+        foreach ($languages as $strLangCode) {
             $this->setTranslatedDataFor($arrValues, $strLangCode);
         }
     }
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \RuntimeException When an untranslated MetaModel is encountered.
      */
     public function unsetDataFor($arrIds)
     {
-        foreach ($this->getMetaModel()->getAvailableLanguages() as $strLangCode) {
+        $languages = $this->getMetaModel()->getAvailableLanguages();
+        if ($languages === null) {
+            throw new \RuntimeException(
+                'MetaModel ' . $this->getMetaModel()->getName() . ' does not seem to be translated.'
+            );
+        }
+
+        foreach ($languages as $strLangCode) {
             $this->unsetValueFor($arrIds, $strLangCode);
         }
     }

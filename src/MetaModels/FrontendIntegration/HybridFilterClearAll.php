@@ -24,6 +24,8 @@ namespace MetaModels\FrontendIntegration;
  * @package    MetaModels
  * @subpackage FrontendClearAll
  * @author     Stefan Heimes <cms@men-at-work.de>
+ *
+ * @property \FrontendTemplate $Template
  */
 abstract class HybridFilterClearAll extends MetaModelHybrid
 {
@@ -52,15 +54,7 @@ abstract class HybridFilterClearAll extends MetaModelHybrid
             return parent::generate();
         }
 
-        // Fallback template.
-        if (!empty($this->metamodel_fef_template)) {
-            $this->strTemplate = $this->metamodel_fef_template;
-        }
-
-        return parent::generate();
-        
-        // ToDo: We have to check if we need this anymore.
-        // return sprintf('[[[metamodelfrontendfilterclearall::mod::%s]]]', $this->id);
+        return sprintf('[[[metamodelfrontendfilterclearall::mod::%s]]]', $this->id);
     }
 
     /**
@@ -77,16 +71,13 @@ abstract class HybridFilterClearAll extends MetaModelHybrid
         $arrPage          = $GLOBALS['objPage']->row();
         $arrGetParameters = array();
 
-        // @codingStandardsIgnoreStart - Skip filter params, loop over $_GET to get a list of all keys.
-        foreach (array_keys($_GET) as $mixGetKey)
-            // @codingStandardsIgnoreEnd - Continue with style checking.
-        {
+        foreach (array_keys($_GET) as $mixGetKey) {
             if (in_array($mixGetKey, $GLOBALS['MM_FILTER_PARAMS'])) {
                 $blnActiveParam = true;
                 continue;
             }
 
-            $arrGetParameters[$mixGetKey] = \Input::getInstance()->get($mixGetKey);
+            $arrGetParameters[$mixGetKey] = \Input::get($mixGetKey);
         }
 
         // Check if we have filter and if we have active params.
@@ -107,6 +98,11 @@ abstract class HybridFilterClearAll extends MetaModelHybrid
      */
     public function generateReal()
     {
+        // Fallback template.
+        if (!empty($this->metamodel_fef_template)) {
+            $this->strTemplate = $this->metamodel_fef_template;
+        }
+
         return parent::generate();
     }
 
