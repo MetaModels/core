@@ -28,7 +28,6 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
  */
 class InputScreenRenderModeIs implements PropertyConditionInterface
 {
-
     /**
      * The expected property value.
      *
@@ -58,7 +57,7 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
      *
      * @param string $desiredState The desired state.
      *
-     * @return InputScreenAttributeIs
+     * @return InputScreenRenderModeIs
      */
     public function setRenderMode($desiredState)
     {
@@ -70,7 +69,7 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
     /**
      * Retrieve the desired state.
      *
-     * @return mixed
+     * @return string
      */
     public function getRenderMode()
     {

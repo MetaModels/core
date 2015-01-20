@@ -68,14 +68,14 @@ class FrontendFilter
     /**
      * Configure the filter module.
      *
-     * @param \ContentElement|\Module $objFilterConfig The content element or module using this filter.
+     * @param HybridFilterBlock $objFilterConfig The content element or module using this filter.
      *
      * @return array
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function getMetaModelFrontendFilter($objFilterConfig)
+    public function getMetaModelFrontendFilter(HybridFilterBlock $objFilterConfig)
     {
         $this->objFilterConfig = $objFilterConfig;
 

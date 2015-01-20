@@ -248,7 +248,7 @@ class Builder
     /**
      * Retrieve the MetaModel.
      *
-     * @return \MetaModels\IMetaModel|null
+     * @return \MetaModels\IMetaModel
      */
     protected function getMetaModel()
     {

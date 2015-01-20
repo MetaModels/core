@@ -57,7 +57,7 @@ class RenderSettingAttributeIs implements PropertyConditionInterface
      *
      * @param string $attributeType The attribute type name.
      *
-     * @return InputScreenAttributeIs
+     * @return RenderSettingAttributeIs
      */
     public function setAttributeType($attributeType)
     {

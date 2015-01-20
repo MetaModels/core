@@ -110,7 +110,7 @@ abstract class BreadCrumbBase
      *
      * @param InputProviderInterface $input The input provider in use.
      *
-     * @return mixed
+     * @return bool
      */
     protected function isActiveTable($table, InputProviderInterface $input)
     {
@@ -134,13 +134,13 @@ abstract class BreadCrumbBase
     }
 
     /**
-     * Create an instance from the passed values.
+     * Create an serialized id from the passed values.
      *
      * @param string $dataProviderName The data provider name.
      *
      * @param mixed  $modelId          The id.
      *
-     * @return IdSerializer
+     * @return string
      */
     public function seralizeId($dataProviderName, $modelId)
     {

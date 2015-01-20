@@ -276,6 +276,9 @@ class Subscriber extends BaseSubscriber
      * @param GetPropertyOptionsEvent $event The event.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getAttributeOptions(GetPropertyOptionsEvent $event)
     {
@@ -293,7 +296,7 @@ class Subscriber extends BaseSubscriber
         foreach ($metaModel->getAttributes() as $attribute) {
 
             if (!in_array($attribute->get('type'), $allowedAttributes) && is_array($allowedAttributes)) {
-               continue;
+                continue;
             }
 
             $typeName              = $attribute->get('type');

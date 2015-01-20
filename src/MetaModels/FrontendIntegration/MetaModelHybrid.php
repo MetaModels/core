@@ -50,7 +50,7 @@ abstract class MetaModelHybrid extends \Hybrid
     /**
      * Create a new instance.
      *
-     * @param \Database\Result|\Model\Collection $objElement The object from the database.
+     * @param \Database\Result $objElement The object from the database.
      */
     public function __construct($objElement)
     {

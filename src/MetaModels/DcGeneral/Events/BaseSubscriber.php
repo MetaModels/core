@@ -161,7 +161,7 @@ class BaseSubscriber
      *
      * @param string $method The method name.
      *
-     * @return callable
+     * @return \Closure
      *
      * @deprecated Will not be needed anymore.
      */
@@ -186,7 +186,7 @@ class BaseSubscriber
      *
      * @param int      $priority The priority.
      *
-     * @return callable
+     * @return \Closure
      *
      * @deprecated Non working in the future when the EventPropagator has been removed.
      *

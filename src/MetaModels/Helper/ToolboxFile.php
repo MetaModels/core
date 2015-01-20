@@ -668,7 +668,7 @@ class ToolboxFile
     /**
      * Translate the file ID to file path.
      *
-     * @param mixed $varValue The file id.
+     * @param string $varValue The file id.
      *
      * @return string
      */

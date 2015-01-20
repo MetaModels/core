@@ -80,7 +80,7 @@ class CollectMetaModelTableNamesEvent extends Event
      *
      * @param IMetaModel $metaModelNames The MetaModel names.
      *
-     * @return CreateMetaModelEvent
+     * @return CollectMetaModelTableNamesEvent
      */
     public function setMetaModelNames($metaModelNames)
     {
@@ -94,7 +94,7 @@ class CollectMetaModelTableNamesEvent extends Event
      *
      * @param string[] $metaModelNames The MetaModel names.
      *
-     * @return CreateMetaModelEvent
+     * @return CollectMetaModelTableNamesEvent
      */
     public function addMetaModelNames($metaModelNames)
     {
