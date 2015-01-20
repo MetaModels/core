@@ -298,6 +298,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
             'inputType' => 'multiColumnWizard',
             'eval'      => array
             (
+                'tl_class'     => 'clr',
                 'columnFields' => array
                 (
                     'langcode'    => array
