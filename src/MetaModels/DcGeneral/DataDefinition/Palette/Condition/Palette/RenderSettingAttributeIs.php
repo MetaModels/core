@@ -106,10 +106,10 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
         } elseif ($model) {
             $value = $model->getProperty('attr_id');
         } else {
-            return 0;
+            return false;
         }
 
-        return ($this->getTypeOfAttribute($value) == $this->getAttributeType()) ? $this->getWeight() : 0;
+        return ($this->getTypeOfAttribute($value) == $this->getAttributeType()) ? $this->getWeight() : false;
     }
 
     /**
