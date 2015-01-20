@@ -98,7 +98,7 @@ class HybridFilterBlock extends MetaModelHybrid
      */
     public function getFilterCollection()
     {
-        return $this->objFilterConfig
+        return $this
             ->getServiceContainer()
             ->getFilterFactory()
             ->createCollection($this->metamodel_filtering);
