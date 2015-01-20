@@ -549,7 +549,7 @@ class Builder
         }
 
         if (!$definition->hasActiveInputScreen()) {
-            $definition->setActiveInputScreen($this->getInputScreenDetails());
+            $definition->setActiveInputScreen($this->getViewCombinations()->getInputScreen($container->getName()));
         }
     }
 
