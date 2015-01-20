@@ -89,7 +89,7 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
             self::$stateBuffer[$value] = \Database::getInstance()
                 ->prepare('SELECT rendermode FROM tl_metamodel_dca WHERE id=?')
                 ->limit(1)
-                ->executeUncached($value)
+                ->execute($value)
                 ->rendermode;
         }
 
