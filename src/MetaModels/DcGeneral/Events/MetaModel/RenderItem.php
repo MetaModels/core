@@ -95,10 +95,14 @@ class RenderItem
         $template      = new Template($renderSetting->get('template'));
         $renderSetting = self::removeInvariantAttributes($nativeItem, $renderSetting);
 
-        $template->settings = $renderSetting;
-        $template->items    = new Items(array($nativeItem));
-        $template->view     = $renderSetting;
-        $template->data     = array($nativeItem->parseValue('html5', $renderSetting));
+        $template->setData(
+            array(
+                'settings' => $renderSetting,
+                'items'    => new Items(array($nativeItem)),
+                'view'     => $renderSetting,
+                'data'     => array($nativeItem->parseValue('html5', $renderSetting))
+            )
+        );
 
         $event->setArgs(array($template->parse('html5', true)));
     }
