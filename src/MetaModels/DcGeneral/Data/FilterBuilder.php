@@ -226,6 +226,7 @@ class FilterBuilder
                     $operation['property']
                 ),
                 array($operation['value']),
+                'id',
                 $this->getDatabase()
             ));
 
