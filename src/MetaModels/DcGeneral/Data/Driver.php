@@ -89,7 +89,6 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     public function delete($varItem)
     {
-        $objModelItem = null;
         // Determine the id.
         if (is_object($varItem) && ($varItem instanceof Model)) {
             $objModelItem = $varItem->getItem();

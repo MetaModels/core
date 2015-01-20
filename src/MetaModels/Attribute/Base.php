@@ -402,7 +402,7 @@ abstract class Base implements IAttribute
     /**
      * {@inheritdoc}
      */
-    public function widgetToValue($varValue, $intId)
+    public function widgetToValue($varValue, $itemId)
     {
         return $varValue;
     }
@@ -484,10 +484,10 @@ abstract class Base implements IAttribute
     /**
      * {@inheritdoc}
      */
-    public function sortIds($arrIds, $strDirection)
+    public function sortIds($idList, $strDirection)
     {
         // Base implementation, do not perform any sorting.
-        return $arrIds;
+        return $idList;
     }
 
     /**

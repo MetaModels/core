@@ -89,7 +89,7 @@ class FilterBuilderSql
     /**
      * Build the procedure and return it.
      *
-     * @return string.
+     * @return string
      */
     public function getProcedure()
     {

@@ -36,7 +36,7 @@ interface ITranslated extends IAttribute
      * @param array  $arrLanguages Array of valid language codes that shall be searched. (optional)
      *                             If empty, all languages will be taken into account.
      *
-     * @return int[] the ids of matching items.
+     * @return string[] the ids of matching items.
      */
     public function searchForInLanguages($strPattern, $arrLanguages = array());
 
@@ -54,9 +54,9 @@ interface ITranslated extends IAttribute
     /**
      * Get values for the given items in a certain language.
      *
-     * @param int[]  $arrIds      The ids for which values shall be retrieved.
+     * @param string[] $arrIds      The ids for which values shall be retrieved.
      *
-     * @param string $strLangCode The language code for which the data shall be retrieved.
+     * @param string   $strLangCode The language code for which the data shall be retrieved.
      *
      * @return mixed[] the values.
      */
@@ -65,9 +65,9 @@ interface ITranslated extends IAttribute
     /**
      * Remove values for items in a certain language.
      *
-     * @param int[]  $arrIds      The ids for which values shall be removed.
+     * @param string[] $arrIds      The ids for which values shall be removed.
      *
-     * @param string $strLangCode The language code for which the data shall be removed.
+     * @param string   $strLangCode The language code for which the data shall be removed.
      *
      * @return void
      */

@@ -71,7 +71,7 @@ class InputScreen implements IInputScreen
     /**
      * Grouping and sorting information.
      *
-     * @var IInputScreenGroupingAndSorting
+     * @var IInputScreenGroupingAndSorting[]
      */
     protected $groupSort = array();
 

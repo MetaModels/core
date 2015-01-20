@@ -127,7 +127,7 @@ class Subscriber extends BaseSubscriber
      *
      * @param string              $type       The type of the element.
      *
-     * @return mixed|string
+     * @return string
      */
     public function getLabelText(TranslatorInterface $translator, $type)
     {

@@ -27,8 +27,8 @@ use MetaModels\Render\Setting\ICollection;
  * @subpackage Interface
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  *
- * @method IItems|boolean next() Advance the internal cursor by one returns the current instance or false when last
- *                               item has had been reached.
+ * @method IItems|bool next() Advance the internal cursor by one returns the current instance or false when last
+ *                            item has had been reached.
  */
 interface IItems extends \Iterator, \ArrayAccess
 {
@@ -49,7 +49,7 @@ interface IItems extends \Iterator, \ArrayAccess
     /**
      * Reset to the first element in the collection.
      *
-     * @return bool true if there are items contained, false otherwise.
+     * @return IItems|bool true if there are items contained, false otherwise.
      */
     public function first();
 

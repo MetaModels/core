@@ -30,7 +30,6 @@ use MetaModels\Filter\Rules\SimpleQuery;
  */
 abstract class TranslatedReference extends BaseComplex implements ITranslated
 {
-
     /**
      * Retrieve the name of the table that contains the data for this reference.
      *
@@ -41,9 +40,9 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     /**
      * Build a where clause for the given id(s) and language code.
      *
-     * @param mixed  $mixIds      One, none or many ids to use.
+     * @param string[]|string|null $mixIds      One, none or many ids to use.
      *
-     * @param string $mixLangCode The language code/s to use, optional.
+     * @param string|string[]      $mixLangCode The language code/s to use, optional.
      *
      * @return array
      */
@@ -130,7 +129,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function widgetToValue($varValue, $intId)
+    public function widgetToValue($varValue, $itemId)
     {
         return array
         (
@@ -226,11 +225,11 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     /**
      * {@inheritDoc}
      */
-    public function sortIds($arrIds, $strDirection)
+    public function sortIds($idList, $strDirection)
     {
         $objDB = $this->getMetaModel()->getServiceContainer()->getDatabase();
 
-        $arrWhere = $this->getWhere($arrIds, array(
+        $arrWhere = $this->getWhere($idList, array(
             $this->getMetaModel()->getActiveLanguage(),
             $this->getMetaModel()->getFallbackLanguage()
         ));
@@ -252,11 +251,11 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     /**
      * {@inheritDoc}
      */
-    public function getFilterOptions($arrIds, $usedOnly, &$arrCount = null)
+    public function getFilterOptions($idList, $usedOnly, &$arrCount = null)
     {
         $objDB = $this->getMetaModel()->getServiceContainer()->getDatabase();
         // TODO: implement $arrIds and $usedOnly handling here.
-        $arrWhere = $this->getWhere($arrIds, $this->getMetaModel()->getActiveLanguage());
+        $arrWhere = $this->getWhere($idList, $this->getMetaModel()->getActiveLanguage());
         $strQuery = 'SELECT * FROM ' . $this->getValueTable() . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '');
 
         $objValue = $objDB->prepare($strQuery)

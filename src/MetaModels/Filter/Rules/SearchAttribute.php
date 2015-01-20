@@ -63,7 +63,7 @@ class SearchAttribute extends FilterRule
      */
     public function __construct($objAttribute, $strValue = '', $arrValidLanguages = array())
     {
-        parent::__construct(null);
+        parent::__construct();
         $this->objAttribute      = $objAttribute;
         $this->strValue          = $strValue;
         $this->arrValidLanguages = $arrValidLanguages;

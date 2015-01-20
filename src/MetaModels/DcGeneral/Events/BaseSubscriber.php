@@ -83,7 +83,7 @@ class BaseSubscriber
     /**
      * Register multiple event listeners.
      *
-     * @param array    $eventName The event name to register.
+     * @param string   $eventName The event name to register.
      *
      * @param callable $listener  The listener to register.
      *

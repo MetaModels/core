@@ -90,7 +90,7 @@ class ConditionOr extends FilterRule
      * also when the first rule returns a non empty result and return that
      * result.
      *
-     * @return int[]|null
+     * @return string[]|null
      */
     public function getMatchingIds()
     {

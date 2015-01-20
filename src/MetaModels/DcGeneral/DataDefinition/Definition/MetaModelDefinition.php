@@ -27,14 +27,14 @@ class MetaModelDefinition implements IMetaModelDefinition
     /**
      * The id of the active render setting.
      *
-     * @var int
+     * @var string
      */
     protected $activeRenderSetting;
 
     /**
      * The id of the active input screen.
      *
-     * @var int
+     * @var string
      */
     protected $activeInputScreen;
 

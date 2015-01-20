@@ -17,8 +17,6 @@
 
 namespace MetaModels\Attribute;
 
-use MetaModels\Attribute\Events\CollectMetaModelAttributeInformationEvent;
-use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 
 /**

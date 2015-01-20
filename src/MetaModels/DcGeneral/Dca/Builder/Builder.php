@@ -1463,7 +1463,7 @@ class Builder
 
         foreach ($inputScreen->getLegends() as $legendName => $legend) {
             $paletteLegend = new Legend($legendName);
-            $paletteLegend->setInitialVisibility($legend['visible']);
+            $paletteLegend->setInitialVisibility((bool) $legend['visible']);
             $palette->addLegend($paletteLegend);
 
             $this->translator->setValue($legendName . '_legend', $legend['name'], $container->getName());

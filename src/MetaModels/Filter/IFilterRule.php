@@ -33,7 +33,7 @@ interface IFilterRule
      * If no filtering was applied and therefore all ids shall be reported as valid, the return value of NULL is
      * allowed.
      *
-     * @return int[]|null
+     * @return string[]|null
      */
     public function getMatchingIds();
 }

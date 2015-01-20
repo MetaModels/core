@@ -72,7 +72,7 @@ class LessThan implements IFilterRule
      *
      * If no entries have been found, the result is an empty array.
      *
-     * @return int[]|null
+     * @return string[]|null
      */
     public function getMatchingIds()
     {

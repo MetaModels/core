@@ -319,8 +319,6 @@ class Subscriber extends BaseSubscriber
         $input       = $environment->getInputProvider();
         $pid         = IdSerializer::fromSerialized($input->getParameter('pid'));
 
-        $event->getAction()->getName();
-
         $dispatcher->dispatch(ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE, new LoadLanguageFileEvent('default'));
         $dispatcher->dispatch(
             ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,

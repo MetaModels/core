@@ -93,7 +93,7 @@ class BaseSimple extends Base implements ISimple
      * This is only relevant, when using "null" as id list for attributes that have pre configured
      * values like select lists and tags i.e.
      *
-     * @param array $arrIds   The ids of items that the values shall be fetched from.
+     * @param array $idList   The ids of items that the values shall be fetched from.
      *
      * @param bool  $usedOnly Determines if only "used" values shall be returned.
      *
@@ -101,12 +101,12 @@ class BaseSimple extends Base implements ISimple
      *
      * @return array All options matching the given conditions as name => value.
      */
-    public function getFilterOptions($arrIds, $usedOnly, &$arrCount = null)
+    public function getFilterOptions($idList, $usedOnly, &$arrCount = null)
     {
         $strCol = $this->getColName();
-        if ($arrIds) {
+        if ($idList) {
             // Ensure proper integer ids for SQL injection safety reasons.
-            $strIdList = implode(',', array_map('intval', $arrIds));
+            $strIdList = implode(',', array_map('intval', $idList));
             $objRow    = \Database::getInstance()->execute(
                 'SELECT ' . $strCol . ', COUNT(' . $strCol . ') as mm_count
                 FROM ' . $this->getMetaModel()->getTableName() .
@@ -137,32 +137,26 @@ class BaseSimple extends Base implements ISimple
     }
 
     /**
-     * Sorts the given array list by field value in the given direction.
+     * {@inheritdoc}
      *
      * This base implementation does a plain SQL sort by native value as defined by MySQL.
-     *
-     * @param int[]  $arrIds       A list of Ids from the MetaModel table.
-     *
-     * @param string $strDirection The direction for sorting. either 'ASC' or 'DESC', as in plain SQL.
-     *
-     * @return int[] The sorted integer array.
      */
-    public function sortIds($arrIds, $strDirection)
+    public function sortIds($idList, $strDirection)
     {
         // Base implementation, do a simple sorting on given column.
-        $arrIds = \Database::getInstance()
+        $idList = \Database::getInstance()
             ->prepare(
                 sprintf(
                     'SELECT id FROM %s WHERE id IN (%s) ORDER BY %s %s',
                     $this->getMetaModel()->getTableName(),
-                    implode(',', $arrIds),
+                    implode(',', $idList),
                     $this->getColName(),
                     $strDirection
                 )
             )
             ->execute()
             ->fetchEach('id');
-        return $arrIds;
+        return $idList;
     }
 
     /**

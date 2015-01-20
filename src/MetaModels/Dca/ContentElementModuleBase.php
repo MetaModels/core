@@ -233,7 +233,7 @@ class ContentElementModuleBase
      *
      * @param \DC_Table $objDC The data container calling this method.
      *
-     * @return string[int] array of all attributes as id => human name
+     * @return string[] array of all attributes as id => human name
      */
     public function getFilterSettings(\DC_Table $objDC)
     {
@@ -258,7 +258,7 @@ class ContentElementModuleBase
      *
      * @param \DC_Table $objDC The data container calling this method.
      *
-     * @return string[int] array of all attributes as id => human name
+     * @return string[] array of all attributes as id => human name
      */
     public function getRenderSettings(\DC_Table $objDC)
     {
@@ -298,7 +298,7 @@ class ContentElementModuleBase
      *
      * @param \DC_Table $objDc The data container calling this method.
      *
-     * @return string[string] array of all attributes as colName => human name
+     * @return string[] array of all attributes as colName => human name
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)

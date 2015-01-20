@@ -45,7 +45,7 @@ return array(
         }
     ),
     MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND => array(
-        function (MetaModelsBootEvent $event, $eventName, $dispatcher) {
+        function (MetaModelsBootEvent $event, $eventName, EventDispatcherInterface $dispatcher) {
             $dispatcher->addListener(
                 CreatePropertyConditionEvent::NAME,
                 array(new DefaultPropertyConditionCreator(), 'handle')

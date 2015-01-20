@@ -70,7 +70,7 @@ class SimpleQuery extends FilterRule
      */
     public function __construct($strQueryString, $arrParams = array(), $strIdColumn = 'id', $dataBase = null)
     {
-        parent::__construct(null);
+        parent::__construct();
 
         if ($dataBase === null) {
             $dataBase = \Database::getInstance();

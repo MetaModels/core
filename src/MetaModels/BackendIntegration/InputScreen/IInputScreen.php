@@ -84,7 +84,7 @@ interface IInputScreen
      *
      * @param string $name The name of the property.
      *
-     * @return ConditionChainInterface
+     * @return ConditionChainInterface|null
      */
     public function getConditionsFor($name);
 

@@ -174,18 +174,18 @@ interface IAttribute
      * This is used for transferring a value that has been retrieved from a widget into native attribute
      * value.
      *
-     * @param mixed $varValue The value to be transformed.
+     * @param mixed  $varValue The value to be transformed.
      *
-     * @param int   $intId    The id of the item the value belongs to.
+     * @param string $itemId   The id of the item the value belongs to.
      *
      * @return mixed The resulting native value
      */
-    public function widgetToValue($varValue, $intId);
+    public function widgetToValue($varValue, $itemId);
 
     /**
      * This method is called to store the data for certain items to the database.
      *
-     * @param mixed[int] $arrValues The values to be stored into database. Mapping is item id=>value.
+     * @param mixed[] $arrValues The values to be stored into database. Mapping is item id=>value.
      *
      * @return void
      */
@@ -227,13 +227,13 @@ interface IAttribute
     /**
      * Sorts the given array list by field value in the given direction.
      *
-     * @param int[]  $arrIds       A list of Ids from the MetaModel table.
+     * @param string[] $idList       A list of Ids from the MetaModel table.
      *
-     * @param string $strDirection The direction for sorting. either 'ASC' or 'DESC', as in plain SQL.
+     * @param string   $strDirection The direction for sorting. either 'ASC' or 'DESC', as in plain SQL.
      *
-     * @return int[] The sorted integer array.
+     * @return string[] The sorted array.
      */
-    public function sortIds($arrIds, $strDirection);
+    public function sortIds($idList, $strDirection);
 
     /**
      * Retrieve the filter options of this attribute.
@@ -247,15 +247,16 @@ interface IAttribute
      * This is only relevant, when using "null" as id list for attributes that have pre configured
      * values like select lists and tags i.e.
      *
-     * @param array      $arrIds   The ids of items that the values shall be fetched from.
+     * @param string[]|null $idList   The ids of items that the values shall be fetched from
+     *                                (If empty or null, all items).
      *
-     * @param bool       $usedOnly Determines if only "used" values shall be returned.
+     * @param bool          $usedOnly Determines if only "used" values shall be returned.
      *
-     * @param array|null $arrCount Array for the counted values.
+     * @param array|null    $arrCount Array for the counted values.
      *
      * @return array All options matching the given conditions as name => value.
      */
-    public function getFilterOptions($arrIds, $usedOnly, &$arrCount = null);
+    public function getFilterOptions($idList, $usedOnly, &$arrCount = null);
 
     /**
      * Search all items that match the given expression.
@@ -264,7 +265,7 @@ interface IAttribute
      *
      * @param string $strPattern The text to search for. This may contain wildcards.
      *
-     * @return int[] the ids of matching items.
+     * @return string[]|null The list of item ids of all items matching the condition or null if all match.
      */
     public function searchFor($strPattern);
 
@@ -275,7 +276,7 @@ interface IAttribute
      *
      * @param bool  $blnInclusive If true, the passed value will be included, if false, it will be excluded.
      *
-     * @return int[] The list of item ids of all items matching the condition.
+     * @return string[]|null The list of item ids of all items matching the condition or null if all match.
      */
     public function filterGreaterThan($varValue, $blnInclusive = false);
 
@@ -286,7 +287,7 @@ interface IAttribute
      *
      * @param bool  $blnInclusive If true, the passed value will be included, if false, it will be excluded.
      *
-     * @return int[] The list of item ids of all items matching the condition.
+     * @return string[]|null The list of item ids of all items matching the condition or null if all match.
      */
     public function filterLessThan($varValue, $blnInclusive = false);
 
@@ -295,7 +296,7 @@ interface IAttribute
      *
      * @param mixed $varValue The value to use as upper end.
      *
-     * @return array The list of item ids of all items matching the condition.
+     * @return string[]|null The list of item ids of all items matching the condition or null if all match.
      */
     public function filterNotEqual($varValue);
 

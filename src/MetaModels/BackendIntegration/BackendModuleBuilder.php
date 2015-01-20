@@ -298,8 +298,7 @@ class BackendModuleBuilder
         }
 
         $parentTables = $this->getTableNamesFromInputScreens(
-            $this->viewCombinations->getParentedInputScreenNames(),
-            $this->viewCombinations
+            $this->viewCombinations->getParentedInputScreenNames()
         );
         $this->addChildTablesToBackendModules($parentTables);
     }
