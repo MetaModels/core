@@ -280,7 +280,7 @@ class Subscriber extends BaseSubscriber
      */
     protected function buildWidget(BuildWidgetEvent $event)
     {
-        $metaModel = $this->getMetaModelByModelPid($event->getModel()->getProperty('pid'));
+        $metaModel = $this->getMetaModelByModelPid($event->getModel());
 
         Helper::prepareLanguageAwareWidget(
             $event->getEnvironment(),
