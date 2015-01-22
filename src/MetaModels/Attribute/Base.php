@@ -168,7 +168,7 @@ abstract class Base implements IAttribute
 
                 $arrResult = $objCallback->$strMethod(
                     $this,
-                    $arrBaseFormatted,
+                    $arrResult,
                     $arrRowData,
                     $strOutputFormat,
                     $objSettings
