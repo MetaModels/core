@@ -7,5 +7,5 @@
 
     -->
 <project name="metamodels-core" default="build">
-    <import file="vendor/contao-community-alliance/build-system/ccabs.main.xml" />
+    <import file="vendor/phpcq/phpcq/phpcq.main.xml" />
 </project>
