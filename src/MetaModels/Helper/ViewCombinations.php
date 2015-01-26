@@ -169,6 +169,12 @@ abstract class ViewCombinations
      */
     protected function saveToCache()
     {
+        // Pretty print only came available with php 5.4.
+        $flags = 0;
+        if (defined('JSON_PRETTY_PRINT')) {
+            $flags = JSON_PRETTY_PRINT;
+        }
+
         return $this->container->getCache()->save(
             $this->calculateCacheKey(),
             json_encode(
@@ -178,7 +184,7 @@ abstract class ViewCombinations
                     'parentMap'   => $this->parentMap,
                     'childMap'    => $this->childMap
                 ),
-                JSON_PRETTY_PRINT
+                $flags
             )
         );
     }
