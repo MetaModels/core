@@ -18,6 +18,7 @@
 /**
  * Fields
  */
+
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype']            = array('Type', 'Select the attribute type.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']            = array('Attribute', 'Attribute this setting relates to.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']           = array('Custom template to use for generating', 'Select the template that shall be used for the selected attribute. Valid template files start with "mm_&lt;type&gt;" where the type name is put for &lt;type&gt;');
@@ -31,9 +32,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory']          = array('Ma
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']         = array('Always save', 'If true the field will always be saved, even if its value has not changed.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['chosen']             = array('Chosen', 'Enable Chosen graphical select widget.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['filterable']         = array('Filterable', 'Check if this attribute shall be available for backend filtering.');
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortable']           = array('Sortable', 'Check if this attribute shall be available for backend sorting.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['searchable']         = array('Searchable', 'Check if this attribute shall be available for backend search.');
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag']               = array('Sorting flag override', 'If you want to override the global sorting flag from the palette for this attribute, please select it here.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']          = array('Do not strip html content.', 'If you select this, HTML content will be preserved.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']       = array('Do not encode html tags.', 'If you select this, HTML tags will not be encoded.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['decodeEntities']     = array('Decode HTML entities.', 'Select this, if you want HTML Entities to be decoded.');
@@ -50,6 +49,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']           = array('Re
 /**
  * Legends
  */
+
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']        = 'Type';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['presentation_legend'] = 'Widget appearance related options';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['functions_legend']    = 'Functionality related options';
@@ -61,6 +61,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']     = 'Advance
 /**
  * Buttons
  */
+
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']             = array('New', 'Create new setting.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['edit']            = array('Edit setting', 'Edit setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy']            = array('Copy setting definition', 'Copy setting ID %s');
@@ -72,26 +73,13 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']          = array('Add a
 /**
  * References
  */
+
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['legend']         = 'Legend';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['attribute']      = 'Attribute';
 
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['0']     = 'Do not override sorting';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['1']     = 'Sort by initial letter ascending';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['2']     = 'Sort by initial letter descending';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['3']     = 'Sort by initial "length" letters ascending';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['4']     = 'Sort by initial "length" letters descending';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['5']     = 'Sort by day ascending';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['6']     = 'Sort by day descending';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['7']     = 'Sort by month ascending';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['8']     = 'Sort by month descending';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['9']     = 'Sort by year ascending';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['10']    = 'Sort by year descending';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['11']    = 'Sort ascending';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['12']    = 'Sort descending';
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['0'] = 'Strip slash on save';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['1'] = 'Add slash on save';

@@ -1389,10 +1389,6 @@ class Builder
             $property->setSearchable($propInfo['search']);
         }
 
-        if (isset($propInfo['sorting'])) {
-            $property->setSortable($propInfo['sorting']);
-        }
-
         if (isset($propInfo['filter'])) {
             $property->setFilterable($propInfo['filter']);
         }

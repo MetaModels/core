@@ -124,10 +124,7 @@ CREATE TABLE `tl_metamodel_dcasetting` (
   `tl_class` varchar(64) NOT NULL default '',
 
   `filterable` char(1) NOT NULL default '',
-  `sortable` char(1) NOT NULL default '',
   `searchable` char(1) NOT NULL default '',
--- sorting flag override.
-  `flag` int(4) unsigned NOT NULL default '0',
 -- mandatory flag
   `mandatory` char(1) NOT NULL default ''
 -- alwaysSave flag

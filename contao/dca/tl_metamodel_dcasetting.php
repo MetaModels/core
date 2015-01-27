@@ -267,11 +267,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             // * advanced
             // Core fields:
             // * tl_class           css class to use in backend.
-            // * flag               search flag to override.
             // * mandatory          mandatory
             // * chosen
             // * filterable         can be filtered (in backend)
-            // * sortable           can be sorted (in backend)
             // * searchable         can be searched (in backend)
             // * allowHtml          do not strip html content.
             // * preserveTags       do not encode html tags.
@@ -374,16 +372,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
                 'tl_class' => 'w50',
             )
         ),
-        'sortable'           => array
-        (
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortable'],
-            'exclude'   => true,
-            'inputType' => 'checkbox',
-            'eval'      => array
-            (
-                'tl_class' => 'm12 w50',
-            )
-        ),
         'searchable'         => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['searchable'],
@@ -393,19 +381,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             (
                 'tl_class' => 'w50',
             )
-        ),
-        'flag'               => array
-        (
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag'],
-            'exclude'   => true,
-            'inputType' => 'select',
-            'options'   => array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'),
-            'default'   => '0',
-            'eval'      => array
-            (
-                'tl_class' => 'w50',
-            ),
-            'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']
         ),
         'chosen'             => array
         (

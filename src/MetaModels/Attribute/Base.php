@@ -281,7 +281,7 @@ abstract class Base implements IAttribute
     {
         return array(
             // Settings originating from tl_metamodel_attribute.
-            'id', 'pid', 'sorting', 'tstamp', 'name', 'description', 'type', 'colname', 'isvariant',
+            'id', 'pid', 'tstamp', 'name', 'description', 'type', 'colname', 'isvariant',
             // Settings originating from tl_metamodel_dcasetting.
             'tl_class', 'readonly');
     }
@@ -352,10 +352,6 @@ abstract class Base implements IAttribute
             $arrFieldDef['eval']['trailingSlash'] = (bool) $arrOverrides['trailingSlash'];
         }
 
-        // Sorting flag override.
-        if (in_array('flag', $arrSettingNames) && $arrOverrides['flag']) {
-            $arrFieldDef['flag'] = $arrOverrides['flag'];
-        }
         // Panel conditions.
         if (in_array('filterable', $arrSettingNames) && $arrOverrides['filterable']) {
             $arrFieldDef['filter'] = true;
@@ -363,9 +359,7 @@ abstract class Base implements IAttribute
         if (in_array('searchable', $arrSettingNames) && $arrOverrides['searchable']) {
             $arrFieldDef['search'] = true;
         }
-        if (in_array('sortable', $arrSettingNames) && $arrOverrides['sortable']) {
-            $arrFieldDef['sorting'] = true;
-        }
+
         return $arrFieldDef;
     }
 
@@ -374,6 +368,8 @@ abstract class Base implements IAttribute
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     *
+     * @deprecated Use DataDefinition builders in DC_General 2.0.0
      */
     public function getItemDCA($arrOverrides = array())
     {
@@ -384,10 +380,7 @@ abstract class Base implements IAttribute
                 (array) $GLOBALS['TL_DCA'][$this->getMetaModel()->getTableName()]['fields'][$this->getColName()]
             ),
         );
-        // Add sorting fields.
-        if (in_array('sortable', $this->getAttributeSettingNames()) && $arrOverrides['sortable']) {
-            $arrReturn['list']['sorting']['fields'][] = $this->getColName();
-        }
+
         return $arrReturn;
     }
 
