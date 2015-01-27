@@ -712,7 +712,7 @@ class MetaModel implements IMetaModel
 
         // Apply limiting then.
         if ($intOffset > 0 || $intLimit > 0) {
-            $arrFilteredIds = array_slice($arrFilteredIds, $intOffset, $intLimit);
+            $arrFilteredIds = array_slice($arrFilteredIds, $intOffset, $intLimit ?: null);
         }
         return $arrFilteredIds;
     }
