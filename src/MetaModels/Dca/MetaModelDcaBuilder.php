@@ -91,7 +91,7 @@ class MetaModelDcaBuilder
         $icon,
         $defaultIcon = 'system/modules/metamodels/assets/images/icons/metamodels.png'
     ) {
-        $dispatcher = self::getDispatcher();
+        $dispatcher = $this->getDispatcher();
         $realIcon   = ToolboxFile::convertValueToPath($icon);
         // Determine image to use.
         if ($realIcon && file_exists(TL_ROOT . '/' . $realIcon)) {
@@ -117,7 +117,7 @@ class MetaModelDcaBuilder
     {
         $parentTable = $screen->getParentTable();
         $parentDCA   = &$GLOBALS['TL_DCA'][$parentTable];
-        $dispatcher  = self::getDispatcher();
+        $dispatcher  = $this->getDispatcher();
         $metaModel   = $screen->getMetaModel();
         $event       = new LoadLanguageFileEvent('default');
         $dispatcher->dispatch(ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE, $event);
@@ -140,7 +140,7 @@ class MetaModelDcaBuilder
         (
             'label'               => &$arrCaption,
             'href'                => 'table='.$metaModel->getTableName(),
-            'icon'                => self::getBackendIcon($screen->getIcon()),
+            'icon'                => $this->getBackendIcon($screen->getIcon()),
             'attributes'          => 'onclick="Backend.getScrollOffset()"',
         );
 
@@ -200,7 +200,7 @@ class MetaModelDcaBuilder
      */
     public function buildChildOperationButton($idParameter, $arrRow, $href, $label, $name, $icon, $attributes, $table)
     {
-        $dispatcher = self::getDispatcher();
+        $dispatcher = $this->getDispatcher();
         $modelId    = IdSerializer::fromValues($table, $arrRow['id']);
         $urlEvent   = new AddToUrlEvent($href. '&amp;' . $idParameter . '=' . $modelId->getSerialized());
 
