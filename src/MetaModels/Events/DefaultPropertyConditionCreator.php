@@ -23,13 +23,41 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyVisibleCondition;
+use MetaModels\Attribute\IAttribute;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyContainAnyOfCondition;
+use MetaModels\IMetaModel;
 
 /**
  * This class creates the default instances for property conditions when generating input screens.
  */
 class DefaultPropertyConditionCreator
 {
+    /**
+     * Extract the attribute instance from the MetaModel.
+     *
+     * @param IMetaModel $metaModel   The MetaModel instance.
+     *
+     * @param string     $attributeId The attribute id.
+     *
+     * @return IAttribute
+     *
+     * @throws \RuntimeException When the attribute could not be retrieved.
+     */
+    private function getAttributeFromMetaModel(IMetaModel $metaModel, $attributeId)
+    {
+        $attribute = $metaModel->getAttributeById($attributeId);
+
+        if (!$attribute) {
+            throw new \RuntimeException(sprintf(
+                'Could not retrieve attribute %s from MetaModel %s.',
+                $attributeId,
+                $metaModel->getTableName()
+            ));
+        }
+
+        return $attribute;
+    }
+
     /**
      * Create the property conditions.
      *
@@ -57,15 +85,8 @@ class DefaultPropertyConditionCreator
                 $event->setInstance(new PropertyConditionChain(array(), ConditionChainInterface::AND_CONJUNCTION));
                 break;
             case 'conditionpropertyvalueis':
-                $attribute = $metaModel->getAttributeById($meta['attr_id']);
+                $attribute = $this->getAttributeFromMetaModel($metaModel, $meta['attr_id']);
 
-                if (!$attribute) {
-                    throw new \RuntimeException(sprintf(
-                        'Could not retrieve attribute %s from MetaModel %s.',
-                        $meta['attr_id'],
-                        $metaModel->getTableName()
-                    ));
-                }
                 // FIXME: For checkboxes the meta value is wrong here as it will compare "" == "0".
                 $event->setInstance(new PropertyValueCondition(
                     $attribute->getColName(),
@@ -73,15 +94,7 @@ class DefaultPropertyConditionCreator
                 ));
                 break;
             case 'conditionpropertycontainanyof':
-                $attribute = $metaModel->getAttributeById($meta['attr_id']);
-
-                if (!$attribute) {
-                    throw new \RuntimeException(sprintf(
-                        'Could not retrieve attribute %s from MetaModel %s.',
-                        $meta['attr_id'],
-                        $metaModel->getTableName()
-                    ));
-                }
+                $attribute = $this->getAttributeFromMetaModel($metaModel, $meta['attr_id']);
 
                 $event->setInstance(new PropertyContainAnyOfCondition(
                     $attribute->getColName(),
@@ -89,15 +102,7 @@ class DefaultPropertyConditionCreator
                 ));
                 break;
             case 'conditionpropertyvisible':
-                $attribute = $metaModel->getAttributeById($meta['attr_id']);
-
-                if (!$attribute) {
-                    throw new \RuntimeException(sprintf(
-                        'Could not retrieve attribute %s from MetaModel %s.',
-                        $meta['attr_id'],
-                        $metaModel->getTableName()
-                    ));
-                }
+                $attribute = $this->getAttributeFromMetaModel($metaModel, $meta['attr_id']);
 
                 $event->setInstance(new PropertyVisibleCondition($attribute->getColName()));
                 break;
