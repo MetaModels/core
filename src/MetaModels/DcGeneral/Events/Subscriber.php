@@ -49,6 +49,7 @@ class Subscriber extends BaseSubscriber
         $this->registerTableMetaModelRenderSettingEvents();
         $this->registerTableMetaModelRenderSettingsEvents();
         $this->registerTableMetaModelDcaSortGroupEvents();
+        $this->registerTableMetaModelSearchablePagesEvents();
 
         $this->registerTableWatcher();
     }
@@ -121,6 +122,16 @@ class Subscriber extends BaseSubscriber
     public function registerTableMetaModelDcaSettingConditionsEvents()
     {
         new \MetaModels\DcGeneral\Events\Table\InputScreenCondition\Subscriber($this->getServiceContainer());
+    }
+
+    /**
+     * Register the events for table tl_metamodel_dcasetting_condition.
+     *
+     * @return void
+     */
+    public function registerTableMetaModelSearchablePagesEvents()
+    {
+        new \MetaModels\DcGeneral\Events\Table\SearchablePages\Subscriber($this->getServiceContainer());
     }
 
     /**
@@ -197,8 +208,7 @@ class Subscriber extends BaseSubscriber
                     ($table == 'tl_metamodel_filtersetting') ||
                     ($table == 'tl_metamodel_rendersettings') ||
                     ($table == 'tl_metamodel_rendersetting') ||
-                    ($table == 'tl_metamodel_dca_combine') ||
-                    ($table == 'tl_metamodel_searchable_pages')
+                    ($table == 'tl_metamodel_dca_combine')
                 ) {
                     $purger = new PurgeCache();
                     $purger->purge();
