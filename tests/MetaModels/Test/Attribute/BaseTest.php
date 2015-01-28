@@ -69,7 +69,6 @@ class BaseTest extends TestCase
             // Settings originating from tl_metamodel_attribute.
             'id'           => 1,
             'pid'          => 1,
-            'sorting'      => 1,
             'tstamp'       => 0,
             'name'         => array(
                 'en'       => 'name English',
