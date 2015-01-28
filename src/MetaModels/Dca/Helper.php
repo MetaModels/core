@@ -23,6 +23,7 @@ namespace MetaModels\Dca;
 
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
+use ContaoCommunityAlliance\Translator\TranslatorInterface;
 use MetaModels\IMetaModel;
 
 /**
@@ -104,6 +105,26 @@ class Helper
     }
 
     /**
+     * Extract all languages from the MetaModel and return them as array.
+     *
+     * @param IMetaModel          $metaModel  The MetaModel to extract the languages from.
+     *
+     * @param TranslatorInterface $translator The translator to use.
+     *
+     * @return \string[]
+     */
+    private static function buildLanguageArray(IMetaModel $metaModel, TranslatorInterface $translator)
+    {
+        $languages = array();
+        foreach ((array) $metaModel->getAvailableLanguages() as $langCode) {
+            $languages[$langCode] = $translator->translate('LNG.' . $langCode, 'languages');
+        }
+        asort($languages);
+
+        return $languages;
+    }
+
+    /**
      * Create a widget for naming contexts. Use the language and translation information from the MetaModel.
      *
      * @param EnvironmentInterface $environment   The environment.
@@ -143,17 +164,13 @@ class Helper
             return;
         }
 
-        $fallback = $metaModel->getFallbackLanguage();
+        $fallback   = $metaModel->getFallbackLanguage();
+        $languages  = self::buildLanguageArray($metaModel, $environment->getTranslator());
+        $neededKeys = array_keys($languages);
 
-        $languages = array();
-        foreach ((array) $metaModel->getAvailableLanguages() as $langCode) {
-            $languages[$langCode] = $environment->getTranslator()->translate('LNG.' . $langCode, 'languages');
-        }
-        asort($languages);
-
-        // Ensure we have the values present.
-        if (empty($arrValues)) {
-            foreach (array_keys($languages) as $langCode) {
+        // Ensure we have values for all languages present.
+        if (array_diff_key(array_keys($arrValues), $neededKeys)) {
+            foreach ($neededKeys as $langCode) {
                 $arrValues[$langCode] = '';
             }
         }
