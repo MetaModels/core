@@ -201,13 +201,17 @@ class SearchablePages
     /**
      * Start point for the hook.
      *
-     * @param array $arrPages    List with all pages.
+     * @param array   $arrPages    List with all pages.
      *
-     * @param int   $intRootPage ID of the root page.
+     * @param int     $intRootPage ID of the root page.
+     *
+     * @param boolean $blnUnknown  I don't know it, i don't want it but i just get it ....
+     *
+     * @param string  $strLanguage The current language.
      *
      * @return array
      */
-    public function addPages($arrPages, $intRootPage)
+    public function addPages($arrPages, $intRootPage, $blnUnknown, $strLanguage)
     {
         // Save the pages in the locale array.
         $this->arrFoundPages = $arrPages;
@@ -223,7 +227,8 @@ class SearchablePages
                 $settings->pid,
                 $settings->setFilter,
                 $settings->filterparams,
-                $settings->setRendersetting
+                $settings->setRendersetting,
+                $strLanguage
             );
         }
 
@@ -237,21 +242,22 @@ class SearchablePages
      * Get a MetaModels, a filter and a rendersetting. Get all items based on the filter
      * and build the jumpTo urls.
      *
-     * @param int   $intMetaModels    ID of the MetaModels.
+     * @param int    $intMetaModels    ID of the MetaModels.
      *
-     * @param int   $intFilter        ID of the filter setting.
+     * @param int    $intFilter        ID of the filter setting.
      *
-     * @param array $arrPresetParams  The list with the parameter settings for the filters.
+     * @param array  $arrPresetParams  The list with the parameter settings for the filters.
      *
-     * @param int   $intRenderSetting ID of the rendersetting.
+     * @param int    $intRenderSetting ID of the rendersetting.
+     *
+     * @param string $strLanguage      The current language.
      */
-    function getMetaModelsPages($intMetaModels, $intFilter, $arrPresetParams, $intRenderSetting)
+    function getMetaModelsPages($intMetaModels, $intFilter, $arrPresetParams, $intRenderSetting, $strLanguage)
     {
         // Get the MetaModels.
         $objMetaModels        = $this->getMetaModels($intMetaModels, true);
         $objFilter            = $objMetaModels->getEmptyFilter();
         $arrAvailableLanguage = $objMetaModels->getAvailableLanguages();
-        $strCurrentLanguage   = $GLOBALS['TL_LANGUAGE'];
         $arrNewEntries        = array();
 
         // Get the view.
@@ -266,15 +272,13 @@ class SearchablePages
             $objFilterSetting->addRules($objFilter, $arrProcessed);
         }
 
-        foreach ($arrAvailableLanguage as $strLanguage) {
-            // Set the language.
-            $GLOBALS['TL_LANGUAGE'] = $strLanguage;
+        foreach ($arrAvailableLanguage as $strCurrentLanguage) {
+            if ($strLanguage != $strCurrentLanguage) {
+                continue;
+            }
 
             // Get the object.
-            $objItems = $objMetaModels->findByFilter
-            (
-                $objFilter
-            );
+            $objItems = $objMetaModels->findByFilter($objFilter);
 
             /** @var Item $objItem */
             foreach ($objItems as $objItem) {
