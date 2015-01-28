@@ -160,7 +160,11 @@ class Model implements ModelInterface
             if ($objAttribute) {
                 $varValue = $objAttribute->widgetToValue($varValue, $this->getItem()->get('id'));
             }
-            $this->getItem()->set($strPropertyName, $varValue);
+
+            if ($varValue !== $this->getProperty($strPropertyName)) {
+                $this->setMeta(static::IS_CHANGED, true);
+                $this->getItem()->set($strPropertyName, $varValue);
+            }
         }
     }
 
