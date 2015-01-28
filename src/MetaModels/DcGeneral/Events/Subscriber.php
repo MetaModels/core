@@ -197,7 +197,8 @@ class Subscriber extends BaseSubscriber
                     ($table == 'tl_metamodel_filtersetting') ||
                     ($table == 'tl_metamodel_rendersettings') ||
                     ($table == 'tl_metamodel_rendersetting') ||
-                    ($table == 'tl_metamodel_dca_combine')
+                    ($table == 'tl_metamodel_dca_combine') ||
+                    ($table == 'tl_metamodel_searchable_pages')
                 ) {
                     $purger = new PurgeCache();
                     $purger->purge();
