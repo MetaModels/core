@@ -146,7 +146,10 @@ class Model implements ModelInterface
      */
     public function setId($mixID)
     {
-        $this->getItem()->set('id', $mixID);
+        if ($this->getId() == null) {
+            $this->getItem()->set('id', $mixID);
+            $this->setMeta(static::IS_CHANGED, true);
+        }
     }
 
     /**
