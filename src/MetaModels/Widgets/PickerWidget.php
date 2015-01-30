@@ -59,8 +59,7 @@ class PickerWidget extends \Backend
      */
     public function __construct()
     {
-        $this->import('BackendUser', 'User');
-        $this->import('Database');
+        $this->User = \BackendUser::getInstance();
         parent::__construct();
 
         $this->User->authenticate();
