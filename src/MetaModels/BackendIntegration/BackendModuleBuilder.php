@@ -107,6 +107,12 @@ class BackendModuleBuilder
      */
     protected function saveToCache()
     {
+        // Pretty print only came available with php 5.4.
+        $flags = 0;
+        if (defined('JSON_PRETTY_PRINT')) {
+            $flags = JSON_PRETTY_PRINT;
+        }
+
         return $this->container->getCache()->save(
             $this->calculateCacheKey(),
             json_encode(
@@ -114,7 +120,7 @@ class BackendModuleBuilder
                     'backendMenu'     => $this->backendMenu,
                     'languageStrings' => $this->languageStrings,
                 ),
-                JSON_PRETTY_PRINT
+                $flags
             )
         );
     }
