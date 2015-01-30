@@ -290,7 +290,7 @@ class Subscriber extends BaseSubscriber
             $event->getEnvironment()->getTranslator()->translate('name_langcode', 'tl_metamodel_attribute'),
             $event->getEnvironment()->getTranslator()->translate('name_value', 'tl_metamodel_attribute'),
             false,
-            $event->getModel()->getProperty('legendtitle')
+            deserialize($event->getModel()->getProperty($event->getProperty()->getName()), true)
         );
     }
 
