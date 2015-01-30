@@ -82,7 +82,7 @@ abstract class FilterSettingTypeRenderer
     /**
      * Retrieve the types this renderer is valid for.
      *
-     * @return array
+     * @return string[]
      */
     abstract protected function getTypes();
 
