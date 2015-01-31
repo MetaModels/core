@@ -35,7 +35,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
             'tl_metamodel_dca_combine'
         ),
         'switchToEdit'     => true,
-        'enableVersioning' => true,
+        'enableVersioning' => false,
     ),
     'list'            => array
     (
