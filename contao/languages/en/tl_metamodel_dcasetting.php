@@ -43,7 +43,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']      = array('Tr
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['spaceToUnderscore']  = array('Replace spaces with underscore', 'If true any whitespace character will be replaced by an underscore.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption'] = array('Include blank option', 'if true a blank option will be added to the options which allows to define a &quot;no item selected&quot; option.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']           = array('Read only', 'If true a the widget will be read only and may not be changed.');
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['submitOnChange']     = array('Submit on change', 'If activate the form will be submitted when the field value changes.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['submitOnChange']     = array('Submit on change', 'If active the form will be submitted when the field value changes.');
 
 
 
