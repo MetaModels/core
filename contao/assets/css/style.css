@@ -132,6 +132,10 @@
     height:auto;
   }
 
+  .long  .chzn-container {
+    width:100%;
+  }
+
   .widget.translat-attr label {
     padding-left: 20px;
     display: inline-block;
