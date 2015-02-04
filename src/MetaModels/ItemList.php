@@ -745,6 +745,38 @@ class ItemList implements IServiceContainerAware
     }
 
     /**
+     * Retrieve the translation string for the given lang key.
+     *
+     * In order to achieve the correct caption text, the function tries several translation strings sequentially.
+     * The first language key that is set will win, even if it is to be considered empty.
+     *
+     * This message is looked up in the following order:
+     * 1. $GLOBALS['TL_LANG']['MSC'][<mm tablename>][<render settings id>][$langKey]
+     * 2. $GLOBALS['TL_LANG']['MSC'][<mm tablename>][$langKey]
+     * 3. $GLOBALS['TL_LANG']['MSC'][$langKey]
+     *
+     * @param string $langKey The language key to retrieve.
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    private function getCaptionText($langKey)
+    {
+        $tableName = $this->getMetaModel()->getTableName();
+        if (isset($this->objView)
+            && isset($GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey])
+        ) {
+            return $GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey];
+        } elseif (isset($GLOBALS['TL_LANG']['MSC'][$tableName][$langKey])) {
+            return $GLOBALS['TL_LANG']['MSC'][$tableName][$langKey];
+        }
+
+        return $GLOBALS['TL_LANG']['MSC'][$langKey];
+    }
+
+    /**
      * Retrieve the caption text for "No items found" message.
      *
      * In order to achieve the correct caption text, the function tries several translation strings sequentially.
@@ -756,22 +788,10 @@ class ItemList implements IServiceContainerAware
      * 3. $GLOBALS['TL_LANG']['MSC']['noItemsMsg']
      *
      * @return string
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getNoItemsCaption()
     {
-        $tableName = $this->getMetaModel()->getTableName();
-        if (isset($this->objView)
-            && isset($GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')]['noItemsMsg'])
-        ) {
-            return $GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')]['noItemsMsg'];
-        } elseif (isset($GLOBALS['TL_LANG']['MSC'][$tableName]['noItemsMsg'])) {
-            return $GLOBALS['TL_LANG']['MSC'][$tableName]['noItemsMsg'];
-        }
-
-        return $GLOBALS['TL_LANG']['MSC']['noItemsMsg'];
+        return $this->getCaptionText('noItemsMsg');
     }
 
     /**
@@ -786,22 +806,10 @@ class ItemList implements IServiceContainerAware
      * 3. $GLOBALS['TL_LANG']['MSC']['details']
      *
      * @return string
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getDetailsCaption()
     {
-        $tableName = $this->getMetaModel()->getTableName();
-        if (isset($this->objView)
-            && isset($GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')]['details'])
-        ) {
-            return $GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')]['details'];
-        } elseif (isset($GLOBALS['TL_LANG']['MSC'][$tableName]['details'])) {
-            return $GLOBALS['TL_LANG']['MSC'][$tableName]['details'];
-        }
-
-        return $GLOBALS['TL_LANG']['MSC']['details'];
+        return $this->getCaptionText('details');
     }
 
     /**
