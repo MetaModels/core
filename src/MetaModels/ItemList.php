@@ -792,6 +792,49 @@ class ItemList implements IServiceContainerAware
     }
 
     /**
+     * Set the title and description in the page object.
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    private function setTitleAndDescription()
+    {
+        if ($GLOBALS['objPage'] && $this->objItems->getCount()) {
+            // Add title if needed.
+            if (!empty($this->strTitleAttribute)) {
+                while ($this->objItems->next()) {
+                    $objCurrentItem = $this->objItems->current();
+                    $arrTitle       = $objCurrentItem->parseAttribute($this->strTitleAttribute, 'text');
+
+                    if (!empty($arrTitle['text'])) {
+                        $GLOBALS['objPage']->pageTitle = strip_tags($arrTitle['text']);
+                        break;
+                    }
+                }
+
+                $this->objItems->reset();
+            }
+
+            // Add description if needed.
+            if (!empty($this->strDescriptionAttribute)) {
+                while ($this->objItems->next()) {
+                    $objCurrentItem = $this->objItems->current();
+                    $arrDescription = $objCurrentItem->parseAttribute($this->strDescriptionAttribute, 'text');
+
+                    if (!empty($arrDescription['text'])) {
+                        $GLOBALS['objPage']->description = \String::substr($arrDescription['text'], 120);
+                        break;
+                    }
+                }
+
+                $this->objItems->reset();
+            }
+        }
+    }
+
+    /**
      * Render the list view.
      *
      * @param bool   $blnNoNativeParsing Flag determining if the parsing shall be done internal or if the template will
@@ -800,9 +843,6 @@ class ItemList implements IServiceContainerAware
      * @param object $objCaller          The object calling us, might be a Module or ContentElement or anything else.
      *
      * @return string
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function render($blnNoNativeParsing, $objCaller)
     {
@@ -818,35 +858,7 @@ class ItemList implements IServiceContainerAware
             $this->objTemplate->data = array();
         }
 
-        // Add title if needed.
-        if ($GLOBALS['objPage'] && $this->objItems->getCount() && !empty($this->strTitleAttribute)) {
-            while ($this->objItems->next()) {
-                $objCurrentItem = $this->objItems->current();
-                $arrTitle       = $objCurrentItem->parseAttribute($this->strTitleAttribute, 'text');
-
-                if (isset($arrTitle['text']) && !empty($arrTitle['text'])) {
-                    $GLOBALS['objPage']->pageTitle = strip_tags($arrTitle['text']);
-                    break;
-                }
-            }
-
-            $this->objItems->reset();
-        }
-
-        // Add description if needed.
-        if ($GLOBALS['objPage'] && $this->objItems->getCount() && !empty($this->strDescriptionAttribute)) {
-            while ($this->objItems->next()) {
-                $objCurrentItem = $this->objItems->current();
-                $arrDescription = $objCurrentItem->parseAttribute($this->strDescriptionAttribute, 'text');
-
-                if (isset($arrDescription['text']) && !empty($arrDescription['text'])) {
-                    $GLOBALS['objPage']->description = \String::substr($arrDescription['text'], 120);
-                    break;
-                }
-            }
-
-            $this->objItems->reset();
-        }
+        $this->setTitleAndDescription();
 
         $this->objTemplate->caller       = $objCaller;
         $this->objTemplate->items        = $this->objItems;
