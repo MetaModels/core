@@ -146,12 +146,35 @@ class ItemList implements IServiceContainerAware
     }
 
     /**
+     * Try to set the default service container.
+     *
+     * @return void
+     *
+     * @throws \RuntimeException When the service container could not be set.
+     *
+     * @@SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    private function useDefaultServiceContainer()
+    {
+        $this->serviceContainer = $GLOBALS['container']['metamodels-service-container'];
+
+        if (!($this->serviceContainer instanceof IMetaModelsServiceContainer)) {
+            throw new \RuntimeException('Unable to retrieve default service container.');
+        }
+    }
+
+    /**
      * Retrieve the service container in use.
      *
      * @return IMetaModelsServiceContainer|null
      */
     public function getServiceContainer()
     {
+        if (!$this->serviceContainer) {
+            $this->useDefaultServiceContainer();
+        }
+
         return $this->serviceContainer;
     }
 
