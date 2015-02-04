@@ -370,6 +370,7 @@ class ItemList implements IServiceContainerAware
             throw new \RuntimeException('Could get metamodel id: ' . $this->intMetaModel);
         }
     }
+
     /**
      * Prepare the view.
      *
@@ -707,12 +708,22 @@ class ItemList implements IServiceContainerAware
     }
 
     /**
-     * Retrieve the output format used by this list.
+     * Retrieve the page object.
      *
-     * @return string
+     * @return object
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    private function getPage()
+    {
+        return (TL_MODE == 'FE' && is_object($GLOBALS['objPage'])) ? $GLOBALS['objPage'] : null;
+    }
+
+    /**
+     * Retrieve the output format used by this list.
+     *
+     * @return string
      */
     public function getOutputFormat()
     {
@@ -724,8 +735,10 @@ class ItemList implements IServiceContainerAware
             return $this->objView->get('format');
         }
 
-        if (TL_MODE == 'FE' && is_object($GLOBALS['objPage']) && $GLOBALS['objPage']->outputFormat) {
-            return $GLOBALS['objPage']->outputFormat;
+        $page = $this->getPage();
+
+        if ($page && $page->outputFormat) {
+            return $page->outputFormat;
         }
 
         return 'text';
@@ -795,13 +808,11 @@ class ItemList implements IServiceContainerAware
      * Set the title and description in the page object.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function setTitleAndDescription()
     {
-        if ($GLOBALS['objPage'] && $this->objItems->getCount()) {
+        $page = $this->getPage();
+        if ($page && $this->objItems->getCount()) {
             // Add title if needed.
             if (!empty($this->strTitleAttribute)) {
                 while ($this->objItems->next()) {
@@ -809,7 +820,7 @@ class ItemList implements IServiceContainerAware
                     $arrTitle       = $objCurrentItem->parseAttribute($this->strTitleAttribute, 'text');
 
                     if (!empty($arrTitle['text'])) {
-                        $GLOBALS['objPage']->pageTitle = strip_tags($arrTitle['text']);
+                        $page->pageTitle = strip_tags($arrTitle['text']);
                         break;
                     }
                 }
@@ -824,7 +835,7 @@ class ItemList implements IServiceContainerAware
                     $arrDescription = $objCurrentItem->parseAttribute($this->strDescriptionAttribute, 'text');
 
                     if (!empty($arrDescription['text'])) {
-                        $GLOBALS['objPage']->description = \String::substr($arrDescription['text'], 120);
+                        $page->description = \String::substr($arrDescription['text'], 120);
                         break;
                     }
                 }
