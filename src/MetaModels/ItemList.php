@@ -22,6 +22,7 @@
 
 namespace MetaModels;
 
+use MetaModels\Helper\PaginationLimitCalculator;
 use MetaModels\Render\Template;
 
 /**
@@ -33,34 +34,6 @@ use MetaModels\Render\Template;
  */
 class ItemList implements IServiceContainerAware
 {
-    /**
-     * Use limit.
-     *
-     * @var bool
-     */
-    protected $blnUseLimit = false;
-
-    /**
-     * Offset.
-     *
-     * @var int
-     */
-    protected $intOffset = 0;
-
-    /**
-     * Limit.
-     *
-     * @var int
-     */
-    protected $intLimit = 0;
-
-    /**
-     * Pagination page break.
-     *
-     * @var int
-     */
-    protected $intPerPage = 0;
-
     /**
      * Sort by attribute.
      *
@@ -132,6 +105,21 @@ class ItemList implements IServiceContainerAware
     private $serviceContainer;
 
     /**
+     * The calculator for pagination and limit.
+     *
+     * @var PaginationLimitCalculator
+     */
+    private $paginationLimitCalculator;
+
+    /**
+     * Create a new instance.
+     */
+    public function __construct()
+    {
+        $this->paginationLimitCalculator = new PaginationLimitCalculator();
+    }
+
+    /**
      * Set the service container to use.
      *
      * @param IMetaModelsServiceContainer $serviceContainer The service container.
@@ -191,9 +179,11 @@ class ItemList implements IServiceContainerAware
      */
     public function setLimit($blnUse, $intOffset, $intLimit)
     {
-        $this->blnUseLimit = $blnUse;
-        $this->intOffset   = $intOffset;
-        $this->intLimit    = $intLimit;
+        $this
+            ->paginationLimitCalculator
+            ->setApplyLimitAndOffset($blnUse)
+            ->setOffset($intOffset)
+            ->setLimit($intLimit);
 
         return $this;
     }
@@ -207,7 +197,7 @@ class ItemList implements IServiceContainerAware
      */
     public function setPageBreak($intLimit)
     {
-        $this->intPerPage = $intLimit;
+        $this->paginationLimitCalculator->setPerPage($intLimit);
 
         return $this;
     }
@@ -485,74 +475,6 @@ class ItemList implements IServiceContainerAware
     }
 
     /**
-     * The calculated pagination, if any.
-     *
-     * @var string
-     */
-    protected $strPagination = '';
-
-    /**
-     * Calculate the pagination based upon the offset, limit and total amount of items.
-     *
-     * @param int $intTotal The total amount of items.
-     *
-     * @return void
-     */
-    protected function calculatePagination($intTotal)
-    {
-        $intOffset = null;
-        $intLimit  = null;
-
-        // If defined, we override the pagination here.
-        if ($this->blnUseLimit && ($this->intLimit || $this->intOffset)) {
-            if ($this->intLimit) {
-                $intLimit = $this->intLimit;
-            }
-            if ($this->intOffset) {
-                $intOffset = $this->intOffset;
-            }
-        }
-
-        if ($this->intPerPage > 0) {
-            // If a total limit has been defined, we need to honor that.
-            if (($intLimit !== null) && ($intTotal > $intLimit)) {
-                $intTotal -= $intLimit;
-            }
-            $intTotal -= $intOffset;
-
-            // Get the current page.
-            $intPage = \Input::get('page') ?: 1;
-
-            if ($intPage > ($intTotal / $this->intPerPage)) {
-                $intPage = (int) ceil($intTotal / $this->intPerPage);
-            }
-
-            // Set limit and offset.
-            $pageOffset = ((max($intPage, 1) - 1) * $this->intPerPage);
-            $intOffset += $pageOffset;
-            if ($intLimit === null) {
-                $intLimit = $this->intPerPage;
-            } else {
-                $intLimit = min(($intLimit - $intOffset), $this->intPerPage);
-            }
-
-            // Add pagination menu.
-            $objPagination = new \Pagination($intTotal, $this->intPerPage);
-
-            $this->strPagination = $objPagination->generate("\n  ");
-        } else {
-            if ($intLimit === null) {
-                $intLimit = 0;
-            }
-            if ($intOffset === null) {
-                $intOffset = 0;
-            }
-        }
-        $this->intLimit  = $intLimit;
-        $this->intOffset = $intOffset;
-    }
-
-    /**
      * The items in the list view.
      *
      * @var \MetaModels\IItems
@@ -651,13 +573,14 @@ class ItemList implements IServiceContainerAware
 
         $intTotal = $this->objMetaModel->getCount($this->objFilter);
 
-        $this->calculatePagination($intTotal);
+        $calculator = $this->paginationLimitCalculator;
+        $calculator->setTotalAmount($intTotal);
 
         $this->objItems = $this->objMetaModel->findByFilter(
             $this->objFilter,
             $this->strSortBy,
-            $this->intOffset,
-            $this->intLimit,
+            $calculator->getCalculatedOffset(),
+            $calculator->getCalculatedLimit(),
             $this->strSortDirection,
             $this->getAttributeNames()
         );
@@ -674,7 +597,7 @@ class ItemList implements IServiceContainerAware
      */
     public function getPagination()
     {
-        return $this->strPagination;
+        return $this->paginationLimitCalculator->getPaginationString();
     }
 
     /**
