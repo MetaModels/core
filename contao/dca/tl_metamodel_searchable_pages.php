@@ -196,7 +196,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
             'eval'      => array
             (
                 'includeBlankOption' => true,
-                'chosen'             => true
+                'chosen'             => true,
+                'submitOnChange'     => true
             )
         ),
 
