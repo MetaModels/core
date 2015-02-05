@@ -17,11 +17,13 @@
 
 namespace MetaModels\DcGeneral\Events\Table\SearchablePages;
 
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\NotCondition;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
+use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
-use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbRenderSetting;
-
 
 /**
  * Handles event operations on tl_metamodel_rendersetting.
@@ -35,7 +37,6 @@ class Subscriber extends BaseSubscriber
      */
     protected function registerEventsInDispatcher()
     {
-        $serviceContainer = $this->getServiceContainer();
         $this
             ->addListener(
                 GetPropertyOptionsEvent::NAME,
@@ -44,6 +45,14 @@ class Subscriber extends BaseSubscriber
             ->addListener(
                 GetPropertyOptionsEvent::NAME,
                 array($this, 'getRenderSettingsOptions')
+            )
+            ->addListener(
+                BuildDataDefinitionEvent::NAME,
+                array($this, 'visibleFilterParams')
+            )
+            ->addListener(
+                BuildWidgetEvent::NAME,
+                array($this, 'buildFilterParamsFor')
             );
     }
 
@@ -54,10 +63,11 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public static function getFilterOptions(GetPropertyOptionsEvent $event)
+    public function getFilterOptions(GetPropertyOptionsEvent $event)
     {
         if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_searchable_pages')
             || ($event->getPropertyName() !== 'filter')
+        ) {
             return;
         }
 
@@ -67,7 +77,8 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        $filter = \Database::getInstance()
+        $filter = $this
+            ->getDatabase()
             ->prepare('SELECT id, name FROM tl_metamodel_filter WHERE pid=?')
             ->execute($pid);
 
@@ -86,10 +97,11 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public static function getRenderSettingsOptions(GetPropertyOptionsEvent $event)
+    public function getRenderSettingsOptions(GetPropertyOptionsEvent $event)
     {
         if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_searchable_pages')
             || ($event->getPropertyName() !== 'rendersetting')
+        ) {
             return;
         }
 
@@ -99,17 +111,70 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        $filter = \Database::getInstance()
+        $renderSettings = $this
+            ->getDatabase()
             ->prepare('SELECT id, name FROM tl_metamodel_rendersettings WHERE pid=?')
             ->execute($pid);
 
         $options = array();
-        while ($filter->next()) {
-            $options[$filter->id] = $filter->name;
+        while ($renderSettings->next()) {
+            $options[$renderSettings->id] = $renderSettings->name;
         }
 
         $event->setOptions($options);
     }
 
+    public function visibleFilterParams(BuildDataDefinitionEvent $event)
+    {
+        if ($event->getContainer()->getName() !== 'tl_metamodel_searchable_pages') {
+            return;
+        }
 
+        foreach ($event->getContainer()->getPalettesDefinition()->getPalettes() as $palette) {
+            foreach ($palette->getProperties() as $property) {
+                if ($property->getName() != 'filterparams') {
+                    continue;
+                }
+
+                $chain = $property->getVisibleCondition();
+                if (!($chain
+                    && ($chain instanceof PropertyConditionChain)
+                    && $chain->getConjunction() == PropertyConditionChain::AND_CONJUNCTION
+                )
+                ) {
+                    $chain = new PropertyConditionChain(
+                        $chain ?: array(),
+                        PropertyConditionChain::AND_CONJUNCTION
+                    );
+
+                    $property->setVisibleCondition($chain);
+                }
+
+                $chain->addCondition(new NotCondition(new PropertyValueCondition('filter', '')));
+                break;
+            }
+        }
+    }
+
+    /**
+     * @param BuildWidgetEvent $event
+     */
+    public function buildFilterParamsFor(BuildWidgetEvent $event)
+    {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_searchable_pages')
+            || ($event->getProperty()->getName() !== 'filterparams')
+        ) {
+            return;
+        }
+
+        $model = $event->getModel();
+
+        $objFilterSettings = $this->getServiceContainer()->getFilterFactory()->createCollection(
+            $model->getProperty('filter')
+        );
+
+        $extra = $event->getProperty()->getExtra();
+        $extra['subfields'] = $objFilterSettings->getParameterDCA();
+        $event->getProperty()->setExtra($extra);
+    }
 }
