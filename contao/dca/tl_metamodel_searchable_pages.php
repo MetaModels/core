@@ -128,14 +128,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['show'],
                 'href'  => 'act=show',
                 'icon'  => 'show.gif'
-            ),
-            'settings' => array
-            (
-                'label'   => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['settings'],
-                'href'    => 'table=tl_metamodel_searchable_pages',
-                'icon'    => 'system/modules/metamodels/assets/images/icons/searchable_pages_setting.png',
-                'idparam' => 'pid'
-            ),
+            )
         )
     ),
     'metapalettes'          => array
