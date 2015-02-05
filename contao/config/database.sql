@@ -368,11 +368,11 @@ CREATE TABLE `tl_metamodel_searchable_pages` (
 -- human readable description of the searchable page setting for internal use only.
   `name` varchar(255) NOT NULL default '',
 -- corresponding tl_metamodel_filtersetting
-  `setFilter` int(10) unsigned NOT NULL default '0',
+  `filter` int(10) unsigned NOT NULL default '0',
 -- filter overwrite
   `filterparams` longblob NULL,
 -- corresponding tl_metamodel_dca
-  `setRendersetting` int(10) unsigned NOT NULL default '0',
+  `rendersetting` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `pid` (`pid`),
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

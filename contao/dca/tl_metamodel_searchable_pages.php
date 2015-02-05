@@ -141,9 +141,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
             ),
             'general'    => array
             (
-                'setFilter',
+                'filter',
                 'filterparams',
-                'setRendersetting',
+                'rendersetting',
             ),
         )
     ),
@@ -188,9 +188,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
             )
         ),
 
-        'setFilter'        => array
+        'filter'        => array
         (
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['setFilter'],
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['filter'],
             'exclude'   => true,
             'inputType' => 'select',
             'eval'      => array
@@ -219,9 +219,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
             )
         ),
 
-        'setRendersetting'        => array
+        'rendersetting'        => array
         (
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['setRendersetting'],
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['rendersetting'],
             'exclude'   => true,
             'inputType' => 'select',
             'eval'      => array

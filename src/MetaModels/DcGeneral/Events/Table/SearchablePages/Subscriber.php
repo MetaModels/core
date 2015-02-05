@@ -57,7 +57,7 @@ class Subscriber extends BaseSubscriber
     public static function getFilterOptions(GetPropertyOptionsEvent $event)
     {
         if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_searchable_pages')
-            || ($event->getPropertyName() !== 'setFilter')) {
+            || ($event->getPropertyName() !== 'filter')
             return;
         }
 
@@ -89,7 +89,7 @@ class Subscriber extends BaseSubscriber
     public static function getRenderSettingsOptions(GetPropertyOptionsEvent $event)
     {
         if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_searchable_pages')
-            || ($event->getPropertyName() !== 'setRendersetting')) {
+            || ($event->getPropertyName() !== 'rendersetting')
             return;
         }
 

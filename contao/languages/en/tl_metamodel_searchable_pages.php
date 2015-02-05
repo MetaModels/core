@@ -27,19 +27,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['tstamp']            = arra
     'Revision date',
     'Date and time of the latest revision.'
 );
-$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['isdefault']         = array(
-    'Is default',
-    'Determines that this searchable page setting shall be used as default for the parenting MetaModel.'
-);
-$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['becap_description'] = array(
-    'Description text',
-    'The text you specify in here, will get used as the description (hover title) in the backend menu.'
-);
-$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['setRendersetting']  = array(
+$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['rendersetting']  = array(
     'Rendersetting',
     'Choose the rendersetting which will be used for the search rendering.'
 );
-$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['setFilter']         = array(
+$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['filter']         = array(
     'Filtersetting',
     'Choose the filtersetting which will be used for the search rendering.'
 );
