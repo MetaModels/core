@@ -18,62 +18,49 @@
 
 $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
 (
-    'config'                => array
+    'config'                          => array
     (
-        'dataContainer'    => 'General',
-        'ptable'           => 'tl_metamodel',
-        'ctable'           => 'tl_metamodel_searchable_pages',
-        'switchToEdit'     => false,
-        'enableVersioning' => false,
+        'dataContainer'               => 'General',
+        'switchToEdit'                => false,
+        'enableVersioning'            => false,
     ),
-    'dca_config'            => array
+
+    'dca_config'                      => array
     (
-        'data_provider'  => array
+        'data_provider'               => array
         (
-            'default' => array
+            'parent'                  => array
             (
-                'source' => 'tl_metamodel_searchable_pages'
-            ),
-            'parent'  => array
-            (
-                'source' => 'tl_metamodel'
+                'source'              => 'tl_metamodel'
             )
         ),
-        'childCondition' => array
+        'childCondition'              => array
         (
             array
             (
-                'from'    => 'tl_metamodel',
-                'to'      => 'tl_metamodel_searchable_pages',
-                'setOn'   => array
+                'from'                => 'tl_metamodel',
+                'to'                  => 'tl_metamodel_searchable_pages',
+                'setOn'               => array
                 (
                     array
                     (
-                        'to_field'   => 'pid',
-                        'from_field' => 'id',
+                        'to_field'    => 'pid',
+                        'from_field'  => 'id',
                     ),
                 ),
-                'filter'  => array
+                'filter'              => array
                 (
                     array
                     (
-                        'local'     => 'pid',
-                        'remote'    => 'id',
-                        'operation' => '=',
-                    ),
-                ),
-                'inverse' => array
-                (
-                    array
-                    (
-                        'local'     => 'pid',
-                        'remote'    => 'id',
-                        'operation' => '=',
+                        'local'       => 'pid',
+                        'remote'      => 'id',
+                        'operation'   => '=',
                     ),
                 )
             )
         ),
     ),
+
     'list'                  => array
     (
         'sorting'           => array
