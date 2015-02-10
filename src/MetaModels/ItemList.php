@@ -576,7 +576,7 @@ class ItemList implements IServiceContainerAware
         $calculator = $this->paginationLimitCalculator;
         $calculator->setTotalAmount($intTotal);
         $curPage = (int) \Input::get('page');
-        if(is_int($curPage) && $curPage > 1){
+        if($curPage > 1){
             $calculator->setCurrentPage($curPage);
         }
 
