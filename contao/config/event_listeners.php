@@ -17,6 +17,7 @@
  */
 
 use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
+use MetaModels\DcGeneral\Events\MetaModel\PasteButton;
 use MetaModels\DcGeneral\Events\Table\FilterSetting\FilterSettingTypeRendererCore;
 use MetaModels\Events\CreatePropertyConditionEvent;
 use MetaModels\Events\DatabaseBackedListener;
@@ -54,6 +55,7 @@ return array(
             $handler = new MetaModels\BackendIntegration\Boot();
             $handler->perform($event);
             new FilterSettingTypeRendererCore($event->getServiceContainer());
+            new PasteButton($event->getServiceContainer());
         }
     ),
     MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE => array(

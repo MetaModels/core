@@ -205,16 +205,6 @@ class Builder
             array('MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton', 'createButton')
         );
 
-        // FIXME: propagator
-        $dispatcher->addListener(
-            sprintf(
-                '%s[%s]',
-                GetPasteButtonEvent::NAME,
-                $metaModel->getTableName()
-            ),
-            array('MetaModels\DcGeneral\Events\MetaModel\PasteButton', 'handle')
-        );
-
         // Add some sepcial actions for variants.
         if ($metaModel->hasVariants()) {
             // FIXME: propagator
