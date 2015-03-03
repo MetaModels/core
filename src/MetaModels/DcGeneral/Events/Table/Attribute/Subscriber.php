@@ -492,7 +492,7 @@ class Subscriber extends BaseSubscriber
 
         $old         = $event->getOriginalModel();
         $new         = $event->getModel();
-        $oldInstance = $old ? $this->createAttributeInstance($old->getPropertiesAsArray()) : null;
+        $oldInstance = $old->getProperty('pid') ? $this->createAttributeInstance($old->getPropertiesAsArray()) : null;
         $newInstance = $this->createAttributeInstance($new->getPropertiesAsArray());
 
         // If type or column name has been changed, destroy old data and initialize new.
