@@ -30,6 +30,8 @@ use MetaModels\Filter\Setting\Events\CreateFilterSettingFactoryEvent;
 use MetaModels\Filter\Setting\SimpleLookupFilterSettingTypeFactory;
 use MetaModels\Filter\Setting\StaticIdListFilterSettingTypeFactory;
 use MetaModels\MetaModelsEvents;
+use MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton;
+use MetaModels\DcGeneral\Events\MetaModel\DuplicateModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 return array(
@@ -56,6 +58,8 @@ return array(
             $handler->perform($event);
             new FilterSettingTypeRendererCore($event->getServiceContainer());
             new PasteButton($event->getServiceContainer());
+            new CreateVariantButton($event->getServiceContainer());
+            new DuplicateModel($event->getServiceContainer());
         }
     ),
     MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE => array(

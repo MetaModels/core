@@ -19,21 +19,40 @@
 namespace MetaModels\DcGeneral\Events\MetaModel;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\BackendViewInterface;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\BaseView;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\EditMask;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\ActionEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PostCreateModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PreCreateModelEvent;
 use MetaModels\DcGeneral\Data\Model;
+use MetaModels\DcGeneral\Events\BaseSubscriber;
+use MetaModels\MetaModelsServiceContainer;
 
 /**
  * Event handler class to manage the "create variant" button.
  */
-class CreateVariantButton extends BaseView
+class CreateVariantButton extends BaseSubscriber
 {
+    /**
+     * Register all listeners.
+     *
+     * @return void
+     */
+    protected function registerEventsInDispatcher()
+    {
+        $this->addListener(
+            GetOperationButtonEvent::NAME,
+            array($this, 'createButton')
+            )
+            ->addListener(
+                DcGeneralEvents::ACTION,
+                array($this, 'handleCreateVariantAction')
+            );
+    }
+
     /**
      * Check if we have to add the "Create variant" button.
      *
@@ -41,13 +60,16 @@ class CreateVariantButton extends BaseView
      *
      * @return void
      */
-    public static function createButton(GetOperationButtonEvent $event)
+    public function createButton(GetOperationButtonEvent $event)
     {
+        if($event->getCommand()->getName() != 'createvariant') {
+            return;
+        }
         /** @var Model $model */
         $model     = $event->getModel();
         $metamodel = $model->getItem()->getMetaModel();
 
-        if (!$metamodel->hasVariants() || $model ->getProperty('varbase') === '0') {
+        if (!$metamodel->hasVariants() || $model->getProperty('varbase') === '0') {
             $event->setHtml('');
         }
     }
@@ -62,9 +84,14 @@ class CreateVariantButton extends BaseView
      * @throws \RuntimeException When the base model can not be found.
      * @throws \InvalidArgumentException When the view in the environment is incompatible.
      */
-    public static function handleCreateVariantAction(ActionEvent $event)
+    public function handleCreateVariantAction(ActionEvent $event)
     {
         $environment   = $event->getEnvironment();
+
+        if($event->getAction()->getName() != 'createvariant') {
+            return;
+        }
+
         $view          = $environment->getView();
         $dataProvider  = $environment->getDataProvider();
         $inputProvider = $environment->getInputProvider();
@@ -85,6 +112,15 @@ class CreateVariantButton extends BaseView
                 'Could not find model with id %s for creating a variant.',
                 $modelId
             ));
+        }
+
+        $metaModel = $this
+            ->getServiceContainer()
+            ->getFactory()
+            ->getMetaModel($model->getProviderName());
+
+        if(!$metaModel || !$metaModel->hasVariants()) {
+            return;
         }
 
         $preFunction = function ($environment, $model) {
