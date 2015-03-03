@@ -63,13 +63,6 @@ interface ISimple
     public function set($strName, $varSetting);
 
     /**
-     * Retrieve the jump to information from the setting.
-     *
-     * @return array|null The jump to information or null if none has been set.
-     */
-    public function getJumpTo();
-
-    /**
      * Retrieve the names of all keys in this setting.
      *
      * @return string[]

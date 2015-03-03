@@ -128,7 +128,7 @@ class RenderSettingFactory implements IRenderSettingFactory
             $row = null;
         }
 
-        $renderSetting = new Collection($row ? $row->row() : array());
+        $renderSetting = new Collection($metaModel, $row ? $row->row() : array());
 
         if ($renderSetting->get('id')) {
             $this->collectAttributeSettings($metaModel, $renderSetting);
