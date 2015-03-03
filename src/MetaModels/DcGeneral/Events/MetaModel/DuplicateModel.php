@@ -18,7 +18,6 @@
 
 namespace MetaModels\DcGeneral\Events\MetaModel;
 
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\BaseView;
 use ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 
