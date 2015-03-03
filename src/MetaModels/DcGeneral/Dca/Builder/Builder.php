@@ -193,41 +193,6 @@ class Builder
             // Trigger BuildAttribute Event.
             $dispatcher->dispatch($event::NAME, $event);
         }
-
-        // FIXME: propagator
-        $dispatcher->addListener(
-            sprintf(
-                '%s[%s][%s]',
-                GetOperationButtonEvent::NAME,
-                $metaModel->getTableName(),
-                'createvariant'
-            ),
-            array('MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton', 'createButton')
-        );
-
-        // Add some sepcial actions for variants.
-        if ($metaModel->hasVariants()) {
-            // FIXME: propagator
-            $dispatcher->addListener(
-                sprintf(
-                    '%s[%s]',
-                    PostDuplicateModelEvent::NAME,
-                    $metaModel->getTableName()
-                ),
-                array('MetaModels\DcGeneral\Events\MetaModel\DuplicateModel', 'handle')
-            );
-
-            // FIXME: propagator
-            $dispatcher->addListener(
-                sprintf(
-                    '%s[%s][%s]',
-                    DcGeneralEvents::ACTION,
-                    $metaModel->getTableName(),
-                    'createvariant'
-                ),
-                array('MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton', 'handleCreateVariantAction')
-            );
-        }
     }
 
     /**

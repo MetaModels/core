@@ -20,14 +20,28 @@ namespace MetaModels\DcGeneral\Events\MetaModel;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\BaseView;
 use ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent;
+use MetaModels\DcGeneral\Events\BaseSubscriber;
 
 /**
  * This class handles the paste into or after handling for variants.
  *
  * @package MetaModels\DcGeneral\Events\MetaModel
  */
-class DuplicateModel extends BaseView
+class DuplicateModel extends BaseSubscriber
 {
+    /**
+     * Register all listeners.
+     *
+     * @return void
+     */
+    protected function registerEventsInDispatcher()
+    {
+        $this->addListener(
+            PostDuplicateModelEvent::NAME,
+            array($this, 'handle')
+        );
+    }
+
     /**
      * Handle the paste into and after event.
      *
@@ -35,9 +49,18 @@ class DuplicateModel extends BaseView
      *
      * @return void
      */
-    public static function handle(PostDuplicateModelEvent $event)
+    public function handle(PostDuplicateModelEvent $event)
     {
         $model = $event->getModel();
+
+        $metaModel = $this
+            ->getServiceContainer()
+            ->getFactory()
+            ->getMetaModel($model->getProviderName());
+
+        if(!$metaModel || !$metaModel->hasVariants()) {
+            return;
+        }
 
         // Set the vargroup to null for auto creating.
         $model->setProperty('vargroup', null);
