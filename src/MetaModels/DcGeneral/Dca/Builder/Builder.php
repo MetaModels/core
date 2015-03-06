@@ -18,11 +18,13 @@
 
 namespace MetaModels\DcGeneral\Dca\Builder;
 
+use Contao\Input;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultModelRelationshipDefinition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\ModelRelationshipDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CommandInterface;
@@ -629,7 +631,7 @@ class Builder
 
         $relationship = $this->getRootCondition($container, $definition);
 
-        if(\Input::get('pid')) {
+        if(Input::get('pid')) {
             $parentValue = IdSerializer::fromSerialized(Input::get('pid'))->getId();
         } else {
             $parentValue = '0';
@@ -642,7 +644,7 @@ class Builder
 
         $builder = FilterBuilder::fromArrayForRoot((array) $relationship->getFilterArray())->getFilter();
 
-        $builder->andPropertyEquals('pid', 0);
+        $builder->andPropertyEquals('pid', $parentValue);
 
         $relationship
             ->setFilterArray($builder->getAllAsArray());
