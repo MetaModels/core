@@ -629,9 +629,15 @@ class Builder
 
         $relationship = $this->getRootCondition($container, $definition);
 
+        if(\Input::get('pid')) {
+            $parentValue = IdSerializer::fromSerialized(Input::get('pid'))->getId();
+        } else {
+            $parentValue = '0';
+        }
+
         if (!$relationship->getSetters()) {
             $relationship
-                ->setSetters(array(array('property' => 'pid', 'value' => '0')));
+                ->setSetters(array(array('property' => 'pid', 'value' => $parentValue)));
         }
 
         $builder = FilterBuilder::fromArrayForRoot((array) $relationship->getFilterArray())->getFilter();
