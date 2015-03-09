@@ -70,7 +70,7 @@ class HybridList extends MetaModelHybrid
             $varValue = \Input::get($strName);
 
             if (is_string($varValue)) {
-                $arrReturn[$strName] = $varValue;
+                $arrReturn[$strName] = urldecode($varValue);
             }
         }
 
