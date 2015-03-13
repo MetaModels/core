@@ -420,6 +420,7 @@ class ToolboxFile
             }
 
             $strIcon = 'assets/contao/images/' . $objFile->icon;
+            
             $arrSource = array
             (
                 'file'      => $strFile,
