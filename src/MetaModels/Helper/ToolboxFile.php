@@ -420,22 +420,23 @@ class ToolboxFile
             }
 
             $strIcon = 'assets/contao/images/' . $objFile->icon;
-
+            
             $arrSource = array
             (
-                'file'     => $strFile,
-                'mtime'    => $objFile->mtime,
-                'alt'      => $strAltText,
-                'caption'  => (strlen($arrMeta['caption']) ? $arrMeta['caption'] : ''),
-                'title'    => $strBasename,
-                'metafile' => $arrMeta,
-                'icon'     => $strIcon,
-                'size'     => $objFile->filesize,
-                'sizetext' => sprintf(
+                'file'      => $strFile,
+                'mtime'     => $objFile->mtime,
+                'alt'       => $strAltText,
+                'caption'   => (strlen($arrMeta['caption']) ? $arrMeta['caption'] : ''),
+                'title'     => $strBasename,
+                'metafile'  => $arrMeta,
+                'icon'      => $strIcon,
+                'extension' => $objFile->extension,
+                'size'      => $objFile->filesize,
+                'sizetext'  => sprintf(
                     '(%s)',
                     \Controller::getReadableSize($objFile->filesize, 2)
                 ),
-                'url'      => specialchars($this->getDownloadLink($strFile))
+                'url'       => specialchars($this->getDownloadLink($strFile))
             );
 
             // Prepare images.
