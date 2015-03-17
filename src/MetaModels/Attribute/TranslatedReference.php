@@ -87,9 +87,15 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      * @param string $strLangCode The language code of the language the value is in.
      *
      * @return array
+     *
+     * @throws \InvalidArgumentException When the passed value is not null and not an array.
      */
     protected function getSetValues($arrValue, $intId, $strLangCode)
     {
+        if (($arrValue !== null) && !is_array($arrValue)) {
+            throw new \InvalidArgumentException(sprintf('Invalid value provided: %s', var_export($arrValue, true)));
+        }
+
         return array
         (
             'tstamp' => time(),
