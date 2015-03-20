@@ -26,6 +26,7 @@ namespace MetaModels\Attribute;
  * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
+// FIXME: Should be renamed to ITranslatedAttribute
 interface ITranslated extends IAttribute
 {
     /**

@@ -27,6 +27,7 @@ namespace MetaModels\Attribute;
  * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
+// FIXME: Should be renamed to IComplexAttribute
 interface IComplex extends IAttribute
 {
     /**
