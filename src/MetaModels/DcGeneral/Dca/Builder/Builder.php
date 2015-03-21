@@ -1030,6 +1030,7 @@ class Builder
                     ->setManualSorting()
                     ->setProperty('sorting')
                     ->setSortingMode('ASC');
+                    // FIXME: allow selection of the manual sorting property and its direction in the backend.
             } elseif ($information->getRenderSortAttribute()) {
                 $propertyInformation = $definition->add();
                 $propertyInformation
@@ -1037,11 +1038,14 @@ class Builder
                     ->setSortingMode($information->getRenderSortDirection());
             }
 
-            if ($information->getRenderGroupAttribute()) {
+            $groupType = $this->convertRenderGroupType($information->getRenderGroupType());
+            if ($groupType !== GroupAndSortingInformationInterface::GROUP_NONE
+                && $information->getRenderGroupAttribute()
+            ) {
                 $propertyInformation = $definition->add(0);
                 $propertyInformation
                     ->setProperty($information->getRenderGroupAttribute())
-                    ->setGroupingMode($this->convertRenderGroupType($information->getRenderGroupType()))
+                    ->setGroupingMode($groupType)
                     ->setGroupingLength($information->getRenderGroupLength());
             }
         }
