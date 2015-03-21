@@ -21,6 +21,8 @@ mapping:
     - "Christopher Bölter <c.boelter@cogizz.de>"
   "Martin Treml <github@r2pi.net>": "MrTool <github@r2pi.net>"
   "Zeromax <zero@brothers-project.de>": "Andreas Nölke <zero@brothers-project.de>"
+  "Ondrej Brinkel <Sam256@web.de>": "Ondrej <Sam256@web.de>"
+
 
 copy-left:
   "Christoph Wiechert <christoph.wiechert@4wardmedia.de>": MetaModels/Widgets/PickerWidget.php

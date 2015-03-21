@@ -57,8 +57,7 @@ class PasteButton extends BaseSubscriber
     protected $providerName;
 
     /**
-     * The model where we have to check if
-     * is it a paste into or paste after.
+     * The model where we have to check if is it a paste into or paste after.
      *
      * @var ModelInterface
      */
@@ -109,20 +108,20 @@ class PasteButton extends BaseSubscriber
     /**
      * Find a item by his id.
      *
-     * @param int $id The id to find.
+     * @param int $modelId The id to find.
      *
      * @return ModelInterface
      */
-    protected function getModelById($id)
+    protected function getModelById($modelId)
     {
-        if ($id === null) {
+        if ($modelId === null) {
             return null;
         }
 
         $provider = $this->environment->getDataProvider();
         $config   = $provider
             ->getEmptyConfig()
-            ->setId($id);
+            ->setId($modelId);
 
         return $provider->fetch($config);
     }
@@ -131,6 +130,8 @@ class PasteButton extends BaseSubscriber
      * Determines if this MetaModel instance is subject to variant handling.
      *
      * @return bool true if variants are handled, false otherwise.
+     *
+     * @throws \RuntimeException When the MetaModel can not be loaded.
      */
     protected function hasVariants()
     {
@@ -216,6 +217,8 @@ class PasteButton extends BaseSubscriber
      * @param ClipboardInterface $clipboard The clipboard.
      *
      * @param string             $action    The action to be checked.
+     *
+     * @return void
      */
     protected function checkForAction($clipboard, $action)
     {
@@ -253,6 +256,8 @@ class PasteButton extends BaseSubscriber
      * Check the PA and PI without a contained model.
      *
      * @param string $action The action to be checked.
+     *
+     * @return void
      */
     protected function checkEmpty($action)
     {
@@ -270,6 +275,8 @@ class PasteButton extends BaseSubscriber
      * @param ModelInterface $containedModel The model with all data.
      *
      * @param string         $action         The action to be checked.
+     *
+     * @return void
      */
     protected function checkForRoot($containedModel, $action)
     {
@@ -284,12 +291,15 @@ class PasteButton extends BaseSubscriber
      * @param ModelInterface $containedModel The model with all data.
      *
      * @param string         $action         The action to be checked.
+     *
+     * @return void
      */
     protected function checkForModel($containedModel, $action)
     {
-        if (!$this->circularReference && $this->hasVariants()) {
-            $this->checkModelWithVariants($containedModel);
-        } elseif (!$this->circularReference && !$this->hasVariants()) {
+        if (!$this->circularReference) {
+            if ($this->hasVariants()) {
+                $this->checkModelWithVariants($containedModel);
+            }
             $this->checkModelWithoutVariants($containedModel);
         } elseif ($this->currentModel == null && $containedModel->getProperty('varbase') == 0) {
             $this->disablePA = true;
@@ -307,14 +317,16 @@ class PasteButton extends BaseSubscriber
     /**
      * Check the PA and PI with a model and variant support.
      *
-     * @param ModelInterface $containedModel
+     * @param ModelInterface $containedModel The model to check.
+     *
+     * @return void
      */
     protected function checkModelWithVariants($containedModel)
     {
         // Item and variant support.
-        $isVarbase        = (bool)$containedModel->getProperty('varbase');
+        $isVarbase        = (bool) $containedModel->getProperty('varbase');
         $vargroup         = $containedModel->getProperty('vargroup');
-        $isCurrentVarbase = (bool)$this->currentModel->getProperty('varbase');
+        $isCurrentVarbase = (bool) $this->currentModel->getProperty('varbase');
         $currentVargroup  = $this->currentModel->getProperty('vargroup');
 
         if ($isVarbase && !$this->circularReference && $isCurrentVarbase) {
@@ -332,12 +344,14 @@ class PasteButton extends BaseSubscriber
     /**
      * Check the PA and PI with a model and a normal flat build.
      *
-     * @param ModelInterface $containedModel
+     * @param ModelInterface $containedModel The model to check.
+     *
+     * @return void
      */
     protected function checkModelWithoutVariants($containedModel)
     {
         $this->disablePA = ($this->currentModel->getId() == $containedModel->getId())
-            || ($this->currentModel->getProperty('pid') == $containedModel->getId('pid'));
+            || ($this->currentModel->getProperty('pid') == $containedModel->getId('pid')); // FIXME: is this here now id or pid?
         $this->disablePI = ($this->circularReference)
             || ($this->currentModel->getId() == $containedModel->getId())
             || ($this->currentModel->getProperty('pid') == $containedModel->getId());

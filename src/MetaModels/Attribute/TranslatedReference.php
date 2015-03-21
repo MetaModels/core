@@ -80,7 +80,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     /**
      * Retrieve the values to be used in the INSERT or UPDATE SQL for the given parameters.
      *
-     * @param mixed  $arrValue    The native value of the attribute.
+     * @param array  $arrValue    The native value of the attribute.
      *
      * @param int    $intId       The id of the item to be saved.
      *

@@ -11,6 +11,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Martin Treml <github@r2pi.net>
+ * @author     Christopher Boelter <christopher@boelter.eu>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource

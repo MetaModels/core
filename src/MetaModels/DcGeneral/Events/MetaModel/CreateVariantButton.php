@@ -11,6 +11,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Christopher Boelter <christopher@boelter.eu>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -29,7 +30,6 @@ use ContaoCommunityAlliance\DcGeneral\Event\PostCreateModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PreCreateModelEvent;
 use MetaModels\DcGeneral\Data\Model;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
-use MetaModels\MetaModelsServiceContainer;
 
 /**
  * Event handler class to manage the "create variant" button.
@@ -43,9 +43,10 @@ class CreateVariantButton extends BaseSubscriber
      */
     protected function registerEventsInDispatcher()
     {
-        $this->addListener(
-            GetOperationButtonEvent::NAME,
-            array($this, 'createButton')
+        $this
+            ->addListener(
+                GetOperationButtonEvent::NAME,
+                array($this, 'createButton')
             )
             ->addListener(
                 DcGeneralEvents::ACTION,
@@ -62,7 +63,7 @@ class CreateVariantButton extends BaseSubscriber
      */
     public function createButton(GetOperationButtonEvent $event)
     {
-        if($event->getCommand()->getName() != 'createvariant') {
+        if ($event->getCommand()->getName() != 'createvariant') {
             return;
         }
         /** @var Model $model */
@@ -86,12 +87,11 @@ class CreateVariantButton extends BaseSubscriber
      */
     public function handleCreateVariantAction(ActionEvent $event)
     {
-        $environment   = $event->getEnvironment();
-
-        if($event->getAction()->getName() != 'createvariant') {
+        if ($event->getAction()->getName() != 'createvariant') {
             return;
         }
 
+        $environment   = $event->getEnvironment();
         $view          = $environment->getView();
         $dataProvider  = $environment->getDataProvider();
         $inputProvider = $environment->getInputProvider();
@@ -119,7 +119,7 @@ class CreateVariantButton extends BaseSubscriber
             ->getFactory()
             ->getMetaModel($model->getProviderName());
 
-        if(!$metaModel || !$metaModel->hasVariants()) {
+        if (!$metaModel || !$metaModel->hasVariants()) {
             return;
         }
 

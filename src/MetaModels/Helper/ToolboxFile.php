@@ -15,6 +15,7 @@
  * @author     Andreas Nölke <zero@brothers-project.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Christopher Boelter <christopher@boelter.eu>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -293,6 +294,8 @@ class ToolboxFile
      */
     public function addPath($strPath)
     {
+        // FIXME: we should change this to utilize the dbafs.
+
         if (is_file(TL_ROOT . DIRECTORY_SEPARATOR . $strPath)) {
             $strExtension = pathinfo(TL_ROOT . DIRECTORY_SEPARATOR . $strPath, PATHINFO_EXTENSION);
             if (in_array(strtolower($strExtension), $this->acceptedExtensions)) {
@@ -314,6 +317,7 @@ class ToolboxFile
      */
     public function addPathById($strID)
     {
+        // FIXME: we should change this to add files by retrieving them from the dbafs.
         $objFile = \FilesModel::findByPk($strID);
 
         // ToDo: Should we throw a exception or just return if we have no file.
