@@ -21,6 +21,7 @@ namespace MetaModels\DcGeneral\Data;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBagInterface;
 use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
+use MetaModels\Exceptions\DifferentValuesException;
 use MetaModels\IItem;
 
 /**
@@ -112,6 +113,7 @@ class Model implements ModelInterface
             if ($objAttribute) {
                 $varValue = $objAttribute->valueToWidget($varValue);
             }
+
             return $varValue;
         }
         return null;
@@ -170,14 +172,18 @@ class Model implements ModelInterface
             if ($varValue !== $this->getProperty($strPropertyName)) {
                 $this->setMeta(static::IS_CHANGED, true);
                 $this->getItem()->set($strPropertyName, $varInternalValue);
-                if ($varValue !== $this->getProperty($strPropertyName)) {
+                try {
+                    DifferentValuesException::compare($varValue, $this->getProperty($strPropertyName), false);
+                } catch (DifferentValuesException $exception) {
                     throw new \LogicException(
                         sprintf(
-                            'Property %s (%s) did not accept the value %s.',
+                            'Property %s (%s) did not accept the value (%s).',
                             $strPropertyName,
                             $objAttribute->get('type'),
-                            var_export($varValue, true)
-                        )
+                            $exception->getLongMessage()
+                        ),
+                        1,
+                        $exception
                     );
                 }
             }
