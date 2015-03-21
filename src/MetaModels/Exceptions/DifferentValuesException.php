@@ -186,9 +186,9 @@ class DifferentValuesException extends \Exception
     private static function isEmptyArrayEquivalent($expected, $actual)
     {
         return (gettype($expected) == 'string')
-        && (gettype($actual) == 'array')
-        && empty($actual)
-        && empty($expected);
+            && ((gettype($actual) == 'array') || (gettype($actual) == 'NULL'))
+            && empty($actual)
+            && empty($expected);
     }
 
     /**
