@@ -317,6 +317,11 @@ class ToolboxFile
      */
     public function addPathById($strID)
     {
+        // Check if empty.
+        if(empty($strID)){
+            return $this;
+        }
+
         // FIXME: we should change this to add files by retrieving them from the dbafs.
         $objFile = \FilesModel::findByPk($strID);
 
