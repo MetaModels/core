@@ -20,6 +20,11 @@
 namespace MetaModels\DcGeneral\Events;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\AbstractModelAwareEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PostCreateModelEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PostDeleteModelEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PostPasteModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use MetaModels\BackendIntegration\PurgeCache;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbFilter;
@@ -175,34 +180,47 @@ class Subscriber extends BaseSubscriber
     }
 
     /**
-     * Register event to clear the cache when a relevant data model has been saved.
+     * Check if we have to purge the MetaModels cache.
+     *
+     * @param AbstractModelAwareEvent $event The event holding the model being manipulated.
      *
      * @return void
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
+    public function checkPurge(AbstractModelAwareEvent $event)
+    {
+        $table = $event->getModel()->getProviderName();
+        if (($table == 'tl_metamodel') ||
+            ($table == 'tl_metamodel_dca') ||
+            ($table == 'tl_metamodel_dca_sortgroup') ||
+            ($table == 'tl_metamodel_dcasetting') ||
+            ($table == 'tl_metamodel_dcasetting_condition') ||
+            ($table == 'tl_metamodel_attribute') ||
+            ($table == 'tl_metamodel_filter') ||
+            ($table == 'tl_metamodel_filtersetting') ||
+            ($table == 'tl_metamodel_rendersettings') ||
+            ($table == 'tl_metamodel_rendersetting') ||
+            ($table == 'tl_metamodel_dca_combine')
+        ) {
+            $purger = new PurgeCache();
+            $purger->purge();
+        }
+
+    }
+
+    /**
+     * Register event to clear the cache when a relevant data model has been saved.
+     *
+     * @return void
+     */
     public function registerTableWatcher()
     {
-        $this->addListener(
-            PostPersistModelEvent::NAME,
-            function (PostPersistModelEvent $event) {
-                $table = $event->getModel()->getProviderName();
-                if (($table == 'tl_metamodel') ||
-                    ($table == 'tl_metamodel_dca') ||
-                    ($table == 'tl_metamodel_dca_sortgroup') ||
-                    ($table == 'tl_metamodel_dcasetting') ||
-                    ($table == 'tl_metamodel_dcasetting_condition') ||
-                    ($table == 'tl_metamodel_attribute') ||
-                    ($table == 'tl_metamodel_filter') ||
-                    ($table == 'tl_metamodel_filtersetting') ||
-                    ($table == 'tl_metamodel_rendersettings') ||
-                    ($table == 'tl_metamodel_rendersetting') ||
-                    ($table == 'tl_metamodel_dca_combine')
-                ) {
-                    $purger = new PurgeCache();
-                    $purger->purge();
-                }
-            }
-        );
+        $this
+            ->addListener(PostCreateModelEvent::NAME, array($this, 'checkPurge'))
+            ->addListener(PostDeleteModelEvent::NAME, array($this, 'checkPurge'))
+            ->addListener(PostDuplicateModelEvent::NAME, array($this, 'checkPurge'))
+            ->addListener(PostPasteModelEvent::NAME, array($this, 'checkPurge'))
+            ->addListener(PostPersistModelEvent::NAME, array($this, 'checkPurge'));
     }
 }
