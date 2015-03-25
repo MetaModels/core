@@ -782,6 +782,7 @@ class ToolboxFile
      */
     public static function convertUuidsOrPathsToMetaModels($values)
     {
+        $values = array_filter((array) $values);
         if (empty($values)) {
             return array(
                 'bin'   => array(),
@@ -791,9 +792,6 @@ class ToolboxFile
         }
 
         foreach ($values as $key => $value) {
-            if (empty($value)) {
-                continue;
-            }
             if (!(\Validator::isUuid($value))) {
                 $file = \Dbafs::addResource($value);
                 if (!$file) {
@@ -801,7 +799,6 @@ class ToolboxFile
                 }
 
                 $values[$key] = $file->uuid;
-
             }
         }
 
