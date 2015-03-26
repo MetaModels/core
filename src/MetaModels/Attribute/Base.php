@@ -66,10 +66,8 @@ abstract class Base implements IAttribute
     public function __construct(IMetaModel $objMetaModel, $arrData = array())
     {
         // Meta information.
-        foreach ($this->getAttributeSettingNames() as $strSettingName) {
-            if (isset($arrData[$strSettingName])) {
-                $this->set($strSettingName, $arrData[$strSettingName]);
-            }
+        foreach (array_intersect($this->getAttributeSettingNames(), array_keys($arrData)) as $strSettingName) {
+            $this->set($strSettingName, $arrData[$strSettingName]);
         }
         $this->metaModel = $objMetaModel;
     }
