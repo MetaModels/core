@@ -342,12 +342,9 @@ abstract class Base implements IAttribute
     private function isAllowedValue($name)
     {
         // Load the allowed overrides only once.
-        static $allowedSettings;
-        if (!$allowedSettings) {
-            $allowedSettings = array_flip($this->getAttributeSettingNames());
-        }
+        $allowedSettings = array_flip($this->getAttributeSettingNames());
 
-        return array_key_exists($name, $allowedSettings);
+        return isset($allowedSettings[$name]);
     }
 
     /**
@@ -361,7 +358,7 @@ abstract class Base implements IAttribute
      */
     protected function getOverrideValue($name, $overrides)
     {
-        if ($this->isAllowedValue($name) && array_key_exists($name, $overrides)) {
+        if ($this->isAllowedValue($name) && isset($overrides[$name])) {
             return $overrides[$name];
         }
 
@@ -383,25 +380,26 @@ abstract class Base implements IAttribute
             $fieldDefinition['eval']['unique'] = (bool) $this->getOverrideValue('isunique', $overrides);
         }
 
-        foreach (array
-                 (
-                     'tl_class',
-                     'mandatory',
-                     'alwaysSave',
-                     'chosen',
-                     'allowHtml',
-                     'preserveTags',
-                     'decodeEntities',
-                     'rte',
-                     'rows',
-                     'cols',
-                     'spaceToUnderscore',
-                     'includeBlankOption',
-                     'submitOnChange',
-                     'readonly'
-                 ) as $name) {
-            if (!array_key_exists($name, $fieldDefinition['eval']) && $this->isAllowedValue($name)) {
-                $fieldDefinition['eval'][$name] = $this->getOverrideValue($name, $overrides);
+        foreach (array(
+            'tl_class',
+            'mandatory',
+            'alwaysSave',
+            'chosen',
+            'allowHtml',
+            'preserveTags',
+            'decodeEntities',
+            'rte',
+            'rows',
+            'cols',
+            'spaceToUnderscore',
+            'includeBlankOption',
+            'submitOnChange',
+            'readonly'
+        ) as $name) {
+            if (empty($fieldDefinition['eval'][$name])
+                && ($value = $this->getOverrideValue($name, $overrides))
+            ) {
+                $fieldDefinition['eval'][$name] = $value;
             }
         }
 

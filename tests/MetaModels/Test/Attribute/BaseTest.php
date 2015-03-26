@@ -180,6 +180,9 @@ class BaseTest extends TestCase
             )
         );
 
+        $this->assertFalse(array_key_exists('filter', $fieldDefinition['eval']));
+        $this->assertFalse(array_key_exists('search', $fieldDefinition['eval']));
+
         $this->assertEquals('some_widget_class', $fieldDefinition['eval']['tl_class']);
         $this->assertEquals(true, $fieldDefinition['eval']['readonly']);
     }

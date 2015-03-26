@@ -1365,12 +1365,12 @@ class Builder
             $property->setExplanation($propInfo['explanation']);
         }
 
-        if (!$property->getExtra() && isset($propInfo['eval'])) {
+        if (isset($propInfo['eval'])) {
             $extra = $propInfo['eval'];
             if ($isTranslated) {
                 $extra['tl_class'] = 'translat-attr' . (!empty($extra['tl_class']) ? ' ' . $extra['tl_class'] : '');
             }
-            $property->setExtra($extra);
+            $property->setExtra(array_merge((array) $property->getExtra(), $extra));
         }
     }
 

@@ -206,7 +206,6 @@ class Subscriber extends BaseSubscriber
             $purger = new PurgeCache();
             $purger->purge();
         }
-
     }
 
     /**
