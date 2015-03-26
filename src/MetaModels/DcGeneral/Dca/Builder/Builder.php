@@ -410,7 +410,7 @@ class Builder
     protected function parsePanelFilter(PanelRowInterface $row)
     {
         foreach ($this->getInputScreenDetails()->getProperties() as $property => $value) {
-            if (isset($value['info']['filter'])) {
+            if (!empty($value['info']['filter'])) {
                 $element = new DefaultFilterElementInformation();
                 $element->setPropertyName($property);
                 if (!$row->hasElement($element->getName())) {
