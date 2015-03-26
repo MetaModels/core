@@ -286,77 +286,153 @@ abstract class Base implements IAttribute
     }
 
     /**
-     * {@inheritdoc}
+     * Set the language strings.
+     *
+     * @return void
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function getFieldDefinition($arrOverrides = array())
+    private function setLanguageStrings()
     {
-        $strTableName = $this->getMetaModel()->getTableName();
         // Only overwrite the language if not already set.
-        if (empty($GLOBALS['TL_LANG'][$strTableName][$this->getColName()])) {
-            $GLOBALS['TL_LANG'][$strTableName][$this->getColName()] = array
+        if (empty($GLOBALS['TL_LANG'][$this->getMetaModel()->getTableName()][$this->getColName()])) {
+            $GLOBALS['TL_LANG'][$this->getMetaModel()->getTableName()][$this->getColName()] = array
             (
                 $this->getLangValue($this->get('name')),
                 $this->getLangValue($this->get('description')),
             );
         }
+    }
 
-        $arrFieldDef = array();
-        if (isset($GLOBALS['TL_DCA'][$strTableName]['fields'][$this->getColName()])) {
-            $arrFieldDef = $GLOBALS['TL_DCA'][$strTableName]['fields'][$this->getColName()];
+    /**
+     * Retrieve the base definition by the user from dca_config.
+     *
+     * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    private function getBaseDefinition()
+    {
+        $this->setLanguageStrings();
+        $tableName  = $this->getMetaModel()->getTableName();
+        $definition = array();
+        if (isset($GLOBALS['TL_DCA'][$tableName]['fields'][$this->getColName()])) {
+            $definition = $GLOBALS['TL_DCA'][$tableName]['fields'][$this->getColName()];
         }
 
-        $arrFieldDef = array_replace_recursive(
+        return array_replace_recursive(
             array
             (
-                'label' => &$GLOBALS['TL_LANG'][$strTableName][$this->getColName()],
+                'label' => &$GLOBALS['TL_LANG'][$tableName][$this->getColName()],
                 'eval'  => array()
             ),
-            $arrFieldDef
+            $definition
         );
+    }
 
-        $arrSettingNames = $this->getAttributeSettingNames();
+    /**
+     * Check if a value may be overridden.
+     *
+     * @param string $name The name of the value.
+     *
+     * @return bool
+     */
+    private function isAllowedValue($name)
+    {
+        // Load the allowed overrides only once.
+        static $allowedSettings;
+        if (!$allowedSettings) {
+            $allowedSettings = array_flip($this->getAttributeSettingNames());
+        }
 
-        $arrFieldDef['eval']['unique']     = $this->get('isunique') && in_array('isunique', $arrSettingNames);
-        $arrFieldDef['eval']['mandatory']  = (!empty($arrFieldDef['eval']['unique']))
-            || ($this->get('mandatory') && in_array('mandatory', $arrSettingNames));
-        $arrFieldDef['eval']['alwaysSave'] = (!empty($arrFieldDef['eval']['alwaysSave']))
-            || ($this->get('alwaysSave') && in_array('alwaysSave', $arrSettingNames));
+        return array_key_exists($name, $allowedSettings);
+    }
+
+    /**
+     * Extract an override value.
+     *
+     * @param string $name      The name of the value.
+     *
+     * @param array  $overrides The overrides containing the values to be overridden.
+     *
+     * @return mixed
+     */
+    protected function getOverrideValue($name, $overrides)
+    {
+        if ($this->isAllowedValue($name) && array_key_exists($name, $overrides)) {
+            return $overrides[$name];
+        }
+
+        return $this->get($name);
+    }
+
+    /**
+     * Extract an override value.
+     *
+     * @param array $fieldDefinition The field definition.
+     *
+     * @param array $overrides       The overrides containing the values to be overridden.
+     *
+     * @return array
+     */
+    private function setBaseEval($fieldDefinition, $overrides)
+    {
+        if ($this->isAllowedValue('isunique')) {
+            $fieldDefinition['eval']['unique'] = (bool) $this->getOverrideValue('isunique', $overrides);
+        }
 
         foreach (array
-        (
-            'tl_class',
-            'mandatory',
-            'alwaysSave',
-            'chosen',
-            'allowHtml',
-            'preserveTags',
-            'decodeEntities',
-            'rte',
-            'rows',
-            'cols',
-            'spaceToUnderscore',
-            'includeBlankOption',
-            'submitOnChange',
-            'readonly'
-        ) as $strEval) {
-            if (in_array($strEval, $arrSettingNames) && $arrOverrides[$strEval]) {
-                $arrFieldDef['eval'][$strEval] = $arrOverrides[$strEval];
+                 (
+                     'tl_class',
+                     'mandatory',
+                     'alwaysSave',
+                     'chosen',
+                     'allowHtml',
+                     'preserveTags',
+                     'decodeEntities',
+                     'rte',
+                     'rows',
+                     'cols',
+                     'spaceToUnderscore',
+                     'includeBlankOption',
+                     'submitOnChange',
+                     'readonly'
+                 ) as $name) {
+            if (!array_key_exists($name, $fieldDefinition['eval']) && $this->isAllowedValue($name)) {
+                $fieldDefinition['eval'][$name] = $this->getOverrideValue($name, $overrides);
             }
         }
 
-        if (in_array('trailingSlash', $arrSettingNames) && ($arrOverrides['trailingSlash'] != 2)) {
-            $arrFieldDef['eval']['trailingSlash'] = (bool) $arrOverrides['trailingSlash'];
+        // If we have unique, enforce mandatory.
+        if (!empty($fieldDefinition['eval']['unique'])) {
+            $fieldDefinition['eval']['mandatory'] = true;
+        }
+
+        return $fieldDefinition;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFieldDefinition($arrOverrides = array())
+    {
+        $arrFieldDef = $this->setBaseEval($this->getBaseDefinition(), $arrOverrides);
+
+        if ($this->isAllowedValue('trailingSlash')) {
+            $trailingSlash = $this->getOverrideValue('trailingSlash', $arrOverrides);
+            if ($trailingSlash != 2) {
+                $arrFieldDef['eval']['trailingSlash'] = (bool) $arrOverrides['trailingSlash'];
+            }
         }
 
         // Panel conditions.
-        if (in_array('filterable', $arrSettingNames) && $arrOverrides['filterable']) {
-            $arrFieldDef['filter'] = true;
+        if ($this->isAllowedValue('filterable')) {
+            $arrFieldDef['filter'] = (bool) $this->getOverrideValue('filterable', $arrOverrides);
         }
-        if (in_array('searchable', $arrSettingNames) && $arrOverrides['searchable']) {
-            $arrFieldDef['search'] = true;
+        if ($this->isAllowedValue('searchable')) {
+            $arrFieldDef['search'] = (bool) $this->getOverrideValue('searchable', $arrOverrides);
         }
 
         return $arrFieldDef;
