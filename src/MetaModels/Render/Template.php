@@ -294,7 +294,7 @@ class Template
         $this->callParseTemplateHook();
 
         $templateFile = $this->getTemplate($this->strTemplate, $strOutputFormat, $blnFailIfNotFound);
-        if ($templateFile) {
+        if (!empty($templateFile)) {
             $this->strFormat = $strOutputFormat;
 
             ob_start();
