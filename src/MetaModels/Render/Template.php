@@ -293,12 +293,12 @@ class Template
         // HOOK: add custom parse filters.
         $this->callParseTemplateHook();
 
-        $strTplFile = $this->getTemplate($this->strTemplate, $strOutputFormat, $blnFailIfNotFound);
-        if ($strTplFile) {
+        $templateFile = $this->getTemplate($this->strTemplate, $strOutputFormat, $blnFailIfNotFound);
+        if ($templateFile) {
             $this->strFormat = $strOutputFormat;
 
             ob_start();
-            include($strTplFile);
+            include($templateFile);
             $strBuffer = ob_get_contents();
             ob_end_clean();
 
@@ -307,7 +307,7 @@ class Template
             return $strBuffer;
         }
 
-        return sprintf('Template %s not found (it is maybe within a unreachable theme folder?).');
+        return sprintf('Template %s not found (it is maybe within a unreachable theme folder?).', $templateFile);
     }
 
     /**
