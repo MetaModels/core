@@ -115,11 +115,11 @@ class SearchablePages
      *
      * @param boolean    $ignoreError If true ignore errors like the MetaModels was not found.
      *
-     * @return IMetaModel
+     * @return IMetaModel|null
      *
      * @throws \RuntimeException When the MetaModels is missing.
      */
-    protected function getMetaModels($identifier, $ignoreError)
+    protected function getMetaModel($identifier, $ignoreError)
     {
         // Get the factory.
         $factory = $this->getMetaModelsFactory();
@@ -165,7 +165,7 @@ class SearchablePages
      */
     protected function getView($identifier, $view)
     {
-        $metaModels = $this->getMetaModels($identifier, false);
+        $metaModels = $this->getMetaModel($identifier, false);
 
         return $metaModels->getView($view);
     }
@@ -180,7 +180,7 @@ class SearchablePages
      *
      * @param IMetaModel $metaModels     The MetaModels for the check.
      *
-     * @return array A list with all languages.
+     * @return string[] A list with all languages or null.
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
@@ -188,11 +188,11 @@ class SearchablePages
     {
         if (!empty($singleLanguage)) {
             return array($singleLanguage);
-        } elseif ($metaModels->isTranslated()) {
+        } elseif ($metaModels->isTranslated() && $metaModels->getAvailableLanguages()) {
             return $metaModels->getAvailableLanguages();
-        } else {
-            return array($GLOBALS['TL_LANGUAGE']);
         }
+
+        return array($GLOBALS['TL_LANGUAGE']);
     }
 
     /**
@@ -304,7 +304,7 @@ class SearchablePages
     /**
      * Set parameters.
      *
-     * @param int      $filterId The id of the filter.
+     * @param string   $filterId The id of the filter.
      *
      * @param string[] $presets  The parameter preset values to use.
      *
@@ -400,15 +400,15 @@ class SearchablePages
     /**
      * Get a MetaModels, a filter and a renderSetting. Get all items based on the filter and build the jumpTo urls.
      *
-     * @param int    $metaModelsIdentifier    ID of the MetaModels.
+     * @param string      $metaModelsIdentifier ID of the MetaModels.
      *
-     * @param int    $filterIdentifier        ID of the filter setting.
+     * @param string      $filterIdentifier     ID of the filter setting.
      *
-     * @param array  $presetParams            The list with the parameter settings for the filters.
+     * @param array       $presetParams         The list with the parameter settings for the filters.
      *
-     * @param int    $renderSettingIdentifier ID of the renderSetting.
+     * @param string      $renderSettingId      ID of the renderSetting.
      *
-     * @param string $singleLanguage          The current language.
+     * @param string|null $singleLanguage       The current language.
      *
      * @return void
      *
@@ -418,16 +418,16 @@ class SearchablePages
         $metaModelsIdentifier,
         $filterIdentifier,
         $presetParams,
-        $renderSettingIdentifier,
+        $renderSettingId,
         $singleLanguage = null
     ) {
         // Get the MetaModels.
-        $metaModels         = $this->getMetaModels($metaModelsIdentifier, false);
+        $metaModels         = $this->getMetaModel($metaModelsIdentifier, false);
         $availableLanguages = $this->getLanguage($singleLanguage, $metaModels);
         $currentLanguage    = $GLOBALS['TL_LANGUAGE'];
 
         // Get the view.
-        $view    = $this->getView($metaModelsIdentifier, $renderSettingIdentifier);
+        $view    = $this->getView($metaModelsIdentifier, $renderSettingId);
         $jumpTos = $view->get('jumpTo');
 
         // Set the filter.
