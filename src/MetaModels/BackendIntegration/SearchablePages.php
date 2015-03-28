@@ -30,6 +30,11 @@ use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\Item;
 
+/**
+ * Class SearchablePages.
+ *
+ * @package MetaModels\BackendIntegration
+ */
 class SearchablePages
 {
     /**
@@ -111,6 +116,8 @@ class SearchablePages
      * @param boolean    $ignoreError If true ignore errors like the MetaModels was not found.
      *
      * @return IMetaModel
+     *
+     * @throws \RuntimeException When the MetaModels is missing.
      */
     protected function getMetaModels($identifier, $ignoreError)
     {
@@ -136,14 +143,15 @@ class SearchablePages
     /**
      * Get a filter based on the id.
      *
-     * @param mixed $id Id of the filter
+     * @param mixed $identifier Id of the filter.
      *
      * @return \MetaModels\Filter\Setting\ICollection The filter
      */
-    protected function getFilterSettings($id)
+    protected function getFilterSettings($identifier)
     {
         $filterFactory = $this->getServiceContainer()->getFilterFactory();
-        return $filterFactory->createCollection($id);
+
+        return $filterFactory->createCollection($identifier);
     }
 
     /**
@@ -158,30 +166,31 @@ class SearchablePages
     protected function getView($identifier, $view)
     {
         $metaModels = $this->getMetaModels($identifier, false);
+
         return $metaModels->getView($view);
     }
 
     /**
      * Get the language.
      *
+     * First check the overwrite language. Then check if the MetaModels is translated and get all languages from it.
+     * Use the current language as fallback.
+     *
      * @param string     $singleLanguage The language with the overwrite.
      *
      * @param IMetaModel $metaModels     The MetaModels for the check.
      *
      * @return array A list with all languages.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function getLanguage($singleLanguage, $metaModels)
     {
-        // First check the overwrite language.
         if (!empty($singleLanguage)) {
             return array($singleLanguage);
-        }
-        // Then check if the MetaModels is translated and get
-        // all languages from it.
-        elseif ($metaModels->isTranslated()) {
+        } elseif ($metaModels->isTranslated()) {
             return $metaModels->getAvailableLanguages();
-        } // Use the current language as fallback.
-        else {
+        } else {
             return array($GLOBALS['TL_LANGUAGE']);
         }
     }
@@ -198,6 +207,8 @@ class SearchablePages
      * @param \MetaModels\Render\Setting\ICollection $view               The view to be used.
      *
      * @return array A list of urls for the jumpTos
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function getJumpTosFor($availableLanguages, $metaModels, $filter, $view)
     {
@@ -212,8 +223,8 @@ class SearchablePages
 
             /** @var Item $item */
             foreach ($items as $item) {
-                $jumpTo    = $item->buildJumpToLink($view);
-                $event     = new GetPageDetailsEvent($jumpTo['page']);
+                $jumpTo = $item->buildJumpToLink($view);
+                $event  = new GetPageDetailsEvent($jumpTo['page']);
                 $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
 
                 $url       = $this->getBaseUrl(
@@ -228,7 +239,11 @@ class SearchablePages
     }
 
     /**
-     * @param string[] $pageDetails The page details.
+     * Get the base URL.
+     *
+     * @param string[]    $pageDetails The page details.
+     *
+     * @param null|string $path        Additional path settings.
      *
      * @return UrlBuilder
      */
@@ -264,6 +279,8 @@ class SearchablePages
      * Remove all empty detail pages.
      *
      * @param array $jumpTos A list with the jumpTo pages.
+     *
+     * @return void
      */
     protected function removeEmptyDetailPages($jumpTos)
     {
@@ -339,8 +356,9 @@ class SearchablePages
      *
      * @return array
      *
-     * @see \RebuildIndex::run()
-     * @see \Automator::generateSitemap()
+     * @see    \RebuildIndex::run()
+     *
+     * @see    \Automator::generateSitemap()
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -380,8 +398,7 @@ class SearchablePages
     }
 
     /**
-     * Get a MetaModels, a filter and a renderSetting. Get all items based on the filter
-     * and build the jumpTo urls.
+     * Get a MetaModels, a filter and a renderSetting. Get all items based on the filter and build the jumpTo urls.
      *
      * @param int    $metaModelsIdentifier    ID of the MetaModels.
      *
@@ -392,8 +409,12 @@ class SearchablePages
      * @param int    $renderSettingIdentifier ID of the renderSetting.
      *
      * @param string $singleLanguage          The current language.
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
-    function getMetaModelsPages(
+    public function getMetaModelsPages(
         $metaModelsIdentifier,
         $filterIdentifier,
         $presetParams,
@@ -420,7 +441,7 @@ class SearchablePages
         // Get all jumpTos.
         $newEntries = $this->getJumpTosFor($availableLanguages, $metaModels, $filter, $view);
 
-        // Remove all emptry page details.
+        // Remove all empty page details.
         $this->removeEmptyDetailPages($jumpTos);
 
         // Reset language.
