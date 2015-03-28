@@ -24,7 +24,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
         'switchToEdit'                => false,
         'enableVersioning'            => false,
     ),
-
     'dca_config'                      => array
     (
         'data_provider'               => array
@@ -60,7 +59,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
             )
         ),
     ),
-
     'list'                  => array
     (
         'sorting'           => array
@@ -219,6 +217,5 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
                 'chosen'             => true
             )
         ),
-
     )
 );

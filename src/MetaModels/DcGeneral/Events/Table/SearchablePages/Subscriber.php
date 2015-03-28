@@ -10,6 +10,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -124,6 +125,13 @@ class Subscriber extends BaseSubscriber
         $event->setOptions($options);
     }
 
+    /**
+     * Set the filter params visible or not.
+     *
+     * @param BuildDataDefinitionEvent $event The event.
+     *
+     * @return void
+     */
     public function visibleFilterParams(BuildDataDefinitionEvent $event)
     {
         if ($event->getContainer()->getName() !== 'tl_metamodel_searchable_pages') {
@@ -157,7 +165,11 @@ class Subscriber extends BaseSubscriber
     }
 
     /**
-     * @param BuildWidgetEvent $event
+     * Build the filter params for the widget.
+     *
+     * @param BuildWidgetEvent $event The event.
+     *
+     * @return void
      */
     public function buildFilterParamsFor(BuildWidgetEvent $event)
     {
@@ -173,7 +185,7 @@ class Subscriber extends BaseSubscriber
             $model->getProperty('filter')
         );
 
-        $extra = $event->getProperty()->getExtra();
+        $extra              = $event->getProperty()->getExtra();
         $extra['subfields'] = $objFilterSettings->getParameterDCA();
         $event->getProperty()->setExtra($extra);
     }
