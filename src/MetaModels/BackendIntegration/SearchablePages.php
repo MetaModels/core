@@ -206,11 +206,14 @@ class SearchablePages
      *
      * @param \MetaModels\Render\Setting\ICollection $view               The view to be used.
      *
+     * @param string|null                            $rootPage           The root page id or null if there is no root
+     *                                                                   page.
+     *
      * @return array A list of urls for the jumpTos
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    protected function getJumpTosFor($availableLanguages, $metaModels, $filter, $view)
+    protected function getJumpTosFor($availableLanguages, $metaModels, $filter, $view, $rootPage = null)
     {
         $entries = array();
 
@@ -226,11 +229,19 @@ class SearchablePages
                 $jumpTo = $item->buildJumpToLink($view);
                 $event  = new GetPageDetailsEvent($jumpTo['page']);
                 $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
+                $pageDetails = $event->getPageDetails();
 
-                $url       = $this->getBaseUrl(
-                    $event->getPageDetails(),
+                // If there is a root page check the context.
+                if ($rootPage !== null && $pageDetails['rootId'] != $rootPage) {
+                    continue;
+                }
+
+                // Build the url.
+                $url = $this->getBaseUrl(
+                    $pageDetails,
                     $jumpTo['url']
                 );
+
                 $entries[] = $url->getUrl();
             }
         }
@@ -264,13 +275,20 @@ class SearchablePages
             $url->setScheme('http');
         }
 
+        // Make a array for the parts.
+        $fullPath   = array();
+        $fullPath[] = TL_PATH;
+
+        // Get the path.
         if ($path === null) {
             $event = new GenerateFrontendUrlEvent($pageDetails, null, $pageDetails['language']);
             $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
-            $path = TL_PATH . '/' . $event->getUrl();
+            $fullPath[] = $event->getUrl();
+        } else {
+            $fullPath[] = $path;
         }
 
-        $url->setPath($path);
+        $url->setPath(implode('/', $fullPath));
 
         return $url;
     }
@@ -364,19 +382,7 @@ class SearchablePages
      */
     public function addPages($pages, $rootPage = null, $fromSiteMap = false, $language = null)
     {
-        // Set the language to null.
-        $singleLanguage = null;
-
-        // Check if we have a root page id.
-        // If so add only this language.
-        if (!empty($rootPage) && empty($language)) {
-            $modelPage      = \PageModel::findWithDetails($rootPage);
-            $singleLanguage = $modelPage->language;
-        } elseif (!empty($language)) {
-            $singleLanguage = $language;
-        }
-
-        // Save the pages in the locale array.
+        // Save the pages.
         $this->foundPages = $pages;
         unset($pages);
 
@@ -387,7 +393,8 @@ class SearchablePages
                 $config['filter'],
                 deserialize($config['filterparams'], true),
                 $config['rendersetting'],
-                $singleLanguage
+                $rootPage,
+                $language
             );
         }
 
@@ -408,9 +415,9 @@ class SearchablePages
      *
      * @param string      $renderSettingId      ID of the renderSetting.
      *
-     * @param string|null $singleLanguage       The current language.
+     * @param string|null $rootPage             The root page id or null if there is no root page.
      *
-     * @return void
+     * @param string|null $language             The current language.
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
@@ -419,11 +426,12 @@ class SearchablePages
         $filterIdentifier,
         $presetParams,
         $renderSettingId,
-        $singleLanguage = null
+        $rootPage = null,
+        $language = null
     ) {
         // Get the MetaModels.
         $metaModels         = $this->getMetaModel($metaModelsIdentifier, false);
-        $availableLanguages = $this->getLanguage($singleLanguage, $metaModels);
+        $availableLanguages = $this->getLanguage($language, $metaModels);
         $currentLanguage    = $GLOBALS['TL_LANGUAGE'];
 
         // Get the view.
@@ -439,7 +447,7 @@ class SearchablePages
         $filterSetting->addRules($filter, $processed);
 
         // Get all jumpTos.
-        $newEntries = $this->getJumpTosFor($availableLanguages, $metaModels, $filter, $view);
+        $newEntries = $this->getJumpTosFor($availableLanguages, $metaModels, $filter, $view, $rootPage);
 
         // Remove all empty page details.
         $this->removeEmptyDetailPages($jumpTos);
