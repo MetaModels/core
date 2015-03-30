@@ -501,42 +501,45 @@ class Item implements IItem
             return null;
         }
 
-        // Get the right jumpto.
-        $strDesiredLanguage  = $this->getMetaModel()->getActiveLanguage();
-        $strFallbackLanguage = $this->getMetaModel()->getFallbackLanguage();
+        // Get the right jump to.
+        $desiredLanguage  = $this->getMetaModel()->getActiveLanguage();
+        $fallbackLanguage = $this->getMetaModel()->getFallbackLanguage();
 
-        $intJumpTo         = 0;
-        $intFilterSettings = 0;
-        $language          = null;
+        $jumpToId        = 0;
+        $filterSettingId = 0;
+        $language        = null;
 
         foreach ((array) $objSettings->get('jumpTo') as $arrJumpTo) {
             // If either desired language or fallback, keep the result.
             if (!$this->getMetaModel()->isTranslated()
-                || $arrJumpTo['langcode'] == $strDesiredLanguage
-                || $arrJumpTo['langcode'] == $strFallbackLanguage) {
-                $intJumpTo         = $arrJumpTo['value'];
-                $intFilterSettings = $arrJumpTo['filter'];
-                $language          = $arrJumpTo['langcode'];
+                || $arrJumpTo['langcode'] == $desiredLanguage
+                || $arrJumpTo['langcode'] == $fallbackLanguage
+            ) {
+                $jumpToId        = $arrJumpTo['value'];
+                $filterSettingId = $arrJumpTo['filter'];
+                $language        = $arrJumpTo['langcode'];
                 // If the desired language, break. Otherwise try to get the desired one until all have been evaluated.
-                if ($strDesiredLanguage == $arrJumpTo['langcode']) {
+                if ($desiredLanguage == $arrJumpTo['langcode']) {
                     break;
                 }
             }
         }
 
-        $event = new GetPageDetailsEvent($intJumpTo);
-
-        if ($intJumpTo) {
-            $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
+        // Only run this part if we have a jumpTo.
+        if (empty($jumpToId)) {
+            return null;
         }
+
+        $event = new GetPageDetailsEvent($jumpToId);
+        $this
+            ->getEventDispatcher()
+            ->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
 
         // Apply jumpTo urls based upon the filter defined in the render settings.
         return $this->buildJumpToParametersAndUrl(
             $event->getPageDetails(),
-            $intFilterSettings,
-            $objSettings,
-            // Mask out the "all languages" language key (See #687).
-            ($language !== 'xx') ? $language : null
+            $filterSettingId,
+            $objSettings
         );
     }
 
