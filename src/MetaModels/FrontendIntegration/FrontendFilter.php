@@ -11,8 +11,7 @@
  * @subpackage Core
  * @author     Andreas Isaak <info@andreas-isaak.de>
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     Christopher Bölter <c.boelter@cogizz.de>
- * @author     Christopher Boelter <c.boelter@cogizz.de>
+ * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  The MetaModels team.
  * @license    LGPL.
@@ -26,6 +25,7 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUr
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use MetaModels\FrontendIntegration\Content\FilterClearAll as ContentElementFilterClearAll;
 use MetaModels\FrontendIntegration\Module\FilterClearAll as ModuleFilterClearAll;
+use MetaModels\IMetaModelsServiceContainer;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -358,12 +358,16 @@ class FrontendFilter
      * @param int    $moduleId The id of the module to be inserted for the replace string.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function generateModule($content, $replace, $moduleId)
     {
-        $objDbResult = $this
-            ->objFilterConfig
-            ->getServiceContainer()
+        /** @var IMetaModelsServiceContainer $serviceContainer */
+        $serviceContainer = $GLOBALS['container']['metamodels-service-container'];
+
+        $objDbResult = $serviceContainer
             ->getDatabase()
             ->prepare('SELECT * FROM tl_module WHERE id=? AND type="metamodels_frontendclearall"')
             ->execute($moduleId);
@@ -377,8 +381,6 @@ class FrontendFilter
         $objModule = new ModuleFilterClearAll($objDbResult);
         return str_replace($replace, $objModule->generateReal(), $content);
     }
-
-
 
     /**
      * Add the "clear all Filter".

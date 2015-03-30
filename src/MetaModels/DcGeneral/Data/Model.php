@@ -21,6 +21,7 @@ namespace MetaModels\DcGeneral\Data;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBagInterface;
 use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
+use MetaModels\Exceptions\DifferentValuesException;
 use MetaModels\IItem;
 
 /**
@@ -112,6 +113,7 @@ class Model implements ModelInterface
             if ($objAttribute) {
                 $varValue = $objAttribute->valueToWidget($varValue);
             }
+
             return $varValue;
         }
         return null;
@@ -154,19 +156,36 @@ class Model implements ModelInterface
 
     /**
      * {@inheritDoc}
+     *
+     * @throws \LogicException When the property is unable to accept the value.
      */
     public function setProperty($strPropertyName, $varValue)
     {
         if ($this->getItem()) {
+            $varInternalValue = $varValue;
             // Test if it is an attribute, if so, let it transform the data for the widget.
             $objAttribute = $this->getItem()->getAttribute($strPropertyName);
             if ($objAttribute) {
-                $varValue = $objAttribute->widgetToValue($varValue, $this->getItem()->get('id'));
+                $varInternalValue = $objAttribute->widgetToValue($varValue, $this->getItem()->get('id'));
             }
 
             if ($varValue !== $this->getProperty($strPropertyName)) {
                 $this->setMeta(static::IS_CHANGED, true);
-                $this->getItem()->set($strPropertyName, $varValue);
+                $this->getItem()->set($strPropertyName, $varInternalValue);
+                try {
+                    DifferentValuesException::compare($varValue, $this->getProperty($strPropertyName), false);
+                } catch (DifferentValuesException $exception) {
+                    throw new \LogicException(
+                        sprintf(
+                            'Property %s (%s) did not accept the value (%s).',
+                            $strPropertyName,
+                            $objAttribute->get('type'),
+                            $exception->getLongMessage()
+                        ),
+                        1,
+                        $exception
+                    );
+                }
             }
         }
     }

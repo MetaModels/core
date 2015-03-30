@@ -17,7 +17,6 @@
 
 namespace MetaModels\DcGeneral\Events;
 
-use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;

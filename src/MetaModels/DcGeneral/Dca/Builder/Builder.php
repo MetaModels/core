@@ -11,6 +11,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Christopher Boelter <christopher@boelter.eu>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -192,51 +193,6 @@ class Builder
             $event = new PopulateAttributeEvent($metaModel, $attribute, $environment);
             // Trigger BuildAttribute Event.
             $dispatcher->dispatch($event::NAME, $event);
-        }
-
-        // FIXME: propagator
-        $dispatcher->addListener(
-            sprintf(
-                '%s[%s][%s]',
-                GetOperationButtonEvent::NAME,
-                $metaModel->getTableName(),
-                'createvariant'
-            ),
-            array('MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton', 'createButton')
-        );
-
-        // FIXME: propagator
-        $dispatcher->addListener(
-            sprintf(
-                '%s[%s]',
-                GetPasteButtonEvent::NAME,
-                $metaModel->getTableName()
-            ),
-            array('MetaModels\DcGeneral\Events\MetaModel\PasteButton', 'handle')
-        );
-
-        // Add some sepcial actions for variants.
-        if ($metaModel->hasVariants()) {
-            // FIXME: propagator
-            $dispatcher->addListener(
-                sprintf(
-                    '%s[%s]',
-                    PostDuplicateModelEvent::NAME,
-                    $metaModel->getTableName()
-                ),
-                array('MetaModels\DcGeneral\Events\MetaModel\DuplicateModel', 'handle')
-            );
-
-            // FIXME: propagator
-            $dispatcher->addListener(
-                sprintf(
-                    '%s[%s][%s]',
-                    DcGeneralEvents::ACTION,
-                    $metaModel->getTableName(),
-                    'createvariant'
-                ),
-                array('MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton', 'handleCreateVariantAction')
-            );
         }
     }
 
@@ -454,7 +410,7 @@ class Builder
     protected function parsePanelFilter(PanelRowInterface $row)
     {
         foreach ($this->getInputScreenDetails()->getProperties() as $property => $value) {
-            if (isset($value['info']['filter'])) {
+            if (!empty($value['info']['filter'])) {
                 $element = new DefaultFilterElementInformation();
                 $element->setPropertyName($property);
                 if (!$row->hasElement($element->getName())) {
@@ -1075,6 +1031,7 @@ class Builder
                     ->setManualSorting()
                     ->setProperty('sorting')
                     ->setSortingMode('ASC');
+                    // FIXME: allow selection of the manual sorting property and its direction in the backend.
             } elseif ($information->getRenderSortAttribute()) {
                 $propertyInformation = $definition->add();
                 $propertyInformation
@@ -1082,11 +1039,14 @@ class Builder
                     ->setSortingMode($information->getRenderSortDirection());
             }
 
-            if ($information->getRenderGroupAttribute()) {
+            $groupType = $this->convertRenderGroupType($information->getRenderGroupType());
+            if ($groupType !== GroupAndSortingInformationInterface::GROUP_NONE
+                && $information->getRenderGroupAttribute()
+            ) {
                 $propertyInformation = $definition->add(0);
                 $propertyInformation
                     ->setProperty($information->getRenderGroupAttribute())
-                    ->setGroupingMode($this->convertRenderGroupType($information->getRenderGroupType()))
+                    ->setGroupingMode($groupType)
                     ->setGroupingLength($information->getRenderGroupLength());
             }
         }
@@ -1405,12 +1365,12 @@ class Builder
             $property->setExplanation($propInfo['explanation']);
         }
 
-        if (!$property->getExtra() && isset($propInfo['eval'])) {
+        if (isset($propInfo['eval'])) {
             $extra = $propInfo['eval'];
             if ($isTranslated) {
                 $extra['tl_class'] = 'translat-attr' . (!empty($extra['tl_class']) ? ' ' . $extra['tl_class'] : '');
             }
-            $property->setExtra($extra);
+            $property->setExtra(array_merge((array) $property->getExtra(), $extra));
         }
     }
 

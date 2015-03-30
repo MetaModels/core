@@ -80,16 +80,22 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     /**
      * Retrieve the values to be used in the INSERT or UPDATE SQL for the given parameters.
      *
-     * @param mixed  $arrValue    The native value of the attribute.
+     * @param array  $arrValue    The native value of the attribute.
      *
      * @param int    $intId       The id of the item to be saved.
      *
      * @param string $strLangCode The language code of the language the value is in.
      *
      * @return array
+     *
+     * @throws \InvalidArgumentException When the passed value is not null and not an array.
      */
     protected function getSetValues($arrValue, $intId, $strLangCode)
     {
+        if (($arrValue !== null) && !is_array($arrValue)) {
+            throw new \InvalidArgumentException(sprintf('Invalid value provided: %s', var_export($arrValue, true)));
+        }
+
         return array
         (
             'tstamp' => time(),

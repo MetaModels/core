@@ -15,6 +15,7 @@
  * @author     Andreas Nölke <zero@brothers-project.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Christopher Boelter <christopher@boelter.eu>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -293,6 +294,8 @@ class ToolboxFile
      */
     public function addPath($strPath)
     {
+        // FIXME: we should change this to utilize the dbafs.
+
         if (is_file(TL_ROOT . DIRECTORY_SEPARATOR . $strPath)) {
             $strExtension = pathinfo(TL_ROOT . DIRECTORY_SEPARATOR . $strPath, PATHINFO_EXTENSION);
             if (in_array(strtolower($strExtension), $this->acceptedExtensions)) {
@@ -314,6 +317,12 @@ class ToolboxFile
      */
     public function addPathById($strID)
     {
+        // Check if empty.
+        if(empty($strID)){
+            return $this;
+        }
+
+        // FIXME: we should change this to add files by retrieving them from the dbafs.
         $objFile = \FilesModel::findByPk($strID);
 
         // ToDo: Should we throw a exception or just return if we have no file.
@@ -420,22 +429,23 @@ class ToolboxFile
             }
 
             $strIcon = 'assets/contao/images/' . $objFile->icon;
-
+            
             $arrSource = array
             (
-                'file'     => $strFile,
-                'mtime'    => $objFile->mtime,
-                'alt'      => $strAltText,
-                'caption'  => (strlen($arrMeta['caption']) ? $arrMeta['caption'] : ''),
-                'title'    => $strBasename,
-                'metafile' => $arrMeta,
-                'icon'     => $strIcon,
-                'size'     => $objFile->filesize,
-                'sizetext' => sprintf(
+                'file'      => $strFile,
+                'mtime'     => $objFile->mtime,
+                'alt'       => $strAltText,
+                'caption'   => (strlen($arrMeta['caption']) ? $arrMeta['caption'] : ''),
+                'title'     => $strBasename,
+                'metafile'  => $arrMeta,
+                'icon'      => $strIcon,
+                'extension' => $objFile->extension,
+                'size'      => $objFile->filesize,
+                'sizetext'  => sprintf(
                     '(%s)',
                     \Controller::getReadableSize($objFile->filesize, 2)
                 ),
-                'url'      => specialchars($this->getDownloadLink($strFile))
+                'url'       => specialchars($this->getDownloadLink($strFile))
             );
 
             // Prepare images.
@@ -680,5 +690,118 @@ class ToolboxFile
             return $objFiles->path;
         }
         return '';
+    }
+
+    /**
+     * Convert an array of values handled by MetaModels to a value to be stored in the database (array of bin uuid).
+     *
+     * The input array must have the following layout:
+     * array(
+     *   'bin'   => array() // list of the binary ids.
+     *   'value' => array() // list of the uuids.
+     *   'path' => array() // list of the paths.
+     * )
+     *
+     * @param array $values The values to convert.
+     *
+     * @return array
+     *
+     * @throws \InvalidArgumentException When the input array is invalid.
+     */
+    public static function convertValuesToDatabase($values)
+    {
+        if (!(isset($values['bin']) && isset($values['value']) && isset($values['path']))) {
+            throw new \InvalidArgumentException('Invalid file array');
+        }
+
+        $bin = array();
+        foreach ($values['bin'] as $value) {
+            $bin[] = $value;
+        }
+
+        return $bin;
+    }
+
+    /**
+     * Convert an array of values stored in the database (array of bin uuid) to a value to be handled by MetaModels.
+     *
+     * The output array will have the following layout:
+     * array(
+     *   'bin'   => array() // list of the binary ids.
+     *   'value' => array() // list of the uuids.
+     *   'path' => array() // list of the paths.
+     * )
+     *
+     * @param array $values The binary uuid values to convert.
+     *
+     * @return array
+     *
+     * @throws \InvalidArgumentException When the input array is invalid.
+     */
+    public static function convertValuesToMetaModels($values)
+    {
+        if (!is_array($values)) {
+            throw new \InvalidArgumentException('Invalid uuid list.');
+        }
+
+        $result = array(
+            'bin'   => array(),
+            'value' => array(),
+            'path'  => array()
+        );
+        $models = \FilesModel::findMultipleByUuids(array_filter($values));
+
+        if ($models === null) {
+            return $result;
+        }
+
+        foreach ($models as $value) {
+            $result['bin'][]   = $value->uuid;
+            $result['value'][] = \String::binToUuid($value->uuid);
+            $result['path'][]  = $value->path;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Convert an uuid or path to a value to be handled by MetaModels.
+     *
+     * The output array will have the following layout:
+     * array(
+     *   'bin'   => array() // the binary id.
+     *   'value' => array() // the uuid.
+     *   'path' => array() // the path.
+     * )
+     *
+     * @param array $values The binary uuids or paths to convert.
+     *
+     * @return array
+     *
+     * @throws \InvalidArgumentException When any of the input is not a valid uuid or an non existent file.
+     */
+    public static function convertUuidsOrPathsToMetaModels($values)
+    {
+        $values = array_filter((array) $values);
+        if (empty($values)) {
+            return array(
+                'bin'   => array(),
+                'value' => array(),
+                'path'  => array()
+            );
+        }
+
+        foreach ($values as $key => $value) {
+            if (!(\Validator::isUuid($value))) {
+                $file = \Dbafs::addResource($value);
+                if (!$file) {
+                    throw new \InvalidArgumentException('Invalid value.');
+                }
+
+                $values[$key] = $file->uuid;
+            }
+        }
+
+        return self::convertValuesToMetaModels($values);
     }
 }

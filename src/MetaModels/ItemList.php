@@ -15,6 +15,7 @@
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Tim Gatzky <info@tim-gatzky.de>
+ * @author     Martin Treml <github@r2pi.net>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -575,6 +576,10 @@ class ItemList implements IServiceContainerAware
 
         $calculator = $this->paginationLimitCalculator;
         $calculator->setTotalAmount($intTotal);
+        $curPage = (int) \Input::get('page');
+        if ($curPage > 1) {
+            $calculator->setCurrentPage($curPage);
+        }
 
         $this->objItems = $this->objMetaModel->findByFilter(
             $this->objFilter,

@@ -89,7 +89,7 @@ abstract class Simple implements ISimple
      */
     public function get($strKey)
     {
-        return $this->data[$strKey];
+        return isset($this->data[$strKey]) ? $this->data[$strKey] : null;
     }
 
     /**

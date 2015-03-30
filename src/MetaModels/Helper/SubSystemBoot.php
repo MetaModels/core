@@ -103,6 +103,7 @@ class SubSystemBoot
                     $e->getTraceAsString()
                 )
             );
+            // ¯\_(ツ)_/¯ - give up do not try to boot.
             return;
         }
 

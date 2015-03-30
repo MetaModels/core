@@ -11,12 +11,14 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Christopher Boelter <christopher@boelter.eu>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
  */
 
 use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
+use MetaModels\DcGeneral\Events\MetaModel\PasteButton;
 use MetaModels\DcGeneral\Events\Table\FilterSetting\FilterSettingTypeRendererCore;
 use MetaModels\Events\CreatePropertyConditionEvent;
 use MetaModels\Events\DatabaseBackedListener;
@@ -29,6 +31,8 @@ use MetaModels\Filter\Setting\Events\CreateFilterSettingFactoryEvent;
 use MetaModels\Filter\Setting\SimpleLookupFilterSettingTypeFactory;
 use MetaModels\Filter\Setting\StaticIdListFilterSettingTypeFactory;
 use MetaModels\MetaModelsEvents;
+use MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton;
+use MetaModels\DcGeneral\Events\MetaModel\DuplicateModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 return array(
@@ -54,6 +58,9 @@ return array(
             $handler = new MetaModels\BackendIntegration\Boot();
             $handler->perform($event);
             new FilterSettingTypeRendererCore($event->getServiceContainer());
+            new PasteButton($event->getServiceContainer());
+            new CreateVariantButton($event->getServiceContainer());
+            new DuplicateModel($event->getServiceContainer());
         }
     ),
     MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE => array(

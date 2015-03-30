@@ -163,7 +163,7 @@ class Subscriber extends BaseSubscriber
         $translator = $event->getEnvironment()->getTranslator();
         $database   = $this->getDatabase();
 
-        if (!($model && $database->tableExists($model->getProviderName(), null, true))) {
+        if (!($model && $database->tableExists($model->getProviderName()))) {
             return;
         }
 

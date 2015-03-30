@@ -40,6 +40,7 @@
     "contao-community-alliance/url-builder": "~1.1",
     "contao-community-alliance/dependency-container": "~1.6",
     "contao-community-alliance/event-dispatcher": "~1.3",
+    "contao-community-alliance/events-contao-bindings": "~3.2",
     "doctrine/cache": "~1.3"
   },
   "require-dev": {

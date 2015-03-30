@@ -17,6 +17,8 @@
 
 namespace MetaModels\Render\Setting;
 
+use MetaModels\IItem;
+
 /**
  * Interface for render settings.
  *
@@ -74,18 +76,11 @@ interface ICollection
     public function getSettingNames();
 
     /**
-     * Retrieve the jump to information from the setting.
+     * Render a filter url for the given item.
      *
-     * @return array|null The jump to information or null if none has been set.
+     * @param IItem $item The item to generate the filter url for.
+     *
+     * @return string
      */
-    public function getJumpTo();
-
-    /**
-     * Set the jump to information in the settings object.
-     *
-     * @param array $varSetting The value to use.
-     *
-     * @return ICollection The setting itself.
-     */
-    public function setJumpTo($varSetting);
+    public function buildJumpToUrlFor(IItem $item);
 }

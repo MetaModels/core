@@ -12,6 +12,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Oliver Hoff <oliver@hofff.com>
+ * @author     Ondrej Brinkel <Sam256@web.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -70,7 +71,7 @@ class HybridList extends MetaModelHybrid
             $varValue = \Input::get($strName);
 
             if (is_string($varValue)) {
-                $arrReturn[$strName] = $varValue;
+                $arrReturn[$strName] = urldecode($varValue);
             }
         }
 

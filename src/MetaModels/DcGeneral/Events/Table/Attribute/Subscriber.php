@@ -11,6 +11,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Martin Treml <github@r2pi.net>
+ * @author     Christopher Boelter <christopher@boelter.eu>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -492,7 +493,7 @@ class Subscriber extends BaseSubscriber
 
         $old         = $event->getOriginalModel();
         $new         = $event->getModel();
-        $oldInstance = $old ? $this->createAttributeInstance($old->getPropertiesAsArray()) : null;
+        $oldInstance = $old->getProperty('pid') ? $this->createAttributeInstance($old->getPropertiesAsArray()) : null;
         $newInstance = $this->createAttributeInstance($new->getPropertiesAsArray());
 
         // If type or column name has been changed, destroy old data and initialize new.

@@ -27,9 +27,9 @@ namespace MetaModels\Attribute;
  * @subpackage Interfaces
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
+// FIXME: Should be renamed to ISimpleAttribute
 interface ISimple extends IAttribute
 {
-
     /**
      * Returns the SQL primitive type declaration in MySQL notation. i.e. "text NULL".
      *
