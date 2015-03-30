@@ -435,14 +435,12 @@ class Item implements IItem
      *
      * @param ICollection $renderSettings   The render settings to use.
      *
-     * @param string      $language         The language to use.
-     *
      * @return array
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    protected function buildJumpToParametersAndUrl($page, $filterSettingsId, $renderSettings, $language)
+    protected function buildJumpToParametersAndUrl($page, $filterSettingsId, $renderSettings)
     {
         if (!$page) {
             return null;
@@ -477,7 +475,7 @@ class Item implements IItem
 
         $result['page'] = $page['id'];
 
-        $event = new GenerateFrontendUrlEvent($page, $parameters, $language);
+        $event = new GenerateFrontendUrlEvent($page, $parameters, $page['rootLanguage']);
         $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
         $result['url'] = $event->getUrl();
 
