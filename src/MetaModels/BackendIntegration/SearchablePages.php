@@ -419,6 +419,8 @@ class SearchablePages
      *
      * @param string|null $language             The current language.
      *
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function getMetaModelsPages(
