@@ -107,11 +107,6 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        // FIXME: direct access to BackendUser.
-        if (!\BackendUser::getInstance()->isAdmin) {
-            $event->setHtml('');
-        }
-
         $command = $event->getCommand();
         if ($command->getName() == 'dca_combine') {
             $event->setHref(
