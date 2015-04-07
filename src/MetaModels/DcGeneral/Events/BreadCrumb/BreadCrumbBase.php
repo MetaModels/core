@@ -23,6 +23,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBr
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
+use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use MetaModels\IMetaModelsServiceContainer;
 
 /**
@@ -149,13 +150,15 @@ abstract class BreadCrumbBase
     /**
      * Generate an url from the given parameters.
      *
-     * @param string $tableName The name of the table to link to.
+     * @param string $tableName  The name of the table to link to.
      *
-     * @param string $itemId    The id of the item in the given table.
+     * @param string $itemId     The id of the item in the given table.
+     *
+     * @param bool   $keepAction Flag if the "act" and "id" parameter shall be preserved in the URL.
      *
      * @return string The generated URL.
      */
-    public function generateUrl($tableName, $itemId)
+    public function generateUrl($tableName, $itemId, $keepAction = false)
     {
         $urlEvent = new AddToUrlEvent(
             sprintf(
@@ -167,7 +170,13 @@ abstract class BreadCrumbBase
 
         $this->getServiceContainer()->getEventDispatcher()->dispatch(ContaoEvents::BACKEND_ADD_TO_URL, $urlEvent);
 
-        return $urlEvent->getUrl();
+        $builder = new UrlBuilder($urlEvent->getUrl());
+        if (!$keepAction) {
+            $builder->unsetQueryParameter('act');
+            $builder->unsetQueryParameter('id');
+        }
+
+        return ampersand($builder->getUrl());
     }
 
     /**

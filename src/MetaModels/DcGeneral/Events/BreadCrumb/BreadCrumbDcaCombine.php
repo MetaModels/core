@@ -39,7 +39,8 @@ class BreadCrumbDcaCombine extends BreadCrumbMetaModels
         $elements[] = array(
             'url' => $this->generateUrl(
                 'tl_metamodel_dca_combine',
-                $this->seralizeId('tl_metamodel', $this->metamodelId)
+                $this->seralizeId('tl_metamodel', $this->metamodelId),
+                true
             ),
             'text' => sprintf(
                 $this->getBreadcrumbLabel($environment, 'tl_metamodel_dca_combine'),
