@@ -37,6 +37,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['advanced_legend']      = 'Advance
  * Buttons
  */
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']                  = array('New attribute', 'Create new attribute');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['pastenew']           = array('New attribute after this Attribute', 'New attribute after this Attribute');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['edit']                 = array('Edit attribute', 'Edit attribute ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['cut']                  = array('Cut attribute definition', 'Cut definition of attribute ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['copy']                 = array('Copy attribute definition', 'Copy definition of attribute ID %s');
