@@ -23,9 +23,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name']                 = array('N
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['description']          = array('Description', 'Human readable description');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname']              = array('Column name', 'Internal reference name for this attribute');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['isvariant']            = array('Enable variant override', 'Check this, if you want variants within the MetaModel to override the parent item\'s value');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['isunique']            = array('Unique values', 'Check this, if you want to ensure that each value only occurs once');
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode']       = 'Language';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value']          = 'Description';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['isunique']             = array('Unique values', 'Check this, if you want to ensure that each value only occurs once');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode']        = 'Language';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value']           = 'Description';
 
 /**
  * Legends
@@ -37,6 +37,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['advanced_legend']      = 'Advance
  * Buttons
  */
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']                  = array('New attribute', 'Create new attribute');
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['pastenew']             = array('New attribute after this Attribute', 'New attribute after this Attribute');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['edit']                 = array('Edit attribute', 'Edit attribute ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['cut']                  = array('Cut attribute definition', 'Cut definition of attribute ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['copy']                 = array('Copy attribute definition', 'Copy definition of attribute ID %s');
