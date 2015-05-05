@@ -393,6 +393,14 @@ class Subscriber extends BaseSubscriber
                     )
                 )
                 ->execute();
+            $database
+                ->prepare(
+                    sprintf(
+                        'DELETE FROM tl_metamodel_dca_sortgroup WHERE pid IN (%s)',
+                        implode(',', $idList)
+                    )
+                )
+                ->execute();
         }
 
         // Delete the input screens.
