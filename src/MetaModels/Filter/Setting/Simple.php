@@ -367,6 +367,10 @@ abstract class Simple implements ISimple
             return array();
         }
 
+    // remap (-slash- => /) and (-apos- => ')
+	foreach ($arrFilterUrl as $key => $value)
+		$arrFilterUrl[$key] = str_replace(array('-slash-', '-apos-'), array('/', '\''), $value);
+
         // Determine current value.
         $arrWidget['value'] = isset($arrFilterUrl[$arrWidget['eval']['urlparam']])
             ? $arrFilterUrl[$arrWidget['eval']['urlparam']]
