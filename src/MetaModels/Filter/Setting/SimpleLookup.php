@@ -115,6 +115,11 @@ class SimpleLookup extends Simple
      */
     public function prepareRules(IFilter $objFilter, $arrFilterUrl)
     {
+
+	// remap (-slash- => /) and (-apos- => ')
+	foreach ($arrFilterUrl as $key => $value)
+		$arrFilterUrl[$key] = str_replace(array('-slash-', '-apos-'), array('/', '\''), $value);
+
         $objMetaModel = $this->getMetaModel();
         $objAttribute = $objMetaModel->getAttributeById($this->get('attr_id'));
         $strParam     = $this->getParamName();
@@ -134,15 +139,18 @@ class SimpleLookup extends Simple
                 }
                 $objFilterRule = new FilterRuleSimpleLookup($objAttribute, $arrFilterValue, $arrLanguages);
                 $objFilter->addFilterRule($objFilterRule);
+
                 return;
             }
 
             // We found an attribute but no match in URL. So ignore this filter setting if allow_empty is set.
             if ($this->allowEmpty()) {
+
                 $objFilter->addFilterRule(new FilterRuleStaticIdList(null));
                 return;
             }
         }
+
         // Either no attribute found or no match in url, do not return anything.
         $objFilter->addFilterRule(new FilterRuleStaticIdList(array()));
     }
