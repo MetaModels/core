@@ -20,7 +20,9 @@
 namespace MetaModels\DcGeneral\Events\MetaModel;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\BackendViewInterface;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\ContaoBackendViewTemplate;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\EditMask;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
@@ -138,7 +140,37 @@ class CreateVariantButton extends BaseSubscriber
         if (!$view instanceof BackendViewInterface) {
             throw new \InvalidArgumentException('Invalid view registered in environment.');
         }
-        $editMask = new EditMask($view, $model, null, $preFunction, $postFunction);
+        $editMask = new EditMask($view, $model, null, $preFunction, $postFunction, $this->breadcrumb($environment));
         $event->setResponse($editMask->execute());
+    }
+
+    /**
+     * Get the breadcrumb navigation via event.
+     *
+     * @param EnvironmentInterface $environment The environment.
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    protected function breadcrumb(EnvironmentInterface $environment)
+    {
+        $event = new GetBreadcrumbEvent($environment);
+
+        $environment->getEventDispatcher()->dispatch($event::NAME, $event);
+
+        $arrReturn = $event->getElements();
+
+        if (!is_array($arrReturn) || count($arrReturn) == 0) {
+            return null;
+        }
+
+        $GLOBALS['TL_CSS'][] = 'system/modules/dc-general/html/css/generalBreadcrumb.css';
+
+        $objTemplate           = new ContaoBackendViewTemplate('dcbe_general_breadcrumb');
+        $objTemplate->elements = $arrReturn;
+
+        return $objTemplate->parse();
     }
 }
