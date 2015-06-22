@@ -42,7 +42,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
         'sorting'           => array
         (
             'mode'        => 2,
-            'fields'      => array(),
+            'fields'      => array('sorting'),
             'flag'        => 1,
             'panelLayout' => 'sort,limit'
         ),
