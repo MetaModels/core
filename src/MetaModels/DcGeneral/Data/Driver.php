@@ -515,9 +515,11 @@ class Driver implements MultiLanguageDataProviderInterface
                 ->prepareFilter(
                     $this->getEmptyConfig()->setFilter(
                         array(
-                            'operation' => '=',
-                            'property' => $attribute->getColName(),
-                            'value' => $varNew
+                            array(
+                                'operation' => '=',
+                                'property' => $attribute->getColName(),
+                                'value' => $varNew
+                            )
                         )
                     )
                 )
