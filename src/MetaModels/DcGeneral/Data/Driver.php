@@ -12,6 +12,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Christopher Bölter <c.boelter@cogizz.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -515,9 +516,11 @@ class Driver implements MultiLanguageDataProviderInterface
                 ->prepareFilter(
                     $this->getEmptyConfig()->setFilter(
                         array(
-                            'operation' => '=',
-                            'property' => $attribute->getColName(),
-                            'value' => $varNew
+                            array(
+                                'operation' => '=',
+                                'property' => $attribute->getColName(),
+                                'value' => $varNew
+                            )
                         )
                     )
                 )
