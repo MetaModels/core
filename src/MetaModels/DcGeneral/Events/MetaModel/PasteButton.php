@@ -170,6 +170,7 @@ class PasteButton extends BaseSubscriber
             return;
         }
 
+        $this->checkForAction($clipboard, 'copy');
         $this->checkForAction($clipboard, 'create');
         $this->checkForAction($clipboard, 'cut');
 
@@ -203,6 +204,7 @@ class PasteButton extends BaseSubscriber
             return;
         }
 
+        $this->checkForAction($clipboard, 'copy');
         $this->checkForAction($clipboard, 'create');
         $this->checkForAction($clipboard, 'cut');
 
