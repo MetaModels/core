@@ -177,7 +177,7 @@ class RenderItem
         $additional    = array();
 
         foreach ($renderSetting->getSettingNames() as $name) {
-            $additional[$item->getAttribute($name)->get('name')] = $item->parseAttribute($name, $renderSetting)['text'];
+            $additional[$item->getAttribute($name)->getName()] = $item->parseAttribute($name, $renderSetting)['text'];
         }
 
         $additional = array_merge(
