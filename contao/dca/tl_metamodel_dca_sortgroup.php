@@ -13,6 +13,7 @@
  * @author     Andreas Isaak <info@andreas-isaak.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -144,7 +145,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             'display' => array
             (
                 'ismanualsort',
-                'rendergrouptype'
             ),
         )
     ),
@@ -190,6 +190,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             (
                 'display after rendergrouplen' => array
                 (
+                    'rendergrouptype',
                     'rendersortattr',
                     'rendersort',
                 ),
