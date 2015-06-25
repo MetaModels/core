@@ -10,6 +10,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -62,6 +63,10 @@ class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
      */
     public function getRenderGroupType()
     {
+        if ($this->isManualSorting()) {
+            return 'none';
+        }
+
         return $this->data['rendergrouptype'];
     }
 
