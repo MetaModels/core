@@ -165,7 +165,7 @@ class RenderItem
      */
     public static function addAdditionalParentHeaderFields(GetParentHeaderEvent $event)
     {
-        $parentModel = $event->getParentModel();
+        $parentModel = $event->getModel();
 
         if (!$parentModel instanceof Model) {
             return;
