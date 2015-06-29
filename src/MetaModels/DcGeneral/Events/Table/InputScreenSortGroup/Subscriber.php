@@ -171,7 +171,7 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        $value = str_replace($metaModel->getTableName() . '_', '', $value);
+        $value = substr($value, strlen($metaModel->getTableName() . '_'));
 
         $attribute = $metaModel->getAttribute($value);
 
