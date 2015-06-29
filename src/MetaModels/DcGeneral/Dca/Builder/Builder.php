@@ -1047,7 +1047,8 @@ class Builder
                 $propertyInformation
                     ->setProperty($information->getRenderGroupAttribute())
                     ->setGroupingMode($groupType)
-                    ->setGroupingLength($information->getRenderGroupLength());
+                    ->setGroupingLength($information->getRenderGroupLength())
+                    ->setSortingMode($information->getRenderSortDirection());
             }
         }
     }
