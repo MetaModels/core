@@ -79,6 +79,7 @@ use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\ViewCombinations;
 use MetaModels\DcGeneral\DataDefinition\Definition\MetaModelDefinition;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
+use MetaModels\DcGeneral\DataDefinition\MetaModelDataDefinition;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\IsVariantAttribute;
 use MetaModels\DcGeneral\Events\MetaModel\BuildAttributeEvent;
 use MetaModels\DcGeneral\Events\MetaModel\BuildMetaModelOperationsEvent;
@@ -907,6 +908,7 @@ class Builder
         }
 
         $this->parseListing($container, $view);
+        $this->addSelectCommand($view, $container);
         $this->parseModelOperations($view, $container);
     }
 
@@ -1504,5 +1506,40 @@ class Builder
                 }
             }
         }
+    }
+
+    /**
+     * Add the select command to the backend view definition.
+     *
+     * @param Contao2BackendViewDefinitionInterface $view      The backend view definition.
+     * @param MetaModelDataDefinition               $container The metamodel data definition.
+     * @return void
+     */
+    protected function addSelectCommand(Contao2BackendViewDefinitionInterface $view, $container)
+    {
+        /** @var BasicDefinitionInterface $definition */
+        $definition = $container->getBasicDefinition();
+
+        // No ations allowed. Don't add the select command button.
+        if (!$definition->isEditable() && !$definition->isDeletable() && !$definition->isCreatable()) {
+            return;
+        }
+
+        $commands = $view->getGlobalCommands();
+        $command  = new Command();
+
+        // FIXME: Use the translator to translate the labels.
+        $command
+            ->setName('all')
+            ->setLabel($GLOBALS['TL_LANG']['MSC']['all'][0])
+            ->setDescription($GLOBALS['TL_LANG']['MSC']['all'][1]);
+
+        $parameters        = $command->getParameters();
+        $parameters['act'] = 'select';
+
+        $extra          = $command->getExtra();
+        $extra['class'] = 'header_edit_all';
+
+        $commands->addCommand($command);
     }
 }
