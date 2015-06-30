@@ -580,6 +580,7 @@ class ItemList implements IServiceContainerAware
         if ($curPage > 1) {
             $calculator->setCurrentPage($curPage);
         }
+        $this->objTemplate->total = $intTotal;
 
         $this->objItems = $this->objMetaModel->findByFilter(
             $this->objFilter,
