@@ -79,7 +79,6 @@ use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\ViewCombinations;
 use MetaModels\DcGeneral\DataDefinition\Definition\MetaModelDefinition;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
-use MetaModels\DcGeneral\DataDefinition\MetaModelDataDefinition;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\IsVariantAttribute;
 use MetaModels\DcGeneral\Events\MetaModel\BuildAttributeEvent;
 use MetaModels\DcGeneral\Events\MetaModel\BuildMetaModelOperationsEvent;
@@ -1512,8 +1511,10 @@ class Builder
      * Add the select command to the backend view definition.
      *
      * @param Contao2BackendViewDefinitionInterface $view      The backend view definition.
-     * @param MetaModelDataDefinition               $container The metamodel data definition.
+     * @param IMetaModelDataDefinition              $container The metamodel data definition.
+     *
      * @return void
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function addSelectCommand(Contao2BackendViewDefinitionInterface $view, $container)
     {
