@@ -12,12 +12,14 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Davvid Molineus <david.molineus@netzmacht.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
  */
 
 use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
+use MetaModels\DcGeneral\Events\MetaModel\CutButton;
 use MetaModels\DcGeneral\Events\MetaModel\PasteButton;
 use MetaModels\DcGeneral\Events\Table\FilterSetting\FilterSettingTypeRendererCore;
 use MetaModels\Events\CreatePropertyConditionEvent;
@@ -59,6 +61,7 @@ return array(
             $handler->perform($event);
             new FilterSettingTypeRendererCore($event->getServiceContainer());
             new PasteButton($event->getServiceContainer());
+            new CutButton($event->getServiceContainer());
             new CreateVariantButton($event->getServiceContainer());
             new DuplicateModel($event->getServiceContainer());
         }
