@@ -1,21 +1,22 @@
 language: php
 
 php:
-  - "5.3"
-  - "5.4"
-  - "5.5"
-  - "5.6"
+  - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
 
 env:
-  matrix:
-    - CONTAO_VERSION=~3.2.0
-    - CONTAO_VERSION=~3.3.0
+  - CONTAO_VERSION=~3.2.0
+  - CONTAO_VERSION=~3.3.0
+  - CONTAO_VERSION=~3.4.0
 
 sudo: false
 
 install:
-  - composer require contao/core $CONTAO_VERSION --prefer-dist --dev
-  - composer install --prefer-dist --dev
+  - travis_retry composer self-update && composer --version
+  - travis_retry composer require contao/core $CONTAO_VERSION --no-update
+  - travis_retry composer update --prefer-dist --dev --no-interaction
 
 script: ant -keep-going
 
