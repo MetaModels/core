@@ -936,6 +936,9 @@ class Builder
             $listing->setRootIcon($icon);
         }
 
+        if ($inputScreen = $this->getInputScreenDetails()) {
+            $listing->setShowColumns($inputScreen->isShowColumns());
+        }
         $this->parseListSorting($listing);
         $this->parseListLabel($container, $listing);
     }

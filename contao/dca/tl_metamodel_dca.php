@@ -170,6 +170,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
             'display' => array
             (
                 'rendermode',
+                'showColumns'
             ),
             'permissions' => array
             (
@@ -257,6 +258,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
         (
             'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermode'],
             'inputType'               => 'select',
+            'eval'                    => array
+            (
+                'tl_class'            => 'w50',
+                'submitOnChange'      => true
+            )
+        ),
+        'showColumns' => array
+        (
+            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['showColumns'],
+            'inputType'               => 'checkbox',
             'eval'                    => array
             (
                 'tl_class'            => 'w50',
