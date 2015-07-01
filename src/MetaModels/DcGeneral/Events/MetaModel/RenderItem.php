@@ -10,6 +10,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -17,7 +18,7 @@
 
 namespace MetaModels\DcGeneral\Events\MetaModel;
 
-use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinitionInterface;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetParentHeaderEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\View\Event\RenderReadablePropertyValueEvent;
 use MetaModels\DcGeneral\Data\Model;
@@ -73,9 +74,6 @@ class RenderItem
         $environment = $event->getEnvironment();
         /** @var IMetaModelDataDefinition $definition */
         $definition = $environment->getDataDefinition();
-        /** @var Contao2BackendViewDefinitionInterface $viewSection */
-        $viewSection       = $definition->getDefinition(Contao2BackendViewDefinitionInterface::NAME);
-        $listing           = $viewSection->getListingConfig();
 
         /** @var Model $model */
         $model = $event->getModel();
@@ -96,14 +94,6 @@ class RenderItem
             return;
         }
 
-        $data = array($nativeItem->parseValue('html5', $renderSetting));
-
-        if ($listing->getShowColumns()) {
-            $event->setArgs($data[0]['html5']);
-            return;
-
-        }
-
         $template      = new Template($renderSetting->get('template'));
         $renderSetting = self::removeInvariantAttributes($nativeItem, $renderSetting);
 
@@ -112,7 +102,7 @@ class RenderItem
                 'settings' => $renderSetting,
                 'items'    => new Items(array($nativeItem)),
                 'view'     => $renderSetting,
-                'data'     => $data
+                'data'     => array($nativeItem->parseValue('html5', $renderSetting))
             )
         );
 
@@ -167,6 +157,41 @@ class RenderItem
     }
 
     /**
+     * Add additional parent header fields.
+     *
+     * @param GetParentHeaderEvent $event The subscribed event.
+     *
+     * @return void
+     */
+    public static function addAdditionalParentHeaderFields(GetParentHeaderEvent $event)
+    {
+        $parentModel = $event->getModel();
+
+        if (!$parentModel instanceof Model) {
+            return;
+        }
+
+        $item          = $parentModel->getItem();
+        $metaModel     = $item->getMetaModel();
+        $renderSetting = $metaModel->getServiceContainer()->getRenderSettingFactory()->createCollection($metaModel);
+        $additional    = array();
+
+        foreach ($renderSetting->getSettingNames() as $name) {
+            $parsed = $item->parseAttribute($name, 'text', $renderSetting);
+            $name   = $item->getAttribute($name)->getName();
+
+            $additional[$name] = $parsed['text'];
+        }
+
+        $additional = array_merge(
+            $additional,
+            $event->getAdditional()
+        );
+
+        $event->setAdditional($additional);
+    }
+
+    /**
      * Register to the event dispatcher.
      *
      * @param EventDispatcherInterface $dispatcher The event dispatcher.
@@ -177,5 +202,6 @@ class RenderItem
     {
         $dispatcher->addListener(ModelToLabelEvent::NAME, array(__CLASS__, 'render'));
         $dispatcher->addListener(RenderReadablePropertyValueEvent::NAME, array(__CLASS__, 'getReadableValue'));
+        $dispatcher->addListener(GetParentHeaderEvent::NAME, array(__CLASS__, 'addAdditionalParentHeaderFields'));
     }
 }
