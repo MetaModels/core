@@ -10,6 +10,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -171,7 +172,7 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        $value = str_replace($metaModel->getTableName() . '_', '', $value);
+        $value = substr($value, strlen($metaModel->getTableName() . '_'));
 
         $attribute = $metaModel->getAttribute($value);
 
