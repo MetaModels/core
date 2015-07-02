@@ -938,6 +938,12 @@ class Builder
 
         if ($inputScreen = $this->getInputScreenDetails()) {
             $listing->setShowColumns($inputScreen->isShowColumns());
+            $renderSetting = $this->serviceContainer->getService('metamodels-view-combinations')->getRenderSetting($container->getName());
+
+            $metaModel = $this->serviceContainer->getFactory()->getMetaModel($container->getName());
+            /** @var $renderSettingCollection \MetaModels\Render\Setting\Collection */
+            $renderSettingCollection = $this->serviceContainer->getRenderSettingFactory()->createCollection($metaModel, $renderSetting);
+            $listing->setHeaderPropertyNames($renderSettingCollection->getSettingNames());
         }
         $this->parseListSorting($listing);
         $this->parseListLabel($container, $listing);
