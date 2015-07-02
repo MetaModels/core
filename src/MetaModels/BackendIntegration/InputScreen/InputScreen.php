@@ -116,13 +116,11 @@ class InputScreen implements IInputScreen
     /**
      * Transform a legend information into the property legends.
      *
-     * Returns legend name and its id as array.
-     *
      * @param array      $legend    The legend to transform.
      *
      * @param IMetaModel $metaModel The metamodel the legend belongs to.
      *
-     * @return array
+     * @return string
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
@@ -154,7 +152,7 @@ class InputScreen implements IInputScreen
             'properties' => array()
         );
 
-        return array($legendName, $legend['id']);
+        return $legendName;
     }
 
     /**
@@ -249,7 +247,8 @@ class InputScreen implements IInputScreen
         foreach ($rows as $row) {
             switch ($row['dcatype']) {
                 case 'legend':
-                    list($activeLegend, $activeLegendId) = $this->translateLegend($row, $metaModel);
+                    $activeLegend   = $this->translateLegend($row, $metaModel);
+                    $activeLegendId = $row['id'];
                     break;
 
                 case 'attribute':
