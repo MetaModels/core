@@ -203,12 +203,10 @@ class InputScreen implements IInputScreen
         }
 
         if (!isset($this->conditions[$attributeId])) {
-            // No attribute legend defined, use legend condition.
-            $this->conditions[$attributeId] = $this->conditions[$activeLegendId];
-
-        } else {
-            $this->conditions[$attributeId]->addCondition($this->conditions[$activeLegendId]);
+            $this->conditions[$attributeId] = new PropertyConditionChain();
         }
+
+        $this->conditions[$attributeId]->addCondition($this->conditions[$activeLegendId]);
     }
 
     /**
