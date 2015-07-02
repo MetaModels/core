@@ -206,7 +206,7 @@ class InputScreen implements IInputScreen
             // No attribute legend defined, use legend condition.
             $this->conditions[$attributeId] = $this->conditions[$activeLegendId];
 
-        } elseif ($this->conditions[$attributeId] instanceof ConditionChainInterface) {
+        } else {
             $this->conditions[$attributeId]->addCondition($this->conditions[$activeLegendId]);
         }
     }
