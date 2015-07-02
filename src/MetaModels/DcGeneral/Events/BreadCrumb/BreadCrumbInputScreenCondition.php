@@ -76,7 +76,7 @@ class BreadCrumbInputScreenCondition extends BreadCrumbInputScreenSetting
                 return $attribute->getName();
             }
         } else {
-            $title = deserialize($setting->legendtitle);
+            $title = deserialize($setting->legendtitle, true);
             return isset($title[$GLOBALS['TL_LANGUAGE']]) ? $title[$GLOBALS['TL_LANGUAGE']] : current($title);
         }
 
