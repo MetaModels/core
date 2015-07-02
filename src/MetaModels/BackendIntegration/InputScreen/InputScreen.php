@@ -11,6 +11,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -115,11 +116,13 @@ class InputScreen implements IInputScreen
     /**
      * Transform a legend information into the property legends.
      *
+     * Returns legend name and its id as array.
+     *
      * @param array      $legend    The legend to transform.
      *
      * @param IMetaModel $metaModel The metamodel the legend belongs to.
      *
-     * @return string
+     * @return array
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
@@ -151,7 +154,7 @@ class InputScreen implements IInputScreen
             'properties' => array()
         );
 
-        return $legendName;
+        return array($legendName, $legend['id']);
     }
 
     /**
@@ -163,7 +166,7 @@ class InputScreen implements IInputScreen
      *
      * @param string     $legend    The legend the property belongs to.
      *
-     * @return void
+     * @return bool
      */
     protected function translateProperty($property, $metaModel, $legend)
     {
@@ -171,7 +174,7 @@ class InputScreen implements IInputScreen
 
         // Dead meat.
         if (!$attribute) {
-            return;
+            return false;
         }
 
         $propName = $attribute->getColName();
@@ -182,6 +185,32 @@ class InputScreen implements IInputScreen
         (
             'info'       => $attribute->getFieldDefinition($property),
         );
+
+        return true;
+    }
+
+    /**
+     * Apply legend conditions to its attribute.
+     *
+     * @param int $attributeId    The attribute setting id.
+     * @param int $activeLegendId The legend setting id.
+     *
+     * @return void
+     */
+    protected function applyLegendConditions($attributeId, $activeLegendId)
+    {
+        // No conditions for legend defined.
+        if (!isset($this->conditions[$activeLegendId])) {
+            return;
+        }
+
+        if (!isset($this->conditions[$attributeId])) {
+            // No attribute legend defined, use legend condition.
+            $this->conditions[$attributeId] = $this->conditions[$activeLegendId];
+
+        } elseif ($this->conditions[$attributeId] instanceof ConditionChainInterface) {
+            $this->conditions[$attributeId]->addCondition($this->conditions[$activeLegendId]);
+        }
     }
 
     /**
@@ -196,8 +225,9 @@ class InputScreen implements IInputScreen
      */
     protected function translateRows($rows)
     {
-        $metaModel    = $this->getMetaModel();
-        $activeLegend = null;
+        $metaModel      = $this->getMetaModel();
+        $activeLegend   = null;
+        $activeLegendId = null;
 
         // First pass, fetch all attribute names.
         $columnNames = array();
@@ -219,11 +249,16 @@ class InputScreen implements IInputScreen
         foreach ($rows as $row) {
             switch ($row['dcatype']) {
                 case 'legend':
-                    $activeLegend = $this->translateLegend($row, $metaModel);
+                    list($activeLegend, $activeLegendId) = $this->translateLegend($row, $metaModel);
                     break;
 
                 case 'attribute':
-                    $this->translateProperty($row, $metaModel, $activeLegend);
+                    $exists = $this->translateProperty($row, $metaModel, $activeLegend);
+
+                    if ($exists && $activeLegendId) {
+                        $this->applyLegendConditions($row['id'], $activeLegendId);
+                    }
+
                     break;
 
                 default:
