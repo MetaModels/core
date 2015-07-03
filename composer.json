@@ -31,7 +31,7 @@
   },
   "require": {
     "php": ">=5.3",
-    "contao/core": ">=3.2,<3.5",
+    "contao/core": ">=3.2,<3.6",
     "contao-community-alliance/composer-plugin": "~2.0",
     "contao-community-alliance/dc-general": "~2.0",
     "menatwork/contao-multicolumnwizard": "~3.3",
