@@ -25,8 +25,6 @@ use ContaoCommunityAlliance\DcGeneral\Data\DefaultFilterOptionCollection;
 use ContaoCommunityAlliance\DcGeneral\Data\DefaultLanguageInformation;
 use ContaoCommunityAlliance\DcGeneral\Data\DefaultLanguageInformationCollection;
 use ContaoCommunityAlliance\DcGeneral\Data\FilterOptionCollectionInterface;
-use ContaoCommunityAlliance\DcGeneral\Data\LanguageInformationCollectionInterface;
-use ContaoCommunityAlliance\DcGeneral\Data\LanguageInformationInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\MultiLanguageDataProviderInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\ConfigInterface;
