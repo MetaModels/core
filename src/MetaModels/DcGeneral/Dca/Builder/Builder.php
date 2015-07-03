@@ -23,8 +23,6 @@ use Contao\Input;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultModelRelationshipDefinition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\ModelRelationshipDefinitionInterface;
@@ -46,8 +44,6 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChi
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChildConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootConditionInterface;
-use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
-use ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
 use ContaoCommunityAlliance\Translator\TranslatorChain;
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinition;
