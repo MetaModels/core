@@ -12,6 +12,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Christopher Boelter <c.boelter@cogizz.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -75,7 +76,7 @@ class BreadCrumbInputScreenCondition extends BreadCrumbInputScreenSetting
                 return $attribute->getName();
             }
         } else {
-            $title = deserialize($setting->legendtitle);
+            $title = deserialize($setting->legendtitle, true);
             return isset($title[$GLOBALS['TL_LANGUAGE']]) ? $title[$GLOBALS['TL_LANGUAGE']] : current($title);
         }
 
