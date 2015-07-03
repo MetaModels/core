@@ -19,7 +19,9 @@
  */
 
 use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
+use MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton;
 use MetaModels\DcGeneral\Events\MetaModel\CutButton;
+use MetaModels\DcGeneral\Events\MetaModel\DuplicateModel;
 use MetaModels\DcGeneral\Events\MetaModel\PasteButton;
 use MetaModels\DcGeneral\Events\Table\FilterSetting\FilterSettingTypeRendererCore;
 use MetaModels\Events\CreatePropertyConditionEvent;
@@ -33,8 +35,6 @@ use MetaModels\Filter\Setting\Events\CreateFilterSettingFactoryEvent;
 use MetaModels\Filter\Setting\SimpleLookupFilterSettingTypeFactory;
 use MetaModels\Filter\Setting\StaticIdListFilterSettingTypeFactory;
 use MetaModels\MetaModelsEvents;
-use MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton;
-use MetaModels\DcGeneral\Events\MetaModel\DuplicateModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 return array(
