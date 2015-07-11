@@ -31,7 +31,7 @@
   },
   "require": {
     "php": ">=5.3",
-    "contao/core": ">=3.2,<3.5",
+    "contao/core": ">=3.2,<3.6",
     "contao-community-alliance/composer-plugin": "~2.0",
     "contao-community-alliance/dc-general": "~2.0",
     "menatwork/contao-multicolumnwizard": "~3.3",
@@ -44,7 +44,7 @@
     "doctrine/cache": "~1.3"
   },
   "require-dev": {
-    "cyberspectrum/contao-toolbox": "dev-master",
+    "cyberspectrum/contao-toolbox": "~0.6",
     "phpcq/all-tasks": "~1.0",
     "metamodels/base-unit-tests": "~1.0",
     "metamodels/phpunit-contao-database": "~1.0"

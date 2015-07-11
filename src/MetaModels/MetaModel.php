@@ -442,7 +442,8 @@ class MetaModel implements IMetaModel
 
             // Run each row.
             foreach (array_keys($arrResult) as $intId) {
-                if (!isset($arrResult[$intId][$strColName])) {
+                // Do only skip if the key does not exist. Do not use isset() here as "null" is a valid value.
+                if (!array_key_exists($strColName, $arrResult[$intId])) {
                     continue;
                 }
                 $arrResult[$intId][$strColName] = $objAttribute->unserializeData($arrResult[$intId][$strColName]);

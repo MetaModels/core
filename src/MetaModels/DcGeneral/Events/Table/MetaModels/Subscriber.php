@@ -107,11 +107,6 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        // FIXME: direct access to BackendUser.
-        if (!\BackendUser::getInstance()->isAdmin) {
-            $event->setHtml('');
-        }
-
         $command = $event->getCommand();
         if ($command->getName() == 'dca_combine') {
             $event->setHref(
@@ -394,6 +389,14 @@ class Subscriber extends BaseSubscriber
                 ->prepare(
                     sprintf(
                         'DELETE FROM tl_metamodel_dcasetting WHERE pid IN (%s)',
+                        implode(',', $idList)
+                    )
+                )
+                ->execute();
+            $database
+                ->prepare(
+                    sprintf(
+                        'DELETE FROM tl_metamodel_dca_sortgroup WHERE pid IN (%s)',
                         implode(',', $idList)
                     )
                 )

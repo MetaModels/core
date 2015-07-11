@@ -318,14 +318,13 @@ class ToolboxFile
     public function addPathById($strID)
     {
         // Check if empty.
-        if(empty($strID)){
+        if (empty($strID)) {
             return $this;
         }
 
         // FIXME: we should change this to add files by retrieving them from the dbafs.
         $objFile = \FilesModel::findByPk($strID);
 
-        // ToDo: Should we throw a exception or just return if we have no file.
         if ($objFile !== null) {
             $this->addPath($objFile->path);
         }
@@ -461,7 +460,7 @@ class ToolboxFile
 
                 if (file_exists(TL_ROOT . '/' . urldecode($strSrc))) {
                     $size            = getimagesize(TL_ROOT . '/' . urldecode($strSrc));
-                    $arrSource['lb'] = 'lb'.$this->getLightboxId();
+                    $arrSource['lb'] = 'lb' . $this->getLightboxId();
                     $arrSource['w']  = $size[0];
                     $arrSource['h']  = $size[1];
                     $arrSource['wh'] = $size[3];

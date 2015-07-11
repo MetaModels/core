@@ -10,6 +10,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -17,6 +18,7 @@
 
 namespace MetaModels\DcGeneral\Events\MetaModel;
 
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetParentHeaderEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\View\Event\RenderReadablePropertyValueEvent;
 use MetaModels\DcGeneral\Data\Model;
@@ -155,6 +157,41 @@ class RenderItem
     }
 
     /**
+     * Add additional parent header fields.
+     *
+     * @param GetParentHeaderEvent $event The subscribed event.
+     *
+     * @return void
+     */
+    public static function addAdditionalParentHeaderFields(GetParentHeaderEvent $event)
+    {
+        $parentModel = $event->getModel();
+
+        if (!$parentModel instanceof Model) {
+            return;
+        }
+
+        $item          = $parentModel->getItem();
+        $metaModel     = $item->getMetaModel();
+        $renderSetting = $metaModel->getServiceContainer()->getRenderSettingFactory()->createCollection($metaModel);
+        $additional    = array();
+
+        foreach ($renderSetting->getSettingNames() as $name) {
+            $parsed = $item->parseAttribute($name, 'text', $renderSetting);
+            $name   = $item->getAttribute($name)->getName();
+
+            $additional[$name] = $parsed['text'];
+        }
+
+        $additional = array_merge(
+            $additional,
+            $event->getAdditional()
+        );
+
+        $event->setAdditional($additional);
+    }
+
+    /**
      * Register to the event dispatcher.
      *
      * @param EventDispatcherInterface $dispatcher The event dispatcher.
@@ -165,5 +202,6 @@ class RenderItem
     {
         $dispatcher->addListener(ModelToLabelEvent::NAME, array(__CLASS__, 'render'));
         $dispatcher->addListener(RenderReadablePropertyValueEvent::NAME, array(__CLASS__, 'getReadableValue'));
+        $dispatcher->addListener(GetParentHeaderEvent::NAME, array(__CLASS__, 'addAdditionalParentHeaderFields'));
     }
 }

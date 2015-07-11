@@ -12,6 +12,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Christopher Bölter <c.boelter@cogizz.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
@@ -19,19 +20,17 @@
 
 namespace MetaModels\DcGeneral\Data;
 
+use ContaoCommunityAlliance\DcGeneral\Data\CollectionInterface;
+use ContaoCommunityAlliance\DcGeneral\Data\ConfigInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\DCGE;
+use ContaoCommunityAlliance\DcGeneral\Data\DefaultCollection;
+use ContaoCommunityAlliance\DcGeneral\Data\DefaultConfig;
 use ContaoCommunityAlliance\DcGeneral\Data\DefaultFilterOptionCollection;
 use ContaoCommunityAlliance\DcGeneral\Data\DefaultLanguageInformation;
 use ContaoCommunityAlliance\DcGeneral\Data\DefaultLanguageInformationCollection;
 use ContaoCommunityAlliance\DcGeneral\Data\FilterOptionCollectionInterface;
-use ContaoCommunityAlliance\DcGeneral\Data\LanguageInformationCollectionInterface;
-use ContaoCommunityAlliance\DcGeneral\Data\LanguageInformationInterface;
-use ContaoCommunityAlliance\DcGeneral\Data\MultiLanguageDataProviderInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
-use ContaoCommunityAlliance\DcGeneral\Data\ConfigInterface;
-use ContaoCommunityAlliance\DcGeneral\Data\CollectionInterface;
-use ContaoCommunityAlliance\DcGeneral\Data\DefaultConfig;
-use ContaoCommunityAlliance\DcGeneral\Data\DefaultCollection;
+use ContaoCommunityAlliance\DcGeneral\Data\MultiLanguageDataProviderInterface;
 use MetaModels\Filter\IFilter;
 use MetaModels\IItem;
 use MetaModels\IItems;
@@ -515,9 +514,11 @@ class Driver implements MultiLanguageDataProviderInterface
                 ->prepareFilter(
                     $this->getEmptyConfig()->setFilter(
                         array(
-                            'operation' => '=',
-                            'property' => $attribute->getColName(),
-                            'value' => $varNew
+                            array(
+                                'operation' => '=',
+                                'property' => $attribute->getColName(),
+                                'value' => $varNew
+                            )
                         )
                     )
                 )

@@ -38,6 +38,7 @@ $GLOBALS['TL_LANG']['BRD']['metamodel_rendersetting']                 = 'Render 
 $GLOBALS['TL_LANG']['BRD']['metamodel_dca_sortgroup']                 = 'Sorting and grouping in "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dca']                           = 'All input screens of "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting']                    = 'Input screens in "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_dca_combine']                   = 'Input screen and render setting combination for "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting_condition']          = 'Visibility conditions for attribute "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_filter']                        = 'All filter of "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_filtersetting']                 = 'Filter settings in "%s"';
