@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-12-11T16:14:26+01:00
+ * last-updated: 2014-01-20T17:17:23+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_module']['editfiltersetting']['0']              = 'Filtereinstellungen bearbeiten';
@@ -56,7 +56,7 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby']['1']               = 'Bitte
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby_direction']['0']     = 'Sortierreihenfolge';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby_direction']['1']     = 'In aufsteigender oder absteigender Reihenfolge';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_use_limit']['0']            = 'Offset und Limit für die Auflistung verwenden';
-$GLOBALS['TL_LANG']['tl_module']['metamodel_use_limit']['1']            = 'Auswählen, falls Sie die Anzahl anzuzeigender Datensätze begrenzen möchten. Diese Einstellung ist beipielsweise nützlich, wenn Sie nur die ersten 500 Datensätze anzeigen möchten, oder falls Sie alle Datensätze anzeigen und dabei die ersten 10 überspringen wollen. Eine voreingestellte Paginierung bleibt dabei erhalten.';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_use_limit']['1']            = 'Auswählen, falls Sie die Anzahl anzuzeigender Datensätze begrenzen möchten. Diese Einstellung ist beispielsweise nützlich, wenn Sie nur die ersten 500 Datensätze anzeigen möchten, oder falls Sie alle Datensätze anzeigen und dabei die ersten 10 überspringen wollen. Eine voreingestellte Paginierung bleibt dabei erhalten.';
 $GLOBALS['TL_LANG']['tl_module']['mm_filter_legend']                    = 'MetaModel-Filter';
 $GLOBALS['TL_LANG']['tl_module']['mm_meta_legend']                      = 'Suchmaschinen-Optimierung';
 
