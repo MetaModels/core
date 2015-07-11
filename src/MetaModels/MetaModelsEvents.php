@@ -71,4 +71,11 @@ class MetaModelsEvents
      * @see \MetaModels\Filter\Setting\Events\CreateRenderSettingFactoryEvent
      */
     const RENDER_SETTING_FACTORY_CREATE = 'metamodels.render-setting.factory.create';
+
+    /**
+     * Event when an item is parsed.
+     *
+     * @see \MetaModels\Events\ParseItemEvent.
+     */
+    const PARSE_ITEM = 'metamodels.parse-item';
 }
