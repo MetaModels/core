@@ -104,8 +104,6 @@ class FrontendFilter
                 $strValue = implode(',', array_filter($varParam));
             }
 
-            $strValue = str_replace(array('/', '\''), array('-slash-', '-apos-'), $strValue);
-
             if (strlen($strValue)) {
                 // Shift auto_item to the front.
                 if ($strName == 'auto_item') {
