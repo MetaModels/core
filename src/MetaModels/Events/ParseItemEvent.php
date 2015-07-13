@@ -19,11 +19,12 @@ namespace MetaModels\Events;
 
 use MetaModels\IItem;
 use MetaModels\Render\Setting\ICollection;
+use Symfony\Component\EventDispatcher\Event;
 
 /**
  * This event is triggered when a MetaModels item is parsed.
  */
-class ParseItemEvent
+class ParseItemEvent extends Event
 {
     /**
      * The render setting.
