@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-12-22T20:13:47+01:00
+ * last-updated: 2015-07-13T12:13:35+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']            = 'Интеграция в панель управления';
@@ -73,9 +73,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_0']     = '0 Зап
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_1']     = '1 Записи отсортированы фиксированным полем';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_2']     = '2 Записи отсортированы переключаемым полем';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_3']     = '3 Записи отсортированы родительской таблицей';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_4']     = '4 Отображает дочерние записи родительской записи (см. модуль таблицы стилей)';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_5']     = '5 Записи отображаются в виде дерева (см. структуру сайта)';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_6']     = '6 Отображает дочерние записи в виде дерева (см. модуль статей)';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_4']     = '4 Выводит дочерние записи родительской записи (см. модуль таблицы стилей)';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_5']     = '5 Выводит записи в виде дерева (см. структуру сайта)';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_6']     = '6 Выводит дочерние записи в виде дерева (см. модуль статей)';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['title_legend']              = 'Имя';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']['0']               = 'Дата изменения';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']['1']               = 'Дата и время последнего изменения';
