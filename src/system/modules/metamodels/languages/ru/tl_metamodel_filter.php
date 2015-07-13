@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-12-18T08:12:12+01:00
+ * last-updated: 2014-12-21T04:13:08+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['copy']['0']     = 'Копировать настройки фильтра';
@@ -20,7 +20,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_filter']['edit']['1']     = 'Редактир�
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['name']['0']     = 'Имя';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['name']['1']     = 'Название настроек фильтра';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['new']['0']      = 'Новый';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['new']['1']      = 'Создать новый параметр фильтра';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['settings']['0'] = 'Определить настройки атрибутов';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['settings']['1'] = 'Определить атрибуты параметра фильтра ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['show']['0']     = 'Детали настроек фильтра';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['show']['1']     = 'Показать детали настроек фильтра ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['title_legend']  = 'Имя';

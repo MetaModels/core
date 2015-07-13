@@ -8,11 +8,13 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T06:40:07+02:00
+ * last-updated: 2014-12-18T08:12:14+01:00
  */
 
-
 $GLOBALS['TL_LANG']['XPL']['customsql']['0']['0'] = 'Аннотация';
+$GLOBALS['TL_LANG']['XPL']['customsql']['0']['1'] = 'Введите любой SQL-запрос, который должен быть выполнен.<br />
+		Необходимо чтобы запрос вернул как минимум одну колонку с именем "id".
+		';
 $GLOBALS['TL_LANG']['XPL']['customsql']['5']['0'] = 'Параметр источников';
 $GLOBALS['TL_LANG']['XPL']['customsql']['5']['1'] = 'Параметр источники имеет нормальный макет:
 		<pre>{{param::[source]?[query string]}}</pre>
@@ -31,5 +33,21 @@ $GLOBALS['TL_LANG']['XPL']['customsql']['5']['1'] = 'Параметр источ
 		<li><strong>key</strong> - установите 1 для чтения ключа массивов (набора агрегата потребностей).</li>
 		<li><strong>recursive</strong> - установите 1 для чтения рекурсивных массивов (набора агрегата потребностей).</li>
 		</ul>
+		';
+$GLOBALS['TL_LANG']['XPL']['customsql']['6']['0'] = 'Пример 3<br />использовать сложный фильтр параметров источников';
+$GLOBALS['TL_LANG']['XPL']['customsql']['6']['1'] = '<pre>SELECT id
+	FROM {{table}}
+	WHERE catname={{param::get?name=category&default=defaultcat}}</pre>
+		<p>
+		Это то же самое, как пример 2 но теперь мы используем параметр из строки «запроса».
+		</p>
+		<p>
+		Представьте себе URL страницы, как: "http://example.org/list/category/demo.html"<br />
+		результирующий запрос затем будет: "SELECT id FROM mm_demo WHERE catname=\'demo\'"
+		</p>
+		<p>
+		Если URL-адрес должен быть: "http://example.org/list.html",<br />
+		результирующий запрос затем будет: "SELECT id FROM mm_demo WHERE catname=\'defaultcat\'"
+		</p>
 		';
 

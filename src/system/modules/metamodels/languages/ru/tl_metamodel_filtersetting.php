@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-10-17T12:13:43+02:00
+ * last-updated: 2014-12-18T08:12:12+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']         = 'Поиск на всех языках';
@@ -24,6 +24,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete']['1']            = '�
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit']['0']              = 'Редактировать настройки';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit']['1']              = 'Редактировать настройки фильтра ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['0']               = 'Родительская коллекция';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['0']             = 'Метка';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['0']               = 'Новый';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['1']               = 'Создать новую настройку';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['1']      = 'Показывать только параметры, для которых есть результат после применения этого фильтра.';
