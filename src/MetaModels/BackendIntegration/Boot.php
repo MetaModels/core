@@ -166,6 +166,7 @@ class Boot
                                 return;
                             }
                             $generator->populate($event);
+                            $GLOBALS['TL_CSS'][] = 'system/modules/metamodels/assets/css/style.css';
                         },
                         $generator::PRIORITY
                     );
