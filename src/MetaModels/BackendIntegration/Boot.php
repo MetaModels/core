@@ -48,8 +48,7 @@ class Boot
      */
     private function overrideFilePicker()
     {
-        if (version_compare(VERSION, '3.1', '>=')
-            && \Environment::get('scriptName') == (TL_PATH . '/contao/file.php')
+        if (\Environment::get('scriptName') == (TL_PATH . '/contao/file.php')
             && \Input::get('mmfilepicker')
         ) {
             $GLOBALS['BE_FFL']['fileSelector'] = 'MetaModels\Widgets\FileSelectorWidget';
