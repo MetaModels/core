@@ -318,6 +318,13 @@ class SearchablePages
             if (($strKey = array_search($baseUrl->getUrl(), $this->foundPages)) !== false) {
                 unset($this->foundPages[$strKey]);
             }
+
+            // Make a full url from it without the https.
+            $baseUrl = $this->getBaseUrl($pageDetails, null, true);
+
+            if (($strKey = array_search($baseUrl->getUrl(), $this->foundPages)) !== false) {
+                unset($this->foundPages[$strKey]);
+            }
         }
     }
 
