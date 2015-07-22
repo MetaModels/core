@@ -21,6 +21,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
     'config'                          => array
     (
         'dataContainer'               => 'General',
+        'ptable' => 'tl_metamodel',
         'switchToEdit'                => false,
         'enableVersioning'            => false,
     ),
@@ -54,6 +55,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
                         'local'       => 'pid',
                         'remote'      => 'id',
                         'operation'   => '=',
+                    ),
+                ),
+                'inverse' => array
+                (
+                    array
+                    (
+                        'local' => 'pid',
+                        'remote' => 'id',
+                        'operation' => '=',
                     ),
                 )
             )
@@ -131,31 +141,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
                 'rendersetting',
             ),
         )
-    ),
-    'metasubselectpalettes' => array
-    (
-        'rendertype' => array
-        (
-            'standalone' => array
-            (
-                'backend after rendertype' => array('backendsection'),
-            ),
-            'ctable'     => array
-            (
-                'backend after rendertype' => array('ptable'),
-            )
-        ),
-        'rendermode' => array
-        (
-            'flat'     => array
-            (
-                'display after rendermode' => array(),
-            ),
-            'parented' => array
-            (
-                'display after rendermode' => array(),
-            )
-        ),
     ),
     'fields'                => array
     (
