@@ -256,9 +256,11 @@ class SearchablePages
      *
      * @param null|string $path        Additional path settings.
      *
+     * @param bool        $ignoreSSL   If active the system will ignore the 'rootUseSSL' flag.
+     *
      * @return UrlBuilder
      */
-    private function getBaseUrl($pageDetails, $path = null)
+    private function getBaseUrl($pageDetails, $path = null, $ignoreSSL = false)
     {
         $url = new UrlBuilder();
 
@@ -269,7 +271,7 @@ class SearchablePages
             $url->setHost(\Environment::get('host'));
         }
 
-        if ($pageDetails['rootUseSSL']) {
+        if ($pageDetails['rootUseSSL'] && !$ignoreSSL) {
             $url->setScheme('https');
         } else {
             $url->setScheme('http');
