@@ -57,7 +57,7 @@
 		"cyberspectrum/contao-toolbox": "dev-master"
 	},
 	"conflict": {
-		"contao/core": "3.0.*"
+		"contao/core": "3.0.* | >=3.3"
 	},
 	"autoload": {
 		"classmap": ["src"]
