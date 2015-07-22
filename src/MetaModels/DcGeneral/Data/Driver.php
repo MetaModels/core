@@ -645,7 +645,11 @@ class Driver implements MultiLanguageDataProviderInterface
         if (!$objItem) {
             return null;
         }
-        return new Model($objItem);
+
+        $model = new Model($objItem);
+        $model->setMeta($model::IS_CHANGED, true);
+
+        return $model;
     }
 
     /**

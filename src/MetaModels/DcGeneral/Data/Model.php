@@ -21,6 +21,7 @@ namespace MetaModels\DcGeneral\Data;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBagInterface;
 use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
+use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidPropertyValueException;
 use MetaModels\Exceptions\DifferentValuesException;
 use MetaModels\IItem;
 
@@ -157,7 +158,7 @@ class Model implements ModelInterface
     /**
      * {@inheritDoc}
      *
-     * @throws \LogicException When the property is unable to accept the value.
+     * @throws DcGeneralInvalidPropertyValueException When the property is unable to accept the value.
      */
     public function setProperty($strPropertyName, $varValue)
     {
@@ -175,7 +176,7 @@ class Model implements ModelInterface
                 try {
                     DifferentValuesException::compare($varValue, $this->getProperty($strPropertyName), false);
                 } catch (DifferentValuesException $exception) {
-                    throw new \LogicException(
+                    throw new DcGeneralInvalidPropertyValueException(
                         sprintf(
                             'Property %s (%s) did not accept the value (%s).',
                             $strPropertyName,

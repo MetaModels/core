@@ -125,6 +125,10 @@ abstract class Simple implements ISimple
      */
     protected function isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption)
     {
+        // Special case, the "empty" value first.
+        if (empty($strKeyOption) && !isset($arrFilterUrl[$arrWidget['eval']['urlparam']])) {
+            return true;
+        }
         $blnIsActive = isset($arrFilterUrl[$arrWidget['eval']['urlparam']])
             && ($arrFilterUrl[$arrWidget['eval']['urlparam']] == $strKeyOption);
         if (!$blnIsActive && $this->get('defaultid')) {

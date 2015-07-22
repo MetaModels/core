@@ -21,10 +21,8 @@
 
 namespace MetaModels;
 
-use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GetPageDetailsEvent;
 use MetaModels\Attribute\IAttribute;
+use MetaModels\Events\ParseItemEvent;
 use MetaModels\Filter\IFilter;
 use MetaModels\Render\Setting\ICollection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -384,45 +382,14 @@ class Item implements IItem
             }
         }
 
-        // Call HOOK for other extensions to inject data.
-        $this->parseValueHook($arrResult, $strOutputFormat, $objSettings);
+        // Trigger event to allow other extensions to manipulate the parsed data.
+        $event = new ParseItemEvent($objSettings, $this, $strOutputFormat, $arrResult);
+        $this->getMetaModel()->getServiceContainer()->getEventDispatcher()->dispatch(
+            MetaModelsEvents::PARSE_ITEM,
+            $event
+        );
 
-        return $arrResult;
-    }
-
-    /**
-     * HOOK handler for third party extensions to inject data into the generated output or to reformat the output.
-     *
-     * @param array       $arrResult   The generated data.
-     *
-     * @param string      $strFormat   The desired output format (text, html, etc.).
-     *
-     * @param ICollection $objSettings The render settings to use.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    protected function parseValueHook(&$arrResult, $strFormat, $objSettings)
-    {
-        // TODO: fire an event instead.
-        // HOOK: let third party extensions manipulate the generated data.
-        if (!empty($GLOBALS['METAMODEL_HOOKS']['MetaModelItem::parseValue'])
-            && is_array($GLOBALS['METAMODEL_HOOKS']['MetaModelItem::parseValue'])
-        ) {
-            foreach ($GLOBALS['METAMODEL_HOOKS']['MetaModelItem::parseValue'] as $arrHook) {
-                $strClass  = $arrHook[0];
-                $strMethod = $arrHook[1];
-
-                if (in_array('getInstance', get_class_methods($strClass))) {
-                    $objHook = call_user_func(array($strClass, 'getInstance'));
-                } else {
-                    $objHook = new $strClass();
-                }
-                $objHook->$strMethod($arrResult, $this, $strFormat, $objSettings);
-            }
-        }
+        return $event->getResult();
     }
 
     /**
