@@ -18,6 +18,7 @@
 
 namespace MetaModels\DcGeneral\Events\MetaModel;
 
+use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetParentHeaderEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\View\Event\RenderReadablePropertyValueEvent;
@@ -74,6 +75,9 @@ class RenderItem
         $environment = $event->getEnvironment();
         /** @var IMetaModelDataDefinition $definition */
         $definition = $environment->getDataDefinition();
+        /** @var Contao2BackendViewDefinitionInterface $viewSection */
+        $viewSection       = $definition->getDefinition(Contao2BackendViewDefinitionInterface::NAME);
+        $listing           = $viewSection->getListingConfig();
 
         /** @var Model $model */
         $model = $event->getModel();
@@ -94,6 +98,14 @@ class RenderItem
             return;
         }
 
+        $data = array($nativeItem->parseValue('html5', $renderSetting));
+
+        if ($listing->getShowColumns()) {
+            $event->setArgs($data[0]['html5']);
+            return;
+
+        }
+
         $template      = new Template($renderSetting->get('template'));
         $renderSetting = self::removeInvariantAttributes($nativeItem, $renderSetting);
 
@@ -102,7 +114,7 @@ class RenderItem
                 'settings' => $renderSetting,
                 'items'    => new Items(array($nativeItem)),
                 'view'     => $renderSetting,
-                'data'     => array($nativeItem->parseValue('html5', $renderSetting))
+                'data'     => $data
             )
         );
 

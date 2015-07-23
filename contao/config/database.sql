@@ -54,6 +54,8 @@ CREATE TABLE `tl_metamodel_dca` (
   `rendertype` varchar(10) NOT NULL default '',
 -- render mode - one of: "flat", "parented" (ctable only), "hierarchical"
   `rendermode` varchar(12) NOT NULL default '',
+-- use list view?
+  `showColumns` char(1) NOT NULL default '',
 -- the panel layouts we want to display.
   `panelLayout` blob NULL,
 -- parent table (if rendertype == "ctable")

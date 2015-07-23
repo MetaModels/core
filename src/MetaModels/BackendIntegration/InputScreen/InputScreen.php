@@ -570,4 +570,12 @@ class InputScreen implements IInputScreen
     {
         return $this->data['panelLayout'];
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function isShowColumns()
+    {
+        return (bool) $this->data['showColumns'];
+    }
 }

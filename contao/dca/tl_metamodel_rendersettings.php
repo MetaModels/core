@@ -167,7 +167,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
             'expert'  => array
             (
                 'hideEmptyValues',
-                'hideLabels'
+                'hideLabels',
             ),
             'view'    => array
             (

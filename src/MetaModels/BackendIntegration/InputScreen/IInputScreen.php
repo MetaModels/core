@@ -201,4 +201,13 @@ interface IInputScreen
      * @return string
      */
     public function getPanelLayout();
+
+     /**
+     * Shall show columns?
+     *
+     * @return bool
+     */
+    public function isShowColumns();
+
+
 }
