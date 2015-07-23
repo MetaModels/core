@@ -46,7 +46,8 @@ array_insert(
                         'tl_metamodel_dca',
                         'tl_metamodel_dcasetting',
                         'tl_metamodel_dca_combine',
-                        'tl_metamodel_dcasetting_condition'
+                        'tl_metamodel_dcasetting_condition',
+                        'tl_metamodel_searchable_pages'
                     ),
                     'icon'                  => 'system/modules/metamodels/assets/images/backend/logo.png',
                     'callback'              => 'MetaModels\BackendIntegration\Module'
@@ -116,6 +117,7 @@ $GLOBALS['TL_FFL']['tags']      = 'MetaModels\Widgets\TagsWidget';
 $GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] =
     array('MetaModels\FrontendIntegration\FrontendFilter', 'generateClearAll');
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][]      = array('MetaModels\FrontendIntegration\InsertTags', 'replaceTags');
+$GLOBALS['TL_HOOKS']['getSearchablePages'][]     = array('MetaModels\BackendIntegration\SearchablePages', 'addPages');
 
 $GLOBALS['TL_PURGE']['folders']['metamodels']['affected'][] = 'system/cache/metamodels';
 $GLOBALS['TL_PURGE']['folders']['metamodels']['callback']   =

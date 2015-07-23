@@ -181,7 +181,6 @@ class Collection implements ICollection
         $fallbackLanguage = $this->metaModel->getFallbackLanguage();
         $jumpToPageId     = '';
         $filterSettingId  = '';
-        $language         = null;
 
         if (!isset($this->jumpToCache[$desiredLanguage . '.' . $fallbackLanguage])) {
             $serviceContainer = $this->metaModel->getServiceContainer();
@@ -192,7 +191,6 @@ class Collection implements ICollection
                 if (!$translated || ($langCode == $desiredLanguage) || ($langCode == $fallbackLanguage)) {
                     $jumpToPageId    = $jumpTo['value'];
                     $filterSettingId = $jumpTo['filter'];
-                    $language        = $jumpTo['langcode'];
                     // If the desired language, break.
                     // Otherwise try to get the desired one until all have been evaluated.
                     if ($desiredLanguage == $jumpTo['langcode']) {
@@ -201,17 +199,18 @@ class Collection implements ICollection
                 }
             }
 
+            $pageDetails   = $this->getPageDetails($jumpToPageId);
             $filterSetting = $filterSettingId
                 ? $serviceContainer->getFilterFactory()->createCollection($filterSettingId)
                 : null;
 
             $this->jumpToCache[$desiredLanguage . '.' . $fallbackLanguage] = array(
                 'page'          => $jumpToPageId,
-                'pageDetails'   => $this->getPageDetails($jumpToPageId),
+                'pageDetails'   => $pageDetails,
                 'filter'        => $filterSettingId,
                 'filterSetting' => $filterSetting,
                 // Mask out the "all languages" language key (See #687).
-                'language'      => ($language !== 'xx') ? $language : null,
+                'language'      => $pageDetails['language'],
                 'label'         => $this->getJumpToLabel()
             );
         }
@@ -250,7 +249,12 @@ class Collection implements ICollection
         $result['params'] = $parameterList;
         $result['deep']   = (strlen($parameters) > 0);
 
-        $event = new GenerateFrontendUrlEvent($information['pageDetails'], $parameters, $information['language']);
+        $event = new GenerateFrontendUrlEvent(
+            $information['pageDetails'],
+            $parameters,
+            $information['language']
+        );
+
         $this
             ->metaModel
             ->getServiceContainer()

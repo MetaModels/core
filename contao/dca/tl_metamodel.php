@@ -32,6 +32,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
             'tl_metamodel_filter',
             'tl_metamodel_rendersettings',
             'tl_metamodel_dca',
+            'tl_metamodel_searchable_pages',
             'tl_metamodel_dca_combine'
         ),
         'switchToEdit'     => true,
@@ -63,19 +64,19 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
         ),
         'operations'        => array
         (
-            'edit'           => array
+            'edit'             => array
             (
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel']['editheader'],
                 'href'  => 'act=edit',
                 'icon'  => 'edit.gif',
             ),
-            'cut'            => array
+            'cut'              => array
             (
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel']['cut'],
                 'href'  => 'act=paste&amp;mode=cut',
                 'icon'  => 'cut.gif'
             ),
-            'delete'         => array
+            'delete'           => array
             (
                 'label'      => &$GLOBALS['TL_LANG']['tl_metamodel']['delete'],
                 'href'       => 'act=delete',
@@ -85,41 +86,48 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
                     $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
                 )
             ),
-            'show'           => array
+            'show'             => array
             (
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel']['show'],
                 'href'  => 'act=show',
                 'icon'  => 'show.gif'
             ),
-            'fields'         => array
+            'fields'           => array
             (
                 'label'   => &$GLOBALS['TL_LANG']['tl_metamodel']['fields'],
                 'href'    => 'table=tl_metamodel_attribute',
                 'icon'    => 'system/modules/metamodels/assets/images/icons/fields.png',
                 'idparam' => 'pid'
             ),
-            'rendersettings' => array
+            'rendersettings'   => array
             (
                 'label'   => &$GLOBALS['TL_LANG']['tl_metamodel']['rendersettings'],
                 'href'    => 'table=tl_metamodel_rendersettings',
                 'icon'    => 'system/modules/metamodels/assets/images/icons/rendersettings.png',
                 'idparam' => 'pid'
             ),
-            'dca'            => array
+            'dca'              => array
             (
                 'label'   => &$GLOBALS['TL_LANG']['tl_metamodel']['dca'],
                 'href'    => 'table=tl_metamodel_dca',
                 'icon'    => 'system/modules/metamodels/assets/images/icons/dca.png',
                 'idparam' => 'pid'
             ),
-            'filter'         => array
+            'searchable_pages' => array
+            (
+                'label'   => &$GLOBALS['TL_LANG']['tl_metamodel']['searchable_pages'],
+                'href'    => 'table=tl_metamodel_searchable_pages',
+                'icon'    => 'system/modules/metamodels/assets/images/icons/searchable_pages.png',
+                'idparam' => 'pid'
+            ),
+            'filter'           => array
             (
                 'label'   => &$GLOBALS['TL_LANG']['tl_metamodel']['filter'],
                 'href'    => 'table=tl_metamodel_filter',
                 'icon'    => 'system/modules/metamodels/assets/images/icons/filter.png',
                 'idparam' => 'pid'
             ),
-            'dca_combine'    => array
+            'dca_combine'      => array
             (
                 'label'   => &$GLOBALS['TL_LANG']['tl_metamodel']['dca_combine'],
                 'href'    => 'table=tl_metamodel_dca_combine&act=edit',

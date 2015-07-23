@@ -54,6 +54,7 @@ class Subscriber extends BaseSubscriber
         $this->registerTableMetaModelRenderSettingEvents();
         $this->registerTableMetaModelRenderSettingsEvents();
         $this->registerTableMetaModelDcaSortGroupEvents();
+        $this->registerTableMetaModelSearchablePagesEvents();
 
         $this->registerTableWatcher();
     }
@@ -126,6 +127,16 @@ class Subscriber extends BaseSubscriber
     public function registerTableMetaModelDcaSettingConditionsEvents()
     {
         new \MetaModels\DcGeneral\Events\Table\InputScreenCondition\Subscriber($this->getServiceContainer());
+    }
+
+    /**
+     * Register the events for table tl_metamodel_dcasetting_condition.
+     *
+     * @return void
+     */
+    public function registerTableMetaModelSearchablePagesEvents()
+    {
+        new \MetaModels\DcGeneral\Events\Table\SearchablePages\Subscriber($this->getServiceContainer());
     }
 
     /**

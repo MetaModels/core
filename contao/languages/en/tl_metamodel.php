@@ -52,6 +52,7 @@ $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']       = array('Define rend
 $GLOBALS['TL_LANG']['tl_metamodel']['dca']                  = array('Define input screens', 'Define input screens for MetaModel ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel']['dca_combine']          = array('Define input/output combinations', 'Define input/output combinations for MetaModel ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel']['cut']                  = array('Move MetaModel', 'Define the order of your MetaModels.');
+$GLOBALS['TL_LANG']['tl_metamodel']['searchable_pages']     = array('Define search settings', 'Define search settings for MetaModel ID %s');
 
 /**
  * Misc.
