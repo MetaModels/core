@@ -1451,10 +1451,14 @@ class Builder
 
         foreach ($inputScreen->getLegends() as $legendName => $legend) {
             $paletteLegend = new Legend($legendName);
-            $paletteLegend->setInitialVisibility((bool) $legend['visible']);
+            $paletteLegend->setInitialVisibility(isset($legend['visible']) && (bool) $legend['visible']);
             $palette->addLegend($paletteLegend);
 
-            $this->translator->setValue($legendName . '_legend', $legend['name'], $container->getName());
+            $this->translator->setValue(
+                $legendName . '_legend',
+                isset($legend['name']) ? $legend['name'] : '',
+                $container->getName()
+            );
 
             foreach ($legend['properties'] as $propertyName) {
                 $property = new Property($propertyName);
