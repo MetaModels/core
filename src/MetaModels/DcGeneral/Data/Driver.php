@@ -666,8 +666,8 @@ class Driver implements MultiLanguageDataProviderInterface
         $collection = new DefaultLanguageInformationCollection();
 
         foreach ($this->getMetaModel()->getAvailableLanguages() as $langCode) {
-            // TODO: support country code.
-            $collection->add(new DefaultLanguageInformation($langCode, null));
+            list($langCode, $country) = explode('_', $langCode, 2);
+            $collection->add(new DefaultLanguageInformation($langCode, $country ?: null));
         }
 
         if (count($collection) > 0) {
@@ -686,8 +686,9 @@ class Driver implements MultiLanguageDataProviderInterface
     {
         if ($this->getMetaModel()->isTranslated()) {
             $langCode = $this->getMetaModel()->getFallbackLanguage();
-            // TODO: support country code.
-            return new DefaultLanguageInformation($langCode, null);
+
+            list($langCode, $country) = explode('_', $langCode, 2);
+            return new DefaultLanguageInformation($langCode, $country ?: null);
         }
 
         return null;
