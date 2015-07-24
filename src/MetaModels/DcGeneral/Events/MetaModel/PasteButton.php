@@ -354,7 +354,7 @@ class PasteButton extends BaseSubscriber
     protected function checkModelWithoutVariants($containedModel)
     {
         $this->disablePA = ($this->currentModel->getId() == $containedModel->getId())
-            || ($this->currentModel->getProperty('pid') == $containedModel->getId('pid')); // FIXME: is this here now id or pid?
+            || ($this->currentModel->getProperty('pid') == $containedModel->getProperty('pid'));
         $this->disablePI = ($this->circularReference)
             || ($this->currentModel->getId() == $containedModel->getId())
             || ($this->currentModel->getProperty('pid') == $containedModel->getId());
