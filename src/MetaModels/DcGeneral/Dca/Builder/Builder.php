@@ -74,6 +74,7 @@ use ContaoCommunityAlliance\DcGeneral\Factory\Event\PopulateEnvironmentEvent;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
 use ContaoCommunityAlliance\Translator\TranslatorChain;
 use Contao\Input;
+use MetaModels\Attribute\ITranslated;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\ViewCombinations;
 use MetaModels\DcGeneral\DataDefinition\Definition\MetaModelDefinition;
@@ -1333,8 +1334,7 @@ class Builder
             return;
         }
 
-        $isTranslated = $metaModel->isTranslated()
-            && in_array('MetaModels\Attribute\ITranslated', class_implements($attribute));
+        $isTranslated = $metaModel->isTranslated() && ($attribute instanceof ITranslated);
 
         if ($definition->hasProperty($propName)) {
             $property = $definition->getProperty($propName);
