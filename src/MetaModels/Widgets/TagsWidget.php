@@ -166,7 +166,6 @@ class TagsWidget extends \Widget
             }
 
             // Select all tags.
-            // TODO: does this really make sense? do we need such an option?
             $return .= $this->generateOption(
                 array('value' => '--all--', 'label' => $GLOBALS['TL_LANG']['metamodels_frontendfilter']['select_all']),
                 $count++

@@ -253,7 +253,6 @@ class InsertTags extends \Controller
         // Parse attribute.
         $arrAttr = $objMetaModelItem->parseAttribute($strAttributeName);
 
-        // ToDo: Maybe this should not always be a text element.
         return $arrAttr[$strOutput];
     }
 

@@ -495,7 +495,7 @@ class TableManipulation
             ) {
                 self::createColumn($strTableName, 'varbase', 'char(1) NOT NULL default \'\'', true);
                 self::createColumn($strTableName, 'vargroup', 'int(11) NOT NULL default 0', true);
-                // TODO: we should also apply an index on vargroup here.
+
                 // If there is pre-existing data in the table, we need to provide a separate 'vargroup' value to all of
                 // them, we can do this safely by setting all vargroups to the id of the base item.
                 self::getDB()->execute(sprintf('UPDATE %s SET vargroup=id, varbase=1', $strTableName));
