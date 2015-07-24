@@ -25,9 +25,9 @@ use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\ItemList;
 
-/**
- * MetaModelInsertTags.
- * 
+/** @codingStandardsIgnoreStart
+ * This class handles the replacement of all MetaModels insert tags.
+ *
  * Available insert tags:
  * 
  * -- Total Count --
@@ -43,6 +43,8 @@ use MetaModels\ItemList;
  * 
  * -- JumpTo --
  * mm::jumpTo::[MM Name|ID]::[Item ID]::[ID render setting](::[Parameter (Default:url)|label|page|params.attname])
+ *
+ * @codingStandardsIgnoreEnd
  */
 class InsertTags extends \Controller
 {

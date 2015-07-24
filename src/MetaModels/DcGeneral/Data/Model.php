@@ -169,7 +169,6 @@ class Model implements ModelInterface
             if ($objAttribute) {
                 $varInternalValue = $objAttribute->widgetToValue($varValue, $this->getItem()->get('id'));
             }
-
             if ($varValue !== $this->getProperty($strPropertyName)) {
                 $this->setMeta(static::IS_CHANGED, true);
                 $this->getItem()->set($strPropertyName, $varInternalValue);

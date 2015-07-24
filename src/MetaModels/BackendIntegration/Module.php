@@ -22,8 +22,6 @@ namespace MetaModels\BackendIntegration;
 use ContaoCommunityAlliance\DcGeneral\Action;
 use ContaoCommunityAlliance\DcGeneral\DataContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\Callback\Callbacks;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Implementation of the MetaModel Backend Module that allowing access to MetaModel configuration etc. Everything below

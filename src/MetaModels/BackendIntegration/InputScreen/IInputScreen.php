@@ -204,11 +204,9 @@ interface IInputScreen
     public function getPanelLayout();
 
      /**
-     * Shall show columns?
-     *
-     * @return bool
-     */
+      * If true, the column based layout shall be used, the normal layout otherwise.
+      *
+      * @return bool
+      */
     public function isShowColumns();
-
-
 }

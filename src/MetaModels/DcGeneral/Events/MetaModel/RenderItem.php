@@ -77,8 +77,8 @@ class RenderItem
         /** @var IMetaModelDataDefinition $definition */
         $definition = $environment->getDataDefinition();
         /** @var Contao2BackendViewDefinitionInterface $viewSection */
-        $viewSection       = $definition->getDefinition(Contao2BackendViewDefinitionInterface::NAME);
-        $listing           = $viewSection->getListingConfig();
+        $viewSection = $definition->getDefinition(Contao2BackendViewDefinitionInterface::NAME);
+        $listing     = $viewSection->getListingConfig();
 
         /** @var Model $model */
         $model = $event->getModel();
