@@ -41,6 +41,7 @@ class FileSelectorWidget extends \FileSelector
      */
     public function __construct($arrAttributes = null, $objDca = null)
     {
+        // Pre Contao 3.3 support: We can drop the second argument when we stop supporting Contao 3.3.
         parent::__construct($arrAttributes, $objDca);
 
         if (!$this->strField) {
