@@ -183,6 +183,7 @@ class SearchablePages
      * @return string[] A list with all languages or null.
      *
      * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getLanguage($singleLanguage, $metaModels)
     {
@@ -212,6 +213,7 @@ class SearchablePages
      * @return array A list of urls for the jumpTos
      *
      * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getJumpTosFor($availableLanguages, $metaModels, $filter, $view, $rootPage = null)
     {
@@ -422,6 +424,7 @@ class SearchablePages
      * @return void
      *
      * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function getMetaModelsPages(
         $config,
