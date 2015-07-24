@@ -53,50 +53,6 @@ class Simple implements ISimple
     }
 
     /**
-     * For backwards compatibility only as this used to be stdClass.
-     *
-     * @param string $key   The key to set.
-     *
-     * @param mixed  $value The value to set.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    public function __set($key, $value)
-    {
-        if ($GLOBALS['TL_DEBUG']) {
-            user_error(
-                'Please don\'t do magic access to \MetaModels\Render\Setting\Interfaces\Simple.',
-                E_USER_DEPRECATED
-            );
-        }
-        $this->set($key, $value);
-    }
-
-    /**
-     * For backwards compatibility only as this used to be stdClass.
-     *
-     * @param string $key The key to set.
-     *
-     * @return mixed
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    public function __get($key)
-    {
-        if ($GLOBALS['TL_DEBUG']) {
-            user_error(
-                'Please don\'t do magic access to \MetaModels\Render\Setting\Interfaces\Simple.',
-                E_USER_DEPRECATED
-            );
-        }
-        return $this->get($key);
-    }
-
-    /**
      * Set the parenting render setting.
      *
      * @param ICollection $parent The parenting instance.
