@@ -398,10 +398,7 @@ class SearchablePages
         // Run each entry in the config array.
         foreach ($this->configs as $config) {
             $this->getMetaModelsPages(
-                $config['pid'],
-                $config['filter'],
-                deserialize($config['filterparams'], true),
-                $config['rendersetting'],
+                $config,
                 $rootPage,
                 $language
             );
@@ -416,30 +413,26 @@ class SearchablePages
     /**
      * Get a MetaModels, a filter and a renderSetting. Get all items based on the filter and build the jumpTo urls.
      *
-     * @param string      $metaModelsIdentifier ID of the MetaModels.
+     * @param array       $config   ID of the MetaModels.
      *
-     * @param string      $filterIdentifier     ID of the filter setting.
+     * @param string|null $rootPage The root page id or null if there is no root page.
      *
-     * @param array       $presetParams         The list with the parameter settings for the filters.
-     *
-     * @param string      $renderSettingId      ID of the renderSetting.
-     *
-     * @param string|null $rootPage             The root page id or null if there is no root page.
-     *
-     * @param string|null $language             The current language.
+     * @param string|null $language The current language.
      *
      * @return void
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function getMetaModelsPages(
-        $metaModelsIdentifier,
-        $filterIdentifier,
-        $presetParams,
-        $renderSettingId,
+    private function getMetaModelsPages(
+        $config,
         $rootPage = null,
         $language = null
     ) {
+        $metaModelsIdentifier = $config['pid'];
+        $filterIdentifier     = $config['filter'];
+        $presetParams         = deserialize($config['filterparams'], true);
+        $renderSettingId      = $config['rendersetting'];
+
         // Get the MetaModels.
         $metaModels         = $this->getMetaModel($metaModelsIdentifier, false);
         $availableLanguages = $this->getLanguage($language, $metaModels);
