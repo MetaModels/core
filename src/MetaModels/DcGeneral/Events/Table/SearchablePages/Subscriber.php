@@ -158,7 +158,7 @@ class Subscriber extends BaseSubscriber
                     $property->setVisibleCondition($chain);
                 }
 
-                $chain->addCondition(new NotCondition(new PropertyValueCondition('filter', '')));
+                $chain->addCondition(new NotCondition(new PropertyValueCondition('filter', 0)));
                 break;
             }
         }
