@@ -31,6 +31,9 @@ use ContaoCommunityAlliance\DcGeneral\Data\DefaultLanguageInformationCollection;
 use ContaoCommunityAlliance\DcGeneral\Data\FilterOptionCollectionInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\MultiLanguageDataProviderInterface;
+use MetaModels\Attribute\IAttribute;
+use MetaModels\Attribute\IComplex;
+use MetaModels\Attribute\ITranslated;
 use MetaModels\Filter\IFilter;
 use MetaModels\IItem;
 use MetaModels\IItems;
@@ -537,10 +540,30 @@ class Driver implements MultiLanguageDataProviderInterface
      * @param string $strField The field to reset.
      *
      * @return void
+     *
+     * @throws \RuntimeException For invalid ids.
      */
     public function resetFallback($strField)
     {
-        // TODO: Unimplemented so far.
+        $metaModel = $this->getMetaModel();
+        $attribute = $metaModel->getAttribute($strField);
+        $ids       = $metaModel->getIdsFromFilter(null);
+
+        if ($attribute instanceof IComplex) {
+            $attribute->unsetDataFor($ids);
+        }
+        if ($attribute instanceof ITranslated) {
+            $attribute->unsetValueFor($ids, $this->getCurrentLanguage());
+        }
+        if ($attribute instanceof IAttribute) {
+            $data = array();
+            foreach ($ids as $id) {
+                $data[$id] = null;
+            }
+            $attribute->setDataFor($data);
+        }
+
+        throw new \RuntimeException('Unknown attribute or type ' . $strField);
     }
 
     /**
