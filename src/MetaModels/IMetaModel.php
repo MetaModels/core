@@ -205,7 +205,7 @@ interface IMetaModel
      *
      * @param string       $strSortOrder Optional sorting direction, either 'ASC'(default) or 'DESC'.
      *
-     * @return int[] the ids of items that match the given filter.
+     * @return string[] the ids of items that match the given filter.
      */
     public function getIdsFromFilter($objFilter, $strSortBy = '', $intOffset = 0, $intLimit = 0, $strSortOrder = 'ASC');
 
