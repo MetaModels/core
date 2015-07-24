@@ -1170,16 +1170,18 @@ class Builder
             }
         }
 
-        if (!$command->getLabel() && !isset($extraValues['label'])) {
+        if (!$command->getLabel()) {
             $command->setLabel($operationName . '.0');
-        } elseif (!$command->getLabel() && isset($extraValues['label'])) {
-            $command->setLabel($extraValues['label']);
+            if (isset($extraValues['label'])) {
+                $command->setLabel($extraValues['label']);
+            }
         }
 
-        if (!$command->getDescription() && !isset($extraValues['description'])) {
+        if (!$command->getDescription()) {
             $command->setDescription($operationName . '.1');
-        } elseif (!$command->getDescription() && isset($extraValues['description'])) {
-            $command->setDescription($extraValues['description']);
+            if (isset($extraValues['description'])) {
+                $command->setDescription($extraValues['description']);
+            }
         }
 
         $extra         = $command->getExtra();
