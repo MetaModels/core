@@ -10,6 +10,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     David Maack <david.maack@arcor.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.

@@ -13,6 +13,7 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     David Molineus <david.molineus@netzmacht.de>
+ * @author     Alexander Menk <a.menk@imi.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource

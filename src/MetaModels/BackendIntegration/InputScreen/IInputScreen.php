@@ -11,6 +11,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Alexander Menk <a.menk@imi.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource

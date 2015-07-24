@@ -14,6 +14,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Tim Becker <tim@westwerk.ac>
+ * @author     Alexander Menk <a.menk@imi.de>
  * @copyright  The MetaModels team.
  * @license    LGPL.
  * @filesource
