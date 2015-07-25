@@ -24,7 +24,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\ContaoBacke
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\EditMask;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\ActionEvent;
@@ -98,7 +98,7 @@ class CreateVariantButton extends BaseSubscriber
         $dataProvider  = $environment->getDataProvider();
         $inputProvider = $environment->getInputProvider();
         $modelId       = $inputProvider->hasParameter('id')
-            ? IdSerializer::fromSerialized($inputProvider->getParameter('id'))
+            ? ModelId::fromSerialized($inputProvider->getParameter('id'))
             : null;
 
         /** @var \MetaModels\DcGeneral\Data\Driver $dataProvider */

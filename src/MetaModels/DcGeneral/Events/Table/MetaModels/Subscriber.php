@@ -25,7 +25,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBr
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetGlobalButtonEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PreDeleteModelEvent;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
@@ -113,9 +113,7 @@ class Subscriber extends BaseSubscriber
                 UrlBuilder::fromUrl($event->getHref())
                     ->setQueryParameter(
                         'id',
-                        IdSerializer::fromModel($event->getModel())
-                            ->setDataProviderName('tl_metamodel_dca_combine')
-                            ->getSerialized()
+                        ModelId::fromValues('tl_metamodel_dca_combine', $event->getModel()->getId())->getSerialized()
                     )
                     ->getUrl()
             );

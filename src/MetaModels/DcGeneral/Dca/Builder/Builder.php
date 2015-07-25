@@ -27,7 +27,7 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinition;
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\Dca\ContaoDataProviderInformation;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\BasicDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DataProviderDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultBasicDefinition;
@@ -633,7 +633,7 @@ class Builder
 
         // NOTE: this might bear problems when the definition will get serialized as the input value will not change.
         if (Input::get('pid')) {
-            $parentValue = IdSerializer::fromSerialized(Input::get('pid'))->getId();
+            $parentValue = ModelId::fromSerialized(Input::get('pid'))->getId();
         } else {
             $parentValue = '0';
         }

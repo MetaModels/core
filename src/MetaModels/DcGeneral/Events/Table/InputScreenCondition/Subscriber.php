@@ -27,7 +27,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPa
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\Translator\TranslatorInterface;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
@@ -115,7 +115,7 @@ class Subscriber extends BaseSubscriber
             ->prepare('SELECT id FROM tl_metamodel WHERE
                 id=(SELECT pid FROM tl_metamodel_dca WHERE
                 id=(SELECT pid FROM tl_metamodel_dcasetting WHERE id=?))')
-            ->execute(IdSerializer::fromSerialized($interface->getInputProvider()->getParameter('pid'))->getId());
+            ->execute(ModelId::fromSerialized($interface->getInputProvider()->getParameter('pid'))->getId());
 
         return $this->getMetaModelById($metaModelId->id);
     }

@@ -23,7 +23,7 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\Helper\OperationButtonCallbackListener;
 use MetaModels\Helper\ToolboxFile;
@@ -201,7 +201,7 @@ class MetaModelDcaBuilder
     public function buildChildOperationButton($idParameter, $arrRow, $href, $label, $name, $icon, $attributes, $table)
     {
         $dispatcher = $this->getDispatcher();
-        $modelId    = IdSerializer::fromValues($table, $arrRow['id']);
+        $modelId    = ModelId::fromValues($table, $arrRow['id']);
         $urlEvent   = new AddToUrlEvent($href. '&amp;' . $idParameter . '=' . $modelId->getSerialized());
 
         $dispatcher->dispatch(ContaoEvents::BACKEND_ADD_TO_URL, $urlEvent);

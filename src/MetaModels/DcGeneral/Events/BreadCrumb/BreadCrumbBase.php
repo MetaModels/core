@@ -20,7 +20,7 @@ namespace MetaModels\DcGeneral\Events\BreadCrumb;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\InputProviderInterface;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
@@ -130,7 +130,7 @@ abstract class BreadCrumbBase
     {
         $parameter = $environment->getInputProvider()->getParameter($parameterName);
 
-        return IdSerializer::fromSerialized($parameter)->getId();
+        return ModelId::fromSerialized($parameter)->getId();
     }
 
     /**
@@ -144,7 +144,7 @@ abstract class BreadCrumbBase
      */
     public function seralizeId($dataProviderName, $modelId)
     {
-        return IdSerializer::fromValues($dataProviderName, $modelId)->getSerialized();
+        return ModelId::fromValues($dataProviderName, $modelId)->getSerialized();
     }
 
     /**

@@ -26,7 +26,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBr
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use MetaModels\BackendIntegration\TemplateList;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
@@ -158,7 +158,7 @@ class Subscriber extends BaseSubscriber
 
         $filter = new Filter();
         $filter
-            ->andModelIs(IdSerializer::fromModel($model))
+            ->andModelIs(ModelId::fromModel($model))
             ->andActionIs($clipboard::MODE_CUT);
 
         // Disable all buttons if there is a circular reference.

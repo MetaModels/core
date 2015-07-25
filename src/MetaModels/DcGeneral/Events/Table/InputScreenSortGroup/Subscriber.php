@@ -22,7 +22,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Decod
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
@@ -85,7 +85,7 @@ class Subscriber extends BaseSubscriber
     {
         $metaModelId = $this->getDatabase()
             ->prepare('SELECT id FROM tl_metamodel WHERE id=(SELECT pid FROM tl_metamodel_dca WHERE id=?)')
-            ->execute(IdSerializer::fromSerialized($environment->getInputProvider()->getParameter('pid'))->getId());
+            ->execute(ModelId::fromSerialized($environment->getInputProvider()->getParameter('pid'))->getId());
 
         /** @noinspection PhpUndefinedFieldInspection */
         return $this->getMetaModelById($metaModelId->id);

@@ -22,7 +22,7 @@ namespace MetaModels\Dca;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\IdSerializer;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\UrlBuilder\Contao\BackendUrlBuilder;
 use MetaModels\BackendIntegration\TemplateList;
 use MetaModels\IMetaModelsServiceContainer;
@@ -134,7 +134,7 @@ class ContentElementModuleBase
         $dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
 
         $url = BackendUrlBuilder::fromUrl('contao/main.php?do=metamodels&act=edit')
-            ->setQueryParameter('id', IdSerializer::fromValues('tl_metamodel', $dataContainer->value)->getSerialized());
+            ->setQueryParameter('id', ModelId::fromValues('tl_metamodel', $dataContainer->value)->getSerialized());
 
         return sprintf(
             '<a href="%s" title="%s" style="padding-left:3px">%s</a>',
@@ -175,7 +175,7 @@ class ContentElementModuleBase
         $url = BackendUrlBuilder::fromUrl('contao/main.php?do=metamodels&table=tl_metamodel_filtersetting')
             ->setQueryParameter(
                 'pid',
-                IdSerializer::fromValues('tl_metamodel_filter', $dataContainer->value)->getSerialized()
+                ModelId::fromValues('tl_metamodel_filter', $dataContainer->value)->getSerialized()
             );
 
         return sprintf(
@@ -217,7 +217,7 @@ class ContentElementModuleBase
         $url = BackendUrlBuilder::fromUrl('contao/main.php?do=metamodels&table=tl_metamodel_rendersetting')
             ->setQueryParameter(
                 'pid',
-                IdSerializer::fromValues('tl_metamodel_rendersettings', $dataContainer->value)->getSerialized()
+                ModelId::fromValues('tl_metamodel_rendersettings', $dataContainer->value)->getSerialized()
             );
 
         return sprintf(
