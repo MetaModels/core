@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-12-21T04:13:08+01:00
+ * last-updated: 2015-07-13T12:13:35+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                = 'Добавить все';
@@ -23,6 +23,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']['1']               = '
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['backend_legend']             = 'Панель управления';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['chosen']['0']                = 'Выбранный';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['chosen']['1']                = 'Включить выбранный графический виджет.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['cols']['0']                  = 'Колонки';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['config_legend']              = 'Конфигурация';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy']['0']                  = 'Скопировать определение параметра';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy']['1']                  = 'Копировать настройки ID %s.';
@@ -51,9 +52,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['1']                   = '
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['0']          = 'Не кодировать HTML-теги.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['1']          = 'Если выбрать, HTML-теги будут кодированы.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['0']              = 'Только чтение';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['0']                  = 'Строки';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['searchable']['0']            = 'Поисковый';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['searchable']['1']            = 'Выберите, если этот атрибут должен быть доступен для поиска в панели управления.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['show']['1']                  = 'Show details of setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['show']['0']                  = 'Детали настроек';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['show']['1']                  = 'Показать детали настроек ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortable']['0']              = 'Сортируемый';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortable']['1']              = 'Выберите, если этот атрибут должен быть доступен для сортировки в панели управления.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['1']           = 'Сортировка по возрастанию алфавита';
@@ -67,6 +70,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['7']           = '
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['8']           = 'Сортировать по убыванию месяцев';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['9']           = 'Сортировать по возрастанию лет';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker']                = 'Выбор стиля';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['subpalette']['0']            = 'Управление подобластями';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['subpalette']['1']            = 'Управление подобластями входного экрана ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['0']              = 'Пользовательские шаблоны для генерации';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['1']              = 'Выберите шаблон, который должен использоваться для выбранного атрибута. Имена шаблонов начинаются с "mm_&lt;type&gt;" где имя типа ставится для &lt;type&gt;';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']               = 'Тип';
