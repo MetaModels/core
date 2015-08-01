@@ -56,6 +56,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\Defau
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultSubmitElementInformation;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\SearchElementInformationInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\SubmitElementInformationInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\SelectCommand;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\FilterBuilder;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChildCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChildConditionInterface;
@@ -907,6 +908,7 @@ class Builder
         }
 
         $this->parseListing($container, $view);
+        $this->addSelectCommand($view, $container);
         $this->parseModelOperations($view, $container);
     }
 
@@ -1504,5 +1506,42 @@ class Builder
                 }
             }
         }
+    }
+
+    /**
+     * Add the select command to the backend view definition.
+     *
+     * @param Contao2BackendViewDefinitionInterface $view      The backend view definition.
+     * @param IMetaModelDataDefinition              $container The metamodel data definition.
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    protected function addSelectCommand(Contao2BackendViewDefinitionInterface $view, $container)
+    {
+        /** @var BasicDefinitionInterface $definition */
+        $definition = $container->getBasicDefinition();
+
+        // No ations allowed. Don't add the select command button.
+        if (!$definition->isEditable() && !$definition->isDeletable() && !$definition->isCreatable()) {
+            return;
+        }
+
+        $commands = $view->getGlobalCommands();
+        $command  = new SelectCommand();
+
+        // FIXME: Use the translator to translate the labels.
+        $command
+            ->setName('all')
+            ->setLabel($GLOBALS['TL_LANG']['MSC']['all'][0])
+            ->setDescription($GLOBALS['TL_LANG']['MSC']['all'][1]);
+
+        $parameters        = $command->getParameters();
+        $parameters['act'] = 'select';
+
+        $extra          = $command->getExtra();
+        $extra['class'] = 'header_edit_all';
+
+        $commands->addCommand($command);
     }
 }
