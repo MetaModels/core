@@ -30,6 +30,7 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_offset']                = array('Lis
 $GLOBALS['TL_LANG']['tl_module']['metamodel_limit']                 = array('Maximum number of items', 'Please enter the maximum number of items. Enter 0 to show all items and therefore disable the pagination.');
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby']                = array('Order by', 'Please choose the sort order.');
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby_direction']      = array('Order by direction', 'Ascending or descending order.');
+$GLOBALS['TL_LANG']['tl_module']['metamodel_sort_override']         = array('Allow sort override', 'If checked, the sorting attribute and direction may be overridden via get parameter.');
 $GLOBALS['TL_LANG']['tl_module']['metamodel_filtering']             = array('Filter settings to apply', 'Select the filter settings that shall get applied when compiling the list.');
 $GLOBALS['TL_LANG']['tl_module']['metamodel_layout']                = array('Custom template to use for generating', 'Select the template that shall be used for the selected attribute. Valid template filenames start with "ce_metamodel".');
 $GLOBALS['TL_LANG']['tl_module']['metamodel_rendersettings']        = array('Render settings to apply', 'Select the rendering settings to use for generating the output. If left empty, the default settings for the selected MetaModel will get applied. If no default has been defined, the output will only get the raw values.');

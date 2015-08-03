@@ -89,12 +89,23 @@ class HybridList extends MetaModelHybrid
 
         $this->Template->searchable = !$this->metamodel_donotindex;
 
+        $sorting   = $this->metamodel_sortby;
+        $direction = $this->metamodel_sortby_direction;
+        if ($this->metamodel_sort_override) {
+            if (\Input::get('orderBy')) {
+                $sorting = \Input::get('orderBy');
+            }
+            if (\Input::get('orderDir')) {
+                $direction = \Input::get('orderDir');
+            }
+        }
+
         $objItemRenderer
             ->setServiceContainer($this->getServiceContainer())
             ->setMetaModel($this->metamodel, $this->metamodel_rendersettings)
             ->setLimit($this->metamodel_use_limit, $this->metamodel_offset, $this->metamodel_limit)
             ->setPageBreak($this->perPage)
-            ->setSorting($this->metamodel_sortby, $this->metamodel_sortby_direction)
+            ->setSorting($sorting, $direction)
             ->setFilterSettings($this->metamodel_filtering)
             ->setFilterParameters(
                 deserialize($this->metamodel_filterparams, true),

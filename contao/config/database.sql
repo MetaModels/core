@@ -397,6 +397,7 @@ CREATE TABLE `tl_module` (
 -- filtering and sorting
   `metamodel_sortby` varchar(64) NOT NULL default '',
   `metamodel_sortby_direction` varchar(4) NOT NULL default '',
+  `metamodel_sort_override` char(1) NOT NULL default '',
   `metamodel_filtering` int(10) NOT NULL default '0',
   `metamodel_rendersettings` int(10) NOT NULL default '0',
   `metamodel_noparsing` char(1) NOT NULL default '',

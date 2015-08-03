@@ -23,7 +23,7 @@ $GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = array('MetaMode
 $GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list'] =
     '{title_legend},name,headline,type;' .
     '{config_legend},metamodel,perPage,metamodel_use_limit;' .
-    '{mm_filter_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_filtering,metamodel_filterparams;' .
+    '{mm_filter_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_sort_override,metamodel_filtering,metamodel_filterparams;' .
     '{template_legend:hide},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;' .
     '{mm_meta_legend},metamodel_meta_title,metamodel_meta_description;' .
     '{protected_legend:hide},protected;' .
@@ -42,7 +42,7 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['metamodels_frontendclearall'] =
     '{protected_legend:hide},protected;' .
     '{expert_legend:hide},guests,cssID,space';
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'metamodel_use_limit';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'metamodel_use_limit,metamodel_sort_override';
 
 // Insert new Subpalettes after position 1.
 array_insert(
@@ -149,6 +149,16 @@ array_insert(
                 'chosen'             => true,
                 'tl_class'           => 'w50'
             )
+        ),
+        'metamodel_sort_override'    => array
+        (
+            'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_sort_override'],
+            'exclude'   => true,
+            'inputType' => 'checkbox',
+            'eval'      => array
+            (
+                'tl_class' => 'w50'
+            ),
         ),
         'metamodel_filtering'           => array
         (
