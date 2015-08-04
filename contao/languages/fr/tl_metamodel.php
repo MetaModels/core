@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2015-08-04T04:10:59+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Paramètres avancés';
@@ -49,6 +49,7 @@ $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['0']       = 'Définir les
 $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['1']       = 'Définir les paramètres de rendu pour le MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['0']                 = 'Détails du MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['1']                 = 'Afficher les détails du MetaModel ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel']['sorting']['0']              = 'Tri';
 $GLOBALS['TL_LANG']['tl_metamodel']['tableName']['0']            = 'Nom de la table';
 $GLOBALS['TL_LANG']['tl_metamodel']['tableName']['1']            = 'Nom de la table de la base de données.';
 $GLOBALS['TL_LANG']['tl_metamodel']['title_legend']              = 'Nom et table';
@@ -59,3 +60,4 @@ $GLOBALS['TL_LANG']['tl_metamodel']['tstamp']['0']               = 'Date de rév
 $GLOBALS['TL_LANG']['tl_metamodel']['tstamp']['1']               = 'Date et heure de la dernière révision';
 $GLOBALS['TL_LANG']['tl_metamodel']['varsupport']['0']           = 'Support de variante';
 $GLOBALS['TL_LANG']['tl_metamodel']['varsupport']['1']           = 'Sélectionnez si ce MetaModel doit supporter des variantes d\'articles.';
+

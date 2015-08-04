@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2015-08-04T04:10:59+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_item']['copy']['0']          = 'Copiar l\'element';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['copy']['1']          = 'Copiar l\'element cun l\'ID %s';
@@ -28,9 +27,14 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['fields']['0']        = 'Administrar il
 $GLOBALS['TL_LANG']['tl_metamodel_item']['fields']['1']        = 'Administrar ils attributs da quest MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['new']['0']           = 'Nov element';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['new']['1']           = 'Crear in nov element';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['pasteafter']['0']    = 'Crear in nov element';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['pasteafter']['1']    = 'Crear in nov element suenter l\'element cun l\'ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['pasteinto']['0']     = 'Crear in nov element';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']['0']      = 'Crear in nov element';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']['1']      = 'Crear in nov element suenter l\'element cun l\'ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['show']['0']          = 'Detagls da l\'element';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['show']['1']          = 'Detagls da l\'element cun l\'ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['sorting']['0']       = 'Zavrar';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['varbase']['0']       = 'È la basa da la varianta';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['varbase']['1']       = 'Tscherne questa chaschetta sche ti vuls definir quai sco la basa da la gruppa da variantas actuala';
+

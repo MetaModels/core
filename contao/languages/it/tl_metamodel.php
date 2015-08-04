@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-22T12:42:32+02:00
+ * last-updated: 2015-08-04T04:10:59+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Impostazioni avanzate';
@@ -49,6 +49,7 @@ $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['0']       = 'Definisci l\
 $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['1']       = 'Definisci l\'impostazione di rendering per il MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['0']                 = 'Dettagli MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['1']                 = 'Mostra i dettagli del MetaModel ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel']['sorting']['0']              = 'Ordinamento';
 $GLOBALS['TL_LANG']['tl_metamodel']['tableName']['0']            = 'Nome tabella';
 $GLOBALS['TL_LANG']['tl_metamodel']['tableName']['1']            = 'Nome della tabella per memorizzare gli elementi.';
 $GLOBALS['TL_LANG']['tl_metamodel']['title_legend']              = 'Nome e tabella';

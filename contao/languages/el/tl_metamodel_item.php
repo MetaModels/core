@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T06:40:07+02:00
+ * last-updated: 2015-08-04T04:10:59+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_item']['copy']['0']          = 'Αντιγραφη στιχειου';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['copy']['1']          = 'Αντιγραφή στοιχειου ID%s ';
@@ -28,9 +27,13 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['fields']['0']        = 'Διαχειρ
 $GLOBALS['TL_LANG']['tl_metamodel_item']['fields']['1']        = 'ΔΙαχειριση χαρακτηριστικων του MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['new']['0']           = 'Νέο στοιχειο';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['new']['1']           = 'Δημιουργία νέου στοιχείου ';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['pasteafter']['0']    = 'Δημιουργία νέου στοιχείου ';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['pasteafter']['1']    = 'Δημιουργια νεου στοιχειου μετα το στοιχειο ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['pasteinto']['0']     = 'Δημιουργία νέου στοιχείου ';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']['0']      = 'Δημιουργία νέου στοιχείου ';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']['1']      = 'Δημιουργια νεου στοιχειου μετα το στοιχειο ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['show']['0']          = 'Λεπτομερειες στοιχειου ';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['show']['1']          = ' Λεπτομερειες στοιχειου ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['varbase']['0']       = 'ειναι μια βαση παραλλαγης';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['varbase']['1']       = 'Ελέγξτε αυτό, αν θέλετε να κάνετε αυτή τη βάση για την τρέχουσα ομάδα παραλλαγής';
+

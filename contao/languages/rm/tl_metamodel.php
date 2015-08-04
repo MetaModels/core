@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2015-08-04T04:10:59+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Configuraziun extendida';
 $GLOBALS['TL_LANG']['tl_metamodel']['copy']['0']                 = 'Copiar la definiziun dal MetaModel';
@@ -50,6 +49,7 @@ $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['0']       = 'Definir la c
 $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['1']       = 'Definir la configuraziun da visualisar per il MetaModel cun l\'ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['0']                 = 'Detagls dal MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['1']                 = 'Mussar ils detagls dal MetaModel cun l\'ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel']['sorting']['0']              = 'Zavrar';
 $GLOBALS['TL_LANG']['tl_metamodel']['tableName']['0']            = 'Num da tabella';
 $GLOBALS['TL_LANG']['tl_metamodel']['tableName']['1']            = 'Num da la tabella da la banca da datas che duai cuntegnair ils elements.';
 $GLOBALS['TL_LANG']['tl_metamodel']['title_legend']              = 'Num e tabella';
@@ -60,3 +60,4 @@ $GLOBALS['TL_LANG']['tl_metamodel']['tstamp']['0']               = 'Data da la v
 $GLOBALS['TL_LANG']['tl_metamodel']['tstamp']['1']               = 'Data e temp da l\'ultima versiun';
 $GLOBALS['TL_LANG']['tl_metamodel']['varsupport']['0']           = 'Support da variantas';
 $GLOBALS['TL_LANG']['tl_metamodel']['varsupport']['1']           = 'Tscherna questa chaschetta sche quest MetaModel duai sustegnair variantas dad elements.';
+

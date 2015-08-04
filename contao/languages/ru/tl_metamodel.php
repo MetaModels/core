@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-12-14T12:13:42+01:00
+ * last-updated: 2015-08-04T04:10:59+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Дополнительные параметры';
@@ -49,6 +49,7 @@ $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['0']       = 'Опреде
 $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['1']       = 'Определить настройки отображения MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['0']                 = 'Детали MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['1']                 = 'Показать детали MetaModel ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel']['sorting']['0']              = 'Сортировка';
 $GLOBALS['TL_LANG']['tl_metamodel']['tableName']['0']            = 'Имя таблицы';
 $GLOBALS['TL_LANG']['tl_metamodel']['tableName']['1']            = 'Имя таблицы в базе данных для хранения элементов.';
 $GLOBALS['TL_LANG']['tl_metamodel']['title_legend']              = 'Имя и таблица';
