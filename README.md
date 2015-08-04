@@ -1,5 +1,8 @@
-[![Build Status](https://travis-ci.org/MetaModels/core.png?branch=tng)](https://travis-ci.org/MetaModels/core)
-[![Dependency Status](https://www.versioneye.com/user/projects/54b90e4f8d55087422000002/badge.svg?style=flat)](https://www.versioneye.com/user/projects/54b90e4f8d55087422000002)
+[![Build Status](https://travis-ci.org/MetaModels/core.png)](https://travis-ci.org/MetaModels/core)
+[![Latest Version tagged](http://img.shields.io/github/tag/MetaModels/core.svg)](https://github.com/MetaModels/core/tags)
+[![Latest Version on Packagist](http://img.shields.io/packagist/v/MetaModels/core.svg)](https://packagist.org/packages/MetaModels/core)
+[![Installations via composer per month](http://img.shields.io/packagist/dm/MetaModels/core.svg)](https://packagist.org/packages/MetaModels/core)
+[![Dependency Status](https://www.versioneye.com/php/metamodels:core/badge.svg)](https://www.versioneye.com/php/metamodels:core)
 
 MetaModels
 ==========
