@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:10:59+02:00
+ * last-updated: 2015-08-04T04:14:41+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Дополнительные параметры';
@@ -31,6 +31,9 @@ $GLOBALS['TL_LANG']['tl_metamodel']['fields']['1']               = 'Опреде
 $GLOBALS['TL_LANG']['tl_metamodel']['filter']['0']               = 'Определить фильтры';
 $GLOBALS['TL_LANG']['tl_metamodel']['filter']['1']               = 'Определить фильтры MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemFormat']                = '%s %s';
+$GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['0']      = '%s элементов';
+$GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['1']      = '%s элемент';
+$GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['2:']     = '%s элементов';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemPlural']                = 'элементы';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemSingle']                = 'элемент';
 $GLOBALS['TL_LANG']['tl_metamodel']['languages']['0']            = 'Языки представленные для перевода';
@@ -47,9 +50,12 @@ $GLOBALS['TL_LANG']['tl_metamodel']['new']['0']                  = 'Новый M
 $GLOBALS['TL_LANG']['tl_metamodel']['new']['1']                  = 'Создать новый MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['0']       = 'Определить настройки отображения';
 $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['1']       = 'Определить настройки отображения MetaModel ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel']['searchable_pages']['0']     = 'Определить настройки поиска';
+$GLOBALS['TL_LANG']['tl_metamodel']['searchable_pages']['1']     = 'Определить настройки поиска для MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['0']                 = 'Детали MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['1']                 = 'Показать детали MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['sorting']['0']              = 'Сортировка';
+$GLOBALS['TL_LANG']['tl_metamodel']['sorting']['1']              = 'Порядок сортировки элементов.';
 $GLOBALS['TL_LANG']['tl_metamodel']['tableName']['0']            = 'Имя таблицы';
 $GLOBALS['TL_LANG']['tl_metamodel']['tableName']['1']            = 'Имя таблицы в базе данных для хранения элементов.';
 $GLOBALS['TL_LANG']['tl_metamodel']['title_legend']              = 'Имя и таблица';

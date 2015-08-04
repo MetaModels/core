@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-07-13T12:13:35+02:00
+ * last-updated: 2015-08-04T04:11:00+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Поиск на всех языках';
@@ -26,6 +26,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy']['0']                 =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy']['1']                 = 'Копировать настройки фильтра ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql']['0']            = 'Пользовательский SQL-запрос';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql']['1']            = 'SQL-запрос, который должен быть выполнен, вставка тегов поддерживается.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cut']['0']                  = 'Вырезать определение настроек фильтра';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cut']['1']                  = 'Вырезать параметр фильтра ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid']['0']            = 'По умолчанию';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid']['1']            = 'Значение по умолчанию для выделения.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete']['0']               = 'Удалить настройки фильтра';
@@ -34,6 +36,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit']['0']                 =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit']['1']                 = 'Редактировать настройки фильтра ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['enabled']['0']              = 'Включить';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['enabled']['1']              = 'Включить эту настройку фильтра.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fefilter_legend']           = 'Фильтр внешнего интерфейса';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['0']                  = 'Родительская коллекция';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['1']                  = 'Коллекция настроек фильтра, эта установка относится.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['0']                = 'Метка';
