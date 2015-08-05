@@ -359,10 +359,12 @@ class PasteButton extends BaseSubscriber
      */
     protected function checkModelWithoutVariants($containedModel)
     {
+        $parentDefinition = $this->environment->getDataDefinition()->getBasicDefinition()->getParentDataProvider();
+
         $this->disablePA = ($this->currentModel->getId() == $containedModel->getId())
-            || ($this->currentModel->getProperty('pid') == $containedModel->getProperty('pid'));
+            || ($parentDefinition && $this->currentModel->getProperty('pid') == $containedModel->getProperty('pid'));
         $this->disablePI = ($this->circularReference)
             || ($this->currentModel->getId() == $containedModel->getId())
-            || ($this->currentModel->getProperty('pid') == $containedModel->getId());
+            || ($parentDefinition && $this->currentModel->getProperty('pid') == $containedModel->getId());
     }
 }
