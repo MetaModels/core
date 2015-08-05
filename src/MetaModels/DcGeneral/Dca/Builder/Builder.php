@@ -946,6 +946,9 @@ class Builder
             $listing->setRootIcon($icon);
         }
 
+        $this->parseListSorting($listing);
+        $this->parseListLabel($container, $listing);
+
         if ($inputScreen = $this->getInputScreenDetails()) {
             $listing->setShowColumns($inputScreen->isShowColumns());
             $renderSetting = $this
@@ -959,10 +962,10 @@ class Builder
                 ->serviceContainer
                 ->getRenderSettingFactory()
                 ->createCollection($metaModel, $renderSetting);
-            $listing->setHeaderPropertyNames($renderSettingCollection->getSettingNames());
+            $listing
+                ->getLabelFormatter($container->getName())
+                ->setPropertyNames($renderSettingCollection->getSettingNames());
         }
-        $this->parseListSorting($listing);
-        $this->parseListLabel($container, $listing);
     }
 
     /**
