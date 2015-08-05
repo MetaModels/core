@@ -238,13 +238,19 @@ class PasteButton extends BaseSubscriber
         /** @var ItemInterface[] $items */
         foreach ($items as $item) {
             // Check the context.
-            $itemProviderName = $item->getModelId()->getDataProviderName();
-            $modelId          = $item->getModelId()->getId();
+            $itemProviderName = $item->getDataProviderName();
+            $modelId          = $item->getModelId();
+
             if ($this->providerName !== $itemProviderName) {
                 continue;
             }
 
-            $containedModel = $this->getModelById($modelId);
+            if (!$modelId) {
+                $this->checkEmpty($action);
+                continue;
+            }
+
+            $containedModel = $this->getModelById($modelId->getId());
             if ($this->currentModel == null) {
                 $this->checkForRoot($containedModel, $action);
             } elseif ($containedModel) {
