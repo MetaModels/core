@@ -114,7 +114,7 @@ class InputScreenGroupingAndSorting implements IInputScreenGroupingAndSorting
             if ($metaModel) {
                 $attribute = $metaModel->getAttributeById($this->data['rendersortattr']);
                 if ($attribute) {
-                    $attribute->getColName();
+                    return $attribute->getColName();
                 }
             }
         }
