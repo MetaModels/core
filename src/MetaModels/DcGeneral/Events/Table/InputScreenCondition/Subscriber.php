@@ -297,7 +297,6 @@ class Subscriber extends BaseSubscriber
         $allowedAttributes = $GLOBALS['METAMODELS']['inputscreen_conditions'][$conditionType]['attributes'];
 
         foreach ($metaModel->getAttributes() as $attribute) {
-
             if (is_array($allowedAttributes) && !in_array($attribute->get('type'), $allowedAttributes)) {
                 continue;
             }

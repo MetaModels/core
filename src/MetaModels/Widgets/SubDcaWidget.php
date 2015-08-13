@@ -28,8 +28,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Provide methods to handle multiple widgets in one.
- *
- *
  */
 class SubDcaWidget extends \Widget
 {

@@ -256,6 +256,7 @@ class Items implements IItems
 
     /**
      * {@inheritdoc}
+     *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function parseAll($strOutputFormat = 'text', $objSettings = null)

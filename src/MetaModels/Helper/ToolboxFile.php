@@ -297,7 +297,6 @@ class ToolboxFile
     public function addPath($strPath)
     {
         // FIXME: we should change this to utilize the dbafs.
-
         if (is_file(TL_ROOT . DIRECTORY_SEPARATOR . $strPath)) {
             $strExtension = pathinfo(TL_ROOT . DIRECTORY_SEPARATOR . $strPath, PATHINFO_EXTENSION);
             if (in_array(strtolower($strExtension), $this->acceptedExtensions)) {
@@ -527,8 +526,7 @@ class ToolboxFile
      */
     public function sortFiles($sortType)
     {
-        switch ($sortType)
-        {
+        switch ($sortType) {
             case 'name_desc':
                 return $this->sortByName(false);
 

@@ -228,8 +228,7 @@ class Subscriber extends BaseSubscriber
 
         $model = $event->getModel();
 
-        switch ($model->getProperty('dcatype'))
-        {
+        switch ($model->getProperty('dcatype')) {
             case 'attribute':
                 self::drawAttribute($event);
                 break;

@@ -92,8 +92,7 @@ class SubSystemBootTest extends TestCase
             array(
                 MetaModelsEvents::SUBSYSTEM_BOOT,
                 MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND
-            ),
-            1
+            )
         );
 
         $environment = $this->getMock('Contao\Environment', array('get'), array(), '', false);
@@ -144,8 +143,7 @@ class SubSystemBootTest extends TestCase
             array(
                 MetaModelsEvents::SUBSYSTEM_BOOT,
                 MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND
-            ),
-            1
+            )
         );
 
         $environment = $this->getMock('Contao\Environment', array('get'), array(), '', false);

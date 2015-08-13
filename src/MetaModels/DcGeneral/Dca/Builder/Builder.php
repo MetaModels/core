@@ -377,8 +377,7 @@ class Builder
     {
         // Parse each type.
         foreach ($fields as $field) {
-            switch ($field)
-            {
+            switch ($field) {
                 case 'sort':
                     $this->parsePanelSort($panelRow);
                     break;
@@ -1521,7 +1520,9 @@ class Builder
      * @param IMetaModelDataDefinition              $container The metamodel data definition.
      *
      * @return void
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function addSelectCommand(Contao2BackendViewDefinitionInterface $view, $container)
     {

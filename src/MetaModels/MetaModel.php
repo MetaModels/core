@@ -126,8 +126,8 @@ class MetaModel implements IMetaModel
             $unSerialized = unserialize($value);
         }
 
-        if (isset ($unSerialized) && is_array($unSerialized)) {
-            return  $unSerialized;
+        if (isset($unSerialized) && is_array($unSerialized)) {
+            return $unSerialized;
         }
 
         return $value;

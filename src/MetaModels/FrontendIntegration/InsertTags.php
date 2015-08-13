@@ -27,22 +27,23 @@ use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\ItemList;
 
-/** @codingStandardsIgnoreStart
+/**
  * This class handles the replacement of all MetaModels insert tags.
  *
+ * @codingStandardsIgnoreStart
  * Available insert tags:
- * 
+ *
  * -- Total Count --
  * mm::total::mod::[id]
  * mm::total::ce::[id]
- * 
+ *
  * -- Item --
  * mm::item::[MM Name|ID]::[Item ID|ID,ID,ID]::[ID render setting](::[Output raw|text|html|..])
  * mm::detail::[MM Name|ID]::[Item ID]::[ID render setting](::[Output raw|text|html|..])
- * 
+ *
  * -- Attribute --
  * mm::attribute::[MM Name|ID]::[Item ID]::[Attribute Name|ID](::[Output raw|text|html|..])
- * 
+ *
  * -- JumpTo --
  * mm::jumpTo::[MM Name|ID]::[Item ID]::[ID render setting](::[Parameter (Default:url)|label|page|params.attname])
  *
@@ -81,8 +82,7 @@ class InsertTags extends \Controller
 
         try {
             // Call the fitting function.
-            switch ($arrElements[1])
-            {
+            switch ($arrElements[1]) {
                 // Count for mod or ce elements.
                 case 'total':
                     return $this->getCount($arrElements[2], $arrElements[3]);
@@ -269,8 +269,7 @@ class InsertTags extends \Controller
      */
     protected function getCount($strType, $intID)
     {
-        switch ($strType)
-        {
+        switch ($strType) {
             // From module, can be a MetaModel list or filter.
             case 'mod':
                 $objMetaModelResult = $this->getMetaModelDataFrom('tl_module', $intID);

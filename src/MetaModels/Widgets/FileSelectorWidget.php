@@ -66,7 +66,6 @@ class FileSelectorWidget extends \FileSelector
 
             // Compatibility with Contao pre 3.3 which utilizes the $GLOBALS array directly.
             if (!isset($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField])) {
-
                 $environment         = $this->objDca->getEnvironment();
                 $propertyDefinitions = $environment->getDataDefinition()->getPropertiesDefinition();
 

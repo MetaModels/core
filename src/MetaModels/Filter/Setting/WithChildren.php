@@ -39,9 +39,7 @@ abstract class WithChildren extends Simple implements IWithChildren
     protected $arrChildren = array();
 
     /**
-     *
      * {@inheritdoc}
-     *
      */
     public function addChild(ISimple $objFilterSetting)
     {

@@ -201,8 +201,7 @@ class CustomSql extends Simple
      */
     private function getValueFromSource($source, $valueName, $arguments)
     {
-        switch(strtolower($source))
-        {
+        switch (strtolower($source)) {
             case 'get':
                 return \Input::get($valueName);
 

@@ -26,7 +26,6 @@ namespace MetaModels\Attribute;
  * Simple attributes are attributes that only consist of one column in the metamodel table and therefore do not need
  * to be handled as complex fields must be.
  */
-// FIXME: Should be renamed to ISimpleAttribute
 interface ISimple extends IAttribute
 {
     /**

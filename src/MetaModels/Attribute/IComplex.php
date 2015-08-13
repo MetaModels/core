@@ -26,7 +26,6 @@ namespace MetaModels\Attribute;
  * Complex attributes are attributes that can not be fetched with a simple:
  * "SELECT colName FROM mm_table" and therefore need to be handled differently.
  */
-// FIXME: Should be renamed to IComplexAttribute
 interface IComplex extends IAttribute
 {
     /**

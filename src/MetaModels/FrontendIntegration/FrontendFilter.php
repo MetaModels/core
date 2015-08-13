@@ -402,8 +402,7 @@ class FrontendFilter
                 PREG_SET_ORDER
             )) {
                 foreach ($arrMatches as $arrMatch) {
-                    switch ($arrMatch[1])
-                    {
+                    switch ($arrMatch[1]) {
                         case 'ce':
                             $strContent = $this->generateContentElement($strContent, $arrMatch[0], $arrMatch[2]);
                             break;

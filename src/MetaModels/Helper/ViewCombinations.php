@@ -107,7 +107,6 @@ abstract class ViewCombinations
     protected function calculateCacheKey()
     {
         $key = 'view_combination_' . strtolower(TL_MODE);
-        // Determine file key.
 
         // Authenticate the user - if this fails, we use an anonymous cache file.
         if ($this->authenticateUser()) {

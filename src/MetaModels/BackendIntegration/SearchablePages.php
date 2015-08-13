@@ -385,9 +385,8 @@ class SearchablePages
      *
      * @return array
      *
-     * @see    \RebuildIndex::run()
-     *
-     * @see    \Automator::generateSitemap()
+     * @see \RebuildIndex::run()
+     * @see \Automator::generateSitemap()
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

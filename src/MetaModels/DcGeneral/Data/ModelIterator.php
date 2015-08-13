@@ -20,7 +20,6 @@
 
 namespace MetaModels\DcGeneral\Data;
 
-
 /**
  * Iterator class for allowing usage of MetaModels\DcGeneral\Data\Model
  * in foreach constructs.

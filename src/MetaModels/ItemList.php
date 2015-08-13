@@ -225,6 +225,7 @@ class ItemList implements IServiceContainerAware
      * @param string $strFormat The name of the template output format to use.
      *
      * @return ItemList
+     *
      * @deprecated Use overrideOutputFormat instead
      */
     public function setTemplateFormat($strFormat)

@@ -25,7 +25,6 @@ namespace MetaModels\Attribute;
  * To create MetaModelAttribute instances, use the @link{MetaModelAttributeFactory}
  * This interface handles all interfacing needed for translated attributes.
  */
-// FIXME: Should be renamed to ITranslatedAttribute
 interface ITranslated extends IAttribute
 {
     /**

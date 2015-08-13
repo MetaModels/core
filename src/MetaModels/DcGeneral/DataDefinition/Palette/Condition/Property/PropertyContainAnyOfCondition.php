@@ -12,6 +12,7 @@
  *
  * @package    MetaModels
  * @author     Christopher Boelter <christopher@boelter.eu>
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  2012-2015 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -30,7 +31,6 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
  */
 class PropertyContainAnyOfCondition implements PropertyConditionInterface
 {
-
     /**
      * The property name.
      *
@@ -73,7 +73,7 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
      *
      * @param string $propertyName The property name.
      *
-     * @return PropertyMultipleValueCondition
+     * @return PropertyContainAnyOfCondition
      */
     public function setPropertyName($propertyName)
     {
@@ -96,7 +96,7 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
      *
      * @param mixed $propertyValue The value.
      *
-     * @return PropertyMultipleValueCondition
+     * @return PropertyContainAnyOfCondition
      */
     public function setPropertyValue($propertyValue)
     {
@@ -119,7 +119,7 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
      *
      * @param boolean $strict The flag.
      *
-     * @return PropertyMultipleValueCondition
+     * @return PropertyContainAnyOfCondition
      */
     public function setStrict($strict)
     {

@@ -235,7 +235,7 @@ abstract class Base implements IAttribute
                 $unSerialized = unserialize($varValue);
             }
 
-            if (isset ($unSerialized) && is_array($unSerialized)) {
+            if (isset($unSerialized) && is_array($unSerialized)) {
                 $this->arrData[$strKey] = $unSerialized;
             } else {
                 $this->arrData[$strKey] = $varValue;
@@ -568,6 +568,7 @@ abstract class Base implements IAttribute
      * {@inheritdoc}
      *
      * Base implementation, return empty array.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function filterGreaterThan($varValue, $blnInclusive = false)
@@ -579,6 +580,7 @@ abstract class Base implements IAttribute
      * {@inheritdoc}
      *
      * Base implementation, return empty array.
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function filterLessThan($varValue, $blnInclusive = false)

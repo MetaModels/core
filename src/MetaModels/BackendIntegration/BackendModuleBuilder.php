@@ -247,8 +247,7 @@ class BackendModuleBuilder
             foreach ($parentTables as $parentTable => $childTables) {
                 foreach ($localMenu as $groupName => $modules) {
                     foreach ($modules as $moduleName => $moduleConfiguration) {
-                        if (
-                            isset($moduleConfiguration['tables'])
+                        if (isset($moduleConfiguration['tables'])
                             && in_array($parentTable, $moduleConfiguration['tables'])
                         ) {
                             // First put them into our private list.

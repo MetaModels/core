@@ -50,8 +50,7 @@ class MultiTextWidget extends \Widget
      */
     public function __set($strKey, $varValue)
     {
-        switch ($strKey)
-        {
+        switch ($strKey) {
             case 'maxlength':
                 if ($varValue > 0) {
                     $this->arrAttributes['maxlength'] = $varValue;
