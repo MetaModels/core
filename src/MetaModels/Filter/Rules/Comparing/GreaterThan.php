@@ -1,17 +1,20 @@
 <?php
+
 /**
- * The MetaModels extension allows the creation of multiple collections of custom items,
- * each with its own unique set of selectable attributes, with attribute extendability.
- * The Front-End modules allow you to build powerful listing and filtering of the
- * data in each collection.
+ * This file is part of MetaModels/core.
  *
- * PHP version 5
+ * (c) 2012-2015 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
  *
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  The MetaModels team.
- * @license    LGPL.
+ * @copyright  2012-2015 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
@@ -22,10 +25,6 @@ use MetaModels\Filter\IFilterRule;
 
 /**
  * This is the MetaModelFilterRule class for handling "greater-than" comparison on attributes.
- *
- * @package    MetaModels
- * @subpackage Core
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  */
 class GreaterThan implements IFilterRule
 {
