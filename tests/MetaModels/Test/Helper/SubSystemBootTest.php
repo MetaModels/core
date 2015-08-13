@@ -95,15 +95,10 @@ class SubSystemBootTest extends TestCase
             )
         );
 
-        $environment = $this->getMock('Contao\Environment', array('get'), array(), '', false);
+        $environment = \Contao\Environment::getInstance();
         $container   = new MetaModelsServiceContainer();
         $container->setEventDispatcher($dispatcher);
-
-        $environment
-            ->expects($this->any())
-            ->method('get')
-            ->with('script')
-            ->will($this->returnValue('contao/main.php'));
+        $environment::set('script', 'index.php');
 
         $boot = $this->getMock('MetaModels\Helper\SubSystemBoot', array('getMode', 'metaModelsTablesPresent'));
         $boot
@@ -146,15 +141,10 @@ class SubSystemBootTest extends TestCase
             )
         );
 
-        $environment = $this->getMock('Contao\Environment', array('get'), array(), '', false);
+        $environment = \Contao\Environment::getInstance();
         $container   = new MetaModelsServiceContainer();
         $container->setEventDispatcher($dispatcher);
-
-        $environment
-            ->expects($this->any())
-            ->method('get')
-            ->with('script')
-            ->will($this->returnValue('contao/main.php'));
+        $environment::set('script', 'contao/main.php');
 
         $boot = $this->getMock('MetaModels\Helper\SubSystemBoot', array('getMode', 'metaModelsTablesPresent'));
         $boot
