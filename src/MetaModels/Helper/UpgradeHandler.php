@@ -61,7 +61,9 @@ class UpgradeHandler
                 'metamodel_jumpTo',
                 'int(10) unsigned NOT NULL default \'0\''
             );
-            $objDB->execute('UPDATE tl_content SET metamodel_jumpTo=jumpTo;');
+            if ($objDB->fieldExists('jumpTo', 'tl_content', true)) {
+                $objDB->execute('UPDATE tl_content SET metamodel_jumpTo=jumpTo;');
+            }
         }
 
         if ($objDB->tableExists('tl_module', null, true)
@@ -73,7 +75,9 @@ class UpgradeHandler
                 'metamodel_jumpTo',
                 'int(10) unsigned NOT NULL default \'0\''
             );
-            $objDB->execute('UPDATE tl_module SET metamodel_jumpTo=jumpTo;');
+            if ($objDB->fieldExists('jumpTo', 'tl_module', true)) {
+                $objDB->execute('UPDATE tl_module SET metamodel_jumpTo=jumpTo;');
+            }
         }
     }
 
