@@ -45,7 +45,8 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['metamodels_frontendclearall'] =
     '{protected_legend:hide},protected;' .
     '{expert_legend:hide},guests,cssID,space';
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'metamodel_use_limit,metamodel_sort_override';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'metamodel_use_limit';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'metamodel_sort_override';
 
 // Insert new Subpalettes after position 1.
 array_insert(
