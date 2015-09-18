@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2015-08-04T04:10:59+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Das Attribut "%s" wurde der Eingabemaske hinzugefügt.';
@@ -29,6 +29,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['chosen']['0']                  =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['chosen']['1']                  = '\'Chosen\' für die Auswahl aktivieren.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['cols']['0']                    = 'Spalten';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['cols']['1']                    = 'Anzahl der Spalten die für longtext / table Widget verwenden werden';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['conditions']['0']              = 'Ansichtsbedingungen verwalten';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['conditions']['1']              = 'Verwalten Sie die Ansichtsbedingungen der Eigenschaft ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['config_legend']                = 'Einstellungen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy']['0']                    = 'Kopiere Einstellung';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy']['1']                    = 'Kopiere Einstellung ID %s';
@@ -90,6 +92,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['9']             =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['spaceToUnderscore']['0']       = 'Leerzeichen durch Unterstriche ersetzen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['spaceToUnderscore']['1']       = 'Falls diese Option angewählt ist werden Leerzeichen durch Unterstriche ersetzt.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker']                  = 'CSS-Wizard';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['submitOnChange']['0']          = 'Absenden bei Änderungen';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['submitOnChange']['1']          = 'Wenn aktiv, wird das Formular bei Änderungen eines Feldwertes abgesendet.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['subpalette']['0']              = 'Unterbereiche verwalten';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['subpalette']['1']              = 'Verwalten Sie die Unterbereiche für die Eingabemaske ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['0']                = 'Angepasstes Template für die Ausgabe';
@@ -102,3 +106,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['1']           =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['0']   = 'Schrägstrich beim Speichern entfernen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['1']   = 'Schrägstrich beim Speichern hinzufügen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['2']   = 'Nichts tun';
+

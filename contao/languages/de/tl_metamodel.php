@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:10:59+02:00
+ * last-updated: 2015-08-04T04:14:41+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Erweiterte Einstellungen';
@@ -31,6 +31,9 @@ $GLOBALS['TL_LANG']['tl_metamodel']['fields']['1']               = 'Attribute f�
 $GLOBALS['TL_LANG']['tl_metamodel']['filter']['0']               = 'Filter definieren';
 $GLOBALS['TL_LANG']['tl_metamodel']['filter']['1']               = 'Filter für MetaModel ID %s definieren';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemFormat']                = '%s %s';
+$GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['0']      = '%s Datensätze';
+$GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['1']      = '%s Datensätze';
+$GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['2:']     = '%s Datensätze';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemPlural']                = 'Datensätze';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemSingle']                = 'Datensatz';
 $GLOBALS['TL_LANG']['tl_metamodel']['languages']['0']            = 'Sprachen für die Übersetzungen';
@@ -47,9 +50,12 @@ $GLOBALS['TL_LANG']['tl_metamodel']['new']['0']                  = 'Neues MetaMo
 $GLOBALS['TL_LANG']['tl_metamodel']['new']['1']                  = 'Ein neues MetaModel erstellen.';
 $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['0']       = 'Renderingeinstellungen definieren';
 $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['1']       = 'Render-Einstellungen für MetaModel ID %s definieren';
+$GLOBALS['TL_LANG']['tl_metamodel']['searchable_pages']['0']     = 'Einstellungen der Suche festlegen.';
+$GLOBALS['TL_LANG']['tl_metamodel']['searchable_pages']['1']     = 'Sucheinstellungen für MetaModel ID %s einstellen.';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['0']                 = 'MetaModel-Details';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['1']                 = 'Die Details des MetaModels ID %s anzeigen.';
 $GLOBALS['TL_LANG']['tl_metamodel']['sorting']['0']              = 'Sortierung';
+$GLOBALS['TL_LANG']['tl_metamodel']['sorting']['1']              = 'Sortierungsreihenfolge der Datensätze.';
 $GLOBALS['TL_LANG']['tl_metamodel']['tableName']['0']            = 'Tabellenname';
 $GLOBALS['TL_LANG']['tl_metamodel']['tableName']['1']            = 'Name der Datenbank-Tabelle, in der die Items gespeichert werden.';
 $GLOBALS['TL_LANG']['tl_metamodel']['title_legend']              = 'Name und Tabelle';

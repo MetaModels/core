@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-10-29T12:13:24+01:00
+ * last-updated: 2015-08-04T04:10:59+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Alle Sprachen durchsuchen';
@@ -26,6 +26,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy']['0']                 =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy']['1']                 = 'Kopieren Sie die Filtereinstellung ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql']['0']            = 'Eigene SQL-Abfrage';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql']['1']            = 'Die SQL-Abfrage eingeben, die ausgeführt werden soll. Insert-Tags werden unterstützt.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cut']['0']                  = 'Filtereinstellungen ausschneiden';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cut']['1']                  = 'Filtereinstellungen ausschneiden ID %';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid']['0']            = 'Standard';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid']['1']            = 'Standardwert für die Auswahl.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete']['0']               = 'Filtereinstellung löschen';
@@ -34,6 +36,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit']['0']                 =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit']['1']                 = 'Die Filtereinstellung ID %s bearbeiten';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['enabled']['0']              = 'Aktiviert';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['enabled']['1']              = 'Aktivieren Sie diese Filtereinstellung.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fefilter_legend']           = 'Frontendfilter';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['0']                  = 'Aus übergeordnetem Element';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['1']                  = 'Filtereinstellung(en), zu denen diese Einstellungen gehören.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['0']                = 'Label';
