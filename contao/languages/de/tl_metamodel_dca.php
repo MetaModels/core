@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-10-29T12:13:25+01:00
+ * last-updated: 2015-08-04T04:10:59+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']            = 'Backend-Integration';
@@ -28,14 +28,21 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['copy']['0']                 = 'Eingabem
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['copy']['1']                 = 'Kopieren Sie die Definition der Eingabemaske ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['delete']['0']               = 'Eingabemaske löschen';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['delete']['1']               = 'Löschen Sie die Eingabemaske ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['display_legend']            = 'Anzeigeeinstellungen';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']['0']                 = 'Eingabemaske bearbeiten';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']['1']                 = 'Bearbeiten Sie die Eingabemaske ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']['0']                 = 'Sortier-Flag';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']['1']                 = 'Sortiermodus für die Item-Ansicht';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed']['0']             = 'Nur die Bearbeitung erlauben';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed']['1']             = 'Wenn aktiviert, erlaubt dieser Input-Screen nur das bearbeiten der Einträge. Die Erstell- und Löschfunktion wird deaktiviert.';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['iscreatable']['0']          = 'Erstellen erlauben';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['iscreatable']['1']          = 'Ist die Checkbox gesetzt, können Datensätze erstellt werden.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['0']            = 'Als Standard verwenden';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['1']            = 'Bestimmt, dass diese Eingabemaske als Standard für das Eltern-MetaModel benutzt wird.';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdeleteable']['0']         = 'Löschen erlauben';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdeleteable']['1']         = 'Ist die Checkbox gesetzt, können Datensätze gelöscht werden.';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['iseditable']['0']           = 'Bearbeitung erlauben';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['iseditable']['1']           = 'Ist die Checkbox gesetzt, können Datensätze bearbeitet werden.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['0']  = 'Die Rendering-Einstellung begrenzen';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['1']  = 'Wählen Sie zwischen Frontend und Backend aus.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']['0']                 = 'Sortiermodus';
@@ -47,8 +54,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']['1']                  = 'Erstelle
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['0']          = 'Panel-Layout ';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['1']          = 'Separate Bedienfeldoptionen mit Komma (= Raum) und Semikolon (= neue Zeile) wie Sortieren, Filtern, suchen begrenzen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker']               = 'Panelpicker';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['permissions_legend']        = 'Berechtigungen zur Datenanpassung';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['0']               = 'Name der Elterntabelle (falls zutreffend)';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['1']               = 'Name der Datenbanktabelle, die als Elterntabelle benutzt werden soll';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermode']['0']           = 'Rendering-Modus';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermode']['1']           = 'Wählen Sie ein gewünschtes Rendering aus.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype']['0']           = 'Integration';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype']['1']           = 'Die gewünschte Integrationsart im Backend auswählen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes']['ctable']     = 'Als Kind-Tabelle';
