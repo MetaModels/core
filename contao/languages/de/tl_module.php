@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:10:59+02:00
+ * last-updated: 2015-09-18T12:13:37+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_module']['editfiltersetting']['0']              = 'Filtereinstellungen bearbeiten';
@@ -52,7 +52,7 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_offset']['1']               = 'Bitte
 $GLOBALS['TL_LANG']['tl_module']['metamodel_rendersettings']['0']       = 'Anzuwendende Renderingeinstellungen';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_rendersettings']['1']       = 'Wählen Sie die Rendering-Einstellung aus, die für die Ausgabe benutzt werden sollen. Falls Sie dieses Feld leer lassen, werden die Standardeinstellungen für dieses MetaModel benutzt. Falls keine Standardeinstellung vorhanden ist werden nur die Rohwerte ausgegeben.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sort_override']['0']        = 'Überschreiben der Sortierung erlauben';
-$GLOBALS['TL_LANG']['tl_module']['metamodel_sort_override']['1']        = 'Wenn aktiviert werden die Sortierungsattribute und -anweisungen mit einem GET-Parameter überschrieben.';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_sort_override']['1']        = 'Wenn aktiviert können die Sortierungsattribute und -anweisungen mit einer URL der Form \'/orderBy/<Spaltenname d. Attributs>/orderDir/<DESC || ASC>.html\' oder per GET-Parameter überschrieben werden.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby']['0']               = 'Sortieren nach';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby']['1']               = 'Bitte wählen Sie eine Reihenfolge für die Sortierung aus.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby_direction']['0']     = 'Sortierreihenfolge';
