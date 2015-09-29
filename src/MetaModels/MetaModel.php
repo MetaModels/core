@@ -18,6 +18,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Martin Treml <github@r2pi.net>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2015 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -898,19 +899,21 @@ class MetaModel implements IMetaModel
     /**
      * Update the variants with the value if needed.
      *
-     * @param IItem  $item           The item to save.
+     * @param IItem      $item           The item to save.
      *
-     * @param string $activeLanguage The language the values are in.
+     * @param string     $activeLanguage The language the values are in.
      *
-     * @param int[]  $allIds         The ids of all variants.
+     * @param int[]      $allIds         The ids of all variants.
+     *
+     * @param IItem|null $objBase        The base object for variants.
      *
      * @return void
      */
-    protected function updateVariants($item, $activeLanguage, $allIds)
+    protected function updateVariants($item, $activeLanguage, $allIds, $objBase = null)
     {
         foreach ($this->getAttributes() as $strAttributeId => $objAttribute) {
-            if ($item->isVariant() && !($objAttribute->get('isvariant'))) {
-                // Base not found, skip attribute.
+            if ($item->isVariant() && !$objBase) {
+                // Base not passed, skip attribute.
                 continue;
             }
 
@@ -1000,7 +1003,13 @@ class MetaModel implements IMetaModel
             }
         }
 
-        $this->updateVariants($objItem, $strActiveLanguage, $arrAllIds);
+        // Fetch the base when handling an variant.
+        $objBase = null;
+        if ($objItem->isVariant()) {
+            $objBase = $this->findById($objItem->get('vargroup'));
+        }
+
+        $this->updateVariants($objItem, $strActiveLanguage, $arrAllIds, $objBase);
 
         // Tell all attributes that the model has been saved. Useful for alias fields, edit counters etc.
         foreach ($this->getAttributes() as $objAttribute) {
