@@ -905,11 +905,18 @@ class MetaModel implements IMetaModel
      *
      * @param int[]  $allIds         The ids of all variants.
      *
+     * @param bool   $baseAttributes If also the base attributes get updated as well.
+     *
      * @return void
      */
-    protected function updateVariants($item, $activeLanguage, $allIds)
+    protected function updateVariants($item, $activeLanguage, $allIds, $baseAttributes = false)
     {
         foreach ($this->getAttributes() as $strAttributeId => $objAttribute) {
+            if ($item->isVariant() && !($objAttribute->get('isvariant')) && !$baseAttributes) {
+                // Skip base attribute.
+                continue;
+            }
+
             if ($item->isVariantBase() && !($objAttribute->get('isvariant'))) {
                 // We have to override in variants.
                 $arrIds = $allIds;
@@ -967,8 +974,10 @@ class MetaModel implements IMetaModel
      */
     public function saveItem($objItem)
     {
+        $baseAttributes = false;
         $objItem->set('tstamp', time());
         if (!$objItem->get('id')) {
+            $baseAttributes = true;
             $this->createNewItem($objItem);
         }
 
@@ -996,7 +1005,7 @@ class MetaModel implements IMetaModel
             }
         }
 
-        $this->updateVariants($objItem, $strActiveLanguage, $arrAllIds);
+        $this->updateVariants($objItem, $strActiveLanguage, $arrAllIds, $baseAttributes);
 
         // Tell all attributes that the model has been saved. Useful for alias fields, edit counters etc.
         foreach ($this->getAttributes() as $objAttribute) {
