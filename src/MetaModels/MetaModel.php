@@ -899,24 +899,17 @@ class MetaModel implements IMetaModel
     /**
      * Update the variants with the value if needed.
      *
-     * @param IItem      $item           The item to save.
+     * @param IItem  $item           The item to save.
      *
-     * @param string     $activeLanguage The language the values are in.
+     * @param string $activeLanguage The language the values are in.
      *
-     * @param int[]      $allIds         The ids of all variants.
-     *
-     * @param IItem|null $objBase        The base object for variants.
+     * @param int[]  $allIds         The ids of all variants.
      *
      * @return void
      */
-    protected function updateVariants($item, $activeLanguage, $allIds, $objBase = null)
+    protected function updateVariants($item, $activeLanguage, $allIds)
     {
         foreach ($this->getAttributes() as $strAttributeId => $objAttribute) {
-            if ($item->isVariant() && !$objBase) {
-                // Base not passed, skip attribute.
-                continue;
-            }
-
             if ($item->isVariantBase() && !($objAttribute->get('isvariant'))) {
                 // We have to override in variants.
                 $arrIds = $allIds;
@@ -1003,13 +996,7 @@ class MetaModel implements IMetaModel
             }
         }
 
-        // Fetch the base when handling an variant.
-        $objBase = null;
-        if ($objItem->isVariant()) {
-            $objBase = $this->findById($objItem->get('vargroup'));
-        }
-
-        $this->updateVariants($objItem, $strActiveLanguage, $arrAllIds, $objBase);
+        $this->updateVariants($objItem, $strActiveLanguage, $arrAllIds);
 
         // Tell all attributes that the model has been saved. Useful for alias fields, edit counters etc.
         foreach ($this->getAttributes() as $objAttribute) {
