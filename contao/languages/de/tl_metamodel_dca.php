@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-09-18T09:47:11+02:00
+ * last-updated: 2015-09-18T12:13:37+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']              = 'Backend-Integration';
@@ -72,6 +72,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['settings']['0']               = 'Eingab
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['settings']['1']               = 'Bearbeiten Sie ein Einstellungen der Eingabemaske ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['show']['0']                   = 'Details der Eingabemaske';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['show']['1']                   = 'Sehen Sie die Details der Eingabemaske %s an.';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['showColumns']['0']            = 'Anzeige in Tabellenform';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['showColumns']['1']            = 'Ist die Option ausgewählt, erfolgt de Anzeige in Form einer Tabelle.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['1']            = 'Nach erstem Buchstaben aufsteigend sortieren';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['10']           = 'Nach Jahr absteigend';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['11']           = 'aufsteigend sortieren';
