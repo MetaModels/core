@@ -64,6 +64,26 @@ interface IItem
     public function getAttribute($strAttributeName);
 
     /**
+     * Check if the given attribute is set. This mean if in the data array
+     * is the filed set or not. If the attribute is not loaded the function
+     * will return false.
+     *
+     * @param string $strAttributeName The desired attribute.
+     *
+     * @return bool True means the data is set, on load of the item or at any time.
+     *              False means the attribute is not set.
+     */
+    public function isAttributeSet($strAttributeName);
+
+    /**
+     * Return a list of the col names from the attributes which are set.
+     * Including all meta fields as well.
+     *
+     * @return array
+     */
+    public function getSetAttributes();
+
+    /**
      * Determines if this item is a variant of another item.
      *
      * @return bool True if it is an variant, false otherwise
