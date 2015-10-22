@@ -8,11 +8,12 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2015-08-04T04:10:59+02:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attributs da "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dca']                                           = 'Tut las mascras d\'endataziun da "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_dca_sortgroup']                                 = 'Zavrar e gruppar en "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting']                                    = 'Mascra d\'endataziun en "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting_subpalette']                         = 'Sut-spartas per "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_filter']                                        = 'Tut ils filters da "%s"';
@@ -56,6 +57,7 @@ $GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']['0']                        
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['limit']['0']                               = 'Limitar';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['search']['0']                              = 'Tschertgar';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['sort']['0']                                = 'Zavrar';
+$GLOBALS['TL_LANG']['MSC']['random']                                                  = 'Casual';
 $GLOBALS['TL_LANG']['MSC']['sorting']                                                 = 'Zavrar';
 $GLOBALS['TL_LANG']['MSC']['template_in_theme']                                       = '%s (%s)';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clr']['0']                                    = 'clr';
@@ -79,3 +81,4 @@ $GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter']               
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations']                   = '(Chatta naginas cumbinaziuns correspundentas.)';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['select_all']                        = 'Tscherner tut';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']                            = 'Filter';
+
