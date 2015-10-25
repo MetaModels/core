@@ -43,6 +43,13 @@ abstract class HybridFilterClearAll extends MetaModelHybrid
     protected $strTemplate = 'mm_filter_clearall';
 
     /**
+     * The current element type.
+     *
+     * @var string
+     */
+    protected $type;
+
+    /**
      * Generate the list.
      *
      * @return string

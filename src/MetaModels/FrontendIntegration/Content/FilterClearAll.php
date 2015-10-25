@@ -48,4 +48,11 @@ class FilterClearAll extends HybridFilterClearAll
      * @var string
      */
     protected $typePrefix = 'ce_';
+
+    /**
+     * The current element type.
+     *
+     * @var string
+     */
+    protected $type = 'ce';
 }
