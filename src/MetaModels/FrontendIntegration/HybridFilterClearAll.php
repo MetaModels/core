@@ -60,7 +60,7 @@ abstract class HybridFilterClearAll extends MetaModelHybrid
             return parent::generate();
         }
 
-        return sprintf('[[[metamodelfrontendfilterclearall::mod::%s]]]', $this->id);
+        return sprintf('[[[metamodelfrontendfilterclearall::%s::%s]]]', $this->type, $this->id);
     }
 
     /**
