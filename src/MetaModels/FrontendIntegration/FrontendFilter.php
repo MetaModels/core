@@ -328,9 +328,10 @@ class FrontendFilter
      */
     protected function generateContentElement($content, $replace, $contentId)
     {
-        $objDbResult = $this
-            ->objFilterConfig
-            ->getServiceContainer()
+        /** @var IMetaModelsServiceContainer $serviceContainer */
+        $serviceContainer = $GLOBALS['container']['metamodels-service-container'];
+
+        $objDbResult = $serviceContainer
             ->getDatabase()
             ->prepare('SELECT * FROM tl_content WHERE id=? AND type="metamodels_frontendclearall"')
             ->execute($contentId);
