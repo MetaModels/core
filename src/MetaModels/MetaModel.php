@@ -1004,7 +1004,9 @@ class MetaModel implements IMetaModel
 
         // Tell all attributes that the model has been saved. Useful for alias fields, edit counters etc.
         foreach ($this->getAttributes() as $objAttribute) {
-            $objAttribute->modelSaved($objItem);
+            if ($objItem->isAttributeSet($objAttribute->getColName())) {
+                $objAttribute->modelSaved($objItem);
+            }
         }
     }
 
