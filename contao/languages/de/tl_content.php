@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-12-11T16:14:26+01:00
+ * last-updated: 2015-09-18T12:13:37+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_content']['ASC']                                 = 'aufsteigend';
@@ -47,13 +47,13 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_meta_description']['0']     = 'Meta
 $GLOBALS['TL_LANG']['tl_content']['metamodel_meta_description']['1']     = 'Wählen Sie aus, welches Attribut für die Meta-Beschreibung der Seite benutzt wird.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_meta_title']['0']           = 'Meta-Titel';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_meta_title']['1']           = 'Wählen Sie aus, welches Attribut für den Meta-Titel der Seite benutzt wird.';
-$GLOBALS['TL_LANG']['tl_content']['metamodel_noparsing']['0']            = 'Keine Items ausgeben';
-$GLOBALS['TL_LANG']['tl_content']['metamodel_noparsing']['1']            = 'Wenn diese Box aktiviert ist gibt das Module keine Items aus. Stattdessen stellt es Items-Objekte im Template zur Verfügung.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_noparsing']['0']            = 'Keine geparsten Items über "$data" ausgeben';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_noparsing']['1']            = 'Wenn diese Box aktiviert ist, gibt das Inhaltselement keine geparsten Items über "$data" aus. Die Items-Objekte stehen nach wie vor im Template zur individuellen Verwendung zur Verfügung.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_offset']['0']               = 'Listen-Offset';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_offset']['1']               = 'Bitte geben Sie den Wert für den Offset an (beispielsweise 10 um die ersten 10 Items zu überspringen).';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_rendersettings']['0']       = 'Anzuwendende Rendereinstellungen';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_rendersettings']['1']       = 'Wählen Sie die Rendering-Einstellung aus, die für die Ausgabe benutzt werden sollen. Falls Sie dieses feld leer lassen werden die Standardeinstellungen für dieses MetaModel benutzt. Falls keine Standardeinstellung vorhanden ist werden nur die Rohwerte ausgegeben.';
-$GLOBALS['TL_LANG']['tl_content']['metamodel_sortby']['0']               = 'Sortieren nach ...';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_sortby']['0']               = 'Sortieren nach';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_sortby']['1']               = 'Bitte wählen Sie eine Reihenfolge für die Sortierung aus.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_sortby_direction']['0']     = 'Sortierreihenfolge';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_sortby_direction']['1']     = 'In aufsteigender oder absteigender Reihenfolge';

@@ -328,21 +328,7 @@ class FrontendFilter
      */
     protected function generateContentElement($content, $replace, $contentId)
     {
-        $objDbResult = $this
-            ->objFilterConfig
-            ->getServiceContainer()
-            ->getDatabase()
-            ->prepare('SELECT * FROM tl_content WHERE id=? AND type="metamodels_frontendclearall"')
-            ->execute($contentId);
-
-        // Check if we have a ce element.
-        if ($objDbResult->numRows == 0) {
-            return str_replace($replace, '', $content);
-        }
-
-        // Get instance and call generate function.
-        $objCE = new ContentElementFilterClearAll($objDbResult);
-        return str_replace($replace, $objCE->generateReal(), $content);
+        return $this->generateElement('tl_content', $content, $replace, $contentId);
     }
 
     /**
@@ -355,19 +341,39 @@ class FrontendFilter
      * @param int    $moduleId The id of the module to be inserted for the replace string.
      *
      * @return string
+     */
+    protected function generateModule($content, $replace, $moduleId)
+    {
+        return $this->generateElement('tl_module', $content, $replace, $moduleId);
+    }
+
+    /**
+     * Render a module or content element.
+     *
+     * @param string $table     The name of the table.
+     *
+     * @param string $content   The html content in which to replace.
+     *
+     * @param string $replace   The string within the html to be replaced.
+     *
+     * @param int    $elementId The id of the module/ce-element to be inserted for the replace string.
+     *
+     * @return string
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    protected function generateModule($content, $replace, $moduleId)
+    protected function generateElement($table, $content, $replace, $elementId)
     {
+        $sql = sprintf('SELECT * FROM %s WHERE id=? AND type="metamodels_frontendclearall"', $table);
+
         /** @var IMetaModelsServiceContainer $serviceContainer */
         $serviceContainer = $GLOBALS['container']['metamodels-service-container'];
 
         $objDbResult = $serviceContainer
             ->getDatabase()
-            ->prepare('SELECT * FROM tl_module WHERE id=? AND type="metamodels_frontendclearall"')
-            ->execute($moduleId);
+            ->prepare($sql)
+            ->execute($elementId);
 
         // Check if we have a ce element.
         if ($objDbResult->numRows == 0) {
@@ -375,8 +381,15 @@ class FrontendFilter
         }
 
         // Get instance and call generate function.
-        $objModule = new ModuleFilterClearAll($objDbResult);
-        return str_replace($replace, $objModule->generateReal(), $content);
+        if ($table == 'tl_module') {
+            $objElement = new ModuleFilterClearAll($objDbResult);
+        } elseif ($table == 'tl_content') {
+            $objElement = new ContentElementFilterClearAll($objDbResult);
+        } else {
+            return str_replace($replace, '', $content);
+        }
+
+        return str_replace($replace, $objElement->generateReal(), $content);
     }
 
     /**
