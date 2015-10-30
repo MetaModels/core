@@ -31,7 +31,7 @@ use MetaModels\Helper\ContaoController;
  * found" flag,which defaults to false and therefore one can parse the template and have zero output instead of
  * cluttering the frontend with exceptions.
  */
-class Template
+class Template extends \Template
 {
     /**
      * Template file.
