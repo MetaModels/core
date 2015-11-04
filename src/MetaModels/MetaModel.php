@@ -922,6 +922,14 @@ class MetaModel implements IMetaModel
             }
             $this->saveAttribute($objAttribute, $arrIds, $item->get($strAttributeId), $activeLanguage);
         }
+
+        // Run each id and trigger the model saved function.
+        foreach($allIds as $id){
+            $variantItem = $this->findById($id);
+            foreach ($this->getAttributes() as $strAttributeId => $objAttribute) {
+                $objAttribute->modelSaved($variantItem);
+            }
+        }
     }
 
     /**
@@ -1000,14 +1008,15 @@ class MetaModel implements IMetaModel
             }
         }
 
-        $this->updateVariants($objItem, $strActiveLanguage, $arrAllIds);
-
         // Tell all attributes that the model has been saved. Useful for alias fields, edit counters etc.
         foreach ($this->getAttributes() as $objAttribute) {
             if ($objItem->isAttributeSet($objAttribute->getColName())) {
                 $objAttribute->modelSaved($objItem);
             }
         }
+
+        // Update all variants.
+        $this->updateVariants($objItem, $strActiveLanguage, $arrAllIds);
     }
 
     /**
