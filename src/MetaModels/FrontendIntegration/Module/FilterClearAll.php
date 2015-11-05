@@ -40,7 +40,7 @@ class FilterClearAll extends HybridFilterClearAll
      *
      * @var string
      */
-    protected $wildCardLink = 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id=%s';
+    protected $wildCardLink = 'contao/main.php?do=metamodels';
 
     /**
      * The link to use in the wildcard.

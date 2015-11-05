@@ -44,6 +44,13 @@ class HybridFilterBlock extends MetaModelHybrid
     private $arrJumpTo;
 
     /**
+     * The name to display in the wildcard.
+     *
+     * @var string
+     */
+    protected $wildCardName = '### METAMODEL FILTER ###';
+    
+    /**
      * Get the jump to page data.
      *
      * @return array

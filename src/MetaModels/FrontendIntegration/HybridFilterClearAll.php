@@ -33,7 +33,7 @@ abstract class HybridFilterClearAll extends MetaModelHybrid
      *
      * @var string
      */
-    protected $wildCardName = '### METAMODEL FILTER ELEMENT CLEAR ALL ###';
+    protected $wildCardName = '### METAMODEL FILTER CLEAR ALL ###';
 
     /**
      * Template.

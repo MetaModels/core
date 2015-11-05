@@ -95,7 +95,16 @@ abstract class MetaModelHybrid extends \Hybrid
             $objTemplate->id       = $this->id;
             $objTemplate->link     = $this->name;
             $objTemplate->href     = sprintf($this->wildCardLink, $this->id);
-
+            if ($this->metamodel)
+            {
+		            $objTemplate->id     = $this->metamodel;
+								$factory             = $this->getServiceContainer()->getFactory();
+								$metaModelName       = $factory->translateIdToMetaModelName($this->metamodel);
+								$metaModel           = $factory->getMetaModel($metaModelName);
+								$objTemplate->link   = $metaModel->getName();
+								$objTemplate->href   = $this->wildCardLink;
+						}
+						
             return $objTemplate->parse();
         }
 
