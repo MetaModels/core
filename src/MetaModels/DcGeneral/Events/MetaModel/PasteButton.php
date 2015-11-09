@@ -239,13 +239,19 @@ class PasteButton extends BaseSubscriber
         /** @var ItemInterface[] $items */
         foreach ($items as $item) {
             // Check the context.
-            $itemProviderName = $item->getModelId()->getDataProviderName();
-            $modelId          = $item->getModelId()->getId();
+            $itemProviderName = $item->getDataProviderName();
+            $modelId          = $item->getModelId();
+
             if ($this->providerName !== $itemProviderName) {
                 continue;
             }
 
-            $containedModel = $this->getModelById($modelId);
+            if (!$modelId) {
+                $this->checkEmpty($action);
+                continue;
+            }
+
+            $containedModel = $this->getModelById($modelId->getId());
             if ($this->currentModel == null) {
                 $this->checkForRoot($containedModel, $action);
             } elseif ($containedModel) {
@@ -354,10 +360,12 @@ class PasteButton extends BaseSubscriber
      */
     protected function checkModelWithoutVariants($containedModel)
     {
+        $parentDefinition = $this->environment->getDataDefinition()->getBasicDefinition()->getParentDataProvider();
+
         $this->disablePA = ($this->currentModel->getId() == $containedModel->getId())
-            || ($this->currentModel->getProperty('pid') == $containedModel->getProperty('pid'));
+            || ($parentDefinition && $this->currentModel->getProperty('pid') == $containedModel->getProperty('pid'));
         $this->disablePI = ($this->circularReference)
             || ($this->currentModel->getId() == $containedModel->getId())
-            || ($this->currentModel->getProperty('pid') == $containedModel->getId());
+            || ($parentDefinition && $this->currentModel->getProperty('pid') == $containedModel->getId());
     }
 }
