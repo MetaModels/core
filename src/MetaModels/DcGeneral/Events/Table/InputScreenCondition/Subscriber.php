@@ -23,6 +23,8 @@ namespace MetaModels\DcGeneral\Events\Table\InputScreenCondition;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
+use ContaoCommunityAlliance\DcGeneral\Clipboard\Filter;
+use ContaoCommunityAlliance\DcGeneral\Clipboard\ItemInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
@@ -213,11 +215,10 @@ class Subscriber extends BaseSubscriber
         $environment = $event->getEnvironment();
         $model       = $event->getModel();
         $clipboard   = $environment->getClipboard();
-
         // Disable all buttons if there is a circular reference.
-        if (($clipboard->isCut()
-            && ($event->isCircularReference() || in_array($model->getId(), $clipboard->getContainedIds())))
-        ) {
+        if ($clipboard->fetch(
+            Filter::create()->andActionIs(ItemInterface::CUT)->andModelIs(ModelId::fromModel($model))
+        )) {
             $event
                 ->setPasteAfterDisabled(true)
                 ->setPasteIntoDisabled(true);
