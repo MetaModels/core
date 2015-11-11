@@ -23,6 +23,7 @@
 namespace MetaModels\DcGeneral\Events\Table\FilterSetting;
 
 use ContaoCommunityAlliance\DcGeneral\Clipboard\Filter;
+use ContaoCommunityAlliance\DcGeneral\Clipboard\ItemInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
@@ -162,7 +163,7 @@ class Subscriber extends BaseSubscriber
         $filter = new Filter();
         $filter
             ->andModelIs(ModelId::fromModel($model))
-            ->andActionIs($clipboard::MODE_CUT);
+            ->andActionIs(ItemInterface::CUT);
 
         // Disable all buttons if there is a circular reference.
         if ($event->isCircularReference() || !$clipboard->isEmpty($filter)) {
