@@ -144,7 +144,7 @@ array_insert(
         ),
         'metamodel_sort_override'    => array
         (
-            'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_sort_override'],
+            'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_sort_override'],
             'exclude'   => true,
             'inputType' => 'checkbox',
             'eval'      => array
