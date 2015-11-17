@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-09-18T12:13:37+02:00
+ * last-updated: 2015-10-27T08:13:04+01:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attribute von "%s"';
@@ -20,8 +20,8 @@ $GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting_condition']                    
 $GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting_subpalette']                         = 'Sub-Bereiche für "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_filter']                                        = 'Alle Filter von "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_filtersetting']                                 = 'Filtereinstellungen in "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodel_rendersetting']                                 = 'Rendereinstellungen in "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodel_rendersettings']                                = 'Alle Rendereinstellungen von "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_rendersetting']                                 = 'Render-Einstellungen in "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_rendersettings']                                = 'Alle Render-Einstellungen von "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodels']                                              = 'MetaModels';
 $GLOBALS['TL_LANG']['CTE']['metamodel_content']['0']                                  = 'MetaModel-Liste';
 $GLOBALS['TL_LANG']['CTE']['metamodel_content']['1']                                  = 'Fügt eine Liste aus MetaModel-Datensätzen dem Artikel hinzu.';
@@ -49,8 +49,8 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']                  
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord']                   = 'Die Filtereinstellungen %%s für Filter "%s" in MetaModel "%s" bearbeiten.';
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label']                        = 'Filter "%s" in MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup']['0'] = 'Filterwert für das Attribut "%s"';
-$GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord']                   = 'Die Attributeinstellungen %%s für Rendereinstellung "%s" in MetaModel "%s" bearbeiten.';
-$GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']                        = 'Rendereinstellung "%s" in MetaModel "%s"';
+$GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord']                   = 'Die Attributeinstellungen %%s für Render-Einstellung "%s" in MetaModel "%s" bearbeiten.';
+$GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']                        = 'Render-Einstellung "%s" in MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodels_contributor']                                  = 'Wir danken diesen Benutzerinnen und Benutzern für Tickets, Anregungen und Übersetzungen:';
 $GLOBALS['TL_LANG']['MSC']['metamodels_help']                                         = 'Bitte unterstützen Sie uns!';
 $GLOBALS['TL_LANG']['MSC']['noItemsMsg']                                              = 'Ihre Suche lieferte keine passenden Ergebnisse.';
