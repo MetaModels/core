@@ -233,8 +233,8 @@ class SearchablePages
                 $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
                 $pageDetails = $event->getPageDetails();
 
-                // If there is a root page check the context.
-                if ($rootPage !== null && $pageDetails['rootId'] != $rootPage) {
+                // If there is a root page check the context or if we have no page continue.
+                if ($pageDetails === null || ($rootPage !== null && $pageDetails['rootId'] != $rootPage)) {
                     continue;
                 }
 
@@ -313,6 +313,11 @@ class SearchablePages
             $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
 
             $pageDetails = $event->getPageDetails();
+
+            // Check if we have a page If not go to the next one.
+            if($pageDetails === null) {
+                continue;
+            }
 
             // Make a full url from it.
             $baseUrl = $this->getBaseUrl($pageDetails);
