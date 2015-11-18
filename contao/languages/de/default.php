@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-10-27T08:13:04+01:00
+ * last-updated: 2015-11-18T00:15:18+01:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attribute von "%s"';
@@ -24,7 +24,7 @@ $GLOBALS['TL_LANG']['BRD']['metamodel_rendersetting']                           
 $GLOBALS['TL_LANG']['BRD']['metamodel_rendersettings']                                = 'Alle Render-Einstellungen von "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodels']                                              = 'MetaModels';
 $GLOBALS['TL_LANG']['CTE']['metamodel_content']['0']                                  = 'MetaModel-Liste';
-$GLOBALS['TL_LANG']['CTE']['metamodel_content']['1']                                  = 'Fügt eine Liste aus MetaModel-Datensätzen dem Artikel hinzu.';
+$GLOBALS['TL_LANG']['CTE']['metamodel_content']['1']                                  = 'Fügt eine Liste aus MetaModel-Items dem Artikel hinzu.';
 $GLOBALS['TL_LANG']['CTE']['metamodels']                                              = 'MetaModel-Elemente';
 $GLOBALS['TL_LANG']['CTE']['metamodels_frontendclearall']['0']                        = 'MetaModel-Filterreset';
 $GLOBALS['TL_LANG']['CTE']['metamodels_frontendclearall']['1']                        = 'Fügt eine Funktion zum Zurücksetzen aller Frontend-Filter hinzu.';

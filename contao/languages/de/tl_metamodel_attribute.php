@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:10:59+02:00
+ * last-updated: 2015-09-18T12:13:37+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['advanced_legend']              = 'Erweiterte Einstellungen';
@@ -44,5 +44,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['0']                    = 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['1']                    = 'Die Details des Attributs ID %s anzeigen.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['title_legend']                 = 'Typ, Benennung und Grundeinstellungen des Attributes.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['type']['0']                    = 'Attribut-Typ';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['type']['1']                    = 'Wählen Sie den Typ dieses Attributes. WARNUNG: Dabei werden alle bestehenden Daten für dieses Attribut gelöscht.';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['type']['1']                    = 'Wählen Sie den Typ dieses Attributes. WARNUNG: Wenn der Attributtyp geändert wird dann werden alle bereits bestehenden Daten für das Attribut gelöscht.';
 
