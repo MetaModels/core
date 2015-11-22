@@ -76,10 +76,11 @@ class SimpleLookup extends Simple
      *
      * @return array
      */
-    protected function getParameterFilterOptions($objAttribute, $arrIds, &$arrCount = null)
+    protected function getParameterFilterOptions($objAttribute, $arrIds, &$arrCount = null, $forceToUseArrIds = false)
     {
+        
         $arrOptions = $objAttribute->getFilterOptions(
-            $this->get('onlypossible') ? $arrIds : null,
+            ($this->get('onlypossible') || $forceToUseArrIds) ? $arrIds : null,
             (bool) $this->get('onlyused'),
             $arrCount
         );
@@ -238,30 +239,39 @@ class SimpleLookup extends Simple
         $arrIds,
         $arrFilterUrl,
         $arrJumpTo,
-        FrontendFilterOptions $objFrontendFilterOptions
+        FrontendFilterOptions $objFrontendFilterOptions,
+        $arrCustom = array()
     ) {
+        
+        /* $arrCustom array with settings which makes the function more flexible to use in template
+            the following keys can be set: objAttribute, forceToUseArrIds, strParamName, 
+            [Widget > eval: includeBlankOption, onlyused, onlypossible, template] (only eval for now)
+        */
+        $strParam           = (!isset($arrCustom['strParamName'])) ? $this->getParamName() : $arrCustom['strParamName'];
+        $forceToUseArrIds   = (!isset($arrCustom['forceToUseArrIds'])) ? false : $arrCustom['forceToUseArrIds'];
+        
         // If defined as static, return nothing as not to be manipulated via editors.
         if (!$this->enableFEFilterWidget()) {
             return array();
         }
 
-        $objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
+        $objAttribute = (!isset($arrCustom['objAttribute'])) ? $this->getMetaModel()->getAttributeById($this->get('attr_id')) : $arrCustom['objAttribute'];
 
         if (!$objAttribute) {
             return array();
         }
 
-        $GLOBALS['MM_FILTER_PARAMS'][] = $this->getParamName();
+        $GLOBALS['MM_FILTER_PARAMS'][] = $strParam;
 
         $arrCount  = array();
         $arrWidget = array(
             'label'     => array(
                 // TODO: make this multilingual.
                 ($this->get('label') ? $this->get('label') : $objAttribute->getName()),
-                'GET: ' . $this->getParamName()
+                'GET: ' . $strParam
             ),
             'inputType' => 'select',
-            'options'   => $this->getParameterFilterOptions($objAttribute, $arrIds, $arrCount),
+            'options'   => $this->getParameterFilterOptions($objAttribute, $arrIds, $arrCount, $forceToUseArrIds),
             'count'     => $arrCount,
             'showCount' => $objFrontendFilterOptions->isShowCountValues(),
             'eval'      => array
@@ -273,16 +283,20 @@ class SimpleLookup extends Simple
                     ),
                 'blankOptionLabel'   => &$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'],
                 'colname'            => $objAttribute->getColname(),
-                'urlparam'           => $this->getParamName(),
+                'urlparam'           => $strParam,
                 'onlyused'           => $this->get('onlyused'),
                 'onlypossible'       => $this->get('onlypossible'),
                 'template'           => $this->get('template'),
             )
         );
 
+        if (isset($arrCustom['Widget']['eval'])&&is_array($arrCustom['Widget']['eval'])) {
+            $arrWidget['eval'] = array_merge($arrWidget['eval'],$arrCustom['Widget']['eval']);
+        }
+
         return array
         (
-            $this->getParamName() => $this->prepareFrontendFilterWidget(
+            $strParam => $this->prepareFrontendFilterWidget(
                 $arrWidget,
                 $arrFilterUrl,
                 $arrJumpTo,
