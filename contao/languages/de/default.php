@@ -8,12 +8,12 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-11-18T00:15:18+01:00
+ * last-updated: 2015-11-18T16:13:56+01:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attribute von "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dca']                                           = 'Alle Eingabemasken für "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodel_dca_combine']                                   = 'Eingabemaske und Renderingeinstellungen kombinieren für "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_dca_combine']                                   = 'Eingabemaske und Render-Einstellung kombinieren für "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dca_sortgroup']                                 = 'Sortierung und Gruppierung in "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting']                                    = 'Eingabemasken in "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting_condition']                          = 'Anzeigeeinstellungen für Attribut %s';
