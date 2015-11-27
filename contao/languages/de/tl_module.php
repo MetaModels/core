@@ -8,15 +8,15 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-09-21T16:12:22+02:00
+ * last-updated: 2015-11-27T00:13:16+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_module']['editfiltersetting']['0']              = 'Filtereinstellungen bearbeiten';
 $GLOBALS['TL_LANG']['tl_module']['editfiltersetting']['1']              = 'Die Filtereinstellungen ID %s bearbeiten';
 $GLOBALS['TL_LANG']['tl_module']['editmetamodel']['0']                  = 'MetaModel bearbeiten';
 $GLOBALS['TL_LANG']['tl_module']['editmetamodel']['1']                  = 'Das MetaModel mit der ID %s bearbeiten.';
-$GLOBALS['TL_LANG']['tl_module']['editrendersetting']['0']              = 'Renderingeinstellungen bearbeiten';
-$GLOBALS['TL_LANG']['tl_module']['editrendersetting']['1']              = 'Renderingeinstellung ID %s bearbeiten';
+$GLOBALS['TL_LANG']['tl_module']['editrendersetting']['0']              = 'Render-Einstellung bearbeiten';
+$GLOBALS['TL_LANG']['tl_module']['editrendersetting']['1']              = 'Render-Einstellung ID %s bearbeiten';
 $GLOBALS['TL_LANG']['tl_module']['metamodel']['0']                      = 'MetaModel';
 $GLOBALS['TL_LANG']['tl_module']['metamodel']['1']                      = 'Bitte geben Sie das MetaModel an, das in dieser Auflistung verwendet werden soll.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_available_values']['0']     = 'Ergebnisse zählen';

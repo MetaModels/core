@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-10-05T12:14:06+02:00
+ * last-updated: 2015-11-27T00:13:16+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_content']['ASC']                                 = 'aufsteigend';
@@ -17,7 +17,7 @@ $GLOBALS['TL_LANG']['tl_content']['editfiltersetting']['0']              = 'Filt
 $GLOBALS['TL_LANG']['tl_content']['editfiltersetting']['1']              = 'Die Filtereinstellungen ID %s bearbeiten';
 $GLOBALS['TL_LANG']['tl_content']['editmetamodel']['0']                  = 'MetaModel bearbeiten';
 $GLOBALS['TL_LANG']['tl_content']['editmetamodel']['1']                  = 'Das MetaModel mit der ID %s bearbeiten.';
-$GLOBALS['TL_LANG']['tl_content']['editrendersetting']['0']              = 'Rendereinstellungen bearbeiten';
+$GLOBALS['TL_LANG']['tl_content']['editrendersetting']['0']              = 'Render-Einstellung bearbeiten';
 $GLOBALS['TL_LANG']['tl_content']['editrendersetting']['1']              = 'Render-Einstellung ID %s bearbeiten';
 $GLOBALS['TL_LANG']['tl_content']['metamodel']['0']                      = 'MetaModel';
 $GLOBALS['TL_LANG']['tl_content']['metamodel']['1']                      = 'Bitte geben Sie das MetaModel an, das in dieser Auflistung verwendet werden soll.';

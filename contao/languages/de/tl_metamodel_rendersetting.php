@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-09-18T12:13:37+02:00
+ * last-updated: 2015-11-27T00:13:16+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']                     = '%s <strong>%s</strong> <em>[%s]</em>';
@@ -24,9 +24,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id']['0']            = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id']['1']            = 'Attribut, auf das sich diese Einstellung bezieht.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy']['0']               = 'Render-Einstellung kopieren';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy']['1']               = 'Kopieren Sie die Render-Einstellung ID %s.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['cut']['0']                = 'Renderingeinstellung ausschneiden';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['cut']['1']                = 'Ausschneiden der Renderingeinstellung ID %s.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete']['0']             = 'Renderingeinstellungen löschen';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['cut']['0']                = 'Render-Einstellung ausschneiden';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['cut']['1']                = 'Ausschneiden der Render-Einstellung ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete']['0']             = 'Render-Einstellung löschen';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete']['1']             = 'Löschen Sie die Render-Einstellung ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit']['0']               = 'Einstellung bearbeiten';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit']['1']               = 'Render-Einstellung ID %s bearbeiten.';
