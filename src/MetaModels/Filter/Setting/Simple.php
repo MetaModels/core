@@ -15,6 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de> 
  * @copyright  2012-2015 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -393,6 +394,12 @@ abstract class Simple implements ISimple
 
         /** @var \Widget $objWidget */
         $objWidget = new $strClass($event->getResult());
+       
+        // add placeholder to text field widget
+        if ($strClass == 'FormTextField' && $arrWidget['placeholder'])
+        {
+            $objWidget->addAttributes(array("placeholder"=>$arrWidget['placeholder']));
+        }
 
         $strField = $objWidget->generate();
 
