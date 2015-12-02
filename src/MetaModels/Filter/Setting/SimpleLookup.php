@@ -47,7 +47,7 @@ class SimpleLookup extends Simple
             return $this->get('urlparam');
         }
 
-        $objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
+        $objAttribute = $this->getFilteredAttribute();
         if ($objAttribute) {
             return $objAttribute->getColName();
         }
@@ -115,7 +115,7 @@ class SimpleLookup extends Simple
     public function prepareRules(IFilter $objFilter, $arrFilterUrl)
     {
         $objMetaModel = $this->getMetaModel();
-        $objAttribute = $objMetaModel->getAttributeById($this->get('attr_id'));
+        $objAttribute = $this->getFilteredAttribute();
         $strParam     = $this->getParamName();
 
         if ($objAttribute && $strParam) {
@@ -151,8 +151,7 @@ class SimpleLookup extends Simple
      */
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
     {
-        $objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
-        if ($objAttribute) {
+        if ($objAttribute = $this->getFilteredAttribute()) {
             // TODO: shall we omit returning of empty values?
             $strResult = $objAttribute->getFilterUrlValue($objItem->get($objAttribute->getColName()));
             return array($this->getParamName() => $strResult);
@@ -182,7 +181,7 @@ class SimpleLookup extends Simple
             return array();
         }
 
-        $objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
+        $objAttribute = $this->getFilteredAttribute();
         $arrOptions   = $objAttribute->getFilterOptions(null, true);
 
         return array(
@@ -297,12 +296,29 @@ class SimpleLookup extends Simple
     public function getReferencedAttributes()
     {
         if ($this->get('attr_id')) {
-            $attribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
-            if ($attribute instanceof IAttribute) {
+            if ($attribute = $this->getFilteredAttribute()) {
                 return array($attribute->getColName());
             }
         }
 
         return array();
+    }
+
+    /**
+     * Retrieve the attribute we are filtering on.
+     *
+     * @return IAttribute|null
+     */
+    protected function getFilteredAttribute()
+    {
+        if ($attributeId = $this->get('attr_id')) {
+            return null;
+        }
+
+        if ($attribute = $this->getMetaModel()->getAttributeById($attributeId)) {
+            return $attribute;
+        }
+
+        return null;
     }
 }
