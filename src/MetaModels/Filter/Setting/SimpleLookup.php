@@ -56,6 +56,25 @@ class SimpleLookup extends Simple
     }
 
     /**
+     * Return the label to use.
+     *
+     * @return string|null
+     */
+    protected function getLabel()
+    {
+        if ($attribute = $this->getFilteredAttribute()) {
+            // TODO: make this multilingual.
+            if ($label = $this->get('label')) {
+                return $label;
+            }
+
+            return $attribute->getName();
+        }
+
+        return null;
+    }
+
+    /**
      * Determine if this filter setting shall return all matches if no url param has been specified.
      *
      * @return bool true if all matches shall be returned, false otherwise.
@@ -212,15 +231,9 @@ class SimpleLookup extends Simple
      */
     public function getParameterFilterNames()
     {
-        if ($strParamName = $this->getParamName()) {
-            $objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
-
-            if (!$objAttribute) {
-                return array();
-            }
-
+        if (($label = $this->getLabel()) && ($paramName = $this->getParamName())) {
             return array(
-                $strParamName => ($this->get('label') ? $this->get('label') : $objAttribute->getName())
+                $paramName => $label
             );
         }
 
@@ -244,9 +257,7 @@ class SimpleLookup extends Simple
             return array();
         }
 
-        $objAttribute = $this->getMetaModel()->getAttributeById($this->get('attr_id'));
-
-        if (!$objAttribute) {
+        if (!($attribute = $this->getFilteredAttribute())) {
             return array();
         }
 
@@ -255,12 +266,11 @@ class SimpleLookup extends Simple
         $arrCount  = array();
         $arrWidget = array(
             'label'     => array(
-                // TODO: make this multilingual.
-                ($this->get('label') ? $this->get('label') : $objAttribute->getName()),
+                $this->getLabel(),
                 'GET: ' . $this->getParamName()
             ),
             'inputType' => 'select',
-            'options'   => $this->getParameterFilterOptions($objAttribute, $arrIds, $arrCount),
+            'options'   => $this->getParameterFilterOptions($attribute, $arrIds, $arrCount),
             'count'     => $arrCount,
             'showCount' => $objFrontendFilterOptions->isShowCountValues(),
             'eval'      => array
@@ -271,7 +281,7 @@ class SimpleLookup extends Simple
                         : false
                     ),
                 'blankOptionLabel'   => &$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'],
-                'colname'            => $objAttribute->getColname(),
+                'colname'            => $attribute->getColname(),
                 'urlparam'           => $this->getParamName(),
                 'onlyused'           => $this->get('onlyused'),
                 'onlypossible'       => $this->get('onlypossible'),
