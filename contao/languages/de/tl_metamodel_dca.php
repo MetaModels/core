@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-10-21T12:15:09+02:00
+ * last-updated: 2015-10-21T16:15:57+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']              = 'Backend-Integration';
@@ -45,7 +45,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdeleteable']['0']           = 'Lösch
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdeleteable']['1']           = 'Ist die Checkbox gesetzt, können Datensätze gelöscht werden.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['iseditable']['0']             = 'Bearbeitung erlauben';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['iseditable']['1']             = 'Ist die Checkbox gesetzt, können Datensätze bearbeitet werden.';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['0']    = 'Die Rendering-Einstellung begrenzen';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['0']    = 'Rendering-Einstellung begrenzen';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['1']    = 'Wählen Sie zwischen Frontend und Backend aus.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']['0']                   = 'Sortiermodus';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']['1']                   = 'Sortiermodus für die Item-Ansicht';
@@ -59,8 +59,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker']                 = 'Panelp
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['permissions_legend']          = 'Berechtigungen zur Datenanpassung';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['0']                 = 'Name der Elterntabelle';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['1']                 = 'Name der Datenbanktabelle, die als Elterntabelle benutzt werden soll';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermode']['0']             = 'Rendering-Modus';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermode']['1']             = 'Wählen Sie ein gewünschtes Rendering aus.';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermode']['0']             = 'Render-Modus';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermode']['1']             = 'Wählen Sie eine gewünschte Render-Einstellung aus.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermodes']['flat']         = 'Eine Ebene (ohne Hierarchie)';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermodes']['hierarchical'] = 'Hierarchie';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermodes']['parented']     = 'Elternelement vorhanden';

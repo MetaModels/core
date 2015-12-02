@@ -8,15 +8,15 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-09-18T12:13:37+02:00
+ * last-updated: 2015-11-27T00:13:16+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_module']['editfiltersetting']['0']              = 'Filtereinstellungen bearbeiten';
 $GLOBALS['TL_LANG']['tl_module']['editfiltersetting']['1']              = 'Die Filtereinstellungen ID %s bearbeiten';
 $GLOBALS['TL_LANG']['tl_module']['editmetamodel']['0']                  = 'MetaModel bearbeiten';
 $GLOBALS['TL_LANG']['tl_module']['editmetamodel']['1']                  = 'Das MetaModel mit der ID %s bearbeiten.';
-$GLOBALS['TL_LANG']['tl_module']['editrendersetting']['0']              = 'Renderingeinstellungen bearbeiten';
-$GLOBALS['TL_LANG']['tl_module']['editrendersetting']['1']              = 'Die Renderingeinstellung ID %s bearbeiten';
+$GLOBALS['TL_LANG']['tl_module']['editrendersetting']['0']              = 'Render-Einstellung bearbeiten';
+$GLOBALS['TL_LANG']['tl_module']['editrendersetting']['1']              = 'Render-Einstellung ID %s bearbeiten';
 $GLOBALS['TL_LANG']['tl_module']['metamodel']['0']                      = 'MetaModel';
 $GLOBALS['TL_LANG']['tl_module']['metamodel']['1']                      = 'Bitte geben Sie das MetaModel an, das in dieser Auflistung verwendet werden soll.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_available_values']['0']     = 'Ergebnisse zählen';
@@ -49,7 +49,7 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_noparsing']['0']            = 'Keine
 $GLOBALS['TL_LANG']['tl_module']['metamodel_noparsing']['1']            = 'Wenn diese Box aktiviert ist, dann gibt das Modul keine Datensätze aus. Stattdessen stellt es dafür Objekte im Template zur Verfügung.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_offset']['0']               = 'Listen-Offset';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_offset']['1']               = 'Bitte geben Sie den Wert für den Offset an (beispielsweise 10 um die ersten 10 Items zu überspringen).';
-$GLOBALS['TL_LANG']['tl_module']['metamodel_rendersettings']['0']       = 'Anzuwendende Renderingeinstellungen';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_rendersettings']['0']       = 'Anzuwendende Render-Einstellung';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_rendersettings']['1']       = 'Wählen Sie die Rendering-Einstellung aus, die für die Ausgabe benutzt werden sollen. Falls Sie dieses Feld leer lassen, werden die Standardeinstellungen für dieses MetaModel benutzt. Falls keine Standardeinstellung vorhanden ist werden nur die Rohwerte ausgegeben.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sort_override']['0']        = 'Überschreiben der Sortierung erlauben';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sort_override']['1']        = 'Wenn aktiviert können die Sortierungsattribute und -anweisungen mit einer URL der Form \'/orderBy/<Spaltenname d. Attributs>/orderDir/<DESC || ASC>.html\' oder per GET-Parameter überschrieben werden.';

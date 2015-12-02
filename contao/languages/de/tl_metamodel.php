@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:14:41+02:00
+ * last-updated: 2015-09-18T12:13:37+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Erweiterte Einstellungen';
@@ -23,7 +23,7 @@ $GLOBALS['TL_LANG']['tl_metamodel']['dca_combine']['1']          = 'Definieren S
 $GLOBALS['TL_LANG']['tl_metamodel']['delete']['0']               = 'MetaModel löschen';
 $GLOBALS['TL_LANG']['tl_metamodel']['delete']['1']               = 'Das MetaModel ID %s löschen.';
 $GLOBALS['TL_LANG']['tl_metamodel']['edit']['0']                 = 'Items verwalten';
-$GLOBALS['TL_LANG']['tl_metamodel']['edit']['1']                 = 'Die Datenssätze des MetaModel ID %s verwalten.';
+$GLOBALS['TL_LANG']['tl_metamodel']['edit']['1']                 = 'Die Items des MetaModel ID %s verwalten.';
 $GLOBALS['TL_LANG']['tl_metamodel']['editheader']['0']           = 'MetaModel bearbeiten';
 $GLOBALS['TL_LANG']['tl_metamodel']['editheader']['1']           = 'Bearbeiten Sie das MetaModel mit der ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['fields']['0']               = 'Attribute definieren';
@@ -48,7 +48,7 @@ $GLOBALS['TL_LANG']['tl_metamodel']['name']['0']                 = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel']['name']['1']                 = 'Name des MetaModels.';
 $GLOBALS['TL_LANG']['tl_metamodel']['new']['0']                  = 'Neues MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel']['new']['1']                  = 'Ein neues MetaModel erstellen.';
-$GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['0']       = 'Renderingeinstellungen definieren';
+$GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['0']       = 'Render-Einstellungen definieren';
 $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['1']       = 'Render-Einstellungen für MetaModel ID %s definieren';
 $GLOBALS['TL_LANG']['tl_metamodel']['searchable_pages']['0']     = 'Einstellungen der Suche festlegen.';
 $GLOBALS['TL_LANG']['tl_metamodel']['searchable_pages']['1']     = 'Sucheinstellungen für MetaModel ID %s einstellen.';

@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-09-18T09:47:11+02:00
+ * last-updated: 2015-09-18T12:13:37+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['becap_description']['0']      = 'Beschreibungstext';
@@ -46,8 +46,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergrouptypes']['none']   
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergrouptypes']['week']    = 'Gruppiere nach Woche des Jahres';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergrouptypes']['weekday'] = 'Gruppiere nach Wochentag des Datums';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergrouptypes']['year']    = 'Gruppiere nach Jahr des Datums';
-$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendermode']['0']             = 'Rendering-Modus';
-$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendermode']['1']             = 'Wählen Sie ein gewünschtes Rendering aus..';
+$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendermode']['0']             = 'Render-Modus';
+$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendermode']['1']             = 'Wählen Sie eine gewünschte Render-Einstellung aus..';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['settings']['0']               = 'Einstellungen der Definition';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['settings']['1']               = 'Bearbeiten Sie ein Einstellungen der Definition ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['show']['0']                   = 'Details der Definition';

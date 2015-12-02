@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:10:59+02:00
+ * last-updated: 2015-09-18T12:13:37+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['0']      = 'Zusätzliche CSS-Dateien';
@@ -57,7 +57,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']['1']           = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']['0']               = 'Filterdetails';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']['1']               = 'Zeige Details der Einstellung ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['0']           = 'Template';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['1']           = 'Geben Sie ein (angepasstes) Template an, das für das Rendern der Einträge benutzt werden soll.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['1']           = 'Geben Sie ein (angepasstes) Template an, das für die Render-Einstellung der Einträge benutzt werden soll.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']            = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['0']             = 'Aktualisierungsdatum';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['1']             = 'Datum und Uhrzeit der letzten Aktualisierung.';
