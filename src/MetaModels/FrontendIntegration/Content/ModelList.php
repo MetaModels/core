@@ -41,7 +41,7 @@ class ModelList extends HybridList
      *
      * @var string
      */
-    protected $wildCardLink = 'contao/main.php?do=themes&amp;table=tl_content&amp;act=edit&amp;id=%s';
+    protected $wildCardLink = 'contao/main.php?do=metamodels';
 
     /**
      * The link to use in the wildcard.
