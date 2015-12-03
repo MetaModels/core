@@ -305,10 +305,8 @@ class SimpleLookup extends Simple
      */
     public function getReferencedAttributes()
     {
-        if ($this->get('attr_id')) {
-            if ($attribute = $this->getFilteredAttribute()) {
-                return array($attribute->getColName());
-            }
+        if ($attribute = $this->getFilteredAttribute()) {
+            return array($attribute->getColName());
         }
 
         return array();
@@ -321,7 +319,7 @@ class SimpleLookup extends Simple
      */
     protected function getFilteredAttribute()
     {
-        if ($attributeId = $this->get('attr_id')) {
+        if (!($attributeId = $this->get('attr_id'))) {
             return null;
         }
 
