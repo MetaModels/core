@@ -792,7 +792,7 @@ class ToolboxFile
 
         foreach ($values as $key => $value) {
             if (!(\Validator::isUuid($value))) {
-                $file = \Dbafs::addResource($value);
+                $file = \FilesModel::findByPath($value) ?: \Dbafs::addResource($value);
                 if (!$file) {
                     throw new \InvalidArgumentException('Invalid value.');
                 }
