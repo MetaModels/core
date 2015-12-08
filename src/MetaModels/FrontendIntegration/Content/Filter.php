@@ -39,7 +39,7 @@ class Filter extends HybridFilterBlock
      *
      * @var string
      */
-    protected $wildCardLink = 'contao/main.php?do=themes&amp;table=tl_content&amp;act=edit&amp;id=%s';
+    protected $wildCardLink = 'contao/main.php?do=page&amp;table=tl_content&amp;act=edit&amp;id=%s';
 
     /**
      * The link to use in the wildcard.
@@ -47,4 +47,11 @@ class Filter extends HybridFilterBlock
      * @var string
      */
     protected $typePrefix = 'ce_';
+
+    /**
+     * The name to display in the wildcard.
+     *
+     * @var string
+     */
+    protected $wildCardName = '### METAMODEL FILTER ###';
 }

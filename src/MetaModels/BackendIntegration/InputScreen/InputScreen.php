@@ -137,8 +137,8 @@ class InputScreen implements IInputScreen
                 // Use the fallback.
                 $strLegend = $arrLegend[$metaModel->getFallbackLanguage()];
                 if (!$strLegend) {
-                    // Last resort, simply "legend".
-                    $strLegend = 'legend';
+                    // Last resort, simply "legend". See issue #926.
+                    $strLegend = 'legend' . (count($this->legends) + 1);
                 }
             }
         } else {
