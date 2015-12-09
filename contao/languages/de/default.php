@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-11-18T16:13:56+01:00
+ * last-updated: 2015-11-27T00:13:16+01:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attribute von "%s"';
@@ -55,7 +55,7 @@ $GLOBALS['TL_LANG']['MSC']['metamodels_contributor']                            
 $GLOBALS['TL_LANG']['MSC']['metamodels_help']                                         = 'Bitte unterstützen Sie uns!';
 $GLOBALS['TL_LANG']['MSC']['noItemsMsg']                                              = 'Ihre Suche lieferte keine passenden Ergebnisse.';
 $GLOBALS['TL_LANG']['MSC']['no_theme']                                                = 'Globaler Gültigkeitsbereich ';
-$GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']['0']                              = 'Filter';
+$GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']['0']                              = 'Filtersets';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['limit']['0']                               = 'Limitierung';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['search']['0']                              = 'Suche';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['sort']['0']                                = 'Sortierung';
@@ -82,5 +82,5 @@ $GLOBALS['TL_LANG']['metamodels_frontendfilter']['clear_all']                   
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter']                     = 'Nicht filtern';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations']                   = '(Keine passenden Kombinationen gefunden.)';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['select_all']                        = 'Alles auswählen';
-$GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']                            = 'Filter';
+$GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']                            = 'Filtersets';
 

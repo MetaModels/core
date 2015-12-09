@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-09-18T12:13:37+02:00
+ * last-updated: 2015-11-18T00:15:18+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Erweiterte Einstellungen';
@@ -18,18 +18,18 @@ $GLOBALS['TL_LANG']['tl_metamodel']['cut']['0']                  = 'MetaModel ve
 $GLOBALS['TL_LANG']['tl_metamodel']['cut']['1']                  = 'Bestimmen Sie die Reihenfolge Ihrer MetaModels.';
 $GLOBALS['TL_LANG']['tl_metamodel']['dca']['0']                  = 'Eingabemasken definieren';
 $GLOBALS['TL_LANG']['tl_metamodel']['dca']['1']                  = 'Eingabemaske für MetaModel ID %s definieren.';
-$GLOBALS['TL_LANG']['tl_metamodel']['dca_combine']['0']          = 'Eingabe- / Ausgabe-Optionen definieren';
-$GLOBALS['TL_LANG']['tl_metamodel']['dca_combine']['1']          = 'Definieren Sie die Eingabe- / Ausgabe-Optionen für MetaModel ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel']['dca_combine']['0']          = 'Eingabe-/Render-Zuordnungen definieren';
+$GLOBALS['TL_LANG']['tl_metamodel']['dca_combine']['1']          = 'Definieren der Eingabe-/Render-Zuordnungen für MetaModel ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel']['delete']['0']               = 'MetaModel löschen';
 $GLOBALS['TL_LANG']['tl_metamodel']['delete']['1']               = 'Das MetaModel ID %s löschen.';
 $GLOBALS['TL_LANG']['tl_metamodel']['edit']['0']                 = 'Items verwalten';
 $GLOBALS['TL_LANG']['tl_metamodel']['edit']['1']                 = 'Die Items des MetaModel ID %s verwalten.';
 $GLOBALS['TL_LANG']['tl_metamodel']['editheader']['0']           = 'MetaModel bearbeiten';
 $GLOBALS['TL_LANG']['tl_metamodel']['editheader']['1']           = 'Bearbeiten Sie das MetaModel mit der ID %s';
-$GLOBALS['TL_LANG']['tl_metamodel']['fields']['0']               = 'Attribute definieren';
-$GLOBALS['TL_LANG']['tl_metamodel']['fields']['1']               = 'Attribute für MetaModel ID %s definieren';
-$GLOBALS['TL_LANG']['tl_metamodel']['filter']['0']               = 'Filter definieren';
-$GLOBALS['TL_LANG']['tl_metamodel']['filter']['1']               = 'Filter für MetaModel ID %s definieren';
+$GLOBALS['TL_LANG']['tl_metamodel']['fields']['0']               = 'Attribute anlegen';
+$GLOBALS['TL_LANG']['tl_metamodel']['fields']['1']               = 'Attribute für MetaModel ID %s anlegen.';
+$GLOBALS['TL_LANG']['tl_metamodel']['filter']['0']               = 'Filtersets definieren';
+$GLOBALS['TL_LANG']['tl_metamodel']['filter']['1']               = 'Filtersets für MetaModel ID %s anlegen.';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemFormat']                = '%s %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['0']      = '%s Datensätze';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['1']      = '%s Datensätze';
@@ -51,7 +51,7 @@ $GLOBALS['TL_LANG']['tl_metamodel']['new']['1']                  = 'Ein neues Me
 $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['0']       = 'Render-Einstellungen definieren';
 $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['1']       = 'Render-Einstellungen für MetaModel ID %s definieren';
 $GLOBALS['TL_LANG']['tl_metamodel']['searchable_pages']['0']     = 'Einstellungen der Suche festlegen.';
-$GLOBALS['TL_LANG']['tl_metamodel']['searchable_pages']['1']     = 'Sucheinstellungen für MetaModel ID %s einstellen.';
+$GLOBALS['TL_LANG']['tl_metamodel']['searchable_pages']['1']     = 'Indexierungen für MetaModel ID %s anlegen';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['0']                 = 'MetaModel-Details';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['1']                 = 'Die Details des MetaModels ID %s anzeigen.';
 $GLOBALS['TL_LANG']['tl_metamodel']['sorting']['0']              = 'Sortierung';

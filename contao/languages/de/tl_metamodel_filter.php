@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:14:41+02:00
+ * last-updated: 2015-09-18T12:13:37+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['copy']['0']       = 'Filtereinstellung kopieren';
@@ -26,7 +26,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filter']['new']['1']        = 'Erstellen Sie e
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['pastenew']['0']   = 'Neu';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['pastenew']['1']   = 'Erstellen Sie eine neue Filtereinstellung.';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['settings']['0']   = 'Attributeinstellungen definieren';
-$GLOBALS['TL_LANG']['tl_metamodel_filter']['settings']['1']   = 'Definieren Sie die Attributeinstellungen für die Filtereinstellung ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['settings']['1']   = 'Definieren Sie die Attributeinstellungen für das Filterset ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['show']['0']       = 'Details';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['show']['1']       = 'Die Details der Filtereinstellung ID %s anzeigen.';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['title_legend']    = 'Name';

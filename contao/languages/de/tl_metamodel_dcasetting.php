@@ -8,15 +8,15 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:10:59+02:00
+ * last-updated: 2015-09-18T12:13:37+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Das Attribut "%s" wurde der Eingabemaske hinzugefügt.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess_subpalette'] = 'Das Attribut "%s" wurde dem Unterbereich "%s" hinzugefügt.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained']      = 'Das Attribut %s ist bereits in der Eingabemaske vorhanden.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd']               = 'Will add the attribute "%s" to the input screen.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd']               = 'Attribut "%s" der Eingabemaske hinzufügen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                  = 'Alle hinzufügen';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['1']                  = 'Alle Attribute der Eingabemaske hinzufügen';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['1']                  = 'Alle Attribute der Eingabemaske hinzufügen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']              = 'Erweitert';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['0']               = 'HTML-Inhalte erhalten';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['1']               = 'Falls angewählt wird HTML-Inhalt erhalten.';
@@ -29,8 +29,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['chosen']['0']                  =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['chosen']['1']                  = '\'Chosen\' für die Auswahl aktivieren.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['cols']['0']                    = 'Spalten';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['cols']['1']                    = 'Anzahl der Spalten die für longtext / table Widget verwenden werden';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['conditions']['0']              = 'Ansichtsbedingungen verwalten';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['conditions']['1']              = 'Verwalten Sie die Ansichtsbedingungen der Eigenschaft ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['conditions']['0']              = 'Ansichtsbedingungen des Eingabefeldes';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['conditions']['1']              = 'Ansichtsbedingungen des Eingabefeldes ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['config_legend']                = 'Einstellungen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy']['0']                    = 'Kopiere Einstellung';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy']['1']                    = 'Kopiere Einstellung ID %s';
