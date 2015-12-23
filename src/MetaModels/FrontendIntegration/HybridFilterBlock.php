@@ -128,7 +128,7 @@ class HybridFilterBlock extends MetaModelHybrid
         $objFilter = new FrontendFilter();
         $arrFilter = $objFilter->getMetaModelFrontendFilter($this);
 
-        $this->Template->setData($arrFilter);
+        $this->Template->setData(array_merge($this->Template->getData(), $arrFilter));
         $this->Template->submit = $arrFilter['submit'];
     }
 }
