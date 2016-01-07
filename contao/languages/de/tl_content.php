@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-11-27T00:13:16+01:00
+ * last-updated: 2015-11-27T08:12:51+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_content']['ASC']                                 = 'aufsteigend';
@@ -30,7 +30,7 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_autosubmit']['1']       = 'Läd
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_hideclearfilter']['0']  = '\'Filter leeren\' verbergen';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_hideclearfilter']['1']  = 'Verbirgt die Option zum Zurücksetzen in allen Filtern.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_params']['0']           = 'Attribute';
-$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_params']['1']           = 'Die Attribute auswählen, die in diesem Frontend-Filter verwendet werden sollen.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_params']['1']           = 'Die Attribute auswählen, die in diesem Frontend-Filterset verwendet werden sollen.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_template']['0']         = 'Template';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_template']['1']         = 'Bitte wählen Sie das Frontend-Template aus.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering']['0']            = 'Anzuwendende Filtereinstellungen';
