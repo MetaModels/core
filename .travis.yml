@@ -16,7 +16,7 @@ env:
 # Exclude impossible Contao Version combinations.
 matrix:
   exclude:
-    - php: 5.3
+    - php: "5.3"
       env: CONTAO_VERSION=~3.5.0
  
 sudo: false
