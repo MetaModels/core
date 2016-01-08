@@ -27,7 +27,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['config_legend'] = 'Con
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type']    = array('Type', 'Select the attribute or logic type.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type']    = array('Type', 'Select the condition type.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['enabled'] = array('Enabled', 'Check to enable this condition.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['comment'] = array('Comment', 'Enter a comment to describe the purpose of this condition.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['attr_id'] = array('Attribute', 'Select the attribute to use for this condition.');
