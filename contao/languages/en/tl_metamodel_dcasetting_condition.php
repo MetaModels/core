@@ -21,8 +21,8 @@
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['basic_legend']  = 'Basic config';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['config_legend'] = 'Condition config';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['basic_legend']  = 'Basic configuration';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['config_legend'] = 'Condition configuration';
 
 /**
  * Fields
@@ -56,6 +56,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['cond
  * Reference
  */
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['typedesc']['_default_']    = '%s <strong>%s</strong><br>for attribute <em>%s</em> (Parameter: %s)';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['typedesc']['conditionor']  = '%s <strong>%s</strong><br>any sub condition must be fulfilled';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['typedesc']['conditionand'] = '%s <strong>%s</strong><br>all sub condition must be fulfilled';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['typedesc']['conditionor']  = '%s <strong>%s</strong><br>any sub conditions must be fulfilled';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['typedesc']['conditionand'] = '%s <strong>%s</strong><br>all sub conditions must be fulfilled';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['typedesc']['conditionnot'] = '%s <strong>%s</strong><br>invert the result of the contained condition';
