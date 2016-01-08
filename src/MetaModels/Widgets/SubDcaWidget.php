@@ -296,6 +296,8 @@ class SubDcaWidget extends \Widget
         $arrField['id']                = $this->strId . '_' . $strRow . '_' . $strKey;
         $arrField['value']             = ($varValue !== '') ? $varValue : $arrField['default'];
         $arrField['eval']['tableless'] = true;
+        $arrField['eval']['multiple']  = $arrField['inputType'] == 'select' ? true : false;
+        $arrField['eval']['chosen']    = $arrField['inputType'] == 'select' ? true : false;
 
         $event = new GetAttributesFromDcaEvent(
             $arrField,
