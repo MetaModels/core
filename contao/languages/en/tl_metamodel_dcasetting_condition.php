@@ -21,13 +21,13 @@
 /**
  * Legends
  */
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['title_legend']  = 'Title';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['config_legend'] = 'Config';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['basic_legend']  = 'Basic configuration';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['config_legend'] = 'Condition configuration';
 
 /**
  * Fields
  */
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type']    = array('Type', 'Select the attribute type.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type']    = array('Type', 'Select the condition type.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['enabled'] = array('Enabled', 'Check to enable this condition.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['comment'] = array('Comment', 'Enter a comment to describe the purpose of this condition.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['attr_id'] = array('Attribute', 'Select the attribute to use for this condition.');
@@ -45,15 +45,17 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show']       = array('
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['addall']     = array('Add all', 'Add all attributes to input screen');
 
 // filter condition names.
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionpropertyvalueis']      = 'Attribute value is...';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionpropertycontainanyof'] = 'Attribute values contain any of...';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionpropertyvisible']      = 'Is attribute visible...';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionor']                   = 'OR';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionand']                  = 'AND';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionpropertyvalueis']      = 'Property value is';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionpropertycontainanyof'] = 'Property values contain any of';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionpropertyvisible']      = 'Property is visible';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionnot']                  = 'Not';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditionnames']['conditionnot']                  = 'NOT';
 
 /**
  * Reference
  */
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['typedesc']['_default_']    = '%s <strong>%s</strong><br /> for attribute <em>%s</em> (Parameter: %s)';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['typedesc']['conditionnot'] = '%s <strong>%s</strong><br /> invert the result of the contained conditions.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['typedesc']['_default_']    = '%s <strong>%s</strong><br>for attribute <em>%s</em> (Parameter: %s)';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['typedesc']['conditionor']  = '%s <strong>%s</strong><br>any sub conditions must be fulfilled';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['typedesc']['conditionand'] = '%s <strong>%s</strong><br>all sub conditions must be fulfilled';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['typedesc']['conditionnot'] = '%s <strong>%s</strong><br>invert the result of the contained condition';

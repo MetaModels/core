@@ -226,7 +226,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
     (
         'default'                                      => array
         (
-            '+title' => array
+            'basic' => array
             (
                 'type',
                 'enabled',
@@ -278,7 +278,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
             // needed for act=copy in DC_Table, as otherwise the fid value will not be copied.
             'label' => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['fid'],
         ),
-        'type'      => array
+        'type'     => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type'],
             'exclude'   => true,
@@ -291,8 +291,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
                 'includeBlankOption' => true,
                 'mandatory'          => true,
                 'tl_class'           => 'w50',
-                'chosen'             => true
-            ),
+                'chosen'             => true,
+                'helpwizard'         => true
+             ),
+             'explanation' => 'dcasetting_condition'
         ),
         'enabled'   => array
         (
