@@ -8,34 +8,33 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2015-08-04T04:10:59+02:00
  */
 
-
-$GLOBALS['TL_LANG']['XPL']['customsql']['0']['0'] = 'Resumaziun';
-$GLOBALS['TL_LANG']['XPL']['customsql']['0']['1'] = 'Tippa ina dumonda dad SQL che duai vegnir exequida.<br />
+$GLOBALS['TL_LANG']['XPL']['customsql']['0']['0']            = 'Resumaziun';
+$GLOBALS['TL_LANG']['XPL']['customsql']['0']['1']            = 'Tippa ina dumonda dad SQL che duai vegnir exequida.<br />
 		Igl è necessari ch\'il resultat da questa dumonda cuntegna almain ina colonna cun il num "id".
 		';
-$GLOBALS['TL_LANG']['XPL']['customsql']['1']['0'] = 'Exempel 1<br />dumonda simpla';
-$GLOBALS['TL_LANG']['XPL']['customsql']['1']['1'] = '<pre>SELECT id FROM mm_mymetamodel WHERE page_id=1</pre>
+$GLOBALS['TL_LANG']['XPL']['customsql']['1']['0']            = 'Exempel 1<br />dumonda simpla';
+$GLOBALS['TL_LANG']['XPL']['customsql']['1']['1']            = '<pre>SELECT id FROM mm_mymetamodel WHERE page_id=1</pre>
 		Quai tscherna tut las IDs da la tabella <em>mm_mymetamodel</em> che han la valur <em>page_id=1</em>
 		';
-$GLOBALS['TL_LANG']['XPL']['customsql']['2']['0'] = 'Exempel 2<br />inserir num da tabella';
-$GLOBALS['TL_LANG']['XPL']['customsql']['2']['1'] = '<pre>SELECT id FROM {{table}} WHERE page_id=1</pre>
+$GLOBALS['TL_LANG']['XPL']['customsql']['2']['0']            = 'Exempel 2<br />inserir num da tabella';
+$GLOBALS['TL_LANG']['XPL']['customsql']['2']['1']            = '<pre>SELECT id FROM {{table}} WHERE page_id=1</pre>
 		Quai è prest il medem sco en l\'exempel 1, be vegn il num da la tabella dal MetaModel actual (il <em>mm_mymetamodel</em> en l\'exempel sura) inserì en la dumonda.
 		
 		';
-$GLOBALS['TL_LANG']['XPL']['customsql']['3']['0'] = 'Insert-tags';
-$GLOBALS['TL_LANG']['XPL']['customsql']['3']['1'] = 'Insert-tags vegnan sustegnids. Ma ponderesche che betg tut ils tags pudessan star a disopsiziun
+$GLOBALS['TL_LANG']['XPL']['customsql']['3']['0']            = 'Insert-tags';
+$GLOBALS['TL_LANG']['XPL']['customsql']['3']['1']            = 'Insert-tags vegnan sustegnids. Ma ponderesche che betg tut ils tags pudessan star a disopsiziun
 		sche la configuraziun dal filter vegn utilisada (p.ex. stat <em>{{page::id}}</em> 
 		be a disposiziun sch\'i vegn utilisà sin ina pagina e betg en in feed RSS).';
-$GLOBALS['TL_LANG']['XPL']['customsql']['4']['0'] = 'Insert-tags segirs';
-$GLOBALS['TL_LANG']['XPL']['customsql']['4']['1'] = 'Insert-tags segir èn sco normals insert-tags, ma lur valur vegn codada en la dumonda.<br />
+$GLOBALS['TL_LANG']['XPL']['customsql']['4']['0']            = 'Insert-tags segirs';
+$GLOBALS['TL_LANG']['XPL']['customsql']['4']['1']            = 'Insert-tags segir èn sco normals insert-tags, ma lur valur vegn codada en la dumonda.<br />
 		Perquai èsi probabel pli segir dad utilisar l\'equivalent segir sche ti n\'ès betg dal tut segir tge che ti fas.<br />
 		La notaziun è la suandanta:
 		<pre>{{secure::page::id}}</pre>';
-$GLOBALS['TL_LANG']['XPL']['customsql']['5']['0'] = 'Funtaunas da parameters<br />';
-$GLOBALS['TL_LANG']['XPL']['customsql']['5']['1'] = 'Funtaunas da parameters han in layout da funtauna da:
+$GLOBALS['TL_LANG']['XPL']['customsql']['5']['0']            = 'Funtaunas da parameters<br />';
+$GLOBALS['TL_LANG']['XPL']['customsql']['5']['1']            = 'Funtaunas da parameters han in layout da funtauna da:
 		<pre>{{param::[funtauna]?[dumonda]}}</pre>
 		Nua che funtauna po esser in da:
 		<ul>
@@ -53,8 +52,8 @@ $GLOBALS['TL_LANG']['XPL']['customsql']['5']['1'] = 'Funtaunas da parameters han
 		<li><strong>recursive</strong> - metter sin 1 per leger recursivamain ils arrays (dovra aggregate set).</li>
 		</ul>
 		';
-$GLOBALS['TL_LANG']['XPL']['customsql']['6']['0'] = 'Exempel 3<br />utilisar funtaunas da parameters cumplexas';
-$GLOBALS['TL_LANG']['XPL']['customsql']['6']['1'] = '<pre>SELECT id
+$GLOBALS['TL_LANG']['XPL']['customsql']['6']['0']            = 'Exempel 3<br />utilisar funtaunas da parameters cumplexas';
+$GLOBALS['TL_LANG']['XPL']['customsql']['6']['1']            = '<pre>SELECT id
 	FROM {{table}}
 	WHERE catname={{param::get?name=category&default=defaultcat}}</pre>
 		<p>
@@ -69,3 +68,5 @@ $GLOBALS['TL_LANG']['XPL']['customsql']['6']['1'] = '<pre>SELECT id
 		vegn la dumonda resultanta esser: "SELECT id FROM mm_demo WHERE catname=\'defaultcat\'"
 		</p>
 		';
+$GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['3']['0'] = 'OR';
+
