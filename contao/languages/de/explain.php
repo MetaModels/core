@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-09-22T12:13:17+02:00
+ * last-updated: 2016-01-13T20:12:55+01:00
  */
 
 $GLOBALS['TL_LANG']['XPL']['customsql']['0']['0']            = 'Zusammenfassung';
@@ -33,6 +33,11 @@ Komplexe Filter, Parameter und Quellen nutzen';
 $GLOBALS['TL_LANG']['XPL']['customsql']['6']['1']            = '<pre>SELECT id
 FROM {{table}}
 WHERE catname={{param::get?name=category&default=defaultcat}}</pre> <p> Dies ist prinzipiell ähnlich wie in Beispiel 2. Allerdings wird hier ein Parameter aus dem "query"-String verwendet. </p> <p> Stellen Sie sich eine Seiten-URL wie "http://example.org/list/category/demo.html" vor.<br /> Die Abfrage lautet dann: "SELECT id FROM mm_demo WHERE catname=\'demo\'" </p> <p> Falls die URL "http://example.org/list.html" lauten soll müsste die Abfrage dann "SELECT id FROM mm_demo WHERE catname=\'defaultcat\'" lauten. </p> ';
+$GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['0']['0'] = 'Eigenschaftswert ist...';
+$GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['0']['1'] = 'Die Bedingung ist erfüllt, wenn der Attributwert gleich dem festgelegten Wert ist.';
+$GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['1']['0'] = 'Eigenschaftswert kann beinhalten...';
+$GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['2']['0'] = 'Eigenschaft ist sichtbar...';
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['3']['0'] = 'ODER';
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['4']['0'] = 'UND';
+$GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['5']['0'] = 'NICHT';
 
