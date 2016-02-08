@@ -150,7 +150,7 @@ class InputScreen implements IInputScreen
         $this->legends[$legendName] = array
         (
             'name'       => $strLegend,
-            'visible'    => (bool) $legend['legendhide'],
+            'visible'    => !(isset($legend['legendhide']) && (bool) $legend['legendhide']),
             'properties' => array()
         );
 
@@ -224,7 +224,10 @@ class InputScreen implements IInputScreen
     protected function translateRows($rows)
     {
         $metaModel      = $this->getMetaModel();
-        $activeLegend   = null;
+        $activeLegend   = $this->translateLegend(
+            array('legendtitle' => 'Unnamed legend', 'legendhide' => false),
+            $metaModel
+        );
         $activeLegendId = null;
 
         // First pass, fetch all attribute names.
