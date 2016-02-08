@@ -1533,11 +1533,10 @@ class Builder
         $commands = $view->getGlobalCommands();
         $command  = new SelectCommand();
 
-        // FIXME: Use the translator to translate the labels.
         $command
             ->setName('all')
-            ->setLabel($GLOBALS['TL_LANG']['MSC']['all'][0])
-            ->setDescription($GLOBALS['TL_LANG']['MSC']['all'][1]);
+            ->setLabel('MSC.all.0')
+            ->setDescription('MSC.all.1');
 
         $parameters        = $command->getParameters();
         $parameters['act'] = 'select';
