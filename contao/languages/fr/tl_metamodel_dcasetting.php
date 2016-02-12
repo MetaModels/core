@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-09-29T00:13:17+02:00
+ * last-updated: 2015-08-04T04:10:59+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Attribut "%s" ajouté au masque de saisie.';
@@ -21,7 +21,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']              =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['0']               = 'Ne pas retirer le contenu HTML.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['1']               = 'Si vous sélectionnez cette option, le contenu HTML sera préservé.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['0']              = 'Toujours sauvegarder';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['1']              = 'Si vrai, le champ sera toujours sauvegarder, même si sa valeur n\'est pas changée.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['1']              = 'Si vrai, le champ sera toujours sauvegardé, même si sa valeur n\'est pas changée.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']['0']                 = 'Attribut';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']['1']                 = 'Attribut auquel ce paramètre se réfère.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['backend_legend']               = 'Back office';
@@ -48,7 +48,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag']['0']                    =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag']['1']                    = 'Si vous voulez dérogez le tri global des signes de la palette pour cet attribut, veuillez le sélectionner ici.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['functions_legend']             = 'Options relatives à la fonctionalité';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['0']      = 'Inclure une option vide';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['1']      = 'Si vrai, une option vide sera ajouté aux options qui permettent de définir une option d\'article.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['1']      = 'Si vrai, une option vide sera ajoutée aux options qui permettent de définir une option d\'article.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']['0']              = 'Cacher légende';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']['1']              = 'Cacher légende par défaut.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']['0']             = 'Titre de la légende';
@@ -102,3 +102,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['1']           =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['0']   = 'Enlever le slash lors de l\'enregistrement';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['1']   = 'Ajouter le slash à l\'enregistrement';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['2']   = 'Ne rien faire';
+

@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-09-29T00:13:17+02:00
+ * last-updated: 2015-08-04T04:10:59+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_content']['ASC']                                 = 'Ascendant';
@@ -30,7 +30,7 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_autosubmit']['1']       = 'Rech
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_hideclearfilter']['0']  = 'Cacher option réinitialisation filtre';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_hideclearfilter']['1']  = 'Cacher l\'option réinitialisation filtre dans tout les filtres.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_params']['0']           = 'Attributs';
-$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_params']['1']           = 'Selectionner les attributs utiliser dans ce filtre front-office.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_params']['1']           = 'Selectionnez les attributs utilisés dans ce filtre frontal';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_template']['0']         = 'Modèle';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_template']['1']         = 'Sélectionner un modèle du front office.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering']['0']            = 'Paramètres de filtre à appliquer';
@@ -63,3 +63,4 @@ $GLOBALS['TL_LANG']['tl_content']['mm_config_legend']                    = 'Conf
 $GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']                    = 'Filtre du MetaModel';
 $GLOBALS['TL_LANG']['tl_content']['mm_meta_legend']                      = 'Optimisation du moteur de recherche';
 $GLOBALS['TL_LANG']['tl_content']['mm_rendering']                        = 'Rendu du MetaModel';
+
