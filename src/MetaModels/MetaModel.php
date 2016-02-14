@@ -18,6 +18,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Martin Treml <github@r2pi.net>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2015 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -904,13 +905,15 @@ class MetaModel implements IMetaModel
      *
      * @param int[]  $allIds         The ids of all variants.
      *
+     * @param bool   $baseAttributes If also the base attributes get updated as well.
+     *
      * @return void
      */
-    protected function updateVariants($item, $activeLanguage, $allIds)
+    protected function updateVariants($item, $activeLanguage, $allIds, $baseAttributes = false)
     {
         foreach ($this->getAttributes() as $strAttributeId => $objAttribute) {
-            if ($item->isVariant() && !($objAttribute->get('isvariant'))) {
-                // Base not found, skip attribute.
+            if ($item->isVariant() && !($objAttribute->get('isvariant')) && !$baseAttributes) {
+                // Skip base attribute.
                 continue;
             }
 
@@ -971,8 +974,10 @@ class MetaModel implements IMetaModel
      */
     public function saveItem($objItem)
     {
+        $baseAttributes = false;
         $objItem->set('tstamp', time());
         if (!$objItem->get('id')) {
+            $baseAttributes = true;
             $this->createNewItem($objItem);
         }
 
@@ -1000,7 +1005,7 @@ class MetaModel implements IMetaModel
             }
         }
 
-        $this->updateVariants($objItem, $strActiveLanguage, $arrAllIds);
+        $this->updateVariants($objItem, $strActiveLanguage, $arrAllIds, $baseAttributes);
 
         // Tell all attributes that the model has been saved. Useful for alias fields, edit counters etc.
         foreach ($this->getAttributes() as $objAttribute) {
