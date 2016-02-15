@@ -74,6 +74,14 @@ class TableManipulation
     const STATEMENT_DROP_COLUMN = 'ALTER TABLE %s DROP COLUMN %s';
 
     /**
+     * SQL statement template to add a index to a column of a table.
+     * First parameter is table name.
+     * second parameter is indextype
+     * third parameter is name of the column.
+     */
+    const STATEMENT_ADD_INDEX_COLUMN = 'ALTER TABLE %s ADD %s(%s)';
+    
+    /**
      * List of reserved MySQL identifiers.
      *
      * @var string[]
@@ -331,6 +339,33 @@ class TableManipulation
         self::checkTableExists($strTableName);
 
         self::getDB()->execute(sprintf(self::STATEMENT_DROP_TABLE, $strTableName));
+    }
+
+    /**
+     * Add a index to given tablename for specified columnname
+     * 
+     * @param string $strTableName      The table name.
+     *
+     * @param string $strIndexType      The index type.
+     *
+     * @param string $strColName        The column name to add a index.
+     *
+     * @return void
+     *
+     * @throws \Exception If an invalid table name has been passed or the table does not exist, the column name is
+     *                    invalid or the column does not exist.
+     */
+    public static function addIndex($strTableName, $strIndexType, $strColName)
+    {
+        self::checkColumnExists($strTableName,$strColName);        
+        self::getDB()->execute(
+            sprintf(
+                self::STATEMENT_ADD_INDEX_COLUMN,
+                $strTableName,
+                $strIndexType,
+                $strColName
+            )
+        );
     }
 
     /**
