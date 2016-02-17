@@ -256,6 +256,8 @@ CREATE TABLE `tl_metamodel_filtersetting` (
   `items` text NULL,
 -- label for frontend filter widget.
   `label` blob NULL,
+-- placeholder for text frontend filter widget.  
+  `placeholder` varchar(255) NOT NULL default '',  
 -- template for frontend filter widget.
   `template` varchar(64) NOT NULL default '',
 -- include a reset option in FE filter.
