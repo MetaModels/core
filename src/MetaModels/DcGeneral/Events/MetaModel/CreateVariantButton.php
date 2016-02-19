@@ -33,6 +33,7 @@ use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\ActionEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PostCreateModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PreCreateModelEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PreEditModelEvent;
 use MetaModels\DcGeneral\Data\Model;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 
@@ -56,6 +57,10 @@ class CreateVariantButton extends BaseSubscriber
             ->addListener(
                 DcGeneralEvents::ACTION,
                 array($this, 'handleCreateVariantAction')
+            )
+            ->addListener(
+                PreEditModelEvent::NAME,
+                array($this, 'presetVariantBase')
             );
     }
 
@@ -145,6 +150,33 @@ class CreateVariantButton extends BaseSubscriber
         }
         $editMask = new EditMask($view, $model, null, $preFunction, $postFunction, $this->breadcrumb($environment));
         $event->setResponse($editMask->execute());
+    }
+
+    /**
+     * Check the items before the edit start. If there is a item with variant support and a empty vargroup it must be a
+     * base. So set the varbase to 1.
+     *
+     * @param PreEditModelEvent $event The event with the model.
+     *
+     * @return void
+     */
+    public function presetVariantBase(PreEditModelEvent $event)
+    {
+        /** @var \MetaModels\DcGeneral\Data\Model $model */
+        $model = $event->getModel();
+
+        // Check of we have the driver from MetaModels. Only these request are from interest.
+        if (get_class($model) != 'MetaModels\DcGeneral\Data\Model') {
+            return;
+        }
+
+        // Get the item and check the context.
+        $nativeItem = $model->getItem();
+        $metaModel  = $nativeItem->getMetaModel();
+
+        if ($metaModel->hasVariants() && empty($nativeItem->get('vargroup'))) {
+            $nativeItem->set('varbase', '1');
+        }
     }
 
     /**
