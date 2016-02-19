@@ -162,11 +162,10 @@ class CreateVariantButton extends BaseSubscriber
      */
     public function presetVariantBase(PreEditModelEvent $event)
     {
-        /** @var \MetaModels\DcGeneral\Data\Model $model */
         $model = $event->getModel();
 
         // Check of we have the driver from MetaModels. Only these request are from interest.
-        if (get_class($model) != 'MetaModels\DcGeneral\Data\Model') {
+        if (!$model instanceof Model) {
             return;
         }
 
