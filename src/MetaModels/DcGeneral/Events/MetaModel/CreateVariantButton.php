@@ -173,7 +173,7 @@ class CreateVariantButton extends BaseSubscriber
         $nativeItem = $model->getItem();
         $metaModel  = $nativeItem->getMetaModel();
 
-        if ($metaModel->hasVariants() && empty($nativeItem->get('vargroup'))) {
+        if ($metaModel->hasVariants() && (!$nativeItem->get('vargroup'))) {
             $nativeItem->set('varbase', '1');
         }
     }
