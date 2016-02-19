@@ -24,7 +24,7 @@ namespace MetaModels;
  * This is the MetaModel factory interface.
  *
  * To create a MetaModel instance, create an instance of the factory.
- * and call {@link \MetaModels\IFactory::byTableName()}.
+ * and call {@link \MetaModels\IFactory::getMetaModel()}.
  *
  * If you only have the id of a MetaModel, you can translate it to the MetaModel-name by invoking
  * {@link \MetaModels\IFactory::translateIdToMetaModelName()} and then perform just as normal.
@@ -32,38 +32,7 @@ namespace MetaModels;
 interface IFactory extends IServiceContainerAware
 {
     /**
-     * Create a MetaModel instance from the id.
-     *
-     * @param int $intId The id of the MetaModel.
-     *
-     * @return IMetaModel the instance of the MetaModel or null if not found.
-     *
-     * @deprecated To create an instance use methods translateIdToMetaModelName() and createMetaModel().
-     */
-    public static function byId($intId);
-
-    /**
-     * Create a MetaModel instance from the table name.
-     *
-     * @param string $strTableName The name of the table.
-     *
-     * @return IMetaModel the instance of the MetaModel or null if not found.
-     *
-     * @deprecated To create an instance use method createMetaModel().
-     */
-    public static function byTableName($strTableName);
-
-    /**
-     * Query for all known MetaModel database tables.
-     *
-     * @return string[] all MetaModel table names as string array.
-     *
-     * @deprecated To retrieve all names use method collectNames().
-     */
-    public static function getAllTables();
-
-    /**
-     * Retrieve the event dispatcher.
+     * Retrieve the service container.
      *
      * @return IMetaModelsServiceContainer
      */
