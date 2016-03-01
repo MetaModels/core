@@ -18,6 +18,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Martin Treml <github@r2pi.net>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Chris Raidler <c.raidler@rad-consulting.ch>
  * @copyright  2012-2015 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
