@@ -13,6 +13,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Henry Lamorski <henry.lamorski@mailbox.org>
  * @copyright  2012-2015 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -22,6 +23,8 @@ namespace MetaModels\Helper;
 
 /**
  * This is the class for table manipulations like creation/renaming/deleting of tables and columns.
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class TableManipulation
 {
@@ -343,12 +346,12 @@ class TableManipulation
 
     /**
      * Add a index to given tablename for specified columnname
-     * 
-     * @param string $strTableName      The table name.
      *
-     * @param string $strIndexType      The index type.
+     * @param string $strTableName The table name.
      *
-     * @param string $strColName        The column name to add a index.
+     * @param string $strIndexType The index type.
+     *
+     * @param string $strColName   The column name to add a index.
      *
      * @return void
      *
@@ -357,7 +360,7 @@ class TableManipulation
      */
     public static function addIndex($strTableName, $strIndexType, $strColName)
     {
-        self::checkColumnExists($strTableName,$strColName);        
+        self::checkColumnExists($strTableName, $strColName);
         self::getDB()->execute(
             sprintf(
                 self::STATEMENT_ADD_INDEX_COLUMN,
