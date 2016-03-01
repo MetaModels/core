@@ -16,6 +16,7 @@ I confirm that:
 | Contao version:                     |          |                                  |
 | MetaModels version:                 |          |                                  |
 | Installation via composer           | (yes/no) |                                  |
+| Installed MetaModels packages       |          |                                  |
 
 ## Issue description
 
@@ -27,13 +28,13 @@ I confirm that:
 2. [Second Step]
 3. [and so on…]
 
-## Expected behaviour
+## Describe the behaviour of the application
 
-(Tell us what should happen)
+(Tell us what happens)
 
-## Actual behaviour
+## Describe the expected behaviour of the application
 
-(Tell us what happens instead)
+(Tell us what should have happened)
 
 ## Screenshots
 
