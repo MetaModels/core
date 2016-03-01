@@ -315,7 +315,7 @@ class SearchablePages
             $pageDetails = $event->getPageDetails();
 
             // Check if we have a page If not go to the next one.
-            if($pageDetails === null) {
+            if ($pageDetails === null) {
                 continue;
             }
 
