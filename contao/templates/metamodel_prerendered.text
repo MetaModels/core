@@ -1,0 +1,21 @@
+<?php
+$strRendersettings = isset($this->settings)? 'settings' : 'view';
+$hideLabels = $this->$strRendersettings->get('hideLabels');
+if (count($this->data)) {
+    foreach ($this->data as $item) {
+        foreach ($item['attributes'] as $field => $name) {
+            if ((isset($item['text'][$field]) && ($value = $item['text'][$field]))) {
+                if(!$hideLabels) {
+                    echo sprintf($GLOBALS['TL_LANG']['MSC']['field_label'], $name) . ': ';
+                }
+                echo $value . PHP_EOL;
+            }
+        }
+
+        if ($item['jumpTo']['deep']) {
+            echo $this->details . ': ' . $item['jumpTo']['url']; ?>
+        }
+    }
+} else {
+    echo $this->noItemsMsg;
+}
