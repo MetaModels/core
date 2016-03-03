@@ -461,7 +461,7 @@ class Builder
         }
 
         foreach ($this->getInputScreenDetails()->getProperties() as $property => $value) {
-            if (isset($value['info']['search'])) {
+            if (!empty($value['info']['search'])) {
                 $element->addProperty($property);
             }
         }
