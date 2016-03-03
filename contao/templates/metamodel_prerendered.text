@@ -13,7 +13,7 @@ if (count($this->data)) {
         }
 
         if ($item['jumpTo']['deep']) {
-            echo $this->details . ': ' . $item['jumpTo']['url']; ?>
+            echo $this->details . ': ' . $item['jumpTo']['url'];
         }
     }
 } else {
