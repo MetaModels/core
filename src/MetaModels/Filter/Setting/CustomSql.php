@@ -16,6 +16,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Jan Malte Gerth <anmeldungen@malte-gerth.de>
  * @author     Oliver Hoff <oliver@hofff.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2015 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -145,7 +146,7 @@ class CustomSql extends Simple
      */
     private function addParameter($parameter)
     {
-        if (empty($parameter)) {
+        if (is_null($parameter)) {
             return;
         }
 
@@ -302,7 +303,6 @@ class CustomSql extends Simple
         if ($index != $count || $var === null) {
             if (isset($arrArgs['default'])) {
                 $this->addParameter($arrArgs['default']);
-
                 return '?';
             } else {
                 return 'NULL';
