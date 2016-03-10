@@ -16,6 +16,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Jan Malte Gerth <anmeldungen@malte-gerth.de>
  * @author     Oliver Hoff <oliver@hofff.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2015 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
