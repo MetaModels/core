@@ -145,7 +145,7 @@ class CustomSql extends Simple
      */
     private function addParameter($parameter)
     {
-        if (empty($parameter)) {
+        if (is_null($parameter)) {
             return;
         }
 
@@ -302,7 +302,6 @@ class CustomSql extends Simple
         if ($index != $count || $var === null) {
             if (isset($arrArgs['default'])) {
                 $this->addParameter($arrArgs['default']);
-
                 return '?';
             } else {
                 return 'NULL';
