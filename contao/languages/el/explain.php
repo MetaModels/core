@@ -8,30 +8,29 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2015-08-04T04:10:59+02:00
  */
 
-
-$GLOBALS['TL_LANG']['XPL']['customsql']['0']['0'] = 'Περίληψη ';
-$GLOBALS['TL_LANG']['XPL']['customsql']['0']['1'] = 'Πληκτρολογήστε οποιοδήποτε ερώτημα SQL που εκτελείται.
+$GLOBALS['TL_LANG']['XPL']['customsql']['0']['0']            = 'Περίληψη ';
+$GLOBALS['TL_LANG']['XPL']['customsql']['0']['1']            = 'Πληκτρολογήστε οποιοδήποτε ερώτημα SQL που εκτελείται.
 ⏎ »» Απαιτείται ότι αυτό το ερώτημα επιστρέφει τουλάχιστον μία στήλη ονομάζει "αναγνωριστικό". ⏎ »» ';
-$GLOBALS['TL_LANG']['XPL']['customsql']['1']['0'] = 'Παραδειγμα 1<br />απλό ερώτημα ';
-$GLOBALS['TL_LANG']['XPL']['customsql']['1']['1'] = ' SELECT id ΑΠΟ ΟΠΟΥ mm_mymetamodel page_id = 1 < / pre> ⏎
+$GLOBALS['TL_LANG']['XPL']['customsql']['1']['0']            = 'Παραδειγμα 1<br />απλό ερώτημα ';
+$GLOBALS['TL_LANG']['XPL']['customsql']['1']['1']            = ' SELECT id ΑΠΟ ΟΠΟΥ mm_mymetamodel page_id = 1 < / pre> ⏎
  »» Αυτό επιλέγει όλα τα αναγνωριστικά από τον πίνακα  mm_mymetamodel < / em > που έχει την τιμή  page_id = 1 < / em > ⏎
  »»';
-$GLOBALS['TL_LANG']['XPL']['customsql']['2']['0'] = 'Παραδειγμα 2<br />εισαγωγη ονοματος ταμπελας';
-$GLOBALS['TL_LANG']['XPL']['customsql']['2']['1'] = '<pre>SELECT id FROM {{table}} WHERE page_id=1</pre>
+$GLOBALS['TL_LANG']['XPL']['customsql']['2']['0']            = 'Παραδειγμα 2<br />εισαγωγη ονοματος ταμπελας';
+$GLOBALS['TL_LANG']['XPL']['customsql']['2']['1']            = '<pre>SELECT id FROM {{table}} WHERE page_id=1</pre>
 		This is merely the same as example 1 but the table name of the current MetaModel (i.e.: the <em>mm_mymetamodel</em> from above) will get inserted into the query.
 		';
-$GLOBALS['TL_LANG']['XPL']['customsql']['3']['0'] = 'Εισαγωγη ετικετων';
-$GLOBALS['TL_LANG']['XPL']['customsql']['3']['1'] = 'Ετικέτες υποστηρίζονται, αλλά δεν είναι όλες οι ετικέτες διαθεσιμες⏎ »» όταν η ρύθμιση φίλτρου χρησιμοποιείται (για παράδειγμα το {{page::id}} is⏎ »» διαθέσιμη μόνο όταν χρησιμοποιείται από ένα μπροστινό άκρο σελίδας και όχι από τα RSS-feeds).';
-$GLOBALS['TL_LANG']['XPL']['customsql']['4']['0'] = 'Ασφαλης εισαγωγη ετικετων';
-$GLOBALS['TL_LANG']['XPL']['customsql']['4']['1'] = 'Ενθετο ασφαλων ετικετων είναι ακριβώς όπως το απλό ένθετο, αλλά η αξία τους δραπέτευσε.
+$GLOBALS['TL_LANG']['XPL']['customsql']['3']['0']            = 'Εισαγωγη ετικετων';
+$GLOBALS['TL_LANG']['XPL']['customsql']['3']['1']            = 'Ετικέτες υποστηρίζονται, αλλά δεν είναι όλες οι ετικέτες διαθεσιμες⏎ »» όταν η ρύθμιση φίλτρου χρησιμοποιείται (για παράδειγμα το {{page::id}} is⏎ »» διαθέσιμη μόνο όταν χρησιμοποιείται από ένα μπροστινό άκρο σελίδας και όχι από τα RSS-feeds).';
+$GLOBALS['TL_LANG']['XPL']['customsql']['4']['0']            = 'Ασφαλης εισαγωγη ετικετων';
+$GLOBALS['TL_LANG']['XPL']['customsql']['4']['1']            = 'Ενθετο ασφαλων ετικετων είναι ακριβώς όπως το απλό ένθετο, αλλά η αξία τους δραπέτευσε.
 ⏎ »»Ως εκ τούτου θα μπορούσε να είναι σε καλύτερη θέση με το ασφαλή ισοδύναμο αν ξέρετε ακριβώς τι κάνετε.<br />⏎
 ⏎ »» Ο συμβολισμός είναι σαν:⏎ 
 »»{{ασφαλή::σελίδα::id}}</pre>';
-$GLOBALS['TL_LANG']['XPL']['customsql']['5']['0'] = 'Πηγες παραμετρων<br />';
-$GLOBALS['TL_LANG']['XPL']['customsql']['5']['1'] = 'Parameter sources have the normal layout of:
+$GLOBALS['TL_LANG']['XPL']['customsql']['5']['0']            = 'Πηγες παραμετρων<br />';
+$GLOBALS['TL_LANG']['XPL']['customsql']['5']['1']            = 'Parameter sources have the normal layout of:
 		<pre>{{param::[source]?[query string]}}</pre>
 		Where the source may be any of:
 		<ul>
@@ -49,8 +48,8 @@ $GLOBALS['TL_LANG']['XPL']['customsql']['5']['1'] = 'Parameter sources have the 
 		<li><strong>recursive</strong> - set to 1 to read arrays recursive (needs aggregate set).</li>
 		</ul>
 		';
-$GLOBALS['TL_LANG']['XPL']['customsql']['6']['0'] = 'Παραδειγμα 3<br />χρησιμοποιηση φιλτρων των παραμετρων πηγων';
-$GLOBALS['TL_LANG']['XPL']['customsql']['6']['1'] = '<pre>SELECT id
+$GLOBALS['TL_LANG']['XPL']['customsql']['6']['0']            = 'Παραδειγμα 3<br />χρησιμοποιηση φιλτρων των παραμετρων πηγων';
+$GLOBALS['TL_LANG']['XPL']['customsql']['6']['1']            = '<pre>SELECT id
 	FROM {{table}}
 	WHERE catname={{param::get?name=category&default=defaultcat}}</pre>
 		<p>
@@ -65,3 +64,5 @@ $GLOBALS['TL_LANG']['XPL']['customsql']['6']['1'] = '<pre>SELECT id
 		the resulting Query will then be: "SELECT id FROM mm_demo WHERE catname=\'defaultcat\'"
 		</p>
 		';
+$GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['3']['0'] = 'OR';
+

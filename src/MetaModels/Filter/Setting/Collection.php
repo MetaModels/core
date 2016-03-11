@@ -52,7 +52,7 @@ class Collection implements ICollection
      *
      * @var IMetaModel
      */
-     protected $metaModel;
+    protected $metaModel;
 
     /**
      * Create a new instance.

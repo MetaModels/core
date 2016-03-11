@@ -145,10 +145,6 @@ class CustomSql extends Simple
      */
     private function addParameter($parameter)
     {
-        if (empty($parameter)) {
-            return;
-        }
-
         $this->queryParameter[] = $parameter;
     }
 
@@ -215,8 +211,12 @@ class CustomSql extends Simple
                 return \Session::getInstance()->get($valueName);
 
             case 'filter':
-                if (isset($this->filterParameters)) {
-                    return $this->filterParameters[$valueName];
+                if (is_array($this->filterParameters)) {
+                    if (array_key_exists($valueName, $this->filterParameters)) {
+                        return $this->filterParameters[$valueName];
+                    }
+
+                    return null;
                 }
                 break;
 
@@ -226,8 +226,8 @@ class CustomSql extends Simple
             default:
         }
 
-        // This should never occur.
-        return 'NULL';
+        // Unknown sources always resort to null.
+        return null;
     }
 
     /**
@@ -300,7 +300,7 @@ class CustomSql extends Simple
         }
 
         if ($index != $count || $var === null) {
-            if (isset($arrArgs['default'])) {
+            if (array_key_exists('default', $arrArgs) && (null !== $arrArgs['default'])) {
                 $this->addParameter($arrArgs['default']);
 
                 return '?';

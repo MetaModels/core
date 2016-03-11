@@ -86,7 +86,12 @@ class MultiTextWidget extends \Widget
     protected function validator($varInput)
     {
         if (is_array($varInput)) {
-            return parent::validator($varInput);
+            $value = array();
+            foreach ($varInput as $key => $input) {
+                $value[$key] = parent::validator($input);
+            }
+
+            return $value;
         }
 
         return parent::validator(trim($varInput));

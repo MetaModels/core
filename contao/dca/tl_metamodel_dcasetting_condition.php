@@ -17,6 +17,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Christopher Boelter <christopher@boelter.eu>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2015 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -226,7 +227,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
     (
         'default'                                      => array
         (
-            '+title' => array
+            'basic' => array
             (
                 'type',
                 'enabled',
@@ -278,7 +279,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
             // needed for act=copy in DC_Table, as otherwise the fid value will not be copied.
             'label' => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['fid'],
         ),
-        'type'      => array
+        'type'     => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type'],
             'exclude'   => true,
@@ -291,8 +292,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
                 'includeBlankOption' => true,
                 'mandatory'          => true,
                 'tl_class'           => 'w50',
-                'chosen'             => true
-            ),
+                'chosen'             => true,
+                'helpwizard'         => true
+             ),
+             'explanation' => 'dcasetting_condition'
         ),
         'enabled'   => array
         (

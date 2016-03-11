@@ -31,6 +31,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['becap_description']          
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergrouptype']             = array('Grouping type', 'The grouping type to use in the item view.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergroupattr']             = array('Grouping attribute', 'The attribute to use for grouping in the item view.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergrouplen']              = array('Grouping length', 'The amount of characters to use for grouping.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendersortattr']              = array('Sorting attribute', 'The attribute to sort by.');
+$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendersort']                  = array('Sorting direction', 'The sorting direction.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['ismanualsort']                = array('Enable manual sorting', 'If this is enabled, the user will be able to perform manual sorting.');
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['title_legend']                = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['display_legend']              = 'Data display settings';
@@ -48,3 +50,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergrouptypes']['weekday']
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergrouptypes']['week']    = 'Group by week of year';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergrouptypes']['month']   = 'Group by month of date';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergrouptypes']['year']    = 'Group by year of date';
+
+$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendersortdirections']['asc']  = 'Ascending';
+$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendersortdirections']['desc'] = 'Descending';

@@ -29,7 +29,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 /**
  * This is the MetaModel factory interface.
  *
- * To create a MetaModel instance, either call @link{MetaModelFactory::byId()} or @link{MetaModelFactory::byTableName()}
+ * To create a MetaModel instance, call @link{MetaModelFactory::getMetaModel()}
  */
 class Factory implements IFactory
 {
@@ -147,12 +147,23 @@ class Factory implements IFactory
     }
 
     /**
-     * {@inheritdoc}
+     * Create a MetaModel instance from the id.
      *
-     * @deprecated To create an instance use methods translateIdToMetaModelName() and createMetaModel().
+     * @param int $intId The id of the MetaModel.
+     *
+     * @return IMetaModel the instance of the MetaModel or null if not found.
+     *
+     * @deprecated To create an instance use methods translateIdToMetaModelName() and getMetaModel().
      */
     public static function byId($intId)
     {
+        trigger_error(
+            'MetaModels\Factory::byId is deprecated and will get removed. ' .
+            'Use methods MetaModels\Factory::translateIdToMetaModelName() and ' .
+            'MetaModels\Factory::getMetaModel() instead.',
+            E_USER_DEPRECATED
+        );
+
         $factory = static::getDefaultFactory();
         $name    = $factory->translateIdToMetaModelName($intId);
 
@@ -160,24 +171,42 @@ class Factory implements IFactory
     }
 
     /**
-     * {@inheritdoc}
+     * Create a MetaModel instance from the table name.
      *
-     * @deprecated To create an instance use method createMetaModel().
+     * @param string $strTableName The name of the table.
+     *
+     * @return IMetaModel the instance of the MetaModel or null if not found.
+     *
+     * @deprecated To create an instance use method getMetaModel().
      */
     public static function byTableName($strTableName)
     {
+        trigger_error(
+            'MetaModels\Factory::byTableName is deprecated and will get removed. ' .
+            'Use method MetaModels\Factory::getMetaModel() instead.',
+            E_USER_DEPRECATED
+        );
+
         $factory = static::getDefaultFactory();
 
         return $factory->getMetaModel($strTableName);
     }
 
     /**
-     * {@inheritdoc}
+     * Query for all known MetaModel database tables.
+     *
+     * @return string[] all MetaModel table names as string array.
      *
      * @deprecated To retrieve all names use method collectNames().
      */
     public static function getAllTables()
     {
+        trigger_error(
+            'MetaModels\Factory::getAllTables is deprecated and will get removed. ' .
+            'Use method MetaModels\Factory::collectNames() instead.',
+            E_USER_DEPRECATED
+        );
+
         $factory = static::getDefaultFactory();
 
         return $factory->collectNames();

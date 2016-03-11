@@ -49,9 +49,6 @@ class IsVariantAttribute implements PropertyConditionInterface
 
         $nativeItem = $model->getItem();
         $metaModel  = $nativeItem->getMetaModel();
-        $attribute  = $metaModel->getAttribute($property->getName());
-
-        $attribute->get('isvariant');
 
         if ($metaModel->hasVariants() && !$nativeItem->isVariantBase()) {
             return !in_array($property->getName(), array_keys($metaModel->getInVariantAttributes()));

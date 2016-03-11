@@ -315,16 +315,6 @@ class Driver implements MultiLanguageDataProviderInterface
     }
 
     /**
-     * Fetch an empty filter item collection.
-     *
-     * @return FilterOptionCollectionInterface
-     */
-    public function getEmptyFilterOptionCollection()
-    {
-        return new DefaultFilterOptionCollection();
-    }
-
-    /**
      * Prepare a filter and return it.
      *
      * @param ConfigInterface $configuration The configuration.
@@ -458,7 +448,7 @@ class Driver implements MultiLanguageDataProviderInterface
             ->getAttribute($arrProperties[0])
             ->getFilterOptions($objFilter->getMatchingIds(), true);
 
-        $objCollection = $this->getEmptyFilterOptionCollection();
+        $objCollection = new DefaultFilterOptionCollection();
         foreach ($arrValues as $strKey => $strValue) {
             $objCollection->add($strKey, $strValue);
         }

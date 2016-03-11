@@ -19,7 +19,7 @@
  */
 
 /**
- * Insert tags
+ * filter: custom sql
  */
 $GLOBALS['TL_LANG']['XPL']['customsql'] = array
 (
@@ -103,4 +103,41 @@ $GLOBALS['TL_LANG']['XPL']['customsql'] = array
         </p>
         '
     )
+);
+
+/**
+ * dcasetting: conditions
+ */
+$GLOBALS['TL_LANG']['XPL']['dcasetting_condition'] = array
+(
+    array
+    (
+        'Attribute value is...',
+        'The condition is fulfilled when the attribute value is equal to the specified value.'
+    ),
+    array
+    (
+        'Attribute values contain any of...',
+        'The condition is fulfilled when any of the attribute\'s values matches at least one of the specified values (set intersection).'
+    ),
+    array
+    (
+        'Is attribute visible...',
+        'The condition is fulfilled when the condition of the specifiend attribute is fulfilled. In other words, the attribute is visible if, and only if, the specified attribute is visible as well.'
+    ),
+    array
+    (
+        'OR',
+        'Any sub condition must be fulfilled.'
+    ),
+    array
+    (
+        'AND',
+        'All sub condition must be fulfilled.'
+    ),
+    array
+    (
+        'NOT',
+        'Invert the result of the contained condition.'
+    )                      
 );

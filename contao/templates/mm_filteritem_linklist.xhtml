@@ -1,3 +1,8 @@
+<?php if ($this->errors): ?>
+<?php foreach ($this->errors as $error): ?>
+<p class="error"><?php echo $error; ?></p>
+<?php endforeach; ?>
+<?php endif; ?>
 <?php if(is_array($this->options) && count($this->options)): ?>
 <ul>
 <?php
