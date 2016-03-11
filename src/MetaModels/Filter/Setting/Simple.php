@@ -22,6 +22,8 @@
 
 namespace MetaModels\Filter\Setting;
 
+use Contao\Input;
+use Contao\Widget;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Widget\GetAttributesFromDcaEvent;
@@ -378,8 +380,7 @@ abstract class Simple implements ISimple
         $dispatcher = $this->getEventDispatcher();
         $event      = new GetAttributesFromDcaEvent(
             $arrWidget,
-            $arrWidget['eval']['urlparam'],
-            $arrWidget['value']
+            $arrWidget['eval']['urlparam']
         );
 
         $dispatcher->dispatch(
@@ -393,8 +394,8 @@ abstract class Simple implements ISimple
 
         /** @var \Widget $objWidget */
         $objWidget = new $strClass($event->getResult());
-
-        $strField = $objWidget->generate();
+        $this->validateWidget($objWidget, $arrWidget['value']);
+        $strField = $objWidget->generateWithError();
 
         return array
         (
@@ -418,7 +419,8 @@ abstract class Simple implements ISimple
             'count'      => isset($arrWidget['count']) ? $arrWidget['count'] : null,
             'showCount'  => $objFrontendFilterOptions->isShowCountValues(),
             'autosubmit' => $objFrontendFilterOptions->isAutoSubmit(),
-            'urlvalue'   => array_key_exists('urlvalue', $arrWidget) ? $arrWidget['urlvalue'] : $arrWidget['value']
+            'urlvalue'   => array_key_exists('urlvalue', $arrWidget) ? $arrWidget['urlvalue'] : $arrWidget['value'],
+            'errors'     => $objWidget->hasErrors() ? $objWidget->getErrors() : array()
         );
     }
 
@@ -472,5 +474,32 @@ abstract class Simple implements ISimple
     public function getReferencedAttributes()
     {
         return array();
+    }
+
+    /**
+     * Validate the widget using the value.
+     *
+     * @param Widget      $widget The widget to validate.
+     *
+     * @param string|null $value  The value to validate.
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    protected function validateWidget($widget, $value)
+    {
+        if (null === $value) {
+            return;
+        }
+        $name = $widget->name;
+
+        // Backup $_POST value.
+        $keeper = Input::post($name);
+        Input::setPost($name, $value);
+        $widget->validate();
+        // Restore $_POST value.
+        Input::setPost($name, $keeper);
     }
 }

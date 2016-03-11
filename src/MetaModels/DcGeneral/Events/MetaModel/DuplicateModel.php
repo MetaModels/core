@@ -23,6 +23,7 @@
 namespace MetaModels\DcGeneral\Events\MetaModel;
 
 use ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\PreDuplicateModelEvent;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 
 /**
@@ -38,7 +39,7 @@ class DuplicateModel extends BaseSubscriber
     protected function registerEventsInDispatcher()
     {
         $this->addListener(
-            PostDuplicateModelEvent::NAME,
+            PreDuplicateModelEvent::NAME,
             array($this, 'handle')
         );
     }
@@ -46,11 +47,11 @@ class DuplicateModel extends BaseSubscriber
     /**
      * Handle the paste into and after event.
      *
-     * @param PostDuplicateModelEvent $event The event.
+     * @param PreDuplicateModelEvent $event The event.
      *
      * @return void
      */
-    public function handle(PostDuplicateModelEvent $event)
+    public function handle(PreDuplicateModelEvent $event)
     {
         $model = $event->getModel();
 
@@ -63,7 +64,9 @@ class DuplicateModel extends BaseSubscriber
             return;
         }
 
-        // Set the vargroup to null for auto creating.
-        $model->setProperty('vargroup', null);
+        // If we have a varbase, reset the vargroup because we got a new id.
+        if($model->getProperty('varbase') == 1){
+            $model->setProperty('vargroup', null);
+        }
     }
 }

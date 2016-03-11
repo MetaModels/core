@@ -54,12 +54,12 @@ class GreaterThan implements IFilterRule
      *
      * @param IAttribute $objAttribute The attribute that shall be searched.
      *
-     * @param array      $varValue     The value to compare against.
+     * @param mixed      $varValue     The value to compare against.
      *
      * @param bool       $blnInclusive If true, the passed value will be included in the check
      *                                 and therefore make the check an equal-or-greater test.
      */
-    public function __construct($objAttribute, $varValue, $blnInclusive = false)
+    public function __construct(IAttribute $objAttribute, $varValue, $blnInclusive = false)
     {
         $this->objAttribute = $objAttribute;
         $this->varValue     = $varValue;

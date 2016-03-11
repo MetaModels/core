@@ -109,6 +109,7 @@ class ConditionOr extends FilterRule
                 $arrIds = array_merge($arrIds, $arrChildMatches);
             }
         }
-        return $arrIds;
+
+        return array_unique($arrIds);
     }
 }

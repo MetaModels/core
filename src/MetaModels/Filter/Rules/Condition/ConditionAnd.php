@@ -55,30 +55,31 @@ class ConditionAnd extends FilterRule
      */
     public function getMatchingIds()
     {
-        $arrIds   = null;
-        $blnEmpty = true;
-        foreach ($this->arrChildFilters as $objChildFilter) {
-            $arrChildMatches = $objChildFilter->getMatchingIds();
-            // If null => all items allowed by this rule.
-            if ($arrChildMatches === null) {
-                continue;
-            }
+        if (0 === count($this->arrChildFilters)) {
+            return array();
+        }
 
-            if ($arrChildMatches) {
-                $blnEmpty = false;
-                if ($arrIds === null) {
-                    $arrIds = $arrChildMatches;
-                } else {
-                    $arrIds = array_intersect($arrIds, $arrChildMatches);
-                }
-            } else {
+        $ids = null;
+        foreach ($this->arrChildFilters as $objChildFilter) {
+            $matchingIds = $objChildFilter->getMatchingIds();
+            if (array() === $matchingIds) {
                 // Empty array, no items allowed by this rule, break out.
                 return array();
             }
+
+            // If null => all items allowed by this rule => ignore it.
+            if (null === $matchingIds) {
+                continue;
+            }
+
+            if (null === $ids) {
+                $ids = $matchingIds;
+                continue;
+            }
+
+            $ids = array_intersect($ids, $matchingIds);
         }
-        if ($blnEmpty) {
-            return array();
-        }
-        return $arrIds;
+
+        return is_array($ids) ? array_values($ids) : null;
     }
 }

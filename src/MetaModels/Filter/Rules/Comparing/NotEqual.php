@@ -47,9 +47,9 @@ class NotEqual implements IFilterRule
      *
      * @param IAttribute $objAttribute The query that shall be executed.
      *
-     * @param array      $varValue     The value to compare against.
+     * @param mixed      $varValue     The value to compare against.
      */
-    public function __construct($objAttribute, $varValue)
+    public function __construct(IAttribute $objAttribute, $varValue)
     {
         $this->objAttribute = $objAttribute;
         $this->varValue     = $varValue;

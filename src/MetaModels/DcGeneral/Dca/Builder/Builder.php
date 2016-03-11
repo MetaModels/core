@@ -461,7 +461,7 @@ class Builder
         }
 
         foreach ($this->getInputScreenDetails()->getProperties() as $property => $value) {
-            if (isset($value['info']['search'])) {
+            if (!empty($value['info']['search'])) {
                 $element->addProperty($property);
             }
         }
@@ -1467,14 +1467,10 @@ class Builder
 
         foreach ($inputScreen->getLegends() as $legendName => $legend) {
             $paletteLegend = new Legend($legendName);
-            $paletteLegend->setInitialVisibility(isset($legend['visible']) && (bool) $legend['visible']);
+            $paletteLegend->setInitialVisibility($legend['visible']);
             $palette->addLegend($paletteLegend);
 
-            $this->translator->setValue(
-                $legendName . '_legend',
-                isset($legend['name']) ? $legend['name'] : '',
-                $container->getName()
-            );
+            $this->translator->setValue($legendName . '_legend', $legend['name'], $container->getName());
 
             foreach ($legend['properties'] as $propertyName) {
                 $property = new Property($propertyName);
@@ -1537,11 +1533,10 @@ class Builder
         $commands = $view->getGlobalCommands();
         $command  = new SelectCommand();
 
-        // FIXME: Use the translator to translate the labels.
         $command
             ->setName('all')
-            ->setLabel($GLOBALS['TL_LANG']['MSC']['all'][0])
-            ->setDescription($GLOBALS['TL_LANG']['MSC']['all'][1]);
+            ->setLabel('MSC.all.0')
+            ->setDescription('MSC.all.1');
 
         $parameters        = $command->getParameters();
         $parameters['act'] = 'select';
