@@ -389,4 +389,92 @@ class CustomSqlTest extends TestCase
             array()
         );
     }
+
+    /**
+     * Test with an empty string value.
+     *
+     * @return void
+     */
+    public function testWithEmptyStringValue()
+    {
+        $setting = $this->mockCustomSql(
+            array(
+                'customsql' => 'SELECT id FROM {{table}} WHERE otherparam={{param::filter?name=otherparam}}'
+            ),
+            'tableName'
+        );
+
+        $this->assertGeneratedSqlIs(
+            'SELECT id FROM tableName WHERE otherparam=?',
+            array(''),
+            $setting,
+            array('otherparam' => '')
+        );
+    }
+
+    /**
+     * Test with a numeric zero value.
+     *
+     * @return void
+     */
+    public function testWithZeroValue()
+    {
+        $setting = $this->mockCustomSql(
+            array(
+                'customsql' => 'SELECT id FROM {{table}} WHERE otherparam={{param::filter?name=otherparam}}'
+            ),
+            'tableName'
+        );
+
+        $this->assertGeneratedSqlIs(
+            'SELECT id FROM tableName WHERE otherparam=?',
+            array(0),
+            $setting,
+            array('otherparam' => 0)
+        );
+    }
+
+    /**
+     * Test with a null value (not passed as param value).
+     *
+     * @return void
+     */
+    public function testWithNullValue()
+    {
+        $setting = $this->mockCustomSql(
+            array(
+                'customsql' => 'SELECT id FROM {{table}} WHERE otherparam={{param::filter?name=otherparam}}'
+            ),
+            'tableName'
+        );
+
+        $this->assertGeneratedSqlIs(
+            'SELECT id FROM tableName WHERE otherparam=NULL',
+            array(),
+            $setting,
+            array('otherparam' => null)
+        );
+    }
+
+    /**
+     * Test with a null value (not passed as param value) and a default.
+     *
+     * @return void
+     */
+    public function testWithNullValueAndDefault()
+    {
+        $setting = $this->mockCustomSql(
+            array(
+                'customsql' => 'SELECT id FROM {{table}} WHERE otherparam={{param::filter?name=otherparam&default=xyz}}'
+            ),
+            'tableName'
+        );
+
+        $this->assertGeneratedSqlIs(
+            'SELECT id FROM tableName WHERE otherparam=?',
+            array('xyz'),
+            $setting,
+            array('otherparam' => null)
+        );
+    }
 }
