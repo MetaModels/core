@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-11-27T00:13:16+01:00
+ * last-updated: 2016-03-11T20:13:56+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['becap_description']['0']       = 'Beschreibungstext';
@@ -48,8 +48,12 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergrouptypes']['weekday']
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergrouptypes']['year']     = 'Gruppiere nach Jahr des Datums';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendermode']['0']              = 'Render-Modus';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendermode']['1']              = 'Wählen Sie eine gewünschte Render-Einstellung aus..';
-$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendersortdirections']['asc']  = 'aufsteigend';
-$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendersortdirections']['desc'] = 'absteigend';
+$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendersort']['0']              = 'Sortierrichtung';
+$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendersort']['1']              = 'Richtung der Sortierung.';
+$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendersortattr']['0']          = 'Attribut der Sortierung';
+$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendersortattr']['1']          = 'Attribut nach dem sortiert wird.';
+$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendersortdirections']['asc']  = 'Aufsteigend';
+$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendersortdirections']['desc'] = 'Absteigend';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['settings']['0']                = 'Einstellungen der Definition';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['settings']['1']                = 'Bearbeiten Sie ein Einstellungen der Definition ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['show']['0']                    = 'Details der Definition';
