@@ -167,16 +167,12 @@ class Subscriber extends BaseSubscriber
             '&id=%4$s' .
             '&item=PALETTE_PANEL_PICKER';
 
-        if (version_compare(VERSION, '3.0', '<')) {
-            $link = ' <a href="' . $url . '" rel="lightbox[files 765 60%%]" data-lightbox="files 765 60%%">%5$s</a>';
-        } else {
-            $link = ' <a href="' . $url . '" onclick="Backend.getScrollOffset();Backend.openModalIframe({' .
-                '\'width\':765,' .
-                '\'title\':\'%6$s\',' .
-                '\'url\':this.href,' .
-                '\'id\':\'%4$s\'' .
-                '});return false">%5$s</a>';
-        }
+        $link = ' <a href="' . $url . '" onclick="Backend.getScrollOffset();Backend.openModalIframe({' .
+            '\'width\':765,' .
+            '\'title\':\'%6$s\',' .
+            '\'url\':this.href,' .
+            '\'id\':\'%4$s\'' .
+            '});return false">%5$s</a>';
 
         $imageEvent = new GenerateHtmlEvent(
             'system/modules/metamodels/assets/images/icons/panel_layout.png',
