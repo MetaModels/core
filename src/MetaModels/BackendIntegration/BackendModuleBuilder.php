@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2016 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2016 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -327,7 +328,7 @@ class BackendModuleBuilder
                 $GLOBALS['BE_MOD'][$section] = array();
             }
 
-            $GLOBALS['BE_MOD'][$section] = array_merge_recursive($entries, $GLOBALS['BE_MOD'][$section]);
+            $GLOBALS['BE_MOD'][$section] = array_merge_recursive($GLOBALS['BE_MOD'][$section], $entries);
         }
 
         $GLOBALS['TL_LANG'] = array_merge_recursive($this->languageStrings, $GLOBALS['TL_LANG']);
