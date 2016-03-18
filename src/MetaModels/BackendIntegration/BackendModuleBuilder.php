@@ -313,6 +313,24 @@ class BackendModuleBuilder
     }
 
     /**
+     * Merge two arrays recusive with unique values.
+     *
+     * @return array
+     */
+    private function array_merge_recursive_unique($array1, $array2) {
+        if (empty($array1)) return $array2;
+      
+        foreach ($array2 as $key => $value) {
+            if (is_array($value) && is_array(@$array1[$key])) {
+                $value = $this->array_merge_recursive_unique($array1[$key], $value);
+            }
+            $array1[$key] = $value;
+        }
+        
+        return $array1;
+    }
+
+    /**
      * Set the local data into the GLOBALS config.
      *
      * @return void
@@ -327,10 +345,16 @@ class BackendModuleBuilder
             if (!isset($GLOBALS['BE_MOD'][$section])) {
                 $GLOBALS['BE_MOD'][$section] = array();
             }
-
-            $GLOBALS['BE_MOD'][$section] = array_merge_recursive($GLOBALS['BE_MOD'][$section], $entries);
+            
+            foreach ($entries as $entryName => $entry) {
+                if(!isset($GLOBALS['BE_MOD'][$section][$entryName])) {
+                    $GLOBALS['BE_MOD'][$section][$entryName] = array();
+                }
+                $GLOBALS['BE_MOD'][$section][$entryName] = $this->array_merge_recursive_unique($entry, $GLOBALS['BE_MOD'][$section][$entryName]);
+            }
+            
         }
 
-        $GLOBALS['TL_LANG'] = array_merge_recursive($this->languageStrings, $GLOBALS['TL_LANG']);
+        $GLOBALS['TL_LANG'] = $this->array_merge_recursive_unique($this->languageStrings, $GLOBALS['TL_LANG']);
     }
 }
