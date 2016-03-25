@@ -25,11 +25,13 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Decod
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
+use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\InputScreenRenderModeIs;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
@@ -60,6 +62,14 @@ class Subscriber extends BaseSubscriber
                 }
             )
             ->addListener(
+                ModelToLabelEvent::NAME,
+                array($this, 'modelToLabel')
+            )
+            ->addListener(
+                PostPersistModelEvent::NAME,
+                array($this, 'handleUpdate')
+            )            
+            ->addListener(
                 GetPropertyOptionsEvent::NAME,
                 array($this, 'getAttrOptions')
             )
@@ -74,6 +84,64 @@ class Subscriber extends BaseSubscriber
             ->addListener(
                 BuildDataDefinitionEvent::NAME,
                 array($this, 'setVisibility')
+            );
+    }
+
+    /**
+     * Draw the render setting.
+     *
+     * @param ModelToLabelEvent $event The event.
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    public function modelToLabel(ModelToLabelEvent $event)
+    {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca_sortgroup')) {
+            return;
+        }
+
+        if ($event->getModel()->getProperty('isdefault')) {
+            $event->setLabel(
+                $event->getLabel() .
+                ' <span style="color:#b3b3b3; padding-left:3px">[' . $GLOBALS['TL_LANG']['MSC']['fallback'] . ']</span>'
+            );
+        }
+    }
+
+    /**
+     * Handle the update of a render setting.
+     *
+     * This resets the default flags for all other render settings when becoming the default.
+     *
+     * @param PostPersistModelEvent $event The event.
+     *
+     * @return void
+     */
+    public function handleUpdate(PostPersistModelEvent $event)
+    {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca_sortgroup')) {
+            return;
+        }
+
+        $new = $event->getModel();
+
+        if (!$new->getProperty('isdefault')) {
+            return;
+        }
+
+        $this
+            ->getDatabase()
+            ->prepare('UPDATE tl_metamodel_dca_sortgroup
+                    SET isdefault = \'\'
+                    WHERE pid=?
+                        AND id<>?
+                        AND isdefault=1')
+            ->execute(
+                $new->getProperty('pid'),
+                $new->getId()
             );
     }
 
