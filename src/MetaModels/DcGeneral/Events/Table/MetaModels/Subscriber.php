@@ -344,7 +344,7 @@ class Subscriber extends BaseSubscriber
      */
     public function handleDelete(PreDeleteModelEvent $event)
     {
-        if ($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel') {
+        if ($event->getModel()->getProviderName() !== 'tl_metamodel') {
             return;
         }
 
