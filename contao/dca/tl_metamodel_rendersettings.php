@@ -38,7 +38,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
     (
         'data_provider'  => array
         (
-            'parent' => array
+            'parent'                     => array
             (
                 'source' => 'tl_metamodel'
             ),
