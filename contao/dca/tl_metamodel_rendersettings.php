@@ -18,6 +18,7 @@
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Alexander Menk <a.menk@imi.de>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2015 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -29,7 +30,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
     (
         'dataContainer'    => 'General',
         'ptable'           => 'tl_metamodel',
-        'ctable'           => 'tl_metamodel_rendersetting',
         'switchToEdit'     => false,
         'enableVersioning' => false,
     ),
@@ -37,10 +37,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
     (
         'data_provider'  => array
         (
-            'parent' => array
+            'parent'                     => array
             (
                 'source' => 'tl_metamodel'
-            )
+            ),
+            'tl_metamodel_rendersetting' => array
+            (
+                'source' => 'tl_metamodel_rendersetting'
+            ),
         ),
         'childCondition' => array
         (
@@ -72,7 +76,29 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
                         'operation' => '=',
                     ),
                 )
-            )
+            ),
+
+            array(
+                'from'   => 'tl_metamodel_rendersettings',
+                'to'     => 'tl_metamodel_rendersetting',
+                'setOn'  => array
+                (
+                    array
+                    (
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter' => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
         ),
         'child_list'     => array
         (
