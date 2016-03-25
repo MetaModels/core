@@ -42,7 +42,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
             (
                 'source'              => 'tl_metamodel'
             ),
-             array
+             'tl_metamodel_filtersetting' => array
             (
                 'source'              => 'tl_metamodel_filtersetting'
             ),
