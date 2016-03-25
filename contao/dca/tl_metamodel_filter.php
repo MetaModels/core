@@ -41,7 +41,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
             'parent'                  => array
             (
                 'source'              => 'tl_metamodel'
-            )
+            ),
+             array
+            (
+                'source'              => 'tl_metamodel_filtersetting'
+            ),
         ),
         'childCondition'              => array
         (
@@ -65,8 +69,30 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
                         'remote'      => 'id',
                         'operation'   => '=',
                     ),
+                ),
+            ),
+
+            array(
+                'from'   => 'tl_metamodel_filter',
+                'to'     => 'tl_metamodel_filtersetting',
+                'setOn'  => array
+                (
+                    array
+                    (
+                        'to_field'   => 'fid',
+                        'from_field' => 'id',
+                    )
+                ),
+                'filter' => array
+                (
+                    array
+                    (
+                        'local'     => 'fid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
                 )
-            )
+            ),
         ),
     ),
 
