@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2016 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de> 
+ * @copyright  2012-2016 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -23,14 +24,16 @@ namespace MetaModels\DcGeneral\Events\Table\SearchablePages;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\NotCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
+use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbSearchablePages;
 
 /**
- * Handles event operations on tl_metamodel_rendersetting.
+ * Handles event operations on tl_metamodel_searchable_pages.
  */
 class Subscriber extends BaseSubscriber
 {
@@ -41,7 +44,18 @@ class Subscriber extends BaseSubscriber
      */
     protected function registerEventsInDispatcher()
     {
+        $serviceContainer = $this->getServiceContainer();
         $this
+            ->addListener(
+                GetBreadcrumbEvent::NAME,
+                function (GetBreadcrumbEvent $event) use ($serviceContainer) {
+                    if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_searchable_pages')) {
+                        return;
+                    }
+                    $subscriber = new BreadCrumbSearchablePages($serviceContainer);
+                    $subscriber->getBreadcrumb($event);
+                }
+            )        
             ->addListener(
                 GetPropertyOptionsEvent::NAME,
                 array($this, 'getFilterOptions')
