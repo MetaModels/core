@@ -487,10 +487,10 @@ class Item implements IItem
         // If this item is a variant base, we need to clean the variant base and set ourselves as the base.
         if ($this->isVariantBase()) {
             $objNewItem->set('vargroup', $this->get('id'));
-            $objNewItem->set('varbase', 0);
+            $objNewItem->set('varbase', '0');
         } else {
             $objNewItem->set('vargroup', $this->get('vargroup'));
-            $objNewItem->set('varbase', 0);
+            $objNewItem->set('varbase', '0');
         }
         return $objNewItem;
     }
