@@ -40,7 +40,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
             'parent' => array
             (
                 'source' => 'tl_metamodel'
-            )
+            ),
+            
+            'tl_metamodel_rendersetting' => array
+            (
+                'source' => 'tl_metamodel_rendersetting'
+            ),
         ),
         'childCondition' => array
         (
@@ -72,7 +77,29 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
                         'operation' => '=',
                     ),
                 )
-            )
+            ),
+
+            array(
+                'from'   => 'tl_metamodel_rendersettings',
+                'to'     => 'tl_metamodel_rendersetting',
+                'setOn'  => array
+                (
+                    array
+                    (
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter' => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
         ),
         'child_list'     => array
         (
