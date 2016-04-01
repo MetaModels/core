@@ -18,6 +18,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Tim Becker <please.tim@metamodel.me>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2015 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -41,6 +42,321 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
         ),
         'switchToEdit'     => true,
         'enableVersioning' => false,
+    ),
+    'dca_config' => array
+    (
+        'data_provider' => array
+        (
+            'default' => array
+            (
+                'source' => 'tl_metamodel'
+            ),
+
+            'tl_metamodel_attribute' => array
+            (
+                'source' => 'tl_metamodel_attribute'
+            ),
+
+            'tl_metamodel_rendersettings' => array
+            (
+                'source' => 'tl_metamodel_rendersettings'
+            ),
+            'tl_metamodel_rendersetting' => array
+            (
+                'source' => 'tl_metamodel_rendersetting'
+            ),
+
+            'tl_metamodel_dca' => array
+            (
+                'source' => 'tl_metamodel_dca'
+            ),
+            'tl_metamodel_dca_sortgroup' => array
+            (
+                'source' => 'tl_metamodel_dca_sortgroup'
+            ),
+            'tl_metamodel_dcasetting' => array
+            (
+                'source' => 'tl_metamodel_dcasetting'
+            ),
+
+            'tl_metamodel_searchable_pages' => array
+            (
+                'source' => 'tl_metamodel_searchable_pages'
+            ),
+
+            'tl_metamodel_filter' => array
+            (
+                'source' => 'tl_metamodel_filter'
+            ),
+            'tl_metamodel_filtersetting' => array
+            (
+                'source' => 'tl_metamodel_filtersetting'
+            ),
+
+            'tl_metamodel_dca_combine' => array
+            (
+                'source' => 'tl_metamodel_dca_combine'
+            ),
+        ),
+        'childCondition' => array
+        (
+            array
+            (
+                'from'    => 'tl_metamodel',
+                'to'      => 'tl_metamodel_attribute',
+                'setOn'   => array
+                (
+                    array
+                    (
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter'  => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                ),
+                'inverse' => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
+
+            array(
+                'from'    => 'tl_metamodel',
+                'to'      => 'tl_metamodel_rendersettings',
+                'setOn'   => array
+                (
+                    array(
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter'  => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                ),
+                'inverse' => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
+            array(
+                'from'   => 'tl_metamodel_rendersettings',
+                'to'     => 'tl_metamodel_rendersetting',
+                'setOn'  => array
+                (
+                    array
+                    (
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter' => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
+
+            array
+            (
+                'from'    => 'tl_metamodel',
+                'to'      => 'tl_metamodel_dca',
+                'setOn'   => array
+                (
+                    array
+                    (
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter'  => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                ),
+                'inverse' => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),array
+            (
+                'from'    => 'tl_metamodel_dca',
+                'to'      => 'tl_metamodel_dca_sortgroup',
+                'setOn'   => array
+                (
+                    array
+                    (
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter'  => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                ),
+            ),
+            array
+            (
+                'from'   => 'tl_metamodel_dca',
+                'to'     => 'tl_metamodel_dcasetting',
+                'setOn'  => array
+                (
+                    array
+                    (
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter' => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
+
+            array
+            (
+                'from'                => 'tl_metamodel',
+                'to'                  => 'tl_metamodel_searchable_pages',
+                'setOn'               => array
+                (
+                    array
+                    (
+                        'to_field'    => 'pid',
+                        'from_field'  => 'id',
+                    ),
+                ),
+                'filter'              => array
+                (
+                    array
+                    (
+                        'local'       => 'pid',
+                        'remote'      => 'id',
+                        'operation'   => '=',
+                    ),
+                ),
+                'inverse' => array
+                (
+                    array
+                    (
+                        'local' => 'pid',
+                        'remote' => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
+
+            array
+            (
+                'from'                => 'tl_metamodel',
+                'to'                  => 'tl_metamodel_filter',
+                'setOn'               => array
+                (
+                    array
+                    (
+                        'to_field'    => 'pid',
+                        'from_field'  => 'id',
+                    ),
+                ),
+                'filter'              => array
+                (
+                    array
+                    (
+                        'local'       => 'pid',
+                        'remote'      => 'id',
+                        'operation'   => '=',
+                    ),
+                ),
+            ),
+            array(
+                'from'   => 'tl_metamodel_filter',
+                'to'     => 'tl_metamodel_filtersetting',
+                'setOn'  => array
+                (
+                    array
+                    (
+                        'to_field'   => 'fid',
+                        'from_field' => 'id',
+                    )
+                ),
+                'filter' => array
+                (
+                    array
+                    (
+                        'local'     => 'fid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
+
+            array
+            (
+                'from'                => 'tl_metamodel',
+                'to'                  => 'tl_metamodel_dca_combine',
+                'setOn'               => array
+                (
+                    array
+                    (
+                        'to_field'    => 'pid',
+                        'from_field'  => 'id',
+                    ),
+                ),
+                'filter'              => array
+                (
+                    array
+                    (
+                        'local'       => 'pid',
+                        'remote'      => 'id',
+                        'operation'   => '=',
+                    ),
+                ),
+            ),
+        ),
     ),
     'list'            => array
     (

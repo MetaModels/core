@@ -18,6 +18,7 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Tim Becker <tim@westwerk.ac>
  * @author     Alexander Menk <a.menk@imi.de>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2015 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -44,7 +45,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
             'parent'  => array
             (
                 'source' => 'tl_metamodel'
-            )
+            ),
+            
+            'tl_metamodel_dca_sortgroup' => array
+            (
+                'source' => 'tl_metamodel_dca_sortgroup'
+            ),
+            'tl_metamodel_dcasetting' => array
+            (
+                'source' => 'tl_metamodel_dcasetting'
+            ),
         ),
         'childCondition' => array
         (
@@ -78,7 +88,53 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
                         'operation' => '=',
                     ),
                 )
-            )
+            ),
+
+            array
+            (
+                'from'    => 'tl_metamodel_dca',
+                'to'      => 'tl_metamodel_dca_sortgroup',
+                'setOn'   => array
+                (
+                    array
+                    (
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter'  => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                ),
+            ),
+
+            array
+            (
+                'from'   => 'tl_metamodel_dca',
+                'to'     => 'tl_metamodel_dcasetting',
+                'setOn'  => array
+                (
+                    array
+                    (
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter' => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
         ),
     ),
     'list'                  => array
