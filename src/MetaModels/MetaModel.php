@@ -610,7 +610,8 @@ class MetaModel implements IMetaModel
      */
     public function getActiveLanguage()
     {
-        return array_shift(explode('-', $GLOBALS['TL_LANGUAGE']));
+        $tmp = explode('-', $GLOBALS['TL_LANGUAGE']);
+        return array_shift($tmp);
     }
 
     /**
