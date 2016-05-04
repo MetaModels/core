@@ -280,7 +280,7 @@ class MetaModel implements IMetaModel
 
             foreach ($objRow->row() as $strKey => $varValue) {
                 if ((!$arrAttrOnly) || (in_array($strKey, $arrAttrOnly))) {
-                    $arrData[$strKey] = $this->tryUnserialize($varValue);
+                    $arrData[$strKey] = $varValue;
                 }
             }
 
@@ -446,7 +446,23 @@ class MetaModel implements IMetaModel
                 if (!array_key_exists($strColName, $arrResult[$intId])) {
                     continue;
                 }
-                $arrResult[$intId][$strColName] = $objAttribute->unserializeData($arrResult[$intId][$strColName]);
+                $value  = $arrResult[$intId][$strColName];
+                $value2 = $objAttribute->unserializeData($arrResult[$intId][$strColName]);
+                // Deprecated fallback, attributes should deserialize themselves for a long time now.
+                if ($value === $value2) {
+                    $value2 = $this->tryUnserialize($value);
+                    if ($value !== $value2) {
+                        trigger_error(
+                            sprintf(
+                                'Attribute type %s should implement method unserializeData() and  serializeData().',
+                                $objAttribute->get('type')
+                            ),
+                            E_USER_DEPRECATED
+                        );
+                    }
+                }
+                // End of deprecated fallback.
+                $arrResult[$intId][$strColName] = $value2;
             }
         }
 
