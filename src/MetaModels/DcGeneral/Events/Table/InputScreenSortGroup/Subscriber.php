@@ -14,6 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2015 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -25,6 +26,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Decod
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
@@ -60,6 +62,10 @@ class Subscriber extends BaseSubscriber
                 }
             )
             ->addListener(
+                ModelToLabelEvent::NAME,
+                array($this, 'modelToLabel')
+            )
+            ->addListener(
                 GetPropertyOptionsEvent::NAME,
                 array($this, 'getAttrOptions')
             )
@@ -75,6 +81,30 @@ class Subscriber extends BaseSubscriber
                 BuildDataDefinitionEvent::NAME,
                 array($this, 'setVisibility')
             );
+    }
+
+    /**
+     * Draw the render setting.
+     *
+     * @param ModelToLabelEvent $event The event.
+     *
+     * @return void
+     */
+    public function modelToLabel(ModelToLabelEvent $event)
+    {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca_sortgroup')) {
+            return;
+        }
+
+        if ($event->getModel()->getProperty('isdefault')) {
+            $event->setLabel(
+                sprintf(
+                    '%s <span style="color:#b3b3b3; padding-left:3px">[%s]</span>',
+                    $event->getLabel(),
+                    $event->getEnvironment()->getTranslator()->translate('MSC.fallback')
+                )
+            );
+        }
     }
 
     /**
