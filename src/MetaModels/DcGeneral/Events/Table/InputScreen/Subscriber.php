@@ -28,7 +28,6 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Manip
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition;
-use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbInputScreens;
@@ -262,38 +261,6 @@ class Subscriber extends BaseSubscriber
         }
 
         $event->setOptions(array('standalone', 'ctable'));
-    }
-
-    /**
-     * Handle the update of a MetaModel and all attached data.
-     *
-     * @param PostPersistModelEvent $event The event.
-     *
-     * @return void
-     */
-    public function handleUpdateInputScreen(PostPersistModelEvent $event)
-    {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca')) {
-            return;
-        }
-
-        $new = $event->getModel();
-
-        if (!$new->getProperty('isdefault')) {
-            return;
-        }
-
-        $this
-            ->getDatabase()
-            ->prepare('UPDATE tl_metamodel_dca
-                SET isdefault = \'\'
-                WHERE pid=?
-                    AND id<>?
-                    AND isdefault=1')
-            ->execute(
-                $new->getProperty('pid'),
-                $new->getId()
-            );
     }
 
     /**

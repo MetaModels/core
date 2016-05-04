@@ -285,8 +285,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
             'inputType' => 'checkbox',
             'eval'      => array
             (
-                'maxlength' => 255,
-                'tl_class'  => 'w50 m12 cbx'
+                'tl_class'  => 'w50 m12 cbx',
+                'fallback'  => true
             ),
         ),
         'rendertype'     => array

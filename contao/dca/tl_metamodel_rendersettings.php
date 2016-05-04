@@ -227,7 +227,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
             'inputType' => 'checkbox',
             'eval'      => array
             (
-                'tl_class' => 'm12 w50 cbx'
+                'tl_class' => 'm12 w50 cbx',
+                'fallback'  => true
             ),
         ),
         'hideEmptyValues' => array
