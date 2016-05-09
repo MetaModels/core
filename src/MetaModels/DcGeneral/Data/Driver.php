@@ -362,7 +362,7 @@ class Driver implements MultiLanguageDataProviderInterface
             $sorting[0],
             $config->getStart(),
             $config->getAmount(),
-            $sorting[1]
+            strtoupper($sorting[1])
         );
     }
 
