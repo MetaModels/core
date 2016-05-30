@@ -17,6 +17,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2015 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -487,10 +488,10 @@ class Item implements IItem
         // If this item is a variant base, we need to clean the variant base and set ourselves as the base.
         if ($this->isVariantBase()) {
             $objNewItem->set('vargroup', $this->get('id'));
-            $objNewItem->set('varbase', 0);
+            $objNewItem->set('varbase', '0');
         } else {
             $objNewItem->set('vargroup', $this->get('vargroup'));
-            $objNewItem->set('varbase', 0);
+            $objNewItem->set('varbase', '0');
         }
         return $objNewItem;
     }

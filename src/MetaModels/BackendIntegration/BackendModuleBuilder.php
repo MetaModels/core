@@ -326,8 +326,16 @@ class BackendModuleBuilder
             if (!isset($GLOBALS['BE_MOD'][$section])) {
                 $GLOBALS['BE_MOD'][$section] = array();
             }
-
-            $GLOBALS['BE_MOD'][$section] = array_merge_recursive($entries, $GLOBALS['BE_MOD'][$section]);
+            // Loop over section elements to ensure we append our values.
+            foreach ($entries as $entryName => $entry) {
+                if (!isset($GLOBALS['BE_MOD'][$section][$entryName])) {
+                    $GLOBALS['BE_MOD'][$section][$entryName] = array();
+                }
+                $GLOBALS['BE_MOD'][$section][$entryName] = array_merge_recursive(
+                    $entry,
+                    $GLOBALS['BE_MOD'][$section][$entryName]
+                );
+            }
         }
 
         $GLOBALS['TL_LANG'] = array_merge_recursive($this->languageStrings, $GLOBALS['TL_LANG']);

@@ -43,19 +43,6 @@ class RenderSettings
     {
         $environment = $dataContainer->getEnvironment();
 
-        if (version_compare(VERSION, '3.0', '<')) {
-            $event = new GenerateHtmlEvent(
-                'pickpage.gif',
-                $environment->getTranslator()->translate('MSC.pagepicker'),
-                'style="vertical-align:top;cursor:pointer" onclick="Backend.pickPage(\'ctrl_' .
-                $dataContainer->inputName . '\')"'
-            );
-
-            $environment->getEventDispatcher()->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
-
-            return ' ' . $event->getHtml();
-        }
-
         $url = sprintf(
             '%scontao/page.php?do=metamodels&table=tl_metamodel_rendersettings&field=ctrl_%s',
             \Environment::get('base'),

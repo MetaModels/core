@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2016 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,8 @@
  * @author     Andreas Isaak <info@andreas-isaak.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2016 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -30,20 +31,23 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodel_content'] =
     '{mm_rendering},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;' .
     '{mm_meta_legend},metamodel_meta_title,metamodel_meta_description;' .
     '{protected_legend:hide},protected;' .
-    '{expert_legend:hide},metamodel_donotindex,guests,cssID,space';
+    '{expert_legend:hide},guests,cssID,space;' .
+    '{invisible_legend:hide},invisible,start,stop';
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodels_frontendfilter'] =
     '{type_legend},name,headline,type;' .
     '{mm_filter_legend},metamodel_jumpTo,metamodel,metamodel_filtering,metamodel_fef_template,metamodel_fef_params,' .
     'metamodel_fef_autosubmit,metamodel_fef_hideclearfilter,metamodel_available_values;' .
     '{protected_legend:hide},protected;' .
-    '{expert_legend:hide},guests,invisible,cssID,space';
+    '{expert_legend:hide},guests,cssID,space;' .
+    '{invisible_legend:hide},invisible,start,stop';
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodels_frontendclearall'] =
     '{type_legend},name,headline,type;' .
     '{mm_filter_legend},metamodel_fef_template;' .
     '{protected_legend:hide},protected;' .
-    '{expert_legend:hide},guests,invisible,cssID,space';
+    '{expert_legend:hide},guests,cssID,space;' .
+    '{invisible_legend:hide},invisible,start,stop';
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_use_limit';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_sort_override';

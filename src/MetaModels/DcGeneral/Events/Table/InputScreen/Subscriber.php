@@ -28,7 +28,6 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Manip
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition;
-use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbInputScreens;
@@ -167,16 +166,12 @@ class Subscriber extends BaseSubscriber
             '&id=%4$s' .
             '&item=PALETTE_PANEL_PICKER';
 
-        if (version_compare(VERSION, '3.0', '<')) {
-            $link = ' <a href="' . $url . '" rel="lightbox[files 765 60%%]" data-lightbox="files 765 60%%">%5$s</a>';
-        } else {
-            $link = ' <a href="' . $url . '" onclick="Backend.getScrollOffset();Backend.openModalIframe({' .
-                '\'width\':765,' .
-                '\'title\':\'%6$s\',' .
-                '\'url\':this.href,' .
-                '\'id\':\'%4$s\'' .
-                '});return false">%5$s</a>';
-        }
+        $link = ' <a href="' . $url . '" onclick="Backend.getScrollOffset();Backend.openModalIframe({' .
+            '\'width\':765,' .
+            '\'title\':\'%6$s\',' .
+            '\'url\':this.href,' .
+            '\'id\':\'%4$s\'' .
+            '});return false">%5$s</a>';
 
         $imageEvent = new GenerateHtmlEvent(
             'system/modules/metamodels/assets/images/icons/panel_layout.png',
@@ -266,38 +261,6 @@ class Subscriber extends BaseSubscriber
         }
 
         $event->setOptions(array('standalone', 'ctable'));
-    }
-
-    /**
-     * Handle the update of a MetaModel and all attached data.
-     *
-     * @param PostPersistModelEvent $event The event.
-     *
-     * @return void
-     */
-    public function handleUpdateInputScreen(PostPersistModelEvent $event)
-    {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dca')) {
-            return;
-        }
-
-        $new = $event->getModel();
-
-        if (!$new->getProperty('isdefault')) {
-            return;
-        }
-
-        $this
-            ->getDatabase()
-            ->prepare('UPDATE tl_metamodel_dca
-                SET isdefault = \'\'
-                WHERE pid=?
-                    AND id<>?
-                    AND isdefault=1')
-            ->execute(
-                $new->getProperty('pid'),
-                $new->getId()
-            );
     }
 
     /**

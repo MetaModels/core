@@ -34,9 +34,12 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Model
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
+use ContaoCommunityAlliance\DcGeneral\Factory\DcGeneralFactory;
 use ContaoCommunityAlliance\Translator\TranslatorInterface;
+use MetaModels\Attribute\IAttribute;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbInputScreenCondition;
+use MetaModels\IMetaModel;
 
 /**
  * Handles event operations on tl_metamodel_dcasetting_condition.
@@ -414,9 +417,9 @@ class Subscriber extends BaseSubscriber
         $attribute = $metaModel->getAttributeById($model->getProperty('attr_id'));
 
         if ($attribute) {
-            $options = $attribute->getFilterOptions(null, false);
+            $options = $this->getOptionsViaDcGeneral($metaModel, $event->getEnvironment(), $attribute);
             $mangled = array();
-            foreach ($options as $key => $option) {
+            foreach ((array) $options as $key => $option) {
                 $mangled['value_' . $key] = $option;
             }
 
@@ -479,5 +482,35 @@ class Subscriber extends BaseSubscriber
             // Cut off the 'value_' prefix.
             $event->setValue(substr($event->getValue(), 6));
         }
+    }
+
+    /**
+     * Obtain the values of a property within a dc-general instance.
+     *
+     * @param IMetaModel           $metaModel   The metamodel instance to obtain the values from.
+     *
+     * @param EnvironmentInterface $environment The environment used in the input screen table dc-general.
+     *
+     * @param IAttribute           $attribute   The attribute to obtain the values for.
+     *
+     * @return array
+     */
+    private function getOptionsViaDcGeneral($metaModel, $environment, $attribute)
+    {
+        $factory   = new DcGeneralFactory();
+        $dcGeneral = $factory
+            ->setContainerName($metaModel->getTableName())
+            ->setEventDispatcher($environment->getEventDispatcher())
+            ->setTranslator($environment->getTranslator())
+            ->createDcGeneral();
+
+        $subEnv = $dcGeneral->getEnvironment();
+        $optEv  = new GetPropertyOptionsEvent($subEnv, $subEnv->getDataProvider()->getEmptyModel());
+        $optEv->setPropertyName($attribute->getColName());
+        $subEnv->getEventDispatcher()->dispatch(GetPropertyOptionsEvent::NAME, $optEv);
+
+        $options = $optEv->getOptions();
+
+        return $options;
     }
 }
