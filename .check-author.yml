@@ -23,7 +23,9 @@ mapping:
   "Andreas Nölke <zero@brothers-project.de>": "Zeromax <zero@brothers-project.de>"
   "Ondrej Brinkel <Sam256@web.de>": "Ondrej <Sam256@web.de>"
   "Tim Becker <please.tim@metamodel.me>": "Tim Becker <tim@westwerk.ac>"
-  "Ingolf Steinhardt <info@e-spin.de>": "xantippe <info@e-spin.de>"
+  "Ingolf Steinhardt <info@e-spin.de>":
+    - "xantippe <info@e-spin.de>"
+    - "zonky2 <info@e-spin.de>"
 
 copy-left:
   "Christoph Wiechert <christoph.wiechert@4wardmedia.de>": MetaModels/Widgets/PickerWidget.php

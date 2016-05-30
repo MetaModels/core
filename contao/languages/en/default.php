@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2016 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2016 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -45,6 +46,7 @@ $GLOBALS['TL_LANG']['BRD']['metamodel_dca_combine']                   = 'Input s
 $GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting_condition']          = 'Visibility conditions for attribute "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_filter']                        = 'All filter of "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_filtersetting']                 = 'Filter settings in "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_searchable_pages']              = 'All indexes of "%s"';
 
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']        = 'Edit "%s" for item %%s';
 $GLOBALS['TL_LANG']['MSC']['sorting']                                 = 'Sorting';

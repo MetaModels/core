@@ -314,7 +314,7 @@ abstract class Simple implements ISimple
                     $strValue = '/' . $strValue;
                 }
             }
-            $event = new GenerateFrontendUrlEvent($arrJumpTo, sprintf($strFilterAction, $strValue));
+            $event = new GenerateFrontendUrlEvent($arrJumpTo, sprintf($strFilterAction, $strValue), null, true);
             $dispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
 
             $arrOptions[] = array

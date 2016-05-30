@@ -606,14 +606,10 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        $url = 'system/modules/metamodels/popup.php?tbl=%s&fld=%s&inputName=ctrl_%s&id=%s&item=PALETTE_STYLE_PICKER';
-        if (version_compare(VERSION, '3.0', '<')) {
-            $link = ' <a href="' . $url . '" data-lightbox="files 768 80%%">%s</a>';
-        } else {
-            $link = ' <a href="javascript:Backend.openModalIframe({url:\'' .
-                $url .
-                '\',width:790,title:\'Stylepicker\'});">%s</a>';
-        }
+        $url  = 'system/modules/metamodels/popup.php?tbl=%s&fld=%s&inputName=ctrl_%s&id=%s&item=PALETTE_STYLE_PICKER';
+        $link = ' <a href="javascript:Backend.openModalIframe({url:\'' .
+            $url .
+            '\',width:790,title:\'Stylepicker\'});">%s</a>';
 
         /** @var GenerateHtmlEvent $imageEvent */
         $imageEvent = $event->getEnvironment()->getEventDispatcher()->dispatch(

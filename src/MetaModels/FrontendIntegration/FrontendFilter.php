@@ -134,7 +134,9 @@ class FrontendFilter
         $dispatcher = $this->getDispatcher();
         $event      = new GenerateFrontendUrlEvent(
             $this->objFilterConfig->getJumpTo(),
-            $this->getJumpToUrl($arrParams)
+            $this->getJumpToUrl($arrParams),
+            null,
+            true
         );
         $dispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
 
@@ -299,7 +301,12 @@ class FrontendFilter
             $renderedWidgets[$strWidget] = $this->renderWidget($arrWidgets[$strWidget], $filterOptions);
         }
 
-        $event = new GenerateFrontendUrlEvent($jumpToInformation, $this->getJumpToUrl($filterParameters['other']));
+        $event = new GenerateFrontendUrlEvent(
+            $jumpToInformation,
+            $this->getJumpToUrl($filterParameters['other']),
+            null,
+            true
+        );
         $this->getDispatcher()->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
 
         // Return filter data.

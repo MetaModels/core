@@ -19,6 +19,7 @@
  * @author     Martin Treml <github@r2pi.net>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Chris Raidler <c.raidler@rad-consulting.ch>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2015 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -280,7 +281,7 @@ class MetaModel implements IMetaModel
 
             foreach ($objRow->row() as $strKey => $varValue) {
                 if ((!$arrAttrOnly) || (in_array($strKey, $arrAttrOnly))) {
-                    $arrData[$strKey] = $this->tryUnserialize($varValue);
+                    $arrData[$strKey] = $varValue;
                 }
             }
 
@@ -446,7 +447,23 @@ class MetaModel implements IMetaModel
                 if (!array_key_exists($strColName, $arrResult[$intId])) {
                     continue;
                 }
-                $arrResult[$intId][$strColName] = $objAttribute->unserializeData($arrResult[$intId][$strColName]);
+                $value  = $arrResult[$intId][$strColName];
+                $value2 = $objAttribute->unserializeData($arrResult[$intId][$strColName]);
+                // Deprecated fallback, attributes should deserialize themselves for a long time now.
+                if ($value === $value2) {
+                    $value2 = $this->tryUnserialize($value);
+                    if ($value !== $value2) {
+                        trigger_error(
+                            sprintf(
+                                'Attribute type %s should implement method unserializeData() and  serializeData().',
+                                $objAttribute->get('type')
+                            ),
+                            E_USER_DEPRECATED
+                        );
+                    }
+                }
+                // End of deprecated fallback.
+                $arrResult[$intId][$strColName] = $value2;
             }
         }
 
@@ -594,7 +611,8 @@ class MetaModel implements IMetaModel
      */
     public function getActiveLanguage()
     {
-        return array_shift(explode('-', $GLOBALS['TL_LANGUAGE']));
+        $tmp = explode('-', $GLOBALS['TL_LANGUAGE']);
+        return array_shift($tmp);
     }
 
     /**
@@ -905,13 +923,15 @@ class MetaModel implements IMetaModel
      *
      * @param int[]  $allIds         The ids of all variants.
      *
+     * @param bool   $baseAttributes If also the base attributes get updated as well.
+     *
      * @return void
      */
-    protected function updateVariants($item, $activeLanguage, $allIds)
+    protected function updateVariants($item, $activeLanguage, $allIds, $baseAttributes = false)
     {
         foreach ($this->getAttributes() as $strAttributeId => $objAttribute) {
-            if ($item->isVariant() && !($objAttribute->get('isvariant'))) {
-                // Base not found, skip attribute.
+            if (!$baseAttributes && $item->isVariant() && !($objAttribute->get('isvariant'))) {
+                // Skip base attribute.
                 continue;
             }
 
@@ -972,8 +992,10 @@ class MetaModel implements IMetaModel
      */
     public function saveItem($objItem)
     {
+        $baseAttributes = false;
         $objItem->set('tstamp', time());
         if (!$objItem->get('id')) {
+            $baseAttributes = true;
             $this->createNewItem($objItem);
         }
 
@@ -1001,7 +1023,7 @@ class MetaModel implements IMetaModel
             }
         }
 
-        $this->updateVariants($objItem, $strActiveLanguage, $arrAllIds);
+        $this->updateVariants($objItem, $strActiveLanguage, $arrAllIds, $baseAttributes);
 
         // Tell all attributes that the model has been saved. Useful for alias fields, edit counters etc.
         foreach ($this->getAttributes() as $objAttribute) {

@@ -28,7 +28,6 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBr
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
-use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use MenAtWork\MultiColumnWizard\Event\GetOptionsEvent;
 use MetaModels\BackendIntegration\TemplateList;
 use MetaModels\Dca\Helper;
@@ -62,10 +61,6 @@ class Subscriber extends BaseSubscriber
             ->addListener(
                 ModelToLabelEvent::NAME,
                 array($this, 'modelToLabel')
-            )
-            ->addListener(
-                PostPersistModelEvent::NAME,
-                array($this, 'handleUpdate')
             )
             ->addListener(
                 DecodePropertyValueForWidgetEvent::NAME,
@@ -115,40 +110,6 @@ class Subscriber extends BaseSubscriber
                 ' <span style="color:#b3b3b3; padding-left:3px">[' . $GLOBALS['TL_LANG']['MSC']['fallback'] . ']</span>'
             );
         }
-    }
-
-    /**
-     * Handle the update of a render setting.
-     *
-     * This resets the default flags for all other render settings when becoming the default.
-     *
-     * @param PostPersistModelEvent $event The event.
-     *
-     * @return void
-     */
-    public function handleUpdate(PostPersistModelEvent $event)
-    {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersettings')) {
-            return;
-        }
-
-        $new = $event->getModel();
-
-        if (!$new->getProperty('isdefault')) {
-            return;
-        }
-
-        $this
-            ->getDatabase()
-            ->prepare('UPDATE tl_metamodel_rendersettings
-                    SET isdefault = \'\'
-                    WHERE pid=?
-                        AND id<>?
-                        AND isdefault=1')
-            ->execute(
-                $new->getProperty('pid'),
-                $new->getId()
-            );
     }
 
     /**

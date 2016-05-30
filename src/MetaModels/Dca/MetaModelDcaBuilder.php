@@ -201,15 +201,25 @@ class MetaModelDcaBuilder
     {
         $dispatcher = $this->getDispatcher();
         $modelId    = ModelId::fromValues($table, $arrRow['id']);
-        $urlEvent   = new AddToUrlEvent($href. '&amp;' . $idParameter . '=' . $modelId->getSerialized());
 
+        $url = $href . '&amp;' . $idParameter . '=' . $modelId->getSerialized();
+        // If id parameter different, we have to override it in the URL.
+        if ('id' !== $idParameter) {
+            $url .= '&amp;id=';
+        }
+        $urlEvent = new AddToUrlEvent($url);
         $dispatcher->dispatch(ContaoEvents::BACKEND_ADD_TO_URL, $urlEvent);
+        $url = $urlEvent->getUrl();
+        // If id parameter different, we have to clean out the id in the URL now.
+        if ('id' !== $idParameter) {
+            $url = preg_replace('#(&amp;)id=(?:&amp;)?#', '$1', $url);
+        }
 
         $imageEvent = new GenerateHtmlEvent($icon, $label);
         $dispatcher->dispatch(ContaoEvents::IMAGE_GET_HTML, $imageEvent);
 
         $title = sprintf($label ?: $name, $arrRow['id']);
-        return '<a href="' . $urlEvent->getUrl() . '" title="' .
+        return '<a href="' . $url . '" title="' .
             specialchars($title) . '"' . $attributes . '>' . $imageEvent->getHtml() .
         '</a> ';
     }
