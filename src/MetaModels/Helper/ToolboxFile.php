@@ -754,9 +754,15 @@ class ToolboxFile
             return $result;
         }
 
+        if (version_compare(VERSION . '.' . BUILD, '3.5.5', '>=')) {
+            $mapFunc = array('StringUtil', 'binToUuid');
+        } else {
+            $mapFunc = array('String', 'binToUuid');
+        }
+
         foreach ($models as $value) {
             $result['bin'][]   = $value->uuid;
-            $result['value'][] = \String::binToUuid($value->uuid);
+            $result['value'][] = call_user_func($mapFunc, $value->uuid);
             $result['path'][]  = $value->path;
         }
 
