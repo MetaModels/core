@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-12-17T20:12:23+01:00
+ * last-updated: 2015-08-04T04:10:59+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_content']['ASC']                                 = 'По возрастанию';
@@ -53,6 +53,8 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_offset']['0']               = 'Сп
 $GLOBALS['TL_LANG']['tl_content']['metamodel_offset']['1']               = 'Укажите значение смещения (т.е. 10, чтобы пропустить первые 10 элементов).';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_rendersettings']['0']       = 'Настройки отображения для применения';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_rendersettings']['1']       = 'Выберите настройки отображения для создания выходных данных. Если оставить поле пустым, будут применены параметры по умолчанию для выбранного MetaModel. Если значение по умолчанию отсутствует или не определено, на выводе будут только исходные значения.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_sort_override']['0']        = 'Разрешить переопределение сортировки';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_sort_override']['1']        = 'Выберите для переопределения направления сортировки атрибутов через get-параметр.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_sortby']['0']               = 'Сортировать по';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_sortby']['1']               = 'Выберите порядок сортировки.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_sortby_direction']['0']     = 'Порядок направления';
