@@ -8,13 +8,12 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:10:59+02:00
+ * last-updated: 2016-01-13T20:12:54+01:00
  */
 
 $GLOBALS['TL_LANG']['XPL']['customsql']['0']['0']            = 'Résumé';
-$GLOBALS['TL_LANG']['XPL']['customsql']['0']['1']            = 'Entrez chaque requêtes SQL qui devrait être executée.<br />⏎
-⇥⇥il est requis que cette requête retourne au moins une colomne nommée "id".⏎
-⇥⇥';
+$GLOBALS['TL_LANG']['XPL']['customsql']['0']['1']            = 'Saisissez les requêtes SQL à exécuter.<br />
+Cette requête doit renvoyer au minimum une colonne "id".';
 $GLOBALS['TL_LANG']['XPL']['customsql']['1']['0']            = 'Example 1<br />requête plaine';
 $GLOBALS['TL_LANG']['XPL']['customsql']['1']['1']            = '<pre>SELECT id FROM mm_mymetamodel WHERE page_id=1</pre>⏎
 »»Cela sélectionne tous les identifiants de la table <em>mm_mymetamodel</em> qui ont la valeur <em>page_id=1</em>⏎
