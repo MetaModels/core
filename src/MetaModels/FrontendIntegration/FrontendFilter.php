@@ -114,8 +114,8 @@ class FrontendFilter
                 $strFilterAction .= sprintf(
                     $GLOBALS['TL_CONFIG']['disableAlias'] ? '&amp;%s=%s' : '/%s/%s',
                     $strName,
-                    // double rawurlencode to encode all special characters
-                    // look at http://php.net/manual/en/function.rawurlencode.php
+                    // Double rawurlencode to encode all special characters.
+                    // Look at http://php.net/manual/en/function.rawurlencode.php .
                     rawurlencode(rawurlencode($strValue))
                 );
             }
