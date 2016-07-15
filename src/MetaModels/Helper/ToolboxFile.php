@@ -106,13 +106,11 @@ class ToolboxFile
     protected $metaInformation;
 
     /**
-     * Meta sorting information for files.
+     * File id mapping for files.
      *
-     * @var array
-     *
-     * @deprecated Remove when we drop support for Contao 2.11 - impossible in Contao 3.
+     * @var string[]
      */
-    protected $metaSort;
+    protected $uuidMap = array();
 
     /**
      * Buffered file information.
@@ -508,16 +506,16 @@ class ToolboxFile
      * name_desc - Sort by filename descending
      * date_asc  - Sort by modification time ascending.
      * date_desc - Sort by modification time descending.
-     * meta      - Sort by meta.txt - the order of the files in the meta.txt is being used, however, the files are still
-     *             being grouped by the folders, as the meta.txt is local to a folder and may not span more than one
-     *             level of the file system
+     * manual    - Sort by passed id array, the array must contain the binary ids of the files.
      * random    - Shuffle all the files around.
      *
      * @param string $sortType The sort condition to be applied.
      *
+     * @param array  $sortIds  The list of binary ids to sort by (sort type "manual" only).
+     *
      * @return array The sorted file list.
      */
-    public function sortFiles($sortType)
+    public function sortFiles($sortType, $sortIds = array())
     {
         switch ($sortType) {
             case 'name_desc':
@@ -528,6 +526,9 @@ class ToolboxFile
 
             case 'date_desc':
                 return $this->sortByDate(false);
+
+            case 'manual':
+                return $this->sortByIdList($sortIds);
 
             case 'random':
                 return $this->sortByRandom();
@@ -602,6 +603,32 @@ class ToolboxFile
         }
 
         return $this->remapSorting($arrFiles, $this->outputBuffer);
+    }
+
+    /**
+     * Sort by passed id list.
+     *
+     * @param array $sortIds The list of binary ids to sort by.
+     *
+     * @return array
+     */
+    protected function sortByIdList($sortIds)
+    {
+        $fileMap = $this->foundFiles;
+        if (!$fileMap) {
+            return array('files' => array(), 'source' => array());
+        }
+        $fileKeys = array_flip(array_keys($this->uuidMap));
+        $sorted   = array();
+        foreach ($sortIds as $sortStringId) {
+            $key          = $fileKeys[$sortStringId];
+            $sorted[$key] = $fileMap[$key];
+            unset($fileMap[$key]);
+        }
+        // Add anything not sorted yet to the end.
+        $sorted += $fileMap;
+
+        return $this->remapSorting($sorted, $this->outputBuffer);
     }
 
     /**
@@ -856,6 +883,7 @@ class ToolboxFile
             ) {
                 $path                       = $file->path;
                 $this->foundFiles[]         = $path;
+                $this->uuidMap[$file->uuid] = $path;
                 $meta                       = deserialize($file->meta, true);
 
                 if (isset($meta[$baseLanguage])) {
