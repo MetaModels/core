@@ -30,8 +30,8 @@
     "source": "https://github.com/MetaModels/core"
   },
   "require": {
-    "php": ">=5.3",
-    "contao/core": ">=3.2,<3.6",
+    "php": ">=5.4",
+    "contao/core": "^3.5.5",
     "contao-community-alliance/composer-plugin": "~2.0",
     "contao-community-alliance/dc-general": "~2.0",
     "menatwork/contao-multicolumnwizard": "~3.3",
@@ -48,9 +48,6 @@
     "phpcq/all-tasks": "~1.1",
     "metamodels/base-unit-tests": "~1.0",
     "metamodels/phpunit-contao-database": "~1.0"
-  },
-  "conflict": {
-    "contao/core": "3.4.0"
   },
   "autoload": {
     "psr-0": {
