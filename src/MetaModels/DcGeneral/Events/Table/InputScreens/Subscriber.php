@@ -22,8 +22,6 @@ namespace MetaModels\DcGeneral\Events\Table\InputScreens;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
-use ContaoCommunityAlliance\Contao\Bindings\Events\System\GetReferrerEvent;
-use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
@@ -31,7 +29,6 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBr
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
-use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionChainInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionInterface;
@@ -42,8 +39,6 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PaletteInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
-use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
-use ContaoCommunityAlliance\DcGeneral\Event\ActionEvent;
 use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use MetaModels\Dca\Helper;
@@ -79,10 +74,6 @@ class Subscriber extends BaseSubscriber
             ->addListener(
                 ModelToLabelEvent::NAME,
                 array($this, 'handleModelToLabel')
-            )
-            ->addListener(
-                DcGeneralEvents::ACTION,
-                array($this, 'handleAddAll')
             )
             ->addListener(
                 DecodePropertyValueForWidgetEvent::NAME,
@@ -240,178 +231,6 @@ class Subscriber extends BaseSubscriber
             default:
                 break;
         }
-    }
-
-    /**
-     * Perform the action.
-     *
-     * @param IMetaModel $metaModel       The MetaModel.
-     *
-     * @param array      $knownAttributes The list of known attributes.
-     *
-     * @param int        $startSort       The first sort index.
-     *
-     * @param int        $pid             The pid.
-     *
-     * @param array      $messages        The messages array.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    protected function perform(IMetaModel $metaModel, $knownAttributes, $startSort, $pid, &$messages)
-    {
-        $database = $this->getDatabase();
-
-        // Loop over all attributes now.
-        foreach ($metaModel->getAttributes() as $attribute) {
-            if (!array_key_exists($attribute->get('id'), $knownAttributes)) {
-                $arrData = array
-                (
-                    'pid'      => $pid,
-                    'sorting'  => $startSort,
-                    'tstamp'   => time(),
-                    'dcatype'  => 'attribute',
-                    'attr_id'  => $attribute->get('id'),
-                    'tl_class' => '',
-                );
-
-                $startSort += 128;
-                $database
-                    ->prepare('INSERT INTO tl_metamodel_dcasetting %s')
-                    ->set($arrData)
-                    ->execute();
-
-                $messages[] = array
-                (
-                    'severity' => 'confirm',
-                    'message'  => sprintf(
-                        $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess'],
-                        $attribute->getName()
-                    ),
-                );
-            }
-        }
-    }
-
-    /**
-     * Handle the add all action event.
-     *
-     * @param ActionEvent $event The event.
-     *
-     * @return void
-     *
-     * @throws \RuntimeException When the MetaModel can not be retrieved.
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    public function handleAddAll(ActionEvent $event)
-    {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dcasetting')) {
-            return;
-        }
-
-        if ($event->getAction()->getName() !== 'dca_addall') {
-            return;
-        }
-
-        $environment = $event->getEnvironment();
-        $dispatcher  = $environment->getEventDispatcher();
-        $database    = $this->getDatabase();
-        $input       = $environment->getInputProvider();
-        $pid         = ModelId::fromSerialized($input->getParameter('pid'));
-
-        $dispatcher->dispatch(ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE, new LoadLanguageFileEvent('default'));
-        $dispatcher->dispatch(
-            ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
-            new LoadLanguageFileEvent('tl_metamodel_dcasetting')
-        );
-        $referrer = new GetReferrerEvent(true, 'tl_metamodel_dcasetting');
-        $dispatcher->dispatch(ContaoEvents::SYSTEM_GET_REFERRER, $referrer);
-
-        $template = new \BackendTemplate('be_autocreatepalette');
-
-        $template->cacheMessage  = '';
-        $template->updateMessage = '';
-        $template->href          = $referrer->getReferrerUrl();
-        $template->headline      = $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall'][1];
-
-        // Severity is: error, confirm, info, new.
-        $messages = array();
-
-        $palette = $database
-            ->prepare('SELECT * FROM tl_metamodel_dca WHERE id=?')
-            ->execute($pid->getId());
-
-        $metaModel = $this->getMetaModelById($palette->pid);
-
-        if (!$metaModel) {
-            throw new \RuntimeException('Could not retrieve MetaModel ' . $palette->pid);
-        }
-
-        $alreadyExisting = $database
-            ->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=?')
-            ->execute($pid->getId());
-
-        $knownAttributes = array();
-        $intMax          = 128;
-        while ($alreadyExisting->next()) {
-            $knownAttributes[$alreadyExisting->attr_id] = $alreadyExisting->row();
-            if ($intMax < $alreadyExisting->sorting) {
-                $intMax = $alreadyExisting->sorting;
-            }
-        }
-
-        $blnWantPerform = false;
-        // Perform the labour work.
-        if ($input->getValue('act') == 'perform') {
-            $this->perform(
-                $metaModel,
-                $knownAttributes,
-                $intMax,
-                $pid->getId(),
-                $messages
-            );
-        } else {
-            // Loop over all attributes now.
-            foreach ($metaModel->getAttributes() as $attribute) {
-                if (array_key_exists($attribute->get('id'), $knownAttributes)) {
-                    $messages[] = array
-                    (
-                        'severity' => 'info',
-                        'message'  => sprintf(
-                            $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained'],
-                            $attribute->getName()
-                        ),
-                    );
-                } else {
-                    $messages[] = array
-                    (
-                        'severity' => 'confirm',
-                        'message'  => sprintf(
-                            $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd'],
-                            $attribute->getName()
-                        ),
-                    );
-
-                    $blnWantPerform = true;
-                }
-            }
-        }
-
-        if ($blnWantPerform) {
-            $template->action = ampersand(\Environment::get('request'));
-            $template->submit = $GLOBALS['TL_LANG']['MSC']['continue'];
-        } else {
-            $template->action = ampersand($referrer->getReferrerUrl());
-            $template->submit = $GLOBALS['TL_LANG']['MSC']['saveNclose'];
-        }
-
-        $template->error = $messages;
-
-        $event->setResponse($template->parse());
     }
 
     /**

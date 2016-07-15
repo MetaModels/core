@@ -1,0 +1,40 @@
+<div id="tl_buttons">
+    <a href="<?= $this->href ?>" class="header_back" title="<?= specialchars($this->backBt) ?>"><?= $this->backBt ?></a>
+</div>
+<div id="tl_metamodel_autocreate_palette">
+    <h2 class="sub_headline"><?= $this->headline ?></h2>
+    <form action="<?= $this->action ?>" class="tl_form" method="post">
+        <div class="tl_formbody_edit">
+            <input type="hidden" name="REQUEST_TOKEN" value="<?= REQUEST_TOKEN ?>">
+            <div class="fields">
+                <div>
+                    <label for="tl_select_trigger">
+                        <input type="checkbox" id="tl_select_trigger"
+                               onclick="Backend.toggleCheckboxes(this)"<?php if (!$this->hasCheckbox): ?> disabled<?php endif; ?> />
+                        <?= $this->selectAll ?>
+                    </label>
+                </div>
+                <?php foreach ($this->fields as $field): ?>
+                    <div class="field <?= $field['class'] ?>">
+                        <?php if ($field['checkbox']): ?>
+                            <label for="attribute_<?= $field['attr_id'] ?>">
+                                <input type="checkbox" id="attribute_<?= $field['attr_id'] ?>"
+                                       name="attribute_<?= $field['attr_id'] ?>"/>
+                                <?= $field['text'] ?>
+                            </label>
+                        <?php else: ?>
+                            <?= $field['text'] ?>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <div class="tl_formbody_submit">
+            <div class="tl_submit_container">
+                <input type="submit" name="add" class="tl_submit"
+                       value="<?= $this->add ?>"<?php if (!$this->hasCheckbox): ?> disabled<?php endif; ?>>
+                <input type="submit" name="saveNclose" class="tl_submit" value="<?= $this->saveNclose ?>">
+            </div>
+        </div>
+    </form>
+</div>
