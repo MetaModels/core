@@ -27,6 +27,7 @@ namespace MetaModels\Helper;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
+use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -380,14 +381,9 @@ class ToolboxFile
      */
     protected function getDownloadLink($strFile)
     {
-        $strRequest = \Environment::get('request');
-        if (($intPos = strpos($strRequest, '?')) !== false) {
-            $strRequest = str_replace('?&', '?', preg_replace('/&?file=[^&]&*/', '', $strRequest));
-        }
-        $strRequest .= ($intPos === false ? '?' : '&');
-        $strRequest .= 'file=' . urlencode($strFile);
-
-        return $strRequest;
+        return UrlBuilder::fromUrl(\Environment::get('request'))
+            ->setQueryParameter('file', urlencode($strFile))
+            ->getUrl();
     }
 
     /**
