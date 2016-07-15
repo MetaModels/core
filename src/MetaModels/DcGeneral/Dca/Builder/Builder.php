@@ -1337,7 +1337,7 @@ class Builder
         $metaModel = $this->getMetaModel();
         $attribute = $metaModel->getAttribute($propName);
 
-        if (!$attribute) {
+        if (!$attribute || !$propInfo) {
             return;
         }
 
