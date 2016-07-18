@@ -24,7 +24,7 @@ namespace MetaModels\Attribute;
 
 use MetaModels\IItem;
 use MetaModels\IMetaModel;
-use MetaModels\Render\Setting\ISimple;
+use MetaModels\Render\Setting\ISimple as ISimpleRenderSetting;
 use MetaModels\Render\Setting\Simple;
 
 /**
@@ -209,7 +209,7 @@ interface IAttribute
      *
      * @param string       $strOutputFormat The desired output format.
      *
-     * @param ISimple|null $objSettings     Custom settings to be passed to the renderer.
+     * @param ISimpleRenderSetting|null $objSettings     Custom settings to be passed to the renderer.
      *
      * @return array An array with all the converted data.
      */

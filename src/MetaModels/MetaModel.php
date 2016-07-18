@@ -28,7 +28,7 @@
 namespace MetaModels;
 
 use MetaModels\Attribute\IComplex;
-use MetaModels\Attribute\ISimple;
+use MetaModels\Attribute\ISimple as ISimpleAttribute;
 use MetaModels\Attribute\ITranslated;
 use MetaModels\Filter\Filter;
 use MetaModels\Attribute\IAttribute;
@@ -108,7 +108,7 @@ class MetaModel implements IMetaModel
     /**
      * Retrieve the database instance to use.
      *
-     * @return \Database
+     * @return \Contao\Database
      */
     protected function getDatabase()
     {
@@ -176,7 +176,7 @@ class MetaModel implements IMetaModel
      */
     protected function isSimpleAttribute($objAttribute)
     {
-        return $objAttribute instanceof ISimple;
+        return $objAttribute instanceof ISimpleAttribute;
     }
 
     /**
@@ -223,7 +223,7 @@ class MetaModel implements IMetaModel
     /**
      * This method retrieves all simple attributes from the current MetaModel.
      *
-     * @return ISimple[] all simple attributes defined for this instance.
+     * @return ISimpleAttribute[] all simple attributes defined for this instance.
      */
     protected function getSimpleAttributes()
     {
