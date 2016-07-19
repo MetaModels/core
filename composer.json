@@ -36,7 +36,7 @@
     "contao-community-alliance/dc-general": "~2.0",
     "menatwork/contao-multicolumnwizard": "~3.3",
     "contao-community-alliance/meta-palettes": "~1.7",
-    "discordier/justtextwidgets": "~0.5",
+    "discordier/justtextwidgets": "~1.0",
     "contao-community-alliance/url-builder": "~1.1",
     "contao-community-alliance/dependency-container": "~1.6",
     "contao-community-alliance/event-dispatcher": "~1.3",
