@@ -205,9 +205,9 @@ interface IAttribute
      * useful when being echo'ed in a template and the raw value in the section 'raw'.
      * Each attribute class MAY return as many other values in this array with custom keys as it wants.
      *
-     * @param array        $arrRowData      The (native) row data from the MetaModel table.
+     * @param array                     $arrRowData      The (native) row data from the MetaModel table.
      *
-     * @param string       $strOutputFormat The desired output format.
+     * @param string                    $strOutputFormat The desired output format.
      *
      * @param ISimpleRenderSetting|null $objSettings     Custom settings to be passed to the renderer.
      *
