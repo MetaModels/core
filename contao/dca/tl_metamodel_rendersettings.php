@@ -315,7 +315,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
                         'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page'],
                         'exclude'   => true,
                         'inputType' => 'text',
-                        // TODO: change callbacks to event handlers.
                         'wizard'    => array
                         (
                             array('MetaModels\Dca\RenderSettings', 'pagePicker')
