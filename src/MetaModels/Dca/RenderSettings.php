@@ -67,7 +67,10 @@ class RenderSettings
             '\'title\':\'%2$s\',' .
             '\'url\': this.href + \'&value=\' + ' .
             // We have no access to the current value as MCW does not understand DCG so far. So we do it all in JS.
-            '/{{link_url::([^}]*)}}/.exec($(\'ctrl_%3$s\').value)[1],\'id\':\'ctrl_%3$s\'}' .
+            '(/{{link_url::([^}]*)}}/.test($(\'ctrl_%3$s\').value)' .
+                ' ? /{{link_url::([^}]*)}}/.exec($(\'ctrl_%3$s\').value)[1]' .
+                ' : \'\'),' .
+            '\'id\':\'%3$s\',\'tag\':\'ctrl_%3$s\',\'self\':this}' .
             '); return false;">%4$s</a>',
             $url,
             specialchars(str_replace('\'', '\\\'', $environment->getTranslator()->translate('MOD.page.0'))),
