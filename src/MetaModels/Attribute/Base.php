@@ -26,7 +26,7 @@
 namespace MetaModels\Attribute;
 
 use MetaModels\IMetaModel;
-use MetaModels\Render\Setting\ISimple;
+use MetaModels\Render\Setting\ISimple as ISimpleRenderSetting;
 use MetaModels\Render\Setting\Simple;
 use MetaModels\Render\Template;
 
@@ -145,7 +145,7 @@ abstract class Base implements IAttribute
      *
      * @param string  $strOutputFormat  The output format to use.
      *
-     * @param ISimple $objSettings      The output format settings.
+     * @param ISimpleRenderSetting $objSettings      The output format settings.
      *
      * @return mixed
      *
@@ -184,7 +184,7 @@ abstract class Base implements IAttribute
      *
      * @param array    $arrRowData  The row data for the current item.
      *
-     * @param ISimple  $objSettings The render settings to use for this attribute.
+     * @param ISimpleRenderSetting  $objSettings The render settings to use for this attribute.
      *
      * @return void
      */
@@ -495,7 +495,7 @@ abstract class Base implements IAttribute
             'raw' => $arrRowData[$this->getColName()],
         );
 
-        /** @var ISimple $objSettings */
+        /** @var ISimpleRenderSetting $objSettings */
         if ($objSettings && $objSettings->get('template')) {
             $strTemplate = $objSettings->get('template');
 

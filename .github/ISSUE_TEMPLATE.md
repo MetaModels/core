@@ -15,8 +15,9 @@ I confirm that:
 | PHP version:                        |          |                                  |
 | Contao version:                     |          |                                  |
 | MetaModels version:                 |          |                                  |
-| Installation via composer           | (yes/no) |                                  |
-| Installed MetaModels packages       |          |                                  |
+| Installation via composer:          | (yes/no) |                                  |
+| Installed MetaModels packages:      |          |                                  |
+| DCG version:                        |          |                                  |
 
 ## Issue description
 

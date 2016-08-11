@@ -28,6 +28,8 @@ use MetaModels\DcGeneral\Events\MetaModel\CutButton;
 use MetaModels\DcGeneral\Events\MetaModel\DuplicateModel;
 use MetaModels\DcGeneral\Events\MetaModel\PasteButton;
 use MetaModels\DcGeneral\Events\Table\FilterSetting\FilterSettingTypeRendererCore;
+use MetaModels\DcGeneral\Events\Table\InputScreens\InputScreenAddAllHandler;
+use MetaModels\DcGeneral\Events\Table\RenderSetting\RenderSettingAddAllHandler;
 use MetaModels\Events\CreatePropertyConditionEvent;
 use MetaModels\Events\DatabaseBackedListener;
 use MetaModels\Events\DefaultPropertyConditionCreator;
@@ -69,6 +71,8 @@ return array(
             new CutButton($event->getServiceContainer());
             new CreateVariantButton($event->getServiceContainer());
             new DuplicateModel($event->getServiceContainer());
+            $dispatcher->addSubscriber(new RenderSettingAddAllHandler($event->getServiceContainer()));
+            $dispatcher->addSubscriber(new InputScreenAddAllHandler($event->getServiceContainer()));
         }
     ),
     MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE => array(

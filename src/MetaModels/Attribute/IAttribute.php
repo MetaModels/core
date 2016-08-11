@@ -24,7 +24,7 @@ namespace MetaModels\Attribute;
 
 use MetaModels\IItem;
 use MetaModels\IMetaModel;
-use MetaModels\Render\Setting\ISimple;
+use MetaModels\Render\Setting\ISimple as ISimpleRenderSetting;
 use MetaModels\Render\Setting\Simple;
 
 /**
@@ -205,11 +205,11 @@ interface IAttribute
      * useful when being echo'ed in a template and the raw value in the section 'raw'.
      * Each attribute class MAY return as many other values in this array with custom keys as it wants.
      *
-     * @param array        $arrRowData      The (native) row data from the MetaModel table.
+     * @param array                     $arrRowData      The (native) row data from the MetaModel table.
      *
-     * @param string       $strOutputFormat The desired output format.
+     * @param string                    $strOutputFormat The desired output format.
      *
-     * @param ISimple|null $objSettings     Custom settings to be passed to the renderer.
+     * @param ISimpleRenderSetting|null $objSettings     Custom settings to be passed to the renderer.
      *
      * @return array An array with all the converted data.
      */
