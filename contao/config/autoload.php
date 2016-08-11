@@ -27,8 +27,7 @@
  */
 TemplateLoader::addFiles(array
 (
-    'be_autocreatepalette'       => 'system/modules/metamodels/templates',
-    'be_autocreateview'          => 'system/modules/metamodels/templates',
+    'be_addallattributes'        => 'system/modules/metamodels/templates',
     'be_dcastylepicker'          => 'system/modules/metamodels/templates',
     'be_detectedproblems'        => 'system/modules/metamodels/templates',
     'be_metamodel_full'          => 'system/modules/metamodels/templates',

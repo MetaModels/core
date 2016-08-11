@@ -33,7 +33,11 @@ use ContaoCommunityAlliance\DcGeneral\DC_General;
 class RenderSettings
 {
     /**
-     * Return the link picker wizard.
+     * Return the link picker wizard - this is called from Multi column wizard in render settings jumpTo page handling.
+     *
+     * We should change this callback to event handlers as soon as MCW understands how DcGeneral events work.
+     * So far MCW does not build sub widgets the MCW way, therefore we need to keep this as it is, despite the fact that
+     * we are jumping multiple hoops with the inline javascript code to obtain the value.
      *
      * @param DC_General $dataContainer The DC_General currently in use.
      *
@@ -49,14 +53,6 @@ class RenderSettings
             $dataContainer->inputName
         );
 
-        $options = sprintf(
-            "{'width':765,'title':'%s','url':'%s','id':'%s','tag':'ctrl_%s','self':this}",
-            $environment->getTranslator()->translate('MOD.page.0'),
-            $url,
-            $dataContainer->inputName,
-            $dataContainer->inputName
-        );
-
         $event = new GenerateHtmlEvent(
             'pickpage.gif',
             $environment->getTranslator()->translate('MSC.pagepicker'),
@@ -66,9 +62,19 @@ class RenderSettings
         $environment->getEventDispatcher()->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
 
         return sprintf(
-            ' <a href="%s"%s>%s</a>',
+            ' <a href="%1$s" onclick="Backend.openModalSelector(' .
+            '{\'width\':765,' .
+            '\'title\':\'%2$s\',' .
+            '\'url\': this.href + \'&value=\' + ' .
+            // We have no access to the current value as MCW does not understand DCG so far. So we do it all in JS.
+            '(/{{link_url::([^}]*)}}/.test($(\'ctrl_%3$s\').value)' .
+                ' ? /{{link_url::([^}]*)}}/.exec($(\'ctrl_%3$s\').value)[1]' .
+                ' : \'\'),' .
+            '\'id\':\'%3$s\',\'tag\':\'ctrl_%3$s\',\'self\':this}' .
+            '); return false;">%4$s</a>',
             $url,
-            ' onclick="Backend.openModalSelector(' . $options . '); return false;"',
+            specialchars(str_replace('\'', '\\\'', $environment->getTranslator()->translate('MOD.page.0'))),
+            $dataContainer->inputName,
             $event->getHtml()
         );
     }

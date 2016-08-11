@@ -27,6 +27,7 @@ namespace MetaModels\Helper;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
+use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -84,11 +85,18 @@ class ToolboxFile
     protected $foundFiles = array();
 
     /**
-     * The folders to process in this instance.
+     * The pending paths to collect from DB.
+     *
+     * @var string[]
+     */
+    protected $pendingPaths = array();
+
+    /**
+     * The pending uuids to collect from DB.
      *
      * @var array
      */
-    protected $foundFolders;
+    protected $pendingIds = array();
 
     /**
      * Meta information for files.
@@ -97,15 +105,12 @@ class ToolboxFile
      */
     protected $metaInformation;
 
-
     /**
-     * Meta sorting information for files.
+     * File id mapping for files.
      *
-     * @var array
-     *
-     * @deprecated Remove when we drop support for Contao 2.11 - impossible in Contao 3.
+     * @var string[]
      */
-    protected $metaSort;
+    protected $uuidMap = array();
 
     /**
      * Buffered file information.
@@ -296,15 +301,7 @@ class ToolboxFile
      */
     public function addPath($strPath)
     {
-        // FIXME: we should change this to utilize the dbafs.
-        if (is_file(TL_ROOT . DIRECTORY_SEPARATOR . $strPath)) {
-            $strExtension = pathinfo(TL_ROOT . DIRECTORY_SEPARATOR . $strPath, PATHINFO_EXTENSION);
-            if (in_array(strtolower($strExtension), $this->acceptedExtensions)) {
-                $this->foundFiles[] = $strPath;
-            }
-        } elseif (is_dir(TL_ROOT . DIRECTORY_SEPARATOR . $strPath)) {
-            $this->foundFolders[] = $strPath;
-        }
+        $this->pendingPaths[] = $strPath;
 
         return $this;
     }
@@ -312,24 +309,23 @@ class ToolboxFile
     /**
      * Contao 3 DBAFS Support.
      *
-     * @param string $strID Id of the file.
+     * @param string $strId String uuid of the file.
      *
      * @return ToolboxFile
      */
-    public function addPathById($strID)
+    public function addPathById($strId)
     {
         // Check if empty.
-        if (empty($strID)) {
+        if (empty($strId)) {
             return $this;
         }
 
-        // FIXME: we should change this to add files by retrieving them from the dbafs.
-        $objFile = \FilesModel::findByPk($strID);
-
-        if ($objFile !== null) {
-            $this->addPath($objFile->path);
+        if (!\Validator::isBinaryUuid($strId)) {
+            $this->pendingIds[] = self::stringToUuid($strId);
+            return $this;
         }
 
+        $this->pendingIds[] = $strId;
         return $this;
     }
 
@@ -340,37 +336,37 @@ class ToolboxFile
      */
     protected function collectFiles()
     {
-        if (count($this->foundFolders)) {
-            while ($strPath = array_pop($this->foundFolders)) {
-                foreach (scan(TL_ROOT . DIRECTORY_SEPARATOR . $strPath) as $strSubfile) {
-                    $this->addPath($strPath . DIRECTORY_SEPARATOR . $strSubfile);
-                }
-            }
+        $table = \FilesModel::getTable();
+
+        $conditions = array();
+        $parameters = array();
+        if (count($this->pendingIds)) {
+            $conditions[] = $table . '.uuid IN(' .
+                implode(',', array_fill(0, count($this->pendingIds), 'UNHEX(?)')) . ')';
+            $parameters   = array_map('bin2hex', $this->pendingIds);
+
+            $this->pendingIds = array();
         }
-    }
+        if (count($this->pendingPaths)) {
+            $slug = $table . '.path LIKE ?';
+            foreach ($this->pendingPaths as $pendingPath) {
+                $conditions[] = $slug;
+                $parameters[] = $pendingPath . '%';
+            }
+            $this->pendingPaths = array();
+        }
 
-    /**
-     * Loops all found files and parses the corresponding metafile.
-     *
-     * @return void
-     */
-    protected function parseMetaFiles()
-    {
-        $files = \FilesModel::findMultipleByPaths($this->foundFiles);
-
-        if (!$files) {
+        if (!count($conditions)) {
             return;
         }
 
-        while ($files->next()) {
-            $path = $files->path;
-            $meta = deserialize($files->meta, true);
+        if ($files = \FilesModel::findBy(array(implode(' OR ', $conditions)), $parameters)) {
+            $this->addFileModels($files);
+        }
 
-            if (isset($meta[$this->getBaseLanguage()])) {
-                $this->metaInformation[dirname($path)][basename($path)] = $meta[$this->getBaseLanguage()];
-            } elseif (isset($meta[$this->getFallbackLanguage()])) {
-                $this->metaInformation[dirname($path)][basename($path)] = $meta[$this->getFallbackLanguage()];
-            }
+        if (count($this->pendingPaths)) {
+            // Run again.
+            $this->collectFiles();
         }
     }
 
@@ -383,14 +379,9 @@ class ToolboxFile
      */
     protected function getDownloadLink($strFile)
     {
-        $strRequest = \Environment::get('request');
-        if (($intPos = strpos($strRequest, '?')) !== false) {
-            $strRequest = str_replace('?&', '?', preg_replace('/&?file=[^&]&*/', '', $strRequest));
-        }
-        $strRequest .= ($intPos === false ? '?' : '&');
-        $strRequest .= 'file=' . urlencode($strFile);
-
-        return $strRequest;
+        return UrlBuilder::fromUrl(\Environment::get('request'))
+            ->setQueryParameter('file', urlencode($strFile))
+            ->getUrl();
     }
 
     /**
@@ -515,16 +506,16 @@ class ToolboxFile
      * name_desc - Sort by filename descending
      * date_asc  - Sort by modification time ascending.
      * date_desc - Sort by modification time descending.
-     * meta      - Sort by meta.txt - the order of the files in the meta.txt is being used, however, the files are still
-     *             being grouped by the folders, as the meta.txt is local to a folder and may not span more than one
-     *             level of the file system
+     * manual    - Sort by passed id array, the array must contain the binary ids of the files.
      * random    - Shuffle all the files around.
      *
      * @param string $sortType The sort condition to be applied.
      *
+     * @param array  $sortIds  The list of binary ids to sort by (sort type "manual" only).
+     *
      * @return array The sorted file list.
      */
-    public function sortFiles($sortType)
+    public function sortFiles($sortType, $sortIds = array())
     {
         switch ($sortType) {
             case 'name_desc':
@@ -535,6 +526,9 @@ class ToolboxFile
 
             case 'date_desc':
                 return $this->sortByDate(false);
+
+            case 'manual':
+                return $this->sortByIdList($sortIds);
 
             case 'random':
                 return $this->sortByRandom();
@@ -612,6 +606,32 @@ class ToolboxFile
     }
 
     /**
+     * Sort by passed id list.
+     *
+     * @param array $sortIds The list of binary ids to sort by.
+     *
+     * @return array
+     */
+    protected function sortByIdList($sortIds)
+    {
+        $fileMap = $this->foundFiles;
+        if (!$fileMap) {
+            return array('files' => array(), 'source' => array());
+        }
+        $fileKeys = array_flip(array_keys($this->uuidMap));
+        $sorted   = array();
+        foreach ($sortIds as $sortStringId) {
+            $key          = $fileKeys[$sortStringId];
+            $sorted[$key] = $fileMap[$key];
+            unset($fileMap[$key]);
+        }
+        // Add anything not sorted yet to the end.
+        $sorted += $fileMap;
+
+        return $this->remapSorting($sorted, $this->outputBuffer);
+    }
+
+    /**
      * Shuffle the file list.
      *
      * @return array
@@ -665,10 +685,7 @@ class ToolboxFile
             \Controller::sendFileToBrowser($strFile);
         }
 
-        // Step 2.: Fetch all meta data for the found files.
-        $this->parseMetaFiles();
-
-        // Step 3.: fetch additional information like modification time etc. and prepare the output buffer.
+        // Step 2.: fetch additional information like modification time etc. and prepare the output buffer.
         $this->fetchAdditionalData();
 
         return $this;
@@ -754,15 +771,9 @@ class ToolboxFile
             return $result;
         }
 
-        if (version_compare(VERSION . '.' . BUILD, '3.5.5', '>=')) {
-            $mapFunc = array('StringUtil', 'binToUuid');
-        } else {
-            $mapFunc = array('String', 'binToUuid');
-        }
-
         foreach ($models as $value) {
             $result['bin'][]   = $value->uuid;
-            $result['value'][] = call_user_func($mapFunc, $value->uuid);
+            $result['value'][] = self::uuidToString($value->uuid);
             $result['path'][]  = $value->path;
         }
 
@@ -808,5 +819,79 @@ class ToolboxFile
         }
 
         return self::convertValuesToMetaModels($values);
+    }
+
+    /**
+     * Map a binary uuid to it's string representation.
+     *
+     * @param string $uuid The binary string.
+     *
+     * @return string
+     */
+    private static function uuidToString($uuid)
+    {
+        static $uuidMapper;
+        if (!isset($uuidMapper)) {
+            $uuidMapper =
+                array((version_compare(VERSION . '.' . BUILD, '3.5.5', '>=')) ? 'StringUtil' : 'String', 'binToUuid');
+        }
+
+        return call_user_func($uuidMapper, $uuid);
+    }
+
+    /**
+     * Map a string to it's binary uuid representation.
+     *
+     * @param string $uuid The string.
+     *
+     * @return string
+     */
+    private static function stringToUuid($uuid)
+    {
+        static $uuidMapper;
+        if (!isset($uuidMapper)) {
+            $uuidMapper =
+                array((version_compare(VERSION . '.' . BUILD, '3.5.5', '>=')) ? 'StringUtil' : 'String', 'uuidToBin');
+        }
+
+        return call_user_func($uuidMapper, $uuid);
+    }
+
+    /**
+     * Add the passed file model collection to the current buffer if the extension is allowed.
+     *
+     * Must either be called from within collectFiles or collectFiles must be called later on as this method
+     * will add models of type folder to the list of pending paths to allow for recursive inclusion.
+     *
+     * @param \FilesModel[] $files     The files to add.
+     *
+     * @param array         $skipPaths List of directories not to be added to the list of pending directories.
+     *
+     * @return void
+     */
+    private function addFileModels($files, $skipPaths = array())
+    {
+        $baseLanguage     = $this->getBaseLanguage();
+        $fallbackLanguage = $this->getFallbackLanguage();
+        foreach ($files as $file) {
+            if ('folder' === $file->type && !in_array($file->path, $skipPaths)) {
+                $this->pendingPaths[] = $file->path . '/';
+                continue;
+            }
+            if (is_file(TL_ROOT . DIRECTORY_SEPARATOR . $file->path) &&
+                in_array(strtolower(pathinfo($file->path, PATHINFO_EXTENSION)), $this->acceptedExtensions)
+            ) {
+                $path                       = $file->path;
+                $this->foundFiles[]         = $path;
+                $this->uuidMap[$file->uuid] = $path;
+                $meta                       = deserialize($file->meta, true);
+
+                if (isset($meta[$baseLanguage])) {
+                    $this->metaInformation[dirname($path)][basename($path)] = $meta[$baseLanguage];
+                } elseif (isset($meta[$fallbackLanguage])) {
+                    $this->metaInformation[dirname($path)][basename($path)] = $meta[$fallbackLanguage];
+                }
+            }
+        }
     }
 }
