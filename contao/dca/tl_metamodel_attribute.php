@@ -49,6 +49,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
             (
                 'source' => 'tl_metamodel_dcasetting'
             ),
+            'tl_metamodel_dcasetting_condition' => array
+            (
+                'source' => 'tl_metamodel_dcasetting_condition'
+            ),
         ),
         'childCondition' => array
         (
