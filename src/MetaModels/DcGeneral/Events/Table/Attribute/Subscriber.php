@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2016 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Martin Treml <github@r2pi.net>
  * @author     Christopher Boelter <christopher@boelter.eu>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2016 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -29,6 +30,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBr
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
+use ContaoCommunityAlliance\DcGeneral\DC_General;
 use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PreDeleteModelEvent;
 use MetaModels\Attribute\IAttribute;
@@ -536,7 +538,64 @@ class Subscriber extends BaseSubscriber
         $attribute = $this->createAttributeInstance($event->getModel()->getPropertiesAsArray());
 
         if ($attribute) {
+            $this->deleteConditionSettings($event);
+
             $attribute->destroyAUX();
+        }
+    }
+
+    /**
+     * Delete joint condition setting with attribute.
+     *
+     * @param PreDeleteModelEvent $event The event.
+     *
+     * @return void
+     */
+    protected function deleteConditionSettings(PreDeleteModelEvent $event)
+    {
+        $environment  = $event->getEnvironment();
+        $model        = $event->getModel();
+        $dataProvider = $environment->getDataProvider('tl_metamodel_dcasetting_condition');
+
+        $conditions = $dataProvider->fetchAll(
+            $dataProvider->getEmptyConfig()->setFilter(
+                array(
+                    array(
+                        'operation' => '=',
+                        'property'  => 'attr_id',
+                        'value'     => $model->getID()
+                    )
+                )
+            )
+        );
+
+        if ($conditions->count() < 1) {
+            return;
+        }
+
+        $conditionsGeneral            = new DC_General($dataProvider->getEmptyModel()->getProviderName());
+        $conditionsEnvironment        = $conditionsGeneral->getEnvironment();
+        $conditionsDataDefinition     = $conditionsEnvironment->getDataDefinition();
+        $conditionsPalettesDefinition = $conditionsDataDefinition->getPalettesDefinition();
+
+        $conditionsIterator = $conditions->getIterator();
+        while ($currentCondition = $conditionsIterator->current()) {
+            $conditionPalette = $conditionsPalettesDefinition->getPaletteByName(
+                $currentCondition->getProperty('type')
+            );
+            $conditionProperties = $conditionPalette->getVisibleProperties(
+                $currentCondition
+            );
+
+            foreach ($conditionProperties as $conditionProperty) {
+                if ($conditionProperty->getName() !== 'attr_id') {
+                    continue;
+                }
+
+                $dataProvider->delete($currentCondition);
+            }
+
+            $conditionsIterator->next();
         }
     }
 }
