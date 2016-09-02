@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-12-10T00:13:29+01:00
+ * last-updated: 2016-03-12T00:14:25+01:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attribute von "%s"';
@@ -22,6 +22,7 @@ $GLOBALS['TL_LANG']['BRD']['metamodel_filter']                                  
 $GLOBALS['TL_LANG']['BRD']['metamodel_filtersetting']                                 = 'Filtereinstellungen in "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_rendersetting']                                 = 'Render-Einstellungen in "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_rendersettings']                                = 'Alle Render-Einstellungen von "%s"';
+$GLOBALS['TL_LANG']['BRD']['metamodel_searchable_pages']                              = 'Alle Indizes von "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodels']                                              = 'MetaModels';
 $GLOBALS['TL_LANG']['CTE']['metamodel_content']['0']                                  = 'MetaModel-Liste';
 $GLOBALS['TL_LANG']['CTE']['metamodel_content']['1']                                  = 'Fügt eine Liste aus MetaModel-Items dem Artikel hinzu.';
