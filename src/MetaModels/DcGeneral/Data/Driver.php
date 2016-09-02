@@ -254,7 +254,7 @@ class Driver implements MultiLanguageDataProviderInterface
             $modelId = reset($ids);
         }
 
-        $objItem = $modelId ? $this->getMetaModel()->findById($modelId) : null;
+        $objItem = $modelId ? $this->getMetaModel()->findById($modelId, $objConfig->getFields() ?: array()) : null;
 
         $this->setLanguage($backupLanguage);
 
