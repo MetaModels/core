@@ -477,7 +477,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
             'inputType' => 'checkbox',
             'eval'      => array
             (
-                'tl_class' => 'w50',
+                'tl_class'       => 'w50',
+                'submitOnChange' => true,
             ),
         ),
         'onlypossible'      => array
