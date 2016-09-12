@@ -199,8 +199,6 @@ class SearchablePages
     /**
      * Get the list of jumpTos based on the items.
      *
-     * @param array                                  $availableLanguages List of languages to be used.
-     *
      * @param IMetaModel                             $metaModels         The MetaModels to be used.
      *
      * @param IFilter                                $filter             The filter to be used.
@@ -215,37 +213,32 @@ class SearchablePages
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    protected function getJumpTosFor($availableLanguages, $metaModels, $filter, $view, $rootPage = null)
+    protected function getJumpTosFor($metaModels, $filter, $view, $rootPage = null)
     {
         $entries = array();
 
-        foreach ($availableLanguages as $language) {
-            // Set the language.
-            $GLOBALS['TL_LANGUAGE'] = $language;
+        // Get the object.
+        $items = $metaModels->findByFilter($filter);
 
-            // Get the object.
-            $items = $metaModels->findByFilter($filter);
+        /** @var Item $item */
+        foreach ($items as $item) {
+            $jumpTo = $item->buildJumpToLink($view);
+            $event  = new GetPageDetailsEvent($jumpTo['page']);
+            $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
+            $pageDetails = $event->getPageDetails();
 
-            /** @var Item $item */
-            foreach ($items as $item) {
-                $jumpTo = $item->buildJumpToLink($view);
-                $event  = new GetPageDetailsEvent($jumpTo['page']);
-                $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
-                $pageDetails = $event->getPageDetails();
-
-                // If there is a root page check the context or if we have no page continue.
-                if ($pageDetails === null || ($rootPage !== null && $pageDetails['rootId'] != $rootPage)) {
-                    continue;
-                }
-
-                // Build the url.
-                $url = $this->getBaseUrl(
-                    $pageDetails,
-                    $jumpTo['url']
-                );
-
-                $entries[] = $url->getUrl();
+            // If there is a root page check the context or if we have no page continue.
+            if ($pageDetails === null || ($rootPage !== null && $pageDetails['rootId'] != $rootPage)) {
+                continue;
             }
+
+            // Build the url.
+            $url = $this->getBaseUrl(
+                $pageDetails,
+                $jumpTo['url']
+            );
+
+            $entries[] = $url->getUrl();
         }
 
         return $entries;
@@ -445,28 +438,37 @@ class SearchablePages
         $availableLanguages = $this->getLanguage($language, $metaModels);
         $currentLanguage    = $GLOBALS['TL_LANGUAGE'];
 
-        // Get the view.
-        $view    = $this->getView($metaModelsIdentifier, $renderSettingId);
-        $jumpTos = $view->get('jumpTo');
+        foreach ($availableLanguages as $newLanguage)
+        {
+            // Change language.
+            $GLOBALS['TL_LANGUAGE'] = $newLanguage;
 
-        // Set the filter.
-        $processed = $this->setFilterParameters($filterIdentifier, $presetParams, array());
+            // Get the view.
+            $view    = $this->getView($metaModelsIdentifier, $renderSettingId);
+            $jumpTos = $view->get('jumpTo');
 
-        // Create a new filter for the search.
-        $filter        = $metaModels->getEmptyFilter();
-        $filterSetting = $this->getFilterSettings($filterIdentifier);
-        $filterSetting->addRules($filter, $processed);
+            // Set the filter.
+            $processed = $this->setFilterParameters($filterIdentifier, $presetParams, array());
 
-        // Get all jumpTos.
-        $newEntries = $this->getJumpTosFor($availableLanguages, $metaModels, $filter, $view, $rootPage);
+            // Create a new filter for the search.
+            $filter        = $metaModels->getEmptyFilter();
+            $filterSetting = $this->getFilterSettings($filterIdentifier);
+            $filterSetting->addRules($filter, $processed);
 
-        // Remove all empty page details.
-        $this->removeEmptyDetailPages($jumpTos);
+            // Get all jumpTos.
+            $newEntries = $this->getJumpTosFor($metaModels, $filter, $view, $rootPage);
 
-        // Reset language.
+            // Remove all empty page details.
+            $this->removeEmptyDetailPages($jumpTos);
+
+            // Reset language.
+            $GLOBALS['TL_LANGUAGE'] = $currentLanguage;
+
+            // Merge all results.
+            $this->foundPages = array_merge($this->foundPages, $newEntries);
+        }
+
+        // Reset the language.
         $GLOBALS['TL_LANGUAGE'] = $currentLanguage;
-
-        // Merge all results.
-        $this->foundPages = array_merge($this->foundPages, $newEntries);
     }
 }
