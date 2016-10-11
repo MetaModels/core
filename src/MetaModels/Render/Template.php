@@ -14,7 +14,6 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Maack <david.maack@arcor.de>
- * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  2012-2015 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -54,20 +53,6 @@ class Template
      * @var string
      */
     protected $strDefault;
-
-    /**
-     * Tag ending
-     *
-     * @var string
-     */
-    protected $strTagEnding = '>';
-
-    /**
-     * Output buffer.
-     *
-     * @var string
-     */
-    protected $strBuffer;
 
     /**
      * Template data.
