@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2016 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2016 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -250,23 +251,37 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function sortIds($idList, $strDirection)
     {
-        $objDB = $this->getMetaModel()->getServiceContainer()->getDatabase();
+        $objDB    = $this->getMetaModel()->getServiceContainer()->getDatabase();
 
-        $arrWhere = $this->getWhere($idList, array(
-            $this->getMetaModel()->getActiveLanguage(),
-            $this->getMetaModel()->getFallbackLanguage()
-        ));
-
-        $strQuery = sprintf(
-            'SELECT item_id FROM %s %s GROUP BY item_id',
-            $this->getValueTable(),
-            ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '')
-        );
-
-        $arrOptionizer = $this->getOptionizer();
-
-        $objValue = $objDB->prepare($strQuery . ' ORDER BY '.$arrOptionizer['value'] . ' ' . $strDirection)
-            ->execute(($arrWhere ? $arrWhere['params'] : null));
+        $langSet  = sprintf('\'%s\',\'%s\'', $this->getMetaModel()->getActiveLanguage(), $this->getMetaModel()->getFallbackLanguage());
+ 
+        $objValue = $objDB->prepare(
+                                sprintf(
+                                    'SELECT t1.item_id
+                                       FROM %1$s AS t1
+                                       RIGHT JOIN %1$s ON (t1.id = (SELECT
+                                           t2.id
+                                           FROM %1$s AS t2
+                                           WHERE (t2.att_id=%2$s)
+                                           AND langcode IN (%3$s)
+                                           AND (t2.item_id=t1.item_id)
+                                           ORDER BY FIELD(t2.langcode,%3$s)
+                                           LIMIT 1
+                                       ))
+                                       WHERE t1.id IS NOT NULL
+                                       AND  (t1.item_id IN (%4$s))
+                                       GROUP BY t1.id
+                                       ORDER BY t1.value %5$s',
+                                    // @codingStandardsIgnoreStart - we want to keep the numbers at the end of the lines below.
+                                    $this->getValueTable(),                    // 1
+                                    $this->get('id'),                          // 2
+                                    $langSet,                                  // 3
+                                    $this->parameterMask($idList),             // 4
+                                    $strDirection                              // 5
+                                    // @codingStandardsIgnoreEnd
+                                )
+                            )
+                            ->execute($idList);
 
         return $objValue->fetchEach('item_id');
     }
