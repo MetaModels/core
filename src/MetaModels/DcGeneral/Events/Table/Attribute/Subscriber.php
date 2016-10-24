@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2016 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Martin Treml <github@r2pi.net>
  * @author     Christopher Boelter <christopher@boelter.eu>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2016 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -529,7 +530,7 @@ class Subscriber extends BaseSubscriber
      */
     public function handleDeleteAttribute(PreDeleteModelEvent $event)
     {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_attribute')) {
+        if (($event->getModel()->getProviderName() !== 'tl_metamodel_attribute')) {
             return;
         }
 
