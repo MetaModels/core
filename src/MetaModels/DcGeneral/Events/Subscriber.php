@@ -85,7 +85,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public function registerTableMetaModelDcaEvents()
+    private function registerTableMetaModelDcaEvents()
     {
         new \MetaModels\DcGeneral\Events\Table\InputScreen\Subscriber($this->getServiceContainer());
     }
@@ -95,7 +95,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public function registerTableMetaModelDcaSortGroupEvents()
+    private function registerTableMetaModelDcaSortGroupEvents()
     {
         new \MetaModels\DcGeneral\Events\Table\InputScreenSortGroup\Subscriber($this->getServiceContainer());
     }
@@ -105,7 +105,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public function registerTableMetaModelDcaCombineEvents()
+    private function registerTableMetaModelDcaCombineEvents()
     {
         new \MetaModels\DcGeneral\Events\Table\DcaCombine\Subscriber($this->getServiceContainer());
     }
@@ -115,7 +115,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public function registerTableMetaModelDcaSettingEvents()
+    private function registerTableMetaModelDcaSettingEvents()
     {
         new \MetaModels\DcGeneral\Events\Table\InputScreens\Subscriber($this->getServiceContainer());
     }
@@ -125,7 +125,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public function registerTableMetaModelDcaSettingConditionsEvents()
+    private function registerTableMetaModelDcaSettingConditionsEvents()
     {
         new \MetaModels\DcGeneral\Events\Table\InputScreenCondition\Subscriber($this->getServiceContainer());
     }
@@ -135,7 +135,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public function registerTableMetaModelSearchablePagesEvents()
+    private function registerTableMetaModelSearchablePagesEvents()
     {
         new \MetaModels\DcGeneral\Events\Table\SearchablePages\Subscriber($this->getServiceContainer());
     }
@@ -145,7 +145,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public function registerTableMetaModelFilterEvents()
+    private function registerTableMetaModelFilterEvents()
     {
         $serviceContainer = $this->getServiceContainer();
         $this
@@ -166,7 +166,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public function registerTableMetaModelFilterSettingEvents()
+    private function registerTableMetaModelFilterSettingEvents()
     {
         new \MetaModels\DcGeneral\Events\Table\FilterSetting\Subscriber($this->getServiceContainer());
     }
@@ -176,7 +176,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public function registerTableMetaModelRenderSettingEvents()
+    private function registerTableMetaModelRenderSettingEvents()
     {
         new \MetaModels\DcGeneral\Events\Table\RenderSetting\Subscriber($this->getServiceContainer());
     }
@@ -186,7 +186,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public function registerTableMetaModelRenderSettingsEvents()
+    private function registerTableMetaModelRenderSettingsEvents()
     {
         new \MetaModels\DcGeneral\Events\Table\RenderSettings\Subscriber($this->getServiceContainer());
     }
@@ -225,7 +225,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public function registerTableWatcher()
+    private function registerTableWatcher()
     {
         $this
             ->addListener(PostCreateModelEvent::NAME, array($this, 'checkPurge'))
