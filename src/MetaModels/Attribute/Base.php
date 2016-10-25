@@ -521,7 +521,6 @@ abstract class Base implements IAttribute
 
                 $arrResult['text'] = $objTemplate->parse('text', true);
             }
-
         } else {
             // Text rendering is mandatory, therefore render using default render settings.
             $arrResult = $this->parseValue($arrRowData, 'text', $this->getDefaultRenderSettings());

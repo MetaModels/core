@@ -395,7 +395,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @param ConfigInterface $objConfig The configuration to be applied.
      *
-     * @return CollectionInterface
+     * @return CollectionInterface|ModelInterface[]|string[]
      */
     public function fetchAll(ConfigInterface $objConfig)
     {
