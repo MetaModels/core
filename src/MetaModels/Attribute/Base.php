@@ -34,6 +34,8 @@ use MetaModels\Render\Template;
  * This is the main MetaModels-attribute base class.
  * To create a MetaModelAttribute instance, use the {@link MetaModelAttributeFactory}
  * This class is the reference implementation for {@link IMetaModelAttribute}.
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 abstract class Base implements IAttribute
 {

@@ -47,6 +47,8 @@ use MetaModels\Item;
 
 /**
  * Data driver class for DC_General.
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods) - The interface is too complex, maybe split into traits.
  */
 class Driver implements MultiLanguageDataProviderInterface
 {
