@@ -16,6 +16,7 @@
  * @author     Christopher Bölter <c.boelter@cogizz.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
+ * @author     binron <rtb@gmx.ch>
  * @copyright  2012-2015 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -254,7 +255,7 @@ class Driver implements MultiLanguageDataProviderInterface
             $modelId = reset($ids);
         }
 
-        $objItem = $modelId ? $this->getMetaModel()->findById($modelId) : null;
+        $objItem = $modelId ? $this->getMetaModel()->findById($modelId, $objConfig->getFields() ?: array()) : null;
 
         $this->setLanguage($backupLanguage);
 
