@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2016 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @copyright  2012-2016 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -202,7 +202,7 @@ class SimpleLookup extends Simple
         }
 
         $objAttribute = $this->getFilteredAttribute();
-        $arrOptions   = $objAttribute->getFilterOptions(null, false);
+        $arrOptions   = $objAttribute->getFilterOptions(null, (bool) $this->get('onlyused'));
 
         return array(
             $this->getParamName() => array
