@@ -46,7 +46,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      *
      * @return array
      */
-    protected function getWhere($mixIds, $mixLangCode = '')
+    private function getWhere($mixIds, $mixLangCode = '')
     {
         $procedure  = 'att_id=?';
         $parameters = array($this->get('id'));
