@@ -202,8 +202,7 @@ class SimpleLookup extends Simple
         }
 
         $objAttribute = $this->getFilteredAttribute();
-        $onlyUsed = $this->get('onlyused') ? true : false;
-        $arrOptions   = $objAttribute->getFilterOptions(null, $onlyUsed);
+        $arrOptions   = $objAttribute->getFilterOptions(null, (bool) $this->get('onlyused'));
 
         return array(
             $this->getParamName() => array
