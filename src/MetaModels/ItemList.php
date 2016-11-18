@@ -304,12 +304,14 @@ class ItemList implements IServiceContainerAware
      *
      * @param string $strDescriptionAttribute Name of attribue for description.
      *
-     * @return void
+     * @return ItemList
      */
     public function setMetaTags($strTitleAttribute, $strDescriptionAttribute)
     {
         $this->strDescriptionAttribute = $strDescriptionAttribute;
         $this->strTitleAttribute       = $strTitleAttribute;
+
+        return $this;
     }
 
     /**
