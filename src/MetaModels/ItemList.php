@@ -27,6 +27,7 @@
 
 namespace MetaModels;
 
+use MetaModels\Events\RenderItemListEvent;
 use MetaModels\Helper\PaginationLimitCalculator;
 use MetaModels\Render\Template;
 
@@ -802,6 +803,12 @@ class ItemList implements IServiceContainerAware
      */
     public function render($blnNoNativeParsing, $objCaller)
     {
+        $event = new RenderItemListEvent($this, $this->objTemplate, $objCaller);
+        $this
+            ->getServiceContainer()
+            ->getEventDispatcher()
+            ->dispatch(MetaModelsEvents::RENDER_ITEM_LIST, $event);
+
         $this->objTemplate->noItemsMsg = $this->getNoItemsCaption();
         $this->objTemplate->details    = $this->getDetailsCaption();
 
