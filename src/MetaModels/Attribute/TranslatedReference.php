@@ -252,36 +252,38 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     public function sortIds($idList, $strDirection)
     {
         $objDB    = $this->getMetaModel()->getServiceContainer()->getDatabase();
-
-        $langSet  = sprintf('\'%s\',\'%s\'', $this->getMetaModel()->getActiveLanguage(), $this->getMetaModel()->getFallbackLanguage());
- 
+        $langSet  = sprintf(
+            '\'%s\',\'%s\'',
+            $this->getMetaModel()->getActiveLanguage(),
+            $this->getMetaModel()->getFallbackLanguage()
+        );
         $objValue = $objDB->prepare(
-                                sprintf(
-                                    'SELECT t1.item_id
-                                       FROM %1$s AS t1
-                                       RIGHT JOIN %1$s ON (t1.id = (SELECT
-                                           t2.id
-                                           FROM %1$s AS t2
-                                           WHERE (t2.att_id=%2$s)
-                                           AND langcode IN (%3$s)
-                                           AND (t2.item_id=t1.item_id)
-                                           ORDER BY FIELD(t2.langcode,%3$s)
-                                           LIMIT 1
-                                       ))
-                                       WHERE t1.id IS NOT NULL
-                                       AND  (t1.item_id IN (%4$s))
-                                       GROUP BY t1.id
-                                       ORDER BY t1.value %5$s',
-                                    // @codingStandardsIgnoreStart - we want to keep the numbers at the end of the lines below.
-                                    $this->getValueTable(),                    // 1
-                                    $this->get('id'),                          // 2
-                                    $langSet,                                  // 3
-                                    $this->parameterMask($idList),             // 4
-                                    $strDirection                              // 5
-                                    // @codingStandardsIgnoreEnd
-                                )
-                            )
-                            ->execute($idList);
+            sprintf(
+                'SELECT t1.item_id
+                   FROM %1$s AS t1
+                   RIGHT JOIN %1$s ON (t1.id = (SELECT
+                       t2.id
+                       FROM %1$s AS t2
+                       WHERE (t2.att_id=%2$s)
+                       AND langcode IN (%3$s)
+                       AND (t2.item_id=t1.item_id)
+                       ORDER BY FIELD(t2.langcode,%3$s)
+                       LIMIT 1
+                   ))
+                   WHERE t1.id IS NOT NULL
+                   AND  (t1.item_id IN (%4$s))
+                   GROUP BY t1.id
+                   ORDER BY t1.value %5$s',
+                // @codingStandardsIgnoreStart - we want to keep the numbers at the end of the lines below.
+                $this->getValueTable(),                    // 1
+                $this->get('id'),                          // 2
+                $langSet,                                  // 3
+                $this->parameterMask($idList),             // 4
+                $strDirection                              // 5
+                // @codingStandardsIgnoreEnd
+            )
+        )
+        ->execute($idList);
 
         return $objValue->fetchEach('item_id');
     }
