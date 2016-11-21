@@ -23,6 +23,8 @@ namespace MetaModels;
 
 /**
  * Interface for a collection of MetaModel items.
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class Items implements IItems
 {
