@@ -22,7 +22,6 @@
 
 namespace MetaModels\DcGeneral\Events\MetaModel;
 
-use ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PreDuplicateModelEvent;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 
@@ -65,7 +64,7 @@ class DuplicateModel extends BaseSubscriber
         }
 
         // If we have a varbase, reset the vargroup because we got a new id.
-        if($model->getProperty('varbase') == 1){
+        if ($model->getProperty('varbase') == 1) {
             $model->setProperty('vargroup', null);
         }
     }

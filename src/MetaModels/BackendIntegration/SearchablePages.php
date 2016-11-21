@@ -199,14 +199,13 @@ class SearchablePages
     /**
      * Get the list of jumpTos based on the items.
      *
-     * @param IMetaModel                             $metaModels         The MetaModels to be used.
+     * @param IMetaModel                             $metaModels The MetaModels to be used.
      *
-     * @param IFilter                                $filter             The filter to be used.
+     * @param IFilter                                $filter     The filter to be used.
      *
-     * @param \MetaModels\Render\Setting\ICollection $view               The view to be used.
+     * @param \MetaModels\Render\Setting\ICollection $view       The view to be used.
      *
-     * @param string|null                            $rootPage           The root page id or null if there is no root
-     *                                                                   page.
+     * @param string|null                            $rootPage   The root page id or null if there is no root page.
      *
      * @return array A list of urls for the jumpTos
      *
@@ -438,8 +437,7 @@ class SearchablePages
         $availableLanguages = $this->getLanguage($language, $metaModels);
         $currentLanguage    = $GLOBALS['TL_LANGUAGE'];
 
-        foreach ($availableLanguages as $newLanguage)
-        {
+        foreach ($availableLanguages as $newLanguage) {
             // Change language.
             $GLOBALS['TL_LANGUAGE'] = $newLanguage;
 

@@ -578,9 +578,10 @@ class Subscriber extends BaseSubscriber
         $conditionsDataDefinition     = $conditionsEnvironment->getDataDefinition();
         $conditionsPalettesDefinition = $conditionsDataDefinition->getPalettesDefinition();
 
+        /** @var \Iterator $conditionsIterator */
         $conditionsIterator = $conditions->getIterator();
         while ($currentCondition = $conditionsIterator->current()) {
-            $conditionPalette = $conditionsPalettesDefinition->getPaletteByName(
+            $conditionPalette    = $conditionsPalettesDefinition->getPaletteByName(
                 $currentCondition->getProperty('type')
             );
             $conditionProperties = $conditionPalette->getVisibleProperties(

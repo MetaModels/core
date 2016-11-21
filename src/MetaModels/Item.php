@@ -309,7 +309,6 @@ class Item implements IItem
             return null;
         }
         return $this->getMetaModel()->findVariantsWithBase(array($this->get('id')), $objFilter);
-
     }
 
     /**
