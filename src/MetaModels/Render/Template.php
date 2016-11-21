@@ -111,12 +111,14 @@ class Template
      */
     public function __get($strKey)
     {
-        if ($GLOBALS['TL_CONFIG']['debugMode'] && !array_key_exists($strKey, $this->arrData)) {
-            trigger_error($this->getName() . ': Undefined template variable: ' . $strKey, E_USER_WARNING);
-
-            return null;
+        if (array_key_exists($strKey, $this->arrData)) {
+            return $this->arrData[$strKey];
         }
-        return $this->arrData[$strKey];
+
+        if (!empty($GLOBALS['TL_CONFIG']['debugMode'])) {
+            trigger_error($this->getName() . ': Undefined template variable: ' . $strKey, E_USER_WARNING);
+        }
+        return null;
     }
 
     /**
