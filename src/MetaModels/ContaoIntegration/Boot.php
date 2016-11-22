@@ -154,8 +154,5 @@ abstract class Boot
                 }
             );
         }
-
-        // Register the global subscriber.
-        new Subscriber($container);
     }
 }
