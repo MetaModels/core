@@ -161,7 +161,7 @@ interface IMetaModel
      * @param string[] $arrAttrOnly Names of the attributes that shall be enclosed in the result, defaults to empty
      *                              which means all attributes.
      *
-     * @return IItem the item if found, NULL otherwise.
+     * @return IItem|null The item if found, NULL otherwise.
      */
     public function findById($intId, $arrAttrOnly = array());
 
