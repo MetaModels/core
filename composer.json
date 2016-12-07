@@ -33,7 +33,7 @@
     "php": ">=5.4",
     "contao/core": "^3.5.5",
     "contao-community-alliance/composer-plugin": "~2.0",
-    "contao-community-alliance/dc-general": "~2.0",
+    "contao-community-alliance/dc-general": "~2.0@beta",
     "menatwork/contao-multicolumnwizard": "~3.3",
     "contao-community-alliance/meta-palettes": "~1.7",
     "discordier/justtextwidgets": "~1.0",
@@ -78,7 +78,5 @@
       "dev-master": "2.0.x-dev",
       "dev-develop": "2.1.x-dev"
     }
-  },
-  "prefer-stable": true,
-  "minimum-stability": "dev"
+  }
 }
