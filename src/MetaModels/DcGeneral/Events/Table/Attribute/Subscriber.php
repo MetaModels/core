@@ -185,7 +185,7 @@ class Subscriber extends BaseSubscriber
                 $description = $arrDescription[$attribute->getMetaModel()->getFallbackLanguage()];
             }
         } else {
-            $description = $attribute->getName();
+            $description = $arrDescription ?: $attribute->getName();
         }
 
         $event
