@@ -31,7 +31,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']         = array('Hi
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']        = array('Legend title', 'Here you can enter the legend title.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']      = 'Language';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']         = 'Legend title';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory']          = array('Mandatory', 'Check if this attribute shall be mandatory.');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory']          = array('Mandatory', 'Check if this attribute shall be mandatory.
+<br />NOTE: This will be implicitely active on if you selected "Unique values" in the attribute configuration.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']         = array('Always save', 'If true the field will always be saved, even if its value has not changed.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['chosen']             = array('Chosen', 'Enable Chosen graphical select widget.');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['filterable']         = array('Filterable', 'Check if this attribute shall be available for backend filtering.');
