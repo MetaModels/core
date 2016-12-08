@@ -537,6 +537,10 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     public function resetFallback($strField)
     {
+        // @codingStandardsIgnoreStart
+        @trigger_error(__CLASS__ . '::' . __METHOD__ . ' is deprecated - handle resetting manually', E_USER_DEPRECATED);
+        // @codingStandardsIgnoreEnd
+
         $metaModel = $this->getMetaModel();
         $attribute = $metaModel->getAttribute($strField);
         $ids       = $metaModel->getIdsFromFilter(null);
