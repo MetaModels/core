@@ -52,7 +52,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
             'tl_metamodel_dcasetting_condition' => array
             (
                 'source' => 'tl_metamodel_dcasetting_condition'
-            ),
+            )
         ),
         'childCondition' => array
         (
@@ -126,137 +126,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
                     array
                     (
                         'local'     => 'attr_id',
-                        'remote'    => 'id',
-                        'operation' => '=',
-                    ),
-                )
-            ),
-
-            array(
-                'from'   => 'tl_metamodel_attribute',
-                'to'     => 'tl_metamodel_translatedcheckbox',
-                'setOn'  => array
-                (
-                    array
-                    (
-                        'to_field'   => 'att_id',
-                        'from_field' => 'id',
-                    ),
-                ),
-                'filter' => array
-                (
-                    array
-                    (
-                        'local'     => 'att_id',
-                        'remote'    => 'id',
-                        'operation' => '=',
-                    ),
-                )
-            ),
-            array(
-                'from'   => 'tl_metamodel_attribute',
-                'to'     => 'tl_metamodel_translatedlongblob',
-                'setOn'  => array
-                (
-                    array
-                    (
-                        'to_field'   => 'att_id',
-                        'from_field' => 'id',
-                    ),
-                ),
-                'filter' => array
-                (
-                    array
-                    (
-                        'local'     => 'att_id',
-                        'remote'    => 'id',
-                        'operation' => '=',
-                    ),
-                )
-            ),
-
-            array(
-                'from'   => 'tl_metamodel_attribute',
-                'to'     => 'tl_metamodel_translatedlongtext',
-                'setOn'  => array
-                (
-                    array
-                    (
-                        'to_field'   => 'att_id',
-                        'from_field' => 'id',
-                    ),
-                ),
-                'filter' => array
-                (
-                    array
-                    (
-                        'local'     => 'att_id',
-                        'remote'    => 'id',
-                        'operation' => '=',
-                    ),
-                )
-            ),
-
-            array(
-                'from'   => 'tl_metamodel_attribute',
-                'to'     => 'tl_metamodel_translatedtabletext',
-                'setOn'  => array
-                (
-                    array
-                    (
-                        'to_field'   => 'att_id',
-                        'from_field' => 'id',
-                    ),
-                ),
-                'filter' => array
-                (
-                    array
-                    (
-                        'local'     => 'att_id',
-                        'remote'    => 'id',
-                        'operation' => '=',
-                    ),
-                )
-            ),
-
-            array(
-                'from'   => 'tl_metamodel_attribute',
-                'to'     => 'tl_metamodel_translatedtext',
-                'setOn'  => array
-                (
-                    array
-                    (
-                        'to_field'   => 'att_id',
-                        'from_field' => 'id',
-                    ),
-                ),
-                'filter' => array
-                (
-                    array
-                    (
-                        'local'     => 'att_id',
-                        'remote'    => 'id',
-                        'operation' => '=',
-                    ),
-                )
-            ),
-
-            array(
-                'from'   => 'tl_metamodel_attribute',
-                'to'     => 'tl_metamodel_translatedurl',
-                'setOn'  => array
-                (
-                    array
-                    (
-                        'to_field'   => 'att_id',
-                        'from_field' => 'id',
-                    ),
-                ),
-                'filter' => array
-                (
-                    array
-                    (
-                        'local'     => 'att_id',
                         'remote'    => 'id',
                         'operation' => '=',
                     ),
