@@ -32,6 +32,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPa
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\Controller\ModelCollector;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Factory\DcGeneralFactory;
@@ -238,9 +239,8 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        if (isset($flags['maxChildren'])
-            && count($event->getEnvironment()->getController()->assembleAllChildrenFrom($model)) > $flags['maxChildren']
-        ) {
+        $collector = new ModelCollector($environment);
+        if (isset($flags['maxChildren']) && count($collector->collectChildrenOf($model)) > $flags['maxChildren']) {
             $event->setPasteIntoDisabled(true);
         }
     }
