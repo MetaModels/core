@@ -69,6 +69,10 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
             (
                 'source' => 'tl_metamodel_dcasetting'
             ),
+            'tl_metamodel_dcasetting_condition' => array
+            (
+                'source' => 'tl_metamodel_dcasetting_condition'
+            ),
 
             'tl_metamodel_searchable_pages' => array
             (
@@ -243,6 +247,28 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
                     array
                     (
                         'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
+            array
+            (
+                'from'   => 'tl_metamodel_dcasetting',
+                'to'     => 'tl_metamodel_dcasetting_condition',
+                'setOn'  => array
+                (
+                    array
+                    (
+                        'to_field'   => 'settingId',
+                        'from_field' => 'id',
+                    )
+                ),
+                'filter' => array
+                (
+                    array
+                    (
+                        'local'     => 'settingId',
                         'remote'    => 'id',
                         'operation' => '=',
                     ),
