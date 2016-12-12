@@ -217,7 +217,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             ),
             'char'  => array
             (
-                'display after rendergrouptype' => array
+                'display after rendergroupattr' => array
                 (
                     'rendergrouplen'
                 ),
@@ -227,11 +227,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
         (
             '!1' => array
             (
-                'display after rendergrouplen' => array
+                'display after ismanualsort' => array
                 (
-                    'rendergrouptype',
                     'rendersortattr',
                     'rendersort',
+                    'rendergrouptype',
                 ),
             )
         )
@@ -291,7 +291,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             'inputType' => 'select',
             'eval'      => array
             (
-                'tl_class' => 'w50',
+                'tl_class' => 'w50 clr',
             ),
         ),
         'rendergrouptype' => array
@@ -300,9 +300,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             'exclude'   => true,
             'inputType' => 'select',
             'options'   => array('none', 'char', 'digit', 'day', 'weekday', 'week', 'month', 'year'),
+            'default'   => 'none',
             'eval'      => array
             (
-                'tl_class'       => 'w50',
+                'tl_class'       => 'w50 clr',
                 'submitOnChange' => true
             ),
             'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergrouptypes']
