@@ -74,6 +74,11 @@ class DefaultPropertyConditionCreator
      */
     public function handle(CreatePropertyConditionEvent $event)
     {
+        // Do not override existing conditions.
+        if (null !== $event->getInstance()) {
+            return;
+        }
+
         $meta      = $event->getData();
         $metaModel = $event->getMetaModel();
 
@@ -90,12 +95,7 @@ class DefaultPropertyConditionCreator
                 break;
             case 'conditionpropertyvalueis':
                 $attribute = $this->getAttributeFromMetaModel($metaModel, $meta['attr_id']);
-
-                // FIXME: For checkboxes the meta value is wrong here as it will compare "" == "0".
-                $event->setInstance(new PropertyValueCondition(
-                    $attribute->getColName(),
-                    $meta['value']
-                ));
+                $event->setInstance(new PropertyValueCondition($attribute->getColName(), $meta['value']));
                 break;
             case 'conditionpropertycontainanyof':
                 $attribute = $this->getAttributeFromMetaModel($metaModel, $meta['attr_id']);
