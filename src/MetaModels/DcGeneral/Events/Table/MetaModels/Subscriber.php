@@ -36,7 +36,6 @@ use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbMetaModels;
 use MetaModels\Helper\TableManipulation;
-use MetaModels\IMetaModel;
 
 /**
  * Handles event operations on tl_metamodel.
