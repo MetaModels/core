@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2016 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,11 +16,13 @@
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2016 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\CheckPropertyPermissionEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
 use MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton;
@@ -138,5 +140,14 @@ return array(
             'MetaModels\DcGeneral\Events\MetaModel\PropertyOptionsProvider::getPropertyOptions',
             -200
         )
+    ),
+    CheckPropertyPermissionEvent::NAME => array(
+        function (CheckPropertyPermissionEvent $event) {
+            if (strpos($event->getProvider(), 'mm_') !== 0) {
+                return;
+            }
+
+            $event->setAllowed(true);
+        }
     )
 );
