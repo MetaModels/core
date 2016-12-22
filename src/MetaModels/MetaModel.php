@@ -930,6 +930,11 @@ class MetaModel implements IMetaModel
     protected function updateVariants($item, $activeLanguage, $allIds, $baseAttributes = false)
     {
         foreach ($this->getAttributes() as $strAttributeId => $objAttribute) {
+            // Skip unset attributes.
+            if (!$item->isAttributeSet($objAttribute->getColName())) {
+                continue;
+            }
+
             if (!$baseAttributes && $item->isVariant() && !($objAttribute->get('isvariant'))) {
                 // Skip base attribute.
                 continue;
