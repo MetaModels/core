@@ -31,6 +31,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2Ba
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\Dca\ContaoDataProviderInformation;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\BasicDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DataProviderDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultBasicDefinition;
@@ -72,6 +73,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Legend;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Palette;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
+use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\PopulateEnvironmentEvent;
@@ -81,6 +83,7 @@ use Contao\Input;
 use MetaModels\Attribute\ITranslated;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\ViewCombinations;
+use MetaModels\DcGeneral\Data\Driver;
 use MetaModels\DcGeneral\DataDefinition\Definition\MetaModelDefinition;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\IsVariantAttribute;
@@ -198,6 +201,17 @@ class Builder
             $event = new PopulateAttributeEvent($metaModel, $attribute, $environment);
             // Trigger BuildAttribute Event.
             $dispatcher->dispatch($event::NAME, $event);
+        }
+
+        foreach ([
+            $environment->getDataDefinition(),
+            $environment->getParentDataDefinition(),
+            $environment->getRootDataDefinition()
+        ] as $definition) {
+            if (!$definition instanceof ContainerInterface) {
+                continue;
+            }
+            $this->injectServiceContainerIntoDataDrivers($definition->getDataProviderDefinition(), $environment);
         }
     }
 
@@ -840,8 +854,7 @@ class Builder
                 ->setTableName($container->getName())
                 ->setClassName('MetaModels\DcGeneral\Data\Driver')
                 ->setInitializationData(array(
-                    'source'            => $container->getName(),
-                    'service-container' => $this->serviceContainer
+                    'source' => $container->getName(),
                 ))
                 ->setVersioningEnabled(false);
             $container->getBasicDefinition()->setDataProvider($container->getName());
@@ -869,8 +882,7 @@ class Builder
                     ->setTableName($inputScreen->getParentTable())
                     ->setInitializationData(
                         array(
-                            'source'            => $inputScreen->getParentTable(),
-                            'service-container' => $this->serviceContainer
+                            'source' => $inputScreen->getParentTable(),
                         )
                     );
 
@@ -1545,5 +1557,25 @@ class Builder
         $extra['class'] = 'header_edit_all';
 
         $commands->addCommand($command);
+    }
+
+    /**
+     * Inject the service container into the data driver instances.
+     *
+     * @param DataProviderDefinitionInterface $providerDefinitions The definitions.
+     * @param EnvironmentInterface            $environment         The environment containing the providers.
+     *
+     * @return void
+     */
+    private function injectServiceContainerIntoDataDrivers($providerDefinitions, $environment)
+    {
+        foreach ($providerDefinitions as $provider) {
+            $providerInstance = $environment->getDataProvider($provider->getName());
+            if ($providerInstance instanceof Driver) {
+                $providerInstance->setBaseConfig(
+                    array_merge($provider->getInitializationData(), ['service-container' => $this->serviceContainer])
+                );
+            }
+        }
     }
 }
