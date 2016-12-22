@@ -123,12 +123,13 @@ abstract class Boot
                         return;
                     }
 
-                    $inputScreen = $viewCombinations->getInputScreenDetails($metaModelName);
+                    $inputScreen   = $viewCombinations->getInputScreenDetails($metaModelName);
+                    $renderSetting = $viewCombinations->getRenderSetting($metaModelName);
 
                     $factory->setContainerClassName('MetaModels\DcGeneral\DataDefinition\MetaModelDataDefinition');
 
                     $dispatcher = $container->getEventDispatcher();
-                    $generator  = new Builder($container, $inputScreen);
+                    $generator  = new Builder($container, $inputScreen, $renderSetting);
 
                     $dispatcher->addListener(
                         BuildDataDefinitionEvent::NAME,

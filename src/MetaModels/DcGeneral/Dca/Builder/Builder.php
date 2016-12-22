@@ -128,12 +128,15 @@ class Builder
      * @param IMetaModelsServiceContainer $serviceContainer The name of the MetaModel being created.
      *
      * @param IInputScreen                $inputScreen      The input screen to use.
+     *
+     * @param int                         $renderSetting    The render setting.
      */
-    public function __construct($serviceContainer, $inputScreen)
+    public function __construct($serviceContainer, $inputScreen, $renderSetting)
     {
         $this->serviceContainer = $serviceContainer;
         $this->inputScreen      = $inputScreen;
         $this->translator       = new StaticTranslator();
+        $this->renderSetting    = $renderSetting;
     }
 
     /**
@@ -1113,11 +1116,14 @@ class Builder
         } else {
             $formatter = $listing->getLabelFormatter($providerName);
         }
-
+        $renderSetting = $this->serviceContainer->getRenderSettingFactory()->createCollection(
+            $this->getMetaModel(),
+            $this->renderSetting
+        );
         $formatter->setPropertyNames(
             array_merge(
                 $formatter->getPropertyNames(),
-                $container->getPropertiesDefinition()->getPropertyNames()
+                $renderSetting->getSettingNames()
             )
         );
 
@@ -1349,7 +1355,7 @@ class Builder
         $metaModel = $this->getMetaModel();
         $attribute = $metaModel->getAttribute($propName);
 
-        if (!$attribute || !$propInfo) {
+        if (!$attribute) {
             return;
         }
 
@@ -1362,16 +1368,20 @@ class Builder
             $definition->addProperty($property);
         }
 
-        if (!$property->getLabel() && isset($propInfo['label'])) {
-            $lang = $propInfo['label'];
+        if (!$property->getLabel()) {
+            if (isset($propInfo['label'])) {
+                $lang = $propInfo['label'];
 
-            if (is_array($lang)) {
-                $label       = reset($lang);
-                $description = next($lang);
+                if (is_array($lang)) {
+                    $label       = reset($lang);
+                    $description = next($lang);
 
-                $property->setDescription($description);
+                    $property->setDescription($description);
+                } else {
+                    $label = $lang;
+                }
             } else {
-                $label = $lang;
+                $label = $attribute->getName();
             }
 
             $property->setLabel($label);
