@@ -21,6 +21,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\MetaModels;
 
+use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
@@ -31,6 +32,7 @@ use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PreDeleteModelEvent;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
+use MenAtWork\MultiColumnWizard\Event\GetOptionsEvent;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbMetaModels;
 use MetaModels\Helper\TableManipulation;
@@ -78,6 +80,10 @@ class Subscriber extends BaseSubscriber
             ->addListener(
                 PreDeleteModelEvent::NAME,
                 array($this, 'handleDelete')
+            )
+            ->addListener(
+                GetOptionsEvent::NAME,
+                array($this, 'loadLanguageOptions')
             )
             ->addListener(
                 DecodePropertyValueForWidgetEvent::NAME,
@@ -238,6 +244,28 @@ class Subscriber extends BaseSubscriber
         }
 
         $event->setValue($output);
+    }
+
+    /**
+     * Prepare the language options.
+     *
+     * @param GetOptionsEvent $event The event.
+     *
+     * @return void
+     */
+    public function loadLanguageOptions(GetOptionsEvent $event)
+    {
+        if (($event->getModel()->getProviderName() !== 'tl_metamodel')
+            || ($event->getPropertyName() !== 'languages')
+            || ($event->getSubPropertyName() !== 'langcode')
+            || $event->getOptions() !== []) {
+            return;
+        }
+
+        $event->setOptions(array_flip(array_filter(array_flip(System::getLanguages()), function ($langCode) {
+            // Disable >2 char long language codes for the moment.
+            return (strlen($langCode) == 2);
+        })));
     }
 
     /**
