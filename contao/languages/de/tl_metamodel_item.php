@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:14:42+02:00
+ * last-updated: 2015-09-18T12:13:37+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_item']['copy']['0']          = 'Datensatz kopieren';
@@ -21,7 +21,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['delete']['0']        = 'Item löschen'
 $GLOBALS['TL_LANG']['tl_metamodel_item']['delete']['1']        = 'Den Datensatz ID %s löschen.';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['edit']['0']          = 'Datensatz bearbeiten';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['edit']['1']          = 'Den Datensatz mit der ID %s bearbeiten.';
-$GLOBALS['TL_LANG']['tl_metamodel_item']['editRecord']         = 'Den Datensatz mit der ID %s bearbeiten.';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['editRecord']         = 'Bearbeite Datensatz %s';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['editheader']['0']    = 'Datensatz-Typ bearbeiten';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['editheader']['1']    = 'Bearbeiten Sie den Datensatz-Typ.';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['fields']['0']        = 'Attribute verwalten';
