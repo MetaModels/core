@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2016 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,8 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2016 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -42,6 +43,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             'parent'  => array
             (
                 'source' => 'tl_metamodel_dca'
+            ),
+            'tl_metamodel' => array
+            (
+                'source' => 'tl_metamodel'
             )
         ),
         'childCondition' => array
@@ -50,6 +55,37 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             (
                 'from'    => 'tl_metamodel_dca',
                 'to'      => 'tl_metamodel_dca_sortgroup',
+                'setOn'   => array
+                (
+                    array
+                    (
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter'  => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                ),
+                'inverse' => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
+            array
+            (
+                'from'    => 'tl_metamodel',
+                'to'      => 'tl_metamodel_dca',
                 'setOn'   => array
                 (
                     array
