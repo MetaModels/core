@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2016 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,8 @@
  * @author     Andreas Isaak <info@andreas-isaak.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2016 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -71,7 +72,178 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
                         'operation' => '=',
                     ),
                 )
-            )
+            ),
+
+            array(
+                'from'   => 'tl_metamodel_attribute',
+                'to'     => 'tl_metamodel_rendersetting',
+                'setOn'  => array
+                (
+                    array
+                    (
+                        'to_field'   => 'attr_id',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter' => array
+                (
+                    array
+                    (
+                        'local'     => 'attr_id',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
+
+            array(
+                'from'   => 'tl_metamodel_attribute',
+                'to'     => 'tl_metamodel_dcasetting',
+                'setOn'  => array
+                (
+                    array
+                    (
+                        'to_field'   => 'attr_id',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter' => array
+                (
+                    array
+                    (
+                        'local'     => 'attr_id',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
+
+            array(
+                'from'   => 'tl_metamodel_attribute',
+                'to'     => 'tl_metamodel_translatedcheckbox',
+                'setOn'  => array
+                (
+                    array
+                    (
+                        'to_field'   => 'att_id',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter' => array
+                (
+                    array
+                    (
+                        'local'     => 'att_id',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
+            array(
+                'from'   => 'tl_metamodel_attribute',
+                'to'     => 'tl_metamodel_translatedlongblob',
+                'setOn'  => array
+                (
+                    array
+                    (
+                        'to_field'   => 'att_id',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter' => array
+                (
+                    array
+                    (
+                        'local'     => 'att_id',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
+            array(
+                'from'   => 'tl_metamodel_attribute',
+                'to'     => 'tl_metamodel_translatedlongtext',
+                'setOn'  => array
+                (
+                    array
+                    (
+                        'to_field'   => 'att_id',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter' => array
+                (
+                    array
+                    (
+                        'local'     => 'att_id',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
+            array(
+                'from'   => 'tl_metamodel_attribute',
+                'to'     => 'tl_metamodel_translatedtabletext',
+                'setOn'  => array
+                (
+                    array
+                    (
+                        'to_field'   => 'att_id',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter' => array
+                (
+                    array
+                    (
+                        'local'     => 'att_id',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
+            array(
+                'from'   => 'tl_metamodel_attribute',
+                'to'     => 'tl_metamodel_translatedtext',
+                'setOn'  => array
+                (
+                    array
+                    (
+                        'to_field'   => 'att_id',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter' => array
+                (
+                    array
+                    (
+                        'local'     => 'att_id',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
+            array(
+                'from'   => 'tl_metamodel_attribute',
+                'to'     => 'tl_metamodel_translatedurl',
+                'setOn'  => array
+                (
+                    array
+                    (
+                        'to_field'   => 'att_id',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter' => array
+                (
+                    array
+                    (
+                        'local'     => 'att_id',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
         ),
     ),
     'list'         => array
