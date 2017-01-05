@@ -310,7 +310,8 @@ class ContentElementModuleBase
     {
         $arrAttributeNames = array(
             'sorting' => $GLOBALS['TL_LANG']['MSC']['sorting'],
-            'random'  => $GLOBALS['TL_LANG']['MSC']['random']
+            'random'  => $GLOBALS['TL_LANG']['MSC']['random'],
+            'id'  => $GLOBALS['TL_LANG']['MSC']['id'][0]
         );
 
         $factory       = $this->getServiceContainer()->getFactory();
