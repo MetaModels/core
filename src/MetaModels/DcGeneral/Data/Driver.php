@@ -77,6 +77,8 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     protected $strCurrentLanguage;
 
+    protected $strLangCodeDelimiter = '-';
+
     /**
      * Delete an item.
      *
@@ -678,7 +680,7 @@ class Driver implements MultiLanguageDataProviderInterface
         $collection = new DefaultLanguageInformationCollection();
 
         foreach ($this->getMetaModel()->getAvailableLanguages() as $langCode) {
-            list($langCode, $country) = explode('_', $langCode, 2);
+            list($langCode, $country) = explode($this->strLangCodeDelimiter, $langCode, 2);
             $collection->add(new DefaultLanguageInformation($langCode, $country ?: null));
         }
 
@@ -699,13 +701,18 @@ class Driver implements MultiLanguageDataProviderInterface
         if ($this->getMetaModel()->isTranslated()) {
             $langCode = $this->getMetaModel()->getFallbackLanguage();
 
-            list($langCode, $country) = explode('_', $langCode, 2);
+            list($langCode, $country) = explode($this->strLangCodeDelimiter, $langCode, 2);
             return new DefaultLanguageInformation($langCode, $country ?: null);
         }
 
         return null;
     }
 
+    public function setLangCodeDelimiter($strDelimiter)
+    {
+        $this->strLangCodeDelimiter = $strDelimiter;
+    }
+    
     /**
      * Set the current working language for the whole data provider.
      *
