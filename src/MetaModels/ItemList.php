@@ -772,7 +772,12 @@ class ItemList implements IServiceContainerAware
                     $arrDescription = $objCurrentItem->parseAttribute($this->strDescriptionAttribute, 'text');
 
                     if (!empty($arrDescription['text'])) {
-                        $page->description = \String::substr($arrDescription['text'], 120);
+						// PHP 7 compatibility, see https://github.com/contao/core-bundle/issues/309
+						if (version_compare(VERSION . '.' . BUILD, '3.5.5', '>=')) {
+							$page->description = \Contao\StringUtil::substr($arrDescription['text'], 120);
+						} else {
+							$page->description = \String::substr($arrDescription['text'], 120);
+						}
                         break;
                     }
                 }
