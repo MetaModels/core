@@ -19,7 +19,8 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Tim Gatzky <info@tim-gatzky.de>
  * @author     Martin Treml <github@r2pi.net>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Henry Lamorski <henry.lamorski@mailbox.org>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
