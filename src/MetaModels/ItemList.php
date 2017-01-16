@@ -19,7 +19,8 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Tim Gatzky <info@tim-gatzky.de>
  * @author     Martin Treml <github@r2pi.net>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Henry Lamorski <henry.lamorski@mailbox.org>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -772,7 +773,12 @@ class ItemList implements IServiceContainerAware
                     $arrDescription = $objCurrentItem->parseAttribute($this->strDescriptionAttribute, 'text');
 
                     if (!empty($arrDescription['text'])) {
-                        $page->description = \String::substr($arrDescription['text'], 120);
+						// PHP 7 compatibility, see https://github.com/contao/core-bundle/issues/309
+						if (version_compare(VERSION . '.' . BUILD, '3.5.5', '>=')) {
+							$page->description = \Contao\StringUtil::substr($arrDescription['text'], 120);
+						} else {
+							$page->description = \String::substr($arrDescription['text'], 120);
+						}
                         break;
                     }
                 }
