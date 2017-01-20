@@ -328,7 +328,7 @@ class Template
         while ($this->strParent !== null) {
             $strCurrent = $this->strParent;
             $strParent  = $this->strDefault
-                    ?: $this->getTemplate($this->strParent, $this->strFormat, $blnFailIfNotFound);
+                ?: $this->getTemplate($this->strParent, $this->strFormat, $blnFailIfNotFound);
 
             // Check if we have the template.
             if (empty($strParent)) {
@@ -343,7 +343,7 @@ class Template
             $this->strDefault = null;
 
             ob_start();
-            include $strParent;
+            include($strParent);
 
             // Capture the output of the root template
             if ($this->strParent === null) {
@@ -404,11 +404,11 @@ class Template
     /**
      * Extend another template
      *
-     * @param string $name The template name
+     * @param string $strName The template name
      */
-    public function extend($name)
+    public function extend($strName)
     {
-        $this->strParent = $name;
+        $this->strParent = $strName;
     }
 
     /**
@@ -422,37 +422,37 @@ class Template
     /**
      * Start a new block
      *
-     * @param string $name The block name
+     * @param string $strName The block name
      *
      * @throws \Exception If a child templates contains nested blocks
      */
-    public function block($name)
+    public function block($strName)
     {
-        $this->arrBlockNames[] = $name;
+        $this->arrBlockNames[] = $strName;
 
         // Root template
         if ($this->strParent === null) {
             // Register the block name
-            if (!isset($this->arrBlocks[$name])) {
-                $this->arrBlocks[$name] = '[[TL_PARENT]]';
+            if (!isset($this->arrBlocks[$strName])) {
+                $this->arrBlocks[$strName] = '[[TL_PARENT]]';
             } // Combine the contents of the child blocks
-            elseif (is_array($this->arrBlocks[$name])) {
+            elseif (is_array($this->arrBlocks[$strName])) {
                 $callback = function ($current, $parent) {
                     return str_replace('[[TL_PARENT]]', $parent, $current);
                 };
 
-                $this->arrBlocks[$name] = array_reduce($this->arrBlocks[$name], $callback, '[[TL_PARENT]]');
+                $this->arrBlocks[$strName] = array_reduce($this->arrBlocks[$strName], $callback, '[[TL_PARENT]]');
             }
 
             // Handle nested blocks
-            if ($this->arrBlocks[$name] != '[[TL_PARENT]]') {
+            if ($this->arrBlocks[$strName] != '[[TL_PARENT]]') {
                 // Output everything before the first TL_PARENT tag
-                if (strpos($this->arrBlocks[$name], '[[TL_PARENT]]') !== false) {
-                    list($content) = explode('[[TL_PARENT]]', $this->arrBlocks[$name], 2);
+                if (strpos($this->arrBlocks[$strName], '[[TL_PARENT]]') !== false) {
+                    list($content) = explode('[[TL_PARENT]]', $this->arrBlocks[$strName], 2);
                     echo $content;
                 } // Output the current block and start a new output buffer to remove the following blocks
                 else {
-                    echo $this->arrBlocks[$name];
+                    echo $this->arrBlocks[$strName];
                     ob_start();
                 }
             }
@@ -513,21 +513,21 @@ class Template
     /**
      * Insert a template
      *
-     * @param string $name The template name
-     * @param array  $data An optional data array
+     * @param string $strName The template name
+     * @param array  $arrData An optional data array
      */
-    public function insert($name, array $data = null)
+    public function insert($strName, array $arrData = null)
     {
         if (TL_MODE == 'BE') {
-            $tpl = new \BackendTemplate($name);
+            $objTemplate = new \BackendTemplate($strName);
         } else {
-            $tpl = new \FrontendTemplate($name);
+            $objTemplate = new \FrontendTemplate($strName);
         }
 
-        if ($data !== null) {
-            $tpl->setData($data);
+        if ($arrData !== null) {
+            $objTemplate->setData($arrData);
         }
 
-        echo $tpl->parse($this->getFormat());
+        echo $objTemplate->parse($this->getFormat());
     }
 }
