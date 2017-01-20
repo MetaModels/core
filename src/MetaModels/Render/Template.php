@@ -312,7 +312,7 @@ class Template
             return '';
         }
 
-        // St the format.
+        // Set the format.
         $this->strFormat = $strOutputFormat;
 
         // HOOK: add custom parse filters.
