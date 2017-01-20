@@ -4,6 +4,7 @@
 <div class="layout_full">
 
 <?php foreach ($this->data as $arrItem) : ?>
+<?php $this->block('item'); ?>
 <div class="item <?php echo $arrItem['class']; ?>">
 
 <?php foreach ($arrItem['attributes'] as $field => $strName) : ?>
@@ -17,15 +18,20 @@
 </div>
 <?php endif; ?>
 <?php endforeach; ?>
+<?php $this->block('actions'); ?>
 <?php if ($arrItem['jumpTo']['deep']) : ?>
 <a href="<?php echo $arrItem['jumpTo']['url']; ?>"><?php echo $this->details; ?></a>
 <?php endif; ?>
 <?php if (isset($this->editEnable) && $this->editEnable) : ?>
 <a href="<?php echo $arrItem['editUrl']; ?>"><?php echo $this->editLabel; ?></a>
 <?php endif; ?>
+<?php $this->endblock(); ?>
 </div>
 <?php endforeach; ?>
 </div>
+<?php $this->endblock(); ?>
 <?php else : ?>
+<?php $this->block('noItem'); ?>
 <p class="info"><?php echo $this->noItemsMsg; ?></p>
+<?php $this->endblock(); ?>
 <?php endif; ?>
