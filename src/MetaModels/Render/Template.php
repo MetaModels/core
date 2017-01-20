@@ -326,7 +326,8 @@ class Template
         // Include the parent templates
         while ($this->strParent !== null) {
             $strCurrent = $this->strParent;
-            $strParent  = $this->strDefault ?: $this->getTemplate($this->strParent, $this->strFormat);
+            $strParent  = $this->strDefault
+                    ?: $this->getTemplate($this->strParent, $this->strFormat, $blnFailIfNotFound);
 
             // Check if we have the template.
             if (empty($strParent)) {
@@ -347,7 +348,7 @@ class Template
             if ($this->strParent === null) {
                 $strBuffer = ob_get_contents();
             } elseif ($this->strParent == $strCurrent) {
-                $this->strDefault = \TemplateLoader::getDefaultPath($this->strParent, $this->strFormat);
+                $this->strDefault = $this->getTemplate($this->strParent, $this->strFormat, $blnFailIfNotFound);
             }
 
             ob_end_clean();
