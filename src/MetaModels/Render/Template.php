@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Maack <david.maack@arcor.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -24,11 +25,11 @@ namespace MetaModels\Render;
 use MetaModels\Helper\ContaoController;
 
 /**
- * Template class for metamodels.
+ * Template class for MetaModels.
  * In most aspects this behaves identically to the FrontendTemplate class from Contao but it differs in respect to
  * format selection.
  * The format is being determined upon parsing and not upon instantiation. There is also an optional "fail on not
- * found" flag,which defaults to false and therefore one can parse the template and have zero output instead of
+ * found" flag, which defaults to false and therefore one can parse the template and have zero output instead of
  * cluttering the frontend with exceptions.
  */
 class Template
