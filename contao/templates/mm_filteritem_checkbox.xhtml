@@ -1,11 +1,9 @@
-<?php if ($this->errors): ?>
-<?php foreach ($this->errors as $error): ?>
-<p class="error"><?php echo $error; ?></p>
-<?php endforeach; ?>
-<?php endif; ?>
+<?php $this->extend('mm_filteritem_default'); ?>
+
+<?php $this->block('formfield'); ?>
 <?php if(is_array($this->options) && count($this->options)>0): ?>
 <fieldset id="ctrl_<?php echo $this->urlparam; ?>" class="checkbox_container">
-<?php 
+<?php
 $count = 0;
 foreach($this->options as $option):
 	$class = ($count == 0) ? 'first ' : '';
@@ -37,3 +35,4 @@ foreach($this->options as $option):
 <?php endforeach; ?>
 </fieldset>
 <?php endif; ?>
+<?php $this->endblock(); ?>

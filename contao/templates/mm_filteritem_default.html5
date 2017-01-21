@@ -1,1 +1,11 @@
+<?php $this->block('error'); ?>
+<?php if ($this->errors): ?>
+<?php foreach ($this->errors as $error): ?>
+<p class="error"><?php echo $error; ?></p>
+<?php endforeach; ?>
+<?php endif; ?>
+<?php $this->endblock(); ?>
+
+<?php $this->block('formfield'); ?>
 <?php echo $this->formfield; ?>
+<?php $this->endblock(); ?>
