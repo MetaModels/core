@@ -1,4 +1,3 @@
-<?php $strRendersettings = isset($this->settings) ? 'settings' : 'view'; ?>
 <?php if (count($this->data)) : ?>
 
 <div class="layout_full">
@@ -11,7 +10,7 @@
 <?php if ((isset($arrItem[$this->getFormat()][$field]) && ($strValue = $arrItem[$this->getFormat()][$field])
     || (isset($arrItem['text'][$field]) && ($strValue = $arrItem['text'][$field])))) : ?>
 <div class="field <?php echo $field; ?>">
-    <?php if (!$this->$strRendersettings->get('hideLabels')) : ?>
+    <?php if (!$this->view->get('hideLabels')) : ?>
     <div class="label"><?php echo sprintf($GLOBALS['TL_LANG']['MSC']['field_label'], $strName); ?></div>
     <?php endif; ?>
   <div class="value"> <?php echo $strValue; ?></div>
