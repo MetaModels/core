@@ -1,25 +1,25 @@
 <!-- indexer::stop -->
-<section class="<?php echo $this->class; ?> block"<?php echo $this->cssID; ?><?php if ($this->style): ?> style="<?php echo $this->style; ?>"<?php endif; ?>>
+<section class="<?= $this->class ?> block"<?= $this->cssID ?><?php if ($this->style): ?> style="<?= $this->style ?>"<?php endif; ?>>
 <?php if ($this->headline): ?>
 
-<<?php echo $this->hl; ?>><?php echo $this->headline; ?></<?php echo $this->hl; ?>>
+<<?= $this->hl ?>><?= $this->headline ?></<?= $this->hl ?>>
 <?php endif; ?>
 
-<form<?php if ($this->action): ?> action="<?php echo $this->action; ?>"<?php endif; ?> method="post">
+<form<?php if ($this->action): ?> action="<?= $this->action ?>"<?php endif; ?> method="post">
 <input name="REQUEST_TOKEN" type="hidden" value="{{request_token}}" />
-<input type="hidden" name="FORM_SUBMIT" value="<?php echo $this->formid; ?>">
+<input type="hidden" name="FORM_SUBMIT" value="<?= $this->formid ?>">
 <div class="formbody">
 
 <?php foreach((is_array($this->filters) ? $this->filters : array()) as $filter): ?>
-<div class="widget <?php echo $filter['class']; ?>">
-	<?php echo $filter['label']; ?>
-	<?php echo $filter['value']; ?>
+<div class="widget <?= $filter['class'] ?>">
+	<?= $filter['label'] ?>
+	<?= $filter['value'] ?>
 </div>
 <?php endforeach; ?>
 
 <?php if($this->submit): ?>
 <div class="submit_container">
-  <input type="submit" class="submit" value="<?php echo $this->submit; ?>">
+  <input type="submit" class="submit" value="<?= $this->submit ?>">
 </div>
 <?php endif; ?>
 </div>

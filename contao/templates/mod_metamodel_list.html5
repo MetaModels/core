@@ -2,9 +2,9 @@
 
 <?php $this->block('content'); ?>
 <?php if ($this->editEnable): ?>
-<div class="addUrl"><a href="<?php echo $this->addUrl; ?>"><?php echo $this->addNewLabel; ?></a></div>
+<div class="addUrl"><a href="<?= $this->addUrl ?>"><?= $this->addNewLabel ?></a></div>
 <?php endif; ?>
 
-<?php echo $this->items; ?>
-<?php echo $this->pagination; ?>
+<?= $this->items ?>
+<?= $this->pagination ?>
 <?php $this->endblock(); ?>

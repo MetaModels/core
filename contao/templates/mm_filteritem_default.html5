@@ -1,11 +1,11 @@
 <?php $this->block('error'); ?>
 <?php if ($this->errors): ?>
 <?php foreach ($this->errors as $error): ?>
-<p class="error"><?php echo $error; ?></p>
+<p class="error"><?= $error ?></p>
 <?php endforeach; ?>
 <?php endif; ?>
 <?php $this->endblock(); ?>
 
 <?php $this->block('formfield'); ?>
-<?php echo $this->formfield; ?>
+<?= $this->formfield ?>
 <?php $this->endblock(); ?>

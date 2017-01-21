@@ -2,7 +2,7 @@
 
 <?php $this->block('formfield'); ?>
 <?php if(is_array($this->options) && count($this->options)>0): ?>
-<fieldset id="ctrl_<?php echo $this->urlparam; ?>" class="checkbox_container">
+<fieldset id="ctrl_<?= $this->urlparam ?>" class="checkbox_container">
 <?php
 $count = 0;
 foreach($this->options as $option):
@@ -31,7 +31,7 @@ foreach($this->options as $option):
 	);
 	$count++;
 ?>
-<span class="<?php echo $class; ?>"><?php echo $field; ?> <?php echo $label; ?></span>
+<span class="<?= $class ?>"><?= $field ?> <?= $label ?></span>
 <?php endforeach; ?>
 </fieldset>
 <?php endif; ?>

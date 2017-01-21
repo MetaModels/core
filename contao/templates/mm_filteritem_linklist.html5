@@ -11,8 +11,8 @@ foreach($this->options as $option):
     $class .= ($i++ % 2) ? 'even' : 'odd';
     $class .= (strlen($option['class'])) ? ' ' . $option['class'] : '';
 ?>
-<li class="<?php echo $class; ?>">
-<a href="<?php echo $option['href']; ?>" class="<?php echo $class; ?>" title="<?php echo $option['value']; ?>"><?php echo $option['value']; ?><?php if($this->showCount): ?> <span class="count">(<?php echo $this->count[$option['key']]; ?>)</span><?php endif; ?></a>
+<li class="<?= $class ?>">
+<a href="<?= $option['href'] ?>" class="<?= $class ?>" title="<?= $option['value'] ?>"><?= $option['value'] ?><?php if($this->showCount): ?> <span class="count">(<?= $this->count[$option['key']] ?>)</span><?php endif; ?></a>
 </li>
 <?php endforeach; ?>
 </ul>
