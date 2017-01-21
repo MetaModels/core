@@ -1,6 +1,5 @@
 <?php
-$strRendersettings = isset($this->settings)? 'settings' : 'view';
-$hideLabels = $this->$strRendersettings->get('hideLabels');
+$hideLabels = $this->view->get('hideLabels');
 if (count($this->data)) {
     foreach ($this->data as $item) {
         foreach ($item['attributes'] as $field => $name) {
