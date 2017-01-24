@@ -9,10 +9,10 @@
 <?php foreach ($this->items->getItem()->getMetaModel()->getAttributes() as $field => $objAttribute): ?>
 <?php if (($strValue = $arrItem[$this->getFormat()][$field]) || ($strValue = $arrItem['text'][$field])): ?>
 <div class="field <?= $field ?>">
-	<?php if(!$this->view->get('hideLabels')): ?>
-		<div class="label"><?= sprintf($GLOBALS['TL_LANG']['MSC']['field_label'], $objAttribute->getName()) ?></div>
-	<?php endif; ?>
-	<div class="value"> <?= $strValue ?></div>
+<?php if(!$this->view->get('hideLabels')): ?>
+<div class="label"><?= sprintf($GLOBALS['TL_LANG']['MSC']['field_label'], $objAttribute->getName()) ?></div>
+<?php endif; ?>
+<div class="value"> <?= $strValue ?></div>
 </div>
 <?php endif; ?>
 <?php endforeach; ?>

@@ -4,8 +4,9 @@
 <?php if(is_array($this->options) && count($this->options)): ?>
 <ul>
 <?php
-$i = 0; $last = count($this->options) - 1;
-foreach($this->options as $option):
+$i    = 0;
+$last = count($this->options) - 1;
+foreach ($this->options as $option):
     $class = (!$i) ? 'first ' : '';
     $class .= ($i == $last) ? 'last ' : '';
     $class .= ($i++ % 2) ? 'even' : 'odd';

@@ -12,14 +12,14 @@
 
 <?php foreach((is_array($this->filters) ? $this->filters : array()) as $filter): ?>
 <div class="widget <?= $filter['class'] ?>">
-	<?= $filter['label'] ?>
-	<?= $filter['value'] ?>
+<?= $filter['label'] ?>
+<?= $filter['value'] ?>
 </div>
 <?php endforeach; ?>
 
 <?php if($this->submit): ?>
 <div class="submit_container">
-  <input type="submit" class="submit" value="<?= $this->submit ?>">
+<input type="submit" class="submit" value="<?= $this->submit ?>">
 </div>
 <?php endif; ?>
 </div>
