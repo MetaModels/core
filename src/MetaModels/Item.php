@@ -468,6 +468,7 @@ class Item implements IItem
         $arrNewData = $this->arrData;
         unset($arrNewData['id']);
         unset($arrNewData['tstamp']);
+        unset($arrNewData['vargroup']);
         return new Item($this->getMetaModel(), $arrNewData);
     }
 
