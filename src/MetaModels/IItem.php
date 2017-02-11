@@ -112,6 +112,13 @@ interface IItem
     public function getVariants($objFilter);
 
     /**
+     * Fetch the meta model variant base for this item. For a non-variant item the variant base is the item itself.
+     *
+     * @return \MetaModels\IItem The variant base.
+     */
+    public function getVariantBase();
+
+    /**
      * Save the current data for every attribute to the data sink.
      *
      * @return void

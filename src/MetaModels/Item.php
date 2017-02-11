@@ -295,6 +295,16 @@ class Item implements IItem
     }
 
     /**
+     * Fetch the meta model variant base for this item. For a non-variant item the variant base is the item itself.
+     *
+     * @return \MetaModels\IItem The variant base.
+     */
+    public function getVariantBase()
+    {
+        // TODO: Implement getVariantBase() method.
+    }
+
+    /**
      * Find all Variants including the variant base.
      *
      * The item itself is excluded from the return list.
