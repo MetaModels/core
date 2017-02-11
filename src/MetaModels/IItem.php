@@ -107,14 +107,16 @@ interface IItem
      *
      * @param \MetaModels\Filter\IFilter $objFilter The filter settings to be applied.
      *
-     * @return \MetaModels\IItems A list of all variants for this item.
+     * @return \MetaModels\IItems|null A list of all variants for this item or null if the item cannot handle variants.
      */
     public function getVariants($objFilter);
 
     /**
-     * Fetch the meta model variant base for this item. For a non-variant item the variant base is the item itself.
+     * Fetch the meta model variant base for this item.
      *
-     * @return \MetaModels\IItem The variant base.
+     * Note: For a non-variant item the variant base is the item itself.
+     *
+     * @return IItem The variant base.
      */
     public function getVariantBase();
 
