@@ -11,24 +11,6 @@
 -- --------------------------------------------------------
 
 --
--- Table `tl_metamodel_filter`
---
-
-CREATE TABLE `tl_metamodel_filter` (
-  `id` int(10) unsigned NOT NULL auto_increment,
--- corresponding meta model
-  `pid` int(10) unsigned NOT NULL default '0',
-  `tstamp` int(10) unsigned NOT NULL default '0',
--- human readable name of the filter setting for internal use only.
-  `name` varchar(64) NOT NULL default '',
-  PRIMARY KEY  (`id`),
-  KEY `pid` (`pid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
--- --------------------------------------------------------
-
---
 -- Table `tl_metamodel_filtersetting`
 --
 

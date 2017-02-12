@@ -33,6 +33,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
         'dataContainer'               => 'General',
         'switchToEdit'                => false,
         'enableVersioning'            => false,
+        'sql'              => array
+        (
+            'keys' => array
+            (
+                'id'      => 'primary',
+                'pid'     => 'index'
+            ),
+        ),
     ),
 
     'dca_config'                      => array
@@ -182,8 +190,17 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
 
     'fields' => array
     (
-        'tstamp'                      => array
+        'id'          => array
         (
+            'sql' => "int(10) unsigned NOT NULL auto_increment"
+        ),
+        'pid'         => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'tstamp'      => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
         ),
         'name'                        => array
         (
@@ -195,7 +212,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
                 'mandatory'           => true,
                 'maxlength'           => 255,
                 'tl_class'            => 'w50'
-            )
+            ),
+            'sql' => "varchar(64) NOT NULL default ''"
         ),
     )
 );
