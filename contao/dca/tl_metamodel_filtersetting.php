@@ -35,6 +35,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
         'dataContainer'    => 'General',
         'switchToEdit'     => false,
         'enableVersioning' => false,
+        'sql'              => array
+        (
+            'keys' => array
+            (
+                'id'  => 'primary',
+                'pid' => 'index'
+            ),
+        )
     ),
     'dca_config'            => array
     (
@@ -286,8 +294,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
     'metasubselectpalettes' => array
     (
         'attr_id' => array
-        (
-        )
+        ()
     ),
     'simplelookup_palettes' => array
     (
@@ -298,11 +305,29 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
     ),
     'fields'                => array
     (
+        'id'                => array
+        (
+            'sql' => "int(10) unsigned NOT NULL auto_increment"
+        ),
+        'pid'               => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'sorting'           => array
+        (
+            'sorting' => true,
+            'sql'     => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'tstamp'            => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
         'fid'               => array
         (
             // Keep this empty but keep it here!
             // needed for act=copy in DC_Table, as otherwise the fid value will not be copied.
             'label' => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid'],
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
         ),
         'type'              => array
         (
@@ -319,6 +344,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
                 'tl_class'           => 'w50',
                 'chosen'             => true
             ),
+            'sql'       => "varchar(64) NOT NULL default ''"
         ),
         'enabled'           => array
         (
@@ -330,13 +356,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
                 'alwaysSave' => true,
                 'tl_class'   => 'w50 m12',
             ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'comment'           => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['comment'],
             'exclude'   => true,
             'inputType' => 'text',
-            'eval'      => array('tl_class' => 'clr long')
+            'eval'      => array('tl_class' => 'clr long'),
+            'sql'       => "varchar(255) NOT NULL default ''"
         ),
         'attr_id'           => array
         (
@@ -353,6 +381,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
                 'tl_class'           => 'w50',
                 'chosen'             => true
             ),
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),
         'all_langs'         => array
         (
@@ -364,6 +393,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
                 'alwaysSave' => true,
                 'tl_class'   => 'w50 m12 cbx',
             ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'items'             => array
         (
@@ -376,6 +406,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
                 'alwaysSave'     => true,
                 'mandatory'      => true,
             ),
+            'sql'       => "text NULL"
         ),
         'urlparam'          => array
         (
@@ -385,7 +416,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
             'eval'      => array
             (
                 'tl_class' => 'w50',
-            )
+            ),
+            'sql'       => "varchar(255) NOT NULL default ''"
         ),
         'predef_param'      => array
         (
@@ -397,6 +429,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
                 'alwaysSave' => true,
                 'tl_class'   => 'w50 m12',
             ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'customsql'         => array
         (
@@ -412,7 +445,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
                 'class'          => 'monospace',
                 'helpwizard'     => true,
             ),
-            'explanation' => 'customsql'
+            'explanation' => 'customsql',
+            'sql'         => "text NULL"
         ),
         'allow_empty'       => array
         (
@@ -424,6 +458,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
                 'alwaysSave' => true,
                 'tl_class'   => 'w50 m12',
             ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'stop_after_match'  => array
         (
@@ -435,6 +470,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
                 'alwaysSave' => true,
                 'tl_class'   => 'w50 m12',
             ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'label'             => array
         (
@@ -445,6 +481,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
             (
                 'tl_class' => 'clr w50',
             ),
+            'sql'       => "blob NULL"
         ),
         'template'          => array
         (
@@ -457,6 +494,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
                 'tl_class' => 'w50',
                 'chosen'   => true
             ),
+            'sql'       => "varchar(64) NOT NULL default ''"
         ),
         'blankoption'       => array
         (
@@ -468,6 +506,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
             (
                 'tl_class' => 'w50 clr',
             ),
+            'sql'       => "char(1) NOT NULL default '1'"
         ),
         'onlyused'          => array
         (
@@ -480,6 +519,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
                 'tl_class'       => 'w50',
                 'submitOnChange' => true,
             ),
+            'sql'       => "char(1) NOT NULL default '0'"
         ),
         'onlypossible'      => array
         (
@@ -491,6 +531,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
             (
                 'tl_class' => 'w50',
             ),
+            'sql'       => "char(1) NOT NULL default '0'"
         ),
         'skipfilteroptions' => array
         (
@@ -502,6 +543,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
             (
                 'tl_class' => 'w50',
             ),
+            'sql'       => "char(1) NOT NULL default '0'"
         ),
         'defaultid'         => array
         (
@@ -512,7 +554,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
             (
                 'tl_class'           => 'w50 clr',
                 'includeBlankOption' => true
-            )
+            ),
+            'sql'       => "varchar(255) NOT NULL default ''"
         )
     )
 );
