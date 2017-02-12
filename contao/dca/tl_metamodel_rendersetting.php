@@ -30,6 +30,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
         'ptable'           => 'tl_metamodel_rendersettings',
         'switchToEdit'     => true,
         'enableVersioning' => false,
+        'sql'              => array
+        (
+            'keys' => array
+            (
+                'id'  => 'primary',
+                'pid' => 'index'
+            ),
+        )
     ),
     'dca_config'   => array
     (
@@ -204,6 +212,22 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
     // Fields.
     'fields'       => array
     (
+        'id'               => array
+        (
+            'sql' => "int(10) unsigned NOT NULL auto_increment"
+        ),
+        'pid'              => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'sorting'          => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'tstamp'           => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
         'attr_id'          => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id'],
@@ -218,6 +242,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
                 'chosen'             => true,
                 'tl_class'           => 'w50'
             ),
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),
         'template'         => array
         (
@@ -229,9 +254,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
                 'tl_class'           => 'w50',
                 'chosen'             => true,
                 'includeBlankOption' => true,
-            )
+            ),
+            'sql'       => "varchar(64) NOT NULL default ''"
         ),
-        'sorting'          => array(),
         'additional_class' => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['additional_class'],
@@ -241,7 +266,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
             (
                 'tl_class'  => 'w50',
                 'maxlength' => 64,
-            )
+            ),
+            'sql'       => "varchar(64) NOT NULL default ''"
         ),
+        'enabled'          => array
+        (
+            'sql' => "char(1) NOT NULL default ''"
+        )
     )
 );
