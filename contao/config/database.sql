@@ -8,24 +8,6 @@
 -- **********************************************************
 
 
-CREATE TABLE `tl_metamodel_dcasetting_condition` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `pid` int(10) unsigned NOT NULL default '0',
-  `settingId` int(10) unsigned NOT NULL default '0',
-  `sorting` int(10) unsigned NOT NULL default '0',
-  `tstamp` int(10) unsigned NOT NULL default '0',
-  `enabled` char(1) NOT NULL default '',
--- type, any registered condition mapping.
-  `type` varchar(255) NOT NULL default '',
--- corresponding tl_metamodel_attribute
-  `attr_id` int(10) unsigned NOT NULL default '0',
--- short comment for describing the purpose
-  `comment` varchar(255) NOT NULL default '',
-  `value` blob NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 -- --------------------------------------------------------
 
 --
