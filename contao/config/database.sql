@@ -8,36 +8,6 @@
 -- **********************************************************
 
 
--- --------------------------------------------------------
-
---
--- Table `tl_metamodel_rendersettings`
---
-
-CREATE TABLE `tl_metamodel_rendersettings` (
-  `id` int(10) unsigned NOT NULL auto_increment,
--- corresponding meta model
-  `pid` int(10) unsigned NOT NULL default '0',
-  `tstamp` int(10) unsigned NOT NULL default '0',
--- human readable name of the setting for internal use only.
-  `name` varchar(64) NOT NULL default '',
--- is default?
-  `isdefault` char(1) NOT NULL default '',
--- the template to use.
-  `template` varchar(64) NOT NULL default '',
-  `format` varchar(255) NOT NULL default '',
--- CSS JS files
-   `additionalCss` blob NULL,
-   `additionalJs` blob NULL,
--- special options for the template
-  `hideEmptyValues` char(1) NOT NULL default '',
-  `hideLabels` char(1) NOT NULL default '',
--- the jumpTo page to use.
-  `jumpTo` blob NULL,
-  PRIMARY KEY  (`id`),
-  KEY `pid` (`pid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 
 -- --------------------------------------------------------
 
