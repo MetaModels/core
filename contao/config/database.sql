@@ -8,34 +8,6 @@
 -- **********************************************************
 
 
-
--- --------------------------------------------------------
-
---
--- Table `tl_metamodel_dca_combine`
---
-
-CREATE TABLE `tl_metamodel_dca_combine` (
-  `id` int(10) unsigned NOT NULL auto_increment,
--- corresponding tl_metamodel
-  `pid` int(10) unsigned NOT NULL default '0',
-  `tstamp` int(10) unsigned NOT NULL default '0',
-  `sorting` int(10) unsigned NOT NULL default '0',
--- fe usergroup, if any
-  `fe_group` int(10) unsigned NOT NULL default '0',
--- be usergroup, if any (keep signed as admins are -1)
-  `be_group` int(10) NOT NULL default '0',
--- corresponding tl_metamodel_dca (palette)
-  `dca_id` int(10) unsigned NOT NULL default '0',
--- corresponding tl_metamodel_rendersetting (view)
-  `view_id` int(10) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`id`),
-  KEY `pid` (`pid`),
-  KEY `fe_group` (`fe_group`),
-  KEY `be_group` (`be_group`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 -- --------------------------------------------------------
 
 --

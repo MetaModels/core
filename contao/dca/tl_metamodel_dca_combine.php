@@ -29,6 +29,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
         'switchToEdit'     => false,
         'enableVersioning' => false,
         'closed'           => false,
+        'sql'              => array
+        (
+            'keys' => array
+            (
+                'id'       => 'primary',
+                'pid'      => 'index',
+                'fe_group' => 'index',
+                'be_group' => 'index'
+            ),
+        )
     ),
     'dca_config' => array
     (
@@ -49,7 +59,23 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
     ),
     'fields'     => array
     (
-        'rows' => array
+        'id'      => array
+        (
+            'sql' => "int(10) unsigned NOT NULL auto_increment"
+        ),
+        'pid'     => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'sorting' => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'tstamp'  => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'rows'    => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_combiner'],
             'exclude'   => true,
@@ -80,7 +106,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
                             'includeBlankOption' => true,
                             'style'              => 'width:115px',
                             'chosen'             => 'true'
-                        )
+                        ),
+                        'sql'       => "int(10) unsigned NOT NULL default '0'"
                     ),
                     'be_group' => array
                     (
@@ -92,7 +119,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
                             'includeBlankOption' => true,
                             'style'              => 'width:115px',
                             'chosen'             => 'true'
-                        )
+                        ),
+                        'sql'       => "int(10) NOT NULL default '0'" // keep signed as admins are -1
                     ),
                     'dca_id'   => array
                     (
@@ -103,7 +131,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
                         (
                             'style'  => 'width:180px',
                             'chosen' => 'true'
-                        )
+                        ),
+                        'sql'       => "int(10) unsigned NOT NULL default '0'"
                     ),
                     'view_id'  => array
                     (
@@ -114,7 +143,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
                         (
                             'style'  => 'width:180px',
                             'chosen' => 'true'
-                        )
+                        ),
+                        'sql'       => "int(10) unsigned NOT NULL default '0'"
                     ),
                 ),
             ),
