@@ -317,7 +317,7 @@ array_insert(
         'metamodel_fef_template'        => array
         (
             'label'            => &$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_template'],
-            'default'          => 'event_full',
+            'default'          => 'mm_filter_default',
             'exclude'          => true,
             'inputType'        => 'select',
             'options_callback' => array('MetaModels\Dca\Module', 'getFilterTemplates'),

@@ -34,7 +34,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
         (
             'keys' => array
             (
-                'id' => 'primary',
+                'id'  => 'primary',
+                'pid' => 'index'
             ),
         ),
     ),
