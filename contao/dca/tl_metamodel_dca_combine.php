@@ -16,6 +16,7 @@
  * @author     Andreas Isaak <info@andreas-isaak.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -128,6 +129,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
                         'inputType' => 'select',
                         'eval'      => array
                         (
+                            'includeBlankOption' => true,
                             'style'  => 'width:180px',
                             'chosen' => 'true'
                         ),
@@ -139,6 +141,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
                         'inputType' => 'select',
                         'eval'      => array
                         (
+                            'includeBlankOption' => true,
                             'style'  => 'width:180px',
                             'chosen' => 'true'
                         ),
