@@ -15,6 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -31,6 +32,8 @@ use MetaModels\Helper\ContaoController;
  * The format is being determined upon parsing and not upon instantiation. There is also an optional "fail on not
  * found" flag, which defaults to false and therefore one can parse the template and have zero output instead of
  * cluttering the frontend with exceptions.
+ *
+ * @@SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class Template
 {
@@ -42,14 +45,14 @@ class Template
     protected $strTemplate;
 
     /**
-     * Parent template
+     * Parent template.
      *
      * @var string
      */
     protected $strParent;
 
     /**
-     * Default template
+     * Default template.
      *
      * @var string
      */
@@ -70,14 +73,14 @@ class Template
     protected $strFormat = null;
 
     /**
-     * Blocks
+     * Blocks.
      *
      * @var array
      */
     protected $arrBlocks = array();
 
     /**
-     * Block names
+     * Block names.
      *
      * @var array
      */
@@ -361,7 +364,12 @@ class Template
         // Add start and end markers in debug mode
         if (\Config::get('debugMode')) {
             $strRelPath = str_replace(TL_ROOT . '/', '', $this->getTemplate($this->strTemplate, $this->strFormat));
-            $strBuffer  = "\n<!-- TEMPLATE START: $strRelPath -->\n$strBuffer\n<!-- TEMPLATE END: $strRelPath -->\n";
+            $strBuffer  = <<<EOF
+<!-- TEMPLATE START: $strRelPath -->
+$strBuffer
+<!-- TEMPLATE END: $strRelPath -->
+
+EOF;
         }
 
         return $strBuffer;
@@ -404,7 +412,9 @@ class Template
     /**
      * Extend another template
      *
-     * @param string $strName The template name
+     * @param string $strName The template name.
+     *
+     * @return void
      */
     public function extend($strName)
     {
@@ -413,6 +423,8 @@ class Template
 
     /**
      * Insert the content of the parent block
+     *
+     * @return void
      */
     public function parent()
     {
@@ -422,9 +434,11 @@ class Template
     /**
      * Start a new block
      *
-     * @param string $strName The block name
+     * @param string $strName The block name.
      *
-     * @throws \Exception If a child templates contains nested blocks
+     * @return void
+     *
+     * @throws \Exception If a child templates contains nested blocks.
      */
     public function block($strName)
     {
@@ -435,8 +449,8 @@ class Template
             // Register the block name
             if (!isset($this->arrBlocks[$strName])) {
                 $this->arrBlocks[$strName] = '[[TL_PARENT]]';
-            } // Combine the contents of the child blocks
-            elseif (is_array($this->arrBlocks[$strName])) {
+            } elseif (is_array($this->arrBlocks[$strName])) {
+                // Combine the contents of the child blocks
                 $callback = function ($current, $parent) {
                     return str_replace('[[TL_PARENT]]', $parent, $current);
                 };
@@ -450,14 +464,14 @@ class Template
                 if (strpos($this->arrBlocks[$strName], '[[TL_PARENT]]') !== false) {
                     list($content) = explode('[[TL_PARENT]]', $this->arrBlocks[$strName], 2);
                     echo $content;
-                } // Output the current block and start a new output buffer to remove the following blocks
-                else {
+                } else {
+                    // Output the current block and start a new output buffer to remove the following blocks
                     echo $this->arrBlocks[$strName];
                     ob_start();
                 }
             }
-        } // Child template
-        else {
+        } else {
+            // Child template
             // Clean the output buffer
             ob_end_clean();
 
@@ -474,7 +488,9 @@ class Template
     /**
      * End a block
      *
-     * @throws \Exception If there is no open block
+     * @return void
+     *
+     * @throws \Exception If there is no open block.
      */
     public function endblock()
     {
@@ -494,13 +510,13 @@ class Template
                 if (strpos($this->arrBlocks[$name], '[[TL_PARENT]]') !== false) {
                     list(, $content) = explode('[[TL_PARENT]]', $this->arrBlocks[$name], 2);
                     echo $content;
-                } // Remove the overwritten content
-                else {
+                } else {
+                    // Remove the overwritten content
                     ob_end_clean();
                 }
             }
-        } // Child template
-        else {
+        } else {
+            // Child template
             // Capture the block content
             $this->arrBlocks[$name][] = ob_get_contents();
             ob_end_clean();
@@ -513,8 +529,10 @@ class Template
     /**
      * Insert a template
      *
-     * @param string $strName The template name
-     * @param array  $arrData An optional data array
+     * @param string $strName The template name.
+     * @param array  $arrData An optional data array.
+     *
+     * @return void
      */
     public function insert($strName, array $arrData = null)
     {
