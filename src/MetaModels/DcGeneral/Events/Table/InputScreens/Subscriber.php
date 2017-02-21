@@ -13,7 +13,8 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -88,6 +89,10 @@ class Subscriber extends BaseSubscriber
                 array($this, 'buildLegendTitleWidget')
             )
             ->addListener(
+                BuildWidgetEvent::NAME,
+                array($this, 'buildMandatoryWidget')
+            )
+            ->addListener(
                 GetPropertyOptionsEvent::NAME,
                 array($this, 'getAttributeOptions')
             )
@@ -134,13 +139,15 @@ class Subscriber extends BaseSubscriber
             if (!$image || !file_exists(TL_ROOT . '/' . $image)) {
                 $image = 'system/modules/metamodels/assets/images/icons/fields.png';
             }
-            $name    = $objAttribute->getName();
-            $colName = $objAttribute->getColName();
+            $name     = $objAttribute->getName();
+            $colName  = $objAttribute->getColName();
+            $isUnique = $objAttribute->get('isunique');
         } else {
-            $type    = 'unknown ID: ' . $model->getProperty('attr_id');
-            $image   = 'system/modules/metamodels/assets/images/icons/fields.png';
-            $name    = 'unknown attribute';
-            $colName = 'unknown column';
+            $type     = 'unknown ID: ' . $model->getProperty('attr_id');
+            $image    = 'system/modules/metamodels/assets/images/icons/fields.png';
+            $name     = 'unknown attribute';
+            $colName  = 'unknown column';
+            $isUnique = false;
         }
 
         /** @var GenerateHtmlEvent $imageEvent */
@@ -160,7 +167,8 @@ class Subscriber extends BaseSubscriber
                 $type,
                 $imageEvent->getHtml(),
                 $name,
-                $model->getProperty('mandatory')
+                // unique attributes are automatically mandatory
+                $model->getProperty('mandatory') || $isUnique
                     ? ' ['.$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory'][0].']'
                     : '',
                 $model->getProperty('tl_class') ? sprintf('[%s]', $model->getProperty('tl_class')) : ''
@@ -330,6 +338,36 @@ class Subscriber extends BaseSubscriber
             false,
             deserialize($event->getModel()->getProperty('legendtitle'), true)
         );
+    }
+    
+    /**
+     * Set the field disabled if the selected the attribute is unique.
+     *
+     * @param BuildWidgetEvent $event The event.
+     *
+     * @return void
+     */
+    public function buildMandatoryWidget(BuildWidgetEvent $event)
+    {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dcasetting')
+            || ($event->getProperty()->getName() !== 'mandatory')) {
+            return;
+        }
+
+        $model     = $event->getModel();
+        $metaModel = $this->getMetaModelById($model->getProperty('pid'));
+        
+        if ($metaModel->getAttributeById($model->getProperty('attr_id'))->get('isunique')) {
+            \Message::addInfo($GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory_for_unique_attr']);
+            
+            $extra = $event->getProperty()->getExtra();
+
+            $extra['disabled'] = true;
+
+            $event->getProperty()->setExtra($extra);
+            
+            $model->setProperty('mandatory', true);
+        }
     }
 
     /**
