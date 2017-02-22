@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2016 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,8 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2016 The MetaModels team.
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -31,16 +32,24 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
         'ptable'           => 'tl_metamodel_dca',
         'switchToEdit'     => false,
         'enableVersioning' => false,
+        'sql'              => array
+        (
+            'keys' => array
+            (
+                'id'  => 'primary',
+                'pid' => 'index'
+            ),
+        ),
     ),
     'dca_config'            => array
     (
         'data_provider'  => array
         (
-            'default' => array
+            'default'      => array
             (
                 'source' => 'tl_metamodel_dca_sortgroup'
             ),
-            'parent'  => array
+            'parent'       => array
             (
                 'source' => 'tl_metamodel_dca'
             ),
@@ -238,6 +247,22 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
     ),
     'fields'                => array
     (
+        'id'              => array
+        (
+            'sql' => "int(10) unsigned NOT NULL auto_increment"
+        ),
+        'pid'             => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'sorting'         => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'tstamp'          => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
         'name'            => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['name'],
@@ -249,7 +274,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
                 'mandatory' => true,
                 'maxlength' => 64,
                 'tl_class'  => 'w50'
-            )
+            ),
+            'sql'       => "text NULL"
         ),
         'isdefault'       => array
         (
@@ -258,9 +284,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             'inputType' => 'checkbox',
             'eval'      => array
             (
-                'tl_class'  => 'w50 m12 cbx',
-                'fallback'  => true
+                'tl_class' => 'w50 m12 cbx',
+                'fallback' => true
             ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'ismanualsort'    => array
         (
@@ -270,7 +297,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             (
                 'tl_class'       => 'w50 m12 cbx',
                 'submitOnChange' => true
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'rendersort'      => array
         (
@@ -282,7 +310,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             (
                 'tl_class' => 'w50',
             ),
-            'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendersortdirections']
+            'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendersortdirections'],
+            'sql'       => "varchar(10) NOT NULL default 'asc'"
         ),
         'rendersortattr'  => array
         (
@@ -293,6 +322,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             (
                 'tl_class' => 'w50 clr',
             ),
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),
         'rendergrouptype' => array
         (
@@ -306,7 +336,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
                 'tl_class'       => 'w50 clr',
                 'submitOnChange' => true
             ),
-            'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergrouptypes']
+            'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergrouptypes'],
+            'sql'       => "varchar(10) NOT NULL default 'none'"
         ),
         'rendergroupattr' => array
         (
@@ -318,6 +349,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
                 'tl_class'       => 'w50',
                 'submitOnChange' => true
             ),
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),
         'rendergrouplen'  => array
         (
@@ -329,6 +361,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
                 'tl_class' => 'w50',
                 'rgxp'     => 'digit'
             ),
+            'sql'       => "int(10) unsigned NOT NULL default '1'"
         ),
         'backendcaption'  => array
         (
@@ -344,10 +377,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
                         'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_langcode'],
                         'exclude'   => true,
                         'inputType' => 'select',
-                        'options'   => array_flip(array_filter(array_flip($this->getLanguages()), function ($langCode) {
-                            // Disable >2 char long language codes for the moment.
-                            return (strlen($langCode) == 2);
-                        })),
+                        'options'   => array_flip(
+                            array_filter(
+                                array_flip($this->getLanguages()),
+                                function ($langCode) {
+                                    // Disable >2 char long language codes for the moment.
+                                    return (2 === strlen($langCode));
+                                }
+                            )
+                        ),
                         'eval'      => array
                         (
                             'style'  => 'width:200px',

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,8 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Tim Becker <please.tim@metamodel.me>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -33,10 +34,18 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
         'dataContainer'    => 'General',
         'switchToEdit'     => true,
         'enableVersioning' => false,
+        'sql'              => array
+        (
+            'keys' => array
+            (
+                'id'        => 'primary',
+                'tableName' => 'index',
+            ),
+        ),
     ),
-    'dca_config' => array
+    'dca_config'      => array
     (
-        'data_provider' => array
+        'data_provider'  => array
         (
             'default' => array
             (
@@ -52,20 +61,20 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
             (
                 'source' => 'tl_metamodel_rendersettings'
             ),
-            'tl_metamodel_rendersetting' => array
+            'tl_metamodel_rendersetting'  => array
             (
                 'source' => 'tl_metamodel_rendersetting'
             ),
 
-            'tl_metamodel_dca' => array
+            'tl_metamodel_dca'                  => array
             (
                 'source' => 'tl_metamodel_dca'
             ),
-            'tl_metamodel_dca_sortgroup' => array
+            'tl_metamodel_dca_sortgroup'        => array
             (
                 'source' => 'tl_metamodel_dca_sortgroup'
             ),
-            'tl_metamodel_dcasetting' => array
+            'tl_metamodel_dcasetting'           => array
             (
                 'source' => 'tl_metamodel_dcasetting'
             ),
@@ -79,7 +88,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
                 'source' => 'tl_metamodel_searchable_pages'
             ),
 
-            'tl_metamodel_filter' => array
+            'tl_metamodel_filter'        => array
             (
                 'source' => 'tl_metamodel_filter'
             ),
@@ -208,11 +217,12 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
                         'operation' => '=',
                     ),
                 )
-            ),array
+            ),
+            array
             (
-                'from'    => 'tl_metamodel_dca',
-                'to'      => 'tl_metamodel_dca_sortgroup',
-                'setOn'   => array
+                'from'   => 'tl_metamodel_dca',
+                'to'     => 'tl_metamodel_dca_sortgroup',
+                'setOn'  => array
                 (
                     array
                     (
@@ -220,7 +230,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
                         'from_field' => 'id',
                     ),
                 ),
-                'filter'  => array
+                'filter' => array
                 (
                     array
                     (
@@ -277,31 +287,31 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 
             array
             (
-                'from'                => 'tl_metamodel',
-                'to'                  => 'tl_metamodel_searchable_pages',
-                'setOn'               => array
+                'from'    => 'tl_metamodel',
+                'to'      => 'tl_metamodel_searchable_pages',
+                'setOn'   => array
                 (
                     array
                     (
-                        'to_field'    => 'pid',
-                        'from_field'  => 'id',
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
                     ),
                 ),
-                'filter'              => array
+                'filter'  => array
                 (
                     array
                     (
-                        'local'       => 'pid',
-                        'remote'      => 'id',
-                        'operation'   => '=',
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
                     ),
                 ),
                 'inverse' => array
                 (
                     array
                     (
-                        'local' => 'pid',
-                        'remote' => 'id',
+                        'local'     => 'pid',
+                        'remote'    => 'id',
                         'operation' => '=',
                     ),
                 )
@@ -309,23 +319,23 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 
             array
             (
-                'from'                => 'tl_metamodel',
-                'to'                  => 'tl_metamodel_filter',
-                'setOn'               => array
+                'from'   => 'tl_metamodel',
+                'to'     => 'tl_metamodel_filter',
+                'setOn'  => array
                 (
                     array
                     (
-                        'to_field'    => 'pid',
-                        'from_field'  => 'id',
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
                     ),
                 ),
-                'filter'              => array
+                'filter' => array
                 (
                     array
                     (
-                        'local'       => 'pid',
-                        'remote'      => 'id',
-                        'operation'   => '=',
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
                     ),
                 ),
             ),
@@ -353,23 +363,23 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
 
             array
             (
-                'from'                => 'tl_metamodel',
-                'to'                  => 'tl_metamodel_dca_combine',
-                'setOn'               => array
+                'from'   => 'tl_metamodel',
+                'to'     => 'tl_metamodel_dca_combine',
+                'setOn'  => array
                 (
                     array
                     (
-                        'to_field'    => 'pid',
-                        'from_field'  => 'id',
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
                     ),
                 ),
-                'filter'              => array
+                'filter' => array
                 (
                     array
                     (
-                        'local'       => 'pid',
-                        'remote'      => 'id',
-                        'operation'   => '=',
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
                     ),
                 ),
             ),
@@ -503,13 +513,20 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
     ),
     'fields'          => array
     (
+        'id'         => array
+        (
+            'sql' => "int(10) unsigned NOT NULL auto_increment"
+        ),
         'tstamp'     => array
-        (),
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
         'sorting'    => array
         (
             'label'   => &$GLOBALS['TL_LANG']['tl_metamodel']['sorting'],
             'sorting' => true,
-            'flag'    => 11
+            'flag'    => 11,
+            'sql'     => "int(10) unsigned NOT NULL default '0'"
         ),
         'name'       => array
         (
@@ -525,7 +542,8 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
                 'maxlength' => 64,
                 'tl_class'  => 'w50',
                 'unique'    => true
-            )
+            ),
+            'sql'       => "varchar(255) NOT NULL default ''"
         ),
         'tableName'  => array
         (
@@ -539,6 +557,11 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
                 'doNotCopy' => true,
                 'tl_class'  => 'w50'
             ),
+            'sql'       => "varchar(64) NOT NULL default ''"
+        ),
+        'mode'       => array
+        (
+            'sql' => "int(1) unsigned NOT NULL default '1'"
         ),
         'translated' => array
         (
@@ -549,7 +572,8 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
             (
                 'tl_class'       => 'clr',
                 'submitOnChange' => true
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'languages'  => array
         (
@@ -569,7 +593,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
                         (
                             'style'  => 'width:470px',
                             'chosen' => 'true'
-                        )
+                        ),
                     ),
                     'isfallback' => array
                     (
@@ -579,10 +603,11 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
                         'eval'      => array
                         (
                             'style' => 'width:50px',
-                        )
+                        ),
                     ),
                 ),
             ),
+            'sql'       => "text NULL"
         ),
         'varsupport' => array
         (
@@ -593,7 +618,8 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
             (
                 'tl_class'       => 'clr',
                 'submitOnChange' => true
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
-    )
+    ),
 );
