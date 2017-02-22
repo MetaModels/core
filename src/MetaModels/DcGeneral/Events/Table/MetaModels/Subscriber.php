@@ -255,10 +255,10 @@ class Subscriber extends BaseSubscriber
      */
     public function loadLanguageOptions(GetOptionsEvent $event)
     {
-        if (($event->getModel()->getProviderName() !== 'tl_metamodel')
+        if (($event->getOptions() !== null) ||
+            ($event->getModel()->getProviderName() !== 'tl_metamodel')
             || ($event->getPropertyName() !== 'languages')
-            || ($event->getSubPropertyName() !== 'langcode')
-            || $event->getOptions() !== []) {
+            || ($event->getSubPropertyName() !== 'langcode')) {
             return;
         }
 
