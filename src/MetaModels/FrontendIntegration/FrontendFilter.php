@@ -107,7 +107,7 @@ class FrontendFilter
             if (strlen($strValue)) {
                 // Shift auto_item to the front.
                 if ($strName == 'auto_item') {
-                    $strFilterAction = '/' . $strValue . $strFilterAction;
+                    $strFilterAction = '/' . rawurlencode(rawurlencode($strValue)) . $strFilterAction;
                     continue;
                 }
 
