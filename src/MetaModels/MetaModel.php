@@ -28,13 +28,14 @@
 
 namespace MetaModels;
 
-use MetaModels\Attribute\IComplex;
-use MetaModels\Attribute\ISimple as ISimpleAttribute;
-use MetaModels\Attribute\ITranslated;
+use MetaModels\DataAccess\DatabaseHelperTrait;
+use MetaModels\DataAccess\IdResolver;
 use MetaModels\DataAccess\ItemPersister;
+use MetaModels\DataAccess\ItemRetriever;
 use MetaModels\Filter\Filter;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\Filter\IFilter;
+use MetaModels\Filter\Rules\SimpleQuery;
 use MetaModels\Filter\Rules\StaticIdList;
 
 /**
@@ -45,13 +46,12 @@ use MetaModels\Filter\Rules\StaticIdList;
  *
  * This class handles all attribute definition instantiation and can be queried for a view instance to certain entries.
  *
- * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * We disable these for the moment - to be changed in MetaModel 2.1.
  */
 class MetaModel implements IMetaModel
 {
+    use DatabaseHelperTrait;
+
     /**
      * Information data of this MetaModel instance.
      *
@@ -113,36 +113,6 @@ class MetaModel implements IMetaModel
     }
 
     /**
-     * Retrieve the database instance to use.
-     *
-     * @return \Contao\Database
-     */
-    protected function getDatabase()
-    {
-        return $this->serviceContainer->getDatabase();
-    }
-
-    /**
-     * Try to unserialize a value.
-     *
-     * @param string $value The string to process.
-     *
-     * @return mixed
-     */
-    protected function tryUnserialize($value)
-    {
-        if (!is_array($value) && (substr($value, 0, 2) == 'a:')) {
-            $unSerialized = unserialize($value);
-        }
-
-        if (isset($unSerialized) && is_array($unSerialized)) {
-            return $unSerialized;
-        }
-
-        return $value;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function addAttribute(IAttribute $objAttribute)
@@ -160,347 +130,6 @@ class MetaModel implements IMetaModel
     public function hasAttribute($strAttributeName)
     {
         return array_key_exists($strAttributeName, $this->arrAttributes);
-    }
-
-    /**
-     * Determine if the given attribute is a complex one.
-     *
-     * @param IAttribute $objAttribute The attribute to test.
-     *
-     * @return bool true if it is complex, false otherwise.
-     */
-    protected function isComplexAttribute($objAttribute)
-    {
-        return $objAttribute instanceof IComplex;
-    }
-
-    /**
-     * Determine if the given attribute is a simple one.
-     *
-     * @param IAttribute $objAttribute The attribute to test.
-     *
-     * @return bool true if it is simple, false otherwise.
-     */
-    protected function isSimpleAttribute($objAttribute)
-    {
-        return $objAttribute instanceof ISimpleAttribute;
-    }
-
-    /**
-     * Determine if the given attribute is a translated one.
-     *
-     * @param IAttribute $objAttribute The attribute to test.
-     *
-     * @return bool true if it is translated, false otherwise.
-     */
-    protected function isTranslatedAttribute($objAttribute)
-    {
-        return $objAttribute instanceof ITranslated;
-    }
-
-    /**
-     * Retrieve all attributes implementing the given interface.
-     *
-     * @param string $interface The interface name.
-     *
-     * @return array
-     */
-    protected function getAttributeImplementing($interface)
-    {
-        $result = array();
-        foreach ($this->getAttributes() as $colName => $attribute) {
-            if ($attribute instanceof $interface) {
-                $result[$colName] = $attribute;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * This method retrieves all complex attributes from the current MetaModel.
-     *
-     * @return IComplex[] all complex attributes defined for this instance.
-     */
-    protected function getComplexAttributes()
-    {
-        return $this->getAttributeImplementing('MetaModels\Attribute\IComplex');
-    }
-
-    /**
-     * This method retrieves all simple attributes from the current MetaModel.
-     *
-     * @return ISimpleAttribute[] all simple attributes defined for this instance.
-     */
-    protected function getSimpleAttributes()
-    {
-        return $this->getAttributeImplementing('MetaModels\Attribute\ISimple');
-    }
-
-    /**
-     * This method retrieves all translated attributes from the current MetaModel.
-     *
-     * @return ITranslated[] all translated attributes defined for this instance.
-     */
-    protected function getTranslatedAttributes()
-    {
-        return $this->getAttributeImplementing('MetaModels\Attribute\ITranslated');
-    }
-
-    /**
-     * Narrow down the list of Ids that match the given filter.
-     *
-     * @param IFilter|null $objFilter The filter to search the matching ids for.
-     *
-     * @return array all matching Ids.
-     */
-    protected function getMatchingIds($objFilter)
-    {
-        if ($objFilter) {
-            $arrFilteredIds = $objFilter->getMatchingIds();
-            if ($arrFilteredIds !== null) {
-                return $arrFilteredIds;
-            }
-        }
-
-        // Either no filter object or all ids allowed => return all ids.
-        // if no id filter is passed, we assume all ids are provided.
-        $objRow = $this->getDatabase()->execute('SELECT id FROM ' . $this->getTableName());
-
-        return $objRow->fetchEach('id');
-    }
-
-    /**
-     * Convert a database result to a result array.
-     *
-     * @param \Database\Result $objRow      The database result.
-     *
-     * @param string[]         $arrAttrOnly The list of attributes to return, if any.
-     *
-     * @return array
-     */
-    protected function convertRowsToResult($objRow, $arrAttrOnly = array())
-    {
-        $arrResult = array();
-
-        while ($objRow->next()) {
-            $arrData = array();
-
-            foreach ($objRow->row() as $strKey => $varValue) {
-                if ((!$arrAttrOnly) || (in_array($strKey, $arrAttrOnly))) {
-                    $arrData[$strKey] = $varValue;
-                }
-            }
-
-            /** @noinspection PhpUndefinedFieldInspection */
-            $arrResult[$objRow->id] = $arrData;
-        }
-
-        return $arrResult;
-    }
-
-    /**
-     * Build a list of the correct amount of "?" for use in a db query.
-     *
-     * @param array $parameters The parameters.
-     *
-     * @return string
-     */
-    protected function buildDatabaseParameterList($parameters)
-    {
-        return implode(',', array_fill(0, count($parameters), '?'));
-    }
-
-    /**
-     * Fetch the "native" database rows with the given ids.
-     *
-     * @param string[] $arrIds      The ids of the items to retrieve the order of ids is used for sorting of the return
-     *                              values.
-     *
-     * @param string[] $arrAttrOnly Names of the attributes that shall be contained in the result, defaults to array()
-     *                              which means all attributes.
-     *
-     * @return array an array containing the database rows with each column "deserialized".
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    protected function fetchRows($arrIds, $arrAttrOnly = array())
-    {
-        $parameters = array_merge($arrIds, $arrIds);
-        $objRow     = $this->getDatabase()
-            ->prepare(
-                sprintf(
-                    'SELECT * FROM %s WHERE id IN (%s) ORDER BY FIELD(id,%s)',
-                    $this->getTableName(),
-                    $this->buildDatabaseParameterList($arrIds),
-                    $this->buildDatabaseParameterList($arrIds)
-                )
-            )
-            ->execute($parameters);
-
-        /** @noinspection PhpUndefinedFieldInspection */
-        if ($objRow->numRows == 0) {
-            return array();
-        }
-
-        // If we have an attribute restriction, make sure we keep the system columns. See #196.
-        if ($arrAttrOnly) {
-            $arrAttrOnly = array_merge($GLOBALS['METAMODELS_SYSTEM_COLUMNS'], $arrAttrOnly);
-        }
-
-        return $this->convertRowsToResult($objRow, $arrAttrOnly);
-    }
-
-    /**
-     * This method is called to retrieve the data for certain items from the database.
-     *
-     * @param ITranslated $attribute The attribute to fetch the values for.
-     *
-     * @param string[]    $ids       The ids of the items to retrieve the order of ids is used for sorting of the return
-     *                               values.
-     *
-     * @return array an array of all matched items, sorted by the id list.
-     */
-    protected function fetchTranslatedAttributeValues(ITranslated $attribute, $ids)
-    {
-        $attributeData = $attribute->getTranslatedDataFor($ids, $this->getActiveLanguage());
-        $missing       = array_diff($ids, array_keys($attributeData));
-
-        if ($missing) {
-            $attributeData += $attribute->getTranslatedDataFor($missing, $this->getFallbackLanguage());
-        }
-
-        return $attributeData;
-    }
-
-    /**
-     * This method is called to retrieve the data for certain items from the database.
-     *
-     * @param string[] $ids      The ids of the items to retrieve the order of ids is used for sorting of the
-     *                           return values.
-     *
-     * @param array    $result   The current values.
-     *
-     * @param string[] $attrOnly Names of the attributes that shall be contained in the result, defaults to array()
-     *                           which means all attributes.
-     *
-     * @return array an array of all matched items, sorted by the id list.
-     */
-    protected function fetchAdditionalAttributes($ids, $result, $attrOnly = array())
-    {
-        $attributes     = $this->getAttributeByNames($attrOnly);
-        $attributeNames = array_intersect(
-            array_keys($attributes),
-            array_keys(array_merge($this->getComplexAttributes(), $this->getTranslatedAttributes()))
-        );
-
-        foreach ($attributeNames as $attributeName) {
-            $attribute = $attributes[$attributeName];
-
-            /** @var IAttribute $attribute */
-            $attributeName = $attribute->getColName();
-
-            // If it is translated, fetch the translated data now.
-            if ($this->isTranslatedAttribute($attribute)) {
-                /** @var ITranslated $attribute */
-                $attributeData = $this->fetchTranslatedAttributeValues($attribute, $ids);
-            } else {
-                /** @var IComplex $attribute */
-                $attributeData = $attribute->getDataFor($ids);
-            }
-
-            foreach (array_keys($result) as $id) {
-                $result[$id][$attributeName] = isset($attributeData[$id]) ? $attributeData[$id] : null;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * This method is called to retrieve the data for certain items from the database.
-     *
-     * @param int[]    $arrIds      The ids of the items to retrieve the order of ids is used for sorting of the
-     *                              return values.
-     *
-     * @param string[] $arrAttrOnly Names of the attributes that shall be contained in the result, defaults to array()
-     *                              which means all attributes.
-     *
-     * @return \MetaModels\IItems a collection of all matched items, sorted by the id list.
-     */
-    protected function getItemsWithId($arrIds, $arrAttrOnly = array())
-    {
-        $arrIds = array_unique(array_filter($arrIds));
-
-        if (!$arrIds) {
-            return new Items(array());
-        }
-
-        if (!$arrAttrOnly) {
-            $arrAttrOnly = array_keys($this->getAttributes());
-        }
-
-        $arrResult = $this->fetchRows($arrIds, $arrAttrOnly);
-
-        // Give simple attributes the chance for editing the "simple" data.
-        foreach ($this->getSimpleAttributes() as $objAttribute) {
-            // Get current simple attribute.
-            $strColName = $objAttribute->getColName();
-
-            // Run each row.
-            foreach (array_keys($arrResult) as $intId) {
-                // Do only skip if the key does not exist. Do not use isset() here as "null" is a valid value.
-                if (!array_key_exists($strColName, $arrResult[$intId])) {
-                    continue;
-                }
-                $value  = $arrResult[$intId][$strColName];
-                $value2 = $objAttribute->unserializeData($arrResult[$intId][$strColName]);
-                // Deprecated fallback, attributes should deserialize themselves for a long time now.
-                if ($value === $value2) {
-                    $value2 = $this->tryUnserialize($value);
-                    if ($value !== $value2) {
-                        trigger_error(
-                            sprintf(
-                                'Attribute type %s should implement method unserializeData() and  serializeData().',
-                                $objAttribute->get('type')
-                            ),
-                            E_USER_DEPRECATED
-                        );
-                    }
-                }
-                // End of deprecated fallback.
-                $arrResult[$intId][$strColName] = $value2;
-            }
-        }
-
-        // Determine "independent attributes" (complex and translated) and inject their content into the row.
-        $arrResult = $this->fetchAdditionalAttributes($arrIds, $arrResult, $arrAttrOnly);
-        $arrItems  = array();
-        foreach ($arrResult as $arrEntry) {
-            $arrItems[] = new Item($this, $arrEntry);
-        }
-
-        $objItems = new Items($arrItems);
-
-        return $objItems;
-    }
-
-    /**
-     * Clone the given filter or create an empty one if no filter has been passed.
-     *
-     * @param IFilter|null $objFilter The filter to clone.
-     *
-     * @return IFilter the cloned filter.
-     */
-    protected function copyFilter($objFilter)
-    {
-        if ($objFilter) {
-            $objNewFilter = $objFilter->createCopy();
-        } else {
-            $objNewFilter = $this->getEmptyFilter();
-        }
-        return $objNewFilter;
     }
 
     /**
@@ -577,7 +206,7 @@ class MetaModel implements IMetaModel
      */
     public function hasVariants()
     {
-        return $this->arrData['varsupport'];
+        return (bool) $this->arrData['varsupport'];
     }
 
     /**
@@ -647,27 +276,6 @@ class MetaModel implements IMetaModel
     }
 
     /**
-     * Retrieve all attributes with the given names.
-     *
-     * @param string[] $attrNames The attribute names, if empty all attributes will be returned.
-     *
-     * @return IAttribute[]
-     */
-    protected function getAttributeByNames($attrNames = array())
-    {
-        if (empty($attrNames)) {
-            return $this->arrAttributes;
-        }
-
-        $result = array();
-        foreach ($attrNames as $attributeName) {
-            $result[$attributeName] = $this->arrAttributes[$attributeName];
-        }
-
-        return $result;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function findById($intId, $arrAttrOnly = array())
@@ -675,9 +283,17 @@ class MetaModel implements IMetaModel
         if (!$intId) {
             return null;
         }
-        $objItems = $this->getItemsWithId(array($intId), $arrAttrOnly);
-        if ($objItems && $objItems->first()) {
-            return $objItems->getItem();
+        $database  = $this->getDatabase();
+        $retriever = new ItemRetriever($this, $database);
+        $resolver  = new IdResolver($this, $database);
+        $resolver
+            ->setFilter($this->getEmptyFilter()->addFilterRule(new StaticIdList([$intId])))
+            ->setLimit(1);
+        $items = $retriever
+            ->setAttributes($arrAttrOnly ?: array_keys($this->arrAttributes))
+            ->findItems($resolver);
+        if ($items && $items->first()) {
+            return $items->getItem();
         }
         return null;
     }
@@ -691,18 +307,19 @@ class MetaModel implements IMetaModel
         $intOffset = 0,
         $intLimit = 0,
         $strSortOrder = 'ASC',
-        $arrAttrOnly = array()
+        $arrAttrOnly = []
     ) {
-        return $this->getItemsWithId(
-            $this->getIdsFromFilter(
-                $objFilter,
-                $strSortBy,
-                $intOffset,
-                $intLimit,
-                $strSortOrder
-            ),
-            $arrAttrOnly
-        );
+        $database  = $this->getDatabase();
+        $retriever = new ItemRetriever($this, $database);
+        $resolver  = IdResolver::create($this, $database);
+        $resolver
+            ->setFilter($objFilter)
+            ->setSortOrder($strSortOrder)
+            ->setSortBy($strSortBy)
+            ->setLimit($intLimit)
+            ->setOffset($intOffset);
+
+        return $retriever->setAttributes($arrAttrOnly ?: array_keys($this->arrAttributes))->findItems($resolver);
     }
 
     /**
@@ -712,41 +329,13 @@ class MetaModel implements IMetaModel
      */
     public function getIdsFromFilter($objFilter, $strSortBy = '', $intOffset = 0, $intLimit = 0, $strSortOrder = 'ASC')
     {
-        if ([] === $arrFilteredIds = array_filter($this->getMatchingIds($objFilter))) {
-            return [];
-        }
-
-        // If desired, sort the entries.
-        if ($strSortBy != '') {
-            if ($objSortAttribute = $this->getAttribute($strSortBy)) {
-                $arrFilteredIds = $objSortAttribute->sortIds($arrFilteredIds, $strSortOrder);
-            } elseif ('id' === $strSortBy) {
-                asort($arrFilteredIds);
-            } elseif (in_array($strSortBy, array('pid', 'tstamp', 'sorting'))) {
-                // Sort by database values.
-                $arrFilteredIds = $this
-                    ->getDatabase()
-                    ->prepare(
-                        sprintf(
-                            'SELECT id FROM %s WHERE id IN(%s) ORDER BY %s %s',
-                            $this->getTableName(),
-                            $this->buildDatabaseParameterList($arrFilteredIds),
-                            $strSortBy,
-                            $strSortOrder
-                        )
-                    )
-                    ->execute($arrFilteredIds)
-                    ->fetchEach('id');
-            } elseif ($strSortBy == 'random') {
-                shuffle($arrFilteredIds);
-            }
-        }
-
-        // Apply limiting then.
-        if ($intOffset > 0 || $intLimit > 0) {
-            $arrFilteredIds = array_slice($arrFilteredIds, $intOffset, $intLimit ?: null);
-        }
-        return array_values($arrFilteredIds);
+        return IdResolver::create($this, $this->getDatabase())
+            ->setFilter($objFilter)
+            ->setSortOrder($strSortOrder)
+            ->setSortBy($strSortBy)
+            ->setLimit($intLimit)
+            ->setOffset($intOffset)
+            ->getIds();
     }
 
     /**
@@ -754,22 +343,7 @@ class MetaModel implements IMetaModel
      */
     public function getCount($objFilter)
     {
-        $arrFilteredIds = $this->getMatchingIds($objFilter);
-        if (count($arrFilteredIds) == 0) {
-            return 0;
-        }
-
-        $objRow = $this
-            ->getDatabase()
-            ->prepare(sprintf(
-                'SELECT COUNT(id) AS count FROM %s WHERE id IN(%s)',
-                $this->getTableName(),
-                $this->buildDatabaseParameterList($arrFilteredIds)
-            ))
-            ->execute($arrFilteredIds);
-
-        /** @noinspection PhpUndefinedFieldInspection */
-        return $objRow->count;
+        return IdResolver::create($this, $this->getDatabase())->setFilter($objFilter)->count();
     }
 
     /**
@@ -777,12 +351,9 @@ class MetaModel implements IMetaModel
      */
     public function findVariantBase($objFilter)
     {
-        $objNewFilter = $this->copyFilter($objFilter);
-
-        $objRow = $this->getDatabase()->execute('SELECT id FROM ' . $this->getTableName() . ' WHERE varbase=1');
-
-        $objNewFilter->addFilterRule(new StaticIdList($objRow->fetchEach('id')));
-        return $this->findByFilter($objNewFilter);
+        $filter = $this->copyFilter($objFilter);
+        $filter->addFilterRule(new SimpleQuery('SELECT id FROM ' . $this->getTableName() . ' WHERE varbase=1'));
+        return $this->findByFilter($filter);
     }
 
     /**
@@ -792,21 +363,20 @@ class MetaModel implements IMetaModel
     {
         if (!$arrIds) {
             // Return an empty result.
-            return $this->getItemsWithId(array());
+            return new Items([]);
         }
-        $objNewFilter = $this->copyFilter($objFilter);
 
-        $objRow = $this
-            ->getDatabase()
-            ->prepare(sprintf(
+        $filter = $this->copyFilter($objFilter);
+        $filter->addFilterRule(new SimpleQuery(
+            sprintf(
                 'SELECT id,vargroup FROM %s WHERE varbase=0 AND vargroup IN (%s)',
                 $this->getTableName(),
                 $this->buildDatabaseParameterList($arrIds)
-            ))
-            ->execute($arrIds);
+            ),
+            $arrIds
+        ));
 
-        $objNewFilter->addFilterRule(new StaticIdList($objRow->fetchEach('id')));
-        return $this->findByFilter($objNewFilter);
+        return $this->findByFilter($filter);
     }
 
     /**
@@ -816,21 +386,20 @@ class MetaModel implements IMetaModel
     {
         if (!$arrIds) {
             // Return an empty result.
-            return $this->getItemsWithId(array());
+            return new Items([]);
         }
-        $objNewFilter = $this->copyFilter($objFilter);
+        $filter = $this->copyFilter($objFilter);
 
-        $objRow = $this
-            ->getDatabase()
-            ->prepare(sprintf(
+        $filter->addFilterRule(new SimpleQuery(
+            sprintf(
                 'SELECT id,vargroup FROM %1$s WHERE vargroup IN (SELECT vargroup FROM %1$s WHERE id IN (%2$s))',
                 $this->getTableName(),
                 $this->buildDatabaseParameterList($arrIds)
-            ))
-            ->execute($arrIds);
+            ),
+            $arrIds
+        ));
 
-        $objNewFilter->addFilterRule(new StaticIdList($objRow->fetchEach('id')));
-        return $this->findByFilter($objNewFilter);
+        return $this->findByFilter($filter);
     }
 
     /**
@@ -838,18 +407,20 @@ class MetaModel implements IMetaModel
      */
     public function getAttributeOptions($strAttribute, $objFilter = null)
     {
-        $objAttribute = $this->getAttribute($strAttribute);
-        if ($objAttribute) {
-            if ($objFilter) {
-                $arrFilteredIds = $this->getMatchingIds($objFilter);
-                $arrFilteredIds = $objAttribute->sortIds($arrFilteredIds, 'ASC');
-                return $objAttribute->getFilterOptions($arrFilteredIds, true);
-            } else {
-                return $objAttribute->getFilterOptions(null, true);
-            }
+        if (null === ($attribute = $this->getAttribute($strAttribute))) {
+            return [];
         }
 
-        return array();
+        if ($objFilter) {
+            $filteredIds = IdResolver::create($this, $this->getDatabase())
+                ->setFilter($objFilter)
+                ->setSortBy($strAttribute)
+                ->getIds();
+
+            return $attribute->getFilterOptions($filteredIds, true);
+        }
+
+        return $attribute->getFilterOptions(null, true);
     }
 
     /**
@@ -911,31 +482,49 @@ class MetaModel implements IMetaModel
     }
 
     /**
-     * Save the base columns of an item and return true if it is a new item.
+     * Clone the given filter or create an empty one if no filter has been passed.
      *
-     * @param IItem $item      The item to save.
-     * @param int   $timestamp The timestamp to use.
+     * @param IFilter|null $objFilter The filter to clone.
      *
-     * @return bool
+     * @return IFilter the cloned filter.
      */
-    private function saveBaseColumns(IItem $item, $timestamp)
+    private function copyFilter($objFilter)
     {
-        $isNew = false;
-        $item->set('tstamp', $timestamp);
-        if (!$item->get('id')) {
-            $isNew = true;
-            $this->createNewItem($item);
+        if ($objFilter) {
+            $objNewFilter = $objFilter->createCopy();
+        } else {
+            $objNewFilter = $this->getEmptyFilter();
+        }
+        return $objNewFilter;
+    }
+
+    /**
+     * Retrieve the database instance to use.
+     *
+     * @return \Contao\Database
+     */
+    private function getDatabase()
+    {
+        return $this->serviceContainer->getDatabase();
+    }
+
+    /**
+     * Try to unserialize a value.
+     *
+     * @param string $value The string to process.
+     *
+     * @return mixed
+     */
+    private function tryUnserialize($value)
+    {
+        if (!is_array($value) && (substr($value, 0, 2) == 'a:')) {
+            $unSerialized = unserialize($value);
         }
 
-        // Update system columns.
-        if (null !== $item->get('pid')) {
-            $this->saveSimpleColumn('pid', [$item->get('id')], $item->get('pid'));
+        if (isset($unSerialized) && is_array($unSerialized)) {
+            return $unSerialized;
         }
-        if (null !== $item->get('sorting')) {
-            $this->saveSimpleColumn('sorting', [$item->get('id')], $item->get('sorting'));
-        }
-        $this->saveSimpleColumn('tstamp', [$item->get('id')], $item->get('tstamp'));
 
-        return $isNew;
+        return $value;
     }
 }
