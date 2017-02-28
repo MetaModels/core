@@ -63,16 +63,14 @@ class SimpleLookup extends Simple
      */
     protected function getLabel()
     {
-        if ($attribute = $this->getFilteredAttribute()) {
-            // TODO: make this multilingual.
-            if ($label = $this->get('label')) {
-                return $label;
-            }
-
-            return $attribute->getName();
+        if (null === ($attribute = $this->getFilteredAttribute())) {
+            return null;
+        }
+        if ($label = $this->get('label')) {
+            return $label;
         }
 
-        return null;
+        return $attribute->getName();
     }
 
     /**
