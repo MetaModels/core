@@ -41,6 +41,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This class provides various methods for handling file collection within Contao.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ToolboxFile
 {
