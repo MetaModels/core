@@ -102,9 +102,9 @@ abstract class Base implements IAttribute
     public function getName()
     {
         if (is_array($this->arrData['name'])) {
-            return $this->getLangValue($this->get('name'));
+            return $this->getLangValue($this->get('name')) ?: $this->getColName();
         }
-        return $this->arrData['name'];
+        return $this->arrData['name'] ?: $this->getColName();
     }
 
     /**
