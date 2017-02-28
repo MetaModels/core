@@ -21,15 +21,18 @@
 
 namespace MetaModels\Widgets;
 
+use Contao\Date;
+use Contao\Widget;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Widget\GetAttributesFromDcaEvent;
+use Exception;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Provide methods to handle multiple widgets in one.
  */
-class SubDcaWidget extends \Widget
+class SubDcaWidget extends Widget
 {
     /**
      * Submit user input.
@@ -268,7 +271,7 @@ class SubDcaWidget extends \Widget
      *
      * @param mixed  $varValue The widget value.
      *
-     * @return \Widget|null The widget on success, null otherwise.
+     * @return Widget|null The widget on success, null otherwise.
      */
     protected function initializeWidget(&$arrField, $strRow, $strKey, $varValue)
     {
@@ -363,11 +366,11 @@ class SubDcaWidget extends \Widget
     /**
      * Handle the onsave_callback for a widget.
      *
-     * @param array   $field  The field DCA.
+     * @param array  $field  The field DCA.
      *
-     * @param \Widget $widget The widget to validate.
+     * @param Widget $widget The widget to validate.
      *
-     * @param mixed   $value  The value.
+     * @param mixed  $value  The value.
      *
      * @return mixed
      */
@@ -381,7 +384,7 @@ class SubDcaWidget extends \Widget
 
                 try {
                     $newValue = $this->$callback[0]->$callback[1]($newValue, $this);
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     $widget->addError($e->getMessage());
                     $this->blnSubmitInput = false;
 
@@ -431,7 +434,7 @@ class SubDcaWidget extends \Widget
         // Convert date formats into timestamps (check the eval setting first -> #3063).
         $rgxp = $arrField['eval']['rgxp'];
         if (($rgxp == 'date' || $rgxp == 'time' || $rgxp == 'datim') && $varValue != '') {
-            $objDate  = new \Date($varValue, $GLOBALS['TL_CONFIG'][$rgxp . 'Format']);
+            $objDate  = new Date($varValue, $GLOBALS['TL_CONFIG'][$rgxp . 'Format']);
             $varValue = $objDate->tstamp;
         }
 
@@ -482,7 +485,7 @@ class SubDcaWidget extends \Widget
     /**
      * Generate the help tag for a widget if needed.
      *
-     * @param \Widget $widget The widget.
+     * @param Widget $widget The widget.
      *
      * @return string
      *
@@ -513,7 +516,7 @@ class SubDcaWidget extends \Widget
         foreach ($this->arrWidgets as $widgetRow) {
             $columns = array();
             foreach ($widgetRow as $widget) {
-                /** @var \Widget $widget */
+                /** @var Widget $widget */
                 $valign = ($widget->valign != '' ? ' valign="' . $widget->valign . '"' : '');
                 $class  = ($widget->tl_class != '' ? ' class="' . $widget->tl_class . '"' : '');
                 $style  = ($widget->style != '' ? ' style="' . $widget->style . '"' : '');

@@ -20,15 +20,17 @@
 
 namespace MetaModels\FrontendIntegration;
 
+use Contao\BackendTemplate;
 use Contao\ContentModel;
 use Contao\FormModel;
+use Contao\Hybrid;
 use Contao\ModuleModel;
 use MetaModels\IMetaModelsServiceContainer;
 
 /**
  * Base implementation of a MetaModel Hybrid element.
  */
-abstract class MetaModelHybrid extends \Hybrid
+abstract class MetaModelHybrid extends Hybrid
 {
     /**
      * The name to display in the wildcard.
@@ -94,7 +96,7 @@ abstract class MetaModelHybrid extends \Hybrid
     public function generate()
     {
         if (TL_MODE == 'BE') {
-            $objTemplate           = new \BackendTemplate('be_wildcard');
+            $objTemplate           = new BackendTemplate('be_wildcard');
             $objTemplate->wildcard = $this->wildCardName;
             $objTemplate->title    = $this->headline;
             $objTemplate->id       = $this->id;
