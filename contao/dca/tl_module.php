@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,8 @@
  * @author     Andreas Isaak <info@andreas-isaak.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -26,7 +27,8 @@ $GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = array('MetaMode
 $GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list'] =
     '{title_legend},name,headline,type;' .
     '{config_legend},metamodel,perPage,metamodel_use_limit;' .
-    '{mm_filter_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_sort_override,metamodel_filtering,metamodel_filterparams;' .
+    '{mm_filter_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_sort_override,metamodel_filtering,metamodel_filterparams;'
+    .
     '{template_legend:hide},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;' .
     '{mm_meta_legend},metamodel_meta_title,metamodel_meta_description;' .
     '{protected_legend:hide},protected;' .
@@ -80,7 +82,8 @@ array_insert(
             'wizard'     => array
             (
                 array('MetaModels\Dca\Module', 'editMetaModel')
-            )
+            ),
+            'sql'        => "int(10) unsigned NOT NULL default '0'"
         ),
         'metamodel_layout'              => array
         (
@@ -92,7 +95,8 @@ array_insert(
             (
                 'chosen'   => true,
                 'tl_class' => 'w50'
-            )
+            ),
+            'sql'              => "varchar(64) NOT NULL default ''"
         ),
         'metamodel_use_limit'           => array
         (
@@ -104,6 +108,7 @@ array_insert(
                 'submitOnChange' => true,
                 'tl_class'       => 'w50 m12'
             ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'metamodel_limit'               => array
         (
@@ -114,7 +119,8 @@ array_insert(
             (
                 'rgxp'     => 'digit',
                 'tl_class' => 'w50'
-            )
+            ),
+            'sql'       => "smallint(5) NOT NULL default '0'"
         ),
         'metamodel_offset'              => array
         (
@@ -126,6 +132,7 @@ array_insert(
                 'rgxp'     => 'digit',
                 'tl_class' => 'w50'
             ),
+            'sql'       => "smallint(5) NOT NULL default '0'"
         ),
         'metamodel_sortby'              => array
         (
@@ -139,6 +146,7 @@ array_insert(
                 'chosen'             => true,
                 'tl_class'           => 'w50'
             ),
+            'sql'              => "varchar(64) NOT NULL default ''"
         ),
         'metamodel_sortby_direction'    => array
         (
@@ -152,9 +160,10 @@ array_insert(
                 'includeBlankOption' => false,
                 'chosen'             => true,
                 'tl_class'           => 'w50'
-            )
+            ),
+            'sql'       => "varchar(4) NOT NULL default ''"
         ),
-        'metamodel_sort_override'    => array
+        'metamodel_sort_override'       => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_sort_override'],
             'exclude'   => true,
@@ -163,6 +172,7 @@ array_insert(
             (
                 'tl_class' => 'w50'
             ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'metamodel_filtering'           => array
         (
@@ -181,7 +191,8 @@ array_insert(
             'wizard'           => array
             (
                 array('MetaModels\Dca\Module', 'editFilterSetting')
-            )
+            ),
+            'sql'              => "int(10) NOT NULL default '0'"
         ),
         'metamodel_rendersettings'      => array
         (
@@ -200,7 +211,8 @@ array_insert(
             'wizard'           => array
             (
                 array('MetaModels\Dca\Module', 'editRenderSetting')
-            )
+            ),
+            'sql'              => "int(10) NOT NULL default '0'"
         ),
         'metamodel_noparsing'           => array
         (
@@ -212,6 +224,7 @@ array_insert(
                 'submitOnChange' => true,
                 'tl_class'       => 'clr'
             ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'metamodel_donotindex'          => array
         (
@@ -222,6 +235,7 @@ array_insert(
             (
                 'tl_class' => 'w50'
             ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'metamodel_available_values'    => array
         (
@@ -232,6 +246,7 @@ array_insert(
             (
                 'tl_class' => 'w50'
             ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'metamodel_filterparams'        => array
         (
@@ -251,6 +266,7 @@ array_insert(
                     ),
                 ),
             ),
+            'sql'       => "longblob NULL"
         ),
         'metamodel_jumpTo'              => array
         (
@@ -260,7 +276,8 @@ array_insert(
             'eval'      => array
             (
                 'fieldType' => 'radio'
-            )
+            ),
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),
         'metamodel_fef_params'          => array
         (
@@ -272,7 +289,8 @@ array_insert(
             (
                 'multiple' => true,
                 'tl_class' => 'clr'
-            )
+            ),
+            'sql'              => "blob NULL"
         ),
         'metamodel_fef_autosubmit'      => array
         (
@@ -284,6 +302,7 @@ array_insert(
             (
                 'tl_class' => 'w50'
             ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'metamodel_fef_hideclearfilter' => array
         (
@@ -294,11 +313,12 @@ array_insert(
             (
                 'tl_class' => 'w50'
             ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'metamodel_fef_template'        => array
         (
             'label'            => &$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_template'],
-            'default'          => 'event_full',
+            'default'          => 'mm_filter_default',
             'exclude'          => true,
             'inputType'        => 'select',
             'options_callback' => array('MetaModels\Dca\Module', 'getFilterTemplates'),
@@ -307,6 +327,7 @@ array_insert(
                 'tl_class' => 'w50',
                 'chosen'   => true
             ),
+            'sql'              => "varchar(64) NOT NULL default ''"
         ),
         'metamodel_meta_title'          => array
         (
@@ -320,6 +341,7 @@ array_insert(
                 'chosen'             => true,
                 'includeBlankOption' => true
             ),
+            'sql'              => "varchar(64) NOT NULL default ''"
         ),
         'metamodel_meta_description'    => array
         (
@@ -333,6 +355,7 @@ array_insert(
                 'chosen'             => true,
                 'includeBlankOption' => true
             ),
+            'sql'              => "varchar(64) NOT NULL default ''"
         )
     )
 );

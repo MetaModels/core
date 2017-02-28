@@ -17,6 +17,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -30,6 +31,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
         'ptable'           => 'tl_metamodel',
         'switchToEdit'     => false,
         'enableVersioning' => false,
+        'sql'              => array
+        (
+            'keys' => array
+            (
+                'id'      => 'primary',
+                'pid'     => 'index',
+                'colname' => 'index'
+            ),
+        ),
     ),
     'dca_config'   => array
     (
@@ -45,7 +55,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
                 'source' => 'tl_metamodel_rendersetting'
             ),
 
-            'tl_metamodel_dcasetting' => array
+            'tl_metamodel_dcasetting'           => array
             (
                 'source' => 'tl_metamodel_dcasetting'
             ),
@@ -226,24 +236,20 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
                 'isunique'
             ),
             'metamodeloverview' => array
-            (
-            ),
+            (),
             'backenddisplay'    => array
-            (
-            ),
+            (),
         ),
         // Default palette for MetaModelAttributeSimple derived types.
         // WARNING: even though it is empty, we have to keep it as otherwise
         // metapalettes will have no way for deriving the palettes. - They need the index.
         '_simpleattribute_ extends _base_'  => array
-        (
-        ),
+        (),
         // Default palette for MetaModelAttributeComplex derived types.
         // WARNING: even though it is empty, we have to keep it as otherwise
         // metapalettes will have no way for deriving the palettes. - They need the index.
         '_complexattribute_ extends _base_' => array
-        (
-        ),
+        (),
     ),
     // Palettes.
     'palettes'     => array
@@ -256,11 +262,22 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
     // Fields.
     'fields'       => array
     (
-        'tstamp'      => array
-        (),
+        'id'          => array
+        (
+            'sql' => "int(10) unsigned NOT NULL auto_increment"
+        ),
+        'pid'         => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
         'sorting'     => array
         (
             'sorting' => true,
+            'sql'     => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'tstamp'      => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
         ),
         'type'        => array
         (
@@ -277,6 +294,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
                 'tl_class'           => 'w50',
                 'chosen'             => 'true'
             ),
+            'sql'       => "varchar(64) NOT NULL default ''"
         ),
         'name'        => array
         (
@@ -286,6 +304,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
             (
                 'tl_class' => 'clr'
             ),
+            'sql'     => "text NULL"
         ),
         'description' => array
         (
@@ -295,6 +314,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
             (
                 'tl_class' => 'clr'
             ),
+            'sql'     => "text NULL"
         ),
         // AVOID: doNotCopy => true, as child records won't be copied when copy metamodel.
         'colname'     => array
@@ -308,6 +328,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
                 'maxlength' => 64,
                 'tl_class'  => 'w50'
             ),
+            'sql'       => "varchar(64) NOT NULL default ''"
         ),
         'isvariant'   => array
         (
@@ -317,7 +338,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
             (
                 'submitOnChange' => true,
                 'tl_class'       => 'cbx w50'
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'isunique'    => array
         (
@@ -327,6 +349,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
             (
                 'tl_class' => 'cbx w50'
             ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
     )
 );
