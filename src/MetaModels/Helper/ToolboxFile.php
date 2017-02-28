@@ -31,6 +31,7 @@ use Contao\Environment;
 use Contao\File;
 use Contao\FilesModel;
 use Contao\Input;
+use Contao\PageError403;
 use Contao\Validator;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
@@ -384,11 +385,22 @@ class ToolboxFile
      * @param string $strFile The file that shall be downloaded.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getDownloadLink($strFile)
     {
+        if (!is_array($_SESSION['metaModels_downloads'])) {
+            $_SESSION['metaModels_downloads'] = [];
+        }
+        if (!isset($_SESSION['metaModels_downloads'][$strFile])) {
+            $_SESSION['metaModels_downloads'][$strFile] = md5(uniqid());
+        }
+
         return UrlBuilder::fromUrl(Environment::get('request'))
             ->setQueryParameter('file', urlencode($strFile))
+            ->setQueryParameter('fileKey', $_SESSION['metaModels_downloads'][$strFile])
             ->getUrl();
     }
 
@@ -685,18 +697,47 @@ class ToolboxFile
         // Step 1.: fetch all files.
         $this->collectFiles();
 
-        // TODO: check if downloading is allowed and send file to browser then
-        // See https://github.com/MetaModels/attribute_file/issues/6 for details of how to implement this.
-        if ((!$this->getShowImages())
-            && ($strFile = Input::get('file')) && in_array($strFile, $this->foundFiles)
-        ) {
-            Controller::sendFileToBrowser($strFile);
-        }
+        // Step 1.1.: Check if any file is to be served.
+        $this->checkDownloads();
 
         // Step 2.: fetch additional information like modification time etc. and prepare the output buffer.
         $this->fetchAdditionalData();
 
         return $this;
+    }
+
+    /**
+     * Check if a file download is desired.
+     *
+     * See https://github.com/MetaModels/attribute_file/issues/6
+     * See https://github.com/MetaModels/core/issues/1014
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    private function checkDownloads()
+    {
+        // If images are to be shown, get out.
+        if ($this->getShowImages()) {
+            return;
+        }
+
+        if (!is_array($_SESSION['metaModels_downloads'])) {
+            $_SESSION['metaModels_downloads'] = [];
+        }
+        if (($file = Input::get('file')) && ($key = Input::get('fileKey'))) {
+            // Check key and return 403 if mismatch.
+            if (!(array_key_exists($file, $_SESSION['metaModels_downloads'])
+                && $_SESSION['metaModels_downloads'][$file] === $key)) {
+                $objHandler = new $GLOBALS['TL_PTY']['error_403']();
+                /** @var PageError403 $objHandler */
+                $objHandler->generate($file);
+            }
+            // Send the file to the browser if check succeeded.
+            Controller::sendFileToBrowser($file);
+        }
     }
 
     /**
