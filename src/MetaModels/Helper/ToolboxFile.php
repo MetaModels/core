@@ -25,9 +25,17 @@
 
 namespace MetaModels\Helper;
 
+use Contao\Controller;
+use Contao\Dbafs;
+use Contao\Environment;
+use Contao\File;
+use Contao\FilesModel;
+use Contao\Input;
+use Contao\Validator;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
+use InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -320,7 +328,7 @@ class ToolboxFile
             return $this;
         }
 
-        if (!\Validator::isBinaryUuid($strId)) {
+        if (!Validator::isBinaryUuid($strId)) {
             $this->pendingIds[] = self::stringToUuid($strId);
             return $this;
         }
@@ -336,7 +344,7 @@ class ToolboxFile
      */
     protected function collectFiles()
     {
-        $table = \FilesModel::getTable();
+        $table = FilesModel::getTable();
 
         $conditions = array();
         $parameters = array();
@@ -360,7 +368,7 @@ class ToolboxFile
             return;
         }
 
-        if ($files = \FilesModel::findBy(array(implode(' OR ', $conditions)), $parameters)) {
+        if ($files = FilesModel::findBy(array(implode(' OR ', $conditions)), $parameters)) {
             $this->addFileModels($files);
         }
 
@@ -379,7 +387,7 @@ class ToolboxFile
      */
     protected function getDownloadLink($strFile)
     {
-        return UrlBuilder::fromUrl(\Environment::get('request'))
+        return UrlBuilder::fromUrl(Environment::get('request'))
             ->setQueryParameter('file', urlencode($strFile))
             ->getUrl();
     }
@@ -409,7 +417,7 @@ class ToolboxFile
         $strMode    = $resizeInfo[2] ? $resizeInfo[2] : '';
 
         foreach ($this->foundFiles as $strFile) {
-            $objFile = new \File($strFile);
+            $objFile = new File($strFile);
 
             $arrMeta     = $this->metaInformation[dirname($strFile)][$objFile->basename];
             $strBasename = strlen($arrMeta['title']) ? $arrMeta['title'] : specialchars($objFile->basename);
@@ -434,7 +442,7 @@ class ToolboxFile
                 'size'      => $objFile->filesize,
                 'sizetext'  => sprintf(
                     '(%s)',
-                    \Controller::getReadableSize($objFile->filesize, 2)
+                    Controller::getReadableSize($objFile->filesize, 2)
                 ),
                 'url'       => specialchars($this->getDownloadLink($strFile))
             );
@@ -680,9 +688,9 @@ class ToolboxFile
         // TODO: check if downloading is allowed and send file to browser then
         // See https://github.com/MetaModels/attribute_file/issues/6 for details of how to implement this.
         if ((!$this->getShowImages())
-            && ($strFile = \Input::get('file')) && in_array($strFile, $this->foundFiles)
+            && ($strFile = Input::get('file')) && in_array($strFile, $this->foundFiles)
         ) {
-            \Controller::sendFileToBrowser($strFile);
+            Controller::sendFileToBrowser($strFile);
         }
 
         // Step 2.: fetch additional information like modification time etc. and prepare the output buffer.
@@ -700,7 +708,7 @@ class ToolboxFile
      */
     public static function convertValueToPath($varValue)
     {
-        $objFiles = \FilesModel::findByPk($varValue);
+        $objFiles = FilesModel::findByPk($varValue);
 
         if ($objFiles !== null) {
             return $objFiles->path;
@@ -722,12 +730,12 @@ class ToolboxFile
      *
      * @return array
      *
-     * @throws \InvalidArgumentException When the input array is invalid.
+     * @throws InvalidArgumentException When the input array is invalid.
      */
     public static function convertValuesToDatabase($values)
     {
         if (!(isset($values['bin']) && isset($values['value']) && isset($values['path']))) {
-            throw new \InvalidArgumentException('Invalid file array');
+            throw new InvalidArgumentException('Invalid file array');
         }
 
         $bin = array();
@@ -752,12 +760,12 @@ class ToolboxFile
      *
      * @return array
      *
-     * @throws \InvalidArgumentException When the input array is invalid.
+     * @throws InvalidArgumentException When the input array is invalid.
      */
     public static function convertValuesToMetaModels($values)
     {
         if (!is_array($values)) {
-            throw new \InvalidArgumentException('Invalid uuid list.');
+            throw new InvalidArgumentException('Invalid uuid list.');
         }
 
         $result = array(
@@ -765,7 +773,7 @@ class ToolboxFile
             'value' => array(),
             'path'  => array()
         );
-        $models = \FilesModel::findMultipleByUuids(array_filter($values));
+        $models = FilesModel::findMultipleByUuids(array_filter($values));
 
         if ($models === null) {
             return $result;
@@ -794,7 +802,7 @@ class ToolboxFile
      *
      * @return array
      *
-     * @throws \InvalidArgumentException When any of the input is not a valid uuid or an non existent file.
+     * @throws InvalidArgumentException When any of the input is not a valid uuid or an non existent file.
      */
     public static function convertUuidsOrPathsToMetaModels($values)
     {
@@ -808,10 +816,10 @@ class ToolboxFile
         }
 
         foreach ($values as $key => $value) {
-            if (!(\Validator::isUuid($value))) {
-                $file = \FilesModel::findByPath($value) ?: \Dbafs::addResource($value);
+            if (!(Validator::isUuid($value))) {
+                $file = FilesModel::findByPath($value) ?: Dbafs::addResource($value);
                 if (!$file) {
-                    throw new \InvalidArgumentException('Invalid value.');
+                    throw new InvalidArgumentException('Invalid value.');
                 }
 
                 $values[$key] = $file->uuid;
@@ -863,9 +871,9 @@ class ToolboxFile
      * Must either be called from within collectFiles or collectFiles must be called later on as this method
      * will add models of type folder to the list of pending paths to allow for recursive inclusion.
      *
-     * @param \FilesModel[] $files     The files to add.
+     * @param FilesModel[] $files     The files to add.
      *
-     * @param array         $skipPaths List of directories not to be added to the list of pending directories.
+     * @param array        $skipPaths List of directories not to be added to the list of pending directories.
      *
      * @return void
      */
