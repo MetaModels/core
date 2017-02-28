@@ -27,6 +27,7 @@
 
 namespace MetaModels;
 
+use Contao\StringUtil;
 use MetaModels\Events\RenderItemListEvent;
 use MetaModels\Helper\PaginationLimitCalculator;
 use MetaModels\Render\Template;
@@ -739,12 +740,7 @@ class ItemList implements IServiceContainerAware
                     $arrDescription = $objCurrentItem->parseAttribute($this->strDescriptionAttribute, 'text');
 
                     if (!empty($arrDescription['text'])) {
-                        // PHP 7 compatibility, see https://github.com/contao/core-bundle/issues/309
-                        if (version_compare(VERSION . '.' . BUILD, '3.5.5', '>=')) {
-                            $page->description = \StringUtil::substr($arrDescription['text'], 160);
-                        } else {
-                            $page->description = \String::substr($arrDescription['text'], 160);
-                        }
+                        $page->description = StringUtil::substr($arrDescription['text'], 160);
                         break;
                     }
                 }

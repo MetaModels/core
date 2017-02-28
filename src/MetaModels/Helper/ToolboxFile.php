@@ -829,13 +829,7 @@ class ToolboxFile
      */
     private static function uuidToString($uuid)
     {
-        static $uuidMapper;
-        if (!isset($uuidMapper)) {
-            $uuidMapper =
-                array((version_compare(VERSION . '.' . BUILD, '3.5.5', '>=')) ? 'StringUtil' : 'String', 'binToUuid');
-        }
-
-        return call_user_func($uuidMapper, $uuid);
+        return call_user_func(['StringUtil', 'binToUuid'], $uuid);
     }
 
     /**
@@ -847,13 +841,7 @@ class ToolboxFile
      */
     private static function stringToUuid($uuid)
     {
-        static $uuidMapper;
-        if (!isset($uuidMapper)) {
-            $uuidMapper =
-                array((version_compare(VERSION . '.' . BUILD, '3.5.5', '>=')) ? 'StringUtil' : 'String', 'uuidToBin');
-        }
-
-        return call_user_func($uuidMapper, $uuid);
+        return call_user_func(['StringUtil', 'uuidToBin'], $uuid);
     }
 
     /**
