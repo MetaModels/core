@@ -165,13 +165,11 @@ class SimpleLookup extends Simple
      */
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
     {
-        if ($objAttribute = $this->getFilteredAttribute()) {
-            // TODO: shall we omit returning of empty values?
-            $strResult = $objAttribute->getFilterUrlValue($objItem->get($objAttribute->getColName()));
-            return array($this->getParamName() => $strResult);
+        if ($attribute = $this->getFilteredAttribute()) {
+            return [$this->getParamName() => $attribute->getFilterUrlValue($objItem->get($attribute->getColName()))];
         }
 
-        return array();
+        return [];
     }
 
     /**
