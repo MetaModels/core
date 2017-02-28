@@ -22,7 +22,6 @@
  */
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
-use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
 use MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton;
 use MetaModels\DcGeneral\Events\MetaModel\CutButton;
 use MetaModels\DcGeneral\Events\MetaModel\DuplicateModel;
@@ -83,11 +82,6 @@ return array(
             $dispatcher->addSubscriber(new InputScreenAddAllHandler($event->getServiceContainer()));
         }
     ),
-    MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE => array(
-        function (CreateAttributeFactoryEvent $event) {
-            \MetaModels\Attribute\Events\LegacyListener::registerLegacyAttributeFactoryEvents($event);
-        }
-    ),
     MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE => array(
         function (CreateFilterSettingFactoryEvent $event) {
             $factory = $event->getFactory();
@@ -97,8 +91,6 @@ return array(
                 ->addTypeFactory(new CustomSqlFilterSettingTypeFactory())
                 ->addTypeFactory(new ConditionAndFilterSettingTypeFactory())
                 ->addTypeFactory(new ConditionOrFilterSettingTypeFactory());
-
-            \MetaModels\Filter\Setting\Events\LegacyListener::registerLegacyFactories($event);
         }
     ),
     // deprecated since 2.0, to be removed in 3.0.

@@ -222,21 +222,6 @@ class ItemList implements IServiceContainerAware
     }
 
     /**
-     * Set output format.
-     *
-     * @param string $strFormat The name of the template output format to use.
-     *
-     * @return ItemList
-     *
-     * @deprecated Use overrideOutputFormat instead
-     */
-    public function setTemplateFormat($strFormat)
-    {
-        $this->overrideOutputFormat($strFormat);
-        return $this;
-    }
-
-    /**
      * Override the output format of the used view.
      *
      * @param string|null $strOutputFormat The desired output format.
@@ -272,28 +257,6 @@ class ItemList implements IServiceContainerAware
         $this->prepareMetaModel();
 
         $this->prepareView();
-
-        return $this;
-    }
-
-    /**
-     * Set filter and parameter.
-     *
-     * @param int      $intFilter  The filter settings to use (if 0, the default will be used).
-     *
-     * @param string[] $arrPresets The parameter preset values to use.
-     *
-     * @param string[] $arrValues  The dynamic parameter values that may be used.
-     *
-     * @return ItemList
-     *
-     * @deprecated Use setFilterSettings() and setFilterParameters().
-     */
-    public function setFilterParam($intFilter, $arrPresets, $arrValues)
-    {
-        $this->setFilterSettings($intFilter);
-
-        $this->setFilterParameters($arrPresets, $arrValues);
 
         return $this;
     }
