@@ -431,64 +431,8 @@ class ToolboxFile
             return;
         }
 
-        $resizeInfo = $this->getResizeImages();
-        $intWidth   = $resizeInfo[0] ? $resizeInfo[0] : '';
-        $intHeight  = $resizeInfo[1] ? $resizeInfo[1] : '';
-        $strMode    = $resizeInfo[2] ? $resizeInfo[2] : '';
-
         foreach ($this->foundFiles as $strFile) {
-            $objFile = new File($strFile);
-
-            $arrMeta     = $this->metaInformation[dirname($strFile)][$objFile->basename];
-            $strBasename = strlen($arrMeta['title']) ? $arrMeta['title'] : specialchars($objFile->basename);
-            if (strlen($arrMeta['caption'])) {
-                $strAltText = $arrMeta['caption'];
-            } else {
-                $strAltText = ucfirst(str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $objFile->filename)));
-            }
-
-            $strIcon = 'assets/contao/images/' . $objFile->icon;
-            
-            $arrSource = array
-            (
-                'file'      => $strFile,
-                'mtime'     => $objFile->mtime,
-                'alt'       => $strAltText,
-                'caption'   => (strlen($arrMeta['caption']) ? $arrMeta['caption'] : ''),
-                'title'     => $strBasename,
-                'metafile'  => $arrMeta,
-                'icon'      => $strIcon,
-                'extension' => $objFile->extension,
-                'size'      => $objFile->filesize,
-                'sizetext'  => sprintf(
-                    '(%s)',
-                    Controller::getReadableSize($objFile->filesize, 2)
-                ),
-                'url'       => specialchars($this->getDownloadLink($strFile))
-            );
-
-            // Prepare images.
-            if ($arrSource['isGdImage'] = $objFile->isGdImage) {
-                if ($this->getShowImages() && ($intWidth || $intHeight || $strMode)) {
-                    $event = new ResizeImageEvent($strFile, $intWidth, $intHeight, $strMode);
-                    $this->dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
-                    $strSrc = $event->getResultImage();
-                } else {
-                    $strSrc = $strFile;
-                }
-                $arrSource['src'] = $strSrc;
-
-                if (file_exists(TL_ROOT . '/' . urldecode($strSrc))) {
-                    $size            = getimagesize(TL_ROOT . '/' . urldecode($strSrc));
-                    $arrSource['lb'] = 'lb' . $this->getLightboxId();
-                    $arrSource['w']  = $size[0];
-                    $arrSource['h']  = $size[1];
-                    $arrSource['wh'] = $size[3];
-                }
-            }
-
-            $this->modifiedTime[] = $objFile->mtime;
-            $this->outputBuffer[] = $arrSource;
+            $this->processFile($strFile);
         }
     }
 
@@ -950,5 +894,72 @@ class ToolboxFile
                 }
             }
         }
+    }
+
+    /**
+     * Process a single file.
+     *
+     * @param string $fileName The file to fetch data for.
+     *
+     * @return void
+     */
+    private function processFile($fileName)
+    {
+        $file  = new File($fileName);
+        $meta  = $this->metaInformation[dirname($fileName)][$file->basename];
+        $title = strlen($meta['title']) ? $meta['title'] : specialchars($file->basename);
+        if (strlen($meta['caption'])) {
+            $altText = $meta['caption'];
+        } else {
+            $altText = ucfirst(str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $file->filename)));
+        }
+
+        $information = [
+            'file'      => $fileName,
+            'mtime'     => $file->mtime,
+            'alt'       => $altText,
+            'caption'   => (!empty($meta['caption']) ? $meta['caption'] : ''),
+            'title'     => $title,
+            'metafile'  => $meta,
+            'icon'      => 'assets/contao/images/' . $file->icon,
+            'extension' => $file->extension,
+            'size'      => $file->filesize,
+            'sizetext'  => sprintf('(%s)', Controller::getReadableSize($file->filesize, 2)),
+            'url'       => specialchars($this->getDownloadLink($fileName))
+        ];
+
+        // Prepare images.
+        if ($information['isGdImage'] = $file->isGdImage) {
+            $information['src'] = urldecode($this->resizeImage($fileName));
+            if (file_exists(TL_ROOT . '/' . $information['src'])) {
+                $size              = getimagesize(TL_ROOT . '/' . $information['src']);
+                $information['lb'] = 'lb' . $this->getLightboxId();
+                $information['w']  = $size[0];
+                $information['h']  = $size[1];
+                $information['wh'] = $size[3];
+            }
+        }
+
+        $this->modifiedTime[] = $file->mtime;
+        $this->outputBuffer[] = $information;
+    }
+
+    /**
+     * Resize the image if needed.
+     *
+     * @param string $fileName The file to resize.
+     *
+     * @return null|string
+     */
+    private function resizeImage($fileName)
+    {
+        list($width, $height, $mode) = $this->getResizeImages();
+        if ($this->getShowImages() && ($width || $height || $mode)) {
+            $event = new ResizeImageEvent($fileName, $width, $height, $mode);
+            $this->dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
+            return $event->getResultImage();
+        }
+
+        return $fileName;
     }
 }
