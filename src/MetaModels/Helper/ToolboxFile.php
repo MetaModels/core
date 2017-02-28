@@ -45,6 +45,13 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class ToolboxFile
 {
     /**
+     * The event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
+
+    /**
      * Allowed file extensions.
      *
      * @var array
@@ -138,11 +145,14 @@ class ToolboxFile
     /**
      * Create a new instance.
      *
+     * @param EventDispatcherInterface|null $dispatcher The event dispatcher to use.
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function __construct()
+    public function __construct(EventDispatcherInterface $dispatcher = null)
     {
+        $this->dispatcher = $dispatcher ?: $GLOBALS['container']['event-dispatcher'];
         // Initialize some values to sane base.
         $this->setAcceptedExtensions(trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']));
     }
@@ -421,8 +431,6 @@ class ToolboxFile
             return;
         }
 
-        /** @var EventDispatcherInterface $dispatcher */
-        $dispatcher = $GLOBALS['container']['event-dispatcher'];
         $resizeInfo = $this->getResizeImages();
         $intWidth   = $resizeInfo[0] ? $resizeInfo[0] : '';
         $intHeight  = $resizeInfo[1] ? $resizeInfo[1] : '';
@@ -463,7 +471,7 @@ class ToolboxFile
             if ($arrSource['isGdImage'] = $objFile->isGdImage) {
                 if ($this->getShowImages() && ($intWidth || $intHeight || $strMode)) {
                     $event = new ResizeImageEvent($strFile, $intWidth, $intHeight, $strMode);
-                    $dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
+                    $this->dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
                     $strSrc = $event->getResultImage();
                 } else {
                     $strSrc = $strFile;
