@@ -155,6 +155,9 @@ class ToolboxFile
         $this->dispatcher = $dispatcher ?: $GLOBALS['container']['event-dispatcher'];
         // Initialize some values to sane base.
         $this->setAcceptedExtensions(trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']));
+        if (!is_array($_SESSION['metaModels_downloads'])) {
+            $_SESSION['metaModels_downloads'] = [];
+        }
     }
 
     /**
@@ -401,9 +404,6 @@ class ToolboxFile
      */
     protected function getDownloadLink($strFile)
     {
-        if (!is_array($_SESSION['metaModels_downloads'])) {
-            $_SESSION['metaModels_downloads'] = [];
-        }
         if (!isset($_SESSION['metaModels_downloads'][$strFile])) {
             $_SESSION['metaModels_downloads'][$strFile] = md5(uniqid());
         }
@@ -674,10 +674,6 @@ class ToolboxFile
         // If images are to be shown, get out.
         if ($this->getShowImages()) {
             return;
-        }
-
-        if (!is_array($_SESSION['metaModels_downloads'])) {
-            $_SESSION['metaModels_downloads'] = [];
         }
         if (($file = Input::get('file')) && ($key = Input::get('fileKey'))) {
             // Check key and return 403 if mismatch.
