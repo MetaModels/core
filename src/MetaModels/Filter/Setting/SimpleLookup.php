@@ -125,7 +125,6 @@ class SimpleLookup extends Simple
      */
     public function enableFEFilterWidget()
     {
-        // TODO: better use a seperate checkbox or the like? For the moment, this has to be overridden by sub classes.
         return (bool) $this->get('predef_param');
     }
 
