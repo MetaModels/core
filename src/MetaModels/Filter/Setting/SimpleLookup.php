@@ -139,13 +139,7 @@ class SimpleLookup extends Simple
         $strParam     = $this->getParamName();
 
         if ($objAttribute && $strParam) {
-            $arrFilterValue = isset($arrFilterUrl[$strParam]) ? $arrFilterUrl[$strParam] : null;
-
-            if (!$arrFilterValue && $this->get('defaultid')) {
-                $arrFilterValue = $this->get('defaultid');
-            }
-
-            if ($arrFilterValue) {
+            if ($arrFilterValue = $this->determineFilterValue($arrFilterUrl, $strParam)) {
                 if ($objMetaModel->isTranslated() && $this->get('all_langs')) {
                     $arrLanguages = $objMetaModel->getAvailableLanguages();
                 } else {
@@ -329,5 +323,22 @@ class SimpleLookup extends Simple
         }
 
         return null;
+    }
+
+    /**
+     * Determine the filter value from the passed values.
+     *
+     * @param array  $filterValues The filter values.
+     * @param string $valueName    The parameter name to obtain.
+     *
+     * @return mixed|null
+     */
+    private function determineFilterValue($filterValues, $valueName)
+    {
+        if (!isset($filterValues[$valueName]) && $this->get('defaultid')) {
+            return $this->get('defaultid');
+        }
+
+        return $filterValues[$valueName];
     }
 }
