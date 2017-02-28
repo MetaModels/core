@@ -31,6 +31,7 @@ namespace MetaModels;
 use MetaModels\Attribute\IComplex;
 use MetaModels\Attribute\ISimple as ISimpleAttribute;
 use MetaModels\Attribute\ITranslated;
+use MetaModels\DataAccess\ItemPersister;
 use MetaModels\Filter\Filter;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\Filter\IFilter;
@@ -852,159 +853,6 @@ class MetaModel implements IMetaModel
     }
 
     /**
-     * Update the value of a native column for the given ids with the given data.
-     *
-     * @param string $strColumn The column name to update (i.e. tstamp).
-     *
-     * @param array  $arrIds    The ids of the rows that shall be updated.
-     *
-     * @param mixed  $varData   The data to save. If this is an array, it is automatically serialized.
-     *
-     * @return void
-     */
-    protected function saveSimpleColumn($strColumn, $arrIds, $varData)
-    {
-        if (is_array($varData)) {
-            $varData = serialize($varData);
-        }
-
-        $this
-            ->getDatabase()
-            ->prepare(
-                sprintf(
-                    'UPDATE %s SET %s=? WHERE id IN (%s)',
-                    $this->getTableName(),
-                    $strColumn,
-                    implode(',', $arrIds)
-                )
-            )
-            ->execute($varData);
-    }
-
-    /**
-     * Update an attribute for the given ids with the given data.
-     *
-     * @param IAttribute $objAttribute The attribute to save.
-     *
-     * @param array      $arrIds       The ids of the rows that shall be updated.
-     *
-     * @param mixed      $varData      The data to save in raw data.
-     *
-     * @param string     $strLangCode  The language code to save.
-     *
-     * @return void
-     *
-     * @throws \RuntimeException When an unknown attribute type is encountered.
-     */
-    protected function saveAttribute($objAttribute, $arrIds, $varData, $strLangCode)
-    {
-        // Call the serializeData for all simple attributes.
-        if ($this->isSimpleAttribute($objAttribute)) {
-            /** @var \MetaModels\Attribute\ISimple $objAttribute */
-            $varData = $objAttribute->serializeData($varData);
-        }
-
-        $arrData = array();
-        foreach ($arrIds as $intId) {
-            $arrData[$intId] = $varData;
-        }
-
-        // Check for translated fields first, then for complex and save as simple then.
-        if ($strLangCode && $this->isTranslatedAttribute($objAttribute)) {
-            /** @var ITranslated $objAttribute */
-            $objAttribute->setTranslatedDataFor($arrData, $strLangCode);
-        } elseif ($this->isComplexAttribute($objAttribute)) {
-            // Complex saving.
-            $objAttribute->setDataFor($arrData);
-        } elseif ($this->isSimpleAttribute($objAttribute)) {
-            $objAttribute->setDataFor($arrData);
-        } else {
-            throw new \RuntimeException(
-                'Unknown attribute type, can not save. Interfaces implemented: ' .
-                implode(', ', class_implements($objAttribute))
-            );
-        }
-    }
-
-    /**
-     * Update the variants with the value if needed.
-     *
-     * @param IItem  $item           The item to save.
-     *
-     * @param string $activeLanguage The language the values are in.
-     *
-     * @param int[]  $allIds         The ids of all variants.
-     *
-     * @param bool   $baseAttributes If also the base attributes get updated as well.
-     *
-     * @return void
-     */
-    protected function updateVariants($item, $activeLanguage, $allIds, $baseAttributes = false)
-    {
-        foreach ($this->getAttributes() as $strAttributeId => $objAttribute) {
-            // Skip unset attributes.
-            if (!$item->isAttributeSet($objAttribute->getColName())) {
-                continue;
-            }
-
-            if (!$baseAttributes && $item->isVariant() && !($objAttribute->get('isvariant'))) {
-                // Skip base attribute.
-                continue;
-            }
-
-            if ($item->isVariantBase() && !($objAttribute->get('isvariant'))) {
-                // We have to override in variants.
-                $arrIds = $allIds;
-            } else {
-                $arrIds = array($item->get('id'));
-            }
-            $this->saveAttribute($objAttribute, $arrIds, $item->get($strAttributeId), $activeLanguage);
-        }
-    }
-
-    /**
-     * Create a new item in the database.
-     *
-     * @param IItem $item The item to be created.
-     *
-     * @return void
-     */
-    protected function createNewItem($item)
-    {
-        $arrData = array
-        (
-            'tstamp' => $item->get('tstamp')
-        );
-
-        $blnNewBaseItem = false;
-        if ($this->hasVariants()) {
-            // No variant group is given, so we have a complete new base item this should be a workaround for these
-            // values should be set by the GeneralDataMetaModel or whoever is calling this method.
-            if ($item->get('vargroup') === null) {
-                $item->set('varbase', '1');
-                $item->set('vargroup', '0');
-                $blnNewBaseItem = true;
-            }
-            $arrData['varbase']  = $item->get('varbase');
-            $arrData['vargroup'] = $item->get('vargroup');
-        }
-
-        /** @noinspection PhpUndefinedFieldInspection */
-        $intItemId = $this
-            ->getDatabase()
-            ->prepare('INSERT INTO ' . $this->getTableName() . ' %s')
-            ->set($arrData)
-            ->execute()
-            ->insertId;
-        $item->set('id', $intItemId);
-
-        // Add the variant group equal to the id.
-        if ($blnNewBaseItem) {
-            $this->saveSimpleColumn('vargroup', array($item->get('id')), $item->get('id'));
-        }
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function saveItem($objItem, $timestamp = null)
@@ -1018,30 +866,8 @@ class MetaModel implements IMetaModel
             // @codingStandardsIgnoreEnd
         }
 
-        $baseAttributes = $this->saveBaseColumns($objItem, $timestamp ?: \time());
-        if ($this->isTranslated()) {
-            $strActiveLanguage = $this->getActiveLanguage();
-        } else {
-            $strActiveLanguage = null;
-        }
-
-        $arrAllIds = array();
-        if ($objItem->isVariantBase()) {
-            $objVariants = $this->findVariantsWithBase(array($objItem->get('id')), null);
-            foreach ($objVariants as $objVariant) {
-                /** @var IItem $objVariant */
-                $arrAllIds[] = $objVariant->get('id');
-            }
-        }
-
-        $this->updateVariants($objItem, $strActiveLanguage, $arrAllIds, $baseAttributes);
-
-        // Tell all attributes that the model has been saved. Useful for alias fields, edit counters etc.
-        foreach ($this->getAttributes() as $objAttribute) {
-            if ($objItem->isAttributeSet($objAttribute->getColName())) {
-                $objAttribute->modelSaved($objItem);
-            }
-        }
+        $persister = new ItemPersister($this, $this->getDatabase());
+        $persister->saveItem($objItem, $timestamp ?: \time());
     }
 
     /**
@@ -1049,32 +875,8 @@ class MetaModel implements IMetaModel
      */
     public function delete(IItem $objItem)
     {
-        $arrIds = array($objItem->get('id'));
-        // Determine if the model is a variant base and if so, fetch the variants additionally.
-        if ($objItem->isVariantBase()) {
-            $objVariants = $objItem->getVariants(new Filter($this));
-            foreach ($objVariants as $objVariant) {
-                /** @var IItem $objVariant */
-                $arrIds[] = $objVariant->get('id');
-            }
-        }
-
-        // Complex attributes shall delete their values first.
-        foreach ($this->getAttributes() as $objAttribute) {
-            if ($this->isComplexAttribute($objAttribute)) {
-                /** @var IComplex $objAttribute */
-                $objAttribute->unsetDataFor($arrIds);
-            }
-        }
-        // Now make the real row disappear.
-        $this
-            ->getDatabase()
-            ->prepare(sprintf(
-                'DELETE FROM %s WHERE id IN (%s)',
-                $this->getTableName(),
-                $this->buildDatabaseParameterList($arrIds)
-            ))
-        ->execute($arrIds);
+        $persister = new ItemPersister($this, $this->getDatabase());
+        $persister->deleteItem($objItem);
     }
 
     /**
