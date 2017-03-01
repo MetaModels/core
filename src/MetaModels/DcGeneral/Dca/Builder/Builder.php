@@ -31,10 +31,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2Ba
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\BasicDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultBasicDefinition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultPalettesDefinition;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultPropertiesDefinition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\PalettesDefinitionInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\PropertiesDefinitionInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\DefaultProperty;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Command;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CommandCollectionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CommandInterface;
@@ -54,7 +51,6 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
 use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
-use MetaModels\Attribute\ITranslated;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\ViewCombinations;
 use MetaModels\DcGeneral\DataDefinition\Definition\MetaModelDefinition;
@@ -64,7 +60,7 @@ use MetaModels\DcGeneral\DefinitionBuilder\ConditionBuilderWithoutVariants;
 use MetaModels\DcGeneral\DefinitionBuilder\ConditionBuilderWithVariants;
 use MetaModels\DcGeneral\DefinitionBuilder\DataProviderBuilder;
 use MetaModels\DcGeneral\DefinitionBuilder\PanelBuilder;
-use MetaModels\DcGeneral\Events\MetaModel\BuildAttributeEvent;
+use MetaModels\DcGeneral\DefinitionBuilder\PropertyDefinitionBuilder;
 use MetaModels\DcGeneral\Events\MetaModel\BuildMetaModelOperationsEvent;
 use MetaModels\DcGeneral\Events\MetaModel\RenderItem;
 use MetaModels\Helper\ToolboxFile;
@@ -158,7 +154,8 @@ class Builder
         $container  = $event->getContainer();
         /** @var $container IMetaModelDataDefinition */
         $this->parseMetaModelDefinition($container);
-        $this->parseProperties($container);
+        $builder = new PropertyDefinitionBuilder($dispatcher);
+        $builder->build($container, $this->inputScreen, $this);
         $this->parseBasicDefinition($container);
 
         $dataBuilder = new DataProviderBuilder($this->inputScreen, $this->serviceContainer->getFactory());
@@ -361,31 +358,19 @@ class Builder
      *
      * @return string
      */
-    protected function convertRenderGroupType($type)
+    private function convertRenderGroupType($type)
     {
-        switch ($type) {
-            case 'char':
-                return GroupAndSortingInformationInterface::GROUP_CHAR;
-
-            case 'digit':
-                return GroupAndSortingInformationInterface::GROUP_DIGIT;
-
-            case 'day':
-                return GroupAndSortingInformationInterface::GROUP_DAY;
-
-            case 'weekday':
-                return GroupAndSortingInformationInterface::GROUP_WEEKDAY;
-
-            case 'week':
-                return GroupAndSortingInformationInterface::GROUP_WEEK;
-
-            case 'month':
-                return GroupAndSortingInformationInterface::GROUP_MONTH;
-
-            case 'year':
-                return GroupAndSortingInformationInterface::GROUP_YEAR;
-
-            default:
+        $lookup = [
+            'char'    => GroupAndSortingInformationInterface::GROUP_CHAR,
+            'digit'   => GroupAndSortingInformationInterface::GROUP_DIGIT,
+            'day'     => GroupAndSortingInformationInterface::GROUP_DAY,
+            'weekday' => GroupAndSortingInformationInterface::GROUP_WEEKDAY,
+            'week'    => GroupAndSortingInformationInterface::GROUP_WEEK,
+            'month'   => GroupAndSortingInformationInterface::GROUP_MONTH,
+            'year'    => GroupAndSortingInformationInterface::GROUP_YEAR,
+        ];
+        if (array_key_exists($type, $lookup)) {
+            return $lookup[$type];
         }
 
         return GroupAndSortingInformationInterface::GROUP_NONE;
@@ -674,133 +659,6 @@ class Builder
             $this
         );
         $this->serviceContainer->getEventDispatcher()->dispatch($event::NAME, $event);
-    }
-
-    /**
-     * Build the property information for a certain property from the data container array.
-     *
-     * @param PropertiesDefinitionInterface $definition  The property collection definition.
-     *
-     * @param string                        $propName    The name of the property.
-     *
-     * @param IInputScreen                  $inputScreen The input screen instance.
-     *
-     * @return void
-     */
-    protected function buildPropertyFromDca(
-        PropertiesDefinitionInterface $definition,
-        $propName,
-        IInputScreen $inputScreen
-    ) {
-        $property  = $inputScreen->getProperty($propName);
-        $propInfo  = $property['info'];
-        $metaModel = $this->getMetaModel();
-        $attribute = $metaModel->getAttribute($propName);
-
-        if (!$attribute) {
-            return;
-        }
-
-        $isTranslated = $metaModel->isTranslated() && ($attribute instanceof ITranslated);
-
-        if ($definition->hasProperty($propName)) {
-            $property = $definition->getProperty($propName);
-        } else {
-            $property = new DefaultProperty($propName);
-            $definition->addProperty($property);
-        }
-
-        if (!$property->getLabel()) {
-            if (isset($propInfo['label'])) {
-                $lang = $propInfo['label'];
-
-                if (is_array($lang)) {
-                    $label       = reset($lang);
-                    $description = next($lang);
-
-                    $property->setDescription($description);
-                } else {
-                    $label = $lang;
-                }
-            } else {
-                $label = $attribute->getName();
-            }
-
-            $property->setLabel($label);
-        }
-
-        if (!$property->getDescription() && isset($propInfo['description'])) {
-            $property->setDescription($propInfo['description']);
-        }
-
-        if (!$property->getDefaultValue() && isset($propInfo['default'])) {
-            $property->setDefaultValue($propInfo['default']);
-        }
-
-        if (isset($propInfo['exclude'])) {
-            $property->setExcluded($propInfo['exclude']);
-        }
-
-        if (isset($propInfo['search'])) {
-            $property->setSearchable($propInfo['search']);
-        }
-
-        if (isset($propInfo['filter'])) {
-            $property->setFilterable($propInfo['filter']);
-        }
-
-        if (!$property->getWidgetType() && isset($propInfo['inputType'])) {
-            $property->setWidgetType($propInfo['inputType']);
-        }
-
-        if (!$property->getOptions() && isset($propInfo['options'])) {
-            $property->setOptions($propInfo['options']);
-        }
-
-        if (!$property->getExplanation() && isset($propInfo['explanation'])) {
-            $property->setExplanation($propInfo['explanation']);
-        }
-
-        if (isset($propInfo['eval'])) {
-            $extra = $propInfo['eval'];
-            if ($isTranslated) {
-                $extra['tl_class'] = 'translat-attr' . (!empty($extra['tl_class']) ? ' ' . $extra['tl_class'] : '');
-            }
-            $property->setExtra(array_merge((array) $property->getExtra(), $extra));
-        }
-    }
-
-    /**
-     * Parse the defined properties and populate the definition.
-     *
-     * @param IMetaModelDataDefinition $container The data container.
-     *
-     * @return void
-     */
-    protected function parseProperties(IMetaModelDataDefinition $container)
-    {
-        if ($container->hasPropertiesDefinition()) {
-            $definition = $container->getPropertiesDefinition();
-        } else {
-            $definition = new DefaultPropertiesDefinition();
-            $container->setPropertiesDefinition($definition);
-        }
-
-        $metaModel = $this->getMetaModel();
-
-        // If the current metamodels has variants add the varbase and vargroup to the definition.
-        if ($metaModel->hasVariants()) {
-            $this->buildPropertyFromDca($definition, 'varbase', $this->inputScreen);
-            $this->buildPropertyFromDca($definition, 'vargroup', $this->inputScreen);
-        }
-
-        foreach ($metaModel->getAttributes() as $attribute) {
-            $this->buildPropertyFromDca($definition, $attribute->getColName(), $this->inputScreen);
-
-            $event = new BuildAttributeEvent($metaModel, $attribute, $container, $this->inputScreen, $this);
-            // Trigger BuildAttribute Event.
-            $this->serviceContainer->getEventDispatcher()->dispatch($event::NAME, $event);
-        }
     }
 
     /**
