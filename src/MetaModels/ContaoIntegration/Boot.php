@@ -31,7 +31,9 @@ use ContaoCommunityAlliance\DcGeneral\Factory\Event\PopulateEnvironmentEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\PreCreateDcGeneralEvent;
 use MetaModels\Dca\MetaModelDcaBuilder;
 use MetaModels\DcGeneral\Dca\Builder\Builder;
-use MetaModels\DcGeneral\Events\Subscriber;
+use MetaModels\DcGeneral\Populator\AttributePopulator;
+use MetaModels\DcGeneral\Populator\DataProviderPopulator;
+use MetaModels\DcGeneral\Populator\TranslatorPopulator;
 use MetaModels\Helper\LoadDataContainerHookListener;
 use MetaModels\Helper\ViewCombinations;
 use MetaModels\IMetaModelsServiceContainer;
@@ -130,6 +132,7 @@ abstract class Boot
 
                     $dispatcher = $container->getEventDispatcher();
                     $generator  = new Builder($container, $inputScreen, $renderSetting);
+                    $translator = $generator->getTranslator();
 
                     $dispatcher->addListener(
                         BuildDataDefinitionEvent::NAME,
@@ -143,11 +146,28 @@ abstract class Boot
                     );
                     $dispatcher->addListener(
                         PopulateEnvironmentEvent::NAME,
-                        function (PopulateEnvironmentEvent $event) use ($metaModelName, $generator) {
+                        function (PopulateEnvironmentEvent $event) use (
+                            $metaModelName,
+                            $inputScreen,
+                            $container,
+                            $translator
+                        ) {
                             if ($event->getEnvironment()->getDataDefinition()->getName() !== $metaModelName) {
                                 return;
                             }
-                            $generator->populate($event);
+
+                            $environment = $event->getEnvironment();
+
+                            $populator = new TranslatorPopulator($container, $translator);
+                            $populator->populate($environment);
+
+                            $populator = new AttributePopulator($inputScreen);
+                            $populator->populate($environment);
+
+                            $populator = new DataProviderPopulator($container);
+                            $populator->populate($environment);
+                            unset($populator);
+
                             $GLOBALS['TL_CSS'][] = 'system/modules/metamodels/assets/css/style.css';
                         },
                         $generator::PRIORITY

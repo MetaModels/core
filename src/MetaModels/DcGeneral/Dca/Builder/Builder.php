@@ -26,20 +26,12 @@ namespace MetaModels\DcGeneral\Dca\Builder;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
-use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinition;
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinitionInterface;
-use ContaoCommunityAlliance\DcGeneral\Contao\Dca\ContaoDataProviderInformation;
-use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\BasicDefinitionInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DataProviderDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultBasicDefinition;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultDataProviderDefinition;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultModelRelationshipDefinition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultPalettesDefinition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultPropertiesDefinition;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\ModelRelationshipDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\PalettesDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\PropertiesDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\DefaultProperty;
@@ -51,21 +43,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CutCommand;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\DefaultModelFormatterConfig;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\GroupAndSortingInformationInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\ListingConfigInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\PanelRowCollectionInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\PanelRowInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultFilterElementInformation;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultLimitElementInformation;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultSearchElementInformation;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultSortElementInformation;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultSubmitElementInformation;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\SearchElementInformationInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\SubmitElementInformationInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\SelectCommand;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\FilterBuilder;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChildCondition;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChildConditionInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootCondition;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Palette\DefaultPaletteCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\BooleanCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
@@ -73,23 +51,21 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Legend;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Palette;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
-use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
-use ContaoCommunityAlliance\DcGeneral\Factory\Event\PopulateEnvironmentEvent;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
-use ContaoCommunityAlliance\Translator\TranslatorChain;
-use Contao\Input;
 use MetaModels\Attribute\ITranslated;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\ViewCombinations;
-use MetaModels\DcGeneral\Data\Driver;
 use MetaModels\DcGeneral\DataDefinition\Definition\MetaModelDefinition;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\IsVariantAttribute;
+use MetaModels\DcGeneral\DefinitionBuilder\ConditionBuilderWithoutVariants;
+use MetaModels\DcGeneral\DefinitionBuilder\ConditionBuilderWithVariants;
+use MetaModels\DcGeneral\DefinitionBuilder\DataProviderBuilder;
+use MetaModels\DcGeneral\DefinitionBuilder\PanelBuilder;
 use MetaModels\DcGeneral\Events\MetaModel\BuildAttributeEvent;
 use MetaModels\DcGeneral\Events\MetaModel\BuildMetaModelOperationsEvent;
-use MetaModels\DcGeneral\Events\MetaModel\PopulateAttributeEvent;
 use MetaModels\DcGeneral\Events\MetaModel\RenderItem;
 use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModelsServiceContainer;
@@ -106,21 +82,21 @@ class Builder
      *
      * @var StaticTranslator
      */
-    protected $translator;
+    private $translator;
 
     /**
      * The MetaModel this builder is responsible for.
      *
      * @var IMetaModelsServiceContainer
      */
-    protected $serviceContainer;
+    private $serviceContainer;
 
     /**
      * The input screen to use.
      *
      * @var IInputScreen
      */
-    protected $inputScreen;
+    private $inputScreen;
 
     /**
      * Create a new instance and instantiate the translator.
@@ -140,92 +116,13 @@ class Builder
     }
 
     /**
-     * Map all translation values from the given array to the given destination domain using the optional base key.
+     * Retrieve the translator.
      *
-     * @param array  $array   The array holding the translation values.
-     *
-     * @param string $domain  The target domain.
-     *
-     * @param string $baseKey The base key to prepend the values of the array with.
-     *
-     * @return void
+     * @return StaticTranslator
      */
-    protected function mapTranslations($array, $domain, $baseKey = '')
+    public function getTranslator()
     {
-        foreach ($array as $key => $value) {
-            $newKey = ($baseKey ? $baseKey . '.' : '') . $key;
-            if (is_array($value)) {
-                $this->mapTranslations($value, $domain, $newKey);
-            } else {
-                $this->translator->setValue($newKey, $value, $domain);
-            }
-        }
-    }
-
-    /**
-     * Handle a populate environment event for MetaModels.
-     *
-     * @param PopulateEnvironmentEvent $event The event payload.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    public function populate(PopulateEnvironmentEvent $event)
-    {
-        $translator = $event->getEnvironment()->getTranslator();
-        $dispatcher = $this->serviceContainer->getEventDispatcher();
-
-        if (!$translator instanceof TranslatorChain) {
-            $translatorChain = new TranslatorChain();
-            $translatorChain->add($translator);
-            $event->getEnvironment()->setTranslator($translatorChain);
-        } else {
-            $translatorChain = $translator;
-        }
-
-        // Map the tl_metamodel_item domain over to this domain.
-        $dispatcher->dispatch(
-            ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
-            new LoadLanguageFileEvent('tl_metamodel_item')
-        );
-
-        $this->mapTranslations(
-            $GLOBALS['TL_LANG']['tl_metamodel_item'],
-            $event->getEnvironment()->getDataDefinition()->getName()
-        );
-
-        $translatorChain->add($this->translator);
-
-        $metaModel   = $this->getMetaModel();
-        $environment = $event->getEnvironment();
-        foreach ($metaModel->getAttributes() as $attribute) {
-            $event = new PopulateAttributeEvent($metaModel, $attribute, $environment);
-            // Trigger BuildAttribute Event.
-            $dispatcher->dispatch($event::NAME, $event);
-        }
-
-        foreach ([
-            $environment->getDataDefinition(),
-            $environment->getParentDataDefinition(),
-            $environment->getRootDataDefinition()
-        ] as $definition) {
-            if (!$definition instanceof ContainerInterface) {
-                continue;
-            }
-            $this->injectServiceContainerIntoDataDrivers($definition->getDataProviderDefinition(), $environment);
-        }
-    }
-
-    /**
-     * Return the input screen details.
-     *
-     * @return IInputScreen
-     */
-    protected function getInputScreenDetails()
-    {
-        return $this->inputScreen;
+        return $this->translator;
     }
 
     /**
@@ -235,7 +132,7 @@ class Builder
      */
     protected function getMetaModel()
     {
-        return $this->getInputScreenDetails()->getMetaModel();
+        return $this->inputScreen->getMetaModel();
     }
 
     /**
@@ -246,25 +143,6 @@ class Builder
     protected function getViewCombinations()
     {
         return $this->serviceContainer->getService('metamodels-view-combinations');
-    }
-
-    /**
-     * Retrieve the data provider definition.
-     *
-     * @param IMetaModelDataDefinition $container The data container.
-     *
-     * @return DataProviderDefinitionInterface|DefaultDataProviderDefinition
-     */
-    protected function getDataProviderDefinition(IMetaModelDataDefinition $container)
-    {
-        // Parse data provider.
-        if ($container->hasDataProviderDefinition()) {
-            return $container->getDataProviderDefinition();
-        }
-
-        $config = new DefaultDataProviderDefinition();
-        $container->setDataProviderDefinition($config);
-        return $config;
     }
 
     /**
@@ -282,238 +160,18 @@ class Builder
         $this->parseMetaModelDefinition($container);
         $this->parseProperties($container);
         $this->parseBasicDefinition($container);
-        $this->parseDataProvider($container);
+
+        $dataBuilder = new DataProviderBuilder($this->inputScreen, $this->serviceContainer->getFactory());
+        $dataBuilder->parseDataProvider($container);
+
         $this->parseBackendView($container);
-        $this->parsePanels($container);
+        $builder = new PanelBuilder($this->inputScreen);
+        $builder->build($container);
 
         $this->parsePalettes($container);
 
         // Attach renderer to event.
         RenderItem::register($dispatcher);
-    }
-
-    /**
-     * Ensure at least one submit element is present in any of the rows.
-     *
-     * If no submit element is present, this method will create one at the end of the last row.
-     *
-     * @param PanelRowCollectionInterface $panelRows The panel rows.
-     *
-     * @return void
-     */
-    protected function ensureSubmitElement($panelRows)
-    {
-        // Check if we have a submit button.
-        $hasSubmit = false;
-        foreach ($panelRows as $panelRow) {
-            foreach ($panelRow as $element) {
-                if ($element instanceof SubmitElementInformationInterface) {
-                    $hasSubmit = true;
-                    break;
-                }
-
-                if ($hasSubmit) {
-                    break;
-                }
-            }
-        }
-
-        // If not add a submit.
-        if (!$hasSubmit && $panelRows->getRowCount()) {
-            $row = $panelRows->getRow($panelRows->getRowCount() - 1);
-            $row->addElement(new DefaultSubmitElementInformation(), 0);
-        }
-    }
-
-    /**
-     * Parse the panels, if we have some one.
-     *
-     * @param IMetaModelDataDefinition $container The panel container.
-     *
-     * @return void
-     */
-    protected function parsePanels(IMetaModelDataDefinition $container)
-    {
-        // Check if we have a BackendViewDef.
-        if ($container->hasDefinition(Contao2BackendViewDefinitionInterface::NAME)) {
-            /** @var Contao2BackendViewDefinitionInterface $view */
-            $view = $container->getDefinition(Contao2BackendViewDefinitionInterface::NAME);
-        } else {
-            return;
-        }
-
-        // Get the panel layout.
-        $inputScreen = $this->getInputScreenDetails();
-        $panelLayout = $inputScreen->getPanelLayout();
-
-        // Check if we have a layout.
-        if (empty($panelLayout)) {
-            return;
-        }
-
-        // Get the layout from the dca.
-        $arrRows = trimsplit(';', $panelLayout);
-
-        // Create a new panel container.
-        $panel     = $view->getPanelLayout();
-        $panelRows = $panel->getRows();
-
-        foreach ($arrRows as $rowNo => $rowElements) {
-            // Get the row, if we have one or create a new one.
-            if ($panelRows->getRowCount() < ($rowNo + 1)) {
-                $panelRow = $panelRows->addRow();
-            } else {
-                $panelRow = $panelRows->getRow($rowNo);
-            }
-
-            // Get the fields.
-            $fields = trimsplit(',', $rowElements);
-            $fields = array_reverse($fields);
-
-            $this->parsePanelRow($fields, $panelRow);
-
-            // If we have no entries for this row, remove it.
-            if ($panelRow->getCount() == 0) {
-                $panelRows->deleteRow($rowNo);
-            }
-        }
-
-        $this->ensureSubmitElement($panelRows);
-    }
-
-    /**
-     * Parse a single row with all elements.
-     *
-     * @param array             $fields   A list of fields for adding to the row.
-     *
-     * @param PanelRowInterface $panelRow The row container itself.
-     *
-     * @return void
-     */
-    protected function parsePanelRow($fields, PanelRowInterface $panelRow)
-    {
-        // Parse each type.
-        foreach ($fields as $field) {
-            switch ($field) {
-                case 'sort':
-                    $this->parsePanelSort($panelRow);
-                    break;
-
-                case 'limit':
-                    $this->parsePanelLimit($panelRow);
-                    break;
-
-                case 'filter':
-                    $this->parsePanelFilter($panelRow);
-                    break;
-
-                case 'search':
-                    $this->parsePanelSearch($panelRow);
-                    break;
-
-                case 'submit':
-                    $this->parsePanelSubmit($panelRow);
-                    break;
-
-                default:
-                    break;
-            }
-        }
-    }
-
-    /**
-     * Add filter elements to the panel.
-     *
-     * @param PanelRowInterface $row The row to which the element shall get added to.
-     *
-     * @return void
-     */
-    protected function parsePanelFilter(PanelRowInterface $row)
-    {
-        foreach ($this->getInputScreenDetails()->getProperties() as $property => $value) {
-            if (!empty($value['info']['filter'])) {
-                $element = new DefaultFilterElementInformation();
-                $element->setPropertyName($property);
-                if (!$row->hasElement($element->getName())) {
-                    $row->addElement($element);
-                }
-            }
-        }
-    }
-
-    /**
-     * Add sort element to the panel.
-     *
-     * @param PanelRowInterface $row The row to which the element shall get added to.
-     *
-     * @return void
-     */
-    protected function parsePanelSort(PanelRowInterface $row)
-    {
-        if (!$row->hasElement('sort')) {
-            $element = new DefaultSortElementInformation();
-            $row->addElement($element);
-        }
-    }
-
-    /**
-     * Add search element to the panel.
-     *
-     * @param PanelRowInterface $row The row to which the element shall get added to.
-     *
-     * @return void
-     *
-     * @throws \InvalidArgumentException When the search element does not implement the correct interface.
-     */
-    protected function parsePanelSearch(PanelRowInterface $row)
-    {
-        if ($row->hasElement('search')) {
-            $element = $row->getElement('search');
-        } else {
-            $element = new DefaultSearchElementInformation();
-        }
-
-        if (!$element instanceof SearchElementInformationInterface) {
-            throw new \InvalidArgumentException('Search element does not implement the correct interface.');
-        }
-
-        foreach ($this->getInputScreenDetails()->getProperties() as $property => $value) {
-            if (!empty($value['info']['search'])) {
-                $element->addProperty($property);
-            }
-        }
-
-        if ($element->getPropertyNames() && !$row->hasElement('search')) {
-            $row->addElement($element);
-        }
-    }
-
-    /**
-     * Add  elements to the panel.
-     *
-     * @param PanelRowInterface $row The row to which the element shall get added to.
-     *
-     * @return void
-     */
-    protected function parsePanelLimit(PanelRowInterface $row)
-    {
-        if (!$row->hasElement('limit')) {
-            $row->addElement(new DefaultLimitElementInformation());
-        }
-    }
-
-    /**
-     * Add  elements to the panel.
-     *
-     * @param PanelRowInterface $row The row to which the element shall get added to.
-     *
-     * @return void
-     */
-    protected function parsePanelSubmit(PanelRowInterface $row)
-    {
-        if (!$row->hasElement('submit')) {
-            $row->addElement(new DefaultSubmitElementInformation());
-        }
     }
 
     /**
@@ -559,7 +217,7 @@ class Builder
 
         $config->setDataProvider($container->getName());
 
-        $inputScreen = $this->getInputScreenDetails();
+        $inputScreen = $this->inputScreen;
 
         if ($inputScreen->isHierarchical()) {
             // Hierarchical mode - Records are displayed as tree (see site structure).
@@ -577,327 +235,11 @@ class Builder
             ->setCreatable($inputScreen->isCreatable())
             ->setDeletable($inputScreen->isDeletable());
 
-        $this->calculateConditions($container);
-    }
-
-    /**
-     * Parse the correct conditions.
-     *
-     * @param IMetaModelDataDefinition $container The data container.
-     *
-     * @return void
-     *
-     * @throws \InvalidArgumentException When the stored definition does not implement the correct interface.
-     */
-    protected function calculateConditions(IMetaModelDataDefinition $container)
-    {
-        if ($container->hasDefinition(ModelRelationshipDefinitionInterface::NAME)) {
-            $definition = $container->getDefinition(ModelRelationshipDefinitionInterface::NAME);
-        } else {
-            $definition = new DefaultModelRelationshipDefinition();
-
-            $container->setDefinition(ModelRelationshipDefinitionInterface::NAME, $definition);
-        }
-
-        if (!$definition instanceof ModelRelationshipDefinitionInterface) {
-            throw new \InvalidArgumentException('Search element does not implement the correct interface.');
-        }
-
         if ($this->getMetaModel()->hasVariants()) {
-            $this->calculateConditionsWithVariants($container, $definition);
-        } else {
-            $this->calculateConditionsWithoutVariants($container, $definition);
-        }
-    }
-
-    /**
-     * Parse the correct conditions for a MetaModel with variant support.
-     *
-     * @param IMetaModelDataDefinition             $container  The data container.
-     *
-     * @param ModelRelationshipDefinitionInterface $definition The relationship container.
-     *
-     * @return RootConditionInterface
-     */
-    protected function getRootCondition($container, $definition)
-    {
-        $rootProvider = $container->getName();
-
-        if (($relationship = $definition->getRootCondition()) === null) {
-            $relationship = new RootCondition();
-            $relationship
-                ->setSourceName($rootProvider);
-            $definition->setRootCondition($relationship);
-        }
-
-        return $relationship;
-    }
-
-    /**
-     * Parse the correct conditions for a MetaModel with variant support.
-     *
-     * @param IMetaModelDataDefinition             $container  The data container.
-     *
-     * @param ModelRelationshipDefinitionInterface $definition The relationship container.
-     *
-     * @return void
-     */
-    protected function addHierarchicalConditions(IMetaModelDataDefinition $container, $definition)
-    {
-        // Not hierarchical? Get out.
-        if ($container->getBasicDefinition()->getMode() !== BasicDefinitionInterface::MODE_HIERARCHICAL) {
+            ConditionBuilderWithVariants::calculateConditions($container, $this->inputScreen);
             return;
         }
-
-        $relationship = $this->getRootCondition($container, $definition);
-
-        // NOTE: this might bear problems when the definition will get serialized as the input value will not change.
-        if (Input::get('pid')) {
-            $parentValue = ModelId::fromSerialized(Input::get('pid'))->getId();
-        } else {
-            $parentValue = '0';
-        }
-
-        if (!$relationship->getSetters()) {
-            $relationship
-                ->setSetters(array(array('property' => 'pid', 'value' => $parentValue)));
-        }
-
-        $builder = FilterBuilder::fromArrayForRoot((array) $relationship->getFilterArray())->getFilter();
-
-        $builder->andPropertyEquals('pid', $parentValue);
-
-        $relationship
-            ->setFilterArray($builder->getAllAsArray());
-
-        $setter  = array(array('to_field' => 'pid', 'from_field' => 'id'));
-        $inverse = array();
-
-        /** @var ParentChildConditionInterface $relationship */
-        $relationship = $definition->getChildCondition($container->getName(), $container->getName());
-        if ($relationship === null) {
-            $relationship = new ParentChildCondition();
-            $relationship
-                ->setSourceName($container->getName())
-                ->setDestinationName($container->getName());
-            $definition->addChildCondition($relationship);
-        } else {
-            $setter  = array_merge_recursive($setter, $relationship->getSetters());
-            $inverse = array_merge_recursive($inverse, $relationship->getInverseFilterArray());
-        }
-
-        // For tl_ prefix, the only unique target can be the id?
-        // maybe load parent dc and scan for unique in config then.
-        $relationship
-            ->setFilterArray(
-                FilterBuilder::fromArray($relationship->getFilterArray())
-                    ->getFilter()
-                    ->andRemotePropertyEquals('pid', 'id')
-                    ->getAllAsArray()
-            )
-            ->setSetters($setter)
-            ->setInverseFilterArray($inverse);
-    }
-
-    /**
-     * Parse the correct conditions for a MetaModel with variant support.
-     *
-     * @param IMetaModelDataDefinition             $container  The data container.
-     *
-     * @param ModelRelationshipDefinitionInterface $definition The relationship container.
-     *
-     * @return void
-     */
-    protected function addParentCondition(IMetaModelDataDefinition $container, $definition)
-    {
-        $inputScreen = $this->getInputScreenDetails();
-
-        if ($inputScreen->isStandalone()) {
-            return;
-        }
-
-        $setter  = array(array('to_field' => 'pid', 'from_field' => 'id'));
-        $inverse = array();
-
-        /** @var ParentChildConditionInterface $relationship */
-        $relationship = $definition->getChildCondition($inputScreen->getParentTable(), $container->getName());
-        if (!$relationship instanceof ParentChildConditionInterface) {
-            $relationship = new ParentChildCondition();
-            $relationship
-                ->setSourceName($inputScreen->getParentTable())
-                ->setDestinationName($container->getName());
-            $definition->addChildCondition($relationship);
-        } else {
-            $setter  = array_merge_recursive($setter, $relationship->getSetters());
-            $inverse = array_merge_recursive($inverse, $relationship->getInverseFilterArray());
-        }
-
-        // For tl_ prefix, the only unique target can be the id?
-        // maybe load parent dc and scan for unique in config then.
-        $relationship
-            ->setFilterArray(
-                FilterBuilder::fromArray($relationship->getFilterArray())
-                    ->getFilter()
-                    ->andRemotePropertyEquals('pid', 'id')
-                    ->getAllAsArray()
-            )
-            ->setSetters($setter)
-            ->setInverseFilterArray($inverse);
-    }
-
-    /**
-     * Parse the correct conditions for a MetaModel with variant support.
-     *
-     * @param IMetaModelDataDefinition             $container  The data container.
-     *
-     * @param ModelRelationshipDefinitionInterface $definition The relationship container.
-     *
-     * @return void
-     */
-    protected function calculateConditionsWithVariants(IMetaModelDataDefinition $container, $definition)
-    {
-        // Basic conditions.
-        $this->addHierarchicalConditions($container, $definition);
-        $this->addParentCondition($container, $definition);
-
-        // Conditions for metamodels variants.
-        $relationship = $this->getRootCondition($container, $definition);
-        $relationship->setSetters(array_merge_recursive(
-            array(array('property' => 'varbase', 'value' => '1')),
-            $relationship->getSetters()
-        ));
-
-        $builder = FilterBuilder::fromArrayForRoot((array) $relationship->getFilterArray())->getFilter();
-
-        $builder->andPropertyEquals('varbase', 1);
-
-        $relationship->setFilterArray($builder->getAllAsArray());
-
-        $setter  = array(
-            array('to_field' => 'varbase', 'value' => '0'),
-            array('to_field' => 'vargroup', 'from_field' => 'vargroup')
-        );
-        $inverse = array();
-
-        /** @var ParentChildConditionInterface $relationship */
-        $relationship = $definition->getChildCondition($container->getName(), $container->getName());
-
-        if ($relationship === null) {
-            $relationship = new ParentChildCondition();
-            $relationship
-                ->setSourceName($container->getName())
-                ->setDestinationName($container->getName());
-            $definition->addChildCondition($relationship);
-        } else {
-            $setter  = array_merge_recursive($setter, $relationship->getSetters());
-            $inverse = array_merge_recursive($inverse, $relationship->getInverseFilterArray());
-        }
-
-        $relationship
-            ->setFilterArray(
-                FilterBuilder::fromArray($relationship->getFilterArray())
-                    ->getFilter()
-                    ->getBuilder()
-                    ->encapsulateOr()
-                        ->andRemotePropertyEquals('vargroup', 'vargroup')
-                        ->andRemotePropertyEquals('vargroup', 'id')
-                        ->andRemotePropertyEquals('varbase', 0, true)
-                    ->getAllAsArray()
-            )
-            ->setSetters($setter)
-            ->setInverseFilterArray($inverse);
-    }
-
-    /**
-     * Parse the correct conditions for a MetaModel with variant support.
-     *
-     * @param IMetaModelDataDefinition             $container  The data container.
-     *
-     * @param ModelRelationshipDefinitionInterface $definition The relationship container.
-     *
-     * @return void
-     *
-     * @throws \RuntimeException When the conditions can not be determined yet.
-     */
-    protected function calculateConditionsWithoutVariants(IMetaModelDataDefinition $container, $definition)
-    {
-        $inputScreen = $this->getInputScreenDetails();
-        if (!$inputScreen->isStandalone()) {
-            if ($container->getBasicDefinition()->getMode() == BasicDefinitionInterface::MODE_HIERARCHICAL) {
-                throw new \RuntimeException('Hierarchical mode with parent table is not supported yet.');
-            }
-        }
-
-        $this->addHierarchicalConditions($container, $definition);
-        $this->addParentCondition($container, $definition);
-    }
-
-    /**
-     * Create the data provider definition in the container if not already set.
-     *
-     * @param IMetaModelDataDefinition $container The data container.
-     *
-     * @return void
-     */
-    protected function parseDataProvider(IMetaModelDataDefinition $container)
-    {
-        $config = $this->getDataProviderDefinition($container);
-
-        // Check config if it already exists, if not, add it.
-        if (!$config->hasInformation($container->getName())) {
-            $providerInformation = new ContaoDataProviderInformation();
-            $providerInformation->setName($container->getName());
-            $config->addInformation($providerInformation);
-        } else {
-            $providerInformation = $config->getInformation($container->getName());
-        }
-
-        if ($providerInformation instanceof ContaoDataProviderInformation) {
-            $providerInformation
-                ->setTableName($container->getName())
-                ->setClassName('MetaModels\DcGeneral\Data\Driver')
-                ->setInitializationData(array(
-                    'source' => $container->getName(),
-                ))
-                ->setVersioningEnabled(false);
-            $container->getBasicDefinition()->setDataProvider($container->getName());
-        }
-
-        // If in hierarchical mode, set the root provider.
-        if ($container->getBasicDefinition()->getMode() == BasicDefinitionInterface::MODE_HIERARCHICAL) {
-            $container->getBasicDefinition()->setRootDataProvider($container->getName());
-        }
-
-        $inputScreen = $this->getInputScreenDetails();
-        // If not standalone, set the correct parent provider.
-        if (!$inputScreen->isStandalone()) {
-            // Check config if it already exists, if not, add it.
-            if (!$config->hasInformation($inputScreen->getParentTable())) {
-                $providerInformation = new ContaoDataProviderInformation();
-                $providerInformation->setName($inputScreen->getParentTable());
-                $config->addInformation($providerInformation);
-            } else {
-                $providerInformation = $config->getInformation($inputScreen->getParentTable());
-            }
-
-            if ($providerInformation instanceof ContaoDataProviderInformation) {
-                $providerInformation
-                    ->setTableName($inputScreen->getParentTable())
-                    ->setInitializationData(
-                        array(
-                            'source' => $inputScreen->getParentTable(),
-                        )
-                    );
-
-                // How can we honor other drivers? We do only check for MetaModels and legacy SQL here.
-                if (in_array($inputScreen->getParentTable(), $this->serviceContainer->getFactory()->collectNames())) {
-                    $providerInformation
-                        ->setClassName('MetaModels\DcGeneral\Data\Driver');
-                }
-
-                $container->getBasicDefinition()->setParentDataProvider($inputScreen->getParentTable());
-            }
-        }
+        ConditionBuilderWithoutVariants::calculateConditions($container, $this->inputScreen);
     }
 
     /**
@@ -948,7 +290,7 @@ class Builder
         }
 
         if (($listing->getRootIcon() === null)
-            && (($inputScreen = $this->getInputScreenDetails()) !== null)
+            && (($inputScreen = $this->inputScreen) !== null)
         ) {
             $icon = ToolboxFile::convertValueToPath($inputScreen->getIcon());
             // Determine image to use.
@@ -966,7 +308,7 @@ class Builder
         $this->parseListSorting($listing);
         $this->parseListLabel($container, $listing);
 
-        if ($inputScreen = $this->getInputScreenDetails()) {
+        if ($inputScreen = $this->inputScreen) {
             $listing->setShowColumns($inputScreen->isShowColumns());
             $renderSetting = $this
                 ->serviceContainer
@@ -1058,7 +400,7 @@ class Builder
      */
     protected function parseListSorting(ListingConfigInterface $listing)
     {
-        $inputScreen = $this->getInputScreenDetails();
+        $inputScreen = $this->inputScreen;
 
         $listing->setRootIcon($this->getBackendIcon($inputScreen->getIcon()));
 
@@ -1328,7 +670,7 @@ class Builder
         $event = new BuildMetaModelOperationsEvent(
             $this->getMetaModel(),
             $container,
-            $this->getInputScreenDetails(),
+            $this->inputScreen,
             $this
         );
         $this->serviceContainer->getEventDispatcher()->dispatch($event::NAME, $event);
@@ -1444,19 +786,18 @@ class Builder
             $container->setPropertiesDefinition($definition);
         }
 
-        $metaModel   = $this->getMetaModel();
-        $inputScreen = $this->getInputScreenDetails();
+        $metaModel = $this->getMetaModel();
 
         // If the current metamodels has variants add the varbase and vargroup to the definition.
         if ($metaModel->hasVariants()) {
-            $this->buildPropertyFromDca($definition, 'varbase', $inputScreen);
-            $this->buildPropertyFromDca($definition, 'vargroup', $inputScreen);
+            $this->buildPropertyFromDca($definition, 'varbase', $this->inputScreen);
+            $this->buildPropertyFromDca($definition, 'vargroup', $this->inputScreen);
         }
 
         foreach ($metaModel->getAttributes() as $attribute) {
-            $this->buildPropertyFromDca($definition, $attribute->getColName(), $inputScreen);
+            $this->buildPropertyFromDca($definition, $attribute->getColName(), $this->inputScreen);
 
-            $event = new BuildAttributeEvent($metaModel, $attribute, $container, $inputScreen, $this);
+            $event = new BuildAttributeEvent($metaModel, $attribute, $container, $this->inputScreen, $this);
             // Trigger BuildAttribute Event.
             $this->serviceContainer->getEventDispatcher()->dispatch($event::NAME, $event);
         }
@@ -1471,8 +812,7 @@ class Builder
      */
     protected function parsePalettes(IMetaModelDataDefinition $container)
     {
-        $inputScreen = $this->getInputScreenDetails();
-        $metaModel   = $this->getMetaModel();
+        $metaModel = $this->getMetaModel();
 
         if ($container->hasDefinition(PalettesDefinitionInterface::NAME)) {
             $palettesDefinition = $container->getDefinition(PalettesDefinitionInterface::NAME);
@@ -1487,7 +827,7 @@ class Builder
             ->setCondition(new DefaultPaletteCondition());
         $palettesDefinition->addPalette($palette);
 
-        foreach ($inputScreen->getLegends() as $legendName => $legend) {
+        foreach ($this->inputScreen->getLegends() as $legendName => $legend) {
             $paletteLegend = new Legend($legendName);
             $paletteLegend->setInitialVisibility($legend['visible']);
             $palette->addLegend($paletteLegend);
@@ -1497,7 +837,7 @@ class Builder
             foreach ($legend['properties'] as $propertyName) {
                 $property = new Property($propertyName);
                 $paletteLegend->addProperty($property);
-                $propInfo = $inputScreen->getProperty($propertyName);
+                $propInfo = $this->inputScreen->getProperty($propertyName);
 
                 $chain = new PropertyConditionChain();
                 $property->setEditableCondition($chain);
@@ -1518,7 +858,7 @@ class Builder
                         || (isset($extra['hideInput']) && $extra['hideInput']))
                 ));
 
-                $propertyConditions = $inputScreen->getConditionsFor($propertyName);
+                $propertyConditions = $this->inputScreen->getConditionsFor($propertyName);
                 if ($propertyConditions !== null) {
                     $chain->addCondition($propertyConditions);
                 }
@@ -1567,25 +907,5 @@ class Builder
         $extra['class'] = 'header_edit_all';
 
         $commands->addCommand($command);
-    }
-
-    /**
-     * Inject the service container into the data driver instances.
-     *
-     * @param DataProviderDefinitionInterface $providerDefinitions The definitions.
-     * @param EnvironmentInterface            $environment         The environment containing the providers.
-     *
-     * @return void
-     */
-    private function injectServiceContainerIntoDataDrivers($providerDefinitions, $environment)
-    {
-        foreach ($providerDefinitions as $provider) {
-            $providerInstance = $environment->getDataProvider($provider->getName());
-            if ($providerInstance instanceof Driver) {
-                $providerInstance->setBaseConfig(
-                    array_merge($provider->getInitializationData(), ['service-container' => $this->serviceContainer])
-                );
-            }
-        }
     }
 }
