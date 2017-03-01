@@ -208,10 +208,9 @@ class ItemRetriever
      */
     private function fetchAdditionalAttributes(array $ids, array $result)
     {
-        $attributeNames = array_diff(array_keys($this->attributes), array_keys($this->simpleAttributes));
-        $attributes     = array_filter($this->attributes, function ($attribute) use ($attributeNames) {
+        $attributes = array_filter($this->attributes, function ($attribute) {
             /** @var IAttribute $attribute */
-            return in_array($attribute->getColName(), $attributeNames);
+            return $attribute instanceof ITranslated || $attribute instanceof IComplex;
         });
 
         foreach ($attributes as $attributeName => $attribute) {
