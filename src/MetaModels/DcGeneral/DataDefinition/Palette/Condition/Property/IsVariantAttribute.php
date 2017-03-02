@@ -28,7 +28,10 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
 
 /**
- * Condition for the default palette.
+ * This condition matches as soon as all of the following apply:
+ * 1. the MetaModel supports variants.
+ * 2. the current item is not a variant base.
+ * 3. the attribute is not an invariant attribute.
  */
 class IsVariantAttribute implements PropertyConditionInterface
 {
