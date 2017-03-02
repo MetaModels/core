@@ -28,8 +28,6 @@ use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinition;
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinitionInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\BasicDefinitionInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultBasicDefinition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\DefaultModelFormatterConfig;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\GroupAndSortingInformationInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\ListingConfigInterface;
@@ -40,9 +38,8 @@ use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\ViewCombinations;
 use MetaModels\DcGeneral\DataDefinition\Definition\MetaModelDefinition;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
+use MetaModels\DcGeneral\DefinitionBuilder\BasicDefinitionBuilder;
 use MetaModels\DcGeneral\DefinitionBuilder\CommandBuilder;
-use MetaModels\DcGeneral\DefinitionBuilder\ConditionBuilderWithoutVariants;
-use MetaModels\DcGeneral\DefinitionBuilder\ConditionBuilderWithVariants;
 use MetaModels\DcGeneral\DefinitionBuilder\DataProviderBuilder;
 use MetaModels\DcGeneral\DefinitionBuilder\PaletteBuilder;
 use MetaModels\DcGeneral\DefinitionBuilder\PanelBuilder;
@@ -141,7 +138,9 @@ class Builder
         $this->parseMetaModelDefinition($container);
         $builder = new PropertyDefinitionBuilder($dispatcher);
         $builder->build($container, $this->inputScreen, $this);
-        $this->parseBasicDefinition($container);
+
+        $builder = new BasicDefinitionBuilder($dispatcher);
+        $builder->build($container, $this->inputScreen);
 
         $dataBuilder = new DataProviderBuilder($this->inputScreen, $this->serviceContainer->getFactory());
         $dataBuilder->parseDataProvider($container);
@@ -182,49 +181,6 @@ class Builder
         if (!$definition->hasActiveInputScreen()) {
             $definition->setActiveInputScreen($this->getViewCombinations()->getInputScreen($container->getName()));
         }
-    }
-
-    /**
-     * Parse the basic configuration and populate the definition.
-     *
-     * @param IMetaModelDataDefinition $container The data container.
-     *
-     * @return void
-     */
-    protected function parseBasicDefinition(IMetaModelDataDefinition $container)
-    {
-        if ($container->hasBasicDefinition()) {
-            $config = $container->getBasicDefinition();
-        } else {
-            $config = new DefaultBasicDefinition();
-            $container->setBasicDefinition($config);
-        }
-
-        $config->setDataProvider($container->getName());
-
-        $inputScreen = $this->inputScreen;
-
-        if ($inputScreen->isHierarchical()) {
-            // Hierarchical mode - Records are displayed as tree (see site structure).
-            $config->setMode(BasicDefinitionInterface::MODE_HIERARCHICAL);
-        } elseif ($inputScreen->isParented()) {
-            // Displays the child records of a parent record (see style sheets module).
-            $config->setMode(BasicDefinitionInterface::MODE_PARENTEDLIST);
-        } elseif ($inputScreen->isFlat()) {
-            // Flat mode.
-            $config->setMode(BasicDefinitionInterface::MODE_FLAT);
-        }
-
-        $config
-            ->setEditable($inputScreen->isEditable())
-            ->setCreatable($inputScreen->isCreatable())
-            ->setDeletable($inputScreen->isDeletable());
-
-        if ($this->getMetaModel()->hasVariants()) {
-            ConditionBuilderWithVariants::calculateConditions($container, $this->inputScreen);
-            return;
-        }
-        ConditionBuilderWithoutVariants::calculateConditions($container, $this->inputScreen);
     }
 
     /**
