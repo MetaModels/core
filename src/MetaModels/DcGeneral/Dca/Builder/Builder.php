@@ -30,18 +30,9 @@ use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2Ba
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\BasicDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultBasicDefinition;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultPalettesDefinition;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\PalettesDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\DefaultModelFormatterConfig;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\GroupAndSortingInformationInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\ListingConfigInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Palette\DefaultPaletteCondition;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\BooleanCondition;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Legend;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Palette;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
 use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
@@ -49,11 +40,11 @@ use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\ViewCombinations;
 use MetaModels\DcGeneral\DataDefinition\Definition\MetaModelDefinition;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
-use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\IsVariantAttribute;
 use MetaModels\DcGeneral\DefinitionBuilder\CommandBuilder;
 use MetaModels\DcGeneral\DefinitionBuilder\ConditionBuilderWithoutVariants;
 use MetaModels\DcGeneral\DefinitionBuilder\ConditionBuilderWithVariants;
 use MetaModels\DcGeneral\DefinitionBuilder\DataProviderBuilder;
+use MetaModels\DcGeneral\DefinitionBuilder\PaletteBuilder;
 use MetaModels\DcGeneral\DefinitionBuilder\PanelBuilder;
 use MetaModels\DcGeneral\DefinitionBuilder\PropertyDefinitionBuilder;
 use MetaModels\DcGeneral\Events\MetaModel\RenderItem;
@@ -161,7 +152,8 @@ class Builder
         $builder = new PanelBuilder($this->inputScreen);
         $builder->build($container);
 
-        $this->parsePalettes($container);
+        $builder = new PaletteBuilder();
+        $builder->build($container, $this->inputScreen, $this->translator);
 
         // Attach renderer to event.
         RenderItem::register($dispatcher);
@@ -450,74 +442,6 @@ class Builder
 
         if (!$formatter->getFormat()) {
             $formatter->setFormat(str_repeat('%s ', count($formatter->getPropertyNames())));
-        }
-    }
-
-    /**
-     * Parse the palettes from the input screen into the data container.
-     *
-     * @param IMetaModelDataDefinition $container The data container.
-     *
-     * @return void
-     */
-    protected function parsePalettes(IMetaModelDataDefinition $container)
-    {
-        $metaModel = $this->getMetaModel();
-
-        if ($container->hasDefinition(PalettesDefinitionInterface::NAME)) {
-            $palettesDefinition = $container->getDefinition(PalettesDefinitionInterface::NAME);
-        } else {
-            $palettesDefinition = new DefaultPalettesDefinition();
-            $container->setDefinition(PalettesDefinitionInterface::NAME, $palettesDefinition);
-        }
-
-        $palette = new Palette();
-        $palette
-            ->setName('default')
-            ->setCondition(new DefaultPaletteCondition());
-        $palettesDefinition->addPalette($palette);
-
-        foreach ($this->inputScreen->getLegends() as $legendName => $legend) {
-            $paletteLegend = new Legend($legendName);
-            $paletteLegend->setInitialVisibility($legend['visible']);
-            $palette->addLegend($paletteLegend);
-
-            $this->translator->setValue($legendName . '_legend', $legend['name'], $container->getName());
-
-            foreach ($legend['properties'] as $propertyName) {
-                $property = new Property($propertyName);
-                $paletteLegend->addProperty($property);
-                $propInfo = $this->inputScreen->getProperty($propertyName);
-
-                $chain = new PropertyConditionChain();
-                $property->setEditableCondition($chain);
-
-                $chain->addCondition(new BooleanCondition(
-                    !(isset($propInfo['info']['readonly']) && $propInfo['info']['readonly'])
-                ));
-
-                if ($metaModel->hasVariants() && !$metaModel->getAttribute($propertyName)->get('isvariant')) {
-                    $chain->addCondition(new PropertyValueCondition('varbase', 1));
-                }
-
-                $extra = $propInfo['info'];
-                $chain = new PropertyConditionChain();
-                $property->setVisibleCondition($chain);
-                $chain->addCondition(new BooleanCondition(
-                    !((isset($extra['doNotShow']) && $extra['doNotShow'])
-                        || (isset($extra['hideInput']) && $extra['hideInput']))
-                ));
-
-                $propertyConditions = $this->inputScreen->getConditionsFor($propertyName);
-                if ($propertyConditions !== null) {
-                    $chain->addCondition($propertyConditions);
-                }
-
-                // If variants, do show only if allowed.
-                if ($metaModel->hasVariants()) {
-                    $chain->addCondition(new IsVariantAttribute());
-                }
-            }
         }
     }
 }
