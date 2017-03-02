@@ -66,7 +66,7 @@ class DataProviderBuilder
      *
      * @return void
      */
-    public function parseDataProvider(IMetaModelDataDefinition $container)
+    public function build(IMetaModelDataDefinition $container)
     {
         $config = $this->getDataProviderDefinition($container);
 

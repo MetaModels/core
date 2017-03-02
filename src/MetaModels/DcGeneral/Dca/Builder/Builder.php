@@ -131,7 +131,7 @@ class Builder
         $builder->build($container, $this->inputScreen);
 
         $dataBuilder = new DataProviderBuilder($this->inputScreen, $this->serviceContainer->getFactory());
-        $dataBuilder->parseDataProvider($container);
+        $dataBuilder->build($container);
 
         $builder = new Contao2BackendViewDefinitionBuilder($dispatcher, $this->serviceContainer->getRenderSettingFactory());
         $builder->build($container, $this->inputScreen);
