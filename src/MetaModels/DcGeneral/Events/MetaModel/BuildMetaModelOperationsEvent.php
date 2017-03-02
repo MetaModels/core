@@ -66,7 +66,7 @@ class BuildMetaModelOperationsEvent extends AbstractContainerAwareEvent
      *
      * @param IInputScreen       $inputScreen   The input screen in use.
      *
-     * @param Builder            $builder       The data definition builder calling.
+     * @param Builder            $builder       The data definition builder calling - deprecated.
      */
     public function __construct(
         IMetaModel $metaModel,
@@ -108,6 +108,7 @@ class BuildMetaModelOperationsEvent extends AbstractContainerAwareEvent
      */
     public function getBuilder()
     {
+        trigger_error('The property "builder" is deprecated and will get removed.', E_USER_DEPRECATED);
         return $this->builder;
     }
 }

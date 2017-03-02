@@ -32,15 +32,9 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\BasicDefinitionI
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultBasicDefinition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultPalettesDefinition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\PalettesDefinitionInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Command;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CommandCollectionInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CommandInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CopyCommand;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CutCommand;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\DefaultModelFormatterConfig;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\GroupAndSortingInformationInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\ListingConfigInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\SelectCommand;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Palette\DefaultPaletteCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\BooleanCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
@@ -56,12 +50,12 @@ use MetaModels\BackendIntegration\ViewCombinations;
 use MetaModels\DcGeneral\DataDefinition\Definition\MetaModelDefinition;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\IsVariantAttribute;
+use MetaModels\DcGeneral\DefinitionBuilder\CommandBuilder;
 use MetaModels\DcGeneral\DefinitionBuilder\ConditionBuilderWithoutVariants;
 use MetaModels\DcGeneral\DefinitionBuilder\ConditionBuilderWithVariants;
 use MetaModels\DcGeneral\DefinitionBuilder\DataProviderBuilder;
 use MetaModels\DcGeneral\DefinitionBuilder\PanelBuilder;
 use MetaModels\DcGeneral\DefinitionBuilder\PropertyDefinitionBuilder;
-use MetaModels\DcGeneral\Events\MetaModel\BuildMetaModelOperationsEvent;
 use MetaModels\DcGeneral\Events\MetaModel\RenderItem;
 use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModelsServiceContainer;
@@ -162,6 +156,8 @@ class Builder
         $dataBuilder->parseDataProvider($container);
 
         $this->parseBackendView($container);
+        $builder = new CommandBuilder($dispatcher, $this->getViewCombinations());
+        $builder->build($container, $this->inputScreen, $this);
         $builder = new PanelBuilder($this->inputScreen);
         $builder->build($container);
 
@@ -264,8 +260,6 @@ class Builder
         }
 
         $this->parseListing($container, $view);
-        $this->addSelectCommand($view, $container);
-        $this->parseModelOperations($view, $container);
     }
 
 
@@ -460,208 +454,6 @@ class Builder
     }
 
     /**
-     * Retrieve or create a command instance of the given name.
-     *
-     * @param CommandCollectionInterface $collection    The command collection.
-     *
-     * @param string                     $operationName The name of the operation.
-     *
-     * @return CommandInterface
-     */
-    protected function getCommandInstance(CommandCollectionInterface $collection, $operationName)
-    {
-        if ($collection->hasCommandNamed($operationName)) {
-            $command = $collection->getCommandNamed($operationName);
-        } else {
-            switch ($operationName) {
-                case 'cut':
-                    $command = new CutCommand();
-                    break;
-
-                case 'copy':
-                    $command = new CopyCommand();
-                    break;
-
-                default:
-                    $command = new Command();
-            }
-
-            $command->setName($operationName);
-            $collection->addCommand($command);
-        }
-
-        return $command;
-    }
-
-    /**
-     * Build a command into the the command collection.
-     *
-     * @param CommandCollectionInterface $collection      The command collection.
-     *
-     * @param string                     $operationName   The operation name.
-     *
-     * @param array                      $queryParameters The query parameters for the operation.
-     *
-     * @param string                     $icon            The icon to use in the backend.
-     *
-     * @param array                      $extraValues     The extra values for the command.
-     *
-     * @return Builder
-     */
-    protected function createCommand(
-        CommandCollectionInterface $collection,
-        $operationName,
-        $queryParameters,
-        $icon,
-        $extraValues
-    ) {
-        $command    = $this->getCommandInstance($collection, $operationName);
-        $parameters = $command->getParameters();
-        foreach ($queryParameters as $name => $value) {
-            if (!isset($parameters[$name])) {
-                $parameters[$name] = $value;
-            }
-        }
-
-        if (!$command->getLabel()) {
-            $command->setLabel($operationName . '.0');
-            if (isset($extraValues['label'])) {
-                $command->setLabel($extraValues['label']);
-            }
-        }
-
-        if (!$command->getDescription()) {
-            $command->setDescription($operationName . '.1');
-            if (isset($extraValues['description'])) {
-                $command->setDescription($extraValues['description']);
-            }
-        }
-
-        $extra         = $command->getExtra();
-        $extra['icon'] = $icon;
-
-        foreach ($extraValues as $name => $value) {
-            if (!isset($extra[$name])) {
-                $extra[$name] = $value;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Parse the defined model scoped operations and populate the definition.
-     *
-     * @param Contao2BackendViewDefinitionInterface $view      The backend view information.
-     *
-     * @param IMetaModelDataDefinition              $container The data container.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    protected function parseModelOperations(
-        Contao2BackendViewDefinitionInterface $view,
-        IMetaModelDataDefinition $container
-    ) {
-        $collection = $view->getModelCommands();
-        $this->createCommand(
-            $collection,
-            'edit',
-            array('act' => 'edit'),
-            'edit.gif',
-            array()
-        )
-        ->createCommand(
-            $collection,
-            'copy',
-            array('act' => ''),
-            'copy.gif',
-            array('attributes' => 'onclick="Backend.getScrollOffset();"')
-        )
-        ->createCommand(
-            $collection,
-            'cut',
-            array('act' => 'paste', 'mode' => 'cut'),
-            'cut.gif',
-            array(
-                'attributes' => 'onclick="Backend.getScrollOffset();"'
-            )
-        )
-        ->createCommand(
-            $collection,
-            'delete',
-            array('act' => 'delete'),
-            'delete.gif',
-            array(
-                'attributes' => sprintf(
-                    'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
-                    // FIXME: we need the translation manager here.
-                    $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
-                )
-            )
-        )
-        ->createCommand(
-            $collection,
-            'show',
-            array('act' => 'show'),
-            'show.gif',
-            array()
-        );
-
-        if ($this->getMetaModel()->hasVariants()) {
-            $this->createCommand(
-                $collection,
-                'createvariant',
-                array('act' => 'createvariant'),
-                'system/modules/metamodels/assets/images/icons/variants.png',
-                array()
-            );
-        }
-
-        // Check if we have some children.
-        foreach ($this->getViewCombinations()->getParentedInputScreens($container->getName()) as $screen) {
-            $metaModel  = $screen->getMetaModel();
-            $arrCaption = array(
-                '',
-                sprintf(
-                    $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'],
-                    $metaModel->getName()
-                )
-            );
-
-            foreach ($screen->getBackendCaption() as $arrLangEntry) {
-                if ($arrLangEntry['label'] != '' && $arrLangEntry['langcode'] == $GLOBALS['TL_LANGUAGE']) {
-                    $arrCaption = array($arrLangEntry['description'], $arrLangEntry['label']);
-                }
-            }
-
-            $this->createCommand(
-                $collection,
-                'edit_' . $metaModel->getTableName(),
-                array('table' => $metaModel->getTableName()),
-                self::getBackendIcon($screen->getIcon()),
-                array
-                (
-                    'attributes'  => 'onclick="Backend.getScrollOffset();"',
-                    'label'       => $arrCaption[0],
-                    'description' => $arrCaption[1],
-                    'idparam'     => 'pid'
-                )
-            );
-        }
-
-        $event = new BuildMetaModelOperationsEvent(
-            $this->getMetaModel(),
-            $container,
-            $this->inputScreen,
-            $this
-        );
-        $this->serviceContainer->getEventDispatcher()->dispatch($event::NAME, $event);
-    }
-
-    /**
      * Parse the palettes from the input screen into the data container.
      *
      * @param IMetaModelDataDefinition $container The data container.
@@ -727,43 +519,5 @@ class Builder
                 }
             }
         }
-    }
-
-    /**
-     * Add the select command to the backend view definition.
-     *
-     * @param Contao2BackendViewDefinitionInterface $view      The backend view definition.
-     * @param IMetaModelDataDefinition              $container The metamodel data definition.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    protected function addSelectCommand(Contao2BackendViewDefinitionInterface $view, $container)
-    {
-        /** @var BasicDefinitionInterface $definition */
-        $definition = $container->getBasicDefinition();
-
-        // No ations allowed. Don't add the select command button.
-        if (!$definition->isEditable() && !$definition->isDeletable() && !$definition->isCreatable()) {
-            return;
-        }
-
-        $commands = $view->getGlobalCommands();
-        $command  = new SelectCommand();
-
-        $command
-            ->setName('all')
-            ->setLabel('MSC.all.0')
-            ->setDescription('MSC.all.1');
-
-        $parameters        = $command->getParameters();
-        $parameters['act'] = 'select';
-
-        $extra          = $command->getExtra();
-        $extra['class'] = 'header_edit_all';
-
-        $commands->addCommand($command);
     }
 }
