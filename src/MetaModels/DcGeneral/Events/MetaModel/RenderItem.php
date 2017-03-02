@@ -121,7 +121,7 @@ class RenderItem
             )
         );
 
-        $event->setArgs(array($template->parse('html5')));
+        $event->setLabel('%s')->setArgs(array($template->parse('html5')));
     }
 
     /**
