@@ -28,8 +28,6 @@ use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
-use MetaModels\BackendIntegration\InputScreen\IInputScreen;
-use MetaModels\BackendIntegration\ViewCombinations;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\DefinitionBuilder\BasicDefinitionBuilder;
 use MetaModels\DcGeneral\DefinitionBuilder\CommandBuilder;
@@ -65,27 +63,14 @@ class Builder
     private $serviceContainer;
 
     /**
-     * The input screen to use.
-     *
-     * @var IInputScreen
-     */
-    private $inputScreen;
-
-    /**
      * Create a new instance and instantiate the translator.
      *
      * @param IMetaModelsServiceContainer $serviceContainer The name of the MetaModel being created.
-     *
-     * @param IInputScreen                $inputScreen      The input screen to use.
-     *
-     * @param int                         $renderSetting    The render setting.
      */
-    public function __construct($serviceContainer, $inputScreen, $renderSetting)
+    public function __construct($serviceContainer)
     {
         $this->serviceContainer = $serviceContainer;
-        $this->inputScreen      = $inputScreen;
         $this->translator       = new StaticTranslator();
-        $this->renderSetting    = $renderSetting;
     }
 
     /**
@@ -96,17 +81,6 @@ class Builder
     public function getTranslator()
     {
         return $this->translator;
-    }
-
-    /**
-    /**
-     * Retrieve the MetaModel.
-     *
-     * @return ViewCombinations|null
-     */
-    protected function getViewCombinations()
-    {
-        return $this->serviceContainer->getService('metamodels-view-combinations');
     }
 
     /**
@@ -121,28 +95,31 @@ class Builder
         $dispatcher = $this->serviceContainer->getEventDispatcher();
         $container  = $event->getContainer();
         /** @var $container IMetaModelDataDefinition */
-        $builder = new MetaModelDefinitionBuilder($this->getViewCombinations());
+        $viewCombinations = $this->serviceContainer->getService('metamodels-view-combinations');
+        $inputScreen      = $viewCombinations->getInputScreenDetails($container->getName());
+
+        $builder = new MetaModelDefinitionBuilder($viewCombinations);
         $builder->build($container);
 
         $builder = new PropertyDefinitionBuilder($dispatcher);
-        $builder->build($container, $this->inputScreen, $this);
+        $builder->build($container, $inputScreen, $this);
 
         $builder = new BasicDefinitionBuilder($dispatcher);
-        $builder->build($container, $this->inputScreen);
+        $builder->build($container, $inputScreen);
 
-        $dataBuilder = new DataProviderBuilder($this->inputScreen, $this->serviceContainer->getFactory());
+        $dataBuilder = new DataProviderBuilder($inputScreen, $this->serviceContainer->getFactory());
         $dataBuilder->build($container);
 
         $builder = new Contao2BackendViewDefinitionBuilder($dispatcher, $this->serviceContainer->getRenderSettingFactory());
-        $builder->build($container, $this->inputScreen);
+        $builder->build($container, $inputScreen);
 
-        $builder = new CommandBuilder($dispatcher, $this->getViewCombinations());
-        $builder->build($container, $this->inputScreen, $this);
-        $builder = new PanelBuilder($this->inputScreen);
+        $builder = new CommandBuilder($dispatcher, $viewCombinations);
+        $builder->build($container, $inputScreen, $this);
+        $builder = new PanelBuilder($inputScreen);
         $builder->build($container);
 
         $builder = new PaletteBuilder();
-        $builder->build($container, $this->inputScreen, $this->translator);
+        $builder->build($container, $inputScreen, $this->translator);
 
         // Attach renderer to event.
         RenderItem::register($dispatcher);
