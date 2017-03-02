@@ -36,11 +36,11 @@ use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\ViewCombinations;
-use MetaModels\DcGeneral\DataDefinition\Definition\MetaModelDefinition;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\DefinitionBuilder\BasicDefinitionBuilder;
 use MetaModels\DcGeneral\DefinitionBuilder\CommandBuilder;
 use MetaModels\DcGeneral\DefinitionBuilder\DataProviderBuilder;
+use MetaModels\DcGeneral\DefinitionBuilder\MetaModelDefinitionBuilder;
 use MetaModels\DcGeneral\DefinitionBuilder\PaletteBuilder;
 use MetaModels\DcGeneral\DefinitionBuilder\PanelBuilder;
 use MetaModels\DcGeneral\DefinitionBuilder\PropertyDefinitionBuilder;
@@ -135,7 +135,9 @@ class Builder
         $dispatcher = $this->serviceContainer->getEventDispatcher();
         $container  = $event->getContainer();
         /** @var $container IMetaModelDataDefinition */
-        $this->parseMetaModelDefinition($container);
+        $builder = new MetaModelDefinitionBuilder($this->getViewCombinations());
+        $builder->build($container);
+
         $builder = new PropertyDefinitionBuilder($dispatcher);
         $builder->build($container, $this->inputScreen, $this);
 
@@ -156,31 +158,6 @@ class Builder
 
         // Attach renderer to event.
         RenderItem::register($dispatcher);
-    }
-
-    /**
-     * Parse the basic configuration and populate the definition.
-     *
-     * @param IMetaModelDataDefinition $container The data container.
-     *
-     * @return void
-     */
-    protected function parseMetaModelDefinition(IMetaModelDataDefinition $container)
-    {
-        if ($container->hasMetaModelDefinition()) {
-            $definition = $container->getMetaModelDefinition();
-        } else {
-            $definition = new MetaModelDefinition();
-            $container->setMetaModelDefinition($definition);
-        }
-
-        if (!$definition->hasActiveRenderSetting()) {
-            $definition->setActiveRenderSetting($this->getViewCombinations()->getRenderSetting($container->getName()));
-        }
-
-        if (!$definition->hasActiveInputScreen()) {
-            $definition->setActiveInputScreen($this->getViewCombinations()->getInputScreen($container->getName()));
-        }
     }
 
     /**
