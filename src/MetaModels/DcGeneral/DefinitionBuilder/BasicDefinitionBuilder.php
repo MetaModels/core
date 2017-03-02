@@ -22,8 +22,8 @@ namespace MetaModels\DcGeneral\DefinitionBuilder;
 
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\BasicDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultBasicDefinition;
-use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
+use MetaModels\Helper\ViewCombinations;
 
 /**
  * This class handles building of the basic definition
@@ -31,15 +31,33 @@ use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 class BasicDefinitionBuilder
 {
     /**
+     * The view combinations.
+     *
+     * @var ViewCombinations
+     */
+    private $viewCombinations;
+
+    /**
+     * Create a new instance.
+     *
+     * @param ViewCombinations $viewCombinations The view combinations.
+     */
+    public function __construct(ViewCombinations $viewCombinations)
+    {
+        $this->viewCombinations = $viewCombinations;
+    }
+
+    /**
      * Build the definition.
      *
-     * @param IMetaModelDataDefinition $container   The container being built.
-     * @param IInputScreen             $inputScreen The input screen.
+     * @param IMetaModelDataDefinition $container The container being built.
      *
      * @return void
      */
-    public function build(IMetaModelDataDefinition $container, IInputScreen $inputScreen)
+    public function build(IMetaModelDataDefinition $container)
     {
+        $inputScreen = $this->viewCombinations->getInputScreenDetails($container->getName());
+
         $config = $this->getOrCreateBasicDefinition($container);
 
         $config->setDataProvider($container->getName());

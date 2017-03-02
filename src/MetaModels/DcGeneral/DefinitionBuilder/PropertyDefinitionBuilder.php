@@ -30,6 +30,7 @@ use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\Dca\Builder\Builder;
 use MetaModels\DcGeneral\Events\MetaModel\BuildAttributeEvent;
+use MetaModels\Helper\ViewCombinations;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -45,26 +46,36 @@ class PropertyDefinitionBuilder
     private $dispatcher;
 
     /**
+     * The view combinations.
+     *
+     * @var ViewCombinations
+     */
+    private $viewCombinations;
+
+    /**
      * Create a new instance.
      *
-     * @param EventDispatcherInterface $dispatcher The event dispatcher.
+     * @param EventDispatcherInterface $dispatcher       The event dispatcher.
+     * @param ViewCombinations         $viewCombinations The view combinations.
      */
-    public function __construct(EventDispatcherInterface $dispatcher)
+    public function __construct(EventDispatcherInterface $dispatcher, ViewCombinations $viewCombinations)
     {
-        $this->dispatcher = $dispatcher;
+        $this->dispatcher       = $dispatcher;
+        $this->viewCombinations = $viewCombinations;
     }
 
     /**
      * Build the property definition.
      *
-     * @param IMetaModelDataDefinition $container   The data container.
-     * @param IInputScreen             $inputScreen The input screen.
-     * @param Builder                  $builder     Deprecated - the builder instance to use in events.
+     * @param IMetaModelDataDefinition $container The data container.
+     * @param Builder                  $builder   Deprecated - the builder instance to use in events.
      *
      * @return void
      */
-    public function build(IMetaModelDataDefinition $container, IInputScreen $inputScreen, Builder $builder)
+    public function build(IMetaModelDataDefinition $container, Builder $builder)
     {
+        $inputScreen = $this->viewCombinations->getInputScreenDetails($container->getName());
+
         if ($container->hasPropertiesDefinition()) {
             $definition = $container->getPropertiesDefinition();
         } else {

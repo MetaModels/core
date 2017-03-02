@@ -32,6 +32,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\PanelRowCol
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\PanelRowInterface;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
+use MetaModels\Helper\ViewCombinations;
 
 /**
  * This class handles the panel building.
@@ -39,7 +40,14 @@ use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 class PanelBuilder
 {
     /**
-     * The input screen to use.
+     * The view combinations.
+     *
+     * @var ViewCombinations
+     */
+    private $viewCombinations;
+
+    /**
+     * The input screen to use (only set during build phase).
      *
      * @var IInputScreen
      */
@@ -48,11 +56,11 @@ class PanelBuilder
     /**
      * Create a new instance.
      *
-     * @param IInputScreen $inputScreen The input screen.
+     * @param ViewCombinations $viewCombinations The view combinations.
      */
-    public function __construct(IInputScreen $inputScreen)
+    public function __construct(ViewCombinations $viewCombinations)
     {
-        $this->inputScreen = $inputScreen;
+        $this->viewCombinations = $viewCombinations;
     }
 
     /**
@@ -64,6 +72,8 @@ class PanelBuilder
      */
     public function build(IMetaModelDataDefinition $container)
     {
+        $this->inputScreen = $this->viewCombinations->getInputScreenDetails($container->getName());
+
         // Check if we have a BackendViewDef.
         if ($container->hasDefinition(Contao2BackendViewDefinitionInterface::NAME)) {
             /** @var Contao2BackendViewDefinitionInterface $view */
@@ -108,6 +118,7 @@ class PanelBuilder
         }
 
         $this->ensureSubmitElement($panelRows);
+        $this->inputScreen = null;
     }
 
     /**

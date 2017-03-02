@@ -89,14 +89,13 @@ class CommandBuilder
      * Parse and build the backend view definition for the old Contao2 backend view.
      *
      * @param IMetaModelDataDefinition $container   The data container.
-     * @param IInputScreen             $inputScreen The input screen.
      * @param Builder                  $builder     Deprecated - the builder instance to use in events.
      *
      * @throws DcGeneralInvalidArgumentException When the contained view definition is of invalid type.
      *
      * @return void
      */
-    public function build(IMetaModelDataDefinition $container, IInputScreen $inputScreen, Builder $builder)
+    public function build(IMetaModelDataDefinition $container, Builder $builder)
     {
         if ($container->hasDefinition(Contao2BackendViewDefinitionInterface::NAME)) {
             $view = $container->getDefinition(Contao2BackendViewDefinitionInterface::NAME);
@@ -112,7 +111,7 @@ class CommandBuilder
         }
 
         $this->container   = $container;
-        $this->inputScreen = $inputScreen;
+        $this->inputScreen = $inputScreen = $this->viewCombinations->getInputScreenDetails($container->getName());
         $this->addEditMultipleCommand($view);
         $this->parseModelOperations($view);
         $this->container   = null;

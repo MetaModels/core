@@ -34,6 +34,7 @@ use ContaoCommunityAlliance\Translator\StaticTranslator;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\IsVariantAttribute;
+use MetaModels\Helper\ViewCombinations;
 
 /**
  * This class takes care of the palette building.
@@ -41,16 +42,34 @@ use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\IsVariantAttr
 class PaletteBuilder
 {
     /**
+     * The view combinations.
+     *
+     * @var ViewCombinations
+     */
+    private $viewCombinations;
+
+    /**
+     * Create a new instance.
+     *
+     * @param ViewCombinations $viewCombinations The view combinations.
+     */
+    public function __construct(ViewCombinations $viewCombinations)
+    {
+        $this->viewCombinations = $viewCombinations;
+    }
+
+    /**
      * Parse and build the backend view definition for the old Contao2 backend view.
      *
-     * @param IMetaModelDataDefinition $container   The data container.
-     * @param IInputScreen             $inputScreen The input screen.
-     * @param StaticTranslator         $translator  The translator (needed for legend captions).
+     * @param IMetaModelDataDefinition $container  The data container.
+     * @param StaticTranslator         $translator The translator (needed for legend captions).
      *
      * @return void
      */
-    public function build(IMetaModelDataDefinition $container, IInputScreen $inputScreen, StaticTranslator $translator)
+    public function build(IMetaModelDataDefinition $container, StaticTranslator $translator)
     {
+        $inputScreen = $this->viewCombinations->getInputScreenDetails($container->getName());
+
         $variantHandling    = $inputScreen->getMetaModel()->hasVariants();
         $palettesDefinition = $this->getOrCreatePaletteDefinition($container);
 

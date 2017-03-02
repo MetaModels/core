@@ -24,8 +24,8 @@ use ContaoCommunityAlliance\DcGeneral\Contao\Dca\ContaoDataProviderInformation;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\BasicDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DataProviderDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultDataProviderDefinition;
-use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
+use MetaModels\Helper\ViewCombinations;
 use MetaModels\IFactory;
 
 /**
@@ -34,11 +34,11 @@ use MetaModels\IFactory;
 class DataProviderBuilder
 {
     /**
-     * The input screen to use.
+     * The view combinations.
      *
-     * @var IInputScreen
+     * @var ViewCombinations
      */
-    private $inputScreen;
+    private $viewCombinations;
 
     /**
      * The factory to use.
@@ -50,13 +50,13 @@ class DataProviderBuilder
     /**
      * Create a new instance.
      *
-     * @param IInputScreen $inputScreen The input screen.
-     * @param IFactory     $factory     The factory.
+     * @param ViewCombinations $viewCombinations The view combinations.
+     * @param IFactory         $factory          The factory.
      */
-    public function __construct(IInputScreen $inputScreen, IFactory $factory)
+    public function __construct(ViewCombinations $viewCombinations, IFactory $factory)
     {
-        $this->inputScreen = $inputScreen;
-        $this->factory     = $factory;
+        $this->viewCombinations = $viewCombinations;
+        $this->factory          = $factory;
     }
 
     /**
@@ -68,6 +68,8 @@ class DataProviderBuilder
      */
     public function build(IMetaModelDataDefinition $container)
     {
+        $inputScreen = $this->viewCombinations->getInputScreenDetails($container->getName());
+
         $config = $this->getDataProviderDefinition($container);
 
         // Check config if it already exists, if not, add it.
@@ -96,8 +98,8 @@ class DataProviderBuilder
         }
 
         // If not standalone, set the correct parent provider.
-        if (!$this->inputScreen->isStandalone()) {
-            $parentTable = $this->inputScreen->getParentTable();
+        if (!$inputScreen->isStandalone()) {
+            $parentTable = $inputScreen->getParentTable();
             // Check config if it already exists, if not, add it.
             if (!$config->hasInformation($parentTable)) {
                 $providerInformation = new ContaoDataProviderInformation();

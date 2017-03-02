@@ -96,30 +96,33 @@ class Builder
         $container  = $event->getContainer();
         /** @var $container IMetaModelDataDefinition */
         $viewCombinations = $this->serviceContainer->getService('metamodels-view-combinations');
-        $inputScreen      = $viewCombinations->getInputScreenDetails($container->getName());
 
         $builder = new MetaModelDefinitionBuilder($viewCombinations);
         $builder->build($container);
 
-        $builder = new PropertyDefinitionBuilder($dispatcher);
-        $builder->build($container, $inputScreen, $this);
+        $builder = new PropertyDefinitionBuilder($dispatcher, $viewCombinations);
+        $builder->build($container, $this);
 
-        $builder = new BasicDefinitionBuilder($dispatcher);
-        $builder->build($container, $inputScreen);
-
-        $dataBuilder = new DataProviderBuilder($inputScreen, $this->serviceContainer->getFactory());
-        $dataBuilder->build($container);
-
-        $builder = new Contao2BackendViewDefinitionBuilder($dispatcher, $this->serviceContainer->getRenderSettingFactory());
-        $builder->build($container, $inputScreen);
-
-        $builder = new CommandBuilder($dispatcher, $viewCombinations);
-        $builder->build($container, $inputScreen, $this);
-        $builder = new PanelBuilder($inputScreen);
+        $builder = new BasicDefinitionBuilder($viewCombinations);
         $builder->build($container);
 
-        $builder = new PaletteBuilder();
-        $builder->build($container, $inputScreen, $this->translator);
+        $dataBuilder = new DataProviderBuilder($viewCombinations, $this->serviceContainer->getFactory());
+        $dataBuilder->build($container);
+
+        $builder = new Contao2BackendViewDefinitionBuilder(
+            $viewCombinations,
+            $dispatcher,
+            $this->serviceContainer->getRenderSettingFactory()
+        );
+        $builder->build($container);
+
+        $builder = new CommandBuilder($dispatcher, $viewCombinations);
+        $builder->build($container, $this);
+        $builder = new PanelBuilder($viewCombinations);
+        $builder->build($container);
+
+        $builder = new PaletteBuilder($viewCombinations);
+        $builder->build($container, $this->translator);
 
         // Attach renderer to event.
         RenderItem::register($dispatcher);

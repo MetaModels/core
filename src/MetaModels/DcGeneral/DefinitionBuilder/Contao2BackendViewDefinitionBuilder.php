@@ -33,6 +33,7 @@ use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\InputScreen\IInputScreenGroupingAndSorting;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\Helper\ToolboxFile;
+use MetaModels\Helper\ViewCombinations;
 use MetaModels\IMetaModel;
 use MetaModels\Render\Setting\IRenderSettingFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -42,6 +43,13 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Contao2BackendViewDefinitionBuilder
 {
+    /**
+     * The view combinations.
+     *
+     * @var ViewCombinations
+     */
+    private $viewCombinations;
+
     /**
      * The event dispatcher.
      *
@@ -87,11 +95,16 @@ class Contao2BackendViewDefinitionBuilder
     /**
      * Create a new instance.
      *
+     * @param ViewCombinations         $viewCombinations     The view combinations.
      * @param EventDispatcherInterface $dispatcher           The event dispatcher.
      * @param IRenderSettingFactory    $renderSettingFactory The render setting factory.
      */
-    public function __construct(EventDispatcherInterface $dispatcher, IRenderSettingFactory $renderSettingFactory)
-    {
+    public function __construct(
+        ViewCombinations $viewCombinations,
+        EventDispatcherInterface $dispatcher,
+        IRenderSettingFactory $renderSettingFactory
+    ) {
+        $this->viewCombinations     = $viewCombinations;
         $this->dispatcher           = $dispatcher;
         $this->renderSettingFactory = $renderSettingFactory;
     }
@@ -99,19 +112,18 @@ class Contao2BackendViewDefinitionBuilder
     /**
      * Parse and build the backend view definition for the old Contao2 backend view.
      *
-     * @param IMetaModelDataDefinition $container   The data container.
-     * @param IInputScreen             $inputScreen The input screen.
+     * @param IMetaModelDataDefinition $container The data container.
      *
      * @throws DcGeneralInvalidArgumentException When the contained view definition is of invalid type.
      *
      * @return void
      */
-    public function build(IMetaModelDataDefinition $container, IInputScreen $inputScreen)
+    public function build(IMetaModelDataDefinition $container)
     {
         $this->container   = $container;
         $this->definition  = $this->getOrCreateDefinition();
-        $this->inputScreen = $inputScreen;
-        $this->metaModel   = $inputScreen->getMetaModel();
+        $this->inputScreen = $this->viewCombinations->getInputScreenDetails($container->getName());
+        $this->metaModel   = $this->inputScreen->getMetaModel();
 
         $this->parseListing();
 
