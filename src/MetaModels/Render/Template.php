@@ -362,7 +362,7 @@ class Template
         $this->arrBlocks = array();
 
         // Add start and end markers in debug mode
-        if (\Config::get('debugMode')) {
+        if (\Config::get('debugMode') && in_array($this->strFormat, ['html5', 'xhtml'])) {
             $strRelPath = str_replace(TL_ROOT . '/', '', $this->getTemplate($this->strTemplate, $this->strFormat));
             $strBuffer  = <<<EOF
 <!-- TEMPLATE START: $strRelPath -->
