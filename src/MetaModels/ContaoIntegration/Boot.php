@@ -31,6 +31,7 @@ use ContaoCommunityAlliance\DcGeneral\Factory\Event\PopulateEnvironmentEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\PreCreateDcGeneralEvent;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
 use MetaModels\Dca\MetaModelDcaBuilder;
+use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\DefinitionBuilder\BasicDefinitionBuilder;
 use MetaModels\DcGeneral\DefinitionBuilder\CommandBuilder;
 use MetaModels\DcGeneral\DefinitionBuilder\Contao2BackendViewDefinitionBuilder;
@@ -160,53 +161,40 @@ abstract class Boot
         );
         RenderItem::register($dispatcher);
 
-        foreach ($container->getFactory()->collectNames() as $metaModelName) {
-            $this->attachLoadDataContainerHook($metaModelName, $container);
-
-            $dispatcher->addListener(
-                PreCreateDcGeneralEvent::NAME,
-                function (PreCreateDcGeneralEvent $event) use ($metaModelName, $viewCombinations, $container, $translator) {
-                    $factory = $event->getFactory();
-                    $name    = $factory->getContainerName();
-                    if ($name !== $metaModelName) {
-                        return;
-                    }
-
-                    $inputScreen = $viewCombinations->getInputScreenDetails($metaModelName);
-
-                    $factory->setContainerClassName('MetaModels\DcGeneral\DataDefinition\MetaModelDataDefinition');
-
-                    $dispatcher = $container->getEventDispatcher();
-
-                    $dispatcher->addListener(
-                        PopulateEnvironmentEvent::NAME,
-                        function (PopulateEnvironmentEvent $event) use (
-                            $metaModelName,
-                            $inputScreen,
-                            $container,
-                            $translator
-                        ) {
-                            if ($event->getEnvironment()->getDataDefinition()->getName() !== $metaModelName) {
-                                return;
-                            }
-
-                            $environment = $event->getEnvironment();
-
-                            $populator = new TranslatorPopulator($container, $translator);
-                            $populator->populate($environment);
-
-                            $populator = new AttributePopulator($inputScreen);
-                            $populator->populate($environment);
-
-                            $populator = new DataProviderPopulator($container);
-                            $populator->populate($environment);
-                            unset($populator);
-
-                            $GLOBALS['TL_CSS'][] = 'system/modules/metamodels/assets/css/style.css';
-                        }
-                    );
+        $dispatcher->addListener(
+            PopulateEnvironmentEvent::NAME,
+            [new TranslatorPopulator($dispatcher, $translator), 'handle']
+        );
+        $dispatcher->addListener(
+            PopulateEnvironmentEvent::NAME,
+            [new AttributePopulator($dispatcher, $viewCombinations), 'handle']
+        );
+        $dispatcher->addListener(
+            PopulateEnvironmentEvent::NAME,
+            [new DataProviderPopulator($container), 'handle']
+        );
+        $dispatcher->addListener(
+            PopulateEnvironmentEvent::NAME,
+            function (PopulateEnvironmentEvent $event) {
+                if ($event->getEnvironment()->getDataDefinition() instanceof IMetaModelDataDefinition) {
+                    $GLOBALS['TL_CSS'][] = 'system/modules/metamodels/assets/css/style.css';
                 }
-            );
+            }
+        );
+
+        $names = $container->getFactory()->collectNames();
+        $dispatcher->addListener(
+            PreCreateDcGeneralEvent::NAME,
+            function (PreCreateDcGeneralEvent $event) use ($names) {
+                $factory = $event->getFactory();
+                if (!in_array($factory->getContainerName(), $names)) {
+                    return;
+                }
+                $factory->setContainerClassName('MetaModels\DcGeneral\DataDefinition\MetaModelDataDefinition');
+            }
+        );
+        foreach ($names as $metaModelName) {
+            $this->attachLoadDataContainerHook($metaModelName, $container);
         }
     }
 }

@@ -31,6 +31,8 @@ use MetaModels\IMetaModelsServiceContainer;
  */
 class DataProviderPopulator
 {
+    use MetaModelPopulatorTrait;
+
     /**
      * The MetaModel this builder is responsible for.
      *

@@ -21,29 +21,41 @@
 namespace MetaModels\DcGeneral\Populator;
 
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
-use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\DcGeneral\Events\MetaModel\PopulateAttributeEvent;
+use MetaModels\Helper\ViewCombinations;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This class handles the MetaModels attribute populating.
  */
 class AttributePopulator
 {
+    use MetaModelPopulatorTrait;
+
     /**
-     * The input screen to use.
+     * The event dispatcher.
      *
-     * @var IInputScreen
+     * @var EventDispatcherInterface
      */
-    private $inputScreen;
+    private $dispatcher;
+
+    /**
+     * The view combinations.
+     *
+     * @var ViewCombinations
+     */
+    private $viewCombinations;
 
     /**
      * Create a new instance.
      *
-     * @param IInputScreen $inputScreen The input screen in use.
+     * @param EventDispatcherInterface $dispatcher       The event dispatcher.
+     * @param ViewCombinations         $viewCombinations The view combinations.
      */
-    public function __construct(IInputScreen $inputScreen)
+    public function __construct(EventDispatcherInterface $dispatcher, ViewCombinations $viewCombinations)
     {
-        $this->inputScreen = $inputScreen;
+        $this->dispatcher       = $dispatcher;
+        $this->viewCombinations = $viewCombinations;
     }
 
     /**
@@ -55,12 +67,12 @@ class AttributePopulator
      */
     public function populate(EnvironmentInterface $environment)
     {
-        $dispatcher = $environment->getEventDispatcher();
-        $metaModel  = $this->inputScreen->getMetaModel();
+        $inputScreen = $this->viewCombinations->getInputScreenDetails($environment->getDataDefinition()->getName());
+        $metaModel   = $inputScreen->getMetaModel();
         foreach ($metaModel->getAttributes() as $attribute) {
             $event = new PopulateAttributeEvent($metaModel, $attribute, $environment);
             // Trigger BuildAttribute Event.
-            $dispatcher->dispatch($event::NAME, $event);
+            $this->dispatcher->dispatch($event::NAME, $event);
         }
     }
 }

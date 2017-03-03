@@ -25,19 +25,21 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
 use ContaoCommunityAlliance\Translator\TranslatorChain;
-use MetaModels\IMetaModelsServiceContainer;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This class populates the translator.
  */
 class TranslatorPopulator
 {
+    use MetaModelPopulatorTrait;
+
     /**
-     * The MetaModel this builder is responsible for.
+     * The event dispatcher.
      *
-     * @var IMetaModelsServiceContainer
+     * @var EventDispatcherInterface
      */
-    private $serviceContainer;
+    private $dispatcher;
 
     /**
      * The translator instance this builder adds values to.
@@ -49,13 +51,13 @@ class TranslatorPopulator
     /**
      * Create a new instance.
      *
-     * @param IMetaModelsServiceContainer $serviceContainer The service container.
-     * @param StaticTranslator            $translator       The translator.
+     * @param EventDispatcherInterface $dispatcher The event dispatcher.
+     * @param StaticTranslator         $translator The translator.
      */
-    public function __construct(IMetaModelsServiceContainer $serviceContainer, StaticTranslator $translator)
+    public function __construct(EventDispatcherInterface $dispatcher, StaticTranslator $translator)
     {
-        $this->serviceContainer = $serviceContainer;
-        $this->translator       = $translator;
+        $this->dispatcher = $dispatcher;
+        $this->translator = $translator;
     }
 
     /**
@@ -68,7 +70,7 @@ class TranslatorPopulator
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function populate(EnvironmentInterface $environment)
+    protected function populate(EnvironmentInterface $environment)
     {
         $translator = $environment->getTranslator();
         if (!($translator instanceof TranslatorChain)) {
@@ -81,7 +83,7 @@ class TranslatorPopulator
         $translatorChain->add($this->translator);
 
         // Map the tl_metamodel_item domain over to this domain.
-        $this->serviceContainer->getEventDispatcher()->dispatch(
+        $this->dispatcher->dispatch(
             ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
             new LoadLanguageFileEvent('tl_metamodel_item')
         );
