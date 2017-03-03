@@ -32,10 +32,10 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CutCommand;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\SelectCommand;
 use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
-use MetaModels\BackendIntegration\ViewCombinations;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\Events\MetaModel\BuildMetaModelOperationsEvent;
 use MetaModels\Helper\ToolboxFile;
+use MetaModels\Helper\ViewCombinations;
 use MetaModels\IMetaModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
