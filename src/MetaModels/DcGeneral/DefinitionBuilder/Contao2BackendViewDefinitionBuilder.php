@@ -43,6 +43,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Contao2BackendViewDefinitionBuilder
 {
+    use MetaModelDefinitionBuilderTrait;
+
     /**
      * The view combinations.
      *
@@ -118,7 +120,7 @@ class Contao2BackendViewDefinitionBuilder
      *
      * @return void
      */
-    public function build(IMetaModelDataDefinition $container)
+    protected function build(IMetaModelDataDefinition $container)
     {
         $this->container   = $container;
         $this->definition  = $this->getOrCreateDefinition();

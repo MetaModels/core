@@ -31,7 +31,6 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Legend;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Palette;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
-use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\IsVariantAttribute;
 use MetaModels\Helper\ViewCombinations;
@@ -41,6 +40,8 @@ use MetaModels\Helper\ViewCombinations;
  */
 class PaletteBuilder
 {
+    use MetaModelDefinitionBuilderTrait;
+
     /**
      * The view combinations.
      *
@@ -49,24 +50,32 @@ class PaletteBuilder
     private $viewCombinations;
 
     /**
+     * The translator to populate.
+     *
+     * @var StaticTranslator
+     */
+    private $translator;
+
+    /**
      * Create a new instance.
      *
      * @param ViewCombinations $viewCombinations The view combinations.
+     * @param StaticTranslator $translator       The translator (needed for legend captions).
      */
-    public function __construct(ViewCombinations $viewCombinations)
+    public function __construct(ViewCombinations $viewCombinations, StaticTranslator $translator)
     {
         $this->viewCombinations = $viewCombinations;
+        $this->translator       = $translator;
     }
 
     /**
      * Parse and build the backend view definition for the old Contao2 backend view.
      *
-     * @param IMetaModelDataDefinition $container  The data container.
-     * @param StaticTranslator         $translator The translator (needed for legend captions).
+     * @param IMetaModelDataDefinition $container The data container.
      *
      * @return void
      */
-    public function build(IMetaModelDataDefinition $container, StaticTranslator $translator)
+    protected function build(IMetaModelDataDefinition $container)
     {
         $inputScreen = $this->viewCombinations->getInputScreenDetails($container->getName());
 
@@ -85,7 +94,7 @@ class PaletteBuilder
             $legend->setInitialVisibility($legendInfo['visible']);
             $palette->addLegend($legend);
 
-            $translator->setValue($legendName . '_legend', $legendInfo['name'], $container->getName());
+            $this->translator->setValue($legendName . '_legend', $legendInfo['name'], $container->getName());
 
             foreach ($legendInfo['properties'] as $propertyName) {
                 $legend->addProperty(

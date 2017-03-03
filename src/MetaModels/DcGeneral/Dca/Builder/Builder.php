@@ -93,36 +93,35 @@ class Builder
     public function build(BuildDataDefinitionEvent $event)
     {
         $dispatcher = $this->serviceContainer->getEventDispatcher();
-        $container  = $event->getContainer();
         /** @var $container IMetaModelDataDefinition */
         $viewCombinations = $this->serviceContainer->getService('metamodels-view-combinations');
 
         $builder = new MetaModelDefinitionBuilder($viewCombinations);
-        $builder->build($container);
+        $builder->handle($event);
 
         $builder = new PropertyDefinitionBuilder($dispatcher, $viewCombinations);
-        $builder->build($container, $this);
+        $builder->handle($event);
 
         $builder = new BasicDefinitionBuilder($viewCombinations);
-        $builder->build($container);
+        $builder->handle($event);
 
-        $dataBuilder = new DataProviderBuilder($viewCombinations, $this->serviceContainer->getFactory());
-        $dataBuilder->build($container);
+        $builder = new DataProviderBuilder($viewCombinations, $this->serviceContainer->getFactory());
+        $builder->handle($event);
 
         $builder = new Contao2BackendViewDefinitionBuilder(
             $viewCombinations,
             $dispatcher,
             $this->serviceContainer->getRenderSettingFactory()
         );
-        $builder->build($container);
+        $builder->handle($event);
 
         $builder = new CommandBuilder($dispatcher, $viewCombinations);
-        $builder->build($container, $this);
+        $builder->handle($event);
         $builder = new PanelBuilder($viewCombinations);
-        $builder->build($container);
+        $builder->handle($event);
 
-        $builder = new PaletteBuilder($viewCombinations);
-        $builder->build($container, $this->translator);
+        $builder = new PaletteBuilder($viewCombinations, $this->translator);
+        $builder->handle($event);
 
         // Attach renderer to event.
         RenderItem::register($dispatcher);

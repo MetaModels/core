@@ -34,7 +34,6 @@ use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentExceptio
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\ViewCombinations;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
-use MetaModels\DcGeneral\Dca\Builder\Builder;
 use MetaModels\DcGeneral\Events\MetaModel\BuildMetaModelOperationsEvent;
 use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModel;
@@ -45,6 +44,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class CommandBuilder
 {
+    use MetaModelDefinitionBuilderTrait;
+
     /**
      * The event dispatcher.
      *
@@ -88,14 +89,13 @@ class CommandBuilder
     /**
      * Parse and build the backend view definition for the old Contao2 backend view.
      *
-     * @param IMetaModelDataDefinition $container   The data container.
-     * @param Builder                  $builder     Deprecated - the builder instance to use in events.
+     * @param IMetaModelDataDefinition $container The data container.
      *
      * @throws DcGeneralInvalidArgumentException When the contained view definition is of invalid type.
      *
      * @return void
      */
-    public function build(IMetaModelDataDefinition $container, Builder $builder)
+    protected function build(IMetaModelDataDefinition $container)
     {
         if ($container->hasDefinition(Contao2BackendViewDefinitionInterface::NAME)) {
             $view = $container->getDefinition(Contao2BackendViewDefinitionInterface::NAME);
@@ -117,7 +117,7 @@ class CommandBuilder
         $this->container   = null;
         $this->inputScreen = null;
 
-        $event = new BuildMetaModelOperationsEvent($inputScreen->getMetaModel(), $container, $inputScreen, $builder);
+        $event = new BuildMetaModelOperationsEvent($inputScreen->getMetaModel(), $container, $inputScreen);
         $this->dispatcher->dispatch($event::NAME, $event);
     }
 

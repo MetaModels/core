@@ -30,6 +30,8 @@ use MetaModels\Helper\ViewCombinations;
  */
 class BasicDefinitionBuilder
 {
+    use MetaModelDefinitionBuilderTrait;
+
     /**
      * The view combinations.
      *
@@ -54,7 +56,7 @@ class BasicDefinitionBuilder
      *
      * @return void
      */
-    public function build(IMetaModelDataDefinition $container)
+    protected function build(IMetaModelDataDefinition $container)
     {
         $inputScreen = $this->viewCombinations->getInputScreenDetails($container->getName());
 

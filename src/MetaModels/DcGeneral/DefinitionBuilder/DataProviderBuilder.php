@@ -33,6 +33,8 @@ use MetaModels\IFactory;
  */
 class DataProviderBuilder
 {
+    use MetaModelDefinitionBuilderTrait;
+
     /**
      * The view combinations.
      *
@@ -66,7 +68,7 @@ class DataProviderBuilder
      *
      * @return void
      */
-    public function build(IMetaModelDataDefinition $container)
+    protected function build(IMetaModelDataDefinition $container)
     {
         $inputScreen = $this->viewCombinations->getInputScreenDetails($container->getName());
 

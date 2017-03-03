@@ -28,7 +28,6 @@ use MetaModels\Attribute\IAttribute;
 use MetaModels\Attribute\ITranslated;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
-use MetaModels\DcGeneral\Dca\Builder\Builder;
 use MetaModels\DcGeneral\Events\MetaModel\BuildAttributeEvent;
 use MetaModels\Helper\ViewCombinations;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -38,6 +37,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class PropertyDefinitionBuilder
 {
+    use MetaModelDefinitionBuilderTrait;
+
     /**
      * The event dispatcher.
      *
@@ -68,11 +69,10 @@ class PropertyDefinitionBuilder
      * Build the property definition.
      *
      * @param IMetaModelDataDefinition $container The data container.
-     * @param Builder                  $builder   Deprecated - the builder instance to use in events.
      *
      * @return void
      */
-    public function build(IMetaModelDataDefinition $container, Builder $builder)
+    protected function build(IMetaModelDataDefinition $container)
     {
         $inputScreen = $this->viewCombinations->getInputScreenDetails($container->getName());
 
@@ -106,7 +106,7 @@ class PropertyDefinitionBuilder
 
         foreach ($metaModel->getAttributes() as $attribute) {
             $this->buildProperty($definition, $attribute, $this->propInfo($inputScreen, $attribute));
-            $event = new BuildAttributeEvent($metaModel, $attribute, $container, $inputScreen, $builder);
+            $event = new BuildAttributeEvent($metaModel, $attribute, $container, $inputScreen);
             $this->dispatcher->dispatch($event::NAME, $event);
         }
     }

@@ -30,6 +30,8 @@ use MetaModels\Helper\ViewCombinations;
  */
 class MetaModelDefinitionBuilder
 {
+    use MetaModelDefinitionBuilderTrait;
+
     /**
      * The view combinations.
      *
@@ -54,7 +56,7 @@ class MetaModelDefinitionBuilder
      *
      * @return void
      */
-    public function build(IMetaModelDataDefinition $container)
+    protected function build(IMetaModelDataDefinition $container)
     {
         $definition = $this->createOrGetDefinition($container);
 

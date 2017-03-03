@@ -39,6 +39,8 @@ use MetaModels\Helper\ViewCombinations;
  */
 class PanelBuilder
 {
+    use MetaModelDefinitionBuilderTrait;
+
     /**
      * The view combinations.
      *
@@ -70,7 +72,7 @@ class PanelBuilder
      *
      * @return void
      */
-    public function build(IMetaModelDataDefinition $container)
+    protected function build(IMetaModelDataDefinition $container)
     {
         $this->inputScreen = $this->viewCombinations->getInputScreenDetails($container->getName());
 
