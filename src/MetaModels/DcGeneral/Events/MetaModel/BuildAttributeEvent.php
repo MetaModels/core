@@ -59,13 +59,6 @@ class BuildAttributeEvent extends AbstractContainerAwareEvent
     protected $inputScreen;
 
     /**
-     * The data definition builder.
-     *
-     * @var Builder
-     */
-    protected $builder;
-
-    /**
      * Create a new container aware event.
      *
      * @param IMetaModel         $metaModel     The MetaModel.
@@ -75,22 +68,18 @@ class BuildAttributeEvent extends AbstractContainerAwareEvent
      * @param ContainerInterface $dataContainer The data container information.
      *
      * @param IInputScreen       $inputScreen   The input screen in use.
-     *
-     * @param Builder            $builder       The data definition builder calling.
      */
     public function __construct(
         IMetaModel $metaModel,
         IAttribute $attribute,
         ContainerInterface $dataContainer,
-        IInputScreen $inputScreen,
-        Builder $builder
+        IInputScreen $inputScreen
     ) {
         parent::__construct($dataContainer);
 
         $this->metaModel   = $metaModel;
         $this->attribute   = $attribute;
         $this->inputScreen = $inputScreen;
-        $this->builder     = $builder;
     }
 
     /**
@@ -121,17 +110,5 @@ class BuildAttributeEvent extends AbstractContainerAwareEvent
     public function getInputScreen()
     {
         return $this->inputScreen;
-    }
-
-    /**
-     * Retrieve the builder instance.
-     *
-     * @return Builder
-     */
-    public function getBuilder()
-    {
-        trigger_error('The builder has been deprecated and will not be available anymore.', E_USER_DEPRECATED);
-
-        return $this->builder;
     }
 }
