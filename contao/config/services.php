@@ -20,29 +20,19 @@
 
 /** @var Pimple $container */
 
-$container['metamodels-attribute-factory.factory.default'] = $container->protect(
+$container['metamodels-attribute-factory.factory'] = $container->share(
     function () {
         return new MetaModels\Attribute\AttributeFactory();
     }
 );
 
-if (!isset($container['metamodels-attribute-factory.factory'])) {
-    $container['metamodels-attribute-factory.factory'] =
-        $container->raw('metamodels-attribute-factory.factory.default');
-}
-
-$container['metamodels-factory.factory.default'] = $container->protect(
+$container['metamodels-factory.factory'] = $container->share(
     function () {
         return new MetaModels\Factory();
     }
 );
 
-if (!isset($container['metamodels-factory.factory'])) {
-    $container['metamodels-factory.factory'] =
-        $container->raw('metamodels-factory.factory.default');
-}
-
-$container['metamodels-filter-setting-factory.factory.default'] = $container->protect(
+$container['metamodels-filter-setting-factory.factory'] = $container->share(
     function () {
         return new MetaModels\Filter\Setting\FilterSettingFactory();
     }
@@ -53,18 +43,13 @@ if (!isset($container['metamodels-filter-setting-factory.factory'])) {
         $container->raw('metamodels-filter-setting-factory.factory.default');
 }
 
-$container['metamodels-render-setting-factory.factory.default'] = $container->protect(
+$container['metamodels-render-setting-factory.factory'] = $container->share(
     function () {
         return new MetaModels\Render\Setting\RenderSettingFactory();
     }
 );
 
-if (!isset($container['metamodels-render-setting-factory.factory'])) {
-    $container['metamodels-render-setting-factory.factory'] =
-        $container->raw('metamodels-render-setting-factory.factory.default');
-}
-
-$container['metamodels-cache.factory.default'] = $container->protect(
+$container['metamodels-cache.factory'] = $container->share(
     function ($container) {
         if ($container['config']->get('bypassCache')) {
             return new \Doctrine\Common\Cache\ArrayCache();
@@ -74,12 +59,7 @@ $container['metamodels-cache.factory.default'] = $container->protect(
     }
 );
 
-if (!isset($container['metamodels-cache.factory'])) {
-    $container['metamodels-cache.factory'] =
-        $container->raw('metamodels-cache.factory.default');
-}
-
-$container['metamodels-service-container.factory.default'] = $container->protect(
+$container['metamodels-service-container.factory'] = $container->share(
     function ($container) {
         $serviceContainer = new MetaModels\MetaModelsServiceContainer();
         $dispatcher       = $container['event-dispatcher'];
@@ -88,25 +68,20 @@ $container['metamodels-service-container.factory.default'] = $container->protect
             ->setDatabase($container['database.connection']);
 
         $serviceContainer
-            ->setAttributeFactory($container['metamodels-attribute-factory.factory']($container))
-            ->setFactory($container['metamodels-factory.factory']($container))
-            ->setFilterFactory($container['metamodels-filter-setting-factory.factory']($container))
-            ->setRenderSettingFactory($container['metamodels-render-setting-factory.factory']($container))
-            ->setCache($container['metamodels-cache.factory']($container));
+            ->setAttributeFactory($container['metamodels-attribute-factory.factory'])
+            ->setFactory($container['metamodels-factory.factory'])
+            ->setFilterFactory($container['metamodels-filter-setting-factory.factory'])
+            ->setRenderSettingFactory($container['metamodels-render-setting-factory.factory'])
+            ->setCache($container['metamodels-cache.factory']);
 
         return $serviceContainer;
     }
 );
 
-if (!isset($container['metamodels-service-container.factory'])) {
-    $container['metamodels-service-container.factory'] =
-        $container->raw('metamodels-service-container.factory.default');
-}
-
 $container['metamodels-service-container'] = $container->share(
     function ($container) {
         $factory = $container['metamodels-service-container.factory'];
 
-        return $factory($container);
+        return $factory;
     }
 );
