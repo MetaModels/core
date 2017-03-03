@@ -28,16 +28,6 @@ use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
-use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
-use MetaModels\DcGeneral\DefinitionBuilder\BasicDefinitionBuilder;
-use MetaModels\DcGeneral\DefinitionBuilder\CommandBuilder;
-use MetaModels\DcGeneral\DefinitionBuilder\Contao2BackendViewDefinitionBuilder;
-use MetaModels\DcGeneral\DefinitionBuilder\DataProviderBuilder;
-use MetaModels\DcGeneral\DefinitionBuilder\MetaModelDefinitionBuilder;
-use MetaModels\DcGeneral\DefinitionBuilder\PaletteBuilder;
-use MetaModels\DcGeneral\DefinitionBuilder\PanelBuilder;
-use MetaModels\DcGeneral\DefinitionBuilder\PropertyDefinitionBuilder;
-use MetaModels\DcGeneral\Events\MetaModel\RenderItem;
 use MetaModels\Helper\ToolboxFile;
 use MetaModels\IMetaModelsServiceContainer;
 
@@ -93,38 +83,8 @@ class Builder
     public function build(BuildDataDefinitionEvent $event)
     {
         $dispatcher = $this->serviceContainer->getEventDispatcher();
-        /** @var $container IMetaModelDataDefinition */
-        $viewCombinations = $this->serviceContainer->getService('metamodels-view-combinations');
-
-        $builder = new MetaModelDefinitionBuilder($viewCombinations);
-        $builder->handle($event);
-
-        $builder = new PropertyDefinitionBuilder($dispatcher, $viewCombinations);
-        $builder->handle($event);
-
-        $builder = new BasicDefinitionBuilder($viewCombinations);
-        $builder->handle($event);
-
-        $builder = new DataProviderBuilder($viewCombinations, $this->serviceContainer->getFactory());
-        $builder->handle($event);
-
-        $builder = new Contao2BackendViewDefinitionBuilder(
-            $viewCombinations,
-            $dispatcher,
-            $this->serviceContainer->getRenderSettingFactory()
-        );
-        $builder->handle($event);
-
-        $builder = new CommandBuilder($dispatcher, $viewCombinations);
-        $builder->handle($event);
-        $builder = new PanelBuilder($viewCombinations);
-        $builder->handle($event);
-
-        $builder = new PaletteBuilder($viewCombinations, $this->translator);
-        $builder->handle($event);
 
         // Attach renderer to event.
-        RenderItem::register($dispatcher);
     }
 
     /**

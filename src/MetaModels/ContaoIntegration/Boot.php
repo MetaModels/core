@@ -29,8 +29,17 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\PopulateEnvironmentEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\PreCreateDcGeneralEvent;
+use ContaoCommunityAlliance\Translator\StaticTranslator;
 use MetaModels\Dca\MetaModelDcaBuilder;
-use MetaModels\DcGeneral\Dca\Builder\Builder;
+use MetaModels\DcGeneral\DefinitionBuilder\BasicDefinitionBuilder;
+use MetaModels\DcGeneral\DefinitionBuilder\CommandBuilder;
+use MetaModels\DcGeneral\DefinitionBuilder\Contao2BackendViewDefinitionBuilder;
+use MetaModels\DcGeneral\DefinitionBuilder\DataProviderBuilder;
+use MetaModels\DcGeneral\DefinitionBuilder\MetaModelDefinitionBuilder;
+use MetaModels\DcGeneral\DefinitionBuilder\PaletteBuilder;
+use MetaModels\DcGeneral\DefinitionBuilder\PanelBuilder;
+use MetaModels\DcGeneral\DefinitionBuilder\PropertyDefinitionBuilder;
+use MetaModels\DcGeneral\Events\MetaModel\RenderItem;
 use MetaModels\DcGeneral\Populator\AttributePopulator;
 use MetaModels\DcGeneral\Populator\DataProviderPopulator;
 use MetaModels\DcGeneral\Populator\TranslatorPopulator;
@@ -111,14 +120,52 @@ abstract class Boot
                 }
             );
         }
-
+        $translator = new StaticTranslator();
         $dispatcher = $container->getEventDispatcher();
+        $dispatcher->addListener(
+            BuildDataDefinitionEvent::NAME,
+            [new MetaModelDefinitionBuilder($viewCombinations), 'handle']
+        );
+        $dispatcher->addListener(
+            BuildDataDefinitionEvent::NAME,
+            [new PropertyDefinitionBuilder($dispatcher, $viewCombinations), 'handle']
+        );
+        $dispatcher->addListener(
+            BuildDataDefinitionEvent::NAME,
+            [new BasicDefinitionBuilder($viewCombinations), 'handle']
+        );
+        $dispatcher->addListener(
+            BuildDataDefinitionEvent::NAME,
+            [new DataProviderBuilder($viewCombinations, $container->getFactory()), 'handle']
+        );
+        $dispatcher->addListener(
+            BuildDataDefinitionEvent::NAME,
+            [new Contao2BackendViewDefinitionBuilder(
+                $viewCombinations,
+                $dispatcher,
+                $container->getRenderSettingFactory()
+            ), 'handle']
+        );
+        $dispatcher->addListener(
+            BuildDataDefinitionEvent::NAME,
+            [new CommandBuilder($dispatcher, $viewCombinations), 'handle']
+        );
+        $dispatcher->addListener(
+            BuildDataDefinitionEvent::NAME,
+            [new PanelBuilder($viewCombinations), 'handle']
+        );
+        $dispatcher->addListener(
+            BuildDataDefinitionEvent::NAME,
+            [new PaletteBuilder($viewCombinations, $translator), 'handle']
+        );
+        RenderItem::register($dispatcher);
+
         foreach ($container->getFactory()->collectNames() as $metaModelName) {
             $this->attachLoadDataContainerHook($metaModelName, $container);
 
             $dispatcher->addListener(
                 PreCreateDcGeneralEvent::NAME,
-                function (PreCreateDcGeneralEvent $event) use ($metaModelName, $viewCombinations, $container) {
+                function (PreCreateDcGeneralEvent $event) use ($metaModelName, $viewCombinations, $container, $translator) {
                     $factory = $event->getFactory();
                     $name    = $factory->getContainerName();
                     if ($name !== $metaModelName) {
@@ -130,19 +177,7 @@ abstract class Boot
                     $factory->setContainerClassName('MetaModels\DcGeneral\DataDefinition\MetaModelDataDefinition');
 
                     $dispatcher = $container->getEventDispatcher();
-                    $generator  = new Builder($container);
-                    $translator = $generator->getTranslator();
 
-                    $dispatcher->addListener(
-                        BuildDataDefinitionEvent::NAME,
-                        function (BuildDataDefinitionEvent $event) use ($metaModelName, $generator) {
-                            if ($event->getContainer()->getName() !== $metaModelName) {
-                                return;
-                            }
-                            $generator->build($event);
-                        },
-                        $generator::PRIORITY
-                    );
                     $dispatcher->addListener(
                         PopulateEnvironmentEvent::NAME,
                         function (PopulateEnvironmentEvent $event) use (
@@ -168,8 +203,7 @@ abstract class Boot
                             unset($populator);
 
                             $GLOBALS['TL_CSS'][] = 'system/modules/metamodels/assets/css/style.css';
-                        },
-                        $generator::PRIORITY
+                        }
                     );
                 }
             );
