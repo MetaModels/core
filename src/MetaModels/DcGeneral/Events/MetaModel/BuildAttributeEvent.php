@@ -24,7 +24,6 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractContainerAwareEvent;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
-use MetaModels\DcGeneral\Dca\Builder\Builder;
 use MetaModels\IMetaModel;
 
 /**

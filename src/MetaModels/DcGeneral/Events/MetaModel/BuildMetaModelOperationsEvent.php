@@ -23,7 +23,6 @@ namespace MetaModels\DcGeneral\Events\MetaModel;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractContainerAwareEvent;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
-use MetaModels\DcGeneral\Dca\Builder\Builder;
 use MetaModels\IMetaModel;
 
 /**
