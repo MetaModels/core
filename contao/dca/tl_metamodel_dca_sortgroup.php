@@ -198,23 +198,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
     ),
     'metasubselectpalettes' => array
     (
-        'rendertype'      => array
-        (
-            'standalone' => array
-            (
-                'backend after rendertype' => array
-                (
-                    'backendsection'
-                ),
-            ),
-            'ctable'     => array
-            (
-                'backend after rendertype' => array
-                (
-                    'ptable'
-                ),
-            )
-        ),
         'rendergrouptype' => array
         (
             '!none' => array
