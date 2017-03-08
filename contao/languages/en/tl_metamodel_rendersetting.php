@@ -18,42 +18,36 @@
  * @filesource
  */
 
-/**
- * Fields
- */
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id']         = array('Attribute', 'Attribute this setting relates to.');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template']        = array('Custom template to use for generating', 'Select the template that shall be used for the selected attribute. Valid template files start with "mm_&lt;type&gt;" where the type name is put for &lt;type&gt;');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['additional_class'] = array('Custom CSS class', 'Enter any CSS classes that you want get added to the output of this attribute');
-
-/**
- * Legends
- */
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['title_legend']    = 'Type';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['advanced_legend'] = 'Advanced';
-
-/**
- * Buttons
- */
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['new']             = array('New', 'Create new setting');
-
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit']            = array('Edit setting', 'Edit render setting ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['cut']             = array('Cut render setting definition', 'Cut render setting ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy']            = array('Copy render setting definition', 'Copy render setting ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete']          = array('Delete render setting', 'Delete render setting ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show']            = array('Render setting details', 'Show details of render setting ID %s');
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']          = array('Add all', 'Add all attributes to render setting');
-
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['pastenew'][0]     = 'Add new at the top';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['pastenew'][1]     = 'Add new after render setting ID %s';
-
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']             = '%s <strong>%s</strong> <em>[%s]</em>';
-
-/**
- * Messages
- */
-
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_willadd'] = 'Will add attribute %s to rendersetting.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id'][0]              = 'Attribute';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id'][1]              = 'Attribute this setting relates to.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template'][0]             = 'Custom template to use for generating';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template'][1]             =
+    'Select the template that shall be used for the selected attribute. ' .
+    'Valid template files start with "mm_&lt;type&gt;" where the type name is put for &lt;type&gt;';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['additional_class'][0]     = 'Custom CSS class';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['additional_class'][1]     =
+    'Enter any CSS classes that you want get added to the output of this attribute';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['title_legend']            = 'Type';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['advanced_legend']         = 'Advanced';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['new'][0]                  = 'New';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['new'][1]                  = 'Create new setting';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit'][0]                 = 'Edit setting';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit'][1]                 = 'Edit render setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['cut'][0]                  = 'Cut render setting definition';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['cut'][1]                  = 'Cut render setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy'][0]                 = 'Copy render setting definition';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy'][1]                 = 'Copy render setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete'][0]               = 'Delete render setting';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete'][1]               = 'Delete render setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show'][0]                 = 'Render setting details';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show'][1]                 = 'Show details of render setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall'][0]               = 'Add all';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall'][1]               = 'Add all attributes to render setting';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['pastenew'][0]             = 'Add new at the top';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['pastenew'][1]             = 'Add new after render setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']                     = '%s <strong>%s</strong> <em>[%s]</em>';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_willadd']          =
+    'Will add attribute %s to rendersetting.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_alreadycontained'] = 'Attribute %s already in rendersetting.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_addsuccess'] = 'Added attribute %s to rendersetting.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_activate'] = 'Add new settings enabled.';
-
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_addsuccess']       = 'Added attribute %s to rendersetting.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_activate']         = 'Add new settings enabled.';

@@ -18,9 +18,6 @@
  * @filesource
  */
 
-/**
- * Buttons
- */
 $GLOBALS['TL_LANG']['tl_metamodel_item']['new'][0]           = 'New item';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['new'][1]           = 'Create new item';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['edit'][0]          = 'Edit item';
@@ -43,11 +40,10 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['pasteinto'][0]     = 'Create new item'
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pasteinto'][1]     = 'Create a new item in item ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew'][0]      = 'Add new at the top';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew'][1]      = 'Add new item after item ID %s';
-
-$GLOBALS['TL_LANG']['tl_metamodel_item']['varbase'][0] = 'Is variant base';
-$GLOBALS['TL_LANG']['tl_metamodel_item']['varbase'][1] = 'Check this if you want to make this the base for the current variant group';
-
-$GLOBALS['TL_LANG']['tl_metamodel_item']['editRecord'] = 'Edit item %s';
-$GLOBALS['TL_LANG']['tl_metamodel_item']['newRecord']  = 'Create a new item';
-
-$GLOBALS['TL_LANG']['tl_metamodel_item']['sorting'] = array('Sorting', 'The manual sorting');
+$GLOBALS['TL_LANG']['tl_metamodel_item']['varbase'][0]       = 'Is variant base';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['varbase'][1]       =
+    'Check this if you want to make this the base for the current variant group';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['editRecord']       = 'Edit item %s';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['newRecord']        = 'Create a new item';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['sorting'][0]       = 'Sorting';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['sorting'][1]       = 'The manual sorting';
