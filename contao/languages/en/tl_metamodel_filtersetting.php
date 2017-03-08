@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -59,6 +59,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy']                 = arra
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cut']                  = array('Cut filter setting definition', 'Cut filter setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete']               = array('Delete filter setting', 'Delete filter setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']                 = array('Filter setting details', 'Show details of filter setting ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pastenew'][0]   = 'Add new at the top';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pastenew'][1]   = 'Add new after setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteafter'][1] = 'Create new after setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteinto'][0]  = 'Create new setting at the top';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteinto'][1]  = 'Create new at the top of setting ID %s';
 
 
 /**

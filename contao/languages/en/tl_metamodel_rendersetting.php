@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -42,6 +42,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy']            = array('Co
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete']          = array('Delete render setting', 'Delete render setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show']            = array('Render setting details', 'Show details of render setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']          = array('Add all', 'Add all attributes to render setting');
+
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['pastenew'][0]     = 'Add new at the top';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['pastenew'][1]     = 'Add new after render setting ID %s';
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']             = '%s <strong>%s</strong> <em>[%s]</em>';
 

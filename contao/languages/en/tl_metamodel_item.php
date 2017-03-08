@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -41,6 +41,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['pasteafter'][0]    = 'Create new item'
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pasteafter'][1]    = 'Create a new item after item ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pasteinto'][0]     = 'Create new item';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pasteinto'][1]     = 'Create a new item in item ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew'][0]      = 'Add new at the top';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew'][1]      = 'Add new item after item ID %s';
 
 $GLOBALS['TL_LANG']['tl_metamodel_item']['varbase'][0] = 'Is variant base';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['varbase'][1] = 'Check this if you want to make this the base for the current variant group';

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Christian de la Haye <service@delahaye.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -56,6 +56,10 @@ $GLOBALS['TL_LANG']['tl_metamodel']['dca']                  = array('Define inpu
 $GLOBALS['TL_LANG']['tl_metamodel']['dca_combine']          = array('Define input/output combinations', 'Define input/output combinations for MetaModel ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel']['cut']                  = array('Move MetaModel', 'Define the order of your MetaModels.');
 $GLOBALS['TL_LANG']['tl_metamodel']['searchable_pages']     = array('Define search settings', 'Define search settings for MetaModel ID %s');
+$GLOBALS['TL_LANG']['tl_metamodel']['pastenew'][0]          = 'Add new at the top';
+$GLOBALS['TL_LANG']['tl_metamodel']['pastenew'][1]          = 'Add new after MetaModel ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel']['pasteafter'][0]        = 'Create new MetaModel';
+$GLOBALS['TL_LANG']['tl_metamodel']['pasteafter'][1]        = 'Create new after MetaModel ID %s';
 
 /**
  * Misc.

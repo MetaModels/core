@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -75,6 +75,10 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete']          = array('Delet
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['conditions']      = array('Manage visibility conditions', 'Manage the visibility conditions of property ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['show']            = array('Setting details', 'Show details of setting ID %s');
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']          = array('Add all', 'Add all attributes to input screen');
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pastenew'][0]     = 'Add new at the top';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pastenew'][1]     = 'Add new after setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pasteafter'][0]   = 'Create new setting at the top';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pasteafter'][1]   = 'Create new after setting ID %s';
 
 /**
  * References
