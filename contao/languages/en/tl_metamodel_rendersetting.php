@@ -52,4 +52,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']             = '%s <stro
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_willadd'] = 'Will add attribute %s to rendersetting.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_alreadycontained'] = 'Attribute %s already in rendersetting.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_addsuccess'] = 'Added attribute %s to rendersetting.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_activate'] = 'Add new settings enabled.';
 

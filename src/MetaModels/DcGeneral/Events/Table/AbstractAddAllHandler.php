@@ -122,6 +122,13 @@ abstract class AbstractAddAllHandler implements EventSubscriberInterface
     protected static $ptable;
 
     /**
+     * The field to use for activating (published, enabled, ...).
+     *
+     * @var string
+     */
+    protected static $activeField;
+
+    /**
      * The action name to listen on.
      *
      * @var string
@@ -217,7 +224,7 @@ abstract class AbstractAddAllHandler implements EventSubscriberInterface
         }
 
         if ($this->input->hasValue('add') || $this->input->hasValue('saveNclose')) {
-            $this->perform(($startSort + 128), $pid);
+            $this->perform(($startSort + 128), $pid, $this->input->hasValue('activate'));
         }
         if ($this->input->hasValue('saveNclose')) {
             \Controller::redirect($referrer->getReferrerUrl());
@@ -228,6 +235,7 @@ abstract class AbstractAddAllHandler implements EventSubscriberInterface
         $this->template->backBt        = $this->translator->translate('MSC.backBT');
         $this->template->add           = $this->translator->translate('MSC.continue');
         $this->template->saveNclose    = $this->translator->translate('MSC.saveNclose');
+        $this->template->activate      = $this->translator->translate('addAll_activate', static::$table);
         $this->template->headline      = $this->translator->translate('addall.1', static::$table);
         $this->template->selectAll     = $this->translator->translate('MSC.selectAll');
         $this->template->cacheMessage  = '';
@@ -252,16 +260,16 @@ abstract class AbstractAddAllHandler implements EventSubscriberInterface
     /**
      * Perform the action.
      *
-     * @param int $startSort The first sort index.
-     *
-     * @param int $pid       The pid.
+     * @param int  $startSort The first sort index.
+     * @param int  $pid       The pid.
+     * @param bool $activate  Flag if the new entries shall be activated from the beginning.
      *
      * @return void
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    private function perform($startSort, $pid)
+    private function perform($startSort, $pid, $activate)
     {
         $this->loadLanguageFiles();
 
@@ -284,6 +292,9 @@ abstract class AbstractAddAllHandler implements EventSubscriberInterface
                     'attr_id'  => $attrId,
                 )
             );
+            if ($activate) {
+                $data[static::$activeField] = 1;
+            }
 
             $startSort += 128;
             $query      = $this->database

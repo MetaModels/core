@@ -43,6 +43,13 @@ class RenderSettingAddAllHandler extends AbstractAddAllHandler
     protected static $ptable = 'tl_metamodel_rendersettings';
 
     /**
+     * The field to use for activating.
+     *
+     * @var string
+     */
+    protected static $activeField = 'enabled';
+
+    /**
      * The action name to listen on.
      *
      * @var string

@@ -13,6 +13,10 @@
                                onclick="Backend.toggleCheckboxes(this)"<?php if (!$this->hasCheckbox): ?> disabled<?php endif; ?> />
                         <?= $this->selectAll ?>
                     </label>
+                    <label class="activate" for="activate">
+                        <input type="checkbox" name="activate" id="activate"<?php if (!$this->hasCheckbox): ?> disabled<?php endif; ?> />
+                        <?= $this->activate ?>
+                    </label>
                 </div>
                 <?php foreach ($this->fields as $field): ?>
                     <div class="field <?= $field['class'] ?>">
