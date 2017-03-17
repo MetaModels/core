@@ -212,7 +212,7 @@ class ItemPersister
             ->database
             ->prepare(
                 sprintf(
-                    'UPDATE %1$s %%s=? WHERE id IN (%2$s)',
+                    'UPDATE %1$s %%s WHERE id IN (%2$s)',
                     $this->tableName,
                     $this->buildDatabaseParameterList($ids)
                 )
