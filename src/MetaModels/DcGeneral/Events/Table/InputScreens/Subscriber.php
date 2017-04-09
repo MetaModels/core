@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,6 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -357,7 +358,7 @@ class Subscriber extends BaseSubscriber
         }
 
         $model     = $event->getModel();
-        $metaModel = $this->getMetaModelById($model->getProperty('pid'));
+        $metaModel = $this->getMetaModelById($this->getMetaModelId($event));
 
         if ($metaModel->getAttributeById($model->getProperty('attr_id'))->get('isunique')) {
             Message::addInfo(
@@ -616,5 +617,45 @@ class Subscriber extends BaseSubscriber
                 }
             }
         }
+    }
+
+    /**
+     * Get the id from the meta model.
+     *
+     * @param BuildWidgetEvent $event The event.
+     *
+     * @return string
+     */
+    protected function getMetaModelId(BuildWidgetEvent $event)
+    {
+        $environment          = $event->getEnvironment();
+        $dataDefinition       = $environment->getDataDefinition();
+        $parentDataDefinition = $environment->getParentDataDefinition();
+        $parentDataProvider   = $environment->getDataProvider($parentDataDefinition->getName());
+        $relationship         = $dataDefinition->getModelRelationshipDefinition();
+        $parentRelationship   = $parentDataDefinition->getModelRelationshipDefinition();
+
+        $childCondition =
+            $relationship->getChildCondition($parentDataDefinition->getName(), $dataDefinition->getName());
+
+        $parentModel = $parentDataProvider->fetch(
+            $parentDataProvider->getEmptyConfig()
+                ->setFilter($childCondition->getInverseFilterFor($event->getModel()))
+        );
+
+        $metaModelDataProvider =
+            $environment->getDataProvider($parentDataDefinition->getBasicDefinition()->getParentDataProvider());
+
+        $parentChildCondition = $parentRelationship->getChildCondition(
+            $parentDataDefinition->getBasicDefinition()->getParentDataProvider(),
+            $parentDataDefinition->getName()
+        );
+
+        $metaModel = $metaModelDataProvider->fetch(
+            $metaModelDataProvider->getEmptyConfig()
+                ->setFilter($parentChildCondition->getInverseFilterFor($parentModel))
+        );
+
+        return $metaModel->getId();
     }
 }
