@@ -37,6 +37,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PaletteInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
+use MetaModels\Attribute\IInternal;
 use MetaModels\BackendIntegration\TemplateList;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Palette\RenderSettingAttributeIs as PaletteCondition;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\RenderSettingAttributeIs as PropertyCondition;
@@ -247,7 +248,9 @@ class Subscriber extends BaseSubscriber
             ->fetchEach('attr_id');
 
         foreach ($metaModel->getAttributes() as $attribute) {
-            if (in_array($attribute->get('id'), $alreadyTaken)) {
+            if ($attribute instanceof IInternal
+                || in_array($attribute->get('id'), $alreadyTaken)
+            ) {
                 continue;
             }
             $arrResult[$attribute->get('id')] = sprintf(
