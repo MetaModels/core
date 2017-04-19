@@ -285,7 +285,7 @@ class Item implements IItem
      *
      * @param IFilter $objFilter The filter settings to be applied.
      *
-     * @return IItems A list of all variants for this item.
+     * @return IItems|null A list of all variants for this item.
      */
     public function getVariants($objFilter)
     {
@@ -294,6 +294,22 @@ class Item implements IItem
         }
 
         return null;
+    }
+
+    /**
+     * Fetch the meta model variant base for this item.
+     *
+     * Note: For a non-variant item the variant base is the item itself.
+     *
+     * @return IItem The variant base.
+     */
+    public function getVariantBase()
+    {
+        if (!$this->isVariantBase()) {
+            return $this->getMetaModel()->findById($this->get('vargroup'));
+        }
+
+        return $this;
     }
 
     /**

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -107,9 +108,18 @@ interface IItem
      *
      * @param \MetaModels\Filter\IFilter $objFilter The filter settings to be applied.
      *
-     * @return \MetaModels\IItems A list of all variants for this item.
+     * @return \MetaModels\IItems|null A list of all variants for this item or null if the item cannot handle variants.
      */
     public function getVariants($objFilter);
+
+    /**
+     * Fetch the meta model variant base for this item.
+     *
+     * Note: For a non-variant item the variant base is the item itself.
+     *
+     * @return IItem The variant base.
+     */
+    public function getVariantBase();
 
     /**
      * Save the current data for every attribute to the data sink.
