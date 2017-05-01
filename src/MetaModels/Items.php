@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Maack <david.maack@arcor.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -269,9 +270,12 @@ class Items implements IItems
         $intCursor = $this->intCursor;
 
         foreach ($this as $objItem) {
-            $arrParsedItem          = $this->parseValue($strOutputFormat, $objSettings);
-            $arrParsedItem['class'] = $this->getClass();
-            $arrResult[]            = $arrParsedItem;
+            $arrParsedItem = $this->parseValue($strOutputFormat, $objSettings);
+
+            $arrParsedItem['class'] .= ' ' . $this->getClass();
+            $arrParsedItem['class']  = trim($arrParsedItem['class']);
+
+            $arrResult[] = $arrParsedItem;
         }
 
         // Restore cursor.
