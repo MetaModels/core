@@ -13,8 +13,13 @@ if (count($this->data)) {
             }
         }
 
-        if ($item['jumpTo']['deep']) {
-            echo $this->details . ': ' . $item['jumpTo']['url'];
+        foreach ($item['actions'] as $action) {
+            echo sprintf(
+                '%s: %s%s',
+                $action['label'],
+                $action['href'],
+                PHP_EOL
+            );
         }
     }
 } else {
