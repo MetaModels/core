@@ -15,3 +15,5 @@
 $GLOBALS['TL_LANG']['tl_maintenance_jobs']['metamodels']['0'] = 'MetaModels Cache';
 $GLOBALS['TL_LANG']['tl_maintenance_jobs']['metamodels']['1'] = 'Löschen des MetaModels-Cache (Backend Menü usw.)';
 
+$GLOBALS['TL_LANG']['tl_maintenance_jobs']['metamodels_assets']['0'] = 'MetaModels Assets';
+$GLOBALS['TL_LANG']['tl_maintenance_jobs']['metamodels_assets']['1'] = 'Löschen des MetaModels-Assets-Ordners (Backend Icons usw.)';

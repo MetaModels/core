@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,7 +20,7 @@
  * @author     Tim Gatzky <info@tim-gatzky.de>
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -148,6 +148,10 @@ $GLOBALS['TL_HOOKS']['getSearchablePages'][]     = array('MetaModels\BackendInte
 $GLOBALS['TL_PURGE']['folders']['metamodels']['affected'][] = 'system/cache/metamodels';
 $GLOBALS['TL_PURGE']['folders']['metamodels']['callback']   =
     array('MetaModels\BackendIntegration\PurgeCache', 'purge');
+
+$GLOBALS['TL_PURGE']['folders']['metamodels_assets']['affected'][] = 'assets/metamodels';
+$GLOBALS['TL_PURGE']['folders']['metamodels_assets']['callback']   =
+    array('MetaModels\BackendIntegration\PurgeAssets', 'purge');
 
 // Meta Information.
 $GLOBALS['METAMODELS']['metainformation']['allowedTitle'][]       = 'text';
