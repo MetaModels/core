@@ -54,7 +54,7 @@ class AttributeFactory implements IAttributeFactory
      *
      * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
      *
-     * @return Factory
+     * @return AttributeFactory
      */
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer)
     {

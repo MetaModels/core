@@ -25,16 +25,34 @@
 
 namespace MetaModels\Helper;
 
+use Contao\Controller;
+use Contao\Dbafs;
+use Contao\Environment;
+use Contao\File;
+use Contao\FilesModel;
+use Contao\Input;
+use Contao\PageError403;
+use Contao\Validator;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
+use InvalidArgumentException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This class provides various methods for handling file collection within Contao.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ToolboxFile
 {
+    /**
+     * The event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
+
     /**
      * Allowed file extensions.
      *
@@ -129,13 +147,19 @@ class ToolboxFile
     /**
      * Create a new instance.
      *
+     * @param EventDispatcherInterface|null $dispatcher The event dispatcher to use.
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function __construct()
+    public function __construct(EventDispatcherInterface $dispatcher = null)
     {
+        $this->dispatcher = $dispatcher ?: $GLOBALS['container']['event-dispatcher'];
         // Initialize some values to sane base.
         $this->setAcceptedExtensions(trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']));
+        if (!is_array($_SESSION['metaModels_downloads'])) {
+            $_SESSION['metaModels_downloads'] = [];
+        }
     }
 
     /**
@@ -320,7 +344,7 @@ class ToolboxFile
             return $this;
         }
 
-        if (!\Validator::isBinaryUuid($strId)) {
+        if (!Validator::isBinaryUuid($strId)) {
             $this->pendingIds[] = self::stringToUuid($strId);
             return $this;
         }
@@ -336,7 +360,7 @@ class ToolboxFile
      */
     protected function collectFiles()
     {
-        $table = \FilesModel::getTable();
+        $table = FilesModel::getTable();
 
         $conditions = array();
         $parameters = array();
@@ -360,7 +384,7 @@ class ToolboxFile
             return;
         }
 
-        if ($files = \FilesModel::findBy(array(implode(' OR ', $conditions)), $parameters)) {
+        if ($files = FilesModel::findBy(array(implode(' OR ', $conditions)), $parameters)) {
             $this->addFileModels($files);
         }
 
@@ -376,11 +400,19 @@ class ToolboxFile
      * @param string $strFile The file that shall be downloaded.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getDownloadLink($strFile)
     {
-        return UrlBuilder::fromUrl(\Environment::get('request'))
+        if (!isset($_SESSION['metaModels_downloads'][$strFile])) {
+            $_SESSION['metaModels_downloads'][$strFile] = md5(uniqid());
+        }
+
+        return UrlBuilder::fromUrl(Environment::get('request'))
             ->setQueryParameter('file', urlencode($strFile))
+            ->setQueryParameter('fileKey', $_SESSION['metaModels_downloads'][$strFile])
             ->getUrl();
     }
 
@@ -401,66 +433,8 @@ class ToolboxFile
             return;
         }
 
-        /** @var EventDispatcherInterface $dispatcher */
-        $dispatcher = $GLOBALS['container']['event-dispatcher'];
-        $resizeInfo = $this->getResizeImages();
-        $intWidth   = $resizeInfo[0] ? $resizeInfo[0] : '';
-        $intHeight  = $resizeInfo[1] ? $resizeInfo[1] : '';
-        $strMode    = $resizeInfo[2] ? $resizeInfo[2] : '';
-
         foreach ($this->foundFiles as $strFile) {
-            $objFile = new \File($strFile);
-
-            $arrMeta     = $this->metaInformation[dirname($strFile)][$objFile->basename];
-            $strBasename = strlen($arrMeta['title']) ? $arrMeta['title'] : specialchars($objFile->basename);
-            if (strlen($arrMeta['caption'])) {
-                $strAltText = $arrMeta['caption'];
-            } else {
-                $strAltText = ucfirst(str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $objFile->filename)));
-            }
-
-            $strIcon = 'assets/contao/images/' . $objFile->icon;
-            
-            $arrSource = array
-            (
-                'file'      => $strFile,
-                'mtime'     => $objFile->mtime,
-                'alt'       => $strAltText,
-                'caption'   => (strlen($arrMeta['caption']) ? $arrMeta['caption'] : ''),
-                'title'     => $strBasename,
-                'metafile'  => $arrMeta,
-                'icon'      => $strIcon,
-                'extension' => $objFile->extension,
-                'size'      => $objFile->filesize,
-                'sizetext'  => sprintf(
-                    '(%s)',
-                    \Controller::getReadableSize($objFile->filesize, 2)
-                ),
-                'url'       => specialchars($this->getDownloadLink($strFile))
-            );
-
-            // Prepare images.
-            if ($arrSource['isGdImage'] = $objFile->isGdImage) {
-                if ($this->getShowImages() && ($intWidth || $intHeight || $strMode)) {
-                    $event = new ResizeImageEvent($strFile, $intWidth, $intHeight, $strMode);
-                    $dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
-                    $strSrc = $event->getResultImage();
-                } else {
-                    $strSrc = $strFile;
-                }
-                $arrSource['src'] = $strSrc;
-
-                if (file_exists(TL_ROOT . '/' . urldecode($strSrc))) {
-                    $size            = getimagesize(TL_ROOT . '/' . urldecode($strSrc));
-                    $arrSource['lb'] = 'lb' . $this->getLightboxId();
-                    $arrSource['w']  = $size[0];
-                    $arrSource['h']  = $size[1];
-                    $arrSource['wh'] = $size[3];
-                }
-            }
-
-            $this->modifiedTime[] = $objFile->mtime;
-            $this->outputBuffer[] = $arrSource;
+            $this->processFile($strFile);
         }
     }
 
@@ -677,18 +651,43 @@ class ToolboxFile
         // Step 1.: fetch all files.
         $this->collectFiles();
 
-        // TODO: check if downloading is allowed and send file to browser then
-        // See https://github.com/MetaModels/attribute_file/issues/6 for details of how to implement this.
-        if ((!$this->getShowImages())
-            && ($strFile = \Input::get('file')) && in_array($strFile, $this->foundFiles)
-        ) {
-            \Controller::sendFileToBrowser($strFile);
-        }
+        // Step 1.1.: Check if any file is to be served.
+        $this->checkDownloads();
 
         // Step 2.: fetch additional information like modification time etc. and prepare the output buffer.
         $this->fetchAdditionalData();
 
         return $this;
+    }
+
+    /**
+     * Check if a file download is desired.
+     *
+     * See https://github.com/MetaModels/attribute_file/issues/6
+     * See https://github.com/MetaModels/core/issues/1014
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    private function checkDownloads()
+    {
+        // If images are to be shown, get out.
+        if ($this->getShowImages()) {
+            return;
+        }
+        if (($file = Input::get('file')) && ($key = Input::get('fileKey'))) {
+            // Check key and return 403 if mismatch.
+            if (!(array_key_exists($file, $_SESSION['metaModels_downloads'])
+                && $_SESSION['metaModels_downloads'][$file] === $key)) {
+                $objHandler = new $GLOBALS['TL_PTY']['error_403']();
+                /** @var PageError403 $objHandler */
+                $objHandler->generate($file);
+            }
+            // Send the file to the browser if check succeeded.
+            Controller::sendFileToBrowser($file);
+        }
     }
 
     /**
@@ -700,7 +699,7 @@ class ToolboxFile
      */
     public static function convertValueToPath($varValue)
     {
-        $objFiles = \FilesModel::findByPk($varValue);
+        $objFiles = FilesModel::findByPk($varValue);
 
         if ($objFiles !== null) {
             return $objFiles->path;
@@ -722,12 +721,12 @@ class ToolboxFile
      *
      * @return array
      *
-     * @throws \InvalidArgumentException When the input array is invalid.
+     * @throws InvalidArgumentException When the input array is invalid.
      */
     public static function convertValuesToDatabase($values)
     {
         if (!(isset($values['bin']) && isset($values['value']) && isset($values['path']))) {
-            throw new \InvalidArgumentException('Invalid file array');
+            throw new InvalidArgumentException('Invalid file array');
         }
 
         $bin = array();
@@ -752,12 +751,12 @@ class ToolboxFile
      *
      * @return array
      *
-     * @throws \InvalidArgumentException When the input array is invalid.
+     * @throws InvalidArgumentException When the input array is invalid.
      */
     public static function convertValuesToMetaModels($values)
     {
         if (!is_array($values)) {
-            throw new \InvalidArgumentException('Invalid uuid list.');
+            throw new InvalidArgumentException('Invalid uuid list.');
         }
 
         $result = array(
@@ -765,7 +764,7 @@ class ToolboxFile
             'value' => array(),
             'path'  => array()
         );
-        $models = \FilesModel::findMultipleByUuids(array_filter($values));
+        $models = FilesModel::findMultipleByUuids(array_filter($values));
 
         if ($models === null) {
             return $result;
@@ -794,7 +793,7 @@ class ToolboxFile
      *
      * @return array
      *
-     * @throws \InvalidArgumentException When any of the input is not a valid uuid or an non existent file.
+     * @throws InvalidArgumentException When any of the input is not a valid uuid or an non existent file.
      */
     public static function convertUuidsOrPathsToMetaModels($values)
     {
@@ -808,10 +807,10 @@ class ToolboxFile
         }
 
         foreach ($values as $key => $value) {
-            if (!(\Validator::isUuid($value))) {
-                $file = \FilesModel::findByPath($value) ?: \Dbafs::addResource($value);
+            if (!(Validator::isUuid($value))) {
+                $file = FilesModel::findByPath($value) ?: Dbafs::addResource($value);
                 if (!$file) {
-                    throw new \InvalidArgumentException('Invalid value.');
+                    throw new InvalidArgumentException('Invalid value.');
                 }
 
                 $values[$key] = $file->uuid;
@@ -830,13 +829,7 @@ class ToolboxFile
      */
     private static function uuidToString($uuid)
     {
-        static $uuidMapper;
-        if (!isset($uuidMapper)) {
-            $uuidMapper =
-                array((version_compare(VERSION . '.' . BUILD, '3.5.5', '>=')) ? 'StringUtil' : 'String', 'binToUuid');
-        }
-
-        return call_user_func($uuidMapper, $uuid);
+        return call_user_func(['StringUtil', 'binToUuid'], $uuid);
     }
 
     /**
@@ -848,13 +841,7 @@ class ToolboxFile
      */
     private static function stringToUuid($uuid)
     {
-        static $uuidMapper;
-        if (!isset($uuidMapper)) {
-            $uuidMapper =
-                array((version_compare(VERSION . '.' . BUILD, '3.5.5', '>=')) ? 'StringUtil' : 'String', 'uuidToBin');
-        }
-
-        return call_user_func($uuidMapper, $uuid);
+        return call_user_func(['StringUtil', 'uuidToBin'], $uuid);
     }
 
     /**
@@ -863,9 +850,9 @@ class ToolboxFile
      * Must either be called from within collectFiles or collectFiles must be called later on as this method
      * will add models of type folder to the list of pending paths to allow for recursive inclusion.
      *
-     * @param \FilesModel[] $files     The files to add.
+     * @param FilesModel[] $files     The files to add.
      *
-     * @param array         $skipPaths List of directories not to be added to the list of pending directories.
+     * @param array        $skipPaths List of directories not to be added to the list of pending directories.
      *
      * @return void
      */
@@ -893,5 +880,72 @@ class ToolboxFile
                 }
             }
         }
+    }
+
+    /**
+     * Process a single file.
+     *
+     * @param string $fileName The file to fetch data for.
+     *
+     * @return void
+     */
+    private function processFile($fileName)
+    {
+        $file  = new File($fileName);
+        $meta  = $this->metaInformation[dirname($fileName)][$file->basename];
+        $title = strlen($meta['title']) ? $meta['title'] : specialchars($file->basename);
+        if (strlen($meta['caption'])) {
+            $altText = $meta['caption'];
+        } else {
+            $altText = ucfirst(str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $file->filename)));
+        }
+
+        $information = [
+            'file'      => $fileName,
+            'mtime'     => $file->mtime,
+            'alt'       => $altText,
+            'caption'   => (!empty($meta['caption']) ? $meta['caption'] : ''),
+            'title'     => $title,
+            'metafile'  => $meta,
+            'icon'      => 'assets/contao/images/' . $file->icon,
+            'extension' => $file->extension,
+            'size'      => $file->filesize,
+            'sizetext'  => sprintf('(%s)', Controller::getReadableSize($file->filesize, 2)),
+            'url'       => specialchars($this->getDownloadLink($fileName))
+        ];
+
+        // Prepare images.
+        if ($information['isGdImage'] = $file->isGdImage) {
+            $information['src'] = urldecode($this->resizeImage($fileName));
+            if (file_exists(TL_ROOT . '/' . $information['src'])) {
+                $size              = getimagesize(TL_ROOT . '/' . $information['src']);
+                $information['lb'] = 'lb' . $this->getLightboxId();
+                $information['w']  = $size[0];
+                $information['h']  = $size[1];
+                $information['wh'] = $size[3];
+            }
+        }
+
+        $this->modifiedTime[] = $file->mtime;
+        $this->outputBuffer[] = $information;
+    }
+
+    /**
+     * Resize the image if needed.
+     *
+     * @param string $fileName The file to resize.
+     *
+     * @return null|string
+     */
+    private function resizeImage($fileName)
+    {
+        list($width, $height, $mode) = $this->getResizeImages();
+        if ($this->getShowImages() && ($width || $height || $mode)) {
+            $event = new ResizeImageEvent($fileName, $width, $height, $mode);
+            $this->dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
+            return $event->getResultImage();
+        }
+
+        return $fileName;
     }
 }

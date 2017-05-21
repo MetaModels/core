@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,8 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -34,6 +35,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
         'dataContainer'    => 'General',
         'switchToEdit'     => false,
         'enableVersioning' => false,
+        'sql'              => array
+        (
+            'keys' => array
+            (
+                'id'  => 'primary',
+                'pid' => 'index'
+            ),
+        ),
     ),
     'dca_config'            => array
     (
@@ -225,7 +234,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
     ),
     'metapalettes'          => array
     (
-        'default'                                      => array
+        'default'                                           => array
         (
             'basic' => array
             (
@@ -234,20 +243,18 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
                 'comment'
             ),
         ),
-        '_attribute_ extends default'                  => array
+        '_attribute_ extends default'                       => array
         (
             '+config' => array
             (
                 'attr_id'
             )
         ),
-        'conditionor extends default'                  => array
-        (
-        ),
-        'conditionand extends default'                 => array
-        (
-        ),
-        'conditionpropertyvalueis extends _attribute_' => array
+        'conditionor extends default'                       => array
+        (),
+        'conditionand extends default'                      => array
+        (),
+        'conditionpropertyvalueis extends _attribute_'      => array
         (
             '+config' => array
             (
@@ -261,30 +268,45 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
                 'value'
             )
         ),
-        'conditionpropertyvisible extends _attribute_' => array
-        (
-        ),
+        'conditionpropertyvisible extends _attribute_'      => array
+        (),
     ),
     'metasubselectpalettes' => array
     (
         'attr_id' => array
-        (
-        )
+        ()
     ),
     'fields'                => array
     (
+        'id'        => array
+        (
+            'sql' => "int(10) unsigned NOT NULL auto_increment"
+        ),
+        'pid'       => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'sorting'   => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'tstamp'    => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
         'settingId' => array
         (
             // Keep this empty but keep it here!
             // needed for act=copy in DC_Table, as otherwise the fid value will not be copied.
             'label' => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['fid'],
+            'sql'   => "int(10) unsigned NOT NULL default '0'"
         ),
-        'type'     => array
+        'type'      => array
         (
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type'],
-            'exclude'   => true,
-            'inputType' => 'select',
-            'eval'      => array
+            'label'       => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type'],
+            'exclude'     => true,
+            'inputType'   => 'select',
+            'eval'        => array
             (
                 'doNotSaveEmpty'     => true,
                 'alwaysSave'         => true,
@@ -294,8 +316,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
                 'tl_class'           => 'w50',
                 'chosen'             => true,
                 'helpwizard'         => true
-             ),
-             'explanation' => 'dcasetting_condition'
+            ),
+            'explanation' => 'dcasetting_condition',
+            'sql'         => "varchar(255) NOT NULL default ''"
         ),
         'enabled'   => array
         (
@@ -307,6 +330,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
                 'alwaysSave' => true,
                 'tl_class'   => 'w50 m12',
             ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'comment'   => array
         (
@@ -316,7 +340,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
             'eval'      => array
             (
                 'tl_class' => 'clr long'
-            )
+            ),
+            'sql'       => "varchar(255) NOT NULL default ''"
         ),
         'attr_id'   => array
         (
@@ -333,6 +358,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
                 'tl_class'           => 'w50',
                 'chosen'             => true
             ),
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),
         'value'     => array
         (
@@ -346,6 +372,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
                 'tl_class'           => 'w50',
                 'chosen'             => true
             ),
+            'sql'       => "blob NULL"
         ),
     )
 );

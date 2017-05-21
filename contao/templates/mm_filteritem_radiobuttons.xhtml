@@ -1,39 +1,40 @@
-<?php if ($this->errors): ?>
-<?php foreach ($this->errors as $error): ?>
-<p class="error"><?php echo $error; ?></p>
-<?php endforeach; ?>
-<?php endif; ?>
+<?php $this->extend('mm_filteritem_default'); ?>
+
+<?php $this->block('formfield'); ?>
 <?php if(is_array($this->options) && count($this->options)>0): ?>
-<fieldset id="ctrl_<?php echo $this->urlparam; ?>" class="radio_container">
-<?php 
+<fieldset id="ctrl_<?= $this->urlparam ?>" class="radio_container">
+<?php
 $count = 0;
-foreach($this->options as $option):
+foreach ($this->options as $option):
     $class = ($count == 0) ? 'first ' : '';
-    $class .= ($count == count($this->options) - 1 ) ? 'last ' : '';
+    $class .= ($count == count($this->options) - 1) ? 'last ' : '';
     $class .= ($count % 2 == 1) ? 'even' : 'odd';
     $class .= (strlen($option['class'])) ? ' ' . $option['class'] : '';
 ?>
 
 <?php
-    $field = sprintf('<input type="radio" name="%s" id="opt_%s_%s" class="radio%s" value="%s"%s />',
+    $field = sprintf(
+        '<input type="radio" name="%s" id="opt_%s_%s" class="radio%s" value="%s"%s />',
         $this->urlparam,
         $this->urlparam,
         $count,
         $this->submit ? ' submitonchange' : '',
         $option['key'],
-        ($option['active'] ? ' checked="checked"':'')
+        ($option['active'] ? ' checked="checked"' : '')
     );
-    $label = sprintf('<label id="lbl_%s_%s" for="opt_%s_%s">%s%s</label>',
+    $label = sprintf(
+        '<label id="lbl_%s_%s" for="opt_%s_%s">%s%s</label>',
         $this->urlparam,
         $count,
         $this->urlparam,
         $count,
         $option['value'],
-        (($this->showCount) ? ' <span class="count">('. $this->count[$option['key']] .')</span>' : '')
+        (($this->showCount) ? ' <span class="count">(' . $this->count[$option['key']] . ')</span>' : '')
     );
     $count++;
 ?>
-<span class="<?php echo $class; ?>"><?php echo $field; ?> <?php echo $label; ?></span>
+<span class="<?= $class ?>"><?= $field ?> <?= $label ?></span>
 <?php endforeach; ?>
 </fieldset>
 <?php endif; ?>
+<?php $this->endblock(); ?>

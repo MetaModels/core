@@ -26,6 +26,9 @@ mapping:
   "Ingolf Steinhardt <info@e-spin.de>":
     - "xantippe <info@e-spin.de>"
     - "zonky2 <info@e-spin.de>"
+  "binron <rtb@gmx.ch>": "binron <rtb@gmx.ch>"
+  "Jeremie Constant <j.constant@imi.de>":
+    - "JeremieConstant <j.constant@imi.de>"
 
 copy-left:
   "Christoph Wiechert <christoph.wiechert@4wardmedia.de>": MetaModels/Widgets/PickerWidget.php

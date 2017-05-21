@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2016 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Martin Treml <github@r2pi.net>
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2016 The MetaModels team.
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -140,7 +140,10 @@ class Subscriber extends BaseSubscriber
      */
     public function modelToLabel(ModelToLabelEvent $event)
     {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_attribute')) {
+        $dataDefinitionName = $event->getEnvironment()->getDataDefinition()->getName();
+        if (($dataDefinitionName !== 'tl_metamodel_attribute')
+            || ($dataDefinitionName !== $event->getModel()->getProviderName())
+        ) {
             return;
         }
 
@@ -185,7 +188,7 @@ class Subscriber extends BaseSubscriber
                 $description = $arrDescription[$attribute->getMetaModel()->getFallbackLanguage()];
             }
         } else {
-            $description = $attribute->getName();
+            $description = $arrDescription ?: $attribute->getName();
         }
 
         $event
@@ -214,7 +217,10 @@ class Subscriber extends BaseSubscriber
     public function getOptions(GetPropertyOptionsEvent $event)
     {
         if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_attribute')
-            || ($event->getPropertyName() !== 'type')) {
+            || ($event->getPropertyName() !== 'type')
+            || ($event->getEnvironment()->getInputProvider()->getParameter('act') === 'select'
+                && !$event->getModel()->getId())
+        ) {
             return;
         }
 
@@ -255,6 +261,10 @@ class Subscriber extends BaseSubscriber
      */
     protected function decodeValue(DecodePropertyValueForWidgetEvent $event)
     {
+        if ($event->getEnvironment()->getDataDefinition()->getName() !== $event->getModel()->getProviderName()) {
+            return;
+        }
+
         $metaModel = $this->getMetaModelByModelPid($event->getModel());
 
         $values = Helper::decodeLangArray($event->getValue(), $metaModel);
@@ -531,7 +541,7 @@ class Subscriber extends BaseSubscriber
      */
     public function handleDeleteAttribute(PreDeleteModelEvent $event)
     {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_attribute')) {
+        if (($event->getModel()->getProviderName() !== 'tl_metamodel_attribute')) {
             return;
         }
 
@@ -578,9 +588,10 @@ class Subscriber extends BaseSubscriber
         $conditionsDataDefinition     = $conditionsEnvironment->getDataDefinition();
         $conditionsPalettesDefinition = $conditionsDataDefinition->getPalettesDefinition();
 
+        /** @var \Iterator $conditionsIterator */
         $conditionsIterator = $conditions->getIterator();
         while ($currentCondition = $conditionsIterator->current()) {
-            $conditionPalette = $conditionsPalettesDefinition->getPaletteByName(
+            $conditionPalette    = $conditionsPalettesDefinition->getPaletteByName(
                 $currentCondition->getProperty('type')
             );
             $conditionProperties = $conditionPalette->getVisibleProperties(

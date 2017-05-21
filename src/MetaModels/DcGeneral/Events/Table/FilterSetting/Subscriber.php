@@ -245,7 +245,11 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        $attribute = $metaModel->getAttributeById($model->getProperty('attr_id'));
+        if (!($attributeId = $model->getProperty('attr_id'))) {
+            return;
+        }
+
+        $attribute = $metaModel->getAttributeById($attributeId);
         if (!$attribute) {
             return;
         }

@@ -20,12 +20,17 @@
 
 namespace MetaModels\FrontendIntegration;
 
+use Contao\BackendTemplate;
+use Contao\ContentModel;
+use Contao\FormModel;
+use Contao\Hybrid;
+use Contao\ModuleModel;
 use MetaModels\IMetaModelsServiceContainer;
 
 /**
  * Base implementation of a MetaModel Hybrid element.
  */
-abstract class MetaModelHybrid extends \Hybrid
+abstract class MetaModelHybrid extends Hybrid
 {
     /**
      * The name to display in the wildcard.
@@ -64,11 +69,13 @@ abstract class MetaModelHybrid extends \Hybrid
     /**
      * Create a new instance.
      *
-     * @param \Database\Result $objElement The object from the database.
+     * @param ContentModel|ModuleModel|FormModel $objElement The object from the database.
+     *
+     * @param string                             $strColumn  The column the element is displayed within.
      */
-    public function __construct($objElement)
+    public function __construct($objElement, $strColumn = 'main')
     {
-        parent::__construct($objElement);
+        parent::__construct($objElement, $strColumn);
 
         $this->arrData = $objElement->row();
         // Get space and CSS ID from the parent element (!)
@@ -89,7 +96,7 @@ abstract class MetaModelHybrid extends \Hybrid
     public function generate()
     {
         if (TL_MODE == 'BE') {
-            $objTemplate           = new \BackendTemplate('be_wildcard');
+            $objTemplate           = new BackendTemplate('be_wildcard');
             $objTemplate->wildcard = $this->wildCardName;
             $objTemplate->title    = $this->headline;
             $objTemplate->id       = $this->id;

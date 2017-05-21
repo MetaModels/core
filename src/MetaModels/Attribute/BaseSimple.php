@@ -86,6 +86,11 @@ class BaseSimple extends Base implements ISimple
      */
     public function getFilterOptions($idList, $usedOnly, &$arrCount = null)
     {
+        // If empty list, return empty result. See also #379 for discussion.
+        if ($idList === array()) {
+            return array();
+        }
+
         $strCol = $this->getColName();
         if ($idList) {
             $objRow = $this->getMetaModel()->getServiceContainer()->getDatabase()

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,9 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Andreas Isaak <info@andreas-isaak.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -29,6 +31,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
         'switchToEdit'     => false,
         'enableVersioning' => false,
         'closed'           => false,
+        'sql'              => array
+        (
+            'keys' => array
+            (
+                'id'       => 'primary',
+                'pid'      => 'index',
+                'fe_group' => 'index',
+                'be_group' => 'index'
+            ),
+        )
     ),
     'dca_config' => array
     (
@@ -49,7 +61,23 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
     ),
     'fields'     => array
     (
-        'rows' => array
+        'id'       => array
+        (
+            'sql' => "int(10) unsigned NOT NULL auto_increment"
+        ),
+        'pid'      => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'sorting'  => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'tstamp'   => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'rows'     => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_combiner'],
             'exclude'   => true,
@@ -80,7 +108,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
                             'includeBlankOption' => true,
                             'style'              => 'width:115px',
                             'chosen'             => 'true'
-                        )
+                        ),
                     ),
                     'be_group' => array
                     (
@@ -92,7 +120,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
                             'includeBlankOption' => true,
                             'style'              => 'width:115px',
                             'chosen'             => 'true'
-                        )
+                        ),
                     ),
                     'dca_id'   => array
                     (
@@ -101,9 +129,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
                         'inputType' => 'select',
                         'eval'      => array
                         (
+                            'includeBlankOption' => true,
                             'style'  => 'width:180px',
                             'chosen' => 'true'
-                        )
+                        ),
                     ),
                     'view_id'  => array
                     (
@@ -112,12 +141,30 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
                         'inputType' => 'select',
                         'eval'      => array
                         (
+                            'includeBlankOption' => true,
                             'style'  => 'width:180px',
                             'chosen' => 'true'
-                        )
+                        ),
                     ),
                 ),
             ),
+        ),
+        'fe_group' => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'be_group' => array
+        (
+            // keep signed as admins are -1
+            'sql' => "int(10) NOT NULL default '0'"
+        ),
+        'dca_id'   => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'view_id'  => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
         )
     )
 );

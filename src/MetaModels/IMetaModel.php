@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2016 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Maack <david.maack@arcor.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2016 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -30,8 +31,9 @@ use MetaModels\Filter\IFilter;
  * This interface handles all attribute definition instantiation and can be queried for a view instance to certain
  * entries.
  *
- * @see MetaModelFactory::byId        To instantiate a MetaModel by its ID.
- * @see MetaModelFactory::byTableName To instantiate a MetaModel by its table name.
+ * @see MetaModelFactory::byId                             To instantiate a MetaModel by its ID.
+ *
+ * @see \MetaModels\IFactory::getMetaModel($metaModelName) To instantiate a MetaModel by its table name.
  */
 interface IMetaModel
 {
@@ -161,7 +163,7 @@ interface IMetaModel
      * @param string[] $arrAttrOnly Names of the attributes that shall be enclosed in the result, defaults to empty
      *                              which means all attributes.
      *
-     * @return IItem the item if found, NULL otherwise.
+     * @return IItem|null The item if found, NULL otherwise.
      */
     public function findById($intId, $arrAttrOnly = array());
 

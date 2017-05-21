@@ -81,4 +81,11 @@ class MetaModelsEvents
      * @see \MetaModels\Events\ParseItemEvent.
      */
     const PARSE_ITEM = 'metamodels.parse-item';
+
+    /**
+     * Event when an item list is rendered.
+     *
+     * @see \MetaModels\Events\RenderItemListEvent.
+     */
+    const RENDER_ITEM_LIST = 'metamodels.render-item-list';
 }

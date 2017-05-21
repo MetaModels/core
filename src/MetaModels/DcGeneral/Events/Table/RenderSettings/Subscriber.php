@@ -133,10 +133,6 @@ class Subscriber extends BaseSubscriber
             ->getProperty($event->getProperty());
         $value    = deserialize($event->getValue(), true);
 
-        if (!$value) {
-            return;
-        }
-
         $extra = $propInfo->getExtra();
 
         $newValues    = array();

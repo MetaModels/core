@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    <!--
-     This project is using the Contao Community Alliance Build System (CCABS)
+<!--
+This project is using the PHP code quality project (PHPCQ).
 
-     For documentation visit:
-       https://github.com/contao-community-alliance/build-system
+For documentation visit:
+  https://github.com/phpcq/phpcq
 
-    -->
+-->
 <project name="metamodels-core" default="build">
     <import file="vendor/phpcq/phpcq/phpcq.main.xml" />
 </project>

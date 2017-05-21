@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2015 The MetaModels team.
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -33,6 +33,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Interface for a MetaModel item.
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class Item implements IItem
 {
@@ -283,7 +285,7 @@ class Item implements IItem
      *
      * @param IFilter $objFilter The filter settings to be applied.
      *
-     * @return IItems A list of all variants for this item.
+     * @return IItems|null A list of all variants for this item.
      */
     public function getVariants($objFilter)
     {
@@ -292,6 +294,22 @@ class Item implements IItem
         }
 
         return null;
+    }
+
+    /**
+     * Fetch the meta model variant base for this item.
+     *
+     * Note: For a non-variant item the variant base is the item itself.
+     *
+     * @return IItem The variant base.
+     */
+    public function getVariantBase()
+    {
+        if (!$this->isVariantBase()) {
+            return $this->getMetaModel()->findById($this->get('vargroup'));
+        }
+
+        return $this;
     }
 
     /**
@@ -309,7 +327,6 @@ class Item implements IItem
             return null;
         }
         return $this->getMetaModel()->findVariantsWithBase(array($this->get('id')), $objFilter);
-
     }
 
     /**
@@ -429,7 +446,7 @@ class Item implements IItem
      *
      * @param ICollection $objSettings The render settings to use.
      *
-     * @return array
+     * @return string|null
      */
     public function buildJumpToLink($objSettings)
     {
@@ -469,6 +486,7 @@ class Item implements IItem
         $arrNewData = $this->arrData;
         unset($arrNewData['id']);
         unset($arrNewData['tstamp']);
+        unset($arrNewData['vargroup']);
         return new Item($this->getMetaModel(), $arrNewData);
     }
 

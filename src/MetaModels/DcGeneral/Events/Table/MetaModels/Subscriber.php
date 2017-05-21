@@ -21,8 +21,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\MetaModels;
 
-use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
+use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
@@ -33,10 +32,10 @@ use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PreDeleteModelEvent;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
+use MenAtWork\MultiColumnWizard\Event\GetOptionsEvent;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbMetaModels;
 use MetaModels\Helper\TableManipulation;
-use MetaModels\IMetaModel;
 
 /**
  * Handles event operations on tl_metamodel.
@@ -81,6 +80,10 @@ class Subscriber extends BaseSubscriber
             ->addListener(
                 PreDeleteModelEvent::NAME,
                 array($this, 'handleDelete')
+            )
+            ->addListener(
+                GetOptionsEvent::NAME,
+                array($this, 'loadLanguageOptions')
             )
             ->addListener(
                 DecodePropertyValueForWidgetEvent::NAME,
@@ -157,45 +160,34 @@ class Subscriber extends BaseSubscriber
         $model      = $event->getModel();
         $translator = $event->getEnvironment()->getTranslator();
         $database   = $this->getDatabase();
+        $tableName  = $model->getProperty('tableName');
 
-        if (!($model && $database->tableExists($model->getProviderName()))) {
+        if (!($model && !empty($tableName) && $database->tableExists($tableName))) {
             return;
         }
 
         $strLabel = vsprintf($event->getLabel(), $event->getArgs());
-
-        $strImage = '';
-        if ($model->getProperty('addImage')) {
-            $arrSize    = deserialize($model->getProperty('size'));
-            $imageEvent = new ResizeImageEvent($model->getProperty('singleSRC'), $arrSize[0], $arrSize[1], $arrSize[2]);
-
-            $event->getEnvironment()->getEventDispatcher()->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
-
-            $strImage = sprintf(
-                '<div class="image" style="padding-top:3px"><img src="%s" alt="%%1$s" /></div> ',
-                $imageEvent->getImage(),
-                htmlspecialchars($strLabel)
-            );
-        }
-
+        $image    = ((bool) $model->getProperty('translated')) ? 'locale.png' : 'locale_1.png';
         $objCount = $database
-            ->prepare('SELECT count(*) AS itemCount FROM ' . $model->getProperty('tableName'))
+            ->prepare('SELECT count(*) AS itemCount FROM ' . $tableName)
             ->execute();
         /** @noinspection PhpUndefinedFieldInspection */
         $count = $objCount->itemCount;
 
-        $itemCount = sprintf(
-            '<span style="color:#b3b3b3; padding-left:3px">[%s]</span>',
-            $translator->translatePluralized(
-                'itemFormatCount',
-                $count,
-                'tl_metamodel',
-                array($count)
+        $event->setArgs([
+            sprintf(
+                '
+<span class="name">
+  <img src="system/modules/metamodels/assets/images/icons/%1$s" /> %2$s
+  <span style="color:#b3b3b3; padding-left:3px">(%3$s)</span>
+  <span style="color:#b3b3b3; padding-left:3px">[%4$s]</span>
+</span>',
+                $image,
+                $strLabel,
+                $tableName,
+                $translator->translatePluralized('itemFormatCount', $count, 'tl_metamodel', [$count])
             )
-        );
-        $tableName = '<span style="color:#b3b3b3; padding-left:3px">(' . $model->getProperty('tableName') . ')</span>';
-
-        $event->setArgs(array('<span class="name">' . $strLabel . $tableName . $itemCount . '</span>' . $strImage));
+        ]);
     }
 
     /**
@@ -252,6 +244,28 @@ class Subscriber extends BaseSubscriber
         }
 
         $event->setValue($output);
+    }
+
+    /**
+     * Prepare the language options.
+     *
+     * @param GetOptionsEvent $event The event.
+     *
+     * @return void
+     */
+    public function loadLanguageOptions(GetOptionsEvent $event)
+    {
+        if (($event->getOptions() !== null) ||
+            ($event->getModel()->getProviderName() !== 'tl_metamodel')
+            || ($event->getPropertyName() !== 'languages')
+            || ($event->getSubPropertyName() !== 'langcode')) {
+            return;
+        }
+
+        $event->setOptions(array_flip(array_filter(array_flip(System::getLanguages()), function ($langCode) {
+            // Disable >2 char long language codes for the moment.
+            return (strlen($langCode) == 2);
+        })));
     }
 
     /**

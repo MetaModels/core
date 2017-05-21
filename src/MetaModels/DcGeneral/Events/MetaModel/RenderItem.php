@@ -107,7 +107,6 @@ class RenderItem
         if ($listing->getShowColumns()) {
             $event->setArgs($data[0]['html5']);
             return;
-
         }
 
         $template      = new Template($renderSetting->get('template'));
@@ -122,7 +121,7 @@ class RenderItem
             )
         );
 
-        $event->setArgs(array($template->parse('html5')));
+        $event->setLabel('%s')->setArgs(array($template->parse('html5')));
     }
 
     /**

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -66,6 +67,13 @@ class PaginationLimitCalculator
      * @var int
      */
     private $totalAmount = 0;
+
+    /**
+     * The maximum number of pagination links.
+     *
+     * @var int
+     */
+    private $maxPaginationLinks;
 
     /**
      * The calculated offset.
@@ -262,6 +270,34 @@ class PaginationLimitCalculator
     }
 
     /**
+     * Set the number of maximum pagination links.
+     *
+     * @return int
+     */
+    public function getMaxPaginationLinks()
+    {
+        if (null === $this->maxPaginationLinks) {
+            $this->setMaxPaginationLinks(\Config::get('maxPaginationLinks'));
+        }
+
+        return $this->maxPaginationLinks;
+    }
+
+    /**
+     * Get the number of maximum pagination links.
+     *
+     * @param int $maxPaginationLinks The maximum number of links.
+     *
+     * @return PaginationLimitCalculator
+     */
+    public function setMaxPaginationLinks($maxPaginationLinks)
+    {
+        $this->maxPaginationLinks = $maxPaginationLinks;
+
+        return $this->markDirty();
+    }
+
+    /**
      * Render the pagination string.
      *
      * @return string
@@ -275,7 +311,7 @@ class PaginationLimitCalculator
         }
 
         // Add pagination menu.
-        $objPagination = new \Pagination($this->calculatedTotal, $this->getPerPage());
+        $objPagination = new \Pagination($this->calculatedTotal, $this->getPerPage(), $this->getMaxPaginationLinks());
 
         return $objPagination->generate("\n  ");
     }

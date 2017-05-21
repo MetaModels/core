@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,9 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -30,18 +32,30 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
         'ptable'           => 'tl_metamodel_dca',
         'switchToEdit'     => false,
         'enableVersioning' => false,
+        'sql'              => array
+        (
+            'keys' => array
+            (
+                'id'  => 'primary',
+                'pid' => 'index'
+            ),
+        ),
     ),
     'dca_config'            => array
     (
         'data_provider'  => array
         (
-            'default' => array
+            'default'      => array
             (
                 'source' => 'tl_metamodel_dca_sortgroup'
             ),
-            'parent'  => array
+            'parent'       => array
             (
                 'source' => 'tl_metamodel_dca'
+            ),
+            'tl_metamodel' => array
+            (
+                'source' => 'tl_metamodel'
             )
         ),
         'childCondition' => array
@@ -50,6 +64,37 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             (
                 'from'    => 'tl_metamodel_dca',
                 'to'      => 'tl_metamodel_dca_sortgroup',
+                'setOn'   => array
+                (
+                    array
+                    (
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
+                    ),
+                ),
+                'filter'  => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                ),
+                'inverse' => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                )
+            ),
+            array
+            (
+                'from'    => 'tl_metamodel',
+                'to'      => 'tl_metamodel_dca',
                 'setOn'   => array
                 (
                     array
@@ -153,23 +198,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
     ),
     'metasubselectpalettes' => array
     (
-        'rendertype'      => array
-        (
-            'standalone' => array
-            (
-                'backend after rendertype' => array
-                (
-                    'backendsection'
-                ),
-            ),
-            'ctable'     => array
-            (
-                'backend after rendertype' => array
-                (
-                    'ptable'
-                ),
-            )
-        ),
         'rendergrouptype' => array
         (
             '!none' => array
@@ -181,7 +209,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             ),
             'char'  => array
             (
-                'display after rendergrouptype' => array
+                'display after rendergroupattr' => array
                 (
                     'rendergrouplen'
                 ),
@@ -191,17 +219,33 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
         (
             '!1' => array
             (
-                'display after rendergrouplen' => array
+                'display after ismanualsort' => array
                 (
-                    'rendergrouptype',
                     'rendersortattr',
                     'rendersort',
+                    'rendergrouptype',
                 ),
             )
         )
     ),
     'fields'                => array
     (
+        'id'              => array
+        (
+            'sql' => "int(10) unsigned NOT NULL auto_increment"
+        ),
+        'pid'             => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'sorting'         => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'tstamp'          => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
         'name'            => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['name'],
@@ -213,7 +257,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
                 'mandatory' => true,
                 'maxlength' => 64,
                 'tl_class'  => 'w50'
-            )
+            ),
+            'sql'       => "text NULL"
         ),
         'isdefault'       => array
         (
@@ -222,9 +267,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             'inputType' => 'checkbox',
             'eval'      => array
             (
-                'tl_class'  => 'w50 m12 cbx',
-                'fallback'  => true
+                'tl_class' => 'w50 m12 cbx',
+                'fallback' => true
             ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'ismanualsort'    => array
         (
@@ -234,7 +280,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             (
                 'tl_class'       => 'w50 m12 cbx',
                 'submitOnChange' => true
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'rendersort'      => array
         (
@@ -246,7 +293,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             (
                 'tl_class' => 'w50',
             ),
-            'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendersortdirections']
+            'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendersortdirections'],
+            'sql'       => "varchar(10) NOT NULL default 'asc'"
         ),
         'rendersortattr'  => array
         (
@@ -255,8 +303,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             'inputType' => 'select',
             'eval'      => array
             (
-                'tl_class' => 'w50',
+                'tl_class' => 'w50 clr',
             ),
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),
         'rendergrouptype' => array
         (
@@ -264,12 +313,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             'exclude'   => true,
             'inputType' => 'select',
             'options'   => array('none', 'char', 'digit', 'day', 'weekday', 'week', 'month', 'year'),
+            'default'   => 'none',
             'eval'      => array
             (
-                'tl_class'       => 'w50',
+                'tl_class'       => 'w50 clr',
                 'submitOnChange' => true
             ),
-            'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergrouptypes']
+            'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergrouptypes'],
+            'sql'       => "varchar(10) NOT NULL default 'none'"
         ),
         'rendergroupattr' => array
         (
@@ -281,6 +332,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
                 'tl_class'       => 'w50',
                 'submitOnChange' => true
             ),
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),
         'rendergrouplen'  => array
         (
@@ -292,6 +344,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
                 'tl_class' => 'w50',
                 'rgxp'     => 'digit'
             ),
+            'sql'       => "int(10) unsigned NOT NULL default '1'"
         ),
         'backendcaption'  => array
         (
@@ -307,10 +360,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
                         'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_langcode'],
                         'exclude'   => true,
                         'inputType' => 'select',
-                        'options'   => array_flip(array_filter(array_flip($this->getLanguages()), function ($langCode) {
-                            // Disable >2 char long language codes for the moment.
-                            return (strlen($langCode) == 2);
-                        })),
+                        'options'   => array_flip(
+                            array_filter(
+                                array_flip($this->getLanguages()),
+                                function ($langCode) {
+                                    // Disable >2 char long language codes for the moment.
+                                    return (2 === strlen($langCode));
+                                }
+                            )
+                        ),
                         'eval'      => array
                         (
                             'style'  => 'width:200px',

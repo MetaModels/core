@@ -36,4 +36,18 @@ class ViewCombinations extends \MetaModels\Helper\ViewCombinations
     {
         return $this->getUser()->authenticate();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getUserGroups()
+    {
+        /** @noinspection PhpUndefinedFieldInspection */
+        // Special case in combinations, anonymous frontend users have the implicit group id -1.
+        if (!$this->getUser()->id) {
+            return [-1];
+        }
+
+        return parent::getUserGroups();
+    }
 }

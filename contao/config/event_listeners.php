@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2016 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,13 +16,12 @@
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @copyright  2012-2016 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
-use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
 use MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton;
 use MetaModels\DcGeneral\Events\MetaModel\CutButton;
 use MetaModels\DcGeneral\Events\MetaModel\DuplicateModel;
@@ -47,8 +46,19 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 return array(
     MetaModelsEvents::SUBSYSTEM_BOOT => array(
         function (MetaModelsBootEvent $event) {
+            /** @var EventDispatcherInterface $dispatcher */
+            $dispatcher = func_get_arg(2);
+
+            // This loads the factories.
             $handler = new DatabaseBackedListener();
             $handler->handleEvent($event);
+
+            $dispatcher->addListener(
+                CreatePropertyConditionEvent::NAME,
+                array(new DefaultPropertyConditionCreator(), 'handle')
+            );
+
+            new DuplicateModel($event->getServiceContainer());
         }
     ),
     MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND => array(
@@ -58,11 +68,9 @@ return array(
         }
     ),
     MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND => array(
-        function (MetaModelsBootEvent $event, $eventName, EventDispatcherInterface $dispatcher) {
-            $dispatcher->addListener(
-                CreatePropertyConditionEvent::NAME,
-                array(new DefaultPropertyConditionCreator(), 'handle')
-            );
+        function (MetaModelsBootEvent $event) {
+            /** @var EventDispatcherInterface $dispatcher */
+            $dispatcher = func_get_arg(2);
 
             $handler = new MetaModels\BackendIntegration\Boot();
             $handler->perform($event);
@@ -70,14 +78,8 @@ return array(
             new PasteButton($event->getServiceContainer());
             new CutButton($event->getServiceContainer());
             new CreateVariantButton($event->getServiceContainer());
-            new DuplicateModel($event->getServiceContainer());
             $dispatcher->addSubscriber(new RenderSettingAddAllHandler($event->getServiceContainer()));
             $dispatcher->addSubscriber(new InputScreenAddAllHandler($event->getServiceContainer()));
-        }
-    ),
-    MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE => array(
-        function (CreateAttributeFactoryEvent $event) {
-            \MetaModels\Attribute\Events\LegacyListener::registerLegacyAttributeFactoryEvents($event);
         }
     ),
     MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE => array(
@@ -89,8 +91,6 @@ return array(
                 ->addTypeFactory(new CustomSqlFilterSettingTypeFactory())
                 ->addTypeFactory(new ConditionAndFilterSettingTypeFactory())
                 ->addTypeFactory(new ConditionOrFilterSettingTypeFactory());
-
-            \MetaModels\Filter\Setting\Events\LegacyListener::registerLegacyFactories($event);
         }
     ),
     // deprecated since 2.0, to be removed in 3.0.

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -272,15 +273,15 @@ abstract class FilterSettingTypeRenderer
      */
     public function modelToLabel(ModelToLabelEvent $event)
     {
-        if (($event->getEnvironment()->getDataDefinition()->getName()
-                !== 'tl_metamodel_filtersetting')
+        $model = $event->getModel();
+
+        if (($model->getProviderName() !== 'tl_metamodel_filtersetting')
             || in_array($event->getModel()->getProperty('type'), $this->getTypes())
         ) {
             return;
         }
 
         $environment = $event->getEnvironment();
-        $model       = $event->getModel();
 
         $event
             ->setLabel($this->getLabelPattern($environment, $model))

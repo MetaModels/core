@@ -25,6 +25,8 @@ use MetaModels\IMetaModelsServiceContainer;
 
 /**
  * Base class for central event subscriber implementation.
+ *
+ * @SuppressWarnings(PHPMD.NumberOfChildren) - this is a stupid general purpose class.
  */
 class BaseSubscriber
 {

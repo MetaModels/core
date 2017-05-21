@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,65 +18,74 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Tim Becker <tim@westwerk.ac>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
 $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
 (
-    'config'                          => array
+    'config'       => array
     (
-        'dataContainer'               => 'General',
-        'ptable' => 'tl_metamodel',
-        'switchToEdit'                => false,
-        'enableVersioning'            => false,
-    ),
-    'dca_config'                      => array
-    (
-        'data_provider'               => array
+        'dataContainer'    => 'General',
+        'ptable'           => 'tl_metamodel',
+        'switchToEdit'     => false,
+        'enableVersioning' => false,
+        'sql'              => array
         (
-            'parent'                  => array
+            'keys' => array
             (
-                'source'              => 'tl_metamodel'
+                'id'  => 'primary',
+                'pid' => 'index',
+            ),
+        )
+    ),
+    'dca_config'   => array
+    (
+        'data_provider'  => array
+        (
+            'parent' => array
+            (
+                'source' => 'tl_metamodel'
             )
         ),
-        'childCondition'              => array
+        'childCondition' => array
         (
             array
             (
-                'from'                => 'tl_metamodel',
-                'to'                  => 'tl_metamodel_searchable_pages',
-                'setOn'               => array
+                'from'    => 'tl_metamodel',
+                'to'      => 'tl_metamodel_searchable_pages',
+                'setOn'   => array
                 (
                     array
                     (
-                        'to_field'    => 'pid',
-                        'from_field'  => 'id',
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
                     ),
                 ),
-                'filter'              => array
+                'filter'  => array
                 (
                     array
                     (
-                        'local'       => 'pid',
-                        'remote'      => 'id',
-                        'operation'   => '=',
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
                     ),
                 ),
                 'inverse' => array
                 (
                     array
                     (
-                        'local' => 'pid',
-                        'remote' => 'id',
+                        'local'     => 'pid',
+                        'remote'    => 'id',
                         'operation' => '=',
                     ),
                 )
             )
         ),
     ),
-    'list'                  => array
+    'list'         => array
     (
         'sorting'           => array
         (
@@ -103,19 +112,19 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
         ),
         'operations'        => array
         (
-            'edit'     => array
+            'edit'   => array
             (
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['edit'],
                 'href'  => 'act=edit',
                 'icon'  => 'edit.gif',
             ),
-            'copy'     => array
+            'copy'   => array
             (
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['copy'],
                 'href'  => 'act=copy',
                 'icon'  => 'copy.gif',
             ),
-            'delete'   => array
+            'delete' => array
             (
                 'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['delete'],
                 'href'       => 'act=delete',
@@ -125,7 +134,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
                     $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
                 )
             ),
-            'show'     => array
+            'show'   => array
             (
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['show'],
                 'href'  => 'act=show',
@@ -133,7 +142,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
             )
         )
     ),
-    'metapalettes'          => array
+    'metapalettes' => array
     (
         'default' => array
         (
@@ -141,7 +150,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
             (
                 'name',
             ),
-            'general'    => array
+            'general' => array
             (
                 'filter',
                 'filterparams',
@@ -149,9 +158,21 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
             ),
         )
     ),
-    'fields'                => array
+    'fields'       => array
     (
-        'name'            => array
+        'id'            => array
+        (
+            'sql' => "int(10) unsigned NOT NULL auto_increment"
+        ),
+        'pid'           => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'tstamp'        => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'name'          => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['name'],
             'exclude'   => true,
@@ -162,9 +183,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
                 'mandatory' => true,
                 'maxlength' => 255,
                 'tl_class'  => 'w50'
-            )
+            ),
+            'sql'       => "varchar(255) NOT NULL default ''"
         ),
-
         'filter'        => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['filter'],
@@ -175,10 +196,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
                 'includeBlankOption' => true,
                 'chosen'             => true,
                 'submitOnChange'     => true
-            )
+            ),
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),
-
-        'filterparams'        => array
+        'filterparams'  => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['filterparams'],
             'exclude'   => true,
@@ -194,10 +215,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
                         'inputType' => 'checkbox'
                     ),
                 ),
-            )
+            ),
+            'sql'       => "longblob NULL"
         ),
-
-        'rendersetting'        => array
+        'rendersetting' => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['rendersetting'],
             'exclude'   => true,
@@ -207,7 +228,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
                 'includeBlankOption' => true,
                 'mandatory'          => true,
                 'chosen'             => true
-            )
+            ),
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),
+        'published'     => array
+        (
+            'sql' => "char(1) NOT NULL default ''"
+        )
     )
 );

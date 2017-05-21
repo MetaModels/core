@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -24,7 +24,6 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractContainerAwareEvent;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
-use MetaModels\DcGeneral\Dca\Builder\Builder;
 use MetaModels\IMetaModel;
 
 /**
@@ -59,13 +58,6 @@ class BuildAttributeEvent extends AbstractContainerAwareEvent
     protected $inputScreen;
 
     /**
-     * The data definition builder.
-     *
-     * @var Builder
-     */
-    protected $builder;
-
-    /**
      * Create a new container aware event.
      *
      * @param IMetaModel         $metaModel     The MetaModel.
@@ -75,22 +67,18 @@ class BuildAttributeEvent extends AbstractContainerAwareEvent
      * @param ContainerInterface $dataContainer The data container information.
      *
      * @param IInputScreen       $inputScreen   The input screen in use.
-     *
-     * @param Builder            $builder       The data definition builder calling.
      */
     public function __construct(
         IMetaModel $metaModel,
         IAttribute $attribute,
         ContainerInterface $dataContainer,
-        IInputScreen $inputScreen,
-        Builder $builder
+        IInputScreen $inputScreen
     ) {
         parent::__construct($dataContainer);
 
         $this->metaModel   = $metaModel;
         $this->attribute   = $attribute;
         $this->inputScreen = $inputScreen;
-        $this->builder     = $builder;
     }
 
     /**
@@ -121,15 +109,5 @@ class BuildAttributeEvent extends AbstractContainerAwareEvent
     public function getInputScreen()
     {
         return $this->inputScreen;
-    }
-
-    /**
-     * Retrieve the builder instance.
-     *
-     * @return Builder
-     */
-    public function getBuilder()
-    {
-        return $this->builder;
     }
 }
