@@ -170,15 +170,6 @@ interface IInputScreen
     public function isFlat();
 
     /**
-     * Check if the MetaModel is closed.
-     *
-     * @return bool
-     *
-     * @deprecated use isEditable() and isCreatable() and isDeletable().
-     */
-    public function isClosed();
-
-    /**
      * Check if the MetaModel is editable.
      *
      * @return bool

@@ -19,6 +19,7 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Tim Gatzky <info@tim-gatzky.de>
  * @author     Martin Treml <github@r2pi.net>
+ * @author     Jeremie Constant <j.constant@imi.de>
  * @copyright  2012-2015 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -26,6 +27,8 @@
 
 namespace MetaModels;
 
+use Contao\StringUtil;
+use MetaModels\Events\RenderItemListEvent;
 use MetaModels\Helper\PaginationLimitCalculator;
 use MetaModels\Render\Template;
 
@@ -220,21 +223,6 @@ class ItemList implements IServiceContainerAware
     }
 
     /**
-     * Set output format.
-     *
-     * @param string $strFormat The name of the template output format to use.
-     *
-     * @return ItemList
-     *
-     * @deprecated Use overrideOutputFormat instead
-     */
-    public function setTemplateFormat($strFormat)
-    {
-        $this->overrideOutputFormat($strFormat);
-        return $this;
-    }
-
-    /**
      * Override the output format of the used view.
      *
      * @param string|null $strOutputFormat The desired output format.
@@ -275,40 +263,20 @@ class ItemList implements IServiceContainerAware
     }
 
     /**
-     * Set filter and parameter.
-     *
-     * @param int      $intFilter  The filter settings to use (if 0, the default will be used).
-     *
-     * @param string[] $arrPresets The parameter preset values to use.
-     *
-     * @param string[] $arrValues  The dynamic parameter values that may be used.
-     *
-     * @return ItemList
-     *
-     * @deprecated Use setFilterSettings() and setFilterParameters().
-     */
-    public function setFilterParam($intFilter, $arrPresets, $arrValues)
-    {
-        $this->setFilterSettings($intFilter);
-
-        $this->setFilterParameters($arrPresets, $arrValues);
-
-        return $this;
-    }
-
-    /**
      * Add the attribute names for meta title and description.
      *
      * @param string $strTitleAttribute       Name of attribute for title.
      *
      * @param string $strDescriptionAttribute Name of attribue for description.
      *
-     * @return void
+     * @return ItemList
      */
     public function setMetaTags($strTitleAttribute, $strDescriptionAttribute)
     {
         $this->strDescriptionAttribute = $strDescriptionAttribute;
         $this->strTitleAttribute       = $strTitleAttribute;
+
+        return $this;
     }
 
     /**
@@ -772,7 +740,7 @@ class ItemList implements IServiceContainerAware
                     $arrDescription = $objCurrentItem->parseAttribute($this->strDescriptionAttribute, 'text');
 
                     if (!empty($arrDescription['text'])) {
-                        $page->description = \String::substr($arrDescription['text'], 120);
+                        $page->description = StringUtil::substr($arrDescription['text'], 160);
                         break;
                     }
                 }
@@ -794,6 +762,12 @@ class ItemList implements IServiceContainerAware
      */
     public function render($blnNoNativeParsing, $objCaller)
     {
+        $event = new RenderItemListEvent($this, $this->objTemplate, $objCaller);
+        $this
+            ->getServiceContainer()
+            ->getEventDispatcher()
+            ->dispatch(MetaModelsEvents::RENDER_ITEM_LIST, $event);
+
         $this->objTemplate->noItemsMsg = $this->getNoItemsCaption();
         $this->objTemplate->details    = $this->getDetailsCaption();
 

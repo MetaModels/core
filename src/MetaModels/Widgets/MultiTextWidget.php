@@ -20,10 +20,12 @@
 
 namespace MetaModels\Widgets;
 
+use Contao\Widget;
+
 /**
  * Form field with more than 1 input, based on form field by Leo Feyer.
  */
-class MultiTextWidget extends \Widget
+class MultiTextWidget extends Widget
 {
     /**
      * Submit user input.

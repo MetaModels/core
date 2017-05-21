@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,8 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Alexander Menk <a.menk@imi.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -32,6 +33,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
         'ptable'           => 'tl_metamodel',
         'switchToEdit'     => false,
         'enableVersioning' => false,
+        'sql'              => array
+        (
+            'keys' => array
+            (
+                'id'  => 'primary',
+                'pid' => 'index'
+            ),
+        )
     ),
     'dca_config'   => array
     (
@@ -208,6 +217,18 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
     ),
     'fields'       => array
     (
+        'id'              => array
+        (
+            'sql' => "int(10) unsigned NOT NULL auto_increment"
+        ),
+        'pid'             => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'tstamp'          => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
         'name'            => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name'],
@@ -218,7 +239,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
                 'mandatory' => true,
                 'maxlength' => 255,
                 'tl_class'  => 'w50'
-            )
+            ),
+            'sql'       => "varchar(64) NOT NULL default ''"
         ),
         'isdefault'       => array
         (
@@ -228,8 +250,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
             'eval'      => array
             (
                 'tl_class' => 'm12 w50 cbx',
-                'fallback'  => true
+                'fallback' => true
             ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'hideEmptyValues' => array
         (
@@ -239,7 +262,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
             'eval'      => array
             (
                 'tl_class' => 'w50'
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'hideLabels'      => array
         (
@@ -249,7 +273,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
             'eval'      => array
             (
                 'tl_class' => 'w50'
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'template'        => array
         (
@@ -263,7 +288,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
                 'tl_class'           => 'w50',
                 'mandatory'          => true,
                 'chosen'             => true
-            )
+            ),
+            'sql'       => "varchar(64) NOT NULL default ''"
         ),
         'format'          => array
         (
@@ -282,7 +308,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
                 'includeBlankOption' => true,
                 'tl_class'           => 'w50',
                 'chosen'             => true
-            )
+            ),
+            'sql'       => "varchar(255) NOT NULL default ''"
         ),
         'jumpTo'          => array
         (
@@ -345,7 +372,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
                     'down'   => false
                 ),
                 'tl_class'     => 'clr clx',
-            )
+            ),
+            'sql'            => "blob NULL"
         ),
         'additionalCss'   => array
         (
@@ -380,7 +408,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
                         )
                     ),
                 )
-            )
+            ),
+            'sql'       => "blob NULL"
         ),
         'additionalJs'    => array
         (
@@ -414,7 +443,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
                         )
                     ),
                 )
-            )
+            ),
+            'sql'       => "blob NULL"
         ),
     ),
 );

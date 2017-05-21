@@ -21,10 +21,12 @@
 
 namespace MetaModels\Widgets;
 
+use Contao\Widget;
+
 /**
  * Form field "tags", based on form field by Leo Feyer.
  */
-class TagsWidget extends \Widget
+class TagsWidget extends Widget
 {
     /**
      * Template.

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2016 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,19 +13,20 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @copyright  2012-2016 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
 namespace MetaModels\FrontendIntegration;
 
+use MetaModels\ContaoIntegration\Boot as BaseBoot;
 use MetaModels\Events\MetaModelsBootEvent;
 
 /**
- * This class is used in the frontend to build the menu.
+ * This class is used in the frontend to allow loading of data containers.
  */
-class Boot
+class Boot extends BaseBoot
 {
     /**
      * Boot the system in the frontend.
@@ -33,9 +34,17 @@ class Boot
      * @param MetaModelsBootEvent $event The event.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function perform(MetaModelsBootEvent $event)
     {
-        // Perform frontend boot tasks.
+        $container = $event->getServiceContainer();
+
+        $viewCombinations = new ViewCombinations($container, $GLOBALS['container']['user']);
+        $container->setService($viewCombinations, 'metamodels-view-combinations');
+
+        $this->performBoot($container, $viewCombinations);
     }
 }

@@ -16,6 +16,7 @@
  * @author     Christopher Bölter <c.boelter@cogizz.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
+ * @author     binron <rtb@gmx.ch>
  * @copyright  2012-2015 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -46,6 +47,8 @@ use MetaModels\Item;
 
 /**
  * Data driver class for DC_General.
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods) - The interface is too complex, maybe split into traits.
  */
 class Driver implements MultiLanguageDataProviderInterface
 {
@@ -254,7 +257,7 @@ class Driver implements MultiLanguageDataProviderInterface
             $modelId = reset($ids);
         }
 
-        $objItem = $modelId ? $this->getMetaModel()->findById($modelId) : null;
+        $objItem = $modelId ? $this->getMetaModel()->findById($modelId, $objConfig->getFields() ?: array()) : null;
 
         $this->setLanguage($backupLanguage);
 
@@ -394,7 +397,7 @@ class Driver implements MultiLanguageDataProviderInterface
      *
      * @param ConfigInterface $objConfig The configuration to be applied.
      *
-     * @return CollectionInterface
+     * @return CollectionInterface|ModelInterface[]|string[]
      */
     public function fetchAll(ConfigInterface $objConfig)
     {
@@ -534,6 +537,10 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     public function resetFallback($strField)
     {
+        // @codingStandardsIgnoreStart
+        @trigger_error(__CLASS__ . '::' . __METHOD__ . ' is deprecated - handle resetting manually', E_USER_DEPRECATED);
+        // @codingStandardsIgnoreEnd
+
         $metaModel = $this->getMetaModel();
         $attribute = $metaModel->getAttribute($strField);
         $ids       = $metaModel->getIdsFromFilter(null);

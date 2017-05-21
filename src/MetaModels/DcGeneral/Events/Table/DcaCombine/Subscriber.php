@@ -93,6 +93,8 @@ class Subscriber extends BaseSubscriber
         $result = array();
         if ($table == 'tl_user_group') {
             $result[-1] = $event->getEnvironment()->getTranslator()->translate('sysadmin', 'tl_metamodel_dca_combine');
+        } else {
+            $result[-1] = $event->getEnvironment()->getTranslator()->translate('anonymous', 'tl_metamodel_dca_combine');
         }
 
         while ($groups->next()) {

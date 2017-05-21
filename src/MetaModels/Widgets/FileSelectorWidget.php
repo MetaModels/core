@@ -21,31 +21,27 @@
 
 namespace MetaModels\Widgets;
 
-use ContaoCommunityAlliance\DcGeneral\DcGeneral;
+use Contao\FileSelector;
 use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
 
 /**
  * Provide methods to handle input field "file tree".
  */
-class FileSelectorWidget extends \FileSelector
+class FileSelectorWidget extends FileSelector
 {
     /**
      * Initialize the object.
      *
-     * @param array     $arrAttributes An optional attributes array.
-     *
-     * @param DcGeneral $objDca        Optionally the data container instance
-     *                                 (Removed for Contao 3.3 in there we have $arrAttributes['dataContainer']).
+     * @param array $arrAttributes An optional attributes array.
      *
      * @throws DcGeneralInvalidArgumentException When the property could not be retrieved from the DcGeneral.
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function __construct($arrAttributes = null, $objDca = null)
+    public function __construct($arrAttributes = null)
     {
-        // Pre Contao 3.3 support: We can drop the second argument when we stop supporting Contao 3.3.
-        parent::__construct($arrAttributes, $objDca);
+        parent::__construct($arrAttributes);
 
         if (!$this->strField) {
             $this->strField = $arrAttributes['name'];
@@ -56,30 +52,6 @@ class FileSelectorWidget extends \FileSelector
             $chunks = explode('_', $this->strField);
             array_shift($chunks);
             $this->strField = implode('_', $chunks);
-        }
-
-        if (version_compare(VERSION, '3.3', '<')) {
-            // Pre Contao 3.3 - we get the objDca as second parameter here.
-            if (!isset($this->objDca) && $objDca) {
-                $this->objDca = $objDca;
-            }
-
-            // Compatibility with Contao pre 3.3 which utilizes the $GLOBALS array directly.
-            if (!isset($GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField])) {
-                $environment         = $this->objDca->getEnvironment();
-                $propertyDefinitions = $environment->getDataDefinition()->getPropertiesDefinition();
-
-                if (!$propertyDefinitions->hasProperty($this->strField)) {
-                    throw new DcGeneralInvalidArgumentException(
-                        'Property ' . $this->strField . ' is not defined in propertyDefinitions.'
-                    );
-                }
-
-                $propInfo  = $propertyDefinitions->getProperty($this->strField);
-                $propExtra = $propInfo->getExtra();
-
-                $GLOBALS['TL_DCA'][$this->strTable]['fields'][$this->strField] = array('eval' => $propExtra);
-            }
         }
     }
 

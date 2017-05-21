@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2016 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @copyright  2012-2016 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -63,16 +63,14 @@ class SimpleLookup extends Simple
      */
     protected function getLabel()
     {
-        if ($attribute = $this->getFilteredAttribute()) {
-            // TODO: make this multilingual.
-            if ($label = $this->get('label')) {
-                return $label;
-            }
-
-            return $attribute->getName();
+        if (null === ($attribute = $this->getFilteredAttribute())) {
+            return null;
+        }
+        if ($label = $this->get('label')) {
+            return $label;
         }
 
-        return null;
+        return $attribute->getName();
     }
 
     /**
@@ -125,7 +123,6 @@ class SimpleLookup extends Simple
      */
     public function enableFEFilterWidget()
     {
-        // TODO: better use a seperate checkbox or the like? For the moment, this has to be overridden by sub classes.
         return (bool) $this->get('predef_param');
     }
 
@@ -139,13 +136,7 @@ class SimpleLookup extends Simple
         $strParam     = $this->getParamName();
 
         if ($objAttribute && $strParam) {
-            $arrFilterValue = isset($arrFilterUrl[$strParam]) ? $arrFilterUrl[$strParam] : null;
-
-            if (!$arrFilterValue && $this->get('defaultid')) {
-                $arrFilterValue = $this->get('defaultid');
-            }
-
-            if ($arrFilterValue) {
+            if ($arrFilterValue = $this->determineFilterValue($arrFilterUrl, $strParam)) {
                 if ($objMetaModel->isTranslated() && $this->get('all_langs')) {
                     $arrLanguages = $objMetaModel->getAvailableLanguages();
                 } else {
@@ -171,13 +162,11 @@ class SimpleLookup extends Simple
      */
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
     {
-        if ($objAttribute = $this->getFilteredAttribute()) {
-            // TODO: shall we omit returning of empty values?
-            $strResult = $objAttribute->getFilterUrlValue($objItem->get($objAttribute->getColName()));
-            return array($this->getParamName() => $strResult);
+        if ($attribute = $this->getFilteredAttribute()) {
+            return [$this->getParamName() => $attribute->getFilterUrlValue($objItem->get($attribute->getColName()))];
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -202,7 +191,7 @@ class SimpleLookup extends Simple
         }
 
         $objAttribute = $this->getFilteredAttribute();
-        $arrOptions   = $objAttribute->getFilterOptions(null, false);
+        $arrOptions   = $objAttribute->getFilterOptions(null, (bool) $this->get('onlyused'));
 
         return array(
             $this->getParamName() => array
@@ -329,5 +318,22 @@ class SimpleLookup extends Simple
         }
 
         return null;
+    }
+
+    /**
+     * Determine the filter value from the passed values.
+     *
+     * @param array  $filterValues The filter values.
+     * @param string $valueName    The parameter name to obtain.
+     *
+     * @return mixed|null
+     */
+    private function determineFilterValue($filterValues, $valueName)
+    {
+        if (!isset($filterValues[$valueName]) && $this->get('defaultid')) {
+            return $this->get('defaultid');
+        }
+
+        return $filterValues[$valueName];
     }
 }

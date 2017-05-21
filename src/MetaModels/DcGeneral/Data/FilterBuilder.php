@@ -284,7 +284,6 @@ class FilterBuilder
         }
 
         return $skipped;
-
     }
 
     /**

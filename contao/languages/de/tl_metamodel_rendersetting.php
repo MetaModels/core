@@ -8,15 +8,15 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-11-27T08:12:51+01:00
+ * last-updated: 2016-11-17T12:14:40+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']                     = '%s <strong>%s</strong> <em>[%s]</em>';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_addsuccess']       = 'Das Attribut "%s" wurde der Eingabemaske hinzugefügt.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_alreadycontained'] = 'Das Attribut %s ist bereits in der Eingabemaske vorhanden.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_willadd']          = 'Das Attribut %s wird der Eingabemaske hinzugefügt.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_addsuccess']       = 'Das Attribut "%s" wurde der Render-Einstellung hinzugefügt.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_alreadycontained'] = 'Das Attribut %s ist bereits in der Render-Einstellung vorhanden.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_willadd']          = 'Das Attribut %s wird der Render-Einstellung hinzugefügt.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']['0']             = 'Alle hinzufügen';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']['1']             = 'Alle Attribute der Eingabemaske hinzufügen.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']['1']             = 'Alle Attribute der Render-Einstellung hinzufügen.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['additional_class']['0']   = 'Eigene CSS-Klasse';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['additional_class']['1']   = 'Eingabe einer CSS-Klasse wenn diese mit dem Attribut ausgegeben werden soll.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['advanced_legend']         = 'Erweitern';

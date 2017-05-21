@@ -24,32 +24,19 @@
 
 namespace MetaModels\Widgets;
 
+use Contao\Backend;
+use Contao\BackendTemplate;
+use Contao\BackendUser;
+use Contao\Controller;
+use Contao\Environment;
+use Contao\Input;
+use RuntimeException;
+
 /**
  * This class handles the DCA style picker.
  */
-class PickerWidget extends \Backend
+class PickerWidget
 {
-    /**
-     * Current Ajax object.
-     *
-     * @var object
-     */
-    protected $objAjax;
-
-    /**
-     * The backend user.
-     *
-     * @var \Contao\BackendUser
-     */
-    private $User;
-
-    /**
-     * The template instance.
-     *
-     * @var \Contao\BackendTemplate
-     */
-    private $Template;
-
     /**
      * Initialize the controller.
      *
@@ -62,72 +49,54 @@ class PickerWidget extends \Backend
      */
     public function __construct()
     {
-        $this->User = \BackendUser::getInstance();
-        parent::__construct();
-
-        $this->User->authenticate();
-
-        $this->loadLanguageFile('default');
-        $this->loadLanguageFile('modules');
+        BackendUser::getInstance()->authenticate();
+        Controller::loadLanguageFile('default');
+        Controller::loadLanguageFile('modules');
     }
-
-    /**
-     * Generate the template.
-     *
-     * @return void
-     *
-     * @throws \RuntimeException When the fieldname is invalid.
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    public function generate()
-    {
-        $this->Template->headline = $GLOBALS['TL_LANG']['MSC']['metamodelspicker'];
-
-        $inputName = $this->Input->get('inputName');
-        if (!preg_match('~^[a-z\-_0-9]+$~i', $inputName)) {
-            throw new \RuntimeException('Field-Parameter ERROR!');
-        }
-
-        $this->Template->field = $inputName;
-        $this->Template->items = $GLOBALS[$this->Input->get('item')];
-    }
-
 
     /**
      * Run controller and parse the login template.
      *
      * @return void
      *
+     * @throws RuntimeException When the fieldname is invalid.
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function run()
     {
-        $this->Template       = new \BackendTemplate('be_dcastylepicker');
-        $this->Template->main = '';
-        $this->generate();
+        $template           = new BackendTemplate('be_dcastylepicker');
+        $template->main     = '';
+        $template->headline = $GLOBALS['TL_LANG']['MSC']['metamodelspicker'];
 
-        if (!strlen($this->Template->headline)) {
-            $this->Template->headline = $GLOBALS['TL_CONFIG']['websiteTitle'];
+        $inputName = Input::get('inputName');
+        if (!preg_match('~^[a-z\-_0-9]+$~i', $inputName)) {
+            throw new RuntimeException('Field-Parameter ERROR!');
         }
 
-        $this->Template->theme          = $this->getTheme();
-        $this->Template->base           = $this->Environment->base;
-        $this->Template->language       = $GLOBALS['TL_LANGUAGE'];
-        $this->Template->title          = $GLOBALS['TL_CONFIG']['websiteTitle'];
-        $this->Template->charset        = $GLOBALS['TL_CONFIG']['characterSet'];
-        $this->Template->pageOffset     = $this->Input->cookie('BE_PAGE_OFFSET');
-        $this->Template->error          = (\Input::get('act') == 'error') ? $GLOBALS['TL_LANG']['ERR']['general'] : '';
-        $this->Template->skipNavigation = $GLOBALS['TL_LANG']['MSC']['skipNavigation'];
-        $this->Template->request        = ampersand($this->Environment->request);
-        $this->Template->top            = $GLOBALS['TL_LANG']['MSC']['backToTop'];
-        $this->Template->be27           = !$GLOBALS['TL_CONFIG']['oldBeTheme'];
-        $this->Template->expandNode     = $GLOBALS['TL_LANG']['MSC']['expandNode'];
-        $this->Template->collapseNode   = $GLOBALS['TL_LANG']['MSC']['collapseNode'];
-        $this->Template->strField       = $this->Input->get('fld');
+        $template->field = $inputName;
+        $template->items = $GLOBALS[Input::get('item')];
 
-        $this->Template->output();
+        if (!strlen($template->headline)) {
+            $template->headline = $GLOBALS['TL_CONFIG']['websiteTitle'];
+        }
+
+        $template->theme          = Backend::getTheme();
+        $template->base           = Environment::get('base');
+        $template->language       = $GLOBALS['TL_LANGUAGE'];
+        $template->title          = $GLOBALS['TL_CONFIG']['websiteTitle'];
+        $template->charset        = $GLOBALS['TL_CONFIG']['characterSet'];
+        $template->pageOffset     = Input::cookie('BE_PAGE_OFFSET');
+        $template->error          = (Input::get('act') == 'error') ? $GLOBALS['TL_LANG']['ERR']['general'] : '';
+        $template->skipNavigation = $GLOBALS['TL_LANG']['MSC']['skipNavigation'];
+        $template->request        = ampersand(Environment::get('request'));
+        $template->top            = $GLOBALS['TL_LANG']['MSC']['backToTop'];
+        $template->be27           = !$GLOBALS['TL_CONFIG']['oldBeTheme'];
+        $template->expandNode     = $GLOBALS['TL_LANG']['MSC']['expandNode'];
+        $template->collapseNode   = $GLOBALS['TL_LANG']['MSC']['collapseNode'];
+        $template->strField       = Input::get('fld');
+
+        $template->output();
     }
 }

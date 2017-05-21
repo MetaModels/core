@@ -20,6 +20,7 @@
 
 namespace MetaModels\BackendIntegration;
 
+use Contao\System;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -73,6 +74,11 @@ class BackendModuleBuilder
         $this->viewCombinations = $viewCombinations;
 
         if (!$this->loadFromCache()) {
+            // HOTFIX: See #1093 - the delete button message is contained in 'default' language file.
+            // Loading our icon will trigger the \FilesModel to load the data container 'tl_files' but without
+            // loading the language file first. Therefore the confirmation message in the delete button will cease to
+            // exist.
+            System::loadLanguageFile('default');
             $this->resolve();
             $this->saveToCache();
         }

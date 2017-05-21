@@ -43,6 +43,13 @@ class InputScreenAddAllHandler extends AbstractAddAllHandler
     protected static $ptable = 'tl_metamodel_dca';
 
     /**
+     * The field to use for activating.
+     *
+     * @var string
+     */
+    protected static $activeField = 'published';
+
+    /**
      * The action name to listen on.
      *
      * @var string

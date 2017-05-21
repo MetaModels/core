@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,10 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -30,6 +33,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
         'dataContainer'    => 'General',
         'switchToEdit'     => true,
         'enableVersioning' => false,
+        'sql'              => array
+        (
+            'keys' => array
+            (
+                'id'  => 'primary',
+                'pid' => 'index'
+            ),
+        ),
     ),
     'dca_config'            => array
     (
@@ -67,6 +78,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
                     ),
                 ),
                 'filter' => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                ),
+                'inverse' => array
                 (
                     array
                     (
@@ -287,7 +307,26 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
     ),
     'fields'                => array
     (
-        'sorting'            => array(),
+        'id'                 => array
+        (
+            'sql' => "int(10) unsigned NOT NULL auto_increment"
+        ),
+        'pid'                => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'sorting'            => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'tstamp'             => array
+        (
+            'sql' => "int(10) unsigned NOT NULL default '0'"
+        ),
+        'published'          => array
+        (
+            'sql' => "char(1) NOT NULL default ''"
+        ),
         'dcatype'            => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype'],
@@ -300,7 +339,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
                 'tl_class'           => 'w50',
                 'includeBlankOption' => true,
                 'submitOnChange'     => true,
-            )
+            ),
+            'sql'       => "varchar(10) NOT NULL default ''"
         ),
         'attr_id'            => array
         (
@@ -315,6 +355,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
                 'mandatory'          => true,
                 'submitOnChange'     => true,
             ),
+            'sql'       => "int(10) unsigned NOT NULL default '0'"
         ),
         'tl_class'           => array
         (
@@ -325,6 +366,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             (
                 'tl_class' => 'long wizard',
             ),
+            'sql'       => "varchar(64) NOT NULL default ''"
         ),
         'legendhide'         => array
         (
@@ -334,7 +376,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             'eval'      => array
             (
                 'tl_class' => 'w50 m12 cbx'
-            )
+            ),
+            'sql'       => "varchar(5) NOT NULL default ''"
         ),
         'legendtitle'        => array
         (
@@ -343,17 +386,19 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             'eval'    => array
             (
                 'tl_class' => 'clr'
-            )
+            ),
+            'sql'     => "varchar(255) NOT NULL default ''"
         ),
         'mandatory'          => array
         (
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory'],
-            'exclude'   => true,
-            'inputType' => 'checkbox',
-            'eval'      => array
+            'label'                => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory'],
+            'exclude'              => true,
+            'inputType'            => 'checkbox',
+            'eval'                 => array
             (
                 'tl_class' => 'w50',
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'alwaysSave'         => array
         (
@@ -363,7 +408,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             'eval'      => array
             (
                 'tl_class' => 'w50',
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'filterable'         => array
         (
@@ -373,7 +419,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             'eval'      => array
             (
                 'tl_class' => 'w50',
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'searchable'         => array
         (
@@ -383,7 +430,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             'eval'      => array
             (
                 'tl_class' => 'w50',
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'chosen'             => array
         (
@@ -393,7 +441,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             'eval'      => array
             (
                 'tl_class' => 'w50 m12'
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'allowHtml'          => array
         (
@@ -403,7 +452,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             'eval'      => array
             (
                 'tl_class' => 'w50',
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'preserveTags'       => array
         (
@@ -413,7 +463,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             'eval'      => array
             (
                 'tl_class' => 'w50',
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'decodeEntities'     => array
         (
@@ -423,7 +474,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             'eval'      => array
             (
                 'tl_class' => 'w50',
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'rte'                => array
         (
@@ -435,7 +487,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             (
                 'tl_class'           => 'm12',
                 'includeBlankOption' => true,
-            )
+            ),
+            'sql'       => "varchar(64) NOT NULL default ''"
         ),
         'rows'               => array
         (
@@ -446,7 +499,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             (
                 'tl_class' => 'w50',
                 'rgxp'     => 'digit'
-            )
+            ),
+            'sql'       => "int(10) NOT NULL default '0'"
         ),
         'cols'               => array
         (
@@ -457,7 +511,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             (
                 'tl_class' => 'w50',
                 'rgxp'     => 'digit'
-            )
+            ),
+            'sql'       => "int(10) NOT NULL default '0'"
         ),
         'trailingSlash'      => array
         (
@@ -470,7 +525,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             'eval'      => array
             (
                 'tl_class' => 'w50 clr',
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default '2'"
         ),
         'spaceToUnderscore'  => array
         (
@@ -480,7 +536,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             'eval'      => array
             (
                 'tl_class' => 'w50 m12',
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'includeBlankOption' => array
         (
@@ -490,7 +547,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             'eval'      => array
             (
                 'tl_class' => 'clr m12',
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'submitOnChange'     => array
         (
@@ -500,7 +558,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             'eval'      => array
             (
                 'tl_class' => 'clr m12',
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
         ),
         'readonly'           => array
         (
@@ -509,7 +568,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             'eval'      => array
             (
                 'tl_class' => 'w50',
-            )
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
         )
     )
 );

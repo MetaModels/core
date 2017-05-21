@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,13 +13,16 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
 namespace MetaModels\DcGeneral\Events\Table\InputScreens;
 
+use Contao\Message;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
@@ -88,6 +91,10 @@ class Subscriber extends BaseSubscriber
                 array($this, 'buildLegendTitleWidget')
             )
             ->addListener(
+                BuildWidgetEvent::NAME,
+                array($this, 'buildMandatoryWidget')
+            )
+            ->addListener(
                 GetPropertyOptionsEvent::NAME,
                 array($this, 'getAttributeOptions')
             )
@@ -134,13 +141,15 @@ class Subscriber extends BaseSubscriber
             if (!$image || !file_exists(TL_ROOT . '/' . $image)) {
                 $image = 'system/modules/metamodels/assets/images/icons/fields.png';
             }
-            $name    = $objAttribute->getName();
-            $colName = $objAttribute->getColName();
+            $name     = $objAttribute->getName();
+            $colName  = $objAttribute->getColName();
+            $isUnique = $objAttribute->get('isunique');
         } else {
-            $type    = 'unknown ID: ' . $model->getProperty('attr_id');
-            $image   = 'system/modules/metamodels/assets/images/icons/fields.png';
-            $name    = 'unknown attribute';
-            $colName = 'unknown column';
+            $type     = 'unknown ID: ' . $model->getProperty('attr_id');
+            $image    = 'system/modules/metamodels/assets/images/icons/fields.png';
+            $name     = 'unknown attribute';
+            $colName  = 'unknown column';
+            $isUnique = false;
         }
 
         /** @var GenerateHtmlEvent $imageEvent */
@@ -160,7 +169,8 @@ class Subscriber extends BaseSubscriber
                 $type,
                 $imageEvent->getHtml(),
                 $name,
-                $model->getProperty('mandatory')
+                // unique attributes are automatically mandatory
+                $model->getProperty('mandatory') || $isUnique
                     ? ' ['.$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory'][0].']'
                     : '',
                 $model->getProperty('tl_class') ? sprintf('[%s]', $model->getProperty('tl_class')) : ''
@@ -330,6 +340,41 @@ class Subscriber extends BaseSubscriber
             false,
             deserialize($event->getModel()->getProperty('legendtitle'), true)
         );
+    }
+
+    /**
+     * Disable the mandatory checkbox field if the selected attribute is unique.
+     *
+     * @param BuildWidgetEvent $event The event.
+     *
+     * @return void
+     */
+    public function buildMandatoryWidget(BuildWidgetEvent $event)
+    {
+        $environment = $event->getEnvironment();
+        if (($environment->getDataDefinition()->getName() !== 'tl_metamodel_dcasetting')
+            || ($event->getProperty()->getName() !== 'mandatory')) {
+            return;
+        }
+
+        $model     = $event->getModel();
+        $metaModel = $this->getMetaModelById($this->getMetaModelId($event));
+
+        if ($metaModel->getAttributeById($model->getProperty('attr_id'))->get('isunique')) {
+            Message::addInfo(
+                $environment
+                    ->getTranslator()
+                    ->translate('mandatory_for_unique_attr', 'tl_metamodel_dcasetting')
+            );
+
+            $extra = $event->getProperty()->getExtra();
+
+            $extra['disabled'] = true;
+
+            $event->getProperty()->setExtra($extra);
+
+            $model->setProperty('mandatory', true);
+        }
     }
 
     /**
@@ -572,5 +617,45 @@ class Subscriber extends BaseSubscriber
                 }
             }
         }
+    }
+
+    /**
+     * Get the id from the meta model.
+     *
+     * @param BuildWidgetEvent $event The event.
+     *
+     * @return string
+     */
+    protected function getMetaModelId(BuildWidgetEvent $event)
+    {
+        $environment          = $event->getEnvironment();
+        $dataDefinition       = $environment->getDataDefinition();
+        $parentDataDefinition = $environment->getParentDataDefinition();
+        $parentDataProvider   = $environment->getDataProvider($parentDataDefinition->getName());
+        $relationship         = $dataDefinition->getModelRelationshipDefinition();
+        $parentRelationship   = $parentDataDefinition->getModelRelationshipDefinition();
+
+        $childCondition =
+            $relationship->getChildCondition($parentDataDefinition->getName(), $dataDefinition->getName());
+
+        $parentModel = $parentDataProvider->fetch(
+            $parentDataProvider->getEmptyConfig()
+                ->setFilter($childCondition->getInverseFilterFor($event->getModel()))
+        );
+
+        $metaModelDataProvider =
+            $environment->getDataProvider($parentDataDefinition->getBasicDefinition()->getParentDataProvider());
+
+        $parentChildCondition = $parentRelationship->getChildCondition(
+            $parentDataDefinition->getBasicDefinition()->getParentDataProvider(),
+            $parentDataDefinition->getName()
+        );
+
+        $metaModel = $metaModelDataProvider->fetch(
+            $metaModelDataProvider->getEmptyConfig()
+                ->setFilter($parentChildCondition->getInverseFilterFor($parentModel))
+        );
+
+        return $metaModel->getId();
     }
 }
