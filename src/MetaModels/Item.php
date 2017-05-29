@@ -18,6 +18,7 @@
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -26,6 +27,7 @@
 namespace MetaModels;
 
 use MetaModels\Attribute\IAttribute;
+use MetaModels\Attribute\IInternal;
 use MetaModels\Events\ParseItemEvent;
 use MetaModels\Filter\IFilter;
 use MetaModels\Render\Setting\ICollection;
@@ -100,7 +102,12 @@ class Item implements IItem
      */
     public function internalParseAttribute($objAttribute, $strOutputFormat, $objSettings)
     {
+        if ($objAttribute instanceof IInternal) {
+            return array();
+        }
+
         $arrResult = array();
+
         if ($objAttribute) {
             // Extract view settings for this attribute.
             if ($objSettings) {
