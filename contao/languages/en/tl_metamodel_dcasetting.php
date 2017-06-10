@@ -14,6 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -35,8 +36,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class'][0]                = '
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class'][1]                =
     'Here you can set backend class(es). Use the style picker for a better experience.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker']                = 'Style picker';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide'][0]              = 'Hide legend';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide'][1]              = 'Hide the legend by default.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide'][0]              = 'Collapse section';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide'][1]              = 'Collapse the section by default.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle'][0]             = 'Legend title';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle'][1]             = 'Here you can enter the legend title.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']              = 'Language';
