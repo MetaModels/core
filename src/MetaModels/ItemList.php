@@ -20,7 +20,8 @@
  * @author     Tim Gatzky <info@tim-gatzky.de>
  * @author     Martin Treml <github@r2pi.net>
  * @author     Jeremie Constant <j.constant@imi.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -692,24 +693,6 @@ class ItemList implements IServiceContainerAware
     }
 
     /**
-     * Retrieve the caption text for the "Show details" link.
-     *
-     * In order to achieve the correct caption text, the function tries several translation strings sequentially.
-     * The first language key that is set will win, even if it is to be considered empty.
-     *
-     * This message is looked up in the following order:
-     * 1. $GLOBALS['TL_LANG']['MSC'][<mm tablename>][<render settings id>]['details']
-     * 2. $GLOBALS['TL_LANG']['MSC'][<mm tablename>]['details']
-     * 3. $GLOBALS['TL_LANG']['MSC']['details']
-     *
-     * @return string
-     */
-    protected function getDetailsCaption()
-    {
-        return $this->getCaptionText('details');
-    }
-
-    /**
      * Set the title and description in the page object.
      *
      * @return void
@@ -769,7 +752,6 @@ class ItemList implements IServiceContainerAware
             ->dispatch(MetaModelsEvents::RENDER_ITEM_LIST, $event);
 
         $this->objTemplate->noItemsMsg = $this->getNoItemsCaption();
-        $this->objTemplate->details    = $this->getDetailsCaption();
 
         $this->prepare();
         $strOutputFormat = $this->getOutputFormat();
