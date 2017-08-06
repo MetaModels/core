@@ -555,7 +555,7 @@ class SubDcaWidget extends Widget
 
         // Add a "no entries found" message if there are no sub widgets.
         if (!count($arrOptions)) {
-            $arrOptions[] = '<p class="tl_noopt">'.$GLOBALS['TL_LANG']['MSC']['noResult'].'</p>';
+            $arrOptions[] = '<td><p class="tl_noopt">'.$GLOBALS['TL_LANG']['MSC']['noResult'].'</p></td>';
         }
 
         $strHead = '';
