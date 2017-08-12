@@ -14,6 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -129,3 +130,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']          =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_activate']            = 'Add new settings enabled.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory_for_unique_attr']  =
     'Unique attribues are automatically mandatory (this is not changable).';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly_for_force_alias']  =
+    'Attribues with force alias are automatically readonly (this is not changable).';
