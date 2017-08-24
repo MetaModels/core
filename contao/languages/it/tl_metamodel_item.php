@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:10:59+02:00
+ * last-updated: 2017-08-24T12:43:20+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_item']['copy']['0']          = 'Copia elemento';
@@ -30,8 +30,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['new']['1']           = 'Crea un nuovo 
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pasteafter']['0']    = 'Crea un nuovo elemento';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pasteafter']['1']    = 'Crea un nuovo elemento dopo l\'elemento ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pasteinto']['0']     = 'Crea un nuovo elemento';
-$GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']['0']      = 'Crea un nuovo elemento';
-$GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']['1']      = 'Crea un nuovo elemento dopo l\'elemento ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['show']['0']          = 'Dettagli dell\'elemento';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['show']['1']          = 'Mostra i dettagli dell\'elemento ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['sorting']['0']       = 'Ordinamento';

@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-03-23T12:13:41+01:00
+ * last-updated: 2017-08-24T12:42:55+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['advanced_legend']  = 'Impostazioni avanzate';
@@ -36,6 +36,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode']    = 'Lingua';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value']       = 'Descrizione';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']['0']         = 'Nuovo attributo';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']['1']         = 'Crea un nuovo attributo';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['pasteafter']['0']  = 'Crea un nuovo attributo';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['0']        = 'Dettagli dell\'attributo';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['1']        = 'Mostra i dettagli dell\'attributo ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['title_legend']     = 'Tipologia, denominazione e configurazione attributi di base';

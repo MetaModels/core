@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2017-08-24T12:43:26+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['0']     = 'Ulteriori file CSS';
@@ -39,7 +39,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['0']            = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['1']            = 'La pagina che viene utilizzata come URL "Mostra dettagli". Nota che i parametri URL verranno generate dall\'impostazione del filtro che è attualmente in uso.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_allLanguages']    = 'Tutte le lingue';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter']['0']     = 'Impostazioni filtro';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter']['1']     = 'Le impostazioni del filtro che definiscono come l\'obiettivo (il reader/lister sulla pagina di dettaglio) identificherà le concordanze proprie.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['0']   = 'Lingua';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['1']   = 'La lingua per la pagina JumpTo';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page']['0']       = 'Vai alla pagina';

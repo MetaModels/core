@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:14:41+02:00
+ * last-updated: 2017-08-24T12:42:52+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Дополнительные параметры';
@@ -44,21 +44,22 @@ $GLOBALS['TL_LANG']['tl_metamodel']['languages_langcode']['0']   = 'Язык';
 $GLOBALS['TL_LANG']['tl_metamodel']['languages_langcode']['1']   = 'Выберите языки, которые хотите предоставить.';
 $GLOBALS['TL_LANG']['tl_metamodel']['mode']['0']                 = 'Режим родительского списка';
 $GLOBALS['TL_LANG']['tl_metamodel']['mode']['1']                 = 'Режим использования отношений подчинения родитель/потомки.';
-$GLOBALS['TL_LANG']['tl_metamodel']['name']['0']                 = 'Имя';
-$GLOBALS['TL_LANG']['tl_metamodel']['name']['1']                 = 'Имя MetaModel.';
+$GLOBALS['TL_LANG']['tl_metamodel']['name']['0']                 = 'Название';
+$GLOBALS['TL_LANG']['tl_metamodel']['name']['1']                 = 'Название MetaModel.';
 $GLOBALS['TL_LANG']['tl_metamodel']['new']['0']                  = 'Новый MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel']['new']['1']                  = 'Создать новый MetaModel';
-$GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['0']       = 'Определить настройки отображения';
-$GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['1']       = 'Определить настройки отображения MetaModel ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel']['pastenew']['0']             = 'Добавить новый сверху';
+$GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['0']       = 'Определить настройки визуализации';
+$GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['1']       = 'Определить настройки визуализации MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['searchable_pages']['0']     = 'Определить настройки поиска';
 $GLOBALS['TL_LANG']['tl_metamodel']['searchable_pages']['1']     = 'Определить настройки поиска для MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['0']                 = 'Детали MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel']['show']['1']                 = 'Показать детали MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['sorting']['0']              = 'Сортировка';
 $GLOBALS['TL_LANG']['tl_metamodel']['sorting']['1']              = 'Порядок сортировки элементов.';
-$GLOBALS['TL_LANG']['tl_metamodel']['tableName']['0']            = 'Имя таблицы';
-$GLOBALS['TL_LANG']['tl_metamodel']['tableName']['1']            = 'Имя таблицы в базе данных для хранения элементов.';
-$GLOBALS['TL_LANG']['tl_metamodel']['title_legend']              = 'Имя и таблица';
+$GLOBALS['TL_LANG']['tl_metamodel']['tableName']['0']            = 'Название таблицы';
+$GLOBALS['TL_LANG']['tl_metamodel']['tableName']['1']            = 'Название таблицы в базе данных для хранения элементов.';
+$GLOBALS['TL_LANG']['tl_metamodel']['title_legend']              = 'Название и таблица';
 $GLOBALS['TL_LANG']['tl_metamodel']['translated']['0']           = 'Перевод';
 $GLOBALS['TL_LANG']['tl_metamodel']['translated']['1']           = 'Выберите, если MetaModel должен поддерживать перевод/многоязычность.';
 $GLOBALS['TL_LANG']['tl_metamodel']['translated_legend']         = 'Перевод';

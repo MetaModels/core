@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2017-08-24T12:42:58+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']            = 'Integraziun en il back-end';
@@ -47,7 +47,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']['1']                  = 'Crear in
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['0']          = 'Vista dal panel';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['1']          = 'Seperar las opziuns per in panel cun commas (= distanza) e semicolons (= nova lingia) sco p.ex. sort,filter;search,limit.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker']               = 'Panel-picker';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['0']               = 'Num da tabella dal genitur (sche in exista)';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['1']               = 'Num da la tabella da banca da datas che duai vegnir referenzà sco tabella da genitur.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype']['0']           = 'Integraziun';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype']['1']           = 'Tscherna il tip giavischà per l\'integraziun.';
@@ -82,3 +81,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']['1']               = 'Data e t
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['use_limitview']['0']        = 'Vesair la limitaziun';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['use_limitview']['1']        = 'Activar la limitaziun da vista.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['view_legend']               = 'Configuraziun da vista';
+

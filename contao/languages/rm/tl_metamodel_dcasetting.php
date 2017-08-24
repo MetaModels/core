@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2017-08-24T12:43:05+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Agiuntà l\'attribut "%s" a la mascra d\'endataziun.';
@@ -19,7 +19,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                  =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['1']                  = 'Agiuntar tut ils attributs a la mascra d\'endataziun';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']              = 'Avanzà';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['0']               = 'Mantegnair cuntegn da html.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['1']               = 'Tscherna questa chaschetta per mantegnair da html.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['0']              = 'Adina memorisar';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['1']              = 'Sche activà vegn quest champ adina memorisà, era sche la valur n\'è betg vegnida midada.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']['0']                 = 'Attribut';
@@ -49,12 +48,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag']['1']                    =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['functions_legend']             = 'Opziuns davart la funcziunalitad';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['0']      = 'Includer ina opziun vida';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['1']      = 'Sche activà vegn ina opziun agiuntada, che lubescha da definir la pussaivladad &quot;tschernì nagin element&quot;.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']['0']              = 'Zuppentar la legenda';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']['1']              = 'Zuppentar sco standard la legenda.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']['0']             = 'Titel da la legenda';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']['1']             = 'Qua pos ti endatar il titel da la legenda';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory']['0']               = 'Obligatoric';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory']['1']               = 'Tscherna questa chaschetta sche quest attribut duai esser obligatoric.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']                = 'Lingua';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']                   = 'Titel da la legenda';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['0']                     = 'Nov';
@@ -102,3 +98,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['1']           =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['0']   = 'Allontanar slashs durant memorisar';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['1']   = 'Agiuntar in slash durant memorisar';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['2']   = 'Far nagut';
+

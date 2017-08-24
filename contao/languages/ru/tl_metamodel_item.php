@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:14:41+02:00
+ * last-updated: 2017-08-24T12:43:20+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_item']['copy']['0']          = 'Копировать элемент';
@@ -33,8 +33,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['pasteafter']['0']    = 'Создать
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pasteafter']['1']    = 'Создать новый элемент после элемента ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pasteinto']['0']     = 'Создать новый элемент';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pasteinto']['1']     = 'Создать новый элемент в элементе ID %s';
-$GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']['0']      = 'Создать новый элемент';
-$GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']['1']      = 'Создайть новый элемент после элемента ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']['0']      = 'Добавить новый сверху';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']['1']      = 'Добавить новый элемент после элемента ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['show']['0']          = 'Детали элемента';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['show']['1']          = 'Показать детали элемента ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['sorting']['0']       = 'Сортировка';

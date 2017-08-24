@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2017-08-24T12:42:55+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['advanced_legend']  = 'Configuraziun extendida';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname']['0']     = 'Num da la colonna';
@@ -37,8 +36,10 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode']    = 'Lingua';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value']       = 'Descripziun';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']['0']         = 'Nov attribut';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']['1']         = 'Crear in nov attribut';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['pasteafter']['0']  = 'Crear in nov attribut';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['0']        = 'Detagls da l\'attribut';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['1']        = 'Detagls da l\'attribut cun l\'ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['title_legend']     = 'Tip, num e configuraziun da basa d\'attributs';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['type']['0']        = 'Tip da l\'attribut';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['type']['1']        = 'Tscherna il tip da quest attribut. ATTENZIUN: Sche ti midas quai vegnan tut las datas entaifer quest attribut stizzadas!';
+

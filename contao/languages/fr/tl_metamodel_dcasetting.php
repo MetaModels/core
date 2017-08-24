@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:10:59+02:00
+ * last-updated: 2017-08-24T12:43:05+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Attribut "%s" ajouté au masque de saisie.';
@@ -19,7 +19,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                  =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['1']                  = 'Ajouter tout les attributs au masque de saisie';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']              = 'Avancé';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['0']               = 'Ne pas retirer le contenu HTML.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['1']               = 'Si vous sélectionnez cette option, le contenu HTML sera préservé.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['0']              = 'Toujours sauvegarder';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['1']              = 'Si vrai, le champ sera toujours sauvegardé, même si sa valeur n\'est pas changée.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']['0']                 = 'Attribut';
@@ -49,12 +48,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag']['1']                    =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['functions_legend']             = 'Options relatives à la fonctionalité';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['0']      = 'Inclure une option vide';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['1']      = 'Si vrai, une option vide sera ajoutée aux options qui permettent de définir une option d\'article.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']['0']              = 'Cacher légende';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']['1']              = 'Cacher légende par défaut.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']['0']             = 'Titre de la légende';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']['1']             = 'Saisir le titre de la légende.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory']['0']               = 'Obligatoire';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory']['1']               = 'Cocher si cet attribut doit être obligatoire.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']                = 'Langue';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']                   = 'Titre de la légende';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['0']                     = 'Nouveau';

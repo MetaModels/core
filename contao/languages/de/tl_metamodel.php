@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-11-18T00:15:18+01:00
+ * last-updated: 2017-08-24T12:42:52+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Erweiterte Einstellungen';
@@ -48,6 +48,10 @@ $GLOBALS['TL_LANG']['tl_metamodel']['name']['0']                 = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel']['name']['1']                 = 'Name des MetaModels.';
 $GLOBALS['TL_LANG']['tl_metamodel']['new']['0']                  = 'Neues MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel']['new']['1']                  = 'Ein neues MetaModel erstellen.';
+$GLOBALS['TL_LANG']['tl_metamodel']['pasteafter']['0']           = 'Erstellt ein neues MetaModel';
+$GLOBALS['TL_LANG']['tl_metamodel']['pasteafter']['1']           = 'Erstelle neues MetaModel nach MetaModel ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel']['pastenew']['0']             = 'Neue Einstellung oben erstellen';
+$GLOBALS['TL_LANG']['tl_metamodel']['pastenew']['1']             = 'Neues MetaModel nach MetaModel ID %s anlegen';
 $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['0']       = 'Render-Einstellungen definieren';
 $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['1']       = 'Render-Einstellungen für MetaModel ID %s definieren';
 $GLOBALS['TL_LANG']['tl_metamodel']['searchable_pages']['0']     = 'Einstellungen der Suche festlegen.';
