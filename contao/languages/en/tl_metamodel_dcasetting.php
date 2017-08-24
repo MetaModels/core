@@ -130,3 +130,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']          =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_activate']            = 'Add new settings enabled.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory_for_unique_attr']  =
     'Unique attribues are automatically mandatory (this is not changable).';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly_for_force_alias']  =
+    'Attribues with force alias are automatically readonly (this is not changable).';
