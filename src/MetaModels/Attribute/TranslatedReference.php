@@ -322,19 +322,30 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         $arrExisting = array_keys($this->getTranslatedDataFor($arrIds, $strLangCode));
         $arrNewIds   = array_diff($arrIds, $arrExisting);
 
-        // Update existing values.
-        $strQuery = 'UPDATE ' . $this->getValueTable() . ' %s';
+        // Update existing values - delete if empty.
+        $strQueryUpdate = 'UPDATE ' . $this->getValueTable() . ' %s';
+        $strQueryDelete = 'DELETE FROM ' . $this->getValueTable();
+
         foreach ($arrExisting as $intId) {
             $arrWhere = $this->getWhere($intId, $strLangCode);
-            $objDB->prepare($strQuery . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : ''))
-                ->set($this->getSetValues($arrValues[$intId], $intId, $strLangCode))
-                ->execute(($arrWhere ? $arrWhere['params'] : null));
+            
+            if ($arrValues[$intId]['value'] != '') {
+                $objDB->prepare($strQueryUpdate . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : ''))
+                    ->set($this->getSetValues($arrValues[$intId], $intId, $strLangCode))
+                    ->execute(($arrWhere ? $arrWhere['params'] : null));
+            } else {
+                $objDB->prepare($strQueryDelete . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : ''))
+                    ->execute(($arrWhere ? $arrWhere['params'] : null));
+            }
         }
 
         // Insert the new values.
-        $strQuery = 'INSERT INTO ' . $this->getValueTable() . ' %s';
+        $strQueryInsert = 'INSERT INTO ' . $this->getValueTable() . ' %s';
         foreach ($arrNewIds as $intId) {
-            $objDB->prepare($strQuery)
+            if ($arrValues[$intId]['value'] == '') {
+                continue;
+            }
+            $objDB->prepare($strQueryInsert)
                 ->set($this->getSetValues($arrValues[$intId], $intId, $strLangCode))
                 ->execute();
         }
