@@ -7,7 +7,7 @@ if ($this->items->getCount()) {
         foreach ($item['attributes'] as $field => $attribute) {
             if ((isset($item['text'][$field]) && ($value = $item['text'][$field]))) {
                 if (!$hideLabels) {
-                    echo sprintf($GLOBALS['TL_LANG']['MSC']['field_label'], $attribute->getName()) . ': ';
+                    echo sprintf($GLOBALS['TL_LANG']['MSC']['field_label'], $attribute->getName()) . ' ';
                 }
                 echo $value . PHP_EOL;
             }
