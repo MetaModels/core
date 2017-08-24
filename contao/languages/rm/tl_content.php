@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T23:07:50+02:00
+ * last-updated: 2017-08-24T12:42:46+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_content']['ASC']                                 = 'Ascendent';
@@ -36,6 +36,7 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_template']['1']         = 'Tsch
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering']['0']            = 'Configuraziun da filter per applitgar';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering']['1']            = 'Tscherna la configuraziun da filter che duess vegnir applitgada per far la glista.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams']['0']         = 'Surscriver ils parameters da filtrar';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams']['1']         = 'Surscriver ils parameters da filtrar';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams_use_get']['0'] = 'Utilisar il parameter GET';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_jumpTo']['0']               = 'Pagina per renviar';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_jumpTo']['1']               = 'Tscherna la pagina a la quala ils visitaders duain vegnir renviads sch\'els cliccan sin ina colliaziun u tramettan in formular';
@@ -58,3 +59,4 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit']['1']            = 'Acti
 $GLOBALS['TL_LANG']['tl_content']['mm_config_legend']                    = 'Configuraziun da MetaModel';
 $GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']                    = 'Filter da MetaModel';
 $GLOBALS['TL_LANG']['tl_content']['mm_rendering']                        = 'Visualisaziun da MetaModel';
+

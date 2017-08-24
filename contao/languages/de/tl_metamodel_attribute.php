@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-11-18T16:13:56+01:00
+ * last-updated: 2017-08-24T12:42:55+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['advanced_legend']              = 'Erweiterte Einstellungen';
@@ -38,8 +38,10 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode']                = 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value']                   = 'Beschreibung';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']['0']                     = 'Neues Attribut';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']['1']                     = 'Erstellen Sie ein neues Attribut.';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['pastenew']['0']                = 'Neues Attribut nach diesem Attribut';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['pastenew']['1']                = 'Neues Attribut nach diesem Attribut';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['pasteafter']['0']              = 'Erstellen Sie ein neues Attribut.';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['pasteafter']['1']              = 'Erstellen Sie einen neuen Datensatz nach Attribut ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['pastenew']['0']                = 'Neue Einstellung oben erstellen';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['pastenew']['1']                = 'Neue Einstellung nach Element ID %s anlegen';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['0']                    = 'Attribut-Details';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['1']                    = 'Die Details des Attributs ID %s anzeigen.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['title_legend']                 = 'Typ, Benennung und Grundeinstellungen des Attributes.';

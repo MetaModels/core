@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T23:07:50+02:00
+ * last-updated: 2017-08-24T12:42:52+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Προσαρμοσμενες ρυθμισεις';
@@ -25,7 +25,6 @@ $GLOBALS['TL_LANG']['tl_metamodel']['delete']['1']               = 'Διαγρα
 $GLOBALS['TL_LANG']['tl_metamodel']['edit']['0']                 = 'Διαχειριση στοιχειων';
 $GLOBALS['TL_LANG']['tl_metamodel']['edit']['1']                 = 'Διαχειριση στοιχειων του MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['editheader']['0']           = 'Επεξεργασια του MetaModel';
-$GLOBALS['TL_LANG']['tl_metamodel']['editheader']['1']           = 'Επεξεργασια του MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel']['fields']['0']               = 'Ορίσμος χαρακτηριστικων ';
 $GLOBALS['TL_LANG']['tl_metamodel']['fields']['1']               = 'ΔΙαχειριση χαρακτηριστικων του MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['filter']['0']               = 'Ορισμος φιλτρων';
@@ -60,3 +59,4 @@ $GLOBALS['TL_LANG']['tl_metamodel']['tstamp']['0']               = 'Επεξερ
 $GLOBALS['TL_LANG']['tl_metamodel']['tstamp']['1']               = 'Ημερομηνία και ώρα της τελευταίας αναθεώρησης.';
 $GLOBALS['TL_LANG']['tl_metamodel']['varsupport']['0']           = 'Υποστήριξη Variant';
 $GLOBALS['TL_LANG']['tl_metamodel']['varsupport']['1']           = 'Ελέγξτε αν το MetaModel θα στηρίξει παραλλαγές των αντικειμένων.';
+

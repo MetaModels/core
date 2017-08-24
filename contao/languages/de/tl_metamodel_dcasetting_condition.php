@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-09-18T12:13:37+02:00
+ * last-updated: 2017-08-24T12:43:08+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['addall']['0']                                     = 'Alle hinzufügen';
@@ -37,6 +37,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['enabled']['0']        
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['enabled']['1']                                    = 'Aktivieren dieser Bedingung.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['new']['0']                                        = 'Neu';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['new']['1']                                        = 'Neue Einstellung erstellen.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['pasteafter']['1']                                 = 'Neue Einstellung nach Element ID %s anlegen';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['pasteinto']['0']                                  = 'Neue Einstellung oben anlegen';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['pasteinto']['1']                                  = 'Neue Einstellung oben von Einstellung ID %s anlegen';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['pastenew']['0']                                   = 'Neue Einstellung oben erstellen';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['pastenew']['1']                                   = 'Neues Einstellung nach dem Element ID %s erstellen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show']['0']                                       = 'Einstellungsdetails';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show']['1']                                       = 'Zeige Details der Einstellung ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['title_legend']                                    = 'Titel';

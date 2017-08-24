@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:10:59+02:00
+ * last-updated: 2017-08-24T12:42:46+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_content']['ASC']                                 = 'Ascendant';
@@ -36,6 +36,7 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_template']['1']         = 'Sél
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering']['0']            = 'Paramètres de filtre à appliquer';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering']['1']            = 'Sélectionnez le paramètre de filtre qui doit être appliquer lors de la création de la liste.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams']['0']         = 'Dérogation paramètre de filtre';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams']['1']         = 'Dérogation paramètre de filtre';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams_use_get']['0'] = 'Utiliser le paramètre GET';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_jumpTo']['0']               = 'Page de redirection';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_jumpTo']['1']               = 'Veuillez choisir la page vers laquelle les internautes seront redirigés lors d\'un clic sur un lien ou lors de la soumission d\'un formulaire.';

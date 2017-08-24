@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:11:00+02:00
+ * last-updated: 2017-08-24T12:43:26+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['0']      = 'Дополнительные css-файлы';
@@ -42,23 +42,25 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['0']             = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['1']             = 'Страница, которая должна использоваться в качестве URL-адреса "Показать детали". Обратите внимание, что подробный URL получит параметр фильтра, который используется в настоящее время.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_allLanguages']     = 'Все языки';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter']['0']      = 'Настройки фильтра';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter']['1']      = 'Настройки фильтра, которые определяют, как целевой просмотрщик/список будет идентифицировать его совпадения на странице деталей.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['0']    = 'Язык';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['1']    = 'Язык перехода к странице.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page']['0']        = 'Перейти к странице';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page']['1']        = 'Страница для ссылки деталей.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']['0']               = 'Имя';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']['1']               = 'Имя настройки.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']['0']               = 'Название';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']['1']               = 'Название настройки.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']['0']                = 'Новый';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']['1']                = 'Создать новую настройку';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['pasteafter']['0']         = 'Создать новую настройку сверху';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['pasteafter']['1']         = 'Создать новый после настройки ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['pastenew']['0']           = 'Добавить новый сверху';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['publish']                 = 'Опубликовать';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']['0']           = 'Определить настройки атрибутов';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']['1']           = 'Определить настройки атрибутов ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']['0']               = 'Детали фильтра';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']['1']               = 'Показать детали настроек ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['0']           = 'Шаблон';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['1']           = 'Шаблон, используемый для отображения элементов.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']            = 'Имя';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['1']           = 'Шаблон, используемый для визуализации элементов.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']            = 'Название';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['0']             = 'Дата изменения';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['1']             = 'Дата и время последнего изменения';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['view_legend']             = 'Параметры просмотра';

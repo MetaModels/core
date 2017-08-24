@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:10:59+02:00
+ * last-updated: 2017-08-24T12:43:08+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['addall']['0']                   = 'Agiuntar tuts';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['addall']['1']                   = 'Agiuntar tut ils attributs a la mascra d\'endataziun';
@@ -29,5 +28,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['new']['1']            
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show']['0']                     = 'Detagls da la configuraziun';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show']['1']                     = 'Mussar detagls dal filter cun l\'ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type']['0']                     = 'Tip';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type']['1']                     = 'Tscherna il tip da l\'attribut';
 

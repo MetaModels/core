@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:10:59+02:00
+ * last-updated: 2017-08-24T12:43:08+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['addall']['0']                   = 'Ajouter tout';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['addall']['1']                   = 'Ajouter tout les attributs au masque de saisie';
@@ -29,5 +28,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['new']['1']            
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show']['0']                     = 'Détails paramètre';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show']['1']                     = 'Montrer les détails du paramètre ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type']['0']                     = 'Type';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type']['1']                     = 'Sélectionner le type d\'attribut.';
 

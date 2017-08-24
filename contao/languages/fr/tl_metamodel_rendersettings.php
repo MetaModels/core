@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2017-08-24T12:43:26+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['0']     = 'Fichiers CSS additionnels';
@@ -39,7 +39,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['0']            = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['1']            = 'L\'URL de la page qui doit être utilisé pour montrer les détails. Notez que les paramètres détaillés de l\'URL seront générés par le paramètre de filtre courant.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_allLanguages']    = 'Toutes les langues';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter']['0']     = 'Paramètres de filtre';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter']['1']     = 'Les paramètres de filtres qui définissent comment la cible (le lecteur/listeur dans la page de détail) identifiera ses correspondances.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['0']   = 'Langue';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['1']   = 'Le langage pour la page cible.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page']['0']       = 'Page cibe';
@@ -59,3 +58,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']           = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['0']            = 'Date de révision';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['1']            = 'Date et heure de la dernière révision.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['view_legend']            = 'Paramètres de vue';
+

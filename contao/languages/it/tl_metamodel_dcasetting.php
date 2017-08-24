@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-10-29T12:13:24+01:00
+ * last-updated: 2017-08-24T12:43:05+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Aggiunto l\'attributo "%s" alla maschera di input.';
@@ -19,7 +19,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                  =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['1']                  = 'Aggiungi tutti gli attributi nella maschera di input';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']              = 'Avanzato';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['0']               = 'Non alterare i contenuti html';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['1']               = 'Se si seleziona questa opzione, i contenuti HTML rimarranno inalterati.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['0']              = 'Salva sempre';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['1']              = 'Se viene selezionata l\'opzione, il campo viene sempre salvato anche se non è variato.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']['0']                 = 'Attributo';
@@ -49,12 +48,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag']['1']                    =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['functions_legend']             = 'Funzionalità delle opzioni correlate';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['0']      = 'Includi opzione vuota';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['1']      = 'Se questa opzione è selezionata verrà aggiunta tra le scelte un\'opzione vuota.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']['0']              = 'Nascondi legenda';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']['1']              = 'Nascondi la legenda come predefinito';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']['0']             = 'Titolo legenda';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']['1']             = 'Inserire il titolo della legenda';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory']['0']               = 'Obbligatorio';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory']['1']               = 'Selezionare questa opzione se l\'attributo è obbligatorio.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']                = 'Lingua';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']                   = 'Titolo legenda';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['0']                     = 'Nuovo';

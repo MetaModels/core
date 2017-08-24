@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-09-18T12:13:37+02:00
+ * last-updated: 2017-08-24T12:43:26+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['0']      = 'Zusätzliche CSS-Dateien';
@@ -51,6 +51,10 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']['0']               = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']['1']               = 'Einstellungsname';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']['0']                = 'Neu';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']['1']                = 'Erstellen Sie eine neue Einstellung.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['pasteafter']['0']         = 'Neue Einstellung oben anlegen';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['pasteafter']['1']         = 'Neue Einstellung nach Element ID %s anlegen';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['pastenew']['0']           = 'Neue Einstellung oben erstellen';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['pastenew']['1']           = 'Neues Einstellung nach dem Element ID %s erstellen';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['publish']                 = 'Veröffentlichen';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']['0']           = 'Attributeinstellungen festlegen';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']['1']           = 'Legen Sie die Attributeinstellungen für die Filtereinstellung ID %s fest.';

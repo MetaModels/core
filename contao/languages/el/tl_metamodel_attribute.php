@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2017-08-24T12:42:55+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['advanced_legend']  = 'Προσαρμοσμενες ρυθμισεις';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname']['0']     = 'Όνομα στήλης ';
@@ -37,8 +36,10 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode']    = 'Γλωσσ�
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value']       = 'Περιγραφη';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']['0']         = 'Νεο χαρακτηριστικό';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']['1']         = 'Δημιουργια νεου χαρακτηριστικου';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['pasteafter']['0']  = 'Δημιουργια νεου χαρακτηριστικου';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['0']        = ' Λεπτομερειες χαρακτηριστικου';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['1']        = ' Λεπτομερειες χαρακτηριστικου ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['title_legend']     = 'Τύπος, ονομασία και βάση διαμόρφωσης χαρακτηριστικόυ ';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['type']['0']        = ' Χαρακτηριστικο τυπου';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['type']['1']        = 'Επιλέξτε τον τύπο αυτού του χαρακτηριστικού. Προειδοποίηση: Εάν αλλάξετε αυτό, όλα τα υπάρχοντα δεδομένα μέσα σε αυτό το χαρακτηριστικό θα διαγραφθουν. ';
+
