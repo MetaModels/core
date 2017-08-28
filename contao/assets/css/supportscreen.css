@@ -1,51 +1,56 @@
 /**
- * The MetaModels extension allows the creation of multiple collections of custom items,
- * each with its own unique set of selectable attributes, with attribute extendability.
- * The Front-End modules allow you to build powerful listing and filtering of the
- * data in each collection.
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2017 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
  *
  * @package    MetaModels
  * @subpackage Core
  * @author     Andreas Isaak <info@andreas-isaak.de>
- * @copyright  The MetaModels team.
- * @license    LGPL.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2017 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
-  .mm_support_display .logo {
-    display:block;
-    height:38px;
-    text-indent:-99999px;
-    width:169px;
-    background:#fff url(http://now.metamodel.me/files/standard/layout/images/metamodels.png) no-repeat top left;
-  }
+.mm_support_display .logo {
+  display:block;
+  height:38px;
+  text-indent:-99999px;
+  width:169px;
+  background:#fff url(http://now.metamodel.me/files/standard/layout/images/metamodels.png) no-repeat top left;
+}
 
-  .mm_support_display h1 {
-    margin-bottom:20px;
-  }
+.mm_support_display h1 {
+  margin-bottom:20px;
+}
 
-  .mm_support_display .colset {
-    width:100%;
-    padding-top:10px;
-    padding-bottom:10px;
-    overflow:hidden;
-    clear:both;
-  }
+.mm_support_display .colset {
+  width:100%;
+  padding-top:10px;
+  padding-bottom:10px;
+  overflow:hidden;
+  clear:both;
+}
 
-  .mm_support_display .colset form {
-    padding-top:10px;
-  }
+.mm_support_display .colset form {
+  padding-top:10px;
+}
 
-  .mm_support_display .colset a {
-    text-decoration:underline;
-  }
+.mm_support_display a {
+  text-decoration:underline;
+}
 
-  .mm_support_display .colset .left {
-    width:35%;
-    float:left;
-  }
+.mm_support_display .colset .left {
+  width:35%;
+  float:left;
+}
 
-  .mm_support_display .colset .right {
-    float:right;
-    width:60%;
-  }
+.mm_support_display .colset .right {
+  float:right;
+  width:60%;
+}
