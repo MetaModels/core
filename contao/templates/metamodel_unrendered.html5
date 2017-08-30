@@ -19,8 +19,7 @@
 <?php $this->block('actions'); ?>
 <div class="actions">
 <?php foreach($arrItem['actions'] as $action): ?>
-<a href="<?= $action['href']; ?>"<?php if ($action['class']): ?> class="<?= $action['class']; ?>"<?php endif; ?><?php if ($action['title']): ?> title="<?= $action['title']; ?>"<?php endif; ?><?= $action['attribute']; ?>><?= $action['label']; ?></a>
-<?php endforeach; ?>
+<?php $this->insert('mm_actionbutton', ['action' => $action]); ?><?php endforeach; ?>
 </div>
 <?php $this->endblock(); ?>
 </div>
