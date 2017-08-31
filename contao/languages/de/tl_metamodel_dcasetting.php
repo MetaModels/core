@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:43:05+02:00
+ * last-updated: 2017-08-31T12:18:09+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_activate']              = 'Hinzugefügte Attribute aktivieren.';
@@ -20,9 +20,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                  =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['1']                  = 'Alle Attribute der Eingabemaske hinzufügen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']              = 'Erweitert';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['0']               = 'HTML-Inhalte erhalten';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['1']               = 'Falls angewählt wird HTML-Inhalt erhalten.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['1']               = 'Falls angewählt, wird HTML-Inhalt erhalten.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['0']              = 'Immer speichern';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['1']              = 'Falls angewählt wird dieses Feld - unabhängig davon, ob sich sein Wert geändert hat - immer gespeichert, ';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['1']              = 'Falls angewählt, wird dieses Feld - unabhängig davon, ob sich sein Wert geändert hat - immer gespeichert, ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']['0']                 = 'Attribute';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']['1']                 = 'Attribut, auf das sich diese Einstellung bezieht.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['backend_legend']               = 'Backend';
@@ -51,7 +51,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag']['0']                    =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag']['1']                    = 'Auswählen, falls Sie die globale Vorgabe für die Sortierung dieses Attributes überschreiben möchten.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['functions_legend']             = 'Funktionsbezogene Einstellungen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['0']      = 'Leere Option einfügen';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['1']      = 'Falls diese Option angewählt ist wird zusätzlich "kein Element ausgewählt" ermöglicht.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['1']      = 'Falls diese Option angewählt ist, wird zusätzlich "kein Element ausgewählt" ermöglicht.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']['0']              = 'Abschnitt ausblenden';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']['1']              = 'Abschnitt als Standardeinstellung ausblenden.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']['0']             = 'Legenden-Titel';
@@ -71,9 +71,10 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pastenew']['0']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pastenew']['1']                = 'Neues Einstellung nach dem Element ID %s anlegen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['presentation_legend']          = 'Anzeigeoptionen des Widgets';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['0']            = 'HTML-Tags nicht codieren.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['1']            = 'Falls ausgewählt werden HTML-Tags nicht codiert.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['1']            = 'Falls ausgewählt, werden HTML-Tags nicht codiert.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['0']                = 'Nur lesen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['1']                = 'Wenn aktiviert, erlaubt das Feld nur das Lesen und kann nicht geändert werden.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly_for_force_alias']     = 'Attribute mit "Neuerstellung erzwingen" sind automatisch "nur lesend" (Einstellung nicht änderbar).';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['0']                    = 'Zeilen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['1']                    = 'Anzahl der Zeilen, die für longtext / table Widget verwendet werden.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rte']['0']                     = 'Richtext-Editor aktivieren';
@@ -97,7 +98,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['7']             =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['8']             = 'Absteigende Sortierung nach Monat';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['sortingflag']['9']             = 'Aufsteigende Sortierung nach Jahr';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['spaceToUnderscore']['0']       = 'Leerzeichen durch Unterstriche ersetzen';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['spaceToUnderscore']['1']       = 'Falls diese Option angewählt ist werden Leerzeichen durch Unterstriche ersetzt.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['spaceToUnderscore']['1']       = 'Falls diese Option angewählt ist, werden Leerzeichen durch Unterstriche ersetzt.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker']                  = 'CSS-Wizard';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['submitOnChange']['0']          = 'Absenden bei Änderungen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['submitOnChange']['1']          = 'Wenn aktiv, wird das Formular bei Änderungen eines Feldwertes abgesendet.';
