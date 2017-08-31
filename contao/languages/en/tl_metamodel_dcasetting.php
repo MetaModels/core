@@ -100,6 +100,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new'][0]                     = '
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new'][1]                     = 'Create new setting.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['edit'][0]                    = 'Edit setting';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['edit'][1]                    = 'Edit setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['cut'][0]                     = 'Cut setting definition';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['cut'][1]                     = 'Cut setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy'][0]                    = 'Copy setting definition';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy'][1]                    = 'Copy setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete'][0]                  = 'Delete setting';
@@ -109,6 +111,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['conditions'][1]              =
     'Manage the visibility conditions of property ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['show'][0]                    = 'Setting details';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['show'][1]                    = 'Show details of setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle'][0]                  = 'Toggle';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle'][1]                  = 'Toggle the state of setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall'][0]                  = 'Add all';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall'][1]                  = 'Add all attributes to input screen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pastenew'][0]                = 'Add new at the top';

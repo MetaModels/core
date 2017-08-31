@@ -48,6 +48,10 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['edit'][0]             
     'Edit setting';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['edit'][1]                                         =
     'Edit setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['cut'][0]                                          =
+    'Cut setting definition';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['cut'][1]                                          =
+    'Cut setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['copy'][0]                                         =
     'Copy setting definition';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['copy'][1]                                         =
@@ -64,6 +68,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show'][0]             
     'Setting details';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show'][1]                                         =
     'Show details of setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['toggle'][0]                                       = 'Toggle';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['toggle'][1]                                       =
+    'Toggle the state of setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['addall'][0]                                       = 'Add all';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['addall'][1]                                       =
     'Add all attributes to input screen';
