@@ -19,6 +19,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -345,58 +346,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
                 'rgxp'     => 'digit'
             ),
             'sql'       => "int(10) unsigned NOT NULL default '1'"
-        ),
-        'backendcaption'  => array
-        (
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['backendcaption'],
-            'exclude'   => true,
-            'inputType' => 'multiColumnWizard',
-            'eval'      => array
-            (
-                'columnFields' => array
-                (
-                    'langcode'    => array
-                    (
-                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_langcode'],
-                        'exclude'   => true,
-                        'inputType' => 'select',
-                        'options'   => array_flip(
-                            array_filter(
-                                array_flip($this->getLanguages()),
-                                function ($langCode) {
-                                    // Disable >2 char long language codes for the moment.
-                                    return (2 === strlen($langCode));
-                                }
-                            )
-                        ),
-                        'eval'      => array
-                        (
-                            'style'  => 'width:200px',
-                            'chosen' => 'true'
-                        )
-                    ),
-                    'label'       => array
-                    (
-                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_label'],
-                        'exclude'   => true,
-                        'inputType' => 'text',
-                        'eval'      => array
-                        (
-                            'style' => 'width:180px',
-                        )
-                    ),
-                    'description' => array
-                    (
-                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_description'],
-                        'exclude'   => true,
-                        'inputType' => 'text',
-                        'eval'      => array
-                        (
-                            'style' => 'width:200px',
-                        )
-                    ),
-                ),
-            )
-        ),
+        )
     )
 );
