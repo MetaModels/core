@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Martin Treml <github@r2pi.net>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -59,10 +60,6 @@ class Subscriber extends BaseSubscriber
                 }
             )
             ->addListener(
-                ModelToLabelEvent::NAME,
-                array($this, 'modelToLabel')
-            )
-            ->addListener(
                 DecodePropertyValueForWidgetEvent::NAME,
                 array($this, 'decodeJumpToValue')
             )
@@ -86,30 +83,6 @@ class Subscriber extends BaseSubscriber
                 GetOptionsEvent::NAME,
                 array($this, 'getJsFilesOptions')
             );
-    }
-
-    /**
-     * Draw the render setting.
-     *
-     * @param ModelToLabelEvent $event The event.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    public function modelToLabel(ModelToLabelEvent $event)
-    {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersettings')) {
-            return;
-        }
-
-        if ($event->getModel()->getProperty('isdefault')) {
-            $event->setLabel(
-                $event->getLabel() .
-                ' <span style="color:#b3b3b3; padding-left:3px">[' . $GLOBALS['TL_LANG']['MSC']['fallback'] . ']</span>'
-            );
-        }
     }
 
     /**
