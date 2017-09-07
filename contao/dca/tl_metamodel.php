@@ -20,6 +20,7 @@
  * @author     Tim Becker <please.tim@metamodel.me>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -540,8 +541,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
             (
                 'mandatory' => true,
                 'maxlength' => 64,
-                'tl_class'  => 'w50',
-                'unique'    => true
+                'tl_class'  => 'w50'
             ),
             'sql'       => "varchar(255) NOT NULL default ''"
         ),
