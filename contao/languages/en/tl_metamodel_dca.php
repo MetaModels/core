@@ -13,6 +13,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -22,9 +23,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['name'][0]                     = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['name'][1]                     = 'Name of the input screen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp'][0]                   = 'Revision date';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp'][1]                   = 'Date and time of the latest revision.';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault'][0]                = 'Is default';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault'][1]                =
-    'Determines that this input screen shall be used as default for the parenting MetaModel.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype'][0]               = 'Integration';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype'][1]               = 'Select the desired type of integration.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermode'][0]               = 'Render mode';
