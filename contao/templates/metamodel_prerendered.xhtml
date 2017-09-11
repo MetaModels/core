@@ -18,17 +18,16 @@
 <?php endif; ?>
 <?php endforeach; ?>
 <?php $this->block('actions'); ?>
-<?php if ($arrItem['jumpTo']['deep']): ?>
-<a href="<?= $arrItem['jumpTo']['url'] ?>"><?= $this->details ?></a>
-<?php endif; ?>
-<?php if (isset($this->editEnable) && $this->editEnable): ?>
-<a href="<?= $arrItem['editUrl'] ?>"><?= $this->editLabel ?></a>
-<?php endif; ?>
-<?php $this->endblock(); ?>
-</div>
+<div class="actions">
+<?php foreach($arrItem['actions'] as $action): ?>
+<a href="<?= $action['href']; ?>"<?php if ($action['class']): ?> class="<?= $action['class']; ?>"<?php endif; ?><?php if ($action['title']): ?> title="<?= $action['title']; ?>"<?php endif; ?><?= $action['attribute']; ?>><?= $action['label']; ?></a>
 <?php endforeach; ?>
 </div>
 <?php $this->endblock(); ?>
+</div>
+<?php $this->endblock(); ?>
+<?php endforeach; ?>
+</div>
 <?php else : ?>
 <?php $this->block('noItem'); ?>
 <p class="info"><?= $this->noItemsMsg ?></p>

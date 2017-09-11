@@ -8,7 +8,7 @@
   $objCombiner = new Combiner();
   $objCombiner->add('system/themes/'. $this->theme .'/basic.css');
   $objCombiner->add('system/themes/'. $this->theme .'/main.css');
-  echo $objCombiner->getCombinedFile();
+  echo $objCombiner->getCombinedFile('');
 ?>" media="all">
 <!--[if IE]><link rel="stylesheet" href="<?= TL_SCRIPT_URL ?>system/themes/<?= $this->theme ?>/iefixes.css" media="screen"><![endif]-->
 <?= $this->stylesheets ?>
@@ -44,7 +44,7 @@ var REQUEST_TOKEN = '<?= REQUEST_TOKEN ?>';
   $objCombiner->add('assets/mootools/mootao/Mootao.js', MOOTOOLS_TAO);
   $objCombiner->add('assets/contao/js/core.js');
   $objCombiner->add('system/themes/'. $this->theme .'/hover.js');
-  echo $objCombiner->getCombinedFile();
+  echo $objCombiner->getCombinedFile('');
 ?>"></script>
 
 <?php if($this->strField == 'panelLayout'): ?>

@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2017-08-24T12:43:05+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Προστέθηκε το χαρακτηριστικό %s στην οθονη εισαγωγης.';
@@ -19,7 +19,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                  =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['1']                  = 'Προσθέστε όλα τα χαρακτηριστικά για την οθόνη εισαγωγής';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']              = 'Προσαρμογη';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['0']               = 'Κανενα html περιεχόμενο. ';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['1']               = 'Αν επιλέξετε αυτό, τοHTML περιεχόμενο θα ειναι διατηρημένο. ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['0']              = 'Πάντα να αποθηκεύετε ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['1']              = 'Αν αληθεύει το πεδίο θα είναι πάντα αποθυκευμενο, έστω και αν η αξία του δεν έχει αλλάξει. ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']['0']                 = ' Χαρακτηριστικο';
@@ -48,12 +47,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag']['0']                    =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['flag']['1']                    = 'Αν θέλετε να παρακάμψετε την παγκόσμια σημαία διαλογής από την παλέτα για αυτό το χαρακτηριστικό, παρακαλούμε επιλέξτε εδώ.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['0']      = 'Συμπεριλάβετε κενό επιλογής ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption']['1']      = 'αν αληθεύει ένα κενό επιλογή θα προστεθεί στις επιλογές που σας επιτρέπουν να ορίσετε μια "όχι επιλεγμένο στοιχείο " επιλογή ';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']['0']              = 'Απόκρυψη υπομνηματος';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide']['1']              = 'Αποκρύψη υπόμνηματος για την προεπιλογή.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']['0']             = 'Τιτλος υπομνηματος';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle']['1']             = 'Εδώ μπορείτε να εισαγετε εναν τιτλο υπομνηματος.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory']['0']               = 'Υποχρεωση';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory']['1']               = 'Ελέγξτε αν αυτό το χαρακτηριστικό είναι υποχρεωτικο.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']                = 'Γλωσσα ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']                   = 'Τιτλος υπομνηματος';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['0']                     = 'Νεος τυπος';

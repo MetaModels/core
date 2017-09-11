@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,8 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Christopher Boelter <christopher@boelter.eu>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -714,7 +715,8 @@ class ToolboxFile
      * array(
      *   'bin'   => array() // list of the binary ids.
      *   'value' => array() // list of the uuids.
-     *   'path' => array() // list of the paths.
+     *   'path'  => array() // list of the paths.
+     *   'meta'  => array() // list of the meta data.
      * )
      *
      * @param array $values The values to convert.
@@ -744,7 +746,8 @@ class ToolboxFile
      * array(
      *   'bin'   => array() // list of the binary ids.
      *   'value' => array() // list of the uuids.
-     *   'path' => array() // list of the paths.
+     *   'path'  => array() // list of the paths.
+     *   'meta'  => array() // list of the meta data.
      * )
      *
      * @param array $values The binary uuid values to convert.
@@ -762,7 +765,8 @@ class ToolboxFile
         $result = array(
             'bin'   => array(),
             'value' => array(),
-            'path'  => array()
+            'path'  => array(),
+            'meta'  => array()
         );
         $models = FilesModel::findMultipleByUuids(array_filter($values));
 
@@ -774,6 +778,7 @@ class ToolboxFile
             $result['bin'][]   = $value->uuid;
             $result['value'][] = self::uuidToString($value->uuid);
             $result['path'][]  = $value->path;
+            $result['meta'][]  = deserialize($value->meta, true);
         }
 
         return $result;
@@ -784,9 +789,10 @@ class ToolboxFile
      *
      * The output array will have the following layout:
      * array(
-     *   'bin'   => array() // the binary id.
-     *   'value' => array() // the uuid.
-     *   'path' => array() // the path.
+     *   'bin'   => array() // list of the binary ids.
+     *   'value' => array() // list of the uuids.
+     *   'path'  => array() // list of the paths.
+     *   'meta'  => array() // list of the meta data.
      * )
      *
      * @param array $values The binary uuids or paths to convert.
@@ -802,7 +808,8 @@ class ToolboxFile
             return array(
                 'bin'   => array(),
                 'value' => array(),
-                'path'  => array()
+                'path'  => array(),
+                'meta'  => array()
             );
         }
 

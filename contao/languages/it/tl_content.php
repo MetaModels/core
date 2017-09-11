@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2014-03-27T12:16:04+01:00
+ * last-updated: 2017-08-24T12:42:46+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_content']['ASC']                                 = 'Ascendente';
@@ -36,6 +36,7 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_template']['1']         = 'Sele
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering']['0']            = 'Seleziona le impostazioni dei filtri da aplicare';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering']['1']            = 'Selezionare le impostazioni dei filtri che verranno applicati durante la compilazione della lista.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams']['0']         = 'Sovrascrivi i parametri del filtro';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams']['1']         = 'Sovrascrivi i parametri del filtro';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams_use_get']['0'] = 'Usa i parametri GET';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_jumpTo']['0']               = 'Pagina di reindirizzamento';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_jumpTo']['1']               = 'Selezionare la pagina a cui verranno reindirizzati i visitatori quando si clicca un link o  si invia un modulo.';

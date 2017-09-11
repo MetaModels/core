@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2016 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,8 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2016 The MetaModels team.
+ * @author     Frank Mueller <frank.mueller@linking-you.de>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -305,7 +306,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
 
         $arrReturn = array();
         while ($objValue->next()) {
-            $arrReturn[$objValue->$arrOptionizer['key']] = $objValue->$arrOptionizer['value'];
+            $arrReturn[$objValue->{$arrOptionizer['key']}] = $objValue->{$arrOptionizer['value']};
         }
         return $arrReturn;
     }
@@ -321,19 +322,30 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         $arrExisting = array_keys($this->getTranslatedDataFor($arrIds, $strLangCode));
         $arrNewIds   = array_diff($arrIds, $arrExisting);
 
-        // Update existing values.
-        $strQuery = 'UPDATE ' . $this->getValueTable() . ' %s';
+        // Update existing values - delete if empty.
+        $strQueryUpdate = 'UPDATE ' . $this->getValueTable() . ' %s';
+        $strQueryDelete = 'DELETE FROM ' . $this->getValueTable();
+
         foreach ($arrExisting as $intId) {
             $arrWhere = $this->getWhere($intId, $strLangCode);
-            $objDB->prepare($strQuery . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : ''))
-                ->set($this->getSetValues($arrValues[$intId], $intId, $strLangCode))
-                ->execute(($arrWhere ? $arrWhere['params'] : null));
+            
+            if ($arrValues[$intId]['value'] != '') {
+                $objDB->prepare($strQueryUpdate . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : ''))
+                    ->set($this->getSetValues($arrValues[$intId], $intId, $strLangCode))
+                    ->execute(($arrWhere ? $arrWhere['params'] : null));
+            } else {
+                $objDB->prepare($strQueryDelete . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : ''))
+                    ->execute(($arrWhere ? $arrWhere['params'] : null));
+            }
         }
 
         // Insert the new values.
-        $strQuery = 'INSERT INTO ' . $this->getValueTable() . ' %s';
+        $strQueryInsert = 'INSERT INTO ' . $this->getValueTable() . ' %s';
         foreach ($arrNewIds as $intId) {
-            $objDB->prepare($strQuery)
+            if ($arrValues[$intId]['value'] == '') {
+                continue;
+            }
+            $objDB->prepare($strQueryInsert)
                 ->set($this->getSetValues($arrValues[$intId], $intId, $strLangCode))
                 ->execute();
         }

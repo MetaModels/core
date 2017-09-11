@@ -18,6 +18,7 @@
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -26,6 +27,7 @@
 namespace MetaModels;
 
 use MetaModels\Attribute\IAttribute;
+use MetaModels\Attribute\IInternal;
 use MetaModels\Events\ParseItemEvent;
 use MetaModels\Filter\IFilter;
 use MetaModels\Render\Setting\ICollection;
@@ -100,7 +102,12 @@ class Item implements IItem
      */
     public function internalParseAttribute($objAttribute, $strOutputFormat, $objSettings)
     {
+        if ($objAttribute instanceof IInternal) {
+            return array();
+        }
+
         $arrResult = array();
+
         if ($objAttribute) {
             // Extract view settings for this attribute.
             if ($objSettings) {
@@ -388,14 +395,14 @@ class Item implements IItem
     {
         $this->registerAssets($objSettings);
 
-        $arrResult = array
-        (
-            'raw' => $this->arrData,
-            'text' => array(),
-            'attributes' => array(),
-            $strOutputFormat => array(),
-            'class' => ''
-        );
+        $arrResult = [
+            'raw'            => $this->arrData,
+            'text'           => [],
+            'attributes'     => [],
+            $strOutputFormat => [],
+            'class'          => '',
+            'actions'        => []
+        ];
 
         // No render settings, parse "normal" and hope the best - not all attribute types must provide usable output.
         if (!$objSettings) {
@@ -408,7 +415,18 @@ class Item implements IItem
             return $arrResult;
         }
 
-        $arrResult['jumpTo'] = $this->buildJumpToLink($objSettings);
+        // Add jumpTo link
+        $jumpTo = $this->buildJumpToLink($objSettings);
+        if (true === $jumpTo['deep']) {
+            $arrResult['actions']['jumpTo'] = [
+                'href'  => $jumpTo['url'],
+                'label' => $this->getCaptionText('details'),
+                'class' => 'details'
+            ];
+        }
+
+        // Just here for backwards compatibility with templates. See #1087
+        $arrResult['jumpTo'] = $jumpTo;
 
         // First, parse the values in the same order as they are in the render settings.
         foreach ($objSettings->getSettingNames() as $strAttrName) {
@@ -512,5 +530,38 @@ class Item implements IItem
             $objNewItem->set('varbase', '0');
         }
         return $objNewItem;
+    }
+
+
+    /**
+     * Retrieve the translation string for the given lang key.
+     *
+     * In order to achieve the correct caption text, the function tries several translation strings sequentially.
+     * The first language key that is set will win, even if it is to be considered empty.
+     *
+     * This message is looked up in the following order:
+     * 1. $GLOBALS['TL_LANG']['MSC'][<mm tablename>][<render settings id>][$langKey]
+     * 2. $GLOBALS['TL_LANG']['MSC'][<mm tablename>][$langKey]
+     * 3. $GLOBALS['TL_LANG']['MSC'][$langKey]
+     *
+     * @param string $langKey The language key to retrieve.
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    private function getCaptionText($langKey)
+    {
+        $tableName = $this->getMetaModel()->getTableName();
+        if (isset($this->objView)
+            && isset($GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey])
+        ) {
+            return $GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey];
+        } elseif (isset($GLOBALS['TL_LANG']['MSC'][$tableName][$langKey])) {
+            return $GLOBALS['TL_LANG']['MSC'][$tableName][$langKey];
+        }
+
+        return $GLOBALS['TL_LANG']['MSC'][$langKey];
     }
 }

@@ -15,6 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -93,6 +94,10 @@ class Subscriber extends BaseSubscriber
             ->addListener(
                 BuildWidgetEvent::NAME,
                 array($this, 'buildMandatoryWidget')
+            )
+            ->addListener(
+                BuildWidgetEvent::NAME,
+                array($this, 'buildReadonlyWidget')
             )
             ->addListener(
                 GetPropertyOptionsEvent::NAME,
@@ -374,6 +379,41 @@ class Subscriber extends BaseSubscriber
             $event->getProperty()->setExtra($extra);
 
             $model->setProperty('mandatory', true);
+        }
+    }
+
+    /**
+     * Disable the readonly checkbox field if the selected attribute has force_alias.
+     *
+     * @param BuildWidgetEvent $event The event.
+     *
+     * @return void
+     */
+    public function buildReadonlyWidget(BuildWidgetEvent $event)
+    {
+        $environment = $event->getEnvironment();
+        if (($environment->getDataDefinition()->getName() !== 'tl_metamodel_dcasetting')
+            || ($event->getProperty()->getName() !== 'readonly')) {
+            return;
+        }
+
+        $model     = $event->getModel();
+        $metaModel = $this->getMetaModelById($this->getMetaModelId($event));
+
+        if ($metaModel->getAttributeById($model->getProperty('attr_id'))->get('force_alias')) {
+            Message::addInfo(
+                $environment
+                    ->getTranslator()
+                    ->translate('readonly_for_force_alias', 'tl_metamodel_dcasetting')
+            );
+
+            $extra = $event->getProperty()->getExtra();
+
+            $extra['disabled'] = true;
+
+            $event->getProperty()->setExtra($extra);
+
+            $model->setProperty('readonly', true);
         }
     }
 

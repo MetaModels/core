@@ -7,14 +7,19 @@ if ($this->items->getCount()) {
         foreach ($item['attributes'] as $field => $attribute) {
             if ((isset($item['text'][$field]) && ($value = $item['text'][$field]))) {
                 if (!$hideLabels) {
-                    echo sprintf($GLOBALS['TL_LANG']['MSC']['field_label'], $attribute->getName()) . ': ';
+                    echo sprintf($GLOBALS['TL_LANG']['MSC']['field_label'], $attribute->getName()) . ' ';
                 }
                 echo $value . PHP_EOL;
             }
         }
 
-        if ($item['jumpTo']['deep']) {
-            echo $this->details . ': ' . $item['jumpTo']['url'];
+        foreach ($item['actions'] as $action) {
+            echo sprintf(
+                '%s: %s%s',
+                $action['label'],
+                $action['href'],
+                PHP_EOL
+            );
         }
     }
 } else {

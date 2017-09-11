@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2017-08-24T12:42:46+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_content']['ASC']                                 = 'Αύξουσα';
 $GLOBALS['TL_LANG']['tl_content']['DESC']                                = 'Φθίνουσα';
@@ -35,6 +34,7 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_template']['1']         = 'Επ
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering']['0']            = 'Ρυθμίσεις για εφαρμόγη φίλτρου ';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering']['1']            = 'Επιλέξτε τις ρυθμίσεις φίλτρου που πρέπει να εφαρμόζονται κατά την κατάρτιση του καταλόγου.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams']['0']         = 'Υπερισχυση παραμετρων φιλτρου';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams']['1']         = 'Υπερισχυση παραμετρων φιλτρου';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams_use_get']['0'] = 'Χρησιμοποιηση της GET παραμετρου';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_jumpTo']['0']               = 'Σελίδα ανακατεύθυνσης';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_jumpTo']['1']               = 'Παρακαλώ επιλέξτε τη σελίδα που θα μεταφερθουν οι επισκέπτες όταν κάνετε κλικ σε μια σύνδεση ή υποβάλλοντας το δελτίο. ';
@@ -57,3 +57,4 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit']['1']            = 'Ελ
 $GLOBALS['TL_LANG']['tl_content']['mm_config_legend']                    = 'MetaModel Διαμόρφωση ';
 $GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']                    = 'MetaModel Φιλτρο';
 $GLOBALS['TL_LANG']['tl_content']['mm_rendering']                        = 'MetaModel αποτύπωση ';
+

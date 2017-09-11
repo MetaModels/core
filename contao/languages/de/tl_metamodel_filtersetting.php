@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-09-18T12:13:37+02:00
+ * last-updated: 2017-08-24T12:43:17+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Alle Sprachen durchsuchen';
@@ -47,6 +47,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['0']         =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['1']         = 'Nur Optionen anzeigen, für die es nach Anwendung dieses Filters ein Ergebnis gibt.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['0']             = 'Nur zugeordnete Werte';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['1']             = 'Zeige nur Optionen, die im MetaModel bereits zugeordnet sind.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteafter']['1']           = 'Neue Einstellung nach Element ID %s anlegen';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteinto']['0']            = 'Neue Einstellung oben anlegen';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteinto']['1']            = 'Neue Filterregel oben von Filterregel ID %s anlegen';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pastenew']['0']             = 'Neue Einstellung oben erstellen';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pastenew']['1']             = 'Neues Einstellung nach dem Element ID %s erstellen';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['0']         = 'Statischer Parameter';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['1']         = 'Auswählen, wenn Sie Werte für diesen Parameter aus einer übergordneten Liste (wie zum Beispiel Module, Inhaltselemente, etc.) beziehen möchten.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['0']                 = 'Details';

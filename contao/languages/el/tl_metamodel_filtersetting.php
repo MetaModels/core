@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2017-08-24T12:43:17+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Αναζητηση ολων των γλωσσων';
@@ -40,16 +40,13 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['0']                =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['1']                = 'Εμφάνιση ετικέτας αντί για όνομα του χαρακτηριστικού. ';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['0']                  = 'Νεος τυπος';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['1']                  = 'Δημιουργια νεας ρυθμισης.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['0']         = 'Παραμένοντας ετικέτες μόνο ';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['1']         = 'Εμφάνιση μόνο των επιλογων, που εξακολουθούν να ανατιθενται κάπου μετά το πραγματικο φίλτρο που έχει ρυθμιστεί.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['0']             = 'Ειδικες ετικέτες μόνο ';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['1']             = 'Εμφάνιση μόνο των επιλογων, που έχουν εκχωρηθεί κάπου στο MetaModel.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['0']         = 'Στατικη παραμετρος';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['1']         = 'Ελέγξτε εάν θέλετε να είστε σε θέση να ρυθμίσετε την τιμή αυτής της παραμέτρου στη λίστα ανατροφής (modules , τα στοιχεία περιεχομένου , κ.λπ. )';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['0']                 = 'Λεπτομερειες ρυθμισης φιλτρου';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['1']                 = 'Δείτε λεπτομέρειες σχετικά με τη ρύθμιση του φίλτρου ID%s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['0']     = ' Διακοπή μετά τον πρώτο αγώνα ';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['1']     = 'Ελέγξτε αν θέλετε αυτό το φίλτρο ρύθμισης να σταματήσει την εκτέλεση των κανόνων του παιδιού μετά την πρώτη υποομάδα αν βρεθουν κάποια παιχνίδια. ';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['0']             = 'Προτυπο';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['1']             = 'Υπο πρότυπο για αυτό το στοιχείο φίλτρου. Πρότυπο: widget μορφή. ';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['title_legend']              = 'Τυπος';
@@ -68,3 +65,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['idlist']       =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['simplelookup'] = 'Απλή αναζήτηση';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['0']             = 'URL παραμετρος';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['1']             = 'Η URL παραμετρος που πρέπει να αντιστοιχιστεί στο επιλεγμένο χαρακτηριστικό. Η ειδική "auto_item " παράμετρος μπορεί επίσης να χρησιμοποιηθεί, αυτό είναι ιδιαίτερα χρήσιμο για ψευδώνυμες στήλες. ';
+
