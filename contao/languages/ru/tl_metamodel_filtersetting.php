@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:11:00+02:00
+ * last-updated: 2017-08-24T12:43:17+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Поиск на всех языках';
@@ -40,20 +40,22 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fefilter_legend']           =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['0']                  = 'Родительская коллекция';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['1']                  = 'Коллекция настроек фильтра, эта установка относится.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['0']                = 'Метка';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['1']                = 'Показать метки вместо имени атрибута.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['1']                = 'Показать метки вместо названия атрибута.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['0']                  = 'Новый';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['1']                  = 'Создать новую настройку';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['0']         = 'Только остальные значения';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['1']         = 'Показывать только параметры, для которых есть результат после применения этого фильтра.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['0']             = 'Только назначенные значения';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['1']             = 'Показывать только параметры, которые назначены где-то в MetaModel.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteafter']['1']           = 'Создать новый после настройки ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteinto']['0']            = 'Создать новую настройку сверху';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pastenew']['0']             = 'Добавить новый сверху';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['0']         = 'Статический параметр';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['0']                 = 'Детали настроек фильтра';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['1']                 = 'Показать детали настроек фильтра ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions']['0']    = 'Игнорировать этот фильтр для остальных значений';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions']['1']    = 'Если активировать, фильтр возвратит все варианты "без себя" в правиле фильтра.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['0']     = 'Остановка после первого соответствия';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['1']     = 'Выберите, если хотите, остановить выполнение дочерних правил фильтра после нахождения первых соответствий.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['0']             = 'Шаблон';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['1']             = 'Подшаблон для этого элемента фильтра. Стандарт: виджет формы.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['title_legend']              = 'Тип';

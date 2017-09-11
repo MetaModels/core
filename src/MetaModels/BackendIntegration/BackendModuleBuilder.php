@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -168,7 +169,7 @@ class BackendModuleBuilder
     /**
      * Build a 16x16 sized representation of the passed icon if it exists or fallback to the default icon otherwise.
      *
-     * @param string $icon The path to the icon (relative to TL_ROOT).
+     * @param string $icon The path to the icon or image (relative to TL_ROOT).
      *
      * @return string The path to the generated icon.
      */
@@ -176,11 +177,16 @@ class BackendModuleBuilder
     {
         // Determine image to use.
         if ($icon && file_exists(TL_ROOT . '/' . $icon)) {
-            $event = new ResizeImageEvent($icon, 16, 16);
+            // Create folder if empty.
+            new \Folder('assets/metamodels/images/icons/');
+
+            $event = new ResizeImageEvent($icon, 16, 16, '', 'assets/metamodels/images/icons/' . basename($icon), true);
 
             $this->getEventDispatcher()->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
 
-            return $event->getResultImage();
+            if (file_exists(TL_ROOT . '/' . $event->getResultImage())) {
+                return $event->getResultImage();
+            }
         }
 
         return 'system/modules/metamodels/assets/images/icons/metamodels.png';

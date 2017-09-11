@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-23T16:13:38+02:00
+ * last-updated: 2017-08-24T12:42:58+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']            = 'Integrazione del backend';
@@ -47,7 +47,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']['1']                  = 'Crea una
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['0']          = 'Layout del pannello';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['1']          = 'Separa le opzioni del pannello con virgola (diventa uno spazio) e punto e virgola (diventa una nuova riga) come ordinamento, filtro, ricerca e limite.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker']               = 'Panelpicker';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['0']               = 'Nome della tabella padre';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['1']               = 'Nome della tabella del database che deve essere indicata come tabella padre.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype']['0']           = 'Integrazione';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype']['1']           = 'Selezionare il tipo di integrazione desiderata.';
@@ -82,3 +81,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']['1']               = 'Data e o
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['use_limitview']['0']        = 'Limitazione vista';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['use_limitview']['1']        = 'Attiva i limiti della vista';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['view_legend']               = 'Visualizza le impostazioni';
+

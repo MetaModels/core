@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-10-26T08:13:26+02:00
+ * last-updated: 2017-08-24T12:43:17+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Tschertgar tut las linguas';
@@ -49,7 +49,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['1']         =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['0']                 = 'Detagls da la configuraziun da filter';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['1']                 = 'Mussar ils detagls da la configuraziun da filter cun l\'ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['0']     = 'Chalar suenter l\'emprima congruenza';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['1']     = 'Activescha la chaschetta, sche ti vuls che questa configuraziun da filter chala dad exequir ils uffants sche l\'emprim subset ha chattà congruenzas.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['0']             = 'Template';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['1']             = 'Sut-template per quest element da filter. Standard: form widget.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['title_legend']              = 'Tip';
@@ -68,3 +67,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['idlist']       =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['simplelookup'] = 'Dumonda simpla';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['0']             = 'parameter da l\'URL';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['1']             = 'Il parameter da l\'URL che duai vegnir attribuì a l\'attribut tschernì. Il parameter special <em>"auto_item"</em> po era vegnir utilisà, quai è specialmain practic per colonnas dad alias.';
+

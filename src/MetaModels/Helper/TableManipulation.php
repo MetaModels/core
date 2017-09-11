@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,12 +14,15 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Henry Lamorski <henry.lamorski@mailbox.org>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
 namespace MetaModels\Helper;
+
+use ContaoCommunityAlliance\DcGeneral\Contao\InputProvider;
 
 /**
  * This is the class for table manipulations like creation/renaming/deleting of tables and columns.
@@ -83,7 +86,7 @@ class TableManipulation
      * third parameter is name of the column.
      */
     const STATEMENT_ADD_INDEX_COLUMN = 'ALTER TABLE %s ADD %s(%s)';
-    
+
     /**
      * List of reserved MySQL identifiers.
      *
@@ -123,6 +126,13 @@ class TableManipulation
     );
 
     /**
+     * List of reserved column post fix.
+     *
+     * @var string[]
+     */
+    protected static $reservedColumnPostFix = array('__sort');
+
+    /**
      * All system columns that always are defined in a MetaModel table.
      *
      * When you alter this, ensure to also change @link{TableManipulation::STATEMENT_CREATE_TABLE} above.
@@ -151,6 +161,34 @@ class TableManipulation
     public static function isReservedWord($word)
     {
         return in_array(strtoupper($word), self::$reservedWords);
+    }
+
+    /**
+     * Test if the given column post fix is a reserved by MetaModels.
+     *
+     * @param string $strColName The column name to test.
+     *
+     * @return bool
+     */
+    public static function isReserveColumnPostFix($strColName)
+    {
+        $inputProvider = new InputProvider();
+
+        if (!$inputProvider->hasValue('colname')
+            || strtolower($strColName) !== strtolower($inputProvider->getValue('colname'))
+        ) {
+            return false;
+        }
+
+        foreach (self::$reservedColumnPostFix as $postFix) {
+            if ($postFix !== strtolower(substr($strColName, -strlen($postFix)))) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -188,7 +226,9 @@ class TableManipulation
      */
     public static function isValidColumnName($strColName)
     {
-        return self::isValidMySQLIdentifier($strColName) && !self::isReservedWord($strColName);
+        return self::isValidMySQLIdentifier($strColName)
+               && !self::isReservedWord($strColName)
+               && !self::isReserveColumnPostFix($strColName);
     }
 
     /**

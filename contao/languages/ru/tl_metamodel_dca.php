@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-07-13T12:13:35+02:00
+ * last-updated: 2017-08-24T12:42:58+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']            = 'Интеграция в панель управления';
@@ -36,19 +36,21 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed']['0']             = 'Разр
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed']['1']             = 'Если флажок установлен, этот экран ввода позволит только редактировать записи. Функции создания и удаления будут отключены.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['0']            = 'По умолчанию';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['1']            = 'Определяет, что этот входной экран должен использоваться по умолчанию для родительского элемента MetaModel.';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['0']  = 'Ограничение настроек отображения';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['0']  = 'Ограничение настроек визуализации';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['1']  = 'Выбор между внешним интерфейсом или панелью управления.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']['0']                 = 'Режим сортировки';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']['1']                 = 'Режим сортировки для использования в представлении элемента.';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['name']['0']                 = 'Имя';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['name']['1']                 = 'Имя входного экрана';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['name']['0']                 = 'Название';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['name']['1']                 = 'Название входного экрана';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']['0']                  = 'Новый входной экран';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']['1']                  = 'Создать новый входной экран';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['0']          = 'Макет панели';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['1']          = 'Отдельные параметры панели с запятой (= пробел) и точка с запятой (= новая линия) как сортировка, фильтрация; поиск, лимит.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker']               = 'Выбор панели';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['0']               = 'Имя родительской таблицы (если есть)';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['1']               = 'Имя таблицы базы данных, которая должна передаваться в качестве родительской таблицы.';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['0']               = 'Имя родительской таблицы';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['1']               = 'Название таблицы базы данных, которая должна передаваться в качестве родительской таблицы.';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermode']['0']           = 'Режим визуализации';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermode']['1']           = 'Выберите нужный режим визуализации.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype']['0']           = 'Интеграция';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype']['1']           = 'Выберите требуемый тип интеграции.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes']['ctable']     = 'Как дочерняя таблица';
@@ -76,7 +78,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_3']     = '3 Зап
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_4']     = '4 Выводит дочерние записи родительской записи (см. модуль таблицы стилей)';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_5']     = '5 Выводит записи в виде дерева (см. структуру сайта)';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_6']     = '6 Выводит дочерние записи в виде дерева (см. модуль статей)';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['title_legend']              = 'Имя';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['title_legend']              = 'Название';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']['0']               = 'Дата изменения';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']['1']               = 'Дата и время последнего изменения';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['use_limitview']['0']        = 'Просмотр ограничения';

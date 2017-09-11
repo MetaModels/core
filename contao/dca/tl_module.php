@@ -17,6 +17,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -32,7 +33,7 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list'] =
     '{template_legend:hide},metamodel_layout,metamodel_rendersettings,metamodel_noparsing;' .
     '{mm_meta_legend},metamodel_meta_title,metamodel_meta_description;' .
     '{protected_legend:hide},protected;' .
-    '{expert_legend:hide},metamodel_donotindex,guests,cssID,space';
+    '{expert_legend:hide},guests,cssID,space,metamodel_donotindex';
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['metamodels_frontendfilter'] =
     '{title_legend},name,headline,type;' .

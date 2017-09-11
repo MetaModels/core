@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-12-10T00:13:29+01:00
+ * last-updated: 2017-08-24T12:42:46+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_content']['ASC']                                 = 'aufsteigend';
@@ -36,6 +36,7 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_template']['1']         = 'Bitt
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering']['0']            = 'Anzuwendende Filtereinstellungen';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering']['1']            = 'Wählen Sie die Filtereinstellungen aus, die für die Auflistung benutzt werden sollen';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams']['0']         = 'Filtereinstellungen überschreiben';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams']['1']         = 'Filterparameter überschreiben';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filterparams_use_get']['0'] = 'Den GET-Parameter benutzen';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_jumpTo']['0']               = 'Weiterleitungsseite';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_jumpTo']['1']               = 'Bitte wählen Sie die Seite aus, zu der Besucher weitergeleitet werden sollen, nachdem sie einen Link geklickt oder ein Formular abgeschickt haben.';

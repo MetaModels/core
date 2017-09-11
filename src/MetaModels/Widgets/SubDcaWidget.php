@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Danilo Benevides <danilobenevides01@gmail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -555,7 +556,7 @@ class SubDcaWidget extends Widget
 
         // Add a "no entries found" message if there are no sub widgets.
         if (!count($arrOptions)) {
-            $arrOptions[] = '<p class="tl_noopt">'.$GLOBALS['TL_LANG']['MSC']['noResult'].'</p>';
+            $arrOptions[] = '<td><p class="tl_noopt">'.$GLOBALS['TL_LANG']['MSC']['noResult'].'</p></td>';
         }
 
         $strHead = '';

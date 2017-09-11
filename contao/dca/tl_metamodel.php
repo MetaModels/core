@@ -20,6 +20,7 @@
  * @author     Tim Becker <please.tim@metamodel.me>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -392,7 +393,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
             'mode'        => 2,
             'fields'      => array(),
             'flag'        => 1,
-            'panelLayout' => 'sort,limit'
+            'panelLayout' => 'sort,search;limit'
         ),
         'label'             => array
         (
@@ -536,6 +537,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
             'length'    => 1,
             'exclude'   => true,
             'inputType' => 'text',
+            'search'    => true,
             'eval'      => array
             (
                 'mandatory' => true,
@@ -548,8 +550,10 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
         'tableName'  => array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel']['tableName'],
+            'sorting'   => true,
             'exclude'   => true,
             'inputType' => 'text',
+            'search'    => true,
             'eval'      => array
             (
                 'mandatory' => true,

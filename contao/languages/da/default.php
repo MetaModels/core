@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2017-08-24T12:42:37+02:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Egenskaber for "%s"';
@@ -28,9 +28,7 @@ $GLOBALS['TL_LANG']['CTE']['metamodels_frontendclearall']['1']                  
 $GLOBALS['TL_LANG']['CTE']['metamodels_frontendfilter']['0']                          = 'MetaModel frontend filter';
 $GLOBALS['TL_LANG']['CTE']['metamodels_frontendfilter']['1']                          = 'Tilføjer et frontend filter for en MetaModel.';
 $GLOBALS['TL_LANG']['ERR']['activate_extension']                                      = 'Aktiver venligst den påkrævede udvidelse "%s" (%s)';
-$GLOBALS['TL_LANG']['ERR']['columnExists']                                            = 'Der eksisterer allerede en egenskab med dette kolonne navn.';
 $GLOBALS['TL_LANG']['ERR']['install_extension']                                       = 'Installer venligst den påkrævede udvidelse "%s" (%s)';
-$GLOBALS['TL_LANG']['ERR']['invalidTableName']                                        = 'Tabel navnet er ugyldigt.';
 $GLOBALS['TL_LANG']['ERR']['no_palette']                                              = 'Forsøgt at tilgå MetaModel "%s" uden indtastningsvisninger for nuværende bruger %s.';
 $GLOBALS['TL_LANG']['ERR']['no_view']                                                 = 'Fosøg på at tilgå MetaModel "%s" uden visning for bruger %s.';
 $GLOBALS['TL_LANG']['MSC']['details']                                                 = 'Oplysninger';

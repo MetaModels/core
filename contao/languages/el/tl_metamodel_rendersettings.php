@@ -8,9 +8,8 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-05-13T22:11:20+02:00
+ * last-updated: 2017-08-24T12:43:26+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['0']     = 'Πρόσθετα css αρχεία';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['1']     = 'Επιλέξτε αυτό, εάν θέλετε να συμπεριλάβετε πρόσθετα αρχεία CSS.';
@@ -39,7 +38,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['1']         = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['0']            = 'JumpTo σελίδα';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['1']            = 'Η σελίδα που πρέπει να χρησιμοποιτε ως "Αναλυτικά" URLs. Σημειώστε ότι οι λεπτομερείς παραμέτρους που URL θα πάρει παράγεται από το φίλτρο ρύθμιση που είναι σήμερα σε χρήση. ';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter']['0']     = 'Ρυθμισεις φιλτρου';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter']['1']     = 'Το φίλτρο ρυθμίσεων που καθορίζουν τον τρόπο του στόχου (ο αναγνώστης / Lister στη σελίδα λεπτομερειών) θα προσδιορίζει τα παιχνίδια του. ';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['0']   = 'Γλωσσα ';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['1']   = 'Η γλώσσα για το άλμα στη σελίδα. ';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page']['0']       = 'Αλμα στη σελίδα. ';
@@ -59,3 +57,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']           = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['0']            = 'Επεξεργασια ημερομηνιας';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['1']            = 'Ημερομηνία και ώρα της τελευταίας αναθεώρησης.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['view_legend']            = 'Εμφανιση ρυθμισεων';
+

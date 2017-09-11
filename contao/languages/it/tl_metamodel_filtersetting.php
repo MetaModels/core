@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-10-29T16:13:41+01:00
+ * last-updated: 2017-08-24T12:43:17+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Cerca tutte le lingue';
@@ -51,7 +51,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['1']                 =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions']['0']    = 'Ignorare questo tipo di filtro per i valori rimanenti';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions']['1']    = 'Se questa opzione è attiva, il filtro restituirà tutti i valori senza prendere nelle regole del filtro.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['0']     = 'Stop dopo la prima corrispondenza';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['1']     = 'Se abilitata, questa impostazione filtro fermerà l\'esecuzione altre regole dopo il primo sottoinsieme valido.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['0']             = 'Template';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['1']             = 'Sub template per gli elementi filtro. Standard: form widget.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['title_legend']              = 'Tipo';

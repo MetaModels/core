@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-11-20T20:13:51+01:00
+ * last-updated: 2017-08-24T12:43:17+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Cherche dans toutes les langues';
@@ -49,7 +49,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['1']         =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['0']                 = 'Détails paramètre filtre';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['1']                 = 'Montere détail du paramètre de filtre ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['0']     = 'Arrêter après la première correspondance';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['1']     = 'Cocher si vous souhaitez que ce paramètre de filtre arrête l\'exécution de ses règles lèguées après que le premier sous ensemble ait trouvé des correspondances.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['0']             = 'Modèle';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['1']             = 'Sous-modèle pour cet élément filtre. Standard: gadget formulaire.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['title_legend']              = 'Type';
@@ -68,3 +67,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['idlist']       =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['simplelookup'] = 'Recherche simple';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['0']             = 'Paramètre URL';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['1']             = 'Le paramètre d\'URL qui doit être appliqué à l\'attribut sélectionné. Le paramètre spécial <em>"auto_item"</em> peut aussi être utilisé, spécialement pour les alias de colonnes.';
+

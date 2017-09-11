@@ -8,11 +8,11 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:10:59+02:00
+ * last-updated: 2017-08-24T12:43:30+02:00
  */
 
-
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['filterparams']['0'] = 'Sovrascrivi i parametri del filtro';
+$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['filterparams']['1'] = 'Sovrascrivi i parametri del filtro';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['general_legend']    = 'Impostazioni generali';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['name']['0']         = 'Nome';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['title_legend']      = 'Nome';

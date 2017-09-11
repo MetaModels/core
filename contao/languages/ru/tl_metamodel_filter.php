@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:14:41+02:00
+ * last-updated: 2017-08-24T12:43:14+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['copy']['0']       = 'Копировать настройки фильтра';
@@ -19,7 +19,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filter']['edit']['0']       = 'Редакти�
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['edit']['1']       = 'Редактировать настройки фильтра ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['editheader']['0'] = 'Редактировать';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['editheader']['1'] = 'Редактировать MetaModel';
-$GLOBALS['TL_LANG']['tl_metamodel_filter']['name']['0']       = 'Имя';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['name']['0']       = 'Название';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['name']['1']       = 'Название настроек фильтра';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['new']['0']        = 'Новый';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['new']['1']        = 'Создать новый параметр фильтра';
@@ -29,7 +29,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filter']['settings']['0']   = 'Определ�
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['settings']['1']   = 'Определить атрибуты параметра фильтра ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['show']['0']       = 'Детали настроек фильтра';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['show']['1']       = 'Показать детали настроек фильтра ID %s';
-$GLOBALS['TL_LANG']['tl_metamodel_filter']['title_legend']    = 'Имя';
+$GLOBALS['TL_LANG']['tl_metamodel_filter']['title_legend']    = 'Название';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['tstamp']['0']     = 'Дата изменения';
 $GLOBALS['TL_LANG']['tl_metamodel_filter']['tstamp']['1']     = 'Дата и время последнего изменения';
 

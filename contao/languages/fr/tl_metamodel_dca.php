@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:10:59+02:00
+ * last-updated: 2017-08-24T12:42:58+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']              = 'intégration back-office';
@@ -55,7 +55,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']['1']                    = 'Créer
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['0']            = 'Agencement du panneau';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['1']            = 'Séparez les options de panneau avec des virgules (=space) et des point virgules (=new line) comme sort,filter;search,limit';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker']                 = 'Sélecteur de panneau';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['0']                 = 'Nom table parent (le cas échéant)';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['1']                 = 'Nom de la table base de donnée qui doit être référé comme table parent';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermode']['0']             = 'Mode de rendu';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermodes']['flat']         = 'À plat';

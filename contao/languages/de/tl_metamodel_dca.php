@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-10-21T16:15:57+02:00
+ * last-updated: 2017-08-24T12:42:58+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']              = 'Backend-Integration';
@@ -69,7 +69,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype']['1']             = 'Die ge
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes']['ctable']       = 'Als Kind-Tabelle';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes']['standalone']   = 'Unabhängig';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['settings']['0']               = 'Eingabemasken-Einstellungen';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['settings']['1']               = 'Bearbeiten Sie ein Einstellungen der Eingabemaske ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['settings']['1']               = 'Bearbeiten Sie die anzuzeigenden Felder der Eingabemaske ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['show']['0']                   = 'Details der Eingabemaske';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['show']['1']                   = 'Sehen Sie die Details der Eingabemaske %s an.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['showColumns']['0']            = 'Anzeige in Tabellenform';
