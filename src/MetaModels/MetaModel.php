@@ -1006,11 +1006,22 @@ class MetaModel implements IMetaModel
 
     /**
      * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function saveItem($objItem)
+    public function saveItem($objItem, $timestamp = null)
     {
+        if (null === $timestamp) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                'Not passing a timestamp has been deprecated and will cause an error in MetaModels 3',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+        }
+
         $baseAttributes = false;
-        $objItem->set('tstamp', time());
+        $objItem->set('tstamp', $timestamp ?: \time());
         if (!$objItem->get('id')) {
             $baseAttributes = true;
             $this->createNewItem($objItem);

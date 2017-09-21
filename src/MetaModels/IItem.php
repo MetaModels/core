@@ -125,9 +125,13 @@ interface IItem
     /**
      * Save the current data for every attribute to the data sink.
      *
+     * @param int|null $timestamp Optional parameter for use own timestamp.
+     *                            This is useful if save a collection of models and all shall have
+     *                            the same timestamp.
+     *
      * @return void
      */
-    public function save();
+    public function save($timestamp = null);
 
     /**
      * Renders the item in the given output format.
