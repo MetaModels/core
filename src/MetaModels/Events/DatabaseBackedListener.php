@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -230,7 +231,7 @@ class DatabaseBackedListener
             return;
         }
 
-        $objData = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel WHERE tableName=?')
+        $objData = $this->getDatabase()->prepare('SELECT * FROM tl_metamodel WHERE tableName=?')
             ->limit(1)
             ->execute($event->getMetaModelName());
 
