@@ -14,6 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -104,29 +105,52 @@ abstract class MetaModelHybrid extends Hybrid
                 $GLOBALS['TL_CSS'][] = 'system/modules/metamodels/assets/css/style.css';
 
                 // Retrieve name of MetaModels.
+                /** @var TranslatorInterface $translator */
+                $infoTemplate  =
+                    '<div class="wc_info tl_gray"><span class="wc_label"><abbr title="%s">%s:</abbr></span> %s</div>';
+
                 $factory       = $this->getServiceContainer()->getFactory();
                 $metaModelName = $factory->translateIdToMetaModelName($this->metamodel);
                 $metaModel     = $factory->getMetaModel($metaModelName);
-                $strInfo       = '<div class="wc_info tl_gray"><span class="wc_label"><abbr title="MetaModel">MM:</abbr> </span>' . $metaModel->getName() . '</div>';
+                $strInfo       = sprintf(
+                    $infoTemplate,
+                    $GLOBALS['TL_LANG']['MSC']['mm_be_info_name'][1],
+                    $GLOBALS['TL_LANG']['MSC']['mm_be_info_name'][0],
+                    $metaModel->getName()
+                );
 
-                $database = \Database::getInstance();
+                $database = $this->getServiceContainer()->getDatabase();
 
                 // Retrieve name of filter.
                 if ($this->metamodel_filtering) {
                     $infoFi = $database
-                        ->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
-                        ->execute($this->metamodel_filtering)
-                        ->row();
-                    $strInfo .= '<div class="wc_info tl_gray"><span class="wc_label"><abbr title="Filter">Fi:</abbr> </span>' . $infoFi['name'] . '</div>';
+                        ->prepare('SELECT name FROM tl_metamodel_filter WHERE id=?')
+                        ->execute($this->metamodel_filtering);
+
+                    if ($infoFi->numRows) {
+                        $strInfo .= sprintf(
+                            $infoTemplate,
+                            $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter'][1],
+                            $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter'][0],
+                            $infoFi['name']
+                        );
+                    }
                 }
 
                 // Retrieve name of rendersetting.
                 if ($this->metamodel_rendersettings) {
                     $infoRs = $database
-                        ->prepare('SELECT * FROM tl_metamodel_rendersettings WHERE id=?')
-                        ->execute($this->metamodel_rendersettings)
-                        ->row();
-                    $strInfo .= '<div class="wc_info tl_gray"><span class="wc_label"><abbr title="Render-Setting">Rs:</abbr> </span>' . $infoRs['name'] . '</div>';
+                        ->prepare('SELECT name FROM tl_metamodel_rendersettings WHERE id=?')
+                        ->execute($this->metamodel_rendersettings);
+
+                    if ($infoRs->numRows) {
+                        $strInfo .= sprintf(
+                            $infoTemplate,
+                            $GLOBALS['TL_LANG']['MSC']['mm_be_info_render_setting'][1],
+                            $GLOBALS['TL_LANG']['MSC']['mm_be_info_render_setting'][0],
+                            $infoRs['name']
+                        );
+                    }
                 }
             }
 

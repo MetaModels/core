@@ -14,6 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -126,3 +127,9 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup']
 $GLOBALS['TL_LANG']['MSC']['metamodels_help']                                       = 'We are calling for your help!';
 $GLOBALS['TL_LANG']['MSC']['metamodels_contributor']                                =
     'Thanks to these users for tickets, suggestions and translations';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_name'][0]                                    = 'MM';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_name'][1]                                    = 'MetaModel';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_filter'][0]                                  = 'Fi';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_filter'][1]                                  = 'Filter';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_render_setting'][0]                          = 'Rs';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_render_setting'][1]                          = 'Rendersetting';
