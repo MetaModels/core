@@ -179,9 +179,9 @@ class BackendModuleBuilder
         // Determine image to use.
         if ($icon && file_exists(TL_ROOT . '/' . $icon)) {
             // Create folder if empty.
-            new \Folder('assets/metamodels/images/icons/');
+            new \Folder('bundles/metamodelscore/images/icons/');
 
-            $event = new ResizeImageEvent($icon, 16, 16, '', 'assets/metamodels/images/icons/' . basename($icon), true);
+            $event = new ResizeImageEvent($icon, 16, 16, '', 'bundles/metamodelscore/images/icons/' . basename($icon), true);
 
             $this->getEventDispatcher()->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
 
@@ -190,7 +190,7 @@ class BackendModuleBuilder
             }
         }
 
-        return 'system/modules/metamodels/assets/images/icons/metamodels.png';
+        return 'bundles/metamodelscore/images/icons/metamodels.png';
     }
 
     /**

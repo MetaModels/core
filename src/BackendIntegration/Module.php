@@ -60,7 +60,7 @@ class Module
      */
     public function generate()
     {
-        $GLOBALS['TL_CSS'][] = 'system/modules/metamodels/assets/css/style.css';
+        $GLOBALS['TL_CSS'][] = 'bundles/metamodelscore/assets/css/style.css';
         $arrModule           = $GLOBALS['BE_MOD']['metamodels']['metamodels'];
         // Custom action (if key is not defined in config.php the default action will be called).
         if (\Input::get('key') && isset($arrModule[\Input::get('key')])) {

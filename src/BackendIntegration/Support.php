@@ -46,6 +46,6 @@ class Support extends \BackendModule
      */
     protected function compile()
     {
-        $GLOBALS['TL_CSS'][] = 'system/modules/metamodels/assets/css/supportscreen.css';
+        $GLOBALS['TL_CSS'][] = 'bundles/metamodelscore/css/supportscreen.css';
     }
 }

@@ -178,7 +178,7 @@ abstract class Boot
             PopulateEnvironmentEvent::NAME,
             function (PopulateEnvironmentEvent $event) {
                 if ($event->getEnvironment()->getDataDefinition() instanceof IMetaModelDataDefinition) {
-                    $GLOBALS['TL_CSS'][] = 'system/modules/metamodels/assets/css/style.css';
+                    $GLOBALS['TL_CSS'][] = 'bundles/metamodelscore/css/style.css';
                 }
             }
         );
