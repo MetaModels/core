@@ -63,7 +63,7 @@
       "transifex": {
         "project": "metamodels",
         "prefix": "core-",
-        "languages_cto": "contao/languages",
+        "languages_cto": "src/Resources/contao/languages",
         "languages_tx": ".tx"
       },
       "runonce": [
