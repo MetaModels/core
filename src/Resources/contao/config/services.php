@@ -27,40 +27,40 @@ $container->provideSymfonyService('metamodels-factory.factory');
 $container->provideSymfonyService('metamodels-filter-setting-factory.factory');
 $container->provideSymfonyService('metamodels-render-setting-factory.factory');
 
-// Fixme what cache system we use?
-$cacheFactory = null;
-if ($container['config']->get('bypassCache')) {
-    $cacheFactory = new \Doctrine\Common\Cache\ArrayCache();
-} else {
-    $cacheFactory = new \Doctrine\Common\Cache\FilesystemCache(TL_ROOT . '/system/cache/metamodels');
-}
-$container->provideSymfonyService('metamodels-cache.factory');
-$service->set(
-    'metamodels-cache.factory',
-    $cacheFactory
+$container['metamodels-cache.factory'] = $container->share(
+    function ($container) use ($service) {
+        if ($container['config']->get('bypassCache')) {
+            return new \Doctrine\Common\Cache\ArrayCache();
+        }
+
+        return new \Doctrine\Common\Cache\FilesystemCache(TL_ROOT . '/system/cache/metamodels');
+    }
 );
 
 // Fixme build an factory for metamodels service container.
-$serviceContainer = new MetaModels\MetaModelsServiceContainer();
-$dispatcher       = $container['event-dispatcher'];
-$serviceContainer
-    ->setEventDispatcher($dispatcher)
-    ->setDatabase($container['database.connection']);
+$container['metamodels-service-container.factory'] = $container->share(
+    function ($container) use ($service) {
+        $serviceContainer = new MetaModels\MetaModelsServiceContainer();
+        $dispatcher       = $service->get('event_dispatcher');
+        $serviceContainer
+            ->setEventDispatcher($dispatcher)
+            ->setDatabase($container['database.connection']);
 
-$serviceContainer
-    ->setAttributeFactory($container['metamodels-attribute-factory.factory'])
-    ->setFactory($container['metamodels-factory.factory'])
-    ->setFilterFactory($container['metamodels-filter-setting-factory.factory'])
-    ->setRenderSettingFactory($container['metamodels-render-setting-factory.factory'])
-    ->setCache($container['metamodels-cache.factory']);
-$container->provideSymfonyService('metamodels-service-container.factory');
-$service->set(
-    'metamodels-service-container.factory',
-    $serviceContainer
+        $serviceContainer
+            ->setAttributeFactory($container['metamodels-attribute-factory.factory'])
+            ->setFactory($container['metamodels-factory.factory'])
+            ->setFilterFactory($container['metamodels-filter-setting-factory.factory'])
+            ->setRenderSettingFactory($container['metamodels-render-setting-factory.factory'])
+            ->setCache($container['metamodels-cache.factory']);
+
+        return $serviceContainer;
+    }
 );
 
-$container->provideSymfonyService('metamodels-service-container');
-$service->set(
-    'metamodels-service-container',
-    $service->get('metamodels-service-container.factory')
+$container['metamodels-service-container'] = $container->share(
+    function ($container) {
+        $factory = $container['metamodels-service-container.factory'];
+
+        return $factory;
+    }
 );
