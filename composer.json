@@ -6,7 +6,7 @@
     "metamodels",
     "core"
   ],
-  "type": "contao-module",
+  "type": "contao-bundle",
   "homepage": "http://now.metamodel.me/",
   "license": "LGPL-3.0+",
   "authors": [
@@ -45,8 +45,7 @@
   "require-dev": {
     "cyberspectrum/contao-toolbox": "~0.6",
     "phpcq/all-tasks": "~1.1",
-    "metamodels/base-unit-tests": "~1.0",
-    "metamodels/phpunit-contao-database": "~1.0"
+    "contao/manager-bundle": "~4.4"
   },
   "autoload": {
     "psr-4": {
@@ -59,10 +58,8 @@
     }
   },
   "extra": {
+    "contao-manager-plugin": "MetaModels\\ContaoManager\\Plugin",
     "contao": {
-      "sources": {
-        "contao": "system/modules/metamodels"
-      },
       "transifex": {
         "project": "metamodels",
         "prefix": "core-",
