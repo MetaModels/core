@@ -1,0 +1,16 @@
+services:
+
+    ## Service block
+    metamodels-attribute-factory.factory:
+        class: MetaModels\Attribute\AttributeFactory
+
+    metamodels-factory.factory:
+        class: MetaModels\Factory
+
+    metamodels-filter-setting-factory.factory:
+        class: MetaModels\Filter\Setting\FilterSettingFactory
+
+    metamodels-render-setting-factory.factory:
+        class: MetaModels\Render\Setting\RenderSettingFactory
+
+
