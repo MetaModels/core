@@ -49,13 +49,13 @@
     "metamodels/phpunit-contao-database": "~1.0"
   },
   "autoload": {
-    "psr-0": {
-      "MetaModels\\": "src"
+    "psr-4": {
+      "MetaModels\\": "src/"
     }
   },
   "autoload-dev": {
-    "psr-0": {
-      "MetaModels\\Test\\": "tests"
+    "psr-4": {
+      "MetaModels\\Test\\": "tests/Test/"
     }
   },
   "extra": {
