@@ -29,7 +29,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\Callback\Callbacks;
 
 /**
  * Implementation of the MetaModel Backend Module that allowing access to MetaModel configuration etc. Everything below
- * http://..../contao/main.php?do=metamodels&.... ends up here.
+ * http://..../contao?do=metamodels&.... ends up here.
  */
 class Module
 {
@@ -60,7 +60,7 @@ class Module
      */
     public function generate()
     {
-        $GLOBALS['TL_CSS'][] = 'bundles/metamodelscore/assets/css/style.css';
+        $GLOBALS['TL_CSS'][] = 'bundles/metamodelscore/css/style.css';
         $arrModule           = $GLOBALS['BE_MOD']['metamodels']['metamodels'];
         // Custom action (if key is not defined in config.php the default action will be called).
         if (\Input::get('key') && isset($arrModule[\Input::get('key')])) {

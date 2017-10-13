@@ -126,7 +126,7 @@ abstract class FilterSettingTypeRenderer
 
         $image = $typeFactory ? $typeFactory->getTypeIcon() : null;
         if (!$image || !file_exists(TL_ROOT . '/' . $image)) {
-            $image = 'system/modules/metamodels/assets/images/icons/filter_default.png';
+            $image = 'bundles/metamodelscore/images/icons/filter_default.png';
         }
 
         if (!$model->getProperty('enabled')) {

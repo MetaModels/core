@@ -49,7 +49,7 @@ class BreadCrumbDcaCombine extends BreadCrumbMetaModels
                 $this->getBreadcrumbLabel($environment, 'tl_metamodel_dca_combine'),
                 $this->getMetaModel()->getName()
             ),
-            'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/dca_combine.png'
+            'icon' => $this->getBaseUrl() . '/bundles/metamodelscore/images/icons/dca_combine.png'
         );
 
         return $elements;

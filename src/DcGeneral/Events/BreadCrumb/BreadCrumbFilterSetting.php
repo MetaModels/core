@@ -59,7 +59,7 @@ class BreadCrumbFilterSetting extends BreadCrumbFilter
                 $this->getBreadcrumbLabel($environment, 'tl_metamodel_filtersetting'),
                 $filterSetting->name
             ),
-            'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/filter_setting.png'
+            'icon' => $this->getBaseUrl() . '/bundles/metamodelscore/images/icons/filter_setting.png'
         );
 
         return $elements;

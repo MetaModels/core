@@ -35,7 +35,7 @@ class ConditionOrFilterSettingTypeFactory extends AbstractFilterSettingTypeFacto
 
         $this
             ->setTypeName('conditionor')
-            ->setTypeIcon('system/modules/metamodels/assets/images/icons/filter_or.png')
+            ->setTypeIcon('bundles/metamodelscore/images/icons/filter_or.png')
             ->setTypeClass('MetaModels\Filter\Setting\Condition\ConditionOr')
             ->allowAttributeTypes();
     }

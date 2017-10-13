@@ -175,7 +175,7 @@ class Subscriber extends BaseSubscriber
             '});return false">%5$s</a>';
 
         $imageEvent = new GenerateHtmlEvent(
-            'system/modules/metamodels/assets/images/icons/panel_layout.png',
+            'bundles/metamodelscore/images/icons/panel_layout.png',
             $event->getEnvironment()->getTranslator()->translate('panelpicker', 'tl_metamodel_dca'),
             'style="vertical-align:top;"'
         );

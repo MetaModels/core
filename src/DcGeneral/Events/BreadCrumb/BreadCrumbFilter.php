@@ -76,7 +76,7 @@ class BreadCrumbFilter extends BreadCrumbMetaModels
                 $this->getBreadcrumbLabel($environment, 'tl_metamodel_filter'),
                 $this->getMetaModel()->getName()
             ),
-            'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/filter.png'
+            'icon' => $this->getBaseUrl() . '/bundles/metamodelscore/images/icons/filter.png'
         );
 
         return $elements;

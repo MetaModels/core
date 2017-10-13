@@ -89,7 +89,7 @@ class MetaModelDcaBuilder
      */
     public function getBackendIcon(
         $icon,
-        $defaultIcon = 'system/modules/metamodels/assets/images/icons/metamodels.png'
+        $defaultIcon = 'bundles/metamodelscore/images/icons/metamodels.png'
     ) {
         $dispatcher = $this->getDispatcher();
         $realIcon   = ToolboxFile::convertValueToPath($icon);

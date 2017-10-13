@@ -158,7 +158,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
                 'attr_id'
             ),
             'flag'         => 1,
-            'icon'         => 'system/modules/metamodels/assets/images/icons/filter_and.png',
+            'icon'         => 'bundles/metamodelscore/images/icons/filter_and.png',
         ),
         'label'             => array
         (

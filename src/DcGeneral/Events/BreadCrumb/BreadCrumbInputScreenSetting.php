@@ -74,7 +74,7 @@ class BreadCrumbInputScreenSetting extends BreadCrumbInputScreens
                 $this->getBreadcrumbLabel($environment, 'tl_metamodel_dcasetting'),
                 $this->getInputScreen()->name
             ),
-            'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/dca_setting.png'
+            'icon' => $this->getBaseUrl() . '/bundles/metamodelscore/images/icons/dca_setting.png'
         );
 
         return $elements;

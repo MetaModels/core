@@ -144,14 +144,14 @@ class Subscriber extends BaseSubscriber
             $type  = $objAttribute->get('type');
             $image = $GLOBALS['METAMODELS']['attributes'][$type]['image'];
             if (!$image || !file_exists(TL_ROOT . '/' . $image)) {
-                $image = 'system/modules/metamodels/assets/images/icons/fields.png';
+                $image = 'bundles/metamodelscore/images/icons/fields.png';
             }
             $name     = $objAttribute->getName();
             $colName  = $objAttribute->getColName();
             $isUnique = $objAttribute->get('isunique');
         } else {
             $type     = 'unknown ID: ' . $model->getProperty('attr_id');
-            $image    = 'system/modules/metamodels/assets/images/icons/fields.png';
+            $image    = 'bundles/metamodelscore/images/icons/fields.png';
             $name     = 'unknown attribute';
             $colName  = 'unknown column';
             $isUnique = false;
@@ -519,7 +519,7 @@ class Subscriber extends BaseSubscriber
         $imageEvent = $event->getEnvironment()->getEventDispatcher()->dispatch(
             ContaoEvents::IMAGE_GET_HTML,
             new GenerateHtmlEvent(
-                'system/modules/metamodels/assets/images/icons/dca_wizard.png',
+                'bundles/metamodelscore/images/icons/dca_wizard.png',
                 $event->getEnvironment()->getTranslator()->translate('stylepicker', 'tl_metamodel_dcasetting'),
                 'style="vertical-align:top;"'
             )

@@ -203,14 +203,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
             (
                 'label'   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['groupsort_settings'],
                 'href'    => 'table=tl_metamodel_dca_sortgroup',
-                'icon'    => 'system/modules/metamodels/assets/images/icons/dca_groupsortsettings.png',
+                'icon'    => 'bundles/metamodelscore/images/icons/dca_groupsortsettings.png',
                 'idparam' => 'pid'
             ),
             'settings'           => array
             (
                 'label'   => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['settings'],
                 'href'    => 'table=tl_metamodel_dcasetting',
-                'icon'    => 'system/modules/metamodels/assets/images/icons/dca_setting.png',
+                'icon'    => 'bundles/metamodelscore/images/icons/dca_setting.png',
                 'idparam' => 'pid'
             ),
         )

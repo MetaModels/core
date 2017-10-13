@@ -35,7 +35,7 @@ class StaticIdListFilterSettingTypeFactory extends AbstractFilterSettingTypeFact
 
         $this
             ->setTypeName('idlist')
-            ->setTypeIcon('system/modules/metamodels/assets/images/icons/filter_default.png')
+            ->setTypeIcon('bundles/metamodelscore/images/icons/filter_default.png')
             ->setTypeClass('MetaModels\Filter\Setting\IdList');
     }
 }

@@ -108,7 +108,7 @@ class BreadCrumbInputScreenCondition extends BreadCrumbInputScreenSetting
                 $this->getBreadcrumbLabel($environment, 'tl_metamodel_dcasetting_condition'),
                 $this->getConditionAttribute()
             ),
-            'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/dca_condition.png'
+            'icon' => $this->getBaseUrl() . '/bundles/metamodelscore/images/icons/dca_condition.png'
         );
 
         return $elements;

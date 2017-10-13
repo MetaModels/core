@@ -201,7 +201,7 @@ class CreateVariantButton extends BaseSubscriber
             return null;
         }
 
-        $GLOBALS['TL_CSS'][] = 'system/modules/dc-general/html/css/generalBreadcrumb.css';
+        $GLOBALS['TL_CSS'][] = 'bundles/ccadcgeneral/css/generalBreadcrumb.css';
 
         $objTemplate           = new ContaoBackendViewTemplate('dcbe_general_breadcrumb');
         $objTemplate->elements = $arrReturn;

@@ -190,7 +190,7 @@ class CommandBuilder
                 $collection,
                 'createvariant',
                 ['act' => 'createvariant'],
-                'system/modules/metamodels/assets/images/icons/variants.png'
+                'bundles/metamodelscore/images/icons/variants.png'
             );
         }
 
@@ -322,7 +322,7 @@ class CommandBuilder
             }
         }
 
-        return 'system/modules/metamodels/assets/images/icons/metamodels.png';
+        return 'bundles/metamodelscore/images/icons/metamodels.png';
     }
 
     /**

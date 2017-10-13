@@ -295,7 +295,7 @@ class Contao2BackendViewDefinitionBuilder
             }
         }
 
-        return 'system/modules/metamodels/assets/images/icons/metamodels.png';
+        return 'bundles/metamodelscore/images/icons/metamodels.png';
     }
 
     /**

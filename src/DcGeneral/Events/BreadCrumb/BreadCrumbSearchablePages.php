@@ -50,7 +50,7 @@ class BreadCrumbSearchablePages extends BreadCrumbMetaModels
                 $this->getBreadcrumbLabel($environment, 'tl_metamodel_searchable_pages'),
                 $this->getMetaModel()->getName()
             ),
-            'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/searchable_pages.png'
+            'icon' => $this->getBaseUrl() . '/bundles/metamodelscore/images/icons/searchable_pages.png'
         );
 
         return $elements;

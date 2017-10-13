@@ -48,7 +48,7 @@ class BreadCrumbAttributes extends BreadCrumbMetaModels
                 $this->getBreadcrumbLabel($environment, 'tl_metamodel_attribute'),
                 $this->getMetaModel()->getName()
             ),
-            'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/fields.png'
+            'icon' => $this->getBaseUrl() . '/bundles/metamodelscore/images/icons/fields.png'
         );
 
         return $elements;

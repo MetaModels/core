@@ -49,7 +49,7 @@ class BreadCrumbInputScreenSortGroup extends BreadCrumbInputScreens
                 $this->getBreadcrumbLabel($environment, 'tl_metamodel_dca_sortgroup'),
                 $this->getInputScreen()->name
             ),
-            'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/icons/dca_groupsortsettings.png'
+            'icon' => $this->getBaseUrl() . '/bundles/metamodelscore/images/icons/dca_groupsortsettings.png'
         );
 
         return $elements;

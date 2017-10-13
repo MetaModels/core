@@ -53,12 +53,12 @@ array_insert(
                         'tl_metamodel_dcasetting_condition',
                         'tl_metamodel_searchable_pages'
                     ),
-                    'icon'                  => 'system/modules/metamodels/assets/images/backend/logo.png',
+                    'icon'                  => 'bundles/metamodelscore/images/backend/logo.png',
                     'callback'              => 'MetaModels\BackendIntegration\Module'
                 ),
                 'support_metamodels' => array
                 (
-                    'icon'                  => 'system/modules/metamodels/assets/images/backend/support.png',
+                    'icon'                  => 'bundles/metamodelscore/images/backend/support.png',
                     'callback'              => 'MetaModels\BackendIntegration\Support'
                 )
             ),

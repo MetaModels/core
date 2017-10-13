@@ -35,7 +35,7 @@ class CustomSqlFilterSettingTypeFactory extends AbstractFilterSettingTypeFactory
 
         $this
             ->setTypeName('customsql')
-            ->setTypeIcon('system/modules/metamodels/assets/images/icons/filter_customsql.png')
+            ->setTypeIcon('bundles/metamodelscore/images/icons/filter_customsql.png')
             ->setTypeClass('MetaModels\Filter\Setting\CustomSql')
             ->allowAttributeTypes();
     }

@@ -60,7 +60,7 @@ class BreadCrumbMetaModels extends BreadCrumbBase
         $elements[] = array(
             'url' => 'contao/main.php?do=metamodels',
             'text' => $this->getBreadcrumbLabel($environment, 'metamodels'),
-            'icon' => $this->getBaseUrl() . '/system/modules/metamodels/assets/images/backend/logo.png'
+            'icon' => $this->getBaseUrl() . '/bundles/metamodelscore/images/backend/logo.png'
         );
 
         return $elements;

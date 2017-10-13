@@ -142,13 +142,13 @@ class Subscriber extends BaseSubscriber
             $type  = $attribute->get('type');
             $image = $GLOBALS['METAMODELS']['attributes'][$type]['image'];
             if (!$image || !file_exists(TL_ROOT . '/' . $image)) {
-                $image = 'system/modules/metamodels/assets/images/icons/fields.png';
+                $image = 'bundles/metamodelscore/images/icons/fields.png';
             }
             $name    = $attribute->getName();
             $colName = $attribute->getColName();
         } else {
             $translator = $event->getEnvironment()->getTranslator();
-            $image      = 'system/modules/metamodels/assets/images/icons/fields.png';
+            $image      = 'bundles/metamodelscore/images/icons/fields.png';
             $name       = $translator->translate('error_unknown_id', 'error_unknown_attribute');
             $colName    = $translator->translate('error_unknown_column', 'error_unknown_attribute');
             $type       = $translator->translate(

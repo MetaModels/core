@@ -178,7 +178,7 @@ class Subscriber extends BaseSubscriber
             sprintf(
                 '
 <span class="name">
-  <img src="system/modules/metamodels/assets/images/icons/%1$s" /> %2$s
+  <img src="bundles/metamodelscore/images/icons/%1$s" /> %2$s
   <span style="color:#b3b3b3; padding-left:3px">(%3$s)</span>
   <span style="color:#b3b3b3; padding-left:3px">[%4$s]</span>
 </span>',

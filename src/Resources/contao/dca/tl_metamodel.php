@@ -444,42 +444,42 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
             (
                 'label'   => &$GLOBALS['TL_LANG']['tl_metamodel']['fields'],
                 'href'    => 'table=tl_metamodel_attribute',
-                'icon'    => 'system/modules/metamodels/assets/images/icons/fields.png',
+                'icon'    => 'bundles/metamodelscore/images/icons/fields.png',
                 'idparam' => 'pid'
             ),
             'rendersettings'   => array
             (
                 'label'   => &$GLOBALS['TL_LANG']['tl_metamodel']['rendersettings'],
                 'href'    => 'table=tl_metamodel_rendersettings',
-                'icon'    => 'system/modules/metamodels/assets/images/icons/rendersettings.png',
+                'icon'    => 'bundles/metamodelscore/images/icons/rendersettings.png',
                 'idparam' => 'pid'
             ),
             'dca'              => array
             (
                 'label'   => &$GLOBALS['TL_LANG']['tl_metamodel']['dca'],
                 'href'    => 'table=tl_metamodel_dca',
-                'icon'    => 'system/modules/metamodels/assets/images/icons/dca.png',
+                'icon'    => 'bundles/metamodelscore/images/icons/dca.png',
                 'idparam' => 'pid'
             ),
             'searchable_pages' => array
             (
                 'label'   => &$GLOBALS['TL_LANG']['tl_metamodel']['searchable_pages'],
                 'href'    => 'table=tl_metamodel_searchable_pages',
-                'icon'    => 'system/modules/metamodels/assets/images/icons/searchable_pages.png',
+                'icon'    => 'bundles/metamodelscore/images/icons/searchable_pages.png',
                 'idparam' => 'pid'
             ),
             'filter'           => array
             (
                 'label'   => &$GLOBALS['TL_LANG']['tl_metamodel']['filter'],
                 'href'    => 'table=tl_metamodel_filter',
-                'icon'    => 'system/modules/metamodels/assets/images/icons/filter.png',
+                'icon'    => 'bundles/metamodelscore/images/icons/filter.png',
                 'idparam' => 'pid'
             ),
             'dca_combine'      => array
             (
                 'label'   => &$GLOBALS['TL_LANG']['tl_metamodel']['dca_combine'],
                 'href'    => 'table=tl_metamodel_dca_combine&act=edit',
-                'icon'    => 'system/modules/metamodels/assets/images/icons/dca_combine.png',
+                'icon'    => 'bundles/metamodelscore/images/icons/dca_combine.png',
                 'idparam' => 'pid'
             ),
         )

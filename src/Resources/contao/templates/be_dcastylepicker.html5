@@ -48,9 +48,9 @@ var REQUEST_TOKEN = '<?= REQUEST_TOKEN ?>';
 ?>"></script>
 
 <?php if($this->strField == 'panelLayout'): ?>
-<script src="system/modules/metamodels/assets/js/panelpicker.js"></script>
+<script src="bundles/metamodelscore/js/panelpicker.js"></script>
 <?php else: ?>
-<script src="system/modules/metamodels/assets/js/stylepicker.js"></script>
+<script src="bundles/metamodelscore/js/stylepicker.js"></script>
 <?php endif ?>
 
 <!--[if lt IE 9]><script src="<?= TL_PLUGINS_URL ?>plugins/html5shim/html5-<?= HTML5SHIM ?>.js"></script><![endif]-->
