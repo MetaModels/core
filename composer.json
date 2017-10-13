@@ -34,7 +34,7 @@
     "contao/core-bundle": "~4.4",
     "contao-community-alliance/dc-general": "~2.1@dev",
     "menatwork/contao-multicolumnwizard": "3.3.10",
-    "contao-community-alliance/meta-palettes": "~1.7",
+    "contao-community-alliance/meta-palettes": "~2.0",
     "discordier/justtextwidgets": "dev-hotfix/contao4-compatibility",
     "contao-community-alliance/url-builder": "~1.3@dev",
     "contao-community-alliance/dependency-container": "~2.0@dev",
