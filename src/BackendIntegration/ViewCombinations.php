@@ -37,13 +37,17 @@ class ViewCombinations extends \MetaModels\Helper\ViewCombinations
      */
     protected function authenticateUser()
     {
-        // Do not execute anything if we are on the index page because no User is logged in.
-        if (strpos(Environment::get('script'), 'contao/index.php') !== false) {
+        if (\System::getContainer()->get('cca.dc-general.scope-matcher')->currentScopeIsUnknown()) {
+            return false;
+        }
+
+        // Do not execute anything if we are on the login page because no User is logged in.
+        if (strpos(Environment::get('script'), 'contao/login') !== false) {
             return false;
         }
 
         // Issue #66 - contao/install.php is not working anymore. Thanks to Stefan Lindecke (@lindesbs).
-        if (strpos(Environment::get('request'), 'install.php') !== false) {
+        if (strpos(Environment::get('request'), 'install') !== false) {
             return false;
         }
 

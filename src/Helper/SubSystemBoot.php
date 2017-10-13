@@ -83,16 +83,16 @@ class SubSystemBoot
         /** @var \Contao\Environment $environment */
         $environment = $container['environment'];
         // There is no need to boot in login or install screen.
-        if (($environment->get('script') == 'contao/index.php')
-            || ($environment->get('script') == 'contao/install.php')) {
+        if (($environment->get('script') == 'contao/login')
+            || ($environment->get('script') == 'contao/install')) {
             return;
         }
-
+        $logger = \System::getContainer()->get('logger');
         /** @var \MetaModels\IMetaModelsServiceContainer $container */
         try {
             $container = $container['metamodels-service-container'];
         } catch (\Exception $e) {
-            error_log(
+            $logger->error(
                 sprintf(
                     'MetaModels startup interrupted: Uncaught exception \'%s\' with message \'%s\' thrown in %s ' .
                     "on line %s\n%s",
@@ -110,7 +110,7 @@ class SubSystemBoot
         // Ensure all tables are created.
         if (!$this->metaModelsTablesPresent($container->getDatabase())
         ) {
-            error_log('MetaModels startup interrupted: Not all MetaModels tables have been created.');
+            $logger->error('MetaModels startup interrupted: Not all MetaModels tables have been created.');
             return;
         }
 
@@ -119,14 +119,15 @@ class SubSystemBoot
 
         $dispatcher->dispatch(MetaModelsEvents::SUBSYSTEM_BOOT, $event);
 
-        if ($mode = $this->getMode()) {
-            $eventName = MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND;
-
-            if ($mode === 'BE') {
-                $eventName = MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND;
-            }
-
-            $dispatcher->dispatch($eventName, $event);
+        $determinator = \System::getContainer()->get('cca.dc-general.scope-matcher');
+        switch (true) {
+            case $determinator->currentScopeIsFrontend():
+                $dispatcher->dispatch(MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND, $event);
+                break;
+            case $determinator->currentScopeIsBackend():
+                $dispatcher->dispatch(MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND, $event);
+                break;
+            default:
         }
     }
 }
