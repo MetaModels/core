@@ -22,9 +22,11 @@
 namespace MetaModels\Filter\Setting;
 
 use Database\Result;
+use Doctrine\DBAL\Connection;
 use MetaModels\Filter\Setting\Events\CreateFilterSettingFactoryEvent;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsEvents;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This is the filter settings factory interface.
@@ -39,11 +41,37 @@ class FilterSettingFactory implements IFilterSettingFactory
     protected $serviceContainer;
 
     /**
+     * The event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * The database connection.
+     *
+     * @var Connection
+     */
+    private $database;
+
+    /**
      * The registered type factories.
      *
      * @var IFilterSettingTypeFactory[]
      */
     protected $typeFactories;
+
+    /**
+     * Create a new instance.
+     *
+     * @param Connection               $database
+     * @param EventDispatcherInterface $eventDispatcher The event dispatcher to use.
+     */
+    public function __construct(Connection $database, EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+        $this->database        = $database;
+    }
 
     /**
      * {@inheritdoc}
@@ -58,7 +86,7 @@ class FilterSettingFactory implements IFilterSettingFactory
         }
         $this->serviceContainer = $serviceContainer;
 
-        if ($serviceContainer->getEventDispatcher()->hasListeners(MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE)) {
+        if ($this->eventDispatcher->hasListeners(MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE)) {
             @trigger_error(
                 'Event "' .
                 MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE .
@@ -198,12 +226,19 @@ class FilterSettingFactory implements IFilterSettingFactory
     public function createCollection($settingId)
     {
         // TODO: we should provide a collector like for attributes.
-        $information = $this->serviceContainer->getDatabase()
-            ->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
-            ->execute($settingId)
-            ->row();
+        $query = $this->database
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('tl_metamodel_filter')
+            ->where('id=:id')
+            ->setMaxResults(1)
+            ->setParameter('id', $settingId)
+            ->execute();
+        if (!$query) {
+            throw new \RuntimeException('Could not retrieve filter setting');
+        }
 
-        if (!empty($information)) {
+        if (!empty($information = $query->fetch(\PDO::FETCH_ASSOC))) {
             $modelFactory = $this->serviceContainer->getFactory();
             $metaModel    = $modelFactory->getMetaModel($modelFactory->translateIdToMetaModelName($information['pid']));
             $collection   = new Collection($information);

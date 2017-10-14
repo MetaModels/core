@@ -11,6 +11,9 @@ services:
 
     metamodels.filter_setting_factory:
         class: MetaModels\Filter\Setting\FilterSettingFactory
+        arguments:
+          - "@database_connection"
+          - "@event_dispatcher"
 
     metamodels.filter_setting_factory.idlist:
         class: MetaModels\Filter\Setting\StaticIdListFilterSettingTypeFactory
