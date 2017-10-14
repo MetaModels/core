@@ -61,11 +61,18 @@ class AttributeFactory implements IAttributeFactory
     {
         $this->serviceContainer = $serviceContainer;
 
-        $this->typeFactories = array();
-        $this->getEventDispatcher()->dispatch(
-            MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE,
-            new CreateAttributeFactoryEvent($this)
-        );
+        $dispatcher = $this->getEventDispatcher();
+        if ($dispatcher->hasListeners(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE)) {
+            @trigger_error(
+                'Event ' .
+                MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE .
+                ' is deprecated - register your attribute factories via the service container.'
+            );
+            $dispatcher->dispatch(
+                MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE,
+                new CreateAttributeFactoryEvent($this)
+            );
+        }
 
         return $this;
     }
