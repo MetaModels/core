@@ -6,6 +6,8 @@ services:
 
     metamodels.attribute_factory:
         class: MetaModels\Attribute\AttributeFactory
+        arguments:
+          - "@event_dispatcher"
 
     metamodels.filter_setting_factory:
         class: MetaModels\Filter\Setting\FilterSettingFactory

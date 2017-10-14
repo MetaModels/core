@@ -44,11 +44,28 @@ class AttributeFactory implements IAttributeFactory
     protected $serviceContainer;
 
     /**
+     * The event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * The registered type factories.
      *
      * @var IAttributeTypeFactory[]
      */
     protected $typeFactories = array();
+
+    /**
+     * Create a new instance.
+     *
+     * @param EventDispatcherInterface $eventDispatcher The event dispatcher to use.
+     */
+    public function __construct(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
 
     /**
      * Set the service container.
@@ -68,15 +85,14 @@ class AttributeFactory implements IAttributeFactory
 
         $this->serviceContainer = $serviceContainer;
 
-        $dispatcher = $this->getEventDispatcher();
-        if ($dispatcher->hasListeners(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE)) {
+        if ($this->eventDispatcher->hasListeners(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE)) {
             @trigger_error(
                 'Event "' .
                 MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE .
                 '" is deprecated - register your attribute factories via the service container.',
                 E_USER_DEPRECATED
             );
-            $dispatcher->dispatch(
+            $this->eventDispatcher->dispatch(
                 MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE,
                 new CreateAttributeFactoryEvent($this)
             );
@@ -100,16 +116,6 @@ class AttributeFactory implements IAttributeFactory
     }
 
     /**
-     * Retrieve the event dispatcher.
-     *
-     * @return EventDispatcherInterface
-     */
-    protected function getEventDispatcher()
-    {
-        return $this->getServiceContainer()->getEventDispatcher();
-    }
-
-    /**
      * Create an attribute instance from an information array.
      *
      * @param array      $information The attribute information.
@@ -121,7 +127,7 @@ class AttributeFactory implements IAttributeFactory
     public function createAttribute($information, $metaModel)
     {
         $event = new CreateAttributeEvent($information, $metaModel);
-        $this->getEventDispatcher()->dispatch(CreateAttributeEvent::NAME, $event);
+        $this->eventDispatcher->dispatch(CreateAttributeEvent::NAME, $event);
 
         if ($event->getAttribute()) {
             return $event->getAttribute();
@@ -206,7 +212,7 @@ class AttributeFactory implements IAttributeFactory
     {
         $event = new CollectMetaModelAttributeInformationEvent($metaModel);
 
-        $this->getEventDispatcher()->dispatch($event::NAME, $event);
+        $this->eventDispatcher->dispatch($event::NAME, $event);
 
         return $event->getAttributeInformation();
     }
