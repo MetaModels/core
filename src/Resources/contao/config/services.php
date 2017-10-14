@@ -22,10 +22,10 @@
 /** @var \DependencyInjection\Container\PimpleGate $container */
 $service = $container->getContainer();
 
-$container->provideSymfonyService('metamodels-attribute-factory.factory');
-$container->provideSymfonyService('metamodels-factory.factory');
-$container->provideSymfonyService('metamodels-filter-setting-factory.factory');
-$container->provideSymfonyService('metamodels-render-setting-factory.factory');
+$container->provideSymfonyService('metamodels.attribute_factory');
+$container->provideSymfonyService('metamodels.factory');
+$container->provideSymfonyService('metamodels.filter_setting_factory');
+$container->provideSymfonyService('metamodels.render_setting_factory');
 
 $container['metamodels-cache.factory'] = $container->share(
     function ($container) use ($service) {
@@ -47,10 +47,10 @@ $container['metamodels-service-container.factory'] = $container->share(
             ->setDatabase($container['database.connection']);
 
         $serviceContainer
-            ->setAttributeFactory($container['metamodels-attribute-factory.factory'])
-            ->setFactory($container['metamodels-factory.factory'])
-            ->setFilterFactory($container['metamodels-filter-setting-factory.factory'])
-            ->setRenderSettingFactory($container['metamodels-render-setting-factory.factory'])
+            ->setAttributeFactory($service->get('metamodels.attribute_factory'))
+            ->setFactory($service->get('metamodels.factory'))
+            ->setFilterFactory($service->get('metamodels.filter_setting_factory'))
+            ->setRenderSettingFactory($service->get('metamodels.render_setting_factory'))
             ->setCache($container['metamodels-cache.factory']);
 
         return $serviceContainer;
