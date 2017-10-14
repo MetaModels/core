@@ -154,7 +154,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     public function setFilterFactory($filterFactory)
     {
         $this->filterFactory = $filterFactory;
-        $filterFactory->setServiceContainer($this);
+        $filterFactory->setServiceContainer($this, false);
 
         return $this;
     }

@@ -35,12 +35,6 @@ use MetaModels\Events\DatabaseBackedListener;
 use MetaModels\Events\DefaultPropertyConditionCreator;
 use MetaModels\Events\MetaModelsBootEvent;
 use MetaModels\Events\ParseItemEvent;
-use MetaModels\Filter\Setting\ConditionAndFilterSettingTypeFactory;
-use MetaModels\Filter\Setting\ConditionOrFilterSettingTypeFactory;
-use MetaModels\Filter\Setting\CustomSqlFilterSettingTypeFactory;
-use MetaModels\Filter\Setting\Events\CreateFilterSettingFactoryEvent;
-use MetaModels\Filter\Setting\SimpleLookupFilterSettingTypeFactory;
-use MetaModels\Filter\Setting\StaticIdListFilterSettingTypeFactory;
 use MetaModels\MetaModelsEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -81,17 +75,6 @@ return array(
             new CreateVariantButton($event->getServiceContainer());
             $dispatcher->addSubscriber(new RenderSettingAddAllHandler($event->getServiceContainer()));
             $dispatcher->addSubscriber(new InputScreenAddAllHandler($event->getServiceContainer()));
-        }
-    ),
-    MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE => array(
-        function (CreateFilterSettingFactoryEvent $event) {
-            $factory = $event->getFactory();
-            $factory
-                ->addTypeFactory(new StaticIdListFilterSettingTypeFactory())
-                ->addTypeFactory(new SimpleLookupFilterSettingTypeFactory())
-                ->addTypeFactory(new CustomSqlFilterSettingTypeFactory())
-                ->addTypeFactory(new ConditionAndFilterSettingTypeFactory())
-                ->addTypeFactory(new ConditionOrFilterSettingTypeFactory());
         }
     ),
     // deprecated since 2.0, to be removed in 3.0.

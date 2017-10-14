@@ -12,7 +12,20 @@ services:
     metamodels.filter_setting_factory:
         class: MetaModels\Filter\Setting\FilterSettingFactory
 
+    metamodels.filter_setting_factory.idlist:
+        class: MetaModels\Filter\Setting\StaticIdListFilterSettingTypeFactory
+
+    metamodels.filter_setting_factory.simplelookup:
+        class: MetaModels\Filter\Setting\SimpleLookupFilterSettingTypeFactory
+
+    metamodels.filter_setting_factory.customsql:
+        class: MetaModels\Filter\Setting\CustomSqlFilterSettingTypeFactory
+
+    metamodels.filter_setting_factory.conditionand:
+        class: MetaModels\Filter\Setting\ConditionAndFilterSettingTypeFactory
+
+    metamodels.filter_setting_factory.conditionor:
+        class: MetaModels\Filter\Setting\ConditionOrFilterSettingTypeFactory
+
     metamodels.render_setting_factory:
         class: MetaModels\Render\Setting\RenderSettingFactory
-
-

@@ -48,15 +48,28 @@ class FilterSettingFactory implements IFilterSettingFactory
     /**
      * {@inheritdoc}
      */
-    public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer)
+    public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, $deprecationNotice = true)
     {
+        if ($deprecationNotice) {
+            @trigger_error(
+                '"' .__METHOD__ . '" is deprecated and will get removed.',
+                E_USER_DEPRECATED
+            );
+        }
         $this->serviceContainer = $serviceContainer;
 
-        $this->typeFactories = array();
-        $this->serviceContainer->getEventDispatcher()->dispatch(
-            MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE,
-            new CreateFilterSettingFactoryEvent($this)
-        );
+        if ($serviceContainer->getEventDispatcher()->hasListeners(MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE)) {
+            @trigger_error(
+                'Event "' .
+                MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE .
+                '" is deprecated - register your attribute factories via the service container.',
+                E_USER_DEPRECATED
+            );
+            $this->serviceContainer->getEventDispatcher()->dispatch(
+                MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE,
+                new CreateFilterSettingFactoryEvent($this)
+            );
+        }
 
         return $this;
     }
@@ -66,15 +79,25 @@ class FilterSettingFactory implements IFilterSettingFactory
      */
     public function getServiceContainer()
     {
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated - use the services from the service container.',
+            E_USER_DEPRECATED
+        );
         return $this->serviceContainer;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \RuntimeException When the type is already registered.
      */
     public function addTypeFactory($factory)
     {
-        $this->typeFactories[$factory->getTypeName()] = $factory;
+        $typeName = $factory->getTypeName();
+        if (isset($this->typeFactories[$typeName])) {
+            throw new \RuntimeException('Filter type ' . $typeName . ' is already registered.');
+        }
+        $this->typeFactories[$typeName] = $factory;
 
         return $this;
     }
