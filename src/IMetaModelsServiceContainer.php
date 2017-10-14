@@ -29,6 +29,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This interface provides access to most of the needed services within MetaModels.
+ *
+ * @deprecated The service container will get removed, use the symfony service container instead.
  */
 interface IMetaModelsServiceContainer
 {

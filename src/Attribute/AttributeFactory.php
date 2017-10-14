@@ -57,16 +57,24 @@ class AttributeFactory implements IAttributeFactory
      *
      * @return AttributeFactory
      */
-    public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer)
+    public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, $deprecationNotice = true)
     {
+        if ($deprecationNotice) {
+            @trigger_error(
+                '"' .__METHOD__ . '" is deprecated and will get removed.',
+                E_USER_DEPRECATED
+            );
+        }
+
         $this->serviceContainer = $serviceContainer;
 
         $dispatcher = $this->getEventDispatcher();
         if ($dispatcher->hasListeners(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE)) {
             @trigger_error(
-                'Event ' .
+                'Event "' .
                 MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE .
-                ' is deprecated - register your attribute factories via the service container.'
+                '" is deprecated - register your attribute factories via the service container.',
+                E_USER_DEPRECATED
             );
             $dispatcher->dispatch(
                 MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE,
@@ -84,6 +92,10 @@ class AttributeFactory implements IAttributeFactory
      */
     public function getServiceContainer()
     {
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated - use the services from the service container.',
+            E_USER_DEPRECATED
+        );
         return $this->serviceContainer;
     }
 

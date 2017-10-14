@@ -29,6 +29,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Reference implementation of IMetaModelsServiceContainer.
+ *
+ * @deprecated The service container will get removed, use the symfony service container instead.
  */
 class MetaModelsServiceContainer implements IMetaModelsServiceContainer
 {
@@ -108,6 +110,10 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getFactory()
     {
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
+            E_USER_DEPRECATED
+        );
         return $this->factory;
     }
 
@@ -121,7 +127,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     public function setAttributeFactory(IAttributeFactory $factory)
     {
         $this->attributeFactory = $factory;
-        $factory->setServiceContainer($this);
+        $factory->setServiceContainer($this, false);
 
         return $this;
     }
@@ -131,6 +137,10 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getAttributeFactory()
     {
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
+            E_USER_DEPRECATED
+        );
         return $this->attributeFactory;
     }
 
@@ -154,6 +164,10 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getFilterFactory()
     {
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
+            E_USER_DEPRECATED
+        );
         return $this->filterFactory;
     }
 
@@ -177,6 +191,10 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getRenderSettingFactory()
     {
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
+            E_USER_DEPRECATED
+        );
         return $this->renderFactory;
     }
 
@@ -199,6 +217,10 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getEventDispatcher()
     {
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
+            E_USER_DEPRECATED
+        );
         return $this->dispatcher;
     }
 
@@ -221,6 +243,10 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getDatabase()
     {
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
+            E_USER_DEPRECATED
+        );
         return $this->database;
     }
 
@@ -231,6 +257,10 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getCache()
     {
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
+            E_USER_DEPRECATED
+        );
         return $this->cache;
     }
 
@@ -255,6 +285,10 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function setService($service, $serviceName = null)
     {
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
+            E_USER_DEPRECATED
+        );
         if ($serviceName === null) {
             if (!is_object($service) || $service instanceof \Closure) {
                 throw new \InvalidArgumentException(
@@ -275,6 +309,10 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getService($serviceName)
     {
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
+            E_USER_DEPRECATED
+        );
         return isset($this->services[(string) $serviceName]) ? $this->services[(string) $serviceName] : null;
     }
 }

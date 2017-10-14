@@ -40,6 +40,10 @@ $container['metamodels-cache.factory'] = $container->share(
 // Fixme build an factory for metamodels service container.
 $container['metamodels-service-container.factory'] = $container->share(
     function ($container) use ($service) {
+        @trigger_error(
+            'The MetaModels service container is deprecated and will get removed - use the symfony DIC directly.',
+            E_USER_DEPRECATED
+        );
         $serviceContainer = new MetaModels\MetaModelsServiceContainer();
         $dispatcher       = $service->get('event_dispatcher');
         $serviceContainer
