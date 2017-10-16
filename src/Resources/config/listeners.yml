@@ -17,3 +17,10 @@ services:
             -   name: kernel.event_listener
                 event: metamodels.metamodel.get-metamodel-name-from-id
                 method: getMetaModelNameFromId
+
+    metamodels.default_property_condition_creator:
+        class: MetaModels\Events\DefaultPropertyConditionCreator
+        tags:
+            -   name: kernel.event_listener
+                event: metamodels.events.create-property-condition-event
+                method: handle

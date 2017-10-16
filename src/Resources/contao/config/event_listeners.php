@@ -30,8 +30,6 @@ use MetaModels\DcGeneral\Events\MetaModel\PasteButton;
 use MetaModels\DcGeneral\Events\Table\FilterSetting\FilterSettingTypeRendererCore;
 use MetaModels\DcGeneral\Events\Table\InputScreens\InputScreenAddAllHandler;
 use MetaModels\DcGeneral\Events\Table\RenderSetting\RenderSettingAddAllHandler;
-use MetaModels\Events\CreatePropertyConditionEvent;
-use MetaModels\Events\DefaultPropertyConditionCreator;
 use MetaModels\Events\MetaModelsBootEvent;
 use MetaModels\Events\ParseItemEvent;
 use MetaModels\MetaModelsEvents;
@@ -40,14 +38,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 return array(
     MetaModelsEvents::SUBSYSTEM_BOOT => array(
         function (MetaModelsBootEvent $event) {
-            /** @var EventDispatcherInterface $dispatcher */
-            $dispatcher = func_get_arg(2);
-
-            $dispatcher->addListener(
-                CreatePropertyConditionEvent::NAME,
-                array(new DefaultPropertyConditionCreator(), 'handle')
-            );
-
             new DuplicateModel($event->getServiceContainer());
         }
     ),
