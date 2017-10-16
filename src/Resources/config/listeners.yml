@@ -33,3 +33,12 @@ services:
                 method: getPropertyOptions
                 # Keep priority low to allow attributes like select and tags to override values.
                 priority: -200
+
+    metamodels.pre_duplicate_model_listener:
+        class: MetaModels\DcGeneral\Events\MetaModel\DuplicateModel
+        arguments:
+            - "@metamodels.factory"
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.model.pre-duplicate
+                method: handle

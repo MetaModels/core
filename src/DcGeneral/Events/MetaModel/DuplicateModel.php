@@ -24,24 +24,28 @@
 namespace MetaModels\DcGeneral\Events\MetaModel;
 
 use ContaoCommunityAlliance\DcGeneral\Event\PreDuplicateModelEvent;
-use MetaModels\DcGeneral\Events\BaseSubscriber;
+use MetaModels\IFactory;
 
 /**
  * This class handles the paste into or after handling for variants.
  */
-class DuplicateModel extends BaseSubscriber
+class DuplicateModel
 {
     /**
-     * Register all listeners.
+     * The MetaModels factory.
      *
-     * @return void
+     * @var IFactory
      */
-    protected function registerEventsInDispatcher()
+    private $factory;
+
+    /**
+     * Create a new instance.
+     *
+     * @param IFactory $factory
+     */
+    public function __construct(IFactory $factory)
     {
-        $this->addListener(
-            PreDuplicateModelEvent::NAME,
-            array($this, 'handle')
-        );
+        $this->factory = $factory;
     }
 
     /**
@@ -55,10 +59,7 @@ class DuplicateModel extends BaseSubscriber
     {
         $model = $event->getModel();
 
-        $metaModel = $this
-            ->getServiceContainer()
-            ->getFactory()
-            ->getMetaModel($model->getProviderName());
+        $metaModel = $this->factory->getMetaModel($model->getProviderName());
 
         if (!$metaModel || !$metaModel->hasVariants()) {
             return;

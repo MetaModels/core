@@ -24,7 +24,6 @@
 
 use MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton;
 use MetaModels\DcGeneral\Events\MetaModel\CutButton;
-use MetaModels\DcGeneral\Events\MetaModel\DuplicateModel;
 use MetaModels\DcGeneral\Events\MetaModel\PasteButton;
 use MetaModels\DcGeneral\Events\Table\FilterSetting\FilterSettingTypeRendererCore;
 use MetaModels\DcGeneral\Events\Table\InputScreens\InputScreenAddAllHandler;
@@ -35,11 +34,6 @@ use MetaModels\MetaModelsEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 return array(
-    MetaModelsEvents::SUBSYSTEM_BOOT => array(
-        function (MetaModelsBootEvent $event) {
-            new DuplicateModel($event->getServiceContainer());
-        }
-    ),
     MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND => array(
         function (MetaModelsBootEvent $event) {
             $handler = new MetaModels\FrontendIntegration\Boot();
