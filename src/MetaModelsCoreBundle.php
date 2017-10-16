@@ -21,7 +21,7 @@
 
 namespace MetaModels;
 
-use MetaModels\DependencyInjection\CompilerPass\AddFilterFactoryPass;
+use MetaModels\DependencyInjection\CompilerPass\CollectFactoriesPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -34,6 +34,6 @@ class MetaModelsCoreBundle extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new AddFilterFactoryPass());
+        $container->addCompilerPass(new CollectFactoriesPass());
     }
 }
