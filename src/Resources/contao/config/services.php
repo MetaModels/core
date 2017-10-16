@@ -48,7 +48,7 @@ $container['metamodels-service-container.factory'] = $container->share(
         $dispatcher       = $service->get('event_dispatcher');
         $serviceContainer
             ->setEventDispatcher($dispatcher)
-            ->setDatabase($container['database.connection']);
+            ->setDatabase($service->get('cca.legacy_dic.contao_database_connection'));
 
         $serviceContainer
             ->setAttributeFactory($service->get('metamodels.attribute_factory'))
