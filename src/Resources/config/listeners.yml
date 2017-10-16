@@ -1,0 +1,19 @@
+services:
+    metamodels.provider_from_database:
+        class: MetaModels\Events\DatabaseBackedListener
+        arguments:
+            - "@database_connection"
+            - "@cca.legacy_dic"
+        tags:
+            -   name: kernel.event_listener
+                event: metamodels.metamodel.collect-metamodel-attribute-information
+                method: collectMetaModelAttributeInformation
+            -   name: kernel.event_listener
+                event: metamodels.metamodel.collect-table-names
+                method: collectMetaModelTableNames
+            -   name: kernel.event_listener
+                event: metamodels.metamodel.create
+                method: createMetaModel
+            -   name: kernel.event_listener
+                event: metamodels.metamodel.get-metamodel-name-from-id
+                method: getMetaModelNameFromId

@@ -21,18 +21,32 @@
 
 namespace MetaModels\Events;
 
+use DependencyInjection\Container\LegacyDependencyInjectionContainer;
+use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\Events\CollectMetaModelAttributeInformationEvent;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModel;
 
 /**
- * This is the MetaModel factory interface.
- *
- * To create a MetaModel instance, either call @link{MetaModelFactory::byId()} or @link{MetaModelFactory::byTableName()}
+ * This is the information retriever database backend.
  */
 class DatabaseBackedListener
 {
+    /**
+     * The legacy dependency injection container - used for retrieving the MetaModels service container.
+     *
+     * @var LegacyDependencyInjectionContainer
+     */
+    private $legacyDic;
+
+    /**
+     * The database connection.
+     *
+     * @var Connection
+     */
+    private $database;
+
     /**
      * All MetaModel instances created via this listener.
      *
@@ -40,7 +54,7 @@ class DatabaseBackedListener
      *
      * @var IMetaModel[]
      */
-    protected static $instancesById = array();
+    private $instancesById = [];
 
     /**
      * All MetaModel instances.
@@ -49,85 +63,51 @@ class DatabaseBackedListener
      *
      * @var IMetaModel[]
      */
-    protected static $instancesByTable = array();
+    private $instancesByTable = [];
 
     /**
      * The table names.
      *
      * @var string[]
      */
-    protected static $tableNames = null;
+    private $tableNames = null;
 
     /**
      * Flag if the table names have already been collected.
      *
      * @var bool
      */
-    protected static $tableNamesCollected = false;
+    private $tableNamesCollected = false;
 
     /**
      * All attribute information.
      *
      * @var array[]
      */
-    protected static $attributeInformation = array();
+    private $attributeInformation = [];
 
     /**
-     * The service container.
+     * Create a new instance.
      *
-     * @var IMetaModelsServiceContainer
+     * @param Connection                         $database  The database connection.
+     * @param LegacyDependencyInjectionContainer $legacyDic The legacy service container.
      */
-    protected $serviceContainer;
-
-    /**
-     * Register to the event dispatcher in the provided service container.
-     *
-     * @param MetaModelsBootEvent $event The event.
-     *
-     * @return void
-     */
-    public function handleEvent(MetaModelsBootEvent $event)
+    public function __construct(Connection $database, LegacyDependencyInjectionContainer $legacyDic)
     {
-        $this->serviceContainer = $event->getServiceContainer();
-
-        $dispatcher = $this->getServiceContainer()->getEventDispatcher();
-
-        $dispatcher->addListener(
-            CollectMetaModelAttributeInformationEvent::NAME,
-            array($this, 'collectMetaModelAttributeInformation')
-        );
-        $dispatcher->addListener(
-            CollectMetaModelTableNamesEvent::NAME,
-            array($this, 'collectMetaModelTableNames')
-        );
-        $dispatcher->addListener(
-            CreateMetaModelEvent::NAME,
-            array($this, 'createMetaModel')
-        );
-        $dispatcher->addListener(
-            GetMetaModelNameFromIdEvent::NAME,
-            array($this, 'getMetaModelNameFromId')
-        );
+        $this->legacyDic = $legacyDic;
+        $this->database  = $database;
     }
 
     /**
      * Retrieve the service container.
      *
      * @return IMetaModelsServiceContainer
+     *
+     * @deprecated The service container is deprecated and should not be used anymore.
      */
     public function getServiceContainer()
     {
-        return $this->serviceContainer;
-    }
-
-    /**
-     * Retrieve the system database.
-     *
-     * @return \Contao\Database
-     */
-    protected function getDatabase()
-    {
-        return $this->getServiceContainer()->getDatabase();
+        return $this->legacyDic->getService('metamodels-service-container');
     }
 
     /**
@@ -139,27 +119,34 @@ class DatabaseBackedListener
      */
     public function getMetaModelNameFromId(GetMetaModelNameFromIdEvent $event)
     {
-        if (array_key_exists($event->getMetaModelId(), self::$instancesById)) {
-            $event->setMetaModelName(self::$instancesById[$event->getMetaModelId()]->getTableName());
+        $metaModelId =$event->getMetaModelId();
+        if (array_key_exists($metaModelId, $this->instancesById)) {
+            $event->setMetaModelName($this->instancesById[$metaModelId]->getTableName());
 
             return;
         }
 
-        if (isset(self::$tableNames[$event->getMetaModelId()])) {
-            $event->setMetaModelName(self::$tableNames[$event->getMetaModelId()]);
+        if (isset($this->tableNames[$metaModelId])) {
+            $event->setMetaModelName($this->tableNames[$metaModelId]);
 
             return;
         }
 
-        if (!self::$tableNamesCollected) {
-            $objData = $this->getDatabase()->prepare('SELECT * FROM tl_metamodel WHERE id=?')
-                ->limit(1)
-                ->execute($event->getMetaModelId());
-            /** @noinspection PhpUndefinedFieldInspection */
-            if ($objData->numRows) {
-                /** @noinspection PhpUndefinedFieldInspection */
-                self::$tableNames[$event->getMetaModelId()] = $objData->tableName;
-                $event->setMetaModelName(self::$tableNames[$event->getMetaModelId()]);
+        if (!$this->tableNamesCollected) {
+            $table = $this
+                ->database
+                ->createQueryBuilder()
+                ->select('*')
+                ->from('tl_metamodel')
+                ->where('id=:id')
+                ->setParameter('id', $metaModelId)
+                ->setMaxResults(1)
+                ->execute()
+                ->fetch(\PDO::FETCH_ASSOC);
+
+            if ($table) {
+                $this->tableNames[$metaModelId] = $table['tableName'];
+                $event->setMetaModelName($this->tableNames[$metaModelId]);
             }
         }
     }
@@ -182,6 +169,8 @@ class DatabaseBackedListener
         if (!isset($GLOBALS['METAMODELS']['factories'][$name])) {
             return false;
         }
+
+        @trigger_error('Creating MetaModel instances via global factories is deprecated.', E_USER_DEPRECATED);
 
         $factoryClass = $GLOBALS['METAMODELS']['factories'][$name];
         $event->setMetaModel(call_user_func_array(array($factoryClass, 'createInstance'), array($arrData)));
@@ -207,8 +196,8 @@ class DatabaseBackedListener
         }
 
         if ($event->getMetaModel()) {
-            self::$instancesByTable[$event->getMetaModelName()]     = $event->getMetaModel();
-            self::$instancesById[$event->getMetaModel()->get('id')] = $event->getMetaModel();
+            $this->instancesByTable[$event->getMetaModelName()]     = $event->getMetaModel();
+            $this->instancesById[$event->getMetaModel()->get('id')] = $event->getMetaModel();
         }
     }
 
@@ -225,19 +214,25 @@ class DatabaseBackedListener
             return;
         }
 
-        if (isset(self::$instancesByTable[$event->getMetaModelName()])) {
-            $event->setMetaModel(self::$instancesByTable[$event->getMetaModelName()]);
+        if (isset($this->instancesByTable[$event->getMetaModelName()])) {
+            $event->setMetaModel($this->instancesByTable[$event->getMetaModelName()]);
 
             return;
         }
 
-        $objData = \Database::getInstance()->prepare('SELECT * FROM tl_metamodel WHERE tableName=?')
-            ->limit(1)
-            ->execute($event->getMetaModelName());
+        $table = $this
+            ->database
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('tl_metamodel')
+            ->where('tableName=:tableName')
+            ->setParameter('tableName', $event->getMetaModelName())
+            ->setMaxResults(1)
+            ->execute()
+            ->fetch(\PDO::FETCH_ASSOC);
 
-        /** @noinspection PhpUndefinedFieldInspection */
-        if ($objData->numRows) {
-            $this->createInstance($event, $objData->row());
+        if ($table) {
+            $this->createInstance($event, $table);
         }
     }
 
@@ -250,23 +245,27 @@ class DatabaseBackedListener
      */
     public function collectMetaModelTableNames(CollectMetaModelTableNamesEvent $event)
     {
-        if (self::$tableNamesCollected) {
-            $event->addMetaModelNames(self::$tableNames);
+        if ($this->tableNamesCollected) {
+            $event->addMetaModelNames($this->tableNames);
 
             return;
         }
 
-        $objDB = $this->getDatabase();
-        if (!$objDB->tableExists('tl_metamodel')) {
-            // I can't work without a properly installed database.
-            return;
+        $tables = $this
+            ->database
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('tl_metamodel')
+            ->orderBy('sorting')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_ASSOC);
+
+        foreach ($tables as $table) {
+            $this->tableNames[$table['id']] = $table['tableName'];
         }
 
-        self::$tableNames = $objDB->execute('SELECT * FROM tl_metamodel order by sorting')
-            ->fetchEach('tableName');
-
-        $event->addMetaModelNames(self::$tableNames);
-        self::$tableNamesCollected = true;
+        $event->addMetaModelNames($this->tableNames);
+        $this->tableNamesCollected = true;
     }
 
     /**
@@ -278,25 +277,29 @@ class DatabaseBackedListener
      */
     public function collectMetaModelAttributeInformation(CollectMetaModelAttributeInformationEvent $event)
     {
-        if (isset(self::$attributeInformation[$event->getMetaModel()->getTableName()])) {
-            foreach (self::$attributeInformation[$event->getMetaModel()->getTableName()] as $name => $information) {
-                $event->addAttributeInformation($name, $information);
-            }
+        $metaModelName = $event->getMetaModel()->getTableName();
+        if (!array_key_exists($metaModelName, $this->attributeInformation)) {
+            $attributes = $this
+                ->database
+                ->createQueryBuilder()
+                ->select('*')
+                ->from('tl_metamodel_attribute')
+                ->where('pid=:pid')
+                ->setParameter('pid', $event->getMetaModel()->get('id'))
+                ->orderBy('sorting')
+                ->execute()
+                ->fetchAll(\PDO::FETCH_ASSOC);
 
-            return;
+            $this->attributeInformation[$metaModelName] = [];
+            foreach ($attributes as $attribute) {
+                $colName = $attribute['colname'];
+
+                $this->attributeInformation[$metaModelName][$colName] = $attributes;
+            }
         }
 
-        $database   = $this->getDatabase();
-        $attributes = $database->prepare('SELECT * FROM tl_metamodel_attribute WHERE pid=?')
-            ->execute($event->getMetaModel()->get('id'));
-
-        $metaModelName = $event->getMetaModel()->getTableName();
-        while ($attributes->next()) {
-            /** @noinspection PhpUndefinedFieldInspection */
-            $colName = $attributes->colname;
-
-            self::$attributeInformation[$metaModelName][$colName] = $attributes->row();
-            $event->addAttributeInformation($colName, $attributes->row());
+        foreach ($this->attributeInformation[$metaModelName] as $name => $information) {
+            $event->addAttributeInformation($name, $information);
         }
     }
 }

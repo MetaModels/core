@@ -31,7 +31,6 @@ use MetaModels\DcGeneral\Events\Table\FilterSetting\FilterSettingTypeRendererCor
 use MetaModels\DcGeneral\Events\Table\InputScreens\InputScreenAddAllHandler;
 use MetaModels\DcGeneral\Events\Table\RenderSetting\RenderSettingAddAllHandler;
 use MetaModels\Events\CreatePropertyConditionEvent;
-use MetaModels\Events\DatabaseBackedListener;
 use MetaModels\Events\DefaultPropertyConditionCreator;
 use MetaModels\Events\MetaModelsBootEvent;
 use MetaModels\Events\ParseItemEvent;
@@ -43,10 +42,6 @@ return array(
         function (MetaModelsBootEvent $event) {
             /** @var EventDispatcherInterface $dispatcher */
             $dispatcher = func_get_arg(2);
-
-            // This loads the factories.
-            $handler = new DatabaseBackedListener();
-            $handler->handleEvent($event);
 
             $dispatcher->addListener(
                 CreatePropertyConditionEvent::NAME,
