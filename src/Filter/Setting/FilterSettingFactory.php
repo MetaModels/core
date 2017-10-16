@@ -21,7 +21,6 @@
 
 namespace MetaModels\Filter\Setting;
 
-use Database\Result;
 use Doctrine\DBAL\Connection;
 use MetaModels\Filter\Setting\Events\CreateFilterSettingFactoryEvent;
 use MetaModels\IMetaModelsServiceContainer;
@@ -141,17 +140,17 @@ class FilterSettingFactory implements IFilterSettingFactory
     /**
      * Create a new setting.
      *
-     * @param Result      $dbResult       The information from which to initialize the setting from.
+     * @param array       $dbResult       The information from which to initialize the setting from.
      *
      * @param ICollection $filterSettings The MetaModel filter settings.
      *
      * @return ISimple|null
      */
-    protected function createSetting($dbResult, $filterSettings)
+    private function createSetting($dbResult, $filterSettings)
     {
-        $factory = $this->getTypeFactory($dbResult->type);
+        $factory = $this->getTypeFactory($dbResult['type']);
         if ($factory) {
-            $setting = $factory->createInstance($dbResult->row(), $filterSettings);
+            $setting = $factory->createInstance($dbResult, $filterSettings);
 
             if (!$setting) {
                 return null;
@@ -178,15 +177,21 @@ class FilterSettingFactory implements IFilterSettingFactory
      *
      * @return void
      */
-    protected function collectRulesFor($parentSetting, $filterSettings)
+    private function collectRulesFor($parentSetting, $filterSettings)
     {
         // TODO: we should provide a collector like for attributes.
-        $childInformation = $this->serviceContainer->getDatabase()
-            ->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE pid=? AND enabled=1 ORDER BY sorting ASC')
-            ->execute($parentSetting->get('id'));
+        $childInformation = $this->database
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('tl_metamodel_filtersetting')
+            ->where('pid=:pid')
+            ->andWhere('enabled=1')
+            ->orderBy('sorting', 'ASC')
+            ->setParameter('pid', $parentSetting->get('id'))
+            ->execute();
 
-        while ($childInformation->next()) {
-            $childSetting = $this->createSetting($childInformation, $filterSettings);
+        foreach ($childInformation->fetchAll(\PDO::FETCH_ASSOC) as $item) {
+            $childSetting = $this->createSetting($item, $filterSettings);
             if ($childSetting) {
                 $parentSetting->addChild($childSetting);
             }
@@ -203,15 +208,19 @@ class FilterSettingFactory implements IFilterSettingFactory
     public function collectRules($filterSettings)
     {
         // TODO: we should provide a collector like for attributes.
-        $database    = $this->serviceContainer->getDatabase();
-        $information = $database
-            ->prepare(
-                'SELECT * FROM tl_metamodel_filtersetting WHERE fid=? AND pid=0 AND enabled=1 ORDER BY sorting ASC'
-            )
-            ->execute($filterSettings->get('id'));
+        $information = $this->database
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('tl_metamodel_filtersetting')
+            ->where('fid=:fid')
+            ->andWhere('pid=0')
+            ->andWhere('enabled=1')
+            ->setMaxResults(1)
+            ->setParameter('fid', $filterSettings->get('id'))
+            ->execute();
 
-        while ($information->next()) {
-            $newSetting = $this->createSetting($information, $filterSettings);
+        foreach ($information->fetchAll(\PDO::FETCH_ASSOC) as $item) {
+            $newSetting = $this->createSetting($item, $filterSettings);
             if ($newSetting) {
                 $filterSettings->addSetting($newSetting);
             }
