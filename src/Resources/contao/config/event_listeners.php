@@ -22,7 +22,6 @@
  * @filesource
  */
 
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton;
 use MetaModels\DcGeneral\Events\MetaModel\CutButton;
 use MetaModels\DcGeneral\Events\MetaModel\DuplicateModel;
@@ -99,13 +98,6 @@ return array(
                 $event->setResult($result);
             },
             -10
-        )
-    ),
-    GetPropertyOptionsEvent::NAME => array(
-        array(
-            // Keep priority low to allow attributes like select and tags to override values.
-            'MetaModels\DcGeneral\Events\MetaModel\PropertyOptionsProvider::getPropertyOptions',
-            -200
         )
     )
 );

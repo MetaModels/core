@@ -24,3 +24,12 @@ services:
             -   name: kernel.event_listener
                 event: metamodels.events.create-property-condition-event
                 method: handle
+
+    metamodels.property_options_provider:
+        class: MetaModels\DcGeneral\Events\MetaModel\PropertyOptionsProvider
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.get-property-options
+                method: getPropertyOptions
+                # Keep priority low to allow attributes like select and tags to override values.
+                priority: -200
