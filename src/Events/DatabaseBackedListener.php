@@ -294,7 +294,7 @@ class DatabaseBackedListener
             foreach ($attributes as $attribute) {
                 $colName = $attribute['colname'];
 
-                $this->attributeInformation[$metaModelName][$colName] = $attributes;
+                $this->attributeInformation[$metaModelName][$colName] = $attribute;
             }
         }
 
