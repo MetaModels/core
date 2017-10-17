@@ -22,6 +22,8 @@
 namespace MetaModels\Filter\Rules;
 
 use Contao\Database;
+use Contao\System;
+use Doctrine\DBAL\Connection;
 use MetaModels\Filter\FilterRule;
 
 /**
@@ -53,28 +55,42 @@ class SimpleQuery extends FilterRule
     /**
      * The database instance to use.
      *
-     * @var Database
+     * @var Connection
      */
     private $dataBase;
 
     /**
      * Creates an instance of a simple query filter rule.
      *
-     * @param string   $strQueryString The query that shall be executed.
-     *
-     * @param array    $arrParams      The query parameters that shall be used.
-     *
-     * @param string   $strIdColumn    The column where the item id is stored in.
-     *
-     * @param Database $dataBase       The database to use.
+     * @param string     $strQueryString The query that shall be executed.
+     * @param array      $arrParams      The query parameters that shall be used.
+     * @param string     $strIdColumn    The column where the item id is stored in.
+     * @param Connection $dataBase       The database to use.
      */
     public function __construct($strQueryString, $arrParams = array(), $strIdColumn = 'id', $dataBase = null)
     {
         parent::__construct();
 
-        if ($dataBase === null) {
-            $dataBase = \Database::getInstance();
+        // BC layer - we used to accept a Contao database instance here.
+        if ($dataBase instanceof Database) {
+            @trigger_error(
+                '"' . __METHOD__ . '" now accepts doctrine instances - ' .
+                'passing Contao database instances is deprecated.',
+                E_USER_DEPRECATED
+            );
+            $reflection = new \ReflectionProperty(Database::class, 'resConnection');
+            $reflection->setAccessible(true);
+
+            $dataBase = $reflection->getValue($dataBase);
         }
+        if (null === $dataBase) {
+            @trigger_error(
+                'You should pass a doctrine database connection to "' . __METHOD__ . '".',
+                E_USER_DEPRECATED
+            );
+            $dataBase = System::getContainer()->get('database_connection');
+        }
+
         $this->strQueryString = $strQueryString;
         $this->arrParams      = $arrParams;
         $this->strIdColumn    = $strIdColumn;
@@ -87,9 +103,14 @@ class SimpleQuery extends FilterRule
     public function getMatchingIds()
     {
         $objMatches = $this->dataBase
-            ->prepare($this->strQueryString)
-            ->execute($this->arrParams);
+            ->prepare($this->strQueryString);
 
-        return ($objMatches->numRows == 0) ? array() : $objMatches->fetchEach($this->strIdColumn);
+        $objMatches->execute($this->arrParams);
+
+        $ids = [];
+        foreach ($objMatches->fetchAll(\PDO::FETCH_ASSOC) as $value) {
+            $ids[] = $value[$this->strIdColumn];
+        }
+        return $ids;
     }
 }
