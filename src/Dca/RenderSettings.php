@@ -26,7 +26,7 @@ namespace MetaModels\Dca;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
-use ContaoCommunityAlliance\DcGeneral\DC_General;
+use ContaoCommunityAlliance\DcGeneral\DC\General;
 
 /**
  * This class is used from DCA tl_metamodel_rendersetting for various callbacks.
@@ -40,11 +40,11 @@ class RenderSettings
      * So far MCW does not build sub widgets the MCW way, therefore we need to keep this as it is, despite the fact that
      * we are jumping multiple hoops with the inline javascript code to obtain the value.
      *
-     * @param DC_General $dataContainer The DC_General currently in use.
+     * @param General $dataContainer The DC_General currently in use.
      *
      * @return string
      */
-    public function pagePicker(DC_General $dataContainer)
+    public function pagePicker(General $dataContainer)
     {
         $environment = $dataContainer->getEnvironment();
 
