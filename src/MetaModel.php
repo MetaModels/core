@@ -86,6 +86,8 @@ class MetaModel implements IMetaModel
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Inject services via constructor or setter.
      */
     public function getServiceContainer()
     {
@@ -98,9 +100,17 @@ class MetaModel implements IMetaModel
      * @param IMetaModelsServiceContainer $serviceContainer The service container.
      *
      * @return MetaModel
+     *
+     * @deprecated Inject services via constructor or setter.
      */
-    public function setServiceContainer($serviceContainer)
+    public function setServiceContainer($serviceContainer, $deprecationNotice = true)
     {
+        if ($deprecationNotice) {
+            @trigger_error(
+                '"' .__METHOD__ . '" is deprecated and will get removed.',
+                E_USER_DEPRECATED
+            );
+        }
         $this->serviceContainer = $serviceContainer;
 
         return $this;

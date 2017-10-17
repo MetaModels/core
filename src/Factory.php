@@ -39,7 +39,7 @@ class Factory implements IFactory
      *
      * @var IMetaModelsServiceContainer
      */
-    protected $serviceContainer;
+    private $serviceContainer;
 
     /**
      * The already translated MetaModel names.
@@ -54,9 +54,18 @@ class Factory implements IFactory
      * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
      *
      * @return Factory
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
-    public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer)
+    public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, $deprecationNotice = true)
     {
+        if ($deprecationNotice) {
+            @trigger_error(
+                '"' .__METHOD__ . '" is deprecated and will get removed.',
+                E_USER_DEPRECATED
+            );
+        }
+
         $this->serviceContainer = $serviceContainer;
 
         return $this;
@@ -66,9 +75,15 @@ class Factory implements IFactory
      * Retrieve the service container.
      *
      * @return IMetaModelsServiceContainer
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getServiceContainer()
     {
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated - use the services from the service container.',
+            E_USER_DEPRECATED
+        );
         return $this->serviceContainer;
     }
 

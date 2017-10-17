@@ -38,6 +38,8 @@ interface IMetaModelsServiceContainer
      * Retrieve the MetaModels factory.
      *
      * @return IFactory
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getFactory();
 
@@ -45,6 +47,8 @@ interface IMetaModelsServiceContainer
      * Retrieve the MetaModels factory.
      *
      * @return IAttributeFactory
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getAttributeFactory();
 
@@ -52,6 +56,8 @@ interface IMetaModelsServiceContainer
      * Retrieve the filter settings factory.
      *
      * @return IFilterSettingFactory
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getFilterFactory();
 
@@ -59,6 +65,8 @@ interface IMetaModelsServiceContainer
      * Retrieve the render settings factory.
      *
      * @return IRenderSettingFactory
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getRenderSettingFactory();
 
@@ -66,6 +74,8 @@ interface IMetaModelsServiceContainer
      * Retrieve the event dispatcher.
      *
      * @return EventDispatcherInterface
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getEventDispatcher();
 
@@ -73,6 +83,8 @@ interface IMetaModelsServiceContainer
      * Retrieve the system database.
      *
      * @return \Contao\Database
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getDatabase();
 
@@ -80,6 +92,8 @@ interface IMetaModelsServiceContainer
      * The cache in use.
      *
      * @return Cache
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getCache();
 
@@ -94,6 +108,8 @@ interface IMetaModelsServiceContainer
      *                                           of the service will get used if the passed service is an object).
      *
      * @return MetaModelsServiceContainer
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function setService($service, $serviceName = null);
 
@@ -106,6 +122,8 @@ interface IMetaModelsServiceContainer
      * @param string $serviceName The name of the service to retrieve.
      *
      * @return object|callable|mixed
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getService($serviceName);
 }

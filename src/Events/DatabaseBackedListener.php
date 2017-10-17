@@ -191,7 +191,7 @@ class DatabaseBackedListener
     {
         if (!$this->createInstanceViaLegacyFactory($event, $arrData)) {
             $metaModel = new MetaModel($arrData);
-            $metaModel->setServiceContainer($this->getServiceContainer());
+            $metaModel->setServiceContainer($this->getServiceContainer(), false);
             $event->setMetaModel($metaModel);
         }
 

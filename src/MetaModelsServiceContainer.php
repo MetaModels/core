@@ -100,7 +100,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     public function setFactory(IFactory $factory)
     {
         $this->factory = $factory;
-        $factory->setServiceContainer($this);
+        $factory->setServiceContainer($this, false);
 
         return $this;
     }

@@ -70,9 +70,15 @@ abstract class Simple implements ISimple
      * Retrieve the service container.
      *
      * @return IMetaModelsServiceContainer
+     *
+     * @deprecated Inject needed services via constructor or setter.
      */
     public function getServiceContainer()
     {
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated and will get removed.',
+            E_USER_DEPRECATED
+        );
         return $this->getMetaModel()->getServiceContainer();
     }
 
@@ -80,9 +86,15 @@ abstract class Simple implements ISimple
      * Retrieve the event dispatcher.
      *
      * @return EventDispatcherInterface
+     *
+     * @deprecated Inject the event dispatcher via constructor or setter.
      */
     public function getEventDispatcher()
     {
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated and will get removed.',
+            E_USER_DEPRECATED
+        );
         return $this->getServiceContainer()->getEventDispatcher();
     }
 

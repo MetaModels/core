@@ -42,6 +42,8 @@ interface IMetaModel
      * Retrieve the service container.
      *
      * @return IMetaModelsServiceContainer
+     *
+     * @deprecated Inject services via constructor or setter.
      */
     public function getServiceContainer();
 

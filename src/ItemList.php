@@ -130,6 +130,8 @@ class ItemList implements IServiceContainerAware
      * @param IMetaModelsServiceContainer $serviceContainer The service container.
      *
      * @return ItemList
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer)
     {
@@ -161,6 +163,8 @@ class ItemList implements IServiceContainerAware
      * Retrieve the service container in use.
      *
      * @return IMetaModelsServiceContainer|null
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getServiceContainer()
     {

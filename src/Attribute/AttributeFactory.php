@@ -73,6 +73,8 @@ class AttributeFactory implements IAttributeFactory
      * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
      *
      * @return AttributeFactory
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, $deprecationNotice = true)
     {
@@ -105,6 +107,8 @@ class AttributeFactory implements IAttributeFactory
      * Retrieve the service container.
      *
      * @return IMetaModelsServiceContainer
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getServiceContainer()
     {

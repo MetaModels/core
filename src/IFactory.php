@@ -36,6 +36,8 @@ interface IFactory extends IServiceContainerAware
      * Retrieve the service container.
      *
      * @return IMetaModelsServiceContainer
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getServiceContainer();
 

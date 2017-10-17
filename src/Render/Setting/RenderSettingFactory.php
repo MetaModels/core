@@ -66,7 +66,7 @@ class RenderSettingFactory implements IRenderSettingFactory
     /**
      * Create a new instance.
      *
-     * @param Connection               $database
+     * @param Connection               $database        The database.
      * @param EventDispatcherInterface $eventDispatcher The event dispatcher to use.
      */
     public function __construct(Connection $database, EventDispatcherInterface $eventDispatcher)
@@ -81,6 +81,8 @@ class RenderSettingFactory implements IRenderSettingFactory
      * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
      *
      * @return RenderSettingFactory
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, $deprecationNotice = true)
     {
@@ -113,6 +115,8 @@ class RenderSettingFactory implements IRenderSettingFactory
      * Retrieve the service container.
      *
      * @return IMetaModelsServiceContainer
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getServiceContainer()
     {

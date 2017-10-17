@@ -34,6 +34,8 @@ interface IServiceContainerAware
      * @param IMetaModelsServiceContainer $serviceContainer The service container.
      *
      * @return IServiceContainerAware
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer);
 
@@ -41,6 +43,8 @@ interface IServiceContainerAware
      * Retrieve the service container in use.
      *
      * @return IMetaModelsServiceContainer|null
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getServiceContainer();
 }

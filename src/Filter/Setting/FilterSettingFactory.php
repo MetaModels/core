@@ -74,6 +74,8 @@ class FilterSettingFactory implements IFilterSettingFactory
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, $deprecationNotice = true)
     {
@@ -92,7 +94,7 @@ class FilterSettingFactory implements IFilterSettingFactory
                 '" is deprecated - register your attribute factories via the service container.',
                 E_USER_DEPRECATED
             );
-            $this->serviceContainer->getEventDispatcher()->dispatch(
+            $this->eventDispatcher->dispatch(
                 MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE,
                 new CreateFilterSettingFactoryEvent($this)
             );
@@ -103,6 +105,8 @@ class FilterSettingFactory implements IFilterSettingFactory
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getServiceContainer()
     {
