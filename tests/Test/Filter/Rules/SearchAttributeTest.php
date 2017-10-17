@@ -22,7 +22,7 @@
 namespace MetaModels\Test\Filter\Rules;
 
 use MetaModels\Filter\Rules\SearchAttribute;
-use MetaModels\Test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test greater-than filter rules.

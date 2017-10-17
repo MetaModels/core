@@ -23,7 +23,7 @@ namespace MetaModels\Test\Filter\Rules\Condition;
 
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Rules\Condition\ConditionOr;
-use MetaModels\Test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test OR condition filter rules.

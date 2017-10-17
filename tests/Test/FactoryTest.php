@@ -26,7 +26,9 @@ use MetaModels\Events\GetMetaModelNameFromIdEvent;
 use MetaModels\Factory;
 use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\IMetaModelsServiceContainer;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Test the attribute factory.
@@ -86,7 +88,7 @@ class FactoryTest extends TestCase
      */
     protected function mockServiceContainer($mockEventDispatcher = false)
     {
-        $serviceContainer = $this->getMock('MetaModels\IMetaModelsServiceContainer');
+        $serviceContainer = $this->getMockBuilder(IMetaModelsServiceContainer::class)->getMockForAbstractClass();
 
         $serviceContainer
             ->expects($this->any())
@@ -94,23 +96,11 @@ class FactoryTest extends TestCase
             ->will(
                 $this->returnValue(
                     $mockEventDispatcher
-                    ? $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface')
+                    ? $this->getMockBuilder(EventDispatcherInterface::class)->getMockForAbstractClass()
                     : new EventDispatcher()
                 )
             );
 
         return $serviceContainer;
-    }
-
-    /**
-     * Mock an attribute factory.
-     *
-     * @return IAttributeFactory
-     */
-    protected function mockAttributeFactory()
-    {
-        $factory = $this->getMock('MetaModels\Attribute\IAttributeFactory');
-
-        return $factory;
     }
 }

@@ -22,7 +22,7 @@
 namespace MetaModels\Test\Helper;
 
 use MetaModels\Helper\ToolboxFile;
-use MetaModels\Test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test the attribute factory.
@@ -38,14 +38,15 @@ class ToolBoxFileTest extends TestCase
      */
     public function testConvertUuidsOrPathsToMetaModelsEmpty()
     {
-        $emptyExpected = array(
-            'bin'   => array(),
-            'value' => array(),
-            'path'  => array()
-        );
+        $emptyExpected = [
+            'bin'   => [],
+            'value' => [],
+            'path'  => [],
+            'meta'  => []
+        ];
 
         $this->assertEquals($emptyExpected, ToolboxFile::convertUuidsOrPathsToMetaModels(null));
-        $this->assertEquals($emptyExpected, ToolboxFile::convertUuidsOrPathsToMetaModels(array()));
-        $this->assertEquals($emptyExpected, ToolboxFile::convertUuidsOrPathsToMetaModels(array(null)));
+        $this->assertEquals($emptyExpected, ToolboxFile::convertUuidsOrPathsToMetaModels([]));
+        $this->assertEquals($emptyExpected, ToolboxFile::convertUuidsOrPathsToMetaModels([null]));
     }
 }

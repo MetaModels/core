@@ -21,7 +21,9 @@
 
 namespace MetaModels\Test\Filter\Setting;
 
+use MetaModels\Filter\Setting\ICollection;
 use MetaModels\Filter\Setting\Simple;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test simple filter settings.
@@ -33,17 +35,16 @@ class SimpleTest extends TestCase
      *
      * @param array  $properties The initialization data.
      *
-     * @param string $tableName  The table name of the MetaModel to mock.
-     *
-     * @return Simple
+     * @return Simple|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function mockSimpleFilterSetting($properties = array(), $tableName = 'mm_unittest')
+    protected function mockSimpleFilterSetting($properties = [])
     {
-        $setting = $this->getMock(
-            'MetaModels\Filter\Setting\Simple',
-            array(),
-            array($this->mockFilterSetting($tableName), $properties)
-        );
+        $filterSetting = $this->getMockForAbstractClass(ICollection::class);
+
+        $setting = $this
+            ->getMockBuilder('MetaModels\Filter\Setting\Simple')
+            ->setConstructorArgs([$filterSetting, $properties])
+            ->getMockForAbstractClass();
 
         return $setting;
     }

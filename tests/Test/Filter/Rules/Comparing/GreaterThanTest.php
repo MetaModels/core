@@ -22,7 +22,7 @@
 namespace MetaModels\Test\Filter\Rules\Comparing;
 
 use MetaModels\Filter\Rules\Comparing\GreaterThan;
-use MetaModels\Test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test greater-than filter rules.

@@ -9,11 +9,11 @@
 		 processIsolation="false"
 		 stopOnFailure="false"
 		 syntaxCheck="false"
-		 bootstrap="tests/bootstrap.php"
+		 bootstrap="vendor/autoload.php"
 		>
 	<testsuites>
 		<testsuite name="MetaModels core tests">
-			<directory>./tests/MetaModels/</directory>
+			<directory>./tests/</directory>
 		</testsuite>
 	</testsuites>
 

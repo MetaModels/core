@@ -23,7 +23,7 @@ namespace MetaModels\Test\Attribute;
 
 use MetaModels\Attribute\Base;
 use MetaModels\IMetaModel;
-use MetaModels\Test\TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test the base attribute.
@@ -40,11 +40,7 @@ class BaseTest extends TestCase
      */
     protected function mockMetaModel($language, $fallbackLanguage)
     {
-        $metaModel = $this->getMock(
-            'MetaModels\MetaModel',
-            array(),
-            array(array())
-        );
+        $metaModel = $this->getMockForAbstractClass(IMetaModel::class);
 
         $metaModel
             ->expects($this->any())

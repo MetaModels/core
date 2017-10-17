@@ -26,8 +26,7 @@ use MetaModels\Attribute\IAttributeTypeFactory;
 use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsEvents;
-use MetaModels\Test\Attribute\Mock\AttributeFactoryMocker;
-use MetaModels\Test\TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -42,13 +41,20 @@ class AttributeFactoryTest extends TestCase
      */
     public function testCreateFactoryFiresEvent()
     {
-        $serviceContainer = $this->mockServiceContainer();
-        $serviceContainer->getEventDispatcher()
+        $serviceContainer = $this->getMockForAbstractClass(IMetaModelsServiceContainer::class);
+
+        $eventDispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
+        $eventDispatcher
             ->expects($this->exactly(1))
             ->method('dispatch')
             ->with($this->equalTo(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE));
+        $eventDispatcher
+            ->expects($this->exactly(1))
+            ->method('hasListeners')
+            ->with($this->equalTo(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE))
+            ->willReturn(true);
 
-        $factory = new AttributeFactory();
+        $factory = new AttributeFactory($eventDispatcher);
         $factory->setServiceContainer($serviceContainer);
 
         $this->assertSame($serviceContainer, $factory->getServiceContainer());
@@ -61,7 +67,7 @@ class AttributeFactoryTest extends TestCase
      */
     public function testAddTypeFactoryAndGetTypeFactory()
     {
-        $factory = new AttributeFactory();
+        $factory = new AttributeFactory($this->getMockForAbstractClass(EventDispatcherInterface::class));
 
         $this->assertNull($factory->getTypeFactory('test'));
         $attributeFactory = $this->mockAttributeFactory('test', true, false, false);
@@ -135,7 +141,7 @@ class AttributeFactoryTest extends TestCase
      */
     public function testAttributeTypeMatchesFlags()
     {
-        $factory = new AttributeFactory();
+        $factory = new AttributeFactory($this->getMockForAbstractClass(EventDispatcherInterface::class));
         $factory->addTypeFactory($this->mockAttributeFactory('test_translated', true, false, false));
         $factory->addTypeFactory($this->mockAttributeFactory('test_simple', false, true, false));
         $factory->addTypeFactory($this->mockAttributeFactory('test_complex', false, false, true));
@@ -160,7 +166,7 @@ class AttributeFactoryTest extends TestCase
      */
     public function testGetTypeNames()
     {
-        $factory = new AttributeFactory();
+        $factory = new AttributeFactory($this->getMockForAbstractClass(EventDispatcherInterface::class));
 
         $this->assertSame(
             array(),
@@ -268,7 +274,7 @@ class AttributeFactoryTest extends TestCase
      */
     public function testGetTypeIcon()
     {
-        $factory     = new AttributeFactory();
+        $factory     = new AttributeFactory($this->getMockForAbstractClass(EventDispatcherInterface::class));
         $typeFactory = $this->mockAttributeFactory('test', true, false, false, new \stdClass, 'icon.png');
         $factory->addTypeFactory($typeFactory);
 
@@ -300,54 +306,45 @@ class AttributeFactoryTest extends TestCase
         $class = 'stdClass',
         $typeIcon = 'icon.png'
     ) {
-        return AttributeFactoryMocker::mockAttributeFactory(
-            $this,
-            $typeName,
-            $translated,
-            $simple,
-            $complex,
-            $class,
-            $typeIcon
-        );
-    }
+        $mockTypeFactory = $this->getMockForAbstractClass(IAttributeTypeFactory::class);
 
-    /**
-     * Mock a service container.
-     *
-     * @return IMetaModelsServiceContainer
-     */
-    protected function mockServiceContainer()
-    {
-        $serviceContainer = $this->getMock('MetaModels\IMetaModelsServiceContainer');
-
-        $serviceContainer
+        $mockTypeFactory
             ->expects($this->any())
-            ->method('getEventDispatcher')
-            ->will($this->returnValue($this->mockEventDispatcher()));
+            ->method('getTypeName')
+            ->willReturnCallback(function () use ($typeName) {
+                return $typeName;
+            });
+        $mockTypeFactory
+            ->expects($this->any())
+            ->method('getTypeIcon')
+            ->willReturnCallback(function () use ($typeIcon) {
+                return $typeIcon;
+            });
+        $mockTypeFactory
+            ->expects($this->any())
+            ->method('createInstance')
+            ->willReturnCallback(function ($information, $metaModel) use ($class) {
+                return new $class($information, $metaModel);
+            });
+        $mockTypeFactory
+            ->expects($this->any())
+            ->method('isTranslatedType')
+            ->willReturnCallback(function () use ($translated) {
+                return $translated;
+            });
+        $mockTypeFactory
+            ->expects($this->any())
+            ->method('isSimpleType')
+            ->willReturnCallback(function () use ($simple) {
+                return $simple;
+            });
+        $mockTypeFactory
+            ->expects($this->any())
+            ->method('isComplexType')
+            ->willReturnCallback(function () use ($complex) {
+                return $complex;
+            });
 
-        return $serviceContainer;
-    }
-
-    /**
-     * Mock an event dispatcher.
-     *
-     * @param string $expectedEvent The name of the expected event.
-     *
-     * @param int    $expectedCount The amount how often this event shall get dispatched.
-     *
-     * @return EventDispatcherInterface
-     */
-    protected function mockEventDispatcher($expectedEvent = '', $expectedCount = 0)
-    {
-        $eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcher');
-
-        if ($expectedEvent) {
-            $eventDispatcher
-                ->expects($this->exactly($expectedCount))
-                ->method('dispatch')
-                ->with($this->equalTo($expectedEvent));
-        }
-
-        return $eventDispatcher;
+        return $mockTypeFactory;
     }
 }
