@@ -19,14 +19,14 @@
  * @filesource
  */
 
-namespace MetaModels\ContaoManager;
+namespace MetaModels\CoreBundle\ContaoManager;
 
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\ManagerBundle\ContaoManagerBundle;
 use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
-use MetaModels\MetaModelsCoreBundle;
+use MetaModels\CoreBundle\MetaModelsCoreBundle;
 
 /**
  * Plugin for the Contao Manager.

@@ -61,7 +61,7 @@ $GLOBALS['TL_LANG']['MSC']['panelLayout']['limit']['0']                         
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['search']['0']                              = 'Suche';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['sort']['0']                                = 'Sortierung';
 $GLOBALS['TL_LANG']['MSC']['random']                                                  = 'Zufällig';
-$GLOBALS['TL_LANG']['MSC']['sorting']                                                 = 'Sortierung';
+//$GLOBALS['TL_LANG']['MSC']['sorting']                                                 = 'Sortierung';
 $GLOBALS['TL_LANG']['MSC']['template_in_theme']                                       = '%s (%s)';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clr']['0']                                    = 'clr';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clr']['1']                                    = 'Hebt alle Floats auf.';

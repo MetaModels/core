@@ -30,6 +30,7 @@ services:
         arguments:
           - "@database_connection"
           - "@metamodels.insert_tags"
+          - "@cca.legacy_dic"
         tags:
           - { name: metamodels.filter_factory }
 

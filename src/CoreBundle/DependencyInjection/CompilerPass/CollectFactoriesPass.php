@@ -18,7 +18,7 @@
  * @filesource
  */
 
-namespace MetaModels\DependencyInjection\CompilerPass;
+namespace MetaModels\CoreBundle\DependencyInjection\CompilerPass;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

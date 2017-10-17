@@ -31,5 +31,5 @@ mapping:
     - "JeremieConstant <j.constant@imi.de>"
 
 copy-left:
-  "Christoph Wiechert <christoph.wiechert@4wardmedia.de>": MetaModels/Widgets/PickerWidget.php
-  "Andreas Nölke <zero@brothers-project.de>": MetaModels/Widgets/PickerWidget.php
+  "Christoph Wiechert <christoph.wiechert@4wardmedia.de>": Widgets/PickerWidget.php
+  "Andreas Nölke <zero@brothers-project.de>": Widgets/PickerWidget.php

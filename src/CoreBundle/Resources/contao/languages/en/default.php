@@ -51,7 +51,7 @@ $GLOBALS['TL_LANG']['BRD']['metamodel_filter']                                  
 $GLOBALS['TL_LANG']['BRD']['metamodel_filtersetting']                               = 'Filter settings in "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_searchable_pages']                            = 'All indexes of "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']                      = 'Edit "%s" for item %%s';
-$GLOBALS['TL_LANG']['MSC']['sorting']                                               = 'Sorting';
+$GLOBALS['TL_LANG']['MSC']['metamodels_sorting']                                    = 'Sorting';
 $GLOBALS['TL_LANG']['MSC']['random']                                                = 'Random';
 $GLOBALS['TL_LANG']['MSC']['template_in_theme']                                     = '%s (%s)';
 $GLOBALS['TL_LANG']['MSC']['no_theme']                                              = 'global scope';

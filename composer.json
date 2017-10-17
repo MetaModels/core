@@ -58,12 +58,12 @@
     }
   },
   "extra": {
-    "contao-manager-plugin": "MetaModels\\ContaoManager\\Plugin",
+    "contao-manager-plugin": "MetaModels\\CoreBundle\\ContaoManager\\Plugin",
     "contao": {
       "transifex": {
         "project": "metamodels",
         "prefix": "core-",
-        "languages_cto": "src/Resources/contao/languages",
+        "languages_cto": "src/CoreBundle/Resources/contao/languages",
         "languages_tx": ".tx"
       },
       "runonce": [

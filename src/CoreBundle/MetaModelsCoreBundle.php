@@ -19,9 +19,9 @@
  * @filesource
  */
 
-namespace MetaModels;
+namespace MetaModels\CoreBundle;
 
-use MetaModels\DependencyInjection\CompilerPass\CollectFactoriesPass;
+use MetaModels\CoreBundle\DependencyInjection\CompilerPass\CollectFactoriesPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

@@ -42,3 +42,32 @@ services:
             -   name: kernel.event_listener
                 event: dc-general.model.pre-duplicate
                 method: handle
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#    metamodels.listener.table.tl_metamodel_rendersettings:
+#        class: MetaModels\DcGeneral\Events\Table\RenderSettings\Subscriber
+#        arguments:
+#            - "@metamodels.template_list"
+#        tags:
+#            -   name: kernel.event_listener
+#                event:

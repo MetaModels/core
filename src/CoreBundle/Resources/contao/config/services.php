@@ -29,7 +29,8 @@ $container->provideSymfonyService('metamodels.render_setting_factory');
 
 $container['metamodels-cache.factory'] = $container->share(
     function ($container) use ($service) {
-        if ($container['config']->get('bypassCache')) {
+        // FIXME: temporarily disabled.
+        if (true || $container['config']->get('bypassCache')) {
             return new \Doctrine\Common\Cache\ArrayCache();
         }
 
