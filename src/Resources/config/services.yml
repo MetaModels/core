@@ -42,6 +42,9 @@ services:
 
     metamodels.render_setting_factory:
         class: MetaModels\Render\Setting\RenderSettingFactory
+        arguments:
+          - "@database_connection"
+          - "@event_dispatcher"
 
     metamodels.template_list:
         class: MetaModels\BackendIntegration\TemplateList

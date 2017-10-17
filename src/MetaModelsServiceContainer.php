@@ -181,7 +181,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     public function setRenderSettingFactory($renderFactory)
     {
         $this->renderFactory = $renderFactory;
-        $renderFactory->setServiceContainer($this);
+        $renderFactory->setServiceContainer($this, false);
 
         return $this;
     }

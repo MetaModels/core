@@ -21,10 +21,12 @@
 
 namespace MetaModels\Render\Setting;
 
+use Doctrine\DBAL\Connection;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsEvents;
 use MetaModels\Render\Setting\Events\CreateRenderSettingFactoryEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This is the filter settings factory interface.
@@ -35,15 +37,43 @@ class RenderSettingFactory implements IRenderSettingFactory
      * The event dispatcher.
      *
      * @var IMetaModelsServiceContainer
+     *
+     * @deprecated The service container will get removed.
      */
-    protected $serviceContainer;
+    private $serviceContainer;
+
+    /**
+     * The database connection.
+     *
+     * @var Connection
+     */
+    private $database;
+
+    /**
+     * The event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
 
     /**
      * The already created render settings.
      *
      * @var ICollection[]
      */
-    protected $renderSettings;
+    private $renderSettings;
+
+    /**
+     * Create a new instance.
+     *
+     * @param Connection               $database
+     * @param EventDispatcherInterface $eventDispatcher The event dispatcher to use.
+     */
+    public function __construct(Connection $database, EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+        $this->database        = $database;
+    }
 
     /**
      * Set the service container.
@@ -52,14 +82,30 @@ class RenderSettingFactory implements IRenderSettingFactory
      *
      * @return RenderSettingFactory
      */
-    public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer)
+    public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, $deprecationNotice = true)
     {
+        if ($deprecationNotice) {
+            @trigger_error(
+                '"' .__METHOD__ . '" is deprecated and will get removed.',
+                E_USER_DEPRECATED
+            );
+        }
         $this->serviceContainer = $serviceContainer;
 
-        $this->serviceContainer->getEventDispatcher()->dispatch(
-            MetaModelsEvents::RENDER_SETTING_FACTORY_CREATE,
-            new CreateRenderSettingFactoryEvent($this)
-        );
+        if ($this->eventDispatcher->hasListeners(MetaModelsEvents::RENDER_SETTING_FACTORY_CREATE)) {
+            @trigger_error(
+                'Event "' .
+                MetaModelsEvents::RENDER_SETTING_FACTORY_CREATE .
+                '" is deprecated - register your factories via the service container.',
+                E_USER_DEPRECATED
+            );
+
+            $this->serviceContainer->getEventDispatcher()->dispatch(
+                MetaModelsEvents::RENDER_SETTING_FACTORY_CREATE,
+                new CreateRenderSettingFactoryEvent($this)
+            );
+        }
+
         return $this;
     }
 
@@ -70,6 +116,10 @@ class RenderSettingFactory implements IRenderSettingFactory
      */
     public function getServiceContainer()
     {
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated - use the services from the service container.',
+            E_USER_DEPRECATED
+        );
         return $this->serviceContainer;
     }
 
@@ -84,12 +134,19 @@ class RenderSettingFactory implements IRenderSettingFactory
      */
     public function collectAttributeSettings(IMetaModel $metaModel, $renderSetting)
     {
-        $attributeRow = $this->serviceContainer->getDatabase()
-            ->prepare('SELECT * FROM tl_metamodel_rendersetting WHERE pid=? AND enabled=1 ORDER BY sorting')
-            ->execute($renderSetting->get('id'));
+        $attributeRows = $this
+            ->database
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('tl_metamodel_rendersetting')
+            ->where('pid=:pid')
+            ->andWhere('enabled=1')
+            ->orderBy('sorting')
+            ->setParameter('pid', $renderSetting->get('id'))
+            ->execute();
 
-        while ($attributeRow->next()) {
-            $attribute = $metaModel->getAttributeById($attributeRow->attr_id);
+        foreach ($attributeRows->fetchAll(\PDO::FETCH_ASSOC) as $attributeRow) {
+            $attribute = $metaModel->getAttributeById($attributeRow['attr_id']);
             if (!$attribute) {
                 continue;
             }
@@ -100,7 +157,7 @@ class RenderSettingFactory implements IRenderSettingFactory
                 $attributeSetting = $attribute->getDefaultRenderSettings();
             }
 
-            foreach ($attributeRow->row() as $strKey => $varValue) {
+            foreach ($attributeRow as $strKey => $varValue) {
                 if ($varValue) {
                     $attributeSetting->set($strKey, deserialize($varValue));
                 }
@@ -120,19 +177,25 @@ class RenderSettingFactory implements IRenderSettingFactory
      */
     protected function internalCreateRenderSetting(IMetaModel $metaModel, $settingId)
     {
-        $row = $this->serviceContainer->getDatabase()
-            ->prepare(
-                'SELECT * FROM tl_metamodel_rendersettings WHERE pid=? AND (id=? OR isdefault=1) ORDER BY isdefault ASC'
-            )
-            ->limit(1)
-            ->execute($metaModel->get('id'), $settingId ?: 0);
+        $row = $this
+            ->database
+            ->createQueryBuilder()
+            ->select('*')
+            ->from('tl_metamodel_rendersettings')
+            ->where('pid=:pid')
+            ->andWhere('(id=:id OR isdefault=1)')
+            ->orderBy('isdefault')
+            ->setParameter('pid', $metaModel->get('id'))
+            ->setParameter('id', $settingId ?: 0)
+            ->setMaxResults(1)
+            ->execute()
+            ->fetch(\PDO::FETCH_ASSOC);
 
-        /** @noinspection PhpUndefinedFieldInspection */
-        if (!$row->numRows) {
+        if (!$row) {
             $row = null;
         }
 
-        $renderSetting = new Collection($metaModel, $row ? $row->row() : array());
+        $renderSetting = new Collection($metaModel, $row);
 
         if ($renderSetting->get('id')) {
             $this->collectAttributeSettings($metaModel, $renderSetting);
