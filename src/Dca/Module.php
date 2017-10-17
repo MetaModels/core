@@ -24,8 +24,6 @@
 
 namespace MetaModels\Dca;
 
-use MetaModels\BackendIntegration\TemplateList;
-
 /**
  * Complementary methods needed by the DCA in tl_module.
  */
@@ -57,8 +55,7 @@ class Module extends ContentElementModuleBase
     {
         /** @noinspection PhpUndefinedFieldInspection */
         $type = $objDC->activeRecord->type;
-        $list = new TemplateList();
-        $list->setServiceContainer($GLOBALS['container']['metamodels-service-container']);
+        $list = \Contao\System::getContainer()->get('metamodels.template_list');
 
         return $list->getTemplatesForBase('mod_' . $type);
     }

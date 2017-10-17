@@ -33,7 +33,6 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPr
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
-use MetaModels\BackendIntegration\TemplateList;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbFilterSetting;
 use MetaModels\IMetaModel;
@@ -300,8 +299,7 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        $list = new TemplateList();
-        $list->setServiceContainer($this->getServiceContainer());
+        $list = \Contao\System::getContainer()->get('metamodels.template_list');
         $event->setOptions($list->getTemplatesForBase('mm_filteritem_'));
     }
 

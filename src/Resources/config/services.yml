@@ -42,3 +42,10 @@ services:
 
     metamodels.render_setting_factory:
         class: MetaModels\Render\Setting\RenderSettingFactory
+
+    metamodels.template_list:
+        class: MetaModels\BackendIntegration\TemplateList
+        arguments:
+          - "@database_connection"
+          - "%contao.resources_paths%"
+          - "%kernel.project_dir%"

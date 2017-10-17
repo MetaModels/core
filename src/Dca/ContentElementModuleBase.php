@@ -29,7 +29,6 @@ use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\UrlBuilder\Contao\BackendUrlBuilder;
-use MetaModels\BackendIntegration\TemplateList;
 use MetaModels\IMetaModelsServiceContainer;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -292,8 +291,7 @@ class ContentElementModuleBase
      */
     public function getFilterTemplates()
     {
-        $list = new TemplateList();
-        $list->setServiceContainer($GLOBALS['container']['metamodels-service-container']);
+        $list = \Contao\System::getContainer()->get('metamodels.template_list');
 
         return $list->getTemplatesForBase('mm_filter_');
     }

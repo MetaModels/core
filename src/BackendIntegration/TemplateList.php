@@ -21,167 +21,46 @@
 
 namespace MetaModels\BackendIntegration;
 
-use MetaModels\IMetaModelsServiceContainer;
-use MetaModels\IServiceContainerAware;
+use Doctrine\DBAL\Connection;
 
 /**
  * Handy helper class to retrieve a list of templates.
  */
-class TemplateList implements IServiceContainerAware
+class TemplateList
 {
     /**
-     * The service container.
+     * The database connection.
      *
-     * @var IMetaModelsServiceContainer
+     * @var Connection
      */
-    protected $serviceContainer;
+    private $database;
 
     /**
-     * Set the service container to use.
+     * The resource directories.
      *
-     * @param IMetaModelsServiceContainer $serviceContainer The service container.
-     *
-     * @return TemplateList
+     * @var string[]
      */
-    public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer)
-    {
-        $this->serviceContainer = $serviceContainer;
-
-        return $this;
-    }
+    private $resourceDirs;
 
     /**
-     * Retrieve the service container in use.
+     * The project root directory.
      *
-     * @return IMetaModelsServiceContainer|null
+     * @var string
      */
-    public function getServiceContainer()
-    {
-        return $this->serviceContainer;
-    }
+    private $rootDir;
 
     /**
-     * Retrieve the message to use when not within a theme (aka global scope).
+     * Create a new instance.
      *
-     * @return string
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @param Connection $database     The database connection.
+     * @param string[]   $resourceDirs The resource directories.
+     * @param string     $rootDir      The root directory.
      */
-    protected function getNoThemeMessage()
+    public function __construct(Connection $database, $resourceDirs, $rootDir)
     {
-        return $GLOBALS['TL_LANG']['MSC']['no_theme'];
-    }
-
-    /**
-     * Fetch a list of matching templates of the current base within the given folder and the passed theme name.
-     *
-     * @param string $base      The base for the templates to be retrieved.
-     *
-     * @param string $folder    The folder to search in.
-     *
-     * @param string $themeName The name of the theme for the given folder (will get used in the returned description
-     *                          text).
-     *
-     * @return array
-     */
-    protected function getTemplatesForBaseFrom($base, $folder, $themeName)
-    {
-        $themeName      = trim($themeName);
-        $themeTemplates = glob($folder . '/' . $base . '*');
-
-        if (!$themeTemplates) {
-            return array();
-        }
-
-        $templates = array();
-
-        foreach ($themeTemplates as $template) {
-            $template = basename($template, strrchr($template, '.'));
-
-            $templates[$template] = array($themeName => $themeName);
-        }
-
-        return $templates;
-    }
-
-    /**
-     * Fetch the templates from TL_ROOT/templates/.
-     *
-     * @param string $templateBaseName The base name for the templates to retrieve.
-     *
-     * @return array
-     */
-    protected function fetchRootTemplates($templateBaseName)
-    {
-        return $this->getTemplatesForBaseFrom(
-            $templateBaseName,
-            TL_ROOT . '/templates',
-            $this->getNoThemeMessage()
-        );
-    }
-
-    /**
-     * Fetch the templates from TL_ROOT/templates/.
-     *
-     * @param string $templateBaseName The base name for the templates to retrieve.
-     *
-     * @return array
-     */
-    protected function fetchTemplatesFromThemes($templateBaseName)
-    {
-        $allTemplates = array();
-        $themes       = $this
-            ->getServiceContainer()
-            ->getDatabase()
-            ->prepare('SELECT id,name,templates FROM tl_theme')
-            ->execute();
-
-        // Add all the theme templates folders.
-        while ($themes->next()) {
-            /** @noinspection PhpUndefinedFieldInspection  */
-            $templateDir = $themes->templates;
-            /** @noinspection PhpUndefinedFieldInspection  */
-            $themeName = $themes->name;
-            if ($templateDir != '') {
-                $allTemplates = array_replace_recursive(
-                    $allTemplates,
-                    $this->getTemplatesForBaseFrom(
-                        $templateBaseName,
-                        TL_ROOT . '/' . $templateDir,
-                        $themeName
-                    )
-                );
-            }
-        }
-
-        return $allTemplates;
-    }
-
-    /**
-     * Fetch the templates from TL_ROOT/templates/.
-     *
-     * @param string $templateBaseName The base name for the templates to retrieve.
-     *
-     * @return array
-     */
-    protected function fetchTemplatesFromModules($templateBaseName)
-    {
-        $allTemplates = array();
-
-        // Add the module templates folders if they exist.
-        foreach (\Config::getInstance()->getActiveModules() as $strModule) {
-            $allTemplates = array_replace_recursive(
-                $allTemplates,
-                self::getTemplatesForBaseFrom(
-                    $templateBaseName,
-                    TL_ROOT . '/system/modules/' . $strModule . '/templates',
-                    $this->getNoThemeMessage()
-                )
-            );
-        }
-
-        return $allTemplates;
+        $this->database     = $database;
+        $this->resourceDirs = $resourceDirs;
+        $this->rootDir      = $rootDir;
     }
 
     /**
@@ -199,7 +78,7 @@ class TemplateList implements IServiceContainerAware
         $allTemplates = array_replace_recursive(
             $this->fetchTemplatesFromThemes($templateBaseName),
             $this->fetchRootTemplates($templateBaseName),
-            $this->fetchTemplatesFromModules($templateBaseName)
+            $this->fetchTemplatesFromResourceDirectories($templateBaseName)
         );
 
         $templateList = array();
@@ -214,5 +93,124 @@ class TemplateList implements IServiceContainerAware
         ksort($templateList);
 
         return array_unique($templateList);
+    }
+
+    /**
+     * Retrieve the message to use when not within a theme (aka global scope).
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    private function getNoThemeMessage()
+    {
+        return $GLOBALS['TL_LANG']['MSC']['no_theme'];
+    }
+
+    /**
+     * Fetch the templates from TL_ROOT/templates/.
+     *
+     * @param string $templateBaseName The base name for the templates to retrieve.
+     *
+     * @return array
+     */
+    private function fetchRootTemplates($templateBaseName)
+    {
+        return $this->getTemplatesForBaseFrom(
+            $templateBaseName,
+            $this->rootDir . '/templates', $this->getNoThemeMessage()
+        );
+    }
+
+    /**
+     * Fetch the templates from TL_ROOT/templates/.
+     *
+     * @param string $templateBaseName The base name for the templates to retrieve.
+     *
+     * @return array
+     */
+    private function fetchTemplatesFromThemes($templateBaseName)
+    {
+        $allTemplates = [];
+        $themes       = $this
+            ->database
+            ->createQueryBuilder()
+            ->select('id,name,templates')
+            ->from('tl_theme')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_ASSOC);
+
+        // Add all the theme templates folders.
+        foreach ($themes as $theme) {
+            $templateDir = $theme['templates'];
+            $themeName = $theme['name'];
+            if ($templateDir != '') {
+                $allTemplates = array_replace_recursive(
+                    $allTemplates,
+                    $this->getTemplatesForBaseFrom(
+                        $templateBaseName,
+                        $this->rootDir . '/' . $templateDir,
+                        $themeName
+                    )
+                );
+            }
+        }
+
+        return $allTemplates;
+    }
+
+    /**
+     * Fetch the templates from resource locations.
+     *
+     * @param string $templateBaseName The base name for the templates to retrieve.
+     *
+     * @return array
+     */
+    private function fetchTemplatesFromResourceDirectories($templateBaseName)
+    {
+        $allTemplates = [];
+        $themeName    = $this->getNoThemeMessage();
+        // Add the module templates folders if they exist.
+        foreach ($this->resourceDirs as $resourceDir) {
+            $allTemplates = array_replace_recursive(
+                $allTemplates,
+                $this->getTemplatesForBaseFrom($templateBaseName, $resourceDir . '/templates', $themeName)
+            );
+        }
+
+        return $allTemplates;
+    }
+
+    /**
+     * Fetch a list of matching templates of the current base within the given folder and the passed theme name.
+     *
+     * @param string $base      The base for the templates to be retrieved.
+     *
+     * @param string $folder    The folder to search in.
+     *
+     * @param string $themeName The name of the theme for the given folder (will get used in the returned description
+     *                          text).
+     *
+     * @return array
+     */
+    private function getTemplatesForBaseFrom($base, $folder, $themeName)
+    {
+        $themeName      = trim($themeName);
+        $themeTemplates = glob($folder . '/' . $base . '*');
+
+        if (!$themeTemplates) {
+            return [];
+        }
+
+        $templates = [];
+
+        foreach ($themeTemplates as $template) {
+            $template = basename($template, strrchr($template, '.'));
+
+            $templates[$template] = [$themeName => $themeName];
+        }
+
+        return $templates;
     }
 }
