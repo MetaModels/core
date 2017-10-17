@@ -24,17 +24,50 @@
 
 namespace MetaModels\Filter\Setting;
 
-use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\ReplaceInsertTagsEvent;
+use Contao\Input;
+use Contao\InsertTags;
+use Contao\Session;
+use Doctrine\DBAL\Connection;
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Rules\SimpleQuery;
+use MetaModels\FrontendIntegration\FrontendFilterOptions;
+use MetaModels\IItem;
+use MetaModels\Render\Setting\ICollection as IRenderSettings;
 
 /**
  * This filter condition generates a filter rule for a predefined SQL query.
  * The generated rule will only return ids that are returned from this query.
  */
-class CustomSql extends Simple
+class CustomSql implements ISimple
 {
+    /**
+     * The parenting filter setting container this setting belongs to.
+     *
+     * @var ICollection
+     */
+    private $collection = null;
+
+    /**
+     * The attributes of this filter setting.
+     *
+     * @var array
+     */
+    private $data = [];
+
+    /**
+     * The database connection.
+     *
+     * @var Connection
+     */
+    private $database;
+
+    /**
+     * The event dispatcher.
+     *
+     * @var InsertTags
+     */
+    private $insertTags;
+
     /**
      * The filter params (should be array or null).
      *
@@ -57,13 +90,54 @@ class CustomSql extends Simple
     private $queryParameter;
 
     /**
+     * Closure to obtain the legacy service container only when needed.
+     *
+     * @var \Closure
+     *
+     * @deprecated Only here as gateway to the deprecated service container.
+     */
+    private $oldContainer;
+
+    /**
+     * Constructor - initialize the object and store the parameters.
+     *
+     * @param ICollection $collection   The parenting filter settings object.
+     * @param array       $data         The attributes for this filter setting.
+     * @param Connection  $database     The database.
+     * @param InsertTags  $insertTags   The insert tags replacer.
+     * @param \Closure    $oldContainer Closure to obtain the legacy service container only when needed.
+     */
+    public function __construct(
+        $collection,
+        $data,
+        Connection $database,
+        InsertTags $insertTags,
+        $oldContainer
+    ) {
+        $this->collection = $collection;
+        $this->data       = $data;
+        $this->database   = $database;
+        $this->insertTags = $insertTags;
+
+        $this->oldContainer = $oldContainer;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function get($strKey)
+    {
+        return isset($this->data[$strKey]) ? $this->data[$strKey] : null;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function prepareRules(IFilter $objFilter, $arrFilterUrl)
     {
         $this->filterParameters = $arrFilterUrl;
         $this->queryString      = $this->get('customsql');
-        $this->queryParameter   = array();
+        $this->queryParameter   = [];
 
         $objFilter->addFilterRule($this->getFilterRule());
 
@@ -73,11 +147,19 @@ class CustomSql extends Simple
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
+    {
+        return [];
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getParameters()
     {
-        $arrParams = array();
+        $arrParams = [];
 
         preg_match_all('@\{\{param::filter\?([^}]*)\}\}@', $this->get('customsql'), $arrMatches);
         foreach ($arrMatches[1] as $strQuery) {
@@ -89,6 +171,42 @@ class CustomSql extends Simple
         }
 
         return $arrParams;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameterDCA()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameterFilterNames()
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getParameterFilterWidgets(
+        $arrIds,
+        $arrFilterUrl,
+        $arrJumpTo,
+        FrontendFilterOptions $objFrontendFilterOptions
+    ) {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getReferencedAttributes()
+    {
+        return [];
     }
 
     /**
@@ -117,7 +235,7 @@ class CustomSql extends Simple
             $this->queryString,
             $this->queryParameter,
             'id',
-            $this->getMetaModel()->getServiceContainer()->getDatabase()
+            $this->database
         );
     }
 
@@ -156,7 +274,11 @@ class CustomSql extends Simple
      */
     private function parseTable()
     {
-        $this->queryString = str_replace('{{table}}', $this->getMetaModel()->getTableName(), $this->queryString);
+        $this->queryString = str_replace(
+            '{{table}}',
+            $this->collection->getMetaModel()->getTableName(),
+            $this->queryString
+        );
     }
 
     /**
@@ -176,7 +298,7 @@ class CustomSql extends Simple
             $serviceName = $valueName;
         }
 
-        $service = $this->getServiceContainer()->getService($serviceName);
+        $service = $this->oldContainer->__invoke()->getService($serviceName);
         if (is_callable($service)) {
             return call_user_func($service, $valueName, $arguments);
         }
@@ -200,16 +322,16 @@ class CustomSql extends Simple
     {
         switch (strtolower($source)) {
             case 'get':
-                return \Input::get($valueName);
+                return Input::get($valueName);
 
             case 'post':
-                return \Input::post($valueName);
+                return Input::post($valueName);
 
             case 'cookie':
-                return \Input::cookie($valueName);
+                return Input::cookie($valueName);
 
             case 'session':
-                return \Session::getInstance()->get($valueName);
+                return Session::getInstance()->get($valueName);
 
             case 'filter':
                 if (is_array($this->filterParameters)) {
@@ -222,6 +344,10 @@ class CustomSql extends Simple
                 break;
 
             case 'container':
+                @trigger_error(
+                    'Getting filter values from the service container is deprecated, the container will get removed.',
+                    E_USER_DEPRECATED
+                );
                 return $this->getValueFromServiceContainer($valueName, $arguments);
 
             default:
@@ -329,7 +455,7 @@ class CustomSql extends Simple
     {
         $this->queryString = preg_replace_callback(
             '@\{\{param::([^}]*)\}\}@',
-            array($this, 'convertParameter'),
+            [$this, 'convertParameter'],
             $this->queryString
         );
     }
@@ -343,11 +469,7 @@ class CustomSql extends Simple
      */
     private function parseInsertTagsInternal($queryString)
     {
-        $dispatcher = $this->getEventDispatcher();
-        $event      = new ReplaceInsertTagsEvent($queryString, false);
-        $dispatcher->dispatch(ContaoEvents::CONTROLLER_REPLACE_INSERT_TAGS, $event);
-
-        return $event->getBuffer();
+        return $this->insertTags->replace($queryString, false);
     }
 
     /**
@@ -375,7 +497,7 @@ class CustomSql extends Simple
     {
         $this->queryString = preg_replace_callback(
             '@\{\{secure::([^}]+)\}\}@',
-            array($this, 'parseAndAddSecureInsertTagAsParameter'),
+            [$this, 'parseAndAddSecureInsertTagAsParameter'],
             $this->queryString
         );
     }

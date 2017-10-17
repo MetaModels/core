@@ -21,22 +21,75 @@
 
 namespace MetaModels\Filter\Setting;
 
+use Contao\InsertTags;
+use DependencyInjection\Container\LegacyDependencyInjectionContainer;
+use Doctrine\DBAL\Connection;
+
 /**
  * Attribute type factory for custom SQL filter settings.
  */
 class CustomSqlFilterSettingTypeFactory extends AbstractFilterSettingTypeFactory
 {
     /**
-     * {@inheritDoc}
+     * The database connection.
+     *
+     * @var Connection
      */
-    public function __construct()
-    {
+    private $database;
+
+    /**
+     * The event dispatcher.
+     *
+     * @var InsertTags
+     */
+    private $insertTags;
+
+    /**
+     * The legacy dependency injection container - used for retrieving the MetaModels service container.
+     *
+     * @var LegacyDependencyInjectionContainer
+     *
+     * @deprecated Only here as gateway to the deprecated service container.
+     */
+    private $legacyDic;
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param Connection $database   The database.
+     * @param InsertTags $insertTags The insert tag handler.
+     */
+    public function __construct(
+        Connection $database,
+        InsertTags $insertTags,
+        LegacyDependencyInjectionContainer $legacyDic
+    ) {
         parent::__construct();
+
+        $this->database   = $database;
+        $this->insertTags = $insertTags;
+        $this->legacyDic = $legacyDic;
 
         $this
             ->setTypeName('customsql')
             ->setTypeIcon('bundles/metamodelscore/images/icons/filter_customsql.png')
-            ->setTypeClass('MetaModels\Filter\Setting\CustomSql')
+            ->setTypeClass(CustomSql::class)
             ->allowAttributeTypes();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createInstance($information, $filterSettings)
+    {
+        return new CustomSql(
+            $filterSettings,
+            $information,
+            $this->database,
+            $this->insertTags,
+            function () {
+                return $this->legacyDic->getService('metamodels-service-container');
+            }
+        );
     }
 }
