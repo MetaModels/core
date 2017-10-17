@@ -27,6 +27,9 @@ services:
 
     metamodels.filter_setting_factory.customsql:
         class: MetaModels\Filter\Setting\CustomSqlFilterSettingTypeFactory
+        arguments:
+          - "@database_connection"
+          - "@metamodels.insert_tags"
         tags:
           - { name: metamodels.filter_factory }
 
@@ -52,3 +55,6 @@ services:
           - "@database_connection"
           - "%contao.resources_paths%"
           - "%kernel.project_dir%"
+
+    metamodels.insert_tags:
+        class: Contao\InsertTags
