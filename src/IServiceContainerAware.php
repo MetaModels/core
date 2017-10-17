@@ -23,6 +23,8 @@ namespace MetaModels;
 
 /**
  * Reference implementation of IMetaModelsServiceContainer.
+ *
+ * @deprecated The interface has been deprecated as the whole service container is deprecated and will get removed.
  */
 interface IServiceContainerAware
 {
