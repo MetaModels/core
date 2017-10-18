@@ -1,0 +1,29 @@
+services:
+    metamodels.filter_setting_factory.idlist:
+        class: MetaModels\Filter\Setting\StaticIdListFilterSettingTypeFactory
+        tags:
+          - { name: metamodels.filter_factory }
+
+    metamodels.filter_setting_factory.simplelookup:
+        class: MetaModels\Filter\Setting\SimpleLookupFilterSettingTypeFactory
+        tags:
+          - { name: metamodels.filter_factory }
+
+    metamodels.filter_setting_factory.customsql:
+        class: MetaModels\Filter\Setting\CustomSqlFilterSettingTypeFactory
+        arguments:
+          - "@database_connection"
+          - "@metamodels.insert_tags"
+          - "@cca.legacy_dic"
+        tags:
+          - { name: metamodels.filter_factory }
+
+    metamodels.filter_setting_factory.conditionand:
+        class: MetaModels\Filter\Setting\ConditionAndFilterSettingTypeFactory
+        tags:
+          - { name: metamodels.filter_factory }
+
+    metamodels.filter_setting_factory.conditionor:
+        class: MetaModels\Filter\Setting\ConditionOrFilterSettingTypeFactory
+        tags:
+          - { name: metamodels.filter_factory }
