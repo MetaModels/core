@@ -1,32 +1,31 @@
 <?php
 
 /**
- * This file is part of contao-community-alliance/dc-general.
+ * This file is part of MetaModels/core.
  *
- * (c) 2013-2017 Contao Community Alliance.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
  * This project is provided in good faith and hope to be usable by anyone.
  *
- * @package    contao-community-alliance/dc-general
- * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @package    MetaModels
+ * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     Andreas Isaak <andy.jared@googlemail.com>
- * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @author     Tristan Lins <tristan.lins@bit3.de>
- * @copyright  2013-2017 Contao Community Alliance.
- * @license    https://github.com/contao-community-alliance/dc-general/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2017 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\DependencyInjection;
 
+use Doctrine\Common\Cache\ArrayCache;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * This is the class that loads and manages the bundle configuration
@@ -38,9 +37,41 @@ class MetaModelsCoreExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('listeners.yml');
         $loader->load('filter-settings.yml');
+
+        $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
+        $this->buildCacheService($container, $config);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getConfiguration(array $config, ContainerBuilder $container)
+    {
+        return new Configuration($container->getParameter('kernel.debug'));
+    }
+
+    /**
+     *
+     * @param ContainerBuilder $container
+     * @param                  $config
+     *
+     * @return void
+     */
+    private function buildCacheService(ContainerBuilder $container, $config)
+    {
+        // if cache disabled, swap it out with the dummy cache.
+        if (!$config['enable_cache']) {
+            $cache = $container->getDefinition('metamodels.cache');
+            $cache->setClass(ArrayCache::class);
+            $cache->setArguments([]);
+            $container->setParameter('metamodels.cache_dir', null);
+            return;
+        }
+
+        $container->setParameter('metamodels.cache_dir', $config['cache_dir']);
     }
 }

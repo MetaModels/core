@@ -26,21 +26,11 @@ $container->provideSymfonyService('metamodels.attribute_factory');
 $container->provideSymfonyService('metamodels.factory');
 $container->provideSymfonyService('metamodels.filter_setting_factory');
 $container->provideSymfonyService('metamodels.render_setting_factory');
-
-$container['metamodels-cache.factory'] = $container->share(
-    function ($container) use ($service) {
-        // FIXME: temporarily disabled.
-        if (true || $container['config']->get('bypassCache')) {
-            return new \Doctrine\Common\Cache\ArrayCache();
-        }
-
-        return new \Doctrine\Common\Cache\FilesystemCache(TL_ROOT . '/system/cache/metamodels');
-    }
-);
+$container->provideSymfonyService('metamodels.cache');
 
 // Fixme build an factory for metamodels service container.
 $container['metamodels-service-container.factory'] = $container->share(
-    function ($container) use ($service) {
+    function () use ($service) {
         @trigger_error(
             'The MetaModels service container is deprecated and will get removed - use the symfony DIC directly.',
             E_USER_DEPRECATED
@@ -56,7 +46,7 @@ $container['metamodels-service-container.factory'] = $container->share(
             ->setFactory($service->get('metamodels.factory'))
             ->setFilterFactory($service->get('metamodels.filter_setting_factory'))
             ->setRenderSettingFactory($service->get('metamodels.render_setting_factory'))
-            ->setCache($container['metamodels-cache.factory']);
+            ->setCache($service->get('metamodels.cache'));
 
         return $serviceContainer;
     }

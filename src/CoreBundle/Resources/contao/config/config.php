@@ -20,6 +20,7 @@
  * @author     Tim Gatzky <info@tim-gatzky.de>
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -145,9 +146,16 @@ $GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] =
 $GLOBALS['TL_HOOKS']['replaceInsertTags'][]      = array('MetaModels\FrontendIntegration\InsertTags', 'replaceTags');
 $GLOBALS['TL_HOOKS']['getSearchablePages'][]     = array('MetaModels\BackendIntegration\SearchablePages', 'addPages');
 
-$GLOBALS['TL_PURGE']['folders']['metamodels']['affected'][] = 'system/cache/metamodels';
-$GLOBALS['TL_PURGE']['folders']['metamodels']['callback']   =
-    array('MetaModels\BackendIntegration\PurgeCache', 'purge');
+// Add cache only if dir defined in container (and therefore we are using the cache).
+if ($cacheDir = \Contao\System::getContainer()->getParameter('metamodels.cache_dir')) {
+    // We need to translate the cache dir - otherwise the backend view is distorted. See \Contao\PurgeData::run().
+    $GLOBALS['TL_PURGE']['folders']['metamodels']['affected'] = [str_replace(
+        \Contao\System::getContainer()->getParameter('kernel.cache_dir') . '/',
+        '%s/',
+        $cacheDir
+    )];
+    $GLOBALS['TL_PURGE']['folders']['metamodels']['callback'] = ['metamodels.cache.purger', 'purge'];
+}
 
 $GLOBALS['TL_PURGE']['folders']['metamodels_assets']['affected'][] = 'assets/metamodels';
 $GLOBALS['TL_PURGE']['folders']['metamodels_assets']['callback']   =

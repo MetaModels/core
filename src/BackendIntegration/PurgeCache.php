@@ -21,9 +21,10 @@
 
 namespace MetaModels\BackendIntegration;
 
-use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\System\LogEvent;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Contao\CoreBundle\Monolog\ContaoContext;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Purge the MetaModels cache.
@@ -31,7 +32,33 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class PurgeCache
 {
     /**
-     * Purge the page cache.
+     * The cache directory.
+     *
+     * @var string
+     */
+    private $cacheDir;
+
+    /**
+     * The logger to use.
+     *
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * Create a new instance.
+     *
+     * @param string          $cacheDir The cache directory.
+     * @param LoggerInterface $logger   The logger.
+     */
+    public function __construct($cacheDir, LoggerInterface $logger)
+    {
+        $this->cacheDir = $cacheDir;
+        $this->logger   = $logger;
+    }
+
+    /**
+     * Purge the file cache.
      *
      * @return void
      *
@@ -40,17 +67,13 @@ class PurgeCache
      */
     public function purge()
     {
-        foreach ($GLOBALS['TL_PURGE']['folders']['metamodels']['affected'] as $folderName) {
-            // Purge the folder
-            $folder = new \Folder($folderName);
-            $folder->purge();
-        }
+        $fileSystem = new Filesystem();
+        $fileSystem->remove($this->cacheDir);
 
-        /** @var EventDispatcherInterface $dispatcher */
-        $dispatcher = $GLOBALS['container']['event-dispatcher'];
-        $dispatcher->dispatch(
-            ContaoEvents::SYSTEM_LOG,
-            new LogEvent('Purged the MetaModels cache', __METHOD__, TL_CRON)
+        $this->logger->log(
+            LogLevel::INFO,
+            'Purged the MetaModels cache',
+            ['contao' => new ContaoContext(__METHOD__, TL_CRON)]
         );
     }
 }

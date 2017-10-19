@@ -1,4 +1,15 @@
 services:
+    metamodels.cache:
+        class: Doctrine\Common\Cache\FilesystemCache
+        arguments:
+            - "%metamodels.cache_dir%"
+
+    metamodels.cache.purger:
+        class: MetaModels\BackendIntegration\PurgeCache
+        arguments:
+            - "%metamodels.cache_dir%"
+            - "@logger"
+
     metamodels.factory:
         class: MetaModels\Factory
 
