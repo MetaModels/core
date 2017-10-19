@@ -284,14 +284,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
             (
                 'customsql'
             ),
-        ),
-        'simplelookup_translated extends simplelookup' => array
-        (
-            '+config' => array
-            (
-                'all_langs'
-            ),
-        ),
+        )
     ),
     'metasubselectpalettes' => array
     (
@@ -302,7 +295,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
     (
         '_translated_' => array
         (
-            'all_langs'
+            'config' => array
+            (
+                'all_langs'
+            )
         )
     ),
     'fields'                => array
