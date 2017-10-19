@@ -33,7 +33,7 @@
     "php": ">=5.6",
     "contao/core-bundle": "~4.4",
     "contao-community-alliance/dc-general": "~2.1@dev",
-    "menatwork/contao-multicolumnwizard": "3.3.10",
+    "menatwork/contao-multicolumnwizard": "^3.3.13",
     "contao-community-alliance/meta-palettes": "~2.0@dev",
     "discordier/justtextwidgets": "dev-hotfix/contao4-compatibility",
     "contao-community-alliance/url-builder": "~1.3@dev",
