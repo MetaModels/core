@@ -1,0 +1,1230 @@
+[
+  {
+    "name": "Tim Becker",
+    "login": "tim-bec"
+  },
+  {
+    "name": "Andreas Isaak",
+    "login": "andreasisaak"
+  },
+  {
+    "name": "Christian Schiffler",
+    "login": "discordier"
+  },
+  {
+    "name": "The friendly buildbot",
+    "login": "MiniModel"
+  },
+  {
+    "name": "Stefan Heimes",
+    "login": "stefanheimes"
+  },
+  {
+    "name": null,
+    "login": "zonky2"
+  },
+  {
+    "name": "Michael Gawlik",
+    "login": "michaelgawlik"
+  },
+  {
+    "name": "Jeremie Constant",
+    "login": "JeremieConstant"
+  },
+  {
+    "name": null,
+    "login": "binron"
+  },
+  {
+    "name": null,
+    "login": "design23"
+  },
+  {
+    "name": null,
+    "login": "pepesale"
+  },
+  {
+    "name": "André Saage",
+    "login": "asaage"
+  },
+  {
+    "name": "Hauge",
+    "login": "Hauge"
+  },
+  {
+    "name": null,
+    "login": "Olli"
+  },
+  {
+    "name": null,
+    "login": "bastlwastl"
+  },
+  {
+    "name": null,
+    "login": "Rotbarsch"
+  },
+  {
+    "name": "Daniel Nemeth",
+    "login": "daniel-nemeth"
+  },
+  {
+    "name": "Sven Baumann",
+    "login": "baumannsven"
+  },
+  {
+    "name": "Stefan Meschke",
+    "login": "stefanmeschke"
+  },
+  {
+    "name": "Sebastian Leitz",
+    "login": "seaneble"
+  },
+  {
+    "name": "Richard Henkenjohann",
+    "login": "richardhj"
+  },
+  {
+    "name": "Marc Reimann",
+    "login": "MacKP"
+  },
+  {
+    "name": "Michael Bischof",
+    "login": "micbis"
+  },
+  {
+    "name": "haendersonfox",
+    "login": "haendersonfox"
+  },
+  {
+    "name": "Alexander Menk",
+    "login": "amenk"
+  },
+  {
+    "name": null,
+    "login": "JLBA"
+  },
+  {
+    "name": null,
+    "login": "AgentCT"
+  },
+  {
+    "name": "Chris Raidler",
+    "login": "craidler-radconsulting"
+  },
+  {
+    "name": null,
+    "login": "HRP2016"
+  },
+  {
+    "name": null,
+    "login": "transopticmedia"
+  },
+  {
+    "name": null,
+    "login": "kollp"
+  },
+  {
+    "name": "Henry Lamorski",
+    "login": "HenryLamorski"
+  },
+  {
+    "name": null,
+    "login": "Taskrider"
+  },
+  {
+    "name": "Cliff Parnitzky",
+    "login": "cliffparnitzky"
+  },
+  {
+    "name": "chibko",
+    "login": "chibko"
+  },
+  {
+    "name": null,
+    "login": "030media"
+  },
+  {
+    "name": null,
+    "login": "mosesontheweb"
+  },
+  {
+    "name": "Monique Hahnefeld",
+    "login": "MoniqueHahnefeld"
+  },
+  {
+    "name": "Andreas Nölke",
+    "login": "Zeromax"
+  },
+  {
+    "name": "Daniel Koch",
+    "login": "kocd"
+  },
+  {
+    "name": "David Molineus",
+    "login": "dmolineus"
+  },
+  {
+    "name": "Lukas Drechsel-Burkhard",
+    "login": "lucdesign"
+  },
+  {
+    "name": null,
+    "login": "SeoNerd"
+  },
+  {
+    "name": null,
+    "login": "Hoch-3"
+  },
+  {
+    "name": null,
+    "login": "31er"
+  },
+  {
+    "name": "Roman Walters",
+    "login": "pointout"
+  },
+  {
+    "name": "Patrick Siemen",
+    "login": "siemendev"
+  },
+  {
+    "name": null,
+    "login": "n-m-k"
+  },
+  {
+    "name": null,
+    "login": "vienneva"
+  },
+  {
+    "name": null,
+    "login": "cptshit"
+  },
+  {
+    "name": null,
+    "login": "pju-"
+  },
+  {
+    "name": null,
+    "login": "1stof8"
+  },
+  {
+    "name": null,
+    "login": "mlwebworker"
+  },
+  {
+    "name": "Matthias Gmeiner",
+    "login": "Messa1"
+  },
+  {
+    "name": null,
+    "login": "cyberlussi"
+  },
+  {
+    "name": "dbopp",
+    "login": "Teetrinker"
+  },
+  {
+    "name": "Scrutinizer Auto-Fixer",
+    "login": "scrutinizer-auto-fixer"
+  },
+  {
+    "name": null,
+    "login": "hippc"
+  },
+  {
+    "name": "Fritz Michael Gschwantner",
+    "login": "fritzmg"
+  },
+  {
+    "name": null,
+    "login": "mhammerschmidt"
+  },
+  {
+    "name": "Andreas Burg",
+    "login": "Aybee"
+  },
+  {
+    "name": null,
+    "login": "elebar"
+  },
+  {
+    "name": "JT-007",
+    "login": "JT-007"
+  },
+  {
+    "name": null,
+    "login": "padgrob"
+  },
+  {
+    "name": null,
+    "login": "Znrl"
+  },
+  {
+    "name": null,
+    "login": "Fr3d83"
+  },
+  {
+    "name": null,
+    "login": "KeepFighting15"
+  },
+  {
+    "name": "Kreativ&Söhne",
+    "login": "Kreativsoehne"
+  },
+  {
+    "name": null,
+    "login": "Spelmann"
+  },
+  {
+    "name": null,
+    "login": "4lmnts"
+  },
+  {
+    "name": null,
+    "login": "janborg"
+  },
+  {
+    "name": "Dominik Knipprath",
+    "login": "mrs4ndm4n"
+  },
+  {
+    "name": null,
+    "login": "dazzle89"
+  },
+  {
+    "name": "Christopher Bölter",
+    "login": "cboelter"
+  },
+  {
+    "name": null,
+    "login": "septentrio"
+  },
+  {
+    "name": "Ondrej Brinkel",
+    "login": "der-On"
+  },
+  {
+    "name": "Ben",
+    "login": "360fusionBen"
+  },
+  {
+    "name": "Patrick",
+    "login": "psren"
+  },
+  {
+    "name": "Martin Treml",
+    "login": "Munsio"
+  },
+  {
+    "name": null,
+    "login": "Schnubl"
+  },
+  {
+    "name": null,
+    "login": "basisbyte"
+  },
+  {
+    "name": null,
+    "login": "sevenfour66"
+  },
+  {
+    "name": null,
+    "login": "rittler"
+  },
+  {
+    "name": "Basti Buck",
+    "login": "bastibuck"
+  },
+  {
+    "name": "Tobias Niebergall",
+    "login": "tniebergall"
+  },
+  {
+    "name": null,
+    "login": "emkayy"
+  },
+  {
+    "name": null,
+    "login": "xApep"
+  },
+  {
+    "name": null,
+    "login": "ae69"
+  },
+  {
+    "name": "wangaz.",
+    "login": "wangaz"
+  },
+  {
+    "name": null,
+    "login": "markknochen1"
+  },
+  {
+    "name": "Jan Malte Gerth",
+    "login": "JanMalte"
+  },
+  {
+    "name": "Valentin",
+    "login": "valentin-"
+  },
+  {
+    "name": "Steven Brauer",
+    "login": "tognit"
+  },
+  {
+    "name": null,
+    "login": "bibib"
+  },
+  {
+    "name": "Wagnerwagner",
+    "login": "Wagnerwagner"
+  },
+  {
+    "name": null,
+    "login": "kein-nickname"
+  },
+  {
+    "name": null,
+    "login": "bizon1"
+  },
+  {
+    "name": "René Aye",
+    "login": "reneaye"
+  },
+  {
+    "name": "Jonas Pruditsch",
+    "login": "hansen-pansen"
+  },
+  {
+    "name": "Claudine Brändle",
+    "login": "no-location"
+  },
+  {
+    "name": "Harry Boldt",
+    "login": "harry-boldt"
+  },
+  {
+    "name": "Tristan Lins",
+    "login": "tristanlins"
+  },
+  {
+    "name": "David Maack",
+    "login": "davidmaack"
+  },
+  {
+    "name": "Dominik Zogg",
+    "login": "dominikzogg"
+  },
+  {
+    "name": null,
+    "login": "m-r-h-n"
+  },
+  {
+    "name": null,
+    "login": "jabadoo"
+  },
+  {
+    "name": null,
+    "login": "spirelli"
+  },
+  {
+    "name": null,
+    "login": "Schockwelle"
+  },
+  {
+    "name": "Corbinian Kling",
+    "login": "cirby83"
+  },
+  {
+    "name": "Gassi",
+    "login": "gassi101"
+  },
+  {
+    "name": "Just Schimmelpenninck",
+    "login": "justschim"
+  },
+  {
+    "name": "Oliver",
+    "login": "ways2web"
+  },
+  {
+    "name": "Markus Gauwatz",
+    "login": "Sorato95"
+  },
+  {
+    "name": null,
+    "login": "cogizz"
+  },
+  {
+    "name": null,
+    "login": "nelhop"
+  },
+  {
+    "name": "Oliver Lohoff",
+    "login": "c4y"
+  },
+  {
+    "name": "Peter",
+    "login": "kadaj-"
+  },
+  {
+    "name": null,
+    "login": "jgrotstabel"
+  },
+  {
+    "name": null,
+    "login": "stone2k2"
+  },
+  {
+    "name": "Manuel Schneider",
+    "login": "schmanat"
+  },
+  {
+    "name": null,
+    "login": "tschero"
+  },
+  {
+    "name": "Dennis Erdmann",
+    "login": "denniserdmann"
+  },
+  {
+    "name": "Deleted user",
+    "login": "ghost"
+  },
+  {
+    "name": "BennX",
+    "login": "BennX"
+  },
+  {
+    "name": null,
+    "login": "TomHege"
+  },
+  {
+    "name": null,
+    "login": "johannes-bittner"
+  },
+  {
+    "name": "cepharum GmbH",
+    "login": "cepharum"
+  },
+  {
+    "name": "Jonas Büchel",
+    "login": "jonasbuechel"
+  },
+  {
+    "name": "Leo Unglaub",
+    "login": "leo-unglaub"
+  },
+  {
+    "name": "Jan Theofel",
+    "login": "jantheofel"
+  },
+  {
+    "name": "Simon Kusterer",
+    "login": "xat"
+  },
+  {
+    "name": "datenkind",
+    "login": "datenkind"
+  },
+  {
+    "name": null,
+    "login": "blackbee"
+  },
+  {
+    "name": null,
+    "login": "paolobattistella"
+  },
+  {
+    "name": "Oliver Hoff",
+    "login": "backbone87"
+  },
+  {
+    "name": "Nicky Hoff",
+    "login": "frontendschlampe"
+  },
+  {
+    "name": null,
+    "login": "jacobro"
+  },
+  {
+    "name": null,
+    "login": "UlrichHolland"
+  },
+  {
+    "name": null,
+    "login": "Nane36"
+  },
+  {
+    "name": "Grex",
+    "login": "GrexAut"
+  },
+  {
+    "name": "Benny Born",
+    "login": "bennyborn"
+  },
+  {
+    "name": "Kateryna Viderska",
+    "login": "greenskyes"
+  },
+  {
+    "name": null,
+    "login": "mad99"
+  },
+  {
+    "name": null,
+    "login": "svenskalec"
+  },
+  {
+    "name": "gingebaker",
+    "login": "gingebaker"
+  },
+  {
+    "name": "Wolfgang Schwaiger",
+    "login": "wschwaiger"
+  },
+  {
+    "name": "Jürgen Höfs",
+    "login": "Jugibur"
+  },
+  {
+    "name": "Tim Gatzky",
+    "login": "timgatzky"
+  },
+  {
+    "name": "Stefan Lindecke",
+    "login": "lindesbs"
+  },
+  {
+    "name": null,
+    "login": "MaryLou1"
+  },
+  {
+    "name": null,
+    "login": "palmi"
+  },
+  {
+    "name": null,
+    "login": "Bommela"
+  },
+  {
+    "name": null,
+    "login": "valentinsvahn"
+  },
+  {
+    "name": "Bob",
+    "login": "rburch"
+  },
+  {
+    "name": null,
+    "login": "andre5tz"
+  },
+  {
+    "name": "Armin Dressler",
+    "login": "adressler"
+  },
+  {
+    "name": null,
+    "login": "Aggroschlumpf"
+  },
+  {
+    "name": null,
+    "login": "rezico"
+  },
+  {
+    "name": "Ruud Walraven",
+    "login": "Ruudt"
+  },
+  {
+    "name": null,
+    "login": "KlausGrenoble"
+  },
+  {
+    "name": null,
+    "login": "mediafant"
+  },
+  {
+    "name": "Patrick Kahl",
+    "login": "patrickkahl"
+  },
+  {
+    "name": "Christian Düll",
+    "login": "chrizdee"
+  },
+  {
+    "name": null,
+    "login": "Hendriks"
+  },
+  {
+    "name": null,
+    "login": "schumja"
+  },
+  {
+    "name": null,
+    "login": "timmey123"
+  },
+  {
+    "name": null,
+    "login": "CrawlingKing"
+  },
+  {
+    "name": null,
+    "login": "voss-wd"
+  },
+  {
+    "name": null,
+    "login": "hendrik-d"
+  },
+  {
+    "name": "Rolf Schupfinger",
+    "login": "cgpro"
+  },
+  {
+    "name": null,
+    "login": "guay"
+  },
+  {
+    "name": "Jens Doberenz",
+    "login": "jedoStyle"
+  },
+  {
+    "name": "Thomas Weitzel",
+    "login": "planepix"
+  },
+  {
+    "name": "Lionel",
+    "login": "lionel-m"
+  },
+  {
+    "name": "Tai",
+    "login": "itaikun42"
+  },
+  {
+    "name": "Paul Pflugradt",
+    "login": "paulpflug"
+  },
+  {
+    "name": "David Greminger",
+    "login": "bytehead"
+  },
+  {
+    "name": "Erik Herbert",
+    "login": "erikherbert"
+  },
+  {
+    "name": null,
+    "login": "danieleicher"
+  },
+  {
+    "name": "Dennis Bastian",
+    "login": "Creational"
+  },
+  {
+    "name": null,
+    "login": "ParoX2k"
+  },
+  {
+    "name": "Christian de la Haye",
+    "login": "delahaye"
+  },
+  {
+    "name": "Christian Kolb",
+    "login": "christian-kolb"
+  },
+  {
+    "name": null,
+    "login": "folkfreund"
+  },
+  {
+    "name": "Carolina M. Koehn",
+    "login": "kikmedia"
+  },
+  {
+    "name": null,
+    "login": "Shoekrates"
+  },
+  {
+    "name": null,
+    "login": "pixelfreude"
+  },
+  {
+    "name": "Kyros Starr",
+    "login": "Kyros"
+  },
+  {
+    "name": "Hannes",
+    "login": "xchs"
+  },
+  {
+    "name": "Daniel Jahnsmüller",
+    "login": "Tastaturberuf"
+  },
+  {
+    "name": "Glen Langer",
+    "login": "BugBuster1701"
+  },
+  {
+    "name": "Nico Ziegler",
+    "login": "gruenerPetz"
+  },
+  {
+    "name": null,
+    "login": "BlackP999"
+  },
+  {
+    "name": "Markus Fröhlich",
+    "login": "inred-froehlich"
+  },
+  {
+    "name": "Josh Kalderimis",
+    "login": "joshk"
+  },
+  {
+    "name": "Frank",
+    "login": "Kahmoon"
+  },
+  {
+    "name": null,
+    "login": "wwwebgainss"
+  },
+  {
+    "name": "Markus Schindler",
+    "login": "codesache"
+  },
+  {
+    "name": null,
+    "login": "pandroid"
+  },
+  {
+    "name": "CeeKay",
+    "login": "no-one"
+  },
+  {
+    "name": "Markus Gerards",
+    "login": "gerricom"
+  },
+  {
+    "name": "Gregor Walter",
+    "login": "chameo"
+  },
+  {
+    "name": null,
+    "login": "tschupatschups"
+  },
+  {
+    "name": null,
+    "login": "mj1985"
+  },
+  {
+    "name": null,
+    "login": "wilhelmtell9"
+  },
+  {
+    "name": null,
+    "login": "mcfausti"
+  },
+  {
+    "name": "PaoloB",
+    "login": "PaoloB"
+  },
+  {
+    "name": "Darko Seleši",
+    "login": "w3scout"
+  },
+  {
+    "name": "come medien ag",
+    "login": "comede"
+  },
+  {
+    "name": null,
+    "login": "DexterParis"
+  },
+  {
+    "name": null,
+    "login": "MarcelBurri"
+  },
+  {
+    "name": null,
+    "login": "surelyfx"
+  },
+  {
+    "name": null,
+    "login": "quaksi99"
+  },
+  {
+    "name": null,
+    "login": "engineoliver"
+  },
+  {
+    "name": "Oliver Willmes",
+    "login": "Ainschy"
+  },
+  {
+    "name": null,
+    "login": "jonas1616"
+  },
+  {
+    "name": null,
+    "login": "Dockmedia"
+  },
+  {
+    "name": null,
+    "login": "liquid-a"
+  },
+  {
+    "name": null,
+    "login": "mirkogleibe"
+  },
+  {
+    "name": null,
+    "login": "klickagent"
+  },
+  {
+    "name": null,
+    "login": "sizta"
+  },
+  {
+    "name": "Michael Bleicher",
+    "login": "BLW-Michael"
+  },
+  {
+    "name": "David Maack",
+    "login": null
+  },
+  {
+    "name": "cogizz",
+    "login": null
+  },
+  {
+    "name": "Kyros Starr",
+    "login": null
+  },
+  {
+    "name": "Oliver Lohoff",
+    "login": null
+  },
+  {
+    "name": "Christian Kolb",
+    "login": null
+  },
+  {
+    "name": "MrTool",
+    "login": null
+  },
+  {
+    "name": "cogizz",
+    "login": null
+  },
+  {
+    "name": "Markus Gerards",
+    "login": null
+  },
+  {
+    "name": "Ingolf Steinhardt",
+    "login": "e-spin"
+  },
+  {
+    "name": null,
+    "login": "albirs"
+  },
+  {
+    "name": "Michel Balzer",
+    "login": "michelbalzer"
+  },
+  {
+    "name": "Peter Eberle",
+    "login": "petereberlecom"
+  },
+  {
+    "name": null,
+    "login": "martonos"
+  },
+  {
+    "name": "Fabian Solèr",
+    "login": "fabian-ibr"
+  },
+  {
+    "name": "Andreas Döbeling",
+    "login": "ADoebeling"
+  },
+  {
+    "name": "Martin Knorr",
+    "login": "m-knorr"
+  },
+  {
+    "name": null,
+    "login": "hh-com"
+  },
+  {
+    "name": null,
+    "login": "netdrag"
+  },
+  {
+    "name": null,
+    "login": "pagestyles"
+  },
+  {
+    "name": null,
+    "login": "memikeandi"
+  },
+  {
+    "name": "Dominik Tomasi",
+    "login": "dtomasi"
+  },
+  {
+    "name": "Dennis Unverricht",
+    "login": "denunv"
+  },
+  {
+    "name": null,
+    "login": "uagga"
+  },
+  {
+    "name": null,
+    "login": "MoppieMop"
+  },
+  {
+    "name": null,
+    "login": "chaela"
+  },
+  {
+    "name": "Peter Hoffmeister",
+    "login": "ArtiSolution"
+  },
+  {
+    "name": null,
+    "login": "dws0709"
+  },
+  {
+    "name": "Flo Höck",
+    "login": "fl0eck"
+  },
+  {
+    "name": null,
+    "login": "mrx02de"
+  },
+  {
+    "name": null,
+    "login": "felixxxxx"
+  },
+  {
+    "name": "aLex",
+    "login": "luger95"
+  },
+  {
+    "name": "Iteration",
+    "login": "IterationCorp"
+  },
+  {
+    "name": "Andrea B.",
+    "login": "2zi0"
+  },
+  {
+    "name": "Leo Feyer",
+    "login": "leofeyer"
+  },
+  {
+    "name": "Matthias Ott",
+    "login": "matthiasott"
+  },
+  {
+    "name": null,
+    "login": "phreak"
+  },
+  {
+    "name": null,
+    "login": "frankcom"
+  },
+  {
+    "name": "dunkelblaufastschwarz",
+    "login": "dbfs"
+  },
+  {
+    "name": null,
+    "login": "format-web"
+  },
+  {
+    "name": "Klaus Gansberger",
+    "login": "kgansberger"
+  },
+  {
+    "name": null,
+    "login": "mastergizmo"
+  },
+  {
+    "name": null,
+    "login": "sonjaeh"
+  },
+  {
+    "name": "Lukas",
+    "login": "luhaklubarbeitnet"
+  },
+  {
+    "name": "Andreas Schempp",
+    "login": "aschempp"
+  },
+  {
+    "name": "Yanick Witschi",
+    "login": "Toflar"
+  },
+  {
+    "name": "Florian Ludwig",
+    "login": "seomantix"
+  },
+  {
+    "name": "GitHub Web Flow",
+    "login": "web-flow"
+  },
+  {
+    "name": null,
+    "login": "dennishpunkt"
+  },
+  {
+    "name": null,
+    "login": "matthiasbra"
+  },
+  {
+    "name": null,
+    "login": "dirktietze"
+  },
+  {
+    "name": "Arndt von Lucadou",
+    "login": "a-v-l"
+  },
+  {
+    "name": "Simon Wohler",
+    "login": "bekanntmacher"
+  },
+  {
+    "name": null,
+    "login": "elenadatta"
+  },
+  {
+    "name": "Michael",
+    "login": "Hemmilicious"
+  },
+  {
+    "name": null,
+    "login": "poldip"
+  },
+  {
+    "name": null,
+    "login": "mhillen"
+  },
+  {
+    "name": null,
+    "login": "molokodesign"
+  },
+  {
+    "name": null,
+    "login": "mecintosch"
+  },
+  {
+    "name": null,
+    "login": "Bees2"
+  },
+  {
+    "name": "Philipp",
+    "login": "beyerph"
+  },
+  {
+    "name": null,
+    "login": "kwissy"
+  },
+  {
+    "name": "Sven Meierhans",
+    "login": "SvenMeierhans"
+  },
+  {
+    "name": "Tsarma",
+    "login": "tsarma"
+  },
+  {
+    "name": "Joé Jemmely",
+    "login": "joejemmely"
+  },
+  {
+    "name": null,
+    "login": "Schmidty2"
+  },
+  {
+    "name": "Andreas Kroll",
+    "login": "akroii"
+  },
+  {
+    "name": "Julian Stock",
+    "login": "JLNNN"
+  },
+  {
+    "name": null,
+    "login": "patrickschroer"
+  },
+  {
+    "name": null,
+    "login": "Floxn"
+  },
+  {
+    "name": null,
+    "login": "Shania567"
+  },
+  {
+    "name": null,
+    "login": "WorkerBeeEu"
+  },
+  {
+    "name": null,
+    "login": "sdcarte"
+  },
+  {
+    "name": "Tobias Ritter",
+    "login": "UB3RL33T"
+  },
+  {
+    "name": "Sascha Weilbächer",
+    "login": "wortberge"
+  },
+  {
+    "name": "Dams",
+    "login": "Damsgit"
+  },
+  {
+    "name": "speedweb",
+    "login": "speedweb"
+  },
+  {
+    "name": null,
+    "login": "nordentwickler"
+  },
+  {
+    "name": "Hella Schuster",
+    "login": "hella-schu"
+  },
+  {
+    "name": null,
+    "login": "NakNakNaaak"
+  },
+  {
+    "name": "Danilo Benevides",
+    "login": "DaniloBenevides"
+  },
+  {
+    "name": "Thomas Janotta",
+    "login": "ThomasJanotta"
+  },
+  {
+    "name": null,
+    "login": "LinkingYou"
+  },
+  {
+    "name": null,
+    "login": "marcuslelle"
+  },
+  {
+    "name": null,
+    "login": "HaraldHubinger"
+  },
+  {
+    "name": null,
+    "login": "Sukrams"
+  }
+]

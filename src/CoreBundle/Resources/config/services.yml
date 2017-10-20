@@ -39,3 +39,18 @@ services:
 
     metamodels.insert_tags:
         class: Contao\InsertTags
+
+    metamodels.backend.navigation_builder:
+        class: MetaModels\CoreBundle\Contao\Hooks\RegisterBackendNavigation
+        arguments:
+            - "@contao.translation.translator"
+            - "@request_stack"
+            - "@router"
+
+    metamodels.controller.support_screen:
+        class: MetaModels\CoreBundle\Controller\Backend\SupportMetaModelsController
+        arguments:
+            - "@templating"
+            - "@contao.translation.translator"
+            - "%metamodels.resource_dir%/data/contributors-github.json"
+            - "%metamodels.resource_dir%/data/contributors-transifex.json"

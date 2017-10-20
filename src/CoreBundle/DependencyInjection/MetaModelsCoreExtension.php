@@ -44,6 +44,8 @@ class MetaModelsCoreExtension extends Extension
 
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
         $this->buildCacheService($container, $config);
+
+        $container->setParameter('metamodels.resource_dir', __DIR__ . '/../Resources');
     }
 
     /**

@@ -56,11 +56,6 @@ array_insert(
                     ),
                     'icon'                  => 'bundles/metamodelscore/images/backend/logo.png',
                     'callback'              => 'MetaModels\BackendIntegration\Module'
-                ),
-                'support_metamodels' => array
-                (
-                    'icon'                  => 'bundles/metamodelscore/images/backend/support.png',
-                    'callback'              => 'MetaModels\BackendIntegration\Support'
                 )
             ),
             // Append all previous data here.
@@ -270,3 +265,5 @@ $GLOBALS['TL_HOOKS']['initializeDependencyContainer'][] = function (
     $handler = new MetaModels\Helper\SubSystemBoot();
     $handler->boot($container);
 };
+
+$GLOBALS['TL_HOOKS']['getUserNavigation'][] = ['metamodels.backend.navigation_builder', 'onGetUserNavigation'];

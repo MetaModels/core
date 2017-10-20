@@ -1,0 +1,3 @@
+metamodels.support_screen:
+    path: /contao/metamodels/support
+    defaults: { _controller: metamodels.controller.support_screen, _scope: backend, _token_check: true }

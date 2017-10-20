@@ -1,0 +1,13 @@
+{{ render_contao_backend_template({
+    main: block('main'),
+    error: block('error'),
+    headline: block('headline'),
+    stylesheets: block('stylesheets')
+}) | raw }}
+
+
+{% block stylesheets %}
+    {% for stylesheet in stylesheets %}
+        <link rel="stylesheet" href="{{ stylesheet }}">
+    {% endfor %}
+{% endblock %}
