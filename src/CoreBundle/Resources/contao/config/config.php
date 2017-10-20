@@ -267,3 +267,4 @@ $GLOBALS['TL_HOOKS']['initializeDependencyContainer'][] = function (
 };
 
 $GLOBALS['TL_HOOKS']['getUserNavigation'][] = ['metamodels.backend.navigation_builder', 'onGetUserNavigation'];
+$GLOBALS['TL_HOOKS']['loadDataContainer'][] = ['metamodels.datacontainer_loader', 'onLoadDataContainer'];

@@ -24,9 +24,6 @@
 
 namespace MetaModels\ContaoIntegration;
 
-use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\LoadDataContainerEvent;
-use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\PopulateEnvironmentEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\PreCreateDcGeneralEvent;
@@ -56,43 +53,6 @@ use MetaModels\IMetaModelsServiceContainer;
  */
 abstract class Boot
 {
-    /**
-     * Register the loadDataContainer HOOK for the given table name to create the DcGeneral etc.
-     *
-     * @param string                      $tableName The name of the table to be loaded.
-     *
-     * @param IMetaModelsServiceContainer $container The MetaModels service container.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    private function attachLoadDataContainerHook($tableName, $container)
-    {
-        LoadDataContainerHookListener::attachFor(
-            $tableName,
-            function ($tableName) use ($container) {
-                $dispatcher = $container->getEventDispatcher();
-                $event      = new LoadDataContainerEvent('tl_metamodel_item');
-                $dispatcher->dispatch(
-                    ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
-                    new LoadLanguageFileEvent('tl_metamodel_item')
-                );
-                $dispatcher->dispatch(ContaoEvents::CONTROLLER_LOAD_DATA_CONTAINER, $event);
-
-                if (!isset($GLOBALS['TL_DCA'][$tableName])) {
-                    $GLOBALS['TL_DCA'][$tableName] = array();
-                }
-
-                $GLOBALS['TL_DCA'][$tableName] = array_replace_recursive(
-                    (array) $GLOBALS['TL_DCA']['tl_metamodel_item'],
-                    (array) $GLOBALS['TL_DCA'][$tableName]
-                );
-            }
-        );
-    }
-
     /**
      * Boot the system and register dca loader etc.
      *
@@ -194,8 +154,5 @@ abstract class Boot
                 $factory->setContainerClassName('MetaModels\DcGeneral\DataDefinition\MetaModelDataDefinition');
             }
         );
-        foreach ($names as $metaModelName) {
-            $this->attachLoadDataContainerHook($metaModelName, $container);
-        }
     }
 }

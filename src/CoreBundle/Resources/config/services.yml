@@ -48,6 +48,12 @@ services:
             - "@router"
             - "@metamodels.view_combination"
 
+    metamodels.datacontainer_loader:
+        class: MetaModels\CoreBundle\Contao\Hooks\LoadDataContainer
+        arguments:
+            - "@metamodels.factory"
+            - "@=service('contao.framework').getAdapter('Contao\\\\Controller')"
+
     metamodels.controller.support_screen:
         class: MetaModels\CoreBundle\Controller\Backend\SupportMetaModelsController
         arguments:
