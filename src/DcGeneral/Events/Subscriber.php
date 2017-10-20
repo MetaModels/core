@@ -30,7 +30,6 @@ use ContaoCommunityAlliance\DcGeneral\Event\PostDeleteModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PostPasteModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
-use MetaModels\BackendIntegration\PurgeCache;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbFilter;
 
 /**
@@ -216,7 +215,7 @@ class Subscriber extends BaseSubscriber
             ($table == 'tl_metamodel_rendersetting') ||
             ($table == 'tl_metamodel_dca_combine')
         ) {
-            $purger = new PurgeCache();
+            $purger = \Contao\System::getContainer()->get('metamodels.cache.purger');
             $purger->purge();
         }
     }
