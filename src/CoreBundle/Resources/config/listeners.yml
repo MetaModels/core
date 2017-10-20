@@ -61,6 +61,17 @@ services:
 
 
 
+    metamodels.backend.auth.listener:
+        class: MetaModels\CoreBundle\EventListener\UserListener
+        arguments:
+            - "@security.token_storage"
+            - "@security.authentication.trust_resolver"
+            - "@contao.routing.scope_matcher"
+            - "@metamodels.view_combination"
+        tags:
+            - name: kernel.event_listener
+              event: kernel.request
+              priority: -500
 
 
 

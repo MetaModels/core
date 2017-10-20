@@ -67,9 +67,6 @@ class Boot extends BaseBoot
         $viewCombinations = new ViewCombinations($container, $GLOBALS['container']['user']);
         $container->setService($viewCombinations, 'metamodels-view-combinations');
 
-        $menuBuilder = new BackendModuleBuilder($container, $viewCombinations);
-        $menuBuilder->export();
-
         $this->performBoot($container, $viewCombinations);
 
         // Register the global subscriber.

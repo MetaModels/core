@@ -46,6 +46,7 @@ services:
             - "@contao.translation.translator"
             - "@request_stack"
             - "@router"
+            - "@metamodels.view_combination"
 
     metamodels.controller.support_screen:
         class: MetaModels\CoreBundle\Controller\Backend\SupportMetaModelsController
@@ -54,3 +55,23 @@ services:
             - "@contao.translation.translator"
             - "%metamodels.resource_dir%/data/contributors-github.json"
             - "%metamodels.resource_dir%/data/contributors-transifex.json"
+
+    metamodels.view_combination.builder:
+        class: MetaModels\ViewCombination\ViewCombinationBuilder
+        arguments:
+            - "@database_connection"
+            - "@metamodels.factory"
+
+    metamodels.view_combination.input_screen_information_builder:
+        class: MetaModels\ViewCombination\InputScreenInformationBuilder
+        arguments:
+            - "@database_connection"
+            - "@metamodels.factory"
+
+    metamodels.view_combination:
+        class: MetaModels\ViewCombination\ViewCombination
+        arguments:
+            - "@metamodels.cache"
+            - "@security.token_storage"
+            - "@metamodels.view_combination.builder"
+            - "@metamodels.view_combination.input_screen_information_builder"

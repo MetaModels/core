@@ -20,6 +20,7 @@
 
 namespace MetaModels\CoreBundle\Contao\Hooks;
 
+use MetaModels\ViewCombination\ViewCombination;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -51,20 +52,30 @@ class RegisterBackendNavigation
     private $translator;
 
     /**
+     * The translator in use.
+     *
+     * @var ViewCombination
+     */
+    private $viewCombination;
+
+    /**
      * Create a new instance.
      *
      * @param TranslatorInterface   $translator
      * @param RequestStack          $requestStack
      * @param UrlGeneratorInterface $urlGenerator
+     * @param ViewCombination       $viewCombination
      */
     public function __construct(
         TranslatorInterface $translator,
         RequestStack $requestStack,
-        UrlGeneratorInterface $urlGenerator
+        UrlGeneratorInterface $urlGenerator,
+        ViewCombination $viewCombination
     ) {
-        $this->requestStack = $requestStack;
-        $this->urlGenerator = $urlGenerator;
-        $this->translator = $translator;
+        $this->requestStack    = $requestStack;
+        $this->urlGenerator    = $urlGenerator;
+        $this->translator      = $translator;
+        $this->viewCombination = $viewCombination;
     }
 
     /**
@@ -88,7 +99,40 @@ class RegisterBackendNavigation
             ]
         );
 
+        $locale = $this->requestStack->getCurrentRequest()->getLocale();
+        foreach ($this->viewCombination->getStandalone() as $metaModelName => $screen) {
+            $this->addMenu(
+                $modules,
+                $screen['meta']['backendsection'],
+                'metamodel_' . $metaModelName,
+                [
+                    'label' => $this->extractLanguageValue($screen['label'], $locale),
+                    'title' => $this->extractLanguageValue($screen['description'], $locale),
+                    'route' => 'contao_backend',
+                    'param' => ['do' => 'metamodel_' . $metaModelName],
+                ]
+            );
+        }
+
         return $modules;
+    }
+
+    /**
+     * Extract the language value.
+     *
+     * @param string[] $values The values.
+     *
+     * @param string   $locale The current locale.
+     *
+     * @return string
+     */
+    private function extractLanguageValue($values, $locale)
+    {
+        if (isset($values[$locale])) {
+            return $values[$locale];
+        }
+
+        return $values[''];
     }
 
     /**
@@ -103,12 +147,8 @@ class RegisterBackendNavigation
      */
     private function addMenu(&$modules, $section, $name, $module)
     {
-        $module['href'] = $this->urlGenerator->generate($module['route']);
-
-        $active = ($this->requestStack->getCurrentRequest()->attributes->get('_route') === $module['route']);
-
-        $class = 'navigation ' . $name;
-
+        $active = $this->isActive($module['route'], $module['param']);
+        $class  = 'navigation ' . $name;
         if (isset($module['class'])) {
             $class .= ' ' . $module['class'];
         }
@@ -123,5 +163,31 @@ class RegisterBackendNavigation
             'isActive' => $active,
             'href'     => $this->urlGenerator->generate($module['route'], $module['param'])
         ];
+    }
+
+    /**
+     * @param string $route  The route name.
+     * @param array  $params The route parameters.
+     *
+     * @return bool
+     */
+    private function isActive($route, $params)
+    {
+        if (!$active = ($this->requestStack->getCurrentRequest()->attributes->get('_route') === $route)) {
+            return false;
+        }
+        $request = $this->requestStack->getCurrentRequest();
+        $attributes = $request->attributes->get('_route_params');
+        $query      = $request->query;
+        foreach ($params as $param => $value) {
+            if (isset($attributes[$param]) && ($value !== $request->attributes['_route_params'][$param])) {
+                return false;
+            }
+            if ($query->has($param) && ($value !== $query->get($param))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
