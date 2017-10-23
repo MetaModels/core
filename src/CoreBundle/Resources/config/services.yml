@@ -52,7 +52,10 @@ services:
         class: MetaModels\CoreBundle\Contao\Hooks\LoadDataContainer
         arguments:
             - "@metamodels.factory"
+            - "@metamodels.view_combination"
+            - "@contao.image.image_factory"
             - "@=service('contao.framework').getAdapter('Contao\\\\Controller')"
+            - "@=service('contao.framework').getAdapter('Contao\\\\Image')"
 
     metamodels.controller.support_screen:
         class: MetaModels\CoreBundle\Controller\Backend\SupportMetaModelsController

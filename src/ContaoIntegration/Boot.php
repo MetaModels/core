@@ -28,7 +28,6 @@ use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\PopulateEnvironmentEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\PreCreateDcGeneralEvent;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
-use MetaModels\Dca\MetaModelDcaBuilder;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\DefinitionBuilder\BasicDefinitionBuilder;
 use MetaModels\DcGeneral\DefinitionBuilder\CommandBuilder;
@@ -42,7 +41,6 @@ use MetaModels\DcGeneral\Events\MetaModel\RenderItem;
 use MetaModels\DcGeneral\Populator\AttributePopulator;
 use MetaModels\DcGeneral\Populator\DataProviderPopulator;
 use MetaModels\DcGeneral\Populator\TranslatorPopulator;
-use MetaModels\Helper\LoadDataContainerHookListener;
 use MetaModels\Helper\ViewCombinations;
 use MetaModels\IMetaModelsServiceContainer;
 
@@ -67,21 +65,6 @@ abstract class Boot
      */
     protected function performBoot(IMetaModelsServiceContainer $container, ViewCombinations $viewCombinations)
     {
-        // Prepare lazy loading of the data containers.
-        foreach ($viewCombinations->getParentedInputScreenNames() as $metaModelName) {
-            $parent = $viewCombinations->getParentOf($metaModelName);
-            if (substr($parent, 0, 3) === 'mm_') {
-                continue;
-            }
-            LoadDataContainerHookListener::attachFor(
-                $parent,
-                function () use ($metaModelName, $viewCombinations, $container) {
-                    $inputScreen = $viewCombinations->getInputScreenDetails($metaModelName);
-                    $builder     = new MetaModelDcaBuilder($container);
-                    $builder->injectOperationButton($inputScreen);
-                }
-            );
-        }
         $translator = new StaticTranslator();
         $dispatcher = $container->getEventDispatcher();
         $dispatcher->addListener(
