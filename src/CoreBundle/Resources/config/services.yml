@@ -40,6 +40,12 @@ services:
     metamodels.insert_tags:
         class: Contao\InsertTags
 
+    metamodels.table_manipulator:
+        class: MetaModels\Helper\TableManipulator
+        arguments:
+          - "@database_connection"
+          - "%metamodels.system_columns%"
+
     metamodels.backend.navigation_builder:
         class: MetaModels\CoreBundle\Contao\Hooks\RegisterBackendNavigation
         arguments:

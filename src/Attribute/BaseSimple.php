@@ -17,6 +17,7 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -24,15 +25,78 @@
 
 namespace MetaModels\Attribute;
 
-use MetaModels\Helper\TableManipulation;
+use Contao\System;
+use Doctrine\DBAL\Connection;
+use MetaModels\Helper\TableManipulator;
+use MetaModels\IMetaModel;
 
 /**
  * Reference implementation for Simple attributes.
  * Simple fields are fields that only consist of one column in the metamodel table and therefore do not need
  * to be handled as complex fields must be.
+ *
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class BaseSimple extends Base implements ISimple
 {
+    /**
+     * Database connection.
+     *
+     * @var Connection
+     */
+    protected $connection;
+
+    /**
+     * Table manipulator.
+     *
+     * @var TableManipulator
+     */
+    protected $tableManipulator;
+
+    /**
+     * Instantiate an MetaModel attribute.
+     *
+     * Note that you should not use this directly but use the factory classes to instantiate attributes.
+     *
+     * @param IMetaModel       $objMetaModel     The MetaModel instance this attribute belongs to.
+     *
+     * @param Connection       $connection       The database connection.
+     *
+     * @param TableManipulator $tableManipulator Table manipulator instance.
+     *
+     * @param array            $arrData          The information array, for attribute information, refer to
+     *                                           documentation of table tl_metamodel_attribute and documentation of the
+     *                                           certain attribute classes for information what values are understood.
+     */
+    public function __construct(
+        IMetaModel $objMetaModel,
+        $arrData = [],
+        Connection $connection = null,
+        TableManipulator $tableManipulator = null
+    ) {
+        parent::__construct($objMetaModel, $arrData);
+
+        if (null === $connection) {
+            @trigger_error(
+                'Connection is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            $connection = System::getContainer()->get('database_connection');
+        }
+
+        if (null === $tableManipulator) {
+            @trigger_error(
+                'Table manipulator is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+
+            $tableManipulator = System::getContainer()->get('metamodels.table_manipulator');
+        }
+
+        $this->connection       = $connection;
+        $this->tableManipulator = $tableManipulator;
+    }
+
     /**
      * Updates the meta information of the attribute.
      *
@@ -76,9 +140,8 @@ class BaseSimple extends Base implements ISimple
             if (is_array($varData)) {
                 $varData = serialize($varData);
             }
-            $this->getMetaModel()->getServiceContainer()->getDatabase()
-                ->prepare(sprintf('UPDATE %s SET %s=? WHERE id=%s', $strTable, $strColName, $intId))
-                ->execute($varData);
+
+            $this->connection->update($strTable, [$strColName => $varData], ['id' => $intId]);
         }
     }
 
@@ -94,29 +157,28 @@ class BaseSimple extends Base implements ISimple
 
         $strCol = $this->getColName();
         if ($idList) {
-            $objRow = $this->getMetaModel()->getServiceContainer()->getDatabase()
-                ->prepare(
-                    'SELECT ' . $strCol . ', COUNT(' . $strCol . ') as mm_count
-                    FROM ' . $this->getMetaModel()->getTableName() .
-                    ' WHERE id IN (' . $this->parameterMask($idList) . ')
-                    GROUP BY ' . $strCol . '
-                    ORDER BY FIELD(id,' . $this->parameterMask($idList). ')'
-                )
-                ->execute(array_merge($idList, $idList));
+            $statement = $this->connection->createQueryBuilder()
+                ->select($strCol . ', COUNT(' . $strCol . ') as mm_count')
+                ->from($this->getMetaModel()->getTableName())
+                ->where('id IN (:ids)')
+                ->groupBy($strCol)
+                ->orderBy('FIELD(id, :ids)')
+                ->setParameter('ids', $idList, Connection::PARAM_INT_ARRAY)
+                ->execute();
         } elseif ($usedOnly) {
-            $objRow = $this->getMetaModel()->getServiceContainer()->getDatabase()->execute(
-                'SELECT ' . $strCol . ', COUNT(' . $strCol . ') as mm_count
-                FROM ' . $this->getMetaModel()->getTableName() . '
-                GROUP BY ' . $strCol . '
-                ORDER BY ' . $strCol
-            );
+            $statement = $this->connection->createQueryBuilder()
+                ->select('SELECT ' . $strCol . ', COUNT(' . $strCol . ') as mm_count')
+                ->from($this->getMetaModel()->getTableName())
+                ->groupBy($strCol)
+                ->orderBy($strCol)
+                ->execute();
         } else {
             // We can not do anything here, must be handled by the derived attribute class.
             return array();
         }
 
         $arrResult = array();
-        while ($objRow->next()) {
+        while ($objRow = $statement->fetch(\PDO::FETCH_OBJ)) {
             if (is_array($arrCount)) {
                 $arrCount[$objRow->$strCol] = $objRow->mm_count;
             }
@@ -134,18 +196,15 @@ class BaseSimple extends Base implements ISimple
     public function sortIds($idList, $strDirection)
     {
         // Base implementation, do a simple sorting on given column.
-        $idList = $this->getMetaModel()->getServiceContainer()->getDatabase()
-            ->prepare(
-                sprintf(
-                    'SELECT id FROM %s WHERE id IN (%s) ORDER BY %s %s',
-                    $this->getMetaModel()->getTableName(),
-                    $this->parameterMask($idList),
-                    $this->getColName(),
-                    $strDirection
-                )
-            )
-            ->execute($idList)
-            ->fetchEach('id');
+        $idList = $this->connection->createQueryBuilder()
+            ->select('id')
+            ->from($this->getMetaModel()->getTableName())
+            ->where('id IN (:ids)')
+            ->setParameter('ids', $idList)
+            ->orderBy($this->getColName(), $strDirection)
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN, 'id');
+
         return $idList;
     }
 
@@ -162,17 +221,15 @@ class BaseSimple extends Base implements ISimple
     public function searchFor($strPattern)
     {
         // Base implementation, do a simple search on given column.
-        $objQuery = $this->getMetaModel()->getServiceContainer()->getDatabase()
-            ->prepare(
-                sprintf(
-                    'SELECT id FROM %s WHERE %s LIKE ?',
-                    $this->getMetaModel()->getTableName(),
-                    $this->getColName()
-                )
-            )
-            ->execute(str_replace(array('*', '?'), array('%', '_'), $strPattern));
+        $strPattern = str_replace(array('*', '?'), array('%', '_'), $strPattern);
+        $arrIds     = $this->connection->createQueryBuilder()
+            ->select('id')
+            ->from($this->getMetaModel()->getTableName())
+            ->where($this->getColName() . ' LIKE :pattern')
+            ->setParameter('pattern', $strPattern)
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN, 'id');
 
-        $arrIds = $objQuery->fetchEach('id');
         return $arrIds;
     }
 
@@ -221,7 +278,7 @@ class BaseSimple extends Base implements ISimple
     public function createColumn()
     {
         if ($this->getColName()) {
-            TableManipulation::createColumn(
+            $this->tableManipulator->createColumn(
                 $this->getMetaModel()->getTableName(),
                 $this->getColName(),
                 $this->getSQLDataType()
@@ -236,15 +293,12 @@ class BaseSimple extends Base implements ISimple
      */
     public function deleteColumn()
     {
+        $schemaManager = $this->connection->getSchemaManager();
+        $columns       = $schemaManager->listTableIndexes($this->getMetaModel()->getTableName());
+
         // Try to delete the column. If it does not exist as we can assume it has been deleted already then.
-        if ($this->getColName()
-            && $this->getMetaModel()->getServiceContainer()->getDatabase()->fieldExists(
-                $this->getColName(),
-                $this->getMetaModel()->getTableName(),
-                true
-            )
-        ) {
-            TableManipulation::dropColumn($this->getMetaModel()->getTableName(), $this->getColName());
+        if ($this->getColName() && isset($columns[$this->getColName()])) {
+            $this->tableManipulator->dropColumn($this->getMetaModel()->getTableName(), $this->getColName());
         }
     }
 
@@ -257,15 +311,13 @@ class BaseSimple extends Base implements ISimple
      */
     public function renameColumn($strNewColumnName)
     {
-        TableManipulation::checkColumnName($strNewColumnName);
-        if ($this->getColName()
-            && $this->getMetaModel()->getServiceContainer()->getDatabase()->fieldExists(
-                $this->getColName(),
-                $this->getMetaModel()->getTableName(),
-                true
-            )
-        ) {
-            TableManipulation::renameColumn(
+        $this->tableManipulator->checkColumnName($strNewColumnName);
+
+        $schemaManager = $this->connection->getSchemaManager();
+        $columns       = $schemaManager->listTableIndexes($this->getMetaModel()->getTableName());
+
+        if ($this->getColName() && isset($columns[$this->getColName()])) {
+            $this->tableManipulator->renameColumn(
                 $this->getMetaModel()->getTableName(),
                 $this->getColName(),
                 $strNewColumnName,

@@ -1,0 +1,11 @@
+parameters:
+   # All system columns that always are defined in a MetaModel table and are not attributes.
+   # When you alter this, consider to also change @link{MetaModelTableManipulator::STATEMENT_CREATE_TABLE}.
+   # Extensions will have to alter the table on their own as the columns will not get transported then.
+   metamodels.system_columns:
+    - id
+    - pid
+    - sorting
+    - tstamp
+    - vargroup
+    - varbase
