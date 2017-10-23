@@ -167,7 +167,6 @@ class LoadDataContainer
         $this->controller->loadLanguageFile('default');
         foreach ($map[$tableName] as $metaModelTable => $inputScreen) {
             $metaModel = $this->factory->getMetaModel($metaModelTable);
-            dump($inputScreen);
 
             // FIXME: need a proper translator here. :/
             $caption = [
