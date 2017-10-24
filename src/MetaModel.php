@@ -91,13 +91,16 @@ class MetaModel implements IMetaModel
      */
     public function getServiceContainer()
     {
-        return $this->serviceContainer;
+        return is_callable($this->serviceContainer) ? call_user_func($this->serviceContainer) : $this->serviceContainer;
     }
 
     /**
      * Set the service container.
      *
-     * @param IMetaModelsServiceContainer $serviceContainer The service container.
+     * NOTE: this is deprecated - to prevent triggering deprecation notices, you may pass a closure here which
+     * will then return the service container.
+     *
+     * @param \Closure|IMetaModelsServiceContainer $serviceContainer The service container.
      *
      * @return MetaModel
      *
