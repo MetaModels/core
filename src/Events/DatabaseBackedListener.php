@@ -22,7 +22,6 @@
 
 namespace MetaModels\Events;
 
-use DependencyInjection\Container\LegacyDependencyInjectionContainer;
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\Events\CollectMetaModelAttributeInformationEvent;
 use MetaModels\IMetaModel;
@@ -34,13 +33,6 @@ use MetaModels\MetaModel;
  */
 class DatabaseBackedListener
 {
-    /**
-     * The legacy dependency injection container - used for retrieving the MetaModels service container.
-     *
-     * @var LegacyDependencyInjectionContainer
-     */
-    private $legacyDic;
-
     /**
      * The database connection.
      *
@@ -90,12 +82,10 @@ class DatabaseBackedListener
     /**
      * Create a new instance.
      *
-     * @param Connection                         $database  The database connection.
-     * @param LegacyDependencyInjectionContainer $legacyDic The legacy service container.
+     * @param Connection $database  The database connection.
      */
-    public function __construct(Connection $database, LegacyDependencyInjectionContainer $legacyDic)
+    public function __construct(Connection $database)
     {
-        $this->legacyDic = $legacyDic;
         $this->database  = $database;
     }
 
@@ -108,7 +98,7 @@ class DatabaseBackedListener
      */
     public function getServiceContainer()
     {
-        return $this->legacyDic->getService('metamodels-service-container');
+        return \System::getContainer()->get('cca.legacy_dic')->getService('metamodels-service-container');
     }
 
     /**
@@ -192,7 +182,7 @@ class DatabaseBackedListener
     {
         if (!$this->createInstanceViaLegacyFactory($event, $arrData)) {
             $metaModel = new MetaModel($arrData);
-            $metaModel->setServiceContainer(function (){
+            $metaModel->setServiceContainer(function () {
                 return $this->getServiceContainer();
             }, false);
             $event->setMetaModel($metaModel);

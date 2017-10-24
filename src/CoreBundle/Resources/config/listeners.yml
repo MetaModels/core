@@ -3,7 +3,6 @@ services:
         class: MetaModels\Events\DatabaseBackedListener
         arguments:
             - "@database_connection"
-            - "@cca.legacy_dic"
         tags:
             -   name: kernel.event_listener
                 event: metamodels.metamodel.collect-metamodel-attribute-information
