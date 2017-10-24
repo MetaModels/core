@@ -13,3 +13,37 @@ services:
             -   name: kernel.event_listener
                 event: dc-general.view.contao2backend.get-parent-header
                 method: addAdditionalParentHeaderFields
+
+    metamodels.create_variant_button_listener:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\MetaModel\CreateVariantButtonListener
+        arguments:
+            - "@metamodels.factory"
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.get-operation-button
+                method: createButton
+            -   name: kernel.event_listener
+                event: dc-general.action
+                method: handleCreateVariantAction
+            -   name: kernel.event_listener
+                event: dc-general.model.pre-edit-model
+                method: presetVariantBase
+
+    metamodels.cut_button_listener:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\MetaModel\CutButtonListener
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.get-operation-button
+                method: handle
+
+    metamodels.paste_button_listener:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\MetaModel\PasteButtonListener
+        arguments:
+            - "@metamodels.factory"
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.get-paste-button
+                method: handle
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.get-paste-root-button
+                method: handleRoot

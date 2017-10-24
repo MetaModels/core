@@ -20,31 +20,17 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\Events\MetaModel;
+namespace MetaModels\CoreBundle\EventListener\DcGeneral\MetaModel;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\ViewHelpers;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
-use MetaModels\DcGeneral\Events\BaseSubscriber;
 
 /**
- * Class CutButton handles the cut button for a metamodels item view.
+ * Class CutButtonListener handles the cut button for a metamodels item view.
  */
-class CutButton extends BaseSubscriber
+class CutButtonListener
 {
-    /**
-     * Register all listeners.
-     *
-     * @return void
-     */
-    protected function registerEventsInDispatcher()
-    {
-        $this->addListener(
-            GetOperationButtonEvent::NAME,
-            array($this, 'handle')
-        );
-    }
-
     /**
      * Handle the event.
      *

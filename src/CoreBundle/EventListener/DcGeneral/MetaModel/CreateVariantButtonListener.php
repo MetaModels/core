@@ -21,7 +21,7 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\Events\MetaModel;
+namespace MetaModels\CoreBundle\EventListener\DcGeneral\MetaModel;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\BackendViewInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\ContaoBackendViewTemplate;
@@ -29,40 +29,34 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\EditMask;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetOperationButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
-use ContaoCommunityAlliance\DcGeneral\DcGeneralEvents;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\ActionEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PostCreateModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PreCreateModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PreEditModelEvent;
 use MetaModels\DcGeneral\Data\Model;
-use MetaModels\DcGeneral\Events\BaseSubscriber;
+use MetaModels\IFactory;
 
 /**
  * Event handler class to manage the "create variant" button.
  */
-class CreateVariantButton extends BaseSubscriber
+class CreateVariantButtonListener
 {
     /**
-     * Register all listeners.
+     * The factory.
      *
-     * @return void
+     * @var IFactory
      */
-    protected function registerEventsInDispatcher()
+    private $factory;
+
+    /**
+     * Create a new instance.
+     *
+     * @param IFactory $factory The factory.
+     */
+    public function __construct(IFactory $factory)
     {
-        $this
-            ->addListener(
-                GetOperationButtonEvent::NAME,
-                array($this, 'createButton')
-            )
-            ->addListener(
-                DcGeneralEvents::ACTION,
-                array($this, 'handleCreateVariantAction')
-            )
-            ->addListener(
-                PreEditModelEvent::NAME,
-                array($this, 'presetVariantBase')
-            );
+        $this->factory = $factory;
     }
 
     /**
@@ -125,10 +119,7 @@ class CreateVariantButton extends BaseSubscriber
             ));
         }
 
-        $metaModel = $this
-            ->getServiceContainer()
-            ->getFactory()
-            ->getMetaModel($model->getProviderName());
+        $metaModel = $this->factory->getMetaModel($model->getProviderName());
 
         if (!$metaModel || !$metaModel->hasVariants()) {
             return;

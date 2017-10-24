@@ -21,7 +21,7 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\Events\MetaModel;
+namespace MetaModels\CoreBundle\EventListener\DcGeneral\MetaModel;
 
 use ContaoCommunityAlliance\DcGeneral\Clipboard\ClipboardInterface;
 use ContaoCommunityAlliance\DcGeneral\Clipboard\Filter;
@@ -31,40 +31,47 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPa
 use ContaoCommunityAlliance\DcGeneral\Data\DataProviderInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
-use MetaModels\DcGeneral\Events\BaseSubscriber;
+use MetaModels\IFactory;
 
 /**
  * This class handles the paste into and after button activation and deactivation for all MetaModels being edited.
  */
-class PasteButton extends BaseSubscriber
+class PasteButtonListener
 {
+    /**
+     * The factory.
+     *
+     * @var IFactory
+     */
+    private $factory;
+
     /**
      * The current environment.
      *
      * @var EnvironmentInterface
      */
-    protected $environment;
+    private $environment;
 
     /**
      * The current data provider.
      *
      * @var DataProviderInterface
      */
-    protected $provider;
+    private $provider;
 
     /**
      * The name of current data provider.
      *
      * @var string
      */
-    protected $providerName;
+    private $providerName;
 
     /**
      * The model where we have to check if is it a paste into or paste after.
      *
      * @var ModelInterface
      */
-    protected $currentModel;
+    private $currentModel;
 
     /**
      * Get determinator if there exists a circular reference.
@@ -74,110 +81,30 @@ class PasteButton extends BaseSubscriber
      *
      * @var boolean
      */
-    protected $circularReference;
+    private $circularReference;
 
     /**
      * Disable the paste after.
      *
      * @var bool
      */
-    protected $disablePA = true;
+    private $disablePA = true;
 
     /**
      * Disable the paste into.
      *
      * @var bool
      */
-    protected $disablePI = true;
+    private $disablePI = true;
 
     /**
-     * Register all listeners.
+     * Create a new instance.
      *
-     * @return void
+     * @param IFactory $factory The factory.
      */
-    protected function registerEventsInDispatcher()
+    public function __construct(IFactory $factory)
     {
-        $this->addListener(
-            GetPasteButtonEvent::NAME,
-            array($this, 'handle')
-        );
-
-        $this->addListener(
-            GetPasteRootButtonEvent::NAME,
-            array($this, 'handleRoot')
-        );
-    }
-
-    /**
-     * Find a item by his id.
-     *
-     * @param int $modelId The id to find.
-     *
-     * @return ModelInterface
-     */
-    protected function getModelById($modelId)
-    {
-        if ($modelId === null) {
-            return null;
-        }
-
-        $provider = $this->environment->getDataProvider();
-        $config   = $provider
-            ->getEmptyConfig()
-            ->setId($modelId);
-
-        return $provider->fetch($config);
-    }
-
-    /**
-     * Determines if this MetaModel instance is subject to variant handling.
-     *
-     * @return bool true if variants are handled, false otherwise.
-     *
-     * @throws \RuntimeException When the MetaModel can not be loaded.
-     */
-    protected function hasVariants()
-    {
-        $metaModels = $this
-            ->getServiceContainer()
-            ->getFactory()
-            ->getMetaModel($this->providerName);
-
-        if ($metaModels === null) {
-            throw new \RuntimeException(sprintf('Could not find a MetaModels with the name %s', $this->providerName));
-        }
-
-        return $metaModels->hasVariants();
-    }
-
-    /**
-     * Handle the paste into and after buttons.
-     *
-     * @param GetPasteRootButtonEvent $event The event.
-     *
-     * @return void
-     *
-     * @throws \RuntimeException When more than one model is contained within the clipboard.
-     */
-    public function handleRoot(GetPasteRootButtonEvent $event)
-    {
-        $this->environment  = $event->getEnvironment();
-        $this->provider     = $this->environment->getDataProvider();
-        $this->providerName = $this->provider->getEmptyModel()->getProviderName();
-        $clipboard          = $this->environment->getClipboard();
-        $this->currentModel = null;
-        $this->disablePI    = false;
-
-        // Only run for a MetaModels.
-        if ((substr($this->providerName, 0, 3) !== 'mm_') || $event->isPasteDisabled()) {
-            return;
-        }
-
-        $this->checkForAction($clipboard, 'copy');
-        $this->checkForAction($clipboard, 'create');
-        $this->checkForAction($clipboard, 'cut');
-
-        $event->setPasteDisabled($this->disablePI);
+        $this->factory = $factory;
     }
 
     /**
@@ -217,6 +144,75 @@ class PasteButton extends BaseSubscriber
     }
 
     /**
+     * Handle the paste into and after buttons.
+     *
+     * @param GetPasteRootButtonEvent $event The event.
+     *
+     * @return void
+     *
+     * @throws \RuntimeException When more than one model is contained within the clipboard.
+     */
+    public function handleRoot(GetPasteRootButtonEvent $event)
+    {
+        $this->environment  = $event->getEnvironment();
+        $this->provider     = $this->environment->getDataProvider();
+        $this->providerName = $this->provider->getEmptyModel()->getProviderName();
+        $clipboard          = $this->environment->getClipboard();
+        $this->currentModel = null;
+        $this->disablePI    = false;
+
+        // Only run for a MetaModels.
+        if ((substr($this->providerName, 0, 3) !== 'mm_') || $event->isPasteDisabled()) {
+            return;
+        }
+
+        $this->checkForAction($clipboard, 'copy');
+        $this->checkForAction($clipboard, 'create');
+        $this->checkForAction($clipboard, 'cut');
+
+        $event->setPasteDisabled($this->disablePI);
+    }
+
+    /**
+     * Find a item by its id.
+     *
+     * @param int $modelId The id to find.
+     *
+     * @return ModelInterface
+     */
+    private function getModelById($modelId)
+    {
+        if ($modelId === null) {
+            return null;
+        }
+
+        $provider = $this->environment->getDataProvider();
+        $config   = $provider
+            ->getEmptyConfig()
+            ->setId($modelId);
+
+        return $provider->fetch($config);
+    }
+
+    /**
+     * Determines if this MetaModel instance is subject to variant handling.
+     *
+     * @return bool true if variants are handled, false otherwise.
+     *
+     * @throws \RuntimeException When the MetaModel can not be loaded.
+     */
+    private function hasVariants()
+    {
+        $metaModel = $this->factory->getMetaModel($this->providerName);
+
+        if ($metaModel === null) {
+            throw new \RuntimeException(sprintf('Could not find a MetaModels with the name %s', $this->providerName));
+        }
+
+        return $metaModel->hasVariants();
+    }
+
+    /**
      * Check the buttons based on the action.
      *
      * @param ClipboardInterface $clipboard The clipboard.
@@ -225,7 +221,7 @@ class PasteButton extends BaseSubscriber
      *
      * @return void
      */
-    protected function checkForAction($clipboard, $action)
+    private function checkForAction($clipboard, $action)
     {
         // Make a filter for the given action.
         $filter = new Filter();
@@ -270,7 +266,7 @@ class PasteButton extends BaseSubscriber
      *
      * @return void
      */
-    protected function checkEmpty($action)
+    private function checkEmpty($action)
     {
         if ($this->hasVariants() && $this->currentModel !== null) {
             $this->disablePA = false;
@@ -289,7 +285,7 @@ class PasteButton extends BaseSubscriber
      *
      * @return void
      */
-    protected function checkForRoot($containedModel, $action)
+    private function checkForRoot($containedModel, $action)
     {
         if ($this->hasVariants() && $action == 'cut' && $containedModel->getProperty('varbase') == 0) {
             $this->disablePI = true;
@@ -305,7 +301,7 @@ class PasteButton extends BaseSubscriber
      *
      * @return void
      */
-    protected function checkForModel($containedModel, $action)
+    private function checkForModel($containedModel, $action)
     {
         if (!$this->circularReference) {
             if ($this->hasVariants()) {
@@ -332,7 +328,7 @@ class PasteButton extends BaseSubscriber
      *
      * @return void
      */
-    protected function checkModelWithVariants($containedModel)
+    private function checkModelWithVariants($containedModel)
     {
         // Item and variant support.
         $isVarbase        = (bool) $containedModel->getProperty('varbase');
@@ -359,7 +355,7 @@ class PasteButton extends BaseSubscriber
      *
      * @return void
      */
-    protected function checkModelWithoutVariants($containedModel)
+    private function checkModelWithoutVariants($containedModel)
     {
         $parentDefinition = $this->environment->getDataDefinition()->getBasicDefinition()->getParentDataProvider();
 

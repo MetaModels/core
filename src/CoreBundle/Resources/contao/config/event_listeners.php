@@ -22,9 +22,6 @@
  * @filesource
  */
 
-use MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton;
-use MetaModels\DcGeneral\Events\MetaModel\CutButton;
-use MetaModels\DcGeneral\Events\MetaModel\PasteButton;
 use MetaModels\DcGeneral\Events\Table\InputScreens\InputScreenAddAllHandler;
 use MetaModels\DcGeneral\Events\Table\RenderSetting\RenderSettingAddAllHandler;
 use MetaModels\Events\MetaModelsBootEvent;
@@ -37,9 +34,6 @@ return array(
         function (MetaModelsBootEvent $event) {
             /** @var EventDispatcherInterface $dispatcher */
             $dispatcher = func_get_arg(2);
-            new PasteButton($event->getServiceContainer());
-            new CutButton($event->getServiceContainer());
-            new CreateVariantButton($event->getServiceContainer());
             $dispatcher->addSubscriber(new RenderSettingAddAllHandler($event->getServiceContainer()));
             $dispatcher->addSubscriber(new InputScreenAddAllHandler($event->getServiceContainer()));
         }
