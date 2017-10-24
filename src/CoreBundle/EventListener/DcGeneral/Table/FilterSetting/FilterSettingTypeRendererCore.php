@@ -19,7 +19,7 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\Events\Table\FilterSetting;
+namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting;
 
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
@@ -27,7 +27,7 @@ use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 /**
  * Handles rendering of model from tl_metamodel_filtersetting.
  */
-class FilterSettingTypeRendererCore extends FilterSettingTypeRenderer
+class FilterSettingTypeRendererCore extends AbstractFilterSettingTypeRenderer
 {
     /**
      * Retrieve the types this renderer is valid for.
@@ -36,7 +36,7 @@ class FilterSettingTypeRendererCore extends FilterSettingTypeRenderer
      */
     protected function getTypes()
     {
-        return array('idlist', 'simplelookup', 'customsql', 'conditionand', 'conditionor');
+        return ['idlist', 'simplelookup', 'customsql', 'conditionand', 'conditionor'];
     }
 
     /**

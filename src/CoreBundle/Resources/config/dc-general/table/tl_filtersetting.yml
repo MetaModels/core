@@ -1,0 +1,11 @@
+services:
+    metamodels.dc_general.table.tl_filter_setting.type_renderer_core:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting\FilterSettingTypeRendererCore
+        arguments:
+            - "@metamodels.filter_setting_factory"
+            - "@event_dispatcher"
+            - "@metamodels.assets.icon_builder"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.model-to-label
+              method: modelToLabel
