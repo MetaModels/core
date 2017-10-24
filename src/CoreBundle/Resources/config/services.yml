@@ -20,6 +20,9 @@ services:
             - "@logger"
 
     metamodels.factory:
+        arguments:
+            - "@event_dispatcher"
+            - "@metamodels.attribute_factory"
         class: MetaModels\Factory
 
     metamodels.attribute_factory:

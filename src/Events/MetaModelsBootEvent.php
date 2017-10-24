@@ -38,29 +38,12 @@ use Symfony\Component\EventDispatcher\Event;
 class MetaModelsBootEvent extends Event
 {
     /**
-     * The MetaModel service container.
-     *
-     * @var IMetaModelsServiceContainer
-     */
-    protected $serviceContainer;
-
-    /**
-     * Create a new instance.
-     *
-     * @param IMetaModelsServiceContainer $serviceContainer The MetaModel service container.
-     */
-    public function __construct(IMetaModelsServiceContainer $serviceContainer)
-    {
-        $this->serviceContainer = $serviceContainer;
-    }
-
-    /**
      * Retrieve the service container.
      *
      * @return IMetaModelsServiceContainer
      */
     public function getServiceContainer()
     {
-        return $this->serviceContainer;
+        return $GLOBALS['container']['metamodels-service-container'];
     }
 }
