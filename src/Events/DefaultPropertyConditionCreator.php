@@ -26,11 +26,12 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionChainInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\BooleanCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\NotCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyVisibleCondition;
-use MetaModels\Attribute\IAttribute;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyContainAnyOfCondition;
 use MetaModels\IMetaModel;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This class creates the default instances for property conditions when generating input screens.
@@ -38,29 +39,20 @@ use MetaModels\IMetaModel;
 class DefaultPropertyConditionCreator
 {
     /**
-     * Extract the attribute instance from the MetaModel.
+     * The event dispatcher.
      *
-     * @param IMetaModel $metaModel   The MetaModel instance.
-     *
-     * @param string     $attributeId The attribute id.
-     *
-     * @return IAttribute
-     *
-     * @throws \RuntimeException When the attribute could not be retrieved.
+     * @var EventDispatcherInterface
      */
-    private function getAttributeFromMetaModel(IMetaModel $metaModel, $attributeId)
+    private $dispatcher;
+
+    /**
+     * Create a new instance.
+     *
+     * @param EventDispatcherInterface $dispatcher The event dispatcher.
+     */
+    public function __construct(EventDispatcherInterface $dispatcher)
     {
-        $attribute = $metaModel->getAttributeById($attributeId);
-
-        if (!$attribute) {
-            throw new \RuntimeException(sprintf(
-                'Could not retrieve attribute %s from MetaModel %s.',
-                $attributeId,
-                $metaModel->getTableName()
-            ));
-        }
-
-        return $attribute;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -89,33 +81,177 @@ class DefaultPropertyConditionCreator
 
         switch ($meta['type']) {
             case 'conditionor':
-                $event->setInstance(new PropertyConditionChain(array(), ConditionChainInterface::OR_CONJUNCTION));
-                break;
+                $event->setInstance($this->buildOrCondition($event->getData(), $metaModel));
+                return;
             case 'conditionand':
-                $event->setInstance(new PropertyConditionChain(array(), ConditionChainInterface::AND_CONJUNCTION));
-                break;
+                $event->setInstance($this->buildAndCondition($event->getData(), $metaModel));
+                return;
             case 'conditionpropertyvalueis':
-                $attribute = $this->getAttributeFromMetaModel($metaModel, $meta['attr_id']);
-                $event->setInstance(new PropertyValueCondition($attribute->getColName(), $meta['value']));
-                break;
+                $event->setInstance($this->buildPropertyValueCondition($event->getData(), $metaModel));
+                return;
             case 'conditionpropertycontainanyof':
-                $attribute = $this->getAttributeFromMetaModel($metaModel, $meta['attr_id']);
-
-                $event->setInstance(new PropertyContainAnyOfCondition(
-                    $attribute->getColName(),
-                    deserialize($meta['value'])
-                ));
-                break;
+                $event->setInstance($this->buildPropertyContainAnyOfCondition($event->getData(), $metaModel));
+                return;
             case 'conditionpropertyvisible':
-                $attribute = $this->getAttributeFromMetaModel($metaModel, $meta['attr_id']);
-
-                $event->setInstance(new PropertyVisibleCondition($attribute->getColName()));
-                break;
-
+                $event->setInstance($this->buildPropertyVisibleCondition($event->getData(), $metaModel));
+                return;
             case 'conditionnot':
-                $event->setInstance(new NotCondition(new BooleanCondition(false)));
-                break;
+                $event->setInstance($this->buildNotCondition($event->getData(), $metaModel));
+                return;
             default:
         }
+    }
+
+    /**
+     * Build an OR condition.
+     *
+     * @param array      $condition The data.
+     * @param IMetaModel $metaModel The MetaModel instance.
+     *
+     * @return PropertyConditionChain
+     */
+    private function buildOrCondition(array $condition, IMetaModel $metaModel)
+    {
+        $children = [];
+        if (!empty($condition['children'])) {
+            foreach ($condition['children'] as $child) {
+                $children[] = $this->convertCondition($child, $metaModel);
+            }
+        }
+
+        return new PropertyConditionChain($children, ConditionChainInterface::OR_CONJUNCTION);
+    }
+
+    /**
+     * Build an AND condition.
+     *
+     * @param array      $condition The data.
+     * @param IMetaModel $metaModel The MetaModel instance.
+     *
+     * @return PropertyConditionChain
+     */
+    private function buildAndCondition(array $condition, IMetaModel $metaModel)
+    {
+        $children = [];
+        if (!empty($condition['children'])) {
+            foreach ($condition['children'] as $child) {
+                $children[] = $this->convertCondition($child, $metaModel);
+            }
+        }
+
+        return new PropertyConditionChain($children, ConditionChainInterface::AND_CONJUNCTION);
+    }
+
+    /**
+     * Extract the attribute instance from the MetaModel.
+     *
+     * @param IMetaModel $metaModel   The MetaModel instance.
+     *
+     * @param string     $attributeId The attribute id.
+     *
+     * @return string
+     *
+     * @throws \RuntimeException When the attribute could not be retrieved.
+     */
+    private function getAttributeName(IMetaModel $metaModel, $attributeId)
+    {
+        if (null === $attribute = $metaModel->getAttributeById($attributeId)) {
+            throw new \RuntimeException(sprintf(
+                'Could not retrieve attribute %s from MetaModel %s.',
+                $attributeId,
+                $metaModel->getTableName()
+            ));
+        }
+
+        return $attribute->getColName();
+    }
+
+    /**
+     * Create a property value condition.
+     *
+     * @param array      $condition The data.
+     * @param IMetaModel $metaModel The MetaModel instance.
+     *
+     * @return PropertyValueCondition
+     */
+    private function buildPropertyValueCondition(array $condition, IMetaModel $metaModel)
+    {
+        return new PropertyValueCondition(
+            $this->getAttributeName($metaModel, $condition['attr_id']),
+            $condition['value']
+        );
+    }
+
+    /**
+     * Create a property contain any of value condition.
+     *
+     * @param array      $condition The data.
+     * @param IMetaModel $metaModel The MetaModel instance.
+     *
+     * @return PropertyContainAnyOfCondition
+     */
+    private function buildPropertyContainAnyOfCondition(array $condition, IMetaModel $metaModel)
+    {
+        return new PropertyContainAnyOfCondition(
+            $this->getAttributeName($metaModel, $condition['attr_id']),
+            deserialize($condition['value'])
+        );
+    }
+
+    /**
+     * Create a property visible condition.
+     *
+     * @param array      $condition The data.
+     * @param IMetaModel $metaModel The MetaModel instance.
+     *
+     * @return PropertyVisibleCondition
+     */
+    private function buildPropertyVisibleCondition(array $condition, IMetaModel $metaModel)
+    {
+        return new PropertyVisibleCondition($this->getAttributeName($metaModel, $condition['attr_id']));
+    }
+
+    /**
+     * Create a not condition.
+     *
+     * @param array      $condition The data.
+     * @param IMetaModel $metaModel The MetaModel instance.
+     *
+     * @return NotCondition
+     */
+    private function buildNotCondition(array $condition, IMetaModel $metaModel)
+    {
+        // No children, then return "true".
+        if (empty($condition['children'])) {
+            return new NotCondition(new BooleanCondition(false));
+        }
+        if (1 < $count = count($condition['children'])) {
+            throw new \InvalidArgumentException('NOT conditions may only contain one child, ' . $count . ' given.');
+        }
+
+        return new NotCondition($this->convertCondition($condition['children'][0], $metaModel));
+    }
+
+    /**
+     * Perform conversion of a sub condition.
+     *
+     * @param array      $condition The condition to convert.
+     * @param IMetaModel $metaModel The MetaModel instance.
+     *
+     * @return PropertyConditionInterface
+     */
+    private function convertCondition($condition, IMetaModel $metaModel)
+    {
+        $event = new CreatePropertyConditionEvent($condition, $metaModel);
+        $this->dispatcher->dispatch(CreatePropertyConditionEvent::NAME, $event);
+
+        if (null === $result = $event->getInstance()) {
+            throw new \RuntimeException(sprintf(
+                'Condition of type %s could not be transformed to an instance.',
+                $condition['type']
+            ));
+        }
+
+        return $result;
     }
 }

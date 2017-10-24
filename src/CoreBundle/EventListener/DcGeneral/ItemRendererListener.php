@@ -21,7 +21,7 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\Events\MetaModel;
+namespace MetaModels\CoreBundle\EventListener\DcGeneral;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetParentHeaderEvent;
@@ -32,40 +32,29 @@ use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\IItem;
 use MetaModels\Items;
 use MetaModels\Render\Setting\ICollection;
+use MetaModels\Render\Setting\IRenderSettingFactory;
 use MetaModels\Render\Template;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Render a MetaModel item in the backend using the render setting attached to the active input screen.
  */
-class RenderItem
+class ItemRendererListener
 {
     /**
-     * Remove invariant attributes from the render setting.
+     * The render setting factory.
      *
-     * This is done by cloning the input collection of render settings and removing any invariant attribute.
-     *
-     * @param IItem       $nativeItem    The native item.
-     *
-     * @param ICollection $renderSetting The render setting to be used.
-     *
-     * @return ICollection
+     * @var IRenderSettingFactory
      */
-    protected static function removeInvariantAttributes(IItem $nativeItem, ICollection $renderSetting)
+    private $renderSettingFactory;
+
+    /**
+     * Create a new instance.
+     *
+     * @param IRenderSettingFactory $renderSettingFactory
+     */
+    public function __construct(IRenderSettingFactory $renderSettingFactory)
     {
-        $model = $nativeItem->getMetaModel();
-
-        if ($model->hasVariants() && !$nativeItem->isVariantBase()) {
-            // Create a clone to have a separate copy of the object as we are going to manipulate it here.
-            $renderSetting = clone $renderSetting;
-
-            // Loop over all attributes and remove those from rendering that are not desired.
-            foreach (array_keys($model->getInVariantAttributes()) as $strAttrName) {
-                $renderSetting->setSetting($strAttrName, null);
-            }
-        }
-
-        return $renderSetting;
+        $this->renderSettingFactory = $renderSettingFactory;
     }
 
     /**
@@ -75,7 +64,7 @@ class RenderItem
      *
      * @return void
      */
-    public static function render(ModelToLabelEvent $event)
+    public function render(ModelToLabelEvent $event)
     {
         $environment = $event->getEnvironment();
         /** @var IMetaModelDataDefinition $definition */
@@ -94,9 +83,7 @@ class RenderItem
         $nativeItem = $model->getItem();
         $metaModel  = $nativeItem->getMetaModel();
 
-        $renderSetting = $metaModel
-            ->getServiceContainer()
-            ->getRenderSettingFactory()
+        $renderSetting = $this->renderSettingFactory
             ->createCollection($metaModel, $definition->getMetaModelDefinition()->getActiveRenderSetting());
 
         if (!$renderSetting) {
@@ -132,7 +119,7 @@ class RenderItem
      *
      * @return void
      */
-    public static function getReadableValue(RenderReadablePropertyValueEvent $event)
+    public function getReadableValue(RenderReadablePropertyValueEvent $event)
     {
         $environment = $event->getEnvironment();
         /** @var IMetaModelDataDefinition $definition */
@@ -148,10 +135,7 @@ class RenderItem
         $nativeItem = $model->getItem();
         $metaModel  = $nativeItem->getMetaModel();
 
-        $renderSetting = $metaModel
-            ->getServiceContainer()
-            ->getRenderSettingFactory()
-            ->createCollection($metaModel, $definition->getMetaModelDefinition()->getActiveRenderSetting());
+        $renderSetting = $this->renderSettingFactory->createCollection($metaModel, $definition->getMetaModelDefinition()->getActiveRenderSetting());
 
         if (!$renderSetting) {
             return;
@@ -179,17 +163,20 @@ class RenderItem
      *
      * @return void
      */
-    public static function addAdditionalParentHeaderFields(GetParentHeaderEvent $event)
+    public function addAdditionalParentHeaderFields(GetParentHeaderEvent $event)
     {
         $parentModel = $event->getModel();
 
         if (!$parentModel instanceof Model) {
             return;
         }
+        $environment = $event->getEnvironment();
+        /** @var IMetaModelDataDefinition $definition */
+        $definition = $environment->getDataDefinition();
 
         $item          = $parentModel->getItem();
         $metaModel     = $item->getMetaModel();
-        $renderSetting = $metaModel->getServiceContainer()->getRenderSettingFactory()->createCollection($metaModel);
+        $renderSetting = $this->renderSettingFactory->createCollection($metaModel, $definition->getMetaModelDefinition()->getActiveRenderSetting());
         $additional    = array();
 
         foreach ($renderSetting->getSettingNames() as $name) {
@@ -208,16 +195,30 @@ class RenderItem
     }
 
     /**
-     * Register to the event dispatcher.
+     * Remove invariant attributes from the render setting.
      *
-     * @param EventDispatcherInterface $dispatcher The event dispatcher.
+     * This is done by cloning the input collection of render settings and removing any invariant attribute.
      *
-     * @return void
+     * @param IItem       $nativeItem    The native item.
+     *
+     * @param ICollection $renderSetting The render setting to be used.
+     *
+     * @return ICollection
      */
-    public static function register($dispatcher)
+    private function removeInvariantAttributes(IItem $nativeItem, ICollection $renderSetting)
     {
-        $dispatcher->addListener(ModelToLabelEvent::NAME, array(__CLASS__, 'render'));
-        $dispatcher->addListener(RenderReadablePropertyValueEvent::NAME, array(__CLASS__, 'getReadableValue'));
-        $dispatcher->addListener(GetParentHeaderEvent::NAME, array(__CLASS__, 'addAdditionalParentHeaderFields'));
+        $model = $nativeItem->getMetaModel();
+
+        if ($model->hasVariants() && !$nativeItem->isVariantBase()) {
+            // Create a clone to have a separate copy of the object as we are going to manipulate it here.
+            $renderSetting = clone $renderSetting;
+
+            // Loop over all attributes and remove those from rendering that are not desired.
+            foreach (array_keys($model->getInVariantAttributes()) as $strAttrName) {
+                $renderSetting->setSetting($strAttrName, null);
+            }
+        }
+
+        return $renderSetting;
     }
 }

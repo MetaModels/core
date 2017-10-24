@@ -19,11 +19,11 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\Populator;
+namespace MetaModels\CoreBundle\EventListener\DcGeneral\EnvironmentPopulator;
 
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use MetaModels\DcGeneral\Events\MetaModel\PopulateAttributeEvent;
-use MetaModels\Helper\ViewCombinations;
+use MetaModels\IFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -41,22 +41,22 @@ class AttributePopulator
     private $dispatcher;
 
     /**
-     * The view combinations.
+     * The MetaModels factory.
      *
-     * @var ViewCombinations
+     * @var IFactory
      */
-    private $viewCombinations;
+    private $factory;
 
     /**
      * Create a new instance.
      *
-     * @param EventDispatcherInterface $dispatcher       The event dispatcher.
-     * @param ViewCombinations         $viewCombinations The view combinations.
+     * @param EventDispatcherInterface $dispatcher The event dispatcher.
+     * @param IFactory                 $factory    The MetaModels factory.
      */
-    public function __construct(EventDispatcherInterface $dispatcher, ViewCombinations $viewCombinations)
+    public function __construct(EventDispatcherInterface $dispatcher, IFactory $factory)
     {
-        $this->dispatcher       = $dispatcher;
-        $this->viewCombinations = $viewCombinations;
+        $this->dispatcher = $dispatcher;
+        $this->factory    = $factory;
     }
 
     /**
@@ -68,8 +68,7 @@ class AttributePopulator
      */
     public function populate(EnvironmentInterface $environment)
     {
-        $inputScreen = $this->viewCombinations->getInputScreenDetails($environment->getDataDefinition()->getName());
-        $metaModel   = $inputScreen->getMetaModel();
+        $metaModel = $this->factory->getMetaModel($environment->getDataDefinition()->getName());
         foreach ($metaModel->getAttributes() as $attribute) {
             $event = new PopulateAttributeEvent($metaModel, $attribute, $environment);
             // Trigger BuildAttribute Event.

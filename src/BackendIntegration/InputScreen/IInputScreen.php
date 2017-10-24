@@ -28,6 +28,8 @@ use MetaModels\IMetaModel;
 
 /**
  * This interface describes the abstraction of an input screen.
+ *
+ * @deprecated This will get removed.
  */
 interface IInputScreen
 {

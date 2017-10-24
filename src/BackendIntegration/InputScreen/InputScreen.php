@@ -35,6 +35,8 @@ use MetaModels\IMetaModelsServiceContainer;
 
 /**
  * Implementation of IInputScreen.
+ *
+ * @deprecated This class will get removed.
  */
 class InputScreen implements IInputScreen
 {

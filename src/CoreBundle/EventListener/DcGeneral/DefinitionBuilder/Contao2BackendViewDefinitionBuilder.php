@@ -19,10 +19,8 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\DefinitionBuilder;
+namespace MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder;
 
-use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinition;
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\DefaultModelFormatterConfig;
@@ -30,14 +28,12 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\GroupAndSor
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\GroupAndSortingInformationInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\ListingConfigInterface;
 use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
-use MetaModels\BackendIntegration\InputScreen\IInputScreen;
-use MetaModels\BackendIntegration\InputScreen\IInputScreenGroupingAndSorting;
+use MetaModels\CoreBundle\Assets\IconBuilder;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
-use MetaModels\Helper\ToolboxFile;
-use MetaModels\Helper\ViewCombinations;
+use MetaModels\IFactory;
 use MetaModels\IMetaModel;
 use MetaModels\Render\Setting\IRenderSettingFactory;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use MetaModels\ViewCombination\ViewCombination;
 
 /**
  * This class builds the Contao2 backend view definition.
@@ -49,16 +45,9 @@ class Contao2BackendViewDefinitionBuilder
     /**
      * The view combinations.
      *
-     * @var ViewCombinations
+     * @var ViewCombination
      */
-    private $viewCombinations;
-
-    /**
-     * The event dispatcher.
-     *
-     * @var EventDispatcherInterface
-     */
-    private $dispatcher;
+    private $viewCombination;
 
     /**
      * The render setting factory.
@@ -84,7 +73,7 @@ class Contao2BackendViewDefinitionBuilder
     /**
      * The input screen (only set during build phase).
      *
-     * @var IInputScreen
+     * @var array
      */
     private $inputScreen;
 
@@ -96,20 +85,37 @@ class Contao2BackendViewDefinitionBuilder
     private $metaModel;
 
     /**
+     * The MetaModels factory.
+     *
+     * @var IFactory
+     */
+    private $factory;
+
+    /**
+     * The icon builder.
+     *
+     * @var IconBuilder
+     */
+    private $iconBuilder;
+
+    /**
      * Create a new instance.
      *
-     * @param ViewCombinations         $viewCombinations     The view combinations.
-     * @param EventDispatcherInterface $dispatcher           The event dispatcher.
+     * @param ViewCombination          $viewCombination      The view combinations.
+     * @param IFactory                 $factory              The MetaModels factory.
      * @param IRenderSettingFactory    $renderSettingFactory The render setting factory.
+     * @param IconBuilder              $iconBuilder          The icon builder.
      */
     public function __construct(
-        ViewCombinations $viewCombinations,
-        EventDispatcherInterface $dispatcher,
-        IRenderSettingFactory $renderSettingFactory
+        ViewCombination $viewCombination,
+        IFactory $factory,
+        IRenderSettingFactory $renderSettingFactory,
+        IconBuilder $iconBuilder
     ) {
-        $this->viewCombinations     = $viewCombinations;
-        $this->dispatcher           = $dispatcher;
+        $this->viewCombination      = $viewCombination;
+        $this->factory              = $factory;
         $this->renderSettingFactory = $renderSettingFactory;
+        $this->iconBuilder          = $iconBuilder;
     }
 
     /**
@@ -125,8 +131,8 @@ class Contao2BackendViewDefinitionBuilder
     {
         $this->container   = $container;
         $this->definition  = $this->getOrCreateDefinition();
-        $this->inputScreen = $this->viewCombinations->getInputScreenDetails($container->getName());
-        $this->metaModel   = $this->inputScreen->getMetaModel();
+        $this->inputScreen = $this->viewCombination->getScreen($container->getName());
+        $this->metaModel   = $this->factory->getMetaModel($container->getName());
 
         $this->parseListing();
 
@@ -176,13 +182,13 @@ class Contao2BackendViewDefinitionBuilder
         }
 
         if (null === $listing->getRootIcon()) {
-            $listing->setRootIcon($this->getBackendIcon($this->inputScreen->getIcon()));
+            $listing->setRootIcon($this->iconBuilder->getBackendIcon($this->inputScreen['meta']['backendicon']));
         }
 
         $this->parseListSorting($listing);
         $this->parseListLabel($listing);
 
-        $listing->setShowColumns($this->inputScreen->isShowColumns());
+        $listing->setShowColumns((bool) $this->inputScreen['meta']['showColumns']);
     }
 
     /**
@@ -195,25 +201,25 @@ class Contao2BackendViewDefinitionBuilder
     private function parseListSorting(ListingConfigInterface $listing)
     {
         $definitions = $listing->getGroupAndSortingDefinition();
-        foreach ($this->inputScreen->getGroupingAndSorting() as $information) {
+        foreach ($this->inputScreen['groupSort'] as $information) {
             $definition = $definitions->add();
-            $definition->setName($information->getName());
-            if ($information->isDefault() && !$definitions->hasDefault()) {
+            $definition->setName($information['name']);
+            if ($information['isdefault'] && !$definitions->hasDefault()) {
                 $definitions->markDefault($definition);
             }
 
             $this->handleSorting($information, $definition);
 
-            $groupType = $this->convertRenderGroupType($information->getRenderGroupType());
+            $groupType = $this->convertRenderGroupType($information['rendergrouptype']);
             if ($groupType !== GroupAndSortingInformationInterface::GROUP_NONE
-                && $information->getRenderGroupAttribute()
+                && $information['col_name']
             ) {
                 $propertyInformation = $definition->add(0);
                 $propertyInformation
-                    ->setProperty($information->getRenderGroupAttribute())
+                    ->setProperty($information['col_name'])
                     ->setGroupingMode($groupType)
-                    ->setGroupingLength($information->getRenderGroupLength())
-                    ->setSortingMode($information->getRenderSortDirection());
+                    ->setGroupingLength($information['rendergrouplen'])
+                    ->setSortingMode($information['rendersort']);
             }
         }
     }
@@ -221,16 +227,16 @@ class Contao2BackendViewDefinitionBuilder
     /**
      * Set the correct sorting value.
      *
-     * @param IInputScreenGroupingAndSorting     $information The sorting and group information.
+     * @param array                              $information The sorting and group information.
      * @param GroupAndSortingDefinitionInterface $definition  The sorting and group definition.
      *
      * @return void
      */
     private function handleSorting(
-        IInputScreenGroupingAndSorting $information,
+        $information,
         GroupAndSortingDefinitionInterface $definition
     ) {
-        if ($information->isManualSorting()) {
+        if ($information['ismanualsort']) {
             $definition
                 ->add()
                 ->setManualSorting()
@@ -238,11 +244,11 @@ class Contao2BackendViewDefinitionBuilder
                 ->setSortingMode(GroupAndSortingInformationInterface::SORT_ASC);
             return;
         }
-        if ($information->getRenderSortAttribute()) {
+        if ($information['col_name']) {
             $definition
                 ->add()
-                ->setProperty($information->getRenderSortAttribute())
-                ->setSortingMode($information->getRenderSortDirection());
+                ->setProperty($information['col_name'])
+                ->setSortingMode($information['rendersort']);
         }
     }
 
@@ -269,33 +275,6 @@ class Contao2BackendViewDefinitionBuilder
         }
 
         return GroupAndSortingInformationInterface::GROUP_NONE;
-    }
-
-    /**
-     * Generate a 16x16 pixel version of the passed image file. If this can not be done, the default image is returned.
-     *
-     * @param string $icon The name of the image file.
-     *
-     * @return null|string
-     */
-    private function getBackendIcon($icon)
-    {
-        // Determine the image to use.
-        if ($icon) {
-            $icon = ToolboxFile::convertValueToPath($icon);
-
-            /** @var ResizeImageEvent $event */
-            $event = $this->dispatcher->dispatch(
-                ContaoEvents::IMAGE_RESIZE,
-                new ResizeImageEvent($icon, 16, 16)
-            );
-
-            if (file_exists(TL_ROOT . '/' . $event->getResultImage())) {
-                return $event->getResultImage();
-            }
-        }
-
-        return 'bundles/metamodelscore/images/icons/metamodels.png';
     }
 
     /**

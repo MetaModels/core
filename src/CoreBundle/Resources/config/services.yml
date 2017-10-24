@@ -1,4 +1,13 @@
 services:
+    metamodels.assets.icon_builder:
+        class: MetaModels\CoreBundle\Assets\IconBuilder
+        arguments:
+            - "@=service('contao.framework').getAdapter('Contao\\\\FilesModel')"
+            - "@contao.image.image_factory"
+            - "%kernel.project_dir%"
+            - "%metamodels.assets_dir%"
+            - "@=service('contao.framework').getAdapter('Contao\\\\Image')"
+
     metamodels.cache:
         class: Doctrine\Common\Cache\FilesystemCache
         arguments:
@@ -59,9 +68,8 @@ services:
         arguments:
             - "@metamodels.factory"
             - "@metamodels.view_combination"
-            - "@contao.image.image_factory"
             - "@=service('contao.framework').getAdapter('Contao\\\\Controller')"
-            - "@=service('contao.framework').getAdapter('Contao\\\\Image')"
+            - "@metamodels.assets.icon_builder"
 
     metamodels.controller.support_screen:
         class: MetaModels\CoreBundle\Controller\Backend\SupportMetaModelsController

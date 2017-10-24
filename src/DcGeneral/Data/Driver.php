@@ -43,7 +43,6 @@ use MetaModels\Filter\IFilter;
 use MetaModels\IItem;
 use MetaModels\IItems;
 use MetaModels\IMetaModel;
-use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\Item;
 
 /**
@@ -66,13 +65,6 @@ class Driver implements MultiLanguageDataProviderInterface
      * @var IMetaModel
      */
     protected $metaModel = null;
-
-    /**
-     * The service container.
-     *
-     * @var IMetaModelsServiceContainer
-     */
-    protected $serviceContainer = null;
 
     /**
      * The current active language.
@@ -196,16 +188,6 @@ class Driver implements MultiLanguageDataProviderInterface
     }
 
     /**
-     * Retrieve the service container.
-     *
-     * @return IMetaModelsServiceContainer
-     */
-    protected function getServiceContainer()
-    {
-        return $this->serviceContainer;
-    }
-
-    /**
      * Retrieve the MetaModel.
      *
      * @return IMetaModel
@@ -215,24 +197,11 @@ class Driver implements MultiLanguageDataProviderInterface
     protected function getMetaModel()
     {
         if (!$this->metaModel) {
-            $this->metaModel = $this->getServiceContainer()->getFactory()->getMetaModel($this->strTable);
-
             if ($this->metaModel === null) {
-                throw new \RuntimeException('Could not retrieve MetaModel ' . $this->strTable);
+                throw new \RuntimeException('No MetaModel instance set for ' . $this->strTable);
             }
         }
-
         return $this->metaModel;
-    }
-
-    /**
-     * Retrieve the Database.
-     *
-     * @return \Contao\Database
-     */
-    protected function getDatabase()
-    {
-        return $this->getServiceContainer()->getDatabase();
     }
 
     /**
@@ -283,8 +252,8 @@ class Driver implements MultiLanguageDataProviderInterface
             throw new \RuntimeException('Missing table name.');
         }
 
-        $this->strTable         = $arrConfig['source'];
-        $this->serviceContainer = $arrConfig['service-container'];
+        $this->strTable  = $arrConfig['source'];
+        $this->metaModel = $arrConfig['metaModel'];
     }
 
     /**

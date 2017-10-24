@@ -20,6 +20,8 @@ services:
 
     metamodels.default_property_condition_creator:
         class: MetaModels\Events\DefaultPropertyConditionCreator
+        arguments:
+            - "@event_dispatcher"
         tags:
             -   name: kernel.event_listener
                 event: metamodels.events.create-property-condition-event

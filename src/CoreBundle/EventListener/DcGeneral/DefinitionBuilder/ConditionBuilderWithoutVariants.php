@@ -19,7 +19,7 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\DefinitionBuilder;
+namespace MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder;
 
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\BasicDefinitionInterface;
 
@@ -37,7 +37,7 @@ class ConditionBuilderWithoutVariants extends AbstractConditionBuilder
      */
     protected function calculate()
     {
-        if (!$this->inputScreen->isStandalone()) {
+        if ($this->inputScreen['meta']['rendertype'] !== 'standalone') {
             if ($this->container->getBasicDefinition()->getMode() == BasicDefinitionInterface::MODE_HIERARCHICAL) {
                 throw new \RuntimeException('Hierarchical mode with parent table is not supported yet.');
             }

@@ -60,7 +60,7 @@ class CreatePropertyConditionEvent extends Event
      *
      * @param IMetaModel $metaModel The MetaModel instance the condition applies to.
      */
-    public function __construct($data, $metaModel)
+    public function __construct($data, IMetaModel $metaModel)
     {
         $this->data      = $data;
         $this->metaModel = $metaModel;

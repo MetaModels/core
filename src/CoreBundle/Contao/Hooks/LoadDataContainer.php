@@ -22,10 +22,8 @@ namespace MetaModels\CoreBundle\Contao\Hooks;
 
 use Contao\Controller;
 use Contao\CoreBundle\Framework\Adapter;
-use Contao\CoreBundle\Image\ImageFactoryInterface;
-use Contao\Image;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
-use MetaModels\Helper\ToolboxFile;
+use MetaModels\CoreBundle\Assets\IconBuilder;
 use MetaModels\IFactory;
 use MetaModels\ViewCombination\ViewCombination;
 
@@ -56,40 +54,30 @@ class LoadDataContainer
     private $combination;
 
     /**
-     * The image factory.
+     * The icon builder.
      *
-     * @var ImageFactoryInterface
+     * @var IconBuilder
      */
-    private $imageFactory;
-
-    /**
-     * The image adapter.
-     *
-     * @var Image
-     */
-    private $image;
+    private $iconBuilder;
 
     /**
      * Create a new instance.
      *
      * @param IFactory              $factory           The MetaModels factory.
      * @param ViewCombination       $combination       The view combination provider.
-     * @param ImageFactoryInterface $imageFactory      The image factory for resizing images.
      * @param Adapter               $controllerAdapter The controller adapter to load languages and data containers.
-     * @param Adapter               $imageAdapter      The image adapter to generate HTML code for buttons.
+     * @param IconBuilder           $iconBuilder       The icon builder.
      */
     public function __construct(
         IFactory $factory,
         ViewCombination $combination,
-        ImageFactoryInterface $imageFactory,
         Adapter $controllerAdapter,
-        Adapter $imageAdapter
+        IconBuilder $iconBuilder
     ) {
         $this->factory      = $factory;
         $this->combination  = $combination;
-        $this->imageFactory = $imageFactory;
         $this->controller   = $controllerAdapter;
-        $this->image        = $imageAdapter;
+        $this->iconBuilder  = $iconBuilder;
     }
 
     /**
@@ -186,7 +174,7 @@ class LoadDataContainer
             (
                 'label'               => &$caption,
                 'href'                => 'table=' . $metaModelTable,
-                'icon'                => $this->getBackendIcon($inputScreen['meta']['backendicon']),
+                'icon'                => $this->iconBuilder->getBackendIcon($inputScreen['meta']['backendicon']),
                 'attributes'          => 'onclick="Backend.getScrollOffset()"',
             );
 
@@ -218,26 +206,6 @@ class LoadDataContainer
     }
 
     /**
-     * Get a 16x16 pixel resized icon of the passed image if it exists, return the default icon otherwise.
-     *
-     * @param string $icon        The icon to resize.
-     *
-     * @param string $defaultIcon The default icon.
-     *
-     * @return string
-     */
-    public function getBackendIcon($icon, $defaultIcon = 'bundles/metamodelscore/images/icons/metamodels.png')
-    {
-        $realIcon   = ToolboxFile::convertValueToPath($icon);
-        // Determine image to use.
-        if ($realIcon && file_exists(TL_ROOT . '/' . $realIcon)) {
-            return $this->imageFactory->create($realIcon, [16, 16, 'proportional']);
-        }
-
-        return $defaultIcon;
-    }
-
-    /**
      * This method exists only for being compatible when MetaModels are being used as child table from DC_Table context.
      *
      * @param string $idParameter The id parameter in use.
@@ -258,7 +226,7 @@ class LoadDataContainer
      *
      * @return string
      */
-    public function buildChildOperationButton($idParameter, $itemId, $href, $label, $name, $icon, $attributes, $table)
+    private function buildChildOperationButton($idParameter, $itemId, $href, $label, $name, $icon, $attributes, $table)
     {
         $modelId = ModelId::fromValues($table, $itemId);
 
@@ -279,7 +247,7 @@ class LoadDataContainer
             $url,
             specialchars($title),
             $attributes,
-            $this->image->getHtml($icon, $label)
+            $this->iconBuilder->getBackendIconImageTag($icon, $label)
         );
     }
 }

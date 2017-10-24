@@ -30,6 +30,8 @@ use MetaModels\IMetaModelsServiceContainer;
  * Class ViewCombinations.
  *
  * Retrieve combinations of view and input screens for the currently logged in user (either frontend or backend).
+ *
+ * @deprecated This will get removed.
  */
 abstract class ViewCombinations
 {

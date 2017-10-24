@@ -19,7 +19,7 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\Populator;
+namespace MetaModels\CoreBundle\EventListener\DcGeneral\EnvironmentPopulator;
 
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\PopulateEnvironmentEvent;

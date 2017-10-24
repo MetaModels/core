@@ -34,20 +34,35 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 class MetaModelsCoreExtension extends Extension
 {
     /**
+     * The configuration files.
+     *
+     * @var string[]
+     */
+    private $files = [
+        'config.yml',
+        'services.yml',
+        'listeners.yml',
+        'filter-settings.yml',
+        'dc-general/definition-builder.yml',
+        'dc-general/environment-populator.yml',
+        'dc-general/listener.yml',
+    ];
+
+    /**
      * {@inheritDoc}
      */
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $loader->load('config.yml');
-        $loader->load('services.yml');
-        $loader->load('listeners.yml');
-        $loader->load('filter-settings.yml');
+        foreach ($this->files as $file) {
+            $loader->load($file);
+        }
 
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
         $this->buildCacheService($container, $config);
 
         $container->setParameter('metamodels.resource_dir', __DIR__ . '/../Resources');
+        $container->setParameter('metamodels.assets_dir', $config['assets_dir']);
     }
 
     /**
@@ -55,7 +70,10 @@ class MetaModelsCoreExtension extends Extension
      */
     public function getConfiguration(array $config, ContainerBuilder $container)
     {
-        return new Configuration($container->getParameter('kernel.debug'));
+        return new Configuration(
+            $container->getParameter('kernel.debug'),
+            $container->getParameter('kernel.project_dir')
+        );
     }
 
     /**

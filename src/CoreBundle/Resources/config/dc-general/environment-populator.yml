@@ -1,0 +1,45 @@
+services:
+    metamodels.environment_populator.asset_populator:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\EnvironmentPopulator\AssetPopulator
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.factory.populate-environment
+              method: "handle"
+
+    metamodels.environment_populator.attribute_populator:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\EnvironmentPopulator\AttributePopulator
+        arguments:
+            - "@event_dispatcher"
+            - "@metamodels.factory"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.factory.populate-environment
+              method: "handle"
+
+    metamodels.environment_populator.data_provider_populator:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\EnvironmentPopulator\DataProviderPopulator
+        arguments:
+            - "@metamodels.factory"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.factory.populate-environment
+              method: "handle"
+
+    metamodels.environment_populator.translator_populator:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\EnvironmentPopulator\TranslatorPopulator
+        arguments:
+            - "@event_dispatcher"
+            - "@metamodels.view_combination"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.factory.populate-environment
+              method: "handle"
+
+    metamodels.pre_create_dc_general_listener:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\PreCreateListener
+        arguments:
+            - "@metamodels.factory"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.factory.pre-create-dc-general
+              method: "handle"

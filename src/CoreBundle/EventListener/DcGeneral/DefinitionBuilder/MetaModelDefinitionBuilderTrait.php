@@ -19,7 +19,7 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\DefinitionBuilder;
+namespace MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder;
 
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;

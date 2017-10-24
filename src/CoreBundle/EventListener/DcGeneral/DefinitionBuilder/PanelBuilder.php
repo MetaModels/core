@@ -19,7 +19,7 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\DefinitionBuilder;
+namespace MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultFilterElementInformation;
@@ -31,9 +31,8 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\Searc
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\SubmitElementInformationInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\PanelRowCollectionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\PanelRowInterface;
-use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
-use MetaModels\Helper\ViewCombinations;
+use MetaModels\ViewCombination\ViewCombination;
 
 /**
  * This class handles the panel building.
@@ -45,25 +44,25 @@ class PanelBuilder
     /**
      * The view combinations.
      *
-     * @var ViewCombinations
+     * @var ViewCombination
      */
-    private $viewCombinations;
+    private $viewCombination;
 
     /**
      * The input screen to use (only set during build phase).
      *
-     * @var IInputScreen
+     * @var array
      */
     private $inputScreen;
 
     /**
      * Create a new instance.
      *
-     * @param ViewCombinations $viewCombinations The view combinations.
+     * @param ViewCombination $viewCombination The view combinations.
      */
-    public function __construct(ViewCombinations $viewCombinations)
+    public function __construct(ViewCombination $viewCombination)
     {
-        $this->viewCombinations = $viewCombinations;
+        $this->viewCombination = $viewCombination;
     }
 
     /**
@@ -75,7 +74,7 @@ class PanelBuilder
      */
     protected function build(IMetaModelDataDefinition $container)
     {
-        $this->inputScreen = $this->viewCombinations->getInputScreenDetails($container->getName());
+        $this->inputScreen = $this->viewCombination->getScreen($container->getName());
 
         // Check if we have a BackendViewDef.
         if ($container->hasDefinition(Contao2BackendViewDefinitionInterface::NAME)) {
@@ -86,7 +85,7 @@ class PanelBuilder
         }
 
         // Get the panel layout.
-        $panelLayout = $this->inputScreen->getPanelLayout();
+        $panelLayout = $this->inputScreen['meta']['panelLayout'];
 
         // Check if we have a layout.
         if (empty($panelLayout)) {
@@ -206,10 +205,10 @@ class PanelBuilder
      */
     private function parsePanelFilter(PanelRowInterface $row)
     {
-        foreach ($this->inputScreen->getProperties() as $property => $value) {
+        foreach ($this->inputScreen['properties'] as $value) {
             if (!empty($value['info']['filter'])) {
                 $element = new DefaultFilterElementInformation();
-                $element->setPropertyName($property);
+                $element->setPropertyName($value['col_name']);
                 if (!$row->hasElement($element->getName())) {
                     $row->addElement($element);
                 }
@@ -253,9 +252,9 @@ class PanelBuilder
             throw new \InvalidArgumentException('Search element does not implement the correct interface.');
         }
 
-        foreach ($this->inputScreen->getProperties() as $property => $value) {
+        foreach ($this->inputScreen['properties'] as $value) {
             if (!empty($value['info']['search'])) {
-                $element->addProperty($property);
+                $element->addProperty($value['col_name']);
             }
         }
 
