@@ -23,6 +23,7 @@ namespace MetaModels\CoreBundle\Assets;
 
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Image\ImageFactoryInterface;
+use Contao\Validator;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -43,6 +44,13 @@ class IconBuilder
      * @var string
      */
     private $outputPath;
+
+    /**
+     * The web reachable path for assets.
+     *
+     * @var string
+     */
+    private $webPath;
 
     /**
      * Adapter to the Contao\FilesModel class.
@@ -72,6 +80,7 @@ class IconBuilder
      * @param ImageFactoryInterface $imageFactory The image factory for resizing images.
      * @param string                $rootPath     The root path of the application.
      * @param string                $outputPath   The output path for assets.
+     * @param string                $webPath      The web reachable path for assets.
      * @param Adapter               $imageAdapter The image adapter to generate HTML code images.
      */
     public function __construct(
@@ -79,12 +88,14 @@ class IconBuilder
         ImageFactoryInterface $imageFactory,
         $rootPath,
         $outputPath,
+        $webPath,
         Adapter $imageAdapter
     ) {
         $this->filesAdapter = $filesAdapter;
         $this->imageFactory = $imageFactory;
         $this->rootPath     = $rootPath;
         $this->outputPath   = $outputPath;
+        $this->webPath      = $webPath;
         $this->image        = $imageAdapter;
 
         // Ensure output path exists.
@@ -114,15 +125,24 @@ class IconBuilder
     /**
      * Get a 16x16 pixel resized icon <img>-tag of the passed image if it exists, return the default MM icon otherwise.
      *
-     * @param string $icon       The image path.
-     * @param string $alt        An optional alt attribute.
-     * @param string $attributes A string of other attributes.
+     * @param string $icon        The image path.
+     * @param string $alt         An optional alt attribute.
+     * @param string $attributes  A string of other attributes.
+     * @param string $defaultIcon The default icon.
      *
      * @return string
      */
-    public function getBackendIconImageTag($icon, $alt = '', $attributes = '')
-    {
-        return $this->image->getHtml($this->getBackendIcon($icon), $alt, $attributes);
+    public function getBackendIconImageTag(
+        $icon,
+        $alt = '',
+        $attributes = '',
+        $defaultIcon = 'bundles/metamodelscore/images/icons/metamodels.png'
+    ) {
+        return $this->image->getHtml(
+            $this->webPath . '/' . substr($this->getBackendIcon($icon, $defaultIcon), strlen($this->outputPath) + 1),
+            $alt,
+            $attributes
+        );
     }
 
     /**
@@ -135,9 +155,15 @@ class IconBuilder
      */
     public function convertValueToPath($varValue, $fallback)
     {
-        $model = $this->filesAdapter->findByPk($varValue);
-        if ($model !== null && file_exists($this->rootPath . '/' . $model->path)) {
-            return $model->path;
+        if (Validator::isUuid($varValue)) {
+            $model = $this->filesAdapter->findByPk($varValue);
+            if ($model !== null && file_exists($this->rootPath . '/' . $model->path)) {
+                return $model->path;
+            }
+            return $fallback;
+        }
+        if (file_exists($varValue)) {
+            return $varValue;
         }
 
         return $fallback;

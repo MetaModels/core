@@ -82,6 +82,10 @@ class Configuration implements ConfigurationInterface
                         })
                     ->end()
                 ->end()
+                ->scalarNode('assets_web')
+                    ->cannotBeEmpty()
+                    ->defaultValue($this->resolvePath('assets/metamodels'))
+                ->end()
             ->end();
 
         return $treeBuilder;

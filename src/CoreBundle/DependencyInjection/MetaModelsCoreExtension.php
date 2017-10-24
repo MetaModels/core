@@ -63,6 +63,7 @@ class MetaModelsCoreExtension extends Extension
 
         $container->setParameter('metamodels.resource_dir', __DIR__ . '/../Resources');
         $container->setParameter('metamodels.assets_dir', $config['assets_dir']);
+        $container->setParameter('metamodels.assets_web', $config['assets_web']);
     }
 
     /**
