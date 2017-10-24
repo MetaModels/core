@@ -30,48 +30,6 @@ use MetaModels\MetaModelsEvents;
 class SubSystemBoot
 {
     /**
-     * Local wrapper function to retrieve the current execution mode of Contao.
-     *
-     * @return string
-     */
-    protected function getMode()
-    {
-        return defined('TL_MODE') ? TL_MODE : '';
-    }
-
-    /**
-     * Check if all MetaModels tables are installed.
-     *
-     * @param \Contao\Database $database The database.
-     *
-     * @return bool
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    protected function metaModelsTablesPresent($database)
-    {
-        $tables = array_flip($database->listTables());
-
-        if (!(
-            isset($tables['tl_metamodel'])
-            && isset($tables['tl_metamodel_dca'])
-            && isset($tables['tl_metamodel_dca_sortgroup'])
-            && isset($tables['tl_metamodel_dcasetting'])
-            && isset($tables['tl_metamodel_dcasetting_condition'])
-            && isset($tables['tl_metamodel_attribute'])
-            && isset($tables['tl_metamodel_filter'])
-            && isset($tables['tl_metamodel_filtersetting'])
-            && isset($tables['tl_metamodel_rendersettings'])
-            && isset($tables['tl_metamodel_rendersetting'])
-            && isset($tables['tl_metamodel_dca_combine'])
-        )) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Boot up the system and initialize a service container.
      *
      * @param \Pimple $container The dependency injection container.
@@ -88,12 +46,31 @@ class SubSystemBoot
         if (($script == 'contao/login') || ($script == 'contao/install')) {
             return;
         }
-        $logger = \System::getContainer()->get('logger');
+        $tableManipulator = \System::getContainer()->get('metamodels.table_manipulator');
         // Ensure all tables are created.
-        if (!$this->metaModelsTablesPresent(\System::getContainer()->get('cca.legacy_dic.contao_database_connection'))
-        ) {
-            $logger->error('MetaModels startup interrupted: Not all MetaModels tables have been created.');
-            return;
+        foreach ([
+            'tl_metamodel',
+            'tl_metamodel_dca',
+            'tl_metamodel_dca_sortgroup',
+            'tl_metamodel_dcasetting',
+            'tl_metamodel_dcasetting_condition',
+            'tl_metamodel_attribute',
+            'tl_metamodel_filter',
+            'tl_metamodel_filtersetting',
+            'tl_metamodel_rendersettings',
+            'tl_metamodel_rendersetting',
+            'tl_metamodel_dca_combine',
+        ] as $table) {
+            try {
+                $tableManipulator->checkTableExists($table);
+            } catch (\Exception $exception) {
+                \System::getContainer()
+                    ->get('logger')
+                    ->error(
+                        'MetaModels startup interrupted. ' .
+                        ' Not all MetaModels tables have been created (missing: ' . $table . ').');
+                return;
+            }
         }
 
         $dispatcher = \System::getContainer()->get('event_dispatcher');
