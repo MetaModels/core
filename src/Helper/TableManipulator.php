@@ -610,7 +610,7 @@ class TableManipulator
      */
     private function fieldExists($strTableName, $strColumnName)
     {
-        $columns = $this->connection->getSchemaManager()->listTableIndexes($strTableName);
+        $columns = $this->connection->getSchemaManager()->listTableColumns($strTableName);
 
         return isset($columns[$strColumnName]);
     }
