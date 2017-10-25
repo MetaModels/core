@@ -21,6 +21,10 @@
 
 namespace MetaModels\Attribute;
 
+use Contao\System;
+use Doctrine\DBAL\Connection;
+use MetaModels\Helper\TableManipulator;
+
 /**
  * This is an abstract factory to query instances of attributes.
  *
@@ -51,6 +55,20 @@ abstract class AbstractAttributeTypeFactory implements IAttributeTypeFactory
     protected $typeIcon;
 
     /**
+     * Database connection.
+     *
+     * @var Connection
+     */
+    protected $connection;
+
+    /**
+     * Table manipulator.
+     *
+     * @var TableManipulator
+     */
+    protected $tableManipulator;
+
+    /**
      * {@inheritdoc}
      */
     public function getTypeName()
@@ -71,15 +89,36 @@ abstract class AbstractAttributeTypeFactory implements IAttributeTypeFactory
      */
     public function createInstance($information, $metaModel)
     {
-        return new $this->typeClass($metaModel, $information);
+        return new $this->typeClass($metaModel, $information, $this->connection, $this->tableManipulator);
     }
 
     /**
      * Create a new instance.
+     *
+     * @param Connection|null       $connection       Database connection.
+     * @param TableManipulator|null $tableManipulator Table manipulator.
      */
-    protected function __construct()
+    protected function __construct(Connection $connection = null, TableManipulator $tableManipulator = null)
     {
-        // Nothing to do, aside from making the constructor protected.
+        if (null === $connection) {
+            @trigger_error(
+                'Connection is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            $connection = System::getContainer()->get('database_connection');
+        }
+
+        if (null === $tableManipulator) {
+            @trigger_error(
+                'Table manipulator is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+
+            $tableManipulator = System::getContainer()->get('metamodels.table_manipulator');
+        }
+
+        $this->connection       = $connection;
+        $this->tableManipulator = $tableManipulator;
     }
 
     /**
