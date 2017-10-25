@@ -24,6 +24,7 @@ namespace MetaModels\DcGeneral\Events\MetaModel;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractContainerAwareEvent;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
+use MetaModels\BackendIntegration\InputScreen\InputScreen;
 use MetaModels\IMetaModel;
 
 /**
@@ -46,7 +47,7 @@ class BuildMetaModelOperationsEvent extends AbstractContainerAwareEvent
     /**
      * The input screen in use.
      *
-     * @var IInputScreen
+     * @var array
      */
     protected $inputScreen;
 
@@ -57,12 +58,12 @@ class BuildMetaModelOperationsEvent extends AbstractContainerAwareEvent
      *
      * @param ContainerInterface $dataContainer The data container information.
      *
-     * @param IInputScreen       $inputScreen   The input screen in use.
+     * @param array              $inputScreen   The input screen in use.
      */
     public function __construct(
         IMetaModel $metaModel,
         ContainerInterface $dataContainer,
-        IInputScreen $inputScreen
+        array $inputScreen
     ) {
         parent::__construct($dataContainer);
 
@@ -83,10 +84,28 @@ class BuildMetaModelOperationsEvent extends AbstractContainerAwareEvent
     /**
      * Retrieve the input screen.
      *
+     * @return array
+     */
+    public function getScreen()
+    {
+        return $this->inputScreen;
+    }
+
+    /**
+     * Retrieve the input screen.
+     *
      * @return IInputScreen
+     *
+     * @deprecated The InputScreen class will get removed.
      */
     public function getInputScreen()
     {
-        return $this->inputScreen;
+        return new InputScreen(
+            \System::getContainer()->get('cca.legacy_dic')->getService('metamodels-service-container'),
+            $this->inputScreen['meta'],
+            $this->inputScreen['properties'],
+            $this->inputScreen['conditions'],
+            $this->inputScreen['groupSort']
+        );
     }
 }

@@ -19,13 +19,14 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\Populator;
+namespace MetaModels\CoreBundle\EventListener\DcGeneral\EnvironmentPopulator;
 
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
 use ContaoCommunityAlliance\Translator\TranslatorChain;
+use MetaModels\ViewCombination\ViewCombination;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -43,22 +44,22 @@ class TranslatorPopulator
     private $dispatcher;
 
     /**
-     * The translator instance this builder adds values to.
+     * The view combination.
      *
-     * @var StaticTranslator
+     * @var ViewCombination
      */
-    private $translator;
+    private $viewCombination;
 
     /**
      * Create a new instance.
      *
-     * @param EventDispatcherInterface $dispatcher The event dispatcher.
-     * @param StaticTranslator         $translator The translator.
+     * @param EventDispatcherInterface $dispatcher      The event dispatcher.
+     * @param ViewCombination          $viewCombination The view combination.
      */
-    public function __construct(EventDispatcherInterface $dispatcher, StaticTranslator $translator)
+    public function __construct(EventDispatcherInterface $dispatcher, ViewCombination $viewCombination)
     {
-        $this->dispatcher = $dispatcher;
-        $this->translator = $translator;
+        $this->dispatcher      = $dispatcher;
+        $this->viewCombination = $viewCombination;
     }
 
     /**
@@ -81,7 +82,7 @@ class TranslatorPopulator
         } else {
             $translatorChain = $translator;
         }
-        $translatorChain->add($this->translator);
+        $translatorChain->add($translator = new StaticTranslator());
 
         // Map the tl_metamodel_item domain over to this domain.
         $this->dispatcher->dispatch(
@@ -89,31 +90,71 @@ class TranslatorPopulator
             new LoadLanguageFileEvent('tl_metamodel_item')
         );
 
+        $definitionName = $environment->getDataDefinition()->getName();
         $this->mapTranslations(
             $GLOBALS['TL_LANG']['tl_metamodel_item'],
-            $environment->getDataDefinition()->getName()
+            $definitionName,
+            $translator
+        );
+
+        $this->addInputScreenTranslations(
+            $translator,
+            $this->viewCombination->getScreen($definitionName),
+            $definitionName
         );
     }
 
     /**
      * Map all translation values from the given array to the given destination domain using the optional base key.
      *
-     * @param array  $array   The array holding the translation values.
-     *
-     * @param string $domain  The target domain.
-     *
-     * @param string $baseKey The base key to prepend the values of the array with.
+     * @param array            $array      The array holding the translation values.
+     * @param string           $domain     The target domain.
+     * @param StaticTranslator $translator The translator.
+     * @param string           $baseKey    The base key to prepend the values of the array with.
      *
      * @return void
      */
-    private function mapTranslations($array, $domain, $baseKey = '')
+    private function mapTranslations($array, $domain, StaticTranslator $translator, $baseKey = '')
     {
         foreach ($array as $key => $value) {
             $newKey = ($baseKey ? $baseKey . '.' : '') . $key;
             if (is_array($value)) {
-                $this->mapTranslations($value, $domain, $newKey);
+                $this->mapTranslations($value, $domain, $translator, $newKey);
             } else {
-                $this->translator->setValue($newKey, $value, $domain);
+                $translator->setValue($newKey, $value, $domain);
+            }
+        }
+    }
+
+    /**
+     * Add the translations for the input screen.
+     *
+     * @param StaticTranslator $translator    The translator.
+     * @param array            $inputScreen   The input screen.
+     * @param string           $containerName The container name.
+     *
+     * @return void
+     */
+    private function addInputScreenTranslations(StaticTranslator $translator, $inputScreen, $containerName)
+    {
+        // FIXME: need current locale here!
+        $currentLocale = $GLOBALS['TL_LANGUAGE'];
+
+        foreach ($inputScreen['legends'] as $legendName => $legendInfo) {
+            foreach ($legendInfo['label'] as $langCode => $label) {
+                $translator->setValue(
+                    $legendName . '_legend',
+                    $label,
+                    $containerName,
+                    $langCode
+                );
+                if ($currentLocale === $langCode) {
+                    $translator->setValue(
+                        $legendName . '_legend',
+                        $label,
+                        $containerName
+                    );
+                }
             }
         }
     }

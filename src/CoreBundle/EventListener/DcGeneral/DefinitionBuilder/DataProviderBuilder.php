@@ -19,15 +19,16 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\DefinitionBuilder;
+namespace MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\Dca\ContaoDataProviderInformation;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\BasicDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DataProviderDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultDataProviderDefinition;
+use MetaModels\DcGeneral\Data\Driver;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
-use MetaModels\Helper\ViewCombinations;
 use MetaModels\IFactory;
+use MetaModels\ViewCombination\ViewCombination;
 
 /**
  * This class takes care of populating the data provider instances.
@@ -39,27 +40,27 @@ class DataProviderBuilder
     /**
      * The view combinations.
      *
-     * @var ViewCombinations
+     * @var ViewCombination
      */
-    private $viewCombinations;
+    private $viewCombination;
 
     /**
      * The factory to use.
      *
      * @var IFactory
      */
-    protected $factory;
+    private $factory;
 
     /**
      * Create a new instance.
      *
-     * @param ViewCombinations $viewCombinations The view combinations.
+     * @param ViewCombination $viewCombination The view combinations.
      * @param IFactory         $factory          The factory.
      */
-    public function __construct(ViewCombinations $viewCombinations, IFactory $factory)
+    public function __construct(ViewCombination $viewCombination, IFactory $factory)
     {
-        $this->viewCombinations = $viewCombinations;
-        $this->factory          = $factory;
+        $this->viewCombination = $viewCombination;
+        $this->factory         = $factory;
     }
 
     /**
@@ -71,7 +72,11 @@ class DataProviderBuilder
      */
     protected function build(IMetaModelDataDefinition $container)
     {
-        $inputScreen = $this->viewCombinations->getInputScreenDetails($container->getName());
+        $inputScreen = $this->viewCombination->getScreen($container->getName());
+        if (!$inputScreen) {
+            return;
+        }
+        $meta = $inputScreen['meta'];
 
         $config = $this->getDataProviderDefinition($container);
 
@@ -87,10 +92,8 @@ class DataProviderBuilder
         if ($providerInformation instanceof ContaoDataProviderInformation) {
             $providerInformation
                 ->setTableName($container->getName())
-                ->setClassName('MetaModels\DcGeneral\Data\Driver')
-                ->setInitializationData(array(
-                    'source' => $container->getName(),
-                ))
+                ->setClassName(Driver::class)
+                ->setInitializationData(['source' => $container->getName()])
                 ->setVersioningEnabled(false);
             $basicDefinition->setDataProvider($container->getName());
         }
@@ -101,8 +104,8 @@ class DataProviderBuilder
         }
 
         // If not standalone, set the correct parent provider.
-        if (!$inputScreen->isStandalone()) {
-            $parentTable = $inputScreen->getParentTable();
+        if ('ctable' === $meta['rendertype']) {
+            $parentTable = $meta['ptable'];
             // Check config if it already exists, if not, add it.
             if (!$config->hasInformation($parentTable)) {
                 $providerInformation = new ContaoDataProviderInformation();
@@ -118,8 +121,7 @@ class DataProviderBuilder
                     ->setInitializationData(['source' => $parentTable]);
                 // How can we honor other drivers? We do only check for MetaModels and legacy SQL here.
                 if (in_array($parentTable, $this->factory->collectNames())) {
-                    $providerInformation
-                        ->setClassName('MetaModels\DcGeneral\Data\Driver');
+                    $providerInformation->setClassName(Driver::class);
                 }
 
                 $basicDefinition->setParentDataProvider($parentTable);

@@ -34,19 +34,10 @@ use MetaModels\MetaModelsEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 return array(
-    MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND => array(
-        function (MetaModelsBootEvent $event) {
-            $handler = new MetaModels\FrontendIntegration\Boot();
-            $handler->perform($event);
-        }
-    ),
     MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND => array(
         function (MetaModelsBootEvent $event) {
             /** @var EventDispatcherInterface $dispatcher */
             $dispatcher = func_get_arg(2);
-
-            $handler = new MetaModels\BackendIntegration\Boot();
-            $handler->perform($event);
             new FilterSettingTypeRendererCore($event->getServiceContainer());
             new PasteButton($event->getServiceContainer());
             new CutButton($event->getServiceContainer());

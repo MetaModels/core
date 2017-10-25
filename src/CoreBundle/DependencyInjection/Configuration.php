@@ -22,6 +22,7 @@ namespace MetaModels\CoreBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Webmozart\PathUtil\Path;
 
 /**
  * Adds the Contao configuration structure.
@@ -36,13 +37,22 @@ class Configuration implements ConfigurationInterface
     private $debug;
 
     /**
+     * The root directory.
+     *
+     * @var string
+     */
+    private $rootDir;
+
+    /**
      * Constructor.
      *
-     * @param bool $debug The debug flag.
+     * @param bool   $debug   The debug flag.
+     * @param string $rootDir The root directory.
      */
-    public function __construct($debug)
+    public function __construct($debug, $rootDir)
     {
-        $this->debug = (bool) $debug;
+        $this->debug   = (bool) $debug;
+        $this->rootDir = $rootDir;
     }
 
     /**
@@ -63,8 +73,35 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('cache_dir')
                     ->defaultValue('%kernel.cache_dir%/metamodels')
                 ->end()
+                ->scalarNode('assets_dir')
+                    ->cannotBeEmpty()
+                    ->defaultValue($this->resolvePath($this->rootDir . '/assets/metamodels'))
+                    ->validate()
+                        ->always(function ($value) {
+                            return $this->resolvePath($value);
+                        })
+                    ->end()
+                ->end()
             ->end();
 
         return $treeBuilder;
+    }
+
+    /**
+     * Resolves a path.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    private function resolvePath($value)
+    {
+        $path = Path::canonicalize($value);
+
+        if ('\\' === DIRECTORY_SEPARATOR) {
+            $path = str_replace('/', '\\', $path);
+        }
+
+        return $path;
     }
 }

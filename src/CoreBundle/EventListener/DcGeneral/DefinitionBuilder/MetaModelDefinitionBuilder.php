@@ -19,12 +19,12 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\DefinitionBuilder;
+namespace MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder;
 
 use MetaModels\DcGeneral\DataDefinition\Definition\IMetaModelDefinition;
 use MetaModels\DcGeneral\DataDefinition\Definition\MetaModelDefinition;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
-use MetaModels\Helper\ViewCombinations;
+use MetaModels\ViewCombination\ViewCombination;
 
 /**
  * This class builds the MetaModel definition.
@@ -36,18 +36,18 @@ class MetaModelDefinitionBuilder
     /**
      * The view combinations.
      *
-     * @var ViewCombinations
+     * @var ViewCombination
      */
-    private $viewCombinations;
+    private $viewCombination;
 
     /**
      * Create a new instance.
      *
-     * @param ViewCombinations $viewCombinations The view combinations.
+     * @param ViewCombination $viewCombination The view combination.
      */
-    public function __construct(ViewCombinations $viewCombinations)
+    public function __construct(ViewCombination $viewCombination)
     {
-        $this->viewCombinations = $viewCombinations;
+        $this->viewCombination = $viewCombination;
     }
 
     /**
@@ -61,12 +61,16 @@ class MetaModelDefinitionBuilder
     {
         $definition = $this->createOrGetDefinition($container);
 
+        if (empty($combination = $this->viewCombination->getCombination($container->getName()))) {
+            return;
+        }
+
         if (!$definition->hasActiveRenderSetting()) {
-            $definition->setActiveRenderSetting($this->viewCombinations->getRenderSetting($container->getName()));
+            $definition->setActiveRenderSetting($combination['view_id']);
         }
 
         if (!$definition->hasActiveInputScreen()) {
-            $definition->setActiveInputScreen($this->viewCombinations->getInputScreen($container->getName()));
+            $definition->setActiveInputScreen($combination['dca_id']);
         }
     }
 

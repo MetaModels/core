@@ -107,7 +107,9 @@ class ViewCombination
 
                 break;
             default:
-                throw new \InvalidArgumentException('Invalid user.');
+                // Default handled as frontend anonymous.
+                $mode = 'fe';
+                $groups = [-1];
         }
 
         $groups = array_filter($groups);
@@ -121,6 +123,23 @@ class ViewCombination
         $this->cache->save($cacheKey, $combinations);
 
         return $combinations;
+    }
+
+    /**
+     * Retrieve a combination for a table.
+     *
+     * @param string $tableName The table name.
+     *
+     * @return array|null
+     */
+    public function getCombination($tableName)
+    {
+        $combinations = $this->getCombinations();
+        if (isset($combinations['byName'][$tableName])) {
+            return $combinations['byName'][$tableName];
+        }
+
+        return null;
     }
 
     /**
@@ -152,6 +171,39 @@ class ViewCombination
     }
 
     /**
+     * Obtain child input screens of the passed parent.
+     *
+     * @param string $parentTable The parent table to assemble the children of.
+     *
+     * @return array
+     */
+    public function getChildrenOf($parentTable)
+    {
+        $inputScreens = array_filter($this->getInputScreens(), function ($inputScreen) use ($parentTable){
+            return ($inputScreen['meta']['rendertype'] === 'ctable') && ($inputScreen['meta']['ptable'] === $parentTable);
+        });
+
+        return $inputScreens;
+    }
+
+    /**
+     * Obtain parented input screens.
+     *
+     * @param string $tableName The table name.
+     *
+     * @return array|null
+     */
+    public function getScreen($tableName)
+    {
+        $inputScreens = $this->getInputScreens();
+        if (isset($inputScreens[$tableName])) {
+            return $inputScreens[$tableName];
+        }
+
+        return null;
+    }
+
+    /**
      *
      *
      * @return array
@@ -159,8 +211,7 @@ class ViewCombination
     private function getInputScreens()
     {
         $combinations = $this->getCombinations();
-
-        $screenIds = array_map(function ($combination) {
+        $screenIds    = array_map(function ($combination) {
             return $combination['dca_id'];
         }, $combinations['byName']);
 
@@ -181,6 +232,9 @@ class ViewCombination
      */
     private function getUser()
     {
-        return $this->tokenStorage->getToken()->getUser();
+        if (null === $token = $this->tokenStorage->getToken()) {
+            return null;
+        }
+        return $token->getUser();
     }
 }

@@ -19,7 +19,7 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\DefinitionBuilder;
+namespace MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder;
 
 use Contao\Input;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
@@ -31,7 +31,6 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChi
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\ParentChildConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\RootConditionInterface;
-use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 
 /**
@@ -49,7 +48,7 @@ abstract class AbstractConditionBuilder
     /**
      * The input screen.
      *
-     * @var IInputScreen
+     * @var array
      */
     protected $inputScreen;
 
@@ -64,13 +63,13 @@ abstract class AbstractConditionBuilder
      * Parse the correct conditions.
      *
      * @param IMetaModelDataDefinition $container   The data container.
-     * @param IInputScreen             $inputScreen The input screen.
+     * @param array                    $inputScreen The input screen.
      *
      * @return void
      *
      * @throws \InvalidArgumentException When the stored definition does not implement the correct interface.
      */
-    public static function calculateConditions(IMetaModelDataDefinition $container, IInputScreen $inputScreen)
+    public static function calculateConditions(IMetaModelDataDefinition $container, array $inputScreen)
     {
         if ($container->hasDefinition(ModelRelationshipDefinitionInterface::NAME)) {
             $definition = $container->getDefinition(ModelRelationshipDefinitionInterface::NAME);
@@ -108,7 +107,7 @@ abstract class AbstractConditionBuilder
      */
     protected function addParentCondition()
     {
-        if ($this->inputScreen->isStandalone()) {
+        if ($this->inputScreen['meta']['rendertype'] === 'standalone') {
             return;
         }
 
@@ -117,13 +116,13 @@ abstract class AbstractConditionBuilder
 
         /** @var ParentChildConditionInterface $relationship */
         $relationship = $this->definition->getChildCondition(
-            $this->inputScreen->getParentTable(),
+            $this->inputScreen['meta']['ptable'],
             $this->container->getName()
         );
         if (!$relationship instanceof ParentChildConditionInterface) {
             $relationship = new ParentChildCondition();
             $relationship
-                ->setSourceName($this->inputScreen->getParentTable())
+                ->setSourceName($this->inputScreen['meta']['ptable'])
                 ->setDestinationName($this->container->getName());
             $this->definition->addChildCondition($relationship);
         } else {

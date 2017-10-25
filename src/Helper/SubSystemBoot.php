@@ -88,34 +88,15 @@ class SubSystemBoot
             return;
         }
         $logger = \System::getContainer()->get('logger');
-        /** @var \MetaModels\IMetaModelsServiceContainer $container */
-        try {
-            $container = $container['metamodels-service-container'];
-        } catch (\Exception $e) {
-            $logger->error(
-                sprintf(
-                    'MetaModels startup interrupted: Uncaught exception \'%s\' with message \'%s\' thrown in %s ' .
-                    "on line %s\n%s",
-                    get_class($e),
-                    $e->getMessage(),
-                    $e->getFile(),
-                    $e->getLine(),
-                    $e->getTraceAsString()
-                )
-            );
-            // ¯\_(ツ)_/¯ - give up do not try to boot.
-            return;
-        }
-
         // Ensure all tables are created.
-        if (!$this->metaModelsTablesPresent($container->getDatabase())
+        if (!$this->metaModelsTablesPresent(\System::getContainer()->get('cca.legacy_dic.contao_database_connection'))
         ) {
             $logger->error('MetaModels startup interrupted: Not all MetaModels tables have been created.');
             return;
         }
 
-        $dispatcher = $container->getEventDispatcher();
-        $event      = new MetaModelsBootEvent($container);
+        $dispatcher = \System::getContainer()->get('event_dispatcher');
+        $event      = new MetaModelsBootEvent();
 
         $dispatcher->dispatch(MetaModelsEvents::SUBSYSTEM_BOOT, $event);
 

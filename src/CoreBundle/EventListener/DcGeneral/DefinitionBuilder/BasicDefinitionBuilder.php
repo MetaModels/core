@@ -19,12 +19,13 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\DefinitionBuilder;
+namespace MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder;
 
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\BasicDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultBasicDefinition;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
-use MetaModels\Helper\ViewCombinations;
+use MetaModels\IFactory;
+use MetaModels\ViewCombination\ViewCombination;
 
 /**
  * This class handles building of the basic definition
@@ -36,18 +37,27 @@ class BasicDefinitionBuilder
     /**
      * The view combinations.
      *
-     * @var ViewCombinations
+     * @var ViewCombination
      */
-    private $viewCombinations;
+    private $viewCombination;
+
+    /**
+     * The factory.
+     *
+     * @var IFactory
+     */
+    private $factory;
 
     /**
      * Create a new instance.
      *
-     * @param ViewCombinations $viewCombinations The view combinations.
+     * @param ViewCombination $viewCombination The view combination.
+     * @param IFactory        $factory         The factory.
      */
-    public function __construct(ViewCombinations $viewCombinations)
+    public function __construct(ViewCombination $viewCombination, IFactory $factory)
     {
-        $this->viewCombinations = $viewCombinations;
+        $this->viewCombination = $viewCombination;
+        $this->factory         = $factory;
     }
 
     /**
@@ -59,29 +69,39 @@ class BasicDefinitionBuilder
      */
     protected function build(IMetaModelDataDefinition $container)
     {
-        $inputScreen = $this->viewCombinations->getInputScreenDetails($container->getName());
+        $inputScreen = $this->viewCombination->getScreen($container->getName());
+        if (!$inputScreen) {
+            return;
+        }
+        $meta = $inputScreen['meta'];
 
         $config = $this->getOrCreateBasicDefinition($container);
 
         $config->setDataProvider($container->getName());
 
-        if ($inputScreen->isHierarchical()) {
+        $metaModel = $this->factory->getMetaModel($container->getName());
+        // If we have variants, override all modes to tree mode.
+        if ($metaModel->hasVariants()) {
+            $config->setMode(BasicDefinitionInterface::MODE_HIERARCHICAL);
+        }
+
+        if ('hierarchical' === $meta['rendermode']) {
             // Hierarchical mode - Records are displayed as tree (see site structure).
             $config->setMode(BasicDefinitionInterface::MODE_HIERARCHICAL);
-        } elseif ($inputScreen->isParented()) {
+        } elseif ('parented' === $meta['rendermode']) {
             // Displays the child records of a parent record (see style sheets module).
             $config->setMode(BasicDefinitionInterface::MODE_PARENTEDLIST);
-        } elseif ($inputScreen->isFlat()) {
+        } elseif ('flat' === $meta['rendermode']) {
             // Flat mode.
             $config->setMode(BasicDefinitionInterface::MODE_FLAT);
         }
 
         $config
-            ->setEditable($inputScreen->isEditable())
-            ->setCreatable($inputScreen->isCreatable())
-            ->setDeletable($inputScreen->isDeletable());
+            ->setEditable((bool) $meta['iseditable'])
+            ->setCreatable((bool) $meta['iscreatable'])
+            ->setDeletable((bool) $meta['isdeleteable']);
 
-        if ($inputScreen->getMetaModel()->hasVariants()) {
+        if ($metaModel->hasVariants()) {
             ConditionBuilderWithVariants::calculateConditions($container, $inputScreen);
             return;
         }

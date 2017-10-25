@@ -25,6 +25,8 @@ namespace MetaModels\FrontendIntegration;
  * Class ViewCombinations.
  *
  * Retrieve combinations of view and input screens for the currently logged in user (either frontend or backend).
+ *
+ * @deprecated This will get removed.
  */
 class ViewCombinations extends \MetaModels\Helper\ViewCombinations
 {

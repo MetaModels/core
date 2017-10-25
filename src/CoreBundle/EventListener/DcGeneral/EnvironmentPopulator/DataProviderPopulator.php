@@ -19,13 +19,13 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\Populator;
+namespace MetaModels\CoreBundle\EventListener\DcGeneral\EnvironmentPopulator;
 
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DataProviderDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use MetaModels\DcGeneral\Data\Driver;
-use MetaModels\IMetaModelsServiceContainer;
+use MetaModels\IFactory;
 
 /**
  * This class handles the populating of the Environments.
@@ -35,20 +35,20 @@ class DataProviderPopulator
     use MetaModelPopulatorTrait;
 
     /**
-     * The MetaModel this builder is responsible for.
+     * The MetaModel factory.
      *
-     * @var IMetaModelsServiceContainer
+     * @var IFactory
      */
-    private $serviceContainer;
+    private $factory;
 
     /**
      * Create a new instance.
      *
-     * @param IMetaModelsServiceContainer $serviceContainer The service container.
+     * @param IFactory $factory The MetaModel factory.
      */
-    public function __construct(IMetaModelsServiceContainer $serviceContainer)
+    public function __construct(IFactory $factory)
     {
-        $this->serviceContainer = $serviceContainer;
+        $this->factory = $factory;
     }
 
     /**
@@ -85,8 +85,10 @@ class DataProviderPopulator
         foreach ($providerDefinitions as $provider) {
             $providerInstance = $environment->getDataProvider($provider->getName());
             if ($providerInstance instanceof Driver) {
+                $initialization = $provider->getInitializationData();
+                $metaModel = $this->factory->getMetaModel($initialization['source']);
                 $providerInstance->setBaseConfig(
-                    array_merge($provider->getInitializationData(), ['service-container' => $this->serviceContainer])
+                    array_merge($initialization, ['metaModel' => $metaModel])
                 );
             }
         }

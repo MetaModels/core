@@ -19,9 +19,9 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\DefinitionBuilder;
+namespace MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder;
 
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionChainInterface;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultPalettesDefinition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\PalettesDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\PropertyInterface;
@@ -31,10 +31,13 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Legend;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Palette;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
-use ContaoCommunityAlliance\Translator\StaticTranslator;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\IsVariantAttribute;
-use MetaModels\Helper\ViewCombinations;
+use MetaModels\Events\CreatePropertyConditionEvent;
+use MetaModels\IFactory;
+use MetaModels\IMetaModel;
+use MetaModels\ViewCombination\ViewCombination;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This class takes care of the palette building.
@@ -46,27 +49,39 @@ class PaletteBuilder
     /**
      * The view combinations.
      *
-     * @var ViewCombinations
+     * @var ViewCombination
      */
-    private $viewCombinations;
+    private $viewCombination;
 
     /**
-     * The translator to populate.
+     * The factory to use.
      *
-     * @var StaticTranslator
+     * @var IFactory
      */
-    private $translator;
+    private $factory;
+
+    /**
+     * The event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
 
     /**
      * Create a new instance.
      *
-     * @param ViewCombinations $viewCombinations The view combinations.
-     * @param StaticTranslator $translator       The translator (needed for legend captions).
+     * @param ViewCombination          $viewCombination The view combinations.
+     * @param IFactory                 $factory         The factory.
+     * @param EventDispatcherInterface $dispatcher      The event dispatcher.
      */
-    public function __construct(ViewCombinations $viewCombinations, StaticTranslator $translator)
-    {
-        $this->viewCombinations = $viewCombinations;
-        $this->translator       = $translator;
+    public function __construct(
+        ViewCombination $viewCombination,
+        IFactory $factory,
+        EventDispatcherInterface $dispatcher
+    ) {
+        $this->viewCombination = $viewCombination;
+        $this->factory         = $factory;
+        $this->dispatcher      = $dispatcher;
     }
 
     /**
@@ -78,9 +93,9 @@ class PaletteBuilder
      */
     protected function build(IMetaModelDataDefinition $container)
     {
-        $inputScreen = $this->viewCombinations->getInputScreenDetails($container->getName());
-
-        $variantHandling    = $inputScreen->getMetaModel()->hasVariants();
+        $inputScreen        = $this->viewCombination->getScreen($container->getName());
+        $metaModel          = $this->factory->getMetaModel($container->getName());
+        $variantHandling    = $metaModel->hasVariants();
         $palettesDefinition = $this->getOrCreatePaletteDefinition($container);
 
         $properties = $container->getPropertiesDefinition();
@@ -90,20 +105,20 @@ class PaletteBuilder
             ->setName('default')
             ->setCondition(new DefaultPaletteCondition());
 
-        foreach ($inputScreen->getLegends() as $legendName => $legendInfo) {
+        foreach ($inputScreen['legends'] as $legendName => $legendInfo) {
             $legend = new Legend($legendName);
             $legend->setInitialVisibility($legendInfo['visible']);
             $palette->addLegend($legend);
 
-            $this->translator->setValue($legendName . '_legend', $legendInfo['name'], $container->getName());
-
-            foreach ($legendInfo['properties'] as $propertyName) {
+            $legendConditions = $this->buildCondition($legendInfo['condition'], $metaModel);
+            foreach ($legendInfo['properties'] as $property) {
                 $legend->addProperty(
                     $this->createProperty(
-                        $properties->getProperty($propertyName),
-                        $propertyName,
+                        $properties->getProperty($property['name']),
+                        $property['name'],
                         $variantHandling,
-                        $inputScreen->getConditionsFor($propertyName)
+                        $this->buildCondition($property['condition'], $metaModel),
+                        $legendConditions
                     )
                 );
             }
@@ -133,10 +148,11 @@ class PaletteBuilder
     /**
      * Create a property for the palette.
      *
-     * @param PropertyInterface            $property        The input screen.
-     * @param string                       $propertyName    The property name.
-     * @param bool                         $variantHandling The MetaModel instance.
-     * @param ConditionChainInterface|null $conditions      The conditions.
+     * @param PropertyInterface       $property        The input screen.
+     * @param string                  $propertyName    The property name.
+     * @param bool                    $variantHandling The MetaModel instance.
+     * @param ConditionInterface|null $condition       The condition.
+     * @param ConditionInterface|null $legendCondition The condition.
      *
      * @return Property
      */
@@ -144,7 +160,8 @@ class PaletteBuilder
         PropertyInterface $property,
         $propertyName,
         $variantHandling,
-        ConditionChainInterface $conditions = null
+        ConditionInterface $condition = null,
+        ConditionInterface $legendCondition = null
     ) {
         $paletteProperty = new Property($propertyName);
 
@@ -169,10 +186,40 @@ class PaletteBuilder
             )
         );
 
-        if (null !== $conditions) {
-            $chain->addCondition($conditions);
+        if (null !== $condition) {
+            $chain->addCondition($condition);
+        }
+        if (null !== $legendCondition) {
+            $chain->addCondition($legendCondition);
         }
 
         return $paletteProperty;
+    }
+
+    /**
+     * Build the conditions for the passed condition array.
+     *
+     * @param array|null $condition The condition information.
+     *
+     * @param IMetaModel $metaModel The MetaModel instance.
+     *
+     * @return null|ConditionInterface
+     */
+    private function buildCondition($condition, $metaModel)
+    {
+        if (null === $condition) {
+            return null;
+        }
+        $event = new CreatePropertyConditionEvent($condition, $metaModel);
+        $this->dispatcher->dispatch(CreatePropertyConditionEvent::NAME, $event);
+
+        if ($event->getInstance() === null) {
+            throw new \RuntimeException(sprintf(
+                'Condition of type %s could not be transformed to an instance.',
+                $condition['type']
+            ));
+        }
+
+        return $event->getInstance();
     }
 }

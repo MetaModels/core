@@ -22,6 +22,7 @@
 
 namespace MetaModels;
 
+use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\Events\CollectMetaModelTableNamesEvent;
 use MetaModels\Events\CreateMetaModelEvent;
 use MetaModels\Events\GetMetaModelNameFromIdEvent;
@@ -35,6 +36,20 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class Factory implements IFactory
 {
     /**
+     * The event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
+
+    /**
+     * The attribute factory.
+     *
+     * @var IAttributeFactory
+     */
+    private $attributeFactory;
+
+    /**
      * The service container.
      *
      * @var IMetaModelsServiceContainer
@@ -47,6 +62,17 @@ class Factory implements IFactory
      * @var string[]
      */
     private $lookupMap = array();
+
+    /**
+     * Create a new instance.
+     *
+     * @param EventDispatcherInterface $dispatcher The event dispatcher.
+     */
+    public function __construct(EventDispatcherInterface $dispatcher, IAttributeFactory $attributeFactory)
+    {
+        $this->dispatcher       = $dispatcher;
+        $this->attributeFactory = $attributeFactory;
+    }
 
     /**
      * Set the service container.
@@ -88,16 +114,6 @@ class Factory implements IFactory
     }
 
     /**
-     * Retrieve the event dispatcher.
-     *
-     * @return EventDispatcherInterface
-     */
-    protected function getEventDispatcher()
-    {
-        return $this->getServiceContainer()->getEventDispatcher();
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function translateIdToMetaModelName($metaModelId)
@@ -105,7 +121,7 @@ class Factory implements IFactory
         if (!isset($this->lookupMap[$metaModelId])) {
             $event = new GetMetaModelNameFromIdEvent($metaModelId);
 
-            $this->getEventDispatcher()->dispatch($event::NAME, $event);
+            $this->dispatcher->dispatch($event::NAME, $event);
 
             $this->lookupMap[$metaModelId] = $event->getMetaModelName();
         }
@@ -120,13 +136,12 @@ class Factory implements IFactory
     {
         $event = new CreateMetaModelEvent($this, $metaModelName);
 
-        $this->getEventDispatcher()->dispatch($event::NAME, $event);
+        $this->dispatcher->dispatch($event::NAME, $event);
 
         $metaModel = $event->getMetaModel();
 
         if ($metaModel) {
-            $attributeFactory = $this->getServiceContainer()->getAttributeFactory();
-            foreach ($attributeFactory->createAttributesForMetaModel($metaModel) as $attribute) {
+            foreach ($this->attributeFactory->createAttributesForMetaModel($metaModel) as $attribute) {
                 $metaModel->addAttribute($attribute);
             }
         }
@@ -141,7 +156,7 @@ class Factory implements IFactory
     {
         $event = new CollectMetaModelTableNamesEvent($this);
 
-        $this->getEventDispatcher()->dispatch($event::NAME, $event);
+        $this->dispatcher->dispatch($event::NAME, $event);
 
         return $event->getMetaModelNames();
     }

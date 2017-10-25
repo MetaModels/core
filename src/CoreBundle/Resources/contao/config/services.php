@@ -28,8 +28,7 @@ $container->provideSymfonyService('metamodels.filter_setting_factory');
 $container->provideSymfonyService('metamodels.render_setting_factory');
 $container->provideSymfonyService('metamodels.cache');
 
-// Fixme build an factory for metamodels service container.
-$container['metamodels-service-container.factory'] = $container->share(
+$container['metamodels-service-container'] = $container->share(
     function () use ($service) {
         @trigger_error(
             'The MetaModels service container is deprecated and will get removed - use the symfony DIC directly.',
@@ -49,13 +48,5 @@ $container['metamodels-service-container.factory'] = $container->share(
             ->setCache($service->get('metamodels.cache'));
 
         return $serviceContainer;
-    }
-);
-
-$container['metamodels-service-container'] = $container->share(
-    function ($container) {
-        $factory = $container['metamodels-service-container.factory'];
-
-        return $factory;
     }
 );

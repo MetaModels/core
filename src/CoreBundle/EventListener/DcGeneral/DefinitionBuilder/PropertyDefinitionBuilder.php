@@ -19,7 +19,7 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\DefinitionBuilder;
+namespace MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder;
 
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultPropertiesDefinition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\DefaultProperty;
@@ -27,10 +27,10 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\Prope
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\PropertiesDefinitionInterface;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\Attribute\ITranslated;
-use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\Events\MetaModel\BuildAttributeEvent;
-use MetaModels\Helper\ViewCombinations;
+use MetaModels\IFactory;
+use MetaModels\ViewCombination\ViewCombination;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -50,20 +50,32 @@ class PropertyDefinitionBuilder
     /**
      * The view combinations.
      *
-     * @var ViewCombinations
+     * @var ViewCombination
      */
-    private $viewCombinations;
+    private $viewCombination;
+
+    /**
+     * The MetaModels factory.
+     *
+     * @var IFactory
+     */
+    private $factory;
 
     /**
      * Create a new instance.
      *
-     * @param EventDispatcherInterface $dispatcher       The event dispatcher.
-     * @param ViewCombinations         $viewCombinations The view combinations.
+     * @param EventDispatcherInterface $dispatcher      The event dispatcher.
+     * @param ViewCombination          $viewCombination The view combination.
+     * @param IFactory                 $factory         The factory.
      */
-    public function __construct(EventDispatcherInterface $dispatcher, ViewCombinations $viewCombinations)
-    {
-        $this->dispatcher       = $dispatcher;
-        $this->viewCombinations = $viewCombinations;
+    public function __construct(
+        EventDispatcherInterface $dispatcher,
+        ViewCombination $viewCombination,
+        IFactory $factory
+    ) {
+        $this->dispatcher      = $dispatcher;
+        $this->viewCombination = $viewCombination;
+        $this->factory         = $factory;
     }
 
     /**
@@ -75,7 +87,10 @@ class PropertyDefinitionBuilder
      */
     protected function build(IMetaModelDataDefinition $container)
     {
-        $inputScreen = $this->viewCombinations->getInputScreenDetails($container->getName());
+        $inputScreen = $this->viewCombination->getScreen($container->getName());
+        if (!$inputScreen) {
+            return;
+        }
 
         if ($container->hasPropertiesDefinition()) {
             $definition = $container->getPropertiesDefinition();
@@ -84,9 +99,9 @@ class PropertyDefinitionBuilder
             $container->setPropertiesDefinition($definition);
         }
 
-        $metaModel = $inputScreen->getMetaModel();
+        $metaModel = $this->factory->getMetaModel($container->getName());
 
-        // If the current metamodels has variants add the varbase and vargroup to the definition.
+        // If the current metamodel has variants add the varbase and vargroup to the definition.
         if ($metaModel->hasVariants()) {
             // FIXME: these are not properties yet, therefore we have to work around.
             $this->getOrCreateProperty($definition, 'varbase');
@@ -105,29 +120,28 @@ class PropertyDefinitionBuilder
             */
         }
 
+        $properties = [];
+        foreach ($inputScreen['properties'] as $property) {
+            if ('attribute' !== $property['dcatype']) {
+                continue;
+            }
+            $properties[$property['attr_id']] = $property;
+        }
+
         foreach ($metaModel->getAttributes() as $attribute) {
-            $this->buildProperty($definition, $attribute, $this->propInfo($inputScreen, $attribute));
-            $event = new BuildAttributeEvent($metaModel, $attribute, $container, $inputScreen);
+            if (!isset($properties[$attribute->get('id')])) {
+                continue;
+            }
+            $this->buildProperty(
+                $definition,
+                $attribute,
+                $attribute->getFieldDefinition($properties[$attribute->get('id')])
+            );
+
+            // FIXME: this event should get transformed to injecting a list of tagged property definition builders here.
+            $event = new BuildAttributeEvent($metaModel, $attribute, $container);
             $this->dispatcher->dispatch($event::NAME, $event);
         }
-    }
-
-    /**
-     * Obtain the property info from the input screen.
-     *
-     * @param IInputScreen $inputScreen The input screen.
-     * @param IAttribute   $attribute   The attribute.
-     *
-     * @return array
-     */
-    private function propInfo(IInputScreen $inputScreen, IAttribute $attribute)
-    {
-        $info = $inputScreen->getProperty($attribute->getColName());
-        if (!isset($info['info'])) {
-            return [];
-        }
-
-        return $info['info'];
     }
 
     /**

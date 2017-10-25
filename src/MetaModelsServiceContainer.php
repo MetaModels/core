@@ -313,6 +313,29 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
             '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
+
+        // Hacked in here as initialization is dead now.
+        if (!isset($this->services[(string) $serviceName]) && 'metamodels-view-combinations' === $serviceName) {
+            $determinator = \System::getContainer()->get('cca.dc-general.scope-matcher');
+            switch (true) {
+                case $determinator->currentScopeIsFrontend():
+                    $this->services['metamodels-view-combinations'] =
+                        new \MetaModels\FrontendIntegration\ViewCombinations(
+                            $this,
+                            $GLOBALS['container']['user']
+                        );
+                    break;
+                case $determinator->currentScopeIsBackend():
+                    $this->services['metamodels-view-combinations'] =
+                        new \MetaModels\BackendIntegration\ViewCombinations(
+                            $this,
+                            $GLOBALS['container']['user']
+                        );
+                    break;
+                default:
+            }
+        }
+
         return isset($this->services[(string) $serviceName]) ? $this->services[(string) $serviceName] : null;
     }
 }

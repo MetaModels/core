@@ -41,7 +41,10 @@
     "contao-community-alliance/event-dispatcher": "~2.0@dev",
     "contao-community-alliance/events-contao-bindings": "~4.0@dev",
     "contao-community-alliance/translator": "~2.0@dev",
-    "doctrine/cache": "~1.6"
+    "doctrine/cache": "~1.6",
+    "webmozart/path-util": "~2.3",
+    "symfony/proxy-manager-bridge": "^3.3",
+    "ocramius/proxy-manager": "^1.0 || ^2.1"
   },
   "require-dev": {
     "cyberspectrum/contao-toolbox": "~0.6",
