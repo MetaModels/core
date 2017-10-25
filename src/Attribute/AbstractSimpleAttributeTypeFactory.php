@@ -62,6 +62,6 @@ class AbstractSimpleAttributeTypeFactory extends AbstractAttributeTypeFactory
      */
     public function createInstance($information, $metaModel)
     {
-        return new $this->typeClass($information, $metaModel, $this->connection, $this->tableManipulator);
+        return new $this->typeClass($metaModel, $information, $this->connection, $this->tableManipulator);
     }
 }
