@@ -83,8 +83,8 @@ class SubSystemBoot
         /** @var \Contao\Environment $environment */
         $environment = $container['environment'];
         // There is no need to boot in login or install screen.
-        if (($environment->get('script') == 'contao/login')
-            || ($environment->get('script') == 'contao/install')) {
+        if (($environment->get('relativeRequest') == 'contao/login')
+            || ($environment->get('relativeRequest') == 'contao/install')) {
             return;
         }
         $logger = \System::getContainer()->get('logger');
