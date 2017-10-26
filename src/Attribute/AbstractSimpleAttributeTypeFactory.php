@@ -36,14 +36,14 @@ class AbstractSimpleAttributeTypeFactory extends AbstractAttributeTypeFactory
      *
      * @var Connection
      */
-    private $connection;
+    protected $connection;
 
     /**
      * Table manipulator.
      *
      * @var TableManipulator
      */
-    private $tableManipulator;
+    protected $tableManipulator;
 
     /**
      * Construct.
