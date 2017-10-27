@@ -36,6 +36,7 @@ return array(
             $dispatcher = func_get_arg(2);
             $dispatcher->addSubscriber(new RenderSettingAddAllHandler($event->getServiceContainer()));
             $dispatcher->addSubscriber(new InputScreenAddAllHandler($event->getServiceContainer()));
+            new \MetaModels\DcGeneral\Events\Subscriber($event->getServiceContainer());
         }
     ),
     // deprecated since 2.0, to be removed in 3.0.
