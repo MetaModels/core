@@ -157,7 +157,7 @@ class Helper
         if (!$metaModel->isTranslated()) {
             $extra = $property->getExtra();
 
-            $extra['tl_class'] .= 'w50';
+            $extra['tl_class'] .= empty($extra['tl_class']) ? 'w50' : ' w50';
 
             $property
                 ->setWidgetType('text')
