@@ -21,6 +21,7 @@
 
 namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
+use Contao\StringUtil;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
@@ -92,7 +93,7 @@ abstract class BreadCrumbBase
             return strtoupper(substr($shortTable, 0, 1)) . substr($shortTable, 1, (strlen($shortTable) - 1)) . ' %s';
         }
 
-        return specialchars($label);
+        return StringUtil::specialchars($label);
     }
 
     /**

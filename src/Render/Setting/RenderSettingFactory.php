@@ -21,6 +21,7 @@
 
 namespace MetaModels\Render\Setting;
 
+use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
@@ -163,7 +164,7 @@ class RenderSettingFactory implements IRenderSettingFactory
 
             foreach ($attributeRow as $strKey => $varValue) {
                 if ($varValue) {
-                    $attributeSetting->set($strKey, deserialize($varValue));
+                    $attributeSetting->set($strKey, StringUtil::deserialize($varValue));
                 }
             }
             $renderSetting->setSetting($attribute->getColName(), $attributeSetting);

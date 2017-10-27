@@ -22,6 +22,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\RenderSettings;
 
+use Contao\StringUtil;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
@@ -131,7 +132,7 @@ class Subscriber extends BaseSubscriber
             ->getDataDefinition()
             ->getPropertiesDefinition()
             ->getProperty($event->getProperty());
-        $value    = deserialize($event->getValue(), true);
+        $value    = StringUtil::deserialize($event->getValue(), true);
 
         $extra = $propInfo->getExtra();
 
@@ -181,7 +182,7 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        $value = deserialize($event->getValue(), true);
+        $value = StringUtil::deserialize($event->getValue(), true);
 
         foreach ($value as $k => $v) {
             $value[$k]['value'] = str_replace(

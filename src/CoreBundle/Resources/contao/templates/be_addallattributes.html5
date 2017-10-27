@@ -1,5 +1,5 @@
 <div id="tl_buttons">
-    <a href="<?= $this->href ?>" class="header_back" title="<?= specialchars($this->backBt) ?>"><?= $this->backBt ?></a>
+    <a href="<?= $this->href ?>" class="header_back" title="<?= \Contao\StringUtil::specialchars($this->backBt) ?>"><?= $this->backBt ?></a>
 </div>
 <div id="tl_metamodel_autocreate_palette">
     <h2 class="sub_headline"><?= $this->headline ?></h2>

@@ -24,6 +24,7 @@
 
 namespace MetaModels\Dca;
 
+use Contao\StringUtil;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\DcGeneral\DC\General;
@@ -74,7 +75,7 @@ class RenderSettings
             '\'id\':\'%3$s\',\'tag\':\'ctrl_%3$s\',\'self\':this}' .
             '); return false;">%4$s</a>',
             $url,
-            specialchars(str_replace('\'', '\\\'', $environment->getTranslator()->translate('MOD.page.0'))),
+            StringUtil::specialchars(str_replace('\'', '\\\'', $environment->getTranslator()->translate('MOD.page.0'))),
             $dataContainer->inputName,
             $event->getHtml()
         );

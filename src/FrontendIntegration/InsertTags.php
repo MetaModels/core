@@ -22,6 +22,7 @@
 
 namespace MetaModels\FrontendIntegration;
 
+use Contao\StringUtil;
 use Database\Result;
 use MetaModels\Filter\Rules\StaticIdList;
 use MetaModels\IMetaModel;
@@ -157,7 +158,7 @@ class InsertTags extends \Controller
 
         // Check if someone want the sub params.
         if (stripos($strParam, 'params.') !== false) {
-            $mixAttName = trimsplit('.', $strParam);
+            $mixAttName = StringUtil::trimsplit('.', $strParam);
             $mixAttName = array_pop($mixAttName);
 
             if (isset($arrRenderedItem['jumpTo']['params'][$mixAttName])) {
@@ -205,7 +206,7 @@ class InsertTags extends \Controller
             ->overrideOutputFormat($strOutput);
 
         // Handle a set of ids.
-        $arrIds = trimsplit(',', $mixDataId);
+        $arrIds = StringUtil::trimsplit(',', $mixDataId);
 
         // Check each id if published.
         foreach ($arrIds as $intKey => $intId) {

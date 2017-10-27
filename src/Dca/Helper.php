@@ -26,6 +26,7 @@
 
 namespace MetaModels\Dca;
 
+use Contao\StringUtil;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\Translator\TranslatorInterface;
@@ -47,7 +48,7 @@ class Helper
      */
     public static function decodeLangArray($varValue, IMetaModel $objMetaModel)
     {
-        $arrLangValues = deserialize($varValue);
+        $arrLangValues = StringUtil::deserialize($varValue);
         if (!$objMetaModel->isTranslated()) {
             // If we have an array, return the first value and exit, if not an array, return the value itself.
             return is_array($arrLangValues) ? $arrLangValues[key($arrLangValues)] : $arrLangValues;
@@ -90,7 +91,7 @@ class Helper
         if (!$objMetaModel->isTranslated()) {
             return $varValue;
         }
-        $arrLangValues = deserialize($varValue);
+        $arrLangValues = StringUtil::deserialize($varValue);
         $arrOutput     = array();
         foreach ($arrLangValues as $varSubValue) {
             $strLangCode = $varSubValue['langcode'];

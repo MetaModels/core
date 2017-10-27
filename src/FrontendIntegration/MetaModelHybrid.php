@@ -28,6 +28,7 @@ use Contao\ContentModel;
 use Contao\FormModel;
 use Contao\Hybrid;
 use Contao\ModuleModel;
+use Contao\StringUtil;
 use MetaModels\IMetaModelsServiceContainer;
 
 /**
@@ -82,11 +83,11 @@ abstract class MetaModelHybrid extends Hybrid
 
         $this->arrData = $objElement->row();
         // Get space and CSS ID from the parent element (!)
-        $this->space      = deserialize($objElement->space);
-        $this->cssID      = deserialize($objElement->cssID, true);
+        $this->space      = StringUtil::deserialize($objElement->space);
+        $this->cssID      = StringUtil::deserialize($objElement->cssID, true);
         $this->typePrefix = $objElement->typePrefix;
         $this->strKey     = $objElement->type;
-        $arrHeadline      = deserialize($objElement->headline);
+        $arrHeadline      = StringUtil::deserialize($objElement->headline);
         $this->headline   = is_array($arrHeadline) ? $arrHeadline['value'] : $arrHeadline;
         $this->hl         = is_array($arrHeadline) ? $arrHeadline['unit'] : 'h1';
     }

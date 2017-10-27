@@ -25,6 +25,7 @@
 namespace MetaModels\Widgets;
 
 use Contao\Date;
+use Contao\StringUtil;
 use Contao\Widget;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
@@ -114,7 +115,7 @@ class SubDcaWidget extends Widget
     {
         switch ($strKey) {
             case 'options':
-                $this->arrOptions = deserialize($varValue);
+                $this->arrOptions = StringUtil::deserialize($varValue);
 
                 foreach ($this->arrOptions as $arrOptions) {
                     if ($arrOptions['default']) {
@@ -123,11 +124,11 @@ class SubDcaWidget extends Widget
                 }
                 break;
             case 'subfields':
-                $this->arrSubFields = deserialize($varValue);
+                $this->arrSubFields = StringUtil::deserialize($varValue);
                 break;
 
             case 'flagfields':
-                $this->arrFlagFields = deserialize($varValue);
+                $this->arrFlagFields = StringUtil::deserialize($varValue);
                 break;
 
             default:
@@ -181,7 +182,7 @@ class SubDcaWidget extends Widget
             $this->strTable,
             $this->strName,
             $key,
-            specialchars($GLOBALS['TL_LANG']['MSC']['helpWizard']),
+            StringUtil::specialchars($GLOBALS['TL_LANG']['MSC']['helpWizard']),
             $event->getHtml()
         );
     }

@@ -21,6 +21,7 @@
 
 namespace MetaModels\Widgets;
 
+use Contao\StringUtil;
 use Contao\Widget;
 
 /**
@@ -118,7 +119,7 @@ class MultiTextWidget extends Widget
                 $i,
                 '',
                 (strlen($this->strClass) ? ' ' . $this->strClass : ''),
-                specialchars($this->varValue[$i]),
+                StringUtil::specialchars($this->varValue[$i]),
                 $this->getAttributes(),
                 $this->strTagEnding
             );

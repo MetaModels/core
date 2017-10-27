@@ -24,6 +24,7 @@
 namespace MetaModels\DcGeneral\Events\Table\InputScreens;
 
 use Contao\Message;
+use Contao\StringUtil;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
@@ -196,7 +197,7 @@ class Subscriber extends BaseSubscriber
     {
         $model = $event->getModel();
 
-        $arrLegend = deserialize($model->getProperty('legendtitle'));
+        $arrLegend = StringUtil::deserialize($model->getProperty('legendtitle'));
         if (is_array($arrLegend)) {
             $strLegend = $arrLegend[$GLOBALS['TL_LANGUAGE']];
 
@@ -343,7 +344,7 @@ class Subscriber extends BaseSubscriber
             $event->getEnvironment()->getTranslator()->translate('name_langcode', 'tl_metamodel_dcasetting'),
             $event->getEnvironment()->getTranslator()->translate('name_value', 'tl_metamodel_dcasetting'),
             false,
-            deserialize($event->getModel()->getProperty('legendtitle'), true)
+            StringUtil::deserialize($event->getModel()->getProperty('legendtitle'), true)
         );
     }
 

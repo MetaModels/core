@@ -21,6 +21,8 @@
 
 namespace MetaModels\Render\Setting;
 
+use Contao\StringUtil;
+
 /**
  * Base implementation for render settings.
  */
@@ -48,7 +50,7 @@ class Simple implements ISimple
     public function __construct($arrInformation = array())
     {
         foreach ($arrInformation as $strKey => $varValue) {
-            $this->set($strKey, deserialize($varValue));
+            $this->set($strKey, StringUtil::deserialize($varValue));
         }
     }
 

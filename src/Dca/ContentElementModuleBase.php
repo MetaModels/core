@@ -25,6 +25,7 @@
 
 namespace MetaModels\Dca;
 
+use Contao\StringUtil;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
@@ -143,7 +144,7 @@ class ContentElementModuleBase
         return sprintf(
             '<a href="%s" title="%s" style="padding-left:3px">%s</a>',
             $url->getUrl(),
-            sprintf(specialchars($GLOBALS['TL_LANG'][$table]['editmetamodel'][1]), $dataContainer->value),
+            sprintf(StringUtil::specialchars($GLOBALS['TL_LANG'][$table]['editmetamodel'][1]), $dataContainer->value),
             $event->getHtml()
         );
     }
@@ -185,7 +186,7 @@ class ContentElementModuleBase
         return sprintf(
             '<a href="%s" title="%s" style="padding-left:3px">%s</a>',
             $url->getUrl(),
-            sprintf(specialchars($GLOBALS['TL_LANG'][$table]['editfiltersetting'][1]), $dataContainer->value),
+            sprintf(StringUtil::specialchars($GLOBALS['TL_LANG'][$table]['editfiltersetting'][1]), $dataContainer->value),
             $event->getHtml()
         );
     }
@@ -227,7 +228,7 @@ class ContentElementModuleBase
         return sprintf(
             '<a href="%s" title="%s" style="padding-left:3px">%s</a>',
             $url->getUrl(),
-            sprintf(specialchars($GLOBALS['TL_LANG'][$table]['editrendersetting'][1]), $dataContainer->value),
+            sprintf(StringUtil::specialchars($GLOBALS['TL_LANG'][$table]['editrendersetting'][1]), $dataContainer->value),
             $event->getHtml()
         );
     }

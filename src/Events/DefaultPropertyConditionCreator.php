@@ -22,6 +22,7 @@
 
 namespace MetaModels\Events;
 
+use Contao\StringUtil;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionChainInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\BooleanCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\NotCondition;
@@ -194,7 +195,7 @@ class DefaultPropertyConditionCreator
     {
         return new PropertyContainAnyOfCondition(
             $this->getAttributeName($metaModel, $condition['attr_id']),
-            deserialize($condition['value'])
+            StringUtil::deserialize($condition['value'])
         );
     }
 

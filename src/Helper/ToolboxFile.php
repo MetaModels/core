@@ -34,6 +34,7 @@ use Contao\File;
 use Contao\FilesModel;
 use Contao\Input;
 use Contao\PageError403;
+use Contao\StringUtil;
 use Contao\Validator;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
@@ -158,7 +159,7 @@ class ToolboxFile
     {
         $this->dispatcher = $dispatcher ?: $GLOBALS['container']['event-dispatcher'];
         // Initialize some values to sane base.
-        $this->setAcceptedExtensions(trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']));
+        $this->setAcceptedExtensions(StringUtil::trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']));
         if (!is_array($_SESSION['metaModels_downloads'])) {
             $_SESSION['metaModels_downloads'] = [];
         }
@@ -177,10 +178,10 @@ class ToolboxFile
     public function setAcceptedExtensions($acceptedExtensions)
     {
         // We must not allow file extensions that are globally disabled.
-        $allowedDownload = trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']);
+        $allowedDownload = StringUtil::trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']);
 
         if (!is_array($acceptedExtensions)) {
-            $acceptedExtensions = trimsplit(',', $acceptedExtensions);
+            $acceptedExtensions = StringUtil::trimsplit(',', $acceptedExtensions);
         }
 
         $this->acceptedExtensions = array_map('strtolower', array_intersect($allowedDownload, $acceptedExtensions));
@@ -779,7 +780,7 @@ class ToolboxFile
             $result['bin'][]   = $value->uuid;
             $result['value'][] = self::uuidToString($value->uuid);
             $result['path'][]  = $value->path;
-            $result['meta'][]  = deserialize($value->meta, true);
+            $result['meta'][]  = StringUtil::deserialize($value->meta, true);
         }
 
         return $result;
@@ -879,7 +880,7 @@ class ToolboxFile
                 $path                       = $file->path;
                 $this->foundFiles[]         = $path;
                 $this->uuidMap[$file->uuid] = $path;
-                $meta                       = deserialize($file->meta, true);
+                $meta                       = StringUtil::deserialize($file->meta, true);
 
                 if (isset($meta[$baseLanguage])) {
                     $this->metaInformation[dirname($path)][basename($path)] = $meta[$baseLanguage];
@@ -901,7 +902,7 @@ class ToolboxFile
     {
         $file  = new File($fileName);
         $meta  = $this->metaInformation[dirname($fileName)][$file->basename];
-        $title = strlen($meta['title']) ? $meta['title'] : specialchars($file->basename);
+        $title = strlen($meta['title']) ? $meta['title'] : StringUtil::specialchars($file->basename);
         if (strlen($meta['caption'])) {
             $altText = $meta['caption'];
         } else {
@@ -919,7 +920,7 @@ class ToolboxFile
             'extension' => $file->extension,
             'size'      => $file->filesize,
             'sizetext'  => sprintf('(%s)', Controller::getReadableSize($file->filesize, 2)),
-            'url'       => specialchars($this->getDownloadLink($fileName))
+            'url'       => StringUtil::specialchars($this->getDownloadLink($fileName))
         ];
 
         // Prepare images.

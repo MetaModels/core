@@ -23,6 +23,7 @@
 
 namespace MetaModels\DcGeneral\Events\Table\Attribute;
 
+use Contao\StringUtil;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
@@ -181,7 +182,7 @@ class Subscriber extends BaseSubscriber
 
         $colName        = $attribute->getColName();
         $name           = $attribute->getName();
-        $arrDescription = deserialize($attribute->get('description'));
+        $arrDescription = StringUtil::deserialize($attribute->get('description'));
         if (is_array($arrDescription)) {
             $description = $arrDescription[$attribute->getMetaModel()->getActiveLanguage()];
             if (!$description) {
@@ -306,7 +307,7 @@ class Subscriber extends BaseSubscriber
             $event->getEnvironment()->getTranslator()->translate('name_langcode', 'tl_metamodel_attribute'),
             $event->getEnvironment()->getTranslator()->translate('name_value', 'tl_metamodel_attribute'),
             false,
-            deserialize($event->getModel()->getProperty($event->getProperty()->getName()), true)
+            StringUtil::deserialize($event->getModel()->getProperty($event->getProperty()->getName()), true)
         );
     }
 

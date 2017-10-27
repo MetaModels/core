@@ -21,6 +21,7 @@
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting;
 
+use Contao\StringUtil;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
@@ -131,7 +132,7 @@ abstract class AbstractFilterSettingTypeRenderer
         if ($model->getProperty('comment')) {
             return sprintf(
                 $translator->translate('typedesc._comment_', 'tl_metamodel_filtersetting'),
-                specialchars($model->getProperty('comment'))
+                StringUtil::specialchars($model->getProperty('comment'))
             );
         }
         return '';

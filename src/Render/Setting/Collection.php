@@ -24,6 +24,7 @@
 
 namespace MetaModels\Render\Setting;
 
+use Contao\StringUtil;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GetPageDetailsEvent;
@@ -75,7 +76,7 @@ class Collection implements ICollection
         $this->metaModel = $metaModel;
 
         foreach ($arrInformation as $strKey => $varValue) {
-            $this->set($strKey, deserialize($varValue));
+            $this->set($strKey, StringUtil::deserialize($varValue));
         }
     }
 

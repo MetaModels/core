@@ -21,6 +21,7 @@
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder;
 
+use Contao\StringUtil;
 use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2BackendViewDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultFilterElementInformation;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\Panel\DefaultLimitElementInformation;
@@ -93,7 +94,7 @@ class PanelBuilder
         }
 
         // Get the layout from the dca.
-        $arrRows = trimsplit(';', $panelLayout);
+        $arrRows = StringUtil::trimsplit(';', $panelLayout);
 
         // Create a new panel container.
         $panel     = $view->getPanelLayout();
@@ -108,7 +109,7 @@ class PanelBuilder
             }
 
             // Get the fields.
-            $fields = trimsplit(',', $rowElements);
+            $fields = StringUtil::trimsplit(',', $rowElements);
             $fields = array_reverse($fields);
 
             $this->parsePanelRow($fields, $panelRow);

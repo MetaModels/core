@@ -22,6 +22,7 @@
 
 namespace MetaModels\BackendIntegration;
 
+use Contao\StringUtil;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GetPageDetailsEvent;
@@ -430,7 +431,7 @@ class SearchablePages
     ) {
         $metaModelsIdentifier = $config['pid'];
         $filterIdentifier     = $config['filter'];
-        $presetParams         = deserialize($config['filterparams'], true);
+        $presetParams         = StringUtil::deserialize($config['filterparams'], true);
         $renderSettingId      = $config['rendersetting'];
 
         // Get the MetaModels.

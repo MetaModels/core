@@ -25,6 +25,7 @@
 
 namespace MetaModels\BackendIntegration\InputScreen;
 
+use Contao\StringUtil;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionChainInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\NotCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
@@ -133,7 +134,7 @@ class InputScreen implements IInputScreen
      */
     protected function translateLegend($legend, $metaModel)
     {
-        $arrLegend = deserialize($legend['legendtitle']);
+        $arrLegend = StringUtil::deserialize($legend['legendtitle']);
         if (is_array($arrLegend)) {
             // Try to use the language string from the array.
             $strLegend = $arrLegend[$GLOBALS['TL_LANGUAGE']];
@@ -149,7 +150,7 @@ class InputScreen implements IInputScreen
             $strLegend = $legend['legendtitle'] ? $legend['legendtitle'] : 'legend';
         }
 
-        $legendName = standardize($strLegend);
+        $legendName = StringUtil::standardize($strLegend);
 
         $this->legends[$legendName] = array
         (
@@ -483,7 +484,7 @@ class InputScreen implements IInputScreen
      */
     public function getBackendCaption()
     {
-        return deserialize($this->data['backendcaption'], true);
+        return StringUtil::deserialize($this->data['backendcaption'], true);
     }
 
     /**

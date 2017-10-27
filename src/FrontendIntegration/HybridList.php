@@ -25,6 +25,7 @@
 
 namespace MetaModels\FrontendIntegration;
 
+use Contao\StringUtil;
 use MetaModels\ItemList;
 
 /**
@@ -109,7 +110,7 @@ class HybridList extends MetaModelHybrid
             ->setSorting($sorting, $direction)
             ->setFilterSettings($this->metamodel_filtering)
             ->setFilterParameters(
-                deserialize($this->metamodel_filterparams, true),
+                StringUtil::deserialize($this->metamodel_filterparams, true),
                 $this->getFilterParameters($objItemRenderer)
             )
             ->setMetaTags($this->metamodel_meta_title, $this->metamodel_meta_description);

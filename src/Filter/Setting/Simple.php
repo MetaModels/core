@@ -24,6 +24,7 @@
 namespace MetaModels\Filter\Setting;
 
 use Contao\Input;
+use Contao\StringUtil;
 use Contao\Widget;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
@@ -338,7 +339,7 @@ abstract class Simple implements ISimple
                 'value'  => $strOption,
                 'href'   => $event->getUrl(),
                 'active' => $blnActive,
-                'class'  => standardize($strKeyOption) . ($blnActive ? ' active' : '')
+                'class'  => StringUtil::standardize($strKeyOption) . ($blnActive ? ' active' : '')
             );
         }
         return $arrOptions;

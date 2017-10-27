@@ -24,6 +24,7 @@
 
 namespace MetaModels\DcGeneral\Events\BreadCrumb;
 
+use Contao\StringUtil;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 
 /**
@@ -78,7 +79,7 @@ class BreadCrumbInputScreenCondition extends BreadCrumbInputScreenSetting
                 return $attribute->getName();
             }
         } else {
-            $title = deserialize($setting->legendtitle, true);
+            $title = StringUtil::deserialize($setting->legendtitle, true);
             return isset($title[$GLOBALS['TL_LANGUAGE']]) ? $title[$GLOBALS['TL_LANGUAGE']] : current($title);
         }
 
