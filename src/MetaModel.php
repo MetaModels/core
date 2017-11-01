@@ -126,7 +126,7 @@ class MetaModel implements IMetaModel
      */
     protected function getDatabase()
     {
-        return $this->serviceContainer->getDatabase();
+        return $this->getServiceContainer()->getDatabase();
     }
 
     /**
