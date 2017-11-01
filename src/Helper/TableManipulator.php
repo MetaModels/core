@@ -46,7 +46,7 @@ class TableManipulator
     const STATEMENT_CREATE_TABLE = '
             CREATE TABLE `%s` (
                 `id` int(10) unsigned NOT NULL auto_increment,
-                `pid` int(10) unsigned NOT NULL,
+                `pid` int(10) unsigned NOT NULL default \'0\',
                 `sorting` int(10) unsigned NOT NULL default \'0\',
                 `tstamp` int(10) unsigned NOT NULL default \'0\',
                 PRIMARY KEY  (`id`)
