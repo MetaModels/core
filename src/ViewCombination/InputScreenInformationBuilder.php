@@ -13,6 +13,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -65,6 +66,7 @@ class InputScreenInformationBuilder
      */
     public function fetchInputScreens($idList)
     {
+        $idList  = array_filter($idList);
         $builder = $this->connection->createQueryBuilder();
         $screens = $builder
             ->select('*')
