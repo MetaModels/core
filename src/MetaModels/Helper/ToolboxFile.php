@@ -33,6 +33,7 @@ use Contao\File;
 use Contao\FilesModel;
 use Contao\Input;
 use Contao\PageError403;
+use Contao\StringUtil;
 use Contao\Validator;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
@@ -346,7 +347,7 @@ class ToolboxFile
         }
 
         if (!Validator::isBinaryUuid($strId)) {
-            $this->pendingIds[] = self::stringToUuid($strId);
+            $this->pendingIds[] = StringUtil::uuidToBin($strId);
             return $this;
         }
 
@@ -762,13 +763,22 @@ class ToolboxFile
             throw new InvalidArgumentException('Invalid uuid list.');
         }
 
+        // Convert UUIDs to binary and clean empty values out.
+        $values = array_filter(array_map(function ($fileId) {
+            return Validator::isStringUuid($fileId) ? StringUtil::uuidToBin($fileId) : $fileId;
+        }, $values));
+
         $result = array(
             'bin'   => array(),
             'value' => array(),
             'path'  => array(),
             'meta'  => array()
         );
-        $models = FilesModel::findMultipleByUuids(array_filter($values));
+        if (empty($values)) {
+            return $result;
+        }
+
+        $models = FilesModel::findMultipleByUuids($values);
 
         if ($models === null) {
             return $result;
@@ -776,7 +786,7 @@ class ToolboxFile
 
         foreach ($models as $value) {
             $result['bin'][]   = $value->uuid;
-            $result['value'][] = self::uuidToString($value->uuid);
+            $result['value'][] = StringUtil::binToUuid($value->uuid);
             $result['path'][]  = $value->path;
             $result['meta'][]  = deserialize($value->meta, true);
         }
@@ -825,30 +835,6 @@ class ToolboxFile
         }
 
         return self::convertValuesToMetaModels($values);
-    }
-
-    /**
-     * Map a binary uuid to it's string representation.
-     *
-     * @param string $uuid The binary string.
-     *
-     * @return string
-     */
-    private static function uuidToString($uuid)
-    {
-        return call_user_func(['StringUtil', 'binToUuid'], $uuid);
-    }
-
-    /**
-     * Map a string to it's binary uuid representation.
-     *
-     * @param string $uuid The string.
-     *
-     * @return string
-     */
-    private static function stringToUuid($uuid)
-    {
-        return call_user_func(['StringUtil', 'uuidToBin'], $uuid);
     }
 
     /**
