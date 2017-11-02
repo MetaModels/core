@@ -700,16 +700,22 @@ class MetaModel implements IMetaModel
 
     /**
      * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getIdsFromFilter($objFilter, $strSortBy = '', $intOffset = 0, $intLimit = 0, $strSortOrder = 'ASC')
     {
-        $arrFilteredIds = $this->getMatchingIds($objFilter);
+        if ([] === $arrFilteredIds = array_filter($this->getMatchingIds($objFilter))) {
+            return [];
+        }
 
         // If desired, sort the entries.
         if ($arrFilteredIds && $strSortBy != '') {
             if ($objSortAttribute = $this->getAttribute($strSortBy)) {
                 $arrFilteredIds = $objSortAttribute->sortIds($arrFilteredIds, $strSortOrder);
-            } elseif (in_array($strSortBy, array('id', 'pid', 'tstamp', 'sorting'))) {
+            } elseif ('id' === $strSortBy) {
+                asort($arrFilteredIds);
+            } elseif (in_array($strSortBy, array('pid', 'tstamp', 'sorting'))) {
                 // Sort by database values.
                 $arrFilteredIds = $this
                     ->getDatabase()
