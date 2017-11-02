@@ -156,19 +156,19 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             (
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['edit'],
                 'href'  => 'act=edit',
-                'icon'  => 'edit.gif',
+                'icon'  => 'edit.svg',
             ),
             'copy'   => array
             (
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['copy'],
                 'href'  => 'act=copy',
-                'icon'  => 'copy.gif',
+                'icon'  => 'copy.svg',
             ),
             'delete' => array
             (
                 'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['delete'],
                 'href'       => 'act=delete',
-                'icon'       => 'delete.gif',
+                'icon'       => 'delete.svg',
                 'attributes' => sprintf(
                     'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
                     $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
@@ -178,7 +178,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
             (
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['show'],
                 'href'  => 'act=show',
-                'icon'  => 'show.gif'
+                'icon'  => 'show.svg'
             ),
         )
     ),

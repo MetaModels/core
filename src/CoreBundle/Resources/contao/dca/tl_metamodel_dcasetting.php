@@ -198,19 +198,19 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             (
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['edit'],
                 'href'  => 'act=edit',
-                'icon'  => 'edit.gif'
+                'icon'  => 'edit.svg'
             ),
             'cut'        => array
             (
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['cut'],
                 'href'  => 'act=paste&amp;mode=cut',
-                'icon'  => 'cut.gif'
+                'icon'  => 'cut.svg'
             ),
             'delete'     => array
             (
                 'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete'],
                 'href'       => 'act=delete',
-                'icon'       => 'delete.gif',
+                'icon'       => 'delete.svg',
                 'attributes' => sprintf(
                     'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
                     $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
@@ -220,12 +220,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             (
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['show'],
                 'href'  => 'act=show',
-                'icon'  => 'show.gif'
+                'icon'  => 'show.svg'
             ),
             'toggle'     => array
             (
                 'label'          => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle'],
-                'icon'           => 'visible.gif',
+                'icon'           => 'visible.svg',
                 'toggleProperty' => 'published',
             ),
             'conditions' => array

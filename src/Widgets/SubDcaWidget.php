@@ -170,7 +170,7 @@ class SubDcaWidget extends Widget
         }
 
         $event = new GenerateHtmlEvent(
-            'about.gif',
+            'about.svg',
             $GLOBALS['TL_LANG']['MSC']['helpWizard'],
             'style="vertical-align:text-bottom;"'
         );

@@ -197,14 +197,14 @@ class CommandBuilder
         $collection = $view->getModelCommands();
 
         $scrOffsetAttributes = ['attributes' => 'onclick="Backend.getScrollOffset();"'];
-        $this->createCommand($collection, 'edit', ['act' => 'edit'], 'edit.gif');
-        $this->createCommand($collection, 'copy', ['act' => ''], 'copy.gif', $scrOffsetAttributes);
-        $this->createCommand($collection, 'cut', ['act' => 'paste', 'mode' => 'cut'], 'cut.gif', $scrOffsetAttributes);
+        $this->createCommand($collection, 'edit', ['act' => 'edit'], 'edit.svg');
+        $this->createCommand($collection, 'copy', ['act' => ''], 'copy.svg', $scrOffsetAttributes);
+        $this->createCommand($collection, 'cut', ['act' => 'paste', 'mode' => 'cut'], 'cut.svg', $scrOffsetAttributes);
         $this->createCommand(
             $collection,
             'delete',
             ['act' => 'delete'],
-            'delete.gif',
+            'delete.svg',
             [
                 'attributes' => sprintf(
                     'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
@@ -213,7 +213,7 @@ class CommandBuilder
                 )
             ]
         );
-        $this->createCommand($collection, 'show', ['act' => 'show'], 'show.gif');
+        $this->createCommand($collection, 'show', ['act' => 'show'], 'show.svg');
 
         if ($this->factory->getMetaModel($this->container->getName())->hasVariants()) {
             $this->createCommand(

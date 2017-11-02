@@ -49,7 +49,7 @@ body[class*="version_3"] a[class*="header_"] {
     color:#8AB858;
     margin:6px 0;
     padding-left:24px;
-    background:url(../../../../themes/default/images/palOpen.gif) 3px center no-repeat;
+    background:url(../../../../themes/flexible/images/palOpen.gif) 3px center no-repeat;
 }
 
 .dca_combine.widget td:empty {
@@ -145,7 +145,7 @@ textarea[readonly]:focus {
 .w50x {
     height:auto;
 }
-  
+
 .long  .chzn-container {
     width:100%;
 }

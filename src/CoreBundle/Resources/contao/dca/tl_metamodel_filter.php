@@ -150,13 +150,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
             (
                 'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['edit'],
                 'href'                => 'act=edit',
-                'icon'                => 'edit.gif'
+                'icon'                => 'edit.svg'
             ),
             'delete' => array
             (
                 'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['delete'],
                 'href'                => 'act=delete',
-                'icon'                => 'delete.gif',
+                'icon'                => 'delete.svg',
                 'attributes'          => sprintf(
                     'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
                     $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
@@ -166,7 +166,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
             (
                 'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['show'],
                 'href'                => 'act=show',
-                'icon'                => 'show.gif'
+                'icon'                => 'show.svg'
             ),
             'settings' => array
             (

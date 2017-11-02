@@ -56,7 +56,7 @@ class RenderSettings
         );
 
         $event = new GenerateHtmlEvent(
-            'pickpage.gif',
+            'pickpage.svg',
             $environment->getTranslator()->translate('MSC.pagepicker'),
             'style="vertical-align:top;cursor:pointer"'
         );

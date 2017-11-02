@@ -185,26 +185,26 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
             (
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit'],
                 'href'  => 'act=edit',
-                'icon'  => 'edit.gif'
+                'icon'  => 'edit.svg'
             ),
             'copy'   => array
             (
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy'],
                 'href'  => 'act=copy',
-                'icon'  => 'copy.gif'
+                'icon'  => 'copy.svg'
             ),
             'cut'    => array
             (
                 'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cut'],
                 'href'       => 'act=paste&amp;mode=cut',
-                'icon'       => 'cut.gif',
+                'icon'       => 'cut.svg',
                 'attributes' => 'onclick="Backend.getScrollOffset()"',
             ),
             'delete' => array
             (
                 'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete'],
                 'href'       => 'act=delete',
-                'icon'       => 'delete.gif',
+                'icon'       => 'delete.svg',
                 'attributes' => sprintf(
                     'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
                     $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
@@ -214,12 +214,12 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
             (
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show'],
                 'href'  => 'act=show',
-                'icon'  => 'show.gif'
+                'icon'  => 'show.svg'
             ),
             'toggle' => array
             (
                 'label'          => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['toggle'],
-                'icon'           => 'visible.gif',
+                'icon'           => 'visible.svg',
                 'toggleProperty' => 'enabled',
             )
         )

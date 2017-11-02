@@ -130,7 +130,7 @@ class ContentElementModuleBase
         }
 
         $event = new GenerateHtmlEvent(
-            'alias.gif',
+            'alias.svg',
             $GLOBALS['TL_LANG'][$table]['editmetamodel'][0],
             'style="vertical-align:top"'
         );
@@ -168,7 +168,7 @@ class ContentElementModuleBase
         }
 
         $event = new GenerateHtmlEvent(
-            'alias.gif',
+            'alias.svg',
             $GLOBALS['TL_LANG'][$table]['editfiltersetting'][0],
             'style="vertical-align:top"'
         );
@@ -210,7 +210,7 @@ class ContentElementModuleBase
         }
 
         $event = new GenerateHtmlEvent(
-            'alias.gif',
+            'alias.svg',
             $GLOBALS['TL_LANG'][$table]['editrendersetting'][0],
             'style="vertical-align:top"'
         );

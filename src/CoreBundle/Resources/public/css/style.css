@@ -49,7 +49,7 @@
     color:#8AB858;
     margin:6px 0;
     padding-left:24px;
-    background:url(../../../../themes/default/images/palOpen.gif) 3px center no-repeat;
+    background:url(../../../../themes/flexible/images/palOpen.gif) 3px center no-repeat;
   }
 
   .dca_combine.widget td:empty {
@@ -59,14 +59,14 @@
   .mm_problem_display {
     margin-bottom:30px;
   }
- 
+
   .mm_problem_display ul {
     padding:0; list-style:none;
   }
-  
-  form[id*="tl_metamodel_"] .wizard a[data-lightbox] img, 
+
+  form[id*="tl_metamodel_"] .wizard a[data-lightbox] img,
   form[id*="tl_metamodel_"] .wizard a[onclick] img {
-    margin-top:3px; 
+    margin-top:3px;
   }
 
   div[class*="table_tl_metamodel_"] .tl_file_list {
@@ -91,8 +91,8 @@
 
  /*------------------------------------------------------------------------*/
 
-  body[class*="version_3"] .tl_file_list .field_type img, 
-  body[class*="version_2"] .tl_content .field_type img, 
+  body[class*="version_3"] .tl_file_list .field_type img,
+  body[class*="version_2"] .tl_content .field_type img,
   body[class*="version_2"] .tl_content_right + img {
     margin-right:8px;
     float:left;
@@ -121,7 +121,7 @@
   }
 
   input[readonly],
-  textarea[readonly], 
+  textarea[readonly],
   input[readonly]:focus,
   textarea[readonly]:focus {
     background-color: #ebebe4;

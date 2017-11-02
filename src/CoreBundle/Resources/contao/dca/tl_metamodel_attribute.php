@@ -183,20 +183,20 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
             (
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['edit'],
                 'href'  => 'act=edit',
-                'icon'  => 'edit.gif'
+                'icon'  => 'edit.svg'
             ),
             'cut'    => array
             (
                 'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['cut'],
                 'href'       => 'act=paste&amp;mode=cut',
-                'icon'       => 'cut.gif',
+                'icon'       => 'cut.svg',
                 'attributes' => 'onclick="Backend.getScrollOffset();"'
             ),
             'delete' => array
             (
                 'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['delete'],
                 'href'       => 'act=delete',
-                'icon'       => 'delete.gif',
+                'icon'       => 'delete.svg',
                 'attributes' => sprintf(
                     'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
                     $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
@@ -206,7 +206,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
             (
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['show'],
                 'href'  => 'act=show',
-                'icon'  => 'show.gif'
+                'icon'  => 'show.svg'
             ),
 
         )
