@@ -167,7 +167,7 @@ class BaseSimple extends Base implements ISimple
                 ->execute();
         } elseif ($usedOnly) {
             $statement = $this->connection->createQueryBuilder()
-                ->select('SELECT ' . $strCol . ', COUNT(' . $strCol . ') as mm_count')
+                ->select($strCol . ', COUNT(' . $strCol . ') as mm_count')
                 ->from($this->getMetaModel()->getTableName())
                 ->groupBy($strCol)
                 ->orderBy($strCol)
