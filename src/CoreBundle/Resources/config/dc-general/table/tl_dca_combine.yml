@@ -1,0 +1,34 @@
+services:
+    metamodels.dc_general.table.tl_metamodel_dca_combine.fix_sorting:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaCombine\FixSortingListener
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.encode-property-value-from-widget
+              method: handle
+
+    metamodels.dc_general.table.tl_metamodel_dca_combine.group_options:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaCombine\GroupOptionListener
+        arguments:
+            - "@database_connection"
+        tags:
+            - name: kernel.event_listener
+              event: men-at-work.multi-column-wizard.get-options
+              method: handle
+
+    metamodels.dc_general.table.tl_metamodel_dca_combine.input_screen_options:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaCombine\InputScreenOptionListener
+        arguments:
+            - "@database_connection"
+        tags:
+            - name: kernel.event_listener
+              event: men-at-work.multi-column-wizard.get-options
+              method: handle
+
+    metamodels.dc_general.table.tl_metamodel_dca_combine.render_setting_options:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaCombine\RenderSettingOptionListener
+        arguments:
+            - "@database_connection"
+        tags:
+            - name: kernel.event_listener
+              event: men-at-work.multi-column-wizard.get-options
+              method: handle
