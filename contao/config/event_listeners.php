@@ -22,6 +22,10 @@
  */
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\ModelRelationship\FilterBuilder;
+use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
+use MetaModels\Attribute\IAttribute;
+use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton;
 use MetaModels\DcGeneral\Events\MetaModel\CutButton;
 use MetaModels\DcGeneral\Events\MetaModel\DuplicateModel;
@@ -40,8 +44,11 @@ use MetaModels\Filter\Setting\CustomSqlFilterSettingTypeFactory;
 use MetaModels\Filter\Setting\Events\CreateFilterSettingFactoryEvent;
 use MetaModels\Filter\Setting\SimpleLookupFilterSettingTypeFactory;
 use MetaModels\Filter\Setting\StaticIdListFilterSettingTypeFactory;
+use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsEvents;
+use MultiColumnWizard\Event\GetOptionsEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 return array(
     MetaModelsEvents::SUBSYSTEM_BOOT => array(
@@ -92,6 +99,69 @@ return array(
                 ->addTypeFactory(new ConditionAndFilterSettingTypeFactory())
                 ->addTypeFactory(new ConditionOrFilterSettingTypeFactory());
         }
+    ),
+    GetOptionsEvent::NAME => array(
+        function (GetOptionsEvent $event) {
+            if (('tl_metamodel_dca' !== $event->getEnvironment()->getDataDefinition()->getName())
+                || ('additionalFilters' !== $event->getPropertyName())
+                || ('property' !== $event->getSubPropertyName())) {
+                return;
+            }
+
+            /** @var IMetaModelsServiceContainer $serviceContainer */
+            $serviceContainer = $GLOBALS['container']['metamodels-service-container'];
+
+            $metaModel = $serviceContainer->getFactory()->getMetaModel('mm_employee');
+
+            $options = array_values(array_merge(
+                $GLOBALS['METAMODELS_SYSTEM_COLUMNS'],
+                array_map(
+                    function (
+                        /** @var IAttribute $attr */
+                        $attr
+                    ) {
+                        return $attr->getColName();
+                    },
+                    $metaModel->getAttributes()
+                )
+            ));
+
+            $event->setOptions($options);
+        }
+    ),
+    BuildDataDefinitionEvent::NAME => array(
+        [function (BuildDataDefinitionEvent $event) {
+            $container = $event->getContainer();
+            if (!$container instanceof IMetaModelDataDefinition) {
+                return;
+            }
+            $definition  = $container->getBasicDefinition();
+            $screenId    = $container->getMetaModelDefinition()->getActiveInputScreen();
+            $dca = \Database::getInstance()
+                ->prepare('SELECT * FROM tl_metamodel_dca WHERE id=?')
+                ->execute($screenId);
+
+            if (empty($dca->additionalFilters)) {
+                return;
+            }
+
+            // Fetch current filter
+            $additionalFilter = $definition->getAdditionalFilter($definition->getDataProvider()) ?: [];
+            $filterBuilder    = FilterBuilder::fromArrayForRoot($additionalFilter)->getFilter();
+
+            $language = new ExpressionLanguage();
+            $exprVars = ['user' => $GLOBALS['container']['user']];
+
+            foreach (deserialize($dca->additionalFilters,true) as $f) {
+                $value = $language->evaluate($f['expression'], $exprVars);
+                $filterBuilder->andPropertyEquals($f['property'], $value);
+            }
+
+            $definition->setAdditionalFilter(
+                $definition->getDataProvider(),
+                $filterBuilder->getAllAsArray()
+            );
+        }, -500],
     ),
     // deprecated since 2.0, to be removed in 3.0.
     MetaModelsEvents::PARSE_ITEM => array(

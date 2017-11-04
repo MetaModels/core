@@ -244,6 +244,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
                 'iseditable',
                 'iscreatable',
                 'isdeleteable',
+                'additionalFilters'
             ),
         )
     ),
@@ -488,6 +489,43 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
                 'tl_class' => 'w50 m12 cbx',
             ),
             'sql'       => "char(1) NOT NULL default ''"
-        )
+        ),
+        'additionalFilters' => array
+        (
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['additionalFilters'],
+            'exclude'   => true,
+            'inputType' => 'multiColumnWizard',
+            'eval'      => array
+            (
+                'tl_class'     => 'clr',
+                'columnFields' => array
+                (
+                    'property'    => array
+                    (
+                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['addfilter_property'],
+                        'exclude'   => true,
+                        'inputType' => 'select',
+                        'eval'      => array
+                        (
+                            'tl_class'           => 'clr',
+                            'style'              => 'width:200px',
+                            'includeBlankOption' => true,
+                            'chosen'             => 'true',
+                        )
+                    ),
+                    'expression'       => array
+                    (
+                        'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['addfilter_expression'],
+                        'exclude'   => true,
+                        'inputType' => 'text',
+                        'eval'      => array
+                        (
+                            'style' => 'width:180px',
+                        )
+                    ),
+                ),
+            ),
+            'sql'       => "text NULL"
+        ),
     )
 );
