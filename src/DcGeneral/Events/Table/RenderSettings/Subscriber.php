@@ -30,10 +30,10 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBr
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
-use MenAtWork\MultiColumnWizard\Event\GetOptionsEvent;
 use MetaModels\Dca\Helper;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbRenderSettings;
+use MultiColumnWizard\Event\GetOptionsEvent;
 
 /**
  * Handles event operations on tl_metamodel_rendersettings.

@@ -32,10 +32,10 @@ use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\PreDeleteModelEvent;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
-use MenAtWork\MultiColumnWizard\Event\GetOptionsEvent;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbMetaModels;
 use MetaModels\Helper\TableManipulation;
+use MultiColumnWizard\Event\GetOptionsEvent;
 
 /**
  * Handles event operations on tl_metamodel.
