@@ -47,6 +47,7 @@ class MetaModelsCoreExtension extends Extension
         'dc-general/environment-populator.yml',
         'dc-general/listener.yml',
         'dc-general/table/tl_attribute.yml',
+        'dc-general/table/tl_dca.yml',
         'dc-general/table/tl_dca_combine.yml',
         'dc-general/table/tl_filtersetting.yml',
     ];

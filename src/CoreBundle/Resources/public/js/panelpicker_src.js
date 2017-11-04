@@ -46,6 +46,7 @@ var MetaModelsPicker = new Class(
 		// set click-events
 		cont.getElements('.item').each(function(el) {
 			el.addEvent('click',function(e) {
+				e.preventDefault();
 				this.clickItem.apply(this, [e,el]);
 			}.bind(this));
 		}.bind(this));

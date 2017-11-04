@@ -83,6 +83,12 @@ services:
             - "%metamodels.resource_dir%/data/contributors-github.json"
             - "%metamodels.resource_dir%/data/contributors-transifex.json"
 
+    metamodels.controller.picker:
+        class: MetaModels\CoreBundle\Controller\Backend\PickerWidgetController
+        arguments:
+            - "@templating"
+            - "@contao.translation.translator"
+
     metamodels.view_combination.builder:
         class: MetaModels\ViewCombination\ViewCombinationBuilder
         arguments:
