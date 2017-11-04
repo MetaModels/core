@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Martin Treml <github@r2pi.net>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -28,11 +29,11 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBr
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
-use MenAtWork\MultiColumnWizard\Event\GetOptionsEvent;
 use MetaModels\BackendIntegration\TemplateList;
 use MetaModels\Dca\Helper;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbRenderSettings;
+use MultiColumnWizard\Event\GetOptionsEvent;
 
 /**
  * Handles event operations on tl_metamodel_rendersettings.
