@@ -301,8 +301,10 @@ class InputScreenInformationBuilder
                         $result['legend' . (count($result) + 1)] = $legend;
                     }
                     $legend = [
-                        'label'      => unserialize($property['legendtitle']),
-                        'visible'    => !((bool) $property['legendhide']),
+                        'label'      => $metaModel->isTranslated()
+                            ? unserialize($property['legendtitle'])
+                            : ['' => $property['legendtitle']],
+                        'hide'       => !((bool) $property['legendhide']),
                         'properties' => [],
                         'condition' => $condition($property)
                     ];
