@@ -219,7 +219,7 @@ class FilterSettingFactory implements IFilterSettingFactory
             ->where('fid=:fid')
             ->andWhere('pid=0')
             ->andWhere('enabled=1')
-            ->setMaxResults(1)
+            ->orderBy('sorting', 'ASC')
             ->setParameter('fid', $filterSettings->get('id'))
             ->execute();
 
