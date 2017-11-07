@@ -207,7 +207,7 @@ class PanelBuilder
     private function parsePanelFilter(PanelRowInterface $row)
     {
         foreach ($this->inputScreen['properties'] as $value) {
-            if (!empty($value['info']['filter'])) {
+            if (!empty($value['filter'])) {
                 $element = new DefaultFilterElementInformation();
                 $element->setPropertyName($value['col_name']);
                 if (!$row->hasElement($element->getName())) {
@@ -254,7 +254,7 @@ class PanelBuilder
         }
 
         foreach ($this->inputScreen['properties'] as $value) {
-            if (!empty($value['info']['search'])) {
+            if (!empty($value['search'])) {
                 $element->addProperty($value['col_name']);
             }
         }
