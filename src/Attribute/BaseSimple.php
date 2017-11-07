@@ -163,7 +163,7 @@ class BaseSimple extends Base implements ISimple
                 ->where('id IN (:ids)')
                 ->groupBy($strCol)
                 ->orderBy('FIELD(id, :ids)')
-                ->setParameter('ids', $idList, Connection::PARAM_INT_ARRAY)
+                ->setParameter('ids', $idList, Connection::PARAM_STR_ARRAY)
                 ->execute();
         } elseif ($usedOnly) {
             $statement = $this->connection->createQueryBuilder()
@@ -200,7 +200,7 @@ class BaseSimple extends Base implements ISimple
             ->select('id')
             ->from($this->getMetaModel()->getTableName())
             ->where('id IN (:ids)')
-            ->setParameter('ids', $idList)
+            ->setParameter('ids', $idList, Connection::PARAM_STR_ARRAY)
             ->orderBy($this->getColName(), $strDirection)
             ->execute()
             ->fetchAll(\PDO::FETCH_COLUMN, 'id');
