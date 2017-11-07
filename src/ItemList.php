@@ -757,6 +757,7 @@ class ItemList implements IServiceContainerAware
             ->dispatch(MetaModelsEvents::RENDER_ITEM_LIST, $event);
 
         $this->objTemplate->noItemsMsg = $this->getNoItemsCaption();
+        $this->objTemplate->details    = $this->getCaptionText('details');
 
         $this->prepare();
         $strOutputFormat = $this->getOutputFormat();
