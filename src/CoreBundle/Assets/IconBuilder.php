@@ -114,12 +114,13 @@ class IconBuilder
     public function getBackendIcon($icon, $defaultIcon = 'bundles/metamodelscore/images/icons/metamodels.png')
     {
         $realIcon = $this->convertValueToPath($icon, $defaultIcon);
-
-        return $this->imageFactory->create(
+        $resized  = $this->imageFactory->create(
             $realIcon,
             [16, 16, 'proportional'],
             $this->outputPath . '/' . basename($realIcon)
         )->getPath();
+
+        return $this->webPath . '/' . substr($resized, strlen($this->outputPath) + 1);
     }
 
     /**
@@ -138,11 +139,7 @@ class IconBuilder
         $attributes = '',
         $defaultIcon = 'bundles/metamodelscore/images/icons/metamodels.png'
     ) {
-        return $this->image->getHtml(
-            $this->webPath . '/' . substr($this->getBackendIcon($icon, $defaultIcon), strlen($this->outputPath) + 1),
-            $alt,
-            $attributes
-        );
+        return $this->image->getHtml($this->getBackendIcon($icon, $defaultIcon), $alt, $attributes);
     }
 
     /**
