@@ -1,4 +1,15 @@
 services:
+    metamodels.attribute_adder:
+        class: MetaModels\CoreBundle\EventListener\AttributeAddingListener
+        arguments:
+            - "@metamodels.attribute_factory"
+        tags:
+            - name: kernel.event_listener
+              event: metamodels.metamodel.create
+              method: handle
+              # Keep this lower than 0.
+              priority: -200
+
     metamodels.provider_from_database:
         class: MetaModels\Events\DatabaseBackedListener
         arguments:

@@ -22,7 +22,6 @@
 
 namespace MetaModels;
 
-use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\Events\CollectMetaModelTableNamesEvent;
 use MetaModels\Events\CreateMetaModelEvent;
 use MetaModels\Events\GetMetaModelNameFromIdEvent;
@@ -43,13 +42,6 @@ class Factory implements IFactory
     private $dispatcher;
 
     /**
-     * The attribute factory.
-     *
-     * @var IAttributeFactory
-     */
-    private $attributeFactory;
-
-    /**
      * The service container.
      *
      * @var IMetaModelsServiceContainer
@@ -68,10 +60,9 @@ class Factory implements IFactory
      *
      * @param EventDispatcherInterface $dispatcher The event dispatcher.
      */
-    public function __construct(EventDispatcherInterface $dispatcher, IAttributeFactory $attributeFactory)
+    public function __construct(EventDispatcherInterface $dispatcher)
     {
         $this->dispatcher       = $dispatcher;
-        $this->attributeFactory = $attributeFactory;
     }
 
     /**
@@ -139,12 +130,6 @@ class Factory implements IFactory
         $this->dispatcher->dispatch($event::NAME, $event);
 
         $metaModel = $event->getMetaModel();
-
-        if ($metaModel) {
-            foreach ($this->attributeFactory->createAttributesForMetaModel($metaModel) as $attribute) {
-                $metaModel->addAttribute($attribute);
-            }
-        }
 
         return $metaModel;
     }
