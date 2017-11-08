@@ -446,7 +446,7 @@ class TableManipulator
         $this->checkTableExists($strTableName);
         $this->checkColumnName($strColName, $blnAllowSystemCol);
 
-        if (!$this->fieldExists($strColName, $strTableName)) {
+        if (!$this->fieldExists($strTableName, $strColName)) {
             throw ColumnDoesNotExistException::withName($strColName, $strTableName);
         }
     }

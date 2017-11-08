@@ -294,7 +294,7 @@ class BaseSimple extends Base implements ISimple
     public function deleteColumn()
     {
         $schemaManager = $this->connection->getSchemaManager();
-        $columns       = $schemaManager->listTableIndexes($this->getMetaModel()->getTableName());
+        $columns       = $schemaManager->listTableColumns($this->getMetaModel()->getTableName());
 
         // Try to delete the column. If it does not exist as we can assume it has been deleted already then.
         if ($this->getColName() && isset($columns[$this->getColName()])) {

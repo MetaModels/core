@@ -43,8 +43,8 @@ class AttributeSavedListener extends BaseListener
 
         $old         = $event->getOriginalModel();
         $new         = $event->getModel();
-        $oldInstance = $old->getProperty('pid') ? $this->createAttributeInstance($old->getPropertiesAsArray()) : null;
-        $newInstance = $this->createAttributeInstance($new->getPropertiesAsArray());
+        $oldInstance = $old->getProperty('pid') ? $this->createAttributeInstance($old) : null;
+        $newInstance = $this->createAttributeInstance($new);
 
         // If type or column name has been changed, destroy old data and initialize new.
         if ($this->isAttributeNameOrTypeChanged($new, $old)) {
