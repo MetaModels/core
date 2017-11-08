@@ -173,7 +173,9 @@ class RegisterBackendNavigation
      */
     private function isActive($route, $params)
     {
-        if (!$active = ($this->requestStack->getCurrentRequest()->attributes->get('_route') === $route)) {
+        if ('/contao' === $this->requestStack->getCurrentRequest()->getPathInfo()
+            || !($this->requestStack->getCurrentRequest()->attributes->get('_route') === $route)
+        ) {
             return false;
         }
         $request = $this->requestStack->getCurrentRequest();
