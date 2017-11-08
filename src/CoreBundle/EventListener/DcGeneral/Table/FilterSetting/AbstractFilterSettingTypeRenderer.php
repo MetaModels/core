@@ -24,6 +24,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting;
 use Contao\StringUtil;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Backend\AddToUrlEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
@@ -58,20 +59,31 @@ abstract class AbstractFilterSettingTypeRenderer
     private $iconBuilder;
 
     /**
+     * Request scope determinator.
+     *
+     * @var RequestScopeDeterminator
+     */
+    private $scopeMatcher;
+
+    /**
      * Create a new instance.
      *
      * @param IFilterSettingFactory    $filterSettingFactory The filter factory.
      * @param EventDispatcherInterface $dispatcher           The event dispatcher.
      * @param IconBuilder              $iconBuilder          The icon builder.
+     * @param RequestScopeDeterminator $scopeMatcher         Request scope determinator.
      */
     public function __construct(
         IFilterSettingFactory $filterSettingFactory,
         EventDispatcherInterface $dispatcher,
-        IconBuilder $iconBuilder
+        IconBuilder $iconBuilder,
+        RequestScopeDeterminator $scopeMatcher
     ) {
         $this->factory     = $filterSettingFactory;
         $this->dispatcher  = $dispatcher;
         $this->iconBuilder = $iconBuilder;
+
+        $this->scopeMatcher = $scopeMatcher;
     }
 
     /**
@@ -83,6 +95,10 @@ abstract class AbstractFilterSettingTypeRenderer
      */
     public function modelToLabel(ModelToLabelEvent $event)
     {
+        if (!$this->scopeMatcher->currentScopeIsBackend()) {
+            return;
+        }
+
         $model = $event->getModel();
         if (($model->getProviderName() !== 'tl_metamodel_filtersetting')
             || !in_array($event->getModel()->getProperty('type'), $this->getTypes())
