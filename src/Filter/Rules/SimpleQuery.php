@@ -24,6 +24,7 @@ namespace MetaModels\Filter\Rules;
 use Contao\Database;
 use Contao\System;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use MetaModels\Filter\FilterRule;
 
 /**
@@ -36,65 +37,78 @@ class SimpleQuery extends FilterRule
      *
      * @var string
      */
-    protected $strQueryString;
+    private $queryString;
 
     /**
      * The query parameters.
      *
      * @var array
      */
-    protected $arrParams;
+    private $params;
 
     /**
      * The name of the id column in the query.
      *
      * @var string
      */
-    protected $strIdColumn;
+    private $idColumn;
 
     /**
      * The database instance to use.
      *
      * @var Connection
      */
-    private $dataBase;
+    private $connection;
+
+    /**
+     * The parameter types.
+     *
+     * @var array
+     */
+    private $types;
+
+    /**
+     * Create a rule instance from the passed query builder.
+     *
+     * @param QueryBuilder $builder    The builder to extract query information from.
+     *
+     * @param string       $columnName The column to retrieve.
+     *
+     * @return SimpleQuery
+     */
+    public static function createFromQueryBuilder(QueryBuilder $builder, $columnName = 'id')
+    {
+        return new self(
+            $builder->getSQL(),
+            $builder->getParameters(),
+            $columnName,
+            $builder->getConnection(),
+            $builder->getParameterTypes()
+        );
+    }
 
     /**
      * Creates an instance of a simple query filter rule.
      *
-     * @param string     $strQueryString The query that shall be executed.
-     * @param array      $arrParams      The query parameters that shall be used.
-     * @param string     $strIdColumn    The column where the item id is stored in.
-     * @param Connection $dataBase       The database to use.
+     * @param string     $queryString The query that shall be executed.
+     * @param array      $params      The query parameters that shall be used.
+     * @param string     $idColumn    The column where the item id is stored in.
+     * @param Connection $connection  The database to use.
+     * @param array      $types       The types.
      */
-    public function __construct($strQueryString, $arrParams = array(), $strIdColumn = 'id', $dataBase = null)
+    public function __construct($queryString, $params = [], $idColumn = 'id', $connection = null, $types = [])
     {
         parent::__construct();
 
-        // BC layer - we used to accept a Contao database instance here.
-        if ($dataBase instanceof Database) {
-            @trigger_error(
-                '"' . __METHOD__ . '" now accepts doctrine instances - ' .
-                'passing Contao database instances is deprecated.',
-                E_USER_DEPRECATED
-            );
-            $reflection = new \ReflectionProperty(Database::class, 'resConnection');
-            $reflection->setAccessible(true);
-
-            $dataBase = $reflection->getValue($dataBase);
-        }
-        if (null === $dataBase) {
-            @trigger_error(
-                'You should pass a doctrine database connection to "' . __METHOD__ . '".',
-                E_USER_DEPRECATED
-            );
-            $dataBase = System::getContainer()->get('database_connection');
+        if (empty($idColumn)) {
+            throw new \RuntimeException('Invalid id column');
         }
 
-        $this->strQueryString = $strQueryString;
-        $this->arrParams      = $arrParams;
-        $this->strIdColumn    = $strIdColumn;
-        $this->dataBase       = $dataBase;
+        $this->queryString = $queryString;
+        $this->params      = $params;
+        $this->idColumn    = (string) $idColumn;
+        $this->connection  = $this->sanitizeConnection($connection);
+        $this->types       = $types;
     }
 
     /**
@@ -102,15 +116,53 @@ class SimpleQuery extends FilterRule
      */
     public function getMatchingIds()
     {
-        $objMatches = $this->dataBase
-            ->prepare($this->strQueryString);
-
-        $objMatches->execute($this->arrParams);
-
-        $ids = [];
-        foreach ($objMatches->fetchAll(\PDO::FETCH_ASSOC) as $value) {
-            $ids[] = $value[$this->strIdColumn];
+        $matches = $this->connection->executeQuery($this->queryString, $this->params, $this->types);
+        $ids     = [];
+        foreach ($tmp = $matches->fetchAll(\PDO::FETCH_ASSOC) as $value) {
+            $ids[] = $value[$this->idColumn];
         }
+
         return $ids;
+    }
+
+    /**
+     * Sanitize the connection value
+     *
+     * @param Connection|\Contao\Database $connection The connection value.
+     *
+     * @return mixed|object
+     *
+     * @deprecated To be removed in 3.0 - you should ALWAYS pass the proper connection.
+     */
+    private function sanitizeConnection($connection)
+    {
+        if ($connection instanceof Connection) {
+            return $connection;
+        }
+
+        // BC layer - we used to accept a Contao database instance here.
+        if ($connection instanceof Database) {
+            @trigger_error(
+                '"' . __METHOD__ . '" now accepts doctrine instances - ' .
+                'passing Contao database instances is deprecated.',
+                E_USER_DEPRECATED
+            );
+            $reflection = new \ReflectionProperty(Database::class, 'resConnection');
+            $reflection->setAccessible(true);
+            return $reflection->getValue($connection);
+        }
+        if (null === $connection) {
+            @trigger_error(
+                'You should pass a doctrine database connection to "' . __METHOD__ . '".',
+                E_USER_DEPRECATED
+            );
+            $connection = System::getContainer()->get('database_connection');
+        }
+
+        if (!($connection instanceof Connection)) {
+            throw new \RuntimeException('Could not obtain doctrine connection.');
+        }
+
+        return $connection;
     }
 }

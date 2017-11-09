@@ -98,11 +98,11 @@ class CustomSqlTest extends TestCase
         $reflection->setAccessible(true);
         $rules = $reflection->getValue($filter);
 
-        $reflection = new \ReflectionProperty('MetaModels\Filter\Rules\SimpleQuery', 'strQueryString');
+        $reflection = new \ReflectionProperty('MetaModels\Filter\Rules\SimpleQuery', 'queryString');
         $reflection->setAccessible(true);
         $sql = $reflection->getValue($rules[0]);
 
-        $reflection = new \ReflectionProperty('MetaModels\Filter\Rules\SimpleQuery', 'arrParams');
+        $reflection = new \ReflectionProperty('MetaModels\Filter\Rules\SimpleQuery', 'params');
         $reflection->setAccessible(true);
         $params = $reflection->getValue($rules[0]);
 
