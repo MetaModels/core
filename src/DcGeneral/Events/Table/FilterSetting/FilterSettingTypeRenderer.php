@@ -50,7 +50,8 @@ abstract class FilterSettingTypeRenderer extends AbstractFilterSettingTypeRender
         parent::__construct(
             $serviceContainer->getFilterFactory(),
             $serviceContainer->getEventDispatcher(),
-            \System::getContainer()->get('metamodels.assets.icon_builder')
+            \System::getContainer()->get('metamodels.assets.icon_builder'),
+            \System::getContainer()->get('cca.dc-general.scope-matcher')
         );
 
         $this->getServiceContainer()->getEventDispatcher()->addListener(
