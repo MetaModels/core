@@ -69,10 +69,12 @@ class InputScreenInformationBuilder
         $idList  = array_filter($idList);
         $builder = $this->connection->createQueryBuilder();
         $screens = $builder
-            ->select('*')
-            ->from('tl_metamodel_dca')
-            ->where($builder->expr()->in('id', ':idList'))
+            ->select('d.*')
+            ->from('tl_metamodel_dca', 'd')
+            ->leftJoin('d', 'tl_metamodel', 'm', 'm.id=d.pid')
+            ->where($builder->expr()->in('d.id', ':idList'))
             ->setParameter('idList', $idList, Connection::PARAM_STR_ARRAY)
+            ->orderBy('m.sorting')
             ->execute()
             ->fetchAll(\PDO::FETCH_ASSOC);
 
