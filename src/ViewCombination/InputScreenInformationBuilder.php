@@ -304,7 +304,7 @@ class InputScreenInformationBuilder
                         'label'      => $metaModel->isTranslated()
                             ? unserialize($property['legendtitle'])
                             : ['' => $property['legendtitle']],
-                        'hide'       => !((bool) $property['legendhide']),
+                        'hide'       => (bool) $property['legendhide'],
                         'properties' => [],
                         'condition' => $condition($property)
                     ];

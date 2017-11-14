@@ -107,7 +107,7 @@ class PaletteBuilder
 
         foreach ($inputScreen['legends'] as $legendName => $legendInfo) {
             $legend = new Legend($legendName);
-            $legend->setInitialVisibility($legendInfo['visible']);
+            $legend->setInitialVisibility(!$legendInfo['hide']);
             $palette->addLegend($legend);
 
             $legendConditions = $this->buildCondition($legendInfo['condition'], $metaModel);
