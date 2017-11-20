@@ -51,7 +51,9 @@ class Helper
         $arrLangValues = StringUtil::deserialize($varValue);
         if (!$objMetaModel->isTranslated()) {
             // If we have an array, return the first value and exit, if not an array, return the value itself.
-            return is_array($arrLangValues) ? $arrLangValues[key($arrLangValues)] : $arrLangValues;
+            return is_array($arrLangValues)
+                ? serialize($arrLangValues[key($arrLangValues)])
+                : serialize($arrLangValues);
         }
 
         // Sort like in MetaModel definition.
