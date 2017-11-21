@@ -27,6 +27,7 @@
  */
 
 // Preserve values by extensions but insert as first entry after 'system'.
+
 $arrOld = isset($GLOBALS['BE_MOD']['metamodels']) ? $GLOBALS['BE_MOD']['metamodels'] : array();
 unset($GLOBALS['BE_MOD']['metamodels']);
 array_insert(
@@ -64,6 +65,7 @@ array_insert(
     )
 );
 
+// FIXME: should become parameters.
 $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvalueis']['nestingAllowed']      = false;
 $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvalueis']['attributes'][]        = 'select';
 $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvalueis']['attributes'][]        = 'translatedselect';
