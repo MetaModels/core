@@ -24,6 +24,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Decod
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\DcGeneralFactory;
@@ -158,8 +159,14 @@ class ValueListener extends AbstractListener
         if (method_exists($event, 'getPropertyName') && ('value' !== $event->getPropertyName())) {
             return false;
         }
-        if (method_exists($event, 'getProperty') && ('value' !== $event->getProperty())) {
-            return false;
+        if (method_exists($event, 'getProperty')) {
+            $property = $event->getProperty();
+            if ($property instanceof PropertyInterface) {
+                $property = $property->getName();
+            }
+            if ('value' !== $property) {
+                return false;
+            }
         }
 
         return true;
