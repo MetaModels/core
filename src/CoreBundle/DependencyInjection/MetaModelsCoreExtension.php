@@ -55,6 +55,8 @@ class MetaModelsCoreExtension extends Extension
         'dc-general/table/tl_filtersetting.yml',
         'dc-general/table/tl_metamodel.yml',
         'dc-general/table/tl_metamodel_rendersetting.yml',
+        'dc-general/table/tl_metamodel_rendersettings.yml',
+        'dc-general/table/tl_metamodel_searchable_pages.yml',
     ];
 
     /**
