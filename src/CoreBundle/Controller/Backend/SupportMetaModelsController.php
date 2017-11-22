@@ -62,6 +62,8 @@ class SupportMetaModelsController
      *
      * @param EngineInterface     $templating The twig engine.
      * @param TranslatorInterface $translator The translator.
+     * @param string              $github     Path to the github contributor json list.
+     * @param string              $transifex  Path to the transifex contributor json list.
      */
     public function __construct(EngineInterface $templating, TranslatorInterface $translator, $github, $transifex) {
         $this->templating = $templating;
@@ -72,8 +74,6 @@ class SupportMetaModelsController
 
     /**
      * @return Response The template data.
-     *
-     * Template("MetaModelsCoreBundle::misc/support.html.twig")
      */
     public function __invoke()
     {
