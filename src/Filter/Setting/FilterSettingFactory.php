@@ -23,6 +23,7 @@ namespace MetaModels\Filter\Setting;
 
 use Doctrine\DBAL\Connection;
 use MetaModels\Filter\Setting\Events\CreateFilterSettingFactoryEvent;
+use MetaModels\IFactory;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsEvents;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -58,18 +59,30 @@ class FilterSettingFactory implements IFilterSettingFactory
      *
      * @var IFilterSettingTypeFactory[]
      */
-    protected $typeFactories;
+    private $typeFactories;
+
+    /**
+     * The MetaModels factory.
+     *
+     * @var IFactory
+     */
+    private $factory;
 
     /**
      * Create a new instance.
      *
-     * @param Connection               $database
+     * @param Connection               $database        The database connection.
      * @param EventDispatcherInterface $eventDispatcher The event dispatcher to use.
+     * @param IFactory                 $factory         The MetaModels factory.
      */
-    public function __construct(Connection $database, EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        Connection $database,
+        EventDispatcherInterface $eventDispatcher,
+        IFactory $factory
+    ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->database        = $database;
+        $this->factory         = $factory;
     }
 
     /**
@@ -252,13 +265,12 @@ class FilterSettingFactory implements IFilterSettingFactory
         }
 
         if (!empty($information = $query->fetch(\PDO::FETCH_ASSOC))) {
-            $modelFactory = $this->serviceContainer->getFactory();
-            $metaModel    = $modelFactory->getMetaModel($modelFactory->translateIdToMetaModelName($information['pid']));
-            $collection   = new Collection($information);
-
+            // FIXME: service container in use!!!! inject MetaModel factory here!
+            $metaModel = $this->factory->getMetaModel($this->factory->translateIdToMetaModelName($information['pid']));
             if ($metaModel === null) {
                 throw new \RuntimeException('Could not retrieve MetaModel ' . $information['pid']);
             }
+            $collection = new Collection($information);
 
             $collection->setMetaModel($metaModel);
             $this->collectRules($collection);
