@@ -22,6 +22,7 @@
 namespace MetaModels\BackendIntegration;
 
 use Doctrine\DBAL\Connection;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Handy helper class to retrieve a list of templates.
@@ -196,19 +197,17 @@ class TemplateList
      */
     private function getTemplatesForBaseFrom($base, $folder, $themeName)
     {
-        $themeName      = trim($themeName);
-        $themeTemplates = glob($folder . '/' . $base . '*');
-
-        if (!$themeTemplates) {
+        if (!is_dir($folder)) {
             return [];
         }
 
+        $themeName      = trim($themeName);
+        $foundTemplates = Finder::create()->in($folder)->name($base . '*');
+
         $templates = [];
-
-        foreach ($themeTemplates as $template) {
-            $template = basename($template, strrchr($template, '.'));
-
-            $templates[$template] = [$themeName => $themeName];
+        foreach ($foundTemplates as $template) {
+            /** @var \Symfony\Component\Finder\SplFileInfo $template */
+            $templates[$template->getBasename($template->getExtension())] = [$themeName => $themeName];
         }
 
         return $templates;
