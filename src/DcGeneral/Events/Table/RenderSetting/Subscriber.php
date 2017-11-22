@@ -21,11 +21,8 @@
 
 namespace MetaModels\DcGeneral\Events\Table\RenderSetting;
 
-use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionChainInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionInterface;
@@ -69,18 +66,6 @@ class Subscriber extends BaseSubscriber
                 }
             )
             ->addListener(
-                ModelToLabelEvent::NAME,
-                array($this, 'modelToLabel')
-            )
-            ->addListener(
-                GetPropertyOptionsEvent::NAME,
-                array($this, 'getTemplateOptions')
-            )
-            ->addListener(
-                GetPropertyOptionsEvent::NAME,
-                array($this, 'getAttributeOptions')
-            )
-            ->addListener(
                 BuildDataDefinitionEvent::NAME,
                 array($this, 'buildPaletteConditions')
             );
@@ -93,7 +78,7 @@ class Subscriber extends BaseSubscriber
      *
      * @var IMetaModel[]
      */
-    protected $metaModelCache = array();
+    private $metaModelCache = array();
 
     /**
      * Retrieve the MetaModel instance from a render settings model.
@@ -102,7 +87,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return IMetaModel
      */
-    protected function getMetaModel($model)
+    private function getMetaModel($model)
     {
         if (!isset($this->metaModelCache[$model->getProperty('pid')])) {
             $dbResult = $this
@@ -115,94 +100,6 @@ class Subscriber extends BaseSubscriber
         }
 
         return $this->metaModelCache[$model->getProperty('pid')];
-    }
-
-    /**
-     * Draw the render setting.
-     *
-     * @param ModelToLabelEvent $event The event.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    public function modelToLabel(ModelToLabelEvent $event)
-    {
-        $model = $event->getModel();
-
-        if (($model->getProviderName() !== 'tl_metamodel_rendersetting')) {
-            return;
-        }
-
-        $attribute = $this->getMetaModel($model)->getAttributeById($model->getProperty('attr_id'));
-
-        if ($attribute) {
-            $type  = $attribute->get('type');
-            $image = $GLOBALS['METAMODELS']['attributes'][$type]['image'];
-            if (!$image || !file_exists(TL_ROOT . '/' . $image)) {
-                $image = 'bundles/metamodelscore/images/icons/fields.png';
-            }
-            $name    = $attribute->getName();
-            $colName = $attribute->getColName();
-        } else {
-            $translator = $event->getEnvironment()->getTranslator();
-            $image      = 'bundles/metamodelscore/images/icons/fields.png';
-            $name       = $translator->translate('error_unknown_id', 'error_unknown_attribute');
-            $colName    = $translator->translate('error_unknown_column', 'error_unknown_attribute');
-            $type       = $translator->translate(
-                'error_unknown_id',
-                'tl_metamodel_rendersettings',
-                array($model->getProperty('attr_id'))
-            );
-        }
-
-        /** @var GenerateHtmlEvent $imageEvent */
-        $imageEvent = $event->getEnvironment()->getEventDispatcher()->dispatch(
-            ContaoEvents::IMAGE_GET_HTML,
-            new GenerateHtmlEvent($image)
-        );
-
-        $event
-            ->setLabel('<div class="field_heading cte_type %s"><strong>%s</strong> <em>[%s]</em></div>
-                <div class="field_type block">
-                    %s<strong>%s</strong>
-                </div>')
-            ->setArgs(array(
-                $model->getProperty('enabled') ? 'published' : 'unpublished',
-                $colName,
-                $type,
-                $imageEvent->getHtml(),
-                $name
-            ));
-    }
-
-    /**
-     * Provide options for default selection.
-     *
-     * @param GetPropertyOptionsEvent $event The event.
-     *
-     * @return void
-     */
-    public function getTemplateOptions(GetPropertyOptionsEvent $event)
-    {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_rendersetting')
-            || ($event->getPropertyName() !== 'template')) {
-            return;
-        }
-
-        $model          = $event->getModel();
-        $parentProvider = $event->getEnvironment()->getDataProvider('tl_metamodel_rendersettings');
-        $renderSettings = $parentProvider->fetch($parentProvider->getEmptyConfig()->setId($model->getProperty('pid')));
-        $metaModel      = $this->getMetaModelById($renderSettings->getProperty('pid'));
-        $attribute      = $metaModel->getAttributeById($model->getProperty('attr_id'));
-
-        if (!$attribute) {
-            return;
-        }
-
-        $list = \Contao\System::getContainer()->get('metamodels.template_list');
-        $event->setOptions($list->getTemplatesForBase('mm_attr_' . $attribute->get('type')));
     }
 
     /**
@@ -272,7 +169,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return LegendInterface
      */
-    public function getLegend($name, $palette, $prevLegend = null)
+    private function getLegend($name, $palette, $prevLegend = null)
     {
         if ($name[0] == '+') {
             $name = substr($name, 1);
@@ -294,7 +191,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return PropertyInterface
      */
-    public function getProperty($name, $legend)
+    private function getProperty($name, $legend)
     {
         foreach ($legend->getProperties() as $property) {
             if ($property->getName() == $name) {
@@ -317,7 +214,7 @@ class Subscriber extends BaseSubscriber
      *
      * @return void
      */
-    public function addCondition($property, $condition)
+    private function addCondition($property, $condition)
     {
         $currentCondition = $property->getVisibleCondition();
         if ((!($currentCondition instanceof ConditionChainInterface))
@@ -345,7 +242,7 @@ class Subscriber extends BaseSubscriber
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    protected function buildMetaPaletteConditions($palette)
+    private function buildMetaPaletteConditions($palette)
     {
         foreach ((array) $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes'] as
                  $typeName => $paletteInfo) {
