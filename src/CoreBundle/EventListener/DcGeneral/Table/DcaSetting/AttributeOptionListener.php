@@ -36,8 +36,7 @@ class AttributeOptionListener extends AbstractListener
      */
     public function getAttributeOptions(GetPropertyOptionsEvent $event)
     {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dcasetting')
-            || ($event->getPropertyName() !== 'attr_id')) {
+        if (!$this->wantToHandle($event) || ($event->getPropertyName() !== 'attr_id')) {
             return;
         }
 
