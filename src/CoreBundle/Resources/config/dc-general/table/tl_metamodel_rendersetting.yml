@@ -1,4 +1,14 @@
 services:
+    metamodels.listener.table.tl_metamodel_rendersetting.add_all:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\RenderSetting\AddAllButtonListener
+        arguments:
+            - "@database_connection"
+            - "@metamodels.factory"
+            - "@router"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-global-button
+              method: getGlobalButton
     metamodels.listener.table.tl_metamodel_rendersetting.attribute_options:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\RenderSetting\AttributeOptionsListener
         arguments:

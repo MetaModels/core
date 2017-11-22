@@ -1,0 +1,51 @@
+{% extends "@ContaoCore/Backend/be_page.html.twig" %}
+
+{% block headline %}
+    {{ headline }}
+{% endblock %}
+
+{% block main %}
+    <div id="tl_buttons">
+        <a href="{{ href }}" class="header_back" title="{{ backBt }}">{{ backBt }}</a>
+    </div>
+    <div id="tl_metamodel_autocreate_palette">
+        <form action="{{ action }}" class="tl_form" method="post">
+            <div class="tl_formbody_edit">
+                <input type="hidden" name="REQUEST_TOKEN" value="{{ requestToken }}">
+                <div class="fields">
+                    <div>
+                        <label for="tl_select_trigger">
+                            <input type="checkbox" id="tl_select_trigger"
+                                   onclick="Backend.toggleCheckboxes(this)"{% if not hasCheckbox %} disabled{% endif %} />
+                            {{ selectAll }}
+                        </label>
+                        <label class="activate" for="activate">
+                            <input type="checkbox" name="activate" id="activate"{% if not hasCheckbox %} disabled{% endif %} />
+                            {{ activate }}
+                        </label>
+                    </div>
+                    {% for field in fields %}
+                        <div class="field {{ field.class }}">
+                            {% if field.checkbox %}
+                            <label for="attribute_{{ field.attr_id }}">
+                                <input type="checkbox" id="attribute_{{ field.attr_id }}"
+                                       name="{{ field.name }}"/>
+                                {{ field.text }}
+                            </label>
+                            {% else %}
+                            {{ field.text }}
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="tl_formbody_submit">
+                <div class="tl_submit_container">
+                    <input type="submit" name="add" class="tl_submit"
+                           value="{{ add }}"{% if not hasCheckbox %} disabled{% endif %}>
+                    <input type="submit" name="saveNclose" class="tl_submit" value="{{ saveNclose }}">
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

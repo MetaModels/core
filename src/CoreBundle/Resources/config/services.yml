@@ -74,6 +74,21 @@ services:
             - "@=service('contao.framework').getAdapter('Contao\\\\Controller')"
             - "@metamodels.assets.icon_builder"
 
+    metamodels.controller.abstract.add_all:
+        abstract: true
+        arguments:
+            - "@templating"
+            - "@contao.translation.translator"
+            - "@metamodels.factory"
+            - "@database_connection"
+            - "@=service('contao.framework').getAdapter('Contao\\\\System')"
+    metamodels.controller.inputscreen.add_all:
+        class: MetaModels\CoreBundle\Controller\Backend\InputScreenAddAllController
+        parent: metamodels.controller.abstract.add_all
+    metamodels.controller.rendersetting.add_all:
+        class: MetaModels\CoreBundle\Controller\Backend\RenderSettingAddAllController
+        parent: metamodels.controller.abstract.add_all
+
     metamodels.controller.support_screen:
         class: MetaModels\CoreBundle\Controller\Backend\SupportMetaModelsController
         arguments:

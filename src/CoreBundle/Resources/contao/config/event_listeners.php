@@ -22,20 +22,13 @@
  * @filesource
  */
 
-use MetaModels\DcGeneral\Events\Table\InputScreens\InputScreenAddAllHandler;
-use MetaModels\DcGeneral\Events\Table\RenderSetting\RenderSettingAddAllHandler;
 use MetaModels\Events\MetaModelsBootEvent;
 use MetaModels\Events\ParseItemEvent;
 use MetaModels\MetaModelsEvents;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 return array(
     MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND => array(
         function (MetaModelsBootEvent $event) {
-            /** @var EventDispatcherInterface $dispatcher */
-            $dispatcher = func_get_arg(2);
-            $dispatcher->addSubscriber(new RenderSettingAddAllHandler($event->getServiceContainer()));
-            $dispatcher->addSubscriber(new InputScreenAddAllHandler($event->getServiceContainer()));
             new \MetaModels\DcGeneral\Events\Subscriber($event->getServiceContainer());
         }
     ),
