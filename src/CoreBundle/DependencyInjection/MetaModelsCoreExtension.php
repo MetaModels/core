@@ -53,6 +53,7 @@ class MetaModelsCoreExtension extends Extension
         'dc-general/table/tl_dcasetting.yml',
         'dc-general/table/tl_dcasetting_condition.yml',
         'dc-general/table/tl_filtersetting.yml',
+        'dc-general/table/tl_metamodel.yml',
     ];
 
     /**
