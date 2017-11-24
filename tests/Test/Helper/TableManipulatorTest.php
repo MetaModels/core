@@ -13,6 +13,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     David Molineus <david.molineus@netzmacht.de>
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -23,7 +24,6 @@ namespace MetaModels\Test\Helper;
 use Doctrine\DBAL\Connection;
 use MetaModels\Helper\TableManipulator;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * Class TableManipulatorTest
@@ -49,17 +49,15 @@ class TableManipulatorTest extends TestCase
     /**
      * Create the table manipulator.
      *
-     * @param Connection|null          $connection Optional pass a connection mock.
-     * @param TranslatorInterface|null $translator Optional pass a translator.
+     * @param Connection|null $connection Optional pass a connection mock.
      *
      * @return TableManipulator
      */
-    private function createTableManipulator(Connection $connection = null, TranslatorInterface $translator = null)
+    private function createTableManipulator(Connection $connection = null)
     {
         $connection = $connection ?: $this->mockConnection();
-        $translator = $translator ?: $this->mockTranslator();
 
-        return new TableManipulator($connection, $translator, $this->systemColumns);
+        return new TableManipulator($connection, $this->systemColumns);
     }
 
     /**
@@ -74,18 +72,6 @@ class TableManipulatorTest extends TestCase
             ->getMock();
 
         return $connection;
-    }
-
-    /**
-     * Mock the translator.
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|TranslatorInterface
-     */
-    private function mockTranslator()
-    {
-        return $this
-            ->getMockBuilder(TranslatorInterface::class)
-            ->getMock();
     }
 
     /**
