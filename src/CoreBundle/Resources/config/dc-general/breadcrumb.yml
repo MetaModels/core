@@ -1,0 +1,152 @@
+services:
+    metamodels.listener.breadcrumb.store_factory:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb\BreadcrumbStoreFactory
+        arguments:
+            - "@metamodels.assets.icon_builder"
+            - "@translator"
+            - "@request_stack"
+
+    metamodels.listener.breadcrumb.tl_metamodel:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb\BreadcrumbMetaModelListener
+        arguments:
+            - "@metamodels.listener.breadcrumb.store_factory"
+        calls:
+            - { method: "setMetaModelFactory", arguments: ["@metamodels.factory"] }
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-breadcrumb
+              method: getBreadcrumb
+
+    metamodels.listener.breadcrumb.tl_metamodel_attribute:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb\BreadcrumbAttributeListener
+        arguments:
+            - "@metamodels.listener.breadcrumb.store_factory"
+            - "@metamodels.listener.breadcrumb.tl_metamodel"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-breadcrumb
+              method: getBreadcrumb
+
+    metamodels.listener.breadcrumb.tl_metamodel_dca:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb\BreadcrumbDcaListener
+        arguments:
+            - "@metamodels.listener.breadcrumb.store_factory"
+            - "@metamodels.listener.breadcrumb.tl_metamodel"
+        calls:
+            - { method: "setMetaModelFactory", arguments: ["@metamodels.factory"] }
+            - { method: "setConnection", arguments: ["@database_connection"] }
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-breadcrumb
+              method: getBreadcrumb
+
+    metamodels.listener.breadcrumb.tl_metamodel_dcacombine:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb\BreadcrumbDcaCombineListener
+        arguments:
+            - "@metamodels.listener.breadcrumb.store_factory"
+            - "@metamodels.listener.breadcrumb.tl_metamodel"
+        calls:
+            - { method: "setMetaModelFactory", arguments: ["@metamodels.factory"] }
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-breadcrumb
+              method: getBreadcrumb
+
+    metamodels.listener.breadcrumb.tl_metamodel_dca_sortgroup:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb\BreadcrumbDcaSortGroupListener
+        arguments:
+            - "@metamodels.listener.breadcrumb.store_factory"
+            - "@metamodels.listener.breadcrumb.tl_metamodel_dca"
+        calls:
+            - { method: "setConnection", arguments: ["@database_connection"] }
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-breadcrumb
+              method: getBreadcrumb
+
+    metamodels.listener.breadcrumb.tl_metamodel_dcasetting:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb\BreadcrumbDcaSettingListener
+        arguments:
+            - "@metamodels.listener.breadcrumb.store_factory"
+            - "@metamodels.listener.breadcrumb.tl_metamodel_dca"
+        calls:
+            - { method: "setConnection", arguments: ["@database_connection"] }
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-breadcrumb
+              method: getBreadcrumb
+
+    metamodels.listener.breadcrumb.tl_metamodel_dcasetting_condition:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb\BreadcrumbDcaSettingConditionListener
+        arguments:
+            - "@metamodels.listener.breadcrumb.store_factory"
+            - "@metamodels.listener.breadcrumb.tl_metamodel_dcasetting"
+        calls:
+            - { method: "setConnection", arguments: ["@database_connection"] }
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-breadcrumb
+              method: getBreadcrumb
+
+    metamodels.listener.breadcrumb.tl_metamodel_filter:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb\BreadcrumbFilterListener
+        arguments:
+            - "@metamodels.listener.breadcrumb.store_factory"
+            - "@metamodels.listener.breadcrumb.tl_metamodel"
+        calls:
+            - { method: "setMetaModelFactory", arguments: ["@metamodels.factory"] }
+            - { method: "setConnection", arguments: ["@database_connection"] }
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-breadcrumb
+              method: getBreadcrumb
+
+    metamodels.listener.breadcrumb.tl_metamodel_filtersetting:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb\BreadcrumbFilterSettingListener
+        arguments:
+            - "@metamodels.listener.breadcrumb.store_factory"
+            - "@metamodels.listener.breadcrumb.tl_metamodel_filter"
+        calls:
+            - { method: "setConnection", arguments: ["@database_connection"] }
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-breadcrumb
+              method: getBreadcrumb
+
+    metamodels.listener.breadcrumb.tl_metamodel_rendersettings:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb\BreadcrumbRenderSettingsListener
+        arguments:
+            - "@metamodels.listener.breadcrumb.store_factory"
+            - "@metamodels.listener.breadcrumb.tl_metamodel"
+        calls:
+            - { method: "setMetaModelFactory", arguments: ["@metamodels.factory"] }
+            - { method: "setConnection", arguments: ["@database_connection"] }
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-breadcrumb
+              method: getBreadcrumb
+
+    metamodels.listener.breadcrumb.tl_metamodel_rendersetting:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb\BreadcrumbRenderSettingListener
+        arguments:
+            - "@metamodels.listener.breadcrumb.store_factory"
+            - "@metamodels.listener.breadcrumb.tl_metamodel_rendersettings"
+        calls:
+            - { method: "setConnection", arguments: ["@database_connection"] }
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-breadcrumb
+              method: getBreadcrumb
+
+    metamodels.listener.breadcrumb.tl_metamodel_searchable_pages:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb\BreadcrumbSearchablePagesListener
+        arguments:
+            - "@metamodels.listener.breadcrumb.store_factory"
+            - "@metamodels.listener.breadcrumb.tl_metamodel"
+        calls:
+            - { method: "setMetaModelFactory", arguments: ["@metamodels.factory"] }
+            - { method: "setConnection", arguments: ["@database_connection"] }
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-breadcrumb
+              method: getBreadcrumb

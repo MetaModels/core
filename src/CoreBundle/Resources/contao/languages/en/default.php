@@ -37,7 +37,7 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord']             
     'Edit attribute setting %%s for render setting "%s" in MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']                      =
     'Render setting "%s" in MetaModel "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodels']                                            = 'MetaModels';
+$GLOBALS['TL_LANG']['BRD']['metamodel']                                             = 'MetaModels';
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                   = 'Attributes of "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_rendersettings']                              = 'All render setting of "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_rendersetting']                               = 'Render settings in "%s"';
