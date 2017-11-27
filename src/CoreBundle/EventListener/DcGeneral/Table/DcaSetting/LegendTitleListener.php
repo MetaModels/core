@@ -50,7 +50,7 @@ class LegendTitleListener extends AbstractListener
 
         $values = Helper::decodeLangArray($event->getValue(), $metaModel);
 
-        $event->setValue($values);
+        $event->setValue(unserialize($values));
     }
 
     /**
