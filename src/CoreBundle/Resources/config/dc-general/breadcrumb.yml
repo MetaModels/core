@@ -22,6 +22,8 @@ services:
         arguments:
             - "@metamodels.listener.breadcrumb.store_factory"
             - "@metamodels.listener.breadcrumb.tl_metamodel"
+        calls:
+            - { method: "setMetaModelFactory", arguments: ["@metamodels.factory"] }
         tags:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.get-breadcrumb
@@ -82,6 +84,7 @@ services:
             - "@metamodels.listener.breadcrumb.store_factory"
             - "@metamodels.listener.breadcrumb.tl_metamodel_dcasetting"
         calls:
+            - { method: "setMetaModelFactory", arguments: ["@metamodels.factory"] }
             - { method: "setConnection", arguments: ["@database_connection"] }
         tags:
             - name: kernel.event_listener
