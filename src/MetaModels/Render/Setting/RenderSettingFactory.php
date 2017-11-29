@@ -121,7 +121,7 @@ class RenderSettingFactory implements IRenderSettingFactory
     {
         $row = $this->serviceContainer->getDatabase()
             ->prepare(
-                'SELECT * FROM tl_metamodel_rendersettings WHERE pid=? AND (id=? OR isdefault=1) ORDER BY isdefault ASC'
+                'SELECT * FROM tl_metamodel_rendersettings WHERE pid=? AND id=?'
             )
             ->limit(1)
             ->execute($metaModel->get('id'), $settingId ?: 0);
