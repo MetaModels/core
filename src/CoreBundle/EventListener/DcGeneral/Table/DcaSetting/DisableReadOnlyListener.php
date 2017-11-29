@@ -13,6 +13,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -66,7 +67,8 @@ class DisableReadOnlyListener extends AbstractListener
     {
         $environment = $event->getEnvironment();
         if (($environment->getDataDefinition()->getName() !== 'tl_metamodel_dcasetting')
-            || ($event->getProperty()->getName() !== 'readonly')) {
+            || ($event->getProperty()->getName() !== 'readonly')
+            || (null === $event->getModel()->getId())) {
             return;
         }
 
