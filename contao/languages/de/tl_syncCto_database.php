@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-09-18T09:47:11+02:00
+ * last-updated: 2017-11-29T08:54:30+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel']                = 'MetaModels';
@@ -17,7 +17,7 @@ $GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_dca']            = 'Met
 $GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_dca_combine']    = 'MetaModels Workflow';
 $GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_dcasetting']     = 'MetaModels Eingabemasken-Einstellung';
 $GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_filter']         = 'MetaModels Filter';
-$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_filtersetting']  = 'MetaModels Filtereinstellung';
+$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_filtersetting']  = 'MetaModels-Filtereinstellung';
 $GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_rendersetting']  = 'MetaModels Render-Einstellung';
-$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_rendersettings'] = 'MetaModels Render-Einstellung';
+$GLOBALS['TL_LANG']['tl_syncCto_database']['tl_metamodel_rendersettings'] = 'MetaModels Rendereinstellungen';
 
