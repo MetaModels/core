@@ -358,7 +358,9 @@ class Subscriber extends BaseSubscriber
     {
         $environment = $event->getEnvironment();
         if (($environment->getDataDefinition()->getName() !== 'tl_metamodel_dcasetting')
-            || ($event->getProperty()->getName() !== 'mandatory')) {
+            || ($event->getProperty()->getName() !== 'mandatory')
+            || (null === $event->getModel()->getId())
+        ) {
             return;
         }
 
@@ -393,7 +395,9 @@ class Subscriber extends BaseSubscriber
     {
         $environment = $event->getEnvironment();
         if (($environment->getDataDefinition()->getName() !== 'tl_metamodel_dcasetting')
-            || ($event->getProperty()->getName() !== 'readonly')) {
+            || ($event->getProperty()->getName() !== 'readonly')
+            || (null === $event->getModel()->getId())
+        ) {
             return;
         }
 
