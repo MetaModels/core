@@ -18,6 +18,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Frank Mueller <frank.mueller@linking-you.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -25,13 +26,52 @@
 
 namespace MetaModels\Attribute;
 
+use Contao\System;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use MetaModels\Filter\Rules\SimpleQuery;
+use MetaModels\IMetaModel;
 
 /**
  * This is the MetaModelAttribute class for handling translated attributes that reference another table.
  */
 abstract class TranslatedReference extends BaseComplex implements ITranslated
 {
+    /**
+     * Database connection.
+     *
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * Instantiate an MetaModel attribute.
+     *
+     * Note that you should not use this directly but use the factory classes to instantiate attributes.
+     *
+     * @param IMetaModel $objMetaModel The MetaModel instance this attribute belongs to.
+     *
+     * @param array      $arrData      The information array, for attribute information, refer to documentation of
+     *                                 table tl_metamodel_attribute and documentation of the certain attribute classes
+     *                                 for information what values are understood.
+     *
+     * @param Connection $connection   Database connection.
+     */
+    public function __construct(IMetaModel $objMetaModel, $arrData = [], Connection $connection = null)
+    {
+        parent::__construct($objMetaModel, $arrData);
+
+        if (null === $connection) {
+            @trigger_error(
+                'Connection is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            $connection = System::getContainer()->get('database_connection');
+        }
+
+        $this->connection = $connection;
+    }
+
     /**
      * Retrieve the name of the table that contains the data for this reference.
      *
@@ -42,41 +82,43 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     /**
      * Build a where clause for the given id(s) and language code.
      *
-     * @param string[]|string|null $mixIds      One, none or many ids to use.
+     * @param QueryBuilder         $queryBuilder The query builder for the query  being build.
+     *
+     * @param string[]|string|null $mixIds       One, none or many ids to use.
      *
      * @param string|string[]      $mixLangCode The language code/s to use, optional.
      *
-     * @return array
+     * @return void
      */
-    private function getWhere($mixIds, $mixLangCode = '')
+    private function buildWhere(QueryBuilder $queryBuilder, $mixIds, $mixLangCode = '')
     {
-        $procedure  = 'att_id=?';
-        $parameters = array($this->get('id'));
+        $queryBuilder
+            ->andWhere('att_id = :att_id')
+            ->setParameter('att_id', $this->get('id'));
 
         if (!empty($mixIds)) {
             if (is_array($mixIds)) {
-                $procedure .= ' AND item_id IN (' . $this->parameterMask($mixIds) . ')';
-                $parameters = array_merge($parameters, $mixIds);
+                $queryBuilder
+                    ->andWhere('item_id IN (:item_ids)')
+                    ->setParameter('item_ids', $mixIds, Connection::PARAM_STR_ARRAY);
             } else {
-                $procedure   .= ' AND item_id=?';
-                $parameters[] = $mixIds;
+                $queryBuilder
+                    ->andWhere('item_id = :item_id')
+                    ->setParameter('item_id', $mixIds);
             }
         }
 
         if (!empty($mixLangCode)) {
             if (is_array($mixLangCode)) {
-                $procedure .= ' AND langcode IN (' . $this->parameterMask($mixLangCode) . ')';
-                $parameters = array_merge($parameters, $mixLangCode);
+                $queryBuilder
+                    ->andWhere('langcode IN (:langcode)')
+                    ->setParameter('langcode', $mixLangCode, Connection::PARAM_STR_ARRAY);
             } else {
-                $procedure   .= ' AND langcode=?';
-                $parameters[] = $mixLangCode;
+                $queryBuilder
+                    ->andWhere('langcode = :langcode')
+                    ->setParameter('langcode', $mixLangCode);
             }
         }
-
-        return array(
-            'procedure' => $procedure,
-            'params'    => $parameters
-        );
     }
 
     /**
@@ -229,21 +271,18 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     public function searchForInLanguages($strPattern, $arrLanguages = array())
     {
         $optionizer = $this->getOptionizer();
-        $procedure  = $optionizer['value'] . ' LIKE ?';
-        $parameters = array(str_replace(array('*', '?'), array('%', '_'), $strPattern));
-        $arrWhere   = $this->getWhere(null, $arrLanguages);
+        $procedure  = $optionizer['value'] . ' LIKE :pattern';
+        $strPattern = str_replace(array('*', '?'), array('%', '_'), $strPattern);
 
-        if ($arrWhere) {
-            $procedure .= ' AND ' . $arrWhere['procedure'];
-            $parameters = array_merge($parameters, $arrWhere['params']);
-        }
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select('DISTINCT item_id')
+            ->from($this->getValueTable())
+            ->andWhere($procedure)
+            ->setParameter('pattern', $strPattern);
 
-        $filterRule = new SimpleQuery(
-            sprintf('SELECT DISTINCT %1$s FROM %2$s WHERE %3$s', 'item_id', $this->getValueTable(), $procedure),
-            $parameters,
-            'item_id',
-            $this->getMetaModel()->getServiceContainer()->getDatabase()
-        );
+        $this->buildWhere($queryBuilder, null, $arrLanguages);
+
+        $filterRule = SimpleQuery::createFromQueryBuilder($queryBuilder, 'item_id');
 
         return $filterRule->getMatchingIds();
     }
@@ -253,41 +292,42 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function sortIds($idList, $strDirection)
     {
-        $objDB    = $this->getMetaModel()->getServiceContainer()->getDatabase();
         $langSet  = sprintf(
             '\'%s\',\'%s\'',
             $this->getMetaModel()->getActiveLanguage(),
             $this->getMetaModel()->getFallbackLanguage()
         );
-        $objValue = $objDB->prepare(
-            sprintf(
-                'SELECT t1.item_id
-                   FROM %1$s AS t1
-                   RIGHT JOIN %1$s ON (t1.id = (SELECT
-                       t2.id
-                       FROM %1$s AS t2
-                       WHERE (t2.att_id=%2$s)
-                       AND langcode IN (%3$s)
-                       AND (t2.item_id=t1.item_id)
-                       ORDER BY FIELD(t2.langcode,%3$s)
-                       LIMIT 1
-                   ))
-                   WHERE t1.id IS NOT NULL
-                   AND  (t1.item_id IN (%4$s))
-                   GROUP BY t1.id
-                   ORDER BY t1.value %5$s',
-                // @codingStandardsIgnoreStart - we want to keep the numbers at the end of the lines below.
-                $this->getValueTable(),                    // 1
-                $this->get('id'),                          // 2
-                $langSet,                                  // 3
-                $this->parameterMask($idList),             // 4
-                $strDirection                              // 5
-                // @codingStandardsIgnoreEnd
-            )
-        )
-        ->execute($idList);
 
-        return $objValue->fetchEach('item_id');
+        $statement = $this->connection
+            ->executeQuery(
+                sprintf(
+                    'SELECT t1.item_id
+                       FROM %1$s AS t1
+                       RIGHT JOIN %1$s ON (t1.id = (SELECT
+                           t2.id
+                           FROM %1$s AS t2
+                           WHERE (t2.att_id=%2$s)
+                           AND langcode IN (%3$s)
+                           AND (t2.item_id=t1.item_id)
+                           ORDER BY FIELD(t2.langcode,%3$s)
+                           LIMIT 1
+                       ))
+                       WHERE t1.id IS NOT NULL
+                       AND  (t1.item_id IN (?))
+                       GROUP BY t1.id
+                       ORDER BY t1.value %4$s',
+                    // @codingStandardsIgnoreStart - we want to keep the numbers at the end of the lines below.
+                    $this->getValueTable(),                    // 1
+                    $this->get('id'),                          // 2
+                    $langSet,                                  // 3
+                    $strDirection                              // 4
+                    // @codingStandardsIgnoreEnd
+                ),
+                [$idList],
+                [Connection::PARAM_STR_ARRAY]
+            );
+
+        return $statement->fetchAll(\PDO::FETCH_COLUMN, 0);
     }
 
     /**
@@ -295,18 +335,18 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function getFilterOptions($idList, $usedOnly, &$arrCount = null)
     {
-        $objDB = $this->getMetaModel()->getServiceContainer()->getDatabase();
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select('*')
+            ->from($this->getValueTable());
+
         // TODO: implement $arrIds and $usedOnly handling here.
-        $arrWhere = $this->getWhere($idList, $this->getMetaModel()->getActiveLanguage());
-        $strQuery = 'SELECT * FROM ' . $this->getValueTable() . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '');
+        $this->buildWhere($queryBuilder, $idList, $this->getMetaModel()->getActiveLanguage());
 
-        $objValue = $objDB->prepare($strQuery)
-            ->execute(($arrWhere ? $arrWhere['params'] : null));
-
+        $statement     = $queryBuilder->execute();
         $arrOptionizer = $this->getOptionizer();
 
         $arrReturn = array();
-        while ($objValue->next()) {
+        while ($objValue = $statement->fetch(\PDO::FETCH_OBJ)) {
             $arrReturn[$objValue->{$arrOptionizer['key']}] = $objValue->{$arrOptionizer['value']};
         }
         return $arrReturn;
@@ -317,38 +357,41 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function setTranslatedDataFor($arrValues, $strLangCode)
     {
-        $objDB = $this->getMetaModel()->getServiceContainer()->getDatabase();
         // First off determine those to be updated and those to be inserted.
         $arrIds      = array_keys($arrValues);
         $arrExisting = array_keys($this->getTranslatedDataFor($arrIds, $strLangCode));
         $arrNewIds   = array_diff($arrIds, $arrExisting);
 
         // Update existing values - delete if empty.
-        $strQueryUpdate = 'UPDATE ' . $this->getValueTable() . ' %s';
-        $strQueryDelete = 'DELETE FROM ' . $this->getValueTable();
-
         foreach ($arrExisting as $intId) {
-            $arrWhere = $this->getWhere($intId, $strLangCode);
+            $queryBuilder = $this->connection->createQueryBuilder();
+            $this->buildWhere($queryBuilder, $intId, $strLangCode);
             
             if ($arrValues[$intId]['value'] != '') {
-                $objDB->prepare($strQueryUpdate . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : ''))
-                    ->set($this->getSetValues($arrValues[$intId], $intId, $strLangCode))
-                    ->execute(($arrWhere ? $arrWhere['params'] : null));
+                $queryBuilder->update($this->getValueTable());
+
+                foreach ($this->getSetValues($arrValues[$intId], $intId, $strLangCode) as $name => $value) {
+                    $queryBuilder
+                        ->set($name, ':' . $name)
+                        ->setParameter($name, $value);
+                }
             } else {
-                $objDB->prepare($strQueryDelete . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : ''))
-                    ->execute(($arrWhere ? $arrWhere['params'] : null));
+                $queryBuilder->delete($this->getValueTable());
             }
+
+            $queryBuilder->execute();
         }
 
         // Insert the new values.
-        $strQueryInsert = 'INSERT INTO ' . $this->getValueTable() . ' %s';
         foreach ($arrNewIds as $intId) {
             if ($arrValues[$intId]['value'] == '') {
                 continue;
             }
-            $objDB->prepare($strQueryInsert)
-                ->set($this->getSetValues($arrValues[$intId], $intId, $strLangCode))
-                ->execute();
+
+            $this->connection->insert(
+                $this->getValueTable(),
+                $this->getSetValues($arrValues[$intId], $intId, $strLangCode)
+            );
         }
     }
 
@@ -357,18 +400,17 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function getTranslatedDataFor($arrIds, $strLangCode)
     {
-        $objDB = $this->getMetaModel()->getServiceContainer()->getDatabase();
+        $queryBuilder = $this->connection->createQueryBuilder()
+            ->select('*')
+            ->from($this->getValueTable());
 
-        $arrWhere = $this->getWhere($arrIds, $strLangCode);
-        $strQuery = 'SELECT * FROM ' . $this->getValueTable() . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '');
+        $this->buildWhere($queryBuilder, $arrIds, $strLangCode);
 
-        $objValue = $objDB->prepare($strQuery)
-            ->execute(($arrWhere ? $arrWhere['params'] : null));
-
+        $statement = $queryBuilder->execute();
         $arrReturn = array();
-        while ($objValue->next()) {
+        while ($value = $statement->fetch(\PDO::FETCH_ASSOC)) {
             /** @noinspection PhpUndefinedFieldInspection */
-            $arrReturn[$objValue->item_id] = $objValue->row();
+            $arrReturn[$value['item_id']] = $value;
         }
         return $arrReturn;
     }
@@ -378,12 +420,9 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function unsetValueFor($arrIds, $strLangCode)
     {
-        $objDB = $this->getMetaModel()->getServiceContainer()->getDatabase();
+        $queryBuilder = $this->connection->createQueryBuilder()->delete($this->getValueTable());
+        $this->buildWhere($queryBuilder, $arrIds, $strLangCode);
 
-        $arrWhere = $this->getWhere($arrIds, $strLangCode);
-        $strQuery = 'DELETE FROM ' . $this->getValueTable() . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '');
-
-        $objDB->prepare($strQuery)
-            ->execute(($arrWhere ? $arrWhere['params'] : null));
+        $queryBuilder->execute();
     }
 }
