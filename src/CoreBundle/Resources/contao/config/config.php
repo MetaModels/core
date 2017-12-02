@@ -65,6 +65,9 @@ array_insert(
     )
 );
 
+// BE group icon.
+$GLOBALS['TL_CSS']['metamodels'] = 'bundles/metamodelscore/css/be_logo_svg.css';
+
 // FIXME: should become parameters.
 $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvalueis']['nestingAllowed']      = false;
 $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionpropertyvalueis']['attributes'][]        = 'select';
