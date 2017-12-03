@@ -907,7 +907,7 @@ class ToolboxFile
             'url'       => specialchars($this->getDownloadLink($fileName))
         ];
 
-        // Prepare images.
+        // Prepare GD images.
         if ($information['isGdImage'] = $file->isGdImage) {
             $information['src'] = urldecode($this->resizeImage($fileName));
             if (file_exists(TL_ROOT . '/' . $information['src'])) {
@@ -917,6 +917,11 @@ class ToolboxFile
                 $information['h']  = $size[1];
                 $information['wh'] = $size[3];
             }
+        }
+
+        // Prepare SVG images.
+        if ($information['isSvgImage'] = $file->isSvgImage) {
+            $information['src'] = $fileName;
         }
 
         $this->modifiedTime[] = $file->mtime;
