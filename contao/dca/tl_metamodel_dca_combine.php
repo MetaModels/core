@@ -17,6 +17,7 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -63,7 +64,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
     (
         'id'       => array
         (
-            'sql' => "int(10) unsigned NOT NULL auto_increment"
+            'sql' => 'int(10) unsigned NOT NULL auto_increment'
         ),
         'pid'      => array
         (
@@ -151,7 +152,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = array
         ),
         'fe_group' => array
         (
-            'sql' => "int(10) unsigned NOT NULL default '0'"
+            // keep signed as anonymous are -1
+            'sql' => "int(10) NOT NULL default '0'"
         ),
         'be_group' => array
         (

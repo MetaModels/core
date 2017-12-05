@@ -64,3 +64,8 @@ Who did it?
 -----------
 
 See the [CONTRIBUTORS.md](https://github.com/MetaModels/core/tree/master/CONTRIBUTORS.md) file.
+
+Third Party Licenses:
+---------------------
+
+Icons: This software uses the [Fugue Icons](http://p.yusukekamiyamane.com)

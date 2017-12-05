@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,9 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -81,7 +83,7 @@ abstract class MetaModelHybrid extends Hybrid
         // Get space and CSS ID from the parent element (!)
         $this->space      = deserialize($objElement->space);
         $this->cssID      = deserialize($objElement->cssID, true);
-        $this->typePrefix = $objElement->typePrefix ?: $this->typePrefix;
+        $this->typePrefix = $objElement->typePrefix;
         $this->strKey     = $objElement->type;
         $arrHeadline      = deserialize($objElement->headline);
         $this->headline   = is_array($arrHeadline) ? $arrHeadline['value'] : $arrHeadline;
@@ -96,11 +98,67 @@ abstract class MetaModelHybrid extends Hybrid
     public function generate()
     {
         if (TL_MODE == 'BE') {
+
+            $strInfo = '';
+            if ($this->metamodel) {
+                // Add CSS file.
+                $GLOBALS['TL_CSS'][] = 'system/modules/metamodels/assets/css/style.css';
+
+                // Retrieve name of MetaModels.
+                /** @var TranslatorInterface $translator */
+                $infoTemplate  =
+                    '<div class="wc_info tl_gray"><span class="wc_label"><abbr title="%s">%s:</abbr></span> %s</div>';
+
+                $factory       = $this->getServiceContainer()->getFactory();
+                $metaModelName = $factory->translateIdToMetaModelName($this->metamodel);
+                $metaModel     = $factory->getMetaModel($metaModelName);
+                $strInfo       = sprintf(
+                    $infoTemplate,
+                    $GLOBALS['TL_LANG']['MSC']['mm_be_info_name'][1],
+                    $GLOBALS['TL_LANG']['MSC']['mm_be_info_name'][0],
+                    $metaModel->getName()
+                );
+
+                $database = $this->getServiceContainer()->getDatabase();
+
+                // Retrieve name of filter.
+                if ($this->metamodel_filtering) {
+                    $infoFi = $database
+                        ->prepare('SELECT name FROM tl_metamodel_filter WHERE id=?')
+                        ->execute($this->metamodel_filtering);
+
+                    if ($infoFi->numRows) {
+                        $strInfo .= sprintf(
+                            $infoTemplate,
+                            $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter'][1],
+                            $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter'][0],
+                            $infoFi->name
+                        );
+                    }
+                }
+
+                // Retrieve name of rendersetting.
+                if ($this->metamodel_rendersettings) {
+                    $infoRs = $database
+                        ->prepare('SELECT name FROM tl_metamodel_rendersettings WHERE id=?')
+                        ->execute($this->metamodel_rendersettings);
+
+                    if ($infoRs->numRows) {
+                        $strInfo .= sprintf(
+                            $infoTemplate,
+                            $GLOBALS['TL_LANG']['MSC']['mm_be_info_render_setting'][1],
+                            $GLOBALS['TL_LANG']['MSC']['mm_be_info_render_setting'][0],
+                            $infoRs->name
+                        );
+                    }
+                }
+            }
+
             $objTemplate           = new BackendTemplate('be_wildcard');
-            $objTemplate->wildcard = $this->wildCardName;
+            $objTemplate->wildcard = $this->wildCardName . $strInfo;
             $objTemplate->title    = $this->headline;
             $objTemplate->id       = $this->id;
-            $objTemplate->link     = $this->name;
+            $objTemplate->link     = ($this->typePrefix == 'mod_'? 'FE-Modul: ' : '').$this->name;
             $objTemplate->href     = sprintf($this->wildCardLink, $this->id);
 
             return $objTemplate->parse();

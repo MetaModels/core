@@ -14,6 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -123,6 +124,43 @@ $GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations']             
     ' (No matching combinations found.)';
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'][0] = 'Filter value for attribute "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'][1] = '';
-$GLOBALS['TL_LANG']['MSC']['metamodels_help']                                       = 'We are calling for your help!';
-$GLOBALS['TL_LANG']['MSC']['metamodels_contributor']                                =
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['main_headline']                   = 'We are calling for your help!';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['purpose']                         = 'Purpose';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['other_donations']                 =
+    'For donations check also our 
+    <a target="_blank" href="https://now.metamodel.me/en/supporters/fundraising">
+    fundraisings</a> or consider 
+    <a target="_blank" href="https://now.metamodel.me/en/supporters/donate">
+    donating for the manual</a>.';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['contributor_headline']            =
     'Thanks to these users for tickets, suggestions and translations';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_name'][0]                                    = 'MM';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_name'][1]                                    = 'MetaModel';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_filter'][0]                                  = 'Fi';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_filter'][1]                                  = 'Filter';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_render_setting'][0]                          = 'Rs';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_render_setting'][1]                          = 'Rendersetting';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['contributor_link']                = 'See contributors at github...';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['main_text']                       =
+    'As the developers of this project, we receive no compensation for our work.
+    Much of our valuable time is freely given to the MetaModels project. Any 
+    donations towards the MetaModels project would allow us to work on the 
+    project during our working hours, speeding up development significantly.
+    <br /><br />    We guarantee to spend any donations only on this project.
+    If you have any specific requirements or features requests, you are free 
+    to hire a member from our <a target="_blank" 
+    href="https://now.metamodel.me/en/about/team">team</a>, who will gladly 
+    help you.<br /><br />A big thanks to all our <a target="_blank" 
+    href="http://now.metamodel.me/en/supporters">existing supporters and
+    sponsors</a>. Please consider joining our list of sponsors. We could not 
+    create such a popular open source project without the support of the 
+    community.<br /><br /><a target="_blank" 
+    href="http://now.metamodel.me/en/supporters/donate">More informations</a>';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['help_headline']                   =
+    'Help for your MetaModels projects';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['help_text']                       =
+    'On our <a target="_blank" href="https://now.metamodel.me/en/help">help 
+    website as guide to MetaModels</a> you can find the manual, all support 
+    channels, videos tutorials and our newsletter service.<br /><br />
+    <a target="_blank" href="http://metamodels.readthedocs.io/en/latest/">
+    Direct link to the MetaModels manual...</a>';

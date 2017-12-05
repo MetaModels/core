@@ -18,6 +18,7 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -298,9 +299,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
         ),
         'name'        => array
         (
-            'label'   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name'],
-            'exclude' => true,
-            'eval'    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => array
             (
                 'tl_class' => 'clr'
             ),
@@ -308,9 +310,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
         ),
         'description' => array
         (
-            'label'   => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['description'],
-            'exclude' => true,
-            'eval'    => array
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['description'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => array
             (
                 'tl_class' => 'clr'
             ),
@@ -324,9 +327,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
             'inputType' => 'text',
             'eval'      => array
             (
-                'mandatory' => true,
-                'maxlength' => 64,
-                'tl_class'  => 'w50'
+                'mandatory'             => true,
+                'maxlength'             => 64,
+                'tl_class'              => 'w50',
+                // Hide at overrideAll.
+                'doNotOverrideMultiple' => true
             ),
             'sql'       => "varchar(64) NOT NULL default ''"
         ),
