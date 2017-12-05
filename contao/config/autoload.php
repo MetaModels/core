@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,8 @@
  * @author     Christopher Bölter <c.boelter@cogizz.de>
  * @author     Ondrej <Sam256@web.de>
  * @author     Tim Gatzky <info@tim-gatzky.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -37,6 +38,7 @@ TemplateLoader::addFiles(array
     'metamodel_prerendered'      => 'system/modules/metamodels/templates',
     'metamodel_unrendered'       => 'system/modules/metamodels/templates',
     'mod_metamodel_list'         => 'system/modules/metamodels/templates',
+    'mm_actionbutton'            => 'system/modules/metamodels/templates',
     'mm_filter_default'          => 'system/modules/metamodels/templates',
     'mm_filter_clearall'         => 'system/modules/metamodels/templates',
     'mm_filteritem_default'      => 'system/modules/metamodels/templates',

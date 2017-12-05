@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2017 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2015 The MetaModels team.
+ * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
+ * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
  */
@@ -89,7 +90,7 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
     public function getInputScreenRenderMode($value)
     {
         if (!isset(self::$stateBuffer[$value])) {
-            self::$stateBuffer[$value] = \Database::getInstance()
+            self::$stateBuffer[$value] = $this->getServiceContainer()->getDatabase()
                 ->prepare('SELECT rendermode FROM tl_metamodel_dca WHERE id=?')
                 ->limit(1)
                 ->execute($value)
@@ -124,5 +125,18 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
      */
     public function __clone()
     {
+    }
+
+    /**
+     * Retrieve the service container.
+     *
+     * @return IMetaModelsServiceContainer
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    protected function getServiceContainer()
+    {
+        return $GLOBALS['container']['metamodels-service-container'];
     }
 }

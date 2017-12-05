@@ -1,0 +1,5 @@
+<?php if (empty($this->action['html'])): ?>
+    <a href="<?= $this->action['href']; ?>"<?php if ($this->action['class']): ?> class="<?= $this->action['class']; ?>"<?php endif; ?><?php if ($this->action['title']): ?> title="<?= $this->action['title']; ?>"<?php endif; ?><?= $this->action['attribute']; ?>><?= $this->action['label']; ?></a>
+<?php else: ?>
+    <?= $this->action['html'] ?>
+<?php endif ?>

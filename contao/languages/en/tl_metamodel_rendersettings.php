@@ -13,6 +13,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -26,9 +27,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name'][0]                 = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name'][1]                 = 'Setting name.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp'][0]               = 'Revision date';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp'][1]               = 'Date and time of the latest revision.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault'][0]            = 'Is default';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault'][1]            =
-    'Determines that this setting shall be used as default for the parenting MetaModel.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template'][0]             = 'Template';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template'][1]             =
     'The template to use to render the items.';
