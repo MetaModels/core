@@ -15,6 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -189,8 +190,7 @@ class RenderSettingFactory implements IRenderSettingFactory
             ->select('*')
             ->from('tl_metamodel_rendersettings')
             ->where('pid=:pid')
-            ->andWhere('(id=:id OR isdefault=1)')
-            ->orderBy('isdefault')
+            ->andWhere('id=:id')
             ->setParameter('pid', $metaModel->get('id'))
             ->setParameter('id', $settingId ?: 0)
             ->setMaxResults(1)

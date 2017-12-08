@@ -6,13 +6,6 @@ services:
               event: dc-general.view.contao2backend.get-property-options
               method: handle
 
-    metamodels.dc_general.table.tl_metamodel_dca.model_render:
-        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Dca\ModelRenderListener
-        tags:
-            - name: kernel.event_listener
-              event: dc-general.view.contao2backend.model-to-label
-              method: handle
-
     metamodels.dc_general.table.tl_metamodel_dca.parent_table_options:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Dca\ParentTableOptionListener
         arguments:

@@ -20,6 +20,7 @@
  * @author     Alexander Menk <a.menk@imi.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -221,8 +222,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
         (
             'title'       => array
             (
-                'name',
-                'isdefault'
+                'name'
             ),
             'view'        => array
             (
@@ -303,18 +303,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
                 'tl_class'  => 'w50'
             ),
             'sql'       => "varchar(255) NOT NULL default ''"
-        ),
-        'isdefault'      => array
-        (
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault'],
-            'exclude'   => true,
-            'inputType' => 'checkbox',
-            'eval'      => array
-            (
-                'tl_class' => 'w50 m12 cbx',
-                'fallback' => true
-            ),
-            'sql'       => "char(1) NOT NULL default ''"
         ),
         'rendertype'     => array
         (

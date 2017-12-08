@@ -87,8 +87,19 @@ class SupportMetaModelsController
                         'bundles/metamodelscore/css/supportscreen.css'
                     ],
                     'headline' => $this->translator->trans('MOD.support_metamodels.0', [], 'contao_modules'),
-                    'sub_headline' => $this->translator->trans('MSC.metamodels_help', [], 'contao_default'),
-                    'head_contributor' => $this->translator->trans('MSC.metamodels_contributor', [], 'contao_default'),
+                    'sub_headline' =>
+                        $this->translator->trans('MSC.metamodels_support.main_headline', [], 'contao_default'),
+                    'head_contributor' =>
+                        $this->translator->trans('MSC.metamodels_support.contributor_headline', [], 'contao_default'),
+                    'purpose' => $this->translator->trans('MSC.metamodels_support.purpose', [], 'contao_default'),
+                    'other_donations' =>
+                        $this->translator->trans('MSC.metamodels_support.other_donations', [], 'contao_default'),
+                    'main_text' =>
+                        $this->translator->trans('MSC.metamodels_support.main_text', [], 'contao_default'),
+                    'help_headline' =>
+                        $this->translator->trans('MSC.metamodels_support.help_headline', [], 'contao_default'),
+                    'help_text' =>
+                        $this->translator->trans('MSC.metamodels_support.help_text', [], 'contao_default'),
                     'github_contributors' => $this->getJsonFile($this->github),
                     'transifex_contributors' => $this->getJsonFile($this->transifex)
                 ]

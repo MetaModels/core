@@ -14,6 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -91,7 +92,7 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
     public function getTypeOfAttribute($value)
     {
         if (!isset(self::$attributeTypes[$value])) {
-            self::$attributeTypes[$value] = \Database::getInstance()
+            self::$attributeTypes[$value] = $this->getServiceContainer()->getDatabase()
                 ->prepare('SELECT type FROM tl_metamodel_attribute WHERE id=?')
                 ->limit(1)
                 ->execute($value)
@@ -121,5 +122,18 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
      */
     public function __clone()
     {
+    }
+
+    /**
+     * Retrieve the service container.
+     *
+     * @return IMetaModelsServiceContainer
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    protected function getServiceContainer()
+    {
+        return $GLOBALS['container']['metamodels-service-container'];
     }
 }

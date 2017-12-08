@@ -14,6 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Tim Becker <please.tim@metamodel.me>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -45,6 +46,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['delete'][1]        = 'Dele
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['show'][0]          = 'Searchable page setting details';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['show'][1]          =
     'Show details of searchable page setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['toggle'][0]        = 'Toggle';
+$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['toggle'][1]        =
+    'Toggle the state of searchable page setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['settings'][0]      = 'Searchable page settings';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['settings'][1]      =
     'Edit the settings of searchable page setting ID %s';

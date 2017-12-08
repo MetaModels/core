@@ -28,15 +28,6 @@ services:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.encode-property-value-from-widget
               method: encodeValue
-    metamodels.listener.table.tl_metamodel_rendersettings.model_render:
-        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\RenderSettings\ModelToLabelListener
-        arguments:
-            - "@cca.dc-general.scope-matcher"
-            - "@translator"
-        tags:
-            - name: kernel.event_listener
-              event: dc-general.view.contao2backend.model-to-label
-              method: handle
     metamodels.listener.table.tl_metamodel_rendersettings.template_options:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\RenderSettings\TemplateOptionListener
         arguments:

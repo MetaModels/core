@@ -14,6 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -231,8 +232,6 @@ abstract class ViewCombinations
             $found = array();
         }
 
-        $this->getPaletteCombinationDefault($found);
-
         // Clean any undefined.
         foreach (array_keys($this->information) as $tableName) {
             if (empty($this->information[$tableName][self::COMBINATION])
@@ -369,85 +368,6 @@ abstract class ViewCombinations
         return $success;
     }
 
-    /**
-     * Get the default input screens (if any has been defined).
-     *
-     * @param int[] $metaModelIds The MetaModels for which input screens shall NOT be retrieved.
-     *
-     * @return void
-     */
-    protected function getDefaultInputScreens($metaModelIds)
-    {
-        $sqlWhere = '';
-        if ($metaModelIds) {
-            $sqlWhere = sprintf('pid NOT IN (%s) AND', implode(',', array_fill(0, count($metaModelIds), '?')));
-        }
-
-        $inputScreen = $this->getDatabase()
-            ->prepare(sprintf('SELECT * FROM tl_metamodel_dca WHERE %s isdefault=1', $sqlWhere))
-            ->execute($metaModelIds);
-
-        while ($inputScreen->next()) {
-            /** @noinspection PhpUndefinedFieldInspection */
-            $modelId   = $inputScreen->pid;
-            $modelName = $this->tableNameFromId($modelId);
-
-            if (!isset($this->tableMap[$modelId])) {
-                $this->setTableMapping($modelId, $modelName);
-            }
-
-            /** @noinspection PhpUndefinedFieldInspection */
-            $this->information[$modelName][self::COMBINATION]['dca_id'] = $inputScreen->id;
-        }
-    }
-
-    /**
-     * Get the default render settings (if any has been defined).
-     *
-     * @param int[] $metaModelIds The MetaModels for which render settings shall NOT be retrieved.
-     *
-     * @return void
-     */
-    protected function getDefaultRenderSettings($metaModelIds)
-    {
-        $sqlWhere = '';
-        if ($metaModelIds) {
-            $sqlWhere = sprintf('pid NOT IN (%s) AND', implode(',', array_fill(0, count($metaModelIds), '?')));
-        }
-
-        $renderSetting = $this->getDatabase()
-            ->prepare(sprintf(
-                'SELECT * FROM tl_metamodel_rendersettings WHERE %s isdefault=1',
-                $sqlWhere
-            ))
-            ->execute($metaModelIds);
-
-        while ($renderSetting->next()) {
-            /** @noinspection PhpUndefinedFieldInspection */
-            $modelId   = $renderSetting->pid;
-            $modelName = $this->tableNameFromId($modelId);
-
-            if (!isset($this->tableMap[$modelId])) {
-                $this->setTableMapping($modelId, $modelName);
-            }
-
-            /** @noinspection PhpUndefinedFieldInspection */
-            $this->information[$modelName][self::COMBINATION]['view_id'] = $renderSetting->id;
-        }
-    }
-
-    /**
-     * Get the default combination of palette and view (if any has been defined).
-     *
-     * @param int[] $metaModelIds The MetaModels for which combinations shall NOT be retrieved.
-     *
-     * @return void
-     */
-    protected function getPaletteCombinationDefault($metaModelIds)
-    {
-        $this->getDefaultInputScreens($metaModelIds);
-        $this->getDefaultRenderSettings($metaModelIds);
-    }
 
     /**
      * Pull in all DCA settings for the buffered MetaModels and buffer them in the static class.

@@ -15,6 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Henry Lamorski <henry.lamorski@mailbox.org>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -148,7 +149,7 @@ class TableManipulation
      */
     protected static function getDB()
     {
-        return \Database::getInstance();
+        return $GLOBALS['container']['metamodels-service-container']->getDatabase();
     }
 
     /**

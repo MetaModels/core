@@ -15,6 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2017 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
  * @filesource
@@ -395,8 +396,11 @@ class SearchablePages
         $this->foundPages = $pages;
         unset($pages);
 
-        // Run each entry in the config array.
+        // Run each entry in the published config array.
         foreach ($this->configs as $config) {
+            if (!$config['published']) {
+                continue;
+            }
             $this->getMetaModelsPages(
                 $config,
                 $rootPage,
