@@ -118,71 +118,7 @@ class ViewCombinationBuilder
                 'view_id' => $combination['view_id']
             ];
         }
-        $this->addDefaultInputScreens($result);
-        $this->addDefaultRenderSettings($result);
 
         return $result;
-    }
-
-    /**
-     * Get the default input screens (if any defined).
-     *
-     * @param array $result The result so far.
-     *
-     * @return void
-     */
-    private function addDefaultInputScreens(&$result)
-    {
-        $builder = $this->connection->createQueryBuilder();
-
-        $combinations = $builder
-            ->select('*')
-            ->from('tl_metamodel_dca')
-            ->where('isdefault=1')
-            ->andWhere($builder->expr()->notIn('pid', ':idList'))
-            ->setParameter('idList', array_keys($result['byId']), Connection::PARAM_STR_ARRAY)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
-
-        foreach ($combinations as $combination) {
-            $metaModelId = $combination['pid'];
-            if (isset($result['byId'][$metaModelId]['dca_id']) && !empty($result['byId'][$metaModelId]['dca_id'])) {
-                continue;
-            }
-            $name = $this->factory->translateIdToMetaModelName($metaModelId);
-
-            $result['byId'][$metaModelId]['dca_id'] = $result['byName'][$name]['dca_id'] = $combination['id'];
-        }
-    }
-
-    /**
-     * Get the default input screens (if any defined).
-     *
-     * @param array $result The result so far.
-     *
-     * @return void
-     */
-    private function addDefaultRenderSettings(&$result)
-    {
-        $builder = $this->connection->createQueryBuilder();
-
-        $combinations = $builder
-            ->select('*')
-            ->from('tl_metamodel_rendersettings')
-            ->where('isdefault=1')
-            ->andWhere($builder->expr()->notIn('pid', ':idList'))
-            ->setParameter('idList', array_keys($result['byId']), Connection::PARAM_STR_ARRAY)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
-
-        foreach ($combinations as $combination) {
-            $metaModelId = $combination['pid'];
-            if (isset($result['byId'][$metaModelId]['view_id']) && !empty($result['byId'][$metaModelId]['view_id'])) {
-                continue;
-            }
-            $name = $this->factory->translateIdToMetaModelName($metaModelId);
-
-            $result['byId'][$metaModelId]['view_id'] = $result['byName'][$name]['view_id'] = $combination['id'];
-        }
     }
 }
