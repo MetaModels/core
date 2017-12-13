@@ -89,6 +89,18 @@ class LoadDataContainer
      */
     public function onLoadDataContainer($tableName)
     {
+        static $tableExists;
+        // Test that the tables have been created.
+        if (null === $tableExists) {
+            $tableExists = \System::getContainer()
+                ->get('database_connection')
+                ->getSchemaManager()
+                ->tablesExist(['tl_metamodel']);
+        }
+        if (false === $tableExists) {
+            return;
+        }
+
         $this->handleMetaModelTable($tableName);
         $this->handleNonMetaModelTable($tableName);
     }
