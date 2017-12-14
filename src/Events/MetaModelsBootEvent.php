@@ -41,9 +41,18 @@ class MetaModelsBootEvent extends Event
      * Retrieve the service container.
      *
      * @return IMetaModelsServiceContainer
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getServiceContainer()
     {
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'The service container has been deprecated - use services from symfony instead.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
         return $GLOBALS['container']['metamodels-service-container'];
     }
 }
