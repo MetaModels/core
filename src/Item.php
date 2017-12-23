@@ -312,7 +312,7 @@ class Item implements IItem
      */
     public function getVariantBase()
     {
-        if (!$this->isVariantBase()) {
+        if ($this->getMetaModel()->hasVariants() && !$this->isVariantBase()) {
             return $this->getMetaModel()->findById($this->get('vargroup'));
         }
 
