@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,8 +19,9 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -33,6 +34,7 @@ use Contao\File;
 use Contao\FilesModel;
 use Contao\Input;
 use Contao\PageError403;
+use Contao\Picture;
 use Contao\StringUtil;
 use Contao\Validator;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
@@ -922,6 +924,16 @@ class ToolboxFile
         // Prepare SVG images.
         if ($information['isSvgImage'] = $file->isSvgImage) {
             $information['src'] = $fileName;
+        }
+
+        // Prepare the picture for provide the image size.
+        if ($information['isPicture'] = (int) $this->resizeImages[2]) {
+            $picture = Picture::create($file, $this->getResizeImages())->getTemplateData();
+
+            $picture['alt']   = $altText;
+            $picture['title'] = $title;
+
+            $information['picture'] = $picture;
         }
 
         $this->modifiedTime[] = $file->mtime;
