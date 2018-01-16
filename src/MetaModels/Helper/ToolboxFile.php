@@ -34,6 +34,7 @@ use Contao\File;
 use Contao\FilesModel;
 use Contao\Input;
 use Contao\PageError403;
+use Contao\Picture;
 use Contao\StringUtil;
 use Contao\Validator;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
@@ -923,6 +924,16 @@ class ToolboxFile
         // Prepare SVG images.
         if ($information['isSvgImage'] = $file->isSvgImage) {
             $information['src'] = $fileName;
+        }
+
+        // Prepare the picture for provide the image size.
+        if ($information['isPicture'] = (int) $this->resizeImages[2]) {
+            $picture = Picture::create($file, $this->getResizeImages())->getTemplateData();
+
+            $picture['alt']   = $altText;
+            $picture['title'] = $title;
+
+            $information['picture'] = $picture;
         }
 
         $this->modifiedTime[] = $file->mtime;
