@@ -310,7 +310,7 @@ class ContentElementModuleBase
     public function getAttributeNames(\DC_Table $objDc)
     {
         $arrAttributeNames = array(
-            'sorting' => $GLOBALS['TL_LANG']['MSC']['sorting'],
+            'sorting' => $GLOBALS['TL_LANG']['MSC']['metamodels_sorting'],
             'random'  => $GLOBALS['TL_LANG']['MSC']['random'],
             'id'      => $GLOBALS['TL_LANG']['MSC']['id'][0]
         );
