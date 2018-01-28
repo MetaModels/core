@@ -14,11 +14,11 @@
     <div class="tl_formbody_edit" id="styleItems">
         {% if items is not empty %}
         {% for item in items %}
-            <div class="item hover-div">
-                <div class="clr">
+            <div class="item hover-div widget">
+                <div class="clr tl_checkbox_single_container m12">
                     <input type="checkbox" id="check_{{ item.cssclass }}" value="{{ item.cssclass }}"/>
                     <label for="check_{{ item.cssclass }}">
-                        <h2>{{ item.label }} <span>({{ item.cssclass }})</span></h2>
+                        {{ item.label }} <span>({{ item.cssclass }})</span>
                         {% if item.description is defined and item.description is not empty %}
                             <p class="description tl_help tl_tip">{{ item.description }}</p>
                         {% endif %}
