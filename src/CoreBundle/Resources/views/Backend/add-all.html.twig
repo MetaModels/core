@@ -4,6 +4,12 @@
     {{ headline }}
 {% endblock %}
 
+{% block error %}
+    {%- if error is defined -%}
+        {{- error -}}
+    {%- endif -%}
+{% endblock %}
+
 {% block main %}
     <div id="tl_buttons">
         <a href="{{ href }}" class="header_back" title="{{ backBt }}">{{ backBt }}</a>
