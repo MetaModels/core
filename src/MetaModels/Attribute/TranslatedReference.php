@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,8 +17,9 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Frank Mueller <frank.mueller@linking-you.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -328,7 +329,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
 
         foreach ($arrExisting as $intId) {
             $arrWhere = $this->getWhere($intId, $strLangCode);
-            
+
             if ($arrValues[$intId]['value'] != '') {
                 $objDB->prepare($strQueryUpdate . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : ''))
                     ->set($this->getSetValues($arrValues[$intId], $intId, $strLangCode))
