@@ -10,6 +10,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  The MetaModels team.
  * @license    LGPL
  * @filesource
@@ -47,7 +48,9 @@ var MetaModelsPicker = new Class(
 		// set click-events
 		cont.getElements('.item').each(function(el){
 			el.addEvent('click',function(e) {
-				e.preventDefault();
+				if (e.target.get('tag') != 'input') {
+					return true;
+				}
 				self.clickItem(e,el)
 			});
 		});

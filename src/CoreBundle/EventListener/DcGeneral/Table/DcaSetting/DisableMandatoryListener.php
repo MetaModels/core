@@ -15,8 +15,9 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2018 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 

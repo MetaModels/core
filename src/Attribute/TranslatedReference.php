@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,8 +19,8 @@
  * @author     Frank Mueller <frank.mueller@linking-you.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -366,7 +366,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         foreach ($arrExisting as $intId) {
             $queryBuilder = $this->connection->createQueryBuilder();
             $this->buildWhere($queryBuilder, $intId, $strLangCode);
-            
+
             if ($arrValues[$intId]['value'] != '') {
                 $queryBuilder->update($this->getValueTable());
 
