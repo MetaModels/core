@@ -443,7 +443,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
             'inputType' => 'text',
             'eval'      => array
             (
-                'tl_class' => 'clr long wizard',
+                'tl_class' => 'clr wizard',
             ),
             'sql'       => "blob NULL"
         ),
