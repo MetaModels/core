@@ -88,7 +88,12 @@ class CustomSqlFilterSettingTypeFactory extends AbstractFilterSettingTypeFactory
             $this->database,
             $this->insertTags,
             function () {
-                return $this->legacyDic->getService('metamodels-service-container');
+                static $container;
+                if (!$container) {
+                    $container = $this->legacyDic->getService('metamodels-service-container');
+                }
+
+                return $container;
             }
         );
     }
