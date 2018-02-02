@@ -35,17 +35,28 @@ $container['metamodels-service-container'] = $container->share(
             E_USER_DEPRECATED
         );
         $serviceContainer = new MetaModels\MetaModelsServiceContainer();
-        $dispatcher       = $service->get('event_dispatcher');
         $serviceContainer
-            ->setEventDispatcher($dispatcher)
-            ->setDatabase($service->get('cca.legacy_dic.contao_database_connection'));
-
-        $serviceContainer
-            ->setAttributeFactory($service->get('metamodels.attribute_factory'))
-            ->setFactory($service->get('metamodels.factory'))
-            ->setFilterFactory($service->get('metamodels.filter_setting_factory'))
-            ->setRenderSettingFactory($service->get('metamodels.render_setting_factory'))
-            ->setCache($service->get('metamodels.cache'));
+            ->setEventDispatcher(function () use ($service) {
+                return $service->get('event_dispatcher');
+            })
+            ->setDatabase(function () use ($service) {
+                return $service->get('cca.legacy_dic.contao_database_connection');
+            })
+            ->setAttributeFactory(function () use ($service) {
+                return $service->get('metamodels.attribute_factory');
+            })
+            ->setFactory(function () use ($service) {
+                return $service->get('metamodels.factory');
+            })
+            ->setFilterFactory(function () use ($service) {
+                return $service->get('metamodels.filter_setting_factory');
+            })
+            ->setRenderSettingFactory(function () use ($service) {
+                return $service->get('metamodels.render_setting_factory');
+            })
+            ->setCache(function () use ($service) {
+                return $service->get('metamodels.cache');
+            });
 
         return $serviceContainer;
     }
