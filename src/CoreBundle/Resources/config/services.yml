@@ -123,3 +123,12 @@ services:
             - "@security.token_storage"
             - "@metamodels.view_combination.builder"
             - "@metamodels.view_combination.input_screen_information_builder"
+
+    MetaModels\MetaModelsServiceContainer:
+        deprecated: 'The service "%service_id%" is deprecated and to be removed in MetaModels 3 - inject needed services directly.'
+        configurator: 'MetaModels\CoreBundle\LegacyCompat\ServiceContainerInitializer:configure'
+        public: true
+
+    MetaModels\CoreBundle\LegacyCompat\ServiceContainerInitializer:
+        arguments:
+            - '@service_container'
