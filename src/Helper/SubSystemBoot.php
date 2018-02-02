@@ -22,6 +22,8 @@
 
 namespace MetaModels\Helper;
 
+use Contao\Environment;
+use Contao\System;
 use MetaModels\Events\MetaModelsBootEvent;
 use MetaModels\MetaModelsEvents;
 
@@ -31,23 +33,21 @@ use MetaModels\MetaModelsEvents;
 class SubSystemBoot
 {
     /**
-     * Boot up the system and initialize a service container.
-     *
-     * @param \Pimple $container The dependency injection container.
+     * Boot up the system.
      *
      * @return void
      */
-    public function boot(\Pimple $container)
+    public function boot()
     {
-        /** @var \Contao\Environment $environment */
-        $environment = $container['environment'];
+        /** @var Environment $environment */
+        $environment = System::getContainer()->get('contao.framework')->getAdapter(Environment::class);
         $script      = explode('?', $environment->get('relativeRequest'), 2)[0];
 
         // There is no need to boot in login or install screen.
         if (($script == 'contao/login') || ($script == 'contao/install')) {
             return;
         }
-        $tableManipulator = \System::getContainer()->get('metamodels.table_manipulator');
+        $tableManipulator = System::getContainer()->get('metamodels.table_manipulator');
         // Ensure all tables are created.
         foreach ([
             'tl_metamodel',
@@ -65,7 +65,7 @@ class SubSystemBoot
             try {
                 $tableManipulator->checkTableExists($table);
             } catch (\Exception $exception) {
-                \System::getContainer()
+                System::getContainer()
                     ->get('logger')
                     ->error(
                         'MetaModels startup interrupted. ' .
@@ -74,12 +74,12 @@ class SubSystemBoot
             }
         }
 
-        $dispatcher = \System::getContainer()->get('event_dispatcher');
+        $dispatcher = System::getContainer()->get('event_dispatcher');
         $event      = new MetaModelsBootEvent();
 
         $dispatcher->dispatch(MetaModelsEvents::SUBSYSTEM_BOOT, $event);
 
-        $determinator = \System::getContainer()->get('cca.dc-general.scope-matcher');
+        $determinator = System::getContainer()->get('cca.dc-general.scope-matcher');
         switch (true) {
             case $determinator->currentScopeIsFrontend():
                 $dispatcher->dispatch(MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND, $event);
