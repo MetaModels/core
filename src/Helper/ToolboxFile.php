@@ -28,6 +28,7 @@
 namespace MetaModels\Helper;
 
 use Contao\Controller;
+use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Contao\Dbafs;
 use Contao\Environment;
 use Contao\File;
@@ -35,6 +36,7 @@ use Contao\FilesModel;
 use Contao\Input;
 use Contao\PageError403;
 use Contao\StringUtil;
+use Contao\System;
 use Contao\Validator;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
@@ -53,8 +55,24 @@ class ToolboxFile
      * The event dispatcher.
      *
      * @var EventDispatcherInterface
+     *
+     * @deprecated
      */
     private $dispatcher;
+
+    /**
+     * The project root dir.
+     *
+     * @var string
+     */
+    private $rootDir;
+
+    /**
+     * The image factory for resizing.
+     *
+     * @var ImageFactoryInterface
+     */
+    private $imageFactory;
 
     /**
      * Allowed file extensions.
@@ -150,14 +168,34 @@ class ToolboxFile
     /**
      * Create a new instance.
      *
-     * @param EventDispatcherInterface|null $dispatcher The event dispatcher to use.
+     * @param ImageFactoryInterface|EventDispatcherInterface|null $imageFactory The image factory to use).
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function __construct(EventDispatcherInterface $dispatcher = null)
+    public function __construct($imageFactory = null, string $rootDir = null)
     {
-        $this->dispatcher = $dispatcher ?: $GLOBALS['container']['event-dispatcher'];
+        switch (true) {
+            case $imageFactory instanceof ImageFactoryInterface && !empty($this->rootDir):
+                $this->imageFactory = $imageFactory;
+                $this->rootDir      = $rootDir;
+                break;
+            // This is the deprecated fallback (remove in MetaModels 3.0).
+            case $imageFactory instanceof EventDispatcherInterface:
+                @trigger_error(
+                    'Passing an "EventDispatcherInterface" is deprecated, use a "ImageFactoryInterface" instead.',
+                    E_USER_DEPRECATED
+                );
+                $this->dispatcher = $imageFactory;
+                break;
+            // This is another deprecated fallback (remove in MetaModels 3.0).
+            default:
+                @trigger_error(
+                    'Not passing an "ImageFactoryInterface" and root path is deprecated.',
+                    E_USER_DEPRECATED
+                );
+                $this->dispatcher = System::getContainer()->get('event_dispatcher');
+        }
         // Initialize some values to sane base.
         $this->setAcceptedExtensions(StringUtil::trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']));
         if (!is_array($_SESSION['metaModels_downloads'])) {
@@ -940,6 +978,15 @@ class ToolboxFile
     {
         list($width, $height, $mode) = $this->getResizeImages();
         if ($this->getShowImages() && ($width || $height || $mode)) {
+            if ($this->imageFactory) {
+                $image = $this->imageFactory->create(
+                    $this->rootDir . '/' . $fileName,
+                    [$width, $height, $mode]
+                );
+
+                return $image->getUrl($this->rootDir);
+            }
+
             $event = new ResizeImageEvent($fileName, $width, $height, $mode);
             $this->dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
             return $event->getResultImage();
