@@ -526,7 +526,7 @@ class Item implements IItem
         unset($arrNewData['id']);
         unset($arrNewData['tstamp']);
         unset($arrNewData['vargroup']);
-        return new Item($this->getMetaModel(), $arrNewData);
+        return new Item($this->getMetaModel(), $arrNewData, $this->dispatcher);
     }
 
     /**
