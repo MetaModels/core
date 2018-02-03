@@ -55,6 +55,25 @@ services:
                 event: dc-general.model.pre-duplicate
                 method: handle
 
+    MetaModels\CoreBundle\EventListener\PurgeListener:
+        arguments:
+            - '@metamodels.cache.purger'
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.model.post-create
+                method: checkPurge
+            -   name: kernel.event_listener
+                event: dc-general.model.post-delete
+                method: checkPurge
+            -   name: kernel.event_listener
+                event: dc-general.model.post-duplicate
+                method: checkPurge
+            -   name: kernel.event_listener
+                event: dc-general.model.post-paste
+                method: checkPurge
+            -   name: kernel.event_listener
+                event: dc-general.model.post-persist
+                method: checkPurge
 
 
 

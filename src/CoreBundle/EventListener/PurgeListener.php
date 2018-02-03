@@ -21,28 +21,31 @@
  * @filesource
  */
 
-namespace MetaModels\DcGeneral\Events;
+namespace MetaModels\CoreBundle\EventListener;
 
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractModelAwareEvent;
-use ContaoCommunityAlliance\DcGeneral\Event\PostCreateModelEvent;
-use ContaoCommunityAlliance\DcGeneral\Event\PostDeleteModelEvent;
-use ContaoCommunityAlliance\DcGeneral\Event\PostDuplicateModelEvent;
-use ContaoCommunityAlliance\DcGeneral\Event\PostPasteModelEvent;
-use ContaoCommunityAlliance\DcGeneral\Event\PostPersistModelEvent;
+use MetaModels\BackendIntegration\PurgeCache;
 
 /**
  * Central event subscriber implementation.
  */
-class Subscriber extends BaseSubscriber
+class PurgeListener
 {
     /**
-     * Register all listeners to handle creation of a data container.
+     * The cache purger.
      *
-     * @return void
+     * @var PurgeCache
      */
-    protected function registerEventsInDispatcher()
+    private $purger;
+
+    /**
+     * Create a new instance.
+     *
+     * @param PurgeCache $purger The cache purger.
+     */
+    public function __construct(PurgeCache $purger)
     {
-        $this->registerTableWatcher();
+        $this->purger = $purger;
     }
 
     /**
@@ -69,23 +72,7 @@ class Subscriber extends BaseSubscriber
             ($table == 'tl_metamodel_rendersetting') ||
             ($table == 'tl_metamodel_dca_combine')
         ) {
-            $purger = \Contao\System::getContainer()->get('metamodels.cache.purger');
-            $purger->purge();
+            $this->purger->purge();
         }
-    }
-
-    /**
-     * Register event to clear the cache when a relevant data model has been saved.
-     *
-     * @return void
-     */
-    private function registerTableWatcher()
-    {
-        $this
-            ->addListener(PostCreateModelEvent::NAME, array($this, 'checkPurge'))
-            ->addListener(PostDeleteModelEvent::NAME, array($this, 'checkPurge'))
-            ->addListener(PostDuplicateModelEvent::NAME, array($this, 'checkPurge'))
-            ->addListener(PostPasteModelEvent::NAME, array($this, 'checkPurge'))
-            ->addListener(PostPersistModelEvent::NAME, array($this, 'checkPurge'));
     }
 }

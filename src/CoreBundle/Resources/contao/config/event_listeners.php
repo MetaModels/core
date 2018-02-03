@@ -22,16 +22,10 @@
  * @filesource
  */
 
-use MetaModels\Events\MetaModelsBootEvent;
 use MetaModels\Events\ParseItemEvent;
 use MetaModels\MetaModelsEvents;
 
 return array(
-    MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND => array(
-        function (MetaModelsBootEvent $event) {
-            new \MetaModels\DcGeneral\Events\Subscriber($event->getServiceContainer());
-        }
-    ),
     // deprecated since 2.0, to be removed in 3.0.
     MetaModelsEvents::PARSE_ITEM => array(
         array(
