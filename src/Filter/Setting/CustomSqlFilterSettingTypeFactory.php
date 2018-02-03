@@ -22,7 +22,6 @@
 namespace MetaModels\Filter\Setting;
 
 use Contao\InsertTags;
-use DependencyInjection\Container\LegacyDependencyInjectionContainer;
 use Doctrine\DBAL\Connection;
 
 /**
