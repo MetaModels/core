@@ -57,16 +57,32 @@ class Item implements IItem
     protected $arrData = array();
 
     /**
+     * The event dispatcher.
+     *
+     * @var null|EventDispatcherInterface
+     */
+    private $dispatcher;
+
+    /**
      * Create a new instance.
      *
-     * @param IMetaModel $objMetaModel The model this item is represented by.
-     *
-     * @param array      $arrData      The initial data that shall be injected into the new instance.
+     * @param IMetaModel                    $objMetaModel The model this item is represented by.
+     * @param array                         $arrData      The initial data that shall be injected into the new instance.
+     * @param EventDispatcherInterface|null $dispatcher   The event dispatcher.
      */
-    public function __construct(IMetaModel $objMetaModel, $arrData)
+    public function __construct(IMetaModel $objMetaModel, $arrData, EventDispatcherInterface $dispatcher = null)
     {
-        $this->arrData   = $arrData;
-        $this->metaModel = $objMetaModel;
+        $this->arrData    = $arrData;
+        $this->metaModel  = $objMetaModel;
+        $this->dispatcher = $dispatcher;
+
+        if (null === $dispatcher) {
+            @trigger_error(
+                'Not passing the event dispatcher as 3rd argument to "' . __METHOD__ . '" is deprecated ' .
+                'and will cause an error in MetaModels 3.0',
+                E_USER_DEPRECATED
+            );
+        }
     }
 
     /**
@@ -76,6 +92,10 @@ class Item implements IItem
      */
     public function getServiceContainer()
     {
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated and will get removed in MetaModels 3.0.',
+            E_USER_DEPRECATED
+        );
         return $this->getMetaModel()->getServiceContainer();
     }
 
@@ -86,6 +106,10 @@ class Item implements IItem
      */
     protected function getEventDispatcher()
     {
+        if ($this->dispatcher) {
+            return $this->dispatcher;
+        }
+
         return $this->getServiceContainer()->getEventDispatcher();
     }
 
@@ -445,10 +469,7 @@ class Item implements IItem
 
         // Trigger event to allow other extensions to manipulate the parsed data.
         $event = new ParseItemEvent($objSettings, $this, $strOutputFormat, $arrResult);
-        $this->getMetaModel()->getServiceContainer()->getEventDispatcher()->dispatch(
-            MetaModelsEvents::PARSE_ITEM,
-            $event
-        );
+        $this->getEventDispatcher()->dispatch(MetaModelsEvents::PARSE_ITEM, $event);
 
         return $event->getResult();
     }
