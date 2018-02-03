@@ -3,7 +3,7 @@ services:
         arguments:
             - '@metamodels.factory'
             - '@metamodels.view_combination'
-            - "'@=service('contao.framework').getAdapter('Contao\\\\Controller')'"
+            - "@=service('contao.framework').getAdapter('Contao\\\\Controller')"
             - '@metamodels.assets.icon_builder'
         public: true
 

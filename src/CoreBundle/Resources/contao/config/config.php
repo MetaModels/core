@@ -271,5 +271,7 @@ $GLOBALS['TL_HOOKS']['initializeDependencyContainer'][] = function (
     $handler->boot($container);
 };
 
-$GLOBALS['TL_HOOKS']['getUserNavigation'][] = ['metamodels.backend.navigation_builder', 'onGetUserNavigation'];
-$GLOBALS['TL_HOOKS']['loadDataContainer'][] = ['metamodels.datacontainer_loader', 'onLoadDataContainer'];
+$GLOBALS['TL_HOOKS']['getUserNavigation'][] =
+    [MetaModels\CoreBundle\Contao\Hooks\RegisterBackendNavigation::class, 'onGetUserNavigation'];
+$GLOBALS['TL_HOOKS']['loadDataContainer'][] =
+    [\MetaModels\CoreBundle\Contao\Hooks\LoadDataContainer::class, 'onLoadDataContainer'];
