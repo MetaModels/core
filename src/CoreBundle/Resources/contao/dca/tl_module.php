@@ -24,7 +24,9 @@
  * @filesource
  */
 
-$GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = array('MetaModels\Dca\Module', 'buildFilterParams');
+use MetaModels\CoreBundle\Contao\Hooks\ModuleCallback;
+
+$GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = array(ModuleCallback::class, 'buildFilterParameterList');
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list'] =
     '{title_legend},name,headline,type;' .
@@ -83,7 +85,7 @@ array_insert(
             ),
             'wizard'     => array
             (
-                array('MetaModels\Dca\Module', 'editMetaModel')
+                array(ModuleCallback::class, 'editMetaModelButton')
             ),
             'sql'        => "int(10) unsigned NOT NULL default '0'"
         ),
@@ -92,7 +94,7 @@ array_insert(
             'label'            => &$GLOBALS['TL_LANG']['tl_module']['metamodel_layout'],
             'exclude'          => true,
             'inputType'        => 'select',
-            'options_callback' => array('MetaModels\Dca\Module', 'getModuleTemplates'),
+            'options_callback' => array(ModuleCallback::class, 'getTemplates'),
             'eval'             => array
             (
                 'chosen'   => true,
@@ -141,7 +143,7 @@ array_insert(
             'label'            => &$GLOBALS['TL_LANG']['tl_module']['metamodel_sortby'],
             'exclude'          => true,
             'inputType'        => 'select',
-            'options_callback' => array('MetaModels\Dca\Module', 'getAttributeNames'),
+            'options_callback' => array(ModuleCallback::class, 'getAttributeNames'),
             'eval'             => array
             (
                 'includeBlankOption' => true,
@@ -181,7 +183,7 @@ array_insert(
             'label'            => &$GLOBALS['TL_LANG']['tl_module']['metamodel_filtering'],
             'exclude'          => true,
             'inputType'        => 'select',
-            'options_callback' => array('MetaModels\Dca\Module', 'getFilterSettings'),
+            'options_callback' => array(ModuleCallback::class, 'getFilterSettings'),
             'default'          => '',
             'eval'             => array
             (
@@ -192,7 +194,7 @@ array_insert(
             ),
             'wizard'           => array
             (
-                array('MetaModels\Dca\Module', 'editFilterSetting')
+                array(ModuleCallback::class, 'editFilterSettingButton')
             ),
             'sql'              => "int(10) NOT NULL default '0'"
         ),
@@ -201,7 +203,7 @@ array_insert(
             'label'            => &$GLOBALS['TL_LANG']['tl_module']['metamodel_rendersettings'],
             'exclude'          => true,
             'inputType'        => 'select',
-            'options_callback' => array('MetaModels\Dca\Module', 'getRenderSettings'),
+            'options_callback' => array(ModuleCallback::class, 'getRenderSettings'),
             'default'          => '',
             'eval'             => array
             (
@@ -212,7 +214,7 @@ array_insert(
             ),
             'wizard'           => array
             (
-                array('MetaModels\Dca\Module', 'editRenderSetting')
+                array(ModuleCallback::class, 'editRenderSettingButton')
             ),
             'sql'              => "int(10) NOT NULL default '0'"
         ),
@@ -286,7 +288,7 @@ array_insert(
             'label'            => &$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_params'],
             'exclude'          => true,
             'inputType'        => 'checkboxWizard',
-            'options_callback' => array('MetaModels\Dca\Module', 'getFilterParameterNames'),
+            'options_callback' => array(ModuleCallback::class, 'getFilterParameterNames'),
             'eval'             => array
             (
                 'multiple' => true,
@@ -323,7 +325,7 @@ array_insert(
             'default'          => 'mm_filter_default',
             'exclude'          => true,
             'inputType'        => 'select',
-            'options_callback' => array('MetaModels\Dca\Module', 'getFilterTemplates'),
+            'options_callback' => array(ModuleCallback::class, 'getFilterTemplates'),
             'eval'             => array
             (
                 'tl_class' => 'w50',
@@ -336,7 +338,7 @@ array_insert(
             'label'            => &$GLOBALS['TL_LANG']['tl_module']['metamodel_meta_title'],
             'exclude'          => true,
             'inputType'        => 'select',
-            'options_callback' => array('MetaModels\Dca\Module', 'getMetaTitleAttributes'),
+            'options_callback' => array(ModuleCallback::class, 'getMetaTitleAttributes'),
             'eval'             => array
             (
                 'tl_class'           => 'w50',
@@ -350,7 +352,7 @@ array_insert(
             'label'            => &$GLOBALS['TL_LANG']['tl_module']['metamodel_meta_description'],
             'exclude'          => true,
             'inputType'        => 'select',
-            'options_callback' => array('MetaModels\Dca\Module', 'getMetaDescriptionAttributes'),
+            'options_callback' => array(ModuleCallback::class, 'getMetaDescriptionAttributes'),
             'eval'             => array
             (
                 'tl_class'           => 'w50',

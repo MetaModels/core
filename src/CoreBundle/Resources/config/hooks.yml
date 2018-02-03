@@ -1,1 +1,17 @@
 services:
+    MetaModels\CoreBundle\Contao\Hooks\AbstractContentElementAndModuleCallback:
+        abstract: true
+        arguments:
+            - '@metamodels.assets.icon_builder'
+            - '@metamodels.backend.url-builder-factory'
+            - '@metamodels.factory'
+            - '@metamodels.filter_setting_factory'
+            - '@database_connection'
+            - '@metamodels.template_list'
+        public: true
+
+    MetaModels\CoreBundle\Contao\Hooks\ContentElementCallback:
+        parent: MetaModels\CoreBundle\Contao\Hooks\AbstractContentElementAndModuleCallback
+
+    MetaModels\CoreBundle\Contao\Hooks\ModuleCallback:
+        parent: MetaModels\CoreBundle\Contao\Hooks\AbstractContentElementAndModuleCallback
