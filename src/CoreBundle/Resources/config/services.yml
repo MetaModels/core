@@ -75,6 +75,12 @@ services:
         # it is used as HOOK from Contao - needs to be public therefore.
         public: true
 
+    metamodels.backend.url-builder-factory:
+        class: ContaoCommunityAlliance\UrlBuilder\Contao\CsrfUrlBuilderFactory
+        arguments:
+            - '@security.csrf.token_manager'
+            - '%contao.csrf_token_name%'
+
     metamodels.datacontainer_loader:
         class: MetaModels\CoreBundle\Contao\Hooks\LoadDataContainer
         arguments:
