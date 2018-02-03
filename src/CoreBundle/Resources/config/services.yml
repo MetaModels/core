@@ -72,6 +72,8 @@ services:
             - "@request_stack"
             - "@router"
             - "@metamodels.view_combination"
+        # it is used as HOOK from Contao - needs to be public therefore.
+        public: true
 
     metamodels.datacontainer_loader:
         class: MetaModels\CoreBundle\Contao\Hooks\LoadDataContainer
