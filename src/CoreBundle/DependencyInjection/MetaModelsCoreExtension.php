@@ -40,9 +40,10 @@ class MetaModelsCoreExtension extends Extension
      */
     private $files = [
         'config.yml',
-        'services.yml',
-        'listeners.yml',
         'filter-settings.yml',
+        'hooks.yml',
+        'listeners.yml',
+        'services.yml',
         'dc-general/breadcrumb.yml',
         'dc-general/definition-builder.yml',
         'dc-general/environment-populator.yml',
