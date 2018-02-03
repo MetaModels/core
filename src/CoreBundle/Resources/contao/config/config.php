@@ -264,11 +264,9 @@ if (!isset($GLOBALS['MM_FILTER_PARAMS'])) {
     $GLOBALS['MM_FILTER_PARAMS'] = array();
 }
 
-$GLOBALS['TL_HOOKS']['initializeDependencyContainer'][] = function (
-    \Pimple $container
-) {
+$GLOBALS['TL_HOOKS']['initializeDependencyContainer'][] = function () {
     $handler = new MetaModels\Helper\SubSystemBoot();
-    $handler->boot($container);
+    $handler->boot();
 };
 
 $GLOBALS['TL_HOOKS']['getUserNavigation'][] =
