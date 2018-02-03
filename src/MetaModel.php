@@ -28,7 +28,9 @@
 
 namespace MetaModels;
 
+use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use MetaModels\Attribute\IComplex;
 use MetaModels\Attribute\ISimple as ISimpleAttribute;
 use MetaModels\Attribute\ITranslated;
@@ -171,9 +173,15 @@ class MetaModel implements IMetaModel
      * Retrieve the database instance to use.
      *
      * @return \Contao\Database
+     *
+     * @deprecated Use the doctrine connection instead.
      */
     protected function getDatabase()
     {
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated and will get removed.',
+            E_USER_DEPRECATED
+        );
         return $this->getServiceContainer()->getDatabase();
     }
 
@@ -320,38 +328,11 @@ class MetaModel implements IMetaModel
 
         // Either no filter object or all ids allowed => return all ids.
         // if no id filter is passed, we assume all ids are provided.
-        $objRow = $this->getDatabase()->execute('SELECT id FROM ' . $this->getTableName());
-
-        return $objRow->fetchEach('id');
-    }
-
-    /**
-     * Convert a database result to a result array.
-     *
-     * @param \Database\Result $objRow      The database result.
-     *
-     * @param string[]         $arrAttrOnly The list of attributes to return, if any.
-     *
-     * @return array
-     */
-    protected function convertRowsToResult($objRow, $arrAttrOnly = array())
-    {
-        $arrResult = array();
-
-        while ($objRow->next()) {
-            $arrData = array();
-
-            foreach ($objRow->row() as $strKey => $varValue) {
-                if ((!$arrAttrOnly) || (in_array($strKey, $arrAttrOnly))) {
-                    $arrData[$strKey] = $varValue;
-                }
-            }
-
-            /** @noinspection PhpUndefinedFieldInspection */
-            $arrResult[$objRow->id] = $arrData;
-        }
-
-        return $arrResult;
+        return $this->getConnection()->createQueryBuilder()
+            ->select('id')
+            ->from($this->getTableName())
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     /**
@@ -382,29 +363,34 @@ class MetaModel implements IMetaModel
      */
     protected function fetchRows($arrIds, $arrAttrOnly = array())
     {
-        $parameters = array_merge($arrIds, $arrIds);
-        $objRow     = $this->getDatabase()
-            ->prepare(
-                sprintf(
-                    'SELECT * FROM %s WHERE id IN (%s) ORDER BY FIELD(id,%s)',
-                    $this->getTableName(),
-                    $this->buildDatabaseParameterList($arrIds),
-                    $this->buildDatabaseParameterList($arrIds)
-                )
-            )
-            ->execute($parameters);
-
-        /** @noinspection PhpUndefinedFieldInspection */
-        if ($objRow->numRows == 0) {
-            return array();
-        }
+        /** @var QueryBuilder $builder */
+        $builder = $this->getConnection()->createQueryBuilder();
+        $query = $builder
+            ->select('*')
+            ->from($this->getTableName())
+            ->where($builder->expr()->in('id', ':values'))
+            ->setParameter('values', $arrIds, Connection::PARAM_STR_ARRAY)
+            ->orderBy('FIELD(id, :values)')
+            ->execute();
 
         // If we have an attribute restriction, make sure we keep the system columns. See #196.
         if ($arrAttrOnly) {
             $arrAttrOnly = array_merge($GLOBALS['METAMODELS_SYSTEM_COLUMNS'], $arrAttrOnly);
         }
 
-        return $this->convertRowsToResult($objRow, $arrAttrOnly);
+        $result = [];
+        while ($row = $query->fetch(\PDO::FETCH_ASSOC)) {
+            $data = [];
+            foreach ($row as $attribute => $value) {
+                if ((!$arrAttrOnly) || (in_array($attribute, $arrAttrOnly))) {
+                    $data[$attribute] = $value;
+                }
+            }
+
+            $result[$row['id']] = $data;
+        }
+
+        return $result;
     }
 
     /**
@@ -779,19 +765,15 @@ class MetaModel implements IMetaModel
                 asort($arrFilteredIds);
             } elseif (in_array($strSortBy, array('pid', 'tstamp', 'sorting'))) {
                 // Sort by database values.
-                $arrFilteredIds = $this
-                    ->getDatabase()
-                    ->prepare(
-                        sprintf(
-                            'SELECT id FROM %s WHERE id IN(%s) ORDER BY %s %s',
-                            $this->getTableName(),
-                            $this->buildDatabaseParameterList($arrFilteredIds),
-                            $strSortBy,
-                            $strSortOrder
-                        )
-                    )
-                    ->execute($arrFilteredIds)
-                    ->fetchEach('id');
+                $builder = $this->getConnection()->createQueryBuilder();
+                $arrFilteredIds = $builder
+                    ->select('id')
+                    ->from($this->getTableName())
+                    ->where($builder->expr()->in('id', ':values'))
+                    ->setParameter('values', $arrFilteredIds, Connection::PARAM_STR_ARRAY)
+                    ->orderBy($strSortBy, $strSortOrder)
+                    ->execute()
+                    ->fetchAll(\PDO::FETCH_COLUMN);
             } elseif ($strSortBy == 'random') {
                 shuffle($arrFilteredIds);
             }
@@ -814,17 +796,15 @@ class MetaModel implements IMetaModel
             return 0;
         }
 
-        $objRow = $this
-            ->getDatabase()
-            ->prepare(sprintf(
-                'SELECT COUNT(id) AS count FROM %s WHERE id IN(%s)',
-                $this->getTableName(),
-                $this->buildDatabaseParameterList($arrFilteredIds)
-            ))
-            ->execute($arrFilteredIds);
+        $builder = $this->getConnection()->createQueryBuilder();
 
-        /** @noinspection PhpUndefinedFieldInspection */
-        return $objRow->count;
+        return $builder
+            ->select('COUNT(id)')
+            ->from($this->getTableName())
+            ->where($builder->expr()->in('id', ':values'))
+            ->setParameter('values', $arrFilteredIds, Connection::PARAM_STR_ARRAY)
+            ->execute()
+            ->fetch(\PDO::FETCH_COLUMN);
     }
 
     /**
@@ -834,9 +814,16 @@ class MetaModel implements IMetaModel
     {
         $objNewFilter = $this->copyFilter($objFilter);
 
-        $objRow = $this->getDatabase()->execute('SELECT id FROM ' . $this->getTableName() . ' WHERE varbase=1');
+        $idList = $this
+            ->getConnection()
+            ->createQueryBuilder()
+            ->select('id')
+            ->from($this->getTableName())
+            ->where('varbase=1')
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN);
 
-        $objNewFilter->addFilterRule(new StaticIdList($objRow->fetchEach('id')));
+        $objNewFilter->addFilterRule(new StaticIdList($idList));
         return $this->findByFilter($objNewFilter);
     }
 
@@ -851,16 +838,18 @@ class MetaModel implements IMetaModel
         }
         $objNewFilter = $this->copyFilter($objFilter);
 
-        $objRow = $this
-            ->getDatabase()
-            ->prepare(sprintf(
-                'SELECT id,vargroup FROM %s WHERE varbase=0 AND vargroup IN (%s)',
-                $this->getTableName(),
-                $this->buildDatabaseParameterList($arrIds)
-            ))
-            ->execute($arrIds);
+        $builder = $this->getConnection()->createQueryBuilder();
 
-        $objNewFilter->addFilterRule(new StaticIdList($objRow->fetchEach('id')));
+        $idList = $builder
+            ->select('id')
+            ->from($this->getTableName())
+            ->where('varbase=0')
+            ->andWhere($builder->expr()->in('vargroup', ':ids'))
+            ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN);
+
+        $objNewFilter->addFilterRule(new StaticIdList($idList));
         return $this->findByFilter($objNewFilter);
     }
 
@@ -875,16 +864,18 @@ class MetaModel implements IMetaModel
         }
         $objNewFilter = $this->copyFilter($objFilter);
 
-        $objRow = $this
-            ->getDatabase()
-            ->prepare(sprintf(
-                'SELECT id,vargroup FROM %1$s WHERE vargroup IN (SELECT vargroup FROM %1$s WHERE id IN (%2$s))',
-                $this->getTableName(),
-                $this->buildDatabaseParameterList($arrIds)
-            ))
-            ->execute($arrIds);
+        $builder = $this->getConnection()->createQueryBuilder();
 
-        $objNewFilter->addFilterRule(new StaticIdList($objRow->fetchEach('id')));
+        $idList = $builder
+            ->select('v.id')
+            ->from($this->getTableName(), 'v')
+            ->leftJoin('v', $this->getTableName(), 'v2', 'v.vargroup=v2.vargroup')
+            ->where($builder->expr()->in('v2.id', ':ids'))
+            ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN);
+
+        $objNewFilter->addFilterRule(new StaticIdList($idList));
         return $this->findByFilter($objNewFilter);
     }
 
@@ -924,17 +915,14 @@ class MetaModel implements IMetaModel
             $varData = serialize($varData);
         }
 
-        $this
-            ->getDatabase()
-            ->prepare(
-                sprintf(
-                    'UPDATE %s SET %s=? WHERE id IN (%s)',
-                    $this->getTableName(),
-                    $strColumn,
-                    implode(',', $arrIds)
-                )
-            )
-            ->execute($varData);
+        $builder = $this->getConnection()->createQueryBuilder();
+
+        $builder
+            ->update($this->getTableName())
+            ->set('table.' . $strColumn, is_array($varData) ? serialize($varData) : $varData)
+            ->where($builder->expr()->in('v2.id', ':ids'))
+            ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
+            ->execute();
     }
 
     /**
@@ -1027,36 +1015,37 @@ class MetaModel implements IMetaModel
      */
     protected function createNewItem($item)
     {
-        $arrData = array
-        (
-            'tstamp' => $item->get('tstamp')
-        );
-
-        $blnNewBaseItem = false;
+        $data      = ['tstamp' => $item->get('tstamp')];
+        $isNewItem = false;
         if ($this->hasVariants()) {
             // No variant group is given, so we have a complete new base item this should be a workaround for these
             // values should be set by the GeneralDataMetaModel or whoever is calling this method.
             if ($item->get('vargroup') === null) {
                 $item->set('varbase', '1');
                 $item->set('vargroup', '0');
-                $blnNewBaseItem = true;
+                $isNewItem = true;
             }
-            $arrData['varbase']  = $item->get('varbase');
-            $arrData['vargroup'] = $item->get('vargroup');
+            $data['varbase']  = $item->get('varbase');
+            $data['vargroup'] = $item->get('vargroup');
         }
 
-        /** @noinspection PhpUndefinedFieldInspection */
-        $intItemId = $this
-            ->getDatabase()
-            ->prepare('INSERT INTO ' . $this->getTableName() . ' %s')
-            ->set($arrData)
-            ->execute()
-            ->insertId;
-        $item->set('id', $intItemId);
+        $connection = $this->getConnection();
+        $builder    = $connection->createQueryBuilder();
+        $parameters = [];
+        foreach (array_keys($data) as $key) {
+            $parameters[$key] = ':' . $key;
+        }
+        $builder
+            ->insert($this->getTableName())
+            ->values($parameters)
+            ->setParameters($data)
+            ->execute();
+
+        $item->set('id', $connection->lastInsertId());
 
         // Add the variant group equal to the id.
-        if ($blnNewBaseItem) {
-            $this->saveSimpleColumn('vargroup', array($item->get('id')), $item->get('id'));
+        if ($isNewItem) {
+            $this->saveSimpleColumn('vargroup', [$item->get('id')], $item->get('id'));
         }
     }
 
@@ -1129,14 +1118,13 @@ class MetaModel implements IMetaModel
             }
         }
         // Now make the real row disappear.
-        $this
-            ->getDatabase()
-            ->prepare(sprintf(
-                'DELETE FROM %s WHERE id IN (%s)',
-                $this->getTableName(),
-                $this->buildDatabaseParameterList($arrIds)
-            ))
-        ->execute($arrIds);
+        $builder = $this->getConnection()->createQueryBuilder();
+
+        $builder
+            ->delete($this->getTableName())
+            ->where($builder->expr()->in('id', ':ids'))
+            ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
+            ->execute();
     }
 
     /**
