@@ -30,11 +30,17 @@ use Contao\Hybrid;
 use Contao\ModuleModel;
 use Contao\StringUtil;
 use Contao\System;
+use Doctrine\DBAL\Connection;
+use MetaModels\IFactory;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsServiceContainer;
 
 /**
  * Base implementation of a MetaModel Hybrid element.
+ *
+ * @property string metamodel                The id of the MetaModel to use.
+ * @property string metamodel_filtering      The id of the MetaModel filter setting to use.
+ * @property string metamodel_rendersettings The id of the MetaModel render setting to use.
  */
 abstract class MetaModelHybrid extends Hybrid
 {
@@ -64,14 +70,38 @@ abstract class MetaModelHybrid extends Hybrid
      *
      * @return IMetaModelsServiceContainer
      *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     *
      * @deprecated The service container will get removed, inject needed services instead.
      */
     public function getServiceContainer()
     {
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+
         return System::getContainer()->get(MetaModelsServiceContainer::class);
+    }
+
+    /**
+     * Retrieve the factory.
+     *
+     * @return IFactory
+     */
+    protected function getFactory()
+    {
+        return System::getContainer()->get('metamodels.factory');
+    }
+
+    /**
+     * Retrieve the connection.
+     *
+     * @return Connection
+     */
+    protected function getConnection()
+    {
+        return System::getContainer()->get('database_connection');
     }
 
     /**
@@ -111,11 +141,10 @@ abstract class MetaModelHybrid extends Hybrid
                 $GLOBALS['TL_CSS'][] = 'system/modules/metamodels/assets/css/style.css';
 
                 // Retrieve name of MetaModels.
-                /** @var TranslatorInterface $translator */
                 $infoTemplate  =
                     '<div class="wc_info tl_gray"><span class="wc_label"><abbr title="%s">%s:</abbr></span> %s</div>';
 
-                $factory       = $this->getServiceContainer()->getFactory();
+                $factory       = $this->getFactory();
                 $metaModelName = $factory->translateIdToMetaModelName($this->metamodel);
                 $metaModel     = $factory->getMetaModel($metaModelName);
                 $strInfo       = sprintf(
@@ -125,20 +154,25 @@ abstract class MetaModelHybrid extends Hybrid
                     $metaModel->getName()
                 );
 
-                $database = $this->getServiceContainer()->getDatabase();
+                $database = $this->getConnection();
 
                 // Retrieve name of filter.
                 if ($this->metamodel_filtering) {
                     $infoFi = $database
-                        ->prepare('SELECT name FROM tl_metamodel_filter WHERE id=?')
-                        ->execute($this->metamodel_filtering);
+                        ->createQueryBuilder()
+                        ->select('name')
+                        ->from('tl_metamodel_filter')
+                        ->where('id=:id')
+                        ->setParameter('id', $this->metamodel_filtering)
+                        ->execute()
+                        ->fetch(\PDO::FETCH_COLUMN);
 
-                    if ($infoFi->numRows) {
+                    if ($infoFi) {
                         $strInfo .= sprintf(
                             $infoTemplate,
                             $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter'][1],
                             $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter'][0],
-                            $infoFi->name
+                            $infoFi
                         );
                     }
                 }
@@ -146,15 +180,20 @@ abstract class MetaModelHybrid extends Hybrid
                 // Retrieve name of rendersetting.
                 if ($this->metamodel_rendersettings) {
                     $infoRs = $database
-                        ->prepare('SELECT name FROM tl_metamodel_rendersettings WHERE id=?')
-                        ->execute($this->metamodel_rendersettings);
+                        ->createQueryBuilder()
+                        ->select('name')
+                        ->from('tl_metamodel_rendersettings')
+                        ->where('id=:id')
+                        ->setParameter('id', $this->metamodel_rendersettings)
+                        ->execute()
+                        ->fetch(\PDO::FETCH_COLUMN);
 
-                    if ($infoRs->numRows) {
+                    if ($infoRs) {
                         $strInfo .= sprintf(
                             $infoTemplate,
                             $GLOBALS['TL_LANG']['MSC']['mm_be_info_render_setting'][1],
                             $GLOBALS['TL_LANG']['MSC']['mm_be_info_render_setting'][0],
-                            $infoRs->name
+                            $infoRs
                         );
                     }
                 }
