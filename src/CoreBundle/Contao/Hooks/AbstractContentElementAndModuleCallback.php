@@ -29,6 +29,7 @@ use MetaModels\BackendIntegration\TemplateList;
 use MetaModels\CoreBundle\Assets\IconBuilder;
 use MetaModels\Filter\Setting\FilterSettingFactory;
 use MetaModels\IFactory;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * This class is the abstract base for building the "edit MetaModel" button in the backend.
@@ -83,6 +84,11 @@ abstract class AbstractContentElementAndModuleCallback
     private $templateList;
 
     /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
+    /**
      * Create a new instance.
      *
      * @param IconBuilder                $iconBuilder       The icon builder.
@@ -91,6 +97,7 @@ abstract class AbstractContentElementAndModuleCallback
      * @param FilterSettingFactory       $filterFactory     The filter factory.
      * @param Connection                 $connection        The database connection.
      * @param TemplateList               $templateList      The template list loader.
+     * @param RequestStack               $requestStack      The request stack.
      */
     public function __construct(
         IconBuilder $iconBuilder,
@@ -98,7 +105,8 @@ abstract class AbstractContentElementAndModuleCallback
         IFactory $factory,
         FilterSettingFactory $filterFactory,
         Connection $connection,
-        TemplateList $templateList
+        TemplateList $templateList,
+        RequestStack $requestStack
     ) {
         $this->iconBuilder       = $iconBuilder;
         $this->urlBuilderFactory = $urlBuilderFactory;
@@ -106,6 +114,7 @@ abstract class AbstractContentElementAndModuleCallback
         $this->connection        = $connection;
         $this->templateList      = $templateList;
         $this->factory           = $factory;
+        $this->requestStack      = $requestStack;
     }
 
     /**
@@ -306,8 +315,12 @@ abstract class AbstractContentElementAndModuleCallback
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    protected function buildFilterParamsFor(\DC_Table $dataContainer,  $elementName)
+    protected function buildFilterParamsFor(\DC_Table $dataContainer, $elementName)
     {
+        if (!$this->requestStack->getCurrentRequest()->query->get('act')) {
+            return;
+        }
+
         $filterId = $this->connection->createQueryBuilder()
             ->select('c.metamodel_filtering')
             ->from(static::$tableName, 'c')
