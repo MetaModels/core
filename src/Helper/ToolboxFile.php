@@ -169,6 +169,7 @@ class ToolboxFile
      * Create a new instance.
      *
      * @param ImageFactoryInterface|EventDispatcherInterface|null $imageFactory The image factory to use).
+     * @param string|null                                         $rootDir      The root path of the installation.
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
@@ -176,7 +177,7 @@ class ToolboxFile
     public function __construct($imageFactory = null, string $rootDir = null)
     {
         switch (true) {
-            case $imageFactory instanceof ImageFactoryInterface && !empty($this->rootDir):
+            case ($imageFactory instanceof ImageFactoryInterface) && !empty($rootDir):
                 $this->imageFactory = $imageFactory;
                 $this->rootDir      = $rootDir;
                 break;
