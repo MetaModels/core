@@ -642,8 +642,8 @@ class Driver implements MultiLanguageDataProviderInterface
 
         $objNative1 = $objModel1->getItem();
         $objNative2 = $objModel2->getItem();
-        if ($objNative1->getMetaModel() != $objNative2->getMetaModel()) {
-            return false;
+        if ($objNative1->getMetaModel() === $objNative2->getMetaModel()) {
+            return true;
         }
         foreach ($objNative1->getMetaModel()->getAttributes() as $objAttribute) {
             if ($objNative1->get($objAttribute->getColName()) != $objNative2->get($objAttribute->getColName())) {
