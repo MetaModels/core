@@ -101,7 +101,6 @@ class DatabaseBackedListener
         $this->database   = $database;
         $this->dispatcher = $dispatcher;
     }
-    }
 
     /**
      * Retrieve the service container.
