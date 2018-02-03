@@ -23,11 +23,13 @@
 
 namespace MetaModels\Events;
 
+use Contao\System;
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\Events\CollectMetaModelAttributeInformationEvent;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModel;
+use MetaModels\MetaModelsServiceContainer;
 
 /**
  * This is the information retriever database backend.
@@ -99,7 +101,7 @@ class DatabaseBackedListener
      */
     public function getServiceContainer()
     {
-        return \System::getContainer()->get('cca.legacy_dic')->getService('metamodels-service-container');
+        return System::getContainer()->get(MetaModelsServiceContainer::class);
     }
 
     /**

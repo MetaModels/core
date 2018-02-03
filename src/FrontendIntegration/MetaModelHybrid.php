@@ -29,7 +29,9 @@ use Contao\FormModel;
 use Contao\Hybrid;
 use Contao\ModuleModel;
 use Contao\StringUtil;
+use Contao\System;
 use MetaModels\IMetaModelsServiceContainer;
+use MetaModels\MetaModelsServiceContainer;
 
 /**
  * Base implementation of a MetaModel Hybrid element.
@@ -64,10 +66,12 @@ abstract class MetaModelHybrid extends Hybrid
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     *
+     * @deprecated The service container will get removed, inject needed services instead.
      */
     public function getServiceContainer()
     {
-        return $GLOBALS['container']['metamodels-service-container'];
+        return System::getContainer()->get(MetaModelsServiceContainer::class);
     }
 
     /**
