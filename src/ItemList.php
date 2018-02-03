@@ -34,7 +34,6 @@ use MetaModels\Events\RenderItemListEvent;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\Helper\PaginationLimitCalculator;
 use MetaModels\Render\Setting\IRenderSettingFactory;
-use MetaModels\Render\Setting\RenderSettingFactory;
 use MetaModels\Render\Template;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
