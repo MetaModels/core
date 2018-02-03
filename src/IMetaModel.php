@@ -301,6 +301,8 @@ interface IMetaModel
      * @param array $arrFilterUrl      The filter url parameters (usually the contents of $_GET etc.).
      *
      * @return IFilter the generated filter object.
+     *
+     * @deprecated To be removed in MetaModels 3.0 - use the filter setting factory instead.
      */
     public function prepareFilter($intFilterSettings, $arrFilterUrl);
 
@@ -310,6 +312,8 @@ interface IMetaModel
      * @param int $intViewId The id of the render settings to retrieve.
      *
      * @return \MetaModels\Render\Setting\ICollection
+     *
+     * @deprecated To be removed in MetaModels 3.0 - use the render setting factory instead.
      */
     public function getView($intViewId = 0);
 }

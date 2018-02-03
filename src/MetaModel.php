@@ -28,6 +28,7 @@
 
 namespace MetaModels;
 
+use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IComplex;
 use MetaModels\Attribute\ISimple as ISimpleAttribute;
 use MetaModels\Attribute\ITranslated;
@@ -35,6 +36,7 @@ use MetaModels\Filter\Filter;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Rules\StaticIdList;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This is the main MetaModel class.
@@ -72,15 +74,55 @@ class MetaModel implements IMetaModel
     protected $serviceContainer;
 
     /**
+     * The database connection.
+     *
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * The event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
+
+    /**
      * Instantiate a MetaModel.
      *
-     * @param array $arrData The information array, for information on the available columns, refer to
-     *                       documentation of table tl_metamodel.
+     * @param array $arrData                            The information array, for information on the available
+     *                                                  columns, refer to documentation of table tl_metamodel.
+     * @param EventDispatcherInterface|null $dispatcher The event dispatcher.
+     * @param Connection|null               $connection The database connection.
      */
-    public function __construct($arrData)
-    {
+    public function __construct(
+        $arrData,
+        EventDispatcherInterface $dispatcher = null,
+        Connection $connection = null
+    ) {
         foreach ($arrData as $strKey => $varValue) {
             $this->arrData[$strKey] = $this->tryUnserialize($varValue);
+        }
+
+        $this->connection    = $connection;
+        $this->dispatcher    = $dispatcher;
+        if (null === $this->dispatcher) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Not passing the event dispatcher as 2nd argument to "' . __METHOD__ . '" is deprecated ' .
+                'and will cause an error in MetaModels 3.0',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+        }
+        if (null === $this->connection) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Not passing the database connection as 3rd argument to "' . __METHOD__ . '" is deprecated ' .
+                'and will cause an error in MetaModels 3.0',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
         }
     }
 
@@ -91,6 +133,12 @@ class MetaModel implements IMetaModel
      */
     public function getServiceContainer()
     {
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated and will get removed.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
         return is_callable($this->serviceContainer) ? call_user_func($this->serviceContainer) : $this->serviceContainer;
     }
 
@@ -485,7 +533,7 @@ class MetaModel implements IMetaModel
         $arrResult = $this->fetchAdditionalAttributes($arrIds, $arrResult, $arrAttrOnly);
         $arrItems  = array();
         foreach ($arrResult as $arrEntry) {
-            $arrItems[] = new Item($this, $arrEntry);
+            $arrItems[] = new Item($this, $arrEntry, $this->dispatcher);
         }
 
         $objItems = new Items($arrItems);
@@ -1106,6 +1154,14 @@ class MetaModel implements IMetaModel
      */
     public function prepareFilter($intFilterSettings, $arrFilterUrl)
     {
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Method "' . __METHOD__ . '" is deprecated and will get removed in MetaModels 3.0. ' .
+            'Use the "metamodels.filter_setting_factory" service instead.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+
         $objFilter = $this->getEmptyFilter();
         if ($intFilterSettings) {
             $objFilterSettings = $this->getServiceContainer()->getFilterFactory()->createCollection($intFilterSettings);
@@ -1119,6 +1175,33 @@ class MetaModel implements IMetaModel
      */
     public function getView($intViewId = 0)
     {
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Method "' . __METHOD__ . '" is deprecated and will get removed in MetaModels 3.0. ' .
+            'Use the "metamodels.render_setting_factory" service instead.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+
         return $this->getServiceContainer()->getRenderSettingFactory()->createCollection($this, $intViewId);
+    }
+
+    /**
+     * Obtain the doctrine connection.
+     *
+     * @return Connection
+     *
+     * @throws \ReflectionException
+     */
+    private function getConnection()
+    {
+        if ($this->connection) {
+            return $this->connection;
+        }
+
+        $reflection = new \ReflectionProperty(\Contao\Database::class, 'resConnection');
+        $reflection->setAccessible(true);
+
+        return $this->connection = $reflection->getValue($this->getDatabase());
     }
 }

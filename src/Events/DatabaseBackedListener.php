@@ -30,6 +30,7 @@ use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModel;
 use MetaModels\MetaModelsServiceContainer;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This is the information retriever database backend.
@@ -42,6 +43,13 @@ class DatabaseBackedListener
      * @var Connection
      */
     private $database;
+
+    /**
+     * The event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
 
     /**
      * All MetaModel instances created via this listener.
@@ -85,11 +93,14 @@ class DatabaseBackedListener
     /**
      * Create a new instance.
      *
-     * @param Connection $database  The database connection.
+     * @param Connection               $database   The database connection.
+     * @param EventDispatcherInterface $dispatcher The event dispatcher.
      */
-    public function __construct(Connection $database)
+    public function __construct(Connection $database, EventDispatcherInterface $dispatcher)
     {
-        $this->database  = $database;
+        $this->database   = $database;
+        $this->dispatcher = $dispatcher;
+    }
     }
 
     /**
@@ -184,7 +195,7 @@ class DatabaseBackedListener
     protected function createInstance(CreateMetaModelEvent $event, $arrData)
     {
         if (!$this->createInstanceViaLegacyFactory($event, $arrData)) {
-            $metaModel = new MetaModel($arrData);
+            $metaModel = new MetaModel($arrData, $this->dispatcher, $this->database);
             $metaModel->setServiceContainer(function () {
                 return $this->getServiceContainer();
             }, false);
