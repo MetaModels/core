@@ -13,6 +13,7 @@ services:
         class: Doctrine\Common\Cache\FilesystemCache
         arguments:
             - "%metamodels.cache_dir%"
+        public: true
 
     metamodels.cache.purger:
         class: MetaModels\BackendIntegration\PurgeCache
@@ -24,11 +25,13 @@ services:
         arguments:
             - "@event_dispatcher"
         class: MetaModels\Factory
+        public: true
 
     metamodels.attribute_factory:
         class: MetaModels\Attribute\AttributeFactory
         arguments:
           - "@event_dispatcher"
+        public: true
 
     metamodels.filter_setting_factory:
         class: MetaModels\Filter\Setting\FilterSettingFactory
@@ -36,12 +39,14 @@ services:
           - "@database_connection"
           - "@event_dispatcher"
           - "@metamodels.factory"
+        public: true
 
     metamodels.render_setting_factory:
         class: MetaModels\Render\Setting\RenderSettingFactory
         arguments:
           - "@database_connection"
           - "@event_dispatcher"
+        public: true
 
     metamodels.template_list:
         class: MetaModels\BackendIntegration\TemplateList
@@ -58,6 +63,7 @@ services:
         arguments:
           - "@database_connection"
           - "%metamodels.system_columns%"
+        public: true
 
     metamodels.backend.navigation_builder:
         class: MetaModels\CoreBundle\Contao\Hooks\RegisterBackendNavigation
@@ -74,6 +80,7 @@ services:
             - "@metamodels.view_combination"
             - "@=service('contao.framework').getAdapter('Contao\\\\Controller')"
             - "@metamodels.assets.icon_builder"
+        public: true
 
     metamodels.controller.abstract.add_all:
         abstract: true
