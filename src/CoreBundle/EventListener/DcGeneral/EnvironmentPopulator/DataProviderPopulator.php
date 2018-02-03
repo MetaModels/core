@@ -26,6 +26,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DataProviderDefi
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use MetaModels\DcGeneral\Data\Driver;
 use MetaModels\IFactory;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This class handles the populating of the Environments.
@@ -42,13 +43,22 @@ class DataProviderPopulator
     private $factory;
 
     /**
+     * The event dispatcher to pass to drivers.
+     *
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher = null;
+
+    /**
      * Create a new instance.
      *
-     * @param IFactory $factory The MetaModel factory.
+     * @param IFactory                 $factory    The MetaModel factory.
+     * @param EventDispatcherInterface $dispatcher The event dispatcher.
      */
-    public function __construct(IFactory $factory)
+    public function __construct(IFactory $factory, EventDispatcherInterface $dispatcher)
     {
-        $this->factory = $factory;
+        $this->factory    = $factory;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -90,6 +100,7 @@ class DataProviderPopulator
                 $providerInstance->setBaseConfig(
                     array_merge($initialization, ['metaModel' => $metaModel])
                 );
+                $providerInstance->setDispatcher($this->dispatcher);
             }
         }
     }
