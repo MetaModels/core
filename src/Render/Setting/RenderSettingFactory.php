@@ -25,6 +25,7 @@ namespace MetaModels\Render\Setting;
 
 use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
+use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsEvents;
@@ -60,6 +61,13 @@ class RenderSettingFactory implements IRenderSettingFactory
     private $eventDispatcher;
 
     /**
+     * The filter setting factory.
+     *
+     * @var IFilterSettingFactory
+     */
+    private $filterFactory;
+
+    /**
      * The already created render settings.
      *
      * @var ICollection[]
@@ -71,11 +79,16 @@ class RenderSettingFactory implements IRenderSettingFactory
      *
      * @param Connection               $database        The database.
      * @param EventDispatcherInterface $eventDispatcher The event dispatcher to use.
+     * @param IFilterSettingFactory    $filterFactory   The filter setting factory.
      */
-    public function __construct(Connection $database, EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        Connection $database,
+        EventDispatcherInterface $eventDispatcher,
+        IFilterSettingFactory $filterFactory
+    ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->database        = $database;
+        $this->filterFactory   = $filterFactory;
     }
 
     /**
@@ -201,7 +214,7 @@ class RenderSettingFactory implements IRenderSettingFactory
             $row = [];
         }
 
-        $renderSetting = new Collection($metaModel, $row);
+        $renderSetting = new Collection($metaModel, $row, $this->eventDispatcher, $this->filterFactory);
 
         if ($renderSetting->get('id')) {
             $this->collectAttributeSettings($metaModel, $renderSetting);

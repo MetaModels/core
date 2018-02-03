@@ -28,8 +28,10 @@ use Contao\StringUtil;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GetPageDetailsEvent;
+use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\IItem;
 use MetaModels\IMetaModel;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Base implementation for render settings.
@@ -42,6 +44,20 @@ class Collection implements ICollection
      * @var IMetaModel
      */
     protected $metaModel;
+
+    /**
+     * The event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
+
+    /**
+     * The filter setting factory.
+     *
+     * @var IFilterSettingFactory
+     */
+    private $filterFactory;
 
     /**
      * The base information for this render settings object.
@@ -67,13 +83,38 @@ class Collection implements ICollection
     /**
      * Create a new instance.
      *
-     * @param IMetaModel $metaModel      The MetaModel instance.
-     *
-     * @param array      $arrInformation The array that holds all base information for the new instance.
+     * @param IMetaModel               $metaModel      The MetaModel instance.
+     * @param array                    $arrInformation The array that holds all base information for the new instance.
+     * @param EventDispatcherInterface $dispatcher     The event dispatcher.
+     * @param IFilterSettingFactory    $filterFactory  The filter setting factory.
      */
-    public function __construct(IMetaModel $metaModel, $arrInformation)
-    {
-        $this->metaModel = $metaModel;
+    public function __construct(
+        IMetaModel $metaModel,
+        $arrInformation,
+        EventDispatcherInterface $dispatcher,
+        IFilterSettingFactory $filterFactory
+    ) {
+        $this->metaModel     = $metaModel;
+        $this->dispatcher    = $dispatcher;
+        $this->filterFactory = $filterFactory;
+        if (null === $this->dispatcher) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Not passing the event dispatcher as 3rd argument to "' . __METHOD__ . '" is deprecated ' .
+                'and will cause an error in MetaModels 3.0',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+        }
+        if (null === $this->filterFactory) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Not passing the filter setting factory as 4th argument to "' . __METHOD__ . '" is deprecated ' .
+                'and will cause an error in MetaModels 3.0',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+        }
 
         foreach ($arrInformation as $strKey => $varValue) {
             $this->set($strKey, StringUtil::deserialize($varValue));
@@ -162,11 +203,7 @@ class Collection implements ICollection
             return array();
         }
         $event = new GetPageDetailsEvent($pageId);
-        $this
-            ->metaModel
-            ->getServiceContainer()
-            ->getEventDispatcher()
-            ->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
+        $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
 
         return $event->getPageDetails();
     }
@@ -186,8 +223,6 @@ class Collection implements ICollection
         $filterSettingId  = '';
 
         if (!isset($this->jumpToCache[$desiredLanguage . '.' . $fallbackLanguage])) {
-            $serviceContainer = $this->metaModel->getServiceContainer();
-
             foreach ((array) $this->get('jumpTo') as $jumpTo) {
                 $langCode = $jumpTo['langcode'];
                 // If either desired language or fallback, keep the result.
@@ -204,7 +239,7 @@ class Collection implements ICollection
 
             $pageDetails   = $this->getPageDetails($jumpToPageId);
             $filterSetting = $filterSettingId
-                ? $serviceContainer->getFilterFactory()->createCollection($filterSettingId)
+                ? $this->getFilterFactory()->createCollection($filterSettingId)
                 : null;
 
             $this->jumpToCache[$desiredLanguage . '.' . $fallbackLanguage] = array(
@@ -261,13 +296,37 @@ class Collection implements ICollection
             $information['language']
         );
 
-        $this
-            ->metaModel
-            ->getServiceContainer()
-            ->getEventDispatcher()
-            ->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
+        $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
         $result['url'] = $event->getUrl();
 
         return $result;
+    }
+
+    /**
+     * Get the event dispatcher.
+     *
+     * @return EventDispatcherInterface
+     */
+    private function getEventDispatcher()
+    {
+        if ($this->dispatcher) {
+            return $this->dispatcher;
+        }
+
+        return $this->metaModel->getServiceContainer()->getEventDispatcher();
+    }
+
+    /**
+     * Get the filter setting factory.
+     *
+     * @return IFilterSettingFactory
+     */
+    private function getFilterFactory()
+    {
+        if ($this->filterFactory) {
+            return $this->filterFactory;
+        }
+
+        return $this->metaModel->getServiceContainer()->getFilterFactory();
     }
 }

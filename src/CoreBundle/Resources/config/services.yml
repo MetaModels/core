@@ -46,6 +46,7 @@ services:
         arguments:
           - "@database_connection"
           - "@event_dispatcher"
+          - "@metamodels.filter_setting_factory"
         public: true
 
     metamodels.template_list:
