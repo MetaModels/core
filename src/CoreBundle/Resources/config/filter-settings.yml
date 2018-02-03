@@ -14,7 +14,7 @@ services:
         arguments:
           - "@database_connection"
           - "@metamodels.insert_tags"
-          - "@cca.legacy_dic"
+        configurator: 'MetaModels\CoreBundle\LegacyCompat\ServiceContainerInitializer:configureCustomSqlFactory'
         tags:
           - { name: metamodels.filter_factory }
 

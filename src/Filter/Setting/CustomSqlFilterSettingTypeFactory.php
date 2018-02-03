@@ -45,9 +45,9 @@ class CustomSqlFilterSettingTypeFactory extends AbstractFilterSettingTypeFactory
     private $insertTags;
 
     /**
-     * The legacy dependency injection container - used for retrieving the MetaModels service container.
+     * The legacy MetaModels service container retriever callback.
      *
-     * @var LegacyDependencyInjectionContainer
+     * @var \Closure
      *
      * @deprecated Only here as gateway to the deprecated service container.
      */
@@ -61,20 +61,28 @@ class CustomSqlFilterSettingTypeFactory extends AbstractFilterSettingTypeFactory
      */
     public function __construct(
         Connection $database,
-        InsertTags $insertTags,
-        LegacyDependencyInjectionContainer $legacyDic
+        InsertTags $insertTags
     ) {
         parent::__construct();
 
         $this->database   = $database;
         $this->insertTags = $insertTags;
-        $this->legacyDic = $legacyDic;
 
         $this
             ->setTypeName('customsql')
             ->setTypeIcon('bundles/metamodelscore/images/icons/filter_customsql.png')
             ->setTypeClass(CustomSql::class)
             ->allowAttributeTypes();
+    }
+
+    /**
+     * Set the legacy DIC retriever function.
+     *
+     * @return void
+     */
+    public function setLegacyDic(\Closure $callback)
+    {
+        $this->legacyDic = $callback;
     }
 
     /**
@@ -90,7 +98,7 @@ class CustomSqlFilterSettingTypeFactory extends AbstractFilterSettingTypeFactory
             function () {
                 static $container;
                 if (!$container) {
-                    $container = $this->legacyDic->getService('metamodels-service-container');
+                    $container = $this->legacyDic->__invoke();
                 }
 
                 return $container;
