@@ -85,3 +85,16 @@ services:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.manipulate-widget
               method: handle
+    metamodels.listener.table.tl_metamodel_dcasetting.toggle_visibility:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\ToggleVisibilityListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@security.token_storage"
+            - "@metamodels.view_combination"
+            - "@metamodels.cache"
+            - "@security.authentication.trust_resolver"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.action
+              method: handle
+              priority: -10
