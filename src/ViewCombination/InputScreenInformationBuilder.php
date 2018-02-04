@@ -287,8 +287,20 @@ class InputScreenInformationBuilder
         ];
 
         $condition = function ($property) use ($conditions) {
-            if (!isset($conditions[$property['id']])) {
+            if (!isset($conditions[$property['id']]) && $property['published']) {
                 return null;
+            }
+
+            if ($property['dcatype'] !== 'attribute') {
+                return null;
+            }
+
+            if (!$property['published']) {
+                $conditions[$property['id']] = [
+                    [
+                        'type' => 'conditionpropertynotpublished'
+                    ]
+                ];
             }
 
             return [

@@ -99,6 +99,9 @@ class DefaultPropertyConditionCreator
             case 'conditionnot':
                 $event->setInstance($this->buildNotCondition($event->getData(), $metaModel));
                 return;
+            case 'conditionpropertynotpublished':
+                $event->setInstance($this->buildBooleanCondition(false));
+                return;
             default:
         }
     }
@@ -254,5 +257,17 @@ class DefaultPropertyConditionCreator
         }
 
         return $result;
+    }
+
+    /**
+     * Create a boolean condition.
+     *
+     * @param bool $value Determine the state of the boolean condition.
+     *
+     * @return BooleanCondition
+     */
+    private function buildBooleanCondition($value)
+    {
+        return new BooleanCondition($value);
     }
 }
