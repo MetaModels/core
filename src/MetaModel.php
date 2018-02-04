@@ -922,8 +922,8 @@ class MetaModel implements IMetaModel
         $builder = $this->getConnection()->createQueryBuilder();
 
         $builder
-            ->update($this->getTableName())
-            ->set('table.' . $strColumn, is_array($varData) ? serialize($varData) : $varData)
+            ->update($this->getTableName(), 'v2')
+            ->set('v2.' . $strColumn, is_array($varData) ? serialize($varData) : $varData)
             ->where($builder->expr()->in('v2.id', ':ids'))
             ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
             ->execute();
