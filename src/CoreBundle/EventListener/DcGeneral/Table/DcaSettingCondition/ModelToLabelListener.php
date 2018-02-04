@@ -83,13 +83,17 @@ class ModelToLabelListener extends AbstractListener
 
         $environment    = $event->getEnvironment();
         $model          = $event->getModel();
-        $metaModel     = $this->getMetaModel($environment);
+        $metaModel      = $this->getMetaModel($environment);
         $attribute      = $metaModel->getAttributeById($model->getProperty('attr_id'));
         $type           = $model->getProperty('type');
         $parameterValue = (is_array($model->getProperty('value'))
             ? implode(', ', $model->getProperty('value'))
             : $model->getProperty('value'));
-        $name           = $this->translator->trans('tl_metamodel_dcasetting_condition.conditionnames.' . $type, [], 'contao_tl_metamodel_dcasetting_condition');
+        $name = $this->translator->trans(
+            'tl_metamodel_dcasetting_condition.conditionnames.' . $type,
+            [],
+            'contao_tl_metamodel_dcasetting_condition'
+        );
 
         $image = $GLOBALS['METAMODELS']['attributes'][$type]['image'];
         if (!$image || !file_exists(TL_ROOT . '/' . $image)) {
@@ -123,7 +127,11 @@ class ModelToLabelListener extends AbstractListener
      */
     private function getLabelText($type)
     {
-        $label = $this->translator->trans('tl_metamodel_dcasetting_condition.typedesc.' . $type, [], 'contao_tl_metamodel_dcasetting_condition');
+        $label = $this->translator->trans(
+            'tl_metamodel_dcasetting_condition.typedesc.' . $type,
+            [],
+            'contao_tl_metamodel_dcasetting_condition'
+        );
         if ($label == 'tl_metamodel_dcasetting_condition.typedesc.' . $type) {
             $label = $this->translator->trans(
                 'tl_metamodel_dcasetting_condition.typedesc._default_',

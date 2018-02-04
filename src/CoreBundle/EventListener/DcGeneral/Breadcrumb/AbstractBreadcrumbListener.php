@@ -31,6 +31,8 @@ use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 abstract class AbstractBreadcrumbListener
 {
     /**
+     * The breadcrumb store factory.
+     *
      * @var BreadcrumbStoreFactory
      */
     private $storeFactory;
@@ -53,7 +55,7 @@ abstract class AbstractBreadcrumbListener
         AbstractBreadcrumbListener $parent = null
     ) {
         $this->storeFactory = $storeFactory;
-        $this->parent      = $parent;
+        $this->parent       = $parent;
     }
 
     /**

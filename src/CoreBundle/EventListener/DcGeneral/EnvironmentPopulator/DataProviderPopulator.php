@@ -96,7 +96,7 @@ class DataProviderPopulator
             $providerInstance = $environment->getDataProvider($provider->getName());
             if ($providerInstance instanceof Driver) {
                 $initialization = $provider->getInitializationData();
-                $metaModel = $this->factory->getMetaModel($initialization['source']);
+                $metaModel      = $this->factory->getMetaModel($initialization['source']);
                 $providerInstance->setBaseConfig(
                     array_merge($initialization, ['metaModel' => $metaModel])
                 );

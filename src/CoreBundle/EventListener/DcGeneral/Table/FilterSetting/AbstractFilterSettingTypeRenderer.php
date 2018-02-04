@@ -40,6 +40,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 abstract class AbstractFilterSettingTypeRenderer
 {
     /**
+     * The filter setting factory.
+     *
      * @var IFilterSettingFactory
      */
     private $factory;

@@ -72,4 +72,3 @@ class RichTextOptionListener extends AbstractAbstainingListener
         $event->setOptions($configs);
     }
 }
-

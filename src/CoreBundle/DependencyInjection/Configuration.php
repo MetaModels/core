@@ -64,7 +64,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('metamodels');
+        $rootNode    = $treeBuilder->root('metamodels');
 
         $rootNode
             ->children()
@@ -95,7 +95,7 @@ class Configuration implements ConfigurationInterface
     /**
      * Resolves a path.
      *
-     * @param string $value
+     * @param string $value The path.
      *
      * @return string
      */

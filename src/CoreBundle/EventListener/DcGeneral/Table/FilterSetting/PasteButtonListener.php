@@ -33,6 +33,8 @@ use MetaModels\Filter\Setting\IFilterSettingFactory;
 class PasteButtonListener
 {
     /**
+     * The filter setting factory.
+     *
      * @var IFilterSettingFactory
      */
     private $filterFactory;

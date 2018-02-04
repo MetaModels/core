@@ -55,7 +55,7 @@ class DataProviderBuilder
      * Create a new instance.
      *
      * @param ViewCombination $viewCombination The view combinations.
-     * @param IFactory         $factory          The factory.
+     * @param IFactory        $factory         The factory.
      */
     public function __construct(ViewCombination $viewCombination, IFactory $factory)
     {

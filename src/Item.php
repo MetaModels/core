@@ -77,11 +77,13 @@ class Item implements IItem
         $this->dispatcher = $dispatcher;
 
         if (null === $dispatcher) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 'Not passing the event dispatcher as 3rd argument to "' . __METHOD__ . '" is deprecated ' .
                 'and will cause an error in MetaModels 3.0',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
         }
     }
 
@@ -92,10 +94,12 @@ class Item implements IItem
      */
     public function getServiceContainer()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated and will get removed in MetaModels 3.0.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
         return $this->getMetaModel()->getServiceContainer();
     }
 

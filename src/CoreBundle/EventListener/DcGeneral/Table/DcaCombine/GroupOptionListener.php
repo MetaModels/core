@@ -39,7 +39,7 @@ class GroupOptionListener
     /**
      * Create a new instance.
      *
-     * @param Connection $connection
+     * @param Connection $connection The connection.
      */
     public function __construct(Connection $connection)
     {
@@ -72,7 +72,7 @@ class GroupOptionListener
             ->execute()
             ->fetchAll(\PDO::FETCH_ASSOC);
 
-        $result = [];
+        $result     = [];
         $result[-1] = $event->getEnvironment()->getTranslator()->translate(
             $isBackend ? 'sysadmin' : 'anonymous',
             'tl_metamodel_dca_combine'

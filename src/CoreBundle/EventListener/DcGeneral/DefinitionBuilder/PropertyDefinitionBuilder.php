@@ -117,7 +117,7 @@ class PropertyDefinitionBuilder
                 $metaModel->getAttribute('vargroup'),
                 $inputScreen->getProperty('vargroup')['info']
             );
-            */
+           */
         }
 
         $properties = [];

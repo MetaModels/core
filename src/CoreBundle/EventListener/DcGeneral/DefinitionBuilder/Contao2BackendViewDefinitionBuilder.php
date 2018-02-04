@@ -101,10 +101,10 @@ class Contao2BackendViewDefinitionBuilder
     /**
      * Create a new instance.
      *
-     * @param ViewCombination          $viewCombination      The view combinations.
-     * @param IFactory                 $factory              The MetaModels factory.
-     * @param IRenderSettingFactory    $renderSettingFactory The render setting factory.
-     * @param IconBuilder              $iconBuilder          The icon builder.
+     * @param ViewCombination       $viewCombination      The view combinations.
+     * @param IFactory              $factory              The MetaModels factory.
+     * @param IRenderSettingFactory $renderSettingFactory The render setting factory.
+     * @param IconBuilder           $iconBuilder          The icon builder.
      */
     public function __construct(
         ViewCombination $viewCombination,

@@ -46,7 +46,7 @@ class AttributeOptionsListener extends AbstractListener
         $metaModel = $this->getMetaModelFromModel($event->getModel());
 
         foreach ($metaModel->getAttributes() as $attribute) {
-            $typeName              = $attribute->get('type');
+            $typeName                      = $attribute->get('type');
             $result[$attribute->get('id')] = $attribute->getName() . ' [' . $typeName . ']';
         }
 

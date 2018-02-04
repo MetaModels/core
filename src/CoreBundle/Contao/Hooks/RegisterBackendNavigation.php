@@ -62,10 +62,10 @@ class RegisterBackendNavigation
     /**
      * Create a new instance.
      *
-     * @param TranslatorInterface   $translator
-     * @param RequestStack          $requestStack
-     * @param UrlGeneratorInterface $urlGenerator
-     * @param ViewCombination       $viewCombination
+     * @param TranslatorInterface   $translator      The translator.
+     * @param RequestStack          $requestStack    The request stack.
+     * @param UrlGeneratorInterface $urlGenerator    The url generator.
+     * @param ViewCombination       $viewCombination The view combination.
      */
     public function __construct(
         TranslatorInterface $translator,
@@ -167,6 +167,8 @@ class RegisterBackendNavigation
     }
 
     /**
+     * Determine if is active.
+     *
      * @param string $route  The route name.
      * @param array  $params The route parameters.
      *
@@ -179,7 +181,7 @@ class RegisterBackendNavigation
         ) {
             return false;
         }
-        $request = $this->requestStack->getCurrentRequest();
+        $request    = $this->requestStack->getCurrentRequest();
         $attributes = $request->attributes->get('_route_params');
         $query      = $request->query;
         foreach ($params as $param => $value) {

@@ -62,6 +62,8 @@ class ViewCombinationBuilder
      * @param string   $userType   The user type ('fe' or 'be').
      *
      * @return array|null
+     *
+     * @throws \InvalidArgumentException Throws unknown user type.
      */
     public function getCombinationsForUser($userGroups, $userType)
     {

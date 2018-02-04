@@ -54,9 +54,9 @@ class BreadcrumbStoreFactory
     /**
      * Create a new instance.
      *
-     * @param IconBuilder         $iconBuilder The icon builder.
-     * @param TranslatorInterface $translator
-     * @param RequestStack        $requestStack
+     * @param IconBuilder         $iconBuilder  The icon builder.
+     * @param TranslatorInterface $translator   The translator.
+     * @param RequestStack        $requestStack The request stack.
      */
     public function __construct(IconBuilder $iconBuilder, TranslatorInterface $translator, RequestStack $requestStack)
     {

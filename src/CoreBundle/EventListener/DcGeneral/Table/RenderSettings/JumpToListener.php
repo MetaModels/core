@@ -44,11 +44,15 @@ class JumpToListener extends AbstractAbstainingListener
     private $factory;
 
     /**
+     * The connection.
+     *
      * @var Connection
      */
     private $connection;
 
     /**
+     * The translator.
+     *
      * @var TranslatorInterface
      */
     private $translator;
@@ -93,8 +97,8 @@ class JumpToListener extends AbstractAbstainingListener
         $newValues = [];
         $languages = $extra['columnFields']['langcode']['options'];
         foreach (array_keys($languages) as $key) {
-            $newValue  = '';
-            $filter = 0;
+            $newValue = '';
+            $filter   = 0;
             if ($value) {
                 foreach ($value as $arr) {
                     if (!is_array($arr)) {
@@ -103,8 +107,8 @@ class JumpToListener extends AbstractAbstainingListener
 
                     // Set the new value and exit the loop.
                     if (array_search($key, $arr) !== false) {
-                        $newValue  = '{{link_url::'.$arr['value'].'}}';
-                        $filter = $arr['filter'];
+                        $newValue = '{{link_url::' . $arr['value'] . '}}';
+                        $filter   = $arr['filter'];
                         break;
                     }
                 }
@@ -159,8 +163,9 @@ class JumpToListener extends AbstractAbstainingListener
             return;
         }
 
-        $model      = $event->getModel();
-        $metaModel  = $this->factory->getMetaModel($this->factory->translateIdToMetaModelName($model->getProperty('pid')));
+        $model     = $event->getModel();
+        $metaModel =
+            $this->factory->getMetaModel($this->factory->translateIdToMetaModelName($model->getProperty('pid')));
 
         $extra = $event->getProperty()->getExtra();
 

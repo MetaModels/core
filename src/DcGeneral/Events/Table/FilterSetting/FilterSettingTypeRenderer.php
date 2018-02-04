@@ -28,7 +28,8 @@ use MetaModels\IMetaModelsServiceContainer;
 /**
  * Handles rendering of model from tl_metamodel_filtersetting.
  *
- * @deprecated Will get removed in 3.0 - use MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting\AbstractFilterSettingTypeRenderer
+ * @deprecated Will get removed in 3.0 -
+ * use MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting\AbstractFilterSettingTypeRenderer
  */
 abstract class FilterSettingTypeRenderer extends AbstractFilterSettingTypeRenderer
 {

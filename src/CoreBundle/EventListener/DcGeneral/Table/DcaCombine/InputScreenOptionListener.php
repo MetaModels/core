@@ -39,7 +39,7 @@ class InputScreenOptionListener
     /**
      * Create a new instance.
      *
-     * @param Connection $connection
+     * @param Connection $connection The connection.
      */
     public function __construct(Connection $connection)
     {

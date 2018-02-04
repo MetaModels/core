@@ -30,7 +30,7 @@ use MetaModels\IMetaModel;
 
 /**
  * This provides a way to obtain a MetaModel.
-*/
+ */
 abstract class AbstractListener extends AbstractAbstainingListener
 {
     /**
@@ -60,8 +60,8 @@ abstract class AbstractListener extends AbstractAbstainingListener
         Connection $connection
     ) {
         parent::__construct($scopeDeterminator);
-        $this->factory           = $factory;
-        $this->connection        = $connection;
+        $this->factory    = $factory;
+        $this->connection = $connection;
     }
 
     /**

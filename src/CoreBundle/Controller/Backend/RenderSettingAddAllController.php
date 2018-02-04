@@ -32,6 +32,8 @@ use Symfony\Component\HttpFoundation\Response;
 class RenderSettingAddAllController extends AbstractAddAllController
 {
     /**
+     * Invoke this.
+     *
      * @param string  $metaModel     The MetaModel name.
      * @param string  $renderSetting The render setting id.
      * @param Request $request       The request.

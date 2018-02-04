@@ -41,7 +41,7 @@ class DuplicateModel
     /**
      * Create a new instance.
      *
-     * @param IFactory $factory
+     * @param IFactory $factory The factory.
      */
     public function __construct(IFactory $factory)
     {

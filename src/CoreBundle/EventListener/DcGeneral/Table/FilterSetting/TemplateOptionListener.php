@@ -30,6 +30,8 @@ use MetaModels\BackendIntegration\TemplateList;
 class TemplateOptionListener
 {
     /**
+     * The template list.
+     *
      * @var TemplateList
      */
     private $templateList;

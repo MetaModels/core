@@ -73,8 +73,8 @@ class PaletteRestrictionListener
             }
 
             $this->buildMetaPaletteConditions(
-                $palette, (array)
-                $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes']
+                $palette,
+                (array) $GLOBALS['TL_DCA']['tl_metamodel_rendersetting']['metapalettes']
             );
         }
     }

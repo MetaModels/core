@@ -60,13 +60,12 @@ class BaseSimple extends Base implements ISimple
      *
      * @param IMetaModel       $objMetaModel     The MetaModel instance this attribute belongs to.
      *
-     * @param Connection       $connection       The database connection.
-     *
-     * @param TableManipulator $tableManipulator Table manipulator instance.
-     *
      * @param array            $arrData          The information array, for attribute information, refer to
      *                                           documentation of table tl_metamodel_attribute and documentation of the
      *                                           certain attribute classes for information what values are understood.
+     * @param Connection       $connection       The database connection.
+     *
+     * @param TableManipulator $tableManipulator Table manipulator instance.
      */
     public function __construct(
         IMetaModel $objMetaModel,
@@ -77,18 +76,22 @@ class BaseSimple extends Base implements ISimple
         parent::__construct($objMetaModel, $arrData);
 
         if (null === $connection) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 'Connection is missing. It has to be passed in the constructor. Fallback will be dropped.',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
             $connection = System::getContainer()->get('database_connection');
         }
 
         if (null === $tableManipulator) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 'Table manipulator is missing. It has to be passed in the constructor. Fallback will be dropped.',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
 
             $tableManipulator = System::getContainer()->get('metamodels.table_manipulator');
         }

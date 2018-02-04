@@ -50,7 +50,7 @@ class ItemRendererListener
     /**
      * Create a new instance.
      *
-     * @param IRenderSettingFactory $renderSettingFactory
+     * @param IRenderSettingFactory $renderSettingFactory The render setting factory.
      */
     public function __construct(IRenderSettingFactory $renderSettingFactory)
     {
@@ -135,7 +135,10 @@ class ItemRendererListener
         $nativeItem = $model->getItem();
         $metaModel  = $nativeItem->getMetaModel();
 
-        $renderSetting = $this->renderSettingFactory->createCollection($metaModel, $definition->getMetaModelDefinition()->getActiveRenderSetting());
+        $renderSetting = $this->renderSettingFactory->createCollection(
+            $metaModel,
+            $definition->getMetaModelDefinition()->getActiveRenderSetting()
+        );
 
         if (!$renderSetting) {
             return;
@@ -176,7 +179,10 @@ class ItemRendererListener
 
         $item          = $parentModel->getItem();
         $metaModel     = $item->getMetaModel();
-        $renderSetting = $this->renderSettingFactory->createCollection($metaModel, $definition->getMetaModelDefinition()->getActiveRenderSetting());
+        $renderSetting = $this->renderSettingFactory->createCollection(
+            $metaModel,
+            $definition->getMetaModelDefinition()->getActiveRenderSetting()
+        );
         $additional    = array();
 
         foreach ($renderSetting->getSettingNames() as $name) {

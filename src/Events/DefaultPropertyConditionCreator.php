@@ -222,6 +222,8 @@ class DefaultPropertyConditionCreator
      * @param IMetaModel $metaModel The MetaModel instance.
      *
      * @return NotCondition
+     *
+     * @throws \InvalidArgumentException Throws NOT conditions may only contain one child given.
      */
     private function buildNotCondition(array $condition, IMetaModel $metaModel)
     {
@@ -243,6 +245,8 @@ class DefaultPropertyConditionCreator
      * @param IMetaModel $metaModel The MetaModel instance.
      *
      * @return PropertyConditionInterface
+     *
+     * @throws \RuntimeException Throws condition of type could not be transformed to an instance.
      */
     private function convertCondition($condition, IMetaModel $metaModel)
     {

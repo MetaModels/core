@@ -63,7 +63,10 @@ class BreadcrumbFilterListener extends AbstractBreadcrumbListener
         $builder = UrlBuilder::fromUrl($elements->getUri())
             ->setQueryParameter('do', 'metamodels')
             ->setQueryParameter('table', 'tl_metamodel_filter')
-            ->setQueryParameter('pid', ModelId::fromValues('tl_metamodel', $elements->getId('tl_metamodel'))->getSerialized())
+            ->setQueryParameter(
+                'pid',
+                ModelId::fromValues('tl_metamodel', $elements->getId('tl_metamodel'))->getSerialized()
+            )
             ->unsetQueryParameter('act')
             ->unsetQueryParameter('id');
 

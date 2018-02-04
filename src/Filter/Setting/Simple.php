@@ -76,10 +76,12 @@ abstract class Simple implements ISimple
      */
     public function getServiceContainer()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated and will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
         return $this->getMetaModel()->getServiceContainer();
     }
 
@@ -92,10 +94,12 @@ abstract class Simple implements ISimple
      */
     public function getEventDispatcher()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated and will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
         return $this->getServiceContainer()->getEventDispatcher();
     }
 

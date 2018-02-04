@@ -57,7 +57,13 @@ class BreadcrumbDcaSettingConditionListener extends AbstractBreadcrumbListener
         $builder = UrlBuilder::fromUrl($elements->getUri())
             ->setQueryParameter('do', 'metamodels')
             ->setQueryParameter('table', 'tl_metamodel_dcasetting')
-            ->setQueryParameter('pid', ModelId::fromValues('tl_metamodel_dcasetting', $elements->getId('tl_metamodel_dcasetting'))->getSerialized())
+            ->setQueryParameter(
+                'pid',
+                ModelId::fromValues(
+                    'tl_metamodel_dcasetting',
+                    $elements->getId('tl_metamodel_dcasetting')
+                )->getSerialized()
+            )
             ->unsetQueryParameter('act')
             ->unsetQueryParameter('id');
 
@@ -86,7 +92,7 @@ class BreadcrumbDcaSettingConditionListener extends AbstractBreadcrumbListener
         $setting = $this->getRow($settingId, 'tl_metamodel_dcasetting');
 
         if ($setting->dcatype == 'attribute') {
-            $attribute = (object) $this->getRow($setting->attr_id, 'tl_metamodel_attribute');
+            $attribute     = (object) $this->getRow($setting->attr_id, 'tl_metamodel_attribute');
             $metaModelName = $this->factory->translateIdToMetaModelName($attribute->pid);
             $attribute     = $this->factory->getMetaModel($metaModelName)->getAttributeById($attribute->id);
             if ($attribute) {

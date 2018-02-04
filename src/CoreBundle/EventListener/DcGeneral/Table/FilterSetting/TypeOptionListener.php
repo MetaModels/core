@@ -30,6 +30,8 @@ use MetaModels\Filter\Setting\IFilterSettingFactory;
 class TypeOptionListener
 {
     /**
+     * The filter setting factory.
+     *
      * @var IFilterSettingFactory
      */
     private $filterFactory;

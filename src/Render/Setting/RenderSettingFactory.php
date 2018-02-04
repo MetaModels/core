@@ -94,7 +94,9 @@ class RenderSettingFactory implements IRenderSettingFactory
     /**
      * Set the service container.
      *
-     * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
+     * @param IMetaModelsServiceContainer $serviceContainer  The service container to use.
+     *
+     * @param bool                        $deprecationNotice Determine deprecated notice.
      *
      * @return RenderSettingFactory
      *
@@ -103,20 +105,24 @@ class RenderSettingFactory implements IRenderSettingFactory
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, $deprecationNotice = true)
     {
         if ($deprecationNotice) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 '"' .__METHOD__ . '" is deprecated and will get removed.',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
         }
         $this->serviceContainer = $serviceContainer;
 
         if ($this->eventDispatcher->hasListeners(MetaModelsEvents::RENDER_SETTING_FACTORY_CREATE)) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 'Event "' .
                 MetaModelsEvents::RENDER_SETTING_FACTORY_CREATE .
                 '" is deprecated - register your factories via the service container.',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
 
             $this->serviceContainer->getEventDispatcher()->dispatch(
                 MetaModelsEvents::RENDER_SETTING_FACTORY_CREATE,
@@ -136,10 +142,12 @@ class RenderSettingFactory implements IRenderSettingFactory
      */
     public function getServiceContainer()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated - use the services from the service container.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
         return $this->serviceContainer;
     }
 

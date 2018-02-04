@@ -91,13 +91,14 @@ class MetaModelsCoreExtension extends Extension
     }
 
     /**
+     * Build the cache service.
      *
-     * @param ContainerBuilder $container
-     * @param                  $config
+     * @param ContainerBuilder $container The container builder.
+     * @param array            $config    The configuration.
      *
      * @return void
      */
-    private function buildCacheService(ContainerBuilder $container, $config)
+    private function buildCacheService(ContainerBuilder $container, array $config)
     {
         // if cache disabled, swap it out with the dummy cache.
         if (!$config['enable_cache']) {

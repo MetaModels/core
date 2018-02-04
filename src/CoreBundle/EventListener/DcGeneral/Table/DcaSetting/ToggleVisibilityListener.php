@@ -35,11 +35,15 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class ToggleVisibilityListener extends AbstractAbstainingListener
 {
     /**
+     * The token storage.
+     *
      * @var TokenStorageInterface
      */
     private $tokenStorage;
 
     /**
+     * The view combination.
+     *
      * @var ViewCombination
      */
     private $viewCombination;
@@ -52,6 +56,8 @@ class ToggleVisibilityListener extends AbstractAbstainingListener
     private $cache;
 
     /**
+     * The authentication resolver.
+     *
      * @var AuthenticationTrustResolverInterface
      */
     private $authenticationTrustResolver;
@@ -88,6 +94,8 @@ class ToggleVisibilityListener extends AbstractAbstainingListener
      * This rebuilds the screen cache when the visibility of a property is changed.
      *
      * @param ActionEvent $event The event.
+     *
+     * @return void
      */
     public function handle(ActionEvent $event)
     {

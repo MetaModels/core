@@ -109,10 +109,12 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getFactory()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
 
         if (is_callable($this->factory)) {
             $this->factory = call_user_func($this->factory);
@@ -141,10 +143,12 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getAttributeFactory()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
 
         if (is_callable($this->attributeFactory)) {
             $this->attributeFactory = call_user_func($this->attributeFactory);
@@ -173,10 +177,12 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getFilterFactory()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
 
         if (is_callable($this->filterFactory)) {
             $this->filterFactory = call_user_func($this->filterFactory);
@@ -205,10 +211,12 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getRenderSettingFactory()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
 
         if (is_callable($this->renderFactory)) {
             $this->renderFactory = call_user_func($this->renderFactory);
@@ -237,10 +245,12 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getEventDispatcher()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
 
         if (is_callable($this->dispatcher)) {
             $this->dispatcher = call_user_func($this->dispatcher);
@@ -268,10 +278,12 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getDatabase()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
 
         if (is_callable($this->database)) {
             $this->database = call_user_func($this->database);
@@ -287,10 +299,12 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getCache()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
 
         if (is_callable($this->cache)) {
             $this->cache = call_user_func($this->cache);
@@ -320,10 +334,12 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function setService($service, $serviceName = null)
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
         if ($serviceName === null) {
             if (!is_object($service) || $service instanceof \Closure) {
                 throw new \InvalidArgumentException(
@@ -344,10 +360,12 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getService($serviceName)
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
 
         // Hacked in here as initialization is dead now.
         if (!isset($this->services[(string) $serviceName]) && 'metamodels-view-combinations' === $serviceName) {

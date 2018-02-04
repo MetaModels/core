@@ -31,7 +31,7 @@ use MetaModels\IFactory;
 
 /**
  * This provides a way to obtain a MetaModel.
-*/
+ */
 abstract class AbstractListener
 {
     /**
@@ -78,6 +78,8 @@ abstract class AbstractListener
      * @param EnvironmentInterface $interface The environment.
      *
      * @return \MetaModels\IMetaModel
+     *
+     * @throws \RuntimeException Throws if could not retrieve metamodel.
      */
     public function getMetaModel(EnvironmentInterface $interface)
     {

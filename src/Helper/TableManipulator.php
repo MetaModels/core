@@ -26,10 +26,10 @@ namespace MetaModels\Helper;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\InputProvider;
 use Doctrine\DBAL\Connection;
+use MetaModels\Exceptions\Database\ColumnDoesNotExistException;
 use MetaModels\Exceptions\Database\ColumnExistsException;
 use MetaModels\Exceptions\Database\InvalidColumnNameException;
 use MetaModels\Exceptions\Database\InvalidTableNameException;
-use MetaModels\Exceptions\Database\ColumnDoesNotExistException;
 use MetaModels\Exceptions\Database\TableDoesNotExistException;
 use MetaModels\Exceptions\Database\TableExistsException;
 
@@ -160,9 +160,9 @@ class TableManipulator
     /**
      * TableManipulator constructor.
      *
-     * @param Connection          $connection    Database connection.
-     * @param array               $systemColumns System columns that always are defined in a MetaModel table and are not
-     *                                           attributes.
+     * @param Connection $connection    Database connection.
+     * @param array      $systemColumns System columns that always are defined in a MetaModel table and are not
+     *                                  attributes.
      */
     public function __construct(Connection $connection, array $systemColumns)
     {

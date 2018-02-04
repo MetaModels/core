@@ -79,11 +79,15 @@ abstract class AbstractContentElementAndModuleCallback
     private $connection;
 
     /**
+     * The template list.
+     *
      * @var TemplateList
      */
     private $templateList;
 
     /**
+     * The request stack.
+     *
      * @var RequestStack
      */
     private $requestStack;

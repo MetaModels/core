@@ -123,7 +123,7 @@ class DatabaseBackedListener
      */
     public function getMetaModelNameFromId(GetMetaModelNameFromIdEvent $event)
     {
-        $metaModelId =$event->getMetaModelId();
+        $metaModelId = $event->getMetaModelId();
         if (array_key_exists($metaModelId, $this->instancesById)) {
             $event->setMetaModelName($this->instancesById[$metaModelId]->getTableName());
 
@@ -174,7 +174,9 @@ class DatabaseBackedListener
             return false;
         }
 
+        // @codingStandardsIgnoreStart
         @trigger_error('Creating MetaModel instances via global factories is deprecated.', E_USER_DEPRECATED);
+        // @codingStandardsIgnoreEnd
 
         $factoryClass = $GLOBALS['METAMODELS']['factories'][$name];
         $event->setMetaModel(call_user_func_array(array($factoryClass, 'createInstance'), array($arrData)));

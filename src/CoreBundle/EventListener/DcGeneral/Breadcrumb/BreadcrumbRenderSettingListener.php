@@ -55,7 +55,13 @@ class BreadcrumbRenderSettingListener extends AbstractBreadcrumbListener
         $builder = UrlBuilder::fromUrl($elements->getUri())
             ->setQueryParameter('do', 'metamodels')
             ->setQueryParameter('table', 'tl_metamodel_rendersetting')
-            ->setQueryParameter('pid', ModelId::fromValues('tl_metamodel_rendersettings', $elements->getId('tl_metamodel_rendersettings'))->getSerialized())
+            ->setQueryParameter(
+                'pid',
+                ModelId::fromValues(
+                    'tl_metamodel_rendersettings',
+                    $elements->getId('tl_metamodel_rendersettings')
+                )->getSerialized()
+            )
             ->unsetQueryParameter('act')
             ->unsetQueryParameter('id');
 

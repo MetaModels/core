@@ -47,8 +47,8 @@ class PanelLayoutWizardListener
     /**
      * Create a new instance.
      *
-     * @param IconBuilder           $iconBuilder
-     * @param UrlGeneratorInterface $urlGenerator
+     * @param IconBuilder           $iconBuilder  The icon builder.
+     * @param UrlGeneratorInterface $urlGenerator The url generator.
      */
     public function __construct(IconBuilder $iconBuilder, UrlGeneratorInterface $urlGenerator)
     {

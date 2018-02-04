@@ -35,6 +35,8 @@ use Symfony\Component\Translation\TranslatorInterface;
 class DisableReadOnlyListener extends AbstractListener
 {
     /**
+     * The translator.
+     *
      * @var TranslatorInterface
      */
     private $translator;
@@ -45,7 +47,7 @@ class DisableReadOnlyListener extends AbstractListener
      * @param RequestScopeDeterminator $scopeDeterminator The scope determinator.
      * @param IFactory                 $factory           The MetaModel factory.
      * @param Connection               $connection        The database connection.
-     * @param TranslatorInterface      $translator
+     * @param TranslatorInterface      $translator        The translator.
      */
     public function __construct(
         RequestScopeDeterminator $scopeDeterminator,

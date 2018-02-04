@@ -69,7 +69,8 @@ class SubSystemBoot
                     ->get('logger')
                     ->error(
                         'MetaModels startup interrupted. ' .
-                        ' Not all MetaModels tables have been created (missing: ' . $table . ').');
+                        ' Not all MetaModels tables have been created (missing: ' . $table . ').'
+                    );
                 return;
             }
         }

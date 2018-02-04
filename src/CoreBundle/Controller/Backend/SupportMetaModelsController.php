@@ -66,7 +66,8 @@ class SupportMetaModelsController
      * @param string              $github     Path to the github contributor json list.
      * @param string              $transifex  Path to the transifex contributor json list.
      */
-    public function __construct(EngineInterface $templating, TranslatorInterface $translator, $github, $transifex) {
+    public function __construct(EngineInterface $templating, TranslatorInterface $translator, $github, $transifex)
+    {
         $this->templating = $templating;
         $this->translator = $translator;
         $this->github     = $github;
@@ -74,6 +75,8 @@ class SupportMetaModelsController
     }
 
     /**
+     * Invoke this.
+     *
      * @return Response The template data.
      */
     public function __invoke()

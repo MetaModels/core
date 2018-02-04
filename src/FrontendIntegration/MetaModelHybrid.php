@@ -134,14 +134,13 @@ abstract class MetaModelHybrid extends Hybrid
     public function generate()
     {
         if (TL_MODE == 'BE') {
-
             $strInfo = '';
             if ($this->metamodel) {
                 // Add CSS file.
                 $GLOBALS['TL_CSS'][] = 'system/modules/metamodels/assets/css/style.css';
 
                 // Retrieve name of MetaModels.
-                $infoTemplate  =
+                $infoTemplate =
                     '<div class="wc_info tl_gray"><span class="wc_label"><abbr title="%s">%s:</abbr></span> %s</div>';
 
                 $factory       = $this->getFactory();
@@ -203,7 +202,7 @@ abstract class MetaModelHybrid extends Hybrid
             $objTemplate->wildcard = $this->wildCardName . $strInfo;
             $objTemplate->title    = $this->headline;
             $objTemplate->id       = $this->id;
-            $objTemplate->link     = ($this->typePrefix == 'mod_'? 'FE-Modul: ' : '').$this->name;
+            $objTemplate->link     = ($this->typePrefix == 'mod_' ? 'FE-Modul: ' : '') . $this->name;
             $objTemplate->href     = sprintf($this->wildCardLink, $this->id);
 
             return $objTemplate->parse();

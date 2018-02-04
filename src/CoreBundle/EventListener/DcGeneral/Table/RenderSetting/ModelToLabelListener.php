@@ -35,16 +35,22 @@ use Symfony\Component\Translation\TranslatorInterface;
 class ModelToLabelListener extends AbstractListener
 {
     /**
+     * The attribute factory.
+     *
      * @var IAttributeFactory
      */
     private $attributeFactory;
 
     /**
+     * The icon builder.
+     *
      * @var IconBuilder
      */
     private $iconBuilder;
 
     /**
+     * The translator.
+     *
      * @var TranslatorInterface
      */
     private $translator;
@@ -57,7 +63,7 @@ class ModelToLabelListener extends AbstractListener
      * @param Connection               $connection        The database connection.
      * @param IAttributeFactory        $attributeFactory  The attribute factory.
      * @param IconBuilder              $iconBuilder       The icon builder.
-     * @param TranslatorInterface      $translator
+     * @param TranslatorInterface      $translator        The translator.
      */
     public function __construct(
         RequestScopeDeterminator $scopeDeterminator,
@@ -91,15 +97,15 @@ class ModelToLabelListener extends AbstractListener
         $attribute = $metaModel->getAttributeById($model->getProperty('attr_id'));
 
         if ($attribute) {
-            $type  = $attribute->get('type');
-            $image = $this->iconBuilder->getBackendIconImageTag(
+            $type    = $attribute->get('type');
+            $image   = $this->iconBuilder->getBackendIconImageTag(
                 $this->attributeFactory->getIconForType($type),
                 $type,
                 '',
                 'bundles/metamodelscore/images/icons/fields.png'
             );
-            $name     = $attribute->getName();
-            $colName  = $attribute->getColName();
+            $name    = $attribute->getName();
+            $colName = $attribute->getColName();
         } else {
             $type    = $this->trans('error_unknown_id', [$model->getProperty('attr_id')]);
             $image   = $this->iconBuilder->getBackendIconImageTag('bundles/metamodelscore/images/icons/fields.png');

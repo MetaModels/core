@@ -24,6 +24,9 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb;
 use MetaModels\CoreBundle\Assets\IconBuilder;
 use Symfony\Component\Translation\TranslatorInterface;
 
+/**
+ * The breadcrumb store.
+ */
 class BreadcrumbStore
 {
     /**
@@ -78,9 +81,9 @@ class BreadcrumbStore
     /**
      * Push an entry.
      *
-     * @param $url
-     * @param $table
-     * @param $icon
+     * @param string $url   The url.
+     * @param string $table The table.
+     * @param string $icon  The icon.
      *
      * @return void
      */
@@ -153,7 +156,7 @@ class BreadcrumbStore
             return $table;
         }
         $shortTable = str_replace('tl_', '', $table);
-        $label      = $this->translator->trans( 'BRD.' . $shortTable, [], 'contao_default');
+        $label      = $this->translator->trans('BRD.' . $shortTable, [], 'contao_default');
         if ($label == $shortTable) {
             $shortTable = str_replace('tl_metamodel_', '', $table);
             return ucfirst($shortTable) . ' %s';

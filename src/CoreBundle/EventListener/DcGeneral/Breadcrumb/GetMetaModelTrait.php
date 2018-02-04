@@ -42,6 +42,8 @@ trait GetMetaModelTrait
      * @param string $metaModelId The MetaModel id.
      *
      * @return IMetaModel
+     *
+     * @throws \RuntimeException Throws if no factory set.
      */
     protected function getMetaModel($metaModelId)
     {

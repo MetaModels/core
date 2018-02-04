@@ -344,10 +344,12 @@ class CustomSql implements ISimple
                 break;
 
             case 'container':
+                // @codingStandardsIgnoreStart
                 @trigger_error(
                     'Getting filter values from the service container is deprecated, the container will get removed.',
                     E_USER_DEPRECATED
                 );
+                // @codingStandardsIgnoreEnd
                 return $this->getValueFromServiceContainer($valueName, $arguments);
 
             default:

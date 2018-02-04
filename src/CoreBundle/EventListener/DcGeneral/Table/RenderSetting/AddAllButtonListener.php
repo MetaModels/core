@@ -56,9 +56,9 @@ class AddAllButtonListener
     /**
      * Create a new instance.
      *
-     * @param Connection            $connection
-     * @param IFactory              $factory
-     * @param UrlGeneratorInterface $urlGenerator
+     * @param Connection            $connection   The connection.
+     * @param IFactory              $factory      The factory.
+     * @param UrlGeneratorInterface $urlGenerator The url generator.
      */
     public function __construct(Connection $connection, IFactory $factory, UrlGeneratorInterface $urlGenerator)
     {
@@ -97,7 +97,7 @@ class AddAllButtonListener
         $event->setHref(
             $this->urlGenerator->generate(
                 'metamodels.rendersetting.add_all',
-                ['metaModel'=> $name, 'renderSetting' => $renderSetting]
+                ['metaModel' => $name, 'renderSetting' => $renderSetting]
             )
         );
     }

@@ -31,6 +31,8 @@ use MetaModels\Filter\Setting\IFilterSettingFactory;
 class DefaultOptionListener
 {
     /**
+     * The filter setting factory.
+     *
      * @var IFilterSettingFactory
      */
     private $filterFactory;

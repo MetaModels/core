@@ -96,6 +96,8 @@ class SimpleQuery extends FilterRule
      * @param string     $idColumn    The column where the item id is stored in.
      * @param Connection $connection  The database to use.
      * @param array      $types       The types.
+     *
+     * @throws \RuntimeException Throws invalid id column.
      */
     public function __construct($queryString, $params = [], $idColumn = 'id', $connection = null, $types = [])
     {
@@ -133,6 +135,8 @@ class SimpleQuery extends FilterRule
      *
      * @return mixed|object
      *
+     * @throws \RuntimeException Throws could not obtain doctrine connection.
+     *
      * @deprecated To be removed in 3.0 - you should ALWAYS pass the proper connection.
      */
     private function sanitizeConnection($connection)
@@ -143,20 +147,24 @@ class SimpleQuery extends FilterRule
 
         // BC layer - we used to accept a Contao database instance here.
         if ($connection instanceof Database) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 '"' . __METHOD__ . '" now accepts doctrine instances - ' .
                 'passing Contao database instances is deprecated.',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
             $reflection = new \ReflectionProperty(Database::class, 'resConnection');
             $reflection->setAccessible(true);
             return $reflection->getValue($connection);
         }
         if (null === $connection) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 'You should pass a doctrine database connection to "' . __METHOD__ . '".',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
             $connection = System::getContainer()->get('database_connection');
         }
 

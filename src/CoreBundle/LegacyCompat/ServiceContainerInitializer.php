@@ -32,6 +32,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class ServiceContainerInitializer
 {
     /**
+     * The container.
+     *
      * @var ContainerInterface
      */
     private $container;

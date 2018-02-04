@@ -39,7 +39,7 @@ class AttributeAddingListener
     /**
      * Create a new instance.
      *
-     * @param IAttributeFactory $attributeFactory
+     * @param IAttributeFactory $attributeFactory The attribute factory.
      */
     public function __construct(IAttributeFactory $attributeFactory)
     {

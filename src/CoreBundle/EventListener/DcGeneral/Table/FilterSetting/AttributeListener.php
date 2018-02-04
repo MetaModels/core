@@ -32,6 +32,8 @@ use MetaModels\Filter\Setting\IFilterSettingFactory;
 class AttributeListener
 {
     /**
+     * The filter setting factory.
+     *
      * @var IFilterSettingFactory
      */
     private $filterFactory;

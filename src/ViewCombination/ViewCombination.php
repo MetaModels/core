@@ -46,11 +46,15 @@ class ViewCombination
     private $tokenStorage;
 
     /**
+     * The view combination.
+     *
      * @var ViewCombinationBuilder
      */
     private $builder;
 
     /**
+     * The input screen.
+     *
      * @var InputScreenInformationBuilder
      */
     private $inputScreens;
@@ -99,7 +103,7 @@ class ViewCombination
 
                 break;
             case ($user instanceof FrontendUser):
-                $mode = 'fe';
+                $mode   = 'fe';
                 $groups = $user->groups;
                 // Special case in combinations, anonymous frontend users have the implicit group id -1.
                 if (!$this->getUser()->id) {
@@ -109,7 +113,7 @@ class ViewCombination
                 break;
             default:
                 // Default handled as frontend anonymous.
-                $mode = 'fe';
+                $mode   = 'fe';
                 $groups = [-1];
         }
 
@@ -180,9 +184,13 @@ class ViewCombination
      */
     public function getChildrenOf($parentTable)
     {
-        $inputScreens = array_filter($this->getInputScreens(), function ($inputScreen) use ($parentTable){
-            return ($inputScreen['meta']['rendertype'] === 'ctable') && ($inputScreen['meta']['ptable'] === $parentTable);
-        });
+        $inputScreens = array_filter(
+            $this->getInputScreens(),
+            function ($inputScreen) use ($parentTable) {
+                return ($inputScreen['meta']['rendertype'] === 'ctable')
+                       && ($inputScreen['meta']['ptable'] === $parentTable);
+            }
+        );
 
         return $inputScreens;
     }
@@ -205,7 +213,7 @@ class ViewCombination
     }
 
     /**
-     *
+     * Get the input screens.
      *
      * @return array
      */

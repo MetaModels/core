@@ -62,7 +62,7 @@ class Factory implements IFactory
      */
     public function __construct(EventDispatcherInterface $dispatcher)
     {
-        $this->dispatcher       = $dispatcher;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -77,10 +77,12 @@ class Factory implements IFactory
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, $deprecationNotice = true)
     {
         if ($deprecationNotice) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 '"' .__METHOD__ . '" is deprecated and will get removed.',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
         }
 
         $this->serviceContainer = $serviceContainer;
@@ -97,10 +99,12 @@ class Factory implements IFactory
      */
     public function getServiceContainer()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated - use the services from the service container.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
         return $this->serviceContainer;
     }
 

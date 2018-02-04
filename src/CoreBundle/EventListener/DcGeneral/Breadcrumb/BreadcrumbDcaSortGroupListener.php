@@ -55,7 +55,11 @@ class BreadcrumbDcaSortGroupListener extends AbstractBreadcrumbListener
         $builder = UrlBuilder::fromUrl($elements->getUri())
             ->setQueryParameter('do', 'metamodels')
             ->setQueryParameter('table', 'tl_metamodel_dca_sortgroup')
-            ->setQueryParameter('pid', ModelId::fromValues('tl_metamodel_dca', $elements->getId('tl_metamodel_dca'))->getSerialized())
+            ->setQueryParameter(
+                'pid',
+                ModelId::fromValues('tl_metamodel_dca', $elements->getId('tl_metamodel_dca'))
+                    ->getSerialized()
+            )
             ->unsetQueryParameter('act')
             ->unsetQueryParameter('id');
 

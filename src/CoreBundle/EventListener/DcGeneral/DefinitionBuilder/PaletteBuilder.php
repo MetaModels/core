@@ -204,6 +204,8 @@ class PaletteBuilder
      * @param IMetaModel $metaModel The MetaModel instance.
      *
      * @return null|ConditionInterface
+     *
+     * @throws \RuntimeException Throws if condition type not be transformed to an instance.
      */
     private function buildCondition($condition, $metaModel)
     {

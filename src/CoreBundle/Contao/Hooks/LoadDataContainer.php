@@ -64,10 +64,10 @@ class LoadDataContainer
     /**
      * Create a new instance.
      *
-     * @param IFactory              $factory           The MetaModels factory.
-     * @param ViewCombination       $combination       The view combination provider.
-     * @param Adapter               $controllerAdapter The controller adapter to load languages and data containers.
-     * @param IconBuilder           $iconBuilder       The icon builder.
+     * @param IFactory        $factory           The MetaModels factory.
+     * @param ViewCombination $combination       The view combination provider.
+     * @param Adapter         $controllerAdapter The controller adapter to load languages and data containers.
+     * @param IconBuilder     $iconBuilder       The icon builder.
      */
     public function __construct(
         IFactory $factory,
@@ -75,10 +75,10 @@ class LoadDataContainer
         Adapter $controllerAdapter,
         IconBuilder $iconBuilder
     ) {
-        $this->factory      = $factory;
-        $this->combination  = $combination;
-        $this->controller   = $controllerAdapter;
-        $this->iconBuilder  = $iconBuilder;
+        $this->factory     = $factory;
+        $this->combination = $combination;
+        $this->controller  = $controllerAdapter;
+        $this->iconBuilder = $iconBuilder;
     }
 
     /**
@@ -131,8 +131,8 @@ class LoadDataContainer
         }
 
         $GLOBALS['TL_DCA'][$tableName] = array_replace_recursive(
-            (array)$GLOBALS['TL_DCA']['tl_metamodel_item'],
-            (array)$GLOBALS['TL_DCA'][$tableName]
+            (array) $GLOBALS['TL_DCA']['tl_metamodel_item'],
+            (array) $GLOBALS['TL_DCA'][$tableName]
         );
     }
 
@@ -163,7 +163,7 @@ class LoadDataContainer
             return;
         }
 
-        $parentDCA   = &$GLOBALS['TL_DCA'][$tableName];
+        $parentDCA = &$GLOBALS['TL_DCA'][$tableName];
 
         $this->controller->loadLanguageFile('default');
         foreach ($map[$tableName] as $metaModelTable => $inputScreen) {
@@ -182,13 +182,13 @@ class LoadDataContainer
                 }
             }
 
-            $operationName = 'edit_' . $metaModel->getTableName();
+            $operationName                                   = 'edit_' . $metaModel->getTableName();
             $parentDCA['list']['operations'][$operationName] = array
             (
-                'label'               => &$caption,
-                'href'                => 'table=' . $metaModelTable,
-                'icon'                => $this->iconBuilder->getBackendIcon($inputScreen['meta']['backendicon']),
-                'attributes'          => 'onclick="Backend.getScrollOffset()"',
+                'label'      => &$caption,
+                'href'       => 'table=' . $metaModelTable,
+                'icon'       => $this->iconBuilder->getBackendIcon($inputScreen['meta']['backendicon']),
+                'attributes' => 'onclick="Backend.getScrollOffset()"',
             );
 
             // Is the destination table a metamodel with variants?
@@ -200,20 +200,21 @@ class LoadDataContainer
 
             // Compatibility with DC_Table.
             if ($parentDCA['config']['dataContainer'] !== 'General') {
-                $idParameter = $parentDCA['list']['operations'][$operationName]['idparam'];
+                $idParameter                                                        =
+                    $parentDCA['list']['operations'][$operationName]['idparam'];
                 $parentDCA['list']['operations'][$operationName]['button_callback'] =
                     function ($row, $href, $label, $name, $icon, $attributes, $table) use ($idParameter) {
-                    return $this->buildChildOperationButton(
-                        $idParameter,
-                        $row['id'],
-                        $href,
-                        $label,
-                        $name,
-                        $icon,
-                        $attributes,
-                        $table
-                    );
-                };
+                        return $this->buildChildOperationButton(
+                            $idParameter,
+                            $row['id'],
+                            $href,
+                            $label,
+                            $name,
+                            $icon,
+                            $attributes,
+                            $table
+                        );
+                    };
             }
         }
     }

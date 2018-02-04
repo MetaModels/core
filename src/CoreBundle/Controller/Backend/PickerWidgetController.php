@@ -22,7 +22,6 @@
 namespace MetaModels\CoreBundle\Controller\Backend;
 
 use Contao\Backend;
-use Contao\BackendTemplate;
 use Contao\Controller;
 use Contao\Environment;
 use Contao\Input;
@@ -56,7 +55,8 @@ class PickerWidgetController
      * @param EngineInterface     $templating The twig engine.
      * @param TranslatorInterface $translator The translator.
      */
-    public function __construct(EngineInterface $templating, TranslatorInterface $translator) {
+    public function __construct(EngineInterface $templating, TranslatorInterface $translator)
+    {
         $this->templating = $templating;
         $this->translator = $translator;
     }
@@ -65,6 +65,8 @@ class PickerWidgetController
      * Render the picker.
      *
      * @return Response
+     *
+     * @throws \RuntimeException Throw field parameter error.
      */
     public function __invoke()
     {
@@ -131,4 +133,3 @@ class PickerWidgetController
         );
     }
 }
-

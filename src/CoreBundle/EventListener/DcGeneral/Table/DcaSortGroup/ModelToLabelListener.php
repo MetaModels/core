@@ -33,6 +33,8 @@ use Symfony\Component\Translation\TranslatorInterface;
 class ModelToLabelListener extends AbstractListener
 {
     /**
+     * The translator.
+     *
      * @var TranslatorInterface
      */
     private $translator;

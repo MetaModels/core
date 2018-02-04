@@ -93,20 +93,24 @@ class FilterSettingFactory implements IFilterSettingFactory
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, $deprecationNotice = true)
     {
         if ($deprecationNotice) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 '"' .__METHOD__ . '" is deprecated and will get removed.',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
         }
         $this->serviceContainer = $serviceContainer;
 
         if ($this->eventDispatcher->hasListeners(MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE)) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 'Event "' .
                 MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE .
                 '" is deprecated - register your attribute factories via the service container.',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
             $this->eventDispatcher->dispatch(
                 MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE,
                 new CreateFilterSettingFactoryEvent($this)
@@ -123,10 +127,12 @@ class FilterSettingFactory implements IFilterSettingFactory
      */
     public function getServiceContainer()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated - use the services from the service container.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
         return $this->serviceContainer;
     }
 

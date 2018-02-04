@@ -52,8 +52,7 @@ class ColNameValidationListener extends BaseListener
         IAttributeFactory $attributeFactory,
         IFactory $factory,
         TableManipulator $tableManipulator
-    )
-    {
+    ) {
         parent::__construct($scopeDeterminator, $attributeFactory, $factory);
         $this->tableManipulator = $tableManipulator;
     }

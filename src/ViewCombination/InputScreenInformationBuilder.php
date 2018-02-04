@@ -82,7 +82,7 @@ class InputScreenInformationBuilder
         $result = [];
         $keys   = array_flip($idList);
         foreach ($screens as $screen) {
-            $metaModelName = $keys[$screen['id']];
+            $metaModelName          = $keys[$screen['id']];
             $result[$metaModelName] = $this->prepareInputScreen($metaModelName, $screen);
         }
 
@@ -96,6 +96,8 @@ class InputScreenInformationBuilder
      * @param array  $screen    The screen meta data.
      *
      * @return array
+     *
+     * @throws \InvalidArgumentException Throws could not retrieve MetaModel.
      */
     private function prepareInputScreen($modelName, $screen)
     {
@@ -135,7 +137,7 @@ class InputScreenInformationBuilder
                     $converted[$key] = $value;
                 }
             } else {
-                $converted = array_slice($condition, 0);
+                $converted                      = array_slice($condition, 0);
                 $conditionMap[$condition['id']] = &$converted;
             }
             // Is on root level - add to setting now.
@@ -145,7 +147,7 @@ class InputScreenInformationBuilder
             }
             // Is a child, check if parent already added.
             if (!isset($conditionMap[$condition['pid']])) {
-                $temp = ['children' => []];
+                $temp                            = ['children' => []];
                 $conditionMap[$condition['pid']] = &$temp;
             }
             // Add child to parent now.
@@ -167,20 +169,22 @@ class InputScreenInformationBuilder
      */
     private function fetchPropertiesFor($inputScreenId, IMetaModel $metaModel)
     {
-        $builder  = $this->connection->createQueryBuilder();
+        $builder = $this->connection->createQueryBuilder();
         return array_map(function ($column) use ($inputScreenId, $metaModel) {
             if ('attribute' !== $column['dcatype']) {
                 return $column;
             }
             if (!($attribute = $metaModel->getAttributeById($column['attr_id']))) {
+                // @codingStandardsIgnoreStart
                 @trigger_error(
                     'Unknown attribute "' . $column['attr_id'] . '" in input screen "' . $inputScreenId . '"',
                     E_USER_WARNING
                 );
+                // @codingStandardsIgnoreEnd
                 return $column;
             }
             $column['col_name'] = $attribute->getColName();
-            $column = array_merge($column, $attribute->getFieldDefinition($column));
+            $column             = array_merge($column, $attribute->getFieldDefinition($column));
 
             return $column;
         }, $builder
@@ -202,7 +206,7 @@ class InputScreenInformationBuilder
      */
     private function fetchConditions($inputScreenId)
     {
-        $builder  = $this->connection->createQueryBuilder();
+        $builder = $this->connection->createQueryBuilder();
 
         return $builder
             ->select('cond.*', 'setting.attr_id AS setting_attr_id')
@@ -229,7 +233,7 @@ class InputScreenInformationBuilder
      */
     private function fetchGroupSort($inputScreenId, IMetaModel $metaModel)
     {
-        $builder  = $this->connection->createQueryBuilder();
+        $builder = $this->connection->createQueryBuilder();
 
         return array_map(function ($information) use ($inputScreenId, $metaModel) {
             $information['isdefault']      = (bool) $information['isdefault'];
@@ -241,6 +245,7 @@ class InputScreenInformationBuilder
 
             if (!empty($information['rendersortattr'])) {
                 if (!($attribute = $metaModel->getAttributeById($information['rendersortattr']))) {
+                    // @codingStandardsIgnoreStart
                     @trigger_error(
                         sprintf(
                             'Unknown attribute "%1$s" in group sorting "%2$s.%3$s"',
@@ -250,6 +255,7 @@ class InputScreenInformationBuilder
                         ),
                         E_USER_WARNING
                     );
+                    // @codingStandardsIgnoreEnd
                     return $information;
                 }
                 $information['col_name'] = $attribute->getColName();
@@ -332,6 +338,9 @@ class InputScreenInformationBuilder
                         'name'       => $property['col_name'],
                         'condition' => $condition($property)
                     ];
+                    break;
+                default:
+                    break;
             }
         }
         if (!empty($legend['properties'])) {

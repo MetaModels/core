@@ -121,7 +121,8 @@ class TemplateList
     {
         return $this->getTemplatesForBaseFrom(
             $templateBaseName,
-            $this->rootDir . '/templates', $this->getNoThemeMessage()
+            $this->rootDir . '/templates',
+            $this->getNoThemeMessage()
         );
     }
 
@@ -146,7 +147,7 @@ class TemplateList
         // Add all the theme templates folders.
         foreach ($themes as $theme) {
             $templateDir = $theme['templates'];
-            $themeName = $theme['name'];
+            $themeName   = $theme['name'];
             if ($templateDir != '') {
                 $allTemplates = array_replace_recursive(
                     $allTemplates,

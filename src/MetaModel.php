@@ -28,14 +28,13 @@
 
 namespace MetaModels;
 
-use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use MetaModels\Attribute\IAttribute;
 use MetaModels\Attribute\IComplex;
 use MetaModels\Attribute\ISimple as ISimpleAttribute;
 use MetaModels\Attribute\ITranslated;
 use MetaModels\Filter\Filter;
-use MetaModels\Attribute\IAttribute;
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Rules\StaticIdList;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -106,8 +105,8 @@ class MetaModel implements IMetaModel
             $this->arrData[$strKey] = $this->tryUnserialize($varValue);
         }
 
-        $this->connection    = $connection;
-        $this->dispatcher    = $dispatcher;
+        $this->connection = $connection;
+        $this->dispatcher = $dispatcher;
         if (null === $this->dispatcher) {
             // @codingStandardsIgnoreStart
             @trigger_error(
@@ -159,10 +158,12 @@ class MetaModel implements IMetaModel
     public function setServiceContainer($serviceContainer, $deprecationNotice = true)
     {
         if ($deprecationNotice) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 '"' .__METHOD__ . '" is deprecated and will get removed.',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
         }
         $this->serviceContainer = $serviceContainer;
 
@@ -178,10 +179,12 @@ class MetaModel implements IMetaModel
      */
     protected function getDatabase()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated and will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
         return $this->getServiceContainer()->getDatabase();
     }
 
@@ -365,7 +368,7 @@ class MetaModel implements IMetaModel
     {
         /** @var QueryBuilder $builder */
         $builder = $this->getConnection()->createQueryBuilder();
-        $query = $builder
+        $query   = $builder
             ->select('*')
             ->from($this->getTableName())
             ->where($builder->expr()->in('id', ':values'))
@@ -766,6 +769,7 @@ class MetaModel implements IMetaModel
             } elseif (in_array($strSortBy, array('pid', 'tstamp', 'sorting'))) {
                 // Sort by database values.
                 $builder = $this->getConnection()->createQueryBuilder();
+
                 $arrFilteredIds = $builder
                     ->select('id')
                     ->from($this->getTableName())
@@ -1179,7 +1183,7 @@ class MetaModel implements IMetaModel
      *
      * @return Connection
      *
-     * @throws \ReflectionException
+     * @throws \ReflectionException Throws could not connect to database.
      */
     private function getConnection()
     {

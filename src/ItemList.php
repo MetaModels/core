@@ -216,7 +216,7 @@ class ItemList implements IServiceContainerAware
     /**
      * Set the render setting factory.
      *
-     * @param IRenderSettingFactory $factory
+     * @param IRenderSettingFactory $factory The factory.
      *
      * @return ItemList
      */

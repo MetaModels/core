@@ -66,8 +66,8 @@ class BuildAttributeEvent extends AbstractContainerAwareEvent
     ) {
         parent::__construct($dataContainer);
 
-        $this->metaModel   = $metaModel;
-        $this->attribute   = $attribute;
+        $this->metaModel = $metaModel;
+        $this->attribute = $attribute;
     }
 
     /**

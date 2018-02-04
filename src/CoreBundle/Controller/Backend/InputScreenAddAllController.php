@@ -31,6 +31,8 @@ use Symfony\Component\HttpFoundation\Response;
 class InputScreenAddAllController extends AbstractAddAllController
 {
     /**
+     * Invoke this.
+     *
      * @param string  $metaModel   The MetaModel name.
      * @param string  $inputScreen The input screen id.
      * @param Request $request     The request.

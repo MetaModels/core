@@ -80,9 +80,12 @@ class ParentTableOptionListener
 
         if ('ctable' === $event->getModel()->getProperty('rendertype')) {
             $currentTable = $this->factory->translateIdToMetaModelName($event->getModel()->getProperty('pid'));
-            $tables = array_filter($tables, function ($table) use ($currentTable) {
-                return ($currentTable !== $table);
-            });
+            $tables       = array_filter(
+                $tables,
+                function ($table) use ($currentTable) {
+                    return ($currentTable !== $table);
+                }
+            );
         }
 
         $event->setOptions($tables);

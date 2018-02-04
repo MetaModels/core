@@ -140,10 +140,13 @@ abstract class AbstractAddAllController
      * @param Request $request       The request.
      *
      * @return Response
+     *
+     * @throws \RuntimeException Throws if could not retrieve a metamodel.
      */
     protected function process($table, $metaModelName, $parentId, Request $request)
     {
         $this->knownAttributes = $this->fetchExisting($table, $parentId);
+
         $metaModel = $this->factory->getMetaModel($metaModelName);
         if (!$metaModel) {
             throw new \RuntimeException('Could not retrieve MetaModel ' . $metaModelName);
@@ -182,7 +185,7 @@ abstract class AbstractAddAllController
             'backBt'        => $this->translator->trans('MSC.backBT', [], 'contao_default'),
             'add'           => $this->translator->trans('MSC.continue', [], 'contao_default'),
             'saveNclose'    => $this->translator->trans('MSC.saveNclose', [], 'contao_default'),
-            'activate'      => $this->translator->trans($table . '.addAll_activate', [],'contao_' . $table),
+            'activate'      => $this->translator->trans($table . '.addAll_activate', [], 'contao_' . $table),
             'headline'      => $this->translator->trans($table . '.addall.1', [], 'contao_' . $table),
             'selectAll'     => $this->translator->trans('MSC.selectAll', [], 'contao_default'),
             'cacheMessage'  => '',
@@ -205,6 +208,7 @@ abstract class AbstractAddAllController
         // Keep the sorting value.
         $this->startSort       = 0;
         $this->knownAttributes = [];
+
         $alreadyExisting = $this
             ->connection
             ->createQueryBuilder()
@@ -314,6 +318,7 @@ abstract class AbstractAddAllController
     /**
      * Perform addition now.
      *
+     * @param string     $table     The table.
      * @param Request    $request   The request.
      * @param IMetaModel $metaModel The MetaModel.
      * @param string     $parentId  The parent id.
@@ -334,7 +339,7 @@ abstract class AbstractAddAllController
             ) {
                 continue;
             }
-            $data  = [];
+            $data = [];
             foreach ($this->createEmptyDataFor($attribute, $parentId, $activate, $this->startSort) as $key => $value) {
                 $data[$key] = ':' . $key;
                 $query->setParameter($key, $value);
@@ -357,8 +362,7 @@ abstract class AbstractAddAllController
     {
         $uri = $this->systemAdapter->getReferer($encodeAmp, $table);
         // Make the location an absolute URL
-        if (!preg_match('@^https?://@i', $uri))
-        {
+        if (!preg_match('@^https?://@i', $uri)) {
             $uri = $request->getBasePath() . '/' . ltrim($uri, '/');
         }
 

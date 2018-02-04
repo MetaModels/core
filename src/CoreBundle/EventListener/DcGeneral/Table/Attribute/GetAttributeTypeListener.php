@@ -43,10 +43,10 @@ class GetAttributeTypeListener extends BaseListener
     /**
      * Create a new instance.
      *
-     * @param RequestStack             $requestStack
-     * @param RequestScopeDeterminator $scopeDeterminator
-     * @param IAttributeFactory        $attributeFactory
-     * @param IFactory                 $factory
+     * @param RequestStack             $requestStack      The request stack.
+     * @param RequestScopeDeterminator $scopeDeterminator The scope determinator.
+     * @param IAttributeFactory        $attributeFactory  The attribute factory.
+     * @param IFactory                 $factory           The factory.
      */
     public function __construct(
         RequestStack $requestStack,
@@ -67,14 +67,13 @@ class GetAttributeTypeListener extends BaseListener
      */
     public function getOptions(GetPropertyOptionsEvent $event)
     {
-        if (!$this->wantToHandle($event))
-        {
+        if (!$this->wantToHandle($event)) {
             return;
         }
 
-        $translator       = $event->getEnvironment()->getTranslator();
-        $objMetaModel     = $this->getMetaModelByModelPid($event->getModel());
-        $flags            = IAttributeFactory::FLAG_ALL_UNTRANSLATED;
+        $translator   = $event->getEnvironment()->getTranslator();
+        $objMetaModel = $this->getMetaModelByModelPid($event->getModel());
+        $flags        = IAttributeFactory::FLAG_ALL_UNTRANSLATED;
 
         if ($objMetaModel->isTranslated()) {
             $flags |= IAttributeFactory::FLAG_INCLUDE_TRANSLATED;

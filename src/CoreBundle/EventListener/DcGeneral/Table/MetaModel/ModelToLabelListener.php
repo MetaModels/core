@@ -39,6 +39,8 @@ class ModelToLabelListener extends AbstractAbstainingListener
     private $connection;
 
     /**
+     * The translator.
+     *
      * @var TranslatorInterface
      */
     private $translator;
@@ -74,8 +76,8 @@ class ModelToLabelListener extends AbstractAbstainingListener
             return;
         }
 
-        $model      = $event->getModel();
-        $tableName  = $model->getProperty('tableName');
+        $model     = $event->getModel();
+        $tableName = $model->getProperty('tableName');
 
         if (!($model && !empty($tableName) && $this->connection->getSchemaManager()->tablesExist([$tableName]))) {
             return;

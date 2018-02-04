@@ -139,10 +139,12 @@ class CommandBuilder
         $this->inputScreen = null;
 
         if ($this->dispatcher->hasListeners(BuildMetaModelOperationsEvent::NAME)) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 'Event "' . BuildMetaModelOperationsEvent::NAME . '" is deprecated and will get removed',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
             $event = new BuildMetaModelOperationsEvent(
                 $this->factory->getMetaModel($container->getName()),
                 $container,

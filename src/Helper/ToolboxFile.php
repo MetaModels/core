@@ -183,18 +183,22 @@ class ToolboxFile
                 break;
             // This is the deprecated fallback (remove in MetaModels 3.0).
             case $imageFactory instanceof EventDispatcherInterface:
+                // @codingStandardsIgnoreStart
                 @trigger_error(
                     'Passing an "EventDispatcherInterface" is deprecated, use a "ImageFactoryInterface" instead.',
                     E_USER_DEPRECATED
                 );
+                // @codingStandardsIgnoreEnd
                 $this->dispatcher = $imageFactory;
                 break;
             // This is another deprecated fallback (remove in MetaModels 3.0).
             default:
+                // @codingStandardsIgnoreStart
                 @trigger_error(
                     'Not passing an "ImageFactoryInterface" and root path is deprecated.',
                     E_USER_DEPRECATED
                 );
+                // @codingStandardsIgnoreEnd
                 $this->dispatcher = System::getContainer()->get('event_dispatcher');
         }
         // Initialize some values to sane base.
