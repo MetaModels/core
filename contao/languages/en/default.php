@@ -171,3 +171,5 @@ $GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['sorting']                     
 $GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['tstamp']                          = 'Timestamp';
 $GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['vargroup']                        = 'Vargroup';
 $GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['varbase']                         = 'Varbase';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['meta']                            = 'Metafields';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['attributes']                      = 'Attributes';
