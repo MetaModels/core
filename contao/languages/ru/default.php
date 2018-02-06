@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:42:37+02:00
+ * last-updated: 2018-02-06T02:09:44+01:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Атрибуты "%s"';
@@ -38,6 +38,12 @@ $GLOBALS['TL_LANG']['ERR']['systemColumn']                                      
 $GLOBALS['TL_LANG']['ERR']['tableDoesNotExist']                                       = 'Таблица "%s" не существует.';
 $GLOBALS['TL_LANG']['ERR']['tableExists']                                             = 'Таблица "%s" уже существует.';
 $GLOBALS['TL_LANG']['ERR']['upgrade_php_version']                                     = 'Версия PHP-интерпретатора слишком устарела, обновите по крайней мере до %s (сейчас работает версия %s)';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['id']                                = 'ID';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['pid']                               = 'PID';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['sorting']                           = 'Сортировка';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['tstamp']                            = 'Отметка времени';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['varbase']                           = 'Varbase';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['vargroup']                          = 'Vargroup';
 $GLOBALS['TL_LANG']['MSC']['details']                                                 = 'Детали';
 $GLOBALS['TL_LANG']['MSC']['field_label']                                             = '%s:';
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']                        = 'Редактировать "%s" для элемента %%s';
@@ -48,6 +54,11 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord']             
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']                        = 'Настройка визуализации "%s" в MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodels_contributor']                                  = 'Благодарим этих пользователей за тикеты, предложения и переводы';
 $GLOBALS['TL_LANG']['MSC']['metamodels_help']                                         = 'Мы просим оказать нам помощь!';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['contributor_headline']              = 'Благодарим этих пользователей за тикеты, предложения и переводы';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['main_headline']                     = 'Мы просим оказать нам помощь!';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_filter']['1']                                  = 'Фильтр';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_name']['1']                                    = 'MetaModel';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_render_setting']['1']                          = 'Настройка визуализации';
 $GLOBALS['TL_LANG']['MSC']['noItemsMsg']                                              = 'Нет элементов, соответствующих вашему запросу.';
 $GLOBALS['TL_LANG']['MSC']['no_theme']                                                = 'global scope';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']['0']                              = 'Фильтр';

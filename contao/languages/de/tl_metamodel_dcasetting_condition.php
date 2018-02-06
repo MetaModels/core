@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:43:08+02:00
+ * last-updated: 2018-02-06T02:10:15+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['addall']['0']                                     = 'Alle hinzufügen';
@@ -29,6 +29,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditions']['1']     
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['config_legend']                                   = 'Konfiguration der Bedingung';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['copy']['0']                                       = 'Einstellung kopieren';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['copy']['1']                                       = 'Kopieren Sie die Einstellung ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['cut']['0']                                        = 'Einstellung ausschneiden';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['cut']['1']                                        = 'Ausschneiden der Einstellung ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['delete']['0']                                     = 'Einstellung löschen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['delete']['1']                                     = 'Löschen Sie die Einstellung ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['edit']['0']                                       = 'Einstellung bearbeiten';
@@ -45,6 +47,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['pastenew']['1']       
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show']['0']                                       = 'Einstellungsdetails';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show']['1']                                       = 'Zeige Details der Einstellung ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['title_legend']                                    = 'Titel';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['toggle']['0']                                     = 'Wechseln';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['toggle']['1']                                     = 'Umschaltung des Status der Einstellung ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type']['0']                                       = 'Typ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type']['1']                                       = 'Wählen Sie einen Bedingungstyp aus - mehr Informationen im Hilfe-Assistent.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['typedesc']['_default_']                           = '%s <strong>%s</strong><br>für Attribut <em>%s</em> (Parameter: %s)';

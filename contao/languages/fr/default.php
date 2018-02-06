@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2018-02-06T02:09:44+01:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attributs de "%s"';
@@ -40,6 +40,12 @@ $GLOBALS['TL_LANG']['ERR']['systemColumn']                                      
 $GLOBALS['TL_LANG']['ERR']['tableDoesNotExist']                                       = 'Le tableau "%s" n\'existe pas.';
 $GLOBALS['TL_LANG']['ERR']['tableExists']                                             = 'Le tableau "%s" existe déjà.';
 $GLOBALS['TL_LANG']['ERR']['upgrade_php_version']                                     = 'La version minimale de PHP requise est %s (vous utilisez actuellement %s)';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['id']                                = 'ID';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['pid']                               = 'PID';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['sorting']                           = 'Tri';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['tstamp']                            = 'Timestamp';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['varbase']                           = 'Varbase';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['vargroup']                          = 'Vargroup';
 $GLOBALS['TL_LANG']['MSC']['details']                                                 = 'Détails';
 $GLOBALS['TL_LANG']['MSC']['field_label']                                             = '%s:';
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']                        = 'Editer "%s" pour l\'élément %%s';
@@ -50,6 +56,10 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord']             
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']                        = 'Paramètre de rendu "%s" du MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodels_contributor']                                  = 'Merci à ces utilisateurs pour les billets, les suggestions et les traductions';
 $GLOBALS['TL_LANG']['MSC']['metamodels_help']                                         = 'Nous demandons votre aide !';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['contributor_headline']              = 'Merci à ces utilisateurs pour les billets, les suggestions et les traductions';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['main_headline']                     = 'Nous demandons votre aide !';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_filter']['1']                                  = 'Filtre';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_name']['1']                                    = 'MetaModel';
 $GLOBALS['TL_LANG']['MSC']['noItemsMsg']                                              = 'Il n\'y a pas d\'éléments correspondant à votre recherche.';
 $GLOBALS['TL_LANG']['MSC']['no_theme']                                                = 'étendue globale';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']['0']                              = 'Filter';
@@ -79,3 +89,4 @@ $GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter']               
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations']                   = '(Pas de combinaisons trouvées.)';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['select_all']                        = 'Tout sélectionner';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']                            = 'Filter';
+

@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:43:05+02:00
+ * last-updated: 2018-02-06T02:10:11+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Agiuntà l\'attribut "%s" a la mascra d\'endataziun.';
@@ -93,6 +93,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['1']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']                 = 'Tip';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['0']                = 'Classa dal back-end';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['1']                = 'Qua pos ti definir classas dal back-end. Tscherna il style-picker per far pli simpel.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle']['0']                  = 'Activar/deactivar';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['0']           = 'Slash a l\'entschatta';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['1']           = 'Qua pos ti definir sco ch\'in slash a l\'entschatta duai vegnir tractà';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['0']   = 'Allontanar slashs durant memorisar';

@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2015-08-04T04:10:59+02:00
+ * last-updated: 2018-02-06T02:09:44+01:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attributs da "%s"';
@@ -41,6 +41,7 @@ $GLOBALS['TL_LANG']['ERR']['systemColumn']                                      
 $GLOBALS['TL_LANG']['ERR']['tableDoesNotExist']                                       = 'La tabella "%s" n\'exista betg.';
 $GLOBALS['TL_LANG']['ERR']['tableExists']                                             = 'La tabella "%s" exista gia.';
 $GLOBALS['TL_LANG']['ERR']['upgrade_php_version']                                     = 'La versiun da l\'interpreter da PHP è memia bass, actualisescha almain a %s (ti utiliseschas actualmain %s)';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['sorting']                           = 'Zavrar';
 $GLOBALS['TL_LANG']['MSC']['details']                                                 = 'Detagls';
 $GLOBALS['TL_LANG']['MSC']['field_label']                                             = '%s:';
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']                        = 'Modifitgar "%s" per l\'element %%s';
@@ -51,6 +52,10 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord']             
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']                        = 'Elavurar la configuraziun "%s" en il MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodels_contributor']                                  = 'Nus engraziain a suandantas persunas per rapportar sbagls, propostas e translaziuns';
 $GLOBALS['TL_LANG']['MSC']['metamodels_help']                                         = 'Nus ta dumandain per agid';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['contributor_headline']              = 'Nus engraziain a suandantas persunas per rapportar sbagls, propostas e translaziuns';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['main_headline']                     = 'Nus ta dumandain per agid';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_filter']['1']                                  = 'Filtrar';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_name']['1']                                    = 'MetaModel';
 $GLOBALS['TL_LANG']['MSC']['noItemsMsg']                                              = 'I na dat nagins elements che correspunden cun tia tschertga.';
 $GLOBALS['TL_LANG']['MSC']['no_theme']                                                = 'scope global';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']['0']                              = 'Filtrar';

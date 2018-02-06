@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:43:05+02:00
+ * last-updated: 2018-02-06T02:10:11+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Добавлен атрибут "%s" к входному экрану.';
@@ -87,6 +87,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['1']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']                 = 'Тип';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['0']                = 'Класс панели управления';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['1']                = 'Вы можете задать класс(ы) панели управления. Используйте средство выбора стиля для упрощения.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle']['0']                  = 'Переключить';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['0']           = 'Обработка замыкающего слеша';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['2']   = 'Ничего не делать';
 

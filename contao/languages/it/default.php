@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2013-07-10T10:02:32+02:00
+ * last-updated: 2018-02-06T02:09:44+01:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attributi di "%s"';
@@ -40,6 +40,7 @@ $GLOBALS['TL_LANG']['ERR']['systemColumn']                                      
 $GLOBALS['TL_LANG']['ERR']['tableDoesNotExist']                                       = 'La tabella  "%s" non esiste.';
 $GLOBALS['TL_LANG']['ERR']['tableExists']                                             = 'La tabella  "%s" esiste già.';
 $GLOBALS['TL_LANG']['ERR']['upgrade_php_version']                                     = 'La versione di PHP che stai utilizzando non è compatibile, è necessario eseguire un upgrate all\'ultima versione, la %s (attualmente stai utilizzando una versione %s)';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['sorting']                           = 'Ordinamento';
 $GLOBALS['TL_LANG']['MSC']['details']                                                 = 'Dettagli';
 $GLOBALS['TL_LANG']['MSC']['field_label']                                             = '%s:';
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']                        = 'Modifica "%s" per l\'elemento %%s';
@@ -50,6 +51,10 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord']             
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']                        = 'Impostazione di rendering "%s" in MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodels_contributor']                                  = 'Grazie a questi utenti per le segnalazioni di bug, i suggerimenti e le traduzioni';
 $GLOBALS['TL_LANG']['MSC']['metamodels_help']                                         = 'Abbiamo bisogno del vostro aiuto!';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['contributor_headline']              = 'Grazie a questi utenti per le segnalazioni di bug, i suggerimenti e le traduzioni';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['main_headline']                     = 'Abbiamo bisogno del vostro aiuto!';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_filter']['1']                                  = 'Filtro';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_name']['1']                                    = 'MetaModel';
 $GLOBALS['TL_LANG']['MSC']['noItemsMsg']                                              = 'Non ci sono elementi corrispondenti alla ricerca.';
 $GLOBALS['TL_LANG']['MSC']['no_theme']                                                = 'scope globale';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']['0']                              = 'Filtro';
@@ -79,3 +84,4 @@ $GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter']               
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations']                   = ' (Non è stata trovata nessuna combinazione)';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['select_all']                        = 'Seleziona tutto';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']                            = 'Filtro';
+

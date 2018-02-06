@@ -6,11 +6,10 @@
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
  * @link https://www.transifex.com/signup/
- * @link https://www.transifex.com/projects/p/$$project$$/language/$$lang$$/
+ * @link https://www.transifex.com/projects/p/$$project$$/language/et/
  *
- * last-updated: 2017-08-24T12:43:05+02:00
+ * last-updated: 2018-02-06T02:10:11+01:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                = 'Lisa kõik';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']            = 'Edasijõudnutele';
@@ -45,5 +44,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['show']['0']                  = '
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker']                = 'Stiili valija';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['submitOnChange']['0']        = 'Lisa muutmisel';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']               = 'Liik';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle']['0']                = 'Lülita';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['2'] = 'Ära tee midagi';
 

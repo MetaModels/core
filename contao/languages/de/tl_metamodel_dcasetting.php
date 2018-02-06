@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-31T12:18:09+02:00
+ * last-updated: 2018-02-06T02:10:11+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_activate']              = 'Hinzugefügte Attribute aktivieren.';
@@ -35,6 +35,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['conditions']['1']              =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['config_legend']                = 'Einstellungen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy']['0']                    = 'Kopiere Einstellung';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy']['1']                    = 'Kopiere Einstellung ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['cut']['0']                     = 'Einstellung ausschneiden';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['cut']['1']                     = 'Ausschneiden der Einstellung ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype']['0']                 = 'Typ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype']['1']                 = 'Wählen Sie den Attributstypen aus.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['attribute']        = 'Attribut';
@@ -109,6 +111,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['1']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']                 = 'Typ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['0']                = 'Backend-Klasse';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['1']                = 'Hier können Sie eine oder mehrere Backend-Klassen festlegen. Benutzen Sie den Stylepicker für eine einfachere Auswahl der Backend-Klassen.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle']['0']                  = 'Wechseln';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle']['1']                  = 'Umschaltung des Status der Einstellung ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['0']           = 'Führende \'/\' bearbeiten';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['1']           = 'Hier können Sie angeben, wie führende \'/\' behandelt werden sollen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['0']   = 'Schrägstrich beim Speichern entfernen';

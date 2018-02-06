@@ -8,9 +8,9 @@
  * @link https://www.transifex.com/signup/
  * @link https://www.transifex.com/projects/p/$$project$$/language/$$lang$$/
  *
- * last-updated: 2018-02-06T02:09:44+01:00
+ * last-updated: 2018-02-06T02:10:15+01:00
  */
 
 
-$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['sorting'] = 'مرتب‌سازی';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['toggle']['0'] = 'Değiştir';
 

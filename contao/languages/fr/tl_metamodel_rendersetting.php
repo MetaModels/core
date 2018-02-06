@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:43:23+02:00
+ * last-updated: 2018-02-06T02:10:33+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']                     = '%s <strong>%s</strong> <em>[%s]</em>';
@@ -26,4 +26,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['new']['1']                = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template']['0']           = 'Modèle personnalisé à utiliser pour la production';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template']['1']           = 'Sélectionner le modèle qui doit être utilisé pour l\'attribut sélectionné. les fichiers modèle valides commencent par "mm_&lt;type&gt;" où le nom type est mis pour &lt;type&gt;';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['title_legend']            = 'Type';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['toggle']['0']             = 'Basculer';
 
