@@ -165,3 +165,9 @@ $GLOBALS['TL_LANG']['MSC']['metamodels_support']['help_text']                   
     channels, videos tutorials and our newsletter service.<br /><br />
     <a target="_blank" href="http://metamodels.readthedocs.io/en/latest/">
     Direct link to the MetaModels manual...</a>';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['id']                              = 'ID';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['pid']                             = 'PID';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['sorting']                         = 'Sorting';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['tstamp']                          = 'Timestamp';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['vargroup']                        = 'Vargroup';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['varbase']                         = 'Varbase';
