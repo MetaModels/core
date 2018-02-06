@@ -79,7 +79,7 @@
     border:none;
   }
 
-  .tl_subdca legend {
+  .tl_subdca > legend {
     margin:0;
     padding:10px 0 10px 23px;
     background:url(../images/icons/filter_settings.png) no-repeat left center;
