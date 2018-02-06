@@ -191,7 +191,9 @@ class InputScreenInformationBuilder
             ->select('*')
             ->from('tl_metamodel_dcasetting')
             ->where('pid=:pid')
+            ->andWhere('published=:published')
             ->setParameter('pid', $inputScreenId)
+            ->setParameter('published', 1)
             ->orderBy('sorting')
             ->execute()
             ->fetchAll(\PDO::FETCH_ASSOC));
@@ -293,20 +295,8 @@ class InputScreenInformationBuilder
         ];
 
         $condition = function ($property) use ($conditions) {
-            if (!isset($conditions[$property['id']]) && $property['published']) {
+            if (!isset($conditions[$property['id']])) {
                 return null;
-            }
-
-            if ($property['dcatype'] !== 'attribute') {
-                return null;
-            }
-
-            if (!$property['published']) {
-                $conditions[$property['id']] = [
-                    [
-                        'type' => 'conditionpropertynotpublished'
-                    ]
-                ];
             }
 
             return [
