@@ -711,7 +711,7 @@ class MetaModel implements IMetaModel
         }
 
         // If desired, sort the entries.
-        if ($arrFilteredIds && $strSortBy != '') {
+        if ($strSortBy != '') {
             if ($objSortAttribute = $this->getAttribute($strSortBy)) {
                 $arrFilteredIds = $objSortAttribute->sortIds($arrFilteredIds, $strSortOrder);
             } elseif ('id' === $strSortBy) {
