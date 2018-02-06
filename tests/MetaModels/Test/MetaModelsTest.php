@@ -214,11 +214,11 @@ class MetaModelsTest extends TestCase
      */
     public function testGetIdsFromFilter()
     {
-        $metaModel = $this->getMock(
-            'MetaModels\MetaModel',
-            array('getMatchingIds'),
-            array(array('tableName'  => 'mm_test_retrieve'))
-        );
+        $metaModel = $this
+            ->getMockBuilder('MetaModels\MetaModel')
+            ->setMethods(array('getMatchingIds'))
+            ->setConstructorArgs(array(array('tableName'  => 'mm_test_retrieve')))
+            ->getMock();
         $metaModel
             ->expects($this->any())
             ->method('getMatchingIds')
@@ -253,22 +253,21 @@ class MetaModelsTest extends TestCase
      */
     public function testGetCount()
     {
-        $metaModel = $this->getMock(
-            'MetaModels\MetaModel',
-            array('getMatchingIds'),
-            array(array('tableName'  => 'mm_test_retrieve'))
-        );
+        $metaModel = $this
+            ->getMockBuilder('MetaModels\MetaModel')
+            ->setMethods(array('getMatchingIds'))
+            ->setConstructorArgs(array(array('tableName'  => 'mm_test_retrieve')))
+            ->getMock();
         $metaModel
             ->expects($this->any())
             ->method('getMatchingIds')
             ->will($this->returnValue(array()));
         $this->assertEquals(0, $metaModel->getCount($metaModel->getEmptyFilter()));
 
-        $metaModel = $this->getMock(
-            'MetaModels\MetaModel',
-            array('getMatchingIds'),
-            array(array('tableName'  => 'mm_test_retrieve'))
-        );
+        $metaModel = $this->getMockBuilder('MetaModels\MetaModel')
+            ->setMethods(array('getMatchingIds'))
+            ->setConstructorArgs(array(array('tableName'  => 'mm_test_retrieve')))
+            ->getMock();
         $metaModel
             ->expects($this->any())
             ->method('getMatchingIds')

@@ -26,28 +26,8 @@ use MetaModels\Filter\Setting\Simple;
 /**
  * Test simple filter settings.
  */
-class SimpleTest extends TestCase
+class SimpleTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * Mock a Simple filter setting.
-     *
-     * @param array  $properties The initialization data.
-     *
-     * @param string $tableName  The table name of the MetaModel to mock.
-     *
-     * @return Simple
-     */
-    protected function mockSimpleFilterSetting($properties = array(), $tableName = 'mm_unittest')
-    {
-        $setting = $this->getMock(
-            'MetaModels\Filter\Setting\Simple',
-            array(),
-            array($this->mockFilterSetting($tableName), $properties)
-        );
-
-        return $setting;
-    }
-
     /**
      * Add a parameter to the url, if it is auto_item, it will get prepended.
      *
@@ -161,5 +141,19 @@ class SimpleTest extends TestCase
             $this->buildFilterUrl($setting, array('auto_item' => 'AUTO'), 'auto_item'),
             'auto_item 4'
         );
+    }
+
+    /**
+     * Mock a Simple filter setting.
+     *
+     * @return Simple|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private function mockSimpleFilterSetting()
+    {
+        $setting = $this->getMockBuilder('MetaModels\Filter\Setting\Simple')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        return $setting;
     }
 }

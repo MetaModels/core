@@ -86,7 +86,9 @@ class FactoryTest extends TestCase
      */
     protected function mockServiceContainer($mockEventDispatcher = false)
     {
-        $serviceContainer = $this->getMock('MetaModels\IMetaModelsServiceContainer');
+        $serviceContainer = $this
+            ->getMockBuilder('MetaModels\IMetaModelsServiceContainer')
+            ->getMockForAbstractClass();
 
         $serviceContainer
             ->expects($this->any())
@@ -94,7 +96,9 @@ class FactoryTest extends TestCase
             ->will(
                 $this->returnValue(
                     $mockEventDispatcher
-                    ? $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface')
+                    ? $this
+                        ->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')
+                        ->getMockForAbstractClass()
                     : new EventDispatcher()
                 )
             );
@@ -109,7 +113,7 @@ class FactoryTest extends TestCase
      */
     protected function mockAttributeFactory()
     {
-        $factory = $this->getMock('MetaModels\Attribute\IAttributeFactory');
+        $factory = $this->getMockBuilder('MetaModels\Attribute\IAttributeFactory')->getMockForAbstractClass();
 
         return $factory;
     }

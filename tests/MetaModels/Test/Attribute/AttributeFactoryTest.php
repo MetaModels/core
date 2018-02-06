@@ -42,11 +42,9 @@ class AttributeFactoryTest extends TestCase
      */
     public function testCreateFactoryFiresEvent()
     {
-        $serviceContainer = $this->mockServiceContainer();
-        $serviceContainer->getEventDispatcher()
-            ->expects($this->exactly(1))
-            ->method('dispatch')
-            ->with($this->equalTo(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE));
+        $serviceContainer = $this->mockServiceContainer(
+            $this->mockEventDispatcher(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE, 1)
+        );
 
         $factory = new AttributeFactory();
         $factory->setServiceContainer($serviceContainer);
@@ -316,14 +314,17 @@ class AttributeFactoryTest extends TestCase
      *
      * @return IMetaModelsServiceContainer
      */
-    protected function mockServiceContainer()
+    protected function mockServiceContainer(EventDispatcherInterface $eventDispatcher = null)
     {
-        $serviceContainer = $this->getMock('MetaModels\IMetaModelsServiceContainer');
+        if (!$eventDispatcher) {
+            $eventDispatcher = $this->mockEventDispatcher();
+        }
+        $serviceContainer = $this->getMockForAbstractClass('MetaModels\IMetaModelsServiceContainer');
 
         $serviceContainer
             ->expects($this->any())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($this->mockEventDispatcher()));
+            ->will($this->returnValue($eventDispatcher));
 
         return $serviceContainer;
     }
@@ -339,7 +340,7 @@ class AttributeFactoryTest extends TestCase
      */
     protected function mockEventDispatcher($expectedEvent = '', $expectedCount = 0)
     {
-        $eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcher');
+        $eventDispatcher = $this->getMockForAbstractClass('Symfony\Component\EventDispatcher\EventDispatcherInterface');
 
         if ($expectedEvent) {
             $eventDispatcher

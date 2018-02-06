@@ -101,7 +101,10 @@ class SubSystemBootTest extends TestCase
         $container->setEventDispatcher($dispatcher);
         $environment::set('script', 'index.php');
 
-        $boot = $this->getMock('MetaModels\Helper\SubSystemBoot', array('getMode', 'metaModelsTablesPresent'));
+        $boot = $this
+            ->getMockBuilder('MetaModels\Helper\SubSystemBoot')
+            ->setMethods(array('getMode', 'metaModelsTablesPresent'))
+            ->getMock();
         $boot
             ->expects($this->any())
             ->method('getMode')
@@ -147,7 +150,10 @@ class SubSystemBootTest extends TestCase
         $container->setEventDispatcher($dispatcher);
         $environment::set('script', 'contao/main.php');
 
-        $boot = $this->getMock('MetaModels\Helper\SubSystemBoot', array('getMode', 'metaModelsTablesPresent'));
+        $boot = $this
+            ->getMockBuilder('MetaModels\Helper\SubSystemBoot')
+            ->setMethods(array('getMode', 'metaModelsTablesPresent'))
+            ->getMock();
         $boot
             ->expects($this->any())
             ->method('getMode')
@@ -183,7 +189,10 @@ class SubSystemBootTest extends TestCase
      */
     protected function mockEventDispatcher($expectedEvents = array())
     {
-        $eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcher');
+        $eventDispatcher = $this
+            ->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcher')
+            ->setMethods(['dispatch'])
+            ->getMock();
 
         if ($expectedEvents) {
             foreach ($expectedEvents as $index => $eventName) {
