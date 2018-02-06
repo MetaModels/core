@@ -332,6 +332,9 @@ class CommandBuilder
      * @param IInputScreen $screen    The input screen.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function getChildModelCaption($metaModel, $screen)
     {

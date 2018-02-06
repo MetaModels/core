@@ -146,6 +146,9 @@ class TableManipulation
      * Returns the Contao database instance to use.
      *
      * @return \Database the database instance.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected static function getDB()
     {

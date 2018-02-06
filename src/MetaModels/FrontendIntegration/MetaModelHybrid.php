@@ -95,21 +95,21 @@ abstract class MetaModelHybrid extends Hybrid
      * Generate the list.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function generate()
     {
         if (TL_MODE == 'BE') {
-
             $strInfo = '';
             if ($this->metamodel) {
                 // Add CSS file.
                 $GLOBALS['TL_CSS'][] = 'system/modules/metamodels/assets/css/style.css';
 
                 // Retrieve name of MetaModels.
-                /** @var TranslatorInterface $translator */
                 $infoTemplate  =
                     '<div class="wc_info tl_gray"><span class="wc_label"><abbr title="%s">%s:</abbr></span> %s</div>';
-
                 $factory       = $this->getServiceContainer()->getFactory();
                 $metaModelName = $factory->translateIdToMetaModelName($this->metamodel);
                 $metaModel     = $factory->getMetaModel($metaModelName);
@@ -159,7 +159,7 @@ abstract class MetaModelHybrid extends Hybrid
             $objTemplate->wildcard = $this->wildCardName . $strInfo;
             $objTemplate->title    = $this->headline;
             $objTemplate->id       = $this->id;
-            $objTemplate->link     = ($this->typePrefix == 'mod_'? 'FE-Modul: ' : '').$this->name;
+            $objTemplate->link     = ($this->typePrefix == 'mod_' ? 'FE-Modul: ' : '').$this->name;
             $objTemplate->href     = sprintf($this->wildCardLink, $this->id);
 
             return $objTemplate->parse();

@@ -43,6 +43,11 @@ use MetaModels\Filter\Rules\StaticIdList;
  * @see MetaModelFactory::byTableName() to instantiate a MetaModel by its table name.
  *
  * This class handles all attribute definition instantiation and can be queried for a view instance to certain entries.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * We disable these for the moment - to be changed in MetaModel 2.1.
  */
 class MetaModel implements IMetaModel
 {
