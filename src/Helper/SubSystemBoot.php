@@ -98,7 +98,7 @@ class SubSystemBoot
      *
      * @return void
      */
-    private function tryDispatch(string $eventName, MetaModelsBootEvent $event)
+    private function tryDispatch($eventName, MetaModelsBootEvent $event)
     {
         $dispatcher = System::getContainer()->get('event_dispatcher');
         if ($dispatcher->hasListeners($eventName)) {
