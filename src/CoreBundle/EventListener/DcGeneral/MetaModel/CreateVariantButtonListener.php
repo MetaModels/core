@@ -23,6 +23,7 @@
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\MetaModel;
 
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\BackendViewInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\ContaoBackendViewTemplate;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\EditMask;
@@ -50,13 +51,23 @@ class CreateVariantButtonListener
     private $factory;
 
     /**
+     * The request scope determinator.
+     *
+     * @var RequestScopeDeterminator
+     */
+    private $scopeMatcher;
+
+    /**
      * Create a new instance.
      *
-     * @param IFactory $factory The factory.
+     * @param IFactory                 $factory      The factory.
+     *
+     * @param RequestScopeDeterminator $scopeMatcher The request scope determinator.
      */
-    public function __construct(IFactory $factory)
+    public function __construct(IFactory $factory, RequestScopeDeterminator $scopeMatcher)
     {
-        $this->factory = $factory;
+        $this->factory      = $factory;
+        $this->scopeMatcher = $scopeMatcher;
     }
 
     /**
@@ -68,7 +79,7 @@ class CreateVariantButtonListener
      */
     public function createButton(GetOperationButtonEvent $event)
     {
-        if ($event->getCommand()->getName() != 'createvariant') {
+        if ('createvariant' !== $event->getCommand()->getName()) {
             return;
         }
         /** @var Model $model */
@@ -92,7 +103,8 @@ class CreateVariantButtonListener
      */
     public function handleCreateVariantAction(ActionEvent $event)
     {
-        if ($event->getAction()->getName() != 'createvariant') {
+        if (false === $this->scopeMatcher->currentScopeIsBackend()
+            || 'createvariant' !== $event->getAction()->getName()) {
             return;
         }
 
