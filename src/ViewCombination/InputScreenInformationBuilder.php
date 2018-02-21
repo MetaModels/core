@@ -287,9 +287,17 @@ class InputScreenInformationBuilder
     private function convertLegends(array $properties, IMetaModel $metaModel, array $conditions)
     {
         $result = [];
+        $label  = [];
+        if ($metaModel->isTranslated()) {
+            foreach ($metaModel->getAvailableLanguages() as $availableLanguage) {
+                $label[$availableLanguage] = $metaModel->getName();
+            }
+        } else {
+            $label[$metaModel->getActiveLanguage()] = $metaModel->getName();
+        }
 
         $legend = [
-            'label'      => [$metaModel->getFallbackLanguage() => $metaModel->getName()],
+            'label'      => $label,
             'hide'       => false,
             'properties' => []
         ];
