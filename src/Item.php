@@ -471,6 +471,19 @@ class Item implements IItem
             }
         }
 
+        // Add css classes, i.e. for the frontend editing list.
+        if ($this->getMetaModel()->hasVariants()) {
+            if ($this->isVariant()) {
+                $arrResult['class'] = 'variant';
+            } elseif ($this->isVariantBase()) {
+                $arrResult['class'] = 'varbase';
+
+                if (0 !== $this->getVariants(null)->getCount()) {
+                    $arrResult['class'] .= ' varbase-with-variants';
+                }
+            }
+        }
+
         // Trigger event to allow other extensions to manipulate the parsed data.
         $event = new ParseItemEvent($objSettings, $this, $strOutputFormat, $arrResult);
         $this->getEventDispatcher()->dispatch(MetaModelsEvents::PARSE_ITEM, $event);
