@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,8 +17,8 @@
  * @author     Jan Malte Gerth <anmeldungen@malte-gerth.de>
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -344,10 +344,12 @@ class CustomSql implements ISimple
                 break;
 
             case 'container':
+                // @codingStandardsIgnoreStart
                 @trigger_error(
                     'Getting filter values from the service container is deprecated, the container will get removed.',
                     E_USER_DEPRECATED
                 );
+                // @codingStandardsIgnoreEnd
                 return $this->getValueFromServiceContainer($valueName, $arguments);
 
             default:

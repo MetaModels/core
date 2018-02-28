@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,14 +18,15 @@
  * @author     Ondrej Brinkel <Sam256@web.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\FrontendIntegration;
 
 use Contao\StringUtil;
+use Contao\System;
 use MetaModels\ItemList;
 
 /**
@@ -103,7 +104,15 @@ class HybridList extends MetaModelHybrid
         }
 
         $objItemRenderer
-            ->setServiceContainer($this->getServiceContainer())
+            ->setServiceContainerFallback(
+                function () {
+                    return $this->getServiceContainer();
+                }
+            )
+            ->setFactory(System::getContainer()->get('metamodels.factory'))
+            ->setFilterFactory(System::getContainer()->get('metamodels.filter_setting_factory'))
+            ->setRenderSettingFactory(System::getContainer()->get('metamodels.render_setting_factory'))
+            ->setEventDispatcher(System::getContainer()->get('event_dispatcher'))
             ->setMetaModel($this->metamodel, $this->metamodel_rendersettings)
             ->setLimit($this->metamodel_use_limit, $this->metamodel_offset, $this->metamodel_limit)
             ->setPageBreak($this->perPage)

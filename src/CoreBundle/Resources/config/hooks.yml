@@ -1,0 +1,35 @@
+services:
+    MetaModels\CoreBundle\Contao\Hooks\LoadDataContainer:
+        arguments:
+            - '@metamodels.factory'
+            - '@metamodels.view_combination'
+            - "@=service('contao.framework').getAdapter('Contao\\\\Controller')"
+            - '@metamodels.assets.icon_builder'
+        public: true
+
+    MetaModels\CoreBundle\Contao\Hooks\RegisterBackendNavigation:
+        arguments:
+            - '@contao.translation.translator'
+            - '@request_stack'
+            - '@router'
+            - '@metamodels.view_combination'
+        # it is used as HOOK from Contao - needs to be public therefore.
+        public: true
+
+    MetaModels\CoreBundle\Contao\Hooks\AbstractContentElementAndModuleCallback:
+        abstract: true
+        arguments:
+            - '@metamodels.assets.icon_builder'
+            - '@metamodels.backend.url-builder-factory'
+            - '@metamodels.factory'
+            - '@metamodels.filter_setting_factory'
+            - '@database_connection'
+            - '@metamodels.template_list'
+            - '@request_stack'
+        public: true
+
+    MetaModels\CoreBundle\Contao\Hooks\ContentElementCallback:
+        parent: MetaModels\CoreBundle\Contao\Hooks\AbstractContentElementAndModuleCallback
+
+    MetaModels\CoreBundle\Contao\Hooks\ModuleCallback:
+        parent: MetaModels\CoreBundle\Contao\Hooks\AbstractContentElementAndModuleCallback

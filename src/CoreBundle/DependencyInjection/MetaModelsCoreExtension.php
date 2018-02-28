@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,8 +15,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -40,9 +40,10 @@ class MetaModelsCoreExtension extends Extension
      */
     private $files = [
         'config.yml',
-        'services.yml',
-        'listeners.yml',
         'filter-settings.yml',
+        'hooks.yml',
+        'listeners.yml',
+        'services.yml',
         'dc-general/breadcrumb.yml',
         'dc-general/definition-builder.yml',
         'dc-general/environment-populator.yml',
@@ -90,13 +91,14 @@ class MetaModelsCoreExtension extends Extension
     }
 
     /**
+     * Build the cache service.
      *
-     * @param ContainerBuilder $container
-     * @param                  $config
+     * @param ContainerBuilder $container The container builder.
+     * @param array            $config    The configuration.
      *
      * @return void
      */
-    private function buildCacheService(ContainerBuilder $container, $config)
+    private function buildCacheService(ContainerBuilder $container, array $config)
     {
         // if cache disabled, swap it out with the dummy cache.
         if (!$config['enable_cache']) {

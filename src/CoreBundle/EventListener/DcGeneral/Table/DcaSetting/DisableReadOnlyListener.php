@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,8 +14,9 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -34,6 +35,8 @@ use Symfony\Component\Translation\TranslatorInterface;
 class DisableReadOnlyListener extends AbstractListener
 {
     /**
+     * The translator.
+     *
      * @var TranslatorInterface
      */
     private $translator;
@@ -44,7 +47,7 @@ class DisableReadOnlyListener extends AbstractListener
      * @param RequestScopeDeterminator $scopeDeterminator The scope determinator.
      * @param IFactory                 $factory           The MetaModel factory.
      * @param Connection               $connection        The database connection.
-     * @param TranslatorInterface      $translator
+     * @param TranslatorInterface      $translator        The translator.
      */
     public function __construct(
         RequestScopeDeterminator $scopeDeterminator,

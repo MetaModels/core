@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,8 +18,8 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     binron <rtb@gmx.ch>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -44,6 +44,7 @@ use MetaModels\IItem;
 use MetaModels\IItems;
 use MetaModels\IMetaModel;
 use MetaModels\Item;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Data driver class for DC_General.
@@ -67,11 +68,32 @@ class Driver implements MultiLanguageDataProviderInterface
     protected $metaModel = null;
 
     /**
+     * The event dispatcher to pass to items.
+     *
+     * @var null|EventDispatcherInterface
+     */
+    private $dispatcher = null;
+
+    /**
      * The current active language.
      *
      * @var string
      */
     protected $strCurrentLanguage;
+
+    /**
+     * Set dispatcher.
+     *
+     * @param null|EventDispatcherInterface $dispatcher The new value.
+     *
+     * @return Driver
+     */
+    public function setDispatcher($dispatcher)
+    {
+        $this->dispatcher = $dispatcher;
+
+        return $this;
+    }
 
     /**
      * Delete an item.
@@ -237,6 +259,7 @@ class Driver implements MultiLanguageDataProviderInterface
 
         return new Model($objItem);
     }
+
     /**
      * Set base config with source and other necessary parameter.
      *
@@ -273,7 +296,17 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     public function getEmptyModel()
     {
-        $objItem = new Item($this->getMetaModel(), array());
+        if (!isset($this->dispatcher)) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Not setting an "' . EventDispatcherInterface::class .
+                '" via "setDispatcher()" is deprecated and will cause an error in MetaModels 3.0.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+        }
+
+        $objItem = new Item($this->getMetaModel(), array(), $this->dispatcher);
         return new Model($objItem);
     }
 
@@ -609,8 +642,8 @@ class Driver implements MultiLanguageDataProviderInterface
 
         $objNative1 = $objModel1->getItem();
         $objNative2 = $objModel2->getItem();
-        if ($objNative1->getMetaModel() != $objNative2->getMetaModel()) {
-            return false;
+        if ($objNative1->getMetaModel() === $objNative2->getMetaModel()) {
+            return true;
         }
         foreach ($objNative1->getMetaModel()->getAttributes() as $objAttribute) {
             if ($objNative1->get($objAttribute->getColName()) != $objNative2->get($objAttribute->getColName())) {

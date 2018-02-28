@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,8 +16,8 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Alexander Menk <a.menk@imi.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -50,7 +50,7 @@ class ItemRendererListener
     /**
      * Create a new instance.
      *
-     * @param IRenderSettingFactory $renderSettingFactory
+     * @param IRenderSettingFactory $renderSettingFactory The render setting factory.
      */
     public function __construct(IRenderSettingFactory $renderSettingFactory)
     {
@@ -135,7 +135,10 @@ class ItemRendererListener
         $nativeItem = $model->getItem();
         $metaModel  = $nativeItem->getMetaModel();
 
-        $renderSetting = $this->renderSettingFactory->createCollection($metaModel, $definition->getMetaModelDefinition()->getActiveRenderSetting());
+        $renderSetting = $this->renderSettingFactory->createCollection(
+            $metaModel,
+            $definition->getMetaModelDefinition()->getActiveRenderSetting()
+        );
 
         if (!$renderSetting) {
             return;
@@ -176,7 +179,10 @@ class ItemRendererListener
 
         $item          = $parentModel->getItem();
         $metaModel     = $item->getMetaModel();
-        $renderSetting = $this->renderSettingFactory->createCollection($metaModel, $definition->getMetaModelDefinition()->getActiveRenderSetting());
+        $renderSetting = $this->renderSettingFactory->createCollection(
+            $metaModel,
+            $definition->getMetaModelDefinition()->getActiveRenderSetting()
+        );
         $additional    = array();
 
         foreach ($renderSetting->getSettingNames() as $name) {

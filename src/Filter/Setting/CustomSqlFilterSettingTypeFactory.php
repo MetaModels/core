@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,15 +14,14 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Filter\Setting;
 
 use Contao\InsertTags;
-use DependencyInjection\Container\LegacyDependencyInjectionContainer;
 use Doctrine\DBAL\Connection;
 
 /**
@@ -45,9 +44,9 @@ class CustomSqlFilterSettingTypeFactory extends AbstractFilterSettingTypeFactory
     private $insertTags;
 
     /**
-     * The legacy dependency injection container - used for retrieving the MetaModels service container.
+     * The legacy MetaModels service container retriever callback.
      *
-     * @var LegacyDependencyInjectionContainer
+     * @var \Closure
      *
      * @deprecated Only here as gateway to the deprecated service container.
      */
@@ -61,20 +60,28 @@ class CustomSqlFilterSettingTypeFactory extends AbstractFilterSettingTypeFactory
      */
     public function __construct(
         Connection $database,
-        InsertTags $insertTags,
-        LegacyDependencyInjectionContainer $legacyDic
+        InsertTags $insertTags
     ) {
         parent::__construct();
 
         $this->database   = $database;
         $this->insertTags = $insertTags;
-        $this->legacyDic = $legacyDic;
 
         $this
             ->setTypeName('customsql')
             ->setTypeIcon('bundles/metamodelscore/images/icons/filter_customsql.png')
             ->setTypeClass(CustomSql::class)
             ->allowAttributeTypes();
+    }
+
+    /**
+     * Set the legacy DIC retriever function.
+     *
+     * @return void
+     */
+    public function setLegacyDic(\Closure $callback)
+    {
+        $this->legacyDic = $callback;
     }
 
     /**
@@ -88,7 +95,12 @@ class CustomSqlFilterSettingTypeFactory extends AbstractFilterSettingTypeFactory
             $this->database,
             $this->insertTags,
             function () {
-                return $this->legacyDic->getService('metamodels-service-container');
+                static $container;
+                if (!$container) {
+                    $container = $this->legacyDic->__invoke();
+                }
+
+                return $container;
             }
         );
     }

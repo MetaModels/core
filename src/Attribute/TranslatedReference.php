@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,8 +19,8 @@
  * @author     Frank Mueller <frank.mueller@linking-you.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -62,10 +62,12 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         parent::__construct($objMetaModel, $arrData);
 
         if (null === $connection) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 'Connection is missing. It has to be passed in the constructor. Fallback will be dropped.',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
             $connection = System::getContainer()->get('database_connection');
         }
 
@@ -86,7 +88,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      *
      * @param string[]|string|null $mixIds       One, none or many ids to use.
      *
-     * @param string|string[]      $mixLangCode The language code/s to use, optional.
+     * @param string|string[]      $mixLangCode  The language code/s to use, optional.
      *
      * @return void
      */
@@ -292,7 +294,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function sortIds($idList, $strDirection)
     {
-        $langSet  = sprintf(
+        $langSet = sprintf(
             '\'%s\',\'%s\'',
             $this->getMetaModel()->getActiveLanguage(),
             $this->getMetaModel()->getFallbackLanguage()
@@ -366,7 +368,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         foreach ($arrExisting as $intId) {
             $queryBuilder = $this->connection->createQueryBuilder();
             $this->buildWhere($queryBuilder, $intId, $strLangCode);
-            
+
             if ($arrValues[$intId]['value'] != '') {
                 $queryBuilder->update($this->getValueTable());
 

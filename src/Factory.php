@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,8 +15,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -62,7 +62,7 @@ class Factory implements IFactory
      */
     public function __construct(EventDispatcherInterface $dispatcher)
     {
-        $this->dispatcher       = $dispatcher;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -77,10 +77,12 @@ class Factory implements IFactory
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, $deprecationNotice = true)
     {
         if ($deprecationNotice) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 '"' .__METHOD__ . '" is deprecated and will get removed.',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
         }
 
         $this->serviceContainer = $serviceContainer;
@@ -97,10 +99,12 @@ class Factory implements IFactory
      */
     public function getServiceContainer()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated - use the services from the service container.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
         return $this->serviceContainer;
     }
 

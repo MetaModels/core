@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,21 +17,15 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-use MetaModels\Events\MetaModelsBootEvent;
 use MetaModels\Events\ParseItemEvent;
 use MetaModels\MetaModelsEvents;
 
 return array(
-    MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND => array(
-        function (MetaModelsBootEvent $event) {
-            new \MetaModels\DcGeneral\Events\Subscriber($event->getServiceContainer());
-        }
-    ),
     // deprecated since 2.0, to be removed in 3.0.
     MetaModelsEvents::PARSE_ITEM => array(
         array(

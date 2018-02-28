@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,13 +15,15 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Helper;
 
+use Contao\Environment;
+use Contao\System;
 use MetaModels\Events\MetaModelsBootEvent;
 use MetaModels\MetaModelsEvents;
 
@@ -31,23 +33,21 @@ use MetaModels\MetaModelsEvents;
 class SubSystemBoot
 {
     /**
-     * Boot up the system and initialize a service container.
-     *
-     * @param \Pimple $container The dependency injection container.
+     * Boot up the system.
      *
      * @return void
      */
-    public function boot(\Pimple $container)
+    public function boot()
     {
-        /** @var \Contao\Environment $environment */
-        $environment = $container['environment'];
+        /** @var Environment $environment */
+        $environment = System::getContainer()->get('contao.framework')->getAdapter(Environment::class);
         $script      = explode('?', $environment->get('relativeRequest'), 2)[0];
 
         // There is no need to boot in login or install screen.
         if (($script == 'contao/login') || ($script == 'contao/install')) {
             return;
         }
-        $tableManipulator = \System::getContainer()->get('metamodels.table_manipulator');
+        $tableManipulator = System::getContainer()->get('metamodels.table_manipulator');
         // Ensure all tables are created.
         foreach ([
             'tl_metamodel',
@@ -65,29 +65,47 @@ class SubSystemBoot
             try {
                 $tableManipulator->checkTableExists($table);
             } catch (\Exception $exception) {
-                \System::getContainer()
+                System::getContainer()
                     ->get('logger')
                     ->error(
                         'MetaModels startup interrupted. ' .
-                        ' Not all MetaModels tables have been created (missing: ' . $table . ').');
+                        ' Not all MetaModels tables have been created (missing: ' . $table . ').'
+                    );
                 return;
             }
         }
 
-        $dispatcher = \System::getContainer()->get('event_dispatcher');
-        $event      = new MetaModelsBootEvent();
+        $event = new MetaModelsBootEvent();
+        $this->tryDispatch(MetaModelsEvents::SUBSYSTEM_BOOT, $event);
 
-        $dispatcher->dispatch(MetaModelsEvents::SUBSYSTEM_BOOT, $event);
-
-        $determinator = \System::getContainer()->get('cca.dc-general.scope-matcher');
+        $determinator = System::getContainer()->get('cca.dc-general.scope-matcher');
         switch (true) {
             case $determinator->currentScopeIsFrontend():
-                $dispatcher->dispatch(MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND, $event);
+                $this->tryDispatch(MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND, $event);
                 break;
             case $determinator->currentScopeIsBackend():
-                $dispatcher->dispatch(MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND, $event);
+                $this->tryDispatch(MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND, $event);
                 break;
             default:
+        }
+    }
+
+    /**
+     * Test if the event must get dispatched, if so, trigger deprecation and dispatch then.
+     *
+     * @param string              $eventName The event name.
+     * @param MetaModelsBootEvent $event     The event payload.
+     *
+     * @return void
+     */
+    private function tryDispatch($eventName, MetaModelsBootEvent $event)
+    {
+        $dispatcher = System::getContainer()->get('event_dispatcher');
+        if ($dispatcher->hasListeners($eventName)) {
+            // @codingStandardsIgnoreStart
+            @trigger_error('Event "' . $eventName . '" has been deprecated - Use registered services.', E_USER_DEPRECATED);
+            // @codingStandardsIgnoreEnd
+            $dispatcher->dispatch($eventName, $event);
         }
     }
 }

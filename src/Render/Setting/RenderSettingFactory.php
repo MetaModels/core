@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,8 +16,8 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -25,6 +25,7 @@ namespace MetaModels\Render\Setting;
 
 use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
+use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsEvents;
@@ -60,6 +61,13 @@ class RenderSettingFactory implements IRenderSettingFactory
     private $eventDispatcher;
 
     /**
+     * The filter setting factory.
+     *
+     * @var IFilterSettingFactory
+     */
+    private $filterFactory;
+
+    /**
      * The already created render settings.
      *
      * @var ICollection[]
@@ -71,17 +79,24 @@ class RenderSettingFactory implements IRenderSettingFactory
      *
      * @param Connection               $database        The database.
      * @param EventDispatcherInterface $eventDispatcher The event dispatcher to use.
+     * @param IFilterSettingFactory    $filterFactory   The filter setting factory.
      */
-    public function __construct(Connection $database, EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        Connection $database,
+        EventDispatcherInterface $eventDispatcher,
+        IFilterSettingFactory $filterFactory
+    ) {
         $this->eventDispatcher = $eventDispatcher;
         $this->database        = $database;
+        $this->filterFactory   = $filterFactory;
     }
 
     /**
      * Set the service container.
      *
-     * @param IMetaModelsServiceContainer $serviceContainer The service container to use.
+     * @param IMetaModelsServiceContainer $serviceContainer  The service container to use.
+     *
+     * @param bool                        $deprecationNotice Determine deprecated notice.
      *
      * @return RenderSettingFactory
      *
@@ -90,20 +105,24 @@ class RenderSettingFactory implements IRenderSettingFactory
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer, $deprecationNotice = true)
     {
         if ($deprecationNotice) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 '"' .__METHOD__ . '" is deprecated and will get removed.',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
         }
         $this->serviceContainer = $serviceContainer;
 
         if ($this->eventDispatcher->hasListeners(MetaModelsEvents::RENDER_SETTING_FACTORY_CREATE)) {
+            // @codingStandardsIgnoreStart
             @trigger_error(
                 'Event "' .
                 MetaModelsEvents::RENDER_SETTING_FACTORY_CREATE .
                 '" is deprecated - register your factories via the service container.',
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
 
             $this->serviceContainer->getEventDispatcher()->dispatch(
                 MetaModelsEvents::RENDER_SETTING_FACTORY_CREATE,
@@ -123,10 +142,12 @@ class RenderSettingFactory implements IRenderSettingFactory
      */
     public function getServiceContainer()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated - use the services from the service container.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
         return $this->serviceContainer;
     }
 
@@ -201,7 +222,7 @@ class RenderSettingFactory implements IRenderSettingFactory
             $row = [];
         }
 
-        $renderSetting = new Collection($metaModel, $row);
+        $renderSetting = new Collection($metaModel, $row, $this->eventDispatcher, $this->filterFactory);
 
         if ($renderSetting->get('id')) {
             $this->collectAttributeSettings($metaModel, $renderSetting);

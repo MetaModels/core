@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,14 +20,15 @@
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Helper;
 
 use Contao\Controller;
+use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Contao\Dbafs;
 use Contao\Environment;
 use Contao\File;
@@ -35,6 +36,7 @@ use Contao\FilesModel;
 use Contao\Input;
 use Contao\PageError403;
 use Contao\StringUtil;
+use Contao\System;
 use Contao\Validator;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
@@ -53,8 +55,24 @@ class ToolboxFile
      * The event dispatcher.
      *
      * @var EventDispatcherInterface
+     *
+     * @deprecated
      */
     private $dispatcher;
+
+    /**
+     * The project root dir.
+     *
+     * @var string
+     */
+    private $rootDir;
+
+    /**
+     * The image factory for resizing.
+     *
+     * @var ImageFactoryInterface
+     */
+    private $imageFactory;
 
     /**
      * Allowed file extensions.
@@ -150,14 +168,39 @@ class ToolboxFile
     /**
      * Create a new instance.
      *
-     * @param EventDispatcherInterface|null $dispatcher The event dispatcher to use.
+     * @param ImageFactoryInterface|EventDispatcherInterface|null $imageFactory The image factory to use).
+     * @param string|null                                         $rootDir      The root path of the installation.
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function __construct(EventDispatcherInterface $dispatcher = null)
+    public function __construct($imageFactory = null, string $rootDir = null)
     {
-        $this->dispatcher = $dispatcher ?: $GLOBALS['container']['event-dispatcher'];
+        switch (true) {
+            case ($imageFactory instanceof ImageFactoryInterface) && !empty($rootDir):
+                $this->imageFactory = $imageFactory;
+                $this->rootDir      = $rootDir;
+                break;
+            // This is the deprecated fallback (remove in MetaModels 3.0).
+            case $imageFactory instanceof EventDispatcherInterface:
+                // @codingStandardsIgnoreStart
+                @trigger_error(
+                    'Passing an "EventDispatcherInterface" is deprecated, use a "ImageFactoryInterface" instead.',
+                    E_USER_DEPRECATED
+                );
+                // @codingStandardsIgnoreEnd
+                $this->dispatcher = $imageFactory;
+                break;
+            // This is another deprecated fallback (remove in MetaModels 3.0).
+            default:
+                // @codingStandardsIgnoreStart
+                @trigger_error(
+                    'Not passing an "ImageFactoryInterface" and root path is deprecated.',
+                    E_USER_DEPRECATED
+                );
+                // @codingStandardsIgnoreEnd
+                $this->dispatcher = System::getContainer()->get('event_dispatcher');
+        }
         // Initialize some values to sane base.
         $this->setAcceptedExtensions(StringUtil::trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']));
         if (!is_array($_SESSION['metaModels_downloads'])) {
@@ -548,11 +591,7 @@ class ToolboxFile
             return array('files' => array(), 'source' => array());
         }
 
-        if ($blnAscending) {
-            uksort($arrFiles, 'basename_natcasecmp');
-        } else {
-            uksort($arrFiles, 'basename_natcasercmp');
-        }
+        \uasort($arrFiles, ($blnAscending) ? '\basename_natcasecmp' : '\basename_natcasercmp');
 
         return $this->remapSorting($arrFiles, $this->outputBuffer);
     }
@@ -940,6 +979,15 @@ class ToolboxFile
     {
         list($width, $height, $mode) = $this->getResizeImages();
         if ($this->getShowImages() && ($width || $height || $mode)) {
+            if ($this->imageFactory) {
+                $image = $this->imageFactory->create(
+                    $this->rootDir . '/' . $fileName,
+                    [$width, $height, $mode]
+                );
+
+                return $image->getUrl($this->rootDir);
+            }
+
             $event = new ResizeImageEvent($fileName, $width, $height, $mode);
             $this->dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
             return $event->getResultImage();

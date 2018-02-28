@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,8 +14,10 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -34,6 +36,8 @@ use Symfony\Component\Translation\TranslatorInterface;
 class DisableMandatoryListener extends AbstractListener
 {
     /**
+     * The translator.
+     *
      * @var TranslatorInterface
      */
     private $translator;
@@ -44,7 +48,7 @@ class DisableMandatoryListener extends AbstractListener
      * @param RequestScopeDeterminator $scopeDeterminator The scope determinator.
      * @param IFactory                 $factory           The MetaModel factory.
      * @param Connection               $connection        The database connection.
-     * @param TranslatorInterface      $translator
+     * @param TranslatorInterface      $translator        The translator.
      */
     public function __construct(
         RequestScopeDeterminator $scopeDeterminator,
@@ -74,8 +78,12 @@ class DisableMandatoryListener extends AbstractListener
 
         $model     = $event->getModel();
         $metaModel = $this->getMetaModelFromModel($model);
+        $attribute = $metaModel->getAttributeById($model->getProperty('attr_id'));
+        if (null === $attribute) {
+            return;
+        }
 
-        if ($metaModel->getAttributeById($model->getProperty('attr_id'))->get('isunique')) {
+        if ($attribute->get('isunique')) {
             Message::addInfo(
                 $this->translator->trans(
                     'tl_metamodel_dcasetting.mandatory_for_unique_attr',

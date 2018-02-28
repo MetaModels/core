@@ -18,6 +18,7 @@ services:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\MetaModel\CreateVariantButtonListener
         arguments:
             - "@metamodels.factory"
+            - '@cca.dc-general.scope-matcher'
         tags:
             -   name: kernel.event_listener
                 event: dc-general.view.contao2backend.get-operation-button

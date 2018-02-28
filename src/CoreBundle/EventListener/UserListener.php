@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,8 +13,9 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -33,21 +34,29 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class UserListener
 {
     /**
+     * The authentication resolver.
+     *
      * @var TokenStorageInterface
      */
     private $tokenStorage;
 
     /**
+     * The authentication resolver.
+     *
      * @var AuthenticationTrustResolverInterface
      */
     private $authenticationTrustResolver;
 
     /**
+     * The scope matcher.
+     *
      * @var ScopeMatcher
      */
     private $scopeMatcher;
 
     /**
+     * The view combination.
+     *
      * @var ViewCombination
      */
     private $viewCombination;
@@ -55,10 +64,10 @@ class UserListener
     /**
      * Constructor.
      *
-     * @param TokenStorageInterface                $tokenStorage
-     * @param AuthenticationTrustResolverInterface $authenticationTrustResolver
-     * @param ScopeMatcher                         $scopeMatcher
-     * @param ViewCombination                      $viewCombination
+     * @param TokenStorageInterface                $tokenStorage                The token storage.
+     * @param AuthenticationTrustResolverInterface $authenticationTrustResolver The authentication resolver.
+     * @param ScopeMatcher                         $scopeMatcher                The scope matche.
+     * @param ViewCombination                      $viewCombination             The view combination.
      */
     public function __construct(
         TokenStorageInterface $tokenStorage,
@@ -66,19 +75,21 @@ class UserListener
         ScopeMatcher $scopeMatcher,
         ViewCombination $viewCombination
     ) {
-        $this->tokenStorage = $tokenStorage;
+        $this->tokenStorage                = $tokenStorage;
         $this->authenticationTrustResolver = $authenticationTrustResolver;
-        $this->scopeMatcher = $scopeMatcher;
-        $this->viewCombination = $viewCombination;
+        $this->scopeMatcher                = $scopeMatcher;
+        $this->viewCombination             = $viewCombination;
     }
 
     /**
      * Replaces the current session data with the stored session data.
      *
-     * @param GetResponseEvent $event
+     * @param GetResponseEvent $event The event.
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     *
+     * @return void
      */
     public function onKernelRequest(GetResponseEvent $event)
     {

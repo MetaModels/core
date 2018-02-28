@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,8 +19,8 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -57,16 +57,34 @@ class Item implements IItem
     protected $arrData = array();
 
     /**
+     * The event dispatcher.
+     *
+     * @var null|EventDispatcherInterface
+     */
+    private $dispatcher;
+
+    /**
      * Create a new instance.
      *
-     * @param IMetaModel $objMetaModel The model this item is represented by.
-     *
-     * @param array      $arrData      The initial data that shall be injected into the new instance.
+     * @param IMetaModel                    $objMetaModel The model this item is represented by.
+     * @param array                         $arrData      The initial data that shall be injected into the new instance.
+     * @param EventDispatcherInterface|null $dispatcher   The event dispatcher.
      */
-    public function __construct(IMetaModel $objMetaModel, $arrData)
+    public function __construct(IMetaModel $objMetaModel, $arrData, EventDispatcherInterface $dispatcher = null)
     {
-        $this->arrData   = $arrData;
-        $this->metaModel = $objMetaModel;
+        $this->arrData    = $arrData;
+        $this->metaModel  = $objMetaModel;
+        $this->dispatcher = $dispatcher;
+
+        if (null === $dispatcher) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Not passing the event dispatcher as 3rd argument to "' . __METHOD__ . '" is deprecated ' .
+                'and will cause an error in MetaModels 3.0',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+        }
     }
 
     /**
@@ -76,6 +94,12 @@ class Item implements IItem
      */
     public function getServiceContainer()
     {
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated and will get removed in MetaModels 3.0.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
         return $this->getMetaModel()->getServiceContainer();
     }
 
@@ -86,6 +110,10 @@ class Item implements IItem
      */
     protected function getEventDispatcher()
     {
+        if ($this->dispatcher) {
+            return $this->dispatcher;
+        }
+
         return $this->getServiceContainer()->getEventDispatcher();
     }
 
@@ -443,12 +471,22 @@ class Item implements IItem
             }
         }
 
+        // Add css classes, i.e. for the frontend editing list.
+        if ($this->getMetaModel()->hasVariants()) {
+            if ($this->isVariant()) {
+                $arrResult['class'] = 'variant';
+            } elseif ($this->isVariantBase()) {
+                $arrResult['class'] = 'varbase';
+
+                if (0 !== $this->getVariants(null)->getCount()) {
+                    $arrResult['class'] .= ' varbase-with-variants';
+                }
+            }
+        }
+
         // Trigger event to allow other extensions to manipulate the parsed data.
         $event = new ParseItemEvent($objSettings, $this, $strOutputFormat, $arrResult);
-        $this->getMetaModel()->getServiceContainer()->getEventDispatcher()->dispatch(
-            MetaModelsEvents::PARSE_ITEM,
-            $event
-        );
+        $this->getEventDispatcher()->dispatch(MetaModelsEvents::PARSE_ITEM, $event);
 
         return $event->getResult();
     }
@@ -505,7 +543,7 @@ class Item implements IItem
         unset($arrNewData['id']);
         unset($arrNewData['tstamp']);
         unset($arrNewData['vargroup']);
-        return new Item($this->getMetaModel(), $arrNewData);
+        return new Item($this->getMetaModel(), $arrNewData, $this->dispatcher);
     }
 
     /**

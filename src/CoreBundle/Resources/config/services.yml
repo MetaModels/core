@@ -13,6 +13,7 @@ services:
         class: Doctrine\Common\Cache\FilesystemCache
         arguments:
             - "%metamodels.cache_dir%"
+        public: true
 
     metamodels.cache.purger:
         class: MetaModels\BackendIntegration\PurgeCache
@@ -24,11 +25,13 @@ services:
         arguments:
             - "@event_dispatcher"
         class: MetaModels\Factory
+        public: true
 
     metamodels.attribute_factory:
         class: MetaModels\Attribute\AttributeFactory
         arguments:
           - "@event_dispatcher"
+        public: true
 
     metamodels.filter_setting_factory:
         class: MetaModels\Filter\Setting\FilterSettingFactory
@@ -36,12 +39,15 @@ services:
           - "@database_connection"
           - "@event_dispatcher"
           - "@metamodels.factory"
+        public: true
 
     metamodels.render_setting_factory:
         class: MetaModels\Render\Setting\RenderSettingFactory
         arguments:
           - "@database_connection"
           - "@event_dispatcher"
+          - "@metamodels.filter_setting_factory"
+        public: true
 
     metamodels.template_list:
         class: MetaModels\BackendIntegration\TemplateList
@@ -58,22 +64,13 @@ services:
         arguments:
           - "@database_connection"
           - "%metamodels.system_columns%"
+        public: true
 
-    metamodels.backend.navigation_builder:
-        class: MetaModels\CoreBundle\Contao\Hooks\RegisterBackendNavigation
+    metamodels.backend.url-builder-factory:
+        class: ContaoCommunityAlliance\UrlBuilder\Contao\CsrfUrlBuilderFactory
         arguments:
-            - "@contao.translation.translator"
-            - "@request_stack"
-            - "@router"
-            - "@metamodels.view_combination"
-
-    metamodels.datacontainer_loader:
-        class: MetaModels\CoreBundle\Contao\Hooks\LoadDataContainer
-        arguments:
-            - "@metamodels.factory"
-            - "@metamodels.view_combination"
-            - "@=service('contao.framework').getAdapter('Contao\\\\Controller')"
-            - "@metamodels.assets.icon_builder"
+            - '@security.csrf.token_manager'
+            - '%contao.csrf_token_name%'
 
     metamodels.controller.abstract.add_all:
         abstract: true
@@ -123,3 +120,12 @@ services:
             - "@security.token_storage"
             - "@metamodels.view_combination.builder"
             - "@metamodels.view_combination.input_screen_information_builder"
+
+    MetaModels\MetaModelsServiceContainer:
+        deprecated: 'The service "%service_id%" is deprecated and to be removed in MetaModels 3 - inject needed services directly.'
+        configurator: 'MetaModels\CoreBundle\LegacyCompat\ServiceContainerInitializer:configure'
+        public: true
+
+    MetaModels\CoreBundle\LegacyCompat\ServiceContainerInitializer:
+        arguments:
+            - '@service_container'

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,8 +14,8 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -93,14 +93,13 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
     /**
      * Set the factory to use.
      *
-     * @param IFactory $factory The factory in use.
+     * @param IFactory|callable $factory The factory in use.
      *
      * @return MetaModelsServiceContainer
      */
-    public function setFactory(IFactory $factory)
+    public function setFactory($factory)
     {
         $this->factory = $factory;
-        $factory->setServiceContainer($this, false);
 
         return $this;
     }
@@ -110,24 +109,31 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getFactory()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
+
+        if (is_callable($this->factory)) {
+            $this->factory = call_user_func($this->factory);
+            $this->factory->setServiceContainer($this, false);
+        }
+
         return $this->factory;
     }
 
     /**
      * Set the factory to use.
      *
-     * @param IAttributeFactory $factory The factory in use.
+     * @param IAttributeFactory|callable $factory The factory in use.
      *
      * @return MetaModelsServiceContainer
      */
-    public function setAttributeFactory(IAttributeFactory $factory)
+    public function setAttributeFactory($factory)
     {
         $this->attributeFactory = $factory;
-        $factory->setServiceContainer($this, false);
 
         return $this;
     }
@@ -137,24 +143,31 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getAttributeFactory()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
+
+        if (is_callable($this->attributeFactory)) {
+            $this->attributeFactory = call_user_func($this->attributeFactory);
+            $this->attributeFactory->setServiceContainer($this, false);
+        }
+
         return $this->attributeFactory;
     }
 
     /**
      * Set the filter setting factory.
      *
-     * @param IFilterSettingFactory $filterFactory The factory.
+     * @param IFilterSettingFactory|callable $filterFactory The factory.
      *
      * @return MetaModelsServiceContainer
      */
     public function setFilterFactory($filterFactory)
     {
         $this->filterFactory = $filterFactory;
-        $filterFactory->setServiceContainer($this, false);
 
         return $this;
     }
@@ -164,24 +177,31 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getFilterFactory()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
+
+        if (is_callable($this->filterFactory)) {
+            $this->filterFactory = call_user_func($this->filterFactory);
+            $this->filterFactory->setServiceContainer($this, false);
+        }
+
         return $this->filterFactory;
     }
 
     /**
      * Set the filter setting factory.
      *
-     * @param IRenderSettingFactory $renderFactory The factory.
+     * @param IRenderSettingFactory|callable $renderFactory The factory.
      *
      * @return MetaModelsServiceContainer
      */
     public function setRenderSettingFactory($renderFactory)
     {
         $this->renderFactory = $renderFactory;
-        $renderFactory->setServiceContainer($this, false);
 
         return $this;
     }
@@ -191,17 +211,25 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getRenderSettingFactory()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
+
+        if (is_callable($this->renderFactory)) {
+            $this->renderFactory = call_user_func($this->renderFactory);
+            $this->renderFactory->setServiceContainer($this, false);
+        }
+
         return $this->renderFactory;
     }
 
     /**
      * Set the event dispatcher.
      *
-     * @param EventDispatcherInterface $dispatcher The event dispatcher.
+     * @param EventDispatcherInterface|callable $dispatcher The event dispatcher.
      *
      * @return MetaModelsServiceContainer
      */
@@ -217,17 +245,24 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getEventDispatcher()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
+
+        if (is_callable($this->dispatcher)) {
+            $this->dispatcher = call_user_func($this->dispatcher);
+        }
+
         return $this->dispatcher;
     }
 
     /**
      * Set the Contao database instance.
      *
-     * @param \Contao\Database $database The contao database instance.
+     * @param \Contao\Database|callable $database The contao database instance.
      *
      * @return MetaModelsServiceContainer
      */
@@ -243,10 +278,17 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getDatabase()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
+
+        if (is_callable($this->database)) {
+            $this->database = call_user_func($this->database);
+        }
+
         return $this->database;
     }
 
@@ -257,17 +299,24 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getCache()
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
+
+        if (is_callable($this->cache)) {
+            $this->cache = call_user_func($this->cache);
+        }
+
         return $this->cache;
     }
 
     /**
      * Set the cache to use.
      *
-     * @param Cache $cache The cache instance.
+     * @param Cache|callable $cache The cache instance.
      *
      * @return MetaModelsServiceContainer
      */
@@ -285,10 +334,12 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function setService($service, $serviceName = null)
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
         if ($serviceName === null) {
             if (!is_object($service) || $service instanceof \Closure) {
                 throw new \InvalidArgumentException(
@@ -309,10 +360,12 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      */
     public function getService($serviceName)
     {
+        // @codingStandardsIgnoreStart
         @trigger_error(
             '"' .__METHOD__ . '" is deprecated as the service container will get removed.',
             E_USER_DEPRECATED
         );
+        // @codingStandardsIgnoreEnd
 
         // Hacked in here as initialization is dead now.
         if (!isset($this->services[(string) $serviceName]) && 'metamodels-view-combinations' === $serviceName) {

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,8 +13,9 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -82,13 +83,17 @@ class ModelToLabelListener extends AbstractListener
 
         $environment    = $event->getEnvironment();
         $model          = $event->getModel();
-        $metaModel     = $this->getMetaModel($environment);
+        $metaModel      = $this->getMetaModel($environment);
         $attribute      = $metaModel->getAttributeById($model->getProperty('attr_id'));
         $type           = $model->getProperty('type');
         $parameterValue = (is_array($model->getProperty('value'))
             ? implode(', ', $model->getProperty('value'))
             : $model->getProperty('value'));
-        $name           = $this->translator->trans('tl_metamodel_dcasetting_condition.conditionnames.' . $type, [], 'contao_tl_metamodel_dcasetting_condition');
+        $name = $this->translator->trans(
+            'tl_metamodel_dcasetting_condition.conditionnames.' . $type,
+            [],
+            'contao_tl_metamodel_dcasetting_condition'
+        );
 
         $image = $GLOBALS['METAMODELS']['attributes'][$type]['image'];
         if (!$image || !file_exists(TL_ROOT . '/' . $image)) {
@@ -122,7 +127,11 @@ class ModelToLabelListener extends AbstractListener
      */
     private function getLabelText($type)
     {
-        $label = $this->translator->trans('tl_metamodel_dcasetting_condition.typedesc.' . $type, [], 'contao_tl_metamodel_dcasetting_condition');
+        $label = $this->translator->trans(
+            'tl_metamodel_dcasetting_condition.typedesc.' . $type,
+            [],
+            'contao_tl_metamodel_dcasetting_condition'
+        );
         if ($label == 'tl_metamodel_dcasetting_condition.typedesc.' . $type) {
             $label = $this->translator->trans(
                 'tl_metamodel_dcasetting_condition.typedesc._default_',

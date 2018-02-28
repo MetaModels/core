@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,8 +17,8 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -26,10 +26,10 @@ namespace MetaModels\Helper;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\InputProvider;
 use Doctrine\DBAL\Connection;
+use MetaModels\Exceptions\Database\ColumnDoesNotExistException;
 use MetaModels\Exceptions\Database\ColumnExistsException;
 use MetaModels\Exceptions\Database\InvalidColumnNameException;
 use MetaModels\Exceptions\Database\InvalidTableNameException;
-use MetaModels\Exceptions\Database\ColumnDoesNotExistException;
 use MetaModels\Exceptions\Database\TableDoesNotExistException;
 use MetaModels\Exceptions\Database\TableExistsException;
 
@@ -160,9 +160,9 @@ class TableManipulator
     /**
      * TableManipulator constructor.
      *
-     * @param Connection          $connection    Database connection.
-     * @param array               $systemColumns System columns that always are defined in a MetaModel table and are not
-     *                                           attributes.
+     * @param Connection $connection    Database connection.
+     * @param array      $systemColumns System columns that always are defined in a MetaModel table and are not
+     *                                  attributes.
      */
     public function __construct(Connection $connection, array $systemColumns)
     {

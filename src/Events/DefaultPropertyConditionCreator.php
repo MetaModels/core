@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,8 +15,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -219,6 +219,8 @@ class DefaultPropertyConditionCreator
      * @param IMetaModel $metaModel The MetaModel instance.
      *
      * @return NotCondition
+     *
+     * @throws \InvalidArgumentException Throws NOT conditions may only contain one child given.
      */
     private function buildNotCondition(array $condition, IMetaModel $metaModel)
     {
@@ -240,6 +242,8 @@ class DefaultPropertyConditionCreator
      * @param IMetaModel $metaModel The MetaModel instance.
      *
      * @return PropertyConditionInterface
+     *
+     * @throws \RuntimeException Throws condition of type could not be transformed to an instance.
      */
     private function convertCondition($condition, IMetaModel $metaModel)
     {

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,15 +13,15 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\Controller\Backend;
 
 use Contao\Backend;
-use Contao\BackendTemplate;
 use Contao\Controller;
 use Contao\Environment;
 use Contao\Input;
@@ -55,7 +55,8 @@ class PickerWidgetController
      * @param EngineInterface     $templating The twig engine.
      * @param TranslatorInterface $translator The translator.
      */
-    public function __construct(EngineInterface $templating, TranslatorInterface $translator) {
+    public function __construct(EngineInterface $templating, TranslatorInterface $translator)
+    {
         $this->templating = $templating;
         $this->translator = $translator;
     }
@@ -64,6 +65,8 @@ class PickerWidgetController
      * Render the picker.
      *
      * @return Response
+     *
+     * @throws \RuntimeException Throw field parameter error.
      */
     public function __invoke()
     {
@@ -130,4 +133,3 @@ class PickerWidgetController
         );
     }
 }
-

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,8 +13,9 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -45,11 +46,15 @@ class ViewCombination
     private $tokenStorage;
 
     /**
+     * The view combination.
+     *
      * @var ViewCombinationBuilder
      */
     private $builder;
 
     /**
+     * The input screen.
+     *
      * @var InputScreenInformationBuilder
      */
     private $inputScreens;
@@ -98,7 +103,7 @@ class ViewCombination
 
                 break;
             case ($user instanceof FrontendUser):
-                $mode = 'fe';
+                $mode   = 'fe';
                 $groups = $user->groups;
                 // Special case in combinations, anonymous frontend users have the implicit group id -1.
                 if (!$this->getUser()->id) {
@@ -108,7 +113,7 @@ class ViewCombination
                 break;
             default:
                 // Default handled as frontend anonymous.
-                $mode = 'fe';
+                $mode   = 'fe';
                 $groups = [-1];
         }
 
@@ -179,9 +184,13 @@ class ViewCombination
      */
     public function getChildrenOf($parentTable)
     {
-        $inputScreens = array_filter($this->getInputScreens(), function ($inputScreen) use ($parentTable){
-            return ($inputScreen['meta']['rendertype'] === 'ctable') && ($inputScreen['meta']['ptable'] === $parentTable);
-        });
+        $inputScreens = array_filter(
+            $this->getInputScreens(),
+            function ($inputScreen) use ($parentTable) {
+                return ($inputScreen['meta']['rendertype'] === 'ctable')
+                       && ($inputScreen['meta']['ptable'] === $parentTable);
+            }
+        );
 
         return $inputScreens;
     }
@@ -204,7 +213,7 @@ class ViewCombination
     }
 
     /**
-     *
+     * Get the input screens.
      *
      * @return array
      */

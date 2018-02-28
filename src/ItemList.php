@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,8 +22,8 @@
  * @author     Jeremie Constant <j.constant@imi.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -31,8 +31,11 @@ namespace MetaModels;
 
 use Contao\StringUtil;
 use MetaModels\Events\RenderItemListEvent;
+use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\Helper\PaginationLimitCalculator;
+use MetaModels\Render\Setting\IRenderSettingFactory;
 use MetaModels\Render\Template;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Implementation of a general purpose MetaModel listing.
@@ -105,7 +108,9 @@ class ItemList implements IServiceContainerAware
     /**
      * The service container.
      *
-     * @var IMetaModelsServiceContainer
+     * @var IMetaModelsServiceContainer|\Closure
+     *
+     * @deprecated The service container will get removed.
      */
     private $serviceContainer;
 
@@ -117,11 +122,137 @@ class ItemList implements IServiceContainerAware
     private $paginationLimitCalculator;
 
     /**
+     *  The filter setting factory.
+     *
+     * @var IFilterSettingFactory
+     */
+    private $filterFactory;
+
+    /**
+     * The MetaModels factory.
+     *
+     * @var IFactory
+     */
+    private $factory;
+
+    /**
+     * The event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * The render setting factory.
+     *
+     * @var IRenderSettingFactory
+     */
+    private $renderSettingFactory;
+
+    /**
      * Create a new instance.
      */
     public function __construct()
     {
         $this->paginationLimitCalculator = new PaginationLimitCalculator();
+    }
+
+    /**
+     * Set the filter setting factory.
+     *
+     * @param IFilterSettingFactory $filterFactory The filter setting factory.
+     *
+     * @return ItemList
+     */
+    public function setFilterFactory(IFilterSettingFactory $filterFactory)
+    {
+        $this->filterFactory = $filterFactory;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the filter setting factory.
+     *
+     * @return IFilterSettingFactory
+     */
+    private function getFilterFactory()
+    {
+        if ($this->filterFactory) {
+            return $this->filterFactory;
+        }
+
+        return $this->getServiceContainer()->getFilterFactory();
+    }
+
+    /**
+     * Set the factory.
+     *
+     * @param IFactory $factory The factory.
+     *
+     * @return ItemList
+     */
+    public function setFactory(IFactory $factory)
+    {
+        $this->factory = $factory;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the filter setting factory.
+     *
+     * @return IFactory
+     */
+    private function getFactory()
+    {
+        if ($this->factory) {
+            return $this->factory;
+        }
+
+        return $this->getServiceContainer()->getFactory();
+    }
+
+    /**
+     * Set the render setting factory.
+     *
+     * @param IRenderSettingFactory $factory The factory.
+     *
+     * @return ItemList
+     */
+    public function setRenderSettingFactory(IRenderSettingFactory $factory)
+    {
+        $this->renderSettingFactory = $factory;
+
+        return $this;
+    }
+
+    /**
+     * Set eventDispatcher.
+     *
+     * @param EventDispatcherInterface $eventDispatcher The new value.
+     *
+     * @return ItemList
+     */
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+
+        return $this;
+    }
+
+    /**
+     * Retrieve eventDispatcher.
+     *
+     * @return EventDispatcherInterface
+     */
+    private function getEventDispatcher()
+    {
+        if ($this->eventDispatcher) {
+            return $this->eventDispatcher;
+        }
+
+        return $this->getServiceContainer()->getEventDispatcher();
     }
 
     /**
@@ -134,6 +265,22 @@ class ItemList implements IServiceContainerAware
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer)
+    {
+        $this->serviceContainer = $serviceContainer;
+
+        return $this;
+    }
+
+    /**
+     * Set the service container to use (fallback for MM 2.0 compatibility).
+     *
+     * @param \Closure $serviceContainer The service container retriever.
+     *
+     * @return ItemList
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
+     */
+    public function setServiceContainerFallback($serviceContainer)
     {
         $this->serviceContainer = $serviceContainer;
 
@@ -170,6 +317,9 @@ class ItemList implements IServiceContainerAware
     {
         if (!$this->serviceContainer) {
             $this->useDefaultServiceContainer();
+        }
+        if (is_callable($this->serviceContainer)) {
+            return $this->serviceContainer = $this->serviceContainer->__invoke();
         }
 
         return $this->serviceContainer;
@@ -329,7 +479,7 @@ class ItemList implements IServiceContainerAware
      */
     protected function prepareMetaModel()
     {
-        $factory            = $this->getServiceContainer()->getFactory();
+        $factory            = $this->getFactory();
         $this->objMetaModel = $factory->getMetaModel($factory->translateIdToMetaModelName($this->intMetaModel));
         if (!$this->objMetaModel) {
             throw new \RuntimeException('Could get metamodel id: ' . $this->intMetaModel);
@@ -345,7 +495,11 @@ class ItemList implements IServiceContainerAware
      */
     protected function prepareView()
     {
-        $this->objView = $this->objMetaModel->getView($this->intView);
+        if ($this->renderSettingFactory) {
+            $this->objView = $this->renderSettingFactory->createCollection($this->objMetaModel, $this->intView);
+        } else {
+            $this->objView = $this->objMetaModel->getView($this->intView);
+        }
 
         if ($this->objView) {
             $this->objTemplate       = new Template($this->objView->get('template'));
@@ -369,7 +523,7 @@ class ItemList implements IServiceContainerAware
     {
         $this->intFilter = $intFilter;
 
-        $this->objFilterSettings = $this->getServiceContainer()->getFilterFactory()->createCollection($this->intFilter);
+        $this->objFilterSettings = $this->getFilterFactory()->createCollection($this->intFilter);
 
         if (!$this->objFilterSettings) {
             throw new \RuntimeException('Error: no filter object defined.');
@@ -517,7 +671,7 @@ class ItemList implements IServiceContainerAware
         }
 
         if ($intFilterSettings) {
-            $objFilterSettings = $this->getServiceContainer()->getFilterFactory()->createCollection($intFilterSettings);
+            $objFilterSettings = $this->getFilterFactory()->createCollection($intFilterSettings);
             $arrAttributes     = array_merge($objFilterSettings->getReferencedAttributes(), $arrAttributes);
         }
 
@@ -751,10 +905,7 @@ class ItemList implements IServiceContainerAware
     public function render($blnNoNativeParsing, $objCaller)
     {
         $event = new RenderItemListEvent($this, $this->objTemplate, $objCaller);
-        $this
-            ->getServiceContainer()
-            ->getEventDispatcher()
-            ->dispatch(MetaModelsEvents::RENDER_ITEM_LIST, $event);
+        $this->getEventDispatcher()->dispatch(MetaModelsEvents::RENDER_ITEM_LIST, $event);
 
         $this->objTemplate->noItemsMsg = $this->getNoItemsCaption();
         $this->objTemplate->details    = $this->getCaptionText('details');

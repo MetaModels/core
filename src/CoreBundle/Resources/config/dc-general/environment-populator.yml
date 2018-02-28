@@ -19,7 +19,8 @@ services:
     metamodels.environment_populator.data_provider_populator:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\EnvironmentPopulator\DataProviderPopulator
         arguments:
-            - "@metamodels.factory"
+            - '@metamodels.factory'
+            - '@event_dispatcher'
         tags:
             - name: kernel.event_listener
               event: dc-general.factory.populate-environment

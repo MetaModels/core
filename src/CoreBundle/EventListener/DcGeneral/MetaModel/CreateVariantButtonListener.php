@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,13 +16,15 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\MetaModel;
 
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\BackendViewInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\ContaoBackendViewTemplate;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\EditMask;
@@ -50,13 +52,23 @@ class CreateVariantButtonListener
     private $factory;
 
     /**
+     * The request scope determinator.
+     *
+     * @var RequestScopeDeterminator
+     */
+    private $scopeMatcher;
+
+    /**
      * Create a new instance.
      *
-     * @param IFactory $factory The factory.
+     * @param IFactory                 $factory      The factory.
+     *
+     * @param RequestScopeDeterminator $scopeMatcher The request scope determinator.
      */
-    public function __construct(IFactory $factory)
+    public function __construct(IFactory $factory, RequestScopeDeterminator $scopeMatcher)
     {
-        $this->factory = $factory;
+        $this->factory      = $factory;
+        $this->scopeMatcher = $scopeMatcher;
     }
 
     /**
@@ -68,7 +80,7 @@ class CreateVariantButtonListener
      */
     public function createButton(GetOperationButtonEvent $event)
     {
-        if ($event->getCommand()->getName() != 'createvariant') {
+        if ('createvariant' !== $event->getCommand()->getName()) {
             return;
         }
         /** @var Model $model */
@@ -92,7 +104,8 @@ class CreateVariantButtonListener
      */
     public function handleCreateVariantAction(ActionEvent $event)
     {
-        if ($event->getAction()->getName() != 'createvariant') {
+        if (false === $this->scopeMatcher->currentScopeIsBackend()
+            || 'createvariant' !== $event->getAction()->getName()) {
             return;
         }
 

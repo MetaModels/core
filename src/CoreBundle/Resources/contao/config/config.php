@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,8 +21,8 @@
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -264,12 +264,12 @@ if (!isset($GLOBALS['MM_FILTER_PARAMS'])) {
     $GLOBALS['MM_FILTER_PARAMS'] = array();
 }
 
-$GLOBALS['TL_HOOKS']['initializeDependencyContainer'][] = function (
-    \Pimple $container
-) {
+$GLOBALS['TL_HOOKS']['initializeDependencyContainer'][] = function () {
     $handler = new MetaModels\Helper\SubSystemBoot();
-    $handler->boot($container);
+    $handler->boot();
 };
 
-$GLOBALS['TL_HOOKS']['getUserNavigation'][] = ['metamodels.backend.navigation_builder', 'onGetUserNavigation'];
-$GLOBALS['TL_HOOKS']['loadDataContainer'][] = ['metamodels.datacontainer_loader', 'onLoadDataContainer'];
+$GLOBALS['TL_HOOKS']['getUserNavigation'][] =
+    [MetaModels\CoreBundle\Contao\Hooks\RegisterBackendNavigation::class, 'onGetUserNavigation'];
+$GLOBALS['TL_HOOKS']['loadDataContainer'][] =
+    [\MetaModels\CoreBundle\Contao\Hooks\LoadDataContainer::class, 'onLoadDataContainer'];

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,8 +13,9 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -63,10 +64,10 @@ class LoadDataContainer
     /**
      * Create a new instance.
      *
-     * @param IFactory              $factory           The MetaModels factory.
-     * @param ViewCombination       $combination       The view combination provider.
-     * @param Adapter               $controllerAdapter The controller adapter to load languages and data containers.
-     * @param IconBuilder           $iconBuilder       The icon builder.
+     * @param IFactory        $factory           The MetaModels factory.
+     * @param ViewCombination $combination       The view combination provider.
+     * @param Adapter         $controllerAdapter The controller adapter to load languages and data containers.
+     * @param IconBuilder     $iconBuilder       The icon builder.
      */
     public function __construct(
         IFactory $factory,
@@ -74,10 +75,10 @@ class LoadDataContainer
         Adapter $controllerAdapter,
         IconBuilder $iconBuilder
     ) {
-        $this->factory      = $factory;
-        $this->combination  = $combination;
-        $this->controller   = $controllerAdapter;
-        $this->iconBuilder  = $iconBuilder;
+        $this->factory     = $factory;
+        $this->combination = $combination;
+        $this->controller  = $controllerAdapter;
+        $this->iconBuilder = $iconBuilder;
     }
 
     /**
@@ -89,6 +90,18 @@ class LoadDataContainer
      */
     public function onLoadDataContainer($tableName)
     {
+        static $tableExists;
+        // Test that the tables have been created.
+        if (null === $tableExists) {
+            $tableExists = \System::getContainer()
+                ->get('database_connection')
+                ->getSchemaManager()
+                ->tablesExist(['tl_metamodel']);
+        }
+        if (false === $tableExists) {
+            return;
+        }
+
         $this->handleMetaModelTable($tableName);
         $this->handleNonMetaModelTable($tableName);
     }
@@ -118,8 +131,8 @@ class LoadDataContainer
         }
 
         $GLOBALS['TL_DCA'][$tableName] = array_replace_recursive(
-            (array)$GLOBALS['TL_DCA']['tl_metamodel_item'],
-            (array)$GLOBALS['TL_DCA'][$tableName]
+            (array) $GLOBALS['TL_DCA']['tl_metamodel_item'],
+            (array) $GLOBALS['TL_DCA'][$tableName]
         );
     }
 
@@ -150,7 +163,7 @@ class LoadDataContainer
             return;
         }
 
-        $parentDCA   = &$GLOBALS['TL_DCA'][$tableName];
+        $parentDCA = &$GLOBALS['TL_DCA'][$tableName];
 
         $this->controller->loadLanguageFile('default');
         foreach ($map[$tableName] as $metaModelTable => $inputScreen) {
@@ -169,13 +182,13 @@ class LoadDataContainer
                 }
             }
 
-            $operationName = 'edit_' . $metaModel->getTableName();
+            $operationName                                   = 'edit_' . $metaModel->getTableName();
             $parentDCA['list']['operations'][$operationName] = array
             (
-                'label'               => &$caption,
-                'href'                => 'table=' . $metaModelTable,
-                'icon'                => $this->iconBuilder->getBackendIcon($inputScreen['meta']['backendicon']),
-                'attributes'          => 'onclick="Backend.getScrollOffset()"',
+                'label'      => &$caption,
+                'href'       => 'table=' . $metaModelTable,
+                'icon'       => $this->iconBuilder->getBackendIcon($inputScreen['meta']['backendicon']),
+                'attributes' => 'onclick="Backend.getScrollOffset()"',
             );
 
             // Is the destination table a metamodel with variants?
@@ -187,20 +200,21 @@ class LoadDataContainer
 
             // Compatibility with DC_Table.
             if ($parentDCA['config']['dataContainer'] !== 'General') {
-                $idParameter = $parentDCA['list']['operations'][$operationName]['idparam'];
+                $idParameter                                                        =
+                    $parentDCA['list']['operations'][$operationName]['idparam'];
                 $parentDCA['list']['operations'][$operationName]['button_callback'] =
                     function ($row, $href, $label, $name, $icon, $attributes, $table) use ($idParameter) {
-                    return $this->buildChildOperationButton(
-                        $idParameter,
-                        $row['id'],
-                        $href,
-                        $label,
-                        $name,
-                        $icon,
-                        $attributes,
-                        $table
-                    );
-                };
+                        return $this->buildChildOperationButton(
+                            $idParameter,
+                            $row['id'],
+                            $href,
+                            $label,
+                            $name,
+                            $icon,
+                            $attributes,
+                            $table
+                        );
+                    };
             }
         }
     }

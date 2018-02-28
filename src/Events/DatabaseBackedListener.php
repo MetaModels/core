@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,18 +16,21 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Events;
 
+use Contao\System;
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\Events\CollectMetaModelAttributeInformationEvent;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModel;
+use MetaModels\MetaModelsServiceContainer;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This is the information retriever database backend.
@@ -40,6 +43,13 @@ class DatabaseBackedListener
      * @var Connection
      */
     private $database;
+
+    /**
+     * The event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
 
     /**
      * All MetaModel instances created via this listener.
@@ -83,11 +93,13 @@ class DatabaseBackedListener
     /**
      * Create a new instance.
      *
-     * @param Connection $database  The database connection.
+     * @param Connection               $database   The database connection.
+     * @param EventDispatcherInterface $dispatcher The event dispatcher.
      */
-    public function __construct(Connection $database)
+    public function __construct(Connection $database, EventDispatcherInterface $dispatcher)
     {
-        $this->database  = $database;
+        $this->database   = $database;
+        $this->dispatcher = $dispatcher;
     }
 
     /**
@@ -99,7 +111,7 @@ class DatabaseBackedListener
      */
     public function getServiceContainer()
     {
-        return \System::getContainer()->get('cca.legacy_dic')->getService('metamodels-service-container');
+        return System::getContainer()->get(MetaModelsServiceContainer::class);
     }
 
     /**
@@ -111,7 +123,7 @@ class DatabaseBackedListener
      */
     public function getMetaModelNameFromId(GetMetaModelNameFromIdEvent $event)
     {
-        $metaModelId =$event->getMetaModelId();
+        $metaModelId = $event->getMetaModelId();
         if (array_key_exists($metaModelId, $this->instancesById)) {
             $event->setMetaModelName($this->instancesById[$metaModelId]->getTableName());
 
@@ -162,7 +174,9 @@ class DatabaseBackedListener
             return false;
         }
 
+        // @codingStandardsIgnoreStart
         @trigger_error('Creating MetaModel instances via global factories is deprecated.', E_USER_DEPRECATED);
+        // @codingStandardsIgnoreEnd
 
         $factoryClass = $GLOBALS['METAMODELS']['factories'][$name];
         $event->setMetaModel(call_user_func_array(array($factoryClass, 'createInstance'), array($arrData)));
@@ -182,7 +196,7 @@ class DatabaseBackedListener
     protected function createInstance(CreateMetaModelEvent $event, $arrData)
     {
         if (!$this->createInstanceViaLegacyFactory($event, $arrData)) {
-            $metaModel = new MetaModel($arrData);
+            $metaModel = new MetaModel($arrData, $this->dispatcher, $this->database);
             $metaModel->setServiceContainer(function () {
                 return $this->getServiceContainer();
             }, false);

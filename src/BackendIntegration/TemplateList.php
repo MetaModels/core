@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,8 +15,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -121,7 +121,8 @@ class TemplateList
     {
         return $this->getTemplatesForBaseFrom(
             $templateBaseName,
-            $this->rootDir . '/templates', $this->getNoThemeMessage()
+            $this->rootDir . '/templates',
+            $this->getNoThemeMessage()
         );
     }
 
@@ -146,7 +147,7 @@ class TemplateList
         // Add all the theme templates folders.
         foreach ($themes as $theme) {
             $templateDir = $theme['templates'];
-            $themeName = $theme['name'];
+            $themeName   = $theme['name'];
             if ($templateDir != '') {
                 $allTemplates = array_replace_recursive(
                     $allTemplates,

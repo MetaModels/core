@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,8 +14,8 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -62,10 +62,10 @@ class RegisterBackendNavigation
     /**
      * Create a new instance.
      *
-     * @param TranslatorInterface   $translator
-     * @param RequestStack          $requestStack
-     * @param UrlGeneratorInterface $urlGenerator
-     * @param ViewCombination       $viewCombination
+     * @param TranslatorInterface   $translator      The translator.
+     * @param RequestStack          $requestStack    The request stack.
+     * @param UrlGeneratorInterface $urlGenerator    The url generator.
+     * @param ViewCombination       $viewCombination The view combination.
      */
     public function __construct(
         TranslatorInterface $translator,
@@ -167,6 +167,8 @@ class RegisterBackendNavigation
     }
 
     /**
+     * Determine if is active.
+     *
      * @param string $route  The route name.
      * @param array  $params The route parameters.
      *
@@ -179,7 +181,7 @@ class RegisterBackendNavigation
         ) {
             return false;
         }
-        $request = $this->requestStack->getCurrentRequest();
+        $request    = $this->requestStack->getCurrentRequest();
         $attributes = $request->attributes->get('_route_params');
         $query      = $request->query;
         foreach ($params as $param => $value) {

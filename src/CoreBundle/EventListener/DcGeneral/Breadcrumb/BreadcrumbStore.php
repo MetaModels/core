@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,8 +13,9 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -23,6 +24,9 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb;
 use MetaModels\CoreBundle\Assets\IconBuilder;
 use Symfony\Component\Translation\TranslatorInterface;
 
+/**
+ * The breadcrumb store.
+ */
 class BreadcrumbStore
 {
     /**
@@ -77,9 +81,9 @@ class BreadcrumbStore
     /**
      * Push an entry.
      *
-     * @param $url
-     * @param $table
-     * @param $icon
+     * @param string $url   The url.
+     * @param string $table The table.
+     * @param string $icon  The icon.
      *
      * @return void
      */
@@ -152,7 +156,7 @@ class BreadcrumbStore
             return $table;
         }
         $shortTable = str_replace('tl_', '', $table);
-        $label      = $this->translator->trans( 'BRD.' . $shortTable, [], 'contao_default');
+        $label      = $this->translator->trans('BRD.' . $shortTable, [], 'contao_default');
         if ($label == $shortTable) {
             $shortTable = str_replace('tl_metamodel_', '', $table);
             return ucfirst($shortTable) . ' %s';

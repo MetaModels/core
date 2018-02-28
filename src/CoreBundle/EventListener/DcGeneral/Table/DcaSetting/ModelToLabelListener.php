@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,8 +13,9 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -35,16 +36,22 @@ use Symfony\Component\Translation\TranslatorInterface;
 class ModelToLabelListener extends AbstractListener
 {
     /**
+     * The attribute factory.
+     *
      * @var IAttributeFactory
      */
     private $attributeFactory;
 
     /**
+     * The icon builder.
+     *
      * @var IconBuilder
      */
     private $iconBuilder;
 
     /**
+     * The translator.
+     *
      * @var TranslatorInterface
      */
     private $translator;
@@ -57,7 +64,7 @@ class ModelToLabelListener extends AbstractListener
      * @param Connection               $connection        The database connection.
      * @param IAttributeFactory        $attributeFactory  The attribute factory.
      * @param IconBuilder              $iconBuilder       The icon builder.
-     * @param TranslatorInterface      $translator
+     * @param TranslatorInterface      $translator        The translator.
      */
     public function __construct(
         RequestScopeDeterminator $scopeDeterminator,
@@ -116,8 +123,8 @@ class ModelToLabelListener extends AbstractListener
         $attribute = $metaModel->getAttributeById($model->getProperty('attr_id'));
 
         if ($attribute) {
-            $type  = $attribute->get('type');
-            $image = $this->iconBuilder->getBackendIconImageTag(
+            $type     = $attribute->get('type');
+            $image    = $this->iconBuilder->getBackendIconImageTag(
                 $this->attributeFactory->getIconForType($type),
                 $type,
                 '',
