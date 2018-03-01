@@ -42,7 +42,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      *
      * @var Connection
      */
-    private $connection;
+    protected $connection;
 
     /**
      * Instantiate an MetaModel attribute.
