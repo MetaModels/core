@@ -166,7 +166,11 @@ class Subscriber extends BaseSubscriber
      */
     public function handleModelToLabel(ModelToLabelEvent $event)
     {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dcasetting_condition')) {
+        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_dcasetting_condition')
+            || ($event->getEnvironment()->getInputProvider()->hasParameter('mode')
+                && 'select' === $event->getEnvironment()->getInputProvider()->getParameter('act')
+            )
+        ) {
             return;
         }
 

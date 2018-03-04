@@ -269,11 +269,15 @@ interface IMetaModel
     /**
      * Save an item into the database.
      *
-     * @param IItem $objItem The item to save to the database.
+     * @param IItem    $objItem   The item to save to the database.
+     *
+     * @param int|null $timestamp Optional parameter for use own timestamp.
+     *                            This is useful if save a collection of models and all shall have
+     *                            the same timestamp.
      *
      * @return void
      */
-    public function saveItem($objItem);
+    public function saveItem($objItem, $timestamp = null);
 
     /**
      * Remove an item from the database.
