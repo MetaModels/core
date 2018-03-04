@@ -549,11 +549,7 @@ class ToolboxFile
             return array('files' => array(), 'source' => array());
         }
 
-        if ($blnAscending) {
-            uksort($arrFiles, 'basename_natcasecmp');
-        } else {
-            uksort($arrFiles, 'basename_natcasercmp');
-        }
+        \uasort($arrFiles, ($blnAscending) ? '\basename_natcasecmp' : '\basename_natcasercmp');
 
         return $this->remapSorting($arrFiles, $this->outputBuffer);
     }
