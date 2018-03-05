@@ -22,6 +22,7 @@
 
 namespace MetaModels\FrontendIntegration;
 
+use Contao\Input;
 use Database\Result;
 use MetaModels\Filter\Rules\StaticIdList;
 use MetaModels\IMetaModel;
@@ -359,21 +360,27 @@ class InsertTags extends \Controller
      * @param int $intFilterId    ID of the filter.
      *
      * @return boolean|int False for no data or integer for the count result.
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getCountFor($intMetaModelId, $intFilterId)
     {
-        $objMetaModel = $this->loadMetaModel($intMetaModelId);
-        if ($objMetaModel == null) {
+        $metaModel = $this->loadMetaModel($intMetaModelId);
+        if ($metaModel == null) {
             return false;
         }
 
-        // FIXME: sanitize input parameters.
-        $objFilter = $objMetaModel->prepareFilter($intFilterId, $_GET);
+        $objFilter = $metaModel->getEmptyFilter();
+        if ($intFilterId) {
+            $collection = $this->getServiceContainer()->getFilterFactory()->createCollection($intFilterId);
+            $values     = [];
 
-        return $objMetaModel->getCount($objFilter);
+            foreach ($collection->getParameters() as $key) {
+                $values[$key] = Input::get($key);
+            }
+
+            $collection->addRules($objFilter, $values);
+        }
+
+        return $metaModel->getCount($objFilter);
     }
 
     /**
