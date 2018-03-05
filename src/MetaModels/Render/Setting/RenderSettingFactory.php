@@ -95,7 +95,6 @@ class RenderSettingFactory implements IRenderSettingFactory
                 continue;
             }
 
-            // TODO: we should provide attribute type based render setting elements in version 2.X.
             $attributeSetting = $renderSetting->getSetting($attribute->getColName());
             if (!$attributeSetting) {
                 $attributeSetting = $attribute->getDefaultRenderSettings();
