@@ -32,6 +32,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CopyCommand
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CutCommand;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\SelectCommand;
 use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
+use ContaoCommunityAlliance\Translator\TranslatorInterface;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\Events\MetaModel\BuildMetaModelOperationsEvent;
@@ -76,15 +77,27 @@ class CommandBuilder
     private $inputScreen;
 
     /**
+     * The translator.
+     *
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * Create a new instance.
      *
      * @param EventDispatcherInterface $dispatcher       The event dispatcher.
      * @param ViewCombinations         $viewCombinations The view combinations.
+     * @param TranslatorInterface      $translator       The translator.
      */
-    public function __construct(EventDispatcherInterface $dispatcher, ViewCombinations $viewCombinations)
-    {
+    public function __construct(
+        EventDispatcherInterface $dispatcher,
+        ViewCombinations $viewCombinations,
+        TranslatorInterface $translator
+    ) {
         $this->dispatcher       = $dispatcher;
         $this->viewCombinations = $viewCombinations;
+        $this->translator       = $translator;
     }
 
     /**
@@ -158,9 +171,6 @@ class CommandBuilder
      * @param Contao2BackendViewDefinitionInterface $view The backend view information.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function parseModelOperations(Contao2BackendViewDefinitionInterface $view)
     {
@@ -178,8 +188,7 @@ class CommandBuilder
             [
                 'attributes' => sprintf(
                     'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
-                    // FIXME: we need the translation manager here.
-                    $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+                    $this->translator->translate('MSC.deleteConfirm')
                 )
             ]
         );

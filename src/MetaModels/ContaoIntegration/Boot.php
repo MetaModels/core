@@ -150,7 +150,7 @@ abstract class Boot
         );
         $dispatcher->addListener(
             BuildDataDefinitionEvent::NAME,
-            [new CommandBuilder($dispatcher, $viewCombinations), 'handle']
+            [new CommandBuilder($dispatcher, $viewCombinations, $translator), 'handle']
         );
         $dispatcher->addListener(
             BuildDataDefinitionEvent::NAME,
