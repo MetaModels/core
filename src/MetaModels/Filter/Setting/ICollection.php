@@ -75,8 +75,6 @@ interface ICollection
      *                                          jumpTo page.
      *
      * @return array The filter url parameters.
-     *
-     * @todo this way of generating jump to urls is not as elegant as it could be we might want to refactor it.
      */
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting);
 
