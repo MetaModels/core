@@ -1006,8 +1006,6 @@ class MetaModel implements IMetaModel
 
     /**
      * {@inheritdoc}
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function saveItem($objItem, $timestamp = null)
     {
@@ -1020,22 +1018,7 @@ class MetaModel implements IMetaModel
             // @codingStandardsIgnoreEnd
         }
 
-        $baseAttributes = false;
-        $objItem->set('tstamp', $timestamp ?: \time());
-        if (!$objItem->get('id')) {
-            $baseAttributes = true;
-            $this->createNewItem($objItem);
-        }
-
-        // Update system columns.
-        if ($objItem->get('pid') !== null) {
-            $this->saveSimpleColumn('pid', array($objItem->get('id')), $objItem->get('pid'));
-        }
-        if ($objItem->get('sorting') !== null) {
-            $this->saveSimpleColumn('sorting', array($objItem->get('id')), $objItem->get('sorting'));
-        }
-        $this->saveSimpleColumn('tstamp', array($objItem->get('id')), $objItem->get('tstamp'));
-
+        $baseAttributes = $this->saveBaseColumns($objItem, $timestamp ?: \time());
         if ($this->isTranslated()) {
             $strActiveLanguage = $this->getActiveLanguage();
         } else {
@@ -1123,5 +1106,34 @@ class MetaModel implements IMetaModel
     public function getView($intViewId = 0)
     {
         return $this->getServiceContainer()->getRenderSettingFactory()->createCollection($this, $intViewId);
+    }
+
+    /**
+     * Save the base columns of an item and return true if it is a new item.
+     *
+     * @param IItem $item      The item to save.
+     * @param int   $timestamp The timestamp to use.
+     *
+     * @return bool
+     */
+    private function saveBaseColumns(IItem $item, $timestamp)
+    {
+        $isNew = false;
+        $item->set('tstamp', $timestamp);
+        if (!$item->get('id')) {
+            $isNew = true;
+            $this->createNewItem($item);
+        }
+
+        // Update system columns.
+        if (null !== $item->get('pid')) {
+            $this->saveSimpleColumn('pid', [$item->get('id')], $item->get('pid'));
+        }
+        if (null !== $item->get('sorting')) {
+            $this->saveSimpleColumn('sorting', [$item->get('id')], $item->get('sorting'));
+        }
+        $this->saveSimpleColumn('tstamp', [$item->get('id')], $item->get('tstamp'));
+
+        return $isNew;
     }
 }
