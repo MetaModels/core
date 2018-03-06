@@ -335,7 +335,6 @@ class InputScreen implements IInputScreen
                 $condition = $instances[$id];
                 $parent    = ($pid == 0) ? $result : $instances[$pid];
 
-                // TODO: this is better to be done with a new event to sort conditions into their parents as we might
                 // have other classes in the future.
                 if ($parent instanceof ConditionChainInterface) {
                     $parent->addCondition($condition);
