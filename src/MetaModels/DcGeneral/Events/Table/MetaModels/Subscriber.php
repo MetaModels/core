@@ -370,7 +370,6 @@ class Subscriber extends BaseSubscriber
         if ($oldTable !== $newTable) {
             if ($oldTable && $this->getDatabase()->tableExists($oldTable, null, true)) {
                 TableManipulation::renameTable($oldTable, $newTable);
-                // TODO: notify attributes that the MetaModel has changed its table name.
             } else {
                 TableManipulation::createTable($newTable);
             }
