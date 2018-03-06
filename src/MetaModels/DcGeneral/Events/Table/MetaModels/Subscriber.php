@@ -66,10 +66,6 @@ class Subscriber extends BaseSubscriber
                 array($this, 'getOperationButton')
             )
             ->addListener(
-                GetGlobalButtonEvent::NAME,
-                array($this, 'getGlobalButton')
-            )
-            ->addListener(
                 ModelToLabelEvent::NAME,
                 array($this, 'modelToLabel')
             )
@@ -122,25 +118,6 @@ class Subscriber extends BaseSubscriber
                     )
                     ->getUrl()
             );
-        }
-    }
-
-    /**
-     * Clear the button if the User is not admin.
-     *
-     * @param GetGlobalButtonEvent $event The event.
-     *
-     * @return void
-     */
-    public function getGlobalButton(GetGlobalButtonEvent $event)
-    {
-        if ($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel') {
-            return;
-        }
-
-        // FIXME: direct access to BackendUser.
-        if (!\BackendUser::getInstance()->isAdmin) {
-            $event->setHtml('');
         }
     }
 
