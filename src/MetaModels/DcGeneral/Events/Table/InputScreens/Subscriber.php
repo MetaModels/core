@@ -24,6 +24,7 @@
 namespace MetaModels\DcGeneral\Events\Table\InputScreens;
 
 use Contao\Message;
+use Contao\StringUtil;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
@@ -192,18 +193,16 @@ class Subscriber extends BaseSubscriber
      */
     protected function drawLegend(ModelToLabelEvent $event)
     {
-        $model = $event->getModel();
-
-        $arrLegend = deserialize($model->getProperty('legendtitle'));
-        if (is_array($arrLegend)) {
-            $strLegend = $arrLegend[$GLOBALS['TL_LANGUAGE']];
-
-            if (!$strLegend) {
-                // TODO: Get the fallback language here.
-                $strLegend = 'legend';
-            }
-        } else {
-            $strLegend = $model->getProperty('legendtitle') ? $model->getProperty('legendtitle') : 'legend';
+        $model     = $event->getModel();
+        $metaModel = $this->getMetaModelFromModel($model);
+        if (is_array($legend = deserialize($model->getProperty('legendtitle')))) {
+            $legend = $this->searchLanguageValue(
+                $legend,
+                [$metaModel->getActiveLanguage(), $metaModel->getFallbackLanguage()]
+            );
+        }
+        if (empty($legend)) {
+            $legend = 'legend';
         }
 
         $event
@@ -212,9 +211,30 @@ class Subscriber extends BaseSubscriber
             ->setArgs(array(
                 $model->getProperty('published') ? 'published' : 'unpublished',
                 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['legend'],
-                $strLegend,
+                $legend,
                 $model->getProperty('legendhide') ? ':hide' : ''
             ));
+    }
+
+    /**
+     * Search a valid language key in the passed array.
+     *
+     * @param string[] $values    The language values.
+     * @param string[] $languages The valid languages.
+     *
+     * @return null
+     */
+    private function searchLanguageValue($values, $languages)
+    {
+        foreach ($languages as $language) {
+            if (array_key_exists($language, $values)) {
+                if (!empty($values[$language])) {
+                    return $values[$language];
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
