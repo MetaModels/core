@@ -129,8 +129,6 @@ class Subscriber extends BaseSubscriber
      */
     protected function drawAttribute(ModelToLabelEvent $event)
     {
-        // FIXME: in here all language strings and icons are related to filters?
-        // FIXME: Add language files for the error msg.
         $model        = $event->getModel();
         $objSetting   = $this
             ->getDatabase()
