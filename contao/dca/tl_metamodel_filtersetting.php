@@ -309,7 +309,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
     (
         'id'                => array
         (
-            'sql' => "int(10) unsigned NOT NULL auto_increment"
+            'sql' => 'int(10) unsigned NOT NULL auto_increment'
         ),
         'pid'               => array
         (
@@ -408,7 +408,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
                 'alwaysSave'     => true,
                 'mandatory'      => true,
             ),
-            'sql'       => "text NULL"
+            'sql'       => 'text NULL'
         ),
         'urlparam'          => array
         (
@@ -448,7 +448,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
                 'helpwizard'     => true,
             ),
             'explanation' => 'customsql',
-            'sql'         => "text NULL"
+            'sql'         => 'text NULL'
         ),
         'allow_empty'       => array
         (
@@ -483,7 +483,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
             (
                 'tl_class' => 'clr w50',
             ),
-            'sql'       => "blob NULL"
+            'sql'       => 'blob NULL'
         ),
         'template'          => array
         (
