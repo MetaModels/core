@@ -88,21 +88,9 @@ class PropertyDefinitionBuilder
 
         // If the current metamodels has variants add the varbase and vargroup to the definition.
         if ($metaModel->hasVariants()) {
-            // FIXME: these are not properties yet, therefore we have to work around.
+            // These are not properties yet, therefore we have to work around.
             $this->getOrCreateProperty($definition, 'varbase');
             $this->getOrCreateProperty($definition, 'vargroup');
-            /*
-            $this->buildProperty(
-                $definition,
-                $metaModel->getAttribute('varbase'),
-                $inputScreen->getProperty('varbase')['info']
-            );
-            $this->buildProperty(
-                $definition,
-                $metaModel->getAttribute('vargroup'),
-                $inputScreen->getProperty('vargroup')['info']
-            );
-            */
         }
 
         foreach ($metaModel->getAttributes() as $attribute) {
