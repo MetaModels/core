@@ -108,7 +108,7 @@ class ItemPersister
             $language = null;
         }
 
-        $variantIds = [];
+        $variantIds = [$itemId];
         if ($item->isVariantBase()) {
             $variants = $this->metaModel->findVariantsWithBase([$itemId], null);
             foreach ($variants as $objVariant) {
