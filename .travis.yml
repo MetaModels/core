@@ -33,7 +33,7 @@ script: ant -keep-going
 git:
   depth: 2147483647
 
-# Reverted caching due to travis bug travis-ci/travis-ci#4393
-#cache:
-#  directories:
-#    - vendor
+# This used to cause corruption due to travis bug travis-ci/travis-ci#4393 - hopefully it works out now.
+cache:
+  directories:
+    - vendor
