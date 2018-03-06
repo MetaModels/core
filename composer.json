@@ -46,8 +46,8 @@
   "require-dev": {
     "cyberspectrum/contao-toolbox": "~0.6",
     "phpcq/all-tasks": "~1.1",
-    "metamodels/base-unit-tests": "~1.0",
-    "metamodels/phpunit-contao-database": "~1.0"
+    "metamodels/base-unit-tests": "^1.0.4",
+    "metamodels/phpunit-contao-database": "^1.0.1"
   },
   "autoload": {
     "psr-0": {
