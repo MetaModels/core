@@ -295,8 +295,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function getFilterOptions($idList, $usedOnly, &$arrCount = null)
     {
-        $objDB = $this->getMetaModel()->getServiceContainer()->getDatabase();
-        // TODO: implement $arrIds and $usedOnly handling here.
+        $objDB    = $this->getMetaModel()->getServiceContainer()->getDatabase();
         $arrWhere = $this->getWhere($idList, $this->getMetaModel()->getActiveLanguage());
         $strQuery = 'SELECT * FROM ' . $this->getValueTable() . ($arrWhere ? ' WHERE ' . $arrWhere['procedure'] : '');
 
