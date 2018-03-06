@@ -129,7 +129,6 @@ class FilterSettingFactory implements IFilterSettingFactory
      */
     protected function collectRulesFor($parentSetting, $filterSettings)
     {
-        // TODO: we should provide a collector like for attributes.
         $childInformation = $this->serviceContainer->getDatabase()
             ->prepare('SELECT * FROM tl_metamodel_filtersetting WHERE pid=? AND enabled=1 ORDER BY sorting ASC')
             ->execute($parentSetting->get('id'));
@@ -151,7 +150,6 @@ class FilterSettingFactory implements IFilterSettingFactory
      */
     public function collectRules($filterSettings)
     {
-        // TODO: we should provide a collector like for attributes.
         $database    = $this->serviceContainer->getDatabase();
         $information = $database
             ->prepare(
@@ -174,7 +172,6 @@ class FilterSettingFactory implements IFilterSettingFactory
      */
     public function createCollection($settingId)
     {
-        // TODO: we should provide a collector like for attributes.
         $information = $this->serviceContainer->getDatabase()
             ->prepare('SELECT * FROM tl_metamodel_filter WHERE id=?')
             ->execute($settingId)
