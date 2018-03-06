@@ -196,11 +196,6 @@ class FilterBuilderSql
         }
 
         switch (strtoupper($child['operation'])) {
-            case 'AND':
-            case 'OR':
-                // TODO: Currently not supported but we will add it in the future.
-                return $this->getAndOrFilter($child);
-
             case '=':
             case '>':
             case '<':
