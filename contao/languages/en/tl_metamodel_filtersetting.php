@@ -14,6 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -97,7 +98,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteafter'][1]             =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteinto'][0]              = 'Create new setting at the top';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteinto'][1]              =
     'Create new at the top of setting ID %s';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['idlist']       = 'Predefined set';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['idlist']       = 'Predefined set of items';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['simplelookup'] = 'Simple lookup';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['customsql']    = 'Custom SQL';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionor']  = 'OR condition';
@@ -114,3 +115,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand']  =
     '%s <strong>%s</strong> %s <br /> items that are mentioned in all results.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['fefilter']      =
     '%s <strong>%s</strong> %s <br /> for attribute <em>%s</em> (URL parameter: %s)';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['items'][0]                  = 'Items';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['items'][1]                  =
+    'Please enter the IDs of the items for filtering as comma-separated list.';
