@@ -270,7 +270,7 @@ class FilterBuilder
                 $subProcedure = new FilterBuilderSql($tableName, $child['operation'], $this->getDatabase());
                 $subSkipped   = $this->buildNativeSqlProcedure($subProcedure, $child['children']);
 
-                if (count($subSkipped) !== count($child['operation'])) {
+                if (count($subSkipped) !== count($child['children'])) {
                     $procedure->addSubProcedure($subProcedure);
                 }
 
