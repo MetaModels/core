@@ -16,6 +16,7 @@
  * @author     Martin Treml <github@r2pi.net>
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -234,19 +235,28 @@ class Subscriber extends BaseSubscriber
             $flags |= IAttributeFactory::FLAG_INCLUDE_TRANSLATED;
         }
 
-        $options = array();
+        $options      = [];
+        $optionsTrans = [];
         foreach ($attributeFactory->getTypeNames($flags) as $attributeType) {
-            // Might be translated+complex or translated+simple.
-            if ($attributeFactory->getTypeFactory($attributeType)->isTranslatedType()
-                && !$objMetaModel->isTranslated()
-            ) {
-                continue;
+            // Differentiate translated and simple.
+            if ($attributeFactory->getTypeFactory($attributeType)->isTranslatedType()) {
+                $optionsTrans[$attributeType] = $translator->translate(
+                    'typeOptions.' . $attributeType,
+                    'tl_metamodel_attribute'
+                );
+            } else {
+                $options[$attributeType] = $translator->translate(
+                    'typeOptions.' . $attributeType,
+                    'tl_metamodel_attribute'
+                );
             }
+        }
+        asort($options);
 
-            $options[$attributeType] = $translator->translate(
-                'typeOptions.' . $attributeType,
-                'tl_metamodel_attribute'
-            );
+        // Add translated attributes.
+        if ($objMetaModel->isTranslated()) {
+            asort($optionsTrans);
+            $options = array_merge($options, $optionsTrans);
         }
 
         $event->setOptions($options);
