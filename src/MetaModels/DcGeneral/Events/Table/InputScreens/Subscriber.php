@@ -16,6 +16,7 @@
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -729,7 +730,7 @@ class Subscriber extends BaseSubscriber
      * Handle the select buttons for the list show.
      * (override/edit all)
      *
-     * @param GetSelectModeButtonsEvent $event The event
+     * @param GetSelectModeButtonsEvent $event The event.
      *
      * @return void
      */
