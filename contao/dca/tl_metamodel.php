@@ -556,10 +556,12 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
             'search'    => true,
             'eval'      => array
             (
-                'mandatory' => true,
-                'maxlength' => 64,
-                'doNotCopy' => true,
-                'tl_class'  => 'w50'
+                'mandatory'             => true,
+                'maxlength'             => 64,
+                'doNotCopy'             => true,
+                'tl_class'              => 'w50',
+                // Hide at overrideAll.
+                'doNotOverrideMultiple' => true
             ),
             'sql'       => "varchar(64) NOT NULL default ''"
         ),
