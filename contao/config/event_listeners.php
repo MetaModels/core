@@ -90,7 +90,7 @@ return array(
             );
             $dispatcher->addListener(
                 GetSelectModeButtonsEvent::NAME,
-                [new RemoveOverrideButtonListener(), 'prepareSubPalettes']
+                [new RemoveOverrideButtonListener(), 'removeButton']
             );
         }
     ),
