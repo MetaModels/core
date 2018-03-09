@@ -32,7 +32,6 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\Decod
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetBreadcrumbEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetSelectModeButtonsEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
@@ -116,10 +115,6 @@ class Subscriber extends BaseSubscriber
             ->addListener(
                 BuildDataDefinitionEvent::NAME,
                 array($this, 'buildPaletteRestrictions')
-            )
-            ->addListener(
-                GetSelectModeButtonsEvent::NAME,
-                array($this, 'handleSelectButtonsByListShow')
             );
     }
 
@@ -724,31 +719,5 @@ class Subscriber extends BaseSubscriber
         );
 
         return $metaModel->getId();
-    }
-
-    /**
-     * Handle the select buttons for the list show.
-     * (override/edit all)
-     *
-     * @param GetSelectModeButtonsEvent $event The event.
-     *
-     * @return void
-     */
-    public function handleSelectButtonsByListShow(GetSelectModeButtonsEvent $event)
-    {
-        if (('tl_metamodel_dcasetting' !== $event->getEnvironment()->getDataDefinition()->getName())
-            || ('select' !== $event->getEnvironment()->getInputProvider()->getParameter('act'))
-        ) {
-            return;
-        }
-
-        $buttons = $event->getButtons();
-        if (!$buttons['override']) {
-            return;
-        }
-
-        unset($buttons['override']);
-
-        $event->setButtons($buttons);
     }
 }
