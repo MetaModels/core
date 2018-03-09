@@ -535,7 +535,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions'],
             'exclude'   => true,
-            'default'   => true,
+            'default'   => false,
             'inputType' => 'checkbox',
             'eval'      => array
             (
