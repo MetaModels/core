@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2018-02-06T02:10:33+01:00
+ * last-updated: 2018-03-09T21:04:25+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']                     = '%s <strong>%s</strong> <em>[%s]</em>';
@@ -41,5 +41,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template']['0']           = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template']['1']           = 'Wählen Sie das Template aus, das für das gewählte Attribut verwendet werden soll. Gültige Dateinamen für das Template beginnen mit "mm_&lt;typ&gt;", wobei &lt;typ&gt; für den Typ steht.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['title_legend']            = 'Typ';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['toggle']['0']             = 'Wechseln';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['toggle']['1']             = 'Umschaltung des Staus für die Render-Einstellung ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['toggle']['1']             = 'Umschaltung des Status für die Render-Einstellung ID %s.';
 

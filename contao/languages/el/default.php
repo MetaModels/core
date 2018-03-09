@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2018-02-06T02:09:44+01:00
+ * last-updated: 2018-03-09T21:03:41+01:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodels']                       = 'MetaModels ';
@@ -17,5 +17,6 @@ $GLOBALS['TL_LANG']['CTE']['metamodels_frontendclearall']['0'] = 'MetaModel εκ
 $GLOBALS['TL_LANG']['CTE']['metamodels_frontendclearall']['1'] = 'Προσθέτει μια εκκαθαριση όλα για όλα τα φίλτρα.';
 $GLOBALS['TL_LANG']['CTE']['metamodels_frontendfilter']['0']   = 'MetaModel Φιλτρο';
 $GLOBALS['TL_LANG']['CTE']['metamodels_frontendfilter']['1']   = 'Προσθέτει ένα φίλτρο frontend για ενα MetaModel.';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['attributes'] = ' Χαρακτηριστικά';
 $GLOBALS['TL_LANG']['MSC']['mm_be_info_name']['1']             = 'MetaModel';
 
