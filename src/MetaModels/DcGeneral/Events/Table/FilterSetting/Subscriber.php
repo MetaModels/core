@@ -34,9 +34,6 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPr
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\BooleanCondition;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
 use MetaModels\BackendIntegration\TemplateList;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbFilterSetting;
@@ -94,10 +91,6 @@ class Subscriber extends BaseSubscriber
             ->addListener(
                 EncodePropertyValueFromWidgetEvent::NAME,
                 array($this, 'encodeAttributeIdValue')
-            )
-            ->addListener(
-                GetPropertyOptionsEvent::NAME,
-                array($this, 'prepareSubPalettes')
             );
 
         $this->registerModelRenderers();
@@ -413,61 +406,6 @@ class Subscriber extends BaseSubscriber
 
         if ($attribute) {
             $event->setValue($attribute->get('id'));
-        }
-    }
-
-    /**
-     * Prepares the sub palettes e. g. add option for translated attributes for different filter types.
-     *
-     * @param GetPropertyOptionsEvent $event The event.
-     *
-     * @return void
-     */
-    public function prepareSubPalettes(GetPropertyOptionsEvent $event)
-    {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_filtersetting')
-            || ($event->getPropertyName() !== 'attr_id')) {
-            return;
-        }
-
-        $model       = $event->getModel();
-        $metaModel   = $this->getMetaModel($model);
-        $settingType = $model->getProperty('type');
-        $palettes    = $event->getEnvironment()->getDataDefinition()->getPalettesDefinition();
-        $properties  = $event->getEnvironment()->getDataDefinition()->getPropertiesDefinition();
-
-        foreach ($metaModel->getAttributes() as $attribute) {
-            $typeName = $attribute->get('type');
-
-            if ($GLOBALS['TL_DCA']['tl_metamodel_filtersetting'][$settingType . '_palettes'][$typeName]) {
-                $includeLegend =
-                    $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'][$settingType . '_palettes'][$typeName];
-
-                foreach ($includeLegend as $includeLegendName => $includeProperties) {
-                    foreach ($includeProperties as $includeProperty) {
-                        if ((false === $properties->hasProperty($includeProperty))
-                            || (false === $palettes->hasPaletteByName($settingType))
-                            || (false === $palettes->getPaletteByName($settingType)->hasLegend($includeLegendName))
-                        ) {
-                            continue;
-                        }
-
-                        $legend = $palettes->getPaletteByName($settingType)->getLegend($includeLegendName);
-                        if (true === $legend->hasProperty($includeProperty)) {
-                            continue;
-                        }
-
-                        $paletteProperty = new Property($includeProperty);
-                        $legend->addProperty($paletteProperty);
-
-                        $visibleCondition = new PropertyConditionChain();
-                        $paletteProperty->setVisibleCondition($visibleCondition);
-
-                        $condition = new BooleanCondition(true);
-                        $visibleCondition->addCondition($condition);
-                    }
-                }
-            }
         }
     }
 }

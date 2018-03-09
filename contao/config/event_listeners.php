@@ -28,6 +28,7 @@ use MetaModels\DcGeneral\Events\MetaModel\CutButton;
 use MetaModels\DcGeneral\Events\MetaModel\DuplicateModel;
 use MetaModels\DcGeneral\Events\MetaModel\PasteButton;
 use MetaModels\DcGeneral\Events\Table\FilterSetting\FilterSettingTypeRendererCore;
+use MetaModels\DcGeneral\Events\Table\FilterSetting\SubPaletteSubscriber;
 use MetaModels\DcGeneral\Events\Table\InputScreens\InputScreenAddAllHandler;
 use MetaModels\DcGeneral\Events\Table\RenderSetting\RenderSettingAddAllHandler;
 use MetaModels\Events\CreatePropertyConditionEvent;
@@ -81,6 +82,10 @@ return array(
             new CreateVariantButton($event->getServiceContainer());
             $dispatcher->addSubscriber(new RenderSettingAddAllHandler($event->getServiceContainer()));
             $dispatcher->addSubscriber(new InputScreenAddAllHandler($event->getServiceContainer()));
+            $dispatcher->addListener(
+                GetPropertyOptionsEvent::NAME,
+                [new SubPaletteSubscriber($event->getServiceContainer()), 'prepareSubPalettes']
+            );
         }
     ),
     MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE => array(
