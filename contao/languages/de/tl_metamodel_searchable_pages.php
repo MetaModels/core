@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2018-02-06T02:10:38+01:00
+ * last-updated: 2018-03-09T21:04:31+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['copy']['0']          = 'Kopieren der Indexierung';
@@ -27,13 +27,14 @@ $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['name']['1']          = 'Na
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['new']['0']           = 'Neue Indexierung';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['new']['1']           = 'Erstellen einer neuen Indexierung.';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['rendersetting']['0'] = 'Render-Einstellung';
-$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['rendersetting']['1'] = 'Wähle die Render-Einstellung, welche bei der Indexierung verwendet werden soll - das ist meistens die Render-Einstellung für die Listenansicht.';
+$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['rendersetting']['1'] = 'Wähle die Render-Einstellung, die bei der Indexierung verwendet werden soll. Meistens ist es sinnvoll, die Render-Einstellung für die Listenansicht zu benutzen.';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['settings']['0']      = 'Einstellungen der Indexierung';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['settings']['1']      = 'Bearbeiten der Einstellungen der Indexierung ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['show']['0']          = 'Details der Einstellungen der Indexierung';
-$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['show']['1']          = 'Anzeige Details der Einstellungen der Indexierung ID %s.';
+$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['show']['1']          = 'Zeigen Sie die Details der Einstellungen für die Indexierung ID %s an.';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['title_legend']       = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['toggle']['0']        = 'Wechseln';
+$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['toggle']['1']        = 'Umschaltung des Status für die Einstellungen ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['tstamp']['0']        = 'Aktualisierungsdatum';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['tstamp']['1']        = 'Datum und Uhrzeit der letzten Aktualisierung.';
 

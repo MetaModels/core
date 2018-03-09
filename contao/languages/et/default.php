@@ -8,7 +8,7 @@
  * @link https://www.transifex.com/signup/
  * @link https://www.transifex.com/projects/p/$$project$$/language/et/
  *
- * last-updated: 2018-02-06T02:09:44+01:00
+ * last-updated: 2018-03-09T21:03:41+01:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodels']                            = 'MetaModels';
@@ -18,6 +18,7 @@ $GLOBALS['TL_LANG']['CTE']['metamodels_frontendclearall']['0']      = 'MetaModel
 $GLOBALS['TL_LANG']['ERR']['invalidTableName']                      = 'Tabeli nimi "%s" pole korrektne.';
 $GLOBALS['TL_LANG']['ERR']['tableDoesNotExist']                     = 'Tabelit "%s" pole olemas.';
 $GLOBALS['TL_LANG']['ERR']['tableExists']                           = 'Tabel "%s" on juba olemas.';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['attributes']      = 'Omadused';
 $GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['id']              = 'ID';
 $GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['pid']             = 'PID';
 $GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['sorting']         = 'Sorteerimine';

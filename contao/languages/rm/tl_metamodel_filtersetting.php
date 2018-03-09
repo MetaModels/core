@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:43:17+02:00
+ * last-updated: 2018-03-09T21:04:19+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Tschertgar tut las linguas';
@@ -63,7 +63,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup']  =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionand'] = 'cundiziun AND';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionor']  = 'cundiziun OR';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['customsql']    = 'SQL persunalisà';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['idlist']       = 'Set da filters predefinà';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['simplelookup'] = 'Dumonda simpla';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['0']             = 'parameter da l\'URL';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['1']             = 'Il parameter da l\'URL che duai vegnir attribuì a l\'attribut tschernì. Il parameter special <em>"auto_item"</em> po era vegnir utilisà, quai è specialmain practic per colonnas dad alias.';

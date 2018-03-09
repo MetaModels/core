@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2018-02-06T02:09:44+01:00
+ * last-updated: 2018-03-09T21:03:41+01:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attributi di "%s"';
@@ -40,6 +40,7 @@ $GLOBALS['TL_LANG']['ERR']['systemColumn']                                      
 $GLOBALS['TL_LANG']['ERR']['tableDoesNotExist']                                       = 'La tabella  "%s" non esiste.';
 $GLOBALS['TL_LANG']['ERR']['tableExists']                                             = 'La tabella  "%s" esiste già.';
 $GLOBALS['TL_LANG']['ERR']['upgrade_php_version']                                     = 'La versione di PHP che stai utilizzando non è compatibile, è necessario eseguire un upgrate all\'ultima versione, la %s (attualmente stai utilizzando una versione %s)';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['attributes']                        = 'Attributi';
 $GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['sorting']                           = 'Ordinamento';
 $GLOBALS['TL_LANG']['MSC']['details']                                                 = 'Dettagli';
 $GLOBALS['TL_LANG']['MSC']['field_label']                                             = '%s:';

@@ -8,13 +8,13 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:43:01+02:00
+ * last-updated: 2018-03-09T21:04:04+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['anonymous']         = '"Gäste"';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['be_group']['0']     = 'Benutzergruppe';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['be_group']['1']     = 'Geben Sie die Benutzergruppe an, für die diese Kombination gelten soll.';
-$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_combiner']['0'] = 'Rechte für Eingabemaske und Ansichten.';
+$GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_combiner']['0'] = 'Rechte für Eingabemaske und Ansichten';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_combiner']['1'] = 'Benutzen Sie die ausgewählte Palette und Ansicht für eine Frontend- und / oder Backend-Benutzergruppe (falls vorhanden).';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_id']['0']       = 'Eingabemasken';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_id']['1']       = 'Geben Sie die Eingabemaske an, für die diese Kombination gelten soll.';
