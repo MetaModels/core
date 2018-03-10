@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,8 +15,9 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -164,3 +165,11 @@ $GLOBALS['TL_LANG']['MSC']['metamodels_support']['help_text']                   
     channels, videos tutorials and our newsletter service.<br /><br />
     <a target="_blank" href="http://metamodels.readthedocs.io/en/latest/">
     Direct link to the MetaModels manual...</a>';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['id']                              = 'ID';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['pid']                             = 'PID';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['sorting']                         = 'Sorting';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['tstamp']                          = 'Timestamp';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['vargroup']                        = 'Vargroup';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['varbase']                         = 'Varbase';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['meta']                            = 'Metafields';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['attributes']                      = 'Attributes';

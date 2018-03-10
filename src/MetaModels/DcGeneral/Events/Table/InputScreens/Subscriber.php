@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,8 +16,9 @@
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -129,8 +130,6 @@ class Subscriber extends BaseSubscriber
      */
     protected function drawAttribute(ModelToLabelEvent $event)
     {
-        // FIXME: in here all language strings and icons are related to filters?
-        // FIXME: Add language files for the error msg.
         $model        = $event->getModel();
         $objSetting   = $this
             ->getDatabase()
@@ -194,18 +193,16 @@ class Subscriber extends BaseSubscriber
      */
     protected function drawLegend(ModelToLabelEvent $event)
     {
-        $model = $event->getModel();
-
-        $arrLegend = deserialize($model->getProperty('legendtitle'));
-        if (is_array($arrLegend)) {
-            $strLegend = $arrLegend[$GLOBALS['TL_LANGUAGE']];
-
-            if (!$strLegend) {
-                // TODO: Get the fallback language here.
-                $strLegend = 'legend';
-            }
-        } else {
-            $strLegend = $model->getProperty('legendtitle') ? $model->getProperty('legendtitle') : 'legend';
+        $model     = $event->getModel();
+        $metaModel = $this->getMetaModelFromModel($model);
+        if (is_array($legend = deserialize($model->getProperty('legendtitle')))) {
+            $legend = $this->searchLanguageValue(
+                $legend,
+                [$metaModel->getActiveLanguage(), $metaModel->getFallbackLanguage()]
+            );
+        }
+        if (empty($legend)) {
+            $legend = 'legend';
         }
 
         $event
@@ -214,9 +211,30 @@ class Subscriber extends BaseSubscriber
             ->setArgs(array(
                 $model->getProperty('published') ? 'published' : 'unpublished',
                 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['legend'],
-                $strLegend,
+                $legend,
                 $model->getProperty('legendhide') ? ':hide' : ''
             ));
+    }
+
+    /**
+     * Search a valid language key in the passed array.
+     *
+     * @param string[] $values    The language values.
+     * @param string[] $languages The valid languages.
+     *
+     * @return null
+     */
+    private function searchLanguageValue($values, $languages)
+    {
+        foreach ($languages as $language) {
+            if (array_key_exists($language, $values)) {
+                if (!empty($values[$language])) {
+                    return $values[$language];
+                }
+            }
+        }
+
+        return null;
     }
 
     /**

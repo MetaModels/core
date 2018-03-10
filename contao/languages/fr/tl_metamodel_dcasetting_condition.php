@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:43:08+02:00
+ * last-updated: 2018-02-06T02:10:15+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['addall']['0']                   = 'Ajouter tout';
@@ -27,5 +27,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['new']['0']            
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['new']['1']                      = 'Créer un nouveau paramètre.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show']['0']                     = 'Détails paramètre';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show']['1']                     = 'Montrer les détails du paramètre ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['toggle']['0']                   = 'Basculer';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type']['0']                     = 'Type';
 

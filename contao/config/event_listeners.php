@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2016 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,18 +16,22 @@
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2016 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetSelectModeButtonsEvent;
 use MetaModels\DcGeneral\Events\MetaModel\CreateVariantButton;
 use MetaModels\DcGeneral\Events\MetaModel\CutButton;
 use MetaModels\DcGeneral\Events\MetaModel\DuplicateModel;
 use MetaModels\DcGeneral\Events\MetaModel\PasteButton;
 use MetaModels\DcGeneral\Events\Table\FilterSetting\FilterSettingTypeRendererCore;
+use MetaModels\DcGeneral\Events\Table\FilterSetting\SubPaletteSubscriber;
 use MetaModels\DcGeneral\Events\Table\InputScreens\InputScreenAddAllHandler;
+use MetaModels\DcGeneral\Events\Table\InputScreens\RemoveOverrideButtonListener;
 use MetaModels\DcGeneral\Events\Table\RenderSetting\RenderSettingAddAllHandler;
 use MetaModels\Events\CreatePropertyConditionEvent;
 use MetaModels\Events\DatabaseBackedListener;
@@ -80,6 +84,14 @@ return array(
             new CreateVariantButton($event->getServiceContainer());
             $dispatcher->addSubscriber(new RenderSettingAddAllHandler($event->getServiceContainer()));
             $dispatcher->addSubscriber(new InputScreenAddAllHandler($event->getServiceContainer()));
+            $dispatcher->addListener(
+                GetPropertyOptionsEvent::NAME,
+                [new SubPaletteSubscriber($event->getServiceContainer()), 'prepareSubPalettes']
+            );
+            $dispatcher->addListener(
+                GetSelectModeButtonsEvent::NAME,
+                [new RemoveOverrideButtonListener(), 'removeButton']
+            );
         }
     ),
     MetaModelsEvents::FILTER_SETTING_FACTORY_CREATE => array(

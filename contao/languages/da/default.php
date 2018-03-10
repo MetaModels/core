@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:42:37+02:00
+ * last-updated: 2018-02-06T02:09:44+01:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Egenskaber for "%s"';
@@ -31,6 +31,7 @@ $GLOBALS['TL_LANG']['ERR']['activate_extension']                                
 $GLOBALS['TL_LANG']['ERR']['install_extension']                                       = 'Installer venligst den påkrævede udvidelse "%s" (%s)';
 $GLOBALS['TL_LANG']['ERR']['no_palette']                                              = 'Forsøgt at tilgå MetaModel "%s" uden indtastningsvisninger for nuværende bruger %s.';
 $GLOBALS['TL_LANG']['ERR']['no_view']                                                 = 'Fosøg på at tilgå MetaModel "%s" uden visning for bruger %s.';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['sorting']                           = 'Sortering';
 $GLOBALS['TL_LANG']['MSC']['details']                                                 = 'Oplysninger';
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']                        = 'Rediger "%s" for %%s';
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['editRecord']                   = 'Rediger filter indstilling %%s for filter "%s" i MetaModel "%s"';
@@ -40,6 +41,9 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord']             
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']                        = 'Gengivelsesindstilling "%s" i MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodels_contributor']                                  = 'Tak til alle brugere for tickets, foreslag og oversættelser';
 $GLOBALS['TL_LANG']['MSC']['metamodels_help']                                         = 'Vi har brug for din hjælp!';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['contributor_headline']              = 'Tak til alle brugere for tickets, foreslag og oversættelser';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['main_headline']                     = 'Vi har brug for din hjælp!';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_filter']['1']                                  = 'Filtrer';
 $GLOBALS['TL_LANG']['MSC']['noItemsMsg']                                              = 'Intet matchede din søgning.';
 $GLOBALS['TL_LANG']['MSC']['no_theme']                                                = 'globalt omfang';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']['0']                              = 'Filtrer';

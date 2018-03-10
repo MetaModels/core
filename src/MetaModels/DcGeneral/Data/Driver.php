@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,8 +17,9 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     binron <rtb@gmx.ch>
- * @copyright  2012-2015 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -568,18 +569,29 @@ class Driver implements MultiLanguageDataProviderInterface
      * If the item does not have an Id yet, the save operation will add it as a new row to the database and
      * populate the Id of the model accordingly.
      *
-     * @param ModelInterface $objItem The model to save back.
+     * @param ModelInterface $objItem   The model to save back.
+     *
+     * @param int|null            $timestamp Optional the timestamp.
      *
      * @return ModelInterface The passed model.
      *
      * @throws \RuntimeException When an incompatible item was passed, an Exception is being thrown.
      */
-    public function save(ModelInterface $objItem)
+    public function save(ModelInterface $objItem, $timestamp = null)
     {
+        if (null === $timestamp) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                'Not passing a timestamp has been deprecated and will cause an error in MetaModels 3',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+        }
+
         if ($objItem instanceof Model) {
             $backupLanguage = $this->setLanguage($this->getCurrentLanguage());
 
-            $objItem->getItem()->save();
+            $objItem->getItem()->save($timestamp);
 
             $this->setLanguage($backupLanguage);
 
@@ -592,16 +604,27 @@ class Driver implements MultiLanguageDataProviderInterface
     /**
      * Save a collection of items to the data provider.
      *
-     * @param CollectionInterface $objItems The collection containing all items to be saved.
+     * @param CollectionInterface $objItems  The collection containing all items to be saved.
+     *
+     * @param int                 $timestamp Optional the timestamp.
      *
      * @return void
      *
      * @throws \RuntimeException When an incompatible item was passed.
      */
-    public function saveEach(CollectionInterface $objItems)
+    public function saveEach(CollectionInterface $objItems, $timestamp = 0)
     {
+        if (null === $timestamp) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                'Not passing a timestamp has been deprecated and will cause an error in MetaModels 3',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+        }
+
         foreach ($objItems as $objItem) {
-            $this->save($objItem);
+            $this->save($objItem, $timestamp);
         }
     }
 

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,8 +19,8 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -339,12 +339,23 @@ class Item implements IItem
     /**
      * Save the current data for every attribute to the data sink.
      *
+     * @param int|null $timestamp Optional the timestamp.
+     *
      * @return void
      */
-    public function save()
+    public function save($timestamp = null)
     {
+        if (null === $timestamp) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                'Not passing a timestamp has been deprecated and will cause an error in MetaModels 3',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+        }
+
         $objMetaModel = $this->getMetaModel();
-        $objMetaModel->saveItem($this);
+        $objMetaModel->saveItem($this, $timestamp);
     }
 
     /**

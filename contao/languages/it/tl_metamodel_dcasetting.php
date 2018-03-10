@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:43:05+02:00
+ * last-updated: 2018-02-06T02:10:11+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Aggiunto l\'attributo "%s" alla maschera di input.';
@@ -93,6 +93,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['1']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']                 = 'Tipo';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['0']                = 'Classe del backend';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['1']                = 'In questo campo è possibile indicare la classe del backend. Utilizza il selettore di stile per una migliore prestazione.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle']['0']                  = 'Toggle';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['0']           = 'Trattamento slash finale';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['1']           = 'Qui è possibile indicare come verranno trattati gli slash finali';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['0']   = 'Elimina slash durante il salvataggio';

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,8 +13,9 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2015 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -41,11 +42,9 @@ class AttributeFactoryTest extends TestCase
      */
     public function testCreateFactoryFiresEvent()
     {
-        $serviceContainer = $this->mockServiceContainer();
-        $serviceContainer->getEventDispatcher()
-            ->expects($this->exactly(1))
-            ->method('dispatch')
-            ->with($this->equalTo(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE));
+        $serviceContainer = $this->mockServiceContainer(
+            $this->mockEventDispatcher(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE, 1)
+        );
 
         $factory = new AttributeFactory();
         $factory->setServiceContainer($serviceContainer);
@@ -315,14 +314,17 @@ class AttributeFactoryTest extends TestCase
      *
      * @return IMetaModelsServiceContainer
      */
-    protected function mockServiceContainer()
+    protected function mockServiceContainer(EventDispatcherInterface $eventDispatcher = null)
     {
-        $serviceContainer = $this->getMock('MetaModels\IMetaModelsServiceContainer');
+        if (!$eventDispatcher) {
+            $eventDispatcher = $this->mockEventDispatcher();
+        }
+        $serviceContainer = $this->getMockForAbstractClass('MetaModels\IMetaModelsServiceContainer');
 
         $serviceContainer
             ->expects($this->any())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($this->mockEventDispatcher()));
+            ->will($this->returnValue($eventDispatcher));
 
         return $serviceContainer;
     }
@@ -338,7 +340,7 @@ class AttributeFactoryTest extends TestCase
      */
     protected function mockEventDispatcher($expectedEvent = '', $expectedCount = 0)
     {
-        $eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcher');
+        $eventDispatcher = $this->getMockForAbstractClass('Symfony\Component\EventDispatcher\EventDispatcherInterface');
 
         if ($expectedEvent) {
             $eventDispatcher

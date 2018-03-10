@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:43:26+02:00
+ * last-updated: 2018-03-09T21:04:28+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['0']      = 'Zusätzliche CSS-Dateien';
@@ -35,7 +35,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['general_legend']          = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues']['0']    = 'Leere Einträge verbergen';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues']['1']    = 'Verbirgt leere Einträge im Backend und im Frontend.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['0']         = 'Labels verbergen';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['1']         = 'Verberge alle Labels im Backend und im Frontend.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['1']         = 'Mit dieser Einstellung werden im Backend und im Frontend alle Labels verborgen.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['0']          = 'Als Standard verwenden';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['1']          = 'Bestimmt, dass diese Eingabemaske als Standard für das Eltern-MetaModel benutzt wird. <strong>Wichtig:</strong> Eine Eingabemaske muss als Standard aktiviert sein.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['0']             = 'Weiterleitungsseite';
@@ -46,7 +46,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter']['1']      = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['0']    = 'Sprache';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['1']    = 'Sprache der Weiterleitungsseite.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page']['0']        = 'Springe zu Seite';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page']['1']        = 'Geben Sie die Seite an, die für die Detail-Links verwendet werden soll.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page']['1']        = 'Geben Sie die Seite an, die für die Links zur Detailseite verwendet werden soll.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']['0']               = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']['1']               = 'Einstellungsname';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']['0']                = 'Neu';
@@ -61,7 +61,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']['1']           = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']['0']               = 'Filterdetails';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']['1']               = 'Zeige Details der Einstellung ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['0']           = 'Template';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['1']           = 'Geben Sie ein (angepasstes) Template an, das für die Render-Einstellung der Einträge benutzt werden soll.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['1']           = 'Geben Sie das Template an, das für die Render-Einstellung der Einträge benutzt werden soll. Das kann auch ein angepasstes Template sein.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']            = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['0']             = 'Aktualisierungsdatum';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['1']             = 'Datum und Uhrzeit der letzten Aktualisierung.';

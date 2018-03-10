@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,13 +14,15 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @copyright  2012-2015 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\FrontendIntegration;
 
+use Contao\Input;
 use Database\Result;
 use MetaModels\Filter\Rules\StaticIdList;
 use MetaModels\IMetaModel;
@@ -358,21 +360,27 @@ class InsertTags extends \Controller
      * @param int $intFilterId    ID of the filter.
      *
      * @return boolean|int False for no data or integer for the count result.
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getCountFor($intMetaModelId, $intFilterId)
     {
-        $objMetaModel = $this->loadMetaModel($intMetaModelId);
-        if ($objMetaModel == null) {
+        $metaModel = $this->loadMetaModel($intMetaModelId);
+        if ($metaModel == null) {
             return false;
         }
 
-        // FIXME: sanitize input parameters.
-        $objFilter = $objMetaModel->prepareFilter($intFilterId, $_GET);
+        $objFilter = $metaModel->getEmptyFilter();
+        if ($intFilterId) {
+            $collection = $this->getServiceContainer()->getFilterFactory()->createCollection($intFilterId);
+            $values     = [];
 
-        return $objMetaModel->getCount($objFilter);
+            foreach ($collection->getParameters() as $key) {
+                $values[$key] = Input::get($key);
+            }
+
+            $collection->addRules($objFilter, $values);
+        }
+
+        return $metaModel->getCount($objFilter);
     }
 
     /**

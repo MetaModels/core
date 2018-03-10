@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,8 +20,9 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Chris Raidler <c.raidler@rad-consulting.ch>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2015 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -42,6 +43,11 @@ use MetaModels\Filter\Rules\StaticIdList;
  * @see MetaModelFactory::byTableName() to instantiate a MetaModel by its table name.
  *
  * This class handles all attribute definition instantiation and can be queried for a view instance to certain entries.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * We disable these for the moment - to be changed in MetaModel 2.1.
  */
 class MetaModel implements IMetaModel
 {
@@ -710,7 +716,7 @@ class MetaModel implements IMetaModel
         }
 
         // If desired, sort the entries.
-        if ($arrFilteredIds && $strSortBy != '') {
+        if ($strSortBy != '') {
             if ($objSortAttribute = $this->getAttribute($strSortBy)) {
                 $arrFilteredIds = $objSortAttribute->sortIds($arrFilteredIds, $strSortOrder);
             } elseif ('id' === $strSortBy) {
@@ -739,7 +745,7 @@ class MetaModel implements IMetaModel
         if ($intOffset > 0 || $intLimit > 0) {
             $arrFilteredIds = array_slice($arrFilteredIds, $intOffset, $intLimit ?: null);
         }
-        return $arrFilteredIds;
+        return array_values($arrFilteredIds);
     }
 
     /**
@@ -1001,24 +1007,18 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
-    public function saveItem($objItem)
+    public function saveItem($objItem, $timestamp = null)
     {
-        $baseAttributes = false;
-        $objItem->set('tstamp', time());
-        if (!$objItem->get('id')) {
-            $baseAttributes = true;
-            $this->createNewItem($objItem);
+        if (null === $timestamp) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                'Not passing a timestamp has been deprecated and will cause an error in MetaModels 3',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
         }
 
-        // Update system columns.
-        if ($objItem->get('pid') !== null) {
-            $this->saveSimpleColumn('pid', array($objItem->get('id')), $objItem->get('pid'));
-        }
-        if ($objItem->get('sorting') !== null) {
-            $this->saveSimpleColumn('sorting', array($objItem->get('id')), $objItem->get('sorting'));
-        }
-        $this->saveSimpleColumn('tstamp', array($objItem->get('id')), $objItem->get('tstamp'));
-
+        $baseAttributes = $this->saveBaseColumns($objItem, $timestamp ?: \time());
         if ($this->isTranslated()) {
             $strActiveLanguage = $this->getActiveLanguage();
         } else {
@@ -1106,5 +1106,34 @@ class MetaModel implements IMetaModel
     public function getView($intViewId = 0)
     {
         return $this->getServiceContainer()->getRenderSettingFactory()->createCollection($this, $intViewId);
+    }
+
+    /**
+     * Save the base columns of an item and return true if it is a new item.
+     *
+     * @param IItem $item      The item to save.
+     * @param int   $timestamp The timestamp to use.
+     *
+     * @return bool
+     */
+    private function saveBaseColumns(IItem $item, $timestamp)
+    {
+        $isNew = false;
+        $item->set('tstamp', $timestamp);
+        if (!$item->get('id')) {
+            $isNew = true;
+            $this->createNewItem($item);
+        }
+
+        // Update system columns.
+        if (null !== $item->get('pid')) {
+            $this->saveSimpleColumn('pid', [$item->get('id')], $item->get('pid'));
+        }
+        if (null !== $item->get('sorting')) {
+            $this->saveSimpleColumn('sorting', [$item->get('id')], $item->get('sorting'));
+        }
+        $this->saveSimpleColumn('tstamp', [$item->get('id')], $item->get('tstamp'));
+
+        return $isNew;
     }
 }

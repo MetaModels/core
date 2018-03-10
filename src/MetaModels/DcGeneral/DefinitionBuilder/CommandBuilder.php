@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,8 +13,9 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -31,6 +32,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CopyCommand
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\CutCommand;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\View\SelectCommand;
 use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
+use ContaoCommunityAlliance\Translator\TranslatorInterface;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\Events\MetaModel\BuildMetaModelOperationsEvent;
@@ -75,15 +77,27 @@ class CommandBuilder
     private $inputScreen;
 
     /**
+     * The translator.
+     *
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * Create a new instance.
      *
      * @param EventDispatcherInterface $dispatcher       The event dispatcher.
      * @param ViewCombinations         $viewCombinations The view combinations.
+     * @param TranslatorInterface      $translator       The translator.
      */
-    public function __construct(EventDispatcherInterface $dispatcher, ViewCombinations $viewCombinations)
-    {
+    public function __construct(
+        EventDispatcherInterface $dispatcher,
+        ViewCombinations $viewCombinations,
+        TranslatorInterface $translator
+    ) {
         $this->dispatcher       = $dispatcher;
         $this->viewCombinations = $viewCombinations;
+        $this->translator       = $translator;
     }
 
     /**
@@ -157,9 +171,6 @@ class CommandBuilder
      * @param Contao2BackendViewDefinitionInterface $view The backend view information.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function parseModelOperations(Contao2BackendViewDefinitionInterface $view)
     {
@@ -177,8 +188,7 @@ class CommandBuilder
             [
                 'attributes' => sprintf(
                     'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
-                    // FIXME: we need the translation manager here.
-                    $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+                    $this->translator->translate('MSC.deleteConfirm')
                 )
             ]
         );
@@ -331,6 +341,9 @@ class CommandBuilder
      * @param IInputScreen $screen    The input screen.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function getChildModelCaption($metaModel, $screen)
     {

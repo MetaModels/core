@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:43:23+02:00
+ * last-updated: 2018-02-06T02:10:33+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']                     = '%s <strong>%s</strong> <em>[%s]</em>';
@@ -26,4 +26,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['new']['1']                = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template']['0']           = 'Template persunalisà per generar';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['template']['1']           = 'Tscherna il template che duai vegnir utilisà per l\'attribut tschernì. Datotecas da template validas cumenzan cun "mm_&lt;type&gt;", e &lt;type&gt; stat per il tip.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['title_legend']            = 'Tip';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['toggle']['0']             = 'Activar/deactivar';
 

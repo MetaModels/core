@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,8 +14,8 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -64,10 +64,6 @@ class Subscriber extends BaseSubscriber
             ->addListener(
                 GetOperationButtonEvent::NAME,
                 array($this, 'getOperationButton')
-            )
-            ->addListener(
-                GetGlobalButtonEvent::NAME,
-                array($this, 'getGlobalButton')
             )
             ->addListener(
                 ModelToLabelEvent::NAME,
@@ -122,25 +118,6 @@ class Subscriber extends BaseSubscriber
                     )
                     ->getUrl()
             );
-        }
-    }
-
-    /**
-     * Clear the button if the User is not admin.
-     *
-     * @param GetGlobalButtonEvent $event The event.
-     *
-     * @return void
-     */
-    public function getGlobalButton(GetGlobalButtonEvent $event)
-    {
-        if ($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel') {
-            return;
-        }
-
-        // FIXME: direct access to BackendUser.
-        if (!\BackendUser::getInstance()->isAdmin) {
-            $event->setHtml('');
         }
     }
 
@@ -393,7 +370,6 @@ class Subscriber extends BaseSubscriber
         if ($oldTable !== $newTable) {
             if ($oldTable && $this->getDatabase()->tableExists($oldTable, null, true)) {
                 TableManipulation::renameTable($oldTable, $newTable);
-                // TODO: notify attributes that the MetaModel has changed its table name.
             } else {
                 TableManipulation::createTable($newTable);
             }

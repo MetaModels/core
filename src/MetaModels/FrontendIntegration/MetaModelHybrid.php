@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2017 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,8 +15,9 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2017 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -94,21 +95,21 @@ abstract class MetaModelHybrid extends Hybrid
      * Generate the list.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function generate()
     {
         if (TL_MODE == 'BE') {
-
             $strInfo = '';
             if ($this->metamodel) {
                 // Add CSS file.
                 $GLOBALS['TL_CSS'][] = 'system/modules/metamodels/assets/css/style.css';
 
                 // Retrieve name of MetaModels.
-                /** @var TranslatorInterface $translator */
                 $infoTemplate  =
                     '<div class="wc_info tl_gray"><span class="wc_label"><abbr title="%s">%s:</abbr></span> %s</div>';
-
                 $factory       = $this->getServiceContainer()->getFactory();
                 $metaModelName = $factory->translateIdToMetaModelName($this->metamodel);
                 $metaModel     = $factory->getMetaModel($metaModelName);
@@ -158,7 +159,7 @@ abstract class MetaModelHybrid extends Hybrid
             $objTemplate->wildcard = $this->wildCardName . $strInfo;
             $objTemplate->title    = $this->headline;
             $objTemplate->id       = $this->id;
-            $objTemplate->link     = ($this->typePrefix == 'mod_'? 'FE-Modul: ' : '').$this->name;
+            $objTemplate->link     = ($this->typePrefix == 'mod_' ? 'FE-Modul: ' : '').$this->name;
             $objTemplate->href     = sprintf($this->wildCardLink, $this->id);
 
             return $objTemplate->parse();

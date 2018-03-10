@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2015 The MetaModels team.
+ * (c) 2012-2018 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,8 +13,9 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2015 The MetaModels team.
- * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2018 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
@@ -24,11 +25,12 @@ use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\ReplaceInsertTagsEvent;
 use MetaModels\Filter\Filter;
 use MetaModels\Filter\Setting\CustomSql;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * Unit test for testing the CustomSql filter setting.
  */
-class CustomSqlTest extends TestCase
+class CustomSqlTest extends \MetaModels\Test\TestCase
 {
     /**
      * Mock a CustomSql with parseInsertTags disabled.
@@ -41,17 +43,36 @@ class CustomSqlTest extends TestCase
      */
     protected function mockCustomSql($properties = array(), $tableName = 'mm_unittest')
     {
-
         $this->initializeContaoInputClass();
         $this->initializeContaoSessionClass();
 
-        $filterSetting = $this->mockFilterSetting($tableName);
-        $filterSetting->getMetaModel()->getServiceContainer()->getEventDispatcher()->addListener(
+        $serviceContainer = new \MetaModels\MetaModelsServiceContainer();
+        $serviceContainer->setEventDispatcher($eventDispatcher = new EventDispatcher());
+        $serviceContainer->setDatabase(\MetaModels\Test\Contao\Database::getInstance());
+
+        $eventDispatcher->addListener(
             ContaoEvents::CONTROLLER_REPLACE_INSERT_TAGS,
             function (ReplaceInsertTagsEvent $event) {
                 $event->setBuffer(str_replace(array('{{', '::', '}}'), '__', $event->getBuffer()));
             }
         );
+
+        $metaModel = $this
+            ->getMockBuilder('MetaModels\IMetaModel')
+            ->setMethods(array('getTableName', 'getServiceContainer'))
+            ->getMockForAbstractClass();
+        $metaModel->expects($this->any())->method('getTableName')->willReturn($tableName);
+        $metaModel->expects($this->any())->method('getServiceContainer')->willReturn($serviceContainer);
+
+        $filterSetting = $this
+            ->getMockBuilder('MetaModels\Filter\Setting\ICollection')
+            ->setMethods(array('getMetaModel'))
+            ->getMockForAbstractClass();
+
+        $filterSetting
+            ->expects($this->any())
+            ->method('getMetaModel')
+            ->willReturn($metaModel);
 
         $setting = new CustomSql($filterSetting, $properties);
 
@@ -112,7 +133,6 @@ class CustomSqlTest extends TestCase
 
         $this->assertEquals($expectedSql, $sql['sql'], $message);
         $this->assertEquals($expectedParameters, $sql['params'], $message);
-
     }
 
     /**
