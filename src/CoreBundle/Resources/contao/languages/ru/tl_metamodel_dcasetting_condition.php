@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:43:08+02:00
+ * last-updated: 2018-02-06T02:10:15+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['addall']['0']                                     = 'Добавить все';
@@ -38,6 +38,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['pasteinto']['0']      
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['pastenew']['0']                                   = 'Добавить новый сверху';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show']['0']                                       = 'Детали настроек';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show']['1']                                       = 'Показать детали настроек ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['toggle']['0']                                     = 'Переключить';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type']['0']                                       = 'Тип';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type']['1']                                       = 'Выберите тип условия.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['value']['0']                                      = 'Значение';

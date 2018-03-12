@@ -264,11 +264,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
         ),
         'simplelookup extends _attribute_'             => array
         (
-            '+config' => array
+            '+fefilter' => array
             (
                 'urlparam',
-                'allow_empty',
                 'predef_param',
+                'allow_empty',
                 'label',
                 'template',
                 'defaultid',
@@ -284,14 +284,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
             (
                 'customsql'
             ),
-        ),
-        'simplelookup_translated extends simplelookup' => array
-        (
-            '+config' => array
-            (
-                'all_langs'
-            ),
-        ),
+        )
     ),
     'metasubselectpalettes' => array
     (
@@ -302,14 +295,17 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
     (
         '_translated_' => array
         (
-            'all_langs'
+            'config' => array
+            (
+                'all_langs'
+            )
         )
     ),
     'fields'                => array
     (
         'id'                => array
         (
-            'sql' => "int(10) unsigned NOT NULL auto_increment"
+            'sql' => 'int(10) unsigned NOT NULL auto_increment'
         ),
         'pid'               => array
         (
@@ -408,7 +404,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
                 'alwaysSave'     => true,
                 'mandatory'      => true,
             ),
-            'sql'       => "text NULL"
+            'sql'       => 'text NULL'
         ),
         'urlparam'          => array
         (
@@ -429,7 +425,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
             'eval'      => array
             (
                 'alwaysSave' => true,
-                'tl_class'   => 'w50 m12',
+                'tl_class'   => 'clr w50 m12',
             ),
             'sql'       => "char(1) NOT NULL default ''"
         ),
@@ -448,7 +444,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
                 'helpwizard'     => true,
             ),
             'explanation' => 'customsql',
-            'sql'         => "text NULL"
+            'sql'         => 'text NULL'
         ),
         'allow_empty'       => array
         (
@@ -483,7 +479,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
             (
                 'tl_class' => 'clr w50',
             ),
-            'sql'       => "blob NULL"
+            'sql'       => 'blob NULL'
         ),
         'template'          => array
         (
@@ -539,7 +535,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
         (
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions'],
             'exclude'   => true,
-            'default'   => true,
+            'default'   => false,
             'inputType' => 'checkbox',
             'eval'      => array
             (

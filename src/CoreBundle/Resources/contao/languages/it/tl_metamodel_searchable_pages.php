@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:43:30+02:00
+ * last-updated: 2018-02-06T02:10:38+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['filterparams']['0'] = 'Sovrascrivi i parametri del filtro';
@@ -16,6 +16,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['filterparams']['1'] = 'Sov
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['general_legend']    = 'Impostazioni generali';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['name']['0']         = 'Nome';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['title_legend']      = 'Nome';
+$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['toggle']['0']       = 'Toggle';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['tstamp']['0']       = 'Data di revisione';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['tstamp']['1']       = 'Data e ora dell\'ultima revisione.';
 

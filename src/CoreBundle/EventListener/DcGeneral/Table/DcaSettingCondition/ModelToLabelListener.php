@@ -23,6 +23,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSettingConditio
 
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
+use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
 use Doctrine\DBAL\Connection;
 use MetaModels\IFactory;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -116,6 +117,17 @@ class ModelToLabelListener extends AbstractListener
                 $attribute ? $attribute->getName() : '' . $model->getProperty('attr_id'),
                 $parameterValue
             ]);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function wantToHandle(AbstractEnvironmentAwareEvent $event)
+    {
+        return parent::wantToHandle($event) || (
+            $event->getEnvironment()->getInputProvider()->hasParameter('mode')
+                && 'select' === $event->getEnvironment()->getInputProvider()->getParameter('act')
+            );
     }
 
     /**

@@ -133,7 +133,6 @@ class CustomSqlTest extends TestCase
 
         $this->assertEquals($expectedSql, $sql['sql'], $message);
         $this->assertEquals($expectedParameters, $sql['params'], $message);
-
     }
 
     /**

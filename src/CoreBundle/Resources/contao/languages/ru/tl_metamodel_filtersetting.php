@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:43:17+02:00
+ * last-updated: 2018-03-09T21:04:19+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Поиск на всех языках';
@@ -70,7 +70,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup']  =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionand'] = '\'И\' состояние';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionor']  = '\'ИЛИ\' состояние';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['customsql']    = 'Пользовательский SQL';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['idlist']       = 'Предустановленный набор';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['simplelookup'] = 'Простой поиск';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['0']             = 'Параметр URL-адреса';
 

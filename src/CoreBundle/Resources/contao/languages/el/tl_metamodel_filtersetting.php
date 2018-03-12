@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:43:17+02:00
+ * last-updated: 2018-03-09T21:04:19+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Αναζητηση ολων των γλωσσων';
@@ -61,7 +61,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup']  =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionand'] = 'AND κατάσταση';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionor']  = 'OR κατάσταση';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['customsql']    = 'Προσαρμοσμένο SQL ';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['idlist']       = 'Προκαθορισμένο σύνολο';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['simplelookup'] = 'Απλή αναζήτηση';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['0']             = 'URL παραμετρος';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['1']             = 'Η URL παραμετρος που πρέπει να αντιστοιχιστεί στο επιλεγμένο χαρακτηριστικό. Η ειδική "auto_item " παράμετρος μπορεί επίσης να χρησιμοποιηθεί, αυτό είναι ιδιαίτερα χρήσιμο για ψευδώνυμες στήλες. ';

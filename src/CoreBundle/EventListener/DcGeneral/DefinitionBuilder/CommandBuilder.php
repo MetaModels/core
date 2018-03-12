@@ -37,6 +37,7 @@ use MetaModels\IFactory;
 use MetaModels\IMetaModel;
 use MetaModels\ViewCombination\ViewCombination;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * This class builds the commands.
@@ -88,23 +89,33 @@ class CommandBuilder
     private $iconBuilder;
 
     /**
+     * The translator.
+     *
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
      * Create a new instance.
      *
      * @param EventDispatcherInterface $dispatcher      The event dispatcher.
      * @param ViewCombination          $viewCombination The view combinations.
      * @param IFactory                 $factory         The MetaModels factory.
      * @param IconBuilder              $iconBuilder     The icon builder.
+     * @param TranslatorInterface      $translator      The translator.
      */
     public function __construct(
         EventDispatcherInterface $dispatcher,
         ViewCombination $viewCombination,
         IFactory $factory,
-        IconBuilder $iconBuilder
+        IconBuilder $iconBuilder,
+        TranslatorInterface $translator
     ) {
         $this->dispatcher      = $dispatcher;
         $this->viewCombination = $viewCombination;
         $this->factory         = $factory;
         $this->iconBuilder     = $iconBuilder;
+        $this->translator      = $translator;
     }
 
     /**
@@ -190,9 +201,6 @@ class CommandBuilder
      * @param Contao2BackendViewDefinitionInterface $view The backend view information.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function parseModelOperations(Contao2BackendViewDefinitionInterface $view)
     {
@@ -210,8 +218,7 @@ class CommandBuilder
             [
                 'attributes' => sprintf(
                     'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
-                    // FIXME: we need the translation manager here.
-                    $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+                    $this->translator->trans('MSC.deleteConfirm', [], 'contao_default')
                 )
             ]
         );
@@ -336,6 +343,9 @@ class CommandBuilder
      * @param array      $screen    The input screen.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function getChildModelCaption($metaModel, $screen)
     {

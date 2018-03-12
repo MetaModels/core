@@ -79,20 +79,28 @@ class GetAttributeTypeListener extends BaseListener
             $flags |= IAttributeFactory::FLAG_INCLUDE_TRANSLATED;
         }
 
-        $options = [];
-
+        $options      = [];
+        $optionsTrans = [];
         foreach ($this->attributeFactory->getTypeNames($flags) as $attributeType) {
-            // Might be translated+complex or translated+simple.
-            if ($this->attributeFactory->getTypeFactory($attributeType)->isTranslatedType()
-                && !$objMetaModel->isTranslated()
-            ) {
-                continue;
+            // Differentiate translated and simple.
+            if ($this->attributeFactory->getTypeFactory($attributeType)->isTranslatedType()) {
+                $optionsTrans[$attributeType] = $translator->translate(
+                    'typeOptions.' . $attributeType,
+                    'tl_metamodel_attribute'
+                );
+            } else {
+                $options[$attributeType] = $translator->translate(
+                    'typeOptions.' . $attributeType,
+                    'tl_metamodel_attribute'
+                );
             }
+        }
+        asort($options);
 
-            $options[$attributeType] = $translator->translate(
-                'typeOptions.' . $attributeType,
-                'tl_metamodel_attribute'
-            );
+        // Add translated attributes.
+        if ($objMetaModel->isTranslated()) {
+            asort($optionsTrans);
+            $options = array_merge($options, $optionsTrans);
         }
 
         $event->setOptions($options);

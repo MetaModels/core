@@ -95,7 +95,6 @@ class TableUpdatingListener extends AbstractAbstainingListener
         if ($oldTable !== $newTable) {
             if (!empty($oldTable)) {
                 $this->tableManipulator->renameTable($oldTable, $newTable);
-                // TODO: notify attributes that the MetaModel has changed its table name.
             } else {
                 $this->tableManipulator->createTable($newTable);
             }

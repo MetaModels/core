@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:42:37+02:00
+ * last-updated: 2018-03-09T21:03:41+01:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attribute von "%s"';
@@ -44,6 +44,14 @@ $GLOBALS['TL_LANG']['ERR']['systemColumn']                                      
 $GLOBALS['TL_LANG']['ERR']['tableDoesNotExist']                                       = 'Tabelle "%s" existiert nicht.';
 $GLOBALS['TL_LANG']['ERR']['tableExists']                                             = 'Tabelle "%s" existiert bereits.';
 $GLOBALS['TL_LANG']['ERR']['upgrade_php_version']                                     = 'Ihre PHP-Version wird nicht unterstützt. Bitte machen Sie ein Upgrade und benutzen mindestens Version %s (Sie benutzen zur Zeit %s) .';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['attributes']                        = 'Attribute';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['id']                                = 'ID';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['meta']                              = 'Metafelder';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['pid']                               = 'PID';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['sorting']                           = 'Sortierung';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['tstamp']                            = 'Zeitstempel';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['varbase']                           = 'Varbase';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['vargroup']                          = 'Vargroup';
 $GLOBALS['TL_LANG']['MSC']['details']                                                 = 'Details';
 $GLOBALS['TL_LANG']['MSC']['field_label']                                             = '%s:';
 $GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label']                        = ' "%s" für den Eintrag %%s editieren.';
@@ -54,6 +62,20 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord']             
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']                        = 'Render-Einstellung "%s" in MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodels_contributor']                                  = 'Wir danken diesen Benutzerinnen und Benutzern für Tickets, Anregungen und Übersetzungen:';
 $GLOBALS['TL_LANG']['MSC']['metamodels_help']                                         = 'Bitte unterstützen Sie uns!';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['contributor_headline']              = 'Wir danken diesen Benutzerinnen und Benutzern für Tickets, Anregungen und Übersetzungen:';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['contributor_link']                  = 'Mitwirkende bei github...';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['help_headline']                     = 'Hilfe für Dein MetaModels Projekt';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['help_text']                         = 'Auf unserer <a target="_blank" href="https://now.metamodel.me/de/hilfe">Hilfe-Website </a> finden Sie als Leitfaden zu MetaModels das Handbuch, alle Support-Kanäle, Videos und unseren Newsletter-Service.<br /><br /><br /><a target="_blank" href="http://metamodels.readthedocs.io/de/latest/">Direkter Link zum MetaModels Handbuch...</a>';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['main_headline']                     = 'Bitte unterstützen Sie uns!';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['main_text']                         = 'Als Entwickler dieses Projektes erhalten wir keine Vergütung für unsere Arbeit. Ein Großteil unserer wertvollen Zeit widmen dem MetaModels-Projekt. Jede Spende an das MetaModels-Projekt würde es uns ermöglichen, während unserer regulären Arbeitszeit an dem Projekt zu arbeiten, was die Entwicklung erheblich beschleunigen würde. Deshalb bitten wir um eine Unterstützung für das MetaModels-Projekt.<br /><br /> Wir garantieren, dass Spendengelder nur für dieses Projekt ausgegeben werden. Sollten Sie spezielle Wünsche oder Anforderungen haben, können Sie gerne ein Mitglied unseres <a target="_blank" href="https://now.metamodel.me/de/ueber-uns/team">Teams</a>anfragen, das Ihnen gerne weiterhilft. <br /><br /><br />Ein großes Dankeschön an alle <a target="_blank" href="https://now.metamodel.me/de/unterstuetzung">bestehenden Supporter und Sponsoren</a>. Bitte beachten Sie unsere Spendenseite. Ein solches umfangreiches Open Source Projekt konnten wir ohne die Unterstützung der Community nicht realisieren. <br /><br />br /><a target="_blank" href="https://now.metamodel.me/de/unterstuetzer/spenden">Mehr Infos</a>';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['other_donations']                   = 'Für Spenden besuchen Sie auch unsere <a target="_blank" href="https://now.metamodel.me/en/supporters/fundraising"> Fundraisings</a> oder beachten Sie <a target="_blank" href="https://now.metamodel.me/en/supporters/donate"> Spenden für das Handbuch</a>.';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['purpose']                           = 'Verwendungszweck';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_filter']['0']                                  = 'Fi';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_filter']['1']                                  = 'Filtern';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_name']['0']                                    = 'MM';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_name']['1']                                    = 'MetaModel';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_render_setting']['0']                          = 'Rs';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_render_setting']['1']                          = 'Render-Einstellung';
 $GLOBALS['TL_LANG']['MSC']['noItemsMsg']                                              = 'Ihre Suche lieferte keine passenden Ergebnisse.';
 $GLOBALS['TL_LANG']['MSC']['no_theme']                                                = 'Globaler Gültigkeitsbereich ';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']['0']                              = 'Filtersets';

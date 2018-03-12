@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2016-01-14T08:12:31+01:00
+ * last-updated: 2018-03-09T21:03:43+01:00
  */
 
 $GLOBALS['TL_LANG']['XPL']['customsql']['0']['0']            = 'Zusammenfassung';
@@ -33,11 +33,11 @@ Komplexe Filter, Parameter und Quellen nutzen';
 $GLOBALS['TL_LANG']['XPL']['customsql']['6']['1']            = '<pre>SELECT id
 FROM {{table}}
 WHERE catname={{param::get?name=category&default=defaultcat}}</pre> <p> Dies ist prinzipiell ähnlich wie in Beispiel 2. Allerdings wird hier ein Parameter aus dem "query"-String verwendet. </p> <p> Stellen Sie sich eine Seiten-URL wie "http://example.org/list/category/demo.html" vor.<br /> Die Abfrage lautet dann: "SELECT id FROM mm_demo WHERE catname=\'demo\'" </p> <p> Falls die URL "http://example.org/list.html" lauten soll müsste die Abfrage dann "SELECT id FROM mm_demo WHERE catname=\'defaultcat\'" lauten. </p> ';
-$GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['0']['0'] = 'Eigenschaftswert ist...';
+$GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['0']['0'] = 'Eigenschaftswert ist gleich ...';
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['0']['1'] = 'Die Bedingung ist erfüllt, wenn der Attributwert gleich dem festgelegten Wert ist. Als Attribute können diejenigen mit Einfachauswahl wie z.B. Select oder Checkbox ausgewählt werden.';
-$GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['1']['0'] = 'Eigenschaftswert kann beinhalten...';
+$GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['1']['0'] = 'Eigenschaftswert beinhaltet ...';
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['1']['1'] = 'Die Bedingung ist erfüllt, wenn ein beliebiger Attributwert gleich dem jeweils festgelegten Wert ist (Schnittmenge bzw. ODER). Als Attribute können diejenigen mit Mehrfachauswahl wie z.B. Tags ausgewählt werden.';
-$GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['2']['0'] = 'Eigenschaft ist sichtbar...';
+$GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['2']['0'] = 'Eigenschaft ist sichtbar ...';
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['2']['1'] = 'Die Bedingung ist erfüllt, wenn alle Bedingungen für ein ausgewähltes Attribut erfüllt sind. Mit anderen Worten, das Attribut ist sichtbar, und nur dann, wenn das ausgewählte (oder "referenzierte") Attribut auch sichtbar ist. Mit diesem Bedingungstyp erspart man sich das Duplizieren von erstellten Ansichtsbedingungen eines Attributs.';
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['3']['0'] = 'ODER';
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['3']['1'] = 'Eine beliebige Bedingung muss erfüllt sein.';

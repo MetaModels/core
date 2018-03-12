@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:43:05+02:00
+ * last-updated: 2018-02-06T02:10:11+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Attribut "%s" ajouté au masque de saisie.';
@@ -93,6 +93,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['1']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']                 = 'Type';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['0']                = 'Classe back office';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['1']                = 'Ici vous pouvez définir les classe(s) du back office. Utilisez le sélecteur de style pour plsu d\'efficacité.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle']['0']                  = 'Basculer';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['0']           = 'Traitement du slash de fin';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['1']           = 'Ici vous pouvez spécifier comment le slash de fin doit être traité.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['0']   = 'Enlever le slash lors de l\'enregistrement';

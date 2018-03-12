@@ -250,7 +250,6 @@ class Template
      */
     protected function getTemplate($strTemplate, $strFormat = 'html5', $blnFailIfNotFound = false)
     {
-        // FIXME: this could be cached and save two calls to file_exists() in \TemplateLoader::getPath().
         $strTemplate = basename($strTemplate);
         $strCustom   = 'templates';
         // Check for a theme folder.

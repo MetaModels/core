@@ -220,11 +220,11 @@ class MetaModelsTest extends TestCase
     {
         $this->markTestIncomplete('We need to rewrite MetaModel to utilize doctrine first');
 
-        $metaModel = $this->getMock(
-            'MetaModels\MetaModel',
-            array('getMatchingIds'),
-            array(array('tableName'  => 'mm_test_retrieve'))
-        );
+        $metaModel = $this
+            ->getMockBuilder('MetaModels\MetaModel')
+            ->setMethods(array('getMatchingIds'))
+            ->setConstructorArgs(array(array('tableName'  => 'mm_test_retrieve')))
+            ->getMock();
         $metaModel
             ->expects($this->any())
             ->method('getMatchingIds')
@@ -261,22 +261,21 @@ class MetaModelsTest extends TestCase
     {
         $this->markTestIncomplete('We need to rewrite MetaModel to utilize doctrine first');
 
-        $metaModel = $this->getMock(
-            'MetaModels\MetaModel',
-            array('getMatchingIds'),
-            array(array('tableName'  => 'mm_test_retrieve'))
-        );
+        $metaModel = $this
+            ->getMockBuilder('MetaModels\MetaModel')
+            ->setMethods(array('getMatchingIds'))
+            ->setConstructorArgs(array(array('tableName'  => 'mm_test_retrieve')))
+            ->getMock();
         $metaModel
             ->expects($this->any())
             ->method('getMatchingIds')
             ->will($this->returnValue(array()));
         $this->assertEquals(0, $metaModel->getCount($metaModel->getEmptyFilter()));
 
-        $metaModel = $this->getMock(
-            'MetaModels\MetaModel',
-            array('getMatchingIds'),
-            array(array('tableName'  => 'mm_test_retrieve'))
-        );
+        $metaModel = $this->getMockBuilder('MetaModels\MetaModel')
+            ->setMethods(array('getMatchingIds'))
+            ->setConstructorArgs(array(array('tableName'  => 'mm_test_retrieve')))
+            ->getMock();
         $metaModel
             ->expects($this->any())
             ->method('getMatchingIds')

@@ -6,11 +6,10 @@
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
  * @link https://www.transifex.com/signup/
- * @link https://www.transifex.com/projects/p/$$project$$/language/$$lang$$/
+ * @link https://www.transifex.com/projects/p/$$project$$/language/et/
  *
- * last-updated: 2017-08-24T12:43:08+02:00
+ * last-updated: 2018-02-06T02:10:15+01:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['addall']['0']                                = 'Lisa kõik';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['attr_id']['0']                               = 'Omadus';
@@ -30,6 +29,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['enabled']['0']        
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['new']['0']                                   = 'Uus';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['new']['1']                                   = 'Loo uus säte.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show']['0']                                  = 'Seadete üksikasjad';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['toggle']['0']                                = 'Lülita';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type']['0']                                  = 'Liik';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type']['1']                                  = 'Vali tingimuse liik.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['value']['0']                                 = 'Väärtus';

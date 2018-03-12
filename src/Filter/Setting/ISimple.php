@@ -54,8 +54,6 @@ interface ISimple
      *
      * @param string[] $arrFilterUrl The parameters to evaluate.
      *
-     * @todo: we might want to change the name $arrFilterUrl to $arrFilterParams or something like that.
-     *
      * @return void
      */
     public function prepareRules(IFilter $objFilter, $arrFilterUrl);

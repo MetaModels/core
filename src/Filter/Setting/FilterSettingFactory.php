@@ -202,7 +202,6 @@ class FilterSettingFactory implements IFilterSettingFactory
      */
     private function collectRulesFor($parentSetting, $filterSettings)
     {
-        // TODO: we should provide a collector like for attributes.
         $childInformation = $this->database
             ->createQueryBuilder()
             ->select('*')
@@ -230,7 +229,6 @@ class FilterSettingFactory implements IFilterSettingFactory
      */
     public function collectRules($filterSettings)
     {
-        // TODO: we should provide a collector like for attributes.
         $information = $this->database
             ->createQueryBuilder()
             ->select('*')
@@ -257,7 +255,6 @@ class FilterSettingFactory implements IFilterSettingFactory
      */
     public function createCollection($settingId)
     {
-        // TODO: we should provide a collector like for attributes.
         $query = $this->database
             ->createQueryBuilder()
             ->select('*')
@@ -271,7 +268,6 @@ class FilterSettingFactory implements IFilterSettingFactory
         }
 
         if (!empty($information = $query->fetch(\PDO::FETCH_ASSOC))) {
-            // FIXME: service container in use!!!! inject MetaModel factory here!
             $metaModel = $this->factory->getMetaModel($this->factory->translateIdToMetaModelName($information['pid']));
             if ($metaModel === null) {
                 throw new \RuntimeException('Could not retrieve MetaModel ' . $information['pid']);

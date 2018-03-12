@@ -85,3 +85,10 @@ services:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.manipulate-widget
               method: handle
+
+    metamodels.listener.table.tl_metamodel_dcasetting.remove_override_button:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\RemoveOverrideButtonListener
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-select-mode-buttons
+              method: removeButton

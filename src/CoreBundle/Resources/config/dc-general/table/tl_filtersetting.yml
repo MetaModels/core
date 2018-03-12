@@ -61,3 +61,12 @@ services:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.get-property-options
               method: handle
+
+    metamodels.dc_general.table.tl_metamodel_filtersetting.sub_palette:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting\SubPaletteSubscriber
+        arguments:
+            - "@metamodels.filter_setting_factory"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-property-options
+              method: prepareSubPalettes

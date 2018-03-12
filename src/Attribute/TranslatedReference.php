@@ -341,7 +341,6 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
             ->select('*')
             ->from($this->getValueTable());
 
-        // TODO: implement $arrIds and $usedOnly handling here.
         $this->buildWhere($queryBuilder, $idList, $this->getMetaModel()->getActiveLanguage());
 
         $statement     = $queryBuilder->execute();

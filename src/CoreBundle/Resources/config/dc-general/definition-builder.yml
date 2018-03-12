@@ -28,6 +28,7 @@ services:
             - "@metamodels.view_combination"
             - "@metamodels.factory"
             - "@metamodels.assets.icon_builder"
+            - '@translator'
         tags:
             - name: kernel.event_listener
               event: dc-general.factory.build-data-definition

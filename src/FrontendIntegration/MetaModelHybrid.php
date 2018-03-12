@@ -130,6 +130,9 @@ abstract class MetaModelHybrid extends Hybrid
      * Generate the list.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function generate()
     {

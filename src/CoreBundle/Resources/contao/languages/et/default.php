@@ -6,11 +6,10 @@
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
  * @link https://www.transifex.com/signup/
- * @link https://www.transifex.com/projects/p/$$project$$/language/$$lang$$/
+ * @link https://www.transifex.com/projects/p/$$project$$/language/et/
  *
- * last-updated: 2017-08-24T12:42:37+02:00
+ * last-updated: 2018-03-09T21:03:41+01:00
  */
-
 
 $GLOBALS['TL_LANG']['BRD']['metamodels']                            = 'MetaModels';
 $GLOBALS['TL_LANG']['CTE']['metamodel_content']['0']                = 'MetaModel nimekiri';
@@ -19,8 +18,15 @@ $GLOBALS['TL_LANG']['CTE']['metamodels_frontendclearall']['0']      = 'MetaModel
 $GLOBALS['TL_LANG']['ERR']['invalidTableName']                      = 'Tabeli nimi "%s" pole korrektne.';
 $GLOBALS['TL_LANG']['ERR']['tableDoesNotExist']                     = 'Tabelit "%s" pole olemas.';
 $GLOBALS['TL_LANG']['ERR']['tableExists']                           = 'Tabel "%s" on juba olemas.';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['attributes']      = 'Omadused';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['id']              = 'ID';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['pid']             = 'PID';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['sorting']         = 'Sorteerimine';
+$GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['tstamp']          = 'Ajatempel';
 $GLOBALS['TL_LANG']['MSC']['details']                               = 'Üksikasjad';
 $GLOBALS['TL_LANG']['MSC']['field_label']                           = '%s:';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_filter']['1']                = 'Filter';
+$GLOBALS['TL_LANG']['MSC']['mm_be_info_name']['1']                  = 'MetaModel';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']['0']            = 'Filter';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['limit']['0']             = 'Piirang';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['search']['0']            = 'Otsi';
