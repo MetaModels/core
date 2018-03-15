@@ -13,6 +13,7 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -51,27 +52,27 @@ class SubPaletteSubscriber extends BaseSubscriber
             || ($event->getPropertyName() !== 'attr_id')) {
             return;
         }
-
+ 
         $model      = $event->getModel();
         $metaModel  = $this->getMetaModel($model);
-        $typeName   = $model->getProperty('type');
+        $filterType = $model->getProperty('type');
         $palettes   = $event->getEnvironment()->getDataDefinition()->getPalettesDefinition();
         $properties = $event->getEnvironment()->getDataDefinition()->getPropertiesDefinition();
-
-        if (!$palettes->hasPaletteByName($typeName)) {
+ 
+        if (!$palettes->hasPaletteByName($filterType)) {
             return;
         }
-
-        if (!isset($GLOBALS['TL_DCA']['tl_metamodel_filtersetting'][$typeName . '_palettes'])) {
+ 
+        if (!isset($GLOBALS['TL_DCA']['tl_metamodel_filtersetting'][$filterType . '_palettes'])) {
             return;
         }
-        $typeLegends = $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'][$typeName . '_palettes'];
+        $typeLegends = $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'][$filterType . '_palettes'];
         foreach ($metaModel->getAttributes() as $attribute) {
             $typeName = $attribute->get('type');
             if (empty($typeLegends[$typeName])) {
                 continue;
             }
-            $this->prepareIncludeLegend($typeLegends[$typeName], $properties, $palettes->getPaletteByName($typeName));
+            $this->prepareIncludeLegend($typeLegends[$typeName], $properties, $palettes->getPaletteByName($filterType));
         }
     }
 
