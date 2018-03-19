@@ -124,9 +124,11 @@ class ModelToLabelListener extends AbstractListener
      */
     protected function wantToHandle(AbstractEnvironmentAwareEvent $event)
     {
-        return parent::wantToHandle($event) || (
-            $event->getEnvironment()->getInputProvider()->hasParameter('mode')
-                && 'select' === $event->getEnvironment()->getInputProvider()->getParameter('act')
+        return $event->getEnvironment()->getInputProvider()->hasParameter('mode')
+            ? parent::wantToHandle($event)
+              && ('select' === $event->getEnvironment()->getInputProvider()->getParameter('act'))
+            : parent::wantToHandle(
+                $event
             );
     }
 
