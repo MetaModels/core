@@ -28,6 +28,15 @@ services:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.encode-property-value-from-widget
               method: encodeValue
+    metamodels.listener.table.tl_metamodel_rendersettings.language_code_wizard:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\RenderSettings\LanguageCodeWizardListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@contao.picker.builder"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.manipulate-widget
+              method: pagePicker
     metamodels.listener.table.tl_metamodel_rendersettings.template_options:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\RenderSettings\TemplateOptionListener
         arguments:
