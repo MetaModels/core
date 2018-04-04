@@ -14,6 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -82,7 +83,7 @@ class ViewCombination
     /**
      * Obtain the combinations for the current user.
      *
-     * @return array
+     * @return array|null
      */
     public function getCombinations()
     {
@@ -220,7 +221,11 @@ class ViewCombination
     private function getInputScreens()
     {
         $combinations = $this->getCombinations();
-        $screenIds    = array_map(function ($combination) {
+        if (null === $combinations) {
+            return [];
+        }
+
+        $screenIds = array_map(function ($combination) {
             return $combination['dca_id'];
         }, $combinations['byName']);
 
