@@ -391,7 +391,8 @@ class Driver implements MultiLanguageDataProviderInterface
             $config->getStart(),
             $config->getAmount(),
             strtoupper($sorting[1]),
-            $config->getFields() ?: array()
+            $config->getFields() ?: [],
+            $config->getIds() ?: []
         );
     }
 
