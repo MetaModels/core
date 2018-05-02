@@ -740,18 +740,15 @@ class MetaModel implements IMetaModel
         $intOffset = 0,
         $intLimit = 0,
         $strSortOrder = 'ASC',
-        $arrAttrOnly = [],
-        $ids = []
+        $arrAttrOnly = array()
     ) {
-
         return $this->getItemsWithId(
             $this->getIdsFromFilter(
                 $objFilter,
                 $strSortBy,
                 $intOffset,
                 $intLimit,
-                $strSortOrder,
-                $ids
+                $strSortOrder
             ),
             $arrAttrOnly
         );
@@ -762,19 +759,8 @@ class MetaModel implements IMetaModel
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function getIdsFromFilter(
-        $objFilter,
-        $strSortBy = '',
-        $intOffset = 0,
-        $intLimit = 0,
-        $strSortOrder = 'ASC',
-        $ids = []
-    ) {
-        // Filter by ids from data config.
-        if (\count($ids)) {
-            return $ids;
-        }
-
+    public function getIdsFromFilter($objFilter, $strSortBy = '', $intOffset = 0, $intLimit = 0, $strSortOrder = 'ASC')
+    {
         if ([] === $arrFilteredIds = array_filter($this->getMatchingIds($objFilter))) {
             return [];
         }
