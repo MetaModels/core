@@ -6,6 +6,14 @@ services:
               event: dc-general.view.contao2backend.encode-property-value-from-widget
               method: handle
 
+    metamodels.dc_general.table.tl_metamodel_dca_combine.fix_type_safety:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaCombine\FixTypeSafetyListener
+        public: true
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.encode-property-value-from-widget
+              method: handle
+
     metamodels.dc_general.table.tl_metamodel_dca_combine.group_options:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaCombine\GroupOptionListener
         arguments:
