@@ -80,7 +80,7 @@ interface ICollection
      *
      * @param IItem $item The item to generate the filter url for.
      *
-     * @return string
+     * @return array
      */
     public function buildJumpToUrlFor(IItem $item);
 }
