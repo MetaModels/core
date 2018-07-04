@@ -444,6 +444,12 @@ class InputScreen implements IInputScreen
      */
     public function getMetaModel()
     {
+        if (null === $this->data) {
+            throw new \RuntimeException(
+                'No input screen data available, did you forget to define the view combinations?'
+            );
+        }
+
         $factory   = $this->container->getFactory();
         $metaModel = $factory->getMetaModel($factory->translateIdToMetaModelName($this->data['pid']));
 
