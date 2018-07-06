@@ -14,6 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -22,6 +23,8 @@
 namespace MetaModels\DcGeneral\Data;
 
 use Contao\Database;
+use Contao\System;
+use Doctrine\DBAL\Connection;
 use MetaModels\Filter\Rules\SimpleQuery;
 
 /**
@@ -60,24 +63,24 @@ class FilterBuilderSql
     /**
      * The database instance.
      *
-     * @var Database
+     * @var Connection
      */
-    private $dataBase;
+    private $connection;
 
     /**
      * Create a new instance.
      *
-     * @param string   $tableName The table name.
+     * @param string     $tableName  The table name.
      *
-     * @param string   $combiner  The combiner (AND or OR).
+     * @param string     $combiner   The combiner (AND or OR).
      *
-     * @param Database $dataBase  The database to use.
+     * @param Connection $connection The database connection.
      */
-    public function __construct($tableName, $combiner, Database $dataBase)
+    public function __construct($tableName, $combiner, $connection)
     {
-        $this->tableName = $tableName;
-        $this->combiner  = strtoupper($combiner);
-        $this->dataBase  = $dataBase;
+        $this->tableName  = $tableName;
+        $this->combiner   = strtoupper($combiner);
+        $this->connection = $this->sanitizeConnection($connection);
     }
 
     /**
@@ -122,7 +125,7 @@ class FilterBuilderSql
                 sprintf('SELECT id FROM %s WHERE %s', $this->tableName, $this->getProcedure()),
                 $this->getParameters(),
                 'id',
-                $this->dataBase
+                $this->connection
             );
         }
 
@@ -226,5 +229,53 @@ class FilterBuilderSql
         $this->parameter    = array_merge($this->parameter, $subProcedure->getParameters());
 
         return $this;
+    }
+
+    /**
+     * Sanitize the connection value
+     *
+     * @param Connection|\Contao\Database $connection The connection value.
+     *
+     * @return mixed|object
+     *
+     * @throws \RuntimeException Throws could not obtain doctrine connection.
+     * @throws \ReflectionException Throws could not connect to database.
+     *
+     * @deprecated To be removed in 3.0 - you should ALWAYS pass the proper connection.
+     */
+    private function sanitizeConnection($connection)
+    {
+        if ($connection instanceof Connection) {
+            return $connection;
+        }
+
+        // BC layer - we used to accept a Contao database instance here.
+        if ($connection instanceof Database) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                '"' . __METHOD__ . '" now accepts doctrine instances - ' .
+                'passing Contao database instances is deprecated.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $reflection = new \ReflectionProperty(Database::class, 'resConnection');
+            $reflection->setAccessible(true);
+            return $reflection->getValue($connection);
+        }
+        if (null === $connection) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'You should pass a doctrine database connection to "' . __METHOD__ . '".',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $connection = System::getContainer()->get('database_connection');
+        }
+
+        if (!($connection instanceof Connection)) {
+            throw new \RuntimeException('Could not obtain doctrine connection.');
+        }
+
+        return $connection;
     }
 }

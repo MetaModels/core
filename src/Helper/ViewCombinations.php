@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -23,7 +23,9 @@
 
 namespace MetaModels\Helper;
 
+use Contao\System;
 use Contao\User;
+use Doctrine\DBAL\Connection;
 use MetaModels\BackendIntegration\InputScreen\IInputScreen;
 use MetaModels\BackendIntegration\InputScreen\InputScreen;
 use MetaModels\IMetaModelsServiceContainer;
@@ -87,13 +89,22 @@ abstract class ViewCombinations
     private $user;
 
     /**
+     * Database connection.
+     *
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * Create a new instance.
      *
-     * @param IMetaModelsServiceContainer $container The service container.
+     * @param IMetaModelsServiceContainer $container  The service container.
      *
-     * @param User                        $user      The current user.
+     * @param User                        $user       The current user.
+     *
+     * @param Connection|null             $connection Database connection.
      */
-    public function __construct(IMetaModelsServiceContainer $container, User $user)
+    public function __construct(IMetaModelsServiceContainer $container, User $user, Connection $connection = null)
     {
         $this->container = $container;
         $this->user      = $user;
@@ -102,6 +113,18 @@ abstract class ViewCombinations
             $this->resolve();
             $this->saveToCache();
         }
+
+        if (null === $connection) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Connection is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $connection = System::getContainer()->get('database_connection');
+        }
+
+        $this->connection = $connection;
     }
 
     /**
@@ -374,6 +397,8 @@ abstract class ViewCombinations
      * Pull in all DCA settings for the buffered MetaModels and buffer them in the static class.
      *
      * @return void
+     *
+     * @throws \Doctrine\DBAL\DBALException When a database error occurs.
      */
     protected function fetchInputScreenDetails()
     {
@@ -386,30 +411,27 @@ abstract class ViewCombinations
             return;
         }
 
-        $inputScreens = $this->getDatabase()
-            ->prepare(sprintf(
+        $statement = $this->connection->query(
+            sprintf(
                 'SELECT * FROM tl_metamodel_dca WHERE id IN (%s)',
                 implode(',', $inputScreenIds)
-            ))
-            ->execute();
+            )
+        );
 
-        /** @noinspection PhpUndefinedFieldInspection */
-        if (!$inputScreens->numRows) {
-            return;
-        }
-
-        while ($inputScreens->next()) {
+        while ($inputScreens = $statement->fetch(\PDO::FETCH_OBJ)) {
             /** @noinspection PhpUndefinedFieldInspection */
             $screenId = $inputScreens->id;
             /** @noinspection PhpUndefinedFieldInspection */
             $metaModelId   = $inputScreens->pid;
             $metaModelName = $this->tableNameFromId($metaModelId);
-            $propertyRows  = $this->getDatabase()
-                ->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=? AND published=1 ORDER BY sorting ASC')
-                ->execute($screenId);
 
-            $conditions = $this->getDatabase()
-                ->prepare('
+            $propertyRows = $this->connection
+                ->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=? AND published=1 ORDER BY sorting ASC');
+
+            $propertyRows->bindValue(1, $screenId);
+            $propertyRows->execute();
+
+            $conditions = $this->connection->prepare('
                     SELECT cond.*, setting.attr_id AS setting_attr_id
                     FROM tl_metamodel_dcasetting_condition AS cond
                     LEFT JOIN tl_metamodel_dcasetting AS setting
@@ -418,23 +440,25 @@ abstract class ViewCombinations
                     ON (setting.pid=dca.id)
                     WHERE dca.id=? AND setting.published=1 AND cond.enabled=1
                     ORDER BY sorting ASC
-                ')
-                ->execute($screenId);
+                ');
 
-            $groupSort = $this->getDatabase()
-                ->prepare('
+            $conditions->bindValue(1, $screenId);
+            $conditions->execute();
+
+            $groupSort = $this->connection->prepare('
                     SELECT *
                     FROM tl_metamodel_dca_sortgroup
                     WHERE pid=?
                     ORDER BY sorting ASC
-                ')
-                ->execute($screenId);
+                ');
+            $groupSort->bindValue(1, $screenId);
+            $groupSort->execute();
 
             $inputScreen = array(
                 'row'        => $inputScreens->row(),
-                'properties' => $propertyRows->fetchAllAssoc(),
-                'conditions' => $conditions->fetchAllAssoc(),
-                'groupSort'  => $groupSort->fetchAllAssoc()
+                'properties' => $propertyRows->fetchAll(\PDO::FETCH_ASSOC),
+                'conditions' => $conditions->fetchAll(\PDO::FETCH_ASSOC),
+                'groupSort'  => $groupSort->fetchAll(\PDO::FETCH_ASSOC)
             );
 
             $this->information[$metaModelName][self::INPUTSCREEN] = $inputScreen;

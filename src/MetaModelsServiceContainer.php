@@ -14,6 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -375,14 +376,16 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
                     $this->services['metamodels-view-combinations'] =
                         new \MetaModels\FrontendIntegration\ViewCombinations(
                             $this,
-                            $GLOBALS['container']['user']
+                            $GLOBALS['container']['user'],
+                            \System::getContainer()->get('database_connection')
                         );
                     break;
                 case $determinator->currentScopeIsBackend():
                     $this->services['metamodels-view-combinations'] =
                         new \MetaModels\BackendIntegration\ViewCombinations(
                             $this,
-                            $GLOBALS['container']['user']
+                            $GLOBALS['container']['user'],
+                            \System::getContainer()->get('database_connection')
                         );
                     break;
                 default:

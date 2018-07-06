@@ -14,6 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -21,7 +22,9 @@
 
 namespace MetaModels\DcGeneral\Data;
 
+use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Data\ConfigInterface;
+use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Rules\Comparing\GreaterThan;
@@ -53,16 +56,37 @@ class FilterBuilder
     protected $configuration;
 
     /**
+     * Database connection.
+     *
+     * @var Connection
+     */
+    protected $connection;
+
+    /**
      * Generate a filter from a passed configuration.
      *
      * @param IMetaModel      $metaModel     The MetaModel.
      *
      * @param ConfigInterface $configuration The data configuration.
+     *
+     * @param Connection|null $connection    The database connection.
      */
-    public function __construct(IMetaModel $metaModel, ConfigInterface $configuration)
+    public function __construct(IMetaModel $metaModel, ConfigInterface $configuration, Connection $connection = null)
     {
         $this->metaModel     = $metaModel;
         $this->configuration = $configuration;
+
+        if (null === $connection) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Connection is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $connection = System::getContainer()->get('database_connection');
+        }
+
+        $this->connection = $connection;
     }
 
     /**
@@ -143,7 +167,8 @@ class FilterBuilder
             }
         }
 
-        if ($this->getDatabase()->fieldExists($operation['property'], $this->getMetaModel()->getTableName())) {
+        $columns = $this->connection->getSchemaManager()->listTableColumns($this->getMetaModel()->getTableName());
+        if ($columns[$operation['property']]) {
             // System column?
             $filter->addFilterRule(new SimpleQuery(
                 sprintf(
@@ -154,7 +179,7 @@ class FilterBuilder
                 ),
                 array($operation['value']),
                 'id',
-                $this->getDatabase()
+                $this->connection
             ));
 
             return;
@@ -221,7 +246,8 @@ class FilterBuilder
             return;
         }
 
-        if ($this->getDatabase()->fieldExists($operation['property'], $this->getMetaModel()->getTableName())) {
+        $columns = $this->connection->getSchemaManager()->listTableColumns($this->getMetaModel()->getTableName());
+        if ($columns[$operation['property']]) {
             // System column?
             $filter->addFilterRule(new SimpleQuery(
                 sprintf(
@@ -231,7 +257,7 @@ class FilterBuilder
                 ),
                 array($operation['value']),
                 'id',
-                $this->getDatabase()
+                $this->connection
             ));
 
             return;
@@ -267,7 +293,7 @@ class FilterBuilder
 
             // Try to parse the sub procedure and extract as much as possible.
             if (($child['operation'] == 'AND') || ($child['operation'] == 'OR')) {
-                $subProcedure = new FilterBuilderSql($tableName, $child['operation'], $this->getDatabase());
+                $subProcedure = new FilterBuilderSql($tableName, $child['operation'], $this->connection);
                 $subSkipped   = $this->buildNativeSqlProcedure($subProcedure, $child['children']);
 
                 if (count($subSkipped) !== count($child['children'])) {
@@ -300,7 +326,7 @@ class FilterBuilder
      */
     protected function optimizedFilter($filterRule, $children, $operation)
     {
-        $procedure = new FilterBuilderSql($this->getMetaModel()->getTableName(), $operation, $this->getDatabase());
+        $procedure = new FilterBuilderSql($this->getMetaModel()->getTableName(), $operation, $this->connection);
         $skipped   = $this->buildNativeSqlProcedure($procedure, $children);
 
         if (!$procedure->isEmpty()) {
