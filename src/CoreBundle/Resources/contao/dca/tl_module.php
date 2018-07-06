@@ -184,7 +184,7 @@ array_insert(
             'exclude'          => true,
             'inputType'        => 'select',
             'options_callback' => array(ModuleCallback::class, 'getFilterSettings'),
-            'default'          => '',
+            'default'          => '0',
             'eval'             => array
             (
                 'includeBlankOption' => true,
@@ -204,7 +204,7 @@ array_insert(
             'exclude'          => true,
             'inputType'        => 'select',
             'options_callback' => array(ModuleCallback::class, 'getRenderSettings'),
-            'default'          => '',
+            'default'          => '0',
             'eval'             => array
             (
                 'includeBlankOption' => true,
