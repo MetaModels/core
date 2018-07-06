@@ -33,3 +33,8 @@ services:
 
     MetaModels\CoreBundle\Contao\Hooks\ModuleCallback:
         parent: MetaModels\CoreBundle\Contao\Hooks\AbstractContentElementAndModuleCallback
+
+    MetaModels\BackendIntegration\SearchablePages:
+        arguments:
+            - "@database_connection"
+        public: true

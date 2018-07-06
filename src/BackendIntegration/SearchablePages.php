@@ -16,6 +16,7 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -28,6 +29,7 @@ use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GetPageDetailsEvent;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
+use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\Filter\IFilter;
 use MetaModels\IFactory;
@@ -52,20 +54,42 @@ class SearchablePages
      *
      * @var array
      */
-    protected $configs = array();
+    private $configs = array();
+
+    /**
+     * Database connection.
+     *
+     * @var Connection
+     */
+    private $connection;
 
     /**
      * Construct.
+     *
+     * @param Connection $connection Databse connection.
      */
-    public function __construct()
+    public function __construct(Connection $connection)
     {
-        // Init the config from database.
-        $this->configs = $this
-            ->getServiceContainer()
-            ->getDatabase()
-            ->prepare('SELECT * FROM tl_metamodel_searchable_pages')
-            ->execute()
-            ->fetchAllAssoc();
+        $this->connection = $connection;
+    }
+
+    /**
+     * Get all configs.
+     *
+     * @return array
+     *
+     * @throws \Doctrine\DBAL\DBALException When a database error occur.
+     */
+    protected function getConfigs()
+    {
+        if ($this->configs === null) {
+            // Init the config from database.
+            $statement = $this->connection->query('SELECT * FROM tl_metamodel_searchable_pages');
+
+            $this->configs = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        }
+
+        return $this->configs;
     }
 
     /**
@@ -385,6 +409,8 @@ class SearchablePages
      *
      * @return array
      *
+     * @throws \Doctrine\DBAL\DBALException When an database error occur.
+     *
      * @see \RebuildIndex::run()
      * @see \Automator::generateSitemap()
      *
@@ -397,7 +423,7 @@ class SearchablePages
         unset($pages);
 
         // Run each entry in the published config array.
-        foreach ($this->configs as $config) {
+        foreach ($this->getConfigs() as $config) {
             if (!$config['published']) {
                 continue;
             }
