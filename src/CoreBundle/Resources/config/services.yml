@@ -58,6 +58,8 @@ services:
 
     metamodels.insert_tags:
         class: Contao\InsertTags
+        factory: ['@contao.framework', 'getAdapter']
+        arguments: ['Contao\\InsertTags']
 
     metamodels.table_manipulator:
         class: MetaModels\Helper\TableManipulator

@@ -21,6 +21,7 @@
 
 namespace MetaModels\Filter\Setting;
 
+use Contao\CoreBundle\Framework\Adapter;
 use Contao\InsertTags;
 use Doctrine\DBAL\Connection;
 
@@ -56,11 +57,11 @@ class CustomSqlFilterSettingTypeFactory extends AbstractFilterSettingTypeFactory
      * {@inheritDoc}
      *
      * @param Connection $database   The database.
-     * @param InsertTags $insertTags The insert tag handler.
+     * @param Adapter    $insertTags The insert tag adapter.
      */
     public function __construct(
         Connection $database,
-        InsertTags $insertTags
+        Adapter $insertTags
     ) {
         parent::__construct();
 
