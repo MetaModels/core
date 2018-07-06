@@ -16,6 +16,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -23,11 +24,13 @@
 
 namespace MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property;
 
+use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBag;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
+use Doctrine\DBAL\Connection;
 
 /**
  * Condition for the default palette.
@@ -49,13 +52,34 @@ class InputScreenAttributeIs implements PropertyConditionInterface
     protected static $attributeTypes = array();
 
     /**
+     * Database connection.
+     *
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * Create a new instance.
      *
-     * @param string $attributeType The attribute type name.
+     * @param string     $attributeType The attribute type name.
+     *
+     * @param Connection $connection    Database connection.
      */
-    public function __construct($attributeType)
+    public function __construct($attributeType, Connection $connection = null)
     {
         $this->attributeType = $attributeType;
+
+        if (null === $connection) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Connection is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $connection = System::getContainer()->get('database_connection');
+        }
+
+        $this->connection = $connection;
     }
 
     /**
@@ -88,15 +112,17 @@ class InputScreenAttributeIs implements PropertyConditionInterface
      * @param int $value The id of an attribute.
      *
      * @return string
+     *
+     * @throws \Doctrine\DBAL\DBALException When a database error occurs.
      */
     public function getTypeOfAttribute($value)
     {
         if (!isset(self::$attributeTypes[$value])) {
-            self::$attributeTypes[$value] = $this->getServiceContainer()->getDatabase()
-                ->prepare('SELECT type FROM tl_metamodel_attribute WHERE id=?')
-                ->limit(1)
-                ->execute($value)
-                ->type;
+            $statement = $this->connection->prepare('SELECT type FROM tl_metamodel_attribute WHERE id=? LIMIT 0,1');
+            $statement->bindValue(1, $value);
+            $statement->execute();
+
+            self::$attributeTypes[$value] = $statement->fetch(\PDO::FETCH_OBJ)->type;
         }
         return self::$attributeTypes[$value];
     }

@@ -62,6 +62,8 @@ services:
               method: handle
     metamodels.listener.table.tl_metamodel_dcasetting.palette_restriction_builder:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\PaletteRestrictionListener
+        arguments:
+            - "@database_connection"
         tags:
             - name: kernel.event_listener
               event: dc-general.factory.build-data-definition

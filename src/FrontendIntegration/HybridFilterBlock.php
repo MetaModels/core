@@ -15,6 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -22,6 +23,11 @@
 
 namespace MetaModels\FrontendIntegration;
 
+use Contao\ContentModel;
+use Contao\FormModel;
+use Contao\ModuleModel;
+use Contao\System;
+use Doctrine\DBAL\Connection;
 use MetaModels\Filter\Setting\ICollection;
 
 /**
@@ -45,6 +51,28 @@ class HybridFilterBlock extends MetaModelHybrid
      */
     private $arrJumpTo;
 
+
+    /**
+     * Database connection.
+     *
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * HybridFilterBlock constructor.
+     *
+     * @param ContentModel|ModuleModel|FormModel $objElement The object from the database.
+     *
+     * @param string                             $strColumn  The column the element is displayed within.
+     */
+    public function __construct($objElement, $strColumn = 'main')
+    {
+        parent::__construct($objElement, $strColumn);
+
+        $this->connection = System::getContainer()->get('database_connection');;
+    }
+
     /**
      * Get the jump to page data.
      *
@@ -62,15 +90,12 @@ class HybridFilterBlock extends MetaModelHybrid
 
             if ($this->metamodel_jumpTo) {
                 // Page to jump to when filter submit.
-                $objPage = $this
-                    ->getServiceContainer()
-                    ->getDatabase()
-                    ->prepare('SELECT id, alias FROM tl_page WHERE id=?')
-                    ->limit(1)
-                    ->execute($this->metamodel_jumpTo);
+                $statement = $this->connection->prepare('SELECT id, alias FROM tl_page WHERE id=? LIMIT 0,1');
+                $statement->bindValue(1, $this->metamodel_jumpTo);
+                $statement->execute();
 
-                if ($objPage->numRows) {
-                    $this->setJumpTo($objPage->row());
+                if ($statement->rowCount()) {
+                    $this->setJumpTo($statement->fetch(\PDO::FETCH_ASSOC));
                 }
             }
         }

@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
- * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -23,11 +23,13 @@
 
 namespace MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property;
 
+use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBag;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
+use Doctrine\DBAL\Driver\Connection;
 
 /**
  * Condition for the default palette.
@@ -49,13 +51,34 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
     protected static $stateBuffer;
 
     /**
+     * Database connection.
+     *
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * Create a new instance.
      *
-     * @param string $desiredState The desired state.
+     * @param string          $desiredState The desired state.
+     *
+     * @param Connection|null $connection   Database connection.
      */
-    public function __construct($desiredState)
+    public function __construct($desiredState, Connection $connection = null)
     {
         $this->setRenderMode($desiredState);
+
+        if (null === $connection) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Connection is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $connection = System::getContainer()->get('database_connection');
+        }
+
+        $this->connection = $connection;
     }
 
     /**
@@ -92,11 +115,11 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
     public function getInputScreenRenderMode($value)
     {
         if (!isset(self::$stateBuffer[$value])) {
-            self::$stateBuffer[$value] = $this->getServiceContainer()->getDatabase()
-                ->prepare('SELECT rendermode FROM tl_metamodel_dca WHERE id=?')
-                ->limit(1)
-                ->execute($value)
-                ->rendermode;
+            $statement = $this->connection->prepare('SELECT rendermode FROM tl_metamodel_dca WHERE id=? LIMIT 0,1');
+            $statement->bindValue(1, $value);
+            $statement->execute();
+
+            self::$stateBuffer[$value] = $statement->fetch(\PDO::FETCH_OBJ)->rendermode;
         }
 
         return self::$stateBuffer[$value];

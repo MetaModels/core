@@ -18,6 +18,7 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -25,12 +26,13 @@
 
 namespace MetaModels\FrontendIntegration;
 
+use Contao\System;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
+use Doctrine\DBAL\Connection;
 use MetaModels\FrontendIntegration\Content\FilterClearAll as ContentElementFilterClearAll;
 use MetaModels\FrontendIntegration\Module\FilterClearAll as ModuleFilterClearAll;
-use MetaModels\IMetaModelsServiceContainer;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -51,6 +53,33 @@ class FrontendFilter
      * @var string
      */
     protected $formId = 'mm_filter_';
+
+    /**
+     * Database connection.
+     *
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * FrontendFilter constructor.
+     *
+     * @param Connection $connection Database connection.
+     */
+    public function __construct(Connection $connection = null)
+    {
+        if (null === $connection) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Connection is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $connection = System::getContainer()->get('database_connection');
+        }
+
+        $this->connection = $connection;
+    }
 
     /**
      * Retrieve the event dispatcher.
@@ -371,6 +400,8 @@ class FrontendFilter
      *
      * @return string
      *
+     * @throws \Doctrine\DBAL\DBALException When a database error occur.
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
@@ -378,13 +409,11 @@ class FrontendFilter
     {
         $sql = sprintf('SELECT * FROM %s WHERE id=? AND type="metamodels_frontendclearall"', $table);
 
-        /** @var IMetaModelsServiceContainer $serviceContainer */
-        $serviceContainer = $GLOBALS['container']['metamodels-service-container'];
+        $statement = $this->connection->prepare($sql);
+        $statement->bindValue(1, $elementId);
+        $statement->execute();
 
-        $objDbResult = $serviceContainer
-            ->getDatabase()
-            ->prepare($sql)
-            ->execute($elementId);
+        $objDbResult = $statement->fetch(\PDO::FETCH_OBJ);
 
         // Check if we have a ce element.
         if ($objDbResult->numRows == 0) {

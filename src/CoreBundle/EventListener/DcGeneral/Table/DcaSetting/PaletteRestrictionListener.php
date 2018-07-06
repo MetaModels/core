@@ -14,6 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -31,6 +32,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PaletteInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
+use Doctrine\DBAL\Connection;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\InputScreenAttributeIs;
 
 /**
@@ -38,6 +40,23 @@ use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\InputScreenAt
  */
 class PaletteRestrictionListener
 {
+    /**
+     * Database connection.
+     *
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * PaletteRestrictionListener constructor.
+     *
+     * @param Connection $connection Database connection.
+     */
+    public function __construct(Connection $connection)
+    {
+        $this->connection = $connection;
+    }
+
     /**
      * Build the data definition palettes.
      *
@@ -75,7 +94,7 @@ class PaletteRestrictionListener
             foreach ($subSelectPalettes as $typeName => $paletteInfo) {
                 foreach ($paletteInfo as $legendName => $properties) {
                     foreach ($properties as $propertyName) {
-                        $condition = new InputScreenAttributeIs($typeName);
+                        $condition = new InputScreenAttributeIs($typeName, $this->connection);
                         $legend    = $this->getLegend($legendName, $palette);
                         $property  = $this->getProperty($propertyName, $legend);
                         $this->addCondition($property, $condition);

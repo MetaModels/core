@@ -119,7 +119,7 @@ class PaletteRestrictionListener
 
             foreach ($paletteInfo as $legendName => $properties) {
                 foreach ($properties as $propertyName) {
-                    $condition = new PropertyCondition($typeName);
+                    $condition = new PropertyCondition($typeName, $this->connection);
                     $legend    = $this->getLegend($legendName, $palette);
                     $property  = $this->getProperty($propertyName, $legend);
                     $this->addCondition($property, $condition);

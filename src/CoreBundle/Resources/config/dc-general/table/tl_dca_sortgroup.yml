@@ -22,6 +22,8 @@ services:
               method: handle
     metamodels.listener.table.tl_dca_sortgroup.rendergrouptype_visibility_condition:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSortGroup\VisibilityConditionBuildingListener
+        arguments:
+            - "@database_connection"
         tags:
             - name: kernel.event_listener
               event: dc-general.factory.build-data-definition

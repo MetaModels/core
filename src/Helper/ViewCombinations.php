@@ -327,10 +327,11 @@ abstract class ViewCombinations
         return $this->user->groups ? array_filter($this->user->groups) : array();
     }
 
+
     /**
      * Retrieve the palette combinations from the database.
      *
-     * @return null|\Database\Result
+     * @return array|\stdClass[]
      */
     protected function getCombinationsFromDatabase()
     {
@@ -339,13 +340,16 @@ abstract class ViewCombinations
             return null;
         }
 
-        return $this->getDatabase()
-            ->prepare(sprintf(
-                'SELECT * FROM tl_metamodel_dca_combine WHERE %1$s IN (%2$s) OR %1$s=0 ORDER BY pid,sorting ASC',
-                strtolower(TL_MODE) . '_group',
-                implode(',', array_fill(0, count($groups), '?'))
-            ))
-            ->execute($groups);
+        $statement = $this->connection->createQueryBuilder()
+            ->select('*')
+            ->from('tl_metamodel_dca_combine')
+            ->where(strtolower(TL_MODE) . '_group' . 'IN (:groups)')
+            ->orderBy('pid')
+            ->addOrderBy('sorting', 'ASC')
+            ->setParameter('groups', $groups)
+            ->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_OBJ);
     }
 
     /**
@@ -365,9 +369,9 @@ abstract class ViewCombinations
             return array_keys($this->information);
         }
 
-        while ($combinations->next()) {
+        foreach ($combinations as $combination) {
             /** @noinspection PhpUndefinedFieldInspection */
-            $modelId   = $combinations->pid;
+            $modelId   = $combination->pid;
             $modelName = $this->tableNameFromId($modelId);
 
             // Already a combination present, continue with next one.
@@ -380,8 +384,8 @@ abstract class ViewCombinations
 
             /** @noinspection PhpUndefinedFieldInspection */
             $this->information[$modelName][self::COMBINATION] = array(
-                'dca_id'  => $combinations->dca_id,
-                'view_id' => $combinations->view_id
+                'dca_id'  => $combination->dca_id,
+                'view_id' => $combination->view_id
             );
 
             $this->setTableMapping($modelId, $modelName);

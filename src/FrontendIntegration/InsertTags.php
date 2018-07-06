@@ -15,6 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -24,7 +25,8 @@ namespace MetaModels\FrontendIntegration;
 
 use Contao\StringUtil;
 use Contao\Input;
-use Database\Result;
+use Contao\System;
+use Doctrine\DBAL\Connection;
 use MetaModels\Filter\Rules\StaticIdList;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
@@ -52,8 +54,25 @@ use MetaModels\ItemList;
  *
  * @codingStandardsIgnoreEnd
  */
-class InsertTags extends \Controller
+class InsertTags
 {
+    /**
+     * Database connection.
+     *
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * FrontendFilter constructor.
+     *
+     * @param Connection $connection Database connection.
+     */
+    public function __construct(Connection $connection)
+    {
+        $this->connection = $connection;
+    }
+
     /**
      * Retrieve the service container.
      *
@@ -104,7 +123,7 @@ class InsertTags extends \Controller
                 default:
             }
         } catch (\Exception $exc) {
-            $this->log('Error by replace tags: ' . $exc->getMessage(), __CLASS__ . ' | ' . __FUNCTION__, TL_ERROR);
+            System::log('Error by replace tags: ' . $exc->getMessage(), __CLASS__ . ' | ' . __FUNCTION__, TL_ERROR);
         }
 
         return false;
@@ -328,29 +347,30 @@ class InsertTags extends \Controller
      *
      * @param int    $intID    ID of the filter.
      *
-     * @return null|Result Returns null when nothing was found or a \Database\Result with the chosen information.
+     * @return null|\stdClass Returns null when nothing was found or a \Database\Result with the chosen information.
+     *
+     * @throws \Doctrine\DBAL\DBALException When an database error occur.
      */
     protected function getMetaModelDataFrom($strTable, $intID)
     {
-        $objDB = $this->getServiceContainer()->getDatabase();
-
         // Check if we know the table.
-        if (!$objDB->tableExists($strTable)) {
+        if (!$this->connection->getSchemaManager()->tablesExist([$strTable])) {
             return null;
         }
 
         // Get all information form table or return null if we have no data.
-        $objResult = $objDB
-                ->prepare('SELECT metamodel, metamodel_filtering FROM ' . $strTable . ' WHERE id=?')
-                ->limit(1)
-                ->execute($intID);
+        $statement = $this->connection
+            ->prepare('SELECT metamodel, metamodel_filtering FROM ' . $strTable . ' WHERE id=? LIMIT 0,1');
+
+        $statement->bindValue(1, $intID);
+        $statement->execute();
 
         // Check if we have some data.
-        if ($objResult->numRows < 1) {
+        if ($statement->rowCount() < 1) {
             return null;
         }
 
-        return $objResult;
+        return $statement->fetch(\PDO::FETCH_OBJ);
     }
 
     /**
@@ -391,19 +411,22 @@ class InsertTags extends \Controller
      * @param int        $intItemId    Id of the item.
      *
      * @return boolean True => Published | False => Not published
+     *
+     * @throws \Doctrine\DBAL\DBALException When a database error occur.
      */
     protected function isPublishedItem($objMetaModel, $intItemId)
     {
         // Check publish state of an item.
-        $objAttrCheckPublish = $this
-            ->getServiceContainer()
-            ->getDatabase()
-            ->prepare('SELECT colname FROM tl_metamodel_attribute WHERE pid=? AND check_publish=1')
-            ->limit(1)
-            ->execute($objMetaModel->get('id'));
+        $statement = $this->connection
+            ->prepare('SELECT colname FROM tl_metamodel_attribute WHERE pid=? AND check_publish=1 LIMIT 0,1');
 
-        if ($objAttrCheckPublish->numRows > 0) {
-            $objItem = $objMetaModel->findById($intItemId);
+        $statement->bindValue(1, $objMetaModel->get('id'));
+        $statement->execute();
+
+        if ($statement->rowCount() > 0) {
+            $objAttrCheckPublish = $statement->fetch(\PDO::FETCH_OBJ);
+            $objItem             = $objMetaModel->findById($intItemId);
+
             if (!$objItem->get($objAttrCheckPublish->colname)) {
                 return false;
             }

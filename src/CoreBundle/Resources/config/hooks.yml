@@ -38,3 +38,8 @@ services:
         arguments:
             - "@database_connection"
         public: true
+
+    MetaModels\FrontendIntegration\InsertTags:
+        arguments:
+            - "@database_connection"
+        public: true

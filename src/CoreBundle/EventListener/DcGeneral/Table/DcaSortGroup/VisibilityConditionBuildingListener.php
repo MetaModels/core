@@ -14,6 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -25,6 +26,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
+use Doctrine\DBAL\Connection;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\InputScreenRenderModeIs;
 
 /**
@@ -32,6 +34,23 @@ use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\InputScreenRe
  */
 class VisibilityConditionBuildingListener
 {
+    /**
+     * Database connection.
+     *
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * PaletteRestrictionListener constructor.
+     *
+     * @param Connection $connection Database connection.
+     */
+    public function __construct(Connection $connection)
+    {
+        $this->connection = $connection;
+    }
+
     /**
      * Set the visibility condition for the widget.
      *
@@ -57,8 +76,8 @@ class VisibilityConditionBuildingListener
                     $property,
                     new PropertyConditionChain(
                         array(
-                            new InputScreenRenderModeIs('flat'),
-                            new InputScreenRenderModeIs('parented'),
+                            new InputScreenRenderModeIs('flat', $this->connection),
+                            new InputScreenRenderModeIs('parented', $this->connection),
                         ),
                         PropertyConditionChain::OR_CONJUNCTION
                     )
