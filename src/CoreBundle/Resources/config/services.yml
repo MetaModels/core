@@ -58,8 +58,7 @@ services:
 
     metamodels.insert_tags:
         class: Contao\InsertTags
-        factory: ['@contao.framework', 'getAdapter']
-        arguments: ['Contao\\InsertTags']
+        factory: ['@MetaModels\CoreBundle\Contao\Compat\ContaoFactory', 'createInsertTags']
 
     metamodels.table_manipulator:
         class: MetaModels\Helper\TableManipulator
@@ -131,3 +130,8 @@ services:
     MetaModels\CoreBundle\LegacyCompat\ServiceContainerInitializer:
         arguments:
             - '@service_container'
+
+    MetaModels\CoreBundle\Contao\Compat\ContaoFactory:
+        class: MetaModels\CoreBundle\Contao\Compat\ContaoFactory
+        arguments:
+            - '@contao.framework'

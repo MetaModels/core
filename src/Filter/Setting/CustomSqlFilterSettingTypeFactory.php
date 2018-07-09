@@ -61,7 +61,7 @@ class CustomSqlFilterSettingTypeFactory extends AbstractFilterSettingTypeFactory
      */
     public function __construct(
         Connection $database,
-        Adapter $insertTags
+        InsertTags $insertTags
     ) {
         parent::__construct();
 
