@@ -111,18 +111,8 @@ $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionand']['nestingAllowed
 $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionnot']['nestingAllowed']                  = true;
 $GLOBALS['METAMODELS']['inputscreen_conditions']['conditionnot']['maxChildren']                     = 1;
 
-/*
-    All system columns that always are defined in a MetaModel table and are not attributes.
-    When you alter this, consider to also change @link{MetaModelTableManipulation::STATEMENT_CREATE_TABLE}.
-    Extensions will have to alter the table on their own as the columns will not get transported then.
-*/
-
-$GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'id';
-$GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'pid';
-$GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'sorting';
-$GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'tstamp';
-$GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'vargroup';
-$GLOBALS['METAMODELS_SYSTEM_COLUMNS'][] = 'varbase';
+// @deprecated Use the config parameter metamodels.system_columns instead.
+$GLOBALS['METAMODELS_SYSTEM_COLUMNS'] = \Contao\System::getContainer()->getParameter('metamodels.system_columns');
 
 // Front-end modules.
 $GLOBALS['FE_MOD']['metamodels']['metamodel_list']              = 'MetaModels\FrontendIntegration\Module\ModelList';

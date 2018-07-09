@@ -15,6 +15,7 @@ services:
         arguments:
             - "@database_connection"
             - "@event_dispatcher"
+            - '%metamodels.system_columns%'
         tags:
             -   name: kernel.event_listener
                 event: metamodels.metamodel.collect-metamodel-attribute-information

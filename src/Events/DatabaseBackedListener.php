@@ -91,15 +91,24 @@ class DatabaseBackedListener
     private $attributeInformation = [];
 
     /**
+     * The system columns of MetaModels.
+     *
+     * @var string[]
+     */
+    private $systemColumns;
+
+    /**
      * Create a new instance.
      *
-     * @param Connection               $database   The database connection.
-     * @param EventDispatcherInterface $dispatcher The event dispatcher.
+     * @param Connection               $database      The database connection.
+     * @param EventDispatcherInterface $dispatcher    The event dispatcher.
+     * @param string[]                 $systemColumns The system columns.
      */
-    public function __construct(Connection $database, EventDispatcherInterface $dispatcher)
+    public function __construct(Connection $database, EventDispatcherInterface $dispatcher, array $systemColumns)
     {
-        $this->database   = $database;
-        $this->dispatcher = $dispatcher;
+        $this->database      = $database;
+        $this->dispatcher    = $dispatcher;
+        $this->systemColumns = $systemColumns;
     }
 
     /**
@@ -240,6 +249,8 @@ class DatabaseBackedListener
             ->fetch(\PDO::FETCH_ASSOC);
 
         if ($table) {
+            $table['system_columns'] = $this->systemColumns;
+
             $this->createInstance($event, $table);
         }
     }

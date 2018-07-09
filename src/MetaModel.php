@@ -28,6 +28,7 @@
 
 namespace MetaModels;
 
+use Contao\System;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use MetaModels\Attribute\IAttribute;
@@ -94,6 +95,13 @@ class MetaModel implements IMetaModel
     private $dispatcher;
 
     /**
+     * The system columns to preserve.
+     *
+     * @var string[]
+     */
+    private $systemColumns;
+
+    /**
      * Instantiate a MetaModel.
      *
      * @param array $arrData                            The information array, for information on the available
@@ -109,6 +117,7 @@ class MetaModel implements IMetaModel
         foreach ($arrData as $strKey => $varValue) {
             $this->arrData[$strKey] = $this->tryUnserialize($varValue);
         }
+        $this->systemColumns = array_key_exists('system_columns', $arrData) ? $arrData['system_columns'] : [];
 
         $this->connection = $connection;
         $this->dispatcher = $dispatcher;
@@ -383,7 +392,7 @@ class MetaModel implements IMetaModel
 
         // If we have an attribute restriction, make sure we keep the system columns. See #196.
         if ($arrAttrOnly) {
-            $arrAttrOnly = array_merge($GLOBALS['METAMODELS_SYSTEM_COLUMNS'], $arrAttrOnly);
+            $arrAttrOnly = array_merge($this->systemColumns, $arrAttrOnly);
         }
 
         $result = [];
