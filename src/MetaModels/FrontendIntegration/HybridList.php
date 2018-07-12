@@ -13,8 +13,6 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     David Maack <david.maack@arcor.de>
- * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Ondrej Brinkel <Sam256@web.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
