@@ -8,7 +8,7 @@
  * @link https://www.transifex.com/signup/
  * @link https://www.transifex.com/projects/p/$$project$$/language/et/
  *
- * last-updated: 2018-02-06T02:10:33+01:00
+ * last-updated: 2018-07-13T10:50:41+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']['0']     = 'Lisa kõik';
@@ -17,6 +17,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id']['0']    = 'Omadus';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id']['1']    = 'Omadus, millega see säte on seotud.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit']['0']       = 'Muuda seadeid';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['new']['0']        = 'Uus';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['pastenew']['0']   = 'Lisa uued üles';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['title_legend']    = 'Liik';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['toggle']['0']     = 'Lülita';
 

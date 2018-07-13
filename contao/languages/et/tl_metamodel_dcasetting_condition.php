@@ -8,7 +8,7 @@
  * @link https://www.transifex.com/signup/
  * @link https://www.transifex.com/projects/p/$$project$$/language/et/
  *
- * last-updated: 2018-02-06T02:10:15+01:00
+ * last-updated: 2018-07-13T10:50:24+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['addall']['0']                                = 'Lisa kõik';
@@ -28,6 +28,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['edit']['0']           
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['enabled']['0']                               = 'Sisse lülitatud';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['new']['0']                                   = 'Uus';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['new']['1']                                   = 'Loo uus säte.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['pastenew']['0']                              = 'Lisa uued üles';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show']['0']                                  = 'Seadete üksikasjad';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['toggle']['0']                                = 'Lülita';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type']['0']                                  = 'Liik';

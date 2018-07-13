@@ -8,7 +8,7 @@
  * @link https://www.transifex.com/signup/
  * @link https://www.transifex.com/projects/p/$$project$$/language/et/
  *
- * last-updated: 2018-03-09T21:03:41+01:00
+ * last-updated: 2018-07-13T10:49:49+02:00
  */
 
 $GLOBALS['TL_LANG']['BRD']['metamodels']                            = 'MetaModels';
@@ -25,6 +25,7 @@ $GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['sorting']         = 'Sorteerim
 $GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['tstamp']          = 'Ajatempel';
 $GLOBALS['TL_LANG']['MSC']['details']                               = 'Üksikasjad';
 $GLOBALS['TL_LANG']['MSC']['field_label']                           = '%s:';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['purpose']         = 'Eesmärk';
 $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter']['1']                = 'Filter';
 $GLOBALS['TL_LANG']['MSC']['mm_be_info_name']['1']                  = 'MetaModel';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']['0']            = 'Filter';
