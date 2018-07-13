@@ -16,8 +16,6 @@
  * @author     Martin Treml <github@r2pi.net>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @author     Sven Baumann <baumann.sv@gmail.com>
- * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
