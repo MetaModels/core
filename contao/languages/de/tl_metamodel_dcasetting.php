@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2018-02-06T02:10:11+01:00
+ * last-updated: 2018-07-13T10:50:21+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_activate']              = 'Hinzugefügte Attribute aktivieren.';
@@ -19,8 +19,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd']               =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                  = 'Alle hinzufügen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['1']                  = 'Alle Attribute der Eingabemaske hinzufügen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']              = 'Erweitert';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['0']               = 'HTML-Inhalte erhalten';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['1']               = 'Falls angewählt, wird HTML-Inhalt erhalten.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['0']               = 'Erlaubte HTML-Tags nicht encodieren';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['1']               = 'Falls angewählt, werden die erlaubten HTML-Tags aus den Systemeinstellungen nicht encodiert.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['0']              = 'Immer speichern';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['1']              = 'Falls angewählt, wird dieses Feld - unabhängig davon, ob sich sein Wert geändert hat - immer gespeichert, ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']['0']                 = 'Attribute';
@@ -42,7 +42,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype']['1']                 =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['attribute']        = 'Attribut';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['legend']           = 'Legende';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['decodeEntities']['0']          = 'HTML-Entitäten dekodieren.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['decodeEntities']['1']          = 'Wählen Sie dies aus. Wenn HTML Entitäten dekodiert werden sollen.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['decodeEntities']['1']          = 'Falls ausgewählt werden alle HTML-Entitäten dekodiert. Beachten Sie, dass HTML-Entitäten immer dann decodiert werden, wenn "Erlaubte HTML-Tags nicht encodieren" aktiviert ist.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete']['0']                  = 'Lösche Einstellung';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete']['1']                  = 'Lösche Einstellung ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['edit']['0']                    = 'Einstellung bearbeiten';
@@ -72,8 +72,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pasteafter']['1']              =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pastenew']['0']                = 'Neue Einstellung oben anlegen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pastenew']['1']                = 'Neues Einstellung nach dem Element ID %s anlegen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['presentation_legend']          = 'Anzeigeoptionen des Widgets';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['0']            = 'HTML-Tags nicht codieren.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['1']            = 'Falls ausgewählt, werden HTML-Tags nicht codiert.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['0']            = 'Alle HTML-Tags nicht encodieren';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['1']            = 'Falls angewählt, werden keine HTML-Tags encodiert.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['0']                = 'Nur lesen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['1']                = 'Wenn aktiviert, erlaubt das Feld nur das Lesen und kann nicht geändert werden.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly_for_force_alias']     = 'Attribute mit "Neuerstellung erzwingen" sind automatisch "nur lesend" (Einstellung nicht änderbar).';

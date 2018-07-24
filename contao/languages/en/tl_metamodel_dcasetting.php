@@ -58,15 +58,15 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['filterable'][1]              =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['searchable'][0]              = 'Searchable';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['searchable'][1]              =
     'Check if this attribute shall be available for backend search.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml'][0]               = 'Do not strip html content.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml'][0]               = 'Do not encode allowed html tags.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml'][1]               =
-    'If you select this, HTML content will be preserved.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags'][0]            = 'Do not encode html tags.';
+    'If you select this, allowed HTML tags from system settings will not be encoded.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags'][0]            = 'Do not encode all html tags.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags'][1]            =
-    'If you select this, HTML tags will not be encoded.';
+    'If you select this, no HTML tags will be encoded.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['decodeEntities'][0]          = 'Decode HTML entities.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['decodeEntities'][1]          =
-    'Select this, if you want HTML Entities to be decoded.';
+    'If you select this, all HTML entities will be decoded. Note that HTML entities are always decoded if "Do not encode allowed html tags" is true.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rte'][0]                     = 'Enable richtext editor on this';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rte'][1]                     =
     'Select the rich text configuration that shall be used on this field (if any).';

@@ -6,11 +6,10 @@
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
  * @link https://www.transifex.com/signup/
- * @link https://www.transifex.com/projects/p/$$project$$/language/$$lang$$/
+ * @link https://www.transifex.com/projects/p/$$project$$/language/et/
  *
- * last-updated: 2017-08-24T12:43:17+02:00
+ * last-updated: 2018-07-13T10:50:35+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['allow_empty']['0']          = 'Luba tühi väärtus';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id']['0']              = 'Omadus';
@@ -29,6 +28,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['0']                =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['0']                  = 'Uus';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['1']                  = 'Loo uus säte.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['0']             = 'Ainult määratud väärtused';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pastenew']['0']             = 'Lisa uued üles';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['0']         = 'Staatilised parameetrid';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['0']                 = 'Filtri seadete andmed';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['0']             = 'Mall';

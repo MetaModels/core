@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2018-02-06T02:10:11+01:00
+ * last-updated: 2018-07-13T10:50:21+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Aggiunto l\'attributo "%s" alla maschera di input.';
@@ -18,7 +18,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd']               =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                  = 'Aggiungi tutti';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['1']                  = 'Aggiungi tutti gli attributi nella maschera di input';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']              = 'Avanzato';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['0']               = 'Non alterare i contenuti html';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['0']              = 'Salva sempre';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['1']              = 'Se viene selezionata l\'opzione, il campo viene sempre salvato anche se non è variato.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']['0']                 = 'Attributo';
@@ -36,7 +35,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype']['1']                 =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['attribute']        = 'Attributo';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['legend']           = 'Legenda';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['decodeEntities']['0']          = 'Decodifica elementi HTML.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['decodeEntities']['1']          = 'Seleziona questa opzione se si vuole decodificare le entità HTML.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete']['0']                  = 'Cancella l\'impostazione';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete']['1']                  = 'Cancella l\'impostazione ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['edit']['0']                    = 'Modifica l\'impostazione';
@@ -57,8 +55,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['0']                     =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['1']                     = 'Crea una nuova impostazione.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']              = 'Lista del backend, filtri ed ordinamenti';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['presentation_legend']          = 'Widget per l\'aspetto delle opzioni correlate';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['0']            = 'Non codificare i tags html';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['1']            = 'Se viene selezionata questa opzione, i tag HTML non saranno codificati.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['0']                = 'Sola lettura';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['1']                = 'Selezionare questa opzione per rendere il campo in sola lettura, senza che possa essere cambiata.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['0']                    = 'Righe';

@@ -14,8 +14,6 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Tim Becker <please.tim@metamodel.me>
- * @author     Andreas Isaak <info@andreas-isaak.de>
- * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Tim Becker <tim@westwerk.ac>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
