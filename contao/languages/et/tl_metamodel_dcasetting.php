@@ -8,7 +8,7 @@
  * @link https://www.transifex.com/signup/
  * @link https://www.transifex.com/projects/p/$$project$$/language/et/
  *
- * last-updated: 2018-02-06T02:10:11+01:00
+ * last-updated: 2018-07-13T10:50:21+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                = 'Lisa kõik';
@@ -37,6 +37,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']              = '
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']                 = 'Legendi pealkiri';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['0']                   = 'Uus';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['1']                   = 'Loo uus säte.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pastenew']['0']              = 'Lisa uued üles';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['0']              = 'Ainult loetav';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['0']                  = 'Ridasid';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['searchable']['0']            = 'Otsitav';
@@ -45,5 +46,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker']                = '
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['submitOnChange']['0']        = 'Lisa muutmisel';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']               = 'Liik';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle']['0']                = 'Lülita';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['0'] = 'Eemalda salvestamisel kaldkriips';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['1'] = 'Lisa salvestamisel kaldkriips';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['2'] = 'Ära tee midagi';
 

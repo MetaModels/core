@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:43:05+02:00
+ * last-updated: 2018-07-13T10:50:21+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Προστέθηκε το χαρακτηριστικό %s στην οθονη εισαγωγης.';
@@ -18,7 +18,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd']               =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                  = 'Προσθηκη ολων';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['1']                  = 'Προσθέστε όλα τα χαρακτηριστικά για την οθόνη εισαγωγής';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']              = 'Προσαρμογη';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['0']               = 'Κανενα html περιεχόμενο. ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['0']              = 'Πάντα να αποθηκεύετε ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['1']              = 'Αν αληθεύει το πεδίο θα είναι πάντα αποθυκευμενο, έστω και αν η αξία του δεν έχει αλλάξει. ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']['0']                 = ' Χαρακτηριστικο';
@@ -36,7 +35,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype']['1']                 =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['attribute']        = ' Χαρακτηριστικο';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['legend']           = 'Υπομνημα';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['decodeEntities']['0']          = 'Αποκωδικοποίηση HTML οντότητων. ';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['decodeEntities']['1']          = 'Επιλέξτε αυτό, εάν θέλετε η HTML οντότητες να αποκωδικοποιηθουν. ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete']['0']                  = 'Διαγραφή ρύθμισης ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete']['1']                  = 'Διαγραφή ρύθμισης ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['edit']['0']                    = 'Επεξεργασια ρυθμισης';
@@ -54,8 +52,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']                   = 'Τιτλος υπομνηματος';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['0']                     = 'Νεος τυπος';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['1']                     = 'Δημιουργια νεας ρυθμισης';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['0']            = 'Καμμια κωδικοποιηση των html tags. ';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['1']            = 'ΑΝ το επιλεξετε αυτο, τα HTML tags δεν θα κωδικοποιηθουν.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['0']                    = 'Σειρές';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['1']                    = 'Ποσό των σειρων που θα χρησιμοποιηθουν για τον LONGTEXT/πίνακα widget.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rte']['0']                     = 'Ενεργοποίηση Richtext editor για το θέμα αυτό';

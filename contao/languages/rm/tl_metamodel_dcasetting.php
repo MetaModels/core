@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2018-02-06T02:10:11+01:00
+ * last-updated: 2018-07-13T10:50:21+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Agiuntà l\'attribut "%s" a la mascra d\'endataziun.';
@@ -18,7 +18,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd']               =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                  = 'Agiuntar tuts';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['1']                  = 'Agiuntar tut ils attributs a la mascra d\'endataziun';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']              = 'Avanzà';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['0']               = 'Mantegnair cuntegn da html.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['0']              = 'Adina memorisar';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['1']              = 'Sche activà vegn quest champ adina memorisà, era sche la valur n\'è betg vegnida midada.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']['0']                 = 'Attribut';
@@ -36,7 +35,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype']['1']                 =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['attribute']        = 'Attribut';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['legend']           = 'Legenda';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['decodeEntities']['0']          = 'Decodar code da HTML.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['decodeEntities']['1']          = 'Tscherna questa chaschetta sche ti vuls che code da HTML vegn decodà.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete']['0']                  = 'Stizzar la configuraziun';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete']['1']                  = 'Stizzar la configuraziun cun l\'ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['edit']['0']                    = 'Modifitgar la configuraziun';
@@ -57,8 +55,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['0']                     =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['1']                     = 'Crear ina nova configuraziun.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']              = 'Glistar, filtrar e zavrar en il back-end';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['presentation_legend']          = 'Opziuns davart l\'apparientscha dal widget';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['0']            = 'Na betg encodar tags da html.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['1']            = 'Sche ti tschernas questa chaschetta, na vegnan tags da HTML betg encodads.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['0']                = 'Be leger';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['1']                = 'Sche activà vegn il widget be legì e na po betg vegnir midà.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['0']                    = 'Lingias';

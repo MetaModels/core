@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2018-02-06T02:10:11+01:00
+ * last-updated: 2018-07-13T10:50:21+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Добавлен атрибут "%s" к входному экрану.';
@@ -18,7 +18,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd']               =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                  = 'Добавить все';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['1']                  = 'Добавить все атрибуты для входного экрана';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']              = 'Дополнительно';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['allowHtml']['0']               = 'Не разбирать html-контент.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['0']              = 'Всегда сохранять';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave']['1']              = 'Если выбрано, поле всегда будет сохранено, даже если его значение не изменилось.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['attr_id']['0']                 = 'Атрибут';
@@ -56,8 +55,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pasteafter']['0']              =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pasteafter']['1']              = 'Создать новый после настройки ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pastenew']['0']                = 'Добавить новый сверху';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['presentation_legend']          = 'Связанные параметры внешнего вида виджета';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['0']            = 'Не кодировать HTML-теги.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['preserveTags']['1']            = 'Если выбрать, HTML-теги будут кодированы.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['0']                = 'Только чтение';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['1']                = 'Если истина, виджет будет доступен только для чтения и не может быть изменен.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows']['0']                    = 'Строки';

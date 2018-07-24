@@ -6,11 +6,10 @@
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
  * @link https://www.transifex.com/signup/
- * @link https://www.transifex.com/projects/p/$$project$$/language/$$lang$$/
+ * @link https://www.transifex.com/projects/p/$$project$$/language/et/
  *
- * last-updated: 2017-08-24T12:43:26+02:00
+ * last-updated: 2018-07-13T10:50:45+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['copy']['0']               = 'Kopeeri seadete definitsioonid';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['delete']['0']             = 'Kustuta seaded';
@@ -36,6 +35,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page']['0']        = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']['0']               = 'Nimi';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']['1']               = 'Seade nimi.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']['0']                = 'Uus';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['pastenew']['0']           = 'Lisa uued üles';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['publish']                 = 'Avalda';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']['0']           = 'Määra omaduse seaded';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']['0']               = 'Filtri üksikasjad';
