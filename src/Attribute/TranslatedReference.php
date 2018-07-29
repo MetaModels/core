@@ -406,13 +406,21 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     protected function fetchExistingIdsFor($idList, $langCode)
     {
-        $where = $this->getWhere($idList, $langCode);
-        $query = 'SELECT item_id FROM ' . $this->getValueTable() . ($where ? ' WHERE ' . $where['procedure'] : '');
+        $queryBuilder = $this
+            ->connection
+            ->createQueryBuilder()
+            ->select('item_id')
+            ->from($this->getValueTable());
+        $this->buildWhere($queryBuilder, $idList, $langCode);
 
-        $values = $this->getMetaModel()->getServiceContainer()->getDatabase()->prepare($query)
-            ->execute(($where ? $where['params'] : null));
+        $statement = $queryBuilder->execute();
+        $arrReturn = array();
+        while ($value = $statement->fetch(\PDO::FETCH_ASSOC)) {
+            /** @noinspection PhpUndefinedFieldInspection */
+            $arrReturn[$value['item_id']] = $value;
+        }
 
-        return $values->fetchEach('item_id');
+        return $arrReturn;
     }
 
     /**
