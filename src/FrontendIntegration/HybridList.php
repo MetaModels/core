@@ -13,8 +13,6 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     David Maack <david.maack@arcor.de>
- * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Ondrej Brinkel <Sam256@web.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
@@ -124,7 +122,9 @@ class HybridList extends MetaModelHybrid
             )
             ->setMetaTags($this->metamodel_meta_title, $this->metamodel_meta_description);
 
-        $this->Template->items         = $objItemRenderer->render($this->metamodel_noparsing, $this);
+        // Render items with encoded email strings as contao standard.
+        $this->Template->items         =
+            \StringUtil::encodeEmail($objItemRenderer->render($this->metamodel_noparsing, $this));
         $this->Template->numberOfItems = $objItemRenderer->getItems()->getCount();
         $this->Template->pagination    = $objItemRenderer->getPagination();
     }

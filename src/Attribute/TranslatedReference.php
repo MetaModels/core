@@ -360,7 +360,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     {
         // First off determine those to be updated and those to be inserted.
         $arrIds      = array_keys($arrValues);
-        $arrExisting = array_keys($this->getTranslatedDataFor($arrIds, $strLangCode));
+        $arrExisting = $this->fetchExistingIdsFor($arrIds, $strLangCode);
         $arrNewIds   = array_diff($arrIds, $arrExisting);
 
         // Update existing values - delete if empty.
@@ -394,6 +394,25 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
                 $this->getSetValues($arrValues[$intId], $intId, $strLangCode)
             );
         }
+    }
+
+    /**
+     * Filter the item ids for ids that exist in the database.
+     *
+     * @param array  $idList   The id list.
+     * @param string $langCode The language code.
+     *
+     * @return string[]
+     */
+    protected function fetchExistingIdsFor($idList, $langCode)
+    {
+        $where = $this->getWhere($idList, $langCode);
+        $query = 'SELECT item_id FROM ' . $this->getValueTable() . ($where ? ' WHERE ' . $where['procedure'] : '');
+
+        $values = $this->getMetaModel()->getServiceContainer()->getDatabase()->prepare($query)
+            ->execute(($where ? $where['params'] : null));
+
+        return $values->fetchEach('item_id');
     }
 
     /**

@@ -6,11 +6,10 @@
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
  * @link https://www.transifex.com/signup/
- * @link https://www.transifex.com/projects/p/$$project$$/language/$$lang$$/
+ * @link https://www.transifex.com/projects/p/$$project$$/language/et/
  *
- * last-updated: 2017-08-24T12:43:20+02:00
+ * last-updated: 2018-07-13T10:50:38+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel_item']['copy']['0']          = 'Kopeeri kirje';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['createvariant']['0'] = 'Uus variant';
@@ -25,6 +24,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['new']['1']           = 'Loo uus kirje'
 $GLOBALS['TL_LANG']['tl_metamodel_item']['newRecord']          = 'Loo uus kirje';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pasteafter']['0']    = 'Loo uus kirje';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pasteinto']['0']     = 'Loo uus kirje';
+$GLOBALS['TL_LANG']['tl_metamodel_item']['pastenew']['0']      = 'Lisa uued üles';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['sorting']['0']       = 'Sorteerimine';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['sorting']['1']       = 'Käsitsi sorteerimine';
 

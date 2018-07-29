@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2018-03-09T21:04:19+01:00
+ * last-updated: 2018-07-13T10:50:35+02:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Alle Sprachen durchsuchen';
@@ -46,9 +46,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['1']                =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['0']                  = 'Neu';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['1']                  = 'Neues Filterset erstellen.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['0']         = 'Nur verbleibende Werte';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['1']         = 'Nur Optionen anzeigen, für die es nach Anwendung dieses Filters ein Ergebnis gibt.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['1']         = 'Zeige nur die Werte, für die es nach Anwendung dieses Filters ein Ergebnis gibt.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['0']             = 'Nur zugeordnete Werte';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['1']             = 'Zeige nur Optionen, die im MetaModel bereits zugeordnet sind.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['1']             = 'Zeige nur die Werte, die im MetaModel bereits zugeordnet sind.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteafter']['1']           = 'Neue Einstellung nach Element ID %s anlegen.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteinto']['0']            = 'Neue Einstellung oben anlegen';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteinto']['1']            = 'Neue Filterregel oberhalb von Filterregel ID %s anlegen.';
@@ -59,7 +59,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['1']         =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['0']                 = 'Details';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['1']                 = 'Die Details der Filtereinstellung ID %s anzeigen.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions']['0']    = 'Diesen Filter für verbleibende Werte ignorieren';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions']['1']    = 'Falls aktiviert wird dieser Filter alle Optionen außer seine eigenen zurückliefern.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions']['1']    = 'Falls aktiviert wird dieser Filter alle Werte außer seine eigenen zurück liefern.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['0']     = 'Nach erstem Treffer beenden';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['1']     = 'Anwählen, falls Sie möchten, dass nachfolgende Regeln nach dem ersten Treffer nicht mehr ausgeführt werden.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['0']             = 'Template';

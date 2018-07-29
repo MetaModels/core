@@ -6,11 +6,10 @@
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
  * @link https://www.transifex.com/signup/
- * @link https://www.transifex.com/projects/p/$$project$$/language/$$lang$$/
+ * @link https://www.transifex.com/projects/p/$$project$$/language/et/
  *
- * last-updated: 2017-08-24T12:42:52+02:00
+ * last-updated: 2018-07-13T10:50:06+02:00
  */
-
 
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Lisaseaded';
 $GLOBALS['TL_LANG']['tl_metamodel']['cut']['0']                  = 'Liiguta MetaModelsit';
@@ -27,6 +26,7 @@ $GLOBALS['TL_LANG']['tl_metamodel']['name']['0']                 = 'Nimi';
 $GLOBALS['TL_LANG']['tl_metamodel']['name']['1']                 = 'MetaModeli nimi.';
 $GLOBALS['TL_LANG']['tl_metamodel']['new']['0']                  = 'Uus MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel']['new']['1']                  = 'Loo uus MetaModel';
+$GLOBALS['TL_LANG']['tl_metamodel']['pastenew']['0']             = 'Lisa uued üles';
 $GLOBALS['TL_LANG']['tl_metamodel']['searchable_pages']['0']     = 'Määra otsingu seaded';
 $GLOBALS['TL_LANG']['tl_metamodel']['sorting']['0']              = 'Sorteerimine';
 $GLOBALS['TL_LANG']['tl_metamodel']['tableName']['0']            = 'Tabeli nimi';
