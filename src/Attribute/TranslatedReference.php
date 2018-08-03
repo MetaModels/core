@@ -414,13 +414,8 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         $this->buildWhere($queryBuilder, $idList, $langCode);
 
         $statement = $queryBuilder->execute();
-        $arrReturn = array();
-        while ($value = $statement->fetch(\PDO::FETCH_ASSOC)) {
-            /** @noinspection PhpUndefinedFieldInspection */
-            $arrReturn[$value['item_id']] = $value;
-        }
 
-        return $arrReturn;
+        return $statement->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     /**
