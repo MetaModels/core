@@ -415,8 +415,8 @@ class FrontendFilter
 
         $objDbResult = $statement->fetch(\PDO::FETCH_OBJ);
 
-        // Check if we have a ce element.
-        if ($objDbResult->numRows == 0) {
+        // Check if we have a existing module or ce element.
+        if ($objDbResult === false) {
             return str_replace($replace, '', $content);
         }
 

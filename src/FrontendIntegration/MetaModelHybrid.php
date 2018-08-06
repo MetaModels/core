@@ -115,9 +115,9 @@ abstract class MetaModelHybrid extends Hybrid
     {
         parent::__construct($objElement, $strColumn);
 
-        $this->arrData = $objElement->row();
-        // Get space and CSS ID from the parent element (!)
-        $this->space      = StringUtil::deserialize($objElement->space);
+        $this->arrData = method_exists($objElement, 'row') ? $objElement->row() : (array) $objElement;
+
+        // Get CSS ID and headline from the parent element (!).
         $this->cssID      = StringUtil::deserialize($objElement->cssID, true);
         $this->typePrefix = $objElement->typePrefix;
         $this->strKey     = $objElement->type;
