@@ -82,7 +82,7 @@ class SearchablePages
      */
     protected function getConfigs()
     {
-        if ($this->configs === null) {
+        if (!count($this->configs)) {
             // Init the config from database.
             $statement = $this->connection->query('SELECT * FROM tl_metamodel_searchable_pages');
 
