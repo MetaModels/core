@@ -30,6 +30,7 @@
 namespace MetaModels;
 
 use Contao\StringUtil;
+use MetaModels\Events\ItemListModifyFilterEvent;
 use MetaModels\Events\RenderItemListEvent;
 use MetaModels\Helper\PaginationLimitCalculator;
 use MetaModels\Render\Template;
@@ -461,6 +462,11 @@ class ItemList implements IServiceContainerAware
      */
     protected function modifyFilter()
     {
+        $this->eventDispatcher->dispatch(
+            MetaModelsEvents::ITEM_LIST_MODIFY_FILTER,
+            new ItemListModifyFilterEvent($this)
+        );
+
         return $this;
     }
 
