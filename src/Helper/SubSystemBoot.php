@@ -15,6 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -44,35 +45,31 @@ class SubSystemBoot
         $script      = explode('?', $environment->get('relativeRequest'), 2)[0];
 
         // There is no need to boot in login or install screen.
-        if (($script == 'contao/login') || ($script == 'contao/install')) {
+        if (('contao/login' === $script) || ('contao/install' === $script)) {
             return;
         }
-        $tableManipulator = System::getContainer()->get('metamodels.table_manipulator');
+
         // Ensure all tables are created.
-        foreach ([
-            'tl_metamodel',
-            'tl_metamodel_dca',
-            'tl_metamodel_dca_sortgroup',
-            'tl_metamodel_dcasetting',
-            'tl_metamodel_dcasetting_condition',
-            'tl_metamodel_attribute',
-            'tl_metamodel_filter',
-            'tl_metamodel_filtersetting',
-            'tl_metamodel_rendersettings',
-            'tl_metamodel_rendersetting',
-            'tl_metamodel_dca_combine',
-        ] as $table) {
-            try {
-                $tableManipulator->checkTableExists($table);
-            } catch (\Exception $exception) {
-                System::getContainer()
-                    ->get('logger')
-                    ->error(
-                        'MetaModels startup interrupted. ' .
-                        ' Not all MetaModels tables have been created (missing: ' . $table . ').'
-                    );
-                return;
-            }
+        $connection = System::getContainer()->get('database_connection');
+        if (!$connection->getSchemaManager()->tablesExist(
+            [
+                'tl_metamodel',
+                'tl_metamodel_dca',
+                'tl_metamodel_dca_sortgroup',
+                'tl_metamodel_dcasetting',
+                'tl_metamodel_dcasetting_condition',
+                'tl_metamodel_attribute',
+                'tl_metamodel_filter',
+                'tl_metamodel_filtersetting',
+                'tl_metamodel_rendersettings',
+                'tl_metamodel_rendersetting',
+                'tl_metamodel_dca_combine',
+            ]
+        )) {
+            System::getContainer()
+                ->get('logger')
+                ->error('MetaModels startup interrupted. Not all MetaModels tables have been created.');
+            return;
         }
 
         $event = new MetaModelsBootEvent();
