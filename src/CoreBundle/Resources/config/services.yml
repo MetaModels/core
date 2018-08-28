@@ -20,6 +20,7 @@ services:
         arguments:
             - "%metamodels.cache_dir%"
             - "@logger"
+        public: true
 
     metamodels.factory:
         arguments:
