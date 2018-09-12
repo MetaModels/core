@@ -85,9 +85,11 @@ services:
     metamodels.controller.inputscreen.add_all:
         class: MetaModels\CoreBundle\Controller\Backend\InputScreenAddAllController
         parent: metamodels.controller.abstract.add_all
+        tags: ['controller.service_arguments']
     metamodels.controller.rendersetting.add_all:
         class: MetaModels\CoreBundle\Controller\Backend\RenderSettingAddAllController
         parent: metamodels.controller.abstract.add_all
+        tags: ['controller.service_arguments']
 
     metamodels.controller.support_screen:
         class: MetaModels\CoreBundle\Controller\Backend\SupportMetaModelsController
@@ -96,12 +98,14 @@ services:
             - "@contao.translation.translator"
             - "%metamodels.resource_dir%/data/contributors-github.json"
             - "%metamodels.resource_dir%/data/contributors-transifex.json"
+        tags: ['controller.service_arguments']
 
     metamodels.controller.picker:
         class: MetaModels\CoreBundle\Controller\Backend\PickerWidgetController
         arguments:
             - "@templating"
             - "@contao.translation.translator"
+        tags: ['controller.service_arguments']
 
     metamodels.view_combination.builder:
         class: MetaModels\ViewCombination\ViewCombinationBuilder
