@@ -21,6 +21,7 @@
  * @author     Chris Raidler <c.raidler@rad-consulting.ch>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -100,6 +101,13 @@ class MetaModel implements IMetaModel
      * @var string[]
      */
     private $systemColumns;
+
+    /**
+     * The cache existing ids.
+     *
+     * @var array
+     */
+    private $existingIds = [];
 
     /**
      * Instantiate a MetaModel.
@@ -781,6 +789,11 @@ class MetaModel implements IMetaModel
             } elseif ('id' === $strSortBy) {
                 asort($arrFilteredIds);
             } elseif (in_array($strSortBy, array('pid', 'tstamp', 'sorting'))) {
+                // Check existing ids.
+                if (array_intersect($arrFilteredIds, $this->existingIds) == $arrFilteredIds) {
+                    return $arrFilteredIds;
+                }
+
                 // Sort by database values.
                 $builder = $this->getConnection()->createQueryBuilder();
 
@@ -792,6 +805,8 @@ class MetaModel implements IMetaModel
                     ->orderBy($strSortBy, $strSortOrder)
                     ->execute()
                     ->fetchAll(\PDO::FETCH_COLUMN);
+
+                $this->existingIds = array_merge($this->existingIds, $arrFilteredIds);
             } elseif ($strSortBy == 'random') {
                 shuffle($arrFilteredIds);
             }

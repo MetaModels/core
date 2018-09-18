@@ -742,6 +742,10 @@ class ToolboxFile
      */
     public static function convertValueToPath($varValue)
     {
+        if (empty($varValue)) {
+            return '';
+        }
+
         $objFiles = FilesModel::findByPk($varValue);
 
         if ($objFiles !== null) {
