@@ -67,7 +67,7 @@ class Item implements IItem
      * Create a new instance.
      *
      * @param IMetaModel                    $objMetaModel The model this item is represented by.
-     * @param array                         $arrData      The initial data that shall be injected into the new instance.
+     * @param array|null                    $arrData      The initial data that shall be injected into the new instance.
      * @param EventDispatcherInterface|null $dispatcher   The event dispatcher.
      */
     public function __construct(IMetaModel $objMetaModel, $arrData, EventDispatcherInterface $dispatcher = null)
@@ -85,6 +85,18 @@ class Item implements IItem
             );
             // @codingStandardsIgnoreEnd
         }
+
+        if (null === $arrData) {
+            // Initialize attributes with empty values.
+            $arrData = [];
+
+            foreach ($objMetaModel->getAttributes() as $attribute) {
+                $arrData[$attribute->getColName()] = null;
+            }
+        }
+
+        $this->arrData   = $arrData;
+        $this->metaModel = $objMetaModel;
     }
 
     /**
