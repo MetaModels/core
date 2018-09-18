@@ -25,6 +25,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\RenderSettings;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use MultiColumnWizard\Event\GetOptionsEvent;
 use Symfony\Component\Finder\Finder;
+use Webmozart\PathUtil\Path;
 
 /**
  * This handles the rendering of models to labels.
@@ -104,7 +105,7 @@ class AddAssetListener
     {
         $files = [];
         foreach (Finder::create()->in($this->uploadPath)->name('*.' . $extension)->getIterator() as $item) {
-            $files[] = 'files/' . $item->getRelativePathname();
+            $files[] = 'files/' . Path::normalize($item->getRelativePathname());
         }
 
         return $files;

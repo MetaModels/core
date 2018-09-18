@@ -72,7 +72,7 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue(!$this->debug)
                 ->end()
                 ->scalarNode('cache_dir')
-                    ->defaultValue('%kernel.cache_dir%/metamodels')
+                    ->defaultValue('%kernel.cache_dir%' . DIRECTORY_SEPARATOR . 'metamodels')
                 ->end()
                 ->scalarNode('assets_dir')
                     ->cannotBeEmpty()
@@ -85,7 +85,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('assets_web')
                     ->cannotBeEmpty()
-                    ->defaultValue($this->resolvePath('assets/metamodels'))
+                    ->defaultValue('assets/metamodels')
                 ->end()
             ->end();
 

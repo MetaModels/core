@@ -38,7 +38,7 @@ class MetaModelsCoreExtension extends Extension
      *
      * @var string[]
      */
-    private $files = [
+    private static $files = [
         'config.yml',
         'filter-settings.yml',
         'hooks.yml',
@@ -67,7 +67,7 @@ class MetaModelsCoreExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        foreach ($this->files as $file) {
+        foreach (self::$files as $file) {
             $loader->load($file);
         }
 
