@@ -112,6 +112,9 @@ class LoadDataContainer
      * @param string $tableName The table name.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function handleMetaModelTable($tableName)
     {
@@ -142,6 +145,9 @@ class LoadDataContainer
      * @param string $tableName The table name.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function handleNonMetaModelTable($tableName)
     {

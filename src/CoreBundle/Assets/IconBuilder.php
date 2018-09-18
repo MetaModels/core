@@ -55,7 +55,7 @@ class IconBuilder
     /**
      * Adapter to the Contao\FilesModel class.
      *
-     * @var \Contao\FilesModel
+     * @var \Contao\FilesModel|Adapter
      */
     private $filesAdapter;
 
@@ -69,7 +69,7 @@ class IconBuilder
     /**
      * The image adapter.
      *
-     * @var \Contao\Image
+     * @var \Contao\Image|Adapter
      */
     private $image;
 
@@ -120,7 +120,7 @@ class IconBuilder
             $this->outputPath . '/' . basename($realIcon)
         )->getPath();
 
-        return $this->webPath . '/' . substr($resized, strlen($this->outputPath) + 1);
+        return $this->webPath . '/' . substr($resized, (\strlen($this->outputPath) + 1));
     }
 
     /**

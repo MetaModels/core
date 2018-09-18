@@ -57,7 +57,7 @@ class ToolboxFile
      *
      * @var EventDispatcherInterface
      *
-     * @deprecated
+     * @deprecated The event dispatcher will get removed in 3.0 as we now use the image factory.
      */
     private $dispatcher;
 

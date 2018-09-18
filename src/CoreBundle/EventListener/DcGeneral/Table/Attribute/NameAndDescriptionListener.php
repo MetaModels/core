@@ -22,16 +22,45 @@
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute;
 
 use Contao\StringUtil;
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\BuildWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
+use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\Dca\Helper;
+use MetaModels\IFactory;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * This class provides the attribute type names.
  */
 class NameAndDescriptionListener extends BaseListener
 {
+    /**
+     * The translator.
+     *
+     * @var TranslatorInterface
+     */
+    private $translator;
+
+    /**
+     * Create a new instance.
+     *
+     * @param RequestScopeDeterminator $scopeDeterminator The scope determinator.
+     * @param IAttributeFactory        $attributeFactory  The attribute factory.
+     * @param IFactory                 $factory           The MetaModel factory.
+     * @param TranslatorInterface      $translator        The translator.
+     */
+    public function __construct(
+        RequestScopeDeterminator $scopeDeterminator,
+        IAttributeFactory $attributeFactory,
+        IFactory $factory,
+        TranslatorInterface $translator
+    ) {
+        parent::__construct($scopeDeterminator, $attributeFactory, $factory);
+        $this->translator = $translator;
+    }
+
     /**
      * Decode the given value from a serialized language array into the real language array.
      *
@@ -41,14 +70,14 @@ class NameAndDescriptionListener extends BaseListener
      */
     public function decodeValue(DecodePropertyValueForWidgetEvent $event)
     {
-        if (!($this->wantToHandle($event) && in_array($event->getProperty(), ['name', 'description']))) {
+        if (!($this->wantToHandle($event) && \in_array($event->getProperty(), ['name', 'description']))) {
             return;
         }
 
         $metaModel = $this->getMetaModelByModelPid($event->getModel());
         $values    = Helper::decodeLangArray($event->getValue(), $metaModel);
 
-        $event->setValue(unserialize($values));
+        $event->setValue(unserialize($values, false));
     }
 
     /**
@@ -60,7 +89,7 @@ class NameAndDescriptionListener extends BaseListener
      */
     public function encodeValue(EncodePropertyValueFromWidgetEvent $event)
     {
-        if (!($this->wantToHandle($event) && in_array($event->getProperty(), ['name', 'description']))) {
+        if (!($this->wantToHandle($event) && \in_array($event->getProperty(), ['name', 'description']))) {
             return;
         }
         $metaModel = $this->getMetaModelByModelPid($event->getModel());
@@ -78,19 +107,18 @@ class NameAndDescriptionListener extends BaseListener
      */
     public function buildWidget(BuildWidgetEvent $event)
     {
-        if (!($this->wantToHandle($event) && in_array($event->getProperty()->getName(), ['name', 'description']))) {
+        if (!($this->wantToHandle($event) && \in_array($event->getProperty()->getName(), ['name', 'description']))) {
             return;
         }
 
         $metaModel = $this->getMetaModelByModelPid($event->getModel());
 
-        // FIXME: legacy translator in use.
         Helper::prepareLanguageAwareWidget(
             $event->getEnvironment(),
             $event->getProperty(),
             $metaModel,
-            $event->getEnvironment()->getTranslator()->translate('name_langcode', 'tl_metamodel_attribute'),
-            $event->getEnvironment()->getTranslator()->translate('name_value', 'tl_metamodel_attribute'),
+            $this->translator->trans('tl_metamodel_attribute.name_langcode', [], 'contao_tl_metamodel_attribute'),
+            $this->translator->trans('tl_metamodel_attribute.name_value', [], 'contao_tl_metamodel_attribute'),
             false,
             StringUtil::deserialize($event->getModel()->getProperty($event->getProperty()->getName()), true)
         );

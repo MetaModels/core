@@ -107,6 +107,8 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getFactory()
     {
@@ -117,8 +119,8 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
         );
         // @codingStandardsIgnoreEnd
 
-        if (is_callable($this->factory)) {
-            $this->factory = call_user_func($this->factory);
+        if (\is_callable($this->factory)) {
+            $this->factory = \call_user_func($this->factory);
             $this->factory->setServiceContainer($this, false);
         }
 
@@ -141,6 +143,8 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getAttributeFactory()
     {
@@ -151,8 +155,8 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
         );
         // @codingStandardsIgnoreEnd
 
-        if (is_callable($this->attributeFactory)) {
-            $this->attributeFactory = call_user_func($this->attributeFactory);
+        if (\is_callable($this->attributeFactory)) {
+            $this->attributeFactory = \call_user_func($this->attributeFactory);
             $this->attributeFactory->setServiceContainer($this, false);
         }
 
@@ -175,6 +179,8 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getFilterFactory()
     {
@@ -185,8 +191,8 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
         );
         // @codingStandardsIgnoreEnd
 
-        if (is_callable($this->filterFactory)) {
-            $this->filterFactory = call_user_func($this->filterFactory);
+        if (\is_callable($this->filterFactory)) {
+            $this->filterFactory = \call_user_func($this->filterFactory);
             $this->filterFactory->setServiceContainer($this, false);
         }
 
@@ -209,6 +215,8 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getRenderSettingFactory()
     {
@@ -219,8 +227,8 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
         );
         // @codingStandardsIgnoreEnd
 
-        if (is_callable($this->renderFactory)) {
-            $this->renderFactory = call_user_func($this->renderFactory);
+        if (\is_callable($this->renderFactory)) {
+            $this->renderFactory = \call_user_func($this->renderFactory);
             $this->renderFactory->setServiceContainer($this, false);
         }
 
@@ -243,6 +251,8 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getEventDispatcher()
     {
@@ -253,8 +263,8 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
         );
         // @codingStandardsIgnoreEnd
 
-        if (is_callable($this->dispatcher)) {
-            $this->dispatcher = call_user_func($this->dispatcher);
+        if (\is_callable($this->dispatcher)) {
+            $this->dispatcher = \call_user_func($this->dispatcher);
         }
 
         return $this->dispatcher;
@@ -276,6 +286,8 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getDatabase()
     {
@@ -286,8 +298,8 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
         );
         // @codingStandardsIgnoreEnd
 
-        if (is_callable($this->database)) {
-            $this->database = call_user_func($this->database);
+        if (\is_callable($this->database)) {
+            $this->database = \call_user_func($this->database);
         }
 
         return $this->database;
@@ -297,6 +309,8 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      * Retrieve the cache to use.
      *
      * @return Cache
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getCache()
     {
@@ -307,8 +321,8 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
         );
         // @codingStandardsIgnoreEnd
 
-        if (is_callable($this->cache)) {
-            $this->cache = call_user_func($this->cache);
+        if (\is_callable($this->cache)) {
+            $this->cache = \call_user_func($this->cache);
         }
 
         return $this->cache;
@@ -332,6 +346,8 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
      * {@inheritdoc}
      *
      * @throws \InvalidArgumentException When the passed service is not an object and no service name has been passed.
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function setService($service, $serviceName = null)
     {
@@ -342,13 +358,13 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
         );
         // @codingStandardsIgnoreEnd
         if ($serviceName === null) {
-            if (!is_object($service) || $service instanceof \Closure) {
+            if (!\is_object($service) || $service instanceof \Closure) {
                 throw new \InvalidArgumentException(
                     'Service name must be given to ' . __CLASS__ . '::setService when not passing a class instance.'
                 );
             }
 
-            $serviceName = get_class($service);
+            $serviceName = \get_class($service);
         }
 
         $this->services[$serviceName] = $service;
@@ -358,6 +374,11 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
 
     /**
      * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     *
+     * @deprecated The service container will get removed, use the symfony service container instead.
      */
     public function getService($serviceName)
     {
@@ -392,6 +413,6 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
             }
         }
 
-        return isset($this->services[(string) $serviceName]) ? $this->services[(string) $serviceName] : null;
+        return ($this->services[(string) $serviceName] ?? null);
     }
 }

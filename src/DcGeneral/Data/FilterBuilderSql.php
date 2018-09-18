@@ -160,7 +160,7 @@ class FilterBuilderSql
         $this->procedures[] = sprintf(
             '(%s IN (%s))',
             $operation['property'],
-            rtrim(str_repeat('?,', count($operation['values'])), ',')
+            rtrim(str_repeat('?,', \count($operation['values'])), ',')
         );
 
         return $this;
@@ -194,7 +194,7 @@ class FilterBuilderSql
      */
     public function addChild($child)
     {
-        if (!is_array($child)) {
+        if (!\is_array($child)) {
             throw new \RuntimeException('Error Processing sub filter: ' . var_export($child, true), 1);
         }
 
@@ -236,10 +236,9 @@ class FilterBuilderSql
      *
      * @param Connection|\Contao\Database $connection The connection value.
      *
-     * @return mixed|object
+     * @return Connection
      *
      * @throws \RuntimeException Throws could not obtain doctrine connection.
-     * @throws \ReflectionException Throws could not connect to database.
      *
      * @deprecated To be removed in 3.0 - you should ALWAYS pass the proper connection.
      */

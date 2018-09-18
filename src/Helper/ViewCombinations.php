@@ -343,7 +343,7 @@ abstract class ViewCombinations
         $statement = $this->connection->createQueryBuilder()
             ->select('*')
             ->from('tl_metamodel_dca_combine')
-            ->where(strtolower(TL_MODE) . '_group' . 'IN (:groups)')
+            ->where(strtolower(TL_MODE) . '_group IN (:groups)')
             ->orderBy('pid')
             ->addOrderBy('sorting', 'ASC')
             ->setParameter('groups', $groups)

@@ -25,6 +25,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
 use Doctrine\DBAL\Connection;
+use MetaModels\CoreBundle\Assets\IconBuilder;
 use MetaModels\IFactory;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -41,21 +42,31 @@ class ModelToLabelListener extends AbstractListener
     private $translator;
 
     /**
+     * The icon builder.
+     *
+     * @var IconBuilder
+     */
+    private $iconBuilder;
+
+    /**
      * Create a new instance.
      *
      * @param RequestScopeDeterminator $scopeDeterminator The scope determinator.
      * @param IFactory                 $factory           The MetaModel factory.
      * @param Connection               $connection        The database connection.
      * @param TranslatorInterface      $translator        The translator.
+     * @param IconBuilder              $iconBuilder       The icon builder.
      */
     public function __construct(
         RequestScopeDeterminator $scopeDeterminator,
         IFactory $factory,
         Connection $connection,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        IconBuilder $iconBuilder
     ) {
         parent::__construct($scopeDeterminator, $factory, $connection);
-        $this->translator = $translator;
+        $this->translator  = $translator;
+        $this->iconBuilder = $iconBuilder;
     }
 
     /**
@@ -74,45 +85,38 @@ class ModelToLabelListener extends AbstractListener
             return;
         }
 
-        // FIXME: we should only handle the core provided conditions here:
+        // FIXME: we should only handle the conditions provided via lookup map or condition factory here.
+        // The factory should return the condition type image from a call and therefore make the global usage obsolete.
         // conditionor,
         // conditionand,
         // conditionpropertyvalueis,
         // conditionpropertycontainanyof,
         // conditionpropertyvisible,
         // conditionnot
-
         $environment    = $event->getEnvironment();
         $model          = $event->getModel();
         $metaModel      = $this->getMetaModel($environment);
         $attribute      = $metaModel->getAttributeById($model->getProperty('attr_id'));
         $type           = $model->getProperty('type');
-        $parameterValue = (is_array($model->getProperty('value'))
+        $parameterValue = (\is_array($model->getProperty('value'))
             ? implode(', ', $model->getProperty('value'))
             : $model->getProperty('value'));
+
         $name = $this->translator->trans(
             'tl_metamodel_dcasetting_condition.conditionnames.' . $type,
             [],
             'contao_tl_metamodel_dcasetting_condition'
         );
 
-        $image = $GLOBALS['METAMODELS']['attributes'][$type]['image'];
-        if (!$image || !file_exists(TL_ROOT . '/' . $image)) {
-            $image = 'bundles/metamodelscore/images/icons/filter_default.png';
-        }
-
-        /** @var GenerateHtmlEvent $imageEvent */
-/*
-        $imageEvent = $event->getEnvironment()->getEventDispatcher()->dispatch(
-            ContaoEvents::IMAGE_GET_HTML,
-            new GenerateHtmlEvent($image)
-        );
-*/
-
         $event
             ->setLabel($this->getLabelText($type))
             ->setArgs([
-                '', // $imageEvent->getHtml(),
+                $this->iconBuilder->getBackendIconImageTag(
+                    $GLOBALS['METAMODELS']['attributes'][$type]['image'],
+                    $name,
+                    '',
+                    'bundles/metamodelscore/images/icons/filter_default.png'
+                ),
                 $name,
                 $attribute ? $attribute->getName() : '' . $model->getProperty('attr_id'),
                 $parameterValue
@@ -146,13 +150,13 @@ class ModelToLabelListener extends AbstractListener
             [],
             'contao_tl_metamodel_dcasetting_condition'
         );
-        if ($label == 'tl_metamodel_dcasetting_condition.typedesc.' . $type) {
+        if ($label === 'tl_metamodel_dcasetting_condition.typedesc.' . $type) {
             $label = $this->translator->trans(
                 'tl_metamodel_dcasetting_condition.typedesc._default_',
                 [],
                 'contao_tl_metamodel_dcasetting_condition'
             );
-            if ($label == 'tl_metamodel_dcasetting_condition.typedesc._default_') {
+            if ($label === 'tl_metamodel_dcasetting_condition.typedesc._default_') {
                 return $type;
             }
         }

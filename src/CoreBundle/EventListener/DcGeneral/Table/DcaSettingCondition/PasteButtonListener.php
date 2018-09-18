@@ -65,15 +65,13 @@ class PasteButtonListener extends AbstractListener
         // FIXME: should be obtained from factory or parameter.
         $flags = $GLOBALS['METAMODELS']['inputscreen_conditions'][$model->getProperty('type')];
         // If setting does not support children, omit them.
-        if ($model->getId() &&
-            (!$flags['nestingAllowed'])
-        ) {
+        if ((!$flags['nestingAllowed']) && $model->getId()) {
             $event->setPasteIntoDisabled(true);
             return;
         }
 
         $collector = new ModelCollector($environment);
-        if (isset($flags['maxChildren']) && count($collector->collectChildrenOf($model)) > $flags['maxChildren']) {
+        if (isset($flags['maxChildren']) && \count($collector->collectChildrenOf($model)) > $flags['maxChildren']) {
             $event->setPasteIntoDisabled(true);
         }
     }

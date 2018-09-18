@@ -57,6 +57,8 @@ services:
     metamodels.dc_general.table.tl_metamodel_attribute.name_and_description:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute\NameAndDescriptionListener
         parent: metamodels.listener.table.tl_metamodel_attribute.listener_base
+        arguments:
+          $translator: '@contao.translation.translator'
         tags:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.build-widget

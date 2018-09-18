@@ -55,7 +55,7 @@ class AttributeIdListener extends AbstractListener
         $allowedAttributes = $GLOBALS['METAMODELS']['inputscreen_conditions'][$conditionType]['attributes'];
         // FIXME: $allowedAttributes should be obtained from factory or parameter.
         foreach ($metaModel->getAttributes() as $attribute) {
-            if (is_array($allowedAttributes) && !in_array($attribute->get('type'), $allowedAttributes)) {
+            if (\is_array($allowedAttributes) && !\in_array($attribute->get('type'), $allowedAttributes, true)) {
                 continue;
             }
 
@@ -114,7 +114,7 @@ class AttributeIdListener extends AbstractListener
         }
 
         // Cut off the 'mm_xyz_' prefix.
-        $value = substr($value, strlen($metaModel->getTableName() . '_'));
+        $value = substr($value, \strlen($metaModel->getTableName() . '_'));
 
         $attribute = $metaModel->getAttribute($value);
 

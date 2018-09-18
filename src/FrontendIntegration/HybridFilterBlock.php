@@ -71,7 +71,7 @@ class HybridFilterBlock extends MetaModelHybrid
     {
         parent::__construct($objElement, $strColumn);
 
-        $this->connection = System::getContainer()->get('database_connection');;
+        $this->connection = System::getContainer()->get('database_connection');
     }
 
     /**

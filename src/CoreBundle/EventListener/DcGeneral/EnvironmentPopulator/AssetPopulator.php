@@ -32,6 +32,9 @@ class AssetPopulator
      * Populate the environment.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function populate()
     {

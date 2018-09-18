@@ -26,7 +26,7 @@ use Contao\InsertTags;
 /**
  * This class creates instances of Contao classes that have parent classes in global namespace (All in Contao <=4.4).
  *
- * To instantiate, we ensure the framwork is booted prior usage.
+ * To instantiate, we ensure the framework is booted prior usage.
  */
 class ContaoFactory
 {
@@ -40,7 +40,7 @@ class ContaoFactory
     /**
      * Create a new instance.
      *
-     * @param ContaoFrameworkInterface $framework
+     * @param ContaoFrameworkInterface $framework The Contao framework.
      */
     public function __construct(ContaoFrameworkInterface $framework)
     {

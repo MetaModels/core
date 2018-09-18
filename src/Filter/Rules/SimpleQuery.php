@@ -121,7 +121,7 @@ class SimpleQuery extends FilterRule
     {
         $matches = $this->connection->executeQuery($this->queryString, $this->params, $this->types);
         $ids     = [];
-        foreach ($tmp = $matches->fetchAll(\PDO::FETCH_ASSOC) as $value) {
+        foreach ($matches->fetchAll(\PDO::FETCH_ASSOC) as $value) {
             $ids[] = $value[$this->idColumn];
         }
 
@@ -133,7 +133,7 @@ class SimpleQuery extends FilterRule
      *
      * @param Connection|\Contao\Database $connection The connection value.
      *
-     * @return mixed|object
+     * @return Connection
      *
      * @throws \RuntimeException Throws could not obtain doctrine connection.
      *

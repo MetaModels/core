@@ -103,7 +103,7 @@ class BreadcrumbStore
      *
      * @return bool
      */
-    public function hasId($table)
+    public function hasId($table): bool
     {
         return array_key_exists($table, $this->idList);
     }
@@ -111,14 +111,14 @@ class BreadcrumbStore
     /**
      * Set an id.
      *
-     * @param string $table The table name.
-     * @param string $id    The id.
+     * @param string $table  The table name.
+     * @param string $itemId The id.
      *
      * @return void
      */
-    public function setId($table, $id)
+    public function setId($table, $itemId)
     {
-        $this->idList[$table] = $id;
+        $this->idList[$table] = $itemId;
     }
 
     /**
@@ -138,7 +138,7 @@ class BreadcrumbStore
      *
      * @return string
      */
-    public function getUri()
+    public function getUri(): string
     {
         return $this->uri;
     }
@@ -150,14 +150,14 @@ class BreadcrumbStore
      *
      * @return string The human readable name.
      */
-    public function getLabel($table)
+    public function getLabel($table): string
     {
-        if ('tl_' !== substr($table, 0, 3)) {
+        if (strpos($table, 'tl_') !== 0) {
             return $table;
         }
         $shortTable = str_replace('tl_', '', $table);
         $label      = $this->translator->trans('BRD.' . $shortTable, [], 'contao_default');
-        if ($label == $shortTable) {
+        if ($label === $shortTable) {
             $shortTable = str_replace('tl_metamodel_', '', $table);
             return ucfirst($shortTable) . ' %s';
         }
@@ -170,7 +170,7 @@ class BreadcrumbStore
      *
      * @return array
      */
-    public function getElements()
+    public function getElements(): array
     {
         return $this->elements;
     }

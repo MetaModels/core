@@ -65,7 +65,7 @@ class InputScreenInformationBuilder
      *
      * @return array
      */
-    public function fetchInputScreens($idList)
+    public function fetchInputScreens($idList): array
     {
         $idList  = array_filter($idList);
         $builder = $this->connection->createQueryBuilder();
@@ -99,7 +99,7 @@ class InputScreenInformationBuilder
      *
      * @throws \InvalidArgumentException Throws could not retrieve MetaModel.
      */
-    private function prepareInputScreen($modelName, $screen)
+    private function prepareInputScreen($modelName, $screen): array
     {
         if (null === $metaModel = $this->factory->getMetaModel($modelName)) {
             throw new \InvalidArgumentException('Could not retrieve MetaModel ' . $modelName);
@@ -125,10 +125,25 @@ class InputScreenInformationBuilder
             'description' => $description
         ];
 
+        $bySetting         = $this->buildConditionTree($result['conditions']);
+        $result['legends'] = $this->convertLegends($result['properties'], $metaModel, $bySetting);
+
+        return $result;
+    }
+
+    /**
+     * Build condition tree.
+     *
+     * @param array $conditions The condition information.
+     *
+     * @return array
+     */
+    private function buildConditionTree(array $conditions): array
+    {
         // Build condition tree.
         $conditionMap = [];
         $bySetting    = [];
-        foreach ($result['conditions'] as $condition) {
+        foreach ($conditions as $condition) {
             unset($converted);
             // Check if already mapped, if so, we need to set the values.
             if (array_key_exists($condition['id'], $conditionMap)) {
@@ -137,7 +152,7 @@ class InputScreenInformationBuilder
                     $converted[$key] = $value;
                 }
             } else {
-                $converted                      = array_slice($condition, 0);
+                $converted                      = \array_slice($condition, 0);
                 $conditionMap[$condition['id']] = &$converted;
             }
             // Is on root level - add to setting now.
@@ -154,9 +169,7 @@ class InputScreenInformationBuilder
             $conditionMap[$condition['pid']]['children'][] = &$converted;
         }
 
-        $result['legends'] = $this->convertLegends($result['properties'], $metaModel, $bySetting);
-
-        return $result;
+        return $bySetting;
     }
 
     /**
@@ -167,7 +180,7 @@ class InputScreenInformationBuilder
      *
      * @return array
      */
-    private function fetchPropertiesFor($inputScreenId, IMetaModel $metaModel)
+    private function fetchPropertiesFor($inputScreenId, IMetaModel $metaModel): array
     {
         $builder = $this->connection->createQueryBuilder();
         return array_map(function ($column) use ($inputScreenId, $metaModel) {
@@ -206,7 +219,7 @@ class InputScreenInformationBuilder
      *
      * @return array
      */
-    private function fetchConditions($inputScreenId)
+    private function fetchConditions($inputScreenId): array
     {
         $builder = $this->connection->createQueryBuilder();
 
@@ -233,7 +246,7 @@ class InputScreenInformationBuilder
      *
      * @return array
      */
-    private function fetchGroupSort($inputScreenId, IMetaModel $metaModel)
+    private function fetchGroupSort($inputScreenId, IMetaModel $metaModel): array
     {
         $builder = $this->connection->createQueryBuilder();
 
@@ -284,11 +297,11 @@ class InputScreenInformationBuilder
      *
      * @return array
      */
-    private function convertLegends(array $properties, IMetaModel $metaModel, array $conditions)
+    private function convertLegends(array $properties, IMetaModel $metaModel, array $conditions): array
     {
         $result = [];
         $label  = [];
-        if ($metaModel->isTranslated()) {
+        if ($trans = $metaModel->isTranslated()) {
             foreach ($metaModel->getAvailableLanguages() as $availableLanguage) {
                 $label[$availableLanguage] = $metaModel->getName();
             }
@@ -316,35 +329,65 @@ class InputScreenInformationBuilder
         foreach ($properties as $property) {
             switch ($property['dcatype']) {
                 case 'legend':
-                    if (!empty($legend['properties'])) {
-                        $result['legend' . (count($result) + 1)] = $legend;
-                    }
-                    $legend = [
-                        'label'      => $metaModel->isTranslated()
-                            ? unserialize($property['legendtitle'])
-                            : ['' => $property['legendtitle']],
-                        'hide'       => (bool) $property['legendhide'],
-                        'properties' => [],
-                        'condition' => $condition($property)
-                    ];
+                    $this->convertLegend($property, $trans, $condition, $legend, $result);
                     break;
                 case 'attribute':
-                    if (!isset($property['col_name'])) {
-                        continue;
-                    }
-                    $legend['properties'][] = [
-                        'name'       => $property['col_name'],
-                        'condition' => $condition($property)
-                    ];
+                    $this->convertAttribute($property, $condition, $legend);
                     break;
                 default:
                     break;
             }
         }
         if (!empty($legend['properties'])) {
-            $result['legend' . (count($result) + 1)] = $legend;
+            $result['legend' . (\count($result) + 1)] = $legend;
         }
 
         return $result;
+    }
+
+    /**
+     * Convert a legend property.
+     *
+     * @param array    $property  The property information to convert.
+     * @param bool     $trans     Flag if the MetaModel is translated.
+     * @param callable $condition The condition transformer.
+     * @param array    $legend    The current legend information.
+     * @param array    $result    The resulting information.
+     *
+     * @return void
+     */
+    private function convertLegend(array $property, bool $trans, $condition, array &$legend, array &$result)
+    {
+        if (!empty($legend['properties'])) {
+            $result['legend' . (\count($result) + 1)] = $legend;
+        }
+        $legend = [
+            'label'      => $trans
+                ? unserialize($property['legendtitle'], false)
+                : ['' => $property['legendtitle']],
+            'hide'       => (bool) $property['legendhide'],
+            'properties' => [],
+            'condition' => $condition($property)
+        ];
+    }
+
+    /**
+     * Convert an attribute property.
+     *
+     * @param array    $property  The property information to convert.
+     * @param callable $condition The condition transformer.
+     * @param array    $legend    The current legend information.
+     *
+     * @return void
+     */
+    private function convertAttribute(array $property, $condition, array &$legend)
+    {
+        if (!isset($property['col_name'])) {
+            return;
+        }
+        $legend['properties'][] = [
+            'name'       => $property['col_name'],
+            'condition' => $condition($property)
+        ];
     }
 }

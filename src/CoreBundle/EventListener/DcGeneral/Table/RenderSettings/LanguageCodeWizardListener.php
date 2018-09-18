@@ -50,6 +50,7 @@ class LanguageCodeWizardListener
      * LanguageCodeWizardListener constructor.
      *
      * @param RequestScopeDeterminator $scopeDeterminator The request scope matcher.
+     * @param PickerBuilderInterface   $pickerBuilder     The picker builder.
      */
     public function __construct(RequestScopeDeterminator $scopeDeterminator, PickerBuilderInterface $pickerBuilder)
     {
@@ -69,7 +70,7 @@ class LanguageCodeWizardListener
         if (!$this->scopeDeterminator->currentScopeIsBackend()
             || !('tl_metamodel_rendersettings' === $event->getEnvironment()->getDataDefinition()->getName())
             || !((0 === strpos($event->getProperty()->getName(), 'jumpTo'))
-                 && ('[value]' === substr($event->getProperty()->getName(), -strlen('[value]'))))
+                 && ('[value]' === substr($event->getProperty()->getName(), -\strlen('[value]'))))
         ) {
             return;
         }

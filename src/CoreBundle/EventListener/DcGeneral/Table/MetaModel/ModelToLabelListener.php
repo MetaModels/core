@@ -92,6 +92,17 @@ class ModelToLabelListener extends AbstractAbstainingListener
             ->execute()
             ->fetchColumn();
 
+        switch ($count) {
+            case 0:
+                $transId = 'tl_metamodel.itemFormatCount.0';
+                break;
+            case 1:
+                $transId = 'tl_metamodel.itemFormatCount.1';
+                break;
+            default:
+                $transId = 'tl_metamodel.itemFormatCount.2:';
+        }
+
         $event
             ->setLabel('
     <span class="name">
@@ -103,9 +114,7 @@ class ModelToLabelListener extends AbstractAbstainingListener
                 $image,
                 $label,
                 $tableName,
-                // FIXME: cannot translate with choice anymore.
-                // $this->translator->transChoice('tl_metamodel.itemFormatCount', $count, [$count], 'contao_tl_metamodel')
-                $this->translator->trans('tl_metamodel.itemFormatCount.2:', [$count], 'contao_tl_metamodel')
+                $this->translator->trans($transId, [$count], 'contao_tl_metamodel')
             ]);
     }
 }

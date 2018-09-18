@@ -81,8 +81,6 @@ class SupportMetaModelsController
      */
     public function __invoke()
     {
-        // FIXME: can be removed when https://github.com/contao/core-bundle/pull/1153 is merged.
-        $GLOBALS['TL_CSS'][] = 'bundles/metamodelscore/css/supportscreen.css';
         return new Response(
             $this->templating->render(
                 'MetaModelsCoreBundle::misc/support.html.twig',
