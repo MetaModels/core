@@ -18,6 +18,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     binron <rtb@gmx.ch>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -304,7 +305,7 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     public function getEmptyModel()
     {
-        $objItem = new Item($this->getMetaModel(), array());
+        $objItem = new Item($this->getMetaModel(), null);
         return new Model($objItem);
     }
 
