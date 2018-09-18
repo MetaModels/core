@@ -25,6 +25,7 @@ use Contao\CoreBundle\Framework\Adapter;
 use Contao\System;
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IAttribute;
+use MetaModels\BackendIntegration\PurgeCache;
 use MetaModels\IFactory;
 use MetaModels\IMetaModel;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -67,6 +68,13 @@ abstract class AbstractAddAllController
     private $connection;
 
     /**
+     * The cache purger.
+     *
+     * @var PurgeCache
+     */
+    private $purger;
+
+    /**
      * The list of known attributes.
      *
      * @var array
@@ -95,19 +103,22 @@ abstract class AbstractAddAllController
      * @param IFactory            $factory       The MetaModels factory.
      * @param Connection          $connection    The database connection.
      * @param Adapter             $systemAdapter Adapter to the Contao\System class.
+     * @param PurgeCache          $purger        The cache purger.
      */
     public function __construct(
         EngineInterface $templating,
         TranslatorInterface $translator,
         IFactory $factory,
         Connection $connection,
-        Adapter $systemAdapter
+        Adapter $systemAdapter,
+        PurgeCache $purger
     ) {
         $this->templating    = $templating;
         $this->translator    = $translator;
         $this->factory       = $factory;
         $this->connection    = $connection;
         $this->systemAdapter = $systemAdapter;
+        $this->purger        = $purger;
     }
 
     /**
@@ -347,6 +358,7 @@ abstract class AbstractAddAllController
             $query->values($data)->execute();
             $this->startSort += 128;
         }
+        $this->purger->purge();
     }
 
     /**

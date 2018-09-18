@@ -82,6 +82,7 @@ services:
             - "@metamodels.factory"
             - "@database_connection"
             - "@=service('contao.framework').getAdapter('Contao\\\\System')"
+            - '@metamodels.cache.purger'
     metamodels.controller.inputscreen.add_all:
         class: MetaModels\CoreBundle\Controller\Backend\InputScreenAddAllController
         parent: metamodels.controller.abstract.add_all
