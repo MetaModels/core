@@ -19,6 +19,9 @@
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Alexander Menk <a.menk@imi.de>
+ * @author     Andreas Isaak <info@andreas-isaak.de>
+ * @author     David Maack <david.maack@arcor.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
