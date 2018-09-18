@@ -863,8 +863,13 @@ class ItemList implements IServiceContainerAware
             // Add title if needed.
             if (!empty($this->strTitleAttribute)) {
                 while ($this->objItems->next()) {
+                    /** @var IItem $objCurrentItem */
                     $objCurrentItem = $this->objItems->current();
-                    $arrTitle       = $objCurrentItem->parseAttribute($this->strTitleAttribute, 'text');
+                    $arrTitle       = $objCurrentItem->parseAttribute(
+                        $this->strTitleAttribute,
+                        'text',
+                        $this->getView()
+                    );
 
                     if (!empty($arrTitle['text'])) {
                         $page->pageTitle = strip_tags($arrTitle['text']);
@@ -879,7 +884,11 @@ class ItemList implements IServiceContainerAware
             if (!empty($this->strDescriptionAttribute)) {
                 while ($this->objItems->next()) {
                     $objCurrentItem = $this->objItems->current();
-                    $arrDescription = $objCurrentItem->parseAttribute($this->strDescriptionAttribute, 'text');
+                    $arrDescription = $objCurrentItem->parseAttribute(
+                        $this->strDescriptionAttribute,
+                        'text',
+                        $this->getView()
+                    );
 
                     if (!empty($arrDescription['text'])) {
                         $page->description = StringUtil::substr($arrDescription['text'], 160);
