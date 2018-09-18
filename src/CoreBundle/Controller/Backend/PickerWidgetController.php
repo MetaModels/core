@@ -21,11 +21,8 @@
 
 namespace MetaModels\CoreBundle\Controller\Backend;
 
-use Contao\Backend;
-use Contao\Controller;
-use Contao\Environment;
 use Contao\Input;
-use RuntimeException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -50,66 +47,75 @@ class PickerWidgetController
     private $translator;
 
     /**
+     * The configuration for the pickers.
+     *
+     * @var array
+     */
+    private $configuration;
+
+    /**
      * Create a new instance.
      *
-     * @param EngineInterface     $templating The twig engine.
-     * @param TranslatorInterface $translator The translator.
+     * @param EngineInterface     $templating    The twig engine.
+     * @param TranslatorInterface $translator    The translator.
+     * @param array               $configuration The picker configuration.
      */
-    public function __construct(EngineInterface $templating, TranslatorInterface $translator)
+    public function __construct(EngineInterface $templating, TranslatorInterface $translator, array $configuration)
     {
-        $this->templating = $templating;
-        $this->translator = $translator;
+        $this->templating    = $templating;
+        $this->translator    = $translator;
+        $this->configuration = $configuration;
     }
 
     /**
      * Render the picker.
      *
+     * @param Request $request The request.
+     *
      * @return Response
      *
      * @throws \RuntimeException Throw field parameter error.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function __invoke()
+    public function __invoke(Request $request)
     {
-        Controller::loadLanguageFile('default');
-        Controller::loadLanguageFile('modules');
-
+        // Sets be_main.html5 to popup mode in contao/core-bundle/src/Resources/contao/controllers/BackendMain.php.
         Input::setGet('popup', true);
 
-        $inputName = Input::get('fld');
+        $inputName = $request->get('fld');
         if (!preg_match('~^[a-z\-_0-9]+$~i', $inputName)) {
-            throw new RuntimeException('Field-Parameter ERROR!');
+            throw new \RuntimeException('Field-Parameter ERROR!');
         }
 
         $styleSheets = [];
         $javaScripts = [];
         if ('panelLayout' === $inputName) {
-            // $styleSheets[] = 'bundles/metamodelscore/css/';
             $javaScripts[] = 'bundles/metamodelscore/js/panelpicker.js';
         } elseif ('tl_class' === $inputName) {
-            // $styleSheets[] = 'bundles/metamodelscore/css/';
             $javaScripts[] = 'bundles/metamodelscore/js/stylepicker.js';
         }
-        // FIXME: can be removed when https://github.com/contao/core-bundle/pull/1153 is merged.
-        foreach ($styleSheets as $styleSheet) {
-            $GLOBALS['TL_CSS'][] = $styleSheet;
-        }
-        foreach ($javaScripts as $javaScript) {
-            $GLOBALS['TL_JAVASCRIPT'][] = $javaScript;
+
+        $configuration = $this->configuration[$request->get('item')];
+        // Backwards compatibility - configuration was once passed via config.php.
+        if (isset($GLOBALS[$request->get('item')])) {
+            $configuration = array_merge_recursive($configuration, $GLOBALS[$request->get('item')]);
         }
 
         $items  = [];
         $prefix = 'MSC.' . $inputName . '.';
-        foreach ($GLOBALS[Input::get('item')] as $item) {
+        foreach ($configuration as $item) {
             $label = $this->translator->trans($prefix . $item['cssclass'], [], 'contao_default');
             $descr = '';
-            if (is_array($label)) {
-                $descr = $label[1];
-                $label = $label[0];
+            if (\is_array($label)) {
+                list($label, $descr) = $label;
             }
+
             $items[] = [
-                'label'    => $label,
-                'descr'    => $descr,
-                'cssclass' => $item['cssclass'],
+                'label'       => $label,
+                'description' => $descr,
+                'cssclass'    => $item['cssclass'],
             ];
         }
 
@@ -117,13 +123,8 @@ class PickerWidgetController
             $this->templating->render(
                 'MetaModelsCoreBundle:Backend:be_dcastylepicker.html.twig',
                 [
-                    'language'    => $GLOBALS['TL_LANGUAGE'],
-                    'charset'     => $GLOBALS['TL_CONFIG']['characterSet'],
-                    'base'        => Environment::get('base'),
-                    'assets_url'  => TL_ASSETS_URL,
-                    'theme'       => Backend::getTheme(),
                     'items'       => $items,
-                    'field'       => Input::get('inputName'),
+                    'field'       => $request->get('inputName'),
                     'stylesheets' => $styleSheets,
                     'javascripts' => $javaScripts,
                     'headline'    => $this->translator->trans('MSC.metamodelspicker', [], 'contao_default'),

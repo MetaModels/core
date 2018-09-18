@@ -105,6 +105,7 @@ services:
         arguments:
             - "@templating"
             - "@contao.translation.translator"
+            - []
         tags: ['controller.service_arguments']
 
     metamodels.view_combination.builder:
