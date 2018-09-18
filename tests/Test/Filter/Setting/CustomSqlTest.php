@@ -45,15 +45,7 @@ class CustomSqlTest extends TestCase
      */
     protected function mockCustomSql($properties = array(), $tableName = 'mm_unittest')
     {
-        if (!class_exists('\System')) {
-            class_alias('\Contao\System', '\System');
-        }
-
-        if (!class_exists('\Controller')) {
-            class_alias('\Contao\Controller', '\Controller');
-        }
-
-        $metaModel = $this->getMockBuilder(IMetaModel::class)->getMockForAbstractClass();
+        $metaModel = $this->getMockForAbstractClass(IMetaModel::class);
         $metaModel->method('getTableName')->willReturn($tableName);
 
         $filterSetting = $this->getMockForAbstractClass(ICollection::class);
@@ -90,7 +82,7 @@ class CustomSqlTest extends TestCase
      */
     protected function generateSql($instance, $filterUrl = array())
     {
-        $filter = new Filter($this->getMockBuilder(IMetaModel::class)->getMockForAbstractClass());
+        $filter = new Filter($this->getMockForAbstractClass(IMetaModel::class));
 
         $instance->prepareRules($filter, $filterUrl);
 
@@ -471,7 +463,7 @@ class CustomSqlTest extends TestCase
 
     private function initializeContaoInputClass(array $get = [], array $post = [], array $cookie = [])
     {
-        if (!class_exists('\Config')) {
+        if (class_exists('\Contao\Config') && !class_exists('\Config')) {
             class_alias('\Contao\Config', '\Config');
         }
 
