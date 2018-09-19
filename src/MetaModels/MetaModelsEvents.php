@@ -14,6 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -89,4 +90,11 @@ class MetaModelsEvents
      * @see \MetaModels\Events\RenderItemListEvent.
      */
     const RENDER_ITEM_LIST = 'metamodels.render-item-list';
+
+    /**
+     * Event prior evaluating the filter of an item list.
+     *
+     * @see \MetaModels\Events\ItemListModifyFilterEvent.
+     */
+    const ITEM_LIST_MODIFY_FILTER = 'metamodels.item-list-modify-filter';
 }
