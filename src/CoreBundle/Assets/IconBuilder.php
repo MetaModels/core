@@ -113,14 +113,15 @@ class IconBuilder
      */
     public function getBackendIcon($icon, $defaultIcon = 'bundles/metamodelscore/images/icons/metamodels.png')
     {
-        $realIcon = $this->convertValueToPath($icon, $defaultIcon);
-        $resized  = $this->imageFactory->create(
-            $realIcon,
-            [16, 16, 'proportional'],
-            $this->outputPath . '/' . basename($realIcon)
-        )->getPath();
+        $realIcon   = $this->convertValueToPath($icon, $defaultIcon);
+        $targetPath = $this->outputPath . '/' . basename($realIcon);
+        if (\file_exists($targetPath)) {
+            return $this->webPath . '/' . basename($realIcon);
+        }
 
-        return $this->webPath . '/' . substr($resized, (\strlen($this->outputPath) + 1));
+        $this->imageFactory->create($realIcon, [16, 16, 'proportional'], $targetPath);
+
+        return $this->webPath . '/' . basename($realIcon);
     }
 
     /**
