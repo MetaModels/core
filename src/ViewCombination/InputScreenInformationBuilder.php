@@ -363,7 +363,7 @@ class InputScreenInformationBuilder
         }
         $legend = [
             'label'      => $trans
-                ? unserialize($property['legendtitle'], false)
+                ? unserialize($property['legendtitle'], ['allowed_classes' => false])
                 : ['' => $property['legendtitle']],
             'hide'       => (bool) $property['legendhide'],
             'properties' => [],
