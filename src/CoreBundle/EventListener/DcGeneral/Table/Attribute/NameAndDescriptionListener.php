@@ -77,7 +77,7 @@ class NameAndDescriptionListener extends BaseListener
         $metaModel = $this->getMetaModelByModelPid($event->getModel());
         $values    = Helper::decodeLangArray($event->getValue(), $metaModel);
 
-        $event->setValue(unserialize($values, false));
+        $event->setValue(unserialize($values, ['allowed_classes' => false]));
     }
 
     /**
