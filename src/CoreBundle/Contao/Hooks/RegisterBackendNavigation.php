@@ -21,9 +21,11 @@
 
 namespace MetaModels\CoreBundle\Contao\Hooks;
 
+use Contao\StringUtil;
 use MetaModels\ViewCombination\ViewCombination;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
@@ -88,24 +90,54 @@ class RegisterBackendNavigation
      */
     public function onGetUserNavigation($modules)
     {
-        $this->addMenu(
-            $modules,
-            'metamodels',
-            'support_screen',
-            [
-                'label' => $this->translator->trans('MOD.support_metamodels.0', [], 'contao_modules'),
-                'title' => $this->translator->trans('MOD.support_metamodels.1', [], 'contao_modules'),
-                'route' => 'metamodels.support_screen',
-                'param' => [],
-            ]
-        );
+        /** @var \Contao\CoreBundle\Security\Authentication\ContaoToken $user */
+        $user = \System::getContainer()->get('security.token_storage')->getToken();
+        /** @var \Contao\BackendUser $beUser */
+        $beUser = $user->getUser();
+
+        $isAdmin = \in_array('ROLE_ADMIN', array_map(function (Role $role) {
+            return $role->getRole();
+        }, $user->getRoles()), true);
+
+        if (!$isAdmin) {
+            $allowedModules = $beUser->modules;
+            switch (true) {
+                case \is_string($allowedModules):
+                    $allowedModules = unserialize($allowedModules, ['allowed_classes' => false]);
+                    break;
+                case null === $allowedModules:
+                    $allowedModules = [];
+                    break;
+                default:
+            }
+            $userRights = array_flip($allowedModules);
+            unset($allowedModules);
+        }
+
+        if ($isAdmin || isset($userRights['support_metamodels'])) {
+            $this->addMenu(
+                $modules,
+                'metamodels',
+                'support_screen',
+                [
+                    'label' => $this->translator->trans('MOD.support_metamodels.0', [], 'contao_modules'),
+                    'title' => $this->translator->trans('MOD.support_metamodels.1', [], 'contao_modules'),
+                    'route' => 'metamodels.support_screen',
+                    'param' => [],
+                ]
+            );
+        }
 
         $locale = $this->requestStack->getCurrentRequest()->getLocale();
         foreach ($this->viewCombination->getStandalone() as $metaModelName => $screen) {
+            $moduleName = 'metamodel_' . $metaModelName;
+            if (!$isAdmin && !isset($userRights[$moduleName])) {
+                continue;
+            }
             $this->addMenu(
                 $modules,
                 $screen['meta']['backendsection'],
-                'metamodel_' . $metaModelName,
+                $moduleName,
                 [
                     'label' => $this->extractLanguageValue($screen['label'], $locale),
                     'title' => $this->extractLanguageValue($screen['description'], $locale),
@@ -137,6 +169,38 @@ class RegisterBackendNavigation
     }
 
     /**
+     * Build a menu section.
+     *
+     * @return array
+     */
+    private function buildBackendMenuSection($groupName)
+    {
+        $request = $this->requestStack->getCurrentRequest();
+
+        $strRefererId = $this->requestStack->getCurrentRequest()->attributes->get('_contao_referer_id');
+
+        $label = $this->translator->trans('MOD.' . $groupName, [], 'contao_modules');
+
+        if (\is_array($label)) {
+            $label = $label[0];
+        }
+
+        return [
+            'class'   => ' node-expanded',
+            'title'   => StringUtil::specialchars($this->translator->trans('MSC.collapseNode', [], 'contao_modules')),
+            'label'   => $label,
+            'href'    => $this->urlGenerator->generate(
+                'contao_backend',
+                ['do' => $request->get('do'), 'mtg' => $groupName, 'ref' => $strRefererId]
+            ),
+            'ajaxUrl' => $this->urlGenerator->generate('contao_backend'),
+            // backwards compatibility with e.g. EasyThemes
+            'icon'    => 'modPlus.gif',
+            'modules'  => [],
+        ];
+    }
+
+    /**
      * Add a module to the modules list.
      *
      * @param array  $modules The modules list.
@@ -148,6 +212,10 @@ class RegisterBackendNavigation
      */
     private function addMenu(&$modules, $section, $name, $module)
     {
+        if (!isset($modules[$section])) {
+            $modules[$section] = $this->buildBackendMenuSection($section);
+        }
+
         $active = $this->isActive($module['route'], $module['param']);
         $class  = 'navigation ' . $name;
         if (isset($module['class'])) {
@@ -162,7 +230,7 @@ class RegisterBackendNavigation
             'title'    => $module['title'],
             'class'    => $class,
             'isActive' => $active,
-            'href'     => $this->urlGenerator->generate($module['route'], $module['param'])
+            'href'     => $this->urlGenerator->generate($module['route'], $module['param']),
         ];
     }
 

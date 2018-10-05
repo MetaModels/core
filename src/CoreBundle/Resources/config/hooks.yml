@@ -43,3 +43,9 @@ services:
         arguments:
             - "@database_connection"
         public: true
+
+    MetaModels\CoreBundle\Contao\Hooks\FixupUserGroupModules:
+        arguments:
+            - '@metamodels.view_combination.builder'
+            - '@metamodels.view_combination.input_screen_information_builder'
+            - '@request_stack'
