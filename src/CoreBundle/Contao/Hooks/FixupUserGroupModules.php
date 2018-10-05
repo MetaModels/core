@@ -97,8 +97,11 @@ class FixupUserGroupModules
             $modules[$group] = array_values($modules[$group]);
         }
 
-        // 2. Add our "custom" modules.
+        // 2. Add our "custom" modules and remove the main module.
         $modules['metamodels'][] = 'support_metamodels';
+        if (false !== $index = array_search('metamodels', $modules['metamodels'], true)) {
+            unset($modules['metamodels'][$index]);
+        }
 
         // 3. Add back all MetaModels for the current group.
         $combinations = $this->combinationBuilder->getCombinationsForUser([$dataContainer->activeRecord->id], 'be');
