@@ -101,6 +101,7 @@ class FixupUserGroupModules
         $modules['metamodels'][] = 'support_metamodels';
         if (false !== $index = array_search('metamodels', $modules['metamodels'], true)) {
             unset($modules['metamodels'][$index]);
+            $modules['metamodels'] = array_values($modules['metamodels']);
         }
 
         // 3. Add back all MetaModels for the current group.
