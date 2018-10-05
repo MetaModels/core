@@ -13,6 +13,7 @@ services:
             - '@request_stack'
             - '@router'
             - '@metamodels.view_combination'
+            - '@security.token_storage'
         # it is used as HOOK from Contao - needs to be public therefore.
         public: true
 

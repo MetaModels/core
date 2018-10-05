@@ -21,10 +21,13 @@
 
 namespace MetaModels\CoreBundle\Contao\Hooks;
 
+use Contao\CoreBundle\Security\Authentication\ContaoToken;
 use Contao\StringUtil;
 use MetaModels\ViewCombination\ViewCombination;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -62,23 +65,33 @@ class RegisterBackendNavigation
     private $viewCombination;
 
     /**
+     * The token storage.
+     *
+     * @var TokenStorage
+     */
+    private $tokenStorage;
+
+    /**
      * Create a new instance.
      *
      * @param TranslatorInterface   $translator      The translator.
      * @param RequestStack          $requestStack    The request stack.
      * @param UrlGeneratorInterface $urlGenerator    The url generator.
      * @param ViewCombination       $viewCombination The view combination.
+     * @param TokenStorage          $tokenStorage    The token storage.
      */
     public function __construct(
         TranslatorInterface $translator,
         RequestStack $requestStack,
         UrlGeneratorInterface $urlGenerator,
-        ViewCombination $viewCombination
+        ViewCombination $viewCombination,
+        TokenStorage $tokenStorage
     ) {
         $this->requestStack    = $requestStack;
         $this->urlGenerator    = $urlGenerator;
         $this->translator      = $translator;
         $this->viewCombination = $viewCombination;
+        $this->tokenStorage    = $tokenStorage;
     }
 
     /**
@@ -86,33 +99,21 @@ class RegisterBackendNavigation
      *
      * @param array $modules The backend navigation.
      *
-     * @return mixed
+     * @return array
      */
     public function onGetUserNavigation($modules)
     {
-        /** @var \Contao\CoreBundle\Security\Authentication\ContaoToken $user */
-        $user = \System::getContainer()->get('security.token_storage')->getToken();
-        /** @var \Contao\BackendUser $beUser */
-        $beUser = $user->getUser();
+        if (null === $request = $this->requestStack->getCurrentRequest()) {
+            return $modules;
+        }
 
+        /** @var ContaoToken $user */
+        if (($user = $this->tokenStorage->getToken()) instanceof ContaoToken) {
+            $userRights = $this->extractUserRights($user);
+        }
         $isAdmin = \in_array('ROLE_ADMIN', array_map(function (Role $role) {
             return $role->getRole();
         }, $user->getRoles()), true);
-
-        if (!$isAdmin) {
-            $allowedModules = $beUser->modules;
-            switch (true) {
-                case \is_string($allowedModules):
-                    $allowedModules = unserialize($allowedModules, ['allowed_classes' => false]);
-                    break;
-                case null === $allowedModules:
-                    $allowedModules = [];
-                    break;
-                default:
-            }
-            $userRights = array_flip($allowedModules);
-            unset($allowedModules);
-        }
 
         if ($isAdmin || isset($userRights['support_metamodels'])) {
             $this->addMenu(
@@ -124,11 +125,12 @@ class RegisterBackendNavigation
                     'title' => $this->translator->trans('MOD.support_metamodels.1', [], 'contao_modules'),
                     'route' => 'metamodels.support_screen',
                     'param' => [],
-                ]
+                ],
+                $request
             );
         }
 
-        $locale = $this->requestStack->getCurrentRequest()->getLocale();
+        $locale = $request->getLocale();
         foreach ($this->viewCombination->getStandalone() as $metaModelName => $screen) {
             $moduleName = 'metamodel_' . $metaModelName;
             if (!$isAdmin && !isset($userRights[$moduleName])) {
@@ -143,11 +145,37 @@ class RegisterBackendNavigation
                     'title' => $this->extractLanguageValue($screen['description'], $locale),
                     'route' => 'contao_backend',
                     'param' => ['do' => 'metamodel_' . $metaModelName],
-                ]
+                ],
+                $request
             );
         }
 
         return $modules;
+    }
+
+    /**
+     * Extract the permissions from the Contao backend user.
+     *
+     * @param ContaoToken $token The token.
+     *
+     * @return array
+     */
+    private function extractUserRights(ContaoToken $token)
+    {
+        /** @var \Contao\BackendUser $beUser */
+        $beUser = $token->getUser();
+
+        $allowedModules = $beUser->modules;
+        switch (true) {
+            case \is_string($allowedModules):
+                $allowedModules = unserialize($allowedModules, ['allowed_classes' => false]);
+                break;
+            case null === $allowedModules:
+                $allowedModules = [];
+                break;
+            default:
+        }
+        return array_flip($allowedModules);
     }
 
     /**
@@ -171,13 +199,14 @@ class RegisterBackendNavigation
     /**
      * Build a menu section.
      *
+     * @param string  $groupName The group name.
+     * @param Request $request   The current request.
+     *
      * @return array
      */
-    private function buildBackendMenuSection($groupName)
+    private function buildBackendMenuSection($groupName, Request $request)
     {
-        $request = $this->requestStack->getCurrentRequest();
-
-        $strRefererId = $this->requestStack->getCurrentRequest()->attributes->get('_contao_referer_id');
+        $strRefererId = $request->attributes->get('_contao_referer_id');
 
         $label = $this->translator->trans('MOD.' . $groupName, [], 'contao_modules');
 
@@ -203,20 +232,21 @@ class RegisterBackendNavigation
     /**
      * Add a module to the modules list.
      *
-     * @param array  $modules The modules list.
-     * @param string $section The section to add to.
-     * @param string $name    The name of the module.
-     * @param array  $module  The module.
+     * @param array   $modules The modules list.
+     * @param string  $section The section to add to.
+     * @param string  $name    The name of the module.
+     * @param array   $module  The module.
+     * @param Request $request The current request.
      *
      * @return void
      */
-    private function addMenu(&$modules, $section, $name, $module)
+    private function addMenu(&$modules, $section, $name, $module, Request $request)
     {
         if (!isset($modules[$section])) {
-            $modules[$section] = $this->buildBackendMenuSection($section);
+            $modules[$section] = $this->buildBackendMenuSection($section, $request);
         }
 
-        $active = $this->isActive($module['route'], $module['param']);
+        $active = $this->isActive($module['route'], $module['param'], $request);
         $class  = 'navigation ' . $name;
         if (isset($module['class'])) {
             $class .= ' ' . $module['class'];
@@ -237,19 +267,20 @@ class RegisterBackendNavigation
     /**
      * Determine if is active.
      *
-     * @param string $route  The route name.
-     * @param array  $params The route parameters.
+     * @param string  $route   The route name.
+     * @param array   $params  The route parameters.
+     * @param Request $request The current request.
      *
      * @return bool
      */
-    private function isActive($route, $params)
+    private function isActive($route, $params, Request $request)
     {
-        if ('/contao' === $this->requestStack->getCurrentRequest()->getPathInfo()
-            || !($this->requestStack->getCurrentRequest()->attributes->get('_route') === $route)
+        if ('/contao' === $request->getPathInfo()
+            || !($request->attributes->get('_route') === $route)
         ) {
             return false;
         }
-        $request    = $this->requestStack->getCurrentRequest();
+
         $attributes = $request->attributes->get('_route_params');
         $query      = $request->query;
         foreach ($params as $param => $value) {
