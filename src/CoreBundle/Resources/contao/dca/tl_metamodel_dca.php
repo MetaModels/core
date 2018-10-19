@@ -376,7 +376,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = array
                 'fieldType'  => 'radio',
                 'files'      => true,
                 'filesOnly'  => true,
-                'extensions' => 'jpg,jpeg,gif,png,tif,tiff',
+                'extensions' => 'jpg,jpeg,gif,png,tif,tiff,svg',
                 'tl_class'   => 'clr'
             ),
             'sql'       => "blob NULL"
