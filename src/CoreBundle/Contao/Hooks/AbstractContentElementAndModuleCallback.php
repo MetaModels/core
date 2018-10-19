@@ -344,9 +344,44 @@ abstract class AbstractContentElementAndModuleCallback
         }
 
         $collection = $this->filterFactory->createCollection($filterId);
+        $dca = $collection->getParameterDCA();
+        foreach ($dca as $fieldName => $subField) {
+            $options = [];
+            foreach ($subField['options'] as $key => $value) {
+                $options[$this->loadCallback($value)] = $value;
+            }
+
+            $dca[$fieldName]['options']         = $options;
+            $dca[$fieldName]['save_callback'][] = [static::class, 'saveCallback'];
+            $dca[$fieldName]['load_callback'][] = [static::class, 'loadCallback'];
+        }
 
         $GLOBALS['TL_DCA'][static::$tableName]['fields']['metamodel_filterparams']['eval']['subfields'] =
-            $collection->getParameterDCA();
+            $dca;
+    }
+
+    /**
+     * Base64 decode.
+     *
+     * @param string $value
+     *
+     * @return string
+     */
+    public function saveCallback(string $value)
+    {
+        return \base64_decode($value);
+    }
+
+    /**
+     * Base64 encode.
+     *
+     * @param string $value The value.
+     *
+     * @return string
+     */
+    public function loadCallback(string $value)
+    {
+        return trim(\base64_encode($value), '=');
     }
 
     /**
