@@ -256,7 +256,7 @@ class SubDcaWidget extends Widget
         if (is_array($field['load_callback'])) {
             foreach ($field['load_callback'] as $callback) {
                 $this->import($callback[0]);
-                $value = $this->$callback[0]->{$callback[1]}($value, $this);
+                $value = $this->{$callback[0]}->{$callback[1]}($value, $this);
             }
         }
 
@@ -288,7 +288,7 @@ class SubDcaWidget extends Widget
                 $this->import($arrField['input_field_callback'][0]);
             }
 
-            return $this->$arrField['input_field_callback'][0]->$arrField['input_field_callback'][1]($this, $xlabel);
+            return $this->{$arrField['input_field_callback'][0]}->$arrField['input_field_callback'][1]($this, $xlabel);
         }
 
         $strClass = $this->getWidgetClass($arrField);
@@ -388,7 +388,7 @@ class SubDcaWidget extends Widget
                 $this->import($callback[0]);
 
                 try {
-                    $newValue = $this->$callback[0]->{$callback[1]}($newValue, $this);
+                    $newValue = $this->{$callback[0]}->{$callback[1]}($newValue, $this);
                 } catch (Exception $e) {
                     $widget->addError($e->getMessage());
                     $this->blnSubmitInput = false;
@@ -479,6 +479,7 @@ class SubDcaWidget extends Widget
                 }
             }
         }
+        unset($arrSubField);
 
         if ($blnHasError) {
             $this->blnSubmitInput = false;
