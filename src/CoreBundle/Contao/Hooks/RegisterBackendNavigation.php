@@ -21,13 +21,14 @@
 
 namespace MetaModels\CoreBundle\Contao\Hooks;
 
-use Contao\CoreBundle\Security\Authentication\ContaoToken;
+use Contao\BackendUser;
 use Contao\StringUtil;
 use MetaModels\ViewCombination\ViewCombination;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -107,8 +108,7 @@ class RegisterBackendNavigation
             return $modules;
         }
 
-        /** @var ContaoToken $user */
-        if (($user = $this->tokenStorage->getToken()) instanceof ContaoToken) {
+        if (null !== ($user = $this->tokenStorage->getToken())) {
             $userRights = $this->extractUserRights($user);
         }
         $isAdmin = \in_array('ROLE_ADMIN', array_map(function (Role $role) {
@@ -156,14 +156,16 @@ class RegisterBackendNavigation
     /**
      * Extract the permissions from the Contao backend user.
      *
-     * @param ContaoToken $token The token.
+     * @param TokenInterface $token The token.
      *
      * @return array
      */
-    private function extractUserRights(ContaoToken $token)
+    private function extractUserRights(TokenInterface $token)
     {
-        /** @var \Contao\BackendUser $beUser */
         $beUser = $token->getUser();
+        if (!($beUser instanceof BackendUser)) {
+            return [];
+        }
 
         $allowedModules = $beUser->modules;
         switch (true) {
