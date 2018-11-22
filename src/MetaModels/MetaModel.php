@@ -730,27 +730,37 @@ class MetaModel implements IMetaModel
             } elseif ('id' === $strSortBy) {
                 asort($arrFilteredIds);
             } elseif (in_array($strSortBy, array('pid', 'tstamp', 'sorting'))) {
-                // Check existing ids.
-                if (array_intersect($arrFilteredIds, $this->existingIds) == $arrFilteredIds) {
-                    return $arrFilteredIds;
+                // Build the right key for the cache.
+                $sortKey = \sprintf('%s-%s', $strSortBy, \strtolower($strSortOrder));
+                // Used the cached ID list, and make a list of wanted ID's with the sorting of the cache.
+                $cacheResult = array_intersect((array)$this->existingIds[$sortKey], $arrFilteredIds);
+                // Check if we have all ID's or if we have one missing, now we are using the order of the MM Filter.
+                if (array_intersect($arrFilteredIds, $cacheResult) == $arrFilteredIds) {
+                    return $cacheResult;
                 }
-                
+
+                // Merge the already known and the new one.
+                $fullIdList = array_merge((array)$this->existingIds[$sortKey], $arrFilteredIds);
+                $fullIdList = \array_keys(\array_flip($fullIdList));
+
                 // Sort by database values.
-                $arrFilteredIds = $this
+                $arrSortedFilteredIds = $this
                     ->getDatabase()
                     ->prepare(
                         sprintf(
                             'SELECT id FROM %s WHERE id IN(%s) ORDER BY %s %s',
                             $this->getTableName(),
-                            $this->buildDatabaseParameterList($arrFilteredIds),
+                            \implode(', ', \array_fill(0, count($fullIdList), '?')),
                             $strSortBy,
                             $strSortOrder
                         )
                     )
-                    ->execute($arrFilteredIds)
+                    ->execute($fullIdList)
                     ->fetchEach('id');
 
-                $this->existingIds = array_merge($this->existingIds, $arrFilteredIds);
+                // Add the new sorted Id's to the cache and use only the wanted.
+                $this->existingIds[$sortKey] = $arrSortedFilteredIds;
+                $arrFilteredIds              = array_intersect($arrSortedFilteredIds, $arrFilteredIds);
             } elseif ($strSortBy == 'random') {
                 shuffle($arrFilteredIds);
             }
