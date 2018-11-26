@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:42:52+02:00
+ * last-updated: 2018-11-26T23:36:53+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Дополнительные параметры';
@@ -48,7 +48,10 @@ $GLOBALS['TL_LANG']['tl_metamodel']['name']['0']                 = 'Назван
 $GLOBALS['TL_LANG']['tl_metamodel']['name']['1']                 = 'Название MetaModel.';
 $GLOBALS['TL_LANG']['tl_metamodel']['new']['0']                  = 'Новый MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel']['new']['1']                  = 'Создать новый MetaModel';
+$GLOBALS['TL_LANG']['tl_metamodel']['pasteafter']['0']           = 'Создать новый MetaModel';
+$GLOBALS['TL_LANG']['tl_metamodel']['pasteafter']['1']           = 'Создать новый после MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['pastenew']['0']             = 'Добавить новый сверху';
+$GLOBALS['TL_LANG']['tl_metamodel']['pastenew']['1']             = 'Добавить новый после MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['0']       = 'Определить настройки визуализации';
 $GLOBALS['TL_LANG']['tl_metamodel']['rendersettings']['1']       = 'Определить настройки визуализации MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['searchable_pages']['0']     = 'Определить настройки поиска';
