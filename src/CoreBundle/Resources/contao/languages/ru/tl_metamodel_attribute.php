@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:42:55+02:00
+ * last-updated: 2018-11-26T23:36:56+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['advanced_legend']              = 'Дополнительные параметры';
@@ -39,7 +39,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_value']                   = 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']['0']                     = 'Новый атрибут';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']['1']                     = 'Создать новый атрибут';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['pasteafter']['0']              = 'Создать новый атрибут';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['pasteafter']['1']              = 'Создать новый после атрибута ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['pastenew']['0']                = 'Добавить новый сверху';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['pastenew']['1']                = 'Добавить новый после атрибута ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['0']                    = 'Детали атрибута';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['1']                    = 'Показать детали атрибута ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['title_legend']                 = 'Тип, наименование и конфигурация базовых атрибутов';
