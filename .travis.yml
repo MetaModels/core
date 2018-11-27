@@ -29,6 +29,9 @@ before_script:
 
 script: ant -keep-going
 
+after_success:
+  - bash <(curl -s https://copilot.blackducksoftware.com/ci/travis/scripts/upload)
+
 # Hack to make things work again - we can not use a shallow repository.
 git:
   depth: 2147483647

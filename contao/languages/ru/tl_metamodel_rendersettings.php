@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2017-08-24T12:43:26+02:00
+ * last-updated: 2018-11-26T23:37:25+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['0']      = 'Дополнительные css-файлы';
@@ -42,6 +42,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['0']             = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['1']             = 'Страница, которая должна использоваться в качестве URL-адреса "Показать детали". Обратите внимание, что подробный URL получит параметр фильтра, который используется в настоящее время.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_allLanguages']     = 'Все языки';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter']['0']      = 'Настройки фильтра';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_filter']['1']      = 'Параметры фильтра, определяющие, как цель (просмотрщик/список на странице подробностей) будет фильтровать элементы.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['0']    = 'Язык';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['1']    = 'Язык перехода к странице.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page']['0']        = 'Перейти к странице';
@@ -53,6 +54,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']['1']                = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['pasteafter']['0']         = 'Создать новую настройку сверху';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['pasteafter']['1']         = 'Создать новый после настройки ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['pastenew']['0']           = 'Добавить новый сверху';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['pastenew']['1']           = 'Добавить новый после настройки ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['publish']                 = 'Опубликовать';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']['0']           = 'Определить настройки атрибутов';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings']['1']           = 'Определить настройки атрибутов ID %s';

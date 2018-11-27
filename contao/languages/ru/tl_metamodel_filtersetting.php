@@ -8,7 +8,7 @@
  *
  * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
  *
- * last-updated: 2018-03-09T21:04:19+01:00
+ * last-updated: 2018-11-26T23:37:16+01:00
  */
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Поиск на всех языках';
@@ -39,6 +39,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['enabled']['1']              =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fefilter_legend']           = 'Фильтр внешнего интерфейса';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['0']                  = 'Родительская коллекция';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['1']                  = 'Коллекция настроек фильтра, эта установка относится.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['items']['0']                = 'Элементы';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['items']['1']                = 'Введите ID элементов для фильтрации как список, разделенный запятыми.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['0']                = 'Метка';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['1']                = 'Показать метки вместо названия атрибута.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['0']                  = 'Новый';
@@ -49,13 +51,17 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['0']             =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused']['1']             = 'Показывать только параметры, которые назначены где-то в MetaModel.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteafter']['1']           = 'Создать новый после настройки ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteinto']['0']            = 'Создать новую настройку сверху';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteinto']['1']            = 'Создать новое в верхней части настройки ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pastenew']['0']             = 'Добавить новый сверху';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pastenew']['1']             = 'Добавить новый после настройки ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['0']         = 'Статический параметр';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['1']         = 'Проверьте, хотите ли вы установить значение этого параметра в списке родительских прав (модули, элементы контента и т. д.).';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['0']                 = 'Детали настроек фильтра';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['1']                 = 'Показать детали настроек фильтра ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions']['0']    = 'Игнорировать этот фильтр для остальных значений';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions']['1']    = 'Если активировать, фильтр возвратит все варианты "без себя" в правиле фильтра.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['0']     = 'Остановка после первого соответствия';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['1']     = 'Проверьте, не хотите ли вы, чтобы этот параметр фильтра прекратил выполнение своих дочерних правил после первого совпадения первого подмножества.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['0']             = 'Шаблон';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['1']             = 'Подшаблон для этого элемента фильтра. Стандарт: виджет формы.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['title_legend']              = 'Тип';
@@ -70,6 +76,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup']  =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionand'] = '\'И\' состояние';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionor']  = '\'ИЛИ\' состояние';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['customsql']    = 'Пользовательский SQL';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['idlist']       = 'Предопределенный набор элементов';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['simplelookup'] = 'Простой поиск';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['0']             = 'Параметр URL-адреса';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam']['1']             = 'Параметр URL, который должен быть сопоставлен с выбранным атрибутом. Также можно использовать специальный параметр <em>"auto_item"</em>, что особенно полезно для столбцов псевдонимов.';
 
