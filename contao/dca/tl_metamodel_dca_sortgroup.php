@@ -13,9 +13,6 @@
  * @package    MetaModels
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     Andreas Isaak <info@andreas-isaak.de>
- * @author     David Maack <david.maack@arcor.de>
- * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
