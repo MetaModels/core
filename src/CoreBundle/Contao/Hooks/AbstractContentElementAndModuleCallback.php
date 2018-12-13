@@ -344,7 +344,7 @@ abstract class AbstractContentElementAndModuleCallback
         }
 
         $collection = $this->filterFactory->createCollection($filterId);
-        $dca = $collection->getParameterDCA();
+        $dca        = $collection->getParameterDCA();
         foreach ($dca as $fieldName => $subField) {
             $options = [];
             foreach ($subField['options'] as $key => $value) {
@@ -363,7 +363,7 @@ abstract class AbstractContentElementAndModuleCallback
     /**
      * Base64 decode.
      *
-     * @param string $value
+     * @param string $value The value to save.
      *
      * @return string
      */
