@@ -25,6 +25,7 @@ use Contao\CoreBundle\Framework\Adapter;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use MetaModels\CoreBundle\Assets\IconBuilder;
 use MetaModels\IFactory;
+use MetaModels\IMetaModel;
 use MetaModels\ViewCombination\ViewCombination;
 
 /**
@@ -157,10 +158,7 @@ class LoadDataContainer
 
         static $map;
         if (!isset($map)) {
-            $parented = $this->combination->getParented();
-            foreach ($parented as $childName => $child) {
-                $map[$child['meta']['ptable']][$childName] = $child;
-            }
+            $map = $this->buildMap();
         }
 
         // No children for this table.
@@ -173,19 +171,7 @@ class LoadDataContainer
         $this->controller->loadLanguageFile('default');
         foreach ($map[$tableName] as $metaModelTable => $inputScreen) {
             $metaModel = $this->factory->getMetaModel($metaModelTable);
-
-            // FIXME: need a proper translator here. :/
-            $caption = [
-                sprintf($GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'], $metaModel->getName()),
-                ''
-            ];
-
-            foreach ($inputScreen['label'] as $langCode => $label) {
-                // FIXME: need the correct language here.
-                if ($label != '' && $langCode == $GLOBALS['TL_LANGUAGE']) {
-                    $caption = [$label, $inputScreen['description'][$langCode]];
-                }
-            }
+            $caption   = $this->buildCaption($metaModel, $inputScreen);
 
             $operationName                                   = 'edit_' . $metaModel->getTableName();
             $parentDCA['list']['operations'][$operationName] = array
@@ -222,6 +208,51 @@ class LoadDataContainer
                     };
             }
         }
+    }
+
+    /**
+     * Build the data container map.
+     *
+     * @return array
+     */
+    private function buildMap()
+    {
+        $map = [];
+        foreach ($this->combination->getParented() as $childName => $child) {
+            $map[$child['meta']['ptable']][$childName] = $child;
+        }
+
+        return $map;
+    }
+
+    /**
+     * Build the caption for a table.
+     *
+     * @param IMetaModel $metaModel   The MetaModel to build the caption for.
+     * @param array      $inputScreen The input screen information.
+     *
+     * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    private function buildCaption($metaModel, $inputScreen): array
+    {
+        $caption = [
+            sprintf($GLOBALS['TL_LANG']['MSC']['metamodel_edit_as_child']['label'], $metaModel->getName()),
+            ''
+        ];
+
+        foreach ($inputScreen['label'] as $langCode => $label) {
+            if ($label !== '' && $langCode === $GLOBALS['TL_LANGUAGE']) {
+                $caption = [
+                    $label,
+                    $inputScreen['description'][$langCode]
+                ];
+            }
+        }
+
+        return $caption;
     }
 
     /**
