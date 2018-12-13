@@ -38,6 +38,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Implementation of a general purpose MetaModel listing.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ItemList implements IServiceContainerAware
 {
