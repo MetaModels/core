@@ -47,7 +47,7 @@
     "cyberspectrum/contao-toolbox": "~0.7",
     "metamodels/base-unit-tests": "^1.0.4",
     "metamodels/phpunit-contao-database": "^1.0.1",
-    "phpcq/all-tasks": "~1.2"
+    "phpcq/all-tasks": "^1.2"
   },
   "autoload": {
     "psr-0": {
