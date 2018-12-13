@@ -14,7 +14,7 @@
 >
     <testsuites>
         <testsuite name="MetaModels core tests">
-            <directory>./tests/MetaModels/</directory>
+            <directory>./tests</directory>
         </testsuite>
     </testsuites>
     <filter>
