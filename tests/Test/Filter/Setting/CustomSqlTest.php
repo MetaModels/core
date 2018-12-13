@@ -10,8 +10,7 @@
  *
  * This project is provided in good faith and hope to be usable by anyone.
  *
- * @package    MetaModels
- * @subpackage Core
+ * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2018 The MetaModels team.
@@ -31,6 +30,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for testing the CustomSql filter setting.
+ *
+ * @covers \MetaModels\Filter\Setting\CustomSql
  */
 class CustomSqlTest extends TestCase
 {

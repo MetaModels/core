@@ -10,8 +10,7 @@
  *
  * This project is provided in good faith and hope to be usable by anyone.
  *
- * @package    MetaModels
- * @subpackage Core
+ * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Christopher Bölter <c.boelter@cogizz.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>

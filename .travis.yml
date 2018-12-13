@@ -8,36 +8,33 @@ php:
   - "nightly"
 
 env:
- - CONTAO_VERSION=~4.4.0
-
-sudo: false
+  - CONTAO_VERSION=~4.4.0
 
 before_script:
   - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - travis_retry composer self-update && composer --version
-  - travis_retry composer require contao/core-bundle $CONTAO_VERSION --no-update
-  # We have to supply the branch alias here again as travis checks out a commit hash and therefore destroys the
-  # circular dependency metamodels/base-unit-tests -> metamodels/core -> metamodels/base-unit-tests.
+  - travis_retry composer require contao/core $CONTAO_VERSION --no-update
   - >
     if [ "x${TRAVIS_TAG}" != "x" ]; then
-      COMPOSER_ROOT_VERSION=${TRAVIS_TAG} travis_retry composer update --prefer-dist --no-interaction;
+      export COMPOSER_ROOT_VERSION=${TRAVIS_TAG}
     else
-      COMPOSER_ROOT_VERSION=$([[ ${TRAVIS_BRANCH} =~ hotfix/([0-9.]*(-(alpha|beta|rc)[0-9]+)?) ]] \
+      export COMPOSER_ROOT_VERSION=$([[ ${TRAVIS_BRANCH} =~ hotfix/([0-9.]*(-(alpha|beta|rc)[0-9]+)?) ]] \
         && echo ${BASH_REMATCH[1]} \
-        || echo dev-${TRAVIS_BRANCH}) \
-        travis_retry composer update --prefer-dist --no-interaction;
+        || echo dev-${TRAVIS_BRANCH})
     fi
+  - echo "Using root version ${COMPOSER_ROOT_VERSION}"
+  - travis_retry composer update --prefer-dist --no-interaction
 
 script: ant -keep-going
-
-after_success:
-  - bash <(curl -s https://copilot.blackducksoftware.com/ci/travis/scripts/upload)
 
 # Hack to make things work again - we can not use a shallow repository.
 git:
   depth: 2147483647
 
-# This used to cause corruption due to travis bug travis-ci/travis-ci#4393 - hopefully it works out now.
+branches:
+  except:
+    - /.*-translation/
+
 cache:
   directories:
     - vendor

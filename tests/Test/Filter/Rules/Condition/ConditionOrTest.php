@@ -10,8 +10,7 @@
  *
  * This project is provided in good faith and hope to be usable by anyone.
  *
- * @package    MetaModels
- * @subpackage Core
+ * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2018 The MetaModels team.
@@ -27,6 +26,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test OR condition filter rules.
+ *
+ * @covers \MetaModels\Filter\Rules\Condition\ConditionOr
  */
 class ConditionOrTest extends TestCase
 {

@@ -1,38 +1,38 @@
 ignore:
-#  Mini Model <minimodel@metamodel.me>
+  - 'Mini Model <minimodel@metamodel.me>'
 
 exclude:
-  languages
+  - /^src\/CoreBundle\/Resources\/contao\/languages/
 
 mapping:
-  "Andreas Isaak <info@andreas-isaak.de>": "Andreas Isaak <andy.jared@googlemail.com>"
-  "Stefan Heimes <stefan_heimes@hotmail.com>":
-    - "Stefan heimes <stefan_heimes@hotmail.com>"
-    - "chibineko <stefan_heimes@hotmail.com>"
-    - "stefanheimes <stefan_heimes@hotmail.com>"
-    - "Stefan Heimes <cms@men-at-work.de>"
-  "David Maack <david.maack@arcor.de>":
-    - "David Maack <maack@men-at-work.de>"
-    - "davidmaack <david.maack@arcor.de>"
-  "Christopher Boelter <christopher@boelter.eu>":
-    - "cogizz <c.boelter@cogizz.de>"
-    - "cboelter <christopher@boelter.eu>"
-    - "Christopher Boelter <c.boelter@cogizz.de>"
-    - "Christopher Bölter <c.boelter@cogizz.de>"
-  "Martin Treml <github@r2pi.net>": "MrTool <github@r2pi.net>"
-  "Andreas Nölke <zero@brothers-project.de>": "Zeromax <zero@brothers-project.de>"
-  "Ondrej Brinkel <Sam256@web.de>": "Ondrej <Sam256@web.de>"
-  "Tim Becker <please.tim@metamodel.me>": "Tim Becker <tim@westwerk.ac>"
-  "Ingolf Steinhardt <info@e-spin.de>":
-    - "xantippe <info@e-spin.de>"
-    - "zonky2 <info@e-spin.de>"
-  "binron <rtb@gmx.ch>": "binron <rtb@gmx.ch>"
-  "Jeremie Constant <j.constant@imi.de>":
-    - "JeremieConstant <j.constant@imi.de>"
+  'Andreas Isaak <info@andreas-isaak.de>': 'Andreas Isaak <andy.jared@googlemail.com>'
+  'Stefan Heimes <stefan_heimes@hotmail.com>':
+    - 'Stefan heimes <stefan_heimes@hotmail.com>'
+    - 'chibineko <stefan_heimes@hotmail.com>'
+    - 'stefanheimes <stefan_heimes@hotmail.com>'
+    - 'Stefan Heimes <cms@men-at-work.de>'
+  'David Maack <david.maack@arcor.de>':
+    - 'David Maack <maack@men-at-work.de>'
+    - 'davidmaack <david.maack@arcor.de>'
+  'Christopher Boelter <christopher@boelter.eu>':
+    - 'cogizz <c.boelter@cogizz.de>'
+    - 'cboelter <christopher@boelter.eu>'
+    - 'Christopher Boelter <c.boelter@cogizz.de>'
+    - 'Christopher Bölter <c.boelter@cogizz.de>'
+  'Martin Treml <github@r2pi.net>': 'MrTool <github@r2pi.net>'
+  'Andreas Nölke <zero@brothers-project.de>': 'Zeromax <zero@brothers-project.de>'
+  'Ondrej Brinkel <Sam256@web.de>': 'Ondrej <Sam256@web.de>'
+  'Tim Becker <please.tim@metamodel.me>': 'Tim Becker <tim@westwerk.ac>'
+  'Ingolf Steinhardt <info@e-spin.de>':
+    - 'xantippe <info@e-spin.de>'
+    - 'zonky2 <info@e-spin.de>'
+  'binron <rtb@gmx.ch>': 'binron <rtb@gmx.ch>'
+  'Jeremie Constant <j.constant@imi.de>':
+    - 'JeremieConstant <j.constant@imi.de>'
 
 copy-left:
-  "Christoph Wiechert <christoph.wiechert@4wardmedia.de>": Widgets/PickerWidget.php
-  "Andreas Nölke <zero@brothers-project.de>": Widgets/PickerWidget.php
+  'Christoph Wiechert <christoph.wiechert@4wardmedia.de>': Widgets/PickerWidget.php
+  'Andreas Nölke <zero@brothers-project.de>': Widgets/PickerWidget.php
   "Christian Schiffler <c.schiffler@cyberspectrum.de>":
     - src/CoreBundle/EventListener/DcGeneral/Table/DcaSetting/RemoveOverrideButtonListener.php
     - src/CoreBundle/EventListener/DcGeneral/Table/FilterSetting/SubPaletteSubscriber.php
