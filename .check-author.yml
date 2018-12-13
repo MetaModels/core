@@ -36,7 +36,6 @@ copy-left:
   "Christian Schiffler <c.schiffler@cyberspectrum.de>":
     - src/CoreBundle/EventListener/DcGeneral/Table/DcaSetting/RemoveOverrideButtonListener.php
     - src/CoreBundle/EventListener/DcGeneral/Table/FilterSetting/SubPaletteSubscriber.php
-    - src/CoreBundle/EventListener/DcGeneral/Table/RenderSettings/LanguageCodeWizardListener.php
     - src/Helper/TableManipulator.php
   "Stefan Heimes <stefan_heimes@hotmail.com>":
     - src/CoreBundle/EventListener/DcGeneral/Table/RenderSettings/LanguageCodeWizardListener.php
@@ -44,7 +43,6 @@ copy-left:
     - src/CoreBundle/EventListener/DcGeneral/Table/MetaModel/DcaCombineButtonListener.php
   "Ingolf Steinhardt <info@e-spin.de>":
     - src/CoreBundle/EventListener/DcGeneral/Table/FilterSetting/SubPaletteSubscriber.php
-    - src/CoreBundle/EventListener/DcGeneral/Table/RenderSettings/LanguageCodeWizardListener.php
   "David Maack <david.maack@arcor.de>":
     - src/CoreBundle/EventListener/DcGeneral/Table/RenderSettings/LanguageCodeWizardListener.php
   "Andreas Isaak <info@andreas-isaak.de>":
