@@ -31,7 +31,7 @@
   },
   "require": {
     "php": "^5.6 || ^7.0",
-    "contao-community-alliance/composer-plugin": "~2.4",
+    "contao-community-alliance/composer-plugin": "^2.4",
     "contao-community-alliance/dc-general": "^2.0.0-beta42@beta",
     "contao-community-alliance/dependency-container": "^1.8",
     "contao-community-alliance/event-dispatcher": "~1.3",
