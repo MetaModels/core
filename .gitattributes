@@ -1,9 +1,10 @@
 .check-author.yml export-ignore
 .gitattributes export-ignore
-.github export-ignore
 .gitignore export-ignore
 .travis.yml export-ignore
 build.default.properties export-ignore
 build.xml export-ignore
 phpunit.xml.dist export-ignore
+/.github export-ignore
 /tests export-ignore
+ctb.json export-ignore
