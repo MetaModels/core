@@ -516,7 +516,7 @@ class Item implements IItem
      *
      * @param ICollection $objSettings The render settings to use.
      *
-     * @return string|null
+     * @return array
      */
     public function buildJumpToLink($objSettings)
     {
