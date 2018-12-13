@@ -495,15 +495,7 @@ class Item implements IItem
 
         // Add css classes, i.e. for the frontend editing list.
         if ($this->getMetaModel()->hasVariants()) {
-            if ($this->isVariant()) {
-                $arrResult['class'] = 'variant';
-            } elseif ($this->isVariantBase()) {
-                $arrResult['class'] = 'varbase';
-
-                if (0 !== $this->getVariants(null)->getCount()) {
-                    $arrResult['class'] .= ' varbase-with-variants';
-                }
-            }
+            $arrResult['class'] = $this->variantCssClass();
         }
 
         // Trigger event to allow other extensions to manipulate the parsed data.
@@ -623,5 +615,27 @@ class Item implements IItem
         }
 
         return $GLOBALS['TL_LANG']['MSC'][$langKey];
+    }
+
+    /**
+     * Create the CSS class for variant information.
+     *
+     * @return string
+     */
+    private function variantCssClass()
+    {
+        if ($this->isVariant()) {
+            return 'variant';
+        }
+        if ($this->isVariantBase()) {
+            $result = 'varbase';
+
+            if (0 !== $this->getVariants(null)->getCount()) {
+                $result .= ' varbase-with-variants';
+            }
+            return $result;
+        }
+
+        return '';
     }
 }
