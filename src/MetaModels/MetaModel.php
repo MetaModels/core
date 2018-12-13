@@ -45,7 +45,6 @@ use MetaModels\Filter\Rules\StaticIdList;
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * We disable these for the moment - to be changed in MetaModel 2.1.
  */
 class MetaModel implements IMetaModel
 {
