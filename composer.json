@@ -63,12 +63,6 @@
       "sources": {
         "contao": "system/modules/metamodels"
       },
-      "transifex": {
-        "project": "metamodels",
-        "prefix": "core-",
-        "languages_cto": "contao/languages",
-        "languages_tx": ".tx"
-      },
       "runonce": [
         "runonce/runonce.php"
       ]
