@@ -28,6 +28,8 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * Unit test for testing the CustomSql filter setting.
+ *
+ * @covers \MetaModels\Filter\Setting\CustomSql
  */
 class CustomSqlTest extends \MetaModels\Test\TestCase
 {

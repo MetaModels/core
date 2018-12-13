@@ -28,6 +28,8 @@ use MetaModels\Test\TestCase;
 
 /**
  * Test the filter builder.
+ *
+ * @covers \MetaModels\DcGeneral\Data\FilterBuilderSql
  */
 class FilterBuilderSqlTest extends TestCase
 {

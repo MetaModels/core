@@ -26,6 +26,8 @@ use MetaModels\Test\TestCase;
 
 /**
  * Test the base attribute.
+ *
+ * @covers \MetaModels\Attribute\Base
  */
 class BaseTest extends TestCase
 {

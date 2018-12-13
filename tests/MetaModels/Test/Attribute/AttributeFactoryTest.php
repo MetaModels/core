@@ -31,6 +31,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Test the attribute factory.
+ *
+ * @covers \MetaModels\Attribute\AttributeFactory
  */
 class AttributeFactoryTest extends TestCase
 {

@@ -29,6 +29,8 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * Test the attribute factory.
+ *
+ * @covers \MetaModels\Factory
  */
 class FactoryTest extends TestCase
 {

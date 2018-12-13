@@ -25,6 +25,8 @@ use MetaModels\Test\TestCase;
 
 /**
  * Test greater-than filter rules.
+ *
+ * @covers \MetaModels\Filter\Rules\Comparing\GreaterThan
  */
 class GreaterThanTest extends TestCase
 {

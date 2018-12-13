@@ -26,6 +26,8 @@ use MetaModels\Test\TestCase;
 
 /**
  * Test OR condition filter rules.
+ *
+ * @covers \MetaModels\Filter\Rules\Condition\ConditionOr
  */
 class ConditionOrTest extends TestCase
 {

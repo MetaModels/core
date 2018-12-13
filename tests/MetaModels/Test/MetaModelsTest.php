@@ -27,6 +27,8 @@ use MetaModels\Test\Contao\Database;
 
 /**
  * Test the base attribute.
+ *
+ * @covers \MetaModels\MetaModel
  */
 class MetaModelsTest extends TestCase
 {

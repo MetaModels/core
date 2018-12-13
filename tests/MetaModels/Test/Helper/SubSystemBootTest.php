@@ -28,6 +28,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Test the SubSystemBoot class.
+ *
+ * @covers \MetaModels\Helper\SubSystemBoot
  */
 class SubSystemBootTest extends TestCase
 {

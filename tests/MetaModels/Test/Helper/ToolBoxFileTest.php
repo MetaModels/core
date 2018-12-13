@@ -26,6 +26,8 @@ use MetaModels\Test\TestCase;
 
 /**
  * Test the attribute factory.
+ *
+ * @covers \MetaModels\Helper\ToolboxFile
  */
 class ToolBoxFileTest extends TestCase
 {

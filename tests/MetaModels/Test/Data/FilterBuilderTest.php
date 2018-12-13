@@ -30,6 +30,8 @@ use MetaModels\Test\TestCase;
 
 /**
  * Test the filter builder.
+ *
+ * @covers \MetaModels\DcGeneral\Data\FilterBuilder
  */
 class FilterBuilderTest extends TestCase
 {

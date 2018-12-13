@@ -24,6 +24,8 @@ use MetaModels\Filter\Setting\Simple;
 
 /**
  * Test simple filter settings.
+ *
+ * @covers \MetaModels\Filter\Setting\Simple
  */
 class SimpleTest extends \PHPUnit\Framework\TestCase
 {
