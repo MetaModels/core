@@ -21,6 +21,7 @@
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Breadcrumb;
 
+use Contao\StringUtil;
 use MetaModels\CoreBundle\Assets\IconBuilder;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -162,7 +163,7 @@ class BreadcrumbStore
             return ucfirst($shortTable) . ' %s';
         }
 
-        return specialchars($label);
+        return StringUtil::specialchars($label);
     }
 
     /**
