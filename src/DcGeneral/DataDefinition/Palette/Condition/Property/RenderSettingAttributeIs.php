@@ -23,50 +23,30 @@
 namespace MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property;
 
 use Contao\System;
-use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
-use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBag;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
 use Doctrine\DBAL\Connection;
 
 /**
  * Condition for the default palette.
+ *
+ * @deprecated Use AttributeByIdIsOfType instead.
  */
-class RenderSettingAttributeIs implements PropertyConditionInterface
+class RenderSettingAttributeIs extends AttributeByIdIsOfType
 {
-    /**
-     * The expected property value.
-     *
-     * @var mixed
-     */
-    protected $attributeType;
-
-    /**
-     * Database connection.
-     *
-     * @var Connection
-     */
-    private $connection;
-
-    /**
-     * Buffer the attribute types to ease lookup.
-     *
-     * @var array
-     */
-    protected static $attributeTypes = array();
-
     /**
      * Create a new instance.
      *
      * @param string          $attributeType The attribute type name.
-     *
      * @param Connection|null $connection    Database connection.
      */
     public function __construct($attributeType, Connection $connection = null)
     {
-        $this->attributeType = $attributeType;
-
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            '"' . __CLASS__ . '" is deprecated and will get removed in MetaModels 3.0. ' .
+            'Use "' . AttributeByIdIsOfType::class . '" instead',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
         if (null === $connection) {
             // @codingStandardsIgnoreStart
             @trigger_error(
@@ -77,80 +57,7 @@ class RenderSettingAttributeIs implements PropertyConditionInterface
             $connection = System::getContainer()->get('database_connection');
         }
 
-        $this->connection = $connection;
-    }
-
-    /**
-     * Set the attribute type name.
-     *
-     * @param string $attributeType The attribute type name.
-     *
-     * @return RenderSettingAttributeIs
-     */
-    public function setAttributeType($attributeType)
-    {
-        $this->attributeType = $attributeType;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the attribute type name.
-     *
-     * @return mixed
-     */
-    public function getAttributeType()
-    {
-        return $this->attributeType;
-    }
-
-    /**
-     * Retrieve the type name from an attribute.
-     *
-     * @param int $value The id of an attribute.
-     *
-     * @return string
-     *
-     * @throws \Doctrine\DBAL\DBALException When an database error occurs.
-     */
-    public function getTypeOfAttribute($value)
-    {
-        if (!isset(self::$attributeTypes[$value])) {
-            $statement = $this->connection->prepare('SELECT type FROM tl_metamodel_attribute WHERE id=? LIMIT 0,1');
-            $statement->bindValue(1, $value);
-            $statement->execute();
-
-            self::$attributeTypes[$value] = $statement->fetch(\PDO::FETCH_OBJ)->type;
-        }
-
-        return self::$attributeTypes[$value];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function match(
-        ModelInterface $model = null,
-        PropertyValueBag $input = null,
-        PropertyInterface $property = null,
-        LegendInterface $legend = null
-    ) {
-        if ($input && $input->hasPropertyValue('attr_id')) {
-            $value = $input->getPropertyValue('attr_id');
-        } elseif ($model) {
-            $value = $model->getProperty('attr_id');
-        } else {
-            return false;
-        }
-
-        return $this->getTypeOfAttribute($value) == $this->getAttributeType();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __clone()
-    {
+        parent::__construct($attributeType, $connection, 'attr_id');
     }
 
     /**
