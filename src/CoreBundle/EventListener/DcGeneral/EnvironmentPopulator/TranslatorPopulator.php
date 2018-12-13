@@ -133,10 +133,12 @@ class TranslatorPopulator
      * @param string           $containerName The container name.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function addInputScreenTranslations(StaticTranslator $translator, $inputScreen, $containerName)
     {
-        // FIXME: need current locale here!
         $currentLocale = $GLOBALS['TL_LANGUAGE'];
 
         foreach ($inputScreen['legends'] as $legendName => $legendInfo) {
