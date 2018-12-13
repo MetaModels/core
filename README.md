@@ -2,7 +2,6 @@
 [![Latest Version tagged](http://img.shields.io/github/tag/MetaModels/core.svg)](https://github.com/MetaModels/core/tags)
 [![Latest Version on Packagist](http://img.shields.io/packagist/v/MetaModels/core.svg)](https://packagist.org/packages/MetaModels/core)
 [![Installations via composer per month](http://img.shields.io/packagist/dm/MetaModels/core.svg)](https://packagist.org/packages/MetaModels/core)
-[![Dependency Status](https://www.versioneye.com/php/metamodels:core/badge.svg)](https://www.versioneye.com/php/metamodels:core)
 
 MetaModels
 ==========
