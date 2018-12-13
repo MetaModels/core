@@ -95,10 +95,13 @@ class TranslatorPopulator
             $definitionName,
             $translator
         );
+        if (null === $inputScreen = $this->viewCombination->getScreen($definitionName)) {
+            return;
+        }
 
         $this->addInputScreenTranslations(
             $translator,
-            $this->viewCombination->getScreen($definitionName),
+            $inputScreen,
             $definitionName
         );
     }

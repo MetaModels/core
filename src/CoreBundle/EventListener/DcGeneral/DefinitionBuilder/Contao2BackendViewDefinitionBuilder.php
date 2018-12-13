@@ -199,6 +199,9 @@ class Contao2BackendViewDefinitionBuilder
      */
     private function parseListSorting(ListingConfigInterface $listing)
     {
+        if (null === $this->inputScreen) {
+            return;
+        }
         $definitions = $listing->getGroupAndSortingDefinition();
         foreach ($this->inputScreen['groupSort'] as $information) {
             $definition = $definitions->add();

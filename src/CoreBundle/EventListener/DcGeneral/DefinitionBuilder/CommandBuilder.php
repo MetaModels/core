@@ -143,6 +143,9 @@ class CommandBuilder
 
         $this->container   = $container;
         $this->inputScreen = $inputScreen = $this->viewCombination->getScreen($container->getName());
+        if (null === $inputScreen) {
+            return;
+        }
         $this->addEditMultipleCommand($view);
         $this->parseModelOperations($view);
         $this->container   = null;

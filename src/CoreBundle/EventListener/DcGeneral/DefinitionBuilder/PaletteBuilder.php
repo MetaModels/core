@@ -92,7 +92,9 @@ class PaletteBuilder
      */
     protected function build(IMetaModelDataDefinition $container)
     {
-        $inputScreen        = $this->viewCombination->getScreen($container->getName());
+        if (null === ($inputScreen = $this->viewCombination->getScreen($container->getName()))) {
+            return;
+        }
         $metaModel          = $this->factory->getMetaModel($container->getName());
         $variantHandling    = $metaModel->hasVariants();
         $palettesDefinition = $this->getOrCreatePaletteDefinition($container);
