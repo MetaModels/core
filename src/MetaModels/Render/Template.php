@@ -10,8 +10,7 @@
  *
  * This project is provided in good faith and hope to be usable by anyone.
  *
- * @package    MetaModels
- * @subpackage Core
+ * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
@@ -34,7 +33,7 @@ use MetaModels\Helper\ContaoController;
  * found" flag, which defaults to false and therefore one can parse the template and have zero output instead of
  * cluttering the frontend with exceptions.
  *
- * @@SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class Template
 {

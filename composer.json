@@ -31,8 +31,8 @@
   },
   "require": {
     "php": "^5.6 || ^7.0",
-    "contao-community-alliance/composer-plugin": "~2.4",
-    "contao-community-alliance/dc-general": "^2.0.0-beta42@beta",
+    "contao-community-alliance/composer-plugin": "^2.4",
+    "contao-community-alliance/dc-general": "^2.0.0-beta49@beta",
     "contao-community-alliance/dependency-container": "^1.8",
     "contao-community-alliance/event-dispatcher": "~1.3",
     "contao-community-alliance/events-contao-bindings": "^3.5",
@@ -44,10 +44,9 @@
     "menatwork/contao-multicolumnwizard": "^3.3.16"
   },
   "require-dev": {
-    "cyberspectrum/contao-toolbox": "~0.7",
     "metamodels/base-unit-tests": "^1.0.4",
     "metamodels/phpunit-contao-database": "^1.0.1",
-    "phpcq/all-tasks": "~1.2"
+    "phpcq/all-tasks": "^1.2"
   },
   "autoload": {
     "psr-0": {
@@ -64,12 +63,6 @@
       "sources": {
         "contao": "system/modules/metamodels"
       },
-      "transifex": {
-        "project": "metamodels",
-        "prefix": "core-",
-        "languages_cto": "contao/languages",
-        "languages_tx": ".tx"
-      },
       "runonce": [
         "runonce/runonce.php"
       ]
@@ -78,5 +71,8 @@
       "dev-master": "2.0.x-dev",
       "dev-develop": "2.1.x-dev"
     }
+  },
+  "config": {
+    "sort-packages": true
   }
 }

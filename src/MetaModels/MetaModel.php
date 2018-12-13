@@ -10,8 +10,7 @@
  *
  * This project is provided in good faith and hope to be usable by anyone.
  *
- * @package    MetaModels
- * @subpackage Core
+ * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Christopher Boelter <c.boelter@cogizz.de>
  * @author     David Greminger <david.greminger@1up.io>
@@ -43,12 +42,9 @@ use MetaModels\Filter\Rules\StaticIdList;
  * @see MetaModelFactory::byId()        to instantiate a MetaModel by its ID.
  * @see MetaModelFactory::byTableName() to instantiate a MetaModel by its table name.
  *
- * This class handles all attribute definition instantiation and can be queried for a view instance to certain entries.
- *
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * We disable these for the moment - to be changed in MetaModel 2.1.
  */
 class MetaModel implements IMetaModel
 {
