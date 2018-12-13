@@ -29,9 +29,7 @@ use Symfony\Component\EventDispatcher\Event;
  * It holds the MetaModels service container to use.
  *
  * @see MetaModelsEvents::SUBSYSTEM_BOOT
- *
  * @see MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND
- *
  * @see MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND
  */
 class MetaModelsBootEvent extends Event
