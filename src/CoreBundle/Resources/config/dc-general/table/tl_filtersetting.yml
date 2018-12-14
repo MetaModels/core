@@ -68,5 +68,6 @@ services:
             - "@metamodels.filter_setting_factory"
         tags:
             - name: kernel.event_listener
-              event: dc-general.view.contao2backend.get-property-options
+              event: dc-general.factory.build-data-definition
               method: prepareSubPalettes
+              priority: -100
