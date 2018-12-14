@@ -166,9 +166,6 @@ class ModelToLabelListener extends AbstractListener
      * @param ModelToLabelEvent $event The event.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function drawLegend(ModelToLabelEvent $event)
     {
@@ -176,11 +173,9 @@ class ModelToLabelListener extends AbstractListener
         $metaModel = $this->getMetaModelFromModel($model);
         if (is_array($legend = StringUtil::deserialize($model->getProperty('legendtitle')))) {
             foreach ([$metaModel->getActiveLanguage(), $metaModel->getFallbackLanguage()] as $language) {
-                if (array_key_exists($language, $legend)) {
-                    if (!empty($legend[$language])) {
-                        $legend = $legend[$language];
-                        break;
-                    }
+                if (array_key_exists($language, $legend) && !empty($legend[$language])) {
+                    $legend = $legend[$language];
+                    break;
                 }
             }
         }
