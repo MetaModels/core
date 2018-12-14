@@ -23,7 +23,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel;
 
 use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
-use MultiColumnWizard\Event\GetOptionsEvent;
+use MenAtWork\MultiColumnWizardBundle\Event\GetOptionsEvent;
 
 /**
  * This provides the language name options.

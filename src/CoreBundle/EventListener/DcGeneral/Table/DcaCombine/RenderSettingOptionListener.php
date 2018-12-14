@@ -22,7 +22,7 @@
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaCombine;
 
 use Doctrine\DBAL\Connection;
-use MultiColumnWizard\Event\GetOptionsEvent;
+use MenAtWork\MultiColumnWizardBundle\Event\GetOptionsEvent;
 
 /**
  * This class handles obtaining the render setting options.

@@ -23,7 +23,7 @@
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\RenderSettings;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
-use MultiColumnWizard\Event\GetOptionsEvent;
+use MenAtWork\MultiColumnWizardBundle\Event\GetOptionsEvent;
 use Symfony\Component\Finder\Finder;
 use Webmozart\PathUtil\Path;
 
