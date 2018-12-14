@@ -51,6 +51,7 @@ class PickerWidget
     public function __construct()
     {
         BackendUser::getInstance()->authenticate();
+        Controller::setStaticUrls();
         Controller::loadLanguageFile('default');
         Controller::loadLanguageFile('modules');
     }
