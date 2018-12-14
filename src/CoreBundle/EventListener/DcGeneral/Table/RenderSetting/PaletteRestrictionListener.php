@@ -23,23 +23,18 @@
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\RenderSetting;
 
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionChainInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Palette\PaletteConditionChain;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Legend;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PaletteInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
 use Doctrine\DBAL\Connection;
+use MetaModels\CoreBundle\EventListener\DcGeneral\Table\AbstractPaletteRestrictionListener;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Palette\RenderSettingAttributeIs as PaletteCondition;
-use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\RenderSettingAttributeIs as PropertyCondition;
+use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\AttributeByIdIsOfType;
 
 /**
  * This builds the palette conditions as specified by the configuration.
  */
-class PaletteRestrictionListener
+class PaletteRestrictionListener extends AbstractPaletteRestrictionListener
 {
     /**
      * Database connection.
@@ -109,7 +104,7 @@ class PaletteRestrictionListener
     private function buildMetaPaletteConditions($palette, $metaPalettes)
     {
         foreach ($metaPalettes as $typeName => $paletteInfo) {
-            if ($typeName == 'default') {
+            if ('default' === $typeName) {
                 continue;
             }
 
@@ -119,86 +114,12 @@ class PaletteRestrictionListener
 
             foreach ($paletteInfo as $legendName => $properties) {
                 foreach ($properties as $propertyName) {
-                    $condition = new PropertyCondition($typeName, $this->connection);
+                    $condition = new AttributeByIdIsOfType($typeName, $this->connection, 'attr_id');
                     $legend    = $this->getLegend($legendName, $palette);
                     $property  = $this->getProperty($propertyName, $legend);
                     $this->addCondition($property, $condition);
                 }
             }
-        }
-    }
-
-    /**
-     * Retrieve the legend with the given name.
-     *
-     * @param string           $name       Name of the legend.
-     *
-     * @param PaletteInterface $palette    The palette.
-     *
-     * @param LegendInterface  $prevLegend The previous legend.
-     *
-     * @return LegendInterface
-     */
-    private function getLegend($name, $palette, $prevLegend = null)
-    {
-        if ($name[0] == '+') {
-            $name = substr($name, 1);
-        }
-
-        if (!$palette->hasLegend($name)) {
-            $palette->addLegend(new Legend($name), $prevLegend);
-        }
-
-        return $palette->getLegend($name);
-    }
-
-    /**
-     * Retrieve a property from a legend or create a new one.
-     *
-     * @param string          $name   The legend name.
-     *
-     * @param LegendInterface $legend The legend instance.
-     *
-     * @return PropertyInterface
-     */
-    private function getProperty($name, $legend)
-    {
-        foreach ($legend->getProperties() as $property) {
-            if ($property->getName() == $name) {
-                return $property;
-            }
-        }
-
-        $property = new Property($name);
-        $legend->addProperty($property);
-
-        return $property;
-    }
-
-    /**
-     * Add a condition to a property.
-     *
-     * @param PropertyInterface  $property  The property.
-     *
-     * @param ConditionInterface $condition The condition to add.
-     *
-     * @return void
-     */
-    private function addCondition($property, $condition)
-    {
-        $currentCondition = $property->getVisibleCondition();
-        if ((!($currentCondition instanceof ConditionChainInterface))
-            || ($currentCondition->getConjunction() != ConditionChainInterface::OR_CONJUNCTION)
-        ) {
-            if ($currentCondition === null) {
-                $currentCondition = new PropertyConditionChain(array($condition));
-            } else {
-                $currentCondition = new PropertyConditionChain(array($currentCondition, $condition));
-            }
-            $currentCondition->setConjunction(ConditionChainInterface::OR_CONJUNCTION);
-            $property->setVisibleCondition($currentCondition);
-        } else {
-            $currentCondition->addCondition($condition);
         }
     }
 }
