@@ -267,6 +267,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
             (
                 'urlparam',
                 'predef_param',
+                'fe_widget',
                 'allow_empty',
                 'label',
                 'template',
@@ -424,7 +425,19 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = array
             'eval'      => array
             (
                 'alwaysSave' => true,
-                'tl_class'   => 'clr w50 m12',
+                'tl_class'   => 'w50 m12',
+            ),
+            'sql'       => "char(1) NOT NULL default ''"
+        ),
+        'fe_widget'      => array
+        (
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fe_widget'],
+            'exclude'   => true,
+            'inputType' => 'checkbox',
+            'eval'      => array
+            (
+                'alwaysSave' => true,
+                'tl_class'   => 'w50 m12',
             ),
             'sql'       => "char(1) NOT NULL default ''"
         ),
