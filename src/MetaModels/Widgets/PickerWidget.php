@@ -18,6 +18,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -51,6 +52,7 @@ class PickerWidget
     public function __construct()
     {
         BackendUser::getInstance()->authenticate();
+        Controller::setStaticUrls();
         Controller::loadLanguageFile('default');
         Controller::loadLanguageFile('modules');
     }
