@@ -125,7 +125,6 @@ class PropertyDefinitionBuilder
                 $attribute->getFieldDefinition($properties[$attribute->get('id')])
             );
 
-            // FIXME: this event should get transformed to injecting a list of tagged property definition builders here.
             $event = new BuildAttributeEvent($metaModel, $attribute, $container);
             $this->dispatcher->dispatch($event::NAME, $event);
         }
