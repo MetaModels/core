@@ -102,16 +102,13 @@ class BaseSimple extends Base implements ISimple
                     ORDER BY FIELD(id,' . $this->parameterMask($idList). ')'
                 )
                 ->execute(array_merge($idList, $idList));
-        } elseif ($usedOnly) {
+        } else {
             $objRow = $this->getMetaModel()->getServiceContainer()->getDatabase()->execute(
                 'SELECT ' . $strCol . ', COUNT(' . $strCol . ') as mm_count
                 FROM ' . $this->getMetaModel()->getTableName() . '
                 GROUP BY ' . $strCol . '
                 ORDER BY ' . $strCol
             );
-        } else {
-            // We can not do anything here, must be handled by the derived attribute class.
-            return array();
         }
 
         $arrResult = array();
