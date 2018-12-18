@@ -39,7 +39,7 @@
     "contao-community-alliance/translator": "~2.1",
     "contao-community-alliance/url-builder": "~1.3",
     "contao/core-bundle": "^4.4.8",
-    "discordier/justtextwidgets": "^1.1.0",
+    "discordier/justtextwidgets": "^1.2.0@alpha",
     "doctrine/cache": "~1.6",
     "menatwork/contao-multicolumnwizard-bundle": "^3.4.0@beta",
     "ocramius/proxy-manager": "^1.0 || ^2.1",
