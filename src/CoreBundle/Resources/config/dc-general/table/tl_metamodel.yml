@@ -13,7 +13,7 @@ services:
             - "@cca.dc-general.scope-matcher"
         tags:
             - name: kernel.event_listener
-              event: men-at-work.multi-column-wizard.get-options
+              event: men-at-work.multi-column-wizard-bundle.get-options
               method: handle
     metamodels.listener.table.tl_metamodel.language_array_mangler:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel\LanguageArrayListener

@@ -20,7 +20,7 @@ services:
             - "@database_connection"
         tags:
             - name: kernel.event_listener
-              event: men-at-work.multi-column-wizard.get-options
+              event: men-at-work.multi-column-wizard-bundle.get-options
               method: handle
 
     metamodels.dc_general.table.tl_metamodel_dca_combine.input_screen_options:
@@ -29,7 +29,7 @@ services:
             - "@database_connection"
         tags:
             - name: kernel.event_listener
-              event: men-at-work.multi-column-wizard.get-options
+              event: men-at-work.multi-column-wizard-bundle.get-options
               method: handle
 
     metamodels.dc_general.table.tl_metamodel_dca_combine.render_setting_options:
@@ -38,5 +38,5 @@ services:
             - "@database_connection"
         tags:
             - name: kernel.event_listener
-              event: men-at-work.multi-column-wizard.get-options
+              event: men-at-work.multi-column-wizard-bundle.get-options
               method: handle

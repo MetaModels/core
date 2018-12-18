@@ -6,10 +6,10 @@ services:
             - "%kernel.project_dir%/%contao.upload_path%"
         tags:
             - name: kernel.event_listener
-              event: men-at-work.multi-column-wizard.get-options
+              event: men-at-work.multi-column-wizard-bundle.get-options
               method: getStylesheets
             - name: kernel.event_listener
-              event: men-at-work.multi-column-wizard.get-options
+              event: men-at-work.multi-column-wizard-bundle.get-options
               method: getJavascripts
     metamodels.dc_general.table.tl_metamodel_rendersettings.jump_to:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\RenderSettings\JumpToListener
