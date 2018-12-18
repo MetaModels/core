@@ -41,7 +41,7 @@
     "contao/core-bundle": "^4.4.8",
     "discordier/justtextwidgets": "^1.1.0",
     "doctrine/cache": "~1.6",
-    "menatwork/contao-multicolumnwizard": "^3.3.16",
+    "menatwork/contao-multicolumnwizard-bundle": "^3.4.0@beta",
     "ocramius/proxy-manager": "^1.0 || ^2.1",
     "symfony/config": "^3.3 || ^4.0",
     "symfony/dependency-injection": "^3.3 || ^4.0",
