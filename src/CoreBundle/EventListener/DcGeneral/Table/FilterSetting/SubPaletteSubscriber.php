@@ -13,6 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -20,15 +21,15 @@
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting;
 
-use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
-use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\PropertiesDefinitionInterface;
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\BooleanCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Legend;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PaletteInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
+use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
+use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\FilterSettingTypeSubPaletteCondition;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
-use MetaModels\IMetaModel;
 
 /**
  * This takes care of injecting the sub palettes.
@@ -55,88 +56,157 @@ class SubPaletteSubscriber
     /**
      * Prepares the sub palettes e. g. add option for translated attributes for different filter types.
      *
-     * @param GetPropertyOptionsEvent $event The event.
+     * @param BuildDataDefinitionEvent $event The event.
      *
      * @return void
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function prepareSubPalettes(GetPropertyOptionsEvent $event)
+    public function prepareSubPalettes(BuildDataDefinitionEvent $event)
     {
-        if (($event->getEnvironment()->getDataDefinition()->getName() !== 'tl_metamodel_filtersetting')
-            || ($event->getPropertyName() !== 'attr_id')) {
+        $container = $event->getContainer();
+        if ($container->getName() !== 'tl_metamodel_filtersetting') {
             return;
         }
- 
-        $model      = $event->getModel();
-        $metaModel  = $this->getMetaModel($model);
-        $filterType = $model->getProperty('type');
-        $palettes   = $event->getEnvironment()->getDataDefinition()->getPalettesDefinition();
-        $properties = $event->getEnvironment()->getDataDefinition()->getPropertiesDefinition();
- 
-        if (!$palettes->hasPaletteByName($filterType)) {
-            return;
-        }
- 
-        if (!isset($GLOBALS['TL_DCA']['tl_metamodel_filtersetting'][$filterType . '_palettes'])) {
-            return;
-        }
-        $typeLegends = $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'][$filterType . '_palettes'];
-        foreach ($metaModel->getAttributes() as $attribute) {
-            $typeName = $attribute->get('type');
-            if (empty($typeLegends[$typeName])) {
+
+        foreach ($this->filterFactory->getTypeNames() as $filterType) {
+            $paletteName = $filterType . '_palettes';
+
+            if (!isset($GLOBALS['TL_DCA']['tl_metamodel_filtersetting'][$paletteName])) {
                 continue;
             }
-            $this->prepareIncludeLegend($typeLegends[$typeName], $properties, $palettes->getPaletteByName($filterType));
+
+            $palettes    = $container->getPalettesDefinition();
+            $typeLegends = $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'][$paletteName];
+
+            foreach ($palettes->getPalettes() as $palette) {
+                $this->createConditionsForPalette($palette, $typeLegends);
+            }
         }
     }
 
     /**
-     * Prepare the conditions for the passed include legend.
+     * Create all conditions for the given palette.
      *
-     * @param array                         $includeLegend The legend properties.
-     * @param PropertiesDefinitionInterface $properties    The property definitions.
-     * @param PaletteInterface              $palette       The palette to manipulate.
+     * @param PaletteInterface $palette     The palette.
+     * @param array            $typeLegends The type legends.
      *
      * @return void
      */
-    private function prepareIncludeLegend(
-        array $includeLegend,
-        PropertiesDefinitionInterface $properties,
-        PaletteInterface $palette
-    ) {
-        foreach ($includeLegend as $includeLegendName => $includeProperties) {
-            foreach ($includeProperties as $includeProperty) {
-                if ((false === $properties->hasProperty($includeProperty))
-                    || (false === $palette->hasLegend($includeLegendName))
-                ) {
-                    continue;
-                }
+    private function createConditionsForPalette(PaletteInterface $palette, array $typeLegends)
+    {
+        $conditions = [];
 
-                $legend = $palette->getLegend($includeLegendName);
-                if (true === $legend->hasProperty($includeProperty)) {
-                    continue;
-                }
+        foreach ($typeLegends as $value => $legends) {
+            // We use an immutable implementation. Using the same condition is save here.
+            $valueCondition = new FilterSettingTypeSubPaletteCondition($this->filterFactory, $value);
 
-                $legend->addProperty($paletteProperty                   = new Property($includeProperty));
-                $paletteProperty->setVisibleCondition($visibleCondition = new PropertyConditionChain());
-                $visibleCondition->addCondition(new BooleanCondition(true));
+            foreach ($legends as $legendName => $legendProperties) {
+                $legend = $this->getLegend($palette, $legendName);
+
+                foreach ($legendProperties as $propertyName) {
+                    $this
+                        ->getConditionChain($legend, $propertyName, $conditions)
+                        ->addCondition($valueCondition);
+                }
             }
         }
     }
 
     /**
-     * Retrieve the MetaModel attached to the model filter setting.
+     * Get a legend. Create it if not exists.
      *
-     * @param ModelInterface $model The model for which to retrieve the MetaModel.
+     * @param PaletteInterface $palette    The palette.
+     * @param string           $legendName The name of the legend.
      *
-     * @return IMetaModel
+     * @return LegendInterface
      */
-    private function getMetaModel(ModelInterface $model)
+    private function getLegend(PaletteInterface $palette, $legendName)
     {
-        $filterSetting = $this->filterFactory->createCollection($model->getProperty('fid'));
+        if ($palette->hasLegend($legendName)) {
+            return $palette->getLegend($legendName);
+        }
 
-        return $filterSetting->getMetaModel();
+        $legend = new Legend($legendName);
+        $palette->addLegend($legend);
+
+        return $legend;
+    }
+
+    /**
+     * Get the property chain condition for the property.
+     *
+     * @param LegendInterface $legend       The legend.
+     * @param string          $propertyName The legend property name.
+     * @param array           $conditions   Conditions assigned to the properties in this palette.
+     *
+     * @return PropertyConditionChain
+     */
+    private function getConditionChain(LegendInterface $legend, $propertyName, array &$conditions)
+    {
+        // Cache condition chain for each legend property.
+        if (isset($conditions[$legend->getName()][$propertyName])) {
+            return $conditions[$legend->getName()][$propertyName];
+        }
+
+        $property = $this->getLegendProperty($legend, $propertyName);
+
+        // There is no condition assigned to the property. Create an condition chain with an and conjunction
+        // and add the condition condition chain for the sub palette with an or condition to it.
+        $condition = $this->getVisibleCondition($property);
+
+        $orCondition = new PropertyConditionChain();
+        $orCondition->setConjunction(PropertyConditionChain::OR_CONJUNCTION);
+
+        $conditions[$legend->getName()][$propertyName] = $orCondition;
+
+        $condition->addCondition($orCondition);
+
+        return $orCondition;
+    }
+
+    /**
+     * Get a property from a legend. Create if not exists.
+     *
+     * @param LegendInterface $legend       The legend.
+     * @param string          $propertyName The property name.
+     *
+     * @return PropertyInterface
+     */
+    private function getLegendProperty(LegendInterface $legend, $propertyName)
+    {
+        if ($legend->hasProperty($propertyName)) {
+            $property = $legend->getProperty($propertyName);
+        } else {
+            $property = new Property($propertyName);
+            $legend->addProperty($property);
+        }
+
+        return $property;
+    }
+
+    /**
+     * Get the visible condition for a property. Create it if not exists.
+     *
+     * @param PropertyInterface $property Palette property.
+     *
+     * @return PropertyConditionChain
+     */
+    private function getVisibleCondition($property)
+    {
+        $condition = $property->getVisibleCondition();
+        if ($condition instanceof PropertyConditionChain) {
+            return $condition;
+        }
+
+        $conditionChain = new PropertyConditionChain();
+        $property->setVisibleCondition($conditionChain);
+
+        if ($condition) {
+            $conditionChain->addCondition($condition);
+        }
+
+        return $conditionChain;
     }
 }
