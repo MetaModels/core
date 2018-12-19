@@ -219,44 +219,213 @@ class MetaModelsTest extends TestCase
     }
 
     /**
-     * Ensure the buildDatabaseParameterList works correctly.
+     * Ensure the getIdsFromFilter works correctly.
      *
      * @return void
      */
-    public function testGetIdsFromFilter()
+    public function testGetIdsFromFilterSortedById()
     {
-        $this->markTestIncomplete('We need to rewrite MetaModel to utilize doctrine first');
-
         $metaModel = $this
-            ->getMockBuilder('MetaModels\MetaModel')
-            ->setMethods(array('getMatchingIds'))
-            ->setConstructorArgs(array(array('tableName'  => 'mm_test_retrieve')))
+            ->getMockBuilder(MetaModel::class)
+            ->setMethods(['getMatchingIds'])
+            ->setConstructorArgs([
+                ['tableName' => 'mm_test_retrieve'],
+                $this->getMockForAbstractClass(EventDispatcherInterface::class),
+                $this->mockConnection([])
+            ])
             ->getMock();
         $metaModel
-            ->expects($this->any())
+            ->expects($this->exactly(6))
             ->method('getMatchingIds')
-            ->will($this->returnValue(array(4, 3, 2, 1)));
+            ->willReturn([4, 3, 2, 1]);
 
         /** @var MetaModel $metaModel */
-        $database = Database::getNewTestInstance();
-        $metaModel->setServiceContainer($this->mockServiceContainer($database));
+        $this->assertSame([1, 2, 3, 4], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id'));
+        $this->assertSame([1, 2], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 0, 2));
+        $this->assertSame([3, 4], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 2, 2));
+        $this->assertSame([3], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 2, 1));
+        $this->assertSame([], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 20, 0));
+        $this->assertSame([2, 3, 4], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 1, 10));
+    }
 
-        $database
-            ->getQueryCollection()
-            ->theQuery('SELECT id FROM mm_test_retrieve WHERE id IN(?,?,?,?) ORDER BY id ASC')
-            ->with(4, 3, 2, 1)
-            ->result()
-            ->addRow(array('id' => 1))
-            ->addRow(array('id' => 2))
-            ->addRow(array('id' => 3))
-            ->addRow(array('id' => 4));
+    /**
+     * Ensure the getIdsFromFilter works correctly when sorting by pid and slicing the results.
+     *
+     * @return void
+     */
+    public function testGetIdsFromFilterSortedByPid()
+    {
+        $metaModel = $this
+            ->getMockBuilder(MetaModel::class)
+            ->setMethods(['getMatchingIds'])
+            ->setConstructorArgs([
+                ['tableName' => 'mm_test_retrieve'],
+                $this->getMockForAbstractClass(EventDispatcherInterface::class),
+                $this->mockConnection([
+                    \Closure::fromCallable(function () {
+                        $builder = $this
+                            ->getMockBuilder(QueryBuilder::class)
+                            ->disableOriginalConstructor()
+                            ->getMock();
+                        $builder
+                            ->expects($this->once())
+                            ->method('select')
+                            ->with('id')
+                            ->willReturn($builder);
+                        $builder
+                            ->expects($this->once())
+                            ->method('from')
+                            ->with('mm_test_retrieve')
+                            ->willReturn($builder);
 
-        $this->assertEquals(array(1,2,3,4), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id'));
-        $this->assertEquals(array(1,2), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 0, 2));
-        $this->assertEquals(array(3,4), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 2, 2));
-        $this->assertEquals(array(3), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 2, 1));
-        $this->assertEquals(array(), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 20, 0));
-        $this->assertEquals(array(2,3,4), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 1, 10));
+                        $expr = $this
+                            ->getMockBuilder(ExpressionBuilder::class)
+                            ->disableOriginalConstructor()
+                            ->setMethods()
+                            ->getMock();
+
+                        $builder
+                            ->expects($this->once())
+                            ->method('expr')
+                            ->willReturn($expr);
+
+                        $builder
+                            ->expects($this->once())
+                            ->method('where')
+                            ->with('id IN (:values)')
+                            ->willReturn($builder);
+
+                        $builder
+                            ->expects($this->once())
+                            ->method('setParameter')
+                            ->with('values', [4, 3, 2, 1], Connection::PARAM_STR_ARRAY)
+                            ->willReturn($builder);
+
+                        $builder
+                            ->expects($this->once())
+                            ->method('orderBy')
+                            ->with('pid', 'ASC')
+                            ->willReturn($builder);
+
+                        $statement = $this
+                            ->getMockBuilder(Statement::class)
+                            ->disableOriginalConstructor()
+                            ->getMock();
+                        $statement
+                            ->expects($this->once())
+                            ->method('fetchAll')
+                            ->with(\PDO::FETCH_COLUMN)
+                            ->willReturn([1, 2, 3, 4]);
+                        $builder
+                            ->expects($this->once())
+                            ->method('execute')
+                            ->willReturn($statement);
+
+                        return $builder;
+                    })->__invoke()
+                ])
+            ])
+            ->getMock();
+        $metaModel
+            ->expects($this->exactly(6))
+            ->method('getMatchingIds')
+            ->willReturn([4, 3, 2, 1]);
+
+        /** @var MetaModel $metaModel */
+        $this->assertSame(array(1,2,3,4), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid'));
+        $this->assertSame(array(1,2), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 0, 2));
+        $this->assertSame(array(3,4), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 2, 2));
+        $this->assertSame(array(3), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 2, 1));
+        $this->assertSame(array(), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 20, 0));
+        $this->assertSame(array(2,3,4), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 1, 10));
+    }
+
+    /**
+     * Ensure the getIdsFromFilter works correctly when the results have been cached.
+     *
+     * @return void
+     */
+    public function testGetIdsFromFilterSortedByPidWithCache()
+    {
+        $metaModel = $this
+            ->getMockBuilder(MetaModel::class)
+            ->setMethods(['getMatchingIds'])
+            ->setConstructorArgs([
+                ['tableName' => 'mm_test_retrieve'],
+                $this->getMockForAbstractClass(EventDispatcherInterface::class),
+                $this->mockConnection([
+                    \Closure::fromCallable(function () {
+                        $builder = $this
+                            ->getMockBuilder(QueryBuilder::class)
+                            ->disableOriginalConstructor()
+                            ->getMock();
+                        $builder
+                            ->expects($this->once())
+                            ->method('select')
+                            ->with('id')
+                            ->willReturn($builder);
+                        $builder
+                            ->expects($this->once())
+                            ->method('from')
+                            ->with('mm_test_retrieve')
+                            ->willReturn($builder);
+
+                        $expr = $this
+                            ->getMockBuilder(ExpressionBuilder::class)
+                            ->disableOriginalConstructor()
+                            ->setMethods()
+                            ->getMock();
+
+                        $builder
+                            ->expects($this->once())
+                            ->method('expr')
+                            ->willReturn($expr);
+
+                        $builder
+                            ->expects($this->once())
+                            ->method('where')
+                            ->with('id IN (:values)')
+                            ->willReturn($builder);
+
+                        $builder
+                            ->expects($this->once())
+                            ->method('setParameter')
+                            ->with('values', [4, 3, 2, 1], Connection::PARAM_STR_ARRAY)
+                            ->willReturn($builder);
+
+                        $builder
+                            ->expects($this->once())
+                            ->method('orderBy')
+                            ->with('pid', 'ASC')
+                            ->willReturn($builder);
+
+                        $statement = $this
+                            ->getMockBuilder(Statement::class)
+                            ->disableOriginalConstructor()
+                            ->getMock();
+                        $statement
+                            ->expects($this->once())
+                            ->method('fetchAll')
+                            ->with(\PDO::FETCH_COLUMN)
+                            ->willReturn([1, 2, 3, 4]);
+                        $builder
+                            ->expects($this->once())
+                            ->method('execute')
+                            ->willReturn($statement);
+
+                        return $builder;
+                    })->__invoke()
+                ])
+            ])
+            ->getMock();
+        $metaModel
+            ->expects($this->exactly(2))
+            ->method('getMatchingIds')
+            ->willReturnOnConsecutiveCalls([4, 3, 2, 1], [3, 2]);
+
+        /** @var MetaModel $metaModel */
+        $this->assertSame([1, 2, 3, 4], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid'));
+        $this->assertSame([2, 3], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid'));
     }
 
     /**
