@@ -519,7 +519,7 @@ class MetaModelsTest extends TestCase
      *
      * @param array $queryBuilders The query builder list.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
      */
     private function mockConnection(array $queryBuilders)
     {
