@@ -729,10 +729,16 @@ class MetaModel implements IMetaModel
                 // Build the right key for the cache.
                 $sortKey = \sprintf('%s-%s', $strSortBy, \strtolower($strSortOrder));
                 // Used the cached ID list, and make a list of wanted ID's with the sorting of the cache.
-                $cacheResult = array_intersect((array) $this->existingIds[$sortKey], $arrFilteredIds);
+                if (!isset($this->existingIds[$sortKey])) {
+                    $this->existingIds[$sortKey] = [];
+                }
+                $cacheResult = array_intersect($this->existingIds[$sortKey], $arrFilteredIds);
                 // Check if we have all ID's or if we have one missing, now we are using the order of the MM Filter.
                 if (array_intersect($arrFilteredIds, $cacheResult) === $arrFilteredIds) {
-                    return $cacheResult;
+                    if ($intOffset > 0 || $intLimit > 0) {
+                        return array_values(array_slice($cacheResult, $intOffset, $intLimit ?: null));
+                    }
+                    return array_values($cacheResult);
                 }
 
                 // Merge the already known and the new one.
