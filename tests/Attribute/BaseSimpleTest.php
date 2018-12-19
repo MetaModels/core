@@ -14,16 +14,15 @@
  * @subpackage Core
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  2012-2018 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-
 namespace MetaModels\Test\Attribute;
 
 use Doctrine\DBAL\Connection;
-use MetaModels\Attribute\Base;
 use MetaModels\Attribute\BaseSimple;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\Attribute\ISimple;
