@@ -28,7 +28,6 @@
 
 namespace MetaModels;
 
-use Contao\System;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use MetaModels\Attribute\IAttribute;
@@ -215,8 +214,8 @@ class MetaModel implements IMetaModel
      */
     protected function tryUnserialize($value)
     {
-        if (!is_array($value) && (substr($value, 0, 2) == 'a:')) {
-            $unSerialized = unserialize($value);
+        if (0 === strpos($value, 'a:')) {
+            $unSerialized = unserialize($value, ['allowed_classes' => false]);
         }
 
         if (isset($unSerialized) && is_array($unSerialized)) {
@@ -308,7 +307,7 @@ class MetaModel implements IMetaModel
      */
     protected function getComplexAttributes()
     {
-        return $this->getAttributeImplementing('MetaModels\Attribute\IComplex');
+        return $this->getAttributeImplementing(IComplex::class);
     }
 
     /**
@@ -318,7 +317,7 @@ class MetaModel implements IMetaModel
      */
     protected function getSimpleAttributes()
     {
-        return $this->getAttributeImplementing('MetaModels\Attribute\ISimple');
+        return $this->getAttributeImplementing(ISimpleAttribute::class);
     }
 
     /**
@@ -328,7 +327,7 @@ class MetaModel implements IMetaModel
      */
     protected function getTranslatedAttributes()
     {
-        return $this->getAttributeImplementing('MetaModels\Attribute\ITranslated');
+        return $this->getAttributeImplementing(ITranslated::class);
     }
 
     /**
@@ -405,7 +404,7 @@ class MetaModel implements IMetaModel
         while ($row = $query->fetch(\PDO::FETCH_ASSOC)) {
             $data = [];
             foreach ($row as $attribute => $value) {
-                if ((!$arrAttrOnly) || (in_array($attribute, $arrAttrOnly))) {
+                if ((!$arrAttrOnly) || (in_array($attribute, $arrAttrOnly, true))) {
                     $data[$attribute] = $value;
                 }
             }
@@ -475,7 +474,7 @@ class MetaModel implements IMetaModel
             }
 
             foreach (array_keys($result) as $id) {
-                $result[$id][$attributeName] = isset($attributeData[$id]) ? $attributeData[$id] : null;
+                $result[$id][$attributeName] = ($attributeData[$id] ?? null);
             }
         }
 
@@ -545,9 +544,7 @@ class MetaModel implements IMetaModel
             $arrItems[] = new Item($this, $arrEntry, $this->dispatcher);
         }
 
-        $objItems = new Items($arrItems);
-
-        return $objItems;
+        return new Items($arrItems);
     }
 
     /**
@@ -591,7 +588,7 @@ class MetaModel implements IMetaModel
      */
     public function getTableName()
     {
-        return array_key_exists('tableName', $this->arrData) ? $this->arrData['tableName'] : null;
+        return ($this->arrData['tableName'] ?? null);
     }
 
     /**
@@ -692,9 +689,7 @@ class MetaModel implements IMetaModel
     public function getAttribute($strAttributeName)
     {
         $arrAttributes = $this->getAttributes();
-        return array_key_exists($strAttributeName, $arrAttributes)
-            ? $arrAttributes[$strAttributeName]
-            : null;
+        return ($arrAttributes[$strAttributeName] ?? null);
     }
 
     /**
@@ -703,7 +698,7 @@ class MetaModel implements IMetaModel
     public function getAttributeById($intId)
     {
         foreach ($this->getAttributes() as $objAttribute) {
-            if ($objAttribute->get('id') == $intId) {
+            if ($objAttribute->get('id') === $intId) {
                 return $objAttribute;
             }
         }
@@ -781,7 +776,7 @@ class MetaModel implements IMetaModel
         }
 
         // If desired, sort the entries.
-        if ($strSortBy != '') {
+        if ('' !== $strSortBy) {
             if ($objSortAttribute = $this->getAttribute($strSortBy)) {
                 $arrFilteredIds = $objSortAttribute->sortIds($arrFilteredIds, $strSortOrder);
             } elseif ('id' === $strSortBy) {
@@ -839,7 +834,7 @@ class MetaModel implements IMetaModel
     public function getCount($objFilter)
     {
         $arrFilteredIds = $this->getMatchingIds($objFilter);
-        if (count($arrFilteredIds) == 0) {
+        if (0 === count($arrFilteredIds)) {
             return 0;
         }
 
@@ -1173,9 +1168,7 @@ class MetaModel implements IMetaModel
      */
     public function getEmptyFilter()
     {
-        $objFilter = new Filter($this);
-
-        return $objFilter;
+        return new Filter($this);
     }
 
     /**
