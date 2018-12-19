@@ -25,7 +25,9 @@ use ContaoCommunityAlliance\DcGeneral\Clipboard\Filter;
 use ContaoCommunityAlliance\DcGeneral\Clipboard\ItemInterface;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPasteButtonEvent;
 use ContaoCommunityAlliance\DcGeneral\Controller\ModelCollector;
+use ContaoCommunityAlliance\DcGeneral\Controller\RelationshipManager;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 
 /**
  * This handles the type options for conditions.
@@ -67,9 +69,38 @@ class PasteButtonListener extends AbstractConditionFactoryUsingListener
         }
 
         $collector = new ModelCollector($environment);
-        if ((-1 !== ($max = $this->conditionFactory->maxChildren($typeName)))
-            && \count($collector->collectChildrenOf($model)) > $max) {
+        if (!$this->acceptsAnotherChild($model, $collector)) {
             $event->setPasteIntoDisabled(true);
         }
+
+        $definition    = $environment->getDataDefinition();
+        $mode          = $definition->getBasicDefinition()->getMode();
+        $relationships = new RelationshipManager($definition->getModelRelationshipDefinition(), $mode);
+        if (!$relationships->isRoot($model)
+            && ($parent = $collector->searchParentOf($model))
+            && !$this->acceptsAnotherChild($parent, $collector)) {
+            $event->setPasteAfterDisabled(true);
+        }
+    }
+
+    /**
+     * Test if a model accepts another child.
+     *
+     * @param ModelInterface $model     The model that shall be checked.
+     * @param ModelCollector $collector The collector to use.
+     *
+     * @return bool
+     */
+    public function acceptsAnotherChild(ModelInterface $model, ModelCollector $collector)
+    {
+        $conditionType = $model->getProperty('type');
+        if (!$this->conditionFactory->supportsNesting($conditionType)) {
+            return false;
+        }
+        if (-1 === ($max = $this->conditionFactory->maxChildren($conditionType))) {
+            return true;
+        }
+
+        return \count($collector->collectChildrenOf($model)) < $max;
     }
 }
