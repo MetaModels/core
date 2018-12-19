@@ -1,15 +1,25 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2018 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/de/
+ * Last-updated: 2018-12-18T21:45:41+01:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2018-07-13T10:50:35+02:00
+ * @copyright 2012-2018 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Alle Sprachen durchsuchen';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['1']            = 'Auswählen, falls Sie sprachunabhängige Suche ermöglichen möchten. Wenn nicht angewählt wird nur die aktive Sprache für die Suche benutzt.';
@@ -36,6 +46,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit']['0']                 =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit']['1']                 = 'Die Filtereinstellung ID %s bearbeiten.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['enabled']['0']              = 'Aktiviert';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['enabled']['1']              = 'Aktivieren Sie diese Filtereinstellung.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fe_widget']['0']            = 'Frontend Widget bereitstellen';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fe_widget']['1']            = 'Auswählen, wenn Sie den Filter als Filter-Widget im Frontend anzeigen möchten.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fefilter_legend']           = 'Frontendfilter';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['0']                  = 'Aus übergeordnetem Element';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['1']                  = 'Filtereinstellung(en), zu denen diese Einstellungen gehören.';
@@ -56,7 +68,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pastenew']['0']             =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pastenew']['1']             = 'Neue Einstellung nach dem Element ID %s erstellen';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['0']         = 'Statischer Parameter';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['1']         = 'Auswählen, wenn Sie Werte für diesen Parameter aus einer übergordneten Liste (wie zum Beispiel Module, Inhaltselemente, etc.) beziehen möchten.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['0']                 = 'Details';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['0']                 = 'Details der Filtereinstellungen';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['1']                 = 'Die Details der Filtereinstellung ID %s anzeigen.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions']['0']    = 'Diesen Filter für verbleibende Werte ignorieren';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions']['1']    = 'Falls aktiviert wird dieser Filter alle Werte außer seine eigenen zurück liefern.';

@@ -1,6 +1,14 @@
+dist: xenial
+
+addons:
+  apt:
+    packages:
+      - ant-optional
+
 language: php
 
 php:
+  - "7.3"
   - "7.2"
   - "7.1"
   - "7.0"
