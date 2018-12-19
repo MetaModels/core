@@ -174,37 +174,87 @@ class MetaModelsTest extends TestCase
      */
     public function testRetrieveSystemColumns()
     {
-        $this->markTestIncomplete('We need to rewrite MetaModel to utilize doctrine first');
+        $metaModel = new MetaModel(
+            [
+                'id'         => '1',
+                'sorting'    => '256',
+                'tstamp'     => '1367274071',
+                'name'       => 'Test RetrieveSystemColumns',
+                'tableName'  => 'mm_test_retrieve',
+                'translated' => '1',
+                'languages'  => serialize(['en' => ['isfallback' => '1'], 'de' => ['isfallback' => '0']]),
+                'varsupport' => '',
+            ],
+            $this->getMockForAbstractClass(EventDispatcherInterface::class),
+            $this->mockConnection([
+                \Closure::fromCallable(function () {
+                    $builder = $this
+                        ->getMockBuilder(QueryBuilder::class)
+                        ->disableOriginalConstructor()
+                        ->getMock();
+                    $builder
+                        ->expects($this->once())
+                        ->method('select')
+                        ->with('*')
+                        ->willReturn($builder);
+                    $builder
+                        ->expects($this->once())
+                        ->method('from')
+                        ->with('mm_test_retrieve')
+                        ->willReturn($builder);
 
-        $metaModel = new MetaModel(array(
-            'id'         => '1',
-            'sorting'    => '256',
-            'tstamp'     => '1367274071',
-            'name'       => 'Test RetrieveSystemColumns',
-            'tableName'  => 'mm_test_retrieve',
-            'translated' => '1',
-            'languages'  => serialize(array('en' => array('isfallback' => '1'), 'de' => array('isfallback' => '0'))),
-            'varsupport' => '',
-        ));
+                    $expr = $this
+                        ->getMockBuilder(ExpressionBuilder::class)
+                        ->disableOriginalConstructor()
+                        ->setMethods()
+                        ->getMock();
 
-        $rows = array(
-            1 => array(
-                'id'      => 1,
-                'pid'     => 0,
-                'sorting' => 1,
-                'tstamp'  => 343094400,
-            ),
+                    $builder
+                        ->expects($this->once())
+                        ->method('expr')
+                        ->willReturn($expr);
+
+                    $builder
+                        ->expects($this->once())
+                        ->method('where')
+                        ->with('id IN (:values)')
+                        ->willReturn($builder);
+
+                    $builder
+                        ->expects($this->once())
+                        ->method('setParameter')
+                        ->with('values', [1], Connection::PARAM_STR_ARRAY)
+                        ->willReturn($builder);
+
+                    $builder
+                        ->expects($this->once())
+                        ->method('orderBy')
+                        ->with('FIELD(id, :values)')
+                        ->willReturn($builder);
+
+                    $statement = $this
+                        ->getMockBuilder(Statement::class)
+                        ->disableOriginalConstructor()
+                        ->getMock();
+                    $statement
+                        ->expects($this->exactly(2))
+                        ->method('fetch')
+                        ->with(\PDO::FETCH_ASSOC)
+                        ->willReturnOnConsecutiveCalls([
+                            'id'      => 1,
+                            'pid'     => 0,
+                            'sorting' => 1,
+                            'tstamp'  => 343094400,
+                        ], null);
+                    $builder
+                        ->expects($this->once())
+                        ->method('execute')
+                        ->willReturn($statement);
+
+                    return $builder;
+                })->__invoke()
+            ])
         );
-
-        $database = Database::getNewTestInstance();
-        $metaModel->setServiceContainer($this->mockServiceContainer($database));
-
-        $database
-            ->getQueryCollection()
-            ->theQuery('SELECT * FROM mm_test_retrieve WHERE id IN (?) ORDER BY FIELD(id,?)')
-            ->with(1, 1)
-            ->result()
-            ->addRows($rows);
 
         $this->assertEquals($metaModel->getName(), 'Test RetrieveSystemColumns');
 
