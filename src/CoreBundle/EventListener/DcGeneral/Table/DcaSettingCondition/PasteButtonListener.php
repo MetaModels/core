@@ -30,7 +30,7 @@ use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 /**
  * This handles the type options for conditions.
  */
-class PasteButtonListener extends AbstractListener
+class PasteButtonListener extends AbstractConditionFactoryUsingListener
 {
     /**
      * Generate the paste button.
@@ -38,9 +38,6 @@ class PasteButtonListener extends AbstractListener
      * @param GetPasteButtonEvent $event The event.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function handle(GetPasteButtonEvent $event)
     {
@@ -62,16 +59,16 @@ class PasteButtonListener extends AbstractListener
             return;
         }
 
-        // FIXME: should be obtained from factory or parameter.
-        $flags = $GLOBALS['METAMODELS']['inputscreen_conditions'][$model->getProperty('type')];
+        $typeName = $model->getProperty('type');
         // If setting does not support children, omit them.
-        if ((!$flags['nestingAllowed']) && $model->getId()) {
+        if ($model->getId() && !$this->conditionFactory->supportsNesting($typeName)) {
             $event->setPasteIntoDisabled(true);
             return;
         }
 
         $collector = new ModelCollector($environment);
-        if (isset($flags['maxChildren']) && \count($collector->collectChildrenOf($model)) > $flags['maxChildren']) {
+        if ((-1 !== ($max = $this->conditionFactory->maxChildren($typeName)))
+            && \count($collector->collectChildrenOf($model)) > $max) {
             $event->setPasteIntoDisabled(true);
         }
     }

@@ -30,13 +30,12 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Legend;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Palette;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
+use MetaModels\CoreBundle\DcGeneral\PropertyConditionFactory;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\IsVariantAttribute;
-use MetaModels\Events\CreatePropertyConditionEvent;
 use MetaModels\IFactory;
 use MetaModels\IMetaModel;
 use MetaModels\ViewCombination\ViewCombination;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This class takes care of the palette building.
@@ -60,27 +59,27 @@ class PaletteBuilder
     private $factory;
 
     /**
-     * The event dispatcher.
+     * The property condition factory.
      *
-     * @var EventDispatcherInterface
+     * @var PropertyConditionFactory
      */
-    private $dispatcher;
+    private $conditionFactory;
 
     /**
      * Create a new instance.
      *
-     * @param ViewCombination          $viewCombination The view combinations.
-     * @param IFactory                 $factory         The factory.
-     * @param EventDispatcherInterface $dispatcher      The event dispatcher.
+     * @param ViewCombination          $viewCombination  The view combinations.
+     * @param IFactory                 $factory          The factory.
+     * @param PropertyConditionFactory $conditionFactory The condition factory.
      */
     public function __construct(
         ViewCombination $viewCombination,
         IFactory $factory,
-        EventDispatcherInterface $dispatcher
+        PropertyConditionFactory $conditionFactory
     ) {
-        $this->viewCombination = $viewCombination;
-        $this->factory         = $factory;
-        $this->dispatcher      = $dispatcher;
+        $this->viewCombination  = $viewCombination;
+        $this->factory          = $factory;
+        $this->conditionFactory = $conditionFactory;
     }
 
     /**
@@ -213,16 +212,7 @@ class PaletteBuilder
         if (null === $condition) {
             return null;
         }
-        $event = new CreatePropertyConditionEvent($condition, $metaModel);
-        $this->dispatcher->dispatch(CreatePropertyConditionEvent::NAME, $event);
 
-        if ($event->getInstance() === null) {
-            throw new \RuntimeException(sprintf(
-                'Condition of type %s could not be transformed to an instance.',
-                $condition['type']
-            ));
-        }
-
-        return $event->getInstance();
+        return $this->conditionFactory->createCondition($condition, $metaModel);
     }
 }

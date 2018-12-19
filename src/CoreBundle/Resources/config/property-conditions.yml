@@ -1,0 +1,55 @@
+services:
+  MetaModels\CoreBundle\DcGeneral\PropertyConditionFactory:
+    arguments:
+      - '@metamodels.core_bundle.dc_general.property_condition_factories'
+      - '@MetaModels\CoreBundle\DcGeneral\FallbackPropertyConditionFactory'
+
+  metamodels.core_bundle.dc_general.property_condition_factories:
+    class: MetaModels\CoreBundle\DependencyInjection\IdProvidingServiceLocator
+    arguments:
+      - []
+    tags: ['container.service_locator']
+
+  MetaModels\CoreBundle\DcGeneral\FallbackPropertyConditionFactory:
+    arguments:
+      - '@event_dispatcher'
+
+  MetaModels\CoreBundle\DcGeneral\AndPropertyConditionFactory:
+    arguments:
+      - '@MetaModels\CoreBundle\DcGeneral\PropertyConditionFactory'
+    tags:
+      - { name: metamodels.condition_factory, type: 'conditionand' }
+
+  MetaModels\CoreBundle\DcGeneral\OrPropertyConditionFactory:
+    arguments:
+      - '@MetaModels\CoreBundle\DcGeneral\PropertyConditionFactory'
+    tags:
+      - { name: metamodels.condition_factory, type: 'conditionor' }
+
+  MetaModels\CoreBundle\DcGeneral\PropertyContainAnyOfConditionFactory:
+    arguments:
+      -
+        - 'tags'
+        - 'translatedtags'
+    tags:
+      - { name: metamodels.condition_factory, type: 'conditionpropertycontainanyof' }
+
+  MetaModels\CoreBundle\DcGeneral\PropertyValueConditionFactory:
+    arguments:
+      -
+        - 'select'
+        - 'translatedselect'
+        - 'checkbox'
+        - 'translatedcheckbox'
+    tags:
+      - { name: metamodels.condition_factory, type: 'conditionpropertyvalueis' }
+
+  MetaModels\CoreBundle\DcGeneral\PropertyVisibleConditionFactory:
+    tags:
+      - { name: metamodels.condition_factory, type: 'conditionpropertyvisible' }
+
+  MetaModels\CoreBundle\DcGeneral\NotConditionFactory:
+    arguments:
+      - '@MetaModels\CoreBundle\DcGeneral\PropertyConditionFactory'
+    tags:
+      - { name: metamodels.condition_factory, type: 'conditionnot' }

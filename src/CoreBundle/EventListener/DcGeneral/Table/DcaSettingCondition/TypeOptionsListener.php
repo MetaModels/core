@@ -25,13 +25,14 @@ use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
 use Doctrine\DBAL\Connection;
+use MetaModels\CoreBundle\DcGeneral\PropertyConditionFactory;
 use MetaModels\IFactory;
 use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * This handles the type options for conditions.
  */
-class TypeOptionsListener extends AbstractListener
+class TypeOptionsListener extends AbstractConditionFactoryUsingListener
 {
     /**
      * The translator.
@@ -46,15 +47,17 @@ class TypeOptionsListener extends AbstractListener
      * @param RequestScopeDeterminator $scopeDeterminator The scope determinator.
      * @param IFactory                 $factory           The MetaModel factory.
      * @param Connection               $connection        The database connection.
+     * @param PropertyConditionFactory $conditionFactory  The condition factory.
      * @param TranslatorInterface      $translator        The translator.
      */
     public function __construct(
         RequestScopeDeterminator $scopeDeterminator,
         IFactory $factory,
         Connection $connection,
+        PropertyConditionFactory $conditionFactory,
         TranslatorInterface $translator
     ) {
-        parent::__construct($scopeDeterminator, $factory, $connection);
+        parent::__construct($scopeDeterminator, $factory, $connection, $conditionFactory);
         $this->translator = $translator;
     }
 
@@ -75,8 +78,7 @@ class TypeOptionsListener extends AbstractListener
         }
 
         $options = [];
-        // FIXME: should be obtained from factory or parameter.
-        foreach (array_keys((array) $GLOBALS['METAMODELS']['inputscreen_conditions']) as $condition) {
+        foreach ($this->conditionFactory->getTypeNames() as $condition) {
             $options[$condition] = $this->translator->trans(
                 'tl_metamodel_dcasetting_condition.conditionnames.' . $condition,
                 [],

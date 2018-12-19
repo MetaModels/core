@@ -5,6 +5,7 @@ services:
             - "@cca.dc-general.scope-matcher"
             - "@metamodels.factory"
             - "@database_connection"
+            - '@MetaModels\CoreBundle\DcGeneral\PropertyConditionFactory'
         tags:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.get-property-options
@@ -33,6 +34,7 @@ services:
             - "@cca.dc-general.scope-matcher"
             - "@metamodels.factory"
             - "@database_connection"
+            - '@MetaModels\CoreBundle\DcGeneral\PropertyConditionFactory'
         tags:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.get-paste-button
@@ -43,6 +45,7 @@ services:
             - "@cca.dc-general.scope-matcher"
             - "@metamodels.factory"
             - "@database_connection"
+            - '@MetaModels\CoreBundle\DcGeneral\PropertyConditionFactory'
             - "@contao.translation.translator"
         tags:
             - name: kernel.event_listener

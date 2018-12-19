@@ -29,7 +29,7 @@ use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
 /**
  * This handles the rendering of models to labels.
  */
-class AttributeIdListener extends AbstractListener
+class AttributeIdListener extends AbstractConditionFactoryUsingListener
 {
     /**
      * Prepares an option list with alias => name connection for all attributes.
@@ -39,9 +39,6 @@ class AttributeIdListener extends AbstractListener
      * @param GetPropertyOptionsEvent $event The event.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getAttributeOptions(GetPropertyOptionsEvent $event)
     {
@@ -49,13 +46,11 @@ class AttributeIdListener extends AbstractListener
             return;
         }
 
-        $result            = [];
-        $metaModel         = $this->getMetaModel($event->getEnvironment());
-        $conditionType     = $event->getModel()->getProperty('type');
-        $allowedAttributes = $GLOBALS['METAMODELS']['inputscreen_conditions'][$conditionType]['attributes'];
-        // FIXME: $allowedAttributes should be obtained from factory or parameter.
+        $result        = [];
+        $metaModel     = $this->getMetaModel($event->getEnvironment());
+        $conditionType = $event->getModel()->getProperty('type');
         foreach ($metaModel->getAttributes() as $attribute) {
-            if (\is_array($allowedAttributes) && !\in_array($attribute->get('type'), $allowedAttributes, true)) {
+            if (!$this->conditionFactory->supportsAttribute($conditionType, $attribute->get('type'))) {
                 continue;
             }
 

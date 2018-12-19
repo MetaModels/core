@@ -26,6 +26,8 @@ use Symfony\Component\EventDispatcher\Event;
 
 /**
  * This event is dispatched, whenever a MetaModels property condition shall be transformed into an object instance.
+ *
+ * @deprecated Implement proper factories and create conditions within there.
  */
 class CreatePropertyConditionEvent extends Event
 {

@@ -41,12 +41,18 @@ class CollectFactoriesPass implements CompilerPassInterface
     const TAG_FILTER_FACTORY = 'metamodels.filter_factory';
 
     /**
+     * The tag name to use for property condition factories.
+     */
+    const TAG_PROPERTY_CONDITION_FACTORY = 'metamodels.condition_factory';
+
+    /**
      * {@inheritDoc}
      */
     public function process(ContainerBuilder $container)
     {
         $this->collectAttributeFactories($container);
         $this->collectFilterFactories($container);
+        $this->collectPropertyConditionFactories($container);
     }
 
     /**
@@ -77,5 +83,25 @@ class CollectFactoriesPass implements CompilerPassInterface
         foreach (array_keys($container->findTaggedServiceIds(self::TAG_FILTER_FACTORY)) as $factory) {
             $attributeFactory->addMethodCall('addTypeFactory', [new Reference($factory)]);
         }
+    }
+
+    /**
+     * Collect all tagged filter factories.
+     *
+     * @param ContainerBuilder $container The container builder.
+     *
+     * @return void
+     */
+    private function collectPropertyConditionFactories($container)
+    {
+        $factories = $container->getDefinition('metamodels.core_bundle.dc_general.property_condition_factories');
+        $args      = $factories->getArgument(0);
+        foreach ($container->findTaggedServiceIds(self::TAG_PROPERTY_CONDITION_FACTORY) as $factory => $tags) {
+            foreach ($tags as $tag) {
+                $args[$tag['type']] = new Reference($factory);
+            }
+        }
+
+        $factories->setArgument(0, $args);
     }
 }

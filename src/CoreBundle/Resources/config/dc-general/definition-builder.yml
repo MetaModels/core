@@ -60,7 +60,7 @@ services:
         arguments:
             - "@metamodels.view_combination"
             - "@metamodels.factory"
-            - "@event_dispatcher"
+            - '@MetaModels\CoreBundle\DcGeneral\PropertyConditionFactory'
         tags:
             - name: kernel.event_listener
               event: dc-general.factory.build-data-definition
