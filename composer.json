@@ -72,8 +72,7 @@
       ]
     },
     "branch-alias": {
-      "dev-master": "2.0.x-dev",
-      "dev-feature/contao4": "2.1.x-dev"
+      "dev-release/2.1.0": "2.1.x-dev"
     }
   },
   "config": {
