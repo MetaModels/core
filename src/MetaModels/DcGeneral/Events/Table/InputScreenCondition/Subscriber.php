@@ -33,7 +33,9 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPr
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ManipulateWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Controller\ModelCollector;
+use ContaoCommunityAlliance\DcGeneral\Controller\RelationshipManager;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
+use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Factory\DcGeneralFactory;
 use ContaoCommunityAlliance\Translator\TranslatorInterface;
@@ -210,9 +212,6 @@ class Subscriber extends BaseSubscriber
      * @param GetPasteButtonEvent $event The event.
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function generatePasteButton(GetPasteButtonEvent $event)
     {
@@ -234,18 +233,19 @@ class Subscriber extends BaseSubscriber
             return;
         }
 
-        $flags = $GLOBALS['METAMODELS']['inputscreen_conditions'][$model->getProperty('type')];
         // If setting does not support children, omit them.
-        if ($model->getId() &&
-            (!$flags['nestingAllowed'])
-        ) {
+        $collector = new ModelCollector($environment);
+        if ($model->getId() && !$this->acceptsAnotherChild($model, $collector)) {
             $event->setPasteIntoDisabled(true);
-            return;
         }
 
-        $collector = new ModelCollector($environment);
-        if (isset($flags['maxChildren']) && count($collector->collectChildrenOf($model)) > $flags['maxChildren']) {
-            $event->setPasteIntoDisabled(true);
+        $definition    = $environment->getDataDefinition();
+        $mode          = $definition->getBasicDefinition()->getMode();
+        $relationships = new RelationshipManager($definition->getModelRelationshipDefinition(), $mode);
+        if (!$relationships->isRoot($model)
+            && ($parent = $collector->searchParentOf($model))
+            && !$this->acceptsAnotherChild($parent, $collector)) {
+            $event->setPasteAfterDisabled(true);
         }
     }
 
@@ -486,6 +486,33 @@ class Subscriber extends BaseSubscriber
             // Cut off the 'value_' prefix.
             $event->setValue(substr($event->getValue(), 6));
         }
+    }
+
+    /**
+     * Test if a model accepts another child.
+     *
+     * @param ModelInterface $model     The model that shall be checked.
+     * @param ModelCollector $collector The collector to use.
+     *
+     * @return bool
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    private function acceptsAnotherChild(ModelInterface $model, ModelCollector $collector)
+    {
+        $conditionType = $model->getProperty('type');
+        $flags         = $GLOBALS['METAMODELS']['inputscreen_conditions'][$conditionType];
+        if (!$flags['nestingAllowed']) {
+            return false;
+        }
+
+        if (isset($flags['maxChildren'])
+            && count($collector->collectDirectChildrenOf($model)) > $flags['maxChildren']) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
