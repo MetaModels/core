@@ -47,14 +47,14 @@ class ViewCombination
     private $tokenStorage;
 
     /**
-     * The view combination.
+     * The combination builder.
      *
      * @var ViewCombinationBuilder
      */
     private $builder;
 
     /**
-     * The input screen.
+     * The input screen information builder.
      *
      * @var InputScreenInformationBuilder
      */
@@ -185,13 +185,10 @@ class ViewCombination
      */
     public function getChildrenOf($parentTable)
     {
-        $inputScreens = array_filter(
-            $this->getInputScreens(),
-            function ($inputScreen) use ($parentTable) {
-                return ($inputScreen['meta']['rendertype'] === 'ctable')
-                       && ($inputScreen['meta']['ptable'] === $parentTable);
-            }
-        );
+        $inputScreens = array_filter($this->getInputScreens(), function ($inputScreen) use ($parentTable) {
+            return ($inputScreen['meta']['rendertype'] === 'ctable')
+                   && ($inputScreen['meta']['ptable'] === $parentTable);
+        });
 
         return $inputScreens;
     }
@@ -214,7 +211,7 @@ class ViewCombination
     }
 
     /**
-     * Get the input screens.
+     * Retrieve the input screens.
      *
      * @return array
      */

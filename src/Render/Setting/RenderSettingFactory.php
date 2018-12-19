@@ -94,8 +94,7 @@ class RenderSettingFactory implements IRenderSettingFactory
      * Set the service container.
      *
      * @param IMetaModelsServiceContainer $serviceContainer  The service container to use.
-     *
-     * @param bool                        $deprecationNotice Determine deprecated notice.
+     * @param bool                        $deprecationNotice Internal flag to disable deprecation notice.
      *
      * @return RenderSettingFactory
      *

@@ -58,7 +58,6 @@ class BaseSimple extends Base implements ISimple
      * Note that you should not use this directly but use the factory classes to instantiate attributes.
      *
      * @param IMetaModel       $objMetaModel     The MetaModel instance this attribute belongs to.
-     *
      * @param array            $arrData          The information array, for attribute information, refer to
      *                                           documentation of table tl_metamodel_attribute and documentation of the
      *                                           certain attribute classes for information what values are understood.

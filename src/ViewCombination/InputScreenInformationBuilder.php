@@ -97,7 +97,7 @@ class InputScreenInformationBuilder
      *
      * @return array
      *
-     * @throws \InvalidArgumentException Throws could not retrieve MetaModel.
+     * @throws \InvalidArgumentException When the MetaModel can not be retrieved.
      */
     private function prepareInputScreen($modelName, $screen): array
     {
@@ -196,8 +196,11 @@ class InputScreenInformationBuilder
                 // @codingStandardsIgnoreEnd
                 return $column;
             }
-            $column['col_name'] = $attribute->getColName();
-            $column             = array_merge($column, $attribute->getFieldDefinition($column));
+            $column = array_merge(
+                $column,
+                $attribute->getFieldDefinition($column),
+                ['col_name' => $attribute->getColName()]
+            );
 
             return $column;
         }, $builder

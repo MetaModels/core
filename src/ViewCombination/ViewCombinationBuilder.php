@@ -63,7 +63,7 @@ class ViewCombinationBuilder
      *
      * @return array|null
      *
-     * @throws \InvalidArgumentException Throws unknown user type.
+     * @throws \InvalidArgumentException When the user type is unknown.
      */
     public function getCombinationsForUser($userGroups, $userType)
     {
