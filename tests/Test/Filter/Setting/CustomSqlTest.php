@@ -26,14 +26,14 @@ use MetaModels\Filter\Filter;
 use MetaModels\Filter\Setting\CustomSql;
 use MetaModels\Filter\Setting\ICollection;
 use MetaModels\IMetaModel;
-use PHPUnit\Framework\TestCase;
+use MetaModels\Test\AutoLoadingTestCase;
 
 /**
  * Unit test for testing the CustomSql filter setting.
  *
  * @covers \MetaModels\Filter\Setting\CustomSql
  */
-class CustomSqlTest extends TestCase
+class CustomSqlTest extends AutoLoadingTestCase
 {
     /**
      * Mock a CustomSql with parseInsertTags disabled.
