@@ -75,15 +75,17 @@ class FilterBuilder
         $this->metaModel     = $metaModel;
         $this->configuration = $configuration;
 
+        // @codingStandardsIgnoreStart
+        // @codeCoverageIgnoreStart
         if (null === $connection) {
-            // @codingStandardsIgnoreStart
             @trigger_error(
                 'Connection is missing. It has to be passed in the constructor. Fallback will be dropped.',
                 E_USER_DEPRECATED
             );
-            // @codingStandardsIgnoreEnd
             $connection = System::getContainer()->get('database_connection');
         }
+        // @codeCoverageIgnoreEnd
+        // @codingStandardsIgnoreEnd
 
         $this->connection = $connection;
     }

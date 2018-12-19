@@ -247,26 +247,24 @@ class FilterBuilderSql
             return $connection;
         }
 
+        // @codingStandardsIgnoreStart
+        // @codeCoverageIgnoreStart
         // BC layer - we used to accept a Contao database instance here.
         if ($connection instanceof Database) {
-            // @codingStandardsIgnoreStart
             @trigger_error(
                 '"' . __METHOD__ . '" now accepts doctrine instances - ' .
                 'passing Contao database instances is deprecated.',
                 E_USER_DEPRECATED
             );
-            // @codingStandardsIgnoreEnd
             $reflection = new \ReflectionProperty(Database::class, 'resConnection');
             $reflection->setAccessible(true);
             return $reflection->getValue($connection);
         }
         if (null === $connection) {
-            // @codingStandardsIgnoreStart
             @trigger_error(
                 'You should pass a doctrine database connection to "' . __METHOD__ . '".',
                 E_USER_DEPRECATED
             );
-            // @codingStandardsIgnoreEnd
             $connection = System::getContainer()->get('database_connection');
         }
 
@@ -275,5 +273,7 @@ class FilterBuilderSql
         }
 
         return $connection;
+        // @codeCoverageIgnoreEnd
+        // @codingStandardsIgnoreEnd
     }
 }
