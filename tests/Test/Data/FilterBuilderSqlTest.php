@@ -20,9 +20,9 @@
 
 namespace MetaModels\Test\Data;
 
-use ContaoCommunityAlliance\DcGeneral\Data\DefaultConfig;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\ResultStatement;
 use MetaModels\DcGeneral\Data\FilterBuilderSql;
-use MetaModels\MetaModel;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -33,76 +33,152 @@ use PHPUnit\Framework\TestCase;
 class FilterBuilderSqlTest extends TestCase
 {
     /**
+     * Test that a new builder is empty.
+     *
+     * @return void
+     */
+    public function testBuilderIsInitiallyEmpty()
+    {
+        $connection = $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock();
+        $builder    = new FilterBuilderSql('mm_test', 'AND', $connection);
+
+        $this->assertTrue($builder->isEmpty());
+        $this->assertNull($builder->build());
+    }
+
+    /**
+     * Data provider for testBuild()
+     *
+     * @return array
+     */
+    public function buildTestProvider()
+    {
+        return [
+            'equality compare' => [
+                'expectedSql'    => 'SELECT id FROM mm_test WHERE ((test = ?))',
+                'expectedParams' => [0],
+                'filter'         => ['operation' => '=', 'property' => 'test', 'value' => 0]
+            ],
+            'greater than compare' => [
+                'expectedSql'    => 'SELECT id FROM mm_test WHERE ((test > ?))',
+                'expectedParams' => [0],
+                'filter'         => ['operation' => '>', 'property' => 'test', 'value' => 0]
+            ],
+            'less than compare' => [
+                'expectedSql'    => 'SELECT id FROM mm_test WHERE ((test < ?))',
+                'expectedParams' => [0],
+                'filter'         => ['operation' => '<', 'property' => 'test', 'value' => 0]
+            ],
+            'IN list' => [
+                'expectedSql'    => 'SELECT id FROM mm_test WHERE ((test IN (?,?,?)))',
+                'expectedParams' => [1, 2, 3],
+                'filter'         => ['operation' => 'IN', 'property' => 'test', 'values' => [1, 2, 3]]
+            ],
+            'LIKE' => [
+                'expectedSql'    => 'SELECT id FROM mm_test WHERE ((test LIKE ?))',
+                'expectedParams' => ['any_thing%'],
+                'filter'         => ['operation' => 'LIKE', 'property' => 'test', 'value' => 'any?thing*']
+            ],
+        ];
+    }
+
+    /**
+     * Test the build process.
+     *
+     * @param string $expectedSql    The expected SQL query.
+     * @param array  $expectedParams The expected parameters.
+     * @param array  $filter         The filter input array.
+     *
+     * @return void
+     *
+     * @dataProvider buildTestProvider
+     */
+    public function testBuild($expectedSql, $expectedParams, array $filter)
+    {
+        $connection = $this->mockConnection($expectedSql, $expectedParams, [['id' => 'succ'], ['id' => 'ess']]);
+        $builder    = new FilterBuilderSql('mm_test', 'AND', $connection);
+
+        $this->assertSame($builder, $builder->addChild($filter));
+
+        $this->assertSame(['succ', 'ess'], $builder->build()->getMatchingIds());
+    }
+
+    /**
      * Test the build process.
      *
      * @return void
      */
-    public function testBuild()
+    public function testBuildMultiple()
     {
-        $this->markTestIncomplete('Needs to get rewritten using doctrine connection.');
-        $metaModel = new MetaModel(array(
-            'id'         => '1',
-            'sorting'    => '1',
-            'tstamp'     => '0',
-            'name'       => 'MetaModel',
-            'tableName'  => 'mm_test',
-            'mode'       => '',
-            'translated' => '1',
-            'languages'  => array(
-                'en' => array('isfallback' => '1'),
-                'de' => array('isfallback' => '')
-            ),
-            'varsupport' => '1',
-        ));
-
-        /** @var \MetaModels\Attribute\Base $attribute */
-        $attribute = $this
-            ->getMockForAbstractClass(
-                'MetaModels\Attribute\Base',
-                array(
-                    $metaModel,
-                    array(
-                        'colname'      => 'test1',
-                    )
-                )
-            );
-
-        $metaModel->addAttribute($attribute);
-
-        $config = DefaultConfig::init();
-
-        $config->setFilter(array(
-            array(
-                'operation' => '=',
-                'property'  => 'foo',
-                'value'     => 0
-            )
-        ));
-
-        $dataBase = Database::getNewTestInstance();
-        $builder  = new FilterBuilderSql($metaModel->getTableName(), 'AND', $dataBase);
-
-        $dataBase
-            ->getQueryCollection()
-            ->theQuery('SELECT id FROM mm_test WHERE ((test = ?))')
-            ->with(0)
-            ->result()
-            ->addRows(array(
-                array('id' => 0),
-                array('id' => 1),
-                array('id' => 2),
-                array('id' => 3),
-                array('id' => 4),
-                array('id' => 5),
-            ));
-
-        $this->assertTrue($builder->isEmpty());
-
-        $this->assertEquals(
-            $builder,
-            $builder->addChild(array('operation' => '=', 'property' => 'test', 'value' => 0))
+        $connection = $this->mockConnection(
+            'SELECT id FROM mm_test WHERE ((foo = ?) AND (bar = ?))',
+            ['fooz', 'barz'],
+            [['id' => 'succ'], ['id' => 'ess']]
         );
+        $builder    = new FilterBuilderSql('mm_test', 'AND', $connection);
 
-        $this->assertEquals(array(0, 1, 2, 3, 4, 5), $builder->build()->getMatchingIds());
+        $this->assertSame($builder, $builder->addChild(['operation' => '=', 'property' => 'foo', 'value' => 'fooz']));
+        $this->assertSame($builder, $builder->addChild(['operation' => '=', 'property' => 'bar', 'value' => 'barz']));
+
+        $this->assertSame(['succ', 'ess'], $builder->build()->getMatchingIds());
+    }
+
+    /**
+     * Test the build process.
+     *
+     * @return void
+     */
+    public function testAddSubProcedure()
+    {
+        $child = new FilterBuilderSql(
+            'mm_test',
+            'OR',
+            $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock()
+        );
+        $child->addChild(['operation' => '=', 'property' => 'foo', 'value' => 'fooz']);
+        $child->addChild(['operation' => '=', 'property' => 'bar', 'value' => 'barz']);
+
+        $connection = $this->mockConnection(
+            'SELECT id FROM mm_test WHERE (((foo = ?) OR (bar = ?)) AND (moo = ?))',
+            ['fooz', 'barz', 'mooz'],
+            [['id' => 'succ'], ['id' => 'ess']]
+        );
+        $builder    = new FilterBuilderSql('mm_test', 'AND', $connection);
+
+        $this->assertSame($builder, $builder->addSubProcedure($child));
+        $this->assertSame($builder, $builder->addChild(['operation' => '=', 'property' => 'moo', 'value' => 'mooz']));
+
+        $this->assertSame(['succ', 'ess'], $builder->build()->getMatchingIds());
+    }
+
+    /**
+     * Mock a database connection with the passed query.
+     *
+     * @param string $queryString The expected SQL query.
+     * @param array  $params      The expected parameters.
+     * @param array  $result      The query result.
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
+     */
+    private function mockConnection($queryString, $params, $result)
+    {
+        $connection = $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock();
+
+        $statement = $this
+            ->getMockBuilder(ResultStatement::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $statement
+            ->expects($this->once())
+            ->method('fetchAll')
+            ->with(\PDO::FETCH_ASSOC)
+            ->willReturn($result);
+        $connection
+            ->expects($this->once())
+            ->method('executeQuery')
+            ->with($queryString, $params)
+            ->willReturn($statement);
+
+        return $connection;
     }
 }
