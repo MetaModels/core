@@ -362,6 +362,8 @@ class MetaModel implements IMetaModel
      * @param array $parameters The parameters.
      *
      * @return string
+     *
+     * @deprecated Obsolete - Use doctrine query builders instead. To be removed in 3.0
      */
     protected function buildDatabaseParameterList($parameters)
     {
