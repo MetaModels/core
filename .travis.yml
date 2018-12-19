@@ -21,7 +21,7 @@ env:
 before_script:
   - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - travis_retry composer self-update && composer --version
-  - travis_retry composer require contao/core $CONTAO_VERSION --no-update
+  - travis_retry composer require contao/core-bundle $CONTAO_VERSION --no-update
   - >
     if [ "x${TRAVIS_TAG}" != "x" ]; then
       export COMPOSER_ROOT_VERSION=${TRAVIS_TAG}
