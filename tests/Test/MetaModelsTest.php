@@ -99,59 +99,6 @@ class MetaModelsTest extends TestCase
     }
 
     /**
-     * Test method MetaModel::fetchRows.
-     *
-     * @return void
-     */
-    public function testFetchRows()
-    {
-        $this->markTestIncomplete('We need to rewrite MetaModel to utilize doctrine first');
-
-        $metaModel = new MetaModel(array(
-            'id'         => '1',
-            'sorting'    => '1',
-            'tstamp'     => '0',
-            'name'       => 'MetaModel',
-            'tableName'  => 'mm_test',
-            'mode'       => '',
-            'translated' => '1',
-            'languages'  => array(
-                'en' => array('isfallback' => '1'),
-                'de' => array('isfallback' => '')
-            ),
-            'varsupport' => '1',
-        ));
-
-        $rows = array(
-            1 => array(
-                'id'     => 1,
-                'tstamp' => 343094400,
-            ),
-            2 => array(
-                'id'     => 2,
-                'tstamp' => 343094400,
-            ),
-        );
-
-        $database = Database::getNewTestInstance();
-        $metaModel->setServiceContainer($this->mockServiceContainer($database));
-
-        $database
-            ->getQueryCollection()
-            ->theQuery('SELECT * FROM mm_test WHERE id IN (?,?) ORDER BY FIELD(id,?,?)')
-            ->with(1, 2, 1, 2)
-            ->result()
-                ->addRows($rows);
-
-        $reflection = new \ReflectionMethod($metaModel, 'fetchRows');
-        $reflection->setAccessible(true);
-
-        $result = $reflection->invoke($metaModel, array(1,2));
-
-        $this->assertEquals($result, $rows);
-    }
-
-    /**
      * Ensure the buildDatabaseParameterList works correctly.
      *
      * @return void
