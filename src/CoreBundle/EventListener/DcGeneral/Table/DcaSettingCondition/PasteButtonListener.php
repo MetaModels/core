@@ -101,6 +101,6 @@ class PasteButtonListener extends AbstractConditionFactoryUsingListener
             return true;
         }
 
-        return \count($collector->collectChildrenOf($model)) < $max;
+        return \count($collector->collectDirectChildrenOf($model)) < $max;
     }
 }
