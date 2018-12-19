@@ -123,7 +123,7 @@ class SimpleLookup extends Simple
      */
     public function enableFEFilterWidget()
     {
-        return (bool) $this->get('predef_param');
+        return (bool) $this->get('fe_widget');
     }
 
     /**

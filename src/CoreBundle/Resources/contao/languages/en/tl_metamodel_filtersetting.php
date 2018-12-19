@@ -54,6 +54,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param'][0]           =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param'][1]           =
     'Check if you want to be able to set the value of this parameter in the parenting list ' .
     '(modules, content elements, etc.).';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fe_widget'][0]              = 'Provide Frontend widget';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fe_widget'][1]              =
+    'Check if you want to display a filter widget in the Frontend.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql'][0]              = 'Custom SQL Query';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql'][1]              =
     'The SQL query that shall be executed, insert tags are supported.';

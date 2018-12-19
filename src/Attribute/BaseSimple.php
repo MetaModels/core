@@ -167,16 +167,13 @@ class BaseSimple extends Base implements ISimple
                 ->orderBy('FIELD(id, :ids)')
                 ->setParameter('ids', $idList, Connection::PARAM_STR_ARRAY)
                 ->execute();
-        } elseif ($usedOnly) {
+        } else {
             $statement = $this->connection->createQueryBuilder()
                 ->select($strCol . ', COUNT(' . $strCol . ') as mm_count')
                 ->from($this->getMetaModel()->getTableName())
                 ->groupBy($strCol)
                 ->orderBy($strCol)
                 ->execute();
-        } else {
-            // We can not do anything here, must be handled by the derived attribute class.
-            return array();
         }
 
         $arrResult = array();
