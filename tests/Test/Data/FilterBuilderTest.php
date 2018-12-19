@@ -21,11 +21,15 @@
 namespace MetaModels\Test\Data;
 
 use ContaoCommunityAlliance\DcGeneral\Data\DefaultConfig;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\ResultStatement;
 use MetaModels\DcGeneral\Data\FilterBuilder;
 use MetaModels\IMetaModel;
 use MetaModels\MetaModel;
 use MetaModels\MetaModelsServiceContainer;
 use PHPUnit\Framework\TestCase;
+use MetaModels\Attribute\Base;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Test the filter builder.
@@ -39,30 +43,63 @@ class FilterBuilderTest extends TestCase
      *
      * @return IMetaModel
      */
-    private function mockMetaModel()
+    private function mockMetaModel(Connection $connection = null)
     {
-        $dataBase         = Database::getNewTestInstance();
-        $serviceContainer = new MetaModelsServiceContainer();
-        $serviceContainer->setDatabase($dataBase);
+        if (null === $connection) {
+            $connection = $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock();
+        }
 
-        $metaModel = new MetaModel(array(
-            'id'         => '1',
-            'sorting'    => '1',
-            'tstamp'     => '0',
-            'name'       => 'MetaModel',
-            'tableName'  => 'mm_test',
-            'mode'       => '',
-            'translated' => '1',
-            'languages'  => array(
-                'en' => array('isfallback' => '1'),
-                'de' => array('isfallback' => '')
-            ),
-            'varsupport' => '1',
-        ));
-
-        $metaModel->setServiceContainer($serviceContainer);
+        $metaModel = new MetaModel(
+            [
+                'id'         => '1',
+                'sorting'    => '1',
+                'tstamp'     => '0',
+                'name'       => 'MetaModel',
+                'tableName'  => 'mm_test',
+                'mode'       => '',
+                'translated' => '1',
+                'languages'  => [
+                    'en' => ['isfallback' => '1'],
+                    'de' => ['isfallback' => '']
+                ],
+                'varsupport' => '1',
+            ],
+            $this->getMockBuilder(EventDispatcherInterface::class)->disableOriginalConstructor()->getMock(),
+            $connection
+        );
 
         return $metaModel;
+    }
+
+    /**
+     * Mock a database connection with the passed query.
+     *
+     * @param string $queryString The expected SQL query.
+     * @param array  $params      The expected parameters.
+     * @param array  $result      The query result.
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
+     */
+    private function mockConnection($queryString, $params, $result)
+    {
+        $connection = $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock();
+
+        $statement = $this
+            ->getMockBuilder(ResultStatement::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $statement
+            ->expects($this->once())
+            ->method('fetchAll')
+            ->with(\PDO::FETCH_ASSOC)
+            ->willReturn($result);
+        $connection
+            ->expects($this->once())
+            ->method('executeQuery')
+            ->with($queryString, $params)
+            ->willReturn($statement);
+
+        return $connection;
     }
 
     /**
@@ -72,15 +109,17 @@ class FilterBuilderTest extends TestCase
      */
     public function testBuildEmpty()
     {
-        $this->markTestIncomplete('Needs to get rewritten using doctrine connection.');
         $metaModel = $this->mockMetaModel();
 
         $config = DefaultConfig::init();
 
-        $config->setFilter(array(
-        ));
+        $config->setFilter([]);
 
-        $builder = new FilterBuilder($metaModel, $config);
+        $builder = new FilterBuilder(
+            $metaModel,
+            $config,
+            $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock()
+        );
 
         $filter = $builder->build();
 
@@ -94,69 +133,67 @@ class FilterBuilderTest extends TestCase
      */
     public function testBuildSqlOnly()
     {
-        $this->markTestIncomplete('Needs to get rewritten using doctrine connection.');
         $metaModel = $this->mockMetaModel();
-        $dataBase  = $metaModel->getServiceContainer()->getDatabase();
 
         $attribute = $this
-            ->getMockForAbstractClass(
-                'MetaModels\Attribute\Base',
-                array(
-                    $metaModel,
-                    array(
-                        'colname'      => 'test1',
-                    )
-                ),
-                '',
-                true,
-                true,
-                true,
-                array('searchFor')
-            );
+            ->getMockBuilder(Base::class)
+            ->setConstructorArgs([$metaModel, ['colname' => 'test1']])
+            ->setMethods(['searchFor'])
+            ->getMockForAbstractClass();
+
         $attribute
-            ->expects($this->any())
+            ->expects($this->once())
             ->method('searchFor')
             ->with('abc')
-            ->will($this->returnValue(array(0, 1, 2, 3)));
+            ->willReturn([0, 1, 2, 3]);
 
         /** @var \MetaModels\Attribute\Base $attribute */
         $metaModel->addAttribute($attribute);
 
         $config = DefaultConfig::init();
 
-        $config->setFilter(array(
-            array(
+        $config->setFilter([
+            [
                 'operation' => '=',
                 'property'  => 'foo',
                 'value'     => 0
-            ),
-            array(
+            ],
+            [
                 'operation' => '=',
                 'property'  => 'test1',
                 'value'     => 'abc'
-            )
-        ));
+            ]
+        ]);
 
-        /** @var Database $dataBase */
-        $dataBase
-            ->getQueryCollection()
-            ->theQuery('SELECT id FROM mm_test WHERE ((foo = ?))')
-            ->with(0)
-            ->result()
-            ->addRows(array(
-                array('id' => 0),
-                array('id' => 1),
-                array('id' => 2),
-                array('id' => 3),
-                array('id' => 4),
-                array('id' => 5),
-            ));
+        $connection = $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock();
 
-        $builder = new FilterBuilder($metaModel, $config);
+        $statement = $this
+            ->getMockBuilder(ResultStatement::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $statement
+            ->expects($this->once())
+            ->method('fetchAll')
+            ->with(\PDO::FETCH_ASSOC)
+            ->willReturn([
+                ['id' => 0],
+                ['id' => 1],
+                ['id' => 2],
+                ['id' => 3],
+                ['id' => 4],
+                ['id' => 5],
+            ]);
+        $connection
+            ->expects($this->once())
+            ->method('executeQuery')
+            ->with('SELECT id FROM mm_test WHERE ((foo = ?))', [0])
+            ->willReturn($statement);
+
+        $builder = new FilterBuilder($metaModel, $config, $connection);
 
         $filter = $builder->build();
 
-        $this->assertEquals(array(0, 1, 2, 3), $filter->getMatchingIds());
+        $this->assertSame([0, 1, 2, 3], $filter->getMatchingIds());
     }
 
     /**
@@ -168,30 +205,19 @@ class FilterBuilderTest extends TestCase
      */
     public function testIssue700()
     {
-        $this->markTestIncomplete('Needs to get rewritten using doctrine connection.');
         $metaModel = $this->mockMetaModel();
-        $dataBase  = $metaModel->getServiceContainer()->getDatabase();
 
         $attribute = $this
-            ->getMockForAbstractClass(
-                'MetaModels\Attribute\Base',
-                array(
-                    $metaModel,
-                    array(
-                        'colname' => 'test1',
-                    )
-                ),
-                '',
-                true,
-                true,
-                true,
-                array('searchFor')
-            );
+            ->getMockBuilder(Base::class)
+            ->setConstructorArgs([$metaModel, ['colname' => 'test1']])
+            ->setMethods(['searchFor'])
+            ->getMockForAbstractClass();
+
         $attribute
-            ->expects($this->any())
+            ->expects($this->once())
             ->method('searchFor')
             ->with('*test*')
-            ->will($this->returnValue(array(0, 1, 2, 3)));
+            ->willReturn([0, 1, 2, 3]);
 
         /** @var \MetaModels\Attribute\Base $attribute */
         $metaModel->addAttribute($attribute);
@@ -199,44 +225,34 @@ class FilterBuilderTest extends TestCase
         $config = DefaultConfig::init();
 
         $config->setFilter(
-            array(
-                array(
+            [
+                [
                     'operation' => 'AND',
-                    'children'  => array(
-                        array(
+                    'children'  => [
+                        [
                             'operation' => 'AND',
-                            'children'  => array(
-                                array(
+                            'children'  => [
+                                [
                                     'operation' => 'LIKE',
                                     'property'  => 'test1',
                                     'value'     => '*test*'
-                                )
-                            )
-                        ),
-                    )
-                )
-            )
+                                ]
+                            ]
+                        ],
+                    ]
+                ]
+            ]
         );
 
-        /** @var Database $dataBase */
-        $dataBase
-            ->getQueryCollection()
-            ->theQuery('SELECT id FROM mm_test WHERE ((foo = ?))')
-            ->with(0)
-            ->result()
-            ->addRows(array(
-                array('id' => 0),
-                array('id' => 1),
-                array('id' => 2),
-                array('id' => 3),
-                array('id' => 4),
-                array('id' => 5),
-            ));
+        $connection = $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock();
+        $connection
+            ->expects($this->never())
+            ->method('executeQuery');
 
-        $builder = new FilterBuilder($metaModel, $config);
+        $builder = new FilterBuilder($metaModel, $config, $connection);
 
         $filter = $builder->build();
 
-        $this->assertEquals(array(0, 1, 2, 3), $filter->getMatchingIds());
+        $this->assertSame([0, 1, 2, 3], $filter->getMatchingIds());
     }
 }
