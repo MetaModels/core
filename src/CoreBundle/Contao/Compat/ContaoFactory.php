@@ -20,6 +20,7 @@
 
 namespace MetaModels\CoreBundle\Contao\Compat;
 
+use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
 use Contao\InsertTags;
 
@@ -57,5 +58,19 @@ class ContaoFactory
         $this->framework->initialize();
 
         return new InsertTags();
+    }
+
+    /**
+     * Create an adapter.
+     *
+     * @param string $className The class name to create an adapter for.
+     *
+     * @return Adapter
+     */
+    public function getAdapter($className)
+    {
+        $this->framework->initialize();
+
+        return $this->framework->getAdapter($className);
     }
 }

@@ -21,9 +21,7 @@
 
 namespace MetaModels\Filter\Setting;
 
-use Contao\CoreBundle\Framework\Adapter;
-use Contao\InsertTags;
-use Doctrine\DBAL\Connection;
+use Psr\Container\ContainerInterface;
 
 /**
  * Attribute type factory for custom SQL filter settings.
@@ -31,58 +29,27 @@ use Doctrine\DBAL\Connection;
 class CustomSqlFilterSettingTypeFactory extends AbstractFilterSettingTypeFactory
 {
     /**
-     * The database connection.
+     * The Contao framework.
      *
-     * @var Connection
+     * @var ContainerInterface
      */
-    private $database;
-
-    /**
-     * The event dispatcher.
-     *
-     * @var InsertTags
-     */
-    private $insertTags;
-
-    /**
-     * The legacy MetaModels service container retriever callback.
-     *
-     * @var \Closure
-     *
-     * @deprecated Only here as gateway to the deprecated service container.
-     */
-    private $legacyDic;
+    private $container;
 
     /**
      * {@inheritDoc}
      *
-     * @param Connection $database   The database.
-     * @param Adapter    $insertTags The insert tag adapter.
+     * @param ContainerInterface $container The service container.
      */
-    public function __construct(
-        Connection $database,
-        InsertTags $insertTags
-    ) {
+    public function __construct(ContainerInterface $container)
+    {
         parent::__construct();
-
-        $this->database   = $database;
-        $this->insertTags = $insertTags;
+        $this->container = $container;
 
         $this
             ->setTypeName('customsql')
             ->setTypeIcon('bundles/metamodelscore/images/icons/filter_customsql.png')
             ->setTypeClass(CustomSql::class)
             ->allowAttributeTypes();
-    }
-
-    /**
-     * Set the legacy DIC retriever function.
-     *
-     * @return void
-     */
-    public function setLegacyDic(\Closure $callback)
-    {
-        $this->legacyDic = $callback;
     }
 
     /**
@@ -93,16 +60,7 @@ class CustomSqlFilterSettingTypeFactory extends AbstractFilterSettingTypeFactory
         return new CustomSql(
             $filterSettings,
             $information,
-            $this->database,
-            $this->insertTags,
-            function () {
-                static $container;
-                if (!$container) {
-                    $container = $this->legacyDic->__invoke();
-                }
-
-                return $container;
-            }
+            $this->container
         );
     }
 }

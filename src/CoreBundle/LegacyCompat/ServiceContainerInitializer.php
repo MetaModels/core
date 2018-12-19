@@ -21,7 +21,6 @@
 
 namespace MetaModels\CoreBundle\LegacyCompat;
 
-use MetaModels\Filter\Setting\CustomSqlFilterSettingTypeFactory;
 use MetaModels\MetaModelsServiceContainer;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -82,19 +81,5 @@ class ServiceContainerInitializer
             });
 
         return $serviceContainer;
-    }
-
-    /**
-     * Configure the custom SQL filter factory to get the legacy service container.
-     *
-     * @param CustomSqlFilterSettingTypeFactory $factory The factory to configure.
-     *
-     * @return void
-     */
-    public function configureCustomSqlFactory(CustomSqlFilterSettingTypeFactory $factory)
-    {
-        $factory->setLegacyDic(function () {
-            return $this->container->get('MetaModels\MetaModelsServiceContainer');
-        });
     }
 }

@@ -57,6 +57,18 @@ services:
           - "%contao.resources_paths%"
           - "%kernel.project_dir%"
 
+    metamodels.contao_input:
+        class: Contao\Input
+        factory: ['@MetaModels\CoreBundle\Contao\Compat\ContaoFactory', 'getAdapter']
+        arguments:
+            - 'Contao\Input'
+
+    metamodels.contao_session:
+        class: Contao\Session
+        factory: ['@MetaModels\CoreBundle\Contao\Compat\ContaoFactory', 'getAdapter']
+        arguments:
+            - 'Contao\Session'
+
     metamodels.insert_tags:
         class: Contao\InsertTags
         factory: ['@MetaModels\CoreBundle\Contao\Compat\ContaoFactory', 'createInsertTags']

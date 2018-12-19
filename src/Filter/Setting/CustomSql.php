@@ -31,13 +31,16 @@ use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Rules\SimpleQuery;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use MetaModels\IItem;
+use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
+use Psr\Container\ContainerInterface;
+use Symfony\Component\DependencyInjection\ServiceSubscriberInterface;
 
 /**
  * This filter condition generates a filter rule for a predefined SQL query.
  * The generated rule will only return ids that are returned from this query.
  */
-class CustomSql implements ISimple
+class CustomSql implements ISimple, ServiceSubscriberInterface
 {
     /**
      * The parenting filter setting container this setting belongs to.
@@ -52,20 +55,6 @@ class CustomSql implements ISimple
      * @var array
      */
     private $data = [];
-
-    /**
-     * The database connection.
-     *
-     * @var Connection
-     */
-    private $database;
-
-    /**
-     * The event dispatcher.
-     *
-     * @var InsertTags
-     */
-    private $insertTags;
 
     /**
      * The filter params (should be array or null).
@@ -89,36 +78,55 @@ class CustomSql implements ISimple
     private $queryParameter;
 
     /**
-     * Closure to obtain the legacy service container only when needed.
+     * The service container.
      *
-     * @var \Closure
-     *
-     * @deprecated Only here as gateway to the deprecated service container.
+     * @var ContainerInterface
      */
-    private $oldContainer;
+    private $container;
 
     /**
      * Constructor - initialize the object and store the parameters.
      *
-     * @param ICollection $collection   The parenting filter settings object.
-     * @param array       $data         The attributes for this filter setting.
-     * @param Connection  $database     The database.
-     * @param InsertTags  $insertTags   The insert tags replacer.
-     * @param \Closure    $oldContainer Closure to obtain the legacy service container only when needed.
+     * @param ICollection        $collection   The parenting filter settings object.
+     * @param array              $data         The attributes for this filter setting.
+     * @param ContainerInterface $container    The service container.
+     *
+     * @throws \InvalidArgumentException When a service is missing.
      */
-    public function __construct(
-        $collection,
-        $data,
-        Connection $database,
-        InsertTags $insertTags,
-        $oldContainer
-    ) {
+    public function __construct($collection, $data, ContainerInterface $container)
+    {
         $this->collection = $collection;
         $this->data       = $data;
-        $this->database   = $database;
-        $this->insertTags = $insertTags;
 
-        $this->oldContainer = $oldContainer;
+        $missing = [];
+        foreach (array_keys(self::getSubscribedServices()) as $serviceId) {
+            if (!$container->has($serviceId)) {
+                $missing[] = $serviceId;
+            }
+        }
+        if (!empty($missing)) {
+            throw new \InvalidArgumentException(
+                'The service container is missing the following services: ' . implode(', ', $missing)
+            );
+        }
+        $this->container = $container;
+    }
+
+    /**
+     * Get the needed services.
+     *
+     * @return array
+     */
+    public static function getSubscribedServices()
+    {
+        return [
+            Connection::class => Connection::class,
+            Input::class      => Input::class,
+            InsertTags::class => InsertTags::class,
+            Session::class    => Session::class,
+            // This one is deprecated.
+            IMetaModelsServiceContainer::class => IMetaModelsServiceContainer::class
+        ];
     }
 
     /**
@@ -234,7 +242,7 @@ class CustomSql implements ISimple
             $this->queryString,
             $this->queryParameter,
             'id',
-            $this->database
+            $this->container->get(Connection::class)
         );
     }
 
@@ -297,7 +305,7 @@ class CustomSql implements ISimple
             $serviceName = $valueName;
         }
 
-        $service = $this->oldContainer->__invoke()->getService($serviceName);
+        $service = $this->container->get(IMetaModelsServiceContainer::class)->getService($serviceName);
         if (is_callable($service)) {
             return call_user_func($service, $valueName, $arguments);
         }
@@ -321,16 +329,16 @@ class CustomSql implements ISimple
     {
         switch (strtolower($source)) {
             case 'get':
-                return Input::get($valueName);
+                return $this->container->get(Input::class)->get($valueName);
 
             case 'post':
-                return Input::post($valueName);
+                return $this->container->get(Input::class)->post($valueName);
 
             case 'cookie':
-                return Input::cookie($valueName);
+                return $this->container->get(Input::class)->cookie($valueName);
 
             case 'session':
-                return Session::getInstance()->get($valueName);
+                return $this->container->get(Session::class)->get($valueName);
 
             case 'filter':
                 if (is_array($this->filterParameters)) {
@@ -470,7 +478,7 @@ class CustomSql implements ISimple
      */
     private function parseInsertTagsInternal($queryString)
     {
-        return $this->insertTags->replace($queryString, false);
+        return $this->container->get(InsertTags::class)->replace($queryString, false);
     }
 
     /**

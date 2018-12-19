@@ -12,11 +12,22 @@ services:
     metamodels.filter_setting_factory.customsql:
         class: MetaModels\Filter\Setting\CustomSqlFilterSettingTypeFactory
         arguments:
-          - "@database_connection"
-          - "@metamodels.insert_tags"
-        configurator: 'MetaModels\CoreBundle\LegacyCompat\ServiceContainerInitializer:configureCustomSqlFactory'
+          - '@metamodels.filter_setting_factory.customsql.locator'
         tags:
           - { name: metamodels.filter_factory }
+
+    metamodels.filter_setting_factory.customsql.locator:
+        class: Symfony\Component\DependencyInjection\ServiceLocator
+        arguments:
+          -
+            Doctrine\DBAL\Connection: '@database_connection'
+            MetaModels\IMetaModelsServiceContainer: '@MetaModels\MetaModelsServiceContainer'
+            Contao\Input: '@metamodels.contao_input'
+            Contao\InsertTags: '@metamodels.insert_tags'
+            Contao\Session: '@metamodels.contao_session'
+
+        tags:
+          - { name: container.service_locator }
 
     metamodels.filter_setting_factory.conditionand:
         class: MetaModels\Filter\Setting\ConditionAndFilterSettingTypeFactory
