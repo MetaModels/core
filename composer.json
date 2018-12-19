@@ -61,7 +61,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "MetaModels\\Test\\": "tests/Test/"
+      "MetaModels\\Test\\": "tests/"
     }
   },
   "extra": {
