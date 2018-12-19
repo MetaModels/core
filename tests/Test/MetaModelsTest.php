@@ -20,10 +20,16 @@
 
 namespace MetaModels\Test;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\Expression\ExpressionBuilder;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Statement;
+use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModel;
 use MetaModels\MetaModelsServiceContainer;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Test the base attribute.
@@ -258,41 +264,130 @@ class MetaModelsTest extends TestCase
      *
      * @return void
      */
-    public function testGetCount()
+    public function testGetCountForEmptyList()
     {
-        $this->markTestIncomplete('We need to rewrite MetaModel to utilize doctrine first');
-
         $metaModel = $this
-            ->getMockBuilder('MetaModels\MetaModel')
-            ->setMethods(array('getMatchingIds'))
-            ->setConstructorArgs(array(array('tableName'  => 'mm_test_retrieve')))
+            ->getMockBuilder(MetaModel::class)
+            ->setMethods(['getMatchingIds'])
+            ->setConstructorArgs(
+                [
+                    ['tableName' => 'mm_test_retrieve'],
+                    $this->getMockForAbstractClass(EventDispatcherInterface::class),
+                    $this->mockConnection([])
+                ]
+            )
             ->getMock();
         $metaModel
-            ->expects($this->any())
+            ->expects($this->once())
             ->method('getMatchingIds')
-            ->will($this->returnValue(array()));
-        $this->assertEquals(0, $metaModel->getCount($metaModel->getEmptyFilter()));
-
-        $metaModel = $this->getMockBuilder('MetaModels\MetaModel')
-            ->setMethods(array('getMatchingIds'))
-            ->setConstructorArgs(array(array('tableName'  => 'mm_test_retrieve')))
-            ->getMock();
-        $metaModel
-            ->expects($this->any())
-            ->method('getMatchingIds')
-            ->will($this->returnValue(array(4, 3, 2, 1)));
+            ->willReturn([]);
 
         /** @var MetaModel $metaModel */
-        $database = Database::getNewTestInstance();
-        $metaModel->setServiceContainer($this->mockServiceContainer($database));
+        $this->assertEquals(0, $metaModel->getCount($metaModel->getEmptyFilter()));
+    }
 
-        $database
-            ->getQueryCollection()
-            ->theQuery('SELECT COUNT(id) AS count FROM mm_test_retrieve WHERE id IN(?,?,?,?)')
-            ->with(4, 3, 2, 1)
-            ->result()
-            ->addRow(array('count' => 4));
+    /**
+     * Ensure the getCount works correctly.
+     *
+     * @return void
+     */
+    public function testGetCountForNonEmptyList()
+    {
+        $metaModel = $this->getMockBuilder(MetaModel::class)
+            ->setMethods(['getMatchingIds'])
+            ->setConstructorArgs([
+                ['tableName' => 'mm_test_retrieve'],
+                $this->getMockForAbstractClass(EventDispatcherInterface::class),
+                $this->mockConnection([
+                    \Closure::fromCallable(function () {
+                        $builder = $this
+                            ->getMockBuilder(QueryBuilder::class)
+                            ->disableOriginalConstructor()
+                            ->getMock();
+                        $builder
+                            ->expects($this->once())
+                            ->method('select')
+                            ->with('COUNT(id)')
+                            ->willReturn($builder);
+                        $builder
+                            ->expects($this->once())
+                            ->method('from')
+                            ->with('mm_test_retrieve')
+                            ->willReturn($builder);
 
+                        $expr = $this
+                            ->getMockBuilder(ExpressionBuilder::class)
+                            ->disableOriginalConstructor()
+                            ->setMethods()
+                            ->getMock();
+
+                        $builder
+                            ->expects($this->once())
+                            ->method('expr')
+                            ->willReturn($expr);
+
+                        $builder
+                            ->expects($this->once())
+                            ->method('where')
+                            ->with('id IN (:values)')
+                            ->willReturn($builder);
+
+                        $builder
+                            ->expects($this->once())
+                            ->method('setParameter')
+                            ->with('values', [4, 3, 2, 1], Connection::PARAM_STR_ARRAY)
+                            ->willReturn($builder);
+
+                        $statement = $this
+                            ->getMockBuilder(Statement::class)
+                            ->disableOriginalConstructor()
+                            ->getMock();
+                        $statement
+                            ->expects($this->once())
+                            ->method('fetch')
+                            ->with(\PDO::FETCH_COLUMN)
+                            ->willReturn(4);
+                        $builder
+                            ->expects($this->once())
+                            ->method('execute')
+                            ->willReturn($statement);
+
+                        return $builder;
+                    })->__invoke()
+                ])
+            ])
+            ->getMock();
+        $metaModel
+            ->expects($this->once())
+            ->method('getMatchingIds')
+            ->willReturn([4, 3, 2, 1]);
+
+        /** @var MetaModel $metaModel */
         $this->assertEquals(4, $metaModel->getCount($metaModel->getEmptyFilter()));
+    }
+
+    /**
+     * Mock a database connection with hte passed query builders.
+     *
+     * @param array $queryBuilders The query builder list.
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function mockConnection(array $queryBuilders)
+    {
+        $connection = $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock();
+
+        if ([] !== $queryBuilders) {
+            $connection
+                ->expects($this->exactly(count($queryBuilders)))
+                ->method('createQueryBuilder')
+                ->willReturnOnConsecutiveCalls(...$queryBuilders);
+        } else {
+            $connection
+                ->expects($this->never())
+                ->method('createQueryBuilder');
+        }
+
+        return $connection;
     }
 }
