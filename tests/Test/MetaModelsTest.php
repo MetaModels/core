@@ -24,10 +24,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\Expression\ExpressionBuilder;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Statement;
-use MetaModels\IMetaModel;
-use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModel;
-use MetaModels\MetaModelsServiceContainer;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -38,21 +35,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class MetaModelsTest extends TestCase
 {
-    /**
-     * Mock a service container with the given database.
-     *
-     * @param \Contao\Database $database The contao database instance.
-     *
-     * @return IMetaModelsServiceContainer
-     */
-    protected function mockServiceContainer($database)
-    {
-        $serviceContainer = new MetaModelsServiceContainer();
-        $serviceContainer->setDatabase($database);
-
-        return $serviceContainer;
-    }
-
     /**
      * Test instantiation of a MetaModel.
      *
