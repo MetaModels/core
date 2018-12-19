@@ -85,14 +85,6 @@ class ModelToLabelListener extends AbstractListener
             return;
         }
 
-        // FIXME: we should only handle the conditions provided via lookup map or condition factory here.
-        // The factory should return the condition type image from a call and therefore make the global usage obsolete.
-        // conditionor,
-        // conditionand,
-        // conditionpropertyvalueis,
-        // conditionpropertycontainanyof,
-        // conditionpropertyvisible,
-        // conditionnot
         $environment    = $event->getEnvironment();
         $model          = $event->getModel();
         $metaModel      = $this->getMetaModel($environment);
@@ -112,7 +104,7 @@ class ModelToLabelListener extends AbstractListener
             ->setLabel($this->getLabelText($type))
             ->setArgs([
                 $this->iconBuilder->getBackendIconImageTag(
-                    $GLOBALS['METAMODELS']['attributes'][$type]['image'],
+                    'bundles/metamodelscore/images/icons/filter_default.png',
                     $name,
                     '',
                     'bundles/metamodelscore/images/icons/filter_default.png'
