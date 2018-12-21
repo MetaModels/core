@@ -30,6 +30,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use MetaModels\Filter\Rules\SimpleQuery;
 use MetaModels\IMetaModel;
+use MetaModels\ITranslatedMetaModel;
 
 /**
  * This is the MetaModelAttribute class for handling translated attributes that reference another table.
@@ -195,8 +196,8 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function getDataFor($arrIds)
     {
-        $strActiveLanguage   = $this->getMetaModel()->getActiveLanguage();
-        $strFallbackLanguage = $this->getMetaModel()->getFallbackLanguage();
+        $strActiveLanguage   = $this->getActiveLanguage();
+        $strFallbackLanguage = $this->getFallbackLanguage();
 
         $arrReturn = $this->getTranslatedDataFor($arrIds, $strActiveLanguage);
 
@@ -229,6 +230,11 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     private function determineLanguages()
     {
+        $metaModel = $this->getMetaModel();
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            return $metaModel->getLanguages();
+        }
+
         $languages = $this->getMetaModel()->getAvailableLanguages();
         if ($languages === null) {
             throw new \RuntimeException(
@@ -263,7 +269,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function searchFor($strPattern)
     {
-        return $this->searchForInLanguages($strPattern, array($this->getMetaModel()->getActiveLanguage()));
+        return $this->searchForInLanguages($strPattern, array($this->getActiveLanguage()));
     }
 
     /**
@@ -295,8 +301,8 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     {
         $langSet = sprintf(
             '\'%s\',\'%s\'',
-            $this->getMetaModel()->getActiveLanguage(),
-            $this->getMetaModel()->getFallbackLanguage()
+            $this->getActiveLanguage(),
+            $this->getFallbackLanguage()
         );
 
         $statement = $this->connection
@@ -340,7 +346,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
             ->select('*')
             ->from($this->getValueTable());
 
-        $this->buildWhere($queryBuilder, $idList, $this->getMetaModel()->getActiveLanguage());
+        $this->buildWhere($queryBuilder, $idList, $this->getActiveLanguage());
 
         $statement     = $queryBuilder->execute();
         $arrOptionizer = $this->getOptionizer();
@@ -446,5 +452,35 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         $this->buildWhere($queryBuilder, $arrIds, $strLangCode);
 
         $queryBuilder->execute();
+    }
+
+    /**
+     * Retrieve the current language of the MetaModel we are attached to.
+     *
+     * @return string
+     */
+    private function getActiveLanguage()
+    {
+        $metaModel = $this->getMetaModel();
+        if (!$metaModel instanceof ITranslatedMetaModel) {
+            return $metaModel->getActiveLanguage();
+        }
+
+        return $metaModel->getLanguage();
+    }
+
+    /**
+     * Retrieve the main language of the MetaModel we are attached to.
+     *
+     * @return string
+     */
+    private function getFallbackLanguage()
+    {
+        $metaModel = $this->getMetaModel();
+        if (!$metaModel instanceof ITranslatedMetaModel) {
+            return $metaModel->getFallbackLanguage();
+        }
+
+        return $metaModel->getMainLanguage();
     }
 }
