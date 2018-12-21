@@ -208,13 +208,13 @@ class MetaModel implements IMetaModel
     /**
      * Try to unserialize a value.
      *
-     * @param string $value The string to process.
+     * @param mixed $value The string to process.
      *
      * @return mixed
      */
     protected function tryUnserialize($value)
     {
-        if (0 === strpos($value, 'a:')) {
+        if (!is_array($value) && 0 === strpos($value, 'a:')) {
             $unSerialized = unserialize($value, ['allowed_classes' => false]);
         }
 
