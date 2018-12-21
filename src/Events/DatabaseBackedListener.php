@@ -27,8 +27,10 @@ use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\Events\CollectMetaModelAttributeInformationEvent;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
+use MetaModels\ITranslatedMetaModel;
 use MetaModels\MetaModel;
 use MetaModels\MetaModelsServiceContainer;
+use MetaModels\TranslatedMetaModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -200,20 +202,28 @@ class DatabaseBackedListener
      * @param array                $arrData The meta information for the MetaModel.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function createInstance(CreateMetaModelEvent $event, $arrData)
     {
         if (!$this->createInstanceViaLegacyFactory($event, $arrData)) {
-            $metaModel = new MetaModel($arrData, $this->dispatcher, $this->database);
+            if ($arrData['translated']) {
+                $metaModel = new TranslatedMetaModel($arrData, $this->dispatcher, $this->database);
+                $metaModel->selectLanguage($GLOBALS['TL_LANGUAGE']);
+            } else {
+                $metaModel = new MetaModel($arrData, $this->dispatcher, $this->database);
+            }
             $metaModel->setServiceContainer(function () {
                 return $this->getServiceContainer();
             }, false);
             $event->setMetaModel($metaModel);
         }
 
-        if ($event->getMetaModel()) {
-            $this->instancesByTable[$event->getMetaModelName()]     = $event->getMetaModel();
-            $this->instancesById[$event->getMetaModel()->get('id')] = $event->getMetaModel();
+        if ($metaModel = $event->getMetaModel()) {
+            $this->instancesByTable[$event->getMetaModelName()] = $metaModel;
+            $this->instancesById[$metaModel->get('id')]         = $metaModel;
         }
     }
 
@@ -227,11 +237,20 @@ class DatabaseBackedListener
     public function createMetaModel(CreateMetaModelEvent $event)
     {
         if ($event->getMetaModel() !== null) {
+            if (($metaModel = $event->getMetaModel()) instanceof ITranslatedMetaModel && $metaModel->isTranslated()) {
+                // @codingStandardsIgnoreStart
+                @\trigger_error(
+                    'Translated "\MetaModel\IMetamodel" instances are deprecated since MetaModels 2.1 ' .
+                    'and to be removed in 3.0. The MetaModel must implement "\MetaModels\ITranslatedMetaModel".',
+                    E_USER_DEPRECATED
+                );
+                // @codingStandardsIgnoreEnd
+            }
             return;
         }
 
-        if (isset($this->instancesByTable[$event->getMetaModelName()])) {
-            $event->setMetaModel($this->instancesByTable[$event->getMetaModelName()]);
+        if (isset($this->instancesByTable[$metaModelName = $event->getMetaModelName()])) {
+            $event->setMetaModel($this->instancesByTable[$metaModelName]);
 
             return;
         }
@@ -242,7 +261,7 @@ class DatabaseBackedListener
             ->select('*')
             ->from('tl_metamodel')
             ->where('tableName=:tableName')
-            ->setParameter('tableName', $event->getMetaModelName())
+            ->setParameter('tableName', $metaModelName)
             ->setMaxResults(1)
             ->execute()
             ->fetch(\PDO::FETCH_ASSOC);
