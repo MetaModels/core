@@ -46,6 +46,7 @@ use MetaModels\IItem;
 use MetaModels\IItems;
 use MetaModels\IMetaModel;
 use MetaModels\Item;
+use MetaModels\ITranslatedMetaModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -224,6 +225,11 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     protected function setLanguage($language = '')
     {
+        $metaModel = $this->getMetaModel();
+        if ($metaModel instanceof ITranslatedMetaModel && !empty($language)) {
+            $metaModel->selectLanguage($language);
+        }
+
         $previousLanguage = $GLOBALS['TL_LANGUAGE'];
         if (!empty($language) && ($GLOBALS['TL_LANGUAGE'] !== $language)) {
             $GLOBALS['TL_LANGUAGE'] = $language;
@@ -734,14 +740,49 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     public function getLanguages($mixID)
     {
-        if (!$this->getMetaModel()->isTranslated()) {
+        $metaModel = $this->getMetaModel();
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            $collection = new DefaultLanguageInformationCollection();
+            foreach ($metaModel->getLanguages() as $langCode) {
+                [$langCode, $country] = explode('_', $langCode, 2);
+                $collection->add(new DefaultLanguageInformation($langCode, $country ?: null));
+            }
+            if (count($collection) > 0) {
+                return $collection;
+            }
+
             return null;
         }
 
-        $collection = new DefaultLanguageInformationCollection();
+        if (!$metaModel->isTranslated(false)) {
+            return null;
+        }
 
-        foreach ($this->getMetaModel()->getAvailableLanguages() as $langCode) {
-            list($langCode, $country) = explode('_', $langCode, 2);
+        // @coverageIgnoreStart
+        return $this->getLanguagesBcLayer($metaModel);
+        // @coverageIgnoreEnd
+    }
+
+    /**
+     * Backward compatibility layer.
+     *
+     * @param IMetaModel $metaModel The MetaModel.
+     *
+     * @return DefaultLanguageInformationCollection|null
+     */
+    private function getLanguagesBcLayer($metaModel): ?DefaultLanguageInformation
+    {
+        // @coverageIgnoreStart
+        // @codingStandardsIgnoreStart
+        @\trigger_error(
+            'Translated "\MetaModel\IMetamodel" instances are deprecated since MetaModels 2.1 ' .
+            'and to be removed in 3.0. The MetaModel must implement "\MetaModels\ITranslatedMetaModel".',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+        $collection = new DefaultLanguageInformationCollection();
+        foreach ($metaModel->getAvailableLanguages() as $langCode) {
+            [$langCode, $country] = explode('_', $langCode, 2);
             $collection->add(new DefaultLanguageInformation($langCode, $country ?: null));
         }
 
@@ -750,6 +791,7 @@ class Driver implements MultiLanguageDataProviderInterface
         }
 
         return null;
+        // @coverageIgnoreEnd
     }
 
     /**
@@ -759,14 +801,43 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     public function getFallbackLanguage($mixID)
     {
-        if ($this->getMetaModel()->isTranslated()) {
-            $langCode = $this->getMetaModel()->getFallbackLanguage();
-
-            list($langCode, $country) = explode('_', $langCode, 2);
+        $metaModel = $this->getMetaModel();
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            [$langCode, $country] = explode('_', $metaModel->getMainLanguage(), 2);
             return new DefaultLanguageInformation($langCode, $country ?: null);
         }
+        if (!$metaModel->isTranslated(false)) {
+            return null;
+        }
 
-        return null;
+        // @coverageIgnoreStart
+        return $this->getFallbackLanguageBcLayer($metaModel);
+        // @coverageIgnoreEnd
+    }
+
+    /**
+     * Backward compatibility layer.
+     *
+     * @param IMetaModel $metaModel The MetaModel.
+     *
+     * @return DefaultLanguageInformation
+     */
+    private function getFallbackLanguageBcLayer(IMetaModel $metaModel): DefaultLanguageInformation
+    {
+        // @coverageIgnoreStart
+        // @codingStandardsIgnoreStart
+        @\trigger_error(
+            'Translated "\MetaModel\IMetamodel" instances are deprecated since MetaModels 2.1 ' .
+            'and to be removed in 3.0. The MetaModel must implement "\MetaModels\ITranslatedMetaModel".',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+        $langCode = $metaModel->getFallbackLanguage();
+
+        [$langCode, $country] = explode('_', $langCode, 2);
+
+        return new DefaultLanguageInformation($langCode, $country ?: null);
+        // @coverageIgnoreEnd
     }
 
     /**
