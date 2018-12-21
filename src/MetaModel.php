@@ -228,6 +228,19 @@ class MetaModel implements IMetaModel
      */
     public function addAttribute(IAttribute $objAttribute)
     {
+        if ($objAttribute instanceof ITranslated && !$this instanceof ITranslatedMetaModel) {
+            // @coverageIgnoreStart
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                'Adding translated attributes to untranslated "\MetaModel\IMetamodel" instances is ' .
+                'deprecated since MetaModels 2.1 and will error in 3.0. The MetaModel must implement ' .
+                '"\MetaModels\ITranslatedMetaModel".',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            // @coverageIgnoreEnd
+        }
+
         if (!$this->hasAttribute($objAttribute->getColName())) {
             $this->arrAttributes[$objAttribute->getColName()] = $objAttribute;
         }
@@ -626,9 +639,45 @@ class MetaModel implements IMetaModel
     /**
      * {@inheritdoc}
      */
-    public function isTranslated()
+    public function isTranslated(bool $deprecation = true)
     {
-        return $this->arrData['translated'];
+        if (!$deprecation) {
+            return $this->arrData['translated'];
+        }
+        if ($this instanceof ITranslatedMetaModel) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                    'Please use "instanceof \MetaModels\ITranslatedMetaModel" instead.', __METHOD__),
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            return true;
+        }
+        if ($this->arrData['translated']) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf(
+                    'The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                    'MetaModel "%s" should implement "\MetaModels\ITranslatedMetaModel" instead.',
+                    __METHOD__,
+                    $this->getTableName()
+                ),
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            return true;
+        }
+
+        // @codingStandardsIgnoreStart
+        @\trigger_error(
+            sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                'Please use "instanceof \MetaModels\ITranslatedMetaModel" instead.', __METHOD__),
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+
+        return false;
     }
 
     /**
@@ -644,9 +693,36 @@ class MetaModel implements IMetaModel
      */
     public function getAvailableLanguages()
     {
-        if ($this->isTranslated()) {
+        if ($this instanceof ITranslatedMetaModel) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                    'Please use "\MetaModels\ITranslatedMetaModel::getLanguages" instead.', __METHOD__),
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            return $this->getLanguages();
+        }
+
+        if ($this->isTranslated(false)) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                    'Please test for "instanceof "\MetaModels\ITranslatedMetaModel" and use '.
+                    '"\MetaModels\ITranslatedMetaModel::getLanguages" instead.', __METHOD__),
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+
             return array_keys((array) $this->arrData['languages']);
         }
+        // @codingStandardsIgnoreStart
+        @\trigger_error(
+            sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                'Please test for "instanceof \MetaModels\ITranslatedMetaModel".', __METHOD__),
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
 
         return null;
     }
@@ -656,13 +732,40 @@ class MetaModel implements IMetaModel
      */
     public function getFallbackLanguage()
     {
-        if ($this->isTranslated()) {
+        if ($this instanceof ITranslatedMetaModel) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                    'Please use "\MetaModels\ITranslatedMetaModel::getMainLanguage" instead.', __METHOD__),
+                E_USER_DEPRECATED
+            );
+
+            return $this->getMainLanguage();
+        }
+
+        if ($this->isTranslated(false)) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                    'Please implement interface "\MetaModels\ITranslatedMetaModel" and use ' .
+                    '"\MetaModels\ITranslatedMetaModel::getMainLanguage" instead.', __METHOD__),
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
             foreach ($this->arrData['languages'] as $strLangCode => $arrData) {
                 if ($arrData['isfallback']) {
                     return $strLangCode;
                 }
             }
         }
+        // @codingStandardsIgnoreStart
+        @\trigger_error(
+            sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                'Please test for translations via "instanceof \MetaModels\ITranslatedMetaModel" and call ' .
+                '"\MetaModels\ITranslatedMetaModel::getMainLanguage" instead.', __METHOD__),
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
 
         return null;
     }
@@ -677,6 +780,24 @@ class MetaModel implements IMetaModel
      */
     public function getActiveLanguage()
     {
+        if ($this instanceof ITranslatedMetaModel) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                    'Please use "\MetaModels\ITranslatedMetaModel::getLanguage" and ' .
+                    '"\MetaModels\ITranslatedMetaModel::selectLanguage" instead.', __METHOD__),
+                E_USER_DEPRECATED
+            );
+        } else {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                    'Please use "\MetaModels\ITranslatedMetaModel::getLanguage" instead.', __METHOD__),
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+        }
+
         $tmp = explode('-', $GLOBALS['TL_LANGUAGE']);
         return array_shift($tmp);
     }
@@ -1104,7 +1225,17 @@ class MetaModel implements IMetaModel
         }
 
         $baseAttributes = $this->saveBaseColumns($objItem, $timestamp ?: \time());
-        if ($this->isTranslated()) {
+        if ($this instanceof ITranslatedMetaModel) {
+            $strActiveLanguage = $this->getLanguage();
+        } elseif ($this->isTranslated(false)) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf('Support for translated MetaModels not implementing "\MetaModels\ITranslatedMetaModel" '.
+                    'is  deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                    'Please implement interface "\MetaModels\ITranslatedMetaModel".', __METHOD__),
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
             $strActiveLanguage = $this->getActiveLanguage();
         } else {
             $strActiveLanguage = null;
