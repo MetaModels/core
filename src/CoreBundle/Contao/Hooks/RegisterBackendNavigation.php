@@ -257,6 +257,9 @@ class RegisterBackendNavigation
         if ($active) {
             $class .= ' active';
         }
+        if ($request->query->has('ref')) {
+            $module['param']['ref'] = $request->query->get('ref');
+        }
 
         $modules[$section]['modules'][$name] = [
             'label'    => $module['label'],
