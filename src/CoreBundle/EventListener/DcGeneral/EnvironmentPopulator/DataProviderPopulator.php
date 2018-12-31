@@ -23,6 +23,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\EnvironmentPopulator;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ContainerInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DataProviderDefinitionInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
+use Doctrine\DBAL\Connection;
 use MetaModels\DcGeneral\Data\Driver;
 use MetaModels\IFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -49,15 +50,24 @@ class DataProviderPopulator
     private $dispatcher = null;
 
     /**
+     * The database connection.
+     *
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * Create a new instance.
      *
      * @param IFactory                 $factory    The MetaModel factory.
      * @param EventDispatcherInterface $dispatcher The event dispatcher.
+     * @param Connection               $connection The database connection.
      */
-    public function __construct(IFactory $factory, EventDispatcherInterface $dispatcher)
+    public function __construct(IFactory $factory, EventDispatcherInterface $dispatcher, Connection $connection)
     {
         $this->factory    = $factory;
         $this->dispatcher = $dispatcher;
+        $this->connection = $connection;
     }
 
     /**
@@ -100,6 +110,7 @@ class DataProviderPopulator
                     array_merge($initialization, ['metaModel' => $metaModel])
                 );
                 $providerInstance->setDispatcher($this->dispatcher);
+                $providerInstance->setConnection($this->connection);
             }
         }
     }

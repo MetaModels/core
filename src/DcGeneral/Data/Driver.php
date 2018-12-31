@@ -36,6 +36,7 @@ use ContaoCommunityAlliance\DcGeneral\Data\DefaultLanguageInformationCollection;
 use ContaoCommunityAlliance\DcGeneral\Data\FilterOptionCollectionInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
 use ContaoCommunityAlliance\DcGeneral\Data\MultiLanguageDataProviderInterface;
+use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\Attribute\IComplex;
 use MetaModels\Attribute\ITranslated;
@@ -82,6 +83,13 @@ class Driver implements MultiLanguageDataProviderInterface
     protected $strCurrentLanguage;
 
     /**
+     * The database connection.
+     *
+     * @var Connection|null
+     */
+    private $connection;
+
+    /**
      * Set dispatcher.
      *
      * @param null|EventDispatcherInterface $dispatcher The new value.
@@ -91,6 +99,20 @@ class Driver implements MultiLanguageDataProviderInterface
     public function setDispatcher($dispatcher)
     {
         $this->dispatcher = $dispatcher;
+
+        return $this;
+    }
+
+    /**
+     * Set the connection to use.
+     *
+     * @param Connection $connection The connection.
+     *
+     * @return Driver
+     */
+    public function setConnection(Connection $connection)
+    {
+        $this->connection = $connection;
 
         return $this;
     }
@@ -329,7 +351,16 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     protected function prepareFilter(ConfigInterface $configuration)
     {
-        $builder = new FilterBuilder($this->getMetaModel(), $configuration);
+        if (null === $this->connection) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Not setting a "' . Connection::class .
+                '" via "setConnection()" is deprecated and will cause an error in MetaModels 3.0.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+        }
+        $builder = new FilterBuilder($this->getMetaModel(), $configuration, $this->connection);
         return $builder->build();
     }
 

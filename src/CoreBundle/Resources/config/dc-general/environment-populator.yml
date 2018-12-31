@@ -21,6 +21,7 @@ services:
         arguments:
             - '@metamodels.factory'
             - '@event_dispatcher'
+            - '@database_connection'
         tags:
             - name: kernel.event_listener
               event: dc-general.factory.populate-environment
