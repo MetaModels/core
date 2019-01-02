@@ -38,7 +38,7 @@ class BreadcrumbDcaCombineListener extends AbstractBreadcrumbListener
      */
     protected function wantToHandle(GetBreadcrumbEvent $event)
     {
-        return 'tl_metamodel_dcacombine' === $event->getEnvironment()->getDataDefinition()->getName();
+        return 'tl_metamodel_dca_combine' === $event->getEnvironment()->getDataDefinition()->getName();
     }
 
     /**
@@ -54,7 +54,7 @@ class BreadcrumbDcaCombineListener extends AbstractBreadcrumbListener
 
         $builder = UrlBuilder::fromUrl($elements->getUri())
             ->setQueryParameter('do', 'metamodels')
-            ->setQueryParameter('table', 'tl_metamodel_dcacombine')
+            ->setQueryParameter('table', 'tl_metamodel_dca_combine')
             ->setQueryParameter(
                 'pid',
                 ModelId::fromValues('tl_metamodel', $elements->getId('tl_metamodel'))->getSerialized()
@@ -65,7 +65,7 @@ class BreadcrumbDcaCombineListener extends AbstractBreadcrumbListener
         $elements->push(
             ampersand($builder->getUrl()),
             sprintf(
-                $elements->getLabel('tl_metamodel_dcacombine'),
+                $elements->getLabel('tl_metamodel_dca_combine'),
                 $this->getMetaModel($elements->getId('tl_metamodel'))->getName()
             ),
             'bundles/metamodelscore/images/icons/dca_combine.png'
