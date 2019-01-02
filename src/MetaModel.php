@@ -214,13 +214,11 @@ class MetaModel implements IMetaModel
      */
     protected function tryUnserialize($value)
     {
-        if (!is_array($value) && 0 === strpos($value, 'a:')) {
-            $unSerialized = unserialize($value, ['allowed_classes' => false]);
-        }
-
-        if (isset($unSerialized) && is_array($unSerialized)) {
-            return $unSerialized;
-        }
+        if (!is_array($value)
+            && 0 === strpos($value, 'a:')
+            && is_array($unSerialized = unserialize($value, ['allowed_classes' => false]))) {
+                return $unSerialized;
+            }
 
         return $value;
     }
