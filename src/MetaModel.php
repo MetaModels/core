@@ -217,8 +217,8 @@ class MetaModel implements IMetaModel
         if (!is_array($value)
             && 0 === strpos($value, 'a:')
             && is_array($unSerialized = unserialize($value, ['allowed_classes' => false]))) {
-                return $unSerialized;
-            }
+            return $unSerialized;
+        }
 
         return $value;
     }
