@@ -63,6 +63,7 @@ services:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.build-widget
               method: buildWidget
+              priority: 100
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.decode-property-value-for-widget
               method: decodeValue
