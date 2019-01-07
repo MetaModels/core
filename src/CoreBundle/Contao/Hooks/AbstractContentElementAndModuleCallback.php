@@ -363,11 +363,11 @@ abstract class AbstractContentElementAndModuleCallback
     /**
      * Base64 decode.
      *
-     * @param string $value The value to save.
+     * @param string|null $value The value to save.
      *
      * @return string
      */
-    public function saveCallback(string $value)
+    public function saveCallback(string $value = null)
     {
         return \base64_decode($value);
     }
@@ -375,11 +375,11 @@ abstract class AbstractContentElementAndModuleCallback
     /**
      * Base64 encode.
      *
-     * @param string $value The value.
+     * @param string|null $value The value.
      *
      * @return string
      */
-    public function loadCallback(string $value)
+    public function loadCallback(string $value = null)
     {
         return trim(\base64_encode($value), '=');
     }
