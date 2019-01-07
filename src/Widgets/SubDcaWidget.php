@@ -89,7 +89,7 @@ class SubDcaWidget extends Widget
         parent::__construct();
         $this->addAttributes($attributes);
         // Input field callback.
-        if (is_array($attributes['getsubfields_callback'])) {
+        if (isset($attributes['getsubfields_callback']) && is_array($attributes['getsubfields_callback'])) {
             $arrCallback = $this->$attributes['getsubfields_callback'];
             if (!is_object($arrCallback[0])) {
                 $this->import($arrCallback[0]);
@@ -251,7 +251,7 @@ class SubDcaWidget extends Widget
     protected function handleLoadCallback($field, $value)
     {
         // Load callback.
-        if (is_array($field['load_callback'])) {
+        if (isset($field['load_callback']) && is_array($field['load_callback'])) {
             foreach ($field['load_callback'] as $callback) {
                 $this->import($callback[0]);
                 $value = $this->{$callback[0]}->{$callback[1]}($value, $this);
@@ -281,7 +281,7 @@ class SubDcaWidget extends Widget
         $xlabel = $this->getHelpWizard($strKey, $arrField);
 
         // Input field callback.
-        if (is_array($arrField['input_field_callback'])) {
+        if (isset($arrField['input_field_callback']) && is_array($arrField['input_field_callback'])) {
             if (!is_object($this->$arrField['input_field_callback'][0])) {
                 $this->import($arrField['input_field_callback'][0]);
             }
@@ -381,7 +381,7 @@ class SubDcaWidget extends Widget
     {
         $newValue = $value;
 
-        if (is_array($field['save_callback'])) {
+        if (isset($field['save_callback']) && is_array($field['save_callback'])) {
             foreach ($field['save_callback'] as $callback) {
                 $this->import($callback[0]);
 
