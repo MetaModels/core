@@ -50,8 +50,8 @@ abstract class AbstractPropertyConditionChainFactory implements NestableProperty
     public function buildCondition(array $configuration, IMetaModel $metaModel)
     {
         $children = [];
-        if (!empty($condition['children'])) {
-            foreach ($condition['children'] as $child) {
+        if (!empty($configuration['children'])) {
+            foreach ($configuration['children'] as $child) {
                 $children[] = $this->convertCondition($child, $metaModel);
             }
         }
