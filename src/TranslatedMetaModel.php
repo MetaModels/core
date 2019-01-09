@@ -20,6 +20,7 @@
 namespace MetaModels;
 
 use Doctrine\DBAL\Connection;
+use MetaModels\Attribute\ITranslated;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -101,5 +102,34 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
         $this->activeLanguage = $activeLanguage;
 
         return $previousLanguage;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * This is only overridden for BC reasons.
+     * To be removed in MetaModels 3.0.
+     *
+     * @deprecated Since 2.1 to be private in 3.0.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    protected function fetchTranslatedAttributeValues(ITranslated $attribute, $ids)
+    {
+        $originalLanguage       = $GLOBALS['TL_LANGUAGE'];
+        $GLOBALS['TL_LANGUAGE'] = $this->getLanguage();
+
+        try {
+            $attributeData = $attribute->getTranslatedDataFor($ids, $this->getLanguage());
+            // Second round, fetch missing data from main language.
+            if ([] !== $missing = array_diff($ids, array_keys($attributeData))) {
+                $attributeData += $attribute->getTranslatedDataFor($missing, $this->getMainLanguage());
+            }
+
+            return $attributeData;
+        } finally {
+            $GLOBALS['TL_LANGUAGE'] = $originalLanguage;
+        }
     }
 }
