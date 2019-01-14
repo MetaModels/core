@@ -1,7 +1,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2018 The MetaModels team.
+ * (c) 2012-2019 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,150 +13,163 @@
  * @author     Andreas Isaak <info@andreas-isaak.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2018 The MetaModels team.
+ * @author     Carolina Koehn <ck@kikmedia.de>
+ * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
+body[class*="version_3"] a[class*="header_"] {
+	margin-left: 15px;
+}
 
-  body[class*="version_3"] a[class*="header_"] {
-    margin-left:15px;
-  }
+body[class*="version_3"] .tl_file_list .field_type img {
+	margin-right: 8px;
+	float: left;
+}
 
-  .header_css_fields {
-    padding:2px 0px 3px 20px;
-    background-image:url(../images/icons/fields.png);
-    background-position:left center;
-    background-repeat:no-repeat;
-  }
+.header_css_fields {
+	padding: 2px 0 3px 20px;
+	background-image: url("../images/icons/fields.png");
+	background-position: left center;
+	background-repeat: no-repeat;
+}
 
-  .header_add_all {
-    padding:2px 0px 3px 20px;
-    background-image:url(../images/icons/dca_add.png);
-    background-position:left center;
-    background-repeat:no-repeat;
-  }
+.header_add_all {
+	padding: 2px 0 3px 20px;
+	background-image: url("../images/icons/dca_add.png");
+	background-position: left center;
+	background-repeat: no-repeat;
+}
 
-  .rendersetting_add_all {
-    background-image:url(../images/icons/rendersettings_add.png);
-  }
+.rendersetting_add_all {
+	background-image: url("../images/icons/rendersettings_add.png");
+}
 
- /*------------------------------------------------------------------------*/
+.dca_palette {
+	color: #8ab858;
+	margin: 6px 0;
+	padding-left: 24px;
+	background: url("../../../../themes/default/images/palOpen.gif") 3px center no-repeat;
+}
 
-  #table_tl_metamodel_dcasetting_ tr.odd td {
-    background-color:transparent;
-  }
+.mm_problem_display {
+	margin-bottom: 30px;
+}
 
-  .dca_palette {
-    color:#8AB858;
-    margin:6px 0;
-    padding-left:24px;
-    background:url(../../../../themes/default/images/palOpen.gif) 3px center no-repeat;
-  }
+.mm_problem_display ul {
+	padding: 0;
+	list-style: none;
+}
 
-  .dca_combine.widget td:empty {
-    display:none;
-  }
+.tl_subdca > legend {
+	margin: 0;
+	padding: 10px 0 10px 23px;
+	background: url("../images/icons/filter_settings.png") no-repeat left center;
+}
 
-  .mm_problem_display {
-    margin-bottom:30px;
-  }
+.tl_subdca legend label {
+	font-weight: bold;
+}
 
-  .mm_problem_display ul {
-    padding:0; list-style:none;
-  }
+body[class*="version_2"] .tl_content .field_type img {
+	margin-right: 8px;
+	float: left;
+}
 
-  form[id*="tl_metamodel_"] .wizard a[data-lightbox] img,
-  form[id*="tl_metamodel_"] .wizard a[onclick] img {
-    margin-top:3px;
-  }
+body[class*="version_2"] .tl_content_right + img {
+	margin-right: 8px;
+	float: left;
+}
 
-  div[class*="table_tl_metamodel_"] .tl_file_list {
-    padding:4px 0 6px;
-  }
+.list_view li:first-child .tl_content {
+	border-top: 1px solid #ebebe4;
+}
 
-  fieldset.tl_subdca {
-    padding:0;
-    margin:0;
-    border:none;
-  }
+.list_view .tl_content > div:first-child {
+	float: left;
+}
 
-  .tl_subdca > legend {
-    margin:0;
-    padding:10px 0 10px 23px;
-    background:url(../images/icons/filter_settings.png) no-repeat left center;
-  }
+.tl_class {
+	color: #c6c6c6;
+}
 
-  .tl_subdca legend label {
-    font-weight:bold;
-  }
+.tl_formbody {
+	position: relative;
+}
 
- /*------------------------------------------------------------------------*/
+input[readonly] {
+	background-color: #ebebe4;
+}
 
-  body[class*="version_3"] .tl_file_list .field_type img,
-  body[class*="version_2"] .tl_content .field_type img,
-  body[class*="version_2"] .tl_content_right + img {
-    margin-right:8px;
-    float:left;
-  }
+input[readonly]:focus {
+	background-color: #ebebe4;
+}
 
- /*------------------------------------------------------------------------*/
+textarea[readonly] {
+	background-color: #ebebe4;
+}
 
-  .list_view li:first-child .tl_content {
-    border-top:1px solid #E9E9E9;
-  }
+textarea[readonly]:focus {
+	background-color: #ebebe4;
+}
 
-  .list_view .tl_content > div:first-child {
-    float:left;
-  }
+.wc_info {
+	margin: 0;
+}
 
-  .tl_class {
-    color:#c6c6c6;
-  }
+.wc_label {
+	width: 31px;
+	display: inline-block;
+}
 
-  .multicolumnwizard .fallback_language span {
-    font-weight:bold;
-  }
+.clx {
+	overflow: visible;
+}
 
-  .tl_formbody {
-    position:relative;
-  }
+.w50x {
+	height: auto;
+}
 
-  input[readonly],
-  textarea[readonly],
-  input[readonly]:focus,
-  textarea[readonly]:focus {
-    background-color: #ebebe4;
-  }
+#table_tl_metamodel_dcasetting_ tr.odd td {
+	background-color: transparent;
+}
 
-  form[id^=mm_] .sort_hint{
-    display:none;
-  }
+.dca_combine.widget td:empty {
+	display: none;
+}
 
-  /* Wildcard */
-  .wc_info {
-    margin: 0;
-  }
-  .wc_label {
-    width: 31px;
-    display: inline-block;
-  }
+form[id*="tl_metamodel_"] .wizard a[data-lightbox] img {
+	margin-top: 3px;
+}
 
- /*------------------------------------------------------------------------*/
+form[id*="tl_metamodel_"] .wizard a[onclick] img {
+	margin-top: 3px;
+}
 
-  .clx {
-    overflow:visible;
-  }
+div[class*="table_tl_metamodel_"] .tl_file_list {
+	padding: 4px 0 6px;
+}
 
-  .w50x {
-    height:auto;
-  }
+fieldset.tl_subdca {
+	padding: 0;
+	margin: 0;
+	border: none;
+}
 
-  .long  .chzn-container {
-    width:100%;
-  }
+.multicolumnwizard .fallback_language span {
+	font-weight: bold;
+}
 
-  .widget.translat-attr label {
-    padding-left: 20px;
-    display: inline-block;
-   background:url(../images/icons/locale.png) no-repeat left center;
+form[id^=mm_] .sort_hint {
+	display: none;
+}
+
+.long .chzn-container {
+	width: 100%;
+}
+
+.widget.translat-attr label {
+	padding-left: 20px;
+	display: inline-block;
+	background: url("../images/icons/locale.png") no-repeat left center;
 }
