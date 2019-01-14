@@ -1,0 +1,161 @@
+/**
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2019 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * @package    MetaModels
+ * @subpackage Core
+ * @author     Andreas Isaak <info@andreas-isaak.de>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Carolina Koehn <ck@kikmedia.de>
+ * @copyright  2012-2019 The MetaModels team.
+ * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @filesource
+ */
+
+//urls
+$icon_fields: url('../images/icons/fields.png');
+$icon_dca_add: url('../images/icons/dca_add.png');
+$icon_rendersettings_add: url('../images/icons/rendersettings_add.png');
+$icon_pal_open: url('../../../../themes/default/images/palOpen.gif');
+$icon_filter_setting: url('../images/icons/filter_settings.png');
+$icon_locale: url('../images/icons/locale.png');
+
+body[class*="version_3"] {
+	a[class*="header_"] {
+		margin-left: 15px;
+	}
+	.tl_file_list .field_type img {
+		margin-right: 8px;
+		float: left;
+	}
+}
+.header_css_fields {
+	padding: 2px 0 3px 20px;
+	background-image: $icon_fields;
+	background-position: left center;
+	background-repeat: no-repeat;
+}
+.header_add_all {
+	padding: 2px 0 3px 20px;
+	background-image: $icon_dca_add;
+	background-position: left center;
+	background-repeat: no-repeat;
+}
+.rendersetting_add_all {
+	background-image: $icon_rendersettings_add;
+}
+.dca_palette {
+	color: rgba(138, 184, 88, 1);
+	margin: 6px 0;
+	padding-left: 24px;
+	background: $icon_pal_open 3px center no-repeat;
+}
+.mm_problem_display {
+	margin-bottom: 30px;
+	ul {
+		padding: 0;
+		list-style: none;
+	}
+}
+.tl_subdca {
+	> legend {
+		margin: 0;
+		padding: 10px 0 10px 23px;
+		background: $icon_filter_setting no-repeat left center;
+	}
+	legend label {
+		font-weight: bold;
+	}
+}
+body[class*="version_2"] {
+	.tl_content .field_type img {
+		margin-right: 8px;
+		float: left;
+	}
+	.tl_content_right + img {
+		margin-right: 8px;
+		float: left;
+	}
+}
+.list_view {
+	li:first-child .tl_content {
+		border-top: 1px solid rgba(235, 235, 228, 1);
+	}
+	.tl_content > div:first-child {
+		float: left;
+	}
+}
+.tl_class {
+	color: rgba(198, 198, 198, 1);
+}
+.tl_formbody {
+	position: relative;
+}
+input[readonly] {
+	background-color: rgba(235, 235, 228, 1);
+	&:focus {
+		background-color: rgba(235, 235, 228, 1);
+	}
+}
+textarea[readonly] {
+	background-color: rgba(235, 235, 228, 1);
+	&:focus {
+		background-color: rgba(235, 235, 228, 1);
+	}
+}
+.wc_info {
+	margin: 0;
+}
+.wc_label {
+	width: 31px;
+	display: inline-block;
+}
+.clx {
+	overflow: visible;
+}
+.w50x {
+	height: auto;
+}
+#table_tl_metamodel_dcasetting_ tr.odd td {
+	background-color: transparent;
+}
+.dca_combine.widget td:empty {
+	display: none;
+}
+form[id*="tl_metamodel_"] .wizard {
+	a[data-lightbox] img {
+		margin-top: 3px;
+	}
+	a[onclick] img {
+		margin-top: 3px;
+	}
+}
+div[class*="table_tl_metamodel_"] .tl_file_list {
+	padding: 4px 0 6px;
+}
+fieldset.tl_subdca {
+	padding: 0;
+	margin: 0;
+	border: none;
+}
+.multicolumnwizard .fallback_language span {
+	font-weight: bold;
+}
+form[id^=mm_] .sort_hint {
+	display: none;
+}
+.long .chzn-container {
+	width: 100%;
+}
+.widget.translat-attr label {
+	padding-left: 20px;
+	display: inline-block;
+	background: $icon_locale no-repeat left center;
+}
