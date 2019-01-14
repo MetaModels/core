@@ -22,6 +22,7 @@ namespace MetaModels\DcGeneral\DefinitionBuilder;
 
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\DefaultPropertiesDefinition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\DefaultProperty;
+use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\EmptyValueAwarePropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\PropertiesDefinitionInterface;
 use MetaModels\Attribute\IAttribute;
@@ -143,6 +144,7 @@ class PropertyDefinitionBuilder
         $this->setOptions($property, $propInfo);
         $this->setExplanation($property, $propInfo);
         $this->setEval($property, $propInfo, ($attribute instanceof ITranslated));
+        $this->setEmptyValue($property, $propInfo);
     }
 
     /**
@@ -340,5 +342,21 @@ class PropertyDefinitionBuilder
         }
 
         $property->setExtra(array_merge((array) $property->getExtra(), $extra));
+    }
+
+    /**
+     * Set the empty value if defined.
+     *
+     * @param PropertyInterface $property The property to set the empty value.
+     * @param array             $propInfo The property info.
+     *
+     * @return void
+     */
+    private function setEmptyValue(PropertyInterface $property, array $propInfo)
+    {
+        if (!array_key_exists('empty_value', $propInfo) || !($property instanceof EmptyValueAwarePropertyInterface)) {
+            return;
+        }
+        $property->setEmptyValue($propInfo['empty_value']);
     }
 }
