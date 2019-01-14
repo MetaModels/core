@@ -23,7 +23,7 @@
 $white: rgba(255, 255, 255, 1);
 
 //urls
-$url_metamodels: url('http://now.metamodel.me/files/standard/layout/images/metamodels.png');
+$url_metamodels: url('https://now.metamodel.me/files/standard/layout/images/metamodels.png');
 
 .mm_support_display {
 	.logo {
@@ -31,7 +31,7 @@ $url_metamodels: url('http://now.metamodel.me/files/standard/layout/images/metam
 		height: 38px;
 		text-indent: -99999px;
 		width: 169px;
-		background: $white $metamodels no-repeat top left;
+		background: $white $url_metamodels no-repeat top left;
 	}
 	h1 {
 		margin-bottom: 20px;
