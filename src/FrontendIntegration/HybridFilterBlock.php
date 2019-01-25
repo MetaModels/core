@@ -23,17 +23,16 @@
 
 namespace MetaModels\FrontendIntegration;
 
-use Contao\ContentModel;
-use Contao\FormModel;
-use Contao\ModuleModel;
 use Contao\System;
-use Doctrine\DBAL\Connection;
 use MetaModels\Filter\Setting\ICollection;
+use MetaModels\Filter\Setting\IFilterSettingFactory;
 
 /**
  * FE-module for FE-filtering.
  *
  * @property \FrontendTemplate $Template
+ * @property string            $metamodel_jumpTo
+ * @property string            $metamodel_fef_template
  */
 class HybridFilterBlock extends MetaModelHybrid
 {
@@ -51,27 +50,12 @@ class HybridFilterBlock extends MetaModelHybrid
      */
     private $arrJumpTo;
 
-
     /**
-     * Database connection.
+     * The database connection.
      *
-     * @var Connection
+     * @var IFilterSettingFactory
      */
-    private $connection;
-
-    /**
-     * HybridFilterBlock constructor.
-     *
-     * @param ContentModel|ModuleModel|FormModel $objElement The object from the database.
-     *
-     * @param string                             $strColumn  The column the element is displayed within.
-     */
-    public function __construct($objElement, $strColumn = 'main')
-    {
-        parent::__construct($objElement, $strColumn);
-
-        $this->connection = System::getContainer()->get('database_connection');
-    }
+    private $filterFactory;
 
     /**
      * Get the jump to page data.
@@ -90,7 +74,7 @@ class HybridFilterBlock extends MetaModelHybrid
 
             if ($this->metamodel_jumpTo) {
                 // Page to jump to when filter submit.
-                $statement = $this->connection->prepare('SELECT id, alias FROM tl_page WHERE id=? LIMIT 0,1');
+                $statement = $this->getConnection()->prepare('SELECT id, alias FROM tl_page WHERE id=? LIMIT 0,1');
                 $statement->bindValue(1, $this->metamodel_jumpTo);
                 $statement->execute();
 
@@ -125,7 +109,6 @@ class HybridFilterBlock extends MetaModelHybrid
     public function getFilterCollection()
     {
         return $this
-            ->getServiceContainer()
             ->getFilterFactory()
             ->createCollection($this->metamodel_filtering);
     }
@@ -152,10 +135,24 @@ class HybridFilterBlock extends MetaModelHybrid
      */
     protected function compile()
     {
-        $objFilter = new FrontendFilter();
+        $objFilter = new FrontendFilter($this->getConnection());
         $arrFilter = $objFilter->getMetaModelFrontendFilter($this);
 
         $this->Template->setData(array_merge($this->Template->getData(), $arrFilter));
         $this->Template->submit = $arrFilter['submit'];
+    }
+
+    /**
+     * Obtain the filter setting factory.
+     *
+     * @return IFilterSettingFactory
+     */
+    private function getFilterFactory(): IFilterSettingFactory
+    {
+        if (null === $this->filterFactory) {
+            return $this->filterFactory = System::getContainer()->get('metamodels.filter_setting_factory');
+        }
+
+        return $this->filterFactory;
     }
 }

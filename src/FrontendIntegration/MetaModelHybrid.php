@@ -65,6 +65,13 @@ abstract class MetaModelHybrid extends Hybrid
     protected $typePrefix;
 
     /**
+     * The database connection.
+     *
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * Retrieve the service container.
      *
      * @return IMetaModelsServiceContainer
@@ -100,7 +107,18 @@ abstract class MetaModelHybrid extends Hybrid
      */
     protected function getConnection()
     {
-        return System::getContainer()->get('database_connection');
+        if (null === $this->connection) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Connection is missing in class ' . static::class .
+                '. The automatic fallback will be dropped in MetaModels 3.0. Please use dependency injection',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            return $this->connection = System::getContainer()->get('database_connection');
+        }
+
+        return $this->connection;
     }
 
     /**

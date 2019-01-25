@@ -51,3 +51,8 @@ services:
             - '@metamodels.view_combination.input_screen_information_builder'
             - '@request_stack'
         public: true
+
+    MetaModels\FrontendIntegration\FrontendFilter:
+        arguments:
+            - "@database_connection"
+        public: true
