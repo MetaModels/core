@@ -20,7 +20,10 @@
 
 namespace MetaModels\CoreBundle;
 
+use MetaModels\CoreBundle\DependencyInjection\CompilerPass\CollectDoctrineSchemaGeneratorsPass;
 use MetaModels\CoreBundle\DependencyInjection\CompilerPass\CollectFactoriesPass;
+use MetaModels\CoreBundle\DependencyInjection\CompilerPass\CollectSchemaGeneratorsPass;
+use MetaModels\CoreBundle\DependencyInjection\CompilerPass\CollectSchemaManagersPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -37,5 +40,8 @@ class MetaModelsCoreBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new CollectFactoriesPass());
+        $container->addCompilerPass(new CollectSchemaGeneratorsPass());
+        $container->addCompilerPass(new CollectSchemaManagersPass());
+        $container->addCompilerPass(new CollectDoctrineSchemaGeneratorsPass());
     }
 }
