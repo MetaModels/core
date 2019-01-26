@@ -283,7 +283,7 @@ class BaseSimple extends Base implements ISimple
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
-            return $this;
+            return;
         }
 
         // @codingStandardsIgnoreStart
