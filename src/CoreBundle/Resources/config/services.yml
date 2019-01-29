@@ -200,6 +200,12 @@ services:
           - []
         public: true
 
+    MetaModels\Schema\LegacySchemaGenerator:
+        arguments:
+            - '@metamodels.factory'
+        tags:
+            - { name: 'metamodels.schema-generator' }
+
     MetaModels\Schema\Doctrine\DoctrineSchemaGenerator:
         arguments:
           - []
