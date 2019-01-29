@@ -23,14 +23,16 @@ namespace MetaModels\CoreBundle\DependencyInjection\CompilerPass;
 
 use MetaModels\Schema\SchemaManager;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\Compiler\PriorityTaggedServiceTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * This pass adds the tagged schema managers.
  */
 class CollectSchemaManagersPass implements CompilerPassInterface
 {
+    use PriorityTaggedServiceTrait;
+
     public const TAG_NAME = 'metamodels.schema-manager';
 
     /**
@@ -39,10 +41,9 @@ class CollectSchemaManagersPass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         $generator = $container->getDefinition(SchemaManager::class);
-        $argument  = $generator->getArgument(0);
-        foreach (array_keys($container->findTaggedServiceIds(self::TAG_NAME)) as $child) {
-            $argument[] = new Reference($child);
-        }
-        $generator->setArgument(0, $argument);
+        $generator->setArgument(
+            0,
+            array_merge($generator->getArgument(0), $this->findAndSortTaggedServices(self::TAG_NAME, $container))
+        );
     }
 }
