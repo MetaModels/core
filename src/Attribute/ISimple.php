@@ -33,7 +33,7 @@ interface ISimple extends IAttribute
      *
      * @return string
      *
-     * @deprecated Implement schema generators instead.
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function getSQLDataType();
 
@@ -42,7 +42,7 @@ interface ISimple extends IAttribute
      *
      * @return void
      *
-     * @deprecated Implement schema generators instead.
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function createColumn();
 
@@ -51,7 +51,7 @@ interface ISimple extends IAttribute
      *
      * @return void
      *
-     * @deprecated Implement schema generators instead.
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function deleteColumn();
 
@@ -62,7 +62,7 @@ interface ISimple extends IAttribute
      *
      * @return void
      *
-     * @deprecated Implement schema generators instead.
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function renameColumn($strNewColumnName);
 
