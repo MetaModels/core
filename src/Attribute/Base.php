@@ -297,6 +297,8 @@ abstract class Base implements IAttribute
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function handleMetaChange($strMetaName, $varNewValue)
     {
@@ -325,6 +327,8 @@ abstract class Base implements IAttribute
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function destroyAUX()
     {
@@ -349,6 +353,8 @@ abstract class Base implements IAttribute
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function initializeAUX()
     {

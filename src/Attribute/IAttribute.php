@@ -99,7 +99,7 @@ interface IAttribute
      *
      * @return IAttribute The instance of this attribute, to support chaining.
      *
-     * @deprecated Implement schema manipulators instead.
+     * @deprecated Implement schema manipulators instead - see #1267.
      */
     public function handleMetaChange($strMetaName, $varNewValue);
 
@@ -108,7 +108,7 @@ interface IAttribute
      *
      * @return void
      *
-     * @deprecated Implement schema generators instead.
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function destroyAUX();
 
@@ -117,7 +117,7 @@ interface IAttribute
      *
      * @return void
      *
-     * @deprecated Implement schema generators instead.
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function initializeAUX();
 

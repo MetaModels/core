@@ -253,7 +253,7 @@ class BaseSimple extends Base implements ISimple
      *
      * @return string 'blob NULL'
      *
-     * @deprecated Implement schema generators instead.
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function getSQLDataType()
     {
@@ -274,7 +274,7 @@ class BaseSimple extends Base implements ISimple
      *
      * @return void
      *
-     * @deprecated Implement schema generators instead.
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function destroyAUX()
     {
@@ -304,7 +304,7 @@ class BaseSimple extends Base implements ISimple
      *
      * @return void
      *
-     * @deprecated Implement schema generators instead.
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function initializeAUX()
     {
@@ -336,7 +336,7 @@ class BaseSimple extends Base implements ISimple
      *
      * @return void
      *
-     * @deprecated Implement schema generators instead.
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function createColumn()
     {
@@ -371,7 +371,7 @@ class BaseSimple extends Base implements ISimple
      *
      * @return void
      *
-     * @deprecated Implement schema generators instead.
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function deleteColumn()
     {
@@ -408,7 +408,7 @@ class BaseSimple extends Base implements ISimple
      *
      * @return void
      *
-     * @deprecated Implement schema generators instead.
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function renameColumn($strNewColumnName)
     {
