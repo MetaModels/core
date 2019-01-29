@@ -31,7 +31,7 @@ class SchemaInformation
      *
      * @var SchemaInformationInterface[]
      */
-    private $information;
+    private $information = [];
 
     /**
      * Retrieve schema information.
