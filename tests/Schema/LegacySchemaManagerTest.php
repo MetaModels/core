@@ -86,4 +86,35 @@ class LegacySchemaManagerTest extends TestCase
 
         $instance->process($information);
     }
+
+    /**
+     * Test the validate method.
+     *
+     * @return void
+     */
+    public function testValidate(): void
+    {
+        $information = new SchemaInformation();
+        $legacy      = new LegacySchemaInformation();
+        $information->add($legacy);
+
+        $legacy->addAttribute($attribute1 = $this->getMockForAbstractClass(ISimple::class));
+        $legacy->addAttribute($attribute2 = $this->getMockForAbstractClass(IComplex::class));
+        $legacy->addAttribute($attribute3 = $this->getMockForAbstractClass(IAttribute::class));
+
+        $attribute1->expects($this->once())->method('getColName')->willReturn('attribute1');
+        $attribute1->expects($this->once())->method('get')->with('type')->willReturn('type1');
+        $attribute2->expects($this->once())->method('getColName')->willReturn('attribute2');
+        $attribute2->expects($this->once())->method('get')->with('type')->willReturn('type2');
+        $attribute3->expects($this->once())->method('getColName')->willReturn('attribute3');
+        $attribute3->expects($this->once())->method('get')->with('type')->willReturn('type3');
+
+        $instance = new LegacySchemaManager();
+
+        $this->assertSame([
+            '(Re-)Initialize attribute "attribute1" (type: "type1") via legacy method.',
+            '(Re-)Initialize attribute "attribute2" (type: "type2") via legacy method.',
+            '(Re-)Initialize attribute "attribute3" (type: "type3") via legacy method.',
+        ], $instance->validate($information));
+    }
 }

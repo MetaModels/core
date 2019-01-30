@@ -52,4 +52,13 @@ interface SchemaManagerInterface
      * @return void
      */
     public function postprocess(SchemaInformation $information): void;
+
+    /**
+     * List the tasks that will be performed for the passed information
+     *
+     * @param SchemaInformation $information The schema information.
+     *
+     * @return string[]
+     */
+    public function validate(SchemaInformation $information): array;
 }

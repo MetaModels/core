@@ -91,4 +91,27 @@ class LegacySchemaManager implements SchemaManagerInterface
     {
         // No-op.
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function validate(SchemaInformation $information): array
+    {
+        if (!$information->has(LegacySchemaInformation::class)) {
+            return [];
+        }
+        /** @var LegacySchemaInformation $legacySchema */
+        $legacySchema = $information->get(LegacySchemaInformation::class);
+
+        $tasks = [];
+        foreach ($legacySchema->getAttributes() as $attribute) {
+            $tasks[] = sprintf(
+                '(Re-)Initialize attribute "%1$s" (type: "%2$s") via legacy method.',
+                $attribute->getColName(),
+                $attribute->get('type')
+            );
+        }
+
+        return $tasks;
+    }
 }
