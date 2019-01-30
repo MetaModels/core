@@ -98,4 +98,22 @@ class SchemaManagerTest extends TestCase
 
         $instance->postprocess($information);
     }
+
+    /**
+     * Test validation.
+     *
+     * @return void
+     */
+    public function testValidate(): void
+    {
+        $manager1    = $this->getMockForAbstractClass(SchemaManagerInterface::class);
+        $manager2    = $this->getMockForAbstractClass(SchemaManagerInterface::class);
+        $information = new SchemaInformation();
+        $manager1->expects($this->once())->method('validate')->with($information)->willReturn(['1', '2']);
+        $manager2->expects($this->once())->method('validate')->with($information)->willReturn(['3', '4']);
+
+        $instance = new SchemaManager([$manager1, $manager2]);
+
+        $this->assertSame(['1', '2', '3', '4'], $instance->validate($information));
+    }
 }

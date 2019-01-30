@@ -107,4 +107,33 @@ class DoctrineSchemaManager implements SchemaManagerInterface
             $postProcessor->process();
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function validate(SchemaInformation $information): array
+    {
+        // If no information added, exit.
+        if (!$information->has(DoctrineSchemaInformation::class)) {
+            return [];
+        }
+
+        $tasks = [];
+        /** @var DoctrineSchemaInformation $doctrine */
+        $doctrine = $information->get(DoctrineSchemaInformation::class);
+
+        $tasks[] = array_map(function ($preProcessor) {
+            return (string) $preProcessor;
+        }, $doctrine->getPreProcessors());
+
+        $tasks[1] = array_map(function (string $query) {
+            return 'Execute SQL: ' . $query;
+        }, $this->manipulator->getScript($doctrine));
+
+        $tasks[] = array_map(function ($postProcessor) {
+            return (string) $postProcessor;
+        }, $doctrine->getPostProcessors());
+
+        return array_merge(...$tasks);
+    }
 }

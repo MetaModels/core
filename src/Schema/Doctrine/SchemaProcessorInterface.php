@@ -32,4 +32,11 @@ interface SchemaProcessorInterface
      * @return void
      */
     public function process(): void;
+
+    /**
+     * Get a string representation of the task performed.
+     *
+     * @return string
+     */
+    public function __toString();
 }

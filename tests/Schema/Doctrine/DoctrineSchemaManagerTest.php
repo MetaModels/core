@@ -174,6 +174,57 @@ class DoctrineSchemaManagerTest extends TestCase
     }
 
     /**
+     * Test the validation
+     *
+     * @return void
+     */
+    public function testValidate(): void
+    {
+        $manipulator = $this
+            ->getMockBuilder(DoctrineSchemaManipulator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $manipulator->expects($this->once())->method('getScript')->willReturn(['query1', 'query2']);
+
+        $processor1 = $this->getMockForAbstractClass(SchemaProcessorInterface::class);
+        $processor2 = $this->getMockForAbstractClass(SchemaProcessorInterface::class);
+        $processor1->expects($this->once())->method('__toString')->willReturn('pre1');
+        $processor2->expects($this->once())->method('__toString')->willReturn('pre2');
+        $processor3 = $this->getMockForAbstractClass(SchemaProcessorInterface::class);
+        $processor4 = $this->getMockForAbstractClass(SchemaProcessorInterface::class);
+        $processor3->expects($this->once())->method('__toString')->willReturn('post1');
+        $processor4->expects($this->once())->method('__toString')->willReturn('post2');
+
+        /** @var MockObject|DoctrineSchemaInformation $information */
+        $information = $this
+            ->getMockBuilder(DoctrineSchemaInformation::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $information
+            ->expects($this->once())
+            ->method('getPreProcessors')
+            ->willReturn([$processor1, $processor2]);
+        $information
+            ->expects($this->once())
+            ->method('getPostProcessors')
+            ->willReturn([$processor3, $processor4]);
+
+        $schemaInformation = $this->mockSchemaInformation($information);
+
+        $instance = $this->createSchemaManager($manipulator);
+
+        $this->assertSame([
+            'pre1',
+            'pre2',
+            'Execute SQL: query1',
+            'Execute SQL: query2',
+            'post1',
+            'post2',
+        ], $instance->validate($schemaInformation));
+    }
+
+    /**
      * Create a schema manager instance.
      *
      * @param MockObject|DoctrineSchemaManipulator|null $manipulator The manipulator.

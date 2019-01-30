@@ -75,4 +75,17 @@ class SchemaManager implements SchemaManagerInterface
             $manager->postprocess($information);
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function validate(SchemaInformation $information): array
+    {
+        $tasks = [];
+        foreach ($this->managers as $manager) {
+            $tasks[] = $manager->validate($information);
+        }
+
+        return array_merge(...$tasks);
+    }
 }
