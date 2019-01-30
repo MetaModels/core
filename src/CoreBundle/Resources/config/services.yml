@@ -206,6 +206,10 @@ services:
         tags:
             - { name: 'metamodels.schema-generator' }
 
+    MetaModels\Schema\LegacySchemaManager:
+        tags:
+            - { name: 'metamodels.schema-manager', priority: -100 }
+
     MetaModels\Schema\Doctrine\DoctrineSchemaGenerator:
         arguments:
           - []
