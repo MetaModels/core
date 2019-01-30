@@ -269,7 +269,7 @@ abstract class Base implements IAttribute
 
         // @codingStandardsIgnoreStart
         @trigger_error(
-            'Class "' . __CLASS__ . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
+            'Class "' . static::class . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -296,7 +296,7 @@ abstract class Base implements IAttribute
 
         // @codingStandardsIgnoreStart
         @trigger_error(
-            'Class "' . __CLASS__ . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
+            'Class "' . static::class . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -322,7 +322,7 @@ abstract class Base implements IAttribute
 
         // @codingStandardsIgnoreStart
         @trigger_error(
-            'Class "' . __CLASS__ . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
+            'Class "' . static::class . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
