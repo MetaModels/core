@@ -228,6 +228,14 @@ services:
         tags:
             - { name: 'metamodels.schema-manipulator' }
 
+    MetaModels\CoreBundle\Command\SchemaValidatorCommand:
+        arguments:
+            - '@MetaModels\InformationProvider\MetaModelInformationCollector'
+            - '@MetaModels\Schema\SchemaGenerator'
+            - '@MetaModels\Schema\SchemaManager'
+        tags:
+            - { name: 'console.command' }
+
     MetaModels\Schema\Doctrine\SystemColumnSchemaGenerator:
         tags:
             - { name: 'metamodels.schema-generator.doctrine' }
