@@ -55,9 +55,9 @@ abstract class AbstractAttributeTypeSchemaGenerator implements DoctrineSchemaGen
      * @param Table                $tableSchema The table schema.
      * @param AttributeInformation $attribute   The attribute to generate.
      *
-     * @return mixed
+     * @return void
      */
-    abstract protected function generateAttribute(Table $tableSchema, AttributeInformation $attribute);
+    abstract protected function generateAttribute(Table $tableSchema, AttributeInformation $attribute): void;
 
     /**
      * Obtain the type name.

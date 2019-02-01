@@ -92,7 +92,7 @@ class MetaModelCollection implements MetaModelCollectionInterface
     /**
      * {@inheritDoc}
      */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         // Cannot "yield from" here as we have the names as key.
         /** @noinspection YieldFromCanBeUsedInspection */
