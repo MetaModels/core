@@ -15,6 +15,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -24,6 +25,7 @@ namespace MetaModels\Filter\Setting;
 
 use Contao\Input;
 use Contao\StringUtil;
+use Contao\System;
 use Contao\Widget;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
@@ -54,16 +56,38 @@ abstract class Simple implements ISimple
     private $data = array();
 
     /**
+     * The event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
      * Constructor - initialize the object and store the parameters.
      *
-     * @param ICollection $collection The parenting filter settings object.
+     * @param ICollection                   $collection      The parenting filter settings object.
      *
-     * @param array       $data       The attributes for this filter setting.
+     * @param array                         $data            The attributes for this filter setting.
+     *
+     * @param EventDispatcherInterface|null $eventDispatcher The event dispatcher.
      */
-    public function __construct($collection, $data)
+    public function __construct($collection, $data, EventDispatcherInterface $eventDispatcher = null)
     {
         $this->collection = $collection;
         $this->data       = $data;
+
+        if (null === $eventDispatcher) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Event dispatcher is not passed as constructor argument.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+
+            $eventDispatcher = System::getContainer()->get('event_dispatcher');
+        }
+
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -99,7 +123,8 @@ abstract class Simple implements ISimple
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
-        return $this->getServiceContainer()->getEventDispatcher();
+
+        return $this->eventDispatcher;
     }
 
     /**
@@ -294,7 +319,6 @@ abstract class Simple implements ISimple
         if (!isset($arrWidget['options'])) {
             return $arrOptions;
         }
-        $dispatcher = $this->getEventDispatcher();
 
         $strFilterAction = $this->buildFilterUrl($arrFilterUrl, $arrWidget['eval']['urlparam']);
 
@@ -306,7 +330,7 @@ abstract class Simple implements ISimple
         if ($arrWidget['eval']['includeBlankOption']) {
             $blnActive = $this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, '');
             $event     = new GenerateFrontendUrlEvent($arrJumpTo, sprintf($strFilterAction, ''));
-            $dispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
+            $this->eventDispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
 
             $arrOptions[] = array
             (
@@ -334,7 +358,7 @@ abstract class Simple implements ISimple
                 }
             }
             $event = new GenerateFrontendUrlEvent($arrJumpTo, sprintf($strFilterAction, $strValue), null, true);
-            $dispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
+            $this->eventDispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
 
             $arrOptions[] = array
             (
@@ -398,13 +422,12 @@ abstract class Simple implements ISimple
             ? $arrFilterUrl[$arrWidget['eval']['urlparam']]
             : null;
 
-        $dispatcher = $this->getEventDispatcher();
-        $event      = new GetAttributesFromDcaEvent(
+        $event = new GetAttributesFromDcaEvent(
             $arrWidget,
             $arrWidget['eval']['urlparam']
         );
 
-        $dispatcher->dispatch(
+        $this->eventDispatcher->dispatch(
             ContaoEvents::WIDGET_GET_ATTRIBUTES_FROM_DCA,
             $event
         );

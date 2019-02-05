@@ -13,6 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -23,6 +24,7 @@ namespace MetaModels\Test\Filter\Setting;
 use MetaModels\Filter\Setting\ICollection;
 use MetaModels\Filter\Setting\Simple;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Test simple filter settings.
@@ -40,11 +42,12 @@ class SimpleTest extends TestCase
      */
     protected function mockSimpleFilterSetting($properties = [])
     {
-        $filterSetting = $this->getMockForAbstractClass(ICollection::class);
+        $filterSetting   = $this->getMockForAbstractClass(ICollection::class);
+        $eventDispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
 
         $setting = $this
             ->getMockBuilder('MetaModels\Filter\Setting\Simple')
-            ->setConstructorArgs([$filterSetting, $properties])
+            ->setConstructorArgs([$filterSetting, $properties, $eventDispatcher])
             ->getMockForAbstractClass();
 
         return $setting;
