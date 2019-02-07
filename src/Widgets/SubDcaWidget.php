@@ -16,6 +16,7 @@
  * @author     Danilo Benevides <danilobenevides01@gmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -566,8 +567,7 @@ class SubDcaWidget extends Widget
         $strBody = sprintf('<tbody><tr>%s</tr></tbody>', implode("</tr>\n<tr>", $arrOptions));
 
         $strOutput = sprintf(
-            '<table cellspacing="0"%s cellpadding="0" id="ctrl_%s" class="tl_modulewizard multicolumnwizard" ' .
-            'summary="MultiColumnWizard">%s%s</table>',
+            '<table cellspacing="0"%s cellpadding="0" id="ctrl_%s" class="tl_subdca">%s%s</table>',
             (($this->style) ? ('style="' . $this->style . '"') : ('')),
             $this->strId,
             $strHead,
