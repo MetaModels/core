@@ -63,9 +63,6 @@ array_insert(
     )
 );
 
-// BE group icon.
-$GLOBALS['TL_CSS']['metamodels'] = 'bundles/metamodelscore/css/be_logo_svg.css';
-
 // @deprecated Use the config parameter metamodels.system_columns instead.
 $GLOBALS['METAMODELS_SYSTEM_COLUMNS'] = \Contao\System::getContainer()->getParameter('metamodels.system_columns');
 

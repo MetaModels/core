@@ -107,6 +107,7 @@ class RegisterBackendNavigation
         if (null === $request = $this->requestStack->getCurrentRequest()) {
             return $modules;
         }
+        $this->addBackendCss();
 
         if (null !== ($user = $this->tokenStorage->getToken())) {
             $userRights = $this->extractUserRights($user);
@@ -298,5 +299,19 @@ class RegisterBackendNavigation
         }
 
         return true;
+    }
+
+    /**
+     * Add the CSS files for the backend.
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    private function addBackendCss(): void
+    {
+        // BE group icon.
+        $GLOBALS['TL_CSS']['metamodels'] = 'bundles/metamodelscore/css/be_logo_svg.css';
     }
 }
