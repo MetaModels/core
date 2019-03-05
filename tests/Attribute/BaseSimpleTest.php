@@ -31,8 +31,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class BaseSimpleTest
- *
- * @package MetaModels\Test\Attribute
  */
 class BaseSimpleTest extends TestCase
 {

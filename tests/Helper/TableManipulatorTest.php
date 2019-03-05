@@ -27,8 +27,6 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Class TableManipulatorTest
- *
- * @package MetaModels\Test\Helper
  */
 class TableManipulatorTest extends TestCase
 {
