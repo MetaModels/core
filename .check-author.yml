@@ -33,21 +33,21 @@ mapping:
 copy-left:
   'Christoph Wiechert <christoph.wiechert@4wardmedia.de>': Widgets/PickerWidget.php
   'Andreas Nölke <zero@brothers-project.de>': Widgets/PickerWidget.php
-  "Christian Schiffler <c.schiffler@cyberspectrum.de>":
+  'Christian Schiffler <c.schiffler@cyberspectrum.de>':
     - src/CoreBundle/EventListener/DcGeneral/Table/DcaSetting/RemoveOverrideButtonListener.php
     - src/CoreBundle/EventListener/DcGeneral/Table/FilterSetting/SubPaletteSubscriber.php
     - src/Helper/TableManipulator.php
-  "Stefan Heimes <stefan_heimes@hotmail.com>":
+  'Stefan Heimes <stefan_heimes@hotmail.com>':
     - src/CoreBundle/EventListener/DcGeneral/Table/RenderSettings/LanguageCodeWizardListener.php
-  "David Molineus <david.molineus@netzmacht.de>":
+  'David Molineus <david.molineus@netzmacht.de>':
     - src/CoreBundle/EventListener/DcGeneral/Table/MetaModel/DcaCombineButtonListener.php
-  "Ingolf Steinhardt <info@e-spin.de>":
+  'Ingolf Steinhardt <info@e-spin.de>':
     - src/CoreBundle/EventListener/DcGeneral/Table/FilterSetting/SubPaletteSubscriber.php
-  "David Maack <david.maack@arcor.de>":
+  'David Maack <david.maack@arcor.de>':
     - src/CoreBundle/EventListener/DcGeneral/Table/RenderSettings/LanguageCodeWizardListener.php
-  "Andreas Isaak <info@andreas-isaak.de>":
+  'Andreas Isaak <info@andreas-isaak.de>':
     - src/CoreBundle/EventListener/DcGeneral/Table/RenderSettings/LanguageCodeWizardListener.php
-  "Cliff Parnitzky <github@cliff-parnitzky.de>":
+  'Cliff Parnitzky <github@cliff-parnitzky.de>':
     - src/Helper/TableManipulator.php
-  "Henry Lamorski <henry.lamorski@mailbox.org>":
+  'Henry Lamorski <henry.lamorski@mailbox.org>':
     - src/Helper/TableManipulator.php
