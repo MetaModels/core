@@ -51,8 +51,8 @@
     "webmozart/path-util": "~2.3"
   },
   "require-dev": {
-    "phpcq/all-tasks": "~1.2",
-    "contao/manager-bundle": "~4.4"
+    "contao/manager-bundle": "~4.4",
+    "phpcq/all-tasks": "~1.2"
   },
   "autoload": {
     "psr-4": {
