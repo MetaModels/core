@@ -166,7 +166,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
     (
         'id'            => array
         (
-            'sql' => "int(10) unsigned NOT NULL auto_increment"
+            'sql' => 'int(10) unsigned NOT NULL auto_increment'
         ),
         'pid'           => array
         (
@@ -220,7 +220,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
                     ),
                 ),
             ),
-            'sql'       => "longblob NULL"
+            'sql'       => 'longblob NULL'
         ),
         'rendersetting' => array
         (

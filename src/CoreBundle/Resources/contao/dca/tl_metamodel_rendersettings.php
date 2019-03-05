@@ -218,7 +218,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
     (
         'id'              => array
         (
-            'sql' => "int(10) unsigned NOT NULL auto_increment"
+            'sql' => 'int(10) unsigned NOT NULL auto_increment'
         ),
         'pid'             => array
         (
@@ -356,7 +356,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
                 ),
                 'tl_class'     => 'clr clx',
             ),
-            'sql'            => "blob NULL"
+            'sql'            => 'blob NULL'
         ),
         'additionalCss'   => array
         (
@@ -392,7 +392,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
                     ),
                 )
             ),
-            'sql'       => "blob NULL"
+            'sql'       => 'blob NULL'
         ),
         'additionalJs'    => array
         (
@@ -427,7 +427,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = array
                     ),
                 )
             ),
-            'sql'       => "blob NULL"
+            'sql'       => 'blob NULL'
         ),
     ),
 );

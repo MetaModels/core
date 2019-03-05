@@ -264,7 +264,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
     (
         'id'          => array
         (
-            'sql' => "int(10) unsigned NOT NULL auto_increment"
+            'sql' => 'int(10) unsigned NOT NULL auto_increment'
         ),
         'pid'         => array
         (
@@ -305,7 +305,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
             (
                 'tl_class' => 'clr'
             ),
-            'sql'     => "text NULL"
+            'sql'     => 'text NULL'
         ),
         'description' => array
         (
@@ -316,7 +316,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
             (
                 'tl_class' => 'clr'
             ),
-            'sql'     => "text NULL"
+            'sql'     => 'text NULL'
         ),
         // AVOID: doNotCopy => true, as child records won't be copied when copy metamodel.
         'colname'     => array

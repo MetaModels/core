@@ -278,7 +278,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
     (
         'id'        => array
         (
-            'sql' => "int(10) unsigned NOT NULL auto_increment"
+            'sql' => 'int(10) unsigned NOT NULL auto_increment'
         ),
         'pid'       => array
         (
@@ -370,7 +370,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = array
                 'tl_class'           => 'w50',
                 'chosen'             => true
             ),
-            'sql'       => "blob NULL"
+            'sql'       => 'blob NULL'
         ),
     )
 );

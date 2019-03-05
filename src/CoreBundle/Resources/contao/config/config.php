@@ -26,7 +26,6 @@
  */
 
 // Preserve values by extensions but insert as first entry after 'system'.
-
 $arrOld = isset($GLOBALS['BE_MOD']['metamodels']) ? $GLOBALS['BE_MOD']['metamodels'] : array();
 unset($GLOBALS['BE_MOD']['metamodels']);
 array_insert(

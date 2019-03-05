@@ -515,7 +515,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
     (
         'id'         => array
         (
-            'sql' => "int(10) unsigned NOT NULL auto_increment"
+            'sql' => 'int(10) unsigned NOT NULL auto_increment'
         ),
         'tstamp'     => array
         (
@@ -611,7 +611,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = array
                     ),
                 ),
             ),
-            'sql'       => "text NULL"
+            'sql'       => 'text NULL'
         ),
         'varsupport' => array
         (

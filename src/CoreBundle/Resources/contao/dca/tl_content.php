@@ -272,7 +272,7 @@ array_insert(
                     ),
                 ),
             ),
-            'sql'       => "longblob NULL"
+            'sql'       => 'longblob NULL'
         ),
         'metamodel_jumpTo'              => array
         (
@@ -296,7 +296,7 @@ array_insert(
                 'multiple' => true,
                 'tl_class' => 'clr'
             ),
-            'sql'              => "blob NULL"
+            'sql'              => 'blob NULL'
         ),
         'metamodel_fef_autosubmit'      => array
         (

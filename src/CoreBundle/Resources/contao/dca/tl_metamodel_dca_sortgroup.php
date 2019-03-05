@@ -229,7 +229,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
     (
         'id'              => array
         (
-            'sql' => "int(10) unsigned NOT NULL auto_increment"
+            'sql' => 'int(10) unsigned NOT NULL auto_increment'
         ),
         'pid'             => array
         (
@@ -255,7 +255,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
                 'maxlength' => 64,
                 'tl_class'  => 'w50'
             ),
-            'sql'       => "text NULL"
+            'sql'       => 'text NULL'
         ),
         'isdefault'       => array
         (
