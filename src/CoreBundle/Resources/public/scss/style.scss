@@ -27,15 +27,6 @@ $icon_pal_open: url('../../../../themes/default/images/palOpen.gif');
 $icon_filter_setting: url('../images/icons/filter_settings.png');
 $icon_locale: url('../images/icons/locale.png');
 
-body[class*="version_3"] {
-	a[class*="header_"] {
-		margin-left: 15px;
-	}
-	.tl_file_list .field_type img {
-		margin-right: 8px;
-		float: left;
-	}
-}
 .header_css_fields {
 	padding: 2px 0 3px 20px;
 	background-image: $icon_fields;
@@ -72,16 +63,6 @@ body[class*="version_3"] {
 	}
 	legend label {
 		font-weight: bold;
-	}
-}
-body[class*="version_2"] {
-	.tl_content .field_type img {
-		margin-right: 8px;
-		float: left;
-	}
-	.tl_content_right + img {
-		margin-right: 8px;
-		float: left;
 	}
 }
 .list_view {

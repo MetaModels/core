@@ -18,14 +18,6 @@
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
-body[class*="version_3"] a[class*="header_"] {
-	margin-left: 15px;
-}
-
-body[class*="version_3"] .tl_file_list .field_type img {
-	margin-right: 8px;
-	float: left;
-}
 
 .header_css_fields {
 	padding: 2px 0 3px 20px;
@@ -69,16 +61,6 @@ body[class*="version_3"] .tl_file_list .field_type img {
 
 .tl_subdca legend label {
 	font-weight: bold;
-}
-
-body[class*="version_2"] .tl_content .field_type img {
-	margin-right: 8px;
-	float: left;
-}
-
-body[class*="version_2"] .tl_content_right + img {
-	margin-right: 8px;
-	float: left;
 }
 
 .list_view li:first-child .tl_content {
