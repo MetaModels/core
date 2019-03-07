@@ -73,14 +73,17 @@ abstract class Simple implements ISimple
     /**
      * Constructor - initialize the object and store the parameters.
      *
-     * @param ICollection                   $collection      The parenting filter settings object.
-     *
-     * @param array                         $data            The attributes for this filter setting.
-     *
-     * @param EventDispatcherInterface|null $eventDispatcher The event dispatcher.
+     * @param ICollection                   $collection       The parenting filter settings object.
+     * @param array                         $data             The attributes for this filter setting.
+     * @param EventDispatcherInterface|null $eventDispatcher  The event dispatcher.
+     * @param FilterUrlBuilder|null         $filterUrlBuilder The filter URL builder.
      */
-    public function __construct($collection, $data, EventDispatcherInterface $eventDispatcher = null)
-    {
+    public function __construct(
+        $collection,
+        $data,
+        EventDispatcherInterface $eventDispatcher = null,
+        FilterUrlBuilder $filterUrlBuilder = null
+    ) {
         $this->collection = $collection;
         $this->data       = $data;
 
@@ -94,7 +97,7 @@ abstract class Simple implements ISimple
 
             $eventDispatcher = System::getContainer()->get('event_dispatcher');
         }
-        $filterUrlBuilder = null;
+
         if (null === $filterUrlBuilder) {
             // @codingStandardsIgnoreStart
             @trigger_error(

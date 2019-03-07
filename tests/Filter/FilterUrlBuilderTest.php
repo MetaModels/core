@@ -45,7 +45,6 @@ class FilterUrlBuilderTest extends TestCase
             'test generating' => [
                 'expectedUrl' => 'page-alias/auto/slug/sluggy',
                 'expectedParameters' => [
-                    'get-param' => 'get-value',
                     'get2' => 'value',
                 ],
                 'page' => [
@@ -66,7 +65,6 @@ class FilterUrlBuilderTest extends TestCase
             'test stay on page' => [
                 'expectedUrl' => 'alias/auto/slug/sluggy',
                 'expectedParameters' => [
-                    'get-param' => 'get-value',
                     'get2' => 'value',
                 ],
                 'page' => [
@@ -127,7 +125,7 @@ class FilterUrlBuilderTest extends TestCase
             ->with($expectedUrl, $expectedParameters)
             ->willReturn('success');
 
-        $adapter      = $this->getMockBuilder(Adapter::class)->getMock();
+        $adapter      = $this->getMockBuilder(Adapter::class)->disableOriginalConstructor()->getMock();
         $requestStack = $this->mockRequestStack($requestGet, $requestUrl);
 
         $builder = new FilterUrlBuilder($generator, $requestStack, true, '.html', $adapter);
@@ -138,7 +136,8 @@ class FilterUrlBuilderTest extends TestCase
     /**
      * Mock the request stack.
      *
-     * @param array $requestGet The current GET parameters.
+     * @param array  $requestGet The current GET parameters.
+     * @param string $requestUrl The request URL.
      *
      * @return RequestStack
      */

@@ -21,6 +21,7 @@
 
 namespace MetaModels\Test\Filter\Setting;
 
+use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Filter\Setting\ICollection;
 use MetaModels\Filter\Setting\Simple;
 use PHPUnit\Framework\TestCase;
@@ -36,18 +37,19 @@ class SimpleTest extends TestCase
     /**
      * Mock a Simple filter setting.
      *
-     * @param array  $properties The initialization data.
+     * @param array $properties The initialization data.
      *
      * @return Simple|\PHPUnit_Framework_MockObject_MockObject
      */
     protected function mockSimpleFilterSetting($properties = [])
     {
-        $filterSetting   = $this->getMockForAbstractClass(ICollection::class);
-        $eventDispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
+        $filterSetting    = $this->getMockForAbstractClass(ICollection::class);
+        $eventDispatcher  = $this->getMockForAbstractClass(EventDispatcherInterface::class);
+        $filterUrlBuilder = $this->getMockBuilder(FilterUrlBuilder::class)->disableOriginalConstructor()->getMock();
 
         $setting = $this
             ->getMockBuilder('MetaModels\Filter\Setting\Simple')
-            ->setConstructorArgs([$filterSetting, $properties, $eventDispatcher])
+            ->setConstructorArgs([$filterSetting, $properties, $eventDispatcher, $filterUrlBuilder])
             ->getMockForAbstractClass();
 
         return $setting;
