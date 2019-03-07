@@ -382,7 +382,6 @@ class FrontendFilter
             $filterOptions
         );
 
-        // FIXME: input in use.
         // If we have POST data, we need to redirect now.
         if (Input::post('FORM_SUBMIT') === $this->formId) {
             foreach ($wantedNames as $widgetName) {
