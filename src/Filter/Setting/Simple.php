@@ -28,8 +28,9 @@ use Contao\StringUtil;
 use Contao\System;
 use Contao\Widget;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Widget\GetAttributesFromDcaEvent;
+use MetaModels\Filter\FilterUrl;
+use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use MetaModels\IItem;
 use MetaModels\IMetaModelsServiceContainer;
@@ -63,6 +64,13 @@ abstract class Simple implements ISimple
     protected $eventDispatcher;
 
     /**
+     * The filter URL builder.
+     *
+     * @var FilterUrlBuilder
+     */
+    private $filterUrlBuilder;
+
+    /**
      * Constructor - initialize the object and store the parameters.
      *
      * @param ICollection                   $collection      The parenting filter settings object.
@@ -86,8 +94,19 @@ abstract class Simple implements ISimple
 
             $eventDispatcher = System::getContainer()->get('event_dispatcher');
         }
+        $filterUrlBuilder = null;
+        if (null === $filterUrlBuilder) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'FilterUrlBuilder is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $filterUrlBuilder = System::getContainer()->get('metamodels.filter_url');
+        }
 
-        $this->eventDispatcher = $eventDispatcher;
+        $this->eventDispatcher  = $eventDispatcher;
+        $this->filterUrlBuilder = $filterUrlBuilder;
     }
 
     /**
@@ -213,9 +232,18 @@ abstract class Simple implements ISimple
      * @param mixed  $value The parameter value.
      *
      * @return string.
+     *
+     * @deprecated Not in use anymore, use the FilterUrlBuilder.
      */
     protected function addUrlParameter($url, $name, $value)
     {
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            sprintf('"%1$s" has been deprecated in favor of the "FilterUrlBuilder"', __METHOD__),
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+
         if (is_array($value)) {
             $value = implode(',', array_filter($value));
         }
@@ -246,9 +274,18 @@ abstract class Simple implements ISimple
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     *
+     * @deprecated Not in use anymore, use the FilterUrlBuilder.
      */
     protected function buildFilterUrl($fragments, $searchKey)
     {
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            sprintf('"%1$s" has been deprecated in favor of the "FilterUrlBuilder"', __METHOD__),
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+
         $url   = '';
         $found = false;
 
@@ -320,17 +357,18 @@ abstract class Simple implements ISimple
             return $arrOptions;
         }
 
-        $strFilterAction = $this->buildFilterUrl($arrFilterUrl, $arrWidget['eval']['urlparam']);
+        $filterUrl = new FilterUrl($arrJumpTo);
+        foreach ($arrFilterUrl as $name => $value) {
+            if (is_array($value)) {
+                $value = implode(',', array_filter($value));
+            }
 
-        // If no jumpTo-page has been provided, we use the current page.
-        if (!$arrJumpTo) {
-            $arrJumpTo = $GLOBALS['objPage']->row();
+            $filterUrl->setSlug($name, $value);
         }
+        $parameterName = $arrWidget['eval']['urlparam'];
 
         if ($arrWidget['eval']['includeBlankOption']) {
             $blnActive = $this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, '');
-            $event     = new GenerateFrontendUrlEvent($arrJumpTo, sprintf($strFilterAction, ''));
-            $this->eventDispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
 
             $arrOptions[] = array
             (
@@ -340,31 +378,21 @@ abstract class Simple implements ISimple
                     ? $arrWidget['eval']['blankOptionLabel']
                     : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter']
                 ),
-                'href'   => $event->getUrl(),
+                'href'   => $this->filterUrlBuilder->generate($filterUrl->clone()->setSlug($parameterName, '')),
                 'active' => $blnActive,
                 'class'  => 'doNotFilter'.($blnActive ? ' active' : ''),
             );
         }
 
         foreach ($arrWidget['options'] as $strKeyOption => $strOption) {
-            $strValue  = rawurlencode($this->getFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption));
+            $strValue  = $this->getFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption);
             $blnActive = $this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption);
-
-            if (!empty($strValue)) {
-                if ($arrWidget['eval']['urlparam'] !== 'auto_item') {
-                    $strValue = '/' . $arrWidget['eval']['urlparam'] . '/' . $strValue;
-                } else {
-                    $strValue = '/' . $strValue;
-                }
-            }
-            $event = new GenerateFrontendUrlEvent($arrJumpTo, sprintf($strFilterAction, $strValue), null, true);
-            $this->eventDispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
 
             $arrOptions[] = array
             (
                 'key'    => $strKeyOption,
                 'value'  => $strOption,
-                'href'   => $event->getUrl(),
+                'href'   => $this->filterUrlBuilder->generate($filterUrl->clone()->setSlug($parameterName, $strValue)),
                 'active' => $blnActive,
                 'class'  => StringUtil::standardize($strKeyOption) . ($blnActive ? ' active' : '')
             );

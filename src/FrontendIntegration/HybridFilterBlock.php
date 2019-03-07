@@ -24,6 +24,7 @@
 namespace MetaModels\FrontendIntegration;
 
 use Contao\System;
+use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Filter\Setting\ICollection;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 
@@ -33,6 +34,11 @@ use MetaModels\Filter\Setting\IFilterSettingFactory;
  * @property \FrontendTemplate $Template
  * @property string            $metamodel_jumpTo
  * @property string            $metamodel_fef_template
+ * @property bool              $metamodel_fef_autosubmit
+ * @property bool              $metamodel_fef_hideclearfilter
+ * @property bool              $metamodel_available_values
+ * @property string            $metamodel_fef_params
+ * @property int               $id
  */
 class HybridFilterBlock extends MetaModelHybrid
 {
@@ -56,6 +62,13 @@ class HybridFilterBlock extends MetaModelHybrid
      * @var IFilterSettingFactory
      */
     private $filterFactory;
+
+    /**
+     * The filter URL builder.
+     *
+     * @var FilterUrlBuilder
+     */
+    private $filterUrlBuilder;
 
     /**
      * Get the jump to page data.
@@ -135,7 +148,7 @@ class HybridFilterBlock extends MetaModelHybrid
      */
     protected function compile()
     {
-        $objFilter = new FrontendFilter($this->getConnection());
+        $objFilter = new FrontendFilter($this->getConnection(), $this->getFilterUrlBuilder());
         $arrFilter = $objFilter->getMetaModelFrontendFilter($this);
 
         $this->Template->setData(array_merge($this->Template->getData(), $arrFilter));
@@ -154,5 +167,19 @@ class HybridFilterBlock extends MetaModelHybrid
         }
 
         return $this->filterFactory;
+    }
+
+    /**
+     * Obtain the filter URL builder.
+     *
+     * @return FilterUrlBuilder
+     */
+    private function getFilterUrlBuilder(): FilterUrlBuilder
+    {
+        if (null === $this->filterUrlBuilder) {
+            return $this->filterUrlBuilder = System::getContainer()->get('metamodels.filter_url');
+        }
+
+        return $this->filterUrlBuilder;
     }
 }

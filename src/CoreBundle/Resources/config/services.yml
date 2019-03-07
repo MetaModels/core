@@ -48,6 +48,7 @@ services:
           - "@database_connection"
           - "@event_dispatcher"
           - "@metamodels.filter_setting_factory"
+          - '@MetaModels\Filter\FilterUrlBuilder'
         public: true
 
     metamodels.template_list:
@@ -85,6 +86,25 @@ services:
         arguments:
             - '@security.csrf.token_manager'
             - '%contao.csrf_token_name%'
+
+    MetaModels\Filter\FilterUrlBuilder:
+        arguments:
+            - '@contao.routing.url_generator'
+            - '@request_stack'
+            - '%contao.prepend_locale%'
+            - '%contao.url_suffix%'
+            - "@=service('contao.framework').getAdapter('Contao\\\\PageModel')"
+
+    # Please inject the service "MetaModels\Filter\FilterUrlBuilder" directly.
+    metamodels.filter_url:
+        alias: 'MetaModels\Filter\FilterUrlBuilder'
+        public: true
+
+    MetaModels\FrontendIntegration\FrontendFilter:
+        arguments:
+            - '@database_connection'
+            - '@MetaModels\Filter\FilterUrlBuilder'
+        public: true
 
     metamodels.controller.abstract.add_all:
         abstract: true

@@ -25,11 +25,14 @@
 
 namespace MetaModels\FrontendIntegration;
 
+use Contao\CoreBundle\Exception\RedirectResponseException;
+use Contao\Input;
 use Contao\System;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\RedirectEvent;
 use Doctrine\DBAL\Connection;
+use MetaModels\Filter\FilterUrl;
+use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\FrontendIntegration\Content\FilterClearAll as ContentElementFilterClearAll;
 use MetaModels\FrontendIntegration\Module\FilterClearAll as ModuleFilterClearAll;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -61,11 +64,19 @@ class FrontendFilter
     private $connection;
 
     /**
+     * The filter URL builder.
+     *
+     * @var FilterUrlBuilder
+     */
+    private $filterUrlBuilder;
+
+    /**
      * FrontendFilter constructor.
      *
-     * @param Connection $connection Database connection.
+     * @param Connection       $connection       Database connection.
+     * @param FilterUrlBuilder $filterUrlBuilder The filter URL builder.
      */
-    public function __construct(Connection $connection = null)
+    public function __construct(Connection $connection = null, FilterUrlBuilder $filterUrlBuilder = null)
     {
         if (null === $connection) {
             // @codingStandardsIgnoreStart
@@ -76,8 +87,18 @@ class FrontendFilter
             // @codingStandardsIgnoreEnd
             $connection = System::getContainer()->get('database_connection');
         }
+        if (null === $filterUrlBuilder) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'FilterUrlBuilder is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $filterUrlBuilder = System::getContainer()->get('metamodels.filter_url');
+        }
 
-        $this->connection = $connection;
+        $this->connection       = $connection;
+        $this->filterUrlBuilder = $filterUrlBuilder;
     }
 
     /**
@@ -117,9 +138,18 @@ class FrontendFilter
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     *
+     * @deprecated Do not use.
      */
     protected function getJumpToUrl($arrParams)
     {
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            sprintf('"%1$s" has been deprecated in favor of the new "FilterUrlBuilder"', __METHOD__),
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+
         $strFilterAction = '';
         foreach ($arrParams as $strName => $varParam) {
             // Skip the magic "language" parameter.
@@ -160,23 +190,23 @@ class FrontendFilter
      * @param array $arrParams The URL parameters to use.
      *
      * @return void
+     *
+     * @deprecated Do not use.
      */
     protected function redirectPost($arrParams)
     {
-        $dispatcher = $this->getDispatcher();
-        $event      = new GenerateFrontendUrlEvent(
-            $this->objFilterConfig->getJumpTo(),
-            $this->getJumpToUrl($arrParams),
-            null,
-            true
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            sprintf('"%1$s" has been deprecated in favor of the new "FilterUrlBuilder"', __METHOD__),
+            E_USER_DEPRECATED
         );
-        $dispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
-
+        // @codingStandardsIgnoreEnd
+        $jumpTo     = $this->objFilterConfig->getJumpTo();
+        $dispatcher = $this->getDispatcher();
+        $filterUrl  = new FilterUrl($jumpTo, [], $arrParams);
         $dispatcher->dispatch(
             ContaoEvents::CONTROLLER_REDIRECT,
-            new RedirectEvent(
-                \Environment::get('base') . $event->getUrl()
-            )
+            new RedirectEvent($this->filterUrlBuilder->generate($filterUrl))
         );
     }
 
@@ -197,28 +227,36 @@ class FrontendFilter
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     *
+     * @deprecated Do not use.
      */
     protected function getParams()
     {
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            sprintf('"%1$s" has been deprecated in favor of the new "FilterUrlBuilder"', __METHOD__),
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
         $arrWantedParam = $this->getWantedNames();
         $arrMyParams    = $arrOtherParams = array();
 
         if ($_GET) {
             foreach (array_keys($_GET) as $strParam) {
                 if (in_array($strParam, $arrWantedParam)) {
-                    $arrMyParams[$strParam] = \Input::get($strParam);
+                    $arrMyParams[$strParam] = Input::get($strParam);
                 } elseif ($strParam != 'page') {
                     // Add only to the array if param is not page.
-                    $arrOtherParams[$strParam] = \Input::get($strParam);
+                    $arrOtherParams[$strParam] = Input::get($strParam);
                 }
             }
         }
 
         // if POST, translate to proper GET url
-        if ($_POST && (\Input::post('FORM_SUBMIT') == $this->formId)) {
+        if ($_POST && (Input::post('FORM_SUBMIT') == $this->formId)) {
             foreach (array_keys($_POST) as $strParam) {
                 if (in_array($strParam, $arrWantedParam)) {
-                    $arrMyParams[$strParam] = \Input::post($strParam);
+                    $arrMyParams[$strParam] = Input::post($strParam);
                 }
             }
         }
@@ -264,11 +302,20 @@ class FrontendFilter
      * @param array $allParameter    The current parameters.
      *
      * @return void
+     *
+     * @deprecated Do not use.
      */
     protected function checkRedirect($widgets, $wantedParameter, $allParameter)
     {
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            sprintf('"%1$s" has been deprecated in favor of the new "FilterUrlBuilder"', __METHOD__),
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+
         // If we have POST data, we need to redirect now.
-        if (\Input::post('FORM_SUBMIT') != $this->formId) {
+        if (Input::post('FORM_SUBMIT') != $this->formId) {
             return;
         }
         $redirectParameters = $allParameter['other'];
@@ -278,7 +325,13 @@ class FrontendFilter
                 $redirectParameters[$widgetName] = $filter['urlvalue'];
             }
         }
-        $this->redirectPost($redirectParameters);
+
+        $filterUrl  = new FilterUrl($this->objFilterConfig->getJumpTo(), [], $redirectParameters);
+        $dispatcher = $this->getDispatcher();
+        $dispatcher->dispatch(
+            ContaoEvents::CONTROLLER_REDIRECT,
+            new RedirectEvent($this->filterUrlBuilder->generate($filterUrl))
+        );
     }
 
     /**
@@ -307,43 +360,51 @@ class FrontendFilter
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     *
+     * @throws RedirectResponseException When there was a POST request and we have to reload the page.
      */
     protected function getFilters()
     {
         $filterOptions     = $this->getFrontendFilterOptions();
         $jumpToInformation = $this->objFilterConfig->getJumpTo();
-        $filterParameters  = $this->getParams();
         $filterSetting     = $this->objFilterConfig->getFilterCollection();
+        $wantedNames       = $this->getWantedNames();
+
+        $this->buildParameters(
+            $other = new FilterUrl($jumpToInformation),
+            $all   = new FilterUrl($jumpToInformation),
+            $wantedNames
+        );
 
         $arrWidgets = $filterSetting->getParameterFilterWidgets(
-            $filterParameters['all'],
+            $all->getSlugParameters(),
             $jumpToInformation,
             $filterOptions
         );
 
-        // Filter the widgets we do not want to show.
-        $wantedNames = $this->getWantedNames();
+        // FIXME: input in use.
+        // If we have POST data, we need to redirect now.
+        if (Input::post('FORM_SUBMIT') === $this->formId) {
+            foreach ($wantedNames as $widgetName) {
+                $filter = $arrWidgets[$widgetName];
+                if (null !== $filter['urlvalue']) {
+                    $other->setSlug($widgetName, $filter['urlvalue']);
+                }
+            }
 
-        $this->checkRedirect($arrWidgets, $wantedNames, $filterParameters);
+            throw new RedirectResponseException($this->filterUrlBuilder->generate($other));
+        }
 
-        $renderedWidgets = array();
+        $renderedWidgets = [];
 
         // Render the widgets through the filter templates.
         foreach ($wantedNames as $strWidget) {
             $renderedWidgets[$strWidget] = $this->renderWidget($arrWidgets[$strWidget], $filterOptions);
         }
 
-        $event = new GenerateFrontendUrlEvent(
-            $jumpToInformation,
-            $this->getJumpToUrl($filterParameters['other']),
-            null,
-            true
-        );
-        $this->getDispatcher()->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
-
         // Return filter data.
-        return array(
-            'action'     => $event->getUrl(),
+        return [
+            'action'     => $this->filterUrlBuilder->generate($other),
             'formid'     => $this->formId,
             'filters'    => $renderedWidgets,
             'submit'     => (
@@ -351,7 +412,37 @@ class FrontendFilter
                     ? ''
                     : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']
                 )
-        );
+        ];
+    }
+
+    /**
+     * Retrieve the parameter values.
+     *
+     * @param FilterUrl $other       Destination for "other" parameters (not originating from current filter module).
+     * @param FilterUrl $all         Destination for "all" parameters.
+     * @param string[]  $wantedNames The wanted parameter names.
+     *
+     * @return void
+     */
+    protected function buildParameters(FilterUrl $other, FilterUrl $all, array $wantedNames): void
+    {
+        $current = $this->filterUrlBuilder->getCurrentFilterUrl([
+            'postAsSlug'  => $wantedNames,
+            'postAsGet'   => [],
+            'preserveGet' => true
+        ]);
+        foreach ($current->getSlugParameters() as $name => $value) {
+            $all->setSlug($name, $value);
+            if (!in_array($name, $wantedNames)) {
+                $other->setSlug($name, $value);
+            }
+        }
+        foreach ($current->getGetParameters() as $name => $value) {
+            $all->setGet($name, $value);
+            if (!in_array($name, $wantedNames)) {
+                $other->setGet($name, $value);
+            }
+        }
     }
 
     /**
@@ -400,9 +491,6 @@ class FrontendFilter
      * @return string
      *
      * @throws \Doctrine\DBAL\DBALException When a database error occur.
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function generateElement($table, $content, $replace, $elementId)
     {

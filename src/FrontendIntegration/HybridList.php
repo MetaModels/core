@@ -25,6 +25,7 @@
 
 namespace MetaModels\FrontendIntegration;
 
+use Contao\Input;
 use Contao\StringUtil;
 use Contao\System;
 use MetaModels\ItemList;
@@ -68,17 +69,19 @@ class HybridList extends MetaModelHybrid
      */
     protected function getFilterParameters($objItemRenderer)
     {
-        $arrReturn = array();
+        $filterUrlBuilder = System::getContainer()->get('metamodels.filter_url');
+        $filterUrl        = $filterUrlBuilder->getCurrentFilterUrl();
 
-        foreach (array_keys($objItemRenderer->getFilterSettings()->getParameterFilterNames()) as $strName) {
-            $varValue = \Input::get($strName);
-
-            if (is_string($varValue)) {
-                $arrReturn[$strName] = $varValue;
+        $result = [];
+        foreach ($objItemRenderer->getFilterSettings()->getParameters() as $name) {
+            if ($filterUrl->hasSlug($name)) {
+                $result[$name] = $filterUrl->getSlug($name);
             }
+            // DAMN Contao - we have to "mark" the keys in the Input class as used as we get an 404 otherwise.
+            Input::get($name);
         }
 
-        return $arrReturn;
+        return $filterUrl->getSlugParameters();
     }
 
     /**

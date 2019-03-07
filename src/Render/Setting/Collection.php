@@ -24,9 +24,11 @@
 namespace MetaModels\Render\Setting;
 
 use Contao\StringUtil;
+use Contao\System;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GetPageDetailsEvent;
+use MetaModels\Filter\FilterUrl;
+use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\IItem;
 use MetaModels\IMetaModel;
@@ -59,6 +61,13 @@ class Collection implements ICollection
     private $filterFactory;
 
     /**
+     * The filter URL builder.
+     *
+     * @var FilterUrlBuilder
+     */
+    private $filterUrlBuilder;
+
+    /**
      * The base information for this render settings object.
      *
      * @var array
@@ -82,16 +91,18 @@ class Collection implements ICollection
     /**
      * Create a new instance.
      *
-     * @param IMetaModel               $metaModel      The MetaModel instance.
-     * @param array                    $arrInformation The array that holds all base information for the new instance.
-     * @param EventDispatcherInterface $dispatcher     The event dispatcher.
-     * @param IFilterSettingFactory    $filterFactory  The filter setting factory.
+     * @param IMetaModel               $metaModel        The MetaModel instance.
+     * @param array                    $arrInformation   The array that holds all base information for the new instance.
+     * @param EventDispatcherInterface $dispatcher       The event dispatcher.
+     * @param IFilterSettingFactory    $filterFactory    The filter setting factory.
+     * @param FilterUrlBuilder         $filterUrlBuilder The filter URL builder.
      */
     public function __construct(
         IMetaModel $metaModel,
         $arrInformation,
         EventDispatcherInterface $dispatcher,
-        IFilterSettingFactory $filterFactory
+        IFilterSettingFactory $filterFactory,
+        FilterUrlBuilder $filterUrlBuilder = null
     ) {
         $this->metaModel     = $metaModel;
         $this->dispatcher    = $dispatcher;
@@ -114,6 +125,17 @@ class Collection implements ICollection
             );
             // @codingStandardsIgnoreEnd
         }
+        if (null === $filterUrlBuilder) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Not passing the "FilterUrlBuilder" as 5th argument to "' . __METHOD__ . '" is deprecated ' .
+                'and will cause an error in MetaModels 3.0',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $filterUrlBuilder = System::getContainer()->get('metamodels.filter_url');
+        }
+        $this->filterUrlBuilder = $filterUrlBuilder;
 
         foreach ($arrInformation as $strKey => $varValue) {
             $this->set($strKey, StringUtil::deserialize($varValue));
@@ -266,8 +288,12 @@ class Collection implements ICollection
         }
 
         $result        = $information;
-        $parameters    = '';
-        $parameterList = array();
+        $parameterList = [];
+
+        $filterUrl = new FilterUrl($information['pageDetails']);
+        if (!empty($information['language'])) {
+            $filterUrl->setPageValue('language', $information['language']);
+        }
 
         if (!empty($information['filterSetting'])) {
             /** @var \MetaModels\Filter\Setting\ICollection $filterSetting */
@@ -275,28 +301,16 @@ class Collection implements ICollection
             $parameterList = $filterSetting->generateFilterUrlFrom($item, $this);
 
             foreach ($parameterList as $strKey => $strValue) {
-                if ($strValue == '') {
-                    continue;
-                }
-                if ($strKey == 'auto_item') {
-                    $parameters = '/' . $strValue . $parameters;
-                } else {
-                    $parameters .= sprintf('/%s/%s', $strKey, $strValue);
-                }
+                // Sadly the filter values are currently encoded due to legacy reasons.
+                // For MetaModels 3, they should be passed around decoded everywhere.
+                $filterUrl->setSlug($strKey, rawurldecode($strValue));
             }
         }
 
         $result['params'] = $parameterList;
-        $result['deep']   = (strlen($parameters) > 0);
+        $result['deep']   = !empty($filterUrl->getSlugParameters());
 
-        $event = new GenerateFrontendUrlEvent(
-            $information['pageDetails'],
-            $parameters,
-            $information['language']
-        );
-
-        $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
-        $result['url'] = $event->getUrl();
+        $result['url'] = $this->filterUrlBuilder->generate($filterUrl);
 
         return $result;
     }

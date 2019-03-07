@@ -24,6 +24,7 @@ namespace MetaModels\Render\Setting;
 
 use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
+use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
@@ -74,20 +75,30 @@ class RenderSettingFactory implements IRenderSettingFactory
     private $renderSettings;
 
     /**
+     * The filter URL builder.
+     *
+     * @var FilterUrlBuilder
+     */
+    private $filterUrlBuilder;
+
+    /**
      * Create a new instance.
      *
-     * @param Connection               $database        The database.
-     * @param EventDispatcherInterface $eventDispatcher The event dispatcher to use.
-     * @param IFilterSettingFactory    $filterFactory   The filter setting factory.
+     * @param Connection               $database         The database.
+     * @param EventDispatcherInterface $eventDispatcher  The event dispatcher to use.
+     * @param IFilterSettingFactory    $filterFactory    The filter setting factory.
+     * @param FilterUrlBuilder         $filterUrlBuilder The filter URL builder.
      */
     public function __construct(
         Connection $database,
         EventDispatcherInterface $eventDispatcher,
-        IFilterSettingFactory $filterFactory
+        IFilterSettingFactory $filterFactory,
+        FilterUrlBuilder $filterUrlBuilder
     ) {
-        $this->eventDispatcher = $eventDispatcher;
-        $this->database        = $database;
-        $this->filterFactory   = $filterFactory;
+        $this->eventDispatcher  = $eventDispatcher;
+        $this->database         = $database;
+        $this->filterFactory    = $filterFactory;
+        $this->filterUrlBuilder = $filterUrlBuilder;
     }
 
     /**
@@ -219,7 +230,13 @@ class RenderSettingFactory implements IRenderSettingFactory
             $row = [];
         }
 
-        $renderSetting = new Collection($metaModel, $row, $this->eventDispatcher, $this->filterFactory);
+        $renderSetting = new Collection(
+            $metaModel,
+            $row,
+            $this->eventDispatcher,
+            $this->filterFactory,
+            $this->filterUrlBuilder
+        );
 
         if ($renderSetting->get('id')) {
             $this->collectAttributeSettings($metaModel, $renderSetting);
