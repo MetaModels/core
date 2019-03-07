@@ -6,6 +6,9 @@ services:
 
     metamodels.filter_setting_factory.simplelookup:
         class: MetaModels\Filter\Setting\SimpleLookupFilterSettingTypeFactory
+        arguments:
+          - '@event_dispatcher'
+          - '@MetaModels\Filter\FilterUrlBuilder'
         tags:
           - { name: metamodels.filter_factory }
 

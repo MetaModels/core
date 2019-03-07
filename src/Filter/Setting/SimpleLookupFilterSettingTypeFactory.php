@@ -20,22 +20,50 @@
 
 namespace MetaModels\Filter\Setting;
 
+use MetaModels\Filter\FilterUrlBuilder;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 /**
  * Attribute type factory for simple lookup filter settings.
  */
 class SimpleLookupFilterSettingTypeFactory extends AbstractFilterSettingTypeFactory
 {
     /**
+     * The event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
+
+    /**
+     * The filter URL builder.
+     *
+     * @var FilterUrlBuilder
+     */
+    private $filterUrlBuilder;
+
+    /**
      * {@inheritDoc}
      */
-    public function __construct()
+    public function __construct(EventDispatcherInterface $dispatcher, FilterUrlBuilder $filterUrlBuilder)
     {
         parent::__construct();
 
         $this
             ->setTypeName('simplelookup')
             ->setTypeIcon('bundles/metamodelscore/images/icons/filter_default.png')
-            ->setTypeClass('MetaModels\Filter\Setting\SimpleLookup')
+            ->setTypeClass(SimpleLookup::class)
             ->allowAttributeTypes();
+
+        $this->dispatcher       = $dispatcher;
+        $this->filterUrlBuilder = $filterUrlBuilder;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createInstance($information, $filterSettings)
+    {
+        return new SimpleLookup($filterSettings, $information, $this->dispatcher, $this->filterUrlBuilder);
     }
 }
