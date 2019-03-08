@@ -55,7 +55,7 @@ class BreadcrumbDcaSettingConditionListener extends AbstractBreadcrumbListener
 
         $builder = UrlBuilder::fromUrl($elements->getUri())
             ->setQueryParameter('do', 'metamodels')
-            ->setQueryParameter('table', 'tl_metamodel_dcasetting')
+            ->setQueryParameter('table', 'tl_metamodel_dcasetting_condition')
             ->setQueryParameter(
                 'pid',
                 ModelId::fromValues(
