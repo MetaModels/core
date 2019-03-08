@@ -18,40 +18,43 @@
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
-.mm_support_display .logo {
-	display: block;
-	height: 38px;
-	text-indent: -99999px;
-	width: 169px;
-	background: white url("https://now.metamodel.me/files/standard/layout/images/metamodels.png") no-repeat top left;
-}
 
-.mm_support_display h1 {
-	margin-bottom: 20px;
-}
+//colors
+$white: rgba(255, 255, 255, 1);
 
-.mm_support_display .colset {
-	width: 100%;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	overflow: hidden;
-	clear: both;
-}
+//urls
+$url_metamodels: url('https://now.metamodel.me/files/standard/layout/images/metamodels.png');
 
-.mm_support_display .colset form {
-	padding-top: 10px;
-}
-
-.mm_support_display .colset .left {
-	width: 35%;
-	float: left;
-}
-
-.mm_support_display .colset .right {
-	float: right;
-	width: 60%;
-}
-
-.mm_support_display a {
-	text-decoration: underline;
+.mm_support_display {
+	.logo {
+		display: block;
+		height: 38px;
+		text-indent: -99999px;
+		width: 169px;
+		background: $white $url_metamodels no-repeat top left;
+	}
+	h1 {
+		margin-bottom: 20px;
+	}
+	.colset {
+		width: 100%;
+		padding-top: 10px;
+		padding-bottom: 10px;
+		overflow: hidden;
+		clear: both;
+		form {
+			padding-top: 10px;
+		}
+		.left {
+			width: 35%;
+			float: left;
+		}
+		.right {
+			float: right;
+			width: 60%;
+		}
+	}
+	a {
+		text-decoration: underline;
+	}
 }
