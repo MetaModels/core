@@ -366,7 +366,7 @@ abstract class Simple implements ISimple
                 $value = implode(',', array_filter($value));
             }
 
-            $filterUrl->setSlug($name, $value);
+            $filterUrl->setSlug($name, (string) $value);
         }
         $parameterName = $arrWidget['eval']['urlparam'];
 
