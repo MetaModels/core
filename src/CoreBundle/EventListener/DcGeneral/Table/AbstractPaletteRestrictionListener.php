@@ -12,6 +12,7 @@
  *
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -47,6 +48,10 @@ class AbstractPaletteRestrictionListener
      */
     protected function getLegend($name, $palette, $prevLegend = null)
     {
+        if (strpos($name, '+') === 0) {
+            $name = substr($name, 1);
+        }
+
         if (!$palette->hasLegend($name)) {
             $palette->addLegend(new Legend($name), $prevLegend);
         }
