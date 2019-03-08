@@ -533,7 +533,7 @@ class FrontendFilter
      */
     public function generateClearAll($strContent, $strTemplate)
     {
-        if (substr($strTemplate, 0, 7) === 'fe_page') {
+        if (substr($strTemplate, 0, 3) === 'fe_') {
             if (preg_match_all(
                 '#\[\[\[metamodelfrontendfilterclearall::(ce|mod)::([^\]]*)\]\]\]#',
                 $strContent,
