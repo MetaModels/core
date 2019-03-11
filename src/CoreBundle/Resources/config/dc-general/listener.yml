@@ -1,0 +1,50 @@
+services:
+    metamodels.item_renderer_listener:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\ItemRendererListener
+        arguments:
+            - "@metamodels.render_setting_factory"
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.model-to-label
+                method: render
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.render-readable-property-value
+                method: getReadableValue
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.get-parent-header
+                method: addAdditionalParentHeaderFields
+
+    metamodels.create_variant_button_listener:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\MetaModel\CreateVariantButtonListener
+        arguments:
+            - "@metamodels.factory"
+            - '@cca.dc-general.scope-matcher'
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.get-operation-button
+                method: createButton
+            -   name: kernel.event_listener
+                event: dc-general.action
+                method: handleCreateVariantAction
+            -   name: kernel.event_listener
+                event: dc-general.model.pre-edit-model
+                method: presetVariantBase
+
+    metamodels.cut_button_listener:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\MetaModel\CutButtonListener
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.get-operation-button
+                method: handle
+
+    metamodels.paste_button_listener:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\MetaModel\PasteButtonListener
+        arguments:
+            - "@metamodels.factory"
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.get-paste-button
+                method: handle
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.get-paste-root-button
+                method: handleRoot

@@ -1,0 +1,49 @@
+services:
+    metamodels.listener.table.tl_metamodel_rendersettings.add_asset:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\RenderSettings\AddAssetListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "%kernel.project_dir%/%contao.upload_path%"
+        tags:
+            - name: kernel.event_listener
+              event: men-at-work.multi-column-wizard-bundle.get-options
+              method: getStylesheets
+            - name: kernel.event_listener
+              event: men-at-work.multi-column-wizard-bundle.get-options
+              method: getJavascripts
+    metamodels.dc_general.table.tl_metamodel_rendersettings.jump_to:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\RenderSettings\JumpToListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@metamodels.factory"
+            - "@database_connection"
+            - "@translator"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.build-widget
+              method: buildWidget
+              priority: 100
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.decode-property-value-for-widget
+              method: decodeValue
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.encode-property-value-from-widget
+              method: encodeValue
+    metamodels.listener.table.tl_metamodel_rendersettings.language_code_wizard:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\RenderSettings\LanguageCodeWizardListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@contao.picker.builder"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.manipulate-widget
+              method: pagePicker
+    metamodels.listener.table.tl_metamodel_rendersettings.template_options:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\RenderSettings\TemplateOptionListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@metamodels.template_list"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-property-options
+              method: handle

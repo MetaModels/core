@@ -1,0 +1,39 @@
+{% extends "@MetaModelsCore/Backend/be_base.html.twig" %}
+
+{% block headline %}
+    {{ headline }}
+{% endblock %}
+
+{% block error %}
+    {%- if error is defined -%}
+        {{- error -}}
+    {%- endif -%}
+{% endblock %}
+
+{% block main %}
+    <div class="tl_formbody_edit" id="styleItems">
+        {% if items is not empty %}
+        {% for item in items %}
+            <div class="item hover-div widget">
+                <div class="clr tl_checkbox_single_container m12">
+                    <input type="checkbox" id="check_{{ item.cssclass }}" value="{{ item.cssclass }}"/>
+                    <label for="check_{{ item.cssclass }}">
+                        {{ item.label }} <span>({{ item.cssclass }})</span>
+                        {% if item.description is defined and item.description is not empty %}
+                            <p class="description tl_help tl_tip">{{ item.description }}</p>
+                        {% endif %}
+                    </label>
+                </div>
+                <hr />
+            </div>
+        {% endfor %}
+        {% else %}
+        <p class="error">{{ noItems }}</p>
+        {% endif %}
+    </div>
+    <script>
+        window.addEvent('domready', function () {
+            new MetaModelsPicker($('styleItems'), '{{ field }}');
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,89 @@
+services:
+    metamodels.definition_builder.basic_definition_builder:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder\BasicDefinitionBuilder
+        arguments:
+            - "@metamodels.view_combination"
+            - "@metamodels.factory"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.factory.build-data-definition
+              method: "handle"
+
+    metamodels.definition_builder.contao2_backend_view_definition_builder:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder\Contao2BackendViewDefinitionBuilder
+        arguments:
+            - "@metamodels.view_combination"
+            - "@metamodels.factory"
+            - "@metamodels.render_setting_factory"
+            - "@metamodels.assets.icon_builder"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.factory.build-data-definition
+              method: "handle"
+
+    metamodels.definition_builder.command_definition_builder:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder\CommandBuilder
+        arguments:
+            - "@event_dispatcher"
+            - "@metamodels.view_combination"
+            - "@metamodels.factory"
+            - "@metamodels.assets.icon_builder"
+            - '@translator'
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.factory.build-data-definition
+              method: "handle"
+
+    metamodels.definition_builder.data_provider_definition_builder:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder\DataProviderBuilder
+        arguments:
+            - "@metamodels.view_combination"
+            - "@metamodels.factory"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.factory.build-data-definition
+              method: "handle"
+
+    metamodels.definition_builder.metamodel_definition_builder:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder\MetaModelDefinitionBuilder
+        arguments:
+            - "@metamodels.view_combination"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.factory.build-data-definition
+              method: "handle"
+              # Priority must be higher than "metamodels.definition_builder.contao2_backend_view_definition_builder".
+              priority: 10
+
+    metamodels.definition_builder.palette_definition_builder:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder\PaletteBuilder
+        arguments:
+            - "@metamodels.view_combination"
+            - "@metamodels.factory"
+            - '@MetaModels\CoreBundle\DcGeneral\PropertyConditionFactory'
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.factory.build-data-definition
+              method: "handle"
+
+    metamodels.definition_builder.panel_definition_builder:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder\PanelBuilder
+        arguments:
+            - "@metamodels.view_combination"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.factory.build-data-definition
+              method: "handle"
+
+    metamodels.definition_builder.property_definition_builder:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\DefinitionBuilder\PropertyDefinitionBuilder
+        arguments:
+            - "@event_dispatcher"
+            - "@metamodels.view_combination"
+            - "@metamodels.factory"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.factory.build-data-definition
+              method: "handle"
+              # Priority must be higher than "metamodels.definition_builder.palette_definition_builder".
+              priority: 10

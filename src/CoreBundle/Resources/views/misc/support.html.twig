@@ -1,0 +1,57 @@
+{% extends "@MetaModelsCore/Backend/be_base.html.twig" %}
+
+{% block headline %}
+    {{ headline }}
+{% endblock %}
+
+{% block main %}
+<div class="tl_message mm_support_display">
+    <a class="logo" target="_blank" href="http://now.metamodel.me/">MetaModels</a>
+    <div class="tl_tbox block colset">
+        <h2>{{ sub_headline }}</h2>
+        <div class="left">
+            <p><strong>Christian Schiffler</strong><br />
+                KSK Tübingen<br />
+                BLZ: 641 500 20<br />
+                KTO: 157 353 6<br /><br />
+                IBAN: DE24 6415 0020 0001 5735 36<br />
+                SWIFT-BIC: SOLADES1TUB<br /><br />
+                {{ purpose }}: MetaModels</p>
+            <form target="_top" method="post" action="https://www.paypal.com/cgi-bin/webscr">
+                <input type="hidden" value="_donations" name="cmd">
+                <input type="hidden" value="c.schiffler@cyberspectrum.de" name="business">
+                <input type="hidden" value="GB" name="lc">
+                <input type="hidden" value="MetaModels Support" name="item_name">
+                <input type="hidden" value="0" name="no_note">
+                <input type="hidden" value="EUR" name="currency_code">
+                <input type="hidden" value="PP-DonationsBF:btn_donate_LG.gif:NonHostedGuest" name="bn">
+                <input border="0" type="image" alt="" name="submit" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_LG.gif">
+            </form>
+            {{ other_donations | raw }}
+        </div>
+        <div class="right">
+            <p>{{ main_text | raw }}</p>
+        </div>
+    </div>
+    <div class="tl_box block">
+        <h1>{{ help_headline }}</h1>
+        <p>{{ help_text | raw }}</p>
+    </div>
+    <div class="tl_box block">
+        <h1>{{ head_contributor }}</h1>
+        <p>
+            {% for contributor in github_contributors %}
+                {% if contributor.login %}<a href="https://github.com/{{ contributor.login }}" target="_blank">{% endif %}
+                {{ contributor.name ?:contributor.login -}}
+                {% if contributor.login %}</a>{% endif %}{% if not loop.last %},{% endif %}
+            {% endfor %}
+        </p>
+        <p>
+            {% for contributor in transifex_contributors %}
+                <a href="https://www.transifex.com/accounts/profile/{{ contributor.login }}/" target="_blank">{{ contributor.name ?:contributor.login }}</a>
+                {% if not loop.last %},{% endif %}
+            {% endfor %}
+        </p>
+    </div>
+</div>
+{% endblock %}

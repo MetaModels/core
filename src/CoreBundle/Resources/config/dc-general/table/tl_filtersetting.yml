@@ -1,0 +1,73 @@
+services:
+    metamodels.dc_general.table.tl_metamodel_filtersetting.type_renderer_core:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting\FilterSettingTypeRendererCore
+        arguments:
+            - "@metamodels.filter_setting_factory"
+            - "@event_dispatcher"
+            - "@metamodels.assets.icon_builder"
+            - "@cca.dc-general.scope-matcher"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.model-to-label
+              method: modelToLabel
+
+    metamodels.dc_general.table.tl_metamodel_filtersetting.attribute:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting\AttributeListener
+        arguments:
+            - "@metamodels.filter_setting_factory"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-property-options
+              method: getOptions
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.decode-property-value-for-widget
+              method: decodeValue
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.encode-property-value-from-widget
+              method: encodeValue
+
+    metamodels.dc_general.table.tl_metamodel_filtersetting.default_options:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting\DefaultOptionListener
+        arguments:
+            - "@metamodels.filter_setting_factory"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-property-options
+              method: handle
+
+    metamodels.dc_general.table.tl_metamodel_filtersetting.paste_button:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting\PasteButtonListener
+        arguments:
+            - "@metamodels.filter_setting_factory"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-paste-button
+              method: handle
+
+    metamodels.dc_general.table.tl_metamodel_filtersetting.template_options:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting\TemplateOptionListener
+        arguments:
+            - "@metamodels.template_list"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-property-options
+              method: handle
+
+    metamodels.dc_general.table.tl_metamodel_filtersetting.type_options:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting\TypeOptionListener
+        arguments:
+            - "@metamodels.filter_setting_factory"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-property-options
+              method: handle
+
+    metamodels.dc_general.table.tl_metamodel_filtersetting.sub_palette:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting\SubPaletteSubscriber
+        arguments:
+            - "@metamodels.filter_setting_factory"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.factory.build-data-definition
+              method: prepareSubPalettes
+              priority: -100

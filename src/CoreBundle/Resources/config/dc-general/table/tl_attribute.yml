@@ -1,0 +1,72 @@
+services:
+    metamodels.dc_general.table.tl_metamodel_attribute.col_name_validation:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute\ColNameValidationListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@metamodels.attribute_factory"
+            - "@metamodels.factory"
+            - "@metamodels.table_manipulator"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.encode-property-value-from-widget
+              method: handle
+
+    metamodels.listener.table.tl_metamodel_attribute.get_type_options:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute\GetAttributeTypeListener
+        arguments:
+            - "@request_stack"
+            - "@cca.dc-general.scope-matcher"
+            - "@metamodels.attribute_factory"
+            - "@metamodels.factory"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-property-options
+              method: getOptions
+
+    metamodels.listener.table.tl_metamodel_attribute.listener_base:
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@metamodels.attribute_factory"
+            - "@metamodels.factory"
+        abstract: true
+
+    metamodels.listener.table.tl_metamodel_attribute.attribute_saved_listener:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute\AttributeSavedListener
+        parent: metamodels.listener.table.tl_metamodel_attribute.listener_base
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.model.post-persist
+              method: handle
+
+    metamodels.listener.table.tl_metamodel_attribute.attribute_deleted_listener:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute\AttributeDeletedListener
+        parent: metamodels.listener.table.tl_metamodel_attribute.listener_base
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.model.pre-delete
+              method: handle
+
+    metamodels.dc_general.table.tl_metamodel_attribute.type_renderer:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute\AttributeRendererListener
+        parent: metamodels.listener.table.tl_metamodel_attribute.listener_base
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.model-to-label
+              method: modelToLabel
+
+    metamodels.dc_general.table.tl_metamodel_attribute.name_and_description:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute\NameAndDescriptionListener
+        parent: metamodels.listener.table.tl_metamodel_attribute.listener_base
+        arguments:
+          $translator: '@contao.translation.translator'
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.build-widget
+              method: buildWidget
+              priority: 100
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.decode-property-value-for-widget
+              method: decodeValue
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.encode-property-value-from-widget
+              method: encodeValue

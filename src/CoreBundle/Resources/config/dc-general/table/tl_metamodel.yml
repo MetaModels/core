@@ -1,0 +1,59 @@
+services:
+    metamodels.listener.table.tl_metamodel.dca_combine_button:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel\DcaCombineButtonListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-operation-button
+              method: handle
+    metamodels.listener.table.tl_metamodel.language_options:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel\LanguageOptionsListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+        tags:
+            - name: kernel.event_listener
+              event: men-at-work.multi-column-wizard-bundle.get-options
+              method: handle
+    metamodels.listener.table.tl_metamodel.language_array_mangler:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel\LanguageArrayListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.decode-property-value-for-widget
+              method: handleDecode
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.encode-property-value-from-widget
+              method: handleEncode
+    metamodels.listener.table.tl_metamodel.model_render:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel\ModelToLabelListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@database_connection"
+            - "@translator"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.model-to-label
+              method: handle
+    metamodels.listener.table.tl_metamodel.table_name_prefixer:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel\TableNamePrefixingListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@metamodels.table_manipulator"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.encode-property-value-from-widget
+              method: handle
+    metamodels.listener.table.tl_metamodel.table_updater:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel\TableUpdatingListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@metamodels.table_manipulator"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.model.pre-delete
+              method: handleDelete
+            - name: kernel.event_listener
+              event: dc-general.model.post-persist
+              method: handleUpdate

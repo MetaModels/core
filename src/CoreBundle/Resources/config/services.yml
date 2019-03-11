@@ -1,0 +1,176 @@
+services:
+    metamodels.assets.icon_builder:
+        class: MetaModels\CoreBundle\Assets\IconBuilder
+        arguments:
+            - "@=service('contao.framework').getAdapter('Contao\\\\FilesModel')"
+            - "@contao.image.image_factory"
+            - "%kernel.project_dir%"
+            - "%metamodels.assets_dir%"
+            - "%metamodels.assets_web%"
+            - "@=service('contao.framework').getAdapter('Contao\\\\Image')"
+
+    metamodels.cache:
+        class: Doctrine\Common\Cache\FilesystemCache
+        arguments:
+            - "%metamodels.cache_dir%"
+        public: true
+
+    metamodels.cache.purger:
+        class: MetaModels\BackendIntegration\PurgeCache
+        arguments:
+            - "%metamodels.cache_dir%"
+            - "@logger"
+        public: true
+
+    metamodels.factory:
+        arguments:
+            - "@event_dispatcher"
+        class: MetaModels\Factory
+        public: true
+
+    metamodels.attribute_factory:
+        class: MetaModels\Attribute\AttributeFactory
+        arguments:
+          - "@event_dispatcher"
+        public: true
+
+    metamodels.filter_setting_factory:
+        class: MetaModels\Filter\Setting\FilterSettingFactory
+        arguments:
+          - "@database_connection"
+          - "@event_dispatcher"
+          - "@metamodels.factory"
+        public: true
+
+    metamodels.render_setting_factory:
+        class: MetaModels\Render\Setting\RenderSettingFactory
+        arguments:
+          - "@database_connection"
+          - "@event_dispatcher"
+          - "@metamodels.filter_setting_factory"
+          - '@MetaModels\Filter\FilterUrlBuilder'
+        public: true
+
+    metamodels.template_list:
+        class: MetaModels\BackendIntegration\TemplateList
+        arguments:
+          - "@database_connection"
+          - "%contao.resources_paths%"
+          - "%kernel.project_dir%"
+
+    metamodels.contao_input:
+        class: Contao\Input
+        factory: ['@MetaModels\CoreBundle\Contao\Compat\ContaoFactory', 'getAdapter']
+        arguments:
+            - 'Contao\Input'
+
+    metamodels.contao_session:
+        class: Contao\Session
+        factory: ['@MetaModels\CoreBundle\Contao\Compat\ContaoFactory', 'getAdapter']
+        arguments:
+            - 'Contao\Session'
+
+    metamodels.insert_tags:
+        class: Contao\InsertTags
+        factory: ['@MetaModels\CoreBundle\Contao\Compat\ContaoFactory', 'createInsertTags']
+
+    metamodels.table_manipulator:
+        class: MetaModels\Helper\TableManipulator
+        arguments:
+          - "@database_connection"
+          - "%metamodels.system_columns%"
+        public: true
+
+    metamodels.backend.url-builder-factory:
+        class: ContaoCommunityAlliance\UrlBuilder\Contao\CsrfUrlBuilderFactory
+        arguments:
+            - '@security.csrf.token_manager'
+            - '%contao.csrf_token_name%'
+
+    MetaModels\Filter\FilterUrlBuilder:
+        arguments:
+            - '@contao.routing.url_generator'
+            - '@request_stack'
+            - '%contao.prepend_locale%'
+            - '%contao.url_suffix%'
+            - "@=service('contao.framework').getAdapter('Contao\\\\PageModel')"
+
+    # Please inject the service "MetaModels\Filter\FilterUrlBuilder" directly.
+    metamodels.filter_url:
+        alias: 'MetaModels\Filter\FilterUrlBuilder'
+        public: true
+
+    MetaModels\FrontendIntegration\FrontendFilter:
+        arguments:
+            - '@database_connection'
+            - '@MetaModels\Filter\FilterUrlBuilder'
+        public: true
+
+    metamodels.controller.abstract.add_all:
+        abstract: true
+        arguments:
+            - "@templating"
+            - "@contao.translation.translator"
+            - "@metamodels.factory"
+            - "@database_connection"
+            - "@=service('contao.framework').getAdapter('Contao\\\\System')"
+            - '@metamodels.cache.purger'
+    metamodels.controller.inputscreen.add_all:
+        class: MetaModels\CoreBundle\Controller\Backend\InputScreenAddAllController
+        parent: metamodels.controller.abstract.add_all
+        tags: ['controller.service_arguments']
+    metamodels.controller.rendersetting.add_all:
+        class: MetaModels\CoreBundle\Controller\Backend\RenderSettingAddAllController
+        parent: metamodels.controller.abstract.add_all
+        tags: ['controller.service_arguments']
+
+    metamodels.controller.support_screen:
+        class: MetaModels\CoreBundle\Controller\Backend\SupportMetaModelsController
+        arguments:
+            - "@templating"
+            - "@contao.translation.translator"
+            - "%metamodels.resource_dir%/data/contributors-github.json"
+            - "%metamodels.resource_dir%/data/contributors-transifex.json"
+        tags: ['controller.service_arguments']
+
+    metamodels.controller.picker:
+        class: MetaModels\CoreBundle\Controller\Backend\PickerWidgetController
+        arguments:
+            - "@templating"
+            - "@contao.translation.translator"
+            - []
+        tags: ['controller.service_arguments']
+
+    metamodels.view_combination.builder:
+        class: MetaModels\ViewCombination\ViewCombinationBuilder
+        arguments:
+            - "@database_connection"
+            - "@metamodels.factory"
+
+    metamodels.view_combination.input_screen_information_builder:
+        class: MetaModels\ViewCombination\InputScreenInformationBuilder
+        arguments:
+            - "@database_connection"
+            - "@metamodels.factory"
+
+    metamodels.view_combination:
+        class: MetaModels\ViewCombination\ViewCombination
+        arguments:
+            - "@metamodels.cache"
+            - "@security.token_storage"
+            - "@metamodels.view_combination.builder"
+            - "@metamodels.view_combination.input_screen_information_builder"
+
+    MetaModels\MetaModelsServiceContainer:
+        deprecated: 'The service "%service_id%" is deprecated and to be removed in MetaModels 3 - inject needed services directly.'
+        configurator: 'MetaModels\CoreBundle\LegacyCompat\ServiceContainerInitializer:configure'
+        public: true
+
+    MetaModels\CoreBundle\LegacyCompat\ServiceContainerInitializer:
+        arguments:
+            - '@service_container'
+
+    MetaModels\CoreBundle\Contao\Compat\ContaoFactory:
+        class: MetaModels\CoreBundle\Contao\Compat\ContaoFactory
+        arguments:
+            - '@contao.framework'

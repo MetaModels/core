@@ -1,0 +1,34 @@
+services:
+    metamodels.listener.table.tl_metamodel_searchable_pages.filter_options:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\SearchablePages\FilterOptionListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@database_connection"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-property-options
+              method: handle
+    metamodels.listener.table.tl_metamodel_searchable_pages.filter_param_widget:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\SearchablePages\FilterParamWidgetListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@metamodels.filter_setting_factory"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.build-widget
+              method: handle
+    metamodels.listener.table.tl_metamodel_searchable_pages.palette_restrictions:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\SearchablePages\PaletteRestrictionListener
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.factory.build-data-definition
+              method: handle
+    metamodels.listener.table.tl_metamodel_searchable_pages.render_setting_options:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\SearchablePages\RenderSettingOptionListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@database_connection"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-property-options
+              method: handle

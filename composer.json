@@ -6,7 +6,7 @@
     "metamodels",
     "core"
   ],
-  "type": "contao-module",
+  "type": "contao-bundle",
   "homepage": "http://now.metamodel.me/",
   "license": "LGPL-3.0-or-later",
   "authors": [
@@ -30,46 +30,49 @@
     "source": "https://github.com/MetaModels/core"
   },
   "require": {
-    "php": "^5.6 || ^7.0",
-    "contao-community-alliance/composer-plugin": "^2.4",
-    "contao-community-alliance/dc-general": "^2.0.0",
-    "contao-community-alliance/dependency-container": "^1.8",
-    "contao-community-alliance/event-dispatcher": "~1.3",
-    "contao-community-alliance/events-contao-bindings": "^3.5",
-    "contao-community-alliance/meta-palettes": "^1.11",
-    "contao-community-alliance/url-builder": "^1.3",
-    "contao/core": "^3.5.5",
-    "discordier/justtextwidgets": "^1.1",
-    "doctrine/cache": "^1.6",
-    "menatwork/contao-multicolumnwizard": "^3.3.16"
+    "php": "^7.1",
+    "contao-community-alliance/dc-general": "^2.1.0",
+    "contao-community-alliance/dependency-container": "~2.0",
+    "contao-community-alliance/event-dispatcher": "~2.0",
+    "contao-community-alliance/events-contao-bindings": "~4.0",
+    "contao-community-alliance/meta-palettes": "~2.0",
+    "contao-community-alliance/translator": "~2.1",
+    "contao-community-alliance/url-builder": "~1.3",
+    "contao/core-bundle": "^4.4.8",
+    "discordier/justtextwidgets": "^1.2",
+    "doctrine/cache": "~1.6",
+    "menatwork/contao-multicolumnwizard-bundle": "^3.4",
+    "ocramius/proxy-manager": "^1.0 || ^2.1",
+    "symfony/config": "^3.3 || ^4.0",
+    "symfony/dependency-injection": "^3.3 || ^4.0",
+    "symfony/filesystem": "^3.3 || ^4.0",
+    "symfony/finder": "^3.3 || ^4.0",
+    "symfony/proxy-manager-bridge": "^3.3 || ^4.0",
+    "webmozart/path-util": "~2.3"
   },
   "require-dev": {
-    "metamodels/base-unit-tests": "^1.0.4",
-    "metamodels/phpunit-contao-database": "^1.0.1",
+    "contao/manager-plugin": "^2.1",
     "phpcq/all-tasks": "^1.2"
   },
   "autoload": {
-    "psr-0": {
-      "MetaModels\\": "src"
+    "psr-4": {
+      "MetaModels\\": "src/"
     }
   },
   "autoload-dev": {
-    "psr-0": {
-      "MetaModels\\Test\\": "tests"
+    "psr-4": {
+      "MetaModels\\Test\\": "tests/"
     }
   },
   "extra": {
+    "contao-manager-plugin": "MetaModels\\CoreBundle\\ContaoManager\\Plugin",
     "contao": {
-      "sources": {
-        "contao": "system/modules/metamodels"
-      },
       "runonce": [
         "runonce/runonce.php"
       ]
     },
     "branch-alias": {
-      "dev-master": "2.0.x-dev",
-      "dev-develop": "2.1.x-dev"
+      "dev-release/2.1.0": "2.1.x-dev"
     }
   },
   "config": {

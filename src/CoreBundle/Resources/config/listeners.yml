@@ -1,0 +1,108 @@
+services:
+    metamodels.attribute_adder:
+        class: MetaModels\CoreBundle\EventListener\AttributeAddingListener
+        arguments:
+            - "@metamodels.attribute_factory"
+        tags:
+            - name: kernel.event_listener
+              event: metamodels.metamodel.create
+              method: handle
+              # Keep this lower than 0.
+              priority: -200
+
+    metamodels.provider_from_database:
+        class: MetaModels\Events\DatabaseBackedListener
+        arguments:
+            - "@database_connection"
+            - "@event_dispatcher"
+            - '%metamodels.system_columns%'
+        tags:
+            -   name: kernel.event_listener
+                event: metamodels.metamodel.collect-metamodel-attribute-information
+                method: collectMetaModelAttributeInformation
+            -   name: kernel.event_listener
+                event: metamodels.metamodel.collect-table-names
+                method: collectMetaModelTableNames
+            -   name: kernel.event_listener
+                event: metamodels.metamodel.create
+                method: createMetaModel
+            -   name: kernel.event_listener
+                event: metamodels.metamodel.get-metamodel-name-from-id
+                method: getMetaModelNameFromId
+
+    metamodels.property_options_provider:
+        class: MetaModels\DcGeneral\Events\MetaModel\PropertyOptionsProvider
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.view.contao2backend.get-property-options
+                method: getPropertyOptions
+                # Keep priority low to allow attributes like select and tags to override values.
+                priority: -200
+
+    metamodels.pre_duplicate_model_listener:
+        class: MetaModels\DcGeneral\Events\MetaModel\DuplicateModel
+        arguments:
+            - "@metamodels.factory"
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.model.pre-duplicate
+                method: handle
+
+    MetaModels\CoreBundle\EventListener\PurgeListener:
+        arguments:
+            - '@metamodels.cache.purger'
+        tags:
+            -   name: kernel.event_listener
+                event: dc-general.model.post-create
+                method: checkPurge
+            -   name: kernel.event_listener
+                event: dc-general.model.post-delete
+                method: checkPurge
+            -   name: kernel.event_listener
+                event: dc-general.model.post-duplicate
+                method: checkPurge
+            -   name: kernel.event_listener
+                event: dc-general.model.post-paste
+                method: checkPurge
+            -   name: kernel.event_listener
+                event: dc-general.model.post-persist
+                method: checkPurge
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    metamodels.backend.auth.listener:
+        class: MetaModels\CoreBundle\EventListener\UserListener
+        arguments:
+            - "@security.token_storage"
+            - "@security.authentication.trust_resolver"
+            - "@contao.routing.scope_matcher"
+            - "@metamodels.view_combination"
+        tags:
+            - name: kernel.event_listener
+              event: kernel.request
+              priority: -500
+
+
+
+#    metamodels.listener.table.tl_metamodel_rendersettings:
+#        class: MetaModels\DcGeneral\Events\Table\RenderSettings\Subscriber
+#        arguments:
+#            - "@metamodels.template_list"
+#        tags:
+#            -   name: kernel.event_listener
+#                event:

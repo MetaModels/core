@@ -1,0 +1,48 @@
+services:
+    metamodels.dc_general.table.tl_metamodel_dca.backend_section_options:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Dca\BackendSectionOptionListener
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-property-options
+              method: handle
+
+    metamodels.dc_general.table.tl_metamodel_dca.parent_table_options:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Dca\ParentTableOptionListener
+        arguments:
+            - "@database_connection"
+            - "@metamodels.factory"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-property-options
+              method: handle
+
+    metamodels.dc_general.table.tl_metamodel_dca.parent_table_visibility:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Dca\ParentTableVisibilityListener
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.factory.build-data-definition
+              method: handle
+
+    metamodels.dc_general.table.tl_metamodel_dca.panel_layout_wizard:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Dca\PanelLayoutWizardListener
+        arguments:
+            - "@metamodels.assets.icon_builder"
+            - "@router"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.manipulate-widget
+              method: handle
+
+    metamodels.dc_general.table.tl_metamodel_dca.render_mode_options:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Dca\RenderModeOptionListener
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-property-options
+              method: handle
+
+    metamodels.dc_general.table.tl_metamodel_dca.render_type_options:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Dca\RenderTypeOptionListener
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-property-options
+              method: handle

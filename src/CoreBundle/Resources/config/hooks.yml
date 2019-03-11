@@ -1,0 +1,53 @@
+services:
+    MetaModels\CoreBundle\Contao\Hooks\LoadDataContainer:
+        arguments:
+            - '@metamodels.factory'
+            - '@metamodels.view_combination'
+            - "@=service('contao.framework').getAdapter('Contao\\\\Controller')"
+            - '@metamodels.assets.icon_builder'
+        public: true
+
+    MetaModels\CoreBundle\Contao\Hooks\RegisterBackendNavigation:
+        arguments:
+            - '@contao.translation.translator'
+            - '@request_stack'
+            - '@router'
+            - '@metamodels.view_combination'
+            - '@security.token_storage'
+        # it is used as HOOK from Contao - needs to be public therefore.
+        public: true
+
+    MetaModels\CoreBundle\Contao\Hooks\AbstractContentElementAndModuleCallback:
+        abstract: true
+        arguments:
+            - '@metamodels.assets.icon_builder'
+            - '@metamodels.backend.url-builder-factory'
+            - '@metamodels.factory'
+            - '@metamodels.filter_setting_factory'
+            - '@database_connection'
+            - '@metamodels.template_list'
+            - '@request_stack'
+        public: true
+
+    MetaModels\CoreBundle\Contao\Hooks\ContentElementCallback:
+        parent: MetaModels\CoreBundle\Contao\Hooks\AbstractContentElementAndModuleCallback
+
+    MetaModels\CoreBundle\Contao\Hooks\ModuleCallback:
+        parent: MetaModels\CoreBundle\Contao\Hooks\AbstractContentElementAndModuleCallback
+
+    MetaModels\BackendIntegration\SearchablePages:
+        arguments:
+            - "@database_connection"
+        public: true
+
+    MetaModels\FrontendIntegration\InsertTags:
+        arguments:
+            - "@database_connection"
+        public: true
+
+    MetaModels\CoreBundle\Contao\Hooks\FixupUserGroupModules:
+        arguments:
+            - '@metamodels.view_combination.builder'
+            - '@metamodels.view_combination.input_screen_information_builder'
+            - '@request_stack'
+        public: true

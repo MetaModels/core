@@ -2,7 +2,7 @@
   "transifex": {
     "project": "metamodels",
     "prefix": "core-",
-    "languages_cto": "contao/languages",
+    "languages_cto": "src/CoreBundle/Resources/contao/languages",
     "languages_tx": ".tx",
     "php-file-header": [
       "This file is part of MetaModels/core.",

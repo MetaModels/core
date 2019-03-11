@@ -1,0 +1,30 @@
+services:
+    metamodels.listener.table.tl_dca_sortgroup.attribute_options:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSortGroup\AttributeOptionsListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@metamodels.factory"
+            - "@database_connection"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-property-options
+              method: handle
+    metamodels.listener.table.tl_dca_sortgroup.model_render:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSortGroup\ModelToLabelListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@metamodels.factory"
+            - "@database_connection"
+            - "@translator"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.model-to-label
+              method: handle
+    metamodels.listener.table.tl_dca_sortgroup.rendergrouptype_visibility_condition:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSortGroup\VisibilityConditionBuildingListener
+        arguments:
+            - "@database_connection"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.factory.build-data-definition
+              method: handle

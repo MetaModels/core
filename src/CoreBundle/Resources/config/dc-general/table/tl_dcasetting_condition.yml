@@ -1,0 +1,72 @@
+services:
+    metamodels.listener.table.tl_metamodel_dcasetting_condition.attribute_id_listener:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSettingCondition\AttributeIdListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@metamodels.factory"
+            - "@database_connection"
+            - '@MetaModels\CoreBundle\DcGeneral\PropertyConditionFactory'
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-property-options
+              method: getAttributeOptions
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.decode-property-value-for-widget
+              method: decodeAttributeValue
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.encode-property-value-from-widget
+              method: encodeAttributeValue
+    metamodels.listener.table.tl_metamodel_dcasetting_condition.model_render:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSettingCondition\ModelToLabelListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@metamodels.factory"
+            - "@database_connection"
+            - "@contao.translation.translator"
+            - '@metamodels.assets.icon_builder'
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.model-to-label
+              method: handle
+    metamodels.listener.table.tl_metamodel_dcasetting_condition.paste_button:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSettingCondition\PasteButtonListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@metamodels.factory"
+            - "@database_connection"
+            - '@MetaModels\CoreBundle\DcGeneral\PropertyConditionFactory'
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-paste-button
+              method: handle
+    metamodels.listener.table.tl_metamodel_dcasetting_condition.type_option_provider:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSettingCondition\TypeOptionsListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@metamodels.factory"
+            - "@database_connection"
+            - '@MetaModels\CoreBundle\DcGeneral\PropertyConditionFactory'
+            - "@contao.translation.translator"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-property-options
+              method: handle
+    metamodels.listener.table.tl_metamodel_dcasetting_condition.value_listener:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSettingCondition\ValueListener
+        arguments:
+            - "@cca.dc-general.scope-matcher"
+            - "@metamodels.factory"
+            - "@database_connection"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.get-property-options
+              method: getValueOptions
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.decode-property-value-for-widget
+              method: decodeValue
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.encode-property-value-from-widget
+              method: encodeValue
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.manipulate-widget
+              method: setValueOptionsMultiple
