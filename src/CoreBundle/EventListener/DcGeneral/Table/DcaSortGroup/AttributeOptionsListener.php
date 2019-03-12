@@ -22,6 +22,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSortGroup;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
+use MetaModels\Attribute\IInternal;
 
 /**
  * This provides the attribute name options.
@@ -45,6 +46,9 @@ class AttributeOptionsListener extends AbstractListener
         $metaModel = $this->getMetaModelFromModel($event->getModel());
 
         foreach ($metaModel->getAttributes() as $attribute) {
+            if ($attribute instanceof IInternal) {
+                continue;
+            }
             $typeName                      = $attribute->get('type');
             $result[$attribute->get('id')] = $attribute->getName() . ' [' . $typeName . ']';
         }

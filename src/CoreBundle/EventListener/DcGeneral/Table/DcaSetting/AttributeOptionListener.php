@@ -21,6 +21,7 @@
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use MetaModels\Attribute\IInternal;
 
 /**
  * This handles retrieving attributes as options.
@@ -66,7 +67,7 @@ class AttributeOptionListener extends AbstractListener
         $alreadyTaken = $alreadyTaken->execute()->fetchAll(\PDO::FETCH_COLUMN);
 
         foreach ($metaModel->getAttributes() as $attribute) {
-            if (in_array($attribute->get('id'), $alreadyTaken)) {
+            if ($attribute instanceof IInternal || in_array($attribute->get('id'), $alreadyTaken)) {
                 continue;
             }
             $options[$attribute->get('id')] = sprintf(
