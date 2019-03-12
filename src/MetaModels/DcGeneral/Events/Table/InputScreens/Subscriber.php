@@ -45,6 +45,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Property;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentException;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
+use MetaModels\Attribute\IInternal;
 use MetaModels\Dca\Helper;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\InputScreenAttributeIs;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
@@ -480,7 +481,7 @@ class Subscriber extends BaseSubscriber
             ->fetchEach('attr_id');
 
         foreach ($metaModel->getAttributes() as $attribute) {
-            if (in_array($attribute->get('id'), $alreadyTaken)) {
+            if ($attribute instanceof IInternal || in_array($attribute->get('id'), $alreadyTaken)) {
                 continue;
             }
             $arrResult[$attribute->get('id')] = sprintf(
