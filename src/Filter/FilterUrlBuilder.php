@@ -454,7 +454,7 @@ class FilterUrlBuilder
 
         foreach ($request->request->all() as $name => $value) {
             if (is_array($value)) {
-                $value = implode(',', array_filter($value));
+                $value = implode(',', $value);
             }
             if (in_array($name, $options['postAsSlug'])) {
                 $filterUrl->setSlug($name, $value);
