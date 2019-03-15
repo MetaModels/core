@@ -84,7 +84,7 @@ abstract class HybridFilterClearAll extends MetaModelHybrid
                 continue;
             }
 
-            $arrGetParameters[$mixGetKey] = \Input::get($mixGetKey);
+            $arrGetParameters[$mixGetKey] = \Input::get($mixGetKey, false, true);
         }
 
         // Check if we have filter and if we have active params.
