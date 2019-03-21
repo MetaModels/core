@@ -24,7 +24,6 @@
 
 namespace MetaModels\Filter\Setting;
 
-use Contao\Input;
 use Contao\StringUtil;
 use Contao\System;
 use Contao\Widget;
@@ -569,13 +568,9 @@ abstract class Simple implements ISimple
         if (null === $value) {
             return;
         }
-        $name = $widget->name;
-
-        // Backup $_POST value.
-        $keeper = Input::post($name);
-        Input::setPost($name, $value);
+        $widget->setInputCallback(function () use ($value) {
+            return $value;
+        });
         $widget->validate();
-        // Restore $_POST value.
-        Input::setPost($name, $keeper);
     }
 }
