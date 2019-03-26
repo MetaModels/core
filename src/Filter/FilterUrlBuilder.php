@@ -325,13 +325,13 @@ class FilterUrlBuilder
     /**
      * Update the fragments for folder URL aliases.
      *
-     * @param string $alias  The relative request.
-     * @param string $host   The host part of the current request.
-     * @param string $locale The current locale.
+     * @param string      $alias  The relative request.
+     * @param string      $host   The host part of the current request.
+     * @param string|null $locale The current locale or null if none requested.
      *
      * @return array
      */
-    private function getFolderUrlFragments(string $alias, string $host, ?string $locale): ?array
+    private function getFolderUrlFragments(string $alias, string $host, string $locale = null): ?array
     {
         // Check if there are pages with a matching alias
         $pages = $this->getPageCandidates($alias);
