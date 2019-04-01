@@ -257,6 +257,8 @@ class InsertTags
      * @param string     $strOutput         Name of output. Default:raw|text|html5|xhtml|...
      *
      * @return boolean|string Return false when nothing was found or return the value.
+     *
+     * @throws \RuntimeException If $intDataId does not provide an existingMetaModel ID.
      */
     protected function getAttribute($metaModelIdOrName, $intDataId, $strAttributeName, $strOutput = 'raw')
     {
