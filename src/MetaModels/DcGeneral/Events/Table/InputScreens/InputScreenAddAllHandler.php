@@ -21,6 +21,7 @@
 namespace MetaModels\DcGeneral\Events\Table\InputScreens;
 
 use MetaModels\Attribute\IAttribute;
+use MetaModels\Attribute\IInternal;
 use MetaModels\DcGeneral\Events\Table\AbstractAddAllHandler;
 
 /**
@@ -78,10 +79,6 @@ class InputScreenAddAllHandler extends AbstractAddAllHandler
      */
     protected function accepts($attribute)
     {
-        if (!$attribute->get('id')) {
-            return false;
-        }
-
-        return true;
+        return !($attribute instanceof IInternal) && $attribute->get('id');
     }
 }

@@ -33,6 +33,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Factory\Event\BuildDataDefinitionEvent;
+use MetaModels\Attribute\IInternal;
 use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\InputScreenRenderModeIs;
 use MetaModels\DcGeneral\Events\BaseSubscriber;
 use MetaModels\DcGeneral\Events\BreadCrumb\BreadCrumbInputScreenSortGroup;
@@ -144,6 +145,9 @@ class Subscriber extends BaseSubscriber
         $metaModel = $this->getMetaModel($event->getEnvironment());
 
         foreach ($metaModel->getAttributes() as $attribute) {
+            if ($attribute instanceof IInternal) {
+                continue;
+            }
             $typeName              = $attribute->get('type');
             $strSelectVal          = $metaModel->getTableName() . '_' . $attribute->getColName();
             $result[$strSelectVal] = $attribute->getName() . ' [' . $typeName . ']';

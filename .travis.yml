@@ -25,8 +25,8 @@ before_script:
     if [ "x${TRAVIS_TAG}" != "x" ]; then
       export COMPOSER_ROOT_VERSION=${TRAVIS_TAG}
     else
-      export COMPOSER_ROOT_VERSION=$([[ ${TRAVIS_BRANCH} =~ hotfix/([0-9.]*(-(alpha|beta|rc)[0-9]+)?) ]] \
-        && echo ${BASH_REMATCH[1]} \
+      export COMPOSER_ROOT_VERSION=$([[ ${TRAVIS_BRANCH} =~ (hotfix|release|support)/([0-9.]*(-(alpha|beta|rc)[0-9]+)?) ]] \
+        && echo ${BASH_REMATCH[2]} \
         || echo dev-${TRAVIS_BRANCH})
     fi
   - echo "Using root version ${COMPOSER_ROOT_VERSION}"
