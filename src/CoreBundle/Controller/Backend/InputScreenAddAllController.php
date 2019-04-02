@@ -21,6 +21,7 @@
 namespace MetaModels\CoreBundle\Controller\Backend;
 
 use MetaModels\Attribute\IAttribute;
+use MetaModels\Attribute\IInternal;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -70,6 +71,6 @@ class InputScreenAddAllController extends AbstractAddAllController
      */
     protected function accepts(IAttribute $attribute)
     {
-        return !empty($attribute->get('id'));
+        return !($attribute instanceof IInternal) && !empty($attribute->get('id'));
     }
 }
