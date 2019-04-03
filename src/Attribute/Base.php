@@ -544,7 +544,7 @@ abstract class Base implements IAttribute
         // We are parsing as text here as this was the way before this method was implemented. See #216.
         $arrResult = $this->parseValue(array($this->getColName() => $varValue), 'text');
 
-        return urlencode($arrResult['text']);
+        return $arrResult['text'];
     }
 
     /**

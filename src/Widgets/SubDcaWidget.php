@@ -26,6 +26,7 @@ namespace MetaModels\Widgets;
 
 use Contao\Date;
 use Contao\StringUtil;
+use Contao\System;
 use Contao\Widget;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\GenerateHtmlEvent;
@@ -141,13 +142,10 @@ class SubDcaWidget extends Widget
      * Retrieve the event dispatcher.
      *
      * @return EventDispatcherInterface
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getEventDispatcher()
     {
-        return $GLOBALS['container']['event-dispatcher'];
+        return System::getContainer()->get('event_dispatcher');
     }
 
     /**

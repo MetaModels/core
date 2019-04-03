@@ -14,6 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -293,7 +294,11 @@ class FilterBuilder
             }
 
             // Try to parse the sub procedure and extract as much as possible.
-            if (($child['operation'] == 'AND') || ($child['operation'] == 'OR')) {
+            if (('AND' === $child['operation']) || ('OR' === $child['operation'])) {
+                if (null === $child['children']) {
+                    continue;
+                }
+
                 $subProcedure = new FilterBuilderSql($tableName, $child['operation'], $this->connection);
                 $subSkipped   = $this->buildNativeSqlProcedure($subProcedure, $child['children']);
 

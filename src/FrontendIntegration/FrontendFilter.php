@@ -376,6 +376,13 @@ class FrontendFilter
             $wantedNames
         );
 
+        // DAMN Contao - we have to "mark" the keys in the Input class as used as we get an 404 otherwise.
+        foreach ($wantedNames as $name) {
+            if ($all->hasSlug($name)) {
+                Input::get($name);
+            }
+        }
+
         $arrWidgets = $filterSetting->getParameterFilterWidgets(
             $all->getSlugParameters(),
             $jumpToInformation,

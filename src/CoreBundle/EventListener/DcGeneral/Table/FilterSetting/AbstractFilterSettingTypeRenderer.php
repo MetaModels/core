@@ -299,6 +299,8 @@ abstract class AbstractFilterSettingTypeRenderer
      */
     private function updateImageWithDisabled(ModelInterface $model, $image)
     {
+        $this->preCreateInverseImage($model, $image);
+
         if ($model->getProperty('enabled')) {
             return $image;
         }
@@ -307,5 +309,28 @@ abstract class AbstractFilterSettingTypeRenderer
         }
 
         return substr_replace($image, '_1', $intPos, 0);
+    }
+
+    /**
+     * Pre create the inverse image.
+     *
+     * @param ModelInterface $model The model.
+     * @param string         $image The image for pre create.
+     *
+     * @return void
+     */
+    private function preCreateInverseImage(ModelInterface $model, string $image): void
+    {
+        if (false === $intPos = strrpos($image, '.')) {
+            return;
+        }
+
+        if ($model->getProperty('enabled')) {
+            $this->iconBuilder->getBackendIcon(substr_replace($image, '_1', $intPos, 0));
+
+            return;
+        }
+
+        $this->iconBuilder->getBackendIcon($image);
     }
 }
