@@ -15,6 +15,7 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -256,12 +257,14 @@ class InsertTags
      * @param string     $strOutput         Name of output. Default:raw|text|html5|xhtml|...
      *
      * @return boolean|string Return false when nothing was found or return the value.
+     *
+     * @throws \RuntimeException If $intDataId does not provide an existingMetaModel ID.
      */
     protected function getAttribute($metaModelIdOrName, $intDataId, $strAttributeName, $strOutput = 'raw')
     {
         // Get the MM.
         $objMM = $this->loadMetaModel($metaModelIdOrName);
-        if ($objMM == null) {
+        if (null === $objMM) {
             return false;
         }
 
@@ -272,6 +275,9 @@ class InsertTags
 
         // Get item.
         $objMetaModelItem = $objMM->findById($intDataId);
+        if (null === $objMetaModelItem) {
+            throw new \RuntimeException('MetaModel item not found: ' . $intDataId);
+        }
 
         // Parse attribute.
         $arrAttr = $objMetaModelItem->parseAttribute($strAttributeName);
