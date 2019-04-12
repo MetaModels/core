@@ -48,6 +48,12 @@ services:
                 event: dc-general.model.pre-duplicate
                 method: handle
 
+    metamodels.sub_system_boot:
+        class: MetaModels\CoreBundle\EventListener\SubSystemBootListener
+        arguments:
+          ['@contao.framework', '@database_connection', '@logger', '@cca.dc-general.scope-matcher', '@event_dispatcher']
+        public: true
+
     MetaModels\CoreBundle\EventListener\PurgeListener:
         arguments:
             - '@metamodels.cache.purger'
