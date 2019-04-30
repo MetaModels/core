@@ -22,6 +22,8 @@
 
 namespace MetaModels\FrontendIntegration;
 
+use Contao\System;
+
 /**
  * Content element clearing the FE-filter.
  *
@@ -75,16 +77,19 @@ abstract class HybridFilterClearAll extends MetaModelHybrid
     protected function compile()
     {
         $blnActiveParam   = false;
-        $arrPage          = $GLOBALS['objPage']->row();
-        $arrGetParameters = array();
-
-        foreach (array_keys($_GET) as $mixGetKey) {
-            if (in_array($mixGetKey, $GLOBALS['MM_FILTER_PARAMS'])) {
+        $filterUrlBuilder = System::getContainer()->get('metamodels.filter_url');
+        $filterUrl        = $filterUrlBuilder->getCurrentFilterUrl();
+        foreach ($GLOBALS['MM_FILTER_PARAMS'] as $param) {
+            if ($filterUrl->hasSlug($param)) {
+                $filterUrl->setSlug($param, '');
                 $blnActiveParam = true;
                 continue;
             }
-
-            $arrGetParameters[$mixGetKey] = \Input::get($mixGetKey, false, true);
+            if ($filterUrl->hasGet($param)) {
+                $filterUrl->setGet($param, '');
+                $blnActiveParam = true;
+                continue;
+            }
         }
 
         // Check if we have filter and if we have active params.
@@ -95,7 +100,7 @@ abstract class HybridFilterClearAll extends MetaModelHybrid
         $this->Template->activeParam = $blnActiveParam;
 
         // Build FE url.
-        $this->Template->href = $this->generateFrontendUrl($arrPage, $this->getJumpToUrl($arrGetParameters));
+        $this->Template->href = $filterUrlBuilder->generate($filterUrl);
     }
 
     /**
@@ -111,47 +116,5 @@ abstract class HybridFilterClearAll extends MetaModelHybrid
         }
 
         return parent::generate();
-    }
-
-    /**
-     * Generate an url determined by the given params and configured jumpTo page.
-     *
-     * @param array $arrParams The URL parameters to use.
-     *
-     * @return string the generated URL.
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    protected function getJumpToUrl($arrParams)
-    {
-        $strFilterAction = '';
-        foreach ($arrParams as $strName => $varParam) {
-            // Skip the magic "language" parameter.
-            if (($strName == 'language') && $GLOBALS['TL_CONFIG']['addLanguageToUrl']) {
-                continue;
-            }
-
-            $strValue = $varParam;
-
-            if (is_array($varParam)) {
-                $strValue = implode(',', array_filter($varParam));
-            }
-
-            if (strlen($strValue)) {
-                // Shift auto_item to the front.
-                if ($strName == 'auto_item') {
-                    $strFilterAction = '/' . $strValue . $strFilterAction;
-                    continue;
-                }
-
-                $strFilterAction .= sprintf(
-                    $GLOBALS['TL_CONFIG']['disableAlias'] ? '&amp;%s=%s' : '/%s/%s',
-                    $strName,
-                    urlencode($strValue)
-                );
-            }
-        }
-        return $strFilterAction;
     }
 }
