@@ -385,7 +385,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             (
                 'tl_class' => 'clr'
             ),
-            'sql'     => "varchar(255) NOT NULL default ''"
+            'sql'     => 'text NULL'
         ),
         'mandatory'          => array
         (
