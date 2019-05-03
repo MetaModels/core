@@ -1,15 +1,25 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2019 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/de/
+ * Last-updated: 2019-05-03T19:21:32+02:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2018-07-13T10:50:21+02:00
+ * @copyright 2012-2019 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_activate']              = 'Hinzugefügte Attribute aktivieren.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Das Attribut "%s" wurde der Eingabemaske hinzugefügt.';
@@ -42,7 +52,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype']['1']                 =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['attribute']        = 'Attribut';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatypes']['legend']           = 'Legende';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['decodeEntities']['0']          = 'HTML-Entitäten dekodieren.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['decodeEntities']['1']          = 'Falls ausgewählt werden alle HTML-Entitäten dekodiert. Beachten Sie, dass HTML-Entitäten immer dann decodiert werden, wenn "Erlaubte HTML-Tags nicht encodieren" aktiviert ist.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['decodeEntities']['1']          = 'Falls ausgewählt, werden alle HTML-Entitäten dekodiert. Beachten Sie, dass HTML-Entitäten immer dann decodiert werden, wenn "Erlaubte HTML-Tags nicht encodieren" aktiviert ist.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete']['0']                  = 'Lösche Einstellung';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete']['1']                  = 'Lösche Einstellung ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['edit']['0']                    = 'Einstellung bearbeiten';

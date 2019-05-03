@@ -1,15 +1,25 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2019 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/de/
+ * Last-updated: 2019-05-03T19:21:54+02:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2018-03-09T21:04:25+01:00
+ * @copyright 2012-2019 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']                     = '%s <strong>%s</strong> <em>[%s]</em>';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_activate']         = 'Hinzugefügte Attribute aktivieren.';
@@ -19,7 +29,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_willadd']          = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']['0']             = 'Alle hinzufügen';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']['1']             = 'Alle Attribute der Render-Einstellung hinzufügen.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['additional_class']['0']   = 'Eigene CSS-Klasse';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['additional_class']['1']   = 'Eingabe einer CSS-Klasse wenn diese mit dem Attribut ausgegeben werden soll.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['additional_class']['1']   = 'Eingabe einer CSS-Klasse, wenn diese mit dem Attribut ausgegeben werden soll.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['advanced_legend']         = 'Erweitern';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id']['0']            = 'Attribut';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['attr_id']['1']            = 'Attribut, auf das sich diese Einstellung bezieht.';

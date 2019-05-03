@@ -1,16 +1,27 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2019 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/de/
+ * Last-updated: 2019-05-03T19:20:55+02:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2018-03-09T21:03:41+01:00
+ * @copyright 2012-2019 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
+
+$GLOBALS['TL_LANG']['BRD']['metamodel']                                               = 'MetaModels';
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attribute von "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dca']                                           = 'Alle Eingabemasken für "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dca_combine']                                   = 'Eingabemaske und Render-Einstellung kombinieren für "%s"';
@@ -62,14 +73,17 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord']             
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']                        = 'Render-Einstellung "%s" in MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodels_contributor']                                  = 'Wir danken diesen Benutzerinnen und Benutzern für Tickets, Anregungen und Übersetzungen:';
 $GLOBALS['TL_LANG']['MSC']['metamodels_help']                                         = 'Bitte unterstützen Sie uns!';
+$GLOBALS['TL_LANG']['MSC']['metamodels_sorting']                                      = 'Sortierung';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['contributor_headline']              = 'Wir danken diesen Benutzerinnen und Benutzern für Tickets, Anregungen und Übersetzungen:';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['contributor_link']                  = 'Mitwirkende bei github...';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['help_headline']                     = 'Hilfe für Dein MetaModels Projekt';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['help_text']                         = 'Auf unserer <a target="_blank" href="https://now.metamodel.me/de/hilfe">Hilfe-Website </a> finden Sie als Leitfaden zu MetaModels das Handbuch, alle Support-Kanäle, Videos und unseren Newsletter-Service.<br /><br /><br /><a target="_blank" href="http://metamodels.readthedocs.io/de/latest/">Direkter Link zum MetaModels Handbuch...</a>';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['main_headline']                     = 'Bitte unterstützen Sie uns!';
-$GLOBALS['TL_LANG']['MSC']['metamodels_support']['main_text']                         = 'Als Entwickler dieses Projektes erhalten wir keine Vergütung für unsere Arbeit. Ein Großteil unserer wertvollen Zeit widmen dem MetaModels-Projekt. Jede Spende an das MetaModels-Projekt würde es uns ermöglichen, während unserer regulären Arbeitszeit an dem Projekt zu arbeiten, was die Entwicklung erheblich beschleunigen würde. Deshalb bitten wir um eine Unterstützung für das MetaModels-Projekt.<br /><br /> Wir garantieren, dass Spendengelder nur für dieses Projekt ausgegeben werden. Sollten Sie spezielle Wünsche oder Anforderungen haben, können Sie gerne ein Mitglied unseres <a target="_blank" href="https://now.metamodel.me/de/ueber-uns/team">Teams</a>anfragen, das Ihnen gerne weiterhilft. <br /><br /><br />Ein großes Dankeschön an alle <a target="_blank" href="https://now.metamodel.me/de/unterstuetzung">bestehenden Supporter und Sponsoren</a>. Bitte beachten Sie unsere Spendenseite. Ein solches umfangreiches Open Source Projekt konnten wir ohne die Unterstützung der Community nicht realisieren. <br /><br />br /><a target="_blank" href="https://now.metamodel.me/de/unterstuetzer/spenden">Mehr Infos</a>';
+$GLOBALS['TL_LANG']['MSC']['metamodels_support']['main_text']                         = 'Als Entwickler dieses Projektes erhalten wir keine Vergütung für unsere Arbeit. Ein Großteil unserer wertvollen Zeit widmen wir dem MetaModels-Projekt. Jede Spende an das MetaModels-Projekt würde es uns ermöglichen, während unserer regulären Arbeitszeit an dem Projekt zu arbeiten, was die Entwicklung erheblich beschleunigen würde. Deshalb bitten wir um eine Unterstützung für das MetaModels-Projekt.<br /><br /> Wir garantieren, dass Spendengelder nur für dieses Projekt ausgegeben werden. Sollten Sie spezielle Wünsche oder Anforderungen haben, können Sie gerne ein Mitglied unseres <a target="_blank" href="https://now.metamodel.me/de/ueber-uns/team">Teams</a>anfragen, das Ihnen gerne weiterhilft. <br /><br /><br />Ein großes Dankeschön an alle <a target="_blank" href="https://now.metamodel.me/de/unterstuetzung">bestehenden Supporter und Sponsoren</a>. Bitte beachten Sie unsere Spendenseite. Ein solches umfangreiches Open Source Projekt konnten wir ohne die Unterstützung der Community nicht realisieren. <br /><br />br /><a target="_blank" href="https://now.metamodel.me/de/unterstuetzer/spenden">Mehr Infos</a>';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['other_donations']                   = 'Für Spenden besuchen Sie auch unsere <a target="_blank" href="https://now.metamodel.me/en/supporters/fundraising"> Fundraisings</a> oder beachten Sie <a target="_blank" href="https://now.metamodel.me/en/supporters/donate"> Spenden für das Handbuch</a>.';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['purpose']                           = 'Verwendungszweck';
+$GLOBALS['TL_LANG']['MSC']['metamodelspicker']                                        = 'MetaModels Picker';
+$GLOBALS['TL_LANG']['MSC']['metamodelspicker_noItems']                                = 'Keine Einträge gefunden.';
 $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter']['0']                                  = 'Fi';
 $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter']['1']                                  = 'Filtern';
 $GLOBALS['TL_LANG']['MSC']['mm_be_info_name']['0']                                    = 'MM';
@@ -83,12 +97,11 @@ $GLOBALS['TL_LANG']['MSC']['panelLayout']['limit']['0']                         
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['search']['0']                              = 'Suche';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['sort']['0']                                = 'Sortierung';
 $GLOBALS['TL_LANG']['MSC']['random']                                                  = 'Zufällig';
-//$GLOBALS['TL_LANG']['MSC']['sorting']                                                 = 'Sortierung';
 $GLOBALS['TL_LANG']['MSC']['template_in_theme']                                       = '%s (%s)';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clr']['0']                                    = 'clr';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clr']['1']                                    = 'Hebt alle Floats auf.';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clx']['0']                                    = 'clx';
-$GLOBALS['TL_LANG']['MSC']['tl_class']['clx']['1']                                    = 'Entfernt die Voreinstellung "overflow:hidden". Bitte gemeinsam mit mit "clr" verwenden.';
+$GLOBALS['TL_LANG']['MSC']['tl_class']['clx']['1']                                    = 'Entfernt die Voreinstellung "overflow:hidden". Bitte gemeinsam mit "clr" verwenden.';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['long']['0']                                   = 'long';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['long']['1']                                   = 'Sorgt dafür, dass das Eingabefeld zwei Spalten umfasst.';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['m12']['0']                                    = 'm12';
@@ -96,7 +109,7 @@ $GLOBALS['TL_LANG']['MSC']['tl_class']['m12']['1']                              
 $GLOBALS['TL_LANG']['MSC']['tl_class']['w50']['0']                                    = 'w50';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['w50']['1']                                    = 'Setzt die Feldbreite auf 50% und floatet das Element (float:left).';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['w50x']['0']                                   = 'w50x';
-$GLOBALS['TL_LANG']['MSC']['tl_class']['w50x']['1']                                   = 'Entfernt die Voreinstellung für eine feste Höhe. Bitte gemeinsam mit mit "w50" verwenden.';
+$GLOBALS['TL_LANG']['MSC']['tl_class']['w50x']['1']                                   = 'Entfernt die Voreinstellung für eine feste Höhe. Bitte gemeinsam mit "w50" verwenden.';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['wizard']['0']                                 = 'wizard';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['wizard']['1']                                 = 'Verkürzt das Eingabefeld, damit genug Platz für den Wizard (z.B. einen Date Picker) ist.';
 $GLOBALS['TL_LANG']['metamodels_frontendfilter']['action_add']                        = '+';
