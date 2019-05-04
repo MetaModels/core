@@ -20,6 +20,7 @@
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -385,7 +386,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = array
             (
                 'tl_class' => 'clr'
             ),
-            'sql'     => "varchar(255) NOT NULL default ''"
+            'sql'     => 'text NULL'
         ),
         'mandatory'          => array
         (
