@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2018 The MetaModels team.
+ * (c) 2012-2019 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,9 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2018-12-18T21:45:41+01:00
+ * Last-updated: 2019-05-03T19:21:47+02:00
  *
- * @copyright 2012-2018 The MetaModels team.
+ * @copyright 2012-2019 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
@@ -22,9 +22,9 @@
 
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Alle Sprachen durchsuchen';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['1']            = 'Auswählen, falls Sie sprachunabhängige Suche ermöglichen möchten. Wenn nicht angewählt wird nur die aktive Sprache für die Suche benutzt.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['1']            = 'Auswählen, falls Sie sprachunabhängige Suche ermöglichen möchten. Wenn nicht angewählt, wird nur die aktive Sprache für die Suche benutzt.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['allow_empty']['0']          = 'Leeren Wert erlauben';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['allow_empty']['1']          = 'Auswählen, wenn der Filterwert leer sein darf. Falls diese Option angewählt ist und der Parameter einen leeren Wert enthält, dann verhält sich dieser Filter so als wäre er nicht definiert.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['allow_empty']['1']          = 'Auswählen, wenn der Filterwert leer sein darf. Falls diese Option angewählt ist und der Parameter einen leeren Wert enthält, dann verhält sich dieser Filter so, als wäre er nicht definiert.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id']['0']              = 'Attribut';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id']['1']              = 'Attribut, auf das sich diese Einstellung bezieht.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['blankoption']['0']          = 'Leere Auswahl ermöglichen';
@@ -71,7 +71,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['1']         =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['0']                 = 'Details der Filtereinstellungen';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['1']                 = 'Die Details der Filtereinstellung ID %s anzeigen.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions']['0']    = 'Diesen Filter für verbleibende Werte ignorieren';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions']['1']    = 'Falls aktiviert wird dieser Filter alle Werte außer seine eigenen zurück liefern.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions']['1']    = 'Falls aktiviert, wird dieser Filter alle Werte außer seine eigenen zurück liefern.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['0']     = 'Nach erstem Treffer beenden';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['1']     = 'Anwählen, falls Sie möchten, dass nachfolgende Regeln nach dem ersten Treffer nicht mehr ausgeführt werden.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['0']             = 'Template';

@@ -1,15 +1,25 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2019 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/ru/
+ * Last-updated: 2019-05-03T19:21:47+02:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2018-11-26T23:37:16+01:00
+ * @copyright 2012-2019 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Поиск на всех языках';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['1']            = 'Выберите, если хотите, выполнить языконезависимый поиск. Если не выбрать, поиск будет произведен только на текущем, активном языке.';
@@ -36,6 +46,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit']['0']                 =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit']['1']                 = 'Редактировать настройки фильтра ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['enabled']['0']              = 'Включить';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['enabled']['1']              = 'Включить эту настройку фильтра.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fe_widget']['0']            = 'Предоставить виджет Frontend';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fe_widget']['1']            = 'Проверьте, хотите ли вы отображать виджет фильтра во фронтенде.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fefilter_legend']           = 'Фильтр внешнего интерфейса';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['0']                  = 'Родительская коллекция';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['1']                  = 'Коллекция настроек фильтра, эта установка относится.';

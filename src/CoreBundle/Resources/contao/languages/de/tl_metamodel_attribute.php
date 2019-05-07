@@ -1,15 +1,25 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2019 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/de/
+ * Last-updated: 2019-05-03T19:21:19+02:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2017-08-24T12:42:55+02:00
+ * @copyright 2012-2019 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['advanced_legend']              = 'Erweiterte Einstellungen';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname']['0']                 = 'Spaltenname';
@@ -29,9 +39,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['editheader']['1']              = 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['error_unknown_attribute']['0'] = 'Unbekanntes Attribut!';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['error_unknown_attribute']['1'] = 'Erweiterung fehlt? Der Attributtyp "%s" ist nicht installiert.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['isunique']['0']                = 'Eindeutige Werte';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['isunique']['1']                = 'Wählen Sie diese Option, wenn Sie sicherstellen möchten dass jeder Wert nur einmal vorkommen kann.';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['isunique']['1']                = 'Wählen Sie diese Option, wenn Sie sicherstellen möchten, dass jeder Wert nur einmal vorkommen kann.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['isvariant']['0']               = 'Varianten überschreiben';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['isvariant']['1']               = 'Anwählen, falls Sie innerhalb des MetaModels Varianten wünschen um Elternwerte zu überschreiben.';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['isvariant']['1']               = 'Anwählen, falls Sie innerhalb des MetaModels Varianten wünschen, um Elternwerte zu überschreiben.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name']['0']                    = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name']['1']                    = 'Für Menschen lesbarer Name.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['name_langcode']                = 'Sprache';
@@ -46,5 +56,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['0']                    = 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['1']                    = 'Die Details des Attributs ID %s anzeigen.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['title_legend']                 = 'Typ, Benennung und Grundeinstellungen des Attributes.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['type']['0']                    = 'Attribut-Typ';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['type']['1']                    = 'Wählen Sie den Typ dieses Attributes. WARNUNG: Wenn der Attributtyp geändert wird dann werden alle bereits bestehenden Daten für das Attribut gelöscht!';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['type']['1']                    = 'Wählen Sie den Typ dieses Attributes. WARNUNG: Wenn der Attributtyp geändert wird, dann werden alle bereits bestehenden Daten für das Attribut gelöscht!';
 

@@ -1,16 +1,27 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2019 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * Last-updated: 2019-05-03T19:20:55+02:00
  *
- * @link https://www.transifex.com/signup/
- * @link https://www.transifex.com/projects/p/$$project$$/language/et/
- *
- * last-updated: 2018-07-13T10:49:49+02:00
+ * @copyright 2012-2019 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
+
+$GLOBALS['TL_LANG']['BRD']['metamodel']                             = 'MetaModels';
 $GLOBALS['TL_LANG']['BRD']['metamodels']                            = 'MetaModels';
 $GLOBALS['TL_LANG']['CTE']['metamodel_content']['0']                = 'MetaModel nimekiri';
 $GLOBALS['TL_LANG']['CTE']['metamodels']                            = 'MetaModel elemendid';
@@ -25,6 +36,7 @@ $GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['sorting']         = 'Sorteerim
 $GLOBALS['TL_LANG']['METAMODELS_SYSTEM_COLUMNS']['tstamp']          = 'Ajatempel';
 $GLOBALS['TL_LANG']['MSC']['details']                               = 'Üksikasjad';
 $GLOBALS['TL_LANG']['MSC']['field_label']                           = '%s:';
+$GLOBALS['TL_LANG']['MSC']['metamodels_sorting']                    = 'Sorteerimine';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['purpose']         = 'Eesmärk';
 $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter']['1']                = 'Filter';
 $GLOBALS['TL_LANG']['MSC']['mm_be_info_name']['1']                  = 'MetaModel';

@@ -1,15 +1,25 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2019 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/de/
+ * Last-updated: 2019-05-03T19:21:39+02:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2016-03-11T20:13:56+01:00
+ * @copyright 2012-2019 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['becap_description']['0']       = 'Beschreibungstext';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['becap_description']['1']       = 'Dieser Text wird als Beschreibung (Hover) im Backend benutzt.';
@@ -27,7 +37,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['edit']['1']                  
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['isdefault']['0']               = 'Als Standard verwenden';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['isdefault']['1']               = 'Bestimmt, dass diese Eingabemaske als Standard für das Eltern-MetaModel benutzt wird.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['ismanualsort']['0']            = 'Manuelle Sortierung aktivieren';
-$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['ismanualsort']['1']            = 'Wenn aktiviert können ist eine manuelle Sortierung möglich.';
+$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['ismanualsort']['1']            = 'Wenn aktiviert, kann der Nutzer eine manuelle Sortierung vornehmen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['name']['0']                    = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['name']['1']                    = 'Name der Sortierungsruppe';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['new']['0']                     = 'Neue Einstellung';

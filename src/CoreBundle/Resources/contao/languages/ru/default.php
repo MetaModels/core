@@ -1,16 +1,27 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2019 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/ru/
+ * Last-updated: 2019-05-03T19:20:55+02:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2018-11-26T23:36:40+01:00
+ * @copyright 2012-2019 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
+
+$GLOBALS['TL_LANG']['BRD']['metamodel']                                               = 'MetaModels';
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Атрибуты "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dca']                                           = 'Все входные экраны "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dca_combine']                                   = 'Экран ввода и отображения настроек для "%s"';
@@ -62,6 +73,7 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord']             
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']                        = 'Настройка визуализации "%s" в MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodels_contributor']                                  = 'Благодарим этих пользователей за тикеты, предложения и переводы';
 $GLOBALS['TL_LANG']['MSC']['metamodels_help']                                         = 'Мы просим оказать нам помощь!';
+$GLOBALS['TL_LANG']['MSC']['metamodels_sorting']                                      = 'Сортировка';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['contributor_headline']              = 'Благодарим этих пользователей за тикеты, предложения и переводы';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['contributor_link']                  = 'См. содействующих в github ...';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['help_headline']                     = 'Помощь для ваших MetaModels проектов';
@@ -95,6 +107,8 @@ $GLOBALS['TL_LANG']['MSC']['metamodels_support']['other_donations']             
     <a target="_blank" href="https://now.metamodel.me/en/supporters/donate">
     пожертвование для авторов</a>.';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['purpose']                           = 'Цель';
+$GLOBALS['TL_LANG']['MSC']['metamodelspicker']                                        = 'Сборщик MetaModels';
+$GLOBALS['TL_LANG']['MSC']['metamodelspicker_noItems']                                = 'Никаких вещей не найдено.';
 $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter']['0']                                  = 'Фи';
 $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter']['1']                                  = 'Фильтр';
 $GLOBALS['TL_LANG']['MSC']['mm_be_info_name']['0']                                    = 'MM';
