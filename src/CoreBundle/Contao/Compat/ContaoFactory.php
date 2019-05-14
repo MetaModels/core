@@ -72,4 +72,18 @@ class ContaoFactory
 
         return $this->framework->getAdapter($className);
     }
+
+    /**
+     * Create an instance.
+     *
+     * @param string $className The class name to create an instance for.
+     *
+     * @return object
+     */
+    public function createInstance($className)
+    {
+        $this->framework->initialize();
+
+        return $this->framework->createInstance($className);
+    }
 }
