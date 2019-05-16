@@ -20,27 +20,90 @@
  * @filesource
  */
 
-namespace MetaModels\Helper;
+namespace MetaModels\CoreBundle\EventListener;
 
+use Contao\CoreBundle\Framework\ContaoFramework;
 use Contao\Environment;
-use Contao\System;
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
+use Doctrine\DBAL\Connection;
 use MetaModels\Events\MetaModelsBootEvent;
 use MetaModels\MetaModelsEvents;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Base event listener to boot up a MetaModelServiceContainer.
  */
-class SubSystemBoot
+class SubSystemBootListener
 {
+
+    /**
+     * The Contao framework.
+     *
+     * @var ContaoFramework
+     */
+    private $contaoFramework;
+
+    /**
+     * The database connection.
+     *
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * The logger.
+     *
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * The scope matcher.
+     *
+     * @var RequestScopeDeterminator
+     */
+    private $scopeMatcher;
+
+    /**
+     * The event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
+
+    /**
+     * SubSystemBoot constructor.
+     *
+     * @param ContaoFramework          $contaoFramework The Contao framework.
+     * @param Connection               $connection      The database connection.
+     * @param LoggerInterface          $logger          The logger.
+     * @param RequestScopeDeterminator $scopeMatcher    The scope matcher.
+     * @param EventDispatcherInterface $dispatcher      The event dispatcher.
+     */
+    public function __construct(
+        ContaoFramework $contaoFramework,
+        Connection $connection,
+        LoggerInterface $logger,
+        RequestScopeDeterminator $scopeMatcher,
+        EventDispatcherInterface $dispatcher
+    ) {
+        $this->contaoFramework = $contaoFramework;
+        $this->connection      = $connection;
+        $this->logger          = $logger;
+        $this->scopeMatcher    = $scopeMatcher;
+        $this->dispatcher      = $dispatcher;
+    }
+
     /**
      * Boot up the system.
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         /** @var Environment $environment */
-        $environment = System::getContainer()->get('contao.framework')->getAdapter(Environment::class);
+        $environment = $this->contaoFramework->getAdapter(Environment::class);
         $script      = explode('?', $environment->get('relativeRequest'), 2)[0];
 
         // There is no need to boot in login or install screen.
@@ -48,9 +111,7 @@ class SubSystemBoot
             return;
         }
 
-        // Ensure all tables are created.
-        $connection = System::getContainer()->get('database_connection');
-        if (!$connection->getSchemaManager()->tablesExist(
+        if (!$this->connection->getSchemaManager()->tablesExist(
             [
                 'tl_metamodel',
                 'tl_metamodel_dca',
@@ -65,21 +126,18 @@ class SubSystemBoot
                 'tl_metamodel_dca_combine',
             ]
         )) {
-            System::getContainer()
-                ->get('logger')
-                ->error('MetaModels startup interrupted. Not all MetaModels tables have been created.');
+            $this->logger->error('MetaModels startup interrupted. Not all MetaModels tables have been created.');
             return;
         }
 
         $event = new MetaModelsBootEvent();
         $this->tryDispatch(MetaModelsEvents::SUBSYSTEM_BOOT, $event);
 
-        $determinator = System::getContainer()->get('cca.dc-general.scope-matcher');
         switch (true) {
-            case $determinator->currentScopeIsFrontend():
+            case $this->scopeMatcher->currentScopeIsFrontend():
                 $this->tryDispatch(MetaModelsEvents::SUBSYSTEM_BOOT_FRONTEND, $event);
                 break;
-            case $determinator->currentScopeIsBackend():
+            case $this->scopeMatcher->currentScopeIsBackend():
                 $this->tryDispatch(MetaModelsEvents::SUBSYSTEM_BOOT_BACKEND, $event);
                 break;
             default:
@@ -94,14 +152,16 @@ class SubSystemBoot
      *
      * @return void
      */
-    private function tryDispatch($eventName, MetaModelsBootEvent $event)
+    private function tryDispatch($eventName, MetaModelsBootEvent $event): void
     {
-        $dispatcher = System::getContainer()->get('event_dispatcher');
-        if ($dispatcher->hasListeners($eventName)) {
+        if ($this->dispatcher->hasListeners($eventName)) {
             // @codingStandardsIgnoreStart
-            @trigger_error('Event "' . $eventName . '" has been deprecated - Use registered services.', E_USER_DEPRECATED);
+            @trigger_error(
+                'Event "' . $eventName . '" has been deprecated - Use registered services.',
+                E_USER_DEPRECATED
+            );
             // @codingStandardsIgnoreEnd
-            $dispatcher->dispatch($eventName, $event);
+            $this->dispatcher->dispatch($eventName, $event);
         }
     }
 }

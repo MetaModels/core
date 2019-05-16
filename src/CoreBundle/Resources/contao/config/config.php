@@ -20,6 +20,7 @@
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -127,10 +128,7 @@ if (!isset($GLOBALS['MM_FILTER_PARAMS'])) {
     $GLOBALS['MM_FILTER_PARAMS'] = array();
 }
 
-$GLOBALS['TL_HOOKS']['initializeDependencyContainer'][] = function () {
-    $handler = new MetaModels\Helper\SubSystemBoot();
-    $handler->boot();
-};
+$GLOBALS['TL_HOOKS']['initializeSystem'][] = ['metamodels.sub_system_boot', 'boot'];
 
 $GLOBALS['TL_HOOKS']['getUserNavigation'][] =
     [MetaModels\CoreBundle\Contao\Hooks\RegisterBackendNavigation::class, 'onGetUserNavigation'];

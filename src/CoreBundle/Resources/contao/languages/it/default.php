@@ -1,16 +1,27 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2019 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/it/
+ * Last-updated: 2019-05-03T19:20:55+02:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2018-03-09T21:03:41+01:00
+ * @copyright 2012-2019 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
+
+$GLOBALS['TL_LANG']['BRD']['metamodel']                                               = 'MetaModels';
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attributi di "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dca']                                           = 'Tutte le machere di inserimento per "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting']                                    = 'Maschere di inserimento per "%s"';
@@ -52,6 +63,7 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord']             
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']                        = 'Impostazione di rendering "%s" in MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodels_contributor']                                  = 'Grazie a questi utenti per le segnalazioni di bug, i suggerimenti e le traduzioni';
 $GLOBALS['TL_LANG']['MSC']['metamodels_help']                                         = 'Abbiamo bisogno del vostro aiuto!';
+$GLOBALS['TL_LANG']['MSC']['metamodels_sorting']                                      = 'Ordinamento';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['contributor_headline']              = 'Grazie a questi utenti per le segnalazioni di bug, i suggerimenti e le traduzioni';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['main_headline']                     = 'Abbiamo bisogno del vostro aiuto!';
 $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter']['1']                                  = 'Filtro';
