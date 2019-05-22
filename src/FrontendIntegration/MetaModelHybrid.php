@@ -163,10 +163,12 @@ abstract class MetaModelHybrid extends Hybrid
                 $infoTemplate =
                     '<div class="wc_info tl_gray"><span class="wc_label"><abbr title="%s">%s:</abbr></span> %s</div>';
 
-                $factory       = $this->getFactory();
-                $metaModelName = $factory->translateIdToMetaModelName($this->metamodel);
-                $metaModel     = $factory->getMetaModel($metaModelName);
-                $strInfo       = sprintf(
+                $factory = $this->getFactory();
+                if (null === $metaModelName = $factory->translateIdToMetaModelName($this->metamodel)) {
+                    return 'Unknown MetaModel: ' . $this->metamodel;
+                }
+                $metaModel = $factory->getMetaModel($metaModelName);
+                $strInfo   = sprintf(
                     $infoTemplate,
                     $GLOBALS['TL_LANG']['MSC']['mm_be_info_name'][1],
                     $GLOBALS['TL_LANG']['MSC']['mm_be_info_name'][0],
