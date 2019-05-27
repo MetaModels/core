@@ -78,12 +78,11 @@ class InsertTags
      *
      * @return IMetaModelsServiceContainer
      *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @deprecated
      */
     public function getServiceContainer()
     {
-        return $GLOBALS['container']['metamodels-service-container'];
+        return System::getContainer()->get('metamodels.service_container');
     }
 
     /**

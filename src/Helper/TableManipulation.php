@@ -22,6 +22,7 @@
 
 namespace MetaModels\Helper;
 
+use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\InputProvider;
 
 /**
@@ -146,12 +147,11 @@ class TableManipulation
      *
      * @return \Database the database instance.
      *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @deprecated
      */
     protected static function getDB()
     {
-        return $GLOBALS['container']['metamodels-service-container']->getDatabase();
+        return System::getContainer()->get('metamodels.service_container')->getDatabase();
     }
 
     /**

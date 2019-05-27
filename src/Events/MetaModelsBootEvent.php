@@ -20,6 +20,7 @@
 
 namespace MetaModels\Events;
 
+use Contao\System;
 use MetaModels\IMetaModelsServiceContainer;
 use Symfony\Component\EventDispatcher\Event;
 
@@ -39,8 +40,7 @@ class MetaModelsBootEvent extends Event
      *
      * @return IMetaModelsServiceContainer
      *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @deprecated
      */
     public function getServiceContainer()
     {
@@ -50,6 +50,6 @@ class MetaModelsBootEvent extends Event
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
-        return $GLOBALS['container']['metamodels-service-container'];
+        return System::getContainer()->get('metamodels.service_container');
     }
 }

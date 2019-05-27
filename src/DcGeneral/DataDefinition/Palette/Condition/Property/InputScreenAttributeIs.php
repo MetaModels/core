@@ -24,6 +24,7 @@ namespace MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property;
 
 use Contao\System;
 use Doctrine\DBAL\Connection;
+use MetaModels\IMetaModelsServiceContainer;
 
 /**
  * Condition for the default palette.
@@ -65,11 +66,10 @@ class InputScreenAttributeIs extends AttributeByIdIsOfType
      *
      * @return IMetaModelsServiceContainer
      *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @deprecated
      */
     protected function getServiceContainer()
     {
-        return $GLOBALS['container']['metamodels-service-container'];
+        return System::getContainer()->get('metamodels.service_container');
     }
 }
