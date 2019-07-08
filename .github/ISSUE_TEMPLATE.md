@@ -8,14 +8,13 @@ I confirm that:
 
 ## My environment is:
 
-(Please fill in the actual values from your environment)
+(Please fill in the actual values from your environment - check Contao Manager or use `composer show`)
 
 | Key                                 | Value    | Comments                         |
 | ----------------------------------- | ---------| ---------------------------------|
 | PHP version:                        |          |                                  |
 | Contao version:                     |          |                                  |
 | MetaModels version:                 |          |                                  |
-| Installation via composer:          | (yes/no) |                                  |
 | Installed MetaModels packages:      |          |                                  |
 | DCG version:                        |          |                                  |
 
