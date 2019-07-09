@@ -56,6 +56,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Driver implements MultiLanguageDataProviderInterface
 {
+    use DriverBcLayerTrait;
+
     /**
      * Name of current table.
      *
@@ -225,14 +227,16 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     protected function setLanguage($language = '')
     {
-        $metaModel = $this->getMetaModel();
-        if ($metaModel instanceof ITranslatedMetaModel && !empty($language)) {
-            $metaModel->selectLanguage($language);
-        }
-
         $previousLanguage = $GLOBALS['TL_LANGUAGE'];
-        if (!empty($language) && ($GLOBALS['TL_LANGUAGE'] !== $language)) {
-            $GLOBALS['TL_LANGUAGE'] = $language;
+        if (!empty($language)) {
+            $metaModel = $this->getMetaModel();
+            if ($metaModel instanceof ITranslatedMetaModel) {
+                $metaModel->selectLanguage($language);
+            }
+
+            if ($GLOBALS['TL_LANGUAGE'] !== $language) {
+                $GLOBALS['TL_LANGUAGE'] = $language;
+            }
         }
 
         return $previousLanguage;
@@ -764,37 +768,6 @@ class Driver implements MultiLanguageDataProviderInterface
     }
 
     /**
-     * Backward compatibility layer.
-     *
-     * @param IMetaModel $metaModel The MetaModel.
-     *
-     * @return DefaultLanguageInformationCollection|null
-     */
-    private function getLanguagesBcLayer($metaModel): ?DefaultLanguageInformation
-    {
-        // @coverageIgnoreStart
-        // @codingStandardsIgnoreStart
-        @\trigger_error(
-            'Translated "\MetaModel\IMetamodel" instances are deprecated since MetaModels 2.1 ' .
-            'and to be removed in 3.0. The MetaModel must implement "\MetaModels\ITranslatedMetaModel".',
-            E_USER_DEPRECATED
-        );
-        // @codingStandardsIgnoreEnd
-        $collection = new DefaultLanguageInformationCollection();
-        foreach ($metaModel->getAvailableLanguages() as $langCode) {
-            [$langCode, $country] = explode('_', $langCode, 2);
-            $collection->add(new DefaultLanguageInformation($langCode, $country ?: null));
-        }
-
-        if (count($collection) > 0) {
-            return $collection;
-        }
-
-        return null;
-        // @coverageIgnoreEnd
-    }
-
-    /**
      * {@inheritdoc}
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -812,31 +785,6 @@ class Driver implements MultiLanguageDataProviderInterface
 
         // @coverageIgnoreStart
         return $this->getFallbackLanguageBcLayer($metaModel);
-        // @coverageIgnoreEnd
-    }
-
-    /**
-     * Backward compatibility layer.
-     *
-     * @param IMetaModel $metaModel The MetaModel.
-     *
-     * @return DefaultLanguageInformation
-     */
-    private function getFallbackLanguageBcLayer(IMetaModel $metaModel): DefaultLanguageInformation
-    {
-        // @coverageIgnoreStart
-        // @codingStandardsIgnoreStart
-        @\trigger_error(
-            'Translated "\MetaModel\IMetamodel" instances are deprecated since MetaModels 2.1 ' .
-            'and to be removed in 3.0. The MetaModel must implement "\MetaModels\ITranslatedMetaModel".',
-            E_USER_DEPRECATED
-        );
-        // @codingStandardsIgnoreEnd
-        $langCode = $metaModel->getFallbackLanguage();
-
-        [$langCode, $country] = explode('_', $langCode, 2);
-
-        return new DefaultLanguageInformation($langCode, $country ?: null);
         // @coverageIgnoreEnd
     }
 
