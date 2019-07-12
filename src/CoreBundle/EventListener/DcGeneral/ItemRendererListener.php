@@ -26,6 +26,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\DataDefinition\Definition\Contao2Ba
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetParentHeaderEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use ContaoCommunityAlliance\DcGeneral\View\Event\RenderReadablePropertyValueEvent;
+use MetaModels\Attribute\IInternal;
 use MetaModels\DcGeneral\Data\Model;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
 use MetaModels\IItem;
@@ -133,6 +134,9 @@ class ItemRendererListener
 
         $nativeItem = $model->getItem();
         $metaModel  = $nativeItem->getMetaModel();
+        if ($nativeItem->getAttribute($event->getProperty()->getName()) instanceof IInternal) {
+            return;
+        }
 
         $renderSetting = $this->renderSettingFactory->createCollection(
             $metaModel,

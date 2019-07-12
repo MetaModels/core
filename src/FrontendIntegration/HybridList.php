@@ -76,12 +76,14 @@ class HybridList extends MetaModelHybrid
         foreach ($objItemRenderer->getFilterSettings()->getParameters() as $name) {
             if ($filterUrl->hasSlug($name)) {
                 $result[$name] = $filterUrl->getSlug($name);
+            } elseif ($filterUrl->hasGet($name)) {
+                $result[$name] = $filterUrl->getGet($name);
             }
             // DAMN Contao - we have to "mark" the keys in the Input class as used as we get an 404 otherwise.
             Input::get($name);
         }
 
-        return $filterUrl->getSlugParameters();
+        return $result;
     }
 
     /**
