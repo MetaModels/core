@@ -29,6 +29,7 @@ use MetaModels\Attribute\IAttribute;
 use MetaModels\Attribute\IInternal;
 use MetaModels\Events\ParseItemEvent;
 use MetaModels\Filter\IFilter;
+use MetaModels\Helper\EmptyTest;
 use MetaModels\Render\Setting\ICollection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -166,7 +167,7 @@ class Item implements IItem
         // If "hideEmptyValues" is true and the raw is empty remove text and output format.
         if (($objSettings instanceof ICollection)
             && $objSettings->get('hideEmptyValues')
-            && $this->isEmptyValue($arrResult['raw'])
+            && EmptyTest::isEmptyValue($arrResult['raw'])
         ) {
             unset($arrResult[$strOutputFormat]);
             unset($arrResult['text']);
@@ -181,18 +182,19 @@ class Item implements IItem
      * @param array $mixValue The value.
      *
      * @return boolean True => empty, false => found a valid values
+     *
+     * @deprecated Use \MetaModels\Helper\EmptyTest::isEmptyValue instead.
      */
     protected function isEmptyValue($mixValue)
     {
-        if (is_array($mixValue)) {
-            return $this->isArrayEmpty($mixValue);
-        } elseif ($mixValue === '') {
-            return true;
-        } elseif ($mixValue === null) {
-            return true;
-        }
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            __METHOD__ . ' has been deprecated, use "\MetaModels\Helper\EmptyTest::isEmptyValue()" instead',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
 
-        return false;
+        return EmptyTest::isEmptyValue($mixValue);
     }
 
     /**
@@ -201,29 +203,23 @@ class Item implements IItem
      * @param array $arrArray The array to check.
      *
      * @return boolean True => empty, False => some values found.
+     *
+     * @deprecated Use \MetaModels\Helper\EmptyTest::isArrayEmpty instead.
      */
     protected function isArrayEmpty($arrArray)
     {
-        // First off check for simple types.
-        if (empty($arrArray)) {
-            return true;
-        }
-        // Next check for a value array.
-        if (is_array($arrArray) && array_key_exists('value', $arrArray)) {
-            return $this->isArrayEmpty($arrArray['value']);
-        }
-        // Now check sub arrays.
-        if (is_array($arrArray)) {
-            foreach ($arrArray as $value) {
-                if (is_array($value)) {
-                    return $this->isArrayEmpty($value);
-                } elseif (!empty($value)) {
-                    return false;
-                }
-            }
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            __METHOD__ . ' has been deprecated, use "\MetaModels\Helper\EmptyTest::isArrayEmpty()" instead',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+        if (!is_array($arrArray)) {
+            // This should never happen but was possible before.
+            return EmptyTest::isEmptyValue($arrArray);
         }
 
-        return false;
+        return EmptyTest::isArrayEmpty($arrArray);
     }
 
     /**
