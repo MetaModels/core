@@ -36,7 +36,7 @@
                             <label for="attribute_{{ field.attr_id }}">
                                 <input type="checkbox" id="attribute_{{ field.attr_id }}"
                                        name="{{ field.name }}"/>
-                                {{ field.text }}
+                                {{ field.text|raw }}
                             </label>
                             {% else %}
                             {{ field.text }}
