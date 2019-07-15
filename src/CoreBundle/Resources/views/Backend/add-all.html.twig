@@ -39,7 +39,7 @@
                                 {{ field.text|raw }}
                             </label>
                             {% else %}
-                            {{ field.text }}
+                            {{ field.text|raw }}
                             {% endif %}
                         </div>
                     {% endfor %}
