@@ -263,7 +263,7 @@ class FilterUrlBuilder
         if (Config::get('folderUrl') && false !== strpos($requestUri, '/')) {
             $fragments = $this->getFolderUrlFragments(
                 $requestUri,
-                $request->getHost(),
+                $request->getHttpHost(),
                 $request->attributes->get('_locale')
             );
         }
