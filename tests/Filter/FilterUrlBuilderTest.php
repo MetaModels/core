@@ -22,6 +22,7 @@ namespace MetaModels\Test\Filter;
 use Contao\Config;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Routing\UrlGenerator;
+use Contao\Model;
 use Contao\Model\Collection;
 use Contao\PageModel;
 use MetaModels\Filter\FilterUrl;
@@ -174,6 +175,16 @@ class FilterUrlBuilderTest extends TestCase
                 ]
             )
         );
+
+        // Hack for Contao 4.4 & 4.5 - not automatically loaded and aliased
+        if (!class_exists(\Model::class)) {
+            // Try to load with namespace
+            class_exists(Model::class);
+            // Still not there? 4.6+ automatically aliases to root namespace and extends from Contao namespace.
+            if (!class_exists(\Model::class)) {
+                class_alias(Model::class, \Model::class);
+            }
+        }
 
         $page = $this->getMockBuilder(PageModel::class)->disableOriginalConstructor()->getMock();
         $page->expects($this->once())->method('loadDetails')->willReturn((object) [
