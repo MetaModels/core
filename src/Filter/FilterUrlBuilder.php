@@ -124,11 +124,11 @@ class FilterUrlBuilder
             $parameters['_ssl'] = (bool) $jumpTo['rootUseSSL'];
         }
 
-        if ($filterUrl->hasSlug('language')) {
-            $parameters['_locale'] = $filterUrl->getSlug('language');
+        if (null !== ($locale = $jumpTo['language'] ?? null)) {
+            $parameters['_locale'] = $locale;
         }
         foreach ($filterUrl->getSlugParameters() as $name => $value) {
-            if (in_array($name, ['language', 'auto_item'])) {
+            if (in_array($name, ['auto_item'])) {
                 continue;
             }
 
