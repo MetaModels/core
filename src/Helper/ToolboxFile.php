@@ -202,8 +202,10 @@ class ToolboxFile
                 $this->dispatcher = System::getContainer()->get('event_dispatcher');
         }
         // Initialize some values to sane base.
-        $this->setAcceptedExtensions(StringUtil::trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']));
-        if (!is_array($_SESSION['metaModels_downloads'])) {
+        if (isset($GLOBALS['TL_CONFIG']) && isset($GLOBALS['TL_CONFIG']['allowedDownload'])) {
+            $this->setAcceptedExtensions(StringUtil::trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']));
+        }
+        if (isset($_SESSION) && !is_array($_SESSION['metaModels_downloads'])) {
             $_SESSION['metaModels_downloads'] = [];
         }
     }

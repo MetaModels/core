@@ -29,6 +29,7 @@ use ContaoCommunityAlliance\DcGeneral\View\Event\RenderReadablePropertyValueEven
 use MetaModels\Attribute\IInternal;
 use MetaModels\DcGeneral\Data\Model;
 use MetaModels\DcGeneral\DataDefinition\IMetaModelDataDefinition;
+use MetaModels\Helper\EmptyTest;
 use MetaModels\IItem;
 use MetaModels\Items;
 use MetaModels\Render\Setting\ICollection;
@@ -134,7 +135,8 @@ class ItemRendererListener
 
         $nativeItem = $model->getItem();
         $metaModel  = $nativeItem->getMetaModel();
-        if ($nativeItem->getAttribute($event->getProperty()->getName()) instanceof IInternal) {
+        $propName   = $event->getProperty()->getName();
+        if ($nativeItem->getAttribute($propName) instanceof IInternal) {
             return;
         }
 
@@ -147,9 +149,13 @@ class ItemRendererListener
             return;
         }
 
-        $result = $nativeItem->parseAttribute($event->getProperty()->getName(), 'text', $renderSetting);
+        $result = $nativeItem->parseAttribute($propName, 'text', $renderSetting);
 
         if (!isset($result['text'])) {
+            // If hide empty values active and the value IS empty, this is expected. See #1318.
+            if ($renderSetting->get('hideEmptyValues') && EmptyTest::isEmptyValue($nativeItem->get($propName))) {
+                return;
+            }
             $event->setRendered(
                 sprintf(
                     'Unexpected behaviour, attribute %s text representation was not rendered.',
