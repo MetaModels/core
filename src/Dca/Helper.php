@@ -122,7 +122,6 @@ class Helper
         foreach ((array) $metaModel->getAvailableLanguages() as $langCode) {
             $languages[$langCode] = $translator->translate('LNG.' . $langCode, 'languages');
         }
-        asort($languages);
 
         return $languages;
     }
@@ -167,13 +166,12 @@ class Helper
             return;
         }
 
-        $fallback   = $metaModel->getFallbackLanguage();
-        $languages  = self::buildLanguageArray($metaModel, $environment->getTranslator());
-        $neededKeys = array_keys($languages);
+        $fallback  = $metaModel->getFallbackLanguage();
+        $languages = self::buildLanguageArray($metaModel, $environment->getTranslator());
 
         // Ensure we have values for all languages present.
-        if (array_diff_key(array_keys($arrValues), $neededKeys)) {
-            foreach ($neededKeys as $langCode) {
+        if (array_diff_key($languages, $arrValues)) {
+            foreach (array_keys($languages) as $langCode) {
                 $arrValues[$langCode] = '';
             }
         }
