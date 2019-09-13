@@ -37,6 +37,8 @@ copy-left:
     - src/CoreBundle/EventListener/DcGeneral/Table/DcaSetting/RemoveOverrideButtonListener.php
     - src/CoreBundle/EventListener/DcGeneral/Table/FilterSetting/SubPaletteSubscriber.php
     - src/Helper/TableManipulator.php
+    - src/CoreBundle/Contao/InsertTag/ReplaceParam.php
+    - src/CoreBundle/Contao/InsertTag/ReplaceTableName.php
   'Stefan Heimes <stefan_heimes@hotmail.com>':
     - src/CoreBundle/EventListener/DcGeneral/Table/RenderSettings/LanguageCodeWizardListener.php
   'David Molineus <david.molineus@netzmacht.de>':
@@ -45,9 +47,17 @@ copy-left:
     - src/CoreBundle/EventListener/DcGeneral/Table/FilterSetting/SubPaletteSubscriber.php
   'David Maack <david.maack@arcor.de>':
     - src/CoreBundle/EventListener/DcGeneral/Table/RenderSettings/LanguageCodeWizardListener.php
+    - src/CoreBundle/Contao/InsertTag/ReplaceParam.php
+    - src/CoreBundle/Contao/InsertTag/ReplaceTableName.php
   'Andreas Isaak <info@andreas-isaak.de>':
     - src/CoreBundle/EventListener/DcGeneral/Table/RenderSettings/LanguageCodeWizardListener.php
   'Cliff Parnitzky <github@cliff-parnitzky.de>':
     - src/Helper/TableManipulator.php
   'Henry Lamorski <henry.lamorski@mailbox.org>':
     - src/Helper/TableManipulator.php
+  'Jan Malte Gerth <anmeldungen@malte-gerth.de>':
+    - src/CoreBundle/Contao/InsertTag/ReplaceParam.php
+    - src/CoreBundle/Contao/InsertTag/ReplaceTableName.php
+  'Oliver Hoff <oliver@hofff.com>':
+    - src/CoreBundle/Contao/InsertTag/ReplaceParam.php
+    - src/CoreBundle/Contao/InsertTag/ReplaceTableName.php

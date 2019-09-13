@@ -51,6 +51,7 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
         'config.yml',
         'filter-settings.yml',
         'hooks.yml',
+        'insert-tags.yml',
         'listeners.yml',
         'property-conditions.yml',
         'services.yml',

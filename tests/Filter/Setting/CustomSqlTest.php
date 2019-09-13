@@ -25,6 +25,8 @@ use Contao\Input;
 use Contao\InsertTags;
 use Contao\Session;
 use Doctrine\DBAL\Connection;
+use MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam;
+use MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName;
 use MetaModels\Filter\Filter;
 use MetaModels\Filter\Setting\CustomSql;
 use MetaModels\Filter\Setting\ICollection;
@@ -38,6 +40,8 @@ use MetaModels\Filter\Rules\SimpleQuery;
  * Unit test for testing the CustomSql filter setting.
  *
  * @covers \MetaModels\Filter\Setting\CustomSql
+ * @covers \MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam
+ * @covers \MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName
  */
 class CustomSqlTest extends AutoLoadingTestCase
 {
@@ -81,7 +85,7 @@ class CustomSqlTest extends AutoLoadingTestCase
         }
         if (!isset($services[Session::class])) {
         $services[Session::class] = $this
-            ->getMockBuilder(Adapter::class)
+            ->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMock();
@@ -93,6 +97,7 @@ class CustomSqlTest extends AutoLoadingTestCase
                 ->setMethods(['get'])
                 ->getMockForAbstractClass();
         }
+
 
         $container = new Container();
 
@@ -106,6 +111,13 @@ class CustomSqlTest extends AutoLoadingTestCase
         ] as $serviceId) {
             $container->set($serviceId, $services[$serviceId]);
         }
+
+        $container->set(ReplaceTableName::class, new ReplaceTableName());
+        $container->set(
+            ReplaceParam::class,
+            new ReplaceParam($services[Input::class], $services[Session::class])
+        );
+
 
         return new CustomSql($filterSetting, $properties, $container);
     }
@@ -340,7 +352,7 @@ class CustomSqlTest extends AutoLoadingTestCase
     public function testValueFromSession()
     {
         $session = $this
-            ->getMockBuilder(Adapter::class)
+            ->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMock();
@@ -357,6 +369,69 @@ class CustomSqlTest extends AutoLoadingTestCase
         );
 
         $this->assertGeneratedSqlIs($setting, 'SELECT id FROM tableName WHERE catname=?', ['category name'], []);
+    }
+
+    /**
+     * Test variable replacement via session value.
+     *
+     * @return void
+     */
+    public function testValueFromSessionAggregated()
+    {
+        $session = $this
+            ->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['get'])
+            ->getMock();
+        $session
+            ->expects($this->once())
+            ->method('get')
+            ->with('category')
+            ->willReturn(['first', 'second']);
+
+        $setting = $this->mockCustomSql(
+            ['customsql' => 'SELECT id FROM tableName WHERE catname IN ({{param::session?name=category&aggregate}})'],
+            'tableName',
+            [Session::class => $session]
+        );
+
+        $this->assertGeneratedSqlIs(
+            $setting,
+            'SELECT id FROM tableName WHERE catname IN (?,?)',
+            [
+                'first',
+                'second'
+            ],
+            []
+        );
+    }
+
+    /**
+     * Test request variable replacement.
+     *
+     * @return void
+     */
+    public function testValueFromSessionEmpty()
+    {
+        $session = $this
+            ->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['get'])
+            ->getMock();
+        $session->expects($this->once())->method('get')->with('category')->willReturn(null);
+
+        $setting = $this->mockCustomSql(
+            ['customsql' => 'SELECT id FROM tableName WHERE catname={{param::session?name=category&default=defaultcat}}'],
+            'tableName',
+            [Session::class => $session]
+        );
+
+        $this->assertGeneratedSqlIs(
+            $setting,
+            'SELECT id FROM tableName WHERE catname=?',
+            ['defaultcat'],
+            []
+        );
     }
 
     /**
