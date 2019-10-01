@@ -145,6 +145,12 @@ class TranslatorPopulator
         $currentLocale = $GLOBALS['TL_LANGUAGE'];
 
         foreach ($inputScreen['legends'] as $legendName => $legendInfo) {
+            // If current language not defined, use the fallback language.
+            $translator->setValue(
+                $legendName . '_legend',
+                $legendInfo['label']['default'],
+                $containerName
+            );
             foreach ($legendInfo['label'] as $langCode => $label) {
                 $translator->setValue(
                     $legendName . '_legend',
