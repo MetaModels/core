@@ -83,7 +83,7 @@ class FixupUserGroupModules
         }
 
         $original = new \tl_user_group();
-        $modules  = $original->getModules();
+        $modules  = $original->getModules($dataContainer);
 
         // 1. remove all MetaModels
         foreach (array_keys($modules) as $group) {
