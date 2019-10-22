@@ -13,6 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -21,8 +22,9 @@
 namespace MetaModels\CoreBundle\Controller\Backend;
 
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Twig\Environment;
+use Twig\Environment as TwigEnvironment;
 
 /**
  * This controller provides the add-all action in input screens.
@@ -32,9 +34,9 @@ class SupportMetaModelsController
     /**
      * The twig engine.
      *
-     * @var EngineInterface
+     * @var TwigEnvironment
      */
-    private $templating;
+    private $twig;
 
     /**
      * The translator.
@@ -60,14 +62,14 @@ class SupportMetaModelsController
     /**
      * Create a new instance.
      *
-     * @param EngineInterface     $templating The twig engine.
+     * @param Environment         $twig       The twig engine.
      * @param TranslatorInterface $translator The translator.
      * @param string              $github     Path to the github contributor json list.
      * @param string              $transifex  Path to the transifex contributor json list.
      */
-    public function __construct(EngineInterface $templating, TranslatorInterface $translator, $github, $transifex)
+    public function __construct(TwigEnvironment $twig, TranslatorInterface $translator, $github, $transifex)
     {
-        $this->templating = $templating;
+        $this->twig       = $twig;
         $this->translator = $translator;
         $this->github     = $github;
         $this->transifex  = $transifex;
@@ -81,8 +83,8 @@ class SupportMetaModelsController
     public function __invoke()
     {
         return new Response(
-            $this->templating->render(
-                'MetaModelsCoreBundle::misc/support.html.twig',
+            $this->twig->render(
+                '@MetaModelsCore/misc/support.html.twig',
                 [
                     'stylesheets' => [
                         'bundles/metamodelscore/css/supportscreen.css'

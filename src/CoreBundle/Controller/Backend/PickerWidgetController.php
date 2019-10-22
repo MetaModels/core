@@ -13,6 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -23,8 +24,8 @@ namespace MetaModels\CoreBundle\Controller\Backend;
 use Contao\Input;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Twig\Environment as TwigEnvironment;
 
 /**
  * This class renders the picker widget.
@@ -34,9 +35,9 @@ class PickerWidgetController
     /**
      * The twig engine.
      *
-     * @var EngineInterface
+     * @var TwigEnvironment
      */
-    private $templating;
+    private $twig;
 
     /**
      * The translator.
@@ -55,13 +56,13 @@ class PickerWidgetController
     /**
      * Create a new instance.
      *
-     * @param EngineInterface     $templating    The twig engine.
+     * @param TwigEnvironment     $twig          The twig engine.
      * @param TranslatorInterface $translator    The translator.
      * @param array               $configuration The picker configuration.
      */
-    public function __construct(EngineInterface $templating, TranslatorInterface $translator, array $configuration)
+    public function __construct(TwigEnvironment $twig, TranslatorInterface $translator, array $configuration)
     {
-        $this->templating    = $templating;
+        $this->twig          = $twig;
         $this->translator    = $translator;
         $this->configuration = $configuration;
     }
@@ -119,8 +120,8 @@ class PickerWidgetController
         }
 
         return new Response(
-            $this->templating->render(
-                'MetaModelsCoreBundle:Backend:be_dcastylepicker.html.twig',
+            $this->twig->render(
+                '@MetaModelsCore/Backend/be_dcastylepicker.html.twig',
                 [
                     'items'       => $items,
                     'field'       => $request->get('inputName'),
