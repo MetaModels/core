@@ -23,7 +23,6 @@ namespace MetaModels\CoreBundle\Controller\Backend;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Translation\TranslatorInterface;
-use Twig\Environment;
 use Twig\Environment as TwigEnvironment;
 
 /**
@@ -62,7 +61,7 @@ class SupportMetaModelsController
     /**
      * Create a new instance.
      *
-     * @param Environment         $twig       The twig engine.
+     * @param TwigEnvironment     $twig       The twig engine.
      * @param TranslatorInterface $translator The translator.
      * @param string              $github     Path to the github contributor json list.
      * @param string              $transifex  Path to the transifex contributor json list.
