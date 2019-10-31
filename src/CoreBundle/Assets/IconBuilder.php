@@ -85,13 +85,13 @@ class IconBuilder
     /**
      * Create a new instance.
      *
-     * @param Adapter               $filesAdapter Adapter to the Contao files model class.
-     * @param ImageFactoryInterface $imageFactory The image factory for resizing images.
-     * @param string                $rootPath     The root path of the application.
-     * @param string                $outputPath   The output path for assets.
-     * @param string                $webPath      The web reachable path for assets.
-     * @param Adapter               $imageAdapter The image adapter to generate HTML code images.
-     * @param string                $webPath      The project web reachable path for assets.
+     * @param Adapter               $filesAdapter   Adapter to the Contao files model class.
+     * @param ImageFactoryInterface $imageFactory   The image factory for resizing images.
+     * @param string                $rootPath       The root path of the application.
+     * @param string                $outputPath     The output path for assets.
+     * @param string                $webPath        The web reachable path for assets.
+     * @param Adapter               $imageAdapter   The image adapter to generate HTML code images.
+     * @param string                $projectWebPath The project web reachable path for assets.
      */
     public function __construct(
         Adapter $filesAdapter,
@@ -136,7 +136,7 @@ class IconBuilder
             $realIcon = $this->projectWebPath . '/' . $realIcon;
         }
 
-        $image = $this->imageFactory->create($realIcon, [16, 16, 'center_center'], $targetPath);
+        $this->imageFactory->create($realIcon, [16, 16, 'center_center'], $targetPath);
 
         return $this->webPath . '/' . basename($realIcon);
     }
