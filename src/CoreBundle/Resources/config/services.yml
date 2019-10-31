@@ -8,6 +8,7 @@ services:
             - "%metamodels.assets_dir%"
             - "%metamodels.assets_web%"
             - "@=service('contao.framework').getAdapter('Contao\\\\Image')"
+            - "%contao.web_dir%"
 
     metamodels.cache:
         class: Doctrine\Common\Cache\FilesystemCache
