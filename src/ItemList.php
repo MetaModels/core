@@ -21,6 +21,7 @@
  * @author     Jeremie Constant <j.constant@imi.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Benedict Zinke <bz@presentprogressive.de>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -483,7 +484,7 @@ class ItemList implements IServiceContainerAware
         $factory            = $this->getFactory();
         $this->objMetaModel = $factory->getMetaModel($factory->translateIdToMetaModelName($this->intMetaModel));
         if (!$this->objMetaModel) {
-            throw new \RuntimeException('Could get metamodel id: ' . $this->intMetaModel);
+            throw new \RuntimeException('Could not get metamodel with id: ' . $this->intMetaModel);
         }
     }
 

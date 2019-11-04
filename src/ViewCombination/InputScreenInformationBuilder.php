@@ -328,10 +328,11 @@ class InputScreenInformationBuilder
             ];
         };
 
+        $fallbackLanguage = $trans ? $metaModel->getFallbackLanguage() : null;
         foreach ($properties as $property) {
             switch ($property['dcatype']) {
                 case 'legend':
-                    $this->convertLegend($property, $trans, $condition, $legend, $result);
+                    $this->convertLegend($property, $fallbackLanguage, $condition, $legend, $result);
                     break;
                 case 'attribute':
                     $this->convertAttribute($property, $condition, $legend);
@@ -350,23 +351,27 @@ class InputScreenInformationBuilder
     /**
      * Convert a legend property.
      *
-     * @param array    $property  The property information to convert.
-     * @param bool     $trans     Flag if the MetaModel is translated.
-     * @param callable $condition The condition transformer.
-     * @param array    $legend    The current legend information.
-     * @param array    $result    The resulting information.
+     * @param array       $property  The property information to convert.
+     * @param string|null $fallback  The fallback language if the MetaModel is translated or null otherwise.
+     * @param callable    $condition The condition transformer.
+     * @param array       $legend    The current legend information.
+     * @param array       $result    The resulting information.
      *
      * @return void
      */
-    private function convertLegend(array $property, bool $trans, $condition, array &$legend, array &$result)
+    private function convertLegend(array $property, ?string $fallback, $condition, array &$legend, array &$result)
     {
         if (!empty($legend['properties'])) {
             $result['legend' . (\count($result) + 1)] = $legend;
         }
+        if (null === $fallback) {
+            $label = ['' => $property['legendtitle']];
+        } else {
+            $label            = unserialize($property['legendtitle'], ['allowed_classes' => false]);
+            $label['default'] = $label[$fallback];
+        }
         $legend = [
-            'label'      => $trans
-                ? unserialize($property['legendtitle'], ['allowed_classes' => false])
-                : ['' => $property['legendtitle']],
+            'label'      => $label,
             'hide'       => (bool) $property['legendhide'],
             'properties' => [],
             'condition' => $condition($property)

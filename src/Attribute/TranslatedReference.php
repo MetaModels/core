@@ -304,7 +304,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
                 sprintf(
                     'SELECT t1.item_id
                        FROM %1$s AS t1
-                       RIGHT JOIN %1$s ON (t1.id = (SELECT
+                       RIGHT JOIN %1$s as t3 ON (t1.id = (SELECT
                            t2.id
                            FROM %1$s AS t2
                            WHERE (t2.att_id=%2$s)
@@ -313,8 +313,8 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
                            ORDER BY FIELD(t2.langcode,%3$s)
                            LIMIT 1
                        ))
-                       WHERE t1.id IS NOT NULL
-                       AND  (t1.item_id IN (?))
+                       WHERE (t1.item_id IN (?))
+                       AND (t3.item_id IN (?))
                        GROUP BY t1.id
                        ORDER BY t1.value %4$s',
                     // @codingStandardsIgnoreStart - we want to keep the numbers at the end of the lines below.
@@ -324,8 +324,8 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
                     $strDirection                              // 4
                     // @codingStandardsIgnoreEnd
                 ),
-                [$idList],
-                [Connection::PARAM_STR_ARRAY]
+                [$idList, $idList],
+                [Connection::PARAM_STR_ARRAY, Connection::PARAM_STR_ARRAY]
             );
 
         return $statement->fetchAll(\PDO::FETCH_COLUMN, 0);

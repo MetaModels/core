@@ -13,6 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -30,8 +31,8 @@ use MetaModels\IMetaModel;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Templating\EngineInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Twig\Environment as TwigEnvironment;
 
 /**
  * This controller provides the base for the add-all handlers for input screens and render settings.
@@ -83,9 +84,9 @@ abstract class AbstractAddAllController
     /**
      * The twig engine.
      *
-     * @var EngineInterface
+     * @var TwigEnvironment
      */
-    protected $templating;
+    protected $twig;
 
     /**
      * Sorting start value.
@@ -97,7 +98,7 @@ abstract class AbstractAddAllController
     /**
      * Create a new instance.
      *
-     * @param EngineInterface     $templating    The templating instance.
+     * @param TwigEnvironment     $twig          The templating instance.
      * @param TranslatorInterface $translator    The translator.
      * @param IFactory            $factory       The MetaModels factory.
      * @param Connection          $connection    The database connection.
@@ -105,14 +106,14 @@ abstract class AbstractAddAllController
      * @param PurgeCache          $purger        The cache purger.
      */
     public function __construct(
-        EngineInterface $templating,
+        TwigEnvironment $twig,
         TranslatorInterface $translator,
         IFactory $factory,
         Connection $connection,
         Adapter $systemAdapter,
         PurgeCache $purger
     ) {
-        $this->templating    = $templating;
+        $this->twig          = $twig;
         $this->translator    = $translator;
         $this->factory       = $factory;
         $this->connection    = $connection;
@@ -169,8 +170,8 @@ abstract class AbstractAddAllController
             }
         }
 
-        return new Response($this->templating->render(
-            'MetaModelsCoreBundle::Backend/add-all.html.twig',
+        return new Response($this->twig->render(
+            '@MetaModelsCore/Backend/add-all.html.twig',
             $this->render($table, $metaModel, $request)
         ));
     }
