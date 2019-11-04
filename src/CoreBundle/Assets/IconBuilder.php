@@ -14,6 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -25,6 +26,7 @@ use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Contao\Validator;
 use Symfony\Component\Filesystem\Filesystem;
+use Webmozart\PathUtil\Path;
 
 /**
  * This class takes care of building icons for the backend.
@@ -53,6 +55,13 @@ class IconBuilder
     private $webPath;
 
     /**
+     * The project web reachable path for assets.
+     *
+     * @var string
+     */
+    private $projectWebPath;
+
+    /**
      * Adapter to the Contao\FilesModel class.
      *
      * @var \Contao\FilesModel|Adapter
@@ -76,12 +85,13 @@ class IconBuilder
     /**
      * Create a new instance.
      *
-     * @param Adapter               $filesAdapter Adapter to the Contao files model class.
-     * @param ImageFactoryInterface $imageFactory The image factory for resizing images.
-     * @param string                $rootPath     The root path of the application.
-     * @param string                $outputPath   The output path for assets.
-     * @param string                $webPath      The web reachable path for assets.
-     * @param Adapter               $imageAdapter The image adapter to generate HTML code images.
+     * @param Adapter               $filesAdapter   Adapter to the Contao files model class.
+     * @param ImageFactoryInterface $imageFactory   The image factory for resizing images.
+     * @param string                $rootPath       The root path of the application.
+     * @param string                $outputPath     The output path for assets.
+     * @param string                $webPath        The web reachable path for assets.
+     * @param Adapter               $imageAdapter   The image adapter to generate HTML code images.
+     * @param string                $projectWebPath The project web reachable path for assets.
      */
     public function __construct(
         Adapter $filesAdapter,
@@ -89,14 +99,16 @@ class IconBuilder
         $rootPath,
         $outputPath,
         $webPath,
-        Adapter $imageAdapter
+        Adapter $imageAdapter,
+        $projectWebPath
     ) {
-        $this->filesAdapter = $filesAdapter;
-        $this->imageFactory = $imageFactory;
-        $this->rootPath     = $rootPath;
-        $this->outputPath   = $outputPath;
-        $this->webPath      = $webPath;
-        $this->image        = $imageAdapter;
+        $this->filesAdapter   = $filesAdapter;
+        $this->imageFactory   = $imageFactory;
+        $this->rootPath       = $rootPath;
+        $this->outputPath     = $outputPath;
+        $this->webPath        = $webPath;
+        $this->projectWebPath = $projectWebPath;
+        $this->image          = $imageAdapter;
 
         // Ensure output path exists.
         $fileSystem = new Filesystem();
@@ -115,8 +127,13 @@ class IconBuilder
     {
         $realIcon   = $this->convertValueToPath($icon, $defaultIcon);
         $targetPath = $this->outputPath . '/' . basename($realIcon);
+
         if (\file_exists($targetPath)) {
             return $this->webPath . '/' . basename($realIcon);
+        }
+
+        if (!Path::isAbsolute($realIcon)) {
+            $realIcon = $this->projectWebPath . '/' . $realIcon;
         }
 
         $this->imageFactory->create($realIcon, [16, 16, 'center_center'], $targetPath);
