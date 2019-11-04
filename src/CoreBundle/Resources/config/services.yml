@@ -110,7 +110,7 @@ services:
     metamodels.controller.abstract.add_all:
         abstract: true
         arguments:
-            - "@templating"
+            - "@twig"
             - "@contao.translation.translator"
             - "@metamodels.factory"
             - "@database_connection"
@@ -128,7 +128,7 @@ services:
     metamodels.controller.support_screen:
         class: MetaModels\CoreBundle\Controller\Backend\SupportMetaModelsController
         arguments:
-            - "@templating"
+            - "@twig"
             - "@contao.translation.translator"
             - "%metamodels.resource_dir%/data/contributors-github.json"
             - "%metamodels.resource_dir%/data/contributors-transifex.json"
@@ -137,7 +137,7 @@ services:
     metamodels.controller.picker:
         class: MetaModels\CoreBundle\Controller\Backend\PickerWidgetController
         arguments:
-            - "@templating"
+            - "@twig"
             - "@contao.translation.translator"
             - []
         tags: ['controller.service_arguments']
