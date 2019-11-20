@@ -384,7 +384,7 @@ class FrontendFilter
         }
 
         $arrWidgets = $filterSetting->getParameterFilterWidgets(
-            $all->getSlugParameters(),
+            array_merge($all->getSlugParameters(), $all->getGetParameters()),
             $jumpToInformation,
             $filterOptions
         );
