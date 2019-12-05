@@ -14,6 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -27,7 +28,7 @@ use MetaModels\ViewCombination\ViewCombination;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Translation\TranslatorInterface;
@@ -68,7 +69,7 @@ class RegisterBackendNavigation
     /**
      * The token storage.
      *
-     * @var TokenStorage
+     * @var TokenStorageInterface
      */
     private $tokenStorage;
 
@@ -79,14 +80,14 @@ class RegisterBackendNavigation
      * @param RequestStack          $requestStack    The request stack.
      * @param UrlGeneratorInterface $urlGenerator    The url generator.
      * @param ViewCombination       $viewCombination The view combination.
-     * @param TokenStorage          $tokenStorage    The token storage.
+     * @param TokenStorageInterface $tokenStorage    The token storage.
      */
     public function __construct(
         TranslatorInterface $translator,
         RequestStack $requestStack,
         UrlGeneratorInterface $urlGenerator,
         ViewCombination $viewCombination,
-        TokenStorage $tokenStorage
+        TokenStorageInterface $tokenStorage
     ) {
         $this->requestStack    = $requestStack;
         $this->urlGenerator    = $urlGenerator;
