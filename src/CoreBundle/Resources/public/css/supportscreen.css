@@ -18,6 +18,10 @@
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
+.mm_support_display {
+	padding: 15px;
+}
+
 .mm_support_display .logo {
 	display: block;
 	height: 38px;
