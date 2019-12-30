@@ -12,7 +12,7 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2019-05-03T19:21:19+02:00
+ * Last-updated: 2019-12-19T09:26:51+01:00
  *
  * @copyright 2012-2019 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
@@ -50,8 +50,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']['0']                     = 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['new']['1']                     = 'Erstellen Sie ein neues Attribut.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['pasteafter']['0']              = 'Erstellen Sie ein neues Attribut.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['pasteafter']['1']              = 'Erstellen Sie einen neuen Datensatz nach Attribut ID %s.';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['pastenew']['0']                = 'Neue Einstellung oben erstellen';
-$GLOBALS['TL_LANG']['tl_metamodel_attribute']['pastenew']['1']                = 'Neue Einstellung nach Element ID %s anlegen';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['pastenew']['0']                = 'Neues Attribut oben erstellen';
+$GLOBALS['TL_LANG']['tl_metamodel_attribute']['pastenew']['1']                = 'Neues Attribut nach Element ID %s anlegen';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['0']                    = 'Attribut-Details';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['show']['1']                    = 'Die Details des Attributs ID %s anzeigen.';
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['title_legend']                 = 'Typ, Benennung und Grundeinstellungen des Attributes.';
