@@ -162,7 +162,8 @@ class BaseSimple extends Base implements ISimple
                 ->select($strCol . ', COUNT(' . $strCol . ') as mm_count')
                 ->from($this->getMetaModel()->getTableName())
                 ->where('id IN (:ids)')
-                ->groupBy($strCol)
+                ->groupBy('id')
+                ->addGroupBy($strCol)
                 ->orderBy('FIELD(id, :ids)')
                 ->setParameter('ids', $idList, Connection::PARAM_STR_ARRAY)
                 ->execute();
@@ -170,7 +171,8 @@ class BaseSimple extends Base implements ISimple
             $statement = $this->connection->createQueryBuilder()
                 ->select($strCol . ', COUNT(' . $strCol . ') as mm_count')
                 ->from($this->getMetaModel()->getTableName())
-                ->groupBy($strCol)
+                ->groupBy('id')
+                ->addGroupBy($strCol)
                 ->orderBy($strCol)
                 ->execute();
         }
