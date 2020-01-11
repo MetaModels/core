@@ -1,4 +1,9 @@
 services:
+    MetaModels\IFactory: '@metamodels.factory'
+    MetaModels\Filter\Setting\FilterSettingFactory: '@metamodels.filter_setting_factory'
+    MetaModels\Render\Setting\RenderSettingFactory: '@metamodels.render_setting_factory'
+    MetaModels\ViewCombination\ViewCombination: '@metamodels.view_combination'
+
     metamodels.assets.icon_builder:
         class: MetaModels\CoreBundle\Assets\IconBuilder
         arguments:
