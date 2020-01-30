@@ -80,7 +80,7 @@ class PasteButtonListener extends AbstractConditionFactoryUsingListener
     /**
      * Test if a model a parent.
      *
-     * @param ModelInterface $model      The model that shall be checked.
+     * @param ModelInterface      $model The model that shall be checked.
      * @param GetPasteButtonEvent $event The event.
      *
      * @return void
