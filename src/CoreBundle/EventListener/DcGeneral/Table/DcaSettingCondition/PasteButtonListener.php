@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -27,6 +28,7 @@ use ContaoCommunityAlliance\DcGeneral\Controller\ModelCollector;
 use ContaoCommunityAlliance\DcGeneral\Controller\RelationshipManager;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelInterface;
+use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 
 /**
  * This handles the type options for conditions.
@@ -64,6 +66,7 @@ class PasteButtonListener extends AbstractConditionFactoryUsingListener
         // If setting does not support children, omit them.
         if ($model->getId() && !$this->conditionFactory->supportsNesting($typeName)) {
             $event->setPasteIntoDisabled(true);
+            $this->testParent($model, $event);
             return;
         }
 
@@ -71,10 +74,25 @@ class PasteButtonListener extends AbstractConditionFactoryUsingListener
         if (!$this->acceptsAnotherChild($model, $collector)) {
             $event->setPasteIntoDisabled(true);
         }
+        $this->testParent($model, $event);
+    }
 
+    /**
+     * Test if a model a parent.
+     *
+     * @param ModelInterface $model      The model that shall be checked.
+     * @param GetPasteButtonEvent $event The event.
+     *
+     * @return void
+     */
+    private function testParent(ModelInterface $model, GetPasteButtonEvent $event): void
+    {
+        $environment   = $event->getEnvironment();
         $definition    = $environment->getDataDefinition();
         $mode          = $definition->getBasicDefinition()->getMode();
         $relationships = new RelationshipManager($definition->getModelRelationshipDefinition(), $mode);
+        $collector     = new ModelCollector($environment);
+
         if (!$relationships->isRoot($model)
             && ($parent = $collector->searchParentOf($model))
             && !$this->acceptsAnotherChild($parent, $collector)) {
