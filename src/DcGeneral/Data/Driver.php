@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,8 @@
  * @author     binron <rtb@gmx.ch>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -480,10 +481,9 @@ class Driver implements MultiLanguageDataProviderInterface
 
         $objFilter = $this->prepareFilter($objConfig);
 
-        $arrValues = $this
-            ->getMetaModel()
-            ->getAttribute($arrProperties[0])
-            ->getFilterOptions($objFilter->getMatchingIds(), true);
+        $metaModel = $this->getMetaModel();
+        $arrValues = $metaModel
+            ->getAttributeOptions($arrProperties[0], $objFilter);
 
         $objCollection = new DefaultFilterOptionCollection();
         foreach ($arrValues as $strKey => $strValue) {
