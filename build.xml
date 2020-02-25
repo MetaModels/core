@@ -8,4 +8,5 @@ For documentation visit:
 -->
 <project name="metamodels-core" default="build">
     <import file="vendor/phpcq/phpcq/phpcq.main.xml" />
+    <target name="phpspec" />
 </project>
