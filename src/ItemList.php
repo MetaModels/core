@@ -796,8 +796,8 @@ class ItemList implements IServiceContainerAware
 
         $page = $this->getPage();
 
-        if ($page && $page->outputFormat) {
-            return $page->outputFormat;
+        if ($page) {
+            return $page->outputFormat ?: 'html5';
         }
 
         return 'text';
