@@ -93,7 +93,7 @@ class FilterUrlBuilder
 
     /**
      * Returns whether locale is prepended.
-     * 
+     *
      * @return bool
      */
     public function isLocalePrepended(): bool
@@ -103,8 +103,10 @@ class FilterUrlBuilder
 
     /**
      * Sets whether locale is prepended.
-     * 
+     *
      * @param bool $isLocalePrepended The setting.
+     *
+     * @return void
      */
     public function setIsLocalePrepended(bool $isLocalePrepended): void
     {
@@ -125,6 +127,8 @@ class FilterUrlBuilder
      * Sets the url suffix.
      *
      * @param string $urlSuffix The url suffix.
+     *
+     * @return void
      */
     public function setUrlSuffix(string $urlSuffix): void
     {
