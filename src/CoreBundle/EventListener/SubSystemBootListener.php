@@ -111,22 +111,28 @@ class SubSystemBootListener
             return;
         }
 
-        if (!$this->connection->getSchemaManager()->tablesExist(
-            [
-                'tl_metamodel',
-                'tl_metamodel_dca',
-                'tl_metamodel_dca_sortgroup',
-                'tl_metamodel_dcasetting',
-                'tl_metamodel_dcasetting_condition',
-                'tl_metamodel_attribute',
-                'tl_metamodel_filter',
-                'tl_metamodel_filtersetting',
-                'tl_metamodel_rendersettings',
-                'tl_metamodel_rendersetting',
-                'tl_metamodel_dca_combine',
-            ]
-        )) {
-            $this->logger->error('MetaModels startup interrupted. Not all MetaModels tables have been created.');
+        try {
+            if (!$this->connection->getSchemaManager()->tablesExist(
+                [
+                    'tl_metamodel',
+                    'tl_metamodel_dca',
+                    'tl_metamodel_dca_sortgroup',
+                    'tl_metamodel_dcasetting',
+                    'tl_metamodel_dcasetting_condition',
+                    'tl_metamodel_attribute',
+                    'tl_metamodel_filter',
+                    'tl_metamodel_filtersetting',
+                    'tl_metamodel_rendersettings',
+                    'tl_metamodel_rendersetting',
+                    'tl_metamodel_dca_combine',
+                ]
+            )) {
+                $this->logger->error('MetaModels startup interrupted. Not all MetaModels tables have been created.');
+                return;
+            }
+        } catch (\Throwable $throwable) {
+            // Swallow and return - we might not be installed yet. See #1376.
+            $this->logger->error('MetaModels startup interrupted. Exception occurred while checking tables.');
             return;
         }
 
