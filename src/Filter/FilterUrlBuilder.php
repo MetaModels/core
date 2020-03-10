@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -89,6 +89,46 @@ class FilterUrlBuilder
         $this->isLocalePrepended = $isLocalePrepended;
         $this->urlSuffix         = $urlSuffix;
         $this->pageModelAdapter  = $pageModelAdapter;
+    }
+
+    /**
+     * Returns whether locale is prepended.
+     * 
+     * @return bool
+     */
+    public function isLocalePrepended(): bool
+    {
+        return $this->isLocalePrepended;
+    }
+
+    /**
+     * Sets whether locale is prepended.
+     * 
+     * @param bool $isLocalePrepended The setting.
+     */
+    public function setIsLocalePrepended(bool $isLocalePrepended): void
+    {
+        $this->isLocalePrepended = $isLocalePrepended;
+    }
+
+    /**
+     * Gets the url suffix.
+     *
+     * @return string
+     */
+    public function getUrlSuffix(): string
+    {
+        return $this->urlSuffix;
+    }
+
+    /**
+     * Sets the url suffix.
+     *
+     * @param string $urlSuffix The url suffix.
+     */
+    public function setUrlSuffix(string $urlSuffix): void
+    {
+        $this->urlSuffix = $urlSuffix;
     }
 
     /**
