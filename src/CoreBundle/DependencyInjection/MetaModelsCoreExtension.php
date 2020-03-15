@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -77,8 +78,6 @@ class MetaModelsCoreExtension extends Extension
         $container->setParameter('metamodels.resource_dir', __DIR__ . '/../Resources');
         $container->setParameter('metamodels.assets_dir', $config['assets_dir']);
         $container->setParameter('metamodels.assets_web', $config['assets_web']);
-
-        $this->buildPickerService($container);
     }
 
     /**
@@ -112,34 +111,5 @@ class MetaModelsCoreExtension extends Extension
         }
 
         $container->setParameter('metamodels.cache_dir', $config['cache_dir']);
-    }
-
-    /**
-     * Build the picker service.
-     *
-     * @param ContainerBuilder $container The container.
-     *
-     * @return void
-     */
-    private function buildPickerService(ContainerBuilder $container)
-    {
-        $pickerService = $container->getDefinition('metamodels.controller.picker');
-        $configs       = $pickerService->getArgument(2);
-
-        // Selectable styles in the palette tl_class definitions.
-        $configs['PALETTE_STYLE_PICKER'][] = ['cssclass' => 'w50'];
-        $configs['PALETTE_STYLE_PICKER'][] = ['cssclass' => 'w50x'];
-        $configs['PALETTE_STYLE_PICKER'][] = ['cssclass' => 'clr'];
-        $configs['PALETTE_STYLE_PICKER'][] = ['cssclass' => 'clx'];
-        $configs['PALETTE_STYLE_PICKER'][] = ['cssclass' => 'long'];
-        $configs['PALETTE_STYLE_PICKER'][] = ['cssclass' => 'wizard'];
-        $configs['PALETTE_STYLE_PICKER'][] = ['cssclass' => 'm12'];
-        // Selectable panels in the palette panelLayout definitions.
-        $configs['PALETTE_PANEL_PICKER'][] = ['cssclass' => 'search'];
-        $configs['PALETTE_PANEL_PICKER'][] = ['cssclass' => 'sort'];
-        $configs['PALETTE_PANEL_PICKER'][] = ['cssclass' => 'filter'];
-        $configs['PALETTE_PANEL_PICKER'][] = ['cssclass' => 'limit'];
-
-        $pickerService->setArgument(2, $configs);
     }
 }

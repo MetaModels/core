@@ -134,12 +134,12 @@ services:
             - "%metamodels.resource_dir%/data/contributors-transifex.json"
         tags: ['controller.service_arguments']
 
-    metamodels.controller.picker:
-        class: MetaModels\CoreBundle\Controller\Backend\PickerWidgetController
+    metamodels.controller.edit:
+        class: MetaModels\CoreBundle\Controller\Backend\MetaModelDcgController
         arguments:
             - "@twig"
-            - "@contao.translation.translator"
-            - []
+            - "@event_dispatcher"
+            - "@cca.translator.contao_translator"
         tags: ['controller.service_arguments']
 
     metamodels.view_combination.builder:
@@ -175,3 +175,4 @@ services:
         class: MetaModels\CoreBundle\Contao\Compat\ContaoFactory
         arguments:
             - '@contao.framework'
+
