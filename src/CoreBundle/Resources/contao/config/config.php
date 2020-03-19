@@ -68,13 +68,11 @@ array_insert(
 $GLOBALS['METAMODELS_SYSTEM_COLUMNS'] = \Contao\System::getContainer()->getParameter('metamodels.system_columns');
 
 // Front-end modules.
-$GLOBALS['FE_MOD']['metamodels']['metamodel_list']              = 'MetaModels\FrontendIntegration\Module\ModelList';
 $GLOBALS['FE_MOD']['metamodels']['metamodels_frontendfilter']   = 'MetaModels\FrontendIntegration\Module\Filter';
 $GLOBALS['FE_MOD']['metamodels']['metamodels_frontendclearall'] =
     'MetaModels\FrontendIntegration\Module\FilterClearAll';
 
 // Content elements.
-$GLOBALS['TL_CTE']['metamodels']['metamodel_content']           = 'MetaModels\FrontendIntegration\Content\ModelList';
 $GLOBALS['TL_CTE']['metamodels']['metamodels_frontendfilter']   = 'MetaModels\FrontendIntegration\Content\Filter';
 $GLOBALS['TL_CTE']['metamodels']['metamodels_frontendclearall'] =
     'MetaModels\FrontendIntegration\Content\FilterClearAll';

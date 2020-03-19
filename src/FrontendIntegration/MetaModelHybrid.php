@@ -40,6 +40,8 @@ use MetaModels\MetaModelsServiceContainer;
  * @property string metamodel                The id of the MetaModel to use.
  * @property string metamodel_filtering      The id of the MetaModel filter setting to use.
  * @property string metamodel_rendersettings The id of the MetaModel render setting to use.
+ *
+ * @deprecated We switched to fragments in MetaModels 2.2. To be removed in MetaModels 3.0.
  */
 abstract class MetaModelHybrid extends Hybrid
 {

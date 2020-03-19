@@ -44,6 +44,8 @@ class MetaModelsCoreExtension extends Extension
         'listeners.yml',
         'property-conditions.yml',
         'services.yml',
+        'content-elements.yml',
+        'modules.yml',
         'dc-general/breadcrumb.yml',
         'dc-general/definition-builder.yml',
         'dc-general/environment-populator.yml',

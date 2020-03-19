@@ -28,6 +28,8 @@ use MetaModels\FrontendIntegration\HybridList;
 
 /**
  * Implementation of the MetaModel content element.
+ *
+ * @deprecated We switched to fragments {@see ItemListController.php} in MetaModels 2.2. To be removed in MetaModels 3.
  */
 class ModelList extends HybridList
 {

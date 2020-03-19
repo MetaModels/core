@@ -1,0 +1,7 @@
+services:
+    _defaults:
+        autoconfigure: true
+
+    MetaModels\CoreBundle\Controller\ContentElement\ItemListController:
+        arguments:
+            - '@MetaModels\Filter\FilterUrlBuilder'
