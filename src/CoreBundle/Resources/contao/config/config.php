@@ -86,7 +86,6 @@ $GLOBALS['TL_FFL']['tags']      = 'MetaModels\Widgets\TagsWidget';
 // HOOKS.
 $GLOBALS['TL_HOOKS']['outputFrontendTemplate'][] =
     array('MetaModels\FrontendIntegration\FrontendFilter', 'generateClearAll');
-$GLOBALS['TL_HOOKS']['getSearchablePages'][]     = array('MetaModels\BackendIntegration\SearchablePages', 'addPages');
 
 // Add cache only if dir defined in container (and therefore we are using the cache).
 if ($cacheDir = \Contao\System::getContainer()->getParameter('metamodels.cache_dir')) {

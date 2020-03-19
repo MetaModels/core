@@ -42,10 +42,13 @@ services:
             - '@request_stack'
         public: true
 
-    MetaModels\BackendIntegration\SearchablePages:
+    MetaModels\CoreBundle\EventListener\GetSearchablePagesListener:
         arguments:
-            - "@database_connection"
-        public: true
+            - '@database_connection'
+            - '@metamodels.factory'
+            - '@event_dispatcher'
+            - '@metamodels.filter_setting_factory'
+            - '@metamodels.render_setting_factory'
 
     MetaModels\CoreBundle\EventListener\InsertTagsListener:
         arguments:
