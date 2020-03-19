@@ -30,6 +30,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
 use Doctrine\DBAL\Driver\Connection;
 use MetaModels\IMetaModelsServiceContainer;
+use MetaModels\MetaModelsServiceContainer;
 
 /**
  * Condition for the default palette.
@@ -159,8 +160,8 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
      *
      * @deprecated
      */
-    protected function getServiceContainer()
+    protected function getServiceContainer(): IMetaModelsServiceContainer
     {
-        return System::getContainer()->get('metamodels.service_container');
+        return System::getContainer()->get(MetaModelsServiceContainer::class);
     }
 }

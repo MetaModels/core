@@ -28,6 +28,7 @@ use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBag;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Palette\AbstractWeightAwarePaletteCondition;
 use Doctrine\DBAL\Connection;
 use MetaModels\IMetaModelsServiceContainer;
+use MetaModels\MetaModelsServiceContainer;
 
 /**
  * Condition for the default palette.
@@ -158,8 +159,8 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
      *
      * @deprecated
      */
-    protected function getServiceContainer()
+    protected function getServiceContainer(): IMetaModelsServiceContainer
     {
-        return System::getContainer()->get('metamodels.service_container');
+        return System::getContainer()->get(MetaModelsServiceContainer::class);
     }
 }

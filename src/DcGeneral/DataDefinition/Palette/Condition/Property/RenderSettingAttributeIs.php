@@ -25,6 +25,7 @@ namespace MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property;
 use Contao\System;
 use Doctrine\DBAL\Connection;
 use MetaModels\IMetaModelsServiceContainer;
+use MetaModels\MetaModelsServiceContainer;
 
 /**
  * Condition for the default palette.
@@ -68,8 +69,8 @@ class RenderSettingAttributeIs extends AttributeByIdIsOfType
      *
      * @deprecated
      */
-    protected function getServiceContainer()
+    protected function getServiceContainer(): IMetaModelsServiceContainer
     {
-        return System::getContainer()->get('metamodels.service_container');
+        return System::getContainer()->get(MetaModelsServiceContainer::class);
     }
 }

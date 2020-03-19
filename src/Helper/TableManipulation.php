@@ -24,6 +24,7 @@ namespace MetaModels\Helper;
 
 use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\InputProvider;
+use MetaModels\MetaModelsServiceContainer;
 
 /**
  * This is the class for table manipulations like creation/renaming/deleting of tables and columns.
@@ -151,7 +152,7 @@ class TableManipulation
      */
     protected static function getDB()
     {
-        return System::getContainer()->get('metamodels.service_container')->getDatabase();
+        return System::getContainer()->get(MetaModelsServiceContainer::class)->getDatabase();
     }
 
     /**
