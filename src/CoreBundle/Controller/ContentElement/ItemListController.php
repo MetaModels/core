@@ -31,7 +31,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @ContentElement("metamodel_list", category="metamodels")
+ * @ContentElement("metamodel_content", category="metamodels", template="ce_metamodel_content")
  */
 final class ItemListController extends AbstractContentElementController
 {
