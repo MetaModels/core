@@ -128,7 +128,5 @@ if (!isset($GLOBALS['MM_FILTER_PARAMS'])) {
 
 $GLOBALS['TL_HOOKS']['initializeSystem'][] = ['metamodels.sub_system_boot', 'boot'];
 
-$GLOBALS['TL_HOOKS']['getUserNavigation'][] =
-    [MetaModels\CoreBundle\Contao\Hooks\RegisterBackendNavigation::class, 'onGetUserNavigation'];
 $GLOBALS['TL_HOOKS']['loadDataContainer'][] =
     [\MetaModels\CoreBundle\Contao\Hooks\LoadDataContainer::class, 'onLoadDataContainer'];

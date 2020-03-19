@@ -10,16 +10,6 @@ services:
             - '@metamodels.assets.icon_builder'
         public: true
 
-    MetaModels\CoreBundle\Contao\Hooks\RegisterBackendNavigation:
-        arguments:
-            - '@contao.translation.translator'
-            - '@request_stack'
-            - '@router'
-            - '@metamodels.view_combination'
-            - '@security.token_storage'
-        # it is used as HOOK from Contao - needs to be public therefore.
-        public: true
-
     MetaModels\CoreBundle\Contao\Hooks\ContentElementCallback:
         arguments:
             - '@metamodels.assets.icon_builder'

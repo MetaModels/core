@@ -16,6 +16,6 @@
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
-body[class*="version_4"] #tl_navigation .group-metamodels {
+nav[id="tl_navigation"] .group-metamodels {
   background: url(../icons/mm_group_icon_contour.svg) 3px 2px no-repeat;
 }

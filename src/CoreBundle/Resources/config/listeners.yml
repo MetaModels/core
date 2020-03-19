@@ -77,6 +77,15 @@ services:
 
 
 
+    MetaModels\CoreBundle\EventListener\BackendNavigationListener:
+        arguments:
+            - '@contao.translation.translator'
+            - '@request_stack'
+            - '@metamodels.view_combination'
+            - '@security.token_storage'
+            - '@router'
+        tags:
+            - { name: kernel.event_listener }
 
 
 
