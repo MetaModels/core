@@ -82,6 +82,7 @@ final class ItemListController extends AbstractFrontendModuleController
         $filterParams = StringUtil::deserialize($model->metamodel_filterparams, true);
         $itemRenderer
             ->setMetaModel($model->metamodel, $model->metamodel_rendersettings)
+            ->setListTemplate($template)
             ->setLimit($model->metamodel_use_limit, $model->metamodel_offset, $model->metamodel_limit)
             ->setPageBreak($model->perPage)
             ->setSorting($sorting, $direction)

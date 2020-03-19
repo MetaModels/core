@@ -33,6 +33,7 @@ namespace MetaModels;
 use Contao\PageModel;
 use Contao\StringUtil;
 use Contao\System;
+use Contao\Template as ContaoTemplate;
 use MetaModels\Events\RenderItemListEvent;
 use MetaModels\Filter\Setting\ICollection as IFilterSettingCollection;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
@@ -421,6 +422,13 @@ class ItemList
     protected $objTemplate;
 
     /**
+     * The list template (ce_ or mod_).
+     *
+     * @var ContaoTemplate
+     */
+    private $listTemplate;
+
+    /**
      * The filter settings to use.
      *
      * @var IFilterSettingCollection
@@ -565,6 +573,27 @@ class ItemList
     public function getFilterSettings(): IFilterSettingCollection
     {
         return $this->objFilterSettings;
+    }
+
+    /**
+     * @return ContaoTemplate
+     */
+    public function getListTemplate(): ContaoTemplate
+    {
+        return $this->listTemplate;
+    }
+
+    /**
+     *
+     * @param ContaoTemplate $template
+     *
+     * @return self
+     */
+    public function setListTemplate(ContaoTemplate $template): self
+    {
+        $this->listTemplate = $template;
+
+        return $this;
     }
 
     /**
