@@ -46,6 +46,7 @@
     "symfony/filesystem": "4.4.*",
     "symfony/finder": "4.4.*",
     "symfony/proxy-manager-bridge": "4.4.*",
+    "terminal42/service-annotation-bundle": "^1.0",
     "webmozart/path-util": "~2.3"
   },
   "require-dev": {
