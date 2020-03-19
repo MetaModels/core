@@ -89,7 +89,7 @@ final class ItemListController extends AbstractContentElementController
             ->setFilterParameters($filterParams, $this->getFilterParameters($itemRenderer))
             ->setMetaTags($model->metamodel_meta_title, $model->metamodel_meta_description);
 
-        $template->items         = StringUtil::encodeEmail($itemRenderer->render($model->metamodel_noparsing, $this));
+        $template->items         = StringUtil::encodeEmail($itemRenderer->render($model->metamodel_noparsing, $model));
         $template->numberOfItems = $itemRenderer->getItems()->getCount();
         $template->pagination    = $itemRenderer->getPagination();
 

@@ -30,6 +30,8 @@
 
 namespace MetaModels;
 
+use Contao\ContentModel;
+use Contao\ModuleModel;
 use Contao\PageModel;
 use Contao\StringUtil;
 use Contao\System;
@@ -443,6 +445,19 @@ class ItemList
     protected $objFilter;
 
     /**
+     * @var ContentModel|ModuleModel $model
+     */
+    private $model;
+
+    /**
+     * @return ContentModel|ModuleModel
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
+    /**
      * Prepare the MetaModel.
      *
      * @return void
@@ -578,7 +593,7 @@ class ItemList
     /**
      * @return ContaoTemplate
      */
-    public function getListTemplate(): ContaoTemplate
+    public function getListTemplate(): ?ContaoTemplate
     {
         return $this->listTemplate;
     }
@@ -900,8 +915,15 @@ class ItemList
      *
      * @return string
      */
-    public function render($blnNoNativeParsing, $objCaller): string
+    public function render($blnNoNativeParsing, $objCaller=null): string
     {
+        if (func_num_args() > 1) {
+            trigger_error('Passing $objCaller as second argument is deprecated', E_USER_DEPRECATED);
+            if ($objCaller instanceof ContentModel || $objCaller instanceof ModuleModel) {
+                $this->model = $objCaller;
+            }
+        }
+
         $event = new RenderItemListEvent($this, $this->objTemplate, $objCaller);
         $this->getEventDispatcher()->dispatch(MetaModelsEvents::RENDER_ITEM_LIST, $event);
 
