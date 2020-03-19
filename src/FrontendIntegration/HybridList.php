@@ -109,15 +109,6 @@ class HybridList extends MetaModelHybrid
         }
 
         $objItemRenderer
-            ->setServiceContainerFallback(
-                function () {
-                    return $this->getServiceContainer();
-                }
-            )
-            ->setFactory(System::getContainer()->get('metamodels.factory'))
-            ->setFilterFactory(System::getContainer()->get('metamodels.filter_setting_factory'))
-            ->setRenderSettingFactory(System::getContainer()->get('metamodels.render_setting_factory'))
-            ->setEventDispatcher(System::getContainer()->get('event_dispatcher'))
             ->setMetaModel($this->metamodel, $this->metamodel_rendersettings)
             ->setLimit($this->metamodel_use_limit, $this->metamodel_offset, $this->metamodel_limit)
             ->setPageBreak($this->perPage)
