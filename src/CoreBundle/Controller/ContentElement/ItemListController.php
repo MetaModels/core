@@ -100,9 +100,12 @@ final class ItemListController extends AbstractContentElementController
             iterator_to_array($itemRenderer->getItems(), false)
         );
 
-        $this->tagResponse($responseTags);
+        $response = $template->getResponse();
 
-        return $template->getResponse();
+        $this->tagResponse($responseTags);
+        $this->addSharedMaxAgeToResponse($response, $model);
+
+        return $response;
     }
 
     /**
