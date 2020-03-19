@@ -32,8 +32,6 @@
   "require": {
     "php": "^7.2",
     "contao-community-alliance/dc-general": "^2.2@dev",
-    "contao-community-alliance/dependency-container": "~2.0",
-    "contao-community-alliance/event-dispatcher": "~2.0",
     "contao-community-alliance/events-contao-bindings": "~4.0",
     "contao-community-alliance/meta-palettes": "~2.0",
     "contao-community-alliance/translator": "~2.1",

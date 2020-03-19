@@ -21,6 +21,8 @@
 
 namespace MetaModels;
 
+use Contao\BackendUser;
+use Contao\FrontendUser;
 use Doctrine\Common\Cache\Cache;
 use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
@@ -396,7 +398,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
                     $this->services['metamodels-view-combinations'] =
                         new \MetaModels\FrontendIntegration\ViewCombinations(
                             $this,
-                            $GLOBALS['container']['user'],
+                            FrontendUser::getInstance(),
                             \System::getContainer()->get('database_connection')
                         );
                     break;
@@ -404,7 +406,7 @@ class MetaModelsServiceContainer implements IMetaModelsServiceContainer
                     $this->services['metamodels-view-combinations'] =
                         new \MetaModels\BackendIntegration\ViewCombinations(
                             $this,
-                            $GLOBALS['container']['user'],
+                            BackendUser::getInstance(),
                             \System::getContainer()->get('database_connection')
                         );
                     break;

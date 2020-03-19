@@ -28,6 +28,10 @@ services:
             - "@logger"
         public: true
 
+    metamodels.service_container:
+        class: MetaModels\MetaModelsServiceContainer
+        public: true
+
     metamodels.factory:
         arguments:
             - "@event_dispatcher"

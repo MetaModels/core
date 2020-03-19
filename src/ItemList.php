@@ -31,6 +31,7 @@
 namespace MetaModels;
 
 use Contao\StringUtil;
+use Contao\System;
 use MetaModels\Events\RenderItemListEvent;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\Helper\PaginationLimitCalculator;
@@ -296,13 +297,10 @@ class ItemList implements IServiceContainerAware
      * @return void
      *
      * @throws \RuntimeException When the service container could not be set.
-     *
-     * @@SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function useDefaultServiceContainer()
     {
-        $this->serviceContainer = $GLOBALS['container']['metamodels-service-container'];
+        $this->serviceContainer = System::getContainer()->get('metamodels.service_container');
 
         if (!($this->serviceContainer instanceof IMetaModelsServiceContainer)) {
             throw new \RuntimeException('Unable to retrieve default service container.');

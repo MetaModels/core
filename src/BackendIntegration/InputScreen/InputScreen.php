@@ -25,6 +25,7 @@
 namespace MetaModels\BackendIntegration\InputScreen;
 
 use Contao\StringUtil;
+use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionChainInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\NotCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
@@ -281,13 +282,10 @@ class InputScreen implements IInputScreen
      * @return PropertyConditionInterface
      *
      * @throws \RuntimeException When a condition has not been transformed into a valid handling instance.
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function transformCondition($condition)
     {
-        $dispatcher = $GLOBALS['container']['event-dispatcher'];
+        $dispatcher = System::getContainer()->get('event_dispatcher');
         $event      = new CreatePropertyConditionEvent($condition, $this->getMetaModel());
 
         /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */

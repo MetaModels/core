@@ -21,6 +21,7 @@
 
 namespace MetaModels\BackendIntegration;
 
+use Contao\System;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LogEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -46,8 +47,7 @@ class PurgeAssets
             $folder->purge();
         }
 
-        /** @var EventDispatcherInterface $dispatcher */
-        $dispatcher = $GLOBALS['container']['event-dispatcher'];
+        $dispatcher = System::getContainer()->get('event_dispatcher');
         $dispatcher->dispatch(
             ContaoEvents::SYSTEM_LOG,
             new LogEvent('Purged the MetaModels assets', __METHOD__, TL_CRON)

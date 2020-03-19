@@ -106,13 +106,10 @@ class FrontendFilter
      * Retrieve the event dispatcher.
      *
      * @return EventDispatcherInterface
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getDispatcher()
     {
-        return $GLOBALS['container']['event-dispatcher'];
+        return System::getContainer()->get('event_dispatcher');
     }
 
     /**
