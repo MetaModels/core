@@ -21,6 +21,7 @@ namespace MetaModels\CoreBundle\Controller\FrontendModule;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\CoreBundle\ServiceAnnotation\FrontendModule;
+use Contao\Input;
 use Contao\ModuleModel;
 use Contao\StringUtil;
 use Contao\Template;
@@ -124,6 +125,8 @@ final class ItemListController extends AbstractFrontendModuleController
             } elseif ($filterUrl->hasGet($name)) {
                 $result[$name] = $filterUrl->getGet($name);
             }
+            // Mark the parameter as used (otherwise, a 404 is thrown)
+            Input::get($name);
         }
 
         return $result;

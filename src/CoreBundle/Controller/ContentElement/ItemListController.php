@@ -22,6 +22,7 @@ namespace MetaModels\CoreBundle\Controller\ContentElement;
 use Contao\ContentModel;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\ServiceAnnotation\ContentElement;
+use Contao\Input;
 use Contao\StringUtil;
 use Contao\Template;
 use MetaModels\Filter\FilterUrlBuilder;
@@ -126,6 +127,8 @@ final class ItemListController extends AbstractContentElementController
             } elseif ($filterUrl->hasGet($name)) {
                 $result[$name] = $filterUrl->getGet($name);
             }
+            // Mark the parameter as used (otherwise, a 404 is thrown)
+            Input::get($name);
         }
 
         return $result;
