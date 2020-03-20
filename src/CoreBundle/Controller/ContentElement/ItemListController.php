@@ -19,6 +19,7 @@
 
 namespace MetaModels\CoreBundle\Controller\ContentElement;
 
+use Contao\BackendTemplate;
 use Contao\ContentModel;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\ServiceAnnotation\ContentElement;
@@ -56,6 +57,10 @@ final class ItemListController extends AbstractContentElementController
 
     public function __invoke(Request $request, ContentModel $model, string $section, array $classes = null): Response
     {
+        if ($this->get('contao.routing.scope_matcher')->isBackendRequest($request)) {
+            return $this->getBackendWildcard($model);
+        }
+
         if (!empty($model->metamodel_layout)) {
             $model->customTpl = $model->metamodel_layout;
         }
@@ -107,6 +112,16 @@ final class ItemListController extends AbstractContentElementController
         $this->addSharedMaxAgeToResponse($response, $model);
 
         return $response;
+    }
+
+    private function getBackendWildcard(ContentModel $model): Response
+    {
+        $name = $this->get('translator')->trans('CTE.'.$this->getType().'.0', [], 'contao_modules');
+
+        $template = new BackendTemplate('be_wildcard');
+        $template->wildcard = '### '.strtoupper($name).' ###';
+
+        return new Response($template->parse());
     }
 
     /**
