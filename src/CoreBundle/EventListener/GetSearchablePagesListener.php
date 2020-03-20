@@ -39,7 +39,7 @@ use MetaModels\IMetaModel;
 use MetaModels\Item;
 use MetaModels\Render\Setting\ICollection as IRenderSettingCollection;
 use MetaModels\Render\Setting\IRenderSettingFactory;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Terminal42\ServiceAnnotationBundle\ServiceAnnotationInterface;
 
 /**
@@ -78,7 +78,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
     /**
      * Event dispatcher.
      *
-     * @var EventDispatcher
+     * @var EventDispatcherInterface
      */
     private $dispatcher;
 
@@ -99,16 +99,16 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
     /**
      * Construct.
      *
-     * @param Connection            $connection           Database connection.
-     * @param IFactory              $factory              Factory.
-     * @param EventDispatcher       $dispatcher           Event dispatcher.
-     * @param IFilterSettingFactory $filterSettingFactory Filter setting factory.
-     * @param IRenderSettingFactory $renderSettingFactory Render setting factory.
+     * @param Connection               $connection           Database connection.
+     * @param IFactory                 $factory              Factory.
+     * @param EventDispatcherInterface $dispatcher           Event dispatcher.
+     * @param IFilterSettingFactory    $filterSettingFactory Filter setting factory.
+     * @param IRenderSettingFactory    $renderSettingFactory Render setting factory.
      */
     public function __construct(
         Connection $connection,
         IFactory $factory,
-        EventDispatcher $dispatcher,
+        EventDispatcherInterface $dispatcher,
         IFilterSettingFactory $filterSettingFactory,
         IRenderSettingFactory $renderSettingFactory
     ) {
