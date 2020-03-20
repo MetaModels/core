@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,6 +24,7 @@ namespace MetaModels\CoreBundle\EventListener;
 
 use Contao\BackendUser;
 use Contao\CoreBundle\Event\MenuEvent;
+use Contao\StringUtil;
 use MetaModels\ViewCombination\ViewCombination;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -174,7 +175,7 @@ class BackendNavigationListener
         $allowedModules = $beUser->modules;
         switch (true) {
             case \is_string($allowedModules):
-                $allowedModules = unserialize($allowedModules, ['allowed_classes' => false]);
+                $allowedModules = StringUtil::deserialize($allowedModules, true);
                 break;
             case null === $allowedModules:
                 $allowedModules = [];
