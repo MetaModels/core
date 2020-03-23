@@ -31,6 +31,7 @@
 namespace MetaModels;
 
 use Contao\ContentModel;
+use Contao\Model;
 use Contao\ModuleModel;
 use Contao\PageModel;
 use Contao\StringUtil;
@@ -445,14 +446,18 @@ class ItemList
     protected $objFilter;
 
     /**
-     * @var ContentModel|ModuleModel $model
+     * The model, can be module model or content model.
+     *
+     * @var ContentModel|ModuleModel|null $model
      */
     private $model;
 
     /**
-     * @return ContentModel|ModuleModel
+     * Get the model.
+     *
+     * @return ContentModel|ModuleModel|null
      */
-    public function getModel()
+    public function getModel(): ?Model
     {
         return $this->model;
     }
@@ -591,6 +596,8 @@ class ItemList
     }
 
     /**
+     * Get the template of the module or content element.
+     *
      * @return ContaoTemplate
      */
     public function getListTemplate(): ?ContaoTemplate
@@ -599,8 +606,9 @@ class ItemList
     }
 
     /**
+     * Set the template of the module or content element.
      *
-     * @param ContaoTemplate $template
+     * @param ContaoTemplate $template The template.
      *
      * @return self
      */
@@ -780,7 +788,7 @@ class ItemList
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    private function getPage(): ?PageModel
+    private function getPage()
     {
         return ('FE' === TL_MODE && is_object($GLOBALS['objPage'])) ? $GLOBALS['objPage'] : null;
     }
@@ -834,7 +842,7 @@ class ItemList
             return $GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey];
         }
 
-        return $GLOBALS['TL_LANG']['MSC'][$tableName][$langKey] ?? $GLOBALS['TL_LANG']['MSC'][$langKey];
+        return ($GLOBALS['TL_LANG']['MSC'][$tableName][$langKey] ?? $GLOBALS['TL_LANG']['MSC'][$langKey]);
     }
 
     /**
@@ -915,7 +923,7 @@ class ItemList
      *
      * @return string
      */
-    public function render($blnNoNativeParsing, $objCaller=null): string
+    public function render($blnNoNativeParsing, $objCaller = null): string
     {
         if (func_num_args() > 1) {
             trigger_error('Passing $objCaller as second argument is deprecated', E_USER_DEPRECATED);

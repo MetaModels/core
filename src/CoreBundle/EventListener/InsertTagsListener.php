@@ -90,14 +90,21 @@ class InsertTagsListener implements ServiceAnnotationInterface
     private $filterSettingFactory;
 
     /**
-     * FrontendFilter constructor.
+     * InsertTagsListener constructor.
      *
-     * @param Connection $connection Database connection.
+     * @param Connection            $connection           Database connection.
+     * @param IFactory              $factory              The MetaModels factory.
+     * @param IRenderSettingFactory $renderSettingFactory The render setting factory.
+     * @param IFilterSettingFactory $filterSettingFactory The filter setting factory.
      */
-    public function __construct(Connection $connection, IFactory $factory, IRenderSettingFactory $renderSettingFactory, IFilterSettingFactory $filterSettingFactory)
-    {
-        $this->connection = $connection;
-        $this->factory = $factory;
+    public function __construct(
+        Connection $connection,
+        IFactory $factory,
+        IRenderSettingFactory $renderSettingFactory,
+        IFilterSettingFactory $filterSettingFactory
+    ) {
+        $this->connection           = $connection;
+        $this->factory              = $factory;
         $this->renderSettingFactory = $renderSettingFactory;
         $this->filterSettingFactory = $filterSettingFactory;
     }
@@ -327,7 +334,8 @@ class InsertTagsListener implements ServiceAnnotationInterface
 
         // Check if we have data.
         if (null !== $objMetaModelResult) {
-            return $this->getCountFor($objMetaModelResult->metamodel, $objMetaModelResult->metamodel_filtering) ?? false;
+            return ($this->getCountFor($objMetaModelResult->metamodel, $objMetaModelResult->metamodel_filtering)
+                    ?? false);
         }
 
         return false;

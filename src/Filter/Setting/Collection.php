@@ -15,6 +15,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -69,7 +70,7 @@ class Collection implements ICollection
      */
     public function get($key)
     {
-        return $this->arrData[$key] ?? null;
+        return ($this->arrData[$key] ?? null);
     }
 
     /**

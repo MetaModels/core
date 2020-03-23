@@ -18,6 +18,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource

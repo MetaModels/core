@@ -16,6 +16,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -167,7 +168,7 @@ class Collection implements ICollection
      */
     public function getSetting($strAttributeName)
     {
-        return $this->arrSettings[$strAttributeName] ?? null;
+        return ($this->arrSettings[$strAttributeName] ?? null);
     }
 
     /**

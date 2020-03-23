@@ -11,8 +11,6 @@
  * This project is provided in good faith and hope to be usable by anyone.
  *
  * @package    MetaModels/core
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2020 The MetaModels team.
@@ -26,9 +24,7 @@ use Contao\BackendUser;
 use Contao\CoreBundle\Event\MenuEvent;
 use Contao\StringUtil;
 use MetaModels\ViewCombination\ViewCombination;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -81,24 +77,31 @@ class BackendNavigationListener
      * @param RequestStack          $requestStack    The request stack.
      * @param ViewCombination       $viewCombination The view combination.
      * @param TokenStorageInterface $tokenStorage    The token storage.
+     * @param RouterInterface       $router          The router.
      */
     public function __construct(
         TranslatorInterface $translator,
         RequestStack $requestStack,
         ViewCombination $viewCombination,
-        TokenStorageInterface $tokenStorage, RouterInterface $router
+        TokenStorageInterface $tokenStorage,
+        RouterInterface $router
     ) {
         $this->requestStack    = $requestStack;
         $this->translator      = $translator;
         $this->viewCombination = $viewCombination;
         $this->tokenStorage    = $tokenStorage;
-        $this->router = $router;
+        $this->router          = $router;
     }
 
     /**
      * Register back end menu items.
      *
      * @param MenuEvent $event The menu event.
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __invoke(MenuEvent $event): void
     {
@@ -146,13 +149,15 @@ class BackendNavigationListener
                 continue;
             }
 
+            $item = 'metamodel_' . $metaModelName;
+
             $node = $factory
-                ->createItem('metamodel_' . $metaModelName)
-                ->setUri($this->router->generate('contao_backend', ['do' => 'metamodel_' . $metaModelName]))
+                ->createItem($item)
+                ->setUri($this->router->generate('contao_backend', ['do' => $item]))
                 ->setLabel($this->extractLanguageValue($screen['label'], $locale))
                 ->setLinkAttribute('title', $this->extractLanguageValue($screen['description'], $locale))
-                ->setLinkAttribute('class', 'metamodel_' . $metaModelName)
-                ->setCurrent($request->get('_route') === 'contao_backend' && $request->query->get('do') === 'metamodel_' . $metaModelName);
+                ->setLinkAttribute('class', $item)
+                ->setCurrent($request->get('_route') === 'contao_backend' && $request->query->get('do') === $item);
 
             $sectionNode->addChild($node);
         }
@@ -197,7 +202,7 @@ class BackendNavigationListener
      */
     private function extractLanguageValue($values, $locale): string
     {
-        return $values[$locale] ?? $values[''];
+        return ($values[$locale] ?? $values['']);
     }
 
     /**

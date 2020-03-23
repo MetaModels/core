@@ -32,6 +32,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * The item list front end module.
+ *
  * @FrontendModule("metamodel_list", category="metamodels")
  */
 final class ItemListController extends AbstractFrontendModuleController
@@ -54,6 +56,16 @@ final class ItemListController extends AbstractFrontendModuleController
         $this->filterUrlBuilder = $filterUrlBuilder;
     }
 
+    /**
+     * Override the template and return the response.
+     *
+     * @param Request     $request The request.
+     * @param ModuleModel $model   The module model.
+     * @param string      $section The layout section, e.g. "main".
+     * @param array|null  $classes The css classes.
+     *
+     * @return Response The response.
+     */
     public function __invoke(Request $request, ModuleModel $model, string $section, array $classes = null): Response
     {
         if (!empty($model->metamodel_layout)) {
@@ -63,6 +75,15 @@ final class ItemListController extends AbstractFrontendModuleController
         return parent::__invoke($request, $model, $section, $classes);
     }
 
+    /**
+     * Generate the response.
+     *
+     * @param Template    $template The template.
+     * @param ModuleModel $model    The module model.
+     * @param Request     $request  The request.
+     *
+     * @return Response The response.
+     */
     protected function getResponse(Template $template, ModuleModel $model, Request $request): ?Response
     {
         $itemRenderer = new ItemList();
@@ -95,12 +116,9 @@ final class ItemListController extends AbstractFrontendModuleController
         $template->numberOfItems = $itemRenderer->getItems()->getCount();
         $template->pagination    = $itemRenderer->getPagination();
 
-        $responseTags = array_map(
-            static function (IItem $item) {
-                return sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id'));
-            },
-            iterator_to_array($itemRenderer->getItems(), false)
-        );
+        $responseTags = array_map(static function (IItem $item) {
+            return sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id'));
+        }, iterator_to_array($itemRenderer->getItems(), false));
 
         $this->tagResponse($responseTags);
 

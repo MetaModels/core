@@ -33,6 +33,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * The item list content element.
+ *
  * @ContentElement("metamodel_content", category="metamodels", template="ce_metamodel_content")
  */
 final class ItemListController extends AbstractContentElementController
@@ -55,6 +57,16 @@ final class ItemListController extends AbstractContentElementController
         $this->filterUrlBuilder = $filterUrlBuilder;
     }
 
+    /**
+     * Override the template and return the response.
+     *
+     * @param Request      $request The request.
+     * @param ContentModel $model   The content model.
+     * @param string       $section The layout section, e.g. "main".
+     * @param array|null   $classes The css classes.
+     *
+     * @return Response The response.
+     */
     public function __invoke(Request $request, ContentModel $model, string $section, array $classes = null): Response
     {
         if ($this->get('contao.routing.scope_matcher')->isBackendRequest($request)) {
@@ -68,6 +80,15 @@ final class ItemListController extends AbstractContentElementController
         return parent::__invoke($request, $model, $section, $classes);
     }
 
+    /**
+     * Generate the response.
+     *
+     * @param Template     $template The template.
+     * @param ContentModel $model    The content model.
+     * @param Request      $request  The request.
+     *
+     * @return Response The response.
+     */
     protected function getResponse(Template $template, ContentModel $model, Request $request): ?Response
     {
         $itemRenderer = new ItemList();
@@ -99,12 +120,9 @@ final class ItemListController extends AbstractContentElementController
         $template->numberOfItems = $itemRenderer->getItems()->getCount();
         $template->pagination    = $itemRenderer->getPagination();
 
-        $responseTags = array_map(
-            static function (IItem $item) {
-                return sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id'));
-            },
-            iterator_to_array($itemRenderer->getItems(), false)
-        );
+        $responseTags = array_map(static function (IItem $item) {
+            return sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id'));
+        }, iterator_to_array($itemRenderer->getItems(), false));
 
         $response = $template->getResponse();
 
@@ -114,11 +132,17 @@ final class ItemListController extends AbstractContentElementController
         return $response;
     }
 
-    private function getBackendWildcard(ContentModel $model): Response
+    /**
+     * Return a back end wildcard response.
+     *
+     * @return Response The repsonse.
+     */
+    private function getBackendWildcard(): Response
     {
         $name = $this->get('translator')->trans('CTE.'.$this->getType().'.0', [], 'contao_modules');
 
         $template = new BackendTemplate('be_wildcard');
+
         $template->wildcard = '### '.strtoupper($name).' ###';
 
         return new Response($template->parse());
