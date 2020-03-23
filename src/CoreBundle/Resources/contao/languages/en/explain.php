@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2018 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,11 +14,13 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2018 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
+/* filter setting */
 $GLOBALS['TL_LANG']['XPL']['customsql'][0][0] = 'Abstract';
 $GLOBALS['TL_LANG']['XPL']['customsql'][0][1] = 'Type in any SQL query that shall be executed.<br />
         It is required that this query returns at least one column named "id".
@@ -81,6 +83,7 @@ $GLOBALS['TL_LANG']['XPL']['customsql'][6][1] = '<pre>SELECT id
         </p>
         ';
 
+/* dca setting conditions */
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition'][0][0] = 'Attribute value is...';
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition'][0][1] =
     'The condition is fulfilled when the attribute value is equal to the specified value.';
@@ -98,3 +101,17 @@ $GLOBALS['TL_LANG']['XPL']['dcasetting_condition'][4][0] = 'AND';
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition'][4][1] = 'All sub condition must be fulfilled.';
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition'][5][0] = 'NOT';
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition'][5][1] = 'Invert the result of the contained condition.';
+
+/* dca panellayout*/
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][0][0] = 'Set the options of the panel';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][0][1] =
+    'Set the following keywords to define the panel options. Separate panel options with comma (= space) and
+    semicolon (= new line) like "filter;search;sort,limit".';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][1][0] = 'filter';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][1][1] = 'Adds a filter if the option is selected in the attribute.';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][2][0] = 'search';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][2][1] = 'Adds a search field if the option is selected in the attribute.';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][3][0] = 'sort';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][3][1] = 'Adds a sort field if one or more sorting defined.';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][4][0] = 'limit';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][4][1] = 'Adds a limit to use a pagination.';
