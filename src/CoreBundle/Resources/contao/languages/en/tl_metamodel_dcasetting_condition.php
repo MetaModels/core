@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2018 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2018 The MetaModels team.
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -22,6 +22,8 @@
 /**
  * Legends
  */
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['list_label']                                      =
+    'Visibility conditons';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['basic_legend']                                    =
     'Basic configuration';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['config_legend']                                   =
