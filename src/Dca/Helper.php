@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -57,7 +57,7 @@ class Helper
 
         // Sort like in MetaModel definition.
         $arrLanguages = $objMetaModel->getAvailableLanguages();
-        $arrOutput    = array();
+        $arrOutput    = [];
 
         if ($arrLanguages) {
             foreach ($arrLanguages as $strLangCode) {
@@ -93,7 +93,7 @@ class Helper
             return $varValue;
         }
         $arrLangValues = StringUtil::deserialize($varValue);
-        $arrOutput     = array();
+        $arrOutput     = [];
         foreach ($arrLangValues as $varSubValue) {
             $strLangCode = $varSubValue['langcode'];
             unset($varSubValue['langcode']);
@@ -118,7 +118,7 @@ class Helper
      */
     private static function buildLanguageArray(IMetaModel $metaModel, TranslatorInterface $translator)
     {
-        $languages = array();
+        $languages = [];
         foreach ((array) $metaModel->getAvailableLanguages() as $langCode) {
             $languages[$langCode] = $translator->translate('LNG.' . $langCode, 'languages');
         }
@@ -176,7 +176,7 @@ class Helper
             }
         }
 
-        $rowClasses = array();
+        $rowClasses = [];
         foreach (array_keys($arrValues) as $langCode) {
             $rowClasses[] = ($langCode == $fallback) ? 'fallback_language' : 'normal_language';
         }
@@ -184,37 +184,32 @@ class Helper
         $extra = $property->getExtra();
 
         $extra['minCount']       =
-        $extra['maxCount']       = count($languages);
+        $extra['maxCount'] = count($languages);
         $extra['disableSorting'] = true;
-        $extra['tl_class']       = 'clr';
-        $extra['columnFields']   = array
-        (
-            'langcode' => array
-            (
-                'label'                 => $languageLabel,
-                'exclude'               => true,
-                'inputType'             => 'justtextoption',
-                'options'               => $languages,
-                'eval'                  => array
-                (
-                    'rowClasses'        => $rowClasses,
-                    'valign'            => 'center',
-                    'style'             => 'min-width:75px;display:block;'
-                )
-            ),
-            'value' => array
-            (
-                'label'                 => $valueLabel,
-                'exclude'               => true,
-                'inputType'             => $isTextArea ? 'textarea' : 'text',
-                'eval'                  => array
-                (
-                    'rowClasses'        => $rowClasses,
-                    'style'             => 'width:400px;',
-                    'rows'              => 3
-                )
-            ),
-        );
+        $extra['tl_class']       = 'clr w50';
+        $extra['columnFields']   = [
+            'langcode' => [
+                'label'     => $languageLabel,
+                'exclude'   => true,
+                'inputType' => 'justtextoption',
+                'options'   => $languages,
+                'eval'      => [
+                    'rowClasses' => $rowClasses,
+                    'valign'     => 'center',
+                    'style'      => 'min-width:50px;display:block;'
+                ]
+            ],
+            'value'    => [
+                'label'     => $valueLabel,
+                'exclude'   => true,
+                'inputType' => $isTextArea ? 'textarea' : 'text',
+                'eval'      => [
+                    'rowClasses' => $rowClasses,
+                    'style'      => 'width:100%;',
+                    'rows'       => 3
+                ]
+            ],
+        ];
 
         $property
             ->setWidgetType('multiColumnWizard')
@@ -232,8 +227,8 @@ class Helper
      */
     public static function searchFiles($folder, $extension)
     {
-        $scanResult = array();
-        $result     = array();
+        $scanResult = [];
+        $result     = [];
         // Check if we have a file or folder.
         if (is_dir(TL_ROOT . '/' . $folder)) {
             $scanResult = scan(TL_ROOT . '/' . $folder);
@@ -244,7 +239,7 @@ class Helper
             if (!is_file(TL_ROOT . '/' . $folder . '/' . $value)) {
                 $result += self::searchFiles($folder . '/' . $value, $extension);
             } else {
-                if (preg_match('/'.$extension.'$/i', $value)) {
+                if (preg_match('/' . $extension . '$/i', $value)) {
                     $result[$folder][$folder . '/' . $value] = $value;
                 }
             }

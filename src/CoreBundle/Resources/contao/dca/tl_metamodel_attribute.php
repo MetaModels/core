@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,181 +18,143 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-$GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
-(
-    'config'       => array
-    (
+$GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
+    'config'       => [
         'dataContainer'    => 'General',
         'ptable'           => 'tl_metamodel',
         'switchToEdit'     => false,
         'enableVersioning' => false,
-        'sql'              => array
-        (
-            'keys' => array
-            (
+        'sql'              => [
+            'keys' => [
                 'id'      => 'primary',
                 'pid'     => 'index',
                 'colname' => 'index'
-            ),
-        ),
-    ),
-    'dca_config'   => array
-    (
-        'data_provider'  => array
-        (
-            'parent' => array
-            (
+            ],
+        ],
+    ],
+    'dca_config'   => [
+        'data_provider'  => [
+            'parent' => [
                 'source' => 'tl_metamodel'
-            ),
+            ],
 
-            'tl_metamodel_rendersetting' => array
-            (
+            'tl_metamodel_rendersetting' => [
                 'source' => 'tl_metamodel_rendersetting'
-            ),
+            ],
 
-            'tl_metamodel_dcasetting'           => array
-            (
+            'tl_metamodel_dcasetting'           => [
                 'source' => 'tl_metamodel_dcasetting'
-            ),
-            'tl_metamodel_dcasetting_condition' => array
-            (
+            ],
+            'tl_metamodel_dcasetting_condition' => [
                 'source' => 'tl_metamodel_dcasetting_condition'
-            )
-        ),
-        'childCondition' => array
-        (
-            array
-            (
+            ]
+        ],
+        'childCondition' => [
+            [
                 'from'    => 'tl_metamodel',
                 'to'      => 'tl_metamodel_attribute',
-                'setOn'   => array
-                (
-                    array
-                    (
+                'setOn'   => [
+                    [
                         'to_field'   => 'pid',
                         'from_field' => 'id',
-                    ),
-                ),
-                'filter'  => array
-                (
-                    array
-                    (
+                    ],
+                ],
+                'filter'  => [
+                    [
                         'local'     => 'pid',
                         'remote'    => 'id',
                         'operation' => '=',
-                    ),
-                ),
-                'inverse' => array
-                (
-                    array
-                    (
+                    ],
+                ],
+                'inverse' => [
+                    [
                         'local'     => 'pid',
                         'remote'    => 'id',
                         'operation' => '=',
-                    ),
-                )
-            ),
-
-            array(
+                    ],
+                ]
+            ],
+            [
                 'from'   => 'tl_metamodel_attribute',
                 'to'     => 'tl_metamodel_rendersetting',
-                'setOn'  => array
-                (
-                    array
-                    (
+                'setOn'  => [
+                    [
                         'to_field'   => 'attr_id',
                         'from_field' => 'id',
-                    ),
-                ),
-                'filter' => array
-                (
-                    array
-                    (
+                    ],
+                ],
+                'filter' => [
+                    [
                         'local'     => 'attr_id',
                         'remote'    => 'id',
                         'operation' => '=',
-                    ),
-                )
-            ),
-
-            array(
+                    ],
+                ]
+            ],
+            [
                 'from'   => 'tl_metamodel_attribute',
                 'to'     => 'tl_metamodel_dcasetting',
-                'setOn'  => array
-                (
-                    array
-                    (
+                'setOn'  => [
+                    [
                         'to_field'   => 'attr_id',
                         'from_field' => 'id',
-                    ),
-                ),
-                'filter' => array
-                (
-                    array
-                    (
+                    ],
+                ],
+                'filter' => [
+                    [
                         'local'     => 'attr_id',
                         'remote'    => 'id',
                         'operation' => '=',
-                    ),
-                )
-            ),
-        ),
-    ),
-    'list'         => array
-    (
-        'sorting'           => array
-        (
+                    ],
+                ]
+            ],
+        ],
+    ],
+    'list'         => [
+        'sorting'           => [
             'disableGrouping' => true,
             'mode'            => 4,
-            'fields'          => array('sorting'),
+            'fields'          => ['sorting'],
             'panelLayout'     => 'filter,limit',
-            'headerFields'    => array
-            (
+            'headerFields'    => [
                 'name',
                 'tableName',
                 'tstamp',
                 'translated',
                 'varsupport'
-            ),
+            ],
             'flag'            => 1,
-        ),
-        'label'             => array
-        (
-            'fields' => array('name'),
+        ],
+        'label'             => [
+            'fields' => ['name'],
             'format' => '%s'
-        ),
-        'global_operations' => array
-        (
-            'all' => array
-            (
+        ],
+        'global_operations' => [
+            'all' => [
                 'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
                 'href'       => 'act=select',
                 'class'      => 'header_edit_all',
                 'attributes' => 'onclick="Backend.getScrollOffset();"'
-            )
-        ),
-        'operations'        => array
-        (
-            'edit'   => array
-            (
+            ]
+        ],
+        'operations'        => [
+            'edit'   => [
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['edit'],
                 'href'  => 'act=edit',
                 'icon'  => 'edit.svg'
-            ),
-            'cut'    => array
-            (
+            ],
+            'cut'    => [
                 'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['cut'],
                 'href'       => 'act=paste&amp;mode=cut',
                 'icon'       => 'cut.svg',
                 'attributes' => 'onclick="Backend.getScrollOffset();"'
-            ),
-            'delete' => array
-            (
+            ],
+            'delete' => [
                 'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['delete'],
                 'href'       => 'act=delete',
                 'icon'       => 'delete.svg',
@@ -200,92 +162,72 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
                     'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
                     $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
                 )
-            ),
-            'show'   => array
-            (
+            ],
+            'show'   => [
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['show'],
                 'href'  => 'act=show',
                 'icon'  => 'show.svg'
-            ),
+            ],
 
-        )
-    ),
-    'metapalettes' => array
-    (
+        ]
+    ],
+    'metapalettes' => [
         // Initial palette with only the type to be selected.
-        'default'                           => array
-        (
-            'title' => array
-            (
+        'default'                           => [
+            'title' => [
                 'type'
-            )
-        ),
+            ]
+        ],
         // Base palette for MetaModelAttribute derived types.
-        '_base_ extends default'            => array
-        (
-            '+title'            => array
-            (
+        '_base_ extends default'            => [
+            '+title'            => [
                 'colname',
                 'name',
                 'description'
-            ),
-            'advanced'          => array
-            (
+            ],
+            'advanced'          => [
                 ':hide',
                 'isvariant',
                 'isunique'
-            ),
-            'metamodeloverview' => array
-            (),
-            'backenddisplay'    => array
-            (),
-        ),
+            ],
+            'metamodeloverview' => [],
+            'backenddisplay'    => [],
+        ],
         // Default palette for MetaModelAttributeSimple derived types.
         // WARNING: even though it is empty, we have to keep it as otherwise
         // metapalettes will have no way for deriving the palettes. - They need the index.
-        '_simpleattribute_ extends _base_'  => array
-        (),
+        '_simpleattribute_ extends _base_'  => [],
         // Default palette for MetaModelAttributeComplex derived types.
         // WARNING: even though it is empty, we have to keep it as otherwise
         // metapalettes will have no way for deriving the palettes. - They need the index.
-        '_complexattribute_ extends _base_' => array
-        (),
-    ),
+        '_complexattribute_ extends _base_' => [],
+    ],
     // Palettes.
-    'palettes'     => array
-    (
-        '__selector__' => array
-        (
+    'palettes'     => [
+        '__selector__' => [
             'type'
-        )
-    ),
+        ]
+    ],
     // Fields.
-    'fields'       => array
-    (
-        'id'          => array
-        (
+    'fields'       => [
+        'id'          => [
             'sql' => 'int(10) unsigned NOT NULL auto_increment'
-        ),
-        'pid'         => array
-        (
+        ],
+        'pid'         => [
             'sql' => "int(10) unsigned NOT NULL default '0'"
-        ),
-        'sorting'     => array
-        (
+        ],
+        'sorting'     => [
             'sorting' => true,
             'sql'     => "int(10) unsigned NOT NULL default '0'"
-        ),
-        'tstamp'      => array
-        (
+        ],
+        'tstamp'      => [
             'sql' => "int(10) unsigned NOT NULL default '0'"
-        ),
-        'type'        => array
-        (
+        ],
+        'type'        => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['type'],
             'exclude'   => true,
             'inputType' => 'select',
-            'eval'      => array
-            (
+            'eval'      => [
                 'includeBlankOption' => true,
                 'doNotSaveEmpty'     => true,
                 'alwaysSave'         => true,
@@ -293,67 +235,57 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = array
                 'mandatory'          => true,
                 'tl_class'           => 'w50',
                 'chosen'             => 'true'
-            ),
+            ],
             'sql'       => "varchar(64) NOT NULL default ''"
-        ),
-        'name'        => array
-        (
+        ],
+        'name'        => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['name'],
             'exclude'   => true,
             'inputType' => 'text',
-            'eval'      => array
-            (
+            'eval'      => [
                 'tl_class' => 'clr'
-            ),
-            'sql'     => 'text NULL'
-        ),
-        'description' => array
-        (
+            ],
+            'sql'       => 'text NULL'
+        ],
+        'description' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['description'],
             'exclude'   => true,
             'inputType' => 'text',
-            'eval'      => array
-            (
+            'eval'      => [
                 'tl_class' => 'clr'
-            ),
-            'sql'     => 'text NULL'
-        ),
+            ],
+            'sql'       => 'text NULL'
+        ],
         // AVOID: doNotCopy => true, as child records won't be copied when copy metamodel.
-        'colname'     => array
-        (
+        'colname'     => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['colname'],
             'exclude'   => true,
             'inputType' => 'text',
-            'eval'      => array
-            (
+            'eval'      => [
                 'mandatory'             => true,
                 'maxlength'             => 64,
                 'tl_class'              => 'w50',
                 // Hide at overrideAll.
                 'doNotOverrideMultiple' => true
-            ),
+            ],
             'sql'       => "varchar(64) NOT NULL default ''"
-        ),
-        'isvariant'   => array
-        (
+        ],
+        'isvariant'   => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['isvariant'],
             'inputType' => 'checkbox',
-            'eval'      => array
-            (
+            'eval'      => [
                 'submitOnChange' => true,
                 'tl_class'       => 'cbx w50'
-            ),
+            ],
             'sql'       => "char(1) NOT NULL default ''"
-        ),
-        'isunique'    => array
-        (
+        ],
+        'isunique'    => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['isunique'],
             'inputType' => 'checkbox',
-            'eval'      => array
-            (
+            'eval'      => [
                 'tl_class' => 'cbx w50'
-            ),
+            ],
             'sql'       => "char(1) NOT NULL default ''"
-        ),
-    )
-);
+        ],
+    ]
+];
