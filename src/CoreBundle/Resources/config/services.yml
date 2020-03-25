@@ -180,3 +180,9 @@ services:
         class: MetaModels\CoreBundle\Contao\Compat\ContaoFactory
         arguments:
             - '@contao.framework'
+
+    MetaModels\CoreBundle\Migration\TableCollationMigration:
+        arguments:
+            - '@database_connection'
+        tags:
+            - name: contao.migration
