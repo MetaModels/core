@@ -173,3 +173,8 @@ services:
         arguments:
             - '@contao.framework'
 
+    MetaModels\CoreBundle\Migration\TableCollationMigration:
+        arguments:
+            - '@database_connection'
+        tags:
+            - name: contao.migration
