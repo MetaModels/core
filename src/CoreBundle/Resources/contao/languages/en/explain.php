@@ -102,16 +102,24 @@ $GLOBALS['TL_LANG']['XPL']['dcasetting_condition'][4][1] = 'All sub condition mu
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition'][5][0] = 'NOT';
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition'][5][1] = 'Invert the result of the contained condition.';
 
-/* dca panellayout*/
-$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][0][0] = 'Set the options of the panel';
-$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][0][1] =
-    'Set the following keywords to define the panel options. Separate panel options with comma (= space) and
-    semicolon (= new line) like "filter;search;sort,limit".';
-$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][1][0] = 'filter';
-$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][1][1] = 'Adds a filter if the option is selected in the attribute.';
-$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][2][0] = 'search';
-$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][2][1] = 'Adds a search field if the option is selected in the attribute.';
-$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][3][0] = 'sort';
-$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][3][1] = 'Adds a sort field if one or more sorting defined.';
-$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][4][0] = 'limit';
-$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][4][1] = 'Adds a limit to use a pagination.';
+/* dca dcasetting*/
+$GLOBALS['TL_LANG']['XPL']['tl_class'][0][0] = 'Set CSS classes for widget';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][0][1] =
+    'Set one or more of the following CSS classes to define the layout of the widget like "clr w50".';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][1][0] = 'w50';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][1][1] = 'Set the field width to 50% and float it (float:left).';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][2][0] = 'w50x';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][2][1] =
+    'Remove only the annoying fixed height, please use it together with "w50".';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][3][0] = 'clr';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][3][1] = 'Clear all floats.';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][4][0] = 'clx';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][4][1] =
+    'Remove only the annoying overflow hidden, please use it together with "clr".';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][5][0] = 'm12';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][5][1] = 'Add a 12 pixel top margin to the element (used for single checkboxes).';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][6][0] = 'wizard';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][6][1] =
+    'Shorten the input field so there is enough room for the wizard button (e.g. date picker fields).';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][7][0] = 'long';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][7][1] = 'Set the field width to 100%.';
