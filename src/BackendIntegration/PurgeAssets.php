@@ -14,6 +14,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -21,6 +22,7 @@
 
 namespace MetaModels\BackendIntegration;
 
+use Contao\System;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\System\LogEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -46,8 +48,7 @@ class PurgeAssets
             $folder->purge();
         }
 
-        /** @var EventDispatcherInterface $dispatcher */
-        $dispatcher = $GLOBALS['container']['event-dispatcher'];
+        $dispatcher = System::getContainer()->get('event_dispatcher');
         $dispatcher->dispatch(
             ContaoEvents::SYSTEM_LOG,
             new LogEvent('Purged the MetaModels assets', __METHOD__, TL_CRON)

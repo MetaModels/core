@@ -31,9 +31,7 @@
   },
   "require": {
     "php": "^7.2",
-    "contao-community-alliance/dc-general": "^2.1.3",
-    "contao-community-alliance/dependency-container": "~2.0",
-    "contao-community-alliance/event-dispatcher": "~2.0",
+    "contao-community-alliance/dc-general": "^2.2@dev",
     "contao-community-alliance/events-contao-bindings": "~4.0",
     "contao-community-alliance/meta-palettes": "~2.0",
     "contao-community-alliance/translator": "~2.1",
@@ -43,15 +41,16 @@
     "doctrine/cache": "~1.6",
     "menatwork/contao-multicolumnwizard-bundle": "^3.4",
     "ocramius/proxy-manager": "^1.0 || ^2.1",
-    "symfony/config": "^3.3 || ^4.0",
-    "symfony/dependency-injection": "^3.3 || ^4.0",
-    "symfony/filesystem": "^3.3 || ^4.0",
-    "symfony/finder": "^3.3 || ^4.0",
-    "symfony/proxy-manager-bridge": "^3.3 || ^4.0",
+    "symfony/config": "4.4.*",
+    "symfony/dependency-injection": "4.4.*",
+    "symfony/filesystem": "4.4.*",
+    "symfony/finder": "4.4.*",
+    "symfony/proxy-manager-bridge": "4.4.*",
+    "terminal42/service-annotation-bundle": "^1.0",
     "webmozart/path-util": "~2.3"
   },
   "require-dev": {
-    "contao/manager-plugin": "^2.1",
+    "contao/manager-plugin": "^2.8",
     "phpcq/all-tasks": "^1.2"
   },
   "autoload": {

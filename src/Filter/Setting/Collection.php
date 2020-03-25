@@ -15,6 +15,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -38,14 +39,14 @@ class Collection implements ICollection
      *
      * @var array
      */
-    protected $arrData = array();
+    protected $arrData = [];
 
     /**
      * The filter settings contained.
      *
      * @var ISimple[]
      */
-    protected $arrSettings = array();
+    protected $arrSettings = [];
 
     /**
      * The attached MetaModel.
@@ -69,7 +70,7 @@ class Collection implements ICollection
      */
     public function get($key)
     {
-        return isset($this->arrData[$key]) ? $this->arrData[$key] : null;
+        return ($this->arrData[$key] ?? null);
     }
 
     /**
@@ -79,7 +80,7 @@ class Collection implements ICollection
      *
      * @return Collection
      */
-    public function setMetaModel($metaModel)
+    public function setMetaModel($metaModel): self
     {
         $this->metaModel = $metaModel;
 
@@ -111,7 +112,7 @@ class Collection implements ICollection
      *
      * @return Collection
      */
-    public function addSetting($setting)
+    public function addSetting($setting): self
     {
         $this->arrSettings[] = $setting;
 
@@ -125,7 +126,7 @@ class Collection implements ICollection
     {
         foreach ($this->arrSettings as $objSetting) {
             // If the setting is on the ignore list skip it.
-            if (in_array($objSetting->get('id'), $arrIgnoredFilter)) {
+            if (in_array($objSetting->get('id'), $arrIgnoredFilter, false)) {
                 continue;
             }
 
@@ -138,11 +139,12 @@ class Collection implements ICollection
      */
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
     {
-        $arrFilterUrl = array();
+        $filterUrl = [];
         foreach ($this->arrSettings as $objSetting) {
-            $arrFilterUrl = array_merge($arrFilterUrl, $objSetting->generateFilterUrlFrom($objItem, $objRenderSetting));
+            $filterUrl[] = $objSetting->generateFilterUrlFrom($objItem, $objRenderSetting);
         }
-        return $arrFilterUrl;
+
+        return array_merge(...$filterUrl);
     }
 
     /**
@@ -150,11 +152,12 @@ class Collection implements ICollection
      */
     public function getParameters()
     {
-        $arrParams = array();
+        $parameters = [];
         foreach ($this->arrSettings as $objSetting) {
-            $arrParams = array_merge($arrParams, $objSetting->getParameters());
+            $parameters[] = $objSetting->getParameters();
         }
-        return $arrParams;
+
+        return array_merge(...$parameters);
     }
 
     /**
@@ -162,11 +165,12 @@ class Collection implements ICollection
      */
     public function getParameterDCA()
     {
-        $arrParams = array();
+        $parameters = [];
         foreach ($this->arrSettings as $objSetting) {
-            $arrParams = array_merge($arrParams, $objSetting->getParameterDCA());
+            $parameters[] = $objSetting->getParameterDCA();
         }
-        return $arrParams;
+
+        return array_merge(...$parameters);
     }
 
     /**
@@ -174,12 +178,13 @@ class Collection implements ICollection
      */
     public function getParameterFilterNames()
     {
-        $arrParams = array();
+        $parameters = [];
 
         foreach ($this->arrSettings as $objSetting) {
-            $arrParams = array_merge($arrParams, $objSetting->getParameterFilterNames());
+            $parameters[] = $objSetting->getParameterFilterNames();
         }
-        return $arrParams;
+
+        return array_merge(...$parameters);
     }
 
     /**
@@ -190,7 +195,7 @@ class Collection implements ICollection
         $arrJumpTo,
         FrontendFilterOptions $objFrontendFilterOptions
     ) {
-        $arrParams = array();
+        $parameters = [];
 
         // Get the id with all enabled filter.
         $objFilter = $this->getMetaModel()->getEmptyFilter();
@@ -198,22 +203,20 @@ class Collection implements ICollection
 
         $arrBaseIds = $objFilter->getMatchingIds();
 
-        foreach ($this->arrSettings as $objSetting) {
-            if ($objSetting->get('skipfilteroptions')) {
+        foreach ($this->arrSettings as $setting) {
+            if ($setting->get('skipfilteroptions')) {
                 $objFilter = $this->getMetaModel()->getEmptyFilter();
-                $this->addRules($objFilter, $arrFilterUrl, array($objSetting->get('id')));
-                $arrIds = $objFilter->getMatchingIds();
+                $this->addRules($objFilter, $arrFilterUrl, array($setting->get('id')));
+                $ids = $objFilter->getMatchingIds();
             } else {
-                $arrIds = $arrBaseIds;
+                $ids = $arrBaseIds;
             }
 
-            $arrParams = array_merge(
-                $arrParams,
-                $objSetting->getParameterFilterWidgets($arrIds, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions)
-            );
+            $parameters[] =
+                $setting->getParameterFilterWidgets($ids, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions);
         }
 
-        return $arrParams;
+        return array_merge(...$parameters);
     }
 
     /**
@@ -221,12 +224,12 @@ class Collection implements ICollection
      */
     public function getReferencedAttributes()
     {
-        $arrAttributes = array();
+        $attributes = [];
 
-        foreach ($this->arrSettings as $objSetting) {
-            $arrAttributes = array_merge($arrAttributes, $objSetting->getReferencedAttributes());
+        foreach ($this->arrSettings as $setting) {
+            $attributes[] = $setting->getReferencedAttributes();
         }
 
-        return $arrAttributes;
+        return array_merge(...$attributes);
     }
 }

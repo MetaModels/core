@@ -15,6 +15,7 @@
  * @author     Henry Lamorski <henry.lamorski@mailbox.org>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -22,7 +23,9 @@
 
 namespace MetaModels\Helper;
 
+use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\Contao\InputProvider;
+use MetaModels\MetaModelsServiceContainer;
 
 /**
  * This is the class for table manipulations like creation/renaming/deleting of tables and columns.
@@ -146,12 +149,11 @@ class TableManipulation
      *
      * @return \Database the database instance.
      *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @deprecated
      */
     protected static function getDB()
     {
-        return $GLOBALS['container']['metamodels-service-container']->getDatabase();
+        return System::getContainer()->get(MetaModelsServiceContainer::class)->getDatabase();
     }
 
     /**

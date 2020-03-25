@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2018 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,11 +14,13 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2018 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
+/* filter setting */
 $GLOBALS['TL_LANG']['XPL']['customsql'][0][0] = 'Abstract';
 $GLOBALS['TL_LANG']['XPL']['customsql'][0][1] = 'Type in any SQL query that shall be executed.<br />
         It is required that this query returns at least one column named "id".
@@ -81,6 +83,7 @@ $GLOBALS['TL_LANG']['XPL']['customsql'][6][1] = '<pre>SELECT id
         </p>
         ';
 
+/* dca setting conditions */
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition'][0][0] = 'Attribute value is...';
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition'][0][1] =
     'The condition is fulfilled when the attribute value is equal to the specified value.';
@@ -98,3 +101,25 @@ $GLOBALS['TL_LANG']['XPL']['dcasetting_condition'][4][0] = 'AND';
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition'][4][1] = 'All sub condition must be fulfilled.';
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition'][5][0] = 'NOT';
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition'][5][1] = 'Invert the result of the contained condition.';
+
+/* dca dcasetting*/
+$GLOBALS['TL_LANG']['XPL']['tl_class'][0][0] = 'Set CSS classes for widget';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][0][1] =
+    'Set one or more of the following CSS classes to define the layout of the widget like "clr w50".';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][1][0] = 'w50';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][1][1] = 'Set the field width to 50% and float it (float:left).';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][2][0] = 'w50x';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][2][1] =
+    'Remove only the annoying fixed height, please use it together with "w50".';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][3][0] = 'clr';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][3][1] = 'Clear all floats.';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][4][0] = 'clx';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][4][1] =
+    'Remove only the annoying overflow hidden, please use it together with "clr".';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][5][0] = 'm12';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][5][1] = 'Add a 12 pixel top margin to the element (used for single checkboxes).';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][6][0] = 'wizard';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][6][1] =
+    'Shorten the input field so there is enough room for the wizard button (e.g. date picker fields).';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][7][0] = 'long';
+$GLOBALS['TL_LANG']['XPL']['tl_class'][7][1] = 'Set the field width to 100%.';

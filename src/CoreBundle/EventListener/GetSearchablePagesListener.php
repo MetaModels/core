@@ -16,30 +16,37 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-namespace MetaModels\BackendIntegration;
+namespace MetaModels\CoreBundle\EventListener;
 
+use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\StringUtil;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GetPageDetailsEvent;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use Doctrine\DBAL\Connection;
-use MetaModels\Attribute\IAttributeFactory;
+use Doctrine\DBAL\FetchMode;
 use MetaModels\Filter\IFilter;
+use MetaModels\Filter\Setting\ICollection as IFilterSettingCollection;
+use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\IFactory;
 use MetaModels\IMetaModel;
-use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\Item;
+use MetaModels\Render\Setting\ICollection as IRenderSettingCollection;
+use MetaModels\Render\Setting\IRenderSettingFactory;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Terminal42\ServiceAnnotationBundle\ServiceAnnotationInterface;
 
 /**
  * Class SearchablePages.
  */
-class SearchablePages
+class GetSearchablePagesListener implements ServiceAnnotationInterface
 {
     /**
      * A list with all pages found by Contao.
@@ -63,13 +70,99 @@ class SearchablePages
     private $connection;
 
     /**
+     * Factory.
+     *
+     * @var IFactory
+     */
+    private $factory;
+
+    /**
+     * Event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
+
+    /**
+     * Filter setting factory.
+     *
+     * @var IFilterSettingFactory
+     */
+    private $filterSettingFactory;
+
+    /**
+     * Render setting factory.
+     *
+     * @var IRenderSettingFactory
+     */
+    private $renderSettingFactory;
+
+    /**
      * Construct.
      *
-     * @param Connection $connection Databse connection.
+     * @param Connection               $connection           Database connection.
+     * @param IFactory                 $factory              Factory.
+     * @param EventDispatcherInterface $dispatcher           Event dispatcher.
+     * @param IFilterSettingFactory    $filterSettingFactory Filter setting factory.
+     * @param IRenderSettingFactory    $renderSettingFactory Render setting factory.
      */
-    public function __construct(Connection $connection)
+    public function __construct(
+        Connection $connection,
+        IFactory $factory,
+        EventDispatcherInterface $dispatcher,
+        IFilterSettingFactory $filterSettingFactory,
+        IRenderSettingFactory $renderSettingFactory
+    ) {
+        $this->connection           = $connection;
+        $this->factory              = $factory;
+        $this->dispatcher           = $dispatcher;
+        $this->filterSettingFactory = $filterSettingFactory;
+        $this->renderSettingFactory = $renderSettingFactory;
+    }
+
+    /**
+     * Start point for the hook getSearchablePages.
+     *
+     * @Hook("getSearchablePages")
+     *
+     * @param array       $pages       List with all pages.
+     *
+     * @param int|null    $rootPage    ID of the root page.
+     *
+     * @param bool|null   $fromSiteMap True when called from sitemap generator, null otherwise.
+     *
+     * @param string|null $language    The current language.
+     *
+     * @return array
+     *
+     * @throws \Doctrine\DBAL\DBALException When an database error occur.
+     *
+     * @see \RebuildIndex::run()
+     * @see \Automator::generateSitemap()
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function __invoke($pages, $rootPage = null, $fromSiteMap = false, $language = null)
     {
-        $this->connection = $connection;
+        // Save the pages.
+        $this->foundPages = $pages;
+
+        // Run each entry in the published config array.
+        foreach ($this->getConfigs() as $config) {
+            if (!$config['published']) {
+                continue;
+            }
+            $this->getMetaModelsPages(
+                $config,
+                $rootPage,
+                $language
+            );
+        }
+
+        asort($this->foundPages);
+
+        // Return the new list.
+        return $this->foundPages;
     }
 
     /**
@@ -79,59 +172,16 @@ class SearchablePages
      *
      * @throws \Doctrine\DBAL\DBALException When a database error occur.
      */
-    protected function getConfigs()
+    protected function getConfigs(): array
     {
         if (!count($this->configs)) {
             // Init the config from database.
             $statement = $this->connection->query('SELECT * FROM tl_metamodel_searchable_pages');
 
-            $this->configs = $statement->fetchAll(\PDO::FETCH_ASSOC);
+            $this->configs = $statement->fetchAll(FetchMode::ASSOCIATIVE);
         }
 
         return $this->configs;
-    }
-
-    /**
-     * Retrieve the service container.
-     *
-     * @return IMetaModelsServiceContainer
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    protected function getServiceContainer()
-    {
-        return $GLOBALS['container']['metamodels-service-container'];
-    }
-
-    /**
-     * Get the event Dispatcher.
-     *
-     * @return \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
-    protected function getEventDispatcher()
-    {
-        return $this->getServiceContainer()->getEventDispatcher();
-    }
-
-    /**
-     * Get the attribute Factory.
-     *
-     * @return IAttributeFactory
-     */
-    protected function getAttributeFactory()
-    {
-        return $this->getServiceContainer()->getAttributeFactory();
-    }
-
-    /**
-     * Get the MetaModels Factory.
-     *
-     * @return IFactory
-     */
-    protected function getMetaModelsFactory()
-    {
-        return $this->getServiceContainer()->getFactory();
     }
 
     /**
@@ -145,21 +195,18 @@ class SearchablePages
      *
      * @throws \RuntimeException When the MetaModels is missing.
      */
-    protected function getMetaModel($identifier, $ignoreError)
+    protected function getMetaModel($identifier, $ignoreError): ?IMetaModel
     {
-        // Get the factory.
-        $factory = $this->getMetaModelsFactory();
-
         // Id to name.
         if (is_numeric($identifier)) {
-            $identifier = $factory->translateIdToMetaModelName($identifier);
+            $identifier = $this->factory->translateIdToMetaModelName($identifier);
         }
 
         // Create mm, if yowl is true check if we have really a mm .
-        $metaModels = $factory->getMetaModel($identifier);
+        $metaModels = $this->factory->getMetaModel($identifier);
 
         // If $ignoreError is off and we have no mm throw a new exception.
-        if (!$ignoreError && $metaModels == null) {
+        if (!$ignoreError && null === $metaModels) {
             throw new \RuntimeException('Could not find the MetaModels with the name ' . $identifier);
         }
 
@@ -171,13 +218,11 @@ class SearchablePages
      *
      * @param mixed $identifier Id of the filter.
      *
-     * @return \MetaModels\Filter\Setting\ICollection The filter
+     * @return IFilterSettingCollection The filter
      */
-    protected function getFilterSettings($identifier)
+    protected function getFilterSettings($identifier): IFilterSettingCollection
     {
-        $filterFactory = $this->getServiceContainer()->getFilterFactory();
-
-        return $filterFactory->createCollection($identifier);
+        return $this->filterSettingFactory->createCollection($identifier);
     }
 
     /**
@@ -187,13 +232,16 @@ class SearchablePages
      *
      * @param int        $view       ID of the view.
      *
-     * @return \MetaModels\Render\Setting\ICollection
+     * @return IRenderSettingCollection
      */
-    protected function getView($identifier, $view)
+    protected function getView($identifier, $view): ?IRenderSettingCollection
     {
-        $metaModels = $this->getMetaModel($identifier, false);
+        $metaModel = $this->getMetaModel($identifier, false);
+        if (null === $metaModel) {
+            return null;
+        }
 
-        return $metaModels->getView($view);
+        return $this->renderSettingFactory->createCollection($metaModel, $view);
     }
 
     /**
@@ -211,11 +259,13 @@ class SearchablePages
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    protected function getLanguage($singleLanguage, $metaModels)
+    protected function getLanguage($singleLanguage, $metaModels): array
     {
         if (!empty($singleLanguage)) {
             return array($singleLanguage);
-        } elseif ($metaModels->isTranslated() && $metaModels->getAvailableLanguages()) {
+        }
+
+        if ($metaModels->isTranslated() && $metaModels->getAvailableLanguages()) {
             return $metaModels->getAvailableLanguages();
         }
 
@@ -225,31 +275,29 @@ class SearchablePages
     /**
      * Get the list of jumpTos based on the items.
      *
-     * @param IMetaModel                             $metaModels The MetaModels to be used.
+     * @param IMetaModel               $metaModels The MetaModels to be used.
      *
-     * @param IFilter                                $filter     The filter to be used.
+     * @param IFilter                  $filter     The filter to be used.
      *
-     * @param \MetaModels\Render\Setting\ICollection $view       The view to be used.
+     * @param IRenderSettingCollection $view       The view to be used.
      *
-     * @param string|null                            $rootPage   The root page id or null if there is no root page.
+     * @param string|null              $rootPage   The root page id or null if there is no root page.
      *
      * @return array A list of urls for the jumpTos
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    protected function getJumpTosFor($metaModels, $filter, $view, $rootPage = null)
+    protected function getJumpTosFor($metaModels, $filter, $view, $rootPage = null): array
     {
         $entries = array();
 
         // Get the object.
-        $items = $metaModels->findByFilter($filter);
-
         /** @var Item $item */
-        foreach ($items as $item) {
+        foreach ($metaModels->findByFilter($filter) as $item) {
             $jumpTo = $item->buildJumpToLink($view);
             $event  = new GetPageDetailsEvent($jumpTo['page']);
-            $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
+            $this->dispatcher->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
             $pageDetails = $event->getPageDetails();
 
             // If there is a root page check the context or if we have no page continue.
@@ -280,7 +328,7 @@ class SearchablePages
      *
      * @return UrlBuilder
      */
-    private function getBaseUrl($pageDetails, $path = null, $ignoreSSL = false)
+    private function getBaseUrl($pageDetails, $path = null, $ignoreSSL = false): UrlBuilder
     {
         $url = new UrlBuilder();
 
@@ -304,7 +352,7 @@ class SearchablePages
         // Get the path.
         if ($path === null) {
             $event = new GenerateFrontendUrlEvent($pageDetails, null, $pageDetails['language'], true);
-            $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
+            $this->dispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
             $fullPath[] = $event->getUrl();
         } else {
             $fullPath[] = $path;
@@ -322,13 +370,13 @@ class SearchablePages
      *
      * @return void
      */
-    protected function removeEmptyDetailPages($jumpTos)
+    protected function removeEmptyDetailPages($jumpTos): void
     {
         // Remove the detail pages.
         foreach ($jumpTos as $jumpTo) {
             // Get the page from the url.
             $event = new GetPageDetailsEvent($jumpTo['value']);
-            $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
+            $this->dispatcher->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
 
             $pageDetails = $event->getPageDetails();
 
@@ -373,7 +421,7 @@ class SearchablePages
 
         // We have to use all the preset values we want first.
         foreach ($presets as $strPresetName => $arrPreset) {
-            if (in_array($strPresetName, $presetNames)) {
+            if (in_array($strPresetName, $presetNames, true)) {
                 $processed[$strPresetName] = $arrPreset['value'];
             }
         }
@@ -396,50 +444,6 @@ class SearchablePages
     }
 
     /**
-     * Start point for the hook getSearchablePages.
-     *
-     * @param array       $pages       List with all pages.
-     *
-     * @param int|null    $rootPage    ID of the root page.
-     *
-     * @param bool|null   $fromSiteMap True when called from sitemap generator, null otherwise.
-     *
-     * @param string|null $language    The current language.
-     *
-     * @return array
-     *
-     * @throws \Doctrine\DBAL\DBALException When an database error occur.
-     *
-     * @see \RebuildIndex::run()
-     * @see \Automator::generateSitemap()
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function addPages($pages, $rootPage = null, $fromSiteMap = false, $language = null)
-    {
-        // Save the pages.
-        $this->foundPages = $pages;
-        unset($pages);
-
-        // Run each entry in the published config array.
-        foreach ($this->getConfigs() as $config) {
-            if (!$config['published']) {
-                continue;
-            }
-            $this->getMetaModelsPages(
-                $config,
-                $rootPage,
-                $language
-            );
-        }
-
-        asort($this->foundPages);
-
-        // Return the new list.
-        return $this->foundPages;
-    }
-
-    /**
      * Get a MetaModels, a filter and a renderSetting. Get all items based on the filter and build the jumpTo urls.
      *
      * @param array       $config   ID of the MetaModels.
@@ -457,7 +461,7 @@ class SearchablePages
         $config,
         $rootPage = null,
         $language = null
-    ) {
+    ): void {
         $metaModelsIdentifier = $config['pid'];
         $filterIdentifier     = $config['filter'];
         $presetParams         = StringUtil::deserialize($config['filterparams'], true);
@@ -467,6 +471,8 @@ class SearchablePages
         $metaModels         = $this->getMetaModel($metaModelsIdentifier, false);
         $availableLanguages = $this->getLanguage($language, $metaModels);
         $currentLanguage    = $GLOBALS['TL_LANGUAGE'];
+
+        $foundPages = [];
 
         foreach ($availableLanguages as $newLanguage) {
             // Change language.
@@ -494,8 +500,10 @@ class SearchablePages
             $GLOBALS['TL_LANGUAGE'] = $currentLanguage;
 
             // Merge all results.
-            $this->foundPages = array_merge($this->foundPages, $newEntries);
+            $foundPages[] = $newEntries;
         }
+
+        $this->foundPages = array_merge(...$foundPages);
 
         // Reset the language.
         $GLOBALS['TL_LANGUAGE'] = $currentLanguage;

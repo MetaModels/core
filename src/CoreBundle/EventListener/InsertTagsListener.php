@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,21 +16,26 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-namespace MetaModels\FrontendIntegration;
+namespace MetaModels\CoreBundle\EventListener;
 
+use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\StringUtil;
 use Contao\Input;
 use Contao\System;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\FetchMode;
 use MetaModels\Filter\Rules\StaticIdList;
+use MetaModels\Filter\Setting\IFilterSettingFactory;
+use MetaModels\IFactory;
 use MetaModels\IMetaModel;
-use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\ItemList;
+use MetaModels\Render\Setting\IRenderSettingFactory;
+use Terminal42\ServiceAnnotationBundle\ServiceAnnotationInterface;
 
 /**
  * This class handles the replacement of all MetaModels insert tags.
@@ -54,7 +59,7 @@ use MetaModels\ItemList;
  *
  * @codingStandardsIgnoreEnd
  */
-class InsertTags
+class InsertTagsListener implements ServiceAnnotationInterface
 {
     /**
      * Database connection.
@@ -64,61 +69,81 @@ class InsertTags
     private $connection;
 
     /**
-     * FrontendFilter constructor.
+     * The MetaModels factory.
      *
-     * @param Connection $connection Database connection.
+     * @var IFactory
      */
-    public function __construct(Connection $connection)
-    {
-        $this->connection = $connection;
-    }
+    private $factory;
 
     /**
-     * Retrieve the service container.
+     * The render setting factory.
      *
-     * @return IMetaModelsServiceContainer
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @var IRenderSettingFactory
      */
-    public function getServiceContainer()
-    {
-        return $GLOBALS['container']['metamodels-service-container'];
+    private $renderSettingFactory;
+
+    /**
+     * The filter setting factory.
+     *
+     * @var IFilterSettingFactory
+     */
+    private $filterSettingFactory;
+
+    /**
+     * InsertTagsListener constructor.
+     *
+     * @param Connection            $connection           Database connection.
+     * @param IFactory              $factory              The MetaModels factory.
+     * @param IRenderSettingFactory $renderSettingFactory The render setting factory.
+     * @param IFilterSettingFactory $filterSettingFactory The filter setting factory.
+     */
+    public function __construct(
+        Connection $connection,
+        IFactory $factory,
+        IRenderSettingFactory $renderSettingFactory,
+        IFilterSettingFactory $filterSettingFactory
+    ) {
+        $this->connection           = $connection;
+        $this->factory              = $factory;
+        $this->renderSettingFactory = $renderSettingFactory;
+        $this->filterSettingFactory = $filterSettingFactory;
     }
 
     /**
      * Evaluate an insert tag.
      *
-     * @param string $strTag The tag to evaluate.
+     * @Hook("replaceInsertTags")
+     *
+     * @param string $insertTag The tag to evaluate.
      *
      * @return bool|string
      */
-    public function replaceTags($strTag)
+    public function __invoke($insertTag)
     {
-        $arrElements = explode('::', $strTag);
+        $elements = explode('::', $insertTag);
 
         // Check if we have the mm tags.
-        if ($arrElements[0] != 'mm') {
+        if ('mm' !== $elements[0]) {
             return false;
         }
 
         try {
             // Call the fitting function.
-            switch ($arrElements[1]) {
+            switch ($elements[1]) {
                 // Count for mod or ce elements.
                 case 'total':
-                    return $this->getCount($arrElements[2], $arrElements[3]);
+                    return $this->getCount($elements[2], $elements[3]);
 
                 // Get value from an attribute.
                 case 'attribute':
-                    return $this->getAttribute($arrElements[2], $arrElements[3], $arrElements[4], $arrElements[5]);
+                    return $this->getAttribute($elements[2], $elements[3], $elements[4], $elements[5]);
 
                 // Get item.
                 case 'item':
-                    return $this->getItem($arrElements[2], $arrElements[3], $arrElements[4], $arrElements[5]);
+                    return $this->getItem($elements[2], $elements[3], $elements[4], $elements[5]);
 
                 case 'jumpTo':
-                    return $this->jumpTo($arrElements[2], $arrElements[3], $arrElements[4], $arrElements[5]);
+                    return $this->jumpTo($elements[2], $elements[3], $elements[4], $elements[5]);
 
                 default:
             }
@@ -132,17 +157,17 @@ class InsertTags
     /**
      * Get the jumpTo for a chosen value.
      *
-     * @param string|int $mixMetaModel       ID or name of MetaModels.
+     * @param string|int $mixMetaModel ID or name of MetaModels.
      *
-     * @param int        $mixDataId          ID of the data row.
+     * @param int        $mixDataId    ID of the data row.
      *
-     * @param int        $intIdRenderSetting ID of render setting.
+     * @param int        $viewId       ID of render setting.
      *
-     * @param string     $strParam           Name of parameter - Default:url|label|page|params.[attrname].
+     * @param string     $strParam     Name of parameter - Default:url|label|page|params.[attrname].
      *
      * @return boolean|string Return false when nothing was found for the requested value.
      */
-    protected function jumpTo($mixMetaModel, $mixDataId, $intIdRenderSetting, $strParam = 'url')
+    protected function jumpTo($mixMetaModel, $mixDataId, $viewId, $strParam = 'url')
     {
         // Set the param to url if empty.
         if (empty($strParam)) {
@@ -150,28 +175,24 @@ class InsertTags
         }
 
         // Get the MetaModel. Return if we can not find one.
-        $objMetaModel = $this->loadMetaModel($mixMetaModel);
-        if ($objMetaModel == null) {
+        $metaModel = $this->loadMetaModel($mixMetaModel);
+        if (null === $metaModel) {
             return false;
         }
 
         // Get the render setting.
-        $objRenderSettings = $this
-            ->getServiceContainer()
-            ->getRenderSettingFactory()
-            ->createCollection($objMetaModel, $intIdRenderSetting);
-        if ($objRenderSettings == null) {
+        if (null === $renderSettings = $this->renderSettingFactory->createCollection($metaModel, $viewId)) {
             return false;
         }
 
         // Get the data row.
-        $objItem = $objMetaModel->findById($mixDataId);
-        if ($objItem == null) {
+        $item = $metaModel->findById($mixDataId);
+        if (null === $item) {
             return false;
         }
 
         // Render the item and check if we have a jump to.
-        $arrRenderedItem = $objItem->parseValue('text', $objRenderSettings);
+        $arrRenderedItem = $item->parseValue('text', $renderSettings);
         if (!isset($arrRenderedItem['jumpTo'])) {
             return false;
         }
@@ -196,21 +217,21 @@ class InsertTags
     /**
      * Get an item.
      *
-     * @param string|int $metaModelIdOrName  ID or name of MetaModels.
+     * @param string|int $metaModelIdOrName ID or name of MetaModels.
      *
-     * @param string|int $mixDataId          ID of the data row.
+     * @param string|int $mixDataId         ID of the data row.
      *
-     * @param int        $intIdRenderSetting ID of render setting.
+     * @param int        $viewId            ID of render setting.
      *
-     * @param string     $strOutput          Name of output. Default:null (fallback to htmlfynf)|text|html5|xhtml|...
+     * @param string     $strOutput         Name of output. Default:null (fallback to htmlfynf)|text|html5|xhtml|...
      *
      * @return boolean|string Return false when nothing was found or return the value.
      */
-    protected function getItem($metaModelIdOrName, $mixDataId, $intIdRenderSetting, $strOutput = null)
+    protected function getItem($metaModelIdOrName, $mixDataId, $viewId, $strOutput = null)
     {
         // Get the MetaModel. Return if we can not find one.
-        $objMetaModel = $this->loadMetaModel($metaModelIdOrName);
-        if ($objMetaModel == null) {
+        $metaModel = $this->loadMetaModel($metaModelIdOrName);
+        if (null === $metaModel) {
             return false;
         }
 
@@ -221,8 +242,7 @@ class InsertTags
 
         $objMetaModelList = new ItemList();
         $objMetaModelList
-            ->setServiceContainer($this->getServiceContainer())
-            ->setMetaModel($objMetaModel->get('id'), $intIdRenderSetting)
+            ->setMetaModel($metaModel->get('id'), $viewId)
             ->overrideOutputFormat($strOutput);
 
         // Handle a set of ids.
@@ -230,7 +250,7 @@ class InsertTags
 
         // Check each id if published.
         foreach ($arrIds as $intKey => $intId) {
-            if (!$this->isPublishedItem($objMetaModel, $intId)) {
+            if (!$this->isPublishedItem($metaModel, $intId)) {
                 unset($arrIds[$intKey]);
             }
         }
@@ -313,8 +333,9 @@ class InsertTags
         }
 
         // Check if we have data.
-        if ($objMetaModelResult != null) {
-            return $this->getCountFor($objMetaModelResult->metamodel, $objMetaModelResult->metamodel_filtering);
+        if (null !== $objMetaModelResult) {
+            return ($this->getCountFor($objMetaModelResult->metamodel, $objMetaModelResult->metamodel_filtering)
+                    ?? false);
         }
 
         return false;
@@ -327,18 +348,18 @@ class InsertTags
      *
      * @return IMetaModel|null
      */
-    protected function loadMetaModel($nameOrId)
+    protected function loadMetaModel($nameOrId): ?IMetaModel
     {
         if (is_numeric($nameOrId)) {
             // ID.
-            $tableName = $this->getServiceContainer()->getFactory()->translateIdToMetaModelName($nameOrId);
+            $tableName = $this->factory->translateIdToMetaModelName($nameOrId);
         } elseif (is_string($nameOrId)) {
             // Name.
             $tableName = $nameOrId;
         }
 
         if (isset($tableName)) {
-            return $this->getServiceContainer()->getFactory()->getMetaModel($tableName);
+            return $this->factory->getMetaModel($tableName);
         }
 
         // Unknown.
@@ -375,7 +396,7 @@ class InsertTags
             return null;
         }
 
-        return $statement->fetch(\PDO::FETCH_OBJ);
+        return $statement->fetch(FetchMode::STANDARD_OBJECT);
     }
 
     /**
@@ -385,18 +406,18 @@ class InsertTags
      *
      * @param int $intFilterId    ID of the filter.
      *
-     * @return boolean|int False for no data or integer for the count result.
+     * @return boolean|null Null for no data or integer for the count result.
      */
-    protected function getCountFor($intMetaModelId, $intFilterId)
+    protected function getCountFor($intMetaModelId, $intFilterId): ?bool
     {
         $metaModel = $this->loadMetaModel($intMetaModelId);
-        if ($metaModel == null) {
-            return false;
+        if (null === $metaModel) {
+            return null;
         }
 
         $objFilter = $metaModel->getEmptyFilter();
         if ($intFilterId) {
-            $collection = $this->getServiceContainer()->getFilterFactory()->createCollection($intFilterId);
+            $collection = $this->filterSettingFactory->createCollection($intFilterId);
             $values     = [];
 
             foreach ($collection->getParameters() as $key) {
@@ -412,27 +433,27 @@ class InsertTags
     /**
      * Check if the item is published.
      *
-     * @param IMetaModel $objMetaModel Current metamodels.
-     * @param int        $intItemId    Id of the item.
+     * @param IMetaModel $metaModel Current metamodels.
+     * @param int        $intItemId Id of the item.
      *
      * @return boolean True => Published | False => Not published
      *
      * @throws \Doctrine\DBAL\DBALException When a database error occur.
      */
-    protected function isPublishedItem($objMetaModel, $intItemId)
+    protected function isPublishedItem($metaModel, $intItemId): bool
     {
         // Check publish state of an item.
         $statement = $this->connection
             ->prepare('SELECT colname FROM tl_metamodel_attribute WHERE pid=? AND check_publish=1 LIMIT 0,1');
 
-        $statement->bindValue(1, $objMetaModel->get('id'));
+        $statement->bindValue(1, $metaModel->get('id'));
         $statement->execute();
 
         if ($statement->rowCount() > 0) {
-            $objAttrCheckPublish = $statement->fetch(\PDO::FETCH_OBJ);
-            $objItem             = $objMetaModel->findById($intItemId);
+            $checkPublish = $statement->fetch(FetchMode::STANDARD_OBJECT);
+            $item         = $metaModel->findById($intItemId);
 
-            if (!$objItem->get($objAttrCheckPublish->colname)) {
+            if (null === $item || !$item->get($checkPublish->colname)) {
                 return false;
             }
         }

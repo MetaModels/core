@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,113 +17,89 @@
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-$GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
-(
-    'config'       => array
-    (
+$GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = [
+    'config'       => [
         'dataContainer'    => 'General',
         'ptable'           => 'tl_metamodel',
         'switchToEdit'     => false,
         'enableVersioning' => false,
-        'sql'              => array
-        (
-            'keys' => array
-            (
+        'sql'              => [
+            'keys' => [
                 'id'  => 'primary',
                 'pid' => 'index',
-            ),
-        )
-    ),
-    'dca_config'   => array
-    (
-        'data_provider'  => array
-        (
-            'parent' => array
-            (
+            ],
+        ]
+    ],
+    'dca_config'   => [
+        'data_provider'  => [
+            'parent' => [
                 'source' => 'tl_metamodel'
-            )
-        ),
-        'childCondition' => array
-        (
-            array
-            (
+            ]
+        ],
+        'childCondition' => [
+            [
                 'from'    => 'tl_metamodel',
                 'to'      => 'tl_metamodel_searchable_pages',
-                'setOn'   => array
-                (
-                    array
-                    (
+                'setOn'   => [
+                    [
                         'to_field'   => 'pid',
                         'from_field' => 'id',
-                    ),
-                ),
-                'filter'  => array
-                (
-                    array
-                    (
+                    ],
+                ],
+                'filter'  => [
+                    [
                         'local'     => 'pid',
                         'remote'    => 'id',
                         'operation' => '=',
-                    ),
-                ),
-                'inverse' => array
-                (
-                    array
-                    (
+                    ],
+                ],
+                'inverse' => [
+                    [
                         'local'     => 'pid',
                         'remote'    => 'id',
                         'operation' => '=',
-                    ),
-                )
-            )
-        ),
-    ),
-    'list'         => array
-    (
-        'sorting'           => array
-        (
+                    ],
+                ]
+            ]
+        ],
+    ],
+    'list'         => [
+        'sorting'           => [
             'mode'         => 4,
-            'fields'       => array('name'),
+            'fields'       => ['name'],
             'panelLayout'  => 'filter,limit',
-            'headerFields' => array('name'),
+            'headerFields' => ['name'],
             'flag'         => 1,
-        ),
-        'label'             => array
-        (
-            'fields' => array('name'),
+        ],
+        'label'             => [
+            'fields' => ['name'],
             'format' => '%s',
-        ),
-        'global_operations' => array
-        (
-            'all' => array
-            (
+        ],
+        'global_operations' => [
+            'all' => [
                 'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
                 'href'       => 'act=select',
                 'class'      => 'header_edit_all',
                 'attributes' => 'onclick="Backend.getScrollOffset();"'
-            ),
-        ),
-        'operations'        => array
-        (
-            'edit'   => array
-            (
+            ],
+        ],
+        'operations'        => [
+            'edit'   => [
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['edit'],
                 'href'  => 'act=edit',
                 'icon'  => 'edit.svg',
-            ),
-            'copy'   => array
-            (
+            ],
+            'copy'   => [
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['copy'],
                 'href'  => 'act=copy',
                 'icon'  => 'copy.svg',
-            ),
-            'delete' => array
-            (
+            ],
+            'delete' => [
                 'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['delete'],
                 'href'       => 'act=delete',
                 'icon'       => 'delete.svg',
@@ -131,113 +107,95 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = array
                     'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
                     $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
                 )
-            ),
-            'show'   => array
-            (
+            ],
+            'show'   => [
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['show'],
                 'href'  => 'act=show',
                 'icon'  => 'show.svg'
-            ),
-            'toggle' => array
-            (
+            ],
+            'toggle' => [
                 'label'          => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['toggle'],
-                'icon'           => 'visible.gif',
+                'icon'           => 'visible.svg',
                 'toggleProperty' => 'published'
-            )
-        )
-    ),
-    'metapalettes' => array
-    (
-        'default' => array
-        (
-            'title'   => array
-            (
+            ]
+        ]
+    ],
+    'metapalettes' => [
+        'default' => [
+            'title'   => [
                 'name',
-            ),
-            'general' => array
-            (
+            ],
+            'general' => [
+                'rendersetting',
                 'filter',
                 'filterparams',
-                'rendersetting',
-            ),
-        )
-    ),
-    'fields'       => array
-    (
-        'id'            => array
-        (
+            ],
+        ]
+    ],
+    'fields'       => [
+        'id'            => [
             'sql' => 'int(10) unsigned NOT NULL auto_increment'
-        ),
-        'pid'           => array
-        (
+        ],
+        'pid'           =>
+            [
+                'sql' => "int(10) unsigned NOT NULL default '0'"
+            ],
+        'tstamp'        => [
             'sql' => "int(10) unsigned NOT NULL default '0'"
-        ),
-        'tstamp'        => array
-        (
-            'sql' => "int(10) unsigned NOT NULL default '0'"
-        ),
-        'name'          => array
-        (
+        ],
+        'name'          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['name'],
             'exclude'   => true,
             'search'    => true,
             'inputType' => 'text',
-            'eval'      => array
-            (
+            'eval'      => [
                 'mandatory' => true,
                 'maxlength' => 255,
                 'tl_class'  => 'w50'
-            ),
+            ],
             'sql'       => "varchar(255) NOT NULL default ''"
-        ),
-        'filter'        => array
-        (
+        ],
+        'filter'        => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['filter'],
             'exclude'   => true,
             'inputType' => 'select',
-            'eval'      => array
-            (
+            'eval'      => [
                 'includeBlankOption' => true,
                 'chosen'             => true,
-                'submitOnChange'     => true
-            ),
+                'submitOnChange'     => true,
+                'tl_class'           => 'clr w50',
+            ],
             'sql'       => "int(10) unsigned NOT NULL default '0'"
-        ),
-        'filterparams'  => array
-        (
+        ],
+        'filterparams'  => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['filterparams'],
             'exclude'   => true,
             'inputType' => 'mm_subdca',
-            'eval'      => array
-            (
+            'eval'      => [
                 'tl_class'   => 'clr m12',
-                'flagfields' => array
-                (
-                    'use_get' => array
-                    (
+                'flagfields' => [
+                    'use_get' => [
                         'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['filterparams'],
                         'inputType' => 'checkbox'
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
             'sql'       => 'longblob NULL'
-        ),
-        'rendersetting' => array
-        (
+        ],
+        'rendersetting' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['rendersetting'],
             'exclude'   => true,
             'inputType' => 'select',
-            'eval'      => array
-            (
+            'eval'      => [
                 'includeBlankOption' => true,
                 'mandatory'          => true,
-                'chosen'             => true
-            ),
+                'chosen'             => true,
+                'tl_class'           => 'w50',
+            ],
             'sql'       => "int(10) unsigned NOT NULL default '0'"
-        ),
-        'published'     => array
-        (
+        ],
+        'published'     => [
             'sql' => "char(1) NOT NULL default ''"
-        )
-    )
-);
+        ]
+    ]
+];

@@ -16,6 +16,7 @@
  * @author     David Maack <david.maack@arcor.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -115,6 +116,7 @@ class Collection implements ICollection
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
+            $this->dispatcher = System::getContainer()->get('event_dispatcher');
         }
         if (null === $this->filterFactory) {
             // @codingStandardsIgnoreStart
@@ -124,6 +126,7 @@ class Collection implements ICollection
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
+            $this->filterFactory = System::getContainer()->get('metamodels.filter_setting_factory');
         }
         if (null === $filterUrlBuilder) {
             // @codingStandardsIgnoreStart
@@ -165,7 +168,7 @@ class Collection implements ICollection
      */
     public function getSetting($strAttributeName)
     {
-        return isset($this->arrSettings[$strAttributeName]) ? $this->arrSettings[$strAttributeName] : null;
+        return ($this->arrSettings[$strAttributeName] ?? null);
     }
 
     /**
@@ -202,13 +205,9 @@ class Collection implements ICollection
     {
         $tableName = $this->metaModel->getTableName();
 
-        if (isset($GLOBALS['TL_LANG']['MSC'][$tableName][$this->get('id')]['details'])) {
-            return $GLOBALS['TL_LANG']['MSC'][$tableName][$this->get('id')]['details'];
-        } elseif (isset($GLOBALS['TL_LANG']['MSC'][$tableName]['details'])) {
-            return $GLOBALS['TL_LANG']['MSC'][$tableName]['details'];
-        }
-
-        return $GLOBALS['TL_LANG']['MSC']['details'];
+        return $GLOBALS['TL_LANG']['MSC'][$tableName][$this->get('id')]['details'] ??
+               $GLOBALS['TL_LANG']['MSC'][$tableName]['details'] ??
+               $GLOBALS['TL_LANG']['MSC']['details'];
     }
 
     /**
@@ -218,13 +217,14 @@ class Collection implements ICollection
      *
      * @return array
      */
-    private function getPageDetails($pageId)
+    private function getPageDetails($pageId): array
     {
         if (empty($pageId)) {
-            return array();
+            return [];
         }
+
         $event = new GetPageDetailsEvent($pageId);
-        $this->getEventDispatcher()->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
+        $this->dispatcher->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
 
         return $event->getPageDetails();
     }
@@ -234,36 +234,35 @@ class Collection implements ICollection
      *
      * @return array
      */
-    private function determineJumpToInformation()
+    private function determineJumpToInformation(): array
     {
         // Get the right jumpto.
         $translated       = $this->metaModel->isTranslated();
         $desiredLanguage  = $this->metaModel->getActiveLanguage();
         $fallbackLanguage = $this->metaModel->getFallbackLanguage();
+        $cacheKey         = $desiredLanguage . '.' . $fallbackLanguage;
         $jumpToPageId     = '';
         $filterSettingId  = '';
 
-        if (!isset($this->jumpToCache[$desiredLanguage . '.' . $fallbackLanguage])) {
+        if (!isset($this->jumpToCache[$cacheKey])) {
             foreach ((array) $this->get('jumpTo') as $jumpTo) {
                 $langCode = $jumpTo['langcode'];
                 // If either desired language or fallback, keep the result.
-                if (!$translated || ($langCode == $desiredLanguage) || ($langCode == $fallbackLanguage)) {
+                if (!$translated || ($langCode === $desiredLanguage) || ($langCode === $fallbackLanguage)) {
                     $jumpToPageId    = $jumpTo['value'];
                     $filterSettingId = $jumpTo['filter'];
                     // If the desired language, break.
                     // Otherwise try to get the desired one until all have been evaluated.
-                    if ($desiredLanguage == $jumpTo['langcode']) {
+                    if ($desiredLanguage === $jumpTo['langcode']) {
                         break;
                     }
                 }
             }
 
             $pageDetails   = $this->getPageDetails($jumpToPageId);
-            $filterSetting = $filterSettingId
-                ? $this->getFilterFactory()->createCollection($filterSettingId)
-                : null;
+            $filterSetting = $filterSettingId ? $this->filterFactory->createCollection($filterSettingId) : null;
 
-            $this->jumpToCache[$desiredLanguage . '.' . $fallbackLanguage] = array(
+            $this->jumpToCache[$cacheKey] = [
                 'page'          => $jumpToPageId,
                 'pageDetails'   => $pageDetails,
                 'filter'        => $filterSettingId,
@@ -271,7 +270,7 @@ class Collection implements ICollection
                 // Mask out the "all languages" language key (See #687).
                 'language'      => $pageDetails['language'],
                 'label'         => $this->getJumpToLabel()
-            );
+            ];
         }
 
         return $this->jumpToCache[$desiredLanguage . '.' . $fallbackLanguage];
@@ -313,33 +312,5 @@ class Collection implements ICollection
         $result['url'] = $this->filterUrlBuilder->generate($filterUrl);
 
         return $result;
-    }
-
-    /**
-     * Get the event dispatcher.
-     *
-     * @return EventDispatcherInterface
-     */
-    private function getEventDispatcher()
-    {
-        if ($this->dispatcher) {
-            return $this->dispatcher;
-        }
-
-        return $this->metaModel->getServiceContainer()->getEventDispatcher();
-    }
-
-    /**
-     * Get the filter setting factory.
-     *
-     * @return IFilterSettingFactory
-     */
-    private function getFilterFactory()
-    {
-        if ($this->filterFactory) {
-            return $this->filterFactory;
-        }
-
-        return $this->metaModel->getServiceContainer()->getFilterFactory();
     }
 }

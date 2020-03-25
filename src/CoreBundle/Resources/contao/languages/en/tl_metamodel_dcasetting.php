@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2018 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2018 The MetaModels team.
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -35,8 +35,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template'][1]                =
     'Valid template files start with "mm_&lt;type&gt;" where the type name is put for &lt;type&gt;';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class'][0]                = 'Backend class';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class'][1]                =
-    'Here you can set backend class(es). Use the style picker for a better experience.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['stylepicker']                = 'Style picker';
+    'Here you can set backend class(es). Open the wizard for an overview of the classes.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide'][0]              = 'Collapse section';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide'][1]              = 'Collapse the section by default.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendtitle'][0]             = 'Legend title';
@@ -94,7 +93,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['submitOnChange'][1]          =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']               = 'Type';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['presentation_legend']        = 'Widget appearance related options';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['functions_legend']           = 'Functionality related options';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']            = 'Backend listing, filtering and sorting';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']            = 'Filtering and searching in the backend list';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['backend_legend']             = 'Backend';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['config_legend']              = 'Configuration';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']            = 'Advanced';
