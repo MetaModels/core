@@ -89,7 +89,6 @@ $GLOBALS['TL_LANG']['MSC']['panelLayout']['filter'][0]                          
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['filter'][1]                              = '';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['limit'][0]                               = 'Limit';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['limit'][1]                               = '';
-$GLOBALS['TL_LANG']['MSC']['metamodelspicker']                                      = 'MetaModels Picker';
 $GLOBALS['TL_LANG']['MSC']['metamodelspicker_noItems']                              = 'No items found.';
 $GLOBALS['TL_LANG']['ERR']['no_attribute_extension']                                =
     'Please install at least one attribute extension! MetaModels without attributes do not make sense.';

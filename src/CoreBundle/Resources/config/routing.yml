@@ -6,10 +6,6 @@ metamodels.support_screen:
     path: /contao/metamodels/support
     defaults: { _controller: metamodels.controller.support_screen, _scope: backend, _token_check: true }
 
-metamodels.picker:
-    path: /contao/metamodels/picker
-    defaults: { _controller: metamodels.controller.picker, _scope: backend, _token_check: true }
-
 metamodels.rendersetting.add_all:
     path: /contao/metamodels/rendersetting/add-all/{metaModel}/{renderSetting}
     defaults: { _controller: metamodels.controller.rendersetting.add_all, _scope: backend, _token_check: true }

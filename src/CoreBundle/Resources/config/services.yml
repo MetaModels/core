@@ -134,14 +134,6 @@ services:
             - "%metamodels.resource_dir%/data/contributors-transifex.json"
         tags: ['controller.service_arguments']
 
-    metamodels.controller.edit:
-        class: MetaModels\CoreBundle\Controller\Backend\MetaModelDcgController
-        arguments:
-            - "@twig"
-            - "@event_dispatcher"
-            - "@cca.translator.contao_translator"
-        tags: ['controller.service_arguments']
-
     metamodels.view_combination.builder:
         class: MetaModels\ViewCombination\ViewCombinationBuilder
         arguments:
