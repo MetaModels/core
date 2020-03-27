@@ -51,7 +51,7 @@
     "webmozart/path-util": "~2.3"
   },
   "require-dev": {
-    "contao/manager-plugin": "^2.1",
+    "contao/manager-plugin": "^2.8",
     "phpcq/all-tasks": "^1.2"
   },
   "autoload": {
