@@ -46,7 +46,7 @@
     "symfony/config": "^3.3 || ^4.0",
     "symfony/dependency-injection": "^3.3 || ^4.0",
     "symfony/filesystem": "^3.3 || ^4.0",
-    "symfony/finder": "^3.3 || ^4.0",
+    "symfony/finder": "^3.4.38",
     "symfony/proxy-manager-bridge": "^3.3 || ^4.0",
     "webmozart/path-util": "~2.3"
   },
