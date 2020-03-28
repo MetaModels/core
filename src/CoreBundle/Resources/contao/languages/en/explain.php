@@ -20,11 +20,12 @@
  * @filesource
  */
 
-/* filter setting */
+/* custom sql filter setting */
 $GLOBALS['TL_LANG']['XPL']['customsql'][0][0] = 'Abstract';
 $GLOBALS['TL_LANG']['XPL']['customsql'][0][1] = 'Type in any SQL query that shall be executed.<br />
-        It is required that this query returns at least one column named "id".
-        ';
+        It is required that this query returns at least one column named "id".<br />
+        It is not possible to pass calculations from the SQL to the list.<br />
+        The declaration of column names e.g. in sub selects should be entered with backticks ` e.g. `name`.';
 $GLOBALS['TL_LANG']['XPL']['customsql'][1][0] = 'Example 1<br />plain query';
 $GLOBALS['TL_LANG']['XPL']['customsql'][1][1] = '<pre>SELECT id FROM mm_mymetamodel WHERE page_id=1</pre>
         This selects all IDs from the table <em>mm_mymetamodel</em> that have the value <em>page_id=1</em>
