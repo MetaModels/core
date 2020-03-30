@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Frank Mueller <frank.mueller@linking-you.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -272,12 +272,12 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     public function searchForInLanguages($strPattern, $arrLanguages = array())
     {
         $optionizer = $this->getOptionizer();
-        $procedure  = $optionizer['value'] . ' LIKE :pattern';
+        $procedure  = 't.' . $optionizer['value'] . ' LIKE :pattern';
         $strPattern = str_replace(array('*', '?'), array('%', '_'), $strPattern);
 
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select('DISTINCT item_id')
-            ->from($this->getValueTable())
+            ->from($this->getValueTable(), 't')
             ->andWhere($procedure)
             ->setParameter('pattern', $strPattern);
 
@@ -368,11 +368,11 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
             $this->buildWhere($queryBuilder, $intId, $strLangCode);
 
             if ($arrValues[$intId]['value'] != '') {
-                $queryBuilder->update($this->getValueTable());
+                $queryBuilder->update($this->getValueTable(), 't');
 
                 foreach ($this->getSetValues($arrValues[$intId], $intId, $strLangCode) as $name => $value) {
                     $queryBuilder
-                        ->set($name, ':' . $name)
+                        ->set('t.' . $name, ':' . $name)
                         ->setParameter($name, $value);
                 }
             } else {

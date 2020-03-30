@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,7 +21,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -387,9 +387,9 @@ class MetaModel implements IMetaModel
         $builder = $this->getConnection()->createQueryBuilder();
         $query   = $builder
             ->select('*')
-            ->from($this->getTableName())
+            ->from($this->getTableName(), 't')
             ->where($builder->expr()->in('id', ':values'))
-            ->setParameter('values', $arrIds, Connection::PARAM_STR_ARRAY)
+            ->setParameter('t.values', $arrIds, Connection::PARAM_STR_ARRAY)
             ->orderBy('FIELD(id, :values)')
             ->execute();
 
@@ -804,9 +804,9 @@ class MetaModel implements IMetaModel
 
                 $arrSortedFilteredIds = $builder
                     ->select('id')
-                    ->from($this->getTableName())
+                    ->from($this->getTableName(), 't')
                     ->where($builder->expr()->in('id', ':values'))
-                    ->setParameter('values', $arrFilteredIds, Connection::PARAM_STR_ARRAY)
+                    ->setParameter('t.values', $arrFilteredIds, Connection::PARAM_STR_ARRAY)
                     ->orderBy($strSortBy, $strSortOrder)
                     ->execute()
                     ->fetchAll(\PDO::FETCH_COLUMN);
@@ -840,9 +840,9 @@ class MetaModel implements IMetaModel
 
         return $builder
             ->select('COUNT(id)')
-            ->from($this->getTableName())
+            ->from($this->getTableName(), 't')
             ->where($builder->expr()->in('id', ':values'))
-            ->setParameter('values', $arrFilteredIds, Connection::PARAM_STR_ARRAY)
+            ->setParameter('t.values', $arrFilteredIds, Connection::PARAM_STR_ARRAY)
             ->execute()
             ->fetch(\PDO::FETCH_COLUMN);
     }
