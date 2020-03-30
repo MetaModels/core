@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -137,12 +137,15 @@ class BaseSimple extends Base implements ISimple
     {
         $strTable   = $this->getMetaModel()->getTableName();
         $strColName = $this->getColName();
-        foreach ($arrValues as $intId => $varData) {
-            if (is_array($varData)) {
-                $varData = serialize($varData);
-            }
 
-            $this->connection->update($strTable, [$strColName => $varData], ['id' => $intId]);
+        foreach ($arrValues as $intId => $varData) {
+            $statement = $this->connection->createQueryBuilder()
+                ->update($strTable, 't')
+                ->where('t.id', ':id')
+                ->set('t.' . $strColName, ':' . $strColName)
+                ->setParameter($strColName, is_array($varData) ? serialize($varData) : $varData)
+                ->setParameter('id', $intId)
+                ->execute();
         }
     }
 
@@ -198,10 +201,10 @@ class BaseSimple extends Base implements ISimple
         // Base implementation, do a simple sorting on given column.
         $idList = $this->connection->createQueryBuilder()
             ->select('id')
-            ->from($this->getMetaModel()->getTableName())
+            ->from($this->getMetaModel()->getTableName(), 't')
             ->where('id IN (:ids)')
             ->setParameter('ids', $idList, Connection::PARAM_STR_ARRAY)
-            ->orderBy($this->getColName(), $strDirection)
+            ->orderBy('t.' . $this->getColName(), $strDirection)
             ->execute()
             ->fetchAll(\PDO::FETCH_COLUMN, 'id');
 
@@ -222,15 +225,13 @@ class BaseSimple extends Base implements ISimple
     {
         // Base implementation, do a simple search on given column.
         $strPattern = str_replace(array('*', '?'), array('%', '_'), $strPattern);
-        $arrIds     = $this->connection->createQueryBuilder()
+        return $this->connection->createQueryBuilder()
             ->select('id')
-            ->from($this->getMetaModel()->getTableName())
-            ->where($this->getColName() . ' LIKE :pattern')
+            ->from($this->getMetaModel()->getTableName(), 't')
+            ->where('t.' . $this->getColName() . ' LIKE :pattern')
             ->setParameter('pattern', $strPattern)
             ->execute()
             ->fetchAll(\PDO::FETCH_COLUMN, 'id');
-
-        return $arrIds;
     }
 
     /**
