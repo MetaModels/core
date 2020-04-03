@@ -47,6 +47,32 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = [
                 'sort_column'  => 'sorting'
             ]
         ],
+        'childCondition' => [
+            [
+                'from'    => 'tl_metamodel',
+                'to'      => 'tl_metamodel_dca_combine',
+                'setOn'   => [
+                    [
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
+                    ],
+                ],
+                'filter'  => [
+                    [
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ],
+                ],
+                'inverse' => [
+                    [
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ],
+                ]
+            ],
+        ],
     ],
     'palettes'   => [
         'default' => 'rows'
