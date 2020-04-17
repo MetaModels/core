@@ -200,9 +200,9 @@ class BaseSimple extends Base implements ISimple
     {
         // Base implementation, do a simple sorting on given column.
         $idList = $this->connection->createQueryBuilder()
-            ->select('id')
+            ->select('t.id')
             ->from($this->getMetaModel()->getTableName(), 't')
-            ->where('id IN (:ids)')
+            ->where('t.id IN (:ids)')
             ->setParameter('ids', $idList, Connection::PARAM_STR_ARRAY)
             ->orderBy('t.' . $this->getColName(), $strDirection)
             ->execute()
@@ -226,7 +226,7 @@ class BaseSimple extends Base implements ISimple
         // Base implementation, do a simple search on given column.
         $strPattern = str_replace(array('*', '?'), array('%', '_'), $strPattern);
         return $this->connection->createQueryBuilder()
-            ->select('id')
+            ->select('t.id')
             ->from($this->getMetaModel()->getTableName(), 't')
             ->where('t.' . $this->getColName() . ' LIKE :pattern')
             ->setParameter('pattern', $strPattern)

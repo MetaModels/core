@@ -175,7 +175,7 @@ class FilterBuilder
             // System column?
             $filter->addFilterRule(new SimpleQuery(
                 sprintf(
-                    'SELECT id FROM %s WHERE %s %s?',
+                    'SELECT t.id FROM `%s` AS t WHERE t.%s %s?',
                     $this->getMetaModel()->getTableName(),
                     $operation['property'],
                     $operation['operation']
@@ -254,7 +254,7 @@ class FilterBuilder
             // System column?
             $filter->addFilterRule(new SimpleQuery(
                 sprintf(
-                    'SELECT id FROM `%s` WHERE `%s` LIKE ?',
+                    'SELECT t.id FROM `%s` AS t WHERE t.%s LIKE ?',
                     $this->getMetaModel()->getTableName(),
                     $operation['property']
                 ),
