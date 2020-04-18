@@ -138,7 +138,7 @@ class TemplateList
         $themes       = $this
             ->database
             ->createQueryBuilder()
-            ->select('t.id, t.name, sguiHbdjvLt.templates')
+            ->select('t.id, t.name, t.templates')
             ->from('tl_theme', 't')
             ->execute()
             ->fetchAll(\PDO::FETCH_ASSOC);
