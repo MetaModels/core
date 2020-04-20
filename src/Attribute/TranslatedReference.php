@@ -276,14 +276,14 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         $strPattern = str_replace(array('*', '?'), array('%', '_'), $strPattern);
 
         $queryBuilder = $this->connection->createQueryBuilder()
-            ->select('DISTINCT item_id')
+            ->select('DISTINCT t.item_id')
             ->from($this->getValueTable(), 't')
             ->andWhere($procedure)
             ->setParameter('pattern', $strPattern);
 
         $this->buildWhere($queryBuilder, null, $arrLanguages);
 
-        $filterRule = SimpleQuery::createFromQueryBuilder($queryBuilder, 'item_id');
+        $filterRule = SimpleQuery::createFromQueryBuilder($queryBuilder, 't.item_id');
 
         return $filterRule->getMatchingIds();
     }
@@ -408,8 +408,8 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         $queryBuilder = $this
             ->connection
             ->createQueryBuilder()
-            ->select('item_id')
-            ->from($this->getValueTable());
+            ->select('t.item_id')
+            ->from($this->getValueTable(), 't');
         $this->buildWhere($queryBuilder, $idList, $langCode);
 
         $statement = $queryBuilder->execute();

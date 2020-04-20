@@ -347,8 +347,8 @@ class MetaModel implements IMetaModel
         // Either no filter object or all ids allowed => return all ids.
         // if no id filter is passed, we assume all ids are provided.
         return $this->getConnection()->createQueryBuilder()
-            ->select('id')
-            ->from($this->getTableName())
+            ->select('t.id')
+            ->from($this->getTableName(), 't')
             ->execute()
             ->fetchAll(\PDO::FETCH_COLUMN);
     }
@@ -386,10 +386,10 @@ class MetaModel implements IMetaModel
         /** @var QueryBuilder $builder */
         $builder = $this->getConnection()->createQueryBuilder();
         $query   = $builder
-            ->select('*')
+            ->select('t.*')
             ->from($this->getTableName(), 't')
-            ->where($builder->expr()->in('id', ':values'))
-            ->setParameter('t.values', $arrIds, Connection::PARAM_STR_ARRAY)
+            ->where($builder->expr()->in('t.id', ':values'))
+            ->setParameter('values', $arrIds, Connection::PARAM_STR_ARRAY)
             ->orderBy('FIELD(id, :values)')
             ->execute();
 
@@ -803,10 +803,10 @@ class MetaModel implements IMetaModel
                 $builder = $this->getConnection()->createQueryBuilder();
 
                 $arrSortedFilteredIds = $builder
-                    ->select('id')
+                    ->select('t.id')
                     ->from($this->getTableName(), 't')
-                    ->where($builder->expr()->in('id', ':values'))
-                    ->setParameter('t.values', $arrFilteredIds, Connection::PARAM_STR_ARRAY)
+                    ->where($builder->expr()->in('t.id', ':values'))
+                    ->setParameter('values', $arrFilteredIds, Connection::PARAM_STR_ARRAY)
                     ->orderBy($strSortBy, $strSortOrder)
                     ->execute()
                     ->fetchAll(\PDO::FETCH_COLUMN);
@@ -839,10 +839,10 @@ class MetaModel implements IMetaModel
         $builder = $this->getConnection()->createQueryBuilder();
 
         return $builder
-            ->select('COUNT(id)')
+            ->select('COUNT(t.id)')
             ->from($this->getTableName(), 't')
-            ->where($builder->expr()->in('id', ':values'))
-            ->setParameter('t.values', $arrFilteredIds, Connection::PARAM_STR_ARRAY)
+            ->where($builder->expr()->in('t.id', ':values'))
+            ->setParameter('values', $arrFilteredIds, Connection::PARAM_STR_ARRAY)
             ->execute()
             ->fetch(\PDO::FETCH_COLUMN);
     }
@@ -857,9 +857,9 @@ class MetaModel implements IMetaModel
         $idList = $this
             ->getConnection()
             ->createQueryBuilder()
-            ->select('id')
-            ->from($this->getTableName())
-            ->where('varbase=1')
+            ->select('t.id')
+            ->from($this->getTableName(), 't')
+            ->where('t.varbase=1')
             ->execute()
             ->fetchAll(\PDO::FETCH_COLUMN);
 
@@ -881,10 +881,10 @@ class MetaModel implements IMetaModel
         $builder = $this->getConnection()->createQueryBuilder();
 
         $idList = $builder
-            ->select('id')
-            ->from($this->getTableName())
-            ->where('varbase=0')
-            ->andWhere($builder->expr()->in('vargroup', ':ids'))
+            ->select('t.id')
+            ->from($this->getTableName(), 't')
+            ->where('t.varbase=0')
+            ->andWhere($builder->expr()->in('t.vargroup', ':ids'))
             ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
             ->execute()
             ->fetchAll(\PDO::FETCH_COLUMN);
@@ -907,10 +907,10 @@ class MetaModel implements IMetaModel
         $builder = $this->getConnection()->createQueryBuilder();
 
         $idList = $builder
-            ->select('v.id')
-            ->from($this->getTableName(), 'v')
-            ->leftJoin('v', $this->getTableName(), 'v2', 'v.vargroup=v2.vargroup')
-            ->where($builder->expr()->in('v2.id', ':ids'))
+            ->select('t.id')
+            ->from($this->getTableName(), 't')
+            ->leftJoin('t', $this->getTableName(), 't2', 't.vargroup=t2.vargroup')
+            ->where($builder->expr()->in('t2.id', ':ids'))
             ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
             ->execute()
             ->fetchAll(\PDO::FETCH_COLUMN);
@@ -935,7 +935,7 @@ class MetaModel implements IMetaModel
             }
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -958,9 +958,9 @@ class MetaModel implements IMetaModel
         $builder = $this->getConnection()->createQueryBuilder();
 
         $builder
-            ->update($this->getTableName(), 'v2')
-            ->set('v2.' . $strColumn, is_array($varData) ? serialize($varData) : $varData)
-            ->where($builder->expr()->in('v2.id', ':ids'))
+            ->update($this->getTableName(), 't2')
+            ->set('t2.' . $strColumn, is_array($varData) ? serialize($varData) : $varData)
+            ->where($builder->expr()->in('t2.id', ':ids'))
             ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
             ->execute();
     }
@@ -1155,8 +1155,8 @@ class MetaModel implements IMetaModel
         $builder = $this->getConnection()->createQueryBuilder();
 
         $builder
-            ->delete($this->getTableName())
-            ->where($builder->expr()->in('id', ':ids'))
+            ->delete($this->getTableName(), 't')
+            ->where($builder->expr()->in('t.id', ':ids'))
             ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
             ->execute();
     }

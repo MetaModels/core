@@ -64,10 +64,10 @@ class InputScreenOptionListener
         $screens = $this
             ->connection
             ->createQueryBuilder()
-            ->select('`id`')
-            ->addSelect('`name`')
-            ->from('tl_metamodel_dca')
-            ->where('pid=:pid')
+            ->select('t.id')
+            ->addSelect('t.name')
+            ->from('tl_metamodel_dca', 't')
+            ->where('t.pid=:pid')
             ->setParameter('pid', $event->getModel()->getProperty('id'))
             ->execute()
             ->fetchAll(\PDO::FETCH_ASSOC);

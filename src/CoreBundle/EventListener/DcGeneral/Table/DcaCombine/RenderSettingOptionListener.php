@@ -64,10 +64,10 @@ class RenderSettingOptionListener
         $screens = $this
             ->connection
             ->createQueryBuilder()
-            ->select('`id`')
-            ->addSelect('`name`')
-            ->from('tl_metamodel_rendersettings')
-            ->where('pid=:pid')
+            ->select('t.id')
+            ->addSelect('t.name')
+            ->from('tl_metamodel_rendersettings', 't')
+            ->where('t.pid=:pid')
             ->setParameter('pid', $event->getModel()->getProperty('id'))
             ->execute()
             ->fetchAll(\PDO::FETCH_ASSOC);

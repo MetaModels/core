@@ -68,9 +68,9 @@ class FilterOptionListener extends AbstractAbstainingListener
         }
         $filters = $this->connection
             ->createQueryBuilder()
-            ->select('f.id', 'f.name')
-            ->from('tl_metamodel_filter', 'f')
-            ->where('pid=:id')
+            ->select('t.id', 't.name')
+            ->from('tl_metamodel_filter', 't')
+            ->where('t.pid=:id')
             ->setParameter('id', $model->getProperty('pid'))
             ->execute()
             ->fetchAll(\PDO::FETCH_ASSOC);
