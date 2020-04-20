@@ -23,16 +23,6 @@ services:
               event: dc-general.factory.build-data-definition
               method: handle
 
-    metamodels.dc_general.table.tl_metamodel_dca.panel_layout_wizard:
-        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Dca\PanelLayoutWizardListener
-        arguments:
-            - "@metamodels.assets.icon_builder"
-            - "@router"
-        tags:
-            - name: kernel.event_listener
-              event: dc-general.view.contao2backend.manipulate-widget
-              method: handle
-
     metamodels.dc_general.table.tl_metamodel_dca.render_mode_options:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Dca\RenderModeOptionListener
         tags:

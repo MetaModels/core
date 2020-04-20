@@ -103,6 +103,21 @@ $GLOBALS['TL_LANG']['XPL']['dcasetting_condition'][4][1] = 'All sub condition mu
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition'][5][0] = 'NOT';
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition'][5][1] = 'Invert the result of the contained condition.';
 
+/* dca dca (panellayout) */
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][0][0] = 'Set panel options';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][0][1] =
+    'Add one or more panel options and separate with comma (= space) or semicolon (= new line) like "filter;search;sort,limit".';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][1][0] = 'Panel options for copying';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][1][1] = 'filter;search;sort,limit';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][2][0] = 'filter';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][2][1] = 'Show the filter records menu.';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][3][0] = 'search';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][3][1] = 'Show the search records menu.';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][4][0] = 'sort';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][4][1] = 'Show the sort records menu.';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][5][0] = 'limit';
+$GLOBALS['TL_LANG']['XPL']['dca_panellayout'][5][1] = 'Show the limit records menu.';
+
 /* dca dcasetting*/
 $GLOBALS['TL_LANG']['XPL']['tl_class'][0][0] = 'Set CSS classes for widget';
 $GLOBALS['TL_LANG']['XPL']['tl_class'][0][1] =

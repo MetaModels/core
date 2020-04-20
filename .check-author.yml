@@ -33,8 +33,6 @@ mapping:
     - 'JeremieConstant <j.constant@imi.de>'
 
 copy-left:
-  'Christoph Wiechert <christoph.wiechert@4wardmedia.de>': Widgets/PickerWidget.php
-  'Andreas Nölke <zero@brothers-project.de>': Widgets/PickerWidget.php
   'Christian Schiffler <c.schiffler@cyberspectrum.de>':
     - src/CoreBundle/EventListener/DcGeneral/Table/DcaSetting/RemoveOverrideButtonListener.php
     - src/CoreBundle/EventListener/DcGeneral/Table/FilterSetting/SubPaletteSubscriber.php

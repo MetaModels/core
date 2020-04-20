@@ -139,14 +139,6 @@ services:
             - "%metamodels.resource_dir%/data/contributors-transifex.json"
         tags: ['controller.service_arguments']
 
-    metamodels.controller.picker:
-        class: MetaModels\CoreBundle\Controller\Backend\PickerWidgetController
-        arguments:
-            - "@twig"
-            - "@contao.translation.translator"
-            - []
-        tags: ['controller.service_arguments']
-
     metamodels.view_combination.builder:
         class: MetaModels\ViewCombination\ViewCombinationBuilder
         arguments:
