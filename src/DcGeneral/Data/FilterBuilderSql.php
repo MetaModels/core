@@ -122,7 +122,7 @@ class FilterBuilderSql
     {
         if (!$this->isEmpty()) {
             return new SimpleQuery(
-                sprintf('SELECT t.id FROM `%s` AS t WHERE %s', $this->tableName, $this->getProcedure()),
+                sprintf('SELECT t.id FROM %s AS t WHERE %s', $this->tableName, $this->getProcedure()),
                 $this->getParameters(),
                 'id',
                 $this->connection
