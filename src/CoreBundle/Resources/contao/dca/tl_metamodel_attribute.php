@@ -120,7 +120,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
             'disableGrouping' => true,
             'mode'            => 4,
             'fields'          => ['sorting'],
-            'panelLayout'     => 'filter,search;limit',
+            'panelLayout'     => 'filter;search;limit',
             'headerFields'    => [
                 'name',
                 'tableName',
