@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2018 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2018 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -43,14 +44,17 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete'][1]               = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show'][0]                 = 'Render setting details';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show'][1]                 = 'Show details of render setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['toggle'][0]               = 'Toggle';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['toggle'][1]               = 'Toggle the state of render setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['toggle'][1]               =
+    'Toggle the state of render setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall'][0]               = 'Add all';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall'][1]               = 'Add all attributes to render setting';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['pastenew'][0]             = 'Add new at the top';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['pastenew'][1]             = 'Add new after render setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']                     = '%s <strong>%s</strong> <em>[%s]</em>';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_willadd']          =
-    'Will add attribute %s to rendersetting.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_alreadycontained'] = 'Attribute %s already in rendersetting.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_addsuccess']       = 'Added attribute %s to rendersetting.';
+    'Will add attribute "%s" [%s] to rendersetting.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_alreadycontained'] =
+    'Attribute "%s" [%s] already in rendersetting.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_addsuccess']       =
+    'Added attribute "%s" [%s] to rendersetting.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_activate']         = 'Add new settings enabled.';

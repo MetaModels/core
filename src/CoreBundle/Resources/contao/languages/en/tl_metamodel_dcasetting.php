@@ -126,11 +126,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['0'] = '
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['1'] = 'Add slash on save';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['2'] = 'Do nothing';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd']             =
-    'Will add the attribute "%s" to the input screen.';
+    'Will add the attribute "%s" [%s] to the input screen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained']    =
-    'Attribute %s is already contained in input screen.';
+    'Attribute "%s" [%s] is already contained in input screen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']          =
-    'Added the attribute "%s" to the input screen.';
+    'Added the attribute "%s" [%s] to the input screen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_activate']            = 'Add new settings enabled.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory_for_unique_attr']  =
     'Unique attribues are automatically mandatory (this is not changable).';
