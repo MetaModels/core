@@ -120,7 +120,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
             'disableGrouping' => true,
             'mode'            => 4,
             'fields'          => ['sorting'],
-            'panelLayout'     => 'filter,limit',
+            'panelLayout'     => 'filter;search;limit',
             'headerFields'    => [
                 'name',
                 'tableName',
@@ -234,8 +234,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
                 'submitOnChange'     => true,
                 'mandatory'          => true,
                 'tl_class'           => 'w50',
-                'chosen'             => 'true'
+                'chosen'             => true
             ],
+            'filter'             => true,
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
         'name'        => [
@@ -245,6 +246,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
             'eval'      => [
                 'tl_class' => 'clr'
             ],
+            'search'   => true,
             'sql'       => 'text NULL'
         ],
         'description' => [
@@ -268,6 +270,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
                 // Hide at overrideAll.
                 'doNotOverrideMultiple' => true
             ],
+                'search'                => true,
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
         'isvariant'   => [
