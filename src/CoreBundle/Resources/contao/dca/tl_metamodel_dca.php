@@ -260,7 +260,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
             'inputType' => 'select',
             'eval'      => [
                 'tl_class'           => 'w50',
-                'includeBlankOption' => true
+                'includeBlankOption' => true,
+                'chosen'             => true
             ],
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
