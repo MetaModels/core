@@ -12,6 +12,7 @@
  *
  * @package    MetaModels/core
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -26,6 +27,7 @@ use Contao\CoreBundle\ServiceAnnotation\ContentElement;
 use Contao\Input;
 use Contao\StringUtil;
 use Contao\Template;
+use MetaModels\Filter\FilterUrl;
 use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\IItem;
 use MetaModels\ItemList;
@@ -97,12 +99,15 @@ final class ItemListController extends AbstractContentElementController
 
         $sorting   = $model->metamodel_sortby;
         $direction = $model->metamodel_sortby_direction;
+
+        // FIXME: filter URL should be created from local request and not from master request.
+        $filterUrl = $this->filterUrlBuilder->getCurrentFilterUrl();
         if ($model->metamodel_sort_override) {
-            if ($request->query->has('orderBy')) {
-                $sorting = $request->query->get('orderBy');
+            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, 'orderBy')) {
+                $sorting = $value;
             }
-            if ($request->query->has('orderDir')) {
-                $direction = $request->query->get('orderDir');
+            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, 'orderDir')) {
+                $direction = $value;
             }
         }
 
@@ -113,16 +118,19 @@ final class ItemListController extends AbstractContentElementController
             ->setPageBreak($model->perPage)
             ->setSorting($sorting, $direction)
             ->setFilterSettings($model->metamodel_filtering)
-            ->setFilterParameters($filterParams, $this->getFilterParameters($itemRenderer))
+            ->setFilterParameters($filterParams, $this->getFilterParameters($filterUrl, $itemRenderer))
             ->setMetaTags($model->metamodel_meta_title, $model->metamodel_meta_description);
 
         $template->items         = StringUtil::encodeEmail($itemRenderer->render($model->metamodel_noparsing, $model));
         $template->numberOfItems = $itemRenderer->getItems()->getCount();
         $template->pagination    = $itemRenderer->getPagination();
 
-        $responseTags = array_map(static function (IItem $item) {
-            return sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id'));
-        }, iterator_to_array($itemRenderer->getItems(), false));
+        $responseTags = array_map(
+            static function (IItem $item) {
+                return sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id'));
+            },
+            iterator_to_array($itemRenderer->getItems(), false)
+        );
 
         $response = $template->getResponse();
 
@@ -139,11 +147,11 @@ final class ItemListController extends AbstractContentElementController
      */
     private function getBackendWildcard(): Response
     {
-        $name = $this->get('translator')->trans('CTE.'.$this->getType().'.0', [], 'contao_modules');
+        $name = $this->get('translator')->trans('CTE.' . $this->getType() . '.0', [], 'contao_modules');
 
         $template = new BackendTemplate('be_wildcard');
 
-        $template->wildcard = '### '.strtoupper($name).' ###';
+        $template->wildcard = '### ' . strtoupper($name) . ' ###';
 
         return new Response($template->parse());
     }
@@ -155,20 +163,37 @@ final class ItemListController extends AbstractContentElementController
      *
      * @return string[]
      */
-    private function getFilterParameters($itemRenderer): array
+    private function getFilterParameters(FilterUrl $filterUrl, $itemRenderer): array
     {
-        $filterUrl = $this->filterUrlBuilder->getCurrentFilterUrl();
-
         $result = [];
         foreach ($itemRenderer->getFilterSettings()->getParameters() as $name) {
-            if ($filterUrl->hasSlug($name)) {
-                $result[$name] = $filterUrl->getSlug($name);
-            } elseif ($filterUrl->hasGet($name)) {
-                $result[$name] = $filterUrl->getGet($name);
+            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, $name)) {
+                $result[$name] = $value;
             }
-            // Mark the parameter as used (otherwise, a 404 is thrown)
-            Input::get($name);
         }
+
+        return $result;
+    }
+
+    /**
+     * Get parameter from get or slug.
+     *
+     * @param FilterUrl $filterUrl
+     * @param string    $name
+     *
+     * @return string|null
+     */
+    private function tryReadFromSlugOrGet(FilterUrl $filterUrl, string $name): ?string
+    {
+        $result = null;
+        if ($filterUrl->hasSlug($name)) {
+            $result = $filterUrl->getSlug($name);
+        } elseif ($filterUrl->hasGet($name)) {
+            $result = $filterUrl->getGet($name);
+        }
+
+        // Mark the parameter as used (otherwise, a 404 is thrown)
+        Input::get($name);
 
         return $result;
     }
