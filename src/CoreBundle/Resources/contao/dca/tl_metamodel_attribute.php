@@ -236,7 +236,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
                 'tl_class'           => 'w50',
                 'chosen'             => true
             ],
-            'filter'             => true,
+            'filter'    => true,
+            'search'    => true,
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
         'name'        => [
@@ -246,7 +247,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
             'eval'      => [
                 'tl_class' => 'clr'
             ],
-            'search'   => true,
+            'search'    => true,
             'sql'       => 'text NULL'
         ],
         'description' => [
@@ -270,7 +271,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
                 // Hide at overrideAll.
                 'doNotOverrideMultiple' => true
             ],
-                'search'                => true,
+            'search'    => true,
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
         'isvariant'   => [
