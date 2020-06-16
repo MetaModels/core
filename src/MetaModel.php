@@ -1155,8 +1155,8 @@ class MetaModel implements IMetaModel
         $builder = $this->getConnection()->createQueryBuilder();
 
         $builder
-            ->delete($this->getTableName(), 't')
-            ->where($builder->expr()->in('t.id', ':ids'))
+            ->delete($this->getTableName())
+            ->where($builder->expr()->in('`id`', ':ids'))
             ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
             ->execute();
     }
