@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,14 +16,20 @@
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     David Molineus <david.molineus@netzmacht.de>
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Render;
 
+use Contao\CoreBundle\Framework\Adapter;
+use Contao\System;
+use Contao\TemplateLoader;
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use MetaModels\Helper\ContaoController;
+use function array_key_exists;
 
 /**
  * Template class for MetaModels.
@@ -87,6 +93,29 @@ class Template
     protected $arrBlockNames = array();
 
     /**
+     * The template loader.
+     *
+     * @var Adapter|Adapter<TemplateLoader>|null Template loader adapter.
+     */
+    protected $templateLoader;
+
+    /**
+     * Request scope determinator.
+     *
+     * @var RequestScopeDeterminator
+     */
+    protected $scopeDeterminator;
+
+    /**
+     * Template path cache.
+     *
+     * Storing state of template path detection in a cache array for each template format and custom location.
+     *
+     * @var array<string, array<string, array<string, string|false>>>
+     */
+    protected static $templatePathCache = [];
+
+    /**
      * Makes all protected methods from class Controller callable publically.
      *
      * @param string $strMethod The method name.
@@ -103,11 +132,40 @@ class Template
     /**
      * Create a new template instance.
      *
-     * @param string $strTemplate The name of the template file.
+     * @param string                               $strTemplate       The name of the template file.
+     * @param Adapter|Adapter<TemplateLoader>|null $templateLoader    Template loader adapter.
+     * @param RequestScopeDeterminator             $scopeDeterminator Request scope determinator.
      */
-    public function __construct($strTemplate = '')
-    {
+    public function __construct(
+        $strTemplate = '',
+        Adapter $templateLoader = null,
+        RequestScopeDeterminator $scopeDeterminator = null
+    ) {
         $this->strTemplate = $strTemplate;
+
+        if (null === $templateLoader) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Not passing the template loader as 2nd argument to "' . __METHOD__ . '" is deprecated ' .
+                'and will cause an error in MetaModels 3.0',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $templateLoader = System::getContainer()->get('contao.framework')->getAdapter(TemplateLoader::class);
+        }
+        $this->templateLoader = $templateLoader;
+
+        if (null === $scopeDeterminator) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Not passing the request scope determinator as 3rd argument to "' . __METHOD__ . '" is deprecated ' .
+                'and will cause an error in MetaModels 3.0',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $scopeDeterminator = System::getContainer()->get('cca.dc-general.scope-matcher');
+        }
+        $this->scopeDeterminator = $scopeDeterminator;
     }
 
     /**
@@ -252,16 +310,31 @@ class Template
         $strTemplate = basename($strTemplate);
         $strCustom   = 'templates';
         // Check for a theme folder.
-        if (TL_MODE == 'FE') {
+        if ($this->scopeDeterminator->currentScopeIsFrontend()) {
             $tmpDir = str_replace('../', '', $GLOBALS['objPage']->templateGroup);
             if (!empty($tmpDir)) {
                 $strCustom = $tmpDir;
             }
         }
 
+        if (isset(self::$templatePathCache[$strTemplate][$strFormat])
+            && array_key_exists($strCustom, self::$templatePathCache[$strTemplate][$strFormat])
+        ) {
+            return self::$templatePathCache[$strTemplate][$strFormat][$strCustom] !== false
+                ? self::$templatePathCache[$strTemplate][$strFormat][$strCustom]
+                : null;
+        }
+
         try {
-            return \TemplateLoader::getPath($strTemplate, $strFormat, $strCustom);
+            self::$templatePathCache[$strTemplate][$strFormat][$strCustom] = $this->templateLoader->getPath(
+                $strTemplate,
+                $strFormat,
+                $strCustom
+            );
+
+            return self::$templatePathCache[$strTemplate][$strFormat][$strCustom];
         } catch (\Exception $exception) {
+            self::$templatePathCache[$strTemplate][$strFormat][$strCustom] = false;
             if ($blnFailIfNotFound) {
                 throw new \RuntimeException(
                     sprintf('Could not find template %s.%s', $strTemplate, $strFormat),
@@ -288,7 +361,7 @@ class Template
             && is_array($GLOBALS['METAMODEL_HOOKS']['parseTemplate'])
         ) {
             foreach ($GLOBALS['METAMODEL_HOOKS']['parseTemplate'] as $callback) {
-                list($strClass, $strMethod) = $callback;
+                [$strClass, $strMethod] = $callback;
 
                 $objCallback = (in_array('getInstance', get_class_methods($strClass)))
                     ? call_user_func(array($strClass, 'getInstance'))
@@ -461,7 +534,7 @@ EOF;
             if ($this->arrBlocks[$strName] != '[[TL_PARENT]]') {
                 // Output everything before the first TL_PARENT tag
                 if (strpos($this->arrBlocks[$strName], '[[TL_PARENT]]') !== false) {
-                    list($content) = explode('[[TL_PARENT]]', $this->arrBlocks[$strName], 2);
+                    [$content] = explode('[[TL_PARENT]]', $this->arrBlocks[$strName], 2);
                     echo $content;
                 } else {
                     // Output the current block and start a new output buffer to remove the following blocks
@@ -507,7 +580,7 @@ EOF;
             if ($this->arrBlocks[$name] != '[[TL_PARENT]]') {
                 // Output everything after the first TL_PARENT tag
                 if (strpos($this->arrBlocks[$name], '[[TL_PARENT]]') !== false) {
-                    list(, $content) = explode('[[TL_PARENT]]', $this->arrBlocks[$name], 2);
+                    [, $content] = explode('[[TL_PARENT]]', $this->arrBlocks[$name], 2);
                     echo $content;
                 } else {
                     // Remove the overwritten content
@@ -535,7 +608,7 @@ EOF;
      */
     public function insert($strName, array $arrData = null)
     {
-        if (TL_MODE == 'BE') {
+        if ($this->scopeDeterminator->currentScopeIsBackend()) {
             $objTemplate = new \BackendTemplate($strName);
         } else {
             $objTemplate = new \FrontendTemplate($strName);
