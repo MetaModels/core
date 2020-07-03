@@ -55,27 +55,27 @@ class FilterBuilderSqlTest extends TestCase
     {
         return [
             'equality compare' => [
-                'expectedSql'    => 'SELECT id FROM mm_test WHERE ((test = ?))',
+                'expectedSql'    => 'SELECT t.id FROM mm_test AS t WHERE ((t.test = ?))',
                 'expectedParams' => [0],
                 'filter'         => ['operation' => '=', 'property' => 'test', 'value' => 0]
             ],
             'greater than compare' => [
-                'expectedSql'    => 'SELECT id FROM mm_test WHERE ((test > ?))',
+                'expectedSql'    => 'SELECT t.id FROM mm_test AS t WHERE ((t.test > ?))',
                 'expectedParams' => [0],
                 'filter'         => ['operation' => '>', 'property' => 'test', 'value' => 0]
             ],
             'less than compare' => [
-                'expectedSql'    => 'SELECT id FROM mm_test WHERE ((test < ?))',
+                'expectedSql'    => 'SELECT t.id FROM mm_test AS t WHERE ((t.test < ?))',
                 'expectedParams' => [0],
                 'filter'         => ['operation' => '<', 'property' => 'test', 'value' => 0]
             ],
             'IN list' => [
-                'expectedSql'    => 'SELECT id FROM mm_test WHERE ((test IN (?,?,?)))',
+                'expectedSql'    => 'SELECT t.id FROM mm_test AS t WHERE ((t.test IN (?,?,?)))',
                 'expectedParams' => [1, 2, 3],
                 'filter'         => ['operation' => 'IN', 'property' => 'test', 'values' => [1, 2, 3]]
             ],
             'LIKE' => [
-                'expectedSql'    => 'SELECT id FROM mm_test WHERE ((test LIKE ?))',
+                'expectedSql'    => 'SELECT t.id FROM mm_test AS t WHERE ((t.test LIKE ?))',
                 'expectedParams' => ['any_thing%'],
                 'filter'         => ['operation' => 'LIKE', 'property' => 'test', 'value' => 'any?thing*']
             ],
@@ -111,7 +111,7 @@ class FilterBuilderSqlTest extends TestCase
     public function testBuildMultiple()
     {
         $connection = $this->mockConnection(
-            'SELECT id FROM mm_test WHERE ((foo = ?) AND (bar = ?))',
+            'SELECT t.id FROM mm_test AS t WHERE ((t.foo = ?) AND (t.bar = ?))',
             ['fooz', 'barz'],
             [['id' => 'succ'], ['id' => 'ess']]
         );
@@ -139,7 +139,7 @@ class FilterBuilderSqlTest extends TestCase
         $child->addChild(['operation' => '=', 'property' => 'bar', 'value' => 'barz']);
 
         $connection = $this->mockConnection(
-            'SELECT id FROM mm_test WHERE (((foo = ?) OR (bar = ?)) AND (moo = ?))',
+            'SELECT t.id FROM mm_test AS t WHERE (((t.foo = ?) OR (t.bar = ?)) AND (t.moo = ?))',
             ['fooz', 'barz', 'mooz'],
             [['id' => 'succ'], ['id' => 'ess']]
         );
