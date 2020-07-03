@@ -26,8 +26,12 @@ use Contao\ModuleModel;
 use Contao\StringUtil;
 use Contao\Template;
 use MetaModels\Filter\FilterUrlBuilder;
+use MetaModels\Filter\Setting\IFilterSettingFactory;
+use MetaModels\IFactory;
 use MetaModels\IItem;
 use MetaModels\ItemList;
+use MetaModels\Render\Setting\IRenderSettingFactory;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -38,6 +42,33 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class ItemListController extends AbstractFrontendModuleController
 {
+    /**
+     *  The filter setting factory.
+     *
+     * @var IFilterSettingFactory
+     */
+    private $filterFactory;
+
+    /**
+     * The MetaModels factory.
+     *
+     * @var IFactory
+     */
+    private $factory;
+
+    /**
+     * The event dispatcher.
+     *
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * The render setting factory.
+     *
+     * @var IRenderSettingFactory
+     */
+    private $renderSettingFactory;
 
     /**
      * The filter url builder.
@@ -49,11 +80,24 @@ final class ItemListController extends AbstractFrontendModuleController
     /**
      * ItemListController constructor.
      *
-     * @param FilterUrlBuilder $filterUrlBuilder The filter url builder.
+     * @param IFactory                 $factory              The MetaModels factory (required in MetaModels 3.0).
+     * @param IFilterSettingFactory    $filterFactory        The filter setting factory (required in MetaModels 3.0).
+     * @param IRenderSettingFactory    $renderSettingFactory The render setting factory (required in MetaModels 3.0).
+     * @param EventDispatcherInterface $eventDispatcher      The event dispatcher (required in MetaModels 3.0).
+     * @param FilterUrlBuilder         $filterUrlBuilder     The filter url builder.
      */
-    public function __construct(FilterUrlBuilder $filterUrlBuilder)
-    {
-        $this->filterUrlBuilder = $filterUrlBuilder;
+    public function __construct(
+        IFactory $factory,
+        IFilterSettingFactory $filterFactory,
+        IRenderSettingFactory $renderSettingFactory,
+        EventDispatcherInterface $eventDispatcher,
+        FilterUrlBuilder $filterUrlBuilder
+    ) {
+        $this->factory              = $factory;
+        $this->filterFactory        = $filterFactory;
+        $this->renderSettingFactory = $renderSettingFactory;
+        $this->eventDispatcher      = $eventDispatcher;
+        $this->filterUrlBuilder     = $filterUrlBuilder;
     }
 
     /**
@@ -86,7 +130,12 @@ final class ItemListController extends AbstractFrontendModuleController
      */
     protected function getResponse(Template $template, ModuleModel $model, Request $request): ?Response
     {
-        $itemRenderer = new ItemList();
+        $itemRenderer = new ItemList(
+            $this->factory,
+            $this->filterFactory,
+            $this->renderSettingFactory,
+            $this->eventDispatcher
+        );
 
         $template->searchable = !$model->metamodel_donotindex;
 
