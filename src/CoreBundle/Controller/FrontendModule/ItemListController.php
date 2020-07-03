@@ -12,6 +12,7 @@
  *
  * @package    MetaModels/core
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -21,17 +22,9 @@ namespace MetaModels\CoreBundle\Controller\FrontendModule;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\CoreBundle\ServiceAnnotation\FrontendModule;
-use Contao\Input;
 use Contao\ModuleModel;
-use Contao\StringUtil;
 use Contao\Template;
-use MetaModels\Filter\FilterUrlBuilder;
-use MetaModels\Filter\Setting\IFilterSettingFactory;
-use MetaModels\IFactory;
-use MetaModels\IItem;
-use MetaModels\ItemList;
-use MetaModels\Render\Setting\IRenderSettingFactory;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use MetaModels\CoreBundle\Controller\ListControllerTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -42,63 +35,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class ItemListController extends AbstractFrontendModuleController
 {
-    /**
-     *  The filter setting factory.
-     *
-     * @var IFilterSettingFactory
-     */
-    private $filterFactory;
-
-    /**
-     * The MetaModels factory.
-     *
-     * @var IFactory
-     */
-    private $factory;
-
-    /**
-     * The event dispatcher.
-     *
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * The render setting factory.
-     *
-     * @var IRenderSettingFactory
-     */
-    private $renderSettingFactory;
-
-    /**
-     * The filter url builder.
-     *
-     * @var FilterUrlBuilder
-     */
-    private $filterUrlBuilder;
-
-    /**
-     * ItemListController constructor.
-     *
-     * @param IFactory                 $factory              The MetaModels factory (required in MetaModels 3.0).
-     * @param IFilterSettingFactory    $filterFactory        The filter setting factory (required in MetaModels 3.0).
-     * @param IRenderSettingFactory    $renderSettingFactory The render setting factory (required in MetaModels 3.0).
-     * @param EventDispatcherInterface $eventDispatcher      The event dispatcher (required in MetaModels 3.0).
-     * @param FilterUrlBuilder         $filterUrlBuilder     The filter url builder.
-     */
-    public function __construct(
-        IFactory $factory,
-        IFilterSettingFactory $filterFactory,
-        IRenderSettingFactory $renderSettingFactory,
-        EventDispatcherInterface $eventDispatcher,
-        FilterUrlBuilder $filterUrlBuilder
-    ) {
-        $this->factory              = $factory;
-        $this->filterFactory        = $filterFactory;
-        $this->renderSettingFactory = $renderSettingFactory;
-        $this->eventDispatcher      = $eventDispatcher;
-        $this->filterUrlBuilder     = $filterUrlBuilder;
-    }
+    use ListControllerTrait;
 
     /**
      * Override the template and return the response.
@@ -130,72 +67,6 @@ final class ItemListController extends AbstractFrontendModuleController
      */
     protected function getResponse(Template $template, ModuleModel $model, Request $request): ?Response
     {
-        $itemRenderer = new ItemList(
-            $this->factory,
-            $this->filterFactory,
-            $this->renderSettingFactory,
-            $this->eventDispatcher
-        );
-
-        $template->searchable = !$model->metamodel_donotindex;
-
-        $sorting   = $model->metamodel_sortby;
-        $direction = $model->metamodel_sortby_direction;
-        if ($model->metamodel_sort_override) {
-            if ($request->query->has('orderBy')) {
-                $sorting = $request->query->get('orderBy');
-            }
-            if ($request->query->has('orderDir')) {
-                $direction = $request->query->get('orderDir');
-            }
-        }
-
-        $filterParams = StringUtil::deserialize($model->metamodel_filterparams, true);
-        $itemRenderer
-            ->setMetaModel($model->metamodel, $model->metamodel_rendersettings)
-            ->setListTemplate($template)
-            ->setLimit($model->metamodel_use_limit, $model->metamodel_offset, $model->metamodel_limit)
-            ->setPageBreak($model->perPage)
-            ->setSorting($sorting, $direction)
-            ->setFilterSettings($model->metamodel_filtering)
-            ->setFilterParameters($filterParams, $this->getFilterParameters($itemRenderer))
-            ->setMetaTags($model->metamodel_meta_title, $model->metamodel_meta_description);
-
-        $template->items         = StringUtil::encodeEmail($itemRenderer->render($model->metamodel_noparsing, $model));
-        $template->numberOfItems = $itemRenderer->getItems()->getCount();
-        $template->pagination    = $itemRenderer->getPagination();
-
-        $responseTags = array_map(static function (IItem $item) {
-            return sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id'));
-        }, iterator_to_array($itemRenderer->getItems(), false));
-
-        $this->tagResponse($responseTags);
-
-        return $template->getResponse();
-    }
-
-    /**
-     * Retrieve all filter parameters from the input class for the specified filter setting.
-     *
-     * @param ItemList $itemRenderer The list renderer instance to be used.
-     *
-     * @return string[]
-     */
-    private function getFilterParameters($itemRenderer): array
-    {
-        $filterUrl = $this->filterUrlBuilder->getCurrentFilterUrl();
-
-        $result = [];
-        foreach ($itemRenderer->getFilterSettings()->getParameters() as $name) {
-            if ($filterUrl->hasSlug($name)) {
-                $result[$name] = $filterUrl->getSlug($name);
-            } elseif ($filterUrl->hasGet($name)) {
-                $result[$name] = $filterUrl->getGet($name);
-            }
-            // Mark the parameter as used (otherwise, a 404 is thrown)
-            Input::get($name);
-        }
-
-        return $result;
+        return $this->getResponseInternal($template, $model, $request);
     }
 }
