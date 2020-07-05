@@ -175,6 +175,8 @@ services:
 
     MetaModels\CoreBundle\Migration\TableCollationMigration:
         arguments:
-            - '@database_connection'
+            $connection: '@database_connection'
+            # The default table options comes from the doctrine extension.
+            $defaultTableOptions: ~
         tags:
             - name: contao.migration
