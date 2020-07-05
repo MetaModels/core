@@ -51,6 +51,7 @@
   },
   "require-dev": {
     "contao/manager-plugin": "^2.8",
+    "contao/manager-bundle": "^4.9.0, <4.13.0",
     "phpcq/all-tasks": "^1.2"
   },
   "autoload": {
