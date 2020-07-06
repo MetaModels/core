@@ -12,6 +12,7 @@
  *
  * @package    MetaModels/core
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -26,8 +27,8 @@ use Contao\CoreBundle\Migration\MigrationResult;
 use Doctrine\DBAL\Connection;
 
 /**
- * This migration changes collation of all mm_* databases to utf8mb4_unicode_ci
- * and/or DB engine to InnoDB.
+ * This migration changes collation of all mm_* databases to the collation from the default table options
+ * and/or DB engine to the engine from the default table options.
  */
 class TableCollationMigration extends AbstractMigration
 {
@@ -39,13 +40,22 @@ class TableCollationMigration extends AbstractMigration
     private $connection;
 
     /**
+     * The default table options.
+     *
+     * @var array
+     */
+    private $defaultTableOptions;
+
+    /**
      * Create a new instance.
      *
-     * @param Connection $connection The database connection.
+     * @param Connection $connection          The database connection.
+     * @param array      $defaultTableOptions The default table options.
      */
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, array $defaultTableOptions)
     {
-        $this->connection = $connection;
+        $this->connection          = $connection;
+        $this->defaultTableOptions = $defaultTableOptions;
     }
 
     /**
@@ -55,7 +65,11 @@ class TableCollationMigration extends AbstractMigration
      */
     public function getName(): string
     {
-        return 'Change collation to utf8mb4_unicode_ci and/or DB engine to InnoDB of all mm_* tables.';
+        return \sprintf(
+            'Change collation to %1$s and/or DB engine to %2$s of all mm_* tables.',
+            $this->defaultTableOptions['collate'],
+            $this->defaultTableOptions['engine']
+        );
     }
 
     /**
@@ -116,7 +130,9 @@ class TableCollationMigration extends AbstractMigration
                 ->fetch();
 
             // Check collation and DB engine and collect tables with false data.
-            if (('utf8mb4_unicode_ci' !== $result['Collation']) || ('InnoDB' !== $result['Engine'])) {
+            if (($this->defaultTableOptions['collate'] !== $result['Collation'])
+                || ($this->defaultTableOptions['engine'] !== $result['Engine'])
+            ) {
                 $results[] = $tableName;
             }
         }
@@ -136,10 +152,13 @@ class TableCollationMigration extends AbstractMigration
         $this->connection->query(
             sprintf(
                 'ALTER TABLE %1$s
-                ENGINE=InnoDB
-                DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci
+                ENGINE=%2$s
+                DEFAULT CHARSET=%3$s COLLATE %4$s
                 ROW_FORMAT=DYNAMIC',
-                $tableName
+                $tableName,
+                $this->defaultTableOptions['engine'],
+                $this->defaultTableOptions['charset'],
+                $this->defaultTableOptions['collate']
             )
         );
     }

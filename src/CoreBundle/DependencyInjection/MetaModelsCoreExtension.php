@@ -23,16 +23,25 @@
 namespace MetaModels\CoreBundle\DependencyInjection;
 
 use Doctrine\Common\Cache\ArrayCache;
+use MetaModels\CoreBundle\Migration\TableCollationMigration;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * This is the class that loads and manages the bundle configuration
  */
-class MetaModelsCoreExtension extends Extension
+class MetaModelsCoreExtension extends Extension implements PrependExtensionInterface
 {
+    /**
+     * The default table options.
+     *
+     * @var array
+     */
+    private $defaultTableOptions;
+
     /**
      * The configuration files.
      *
@@ -67,6 +76,14 @@ class MetaModelsCoreExtension extends Extension
     /**
      * {@inheritDoc}
      */
+    public function prepend(ContainerBuilder $container): void
+    {
+        $this->collectDefaultTableOptionsFromDoctrineExtension($container);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
@@ -80,6 +97,9 @@ class MetaModelsCoreExtension extends Extension
         $container->setParameter('metamodels.resource_dir', __DIR__ . '/../Resources');
         $container->setParameter('metamodels.assets_dir', $config['assets_dir']);
         $container->setParameter('metamodels.assets_web', $config['assets_web']);
+
+        $container->getDefinition(TableCollationMigration::class)
+            ->setArgument('$defaultTableOptions', $this->defaultTableOptions);
     }
 
     /**
@@ -113,5 +133,36 @@ class MetaModelsCoreExtension extends Extension
         }
 
         $container->setParameter('metamodels.cache_dir', $config['cache_dir']);
+    }
+
+    /**
+     * Collect the default table options from the dcotrine extension.
+     *
+     * @param ContainerBuilder $container The container builder.
+     *
+     * @return void
+     */
+    private function collectDefaultTableOptionsFromDoctrineExtension(ContainerBuilder $container): void
+    {
+        if (!isset($container->getExtensions()['doctrine'])) {
+            $this->defaultTableOptions = [
+                'charset'    => 'utf8mb4',
+                'collate'    => 'utf8mb4_unicode_ci',
+                'engine'     => 'InnoDB',
+                'row_format' => 'DYNAMIC',
+            ];
+
+            return;
+        }
+
+        $defaultTableOptions = [[]];
+        foreach ($container->getExtensionConfig('doctrine') as $doctrineConfig) {
+            if (!isset($doctrineConfig['dbal']['connections']['default']['default_table_options'])) {
+                continue;
+            }
+
+            $defaultTableOptions[] = $doctrineConfig['dbal']['connections']['default']['default_table_options'];
+        }
+        $this->defaultTableOptions = \array_merge(...$defaultTableOptions);
     }
 }
