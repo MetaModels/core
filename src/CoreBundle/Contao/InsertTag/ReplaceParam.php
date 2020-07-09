@@ -46,6 +46,7 @@ class ReplaceParam
      *
      * @var Session
      */
+    // Fixme Replace the deprecated session.
     private $session;
 
     /**
