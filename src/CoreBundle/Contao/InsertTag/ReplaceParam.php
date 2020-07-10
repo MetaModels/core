@@ -32,7 +32,7 @@ use Contao\Session;
 /**
  * This replace the insert tag param.
  */
-class ReplaceParam
+final class ReplaceParam
 {
     /**
      * The input.
@@ -46,7 +46,7 @@ class ReplaceParam
      *
      * @var Session
      */
-    // Fixme Replace the deprecated session.
+    // FIXME: Replace the deprecated session.
     private $session;
 
     /**
@@ -80,7 +80,7 @@ class ReplaceParam
         foreach ($tags as $tag) {
             if (!(2 === \count($chunks = \explode('::', $tag)))
                 || !('param' === $chunks[0])
-                || !$this->isSupportParameter($chunks[1], ['get', 'post', 'cookie', 'session', 'filter'])
+                || !$this->isParameterSupported($chunks[1], ['get', 'post', 'cookie', 'session', 'filter'])
             ) {
                 continue;
             }
@@ -103,7 +103,7 @@ class ReplaceParam
      */
     private function replaceInputParameter(array $chunks, string $content, string $tag): string
     {
-        if (!$this->isSupportParameter($chunks[1], ['get', 'post', 'cookie'])
+        if (!$this->isParameterSupported($chunks[1], ['get', 'post', 'cookie'])
             || !($arguments = $this->splitParameter($chunks[1]))
         ) {
             return $content;
@@ -137,7 +137,7 @@ class ReplaceParam
      */
     private function replaceSessionParameter(array $chunks, string $content, string $tag): string
     {
-        if (!$this->isSupportParameter($chunks[1], ['session'])
+        if (!$this->isParameterSupported($chunks[1], ['session'])
             || !($arguments = $this->splitParameter($chunks[1]))
         ) {
             return $content;
@@ -194,7 +194,7 @@ class ReplaceParam
      *
      * @return bool
      */
-    private function isSupportParameter(string $parameter, array $supported): bool
+    private function isParameterSupported(string $parameter, array $supported): bool
     {
         $isSupported = false;
         foreach ($supported as $name) {
