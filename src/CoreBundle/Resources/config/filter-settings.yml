@@ -28,7 +28,8 @@ services:
             Contao\Input: '@metamodels.contao_input'
             Contao\InsertTags: '@metamodels.insert_tags'
             Contao\Session: '@metamodels.contao_session'
-
+            MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName: '@MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName'
+            MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam: '@MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam'
         tags:
           - { name: container.service_locator }
 

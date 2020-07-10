@@ -1,0 +1,9 @@
+services:
+    MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName:
+        public: false
+
+    MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam:
+        public: false
+        arguments:
+            - '@metamodels.contao_input'
+            - '@metamodels.contao_session'
