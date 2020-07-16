@@ -2,10 +2,11 @@ services:
     metamodels.listener.table.tl_metamodel_dcasetting_condition.attribute_id_listener:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSettingCondition\AttributeIdListener
         arguments:
-            - "@cca.dc-general.scope-matcher"
-            - "@metamodels.factory"
+            - '@cca.dc-general.scope-matcher'
+            - '@MetaModels\IFactory'
             - "@database_connection"
             - '@MetaModels\CoreBundle\DcGeneral\PropertyConditionFactory'
+            - '@MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter'
         tags:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.get-property-options
