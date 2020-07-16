@@ -13,9 +13,10 @@ services:
     metamodels.listener.table.tl_metamodel_dcasetting.attribute_options:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\AttributeOptionListener
         arguments:
-            - "@cca.dc-general.scope-matcher"
-            - "@metamodels.factory"
-            - "@database_connection"
+            - '@cca.dc-general.scope-matcher'
+            - '@MetaModels\IFactory'
+            - '@database_connection'
+            - '@MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter'
         tags:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.get-property-options

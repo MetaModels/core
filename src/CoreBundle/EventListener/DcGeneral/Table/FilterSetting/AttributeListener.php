@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,6 +23,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 
 /**
@@ -38,13 +39,24 @@ class AttributeListener
     private $filterFactory;
 
     /**
+     * The attribute select option label formatter.
+     *
+     * @var SelectAttributeOptionLabelFormatter
+     */
+    private $attributeLabelFormatter;
+
+    /**
      * Create a new instance.
      *
-     * @param IFilterSettingFactory $filterFactory The filter setting factory.
+     * @param IFilterSettingFactory               $filterFactory           The filter setting factory.
+     * @param SelectAttributeOptionLabelFormatter $attributeLabelFormatter The attribute select option label formatter.
      */
-    public function __construct(IFilterSettingFactory $filterFactory)
-    {
-        $this->filterFactory = $filterFactory;
+    public function __construct(
+        IFilterSettingFactory $filterFactory,
+        SelectAttributeOptionLabelFormatter $attributeLabelFormatter
+    ) {
+        $this->filterFactory           = $filterFactory;
+        $this->attributeLabelFormatter = $attributeLabelFormatter;
     }
 
     /**
@@ -72,14 +84,12 @@ class AttributeListener
         }
 
         foreach ($metaModel->getAttributes() as $attribute) {
-            $typeName = $attribute->get('type');
-
-            if ($typeFilter && (!in_array($typeName, $typeFilter))) {
+            if ($typeFilter && (!in_array($attribute->get('type'), $typeFilter))) {
                 continue;
             }
 
             $strSelectVal          = $metaModel->getTableName() .'_' . $attribute->getColName();
-            $result[$strSelectVal] = $attribute->getName() . ' [' . $typeName . ']';
+            $result[$strSelectVal] = $this->attributeLabelFormatter->formatLabel($attribute);
         }
 
         $event->setOptions($result);

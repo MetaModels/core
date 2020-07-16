@@ -20,14 +20,38 @@
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting;
 
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
+use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IInternal;
+use MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter;
+use MetaModels\IFactory;
 
 /**
  * This handles retrieving attributes as options.
  */
 class AttributeOptionListener extends AbstractListener
 {
+    /**
+     * The attribute select option label formatter.
+     *
+     * @var SelectAttributeOptionLabelFormatter
+     */
+    private $attributeLabelFormatter;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __construct(
+        RequestScopeDeterminator $scopeDeterminator,
+        IFactory $factory,
+        Connection $connection,
+        SelectAttributeOptionLabelFormatter $attributeLabelFormatter
+    ) {
+        parent::__construct($scopeDeterminator, $factory, $connection);
+        $this->attributeLabelFormatter = $attributeLabelFormatter;
+    }
+
     /**
      * Retrieve the options for the attributes.
      *
@@ -70,11 +94,7 @@ class AttributeOptionListener extends AbstractListener
             if ($attribute instanceof IInternal || in_array($attribute->get('id'), $alreadyTaken)) {
                 continue;
             }
-            $options[$attribute->get('id')] = sprintf(
-                '%s [%s]',
-                $attribute->getName(),
-                $attribute->get('type')
-            );
+            $options[$attribute->get('id')] = $this->attributeLabelFormatter->formatLabel($attribute);
         }
 
         $event->setOptions($options);

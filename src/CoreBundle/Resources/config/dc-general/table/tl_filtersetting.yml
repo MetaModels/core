@@ -14,7 +14,8 @@ services:
     metamodels.dc_general.table.tl_metamodel_filtersetting.attribute:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\FilterSetting\AttributeListener
         arguments:
-            - "@metamodels.filter_setting_factory"
+            - '@metamodels.filter_setting_factory'
+            - '@MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter'
         tags:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.get-property-options

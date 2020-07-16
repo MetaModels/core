@@ -180,3 +180,6 @@ services:
             $defaultTableOptions: ~
         tags:
             - name: contao.migration
+
+    MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter:
+        public: false
