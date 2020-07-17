@@ -273,7 +273,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     {
         $optionizer = $this->getOptionizer();
         $procedure  = 't.' . $optionizer['value'] . ' LIKE :pattern';
-        $strPattern = str_replace(array('*', '?'), array('%', '_'), $strPattern);
+        $strPattern = str_replace(['*', '?'], ['%', '_'], $strPattern);
 
         $queryBuilder = $this->connection->createQueryBuilder()
             ->select('DISTINCT t.item_id')
@@ -283,7 +283,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
 
         $this->buildWhere($queryBuilder, null, $arrLanguages);
 
-        $filterRule = SimpleQuery::createFromQueryBuilder($queryBuilder, 't.item_id');
+        $filterRule = SimpleQuery::createFromQueryBuilder($queryBuilder, 'item_id');
 
         return $filterRule->getMatchingIds();
     }
