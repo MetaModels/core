@@ -112,6 +112,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = [
                         'inputType' => 'select',
                         'eval'      => [
                             'includeBlankOption' => true,
+                            'blankOptionLabel'   => '*',
                             'style'              => 'width:100%',
                             'chosen'             => 'true'
                         ],
@@ -122,6 +123,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = [
                         'inputType' => 'select',
                         'eval'      => [
                             'includeBlankOption' => true,
+                            'blankOptionLabel'   => '*',
                             'style'              => 'width:100%',
                             'chosen'             => 'true'
                         ],
