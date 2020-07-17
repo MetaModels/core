@@ -140,12 +140,12 @@ class Collection implements ICollection
      */
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
     {
-        $filterUrl = [];
+        $filterUrl = [[]];
         foreach ($this->arrSettings as $objSetting) {
             $filterUrl[] = $objSetting->generateFilterUrlFrom($objItem, $objRenderSetting);
         }
 
-        return empty($parameters) ? [] : array_merge(...$parameters);
+        return array_merge(...$filterUrl);
     }
 
     /**
@@ -153,12 +153,12 @@ class Collection implements ICollection
      */
     public function getParameters()
     {
-        $parameters = [];
+        $parameters = [[]];
         foreach ($this->arrSettings as $objSetting) {
             $parameters[] = $objSetting->getParameters();
         }
 
-        return empty($parameters) ? [] : array_merge(...$parameters);
+        return array_merge(...$parameters);
     }
 
     /**
@@ -166,12 +166,12 @@ class Collection implements ICollection
      */
     public function getParameterDCA()
     {
-        $parameters = [];
+        $parameters = [[]];
         foreach ($this->arrSettings as $objSetting) {
             $parameters[] = $objSetting->getParameterDCA();
         }
 
-        return empty($parameters) ? [] : array_merge(...$parameters);
+        return array_merge(...$parameters);
     }
 
     /**
@@ -179,13 +179,12 @@ class Collection implements ICollection
      */
     public function getParameterFilterNames()
     {
-        $parameters = [];
-
+        $parameters = [[]];
         foreach ($this->arrSettings as $objSetting) {
             $parameters[] = $objSetting->getParameterFilterNames();
         }
 
-        return empty($parameters) ? [] : array_merge(...$parameters);
+        return array_merge(...$parameters);
     }
 
     /**
@@ -196,7 +195,7 @@ class Collection implements ICollection
         $arrJumpTo,
         FrontendFilterOptions $objFrontendFilterOptions
     ) {
-        $parameters = [];
+        $parameters = [[]];
 
         // Get the id with all enabled filter.
         $objFilter = $this->getMetaModel()->getEmptyFilter();
@@ -217,7 +216,7 @@ class Collection implements ICollection
                 $setting->getParameterFilterWidgets($ids, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions);
         }
 
-        return empty($parameters) ? [] : array_merge(...$parameters);
+        return array_merge(...$parameters);
     }
 
     /**
@@ -225,12 +224,11 @@ class Collection implements ICollection
      */
     public function getReferencedAttributes()
     {
-        $attributes = [];
-
+        $attributes = [[]];
         foreach ($this->arrSettings as $setting) {
             $attributes[] = $setting->getReferencedAttributes();
         }
 
-        return empty($parameters) ? [] : array_merge(...$parameters);
+        return array_merge(...$attributes);
     }
 }
