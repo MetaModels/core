@@ -145,7 +145,7 @@ class Collection implements ICollection
             $filterUrl[] = $objSetting->generateFilterUrlFrom($objItem, $objRenderSetting);
         }
 
-        return empty($parameters) ? [] : array_merge(...$parameters);
+        return [] === $filterUrl ? [] : array_merge(...$filterUrl);
     }
 
     /**
@@ -158,7 +158,7 @@ class Collection implements ICollection
             $parameters[] = $objSetting->getParameters();
         }
 
-        return empty($parameters) ? [] : array_merge(...$parameters);
+        return [] === $parameters ? [] : array_merge(...$parameters);
     }
 
     /**
@@ -171,7 +171,7 @@ class Collection implements ICollection
             $parameters[] = $objSetting->getParameterDCA();
         }
 
-        return empty($parameters) ? [] : array_merge(...$parameters);
+        return [] === $parameters ? [] : array_merge(...$parameters);
     }
 
     /**
@@ -180,12 +180,11 @@ class Collection implements ICollection
     public function getParameterFilterNames()
     {
         $parameters = [];
-
         foreach ($this->arrSettings as $objSetting) {
             $parameters[] = $objSetting->getParameterFilterNames();
         }
 
-        return empty($parameters) ? [] : array_merge(...$parameters);
+        return [] === $parameters ? [] : array_merge(...$parameters);
     }
 
     /**
@@ -217,7 +216,7 @@ class Collection implements ICollection
                 $setting->getParameterFilterWidgets($ids, $arrFilterUrl, $arrJumpTo, $objFrontendFilterOptions);
         }
 
-        return empty($parameters) ? [] : array_merge(...$parameters);
+        return [] === $parameters ? [] : array_merge(...$parameters);
     }
 
     /**
@@ -226,11 +225,10 @@ class Collection implements ICollection
     public function getReferencedAttributes()
     {
         $attributes = [];
-
         foreach ($this->arrSettings as $setting) {
             $attributes[] = $setting->getReferencedAttributes();
         }
 
-        return empty($parameters) ? [] : array_merge(...$parameters);
+        return [] === $attributes ? [] : array_merge(...$attributes);
     }
 }
