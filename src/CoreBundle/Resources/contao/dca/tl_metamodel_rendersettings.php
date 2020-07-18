@@ -40,10 +40,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
     ],
     'dca_config'   => [
         'data_provider'  => [
-            'parent'                     => [
+            'default' => [
+                'source' => 'tl_metamodel_rendersettings'
+            ],
+            'parent'  => [
                 'source' => 'tl_metamodel'
             ],
-            'tl_metamodel_rendersetting' => [
+            'tl_metamodel_rendersetting'  => [
                 'source' => 'tl_metamodel_rendersetting'
             ],
         ],

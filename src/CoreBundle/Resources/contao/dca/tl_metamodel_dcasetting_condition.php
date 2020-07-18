@@ -47,6 +47,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = [
             'parent' => [
                 'source' => 'tl_metamodel_dcasetting',
             ],
+            'tl_metamodel_dcasetting' => [
+                'source' => 'tl_metamodel_dcasetting'
+            ]
         ],
         'childCondition' => [
             [
@@ -59,6 +62,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = [
                     ]
                 ],
                 'filter' => [
+                    [
+                        'local'     => 'settingId',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ],
+                ],
+                'inverse' => [
                     [
                         'local'     => 'settingId',
                         'remote'    => 'id',
@@ -80,6 +90,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = [
                     ],
                 ],
                 'filter' => [
+                    [
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ],
+                ],
+                'inverse' => [
                     [
                         'local'     => 'pid',
                         'remote'    => 'id',

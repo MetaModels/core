@@ -39,6 +39,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
     ],
     'dca_config'   => [
         'data_provider'  => [
+            'default' => [
+                'source' => 'tl_metamodel_attribute'
+            ],
             'parent' => [
                 'source' => 'tl_metamodel'
             ],
