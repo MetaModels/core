@@ -54,7 +54,7 @@ class AttributeAddingListener
      */
     public function handle(CreateMetaModelEvent $event)
     {
-        if (null === $metaModel = $event->getMetaModel()) {
+        if ((null === $metaModel = $event->getMetaModel()) || ([] !== $metaModel->getAttributes())) {
             return;
         }
 
