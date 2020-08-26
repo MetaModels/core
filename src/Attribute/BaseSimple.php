@@ -17,6 +17,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
+ * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
  * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -165,8 +166,7 @@ class BaseSimple extends Base implements ISimple
                 ->select($strCol . ', COUNT(' . $strCol . ') as mm_count')
                 ->from($this->getMetaModel()->getTableName())
                 ->where('id IN (:ids)')
-                ->groupBy('id')
-                ->addGroupBy($strCol)
+                ->groupBy($strCol)
                 ->orderBy('FIELD(id, :ids)')
                 ->setParameter('ids', $idList, Connection::PARAM_STR_ARRAY)
                 ->execute();
@@ -174,8 +174,7 @@ class BaseSimple extends Base implements ISimple
             $statement = $this->connection->createQueryBuilder()
                 ->select($strCol . ', COUNT(' . $strCol . ') as mm_count')
                 ->from($this->getMetaModel()->getTableName())
-                ->groupBy('id')
-                ->addGroupBy($strCol)
+                ->groupBy($strCol)
                 ->orderBy($strCol)
                 ->execute();
         }
