@@ -16,6 +16,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -406,9 +407,9 @@ class InsertTagsListener implements ServiceAnnotationInterface
      *
      * @param int $intFilterId    ID of the filter.
      *
-     * @return boolean|null Null for no data or integer for the count result.
+     * @return int|null Null for no data or integer for the count result.
      */
-    protected function getCountFor($intMetaModelId, $intFilterId): ?bool
+    protected function getCountFor($intMetaModelId, $intFilterId): ?int
     {
         $metaModel = $this->loadMetaModel($intMetaModelId);
         if (null === $metaModel) {
