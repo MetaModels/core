@@ -12,12 +12,14 @@
  *
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\Contao\Hooks;
+use Contao\DC_Table;
 
 /**
  * This class provides callbacks for tl_content.
@@ -34,11 +36,11 @@ class ContentElementCallback extends AbstractContentElementAndModuleCallback
     /**
      * Called from tl_content.onload_callback.
      *
-     * @param \DC_Table $dataContainer The data container calling this method.
+     * @param DC_Table $dataContainer The data container calling this method.
      *
      * @return void
      */
-    public function buildFilterParameterList(\DC_Table $dataContainer)
+    public function buildFilterParameterList(DC_Table $dataContainer)
     {
         parent::buildFilterParamsFor($dataContainer, 'metamodel_content');
     }
@@ -46,14 +48,14 @@ class ContentElementCallback extends AbstractContentElementAndModuleCallback
     /**
      * Fetch the template group for the current MetaModel content element.
      *
-     * @param \DC_Table $objDC The data container calling this method.
+     * @param DC_Table $objDC The data container calling this method.
      *
      * @return array
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function getTemplates(\DC_Table $objDC)
+    public function getTemplates(DC_Table $objDC)
     {
         /** @noinspection PhpUndefinedFieldInspection */
         $type = $objDC->activeRecord->type;
