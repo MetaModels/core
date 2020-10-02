@@ -47,7 +47,7 @@ class AutoLoadingTestCase extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         spl_autoload_register(self::class . '::contaoAutoload');
@@ -58,7 +58,7 @@ class AutoLoadingTestCase extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         spl_autoload_unregister(self::class . '::contaoAutoload');
         parent::tearDownAfterClass();

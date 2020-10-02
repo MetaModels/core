@@ -386,8 +386,8 @@ class SubDcaWidget extends Widget
 
                 try {
                     $newValue = $this->{$callback[0]}->{$callback[1]}($newValue, $this);
-                } catch (Exception $e) {
-                    $widget->addError($e->getMessage());
+                } catch (Exception $exception) {
+                    $widget->addError($exception->getMessage());
                     $this->blnSubmitInput = false;
 
                     return $value;

@@ -25,6 +25,8 @@ use Symfony\Component\EventDispatcher\Event;
 
 /**
  * This event is triggered for every metamodel when the attribute information for the MetaModel shall be retrieved.
+ *
+ * @SuppressWarnings(PHPMD.LongClassName)
  */
 class CollectMetaModelAttributeInformationEvent extends Event
 {
