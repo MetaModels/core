@@ -1,5 +1,7 @@
 dist: xenial
 
+os: linux
+
 addons:
   apt:
     packages:
@@ -8,12 +10,10 @@ addons:
 language: php
 
 php:
+  - "7.4"
   - "7.3"
-  - "7.2"
-  - "7.1"
 
 env:
-  - CONTAO_VERSION=~4.8.0
   - CONTAO_VERSION=~4.4.0
 
 # Exclude impossible Contao Version combinations.
