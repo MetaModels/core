@@ -313,9 +313,9 @@ class InsertTagsListener implements ServiceAnnotationInterface
      *
      * @param int    $intID   ID of content element or module.
      *
-     * @return boolean|string Return false when nothing was found or the count value.
+     * @return int Return the count value.
      */
-    protected function getCount($strType, $intID)
+    protected function getCount($strType, $intID): int
     {
         switch ($strType) {
             // From module, can be a MetaModel list or filter.
@@ -330,16 +330,15 @@ class InsertTagsListener implements ServiceAnnotationInterface
 
             // Unknown element type.
             default:
-                return false;
+                return 0;
         }
 
         // Check if we have data.
         if (null !== $objMetaModelResult) {
-            return ($this->getCountFor($objMetaModelResult->metamodel, $objMetaModelResult->metamodel_filtering)
-                    ?? false);
+            return $this->getCountFor($objMetaModelResult->metamodel, $objMetaModelResult->metamodel_filtering);
         }
 
-        return false;
+        return 0;
     }
 
     /**
@@ -407,13 +406,13 @@ class InsertTagsListener implements ServiceAnnotationInterface
      *
      * @param int $intFilterId    ID of the filter.
      *
-     * @return int|null Null for no data or integer for the count result.
+     * @return int The count result.
      */
-    protected function getCountFor($intMetaModelId, $intFilterId): ?int
+    protected function getCountFor($intMetaModelId, $intFilterId): int
     {
         $metaModel = $this->loadMetaModel($intMetaModelId);
         if (null === $metaModel) {
-            return null;
+            return 0;
         }
 
         $objFilter = $metaModel->getEmptyFilter();
