@@ -161,12 +161,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['cut'],
                 'icon'  => 'cut.svg'
             ),
-            'copy'   => array
-            (
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy'],
-                'href'  => 'act=copy',
-                'icon'  => 'copy.svg'
-            ),
             'delete' => array
             (
                 'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete'],
