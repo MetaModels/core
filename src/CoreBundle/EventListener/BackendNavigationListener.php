@@ -202,7 +202,7 @@ class BackendNavigationListener
      */
     private function extractLanguageValue($values, $locale): string
     {
-        return ($values[$locale] ?? $values['']);
+        return html_entity_decode($values[$locale] ?? $values['']);
     }
 
     /**
