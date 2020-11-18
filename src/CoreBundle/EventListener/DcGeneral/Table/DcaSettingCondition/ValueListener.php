@@ -54,8 +54,10 @@ class ValueListener extends AbstractListener
 
         $model     = $event->getModel();
         $metaModel = $this->getMetaModel($event->getEnvironment());
-        $attribute = $metaModel->getAttributeById($model->getProperty('attr_id'));
-
+        if (null === $attributeId = $model->getProperty('attr_id')) {
+            return;
+        }
+        $attribute = $metaModel->getAttributeById($attributeId);
         if ($attribute) {
             $options = $this->getOptionsViaDcGeneral($metaModel, $event->getEnvironment(), $attribute);
             $mangled = [];
@@ -168,9 +170,6 @@ class ValueListener extends AbstractListener
             if ('value' !== $property) {
                 return false;
             }
-        }
-        if (null === $event->getModel()->getProperty('attr_id')) {
-            return false;
         }
 
         return true;
