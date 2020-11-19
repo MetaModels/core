@@ -1,3 +1,4 @@
 <div class="clearall">
-<a title="<?= $GLOBALS['TL_LANG']['metamodels_frontendfilter']['clear_all'] ?>" href="<?= $this->href ?>"><?= $GLOBALS['TL_LANG']['metamodels_frontendfilter']['clear_all'] ?></a>
+    <a title="<?= $GLOBALS['TL_LANG']['metamodels_frontendfilter']['clear_all'] ?>"
+       href="<?= $this->href ?>"><?= $GLOBALS['TL_LANG']['metamodels_frontendfilter']['clear_all'] ?></a>
 </div>

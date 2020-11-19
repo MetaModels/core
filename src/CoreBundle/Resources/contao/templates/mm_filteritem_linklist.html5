@@ -1,21 +1,22 @@
 <?php $this->extend('mm_filteritem_default'); ?>
-
 <?php $this->block('formfield'); ?>
-<?php if(is_array($this->options) && count($this->options)): ?>
-<ul>
-<?php
-$i    = 0;
-$last = count($this->options) - 1;
-foreach ($this->options as $option):
-    $class = (!$i) ? 'first ' : '';
-    $class .= ($i == $last) ? 'last ' : '';
-    $class .= ($i++ % 2) ? 'even' : 'odd';
-    $class .= (strlen($option['class'])) ? ' ' . $option['class'] : '';
-?>
-<li class="<?= $class ?>">
-<a href="<?= $option['href'] ?>" class="<?= $class ?>" title="<?= $option['value'] ?>"><?= $option['value'] ?><?php if($this->showCount): ?> <span class="count">(<?= $this->count[$option['key']] ?>)</span><?php endif; ?></a>
-</li>
-<?php endforeach; ?>
-</ul>
+<?php if (is_array($this->options) && count($this->options)): ?>
+    <ul>
+        <?php
+        $i         = 0;
+        $last      = count($this->options) - 1;
+        foreach ($this->options as $option):
+            $class = (!$i) ? 'first ' : '';
+            $class .= ($i == $last) ? 'last ' : '';
+            $class .= ($i++ % 2) ? 'even' : 'odd';
+            $class .= (strlen($option['class'])) ? ' ' . $option['class'] : '';
+            ?>
+            <li class="<?= $class ?>">
+                <a href="<?= $option['href'] ?>" class="<?= $class ?>"
+                   title="<?= $option['value'] ?>"><?= $option['value'] ?><?php if ($this->showCount): ?> <span
+                            class="count">(<?= $this->count[$option['key']] ?>)</span><?php endif; ?></a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
 <?php endif; ?>
 <?php $this->endblock(); ?>

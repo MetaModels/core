@@ -1,4 +1,4 @@
 <fieldset class="tl_subdca">
-<legend><?= $this->generateLabel() . $this->xlabel ?></legend>
-  <?= $this->generateWithError(true) ?>
+    <legend><?= $this->generateLabel() . $this->xlabel ?></legend>
+    <?= $this->generateWithError(true) ?>
 </fieldset>
