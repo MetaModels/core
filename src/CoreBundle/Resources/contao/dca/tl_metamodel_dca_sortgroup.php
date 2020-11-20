@@ -127,10 +127,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = array
         'sorting'           => array
         (
             'mode'         => 4,
-            'fields'       => array('name'),
+            'fields'       => array('sorting'),
             'panelLayout'  => 'limit',
             'headerFields' => array('name'),
-            'flag'         => 1,
         ),
         'label'             => array
         (
