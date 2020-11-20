@@ -1,15 +1,25 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2020 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/it/
+ * Last-updated: 2020-10-02T16:04:55+02:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2014-03-27T12:16:04+01:00
+ * @copyright 2012-2020 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_module']['editfiltersetting']['0']              = 'Modifica l\'impostazione del filtro';
 $GLOBALS['TL_LANG']['tl_module']['editfiltersetting']['1']              = 'Modifica l\'impostazione del filtro ID %s';
@@ -57,6 +67,6 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby_direction']['0']     = 'Ordin
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby_direction']['1']     = 'Ordine ascendente o discendente';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_use_limit']['0']            = 'Utilizza offset e limiti nella lista';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_use_limit']['1']            = 'Controllare se si desidera limitare la quantità di elementi elencati. Questo è utile per mostrare solo 500 elementi o tutti escludendo i primi 10 record, ma mantenendo l\'impaginazione intatta.';
-$GLOBALS['TL_LANG']['tl_module']['mm_filter_legend']                    = 'Filtro MetaModels';
+$GLOBALS['TL_LANG']['tl_module']['mm_filter_legend']                    = 'Filtro MetaModel ';
 $GLOBALS['TL_LANG']['tl_module']['mm_meta_legend']                      = 'Ottimizzazione motori di ricerca';
 
