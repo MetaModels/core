@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,6 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -21,6 +22,7 @@
 
 namespace MetaModels\CoreBundle\Contao\Hooks;
 
+use Contao\DC_Table;
 use Contao\StringUtil;
 use ContaoCommunityAlliance\DcGeneral\Data\ModelId;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
@@ -125,14 +127,14 @@ abstract class AbstractContentElementAndModuleCallback
     /**
      * Return the edit wizard.
      *
-     * @param \DC_Table $dataContainer The data container.
+     * @param DC_Table $dataContainer The data container.
      *
      * @return string
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function editMetaModelButton(\DC_Table $dataContainer)
+    public function editMetaModelButton(DC_Table $dataContainer)
     {
         if ($dataContainer->value < 1) {
             return '';
@@ -154,14 +156,14 @@ abstract class AbstractContentElementAndModuleCallback
     /**
      * Return the edit wizard.
      *
-     * @param \DC_Table $dataContainer The data container.
+     * @param DC_Table $dataContainer The data container.
      *
      * @return string
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function editFilterSettingButton(\DC_Table $dataContainer)
+    public function editFilterSettingButton(DC_Table $dataContainer)
     {
         if ($dataContainer->value < 1) {
             return '';
@@ -186,14 +188,14 @@ abstract class AbstractContentElementAndModuleCallback
     /**
      * Return the edit wizard.
      *
-     * @param \DC_Table $dataContainer The data container.
+     * @param DC_Table $dataContainer The data container.
      *
      * @return string
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function editRenderSettingButton(\DC_Table $dataContainer)
+    public function editRenderSettingButton(DC_Table $dataContainer)
     {
         if ($dataContainer->value < 1) {
             return '';
@@ -218,14 +220,14 @@ abstract class AbstractContentElementAndModuleCallback
     /**
      * Fetch all attribute names for the current MetaModel.
      *
-     * @param \DC_Table $objDc The data container calling this method.
+     * @param DC_Table $objDc The data container calling this method.
      *
      * @return string[] array of all attributes as colName => human name
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function getAttributeNames(\DC_Table $objDc)
+    public function getAttributeNames(DC_Table $objDc)
     {
         $attributeNames = [
             'sorting' => $GLOBALS['TL_LANG']['MSC']['metamodels_sorting'],
@@ -248,11 +250,11 @@ abstract class AbstractContentElementAndModuleCallback
     /**
      * Fetch all available filter settings for the current meta model.
      *
-     * @param \DC_Table $objDC The data container calling this method.
+     * @param DC_Table $objDC The data container calling this method.
      *
      * @return string[] array of all attributes as id => human name
      */
-    public function getFilterSettings(\DC_Table $objDC)
+    public function getFilterSettings(DC_Table $objDC)
     {
         $filterSettings = $this->connection->createQueryBuilder()
             ->select('f.id', 'f.name')
@@ -276,14 +278,14 @@ abstract class AbstractContentElementAndModuleCallback
     /**
      * Get a list with all allowed attributes for meta title.
      *
-     * @param \DC_Table $objDC The data container calling this method.
+     * @param DC_Table $objDC The data container calling this method.
      *
      * @return array A list with all found attributes.
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function getMetaTitleAttributes(\DC_Table $objDC)
+    public function getMetaTitleAttributes(DC_Table $objDC)
     {
         return $this->getFilteredAttributeNames(
             $objDC->activeRecord->metamodel,
@@ -294,14 +296,14 @@ abstract class AbstractContentElementAndModuleCallback
     /**
      * Get a list with all allowed attributes for meta description.
      *
-     * @param \DC_Table $objDC The data container calling this method.
+     * @param DC_Table $objDC The data container calling this method.
      *
      * @return array A list with all found attributes.
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function getMetaDescriptionAttributes(\DC_Table $objDC)
+    public function getMetaDescriptionAttributes(DC_Table $objDC)
     {
         return $this->getFilteredAttributeNames(
             $objDC->activeRecord->metamodel,
@@ -312,15 +314,15 @@ abstract class AbstractContentElementAndModuleCallback
     /**
      * Called from subclass.
      *
-     * @param \DC_Table $dataContainer The data container calling this method.
-     * @param string    $elementName   The type name to search for.
+     * @param DC_Table $dataContainer The data container calling this method.
+     * @param string   $elementName   The type name to search for.
      *
      * @return void
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    protected function buildFilterParamsFor(\DC_Table $dataContainer, $elementName)
+    protected function buildFilterParamsFor(DC_Table $dataContainer, $elementName)
     {
         if (!$this->requestStack->getCurrentRequest()->query->get('act')) {
             return;
@@ -387,11 +389,11 @@ abstract class AbstractContentElementAndModuleCallback
     /**
      * Get attributes for checkbox wizard.
      *
-     * @param \DC_Table $objDc The current row.
+     * @param DC_Table $objDc The current row.
      *
      * @return array
      */
-    public function getFilterParameterNames(\DC_Table $objDc)
+    public function getFilterParameterNames(DC_Table $objDc)
     {
         $return = array();
         $filter = $objDc->activeRecord->metamodel_filtering;
@@ -430,11 +432,11 @@ abstract class AbstractContentElementAndModuleCallback
     /**
      * Fetch all available render settings for the current meta model.
      *
-     * @param \DC_Table $objDC The data container calling this method.
+     * @param DC_Table $objDC The data container calling this method.
      *
      * @return string[] array of all attributes as id => human name
      */
-    public function getRenderSettings(\DC_Table $objDC)
+    public function getRenderSettings(DC_Table $objDC)
     {
         $filterSettings = $this->connection->createQueryBuilder()
             ->select('r.id', 'r.name')

@@ -21,6 +21,8 @@ namespace MetaModels\CoreBundle\DcGeneral;
 
 /**
  * This interface describes a property condition factory that uses an attribute.
+ *
+ * @SuppressWarnings(PHPMD.LongClassName)
  */
 interface AttributeAwarePropertyConditionFactoryInterface extends PropertyConditionFactoryInterface
 {

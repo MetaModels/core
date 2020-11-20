@@ -27,6 +27,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * This tests the simple query filter rule.
+ *
+ * @covers \MetaModels\Filter\Rules\SimpleQuery
  */
 class SimpleQueryTest extends TestCase
 {
@@ -44,7 +46,7 @@ class SimpleQueryTest extends TestCase
         $connection = $this
             ->getMockBuilder(Connection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['executeQuery'])
+            ->onlyMethods(['executeQuery'])
             ->getMock();
         $statement  = $this->getMockForAbstractClass(Statement::class);
 

@@ -21,6 +21,8 @@ namespace MetaModels\CoreBundle\DcGeneral;
 
 /**
  * This interface describes a property condition factory that may contain children.
+ *
+ * @SuppressWarnings(PHPMD.LongClassName)
  */
 interface NestablePropertyConditionFactoryInterface extends PropertyConditionFactoryInterface
 {

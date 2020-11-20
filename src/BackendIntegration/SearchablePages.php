@@ -435,7 +435,6 @@ class SearchablePages
 
         asort($this->foundPages);
 
-        // Return the new list.
         return $this->foundPages;
     }
 

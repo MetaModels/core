@@ -18,3 +18,4 @@ composer.lock
 # build
 build/
 build.properties
+.phpunit.result.cache
