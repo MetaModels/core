@@ -10,7 +10,6 @@ language: php
 php:
   - "7.4"
   - "7.3"
-  - "7.2"
 
 env:
   - CONTAO_VERSION='contao/core-bundle ~4.9.0'
