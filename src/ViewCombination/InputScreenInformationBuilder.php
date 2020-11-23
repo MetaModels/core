@@ -196,6 +196,7 @@ class InputScreenInformationBuilder
                 // @codingStandardsIgnoreEnd
                 return $column;
             }
+
             $column = array_merge(
                 $column,
                 $attribute->getFieldDefinition($column),

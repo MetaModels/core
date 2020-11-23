@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,9 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2019-05-03T19:20:55+02:00
+ * Last-updated: 2020-10-02T16:01:20+02:00
  *
- * @copyright 2012-2019 The MetaModels team.
+ * @copyright 2012-2020 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
@@ -69,7 +69,7 @@ $GLOBALS['TL_LANG']['MSC']['metamodels_support']['main_headline']               
 $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter']['1']                                  = 'Filtro';
 $GLOBALS['TL_LANG']['MSC']['mm_be_info_name']['1']                                    = 'MetaModel';
 $GLOBALS['TL_LANG']['MSC']['noItemsMsg']                                              = 'Non ci sono elementi corrispondenti alla ricerca.';
-$GLOBALS['TL_LANG']['MSC']['no_theme']                                                = 'scope globale';
+$GLOBALS['TL_LANG']['MSC']['no_theme']                                                = 'portata globale';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']['0']                              = 'Filtro';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['limit']['0']                               = 'Limite';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['search']['0']                              = 'Ricerca';

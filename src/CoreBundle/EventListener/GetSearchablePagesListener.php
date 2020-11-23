@@ -444,6 +444,49 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
     }
 
     /**
+     * Start point for the hook getSearchablePages.
+     *
+     * @param array       $pages       List with all pages.
+     *
+     * @param int|null    $rootPage    ID of the root page.
+     *
+     * @param bool|null   $fromSiteMap True when called from sitemap generator, null otherwise.
+     *
+     * @param string|null $language    The current language.
+     *
+     * @return array
+     *
+     * @throws \Doctrine\DBAL\DBALException When an database error occur.
+     *
+     * @see \RebuildIndex::run()
+     * @see \Automator::generateSitemap()
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function addPages($pages, $rootPage = null, $fromSiteMap = false, $language = null)
+    {
+        // Save the pages.
+        $this->foundPages = $pages;
+        unset($pages);
+
+        // Run each entry in the published config array.
+        foreach ($this->getConfigs() as $config) {
+            if (!$config['published']) {
+                continue;
+            }
+            $this->getMetaModelsPages(
+                $config,
+                $rootPage,
+                $language
+            );
+        }
+
+        asort($this->foundPages);
+
+        return $this->foundPages;
+    }
+
+    /**
      * Get a MetaModels, a filter and a renderSetting. Get all items based on the filter and build the jumpTo urls.
      *
      * @param array       $config   ID of the MetaModels.

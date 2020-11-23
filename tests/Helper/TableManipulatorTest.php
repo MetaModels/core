@@ -23,10 +23,13 @@ namespace MetaModels\Test\Helper;
 
 use Doctrine\DBAL\Connection;
 use MetaModels\Helper\TableManipulator;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Class TableManipulatorTest
+ *
+ * @covers \MetaModels\Helper\TableManipulator
  */
 class TableManipulatorTest extends TestCase
 {
@@ -61,7 +64,7 @@ class TableManipulatorTest extends TestCase
     /**
      * Mock the database connection.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
+     * @return MockObject|Connection
      */
     private function mockConnection()
     {

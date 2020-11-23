@@ -229,9 +229,6 @@ class TableManipulator
      * @param string $strColName The name of the column.
      *
      * @return bool true if the column is a system column, false otherwise.
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function isSystemColumn($strColName)
     {
@@ -245,9 +242,7 @@ class TableManipulator
      *
      * @return void
      *
-     * @throws \Exception If an invalid table name has been passed.
-     *
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @throws InvalidTableNameException If an invalid table name has been passed.
      */
     public function checkTablename($strTableName)
     {
@@ -267,11 +262,9 @@ class TableManipulator
      *
      * @return void
      *
-     * @throws \Exception If an invalid column name has been passed.
+     * @throws InvalidColumnNameException If an invalid column name has been passed.
      *
      * @see{MetaModelTableManipulation::isSystemColumn()} and @see{MetaModelTableManipulation::isValidColumnName()}.
-     *
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function checkColumnName($strColName, $blnAllowSystemCol = false)
     {
@@ -291,9 +284,10 @@ class TableManipulator
      *
      * @return void
      *
-     * @throws \Exception If an invalid table name has been passed or the table does not exist.
+     * @throws InvalidTableNameException  If an invalid table name has been passed.
+     * @throws TableDoesNotExistException If the table does not exist.
      *
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @phpcs:ignore Squiz.Commenting.FunctionCommentThrowTag
      */
     public function checkTableExists($strTableName)
     {
@@ -310,9 +304,10 @@ class TableManipulator
      *
      * @return void
      *
-     * @throws \Exception If an invalid table name has been passed or a table with the given name exists.
+     * @throws InvalidTableNameException If an invalid table name has been passed.
+     * @throws TableExistsException      If a table with the given name exists.
      *
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @phpcs:ignore Squiz.Commenting.FunctionCommentThrowTag
      */
     public function checkTableDoesNotExist($strTableName)
     {
@@ -329,7 +324,8 @@ class TableManipulator
      *
      * @return void
      *
-     * @throws \Exception If an invalid table name has been passed or a table with the given name exists.
+     * @throws InvalidTableNameException If an invalid table name has been passed.
+     * @throws TableExistsException      If a table with the given name exists.
      */
     public function createTable($strTableName)
     {
@@ -346,7 +342,9 @@ class TableManipulator
      *
      * @return void
      *
-     * @throws \Exception If an invalid table name has been passed.
+     * @throws InvalidTableNameException  If an invalid table name has been passed.
+     * @throws TableDoesNotExistException If the source table does not exist.
+     * @throws TableExistsException       If a table with the given target name exists.
      */
     public function renameTable($strTableName, $strNewTableName)
     {
@@ -363,7 +361,8 @@ class TableManipulator
      *
      * @return void
      *
-     * @throws \Exception If an invalid table name has been passed or the table does not exist.
+     * @throws InvalidTableNameException  If an invalid table name has been passed.
+     * @throws TableDoesNotExistException If the table does not exist.
      */
     public function deleteTable($strTableName)
     {
@@ -383,8 +382,10 @@ class TableManipulator
      *
      * @return void
      *
-     * @throws \Exception If an invalid table name has been passed or the table does not exist, the column name is
-     *                    invalid or the column does not exist.
+     * @throws InvalidTableNameException   If an invalid table name has been passed.
+     * @throws TableDoesNotExistException  If the table does not exist.
+     * @throws InvalidColumnNameException  If an invalid column name has been passed.
+     * @throws ColumnDoesNotExistException If the column does not exist.
      */
     public function addIndex($strTableName, $strIndexType, $strColName)
     {
@@ -410,10 +411,12 @@ class TableManipulator
      *
      * @return void
      *
-     * @throws \Exception If an invalid table name has been passed or the table does not exist, the column name is
-     *                    invalid or the column does not exist.
+     * @throws InvalidTableNameException   If an invalid table name has been passed.
+     * @throws TableDoesNotExistException  If the table does not exist.
+     * @throws InvalidColumnNameException  If an invalid column name has been passed.
+     * @throws ColumnDoesNotExistException If the column does not exist.
      *
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @phpcs:ignore Squiz.Commenting.FunctionCommentThrowTag
      */
     public function checkColumnExists($strTableName, $strColName, $blnAllowSystemCol = false)
     {
@@ -436,10 +439,12 @@ class TableManipulator
      *
      * @return void
      *
-     * @throws \Exception If an invalid table name has been passed or the table does not exist, the column name is
-     *                    invalid or the column does not exist.
+     * @throws InvalidTableNameException   If an invalid table name has been passed.
+     * @throws TableDoesNotExistException  If the table does not exist.
+     * @throws InvalidColumnNameException  If an invalid column name has been passed.
+     * @throws ColumnExistsException       If the column does exists.
      *
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @phpcs:ignore Squiz.Commenting.FunctionCommentThrowTag
      */
     public function checkColumnDoesNotExist($strTableName, $strColName, $blnAllowSystemCol = false)
     {

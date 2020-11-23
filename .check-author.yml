@@ -5,6 +5,7 @@ exclude:
   - /^src\/CoreBundle\/Resources\/contao\/languages/
 
 mapping:
+  'Marc Reimann <marc.reimann@paus-medien.de>': 'Marc Reimann <reimann@mediendepot-ruhr.de>'
   'Andreas Isaak <info@andreas-isaak.de>': 'Andreas Isaak <andy.jared@googlemail.com>'
   'Stefan Heimes <stefan_heimes@hotmail.com>':
     - 'Stefan heimes <stefan_heimes@hotmail.com>'
