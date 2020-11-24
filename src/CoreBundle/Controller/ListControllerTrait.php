@@ -105,6 +105,8 @@ trait ListControllerTrait
      * @param Request  $request  The request.
      *
      * @return Response The response.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function getResponseInternal(Template $template, Model $model, Request $request): ?Response
     {
@@ -202,7 +204,6 @@ trait ListControllerTrait
         return $result;
     }
 
-
     /**
      * Return a back end wildcard response.
      *
@@ -221,6 +222,18 @@ trait ListControllerTrait
         return new Response($template->parse());
     }
 
+    /**
+     * Obtain the text for the wildcard.
+     *
+     * @param Model  $model The database list model.
+     * @param string $href  The edit href.
+     * @param string $name  The name of the element.
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
     private function getWildcardInfoText(Model $model, string $href, string $name): string
     {
         if (empty($model->metamodel)) {
