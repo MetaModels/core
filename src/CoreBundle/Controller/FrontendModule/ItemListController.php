@@ -57,6 +57,24 @@ final class ItemListController extends AbstractFrontendModuleController
     }
 
     /**
+     * Return a back end wildcard response.
+     *
+     * @param ModuleModel $module The module model.
+     *
+     * @return Response The response.
+     */
+    protected function getBackendWildcard(ModuleModel $module): Response
+    {
+        $name = $this->get('translator')->trans('FMD.'.$this->getType().'.0', [], 'contao_modules');
+        $href = $this->get('router')->generate(
+            'contao_backend',
+            ['do' => 'themes', 'table' => 'tl_module', 'act' => 'edit', 'id' => $module->id]
+        );
+
+        return $this->renderBackendWildcard($href, $name, $module);
+    }
+
+    /**
      * Generate the response.
      *
      * @param Template    $template The template.

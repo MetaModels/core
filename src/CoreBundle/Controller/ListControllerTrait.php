@@ -21,6 +21,7 @@
 
 namespace MetaModels\CoreBundle\Controller;
 
+use Contao\BackendTemplate;
 use Contao\Input;
 use Contao\Model;
 use Contao\StringUtil;
@@ -199,5 +200,81 @@ trait ListControllerTrait
         Input::get($name);
 
         return $result;
+    }
+
+
+    /**
+     * Return a back end wildcard response.
+     *
+     * @return Response The response.
+     */
+    private function renderBackendWildcard(string $href, string $name, Model $model): Response
+    {
+        $template = new BackendTemplate('be_wildcard');
+
+        $headline = StringUtil::deserialize($model->headline);
+
+        $template->wildcard = $this->getWildcardInfoText($model, $href, $name);
+        $template->title    = (\is_array($headline) ? $headline['value'] : $headline);
+        $template->id       = $model->id;
+
+        return new Response($template->parse());
+    }
+
+    private function getWildcardInfoText(Model $model, string $href, string $name): string
+    {
+        if (empty($model->metamodel)) {
+            return 'MetaModel not configured.';
+        }
+
+        if (null === $metaModelName = $this->factory->translateIdToMetaModelName($model->metamodel)) {
+            return 'Unknown MetaModel: ' . $model->metamodel;
+        }
+        // Add CSS file.
+        $GLOBALS['TL_CSS'][] = 'bundles/metamodelscore/css/style.css';
+
+        // Retrieve name of MetaModels.
+        $infoTemplate =
+            '<div class="wc_info tl_gray"><span class="wc_label"><abbr title="%s">%s:</abbr></span> %s</div>';
+
+        $metaModel = $this->factory->getMetaModel($metaModelName);
+        $header = $name . ': ' . $metaModel->getName();
+        if ($href) {
+            $header .= ' (<a href="' . $href . '&amp;rt=' . REQUEST_TOKEN. '" class="tl_gray">ID: ' . $model->id . '</a>)';
+        }
+        $infoText  = sprintf(
+            $infoTemplate,
+            $this->get('translator')->trans('MSC.mm_be_info_name.1', [], 'contao_default'),
+            $this->get('translator')->trans('MSC.mm_be_info_name.0', [], 'contao_default'),
+            $header
+        );
+
+        // Retrieve name of filter.
+        if ($model->metamodel_filtering) {
+            $infoFi = $this->filterFactory->createCollection($model->metamodel_filtering)->get('name');
+            if ($infoFi) {
+                $infoText .= sprintf(
+                    $infoTemplate,
+                    $this->get('translator')->trans('MSC.mm_be_info_filter.1', [], 'contao_default'),
+                    $this->get('translator')->trans('MSC.mm_be_info_filter.0', [], 'contao_default'),
+                    $infoFi
+                );
+            }
+        }
+
+        // Retrieve name of rendersetting.
+        if ($model->metamodel_rendersettings) {
+            $infoRs = $this->renderSettingFactory->createCollection($metaModel, $model->metamodel_rendersettings)->get('name');
+            if ($infoRs) {
+                $infoText .= sprintf(
+                    $infoTemplate,
+                    $this->get('translator')->trans('MSC.mm_be_info_render_setting.1', [], 'contao_default'),
+                    $this->get('translator')->trans('MSC.mm_be_info_render_setting.0', [], 'contao_default'),
+                    $infoRs
+                );
+            }
+        }
+
+        return $infoText . '<br>';
     }
 }

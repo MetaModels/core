@@ -21,7 +21,6 @@
 
 namespace MetaModels\CoreBundle\Controller\ContentElement;
 
-use Contao\BackendTemplate;
 use Contao\ContentModel;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\ServiceAnnotation\ContentElement;
@@ -82,16 +81,18 @@ final class ItemListController extends AbstractContentElementController
     /**
      * Return a back end wildcard response.
      *
-     * @return Response The repsonse.
+     * @param ContentModel $model The content model.
+     *
+     * @return Response The response.
      */
-    private function getBackendWildcard(): Response
+    private function getBackendWildcard(ContentModel $model): Response
     {
         $name = $this->get('translator')->trans('CTE.' . $this->getType() . '.0', [], 'contao_modules');
+        $href = $this->get('router')->generate(
+            'contao_backend',
+            ['do' => 'article', 'table' => 'tl_content', 'act' => 'edit', 'id' => $model->id]
+        );
 
-        $template = new BackendTemplate('be_wildcard');
-
-        $template->wildcard = '### ' . strtoupper($name) . ' ###';
-
-        return new Response($template->parse());
+        return $this->renderBackendWildcard($href, $name, $model);
     }
 }
