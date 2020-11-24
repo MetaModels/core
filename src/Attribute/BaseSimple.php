@@ -140,7 +140,7 @@ class BaseSimple extends Base implements ISimple
         $strColName = $this->getColName();
 
         foreach ($arrValues as $intId => $varData) {
-            $statement = $this->connection->createQueryBuilder()
+            $this->connection->createQueryBuilder()
                 ->update($strTable, 't')
                 ->where('t.id=:id')
                 ->set('t.' . $strColName, ':' . $strColName)

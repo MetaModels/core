@@ -37,6 +37,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Helper trait for lists (CE and MOD).
+ */
 trait ListControllerTrait
 {
     /**
@@ -165,11 +168,12 @@ trait ListControllerTrait
     /**
      * Retrieve all filter parameters from the input class for the specified filter setting.
      *
-     * @param ItemList $itemRenderer The list renderer instance to be used.
+     * @param FilterUrl $filterUrl    The filter URL to obtain parameters from.
+     * @param ItemList  $itemRenderer The list renderer instance to be used.
      *
      * @return string[]
      */
-    private function getFilterParameters(FilterUrl $filterUrl, $itemRenderer): array
+    private function getFilterParameters(FilterUrl $filterUrl, ItemList $itemRenderer): array
     {
         $result = [];
         foreach ($itemRenderer->getFilterSettings()->getParameters() as $name) {
@@ -184,8 +188,8 @@ trait ListControllerTrait
     /**
      * Get parameter from get or slug.
      *
-     * @param FilterUrl $filterUrl
-     * @param string    $name
+     * @param FilterUrl $filterUrl The filter URL to obtain parameters from.
+     * @param string    $name      The parameter name to obtain.
      *
      * @return string|null
      */
@@ -206,6 +210,10 @@ trait ListControllerTrait
 
     /**
      * Return a back end wildcard response.
+     *
+     * @param string $href  The edit href.
+     * @param string $name  The name of the element.
+     * @param Model  $model The database list model.
      *
      * @return Response The response.
      */
@@ -251,11 +259,16 @@ trait ListControllerTrait
             '<div class="wc_info tl_gray"><span class="wc_label"><abbr title="%s">%s:</abbr></span> %s</div>';
 
         $metaModel = $this->factory->getMetaModel($metaModelName);
-        $header = $name . ': ' . $metaModel->getName();
+        $header    = $name . ': ' . $metaModel->getName();
         if ($href) {
-            $header .= ' (<a href="' . $href . '&amp;rt=' . REQUEST_TOKEN. '" class="tl_gray">ID: ' . $model->id . '</a>)';
+            $header .= sprintf(
+                ' (<a href="%1$s&amp;rt=%2$s" class="tl_gray">ID: %3$s</a>)',
+                $href,
+                REQUEST_TOKEN,
+                $model->id
+            );
         }
-        $infoText  = sprintf(
+        $infoText = sprintf(
             $infoTemplate,
             $this->get('translator')->trans('MSC.mm_be_info_name.1', [], 'contao_default'),
             $this->get('translator')->trans('MSC.mm_be_info_name.0', [], 'contao_default'),
@@ -277,7 +290,9 @@ trait ListControllerTrait
 
         // Retrieve name of rendersetting.
         if ($model->metamodel_rendersettings) {
-            $infoRs = $this->renderSettingFactory->createCollection($metaModel, $model->metamodel_rendersettings)->get('name');
+            $infoRs = $this->renderSettingFactory
+                ->createCollection($metaModel, $model->metamodel_rendersettings)
+                ->get('name');
             if ($infoRs) {
                 $infoText .= sprintf(
                     $infoTemplate,

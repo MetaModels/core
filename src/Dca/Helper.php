@@ -185,7 +185,7 @@ class Helper
         $extra = $property->getExtra();
 
         $extra['minCount']       =
-        $extra['maxCount'] = count($languages);
+        $extra['maxCount']       = count($languages);
         $extra['disableSorting'] = true;
         $extra['tl_class']       = 'clr w50';
         $extra['columnFields']   = [

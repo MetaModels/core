@@ -123,8 +123,6 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
     /**
      * Start point for the hook getSearchablePages.
      *
-     * @Hook("getSearchablePages")
-     *
      * @param array       $pages       List with all pages.
      *
      * @param int|null    $rootPage    ID of the root page.
@@ -139,6 +137,8 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      *
      * @see \RebuildIndex::run()
      * @see \Automator::generateSitemap()
+     *
+     * @Hook("getSearchablePages")
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -161,7 +161,6 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
 
         asort($this->foundPages);
 
-        // Return the new list.
         return $this->foundPages;
     }
 

@@ -92,7 +92,7 @@ class TagsWidget extends Widget
     {
         // If true we need another offset.
         $intSub   = ($this->arrConfiguration['includeBlankOption'] ? 1 : 0);
-        $intSub   += ($this->arrConfiguration['showSelectAll']
+        $intSub  += ($this->arrConfiguration['showSelectAll']
                       || null === $this->arrConfiguration['showSelectAll'] ? 1 : 0);
         $strClass = $this->strName;
 

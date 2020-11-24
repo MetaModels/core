@@ -82,6 +82,8 @@ class FilterBuilderSql
      * @param string     $combiner   The combiner (AND or OR).
      *
      * @param Connection $connection The database connection.
+     *
+     * @param string     $tableAlias The table alias prefix (defaults to 't.').
      */
     public function __construct($tableName, $combiner, $connection, string $tableAlias = 't.')
     {
