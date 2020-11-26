@@ -410,10 +410,16 @@ abstract class AbstractContentElementAndModuleCallback
     /**
      * Get frontend templates for filters.
      *
+     * @param DC_Table $dcTable The data container calling this method.
+     *
      * @return array
      */
-    public function getFilterTemplates()
+    public function getFilterTemplates(DC_Table $dcTable)
     {
+        if ($dcTable->activeRecord->type === 'metamodels_frontendclearall') {
+            return $this->templateList->getTemplatesForBase('mm_clearall_');
+        }
+
         return $this->templateList->getTemplatesForBase('mm_filter_');
     }
 

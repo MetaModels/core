@@ -281,7 +281,6 @@ array_insert(
         ],
         'metamodel_fef_template'        => [
             'label'            => &$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_template'],
-            'default'          => 'mm_filter_default',
             'exclude'          => true,
             'inputType'        => 'select',
             'options_callback' => [ContentElementCallback::class, 'getFilterTemplates'],
