@@ -113,11 +113,11 @@ class InsertTagsListener implements ServiceAnnotationInterface
     /**
      * Evaluate an insert tag.
      *
-     * @Hook("replaceInsertTags")
-     *
      * @param string $insertTag The tag to evaluate.
      *
      * @return bool|string
+     *
+     * @Hook("replaceInsertTags")
      */
     public function __invoke($insertTag)
     {

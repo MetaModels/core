@@ -124,12 +124,12 @@ class MetaModelsTest extends TestCase
                     $builder
                         ->expects($this->once())
                         ->method('select')
-                        ->with('*')
+                        ->with('t.*')
                         ->willReturn($builder);
                     $builder
                         ->expects($this->once())
                         ->method('from')
-                        ->with('mm_test_retrieve')
+                        ->with('mm_test_retrieve', 't')
                         ->willReturn($builder);
 
                     $expr = $this
@@ -146,7 +146,7 @@ class MetaModelsTest extends TestCase
                     $builder
                         ->expects($this->once())
                         ->method('where')
-                        ->with('id IN (:values)')
+                        ->with('t.id IN (:values)')
                         ->willReturn($builder);
 
                     $builder
@@ -249,12 +249,12 @@ class MetaModelsTest extends TestCase
                         $builder
                             ->expects($this->once())
                             ->method('select')
-                            ->with('id')
+                            ->with('t.id')
                             ->willReturn($builder);
                         $builder
                             ->expects($this->once())
                             ->method('from')
-                            ->with('mm_test_retrieve')
+                            ->with('mm_test_retrieve', 't')
                             ->willReturn($builder);
 
                         $expr = $this
@@ -271,7 +271,7 @@ class MetaModelsTest extends TestCase
                         $builder
                             ->expects($this->once())
                             ->method('where')
-                            ->with('id IN (:values)')
+                            ->with('t.id IN (:values)')
                             ->willReturn($builder);
 
                         $builder
@@ -341,12 +341,12 @@ class MetaModelsTest extends TestCase
                         $builder
                             ->expects($this->once())
                             ->method('select')
-                            ->with('id')
+                            ->with('t.id')
                             ->willReturn($builder);
                         $builder
                             ->expects($this->once())
                             ->method('from')
-                            ->with('mm_test_retrieve')
+                            ->with('mm_test_retrieve', 't')
                             ->willReturn($builder);
 
                         $expr = $this
@@ -363,7 +363,7 @@ class MetaModelsTest extends TestCase
                         $builder
                             ->expects($this->once())
                             ->method('where')
-                            ->with('id IN (:values)')
+                            ->with('t.id IN (:values)')
                             ->willReturn($builder);
 
                         $builder
@@ -455,12 +455,12 @@ class MetaModelsTest extends TestCase
                         $builder
                             ->expects($this->once())
                             ->method('select')
-                            ->with('COUNT(id)')
+                            ->with('COUNT(t.id)')
                             ->willReturn($builder);
                         $builder
                             ->expects($this->once())
                             ->method('from')
-                            ->with('mm_test_retrieve')
+                            ->with('mm_test_retrieve', 't')
                             ->willReturn($builder);
 
                         $expr = $this
@@ -477,7 +477,7 @@ class MetaModelsTest extends TestCase
                         $builder
                             ->expects($this->once())
                             ->method('where')
-                            ->with('id IN (:values)')
+                            ->with('t.id IN (:values)')
                             ->willReturn($builder);
 
                         $builder

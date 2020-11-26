@@ -13,6 +13,7 @@
  * @package    MetaModels/core
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -20,17 +21,11 @@
 
 namespace MetaModels\CoreBundle\Controller\ContentElement;
 
-use Contao\BackendTemplate;
 use Contao\ContentModel;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\ServiceAnnotation\ContentElement;
-use Contao\Input;
-use Contao\StringUtil;
 use Contao\Template;
-use MetaModels\Filter\FilterUrl;
-use MetaModels\Filter\FilterUrlBuilder;
-use MetaModels\IItem;
-use MetaModels\ItemList;
+use MetaModels\CoreBundle\Controller\ListControllerTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -41,23 +36,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class ItemListController extends AbstractContentElementController
 {
-
-    /**
-     * The filter url builder.
-     *
-     * @var FilterUrlBuilder
-     */
-    private $filterUrlBuilder;
-
-    /**
-     * ItemListController constructor.
-     *
-     * @param FilterUrlBuilder $filterUrlBuilder The filter url builder.
-     */
-    public function __construct(FilterUrlBuilder $filterUrlBuilder)
-    {
-        $this->filterUrlBuilder = $filterUrlBuilder;
-    }
+    use ListControllerTrait;
 
     /**
      * Override the template and return the response.
@@ -93,49 +72,7 @@ final class ItemListController extends AbstractContentElementController
      */
     protected function getResponse(Template $template, ContentModel $model, Request $request): ?Response
     {
-        $itemRenderer = new ItemList();
-
-        $template->searchable = !$model->metamodel_donotindex;
-
-        $sorting   = $model->metamodel_sortby;
-        $direction = $model->metamodel_sortby_direction;
-
-        // FIXME: filter URL should be created from local request and not from master request.
-        $filterUrl = $this->filterUrlBuilder->getCurrentFilterUrl();
-        if ($model->metamodel_sort_override) {
-            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, 'orderBy')) {
-                $sorting = $value;
-            }
-            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, 'orderDir')) {
-                $direction = $value;
-            }
-        }
-
-        $filterParams = StringUtil::deserialize($model->metamodel_filterparams, true);
-        $itemRenderer
-            ->setMetaModel($model->metamodel, $model->metamodel_rendersettings)
-            ->setListTemplate($template)
-            ->setLimit($model->metamodel_use_limit, $model->metamodel_offset, $model->metamodel_limit)
-            ->setPageBreak($model->perPage)
-            ->setSorting($sorting, $direction)
-            ->setFilterSettings($model->metamodel_filtering)
-            ->setFilterParameters($filterParams, $this->getFilterParameters($filterUrl, $itemRenderer))
-            ->setMetaTags($model->metamodel_meta_title, $model->metamodel_meta_description);
-
-        $template->items         = StringUtil::encodeEmail($itemRenderer->render($model->metamodel_noparsing, $model));
-        $template->numberOfItems = $itemRenderer->getItems()->getCount();
-        $template->pagination    = $itemRenderer->getPagination();
-
-        $responseTags = array_map(
-            static function (IItem $item) {
-                return sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id'));
-            },
-            iterator_to_array($itemRenderer->getItems(), false)
-        );
-
-        $response = $template->getResponse();
-
-        $this->tagResponse($responseTags);
+        $response = $this->getResponseInternal($template, $model, $request);
         $this->addSharedMaxAgeToResponse($response, $model);
 
         return $response;
@@ -144,58 +81,18 @@ final class ItemListController extends AbstractContentElementController
     /**
      * Return a back end wildcard response.
      *
-     * @return Response The repsonse.
+     * @param ContentModel $model The content model.
+     *
+     * @return Response The response.
      */
-    private function getBackendWildcard(): Response
+    private function getBackendWildcard(ContentModel $model): Response
     {
         $name = $this->get('translator')->trans('CTE.' . $this->getType() . '.0', [], 'contao_modules');
+        $href = $this->get('router')->generate(
+            'contao_backend',
+            ['do' => 'article', 'table' => 'tl_content', 'act' => 'edit', 'id' => $model->id]
+        );
 
-        $template = new BackendTemplate('be_wildcard');
-
-        $template->wildcard = '### ' . strtoupper($name) . ' ###';
-
-        return new Response($template->parse());
-    }
-
-    /**
-     * Retrieve all filter parameters from the input class for the specified filter setting.
-     *
-     * @param ItemList $itemRenderer The list renderer instance to be used.
-     *
-     * @return string[]
-     */
-    private function getFilterParameters(FilterUrl $filterUrl, $itemRenderer): array
-    {
-        $result = [];
-        foreach ($itemRenderer->getFilterSettings()->getParameters() as $name) {
-            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, $name)) {
-                $result[$name] = $value;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Get parameter from get or slug.
-     *
-     * @param FilterUrl $filterUrl
-     * @param string    $name
-     *
-     * @return string|null
-     */
-    private function tryReadFromSlugOrGet(FilterUrl $filterUrl, string $name): ?string
-    {
-        $result = null;
-        if ($filterUrl->hasSlug($name)) {
-            $result = $filterUrl->getSlug($name);
-        } elseif ($filterUrl->hasGet($name)) {
-            $result = $filterUrl->getGet($name);
-        }
-
-        // Mark the parameter as used (otherwise, a 404 is thrown)
-        Input::get($name);
-
-        return $result;
+        return $this->renderBackendWildcard($href, $name, $model);
     }
 }
