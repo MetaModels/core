@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * Add description.
+ */
+
+// Debug.
+if (System::getContainer()->get('kernel')->isDebug()) {
+    dump($this->data);
+}
+?>
+<?php if (count($this->data)): ?>
+    <?php foreach ($this->data as $arrItem): ?>
+     <!-- Include here your output with PHP echo from nodes e.g.
+          $arrItem['html5']['attribute_name'] or $arrItem['text']['attribute_name'] and so on
+          Switch on the debug mode and look at the debug output in the toolbar...
+          --->
+    <?php endforeach; ?>
+<?php else : ?>
+    <?php $this->block('noItem'); ?>
+    <p class="info"><?= $this->noItemsMsg ?></p>
+    <?php $this->endblock(); ?>
+<?php endif; ?>
