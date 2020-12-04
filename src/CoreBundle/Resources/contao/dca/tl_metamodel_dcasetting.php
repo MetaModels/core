@@ -397,7 +397,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'inputType' => 'select',
             'default'   => 'tinyMCE',
             'eval'      => [
-                'tl_class'           => 'w50 m12',
+                'tl_class'           => 'w50',
                 'includeBlankOption' => true,
             ],
             'sql'       => "varchar(64) NOT NULL default ''"
