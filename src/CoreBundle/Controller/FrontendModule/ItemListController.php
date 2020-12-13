@@ -13,6 +13,7 @@
  * @package    MetaModels/core
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -23,6 +24,7 @@ namespace MetaModels\CoreBundle\Controller\FrontendModule;
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\CoreBundle\ServiceAnnotation\FrontendModule;
 use Contao\ModuleModel;
+use Contao\PageModel;
 use Contao\Template;
 use MetaModels\CoreBundle\Controller\ListControllerTrait;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,20 +42,26 @@ final class ItemListController extends AbstractFrontendModuleController
     /**
      * Override the template and return the response.
      *
-     * @param Request     $request The request.
-     * @param ModuleModel $model   The module model.
-     * @param string      $section The layout section, e.g. "main".
-     * @param array|null  $classes The css classes.
+     * @param Request        $request   The request.
+     * @param ModuleModel    $model     The module model.
+     * @param string         $section   The layout section, e.g. "main".
+     * @param array|null     $classes   The css classes.
+     * @param PageModel|null $pageModel The page model.
      *
      * @return Response The response.
      */
-    public function __invoke(Request $request, ModuleModel $model, string $section, array $classes = null): Response
-    {
+    public function __invoke(
+        Request $request,
+        ModuleModel $model,
+        string $section,
+        array $classes = null,
+        PageModel $pageModel = null
+    ): Response {
         if (!empty($model->metamodel_layout)) {
             $model->customTpl = $model->metamodel_layout;
         }
 
-        return parent::__invoke($request, $model, $section, $classes);
+        return parent::__invoke($request, $model, $section, $classes, $pageModel);
     }
 
     /**
