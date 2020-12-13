@@ -63,12 +63,13 @@ final class ReplaceParam
 
     /**
      * Replace the param insert tag in the given content.
+     * If the parameter name not exist, then null will returned.
      *
      * @param string $content The content.
      *
-     * @return string
+     * @return string|null
      */
-    public function replace(string $content)
+    public function replace(string $content): ?string
     {
         if (false === \strpos($content, '{{')
             || !($tags = preg_split('~{{([a-zA-Z0-9\x80-\xFF][^{}]*)}}~', $content, -1, PREG_SPLIT_DELIM_CAPTURE))
@@ -77,40 +78,44 @@ final class ReplaceParam
             return $content;
         }
 
+        $newContent = null;
         foreach ($tags as $tag) {
             if (!(2 === \count($chunks = \explode('::', $tag)))
                 || !('param' === $chunks[0])
-                || !$this->isParameterSupported($chunks[1], ['get', 'post', 'cookie', 'session', 'filter'])
+                || !($this->isParameterSupported($chunks[1], ['get', 'post', 'cookie', 'session', 'filter']))
             ) {
                 continue;
             }
 
-            $content = $this->replaceInputParameter($chunks, $content, $tag);
-            $content = $this->replaceSessionParameter($chunks, $content, $tag);
+            $newContent = $this->replaceInputParameter($chunks, $content, $tag);
+            $newContent = $this->replaceSessionParameter($chunks, $newContent, $tag);
         }
 
-        return $content;
+        return $newContent;
     }
 
     /**
      * Replace the insert tag with the input value.
      *
-     * @param array  $chunks  The chunks.
-     * @param string $content The content.
-     * @param string $tag     The tag.
+     * @param array       $chunks  The chunks.
+     * @param string|null $content The content.
+     * @param string      $tag     The tag.
      *
-     * @return string
+     * @return string|null
      */
-    private function replaceInputParameter(array $chunks, string $content, string $tag): string
+    private function replaceInputParameter(array $chunks, ?string $content, string $tag): ?string
     {
-        if (!$this->isParameterSupported($chunks[1], ['get', 'post', 'cookie'])
+        if ((null === $content)
+            || !($this->isParameterSupported($chunks[1], ['get', 'post', 'cookie']))
             || !($arguments = $this->splitParameter($chunks[1]))
         ) {
             return $content;
         }
 
         if ((false === \strpos($tag, '&default='))) {
-            $result = $this->input->{$arguments[0]}($arguments[1]);
+            if (null === ($result = $this->input->{$arguments[0]}($arguments[1]))) {
+                return null;
+            }
             return \str_replace(
                 '{{' . $tag . '}}',
                 \is_array($result) ? \serialize($result) : $result,
@@ -129,15 +134,16 @@ final class ReplaceParam
     /**
      * Replace the insert tag with the session value.
      *
-     * @param array  $chunks  The chunks.
-     * @param string $content The content.
-     * @param string $tag     The tag.
+     * @param array       $chunks  The chunks.
+     * @param string|null $content The content.
+     * @param string      $tag     The tag.
      *
-     * @return string
+     * @return string|null
      */
-    private function replaceSessionParameter(array $chunks, string $content, string $tag): string
+    private function replaceSessionParameter(array $chunks, ?string $content, string $tag): ?string
     {
-        if (!$this->isParameterSupported($chunks[1], ['session'])
+        if ((null === $content)
+            || !($this->isParameterSupported($chunks[1], ['session']))
             || !($arguments = $this->splitParameter($chunks[1]))
         ) {
             return $content;
