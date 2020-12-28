@@ -457,7 +457,7 @@ WHERE 1 = 1',
             'default'   => false,
             'inputType' => 'checkbox',
             'eval'      => [
-                'tl_class' => 'w50 cbx',
+                'tl_class' => 'w50 m12 cbx',
             ],
             'sql'       => "char(1) NOT NULL default '0'"
         ],
