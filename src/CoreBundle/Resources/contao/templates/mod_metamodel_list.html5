@@ -1,10 +1,8 @@
 <?php $this->extend($this->searchable ? 'block_searchable' : 'block_unsearchable'); ?>
-
 <?php $this->block('content'); ?>
 <?php if ($this->editEnable): ?>
-<div class="addUrl"><a href="<?= $this->addUrl ?>"><?= $this->addNewLabel ?></a></div>
+    <div class="addUrl"><a href="<?= $this->addUrl ?>"><?= $this->addNewLabel ?></a></div>
 <?php endif; ?>
-
 <?= $this->items ?>
 <?= $this->pagination ?>
 <?php $this->endblock(); ?>
