@@ -21,6 +21,8 @@ namespace MetaModels\CoreBundle\DcGeneral;
 
 /**
  * This is the abstract base for attribute aware condition factories.
+ *
+ * @SuppressWarnings(PHPMD.LongClassName)
  */
 abstract class AbstractRestrictedAttributeConditionFactory extends AbstractAttributeConditionFactory
 {

@@ -311,7 +311,11 @@ abstract class AbstractAddAllController
      */
     private function checkboxCaption($key, $table, IAttribute $attribute)
     {
-        return $this->translator->trans($table . '.' . $key, [$attribute->getName(), $attribute->getColName()], 'contao_' . $table);
+        return $this->translator->trans(
+            $table . '.' . $key,
+            [$attribute->getName(), $attribute->getColName()],
+            'contao_' . $table
+        );
     }
 
     /**

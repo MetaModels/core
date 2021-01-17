@@ -41,6 +41,7 @@ class AttributeOptionsListener extends AbstractListener
 
     /**
      * {@inheritDoc}
+     *
      * @param SelectAttributeOptionLabelFormatter $attributeLabelFormatter The attribute select option label formatter.
      */
     public function __construct(

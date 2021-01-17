@@ -186,7 +186,7 @@ class FilterBuilderTest extends TestCase
         $connection
             ->expects($this->once())
             ->method('executeQuery')
-            ->with('SELECT id FROM mm_test WHERE ((foo = ?))', [0])
+            ->with('SELECT t.id FROM mm_test AS t WHERE ((t.foo = ?))', [0])
             ->willReturn($statement);
 
         $builder = new FilterBuilder($metaModel, $config, $connection);

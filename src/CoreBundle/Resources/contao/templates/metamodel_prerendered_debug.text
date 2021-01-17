@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * Add description.
+ */
+
+// Debug.
+if (System::getContainer()->get('kernel')->isDebug()) {
+    dump($this->data);
+}
+
+if (count($this->data)) {
+    foreach ($this->data as $item) {
+        /**
+         * Include here your output with PHP echo from nodes e.g.
+         * $item['text']['attribute_name'] and so on
+         * Switch on the debug mode and look at the debug output in the toolbar...
+         */
+    }
+} else {
+    echo $this->noItemsMsg;
+}

@@ -12,6 +12,8 @@
  *
  * @package    MetaModels/core
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -21,13 +23,10 @@ namespace MetaModels\CoreBundle\Controller\FrontendModule;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\CoreBundle\ServiceAnnotation\FrontendModule;
-use Contao\Input;
 use Contao\ModuleModel;
-use Contao\StringUtil;
+use Contao\PageModel;
 use Contao\Template;
-use MetaModels\Filter\FilterUrlBuilder;
-use MetaModels\IItem;
-use MetaModels\ItemList;
+use MetaModels\CoreBundle\Controller\ListControllerTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -38,41 +37,49 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class ItemListController extends AbstractFrontendModuleController
 {
-
-    /**
-     * The filter url builder.
-     *
-     * @var FilterUrlBuilder
-     */
-    private $filterUrlBuilder;
-
-    /**
-     * ItemListController constructor.
-     *
-     * @param FilterUrlBuilder $filterUrlBuilder The filter url builder.
-     */
-    public function __construct(FilterUrlBuilder $filterUrlBuilder)
-    {
-        $this->filterUrlBuilder = $filterUrlBuilder;
-    }
+    use ListControllerTrait;
 
     /**
      * Override the template and return the response.
      *
-     * @param Request     $request The request.
-     * @param ModuleModel $model   The module model.
-     * @param string      $section The layout section, e.g. "main".
-     * @param array|null  $classes The css classes.
+     * @param Request        $request   The request.
+     * @param ModuleModel    $model     The module model.
+     * @param string         $section   The layout section, e.g. "main".
+     * @param array|null     $classes   The css classes.
+     * @param PageModel|null $pageModel The page model.
      *
      * @return Response The response.
      */
-    public function __invoke(Request $request, ModuleModel $model, string $section, array $classes = null): Response
-    {
+    public function __invoke(
+        Request $request,
+        ModuleModel $model,
+        string $section,
+        array $classes = null,
+        PageModel $pageModel = null
+    ): Response {
         if (!empty($model->metamodel_layout)) {
             $model->customTpl = $model->metamodel_layout;
         }
 
-        return parent::__invoke($request, $model, $section, $classes);
+        return parent::__invoke($request, $model, $section, $classes, $pageModel);
+    }
+
+    /**
+     * Return a back end wildcard response.
+     *
+     * @param ModuleModel $module The module model.
+     *
+     * @return Response The response.
+     */
+    protected function getBackendWildcard(ModuleModel $module): Response
+    {
+        $name = $this->get('translator')->trans('FMD.'.$this->getType().'.0', [], 'contao_modules');
+        $href = $this->get('router')->generate(
+            'contao_backend',
+            ['do' => 'themes', 'table' => 'tl_module', 'act' => 'edit', 'id' => $module->id]
+        );
+
+        return $this->renderBackendWildcard($href, $name, $module);
     }
 
     /**
@@ -86,67 +93,6 @@ final class ItemListController extends AbstractFrontendModuleController
      */
     protected function getResponse(Template $template, ModuleModel $model, Request $request): ?Response
     {
-        $itemRenderer = new ItemList();
-
-        $template->searchable = !$model->metamodel_donotindex;
-
-        $sorting   = $model->metamodel_sortby;
-        $direction = $model->metamodel_sortby_direction;
-        if ($model->metamodel_sort_override) {
-            if ($request->query->has('orderBy')) {
-                $sorting = $request->query->get('orderBy');
-            }
-            if ($request->query->has('orderDir')) {
-                $direction = $request->query->get('orderDir');
-            }
-        }
-
-        $filterParams = StringUtil::deserialize($model->metamodel_filterparams, true);
-        $itemRenderer
-            ->setMetaModel($model->metamodel, $model->metamodel_rendersettings)
-            ->setListTemplate($template)
-            ->setLimit($model->metamodel_use_limit, $model->metamodel_offset, $model->metamodel_limit)
-            ->setPageBreak($model->perPage)
-            ->setSorting($sorting, $direction)
-            ->setFilterSettings($model->metamodel_filtering)
-            ->setFilterParameters($filterParams, $this->getFilterParameters($itemRenderer))
-            ->setMetaTags($model->metamodel_meta_title, $model->metamodel_meta_description);
-
-        $template->items         = StringUtil::encodeEmail($itemRenderer->render($model->metamodel_noparsing, $model));
-        $template->numberOfItems = $itemRenderer->getItems()->getCount();
-        $template->pagination    = $itemRenderer->getPagination();
-
-        $responseTags = array_map(static function (IItem $item) {
-            return sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id'));
-        }, iterator_to_array($itemRenderer->getItems(), false));
-
-        $this->tagResponse($responseTags);
-
-        return $template->getResponse();
-    }
-
-    /**
-     * Retrieve all filter parameters from the input class for the specified filter setting.
-     *
-     * @param ItemList $itemRenderer The list renderer instance to be used.
-     *
-     * @return string[]
-     */
-    private function getFilterParameters($itemRenderer): array
-    {
-        $filterUrl = $this->filterUrlBuilder->getCurrentFilterUrl();
-
-        $result = [];
-        foreach ($itemRenderer->getFilterSettings()->getParameters() as $name) {
-            if ($filterUrl->hasSlug($name)) {
-                $result[$name] = $filterUrl->getSlug($name);
-            } elseif ($filterUrl->hasGet($name)) {
-                $result[$name] = $filterUrl->getGet($name);
-            }
-            // Mark the parameter as used (otherwise, a 404 is thrown)
-            Input::get($name);
-        }
-
-        return $result;
+        return $this->getResponseInternal($template, $model, $request);
     }
 }
