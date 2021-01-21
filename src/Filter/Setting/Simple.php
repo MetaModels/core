@@ -472,7 +472,7 @@ abstract class Simple implements ISimple
         /** @var \Widget $objWidget */
         $objWidget = new $strClass($event->getResult());
         $this->validateWidget($objWidget, $arrWidget['value']);
-        $strField = $objWidget->generateWithError();
+        $strField = $objWidget->generate();
 
         return array
         (

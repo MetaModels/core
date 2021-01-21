@@ -1,8 +1,8 @@
 <?php $this->block('error'); ?>
 <?php if ($this->errors): ?>
-<?php foreach ($this->errors as $error): ?>
-<p class="error"><?= $error ?></p>
-<?php endforeach; ?>
+    <?php foreach ($this->errors as $error): ?>
+        <p class="error"><?= $error ?></p>
+    <?php endforeach; ?>
 <?php endif; ?>
 <?php $this->endblock(); ?>
 
