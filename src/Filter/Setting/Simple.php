@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -195,12 +195,15 @@ abstract class Simple implements ISimple
         if (empty($strKeyOption) && !isset($arrFilterUrl[$arrWidget['eval']['urlparam']])) {
             return true;
         }
-        $blnIsActive = isset($arrFilterUrl[$arrWidget['eval']['urlparam']])
-            && ($arrFilterUrl[$arrWidget['eval']['urlparam']] == $strKeyOption);
-        if (!$blnIsActive && $this->get('defaultid')) {
-            $blnIsActive = ($arrFilterUrl[$arrWidget['eval']['urlparam']] == $this->get('defaultid'));
+        if (isset($arrFilterUrl[$arrWidget['eval']['urlparam']])) {
+            return ($arrFilterUrl[$arrWidget['eval']['urlparam']] == $strKeyOption);
         }
-        return $blnIsActive;
+
+        if ($defaultValue = $this->get('defaultid')) {
+            return $strKeyOption == $defaultValue;
+        }
+
+        return false;
     }
 
     /**
@@ -450,9 +453,7 @@ abstract class Simple implements ISimple
         }
 
         // Determine current value.
-        $arrWidget['value'] = isset($arrFilterUrl[$arrWidget['eval']['urlparam']])
-            ? $arrFilterUrl[$arrWidget['eval']['urlparam']]
-            : null;
+        $arrWidget['value'] = $arrFilterUrl[$arrWidget['eval']['urlparam']] ?? ($arrWidget['eval']['default'] ?? null);
 
         $event = new GetAttributesFromDcaEvent(
             $arrWidget,
