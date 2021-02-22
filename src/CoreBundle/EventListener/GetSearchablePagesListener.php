@@ -514,7 +514,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
         $availableLanguages = $this->getLanguage($language, $metaModels);
         $currentLanguage    = $GLOBALS['TL_LANGUAGE'];
 
-        $foundPages = [];
+        $foundPages = [$this->foundPages];
 
         foreach ($availableLanguages as $newLanguage) {
             // Change language.
