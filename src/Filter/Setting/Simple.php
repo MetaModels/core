@@ -466,7 +466,7 @@ abstract class Simple implements ISimple
         );
 
         if ($objFrontendFilterOptions->isAutoSubmit() && TL_MODE == 'FE') {
-            $GLOBALS['TL_JAVASCRIPT']['metamodels'] = 'bundles/metamodelscore/js/metamodels.js';
+            $GLOBALS['TL_JAVASCRIPT']['metamodels'] = 'bundles/metamodelscore/js/metamodels.min.js';
         }
 
         /** @var \Widget $objWidget */
