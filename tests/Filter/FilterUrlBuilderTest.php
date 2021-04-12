@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
  *
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -22,7 +23,6 @@ namespace MetaModels\Test\Filter;
 use Contao\Config;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Routing\UrlGenerator;
-use Contao\Model;
 use Contao\Model\Collection;
 use Contao\PageModel;
 use MetaModels\Filter\FilterUrl;
@@ -124,7 +124,7 @@ class FilterUrlBuilderTest extends TestCase
             ->getMock();
 
         $generator
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('generate')
             ->with($expectedUrl, $expectedParameters)
             ->willReturn('success');
@@ -134,7 +134,7 @@ class FilterUrlBuilderTest extends TestCase
 
         $builder = new FilterUrlBuilder($generator, $requestStack, true, '.html', $adapter);
 
-        $this->assertSame('success', $builder->generate($filterUrl));
+        self::assertSame('success', $builder->generate($filterUrl));
     }
 
     public function testGeneratesNonStandardPorts(): void
@@ -151,7 +151,7 @@ class FilterUrlBuilderTest extends TestCase
             ->getMock();
 
         $generator
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('generate')
             ->with('folder/page/auto/slug/sluggy', ['get2' => 'value'])
             ->willReturn('success');
@@ -176,18 +176,8 @@ class FilterUrlBuilderTest extends TestCase
             )
         );
 
-        // Hack for Contao 4.4 & 4.5 - not automatically loaded and aliased
-        if (!class_exists(\Model::class)) {
-            // Try to load with namespace
-            class_exists(Model::class);
-            // Still not there? 4.6+ automatically aliases to root namespace and extends from Contao namespace.
-            if (!class_exists(\Model::class)) {
-                class_alias(Model::class, \Model::class);
-            }
-        }
-
         $page = $this->getMockBuilder(PageModel::class)->disableOriginalConstructor()->getMock();
-        $page->expects($this->once())->method('loadDetails')->willReturn((object) [
+        $page->expects(self::once())->method('loadDetails')->willReturn((object) [
             'domain'         => 'example.org:8080',
             'rootLanguage'   => 'en',
             'rootIsFallback' => true,
@@ -195,11 +185,11 @@ class FilterUrlBuilderTest extends TestCase
         ]);
 
         $pages = $this->getMockBuilder(Collection::class)->disableOriginalConstructor()->getMock();
-        $pages->expects($this->exactly(2))->method('next')->willReturnOnConsecutiveCalls(true, false);
-        $pages->expects($this->once())->method('current')->willReturn($page);
+        $pages->expects(self::exactly(2))->method('next')->willReturnOnConsecutiveCalls(true, false);
+        $pages->expects(self::once())->method('current')->willReturn($page);
 
         $adapter
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('findByAliases')
             ->with(['folder/page', 'folder'])
             ->willReturn($pages);
@@ -209,7 +199,7 @@ class FilterUrlBuilderTest extends TestCase
         $prevFolderUrl = Config::get('folderUrl');
         Config::set('folderUrl', true);
         try {
-            $this->assertSame('success', $builder->generate($filterUrl));
+            self::assertSame('success', $builder->generate($filterUrl));
         } finally {
             Config::set('folderUrl', $prevFolderUrl);
         }

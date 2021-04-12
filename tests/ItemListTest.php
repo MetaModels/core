@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,7 @@
  *
  * @package    MetaModels/core
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -21,10 +21,8 @@ declare(strict_types=1);
 
 namespace MetaModels\Test;
 
-use Contao\PageModel;
 use MetaModels\ItemList;
 use PHPUnit\Framework\TestCase;
-use function defined;
 
 /**
  * Test the base attribute.
@@ -42,21 +40,21 @@ final class ItemListTest extends TestCase
         }
 
         if (TL_MODE !== 'FE') {
-            $this->markTestSkipped('Test assumes that TL_MODE is set to "FE"');
+            self::markTestSkipped('Test assumes that TL_MODE is set to "FE"');
         }
 
         $GLOBALS['objPage'] = null;
-        $this->assertSame('text', $itemlist->getOutputFormat());
+        self::assertSame('text', $itemlist->getOutputFormat());
 
         $itemlist->overrideOutputFormat('json');
-        $this->assertSame('json', $itemlist->getOutputFormat());
+        self::assertSame('json', $itemlist->getOutputFormat());
 
         $itemlist->overrideOutputFormat(null);
         $GLOBALS['objPage'] = (object) ['outputFormat' => 'xhtml'];
 
-        $this->assertSame('xhtml', $itemlist->getOutputFormat());
+        self::assertSame('xhtml', $itemlist->getOutputFormat());
 
         $GLOBALS['objPage'] = (object) ['outputFormat' => null];
-        $this->assertSame('html5', $itemlist->getOutputFormat());
+        self::assertSame('html5', $itemlist->getOutputFormat());
     }
 }

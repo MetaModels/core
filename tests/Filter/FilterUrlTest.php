@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
  *
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -42,17 +43,17 @@ class FilterUrlTest extends TestCase
             ['slug' => 'slug-value', 'auto_item' => 'auto_item-value', 'empty' => '']
         );
 
-        $this->assertSame(['alias' => 'page-alias'], $filterUrl->getPage());
+        self::assertSame(['alias' => 'page-alias'], $filterUrl->getPage());
 
-        $this->assertTrue($filterUrl->hasGet('get'));
-        $this->assertSame('get-value', $filterUrl->getGet('get'));
-        $this->assertFalse($filterUrl->hasGet('empty'));
-        $this->assertSame(['get' => 'get-value'], $filterUrl->getGetParameters());
+        self::assertTrue($filterUrl->hasGet('get'));
+        self::assertSame('get-value', $filterUrl->getGet('get'));
+        self::assertFalse($filterUrl->hasGet('empty'));
+        self::assertSame(['get' => 'get-value'], $filterUrl->getGetParameters());
 
-        $this->assertTrue($filterUrl->hasSlug('slug'));
-        $this->assertSame('slug-value', $filterUrl->getSlug('slug'));
-        $this->assertSame('auto_item-value', $filterUrl->getSlug('auto_item'));
-        $this->assertFalse($filterUrl->hasSlug('empty'));
-        $this->assertSame(['slug' => 'slug-value', 'auto_item' => 'auto_item-value'], $filterUrl->getSlugParameters());
+        self::assertTrue($filterUrl->hasSlug('slug'));
+        self::assertSame('slug-value', $filterUrl->getSlug('slug'));
+        self::assertSame('auto_item-value', $filterUrl->getSlug('auto_item'));
+        self::assertFalse($filterUrl->hasSlug('empty'));
+        self::assertSame(['slug' => 'slug-value', 'auto_item' => 'auto_item-value'], $filterUrl->getSlugParameters());
     }
 }

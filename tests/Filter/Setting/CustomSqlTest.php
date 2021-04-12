@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -166,8 +166,8 @@ class CustomSqlTest extends AutoLoadingTestCase
     {
         $sql = $this->generateSql($setting, $filterUrl);
 
-        $this->assertEquals($expectedSql, $sql['sql'], $message);
-        $this->assertEquals($expectedParameters, $sql['params'], $message);
+        self::assertEquals($expectedSql, $sql['sql'], $message);
+        self::assertEquals($expectedParameters, $sql['params'], $message);
     }
 
     /**
@@ -246,7 +246,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             ->disableOriginalConstructor()
             ->setMethods(['cookie', 'get', 'post'])
             ->getMock();
-        $input->expects($this->once())->method('get')->with('category')->willReturn(null);
+        $input->expects(self::once())->method('get')->with('category')->willReturn(null);
 
         $setting = $this->mockCustomSql(
             ['customsql' => 'SELECT id FROM tableName WHERE catname={{param::get?name=category&default=defaultcat}}'],
@@ -276,7 +276,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             ->setMethods(['cookie', 'get', 'post'])
             ->getMock();
         $input
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('get')
             ->with('category')
             ->willReturn('category name');
@@ -330,7 +330,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             ->setMethods(['cookie', 'get', 'post'])
             ->getMock();
         $input
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('cookie')
             ->with('category')
             ->willReturn('category name');
@@ -357,7 +357,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             ->setMethods(['get'])
             ->getMock();
         $session
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('get')
             ->with('category')
             ->willReturn('category name');
@@ -384,7 +384,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             ->setMethods(['get'])
             ->getMock();
         $session
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('get')
             ->with('category')
             ->willReturn(['first', 'second']);
@@ -418,7 +418,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMock();
-        $session->expects($this->once())->method('get')->with('category')->willReturn(null);
+        $session->expects(self::once())->method('get')->with('category')->willReturn(null);
 
         $setting = $this->mockCustomSql(
             ['customsql' => 'SELECT id FROM tableName WHERE catname={{param::session?name=category&default=defaultcat}}'],
@@ -467,7 +467,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             ->setMethods(['cookie', 'get', 'post'])
             ->getMock();
         $input
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('get')
             ->with('categories')
             ->willReturn(['first', 'second']);
@@ -502,7 +502,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             ->setMethods(['cookie', 'get', 'post'])
             ->getMock();
         $input
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('get')
             ->with('ids')
             ->willReturn(['1', '2']);

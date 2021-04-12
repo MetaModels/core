@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -46,19 +46,19 @@ class AttributeFactoryTest extends TestCase
 
         $eventDispatcher = $this->getMockForAbstractClass(EventDispatcherInterface::class);
         $eventDispatcher
-            ->expects($this->exactly(1))
+            ->expects(self::exactly(1))
             ->method('dispatch')
-            ->with($this->equalTo(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE));
+            ->with(self::equalTo(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE));
         $eventDispatcher
-            ->expects($this->exactly(1))
+            ->expects(self::exactly(1))
             ->method('hasListeners')
-            ->with($this->equalTo(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE))
+            ->with(self::equalTo(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE))
             ->willReturn(true);
 
         $factory = new AttributeFactory($eventDispatcher);
         $factory->setServiceContainer($serviceContainer);
 
-        $this->assertSame($serviceContainer, $factory->getServiceContainer());
+        self::assertSame($serviceContainer, $factory->getServiceContainer());
     }
 
     /**
@@ -70,15 +70,11 @@ class AttributeFactoryTest extends TestCase
     {
         $factory = new AttributeFactory($this->getMockForAbstractClass(EventDispatcherInterface::class));
 
-        $this->assertNull($factory->getTypeFactory('test'));
+        self::assertNull($factory->getTypeFactory('test'));
         $attributeFactory = $this->mockAttributeFactory('test', true, false, false);
 
-        $this->assertSame(
-            $factory,
-            $factory->addTypeFactory($attributeFactory)
-        );
-
-        $this->assertSame($attributeFactory, $factory->getTypeFactory('test'));
+        self::assertSame($factory, $factory->addTypeFactory($attributeFactory));
+        self::assertSame($attributeFactory, $factory->getTypeFactory('test'));
     }
 
     /**
@@ -98,8 +94,7 @@ class AttributeFactoryTest extends TestCase
      */
     protected function mockFactoryTester($factory, $attributeFactory, $shouldTranslated, $shouldSimple, $shouldComplex)
     {
-        $this->assertSame(
-            true,
+        self::assertTrue(
             $factory->attributeTypeMatchesFlags(
                 $attributeFactory,
                 IAttributeFactory::FLAG_ALL
@@ -107,7 +102,7 @@ class AttributeFactoryTest extends TestCase
             $attributeFactory . '.FLAG_ALL'
         );
 
-        $this->assertSame(
+        self::assertSame(
             $shouldTranslated,
             $factory->attributeTypeMatchesFlags(
                 $attributeFactory,
@@ -116,7 +111,7 @@ class AttributeFactoryTest extends TestCase
             $attributeFactory . '.FLAG_INCLUDE_TRANSLATED'
         );
 
-        $this->assertSame(
+        self::assertSame(
             $shouldSimple,
             $factory->attributeTypeMatchesFlags(
                 $attributeFactory,
@@ -125,7 +120,7 @@ class AttributeFactoryTest extends TestCase
             $attributeFactory . '.FLAG_INCLUDE_SIMPLE'
         );
 
-        $this->assertSame(
+        self::assertSame(
             $shouldComplex,
             $factory->attributeTypeMatchesFlags(
                 $attributeFactory,
@@ -169,31 +164,31 @@ class AttributeFactoryTest extends TestCase
     {
         $factory = new AttributeFactory($this->getMockForAbstractClass(EventDispatcherInterface::class));
 
-        $this->assertSame(
+        self::assertSame(
             array(),
             $factory->getTypeNames(IAttributeFactory::FLAG_ALL),
             'FLAG_ALL'
         );
 
-        $this->assertSame(
+        self::assertSame(
             array(),
             $factory->getTypeNames(IAttributeFactory::FLAG_INCLUDE_TRANSLATED),
             'FLAG_INCLUDE_TRANSLATED'
         );
 
-        $this->assertSame(
+        self::assertSame(
             array(),
             $factory->getTypeNames(IAttributeFactory::FLAG_INCLUDE_SIMPLE),
             'FLAG_INCLUDE_SIMPLE'
         );
 
-        $this->assertSame(
+        self::assertSame(
             array(),
             $factory->getTypeNames(IAttributeFactory::FLAG_INCLUDE_COMPLEX),
             'FLAG_INCLUDE_COMPLEX'
         );
 
-        $this->assertSame(
+        self::assertSame(
             array(),
             $factory->getTypeNames(IAttributeFactory::FLAG_ALL_UNTRANSLATED),
             'FLAG_ALL_UNTRANSLATED'
@@ -207,7 +202,7 @@ class AttributeFactoryTest extends TestCase
         $factory->addTypeFactory($this->mockAttributeFactory('test_translatedcomplex', true, false, true));
         $factory->addTypeFactory($this->mockAttributeFactory('test_translatedsimplecomplex', true, true, true));
 
-        $this->assertSame(
+        self::assertSame(
             array(
                 'test_translated',
                 'test_simple',
@@ -221,7 +216,7 @@ class AttributeFactoryTest extends TestCase
             'FLAG_ALL'
         );
 
-        $this->assertSame(
+        self::assertSame(
             array(
                 'test_translated',
                 'test_translatedsimple',
@@ -232,7 +227,7 @@ class AttributeFactoryTest extends TestCase
             'FLAG_INCLUDE_TRANSLATED'
         );
 
-        $this->assertSame(
+        self::assertSame(
             array(
                 'test_simple',
                 'test_simplecomplex',
@@ -243,7 +238,7 @@ class AttributeFactoryTest extends TestCase
             'FLAG_INCLUDE_SIMPLE'
         );
 
-        $this->assertSame(
+        self::assertSame(
             array(
                 'test_complex',
                 'test_simplecomplex',
@@ -254,7 +249,7 @@ class AttributeFactoryTest extends TestCase
             'FLAG_INCLUDE_COMPLEX'
         );
 
-        $this->assertSame(
+        self::assertSame(
             array(
                 'test_simple',
                 'test_complex',
@@ -279,7 +274,7 @@ class AttributeFactoryTest extends TestCase
         $typeFactory = $this->mockAttributeFactory('test', true, false, false, new \stdClass, 'icon.png');
         $factory->addTypeFactory($typeFactory);
 
-        $this->assertEquals($typeFactory->getTypeIcon(), $factory->getIconForType('test'));
+        self::assertEquals($typeFactory->getTypeIcon(), $factory->getIconForType('test'));
     }
 
     /**
@@ -310,37 +305,37 @@ class AttributeFactoryTest extends TestCase
         $mockTypeFactory = $this->getMockForAbstractClass(IAttributeTypeFactory::class);
 
         $mockTypeFactory
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getTypeName')
             ->willReturnCallback(function () use ($typeName) {
                 return $typeName;
             });
         $mockTypeFactory
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('getTypeIcon')
             ->willReturnCallback(function () use ($typeIcon) {
                 return $typeIcon;
             });
         $mockTypeFactory
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('createInstance')
             ->willReturnCallback(function ($information, $metaModel) use ($class) {
                 return new $class($information, $metaModel);
             });
         $mockTypeFactory
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('isTranslatedType')
             ->willReturnCallback(function () use ($translated) {
                 return $translated;
             });
         $mockTypeFactory
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('isSimpleType')
             ->willReturnCallback(function () use ($simple) {
                 return $simple;
             });
         $mockTypeFactory
-            ->expects($this->any())
+            ->expects(self::any())
             ->method('isComplexType')
             ->willReturnCallback(function () use ($complex) {
                 return $complex;

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -24,6 +24,7 @@ namespace MetaModels\Test\Filter\Setting;
 use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Filter\Setting\ICollection;
 use MetaModels\Filter\Setting\Simple;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -39,7 +40,7 @@ class SimpleTest extends TestCase
      *
      * @param array $properties The initialization data.
      *
-     * @return Simple|\PHPUnit_Framework_MockObject_MockObject
+     * @return Simple|MockObject
      */
     protected function mockSimpleFilterSetting($properties = [])
     {
@@ -48,7 +49,7 @@ class SimpleTest extends TestCase
         $filterUrlBuilder = $this->getMockBuilder(FilterUrlBuilder::class)->disableOriginalConstructor()->getMock();
 
         $setting = $this
-            ->getMockBuilder('MetaModels\Filter\Setting\Simple')
+            ->getMockBuilder(Simple::class)
             ->setConstructorArgs([$filterSetting, $properties, $eventDispatcher, $filterUrlBuilder])
             ->getMockForAbstractClass();
 
@@ -102,22 +103,22 @@ class SimpleTest extends TestCase
     {
         $setting = $this->mockSimpleFilterSetting();
 
-        $this->assertEquals(
+        self::assertEquals(
             '/foo/a/A/b/B',
             $this->addUrlParameter($setting, '/a/A/b/B', 'auto_item', 'foo'),
             'auto_item'
         );
-        $this->assertEquals(
+        self::assertEquals(
             '/a/A/b/B/bar/foo',
             $this->addUrlParameter($setting, '/a/A/b/B', 'bar', 'foo'),
             'bar'
         );
-        $this->assertEquals(
+        self::assertEquals(
             '/a/A/b/B/bar/%%25foo',
             $this->addUrlParameter($setting, '/a/A/b/B', 'bar', '%foo'),
             'bar with percent'
         );
-        $this->assertEquals(
+        self::assertEquals(
             '/a/A/b/B/bar/%%24foo',
             $this->addUrlParameter($setting, '/a/A/b/B', 'bar', '$foo'),
             'bar with dollar'
@@ -133,37 +134,37 @@ class SimpleTest extends TestCase
     {
         $setting = $this->mockSimpleFilterSetting();
 
-        $this->assertEquals(
+        self::assertEquals(
             '%s/a/A/b/B',
             $this->buildFilterUrl($setting, array('a' => 'A', 'b' => 'B', 'auto_item' => 'AUTO'), 'auto_item'),
             'auto_item'
         );
-        $this->assertEquals(
+        self::assertEquals(
             '/AUTO/a/A%s',
             $this->buildFilterUrl($setting, array('a' => 'A', 'b' => 'B', 'auto_item' => 'AUTO'), 'b'),
             'b'
         );
-        $this->assertEquals(
+        self::assertEquals(
             '/AUTO%s/b/B',
             $this->buildFilterUrl($setting, array('a' => 'A', 'b' => 'B', 'auto_item' => 'AUTO'), 'a'),
             'a'
         );
-        $this->assertEquals(
+        self::assertEquals(
             '/AUTO/a/A/b/B%s',
             $this->buildFilterUrl($setting, array('a' => 'A', 'b' => 'B', 'auto_item' => 'AUTO'), 'c'),
             'c'
         );
-        $this->assertEquals(
+        self::assertEquals(
             '%s/a/A/b/B',
             $this->buildFilterUrl($setting, array('a' => 'A', 'b' => 'B'), 'auto_item'),
             'auto_item 2'
         );
-        $this->assertEquals(
+        self::assertEquals(
             '%s',
             $this->buildFilterUrl($setting, array(), 'auto_item'),
             'auto_item 3'
         );
-        $this->assertEquals(
+        self::assertEquals(
             '%s',
             $this->buildFilterUrl($setting, array('auto_item' => 'AUTO'), 'auto_item'),
             'auto_item 4'

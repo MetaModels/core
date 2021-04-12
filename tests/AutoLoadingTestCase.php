@@ -24,43 +24,4 @@ namespace MetaModels\Test;
  */
 class AutoLoadingTestCase extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * This is the hack to mimic the Contao auto loader.
-     *
-     * @param string $class The class to load.
-     *
-     * @return void
-     */
-    public static function contaoAutoload($class)
-    {
-        if (0 === strpos($class, 'Contao\\')) {
-            return;
-        }
-        $result = class_exists('Contao\\' . $class);
-        if ($result) {
-            class_alias('Contao\\' . $class, $class);
-        }
-    }
-
-    /**
-     * Register Contao 4 autoloader.
-     *
-     * @return void
-     */
-    public static function setUpBeforeClass(): void
-    {
-        parent::setUpBeforeClass();
-        spl_autoload_register(self::class . '::contaoAutoload');
-    }
-
-    /**
-     * Unregister Contao 4 autoloader.
-     *
-     * @return void
-     */
-    public static function tearDownAfterClass(): void
-    {
-        spl_autoload_unregister(self::class . '::contaoAutoload');
-        parent::tearDownAfterClass();
-    }
 }

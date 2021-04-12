@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -45,9 +45,9 @@ class FactoryTest extends TestCase
         $factory    = new Factory($dispatcher);
 
         $dispatcher
-            ->expects($this->exactly(1))
+            ->expects(self::exactly(1))
             ->method('dispatch')
-            ->with($this->equalTo(CreateMetaModelEvent::NAME));
+            ->with(self::equalTo(CreateMetaModelEvent::NAME));
 
         $factory->getMetaModel('mm_test');
     }
@@ -69,7 +69,7 @@ class FactoryTest extends TestCase
             }
         );
 
-        $this->assertSame('mm_with_id_10', $factory->translateIdToMetaModelName(10));
+        self::assertSame('mm_with_id_10', $factory->translateIdToMetaModelName(10));
 
         $factory->getMetaModel('mm_test');
     }

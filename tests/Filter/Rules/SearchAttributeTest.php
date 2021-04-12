@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -22,6 +22,8 @@ namespace MetaModels\Test\Filter\Rules;
 
 use MetaModels\Filter\Rules\SearchAttribute;
 use PHPUnit\Framework\TestCase;
+use MetaModels\Attribute\IAttribute;
+use MetaModels\Attribute\ITranslated;
 
 /**
  * Test greater-than filter rules.
@@ -37,16 +39,16 @@ class SearchAttributeTest extends TestCase
      */
     public function testSearchAttribute()
     {
-        $attribute = $this->getMockForAbstractClass('MetaModels\\Attribute\\IAttribute');
+        $attribute = $this->getMockForAbstractClass(IAttribute::class);
         $attribute
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('searchFor')
             ->with('test')
             ->willReturn(array(1, 2, 3));
 
         $rule = new SearchAttribute($attribute, 'test');
 
-        $this->assertEquals(array(1, 2, 3), $rule->getMatchingIds());
+        self::assertEquals(array(1, 2, 3), $rule->getMatchingIds());
     }
 
     /**
@@ -56,16 +58,16 @@ class SearchAttributeTest extends TestCase
      */
     public function testSearchTranslatedAttribute()
     {
-        $attribute = $this->getMockForAbstractClass('MetaModels\\Attribute\\ITranslated');
+        $attribute = $this->getMockForAbstractClass(ITranslated::class);
         $attribute
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('searchForInLanguages')
             ->with('test')
             ->willReturn(array(1, 2, 3));
 
         $rule = new SearchAttribute($attribute, 'test');
 
-        $this->assertEquals(array(1, 2, 3), $rule->getMatchingIds());
+        self::assertEquals(array(1, 2, 3), $rule->getMatchingIds());
     }
 
     /**
@@ -75,15 +77,15 @@ class SearchAttributeTest extends TestCase
      */
     public function testSearchTranslatedAttributeWithLanguageOverride()
     {
-        $attribute = $this->getMockForAbstractClass('MetaModels\\Attribute\\ITranslated');
+        $attribute = $this->getMockForAbstractClass(ITranslated::class);
         $attribute
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('searchForInLanguages')
             ->with('test', array('de', 'en'))
             ->willReturn(array(1, 2, 3));
 
         $rule = new SearchAttribute($attribute, 'test', array('de', 'en'));
 
-        $this->assertEquals(array(1, 2, 3), $rule->getMatchingIds());
+        self::assertEquals(array(1, 2, 3), $rule->getMatchingIds());
     }
 }
