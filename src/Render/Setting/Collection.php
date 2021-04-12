@@ -33,6 +33,7 @@ use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\IItem;
 use MetaModels\IMetaModel;
+use MetaModels\ITranslatedMetaModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -237,43 +238,77 @@ class Collection implements ICollection
     private function determineJumpToInformation(): array
     {
         // Get the right jumpto.
-        $translated       = $this->metaModel->isTranslated();
-        $desiredLanguage  = $this->metaModel->getActiveLanguage();
-        $fallbackLanguage = $this->metaModel->getFallbackLanguage();
-        $cacheKey         = $desiredLanguage . '.' . $fallbackLanguage;
-        $jumpToPageId     = '';
-        $filterSettingId  = '';
-
-        if (!isset($this->jumpToCache[$cacheKey])) {
-            foreach ((array) $this->get('jumpTo') as $jumpTo) {
-                $langCode = $jumpTo['langcode'];
-                // If either desired language or fallback, keep the result.
-                if (!$translated || ($langCode === $desiredLanguage) || ($langCode === $fallbackLanguage)) {
-                    $jumpToPageId    = $jumpTo['value'];
-                    $filterSettingId = $jumpTo['filter'];
-                    // If the desired language, break.
-                    // Otherwise try to get the desired one until all have been evaluated.
-                    if ($desiredLanguage === $jumpTo['langcode']) {
-                        break;
-                    }
-                }
-            }
-
-            $pageDetails   = $this->getPageDetails($jumpToPageId);
-            $filterSetting = $filterSettingId ? $this->filterFactory->createCollection($filterSettingId) : null;
-
-            $this->jumpToCache[$cacheKey] = [
-                'page'          => $jumpToPageId,
-                'pageDetails'   => $pageDetails,
-                'filter'        => $filterSettingId,
-                'filterSetting' => $filterSetting,
-                // Mask out the "all languages" language key (See #687).
-                'language'      => $pageDetails['language'],
-                'label'         => $this->getJumpToLabel()
-            ];
+        $translated       = false;
+        $desiredLanguage  = null;
+        $fallbackLanguage = null;
+        if ($this->metaModel instanceof ITranslatedMetaModel) {
+            $translated       = true;
+            $desiredLanguage  = $this->metaModel->getLanguage();
+            $fallbackLanguage = $this->metaModel->getMainLanguage();
+        } elseif ($this->metaModel->isTranslated(false)) {
+            // @coverageIgnoreStart
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                'Translated "\MetaModel\IMetamodel" instances are deprecated since MetaModels 2.1 ' .
+                'and to be removed in 3.0. The MetaModel must implement "\MetaModels\ITranslatedMetaModel".',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $translated       = true;
+            $desiredLanguage  = $this->metaModel->getActiveLanguage();
+            $fallbackLanguage = $this->metaModel->getFallbackLanguage();
+            // @coverageIgnoreEnd
         }
 
-        return $this->jumpToCache[$desiredLanguage . '.' . $fallbackLanguage];
+        $cacheKey = $desiredLanguage . '.' . $fallbackLanguage;
+        if (!isset($this->jumpToCache[$cacheKey])) {
+            $this->jumpToCache[$cacheKey] = $this->lookupJumpTo($translated, $desiredLanguage, $fallbackLanguage);
+        }
+
+        return $this->jumpToCache[$cacheKey];
+    }
+
+    /**
+     * Look up the jump to url.
+     *
+     * @param bool        $translated Flag if the MetaModel is translated.
+     * @param string|null $desired    The desired language.
+     * @param string|null $fallback   The fallback language.
+     *
+     * @return array
+     */
+    private function lookupJumpTo(bool $translated, string $desired = null, string $fallback = null): array
+    {
+        $jumpToPageId    = '';
+        $filterSettingId = '';
+        foreach ((array) $this->get('jumpTo') as $jumpTo) {
+            $langCode = $jumpTo['langcode'];
+            // If either desired language or fallback, keep the result.
+            if (!$translated || ($langCode === $desired) || ($langCode === $fallback)) {
+                $jumpToPageId    = $jumpTo['value'];
+                $filterSettingId = $jumpTo['filter'];
+                // If the desired language, break.
+                // Otherwise try to get the desired one until all have been evaluated.
+                if (!$translated || ($desired === $jumpTo['langcode'])) {
+                    break;
+                }
+            }
+        }
+
+        $pageDetails   = $this->getPageDetails($jumpToPageId);
+        $filterSetting = $filterSettingId
+            ? $this->getFilterFactory()->createCollection($filterSettingId)
+            : null;
+
+        return [
+            'page'          => $jumpToPageId,
+            'pageDetails'   => $pageDetails,
+            'filter'        => $filterSettingId,
+            'filterSetting' => $filterSetting,
+            // Mask out the "all languages" language key (See #687).
+            'language'      => $pageDetails['language'],
+            'label'         => $this->getJumpToLabel()
+        ];
     }
 
     /**
