@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,7 +20,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -204,8 +204,8 @@ class FrontendFilter
         $dispatcher = $this->getDispatcher();
         $filterUrl  = new FilterUrl($jumpTo, [], $arrParams);
         $dispatcher->dispatch(
-            ContaoEvents::CONTROLLER_REDIRECT,
-            new RedirectEvent($this->filterUrlBuilder->generate($filterUrl))
+            new RedirectEvent($this->filterUrlBuilder->generate($filterUrl)),
+            ContaoEvents::CONTROLLER_REDIRECT
         );
     }
 
@@ -328,8 +328,8 @@ class FrontendFilter
         $filterUrl  = new FilterUrl($this->objFilterConfig->getJumpTo(), [], $redirectParameters);
         $dispatcher = $this->getDispatcher();
         $dispatcher->dispatch(
-            ContaoEvents::CONTROLLER_REDIRECT,
-            new RedirectEvent($this->filterUrlBuilder->generate($filterUrl))
+            new RedirectEvent($this->filterUrlBuilder->generate($filterUrl)),
+            ContaoEvents::CONTROLLER_REDIRECT
         );
     }
 

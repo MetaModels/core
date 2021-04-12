@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -23,7 +23,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Benedict Zinke <bz@presentprogressive.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -1010,7 +1010,7 @@ class ItemList
         }
 
         $event = new RenderItemListEvent($this, $this->objTemplate, $objCaller);
-        $this->getEventDispatcher()->dispatch(MetaModelsEvents::RENDER_ITEM_LIST, $event);
+        $this->getEventDispatcher()->dispatch($event, MetaModelsEvents::RENDER_ITEM_LIST);
 
         $this->objTemplate->noItemsMsg = $this->getNoItemsCaption();
         $this->objTemplate->details    = $this->getCaptionText('details');

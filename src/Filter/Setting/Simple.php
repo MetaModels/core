@@ -460,10 +460,7 @@ abstract class Simple implements ISimple
             $arrWidget['eval']['urlparam']
         );
 
-        $this->eventDispatcher->dispatch(
-            ContaoEvents::WIDGET_GET_ATTRIBUTES_FROM_DCA,
-            $event
-        );
+        $this->eventDispatcher->dispatch($event, ContaoEvents::WIDGET_GET_ATTRIBUTES_FROM_DCA);
 
         if ($objFrontendFilterOptions->isAutoSubmit() && TL_MODE == 'FE') {
             $GLOBALS['TL_JAVASCRIPT']['metamodels'] = 'bundles/metamodelscore/js/metamodels.min.js';
