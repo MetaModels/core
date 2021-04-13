@@ -297,7 +297,7 @@ class Collection implements ICollection
 
         $pageDetails   = $this->getPageDetails($jumpToPageId);
         $filterSetting = $filterSettingId
-            ? $this->getFilterFactory()->createCollection($filterSettingId)
+            ? $this->filterFactory->createCollection($filterSettingId)
             : null;
 
         return [
