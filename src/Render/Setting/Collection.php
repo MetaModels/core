@@ -205,9 +205,9 @@ class Collection implements ICollection
     {
         $tableName = $this->metaModel->getTableName();
 
-        return $GLOBALS['TL_LANG']['MSC'][$tableName][$this->get('id')]['details'] ??
-               $GLOBALS['TL_LANG']['MSC'][$tableName]['details'] ??
-               $GLOBALS['TL_LANG']['MSC']['details'];
+        return ($GLOBALS['TL_LANG']['MSC'][$tableName][$this->get('id')]['details'] ??
+               ($GLOBALS['TL_LANG']['MSC'][$tableName]['details'] ??
+               $GLOBALS['TL_LANG']['MSC']['details']));
     }
 
     /**

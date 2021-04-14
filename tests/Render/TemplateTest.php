@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
  *
  * @package    MetaModels/core
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -46,7 +47,7 @@ final class TemplateTest extends TestCase
         $scopeDeterminator = $this->createMock(RequestScopeDeterminator::class);
         $template          = new Template('example', $templateLoader, $scopeDeterminator);
 
-        $this->assertInstanceOf(Template::class, $template);
+        self::assertInstanceOf(Template::class, $template);
     }
 
     /**
@@ -58,7 +59,7 @@ final class TemplateTest extends TestCase
     {
         $templateLoader = $this->createMock(Adapter::class);
         $templateLoader
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('__call')
             ->with('getPath', ['example1', 'html5', 'templates'])
             ->willReturn('templates/example1.html5');
@@ -67,8 +68,8 @@ final class TemplateTest extends TestCase
         $template          = new Template('example1', $templateLoader, $scopeDeterminator);
         $method            = $this->reflectGetTemplateMethod();
 
-        $this->assertEquals('templates/example1.html5', $method->invoke($template, 'example1'));
-        $this->assertEquals('templates/example1.html5', $method->invoke($template, 'example1'));
+        self::assertEquals('templates/example1.html5', $method->invoke($template, 'example1'));
+        self::assertEquals('templates/example1.html5', $method->invoke($template, 'example1'));
     }
 
     /**
@@ -80,7 +81,7 @@ final class TemplateTest extends TestCase
     {
         $templateLoader = $this->createMock(Adapter::class);
         $templateLoader
-            ->expects($this->exactly(2))
+            ->expects(self::exactly(2))
             ->method('__call')
             ->willReturnMap([
                 ['getPath', ['example2', 'html5', 'templates'], 'templates/example2.html5'],
@@ -91,10 +92,10 @@ final class TemplateTest extends TestCase
         $template          = new Template('example2', $templateLoader, $scopeDeterminator);
         $method            = $this->reflectGetTemplateMethod();
 
-        $this->assertEquals('templates/example2.html5', $method->invoke($template, 'example2', 'html5'));
-        $this->assertEquals('templates/example2.html5', $method->invoke($template, 'example2', 'html5'));
-        $this->assertEquals('templates/example2.text', $method->invoke($template, 'example2', 'text'));
-        $this->assertEquals('templates/example2.text', $method->invoke($template, 'example2', 'text'));
+        self::assertEquals('templates/example2.html5', $method->invoke($template, 'example2', 'html5'));
+        self::assertEquals('templates/example2.html5', $method->invoke($template, 'example2', 'html5'));
+        self::assertEquals('templates/example2.text', $method->invoke($template, 'example2', 'text'));
+        self::assertEquals('templates/example2.text', $method->invoke($template, 'example2', 'text'));
     }
 
     /**
@@ -106,7 +107,7 @@ final class TemplateTest extends TestCase
     {
         $templateLoader = $this->createMock(Adapter::class);
         $templateLoader
-            ->expects($this->exactly(2))
+            ->expects(self::exactly(2))
             ->method('__call')
             ->willReturnMap([
                 ['getPath', ['example3', 'html5', 'templates'], 'templates/example3.html5'],
@@ -117,12 +118,12 @@ final class TemplateTest extends TestCase
         $template          = new Template('example3', $templateLoader, $scopeDeterminator);
         $method            = $this->reflectGetTemplateMethod();
 
-        $this->assertEquals('templates/example3.html5', $method->invoke($template, 'example3', 'html5'));
-        $this->assertEquals('templates/example3.text', $method->invoke($template, 'example3', 'text'));
+        self::assertEquals('templates/example3.html5', $method->invoke($template, 'example3', 'html5'));
+        self::assertEquals('templates/example3.text', $method->invoke($template, 'example3', 'text'));
 
         $template2 = new Template('example3', $templateLoader, $scopeDeterminator);
-        $this->assertEquals('templates/example3.html5', $method->invoke($template2, 'example3', 'html5'));
-        $this->assertEquals('templates/example3.text', $method->invoke($template2, 'example3', 'text'));
+        self::assertEquals('templates/example3.html5', $method->invoke($template2, 'example3', 'html5'));
+        self::assertEquals('templates/example3.text', $method->invoke($template2, 'example3', 'text'));
     }
 
     /**
@@ -134,7 +135,7 @@ final class TemplateTest extends TestCase
     {
         $templateLoader = $this->createMock(Adapter::class);
         $templateLoader
-            ->expects($this->exactly(4))
+            ->expects(self::exactly(4))
             ->method('__call')
             ->willReturnMap([
                 ['getPath', ['example4', 'html5', 'templates'], 'templates/example4.html5'],
@@ -147,24 +148,24 @@ final class TemplateTest extends TestCase
         $template          = new Template('example4', $templateLoader, $scopeDeterminator);
         $method            = $this->reflectGetTemplateMethod();
 
-        $this->assertEquals('templates/example4.html5', $method->invoke($template, 'example4', 'html5'));
-        $this->assertEquals('templates/example4.text', $method->invoke($template, 'example4', 'text'));
-        $this->assertEquals('templates/example4.html5', $method->invoke($template, 'example4', 'html5'));
-        $this->assertEquals('templates/example4.text', $method->invoke($template, 'example4', 'text'));
+        self::assertEquals('templates/example4.html5', $method->invoke($template, 'example4', 'html5'));
+        self::assertEquals('templates/example4.text', $method->invoke($template, 'example4', 'text'));
+        self::assertEquals('templates/example4.html5', $method->invoke($template, 'example4', 'html5'));
+        self::assertEquals('templates/example4.text', $method->invoke($template, 'example4', 'text'));
 
         $scopeDeterminator = $this->createMock(RequestScopeDeterminator::class);
         $scopeDeterminator
-            ->expects($this->exactly(4))
+            ->expects(self::exactly(4))
             ->method('currentScopeIsFrontend')
             ->willReturn(true);
 
         $GLOBALS['objPage'] = (object) ['templateGroup' => 'templates/theme'];
 
         $template2 = new Template('example4', $templateLoader, $scopeDeterminator);
-        $this->assertEquals('templates/theme/example4.html5', $method->invoke($template2, 'example4', 'html5'));
-        $this->assertEquals('templates/theme/example4.text', $method->invoke($template2, 'example4', 'text'));
-        $this->assertEquals('templates/theme/example4.html5', $method->invoke($template2, 'example4', 'html5'));
-        $this->assertEquals('templates/theme/example4.text', $method->invoke($template2, 'example4', 'text'));
+        self::assertEquals('templates/theme/example4.html5', $method->invoke($template2, 'example4', 'html5'));
+        self::assertEquals('templates/theme/example4.text', $method->invoke($template2, 'example4', 'text'));
+        self::assertEquals('templates/theme/example4.html5', $method->invoke($template2, 'example4', 'html5'));
+        self::assertEquals('templates/theme/example4.text', $method->invoke($template2, 'example4', 'text'));
     }
 
     /**
@@ -176,7 +177,7 @@ final class TemplateTest extends TestCase
     {
         $templateLoader = $this->createMock(Adapter::class);
         $templateLoader
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('__call')
             ->with('getPath', ['example5', 'html5', 'templates'])
             ->willReturn(null);
@@ -185,8 +186,8 @@ final class TemplateTest extends TestCase
         $template          = new Template('example5', $templateLoader, $scopeDeterminator);
         $method            = $this->reflectGetTemplateMethod();
 
-        $this->assertEquals(null, $method->invoke($template, 'example5'));
-        $this->assertEquals(null, $method->invoke($template, 'example5'));
+        self::assertEquals(null, $method->invoke($template, 'example5'));
+        self::assertEquals(null, $method->invoke($template, 'example5'));
     }
 
     /**

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -26,7 +26,7 @@ use Doctrine\DBAL\Driver\ResultStatement;
 use MetaModels\DcGeneral\Data\FilterBuilder;
 use MetaModels\IMetaModel;
 use MetaModels\MetaModel;
-use MetaModels\MetaModelsServiceContainer;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use MetaModels\Attribute\Base;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -78,7 +78,7 @@ class FilterBuilderTest extends TestCase
      * @param array  $params      The expected parameters.
      * @param array  $result      The query result.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
+     * @return MockObject|Connection
      */
     private function mockConnection($queryString, $params, $result)
     {
@@ -89,12 +89,12 @@ class FilterBuilderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $statement
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('fetchAll')
             ->with(\PDO::FETCH_ASSOC)
             ->willReturn($result);
         $connection
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('executeQuery')
             ->with($queryString, $params)
             ->willReturn($statement);
@@ -123,7 +123,7 @@ class FilterBuilderTest extends TestCase
 
         $filter = $builder->build();
 
-        $this->assertNull($filter->getMatchingIds());
+        self::assertNull($filter->getMatchingIds());
     }
 
     /**
@@ -142,7 +142,7 @@ class FilterBuilderTest extends TestCase
             ->getMockForAbstractClass();
 
         $attribute
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('searchFor')
             ->with('abc')
             ->willReturn([0, 1, 2, 3]);
@@ -172,7 +172,7 @@ class FilterBuilderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $statement
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('fetchAll')
             ->with(\PDO::FETCH_ASSOC)
             ->willReturn([
@@ -184,16 +184,16 @@ class FilterBuilderTest extends TestCase
                 ['id' => 5],
             ]);
         $connection
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('executeQuery')
-            ->with('SELECT id FROM mm_test WHERE ((foo = ?))', [0])
+            ->with('SELECT t.id FROM mm_test AS t WHERE ((t.foo = ?))', [0])
             ->willReturn($statement);
 
         $builder = new FilterBuilder($metaModel, $config, $connection);
 
         $filter = $builder->build();
 
-        $this->assertSame([0, 1, 2, 3], $filter->getMatchingIds());
+        self::assertSame([0, 1, 2, 3], $filter->getMatchingIds());
     }
 
     /**
@@ -214,7 +214,7 @@ class FilterBuilderTest extends TestCase
             ->getMockForAbstractClass();
 
         $attribute
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('searchFor')
             ->with('*test*')
             ->willReturn([0, 1, 2, 3]);
@@ -246,13 +246,13 @@ class FilterBuilderTest extends TestCase
 
         $connection = $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock();
         $connection
-            ->expects($this->never())
+            ->expects(self::never())
             ->method('executeQuery');
 
         $builder = new FilterBuilder($metaModel, $config, $connection);
 
         $filter = $builder->build();
 
-        $this->assertSame([0, 1, 2, 3], $filter->getMatchingIds());
+        self::assertSame([0, 1, 2, 3], $filter->getMatchingIds());
     }
 }

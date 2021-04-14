@@ -20,6 +20,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -429,7 +430,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
             'search'    => true,
             'eval'      => [
                 'mandatory' => true,
-                'maxlength' => 64,
+                'maxlength' => 255,
                 'tl_class'  => 'w50'
             ],
             'sql'       => "varchar(255) NOT NULL default ''"

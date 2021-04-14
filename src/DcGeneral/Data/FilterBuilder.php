@@ -300,7 +300,7 @@ class FilterBuilder
                     continue;
                 }
 
-                $subProcedure = new FilterBuilderSql($tableName, $child['operation'], $this->connection);
+                $subProcedure = new FilterBuilderSql($tableName, $child['operation'], $this->connection, 't.');
                 $subSkipped   = $this->buildNativeSqlProcedure($subProcedure, $child['children']);
 
                 if (count($subSkipped) !== count($child['children'])) {
@@ -333,7 +333,7 @@ class FilterBuilder
      */
     protected function optimizedFilter($filterRule, $children, $operation)
     {
-        $procedure = new FilterBuilderSql($this->getMetaModel()->getTableName(), $operation, $this->connection);
+        $procedure = new FilterBuilderSql($this->getMetaModel()->getTableName(), $operation, $this->connection, 't.');
         $skipped   = $this->buildNativeSqlProcedure($procedure, $children);
 
         if (!$procedure->isEmpty()) {

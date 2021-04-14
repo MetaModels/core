@@ -838,7 +838,7 @@ class MetaModel implements IMetaModel
 
         $builder = $this->getConnection()->createQueryBuilder();
 
-        return $builder
+        return (int) $builder
             ->select('COUNT(t.id)')
             ->from($this->getTableName(), 't')
             ->where($builder->expr()->in('t.id', ':values'))

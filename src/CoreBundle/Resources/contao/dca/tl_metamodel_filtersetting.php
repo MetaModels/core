@@ -232,7 +232,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
                 'blankoption',
                 'onlyused',
                 'onlypossible',
-                'skipfilteroptions'
+                'skipfilteroptions',
+                'hide_label'
             ],
         ],
         'customsql extends default'        => [
@@ -373,6 +374,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
             'label'       => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql'],
             'exclude'     => true,
             'inputType'   => 'textarea',
+            'default'     => 'SELECT id FROM {{table}}
+WHERE 1 = 1',
             'eval'        => [
                 'allowHtml'      => true,
                 'preserveTags'   => true,
@@ -461,7 +464,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
             'default'   => false,
             'inputType' => 'checkbox',
             'eval'      => [
-                'tl_class' => 'w50 cbx',
+                'tl_class' => 'w50 m12 cbx',
             ],
             'sql'       => "char(1) NOT NULL default '0'"
         ],
@@ -474,6 +477,16 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
                 'includeBlankOption' => true
             ],
             'sql'       => "varchar(255) NOT NULL default ''"
+        ],
+        'hide_label' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['hide_label'],
+            'exclude'   => true,
+            'default'   => false,
+            'inputType' => 'checkbox',
+            'eval'      => [
+                'tl_class' => 'w50 m12 cbx',
+            ],
+            'sql'       => "char(1) NOT NULL default '0'"
         ]
     ]
 ];

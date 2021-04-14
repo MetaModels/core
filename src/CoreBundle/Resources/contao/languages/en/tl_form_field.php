@@ -10,19 +10,15 @@
  *
  * This project is provided in good faith and hope to be usable by anyone.
  *
- * @package    MetaModels/core
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @package    MetaModels
+ * @subpackage Core>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-namespace MetaModels\Test;
-
-/**
- * This test case ensures compatibility of Contao Core bundle versions with root namespace aliasing (4.4).
- */
-class AutoLoadingTestCase extends \PHPUnit\Framework\TestCase
-{
-}
+$GLOBALS['TL_LANG']['FFL']['multitext']['0'] = 'Multitext (internal)';
+$GLOBALS['TL_LANG']['FFL']['multitext']['1'] = 'Multitext (internal, do not use this widget!)';
+$GLOBALS['TL_LANG']['FFL']['tags']['0']      = 'Tags (internal)';
+$GLOBALS['TL_LANG']['FFL']['tags']['1']      = 'Tags (internal, do not use this widget!)';

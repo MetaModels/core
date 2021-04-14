@@ -16,6 +16,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -94,10 +95,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = [
     'list'                  => [
         'sorting'           => [
             'mode'         => 4,
-            'fields'       => ['name'],
+            'fields'       => ['sorting'],
             'panelLayout'  => 'limit',
             'headerFields' => ['name'],
-            'flag'         => 1,
         ],
         'label'             => [
             'fields' => ['name'],
@@ -193,10 +193,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = [
             'inputType' => 'text',
             'eval'      => [
                 'mandatory' => true,
-                'maxlength' => 64,
+                'maxlength' => 255,
                 'tl_class'  => 'w50'
             ],
-            'sql'       => 'text NULL'
+            'sql'       => "varchar(255) NOT NULL default ''"
         ],
         'isdefault'       => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['isdefault'],

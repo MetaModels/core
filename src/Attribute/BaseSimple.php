@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,8 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -139,7 +140,7 @@ class BaseSimple extends Base implements ISimple
         $strColName = $this->getColName();
 
         foreach ($arrValues as $intId => $varData) {
-            $statement = $this->connection->createQueryBuilder()
+            $this->connection->createQueryBuilder()
                 ->update($strTable, 't')
                 ->where('t.id=:id')
                 ->set('t.' . $strColName, ':' . $strColName)
@@ -165,17 +166,15 @@ class BaseSimple extends Base implements ISimple
                 ->select($strCol . ', COUNT(' . $strCol . ') as mm_count')
                 ->from($this->getMetaModel()->getTableName())
                 ->where('id IN (:ids)')
-                ->groupBy('id')
-                ->addGroupBy($strCol)
-                ->orderBy('FIELD(id, :ids)')
+                ->groupBy($strCol)
+                ->orderBy('MIN(FIELD(id, :ids))')
                 ->setParameter('ids', $idList, Connection::PARAM_STR_ARRAY)
                 ->execute();
         } else {
             $statement = $this->connection->createQueryBuilder()
                 ->select($strCol . ', COUNT(' . $strCol . ') as mm_count')
                 ->from($this->getMetaModel()->getTableName())
-                ->groupBy('id')
-                ->addGroupBy($strCol)
+                ->groupBy($strCol)
                 ->orderBy($strCol)
                 ->execute();
         }

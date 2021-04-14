@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -68,7 +68,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template'][0]               =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template'][1]               =
     'Sub template for this filter element. Standard: form widget.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['blankoption'][0]            = 'Empty option';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['blankoption'][1]            = 'Show empty options in select.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['blankoption'][1]            = 'Show empty options in filter widget.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused'][0]               = 'Assigned values only';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused'][1]               =
     'Show only options, that are assigned somewhere in the MetaModel.';
@@ -79,6 +79,10 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions'][0]      =
     'Ignore this filter for the remaining values';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions'][1]      =
     'If activate the filter will return all options without itself in the filter rules.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['hide_label'][0]             =
+    'Hide label in filter widget';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['hide_label'][1]             =
+    'If active, the label is not output.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid'][0]              = 'Default';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid'][1]              = 'Default value for selection.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['title_legend']              = 'Type';

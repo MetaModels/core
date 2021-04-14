@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,6 +23,7 @@ namespace MetaModels\Test\Data;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\ResultStatement;
 use MetaModels\DcGeneral\Data\FilterBuilderSql;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -42,8 +43,8 @@ class FilterBuilderSqlTest extends TestCase
         $connection = $this->getMockBuilder(Connection::class)->disableOriginalConstructor()->getMock();
         $builder    = new FilterBuilderSql('mm_test', 'AND', $connection);
 
-        $this->assertTrue($builder->isEmpty());
-        $this->assertNull($builder->build());
+        self::assertTrue($builder->isEmpty());
+        self::assertNull($builder->build());
     }
 
     /**
@@ -55,27 +56,27 @@ class FilterBuilderSqlTest extends TestCase
     {
         return [
             'equality compare' => [
-                'expectedSql'    => 'SELECT id FROM mm_test WHERE ((test = ?))',
+                'expectedSql'    => 'SELECT t.id FROM mm_test AS t WHERE ((t.test = ?))',
                 'expectedParams' => [0],
                 'filter'         => ['operation' => '=', 'property' => 'test', 'value' => 0]
             ],
             'greater than compare' => [
-                'expectedSql'    => 'SELECT id FROM mm_test WHERE ((test > ?))',
+                'expectedSql'    => 'SELECT t.id FROM mm_test AS t WHERE ((t.test > ?))',
                 'expectedParams' => [0],
                 'filter'         => ['operation' => '>', 'property' => 'test', 'value' => 0]
             ],
             'less than compare' => [
-                'expectedSql'    => 'SELECT id FROM mm_test WHERE ((test < ?))',
+                'expectedSql'    => 'SELECT t.id FROM mm_test AS t WHERE ((t.test < ?))',
                 'expectedParams' => [0],
                 'filter'         => ['operation' => '<', 'property' => 'test', 'value' => 0]
             ],
             'IN list' => [
-                'expectedSql'    => 'SELECT id FROM mm_test WHERE ((test IN (?,?,?)))',
+                'expectedSql'    => 'SELECT t.id FROM mm_test AS t WHERE ((t.test IN (?,?,?)))',
                 'expectedParams' => [1, 2, 3],
                 'filter'         => ['operation' => 'IN', 'property' => 'test', 'values' => [1, 2, 3]]
             ],
             'LIKE' => [
-                'expectedSql'    => 'SELECT id FROM mm_test WHERE ((test LIKE ?))',
+                'expectedSql'    => 'SELECT t.id FROM mm_test AS t WHERE ((t.test LIKE ?))',
                 'expectedParams' => ['any_thing%'],
                 'filter'         => ['operation' => 'LIKE', 'property' => 'test', 'value' => 'any?thing*']
             ],
@@ -98,9 +99,8 @@ class FilterBuilderSqlTest extends TestCase
         $connection = $this->mockConnection($expectedSql, $expectedParams, [['id' => 'succ'], ['id' => 'ess']]);
         $builder    = new FilterBuilderSql('mm_test', 'AND', $connection);
 
-        $this->assertSame($builder, $builder->addChild($filter));
-
-        $this->assertSame(['succ', 'ess'], $builder->build()->getMatchingIds());
+        self::assertSame($builder, $builder->addChild($filter));
+        self::assertSame(['succ', 'ess'], $builder->build()->getMatchingIds());
     }
 
     /**
@@ -111,16 +111,16 @@ class FilterBuilderSqlTest extends TestCase
     public function testBuildMultiple()
     {
         $connection = $this->mockConnection(
-            'SELECT id FROM mm_test WHERE ((foo = ?) AND (bar = ?))',
+            'SELECT t.id FROM mm_test AS t WHERE ((t.foo = ?) AND (t.bar = ?))',
             ['fooz', 'barz'],
             [['id' => 'succ'], ['id' => 'ess']]
         );
         $builder    = new FilterBuilderSql('mm_test', 'AND', $connection);
 
-        $this->assertSame($builder, $builder->addChild(['operation' => '=', 'property' => 'foo', 'value' => 'fooz']));
-        $this->assertSame($builder, $builder->addChild(['operation' => '=', 'property' => 'bar', 'value' => 'barz']));
+        self::assertSame($builder, $builder->addChild(['operation' => '=', 'property' => 'foo', 'value' => 'fooz']));
+        self::assertSame($builder, $builder->addChild(['operation' => '=', 'property' => 'bar', 'value' => 'barz']));
 
-        $this->assertSame(['succ', 'ess'], $builder->build()->getMatchingIds());
+        self::assertSame(['succ', 'ess'], $builder->build()->getMatchingIds());
     }
 
     /**
@@ -139,16 +139,16 @@ class FilterBuilderSqlTest extends TestCase
         $child->addChild(['operation' => '=', 'property' => 'bar', 'value' => 'barz']);
 
         $connection = $this->mockConnection(
-            'SELECT id FROM mm_test WHERE (((foo = ?) OR (bar = ?)) AND (moo = ?))',
+            'SELECT t.id FROM mm_test AS t WHERE (((t.foo = ?) OR (t.bar = ?)) AND (t.moo = ?))',
             ['fooz', 'barz', 'mooz'],
             [['id' => 'succ'], ['id' => 'ess']]
         );
         $builder    = new FilterBuilderSql('mm_test', 'AND', $connection);
 
-        $this->assertSame($builder, $builder->addSubProcedure($child));
-        $this->assertSame($builder, $builder->addChild(['operation' => '=', 'property' => 'moo', 'value' => 'mooz']));
+        self::assertSame($builder, $builder->addSubProcedure($child));
+        self::assertSame($builder, $builder->addChild(['operation' => '=', 'property' => 'moo', 'value' => 'mooz']));
 
-        $this->assertSame(['succ', 'ess'], $builder->build()->getMatchingIds());
+        self::assertSame(['succ', 'ess'], $builder->build()->getMatchingIds());
     }
 
     /**
@@ -158,7 +158,7 @@ class FilterBuilderSqlTest extends TestCase
      * @param array  $params      The expected parameters.
      * @param array  $result      The query result.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
+     * @return MockObject|Connection
      */
     private function mockConnection($queryString, $params, $result)
     {
@@ -169,12 +169,12 @@ class FilterBuilderSqlTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $statement
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('fetchAll')
             ->with(\PDO::FETCH_ASSOC)
             ->willReturn($result);
         $connection
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('executeQuery')
             ->with($queryString, $params)
             ->willReturn($statement);

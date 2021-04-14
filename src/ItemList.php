@@ -31,20 +31,24 @@
 namespace MetaModels;
 
 use Contao\ContentModel;
+use Contao\Input;
 use Contao\Model;
 use Contao\ModuleModel;
-use Contao\PageModel;
 use Contao\StringUtil;
 use Contao\System;
 use Contao\Template as ContaoTemplate;
 use MetaModels\Events\RenderItemListEvent;
+use MetaModels\Filter\IFilter;
+use MetaModels\Filter\IFilterRule;
 use MetaModels\Filter\Setting\ICollection as IFilterSettingCollection;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\Helper\PaginationLimitCalculator;
 use MetaModels\Render\Setting\ICollection as IRenderSettingCollection;
 use MetaModels\Render\Setting\IRenderSettingFactory;
 use MetaModels\Render\Template;
+use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 
 /**
  * Implementation of a general purpose MetaModel listing.
@@ -153,10 +157,23 @@ class ItemList
 
     /**
      * Create a new instance.
+     *
+     * @param IFactory|null                 $factory              The MetaModels factory (required in MetaModels 3.0).
+     * @param IFilterSettingFactory|null    $filterFactory        The filter setting factory (required in MetaModels 3.0).
+     * @param IRenderSettingFactory|null    $renderSettingFactory The render setting factory (required in MetaModels 3.0).
+     * @param EventDispatcherInterface|null $eventDispatcher      The event dispatcher (required in MetaModels 3.0).
      */
-    public function __construct()
-    {
+    public function __construct(
+        IFactory $factory = null,
+        IFilterSettingFactory $filterFactory = null,
+        IRenderSettingFactory $renderSettingFactory = null,
+        EventDispatcherInterface $eventDispatcher = null
+    ) {
         $this->paginationLimitCalculator = new PaginationLimitCalculator();
+        $this->factory                   = $factory;
+        $this->filterFactory             = $filterFactory;
+        $this->renderSettingFactory      = $renderSettingFactory;
+        $this->eventDispatcher           = LegacyEventDispatcherProxy::decorate($eventDispatcher);
     }
 
     /**
@@ -165,9 +182,17 @@ class ItemList
      * @param IFilterSettingFactory $filterFactory The filter setting factory.
      *
      * @return ItemList
+     *
+     * @deprecated Use constructor injection instead.
      */
     public function setFilterFactory(IFilterSettingFactory $filterFactory)
     {
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Method "' . __METHOD__ . '" is deprecated and will be removed in MetaModels 3.0.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
         $this->filterFactory = $filterFactory;
 
         return $this;
@@ -183,8 +208,15 @@ class ItemList
         if ($this->filterFactory) {
             return $this->filterFactory;
         }
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Not setting the filter setting factory via constructor is deprecated and will throw ' .
+            'an exception in MetaModels 3.0.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
 
-        return System::getContainer()->get('metamodels.filter_setting_factory');
+        return $this->filterFactory = System::getContainer()->get('metamodels.filter_setting_factory');
     }
 
     /**
@@ -193,16 +225,24 @@ class ItemList
      * @param IFactory $factory The factory.
      *
      * @return ItemList
+     *
+     * @deprecated Use constructor injection instead.
      */
     public function setFactory(IFactory $factory): self
     {
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Method "' . __METHOD__ . '" is deprecated and will be removed in MetaModels 3.0.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
         $this->factory = $factory;
 
         return $this;
     }
 
     /**
-     * Retrieve the filter setting factory.
+     * Retrieve the factory.
      *
      * @return IFactory
      */
@@ -211,8 +251,15 @@ class ItemList
         if ($this->factory) {
             return $this->factory;
         }
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Not setting the factory via constructor is deprecated and will throw ' .
+            'an exception in MetaModels 3.0.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
 
-        return System::getContainer()->get('metamodels.factory');
+        return $this->factory = System::getContainer()->get('metamodels.factory');
     }
 
     /**
@@ -221,9 +268,17 @@ class ItemList
      * @param IRenderSettingFactory $factory The factory.
      *
      * @return ItemList
+     *
+     * @deprecated Use constructor injection instead.
      */
     public function setRenderSettingFactory(IRenderSettingFactory $factory): self
     {
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Method "' . __METHOD__ . '" is deprecated and will be removed in MetaModels 3.0.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
         $this->renderSettingFactory = $factory;
 
         return $this;
@@ -235,10 +290,18 @@ class ItemList
      * @param EventDispatcherInterface $eventDispatcher The new value.
      *
      * @return ItemList
+     *
+     * @deprecated Use constructor injection instead.
      */
     public function setEventDispatcher(EventDispatcherInterface $eventDispatcher): self
     {
-        $this->eventDispatcher = $eventDispatcher;
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Method "' . __METHOD__ . '" is deprecated and will be removed in MetaModels 3.0.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+        $this->eventDispatcher = LegacyEventDispatcherProxy::decorate($eventDispatcher);
 
         return $this;
     }
@@ -254,7 +317,17 @@ class ItemList
             return $this->eventDispatcher;
         }
 
-        return System::getContainer()->get('event_dispatcher');
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Not setting the event dispatcher via constructor is deprecated and will throw ' .
+            'an exception in MetaModels 3.0.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+
+        return $this->eventDispatcher = LegacyEventDispatcherProxy::decorate(
+            System::getContainer()->get('event_dispatcher')
+        );
     }
 
     /**
@@ -441,7 +514,7 @@ class ItemList
     /**
      * The filter to use.
      *
-     * @var \MetaModels\Filter\IFilter
+     * @var IFilter
      */
     protected $objFilter;
 
@@ -449,6 +522,8 @@ class ItemList
      * The model, can be module model or content model.
      *
      * @var ContentModel|ModuleModel|null $model
+     *
+     * @deprecated Do not use.
      */
     private $model;
 
@@ -456,6 +531,8 @@ class ItemList
      * Get the model.
      *
      * @return ContentModel|ModuleModel|null
+     *
+     * @deprecated Do not use.
      */
     public function getModel(): ?Model
     {
@@ -467,14 +544,14 @@ class ItemList
      *
      * @return void
      *
-     * @throws \RuntimeException When the MetaModel can not be found.
+     * @throws RuntimeException When the MetaModel can not be found.
      */
     protected function prepareMetaModel(): void
     {
         $factory            = $this->getFactory();
         $this->objMetaModel = $factory->getMetaModel($factory->translateIdToMetaModelName($this->intMetaModel));
         if (!$this->objMetaModel) {
-            throw new \RuntimeException('Could not get metamodel with id: ' . $this->intMetaModel);
+            throw new RuntimeException('Could not get metamodel with id: ' . $this->intMetaModel);
         }
     }
 
@@ -509,7 +586,7 @@ class ItemList
      *
      * @return $this
      *
-     * @throws \RuntimeException When the filter settings can not be found.
+     * @throws RuntimeException When the filter settings can not be found.
      */
     public function setFilterSettings($intFilter): self
     {
@@ -518,7 +595,7 @@ class ItemList
         $this->objFilterSettings = $this->getFilterFactory()->createCollection($this->intFilter);
 
         if (!$this->objFilterSettings) {
-            throw new \RuntimeException('Error: no filter object defined.');
+            throw new RuntimeException('Error: no filter object defined.');
         }
 
         return $this;
@@ -527,18 +604,18 @@ class ItemList
     /**
      * Set parameters.
      *
-     * @param string[] $arrPresets The parameter preset values to use.
+     * @param string[][] $arrPresets The parameter preset values to use.
      *
-     * @param string[] $arrValues  The dynamic parameter values that may be used.
+     * @param string[]   $arrValues  The dynamic parameter values that may be used.
      *
      * @return ItemList
      *
-     * @throws \RuntimeException When no filter settings have been set.
+     * @throws RuntimeException When no filter settings have been set.
      */
     public function setFilterParameters($arrPresets, $arrValues): self
     {
         if (!$this->objFilterSettings) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'Error: no filter object defined, call setFilterSettings() before setFilterParameters().'
             );
         }
@@ -578,7 +655,7 @@ class ItemList
     /**
      * Return the filter.
      *
-     * @return \MetaModels\Filter\IFilter
+     * @return IFilter
      */
     public function getFilter(): Filter\IFilter
     {
@@ -622,7 +699,7 @@ class ItemList
     /**
      * The items in the list view.
      *
-     * @var \MetaModels\IItems
+     * @var IItems
      */
     protected $objItems;
 
@@ -641,7 +718,7 @@ class ItemList
     /**
      * Add additional filter rules to the list on the fly.
      *
-     * @param \MetaModels\Filter\IFilterRule $objFilterRule The filter rule to add.
+     * @param IFilterRule $objFilterRule The filter rule to add.
      *
      * @return ItemList
      */
@@ -720,7 +797,7 @@ class ItemList
 
         $calculator = $this->paginationLimitCalculator;
         $calculator->setTotalAmount($intTotal);
-        $curPage = (int) \Input::get('page');
+        $curPage = (int) Input::get('page');
         if ($curPage > 1) {
             $calculator->setCurrentPage($curPage);
         }

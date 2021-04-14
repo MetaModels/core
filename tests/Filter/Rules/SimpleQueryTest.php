@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -27,6 +27,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * This tests the simple query filter rule.
+ *
+ * @covers \MetaModels\Filter\Rules\SimpleQuery
  */
 class SimpleQueryTest extends TestCase
 {
@@ -44,22 +46,22 @@ class SimpleQueryTest extends TestCase
         $connection = $this
             ->getMockBuilder(Connection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['executeQuery'])
+            ->onlyMethods(['executeQuery'])
             ->getMock();
         $statement  = $this->getMockForAbstractClass(Statement::class);
 
         $connection
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('executeQuery')
             ->with($query, $params, $types)
             ->willReturn($statement);
         $statement
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('fetchAll')
             ->with(\PDO::FETCH_ASSOC)
             ->willReturn([['idcolumn' => 'a'], ['idcolumn' => 'b'], ['idcolumn' => 'c']]);
 
         $rule = new SimpleQuery($query, $params, 'idcolumn', $connection, $types);
-        $this->assertSame(['a', 'b', 'c'], $rule->getMatchingIds());
+        self::assertSame(['a', 'b', 'c'], $rule->getMatchingIds());
     }
 }

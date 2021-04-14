@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,7 +21,7 @@
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -296,7 +296,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'exclude'   => true,
             'inputType' => 'checkbox',
             'eval'      => [
-                'tl_class' => 'w50 m12 cbx'
+                'tl_class' => 'w50 cbx m12'
             ],
             'sql'       => "varchar(5) NOT NULL default ''"
         ],
@@ -313,7 +313,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'exclude'   => true,
             'inputType' => 'checkbox',
             'eval'      => [
-                'tl_class' => 'w50 cbx',
+                'tl_class' => 'w50 cbx m12',
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
@@ -331,7 +331,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'exclude'   => true,
             'inputType' => 'checkbox',
             'eval'      => [
-                'tl_class' => 'w50 cbx',
+                'tl_class' => 'w50 cbx m12',
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
@@ -340,7 +340,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'exclude'   => true,
             'inputType' => 'checkbox',
             'eval'      => [
-                'tl_class' => 'w50 cbx',
+                'tl_class' => 'w50 cbx m12',
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
@@ -349,7 +349,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'exclude'   => true,
             'inputType' => 'checkbox',
             'eval'      => [
-                'tl_class' => 'w50 cbx'
+                'tl_class' => 'w50 cbx m12'
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
@@ -359,7 +359,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'inputType' => 'checkbox',
             'eval'      =>
                 [
-                    'tl_class' => 'w50 cbx',
+                    'tl_class' => 'w50 cbx m12',
                 ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
@@ -368,7 +368,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'exclude'   => true,
             'inputType' => 'checkbox',
             'eval'      => [
-                'tl_class' => 'w50 cbx',
+                'tl_class' => 'w50 cbx m12',
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
@@ -377,7 +377,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'exclude'   => true,
             'inputType' => 'checkbox',
             'eval'      => [
-                'tl_class' => 'w50 cbx',
+                'tl_class' => 'w50 cbx m12',
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
@@ -387,7 +387,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'inputType' => 'select',
             'default'   => 'tinyMCE',
             'eval'      => [
-                'tl_class'           => 'w50 m12',
+                'tl_class'           => 'w50',
                 'includeBlankOption' => true,
             ],
             'sql'       => "varchar(64) NOT NULL default ''"
@@ -438,9 +438,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['includeBlankOption'],
             'exclude'   => true,
             'inputType' => 'checkbox',
-            'default'   => 1,
+            'default'   => '1',
             'eval'      => [
-                'tl_class' => 'clr cbx',
+                'tl_class' => 'clr w50 cbx m12',
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
@@ -449,7 +449,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'exclude'   => true,
             'inputType' => 'checkbox',
             'eval'      => [
-                'tl_class' => 'clr cbx',
+                'tl_class' => 'clr w50 cbx m12',
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
@@ -457,7 +457,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly'],
             'inputType' => 'checkbox',
             'eval'      => [
-                'tl_class' => 'w50 cbx',
+                'tl_class' => 'w50 cbx m12',
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ]

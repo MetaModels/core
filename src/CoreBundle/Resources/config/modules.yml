@@ -4,4 +4,8 @@ services:
 
     MetaModels\CoreBundle\Controller\FrontendModule\ItemListController:
         arguments:
+            - '@metamodels.factory'
+            - '@metamodels.filter_setting_factory'
+            - '@metamodels.render_setting_factory'
+            - '@event_dispatcher'
             - '@MetaModels\Filter\FilterUrlBuilder'

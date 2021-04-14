@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -33,7 +34,7 @@ class TagsWidget extends Widget
      *
      * @var string
      */
-    protected $strTemplate = 'form_widget';
+    protected $strTemplate = 'form_tags';
 
 
     /**
@@ -90,12 +91,14 @@ class TagsWidget extends Widget
     protected function getClassForOption($index)
     {
         // If true we need another offset.
-        $intSub   = ($this->arrConfiguration['includeBlankOption'] ? -1 : 1);
+        $intSub   = ($this->arrConfiguration['includeBlankOption'] ? 1 : 0);
+        $intSub  += ($this->arrConfiguration['showSelectAll']
+                      || null === $this->arrConfiguration['showSelectAll'] ? 1 : 0);
         $strClass = $this->strName;
 
         if ($index == 0) {
             $strClass .= ' first';
-        } elseif ($index === (count($this->options) - $intSub)) {
+        } elseif ($index === (count($this->options) - 1 + $intSub)) {
             $strClass .= ' last';
         }
 
@@ -131,13 +134,13 @@ class TagsWidget extends Widget
             // @codingStandardsIgnoreStart - Keep the comments.
             $this->getClassForOption($index),             // 1
             $index,                                       // 2
-            $this->strName.'_'.$index,                    // 3
+            $this->strName . '_' . $index,                    // 3
             $val['value'],                                // 4
             $checked,                                     // 5
             $this->getAttributes() . $this->strTagEnding, // 6
             $val['label'],                                // 7
             $this->strName                                // 8
-            // @codingStandardsIgnoreEnd
+        // @codingStandardsIgnoreEnd
         );
     }
 
@@ -158,37 +161,30 @@ class TagsWidget extends Widget
         $count = 0;
 
         if ($this->options && is_array($this->options)) {
+            // Show not filter option.
             if ($this->arrConfiguration['includeBlankOption']) {
                 $return .= $this->generateOption(
-                    array('value' => '--none--', 'label' => $this->arrConfiguration['blankOptionLabel']),
+                    ['value' => '--none--', 'label' => $this->arrConfiguration['blankOptionLabel']],
                     $count++
                 );
             }
 
-            // Select all tags.
-            $return .= $this->generateOption(
-                array('value' => '--all--', 'label' => $GLOBALS['TL_LANG']['metamodels_frontendfilter']['select_all']),
-                $count++
-            );
+            // Show select all checkbox - check null as BC-Layer.
+            if ($this->arrConfiguration['showSelectAll'] || null === $this->arrConfiguration['showSelectAll']) {
+                $return .= $this->generateOption(
+                    [
+                        'value' => '--all--',
+                        'label' => $GLOBALS['TL_LANG']['metamodels_frontendfilter']['select_all']
+                    ],
+                    $count++
+                );
+            }
 
             foreach ($this->options as $val) {
                 $return .= $this->generateOption($val, $count++);
             }
         } else {
-            // Do not filter.
-            if ($this->arrConfiguration['includeBlankOption']) {
-                $return .= $this->generateOption(
-                    array
-                    (
-                        'value' => '',
-                        'label' => $this->arrConfiguration['blankOptionLabel'] .
-                            '<span>' .
-                            $GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations'] .
-                            '</span>'
-                    ),
-                    $count
-                );
-            }
+            $return .= '<span>' . $GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations'] . '</span>';
         }
 
         $return .= '</fieldset>';

@@ -226,7 +226,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
                 'maxlength'           => 255,
                 'tl_class'            => 'w50'
             ),
-            'sql' => "varchar(64) NOT NULL default ''"
+            'sql' => "varchar(255) NOT NULL default ''"
         ),
     )
 );
