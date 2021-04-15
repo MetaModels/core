@@ -21,6 +21,7 @@
 namespace MetaModels\Test\Attribute;
 
 use MetaModels\Attribute\AttributeFactory;
+use MetaModels\Attribute\Events\CreateAttributeFactoryEvent;
 use MetaModels\Attribute\IAttributeTypeFactory;
 use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\IMetaModelsServiceContainer;
@@ -48,7 +49,12 @@ class AttributeFactoryTest extends TestCase
         $eventDispatcher
             ->expects(self::exactly(1))
             ->method('dispatch')
-            ->with(self::equalTo(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE));
+            ->withConsecutive(
+                [
+                    self::isInstanceOf(CreateAttributeFactoryEvent::class),
+                    self::equalTo(MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE),
+                ]
+            );
         $eventDispatcher
             ->expects(self::exactly(1))
             ->method('hasListeners')

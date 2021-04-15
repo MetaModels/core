@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -296,7 +296,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
         foreach ($metaModels->findByFilter($filter) as $item) {
             $jumpTo = $item->buildJumpToLink($view);
             $event  = new GetPageDetailsEvent($jumpTo['page']);
-            $this->dispatcher->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
+            $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GET_PAGE_DETAILS);
             $pageDetails = $event->getPageDetails();
 
             // If there is a root page check the context or if we have no page continue.
@@ -351,7 +351,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
         // Get the path.
         if ($path === null) {
             $event = new GenerateFrontendUrlEvent($pageDetails, null, $pageDetails['language'], true);
-            $this->dispatcher->dispatch(ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL, $event);
+            $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL);
             $fullPath[] = $event->getUrl();
         } else {
             $fullPath[] = $path;
@@ -375,7 +375,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
         foreach ($jumpTos as $jumpTo) {
             // Get the page from the url.
             $event = new GetPageDetailsEvent($jumpTo['value']);
-            $this->dispatcher->dispatch(ContaoEvents::CONTROLLER_GET_PAGE_DETAILS, $event);
+            $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GET_PAGE_DETAILS);
 
             $pageDetails = $event->getPageDetails();
 

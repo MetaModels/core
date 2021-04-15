@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -140,7 +140,7 @@ class CreateVariantButtonListener
         $preFunction = function ($environment, $model) {
             /** @var EnvironmentInterface $environment */
             $copyEvent = new PreCreateModelEvent($environment, $model);
-            $environment->getEventDispatcher()->dispatch($copyEvent::NAME, $copyEvent);
+            $environment->getEventDispatcher()->dispatch($copyEvent, $copyEvent::NAME);
         };
 
         $postFunction = function ($environment, $model) {
@@ -196,7 +196,7 @@ class CreateVariantButtonListener
     {
         $event = new GetBreadcrumbEvent($environment);
 
-        $environment->getEventDispatcher()->dispatch($event::NAME, $event);
+        $environment->getEventDispatcher()->dispatch($event, $event::NAME);
 
         $arrReturn = $event->getElements();
 
