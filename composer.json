@@ -41,6 +41,7 @@
     "doctrine/cache": "~1.6",
     "menatwork/contao-multicolumnwizard-bundle": "^3.4",
     "ocramius/proxy-manager": "^1.0 || ^2.1",
+    "symfony/asset": "4.4.*",
     "symfony/config": "4.4.*",
     "symfony/dependency-injection": "4.4.*",
     "symfony/event-dispatcher": "4.4.*",
