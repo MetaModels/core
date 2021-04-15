@@ -28,6 +28,7 @@ namespace MetaModels\Helper;
 
 use Contao\Controller;
 use Contao\CoreBundle\Image\ImageFactoryInterface;
+use Contao\CoreBundle\Image\PictureFactoryInterface;
 use Contao\Dbafs;
 use Contao\Environment;
 use Contao\File;
@@ -42,12 +43,14 @@ use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use InvalidArgumentException;
+use Symfony\Component\Asset\Context\ContextInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This class provides various methods for handling file collection within Contao.
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
 class ToolboxFile
 {
@@ -73,6 +76,20 @@ class ToolboxFile
      * @var ImageFactoryInterface
      */
     private $imageFactory;
+
+    /**
+     * The assets files context.
+     *
+     * @var ContextInterface
+     */
+    private $filesContext;
+
+    /**
+     * The picture factory.
+     *
+     * @var PictureFactoryInterface
+     */
+    private $pictureFactory;
 
     /**
      * Allowed file extensions.
@@ -168,14 +185,22 @@ class ToolboxFile
     /**
      * Create a new instance.
      *
-     * @param ImageFactoryInterface|EventDispatcherInterface|null $imageFactory The image factory to use).
-     * @param string|null                                         $rootDir      The root path of the installation.
+     * @param ImageFactoryInterface|EventDispatcherInterface|null $imageFactory   The image factory to use.
+     * @param string|null                                         $rootDir        The root path of the installation.
+     * @param ContextInterface|null                               $filesContext   The assets files context.
+     * @param PictureFactoryInterface|null                        $pictureFactory The picture factory.
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function __construct($imageFactory = null, string $rootDir = null)
-    {
+    public function __construct(
+        $imageFactory = null,
+        string $rootDir = null,
+        ContextInterface $filesContext = null,
+        PictureFactoryInterface $pictureFactory = null
+    ) {
         switch (true) {
             case ($imageFactory instanceof ImageFactoryInterface) && !empty($rootDir):
                 $this->imageFactory = $imageFactory;
@@ -207,6 +232,36 @@ class ToolboxFile
         }
         if (isset($_SESSION) && !is_array($_SESSION['metaModels_downloads'])) {
             $_SESSION['metaModels_downloads'] = [];
+        }
+
+        if (null === ($this->rootDir)) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Not passing an "%kernel.project_dir%" parameter is deprecated.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $this->rootDir = System::getContainer()->getParameter('kernel.project_dirt');
+        }
+
+        if (null === ($this->filesContext = $filesContext)) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Not passing an "ContextInterface" is deprecated.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $this->filesContext = System::getContainer()->get('contao.assets.files_context');
+        }
+
+        if (null === ($this->pictureFactory = $pictureFactory)) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Not passing an "PictureFactoryInterface" is deprecated.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $this->filesContext = System::getContainer()->get('contao.image.picture_factory');
         }
     }
 
@@ -972,12 +1027,16 @@ class ToolboxFile
 
         // Prepare the picture for provide the image size.
         if ($information['isPicture'] = (int) $this->resizeImages[2]) {
-            $picture = Picture::create($file, $this->getResizeImages())->getTemplateData();
+            $projectDir = $this->rootDir;
+            $staticUrl  = $this->filesContext->getStaticUrl();
+            $picture    = $this->pictureFactory->create($projectDir . '/' . $file->path, $this->getResizeImages());
 
-            $picture['alt']   = $altText;
-            $picture['title'] = $title;
-
-            $information['picture'] = $picture;
+            $information['picture'] = [
+                'alt'     => $altText,
+                'title'   => $title,
+                'img'     => $picture->getImg($projectDir, $staticUrl),
+                'sources' => $picture->getSources($projectDir, $staticUrl)
+            ];
         }
 
         $this->modifiedTime[] = $file->mtime;
