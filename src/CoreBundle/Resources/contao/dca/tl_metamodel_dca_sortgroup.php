@@ -88,13 +88,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = [
                         'remote'    => 'id',
                         'operation' => '=',
                     ],
-                ],
-                'inverse' => [
-                    [
-                        'local'     => 'pid',
-                        'remote'    => 'id',
-                        'operation' => '=',
-                    ],
                 ]
             ]
         ],

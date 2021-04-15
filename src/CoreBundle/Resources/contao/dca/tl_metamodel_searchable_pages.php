@@ -37,6 +37,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_searchable_pages'] = [
     ],
     'dca_config'   => [
         'data_provider'  => [
+            'default' => [
+                'source' => 'tl_metamodel_searchable_pages'
+            ],
             'parent' => [
                 'source' => 'tl_metamodel'
             ]

@@ -67,7 +67,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
                         'remote'    => 'id',
                         'operation' => '=',
                     ],
-                ]
+                ],
+                'inverse' => [
+                    [
+                        'local'     => 'fid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ],
+                ],
             ],
             [
                 'from'   => 'tl_metamodel_filtersetting',

@@ -40,13 +40,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
     ],
     'dca_config'            => [
         'data_provider'  => [
-            'default'      => [
+            'root'      => [
                 'source' => 'tl_metamodel_dcasetting'
             ],
             'parent'       => [
-                'source' => 'tl_metamodel_dca'
-            ],
-            'root'         => [
                 'source' => 'tl_metamodel_dca'
             ],
             'tl_metamodel' => [
@@ -88,13 +85,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
                     ],
                 ],
                 'filter'  => [
-                    [
-                        'local'     => 'pid',
-                        'remote'    => 'id',
-                        'operation' => '=',
-                    ],
-                ],
-                'inverse' => [
                     [
                         'local'     => 'pid',
                         'remote'    => 'id',

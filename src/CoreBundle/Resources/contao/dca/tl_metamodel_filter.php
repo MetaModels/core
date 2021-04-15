@@ -48,6 +48,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
     (
         'data_provider'               => array
         (
+            'default'                 => array
+            (
+                'source'              => 'tl_metamodel_filter'
+            ),
             'parent'                  => array
             (
                 'source'              => 'tl_metamodel'
@@ -81,6 +85,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
                         'operation'   => '=',
                     ),
                 ),
+                'inverse'             => array
+                (
+                    array
+                    (
+                        'local'       => 'pid',
+                        'remote'      => 'id',
+                        'operation'   => '=',
+                    ),
+                )
             ),
 
             array(

@@ -64,13 +64,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_combine'] = [
                         'operation' => '=',
                     ],
                 ],
-                'inverse' => [
-                    [
-                        'local'     => 'pid',
-                        'remote'    => 'id',
-                        'operation' => '=',
-                    ],
-                ]
+                // Not set a inverse filter for this configuration.
+                // The used data provider not supported a parent data provider configuration.
+                // 'inverse' => []
             ],
         ],
     ],
