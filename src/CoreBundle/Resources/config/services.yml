@@ -183,3 +183,11 @@ services:
 
     MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter:
         public: false
+
+    MetaModels\Helper\ToolboxFile:
+        public: false
+        arguments:
+            - "@contao.image.image_factory"
+            - "%kernel.project_dir%"
+            - "@contao.assets.files_context"
+            - "@contao.image.picture_factory"
