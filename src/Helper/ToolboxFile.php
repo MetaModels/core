@@ -19,6 +19,7 @@
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Andreas Fischer <anfischer@kaffee-partner.de>
  * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -260,8 +261,9 @@ class ToolboxFile
                 'Not passing an "PictureFactoryInterface" is deprecated.',
                 E_USER_DEPRECATED
             );
+            
             // @codingStandardsIgnoreEnd
-            $this->filesContext = System::getContainer()->get('contao.image.picture_factory');
+            $this->pictureFactory = System::getContainer()->get('contao.image.picture_factory');
         }
     }
 
