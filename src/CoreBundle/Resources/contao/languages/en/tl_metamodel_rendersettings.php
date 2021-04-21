@@ -34,7 +34,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['format'][0]               = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['format'][1]               =
     'Define the output format. Leave empty to use the format used by current page.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['html5']  = 'HTML5';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['xhtml']  = 'XHTML';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['text']   = 'Text';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo'][0]               = 'JumpTo page';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo'][1]               =
