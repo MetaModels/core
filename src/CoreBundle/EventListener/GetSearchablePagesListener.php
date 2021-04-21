@@ -293,7 +293,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
 
         // Get the object.
         /** @var Item $item */
-        foreach ($metaModels->findByFilter($filter) as $item) {
+        foreach ($metaModels->findByFilter($filter, '', 0, 0, 'ASC', $view->getSettingNames()) as $item) {
             $jumpTo = $item->buildJumpToLink($view);
             $event  = new GetPageDetailsEvent($jumpTo['page']);
             $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GET_PAGE_DETAILS);
