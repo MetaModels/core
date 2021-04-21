@@ -240,7 +240,7 @@ class DatabaseBackedListener
             if (($metaModel = $event->getMetaModel()) instanceof ITranslatedMetaModel && $metaModel->isTranslated()) {
                 // @codingStandardsIgnoreStart
                 @\trigger_error(
-                    'Translated "\MetaModel\IMetamodel" instances are deprecated since MetaModels 2.1 ' .
+                    'Translated "\MetaModel\IMetamodel" instances are deprecated since MetaModels 2.2 ' .
                     'and to be removed in 3.0. The MetaModel must implement "\MetaModels\ITranslatedMetaModel".',
                     E_USER_DEPRECATED
                 );

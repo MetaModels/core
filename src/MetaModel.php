@@ -233,7 +233,7 @@ class MetaModel implements IMetaModel
             // @codingStandardsIgnoreStart
             @\trigger_error(
                 'Adding translated attributes to untranslated "\MetaModel\IMetamodel" instances is ' .
-                'deprecated since MetaModels 2.1 and will error in 3.0. The MetaModel must implement ' .
+                'deprecated since MetaModels 2.2 and will error in 3.0. The MetaModel must implement ' .
                 '"\MetaModels\ITranslatedMetaModel".',
                 E_USER_DEPRECATED
             );
@@ -436,7 +436,7 @@ class MetaModel implements IMetaModel
      *
      * @return array an array of all matched items, sorted by the id list.
      *
-     * @deprecated Since 2.1 to be removed in 3.0.
+     * @deprecated Since 2.2 to be removed in 3.0.
      */
     protected function fetchTranslatedAttributeValues(ITranslated $attribute, $ids)
     {
@@ -651,7 +651,7 @@ class MetaModel implements IMetaModel
         if ($this instanceof ITranslatedMetaModel) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
-                sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                     'Please use "instanceof \MetaModels\ITranslatedMetaModel" instead.', __METHOD__),
                 E_USER_DEPRECATED
             );
@@ -662,7 +662,7 @@ class MetaModel implements IMetaModel
             // @codingStandardsIgnoreStart
             @\trigger_error(
                 sprintf(
-                    'The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                    'The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                     'MetaModel "%s" should implement "\MetaModels\ITranslatedMetaModel" instead.',
                     __METHOD__,
                     $this->getTableName()
@@ -675,7 +675,7 @@ class MetaModel implements IMetaModel
 
         // @codingStandardsIgnoreStart
         @\trigger_error(
-            sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+            sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                 'Please use "instanceof \MetaModels\ITranslatedMetaModel" instead.', __METHOD__),
             E_USER_DEPRECATED
         );
@@ -702,7 +702,7 @@ class MetaModel implements IMetaModel
         if ($this instanceof ITranslatedMetaModel) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
-                sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                     'Please use "\MetaModels\ITranslatedMetaModel::getLanguages" instead.', __METHOD__),
                 E_USER_DEPRECATED
             );
@@ -713,7 +713,7 @@ class MetaModel implements IMetaModel
         if ($this->isTranslated(false)) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
-                sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                     'Please test for "instanceof "\MetaModels\ITranslatedMetaModel" and use '.
                     '"\MetaModels\ITranslatedMetaModel::getLanguages" instead.', __METHOD__),
                 E_USER_DEPRECATED
@@ -724,7 +724,7 @@ class MetaModel implements IMetaModel
         }
         // @codingStandardsIgnoreStart
         @\trigger_error(
-            sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+            sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                 'Please test for "instanceof \MetaModels\ITranslatedMetaModel".', __METHOD__),
             E_USER_DEPRECATED
         );
@@ -743,7 +743,7 @@ class MetaModel implements IMetaModel
         if ($this instanceof ITranslatedMetaModel) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
-                sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                     'Please use "\MetaModels\ITranslatedMetaModel::getMainLanguage" instead.', __METHOD__),
                 E_USER_DEPRECATED
             );
@@ -754,7 +754,7 @@ class MetaModel implements IMetaModel
         if ($this->isTranslated(false)) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
-                sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                     'Please implement interface "\MetaModels\ITranslatedMetaModel" and use ' .
                     '"\MetaModels\ITranslatedMetaModel::getMainLanguage" instead.', __METHOD__),
                 E_USER_DEPRECATED
@@ -768,7 +768,7 @@ class MetaModel implements IMetaModel
         }
         // @codingStandardsIgnoreStart
         @\trigger_error(
-            sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+            sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                 'Please test for translations via "instanceof \MetaModels\ITranslatedMetaModel" and call ' .
                 '"\MetaModels\ITranslatedMetaModel::getMainLanguage" instead.', __METHOD__),
             E_USER_DEPRECATED
@@ -793,7 +793,7 @@ class MetaModel implements IMetaModel
         if ($this instanceof ITranslatedMetaModel) {
             // @codingStandardsIgnoreStart
             @\trigger_error(
-                sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                     'Please use "\MetaModels\ITranslatedMetaModel::getLanguage" and ' .
                     '"\MetaModels\ITranslatedMetaModel::selectLanguage" instead.', __METHOD__),
                 E_USER_DEPRECATED
@@ -801,7 +801,7 @@ class MetaModel implements IMetaModel
         } else {
             // @codingStandardsIgnoreStart
             @\trigger_error(
-                sprintf('The method "%s" is deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                     'Please use "\MetaModels\ITranslatedMetaModel::getLanguage" instead.', __METHOD__),
                 E_USER_DEPRECATED
             );
@@ -1241,7 +1241,7 @@ class MetaModel implements IMetaModel
             // @codingStandardsIgnoreStart
             @\trigger_error(
                 sprintf('Support for translated MetaModels not implementing "\MetaModels\ITranslatedMetaModel" '.
-                    'is  deprecated since MetaModels 2.1 and to be removed in 3.0. ' .
+                    'is  deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
                     'Please implement interface "\MetaModels\ITranslatedMetaModel".', __METHOD__),
                 E_USER_DEPRECATED
             );

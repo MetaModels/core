@@ -72,7 +72,7 @@ abstract class Base implements IAttribute
             // @codingStandardsIgnoreStart
             @\trigger_error(
                 sprintf(
-                    'Support for translated "\MetaModel\IMetamodel" instances is deprecated since MetaModels 2.1 ' .
+                    'Support for translated "\MetaModel\IMetamodel" instances is deprecated since MetaModels 2.2 ' .
                     'and to be removed in 3.0. The MetaModel "%s" must implement "\MetaModels\ITranslatedMetaModel".',
                     $objMetaModel->getTableName()
                 ),
@@ -154,7 +154,7 @@ abstract class Base implements IAttribute
             // @codingStandardsIgnoreStart
             @\trigger_error(
                 sprintf(
-                    'Not passing the language code to "%s" is deprecated since MetaModels 2.1 and will fail in 3.0 ',
+                    'Not passing the language code to "%s" is deprecated since MetaModels 2.2 and will fail in 3.0 ',
                     __METHOD__
                 ),
                 E_USER_DEPRECATED
