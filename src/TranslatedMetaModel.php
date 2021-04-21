@@ -110,7 +110,7 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
      * This is only overridden for BC reasons.
      * To be removed in MetaModels 3.0.
      *
-     * @deprecated Since 2.1 to be private in 3.0.
+     * @deprecated Since 2.2 to be private in 3.0.
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
