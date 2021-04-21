@@ -187,6 +187,12 @@ services:
         tags:
             - name: contao.migration
 
+    MetaModels\CoreBundle\Migration\FindClearAllTemplateMigration:
+        arguments:
+            - '%kernel.project_dir%'
+        tags:
+            - name: contao.migration
+
     MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter:
         public: false
 
