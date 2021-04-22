@@ -92,9 +92,10 @@ class FindClearAllTemplateMigration extends AbstractMigration
      */
     private function findClearAllTemplates(): bool
     {
-        $files = Finder::create()->in($this->projectDir . '/templates')->name('mm_filter_clearall*.*');
+        $finder = Finder::create();
+        $finder->in($this->projectDir . '/templates')->name('mm_filter_clearall*.*');
 
-        if (!empty($files)) {
+        if ($finder->hasResults()) {
             return true;
         }
 
