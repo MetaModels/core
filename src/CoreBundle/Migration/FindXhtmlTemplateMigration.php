@@ -92,11 +92,12 @@ class FindXhtmlTemplateMigration extends AbstractMigration
      */
     private function findXhtmlTemplates(): bool
     {
-        $files = Finder::create()->in($this->projectDir . '/templates')->name(
+        $finder = Finder::create();
+        $finder->in($this->projectDir . '/templates')->name(
             ['ce_metamodel_*.xhtml', 'metamodel_*.xhtml', 'mm_*.xhtml', 'mod_metamodel_*.xhtml']
         );
 
-        if (!empty($files)) {
+        if ($finder->hasResults()) {
             return true;
         }
 
