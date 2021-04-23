@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Frank Mueller <frank.mueller@linking-you.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -93,18 +93,23 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     private function buildWhere(QueryBuilder $queryBuilder, $mixIds, $mixLangCode = '')
     {
+        $alias = '';
+        if (null !== $firstFrom = $queryBuilder->getQueryPart('from')[0] ?? null) {
+            $alias = $firstFrom['alias'] . '.';
+        }
+
         $queryBuilder
-            ->andWhere('att_id = :att_id')
+            ->andWhere($alias . 'att_id = :att_id')
             ->setParameter('att_id', $this->get('id'));
 
         if (!empty($mixIds)) {
             if (is_array($mixIds)) {
                 $queryBuilder
-                    ->andWhere('item_id IN (:item_ids)')
+                    ->andWhere($alias . 'item_id IN (:item_ids)')
                     ->setParameter('item_ids', $mixIds, Connection::PARAM_STR_ARRAY);
             } else {
                 $queryBuilder
-                    ->andWhere('item_id = :item_id')
+                    ->andWhere($alias . 'item_id = :item_id')
                     ->setParameter('item_id', $mixIds);
             }
         }
@@ -112,11 +117,11 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         if (!empty($mixLangCode)) {
             if (is_array($mixLangCode)) {
                 $queryBuilder
-                    ->andWhere('langcode IN (:langcode)')
+                    ->andWhere($alias . 'langcode IN (:langcode)')
                     ->setParameter('langcode', $mixLangCode, Connection::PARAM_STR_ARRAY);
             } else {
                 $queryBuilder
-                    ->andWhere('langcode = :langcode')
+                    ->andWhere($alias . 'langcode = :langcode')
                     ->setParameter('langcode', $mixLangCode);
             }
         }
