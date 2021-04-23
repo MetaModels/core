@@ -230,6 +230,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
                 'hide_label',
                 'template',
                 'defaultid',
+                'apply_sorting',
                 'blankoption',
                 'onlyused',
                 'onlypossible',
@@ -488,6 +489,18 @@ WHERE 1 = 1',
                 'tl_class' => 'w50 m12 cbx',
             ],
             'sql'       => "char(1) NOT NULL default '0'"
+        ],
+        'apply_sorting'         => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['apply_sorting'],
+            'exclude'   => true,
+            'inputType' => 'select',
+            'options'   => ['natsort_asc', 'natsort_desc'],
+            'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['sorting_directions'],
+            'eval'      => [
+                'tl_class'           => 'w50',
+                'includeBlankOption' => true
+            ],
+            'sql'       => "varchar(255) NOT NULL default ''"
         ],
         'cssID' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cssID'],
