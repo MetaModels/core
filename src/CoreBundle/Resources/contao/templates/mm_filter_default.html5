@@ -12,7 +12,7 @@
     <div class="formbody">
 
         <?php foreach ((is_array($this->filters) ? $this->filters : []) as $filter): ?>
-            <div class="widget <?= $filter['class'] ?>">
+            <div class="widget <?= $filter['class'] ?>"<?= $filter['cssID'] ?>>
                 <?php
                 if (!$filter['hide_label']) {
                     echo $filter['label'];
