@@ -473,12 +473,14 @@ abstract class Simple implements ISimple
 
         return array
         (
+            'cssID'      => $arrWidget['eval']['cssID'],
             'class'      => sprintf(
-                'mm_%s %s%s%s',
+                'mm_%s %s%s%s%s',
                 $arrWidget['inputType'],
                 $arrWidget['eval']['urlparam'],
                 (($arrWidget['value'] !== null) ? ' used' : ' unused'),
-                ($objFrontendFilterOptions->isAutoSubmit() ? ' submitonchange' : '')
+                ($objFrontendFilterOptions->isAutoSubmit() ? ' submitonchange' : ''),
+                $arrWidget['eval']['class']
             ),
             'label'      => $objWidget->generateLabel(),
             'hide_label' => $arrWidget['eval']['hide_label'],

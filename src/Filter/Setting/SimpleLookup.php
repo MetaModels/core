@@ -23,6 +23,7 @@
 
 namespace MetaModels\Filter\Setting;
 
+use Contao\StringUtil;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use MetaModels\IItem;
@@ -253,6 +254,8 @@ class SimpleLookup extends Simple
 
         $GLOBALS['MM_FILTER_PARAMS'][] = $this->getParamName();
 
+        $cssID = StringUtil::deserialize($this->get('cssID'), true);
+
         $arrCount  = array();
         $arrWidget = array(
             'label'     => array(
@@ -277,6 +280,8 @@ class SimpleLookup extends Simple
                 'onlypossible'       => $this->get('onlypossible'),
                 'template'           => $this->get('template'),
                 'hide_label'         => $this->get('hide_label'),
+                'cssID'              => !empty($cssID[0]) ? ' id="' . $cssID[0] . '"' : '',
+                'class'              => !empty($cssID[1]) ? ' ' . $cssID[1] : '',
             )
         );
 
