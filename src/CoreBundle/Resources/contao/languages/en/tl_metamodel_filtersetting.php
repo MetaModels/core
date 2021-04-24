@@ -83,6 +83,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['hide_label'][0]             =
     'Hide label in filter widget';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['hide_label'][1]             =
     'If active, the label is not output.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cssID'][0]                  = 'CSS ID/class';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cssID'][1]                  =
+    'Here you can set an ID and one or more classes.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid'][0]              = 'Default';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid'][1]              = 'Default value for selection.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['title_legend']              = 'Type';
