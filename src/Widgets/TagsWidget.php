@@ -108,7 +108,7 @@ class TagsWidget extends Widget
             $strClass .= ' odd';
         }
 
-        return ((strlen($this->strClass)) ? ' ' . $this->strClass : '') . $strClass;
+        return ((strlen($this->strClass)) ? $this->strClass . ' ' : '') . $strClass;
     }
 
     /**
@@ -132,9 +132,9 @@ class TagsWidget extends Widget
             '<input type="checkbox" name="%8$s[]" id="opt_%3$s" class="checkbox" value="%4$s"%5$s%6$s ' .
             '<label id="lbl_%3$s" for="opt_%3$s">%7$s</label></span>',
             // @codingStandardsIgnoreStart - Keep the comments.
-            $this->getClassForOption($index),             // 1
+            $this->getClassForOption($index),      // 1
             $index,                                       // 2
-            $this->strName . '_' . $index,                    // 3
+            $this->strName . '_' . $index,                // 3
             $val['value'],                                // 4
             $checked,                                     // 5
             $this->getAttributes() . $this->strTagEnding, // 6
