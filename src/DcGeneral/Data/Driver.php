@@ -46,6 +46,7 @@ use MetaModels\IItem;
 use MetaModels\IItems;
 use MetaModels\IMetaModel;
 use MetaModels\Item;
+use MetaModels\ITranslatedMetaModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -55,6 +56,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class Driver implements MultiLanguageDataProviderInterface
 {
+    use DriverBcLayerTrait;
+
     /**
      * Name of current table.
      *
@@ -225,8 +228,15 @@ class Driver implements MultiLanguageDataProviderInterface
     protected function setLanguage($language = '')
     {
         $previousLanguage = $GLOBALS['TL_LANGUAGE'];
-        if (!empty($language) && ($GLOBALS['TL_LANGUAGE'] !== $language)) {
-            $GLOBALS['TL_LANGUAGE'] = $language;
+        if (!empty($language)) {
+            $metaModel = $this->getMetaModel();
+            if ($metaModel instanceof ITranslatedMetaModel) {
+                $metaModel->selectLanguage($language);
+            }
+
+            if ($GLOBALS['TL_LANGUAGE'] !== $language) {
+                $GLOBALS['TL_LANGUAGE'] = $language;
+            }
         }
 
         return $previousLanguage;
@@ -734,22 +744,27 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     public function getLanguages($mixID)
     {
-        if (!$this->getMetaModel()->isTranslated()) {
+        $metaModel = $this->getMetaModel();
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            $collection = new DefaultLanguageInformationCollection();
+            foreach ($metaModel->getLanguages() as $langCode) {
+                [$langCode, $country] = explode('_', $langCode, 2);
+                $collection->add(new DefaultLanguageInformation($langCode, $country ?: null));
+            }
+            if (count($collection) > 0) {
+                return $collection;
+            }
+
             return null;
         }
 
-        $collection = new DefaultLanguageInformationCollection();
-
-        foreach ($this->getMetaModel()->getAvailableLanguages() as $langCode) {
-            list($langCode, $country) = explode('_', $langCode, 2);
-            $collection->add(new DefaultLanguageInformation($langCode, $country ?: null));
+        if (!$metaModel->isTranslated(false)) {
+            return null;
         }
 
-        if (count($collection) > 0) {
-            return $collection;
-        }
-
-        return null;
+        // @coverageIgnoreStart
+        return $this->getLanguagesBcLayer($metaModel);
+        // @coverageIgnoreEnd
     }
 
     /**
@@ -759,14 +774,18 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     public function getFallbackLanguage($mixID)
     {
-        if ($this->getMetaModel()->isTranslated()) {
-            $langCode = $this->getMetaModel()->getFallbackLanguage();
-
-            list($langCode, $country) = explode('_', $langCode, 2);
+        $metaModel = $this->getMetaModel();
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            [$langCode, $country] = explode('_', $metaModel->getMainLanguage(), 2);
             return new DefaultLanguageInformation($langCode, $country ?: null);
         }
+        if (!$metaModel->isTranslated(false)) {
+            return null;
+        }
 
-        return null;
+        // @coverageIgnoreStart
+        return $this->getFallbackLanguageBcLayer($metaModel);
+        // @coverageIgnoreEnd
     }
 
     /**

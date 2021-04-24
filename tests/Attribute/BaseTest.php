@@ -172,6 +172,7 @@ class BaseTest extends TestCase
      */
     public function testGetFieldDefinition()
     {
+        $GLOBALS['TL_LANGUAGE'] = 'en';
         /** @var Base $attribute */
         $attribute = $this->getAttribute();
 

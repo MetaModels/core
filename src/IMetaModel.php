@@ -106,6 +106,8 @@ interface IMetaModel
      * Determines if this MetaModel instance is subject to translation.
      *
      * @return bool true if the MetaModel is translated, false otherwise.
+     *
+     * @deprecated Please implement ITranslatedMetaModel instead.
      */
     public function isTranslated();
 
@@ -121,6 +123,8 @@ interface IMetaModel
      *
      * @return string[]|null An array containing all codes if the MetaModel is translated,
      *                       null if translation is not active.
+     *
+     * @deprecated Please implement ITranslatedMetaModel instead.
      */
     public function getAvailableLanguages();
 
@@ -129,6 +133,8 @@ interface IMetaModel
      *
      * @return string|null If the MetaModel is translated the language code to be used as fallback,
      *                     null if translation is not active.
+     *
+     * @deprecated Please implement ITranslatedMetaModel instead.
      */
     public function getFallbackLanguage();
 
@@ -136,6 +142,8 @@ interface IMetaModel
      * Get the current active language.
      *
      * @return string the language code.
+     *
+     * @deprecated Please implement ITranslatedMetaModel instead.
      */
     public function getActiveLanguage();
 
