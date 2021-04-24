@@ -487,6 +487,17 @@ WHERE 1 = 1',
                 'tl_class' => 'w50 m12 cbx',
             ],
             'sql'       => "char(1) NOT NULL default '0'"
+        ],
+        'cssID' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cssID'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => [
+                'multiple' => true,
+                'size'     => 2,
+                'tl_class' => 'clr w50'
+            ],
+            'sql'       => "varchar(255) NOT NULL default ''"
         ]
     ]
 ];
