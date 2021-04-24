@@ -481,6 +481,7 @@ abstract class Simple implements ISimple
                 ($objFrontendFilterOptions->isAutoSubmit() ? ' submitonchange' : '')
             ),
             'label'      => $objWidget->generateLabel(),
+            'hide_label' => $arrWidget['eval']['hide_label'],
             'formfield'  => $strField,
             'raw'        => $arrWidget,
             'urlparam'   => $arrWidget['eval']['urlparam'],
