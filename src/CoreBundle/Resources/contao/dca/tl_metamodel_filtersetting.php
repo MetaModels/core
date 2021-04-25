@@ -233,7 +233,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
                 'blankoption',
                 'onlyused',
                 'onlypossible',
-                'skipfilteroptions'
+                'skipfilteroptions',
+                'cssID'
             ],
         ],
         'customsql extends default'        => [
