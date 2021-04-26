@@ -500,7 +500,7 @@ WHERE 1 = 1',
                 'tl_class'           => 'w50',
                 'includeBlankOption' => true
             ],
-            'sql'       => "varchar(255) NOT NULL default ''"
+            'sql' => ['type' => 'string', 'length' => '24', 'notnull' => false, 'default' => '']
         ],
         'cssID' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cssID'],
