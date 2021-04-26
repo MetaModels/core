@@ -251,7 +251,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
         ],
         'published'          => [
             'default' => 1,
-            'sql'     => "char(1) NOT NULL default ''"
+            'sql'     => "char(1) NOT NULL default '1'"
         ],
         'dcatype'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['dcatype'],
@@ -390,7 +390,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
                 'tl_class'           => 'w50',
                 'includeBlankOption' => true,
             ],
-            'sql'       => "varchar(64) NOT NULL default ''"
+            'sql'       => "varchar(64) NOT NULL default 'tinyMCE'"
         ],
         'rows'               => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['rows'],
@@ -442,7 +442,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'eval'      => [
                 'tl_class' => 'clr w50 cbx m12',
             ],
-            'sql'       => "char(1) NOT NULL default ''"
+            'sql'       => "char(1) NOT NULL default '1'"
         ],
         'submitOnChange'     => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['submitOnChange'],
