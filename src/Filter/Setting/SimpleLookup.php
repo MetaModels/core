@@ -114,6 +114,15 @@ class SimpleLookup extends Simple
             }
         }
 
+        switch ($this->get('apply_sorting')) {
+            case 'natsort_asc':
+                \natsort($arrOptions);
+                break;
+            case 'natsort_desc':
+                \rsort($arrOptions, SORT_NATURAL);
+                break;
+        }
+
         return $arrOptions;
     }
 
