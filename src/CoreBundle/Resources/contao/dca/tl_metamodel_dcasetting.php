@@ -284,12 +284,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
             'label'       => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class'],
             'exclude'     => true,
             'inputType'   => 'text',
+            'default'     => 'w50',
             'eval'        => [
                 'tl_class'   => 'clr w50',
                 'helpwizard' => true,
             ],
             'explanation' => 'tl_class',
-            'sql'         => "varchar(64) NOT NULL default ''"
+            'sql'         => ['type' => 'string', 'length' => 64, 'default' => 'w50']
         ],
         'legendhide'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['legendhide'],
