@@ -23,6 +23,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Benedict Zinke <bz@presentprogressive.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -803,6 +804,10 @@ class ItemList
         }
         $this->objTemplate->total = $intTotal;
 
+        if ($this->objMetaModel instanceof TranslatedMetaModel) {
+            $previousLanguage = $this->objMetaModel->selectLanguage($GLOBALS['TL_LANGUAGE']);
+        }
+
         $this->objItems = $this->objMetaModel->findByFilter(
             $this->objFilter,
             $this->strSortBy,
@@ -811,6 +816,10 @@ class ItemList
             $this->strSortDirection,
             $this->getAttributeNames()
         );
+
+        if (isset($previousLanguage)) {
+            $this->objMetaModel->selectLanguage($previousLanguage);
+        }
 
         return $this;
     }
