@@ -8,19 +8,19 @@ addons:
 language: php
 
 php:
+  - "8.0"
   - "7.4"
-  - "7.3"
 
 env:
   - CONTAO_VERSION='contao/core-bundle ~4.9.0'
-  - CONTAO_VERSION='contao/core-bundle ~4.10.0@dev'
+  - CONTAO_VERSION='contao/core-bundle ~4.11.0@dev'
 
 # Exclude impossible Contao Version combinations.
 matrix:
   fast_finish: true
   allow_failures:
-    -  php: "7.4"
-    -  env: CONTAO_VERSION='contao/core-bundle ~4.10.0@dev'
+    -  php: "8.0"
+    -  env: CONTAO_VERSION='contao/core-bundle ~4.11.0@dev'
 
 before_script:
   - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
