@@ -8,7 +8,6 @@ addons:
 language: php
 
 php:
-  - "8.0"
   - "7.4"
 
 env:
@@ -19,7 +18,7 @@ env:
 matrix:
   fast_finish: true
   allow_failures:
-    -  php: "8.0"
+    -  php: "7.4"
     -  env: CONTAO_VERSION='contao/core-bundle ~4.11.0@dev'
 
 before_script:
