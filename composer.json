@@ -25,7 +25,7 @@
   "support": {
     "email": "mail@metamodel.me",
     "issues": "https://github.com/MetaModels/core/issues",
-    "wiki": "http://de.contaowiki.org/MetaModels",
+    "wiki": "https://de.contaowiki.org/MetaModels",
     "irc": "irc://irc.freenode.org/contao.mm",
     "source": "https://github.com/MetaModels/core"
   },
@@ -40,7 +40,6 @@
     "discordier/justtextwidgets": "^1.2",
     "doctrine/cache": "~1.6",
     "menatwork/contao-multicolumnwizard-bundle": "^3.4",
-    "ocramius/proxy-manager": "^1.0 || ^2.1",
     "symfony/asset": "4.4.*",
     "symfony/config": "4.4.*",
     "symfony/dependency-injection": "4.4.*",
