@@ -38,6 +38,7 @@ use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\IFactory;
 use MetaModels\IMetaModel;
 use MetaModels\Item;
+use MetaModels\ITranslatedMetaModel;
 use MetaModels\Render\Setting\ICollection as IRenderSettingCollection;
 use MetaModels\Render\Setting\IRenderSettingFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -519,6 +520,9 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
         foreach ($availableLanguages as $newLanguage) {
             // Change language.
             $GLOBALS['TL_LANGUAGE'] = $newLanguage;
+            if ($metaModels instanceof ITranslatedMetaModel) {
+                $prevLanguage = $metaModels->selectLanguage($newLanguage);
+            }
 
             // Get the view.
             $view    = $this->getView($metaModelsIdentifier, $renderSettingId);
@@ -540,6 +544,9 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
 
             // Reset language.
             $GLOBALS['TL_LANGUAGE'] = $currentLanguage;
+            if ($metaModels instanceof ITranslatedMetaModel) {
+                $metaModels->selectLanguage($prevLanguage);
+            }
 
             // Merge all results.
             $foundPages[] = $newEntries;
