@@ -147,7 +147,6 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
     {
         // Save the pages.
         $this->foundPages = $pages;
-
         // Run each entry in the published config array.
         foreach ($this->getConfigs() as $config) {
             if (!$config['published']) {
@@ -290,13 +289,14 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      */
     protected function getJumpTosFor($metaModels, $filter, $view, $rootPage = null): array
     {
-        $entries = array();
+        $entries = [];
 
         // Get the object.
         /** @var Item $item */
         foreach ($metaModels->findByFilter($filter, '', 0, 0, 'ASC', $view->getSettingNames()) as $item) {
             $jumpTo = $item->buildJumpToLink($view);
-            $event  = new GetPageDetailsEvent($jumpTo['page']);
+
+            $event = new GetPageDetailsEvent($jumpTo['page']);
             $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GET_PAGE_DETAILS);
             $pageDetails = $event->getPageDetails();
 
@@ -305,11 +305,11 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
                 continue;
             }
 
-            // Build the url.
-            $url = $this->getBaseUrl(
-                $pageDetails,
-                $jumpTo['url']
-            );
+            $url = UrlBuilder::fromUrl($jumpTo['url']);
+            if (null === $url->getScheme()) {
+                // Build the absolute url.
+                $url = $this->getBaseUrl($pageDetails, $jumpTo['url']);
+            }
 
             $entries[] = $url->getUrl();
         }
@@ -346,7 +346,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
         }
 
         // Make a array for the parts.
-        $fullPath   = array();
+        $fullPath   = [];
         $fullPath[] = TL_PATH;
 
         // Get the path.
@@ -417,7 +417,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
         $filterSettings = $this->getFilterSettings($filterId);
         $presetNames    = $filterSettings->getParameters();
         $feFilterParams = array_keys($filterSettings->getParameterFilterNames());
-        $processed      = array();
+        $processed      = [];
 
         // We have to use all the preset values we want first.
         foreach ($presets as $strPresetName => $arrPreset) {
@@ -529,7 +529,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
             $jumpTos = $view->get('jumpTo');
 
             // Set the filter.
-            $processed = $this->setFilterParameters($filterIdentifier, $presetParams, array());
+            $processed = $this->setFilterParameters($filterIdentifier, $presetParams, []);
 
             // Create a new filter for the search.
             $filter        = $metaModels->getEmptyFilter();
