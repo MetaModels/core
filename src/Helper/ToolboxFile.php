@@ -30,6 +30,7 @@ namespace MetaModels\Helper;
 use Contao\Controller;
 use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Contao\CoreBundle\Image\PictureFactoryInterface;
+use Contao\CoreBundle\Session\LazySessionAccess;
 use Contao\Dbafs;
 use Contao\Environment;
 use Contao\File;
@@ -47,6 +48,7 @@ use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use InvalidArgumentException;
 use Symfony\Component\Asset\Context\ContextInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * This class provides various methods for handling file collection within Contao.
@@ -192,6 +194,13 @@ class ToolboxFile
     protected $modifiedTime;
 
     /**
+     * Symfony session object
+     *
+     * @var Session
+     */
+    private $session;
+
+    /**
      * Create a new instance.
      *
      * @param ImageFactoryInterface|EventDispatcherInterface|null $imageFactory   The image factory to use.
@@ -270,6 +279,7 @@ class ToolboxFile
             // @codingStandardsIgnoreEnd
             $this->pictureFactory = System::getContainer()->get('contao.image.picture_factory');
         }
+        $this->session = System::getContainer()->get('session');
     }
 
     /**
@@ -538,13 +548,17 @@ class ToolboxFile
             $_SESSION['metaModels_downloads'] = [];
         }
 
-        if (!isset($_SESSION['metaModels_downloads'][$strFile])) {
-            $_SESSION['metaModels_downloads'][$strFile] = md5(uniqid());
+        $bag = $this->session->getBag('attributes');
+
+        $links = $bag->has('metaModels_downloads') ? $bag->get('metaModels_downloads') : [];
+        if (!isset($links[$strFile])) {
+            $links[$strFile] = md5(uniqid());
+            $bag->set('metaModels_downloads', $links);
         }
 
         return UrlBuilder::fromUrl(Environment::get('request'))
             ->setQueryParameter('file', urlencode($strFile))
-            ->setQueryParameter('fileKey', $_SESSION['metaModels_downloads'][$strFile])
+            ->setQueryParameter('fileKey', $links[$strFile])
             ->getUrl();
     }
 
@@ -804,6 +818,7 @@ class ToolboxFile
         if ($this->getShowImages()) {
             return;
         }
+
         if (($file = Input::get('file'))) {
             if ($this->withDownloadKeys) {
                 // Check key and return 403 if mismatch
