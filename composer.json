@@ -42,12 +42,10 @@
     "discordier/justtextwidgets": "^1.2",
     "doctrine/cache": "~1.6",
     "menatwork/contao-multicolumnwizard-bundle": "^3.4",
-    "ocramius/proxy-manager": "^1.0 || ^2.1",
     "symfony/config": "^3.3 || ^4.0",
-    "symfony/dependency-injection": "^3.3 || ^4.0",
+    "symfony/dependency-injection": "^3.3 || ^4.1.12",
     "symfony/filesystem": "^3.3 || ^4.0",
     "symfony/finder": "^3.3 || ^4.0",
-    "symfony/proxy-manager-bridge": "^3.3 || ^4.0",
     "webmozart/path-util": "~2.3"
   },
   "require-dev": {
