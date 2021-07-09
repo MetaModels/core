@@ -98,6 +98,8 @@ interface IAttribute
      * @param mixed  $varNewValue The new value for this meta information.
      *
      * @return IAttribute The instance of this attribute, to support chaining.
+     *
+     * @deprecated Implement schema manipulators instead - see #1267.
      */
     public function handleMetaChange($strMetaName, $varNewValue);
 
@@ -105,6 +107,8 @@ interface IAttribute
      * Delete all auxiliary data like a column in the MetaModel table or references in another table etc.
      *
      * @return void
+     *
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function destroyAUX();
 
@@ -112,6 +116,8 @@ interface IAttribute
      * Create auxiliary data like a column in the MetaModel table or references in another table etc.
      *
      * @return void
+     *
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function initializeAUX();
 

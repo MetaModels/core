@@ -175,3 +175,61 @@ services:
         class: MetaModels\CoreBundle\Contao\Compat\ContaoFactory
         arguments:
             - '@contao.framework'
+
+    MetaModels\InformationProvider\ContaoDatabaseBackedInformationProvider:
+        arguments:
+            - '@database_connection'
+
+    MetaModels\InformationProvider\MetaModelInformationCollector:
+        arguments:
+            - ['@MetaModels\InformationProvider\ContaoDatabaseBackedInformationProvider']
+
+    MetaModels\Schema\SchemaGenerator:
+        arguments:
+          - []
+        public: true
+
+    MetaModels\Schema\SchemaManager:
+        arguments:
+          - []
+        public: true
+
+    MetaModels\Schema\LegacySchemaGenerator:
+        arguments:
+            - '@metamodels.factory'
+        tags:
+            - { name: 'metamodels.schema-generator' }
+
+    MetaModels\Schema\LegacySchemaManager:
+        tags:
+            - { name: 'metamodels.schema-manager', priority: -100 }
+
+    MetaModels\Schema\Doctrine\DoctrineSchemaGenerator:
+        arguments:
+          - []
+        tags:
+            - { name: 'metamodels.schema-generator' }
+
+    MetaModels\Schema\Doctrine\DoctrineSchemaManager:
+        arguments:
+          - '@MetaModels\Schema\Doctrine\DoctrineSchemaManipulator'
+        tags:
+            - { name: 'metamodels.schema-manager' }
+
+    MetaModels\Schema\Doctrine\DoctrineSchemaManipulator:
+        arguments:
+          - '@database_connection'
+        tags:
+            - { name: 'metamodels.schema-manipulator' }
+
+    MetaModels\CoreBundle\Command\SchemaValidatorCommand:
+        arguments:
+            - '@MetaModels\InformationProvider\MetaModelInformationCollector'
+            - '@MetaModels\Schema\SchemaGenerator'
+            - '@MetaModels\Schema\SchemaManager'
+        tags:
+            - { name: 'console.command' }
+
+    MetaModels\Schema\Doctrine\SystemColumnSchemaGenerator:
+        tags:
+            - { name: 'metamodels.schema-generator.doctrine' }
