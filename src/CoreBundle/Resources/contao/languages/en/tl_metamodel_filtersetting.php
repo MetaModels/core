@@ -85,6 +85,10 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['hide_label'][0]              
     'Hide label in filter widget';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['hide_label'][1]                      =
     'If active, the label is not output.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label_as_blankoption'][0]            =
+    'Use label as blank option';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label_as_blankoption'][1]            =
+    'If active, the label output as blank option.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['apply_sorting'][0]                   = 'Sorting';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['apply_sorting'][1]                   =
     'Please enter sorting of values in filter widget.';

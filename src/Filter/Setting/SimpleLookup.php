@@ -266,23 +266,24 @@ class SimpleLookup extends Simple
         $cssID = StringUtil::deserialize($this->get('cssID'), true);
 
         $arrCount  = array();
-        $arrWidget = array(
-            'label'     => array(
+        $arrWidget = [
+            'label'     => [
                 $this->getLabel(),
                 'GET: ' . $this->getParamName()
-            ),
+            ],
             'inputType' => 'select',
             'options'   => $this->getParameterFilterOptions($attribute, $arrIds, $arrCount),
             'count'     => $arrCount,
             'showCount' => $objFrontendFilterOptions->isShowCountValues(),
-            'eval'      => array
-            (
+            'eval'      => [
                 'includeBlankOption' => (
-                        $this->get('blankoption') && !$objFrontendFilterOptions->isHideClearFilter()
-                        ? true
-                        : false
-                    ),
-                'blankOptionLabel'   => &$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'],
+                $this->get('blankoption') && !$objFrontendFilterOptions->isHideClearFilter()
+                    ? true
+                    : false
+                ),
+                'blankOptionLabel'   => $this->get('label_as_blankoption')
+                    ? $this->getLabel()
+                    : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'],
                 'colname'            => $attribute->getColname(),
                 'urlparam'           => $this->getParamName(),
                 'onlyused'           => $this->get('onlyused'),
@@ -291,8 +292,8 @@ class SimpleLookup extends Simple
                 'hide_label'         => $this->get('hide_label'),
                 'cssID'              => !empty($cssID[0]) ? ' id="' . $cssID[0] . '"' : '',
                 'class'              => !empty($cssID[1]) ? ' ' . $cssID[1] : '',
-            )
-        );
+            ]
+        ];
 
         return array
         (

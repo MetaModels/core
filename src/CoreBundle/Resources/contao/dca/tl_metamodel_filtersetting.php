@@ -228,6 +228,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
                 'allow_empty',
                 'label',
                 'hide_label',
+                'label_as_blankoption',
                 'template',
                 'defaultid',
                 'apply_sorting',
@@ -482,6 +483,16 @@ WHERE 1 = 1',
         ],
         'hide_label' => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['hide_label'],
+            'exclude'   => true,
+            'default'   => false,
+            'inputType' => 'checkbox',
+            'eval'      => [
+                'tl_class' => 'w50 m12 cbx',
+            ],
+            'sql'       => "char(1) NOT NULL default '0'"
+        ],
+        'label_as_blankoption' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label_as_blankoption'],
             'exclude'   => true,
             'default'   => false,
             'inputType' => 'checkbox',
