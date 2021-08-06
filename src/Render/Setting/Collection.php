@@ -227,6 +227,10 @@ class Collection implements ICollection
         $event = new GetPageDetailsEvent($pageId);
         $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GET_PAGE_DETAILS);
 
+        if(null === $event->getPageDetails()) {
+            return [];
+        }
+
         return $event->getPageDetails();
     }
 
