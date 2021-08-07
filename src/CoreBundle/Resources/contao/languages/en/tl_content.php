@@ -114,6 +114,21 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_hideclearfilter'][1]          =
 $GLOBALS['TL_LANG']['tl_content']['metamodel_available_values'][0]             = 'Filter counter';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_available_values'][1]             =
     'Display the amount of available entries behind each filter option.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_use_parameters'][0]               = 'Activate parameters';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_use_parameters'][1]               =
+    'You can activate the parameter wizard to set your own parameters.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_parameter_wizard'][0]             = 'Parameters';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_parameter_wizard'][1]             =
+    'Set your own parameters as "key-value-pairs".';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_parameter_wizard_description'][0] = 'Description';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_meta_title'][1]                   =
+    'Set description.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_parameter_wizard_key'][0]         = 'Key';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_meta_title'][1]                   =
+    'Set key.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_parameter_wizard_value'][0]       = 'Value';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_meta_title'][1]                   =
+    'Set value.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_meta_title'][0]                   = 'Meta Title';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_meta_title'][1]                   =
     'Set this attribute as the meta-title of the page.';

@@ -1048,11 +1048,15 @@ class ItemList
             $this->objTemplate->data = [];
         }
 
+        $model = $event->getCaller();
+
         $this->setTitleAndDescription();
 
         $this->objTemplate->caller       = $caller;
         $this->objTemplate->items        = $this->objItems;
         $this->objTemplate->filterParams = $this->arrParam;
+        $this->objTemplate->wizardParams =
+            $model->metamodel_use_parameters ? deserialize($model->metamodel_parameter_wizard) : [];
 
         return $this->objTemplate->parse($outputFormat);
     }
