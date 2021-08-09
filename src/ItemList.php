@@ -70,7 +70,7 @@ class ItemList
      *
      * @var string
      */
-    protected $strSortDirection = 'ASC';
+    protected $strSortDirection = 'asc';
 
     /**
      * The view to use.
@@ -105,7 +105,7 @@ class ItemList
      *
      * @var string[]
      */
-    protected $arrParam = array();
+    protected $arrParam = [];
 
     /**
      * The name of the attribute for the title.
@@ -154,27 +154,37 @@ class ItemList
      *
      * @var IRenderSettingFactory
      */
-    private $renderSettingFactory;
+    private        $renderSettingFactory;
+
+    private string $listKey;
+
+    private string $paginationTemplate;
 
     /**
      * Create a new instance.
      *
      * @param IFactory|null                 $factory              The MetaModels factory (required in MetaModels 3.0).
-     * @param IFilterSettingFactory|null    $filterFactory        The filter setting factory (required in MetaModels 3.0).
-     * @param IRenderSettingFactory|null    $renderSettingFactory The render setting factory (required in MetaModels 3.0).
+     * @param IFilterSettingFactory|null    $filterFactory        The filter setting factory (required in MetaModels
+     *                                                            3.0).
+     * @param IRenderSettingFactory|null    $renderSettingFactory The render setting factory (required in MetaModels
+     *                                                            3.0).
      * @param EventDispatcherInterface|null $eventDispatcher      The event dispatcher (required in MetaModels 3.0).
      */
     public function __construct(
         IFactory $factory = null,
         IFilterSettingFactory $filterFactory = null,
         IRenderSettingFactory $renderSettingFactory = null,
-        EventDispatcherInterface $eventDispatcher = null
+        EventDispatcherInterface $eventDispatcher = null,
+        string $listKey = '',
+        string $paginationTemplate = ''
     ) {
         $this->paginationLimitCalculator = new PaginationLimitCalculator();
         $this->factory                   = $factory;
         $this->filterFactory             = $filterFactory;
         $this->renderSettingFactory      = $renderSettingFactory;
         $this->eventDispatcher           = LegacyEventDispatcherProxy::decorate($eventDispatcher);
+        $this->listKey                   = $listKey;
+        $this->paginationTemplate        = $paginationTemplate;
     }
 
     /**
@@ -408,14 +418,14 @@ class ItemList
      *
      * @param string $strSortBy    The name of the attribute or system column to be used for sorting.
      *
-     * @param string $strDirection The direction, either ASC or DESC (optional).
+     * @param string $strDirection The direction, either asc or desc (optional).
      *
      * @return ItemList
      */
-    public function setSorting($strSortBy, $strDirection = 'ASC'): self
+    public function setSorting(string $strSortBy, string $strDirection = 'asc'): self
     {
         $this->strSortBy        = $strSortBy;
-        $this->strSortDirection = ('DESC' === $strDirection) ? 'DESC' : 'ASC';
+        $this->strSortDirection = ('desc' === strtolower($strDirection)) ? 'desc' : 'asc';
 
         return $this;
     }
@@ -624,7 +634,7 @@ class ItemList
         $arrPresetNames    = $this->objFilterSettings->getParameters();
         $arrFEFilterParams = array_keys($this->objFilterSettings->getParameterFilterNames());
 
-        $arrProcessed = array();
+        $arrProcessed = [];
 
         // We have to use all the preset values we want first.
         foreach ($arrPresets as $strPresetName => $arrPreset) {
@@ -798,7 +808,7 @@ class ItemList
 
         $calculator = $this->paginationLimitCalculator;
         $calculator->setTotalAmount($intTotal);
-        $curPage = (int) Input::get('page');
+        $curPage = (int) Input::get('page' . $this->listKey);
         if ($curPage > 1) {
             $calculator->setCurrentPage($curPage);
         }
@@ -833,7 +843,7 @@ class ItemList
      */
     public function getPagination(): string
     {
-        return $this->paginationLimitCalculator->getPaginationString();
+        return $this->paginationLimitCalculator->getPaginationString('page' . $this->listKey, $this->paginationTemplate);
     }
 
     /**
@@ -1030,8 +1040,10 @@ class ItemList
         if (!$blnNoNativeParsing && $this->objItems->getCount()) {
             $this->objTemplate->data = $this->objItems->parseAll($strOutputFormat, $this->objView);
         } else {
-            $this->objTemplate->data = array();
+            $this->objTemplate->data = [];
         }
+
+        $model = $event->getCaller();
 
         $this->setTitleAndDescription();
 

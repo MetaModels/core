@@ -114,11 +114,25 @@ trait ListControllerTrait
      */
     private function getResponseInternal(Template $template, Model $model, Request $request): ?Response
     {
+        if (empty($key = $model->metamodel_page_param)) {
+            switch ($model->type) {
+                case 'metamodel_content':
+                    $key = '_mmce' . $model->id;
+                    break;
+                case 'metamodel_list':
+                    $key = '_mmfm' . $model->id;
+                    break;
+                default:
+            }
+        }
+
         $itemRenderer = new ItemList(
             $this->factory,
             $this->filterFactory,
             $this->renderSettingFactory,
-            $this->eventDispatcher
+            $this->eventDispatcher,
+            $key,
+            $model->metamodel_pagination
         );
 
         $template->searchable = !$model->metamodel_donotindex;
@@ -129,10 +143,10 @@ trait ListControllerTrait
         // FIXME: filter URL should be created from local request and not from master request.
         $filterUrl = $this->filterUrlBuilder->getCurrentFilterUrl();
         if ($model->metamodel_sort_override) {
-            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, 'orderBy')) {
+            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, $model->metamodel_order_by_param ?: 'orderBy')) {
                 $sorting = $value;
             }
-            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, 'orderDir')) {
+            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, $model->metamodel_order_dir_param ?: 'orderDir')) {
                 $direction = $value;
             }
         }

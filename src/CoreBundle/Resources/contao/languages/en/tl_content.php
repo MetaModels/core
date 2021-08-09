@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2018 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,20 +15,23 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2018 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 $GLOBALS['TL_LANG']['tl_content']['mm_config_legend']                  = 'MetaModel Configuration';
 $GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']                  = 'MetaModel Filter';
-$GLOBALS['TL_LANG']['tl_content']['mm_rendering']                      = 'MetaModel Rendering';
+$GLOBALS['TL_LANG']['tl_content']['mm_rendering_legend']               = 'MetaModel Rendering';
+$GLOBALS['TL_LANG']['tl_content']['mm_sorting_legend']                 = 'MetaModel Sorting';
 $GLOBALS['TL_LANG']['tl_content']['mm_meta_legend']                    = 'Search engine optimization';
 $GLOBALS['TL_LANG']['tl_content']['ASC']                               = 'Ascending';
 $GLOBALS['TL_LANG']['tl_content']['DESC']                              = 'Descending';
 $GLOBALS['TL_LANG']['tl_content']['metamodel'][0]                      = 'MetaModel';
-$GLOBALS['TL_LANG']['tl_content']['metamodel'][1]                      = 'The MetaModel to list in this listing.';
-$GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit'][0]            = 'Use offset and limit for listing';
+$GLOBALS['TL_LANG']['tl_content']['metamodel'][1]                      =
+    'The MetaModel to list in this listing.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit'][0]            =
+    'Use offset and limit for listing';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit'][1]            =
     'Check if you want to limit the amount of items listed. This is useful for only showing the first 500 items or ' .
     'all excluding the first 10 items but keep pagination intact.';
@@ -39,16 +42,25 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_limit'][0]                = 'Maximu
 $GLOBALS['TL_LANG']['tl_content']['metamodel_limit'][1]                =
     'Please enter the maximum number of items. Enter 0 to show all items and therefore disable the pagination.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_sortby'][0]               = 'Order by';
-$GLOBALS['TL_LANG']['tl_content']['metamodel_sortby'][1]               = 'Please choose the sort order.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_sortby'][1]               =
+    'Please choose the sort order.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_sortby_direction'][0]     = 'Order by direction';
-$GLOBALS['TL_LANG']['tl_content']['metamodel_sortby_direction'][1]     = 'Ascending or descending order.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_sortby_direction'][1]     =
+    'Ascending or descending order.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_sort_override'][0]        = 'Allow sort override';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_sort_override'][1]        =
     'If checked, the sorting attribute and direction may be overridden via get parameter.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_order_by_param'][0]       = 'Sorting by key';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_order_by_param'][1]       =
+    'You can override the default key \'sortBy\'.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_order_dir_param'][0]      = 'Sorting direction key';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_order_dir_param'][1]      =
+    'You can override the default key \'sortDir\'.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering'][0]            = 'Filter settings to apply';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering'][1]            =
     'Select the filter settings that shall get applied when compiling the list.';
-$GLOBALS['TL_LANG']['tl_content']['metamodel_layout'][0]               = 'Custom template to use for generating';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_layout'][0]               =
+    'Custom template to use for generating';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_layout'][1]               =
     'Select the template that shall be used for the selected attribute. ' .
     'Valid template filenames start with "ce_metamodel".';
@@ -61,6 +73,15 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_noparsing'][0]            = 'No par
 $GLOBALS['TL_LANG']['tl_content']['metamodel_noparsing'][1]            =
     'If this checkbox is selected, the module will not parse the items. ' .
     'Only the item objects will be available in the template.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_pagination'][0]           =
+    'Custom template to use for pagination';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_pagination'][1]           =
+    'Select the template that shall be used for the pagination. ' .
+    'Valid template filenames start with "pagination".';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_page_param'][0]           =
+    'Override key for pagination';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_page_param'][1]           =
+    'You can override the key \'page*\' in pagination';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_donotindex'][0]           = 'Do not add to search index';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_donotindex'][1]           =
     'If this is checked, the Contao internal search index will ignore the content of this content element.';
@@ -77,7 +98,8 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_params'][1]           =
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_template'][0]         = 'Template';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_template'][1]         = 'Select frontend template.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_autosubmit'][0]       = 'Submit on change';
-$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_autosubmit'][1]       = 'Reload page on filter change.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_autosubmit'][1]       =
+    'Reload page on filter change.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_hideclearfilter'][0]  = 'Hide clear filter option';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_fef_hideclearfilter'][1]  =
     'Hide the clear filter option in every filter.';
@@ -93,7 +115,8 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_meta_description'][1]     =
 $GLOBALS['TL_LANG']['tl_content']['editmetamodel'][0]                  = 'Edit MetaModel';
 $GLOBALS['TL_LANG']['tl_content']['editmetamodel'][1]                  = 'Edit the MetaModel ID %s.';
 $GLOBALS['TL_LANG']['tl_content']['editrendersetting'][0]              = 'Edit rendersetting';
-$GLOBALS['TL_LANG']['tl_content']['editrendersetting'][1]              = 'Edit the render setting ID %s.';
+$GLOBALS['TL_LANG']['tl_content']['editrendersetting'][1]              =
+    'Edit the render setting ID %s.';
 $GLOBALS['TL_LANG']['tl_content']['editfiltersetting'][0]              = 'Edit filtersetting';
 $GLOBALS['TL_LANG']['tl_content']['editfiltersetting'][1]              =
     'Edit the filter setting ID %s.';

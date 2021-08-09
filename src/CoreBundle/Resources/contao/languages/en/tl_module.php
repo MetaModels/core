@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,6 +23,7 @@
 $GLOBALS['TL_LANG']['tl_module']['mm_config_legend']                  = 'MetaModel Configuration';
 $GLOBALS['TL_LANG']['tl_module']['mm_filter_legend']                  = 'MetaModel Filter';
 $GLOBALS['TL_LANG']['tl_module']['mm_rendering_legend']               = 'MetaModel Rendering';
+$GLOBALS['TL_LANG']['tl_module']['mm_sorting_legend']                 = 'MetaModel Sorting';
 $GLOBALS['TL_LANG']['tl_module']['mm_meta_legend']                    = 'Search engine optimization';
 $GLOBALS['TL_LANG']['tl_module']['metamodel'][0]                      = 'MetaModel';
 $GLOBALS['TL_LANG']['tl_module']['metamodel'][1]                      = 'The MetaModel to list in this listing.';
@@ -43,6 +44,12 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_sortby_direction'][1]     = 'Ascendi
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sort_override'][0]        = 'Allow sort override';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sort_override'][1]        =
     'If checked, the sorting attribute and direction may be overridden via get parameter.';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_order_by_param'][0]       = 'Sorting by key';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_order_by_param'][1]       =
+    'You can override the default key \'sortBy\'.';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_order_dir_param'][0]      = 'Sorting direction key';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_order_dir_param'][1]      =
+    'You can override the default key \'sortDir\'.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_filtering'][0]            = 'Filter settings to apply';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_filtering'][1]            =
     'Select the filter settings that shall get applied when compiling the list.';
@@ -59,6 +66,13 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_noparsing'][0]            = 'No pars
 $GLOBALS['TL_LANG']['tl_module']['metamodel_noparsing'][1]            =
     'If this checkbox is selected, the module will not parse the items. ' .
     'Only the item objects will be available in the template.';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_pagination'][0]           = 'Custom template to use for pagination';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_pagination'][1]           =
+    'Select the template that shall be used for the pagination. ' .
+    'Valid template filenames start with "pagination".';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_page_param'][0]           = 'Override key for pagination';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_page_param'][1]           =
+    'You can override the key \'page*\' in pagination.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_donotindex'][0]           = 'Do not add to search index';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_donotindex'][1]           =
     'If this is checked, the Contao internal search index will ignore the content of this content element.';
