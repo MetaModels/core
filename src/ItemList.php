@@ -843,7 +843,10 @@ class ItemList
      */
     public function getPagination(): string
     {
-        return $this->paginationLimitCalculator->getPaginationString('page' . $this->listKey, $this->paginationTemplate);
+        return $this->paginationLimitCalculator->getPaginationString(
+            'page' . $this->listKey,
+            $this->paginationTemplate
+        );
     }
 
     /**
