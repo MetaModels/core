@@ -1,0 +1,26 @@
+<!-- indexer::stop -->
+<nav class="pagination block" aria-label="<?= System::getContainer()->get('translator')->trans('MSC.pagination', [], 'contao_default') ?>">
+    <p><?= \sprintf(System::getContainer()->get('translator')->trans('MSC.totalPages', [], 'contao_default'), $this->intPage, $this->intTotalPages) ?></p>
+    <ul>
+        <?php if ($this->hasFirst): ?>
+            <li class="first"><a href="<?= $this->first['href'] ?>" class="first" title="<?= System::getContainer()->get('translator')->trans('MSC.goToPage', ['%s' => 1], 'contao_default') ?>"><?= System::getContainer()->get('translator')->trans('MSC.first', [], 'contao_default') ?></a></li>
+        <?php endif; ?>
+        <?php if ($this->hasPrevious): ?>
+            <li class="previous"><a href="<?= $this->previous['href'] ?>" class="previous" title="<?= System::getContainer()->get('translator')->trans('MSC.goToPage', ['%s' => $this->intPage - 1], 'contao_default') ?>"><?= System::getContainer()->get('translator')->trans('MSC.previous', [], 'contao_default') ?></a></li>
+        <?php endif; ?>
+        <?php foreach ($this->pages as $page): ?>
+            <?php if (null === $page['href']): ?>
+                <li><strong class="active"><?= $page['page'] ?></strong></li>
+            <?php else: ?>
+                <li><a href="<?= $page['href'] ?>" class="link" title="<?= System::getContainer()->get('translator')->trans('MSC.goToPage', ['%s' => $page['page']], 'contao_default') ?>"><?= $page['page'] ?></a></li>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        <?php if ($this->hasNext): ?>
+            <li class="next"><a href="<?= $this->next['href'] ?>" class="next" title="<?= System::getContainer()->get('translator')->trans('MSC.goToPage', ['%s' => $this->intPage + 1], 'contao_default') ?>"><?= System::getContainer()->get('translator')->trans('MSC.next', [], 'contao_default') ?></a></li>
+        <?php endif; ?>
+        <?php if ($this->hasLast): ?>
+            <li class="last"><a href="<?= $this->last['href'] ?>" class="last" title="<?= System::getContainer()->get('translator')->trans('MSC.goToPage', ['%s' => $this->intTotalPages], 'contao_default') ?>"><?= System::getContainer()->get('translator')->trans('MSC.last', [], 'contao_default') ?></a></li>
+        <?php endif; ?>
+    </ul>
+</nav>
+<!-- indexer::continue -->

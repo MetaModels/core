@@ -44,7 +44,7 @@ class ModuleCallback extends AbstractContentElementAndModuleCallback
     }
 
     /**
-     * Fetch the template group for the current MetaModel content element.
+     * Fetch the template group for the current MetaModel frontend module.
      *
      * @param \DC_Table $objDC The data container calling this method.
      *
@@ -59,7 +59,7 @@ class ModuleCallback extends AbstractContentElementAndModuleCallback
     }
 
     /**
-     * Fetch the template group for the current MetaModel content element.
+     * Fetch the template group for the current MetaModel frontend module.
      *
      * @return array
      *
@@ -68,6 +68,6 @@ class ModuleCallback extends AbstractContentElementAndModuleCallback
      */
     public function getPaginationTemplates()
     {
-        return $this->getTemplateList('pagination');
+        return $this->getTemplateList('mm_pagination');
     }
 }

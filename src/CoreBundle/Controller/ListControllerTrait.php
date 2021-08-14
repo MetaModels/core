@@ -132,6 +132,7 @@ trait ListControllerTrait
             $this->renderSettingFactory,
             $this->eventDispatcher,
             $key,
+            $model->metamodel_page_param_type,
             $model->metamodel_pagination
         );
 

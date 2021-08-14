@@ -158,17 +158,26 @@ class ItemList
 
     private string $listKey;
 
+    private string $paramType;
+
     private string $paginationTemplate;
 
     /**
      * Create a new instance.
      *
      * @param IFactory|null                 $factory              The MetaModels factory (required in MetaModels 3.0).
+     *
      * @param IFilterSettingFactory|null    $filterFactory        The filter setting factory (required in MetaModels
      *                                                            3.0).
      * @param IRenderSettingFactory|null    $renderSettingFactory The render setting factory (required in MetaModels
      *                                                            3.0).
      * @param EventDispatcherInterface|null $eventDispatcher      The event dispatcher (required in MetaModels 3.0).
+     *
+     * @param string                        $listKey              The pagination url key.
+     *
+     * @param string                        $paramType            The pagination parameter url type.
+     *
+     * @param string                        $paginationTemplate   The pagination template.
      */
     public function __construct(
         IFactory $factory = null,
@@ -176,6 +185,7 @@ class ItemList
         IRenderSettingFactory $renderSettingFactory = null,
         EventDispatcherInterface $eventDispatcher = null,
         string $listKey = '',
+        string $paramType = '',
         string $paginationTemplate = ''
     ) {
         $this->paginationLimitCalculator = new PaginationLimitCalculator();
@@ -184,6 +194,7 @@ class ItemList
         $this->renderSettingFactory      = $renderSettingFactory;
         $this->eventDispatcher           = LegacyEventDispatcherProxy::decorate($eventDispatcher);
         $this->listKey                   = $listKey;
+        $this->paramType                 = $paramType;
         $this->paginationTemplate        = $paginationTemplate;
     }
 
@@ -845,6 +856,7 @@ class ItemList
     {
         return $this->paginationLimitCalculator->getPaginationString(
             'page' . $this->listKey,
+            $this->paramType,
             $this->paginationTemplate
         );
     }
@@ -1045,8 +1057,6 @@ class ItemList
         } else {
             $this->objTemplate->data = [];
         }
-
-        $model = $event->getCaller();
 
         $this->setTitleAndDescription();
 

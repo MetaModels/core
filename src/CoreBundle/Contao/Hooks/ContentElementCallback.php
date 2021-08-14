@@ -67,4 +67,17 @@ class ContentElementCallback extends AbstractContentElementAndModuleCallback
 
         return $this->getTemplateList('ce_' . $type);
     }
+
+    /**
+     * Fetch the template group for the current MetaModel content element.
+     *
+     * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    public function getPaginationTemplates()
+    {
+        return $this->getTemplateList('mm_pagination');
+    }
 }
