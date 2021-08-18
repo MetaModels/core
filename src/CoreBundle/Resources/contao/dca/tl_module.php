@@ -30,7 +30,7 @@ $GLOBALS['TL_DCA']['tl_module']['config']['onload_callback'][] = [ModuleCallback
 $GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list'] =
     '{title_legend},name,headline,type;' .
     '{mm_config_legend},metamodel,perPage,metamodel_use_limit;' .
-    '{mm_rendering_legend},metamodel_rendersettings,metamodel_layout,metamodel_noparsing,metamodel_pagination,metamodel_page_param;'
+    '{mm_rendering_legend},metamodel_rendersettings,metamodel_layout,metamodel_noparsing,metamodel_page_param_type,metamodel_page_param,metamodel_pagination;'
     .
     '{mm_filter_legend},metamodel_filtering,metamodel_filterparams;' .
     '{mm_sorting_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_sort_override;' .
@@ -144,7 +144,7 @@ array_insert(
             'exclude'   => true,
             'inputType' => 'select',
             'reference' => &$GLOBALS['TL_LANG']['tl_content'],
-            'options'   => ['ASC' => 'ASC', 'DESC' => 'DESC'],
+            'options'   => ['asc' => 'ASC', 'desc' => 'DESC'],
             'eval'      => [
                 'includeBlankOption' => false,
                 'chosen'             => true,
@@ -162,12 +162,25 @@ array_insert(
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
+        'metamodel_sort_param_type'     => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_sort_param_type'],
+            'exclude'   => true,
+            'inputType' => 'select',
+            'options'   => ['slug', 'get', 'slugNget'],
+            'reference' => &$GLOBALS['TL_LANG']['tl_module']['metamodel_param_type_options'],
+            'default'   => 'slug',
+            'eval'      => [
+                'tl_class' => 'w50'
+            ],
+            'sql'       => "varchar(64) NOT NULL default 'slug'"
+        ],
         'metamodel_order_by_param'      => [
             'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_order_by_param'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => [
-                'tl_class' => 'clr w50'
+                'tl_class' => 'clr w50',
+                'rgxp'     => 'alias'
             ],
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
@@ -176,7 +189,8 @@ array_insert(
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => [
-                'tl_class' => 'w50'
+                'tl_class' => 'w50',
+                'rgxp'     => 'alias'
             ],
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
@@ -224,6 +238,28 @@ array_insert(
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
+        'metamodel_page_param_type'     => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_page_param_type'],
+            'exclude'   => true,
+            'inputType' => 'select',
+            'options'   => ['slugNget', 'slug', 'get'],
+            'reference' => &$GLOBALS['TL_LANG']['tl_module']['metamodel_param_type_options'],
+            'default'   => 'slugNget',
+            'eval'      => [
+                'tl_class' => 'clr w50'
+            ],
+            'sql'       => "varchar(64) NOT NULL default 'slugNget'"
+        ],
+        'metamodel_page_param'          => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_page_param'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => [
+                'tl_class' => 'w50',
+                'rgxp'     => 'alias'
+            ],
+            'sql'       => "varchar(64) NOT NULL default ''"
+        ],
         'metamodel_pagination'          => [
             'label'            => &$GLOBALS['TL_LANG']['tl_module']['metamodel_pagination'],
             'exclude'          => true,
@@ -234,15 +270,6 @@ array_insert(
                 'tl_class' => 'clr w50'
             ],
             'sql'              => "varchar(64) NOT NULL default ''"
-        ],
-        'metamodel_page_param'          => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_page_param'],
-            'exclude'   => true,
-            'inputType' => 'text',
-            'eval'      => [
-                'tl_class' => 'w50'
-            ],
-            'sql'       => "varchar(64) NOT NULL default ''"
         ],
         'metamodel_donotindex'          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_donotindex'],

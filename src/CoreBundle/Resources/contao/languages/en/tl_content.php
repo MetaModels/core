@@ -25,8 +25,8 @@ $GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']                          =
 $GLOBALS['TL_LANG']['tl_content']['mm_rendering_legend']                       = 'MetaModel Rendering';
 $GLOBALS['TL_LANG']['tl_content']['mm_sorting_legend']                         = 'MetaModel Sorting';
 $GLOBALS['TL_LANG']['tl_content']['mm_meta_legend']                            = 'Search engine optimization';
-$GLOBALS['TL_LANG']['tl_content']['ASC']                                       = 'Ascending';
-$GLOBALS['TL_LANG']['tl_content']['DESC']                                      = 'Descending';
+$GLOBALS['TL_LANG']['tl_content']['asc']                                       = 'Ascending';
+$GLOBALS['TL_LANG']['tl_content']['desc']                                      = 'Descending';
 $GLOBALS['TL_LANG']['tl_content']['metamodel'][0]                              = 'MetaModel';
 $GLOBALS['TL_LANG']['tl_content']['metamodel'][1]                              =
     'The MetaModel to list in this listing.';
@@ -56,12 +56,12 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_sort_param_type'][1]              =
 $GLOBALS['TL_LANG']['tl_content']['metamodel_param_type_options']['slugNget'] = 'Slug or GET allowed';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_param_type_options']['slug']      = 'Slug only';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_param_type_options']['get']       = 'GET only';
-$GLOBALS['TL_LANG']['tl_content']['metamodel_order_by_param'][0]               = 'Sorting by key';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_order_by_param'][0]               = 'Override key for order by';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_order_by_param'][1]               =
-    'You can override the default key \'sortBy\'.';
-$GLOBALS['TL_LANG']['tl_content']['metamodel_order_dir_param'][0]              = 'Sorting direction key';
+    'You can override the default key \'orderBy\'.';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_order_dir_param'][0]              = 'Override key for order direction';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_order_dir_param'][1]              =
-    'You can override the default key \'sortDir\'.';
+    'You can override the default key \'orderDir\'.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering'][0]                    = 'Filter settings to apply';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_filtering'][1]                    =
     'Select the filter settings that shall get applied when compiling the list.';
@@ -87,8 +87,7 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_pagination'][0]                   =
 $GLOBALS['TL_LANG']['tl_content']['metamodel_pagination'][1]                   =
     'Select the template that shall be used for the pagination. ' .
     'Valid template filenames start with "pagination".';
-$GLOBALS['TL_LANG']['tl_content']['metamodel_page_param'][0]                   =
-    'Override key for pagination';
+$GLOBALS['TL_LANG']['tl_content']['metamodel_page_param'][0]                   = 'Override key for pagination';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_page_param'][1]                   =
     'You can override the key \'page*\' in pagination';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_donotindex'][0]                   = 'Do not add to search index';

@@ -22,8 +22,12 @@
 
 namespace MetaModels\Helper;
 
+use Contao\Config;
 use Contao\FrontendTemplate;
-use MetaModels\Helper\PaginationGenerator;
+use Contao\System;
+use InvalidArgumentException;
+use MetaModels\Filter\FilterUrl;
+use MetaModels\Filter\FilterUrlBuilder;
 
 /**
  * Helper class to calculate limit and offset and pagination.
@@ -56,7 +60,7 @@ class PaginationLimitCalculator
      *
      * @var int
      */
-    private int $currentPage = 1;
+    private int $currentPage;
 
     /**
      * Pagination page break.
@@ -75,23 +79,23 @@ class PaginationLimitCalculator
     /**
      * The maximum number of pagination links.
      *
-     * @var int
+     * @var int|null
      */
-    private int $maxPaginationLinks;
+    private ?int $maxPaginationLinks = null;
 
     /**
      * The calculated offset.
      *
-     * @var int
+     * @var int|null
      */
-    private int $calculatedOffset;
+    private ?int $calculatedOffset = null;
 
     /**
      * The calculated limit.
      *
-     * @var int
+     * @var int|null
      */
-    private int $calculatedLimit;
+    private ?int $calculatedLimit = null;
 
     /**
      * The calculated total amount.
@@ -108,6 +112,68 @@ class PaginationLimitCalculator
     private bool $isDirty = true;
 
     /**
+     * The filter url builder.
+     *
+     * @var FilterUrlBuilder|object|null
+     */
+    private FilterUrlBuilder $filterUrlBuilder;
+
+    /**
+     * The pagination URL key.
+     *
+     * @var string
+     */
+    private string $pageParam;
+
+    /**
+     * The pagination parameter URL type.
+     *
+     * @var string
+     */
+    private string $paramType;
+
+    /**
+     * The pagination template.
+     *
+     * @var string
+     */
+    private string $paginationTemplate;
+
+    /**
+     * Create a new instance.
+     *
+     * @param FilterUrlBuilder|null $filterUrlBuilder   The filter url builder.
+     *
+     * @param string                $pageParam          The pagination url key
+     *
+     * @param string                $paramType          The pagination parameter url type
+     *
+     * @param string                $paginationTemplate The pagination template
+     */
+    public function __construct(
+        ?FilterUrlBuilder $filterUrlBuilder = null,
+        string $pageParam = 'page',
+        string $paramType = 'get',
+        string $paginationTemplate = 'mm_pagination'
+    ) {
+        $this->pageParam          = $pageParam;
+        $this->paramType          = $paramType;
+        $this->paginationTemplate = $paginationTemplate;
+        if (null === $filterUrlBuilder) {
+            $filterUrlBuilder = System::getContainer()->get('metamodels.filter_url');
+            @trigger_deprecation(
+                'metamodels/core',
+                '2.2.0',
+                __CLASS__ . ' parameter FilterUrlBuilder is null, but the parameter should be set'
+            );
+        }
+        $this->filterUrlBuilder = $filterUrlBuilder;
+
+        $this->filterUrl = new FilterUrl();
+        $this->filterUrlBuilder->addFromCurrentRequest($this->filterUrl);
+    }
+
+    /**
      * Check if the object needs to be recalculated.
      *
      * @return boolean
@@ -122,7 +188,7 @@ class PaginationLimitCalculator
      *
      * @return PaginationLimitCalculator
      */
-    public function markDirty()
+    public function markDirty(): self
     {
         $this->isDirty = true;
 
@@ -146,9 +212,9 @@ class PaginationLimitCalculator
      *
      * @return PaginationLimitCalculator
      */
-    public function setApplyLimitAndOffset($applyLimitAndOffset): PaginationLimitCalculator
+    public function setApplyLimitAndOffset(bool $applyLimitAndOffset): self
     {
-        $this->applyLimitAndOffset = (bool) $applyLimitAndOffset;
+        $this->applyLimitAndOffset = $applyLimitAndOffset;
 
         return $this->markDirty();
     }
@@ -170,9 +236,9 @@ class PaginationLimitCalculator
      *
      * @return PaginationLimitCalculator
      */
-    public function setOffset($offset): PaginationLimitCalculator
+    public function setOffset(int $offset): self
     {
-        $this->offset = (int) $offset;
+        $this->offset = $offset;
 
         return $this->markDirty();
     }
@@ -194,9 +260,9 @@ class PaginationLimitCalculator
      *
      * @return PaginationLimitCalculator
      */
-    public function setLimit($limit): PaginationLimitCalculator
+    public function setLimit(int $limit): self
     {
-        $this->limit = (int) $limit;
+        $this->limit = $limit;
 
         return $this->markDirty();
     }
@@ -208,7 +274,22 @@ class PaginationLimitCalculator
      */
     public function getCurrentPage(): int
     {
-        return $this->currentPage;
+        if (isset($this->currentPage)) {
+            return $this->currentPage;
+        }
+
+        switch ($this->paramType) {
+            case 'get':
+                return (int) ($this->filterUrl->getGet($this->pageParam) ?? 1);
+            case 'slug':
+                return (int) ($this->filterUrl->getSlug($this->pageParam) ?? 1);
+            case 'slugNget':
+                return (int) ($this->filterUrl->getGet($this->pageParam)
+                              ?? $this->filterUrl->getSlug($this->pageParam)
+                                 ?? 1);
+        }
+
+        throw new InvalidArgumentException('Invalid configured value: ' . $this->paramType);
     }
 
     /**
@@ -217,10 +298,18 @@ class PaginationLimitCalculator
      * @param int $currentPage The current page.
      *
      * @return PaginationLimitCalculator
+     *
+     * @deprecated The page is determined automatically from the current request.
      */
-    public function setCurrentPage($currentPage): PaginationLimitCalculator
+    public function setCurrentPage(int $currentPage): self
     {
-        $this->currentPage = (int) $currentPage;
+        $this->currentPage = $currentPage;
+
+        @trigger_deprecation(
+            'metamodels/core',
+            '2.2.0',
+            __METHOD__ . ' is deprecated - the page is determined automatically from the current request'
+        );
 
         return $this->markDirty();
     }
@@ -242,7 +331,7 @@ class PaginationLimitCalculator
      *
      * @return PaginationLimitCalculator
      */
-    public function setPerPage($perPage): PaginationLimitCalculator
+    public function setPerPage(int $perPage): self
     {
         $this->perPage = $perPage;
 
@@ -266,7 +355,7 @@ class PaginationLimitCalculator
      *
      * @return PaginationLimitCalculator
      */
-    public function setTotalAmount($totalAmount): PaginationLimitCalculator
+    public function setTotalAmount(int $totalAmount): self
     {
         $this->totalAmount = $totalAmount;
 
@@ -281,7 +370,7 @@ class PaginationLimitCalculator
     public function getMaxPaginationLinks(): int
     {
         if (null === $this->maxPaginationLinks) {
-            $this->setMaxPaginationLinks(\Config::get('maxPaginationLinks'));
+            $this->setMaxPaginationLinks(Config::get('maxPaginationLinks'));
         }
 
         return $this->maxPaginationLinks;
@@ -294,7 +383,7 @@ class PaginationLimitCalculator
      *
      * @return PaginationLimitCalculator
      */
-    public function setMaxPaginationLinks(int $maxPaginationLinks): PaginationLimitCalculator
+    public function setMaxPaginationLinks(int $maxPaginationLinks): self
     {
         $this->maxPaginationLinks = $maxPaginationLinks;
 
@@ -304,15 +393,9 @@ class PaginationLimitCalculator
     /**
      * Render the pagination string.
      *
-     * @param string $pageKey   The pagination url key
-     *
-     * @param string $paramType The pagination parameter url type
-     *
-     * @param string $template  The pagination template
-     *
      * @return string
      */
-    public function getPaginationString(string $pageKey = '', string $paramType = '', string $template = ''): string
+    public function getPaginationString(): string
     {
         $this->calculate();
 
@@ -320,24 +403,20 @@ class PaginationLimitCalculator
             return '';
         }
 
-        if ($template) {
-            $template = new FrontendTemplate($template);
-        } else {
-            $template = null;
-        }
+        $paginationTemplate = new FrontendTemplate($this->paginationTemplate);
 
         // Add pagination menu get parameter.
         $objPagination = new PaginationGenerator(
+            $this->filterUrlBuilder,
             $this->calculatedTotal,
             $this->getPerPage(),
             $this->getMaxPaginationLinks(),
-            $pageKey,
-            $template,
-            $paramType
+            $this->pageParam,
+            $this->paramType,
+            $paginationTemplate,
         );
 
-        return $objPagination->generate();
-
+        return $objPagination->generateForFilterUrl($this->filterUrl);
     }
 
     /**
@@ -345,7 +424,7 @@ class PaginationLimitCalculator
      *
      * @return int
      */
-    public function getCalculatedOffset()
+    public function getCalculatedOffset(): ?int
     {
         $this->calculate();
 
@@ -357,7 +436,7 @@ class PaginationLimitCalculator
      *
      * @return int
      */
-    public function getCalculatedLimit()
+    public function getCalculatedLimit(): ?int
     {
         $this->calculate();
 

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
  *
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-221 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -29,7 +30,7 @@ class ModuleCallback extends AbstractContentElementAndModuleCallback
      *
      * @var string
      */
-    protected static $tableName = 'tl_module';
+    protected static string $tableName = 'tl_module';
 
     /**
      * Called from tl_content.onload_callback.
@@ -50,7 +51,7 @@ class ModuleCallback extends AbstractContentElementAndModuleCallback
      *
      * @return array
      */
-    public function getTemplates(\DC_Table $objDC)
+    public function getTemplates(\DC_Table $objDC): array
     {
         /** @noinspection PhpUndefinedFieldInspection */
         $type = $objDC->activeRecord->type;
@@ -66,7 +67,7 @@ class ModuleCallback extends AbstractContentElementAndModuleCallback
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function getPaginationTemplates()
+    public function getPaginationTemplates(): array
     {
         return $this->getTemplateList('mm_pagination');
     }

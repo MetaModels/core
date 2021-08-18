@@ -19,10 +19,11 @@
 
 namespace MetaModels\Helper;
 
-use Contao\FrontendTemplate;
-use Contao\StringUtil;
+use Contao\Input;
 use Contao\Template;
-use Symfony\Component\HttpFoundation\Request;
+use InvalidArgumentException;
+use MetaModels\Filter\FilterUrl;
+use MetaModels\Filter\FilterUrlBuilder;
 
 /**
  * Provide methods to render a pagination menu.
@@ -30,171 +31,164 @@ use Symfony\Component\HttpFoundation\Request;
 class PaginationGenerator
 {
     /**
-     * Current page number
-     *
-     * @var integer
+     * @var FilterUrlBuilder
      */
-    protected int $intPage;
+    private FilterUrlBuilder $urlBuilder;
 
     /**
      * Total number of rows
      *
      * @var integer
      */
-    protected int $intRows;
+    private int $numRows;
 
     /**
      * Number of rows per page
      *
      * @var integer
      */
-    protected int $intRowsPerPage;
+    private int $rowsPerPage;
 
     /**
      * Total number of pages
      *
      * @var integer
      */
-    protected int $intTotalPages;
+    private int $totalPages;
 
     /**
      * Total number of links
      *
      * @var integer
      */
-    protected int $intNumberOfLinks;
-
-    /**
-     * Label for the "<< first" link
-     *
-     * @var string
-     */
-    protected string $lblFirst;
-
-    /**
-     * Label for the "< previous" link
-     *
-     * @var string
-     */
-    protected string $lblPrevious;
-
-    /**
-     * Label for the "next >" link
-     *
-     * @var string
-     */
-    protected string $lblNext;
-
-    /**
-     * Label for the "last >>" link
-     *
-     * @var string
-     */
-    protected string $lblLast;
-
-    /**
-     * Label for "total pages"
-     *
-     * @var string
-     */
-    protected string $lblTotal;
+    private int $numberOfLinks;
 
     /**
      * Template object
      *
      * @var Template
      */
-    protected Template $objTemplate;
+    private Template $template;
 
     /**
-     * Show "<< first" and "last >>" links
-     *
-     * @var boolean
-     */
-    protected bool $blnShowFirstLast = true;
-
-    /**
-     * Request url
+     * The parameter name
      *
      * @var string
      */
-    protected string $strUrl = '';
+    private string $pageParam;
 
     /**
-     * Page paramenter
+     * The parameter type
      *
      * @var string
      */
-    protected string $pageKey = 'page';
-
-    /**
-     * Variable connector
-     *
-     * @var string
-     */
-    protected string $strVarConnector = '?';
-
-    /**
-     * Data array
-     *
-     * @var array
-     */
-    protected array $arrData = [];
-
-    /**
-     * Force URL parameter
-     *
-     * @var boolean
-     */
-    protected bool $blnForceParam = false;
+    private string $paramType;
 
     /**
      * Set the number of rows, the number of results per pages and the number of links
      *
-     * @param integer       $intRows       The number of rows
-     * @param integer       $intPerPage    The number of items per page
-     * @param integer       $numberOfLinks The number of links to generate
-     * @param string        $pageKey       The parameter name
-     * @param Template|null $objTemplate   The template object
-     * @param string        $paramType     The parameter type
+     * @param integer  $numRows            The number of rows
+     * @param integer  $rowsPerPage        The number of items per page
+     * @param integer  $numberOfLinks      The number of links to generate
+     * @param string   $pageParam          The pagination url key
+     * @param string   $paramType          The pagination parameter url type
+     * @param Template $paginationTemplate The pagination template
      */
     public function __construct(
-        int $intRows,
-        int $intPerPage,
-        int $numberOfLinks = 7,
-        string $pageKey = 'page',
-        Template $objTemplate = null,
-        string $paramType = 'get'
+        FilterUrlBuilder $urlBuilder,
+        int $numRows,
+        int $rowsPerPage,
+        int $numberOfLinks,
+        string $pageParam,
+        string $paramType,
+        Template $paginationTemplate
     ) {
-        $this->intPage          = 1;
-        $this->intRows          = (int) $intRows;
-        $this->intRowsPerPage   = (int) $intPerPage;
-        $this->intNumberOfLinks = (int) $numberOfLinks;
-
-        if (\Input::get($pageKey) > 0) {
-            $this->intPage = \Input::get($pageKey);
-        }
-
-        $this->pageKey = $pageKey;
-
-        if (null === $objTemplate) {
-            $objTemplate = new FrontendTemplate('mm_pagination');
-        }
-
-        $this->objTemplate = $objTemplate;
-
-        $this->paramType = $paramType;
+        $this->urlBuilder    = $urlBuilder;
+        $this->numRows       = $numRows;
+        $this->rowsPerPage   = $rowsPerPage;
+        $this->totalPages    = ceil($this->numRows / $this->rowsPerPage);
+        $this->numberOfLinks = $numberOfLinks;
+        $this->pageParam     = $pageParam;
+        $this->paramType     = $paramType;
+        $this->template      = $paginationTemplate;
     }
 
+    /**
+     * Generate the pagination menu and return it as HTML string
+     *
+     * @param FilterUrl $filterUrl The filter URL.
+     *
+     * @return string The pagination menu as HTML string
+     */
+    public function generateForFilterUrl(FilterUrl $filterUrl): string
+    {
+        if ($this->rowsPerPage < 1) {
+            return '';
+        }
+
+        $page = $this->getCurrentPage($filterUrl);
+        // This is needed to mark the parameter used.
+        Input::get($this->pageParam);
+
+        // Return if there is only one page
+        if ($this->totalPages < 2 || $this->numRows < 1) {
+            return '';
+        }
+
+        if ($page > $this->totalPages) {
+            $page = $this->totalPages;
+        }
+
+        $template                = $this->template;
+        $template->hasFirst      = $this->hasFirst($page);
+        $template->hasPrevious   = $this->hasPrevious($page);
+        $template->hasNext       = $this->hasNext($page);
+        $template->hasLast       = $this->hasLast($page);
+        $template->pages         = $this->getItemsAsArray($filterUrl, $page);
+        $template->intPage       = $page;
+        $template->intTotalPages = $this->totalPages;
+        $template->first         = $template->hasFirst ? $this->linkToPage($filterUrl, 1) : '';
+        $template->previous      = $template->hasPrevious ? $this->linkToPage($filterUrl, $page - 1) : '';
+        $template->next          = $template->hasNext ? $this->linkToPage($filterUrl, $page + 1) : '';
+        $template->last          = $template->hasLast ? $this->linkToPage($filterUrl, $this->totalPages) : '';
+        $template->class         = 'pagination-' . $this->pageParam;
+        // Adding rel="prev" and rel="next" links is not possible
+        // anymore with unique variable names (see #3515 and #4141)
+
+        return $template->parse();
+    }
+
+    /**
+     * Retrieve the current page (in pagination).
+     *
+     * @param FilterUrl $filterUrl The filter URL.
+     *
+     * @return int
+     */
+    private function getCurrentPage(FilterUrl $filterUrl): int
+    {
+        switch ($this->paramType) {
+            case 'get':
+                return (int) ($filterUrl->getGet($this->pageParam) ?? 1);
+            case 'slug':
+                return (int) ($filterUrl->getSlug($this->pageParam) ?? 1);
+            case 'slugNget':
+                return (int) ($filterUrl->getGet($this->pageParam)
+                    ?? $filterUrl->getSlug($this->pageParam)
+                    ?? 1);
+        }
+
+        throw new InvalidArgumentException('Invalid configured value: ' . $this->paramType);
+    }
 
     /**
      * Return true if the pagination menu has a "<< first" link
      *
      * @return boolean True if the pagination menu has a "<< first" link
      */
-    public function hasFirst(): bool
+    private function hasFirst(int $page): bool
     {
-        return $this->blnShowFirstLast && $this->intPage > 2;
+        return $page > 2;
     }
 
     /**
@@ -202,9 +196,9 @@ class PaginationGenerator
      *
      * @return boolean True if the pagination menu has a "< previous" link
      */
-    public function hasPrevious(): bool
+    public function hasPrevious(int $page): bool
     {
-        return $this->intPage > 1;
+        return $page > 1;
     }
 
     /**
@@ -212,9 +206,9 @@ class PaginationGenerator
      *
      * @return boolean True if the pagination menu has a "next >" link
      */
-    public function hasNext(): bool
+    private function hasNext(int $page): bool
     {
-        return $this->intPage < $this->intTotalPages;
+        return $page < $this->totalPages;
     }
 
     /**
@@ -222,86 +216,9 @@ class PaginationGenerator
      *
      * @return boolean True if the pagination menu has a "last >>" link
      */
-    public function hasLast(): bool
+    private function hasLast(int $page): bool
     {
-        return $this->blnShowFirstLast && $this->intPage < ($this->intTotalPages - 1);
-    }
-
-    public function generateForRequest(Request $request): string
-    {
-        $this->strUrl = $request->getRequestUri();
-
-        return '';
-    }
-
-    /**
-     * Generate the pagination menu and return it as HTML string
-     *
-     * @return string The pagination menu as HTML string
-     */
-    public function generate(): string
-    {
-        if ($this->intRowsPerPage < 1) {
-            return '';
-        }
-
-        $blnQuery = false;
-        [$this->strUrl] = explode('?', \Environment::get('request'), 2);
-
-        // Prepare the URL
-        foreach (preg_split('/&(amp;)?/', \Environment::get('queryString'), -1, PREG_SPLIT_NO_EMPTY) as $fragment) {
-            if (strpos($fragment, $this->pageKey . '=') === false) {
-                $this->strUrl .= (!$blnQuery ? '?' : '&amp;') . $fragment;
-                $blnQuery     = true;
-            }
-        }
-
-        $this->strVarConnector = $blnQuery ? '&amp;' : '?';
-        $this->intTotalPages   = ceil($this->intRows / $this->intRowsPerPage);
-
-        $this->strUrl = \Environment::get('request');
-
-        // Return if there is only one page
-        if ($this->intTotalPages < 2 || $this->intRows < 1) {
-            return '';
-        }
-
-        if ($this->intPage > $this->intTotalPages) {
-            $this->intPage = $this->intTotalPages;
-        }
-
-        $objTemplate = $this->objTemplate;
-
-        $objTemplate->hasFirst      = $this->hasFirst();
-        $objTemplate->hasPrevious   = $this->hasPrevious();
-        $objTemplate->hasNext       = $this->hasNext();
-        $objTemplate->hasLast       = $this->hasLast();
-        $objTemplate->pages         = $this->getItemsAsArray();
-        $objTemplate->intPage       = $this->intPage;
-        $objTemplate->intTotalPages = $this->intTotalPages;
-
-        $objTemplate->first = [
-            'href' => $this->linkToPage(1),
-        ];
-
-        $objTemplate->previous = [
-            'href' => $this->linkToPage($this->intPage - 1),
-        ];
-
-        $objTemplate->next = [
-            'href' => $this->linkToPage($this->intPage + 1),
-        ];
-
-        $objTemplate->last = [
-            'href' => $this->linkToPage($this->intTotalPages),
-        ];
-
-        $objTemplate->class = 'pagination-' . $this->pageKey;
-
-        // Adding rel="prev" and rel="next" links is not possible
-        // anymore with unique variable names (see #3515 and #4141)
-
-        return $objTemplate->parse();
+        return $page < ($this->totalPages - 1);
     }
 
     /**
@@ -309,37 +226,37 @@ class PaginationGenerator
      *
      * @return array The page links as array
      */
-    public function getItemsAsArray()
+    private function getItemsAsArray(FilterUrl $filterUrl, int $page): array
     {
         $arrLinks = [];
 
-        $intNumberOfLinks = floor($this->intNumberOfLinks / 2);
-        $intFirstOffset   = $this->intPage - $intNumberOfLinks - 1;
+        $intNumberOfLinks = floor($this->numberOfLinks / 2);
+        $intFirstOffset   = $page - $intNumberOfLinks - 1;
 
         if ($intFirstOffset > 0) {
             $intFirstOffset = 0;
         }
 
-        $intLastOffset = $this->intPage + $intNumberOfLinks - $this->intTotalPages;
+        $intLastOffset = $page + $intNumberOfLinks - $this->totalPages;
 
         if ($intLastOffset < 0) {
             $intLastOffset = 0;
         }
 
-        $intFirstLink = $this->intPage - $intNumberOfLinks - $intLastOffset;
+        $firstLink = $page - $intNumberOfLinks - $intLastOffset;
 
-        if ($intFirstLink < 1) {
-            $intFirstLink = 1;
+        if ($firstLink < 1) {
+            $firstLink = 1;
         }
 
-        $intLastLink = $this->intPage + $intNumberOfLinks - $intFirstOffset;
+        $lastLink = $page + $intNumberOfLinks - $intFirstOffset;
 
-        if ($intLastLink > $this->intTotalPages) {
-            $intLastLink = $this->intTotalPages;
+        if ($lastLink > $this->totalPages) {
+            $lastLink = $this->totalPages;
         }
 
-        for ($i = $intFirstLink; $i <= $intLastLink; $i++) {
-            if ($i == $this->intPage) {
+        for ($i = $firstLink; $i <= $lastLink; $i++) {
+            if ($i == $page) {
                 $arrLinks[] = [
                     'page' => $i,
                     'href' => null
@@ -347,7 +264,7 @@ class PaginationGenerator
             } else {
                 $arrLinks[] = [
                     'page' => $i,
-                    'href' => $this->linkToPage($i)
+                    'href' => $this->linkToPage($filterUrl, $i)
                 ];
             }
         }
@@ -356,18 +273,28 @@ class PaginationGenerator
     }
 
     /**
-     * Generate a link and return the URL
+     * Generate a link and return the URL.
      *
-     * @param integer $intPage The page ID
+     * @param FilterUrl $filterUrl
+     *
+     * @param integer   $page The page number.
      *
      * @return string The URL string
      */
-    protected function linkToPage($intPage)
+    private function linkToPage(FilterUrl $filterUrl, int $page): string
     {
-        if ($intPage <= 1) {
-            return ampersand($this->strUrl);
+        // Set first without params.
+        if ($page <= 1) {
+            $page = '';
         }
 
-        return ampersand($this->strUrl) . $this->strVarConnector . $this->pageKey . '=' . $intPage;
+        $pageFilterUrl = $filterUrl->clone();
+        if ($this->paramType === 'get') {
+            $pageFilterUrl->setGet($this->pageParam, $page);
+        } else {
+            $pageFilterUrl->setSlug($this->pageParam, $page);
+        }
+
+        return $this->urlBuilder->generate($pageFilterUrl);
     }
 }

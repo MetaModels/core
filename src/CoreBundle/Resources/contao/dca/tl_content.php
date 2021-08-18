@@ -110,23 +110,25 @@ array_insert(
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'metamodel_page_param_type'              => [
-            'label'            => &$GLOBALS['TL_LANG']['tl_content']['metamodel_page_param_type'],
-            'exclude'          => true,
-            'inputType'        => 'select',
-            'options'          => ['slugNget','slug', 'get'],
-            'reference'        => &$GLOBALS['TL_LANG']['tl_content']['metamodel_param_type_options'],
-            'eval'             => [
-                'tl_class'           => 'clr w50'
+        'metamodel_page_param_type'     => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_page_param_type'],
+            'exclude'   => true,
+            'inputType' => 'select',
+            'options'   => ['slugNget', 'slug', 'get'],
+            'reference' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_param_type_options'],
+            'default'   => 'slugNget',
+            'eval'      => [
+                'tl_class' => 'clr w50'
             ],
-            'sql'              => "varchar(64) NOT NULL default 'slugNget'"
+            'sql'       => "varchar(64) NOT NULL default 'slugNget'"
         ],
         'metamodel_page_param'          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_page_param'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => [
-                'tl_class' => 'w50'
+                'tl_class' => 'w50',
+                'rgxp'     => 'alias'
             ],
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
@@ -188,7 +190,7 @@ array_insert(
             'exclude'   => true,
             'inputType' => 'select',
             'reference' => &$GLOBALS['TL_LANG']['tl_content'],
-            'options'   => ['ASC' => 'ASC', 'DESC' => 'DESC'],
+            'options'   => ['asc' => 'ASC', 'desc' => 'DESC'],
             'eval'      => [
                 'includeBlankOption' => false,
                 'chosen'             => true,
@@ -206,23 +208,25 @@ array_insert(
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'metamodel_sort_param_type'              => [
-            'label'            => &$GLOBALS['TL_LANG']['tl_content']['metamodel_sort_param_type'],
-            'exclude'          => true,
-            'inputType'        => 'select',
-            'options'          => ['slugNget','slug', 'get'],
-            'reference'        => &$GLOBALS['TL_LANG']['tl_content']['metamodel_param_type_options'],
-            'eval'             => [
-                'tl_class'           => 'w50'
+        'metamodel_sort_param_type'     => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_sort_param_type'],
+            'exclude'   => true,
+            'inputType' => 'select',
+            'options'   => ['slug', 'get', 'slugNget'],
+            'reference' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_param_type_options'],
+            'default'   => 'slug',
+            'eval'      => [
+                'tl_class' => 'w50'
             ],
-            'sql'              => "varchar(64) NOT NULL default 'slugNget'"
+            'sql'       => "varchar(64) NOT NULL default 'slug'"
         ],
         'metamodel_order_by_param'      => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_order_by_param'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => [
-                'tl_class' => 'clr w50'
+                'tl_class' => 'clr w50',
+                'rgxp'     => 'alias'
             ],
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
@@ -231,7 +235,8 @@ array_insert(
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => [
-                'tl_class' => 'w50'
+                'tl_class' => 'w50',
+                'rgxp'     => 'alias'
             ],
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
