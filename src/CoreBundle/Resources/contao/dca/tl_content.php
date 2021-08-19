@@ -190,7 +190,7 @@ array_insert(
             'exclude'   => true,
             'inputType' => 'select',
             'reference' => &$GLOBALS['TL_LANG']['tl_content'],
-            'options'   => ['asc' => 'ASC', 'desc' => 'DESC'],
+            'options'   => ['ASC' => 'ASC', 'DESC' => 'DESC'],
             'eval'      => [
                 'includeBlankOption' => false,
                 'chosen'             => true,
