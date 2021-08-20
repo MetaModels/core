@@ -190,7 +190,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
                 'backendcaption',
             ],
             'display'     => [
-                'rendermode',
+                'rendermode'
             ],
             'permissions' => [
                 'iseditable',
@@ -270,6 +270,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
         'rendermode'     => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermode'],
             'inputType' => 'select',
+            'default'   => 'flat',
             'eval'      => [
                 'tl_class'       => 'w50',
                 'submitOnChange' => true
