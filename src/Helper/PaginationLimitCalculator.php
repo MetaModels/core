@@ -466,7 +466,7 @@ class PaginationLimitCalculator
         }
 
         // Set limit and offset.
-        $pageOffset             = ((max($page, 1) - 1) * $this->getPerPage());
+        $pageOffset              = ((max($page, 1) - 1) * $this->getPerPage());
         $this->calculatedOffset += $pageOffset;
         if ($this->calculatedLimit === null) {
             $this->calculatedLimit = $this->getPerPage();
