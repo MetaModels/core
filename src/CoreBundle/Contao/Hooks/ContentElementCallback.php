@@ -34,7 +34,7 @@ class ContentElementCallback extends AbstractContentElementAndModuleCallback
      *
      * @var string
      */
-    protected static string $tableName = 'tl_content';
+    protected static $tableName = 'tl_content';
 
     /**
      * Called from tl_content.onload_callback.
