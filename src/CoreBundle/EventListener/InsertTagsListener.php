@@ -243,7 +243,7 @@ class InsertTagsListener implements ServiceAnnotationInterface
 
         $objMetaModelList = new ItemList();
         $objMetaModelList
-            ->setMetaModel($metaModel->get('id'), $viewId)
+            ->setObjMetaModel($metaModel->get('id'), $viewId)
             ->overrideOutputFormat($strOutput);
 
         // Handle a set of ids.

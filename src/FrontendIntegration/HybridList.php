@@ -110,7 +110,7 @@ class HybridList extends MetaModelHybrid
         }
 
         $objItemRenderer
-            ->setMetaModel($this->metamodel, $this->metamodel_rendersettings)
+            ->setObjMetaModel($this->metamodel, $this->metamodel_rendersettings)
             ->setLimit($this->metamodel_use_limit, $this->metamodel_offset, $this->metamodel_limit)
             ->setPageBreak($this->perPage)
             ->setSorting($sorting, $direction)

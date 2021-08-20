@@ -199,7 +199,7 @@ class ItemList
      *
      * @deprecated Use constructor injection instead.
      */
-    public function setFilterFactory(IFilterSettingFactory $filterFactory): ItemList
+    public function setFilterFactory(IFilterSettingFactory $filterFactory)
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
@@ -461,7 +461,7 @@ class ItemList
      *
      * @return ItemList
      */
-    public function setMetaModel(int $metaModelId, int $viewId): self
+    public function setObjMetaModel(int $metaModelId, int $viewId): self
     {
         $this->metaModelId = $metaModelId;
         $this->viewId      = $viewId;
@@ -495,28 +495,28 @@ class ItemList
      *
      * @var IMetaModel
      */
-    protected IMetaModel $metaModel;
+    protected $objMetaModel;
 
     /**
      * The render settings to use.
      *
      * @var IRenderSettingCollection
      */
-    protected IRenderSettingCollection $view;
+    protected $objView;
 
     /**
      * The render template to use (metamodel_).
      *
      * @var Template
      */
-    protected Template $renderTemplate;
+    protected $objTemplate;
 
     /**
      * The list template (ce_ or mod_).
      *
      * @var ContaoTemplate
      */
-    private ContaoTemplate $listTemplate;
+    private $listTemplate;
 
     /**
      * The filter settings to use.
@@ -562,9 +562,9 @@ class ItemList
      */
     protected function prepareMetaModel(): void
     {
-        $factory         = $this->getFactory();
-        $this->metaModel = $factory->getMetaModel($factory->translateIdToMetaModelName($this->metaModelId));
-        if (!$this->metaModel) {
+        $factory            = $this->getFactory();
+        $this->objMetaModel = $factory->getMetaModel($factory->translateIdToMetaModelName($this->metaModelId));
+        if (!$this->objMetaModel) {
             throw new RuntimeException('Could not get metamodel with id: ' . $this->metaModelId);
         }
     }
@@ -579,17 +579,17 @@ class ItemList
     protected function prepareView(): void
     {
         if ($this->renderSettingFactory) {
-            $this->view = $this->renderSettingFactory->createCollection($this->metaModel, $this->viewId);
+            $this->objView = $this->renderSettingFactory->createCollection($this->objMetaModel, $this->viewId);
         } else {
-            $this->view = $this->metaModel->getView($this->viewId);
+            $this->objView = $this->objMetaModel->getView($this->viewId);
         }
 
-        if ($this->view) {
-            $this->renderTemplate       = new Template($this->view->get('template'));
-            $this->renderTemplate->view = $this->view;
+        if ($this->objView) {
+            $this->objTemplate       = new Template($this->objView->get('template'));
+            $this->objTemplate->view = $this->objView;
         } else {
             // Fallback to default.
-            $this->renderTemplate = new Template('metamodel_full');
+            $this->objTemplate = new Template('metamodel_full');
         }
     }
 
@@ -737,7 +737,7 @@ class ItemList
     public function addFilterRule(IFilterRule $filterRule): self
     {
         if (!$this->filter) {
-            $this->filter = $this->metaModel->getEmptyFilter();
+            $this->filter = $this->objMetaModel->getEmptyFilter();
         }
 
         $this->filter->addFilterRule($filterRule);
@@ -754,17 +754,17 @@ class ItemList
      */
     protected function getAttributeNames(): array
     {
-        $attributes = $this->view->getSettingNames();
+        $attributes = $this->objView->getSettingNames();
 
         // Get the right jumpTo.
-        $desiredLanguage  = $this->getMetaModel()->getActiveLanguage();
-        $fallbackLanguage = $this->getMetaModel()->getFallbackLanguage();
+        $desiredLanguage  = $this->getObjMetaModel()->getActiveLanguage();
+        $fallbackLanguage = $this->getObjMetaModel()->getFallbackLanguage();
 
         $filterSettingsId = 0;
 
-        foreach ((array) $this->getView()->get('jumpTo') as $jumpTo) {
+        foreach ((array) $this->getObjView()->get('jumpTo') as $jumpTo) {
             // If either desired language or fallback, keep the result.
-            if (!$this->getMetaModel()->isTranslated()
+            if (!$this->getObjMetaModel()->isTranslated()
                 || $jumpTo['langcode'] == $desiredLanguage
                 || $jumpTo['langcode'] == $fallbackLanguage) {
                 $filterSettingsId = $jumpTo['filter'];
@@ -796,7 +796,7 @@ class ItemList
 
         // Create an empty filter object if not done before.
         if (!isset($this->filter)) {
-            $this->filter = $this->metaModel->getEmptyFilter();
+            $this->filter = $this->objMetaModel->getEmptyFilter();
         }
 
         if (isset($this->filterSettings)) {
@@ -805,17 +805,17 @@ class ItemList
 
         $this->modifyFilter();
 
-        $total = $this->metaModel->getCount($this->filter);
+        $total = $this->objMetaModel->getCount($this->filter);
 
         $calculator = $this->paginationLimitCalculator;
         $calculator->setTotalAmount($total);
-        $this->renderTemplate->total = $total;
+        $this->objTemplate->total = $total;
 
-        if ($this->metaModel instanceof TranslatedMetaModel) {
-            $previousLanguage = $this->metaModel->selectLanguage($GLOBALS['TL_LANGUAGE']);
+        if ($this->objMetaModel instanceof TranslatedMetaModel) {
+            $previousLanguage = $this->objMetaModel->selectLanguage($GLOBALS['TL_LANGUAGE']);
         }
 
-        $this->items = $this->metaModel->findByFilter(
+        $this->items = $this->objMetaModel->findByFilter(
             $this->filter,
             $this->sortBy,
             $calculator->getCalculatedOffset(),
@@ -825,7 +825,7 @@ class ItemList
         );
 
         if (isset($previousLanguage)) {
-            $this->metaModel->selectLanguage($previousLanguage);
+            $this->objMetaModel->selectLanguage($previousLanguage);
         }
 
         return $this;
@@ -858,9 +858,9 @@ class ItemList
      *
      * @return IRenderSettingCollection
      */
-    public function getView(): IRenderSettingCollection
+    public function getObjView(): IRenderSettingCollection
     {
-        return $this->view;
+        return $this->objView;
     }
 
     /**
@@ -868,9 +868,9 @@ class ItemList
      *
      * @return IMetaModel
      */
-    public function getMetaModel(): IMetaModel
+    public function getObjMetaModel(): IMetaModel
     {
-        return $this->metaModel;
+        return $this->objMetaModel;
     }
 
     /**
@@ -897,8 +897,8 @@ class ItemList
             return $this->outputFormat;
         }
 
-        if (isset($this->view) && $this->view->get('format')) {
-            return $this->view->get('format');
+        if (isset($this->objView) && $this->objView->get('format')) {
+            return $this->objView->get('format');
         }
 
         $page = $this->getPage();
@@ -930,9 +930,9 @@ class ItemList
      */
     private function getCaptionText(string $langKey): string
     {
-        $tableName = $this->getMetaModel()->getTableName();
-        if (isset($this->view, $GLOBALS['TL_LANG']['MSC'][$tableName][$this->view->get('id')][$langKey])) {
-            return $GLOBALS['TL_LANG']['MSC'][$tableName][$this->view->get('id')][$langKey];
+        $tableName = $this->getObjMetaModel()->getTableName();
+        if (isset($this->objView, $GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey])) {
+            return $GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey];
         }
 
         return ($GLOBALS['TL_LANG']['MSC'][$tableName][$langKey] ?? $GLOBALS['TL_LANG']['MSC'][$langKey]);
@@ -973,7 +973,7 @@ class ItemList
                     $titles      = $currentItem->parseAttribute(
                         $this->titleAttribute,
                         'text',
-                        $this->getView()
+                        $this->getObjView()
                     );
 
                     if (!empty($titles['text'])) {
@@ -992,7 +992,7 @@ class ItemList
                     $arrDescription = $currentItem->parseAttribute(
                         $this->descriptionAttribute,
                         'text',
-                        $this->getView()
+                        $this->getObjView()
                     );
 
                     if (!empty($arrDescription['text'])) {
@@ -1026,27 +1026,27 @@ class ItemList
             }
         }
 
-        $event = new RenderItemListEvent($this, $this->renderTemplate, $caller);
+        $event = new RenderItemListEvent($this, $this->objTemplate, $caller);
         $this->getEventDispatcher()->dispatch($event, MetaModelsEvents::RENDER_ITEM_LIST);
 
-        $this->renderTemplate->noItemsMsg = $this->getNoItemsCaption();
-        $this->renderTemplate->details    = $this->getCaptionText('details');
+        $this->objTemplate->noItemsMsg = $this->getNoItemsCaption();
+        $this->objTemplate->details    = $this->getCaptionText('details');
 
         $this->prepare();
         $outputFormat = $this->getOutputFormat();
 
         if (!$isNoNativeParsing && $this->items->getCount()) {
-            $this->renderTemplate->data = $this->items->parseAll($outputFormat, $this->view);
+            $this->objTemplate->data = $this->items->parseAll($outputFormat, $this->objView);
         } else {
-            $this->renderTemplate->data = [];
+            $this->objTemplate->data = [];
         }
 
         $this->setTitleAndDescription();
 
-        $this->renderTemplate->caller       = $caller;
-        $this->renderTemplate->items        = $this->items;
-        $this->renderTemplate->filterParams = $this->filterParams;
+        $this->objTemplate->caller       = $caller;
+        $this->objTemplate->items        = $this->items;
+        $this->objTemplate->filterParams = $this->filterParams;
 
-        return $this->renderTemplate->parse($outputFormat);
+        return $this->objTemplate->parse($outputFormat);
     }
 }
