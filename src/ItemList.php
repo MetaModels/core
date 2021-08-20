@@ -63,56 +63,56 @@ class ItemList
      *
      * @var string
      */
-    private string $sortBy = '';
+    protected string $sortBy = '';
 
     /**
      * Sort by attribute.
      *
      * @var string
      */
-    private string $sortDirection = 'asc';
+    protected string $sortDirection = 'ASC';
 
     /**
      * The view id to use.
      *
      * @var int
      */
-    private int $viewId = 0;
+    protected int $viewId = 0;
 
     /**
-     * Sort by attribute.
+     * Output format type.
      *
-     * @var string
+     * @var string|null
      */
-    private string $outputFormat;
+    protected ?string $outputFormat;
 
     /**
      * The MetaModel id to use.
      *
      * @var int
      */
-    private int $metaModelId = 0;
+    protected int $metaModelId = 0;
 
     /**
      * The parameters for the filter.
      *
      * @var string[]
      */
-    private array $filterParams = [];
+    protected array $filterParams = [];
 
     /**
      * The name of the attribute for the title.
      *
      * @var string
      */
-    private string $titleAttribute = '';
+    protected string $titleAttribute = '';
 
     /**
      * The name of the attribute for the description.
      *
      * @var string
      */
-    private string $descriptionAttribute = '';
+    protected string $descriptionAttribute = '';
 
     /**
      * The calculator for pagination and limit.

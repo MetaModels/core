@@ -30,7 +30,7 @@ class ModuleCallback extends AbstractContentElementAndModuleCallback
      *
      * @var string
      */
-    protected static string $tableName = 'tl_module';
+    protected static $tableName = 'tl_module';
 
     /**
      * Called from tl_content.onload_callback.
@@ -51,7 +51,7 @@ class ModuleCallback extends AbstractContentElementAndModuleCallback
      *
      * @return array
      */
-    public function getTemplates(\DC_Table $objDC): array
+    public function getTemplates(\DC_Table $objDC)
     {
         /** @noinspection PhpUndefinedFieldInspection */
         $type = $objDC->activeRecord->type;
