@@ -58,7 +58,7 @@ class ContentElementCallback extends AbstractContentElementAndModuleCallback
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    public function getTemplates(DC_Table $objDC): array
+    public function getTemplates(DC_Table $objDC)
     {
         /** @noinspection PhpUndefinedFieldInspection */
         $type = $objDC->activeRecord->type;
