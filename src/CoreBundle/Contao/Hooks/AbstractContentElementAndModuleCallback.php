@@ -44,7 +44,7 @@ abstract class AbstractContentElementAndModuleCallback
      *
      * @var string
      */
-    protected static string $tableName;
+    protected static $tableName;
 
     /**
      * The icon builder.
