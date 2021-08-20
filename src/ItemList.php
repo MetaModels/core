@@ -124,23 +124,23 @@ class ItemList
     /**
      *  The filter setting factory.
      *
-     * @var IFilterSettingFactory|null
+     * @var IFilterSettingFactory
      */
-    private ?IFilterSettingFactory $filterFactory;
+    private IFilterSettingFactory $filterFactory;
 
     /**
      * The MetaModels factory.
      *
-     * @var IFactory|null
+     * @var IFactory
      */
-    private ?IFactory $factory;
+    private IFactory $factory;
 
     /**
      * The render setting factory.
      *
-     * @var IRenderSettingFactory|null
+     * @var IRenderSettingFactory
      */
-    private ?IRenderSettingFactory $renderSettingFactory;
+    private IRenderSettingFactory $renderSettingFactory;
 
     /**
      * The event dispatcher.
