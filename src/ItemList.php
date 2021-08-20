@@ -523,14 +523,14 @@ class ItemList
      *
      * @var IFilterSettingCollection
      */
-    protected IFilterSettingCollection $filterSettings;
+    protected $objFilterSettings;
 
     /**
      * The filter to use.
      *
      * @var IFilter
      */
-    protected IFilter $filter;
+    protected $objFilter;
 
     /**
      * The model, can be module model or content model.
@@ -598,15 +598,15 @@ class ItemList
      *
      * @param int $filterId The filter setting id to use.
      *
-     * @return ItemList
+     * @return $this
      *
      * @throws RuntimeException When the filter settings can not be found.
      */
-    public function setFilterSettings(int $filterId): self
+    public function setObjFilterSettings(int $filterId): self
     {
-        $this->filterSettings = $this->getFilterFactory()->createCollection($filterId);
+        $this->objFilterSettings = $this->getFilterFactory()->createCollection($filterId);
 
-        if (!$this->filterSettings) {
+        if (!$this->objFilterSettings) {
             throw new RuntimeException('Error: no filter object defined.');
         }
 
@@ -626,14 +626,14 @@ class ItemList
      */
     public function setFilterParameters(array $presets, array $values): self
     {
-        if (!$this->filterSettings) {
+        if (!$this->objFilterSettings) {
             throw new RuntimeException(
                 'Error: no filter object defined, call setFilterSettings() before setFilterParameters().'
             );
         }
 
-        $presetNames     = $this->filterSettings->getParameters();
-        $filterParamKeys = array_keys($this->filterSettings->getParameterFilterNames());
+        $presetNames     = $this->objFilterSettings->getParameters();
+        $filterParamKeys = array_keys($this->objFilterSettings->getParameterFilterNames());
 
         $processed = [];
 
@@ -671,7 +671,7 @@ class ItemList
      */
     public function getFilter(): IFilter
     {
-        return $this->filter;
+        return $this->objFilter;
     }
 
     /**
@@ -679,9 +679,9 @@ class ItemList
      *
      * @return IFilterSettingCollection
      */
-    public function getFilterSettings(): IFilterSettingCollection
+    public function getObjFilterSettings(): IFilterSettingCollection
     {
-        return $this->filterSettings;
+        return $this->objFilterSettings;
     }
 
     /**
@@ -699,7 +699,7 @@ class ItemList
      *
      * @param ContaoTemplate $template The template.
      *
-     * @return ItemList
+     * @return self
      */
     public function setListTemplate(ContaoTemplate $template): self
     {
@@ -736,11 +736,11 @@ class ItemList
      */
     public function addFilterRule(IFilterRule $filterRule): self
     {
-        if (!$this->filter) {
-            $this->filter = $this->objMetaModel->getEmptyFilter();
+        if (!$this->objFilter) {
+            $this->objFilter = $this->objMetaModel->getEmptyFilter();
         }
 
-        $this->filter->addFilterRule($filterRule);
+        $this->objFilter->addFilterRule($filterRule);
 
         return $this;
     }
@@ -795,17 +795,17 @@ class ItemList
         }
 
         // Create an empty filter object if not done before.
-        if (!isset($this->filter)) {
-            $this->filter = $this->objMetaModel->getEmptyFilter();
+        if (!isset($this->objFilter)) {
+            $this->objFilter = $this->objMetaModel->getEmptyFilter();
         }
 
-        if (isset($this->filterSettings)) {
-            $this->filterSettings->addRules($this->filter, $this->filterParams);
+        if (isset($this->objFilterSettings)) {
+            $this->objFilterSettings->addRules($this->objFilter, $this->filterParams);
         }
 
         $this->modifyFilter();
 
-        $total = $this->objMetaModel->getCount($this->filter);
+        $total = $this->objMetaModel->getCount($this->objFilter);
 
         $calculator = $this->paginationLimitCalculator;
         $calculator->setTotalAmount($total);
@@ -816,7 +816,7 @@ class ItemList
         }
 
         $this->items = $this->objMetaModel->findByFilter(
-            $this->filter,
+            $this->objFilter,
             $this->sortBy,
             $calculator->getCalculatedOffset(),
             $calculator->getCalculatedLimit(),

@@ -170,7 +170,7 @@ trait ListControllerTrait
             ->setLimit($model->metamodel_use_limit, $model->metamodel_offset, $model->metamodel_limit)
             ->setPageBreak($model->perPage)
             ->setSorting($sorting, $direction)
-            ->setFilterSettings($model->metamodel_filtering)
+            ->setObjFilterSettings($model->metamodel_filtering)
             ->setFilterParameters(
                 $filterParams,
                 $this->getFilterParameters(
@@ -211,7 +211,7 @@ trait ListControllerTrait
     private function getFilterParameters(FilterUrl $filterUrl, ItemList $itemRenderer, string $sortType): array
     {
         $result = [];
-        foreach ($itemRenderer->getFilterSettings()->getParameters() as $sortParam) {
+        foreach ($itemRenderer->getObjFilterSettings()->getParameters() as $sortParam) {
             if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, $sortParam, $sortType)) {
                 $result[$sortParam] = $value;
             }

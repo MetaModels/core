@@ -74,7 +74,7 @@ class HybridList extends MetaModelHybrid
         $filterUrl        = $filterUrlBuilder->getCurrentFilterUrl();
 
         $result = [];
-        foreach ($objItemRenderer->getFilterSettings()->getParameters() as $name) {
+        foreach ($objItemRenderer->getObjFilterSettings()->getParameters() as $name) {
             if ($filterUrl->hasSlug($name)) {
                 $result[$name] = $filterUrl->getSlug($name);
             } elseif ($filterUrl->hasGet($name)) {
@@ -114,7 +114,7 @@ class HybridList extends MetaModelHybrid
             ->setLimit($this->metamodel_use_limit, $this->metamodel_offset, $this->metamodel_limit)
             ->setPageBreak($this->perPage)
             ->setSorting($sorting, $direction)
-            ->setFilterSettings($this->metamodel_filtering)
+            ->setObjFilterSettings($this->metamodel_filtering)
             ->setFilterParameters(
                 StringUtil::deserialize($this->metamodel_filterparams, true),
                 $this->getFilterParameters($objItemRenderer)
