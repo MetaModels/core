@@ -406,7 +406,7 @@ class PaginationLimitCalculator
         $paginationTemplate = new FrontendTemplate($this->paginationTemplate);
 
         // Add pagination menu get parameter.
-        $objPagination = new PaginationGenerator(
+        $pagination = new PaginationGenerator(
             $this->filterUrlBuilder,
             $this->calculatedTotal,
             $this->getPerPage(),
@@ -416,7 +416,7 @@ class PaginationLimitCalculator
             $paginationTemplate,
         );
 
-        return $objPagination->generateForFilterUrl($this->filterUrl);
+        return $pagination->generateForFilterUrl($this->filterUrl);
     }
 
     /**
