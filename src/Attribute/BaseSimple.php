@@ -156,30 +156,30 @@ class BaseSimple extends Base implements ISimple
     public function getFilterOptions($idList, $usedOnly, &$arrCount = null)
     {
         // If empty list, return empty result. See also #379 for discussion.
-        if ($idList === array()) {
-            return array();
+        if ($idList === []) {
+            return [];
         }
 
         $strCol = $this->getColName();
         if ($idList) {
             $statement = $this->connection->createQueryBuilder()
-                ->select($strCol . ', COUNT(' . $strCol . ') as mm_count')
-                ->from($this->getMetaModel()->getTableName())
-                ->where('id IN (:ids)')
+                ->select('t.' . $strCol . ', COUNT(t.' . $strCol . ') as mm_count')
+                ->from($this->getMetaModel()->getTableName(), 't')
+                ->where('t.id IN (:ids)')
                 ->groupBy($strCol)
-                ->orderBy('MIN(FIELD(id, :ids))')
+                ->orderBy('MIN(FIELD(t.id, :ids))')
                 ->setParameter('ids', $idList, Connection::PARAM_STR_ARRAY)
                 ->execute();
         } else {
             $statement = $this->connection->createQueryBuilder()
-                ->select($strCol . ', COUNT(' . $strCol . ') as mm_count')
-                ->from($this->getMetaModel()->getTableName())
-                ->groupBy($strCol)
-                ->orderBy($strCol)
+                ->select('t.' . $strCol . ', COUNT(t.' . $strCol . ') as mm_count')
+                ->from($this->getMetaModel()->getTableName(), 't')
+                ->groupBy('t.' . $strCol)
+                ->orderBy('t.' . $strCol)
                 ->execute();
         }
 
-        $arrResult = array();
+        $arrResult = [];
         while ($objRow = $statement->fetch(\PDO::FETCH_OBJ)) {
             if (is_array($arrCount)) {
                 $arrCount[$objRow->$strCol] = $objRow->mm_count;
