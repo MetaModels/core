@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,8 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -408,8 +409,9 @@ class Template
             // Check if we have the template.
             if (empty($strParent)) {
                 return sprintf(
-                    'Template %s not found (it is maybe within a unreachable theme folder?).',
-                    $this->strParent
+                    'Template %s.%s not found (it is maybe within a unreachable theme folder?).',
+                    $this->strParent,
+                    $this->strFormat
                 );
             }
 
@@ -431,7 +433,7 @@ class Template
         }
 
         // Reset the internal arrays
-        $this->arrBlocks = array();
+        $this->arrBlocks = [];
 
         // Add start and end markers in debug mode
         if (\Config::get('debugMode') && in_array($this->strFormat, ['html5', 'xhtml'])) {
