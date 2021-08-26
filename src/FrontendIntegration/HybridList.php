@@ -124,7 +124,7 @@ class HybridList extends MetaModelHybrid
         // Render items with encoded email strings as contao standard.
         $this->Template->items         =
             \StringUtil::encodeEmail($objItemRenderer->render($this->metamodel_noparsing, $this));
-        $this->Template->numberOfItems = $objItemRenderer->getItems()->getCount();
+        $this->Template->numberOfItems = $objItemRenderer->getObjItems()->getCount();
         $this->Template->pagination    = $objItemRenderer->getPagination();
     }
 }

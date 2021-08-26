@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -31,10 +31,11 @@ $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] =
 $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodel_content'] =
     '{type_legend},type,headline;' .
     '{mm_config_legend},metamodel,perPage,metamodel_use_limit;' .
-    '{mm_rendering_legend},metamodel_rendersettings,metamodel_layout,metamodel_noparsing;' .
-    '{mm_filter_legend},metamodel_filtering,metamodel_sortby,metamodel_sortby_direction,metamodel_sort_override,metamodel_filterparams;'
+    '{mm_rendering_legend},metamodel_rendersettings,metamodel_layout,metamodel_noparsing,metamodel_page_param_type,metamodel_page_param,metamodel_pagination;'
     .
-    '{mm_meta_legend},metamodel_meta_title,metamodel_meta_description;' .
+    '{mm_filter_legend},metamodel_filtering,metamodel_filterparams;' .
+    '{mm_sorting_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_sort_override;' .
+    '{mm_meta_legend:hide},metamodel_meta_title,metamodel_meta_description;' .
     '{protected_legend:hide},protected;' .
     '{expert_legend:hide},guests,cssID,space;' .
     '{invisible_legend:hide},invisible,start,stop';
@@ -61,7 +62,10 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['__selector__'][] = 'metamodel_sort
 array_insert(
     $GLOBALS['TL_DCA']['tl_content']['subpalettes'],
     1,
-    ['metamodel_use_limit' => 'metamodel_offset,metamodel_limit']
+    [
+        'metamodel_use_limit'     => 'metamodel_offset,metamodel_limit',
+        'metamodel_sort_override' => 'metamodel_sort_param_type,metamodel_order_by_param,metamodel_order_dir_param'
+    ]
 );
 
 // Fields.
@@ -105,6 +109,39 @@ array_insert(
                 'tl_class' => 'w50 m12 cbx'
             ],
             'sql'       => "char(1) NOT NULL default ''"
+        ],
+        'metamodel_page_param_type'     => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_page_param_type'],
+            'exclude'   => true,
+            'inputType' => 'select',
+            'options'   => ['slugNget', 'slug', 'get'],
+            'reference' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_param_type_options'],
+            'default'   => 'slugNget',
+            'eval'      => [
+                'tl_class' => 'clr w50'
+            ],
+            'sql'       => "varchar(64) NOT NULL default 'slugNget'"
+        ],
+        'metamodel_page_param'          => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_page_param'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => [
+                'tl_class' => 'w50',
+                'rgxp'     => 'alias'
+            ],
+            'sql'       => "varchar(64) NOT NULL default ''"
+        ],
+        'metamodel_pagination'          => [
+            'label'            => &$GLOBALS['TL_LANG']['tl_content']['metamodel_pagination'],
+            'exclude'          => true,
+            'inputType'        => 'select',
+            'options_callback' => [ContentElementCallback::class, 'getPaginationTemplates'],
+            'eval'             => [
+                'chosen'   => true,
+                'tl_class' => 'clr w50'
+            ],
+            'sql'              => "varchar(64) NOT NULL default ''"
         ],
         'metamodel_use_limit'           => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit'],
@@ -166,9 +203,42 @@ array_insert(
             'exclude'   => true,
             'inputType' => 'checkbox',
             'eval'      => [
-                'tl_class' => 'w50 m12 cbx'
+                'submitOnChange' => true,
+                'tl_class'       => 'clr w50 m12 cbx'
             ],
             'sql'       => "char(1) NOT NULL default ''"
+        ],
+        'metamodel_sort_param_type'     => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_sort_param_type'],
+            'exclude'   => true,
+            'inputType' => 'select',
+            'options'   => ['slug', 'get', 'slugNget'],
+            'reference' => &$GLOBALS['TL_LANG']['tl_content']['metamodel_param_type_options'],
+            'default'   => 'slug',
+            'eval'      => [
+                'tl_class' => 'w50'
+            ],
+            'sql'       => "varchar(64) NOT NULL default 'slug'"
+        ],
+        'metamodel_order_by_param'      => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_order_by_param'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => [
+                'tl_class' => 'clr w50',
+                'rgxp'     => 'alias'
+            ],
+            'sql'       => "varchar(64) NOT NULL default ''"
+        ],
+        'metamodel_order_dir_param'     => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_order_dir_param'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => [
+                'tl_class' => 'w50',
+                'rgxp'     => 'alias'
+            ],
+            'sql'       => "varchar(64) NOT NULL default ''"
         ],
         'metamodel_filtering'           =>
             [

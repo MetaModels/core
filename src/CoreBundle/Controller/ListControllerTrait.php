@@ -48,35 +48,35 @@ trait ListControllerTrait
      *
      * @var IFilterSettingFactory
      */
-    private $filterFactory;
+    private IFilterSettingFactory $filterFactory;
 
     /**
      * The MetaModels factory.
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * The event dispatcher.
      *
      * @var EventDispatcherInterface
      */
-    private $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
 
     /**
      * The render setting factory.
      *
      * @var IRenderSettingFactory
      */
-    private $renderSettingFactory;
+    private IRenderSettingFactory $renderSettingFactory;
 
     /**
      * The filter url builder.
      *
      * @var FilterUrlBuilder
      */
-    private $filterUrlBuilder;
+    private FilterUrlBuilder $filterUrlBuilder;
 
     /**
      * ItemListController constructor.
@@ -114,11 +114,28 @@ trait ListControllerTrait
      */
     private function getResponseInternal(Template $template, Model $model, Request $request): ?Response
     {
+        if (empty($pageParam = $model->metamodel_page_param)) {
+            switch ($model->type) {
+                case 'metamodel_content':
+                    $pageParam = 'page_mmce' . $model->id;
+                    break;
+                case 'metamodel_list':
+                    $pageParam = 'page_mmfm' . $model->id;
+                    break;
+                default:
+                    $pageParam = 'page_mm' . $model->id;
+            }
+        }
+
         $itemRenderer = new ItemList(
             $this->factory,
             $this->filterFactory,
             $this->renderSettingFactory,
-            $this->eventDispatcher
+            $this->eventDispatcher,
+            $this->filterUrlBuilder,
+            $pageParam,
+            $model->metamodel_page_param_type,
+            $model->metamodel_pagination
         );
 
         $template->searchable = !$model->metamodel_donotindex;
@@ -129,10 +146,20 @@ trait ListControllerTrait
         // FIXME: filter URL should be created from local request and not from master request.
         $filterUrl = $this->filterUrlBuilder->getCurrentFilterUrl();
         if ($model->metamodel_sort_override) {
-            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, 'orderBy')) {
+            if (null !==
+                $value = $this->tryReadFromSlugOrGet(
+                    $filterUrl,
+                    ($model->metamodel_order_by_param ?: 'orderBy'),
+                    $model->metamodel_sort_param_type
+                )) {
                 $sorting = $value;
             }
-            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, 'orderDir')) {
+            if (null !==
+                $value = $this->tryReadFromSlugOrGet(
+                    $filterUrl,
+                    ($model->metamodel_order_dir_param ?: 'orderDir'),
+                    $model->metamodel_sort_param_type
+                )) {
                 $direction = $value;
             }
         }
@@ -145,18 +172,25 @@ trait ListControllerTrait
             ->setPageBreak($model->perPage)
             ->setSorting($sorting, $direction)
             ->setFilterSettings($model->metamodel_filtering)
-            ->setFilterParameters($filterParams, $this->getFilterParameters($filterUrl, $itemRenderer))
+            ->setFilterParameters(
+                $filterParams,
+                $this->getFilterParameters(
+                    $filterUrl,
+                    $itemRenderer,
+                    $model->metamodel_sort_param_type
+                )
+            )
             ->setMetaTags($model->metamodel_meta_title, $model->metamodel_meta_description);
 
         $template->items         = StringUtil::encodeEmail($itemRenderer->render($model->metamodel_noparsing, $model));
-        $template->numberOfItems = $itemRenderer->getItems()->getCount();
+        $template->numberOfItems = $itemRenderer->getObjItems()->getCount();
         $template->pagination    = $itemRenderer->getPagination();
 
         $responseTags = array_map(
             static function (IItem $item) {
                 return sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id'));
             },
-            iterator_to_array($itemRenderer->getItems(), false)
+            iterator_to_array($itemRenderer->getObjItems(), false)
         );
 
         $response = $template->getResponse();
@@ -171,15 +205,16 @@ trait ListControllerTrait
      *
      * @param FilterUrl $filterUrl    The filter URL to obtain parameters from.
      * @param ItemList  $itemRenderer The list renderer instance to be used.
+     * @param string    $sortType     The sort URL type.
      *
      * @return string[]
      */
-    private function getFilterParameters(FilterUrl $filterUrl, ItemList $itemRenderer): array
+    private function getFilterParameters(FilterUrl $filterUrl, ItemList $itemRenderer, string $sortType): array
     {
         $result = [];
-        foreach ($itemRenderer->getFilterSettings()->getParameters() as $name) {
-            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, $name)) {
-                $result[$name] = $value;
+        foreach ($itemRenderer->getFilterSettings()->getParameters() as $sortParam) {
+            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, $sortParam, $sortType)) {
+                $result[$sortParam] = $value;
             }
         }
 
@@ -190,21 +225,29 @@ trait ListControllerTrait
      * Get parameter from get or slug.
      *
      * @param FilterUrl $filterUrl The filter URL to obtain parameters from.
-     * @param string    $name      The parameter name to obtain.
+     * @param string    $sortParam The sort parameter name to obtain.
+     * @param string    $sortType  The sort URL type.
      *
      * @return string|null
      */
-    private function tryReadFromSlugOrGet(FilterUrl $filterUrl, string $name): ?string
+    private function tryReadFromSlugOrGet(FilterUrl $filterUrl, string $sortParam, string $sortType): ?string
     {
         $result = null;
-        if ($filterUrl->hasSlug($name)) {
-            $result = $filterUrl->getSlug($name);
-        } elseif ($filterUrl->hasGet($name)) {
-            $result = $filterUrl->getGet($name);
+
+        switch ($sortType) {
+            case 'get':
+                $result = $filterUrl->getGet($sortParam);
+                break;
+            case 'slug':
+                $result = $filterUrl->getSlug($sortParam);
+                break;
+            case 'slugNget':
+                $result = $filterUrl->getGet($sortParam)
+                          ?? $filterUrl->getSlug($sortParam);
         }
 
         // Mark the parameter as used (otherwise, a 404 is thrown)
-        Input::get($name);
+        Input::get($sortParam);
 
         return $result;
     }
