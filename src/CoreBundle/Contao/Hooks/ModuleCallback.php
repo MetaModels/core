@@ -63,9 +63,6 @@ class ModuleCallback extends AbstractContentElementAndModuleCallback
      * Fetch the template group for the current MetaModel frontend module.
      *
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getPaginationTemplates(): array
     {

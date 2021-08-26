@@ -165,12 +165,12 @@ trait ListControllerTrait
 
         $filterParams = StringUtil::deserialize($model->metamodel_filterparams, true);
         $itemRenderer
-            ->setObjMetaModel($model->metamodel, $model->metamodel_rendersettings)
+            ->setMetaModel($model->metamodel, $model->metamodel_rendersettings)
             ->setListTemplate($template)
             ->setLimit($model->metamodel_use_limit, $model->metamodel_offset, $model->metamodel_limit)
             ->setPageBreak($model->perPage)
             ->setSorting($sorting, $direction)
-            ->setObjFilterSettings($model->metamodel_filtering)
+            ->setFilterSettings($model->metamodel_filtering)
             ->setFilterParameters(
                 $filterParams,
                 $this->getFilterParameters(
@@ -211,7 +211,7 @@ trait ListControllerTrait
     private function getFilterParameters(FilterUrl $filterUrl, ItemList $itemRenderer, string $sortType): array
     {
         $result = [];
-        foreach ($itemRenderer->getObjFilterSettings()->getParameters() as $sortParam) {
+        foreach ($itemRenderer->getFilterSettings()->getParameters() as $sortParam) {
             if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, $sortParam, $sortType)) {
                 $result[$sortParam] = $value;
             }

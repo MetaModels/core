@@ -63,21 +63,21 @@ class ItemList
      *
      * @var string
      */
-    protected string $sortBy = '';
+    protected string $strSortBy = '';
 
     /**
      * Sort by attribute.
      *
      * @var string
      */
-    protected string $sortDirection = 'ASC';
+    protected string $strSortDirection = 'ASC';
 
     /**
      * The view id to use.
      *
      * @var int
      */
-    protected int $viewId = 0;
+    protected int $intView = 0;
 
     /**
      * Output format type.
@@ -91,28 +91,35 @@ class ItemList
      *
      * @var int
      */
-    protected int $metaModelId = 0;
+    protected int $intMetaModel = 0;
+
+    /**
+     * The filter id to use.
+     *
+     * @var int
+     */
+    protected int $intFilter = 0;
 
     /**
      * The parameters for the filter.
      *
      * @var string[]
      */
-    protected array $filterParams = [];
+    protected array $arrParam = [];
 
     /**
      * The name of the attribute for the title.
      *
      * @var string
      */
-    protected string $titleAttribute = '';
+    protected string $strTitleAttribute = '';
 
     /**
      * The name of the attribute for the description.
      *
      * @var string
      */
-    protected string $descriptionAttribute = '';
+    protected string $strDescriptionAttribute = '';
 
     /**
      * The calculator for pagination and limit.
@@ -427,8 +434,8 @@ class ItemList
      */
     public function setSorting(string $sortBy, string $sortDirection = 'ASC'): self
     {
-        $this->sortBy        = $sortBy;
-        $this->sortDirection = ('DESC' === strtoupper($sortDirection)) ? 'DESC' : 'ASC';
+        $this->strSortBy        = $sortBy;
+        $this->strSortDirection = ('DESC' === strtoupper($sortDirection)) ? 'DESC' : 'ASC';
 
         return $this;
     }
@@ -455,16 +462,16 @@ class ItemList
     /**
      * Set MetaModel and render settings.
      *
-     * @param int $metaModelId The MetaModel to use.
+     * @param int $intMetaModel The MetaModel to use.
      *
-     * @param int $viewId      The render settings to use (if 0, the default will be used).
+     * @param int $intView      The render settings to use (if 0, the default will be used).
      *
      * @return ItemList
      */
-    public function setObjMetaModel(int $metaModelId, int $viewId): self
+    public function setMetaModel(int $intMetaModel, int $intView): self
     {
-        $this->metaModelId = $metaModelId;
-        $this->viewId      = $viewId;
+        $this->intMetaModel = $intMetaModel;
+        $this->intView      = $intView;
 
         $this->prepareMetaModel();
 
@@ -484,8 +491,8 @@ class ItemList
      */
     public function setMetaTags(string $titleAttribute, string $descriptionAttribute): self
     {
-        $this->descriptionAttribute = $descriptionAttribute;
-        $this->titleAttribute       = $titleAttribute;
+        $this->strDescriptionAttribute = $descriptionAttribute;
+        $this->strTitleAttribute       = $titleAttribute;
 
         return $this;
     }
@@ -563,9 +570,9 @@ class ItemList
     protected function prepareMetaModel(): void
     {
         $factory            = $this->getFactory();
-        $this->objMetaModel = $factory->getMetaModel($factory->translateIdToMetaModelName($this->metaModelId));
+        $this->objMetaModel = $factory->getMetaModel($factory->translateIdToMetaModelName($this->intMetaModel));
         if (!$this->objMetaModel) {
-            throw new RuntimeException('Could not get metamodel with id: ' . $this->metaModelId);
+            throw new RuntimeException('Could not get metamodel with id: ' . $this->intMetaModel);
         }
     }
 
@@ -579,9 +586,9 @@ class ItemList
     protected function prepareView(): void
     {
         if ($this->renderSettingFactory) {
-            $this->objView = $this->renderSettingFactory->createCollection($this->objMetaModel, $this->viewId);
+            $this->objView = $this->renderSettingFactory->createCollection($this->objMetaModel, $this->intView);
         } else {
-            $this->objView = $this->objMetaModel->getView($this->viewId);
+            $this->objView = $this->objMetaModel->getView($this->intView);
         }
 
         if ($this->objView) {
@@ -596,15 +603,15 @@ class ItemList
     /**
      * Set the filter setting to use.
      *
-     * @param int $filterId The filter setting id to use.
+     * @param int $intFilter The filter setting id to use.
      *
      * @return $this
      *
      * @throws RuntimeException When the filter settings can not be found.
      */
-    public function setObjFilterSettings(int $filterId): self
+    public function setFilterSettings(int $intFilter): self
     {
-        $this->objFilterSettings = $this->getFilterFactory()->createCollection($filterId);
+        $this->objFilterSettings = $this->getFilterFactory()->createCollection($intFilter);
 
         if (!$this->objFilterSettings) {
             throw new RuntimeException('Error: no filter object defined.');
@@ -659,7 +666,7 @@ class ItemList
             }
         }
 
-        $this->filterParams = $processed;
+        $this->arrParam = $processed;
 
         return $this;
     }
@@ -679,7 +686,7 @@ class ItemList
      *
      * @return IFilterSettingCollection
      */
-    public function getObjFilterSettings(): IFilterSettingCollection
+    public function getFilterSettings(): IFilterSettingCollection
     {
         return $this->objFilterSettings;
     }
@@ -757,14 +764,14 @@ class ItemList
         $attributes = $this->objView->getSettingNames();
 
         // Get the right jumpTo.
-        $desiredLanguage  = $this->getObjMetaModel()->getActiveLanguage();
-        $fallbackLanguage = $this->getObjMetaModel()->getFallbackLanguage();
+        $desiredLanguage  = $this->getMetaModel()->getActiveLanguage();
+        $fallbackLanguage = $this->getMetaModel()->getFallbackLanguage();
 
         $filterSettingsId = 0;
 
-        foreach ((array) $this->getObjView()->get('jumpTo') as $jumpTo) {
+        foreach ((array) $this->getView()->get('jumpTo') as $jumpTo) {
             // If either desired language or fallback, keep the result.
-            if (!$this->getObjMetaModel()->isTranslated()
+            if (!$this->getMetaModel()->isTranslated()
                 || $jumpTo['langcode'] == $desiredLanguage
                 || $jumpTo['langcode'] == $fallbackLanguage) {
                 $filterSettingsId = $jumpTo['filter'];
@@ -800,7 +807,7 @@ class ItemList
         }
 
         if (isset($this->objFilterSettings)) {
-            $this->objFilterSettings->addRules($this->objFilter, $this->filterParams);
+            $this->objFilterSettings->addRules($this->objFilter, $this->arrParam);
         }
 
         $this->modifyFilter();
@@ -817,10 +824,10 @@ class ItemList
 
         $this->items = $this->objMetaModel->findByFilter(
             $this->objFilter,
-            $this->sortBy,
+            $this->strSortBy,
             $calculator->getCalculatedOffset(),
             $calculator->getCalculatedLimit(),
-            $this->sortDirection,
+            $this->strSortDirection,
             $this->getAttributeNames()
         );
 
@@ -858,7 +865,7 @@ class ItemList
      *
      * @return IRenderSettingCollection
      */
-    public function getObjView(): IRenderSettingCollection
+    public function getView(): IRenderSettingCollection
     {
         return $this->objView;
     }
@@ -868,7 +875,7 @@ class ItemList
      *
      * @return IMetaModel
      */
-    public function getObjMetaModel(): IMetaModel
+    public function getMetaModel(): IMetaModel
     {
         return $this->objMetaModel;
     }
@@ -930,7 +937,7 @@ class ItemList
      */
     private function getCaptionText(string $langKey): string
     {
-        $tableName = $this->getObjMetaModel()->getTableName();
+        $tableName = $this->getMetaModel()->getTableName();
         if (isset($this->objView, $GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey])) {
             return $GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey];
         }
@@ -966,14 +973,14 @@ class ItemList
         $page = $this->getPage();
         if ($page && $this->items->getCount()) {
             // Add title if needed.
-            if (!empty($this->titleAttribute)) {
+            if (!empty($this->strTitleAttribute)) {
                 while ($this->items->next()) {
                     /** @var IItem $currentItem */
                     $currentItem = $this->items->current();
                     $titles      = $currentItem->parseAttribute(
-                        $this->titleAttribute,
+                        $this->strTitleAttribute,
                         'text',
-                        $this->getObjView()
+                        $this->getView()
                     );
 
                     if (!empty($titles['text'])) {
@@ -986,13 +993,13 @@ class ItemList
             }
 
             // Add description if needed.
-            if (!empty($this->descriptionAttribute)) {
+            if (!empty($this->strDescriptionAttribute)) {
                 while ($this->items->next()) {
                     $currentItem    = $this->items->current();
                     $arrDescription = $currentItem->parseAttribute(
-                        $this->descriptionAttribute,
+                        $this->strDescriptionAttribute,
                         'text',
-                        $this->getObjView()
+                        $this->getView()
                     );
 
                     if (!empty($arrDescription['text'])) {
@@ -1045,7 +1052,7 @@ class ItemList
 
         $this->objTemplate->caller       = $caller;
         $this->objTemplate->items        = $this->items;
-        $this->objTemplate->filterParams = $this->filterParams;
+        $this->objTemplate->filterParams = $this->arrParam;
 
         return $this->objTemplate->parse($outputFormat);
     }

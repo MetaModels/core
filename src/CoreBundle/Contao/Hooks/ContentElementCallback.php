@@ -73,9 +73,6 @@ class ContentElementCallback extends AbstractContentElementAndModuleCallback
      * Fetch the template group for the current MetaModel content element.
      *
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function getPaginationTemplates(): array
     {
