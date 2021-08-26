@@ -720,7 +720,7 @@ class ItemList
      *
      * @var IItems
      */
-    protected IItems $items;
+    protected IItems $objItems;
 
     /**
      * Add additional filter rules to the list.
@@ -797,7 +797,7 @@ class ItemList
      */
     public function prepare(): self
     {
-        if (isset($this->items)) {
+        if (isset($this->objItems)) {
             return $this;
         }
 
@@ -822,7 +822,7 @@ class ItemList
             $previousLanguage = $this->objMetaModel->selectLanguage($GLOBALS['TL_LANGUAGE']);
         }
 
-        $this->items = $this->objMetaModel->findByFilter(
+        $this->objItems = $this->objMetaModel->findByFilter(
             $this->objFilter,
             $this->strSortBy,
             $calculator->getCalculatedOffset(),
@@ -855,9 +855,9 @@ class ItemList
      *
      * @return IItems
      */
-    public function getItems(): IItems
+    public function getObjItems(): IItems
     {
-        return $this->items;
+        return $this->objItems;
     }
 
     /**
@@ -971,12 +971,12 @@ class ItemList
     private function setTitleAndDescription(): void
     {
         $page = $this->getPage();
-        if ($page && $this->items->getCount()) {
+        if ($page && $this->objItems->getCount()) {
             // Add title if needed.
             if (!empty($this->strTitleAttribute)) {
-                while ($this->items->next()) {
+                while ($this->objItems->next()) {
                     /** @var IItem $currentItem */
-                    $currentItem = $this->items->current();
+                    $currentItem = $this->objItems->current();
                     $titles      = $currentItem->parseAttribute(
                         $this->strTitleAttribute,
                         'text',
@@ -989,13 +989,13 @@ class ItemList
                     }
                 }
 
-                $this->items->reset();
+                $this->objItems->reset();
             }
 
             // Add description if needed.
             if (!empty($this->strDescriptionAttribute)) {
-                while ($this->items->next()) {
-                    $currentItem    = $this->items->current();
+                while ($this->objItems->next()) {
+                    $currentItem    = $this->objItems->current();
                     $arrDescription = $currentItem->parseAttribute(
                         $this->strDescriptionAttribute,
                         'text',
@@ -1008,7 +1008,7 @@ class ItemList
                     }
                 }
 
-                $this->items->reset();
+                $this->objItems->reset();
             }
         }
     }
@@ -1042,8 +1042,8 @@ class ItemList
         $this->prepare();
         $outputFormat = $this->getOutputFormat();
 
-        if (!$isNoNativeParsing && $this->items->getCount()) {
-            $this->objTemplate->data = $this->items->parseAll($outputFormat, $this->objView);
+        if (!$isNoNativeParsing && $this->objItems->getCount()) {
+            $this->objTemplate->data = $this->objItems->parseAll($outputFormat, $this->objView);
         } else {
             $this->objTemplate->data = [];
         }
@@ -1051,7 +1051,7 @@ class ItemList
         $this->setTitleAndDescription();
 
         $this->objTemplate->caller       = $caller;
-        $this->objTemplate->items        = $this->items;
+        $this->objTemplate->items        = $this->objItems;
         $this->objTemplate->filterParams = $this->arrParam;
 
         return $this->objTemplate->parse($outputFormat);

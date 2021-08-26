@@ -3,13 +3,13 @@ $translator = System::getContainer()->get('translator');
 ?>
 <!-- indexer::stop -->
 <nav class="pagination block" aria-label="<?= $translator->trans('MSC.pagination', [], 'contao_default') ?>">
-    <p><?= \sprintf($translator->trans('MSC.totalPages', [], 'contao_default'), $this->intPage, $this->intTotalPages) ?></p>
+    <p><?= \sprintf($translator->trans('MSC.totalPages', [], 'contao_default'), $this->page, $this->totalPages) ?></p>
     <ul>
         <?php if ($this->hasFirst): ?>
             <li class="first"><a href="<?= $this->first ?>" class="first" title="<?= $translator->trans('MSC.goToPage', ['%s' => 1], 'contao_default') ?>"><?= $translator->trans('MSC.first', [], 'contao_default') ?></a></li>
         <?php endif; ?>
         <?php if ($this->hasPrevious): ?>
-            <li class="previous"><a href="<?= $this->previous ?>" class="previous" title="<?= $translator->trans('MSC.goToPage', ['%s' => $this->intPage - 1], 'contao_default') ?>"><?= $translator->trans('MSC.previous', [], 'contao_default') ?></a></li>
+            <li class="previous"><a href="<?= $this->previous ?>" class="previous" title="<?= $translator->trans('MSC.goToPage', ['%s' => $this->page - 1], 'contao_default') ?>"><?= $translator->trans('MSC.previous', [], 'contao_default') ?></a></li>
         <?php endif; ?>
         <?php foreach ($this->pages as $page): ?>
             <?php if (null === $page['href']): ?>
@@ -19,10 +19,10 @@ $translator = System::getContainer()->get('translator');
             <?php endif; ?>
         <?php endforeach; ?>
         <?php if ($this->hasNext): ?>
-            <li class="next"><a href="<?= $this->next ?>" class="next" title="<?= $translator->trans('MSC.goToPage', ['%s' => $this->intPage + 1], 'contao_default') ?>"><?= $translator->trans('MSC.next', [], 'contao_default') ?></a></li>
+            <li class="next"><a href="<?= $this->next ?>" class="next" title="<?= $translator->trans('MSC.goToPage', ['%s' => $this->page + 1], 'contao_default') ?>"><?= $translator->trans('MSC.next', [], 'contao_default') ?></a></li>
         <?php endif; ?>
         <?php if ($this->hasLast): ?>
-            <li class="last"><a href="<?= $this->last ?>" class="last" title="<?= $translator->trans('MSC.goToPage', ['%s' => $this->intTotalPages], 'contao_default') ?>"><?= $translator->trans('MSC.last', [], 'contao_default') ?></a></li>
+            <li class="last"><a href="<?= $this->last ?>" class="last" title="<?= $translator->trans('MSC.goToPage', ['%s' => $this->totalPages], 'contao_default') ?>"><?= $translator->trans('MSC.last', [], 'contao_default') ?></a></li>
         <?php endif; ?>
     </ul>
 </nav>

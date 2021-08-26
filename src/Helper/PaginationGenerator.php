@@ -145,8 +145,8 @@ class PaginationGenerator
         $template->hasNext       = $this->hasNext($page);
         $template->hasLast       = $this->hasLast($page);
         $template->pages         = $this->getItemsAsArray($filterUrl, $page);
-        $template->intPage       = $page;
-        $template->intTotalPages = $this->totalPages;
+        $template->page          = $page;
+        $template->totalPages    = $this->totalPages;
         $template->first         = $template->hasFirst ? $this->linkToPage($filterUrl, 1) : '';
         $template->previous      = $template->hasPrevious ? $this->linkToPage($filterUrl, $page - 1) : '';
         $template->next          = $template->hasNext ? $this->linkToPage($filterUrl, $page + 1) : '';
@@ -228,28 +228,28 @@ class PaginationGenerator
      */
     private function getItemsAsArray(FilterUrl $filterUrl, int $page): array
     {
-        $arrLinks = [];
+        $links = [];
 
-        $intNumberOfLinks = floor($this->numberOfLinks / 2);
-        $intFirstOffset   = $page - $intNumberOfLinks - 1;
+        $numberOfLinks = floor($this->numberOfLinks / 2);
+        $firstOffset   = $page - $numberOfLinks - 1;
 
-        if ($intFirstOffset > 0) {
-            $intFirstOffset = 0;
+        if ($firstOffset > 0) {
+            $firstOffset = 0;
         }
 
-        $intLastOffset = $page + $intNumberOfLinks - $this->totalPages;
+        $lastOffset = $page + $numberOfLinks - $this->totalPages;
 
-        if ($intLastOffset < 0) {
-            $intLastOffset = 0;
+        if ($lastOffset < 0) {
+            $lastOffset = 0;
         }
 
-        $firstLink = $page - $intNumberOfLinks - $intLastOffset;
+        $firstLink = $page - $numberOfLinks - $lastOffset;
 
         if ($firstLink < 1) {
             $firstLink = 1;
         }
 
-        $lastLink = $page + $intNumberOfLinks - $intFirstOffset;
+        $lastLink = $page + $numberOfLinks - $firstOffset;
 
         if ($lastLink > $this->totalPages) {
             $lastLink = $this->totalPages;
@@ -257,19 +257,19 @@ class PaginationGenerator
 
         for ($i = $firstLink; $i <= $lastLink; $i++) {
             if ($i == $page) {
-                $arrLinks[] = [
+                $links[] = [
                     'page' => $i,
                     'href' => null
                 ];
             } else {
-                $arrLinks[] = [
+                $links[] = [
                     'page' => $i,
                     'href' => $this->linkToPage($filterUrl, $i)
                 ];
             }
         }
 
-        return $arrLinks;
+        return $links;
     }
 
     /**

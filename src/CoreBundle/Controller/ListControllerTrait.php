@@ -123,6 +123,7 @@ trait ListControllerTrait
                     $pageParam = 'page_mmfm' . $model->id;
                     break;
                 default:
+                    $pageParam = 'page_mm' . $model->id;
             }
         }
 
@@ -182,14 +183,14 @@ trait ListControllerTrait
             ->setMetaTags($model->metamodel_meta_title, $model->metamodel_meta_description);
 
         $template->items         = StringUtil::encodeEmail($itemRenderer->render($model->metamodel_noparsing, $model));
-        $template->numberOfItems = $itemRenderer->getItems()->getCount();
+        $template->numberOfItems = $itemRenderer->getObjItems()->getCount();
         $template->pagination    = $itemRenderer->getPagination();
 
         $responseTags = array_map(
             static function (IItem $item) {
                 return sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id'));
             },
-            iterator_to_array($itemRenderer->getItems(), false)
+            iterator_to_array($itemRenderer->getObjItems(), false)
         );
 
         $response = $template->getResponse();
