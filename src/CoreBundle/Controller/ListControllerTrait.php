@@ -182,6 +182,10 @@ trait ListControllerTrait
             )
             ->setMetaTags($model->metamodel_meta_title, $model->metamodel_meta_description);
 
+        foreach (StringUtil::deserialize($model->metamodel_parameters ?? null, true) as $key => $value) {
+            $itemRenderer->setTemplateParameter($key, $value);
+        }
+
         $template->items         = StringUtil::encodeEmail($itemRenderer->render($model->metamodel_noparsing, $model));
         $template->numberOfItems = $itemRenderer->getObjItems()->getCount();
         $template->pagination    = $itemRenderer->getPagination();
