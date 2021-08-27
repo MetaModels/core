@@ -65,15 +65,10 @@ array_insert(
     $GLOBALS['TL_DCA']['tl_content']['subpalettes'],
     1,
     [
-        'metamodel_use_limit'     => 'metamodel_offset,metamodel_limit',
-        'metamodel_sort_override' => 'metamodel_sort_param_type,metamodel_order_by_param,metamodel_order_dir_param'
+        'metamodel_use_limit'      => 'metamodel_offset,metamodel_limit',
+        'metamodel_sort_override'  => 'metamodel_sort_param_type,metamodel_order_by_param,metamodel_order_dir_param',
+        'metamodel_use_parameters' => 'metamodel_parameter_wizard'
     ]
-);
-
-array_insert(
-    $GLOBALS['TL_DCA']['tl_content']['subpalettes'],
-    1,
-    ['metamodel_use_parameters' => 'metamodel_parameter_wizard']
 );
 
 // Fields.

@@ -24,6 +24,7 @@ $GLOBALS['TL_LANG']['tl_content']['mm_config_legend']                          =
 $GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']                          = 'MetaModel Filter';
 $GLOBALS['TL_LANG']['tl_content']['mm_rendering_legend']                       = 'MetaModel Rendering';
 $GLOBALS['TL_LANG']['tl_content']['mm_sorting_legend']                         = 'MetaModel Sorting';
+$GLOBALS['TL_LANG']['tl_content']['mm_parameters_legend']                      = 'Parameter Setting';
 $GLOBALS['TL_LANG']['tl_content']['mm_meta_legend']                            = 'Search engine optimization';
 $GLOBALS['TL_LANG']['tl_content']['asc']                                       = 'Ascending';
 $GLOBALS['TL_LANG']['tl_content']['desc']                                      = 'Descending';
@@ -81,7 +82,7 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_noparsing'][1]                    =
     'Only the item objects will be available in the template.';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_page_param_type'][0]              = 'URL-Type for pagination';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_page_param_type'][1]              =
-    'Please specify the type of URL parameters als slug (key\value) or GET (key=value).';
+    'Please specify the type of URL parameters als slug (key/value) or GET (key=value).';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_pagination'][0]                   =
     'Custom template to use for pagination';
 $GLOBALS['TL_LANG']['tl_content']['metamodel_pagination'][1]                   =

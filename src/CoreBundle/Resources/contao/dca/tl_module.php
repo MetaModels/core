@@ -34,6 +34,7 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['metamodel_list'] =
     .
     '{mm_filter_legend},metamodel_filtering,metamodel_filterparams;' .
     '{mm_sorting_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_sort_override;' .
+    '{mm_parameters_legend:hide},metamodel_use_parameters;' .
     '{mm_meta_legend:hide},metamodel_meta_title,metamodel_meta_description;' .
     '{protected_legend:hide},protected;' .
     '{expert_legend:hide},guests,cssID,space,metamodel_donotindex';
@@ -53,14 +54,16 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['metamodels_frontendclearall'] =
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'metamodel_use_limit';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'metamodel_sort_override';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['__selector__'][] = 'metamodel_use_parameters';
 
 // Insert new Subpalettes after position 1.
 array_insert(
     $GLOBALS['TL_DCA']['tl_module']['subpalettes'],
     1,
     [
-        'metamodel_use_limit'     => 'metamodel_offset,metamodel_limit',
-        'metamodel_sort_override' => 'metamodel_order_by_param,metamodel_order_dir_param'
+        'metamodel_use_limit'      => 'metamodel_offset,metamodel_limit',
+        'metamodel_sort_override'  => 'metamodel_sort_param_type,metamodel_order_by_param,metamodel_order_dir_param',
+        'metamodel_use_parameters' => 'metamodel_parameter_wizard'
     ]
 );
 
@@ -143,7 +146,7 @@ array_insert(
             'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_sortby_direction'],
             'exclude'   => true,
             'inputType' => 'select',
-            'reference' => &$GLOBALS['TL_LANG']['tl_content'],
+            'reference' => &$GLOBALS['TL_LANG']['tl_module'],
             'options'   => ['ASC' => 'ASC', 'DESC' => 'DESC'],
             'eval'      => [
                 'includeBlankOption' => false,
@@ -380,6 +383,53 @@ array_insert(
                 'includeBlankOption' => true
             ],
             'sql'              => "varchar(64) NOT NULL default ''"
+        ],
+        'metamodel_use_parameters'      => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_use_parameters'],
+            'exclude'   => true,
+            'inputType' => 'checkbox',
+            'eval'      => [
+                'tl_class'       => 'w50 cbx',
+                'submitOnChange' => true,
+            ],
+            'sql'       => "char(1) NOT NULL default ''"
+        ],
+        'metamodel_parameter_wizard'    => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_parameter_wizard'],
+            'exclude'   => true,
+            'inputType' => 'multiColumnWizard',
+            'eval'      => [
+                'columnFields' => [
+                    'description' => [
+                        'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_parameter_wizard_description'],
+                        'exclude'   => true,
+                        'inputType' => 'text',
+                        'eval'      => [
+                            'style' => 'width:250px',
+                        ],
+                    ],
+                    'key'         => [
+                        'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_parameter_wizard_key'],
+                        'exclude'   => true,
+                        'inputType' => 'text',
+                        'eval'      => [
+                            'style'     => 'width:250px',
+                            'mandatory' => true,
+                        ],
+                    ],
+                    'value'       => [
+                        'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_parameter_wizard_value'],
+                        'exclude'   => true,
+                        'inputType' => 'text',
+                        'eval'      => [
+                            'style'     => 'width:250px',
+                            'mandatory' => true,
+                        ],
+                    ],
+                ],
+                'tl_class'     => 'clr',
+            ],
+            'sql'       => 'blob NULL',
         ]
     ]
 );
