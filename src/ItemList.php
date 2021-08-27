@@ -108,6 +108,13 @@ class ItemList
     protected array $arrParam = [];
 
     /**
+     * The parameters for the template.
+     *
+     * @var array<string,mixed>
+     */
+    private array $templateParameter = [];
+
+    /**
      * The name of the attribute for the title.
      *
      * @var string
@@ -715,6 +722,11 @@ class ItemList
         return $this;
     }
 
+    public function setTemplateParameter(string $name, $value): void
+    {
+        $this->templateParameter[$name] = $value;
+    }
+
     /**
      * The items in the list view.
      *
@@ -1048,15 +1060,12 @@ class ItemList
             $this->objTemplate->data = [];
         }
 
-        $model = $event->getCaller();
-
         $this->setTitleAndDescription();
 
         $this->objTemplate->caller       = $caller;
         $this->objTemplate->items        = $this->objItems;
         $this->objTemplate->filterParams = $this->arrParam;
-        $this->objTemplate->wizardParams =
-            $model->metamodel_use_parameters ? deserialize($model->metamodel_parameter_wizard) : [];
+        $this->objTemplate->parameter    = $this->templateParameter;
 
         return $this->objTemplate->parse($outputFormat);
     }

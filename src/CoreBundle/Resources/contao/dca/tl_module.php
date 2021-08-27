@@ -63,7 +63,7 @@ array_insert(
     [
         'metamodel_use_limit'      => 'metamodel_offset,metamodel_limit',
         'metamodel_sort_override'  => 'metamodel_sort_param_type,metamodel_order_by_param,metamodel_order_dir_param',
-        'metamodel_use_parameters' => 'metamodel_parameter_wizard'
+        'metamodel_use_parameters' => 'metamodel_parameters'
     ]
 );
 
@@ -394,14 +394,14 @@ array_insert(
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'metamodel_parameter_wizard'    => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_parameter_wizard'],
+        'metamodel_parameters'    => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_parameters'],
             'exclude'   => true,
             'inputType' => 'multiColumnWizard',
             'eval'      => [
                 'columnFields' => [
                     'description' => [
-                        'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_parameter_wizard_description'],
+                        'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_parameters_description'],
                         'exclude'   => true,
                         'inputType' => 'text',
                         'eval'      => [
@@ -409,7 +409,7 @@ array_insert(
                         ],
                     ],
                     'key'         => [
-                        'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_parameter_wizard_key'],
+                        'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_parameters_key'],
                         'exclude'   => true,
                         'inputType' => 'text',
                         'eval'      => [
@@ -418,7 +418,7 @@ array_insert(
                         ],
                     ],
                     'value'       => [
-                        'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_parameter_wizard_value'],
+                        'label'     => &$GLOBALS['TL_LANG']['tl_module']['metamodel_parameters_value'],
                         'exclude'   => true,
                         'inputType' => 'text',
                         'eval'      => [
