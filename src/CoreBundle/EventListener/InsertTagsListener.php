@@ -224,7 +224,7 @@ class InsertTagsListener implements ServiceAnnotationInterface
      *
      * @param int        $viewId            ID of render setting.
      *
-     * @param string     $strOutput         Name of output. Default:null (fallback to htmlfynf)|text|html5|xhtml|...
+     * @param string     $strOutput         Name of output. Default:null (fallback to html5)|text|html5|...
      *
      * @return boolean|string Return false when nothing was found or return the value.
      */
@@ -275,7 +275,7 @@ class InsertTagsListener implements ServiceAnnotationInterface
      *
      * @param string     $strAttributeName  Name of the attribute.
      *
-     * @param string     $strOutput         Name of output. Default:raw|text|html5|xhtml|...
+     * @param string     $strOutput         Name of output. Default:raw|text|html5|...
      *
      * @return boolean|string Return false when nothing was found or return the value.
      *

@@ -396,10 +396,10 @@ class Template
 
         $strBuffer = '';
 
-        // Start with the template itself
+        // Start with the template itself.
         $this->strParent = $this->strTemplate;
 
-        // Include the parent templates
+        // Include the parent templates.
         while ($this->strParent !== null) {
             $strCurrent = $this->strParent;
             $strParent  = $this->strDefault
@@ -413,7 +413,7 @@ class Template
                 );
             }
 
-            // Reset the flags
+            // Reset the flags.
             $this->strParent  = null;
             $this->strDefault = null;
 
@@ -430,11 +430,11 @@ class Template
             ob_end_clean();
         }
 
-        // Reset the internal arrays
-        $this->arrBlocks = array();
+        // Reset the internal arrays.
+        $this->arrBlocks = [];
 
-        // Add start and end markers in debug mode
-        if (\Config::get('debugMode') && in_array($this->strFormat, ['html5', 'xhtml'])) {
+        // Add start and end markers in debug mode.
+        if (\Config::get('debugMode') && ('html5' === $this->strFormat)) {
             $strRelPath = str_replace(TL_ROOT . '/', '', $this->getTemplate($this->strTemplate, $this->strFormat));
             $strBuffer  = <<<EOF
 <!-- TEMPLATE START: $strRelPath -->
