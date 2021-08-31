@@ -152,7 +152,7 @@ class ItemList
     /**
      * The render setting factory.
      *
-     * @var IRenderSettingFactory
+     * @var IRenderSettingFactory|null
      */
     private ?IRenderSettingFactory $renderSettingFactory;
 
