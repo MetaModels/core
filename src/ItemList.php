@@ -152,7 +152,7 @@ class ItemList
     /**
      * The render setting factory.
      *
-     * @var IRenderSettingFactory|null
+     * @var IRenderSettingFactory
      */
     private ?IRenderSettingFactory $renderSettingFactory;
 
@@ -161,7 +161,7 @@ class ItemList
      *
      * @var EventDispatcherInterface|null
      */
-    private ?EventDispatcherInterface $eventDispatcher;
+    private $eventDispatcher;
 
     /**
      * Create a new instance.
