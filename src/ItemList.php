@@ -138,30 +138,30 @@ class ItemList
     /**
      *  The filter setting factory.
      *
-     * @var IFilterSettingFactory
+     * @var IFilterSettingFactory|null
      */
-    private IFilterSettingFactory $filterFactory;
+    private ?IFilterSettingFactory $filterFactory;
 
     /**
      * The MetaModels factory.
      *
-     * @var IFactory
+     * @var IFactory|null
      */
-    private IFactory $factory;
+    private ?IFactory $factory;
 
     /**
      * The render setting factory.
      *
-     * @var IRenderSettingFactory
+     * @var IRenderSettingFactory|null
      */
-    private IRenderSettingFactory $renderSettingFactory;
+    private ?IRenderSettingFactory $renderSettingFactory;
 
     /**
      * The event dispatcher.
      *
-     * @var EventDispatcherInterface
+     * @var EventDispatcherInterface|null
      */
-    private $eventDispatcher;
+    private ?EventDispatcherInterface $eventDispatcher;
 
     /**
      * Create a new instance.
