@@ -30,9 +30,9 @@ $GLOBALS['TL_DCA']['tl_content']['config']['onload_callback'][] =
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodel_content'] =
     '{type_legend},type,headline;' .
-    '{mm_config_legend},metamodel,perPage,metamodel_use_limit;' .
-    '{mm_rendering_legend},metamodel_rendersettings,metamodel_layout,metamodel_noparsing,metamodel_page_param_type,metamodel_page_param,metamodel_pagination;'
-    .
+    '{mm_config_legend},metamodel,metamodel_use_limit;' .
+    '{mm_rendering_legend},metamodel_rendersettings,metamodel_layout,metamodel_noparsing;' .
+    '{mm_pagination_legend},perPage,metamodel_page_param_type,metamodel_page_param,metamodel_pagination;' .
     '{mm_filter_legend},metamodel_filtering,metamodel_filterparams;' .
     '{mm_sorting_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_sort_override;' .
     '{mm_parameters_legend:hide},metamodel_use_parameters;' .
