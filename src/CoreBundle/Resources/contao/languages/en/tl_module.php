@@ -23,12 +23,15 @@
 $GLOBALS['TL_LANG']['tl_module']['mm_config_legend']                         = 'MetaModel Configuration';
 $GLOBALS['TL_LANG']['tl_module']['mm_filter_legend']                         = 'MetaModel Filter';
 $GLOBALS['TL_LANG']['tl_module']['mm_rendering_legend']                      = 'MetaModel Rendering';
+$GLOBALS['TL_LANG']['tl_module']['mm_pagination_legend']                     = 'MetaModel Pagination';
 $GLOBALS['TL_LANG']['tl_module']['mm_sorting_legend']                        = 'MetaModel Sorting';
+$GLOBALS['TL_LANG']['tl_module']['mm_parameters_legend']                     = 'Parameter Setting';
 $GLOBALS['TL_LANG']['tl_module']['mm_meta_legend']                           = 'Search engine optimization';
-$GLOBALS['TL_LANG']['tl_content']['asc']                                     = 'Ascending';
-$GLOBALS['TL_LANG']['tl_content']['desc']                                    = 'Descending';
+$GLOBALS['TL_LANG']['tl_module']['asc']                                      = 'Ascending';
+$GLOBALS['TL_LANG']['tl_module']['desc']                                     = 'Descending';
 $GLOBALS['TL_LANG']['tl_module']['metamodel'][0]                             = 'MetaModel';
-$GLOBALS['TL_LANG']['tl_module']['metamodel'][1]                             = 'The MetaModel to list in this listing.';
+$GLOBALS['TL_LANG']['tl_module']['metamodel'][1]                             =
+    'The MetaModel to list in this listing.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_use_limit'][0]                   = 'Use offset and limit for listing';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_use_limit'][1]                   =
     'Check if you want to limit the amount of items listed. This is useful for only showing the first 500 items or ' .
@@ -48,7 +51,7 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_sort_override'][1]               =
     'If checked, the sorting attribute and direction may be overridden via get parameter.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sort_param_type'][0]             = 'URL-Type for parameters';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_sort_param_type'][1]             =
-    'Please specify the type of URL parameters als slug (key\value) or GET (key=value).';
+    'Please specify the type of URL parameters als slug (key/value) or GET (key=value).';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_param_type_options']['slugNget'] = 'Slug or GET allowed';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_param_type_options']['slug']     = 'Slug only';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_param_type_options']['get']      = 'GET only';
@@ -61,7 +64,8 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_order_dir_param'][1]             =
 $GLOBALS['TL_LANG']['tl_module']['metamodel_filtering'][0]                   = 'Filter settings to apply';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_filtering'][1]                   =
     'Select the filter settings that shall get applied when compiling the list.';
-$GLOBALS['TL_LANG']['tl_module']['metamodel_layout'][0]                      = 'Custom template to use for generating';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_layout'][0]                      =
+    'Custom template to use for generating';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_layout'][1]                      =
     'Select the template that shall be used for the selected attribute. ' .
     'Valid template filenames start with "ce_metamodel".';
@@ -77,7 +81,8 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_noparsing'][1]                   =
 $GLOBALS['TL_LANG']['tl_module']['metamodel_page_param_type'][0]             = 'URL-Type for pagination';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_page_param_type'][1]             =
     'Please specify the type of URL parameters als slug (key\value) or GET (key=value).';
-$GLOBALS['TL_LANG']['tl_module']['metamodel_pagination'][0]                  = 'Custom template to use for pagination';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_pagination'][0]                  =
+    'Custom template to use for pagination';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_pagination'][1]                  =
     'Select the template that shall be used for the pagination. ' .
     'Valid template filenames start with "pagination".';
@@ -106,6 +111,21 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_hideclearfilter'][1]         =
 $GLOBALS['TL_LANG']['tl_module']['metamodel_available_values'][0]            = 'Filter counter';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_available_values'][1]            =
     'Display the amount of available entries behind each filter option.';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_use_parameters'][0]              = 'Activate parameters';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_use_parameters'][1]              =
+    'You can activate the parameter wizard to set your own parameters.';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_parameters'][0]                  = 'Parameters';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_parameters'][1]                  =
+    'Set your own parameters as "key-value-pairs".';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_parameters_description'][0]      = 'Description';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_parameters_description'][1]      =
+    'Set description.';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_parameters_key'][0]              = 'Key';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_parameters_key'][1]              =
+    'Set key.';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_parameters_value'][0]            = 'Value';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_parameters_value'][1]            =
+    'Set value.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_meta_title'][0]                  = 'Meta Title';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_meta_title'][1]                  =
     'Set this attribute as the meta-title of the page.';

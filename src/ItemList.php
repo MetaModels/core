@@ -108,6 +108,13 @@ class ItemList
     protected array $arrParam = [];
 
     /**
+     * The parameters for the template.
+     *
+     * @var array<string,mixed>
+     */
+    private array $templateParameter = [];
+
+    /**
      * The name of the attribute for the title.
      *
      * @var string
@@ -131,28 +138,28 @@ class ItemList
     /**
      *  The filter setting factory.
      *
-     * @var IFilterSettingFactory
+     * @var IFilterSettingFactory|null
      */
-    private IFilterSettingFactory $filterFactory;
+    private ?IFilterSettingFactory $filterFactory;
 
     /**
      * The MetaModels factory.
      *
-     * @var IFactory
+     * @var IFactory|null
      */
-    private IFactory $factory;
+    private ?IFactory $factory;
 
     /**
      * The render setting factory.
      *
-     * @var IRenderSettingFactory
+     * @var IRenderSettingFactory|null
      */
-    private IRenderSettingFactory $renderSettingFactory;
+    private ?IRenderSettingFactory $renderSettingFactory;
 
     /**
      * The event dispatcher.
      *
-     * @var EventDispatcherInterface
+     * @var EventDispatcherInterface|null
      */
     private $eventDispatcher;
 
@@ -715,6 +722,11 @@ class ItemList
         return $this;
     }
 
+    public function setTemplateParameter(string $name, $value): void
+    {
+        $this->templateParameter[$name] = $value;
+    }
+
     /**
      * The items in the list view.
      *
@@ -1053,6 +1065,7 @@ class ItemList
         $this->objTemplate->caller       = $caller;
         $this->objTemplate->items        = $this->objItems;
         $this->objTemplate->filterParams = $this->arrParam;
+        $this->objTemplate->parameter    = $this->templateParameter;
 
         return $this->objTemplate->parse($outputFormat);
     }
