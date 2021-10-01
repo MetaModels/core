@@ -243,7 +243,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersettings'] = [
             'inputType' => 'select',
             'options'   => [
                 'html5',
-                'xhtml',
                 'text'
             ],
             'reference' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions'],
