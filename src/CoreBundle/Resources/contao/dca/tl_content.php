@@ -32,7 +32,8 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodel_content'] =
     '{type_legend},type,headline;' .
     '{mm_config_legend},metamodel,metamodel_use_limit;' .
     '{mm_rendering_legend},metamodel_rendersettings,metamodel_layout,metamodel_noparsing;' .
-    '{mm_pagination_legend},perPage,metamodel_page_param_type,metamodel_page_param,metamodel_pagination;' .
+    '{mm_pagination_legend},perPage,' .
+    'metamodel_page_param_type,metamodel_page_param,metamodel_maxpaginationplinks,metamodel_pagination;' .
     '{mm_filter_legend},metamodel_filtering,metamodel_filterparams;' .
     '{mm_sorting_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_sort_override;' .
     '{mm_parameters_legend:hide},metamodel_use_parameters;' .
@@ -135,6 +136,16 @@ array_insert(
             ],
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
+        'metamodel_maxpaginationplinks'               => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_maxpaginationplinks'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => [
+                'rgxp'     => 'digit',
+                'tl_class' => 'clr w50'
+            ],
+            'sql'       => "smallint(5) NOT NULL default '0'"
+        ],
         'metamodel_pagination'          => [
             'label'            => &$GLOBALS['TL_LANG']['tl_content']['metamodel_pagination'],
             'exclude'          => true,
@@ -142,7 +153,7 @@ array_insert(
             'options_callback' => [ContentElementCallback::class, 'getPaginationTemplates'],
             'eval'             => [
                 'chosen'   => true,
-                'tl_class' => 'clr w50'
+                'tl_class' => 'w50'
             ],
             'sql'              => "varchar(64) NOT NULL default ''"
         ],

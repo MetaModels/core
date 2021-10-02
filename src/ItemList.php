@@ -180,6 +180,8 @@ class ItemList
      *
      * @param string                        $paramType            The pagination parameter URL type.
      *
+     * @param int                           $maxPaginationLinks   The maximum number of pagination links.
+     *
      * @param string                        $paginationTemplate   The pagination template.
      */
     public function __construct(
@@ -190,12 +192,14 @@ class ItemList
         FilterUrlBuilder $filterUrlBuilder = null,
         string $pageParam = '',
         string $paramType = '',
+        int $maxPaginationLinks = 0,
         string $paginationTemplate = ''
     ) {
         $this->paginationLimitCalculator = new PaginationLimitCalculator(
             $filterUrlBuilder,
             $pageParam,
             $paramType,
+            $maxPaginationLinks,
             $paginationTemplate
         );
         $this->factory              = $factory;

@@ -135,6 +135,7 @@ trait ListControllerTrait
             $this->filterUrlBuilder,
             $pageParam,
             $model->metamodel_page_param_type,
+            $model->metamodel_maxpaginationplinks,
             $model->metamodel_pagination
         );
 
