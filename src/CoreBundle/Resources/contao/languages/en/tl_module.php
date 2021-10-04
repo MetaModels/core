@@ -81,6 +81,10 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_noparsing'][1]                   =
 $GLOBALS['TL_LANG']['tl_module']['metamodel_page_param_type'][0]             = 'URL-Type for pagination';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_page_param_type'][1]             =
     'Please specify the type of URL parameters als slug (key\value) or GET (key=value).';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_maxpaginationlinks'][0]         =
+    'Maximum number of pagination links';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_maxpaginationlinks'][1]         =
+    'Please enter the maximum number pagination links. Enter 0 to show the default value from Contao e.g. 7.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_pagination'][0]                  =
     'Custom template to use for pagination';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_pagination'][1]                  =

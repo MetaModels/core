@@ -79,9 +79,9 @@ class PaginationLimitCalculator
     /**
      * The maximum number of pagination links.
      *
-     * @var int|null
+     * @var int
      */
-    private ?int $maxPaginationLinks = null;
+    private int $maxPaginationLinks;
 
     /**
      * The calculated offset.
@@ -148,16 +148,21 @@ class PaginationLimitCalculator
      *
      * @param string                $paramType          The pagination parameter url type
      *
+     * @param int                   $maxPaginationLinks The maximum number of pagination links.
+     *
      * @param string                $paginationTemplate The pagination template
      */
     public function __construct(
         ?FilterUrlBuilder $filterUrlBuilder = null,
         string $pageParam = 'page',
         string $paramType = 'get',
+        int $maxPaginationLinks = 0,
         string $paginationTemplate = 'mm_pagination'
     ) {
         $this->pageParam          = $pageParam;
         $this->paramType          = $paramType;
+        $this->paramType          = $paramType;
+        $this->maxPaginationLinks = $maxPaginationLinks;
         $this->paginationTemplate = $paginationTemplate;
         if (null === $filterUrlBuilder) {
             $filterUrlBuilder = System::getContainer()->get('metamodels.filter_url');
@@ -363,13 +368,13 @@ class PaginationLimitCalculator
     }
 
     /**
-     * Set the number of maximum pagination links.
+     * Get the number of maximum pagination links.
      *
      * @return int
      */
     public function getMaxPaginationLinks(): int
     {
-        if (null === $this->maxPaginationLinks) {
+        if (!$this->maxPaginationLinks) {
             $this->setMaxPaginationLinks(Config::get('maxPaginationLinks'));
         }
 
@@ -377,7 +382,7 @@ class PaginationLimitCalculator
     }
 
     /**
-     * Get the number of maximum pagination links.
+     * Set the number of maximum pagination links.
      *
      * @param int $maxPaginationLinks The maximum number of links.
      *
