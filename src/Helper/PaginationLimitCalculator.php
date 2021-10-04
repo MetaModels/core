@@ -79,9 +79,9 @@ class PaginationLimitCalculator
     /**
      * The maximum number of pagination links.
      *
-     * @var int|null
+     * @var int
      */
-    private ?int $maxPaginationLinks = null;
+    private int $maxPaginationLinks;
 
     /**
      * The calculated offset.
