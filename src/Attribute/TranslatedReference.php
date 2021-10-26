@@ -316,7 +316,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
                 sprintf(
                     'SELECT t1.item_id
                        FROM %1$s AS t1
-                       RIGHT JOIN %1$s as t3 ON (t1.id = (SELECT
+                       INNER JOIN %1$s as t3 ON (t1.id = (SELECT
                            t2.id
                            FROM %1$s AS t2
                            WHERE (t2.att_id=%2$s)
