@@ -12,6 +12,7 @@
  *
  * @package    MetaModels/core
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -190,7 +191,7 @@ class SetDefaultZeroMigration extends AbstractMigration
     {
         $this->connection->executeQuery(
             sprintf(
-                'ALTER TABLE %1$s CHANGE %1$s.%2$s %1$s.%2$s %3$s NOT NULL DEFAULT %4$s',
+                'ALTER TABLE `%1$s` CHANGE COLUMN `%2$s` `%2$s` %3$s NOT NULL DEFAULT %4$s',
                 $tableName,
                 $columnName,
                 $information['type'],
