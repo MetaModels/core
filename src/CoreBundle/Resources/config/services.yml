@@ -193,6 +193,12 @@ services:
         tags:
             - name: contao.migration
 
+    MetaModels\CoreBundle\Migration\SetDefaultZeroMigration:
+      arguments:
+        $connection: '@database_connection'
+      tags:
+        - name: contao.migration
+
     MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter:
         public: false
 
