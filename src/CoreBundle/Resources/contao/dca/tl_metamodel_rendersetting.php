@@ -109,6 +109,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
                         'remote'    => 'id',
                         'operation' => '=',
                     ),
+                ),
+                'inverse' => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
                 )
             )
         ),
