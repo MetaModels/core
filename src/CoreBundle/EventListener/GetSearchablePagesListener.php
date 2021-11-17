@@ -289,14 +289,42 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      */
     protected function getJumpTosFor($metaModels, $filter, $view, $rootPage = null): array
     {
-        $entries = [];
+        $entries          = [];
+        $filterAttributes = [];
+        $translated       = ($metaModels instanceof ITranslatedMetaModel) || $metaModels->isTranslated(false);
+        $desired          = $GLOBALS['TL_LANGUAGE'];
+        $fallback         = $translated
+            ? (($metaModels instanceof ITranslatedMetaModel) ? $metaModels->getMainLanguage()
+            : $metaModels->getFallbackLanguage()) : null;
+
+        foreach ((array) $view->get('jumpTo') as $jumpTo) {
+            $langCode = $jumpTo['langcode'];
+            // If either desired language or fallback, keep the result.
+            if (!$translated || ($langCode === $desired) || ($langCode === $fallback)) {
+                $jumpToFilterSetting = $this->filterSettingFactory->createCollection($jumpTo['filter']);
+                $filterAttributes    = $jumpToFilterSetting->getReferencedAttributes();
+                // If the desired language, break.
+                // Otherwise try to get the desired one until all have been evaluated.
+                if (!$translated || ($desired === $jumpTo['langcode'])) {
+                    break;
+                }
+            }
+        }
 
         // Get the object.
         /** @var Item $item */
-        foreach ($metaModels->findByFilter($filter, '', 0, 0, 'ASC', $view->getSettingNames()) as $item) {
+        foreach (
+            $metaModels->findByFilter(
+                $filter,
+                '',
+                0,
+                0,
+                'ASC',
+                array_merge($view->getSettingNames(), $filterAttributes)
+            ) as $item
+        ) {
             $jumpTo = $item->buildJumpToLink($view);
-
-            $event = new GetPageDetailsEvent($jumpTo['page']);
+            $event  = new GetPageDetailsEvent($jumpTo['page']);
             $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GET_PAGE_DETAILS);
             $pageDetails = $event->getPageDetails();
 
