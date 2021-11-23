@@ -24,6 +24,7 @@
  * @author     Benedict Zinke <bz@presentprogressive.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Fritz Michael Gschwantner <fmg@inspiredminds.at>
  * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -190,10 +191,10 @@ class ItemList
         IRenderSettingFactory $renderSettingFactory = null,
         EventDispatcherInterface $eventDispatcher = null,
         FilterUrlBuilder $filterUrlBuilder = null,
-        string $pageParam = '',
-        string $paramType = '',
+        string $pageParam = 'page',
+        string $paramType = 'get',
         int $maxPaginationLinks = 0,
-        string $paginationTemplate = ''
+        string $paginationTemplate = 'mm_pagination'
     ) {
         $this->paginationLimitCalculator = new PaginationLimitCalculator(
             $filterUrlBuilder,
