@@ -59,10 +59,7 @@ class LanguageOptionsListener
             return;
         }
 
-        $event->setOptions(array_flip(array_filter(array_flip(System::getLanguages()), function ($langCode) {
-            // Disable >2 char long language codes for the moment.
-            return (strlen($langCode) == 2);
-        })));
+        $event->setOptions(System::getLanguages());
     }
 
     /**

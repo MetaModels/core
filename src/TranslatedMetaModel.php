@@ -118,7 +118,7 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
     protected function fetchTranslatedAttributeValues(ITranslated $attribute, $ids)
     {
         $originalLanguage       = $GLOBALS['TL_LANGUAGE'];
-        $GLOBALS['TL_LANGUAGE'] = $this->getLanguage();
+        $GLOBALS['TL_LANGUAGE'] = str_replace('_', '-', $this->getLanguage());
 
         try {
             $attributeData = $attribute->getTranslatedDataFor($ids, $this->getLanguage());

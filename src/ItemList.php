@@ -836,7 +836,7 @@ class ItemList
         $this->objTemplate->total = $total;
 
         if ($this->objMetaModel instanceof TranslatedMetaModel) {
-            $previousLanguage = $this->objMetaModel->selectLanguage($GLOBALS['TL_LANGUAGE']);
+            $previousLanguage = $this->objMetaModel->selectLanguage(str_replace('-', '_', $GLOBALS['TL_LANGUAGE']));
         }
 
         $this->objItems = $this->objMetaModel->findByFilter(
