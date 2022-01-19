@@ -463,7 +463,8 @@ abstract class Simple implements ISimple
         $this->eventDispatcher->dispatch($event, ContaoEvents::WIDGET_GET_ATTRIBUTES_FROM_DCA);
 
         if ($objFrontendFilterOptions->isAutoSubmit() && TL_MODE == 'FE') {
-            $GLOBALS['TL_JAVASCRIPT']['metamodels'] = 'bundles/metamodelscore/js/metamodels.min.js';
+            $min = System::getContainer()->get('kernel')->isDebug() ? '' : '.min';
+            $GLOBALS['TL_JAVASCRIPT']['metamodels'] = sprintf('bundles/metamodelscore/js/metamodels%s.js', $min);
         }
 
         /** @var \Widget $objWidget */
@@ -497,7 +498,7 @@ abstract class Simple implements ISimple
             'showCount'  => $objFrontendFilterOptions->isShowCountValues(),
             'autosubmit' => $objFrontendFilterOptions->isAutoSubmit(),
             'urlvalue'   => array_key_exists('urlvalue', $arrWidget) ? $arrWidget['urlvalue'] : $arrWidget['value'],
-            'errors'     => $objWidget->hasErrors() ? $objWidget->getErrors() : array(),
+            'errors'     => $objWidget->hasErrors() ? $objWidget->getErrors() : [],
             'used'       => $arrWidget['value'] !== null ? true : false
         );
     }
