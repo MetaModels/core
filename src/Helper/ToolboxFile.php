@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,7 +20,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Andreas Fischer <anfischer@kaffee-partner.de>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -35,6 +35,7 @@ use Contao\Environment;
 use Contao\File;
 use Contao\FilesModel;
 use Contao\Input;
+use Contao\LayoutModel;
 use Contao\PageError403;
 use Contao\Picture;
 use Contao\StringUtil;
@@ -1020,11 +1021,13 @@ class ToolboxFile
                 $information['h']  = $size[1];
                 $information['wh'] = $size[3];
             }
+            $information['imageUrl'] = $fileName;
         }
 
         // Prepare SVG images.
         if ($information['isSvgImage'] = $file->isSvgImage) {
-            $information['src'] = $fileName;
+            $information['src']      = $fileName;
+            $information['imageUrl'] = $fileName;
         }
 
         // Prepare the picture for provide the image size.
@@ -1039,6 +1042,19 @@ class ToolboxFile
                 'img'     => $picture->getImg($projectDir, $staticUrl),
                 'sources' => $picture->getSources($projectDir, $staticUrl)
             ];
+
+            $information['imageUrl'] = $fileName;
+
+            if (isset($GLOBALS['objPage']->layoutId)) {
+                $lightboxSize                   = StringUtil::deserialize(
+                    LayoutModel::findByPk($GLOBALS['objPage']->layoutId)->lightboxSize ?? null,
+                    true
+                );
+                $lightboxPicture                =
+                    $this->pictureFactory->create($projectDir . '/' . $file->path, $lightboxSize);
+                $information['lightboxPicture'] = $lightboxPicture;
+                $information['imageUrl']        = $lightboxPicture->getImg($projectDir, $staticUrl)['src'];
+            }
         }
 
         $this->modifiedTime[] = $file->mtime;
@@ -1054,7 +1070,7 @@ class ToolboxFile
      */
     private function resizeImage($fileName)
     {
-        list($width, $height, $mode) = $this->getResizeImages();
+        [$width, $height, $mode] = $this->getResizeImages();
         if ($this->getShowImages() && ($width || $height || $mode)) {
             if ($this->imageFactory) {
                 $image = $this->imageFactory->create(
