@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -22,17 +22,13 @@
  * Developers need to apply a snippet like this for each
  * class they want to use:
  *
- *   window.addEventListener('DOMContentLoaded', function(e){
- *
- *      var __metaMoodels = new __MetaModels().init();
- *
- *      __metaMoodels.addClassHook('someclass', function(element, key){
+ *      window.MetaModelsFE.addClassHook('someclass', function(element, key){
  *        alert("the class " + key + " has been applied to " + element)
  *      });
  *
- *      __metaMoodels.addClassHook('submitonclick', function(el, helper) {
+ *      window.MetaModelsFE.addClassHook('submitonclick', function(el, helper) {
  *           // Remove old events
- *           helper.unbindEvent({
+ *           helper.unbindEvents({
  *               object: el,
  *               type: 'click'
  *           });
@@ -52,18 +48,11 @@
  *               }
  *           });
  *       });
- *   });
  */
 
-(
+this.__MetaModels = (
     function() {
-        this.__MetaModels = function() {
-            // VARS.
-            /**
-             * Options.
-             */
-            this.options = {};
-
+        function __MetaModels(opts) {
             /**
              * List for additions functions.
              */
@@ -74,30 +63,8 @@
              */
             this.events = [];
 
-            // Define option defaults
-            let defaults = {
-                selector: '',
-            };
-
-            if (arguments[0] && typeof arguments[0] === 'object') {
-                this.options = extendDefaults(defaults, arguments[0]);
-            }
-
-            this.selector = this.options.selector;
-        };
-
-        // CORE.
-        /**
-         * Init.
-         */
-        __MetaModels.prototype.init = function(opts) {
-            // Set the given params
-            this.options = Object(this.options, opts);
-
             this.addClassHook('submitonchange', this.applySubmitOnChange);
             this.addClassHook('submitonclick', this.applySubmitOnClick);
-
-            this.applyClassHooks();
         };
 
         // DEFAULT.
@@ -140,11 +107,9 @@
          * Apply all class handlers to their elements.
          */
         __MetaModels.prototype.applyClassHooks = function() {
-            var self = this;
             for (let x in this.classhooks) {
-                let __hooks = document.querySelectorAll('.' + x);
-                for (let y in __hooks) {
-                    this.classhooks[x](__hooks[y], self);
+                if (this.classhooks.hasOwnProperty(x)) {
+                    document.querySelectorAll('.' + x).forEach(hook => this.classhooks[x](hook, this));
                 }
             }
         };
@@ -157,30 +122,22 @@
          */
         __MetaModels.prototype.bindEvent = function(objEvent) {
             this.events.push(objEvent);
-            let __el = objEvent.object;
-
-            try {
-                __el.addEventListener(objEvent.type, objEvent.func);
-            } catch (e) {
-                // console.log(e);
-            }
+            objEvent.object.addEventListener(objEvent.type, objEvent.func);
         };
 
         /**
          * Unbind given event.
          *
-         * @param {object} objEvent
+         * @param {{type: string, object: Object, func: Function}} objEvent
          * @param {boolean} blnNotRemove
          */
         __MetaModels.prototype.unbindEvent = function(objEvent, blnNotRemove) {
             let intIndex = null;
 
-            let __el = objEvent.object;
-
-            __el.unbind(objEvent.type);
+            objEvent.object.removeEventListener(objEvent.type, objEvent.func);
 
             if (blnNotRemove !== true) {
-                for (var i = 0; i < this.events.length; i++) {
+                for (let i = 0; i < this.events.length; i++) {
                     if (objEvent.object === this.events[i].object && objEvent.type === this.events[i].type) {
                         intIndex = i;
                         break;
@@ -193,24 +150,26 @@
         };
 
         /**
-         * Unbind events for this class.
+         * Unbind events.
+         *
+         * @param {{type?: string, object?: Object}} opts
          */
-        __MetaModels.prototype.unbindEvents = function() {
-            let arrStore = [];
-
-            for (var i = 0; i < this.events.length; i++) {
-                if (this.onLoadWindowScroll === this.events[i]) {
-                    arrStore.push(this.onLoadWindowScroll);
-                    continue;
-                }
-
-                this.unbindEvent(this.events[i], true);
+        __MetaModels.prototype.unbindEvents = function(opts) {
+            let filtered = this.events;
+            if (opts) {
+                filtered = filtered.filter(event => (!opts.object || (event.object === opts.object)) && (!opts.type || (opts.type === event.type)));
             }
 
-            this.events = arrStore;
+            for (var i = 0; i < filtered.length; i++) {
+                this.unbindEvent(filtered[i]);
+            }
         };
+
+        return __MetaModels;
     }());
 
+window.MetaModelsFE = new __MetaModels();
+
 window.addEventListener('DOMContentLoaded', function(e) {
-    new __MetaModels().init();
+    window.MetaModelsFE.applyClassHooks();
 });
