@@ -22,13 +22,12 @@
                 ($option['active'] ? ' checked="checked"' : '')
             );
             $label = sprintf(
-                '<label id="lbl_%s_%s" for="opt_%s_%s">%s%s</label>',
+                '<label id="lbl_%s_%s" for="opt_%s_%s">%s</label>',
                 $this->urlparam,
                 $count,
                 $this->urlparam,
                 $count,
-                $option['value'],
-                (($this->showCount) ? ' <span class="count">(' . $this->count[$option['key']] . ')</span>' : '')
+                $option['value']
             );
             $count++;
             ?>
