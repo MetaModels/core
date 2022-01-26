@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -173,14 +173,7 @@ trait ListControllerTrait
             ->setPageBreak($model->perPage)
             ->setSorting($sorting, $direction)
             ->setFilterSettings($model->metamodel_filtering)
-            ->setFilterParameters(
-                $filterParams,
-                $this->getFilterParameters(
-                    $filterUrl,
-                    $itemRenderer,
-                    $model->metamodel_sort_param_type
-                )
-            )
+            ->setFilterParameters($filterParams, $this->getFilterParameters($filterUrl, $itemRenderer))
             ->setMetaTags($model->metamodel_meta_title, $model->metamodel_meta_description);
 
         foreach (StringUtil::deserialize($model->metamodel_parameters ?? null, true) as $key => $value) {
@@ -210,16 +203,15 @@ trait ListControllerTrait
      *
      * @param FilterUrl $filterUrl    The filter URL to obtain parameters from.
      * @param ItemList  $itemRenderer The list renderer instance to be used.
-     * @param string    $sortType     The sort URL type.
      *
      * @return string[]
      */
-    private function getFilterParameters(FilterUrl $filterUrl, ItemList $itemRenderer, string $sortType): array
+    private function getFilterParameters(FilterUrl $filterUrl, ItemList $itemRenderer): array
     {
         $result = [];
-        foreach ($itemRenderer->getFilterSettings()->getParameters() as $sortParam) {
-            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, $sortParam, $sortType)) {
-                $result[$sortParam] = $value;
+        foreach ($itemRenderer->getFilterSettings()->getParameters() as $name) {
+            if (null !== $value = $this->tryReadFromSlugOrGet($filterUrl, $name, 'slugNget')) {
+                $result[$name] = $value;
             }
         }
 
