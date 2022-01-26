@@ -318,13 +318,20 @@ trait ListControllerTrait
 
         // Retrieve name of filter.
         if ($model->metamodel_filtering) {
-            $infoFi = $this->filterFactory->createCollection($model->metamodel_filtering)->get('name');
+            $filterparams = [];
+            foreach (StringUtil::deserialize($model->metamodel_filterparams, true) as $filterparam) {
+                if ($filterparam['value']) {
+                    $filterparams[] = $filterparam['value'];
+                }
+            }
+            $infoFiPa = count($filterparams) ? ': ' . implode(', ', $filterparams) : '';
+            $infoFi   = $this->filterFactory->createCollection($model->metamodel_filtering)->get('name');
             if ($infoFi) {
                 $infoText .= sprintf(
                     $infoTemplate,
                     $this->get('translator')->trans('MSC.mm_be_info_filter.1', [], 'contao_default'),
                     $this->get('translator')->trans('MSC.mm_be_info_filter.0', [], 'contao_default'),
-                    $infoFi
+                    $infoFi . $infoFiPa
                 );
             }
         }
