@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,8 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -211,7 +212,7 @@ class DatabaseBackedListener
         if (!$this->createInstanceViaLegacyFactory($event, $arrData)) {
             if ($arrData['translated']) {
                 $metaModel = new TranslatedMetaModel($arrData, $this->dispatcher, $this->database);
-                $metaModel->selectLanguage(str_replace('-', '_', $GLOBALS['TL_LANGUAGE']));
+                $metaModel->selectLanguage(\str_replace('-', '_', $GLOBALS['TL_LANGUAGE']));
             } else {
                 $metaModel = new MetaModel($arrData, $this->dispatcher, $this->database);
             }
