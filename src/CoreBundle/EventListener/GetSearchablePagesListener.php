@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -272,7 +272,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
             return $metaModels->getAvailableLanguages();
         }
 
-        return array(str_replace('-', '_', $GLOBALS['TL_LANGUAGE']));
+        return array(\str_replace('-', '_', $GLOBALS['TL_LANGUAGE']));
     }
 
     /**
@@ -296,7 +296,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
         $entries          = [];
         $filterAttributes = [];
         $translated       = ($metaModels instanceof ITranslatedMetaModel) || $metaModels->isTranslated(false);
-        $desired          = str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
+        $desired          = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
         $fallback         = $translated
             ? (($metaModels instanceof ITranslatedMetaModel) ? $metaModels->getMainLanguage()
             : $metaModels->getFallbackLanguage()) : null;
@@ -551,7 +551,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
 
         foreach ($availableLanguages as $newLanguage) {
             // Change language.
-            $GLOBALS['TL_LANGUAGE'] = str_replace('_', '-', $newLanguage);
+            $GLOBALS['TL_LANGUAGE'] = \str_replace('_', '-', $newLanguage);
             if ($metaModels instanceof ITranslatedMetaModel) {
                 $prevLanguage = $metaModels->selectLanguage($newLanguage);
             }
