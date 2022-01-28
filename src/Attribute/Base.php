@@ -160,7 +160,7 @@ abstract class Base implements IAttribute
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
-            $strLangCode = $GLOBALS['TL_LANGUAGE'];
+            $strLangCode = str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
         }
 
         // Not translated, exit.
@@ -358,8 +358,8 @@ abstract class Base implements IAttribute
         if (empty($GLOBALS['TL_LANG'][$this->getMetaModel()->getTableName()][$this->getColName()])) {
             $GLOBALS['TL_LANG'][$this->getMetaModel()->getTableName()][$this->getColName()] = array
             (
-                $this->getLangValue($this->get('name'), $GLOBALS['TL_LANGUAGE']),
-                $this->getLangValue($this->get('description'), $GLOBALS['TL_LANGUAGE']),
+                $this->getLangValue($this->get('name'), str_replace('-', '_', $GLOBALS['TL_LANGUAGE'])),
+                $this->getLangValue($this->get('description'), str_replace('-', '_', $GLOBALS['TL_LANGUAGE'])),
             );
         }
     }

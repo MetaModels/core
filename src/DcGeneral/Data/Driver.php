@@ -227,13 +227,14 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     protected function setLanguage($language = '')
     {
-        $previousLanguage = $GLOBALS['TL_LANGUAGE'];
+        $previousLanguage = str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
         if (!empty($language)) {
             $metaModel = $this->getMetaModel();
             if ($metaModel instanceof ITranslatedMetaModel) {
                 $metaModel->selectLanguage($language);
             }
 
+            $language = str_replace('_', '-', $language);
             if ($GLOBALS['TL_LANGUAGE'] !== $language) {
                 $GLOBALS['TL_LANGUAGE'] = $language;
             }

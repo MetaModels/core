@@ -142,7 +142,12 @@ class TranslatorPopulator
      */
     private function addInputScreenTranslations(StaticTranslator $translator, $inputScreen, $containerName)
     {
-        $currentLocale = $GLOBALS['TL_LANGUAGE'];
+        // Either 2 or 5 char long language code.
+        $currentLocale = str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
+        // Either 2 char language code or null.
+        $shortLocale = (false !== strpos($currentLocale, '_'))
+            ? explode('_', $currentLocale, 2)[0]
+            : null;
 
         foreach ($inputScreen['legends'] as $legendName => $legendInfo) {
             // If current language not defined, use the fallback language.
@@ -151,14 +156,23 @@ class TranslatorPopulator
                 $legendInfo['label']['default'],
                 $containerName
             );
+
+            $fallbackLocales = [$currentLocale];
+            if ($shortLocale && !in_array($currentLocale, array_keys($legendInfo['label']), true)) {
+                $fallbackLocales[] = $shortLocale;
+            }
             foreach ($legendInfo['label'] as $langCode => $label) {
+                // Default is already handled above, do not overwrite!
+                if ($langCode === 'default') {
+                    continue;
+                }
                 $translator->setValue(
                     $legendName . '_legend',
                     $label,
                     $containerName,
                     $langCode
                 );
-                if ($currentLocale === $langCode) {
+                if (in_array($langCode, $fallbackLocales)) {
                     $translator->setValue(
                         $legendName . '_legend',
                         $label,

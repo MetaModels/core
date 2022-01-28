@@ -360,7 +360,7 @@ class CommandBuilder
         ];
 
         foreach ($screen['label'] as $langCode => $label) {
-            if (!empty($label) && $langCode === $GLOBALS['TL_LANGUAGE']) {
+            if (!empty($label) && $langCode === str_replace('-', '_', $GLOBALS['TL_LANGUAGE'])) {
                 $caption = [
                     $screen['description'][$langCode],
                     $label

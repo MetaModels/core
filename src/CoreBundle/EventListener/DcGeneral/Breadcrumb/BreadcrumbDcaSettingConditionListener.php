@@ -99,7 +99,7 @@ class BreadcrumbDcaSettingConditionListener extends AbstractBreadcrumbListener
             }
         } else {
             $title = StringUtil::deserialize($setting->legendtitle, true);
-            return isset($title[$GLOBALS['TL_LANGUAGE']]) ? $title[$GLOBALS['TL_LANGUAGE']] : current($title);
+            return $title[str_replace('-', '_', $GLOBALS['TL_LANGUAGE'])] ?? current($title);
         }
 
         return 'unknown ' . $setting->dcatype;

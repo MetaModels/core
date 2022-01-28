@@ -249,8 +249,9 @@ class LoadDataContainer
             ''
         ];
 
+        $currentLanguage = str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
         foreach ($inputScreen['label'] as $langCode => $label) {
-            if ($label !== '' && $langCode === $GLOBALS['TL_LANGUAGE']) {
+            if ($label !== '' && $langCode === $currentLanguage) {
                 $caption = [
                     $label,
                     $inputScreen['description'][$langCode]
