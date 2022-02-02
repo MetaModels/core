@@ -27,6 +27,7 @@ use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidArgumentExceptio
 use ContaoCommunityAlliance\DcGeneral\Exception\DcGeneralInvalidPropertyValueException;
 use MetaModels\Exceptions\DifferentValuesException;
 use MetaModels\IItem;
+use MetaModels\ITranslatedMetaModel;
 
 /**
  * Data model class for DC_General <-> MetaModel adaption.
@@ -47,6 +48,8 @@ class Model implements ModelInterface
      * @var array
      */
     protected $arrMetaInformation = array();
+
+    private ?string $language;
 
     /**
      * Return the names of all properties stored within this model.
@@ -80,9 +83,10 @@ class Model implements ModelInterface
      *
      * @param IItem $objItem The item that shall be encapsulated.
      */
-    public function __construct($objItem)
+    public function __construct($objItem, ?string $language = null)
     {
         $this->objItem = $objItem;
+        $this->language = $language;
     }
 
     /**
@@ -165,25 +169,48 @@ class Model implements ModelInterface
             $varInternalValue = $varValue;
             // Test if it is an attribute, if so, let it transform the data for the widget.
             $objAttribute = $this->getItem()->getAttribute($strPropertyName);
+
             if ($objAttribute) {
+                $model            = $objAttribute->getMetaModel();
+                $originalLanguage = null;
+                if (null !== $this->language) {
+                    if ($model instanceof ITranslatedMetaModel) {
+                        $originalLanguage = $model->selectLanguage($this->language);
+                    } else if ($model->isTranslated()) {
+                        $originalLanguage       = $GLOBALS['TL_LANGUAGE'];
+                        $GLOBALS['TL_LANGUAGE'] = $this->language;
+                    }
+                }
+
                 $varInternalValue = $objAttribute->widgetToValue($varValue, $this->getItem()->get('id'));
             }
-            if ($varValue !== $this->getProperty($strPropertyName)) {
-                $this->setMeta(static::IS_CHANGED, true);
-                $this->getItem()->set($strPropertyName, $varInternalValue);
-                try {
-                    DifferentValuesException::compare($varValue, $this->getProperty($strPropertyName), false);
-                } catch (DifferentValuesException $exception) {
-                    throw new DcGeneralInvalidPropertyValueException(
-                        sprintf(
-                            'Property %s (%s) did not accept the value (%s).',
-                            $strPropertyName,
-                            $objAttribute->get('type'),
-                            $exception->getLongMessage()
-                        ),
-                        1,
-                        $exception
-                    );
+
+            try {
+                if ($varValue !== $this->getProperty($strPropertyName)) {
+                    $this->setMeta(static::IS_CHANGED, true);
+                    $this->getItem()->set($strPropertyName, $varInternalValue);
+                    try {
+                        DifferentValuesException::compare($varValue, $this->getProperty($strPropertyName), false);
+                    } catch (DifferentValuesException $exception) {
+                        throw new DcGeneralInvalidPropertyValueException(
+                            sprintf(
+                                'Property %s (%s) did not accept the value (%s).',
+                                $strPropertyName,
+                                $objAttribute->get('type'),
+                                $exception->getLongMessage()
+                            ),
+                            1,
+                            $exception
+                        );
+                    }
+                }
+            } finally {
+                if (isset($originalLanguage, $model)) {
+                    if ($model instanceof ITranslatedMetaModel) {
+                        $model->selectLanguage($originalLanguage);
+                    } else if ($model->isTranslated()) {
+                        $GLOBALS['TL_LANGUAGE'] = $originalLanguage;
+                    }
                 }
             }
         }

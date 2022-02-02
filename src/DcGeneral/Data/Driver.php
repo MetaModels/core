@@ -272,7 +272,7 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     public function fetch(ConfigInterface $objConfig)
     {
-        $backupLanguage = $this->setLanguage($this->getCurrentLanguage());
+        $backupLanguage = $this->setLanguage($currentLanguage = $this->getCurrentLanguage());
 
         if ($objConfig->getId() !== null) {
             $modelId = $objConfig->getId();
@@ -290,7 +290,7 @@ class Driver implements MultiLanguageDataProviderInterface
             return null;
         }
 
-        return new Model($objItem);
+        return new Model($objItem, $currentLanguage);
     }
 
     /**
@@ -340,7 +340,7 @@ class Driver implements MultiLanguageDataProviderInterface
         }
 
         $objItem = new Item($this->getMetaModel(), null, $this->dispatcher);
-        return new Model($objItem);
+        return new Model($objItem, $this->getCurrentLanguage());
     }
 
     /**
