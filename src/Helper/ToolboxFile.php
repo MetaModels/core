@@ -157,7 +157,7 @@ class ToolboxFile
     protected $pendingIds = array();
 
     /**
-     * Flag if download links shall be generated.
+     * Flag if download keys shall be generated.
      */
     private bool $withDownloadKeys = true;
 
