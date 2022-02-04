@@ -1031,7 +1031,7 @@ class ToolboxFile
         }
 
         // Prepare the picture for provide the image size.
-        if ($information['isPicture'] = (int) $this->resizeImages[2]) {
+        if ($file->isImage && ($information['isPicture'] = (int) $this->resizeImages[2])) {
             $projectDir = $this->rootDir;
             $staticUrl  = $this->filesContext->getStaticUrl();
             $picture    = $this->pictureFactory->create($projectDir . '/' . $file->path, $this->getResizeImages());
