@@ -157,6 +157,11 @@ class ToolboxFile
     protected $pendingIds = array();
 
     /**
+     * Flag if download keys shall be generated.
+     */
+    private bool $withDownloadKeys = true;
+
+    /**
      * Meta information for files.
      *
      * @var array
@@ -232,9 +237,6 @@ class ToolboxFile
         if (isset($GLOBALS['TL_CONFIG']) && isset($GLOBALS['TL_CONFIG']['allowedDownload'])) {
             $this->setAcceptedExtensions(StringUtil::trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']));
         }
-        if (isset($_SESSION) && !is_array($_SESSION['metaModels_downloads'])) {
-            $_SESSION['metaModels_downloads'] = [];
-        }
 
         if (null === ($this->rootDir)) {
             // @codingStandardsIgnoreStart
@@ -262,7 +264,7 @@ class ToolboxFile
                 'Not passing an "PictureFactoryInterface" is deprecated.',
                 E_USER_DEPRECATED
             );
-            
+
             // @codingStandardsIgnoreEnd
             $this->pictureFactory = System::getContainer()->get('contao.image.picture_factory');
         }
@@ -459,6 +461,11 @@ class ToolboxFile
         return $this;
     }
 
+    public function withDownloadKeys(bool $withDownloadKeys): void
+    {
+        $this->withDownloadKeys = $withDownloadKeys;
+    }
+
     /**
      * Walks the list of pending folders via ToolboxFile::addPath().
      *
@@ -472,7 +479,7 @@ class ToolboxFile
         $parameters = array();
         if (count($this->pendingIds)) {
             $conditions[] = $table . '.uuid IN(' .
-                implode(',', array_fill(0, count($this->pendingIds), 'UNHEX(?)')) . ')';
+                            implode(',', array_fill(0, count($this->pendingIds), 'UNHEX(?)')) . ')';
             $parameters   = array_map('bin2hex', $this->pendingIds);
 
             $this->pendingIds = array();
@@ -512,6 +519,15 @@ class ToolboxFile
      */
     protected function getDownloadLink($strFile)
     {
+        if (!$this->withDownloadKeys) {
+            return UrlBuilder::fromUrl(Environment::get('request'))
+                ->setQueryParameter('file', urlencode($strFile))
+                ->getUrl();
+        }
+        if (isset($_SESSION) && !is_array($_SESSION['metaModels_downloads'])) {
+            $_SESSION['metaModels_downloads'] = [];
+        }
+
         if (!isset($_SESSION['metaModels_downloads'][$strFile])) {
             $_SESSION['metaModels_downloads'][$strFile] = md5(uniqid());
         }
@@ -631,8 +647,8 @@ class ToolboxFile
         $countFiles = count($arrSource);
         foreach (array_keys($arrSource) as $k) {
             $arrSource[$k]['class'] = (($k == 0) ? ' first' : '') .
-                (($k == ($countFiles - 1)) ? ' last' : '') .
-                ((($k % 2) == 0) ? ' even' : ' odd');
+                                      (($k == ($countFiles - 1)) ? ' last' : '') .
+                                      ((($k % 2) == 0) ? ' even' : ' odd');
         }
     }
 
@@ -780,12 +796,14 @@ class ToolboxFile
             return;
         }
         if (($file = Input::get('file')) && ($key = Input::get('fileKey'))) {
-            // Check key and return 403 if mismatch.
-            if (!(array_key_exists($file, $_SESSION['metaModels_downloads'])
-                && $_SESSION['metaModels_downloads'][$file] === $key)) {
-                $objHandler = new $GLOBALS['TL_PTY']['error_403']();
-                /** @var PageError403 $objHandler */
-                $objHandler->generate($file);
+            if ($this->withDownloadKeys) {
+                // Check key and return 403 if mismatch
+                // keep both null-coalescing values different to account for missing values.
+                if (($_SESSION['metaModels_downloads'][$file] ?? null) !== (Input::get('fileKey') ?? false)) {
+                    $objHandler = new $GLOBALS['TL_PTY']['error_403']();
+                    /** @var PageError403 $objHandler */
+                    $objHandler->generate($file);
+                }
             }
             // Send the file to the browser if check succeeded.
             Controller::sendFileToBrowser($file);
