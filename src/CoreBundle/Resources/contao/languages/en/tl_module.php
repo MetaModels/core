@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -102,6 +102,9 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_filterparams_use_get'][1]        = '
 $GLOBALS['TL_LANG']['tl_module']['metamodel_jumpTo'][0]                      = 'Redirect page';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_jumpTo'][1]                      =
     'Please choose the page to which visitors will be redirected when clicking a link or submitting a form.';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_urlfragment'][0]             = 'URL fragment';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_fef_urlfragment'][1]             =
+    'Add URL fragment to jump to anchor or id.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_params'][0]                  = 'Attributes';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_fef_params'][1]                  =
     'Select the attributes used in this frontend filter.';

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,7 +20,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -409,14 +409,16 @@ class FrontendFilter
 
         // Return filter data.
         return [
-            'action'     => $this->filterUrlBuilder->generate($other),
-            'formid'     => $this->formId,
-            'filters'    => $renderedWidgets,
-            'submit'     => (
-                $filterOptions->isAutoSubmit()
-                    ? ''
-                    : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']
-                )
+            'action'  => $this->filterUrlBuilder->generate($other)
+                         . ($this->objFilterConfig->metamodel_fef_urlfragment
+                           ? '#' . $this->objFilterConfig->metamodel_fef_urlfragment
+                           : ''),
+            'formid'  => $this->formId,
+            'filters' => $renderedWidgets,
+            'submit'  => ($filterOptions->isAutoSubmit()
+                          ? ''
+                          : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']
+            )
         ];
     }
 
