@@ -208,7 +208,7 @@ class Model implements ModelInterface
                 if (isset($originalLanguage, $model)) {
                     if ($model instanceof ITranslatedMetaModel) {
                         $model->selectLanguage($originalLanguage);
-                    } else if ($model->isTranslated()) {
+                    } else {
                         $GLOBALS['TL_LANGUAGE'] = $originalLanguage;
                     }
                 }
