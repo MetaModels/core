@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -45,8 +45,9 @@ use Terminal42\ServiceAnnotationBundle\ServiceAnnotationInterface;
  * Available insert tags:
  *
  * -- Total Count --
- * mm::total::mod::[id]
- * mm::total::ce::[id]
+ * mm::total::mod::[ID]
+ * mm::total::ce::[ID]
+ * mm::total::mm::[MM Name|ID]::[ID filter]
  *
  * -- Item --
  * mm::item::[MM Name|ID]::[Item ID|ID,ID,ID]::[ID render setting](::[Output raw|text|html|..])
@@ -133,7 +134,7 @@ class InsertTagsListener implements ServiceAnnotationInterface
             switch ($elements[1]) {
                 // Count for mod or ce elements.
                 case 'total':
-                    return $this->getCount($elements[2], $elements[3]);
+                    return $this->getCount($elements[2], $elements[3], $elements[4]);
 
                 // Get value from an attribute.
                 case 'attribute':
@@ -269,7 +270,7 @@ class InsertTagsListener implements ServiceAnnotationInterface
     /**
      * Get from MM X the item with the id Y and parse the attribute Z and return it.
      *
-     * @param string|int $metaModelIdOrName ID or name of MetaModels.
+     * @param string|int $metaModelIdOrName ID or name of MetaModel.
      *
      * @param int        $intDataId         ID of the data row.
      *
@@ -307,35 +308,38 @@ class InsertTagsListener implements ServiceAnnotationInterface
     }
 
     /**
-     * Get count from a module or content element of a mm.
+     * Get count from a module or content element of a mm or from mm with filter direct.
      *
-     * @param string $strType Type of element like mod or ce.
-     *
-     * @param int    $intID   ID of content element or module.
+     * @param string     $type       Type of element like mod or ce.
+     * @param string|int $identifier ID of content element or module or ID or name of MetaModel.
+     * @param int        $filterId   ID of the filter.
      *
      * @return int Return the count value.
      */
-    protected function getCount($strType, $intID): int
+    protected function getCount($type, $identifier, $filterId): int
     {
-        switch ($strType) {
+        switch ($type) {
             // From module, can be a MetaModel list or filter.
             case 'mod':
-                $objMetaModelResult = $this->getMetaModelDataFrom('tl_module', $intID);
+                if (null !== ($result = $this->getMetaModelDataFrom('tl_module', $identifier))) {
+                    return $this->getCountFor($result->metamodel, $result->metamodel_filtering);
+                }
                 break;
 
             // From content element, can be a MetaModel list or filter.
             case 'ce':
-                $objMetaModelResult = $this->getMetaModelDataFrom('tl_content', $intID);
+                if (null !== ($result = $this->getMetaModelDataFrom('tl_content', $identifier))) {
+                    return $this->getCountFor($result->metamodel, $result->metamodel_filtering);
+                }
                 break;
+
+            // From MetaModel with filter.
+            case 'mm':
+                return $this->getCountFor($identifier, $filterId);
 
             // Unknown element type.
             default:
                 return 0;
-        }
-
-        // Check if we have data.
-        if (null !== $objMetaModelResult) {
-            return $this->getCountFor($objMetaModelResult->metamodel, $objMetaModelResult->metamodel_filtering);
         }
 
         return 0;
