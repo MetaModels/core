@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -45,7 +45,8 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodel_content'] =
 $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodels_frontendfilter'] =
     '{type_legend},type,headline;' .
     '{mm_filter_legend},metamodel,metamodel_filtering,metamodel_fef_template,metamodel_fef_params,' .
-    'metamodel_fef_autosubmit,metamodel_fef_hideclearfilter,metamodel_available_values,metamodel_jumpTo;' .
+    'metamodel_fef_autosubmit,metamodel_fef_hideclearfilter,metamodel_available_values,' .
+    'metamodel_jumpTo,metamodel_fef_urlfragment;' .
     '{protected_legend:hide},protected;' .
     '{expert_legend:hide},guests,cssID,space;' .
     '{invisible_legend:hide},invisible,start,stop';
@@ -136,7 +137,7 @@ array_insert(
             ],
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
-        'metamodel_maxpaginationlinks'               => [
+        'metamodel_maxpaginationlinks'  => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_maxpaginationlinks'],
             'exclude'   => true,
             'inputType' => 'text',
@@ -329,9 +330,19 @@ array_insert(
             'inputType' => 'pageTree',
             'eval'      => [
                 'fieldType' => 'radio',
-                'tl_class'  => 'clr'
+                'tl_class'  => 'clr w50'
             ],
             'sql'       => "int(10) unsigned NOT NULL default '0'"
+        ],
+        'metamodel_fef_urlfragment'          => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_urlfragment'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => [
+                'tl_class' => 'w50',
+                'rgxp'     => 'alias'
+            ],
+            'sql'       => "char(255) NOT NULL default ''"
         ],
         'metamodel_fef_params'          => [
             'label'            => &$GLOBALS['TL_LANG']['tl_content']['metamodel_fef_params'],
@@ -408,7 +419,7 @@ array_insert(
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'metamodel_parameters'    => [
+        'metamodel_parameters'          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_parameters'],
             'exclude'   => true,
             'inputType' => 'multiColumnWizard',
