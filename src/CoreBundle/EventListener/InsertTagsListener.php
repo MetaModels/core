@@ -47,11 +47,10 @@ use Terminal42\ServiceAnnotationBundle\ServiceAnnotationInterface;
  * -- Total Count --
  * mm::total::mod::[ID]
  * mm::total::ce::[ID]
- * mm::total::mm::[MM Name|ID]::[ID filter]
+ * mm::total::mm::[MM Name|ID](::[ID filter])
  *
  * -- Item --
  * mm::item::[MM Name|ID]::[Item ID|ID,ID,ID]::[ID render setting](::[Output raw|text|html|..])
- * mm::detail::[MM Name|ID]::[Item ID]::[ID render setting](::[Output raw|text|html|..])
  *
  * -- Attribute --
  * mm::attribute::[MM Name|ID]::[Item ID]::[Attribute Name|ID](::[Output raw|text|html|..])
@@ -312,11 +311,11 @@ class InsertTagsListener implements ServiceAnnotationInterface
      *
      * @param string     $type       Type of element like mod or ce.
      * @param string|int $identifier ID of content element or module or ID or name of MetaModel.
-     * @param int        $filterId   ID of the filter.
+     * @param int|null   $filterId   ID of the filter.
      *
      * @return int Return the count value.
      */
-    protected function getCount($type, $identifier, $filterId): int
+    protected function getCount(string $type, $identifier, int $filterId = null): int
     {
         switch ($type) {
             // From module, can be a MetaModel list or filter.
@@ -406,13 +405,12 @@ class InsertTagsListener implements ServiceAnnotationInterface
     /**
      * Get count form one MM for chosen filter.
      *
-     * @param int $intMetaModelId ID of the metamodels.
-     *
-     * @param int $intFilterId    ID of the filter.
+     * @param int      $intMetaModelId ID of the metamodels.
+     * @param int|null $intFilterId    ID of the filter.
      *
      * @return int The count result.
      */
-    protected function getCountFor($intMetaModelId, $intFilterId): int
+    protected function getCountFor(int $intMetaModelId, int $intFilterId = null): int
     {
         $metaModel = $this->loadMetaModel($intMetaModelId);
         if (null === $metaModel) {
