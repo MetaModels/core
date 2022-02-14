@@ -53,7 +53,7 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodels_frontendfilter'] =
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodels_frontendclearall'] =
     '{type_legend},type,headline;' .
-    '{mm_filter_legend},metamodel_fef_template;' .
+    '{mm_filter_legend},metamodel_fef_template,metamodel_fef_urlfragment;' .
     '{protected_legend:hide},protected;' .
     '{expert_legend:hide},guests,cssID,space;' .
     '{invisible_legend:hide},invisible,start,stop';
