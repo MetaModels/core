@@ -50,9 +50,9 @@ class FrontendFilterOptions
     /**
      * Value of URL fragment.
      *
-     * @var string|null
+     * @var string
      */
-    protected ?string $urlFragment = '';
+    protected string $urlFragment = '';
 
     /**
      * Check if the filter shall be automatically submitted.
@@ -123,11 +123,11 @@ class FrontendFilterOptions
     /**
      * Set URL fragment.
      *
-     * @param string|null $urlFragment string The URL fragment.
+     * @param string $urlFragment string The URL fragment.
      *
      * @return void
      */
-    public function setUrlFragment(?string $urlFragment): void
+    public function setUrlFragment(string $urlFragment): void
     {
         $this->urlFragment = $urlFragment;
     }
@@ -135,9 +135,9 @@ class FrontendFilterOptions
     /**
      * Get URL fragment.
      *
-     * @return string|null
+     * @return string
      */
-    public function getUrlFragment(): ?string
+    public function getUrlFragment(): string
     {
         return $this->urlFragment;
     }
