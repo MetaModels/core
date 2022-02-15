@@ -348,6 +348,7 @@ class FrontendFilter
         $objFrontendFilterOptions->setShowCountValues(
             $this->objFilterConfig->metamodel_available_values ? true : false
         );
+        $objFrontendFilterOptions->setUrlFragment((string) $this->objFilterConfig->metamodel_fef_urlfragment);
 
         return $objFrontendFilterOptions;
     }

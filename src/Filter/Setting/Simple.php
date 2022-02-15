@@ -55,7 +55,7 @@ abstract class Simple implements ISimple
      *
      * @var array
      */
-    private $data = array();
+    private $data = [];
 
     /**
      * The event dispatcher.
@@ -124,7 +124,7 @@ abstract class Simple implements ISimple
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated and will get removed.',
+            '"' . __METHOD__ . '" is deprecated and will get removed.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -142,7 +142,7 @@ abstract class Simple implements ISimple
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated and will get removed.',
+            '"' . __METHOD__ . '" is deprecated and will get removed.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -359,7 +359,7 @@ abstract class Simple implements ISimple
      */
     protected function prepareFrontendFilterOptions($arrWidget, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit)
     {
-        $arrOptions = array();
+        $arrOptions = [];
         if (!isset($arrWidget['options'])) {
             return $arrOptions;
         }
@@ -377,8 +377,7 @@ abstract class Simple implements ISimple
         if ($arrWidget['eval']['includeBlankOption']) {
             $blnActive = $this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, '');
 
-            $arrOptions[] = array
-            (
+            $arrOptions[] = [
                 'key'    => '',
                 'value'  => (
                 $arrWidget['eval']['blankOptionLabel']
@@ -387,22 +386,21 @@ abstract class Simple implements ISimple
                 ),
                 'href'   => $this->filterUrlBuilder->generate($filterUrl->clone()->setSlug($parameterName, '')),
                 'active' => $blnActive,
-                'class'  => 'doNotFilter'.($blnActive ? ' active' : ''),
-            );
+                'class'  => 'doNotFilter' . ($blnActive ? ' active' : ''),
+            ];
         }
 
         foreach ($arrWidget['options'] as $strKeyOption => $strOption) {
             $strValue  = $this->getFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption);
             $blnActive = $this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption);
 
-            $arrOptions[] = array
-            (
+            $arrOptions[] = [
                 'key'    => $strKeyOption,
                 'value'  => $strOption,
                 'href'   => $this->filterUrlBuilder->generate($filterUrl->clone()->setSlug($parameterName, $strValue)),
                 'active' => $blnActive,
                 'class'  => StringUtil::standardize($strKeyOption) . ($blnActive ? ' active' : '')
-            );
+            ];
         }
         return $arrOptions;
     }
@@ -449,7 +447,7 @@ abstract class Simple implements ISimple
 
         // No widget? no output! that's it.
         if (!$strClass) {
-            return array();
+            return [];
         }
 
         // Determine current value.
@@ -463,7 +461,7 @@ abstract class Simple implements ISimple
         $this->eventDispatcher->dispatch($event, ContaoEvents::WIDGET_GET_ATTRIBUTES_FROM_DCA);
 
         if ($objFrontendFilterOptions->isAutoSubmit() && TL_MODE == 'FE') {
-            $min = System::getContainer()->get('kernel')->isDebug() ? '' : '.min';
+            $min                                    = System::getContainer()->get('kernel')->isDebug() ? '' : '.min';
             $GLOBALS['TL_JAVASCRIPT']['metamodels'] = sprintf('bundles/metamodelscore/js/metamodels%s.js', $min);
         }
 
@@ -472,10 +470,9 @@ abstract class Simple implements ISimple
         $this->validateWidget($objWidget, $arrWidget['value']);
         $strField = $objWidget->generate();
 
-        return array
-        (
-            'cssID'      => $arrWidget['eval']['cssID'],
-            'class'      => sprintf(
+        return [
+            'cssID'       => $arrWidget['eval']['cssID'],
+            'class'       => sprintf(
                 'mm_%s %s%s%s%s',
                 $arrWidget['inputType'],
                 $arrWidget['eval']['urlparam'],
@@ -483,24 +480,25 @@ abstract class Simple implements ISimple
                 ($objFrontendFilterOptions->isAutoSubmit() ? ' submitonchange' : ''),
                 $arrWidget['eval']['class']
             ),
-            'label'      => $objWidget->generateLabel(),
-            'hide_label' => $arrWidget['eval']['hide_label'],
-            'formfield'  => $strField,
-            'raw'        => $arrWidget,
-            'urlparam'   => $arrWidget['eval']['urlparam'],
-            'options'    => $this->prepareFrontendFilterOptions(
+            'label'       => $objWidget->generateLabel(),
+            'hide_label'  => $arrWidget['eval']['hide_label'],
+            'formfield'   => $strField,
+            'raw'         => $arrWidget,
+            'urlparam'    => $arrWidget['eval']['urlparam'],
+            'options'     => $this->prepareFrontendFilterOptions(
                 $arrWidget,
                 $arrFilterUrl,
                 $arrJumpTo,
                 $objFrontendFilterOptions->isAutoSubmit()
             ),
-            'count'      => isset($arrWidget['count']) ? $arrWidget['count'] : null,
-            'showCount'  => $objFrontendFilterOptions->isShowCountValues(),
-            'autosubmit' => $objFrontendFilterOptions->isAutoSubmit(),
-            'urlvalue'   => array_key_exists('urlvalue', $arrWidget) ? $arrWidget['urlvalue'] : $arrWidget['value'],
-            'errors'     => $objWidget->hasErrors() ? $objWidget->getErrors() : [],
-            'used'       => $arrWidget['value'] !== null ? true : false
-        );
+            'count'       => isset($arrWidget['count']) ? $arrWidget['count'] : null,
+            'showCount'   => $objFrontendFilterOptions->isShowCountValues(),
+            'autosubmit'  => $objFrontendFilterOptions->isAutoSubmit(),
+            'urlvalue'    => array_key_exists('urlvalue', $arrWidget) ? $arrWidget['urlvalue'] : $arrWidget['value'],
+            'errors'      => $objWidget->hasErrors() ? $objWidget->getErrors() : [],
+            'used'        => $arrWidget['value'] !== null ? true : false,
+            'urlfragment' => $objFrontendFilterOptions->getUrlFragment()
+        ];
     }
 
     /**
@@ -508,7 +506,7 @@ abstract class Simple implements ISimple
      */
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -516,7 +514,7 @@ abstract class Simple implements ISimple
      */
     public function getParameters()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -524,7 +522,7 @@ abstract class Simple implements ISimple
      */
     public function getParameterDCA()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -532,7 +530,7 @@ abstract class Simple implements ISimple
      */
     public function getParameterFilterNames()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -544,7 +542,7 @@ abstract class Simple implements ISimple
         $arrJumpTo,
         FrontendFilterOptions $objFrontendFilterOptions
     ) {
-        return array();
+        return [];
     }
 
     /**
@@ -552,7 +550,7 @@ abstract class Simple implements ISimple
      */
     public function getReferencedAttributes()
     {
-        return array();
+        return [];
     }
 
     /**
