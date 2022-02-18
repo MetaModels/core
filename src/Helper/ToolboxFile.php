@@ -795,7 +795,7 @@ class ToolboxFile
         if ($this->getShowImages()) {
             return;
         }
-        if (($file = Input::get('file')) && ($key = Input::get('fileKey'))) {
+        if (($file = Input::get('file'))) {
             if ($this->withDownloadKeys) {
                 // Check key and return 403 if mismatch
                 // keep both null-coalescing values different to account for missing values.
