@@ -31,8 +31,8 @@
   },
   "require": {
     "php": "^7.4",
-    "contao-community-alliance/dc-general": "^2.2",
-    "contao-community-alliance/events-contao-bindings": "^4.9",
+    "contao-community-alliance/dc-general": "^2.3@dev",
+    "contao-community-alliance/events-contao-bindings": "^4.9@dev",
     "contao-community-alliance/meta-palettes": "~2.0",
     "contao-community-alliance/translator": "^2.2",
     "contao-community-alliance/url-builder": "~1.3",
