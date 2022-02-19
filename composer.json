@@ -30,7 +30,7 @@
     "source": "https://github.com/MetaModels/core"
   },
   "require": {
-    "php": "^7.4",
+    "php": "^7.4 || ^8.0",
     "contao-community-alliance/dc-general": "^2.3@dev",
     "contao-community-alliance/events-contao-bindings": "^4.10@dev",
     "contao-community-alliance/meta-palettes": "~2.0",
