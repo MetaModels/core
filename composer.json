@@ -46,8 +46,7 @@
     "symfony/event-dispatcher": "^5.4",
     "symfony/filesystem": "^5.4",
     "symfony/finder": "^5.4",
-    "terminal42/service-annotation-bundle": "^1.0",
-    "webmozart/path-util": "~2.3"
+    "terminal42/service-annotation-bundle": "^1.0"
   },
   "require-dev": {
     "contao/manager-plugin": "^2.8",
