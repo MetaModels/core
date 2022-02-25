@@ -37,7 +37,7 @@ use MetaModels\IFactory;
 use MetaModels\IMetaModel;
 use MetaModels\ViewCombination\ViewCombination;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * This class builds the commands.

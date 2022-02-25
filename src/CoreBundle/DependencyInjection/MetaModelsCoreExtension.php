@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,15 +16,15 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\DependencyInjection;
 
-use Doctrine\Common\Cache\ArrayCache;
 use MetaModels\CoreBundle\Migration\TableCollationMigration;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -127,8 +127,8 @@ class MetaModelsCoreExtension extends Extension implements PrependExtensionInter
     {
         // if cache disabled, swap it out with the dummy cache.
         if (!$config['enable_cache']) {
-            $cache = $container->getDefinition('metamodels.cache');
-            $cache->setClass(ArrayCache::class);
+            $cache = $container->getDefinition('metamodels.cache_internal');
+            $cache->setClass(ArrayAdapter::class);
             $cache->setArguments([]);
             $container->setParameter('metamodels.cache_dir', null);
             return;

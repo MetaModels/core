@@ -24,7 +24,7 @@ namespace MetaModels\Events;
 use Contao\System;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsServiceContainer;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * This event is triggered when a metamodels sub system is booted.

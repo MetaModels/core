@@ -22,7 +22,7 @@ namespace MetaModels\Events;
 
 use MetaModels\IFactory;
 use MetaModels\IMetaModel;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * This event is triggered for every metamodel when a factory wants to create an instance.

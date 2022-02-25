@@ -21,7 +21,7 @@
 namespace MetaModels\Events;
 
 use MetaModels\IFactory;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * This event is triggered to collect the names of all known MetaModels.

@@ -24,7 +24,7 @@ namespace MetaModels\CoreBundle\EventListener;
 use Contao\CoreBundle\Routing\ScopeMatcher;
 use MetaModels\BackendIntegration\Module;
 use MetaModels\ViewCombination\ViewCombination;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -84,14 +84,14 @@ class UserListener
     /**
      * Replaces the current session data with the stored session data.
      *
-     * @param GetResponseEvent $event The event.
+     * @param RequestEvent $event The event.
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      *
      * @return void
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         if (!$this->scopeMatcher->isBackendMasterRequest($event)) {
             return;

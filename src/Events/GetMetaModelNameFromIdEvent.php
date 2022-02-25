@@ -20,7 +20,7 @@
 
 namespace MetaModels\Events;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * This event is triggered when a MetaModel id must get translated to a MetaModel name.

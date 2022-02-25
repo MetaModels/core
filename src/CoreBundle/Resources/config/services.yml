@@ -16,9 +16,18 @@ services:
             - "%contao.web_dir%"
 
     metamodels.cache:
-        class: Doctrine\Common\Cache\FilesystemCache
+        class: Doctrine\Common\Cache\Psr6\DoctrineProvider
+        factory: ['Doctrine\Common\Cache\Psr6\DoctrineProvider', 'wrap']
         arguments:
-            - "%metamodels.cache_dir%"
+            - "@metamodels.cache_internal"
+        public: true
+
+    metamodels.cache_internal:
+        class: Symfony\Component\Cache\Adapter\FilesystemAdapter
+        arguments:
+            $namespace: ''
+            $defaultLifetime: 0
+            $directory: "%metamodels.cache_dir%"
         public: true
 
     metamodels.cache.purger:
