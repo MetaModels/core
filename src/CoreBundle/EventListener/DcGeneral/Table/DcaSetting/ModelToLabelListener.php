@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\IAttributeFactory;
 use MetaModels\CoreBundle\Assets\IconBuilder;
 use MetaModels\IFactory;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * This handles the rendering of models to labels.
