@@ -55,6 +55,9 @@
     "doctrine/doctrine-bundle": "^1.8",
     "phpcq/all-tasks": "^1.3"
   },
+  "conflict": {
+    "contao/manager-bundle": "4.9.27"
+  },
   "autoload": {
     "psr-4": {
       "MetaModels\\": "src/"
