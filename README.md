@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/MetaModels/core.png)](https://travis-ci.org/MetaModels/core)
+[![Build Status](https://github.com/MetaModels/core/actions/workflows/diagnostics.yml/badge.svg)](https://github.com/MetaModels/core/actions)
 [![Latest Version tagged](http://img.shields.io/github/tag/MetaModels/core.svg)](https://github.com/MetaModels/core/tags)
 [![Latest Version on Packagist](http://img.shields.io/packagist/v/MetaModels/core.svg)](https://packagist.org/packages/MetaModels/core)
 [![Installations via composer per month](http://img.shields.io/packagist/dm/MetaModels/core.svg)](https://packagist.org/packages/MetaModels/core)
