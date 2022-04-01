@@ -185,6 +185,9 @@ class FilterUrlBuilder
         }
 
         $request = $this->requestStack->getMasterRequest();
+        if (null === $request) {
+            return;
+        }
 
         if (isset($options['preserveGet'])) {
             foreach ($request->query->all() as $name => $value) {
