@@ -95,6 +95,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['apply_sorting'][1]           
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cssID'][0]                           = 'CSS ID/class';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cssID'][1]                           =
     'Here you can set an ID and one or more classes.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['placeholder'][0]                     = 'Placeholder';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['placeholder'][1]                     =
+    'Show this text as long as the field is empty.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['sorting_directions']['natsort_asc']  = 'Natural sorting (ASC)';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['sorting_directions']['natsort_desc'] = 'Natural sorting (DESC)';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid'][0]                       = 'Default';
