@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Andrea Fischer <anfischer@kaffee-partner.de>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -51,11 +51,9 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      * Note that you should not use this directly but use the factory classes to instantiate attributes.
      *
      * @param IMetaModel $objMetaModel The MetaModel instance this attribute belongs to.
-     *
      * @param array      $arrData      The information array, for attribute information, refer to documentation of
      *                                 table tl_metamodel_attribute and documentation of the certain attribute classes
      *                                 for information what values are understood.
-     *
      * @param Connection $connection   Database connection.
      */
     public function __construct(IMetaModel $objMetaModel, $arrData = [], Connection $connection = null)
@@ -86,9 +84,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      * Build a where clause for the given id(s) and language code.
      *
      * @param QueryBuilder         $queryBuilder The query builder for the query  being build.
-     *
      * @param string[]|string|null $mixIds       One, none or many ids to use.
-     *
      * @param string|string[]      $mixLangCode  The language code/s to use, optional.
      *
      * @return void
@@ -133,9 +129,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      * Retrieve the values to be used in the INSERT or UPDATE SQL for the given parameters.
      *
      * @param array  $arrValue    The native value of the attribute.
-     *
      * @param int    $intId       The id of the item to be saved.
-     *
      * @param string $strLangCode The language code of the language the value is in.
      *
      * @return array
@@ -349,15 +343,15 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     public function getFilterOptions($idList, $usedOnly, &$arrCount = null)
     {
         $queryBuilder = $this->connection->createQueryBuilder()
-            ->select('*')
-            ->from($this->getValueTable());
+            ->select('t.*')
+            ->from($this->getValueTable(), 't');
 
         $this->buildWhere($queryBuilder, $idList, $this->getActiveLanguage());
 
         $statement     = $queryBuilder->execute();
         $arrOptionizer = $this->getOptionizer();
 
-        $arrReturn = array();
+        $arrReturn = [];
         while ($objValue = $statement->fetch(\PDO::FETCH_OBJ)) {
             $arrReturn[$objValue->{$arrOptionizer['key']}] = $objValue->{$arrOptionizer['value']};
         }
@@ -435,13 +429,13 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     public function getTranslatedDataFor($arrIds, $strLangCode)
     {
         $queryBuilder = $this->connection->createQueryBuilder()
-            ->select('*')
-            ->from($this->getValueTable());
+            ->select('t.*')
+            ->from($this->getValueTable(), 't');
 
         $this->buildWhere($queryBuilder, $arrIds, $strLangCode);
 
         $statement = $queryBuilder->execute();
-        $arrReturn = array();
+        $arrReturn = [];
         while ($value = $statement->fetch(\PDO::FETCH_ASSOC)) {
             /** @noinspection PhpUndefinedFieldInspection */
             $arrReturn[$value['item_id']] = $value;

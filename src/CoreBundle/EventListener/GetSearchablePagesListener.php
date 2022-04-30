@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -125,11 +125,8 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      * Start point for the hook getSearchablePages.
      *
      * @param array       $pages       List with all pages.
-     *
      * @param int|null    $rootPage    ID of the root page.
-     *
      * @param bool|null   $fromSiteMap True when called from sitemap generator, null otherwise.
-     *
      * @param string|null $language    The current language.
      *
      * @return array
@@ -175,9 +172,13 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
     {
         if (!count($this->configs)) {
             // Init the config from database.
-            $statement = $this->connection->query('SELECT * FROM tl_metamodel_searchable_pages');
+            $statement = $this->connection
+                ->createQueryBuilder()
+                ->select('t.*')
+                ->from('tl_metamodel_searchable_pages', 't')
+                ->execute();
 
-            $this->configs = $statement->fetchAll(FetchMode::ASSOCIATIVE);
+            $this->configs = $statement->fetch(FetchMode::ASSOCIATIVE);
         }
 
         return $this->configs;
@@ -228,7 +229,6 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      * Get the view for a MetaModels.
      *
      * @param string|int $identifier ID/Name of the MetaModels.
-     *
      * @param int        $view       ID of the view.
      *
      * @return IRenderSettingCollection
@@ -250,7 +250,6 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      * Use the current language as fallback.
      *
      * @param string     $singleLanguage The language with the overwrite.
-     *
      * @param IMetaModel $metaModels     The MetaModels for the check.
      *
      * @return string[] A list with all languages or null.
@@ -275,11 +274,8 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      * Get the list of jumpTos based on the items.
      *
      * @param IMetaModel               $metaModels The MetaModels to be used.
-     *
      * @param IFilter                  $filter     The filter to be used.
-     *
      * @param IRenderSettingCollection $view       The view to be used.
-     *
      * @param string|null              $rootPage   The root page id or null if there is no root page.
      *
      * @return array A list of urls for the jumpTos
@@ -349,9 +345,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      * Get the base URL.
      *
      * @param string[]    $pageDetails The page details.
-     *
      * @param null|string $path        Additional path settings.
-     *
      * @param bool        $ignoreSSL   If active the system will ignore the 'rootUseSSL' flag.
      *
      * @return UrlBuilder
@@ -373,7 +367,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
             $url->setScheme('http');
         }
 
-        // Make a array for the parts.
+        // Make an array for the parts.
         $fullPath   = [];
         $fullPath[] = TL_PATH;
 
@@ -433,9 +427,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      * Set parameters.
      *
      * @param string   $filterId The id of the filter.
-     *
      * @param string[] $presets  The parameter preset values to use.
-     *
      * @param string[] $values   The dynamic parameter values that may be used.
      *
      * @return array
@@ -475,11 +467,8 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      * Start point for the hook getSearchablePages.
      *
      * @param array       $pages       List with all pages.
-     *
      * @param int|null    $rootPage    ID of the root page.
-     *
      * @param bool|null   $fromSiteMap True when called from sitemap generator, null otherwise.
-     *
      * @param string|null $language    The current language.
      *
      * @return array
@@ -518,9 +507,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      * Get a MetaModels, a filter and a renderSetting. Get all items based on the filter and build the jumpTo urls.
      *
      * @param array       $config   ID of the MetaModels.
-     *
      * @param string|null $rootPage The root page id or null if there is no root page.
-     *
      * @param string|null $language The current language.
      *
      * @return void

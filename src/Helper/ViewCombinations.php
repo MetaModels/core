@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -48,7 +48,7 @@ abstract class ViewCombinations
      *
      * @var array
      */
-    protected $information = array();
+    protected $information = [];
 
     /**
      * All MetaModel combinations for lookup.
@@ -57,21 +57,21 @@ abstract class ViewCombinations
      *
      * @var string[]
      */
-    protected $tableMap = array();
+    protected $tableMap = [];
 
     /**
      * MetaModels by their parent table.
      *
      * @var array
      */
-    protected $parentMap = array();
+    protected $parentMap = [];
 
     /**
      * MetaModels to their parent table.
      *
      * @var array
      */
-    protected $childMap = array();
+    protected $childMap = [];
 
     /**
      * The service container.
@@ -98,9 +98,7 @@ abstract class ViewCombinations
      * Create a new instance.
      *
      * @param IMetaModelsServiceContainer $container  The service container.
-     *
      * @param User                        $user       The current user.
-     *
      * @param Connection|null             $connection Database connection.
      */
     public function __construct(IMetaModelsServiceContainer $container, User $user, Connection $connection = null)
@@ -272,7 +270,6 @@ abstract class ViewCombinations
      * Set a table mapping.
      *
      * @param string $modelId   The id of the MetaModel.
-     *
      * @param string $tableName The name of the MetaModel.
      *
      * @return void
@@ -340,11 +337,11 @@ abstract class ViewCombinations
         }
 
         $statement = $this->connection->createQueryBuilder()
-            ->select('*')
-            ->from('tl_metamodel_dca_combine')
-            ->where(strtolower(TL_MODE) . '_group IN (:groups)')
-            ->orderBy('pid')
-            ->addOrderBy('sorting', 'ASC')
+            ->select('t.*')
+            ->from('tl_metamodel_dca_combine', 't')
+            ->where('t.' . strtolower(TL_MODE) . '_group IN (:groups)')
+            ->orderBy('t.pid')
+            ->addOrderBy('t.sorting', 'ASC')
             ->setParameter('groups', $groups)
             ->execute();
 
@@ -414,12 +411,13 @@ abstract class ViewCombinations
             return;
         }
 
-        $statement = $this->connection->query(
-            sprintf(
-                'SELECT * FROM tl_metamodel_dca WHERE id IN (%s)',
-                implode(',', $inputScreenIds)
-            )
-        );
+        $statement = $this->connection
+            ->createQueryBuilder()
+            ->select('t.*')
+            ->from('tl_metamodel_dca', 't')
+            ->where('t.id IN (:ids)')
+            ->setParameter('id', $inputScreenIds, Connection::PARAM_STR_ARRAY)
+            ->execute();
 
         while ($inputScreens = $statement->fetch(\PDO::FETCH_OBJ)) {
             /** @noinspection PhpUndefinedFieldInspection */
@@ -429,33 +427,36 @@ abstract class ViewCombinations
             $metaModelName = $this->tableNameFromId($metaModelId);
 
             $propertyRows = $this->connection
-                ->prepare('SELECT * FROM tl_metamodel_dcasetting WHERE pid=? AND published=1 ORDER BY sorting ASC');
+                ->createQueryBuilder()
+                ->select('t.*')
+                ->from('tl_metamodel_dcasetting', 't')
+                ->where('t.pid=:id')
+                ->andWhere('t.published=1')
+                ->setParameter('id', $screenId)
+                ->orderBy('t.sorting', 'ASC')
+                ->execute();
 
-            $propertyRows->bindValue(1, $screenId);
-            $propertyRows->execute();
+            $conditions = $this->connection
+                ->createQueryBuilder()
+                ->select('cond.*, setting.attr_id AS setting_attr_id')
+                ->from('tl_metamodel_dcasetting_condition', 'cond')
+                ->leftJoin('cond', 'tl_metamodel_dcasetti', 'setting', 'cond.settingId=setting.id')
+                ->leftJoin('setting', 'tl_metamodel_dca', 'dca', 'setting.pid=dca.id')
+                ->where('dca.id=:id')
+                ->andWhere('setting.published=1')
+                ->andWhere('cond.enabled=1')
+                ->setParameter('id', $screenId)
+                ->orderBy('cond.sorting', 'ASC')
+                ->execute();
 
-            $conditions = $this->connection->prepare('
-                    SELECT cond.*, setting.attr_id AS setting_attr_id
-                    FROM tl_metamodel_dcasetting_condition AS cond
-                    LEFT JOIN tl_metamodel_dcasetting AS setting
-                    ON (cond.settingId=setting.id)
-                    LEFT JOIN tl_metamodel_dca AS dca
-                    ON (setting.pid=dca.id)
-                    WHERE dca.id=? AND setting.published=1 AND cond.enabled=1
-                    ORDER BY sorting ASC
-                ');
-
-            $conditions->bindValue(1, $screenId);
-            $conditions->execute();
-
-            $groupSort = $this->connection->prepare('
-                    SELECT *
-                    FROM tl_metamodel_dca_sortgroup
-                    WHERE pid=?
-                    ORDER BY sorting ASC
-                ');
-            $groupSort->bindValue(1, $screenId);
-            $groupSort->execute();
+            $groupSort = $this->connection
+                ->createQueryBuilder()
+                ->select('t.*')
+                ->from('tl_metamodel_dca_sortgroup', 't')
+                ->where('t.pid=:pid')
+                ->setParameter('pid', $screenId)
+                ->orderBy('t.sorting', 'ASC')
+                ->execute();
 
             $inputScreen = array(
                 'row'        => $inputScreens->row(),
@@ -530,9 +531,7 @@ abstract class ViewCombinations
     {
         $metaModelName = $this->getMetaModelName($metaModel);
 
-        return isset($this->information[$metaModelName][self::COMBINATION]['view_id'])
-            ? $this->information[$metaModelName][self::COMBINATION]['view_id']
-            : null;
+        return $this->information[$metaModelName][self::COMBINATION]['view_id'] ?? null;
     }
 
     /**
@@ -567,7 +566,7 @@ abstract class ViewCombinations
      */
     public function getStandaloneInputScreens()
     {
-        $result = array();
+        $result = [];
         foreach (array_keys($this->information) as $modelName) {
             if ($this->isInputScreenStandalone($modelName)) {
                 $result[] = $this->getInputScreenDetails($modelName);
@@ -588,7 +587,7 @@ abstract class ViewCombinations
     {
         $metaModelName = $this->getMetaModelName($metaModel);
 
-        return isset($this->childMap[$metaModelName]) ? $this->childMap[$metaModelName] : null;
+        return $this->childMap[$metaModelName] ?? null;
     }
 
     /**
@@ -604,7 +603,7 @@ abstract class ViewCombinations
 
         if ($parent) {
             if (!isset($this->parentMap[$parent])) {
-                return array();
+                return [];
             }
             foreach ($this->parentMap[$parent] as $child) {
                 $result[] = (isset($this->tableMap[$child])) ? $this->tableMap[$child] : $child;

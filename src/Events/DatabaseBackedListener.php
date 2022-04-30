@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,8 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -151,8 +152,8 @@ class DatabaseBackedListener
                 ->database
                 ->createQueryBuilder()
                 ->select('*')
-                ->from('tl_metamodel')
-                ->where('id=:id')
+                ->from('tl_metamodel', 't')
+                ->where('t.id=:id')
                 ->setParameter('id', $metaModelId)
                 ->setMaxResults(1)
                 ->execute()
@@ -259,8 +260,8 @@ class DatabaseBackedListener
             ->database
             ->createQueryBuilder()
             ->select('*')
-            ->from('tl_metamodel')
-            ->where('tableName=:tableName')
+            ->from('tl_metamodel', 't')
+            ->where('t.tableName=:tableName')
             ->setParameter('tableName', $metaModelName)
             ->setMaxResults(1)
             ->execute()
@@ -292,8 +293,8 @@ class DatabaseBackedListener
             ->database
             ->createQueryBuilder()
             ->select('*')
-            ->from('tl_metamodel')
-            ->orderBy('sorting')
+            ->from('tl_metamodel', 't')
+            ->orderBy('t.sorting')
             ->execute()
             ->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -320,10 +321,10 @@ class DatabaseBackedListener
                 ->database
                 ->createQueryBuilder()
                 ->select('*')
-                ->from('tl_metamodel_attribute')
-                ->where('pid=:pid')
+                ->from('tl_metamodel_attribute', 't')
+                ->where('t.pid=:pid')
                 ->setParameter('pid', $event->getMetaModel()->get('id'))
-                ->orderBy('sorting')
+                ->orderBy('t.sorting')
                 ->execute()
                 ->fetchAll(\PDO::FETCH_ASSOC);
 

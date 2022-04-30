@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,8 @@
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -120,9 +121,14 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
     public function getTypeOfAttribute($value)
     {
         if (!isset(self::$attributeTypes[$value])) {
-            $statement = $this->connection->prepare('SELECT type FROM tl_metamodel_attribute WHERE id=? LIMIT 0,1');
-            $statement->bindValue(1, $value);
-            $statement->execute();
+            $statement = $this->connection
+                ->createQueryBuilder()
+                ->select('t.type')
+                ->from('tl_metamodel_attribute', 't')
+                ->where('t.id=:id')
+                ->setParameter('id', $value)
+                ->setMaxResults(1)
+                ->execute();
 
             self::$attributeTypes[$value] = $statement->fetch(\PDO::FETCH_OBJ)->type;
         }
