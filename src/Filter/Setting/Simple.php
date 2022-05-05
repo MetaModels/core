@@ -422,12 +422,9 @@ abstract class Simple implements ISimple
      *                fallback to the value of the url param in the filter url.
      *
      * @param array                 $arrWidget                The widget information to use for generating.
-     *
      * @param array                 $arrFilterUrl             The filter url parameters to use.
-     *
      * @param array                 $arrJumpTo                The jumpTo page to use for URL generating - if empty, the
      *                                                        current frontend page will get used.
-     *
      * @param FrontendFilterOptions $objFrontendFilterOptions The options to use.
      *
      * @return array
@@ -438,11 +435,11 @@ abstract class Simple implements ISimple
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function prepareFrontendFilterWidget(
-        $arrWidget,
-        $arrFilterUrl,
-        $arrJumpTo,
+        array $arrWidget,
+        array $arrFilterUrl,
+        array $arrJumpTo,
         FrontendFilterOptions $objFrontendFilterOptions
-    ) {
+    ): array {
         $strClass = $GLOBALS['TL_FFL'][$arrWidget['inputType']];
 
         // No widget? no output! that's it.
@@ -481,6 +478,7 @@ abstract class Simple implements ISimple
                 $arrWidget['eval']['class']
             ),
             'label'       => $objWidget->generateLabel(),
+            'legend'      => $this->generateLegend($arrWidget),
             'hide_label'  => $arrWidget['eval']['hide_label'],
             'formfield'   => $strField,
             'raw'         => $arrWidget,
@@ -574,5 +572,17 @@ abstract class Simple implements ISimple
             return $value;
         });
         $widget->validate();
+    }
+
+    /**
+     * Generate legend.
+     *
+     * @param $arrWidget
+     *
+     * @return string
+     */
+    protected function generateLegend($arrWidget): string
+    {
+        return '<legend>' . $arrWidget['label'][0] . '</legend>';
     }
 }

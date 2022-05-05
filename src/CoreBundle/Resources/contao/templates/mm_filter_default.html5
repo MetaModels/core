@@ -13,11 +13,6 @@
 
         <?php foreach ((is_array($this->filters) ? $this->filters : []) as $filter): ?>
             <div class="widget <?= $filter['class'] ?>"<?= $filter['cssID'] ?>>
-                <?php
-                if (!$filter['hide_label']) {
-                    echo $filter['label'];
-                }
-                ?>
                 <?= $filter['value'] ?>
             </div>
         <?php endforeach; ?>

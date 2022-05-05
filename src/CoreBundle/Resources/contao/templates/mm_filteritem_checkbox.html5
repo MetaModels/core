@@ -1,4 +1,9 @@
 <?php $this->extend('mm_filteritem_default'); ?>
+<?php $this->block('formlabel'); ?>
+<?php if (!$this->hide_label): ?>
+    <?= $this->legend ?>
+<?php endif; ?>
+<?php $this->endblock(); ?>
 <?php $this->block('formfield'); ?>
 <?php if (is_array($this->options) && count($this->options) > 0): ?>
     <fieldset id="ctrl_<?= $this->urlparam ?>" class="checkbox_container">
