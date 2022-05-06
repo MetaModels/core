@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -120,6 +121,9 @@ class ModelToLabelListener extends AbstractListener
         $model     = $event->getModel();
         $metaModel = $this->getMetaModelFromModel($model);
         $attribute = $metaModel->getAttributeById($model->getProperty('attr_id'));
+        $variant   = ($metaModel->hasVariants() && $attribute->get('isvariant'))
+            ? ', variant'
+            : '';
 
         if ($attribute) {
             $type     = $attribute->get('type');
@@ -141,7 +145,7 @@ class ModelToLabelListener extends AbstractListener
         }
 
         $event
-            ->setLabel('<div class="field_heading cte_type %s"><strong>%s</strong> <em>[%s]</em></div>
+            ->setLabel('<div class="field_heading cte_type %s"><strong>%s</strong> <em>[%s%s]</em></div>
                 <div class="field_type block">
                     %s<strong>%s</strong><span class="mandatory">%s</span> <span class="tl_class">%s</span>
                 </div>')
@@ -149,6 +153,7 @@ class ModelToLabelListener extends AbstractListener
                 $model->getProperty('published') ? 'published' : 'unpublished',
                 $colName,
                 $type,
+                $variant,
                 $image,
                 $name,
                 // unique attributes are automatically mandatory
