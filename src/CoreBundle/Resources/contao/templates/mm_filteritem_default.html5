@@ -6,6 +6,11 @@
 <?php endif; ?>
 <?php $this->endblock(); ?>
 
+<?php $this->block('formlabel'); ?>
+<?php if (!$this->hide_label): ?>
+    <?= $this->label ?>
+<?php endif; ?>
+<?php $this->endblock(); ?>
 <?php $this->block('formfield'); ?>
 <?= $this->formfield ?>
 <?php $this->endblock(); ?>
