@@ -219,11 +219,8 @@ class InsertTagsListener implements ServiceAnnotationInterface
      * Get an item.
      *
      * @param string|int $metaModelIdOrName ID or name of MetaModels.
-     *
      * @param string|int $mixDataId         ID of the data row.
-     *
      * @param int        $viewId            ID of render setting.
-     *
      * @param string     $strOutput         Name of output. Default:null (fallback to html5)|text|html5|...
      *
      * @return boolean|string Return false when nothing was found or return the value.
@@ -270,11 +267,8 @@ class InsertTagsListener implements ServiceAnnotationInterface
      * Get from MM X the item with the id Y and parse the attribute Z and return it.
      *
      * @param string|int $metaModelIdOrName ID or name of MetaModel.
-     *
      * @param int        $intDataId         ID of the data row.
-     *
      * @param string     $strAttributeName  Name of the attribute.
-     *
      * @param string     $strOutput         Name of output. Default:raw|text|html5|...
      *
      * @return boolean|string Return false when nothing was found or return the value.
@@ -373,7 +367,6 @@ class InsertTagsListener implements ServiceAnnotationInterface
      * Get the MetaModel id and the filter id.
      *
      * @param string $strTable Name of table.
-     *
      * @param int    $intID    ID of the filter.
      *
      * @return null|\stdClass Returns null when nothing was found or a \Database\Result with the chosen information.
@@ -389,10 +382,12 @@ class InsertTagsListener implements ServiceAnnotationInterface
 
         // Get all information form table or return null if we have no data.
         $statement = $this->connection
-            ->prepare('SELECT metamodel, metamodel_filtering FROM ' . $strTable . ' WHERE id=? LIMIT 0,1');
-
-        $statement->bindValue(1, $intID);
-        $statement->execute();
+            ->createQueryBuilder()
+            ->select('t.metamodel, t.metamodel_filtering')
+            ->from($strTable, 't')
+            ->where('t.id=:id')
+            ->setParameter('id', $intID)
+            ->execute();
 
         // Check if we have some data.
         if ($statement->rowCount() < 1) {
@@ -446,10 +441,14 @@ class InsertTagsListener implements ServiceAnnotationInterface
     {
         // Check publish state of an item.
         $statement = $this->connection
-            ->prepare('SELECT colname FROM tl_metamodel_attribute WHERE pid=? AND check_publish=1 LIMIT 0,1');
-
-        $statement->bindValue(1, $metaModel->get('id'));
-        $statement->execute();
+            ->createQueryBuilder()
+            ->select('t.colname')
+            ->from('tl_metamodel_attribute', 't')
+            ->where('t.pid=:pid')
+            ->andWhere('t.check_publish=1')
+            ->setParameter('pid', $metaModel->get('id'))
+            ->setMaxResults(1)
+            ->execute();
 
         if ($statement->rowCount() > 0) {
             $checkPublish = $statement->fetch(FetchMode::STANDARD_OBJECT);

@@ -272,7 +272,6 @@ class FrontendFilter
      * Parse a single filter widget.
      *
      * @param array                 $widget        The widget configuration.
-     *
      * @param FrontendFilterOptions $filterOptions The filter options to apply.
      *
      * @return array
@@ -295,9 +294,7 @@ class FrontendFilter
      * Check if we want to redirect to another url.
      *
      * @param array $widgets         The widgets.
-     *
      * @param array $wantedParameter The wanted parameters.
-     *
      * @param array $allParameter    The current parameters.
      *
      * @return void
@@ -457,9 +454,7 @@ class FrontendFilter
      * Render a content element.
      *
      * @param string $content   The html content in which to replace.
-     *
      * @param string $replace   The string within the html to be replaced.
-     *
      * @param int    $contentId The id of the content element to be inserted for the replace string.
      *
      * @return string
@@ -473,9 +468,7 @@ class FrontendFilter
      * Render a module.
      *
      * @param string $content  The html content in which to replace.
-     *
      * @param string $replace  The string within the html to be replaced.
-     *
      * @param int    $moduleId The id of the module to be inserted for the replace string.
      *
      * @return string
@@ -489,11 +482,8 @@ class FrontendFilter
      * Render a module or content element.
      *
      * @param string $table     The name of the table.
-     *
      * @param string $content   The html content in which to replace.
-     *
      * @param string $replace   The string within the html to be replaced.
-     *
      * @param int    $elementId The id of the module/ce-element to be inserted for the replace string.
      *
      * @return string
@@ -533,7 +523,6 @@ class FrontendFilter
      * This is called via parseTemplate HOOK to inject the "clear all" filter into fe_page.
      *
      * @param string $strContent  The whole page content.
-     *
      * @param string $strTemplate The name of the template being parsed.
      *
      * @return string

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -194,7 +195,6 @@ class FilterSettingFactory implements IFilterSettingFactory
      * Fetch all child rules for the given setting.
      *
      * @param IWithChildren $parentSetting  The information from which to initialize the setting from.
-     *
      * @param ICollection   $filterSettings The filter setting instance.
      *
      * @return void
@@ -203,11 +203,11 @@ class FilterSettingFactory implements IFilterSettingFactory
     {
         $childInformation = $this->database
             ->createQueryBuilder()
-            ->select('*')
-            ->from('tl_metamodel_filtersetting')
-            ->where('pid=:pid')
-            ->andWhere('enabled=1')
-            ->orderBy('sorting', 'ASC')
+            ->select('t.*')
+            ->from('tl_metamodel_filtersetting', 't')
+            ->where('t.pid=:pid')
+            ->andWhere('t.enabled=1')
+            ->orderBy('t.sorting', 'ASC')
             ->setParameter('pid', $parentSetting->get('id'))
             ->execute();
 
@@ -231,11 +231,11 @@ class FilterSettingFactory implements IFilterSettingFactory
         $information = $this->database
             ->createQueryBuilder()
             ->select('*')
-            ->from('tl_metamodel_filtersetting')
-            ->where('fid=:fid')
-            ->andWhere('pid=0')
-            ->andWhere('enabled=1')
-            ->orderBy('sorting', 'ASC')
+            ->from('tl_metamodel_filtersetting', 't')
+            ->where('t.fid=:fid')
+            ->andWhere('t.pid=0')
+            ->andWhere('t.enabled=1')
+            ->orderBy('t.sorting', 'ASC')
             ->setParameter('fid', $filterSettings->get('id'))
             ->execute();
 
@@ -256,9 +256,9 @@ class FilterSettingFactory implements IFilterSettingFactory
     {
         $query = $this->database
             ->createQueryBuilder()
-            ->select('*')
-            ->from('tl_metamodel_filter')
-            ->where('id=:id')
+            ->select('t.*')
+            ->from('tl_metamodel_filter', 't')
+            ->where('t.id=:id')
             ->setMaxResults(1)
             ->setParameter('id', $settingId)
             ->execute();
