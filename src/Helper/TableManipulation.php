@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,8 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -66,7 +67,7 @@ class TableManipulation
      * Third parameter is the new name of the column.
      * Fourth parameter is the new type of the column.
      */
-    const STATEMENT_RENAME_COLUMN = 'ALTER TABLE %s CHANGE COLUMN %s %s %s';
+    const STATEMENT_RENAME_COLUMN = 'ALTER TABLE `%s` CHANGE COLUMN %s %s %s';
 
     /**
      * SQL statement template to add a column to a table.
@@ -74,13 +75,13 @@ class TableManipulation
      * Second parameter is the column name.
      * Third parameter is the type of the new column.
      */
-    const STATEMENT_CREATE_COLUMN = 'ALTER TABLE %s ADD %s %s';
+    const STATEMENT_CREATE_COLUMN = 'ALTER TABLE `%s` ADD %s %s';
 
     /**
      * SQL statement template to delete a column from a table.
      * First parameter is the name of the column.
      */
-    const STATEMENT_DROP_COLUMN = 'ALTER TABLE %s DROP COLUMN %s';
+    const STATEMENT_DROP_COLUMN = 'ALTER TABLE `%s` DROP COLUMN %s';
 
     /**
      * SQL statement template to add a index to a column of a table.
@@ -88,45 +89,7 @@ class TableManipulation
      * second parameter is indextype
      * third parameter is name of the column.
      */
-    const STATEMENT_ADD_INDEX_COLUMN = 'ALTER TABLE %s ADD %s(%s)';
-
-    /**
-     * List of reserved MySQL identifiers.
-     *
-     * @var string[]
-     */
-    protected static $reservedWords = array(
-        // MySQL 5.5 and previous.
-        'ACCESSIBLE', 'ADD', 'ALL', 'ALTER', 'ANALYZE', 'AND', 'AS', 'ASC', 'ASENSITIVE', 'BEFORE', 'BETWEEN', 'BIGINT',
-        'BINARY', 'BLOB', 'BOTH', 'BY', 'CALL', 'CASCADE', 'CASE', 'CHANGE', 'CHAR', 'CHARACTER', 'CHECK', 'COLLATE',
-        'COLUMN', 'CONDITION', 'CONSTRAINT', 'CONTINUE', 'CONVERT', 'CREATE', 'CROSS', 'CURRENT_DATE', 'CURRENT_TIME',
-        'CURRENT_TIMESTAMP', 'CURRENT_USER', 'CURSOR', 'DATABASE', 'DATABASES', 'DAY_HOUR', 'DAY_MICROSECOND',
-        'DAY_MINUTE', 'DAY_SECOND', 'DEC', 'DECIMAL', 'DECLARE', 'DEFAULT', 'DELAYED', 'DELETE', 'DESC', 'DESCRIBE',
-        'DETERMINISTIC', 'DISTINCT', 'DISTINCTROW', 'DIV', 'DOUBLE', 'DROP', 'DUAL', 'EACH', 'ELSE', 'ELSEIF',
-        'ENCLOSED', 'ESCAPED', 'EXISTS', 'EXIT', 'EXPLAIN', 'FALSE', 'FETCH', 'FLOAT', 'FLOAT4', 'FLOAT8', 'FOR',
-        'FORCE', 'FOREIGN', 'FROM', 'FULLTEXT', 'GENERAL', 'GRANT', 'GROUP', 'HAVING', 'HIGH_PRIORITY',
-        'HOUR_MICROSECOND', 'HOUR_MINUTE', 'HOUR_SECOND', 'IF', 'IGNORE', 'IGNORE_SERVER_IDS', 'IN', 'INDEX', 'INFILE',
-        'INNER', 'INOUT', 'INSENSITIVE', 'INSERT', 'INT', 'INT1', 'INT2', 'INT3', 'INT4', 'INT8', 'INTEGER', 'INTERVAL',
-        'INTO', 'IS', 'ITERATE', 'JOIN', 'KEY', 'KEYS', 'KILL', 'LEADING', 'LEAVE', 'LEFT', 'LIKE', 'LIMIT', 'LINEAR',
-        'LINES', 'LOAD', 'LOCALTIME', 'LOCALTIMESTAMP', 'LOCK', 'LONG', 'LONGBLOB', 'LONGTEXT', 'LOOP', 'LOW_PRIORITY',
-        'MASTER_HEARTBEAT_PERIOD', 'MASTER_SSL_VERIFY_SERVER_CERT', 'MATCH', 'MAXVALUE', 'MEDIUMBLOB', 'MEDIUMINT',
-        'MEDIUMTEXT', 'MIDDLEINT', 'MINUTE_MICROSECOND', 'MINUTE_SECOND', 'MOD', 'MODIFIES', 'NATURAL', 'NOT',
-        'NO_WRITE_TO_BINLOG', 'NULL', 'NUMERIC', 'ON', 'OPTIMIZE', 'OPTION', 'OPTIONALLY', 'OR', 'ORDER', 'OUT',
-        'OUTER', 'OUTFILE', 'PRECISION', 'PRIMARY', 'PROCEDURE', 'PURGE', 'RANGE', 'READ', 'READS', 'READ_WRITE',
-        'REAL', 'REFERENCES', 'REGEXP', 'RELEASE', 'RENAME', 'REPEAT', 'REPLACE', 'REQUIRE', 'RESIGNAL', 'RESTRICT',
-        'RETURN', 'REVOKE', 'RIGHT', 'RLIKE', 'SCHEMA', 'SCHEMAS', 'SECOND_MICROSECOND', 'SELECT', 'SENSITIVE',
-        'SEPARATOR', 'SET', 'SHOW', 'SIGNAL', 'SLOW', 'SMALLINT', 'SPATIAL', 'SPECIFIC', 'SQL', 'SQLEXCEPTION',
-        'SQLSTATE', 'SQLWARNING', 'SQL_BIG_RESULT', 'SQL_CALC_FOUND_ROWS', 'SQL_SMALL_RESULT', 'SSL', 'STARTING',
-        'STRAIGHT_JOIN', 'TABLE', 'TERMINATED', 'THEN', 'TINYBLOB', 'TINYINT', 'TINYTEXT', 'TO', 'TRAILING', 'TRIGGER',
-        'TRUE', 'UNDO', 'UNION', 'UNIQUE', 'UNLOCK', 'UNSIGNED', 'UPDATE', 'USAGE', 'USE', 'USING', 'UTC_DATE',
-        'UTC_TIME', 'UTC_TIMESTAMP', 'VALUES', 'VARBINARY', 'VARCHAR', 'VARCHARACTER', 'VARYING', 'WHEN', 'WHERE',
-        'WHILE', 'WITH', 'WRITE', 'XOR', 'YEAR_MONTH', 'ZEROFILL',
-        // New in MySQL 5.6.
-        'GET', 'IO_AFTER_GTIDS', 'IO_BEFORE_GTIDS, MASTER_BIND', 'ONE_SHOT', 'PARTITION', 'SQL_AFTER_GTIDS',
-        'SQL_BEFORE_GTIDS',
-        // New in MySQL 5.7.
-        'NONBLOCKING',
-    );
+    const STATEMENT_ADD_INDEX_COLUMN = 'ALTER TABLE `%s` ADD %s(%s)';
 
     /**
      * List of reserved column post fix.
@@ -154,18 +117,6 @@ class TableManipulation
     protected static function getDB()
     {
         return System::getContainer()->get(MetaModelsServiceContainer::class)->getDatabase();
-    }
-
-    /**
-     * Test if the given word is a reserved MySQL word.
-     *
-     * @param string $word The word to test.
-     *
-     * @return bool
-     */
-    public static function isReservedWord($word)
-    {
-        return in_array(strtoupper($word), self::$reservedWords);
     }
 
     /**
@@ -219,7 +170,7 @@ class TableManipulation
      */
     public static function isValidTablename($strTableName)
     {
-        return self::isValidMySQLIdentifier($strTableName) && !self::isReservedWord($strTableName);
+        return self::isValidMySQLIdentifier($strTableName);
     }
 
     /**
@@ -231,9 +182,7 @@ class TableManipulation
      */
     public static function isValidColumnName($strColName)
     {
-        return self::isValidMySQLIdentifier($strColName)
-               && !self::isReservedWord($strColName)
-               && !self::isReserveColumnPostFix($strColName);
+        return self::isValidMySQLIdentifier($strColName) && !self::isReserveColumnPostFix($strColName);
     }
 
     /**
@@ -564,7 +513,6 @@ class TableManipulation
      * Enables or disables Variant support on a certain MetaModel table.
      *
      * @param string $strTableName      The table name of the MetaModel.
-     *
      * @param bool   $blnVariantSupport Flag if the support shall be turned on or off.
      *
      * @return void
@@ -580,7 +528,7 @@ class TableManipulation
 
                 // If there is pre-existing data in the table, we need to provide a separate 'vargroup' value to all of
                 // them, we can do this safely by setting all vargroups to the id of the base item.
-                self::getDB()->execute(sprintf('UPDATE %s SET vargroup=id, varbase=1', $strTableName));
+                self::getDB()->execute(sprintf('UPDATE `%s` t SET t.vargroup=id, t.varbase=1', $strTableName));
             }
         } else {
             if (self::getDB()->tableExists($strTableName, null, true)
