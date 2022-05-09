@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -34,6 +34,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\
 use MetaModels\Events\CreatePropertyConditionEvent;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
+use MetaModels\ITranslatedMetaModel;
 
 /**
  * Implementation of IInputScreen.
@@ -137,16 +138,7 @@ class InputScreen implements IInputScreen
     {
         $arrLegend = StringUtil::deserialize($legend['legendtitle']);
         if (is_array($arrLegend)) {
-            // Try to use the language string from the array.
-            $strLegend = $arrLegend[$GLOBALS['TL_LANGUAGE']];
-            if (!$strLegend) {
-                // Use the fallback.
-                $strLegend = $arrLegend[$metaModel->getFallbackLanguage()];
-                if (!$strLegend) {
-                    // Last resort, simply "legend". See issue #926.
-                    $strLegend = 'legend' . (count($this->legends) + 1);
-                }
-            }
+            $strLegend = $this->extractLegendName($arrLegend);
         } else {
             $strLegend = $legend['legendtitle'] ? $legend['legendtitle'] : 'legend';
         }
@@ -161,6 +153,49 @@ class InputScreen implements IInputScreen
         );
 
         return $legendName;
+    }
+
+    /**
+     * Extract the legend name in the current requested language.
+     *
+     * @param array<string, string> $legend    The legend name list.
+     * @param IMetaModel            $metaModel The metamodel the legend belongs to.
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    private function extractLegendName(array $legend, IMetaModel $metaModel): string
+    {
+        // Current backend language.
+        $language = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
+        if (null !== ($result = $legend[$language] ?? null)) {
+            return $result;
+        }
+        // Is it a regional locale?
+        if (false !== strpos($language, '_')) {
+            $chunks = explode('_', $language);
+            $language = array_shift($chunks);
+            unset($chunks);
+            if (null !== ($result = $legend[$language] ?? null)) {
+                return $result;
+            }
+        }
+
+        // Try fallback language then.
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            if (null !== ($result = $legend[$metaModel->getMainLanguage()] ?? null)) {
+                return $result;
+            }
+        } else {
+            if (null !== ($result = $legend[$metaModel->getFallbackLanguage()] ?? null)) {
+                return $result;
+            }
+        }
+
+        // Last resort, simply "legend". See issue #926.
+        return 'legend' . (count($this->legends) + 1);
     }
 
     /**

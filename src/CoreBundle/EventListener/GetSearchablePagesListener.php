@@ -263,11 +263,15 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
             return array($singleLanguage);
         }
 
+        if ($metaModels instanceof ITranslatedMetaModel) {
+            return $metaModels->getLanguages();
+        }
+
         if ($metaModels->isTranslated() && $metaModels->getAvailableLanguages()) {
             return $metaModels->getAvailableLanguages();
         }
 
-        return array($GLOBALS['TL_LANGUAGE']);
+        return array(\str_replace('-', '_', $GLOBALS['TL_LANGUAGE']));
     }
 
     /**
@@ -288,7 +292,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
         $entries          = [];
         $filterAttributes = [];
         $translated       = ($metaModels instanceof ITranslatedMetaModel) || $metaModels->isTranslated(false);
-        $desired          = $GLOBALS['TL_LANGUAGE'];
+        $desired          = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
         $fallback         = $translated
             ? (($metaModels instanceof ITranslatedMetaModel) ? $metaModels->getMainLanguage()
             : $metaModels->getFallbackLanguage()) : null;
@@ -534,7 +538,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
 
         foreach ($availableLanguages as $newLanguage) {
             // Change language.
-            $GLOBALS['TL_LANGUAGE'] = $newLanguage;
+            $GLOBALS['TL_LANGUAGE'] = \str_replace('_', '-', $newLanguage);
             if ($metaModels instanceof ITranslatedMetaModel) {
                 $prevLanguage = $metaModels->selectLanguage($newLanguage);
             }

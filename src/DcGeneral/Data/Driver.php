@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -227,13 +227,14 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     protected function setLanguage($language = '')
     {
-        $previousLanguage = $GLOBALS['TL_LANGUAGE'];
+        $previousLanguage = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
         if (!empty($language)) {
             $metaModel = $this->getMetaModel();
             if ($metaModel instanceof ITranslatedMetaModel) {
                 $metaModel->selectLanguage($language);
             }
 
+            $language = \str_replace('_', '-', $language);
             if ($GLOBALS['TL_LANGUAGE'] !== $language) {
                 $GLOBALS['TL_LANGUAGE'] = $language;
             }

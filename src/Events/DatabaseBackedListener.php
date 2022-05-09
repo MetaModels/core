@@ -212,7 +212,7 @@ class DatabaseBackedListener
         if (!$this->createInstanceViaLegacyFactory($event, $arrData)) {
             if ($arrData['translated']) {
                 $metaModel = new TranslatedMetaModel($arrData, $this->dispatcher, $this->database);
-                $metaModel->selectLanguage($GLOBALS['TL_LANGUAGE']);
+                $metaModel->selectLanguage(\str_replace('-', '_', $GLOBALS['TL_LANGUAGE']));
             } else {
                 $metaModel = new MetaModel($arrData, $this->dispatcher, $this->database);
             }

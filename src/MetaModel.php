@@ -808,8 +808,7 @@ class MetaModel implements IMetaModel
             // @codingStandardsIgnoreEnd
         }
 
-        $tmp = explode('-', $GLOBALS['TL_LANGUAGE']);
-        return array_shift($tmp);
+        return \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
     }
 
     /**

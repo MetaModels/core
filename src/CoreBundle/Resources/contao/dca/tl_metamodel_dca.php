@@ -324,15 +324,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
                         'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_langcode'],
                         'exclude'   => true,
                         'inputType' => 'select',
-                        'options'   => array_flip(
-                            array_filter(
-                                array_flip($this->getLanguages()),
-                                function ($langCode) {
-                                    // Disable >2 char long language codes for the moment.
-                                    return (strlen($langCode) == 2);
-                                }
-                            )
-                        ),
+                        'options'   => $this->getLanguages(),
                         'eval'      => [
                             'tl_class' => 'clr',
                             'style'    => 'width:100%',
