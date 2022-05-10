@@ -54,14 +54,14 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      *
      * @var array
      */
-    protected $foundPages = array();
+    protected $foundPages = [];
 
     /**
      * A list with all settings from the database.
      *
      * @var array
      */
-    private $configs = array();
+    private $configs = [];
 
     /**
      * Database connection.
@@ -178,7 +178,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
                 ->from('tl_metamodel_searchable_pages', 't')
                 ->execute();
 
-            $this->configs = $statement->fetch(FetchMode::ASSOCIATIVE);
+            $this->configs = $statement->fetchAll(FetchMode::ASSOCIATIVE);
         }
 
         return $this->configs;
