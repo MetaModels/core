@@ -60,7 +60,15 @@ class LanguageOptionsListener
             return;
         }
 
-        $event->setOptions(System::getLanguages());
+        $languages = System::getLanguages();
+        array_walk($languages, function (&$value, &$key) {
+            $value .= sprintf(
+                ' [%s]',
+                (2 === strpos($key, '_') ? substr_replace($key, '-', 2, 1) : $key)
+            );
+        });
+
+        $event->setOptions($languages);
     }
 
     /**
