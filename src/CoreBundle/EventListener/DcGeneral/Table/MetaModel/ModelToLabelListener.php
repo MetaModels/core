@@ -13,6 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -23,7 +24,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\MetaModel;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\ModelToLabelEvent;
 use Doctrine\DBAL\Connection;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * This handles the rendering of models to labels.
@@ -68,6 +69,7 @@ class ModelToLabelListener extends AbstractAbstainingListener
      * @param ModelToLabelEvent $event The event.
      *
      * @return void
+     * @throws \Doctrine\DBAL\Exception
      */
     public function handle(ModelToLabelEvent $event)
     {
@@ -89,8 +91,8 @@ class ModelToLabelListener extends AbstractAbstainingListener
             ->createQueryBuilder()
             ->select('COUNT(t.id) AS itemCount')
             ->from($tableName, 't')
-            ->execute()
-            ->fetchColumn();
+            ->executeQuery()
+            ->fetchOne();
 
         switch ($count) {
             case 0:
