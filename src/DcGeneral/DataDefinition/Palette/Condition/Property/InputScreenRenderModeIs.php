@@ -30,7 +30,7 @@ use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBag;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\MetaModelsServiceContainer;
 
@@ -114,6 +114,8 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
      * @param int $value The id of an input screen.
      *
      * @return string
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     public function getInputScreenRenderMode($value)
     {
@@ -125,9 +127,9 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
                 ->where('t.id=:id')
                 ->setParameter('id',  $value)
                 ->setMaxResults(1)
-                ->execute();
+                ->executeQuery();
 
-            self::$stateBuffer[$value] = $statement->fetch(\PDO::FETCH_OBJ)->rendermode;
+            self::$stateBuffer[$value] = $statement->fetchAssociative()['rendermode'];
         }
 
         return self::$stateBuffer[$value];
