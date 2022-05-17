@@ -72,6 +72,8 @@ class AddAllButtonListener
      * @param GetGlobalButtonEvent $event The event.
      *
      * @return void
+     *
+     * @throws \Doctrine\DBAL\Exception
      */
     public function getGlobalButton(GetGlobalButtonEvent $event)
     {
@@ -88,8 +90,8 @@ class AddAllButtonListener
             ->from('tl_metamodel_dca', 'd')
             ->where('d.id=:pid')
             ->setParameter('pid', $inputScreen)
-            ->execute()
-            ->fetchColumn();
+            ->executeQuery()
+            ->fetchOne();
 
         $name = $this->factory->translateIdToMetaModelName($modelId);
 

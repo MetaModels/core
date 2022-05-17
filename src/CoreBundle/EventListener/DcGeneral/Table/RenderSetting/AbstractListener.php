@@ -72,6 +72,7 @@ abstract class AbstractListener extends AbstractAbstainingListener
      * @return IMetaModel
      *
      * @throws DcGeneralInvalidArgumentException When an invalid model has been passed or the model does not have an id.
+     * @throws \Doctrine\DBAL\Exception
      */
     protected function getMetaModelFromModel(ModelInterface $model)
     {
@@ -92,8 +93,8 @@ abstract class AbstractListener extends AbstractAbstainingListener
             ->from('tl_metamodel_rendersettings', 't')
             ->where('t.id=:id')
             ->setParameter('id', $model->getProperty('pid'))
-            ->execute()
-            ->fetchColumn();
+            ->executeQuery()
+            ->fetchOne();
 
         $tableName = $this->factory->translateIdToMetaModelName($metaModelId);
 

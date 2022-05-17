@@ -79,7 +79,8 @@ abstract class AbstractListener
      *
      * @return \MetaModels\IMetaModel
      *
-     * @throws \RuntimeException Throws if could not retrieve metamodel.
+     * @throws \RuntimeException Throws if you could not retrieve metamodel.
+     * @throws \Doctrine\DBAL\Exception
      */
     public function getMetaModel(EnvironmentInterface $interface)
     {
@@ -90,9 +91,9 @@ abstract class AbstractListener
             ->leftJoin('d', 'tl_metamodel_dcasetting', 's', 'd.id=s.pid')
             ->where('s.id=:id')
             ->setParameter('id', ModelId::fromSerialized($interface->getInputProvider()->getParameter('pid'))->getId())
-            ->execute();
+            ->executeQuery();
 
-        if ($tableName = $this->factory->translateIdToMetaModelName($metaModelId = $metaModelId->fetchColumn())) {
+        if ($tableName = $this->factory->translateIdToMetaModelName($metaModelId = $metaModelId->fetchOne())) {
             return $this->factory->getMetaModel($tableName);
         }
 
