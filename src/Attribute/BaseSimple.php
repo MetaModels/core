@@ -146,7 +146,7 @@ class BaseSimple extends Base implements ISimple
                 ->set('t.' . $strColName, ':' . $strColName)
                 ->setParameter($strColName, is_array($varData) ? serialize($varData) : $varData)
                 ->setParameter('id', $intId)
-                ->execute();
+                ->executeQuery();
         }
     }
 
@@ -169,23 +169,23 @@ class BaseSimple extends Base implements ISimple
                 ->groupBy('t.' . $strCol)
                 ->orderBy('MIN(FIELD(t.id, :ids))')
                 ->setParameter('ids', $idList, Connection::PARAM_STR_ARRAY)
-                ->execute();
+                ->executeQuery();
         } else {
             $statement = $this->connection->createQueryBuilder()
                 ->select('t.' . $strCol . ', COUNT(t.' . $strCol . ') as mm_count')
                 ->from($this->getMetaModel()->getTableName(), 't')
                 ->groupBy('t.' . $strCol)
                 ->orderBy('t.' . $strCol)
-                ->execute();
+                ->executeQuery();
         }
 
         $arrResult = [];
-        while ($objRow = $statement->fetch(\PDO::FETCH_OBJ)) {
+        while ($objRow = $statement->fetchAllAssociative()) {
             if (is_array($arrCount)) {
-                $arrCount[$objRow->$strCol] = $objRow->mm_count;
+                $arrCount[$objRow[$strCol]] = $objRow['mm_count'];
             }
 
-            $arrResult[$objRow->$strCol] = $objRow->$strCol;
+            $arrResult[$objRow[$strCol]] = $objRow[$strCol];
         }
         return $arrResult;
     }
@@ -204,8 +204,8 @@ class BaseSimple extends Base implements ISimple
             ->where('t.id IN (:ids)')
             ->setParameter('ids', $idList, Connection::PARAM_STR_ARRAY)
             ->orderBy('t.' . $this->getColName(), $strDirection)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN, 'id');
+            ->executeQuery()
+            ->fetchFirstColumn();
 
         return $idList;
     }
@@ -229,8 +229,8 @@ class BaseSimple extends Base implements ISimple
             ->from($this->getMetaModel()->getTableName(), 't')
             ->where('t.' . $this->getColName() . ' LIKE :pattern')
             ->setParameter('pattern', $strPattern)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN, 'id');
+            ->executeQuery()
+            ->fetchFirstColumn();
     }
 
     /**
