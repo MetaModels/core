@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2020 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -57,6 +58,10 @@ final class ItemListController extends AbstractFrontendModuleController
         array $classes = null,
         PageModel $pageModel = null
     ): Response {
+        if ($this->scopeMatcher->isBackendRequest($request)) {
+            return $this->getBackendWildcard($model);
+        }
+
         if (!empty($model->metamodel_layout)) {
             $model->customTpl = $model->metamodel_layout;
         }
@@ -73,8 +78,8 @@ final class ItemListController extends AbstractFrontendModuleController
      */
     protected function getBackendWildcard(ModuleModel $module): Response
     {
-        $name = $this->get('translator')->trans('FMD.'.$this->getType().'.0', [], 'contao_modules');
-        $href = $this->get('router')->generate(
+        $name = $this->translator->trans('FMD.'.$this->getType().'.0', [], 'contao_modules');
+        $href = $this->router->generate(
             'contao_backend',
             ['do' => 'themes', 'table' => 'tl_module', 'act' => 'edit', 'id' => $module->id]
         );

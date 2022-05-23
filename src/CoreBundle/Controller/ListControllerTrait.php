@@ -23,9 +23,11 @@
 namespace MetaModels\CoreBundle\Controller;
 
 use Contao\BackendTemplate;
+use Contao\CoreBundle\Routing\ScopeMatcher;
 use Contao\Input;
 use Contao\Model;
 use Contao\StringUtil;
+use Contao\System;
 use Contao\Template;
 use MetaModels\Filter\FilterUrl;
 use MetaModels\Filter\FilterUrlBuilder;
@@ -37,6 +39,8 @@ use MetaModels\Render\Setting\IRenderSettingFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Helper trait for lists (CE and MOD).
@@ -79,6 +83,27 @@ trait ListControllerTrait
     private FilterUrlBuilder $filterUrlBuilder;
 
     /**
+     * The translator.
+     *
+     * @var TranslatorInterface
+     */
+    private TranslatorInterface $translator;
+
+    /**
+     * The router.
+     *
+     * @var RouterInterface
+     */
+    private RouterInterface $router;
+
+    /**
+     * The scope matcher.
+     *
+     * @var ScopeMatcher
+     */
+    private ScopeMatcher $scopeMatcher;
+
+    /**
      * ItemListController constructor.
      *
      * @param IFactory                 $factory              The MetaModels factory (required in MetaModels 3.0).
@@ -86,19 +111,62 @@ trait ListControllerTrait
      * @param IRenderSettingFactory    $renderSettingFactory The render setting factory (required in MetaModels 3.0).
      * @param EventDispatcherInterface $eventDispatcher      The event dispatcher (required in MetaModels 3.0).
      * @param FilterUrlBuilder         $filterUrlBuilder     The filter url builder.
+     * @param TranslatorInterface|null $translator           The translator.
+     * @param RouterInterface|null     $router               The router.
+     * @param ScopeMatcher|null        $scopeMatcher         The scope matcher.
      */
     public function __construct(
         IFactory $factory,
         IFilterSettingFactory $filterFactory,
         IRenderSettingFactory $renderSettingFactory,
         EventDispatcherInterface $eventDispatcher,
-        FilterUrlBuilder $filterUrlBuilder
+        FilterUrlBuilder $filterUrlBuilder,
+        TranslatorInterface $translator = null,
+        RouterInterface $router = null,
+        ScopeMatcher $scopeMatcher = null
     ) {
         $this->factory              = $factory;
         $this->filterFactory        = $filterFactory;
         $this->renderSettingFactory = $renderSettingFactory;
         $this->eventDispatcher      = $eventDispatcher;
         $this->filterUrlBuilder     = $filterUrlBuilder;
+
+        if (null === $translator) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Translator is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+
+            $translator = System::getContainer()->get('translator');
+        }
+
+        if (null === $router) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Router is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+
+            $router = System::getContainer()->get('router');
+        }
+
+        if (null === $scopeMatcher) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'ScopeMatcher is missing. It has to be passed in the constructor. Fallback will be dropped.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+
+            $scopeMatcher = System::getContainer()->get('contao.routing.scope_matcher');
+        }
+
+        $this->translator   = $translator;
+        $this->router       = $router;
+        $this->scopeMatcher = $scopeMatcher;
     }
 
     /**
@@ -312,8 +380,8 @@ trait ListControllerTrait
         }
         $infoText = sprintf(
             $infoTemplate,
-            $this->get('translator')->trans('MSC.mm_be_info_name.1', [], 'contao_default'),
-            $this->get('translator')->trans('MSC.mm_be_info_name.0', [], 'contao_default'),
+            $this->translator->trans('MSC.mm_be_info_name.1', [], 'contao_default'),
+            $this->translator->trans('MSC.mm_be_info_name.0', [], 'contao_default'),
             $header
         );
 
@@ -330,8 +398,8 @@ trait ListControllerTrait
             if ($infoFi) {
                 $infoText .= sprintf(
                     $infoTemplate,
-                    $this->get('translator')->trans('MSC.mm_be_info_filter.1', [], 'contao_default'),
-                    $this->get('translator')->trans('MSC.mm_be_info_filter.0', [], 'contao_default'),
+                    $this->translator->trans('MSC.mm_be_info_filter.1', [], 'contao_default'),
+                    $this->translator->trans('MSC.mm_be_info_filter.0', [], 'contao_default'),
                     $infoFi . $infoFiPa
                 );
             }
@@ -345,8 +413,8 @@ trait ListControllerTrait
             if ($infoRs) {
                 $infoText .= sprintf(
                     $infoTemplate,
-                    $this->get('translator')->trans('MSC.mm_be_info_render_setting.1', [], 'contao_default'),
-                    $this->get('translator')->trans('MSC.mm_be_info_render_setting.0', [], 'contao_default'),
+                    $this->translator->trans('MSC.mm_be_info_render_setting.1', [], 'contao_default'),
+                    $this->translator->trans('MSC.mm_be_info_render_setting.0', [], 'contao_default'),
                     $infoRs
                 );
             }

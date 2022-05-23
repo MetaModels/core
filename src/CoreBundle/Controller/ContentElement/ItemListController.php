@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -26,6 +26,7 @@ use Contao\ContentModel;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
 use Contao\CoreBundle\ServiceAnnotation\ContentElement;
 use Contao\PageModel;
+use Contao\System;
 use Contao\Template;
 use MetaModels\CoreBundle\Controller\ListControllerTrait;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,7 +59,7 @@ final class ItemListController extends AbstractContentElementController
         array $classes = null,
         PageModel $pageModel = null
     ): Response {
-        if ($this->get('contao.routing.scope_matcher')->isBackendRequest($request)) {
+        if ($this->scopeMatcher->isBackendRequest($request)) {
             return $this->getBackendWildcard($model);
         }
 
@@ -95,8 +96,8 @@ final class ItemListController extends AbstractContentElementController
      */
     private function getBackendWildcard(ContentModel $model): Response
     {
-        $name = $this->get('translator')->trans('CTE.' . $this->getType() . '.0', [], 'contao_modules');
-        $href = $this->get('router')->generate(
+        $name = $this->translator->trans('CTE.' . $this->getType() . '.0', [], 'contao_modules');
+        $href = $this->router->generate(
             'contao_backend',
             ['do' => 'article', 'table' => 'tl_content', 'act' => 'edit', 'id' => $model->id]
         );
