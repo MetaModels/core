@@ -240,7 +240,7 @@ abstract class AbstractFilterSettingTypeRenderer
     ) {
         $translator = $environment->getTranslator();
         $metamodel  = $this->getMetaModel($model);
-        $attribute  = $metamodel->getAttributeById($model->getProperty('attr_id'));
+        $attribute  = $metamodel->getAttributeById((int) $model->getProperty('attr_id'));
 
         if ($attribute) {
             $attributeColumnName = $attribute->getColName();

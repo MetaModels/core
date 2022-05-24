@@ -77,7 +77,7 @@ class DisableReadOnlyListener extends AbstractListener
         $model     = $event->getModel();
         $metaModel = $this->getMetaModelFromModel($model);
 
-        if ($metaModel->getAttributeById($model->getProperty('attr_id'))->get('force_alias')) {
+        if ($metaModel->getAttributeById((int) $model->getProperty('attr_id'))->get('force_alias')) {
             Message::addInfo(
                 $this->translator->trans(
                     'tl_metamodel_dcasetting.readonly_for_force_alias',

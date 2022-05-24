@@ -94,7 +94,7 @@ class ModelToLabelListener extends AbstractListener
 
         $model     = $event->getModel();
         $metaModel = $this->getMetaModelFromModel($model);
-        $attribute = $metaModel->getAttributeById($model->getProperty('attr_id'));
+        $attribute = $metaModel->getAttributeById((int) $model->getProperty('attr_id'));
 
         if ($attribute) {
             $type    = $attribute->get('type');

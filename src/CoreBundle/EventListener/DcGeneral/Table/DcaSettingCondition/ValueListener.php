@@ -163,7 +163,7 @@ class ValueListener extends AbstractListener
         }
 
         $metaModel = $this->getMetaModel($event->getEnvironment());
-        $attribute = $metaModel->getAttributeById($event->getModel()->getProperty('attr_id'));
+        $attribute = $metaModel->getAttributeById((int) $event->getModel()->getProperty('attr_id'));
 
         if (!($attribute && ($attribute->get('type') == 'tags'))) {
             return;

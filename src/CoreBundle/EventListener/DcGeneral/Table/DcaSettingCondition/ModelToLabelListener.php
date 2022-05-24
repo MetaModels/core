@@ -88,7 +88,7 @@ class ModelToLabelListener extends AbstractListener
         $environment    = $event->getEnvironment();
         $model          = $event->getModel();
         $metaModel      = $this->getMetaModel($environment);
-        $attribute      = $metaModel->getAttributeById($model->getProperty('attr_id'));
+        $attribute      = $metaModel->getAttributeById((int) $model->getProperty('attr_id'));
         $type           = $model->getProperty('type');
         $parameterValue = (\is_array($model->getProperty('value'))
             ? implode(', ', $model->getProperty('value'))

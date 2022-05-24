@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,7 @@
  *
  * @package    MetaModels/core
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -72,7 +72,7 @@ final class FilterSettingTypeSubPaletteCondition implements PropertyConditionInt
         }
 
         $metaModel = $this->getMetaModel($model);
-        $attribute = $metaModel->getAttributeById($model->getProperty('attr_id'));
+        $attribute = $metaModel->getAttributeById((int) $model->getProperty('attr_id'));
 
         if (!$attribute) {
             return false;
