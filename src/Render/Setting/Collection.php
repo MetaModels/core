@@ -282,13 +282,13 @@ class Collection implements ICollection
         $jumpToPageId    = '';
         $filterSettingId = '';
         foreach ((array) $this->get('jumpTo') as $jumpTo) {
-            $langCode = $jumpTo['langcode'];
+            $langCode = $jumpTo['langcode'] ?? null;
             // If either desired language or fallback, keep the result.
             if (!$translated || ($langCode === $desired) || ($langCode === $fallback)) {
-                $jumpToPageId    = $jumpTo['value'];
-                $filterSettingId = $jumpTo['filter'];
+                $jumpToPageId    = $jumpTo['value'] ?? '';
+                $filterSettingId = $jumpTo['filter'] ?? '';
                 // If the desired language, break.
-                // Otherwise try to get the desired one until all have been evaluated.
+                // Otherwise, try to get the desired one until all have been evaluated.
                 if (!$translated || ($desired === $jumpTo['langcode'])) {
                     break;
                 }
@@ -306,7 +306,7 @@ class Collection implements ICollection
             'filter'        => $filterSettingId,
             'filterSetting' => $filterSetting,
             // Mask out the "all languages" language key (See #687).
-            'language'      => $pageDetails['language'],
+            'language'      => $pageDetails['language'] ?? '',
             'label'         => $this->getJumpToLabel()
         ];
     }
