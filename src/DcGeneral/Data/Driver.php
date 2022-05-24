@@ -310,7 +310,7 @@ class Driver implements MultiLanguageDataProviderInterface
         }
 
         $this->strTable  = $arrConfig['source'];
-        $this->metaModel = $arrConfig['metaModel'];
+        $this->metaModel = $arrConfig['metaModel'] ?? null;
     }
 
     /**
