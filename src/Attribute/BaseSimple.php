@@ -180,7 +180,7 @@ class BaseSimple extends Base implements ISimple
         }
 
         $arrResult = [];
-        while ($objRow = $statement->fetchAllAssociative()) {
+        while ($objRow = $statement->fetchAssociative()) {
             if (is_array($arrCount)) {
                 $arrCount[$objRow[$strCol]] = $objRow['mm_count'];
             }
