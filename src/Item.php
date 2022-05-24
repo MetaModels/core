@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,7 @@
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -414,7 +414,7 @@ class Item implements IItem
         $arrCss = $objSettings->get('additionalCss');
 
         foreach ((array) $arrCss as $arrFile) {
-            if ($arrFile['published']) {
+            if (isset($arrFile['published']) && $arrFile['published']) {
                 $GLOBALS['TL_CSS'][md5($arrFile['file'])] = $arrFile['file'];
             }
         }
@@ -423,7 +423,7 @@ class Item implements IItem
         $arrJs = $objSettings->get('additionalJs');
 
         foreach ((array) $arrJs as $arrFile) {
-            if ($arrFile['published']) {
+            if (isset($arrFile['published']) && $arrFile['published']) {
                 $GLOBALS['TL_JAVASCRIPT'][md5($arrFile['file'])] = $arrFile['file'];
             }
         }
@@ -433,7 +433,6 @@ class Item implements IItem
      * Renders the item in the given output format.
      *
      * @param string      $strOutputFormat The desired output format (optional - default: text).
-     *
      * @param ICollection $objSettings     The render settings to use (optional - default: null).
      *
      * @return array attribute name => format => value
@@ -462,9 +461,9 @@ class Item implements IItem
             return $arrResult;
         }
 
-        // Add jumpTo link
+        // Add jumpTo link.
         $jumpTo = $this->buildJumpToLink($objSettings);
-        if ($jumpTo['url']) {
+        if (isset($jumpTo['url']) && $jumpTo['url']) {
             $arrResult['actions']['jumpTo'] = [
                 'href'  => $jumpTo['url'],
                 'deep'  => $jumpTo['deep'],
