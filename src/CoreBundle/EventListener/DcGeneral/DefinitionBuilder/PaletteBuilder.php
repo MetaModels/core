@@ -111,7 +111,7 @@ class PaletteBuilder
             $legend->setInitialVisibility(!$legendInfo['hide']);
             $palette->addLegend($legend);
 
-            $legendConditions = $this->buildCondition($legendInfo['condition'], $metaModel);
+            $legendConditions = $this->buildCondition(($legendInfo['condition'] ?? null), $metaModel);
             foreach ($legendInfo['properties'] as $property) {
                 $legend->addProperty(
                     $this->createProperty(
