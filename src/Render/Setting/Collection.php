@@ -151,7 +151,7 @@ class Collection implements ICollection
      */
     public function get($strName)
     {
-        return !isset($this->arrBase[$strName]) ?? $this->arrBase[$strName];
+        return $this->arrBase[$strName] ?? null;
     }
 
     /**
