@@ -329,7 +329,7 @@ class SimpleLookup extends Simple
             return null;
         }
 
-        if ($attribute = $this->getMetaModel()->getAttributeById($attributeId)) {
+        if ($attribute = $this->getMetaModel()->getAttributeById((int) $attributeId)) {
             return $attribute;
         }
 

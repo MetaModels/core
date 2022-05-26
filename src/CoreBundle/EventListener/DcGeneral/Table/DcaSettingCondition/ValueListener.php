@@ -62,8 +62,7 @@ class ValueListener extends AbstractListener
             return;
         }
 
-        $attribute = $metaModel->getAttributeById($attributeId);
-
+        $attribute = $metaModel->getAttributeById((int) $attributeId);
         if ($attribute) {
             $options = $this->getOptionsViaDcGeneral($metaModel, $event->getEnvironment(), $attribute);
             $mangled = [];

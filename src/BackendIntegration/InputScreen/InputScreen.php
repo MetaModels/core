@@ -211,7 +211,7 @@ class InputScreen implements IInputScreen
      */
     protected function translateProperty($property, $metaModel, $legend)
     {
-        $attribute = $metaModel->getAttributeById($property['attr_id']);
+        $attribute = $metaModel->getAttributeById((int) $property['attr_id']);
 
         // Dead meat.
         if (!$attribute) {
@@ -278,7 +278,7 @@ class InputScreen implements IInputScreen
                 continue;
             }
 
-            $attribute = $metaModel->getAttributeById($row['attr_id']);
+            $attribute = $metaModel->getAttributeById((int) $row['attr_id']);
             if ($attribute) {
                 $columnNames[$row['id']] = $attribute->getColName();
             }

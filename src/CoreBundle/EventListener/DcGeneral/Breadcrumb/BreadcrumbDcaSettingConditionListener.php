@@ -94,7 +94,7 @@ class BreadcrumbDcaSettingConditionListener extends AbstractBreadcrumbListener
         if ($setting->dcatype == 'attribute') {
             $attribute     = (object) $this->getRow($setting->attr_id, 'tl_metamodel_attribute');
             $metaModelName = $this->factory->translateIdToMetaModelName($attribute->pid);
-            $attribute     = $this->factory->getMetaModel($metaModelName)->getAttributeById($attribute->id);
+            $attribute     = $this->factory->getMetaModel($metaModelName)->getAttributeById((int) $attribute->id);
             if ($attribute) {
                 return $attribute->getName();
             }

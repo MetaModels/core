@@ -194,7 +194,7 @@ class InputScreenInformationBuilder
             if ('attribute' !== $column['dcatype']) {
                 return $column;
             }
-            if (!($attribute = $metaModel->getAttributeById($column['attr_id']))) {
+            if (!($attribute = $metaModel->getAttributeById((int) $column['attr_id']))) {
                 // @codingStandardsIgnoreStart
                 @trigger_error(
                     'Unknown attribute "' . $column['attr_id'] . '" in input screen "' . $inputScreenId . '"',
@@ -271,7 +271,7 @@ class InputScreenInformationBuilder
             }
 
             if (!empty($information['rendersortattr'])) {
-                if (!($attribute = $metaModel->getAttributeById($information['rendersortattr']))) {
+                if (!($attribute = $metaModel->getAttributeById((int) $information['rendersortattr']))) {
                     // @codingStandardsIgnoreStart
                     @trigger_error(
                         sprintf(
