@@ -787,7 +787,7 @@ class ItemList
             if (!$this->getMetaModel()->isTranslated()
                 || $jumpTo['langcode'] == $desiredLanguage
                 || $jumpTo['langcode'] == $fallbackLanguage) {
-                $filterSettingsId = $jumpTo['filter'] ?? '';
+                $filterSettingsId = $jumpTo['filter'] ?? 0;
                 // If the desired language, break. Otherwise, try to get the desired one until all have been evaluated.
                 if (isset($jumpTo['langcode']) && $desiredLanguage === $jumpTo['langcode']) {
                     break;
