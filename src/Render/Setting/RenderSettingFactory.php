@@ -164,10 +164,10 @@ class RenderSettingFactory implements IRenderSettingFactory
      * Collect the attribute settings for the given render setting.
      *
      * @param IMetaModel  $metaModel     The MetaModel instance to retrieve the settings for.
-     *
      * @param ICollection $renderSetting The render setting.
      *
      * @return void
+     * @throws \Doctrine\DBAL\Exception
      */
     public function collectAttributeSettings(IMetaModel $metaModel, $renderSetting)
     {
@@ -180,10 +180,10 @@ class RenderSettingFactory implements IRenderSettingFactory
             ->andWhere('t.enabled=1')
             ->orderBy('t.sorting')
             ->setParameter('pid', $renderSetting->get('id'))
-            ->execute();
+            ->executeQuery();
 
-        foreach ($attributeRows->fetchAll(\PDO::FETCH_ASSOC) as $attributeRow) {
-            $attribute = $metaModel->getAttributeById($attributeRow['attr_id']);
+        foreach ($attributeRows->fetchAllAssociative() as $attributeRow) {
+            $attribute = $metaModel->getAttributeById((int) $attributeRow['attr_id']);
             if (!$attribute) {
                 continue;
             }
@@ -206,10 +206,10 @@ class RenderSettingFactory implements IRenderSettingFactory
      * Create a ICollection instance from the id.
      *
      * @param IMetaModel $metaModel The MetaModel for which to retrieve the render setting.
-     *
      * @param string     $settingId The id of the ICollection.
      *
      * @return ICollection The instance or null if not found.
+     * @throws \Doctrine\DBAL\Exception
      */
     protected function internalCreateRenderSetting(IMetaModel $metaModel, $settingId)
     {
@@ -223,8 +223,8 @@ class RenderSettingFactory implements IRenderSettingFactory
             ->setParameter('pid', $metaModel->get('id'))
             ->setParameter('id', $settingId ?: 0)
             ->setMaxResults(1)
-            ->execute()
-            ->fetch(\PDO::FETCH_ASSOC);
+            ->executeQuery()
+            ->fetchAssociative();
 
         if (!$row) {
             $row = [];
