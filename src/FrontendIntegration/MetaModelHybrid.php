@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -139,7 +139,7 @@ abstract class MetaModelHybrid extends Hybrid
 
         // Get CSS ID and headline from the parent element (!).
         $this->cssID      = StringUtil::deserialize($objElement->cssID, true);
-        $this->typePrefix = $objElement->typePrefix;
+        $this->typePrefix = $objElement->typePrefix ?? '';
         $this->strKey     = $objElement->type;
         $arrHeadline      = StringUtil::deserialize($objElement->headline);
         $this->headline   = is_array($arrHeadline) ? $arrHeadline['value'] : $arrHeadline;
@@ -153,6 +153,7 @@ abstract class MetaModelHybrid extends Hybrid
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @throws \Doctrine\DBAL\Exception
      */
     public function generate()
     {
@@ -184,19 +185,20 @@ abstract class MetaModelHybrid extends Hybrid
                 if ($this->metamodel_filtering) {
                     $infoFi = $database
                         ->createQueryBuilder()
-                        ->select('name')
-                        ->from('tl_metamodel_filter')
-                        ->where('id=:id')
+                        ->select('t.name')
+                        ->from('tl_metamodel_filter', 't')
+                        ->where('t.id=:id')
                         ->setParameter('id', $this->metamodel_filtering)
-                        ->execute()
-                        ->fetch(\PDO::FETCH_COLUMN);
+                        ->setMaxResults(1)
+                        ->executeQuery()
+                        ->fetchFirstColumn();
 
                     if ($infoFi) {
                         $strInfo .= sprintf(
                             $infoTemplate,
                             $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter'][1],
                             $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter'][0],
-                            $infoFi
+                            $infoFi[0]
                         );
                     }
                 }
@@ -205,19 +207,20 @@ abstract class MetaModelHybrid extends Hybrid
                 if ($this->metamodel_rendersettings) {
                     $infoRs = $database
                         ->createQueryBuilder()
-                        ->select('name')
-                        ->from('tl_metamodel_rendersettings')
-                        ->where('id=:id')
+                        ->select('t.name')
+                        ->from('tl_metamodel_rendersettings', 't')
+                        ->where('t.id=:id')
                         ->setParameter('id', $this->metamodel_rendersettings)
-                        ->execute()
-                        ->fetch(\PDO::FETCH_COLUMN);
+                        ->setMaxResults(1)
+                        ->executeQuery()
+                        ->fetchFirstColumn();
 
                     if ($infoRs) {
                         $strInfo .= sprintf(
                             $infoTemplate,
                             $GLOBALS['TL_LANG']['MSC']['mm_be_info_render_setting'][1],
                             $GLOBALS['TL_LANG']['MSC']['mm_be_info_render_setting'][0],
-                            $infoRs
+                            $infoRs[0]
                         );
                     }
                 }

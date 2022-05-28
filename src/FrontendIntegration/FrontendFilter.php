@@ -414,13 +414,13 @@ class FrontendFilter
         return [
             'action'  => $this->filterUrlBuilder->generate($other)
                          . ($this->objFilterConfig->metamodel_fef_urlfragment
-                           ? '#' . $this->objFilterConfig->metamodel_fef_urlfragment
-                           : ''),
+                    ? '#' . $this->objFilterConfig->metamodel_fef_urlfragment
+                    : ''),
             'formid'  => $this->formId,
             'filters' => $renderedWidgets,
             'submit'  => ($filterOptions->isAutoSubmit()
-                          ? ''
-                          : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']
+                ? ''
+                : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']
             )
         ];
     }
@@ -437,10 +437,10 @@ class FrontendFilter
     protected function buildParameters(FilterUrl $other, FilterUrl $all, array $wantedNames): void
     {
         $current = $this->filterUrlBuilder->getCurrentFilterUrl([
-            'postAsSlug'  => $wantedNames,
-            'postAsGet'   => [],
-            'preserveGet' => true
-        ]);
+                                                                    'postAsSlug'  => $wantedNames,
+                                                                    'postAsGet'   => [],
+                                                                    'preserveGet' => true
+                                                                ]);
         foreach ($current->getSlugParameters() as $name => $value) {
             $all->setSlug($name, $value);
             if (!in_array($name, $wantedNames)) {
@@ -494,10 +494,11 @@ class FrontendFilter
      * @return string
      *
      * @throws \Doctrine\DBAL\DBALException When a database error occur.
+     * @throws \Doctrine\DBAL\Exception
      */
     protected function generateElement($table, $content, $replace, $elementId)
     {
-        $objDbResult = $this->connection
+        $result = $this->connection
             ->createQueryBuilder()
             ->select('t.*')
             ->from($table, 't')
@@ -505,19 +506,19 @@ class FrontendFilter
             ->andWhere('t.type=:type')
             ->setParameter('id', $elementId)
             ->setParameter('type', 'metamodels_frontendclearall')
-            ->execute()
-            ->fetch(\PDO::FETCH_OBJ);
+            ->executeQuery()
+            ->fetchAssociative();
 
         // Check if we have an existing module or ce element.
-        if ($objDbResult === false) {
+        if ($result === false) {
             return str_replace($replace, '', $content);
         }
 
         // Get instance and call generate function.
         if ($table == 'tl_module') {
-            $objElement = new ModuleFilterClearAll($objDbResult);
+            $objElement = new ModuleFilterClearAll((object) $result);
         } elseif ($table == 'tl_content') {
-            $objElement = new ContentElementFilterClearAll($objDbResult);
+            $objElement = new ContentElementFilterClearAll((object) $result);
         } else {
             return str_replace($replace, '', $content);
         }
