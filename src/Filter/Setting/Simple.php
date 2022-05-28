@@ -468,18 +468,18 @@ abstract class Simple implements ISimple
         $strField = $objWidget->generate();
 
         return [
-            'cssID'       => $arrWidget['eval']['cssID'],
+            'cssID'       => $arrWidget['eval']['cssID'] ?? '',
             'class'       => sprintf(
                 'mm_%s %s%s%s%s',
                 $arrWidget['inputType'],
                 $arrWidget['eval']['urlparam'],
                 (($arrWidget['value'] !== null) ? ' used' : ' unused'),
                 ($objFrontendFilterOptions->isAutoSubmit() ? ' submitonchange' : ''),
-                $arrWidget['eval']['class']
+                $arrWidget['eval']['class'] ?? ''
             ),
             'label'       => $objWidget->generateLabel(),
             'legend'      => $this->generateLegend($arrWidget),
-            'hide_label'  => $arrWidget['eval']['hide_label'],
+            'hide_label'  => $arrWidget['eval']['hide_label'] ?? false,
             'formfield'   => $strField,
             'raw'         => $arrWidget,
             'urlparam'    => $arrWidget['eval']['urlparam'],
