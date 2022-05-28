@@ -492,15 +492,18 @@ class FrontendFilter
      */
     protected function generateElement($table, $content, $replace, $elementId)
     {
-        $sql = sprintf('SELECT * FROM %s WHERE id=? AND type="metamodels_frontendclearall"', $table);
+        $objDbResult = $this->connection
+            ->createQueryBuilder()
+            ->select('t.*')
+            ->from($table, 't')
+            ->where('t.id',':id')
+            ->andWhere('t.type', ':type')
+            ->setParameter('id', $elementId)
+            ->setParameter('type', 'metamodels_frontendclearall')
+            ->execute()
+            ->fetch(\PDO::FETCH_OBJ);
 
-        $statement = $this->connection->prepare($sql);
-        $statement->bindValue(1, $elementId);
-        $statement->execute();
-
-        $objDbResult = $statement->fetch(\PDO::FETCH_OBJ);
-
-        // Check if we have a existing module or ce element.
+        // Check if we have an existing module or ce element.
         if ($objDbResult === false) {
             return str_replace($replace, '', $content);
         }
