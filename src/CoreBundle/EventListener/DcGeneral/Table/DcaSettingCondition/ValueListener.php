@@ -29,8 +29,10 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\Prope
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
 use ContaoCommunityAlliance\DcGeneral\Factory\DcGeneralFactory;
+use MetaModels\Attribute\IAliasConverter;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\IMetaModel;
+use MetaModels\ITranslatedMetaModel;
 
 /**
  * This handles the rendering of models to labels.
@@ -61,7 +63,7 @@ class ValueListener extends AbstractListener
         if ($attribute) {
             $options = $this->getOptionsViaDcGeneral($metaModel, $event->getEnvironment(), $attribute);
             $mangled = [];
-            foreach ((array) $options as $key => $option) {
+            foreach ((array)$options as $key => $option) {
                 $mangled['value_' . $key] = $option;
             }
 
@@ -70,7 +72,56 @@ class ValueListener extends AbstractListener
     }
 
     /**
-     * Translates an value to a generated alias to allow numeric values.
+     * If the attribute supports the IAliasConverter try to get the id instead of the alias.
+     * If it is not a IAliasConvert return the clear value without "value_".
+     *
+     * @param string     $alias     The alias where we want the id from.
+     *
+     * @param IAttribute $attribute The attribute.
+     *
+     * @param string     $language  The language to used for the convertion.
+     *
+     * @return string The value to be saved.
+     */
+    private function aliasToId(string $alias, IAttribute $attribute, string $language): string
+    {
+        if ($attribute instanceof IAliasConverter) {
+            $id = $attribute->getIdForAlias(substr($alias, 6), $language);
+            if ($id !== null) {
+                return $id;
+            }
+        }
+
+        return substr($alias, 6);
+    }
+
+    /**
+     * If the attribute supports the IAliasConverter try to get the alias instead of the id.
+     * If it is not a IAliasConvert return the values as it is.
+     *
+     * @param string     $idValue   The id to be used to find the alias.
+     *
+     * @param IAttribute $attribute The attribute.
+     *
+     * @param string     $language  The language to used for the convertion.
+     *
+     * @return string The value to be saved.
+     */
+    private function idToAlias(string $idValue, IAttribute $attribute, string $language): string
+    {
+        if ($attribute instanceof IAliasConverter) {
+            $alias = $attribute->getAliasForId($idValue, $language);
+            if ($alias !== null) {
+                return 'value_' . $alias;
+            }
+        }
+
+        return 'value_' . $idValue;
+    }
+
+    /**
+     * Get the pure value like the alias or the id if the attribute is a converted one
+     * and convert it in a value for the widiget for fitting the option keys.
      *
      * @param DecodePropertyValueForWidgetEvent $event The event.
      *
@@ -78,26 +129,39 @@ class ValueListener extends AbstractListener
      */
     public function decodeValue(DecodePropertyValueForWidgetEvent $event)
     {
-        if (!$this->wantToHandle($event)) {
+        if (!$this->wantToHandle($event) || $event->getValue() === null) {
             return;
+        }
+
+        $model     = $event->getModel();
+        $metaModel = $this->getMetaModel($event->getEnvironment());
+        if (null === $attributeId = $model->getProperty('attr_id')) {
+            return;
+        }
+        $attribute = $metaModel->getAttributeById($attributeId);
+
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            $currentLanguage    = $metaModel->getLanguage();
+        } else {
+            $currentLanguage   = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
         }
 
         if (is_array($event->getValue())) {
             $values = [];
 
             foreach ($event->getValue() as $value) {
-                $values[] = 'value_' . $value;
+                $values[] = $this->idToAlias($value, $attribute, $currentLanguage);
             }
 
-            // Cut off the 'value_' prefix.
             $event->setValue($values);
         } else {
-            $event->setValue('value_' . $event->getValue());
+            $event->setValue($this->idToAlias($event->getValue(), $attribute, $currentLanguage));
         }
     }
 
     /**
-     * Translates an generated alias to the corresponding value.
+     * Got the data from the widget and make them clean and nice for all the others.
+     * Try to remove the value_ prefix or convert a alias to id.
      *
      * @param EncodePropertyValueFromWidgetEvent $event The event.
      *
@@ -105,22 +169,33 @@ class ValueListener extends AbstractListener
      */
     public function encodeValue(EncodePropertyValueFromWidgetEvent $event)
     {
-        if (!$this->wantToHandle($event)) {
+        if (!$this->wantToHandle($event) || $event->getValue() === null) {
             return;
+        }
+
+        $model     = $event->getModel();
+        $metaModel = $this->getMetaModel($event->getEnvironment());
+        if (null === $attributeId = $model->getProperty('attr_id')) {
+            return;
+        }
+        $attribute = $metaModel->getAttributeById($attributeId);
+
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            $currentLanguage = $metaModel->getLanguage();
+        } else {
+            $currentLanguage = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
         }
 
         if (is_array($event->getValue())) {
             $values = [];
 
             foreach ($event->getValue() as $value) {
-                $values[] = substr($value, 6);
+                $values[] = $this->aliasToId($value, $attribute, $currentLanguage);
             }
 
-            // Cut off the 'value_' prefix.
             $event->setValue($values);
         } else {
-            // Cut off the 'value_' prefix.
-            $event->setValue(substr($event->getValue(), 6));
+            $event->setValue($this->aliasToId($event->getValue(), $attribute, $currentLanguage));
         }
     }
 
@@ -189,7 +264,7 @@ class ValueListener extends AbstractListener
     private function getOptionsViaDcGeneral($metaModel, $environment, $attribute)
     {
         $factory   = DcGeneralFactory::deriveEmptyFromEnvironment($environment)
-            ->setContainerName($metaModel->getTableName());
+                                     ->setContainerName($metaModel->getTableName());
         $dcGeneral = $factory->createDcGeneral();
 
         $subEnv = $dcGeneral->getEnvironment();

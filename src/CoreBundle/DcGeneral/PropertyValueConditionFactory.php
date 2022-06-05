@@ -12,6 +12,7 @@
  *
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -19,7 +20,7 @@
 
 namespace MetaModels\CoreBundle\DcGeneral;
 
-use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition;
+use MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition;
 use MetaModels\IMetaModel;
 
 /**
@@ -32,9 +33,12 @@ class PropertyValueConditionFactory extends AbstractRestrictedAttributeCondition
      */
     public function buildCondition(array $configuration, IMetaModel $metaModel)
     {
-        return new PropertyValueCondition(
+        $condition = new PropertyValueCondition(
             $this->attributeIdToName($metaModel, $configuration['attr_id']),
             $configuration['value']
         );
+        $condition->setMetaModels($metaModel);
+
+        return $condition;
     }
 }
