@@ -26,6 +26,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
 use MetaModels\Attribute\IAliasConverter;
 use MetaModels\DcGeneral\Data\Model;
+use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
 
 /**
@@ -57,7 +58,7 @@ class PropertyValueCondition implements PropertyConditionInterface
     /**
      * The metamodels of the current context.
      *
-     * @var \MetaModels\MetaModel
+     * @var IMetaModel
      */
     protected $metaModels;
 
@@ -76,17 +77,21 @@ class PropertyValueCondition implements PropertyConditionInterface
     }
 
     /**
-     * @return \MetaModels\MetaModel
+     * Get the metamodels.
+     *
+     * @return IMetaModel
      */
-    public function getMetaModels(): \MetaModels\MetaModel
+    public function getMetaModels(): IMetaModel
     {
         return $this->metaModels;
     }
 
     /**
-     * @param \MetaModels\MetaModel $metaModels
+     * Set the metamodels.
+     *
+     * @param IMetaModel $metaModels
      */
-    public function setMetaModels(\MetaModels\MetaModel $metaModels): void
+    public function setMetaModels(IMetaModel $metaModels): void
     {
         $this->metaModels = $metaModels;
     }
@@ -175,10 +180,10 @@ class PropertyValueCondition implements PropertyConditionInterface
         LegendInterface $legend = null
     ) {
         $attribute = $this->metaModels->getAttribute($this->propertyName);
-        if ($metaModel instanceof ITranslatedMetaModel) {
+        if ($this->metaModels instanceof ITranslatedMetaModel) {
             $currentLanguage = $this->metaModels->getLanguage();
         } else {
-            $currentLanguage = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
+            $currentLanguage  = $this->metaModels->getActiveLanguage();
         }
 
         /*

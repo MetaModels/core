@@ -120,6 +120,24 @@ class ValueListener extends AbstractListener
     }
 
     /**
+     * Try to find the right language context.
+     *
+     * @param \MetaModels\IMetaModel $metaModel The current metamodel for the context.
+     *
+     * @return string
+     */
+    private function extractCurrentLanguagContext(IMetaModel $metaModel): string
+    {
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            $currentLanguage = $metaModel->getLanguage();
+        } else {
+            $currentLanguage = $metaModel->getActiveLanguage();
+        }
+
+        return $currentLanguage;
+    }
+
+    /**
      * Get the pure value like the alias or the id if the attribute is a converted one
      * and convert it in a value for the widiget for fitting the option keys.
      *
@@ -138,13 +156,8 @@ class ValueListener extends AbstractListener
         if (null === $attributeId = $model->getProperty('attr_id')) {
             return;
         }
-        $attribute = $metaModel->getAttributeById($attributeId);
-
-        if ($metaModel instanceof ITranslatedMetaModel) {
-            $currentLanguage    = $metaModel->getLanguage();
-        } else {
-            $currentLanguage   = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
-        }
+        $attribute       = $metaModel->getAttributeById($attributeId);
+        $currentLanguage = $this->extractCurrentLanguagContext($metaModel);
 
         if (is_array($event->getValue())) {
             $values = [];
@@ -178,13 +191,8 @@ class ValueListener extends AbstractListener
         if (null === $attributeId = $model->getProperty('attr_id')) {
             return;
         }
-        $attribute = $metaModel->getAttributeById($attributeId);
-
-        if ($metaModel instanceof ITranslatedMetaModel) {
-            $currentLanguage = $metaModel->getLanguage();
-        } else {
-            $currentLanguage = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
-        }
+        $attribute       = $metaModel->getAttributeById($attributeId);
+        $currentLanguage = $this->extractCurrentLanguagContext($metaModel);
 
         if (is_array($event->getValue())) {
             $values = [];
