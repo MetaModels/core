@@ -109,6 +109,10 @@ class ValueListener extends AbstractListener
      */
     private function idToAlias(string $idValue, IAttribute $attribute, string $language): string
     {
+        if (substr($idValue, 0, 6) == 'value_') {
+            $idValue = substr($idValue, 6);
+        }
+
         if ($attribute instanceof IAliasConverter) {
             $alias = $attribute->getAliasForId($idValue, $language);
             if ($alias !== null) {
