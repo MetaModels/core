@@ -190,9 +190,9 @@ class ValueListener extends AbstractListener
             return;
         }
 
-        $model     = $event->getModel();
+        $model     = $event->getPropertyValueBag();
         $metaModel = $this->getMetaModel($event->getEnvironment());
-        if (null === $attributeId = $model->getProperty('attr_id')) {
+        if (null === $attributeId = $model->getPropertyValue('attr_id')) {
             return;
         }
         $attribute       = $metaModel->getAttributeById($attributeId);
