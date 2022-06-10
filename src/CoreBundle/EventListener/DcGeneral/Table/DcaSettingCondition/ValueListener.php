@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2021 The MetaModels team.
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -63,7 +64,7 @@ class ValueListener extends AbstractListener
         if ($attribute) {
             $options = $this->getOptionsViaDcGeneral($metaModel, $event->getEnvironment(), $attribute);
             $mangled = [];
-            foreach ((array)$options as $key => $option) {
+            foreach ((array) $options as $key => $option) {
                 $mangled['value_' . $key] = $option;
             }
 
@@ -76,9 +77,7 @@ class ValueListener extends AbstractListener
      * If it is not a IAliasConvert return the clear value without "value_".
      *
      * @param string     $alias     The alias where we want the id from.
-     *
      * @param IAttribute $attribute The attribute.
-     *
      * @param string     $language  The language to used for the convertion.
      *
      * @return string The value to be saved.
@@ -100,9 +99,7 @@ class ValueListener extends AbstractListener
      * If it is not a IAliasConvert return the values as it is.
      *
      * @param string     $idValue   The id to be used to find the alias.
-     *
      * @param IAttribute $attribute The attribute.
-     *
      * @param string     $language  The language to used for the convertion.
      *
      * @return string The value to be saved.
@@ -143,7 +140,7 @@ class ValueListener extends AbstractListener
 
     /**
      * Get the pure value like the alias or the id if the attribute is a converted one
-     * and convert it in a value for the widiget for fitting the option keys.
+     * and convert it in a value for the widget for fitting the option keys.
      *
      * @param DecodePropertyValueForWidgetEvent $event The event.
      *
@@ -212,7 +209,7 @@ class ValueListener extends AbstractListener
     }
 
     /**
-     * Set the the value select to multiple.
+     * Set the value select to multiple.
      *
      * @param ManipulateWidgetEvent $event The event.
      *
@@ -266,9 +263,7 @@ class ValueListener extends AbstractListener
      * Obtain the values of a property within a dc-general instance.
      *
      * @param IMetaModel           $metaModel   The metamodel instance to obtain the values from.
-     *
      * @param EnvironmentInterface $environment The environment used in the input screen table dc-general.
-     *
      * @param IAttribute           $attribute   The attribute to obtain the values for.
      *
      * @return array
@@ -276,7 +271,7 @@ class ValueListener extends AbstractListener
     private function getOptionsViaDcGeneral($metaModel, $environment, $attribute)
     {
         $factory   = DcGeneralFactory::deriveEmptyFromEnvironment($environment)
-                                     ->setContainerName($metaModel->getTableName());
+            ->setContainerName($metaModel->getTableName());
         $dcGeneral = $factory->createDcGeneral();
 
         $subEnv = $dcGeneral->getEnvironment();
@@ -284,8 +279,6 @@ class ValueListener extends AbstractListener
         $optEv->setPropertyName($attribute->getColName());
         $subEnv->getEventDispatcher()->dispatch($optEv, GetPropertyOptionsEvent::NAME);
 
-        $options = $optEv->getOptions();
-
-        return $options;
+        return $optEv->getOptions();
     }
 }
