@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
  *
  * @package    MetaModels/core
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -76,9 +77,9 @@ class PropertyValueCondition implements PropertyConditionInterface
      */
     public function __construct($propertyName = '', $propertyValue = null, $strict = false)
     {
-        $this->propertyName  = (string)$propertyName;
+        $this->propertyName  = (string) $propertyName;
         $this->propertyValue = $propertyValue;
-        $this->strict        = (bool)$strict;
+        $this->strict        = (bool) $strict;
     }
 
     /**
@@ -110,7 +111,7 @@ class PropertyValueCondition implements PropertyConditionInterface
      */
     public function setPropertyName($propertyName)
     {
-        $this->propertyName = (string)$propertyName;
+        $this->propertyName = (string) $propertyName;
 
         return $this;
     }
@@ -158,7 +159,7 @@ class PropertyValueCondition implements PropertyConditionInterface
      */
     public function setStrict($strict)
     {
-        $this->strict = (bool)$strict;
+        $this->strict = (bool) $strict;
 
         return $this;
     }
@@ -188,7 +189,7 @@ class PropertyValueCondition implements PropertyConditionInterface
         if ($this->metaModels instanceof ITranslatedMetaModel) {
             $currentLanguage = $this->metaModels->getLanguage();
         } else {
-            $currentLanguage  = $this->metaModels->getActiveLanguage();
+            $currentLanguage = $this->metaModels->getActiveLanguage();
         }
 
         if ($input && $input->hasPropertyValue($this->propertyName)) {
