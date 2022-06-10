@@ -31,6 +31,11 @@ use MetaModels\ITranslatedMetaModel;
 
 /**
  * Condition checking that the value of a property is the same as a passed value.
+ *
+ * Okay her comes the twist. We need this class, this is the only way to get the metamodels context we needed.
+ * If we have it we can call the Alias to ID convert function, since all the options of a select or
+ * other attributes are alias values. But the condition to check if the field is visibility or not use the ID.
+ * So we must translate the alias back to the id and check.
  */
 class PropertyValueCondition implements PropertyConditionInterface
 {
@@ -186,24 +191,16 @@ class PropertyValueCondition implements PropertyConditionInterface
             $currentLanguage  = $this->metaModels->getActiveLanguage();
         }
 
-        /*
-         * Okay her comes the twist. We need the mode, this is the only way to get the metamodels context we need.
-         * If we have it we can call the Alias to ID convert function, since all the options of a select or
-         * other attributes are alias values. But the condition to check if the field is visibil or not is the ID.
-         * So we musst translate the alias back to the id and check.
-         */
         if ($input && $input->hasPropertyValue($this->propertyName)) {
             $value = $input->getPropertyValue($this->propertyName);
-            if ($value && $attribute instanceof IAliasConverter) {
-                $value = $attribute->getIdForAlias($value, $currentLanguage) ?? $value;
-            }
-        } elseif ($model && $model instanceof Model) {
+        } elseif ($model instanceof Model) {
             $value = $model->getProperty($this->propertyName);
-            if ($value && $attribute instanceof IAliasConverter) {
-                $value = $attribute->getIdForAlias($value, $currentLanguage) ?? $value;
-            }
         } else {
             return false;
+        }
+
+        if ($value && $attribute instanceof IAliasConverter) {
+            $value = $attribute->getIdForAlias($value, $currentLanguage) ?? $value;
         }
 
         return $this->strict ? ($value === $this->propertyValue) : ($value == $this->propertyValue);

@@ -26,6 +26,10 @@ use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBag;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
+use MetaModels\Attribute\IAliasConverter;
+use MetaModels\DcGeneral\Data\Model;
+use MetaModels\IMetaModel;
+use MetaModels\ITranslatedMetaModel;
 
 /**
  * Condition checking that the value of a property is the same as a passed value.
@@ -54,6 +58,13 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
     protected $strict;
 
     /**
+     * The metamodels of the current context.
+     *
+     * @var IMetaModel
+     */
+    protected $metaModels;
+
+    /**
      * Create a new instance.
      *
      * @param string $propertyName  The name of the property.
@@ -67,6 +78,26 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
         $this->propertyName  = (string) $propertyName;
         $this->propertyValue = $propertyValue;
         $this->strict        = (bool) $strict;
+    }
+
+    /**
+     * Get the metamodels.
+     *
+     * @return IMetaModel
+     */
+    public function getMetaModels(): IMetaModel
+    {
+        return $this->metaModels;
+    }
+
+    /**
+     * Set the metamodels.
+     *
+     * @param IMetaModel $metaModels
+     */
+    public function setMetaModels(IMetaModel $metaModels): void
+    {
+        $this->metaModels = $metaModels;
     }
 
     /**
@@ -149,9 +180,16 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
         PropertyInterface $property = null,
         LegendInterface $legend = null
     ) {
+        $attribute = $this->metaModels->getAttribute($this->propertyName);
+        if ($this->metaModels instanceof ITranslatedMetaModel) {
+            $currentLanguage = $this->metaModels->getLanguage();
+        } else {
+            $currentLanguage = $this->metaModels->getActiveLanguage();
+        }
+
         if ($input && $input->hasPropertyValue($this->propertyName)) {
             $values = $input->getPropertyValue($this->propertyName);
-        } elseif ($model) {
+        } elseif ($model instanceof Model) {
             $values = $model->getProperty($this->propertyName);
         } else {
             return false;
@@ -161,8 +199,13 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
             return false;
         }
 
+        $propertyValue = \unserialize($this->propertyValue, [false]);
         foreach ($values as $value) {
-            if (in_array($value, $this->propertyValue, $this->strict)) {
+            if ($value && $attribute instanceof IAliasConverter) {
+                $value = $attribute->getIdForAlias($value, $currentLanguage) ?? $value;
+            }
+
+            if (in_array($value, $propertyValue, $this->strict)) {
                 return true;
             }
         }

@@ -33,9 +33,12 @@ class PropertyContainAnyOfConditionFactory extends AbstractRestrictedAttributeCo
      */
     public function buildCondition(array $configuration, IMetaModel $metaModel)
     {
-        return new PropertyContainAnyOfCondition(
+        $condition = new PropertyContainAnyOfCondition(
             $this->attributeIdToName($metaModel, $configuration['attr_id']),
-            StringUtil::deserialize($configuration['value'])
+            $configuration['value']
         );
+        $condition->setMetaModels($metaModel);
+
+        return $condition;
     }
 }
