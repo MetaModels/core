@@ -200,7 +200,6 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
             return false;
         }
 
-        $propertyValue = \unserialize($this->propertyValue, [false]);
         foreach ($values as $value) {
             if ($value && $attribute instanceof IAliasConverter) {
                 $value = $attribute->getIdForAlias($value, $currentLanguage) ?? $value;
