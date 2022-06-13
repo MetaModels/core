@@ -211,16 +211,17 @@ class InputScreenInformationBuilder
             );
 
             return $column;
-        }, $builder
-            ->select('t.*')
-            ->from('tl_metamodel_dcasetting', 't')
-            ->where('t.pid=:pid')
-            ->andWhere('t.published=:published')
-            ->setParameter('pid', $inputScreenId)
-            ->setParameter('published', 1)
-            ->orderBy('t.sorting')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC));
+        },
+            $builder
+                ->select('t.*')
+                ->from('tl_metamodel_dcasetting', 't')
+                ->where('t.pid=:pid')
+                ->andWhere('t.published=:published')
+                ->setParameter('pid', $inputScreenId)
+                ->setParameter('published', 1)
+                ->orderBy('t.sorting')
+                ->execute()
+                ->fetchAll(\PDO::FETCH_ASSOC));
     }
 
     /**
@@ -288,14 +289,15 @@ class InputScreenInformationBuilder
             }
 
             return $information;
-        }, $builder
-            ->select('t.*')
-            ->from('tl_metamodel_dca_sortgroup', 't')
-            ->where('t.pid=:screenId')
-            ->setParameter('screenId', $inputScreenId)
-            ->orderBy('t.sorting')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC));
+        },
+            $builder
+                ->select('t.*')
+                ->from('tl_metamodel_dca_sortgroup', 't')
+                ->where('t.pid=:screenId')
+                ->setParameter('screenId', $inputScreenId)
+                ->orderBy('t.sorting')
+                ->execute()
+                ->fetchAll(\PDO::FETCH_ASSOC));
     }
 
     /**
@@ -330,7 +332,7 @@ class InputScreenInformationBuilder
             ];
         };
 
-        $fallbackLanguage    = null;
+        $fallbackLanguage = null;
         if ($metaModel instanceof ITranslatedMetaModel) {
             $fallbackLanguage = $metaModel->getMainLanguage();
         } elseif ($metaModel->isTranslated(false)) {
@@ -370,11 +372,15 @@ class InputScreenInformationBuilder
     {
         if ($isTranslated) {
             $label = [];
-            foreach (($metaModel instanceof ITranslatedMetaModel)
-                ? $metaModel->getLanguages()
-                : $metaModel->getAvailableLanguages() as $availableLanguage) {
+            foreach (
+                ($metaModel instanceof ITranslatedMetaModel)
+                    ? $metaModel->getLanguages()
+                    : $metaModel->getAvailableLanguages() as $availableLanguage
+            ) {
                 $label[$availableLanguage] = $metaModel->getName();
             }
+            $label['default'] = $metaModel->getName();
+
             return $label;
         }
 
@@ -407,7 +413,7 @@ class InputScreenInformationBuilder
             'label'      => $label,
             'hide'       => (bool) $property['legendhide'],
             'properties' => [],
-            'condition' => $condition($property)
+            'condition'  => $condition($property)
         ];
     }
 
@@ -426,7 +432,7 @@ class InputScreenInformationBuilder
             return;
         }
         $legend['properties'][] = [
-            'name'       => $property['col_name'],
+            'name'      => $property['col_name'],
             'condition' => $condition($property)
         ];
     }
