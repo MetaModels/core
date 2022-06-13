@@ -97,7 +97,7 @@ class PropertyValueCondition implements PropertyConditionInterface
      *
      * @param IMetaModel $metaModel
      */
-    public function setMetaModels(IMetaModel $metaModel): void
+    public function setMetaModel(IMetaModel $metaModel): void
     {
         $this->metaModel = $metaModel;
     }

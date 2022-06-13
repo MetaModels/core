@@ -38,7 +38,7 @@ class PropertyValueConditionFactory extends AbstractRestrictedAttributeCondition
             $this->attributeIdToName($metaModel, $configuration['attr_id']),
             $configuration['value']
         );
-        $condition->setMetaModels($metaModel);
+        $condition->setMetaModel($metaModel);
 
         return $condition;
     }
