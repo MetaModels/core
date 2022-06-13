@@ -15,6 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -59,19 +60,17 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
     protected $strict;
 
     /**
-     * The metamodels of the current context.
+     * The metamodel of the current context.
      *
      * @var IMetaModel
      */
-    protected $metaModels;
+    protected $metaModel;
 
     /**
      * Create a new instance.
      *
      * @param string $propertyName  The name of the property.
-     *
      * @param mixed  $propertyValue The value of the property to match.
-     *
      * @param bool   $strict        Flag if the comparison shall be strict (type safe).
      */
     public function __construct($propertyName = '', $propertyValue = null, $strict = false)
@@ -82,23 +81,23 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
     }
 
     /**
-     * Get the metamodels.
+     * Get the metamodel.
      *
      * @return IMetaModel
      */
-    public function getMetaModels(): IMetaModel
+    public function getMetaModel(): IMetaModel
     {
-        return $this->metaModels;
+        return $this->metaModel;
     }
 
     /**
-     * Set the metamodels.
+     * Set the metamodel.
      *
-     * @param IMetaModel $metaModels
+     * @param IMetaModel $metaModel
      */
-    public function setMetaModels(IMetaModel $metaModels): void
+    public function setMetaModel(IMetaModel $metaModel): void
     {
-        $this->metaModels = $metaModels;
+        $this->metaModel = $metaModel;
     }
 
     /**
@@ -181,11 +180,12 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
         PropertyInterface $property = null,
         LegendInterface $legend = null
     ) {
-        $attribute = $this->metaModels->getAttribute($this->propertyName);
-        if ($this->metaModels instanceof ITranslatedMetaModel) {
-            $currentLanguage = $this->metaModels->getLanguage();
+        $attribute = $this->metaModel->getAttribute($this->propertyName);
+
+        if ($this->metaModel instanceof ITranslatedMetaModel) {
+            $currentLanguage = $this->metaModel->getLanguage();
         } else {
-            $currentLanguage = $this->metaModels->getActiveLanguage();
+            $currentLanguage = $this->metaModel->getActiveLanguage();
         }
 
         if ($input && $input->hasPropertyValue($this->propertyName)) {

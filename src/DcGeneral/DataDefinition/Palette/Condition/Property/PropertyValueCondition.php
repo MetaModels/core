@@ -62,11 +62,11 @@ class PropertyValueCondition implements PropertyConditionInterface
     protected $strict;
 
     /**
-     * The metamodels of the current context.
+     * The metamodel of the current context.
      *
      * @var IMetaModel
      */
-    protected $metaModels;
+    protected $metaModel;
 
     /**
      * Create a new instance.
@@ -83,23 +83,23 @@ class PropertyValueCondition implements PropertyConditionInterface
     }
 
     /**
-     * Get the metamodels.
+     * Get the metamodel.
      *
      * @return IMetaModel
      */
-    public function getMetaModels(): IMetaModel
+    public function getMetaModel(): IMetaModel
     {
-        return $this->metaModels;
+        return $this->metaModel;
     }
 
     /**
-     * Set the metamodels.
+     * Set the metamodel.
      *
-     * @param IMetaModel $metaModels
+     * @param IMetaModel $metaModel
      */
-    public function setMetaModels(IMetaModel $metaModels): void
+    public function setMetaModels(IMetaModel $metaModel): void
     {
-        $this->metaModels = $metaModels;
+        $this->metaModel = $metaModel;
     }
 
     /**
@@ -185,11 +185,12 @@ class PropertyValueCondition implements PropertyConditionInterface
         PropertyInterface $property = null,
         LegendInterface $legend = null
     ) {
-        $attribute = $this->metaModels->getAttribute($this->propertyName);
-        if ($this->metaModels instanceof ITranslatedMetaModel) {
-            $currentLanguage = $this->metaModels->getLanguage();
+        $attribute = $this->metaModel->getAttribute($this->propertyName);
+
+        if ($this->metaModel instanceof ITranslatedMetaModel) {
+            $currentLanguage = $this->metaModel->getLanguage();
         } else {
-            $currentLanguage = $this->metaModels->getActiveLanguage();
+            $currentLanguage = $this->metaModel->getActiveLanguage();
         }
 
         if ($input && $input->hasPropertyValue($this->propertyName)) {
