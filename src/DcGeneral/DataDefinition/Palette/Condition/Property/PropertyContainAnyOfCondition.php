@@ -196,7 +196,12 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
             return false;
         }
 
-        if (!$values || !\is_array($values)) {
+        // If both values, the current values and the searched one, are empty, return true.
+        if (empty($values) && empty($this->propertyValue)) {
+            return true;
+        } elseif (empty($values) || !\is_array($values)) {
+            return false;
+        } elseif (empty($this->propertyValue) || !\is_array($this->propertyValue)) {
             return false;
         }
 
