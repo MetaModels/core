@@ -196,7 +196,7 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
             return false;
         }
 
-        if (!$values || !is_array($values)) {
+        if (!$values || !\is_array($values)) {
             return false;
         }
 
@@ -205,7 +205,7 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
                 $value = $attribute->getIdForAlias($value, $currentLanguage) ?? $value;
             }
 
-            if (in_array($value, $propertyValue, $this->strict)) {
+            if (\in_array($value, $this->propertyValue, $this->strict)) {
                 return true;
             }
         }
