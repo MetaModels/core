@@ -11,9 +11,6 @@
  * This project is provided in good faith and hope to be usable by anyone.
  *
  * @package    MetaModels/core
- * @author     Christopher Boelter <christopher@boelter.eu>
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @copyright  2012-2022 The MetaModels team.
@@ -35,36 +32,41 @@ use MetaModels\ITranslatedMetaModel;
 
 /**
  * Condition checking that the value of a property is the same as a passed value.
+ *
+ * Okay her comes the twist. We need this class, this is the only way to get the metamodels context we needed.
+ * If we have it we can call the Alias to ID convert function, since all the options of a select or
+ * other attributes are alias values. But the condition to check if the field is visibility or not use the ID.
+ * So we must translate the alias back to the id and check.
  */
-class PropertyContainAnyOfCondition implements PropertyConditionInterface
+class PropertyValueCondition implements PropertyConditionInterface
 {
     /**
      * The property name.
      *
      * @var string
      */
-    protected $propertyName;
+    private string $propertyName;
 
     /**
      * The expected property value.
      *
      * @var mixed
      */
-    protected $propertyValue;
+    private $propertyValue;
 
     /**
      * Use strict compare mode.
      *
      * @var bool
      */
-    protected $strict;
+    private bool $strict;
 
     /**
      * The metamodel of the current context.
      *
-     * @var IMetaModel|null
+     * @var IMetaModel
      */
-    protected ?IMetaModel $metaModel;
+    private IMetaModel $metaModel;
 
     /**
      * Create a new instance.
@@ -73,45 +75,22 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
      * @param mixed  $propertyValue The value of the property to match.
      * @param bool   $strict        Flag if the comparison shall be strict (type safe).
      */
-    public function __construct($propertyName = '', $propertyValue = null, $strict = false)
+    public function __construct(string $propertyName, $propertyValue, bool $strict, IMetaModel $metaModel)
     {
-        $this->propertyName  = (string) $propertyName;
+        $this->propertyName  = $propertyName;
         $this->propertyValue = $propertyValue;
-        $this->strict        = (bool) $strict;
-        $this->metaModel     = null;
+        $this->strict        = $strict;
+        $this->metaModel     = $metaModel;
     }
 
     /**
      * Get the metamodel.
      *
-     * @return IMetaModel|null
+     * @return IMetaModel
      */
-    public function getMetaModel(): ?IMetaModel
+    public function getMetaModel(): IMetaModel
     {
         return $this->metaModel;
-    }
-
-    /**
-     * Set the metamodel.
-     *
-     * @param IMetaModel $metaModel
-     */
-    public function setMetaModel(IMetaModel $metaModel): void
-    {
-        $this->metaModel = $metaModel;
-    }
-
-    /**
-     * Set the property name.
-     *
-     * @param string $propertyName The property name.
-     *
-     * @return PropertyContainAnyOfCondition
-     */
-    public function setPropertyName($propertyName)
-    {
-        $this->propertyName = (string) $propertyName;
-        return $this;
     }
 
     /**
@@ -119,22 +98,9 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
      *
      * @return string
      */
-    public function getPropertyName()
+    public function getPropertyName(): string
     {
         return $this->propertyName;
-    }
-
-    /**
-     * Set the property value to match.
-     *
-     * @param mixed $propertyValue The value.
-     *
-     * @return PropertyContainAnyOfCondition
-     */
-    public function setPropertyValue($propertyValue)
-    {
-        $this->propertyValue = $propertyValue;
-        return $this;
     }
 
     /**
@@ -148,26 +114,13 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
     }
 
     /**
-     * Set the flag if the comparison shall be strict (type safe).
-     *
-     * @param boolean $strict The flag.
-     *
-     * @return PropertyContainAnyOfCondition
-     */
-    public function setStrict($strict)
-    {
-        $this->strict = (bool) $strict;
-        return $this;
-    }
-
-    /**
      * Retrieve the flag if the comparison shall be strict (type safe).
      *
      * @return boolean
      *
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getStrict()
+    public function getStrict(): bool
     {
         return $this->strict;
     }
@@ -190,35 +143,18 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
         }
 
         if ($input && $input->hasPropertyValue($this->propertyName)) {
-            $values = $input->getPropertyValue($this->propertyName);
+            $value = $input->getPropertyValue($this->propertyName);
         } elseif ($model instanceof Model) {
-            $values = $model->getProperty($this->propertyName);
+            $value = $model->getProperty($this->propertyName);
         } else {
             return false;
         }
 
-        // If both values, the current values and the searched one, are empty, return true.
-        if (empty($values) && empty($this->propertyValue)) {
-            return true;
-        }
-        if (empty($values) || !\is_array($values)) {
-            return false;
-        }
-        if (empty($this->propertyValue) || !\is_array($this->propertyValue)) {
-            return false;
+        if ($value && $attribute instanceof IAliasConverter) {
+            $value = $attribute->getIdForAlias($value, $currentLanguage) ?? $value;
         }
 
-        foreach ($values as $value) {
-            if ($value && $attribute instanceof IAliasConverter) {
-                $value = $attribute->getIdForAlias($value, $currentLanguage) ?? $value;
-            }
-
-            if (\in_array($value, $this->propertyValue, $this->strict)) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->strict ? ($value === $this->propertyValue) : ($value == $this->propertyValue);
     }
 
     /**
