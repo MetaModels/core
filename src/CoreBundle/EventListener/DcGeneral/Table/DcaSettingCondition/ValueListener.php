@@ -57,10 +57,13 @@ class ValueListener extends AbstractListener
 
         $model     = $event->getModel();
         $metaModel = $this->getMetaModel($event->getEnvironment());
+
         if (null === $attributeId = $model->getProperty('attr_id')) {
             return;
         }
+
         $attribute = $metaModel->getAttributeById($attributeId);
+
         if ($attribute) {
             $options = $this->getOptionsViaDcGeneral($metaModel, $event->getEnvironment(), $attribute);
             $mangled = [];
@@ -70,72 +73,6 @@ class ValueListener extends AbstractListener
 
             $event->setOptions($mangled);
         }
-    }
-
-    /**
-     * If the attribute supports the IAliasConverter try to get the id instead of the alias.
-     * If it is not a IAliasConvert return the clear value without "value_".
-     *
-     * @param string     $alias     The alias where we want the id from.
-     * @param IAttribute $attribute The attribute.
-     * @param string     $language  The language to used for the convertion.
-     *
-     * @return string The value to be saved.
-     */
-    private function aliasToId(string $alias, IAttribute $attribute, string $language): string
-    {
-        if ($attribute instanceof IAliasConverter) {
-            $id = $attribute->getIdForAlias(substr($alias, 6), $language);
-            if ($id !== null) {
-                return $id;
-            }
-        }
-
-        return substr($alias, 6);
-    }
-
-    /**
-     * If the attribute supports the IAliasConverter try to get the alias instead of the id.
-     * If it is not a IAliasConvert return the values as it is.
-     *
-     * @param string     $idValue   The id to be used to find the alias.
-     * @param IAttribute $attribute The attribute.
-     * @param string     $language  The language to used for the convertion.
-     *
-     * @return string The value to be saved.
-     */
-    private function idToAlias(string $idValue, IAttribute $attribute, string $language): string
-    {
-        if (substr($idValue, 0, 6) == 'value_') {
-            $idValue = substr($idValue, 6);
-        }
-
-        if ($attribute instanceof IAliasConverter) {
-            $alias = $attribute->getAliasForId($idValue, $language);
-            if ($alias !== null) {
-                return 'value_' . $alias;
-            }
-        }
-
-        return 'value_' . $idValue;
-    }
-
-    /**
-     * Try to find the right language context.
-     *
-     * @param \MetaModels\IMetaModel $metaModel The current metamodel for the context.
-     *
-     * @return string
-     */
-    private function extractCurrentLanguagContext(IMetaModel $metaModel): string
-    {
-        if ($metaModel instanceof ITranslatedMetaModel) {
-            $currentLanguage = $metaModel->getLanguage();
-        } else {
-            $currentLanguage = $metaModel->getActiveLanguage();
-        }
-
-        return $currentLanguage;
     }
 
     /**
@@ -280,5 +217,71 @@ class ValueListener extends AbstractListener
         $subEnv->getEventDispatcher()->dispatch($optEv, GetPropertyOptionsEvent::NAME);
 
         return $optEv->getOptions();
+    }
+
+    /**
+     * If the attribute supports the IAliasConverter try to get the id instead of the alias.
+     * If it is not an IAliasConverter return the clear value without "value_".
+     *
+     * @param string     $alias     The alias where we want the id from.
+     * @param IAttribute $attribute The attribute.
+     * @param string     $language  The language to used for the convertion.
+     *
+     * @return string The value to be saved.
+     */
+    private function aliasToId(string $alias, IAttribute $attribute, string $language): string
+    {
+        if ($attribute instanceof IAliasConverter) {
+            $id = $attribute->getIdForAlias(substr($alias, 6), $language);
+            if ($id !== null) {
+                return $id;
+            }
+        }
+
+        return substr($alias, 6);
+    }
+
+    /**
+     * If the attribute supports the IAliasConverter try to get the alias instead of the id.
+     * If it is not an IAliasConverter return the values as it is.
+     *
+     * @param string     $idValue   The id to be used to find the alias.
+     * @param IAttribute $attribute The attribute.
+     * @param string     $language  The language to used for the convertion.
+     *
+     * @return string The value to be saved.
+     */
+    private function idToAlias(string $idValue, IAttribute $attribute, string $language): string
+    {
+        if (substr($idValue, 0, 6) == 'value_') {
+            $idValue = substr($idValue, 6);
+        }
+
+        if ($attribute instanceof IAliasConverter) {
+            $alias = $attribute->getAliasForId($idValue, $language);
+            if ($alias !== null) {
+                return 'value_' . $alias;
+            }
+        }
+
+        return 'value_' . $idValue;
+    }
+
+    /**
+     * Try to find the right language context.
+     *
+     * @param \MetaModels\IMetaModel $metaModel The current metamodel for the context.
+     *
+     * @return string
+     */
+    private function extractCurrentLanguageContext(IMetaModel $metaModel): string
+    {
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            $currentLanguage = $metaModel->getLanguage();
+        } else {
+            $currentLanguage = $metaModel->getActiveLanguage();
+        }
+
+        return $currentLanguage;
     }
 }
