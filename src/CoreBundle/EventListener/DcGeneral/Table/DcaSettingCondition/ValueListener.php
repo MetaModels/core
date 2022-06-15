@@ -277,11 +277,13 @@ class ValueListener extends AbstractListener
     private function extractCurrentLanguageContext(IMetaModel $metaModel): string
     {
         if ($metaModel instanceof ITranslatedMetaModel) {
-            $currentLanguage = $metaModel->getLanguage();
-        } else {
-            $currentLanguage = $metaModel->getActiveLanguage();
+            return $metaModel->getLanguage();
         }
-
-        return $currentLanguage;
+        // Legacy compatibility fallback for translated metamodels not implementing the interface.
+        if ($this->isTranslated(false)) {
+            return $metaModel->getActiveLanguage();
+        }
+        // Use the current backend language then.
+        return \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
     }
 }

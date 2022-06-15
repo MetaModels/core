@@ -45,28 +45,28 @@ class PropertyValueCondition implements PropertyConditionInterface
      *
      * @var string
      */
-    protected $propertyName;
+    private $propertyName;
 
     /**
      * The expected property value.
      *
      * @var mixed
      */
-    protected $propertyValue;
+    private $propertyValue;
 
     /**
      * Use strict compare mode.
      *
      * @var bool
      */
-    protected $strict;
+    private $strict;
 
     /**
      * The metamodel of the current context.
      *
      * @var IMetaModel
      */
-    protected $metaModel;
+    private $metaModel;
 
     /**
      * Create a new instance.
@@ -80,6 +80,7 @@ class PropertyValueCondition implements PropertyConditionInterface
         $this->propertyName  = (string) $propertyName;
         $this->propertyValue = $propertyValue;
         $this->strict        = (bool) $strict;
+        $this->metaModel     = null;
     }
 
     /**
