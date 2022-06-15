@@ -45,7 +45,7 @@ class PropertyValueCondition implements PropertyConditionInterface
      *
      * @var string
      */
-    private $propertyName;
+    private string $propertyName;
 
     /**
      * The expected property value.
@@ -59,14 +59,14 @@ class PropertyValueCondition implements PropertyConditionInterface
      *
      * @var bool
      */
-    private $strict;
+    private bool $strict;
 
     /**
      * The metamodel of the current context.
      *
      * @var IMetaModel
      */
-    private $metaModel;
+    private IMetaModel $metaModel;
 
     /**
      * Create a new instance.
@@ -75,12 +75,12 @@ class PropertyValueCondition implements PropertyConditionInterface
      * @param mixed  $propertyValue The value of the property to match.
      * @param bool   $strict        Flag if the comparison shall be strict (type safe).
      */
-    public function __construct($propertyName = '', $propertyValue = null, $strict = false)
+    public function __construct(string $propertyName, $propertyValue, bool $strict, IMetaModel $metaModel)
     {
-        $this->propertyName  = (string) $propertyName;
+        $this->propertyName  = $propertyName;
         $this->propertyValue = $propertyValue;
-        $this->strict        = (bool) $strict;
-        $this->metaModel     = null;
+        $this->strict        = $strict;
+        $this->metaModel     = $metaModel;
     }
 
     /**
@@ -94,51 +94,13 @@ class PropertyValueCondition implements PropertyConditionInterface
     }
 
     /**
-     * Set the metamodel.
-     *
-     * @param IMetaModel $metaModel
-     */
-    public function setMetaModel(IMetaModel $metaModel): void
-    {
-        $this->metaModel = $metaModel;
-    }
-
-    /**
-     * Set the property name.
-     *
-     * @param string $propertyName The property name.
-     *
-     * @return \ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyValueCondition
-     */
-    public function setPropertyName($propertyName)
-    {
-        $this->propertyName = (string) $propertyName;
-
-        return $this;
-    }
-
-    /**
      * Retrieve the property name.
      *
      * @return string
      */
-    public function getPropertyName()
+    public function getPropertyName(): string
     {
         return $this->propertyName;
-    }
-
-    /**
-     * Set the property value to match.
-     *
-     * @param mixed $propertyValue The value.
-     *
-     * @return PropertyValueCondition
-     */
-    public function setPropertyValue($propertyValue)
-    {
-        $this->propertyValue = $propertyValue;
-
-        return $this;
     }
 
     /**
@@ -152,27 +114,13 @@ class PropertyValueCondition implements PropertyConditionInterface
     }
 
     /**
-     * Set the flag if the comparison shall be strict (type safe).
-     *
-     * @param boolean $strict The flag.
-     *
-     * @return PropertyValueCondition
-     */
-    public function setStrict($strict)
-    {
-        $this->strict = (bool) $strict;
-
-        return $this;
-    }
-
-    /**
      * Retrieve the flag if the comparison shall be strict (type safe).
      *
      * @return boolean
      *
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
-    public function getStrict()
+    public function getStrict(): bool
     {
         return $this->strict;
     }

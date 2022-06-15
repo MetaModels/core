@@ -280,7 +280,7 @@ class ValueListener extends AbstractListener
             return $metaModel->getLanguage();
         }
         // Legacy compatibility fallback for translated metamodels not implementing the interface.
-        if ($this->isTranslated(false)) {
+        if ($metaModel->isTranslated(false)) {
             return $metaModel->getActiveLanguage();
         }
         // Use the current backend language then.

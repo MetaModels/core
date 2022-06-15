@@ -34,12 +34,11 @@ class PropertyValueConditionFactory extends AbstractRestrictedAttributeCondition
      */
     public function buildCondition(array $configuration, IMetaModel $metaModel)
     {
-        $condition = new PropertyValueCondition(
+        return new PropertyValueCondition(
             $this->attributeIdToName($metaModel, $configuration['attr_id']),
-            $configuration['value']
+            $configuration['value'],
+            true,
+            $metaModel
         );
-        $condition->setMetaModel($metaModel);
-
-        return $condition;
     }
 }

@@ -62,9 +62,9 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
     /**
      * The metamodel of the current context.
      *
-     * @var IMetaModel
+     * @var IMetaModel|null
      */
-    protected $metaModel;
+    protected ?IMetaModel $metaModel;
 
     /**
      * Create a new instance.
@@ -78,14 +78,15 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
         $this->propertyName  = (string) $propertyName;
         $this->propertyValue = $propertyValue;
         $this->strict        = (bool) $strict;
+        $this->metaModel     = null;
     }
 
     /**
      * Get the metamodel.
      *
-     * @return IMetaModel
+     * @return IMetaModel|null
      */
-    public function getMetaModel(): IMetaModel
+    public function getMetaModel(): ?IMetaModel
     {
         return $this->metaModel;
     }
@@ -199,9 +200,11 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
         // If both values, the current values and the searched one, are empty, return true.
         if (empty($values) && empty($this->propertyValue)) {
             return true;
-        } elseif (empty($values) || !\is_array($values)) {
+        }
+        if (empty($values) || !\is_array($values)) {
             return false;
-        } elseif (empty($this->propertyValue) || !\is_array($this->propertyValue)) {
+        }
+        if (empty($this->propertyValue) || !\is_array($this->propertyValue)) {
             return false;
         }
 
