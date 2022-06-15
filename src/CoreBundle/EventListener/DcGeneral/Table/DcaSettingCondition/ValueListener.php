@@ -95,7 +95,7 @@ class ValueListener extends AbstractListener
             return;
         }
         $attribute       = $metaModel->getAttributeById($attributeId);
-        $currentLanguage = $this->extractCurrentLanguagContext($metaModel);
+        $currentLanguage = $this->extractCurrentLanguageContext($metaModel);
 
         if (is_array($event->getValue())) {
             $values = [];
@@ -130,7 +130,7 @@ class ValueListener extends AbstractListener
             return;
         }
         $attribute       = $metaModel->getAttributeById($attributeId);
-        $currentLanguage = $this->extractCurrentLanguagContext($metaModel);
+        $currentLanguage = $this->extractCurrentLanguageContext($metaModel);
 
         if (is_array($event->getValue())) {
             $values = [];
