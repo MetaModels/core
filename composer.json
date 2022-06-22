@@ -31,10 +31,10 @@
   },
   "require": {
     "php": "^7.4",
-    "contao-community-alliance/dc-general": "^2.2@dev",
-    "contao-community-alliance/events-contao-bindings": "^4.9@dev",
+    "contao-community-alliance/dc-general": "^2.2",
+    "contao-community-alliance/events-contao-bindings": "^4.9",
     "contao-community-alliance/meta-palettes": "~2.0",
-    "contao-community-alliance/translator": "~2.1",
+    "contao-community-alliance/translator": "^2.2",
     "contao-community-alliance/url-builder": "~1.3",
     "contao/core-bundle": "^4.9.0, <4.13.0",
     "discordier/justtextwidgets": "^1.2",
