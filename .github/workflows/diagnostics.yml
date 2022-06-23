@@ -1,0 +1,52 @@
+name: MetaModels core
+
+on:
+  push:
+    branches-ignore:
+      - '**-translation'
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [7.3, 7.4]
+        contao: [~4.4.0, ~4.9.0]
+
+    steps:
+      - name: PHP ${{ matrix.php }} ${{ matrix.contao }} Pull source
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # see https://github.com/shivammathur/setup-php
+      - name: PHP ${{ matrix.php }} ${{ matrix.contao }} Setup PHP.
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: PHP ${{ matrix.php }} ${{ matrix.contao }} Cache composer cache directory
+        uses: actions/cache@v1
+        env:
+          cache-name: composer-cache-dir
+        with:
+          path: ~/.cache/composer
+          key: ${{ runner.os }}-build-${{ env.cache-name }}
+
+      - name: PHP ${{ matrix.php }} ${{ matrix.contao }} Cache vendor directory
+        uses: actions/cache@v1
+        env:
+          cache-name: composer-vendor
+        with:
+          path: vendor
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+
+      - name: PHP ${{ matrix.php }} ${{ matrix.contao }} Install composer dependencies
+        run: composer update --prefer-dist --no-interaction --no-suggest
+
+      - name: PHP ${{ matrix.php }} ${{ matrix.contao }} Run tests
+        run: ant -keep-going

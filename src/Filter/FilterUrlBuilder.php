@@ -14,6 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -190,6 +191,9 @@ class FilterUrlBuilder
         }
 
         $request = $this->requestStack->getMasterRequest();
+        if (null === $request) {
+            return;
+        }
 
         if (isset($options['preserveGet'])) {
             foreach ($request->query->all() as $name => $value) {
