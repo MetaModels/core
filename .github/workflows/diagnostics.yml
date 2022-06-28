@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [7.4]
-        contao: [~4.9.0]
+        php: [7.4, 8,0]
+        contao: [~4.13.0]
 
     steps:
       - name: PHP ${{ matrix.php }} ${{ matrix.contao }} Pull source
