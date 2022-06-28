@@ -67,7 +67,7 @@ class TableCollationMigration extends AbstractMigration
     {
         return \sprintf(
             'Change collation to %1$s and/or DB engine to %2$s of all mm_* tables.',
-            $this->defaultTableOptions['collate'],
+            $this->defaultTableOptions['collation'],
             $this->defaultTableOptions['engine']
         );
     }
@@ -76,9 +76,10 @@ class TableCollationMigration extends AbstractMigration
      * Must only run if:
      * - the mm_* tables are present AND
      * - there collation is not utf8mb4_unicode_ci OR
-     * - these engine is not InnoDB.
+     * - the engine is not InnoDB.
      *
      * @return bool
+     * @throws \Doctrine\DBAL\Exception
      */
     public function shouldRun(): bool
     {
@@ -94,6 +95,7 @@ class TableCollationMigration extends AbstractMigration
      * Collect the tables to be updated and update them.
      *
      * @return MigrationResult
+     * @throws \Doctrine\DBAL\Exception
      */
     public function run(): MigrationResult
     {
@@ -111,6 +113,7 @@ class TableCollationMigration extends AbstractMigration
      * Fetch all tables that are not right collection or DB engine yet.
      *
      * @return array
+     * @throws \Doctrine\DBAL\Exception
      */
     private function fetchPendingTables(): array
     {
@@ -120,17 +123,17 @@ class TableCollationMigration extends AbstractMigration
         $results = [];
         foreach ($tableNames as $tableName) {
             // Only MM model tables.
-            if ('mm_' !== substr($tableName, 0, 3)) {
+            if ('mm_' !== \substr($tableName, 0, 3)) {
                 continue;
             }
 
             // Retrieve table data.
             $result = $this->connection
                 ->executeQuery(sprintf('SHOW TABLE STATUS LIKE \'%1$s\'', $tableName))
-                ->fetch();
+                ->fetchAllAssociative();
 
             // Check collation and DB engine and collect tables with false data.
-            if (($this->defaultTableOptions['collate'] !== $result['Collation'])
+            if (($this->defaultTableOptions['collation'] !== $result['Collation'])
                 || ($this->defaultTableOptions['engine'] !== $result['Engine'])
             ) {
                 $results[] = $tableName;
@@ -146,11 +149,12 @@ class TableCollationMigration extends AbstractMigration
      * @param string $tableName The name of the table.
      *
      * @return void
+     * @throws \Doctrine\DBAL\Exception
      */
     private function fixTable(string $tableName): void
     {
         $this->connection->executeQuery(
-            sprintf(
+            \sprintf(
                 'ALTER TABLE %1$s
                 ENGINE=%2$s
                 DEFAULT CHARSET=%3$s COLLATE %4$s
@@ -158,7 +162,7 @@ class TableCollationMigration extends AbstractMigration
                 $tableName,
                 $this->defaultTableOptions['engine'],
                 $this->defaultTableOptions['charset'],
-                $this->defaultTableOptions['collate']
+                $this->defaultTableOptions['collation']
             )
         );
     }
