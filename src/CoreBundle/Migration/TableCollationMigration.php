@@ -130,7 +130,7 @@ class TableCollationMigration extends AbstractMigration
             // Retrieve table data.
             $result = $this->connection
                 ->executeQuery(sprintf('SHOW TABLE STATUS LIKE \'%1$s\'', $tableName))
-                ->fetchAllAssociative();
+                ->fetchAssociative();
 
             // Check collation and DB engine and collect tables with false data.
             if (($this->defaultTableOptions['collation'] !== $result['Collation'])
