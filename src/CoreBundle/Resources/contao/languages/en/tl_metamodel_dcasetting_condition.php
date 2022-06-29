@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2020 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -50,19 +51,19 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['new'][1]              
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['edit'][0]                                         =
     'Edit setting';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['edit'][1]                                         =
-    'Edit setting ID %s';
+    'Edit the setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['cut'][0]                                          =
     'Cut setting definition';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['cut'][1]                                          =
-    'Cut setting ID %s';
+    'Cut the setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['copy'][0]                                         =
     'Copy setting definition';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['copy'][1]                                         =
-    'Copy setting ID %s';
+    'Copy the setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['delete'][0]                                       =
     'Delete setting';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['delete'][1]                                       =
-    'Delete setting ID %s';
+    'Delete the setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditions'][0]                                   =
     'Manage conditions';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['conditions'][1]                                   =
@@ -104,3 +105,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['typedesc']['conditiona
     '%s <strong>%s</strong><br>all sub conditions must be fulfilled';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['typedesc']['conditionnot']                        =
     '%s <strong>%s</strong><br>invert the result of the contained condition';
+
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['deleteConfirm'] =
+    'Do you really want to delete setting ID %s?';

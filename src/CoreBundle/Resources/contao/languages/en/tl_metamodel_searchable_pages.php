@@ -53,3 +53,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['toggle'][1]        =
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['settings'][0]      = 'Searchable page settings';
 $GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['settings'][1]      =
     'Edit the settings of searchable page setting ID %s';
+
+$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['deleteConfirm'] =
+    'Do you really want to searchable page setting ID %s?';

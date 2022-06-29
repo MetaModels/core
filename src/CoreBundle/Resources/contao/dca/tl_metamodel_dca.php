@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,7 +21,7 @@
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -155,7 +155,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca'] = [
                 'icon'       => 'delete.svg',
                 'attributes' => sprintf(
                     'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
-                    $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+                    $GLOBALS['TL_LANG']['tl_metamodel_dca']['deleteConfirm'] ?? ''
                 )
             ],
             'show'               => [

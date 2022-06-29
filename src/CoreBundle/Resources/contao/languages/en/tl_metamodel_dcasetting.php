@@ -101,13 +101,13 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']            = '
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new'][0]                     = 'New';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new'][1]                     = 'Create new setting.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['edit'][0]                    = 'Edit setting';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['edit'][1]                    = 'Edit setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['edit'][1]                    = 'Edit the setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['cut'][0]                     = 'Cut setting definition';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['cut'][1]                     = 'Cut setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['cut'][1]                     = 'Cut the setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy'][0]                    = 'Copy setting definition';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy'][1]                    = 'Copy setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['copy'][1]                    = 'Copy the setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete'][0]                  = 'Delete setting';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete'][1]                  = 'Delete setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['delete'][1]                  = 'Delete the setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['conditions'][0]              = 'Manage visibility conditions';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['conditions'][1]              =
     'Manage the visibility conditions of property ID %s';
@@ -138,3 +138,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory_for_unique_attr']  =
     'Unique attribues are automatically mandatory (this is not changable).';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly_for_force_alias']   =
     'Attribues with force alias are automatically readonly (this is not changable).';
+
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['deleteConfirm'] = 'Do you really want to delete setting ID %s?';

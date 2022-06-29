@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2018 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2018 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -64,9 +65,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['new'][1]                     
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['edit'][0]                      = 'Edit definition';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['edit'][1]                      = 'Edit the definition ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['copy'][0]                      = 'Copy definition';
-$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['copy'][1]                      = 'Copy definition ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['copy'][1]                      = 'Copy the definition ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['delete'][0]                    = 'Delete definition';
-$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['delete'][1]                    = 'Delete definition ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['delete'][1]                    = 'Delete the definition ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['show'][0]                      = 'Definition details';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['show'][1]                      = 'Show details of definition ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['settings'][0]                  = 'Definition settings';
@@ -82,3 +83,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergrouptypes']['month']  
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendergrouptypes']['year']     = 'Group by year of date';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendersortdirections']['asc']  = 'Ascending';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['rendersortdirections']['desc'] = 'Descending';
+
+$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['deleteConfirm'] = 'Do you really want to delete definition ID %s?';

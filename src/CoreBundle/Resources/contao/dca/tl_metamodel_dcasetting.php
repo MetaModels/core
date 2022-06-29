@@ -166,7 +166,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting'] = [
                 'icon'       => 'delete.svg',
                 'attributes' => sprintf(
                     'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
-                    $GLOBALS['TL_LANG']['MSC']['deleteConfirm']
+                    $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['deleteConfirm'] ?? ''
                 )
             ],
             'show'       => [

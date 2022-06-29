@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -64,11 +64,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['publish']                 = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new'][0]                  = 'New';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new'][1]                  = 'Create new setting';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['edit'][0]                 = 'Edit setting';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['edit'][1]                 = 'Edit setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['edit'][1]                 = 'Edit the setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['copy'][0]                 = 'Copy setting definition';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['copy'][1]                 = 'Copy setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['copy'][1]                 = 'Copy the setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['delete'][0]               = 'Delete setting';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['delete'][1]               = 'Delete setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['delete'][1]               = 'Delete the setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show'][0]                 = 'Filter details';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show'][1]                 = 'Show details of setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['settings'][0]             = 'Define attribute settings';
@@ -81,3 +81,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['pasteafter'][1]           = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['error_unknown_id']        = 'unknown ID: %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['error_unknown_attribute'] = 'unknown attribute';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['error_unknown_column']    = 'unknown column';
+
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['deleteConfirm'] = 'Do you really want to render setting ID %s?';

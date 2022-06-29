@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -36,11 +36,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['new'][1]                  = '
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit'][0]                 = 'Edit setting';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['edit'][1]                 = 'Edit render setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['cut'][0]                  = 'Cut render setting definition';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['cut'][1]                  = 'Cut render setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['cut'][1]                  = 'Cut the render setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy'][0]                 = 'Copy render setting definition';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy'][1]                 = 'Copy render setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy'][1]                 = 'Copy the render setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete'][0]               = 'Delete render setting';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete'][1]               = 'Delete render setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['delete'][1]               = 'Delete the render setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show'][0]                 = 'Render setting details';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['show'][1]                 = 'Show details of render setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['toggle'][0]               = 'Toggle';
@@ -58,3 +58,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_alreadycontained'] =
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_addsuccess']       =
     'Added attribute "%s" [%s] to rendersetting.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_activate']         = 'Add new settings enabled.';
+
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['deleteConfirm'] =
+    'Do you really want to render filter setting ID %s?';

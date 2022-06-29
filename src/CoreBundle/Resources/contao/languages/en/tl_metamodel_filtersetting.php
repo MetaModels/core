@@ -109,15 +109,15 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fefilter_legend']            
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new'][0]                             = 'New';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new'][1]                             = 'Create new setting.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit'][0]                            = 'Edit setting';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit'][1]                            = 'Edit filter setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['edit'][1]                            = 'Edit the filter setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy'][0]                            =
     'Copy filter setting definition';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy'][1]                            = 'Copy filter setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['copy'][1]                            = 'Copy the filter setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cut'][0]                             =
     'Cut filter setting definition';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cut'][1]                             = 'Cut filter setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cut'][1]                             = 'Cut the filter setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete'][0]                          = 'Delete filter setting';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete'][1]                          = 'Delete filter setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete'][1]                          = 'Delete the filter setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show'][0]                            = 'Filter setting details';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show'][1]                            =
     'Show details of filter setting ID %s';
@@ -152,3 +152,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand']   
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['items'][0]                           = 'Items';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['items'][1]                           =
     'Please enter the IDs of the items for filtering as comma-separated list.';
+
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['deleteConfirm'] =
+    'Do you really want to delete filter setting ID %s?';

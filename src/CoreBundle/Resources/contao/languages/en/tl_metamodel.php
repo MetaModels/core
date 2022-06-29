@@ -84,3 +84,5 @@ $GLOBALS['TL_LANG']['tl_metamodel']['pasteafter'][1]             = 'Create new a
 $GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['0']      = '%s items';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['1']      = '%s item';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['2:']     = '%s items';
+
+$GLOBALS['TL_LANG']['tl_metamodel']['deleteConfirm'] = 'Do you really want to delete MetaModel ID %s?';
