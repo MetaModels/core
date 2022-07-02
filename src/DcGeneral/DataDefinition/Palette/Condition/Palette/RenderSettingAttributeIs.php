@@ -120,6 +120,7 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
      */
     public function getTypeOfAttribute($value)
     {
+
         if (!isset(self::$attributeTypes[$value])) {
             $statement = $this->connection
                 ->createQueryBuilder()
@@ -141,11 +142,16 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
      */
     public function getMatchCount(ModelInterface $model = null, PropertyValueBag $input = null)
     {
+        $value = null;
         if ($input && $input->hasPropertyValue('attr_id')) {
             $value = $input->getPropertyValue('attr_id');
         } elseif ($model) {
             $value = $model->getProperty('attr_id');
         } else {
+            return false;
+        }
+
+        if (null === $value) {
             return false;
         }
 
