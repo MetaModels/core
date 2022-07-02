@@ -95,10 +95,10 @@ class HybridFilterBlock extends MetaModelHybrid
                     ->where('t.id=:id')
                     ->setParameter('id', $this->metamodel_jumpTo)
                     ->setMaxResults(1)
-                    ->execute();
+                    ->executeQuery();
 
                 if ($statement->rowCount()) {
-                    $this->setJumpTo($statement->fetch(\PDO::FETCH_ASSOC));
+                    $this->setJumpTo($statement->fetchAssociative());
                 }
             }
         }

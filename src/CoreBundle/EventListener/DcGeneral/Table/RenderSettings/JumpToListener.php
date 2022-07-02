@@ -216,8 +216,8 @@ class JumpToListener extends AbstractAbstainingListener
             ->from('tl_metamodel_filter', 't')
             ->where('t.pid=:id')
             ->setParameter('id', $model->getProperty('pid'))
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $result = [];
         foreach ($filters as $filter) {

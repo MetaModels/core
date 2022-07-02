@@ -68,8 +68,8 @@ class GroupOptionListener
             ->select('t.id')
             ->addSelect('t.name')
             ->from($isBackend ? 'tl_user_group' : 'tl_member_group', 't')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $result     = [];
         $result[-1] = $event->getEnvironment()->getTranslator()->translate(

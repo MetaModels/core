@@ -362,8 +362,8 @@ class MetaModel implements IMetaModel
         return $this->getConnection()->createQueryBuilder()
             ->select('t.id')
             ->from($this->getTableName(), 't')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->executeQuery()
+            ->fetchFirstColumn();
     }
 
     /**
@@ -404,7 +404,7 @@ class MetaModel implements IMetaModel
             ->where($builder->expr()->in('t.id', ':values'))
             ->setParameter('values', $arrIds, Connection::PARAM_STR_ARRAY)
             ->orderBy('FIELD(id, :values)')
-            ->execute();
+            ->executeQuery();
 
         // If we have an attribute restriction, make sure we keep the system columns. See #196.
         if ($arrAttrOnly) {
@@ -412,7 +412,7 @@ class MetaModel implements IMetaModel
         }
 
         $result = [];
-        while ($row = $query->fetch(\PDO::FETCH_ASSOC)) {
+        while ($row = $query->fetchAssociative()) {
             $data = [];
             foreach ($row as $attribute => $value) {
                 if ((!$arrAttrOnly) || (in_array($attribute, $arrAttrOnly, true))) {
@@ -945,8 +945,8 @@ class MetaModel implements IMetaModel
                     ->where($builder->expr()->in('t.id', ':values'))
                     ->setParameter('values', $arrFilteredIds, Connection::PARAM_STR_ARRAY)
                     ->orderBy($strSortBy, $strSortOrder)
-                    ->execute()
-                    ->fetchAll(\PDO::FETCH_COLUMN);
+                    ->executeQuery()
+                    ->fetchFirstColumn();
 
                 // Add the new sorted Id's to the cache and use only the wanted.
                 $this->existingIds[$sortKey] = $arrSortedFilteredIds;
@@ -980,8 +980,8 @@ class MetaModel implements IMetaModel
             ->from($this->getTableName(), 't')
             ->where($builder->expr()->in('t.id', ':values'))
             ->setParameter('values', $arrFilteredIds, Connection::PARAM_STR_ARRAY)
-            ->execute()
-            ->fetch(\PDO::FETCH_COLUMN);
+            ->executeQuery()
+            ->fetchFirstColumn();
     }
 
     /**
@@ -997,8 +997,8 @@ class MetaModel implements IMetaModel
             ->select('t.id')
             ->from($this->getTableName(), 't')
             ->where('t.varbase=1')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->executeQuery()
+            ->fetchFirstColumn();
 
         $objNewFilter->addFilterRule(new StaticIdList($idList));
         return $this->findByFilter($objNewFilter);
@@ -1023,8 +1023,8 @@ class MetaModel implements IMetaModel
             ->where('t.varbase=0')
             ->andWhere($builder->expr()->in('t.vargroup', ':ids'))
             ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->executeQuery()
+            ->fetchFirstColumn();
 
         $objNewFilter->addFilterRule(new StaticIdList($idList));
         return $this->findByFilter($objNewFilter);
@@ -1049,8 +1049,8 @@ class MetaModel implements IMetaModel
             ->leftJoin('t', $this->getTableName(), 't2', 't.vargroup=t2.vargroup')
             ->where($builder->expr()->in('t2.id', ':ids'))
             ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+            ->executeQuery()
+            ->fetchFirstColumn();
 
         $objNewFilter->addFilterRule(new StaticIdList($idList));
         return $this->findByFilter($objNewFilter);

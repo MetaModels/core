@@ -101,8 +101,8 @@ class ViewCombinationBuilder
             ->orWhere('t.' . $userType . '_group=0')
             ->orderBy('t.pid')
             ->addOrderBy('t.sorting')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $result = [
             'byName' => [],

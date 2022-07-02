@@ -140,8 +140,8 @@ class TemplateList
             ->createQueryBuilder()
             ->select('t.id, t.name, t.templates')
             ->from('tl_theme', 't')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         // Add all the theme templates folders.
         foreach ($themes as $theme) {

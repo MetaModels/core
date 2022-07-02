@@ -77,8 +77,8 @@ class InputScreenInformationBuilder
             ->where($builder->expr()->in('d.id', ':idList'))
             ->setParameter('idList', $idList, Connection::PARAM_STR_ARRAY)
             ->orderBy('m.sorting')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $result = [];
         $keys   = array_flip($idList);
@@ -220,8 +220,8 @@ class InputScreenInformationBuilder
                 ->setParameter('pid', $inputScreenId)
                 ->setParameter('published', 1)
                 ->orderBy('t.sorting')
-                ->execute()
-                ->fetchAll(\PDO::FETCH_ASSOC));
+                ->executeQuery()
+                ->fetchAllAssociative());
     }
 
     /**
@@ -246,8 +246,8 @@ class InputScreenInformationBuilder
             ->setParameter('screenId', $inputScreenId)
             ->orderBy('cond.pid')
             ->addOrderBy('cond.sorting')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
+            ->executeQuery()
+            ->fetchAllAssociative();
     }
 
     /**
@@ -296,8 +296,8 @@ class InputScreenInformationBuilder
                 ->where('t.pid=:screenId')
                 ->setParameter('screenId', $inputScreenId)
                 ->orderBy('t.sorting')
-                ->execute()
-                ->fetchAll(\PDO::FETCH_ASSOC));
+                ->executeQuery()
+                ->fetchAllAssociative());
     }
 
     /**

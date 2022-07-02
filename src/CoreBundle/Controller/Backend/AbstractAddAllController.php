@@ -232,9 +232,9 @@ abstract class AbstractAddAllController
             ->where('t.pid=:pid')
             ->setParameter('pid', $parentId)
             ->orderBy('t.sorting')
-            ->execute();
+            ->executeQuery();
 
-        foreach ($alreadyExisting->fetchAll(\PDO::FETCH_ASSOC) as $item) {
+        foreach ($alreadyExisting->fetchAllAssociative() as $item) {
             $this->knownAttributes[$item['attr_id']] = $item;
             $this->startSort                         = $item['sorting'];
         }

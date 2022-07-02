@@ -93,7 +93,7 @@ class ValueListener extends AbstractListener
         if (null === $attributeId = $model->getProperty('attr_id')) {
             return;
         }
-        $attribute       = $metaModel->getAttributeById($attributeId);
+        $attribute       = $metaModel->getAttributeById((int) $attributeId);
         $currentLanguage = $this->extractCurrentLanguageContext($metaModel);
 
         if (is_array($event->getValue())) {
@@ -128,7 +128,7 @@ class ValueListener extends AbstractListener
         if (null === $attributeId = $model->getPropertyValue('attr_id')) {
             return;
         }
-        $attribute       = $metaModel->getAttributeById($attributeId);
+        $attribute       = $metaModel->getAttributeById((int) $attributeId);
         $currentLanguage = $this->extractCurrentLanguageContext($metaModel);
 
         if (is_array($event->getValue())) {

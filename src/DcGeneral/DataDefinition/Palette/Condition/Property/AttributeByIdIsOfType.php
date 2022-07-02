@@ -116,9 +116,9 @@ class AttributeByIdIsOfType implements PropertyConditionInterface
                 ->where('t.id=:id')
                 ->setParameter('id', $value)
                 ->setMaxResults(1)
-                ->execute();
+                ->executeQuery();
 
-            self::$attributeTypes[$value] = $statement->fetch(\PDO::FETCH_COLUMN);
+            self::$attributeTypes[$value] = $statement->fetchFirstColumn();
         }
 
         return self::$attributeTypes[$value];

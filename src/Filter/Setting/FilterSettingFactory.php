@@ -209,9 +209,9 @@ class FilterSettingFactory implements IFilterSettingFactory
             ->andWhere('t.enabled=1')
             ->orderBy('t.sorting', 'ASC')
             ->setParameter('pid', $parentSetting->get('id'))
-            ->execute();
+            ->executeQuery();
 
-        foreach ($childInformation->fetchAll(\PDO::FETCH_ASSOC) as $item) {
+        foreach ($childInformation->fetchAllAssociative() as $item) {
             $childSetting = $this->createSetting($item, $filterSettings);
             if ($childSetting) {
                 $parentSetting->addChild($childSetting);
@@ -237,9 +237,9 @@ class FilterSettingFactory implements IFilterSettingFactory
             ->andWhere('t.enabled=1')
             ->orderBy('t.sorting', 'ASC')
             ->setParameter('fid', $filterSettings->get('id'))
-            ->execute();
+            ->executeQuery();
 
-        foreach ($information->fetchAll(\PDO::FETCH_ASSOC) as $item) {
+        foreach ($information->fetchAllAssociative() as $item) {
             $newSetting = $this->createSetting($item, $filterSettings);
             if ($newSetting) {
                 $filterSettings->addSetting($newSetting);
@@ -261,12 +261,12 @@ class FilterSettingFactory implements IFilterSettingFactory
             ->where('t.id=:id')
             ->setMaxResults(1)
             ->setParameter('id', $settingId)
-            ->execute();
+            ->executeQuery();
         if (!$query) {
             throw new \RuntimeException('Could not retrieve filter setting');
         }
 
-        if (!empty($information = $query->fetch(\PDO::FETCH_ASSOC))) {
+        if (!empty($information = $query->fetchAssociative())) {
             $metaModel = $this->factory->getMetaModel($this->factory->translateIdToMetaModelName($information['pid']));
             if ($metaModel === null) {
                 throw new \RuntimeException('Could not retrieve MetaModel ' . $information['pid']);

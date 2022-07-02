@@ -261,8 +261,8 @@ abstract class AbstractContentElementAndModuleCallback
             ->from('tl_metamodel_filter', 'f')
             ->where('f.pid=:id')
             ->setParameter('id', $objDC->activeRecord->metamodel)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $result = [];
         foreach ($filterSettings as $filterSetting) {
@@ -337,8 +337,8 @@ abstract class AbstractContentElementAndModuleCallback
             ->andWhere('c.type=:type')
             ->setParameter('type', $elementName)
             ->setMaxResults(1)
-            ->execute()
-            ->fetch(\PDO::FETCH_COLUMN);
+            ->executeQuery()
+            ->fetchFirstColumn();
 
         if (!$filterId) {
             unset($GLOBALS['TL_DCA'][static::$tableName]['fields']['metamodel_filterparams']);
@@ -449,8 +449,8 @@ abstract class AbstractContentElementAndModuleCallback
             ->from('tl_metamodel_rendersettings', 'r')
             ->where('r.pid=:id')
             ->setParameter('id', $objDC->activeRecord->metamodel)
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         $result = [];
         foreach ($filterSettings as $filterSetting) {

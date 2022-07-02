@@ -343,9 +343,9 @@ abstract class ViewCombinations
             ->orderBy('t.pid')
             ->addOrderBy('t.sorting', 'ASC')
             ->setParameter('groups', $groups)
-            ->execute();
+            ->executeQuery();
 
-        return $statement->fetchAll(\PDO::FETCH_OBJ);
+        return $statement->fetchAllAssociative();
     }
 
     /**
@@ -367,7 +367,7 @@ abstract class ViewCombinations
 
         foreach ($combinations as $combination) {
             /** @noinspection PhpUndefinedFieldInspection */
-            $modelId   = $combination->pid;
+            $modelId   = $combination['pid'];
             $modelName = $this->tableNameFromId($modelId);
 
             // Already a combination present, continue with next one.
@@ -380,8 +380,8 @@ abstract class ViewCombinations
 
             /** @noinspection PhpUndefinedFieldInspection */
             $this->information[$modelName][self::COMBINATION] = array(
-                'dca_id'  => $combination->dca_id,
-                'view_id' => $combination->view_id
+                'dca_id'  => $combination['dca_id'],
+                'view_id' => $combination['view_id']
             );
 
             $this->setTableMapping($modelId, $modelName);
@@ -417,13 +417,13 @@ abstract class ViewCombinations
             ->from('tl_metamodel_dca', 't')
             ->where('t.id IN (:ids)')
             ->setParameter('id', $inputScreenIds, Connection::PARAM_STR_ARRAY)
-            ->execute();
+            ->executeQuery();
 
-        while ($inputScreens = $statement->fetch(\PDO::FETCH_OBJ)) {
+        while ($inputScreens = $statement->fetchAssociative()) {
             /** @noinspection PhpUndefinedFieldInspection */
-            $screenId = $inputScreens->id;
+            $screenId = $inputScreens['id'];
             /** @noinspection PhpUndefinedFieldInspection */
-            $metaModelId   = $inputScreens->pid;
+            $metaModelId   = $inputScreens['pid'];
             $metaModelName = $this->tableNameFromId($metaModelId);
 
             $propertyRows = $this->connection
@@ -434,7 +434,7 @@ abstract class ViewCombinations
                 ->andWhere('t.published=1')
                 ->setParameter('id', $screenId)
                 ->orderBy('t.sorting', 'ASC')
-                ->execute();
+                ->executeQuery();
 
             $conditions = $this->connection
                 ->createQueryBuilder()
@@ -447,7 +447,7 @@ abstract class ViewCombinations
                 ->andWhere('cond.enabled=1')
                 ->setParameter('id', $screenId)
                 ->orderBy('cond.sorting', 'ASC')
-                ->execute();
+                ->executeQuery();
 
             $groupSort = $this->connection
                 ->createQueryBuilder()
@@ -456,13 +456,13 @@ abstract class ViewCombinations
                 ->where('t.pid=:pid')
                 ->setParameter('pid', $screenId)
                 ->orderBy('t.sorting', 'ASC')
-                ->execute();
+                ->executeQuery();
 
             $inputScreen = array(
                 'row'        => $inputScreens->row(),
-                'properties' => $propertyRows->fetchAll(\PDO::FETCH_ASSOC),
-                'conditions' => $conditions->fetchAll(\PDO::FETCH_ASSOC),
-                'groupSort'  => $groupSort->fetchAll(\PDO::FETCH_ASSOC)
+                'properties' => $propertyRows->fetchAllAssociative(),
+                'conditions' => $conditions->fetchAllAssociative(),
+                'groupSort'  => $groupSort->fetchAllAssociative()
             );
 
             $this->information[$metaModelName][self::INPUTSCREEN] = $inputScreen;

@@ -156,8 +156,8 @@ class DatabaseBackedListener
                 ->where('t.id=:id')
                 ->setParameter('id', $metaModelId)
                 ->setMaxResults(1)
-                ->execute()
-                ->fetch(\PDO::FETCH_ASSOC);
+                ->executeQuery()
+                ->fetchAssociative();
 
             if ($table) {
                 $this->tableNames[$metaModelId] = $table['tableName'];
@@ -264,8 +264,8 @@ class DatabaseBackedListener
             ->where('t.tableName=:tableName')
             ->setParameter('tableName', $metaModelName)
             ->setMaxResults(1)
-            ->execute()
-            ->fetch(\PDO::FETCH_ASSOC);
+            ->executeQuery()
+            ->fetchAssociative();
 
         if ($table) {
             $table['system_columns'] = $this->systemColumns;
@@ -295,8 +295,8 @@ class DatabaseBackedListener
             ->select('*')
             ->from('tl_metamodel', 't')
             ->orderBy('t.sorting')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         foreach ($tables as $table) {
             $this->tableNames[$table['id']] = $table['tableName'];
@@ -325,8 +325,8 @@ class DatabaseBackedListener
                 ->where('t.pid=:pid')
                 ->setParameter('pid', $event->getMetaModel()->get('id'))
                 ->orderBy('t.sorting')
-                ->execute()
-                ->fetchAll(\PDO::FETCH_ASSOC);
+                ->executeQuery()
+                ->fetchAllAssociative();
 
             $this->attributeInformation[$metaModelName] = [];
             foreach ($attributes as $attribute) {

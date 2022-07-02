@@ -128,9 +128,9 @@ class RenderSettingAttributeIs extends AbstractWeightAwarePaletteCondition
                 ->where('t.id=:id')
                 ->setParameter('id', $value)
                 ->setMaxResults(1)
-                ->execute();
+                ->executeQuery();
 
-            self::$attributeTypes[$value] = $statement->fetch(\PDO::FETCH_OBJ)->type;
+            self::$attributeTypes[$value] = $statement->fetchAssociative()['type'];
         }
 
         return self::$attributeTypes[$value];

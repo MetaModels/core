@@ -334,7 +334,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
                 [Connection::PARAM_STR_ARRAY, Connection::PARAM_STR_ARRAY]
             );
 
-        return $statement->fetchAll(\PDO::FETCH_COLUMN, 0);
+        return $statement->fetchFirstColumn();
     }
 
     /**
@@ -348,11 +348,11 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
 
         $this->buildWhere($queryBuilder, $idList, $this->getActiveLanguage());
 
-        $statement     = $queryBuilder->execute();
+        $statement     = $queryBuilder->executeQuery();
         $arrOptionizer = $this->getOptionizer();
 
         $arrReturn = [];
-        while ($objValue = $statement->fetch(\PDO::FETCH_OBJ)) {
+        while ($objValue = $statement->fetchAssociative()) {
             $arrReturn[$objValue->{$arrOptionizer['key']}] = $objValue->{$arrOptionizer['value']};
         }
         return $arrReturn;
@@ -418,9 +418,9 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
             ->from($this->getValueTable(), 't');
         $this->buildWhere($queryBuilder, $idList, $langCode);
 
-        $statement = $queryBuilder->execute();
+        $statement = $queryBuilder->executeQuery();
 
-        return $statement->fetchAll(\PDO::FETCH_COLUMN);
+        return $statement->fetchFirstColumn();
     }
 
     /**
@@ -434,9 +434,9 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
 
         $this->buildWhere($queryBuilder, $arrIds, $strLangCode);
 
-        $statement = $queryBuilder->execute();
+        $statement = $queryBuilder->executeQuery();
         $arrReturn = [];
-        while ($value = $statement->fetch(\PDO::FETCH_ASSOC)) {
+        while ($value = $statement->fetchAssociative()) {
             /** @noinspection PhpUndefinedFieldInspection */
             $arrReturn[$value['item_id']] = $value;
         }

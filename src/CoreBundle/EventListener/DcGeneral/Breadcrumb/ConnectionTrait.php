@@ -65,7 +65,7 @@ trait ConnectionTrait
             ->where('t.id=:id')
             ->setParameter('id', $rowId)
             ->setMaxResults(1)
-            ->execute()
-            ->fetch(\PDO::FETCH_ASSOC);
+            ->executeQuery()
+            ->fetchAssociative();
     }
 }

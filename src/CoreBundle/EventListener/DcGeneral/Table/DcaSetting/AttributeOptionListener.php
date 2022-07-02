@@ -90,7 +90,7 @@ class AttributeOptionListener extends AbstractListener
                 ->andWhere('t.attr_id<>:id')
                 ->setParameter('id', $attributeId);
         }
-        $alreadyTaken = $alreadyTaken->execute()->fetchAll(\PDO::FETCH_COLUMN);
+        $alreadyTaken = $alreadyTaken->executeQuery()->fetchFirstColumn();
 
         foreach ($metaModel->getAttributes() as $attribute) {
             if ($attribute instanceof IInternal || in_array($attribute->get('id'), $alreadyTaken)) {
