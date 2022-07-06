@@ -140,21 +140,21 @@ class ToolboxFile
      *
      * @var array
      */
-    protected $foundFiles = array();
+    protected $foundFiles = [];
 
     /**
      * The pending paths to collect from DB.
      *
      * @var string[]
      */
-    protected $pendingPaths = array();
+    protected $pendingPaths = [];
 
     /**
      * The pending uuids to collect from DB.
      *
      * @var array
      */
-    protected $pendingIds = array();
+    protected $pendingIds = [];
 
     /**
      * Flag if download keys shall be generated.
@@ -173,7 +173,7 @@ class ToolboxFile
      *
      * @var string[]
      */
-    protected $uuidMap = array();
+    protected $uuidMap = [];
 
     /**
      * Buffered file information.
@@ -475,14 +475,14 @@ class ToolboxFile
     {
         $table = FilesModel::getTable();
 
-        $conditions = array();
-        $parameters = array();
+        $conditions = [];
+        $parameters = [];
         if (count($this->pendingIds)) {
             $conditions[] = $table . '.uuid IN(' .
                             implode(',', array_fill(0, count($this->pendingIds), 'UNHEX(?)')) . ')';
             $parameters   = array_map('bin2hex', $this->pendingIds);
 
-            $this->pendingIds = array();
+            $this->pendingIds = [];
         }
         if (count($this->pendingPaths)) {
             $slug = $table . '.path LIKE ?';
@@ -490,14 +490,14 @@ class ToolboxFile
                 $conditions[] = $slug;
                 $parameters[] = $pendingPath . '%';
             }
-            $this->pendingPaths = array();
+            $this->pendingPaths = [];
         }
 
         if (!count($conditions)) {
             return;
         }
 
-        if ($files = FilesModel::findBy(array(implode(' OR ', $conditions)), $parameters)) {
+        if ($files = FilesModel::findBy([implode(' OR ', $conditions)], $parameters)) {
             $this->addFileModels($files);
         }
 
@@ -548,8 +548,8 @@ class ToolboxFile
      */
     protected function fetchAdditionalData()
     {
-        $this->modifiedTime = array();
-        $this->outputBuffer = array();
+        $this->modifiedTime = [];
+        $this->outputBuffer = [];
 
         if (!$this->foundFiles) {
             return;
@@ -577,8 +577,8 @@ class ToolboxFile
      */
     protected function remapSorting($arrFiles, $arrSource)
     {
-        $files  = array();
-        $source = array();
+        $files  = [];
+        $source = [];
 
         foreach (array_keys($arrFiles) as $k) {
             $files[]  = $arrFiles[$k];
@@ -587,11 +587,10 @@ class ToolboxFile
 
         $this->addClasses($source);
 
-        return array
-        (
-            'files' => $files,
+        return [
+            'files'  => $files,
             'source' => $source
-        );
+        ];
     }
 
     /**
@@ -611,7 +610,7 @@ class ToolboxFile
      *
      * @return array The sorted file list.
      */
-    public function sortFiles($sortType, $sortIds = array())
+    public function sortFiles($sortType, $sortIds = [])
     {
         switch ($sortType) {
             case 'name_desc':
@@ -664,7 +663,7 @@ class ToolboxFile
         $arrFiles = $this->foundFiles;
 
         if (!$arrFiles) {
-            return array('files' => array(), 'source' => array());
+            return ['files' => [], 'source' => []];
         }
 
         \uasort($arrFiles, ($blnAscending) ? '\basename_natcasecmp' : '\basename_natcasercmp');
@@ -685,7 +684,7 @@ class ToolboxFile
         $arrDates = $this->modifiedTime;
 
         if (!$arrFiles) {
-            return array('files' => array(), 'source' => array());
+            return ['files' => [], 'source' => []];
         }
 
         if ($blnAscending) {
@@ -708,10 +707,10 @@ class ToolboxFile
     {
         $fileMap = $this->foundFiles;
         if (!$fileMap) {
-            return array('files' => array(), 'source' => array());
+            return ['files' => [], 'source' => []];
         }
         $fileKeys = array_flip(array_keys($this->uuidMap));
-        $sorted   = array();
+        $sorted   = [];
         foreach ($sortIds as $sortStringId) {
             $key          = $fileKeys[$sortStringId];
             $sorted[$key] = $fileMap[$key];
@@ -734,11 +733,11 @@ class ToolboxFile
         $arrSource = $this->outputBuffer;
 
         if (!$arrFiles) {
-            return array('files' => array(), 'source' => array());
+            return ['files' => [], 'source' => []];
         }
 
         $keys  = array_keys($arrFiles);
-        $files = array();
+        $files = [];
         shuffle($keys);
         foreach ($keys as $key) {
             $files[$key] = $arrFiles[$key];
@@ -886,16 +885,18 @@ class ToolboxFile
         }
 
         // Convert UUIDs to binary and clean empty values out.
-        $values = array_filter(array_map(function ($fileId) {
-            return Validator::isStringUuid($fileId) ? StringUtil::uuidToBin($fileId) : $fileId;
-        }, $values));
-
-        $result = array(
-            'bin'   => array(),
-            'value' => array(),
-            'path'  => array(),
-            'meta'  => array()
+        $values = array_filter(
+            array_map(function ($fileId) {
+                return Validator::isStringUuid($fileId) ? StringUtil::uuidToBin($fileId) : $fileId;
+            }, $values)
         );
+
+        $result = [
+            'bin'   => [],
+            'value' => [],
+            'path'  => [],
+            'meta'  => []
+        ];
         if (empty($values)) {
             return $result;
         }
@@ -937,12 +938,12 @@ class ToolboxFile
     {
         $values = array_filter((array) $values);
         if (empty($values)) {
-            return array(
-                'bin'   => array(),
-                'value' => array(),
-                'path'  => array(),
-                'meta'  => array()
-            );
+            return [
+                'bin'   => [],
+                'value' => [],
+                'path'  => [],
+                'meta'  => []
+            ];
         }
 
         foreach ($values as $key => $value) {
@@ -974,7 +975,7 @@ class ToolboxFile
      *
      * @return void
      */
-    private function addFileModels($files, $skipPaths = array())
+    private function addFileModels($files, $skipPaths = [])
     {
         $baseLanguage     = $this->getBaseLanguage();
         $fallbackLanguage = $this->getFallbackLanguage();
@@ -983,8 +984,11 @@ class ToolboxFile
                 $this->pendingPaths[] = $file->path . '/';
                 continue;
             }
-            if (is_file(TL_ROOT . DIRECTORY_SEPARATOR . $file->path) &&
-                in_array(strtolower(pathinfo($file->path, PATHINFO_EXTENSION)), $this->acceptedExtensions)
+            if (is_file(TL_ROOT . DIRECTORY_SEPARATOR . $file->path)
+                && in_array(
+                    strtolower(pathinfo($file->path, PATHINFO_EXTENSION)),
+                    $this->acceptedExtensions
+                )
             ) {
                 $path                       = $file->path;
                 $this->foundFiles[]         = $path;
@@ -1010,9 +1014,11 @@ class ToolboxFile
     private function processFile($fileName)
     {
         $file  = new File($fileName);
-        $meta  = $this->metaInformation[dirname($fileName)][$file->basename];
-        $title = strlen($meta['title']) ? $meta['title'] : StringUtil::specialchars($file->basename);
-        if (strlen($meta['caption'])) {
+        $meta  = $this->metaInformation[dirname($fileName)][$file->basename] ?? [];
+        $title = isset($meta['title']) && strlen($meta['title'])
+            ? $meta['title']
+            : StringUtil::specialchars($file->basename);
+        if (isset($meta['caption']) && strlen($meta['caption'])) {
             $altText = $meta['caption'];
         } else {
             $altText = ucfirst(str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $file->filename)));
@@ -1052,7 +1058,7 @@ class ToolboxFile
         }
 
         // Prepare the picture for provide the image size.
-        if ($file->isImage && ($information['isPicture'] = (int) $this->resizeImages[2])) {
+        if ($file->isImage && ($information['isPicture'] = (int) ($this->resizeImages[2] ?? 0))) {
             $projectDir = $this->rootDir;
             $staticUrl  = $this->filesContext->getStaticUrl();
             $picture    = $this->pictureFactory->create($projectDir . '/' . $file->path, $this->getResizeImages());
