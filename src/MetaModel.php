@@ -840,15 +840,18 @@ class MetaModel implements IMetaModel
      *
      * @return IAttribute[]
      */
-    protected function getAttributeByNames($attrNames = array())
+    protected function getAttributeByNames($attrNames = [])
     {
         if (empty($attrNames)) {
             return $this->arrAttributes;
         }
 
-        $result = array();
+        $result = [];
         foreach ($attrNames as $attributeName) {
-            $result[$attributeName] = $this->arrAttributes[$attributeName];
+            if (null === $attribute = $this->arrAttributes[$attributeName] ?? null) {
+                continue;
+            }
+            $result[$attributeName] = $attribute;
         }
 
         return $result;
