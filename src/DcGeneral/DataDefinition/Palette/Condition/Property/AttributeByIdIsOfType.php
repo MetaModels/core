@@ -103,7 +103,8 @@ class AttributeByIdIsOfType implements PropertyConditionInterface
      *
      * @param int $value The id of an attribute.
      *
-     * @return string
+     * @return ?string Return the id or null if not found.
+     * @throws \Doctrine\DBAL\Exception
      */
     public function getTypeOfAttribute($value)
     {
@@ -118,7 +119,12 @@ class AttributeByIdIsOfType implements PropertyConditionInterface
                 ->setMaxResults(1)
                 ->executeQuery();
 
-            self::$attributeTypes[$value] = $statement->fetchFirstColumn();
+            $result = $statement->fetchFirstColumn();
+            if(count($result) > 0){
+                self::$attributeTypes[$value] = $result[0];
+            }else {
+                self::$attributeTypes[$value] = null;
+            }
         }
 
         return self::$attributeTypes[$value];
