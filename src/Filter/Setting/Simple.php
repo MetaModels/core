@@ -372,17 +372,17 @@ abstract class Simple implements ISimple
 
             $filterUrl->setSlug($name, (string) $value);
         }
-        $parameterName = $arrWidget['eval']['urlparam'];
+        $parameterName = $arrWidget['eval']['urlparam'] ?? '';
 
-        if ($arrWidget['eval']['includeBlankOption']) {
+        if ($arrWidget['eval']['includeBlankOption'] ?? null) {
             $blnActive = $this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, '');
 
             $arrOptions[] = [
                 'key'    => '',
                 'value'  => (
-                $arrWidget['eval']['blankOptionLabel']
-                    ? $arrWidget['eval']['blankOptionLabel']
-                    : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter']
+                !$arrWidget['eval']['blankOptionLabel']
+                    ? $GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter']
+                    : $arrWidget['eval']['blankOptionLabel']
                 ),
                 'href'   => $this->filterUrlBuilder->generate($filterUrl->clone()->setSlug($parameterName, '')),
                 'active' => $blnActive,
