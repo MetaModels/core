@@ -198,7 +198,7 @@ abstract class MetaModelHybrid extends Hybrid
                             $infoTemplate,
                             $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter'][1],
                             $GLOBALS['TL_LANG']['MSC']['mm_be_info_filter'][0],
-                            $infoFi[0]
+                            \current($infoFi)
                         );
                     }
                 }
@@ -220,7 +220,7 @@ abstract class MetaModelHybrid extends Hybrid
                             $infoTemplate,
                             $GLOBALS['TL_LANG']['MSC']['mm_be_info_render_setting'][1],
                             $GLOBALS['TL_LANG']['MSC']['mm_be_info_render_setting'][0],
-                            $infoRs[0]
+                            \current($infoRs)
                         );
                     }
                 }

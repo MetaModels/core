@@ -121,7 +121,7 @@ class AttributeByIdIsOfType implements PropertyConditionInterface
 
             $result = $statement->fetchFirstColumn();
             if(count($result) > 0){
-                self::$attributeTypes[$value] = $result[0];
+                self::$attributeTypes[$value] = \current($result);
             }else {
                 self::$attributeTypes[$value] = null;
             }

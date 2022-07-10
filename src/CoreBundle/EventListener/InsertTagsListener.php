@@ -315,14 +315,14 @@ class InsertTagsListener implements ServiceAnnotationInterface
             // From module, can be a MetaModel list or filter.
             case 'mod':
                 if (null !== ($result = $this->getMetaModelDataFrom('tl_module', $identifier))) {
-                    return $this->getCountFor($result->metamodel, $result->metamodel_filtering);
+                    return $this->getCountFor($result['metamodel'], $result['metamodel_filtering']);
                 }
                 break;
 
             // From content element, can be a MetaModel list or filter.
             case 'ce':
                 if (null !== ($result = $this->getMetaModelDataFrom('tl_content', $identifier))) {
-                    return $this->getCountFor($result->metamodel, $result->metamodel_filtering);
+                    return $this->getCountFor($result['metamodel'], $result['metamodel_filtering']);
                 }
                 break;
 
@@ -387,14 +387,14 @@ class InsertTagsListener implements ServiceAnnotationInterface
             ->from($strTable, 't')
             ->where('t.id=:id')
             ->setParameter('id', $intID)
-            ->execute();
+            ->executeQuery();
 
         // Check if we have some data.
         if ($statement->rowCount() < 1) {
             return null;
         }
 
-        return $statement->fetch(FetchMode::STANDARD_OBJECT);
+        return $statement->fetchAssociative();
     }
 
     /**
@@ -448,13 +448,13 @@ class InsertTagsListener implements ServiceAnnotationInterface
             ->andWhere('t.check_publish=1')
             ->setParameter('pid', $metaModel->get('id'))
             ->setMaxResults(1)
-            ->execute();
+            ->executeQuery();
 
-        if ($statement->rowCount() > 0) {
-            $checkPublish = $statement->fetch(FetchMode::STANDARD_OBJECT);
+        if ($statement->rowCount()) {
+            $checkPublish = $statement->fetchAssociative();
             $item         = $metaModel->findById($intItemId);
 
-            if (null === $item || !$item->get($checkPublish->colname)) {
+            if (null === $item || !$item->get($checkPublish['colname'])) {
                 return false;
             }
         }
