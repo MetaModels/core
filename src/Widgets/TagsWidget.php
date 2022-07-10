@@ -92,8 +92,8 @@ class TagsWidget extends Widget
     {
         // If true we need another offset.
         $intSub   = ($this->arrConfiguration['includeBlankOption'] ? 1 : 0);
-        $intSub  += ($this->arrConfiguration['showSelectAll']
-                      || null === $this->arrConfiguration['showSelectAll'] ? 1 : 0);
+        $intSub  += ((isset($this->arrConfiguration['showSelectAll'])
+                      && null !== $this->arrConfiguration['showSelectAll']) ? 0 : 1);
         $strClass = $this->strName;
 
         if ($index == 0) {
@@ -170,7 +170,8 @@ class TagsWidget extends Widget
             }
 
             // Show select all checkbox - check null as BC-Layer.
-            if ($this->arrConfiguration['showSelectAll'] || null === $this->arrConfiguration['showSelectAll']) {
+            if (isset($this->arrConfiguration['showSelectAll'])
+                && ($this->arrConfiguration['showSelectAll'] || null === $this->arrConfiguration['showSelectAll'])) {
                 $return .= $this->generateOption(
                     [
                         'value' => '--all--',
