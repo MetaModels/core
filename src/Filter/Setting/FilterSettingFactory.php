@@ -262,7 +262,7 @@ class FilterSettingFactory implements IFilterSettingFactory
             ->setMaxResults(1)
             ->setParameter('id', $settingId)
             ->executeQuery();
-        if (!$query) {
+        if (!$query->rowCount()) {
             throw new \RuntimeException('Could not retrieve filter setting');
         }
 

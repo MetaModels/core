@@ -319,6 +319,7 @@ abstract class AbstractContentElementAndModuleCallback
      *
      * @return void
      *
+     * @throws \Doctrine\DBAL\Exception
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
@@ -345,7 +346,7 @@ abstract class AbstractContentElementAndModuleCallback
             return;
         }
 
-        $collection = $this->filterFactory->createCollection($filterId);
+        $collection = $this->filterFactory->createCollection(current($filterId));
         $dca        = $collection->getParameterDCA();
         foreach ($dca as $fieldName => $subField) {
             $options = [];
