@@ -56,7 +56,7 @@ class DoctrineSchemaManipulator
     public function updateDatabase(DoctrineSchemaInformation $schemaInformation): void
     {
         foreach ($this->buildChangeSet($schemaInformation) as $query) {
-            $this->connection->exec($query);
+            $this->connection->executeStatement($query);
         }
     }
 
@@ -78,10 +78,11 @@ class DoctrineSchemaManipulator
      * @param DoctrineSchemaInformation $schemaInformation The schema information.
      *
      * @return string[]
+     * @throws \Doctrine\DBAL\Exception
      */
     private function buildChangeSet(DoctrineSchemaInformation $schemaInformation): array
     {
-        $manager = $this->connection->getSchemaManager();
+        $manager = $this->connection->createSchemaManager();
         $current = $manager->createSchema();
         $diff    = Comparator::compareSchemas($current, $schemaInformation->getSchema());
 
