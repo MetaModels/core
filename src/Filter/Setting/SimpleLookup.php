@@ -350,6 +350,6 @@ class SimpleLookup extends Simple
             return $this->get('defaultid');
         }
 
-        return $filterValues[$valueName];
+        return $filterValues[$valueName] ?? null;
     }
 }

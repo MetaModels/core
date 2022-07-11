@@ -119,7 +119,7 @@ class MultiTextWidget extends Widget
                 $i,
                 '',
                 (strlen($this->strClass) ? ' ' . $this->strClass : ''),
-                StringUtil::specialchars(isset($this->varValue) ? $this->varValue[$i] : ''),
+                StringUtil::specialchars($this->varValue[$i] ?? ''),
                 $this->getAttributes(),
                 $this->strTagEnding
             );
