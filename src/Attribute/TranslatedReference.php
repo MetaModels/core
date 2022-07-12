@@ -384,12 +384,12 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
                 $queryBuilder->delete($this->getValueTable());
             }
 
-            $queryBuilder->execute();
+            $queryBuilder->executeQuery();
         }
 
         // Insert the new values.
         foreach ($arrNewIds as $intId) {
-            if ($arrValues[$intId]['value'] == '') {
+            if (!isset($arrValues[$intId]['value']) || $arrValues[$intId]['value'] == '') {
                 continue;
             }
 
@@ -450,7 +450,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
         $queryBuilder = $this->connection->createQueryBuilder()->delete($this->getValueTable());
         $this->buildWhere($queryBuilder, $arrIds, $strLangCode);
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
     }
 
     /**
