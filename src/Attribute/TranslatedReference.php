@@ -92,7 +92,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
     private function buildWhere(QueryBuilder $queryBuilder, $mixIds, $mixLangCode = '')
     {
         $alias = '';
-        if (null !== $firstFromAlias = $queryBuilder->getQueryPart('from')[0]['alias']) {
+        if (null !== $firstFromAlias = $queryBuilder->getQueryPart('from')[0]['alias'] ?? null) {
             $alias = $firstFromAlias . '.';
         }
 
