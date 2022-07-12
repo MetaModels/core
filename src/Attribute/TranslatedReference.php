@@ -161,10 +161,10 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     protected function getOptionizer()
     {
-        return array(
-            'key' => 'value',
+        return [
+            'key'   => 'value',
             'value' => 'value'
-        );
+        ];
     }
 
 
@@ -173,7 +173,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function valueToWidget($varValue)
     {
-        return $varValue['value'];
+        return $varValue['value'] ?? null;
     }
 
     /**
@@ -183,12 +183,11 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
      */
     public function widgetToValue($varValue, $itemId)
     {
-        return array
-        (
+        return [
             'tstamp' => time(),
             'value'  => $varValue,
             'att_id' => $this->get('id'),
-        );
+        ];
     }
 
     /**

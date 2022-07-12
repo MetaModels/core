@@ -749,8 +749,8 @@ class Driver implements MultiLanguageDataProviderInterface
         if ($metaModel instanceof ITranslatedMetaModel) {
             $collection = new DefaultLanguageInformationCollection();
             foreach ($metaModel->getLanguages() as $langCode) {
-                [$langCode, $country] = explode('_', $langCode, 2);
-                $collection->add(new DefaultLanguageInformation($langCode, $country ?: null));
+                [$langCode, $locale] = explode('_', $langCode, 2) + [null, null];
+                $collection->add(new DefaultLanguageInformation($langCode, $locale));
             }
             if (count($collection) > 0) {
                 return $collection;
@@ -759,7 +759,7 @@ class Driver implements MultiLanguageDataProviderInterface
             return null;
         }
 
-        if (!$metaModel->isTranslated(false)) {
+        if (!($metaModel instanceof ITranslatedMetaModel) && !$metaModel->isTranslated(false)) {
             return null;
         }
 
