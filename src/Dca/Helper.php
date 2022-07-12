@@ -31,6 +31,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Definition\Properties\Prope
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\Translator\TranslatorInterface;
 use MetaModels\IMetaModel;
+use MetaModels\ITranslatedMetaModel;
 
 /**
  * This class is used as base class from dca handler classes for various callbacks.
@@ -40,15 +41,15 @@ class Helper
     /**
      * Decode a language array.
      *
-     * @param array|string $varValue     The value to decode.
-     * @param IMetaModel   $objMetaModel The MetaModel holding the languages.
+     * @param array|string $varValue  The value to decode.
+     * @param IMetaModel   $metaModel The MetaModel holding the languages.
      *
      * @return string
      */
-    public static function decodeLangArray($varValue, IMetaModel $objMetaModel)
+    public static function decodeLangArray($varValue, IMetaModel $metaModel)
     {
         $arrLangValues = StringUtil::deserialize($varValue);
-        if (!$objMetaModel->isTranslated()) {
+        if (!($metaModel instanceof ITranslatedMetaModel) && !$metaModel->isTranslated(false)) {
             // If we have an array, return the first value and exit, if not an array, return the value itself.
             return is_array($arrLangValues)
                 ? serialize($arrLangValues[key($arrLangValues)])
@@ -56,7 +57,7 @@ class Helper
         }
 
         // Sort like in MetaModel definition.
-        $arrLanguages = $objMetaModel->getAvailableLanguages();
+        $arrLanguages = $metaModel->getAvailableLanguages();
         $arrOutput    = [];
 
         if ($arrLanguages) {
@@ -80,16 +81,15 @@ class Helper
     /**
      * Decode a language array.
      *
-     * @param array|string $varValue     The value to decode.
-     *
-     * @param IMetaModel   $objMetaModel The MetaModel holding the languages.
+     * @param array|string $varValue  The value to decode.
+     * @param IMetaModel   $metaModel The MetaModel holding the languages.
      *
      * @return string
      */
-    public static function encodeLangArray($varValue, IMetaModel $objMetaModel)
+    public static function encodeLangArray($varValue, IMetaModel $metaModel)
     {
         // Not translated, make it a plain string.
-        if (!$objMetaModel->isTranslated()) {
+        if (!($metaModel instanceof ITranslatedMetaModel) && !$metaModel->isTranslated(false)) {
             return $varValue;
         }
         $arrLangValues = StringUtil::deserialize($varValue);
@@ -130,17 +130,11 @@ class Helper
      * Create a widget for naming contexts. Use the language and translation information from the MetaModel.
      *
      * @param EnvironmentInterface $environment   The environment.
-     *
      * @param PropertyInterface    $property      The property.
-     *
      * @param IMetaModel           $metaModel     The MetaModel.
-     *
      * @param string               $languageLabel The label to use for the language indicator.
-     *
      * @param string               $valueLabel    The label to use for the input field.
-     *
      * @param bool                 $isTextArea    If true, the widget will become a textarea, false otherwise.
-     *
      * @param array                $arrValues     The values for the widget, needed to highlight the fallback language.
      *
      * @return void
@@ -154,7 +148,7 @@ class Helper
         $isTextArea,
         $arrValues
     ) {
-        if (!$metaModel->isTranslated()) {
+        if (!($metaModel instanceof ITranslatedMetaModel) && !$metaModel->isTranslated(false)) {
             $extra = $property->getExtra();
 
             $extra['tl_class'] .= empty($extra['tl_class']) ? 'w50' : ' w50';
