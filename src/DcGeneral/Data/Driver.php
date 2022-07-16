@@ -777,10 +777,11 @@ class Driver implements MultiLanguageDataProviderInterface
     {
         $metaModel = $this->getMetaModel();
         if ($metaModel instanceof ITranslatedMetaModel) {
-            [$langCode, $country] = explode('_', $metaModel->getMainLanguage(), 2);
-            return new DefaultLanguageInformation($langCode, $country ?: null);
+            [$langCode, $locale] = explode('_', $metaModel->getMainLanguage(), 2) + [null, null];
+            return new DefaultLanguageInformation($langCode, $locale);
         }
-        if (!$metaModel->isTranslated(false)) {
+
+        if (!($metaModel instanceof ITranslatedMetaModel) && !$metaModel->isTranslated(false)) {
             return null;
         }
 
