@@ -51,9 +51,9 @@ class Helper
         $arrLangValues = StringUtil::deserialize($varValue);
         if (!($metaModel instanceof ITranslatedMetaModel) && !$metaModel->isTranslated(false)) {
             // If we have an array, return the first value and exit, if not an array, return the value itself.
-            return is_array($arrLangValues)
-                ? serialize($arrLangValues[key($arrLangValues)])
-                : serialize($arrLangValues);
+            return \is_array($arrLangValues)
+                ? \serialize($arrLangValues[\key($arrLangValues)])
+                : \serialize($arrLangValues);
         }
 
         // Sort like in MetaModel definition.
@@ -62,20 +62,20 @@ class Helper
 
         if ($arrLanguages) {
             foreach ($arrLanguages as $strLangCode) {
-                if (is_array($arrLangValues)) {
+                if (\is_array($arrLangValues)) {
                     $varSubValue = $arrLangValues[$strLangCode] ?? '';
                 } else {
                     $varSubValue = $arrLangValues;
                 }
 
-                if (is_array($varSubValue)) {
-                    $arrOutput[] = array_merge($varSubValue, array('langcode' => $strLangCode));
+                if (\is_array($varSubValue)) {
+                    $arrOutput[] = \array_merge($varSubValue, array('langcode' => $strLangCode));
                 } else {
                     $arrOutput[] = array('langcode' => $strLangCode, 'value' => $varSubValue);
                 }
             }
         }
-        return serialize($arrOutput);
+        return \serialize($arrOutput);
     }
 
     /**

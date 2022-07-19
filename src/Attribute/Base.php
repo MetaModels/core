@@ -301,7 +301,7 @@ abstract class Base implements IAttribute
      */
     public function handleMetaChange($strMetaName, $varNewValue)
     {
-        // By default we accept any change of meta information.
+        // By default, we accept any change of meta information.
         $this->set($strMetaName, $varNewValue);
 
         return $this;
@@ -566,7 +566,7 @@ abstract class Base implements IAttribute
 
             // Text rendering is mandatory, try with the current setting,
             // upon exception, try again with the default settings, as the template name might have changed.
-            // if this fails again, we are definately out of luck and bail the exception.
+            // if this fails again, we are definitely out of luck and bail the exception.
             try {
                 $arrResult['text'] = $objTemplate->parse('text', true);
             } catch (\Exception $e) {
