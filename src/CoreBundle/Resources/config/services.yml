@@ -284,3 +284,11 @@ services:
             - "@contao.assets.files_context"
             - "@contao.image.picture_factory"
             - "@session"
+
+    MetaModels\CoreBundle\Translator\Translator:
+      decorates: 'contao.translation.translator'
+      arguments:
+        - '@MetaModels\CoreBundle\Translator\Translator.inner'
+
+    MetaModels\CoreBundle\Translator\MetaModelTranslationLoader:
+      tags: [ { name: translation.loader, alias: 'metamodels' } ]
