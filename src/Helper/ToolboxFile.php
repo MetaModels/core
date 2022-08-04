@@ -835,12 +835,12 @@ class ToolboxFile
      * Convert an array of values handled by MetaModels to a value to be stored in the database (array of bin uuid).
      *
      * The input array must have the following layout:
-     * array(
-     *   'bin'   => array() // list of the binary ids.
-     *   'value' => array() // list of the uuids.
-     *   'path'  => array() // list of the paths.
-     *   'meta'  => array() // list of the meta data.
-     * )
+     * [
+     *   'bin'   => [] // list of the binary ids.
+     *   'value' => [] // list of the uuids.
+     *   'path'  => [] // list of the paths.
+     *   'meta'  => [] // list of the meta data.
+     * ]
      *
      * @param array $values The values to convert.
      *
@@ -854,7 +854,7 @@ class ToolboxFile
             throw new InvalidArgumentException('Invalid file array');
         }
 
-        $bin = array();
+        $bin = [];
         foreach ($values['bin'] as $value) {
             $bin[] = $value;
         }
@@ -866,12 +866,12 @@ class ToolboxFile
      * Convert an array of values stored in the database (array of bin uuid) to a value to be handled by MetaModels.
      *
      * The output array will have the following layout:
-     * array(
-     *   'bin'   => array() // list of the binary ids.
-     *   'value' => array() // list of the uuids.
-     *   'path'  => array() // list of the paths.
-     *   'meta'  => array() // list of the meta data.
-     * )
+     * [
+     *   'bin'   => [] // list of the binary ids.
+     *   'value' => [] // list of the uuids.
+     *   'path'  => [] // list of the paths.
+     *   'meta'  => [] // list of the meta data.
+     * ]
      *
      * @param array $values The binary uuid values to convert.
      *
@@ -920,12 +920,12 @@ class ToolboxFile
      * Convert an uuid or path to a value to be handled by MetaModels.
      *
      * The output array will have the following layout:
-     * array(
-     *   'bin'   => array() // list of the binary ids.
-     *   'value' => array() // list of the uuids.
-     *   'path'  => array() // list of the paths.
-     *   'meta'  => array() // list of the meta data.
-     * )
+     * [
+     *   'bin'   => [] // list of the binary ids.
+     *   'value' => [] // list of the uuids.
+     *   'path'  => [] // list of the paths.
+     *   'meta'  => [] // list of the meta data.
+     * ]
      *
      * @param array $values The binary uuids or paths to convert.
      *
@@ -947,9 +947,13 @@ class ToolboxFile
 
         foreach ($values as $key => $value) {
             if (!(Validator::isUuid($value))) {
+                if(!\is_string($value)) {
+                    continue;
+                }
+
                 $file = FilesModel::findByPath($value) ?: Dbafs::addResource($value);
                 if (!$file) {
-                    throw new InvalidArgumentException('Invalid value.');
+                    throw new InvalidArgumentException('Invalid path.');
                 }
 
                 $values[$key] = $file->uuid;
@@ -966,7 +970,6 @@ class ToolboxFile
      * will add models of type folder to the list of pending paths to allow for recursive inclusion.
      *
      * @param FilesModel[] $files     The files to add.
-     *
      * @param array        $skipPaths List of directories not to be added to the list of pending directories.
      *
      * @return void
