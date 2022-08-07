@@ -40,7 +40,7 @@
     "discordier/justtextwidgets": "^1.2",
     "doctrine/cache": "^2.1",
     "doctrine/dbal": "^3.3.2",
-    "menatwork/contao-multicolumnwizard-bundle": "^3.4",
+    "menatwork/contao-multicolumnwizard-bundle": "^3.5.7",
     "symfony/asset": "^5.4",
     "symfony/cache": "^5.4",
     "symfony/config": "^5.4",
