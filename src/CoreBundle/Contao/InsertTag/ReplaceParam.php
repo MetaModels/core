@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,8 @@
  * @author     Jan Malte Gerth <anmeldungen@malte-gerth.de>
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -30,7 +31,7 @@ use Contao\Input;
 use Contao\Session;
 
 /**
- * This replace the insert tag param.
+ * This replaces the insert tag param.
  */
 final class ReplaceParam
 {
@@ -46,7 +47,6 @@ final class ReplaceParam
      *
      * @var Session
      */
-    // FIXME: Replace the deprecated session.
     private $session;
 
     /**
@@ -63,7 +63,7 @@ final class ReplaceParam
 
     /**
      * Replace the param insert tag in the given content.
-     * If the parameter name not exist, then null will returned.
+     * If the parameter name not exist, then null will return.
      *
      * @param string $content The content.
      *
