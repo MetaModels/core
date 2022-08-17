@@ -25,6 +25,7 @@ namespace MetaModels\CoreBundle\Assets;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Contao\Validator;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
 
 /**
