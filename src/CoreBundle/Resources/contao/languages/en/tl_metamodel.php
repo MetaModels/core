@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2018 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Christian de la Haye <service@delahaye.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2018 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -41,6 +42,9 @@ $GLOBALS['TL_LANG']['tl_metamodel']['languages_isfallback'][1] = 'Check the lang
 $GLOBALS['TL_LANG']['tl_metamodel']['varsupport'][0]           = 'Variant support';
 $GLOBALS['TL_LANG']['tl_metamodel']['varsupport'][1]           =
     'Check if this MetaModel shall support variants of items.';
+$GLOBALS['TL_LANG']['tl_metamodel']['localesupport'][0]        = 'Locale support';
+$GLOBALS['TL_LANG']['tl_metamodel']['localesupport'][1]        =
+    'Check if this MetaModel shall support locale at languages.';
 $GLOBALS['TL_LANG']['tl_metamodel']['sorting'][0]              = 'Sorting';
 $GLOBALS['TL_LANG']['tl_metamodel']['sorting'][1]              = 'Sorting order of items.';
 $GLOBALS['TL_LANG']['tl_metamodel']['title_legend']            = 'Name and table';
