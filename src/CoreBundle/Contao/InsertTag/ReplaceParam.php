@@ -72,7 +72,7 @@ final class ReplaceParam
     public function replace(string $content): ?string
     {
         if (false === \strpos($content, '{{')
-            || !($tags = preg_split('~{{([a-zA-Z0-9\x80-\xFF][^{}]*)}}~', $content, -1, PREG_SPLIT_DELIM_CAPTURE))
+            || !($tags = preg_split('@\{\{(.*)\}\}@', $content, -1, PREG_SPLIT_DELIM_CAPTURE))
             || (\count($tags) < 2)
         ) {
             return $content;
@@ -80,13 +80,12 @@ final class ReplaceParam
 
         $newContent = null;
         foreach ($tags as $tag) {
-            if (!(2 === \count($chunks = \explode('::', $tag)))
+            if (!(2 === \count($chunks = \explode('::', $tag, 2)))
                 || !('param' === $chunks[0])
                 || !($this->isParameterSupported($chunks[1], ['get', 'post', 'cookie', 'session', 'filter']))
             ) {
                 continue;
             }
-
             $newContent = $this->replaceInputParameter($chunks, $content, $tag);
             $newContent = $this->replaceSessionParameter($chunks, $newContent, $tag);
         }
