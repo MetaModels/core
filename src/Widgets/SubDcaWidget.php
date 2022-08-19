@@ -299,7 +299,7 @@ class SubDcaWidget extends Widget
 
         $arrField['name']              = $this->strName . '[' . $strRow . '][' . $strKey . ']';
         $arrField['id']                = $this->strId . '_' . $strRow . '_' . $strKey;
-        $arrField['value']             = ($varValue !== '') ? $varValue : $arrField['default'];
+        $arrField['value']             = ($varValue !== '') ? $varValue : ($arrField['default'] ?? '');
         $arrField['eval']['tableless'] = true;
 
         $event = new GetAttributesFromDcaEvent(
@@ -418,7 +418,7 @@ class SubDcaWidget extends Widget
      */
     protected function validateWidget(&$arrField, $strRow, $strKey, &$varInput)
     {
-        $varValue  = $varInput[$strRow][$strKey];
+        $varValue  = $varInput[$strRow][$strKey] ?? '';
         $objWidget = $this->initializeWidget($arrField, $strRow, $strKey, $varValue);
         if (!is_object($objWidget)) {
             return false;
@@ -434,7 +434,7 @@ class SubDcaWidget extends Widget
         $varValue = $objWidget->value;
 
         // Convert date formats into timestamps (check the eval setting first -> #3063).
-        $rgxp = $arrField['eval']['rgxp'];
+        $rgxp = $arrField['eval']['rgxp'] ?? null;
         if (($rgxp == 'date' || $rgxp == 'time' || $rgxp == 'datim') && $varValue != '') {
             $objDate  = new Date($varValue, $GLOBALS['TL_CONFIG'][$rgxp . 'Format']);
             $varValue = $objDate->tstamp;
