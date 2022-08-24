@@ -403,6 +403,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
     ],
     'metasubpalettes' => [
         'translated' => [
+            'localeterritorysupport',
             'languages'
         ],
     ],
@@ -459,7 +460,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
             'exclude'   => true,
             'inputType' => 'checkbox',
             'eval'      => [
-                'tl_class'       => 'clr',
+                'tl_class'       => 'clr w50 cbx m12',
                 'submitOnChange' => true
             ],
             'sql'       => "char(1) NOT NULL default ''"
@@ -470,7 +471,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
             'inputType' => 'multiColumnWizard',
             'eval'      =>
                 [
-                    'tl_class'     => 'w50',
+                    'tl_class'     => 'clr w50',
                     'columnFields' => [
                         'langcode'   => [
                             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel']['languages_langcode'],
@@ -499,6 +500,16 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
             'inputType' => 'checkbox',
             'eval'      => [
                 'tl_class'       => 'clr w50'
+            ],
+            'sql'       => "char(1) NOT NULL default ''"
+        ],
+        'localeterritorysupport' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel']['localeterritorysupport'],
+            'exclude'   => true,
+            'inputType' => 'checkbox',
+            'eval'      => [
+                'tl_class'       => 'w50 cbx m12',
+                'submitOnChange' => true
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],

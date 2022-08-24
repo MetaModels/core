@@ -60,15 +60,24 @@ class LanguageOptionsListener
             return;
         }
 
-        $languages = System::getLanguages();
-        array_walk($languages, function (&$value, $key) {
-            $value .= sprintf(
-                ' [%s]',
-                (2 === strpos($key, '_') ? substr_replace($key, '-', 2, 1) : $key)
-            );
-        });
+        $languages           = System::getLanguages();
+        $hasTerritorySupport = (bool) $event->getModel()->getProperty('localeterritorysupport');
+        $languageOptions     = [];
 
-        $event->setOptions($languages);
+        foreach ($languages as $langKey => $langValue) {
+            $hasTerritory = (2 < \strlen($langKey));
+            if (!$hasTerritorySupport && $hasTerritory) {
+                continue;
+            }
+
+            $languageOptions[$langKey] = \sprintf(
+                '%s [%s]',
+                $langValue,
+                $hasTerritory ? \substr_replace($langKey, '-', 2, 1) : $langKey
+            );
+        }
+
+        $event->setOptions($languageOptions);
     }
 
     /**
