@@ -403,7 +403,7 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
     ],
     'metasubpalettes' => [
         'translated' => [
-            'localesupport',
+            'localeterritorysupport',
             'languages'
         ],
     ],
@@ -503,8 +503,8 @@ $GLOBALS['TL_DCA']['tl_metamodel'] = [
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'localesupport' => [
-            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel']['localesupport'],
+        'localeterritorysupport' => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel']['localeterritorysupport'],
             'exclude'   => true,
             'inputType' => 'checkbox',
             'eval'      => [

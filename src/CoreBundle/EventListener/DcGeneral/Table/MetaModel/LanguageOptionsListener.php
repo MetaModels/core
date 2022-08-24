@@ -60,12 +60,12 @@ class LanguageOptionsListener
             return;
         }
 
-        $languages       = System::getLanguages();
-        $isLocaleSupport = (bool) $event->getModel()->getProperty('localesupport');
-        $languageOptions = [];
+        $languages          = System::getLanguages();
+        $isTerritorySupport = (bool) $event->getModel()->getProperty('localeterritorysupport');
+        $languageOptions    = [];
 
         foreach ($languages as $langKey => $langValue) {
-            if (!$isLocaleSupport && (2 === \strpos($langKey, '_'))) {
+            if (!$isTerritorySupport && (2 === \strpos($langKey, '_'))) {
                 continue;
             }
 

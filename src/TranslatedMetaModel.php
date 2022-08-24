@@ -44,6 +44,13 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
     private $mainLanguage;
 
     /**
+     * The locale territory support.
+     *
+     * @var bool
+     */
+    private $isTerritorySupport;
+
+    /**
      * Instantiate a MetaModel.
      *
      * @param array                    $arrData    The information array, for information on the available
@@ -68,6 +75,8 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
         }
         // Mark fallback language as active language.
         $this->activeLanguage = $this->mainLanguage;
+
+        $this->isTerritorySupport = (bool) $this->arrData['localeterritorysupport'];
     }
 
     /**
@@ -99,7 +108,12 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
      */
     public function selectLanguage(string $activeLanguage): string
     {
-        $previousLanguage     = $this->getLanguage();
+        $previousLanguage = $this->getLanguage();
+
+        if (!$this->isTerritorySupport && (2 === \strpos($previousLanguage, '_'))) {
+            $previousLanguage = \substr_replace($previousLanguage, '-', 2, 1);
+        }
+
         $this->activeLanguage = $activeLanguage;
 
         return $previousLanguage;
