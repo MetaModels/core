@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -260,6 +261,35 @@ class CustomSqlTest extends AutoLoadingTestCase
             ['defaultcat'],
             [],
             'See https://github.com/MetaModels/core/issues/376'
+        );
+    }
+
+    /**
+     * Test request variable replacement with insert tag.
+     *
+     * @return void
+     */
+    public function testRequestGetWithEmptyParameterAndInsertTag()
+    {
+        $input = $this
+            ->getMockBuilder(Adapter::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['cookie', 'get', 'post'])
+            ->getMock();
+        $input->expects(self::once())->method('get')->with('category')->willReturn(null);
+
+        $setting = $this->mockCustomSql(
+            ['customsql' => 'SELECT id FROM tableName WHERE catname={{param::get?name=category&default={{page::alias}}}}'],
+            'tableName',
+            [Input::class => $input]
+        );
+
+        $this->assertGeneratedSqlIs(
+            $setting,
+            'SELECT id FROM tableName WHERE catname=?',
+            ['__page__alias__'],
+            [],
+            'See https://github.com/MetaModels/core/issues/880'
         );
     }
 

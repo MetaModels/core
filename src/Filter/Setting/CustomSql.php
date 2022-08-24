@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,8 @@
  * @author     Jan Malte Gerth <anmeldungen@malte-gerth.de>
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -59,7 +60,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     private $data = [];
 
     /**
-     * The filter params (should be array or null).
+     * The filter params (should be an array or null).
      *
      * @var array
      */
@@ -273,7 +274,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      */
     private function addParameter($parameter)
     {
-        $this->queryParameter[] = $parameter;
+        $this->queryParameter[] = $this->parseInsertTagsInternal($parameter);
     }
 
     /**
@@ -482,7 +483,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     private function parseRequestVars()
     {
         $this->queryString = preg_replace_callback(
-            '@\{\{param::([^}]*)\}\}@',
+            '@\{\{param::(.*)\}\}@',
             [$this, 'convertParameter'],
             $this->queryString
         );
