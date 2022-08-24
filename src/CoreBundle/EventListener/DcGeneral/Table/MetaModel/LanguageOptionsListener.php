@@ -60,19 +60,20 @@ class LanguageOptionsListener
             return;
         }
 
-        $languages          = System::getLanguages();
-        $isTerritorySupport = (bool) $event->getModel()->getProperty('localeterritorysupport');
-        $languageOptions    = [];
+        $languages           = System::getLanguages();
+        $hasTerritorySupport = (bool) $event->getModel()->getProperty('localeterritorysupport');
+        $languageOptions     = [];
 
         foreach ($languages as $langKey => $langValue) {
-            if (!$isTerritorySupport && (2 === \strpos($langKey, '_'))) {
+            $hasTerritory = (2 < \strlen($langKey));
+            if (!$hasTerritorySupport && $hasTerritory) {
                 continue;
             }
 
             $languageOptions[$langKey] = \sprintf(
                 '%s [%s]',
                 $langValue,
-                (2 === \strpos($langKey, '_') ? \substr_replace($langKey, '-', 2, 1) : $langKey)
+                $hasTerritory ? \substr_replace($langKey, '-', 2, 1) : $langKey
             );
         }
 
