@@ -74,7 +74,7 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
         // Mark fallback language as active language.
         $this->activeLanguage = $this->mainLanguage;
 
-        $this->hasTerritorySupport = (bool) $this->arrData['localeterritorysupport'];
+        $this->hasTerritorySupport = (bool) ($this->arrData['localeterritorysupport'] ?? false);
     }
 
     /**
