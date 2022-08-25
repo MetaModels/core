@@ -171,10 +171,12 @@ abstract class AbstractAddAllController
             }
         }
 
-        return new Response($this->twig->render(
-            '@MetaModelsCore/Backend/add-all.html.twig',
-            $this->render($table, $metaModel, $request)
-        ));
+        return new Response(
+            $this->twig->render(
+                '@MetaModelsCore/Backend/add-all.html.twig',
+                $this->render($table, $metaModel, $request)
+            )
+        );
     }
 
     /**
@@ -198,12 +200,14 @@ abstract class AbstractAddAllController
             'add'           => $this->translator->trans('MSC.continue', [], 'contao_default'),
             'saveNclose'    => $this->translator->trans('MSC.saveNclose', [], 'contao_default'),
             'activate'      => $this->translator->trans($table . '.addAll_activate', [], 'contao_' . $table),
+            'tlclass'       => '',
             'headline'      => $this->translator->trans($table . '.addall.1', [], 'contao_' . $table),
-            'selectAll'     => $this->translator->trans('MSC.selectAll', [], 'contao_default'),
+            'selectAll'     => $this->translator->trans('MSC.selectAll', [], 'contao_default') . '.',
             'cacheMessage'  => '',
             'updateMessage' => '',
             'hasCheckbox'   => count($fields) > 0,
             'fields'        => $fields,
+            'stylesheets'   => ['bundles/metamodelscore/css/style.css']
         ];
     }
 
@@ -278,13 +282,13 @@ abstract class AbstractAddAllController
                 ];
                 continue;
             } elseif ($this->isAttributeSubmitted($attrId, $request)) {
-                $fields[] = array(
+                $fields[] = [
                     'checkbox' => false,
                     'text'     => $this->checkboxCaption('addAll_addsuccess', $table, $attribute),
                     'class'    => 'tl_confirm',
                     'attr_id'  => $attrId,
                     'name'     => 'attribute_' . $attrId
-                );
+                ];
                 continue;
             }
             $fields[] = [
@@ -343,6 +347,7 @@ abstract class AbstractAddAllController
     private function perform($table, Request $request, $metaModel, $parentId)
     {
         $activate = (bool) $request->request->get('activate');
+        $tlclass  = $request->request->get('tlclass');
 
         $query = $this
             ->connection
@@ -354,11 +359,16 @@ abstract class AbstractAddAllController
             ) {
                 continue;
             }
+
             $data = [];
-            foreach ($this->createEmptyDataFor($attribute, $parentId, $activate, $this->startSort) as $key => $value) {
+            foreach (
+                $this->createEmptyDataFor($attribute, $parentId, $activate, $this->startSort, $tlclass) as $key =>
+                $value
+            ) {
                 $data[$key] = ':' . $key;
                 $query->setParameter($key, $value);
             }
+
             $query->values($data)->execute();
             $this->startSort += 128;
         }
