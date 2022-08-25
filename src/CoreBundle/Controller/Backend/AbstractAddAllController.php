@@ -312,7 +312,7 @@ abstract class AbstractAddAllController
     {
         return $this->translator->trans(
             $table . '.' . $key,
-            [$attribute->getName(), $attribute->getColName()],
+            [$attribute->getName(), $attribute->get('type'), $attribute->getColName()],
             'contao_' . $table
         );
     }
