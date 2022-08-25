@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -44,7 +44,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']              = '
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']                 = 'Legend title';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory'][0]               = 'Mandatory';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory'][1]               = 'Check if this attribute shall be ' .
-    'mandatory.
+                                                                               'mandatory.
 <br />NOTE: This will be implicitely active on if you selected "Unique values" in the attribute configuration.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave'][0]              = 'Always save';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['alwaysSave'][1]              =
@@ -93,7 +93,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['submitOnChange'][1]          =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']               = 'Type';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['presentation_legend']        = 'Widget appearance related options';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['functions_legend']           = 'Functionality related options';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']            = 'Filtering and searching in the backend list';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']            =
+    'Filtering and searching in the backend list';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['backend_legend']             = 'Backend';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['config_legend']              = 'Configuration';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']            = 'Advanced';
@@ -126,13 +127,13 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['0'] = '
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['1'] = 'Add slash on save';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['2'] = 'Do nothing';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd']             =
-    'Will add the attribute "%s" [%s] to the input screen.';
+    'Will add the attribute "%s" [%s, "%s"] to the input screen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained']    =
-    'Attribute "%s" [%s] is already contained in input screen.';
+    'Attribute "%s" [%s, "%s"] is already contained in input screen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']          =
-    'Added the attribute "%s" [%s] to the input screen.';
+    'Added the attribute "%s" [%s, "%s"] to the input screen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_activate']            = 'Add new settings enabled.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory_for_unique_attr']  =
     'Unique attribues are automatically mandatory (this is not changable).';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly_for_force_alias']  =
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly_for_force_alias']   =
     'Attribues with force alias are automatically readonly (this is not changable).';
