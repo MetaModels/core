@@ -53,6 +53,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
             ],
             'tl_metamodel_dcasetting_condition' => [
                 'source' => 'tl_metamodel_dcasetting_condition'
+            ],
+            'tl_metamodel_dca_sortgroup' => [
+                'source' => 'tl_metamodel_dca_sortgroup'
             ]
         ],
         'childCondition' => [
@@ -126,6 +129,23 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
                 'filter' => [
                     [
                         'local'     => 'attr_id',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ],
+                ]
+            ],
+            [
+                'from'   => 'tl_metamodel_attribute',
+                'to'     => 'tl_metamodel_dca_sortgroup',
+                'setOn'  => [
+                    [
+                        'to_field'   => 'rendersortattr',
+                        'from_field' => 'id',
+                    ],
+                ],
+                'filter' => [
+                    [
+                        'local'     => 'rendersortattr',
                         'remote'    => 'id',
                         'operation' => '=',
                     ],
