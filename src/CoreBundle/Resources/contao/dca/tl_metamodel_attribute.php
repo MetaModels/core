@@ -45,11 +45,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
             'parent' => [
                 'source' => 'tl_metamodel'
             ],
-
             'tl_metamodel_rendersetting' => [
                 'source' => 'tl_metamodel_rendersetting'
             ],
-
             'tl_metamodel_dcasetting'           => [
                 'source' => 'tl_metamodel_dcasetting'
             ],
@@ -102,6 +100,23 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
             [
                 'from'   => 'tl_metamodel_attribute',
                 'to'     => 'tl_metamodel_dcasetting',
+                'setOn'  => [
+                    [
+                        'to_field'   => 'attr_id',
+                        'from_field' => 'id',
+                    ],
+                ],
+                'filter' => [
+                    [
+                        'local'     => 'attr_id',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ],
+                ]
+            ],
+            [
+                'from'   => 'tl_metamodel_attribute',
+                'to'     => 'tl_metamodel_dcasetting_condition',
                 'setOn'  => [
                     [
                         'to_field'   => 'attr_id',
@@ -171,7 +186,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
                 'href'  => 'act=show',
                 'icon'  => 'show.svg'
             ],
-
         ]
     ],
     'metapalettes' => [
