@@ -55,7 +55,7 @@ class SetVisibilityConditionIconListener extends AbstractListener
      *
      * @return void
      */
-    public function handle(GetOperationButtonEvent $event)
+    public function handle(GetOperationButtonEvent $event): void
     {
         $environment = $event->getEnvironment();
         if ('tl_metamodel_dcasetting' !== $environment->getDataDefinition()->getName()
@@ -96,8 +96,6 @@ class SetVisibilityConditionIconListener extends AbstractListener
         );
 
         $event->setHtml($button);
-
-        //dump([$event, $event->getHtml(), $event->getCommand(), $extra['icon']]);
     }
 
     /**
