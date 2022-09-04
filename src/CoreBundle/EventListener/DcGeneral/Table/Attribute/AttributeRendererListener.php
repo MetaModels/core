@@ -47,9 +47,6 @@ class AttributeRendererListener extends BaseListener
         $image     = '<img src="' . $this->attributeFactory->getIconForType($type) . '" />';
         $metaModel = $this->getMetaModelByModelPid($model);
         $attribute = $this->attributeFactory->createAttribute($model->getPropertiesAsArray(), $metaModel);
-        $variant   = ($metaModel->hasVariants() && $attribute->get('isvariant'))
-            ? ', variant'
-            : '';
 
         if (!$attribute) {
             $translator = $event
@@ -58,7 +55,7 @@ class AttributeRendererListener extends BaseListener
 
             $event
                 ->setLabel(
-                    '<div class="field_heading cte_type"><strong>%s</strong> <em>[%s%s]</em></div>
+                    '<div class="field_heading cte_type"><strong>%s</strong> <em>[%s]</em></div>
                     <div class="field_type block">
                         <strong>%s</strong><br />
                     </div>'
@@ -66,12 +63,12 @@ class AttributeRendererListener extends BaseListener
                 ->setArgs([
                     $translator->translate('error_unknown_attribute.0', 'tl_metamodel_attribute'),
                     $type,
-                    $variant,
                     $translator->translate('error_unknown_attribute.1', 'tl_metamodel_attribute', [$type]),
                 ]);
             return;
         }
 
+        $variant        = ($metaModel->hasVariants() && $attribute->get('isvariant')) ? ', variant' : '';
         $colName        = $attribute->getColName();
         $name           = $attribute->getName();
         $arrDescription = StringUtil::deserialize($attribute->get('description'));

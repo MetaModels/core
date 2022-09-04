@@ -95,9 +95,6 @@ class ModelToLabelListener extends AbstractListener
         $model     = $event->getModel();
         $metaModel = $this->getMetaModelFromModel($model);
         $attribute = $metaModel->getAttributeById($model->getProperty('attr_id'));
-        $variant   = ($metaModel->hasVariants() && $attribute->get('isvariant'))
-            ? ', variant'
-            : '';
 
         if ($attribute) {
             $type    = $attribute->get('type');
@@ -107,11 +104,13 @@ class ModelToLabelListener extends AbstractListener
                 '',
                 'bundles/metamodelscore/images/icons/fields.png'
             );
+            $variant = ($metaModel->hasVariants() && $attribute->get('isvariant')) ? ', variant' : '';
             $name    = $attribute->getName();
             $colName = $attribute->getColName();
         } else {
             $type    = $this->trans('error_unknown_id', [$model->getProperty('attr_id')]);
             $image   = $this->iconBuilder->getBackendIconImageTag('bundles/metamodelscore/images/icons/fields.png');
+            $variant = '';
             $name    = $this->trans('error_unknown_attribute');
             $colName = $this->trans('error_unknown_column');
         }
