@@ -115,6 +115,7 @@ class PaletteBuilder
                 $legend->addProperty(
                     $this->createProperty(
                         $properties->getProperty($property['name']),
+                        $metaModel,
                         $property['name'],
                         $variantHandling,
                         $this->buildCondition($property['condition'], $metaModel),
@@ -149,6 +150,7 @@ class PaletteBuilder
      * Create a property for the palette.
      *
      * @param PropertyInterface       $property        The input screen.
+     * @param IMetaModel              $metaModel       The MetaModel instance.
      * @param string                  $propertyName    The property name.
      * @param bool                    $variantHandling The MetaModel instance.
      * @param ConditionInterface|null $condition       The condition.
@@ -158,6 +160,7 @@ class PaletteBuilder
      */
     private function createProperty(
         PropertyInterface $property,
+        IMetaModel $metaModel,
         $propertyName,
         $variantHandling,
         ConditionInterface $condition = null,
@@ -167,19 +170,35 @@ class PaletteBuilder
 
         $extra = $property->getExtra();
 
-        $chain = new PropertyConditionChain();
-        $paletteProperty->setEditableCondition($chain);
+        $chainEditable = new PropertyConditionChain();
+        $paletteProperty->setEditableCondition($chainEditable);
         if (isset($extra['readonly'])) {
-            $chain->addCondition(new BooleanCondition($extra['readonly']));
+            $chainEditable->addCondition(new BooleanCondition($extra['readonly']));
         }
 
-        $chain = new PropertyConditionChain();
-        $paletteProperty->setVisibleCondition($chain);
-        // If variants, do show only if allowed.
+        $chainVisible = new PropertyConditionChain();
+        $paletteProperty->setVisibleCondition($chainVisible);
+
+dump([$property->getName(), $extra, $this->isVariantBaseAttribute($property, $metaModel)]);
+//        // If variants, do show only if allowed.
+//        if ($variantHandling) {
+//            //$chain->addCondition(new IsVariantAttribute());
+//        }
+
+        $setReadonly = true;
+        // If variants, do show only if allowed or set readonly if this defined.
         if ($variantHandling) {
-            $chain->addCondition(new IsVariantAttribute());
+            // Check variant base and set readonly.
+            if($this->isVariantBaseAttribute($property, $metaModel) &&  $setReadonly) {
+                $extra['readonly'] = true;
+                $property->setExtra($extra);
+                $chainEditable->addCondition(new BooleanCondition($extra['readonly']));
+            } else {
+                $chainVisible->addCondition(new IsVariantAttribute());
+            }
         }
-        $chain->addCondition(
+
+        $chainVisible->addCondition(
             new BooleanCondition(
                 !((isset($extra['doNotShow']) && $extra['doNotShow'])
                 || (isset($extra['hideInput']) && $extra['hideInput']))
@@ -187,10 +206,10 @@ class PaletteBuilder
         );
 
         if (null !== $condition) {
-            $chain->addCondition($condition);
+            $chainVisible->addCondition($condition);
         }
         if (null !== $legendCondition) {
-            $chain->addCondition($legendCondition);
+            $chainVisible->addCondition($legendCondition);
         }
 
         return $paletteProperty;
@@ -214,5 +233,10 @@ class PaletteBuilder
         }
 
         return $this->conditionFactory->createCondition($condition, $metaModel);
+    }
+
+    private function isVariantBaseAttribute($property, $metaModel)
+    {
+        return (bool) !($metaModel->getAttribute($property->getName())->get('isvariant'));
     }
 }
