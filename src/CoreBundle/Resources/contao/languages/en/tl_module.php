@@ -89,7 +89,10 @@ $GLOBALS['TL_LANG']['tl_module']['metamodel_pagination'][0]                  =
     'Custom template to use for pagination';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_pagination'][1]                  =
     'Select the template that shall be used for the pagination. ' .
-    'Valid template filenames start with "pagination".';
+    'Valid template filenames start with "mm_pagination".';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_pagination_urlfragment'][0]      = 'URL fragment';
+$GLOBALS['TL_LANG']['tl_module']['metamodel_pagination_urlfragment'][1]      =
+    'Add URL fragment to jump to anchor or id.';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_page_param'][0]                  = 'Override key for pagination';
 $GLOBALS['TL_LANG']['tl_module']['metamodel_page_param'][1]                  =
     'You can override the key \'page*\' in pagination.';

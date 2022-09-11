@@ -85,6 +85,13 @@ class PaginationGenerator
     private string $paramType;
 
     /**
+     * The URL fragment
+     *
+     * @var string
+     */
+    private string $paginationFragment;
+
+    /**
      * Set the number of rows, the number of results per pages and the number of links
      *
      * @param integer  $numRows            The number of rows
@@ -93,6 +100,7 @@ class PaginationGenerator
      * @param string   $pageParam          The pagination url key
      * @param string   $paramType          The pagination parameter url type
      * @param Template $paginationTemplate The pagination template
+     * @param string   $paginationFragment The URL fragment
      */
     public function __construct(
         FilterUrlBuilder $urlBuilder,
@@ -101,16 +109,18 @@ class PaginationGenerator
         int $numberOfLinks,
         string $pageParam,
         string $paramType,
-        Template $paginationTemplate
+        Template $paginationTemplate,
+        string $paginationFragment
     ) {
-        $this->urlBuilder    = $urlBuilder;
-        $this->numRows       = $numRows;
-        $this->rowsPerPage   = $rowsPerPage;
-        $this->totalPages    = ceil($this->numRows / $this->rowsPerPage);
-        $this->numberOfLinks = $numberOfLinks;
-        $this->pageParam     = $pageParam;
-        $this->paramType     = $paramType;
-        $this->template      = $paginationTemplate;
+        $this->urlBuilder         = $urlBuilder;
+        $this->numRows            = $numRows;
+        $this->rowsPerPage        = $rowsPerPage;
+        $this->totalPages         = ceil($this->numRows / $this->rowsPerPage);
+        $this->numberOfLinks      = $numberOfLinks;
+        $this->pageParam          = $pageParam;
+        $this->paramType          = $paramType;
+        $this->template           = $paginationTemplate;
+        $this->paginationFragment = $paginationFragment;
     }
 
     /**
@@ -139,19 +149,20 @@ class PaginationGenerator
             $page = $this->totalPages;
         }
 
-        $template                = $this->template;
-        $template->hasFirst      = $this->hasFirst($page);
-        $template->hasPrevious   = $this->hasPrevious($page);
-        $template->hasNext       = $this->hasNext($page);
-        $template->hasLast       = $this->hasLast($page);
-        $template->pages         = $this->getItemsAsArray($filterUrl, $page);
-        $template->page          = $page;
-        $template->totalPages    = $this->totalPages;
-        $template->first         = $template->hasFirst ? $this->linkToPage($filterUrl, 1) : '';
-        $template->previous      = $template->hasPrevious ? $this->linkToPage($filterUrl, $page - 1) : '';
-        $template->next          = $template->hasNext ? $this->linkToPage($filterUrl, $page + 1) : '';
-        $template->last          = $template->hasLast ? $this->linkToPage($filterUrl, $this->totalPages) : '';
-        $template->class         = 'pagination-' . $this->pageParam;
+        $template                     = $this->template;
+        $template->hasFirst           = $this->hasFirst($page);
+        $template->hasPrevious        = $this->hasPrevious($page);
+        $template->hasNext            = $this->hasNext($page);
+        $template->hasLast            = $this->hasLast($page);
+        $template->pages              = $this->getItemsAsArray($filterUrl, $page);
+        $template->page               = $page;
+        $template->totalPages         = $this->totalPages;
+        $template->first              = $template->hasFirst ? $this->linkToPage($filterUrl, 1) : '';
+        $template->previous           = $template->hasPrevious ? $this->linkToPage($filterUrl, $page - 1) : '';
+        $template->next               = $template->hasNext ? $this->linkToPage($filterUrl, $page + 1) : '';
+        $template->last               = $template->hasLast ? $this->linkToPage($filterUrl, $this->totalPages) : '';
+        $template->class              = 'pagination-' . $this->pageParam;
+        $template->paginationFragment = $this->paginationFragment;
         // Adding rel="prev" and rel="next" links is not possible
         // anymore with unique variable names (see #3515 and #4141)
 

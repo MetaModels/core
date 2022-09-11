@@ -168,21 +168,15 @@ class ItemList
      * Create a new instance.
      *
      * @param IFactory|null                 $factory              The MetaModels factory (required in MetaModels 3.0).
-     *
      * @param IFilterSettingFactory|null    $filterFactory        The filter setting factory (required in MetaModels
      *                                                            3.0).
      * @param IRenderSettingFactory|null    $renderSettingFactory The render setting factory (required in MetaModels
      *                                                            3.0).
      * @param EventDispatcherInterface|null $eventDispatcher      The event dispatcher (required in MetaModels 3.0).
-     *
      * @param FilterUrlBuilder|null         $filterUrlBuilder     The filter url builder.
-     *
      * @param string                        $pageParam            The pagination URL key.
-     *
      * @param string                        $paramType            The pagination parameter URL type.
-     *
      * @param int                           $maxPaginationLinks   The maximum number of pagination links.
-     *
      * @param string                        $paginationTemplate   The pagination template.
      */
     public function __construct(
@@ -194,14 +188,16 @@ class ItemList
         string $pageParam = 'page',
         string $paramType = 'get',
         int $maxPaginationLinks = 0,
-        string $paginationTemplate = 'mm_pagination'
+        string $paginationTemplate = 'mm_pagination',
+        string $paginationFragment = ''
     ) {
         $this->paginationLimitCalculator = new PaginationLimitCalculator(
             $filterUrlBuilder,
             $pageParam,
             $paramType,
             $maxPaginationLinks,
-            $paginationTemplate
+            $paginationTemplate,
+            $paginationFragment
         );
         $this->factory              = $factory;
         $this->filterFactory        = $filterFactory;
