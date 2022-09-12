@@ -133,6 +133,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained']    =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']          =
     'Added the attribute "%s" [%s, "%s"] to the input screen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_activate']            = 'Add new settings enabled.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_tlclass']             = 'Set backend class.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['mandatory_for_unique_attr']  =
     'Unique attribues are automatically mandatory (this is not changable).';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly_for_force_alias']   =
