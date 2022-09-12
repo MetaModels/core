@@ -133,6 +133,13 @@ class PaginationLimitCalculator
     private string $paramType;
 
     /**
+     * The URL fragment
+     *
+     * @var string
+     */
+    private string $paginationFragment = '';
+
+    /**
      * The pagination template.
      *
      * @var string
@@ -143,27 +150,25 @@ class PaginationLimitCalculator
      * Create a new instance.
      *
      * @param FilterUrlBuilder|null $filterUrlBuilder   The filter url builder.
-     *
      * @param string                $pageParam          The pagination url key
-     *
      * @param string                $paramType          The pagination parameter url type
-     *
      * @param int                   $maxPaginationLinks The maximum number of pagination links.
-     *
      * @param string                $paginationTemplate The pagination template
+     * @param string                $paginationFragment        The URL fragment
      */
     public function __construct(
         ?FilterUrlBuilder $filterUrlBuilder = null,
         string $pageParam = 'page',
         string $paramType = 'get',
         int $maxPaginationLinks = 0,
-        string $paginationTemplate = 'mm_pagination'
+        string $paginationTemplate = 'mm_pagination',
+        string $paginationFragment = ''
     ) {
         $this->pageParam          = $pageParam;
         $this->paramType          = $paramType;
-        $this->paramType          = $paramType;
         $this->maxPaginationLinks = $maxPaginationLinks;
         $this->paginationTemplate = $paginationTemplate;
+        $this->paginationFragment = $paginationFragment;
         if (null === $filterUrlBuilder) {
             $filterUrlBuilder = System::getContainer()->get('metamodels.filter_url');
             @trigger_deprecation(
@@ -419,6 +424,7 @@ class PaginationLimitCalculator
             $this->pageParam,
             $this->paramType,
             $paginationTemplate,
+            $this->paginationFragment
         );
 
         return $pagination->generateForFilterUrl($this->filterUrl);

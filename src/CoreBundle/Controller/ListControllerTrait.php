@@ -136,7 +136,8 @@ trait ListControllerTrait
             $pageParam,
             $model->metamodel_page_param_type,
             $model->metamodel_maxpaginationlinks,
-            $model->metamodel_pagination
+            $model->metamodel_pagination,
+            $model->metamodel_pagination_urlfragment
         );
 
         $template->searchable = !$model->metamodel_donotindex;

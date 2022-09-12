@@ -33,7 +33,8 @@ $GLOBALS['TL_DCA']['tl_content']['palettes']['metamodel_content'] =
     '{mm_config_legend},metamodel,metamodel_use_limit;' .
     '{mm_rendering_legend},metamodel_rendersettings,metamodel_layout,metamodel_noparsing;' .
     '{mm_pagination_legend:hide},perPage,' .
-    'metamodel_page_param_type,metamodel_page_param,metamodel_maxpaginationlinks,metamodel_pagination;' .
+    'metamodel_page_param_type,metamodel_page_param,metamodel_maxpaginationlinks,metamodel_pagination,' .
+    'metamodel_pagination_urlfragment;' .
     '{mm_filter_legend},metamodel_filtering,metamodel_filterparams;' .
     '{mm_sorting_legend},metamodel_sortby,metamodel_sortby_direction,metamodel_sort_override;' .
     '{mm_parameters_legend:hide},metamodel_use_parameters;' .
@@ -157,6 +158,16 @@ array_insert(
                 'tl_class' => 'w50'
             ],
             'sql'              => "varchar(64) NOT NULL default ''"
+        ],
+        'metamodel_pagination_urlfragment'          => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_pagination_urlfragment'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => [
+                'tl_class' => 'w50',
+                'rgxp'     => 'alias'
+            ],
+            'sql'       => "char(255) NOT NULL default ''"
         ],
         'metamodel_use_limit'           => [
             'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit'],
