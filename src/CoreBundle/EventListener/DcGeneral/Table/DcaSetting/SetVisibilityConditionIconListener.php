@@ -34,21 +34,6 @@ use MetaModels\IFactory;
 class SetVisibilityConditionIconListener extends AbstractListener
 {
     /**
-     * Create a new instance.
-     *
-     * @param RequestScopeDeterminator $scopeDeterminator The scope determinator.
-     * @param IFactory                 $factory           The MetaModel factory.
-     * @param Connection               $connection        The database connection.
-     */
-    public function __construct(
-        RequestScopeDeterminator $scopeDeterminator,
-        IFactory $factory,
-        Connection $connection
-    ) {
-        parent::__construct($scopeDeterminator, $factory, $connection);
-    }
-
-    /**
      * Set icon as status of visibility condition.
      *
      * @param GetOperationButtonEvent $event The event.
