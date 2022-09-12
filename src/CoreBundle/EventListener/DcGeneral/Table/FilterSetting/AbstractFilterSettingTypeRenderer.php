@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2021 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -175,7 +176,7 @@ abstract class AbstractFilterSettingTypeRenderer
 
         /** @var AddToUrlEvent $urlEvent */
         $urlEvent = $this->dispatcher->dispatch(
-            new AddToUrlEvent('act=edit&amp;id='.$model->getId()),
+            new AddToUrlEvent('act=edit&amp;id=' . $model->getId()),
             ContaoEvents::BACKEND_ADD_TO_URL
         );
 
@@ -247,13 +248,22 @@ abstract class AbstractFilterSettingTypeRenderer
             $attributeName = $model->getProperty('attr_id');
         }
 
-        return array(
-                $this->getLabelImage($model),
-                $this->getLabelText($translator, $model),
-                $this->getLabelComment($model, $translator),
+        return [
+            $this->getLabelImage($model),
+            $this->getLabelText($translator, $model),
+            \sprintf(
+                $translator->translate('typedesc._attribute_', 'tl_metamodel_filtersetting'),
                 $attributeName,
-                ($model->getProperty('urlparam') ? $model->getProperty('urlparam') : $attributeName)
-            );
+                $attribute->getName()
+            ),
+            $this->getLabelComment($model, $translator),
+            \sprintf(
+                $translator->translate('typedesc._url_', 'tl_metamodel_filtersetting'),
+                ($model->getProperty('urlparam')
+                    ? $model->getProperty('urlparam')
+                    : $attributeName)
+            )
+        ];
     }
 
     /**
@@ -268,12 +278,13 @@ abstract class AbstractFilterSettingTypeRenderer
     {
         $translator = $environment->getTranslator();
 
-        return array(
+        return [
             $this->getLabelImage($model),
             $this->getLabelText($translator, $model),
+            '',
             $this->getLabelComment($model, $translator),
-            $model->getProperty('type')
-        );
+            ''
+        ];
     }
 
     /**
@@ -286,7 +297,7 @@ abstract class AbstractFilterSettingTypeRenderer
      */
     protected function getLabelParameters(EnvironmentInterface $environment, ModelInterface $model)
     {
-        return $this->getLabelParametersNormal($environment, $model);
+        return $this->getLabelParametersWithAttributeAndUrlParam($environment, $model);
     }
 
     /**

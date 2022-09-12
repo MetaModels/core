@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2021 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2021 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -134,18 +134,19 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['simplelookup']  
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['customsql']             = 'Custom SQL';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionor']           = 'OR condition';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionand']          = 'AND condition';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_']              =
-    '<span title="%s"><sup>(?)</sup></span>';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_attribute_']            = ' <em>[%s, "%s"]</em>';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_url_']                  = ' <em>(URL: %s)</em>';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_']              = '<br />%s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_default_']              =
-    '%s <strong>%s</strong> %s <em>[%s]</em>';
+    '%1$s <strong>%2$s</strong>%3$s%5$s%4$s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup']           =
-    '%s <strong>%s</strong> %s <br /> on attribute <em>%s</em> (URL parameter: %s)';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionor']            =
-    '%s <strong>%s</strong> %s <br /> items that are mentioned in any result.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand']           =
-    '%s <strong>%s</strong> %s <br /> items that are mentioned in all results.';
+    '%1$s <strong>%2$s</strong>%3$s%5$s%4$s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['fefilter']               =
-    '%s <strong>%s</strong> %s <br /> for attribute <em>%s</em> (URL parameter: %s)';
+    '%1$s <strong>%2$s</strong> %3$s%4$s';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionor']            =
+    '%1$s <strong>%2$s</strong>%4$s';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand']           =
+    '%1$s <strong>%2$s</strong>%4$s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['items'][0]                           = 'Items';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['items'][1]                           =
     'Please enter the IDs of the items for filtering as comma-separated list.';
