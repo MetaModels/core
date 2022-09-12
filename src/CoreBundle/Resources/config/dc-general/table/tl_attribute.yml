@@ -30,6 +30,16 @@ services:
             - "@metamodels.factory"
         abstract: true
 
+    metamodels.listener.table.tl_metamodel_attribute.attribute_create_listener:
+        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute\AttributeCreateListener
+        parent: metamodels.listener.table.tl_metamodel_attribute.listener_base
+        arguments:
+            - "@database_connection"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.model.pre-edit-model
+              method: handle
+
     metamodels.listener.table.tl_metamodel_attribute.attribute_saved_listener:
         class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute\AttributeSavedListener
         parent: metamodels.listener.table.tl_metamodel_attribute.listener_base
