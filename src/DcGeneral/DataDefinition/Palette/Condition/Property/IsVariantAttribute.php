@@ -44,7 +44,7 @@ class IsVariantAttribute implements PropertyConditionInterface
         PropertyInterface $property = null,
         LegendInterface $legend = null
     ) {
-        if ($property === null) {
+        if ($property === null || $model === null) {
             return false;
         }
 

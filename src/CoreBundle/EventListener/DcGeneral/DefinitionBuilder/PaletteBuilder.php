@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -115,7 +116,6 @@ class PaletteBuilder
                 $legend->addProperty(
                     $this->createProperty(
                         $properties->getProperty($property['name']),
-                        $metaModel,
                         $property['name'],
                         $variantHandling,
                         $this->buildCondition($property['condition'], $metaModel),
@@ -150,7 +150,6 @@ class PaletteBuilder
      * Create a property for the palette.
      *
      * @param PropertyInterface       $property        The input screen.
-     * @param IMetaModel              $metaModel       The MetaModel instance.
      * @param string                  $propertyName    The property name.
      * @param bool                    $variantHandling The MetaModel instance.
      * @param ConditionInterface|null $condition       The condition.
@@ -160,45 +159,28 @@ class PaletteBuilder
      */
     private function createProperty(
         PropertyInterface $property,
-        IMetaModel $metaModel,
-        $propertyName,
-        $variantHandling,
+        string $propertyName,
+        bool $variantHandling,
         ConditionInterface $condition = null,
         ConditionInterface $legendCondition = null
-    ) {
+    ): Property {
         $paletteProperty = new Property($propertyName);
 
         $extra = $property->getExtra();
 
-        $chainEditable = new PropertyConditionChain();
-        $paletteProperty->setEditableCondition($chainEditable);
+        $chain = new PropertyConditionChain();
+        $paletteProperty->setEditableCondition($chain);
         if (isset($extra['readonly'])) {
-            $chainEditable->addCondition(new BooleanCondition($extra['readonly']));
+            $chain->addCondition(new BooleanCondition($extra['readonly']));
         }
-
-        $chainVisible = new PropertyConditionChain();
-        $paletteProperty->setVisibleCondition($chainVisible);
-
-dump([$property->getName(), $extra, $this->isVariantBaseAttribute($property, $metaModel)]);
-//        // If variants, do show only if allowed.
-//        if ($variantHandling) {
-//            //$chain->addCondition(new IsVariantAttribute());
-//        }
-
-        $setReadonly = true;
-        // If variants, do show only if allowed or set readonly if this defined.
+        // If variants, enable editing only if allowed.
         if ($variantHandling) {
-            // Check variant base and set readonly.
-            if($this->isVariantBaseAttribute($property, $metaModel) &&  $setReadonly) {
-                $extra['readonly'] = true;
-                $property->setExtra($extra);
-                $chainEditable->addCondition(new BooleanCondition($extra['readonly']));
-            } else {
-                $chainVisible->addCondition(new IsVariantAttribute());
-            }
+            $chain->addCondition(new IsVariantAttribute());
         }
 
-        $chainVisible->addCondition(
+        $chain = new PropertyConditionChain();
+        $paletteProperty->setVisibleCondition($chain);
+        $chain->addCondition(
             new BooleanCondition(
                 !((isset($extra['doNotShow']) && $extra['doNotShow'])
                 || (isset($extra['hideInput']) && $extra['hideInput']))
@@ -206,10 +188,10 @@ dump([$property->getName(), $extra, $this->isVariantBaseAttribute($property, $me
         );
 
         if (null !== $condition) {
-            $chainVisible->addCondition($condition);
+            $chain->addCondition($condition);
         }
         if (null !== $legendCondition) {
-            $chainVisible->addCondition($legendCondition);
+            $chain->addCondition($legendCondition);
         }
 
         return $paletteProperty;
@@ -233,10 +215,5 @@ dump([$property->getName(), $extra, $this->isVariantBaseAttribute($property, $me
         }
 
         return $this->conditionFactory->createCondition($condition, $metaModel);
-    }
-
-    private function isVariantBaseAttribute($property, $metaModel)
-    {
-        return (bool) !($metaModel->getAttribute($property->getName())->get('isvariant'));
     }
 }
