@@ -254,14 +254,12 @@ abstract class AbstractFilterSettingTypeRenderer
             \sprintf(
                 $translator->translate('typedesc._attribute_', 'tl_metamodel_filtersetting'),
                 $attributeName,
-                $attribute->getName()
+                ($attribute ? $attribute->getName() : '')
             ),
             $this->getLabelComment($model, $translator),
             \sprintf(
                 $translator->translate('typedesc._url_', 'tl_metamodel_filtersetting'),
-                ($model->getProperty('urlparam')
-                    ? $model->getProperty('urlparam')
-                    : $attributeName)
+                ($model->getProperty('urlparam') ?? $attributeName)
             )
         ];
     }
