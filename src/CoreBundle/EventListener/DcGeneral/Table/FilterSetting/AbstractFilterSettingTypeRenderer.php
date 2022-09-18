@@ -243,9 +243,11 @@ abstract class AbstractFilterSettingTypeRenderer
         $attribute  = $metamodel->getAttributeById($model->getProperty('attr_id'));
 
         if ($attribute) {
-            $attributeName = $attribute->getColName();
+            $attributeColumnName = $attribute->getColName();
+            $attributeName       = $attribute->getName();
         } else {
-            $attributeName = $model->getProperty('attr_id');
+            $attributeColumnName = '-';
+            $attributeName       = '-';
         }
 
         return [
@@ -253,13 +255,13 @@ abstract class AbstractFilterSettingTypeRenderer
             $this->getLabelText($translator, $model),
             \sprintf(
                 $translator->translate('typedesc._attribute_', 'tl_metamodel_filtersetting'),
-                $attributeName,
-                ($attribute ? $attribute->getName() : '')
+                $attributeColumnName,
+                $attributeName
             ),
             $this->getLabelComment($model, $translator),
             \sprintf(
                 $translator->translate('typedesc._url_', 'tl_metamodel_filtersetting'),
-                ($model->getProperty('urlparam') ?? $attributeName)
+                ($model->getProperty('urlparam') ? $model->getProperty('urlparam') : $attributeColumnName)
             )
         ];
     }
