@@ -15,6 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Andreas Fischer <anfischer@kaffee-partner.de>
  * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -121,6 +122,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['delete'][1]                  
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show'][0]                            = 'Filter setting details';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show'][1]                            =
     'Show details of filter setting ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['toggle'][0]                          = 'Toggle';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['toggle'][1]                          = 'Toggle the state of setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pastenew'][0]                        = 'Add new at the top';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pastenew'][1]                        = 'Add new after setting ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteafter'][1]                      =
