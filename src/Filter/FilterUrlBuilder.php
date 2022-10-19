@@ -15,6 +15,7 @@
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Andreas Fischer <anfischer@kaffee-partner.de>
  * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -358,6 +359,10 @@ class FilterUrlBuilder
         unset($pages);
 
         $pages = [];
+
+        $locale = ($locale)
+            ? \str_replace('_', '-', $locale)
+            : $locale;
 
         if (!$this->isLocalePrepended) {
             // Use the first result (see #4872)
