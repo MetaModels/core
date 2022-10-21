@@ -230,9 +230,7 @@ abstract class Base implements IAttribute
      * When rendered via a template, this populates the template with values.
      *
      * @param Template             $objTemplate The Template instance to populate.
-     *
      * @param array                $arrRowData  The row data for the current item.
-     *
      * @param ISimpleRenderSetting $objSettings The render settings to use for this attribute.
      *
      * @return void
@@ -244,7 +242,7 @@ abstract class Base implements IAttribute
                 'attribute'        => $this,
                 'settings'         => $objSettings,
                 'row'              => $arrRowData,
-                'raw'              => $arrRowData[$this->getColName()],
+                'raw'              => ($arrRowData[$this->getColName()] ?? null),
                 'additional_class' => $objSettings->get('additional_class')
                     ? ' ' . $objSettings->get('additional_class')
                     : ''
@@ -549,7 +547,7 @@ abstract class Base implements IAttribute
      */
     public function parseValue($arrRowData, $strOutputFormat = 'text', $objSettings = null)
     {
-        $arrResult = ['raw' => $arrRowData[$this->getColName()]];
+        $arrResult = ['raw' => ($arrRowData[$this->getColName()] ?? null)];
 
         /** @var ISimpleRenderSetting $objSettings */
         if ($objSettings && $objSettings->get('template')) {

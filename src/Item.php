@@ -156,6 +156,7 @@ class Item implements IItem
             } else {
                 $objAttributeSettings = null;
             }
+
             foreach ($objAttribute->parseValue(
                 $this->arrData,
                 $strOutputFormat,
