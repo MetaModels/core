@@ -35,32 +35,19 @@ class SchemaValidatorCommand extends Command
 {
     /**
      * The information collector.
-     *
-     * @var MetaModelInformationCollector
      */
-    private $collector;
+    private MetaModelInformationCollector $collector;
 
     /**
      * The schema generator.
-     *
-     * @var SchemaGenerator
      */
-    private $generator;
+    private SchemaGenerator $generator;
 
     /**
      * The schema manager.
-     *
-     * @var SchemaManager
      */
-    private $manager;
+    private SchemaManager $manager;
 
-    /**
-     * Create a new instance.
-     *
-     * @param MetaModelInformationCollector $collector
-     * @param SchemaGenerator               $generator
-     * @param SchemaManager                 $manager
-     */
     public function __construct(
         MetaModelInformationCollector $collector,
         SchemaGenerator $generator,
@@ -72,19 +59,13 @@ class SchemaValidatorCommand extends Command
         parent::__construct('metamodels:schema-update');
     }
 
-    /**
-     * {@inheritDoc}
-     */
     protected function configure()
     {
         parent::configure();
         $this->addOption('force', null, InputOption::VALUE_NONE, 'Perform the update');
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->generator->generate($information = new SchemaInformation(), $this->collector->getCollection());
 
@@ -92,11 +73,13 @@ class SchemaValidatorCommand extends Command
             $this->manager->preprocess($information);
             $this->manager->process($information);
             $this->manager->postprocess($information);
-            return;
+            return 0;
         }
 
         foreach ($this->manager->validate($information) as $item) {
             $output->writeln($item);
         }
+
+        return 0;
     }
 }
