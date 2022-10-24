@@ -114,9 +114,21 @@ class BaseSimple extends Base implements ISimple
      * @param mixed  $varNewValue The new value for this meta information.
      *
      * @return \MetaModels\Attribute\IAttribute The instance of this attribute, to support chaining.
+     *
+     * @deprecated Implement schema generators instead.
      */
     public function handleMetaChange($strMetaName, $varNewValue)
     {
+        if ($this instanceof ISchemaManagedAttribute) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            return $this;
+        }
+
         // By default we accept any change of meta information.
         if ($strMetaName == 'colname') {
             if ($this->get($strMetaName) != $varNewValue) {
@@ -240,9 +252,20 @@ class BaseSimple extends Base implements ISimple
      * Deriving classes SHOULD override this function.
      *
      * @return string 'blob NULL'
+     *
+     * @deprecated Implement schema generators instead.
      */
     public function getSQLDataType()
     {
+        if ($this instanceof ISchemaManagedAttribute) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+        }
+
         return 'blob NULL';
     }
 
@@ -250,9 +273,28 @@ class BaseSimple extends Base implements ISimple
      * Create auxiliary data like a column in the MetaModel table or references in another table etc.
      *
      * @return void
+     *
+     * @deprecated Implement schema generators instead.
      */
     public function destroyAUX()
     {
+        if ($this instanceof ISchemaManagedAttribute) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            return $this;
+        }
+
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Class "' . __CLASS__ . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+
         parent::destroyAUX();
         $this->deleteColumn();
     }
@@ -261,9 +303,28 @@ class BaseSimple extends Base implements ISimple
      * Delete all auxiliary data like a column in the MetaModel table or references in another table etc.
      *
      * @return void
+     *
+     * @deprecated Implement schema generators instead.
      */
     public function initializeAUX()
     {
+        if ($this instanceof ISchemaManagedAttribute) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            return;
+        }
+
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Class "' . __CLASS__ . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+
         parent::initializeAUX();
         $this->createColumn();
     }
@@ -274,9 +335,28 @@ class BaseSimple extends Base implements ISimple
      * You have to override this function in field types, when you want to have multi column structure etc.
      *
      * @return void
+     *
+     * @deprecated Implement schema generators instead.
      */
     public function createColumn()
     {
+        if ($this instanceof ISchemaManagedAttribute) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            return;
+        }
+
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Class "' . __CLASS__ . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+
         if ($this->getColName()) {
             $this->tableManipulator->createColumn(
                 $this->getMetaModel()->getTableName(),
@@ -290,9 +370,28 @@ class BaseSimple extends Base implements ISimple
      * Removes the underlying database structure for this field.
      *
      * @return void
+     *
+     * @deprecated Implement schema generators instead.
      */
     public function deleteColumn()
     {
+        if ($this instanceof ISchemaManagedAttribute) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            return;
+        }
+
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Class "' . __CLASS__ . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+
         $schemaManager = $this->connection->getSchemaManager();
         $columns       = $schemaManager->listTableColumns($this->getMetaModel()->getTableName());
 
@@ -308,9 +407,28 @@ class BaseSimple extends Base implements ISimple
      * @param string $strNewColumnName The new column name.
      *
      * @return void
+     *
+     * @deprecated Implement schema generators instead.
      */
     public function renameColumn($strNewColumnName)
     {
+        if ($this instanceof ISchemaManagedAttribute) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            return;
+        }
+
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Class "' . __CLASS__ . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+
         $this->tableManipulator->checkColumnName($strNewColumnName);
 
         $schemaManager = $this->connection->getSchemaManager();

@@ -303,6 +303,23 @@ abstract class Base implements IAttribute
         // By default, we accept any change of meta information.
         $this->set($strMetaName, $varNewValue);
 
+        if ($this instanceof ISchemaManagedAttribute) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            return $this;
+        }
+
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Class "' . __CLASS__ . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+
         return $this;
     }
 
@@ -311,6 +328,22 @@ abstract class Base implements IAttribute
      */
     public function destroyAUX()
     {
+        if ($this instanceof ISchemaManagedAttribute) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            return;
+        }
+
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Class "' . __CLASS__ . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
         // No-op.
     }
 
@@ -319,6 +352,22 @@ abstract class Base implements IAttribute
      */
     public function initializeAUX()
     {
+        if ($this instanceof ISchemaManagedAttribute) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            return;
+        }
+
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Class "' . __CLASS__ . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
         // No-op.
     }
 

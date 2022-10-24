@@ -32,6 +32,8 @@ interface ISimple extends IAttribute
      * Returns the SQL primitive type declaration in MySQL notation. i.e. "text NULL".
      *
      * @return string
+     *
+     * @deprecated Implement schema generators instead.
      */
     public function getSQLDataType();
 
@@ -39,6 +41,8 @@ interface ISimple extends IAttribute
      * Creates the underlying database structure for this attribute.
      *
      * @return void
+     *
+     * @deprecated Implement schema generators instead.
      */
     public function createColumn();
 
@@ -46,6 +50,8 @@ interface ISimple extends IAttribute
      * Removes the underlying database structure for this attribute.
      *
      * @return void
+     *
+     * @deprecated Implement schema generators instead.
      */
     public function deleteColumn();
 
@@ -55,6 +61,8 @@ interface ISimple extends IAttribute
      * @param string $strNewColumnName The new column name for the attribute.
      *
      * @return void
+     *
+     * @deprecated Implement schema generators instead.
      */
     public function renameColumn($strNewColumnName);
 
