@@ -39,6 +39,8 @@ use MetaModels\IMetaModel;
  */
 class BaseSimple extends Base implements ISimple
 {
+    use ManagedAttributeTrait;
+
     /**
      * Database connection.
      *
@@ -119,13 +121,8 @@ class BaseSimple extends Base implements ISimple
      */
     public function handleMetaChange($strMetaName, $varNewValue)
     {
-        if ($this instanceof ISchemaManagedAttribute) {
-            // @codingStandardsIgnoreStart
-            @trigger_error(
-                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
-                E_USER_DEPRECATED
-            );
-            // @codingStandardsIgnoreEnd
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
             return $this;
         }
 
@@ -257,13 +254,8 @@ class BaseSimple extends Base implements ISimple
      */
     public function getSQLDataType()
     {
-        if ($this instanceof ISchemaManagedAttribute) {
-            // @codingStandardsIgnoreStart
-            @trigger_error(
-                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
-                E_USER_DEPRECATED
-            );
-            // @codingStandardsIgnoreEnd
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
         }
 
         return 'blob NULL';
@@ -278,22 +270,12 @@ class BaseSimple extends Base implements ISimple
      */
     public function destroyAUX()
     {
-        if ($this instanceof ISchemaManagedAttribute) {
-            // @codingStandardsIgnoreStart
-            @trigger_error(
-                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
-                E_USER_DEPRECATED
-            );
-            // @codingStandardsIgnoreEnd
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
             return;
         }
 
-        // @codingStandardsIgnoreStart
-        @trigger_error(
-            'Class "' . static::class . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
-            E_USER_DEPRECATED
-        );
-        // @codingStandardsIgnoreEnd
+        $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
 
         parent::destroyAUX();
         $this->deleteColumn();
@@ -308,22 +290,12 @@ class BaseSimple extends Base implements ISimple
      */
     public function initializeAUX()
     {
-        if ($this instanceof ISchemaManagedAttribute) {
-            // @codingStandardsIgnoreStart
-            @trigger_error(
-                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
-                E_USER_DEPRECATED
-            );
-            // @codingStandardsIgnoreEnd
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
             return;
         }
 
-        // @codingStandardsIgnoreStart
-        @trigger_error(
-            'Class "' . static::class . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
-            E_USER_DEPRECATED
-        );
-        // @codingStandardsIgnoreEnd
+        $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
 
         parent::initializeAUX();
         $this->createColumn();
@@ -340,22 +312,12 @@ class BaseSimple extends Base implements ISimple
      */
     public function createColumn()
     {
-        if ($this instanceof ISchemaManagedAttribute) {
-            // @codingStandardsIgnoreStart
-            @trigger_error(
-                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
-                E_USER_DEPRECATED
-            );
-            // @codingStandardsIgnoreEnd
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
             return;
         }
 
-        // @codingStandardsIgnoreStart
-        @trigger_error(
-            'Class "' . static::class . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
-            E_USER_DEPRECATED
-        );
-        // @codingStandardsIgnoreEnd
+        $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
 
         if ($this->getColName()) {
             $this->tableManipulator->createColumn(
@@ -375,22 +337,12 @@ class BaseSimple extends Base implements ISimple
      */
     public function deleteColumn()
     {
-        if ($this instanceof ISchemaManagedAttribute) {
-            // @codingStandardsIgnoreStart
-            @trigger_error(
-                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
-                E_USER_DEPRECATED
-            );
-            // @codingStandardsIgnoreEnd
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
             return;
         }
 
-        // @codingStandardsIgnoreStart
-        @trigger_error(
-            'Class "' . static::class . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
-            E_USER_DEPRECATED
-        );
-        // @codingStandardsIgnoreEnd
+        $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
 
         $schemaManager = $this->connection->getSchemaManager();
         $columns       = $schemaManager->listTableColumns($this->getMetaModel()->getTableName());
@@ -412,22 +364,12 @@ class BaseSimple extends Base implements ISimple
      */
     public function renameColumn($strNewColumnName)
     {
-        if ($this instanceof ISchemaManagedAttribute) {
-            // @codingStandardsIgnoreStart
-            @trigger_error(
-                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
-                E_USER_DEPRECATED
-            );
-            // @codingStandardsIgnoreEnd
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
             return;
         }
 
-        // @codingStandardsIgnoreStart
-        @trigger_error(
-            'Class "' . static::class . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
-            E_USER_DEPRECATED
-        );
-        // @codingStandardsIgnoreEnd
+        $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
 
         $this->tableManipulator->checkColumnName($strNewColumnName);
 

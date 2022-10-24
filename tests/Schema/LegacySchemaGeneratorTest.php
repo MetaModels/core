@@ -24,7 +24,6 @@ namespace MetaModels\Test\Schema\Doctrine;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\Attribute\IComplex;
 use MetaModels\Attribute\IInternal;
-use MetaModels\Attribute\ISchemaManagedAttribute;
 use MetaModels\Attribute\ISimple;
 use MetaModels\IFactory;
 use MetaModels\IMetaModel;
@@ -50,7 +49,7 @@ class LegacySchemaGeneratorTest extends TestCase
      */
     public function testInstantiation(): void
     {
-        $instance = new LegacySchemaGenerator($this->getMockForAbstractClass(IFactory::class));
+        $instance = new LegacySchemaGenerator($this->getMockForAbstractClass(IFactory::class), []);
 
         $this->assertInstanceOf(LegacySchemaGenerator::class, $instance);
     }
@@ -62,7 +61,7 @@ class LegacySchemaGeneratorTest extends TestCase
      */
     public function testGenerateAddsSchemaInformationIfNotFound(): void
     {
-        $instance    = new LegacySchemaGenerator($this->getMockForAbstractClass(IFactory::class));
+        $instance    = new LegacySchemaGenerator($this->getMockForAbstractClass(IFactory::class), []);
         $information = new SchemaInformation();
         $collection  = $this->getMockForAbstractClass(MetaModelCollectionInterface::class);
 
@@ -83,9 +82,9 @@ class LegacySchemaGeneratorTest extends TestCase
         $information = new SchemaInformation();
         $collection  = $this->getMockForAbstractClass(MetaModelCollectionInterface::class);
 
-        $attribute1 = $this->getMockForAbstractClass(ISimple::class);
-        $attribute2 = $this->getMockForAbstractClass(IComplex::class);
-        $attribute3 = $this->getMockForAbstractClass(ISchemaManagedAttribute::class);
+        $attribute1 = $this->mockAttribute(ISimple::class, 'attribute1');
+        $attribute2 = $this->mockAttribute(IComplex::class, 'attribute2');
+        $attribute3 = $this->mockAttribute(ISimple::class, 'managed-type');
         $attribute4 = $this->getMockForAbstractClass(IInternal::class);
         $metaModel  = $this->mockMetaModel([$attribute1, $attribute2, $attribute3, $attribute4]);
 
@@ -97,7 +96,7 @@ class LegacySchemaGeneratorTest extends TestCase
         ]));
         $metaModelInformation->addAttribute(new AttributeInformation('test', 'test_type'));
 
-        $instance = new LegacySchemaGenerator($factory);
+        $instance = new LegacySchemaGenerator($factory, ['managed-type']);
 
         $instance->generate($information, $collection);
 
@@ -122,5 +121,24 @@ class LegacySchemaGeneratorTest extends TestCase
         $metaModel->expects($this->once())->method('getAttributes')->willReturn($attributes);
 
         return $metaModel;
+    }
+
+    /** @param class-string<IAttribute> $interface */
+    private function mockAttribute(string $interface, string $typeName): IAttribute
+    {
+        $attribute = $this->getMockForAbstractClass($interface);
+
+        $attribute
+            ->expects(self::atLeastOnce())
+            ->method('get')
+            ->willReturnCallback(function (string $key) use ($typeName) {
+                switch ($key) {
+                    case 'type':
+                        return $typeName;
+                }
+                throw new \LogicException('Unexpected get call');
+            });
+
+        return $attribute;
     }
 }

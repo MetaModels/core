@@ -41,6 +41,8 @@ use MetaModels\Render\Template;
  */
 abstract class Base implements IAttribute
 {
+    use ManagedAttributeTrait;
+
     /**
      * The MetaModel instance this object belongs to.
      *
@@ -305,22 +307,11 @@ abstract class Base implements IAttribute
         // By default, we accept any change of meta information.
         $this->set($strMetaName, $varNewValue);
 
-        if ($this instanceof ISchemaManagedAttribute) {
-            // @codingStandardsIgnoreStart
-            @trigger_error(
-                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
-                E_USER_DEPRECATED
-            );
-            // @codingStandardsIgnoreEnd
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
             return $this;
         }
-
-        // @codingStandardsIgnoreStart
-        @trigger_error(
-            'Class "' . static::class . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
-            E_USER_DEPRECATED
-        );
-        // @codingStandardsIgnoreEnd
+        $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
 
         return $this;
     }
@@ -332,22 +323,12 @@ abstract class Base implements IAttribute
      */
     public function destroyAUX()
     {
-        if ($this instanceof ISchemaManagedAttribute) {
-            // @codingStandardsIgnoreStart
-            @trigger_error(
-                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
-                E_USER_DEPRECATED
-            );
-            // @codingStandardsIgnoreEnd
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
             return;
         }
 
-        // @codingStandardsIgnoreStart
-        @trigger_error(
-            'Class "' . static::class . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
-            E_USER_DEPRECATED
-        );
-        // @codingStandardsIgnoreEnd
+        $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
         // No-op.
     }
 
@@ -358,22 +339,12 @@ abstract class Base implements IAttribute
      */
     public function initializeAUX()
     {
-        if ($this instanceof ISchemaManagedAttribute) {
-            // @codingStandardsIgnoreStart
-            @trigger_error(
-                'Class "' . static::class . '" is a managed attribute you should not call "' . __METHOD__ . '".',
-                E_USER_DEPRECATED
-            );
-            // @codingStandardsIgnoreEnd
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
             return;
         }
 
-        // @codingStandardsIgnoreStart
-        @trigger_error(
-            'Class "' . static::class . '" should be changed to "' . ISchemaManagedAttribute::class . '".',
-            E_USER_DEPRECATED
-        );
-        // @codingStandardsIgnoreEnd
+        $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
         // No-op.
     }
 

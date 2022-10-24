@@ -1,3 +1,5 @@
+parameters:
+  metamodels.managed-schema-type-names: []
 services:
     MetaModels\IFactory: '@metamodels.factory'
     MetaModels\Filter\Setting\IFilterSettingFactory: '@metamodels.filter_setting_factory'
@@ -203,6 +205,7 @@ services:
     MetaModels\Schema\LegacySchemaGenerator:
         arguments:
             - '@metamodels.factory'
+            - '%metamodels.managed-schema-type-names%'
         tags:
             - { name: 'metamodels.schema-generator' }
 

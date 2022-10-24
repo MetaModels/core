@@ -22,9 +22,10 @@ declare(strict_types = 1);
 namespace MetaModels\Schema;
 
 use MetaModels\Attribute\IInternal;
-use MetaModels\Attribute\ISchemaManagedAttribute;
 use MetaModels\IFactory;
 use MetaModels\Information\MetaModelCollectionInterface;
+
+use function in_array;
 
 /**
  * This is the legacy handler for creating the legacy schema.
@@ -33,21 +34,26 @@ use MetaModels\Information\MetaModelCollectionInterface;
  */
 class LegacySchemaGenerator implements SchemaGeneratorInterface
 {
+    /** @var list<string> */
+    private array $ignoredTypeNames;
+
     /**
      * The MetaModels factory.
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * Create a new instance.
      *
-     * @param IFactory $factory The factory.
+     * @param IFactory     $factory The factory.
+     * @param list<string> $ignoredTypeNames
      */
-    public function __construct(IFactory $factory)
+    public function __construct(IFactory $factory, array $ignoredTypeNames)
     {
         $this->factory = $factory;
+        $this->ignoredTypeNames = $ignoredTypeNames;
     }
 
     /**
@@ -66,14 +72,16 @@ class LegacySchemaGenerator implements SchemaGeneratorInterface
             $metaModel = $this->factory->getMetaModel($metaModelInformation->getName());
             foreach ($metaModel->getAttributes() as $attribute) {
                 // Skip managed and internal attributes.
-                if ($attribute instanceof ISchemaManagedAttribute || $attribute instanceof IInternal) {
+                if (
+                    $attribute instanceof IInternal
+                    || in_array($attribute->get('type'), $this->ignoredTypeNames, true)
+                ) {
                     continue;
                 }
 
                 // @codingStandardsIgnoreStart
                 @trigger_error(
-                    'Attribute type "' . $attribute->get('type') .
-                    '" should implement "' . ISchemaManagedAttribute::class . '".',
+                    'Attribute type "' . $attribute->get('type') . '" should be changed to a managed attribute.',
                     E_USER_DEPRECATED
                 );
                 // @codingStandardsIgnoreEnd
