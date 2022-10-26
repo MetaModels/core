@@ -107,16 +107,16 @@ abstract class Base implements IAttribute
     }
 
     /**
-     * Retrieve the human readable name (or title) from the attribute.
+     * Retrieve the human-readable name (or title) from the attribute.
      *
      * If the MetaModel is translated, the currently active language is used,
      * with properly falling back to the defined fallback language.
      *
-     * @return string the human readable name
+     * @return string the human-readable name
      */
     public function getName()
     {
-        if (is_array($this->arrData['name'])) {
+        if (isset($this->arrData['name']) && is_array($this->arrData['name'])) {
             $metaModel = $this->getMetaModel();
             return $this->getLangValue(
                 $this->get('name'),
@@ -124,7 +124,8 @@ abstract class Base implements IAttribute
                     ? $metaModel->getLanguage() : $metaModel->getActiveLanguage()
             ) ?: $this->getColName();
         }
-        return $this->arrData['name'] ?: $this->getColName();
+
+        return $this->arrData['name'] ?? $this->getColName();
     }
 
     /**
