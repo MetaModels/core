@@ -352,7 +352,7 @@ abstract class TranslatedReference extends BaseComplex implements ITranslated
 
         $arrReturn = [];
         while ($objValue = $statement->fetchAssociative()) {
-            $arrReturn[$objValue->{$arrOptionizer['key']}] = $objValue->{$arrOptionizer['value']};
+            $arrReturn[$objValue[$arrOptionizer['key']]] = $objValue[$arrOptionizer['value']];
         }
         return $arrReturn;
     }
