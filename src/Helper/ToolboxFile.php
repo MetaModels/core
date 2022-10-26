@@ -1019,25 +1019,28 @@ class ToolboxFile
         }
 
         $information = [
-            'file'      => $fileName,
-            'mtime'     => $file->mtime,
-            'alt'       => $altText,
-            'caption'   => (!empty($meta['caption']) ? $meta['caption'] : ''),
-            'title'     => $title,
-            'metafile'  => $meta,
-            'icon'      => 'assets/contao/images/' . $file->icon,
-            'extension' => $file->extension,
-            'size'      => $file->filesize,
-            'sizetext'  => sprintf('(%s)', Controller::getReadableSize($file->filesize, 2)),
-            'url'       => StringUtil::specialchars($this->getDownloadLink($fileName))
+            'file'       => $fileName,
+            'mtime'      => $file->mtime,
+            'alt'        => $altText,
+            'caption'    => (!empty($meta['caption']) ? $meta['caption'] : ''),
+            'title'      => $title,
+            'metafile'   => $meta,
+            'icon'       => 'assets/contao/images/' . $file->icon,
+            'extension'  => $file->extension,
+            'size'       => $file->filesize,
+            'sizetext'   => sprintf('(%s)', Controller::getReadableSize($file->filesize, 2)),
+            'url'        => StringUtil::specialchars($this->getDownloadLink($fileName)),
+            'isGdImage'  => false,
+            'isSvgImage' => false,
+            'isPicture'  => false,
         ];
 
         // Prepare GD images.
         if ($information['isGdImage'] = $file->isGdImage) {
             $information['src'] = urldecode($this->resizeImage($fileName));
+            $information['lb']  = 'lb_' . $this->getLightboxId();
             if (file_exists(TL_ROOT . '/' . $information['src'])) {
                 $size              = getimagesize(TL_ROOT . '/' . $information['src']);
-                $information['lb'] = 'lb' . $this->getLightboxId();
                 $information['w']  = $size[0];
                 $information['h']  = $size[1];
                 $information['wh'] = $size[3];
