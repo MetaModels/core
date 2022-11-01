@@ -981,7 +981,7 @@ class MetaModel implements IMetaModel
             ->where($builder->expr()->in('t.id', ':values'))
             ->setParameter('values', $arrFilteredIds, Connection::PARAM_STR_ARRAY)
             ->executeQuery()
-            ->fetchFirstColumn();
+            ->fetchOne();
     }
 
     /**
