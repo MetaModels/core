@@ -246,13 +246,6 @@ class InsertTagsListener implements ServiceAnnotationInterface
         // Handle a set of ids.
         $arrIds = StringUtil::trimsplit(',', $mixDataId);
 
-        // Check each id if published.
-        foreach ($arrIds as $intKey => $intId) {
-            if (!$this->isPublishedItem($metaModel, $intId)) {
-                unset($arrIds[$intKey]);
-            }
-        }
-
         // Render an empty insert tag rather than displaying a list with an empty.
         // result information. do not return false here because the insert tag itself is correct.
         if (count($arrIds) < 1) {
@@ -435,29 +428,18 @@ class InsertTagsListener implements ServiceAnnotationInterface
      *
      * @return boolean True => Published | False => Not published
      *
+     * @deprecated
+     *
      * @throws \Doctrine\DBAL\DBALException When a database error occur.
      */
     protected function isPublishedItem($metaModel, $intItemId): bool
     {
-        // Check publish state of an item.
-        $statement = $this->connection
-            ->createQueryBuilder()
-            ->select('t.colname')
-            ->from('tl_metamodel_attribute', 't')
-            ->where('t.pid=:pid')
-            ->andWhere('t.check_publish=1')
-            ->setParameter('pid', $metaModel->get('id'))
-            ->setMaxResults(1)
-            ->execute();
-
-        if ($statement->rowCount() > 0) {
-            $checkPublish = $statement->fetch(FetchMode::STANDARD_OBJECT);
-            $item         = $metaModel->findById($intItemId);
-
-            if (null === $item || !$item->get($checkPublish->colname)) {
-                return false;
-            }
-        }
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'The check isPublishedItem at inserttag item has been removed.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
 
         return true;
     }
