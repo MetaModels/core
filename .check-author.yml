@@ -12,6 +12,7 @@ mapping:
     - 'chibineko <stefan_heimes@hotmail.com>'
     - 'stefanheimes <stefan_heimes@hotmail.com>'
     - 'Stefan Heimes <cms@men-at-work.de>'
+    - 'Stefan Heimes <heimes@men-at-work.de>'
   'David Maack <david.maack@arcor.de>':
     - 'David Maack <maack@men-at-work.de>'
     - 'davidmaack <david.maack@arcor.de>'
@@ -30,9 +31,14 @@ mapping:
     - 'zonky2 <info@e-spin.de>'
     - 'info@e-spin.de <info@e-spin.de>'
     - 'e-spin <gitlab@e-spin.de>'
+    - 'e-spin <git@e-spin.de>'
+    - 'e-spin <info@e-spin.de>'
+    - 'Ingolf Steinhardt <git@e-spin.de>'
+    - 'Ingolf Steinhardt <info@e-spin.de>'
   'binron <rtb@gmx.ch>': 'binron <rtb@gmx.ch>'
   'Jeremie Constant <j.constant@imi.de>':
     - 'JeremieConstant <j.constant@imi.de>'
+  'Andreas Fischer <anfischer@kaffee-partner.de>': 'A. Fischer <anfischer@kaffee-partner.de>'
 
 copy-left:
   'Christian Schiffler <c.schiffler@cyberspectrum.de>':

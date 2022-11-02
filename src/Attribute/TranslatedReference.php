@@ -18,7 +18,7 @@
  * @author     Frank Mueller <frank.mueller@linking-you.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @author     Andrea Fischer <anfischer@kaffee-partner.de>
+ * @author     Andreas Fischer <anfischer@kaffee-partner.de>
  * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
