@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -103,17 +104,19 @@ class ModelToLabelListener extends AbstractListener
                 '',
                 'bundles/metamodelscore/images/icons/fields.png'
             );
+            $variant = ($metaModel->hasVariants() && $attribute->get('isvariant')) ? ', variant' : '';
             $name    = $attribute->getName();
             $colName = $attribute->getColName();
         } else {
             $type    = $this->trans('error_unknown_id', [$model->getProperty('attr_id')]);
             $image   = $this->iconBuilder->getBackendIconImageTag('bundles/metamodelscore/images/icons/fields.png');
+            $variant = '';
             $name    = $this->trans('error_unknown_attribute');
             $colName = $this->trans('error_unknown_column');
         }
 
         $event
-            ->setLabel('<div class="field_heading cte_type %s"><strong>%s</strong> <em>[%s]</em></div>
+            ->setLabel('<div class="field_heading cte_type %s"><strong>%s</strong> <em>[%s%s]</em></div>
                 <div class="field_type block">
                     %s<strong>%s</strong>
                 </div>')
@@ -121,6 +124,7 @@ class ModelToLabelListener extends AbstractListener
                 $model->getProperty('enabled') ? 'published' : 'unpublished',
                 $colName,
                 $type,
+                $variant,
                 $image,
                 $name
             ]);

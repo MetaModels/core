@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -85,8 +86,8 @@ class TranslatorPopulator
 
         // Map the tl_metamodel_item domain over to this domain.
         $this->dispatcher->dispatch(
-            ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE,
-            new LoadLanguageFileEvent('tl_metamodel_item')
+            new LoadLanguageFileEvent('tl_metamodel_item'),
+            ContaoEvents::SYSTEM_LOAD_LANGUAGE_FILE
         );
 
         $definitionName = $environment->getDataDefinition()->getName();
@@ -142,7 +143,12 @@ class TranslatorPopulator
      */
     private function addInputScreenTranslations(StaticTranslator $translator, $inputScreen, $containerName)
     {
-        $currentLocale = $GLOBALS['TL_LANGUAGE'];
+        // Either 2 or 5 char long language code.
+        $currentLocale = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
+        // Either 2 char language code or null.
+        $shortLocale = (false !== strpos($currentLocale, '_'))
+            ? explode('_', $currentLocale, 2)[0]
+            : null;
 
         foreach ($inputScreen['legends'] as $legendName => $legendInfo) {
             // If current language not defined, use the fallback language.
@@ -151,14 +157,23 @@ class TranslatorPopulator
                 $legendInfo['label']['default'],
                 $containerName
             );
+
+            $fallbackLocales = [$currentLocale];
+            if ($shortLocale && !in_array($currentLocale, array_keys($legendInfo['label']), true)) {
+                $fallbackLocales[] = $shortLocale;
+            }
             foreach ($legendInfo['label'] as $langCode => $label) {
+                // Default is already handled above, do not overwrite!
+                if ($langCode === 'default') {
+                    continue;
+                }
                 $translator->setValue(
                     $legendName . '_legend',
                     $label,
                     $containerName,
                     $langCode
                 );
-                if ($currentLocale === $langCode) {
+                if (in_array($langCode, $fallbackLocales)) {
                     $translator->setValue(
                         $legendName . '_legend',
                         $label,

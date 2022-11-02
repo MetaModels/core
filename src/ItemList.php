@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,141 +22,192 @@
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Benedict Zinke <bz@presentprogressive.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     David Molineus <david.molineus@netzmacht.de>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Fritz Michael Gschwantner <fmg@inspiredminds.at>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels;
 
+use Contao\ContentModel;
+use Contao\Model;
+use Contao\ModuleModel;
 use Contao\StringUtil;
+use Contao\System;
+use Contao\Template as ContaoTemplate;
 use MetaModels\Events\RenderItemListEvent;
+use MetaModels\Filter\FilterUrlBuilder;
+use MetaModels\Filter\IFilter;
+use MetaModels\Filter\IFilterRule;
+use MetaModels\Filter\Setting\ICollection as IFilterSettingCollection;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\Helper\PaginationLimitCalculator;
+use MetaModels\Render\Setting\ICollection as IRenderSettingCollection;
 use MetaModels\Render\Setting\IRenderSettingFactory;
 use MetaModels\Render\Template;
+use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 
 /**
  * Implementation of a general purpose MetaModel listing.
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
-class ItemList implements IServiceContainerAware
+class ItemList
 {
     /**
      * Sort by attribute.
      *
      * @var string
      */
-    protected $strSortBy = '';
+    protected string $strSortBy = '';
 
     /**
      * Sort by attribute.
      *
      * @var string
      */
-    protected $strSortDirection = 'ASC';
+    protected string $strSortDirection = 'ASC';
 
     /**
-     * The view to use.
+     * The view id to use.
      *
      * @var int
      */
-    protected $intView = 0;
+    protected int $intView = 0;
 
     /**
-     * Sort by attribute.
+     * Output format type.
      *
-     * @var string
+     * @var string|null
      */
-    protected $strOutputFormat;
+    protected ?string $outputFormat;
 
     /**
-     * The MetaModel to use.
-     *
-     * @var int
-     */
-    protected $intMetaModel = 0;
-
-    /**
-     * The filter to use.
+     * The MetaModel id to use.
      *
      * @var int
      */
-    protected $intFilter = 0;
+    protected int $intMetaModel = 0;
+
+    /**
+     * The filter id to use.
+     *
+     * @var int
+     */
+    protected int $intFilter = 0;
 
     /**
      * The parameters for the filter.
      *
      * @var string[]
      */
-    protected $arrParam = array();
+    protected array $arrParam = [];
+
+    /**
+     * The parameters for the template.
+     *
+     * @var array<string,mixed>
+     */
+    private array $templateParameter = [];
 
     /**
      * The name of the attribute for the title.
      *
      * @var string
      */
-    protected $strTitleAttribute = '';
+    protected string $strTitleAttribute = '';
 
     /**
      * The name of the attribute for the description.
      *
      * @var string
      */
-    protected $strDescriptionAttribute = '';
-
-    /**
-     * The service container.
-     *
-     * @var IMetaModelsServiceContainer|\Closure
-     *
-     * @deprecated The service container will get removed.
-     */
-    private $serviceContainer;
+    protected string $strDescriptionAttribute = '';
 
     /**
      * The calculator for pagination and limit.
      *
      * @var PaginationLimitCalculator
      */
-    private $paginationLimitCalculator;
+    private PaginationLimitCalculator $paginationLimitCalculator;
 
     /**
      *  The filter setting factory.
      *
-     * @var IFilterSettingFactory
+     * @var IFilterSettingFactory|null
      */
-    private $filterFactory;
+    private ?IFilterSettingFactory $filterFactory;
 
     /**
      * The MetaModels factory.
      *
-     * @var IFactory
+     * @var IFactory|null
      */
-    private $factory;
-
-    /**
-     * The event dispatcher.
-     *
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
+    private ?IFactory $factory;
 
     /**
      * The render setting factory.
      *
-     * @var IRenderSettingFactory
+     * @var IRenderSettingFactory|null
      */
-    private $renderSettingFactory;
+    private ?IRenderSettingFactory $renderSettingFactory;
+
+    /**
+     * The event dispatcher.
+     *
+     * @var EventDispatcherInterface|null
+     */
+    private $eventDispatcher;
 
     /**
      * Create a new instance.
+     *
+     * @param IFactory|null                 $factory              The MetaModels factory (required in MetaModels 3.0).
+     * @param IFilterSettingFactory|null    $filterFactory        The filter setting factory (required in MetaModels
+     *                                                            3.0).
+     * @param IRenderSettingFactory|null    $renderSettingFactory The render setting factory (required in MetaModels
+     *                                                            3.0).
+     * @param EventDispatcherInterface|null $eventDispatcher      The event dispatcher (required in MetaModels 3.0).
+     * @param FilterUrlBuilder|null         $filterUrlBuilder     The filter url builder.
+     * @param string                        $pageParam            The pagination URL key.
+     * @param string                        $paramType            The pagination parameter URL type.
+     * @param int                           $maxPaginationLinks   The maximum number of pagination links.
+     * @param string                        $paginationTemplate   The pagination template.
+     * @param string                        $paginationFragment   The pagination fragment.
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
-    public function __construct()
-    {
-        $this->paginationLimitCalculator = new PaginationLimitCalculator();
+    public function __construct(
+        IFactory $factory = null,
+        IFilterSettingFactory $filterFactory = null,
+        IRenderSettingFactory $renderSettingFactory = null,
+        EventDispatcherInterface $eventDispatcher = null,
+        FilterUrlBuilder $filterUrlBuilder = null,
+        string $pageParam = 'page',
+        string $paramType = 'get',
+        int $maxPaginationLinks = 0,
+        string $paginationTemplate = 'mm_pagination',
+        string $paginationFragment = ''
+    ) {
+        $this->paginationLimitCalculator = new PaginationLimitCalculator(
+            $filterUrlBuilder,
+            $pageParam,
+            $paramType,
+            $maxPaginationLinks,
+            $paginationTemplate,
+            $paginationFragment
+        );
+
+        $this->factory              = $factory;
+        $this->filterFactory        = $filterFactory;
+        $this->renderSettingFactory = $renderSettingFactory;
+        $this->eventDispatcher      = LegacyEventDispatcherProxy::decorate($eventDispatcher);
     }
 
     /**
@@ -165,9 +216,17 @@ class ItemList implements IServiceContainerAware
      * @param IFilterSettingFactory $filterFactory The filter setting factory.
      *
      * @return ItemList
+     *
+     * @deprecated Use constructor injection instead.
      */
     public function setFilterFactory(IFilterSettingFactory $filterFactory)
     {
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Method "' . __METHOD__ . '" is deprecated and will be removed in MetaModels 3.0.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
         $this->filterFactory = $filterFactory;
 
         return $this;
@@ -178,13 +237,20 @@ class ItemList implements IServiceContainerAware
      *
      * @return IFilterSettingFactory
      */
-    private function getFilterFactory()
+    private function getFilterFactory(): IFilterSettingFactory
     {
         if ($this->filterFactory) {
             return $this->filterFactory;
         }
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Not setting the filter setting factory via constructor is deprecated and will throw ' .
+            'an exception in MetaModels 3.0.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
 
-        return $this->getServiceContainer()->getFilterFactory();
+        return $this->filterFactory = System::getContainer()->get('metamodels.filter_setting_factory');
     }
 
     /**
@@ -193,26 +259,41 @@ class ItemList implements IServiceContainerAware
      * @param IFactory $factory The factory.
      *
      * @return ItemList
+     *
+     * @deprecated Use constructor injection instead.
      */
-    public function setFactory(IFactory $factory)
+    public function setFactory(IFactory $factory): self
     {
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Method "' . __METHOD__ . '" is deprecated and will be removed in MetaModels 3.0.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
         $this->factory = $factory;
 
         return $this;
     }
 
     /**
-     * Retrieve the filter setting factory.
+     * Retrieve the factory.
      *
      * @return IFactory
      */
-    private function getFactory()
+    private function getFactory(): IFactory
     {
         if ($this->factory) {
             return $this->factory;
         }
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Not setting the factory via constructor is deprecated and will throw ' .
+            'an exception in MetaModels 3.0.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
 
-        return $this->getServiceContainer()->getFactory();
+        return $this->factory = System::getContainer()->get('metamodels.factory');
     }
 
     /**
@@ -221,9 +302,17 @@ class ItemList implements IServiceContainerAware
      * @param IRenderSettingFactory $factory The factory.
      *
      * @return ItemList
+     *
+     * @deprecated Use constructor injection instead.
      */
-    public function setRenderSettingFactory(IRenderSettingFactory $factory)
+    public function setRenderSettingFactory(IRenderSettingFactory $factory): self
     {
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Method "' . __METHOD__ . '" is deprecated and will be removed in MetaModels 3.0.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
         $this->renderSettingFactory = $factory;
 
         return $this;
@@ -235,10 +324,18 @@ class ItemList implements IServiceContainerAware
      * @param EventDispatcherInterface $eventDispatcher The new value.
      *
      * @return ItemList
+     *
+     * @deprecated Use constructor injection instead.
      */
-    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher): self
     {
-        $this->eventDispatcher = $eventDispatcher;
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Method "' . __METHOD__ . '" is deprecated and will be removed in MetaModels 3.0.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+        $this->eventDispatcher = LegacyEventDispatcherProxy::decorate($eventDispatcher);
 
         return $this;
     }
@@ -248,64 +345,47 @@ class ItemList implements IServiceContainerAware
      *
      * @return EventDispatcherInterface
      */
-    private function getEventDispatcher()
+    private function getEventDispatcher(): EventDispatcherInterface
     {
         if ($this->eventDispatcher) {
             return $this->eventDispatcher;
         }
 
-        return $this->getServiceContainer()->getEventDispatcher();
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            'Not setting the event dispatcher via constructor is deprecated and will throw ' .
+            'an exception in MetaModels 3.0.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+
+        return $this->eventDispatcher = LegacyEventDispatcherProxy::decorate(
+            System::getContainer()->get('event_dispatcher')
+        );
     }
 
     /**
      * Set the service container to use.
      *
-     * @param IMetaModelsServiceContainer $serviceContainer The service container.
-     *
      * @return ItemList
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
-    public function setServiceContainer(IMetaModelsServiceContainer $serviceContainer)
+    public function setServiceContainer(): self
     {
-        $this->serviceContainer = $serviceContainer;
-
         return $this;
     }
 
     /**
      * Set the service container to use (fallback for MM 2.0 compatibility).
      *
-     * @param \Closure $serviceContainer The service container retriever.
-     *
      * @return ItemList
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
-    public function setServiceContainerFallback($serviceContainer)
+    public function setServiceContainerFallback(): self
     {
-        $this->serviceContainer = $serviceContainer;
-
         return $this;
-    }
-
-    /**
-     * Try to set the default service container.
-     *
-     * @return void
-     *
-     * @throws \RuntimeException When the service container could not be set.
-     *
-     * @@SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    private function useDefaultServiceContainer()
-    {
-        $this->serviceContainer = $GLOBALS['container']['metamodels-service-container'];
-
-        if (!($this->serviceContainer instanceof IMetaModelsServiceContainer)) {
-            throw new \RuntimeException('Unable to retrieve default service container.');
-        }
     }
 
     /**
@@ -315,36 +395,29 @@ class ItemList implements IServiceContainerAware
      *
      * @deprecated The service container will get removed, use the symfony service container instead.
      */
-    public function getServiceContainer()
+    public function getServiceContainer(): ?IMetaModelsServiceContainer
     {
-        if (!$this->serviceContainer) {
-            $this->useDefaultServiceContainer();
-        }
-        if (is_callable($this->serviceContainer)) {
-            return $this->serviceContainer = $this->serviceContainer->__invoke();
-        }
-
-        return $this->serviceContainer;
+        return null;
     }
 
     /**
      * Set the limit.
      *
-     * @param bool $blnUse    If true, use limit, if false no limit is applied.
+     * @param bool $isLimit If true, use limit, if false no limit is applied.
      *
-     * @param int  $intOffset Like in SQL, first element to be returned (0 based).
+     * @param int  $offset  Like in SQL, first element to be returned (0 based).
      *
-     * @param int  $intLimit  Like in SQL, amount of elements to retrieve.
+     * @param int  $limit   Like in SQL, amount of elements to retrieve.
      *
      * @return ItemList
      */
-    public function setLimit($blnUse, $intOffset, $intLimit)
+    public function setLimit(bool $isLimit, int $offset, int $limit): self
     {
         $this
             ->paginationLimitCalculator
-            ->setApplyLimitAndOffset($blnUse)
-            ->setOffset($intOffset)
-            ->setLimit($intLimit);
+            ->setApplyLimitAndOffset($isLimit)
+            ->setOffset($offset)
+            ->setLimit($limit);
 
         return $this;
     }
@@ -352,13 +425,13 @@ class ItemList implements IServiceContainerAware
     /**
      * Set page breaking to the given amount of items. A value of 0 disables pagination at all.
      *
-     * @param int $intLimit The amount of items per page. A value of 0 disables pagination.
+     * @param int $limit The amount of items per page. A value of 0 disables pagination.
      *
      * @return ItemList
      */
-    public function setPageBreak($intLimit)
+    public function setPageBreak(int $limit): self
     {
-        $this->paginationLimitCalculator->setPerPage($intLimit);
+        $this->paginationLimitCalculator->setPerPage($limit);
 
         return $this;
     }
@@ -366,16 +439,16 @@ class ItemList implements IServiceContainerAware
     /**
      * Set sorting to an attribute or system column optionally in the given direction.
      *
-     * @param string $strSortBy    The name of the attribute or system column to be used for sorting.
+     * @param string $sortBy        The name of the attribute or system column to be used for sorting.
      *
-     * @param string $strDirection The direction, either ASC or DESC (optional).
+     * @param string $sortDirection The direction, either ASC or DESC (optional).
      *
      * @return ItemList
      */
-    public function setSorting($strSortBy, $strDirection = 'ASC')
+    public function setSorting(string $sortBy, string $sortDirection = 'ASC'): self
     {
-        $this->strSortBy        = $strSortBy;
-        $this->strSortDirection = ($strDirection == 'DESC') ? 'DESC' : 'ASC';
+        $this->strSortBy        = $sortBy;
+        $this->strSortDirection = ('DESC' === strtoupper($sortDirection)) ? 'DESC' : 'ASC';
 
         return $this;
     }
@@ -383,17 +456,17 @@ class ItemList implements IServiceContainerAware
     /**
      * Override the output format of the used view.
      *
-     * @param string|null $strOutputFormat The desired output format.
+     * @param string|null $outputFormat The desired output format.
      *
      * @return ItemList
      */
-    public function overrideOutputFormat($strOutputFormat = null)
+    public function overrideOutputFormat(string $outputFormat = null): self
     {
-        $strOutputFormat = strval($strOutputFormat);
-        if (strlen($strOutputFormat)) {
-            $this->strOutputFormat = $strOutputFormat;
+        $outputFormat = (string) $outputFormat;
+        if ('' !== $outputFormat) {
+            $this->outputFormat = $outputFormat;
         } else {
-            unset($this->strOutputFormat);
+            unset($this->outputFormat);
         }
 
         return $this;
@@ -408,7 +481,7 @@ class ItemList implements IServiceContainerAware
      *
      * @return ItemList
      */
-    public function setMetaModel($intMetaModel, $intView)
+    public function setMetaModel(int $intMetaModel, int $intView): self
     {
         $this->intMetaModel = $intMetaModel;
         $this->intView      = $intView;
@@ -423,16 +496,16 @@ class ItemList implements IServiceContainerAware
     /**
      * Add the attribute names for meta title and description.
      *
-     * @param string $strTitleAttribute       Name of attribute for title.
+     * @param string $titleAttribute       Name of attribute for title.
      *
-     * @param string $strDescriptionAttribute Name of attribue for description.
+     * @param string $descriptionAttribute Name of attribute for description.
      *
      * @return ItemList
      */
-    public function setMetaTags($strTitleAttribute, $strDescriptionAttribute)
+    public function setMetaTags(string $titleAttribute, string $descriptionAttribute): self
     {
-        $this->strDescriptionAttribute = $strDescriptionAttribute;
-        $this->strTitleAttribute       = $strTitleAttribute;
+        $this->strDescriptionAttribute = $descriptionAttribute;
+        $this->strTitleAttribute       = $titleAttribute;
 
         return $this;
     }
@@ -447,44 +520,72 @@ class ItemList implements IServiceContainerAware
     /**
      * The render settings to use.
      *
-     * @var \MetaModels\Render\Setting\ICollection
+     * @var IRenderSettingCollection
      */
     protected $objView;
 
     /**
-     * The render template to use.
+     * The render template to use (metamodel_).
      *
      * @var Template
      */
     protected $objTemplate;
 
     /**
+     * The list template (ce_ or mod_).
+     *
+     * @var ContaoTemplate
+     */
+    private $listTemplate;
+
+    /**
      * The filter settings to use.
      *
-     * @var \MetaModels\Filter\Setting\ICollection
+     * @var IFilterSettingCollection
      */
     protected $objFilterSettings;
 
     /**
      * The filter to use.
      *
-     * @var \MetaModels\Filter\IFilter
+     * @var IFilter
      */
     protected $objFilter;
+
+    /**
+     * The model, can be module model or content model.
+     *
+     * @var ContentModel|ModuleModel|null $model
+     *
+     * @deprecated Do not use.
+     */
+    private $model;
+
+    /**
+     * Get the model.
+     *
+     * @return ContentModel|ModuleModel|null
+     *
+     * @deprecated Do not use.
+     */
+    public function getModel(): ?Model
+    {
+        return $this->model;
+    }
 
     /**
      * Prepare the MetaModel.
      *
      * @return void
      *
-     * @throws \RuntimeException When the MetaModel can not be found.
+     * @throws RuntimeException When the MetaModel can not be found.
      */
-    protected function prepareMetaModel()
+    protected function prepareMetaModel(): void
     {
         $factory            = $this->getFactory();
         $this->objMetaModel = $factory->getMetaModel($factory->translateIdToMetaModelName($this->intMetaModel));
         if (!$this->objMetaModel) {
-            throw new \RuntimeException('Could not get metamodel with id: ' . $this->intMetaModel);
+            throw new RuntimeException('Could not get metamodel with id: ' . $this->intMetaModel);
         }
     }
 
@@ -495,7 +596,7 @@ class ItemList implements IServiceContainerAware
      *
      * @return void
      */
-    protected function prepareView()
+    protected function prepareView(): void
     {
         if ($this->renderSettingFactory) {
             $this->objView = $this->renderSettingFactory->createCollection($this->objMetaModel, $this->intView);
@@ -515,20 +616,18 @@ class ItemList implements IServiceContainerAware
     /**
      * Set the filter setting to use.
      *
-     * @param int $intFilter The filter setting to use.
+     * @param int $intFilter The filter setting id to use.
      *
      * @return $this
      *
-     * @throws \RuntimeException When the filter settings can not be found.
+     * @throws RuntimeException When the filter settings can not be found.
      */
-    public function setFilterSettings($intFilter)
+    public function setFilterSettings(int $intFilter): self
     {
-        $this->intFilter = $intFilter;
-
-        $this->objFilterSettings = $this->getFilterFactory()->createCollection($this->intFilter);
+        $this->objFilterSettings = $this->getFilterFactory()->createCollection($intFilter);
 
         if (!$this->objFilterSettings) {
-            throw new \RuntimeException('Error: no filter object defined.');
+            throw new RuntimeException('Error: no filter object defined.');
         }
 
         return $this;
@@ -537,50 +636,50 @@ class ItemList implements IServiceContainerAware
     /**
      * Set parameters.
      *
-     * @param string[] $arrPresets The parameter preset values to use.
+     * @param string[][] $presets The parameter preset values to use.
      *
-     * @param string[] $arrValues  The dynamic parameter values that may be used.
+     * @param string[]   $values  The dynamic parameter values that may be used.
      *
      * @return ItemList
      *
-     * @throws \RuntimeException When no filter settings have been set.
+     * @throws RuntimeException When no filter settings have been set.
      */
-    public function setFilterParameters($arrPresets, $arrValues)
+    public function setFilterParameters(array $presets, array $values): self
     {
         if (!$this->objFilterSettings) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'Error: no filter object defined, call setFilterSettings() before setFilterParameters().'
             );
         }
 
-        $arrPresetNames    = $this->objFilterSettings->getParameters();
-        $arrFEFilterParams = array_keys($this->objFilterSettings->getParameterFilterNames());
+        $presetNames     = $this->objFilterSettings->getParameters();
+        $filterParamKeys = array_keys($this->objFilterSettings->getParameterFilterNames());
 
-        $arrProcessed = array();
+        $processed = [];
 
         // We have to use all the preset values we want first.
-        foreach ($arrPresets as $strPresetName => $arrPreset) {
-            if (in_array($strPresetName, $arrPresetNames)) {
-                $arrProcessed[$strPresetName] = $arrPreset['value'];
+        foreach ($presets as $presetName => $presetValues) {
+            if (in_array($presetName, $presetNames, true)) {
+                $processed[$presetName] = $presetValues['value'];
             }
         }
 
         // Now we have to use all FE filter params, that are either:
         // * not contained within the presets
         // * or are overridable.
-        foreach ($arrFEFilterParams as $strParameter) {
+        foreach ($filterParamKeys as $filterParameterKey) {
             // Unknown parameter? - next please.
-            if (!array_key_exists($strParameter, $arrValues)) {
+            if (!array_key_exists($filterParameterKey, $values)) {
                 continue;
             }
 
-            // Not a preset or allowed to override? - use value.
-            if ((!array_key_exists($strParameter, $arrPresets)) || $arrPresets[$strParameter]['use_get']) {
-                $arrProcessed[$strParameter] = $arrValues[$strParameter];
+            // Not a preset or allowed to overriding? - use value.
+            if ((!array_key_exists($filterParameterKey, $presets)) || $presets[$filterParameterKey]['use_get']) {
+                $processed[$filterParameterKey] = $values[$filterParameterKey];
             }
         }
 
-        $this->arrParam = $arrProcessed;
+        $this->arrParam = $processed;
 
         return $this;
     }
@@ -588,9 +687,9 @@ class ItemList implements IServiceContainerAware
     /**
      * Return the filter.
      *
-     * @return \MetaModels\Filter\IFilter
+     * @return IFilter
      */
-    public function getFilter()
+    public function getFilter(): IFilter
     {
         return $this->objFilter;
     }
@@ -598,19 +697,56 @@ class ItemList implements IServiceContainerAware
     /**
      * Return the filter settings.
      *
-     * @return \MetaModels\Filter\Setting\ICollection
+     * @return IFilterSettingCollection
      */
-    public function getFilterSettings()
+    public function getFilterSettings(): IFilterSettingCollection
     {
         return $this->objFilterSettings;
     }
 
     /**
+     * Get the template of the module or content element.
+     *
+     * @return ContaoTemplate
+     */
+    public function getListTemplate(): ?ContaoTemplate
+    {
+        return $this->listTemplate;
+    }
+
+    /**
+     * Set the template of the module or content element.
+     *
+     * @param ContaoTemplate $template The template.
+     *
+     * @return self
+     */
+    public function setListTemplate(ContaoTemplate $template): self
+    {
+        $this->listTemplate = $template;
+
+        return $this;
+    }
+
+    /**
+     * Set a template parameter
+     *
+     * @param string $name  The name of the parameter.
+     * @param mixed  $value The value to use.
+     *
+     * @return void
+     */
+    public function setTemplateParameter(string $name, $value): void
+    {
+        $this->templateParameter[$name] = $value;
+    }
+
+    /**
      * The items in the list view.
      *
-     * @var \MetaModels\IItems
+     * @var IItems
      */
-    protected $objItems = null;
+    protected IItems $objItems;
 
     /**
      * Add additional filter rules to the list.
@@ -619,7 +755,7 @@ class ItemList implements IServiceContainerAware
      *
      * @return ItemList
      */
-    protected function modifyFilter()
+    protected function modifyFilter(): self
     {
         return $this;
     }
@@ -627,17 +763,17 @@ class ItemList implements IServiceContainerAware
     /**
      * Add additional filter rules to the list on the fly.
      *
-     * @param \MetaModels\Filter\IFilterRule $objFilterRule The filter rule to add.
+     * @param IFilterRule $filterRule The filter rule to add.
      *
      * @return ItemList
      */
-    public function addFilterRule($objFilterRule)
+    public function addFilterRule(IFilterRule $filterRule): self
     {
         if (!$this->objFilter) {
             $this->objFilter = $this->objMetaModel->getEmptyFilter();
         }
 
-        $this->objFilter->addFilterRule($objFilterRule);
+        $this->objFilter->addFilterRule($filterRule);
 
         return $this;
     }
@@ -649,68 +785,70 @@ class ItemList implements IServiceContainerAware
      *
      * @return string[] the names of the attributes to be fetched.
      */
-    protected function getAttributeNames()
+    protected function getAttributeNames(): array
     {
-        $arrAttributes = $this->objView->getSettingNames();
+        $attributes = $this->objView->getSettingNames();
 
         // Get the right jumpTo.
-        $strDesiredLanguage  = $this->getMetaModel()->getActiveLanguage();
-        $strFallbackLanguage = $this->getMetaModel()->getFallbackLanguage();
+        $desiredLanguage  = $this->getMetaModel()->getActiveLanguage();
+        $fallbackLanguage = $this->getMetaModel()->getFallbackLanguage();
 
-        $intFilterSettings = 0;
+        $filterSettingsId = 0;
 
-        foreach ((array) $this->getView()->get('jumpTo') as $arrJumpTo) {
+        foreach ((array) $this->getView()->get('jumpTo') as $jumpTo) {
             // If either desired language or fallback, keep the result.
             if (!$this->getMetaModel()->isTranslated()
-                || $arrJumpTo['langcode'] == $strDesiredLanguage
-                || $arrJumpTo['langcode'] == $strFallbackLanguage) {
-                $intFilterSettings = $arrJumpTo['filter'];
+                || $jumpTo['langcode'] == $desiredLanguage
+                || $jumpTo['langcode'] == $fallbackLanguage) {
+                $filterSettingsId = $jumpTo['filter'];
                 // If the desired language, break. Otherwise try to get the desired one until all have been evaluated.
-                if ($strDesiredLanguage == $arrJumpTo['langcode']) {
+                if ($desiredLanguage === $jumpTo['langcode']) {
                     break;
                 }
             }
         }
 
-        if ($intFilterSettings) {
-            $objFilterSettings = $this->getFilterFactory()->createCollection($intFilterSettings);
-            $arrAttributes     = array_merge($objFilterSettings->getReferencedAttributes(), $arrAttributes);
+        if ($filterSettingsId) {
+            $filterSettings = $this->getFilterFactory()->createCollection($filterSettingsId);
+            $attributes     = array_merge($filterSettings->getReferencedAttributes(), $attributes);
         }
 
-        return $arrAttributes;
+        return $attributes;
     }
 
     /**
      * Prepare the rendering.
      *
      * @return ItemList
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function prepare()
+    public function prepare(): self
     {
-        if ($this->objItems) {
+        if (isset($this->objItems)) {
             return $this;
         }
 
         // Create an empty filter object if not done before.
-        if (!$this->objFilter) {
+        if (!isset($this->objFilter)) {
             $this->objFilter = $this->objMetaModel->getEmptyFilter();
         }
 
-        if ($this->objFilterSettings) {
+        if (isset($this->objFilterSettings)) {
             $this->objFilterSettings->addRules($this->objFilter, $this->arrParam);
         }
 
         $this->modifyFilter();
 
-        $intTotal = $this->objMetaModel->getCount($this->objFilter);
+        $total = $this->objMetaModel->getCount($this->objFilter);
 
         $calculator = $this->paginationLimitCalculator;
-        $calculator->setTotalAmount($intTotal);
-        $curPage = (int) \Input::get('page');
-        if ($curPage > 1) {
-            $calculator->setCurrentPage($curPage);
+        $calculator->setTotalAmount($total);
+        $this->objTemplate->total = $total;
+
+        if ($this->objMetaModel instanceof TranslatedMetaModel) {
+            $previousLanguage = $this->objMetaModel->selectLanguage(\str_replace('-', '_', $GLOBALS['TL_LANGUAGE']));
         }
-        $this->objTemplate->total = $intTotal;
 
         $this->objItems = $this->objMetaModel->findByFilter(
             $this->objFilter,
@@ -720,6 +858,10 @@ class ItemList implements IServiceContainerAware
             $this->strSortDirection,
             $this->getAttributeNames()
         );
+
+        if (isset($previousLanguage)) {
+            $this->objMetaModel->selectLanguage($previousLanguage);
+        }
 
         return $this;
     }
@@ -731,7 +873,7 @@ class ItemList implements IServiceContainerAware
      *
      * @return string
      */
-    public function getPagination()
+    public function getPagination(): string
     {
         return $this->paginationLimitCalculator->getPaginationString();
     }
@@ -741,7 +883,7 @@ class ItemList implements IServiceContainerAware
      *
      * @return IItems
      */
-    public function getItems()
+    public function getObjItems(): IItems
     {
         return $this->objItems;
     }
@@ -749,9 +891,9 @@ class ItemList implements IServiceContainerAware
     /**
      * Returns the view.
      *
-     * @return \MetaModels\Render\Setting\ICollection
+     * @return IRenderSettingCollection
      */
-    public function getView()
+    public function getView(): IRenderSettingCollection
     {
         return $this->objView;
     }
@@ -761,7 +903,7 @@ class ItemList implements IServiceContainerAware
      *
      * @return IMetaModel
      */
-    public function getMetaModel()
+    public function getMetaModel(): IMetaModel
     {
         return $this->objMetaModel;
     }
@@ -769,14 +911,14 @@ class ItemList implements IServiceContainerAware
     /**
      * Retrieve the page object.
      *
-     * @return object
+     * @return object|null
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    private function getPage()
+    private function getPage(): ?object
     {
-        return (TL_MODE == 'FE' && is_object($GLOBALS['objPage'])) ? $GLOBALS['objPage'] : null;
+        return ('FE' === TL_MODE && is_object($GLOBALS['objPage'])) ? $GLOBALS['objPage'] : null;
     }
 
     /**
@@ -784,10 +926,10 @@ class ItemList implements IServiceContainerAware
      *
      * @return string
      */
-    public function getOutputFormat()
+    public function getOutputFormat(): string
     {
-        if (isset($this->strOutputFormat)) {
-            return $this->strOutputFormat;
+        if (isset($this->outputFormat)) {
+            return $this->outputFormat;
         }
 
         if (isset($this->objView) && $this->objView->get('format')) {
@@ -796,8 +938,8 @@ class ItemList implements IServiceContainerAware
 
         $page = $this->getPage();
 
-        if ($page && $page->outputFormat) {
-            return $page->outputFormat;
+        if ($page) {
+            return $page->outputFormat ?: 'html5';
         }
 
         return 'text';
@@ -821,18 +963,14 @@ class ItemList implements IServiceContainerAware
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    private function getCaptionText($langKey)
+    private function getCaptionText(string $langKey): string
     {
         $tableName = $this->getMetaModel()->getTableName();
-        if (isset($this->objView)
-            && isset($GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey])
-        ) {
+        if (isset($this->objView, $GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey])) {
             return $GLOBALS['TL_LANG']['MSC'][$tableName][$this->objView->get('id')][$langKey];
-        } elseif (isset($GLOBALS['TL_LANG']['MSC'][$tableName][$langKey])) {
-            return $GLOBALS['TL_LANG']['MSC'][$tableName][$langKey];
         }
 
-        return $GLOBALS['TL_LANG']['MSC'][$langKey];
+        return ($GLOBALS['TL_LANG']['MSC'][$tableName][$langKey] ?? $GLOBALS['TL_LANG']['MSC'][$langKey]);
     }
 
     /**
@@ -848,7 +986,7 @@ class ItemList implements IServiceContainerAware
      *
      * @return string
      */
-    protected function getNoItemsCaption()
+    protected function getNoItemsCaption(): string
     {
         return $this->getCaptionText('noItemsMsg');
     }
@@ -858,23 +996,23 @@ class ItemList implements IServiceContainerAware
      *
      * @return void
      */
-    private function setTitleAndDescription()
+    private function setTitleAndDescription(): void
     {
         $page = $this->getPage();
         if ($page && $this->objItems->getCount()) {
             // Add title if needed.
             if (!empty($this->strTitleAttribute)) {
                 while ($this->objItems->next()) {
-                    /** @var IItem $objCurrentItem */
-                    $objCurrentItem = $this->objItems->current();
-                    $arrTitle       = $objCurrentItem->parseAttribute(
+                    /** @var IItem $currentItem */
+                    $currentItem = $this->objItems->current();
+                    $titles      = $currentItem->parseAttribute(
                         $this->strTitleAttribute,
                         'text',
                         $this->getView()
                     );
 
-                    if (!empty($arrTitle['text'])) {
-                        $page->pageTitle = strip_tags($arrTitle['text']);
+                    if (!empty($titles['text'])) {
+                        $page->pageTitle = strip_tags($titles['text']);
                         break;
                     }
                 }
@@ -885,8 +1023,8 @@ class ItemList implements IServiceContainerAware
             // Add description if needed.
             if (!empty($this->strDescriptionAttribute)) {
                 while ($this->objItems->next()) {
-                    $objCurrentItem = $this->objItems->current();
-                    $arrDescription = $objCurrentItem->parseAttribute(
+                    $currentItem    = $this->objItems->current();
+                    $arrDescription = $currentItem->parseAttribute(
                         $this->strDescriptionAttribute,
                         'text',
                         $this->getView()
@@ -906,36 +1044,44 @@ class ItemList implements IServiceContainerAware
     /**
      * Render the list view.
      *
-     * @param bool   $blnNoNativeParsing Flag determining if the parsing shall be done internal or if the template will
-     *                                   handle the parsing on it's own.
-     *
-     * @param object $objCaller          The object calling us, might be a Module or ContentElement or anything else.
+     * @param bool        $isNoNativeParsing Flag determining if the parsing shall be done internal or if the template
+     *                                       will handle the parsing on it's own.
+     * @param object|null $caller            The object calling us, might be a Module or ContentElement or anything
+     *                                       else.
      *
      * @return string
      */
-    public function render($blnNoNativeParsing, $objCaller)
+    public function render(bool $isNoNativeParsing, object $caller = null): string
     {
-        $event = new RenderItemListEvent($this, $this->objTemplate, $objCaller);
-        $this->getEventDispatcher()->dispatch(MetaModelsEvents::RENDER_ITEM_LIST, $event);
+        if (func_num_args() > 1) {
+            trigger_error('Passing $objCaller as second argument is deprecated', E_USER_DEPRECATED);
+            if ($caller instanceof ContentModel || $caller instanceof ModuleModel) {
+                $this->model = $caller;
+            }
+        }
+
+        $event = new RenderItemListEvent($this, $this->objTemplate, $caller);
+        $this->getEventDispatcher()->dispatch($event, MetaModelsEvents::RENDER_ITEM_LIST);
 
         $this->objTemplate->noItemsMsg = $this->getNoItemsCaption();
         $this->objTemplate->details    = $this->getCaptionText('details');
 
         $this->prepare();
-        $strOutputFormat = $this->getOutputFormat();
+        $outputFormat = $this->getOutputFormat();
 
-        if ($this->objItems->getCount() && !$blnNoNativeParsing) {
-            $this->objTemplate->data = $this->objItems->parseAll($strOutputFormat, $this->objView);
+        if (!$isNoNativeParsing && $this->objItems->getCount()) {
+            $this->objTemplate->data = $this->objItems->parseAll($outputFormat, $this->objView);
         } else {
-            $this->objTemplate->data = array();
+            $this->objTemplate->data = [];
         }
 
         $this->setTitleAndDescription();
 
-        $this->objTemplate->caller       = $objCaller;
+        $this->objTemplate->caller       = $caller;
         $this->objTemplate->items        = $this->objItems;
         $this->objTemplate->filterParams = $this->arrParam;
+        $this->objTemplate->parameter    = $this->templateParameter;
 
-        return $this->objTemplate->parse($strOutputFormat);
+        return $this->objTemplate->parse($outputFormat);
     }
 }

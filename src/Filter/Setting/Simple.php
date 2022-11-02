@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,8 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -54,7 +55,7 @@ abstract class Simple implements ISimple
      *
      * @var array
      */
-    private $data = array();
+    private $data = [];
 
     /**
      * The event dispatcher.
@@ -123,7 +124,7 @@ abstract class Simple implements ISimple
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated and will get removed.',
+            '"' . __METHOD__ . '" is deprecated and will get removed.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -141,7 +142,7 @@ abstract class Simple implements ISimple
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' .__METHOD__ . '" is deprecated and will get removed.',
+            '"' . __METHOD__ . '" is deprecated and will get removed.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
@@ -194,12 +195,15 @@ abstract class Simple implements ISimple
         if (empty($strKeyOption) && !isset($arrFilterUrl[$arrWidget['eval']['urlparam']])) {
             return true;
         }
-        $blnIsActive = isset($arrFilterUrl[$arrWidget['eval']['urlparam']])
-            && ($arrFilterUrl[$arrWidget['eval']['urlparam']] == $strKeyOption);
-        if (!$blnIsActive && $this->get('defaultid')) {
-            $blnIsActive = ($arrFilterUrl[$arrWidget['eval']['urlparam']] == $this->get('defaultid'));
+        if (isset($arrFilterUrl[$arrWidget['eval']['urlparam']])) {
+            return ($arrFilterUrl[$arrWidget['eval']['urlparam']] == $strKeyOption);
         }
-        return $blnIsActive;
+
+        if ($defaultValue = $this->get('defaultid')) {
+            return $strKeyOption == $defaultValue;
+        }
+
+        return false;
     }
 
     /**
@@ -355,7 +359,7 @@ abstract class Simple implements ISimple
      */
     protected function prepareFrontendFilterOptions($arrWidget, $arrFilterUrl, $arrJumpTo, $blnAutoSubmit)
     {
-        $arrOptions = array();
+        $arrOptions = [];
         if (!isset($arrWidget['options'])) {
             return $arrOptions;
         }
@@ -373,8 +377,7 @@ abstract class Simple implements ISimple
         if ($arrWidget['eval']['includeBlankOption']) {
             $blnActive = $this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, '');
 
-            $arrOptions[] = array
-            (
+            $arrOptions[] = [
                 'key'    => '',
                 'value'  => (
                 $arrWidget['eval']['blankOptionLabel']
@@ -383,22 +386,21 @@ abstract class Simple implements ISimple
                 ),
                 'href'   => $this->filterUrlBuilder->generate($filterUrl->clone()->setSlug($parameterName, '')),
                 'active' => $blnActive,
-                'class'  => 'doNotFilter'.($blnActive ? ' active' : ''),
-            );
+                'class'  => 'doNotFilter' . ($blnActive ? ' active' : ''),
+            ];
         }
 
         foreach ($arrWidget['options'] as $strKeyOption => $strOption) {
             $strValue  = $this->getFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption);
             $blnActive = $this->isActiveFrontendFilterValue($arrWidget, $arrFilterUrl, $strKeyOption);
 
-            $arrOptions[] = array
-            (
+            $arrOptions[] = [
                 'key'    => $strKeyOption,
                 'value'  => $strOption,
                 'href'   => $this->filterUrlBuilder->generate($filterUrl->clone()->setSlug($parameterName, $strValue)),
                 'active' => $blnActive,
                 'class'  => StringUtil::standardize($strKeyOption) . ($blnActive ? ' active' : '')
-            );
+            ];
         }
         return $arrOptions;
     }
@@ -420,12 +422,9 @@ abstract class Simple implements ISimple
      *                fallback to the value of the url param in the filter url.
      *
      * @param array                 $arrWidget                The widget information to use for generating.
-     *
      * @param array                 $arrFilterUrl             The filter url parameters to use.
-     *
      * @param array                 $arrJumpTo                The jumpTo page to use for URL generating - if empty, the
      *                                                        current frontend page will get used.
-     *
      * @param FrontendFilterOptions $objFrontendFilterOptions The options to use.
      *
      * @return array
@@ -436,67 +435,72 @@ abstract class Simple implements ISimple
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function prepareFrontendFilterWidget(
-        $arrWidget,
-        $arrFilterUrl,
-        $arrJumpTo,
+        array $arrWidget,
+        array $arrFilterUrl,
+        array $arrJumpTo,
         FrontendFilterOptions $objFrontendFilterOptions
-    ) {
+    ): array {
         $strClass = $GLOBALS['TL_FFL'][$arrWidget['inputType']];
 
         // No widget? no output! that's it.
         if (!$strClass) {
-            return array();
+            return [];
         }
 
         // Determine current value.
-        $arrWidget['value'] = isset($arrFilterUrl[$arrWidget['eval']['urlparam']])
-            ? $arrFilterUrl[$arrWidget['eval']['urlparam']]
-            : null;
+        $arrWidget['value'] = (
+            $arrFilterUrl[$arrWidget['eval']['urlparam']]
+            ?? ($arrWidget['eval']['default']
+            ?? null)
+        );
 
         $event = new GetAttributesFromDcaEvent(
             $arrWidget,
             $arrWidget['eval']['urlparam']
         );
 
-        $this->eventDispatcher->dispatch(
-            ContaoEvents::WIDGET_GET_ATTRIBUTES_FROM_DCA,
-            $event
-        );
+        $this->eventDispatcher->dispatch($event, ContaoEvents::WIDGET_GET_ATTRIBUTES_FROM_DCA);
 
         if ($objFrontendFilterOptions->isAutoSubmit() && TL_MODE == 'FE') {
-            $GLOBALS['TL_JAVASCRIPT']['metamodels'] = 'bundles/metamodelscore/js/metamodels.js';
+            $min                                    = System::getContainer()->get('kernel')->isDebug() ? '' : '.min';
+            $GLOBALS['TL_JAVASCRIPT']['metamodels'] = sprintf('bundles/metamodelscore/js/metamodels%s.js', $min);
         }
 
         /** @var \Widget $objWidget */
         $objWidget = new $strClass($event->getResult());
         $this->validateWidget($objWidget, $arrWidget['value']);
-        $strField = $objWidget->generateWithError();
+        $strField = $objWidget->generate();
 
-        return array
-        (
-            'class'      => sprintf(
-                'mm_%s %s%s%s',
+        return [
+            'cssID'       => $arrWidget['eval']['cssID'],
+            'class'       => sprintf(
+                'mm_%s %s%s%s%s',
                 $arrWidget['inputType'],
                 $arrWidget['eval']['urlparam'],
                 (($arrWidget['value'] !== null) ? ' used' : ' unused'),
-                ($objFrontendFilterOptions->isAutoSubmit() ? ' submitonchange' : '')
+                ($objFrontendFilterOptions->isAutoSubmit() ? ' submitonchange' : ''),
+                $arrWidget['eval']['class']
             ),
-            'label'      => $objWidget->generateLabel(),
-            'formfield'  => $strField,
-            'raw'        => $arrWidget,
-            'urlparam'   => $arrWidget['eval']['urlparam'],
-            'options'    => $this->prepareFrontendFilterOptions(
+            'label'       => $objWidget->generateLabel(),
+            'legend'      => $this->generateLegend($arrWidget),
+            'hide_label'  => $arrWidget['eval']['hide_label'],
+            'formfield'   => $strField,
+            'raw'         => $arrWidget,
+            'urlparam'    => $arrWidget['eval']['urlparam'],
+            'options'     => $this->prepareFrontendFilterOptions(
                 $arrWidget,
                 $arrFilterUrl,
                 $arrJumpTo,
                 $objFrontendFilterOptions->isAutoSubmit()
             ),
-            'count'      => isset($arrWidget['count']) ? $arrWidget['count'] : null,
-            'showCount'  => $objFrontendFilterOptions->isShowCountValues(),
-            'autosubmit' => $objFrontendFilterOptions->isAutoSubmit(),
-            'urlvalue'   => array_key_exists('urlvalue', $arrWidget) ? $arrWidget['urlvalue'] : $arrWidget['value'],
-            'errors'     => $objWidget->hasErrors() ? $objWidget->getErrors() : array()
-        );
+            'count'       => isset($arrWidget['count']) ? $arrWidget['count'] : null,
+            'showCount'   => $objFrontendFilterOptions->isShowCountValues(),
+            'autosubmit'  => $objFrontendFilterOptions->isAutoSubmit(),
+            'urlvalue'    => array_key_exists('urlvalue', $arrWidget) ? $arrWidget['urlvalue'] : $arrWidget['value'],
+            'errors'      => $objWidget->hasErrors() ? $objWidget->getErrors() : [],
+            'used'        => $arrWidget['value'] !== null ? true : false,
+            'urlfragment' => $objFrontendFilterOptions->getUrlFragment()
+        ];
     }
 
     /**
@@ -504,7 +508,7 @@ abstract class Simple implements ISimple
      */
     public function generateFilterUrlFrom(IItem $objItem, IRenderSettings $objRenderSetting)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -512,7 +516,7 @@ abstract class Simple implements ISimple
      */
     public function getParameters()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -520,7 +524,7 @@ abstract class Simple implements ISimple
      */
     public function getParameterDCA()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -528,7 +532,7 @@ abstract class Simple implements ISimple
      */
     public function getParameterFilterNames()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -540,7 +544,7 @@ abstract class Simple implements ISimple
         $arrJumpTo,
         FrontendFilterOptions $objFrontendFilterOptions
     ) {
-        return array();
+        return [];
     }
 
     /**
@@ -548,7 +552,7 @@ abstract class Simple implements ISimple
      */
     public function getReferencedAttributes()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -572,5 +576,17 @@ abstract class Simple implements ISimple
             return $value;
         });
         $widget->validate();
+    }
+
+    /**
+     * Generate legend.
+     *
+     * @param array<string, array{label: list<string>}> $arrWidget The widget information array.
+     *
+     * @return string
+     */
+    protected function generateLegend($arrWidget): string
+    {
+        return '<legend>' . $arrWidget['label'][0] . '</legend>';
     }
 }

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,9 @@
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Stefan Heimes <stefan_heimes@hotmail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -26,6 +28,10 @@ use ContaoCommunityAlliance\DcGeneral\Data\PropertyValueBag;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
+use MetaModels\Attribute\IAliasConverter;
+use MetaModels\DcGeneral\Data\Model;
+use MetaModels\IMetaModel;
+use MetaModels\ITranslatedMetaModel;
 
 /**
  * Condition checking that the value of a property is the same as a passed value.
@@ -54,12 +60,17 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
     protected $strict;
 
     /**
+     * The metamodel of the current context.
+     *
+     * @var IMetaModel|null
+     */
+    protected ?IMetaModel $metaModel;
+
+    /**
      * Create a new instance.
      *
      * @param string $propertyName  The name of the property.
-     *
      * @param mixed  $propertyValue The value of the property to match.
-     *
      * @param bool   $strict        Flag if the comparison shall be strict (type safe).
      */
     public function __construct($propertyName = '', $propertyValue = null, $strict = false)
@@ -67,6 +78,27 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
         $this->propertyName  = (string) $propertyName;
         $this->propertyValue = $propertyValue;
         $this->strict        = (bool) $strict;
+        $this->metaModel     = null;
+    }
+
+    /**
+     * Get the metamodel.
+     *
+     * @return IMetaModel|null
+     */
+    public function getMetaModel(): ?IMetaModel
+    {
+        return $this->metaModel;
+    }
+
+    /**
+     * Set the metamodel.
+     *
+     * @param IMetaModel $metaModel
+     */
+    public function setMetaModel(IMetaModel $metaModel): void
+    {
+        $this->metaModel = $metaModel;
     }
 
     /**
@@ -142,6 +174,9 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function match(
         ModelInterface $model = null,
@@ -149,20 +184,39 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
         PropertyInterface $property = null,
         LegendInterface $legend = null
     ) {
+        $attribute = $this->metaModel->getAttribute($this->propertyName);
+
+        if ($this->metaModel instanceof ITranslatedMetaModel) {
+            $currentLanguage = $this->metaModel->getLanguage();
+        } else {
+            $currentLanguage = $this->metaModel->getActiveLanguage();
+        }
+
         if ($input && $input->hasPropertyValue($this->propertyName)) {
             $values = $input->getPropertyValue($this->propertyName);
-        } elseif ($model) {
+        } elseif ($model instanceof Model) {
             $values = $model->getProperty($this->propertyName);
         } else {
             return false;
         }
 
-        if (!$values || !is_array($values)) {
+        // If both values, the current values and the searched one, are empty, return true.
+        if (empty($values) && empty($this->propertyValue)) {
+            return true;
+        }
+        if (empty($values) || !\is_array($values)) {
+            return false;
+        }
+        if (empty($this->propertyValue) || !\is_array($this->propertyValue)) {
             return false;
         }
 
         foreach ($values as $value) {
-            if (in_array($value, $this->propertyValue, $this->strict)) {
+            if ($value && $attribute instanceof IAliasConverter) {
+                $value = ($attribute->getIdForAlias($value, $currentLanguage) ?? $value);
+            }
+
+            if (\in_array($value, $this->propertyValue, $this->strict)) {
                 return true;
             }
         }

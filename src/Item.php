@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,8 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -463,9 +464,10 @@ class Item implements IItem
 
         // Add jumpTo link
         $jumpTo = $this->buildJumpToLink($objSettings);
-        if (true === $jumpTo['deep']) {
+        if ($jumpTo['url']) {
             $arrResult['actions']['jumpTo'] = [
                 'href'  => $jumpTo['url'],
+                'deep'  => $jumpTo['deep'],
                 'label' => $this->getCaptionText('details'),
                 'class' => 'details'
             ];
@@ -496,7 +498,7 @@ class Item implements IItem
 
         // Trigger event to allow other extensions to manipulate the parsed data.
         $event = new ParseItemEvent($objSettings, $this, $strOutputFormat, $arrResult);
-        $this->getEventDispatcher()->dispatch(MetaModelsEvents::PARSE_ITEM, $event);
+        $this->getEventDispatcher()->dispatch($event, MetaModelsEvents::PARSE_ITEM);
 
         return $event->getResult();
     }

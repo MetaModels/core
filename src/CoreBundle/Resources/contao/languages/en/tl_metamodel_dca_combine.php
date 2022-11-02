@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2018 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @subpackage Core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2018 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,10 +26,10 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_combiner'][1] =
     'the selected view.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['fe_group'][0]     = 'Frontend group';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['fe_group'][1]     =
-    'The frontend user group the combination applies to.';
+    'The frontend user group the combination applies to; * is \'catch all\'.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['be_group'][0]     = 'Backend group';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['be_group'][1]     =
-    'The backend user group the combination applies to.';
+    'The backend user group the combination applies to; * is \'catch all\'.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_id'][0]       = 'The input screen';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['dca_id'][1]       = 'The input screen the combination applies to.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_combine']['view_id'][0]      = 'The render setting';

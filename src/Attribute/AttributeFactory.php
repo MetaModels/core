@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -100,8 +100,8 @@ class AttributeFactory implements IAttributeFactory
             );
             // @codingStandardsIgnoreEnd
             $this->eventDispatcher->dispatch(
-                MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE,
-                new CreateAttributeFactoryEvent($this)
+                new CreateAttributeFactoryEvent($this),
+                MetaModelsEvents::ATTRIBUTE_FACTORY_CREATE
             );
         }
 
@@ -138,7 +138,7 @@ class AttributeFactory implements IAttributeFactory
     public function createAttribute($information, $metaModel)
     {
         $event = new CreateAttributeEvent($information, $metaModel);
-        $this->eventDispatcher->dispatch(CreateAttributeEvent::NAME, $event);
+        $this->eventDispatcher->dispatch($event, CreateAttributeEvent::NAME);
 
         if ($event->getAttribute()) {
             return $event->getAttribute();
@@ -223,7 +223,7 @@ class AttributeFactory implements IAttributeFactory
     {
         $event = new CollectMetaModelAttributeInformationEvent($metaModel);
 
-        $this->eventDispatcher->dispatch($event::NAME, $event);
+        $this->eventDispatcher->dispatch($event, $event::NAME);
 
         return $event->getAttributeInformation();
     }

@@ -26,6 +26,7 @@ use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
 use Contao\ManagerPlugin\Routing\RoutingPluginInterface;
+use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use MetaModels\CoreBundle\MetaModelsCoreBundle;
 use Symfony\Component\Config\Loader\LoaderResolverInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -45,7 +46,8 @@ class Plugin implements BundlePluginInterface, RoutingPluginInterface
                 ->setLoadAfter(
                     [
                         ContaoCoreBundle::class,
-                        ContaoManagerBundle::class
+                        ContaoManagerBundle::class,
+                        DoctrineBundle::class
                     ]
                 )
                 ->setReplace(['metamodels'])

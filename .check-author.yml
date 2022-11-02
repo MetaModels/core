@@ -12,6 +12,7 @@ mapping:
     - 'chibineko <stefan_heimes@hotmail.com>'
     - 'stefanheimes <stefan_heimes@hotmail.com>'
     - 'Stefan Heimes <cms@men-at-work.de>'
+    - 'Stefan Heimes <heimes@men-at-work.de>'
   'David Maack <david.maack@arcor.de>':
     - 'David Maack <maack@men-at-work.de>'
     - 'davidmaack <david.maack@arcor.de>'
@@ -26,20 +27,26 @@ mapping:
   'Tim Becker <please.tim@metamodel.me>': 'Tim Becker <tim@westwerk.ac>'
   'Ingolf Steinhardt <info@e-spin.de>':
     - 'xantippe <info@e-spin.de>'
+    - 'zonky <info@e-spin.de>'
     - 'zonky2 <info@e-spin.de>'
-    - 'zonky <gitlab@e-spin.de>'
+    - 'info@e-spin.de <info@e-spin.de>'
     - 'e-spin <gitlab@e-spin.de>'
+    - 'e-spin <git@e-spin.de>'
+    - 'e-spin <info@e-spin.de>'
+    - 'Ingolf Steinhardt <git@e-spin.de>'
+    - 'Ingolf Steinhardt <info@e-spin.de>'
   'binron <rtb@gmx.ch>': 'binron <rtb@gmx.ch>'
   'Jeremie Constant <j.constant@imi.de>':
     - 'JeremieConstant <j.constant@imi.de>'
+  'Andreas Fischer <anfischer@kaffee-partner.de>': 'A. Fischer <anfischer@kaffee-partner.de>'
 
 copy-left:
-  'Christoph Wiechert <christoph.wiechert@4wardmedia.de>': Widgets/PickerWidget.php
-  'Andreas Nölke <zero@brothers-project.de>': Widgets/PickerWidget.php
   'Christian Schiffler <c.schiffler@cyberspectrum.de>':
     - src/CoreBundle/EventListener/DcGeneral/Table/DcaSetting/RemoveOverrideButtonListener.php
     - src/CoreBundle/EventListener/DcGeneral/Table/FilterSetting/SubPaletteSubscriber.php
     - src/Helper/TableManipulator.php
+    - src/CoreBundle/Contao/InsertTag/ReplaceParam.php
+    - src/CoreBundle/Contao/InsertTag/ReplaceTableName.php
   'Stefan Heimes <stefan_heimes@hotmail.com>':
     - src/CoreBundle/EventListener/DcGeneral/Table/RenderSettings/LanguageCodeWizardListener.php
   'David Molineus <david.molineus@netzmacht.de>':
@@ -48,9 +55,17 @@ copy-left:
     - src/CoreBundle/EventListener/DcGeneral/Table/FilterSetting/SubPaletteSubscriber.php
   'David Maack <david.maack@arcor.de>':
     - src/CoreBundle/EventListener/DcGeneral/Table/RenderSettings/LanguageCodeWizardListener.php
+    - src/CoreBundle/Contao/InsertTag/ReplaceParam.php
+    - src/CoreBundle/Contao/InsertTag/ReplaceTableName.php
   'Andreas Isaak <info@andreas-isaak.de>':
     - src/CoreBundle/EventListener/DcGeneral/Table/RenderSettings/LanguageCodeWizardListener.php
   'Cliff Parnitzky <github@cliff-parnitzky.de>':
     - src/Helper/TableManipulator.php
   'Henry Lamorski <henry.lamorski@mailbox.org>':
     - src/Helper/TableManipulator.php
+  'Jan Malte Gerth <anmeldungen@malte-gerth.de>':
+    - src/CoreBundle/Contao/InsertTag/ReplaceParam.php
+    - src/CoreBundle/Contao/InsertTag/ReplaceTableName.php
+  'Oliver Hoff <oliver@hofff.com>':
+    - src/CoreBundle/Contao/InsertTag/ReplaceParam.php
+    - src/CoreBundle/Contao/InsertTag/ReplaceTableName.php

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,8 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -27,8 +28,10 @@ use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\Events\CollectMetaModelAttributeInformationEvent;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
+use MetaModels\ITranslatedMetaModel;
 use MetaModels\MetaModel;
 use MetaModels\MetaModelsServiceContainer;
+use MetaModels\TranslatedMetaModel;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -149,8 +152,8 @@ class DatabaseBackedListener
                 ->database
                 ->createQueryBuilder()
                 ->select('*')
-                ->from('tl_metamodel')
-                ->where('id=:id')
+                ->from('tl_metamodel', 't')
+                ->where('t.id=:id')
                 ->setParameter('id', $metaModelId)
                 ->setMaxResults(1)
                 ->execute()
@@ -200,20 +203,28 @@ class DatabaseBackedListener
      * @param array                $arrData The meta information for the MetaModel.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function createInstance(CreateMetaModelEvent $event, $arrData)
     {
         if (!$this->createInstanceViaLegacyFactory($event, $arrData)) {
-            $metaModel = new MetaModel($arrData, $this->dispatcher, $this->database);
+            if ($arrData['translated']) {
+                $metaModel = new TranslatedMetaModel($arrData, $this->dispatcher, $this->database);
+                $metaModel->selectLanguage(\str_replace('-', '_', $GLOBALS['TL_LANGUAGE']));
+            } else {
+                $metaModel = new MetaModel($arrData, $this->dispatcher, $this->database);
+            }
             $metaModel->setServiceContainer(function () {
                 return $this->getServiceContainer();
             }, false);
             $event->setMetaModel($metaModel);
         }
 
-        if ($event->getMetaModel()) {
-            $this->instancesByTable[$event->getMetaModelName()]     = $event->getMetaModel();
-            $this->instancesById[$event->getMetaModel()->get('id')] = $event->getMetaModel();
+        if ($metaModel = $event->getMetaModel()) {
+            $this->instancesByTable[$event->getMetaModelName()] = $metaModel;
+            $this->instancesById[$metaModel->get('id')]         = $metaModel;
         }
     }
 
@@ -227,11 +238,20 @@ class DatabaseBackedListener
     public function createMetaModel(CreateMetaModelEvent $event)
     {
         if ($event->getMetaModel() !== null) {
+            if (($metaModel = $event->getMetaModel()) instanceof ITranslatedMetaModel && $metaModel->isTranslated()) {
+                // @codingStandardsIgnoreStart
+                @\trigger_error(
+                    'Translated "\MetaModel\IMetamodel" instances are deprecated since MetaModels 2.2 ' .
+                    'and to be removed in 3.0. The MetaModel must implement "\MetaModels\ITranslatedMetaModel".',
+                    E_USER_DEPRECATED
+                );
+                // @codingStandardsIgnoreEnd
+            }
             return;
         }
 
-        if (isset($this->instancesByTable[$event->getMetaModelName()])) {
-            $event->setMetaModel($this->instancesByTable[$event->getMetaModelName()]);
+        if (isset($this->instancesByTable[$metaModelName = $event->getMetaModelName()])) {
+            $event->setMetaModel($this->instancesByTable[$metaModelName]);
 
             return;
         }
@@ -240,9 +260,9 @@ class DatabaseBackedListener
             ->database
             ->createQueryBuilder()
             ->select('*')
-            ->from('tl_metamodel')
-            ->where('tableName=:tableName')
-            ->setParameter('tableName', $event->getMetaModelName())
+            ->from('tl_metamodel', 't')
+            ->where('t.tableName=:tableName')
+            ->setParameter('tableName', $metaModelName)
             ->setMaxResults(1)
             ->execute()
             ->fetch(\PDO::FETCH_ASSOC);
@@ -273,8 +293,8 @@ class DatabaseBackedListener
             ->database
             ->createQueryBuilder()
             ->select('*')
-            ->from('tl_metamodel')
-            ->orderBy('sorting')
+            ->from('tl_metamodel', 't')
+            ->orderBy('t.sorting')
             ->execute()
             ->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -301,10 +321,10 @@ class DatabaseBackedListener
                 ->database
                 ->createQueryBuilder()
                 ->select('*')
-                ->from('tl_metamodel_attribute')
-                ->where('pid=:pid')
+                ->from('tl_metamodel_attribute', 't')
+                ->where('t.pid=:pid')
                 ->setParameter('pid', $event->getMetaModel()->get('id'))
-                ->orderBy('sorting')
+                ->orderBy('t.sorting')
                 ->execute()
                 ->fetchAll(\PDO::FETCH_ASSOC);
 

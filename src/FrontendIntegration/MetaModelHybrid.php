@@ -15,6 +15,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -40,6 +41,8 @@ use MetaModels\MetaModelsServiceContainer;
  * @property string metamodel                The id of the MetaModel to use.
  * @property string metamodel_filtering      The id of the MetaModel filter setting to use.
  * @property string metamodel_rendersettings The id of the MetaModel render setting to use.
+ *
+ * @deprecated We switched to fragments in MetaModels 2.2. To be removed in MetaModels 3.0.
  */
 abstract class MetaModelHybrid extends Hybrid
 {
@@ -157,7 +160,7 @@ abstract class MetaModelHybrid extends Hybrid
             $strInfo = '';
             if ($this->metamodel) {
                 // Add CSS file.
-                $GLOBALS['TL_CSS'][] = 'system/modules/metamodels/assets/css/style.css';
+                $GLOBALS['TL_CSS'][] = 'bundles/metamodelscore/css/style.css';
 
                 // Retrieve name of MetaModels.
                 $infoTemplate =

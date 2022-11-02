@@ -13,6 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -20,7 +21,9 @@
 
 namespace MetaModels\Events;
 
+use Contao\System;
 use MetaModels\IMetaModelsServiceContainer;
+use MetaModels\MetaModelsServiceContainer;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -39,10 +42,9 @@ class MetaModelsBootEvent extends Event
      *
      * @return IMetaModelsServiceContainer
      *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @deprecated
      */
-    public function getServiceContainer()
+    public function getServiceContainer(): IMetaModelsServiceContainer
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
@@ -50,6 +52,6 @@ class MetaModelsBootEvent extends Event
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
-        return $GLOBALS['container']['metamodels-service-container'];
+        return System::getContainer()->get(MetaModelsServiceContainer::class);
     }
 }

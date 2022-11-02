@@ -25,31 +25,34 @@
   "support": {
     "email": "mail@metamodel.me",
     "issues": "https://github.com/MetaModels/core/issues",
-    "wiki": "http://de.contaowiki.org/MetaModels",
+    "wiki": "https://de.contaowiki.org/MetaModels",
     "irc": "irc://irc.freenode.org/contao.mm",
     "source": "https://github.com/MetaModels/core"
   },
   "require": {
-    "php": "^7.1",
-    "contao-community-alliance/dc-general": "^2.1.3",
-    "contao-community-alliance/dependency-container": "~2.0",
-    "contao-community-alliance/event-dispatcher": "~2.0",
-    "contao-community-alliance/events-contao-bindings": "~4.0",
+    "php": "^7.4",
+    "contao-community-alliance/dc-general": "^2.2",
+    "contao-community-alliance/events-contao-bindings": "^4.9",
     "contao-community-alliance/meta-palettes": "~2.0",
-    "contao-community-alliance/translator": "~2.1",
+    "contao-community-alliance/translator": "^2.2",
     "contao-community-alliance/url-builder": "~1.3",
-    "contao/core-bundle": "^4.4.8",
+    "contao/core-bundle": "^4.9.0, <4.13.0",
     "discordier/justtextwidgets": "^1.2",
     "doctrine/cache": "~1.6",
     "menatwork/contao-multicolumnwizard-bundle": "^3.4",
-    "symfony/config": "^3.4.38 || ^4.4.6",
-    "symfony/dependency-injection": "^3.3 || ^4.1.12",
-    "symfony/filesystem": "^3.3 || ^4.0",
-    "symfony/finder": "^3.4.38 || ^4.4.6",
+    "symfony/asset": "^4.4.6",
+    "symfony/config": "^4.4.6",
+    "symfony/dependency-injection": "^4.4.6",
+    "symfony/event-dispatcher": "^4.4.6",
+    "symfony/filesystem": "^4.4.6",
+    "symfony/finder": "^4.4.6",
+    "terminal42/service-annotation-bundle": "^1.0",
     "webmozart/path-util": "~2.3"
   },
   "require-dev": {
-    "contao/manager-plugin": "^2.1",
+    "contao/manager-plugin": "^2.8",
+    "contao/manager-bundle": "^4.9.0, <4.13.0",
+    "doctrine/doctrine-bundle": "^1.8",
     "phpcq/all-tasks": "^1.3"
   },
   "conflict": {
@@ -73,10 +76,14 @@
       ]
     },
     "branch-alias": {
-      "dev-master": "2.1.x-dev"
+      "dev-feature/2.2.0": "2.2.x-dev"
     }
   },
   "config": {
+    "allow-plugins": {
+      "contao-components/installer": false,
+      "contao/manager-plugin": false
+    },
     "sort-packages": true
   }
 }

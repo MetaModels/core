@@ -15,6 +15,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2012-2019 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -24,6 +25,8 @@ namespace MetaModels\DcGeneral\DataDefinition\Palette\Condition\Property;
 
 use Contao\System;
 use Doctrine\DBAL\Connection;
+use MetaModels\IMetaModelsServiceContainer;
+use MetaModels\MetaModelsServiceContainer;
 
 /**
  * Condition for the default palette.
@@ -65,11 +68,10 @@ class RenderSettingAttributeIs extends AttributeByIdIsOfType
      *
      * @return IMetaModelsServiceContainer
      *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @deprecated
      */
-    protected function getServiceContainer()
+    protected function getServiceContainer(): IMetaModelsServiceContainer
     {
-        return $GLOBALS['container']['metamodels-service-container'];
+        return System::getContainer()->get(MetaModelsServiceContainer::class);
     }
 }

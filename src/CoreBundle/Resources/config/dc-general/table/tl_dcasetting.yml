@@ -1,107 +1,117 @@
 services:
-    metamodels.listener.table.tl_metamodel_dcasetting.add_all:
-        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\AddAllButtonListener
-        arguments:
-            - "@database_connection"
-            - "@metamodels.factory"
-            - "@router"
-        tags:
-            - name: kernel.event_listener
-              event: dc-general.view.contao2backend.get-global-button
-              method: getGlobalButton
+  metamodels.listener.table.tl_metamodel_dcasetting.add_all:
+    class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\AddAllButtonListener
+    arguments:
+      - "@database_connection"
+      - "@metamodels.factory"
+      - "@router"
+    tags:
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.get-global-button
+        method: getGlobalButton
 
-    metamodels.listener.table.tl_metamodel_dcasetting.attribute_options:
-        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\AttributeOptionListener
-        arguments:
-            - "@cca.dc-general.scope-matcher"
-            - "@metamodels.factory"
-            - "@database_connection"
-        tags:
-            - name: kernel.event_listener
-              event: dc-general.view.contao2backend.get-property-options
-              method: getAttributeOptions
-    metamodels.listener.table.tl_metamodel_dcasetting.disable_mandatory:
-        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\DisableMandatoryListener
-        arguments:
-            - "@cca.dc-general.scope-matcher"
-            - "@metamodels.factory"
-            - "@database_connection"
-            - "@translator"
-        tags:
-            - name: kernel.event_listener
-              event: dc-general.view.contao2backend.build-widget
-              method: handle
-    metamodels.listener.table.tl_metamodel_dcasetting.disable_read_only:
-        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\DisableReadOnlyListener
-        arguments:
-            - "@cca.dc-general.scope-matcher"
-            - "@metamodels.factory"
-            - "@database_connection"
-            - "@translator"
-        tags:
-            - name: kernel.event_listener
-              event: dc-general.view.contao2backend.build-widget
-              method: handle
-    metamodels.listener.table.tl_metamodel_dcasetting.legend_title:
-        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\LegendTitleListener
-        arguments:
-            - "@cca.dc-general.scope-matcher"
-            - "@metamodels.factory"
-            - "@database_connection"
-        tags:
-            - name: kernel.event_listener
-              event: dc-general.view.contao2backend.decode-property-value-for-widget
-              method: decodeValue
-            - name: kernel.event_listener
-              event: dc-general.view.contao2backend.encode-property-value-from-widget
-              method: encodeValue
-            - name: kernel.event_listener
-              event: dc-general.view.contao2backend.build-widget
-              method: buildWidget
-    metamodels.listener.table.tl_metamodel_dcasetting.model_render:
-        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\ModelToLabelListener
-        arguments:
-            - "@cca.dc-general.scope-matcher"
-            - "@metamodels.factory"
-            - "@database_connection"
-            - "@metamodels.attribute_factory"
-            - "@metamodels.assets.icon_builder"
-            - "@translator"
-        tags:
-            - name: kernel.event_listener
-              event: dc-general.view.contao2backend.model-to-label
-              method: handle
-    metamodels.listener.table.tl_metamodel_dcasetting.palette_restriction_builder:
-        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\PaletteRestrictionListener
-        arguments:
-            - "@database_connection"
-        tags:
-            - name: kernel.event_listener
-              event: dc-general.factory.build-data-definition
-              method: handle
-    metamodels.listener.table.tl_metamodel_dcasetting.rich_text_options:
-        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\RichTextOptionListener
-        arguments:
-            - "@cca.dc-general.scope-matcher"
-            - "@metamodels.template_list"
-        tags:
-            - name: kernel.event_listener
-              event: dc-general.view.contao2backend.get-property-options
-              method: handle
-    metamodels.listener.table.tl_metamodel_dcasetting.tl_class_wizard:
-        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\TlClassWizardListener
-        arguments:
-            - "@cca.dc-general.scope-matcher"
-            - "@metamodels.assets.icon_builder"
-            - "@router"
-        tags:
-            - name: kernel.event_listener
-              event: dc-general.view.contao2backend.manipulate-widget
-              method: handle
+  metamodels.listener.table.tl_metamodel_dcasetting.attribute_options:
+    class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\AttributeOptionListener
+    arguments:
+      - '@cca.dc-general.scope-matcher'
+      - '@MetaModels\IFactory'
+      - '@database_connection'
+      - '@MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter'
+    tags:
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.get-property-options
+        method: getAttributeOptions
 
-    metamodels.listener.table.tl_metamodel_dcasetting.remove_override_button:
-        class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\RemoveOverrideButtonListener
-        tags:
-            - name: kernel.event_listener
-              event: dc-general.view.contao2backend.get-select-mode-buttons
-              method: removeButton
+  metamodels.listener.table.tl_metamodel_dcasetting.disable_mandatory:
+    class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\DisableMandatoryListener
+    arguments:
+      - "@cca.dc-general.scope-matcher"
+      - "@metamodels.factory"
+      - "@database_connection"
+      - "@translator"
+    tags:
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.build-widget
+        method: handle
+
+  metamodels.listener.table.tl_metamodel_dcasetting.disable_read_only:
+    class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\DisableReadOnlyListener
+    arguments:
+      - "@cca.dc-general.scope-matcher"
+      - "@metamodels.factory"
+      - "@database_connection"
+      - "@translator"
+    tags:
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.build-widget
+        method: handle
+
+  metamodels.listener.table.tl_metamodel_dcasetting.legend_title:
+    class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\LegendTitleListener
+    arguments:
+      - "@cca.dc-general.scope-matcher"
+      - "@metamodels.factory"
+      - "@database_connection"
+    tags:
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.decode-property-value-for-widget
+        method: decodeValue
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.encode-property-value-from-widget
+        method: encodeValue
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.build-widget
+        method: buildWidget
+
+  metamodels.listener.table.tl_metamodel_dcasetting.model_render:
+    class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\ModelToLabelListener
+    arguments:
+      - "@cca.dc-general.scope-matcher"
+      - "@metamodels.factory"
+      - "@database_connection"
+      - "@metamodels.attribute_factory"
+      - "@metamodels.assets.icon_builder"
+      - "@translator"
+    tags:
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.model-to-label
+        method: handle
+
+  metamodels.listener.table.tl_metamodel_dcasetting.palette_restriction_builder:
+    class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\PaletteRestrictionListener
+    arguments:
+      - "@database_connection"
+    tags:
+      - name: kernel.event_listener
+        event: dc-general.factory.build-data-definition
+        method: handle
+
+  metamodels.listener.table.tl_metamodel_dcasetting.rich_text_options:
+    class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\RichTextOptionListener
+    arguments:
+      - "@cca.dc-general.scope-matcher"
+      - "@metamodels.template_list"
+    tags:
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.get-property-options
+        method: handle
+
+  metamodels.listener.table.tl_metamodel_dcasetting.remove_override_button:
+    class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\RemoveOverrideButtonListener
+    tags:
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.get-select-mode-buttons
+        method: removeButton
+        priority: -128
+
+  metamodels.listener.table.tl_metamodel_dcasetting.visibility_condition_icon:
+    class: MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\SetVisibilityConditionIconListener
+    arguments:
+      - "@cca.dc-general.scope-matcher"
+      - "@metamodels.factory"
+      - "@database_connection"
+    tags:
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.get-operation-button
+        method: handle
+        priority: 2048

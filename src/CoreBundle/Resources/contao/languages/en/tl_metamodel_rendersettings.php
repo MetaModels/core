@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2018 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2018 The MetaModels team.
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,11 +23,10 @@
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']            = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['general_legend']          = 'General settings';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['expert_legend']           = 'Expert settings';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['view_legend']             = 'View settings';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpto_legend']           = 'Frontend jump-to settings';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additional_legend']       = 'Additional files';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name'][0]                 = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name'][1]                 = 'Setting name.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp'][0]               = 'Revision date';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp'][1]               = 'Date and time of the latest revision.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template'][0]             = 'Template';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template'][1]             =
     'The template to use to render the items.';
@@ -35,7 +34,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['format'][0]               = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['format'][1]               =
     'Define the output format. Leave empty to use the format used by current page.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['html5']  = 'HTML5';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['xhtml']  = 'XHTML';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['text']   = 'Text';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo'][0]               = 'JumpTo page';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo'][1]               =

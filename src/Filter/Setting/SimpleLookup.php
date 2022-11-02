@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,13 +16,14 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Filter\Setting;
 
+use Contao\StringUtil;
 use MetaModels\Attribute\IAttribute;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
 use MetaModels\IItem;
@@ -111,6 +112,16 @@ class SimpleLookup extends Simple
             if ($mixOptions === '' || $mixOptions === null) {
                 unset($arrOptions[$mixOptionKey]);
             }
+        }
+
+        switch ($this->get('apply_sorting')) {
+            case 'natsort_asc':
+                \natcasesort($arrOptions);
+                break;
+            case 'natsort_desc':
+                \rsort($arrOptions, (SORT_NATURAL | SORT_FLAG_CASE));
+                break;
+            default:
         }
 
         return $arrOptions;
@@ -253,31 +264,37 @@ class SimpleLookup extends Simple
 
         $GLOBALS['MM_FILTER_PARAMS'][] = $this->getParamName();
 
+        $cssID = StringUtil::deserialize($this->get('cssID'), true);
+
         $arrCount  = array();
-        $arrWidget = array(
-            'label'     => array(
+        $arrWidget = [
+            'label'     => [
                 $this->getLabel(),
                 'GET: ' . $this->getParamName()
-            ),
+            ],
             'inputType' => 'select',
             'options'   => $this->getParameterFilterOptions($attribute, $arrIds, $arrCount),
             'count'     => $arrCount,
             'showCount' => $objFrontendFilterOptions->isShowCountValues(),
-            'eval'      => array
-            (
+            'eval'      => [
                 'includeBlankOption' => (
-                        $this->get('blankoption') && !$objFrontendFilterOptions->isHideClearFilter()
-                        ? true
-                        : false
-                    ),
-                'blankOptionLabel'   => &$GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'],
+                $this->get('blankoption') && !$objFrontendFilterOptions->isHideClearFilter()
+                    ? true
+                    : false
+                ),
+                'blankOptionLabel'   => $this->get('label_as_blankoption')
+                    ? $this->getLabel()
+                    : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter'],
                 'colname'            => $attribute->getColname(),
                 'urlparam'           => $this->getParamName(),
                 'onlyused'           => $this->get('onlyused'),
                 'onlypossible'       => $this->get('onlypossible'),
                 'template'           => $this->get('template'),
-            )
-        );
+                'hide_label'         => $this->get('hide_label'),
+                'cssID'              => !empty($cssID[0]) ? ' id="' . $cssID[0] . '"' : '',
+                'class'              => !empty($cssID[1]) ? ' ' . $cssID[1] : '',
+            ]
+        ];
 
         return array
         (

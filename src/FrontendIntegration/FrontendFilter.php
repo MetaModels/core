@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,8 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -106,13 +107,10 @@ class FrontendFilter
      * Retrieve the event dispatcher.
      *
      * @return EventDispatcherInterface
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getDispatcher()
     {
-        return $GLOBALS['container']['event-dispatcher'];
+        return System::getContainer()->get('event_dispatcher');
     }
 
     /**
@@ -206,8 +204,8 @@ class FrontendFilter
         $dispatcher = $this->getDispatcher();
         $filterUrl  = new FilterUrl($jumpTo, [], $arrParams);
         $dispatcher->dispatch(
-            ContaoEvents::CONTROLLER_REDIRECT,
-            new RedirectEvent($this->filterUrlBuilder->generate($filterUrl))
+            new RedirectEvent($this->filterUrlBuilder->generate($filterUrl)),
+            ContaoEvents::CONTROLLER_REDIRECT
         );
     }
 
@@ -274,7 +272,6 @@ class FrontendFilter
      * Parse a single filter widget.
      *
      * @param array                 $widget        The widget configuration.
-     *
      * @param FrontendFilterOptions $filterOptions The filter options to apply.
      *
      * @return array
@@ -282,8 +279,8 @@ class FrontendFilter
     protected function renderWidget($widget, $filterOptions)
     {
         $filter       = $widget;
-        $templateName = $filter['raw']['eval']['template'];
-        $template     = new \FrontendTemplate($templateName ? $templateName : 'mm_filteritem_default');
+        $templateName = ($filter['raw']['eval']['template'] ?? 'mm_filteritem_default');
+        $template     = new \FrontendTemplate($templateName);
 
         $template->setData($filter);
 
@@ -297,9 +294,7 @@ class FrontendFilter
      * Check if we want to redirect to another url.
      *
      * @param array $widgets         The widgets.
-     *
      * @param array $wantedParameter The wanted parameters.
-     *
      * @param array $allParameter    The current parameters.
      *
      * @return void
@@ -330,8 +325,8 @@ class FrontendFilter
         $filterUrl  = new FilterUrl($this->objFilterConfig->getJumpTo(), [], $redirectParameters);
         $dispatcher = $this->getDispatcher();
         $dispatcher->dispatch(
-            ContaoEvents::CONTROLLER_REDIRECT,
-            new RedirectEvent($this->filterUrlBuilder->generate($filterUrl))
+            new RedirectEvent($this->filterUrlBuilder->generate($filterUrl)),
+            ContaoEvents::CONTROLLER_REDIRECT
         );
     }
 
@@ -350,6 +345,7 @@ class FrontendFilter
         $objFrontendFilterOptions->setShowCountValues(
             $this->objFilterConfig->metamodel_available_values ? true : false
         );
+        $objFrontendFilterOptions->setUrlFragment((string) $this->objFilterConfig->metamodel_fef_urlfragment);
 
         return $objFrontendFilterOptions;
     }
@@ -361,6 +357,8 @@ class FrontendFilter
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      *
      * @throws RedirectResponseException When there was a POST request and we have to reload the page.
      */
@@ -393,6 +391,9 @@ class FrontendFilter
         // If we have POST data, we need to redirect now.
         if (Input::post('FORM_SUBMIT') === $this->formId) {
             foreach ($wantedNames as $widgetName) {
+                if (empty($arrWidgets[$widgetName])) {
+                    continue;
+                }
                 $filter = $arrWidgets[$widgetName];
                 if (null !== $filter['urlvalue']) {
                     $other->setSlug($widgetName, $filter['urlvalue']);
@@ -406,19 +407,23 @@ class FrontendFilter
 
         // Render the widgets through the filter templates.
         foreach ($wantedNames as $strWidget) {
-            $renderedWidgets[$strWidget] = $this->renderWidget($arrWidgets[$strWidget], $filterOptions);
+            if (!empty($arrWidgets[$strWidget])) {
+                $renderedWidgets[$strWidget] = $this->renderWidget($arrWidgets[$strWidget], $filterOptions);
+            }
         }
 
         // Return filter data.
         return [
-            'action'     => $this->filterUrlBuilder->generate($other),
-            'formid'     => $this->formId,
-            'filters'    => $renderedWidgets,
-            'submit'     => (
-                $filterOptions->isAutoSubmit()
-                    ? ''
-                    : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']
-                )
+            'action'  => $this->filterUrlBuilder->generate($other)
+                         . ($this->objFilterConfig->metamodel_fef_urlfragment
+                           ? '#' . $this->objFilterConfig->metamodel_fef_urlfragment
+                           : ''),
+            'formid'  => $this->formId,
+            'filters' => $renderedWidgets,
+            'submit'  => ($filterOptions->isAutoSubmit()
+                          ? ''
+                          : $GLOBALS['TL_LANG']['metamodels_frontendfilter']['submit']
+            )
         ];
     }
 
@@ -456,9 +461,7 @@ class FrontendFilter
      * Render a content element.
      *
      * @param string $content   The html content in which to replace.
-     *
      * @param string $replace   The string within the html to be replaced.
-     *
      * @param int    $contentId The id of the content element to be inserted for the replace string.
      *
      * @return string
@@ -472,9 +475,7 @@ class FrontendFilter
      * Render a module.
      *
      * @param string $content  The html content in which to replace.
-     *
      * @param string $replace  The string within the html to be replaced.
-     *
      * @param int    $moduleId The id of the module to be inserted for the replace string.
      *
      * @return string
@@ -488,11 +489,8 @@ class FrontendFilter
      * Render a module or content element.
      *
      * @param string $table     The name of the table.
-     *
      * @param string $content   The html content in which to replace.
-     *
      * @param string $replace   The string within the html to be replaced.
-     *
      * @param int    $elementId The id of the module/ce-element to be inserted for the replace string.
      *
      * @return string
@@ -501,15 +499,18 @@ class FrontendFilter
      */
     protected function generateElement($table, $content, $replace, $elementId)
     {
-        $sql = sprintf('SELECT * FROM %s WHERE id=? AND type="metamodels_frontendclearall"', $table);
+        $objDbResult = $this->connection
+            ->createQueryBuilder()
+            ->select('t.*')
+            ->from($table, 't')
+            ->where('t.id=:id')
+            ->andWhere('t.type=:type')
+            ->setParameter('id', $elementId)
+            ->setParameter('type', 'metamodels_frontendclearall')
+            ->execute()
+            ->fetch(\PDO::FETCH_OBJ);
 
-        $statement = $this->connection->prepare($sql);
-        $statement->bindValue(1, $elementId);
-        $statement->execute();
-
-        $objDbResult = $statement->fetch(\PDO::FETCH_OBJ);
-
-        // Check if we have a existing module or ce element.
+        // Check if we have an existing module or ce element.
         if ($objDbResult === false) {
             return str_replace($replace, '', $content);
         }
@@ -532,7 +533,6 @@ class FrontendFilter
      * This is called via parseTemplate HOOK to inject the "clear all" filter into fe_page.
      *
      * @param string $strContent  The whole page content.
-     *
      * @param string $strTemplate The name of the template being parsed.
      *
      * @return string

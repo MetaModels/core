@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,8 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -26,6 +27,7 @@
 namespace MetaModels\Attribute;
 
 use MetaModels\IMetaModel;
+use MetaModels\ITranslatedMetaModel;
 use MetaModels\Render\Setting\ISimple as ISimpleRenderSetting;
 use MetaModels\Render\Setting\Simple;
 use MetaModels\Render\Template;
@@ -51,10 +53,10 @@ abstract class Base implements IAttribute
      *
      * @var array
      */
-    protected $arrData = array();
+    protected $arrData = [];
 
     /**
-     * Instantiate an MetaModel attribute.
+     * Instantiate a MetaModel attribute.
      *
      * Note that you should not use this directly but use the factory classes to instantiate attributes.
      *
@@ -66,6 +68,19 @@ abstract class Base implements IAttribute
      */
     public function __construct(IMetaModel $objMetaModel, $arrData = array())
     {
+        if (!($objMetaModel instanceof ITranslatedMetaModel) && $objMetaModel->isTranslated(false)) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf(
+                    'Support for translated "\MetaModel\IMetamodel" instances is deprecated since MetaModels 2.2 ' .
+                    'and to be removed in 3.0. The MetaModel "%s" must implement "\MetaModels\ITranslatedMetaModel".',
+                    $objMetaModel->getTableName()
+                ),
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+        }
+
         // Meta information.
         foreach (array_intersect($this->getAttributeSettingNames(), array_keys($arrData)) as $strSettingName) {
             $this->set($strSettingName, $arrData[$strSettingName]);
@@ -102,7 +117,12 @@ abstract class Base implements IAttribute
     public function getName()
     {
         if (is_array($this->arrData['name'])) {
-            return $this->getLangValue($this->get('name')) ?: $this->getColName();
+            $metaModel = $this->getMetaModel();
+            return $this->getLangValue(
+                $this->get('name'),
+                ($metaModel instanceof ITranslatedMetaModel)
+                    ? $metaModel->getLanguage() : $metaModel->getActiveLanguage()
+            ) ?: $this->getColName();
         }
         return $this->arrData['name'] ?: $this->getColName();
     }
@@ -115,37 +135,64 @@ abstract class Base implements IAttribute
      *
      * @param array  $arrValues   The array holding all language values in the form array('langcode' => $varValue).
      *
-     * @param string $strLangCode The language code of the language to fetch. Optional, if not given,
-     *                            $GLOBALS['TL_LANGUAGE'] is used.
+     * @param string $strLangCode The language code of the language to fetch.
      *
      * @return mixed|null the value for the given language or the fallback language, NULL if neither is present.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function getLangValue($arrValues, $strLangCode = null)
     {
-        if (!($this->getMetaModel()->isTranslated() && is_array($arrValues))) {
+        $metaModel = $this->getMetaModel();
+        // Not a valid lookup array, exit.
+        if (!is_array($arrValues)) {
             return $arrValues;
         }
 
-        if ($strLangCode === null) {
-            return $this->getLangValue($arrValues, $this->getMetaModel()->getActiveLanguage());
+        if (null === $strLangCode) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf(
+                    'Not passing the language code to "%s" is deprecated since MetaModels 2.2 and will fail in 3.0 ',
+                    __METHOD__
+                ),
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $strLangCode = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
+        }
+
+        // Not translated, exit.
+        if (!($metaModel instanceof ITranslatedMetaModel) && !$metaModel->isTranslated(false)) {
+            return $arrValues;
         }
 
         if (array_key_exists($strLangCode, $arrValues)) {
             return $arrValues[$strLangCode];
         }
-
         // Language code not set, use fallback.
-        return $arrValues[$this->getMetaModel()->getFallbackLanguage()];
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            $strLangCode = $metaModel->getMainLanguage();
+        } else {
+            $strLangCode = $metaModel->getFallbackLanguage();
+        }
+        if (array_key_exists($strLangCode, $arrValues)) {
+            return $arrValues[$strLangCode];
+        }
+
+        return null;
     }
 
     /**
      * Hook additional attribute formatter that want to format the value.
      *
-     * @param array   $arrBaseFormatted The current result array. The keys "raw" and "text" are always populated.
+     * @param array                $arrBaseFormatted The current result array. The keys "raw" and "text" are always
+     *                                               populated.
      *
-     * @param array   $arrRowData       The Raw values from the database.
+     * @param array                $arrRowData       The Raw values from the database.
      *
-     * @param string  $strOutputFormat  The output format to use.
+     * @param string               $strOutputFormat  The output format to use.
      *
      * @param ISimpleRenderSetting $objSettings      The output format settings.
      *
@@ -182,25 +229,27 @@ abstract class Base implements IAttribute
     /**
      * When rendered via a template, this populates the template with values.
      *
-     * @param Template $objTemplate The Template instance to populate.
+     * @param Template             $objTemplate The Template instance to populate.
      *
-     * @param array    $arrRowData  The row data for the current item.
+     * @param array                $arrRowData  The row data for the current item.
      *
-     * @param ISimpleRenderSetting  $objSettings The render settings to use for this attribute.
+     * @param ISimpleRenderSetting $objSettings The render settings to use for this attribute.
      *
      * @return void
      */
     protected function prepareTemplate(Template $objTemplate, $arrRowData, $objSettings)
     {
-        $objTemplate->setData(array(
-            'attribute'        => $this,
-            'settings'         => $objSettings,
-            'row'              => $arrRowData,
-            'raw'              => $arrRowData[$this->getColName()],
-            'additional_class' => $objSettings->get('additional_class')
-                ? ' ' . $objSettings->get('additional_class')
-                : ''
-        ));
+        $objTemplate->setData(
+            [
+                'attribute'        => $this,
+                'settings'         => $objSettings,
+                'row'              => $arrRowData,
+                'raw'              => $arrRowData[$this->getColName()],
+                'additional_class' => $objSettings->get('additional_class')
+                    ? ' ' . $objSettings->get('additional_class')
+                    : ''
+            ]
+        );
     }
 
     /**
@@ -279,11 +328,20 @@ abstract class Base implements IAttribute
      */
     public function getAttributeSettingNames()
     {
-        return array(
+        return [
             // Settings originating from tl_metamodel_attribute.
-            'id', 'pid', 'tstamp', 'name', 'description', 'type', 'colname', 'isvariant',
+            'id',
+            'pid',
+            'tstamp',
+            'name',
+            'description',
+            'type',
+            'colname',
+            'isvariant',
             // Settings originating from tl_metamodel_dcasetting.
-            'tl_class', 'readonly');
+            'tl_class',
+            'readonly'
+        ];
     }
 
     /**
@@ -300,8 +358,8 @@ abstract class Base implements IAttribute
         if (empty($GLOBALS['TL_LANG'][$this->getMetaModel()->getTableName()][$this->getColName()])) {
             $GLOBALS['TL_LANG'][$this->getMetaModel()->getTableName()][$this->getColName()] = array
             (
-                $this->getLangValue($this->get('name')),
-                $this->getLangValue($this->get('description')),
+                $this->getLangValue($this->get('name'), \str_replace('-', '_', $GLOBALS['TL_LANGUAGE'])),
+                $this->getLangValue($this->get('description'), \str_replace('-', '_', $GLOBALS['TL_LANGUAGE'])),
             );
         }
     }
@@ -318,19 +376,20 @@ abstract class Base implements IAttribute
     {
         $this->setLanguageStrings();
         $tableName  = $this->getMetaModel()->getTableName();
-        $definition = array();
+        $definition = [];
         if (isset($GLOBALS['TL_DCA'][$tableName]['fields'][$this->getColName()])) {
             $definition = $GLOBALS['TL_DCA'][$tableName]['fields'][$this->getColName()];
         }
 
-        return array_replace_recursive(
-            array
-            (
-                'label' => &$GLOBALS['TL_LANG'][$tableName][$this->getColName()],
-                'eval'  => array()
-            ),
-            $definition
-        );
+        if (!isset($definition['eval'])) {
+            $definition['eval'] = [];
+        }
+
+        if (!isset($definition['label'])) {
+            $definition['label'] = &$GLOBALS['TL_LANG'][$tableName][$this->getColName()];
+        }
+
+        return $definition;
     }
 
     /**
@@ -381,7 +440,7 @@ abstract class Base implements IAttribute
             $fieldDefinition['eval']['unique'] = (bool) $this->getOverrideValue('isunique', $overrides);
         }
 
-        foreach (array(
+        $names = [
             'tl_class',
             'mandatory',
             'alwaysSave',
@@ -396,7 +455,9 @@ abstract class Base implements IAttribute
             'includeBlankOption',
             'submitOnChange',
             'readonly'
-        ) as $name) {
+        ];
+
+        foreach ($names as $name) {
             if (empty($fieldDefinition['eval'][$name])
                 && ($value = $this->getOverrideValue($name, $overrides))
             ) {
@@ -445,15 +506,14 @@ abstract class Base implements IAttribute
      *
      * @deprecated Use DataDefinition builders in DC_General 2.0.0
      */
-    public function getItemDCA($arrOverrides = array())
+    public function getItemDCA($arrOverrides = [])
     {
-        $arrReturn = array
-        (
+        $arrReturn = [
             'fields' => array_merge(
-                array($this->getColName() => $this->getFieldDefinition($arrOverrides)),
+                [$this->getColName() => $this->getFieldDefinition($arrOverrides)],
                 (array) $GLOBALS['TL_DCA'][$this->getMetaModel()->getTableName()]['fields'][$this->getColName()]
             ),
-        );
+        ];
 
         return $arrReturn;
     }
@@ -479,12 +539,8 @@ abstract class Base implements IAttribute
      */
     public function getDefaultRenderSettings()
     {
-        $objSetting = new Simple(
-            array
-            (
-                'template' => 'mm_attr_' . $this->get('type')
-            )
-        );
+        $objSetting = new Simple(['template' => 'mm_attr_' . $this->get('type')]);
+
         return $objSetting;
     }
 
@@ -493,9 +549,7 @@ abstract class Base implements IAttribute
      */
     public function parseValue($arrRowData, $strOutputFormat = 'text', $objSettings = null)
     {
-        $arrResult = array(
-            'raw' => $arrRowData[$this->getColName()],
-        );
+        $arrResult = ['raw' => $arrRowData[$this->getColName()]];
 
         /** @var ISimpleRenderSetting $objSettings */
         if ($objSettings && $objSettings->get('template')) {
@@ -542,7 +596,7 @@ abstract class Base implements IAttribute
     public function getFilterUrlValue($varValue)
     {
         // We are parsing as text here as this was the way before this method was implemented. See #216.
-        $arrResult = $this->parseValue(array($this->getColName() => $varValue), 'text');
+        $arrResult = $this->parseValue([$this->getColName() => $varValue], 'text');
 
         return $arrResult['text'];
     }
@@ -562,7 +616,7 @@ abstract class Base implements IAttribute
      */
     public function searchFor($strPattern)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -574,7 +628,7 @@ abstract class Base implements IAttribute
      */
     public function filterGreaterThan($varValue, $blnInclusive = false)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -586,7 +640,7 @@ abstract class Base implements IAttribute
      */
     public function filterLessThan($varValue, $blnInclusive = false)
     {
-        return array();
+        return [];
     }
 
     /**

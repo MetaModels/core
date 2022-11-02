@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,8 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Andreas Nölke <zero@brothers-project.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -87,9 +88,14 @@ class HybridFilterBlock extends MetaModelHybrid
 
             if ($this->metamodel_jumpTo) {
                 // Page to jump to when filter submit.
-                $statement = $this->getConnection()->prepare('SELECT id, alias FROM tl_page WHERE id=? LIMIT 0,1');
-                $statement->bindValue(1, $this->metamodel_jumpTo);
-                $statement->execute();
+                $statement = $this->getConnection()
+                    ->createQueryBuilder()
+                    ->select('t.id, t.alias')
+                    ->from('tl_page', 't')
+                    ->where('t.id=:id')
+                    ->setParameter('id', $this->metamodel_jumpTo)
+                    ->setMaxResults(1)
+                    ->execute();
 
                 if ($statement->rowCount()) {
                     $this->setJumpTo($statement->fetch(\PDO::FETCH_ASSOC));

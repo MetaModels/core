@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,9 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -22,16 +24,25 @@
 namespace MetaModels\CoreBundle\DependencyInjection;
 
 use Doctrine\Common\Cache\ArrayCache;
+use MetaModels\CoreBundle\Migration\TableCollationMigration;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 /**
  * This is the class that loads and manages the bundle configuration
  */
-class MetaModelsCoreExtension extends Extension
+class MetaModelsCoreExtension extends Extension implements PrependExtensionInterface
 {
+    /**
+     * The default table options.
+     *
+     * @var array
+     */
+    private $defaultTableOptions;
+
     /**
      * The configuration files.
      *
@@ -41,9 +52,12 @@ class MetaModelsCoreExtension extends Extension
         'config.yml',
         'filter-settings.yml',
         'hooks.yml',
+        'insert-tags.yml',
         'listeners.yml',
         'property-conditions.yml',
         'services.yml',
+        'content-elements.yml',
+        'modules.yml',
         'dc-general/breadcrumb.yml',
         'dc-general/definition-builder.yml',
         'dc-general/environment-populator.yml',
@@ -64,6 +78,14 @@ class MetaModelsCoreExtension extends Extension
     /**
      * {@inheritDoc}
      */
+    public function prepend(ContainerBuilder $container): void
+    {
+        $this->collectDefaultTableOptionsFromDoctrineExtension($container);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
@@ -78,7 +100,8 @@ class MetaModelsCoreExtension extends Extension
         $container->setParameter('metamodels.assets_dir', $config['assets_dir']);
         $container->setParameter('metamodels.assets_web', $config['assets_web']);
 
-        $this->buildPickerService($container);
+        $container->getDefinition(TableCollationMigration::class)
+            ->setArgument('$defaultTableOptions', $this->defaultTableOptions);
     }
 
     /**
@@ -115,31 +138,33 @@ class MetaModelsCoreExtension extends Extension
     }
 
     /**
-     * Build the picker service.
+     * Collect the default table options from the dcotrine extension.
      *
-     * @param ContainerBuilder $container The container.
+     * @param ContainerBuilder $container The container builder.
      *
      * @return void
      */
-    private function buildPickerService(ContainerBuilder $container)
+    private function collectDefaultTableOptionsFromDoctrineExtension(ContainerBuilder $container): void
     {
-        $pickerService = $container->getDefinition('metamodels.controller.picker');
-        $configs       = $pickerService->getArgument(2);
+        if (!isset($container->getExtensions()['doctrine'])) {
+            $this->defaultTableOptions = [
+                'charset'    => 'utf8mb4',
+                'collate'    => 'utf8mb4_unicode_ci',
+                'engine'     => 'InnoDB',
+                'row_format' => 'DYNAMIC',
+            ];
 
-        // Selectable styles in the palette tl_class definitions.
-        $configs['PALETTE_STYLE_PICKER'][] = ['cssclass' => 'w50'];
-        $configs['PALETTE_STYLE_PICKER'][] = ['cssclass' => 'w50x'];
-        $configs['PALETTE_STYLE_PICKER'][] = ['cssclass' => 'clr'];
-        $configs['PALETTE_STYLE_PICKER'][] = ['cssclass' => 'clx'];
-        $configs['PALETTE_STYLE_PICKER'][] = ['cssclass' => 'long'];
-        $configs['PALETTE_STYLE_PICKER'][] = ['cssclass' => 'wizard'];
-        $configs['PALETTE_STYLE_PICKER'][] = ['cssclass' => 'm12'];
-        // Selectable panels in the palette panelLayout definitions.
-        $configs['PALETTE_PANEL_PICKER'][] = ['cssclass' => 'search'];
-        $configs['PALETTE_PANEL_PICKER'][] = ['cssclass' => 'sort'];
-        $configs['PALETTE_PANEL_PICKER'][] = ['cssclass' => 'filter'];
-        $configs['PALETTE_PANEL_PICKER'][] = ['cssclass' => 'limit'];
+            return;
+        }
 
-        $pickerService->setArgument(2, $configs);
+        $defaultTableOptions = [[]];
+        foreach ($container->getExtensionConfig('doctrine') as $doctrineConfig) {
+            if (!isset($doctrineConfig['dbal']['connections']['default']['default_table_options'])) {
+                continue;
+            }
+
+            $defaultTableOptions[] = $doctrineConfig['dbal']['connections']['default']['default_table_options'];
+        }
+        $this->defaultTableOptions = \array_merge(...$defaultTableOptions);
     }
 }

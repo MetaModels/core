@@ -20,6 +20,8 @@
 
 namespace MetaModels\Attribute;
 
+use MetaModels\ITranslatedMetaModel;
+
 /**
  * This is the interface for translated attributes.
  * To create MetaModelAttribute instances, use the @link{MetaModelAttributeFactory}
@@ -27,6 +29,13 @@ namespace MetaModels\Attribute;
  */
 interface ITranslated extends IAttribute
 {
+    /**
+     * Queries the attribute for it's parent MetaModel instance.
+     *
+     * @return ITranslatedMetaModel the MetaModel instance.
+     */
+    public function getMetaModel();
+
     /**
      * Search matches for the given expression.
      *

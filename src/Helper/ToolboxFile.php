@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,8 @@
  * @author     Christopher Boelter <christopher@boelter.eu>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Andreas Fischer <anfischer@kaffee-partner.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -28,11 +29,13 @@ namespace MetaModels\Helper;
 
 use Contao\Controller;
 use Contao\CoreBundle\Image\ImageFactoryInterface;
+use Contao\CoreBundle\Image\PictureFactoryInterface;
 use Contao\Dbafs;
 use Contao\Environment;
 use Contao\File;
 use Contao\FilesModel;
 use Contao\Input;
+use Contao\LayoutModel;
 use Contao\PageError403;
 use Contao\Picture;
 use Contao\StringUtil;
@@ -42,12 +45,14 @@ use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use InvalidArgumentException;
+use Symfony\Component\Asset\Context\ContextInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This class provides various methods for handling file collection within Contao.
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
 class ToolboxFile
 {
@@ -73,6 +78,20 @@ class ToolboxFile
      * @var ImageFactoryInterface
      */
     private $imageFactory;
+
+    /**
+     * The assets files context.
+     *
+     * @var ContextInterface
+     */
+    private $filesContext;
+
+    /**
+     * The picture factory.
+     *
+     * @var PictureFactoryInterface
+     */
+    private $pictureFactory;
 
     /**
      * Allowed file extensions.
@@ -138,6 +157,13 @@ class ToolboxFile
     protected $pendingIds = array();
 
     /**
+     * Flag if download keys shall be generated.
+     *
+     * @var bool
+     */
+    private bool $withDownloadKeys = true;
+
+    /**
      * Meta information for files.
      *
      * @var array
@@ -168,14 +194,22 @@ class ToolboxFile
     /**
      * Create a new instance.
      *
-     * @param ImageFactoryInterface|EventDispatcherInterface|null $imageFactory The image factory to use).
-     * @param string|null                                         $rootDir      The root path of the installation.
+     * @param ImageFactoryInterface|EventDispatcherInterface|null $imageFactory   The image factory to use.
+     * @param string|null                                         $rootDir        The root path of the installation.
+     * @param ContextInterface|null                               $filesContext   The assets files context.
+     * @param PictureFactoryInterface|null                        $pictureFactory The picture factory.
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function __construct($imageFactory = null, string $rootDir = null)
-    {
+    public function __construct(
+        $imageFactory = null,
+        string $rootDir = null,
+        ContextInterface $filesContext = null,
+        PictureFactoryInterface $pictureFactory = null
+    ) {
         switch (true) {
             case ($imageFactory instanceof ImageFactoryInterface) && !empty($rootDir):
                 $this->imageFactory = $imageFactory;
@@ -205,8 +239,36 @@ class ToolboxFile
         if (isset($GLOBALS['TL_CONFIG']) && isset($GLOBALS['TL_CONFIG']['allowedDownload'])) {
             $this->setAcceptedExtensions(StringUtil::trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']));
         }
-        if (isset($_SESSION) && !is_array($_SESSION['metaModels_downloads'])) {
-            $_SESSION['metaModels_downloads'] = [];
+
+        if (null === ($this->rootDir)) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Not passing an "%kernel.project_dir%" parameter is deprecated.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $this->rootDir = System::getContainer()->getParameter('kernel.project_dirt');
+        }
+
+        if (null === ($this->filesContext = $filesContext)) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Not passing an "ContextInterface" is deprecated.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $this->filesContext = System::getContainer()->get('contao.assets.files_context');
+        }
+
+        if (null === ($this->pictureFactory = $pictureFactory)) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Not passing an "PictureFactoryInterface" is deprecated.',
+                E_USER_DEPRECATED
+            );
+
+            // @codingStandardsIgnoreEnd
+            $this->pictureFactory = System::getContainer()->get('contao.image.picture_factory');
         }
     }
 
@@ -402,6 +464,18 @@ class ToolboxFile
     }
 
     /**
+     * Set flag if download keys shall be generated or not.
+     *
+     * @param bool $withDownloadKeys The new value.
+     *
+     * @return void
+     */
+    public function withDownloadKeys(bool $withDownloadKeys): void
+    {
+        $this->withDownloadKeys = $withDownloadKeys;
+    }
+
+    /**
      * Walks the list of pending folders via ToolboxFile::addPath().
      *
      * @return void
@@ -414,7 +488,7 @@ class ToolboxFile
         $parameters = array();
         if (count($this->pendingIds)) {
             $conditions[] = $table . '.uuid IN(' .
-                implode(',', array_fill(0, count($this->pendingIds), 'UNHEX(?)')) . ')';
+                            implode(',', array_fill(0, count($this->pendingIds), 'UNHEX(?)')) . ')';
             $parameters   = array_map('bin2hex', $this->pendingIds);
 
             $this->pendingIds = array();
@@ -454,6 +528,15 @@ class ToolboxFile
      */
     protected function getDownloadLink($strFile)
     {
+        if (!$this->withDownloadKeys) {
+            return UrlBuilder::fromUrl(Environment::get('request'))
+                ->setQueryParameter('file', urlencode($strFile))
+                ->getUrl();
+        }
+        if (isset($_SESSION) && !is_array($_SESSION['metaModels_downloads'])) {
+            $_SESSION['metaModels_downloads'] = [];
+        }
+
         if (!isset($_SESSION['metaModels_downloads'][$strFile])) {
             $_SESSION['metaModels_downloads'][$strFile] = md5(uniqid());
         }
@@ -573,8 +656,8 @@ class ToolboxFile
         $countFiles = count($arrSource);
         foreach (array_keys($arrSource) as $k) {
             $arrSource[$k]['class'] = (($k == 0) ? ' first' : '') .
-                (($k == ($countFiles - 1)) ? ' last' : '') .
-                ((($k % 2) == 0) ? ' even' : ' odd');
+                                      (($k == ($countFiles - 1)) ? ' last' : '') .
+                                      ((($k % 2) == 0) ? ' even' : ' odd');
         }
     }
 
@@ -721,13 +804,15 @@ class ToolboxFile
         if ($this->getShowImages()) {
             return;
         }
-        if (($file = Input::get('file')) && ($key = Input::get('fileKey'))) {
-            // Check key and return 403 if mismatch.
-            if (!(array_key_exists($file, $_SESSION['metaModels_downloads'])
-                && $_SESSION['metaModels_downloads'][$file] === $key)) {
-                $objHandler = new $GLOBALS['TL_PTY']['error_403']();
-                /** @var PageError403 $objHandler */
-                $objHandler->generate($file);
+        if (($file = Input::get('file'))) {
+            if ($this->withDownloadKeys) {
+                // Check key and return 403 if mismatch
+                // keep both null-coalescing values different to account for missing values.
+                if (($_SESSION['metaModels_downloads'][$file] ?? null) !== (Input::get('fileKey') ?? false)) {
+                    $objHandler = new $GLOBALS['TL_PTY']['error_403']();
+                    /** @var PageError403 $objHandler */
+                    $objHandler->generate($file);
+                }
             }
             // Send the file to the browser if check succeeded.
             Controller::sendFileToBrowser($file);
@@ -759,12 +844,12 @@ class ToolboxFile
      * Convert an array of values handled by MetaModels to a value to be stored in the database (array of bin uuid).
      *
      * The input array must have the following layout:
-     * array(
-     *   'bin'   => array() // list of the binary ids.
-     *   'value' => array() // list of the uuids.
-     *   'path'  => array() // list of the paths.
-     *   'meta'  => array() // list of the meta data.
-     * )
+     * [
+     *   'bin'   => [] // list of the binary ids.
+     *   'value' => [] // list of the uuids.
+     *   'path'  => [] // list of the paths.
+     *   'meta'  => [] // list of the meta data.
+     * ]
      *
      * @param array $values The values to convert.
      *
@@ -778,7 +863,7 @@ class ToolboxFile
             throw new InvalidArgumentException('Invalid file array');
         }
 
-        $bin = array();
+        $bin = [];
         foreach ($values['bin'] as $value) {
             $bin[] = $value;
         }
@@ -790,12 +875,12 @@ class ToolboxFile
      * Convert an array of values stored in the database (array of bin uuid) to a value to be handled by MetaModels.
      *
      * The output array will have the following layout:
-     * array(
-     *   'bin'   => array() // list of the binary ids.
-     *   'value' => array() // list of the uuids.
-     *   'path'  => array() // list of the paths.
-     *   'meta'  => array() // list of the meta data.
-     * )
+     * [
+     *   'bin'   => [] // list of the binary ids.
+     *   'value' => [] // list of the uuids.
+     *   'path'  => [] // list of the paths.
+     *   'meta'  => [] // list of the meta data.
+     * ]
      *
      * @param array $values The binary uuid values to convert.
      *
@@ -844,12 +929,12 @@ class ToolboxFile
      * Convert an uuid or path to a value to be handled by MetaModels.
      *
      * The output array will have the following layout:
-     * array(
-     *   'bin'   => array() // list of the binary ids.
-     *   'value' => array() // list of the uuids.
-     *   'path'  => array() // list of the paths.
-     *   'meta'  => array() // list of the meta data.
-     * )
+     * [
+     *   'bin'   => [] // list of the binary ids.
+     *   'value' => [] // list of the uuids.
+     *   'path'  => [] // list of the paths.
+     *   'meta'  => [] // list of the meta data.
+     * ]
      *
      * @param array $values The binary uuids or paths to convert.
      *
@@ -871,9 +956,13 @@ class ToolboxFile
 
         foreach ($values as $key => $value) {
             if (!(Validator::isUuid($value))) {
+                if (!\is_string($value)) {
+                    continue;
+                }
+
                 $file = FilesModel::findByPath($value) ?: Dbafs::addResource($value);
                 if (!$file) {
-                    throw new InvalidArgumentException('Invalid value.');
+                    throw new InvalidArgumentException('Invalid path.');
                 }
 
                 $values[$key] = $file->uuid;
@@ -890,7 +979,6 @@ class ToolboxFile
      * will add models of type folder to the list of pending paths to allow for recursive inclusion.
      *
      * @param FilesModel[] $files     The files to add.
-     *
      * @param array        $skipPaths List of directories not to be added to the list of pending directories.
      *
      * @return void
@@ -927,6 +1015,9 @@ class ToolboxFile
      * @param string $fileName The file to fetch data for.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     private function processFile($fileName)
     {
@@ -940,44 +1031,66 @@ class ToolboxFile
         }
 
         $information = [
-            'file'      => $fileName,
-            'mtime'     => $file->mtime,
-            'alt'       => $altText,
-            'caption'   => (!empty($meta['caption']) ? $meta['caption'] : ''),
-            'title'     => $title,
-            'metafile'  => $meta,
-            'icon'      => 'assets/contao/images/' . $file->icon,
-            'extension' => $file->extension,
-            'size'      => $file->filesize,
-            'sizetext'  => sprintf('(%s)', Controller::getReadableSize($file->filesize, 2)),
-            'url'       => StringUtil::specialchars($this->getDownloadLink($fileName))
+            'file'       => $fileName,
+            'mtime'      => $file->mtime,
+            'alt'        => $altText,
+            'caption'    => (!empty($meta['caption']) ? $meta['caption'] : ''),
+            'title'      => $title,
+            'metafile'   => $meta,
+            'icon'       => 'assets/contao/images/' . $file->icon,
+            'extension'  => $file->extension,
+            'size'       => $file->filesize,
+            'sizetext'   => sprintf('(%s)', Controller::getReadableSize($file->filesize, 2)),
+            'url'        => StringUtil::specialchars($this->getDownloadLink($fileName)),
+            'isGdImage'  => false,
+            'isSvgImage' => false,
+            'isPicture'  => false,
         ];
 
         // Prepare GD images.
         if ($information['isGdImage'] = $file->isGdImage) {
             $information['src'] = urldecode($this->resizeImage($fileName));
+            $information['lb']  = 'lb_' . $this->getLightboxId();
             if (file_exists(TL_ROOT . '/' . $information['src'])) {
                 $size              = getimagesize(TL_ROOT . '/' . $information['src']);
-                $information['lb'] = 'lb' . $this->getLightboxId();
                 $information['w']  = $size[0];
                 $information['h']  = $size[1];
                 $information['wh'] = $size[3];
             }
+            $information['imageUrl'] = $fileName;
         }
 
         // Prepare SVG images.
         if ($information['isSvgImage'] = $file->isSvgImage) {
-            $information['src'] = $fileName;
+            $information['src']      = $fileName;
+            $information['imageUrl'] = $fileName;
         }
 
         // Prepare the picture for provide the image size.
-        if ($information['isPicture'] = (int) $this->resizeImages[2]) {
-            $picture = Picture::create($file, $this->getResizeImages())->getTemplateData();
+        if ($file->isImage && ($information['isPicture'] = (int) $this->resizeImages[2])) {
+            $projectDir = $this->rootDir;
+            $staticUrl  = $this->filesContext->getStaticUrl();
+            $picture    = $this->pictureFactory->create($projectDir . '/' . $file->path, $this->getResizeImages());
 
-            $picture['alt']   = $altText;
-            $picture['title'] = $title;
+            $information['picture'] = [
+                'alt'     => $altText,
+                'title'   => $title,
+                'img'     => $picture->getImg($projectDir, $staticUrl),
+                'sources' => $picture->getSources($projectDir, $staticUrl)
+            ];
 
-            $information['picture'] = $picture;
+            $information['imageUrl'] = $fileName;
+
+            if (isset($GLOBALS['objPage']->layoutId)) {
+                $lightboxSize                   = StringUtil::deserialize(
+                    (LayoutModel::findByPk($GLOBALS['objPage']->layoutId)->lightboxSize ?? null),
+                    true
+                );
+                $lightboxPicture                =
+                    $this->pictureFactory->create($projectDir . '/' . $file->path, $lightboxSize);
+                $information['lightboxPicture'] = $lightboxPicture;
+                $information['imageUrl']        = $lightboxPicture->getImg($projectDir, $staticUrl)['src'];
+            }
         }
 
         $this->modifiedTime[] = $file->mtime;
@@ -993,7 +1106,7 @@ class ToolboxFile
      */
     private function resizeImage($fileName)
     {
-        list($width, $height, $mode) = $this->getResizeImages();
+        [$width, $height, $mode] = $this->getResizeImages();
         if ($this->getShowImages() && ($width || $height || $mode)) {
             if ($this->imageFactory) {
                 $image = $this->imageFactory->create(
@@ -1005,7 +1118,7 @@ class ToolboxFile
             }
 
             $event = new ResizeImageEvent($fileName, $width, $height, $mode);
-            $this->dispatcher->dispatch(ContaoEvents::IMAGE_RESIZE, $event);
+            $this->dispatcher->dispatch($event, ContaoEvents::IMAGE_RESIZE);
             return $event->getResultImage();
         }
 

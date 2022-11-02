@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -21,7 +21,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -228,6 +228,19 @@ class MetaModel implements IMetaModel
      */
     public function addAttribute(IAttribute $objAttribute)
     {
+        if ($objAttribute instanceof ITranslated && !$this instanceof ITranslatedMetaModel) {
+            // @coverageIgnoreStart
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                'Adding translated attributes to untranslated "\MetaModel\IMetamodel" instances is ' .
+                'deprecated since MetaModels 2.2 and will error in 3.0. The MetaModel must implement ' .
+                '"\MetaModels\ITranslatedMetaModel".',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            // @coverageIgnoreEnd
+        }
+
         if (!$this->hasAttribute($objAttribute->getColName())) {
             $this->arrAttributes[$objAttribute->getColName()] = $objAttribute;
         }
@@ -347,8 +360,8 @@ class MetaModel implements IMetaModel
         // Either no filter object or all ids allowed => return all ids.
         // if no id filter is passed, we assume all ids are provided.
         return $this->getConnection()->createQueryBuilder()
-            ->select('id')
-            ->from($this->getTableName())
+            ->select('t.id')
+            ->from($this->getTableName(), 't')
             ->execute()
             ->fetchAll(\PDO::FETCH_COLUMN);
     }
@@ -386,9 +399,9 @@ class MetaModel implements IMetaModel
         /** @var QueryBuilder $builder */
         $builder = $this->getConnection()->createQueryBuilder();
         $query   = $builder
-            ->select('*')
-            ->from($this->getTableName())
-            ->where($builder->expr()->in('id', ':values'))
+            ->select('t.*')
+            ->from($this->getTableName(), 't')
+            ->where($builder->expr()->in('t.id', ':values'))
             ->setParameter('values', $arrIds, Connection::PARAM_STR_ARRAY)
             ->orderBy('FIELD(id, :values)')
             ->execute();
@@ -422,6 +435,8 @@ class MetaModel implements IMetaModel
      *                               values.
      *
      * @return array an array of all matched items, sorted by the id list.
+     *
+     * @deprecated Since 2.2 to be removed in 3.0.
      */
     protected function fetchTranslatedAttributeValues(ITranslated $attribute, $ids)
     {
@@ -625,10 +640,48 @@ class MetaModel implements IMetaModel
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Please implement ITranslatedMetaModel instead.
      */
-    public function isTranslated()
+    public function isTranslated(bool $deprecation = true)
     {
-        return $this->arrData['translated'];
+        if (!$deprecation) {
+            return $this->arrData['translated'];
+        }
+        if ($this instanceof ITranslatedMetaModel) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                    'Please use "instanceof \MetaModels\ITranslatedMetaModel" instead.', __METHOD__),
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            return true;
+        }
+        if ($this->arrData['translated']) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf(
+                    'The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                    'MetaModel "%s" should implement "\MetaModels\ITranslatedMetaModel" instead.',
+                    __METHOD__,
+                    $this->getTableName()
+                ),
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            return true;
+        }
+
+        // @codingStandardsIgnoreStart
+        @\trigger_error(
+            sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                'Please use "instanceof \MetaModels\ITranslatedMetaModel" instead.', __METHOD__),
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+
+        return false;
     }
 
     /**
@@ -641,28 +694,86 @@ class MetaModel implements IMetaModel
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Please implement ITranslatedMetaModel instead.
      */
     public function getAvailableLanguages()
     {
-        if ($this->isTranslated()) {
+        if ($this instanceof ITranslatedMetaModel) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                    'Please use "\MetaModels\ITranslatedMetaModel::getLanguages" instead.', __METHOD__),
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            return $this->getLanguages();
+        }
+
+        if ($this->isTranslated(false)) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                    'Please test for "instanceof "\MetaModels\ITranslatedMetaModel" and use '.
+                    '"\MetaModels\ITranslatedMetaModel::getLanguages" instead.', __METHOD__),
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+
             return array_keys((array) $this->arrData['languages']);
         }
+        // @codingStandardsIgnoreStart
+        @\trigger_error(
+            sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                'Please test for "instanceof \MetaModels\ITranslatedMetaModel".', __METHOD__),
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
 
         return null;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Please implement ITranslatedMetaModel instead.
      */
     public function getFallbackLanguage()
     {
-        if ($this->isTranslated()) {
+        if ($this instanceof ITranslatedMetaModel) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                    'Please use "\MetaModels\ITranslatedMetaModel::getMainLanguage" instead.', __METHOD__),
+                E_USER_DEPRECATED
+            );
+
+            return $this->getMainLanguage();
+        }
+
+        if ($this->isTranslated(false)) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                    'Please implement interface "\MetaModels\ITranslatedMetaModel" and use ' .
+                    '"\MetaModels\ITranslatedMetaModel::getMainLanguage" instead.', __METHOD__),
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
             foreach ($this->arrData['languages'] as $strLangCode => $arrData) {
                 if ($arrData['isfallback']) {
                     return $strLangCode;
                 }
             }
         }
+        // @codingStandardsIgnoreStart
+        @\trigger_error(
+            sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                'Please test for translations via "instanceof \MetaModels\ITranslatedMetaModel" and call ' .
+                '"\MetaModels\ITranslatedMetaModel::getMainLanguage" instead.', __METHOD__),
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
 
         return null;
     }
@@ -674,11 +785,30 @@ class MetaModel implements IMetaModel
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     *
+     * @deprecated Please implement ITranslatedMetaModel instead.
      */
     public function getActiveLanguage()
     {
-        $tmp = explode('-', $GLOBALS['TL_LANGUAGE']);
-        return array_shift($tmp);
+        if ($this instanceof ITranslatedMetaModel) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                    'Please use "\MetaModels\ITranslatedMetaModel::getLanguage" and ' .
+                    '"\MetaModels\ITranslatedMetaModel::selectLanguage" instead.', __METHOD__),
+                E_USER_DEPRECATED
+            );
+        } else {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf('The method "%s" is deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                    'Please use "\MetaModels\ITranslatedMetaModel::getLanguage" instead.', __METHOD__),
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+        }
+
+        return \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
     }
 
     /**
@@ -710,15 +840,18 @@ class MetaModel implements IMetaModel
      *
      * @return IAttribute[]
      */
-    protected function getAttributeByNames($attrNames = array())
+    protected function getAttributeByNames($attrNames = [])
     {
         if (empty($attrNames)) {
             return $this->arrAttributes;
         }
 
-        $result = array();
+        $result = [];
         foreach ($attrNames as $attributeName) {
-            $result[$attributeName] = $this->arrAttributes[$attributeName];
+            if (null === $attribute = ($this->arrAttributes[$attributeName] ?? null)) {
+                continue;
+            }
+            $result[$attributeName] = $attribute;
         }
 
         return $result;
@@ -778,7 +911,11 @@ class MetaModel implements IMetaModel
             if ($objSortAttribute = $this->getAttribute($strSortBy)) {
                 $arrFilteredIds = $objSortAttribute->sortIds($arrFilteredIds, $strSortOrder);
             } elseif ('id' === $strSortBy) {
-                asort($arrFilteredIds);
+                if ($strSortOrder === 'ASC') {
+                    asort($arrFilteredIds);
+                } else {
+                    rsort($arrFilteredIds);
+                }
             } elseif (in_array($strSortBy, array('pid', 'tstamp', 'sorting'))) {
                 // Build the right key for the cache.
                 $sortKey = \sprintf('%s-%s', $strSortBy, \strtolower($strSortOrder));
@@ -803,9 +940,9 @@ class MetaModel implements IMetaModel
                 $builder = $this->getConnection()->createQueryBuilder();
 
                 $arrSortedFilteredIds = $builder
-                    ->select('id')
-                    ->from($this->getTableName())
-                    ->where($builder->expr()->in('id', ':values'))
+                    ->select('t.id')
+                    ->from($this->getTableName(), 't')
+                    ->where($builder->expr()->in('t.id', ':values'))
                     ->setParameter('values', $arrFilteredIds, Connection::PARAM_STR_ARRAY)
                     ->orderBy($strSortBy, $strSortOrder)
                     ->execute()
@@ -838,10 +975,10 @@ class MetaModel implements IMetaModel
 
         $builder = $this->getConnection()->createQueryBuilder();
 
-        return $builder
-            ->select('COUNT(id)')
-            ->from($this->getTableName())
-            ->where($builder->expr()->in('id', ':values'))
+        return (int) $builder
+            ->select('COUNT(t.id)')
+            ->from($this->getTableName(), 't')
+            ->where($builder->expr()->in('t.id', ':values'))
             ->setParameter('values', $arrFilteredIds, Connection::PARAM_STR_ARRAY)
             ->execute()
             ->fetch(\PDO::FETCH_COLUMN);
@@ -857,9 +994,9 @@ class MetaModel implements IMetaModel
         $idList = $this
             ->getConnection()
             ->createQueryBuilder()
-            ->select('id')
-            ->from($this->getTableName())
-            ->where('varbase=1')
+            ->select('t.id')
+            ->from($this->getTableName(), 't')
+            ->where('t.varbase=1')
             ->execute()
             ->fetchAll(\PDO::FETCH_COLUMN);
 
@@ -881,10 +1018,10 @@ class MetaModel implements IMetaModel
         $builder = $this->getConnection()->createQueryBuilder();
 
         $idList = $builder
-            ->select('id')
-            ->from($this->getTableName())
-            ->where('varbase=0')
-            ->andWhere($builder->expr()->in('vargroup', ':ids'))
+            ->select('t.id')
+            ->from($this->getTableName(), 't')
+            ->where('t.varbase=0')
+            ->andWhere($builder->expr()->in('t.vargroup', ':ids'))
             ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
             ->execute()
             ->fetchAll(\PDO::FETCH_COLUMN);
@@ -907,10 +1044,10 @@ class MetaModel implements IMetaModel
         $builder = $this->getConnection()->createQueryBuilder();
 
         $idList = $builder
-            ->select('v.id')
-            ->from($this->getTableName(), 'v')
-            ->leftJoin('v', $this->getTableName(), 'v2', 'v.vargroup=v2.vargroup')
-            ->where($builder->expr()->in('v2.id', ':ids'))
+            ->select('t.id')
+            ->from($this->getTableName(), 't')
+            ->leftJoin('t', $this->getTableName(), 't2', 't.vargroup=t2.vargroup')
+            ->where($builder->expr()->in('t2.id', ':ids'))
             ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
             ->execute()
             ->fetchAll(\PDO::FETCH_COLUMN);
@@ -935,7 +1072,7 @@ class MetaModel implements IMetaModel
             }
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -958,9 +1095,9 @@ class MetaModel implements IMetaModel
         $builder = $this->getConnection()->createQueryBuilder();
 
         $builder
-            ->update($this->getTableName(), 'v2')
-            ->set('v2.' . $strColumn, is_array($varData) ? serialize($varData) : $varData)
-            ->where($builder->expr()->in('v2.id', ':ids'))
+            ->update($this->getTableName(), 't2')
+            ->set('t2.' . $strColumn, is_array($varData) ? serialize($varData) : $varData)
+            ->where($builder->expr()->in('t2.id', ':ids'))
             ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
             ->execute();
     }
@@ -1073,7 +1210,7 @@ class MetaModel implements IMetaModel
         $builder    = $connection->createQueryBuilder();
         $parameters = [];
         foreach (array_keys($data) as $key) {
-            $parameters[$key] = ':' . $key;
+            $parameters[$this->getTableName() . '.' . $key] = ':' . $key;
         }
         $builder
             ->insert($this->getTableName())
@@ -1104,7 +1241,17 @@ class MetaModel implements IMetaModel
         }
 
         $baseAttributes = $this->saveBaseColumns($objItem, $timestamp ?: \time());
-        if ($this->isTranslated()) {
+        if ($this instanceof ITranslatedMetaModel) {
+            $strActiveLanguage = $this->getLanguage();
+        } elseif ($this->isTranslated(false)) {
+            // @codingStandardsIgnoreStart
+            @\trigger_error(
+                sprintf('Support for translated MetaModels not implementing "\MetaModels\ITranslatedMetaModel" '.
+                    'is  deprecated since MetaModels 2.2 and to be removed in 3.0. ' .
+                    'Please implement interface "\MetaModels\ITranslatedMetaModel".', __METHOD__),
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
             $strActiveLanguage = $this->getActiveLanguage();
         } else {
             $strActiveLanguage = null;
@@ -1156,7 +1303,7 @@ class MetaModel implements IMetaModel
 
         $builder
             ->delete($this->getTableName())
-            ->where($builder->expr()->in('id', ':ids'))
+            ->where($builder->expr()->in($this->getTableName() . '.id', ':ids'))
             ->setParameter('ids', $arrIds, Connection::PARAM_STR_ARRAY)
             ->execute();
     }

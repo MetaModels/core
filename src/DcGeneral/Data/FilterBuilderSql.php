@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -50,14 +51,14 @@ class FilterBuilderSql
      *
      * @var string
      */
-    private $procedures = array();
+    private $procedures = [];
 
     /**
      * The SQL query parameters.
      *
      * @var array
      */
-    private $parameter = array();
+    private $parameter = [];
 
     /**
      * The database instance.
@@ -67,6 +68,13 @@ class FilterBuilderSql
     private $connection;
 
     /**
+     * The table alias to use.
+     *
+     * @var string
+     */
+    private $tableAlias;
+
+    /**
      * Create a new instance.
      *
      * @param string     $tableName  The table name.
@@ -74,12 +82,15 @@ class FilterBuilderSql
      * @param string     $combiner   The combiner (AND or OR).
      *
      * @param Connection $connection The database connection.
+     *
+     * @param string     $tableAlias The table alias prefix (defaults to 't.').
      */
-    public function __construct($tableName, $combiner, $connection)
+    public function __construct($tableName, $combiner, $connection, string $tableAlias = 't.')
     {
         $this->tableName  = $tableName;
         $this->combiner   = strtoupper($combiner);
         $this->connection = $this->sanitizeConnection($connection);
+        $this->tableAlias = $tableAlias;
     }
 
     /**
@@ -121,7 +132,7 @@ class FilterBuilderSql
     {
         if (!$this->isEmpty()) {
             return new SimpleQuery(
-                sprintf('SELECT id FROM %s WHERE %s', $this->tableName, $this->getProcedure()),
+                sprintf('SELECT t.id FROM %s AS t WHERE %s', $this->tableName, $this->getProcedure()),
                 $this->getParameters(),
                 'id',
                 $this->connection
@@ -141,7 +152,12 @@ class FilterBuilderSql
     protected function getFilterForComparingOperator($operation)
     {
         $this->parameter[]  = $operation['value'];
-        $this->procedures[] = sprintf('(%s %s ?)', $operation['property'], $operation['operation']);
+        $this->procedures[] = sprintf(
+            '(%s%s %s ?)',
+            $this->tableAlias,
+            $operation['property'],
+            $operation['operation']
+        );
 
         return $this;
     }
@@ -157,7 +173,8 @@ class FilterBuilderSql
     {
         $this->parameter    = array_merge($this->parameter, array_values($operation['values']));
         $this->procedures[] = sprintf(
-            '(%s IN (%s))',
+            '(%s%s IN (%s))',
+            $this->tableAlias,
             $operation['property'],
             rtrim(str_repeat('?,', \count($operation['values'])), ',')
         );
@@ -177,7 +194,7 @@ class FilterBuilderSql
     protected function getFilterForLike($operation)
     {
         $this->parameter[]  = str_replace(array('*', '?'), array('%', '_'), $operation['value']);
-        $this->procedures[] = sprintf('(%s LIKE ?)', $operation['property']);
+        $this->procedures[] = sprintf('(%s%s LIKE ?)', $this->tableAlias, $operation['property']);
 
         return $this;
     }

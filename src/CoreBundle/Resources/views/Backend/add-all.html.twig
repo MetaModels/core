@@ -1,4 +1,4 @@
-{% extends "@ContaoCore/Backend/be_page.html.twig" %}
+{% extends "@MetaModelsCore/Backend/be_base.html.twig" %}
 
 {% block headline %}
     {{ headline }}
@@ -18,18 +18,24 @@
         <form action="{{ action }}" class="tl_form" method="post">
             <div class="tl_formbody_edit">
                 <input type="hidden" name="REQUEST_TOKEN" value="{{ requestToken }}">
+                <div class="settings">
+                    <label for="tl_select_trigger">
+                        <input type="checkbox" id="tl_select_trigger"
+                               onclick="Backend.toggleCheckboxes(this)"{% if not hasCheckbox %} disabled{% endif %} />
+                        {{ selectAll }}
+                    </label>
+                    <label class="activate" for="activate">
+                        <input type="checkbox" name="activate" id="activate" checked{% if not hasCheckbox %} disabled{% endif %} />
+                        {{ activate }}
+                    </label>
+                    {% if tlclass %}
+                    <label class="tlclass" for="tlclass">
+                        <input type="text" name="tlclass" id="tlclass" value="w50" />
+                        {{ tlclass }}
+                    </label>
+                    {% endif %}
+                </div>
                 <div class="fields">
-                    <div>
-                        <label for="tl_select_trigger">
-                            <input type="checkbox" id="tl_select_trigger"
-                                   onclick="Backend.toggleCheckboxes(this)"{% if not hasCheckbox %} disabled{% endif %} />
-                            {{ selectAll }}
-                        </label>
-                        <label class="activate" for="activate">
-                            <input type="checkbox" name="activate" id="activate"{% if not hasCheckbox %} disabled{% endif %} />
-                            {{ activate }}
-                        </label>
-                    </div>
                     {% for field in fields %}
                         <div class="field {{ field.class }}">
                             {% if field.checkbox %}

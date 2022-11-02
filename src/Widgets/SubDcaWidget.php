@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -172,7 +172,7 @@ class SubDcaWidget extends Widget
             $GLOBALS['TL_LANG']['MSC']['helpWizard'],
             'style="vertical-align:text-bottom;"'
         );
-        $this->getEventDispatcher()->dispatch(ContaoEvents::IMAGE_GET_HTML, $event);
+        $this->getEventDispatcher()->dispatch($event, ContaoEvents::IMAGE_GET_HTML);
 
         return sprintf(
             ' <a href="%shelp.php?table=%s&amp;field=%s_%s" title="%s" rel="lightbox[help 610 80%]">%s</a>',
@@ -306,12 +306,12 @@ class SubDcaWidget extends Widget
             $arrField,
             $arrField['name'],
             $arrField['value'],
-            null,
+            '',
             $this->strTable,
             $this->objDca
         );
 
-        $this->getEventDispatcher()->dispatch(ContaoEvents::WIDGET_GET_ATTRIBUTES_FROM_DCA, $event);
+        $this->getEventDispatcher()->dispatch($event, ContaoEvents::WIDGET_GET_ATTRIBUTES_FROM_DCA);
 
         $objWidget = new $strClass($event->getResult());
 

@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,8 @@
  * @author     Jan Malte Gerth <anmeldungen@malte-gerth.de>
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -27,6 +28,8 @@ use Contao\Input;
 use Contao\InsertTags;
 use Contao\Session;
 use Doctrine\DBAL\Connection;
+use MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam;
+use MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName;
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Rules\SimpleQuery;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
@@ -57,7 +60,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     private $data = [];
 
     /**
-     * The filter params (should be array or null).
+     * The filter params (should be an array or null).
      *
      * @var array
      */
@@ -271,7 +274,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      */
     private function addParameter($parameter)
     {
-        $this->queryParameter[] = $parameter;
+        $this->queryParameter[] = $this->parseInsertTagsInternal($parameter);
     }
 
     /**
@@ -281,11 +284,8 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      */
     private function parseTable()
     {
-        $this->queryString = str_replace(
-            '{{table}}',
-            $this->collection->getMetaModel()->getTableName(),
-            $this->queryString
-        );
+        $this->queryString = $this->container->get(ReplaceTableName::class)
+            ->replace($this->collection->getMetaModel()->getTableName(), $this->queryString);
     }
 
     /**
@@ -329,16 +329,10 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     {
         switch (strtolower($source)) {
             case 'get':
-                return $this->container->get(Input::class)->get($valueName);
-
             case 'post':
-                return $this->container->get(Input::class)->post($valueName);
-
             case 'cookie':
-                return $this->container->get(Input::class)->cookie($valueName);
-
             case 'session':
-                return $this->container->get(Session::class)->get($valueName);
+                return $this->executeInsertTagReplaceParam($source, $arguments);
 
             case 'filter':
                 if (is_array($this->filterParameters)) {
@@ -364,6 +358,32 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
 
         // Unknown sources always resort to null.
         return null;
+    }
+
+    /**
+     * Execute the insert tag for replace parameters.
+     *
+     * @param string $source    The source.
+     * @param array  $arguments The arguments.
+     *
+     * @return mixed|string
+     */
+    private function executeInsertTagReplaceParam(string $source, array $arguments)
+    {
+        $filteredArguments = \array_intersect_key($arguments, \array_flip(['name', 'default']));
+        $imploded          = \array_reduce(
+            \array_keys($filteredArguments),
+            function ($carry, $item) use ($filteredArguments) {
+                return $carry .= ($carry ? '&' : '') . $item . '=' . $filteredArguments[$item];
+            }
+        );
+
+        $result = $this->container->get(ReplaceParam::class)
+            ->replace(\sprintf('{{param::%s?%s}}', $source, $imploded));
+
+        // @codingStandardsIgnoreStart
+        return (($results = @\unserialize($result, ['allowed_classes' => false])) ? $results : $result);
+        // @codingStandardsIgnoreEnd
     }
 
     /**
@@ -463,7 +483,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     private function parseRequestVars()
     {
         $this->queryString = preg_replace_callback(
-            '@\{\{param::([^}]*)\}\}@',
+            '@\{\{param::(.*)\}\}@',
             [$this, 'convertParameter'],
             $this->queryString
         );

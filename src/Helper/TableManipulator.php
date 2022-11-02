@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,8 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2020 The MetaModels team.
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -51,7 +52,7 @@ class TableManipulator
                 `sorting` int(10) unsigned NOT NULL default \'0\',
                 `tstamp` int(10) unsigned NOT NULL default \'0\',
                 PRIMARY KEY  (`id`)
-            ) ENGINE=MyISAM DEFAULT CHARSET=utf8';
+            ) CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB ROW_FORMAT = DYNAMIC';
 
     /**
      * SQL statement template to rename a table.
@@ -72,7 +73,7 @@ class TableManipulator
      * Third parameter is the new name of the column.
      * Fourth parameter is the new type of the column.
      */
-    const STATEMENT_RENAME_COLUMN = 'ALTER TABLE %s CHANGE COLUMN %s %s %s';
+    const STATEMENT_RENAME_COLUMN = 'ALTER TABLE `%s` CHANGE COLUMN `%s` `%s` %s';
 
     /**
      * SQL statement template to add a column to a table.
@@ -80,13 +81,13 @@ class TableManipulator
      * Second parameter is the column name.
      * Third parameter is the type of the new column.
      */
-    const STATEMENT_CREATE_COLUMN = 'ALTER TABLE %s ADD %s %s';
+    const STATEMENT_CREATE_COLUMN = 'ALTER TABLE `%s` ADD `%s` %s';
 
     /**
      * SQL statement template to delete a column from a table.
      * First parameter is the name of the column.
      */
-    const STATEMENT_DROP_COLUMN = 'ALTER TABLE %s DROP COLUMN %s';
+    const STATEMENT_DROP_COLUMN = 'ALTER TABLE `%s` DROP COLUMN `%s`';
 
     /**
      * SQL statement template to add a index to a column of a table.
@@ -94,45 +95,16 @@ class TableManipulator
      * second parameter is indextype
      * third parameter is name of the column.
      */
-    const STATEMENT_ADD_INDEX_COLUMN = 'ALTER TABLE %s ADD %s(%s)';
+    const STATEMENT_ADD_INDEX_COLUMN = 'ALTER TABLE `%s` ADD %s(`%s`)';
 
     /**
      * List of reserved MySQL identifiers.
      *
      * @var string[]
+     *
+     * @deprecated We work with backticks for table names and columns instead reserved words.
      */
-    protected static $reservedWords = array(
-        // MySQL 5.5 and previous.
-        'ACCESSIBLE', 'ADD', 'ALL', 'ALTER', 'ANALYZE', 'AND', 'AS', 'ASC', 'ASENSITIVE', 'BEFORE', 'BETWEEN', 'BIGINT',
-        'BINARY', 'BLOB', 'BOTH', 'BY', 'CALL', 'CASCADE', 'CASE', 'CHANGE', 'CHAR', 'CHARACTER', 'CHECK', 'COLLATE',
-        'COLUMN', 'CONDITION', 'CONSTRAINT', 'CONTINUE', 'CONVERT', 'CREATE', 'CROSS', 'CURRENT_DATE', 'CURRENT_TIME',
-        'CURRENT_TIMESTAMP', 'CURRENT_USER', 'CURSOR', 'DATABASE', 'DATABASES', 'DAY_HOUR', 'DAY_MICROSECOND',
-        'DAY_MINUTE', 'DAY_SECOND', 'DEC', 'DECIMAL', 'DECLARE', 'DEFAULT', 'DELAYED', 'DELETE', 'DESC', 'DESCRIBE',
-        'DETERMINISTIC', 'DISTINCT', 'DISTINCTROW', 'DIV', 'DOUBLE', 'DROP', 'DUAL', 'EACH', 'ELSE', 'ELSEIF',
-        'ENCLOSED', 'ESCAPED', 'EXISTS', 'EXIT', 'EXPLAIN', 'FALSE', 'FETCH', 'FLOAT', 'FLOAT4', 'FLOAT8', 'FOR',
-        'FORCE', 'FOREIGN', 'FROM', 'FULLTEXT', 'GENERAL', 'GRANT', 'GROUP', 'HAVING', 'HIGH_PRIORITY',
-        'HOUR_MICROSECOND', 'HOUR_MINUTE', 'HOUR_SECOND', 'IF', 'IGNORE', 'IGNORE_SERVER_IDS', 'IN', 'INDEX', 'INFILE',
-        'INNER', 'INOUT', 'INSENSITIVE', 'INSERT', 'INT', 'INT1', 'INT2', 'INT3', 'INT4', 'INT8', 'INTEGER', 'INTERVAL',
-        'INTO', 'IS', 'ITERATE', 'JOIN', 'KEY', 'KEYS', 'KILL', 'LEADING', 'LEAVE', 'LEFT', 'LIKE', 'LIMIT', 'LINEAR',
-        'LINES', 'LOAD', 'LOCALTIME', 'LOCALTIMESTAMP', 'LOCK', 'LONG', 'LONGBLOB', 'LONGTEXT', 'LOOP', 'LOW_PRIORITY',
-        'MASTER_HEARTBEAT_PERIOD', 'MASTER_SSL_VERIFY_SERVER_CERT', 'MATCH', 'MAXVALUE', 'MEDIUMBLOB', 'MEDIUMINT',
-        'MEDIUMTEXT', 'MIDDLEINT', 'MINUTE_MICROSECOND', 'MINUTE_SECOND', 'MOD', 'MODIFIES', 'NATURAL', 'NOT',
-        'NO_WRITE_TO_BINLOG', 'NULL', 'NUMERIC', 'ON', 'OPTIMIZE', 'OPTION', 'OPTIONALLY', 'OR', 'ORDER', 'OUT',
-        'OUTER', 'OUTFILE', 'PRECISION', 'PRIMARY', 'PROCEDURE', 'PURGE', 'RANGE', 'READ', 'READS', 'READ_WRITE',
-        'REAL', 'REFERENCES', 'REGEXP', 'RELEASE', 'RENAME', 'REPEAT', 'REPLACE', 'REQUIRE', 'RESIGNAL', 'RESTRICT',
-        'RETURN', 'REVOKE', 'RIGHT', 'RLIKE', 'SCHEMA', 'SCHEMAS', 'SECOND_MICROSECOND', 'SELECT', 'SENSITIVE',
-        'SEPARATOR', 'SET', 'SHOW', 'SIGNAL', 'SLOW', 'SMALLINT', 'SPATIAL', 'SPECIFIC', 'SQL', 'SQLEXCEPTION',
-        'SQLSTATE', 'SQLWARNING', 'SQL_BIG_RESULT', 'SQL_CALC_FOUND_ROWS', 'SQL_SMALL_RESULT', 'SSL', 'STARTING',
-        'STRAIGHT_JOIN', 'TABLE', 'TERMINATED', 'THEN', 'TINYBLOB', 'TINYINT', 'TINYTEXT', 'TO', 'TRAILING', 'TRIGGER',
-        'TRUE', 'UNDO', 'UNION', 'UNIQUE', 'UNLOCK', 'UNSIGNED', 'UPDATE', 'USAGE', 'USE', 'USING', 'UTC_DATE',
-        'UTC_TIME', 'UTC_TIMESTAMP', 'VALUES', 'VARBINARY', 'VARCHAR', 'VARCHARACTER', 'VARYING', 'WHEN', 'WHERE',
-        'WHILE', 'WITH', 'WRITE', 'XOR', 'YEAR_MONTH', 'ZEROFILL',
-        // New in MySQL 5.6.
-        'GET', 'IO_AFTER_GTIDS', 'IO_BEFORE_GTIDS, MASTER_BIND', 'ONE_SHOT', 'PARTITION', 'SQL_AFTER_GTIDS',
-        'SQL_BEFORE_GTIDS',
-        // New in MySQL 5.7.
-        'NONBLOCKING',
-    );
+    protected static $reservedWords = [];
 
     /**
      * List of reserved column post fix.
@@ -176,6 +148,8 @@ class TableManipulator
      * @param string $word The word to test.
      *
      * @return bool
+     *
+     * @deprecated We work with backticks for table names and columns instead reserved words.
      */
     public function isReservedWord($word)
     {
@@ -594,7 +568,9 @@ class TableManipulator
 
                 // If there is pre-existing data in the table, we need to provide a separate 'vargroup' value to all of
                 // them, we can do this safely by setting all vargroups to the id of the base item.
-                $this->connection->query(sprintf('UPDATE %s SET vargroup=id, varbase=1', $strTableName));
+                $this->connection->executeQuery(
+                    sprintf('UPDATE `%1$s` SET %1$s.vargroup=id, %1$s.varbase=1', $strTableName)
+                );
             }
         } else {
             if ($this->connection->getSchemaManager()->tablesExist([$strTableName])

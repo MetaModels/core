@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -66,5 +67,15 @@ class ContentElementCallback extends AbstractContentElementAndModuleCallback
         }
 
         return $this->getTemplateList('ce_' . $type);
+    }
+
+    /**
+     * Fetch the template group for the current MetaModel content element.
+     *
+     * @return array
+     */
+    public function getPaginationTemplates(): array
+    {
+        return $this->getTemplateList('mm_pagination');
     }
 }

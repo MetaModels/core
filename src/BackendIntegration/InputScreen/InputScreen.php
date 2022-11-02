@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,8 @@
  * @author     Alexander Menk <a.menk@imi.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,6 +26,7 @@
 namespace MetaModels\BackendIntegration\InputScreen;
 
 use Contao\StringUtil;
+use Contao\System;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\ConditionChainInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\NotCondition;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
@@ -32,6 +34,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\
 use MetaModels\Events\CreatePropertyConditionEvent;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
+use MetaModels\ITranslatedMetaModel;
 
 /**
  * Implementation of IInputScreen.
@@ -130,21 +133,13 @@ class InputScreen implements IInputScreen
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function translateLegend($legend, $metaModel)
     {
         $arrLegend = StringUtil::deserialize($legend['legendtitle']);
         if (is_array($arrLegend)) {
-            // Try to use the language string from the array.
-            $strLegend = $arrLegend[$GLOBALS['TL_LANGUAGE']];
-            if (!$strLegend) {
-                // Use the fallback.
-                $strLegend = $arrLegend[$metaModel->getFallbackLanguage()];
-                if (!$strLegend) {
-                    // Last resort, simply "legend". See issue #926.
-                    $strLegend = 'legend' . (count($this->legends) + 1);
-                }
-            }
+            $strLegend = $this->extractLegendName($arrLegend);
         } else {
             $strLegend = $legend['legendtitle'] ? $legend['legendtitle'] : 'legend';
         }
@@ -159,6 +154,49 @@ class InputScreen implements IInputScreen
         );
 
         return $legendName;
+    }
+
+    /**
+     * Extract the legend name in the current requested language.
+     *
+     * @param array<string, string> $legend    The legend name list.
+     * @param IMetaModel            $metaModel The metamodel the legend belongs to.
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    private function extractLegendName(array $legend, IMetaModel $metaModel): string
+    {
+        // Current backend language.
+        $language = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
+        if (null !== ($result = $legend[$language] ?? null)) {
+            return $result;
+        }
+        // Is it a regional locale?
+        if (false !== strpos($language, '_')) {
+            $chunks   = explode('_', $language);
+            $language = array_shift($chunks);
+            unset($chunks);
+            if (null !== ($result = $legend[$language] ?? null)) {
+                return $result;
+            }
+        }
+
+        // Try fallback language then.
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            if (null !== ($result = $legend[$metaModel->getMainLanguage()] ?? null)) {
+                return $result;
+            }
+        } else {
+            if (null !== ($result = $legend[$metaModel->getFallbackLanguage()] ?? null)) {
+                return $result;
+            }
+        }
+
+        // Last resort, simply "legend". See issue #926.
+        return 'legend' . (count($this->legends) + 1);
     }
 
     /**
@@ -281,17 +319,14 @@ class InputScreen implements IInputScreen
      * @return PropertyConditionInterface
      *
      * @throws \RuntimeException When a condition has not been transformed into a valid handling instance.
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     protected function transformCondition($condition)
     {
-        $dispatcher = $GLOBALS['container']['event-dispatcher'];
+        $dispatcher = System::getContainer()->get('event_dispatcher');
         $event      = new CreatePropertyConditionEvent($condition, $this->getMetaModel());
 
         /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher */
-        $dispatcher->dispatch(CreatePropertyConditionEvent::NAME, $event);
+        $dispatcher->dispatch($event, CreatePropertyConditionEvent::NAME);
 
         if ($event->getInstance() === null) {
             throw new \RuntimeException(sprintf(

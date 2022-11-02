@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,6 +26,7 @@ use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
 use MetaModels\IFactory;
 use MetaModels\IMetaModel;
+use MetaModels\ITranslatedMetaModel;
 
 /**
  * This class obtains information from the database about input screens.
@@ -105,11 +107,17 @@ class InputScreenInformationBuilder
         }
         $caption     = ['' => $metaModel->getName()];
         $description = ['' => $metaModel->getName()];
+        $fallback    = null;
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            $fallback = $metaModel->getMainLanguage();
+        } elseif ($metaModel->isTranslated(false)) {
+            $fallback = $metaModel->getFallbackLanguage();
+        }
         foreach (StringUtil::deserialize($screen['backendcaption'], true) as $languageEntry) {
             $langCode               = $languageEntry['langcode'];
             $caption[$langCode]     = !empty($label = $languageEntry['label']) ? $label : $caption[''];
             $description[$langCode] = !empty($title = $languageEntry['description']) ? $title : $description[''];
-            if ($metaModel->getFallbackLanguage() === $langCode) {
+            if ($fallback === $langCode) {
                 $caption['']     = $label;
                 $description[''] = $title;
             }
@@ -203,16 +211,17 @@ class InputScreenInformationBuilder
             );
 
             return $column;
-        }, $builder
-            ->select('*')
-            ->from('tl_metamodel_dcasetting')
-            ->where('pid=:pid')
-            ->andWhere('published=:published')
-            ->setParameter('pid', $inputScreenId)
-            ->setParameter('published', 1)
-            ->orderBy('sorting')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC));
+        },
+            $builder
+                ->select('t.*')
+                ->from('tl_metamodel_dcasetting', 't')
+                ->where('t.pid=:pid')
+                ->andWhere('t.published=:published')
+                ->setParameter('pid', $inputScreenId)
+                ->setParameter('published', 1)
+                ->orderBy('t.sorting')
+                ->execute()
+                ->fetchAll(\PDO::FETCH_ASSOC));
     }
 
     /**
@@ -235,8 +244,8 @@ class InputScreenInformationBuilder
             ->andWhere('setting.published=1')
             ->andWhere('dca.id=:screenId')
             ->setParameter('screenId', $inputScreenId)
-            ->orderBy('pid')
-            ->addOrderBy('sorting')
+            ->orderBy('cond.pid')
+            ->addOrderBy('cond.sorting')
             ->execute()
             ->fetchAll(\PDO::FETCH_ASSOC);
     }
@@ -280,14 +289,15 @@ class InputScreenInformationBuilder
             }
 
             return $information;
-        }, $builder
-            ->select('*')
-            ->from('tl_metamodel_dca_sortgroup')
-            ->where('pid=:screenId')
-            ->setParameter('screenId', $inputScreenId)
-            ->orderBy('sorting')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC));
+        },
+            $builder
+                ->select('t.*')
+                ->from('tl_metamodel_dca_sortgroup', 't')
+                ->where('t.pid=:screenId')
+                ->setParameter('screenId', $inputScreenId)
+                ->orderBy('t.sorting')
+                ->execute()
+                ->fetchAll(\PDO::FETCH_ASSOC));
     }
 
     /**
@@ -303,15 +313,8 @@ class InputScreenInformationBuilder
     private function convertLegends(array $properties, IMetaModel $metaModel, array $conditions): array
     {
         $result = [];
-        $label  = [];
-        if ($trans = $metaModel->isTranslated()) {
-            foreach ($metaModel->getAvailableLanguages() as $availableLanguage) {
-                $label[$availableLanguage] = $metaModel->getName();
-            }
-        } else {
-            $label[$metaModel->getActiveLanguage()] = $metaModel->getName();
-        }
-
+        $trans  = (($metaModel instanceof ITranslatedMetaModel) || $metaModel->isTranslated(false));
+        $label  = $this->buildLabel($trans, $metaModel);
         $legend = [
             'label'      => $label,
             'hide'       => false,
@@ -329,7 +332,12 @@ class InputScreenInformationBuilder
             ];
         };
 
-        $fallbackLanguage = $trans ? $metaModel->getFallbackLanguage() : null;
+        $fallbackLanguage = null;
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            $fallbackLanguage = $metaModel->getMainLanguage();
+        } elseif ($metaModel->isTranslated(false)) {
+            $fallbackLanguage = $metaModel->getFallbackLanguage();
+        }
         foreach ($properties as $property) {
             switch ($property['dcatype']) {
                 case 'legend':
@@ -350,6 +358,35 @@ class InputScreenInformationBuilder
     }
 
     /**
+     * Build the label.
+     *
+     * @param bool       $isTranslated Flag if the MetaModel is translated.
+     * @param IMetaModel $metaModel    The MetaModel instance.
+     *
+     * @return array
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    private function buildLabel(bool $isTranslated, IMetaModel $metaModel): array
+    {
+        if ($isTranslated) {
+            $label = [];
+            foreach (($metaModel instanceof ITranslatedMetaModel)
+                ? $metaModel->getLanguages()
+                : $metaModel->getAvailableLanguages() as $availableLanguage
+            ) {
+                $label[$availableLanguage] = $metaModel->getName();
+            }
+            $label['default'] = $metaModel->getName();
+
+            return $label;
+        }
+
+        return ['default' => $metaModel->getName()];
+    }
+
+    /**
      * Convert a legend property.
      *
      * @param array       $property  The property information to convert.
@@ -366,7 +403,7 @@ class InputScreenInformationBuilder
             $result['legend' . (\count($result) + 1)] = $legend;
         }
         if (null === $fallback) {
-            $label = ['' => $property['legendtitle']];
+            $label = ['default' => $property['legendtitle']];
         } else {
             $label            = unserialize($property['legendtitle'], ['allowed_classes' => false]);
             $label['default'] = $label[$fallback];
@@ -375,7 +412,7 @@ class InputScreenInformationBuilder
             'label'      => $label,
             'hide'       => (bool) $property['legendhide'],
             'properties' => [],
-            'condition' => $condition($property)
+            'condition'  => $condition($property)
         ];
     }
 
@@ -394,7 +431,7 @@ class InputScreenInformationBuilder
             return;
         }
         $legend['properties'][] = [
-            'name'       => $property['col_name'],
+            'name'      => $property['col_name'],
             'condition' => $condition($property)
         ];
     }

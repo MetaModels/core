@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,9 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -29,6 +31,8 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\LegendInterface;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\PropertyInterface;
 use Doctrine\DBAL\Driver\Connection;
+use MetaModels\IMetaModelsServiceContainer;
+use MetaModels\MetaModelsServiceContainer;
 
 /**
  * Condition for the default palette.
@@ -114,9 +118,14 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
     public function getInputScreenRenderMode($value)
     {
         if (!isset(self::$stateBuffer[$value])) {
-            $statement = $this->connection->prepare('SELECT rendermode FROM tl_metamodel_dca WHERE id=? LIMIT 0,1');
-            $statement->bindValue(1, $value);
-            $statement->execute();
+            $statement =$this->connection
+                ->createQueryBuilder()
+                ->select('t.rendermode')
+                ->from('tl_metamodel_dca', 't')
+                ->where('t.id=:id')
+                ->setParameter('id', $value)
+                ->setMaxResults(1)
+                ->execute();
 
             self::$stateBuffer[$value] = $statement->fetch(\PDO::FETCH_OBJ)->rendermode;
         }
@@ -156,11 +165,10 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
      *
      * @return IMetaModelsServiceContainer
      *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @deprecated
      */
-    protected function getServiceContainer()
+    protected function getServiceContainer(): IMetaModelsServiceContainer
     {
-        return $GLOBALS['container']['metamodels-service-container'];
+        return System::getContainer()->get(MetaModelsServiceContainer::class);
     }
 }

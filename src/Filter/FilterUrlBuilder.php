@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,8 +13,10 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Andreas Fischer <anfischer@kaffee-partner.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -98,6 +100,9 @@ class FilterUrlBuilder
      * @param FilterUrl $filterUrl The filter URL.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function generate(FilterUrl $filterUrl)
     {
@@ -124,6 +129,10 @@ class FilterUrlBuilder
         if (!empty($jumpTo['rootUseSSL'])) {
             $parameters['_ssl'] = (bool) $jumpTo['rootUseSSL'];
         }
+
+        // Initialize with current language - locale is MANDATORY.
+        // See https://github.com/contao/contao/pull/4119
+        $parameters['_locale'] = $GLOBALS['TL_LANGUAGE'];
 
         if (null !== ($locale = $jumpTo['language'] ?? null)) {
             $parameters['_locale'] = $locale;
@@ -334,6 +343,8 @@ class FilterUrlBuilder
      * @param string|null $locale The current locale or null if none requested.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getFolderUrlFragments(string $alias, string $host, string $locale = null): ?array
     {
@@ -353,6 +364,10 @@ class FilterUrlBuilder
         unset($pages);
 
         $pages = [];
+
+        $locale = ($locale)
+            ? \str_replace('_', '-', $locale)
+            : $locale;
 
         if (!$this->isLocalePrepended) {
             // Use the first result (see #4872)

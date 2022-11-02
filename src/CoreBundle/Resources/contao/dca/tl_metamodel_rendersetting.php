@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,9 @@
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     David Molineus <david.molineus@netzmacht.de>
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -44,6 +46,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
     (
         'data_provider'  => array
         (
+            'default'      => array
+            (
+                'source' => 'tl_metamodel_rendersetting'
+            ),
             'parent'       => array
             (
                 'source' => 'tl_metamodel_rendersettings'
@@ -67,6 +73,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
                     ),
                 ),
                 'filter' => array
+                (
+                    array
+                    (
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ),
+                ),
+                'inverse' => array
                 (
                     array
                     (
@@ -159,12 +174,6 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
             (
                 'label' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['cut'],
                 'icon'  => 'cut.svg'
-            ),
-            'copy'   => array
-            (
-                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['copy'],
-                'href'  => 'act=copy',
-                'icon'  => 'copy.svg'
             ),
             'delete' => array
             (
@@ -271,7 +280,8 @@ $GLOBALS['TL_DCA']['tl_metamodel_rendersetting'] = array
         ),
         'enabled'          => array
         (
-            'sql' => "char(1) NOT NULL default ''"
+            'default' => 1,
+            'sql'     => "char(1) NOT NULL default ''"
         )
     )
 );

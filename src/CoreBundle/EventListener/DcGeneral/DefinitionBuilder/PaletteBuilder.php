@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -158,11 +159,11 @@ class PaletteBuilder
      */
     private function createProperty(
         PropertyInterface $property,
-        $propertyName,
-        $variantHandling,
+        string $propertyName,
+        bool $variantHandling,
         ConditionInterface $condition = null,
         ConditionInterface $legendCondition = null
-    ) {
+    ): Property {
         $paletteProperty = new Property($propertyName);
 
         $extra = $property->getExtra();
@@ -172,13 +173,13 @@ class PaletteBuilder
         if (isset($extra['readonly'])) {
             $chain->addCondition(new BooleanCondition($extra['readonly']));
         }
-
-        $chain = new PropertyConditionChain();
-        $paletteProperty->setVisibleCondition($chain);
-        // If variants, do show only if allowed.
+        // If variants, enable editing only if allowed.
         if ($variantHandling) {
             $chain->addCondition(new IsVariantAttribute());
         }
+
+        $chain = new PropertyConditionChain();
+        $paletteProperty->setVisibleCondition($chain);
         $chain->addCondition(
             new BooleanCondition(
                 !((isset($extra['doNotShow']) && $extra['doNotShow'])

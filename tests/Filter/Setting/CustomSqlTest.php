@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,6 +26,8 @@ use Contao\Input;
 use Contao\InsertTags;
 use Contao\Session;
 use Doctrine\DBAL\Connection;
+use MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam;
+use MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName;
 use MetaModels\Filter\Filter;
 use MetaModels\Filter\Setting\CustomSql;
 use MetaModels\Filter\Setting\ICollection;
@@ -38,6 +41,8 @@ use MetaModels\Filter\Rules\SimpleQuery;
  * Unit test for testing the CustomSql filter setting.
  *
  * @covers \MetaModels\Filter\Setting\CustomSql
+ * @covers \MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam
+ * @covers \MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName
  */
 class CustomSqlTest extends AutoLoadingTestCase
 {
@@ -81,7 +86,7 @@ class CustomSqlTest extends AutoLoadingTestCase
         }
         if (!isset($services[Session::class])) {
         $services[Session::class] = $this
-            ->getMockBuilder(Adapter::class)
+            ->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMock();
@@ -93,6 +98,7 @@ class CustomSqlTest extends AutoLoadingTestCase
                 ->setMethods(['get'])
                 ->getMockForAbstractClass();
         }
+
 
         $container = new Container();
 
@@ -106,6 +112,13 @@ class CustomSqlTest extends AutoLoadingTestCase
         ] as $serviceId) {
             $container->set($serviceId, $services[$serviceId]);
         }
+
+        $container->set(ReplaceTableName::class, new ReplaceTableName());
+        $container->set(
+            ReplaceParam::class,
+            new ReplaceParam($services[Input::class], $services[Session::class])
+        );
+
 
         return new CustomSql($filterSetting, $properties, $container);
     }
@@ -154,8 +167,8 @@ class CustomSqlTest extends AutoLoadingTestCase
     {
         $sql = $this->generateSql($setting, $filterUrl);
 
-        $this->assertEquals($expectedSql, $sql['sql'], $message);
-        $this->assertEquals($expectedParameters, $sql['params'], $message);
+        self::assertEquals($expectedSql, $sql['sql'], $message);
+        self::assertEquals($expectedParameters, $sql['params'], $message);
     }
 
     /**
@@ -234,7 +247,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             ->disableOriginalConstructor()
             ->setMethods(['cookie', 'get', 'post'])
             ->getMock();
-        $input->expects($this->once())->method('get')->with('category')->willReturn(null);
+        $input->expects(self::once())->method('get')->with('category')->willReturn(null);
 
         $setting = $this->mockCustomSql(
             ['customsql' => 'SELECT id FROM tableName WHERE catname={{param::get?name=category&default=defaultcat}}'],
@@ -252,6 +265,35 @@ class CustomSqlTest extends AutoLoadingTestCase
     }
 
     /**
+     * Test request variable replacement with insert tag.
+     *
+     * @return void
+     */
+    public function testRequestGetWithEmptyParameterAndInsertTag()
+    {
+        $input = $this
+            ->getMockBuilder(Adapter::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['cookie', 'get', 'post'])
+            ->getMock();
+        $input->expects(self::once())->method('get')->with('category')->willReturn(null);
+
+        $setting = $this->mockCustomSql(
+            ['customsql' => 'SELECT id FROM tableName WHERE catname={{param::get?name=category&default={{page::alias}}}}'],
+            'tableName',
+            [Input::class => $input]
+        );
+
+        $this->assertGeneratedSqlIs(
+            $setting,
+            'SELECT id FROM tableName WHERE catname=?',
+            ['__page__alias__'],
+            [],
+            'See https://github.com/MetaModels/core/issues/880'
+        );
+    }
+
+    /**
      * Test request variable replacement.
      *
      * @return void
@@ -264,7 +306,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             ->setMethods(['cookie', 'get', 'post'])
             ->getMock();
         $input
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('get')
             ->with('category')
             ->willReturn('category name');
@@ -318,7 +360,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             ->setMethods(['cookie', 'get', 'post'])
             ->getMock();
         $input
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('cookie')
             ->with('category')
             ->willReturn('category name');
@@ -340,12 +382,12 @@ class CustomSqlTest extends AutoLoadingTestCase
     public function testValueFromSession()
     {
         $session = $this
-            ->getMockBuilder(Adapter::class)
+            ->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['get'])
             ->getMock();
         $session
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('get')
             ->with('category')
             ->willReturn('category name');
@@ -357,6 +399,69 @@ class CustomSqlTest extends AutoLoadingTestCase
         );
 
         $this->assertGeneratedSqlIs($setting, 'SELECT id FROM tableName WHERE catname=?', ['category name'], []);
+    }
+
+    /**
+     * Test variable replacement via session value.
+     *
+     * @return void
+     */
+    public function testValueFromSessionAggregated()
+    {
+        $session = $this
+            ->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['get'])
+            ->getMock();
+        $session
+            ->expects(self::once())
+            ->method('get')
+            ->with('category')
+            ->willReturn(['first', 'second']);
+
+        $setting = $this->mockCustomSql(
+            ['customsql' => 'SELECT id FROM tableName WHERE catname IN ({{param::session?name=category&aggregate}})'],
+            'tableName',
+            [Session::class => $session]
+        );
+
+        $this->assertGeneratedSqlIs(
+            $setting,
+            'SELECT id FROM tableName WHERE catname IN (?,?)',
+            [
+                'first',
+                'second'
+            ],
+            []
+        );
+    }
+
+    /**
+     * Test request variable replacement.
+     *
+     * @return void
+     */
+    public function testValueFromSessionEmpty()
+    {
+        $session = $this
+            ->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['get'])
+            ->getMock();
+        $session->expects(self::once())->method('get')->with('category')->willReturn(null);
+
+        $setting = $this->mockCustomSql(
+            ['customsql' => 'SELECT id FROM tableName WHERE catname={{param::session?name=category&default=defaultcat}}'],
+            'tableName',
+            [Session::class => $session]
+        );
+
+        $this->assertGeneratedSqlIs(
+            $setting,
+            'SELECT id FROM tableName WHERE catname=?',
+            ['defaultcat'],
+            []
+        );
     }
 
     /**
@@ -392,7 +497,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             ->setMethods(['cookie', 'get', 'post'])
             ->getMock();
         $input
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('get')
             ->with('categories')
             ->willReturn(['first', 'second']);
@@ -427,7 +532,7 @@ class CustomSqlTest extends AutoLoadingTestCase
             ->setMethods(['cookie', 'get', 'post'])
             ->getMock();
         $input
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('get')
             ->with('ids')
             ->willReturn(['1', '2']);

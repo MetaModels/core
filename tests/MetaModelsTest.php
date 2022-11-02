@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,6 +25,7 @@ use Doctrine\DBAL\Query\Expression\ExpressionBuilder;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Statement;
 use MetaModels\MetaModel;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -67,16 +68,16 @@ class MetaModelsTest extends TestCase
         }
 
         $metaModel = new MetaModel($serialized);
-        $this->assertEmpty($metaModel->getAttributes());
+        self::assertEmpty($metaModel->getAttributes());
 
         foreach ($values as $key => $value) {
-            $this->assertEquals($value, $metaModel->get($key), $key);
+            self::assertEquals($value, $metaModel->get($key), $key);
         }
 
         $metaModel = new MetaModel($values);
 
         foreach ($values as $key => $value) {
-            $this->assertEquals($value, $metaModel->get($key), $key);
+            self::assertEquals($value, $metaModel->get($key), $key);
         }
     }
 
@@ -91,9 +92,9 @@ class MetaModelsTest extends TestCase
 
         $reflection = new \ReflectionMethod($metaModel, 'buildDatabaseParameterList');
         $reflection->setAccessible(true);
-        $this->assertEquals('?', $reflection->invoke($metaModel, array(1)));
-        $this->assertEquals('?,?', $reflection->invoke($metaModel, array(1,2)));
-        $this->assertEquals('?,?,?,?,?,?', $reflection->invoke($metaModel, array(1, 2, 'fooo', 'bar', null, 'test')));
+        self::assertEquals('?', $reflection->invoke($metaModel, array(1)));
+        self::assertEquals('?,?', $reflection->invoke($metaModel, array(1, 2)));
+        self::assertEquals('?,?,?,?,?,?', $reflection->invoke($metaModel, array(1, 2, 'fooo', 'bar', null, 'test')));
     }
 
     /**
@@ -124,12 +125,12 @@ class MetaModelsTest extends TestCase
                     $builder
                         ->expects($this->once())
                         ->method('select')
-                        ->with('*')
+                        ->with('t.*')
                         ->willReturn($builder);
                     $builder
                         ->expects($this->once())
                         ->method('from')
-                        ->with('mm_test_retrieve')
+                        ->with('mm_test_retrieve', 't')
                         ->willReturn($builder);
 
                     $expr = $this
@@ -146,7 +147,7 @@ class MetaModelsTest extends TestCase
                     $builder
                         ->expects($this->once())
                         ->method('where')
-                        ->with('id IN (:values)')
+                        ->with('t.id IN (:values)')
                         ->willReturn($builder);
 
                     $builder
@@ -185,16 +186,16 @@ class MetaModelsTest extends TestCase
             ])
         );
 
-        $this->assertEquals($metaModel->getName(), 'Test RetrieveSystemColumns');
+        self::assertEquals($metaModel->getName(), 'Test RetrieveSystemColumns');
 
         $item = $metaModel->findById(1);
 
-        $this->assertEquals(1, $item->get('id'));
-        $this->assertEquals(0, $item->get('pid'));
-        $this->assertEquals(1, $item->get('sorting'));
-        $this->assertEquals(343094400, $item->get('tstamp'));
-        $this->assertNull($item->get('varbase'));
-        $this->assertNull($item->get('vargroup'));
+        self::assertEquals(1, $item->get('id'));
+        self::assertEquals(0, $item->get('pid'));
+        self::assertEquals(1, $item->get('sorting'));
+        self::assertEquals(343094400, $item->get('tstamp'));
+        self::assertNull($item->get('varbase'));
+        self::assertNull($item->get('vargroup'));
     }
 
     /**
@@ -214,17 +215,17 @@ class MetaModelsTest extends TestCase
             ])
             ->getMock();
         $metaModel
-            ->expects($this->exactly(6))
+            ->expects(self::exactly(6))
             ->method('getMatchingIds')
             ->willReturn([4, 3, 2, 1]);
 
         /** @var MetaModel $metaModel */
-        $this->assertSame([1, 2, 3, 4], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id'));
-        $this->assertSame([1, 2], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 0, 2));
-        $this->assertSame([3, 4], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 2, 2));
-        $this->assertSame([3], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 2, 1));
-        $this->assertSame([], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 20, 0));
-        $this->assertSame([2, 3, 4], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 1, 10));
+        self::assertSame([1, 2, 3, 4], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id'));
+        self::assertSame([1, 2], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 0, 2));
+        self::assertSame([3, 4], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 2, 2));
+        self::assertSame([3], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 2, 1));
+        self::assertSame([], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 20, 0));
+        self::assertSame([2, 3, 4], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'id', 1, 10));
     }
 
     /**
@@ -249,12 +250,12 @@ class MetaModelsTest extends TestCase
                         $builder
                             ->expects($this->once())
                             ->method('select')
-                            ->with('id')
+                            ->with('t.id')
                             ->willReturn($builder);
                         $builder
                             ->expects($this->once())
                             ->method('from')
-                            ->with('mm_test_retrieve')
+                            ->with('mm_test_retrieve', 't')
                             ->willReturn($builder);
 
                         $expr = $this
@@ -271,7 +272,7 @@ class MetaModelsTest extends TestCase
                         $builder
                             ->expects($this->once())
                             ->method('where')
-                            ->with('id IN (:values)')
+                            ->with('t.id IN (:values)')
                             ->willReturn($builder);
 
                         $builder
@@ -306,17 +307,17 @@ class MetaModelsTest extends TestCase
             ])
             ->getMock();
         $metaModel
-            ->expects($this->exactly(6))
+            ->expects(self::exactly(6))
             ->method('getMatchingIds')
             ->willReturn([4, 3, 2, 1]);
 
         /** @var MetaModel $metaModel */
-        $this->assertSame(array(1,2,3,4), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid'));
-        $this->assertSame(array(1,2), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 0, 2));
-        $this->assertSame(array(3,4), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 2, 2));
-        $this->assertSame(array(3), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 2, 1));
-        $this->assertSame(array(), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 20, 0));
-        $this->assertSame(array(2,3,4), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 1, 10));
+        self::assertSame(array(1, 2, 3, 4), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid'));
+        self::assertSame(array(1, 2), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 0, 2));
+        self::assertSame(array(3, 4), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 2, 2));
+        self::assertSame(array(3), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 2, 1));
+        self::assertSame(array(), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 20, 0));
+        self::assertSame(array(2, 3, 4), $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid', 1, 10));
     }
 
     /**
@@ -341,12 +342,12 @@ class MetaModelsTest extends TestCase
                         $builder
                             ->expects($this->once())
                             ->method('select')
-                            ->with('id')
+                            ->with('t.id')
                             ->willReturn($builder);
                         $builder
                             ->expects($this->once())
                             ->method('from')
-                            ->with('mm_test_retrieve')
+                            ->with('mm_test_retrieve', 't')
                             ->willReturn($builder);
 
                         $expr = $this
@@ -363,7 +364,7 @@ class MetaModelsTest extends TestCase
                         $builder
                             ->expects($this->once())
                             ->method('where')
-                            ->with('id IN (:values)')
+                            ->with('t.id IN (:values)')
                             ->willReturn($builder);
 
                         $builder
@@ -398,13 +399,13 @@ class MetaModelsTest extends TestCase
             ])
             ->getMock();
         $metaModel
-            ->expects($this->exactly(2))
+            ->expects(self::exactly(2))
             ->method('getMatchingIds')
             ->willReturnOnConsecutiveCalls([4, 3, 2, 1], [3, 2]);
 
         /** @var MetaModel $metaModel */
-        $this->assertSame([1, 2, 3, 4], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid'));
-        $this->assertSame([2, 3], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid'));
+        self::assertSame([1, 2, 3, 4], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid'));
+        self::assertSame([2, 3], $metaModel->getIdsFromFilter($metaModel->getEmptyFilter(), 'pid'));
     }
 
     /**
@@ -426,12 +427,12 @@ class MetaModelsTest extends TestCase
             )
             ->getMock();
         $metaModel
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getMatchingIds')
             ->willReturn([]);
 
         /** @var MetaModel $metaModel */
-        $this->assertEquals(0, $metaModel->getCount($metaModel->getEmptyFilter()));
+        self::assertEquals(0, $metaModel->getCount($metaModel->getEmptyFilter()));
     }
 
     /**
@@ -455,12 +456,12 @@ class MetaModelsTest extends TestCase
                         $builder
                             ->expects($this->once())
                             ->method('select')
-                            ->with('COUNT(id)')
+                            ->with('COUNT(t.id)')
                             ->willReturn($builder);
                         $builder
                             ->expects($this->once())
                             ->method('from')
-                            ->with('mm_test_retrieve')
+                            ->with('mm_test_retrieve', 't')
                             ->willReturn($builder);
 
                         $expr = $this
@@ -477,7 +478,7 @@ class MetaModelsTest extends TestCase
                         $builder
                             ->expects($this->once())
                             ->method('where')
-                            ->with('id IN (:values)')
+                            ->with('t.id IN (:values)')
                             ->willReturn($builder);
 
                         $builder
@@ -506,12 +507,12 @@ class MetaModelsTest extends TestCase
             ])
             ->getMock();
         $metaModel
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getMatchingIds')
             ->willReturn([4, 3, 2, 1]);
 
         /** @var MetaModel $metaModel */
-        $this->assertEquals(4, $metaModel->getCount($metaModel->getEmptyFilter()));
+        self::assertEquals(4, $metaModel->getCount($metaModel->getEmptyFilter()));
     }
 
     /**
@@ -519,7 +520,7 @@ class MetaModelsTest extends TestCase
      *
      * @param array $queryBuilders The query builder list.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|Connection
+     * @return MockObject|Connection
      */
     private function mockConnection(array $queryBuilders)
     {
@@ -527,12 +528,12 @@ class MetaModelsTest extends TestCase
 
         if ([] !== $queryBuilders) {
             $connection
-                ->expects($this->exactly(count($queryBuilders)))
+                ->expects(self::exactly(count($queryBuilders)))
                 ->method('createQueryBuilder')
                 ->willReturnOnConsecutiveCalls(...$queryBuilders);
         } else {
             $connection
-                ->expects($this->never())
+                ->expects(self::never())
                 ->method('createQueryBuilder');
         }
 

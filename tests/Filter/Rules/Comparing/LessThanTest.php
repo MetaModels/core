@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2021 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -22,6 +22,7 @@ namespace MetaModels\Test\Filter\Rules\Comparing;
 
 use MetaModels\Filter\Rules\Comparing\LessThan;
 use PHPUnit\Framework\TestCase;
+use MetaModels\Attribute\IAttribute;
 
 /**
  * Test greater-than filter rules.
@@ -37,12 +38,12 @@ class LessThanTest extends TestCase
      */
     public function testGreaterThan()
     {
-        $attribute = $this->getMockForAbstractClass('MetaModels\\Attribute\\IAttribute');
-        $attribute->expects($this->once())->method('filterLessThan')->with(10, false)->willReturn(array(1, 2, 3));
+        $attribute = $this->getMockForAbstractClass(IAttribute::class);
+        $attribute->expects(self::once())->method('filterLessThan')->with(10, false)->willReturn(array(1, 2, 3));
 
         $rule = new LessThan($attribute, 10);
 
-        $this->assertEquals(array(1, 2, 3), $rule->getMatchingIds());
+        self::assertEquals(array(1, 2, 3), $rule->getMatchingIds());
     }
 
     /**
@@ -52,11 +53,11 @@ class LessThanTest extends TestCase
      */
     public function testGreaterThanInclusive()
     {
-        $attribute = $this->getMockForAbstractClass('MetaModels\\Attribute\\IAttribute');
-        $attribute->expects($this->once())->method('filterLessThan')->with(10, true)->willReturn(array(1, 2, 3));
+        $attribute = $this->getMockForAbstractClass(IAttribute::class);
+        $attribute->expects(self::once())->method('filterLessThan')->with(10, true)->willReturn(array(1, 2, 3));
 
         $rule = new LessThan($attribute, 10, true);
 
-        $this->assertEquals(array(1, 2, 3), $rule->getMatchingIds());
+        self::assertEquals(array(1, 2, 3), $rule->getMatchingIds());
     }
 }

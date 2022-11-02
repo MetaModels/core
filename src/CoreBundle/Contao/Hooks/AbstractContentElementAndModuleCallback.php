@@ -15,7 +15,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Marc Reimann <reimann@mediendepot-ruhr.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -410,10 +410,16 @@ abstract class AbstractContentElementAndModuleCallback
     /**
      * Get frontend templates for filters.
      *
+     * @param DC_Table $dcTable The data container calling this method.
+     *
      * @return array
      */
-    public function getFilterTemplates()
+    public function getFilterTemplates(DC_Table $dcTable)
     {
+        if ($dcTable->activeRecord->type === 'metamodels_frontendclearall') {
+            return $this->templateList->getTemplatesForBase('mm_clearall_');
+        }
+
         return $this->templateList->getTemplatesForBase('mm_filter_');
     }
 
@@ -471,7 +477,7 @@ abstract class AbstractContentElementAndModuleCallback
         $icon = $this->iconBuilder->getBackendIconImageTag(
             'system/themes/flexible/icons/alias.svg',
             $caption,
-            'style="vertical-align:top"'
+            'style="vertical-align:middle;height:24px;"'
         );
 
         return sprintf(

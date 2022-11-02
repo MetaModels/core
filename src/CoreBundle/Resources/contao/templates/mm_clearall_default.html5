@@ -1,0 +1,6 @@
+<!-- indexer::stop -->
+<div class="clearall <?= $this->class ?>">
+    <a title="<?= $GLOBALS['TL_LANG']['metamodels_frontendfilter']['clear_all'] ?>"
+       href="<?= $this->href . ($this->metamodel_fef_urlfragment ? '#' . $this->metamodel_fef_urlfragment : '') ?>"><?= $GLOBALS['TL_LANG']['metamodels_frontendfilter']['clear_all'] ?></a>
+</div>
+<!-- indexer::continue -->

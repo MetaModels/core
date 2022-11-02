@@ -1,4 +1,7 @@
 services:
+    _defaults:
+        autoconfigure: true
+
     MetaModels\CoreBundle\Contao\Hooks\LoadDataContainer:
         arguments:
             - '@metamodels.factory'
@@ -7,18 +10,7 @@ services:
             - '@metamodels.assets.icon_builder'
         public: true
 
-    MetaModels\CoreBundle\Contao\Hooks\RegisterBackendNavigation:
-        arguments:
-            - '@contao.translation.translator'
-            - '@request_stack'
-            - '@router'
-            - '@metamodels.view_combination'
-            - '@security.token_storage'
-        # it is used as HOOK from Contao - needs to be public therefore.
-        public: true
-
-    MetaModels\CoreBundle\Contao\Hooks\AbstractContentElementAndModuleCallback:
-        abstract: true
+    MetaModels\CoreBundle\Contao\Hooks\ContentElementCallback:
         arguments:
             - '@metamodels.assets.icon_builder'
             - '@metamodels.backend.url-builder-factory'
@@ -29,21 +21,31 @@ services:
             - '@request_stack'
         public: true
 
-    MetaModels\CoreBundle\Contao\Hooks\ContentElementCallback:
-        parent: MetaModels\CoreBundle\Contao\Hooks\AbstractContentElementAndModuleCallback
-
     MetaModels\CoreBundle\Contao\Hooks\ModuleCallback:
-        parent: MetaModels\CoreBundle\Contao\Hooks\AbstractContentElementAndModuleCallback
-
-    MetaModels\BackendIntegration\SearchablePages:
         arguments:
-            - "@database_connection"
+            - '@metamodels.assets.icon_builder'
+            - '@metamodels.backend.url-builder-factory'
+            - '@metamodels.factory'
+            - '@metamodels.filter_setting_factory'
+            - '@database_connection'
+            - '@metamodels.template_list'
+            - '@request_stack'
         public: true
 
-    MetaModels\FrontendIntegration\InsertTags:
+    MetaModels\CoreBundle\EventListener\GetSearchablePagesListener:
         arguments:
-            - "@database_connection"
-        public: true
+            - '@database_connection'
+            - '@metamodels.factory'
+            - '@event_dispatcher'
+            - '@metamodels.filter_setting_factory'
+            - '@metamodels.render_setting_factory'
+
+    MetaModels\CoreBundle\EventListener\InsertTagsListener:
+        arguments:
+            - '@database_connection'
+            - '@metamodels.factory'
+            - '@metamodels.render_setting_factory'
+            - '@metamodels.filter_setting_factory'
 
     MetaModels\CoreBundle\Contao\Hooks\FixupUserGroupModules:
         arguments:

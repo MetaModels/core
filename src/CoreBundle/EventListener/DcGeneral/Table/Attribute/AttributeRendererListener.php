@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -45,7 +46,6 @@ class AttributeRendererListener extends BaseListener
         $type      = $model->getProperty('type');
         $image     = '<img src="' . $this->attributeFactory->getIconForType($type) . '" />';
         $metaModel = $this->getMetaModelByModelPid($model);
-
         $attribute = $this->attributeFactory->createAttribute($model->getPropertiesAsArray(), $metaModel);
 
         if (!$attribute) {
@@ -60,17 +60,15 @@ class AttributeRendererListener extends BaseListener
                         <strong>%s</strong><br />
                     </div>'
                 )
-                ->setArgs(
-                    array
-                    (
-                        $translator->translate('error_unknown_attribute.0', 'tl_metamodel_attribute'),
-                        $type,
-                        $translator->translate('error_unknown_attribute.1', 'tl_metamodel_attribute', array($type)),
-                    )
-                );
+                ->setArgs([
+                    $translator->translate('error_unknown_attribute.0', 'tl_metamodel_attribute'),
+                    $type,
+                    $translator->translate('error_unknown_attribute.1', 'tl_metamodel_attribute', [$type]),
+                ]);
             return;
         }
 
+        $variant        = ($metaModel->hasVariants() && $attribute->get('isvariant')) ? ', variant' : '';
         $colName        = $attribute->getColName();
         $name           = $attribute->getName();
         $arrDescription = StringUtil::deserialize($attribute->get('description'));
@@ -85,17 +83,18 @@ class AttributeRendererListener extends BaseListener
 
         $event
             ->setLabel(
-                '<div class="field_heading cte_type"><strong>%s</strong> <em>[%s]</em></div>
+                '<div class="field_heading cte_type"><strong>%s</strong> <em>[%s%s]</em></div>
                 <div class="field_type block">
                     %s<strong>%s</strong> - %s
                 </div>'
             )
-            ->setArgs(array(
+            ->setArgs([
                 $colName,
                 $type,
+                $variant,
                 $image,
                 $name,
                 $description
-            ));
+            ]);
     }
 }

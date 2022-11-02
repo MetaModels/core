@@ -1,4 +1,9 @@
 services:
+    MetaModels\IFactory: '@metamodels.factory'
+    MetaModels\Filter\Setting\IFilterSettingFactory: '@metamodels.filter_setting_factory'
+    MetaModels\Render\Setting\IRenderSettingFactory: '@metamodels.render_setting_factory'
+    MetaModels\ViewCombination\ViewCombination: '@metamodels.view_combination'
+
     metamodels.assets.icon_builder:
         class: MetaModels\CoreBundle\Assets\IconBuilder
         arguments:
@@ -134,14 +139,6 @@ services:
             - "%metamodels.resource_dir%/data/contributors-transifex.json"
         tags: ['controller.service_arguments']
 
-    metamodels.controller.picker:
-        class: MetaModels\CoreBundle\Controller\Backend\PickerWidgetController
-        arguments:
-            - "@twig"
-            - "@contao.translation.translator"
-            - []
-        tags: ['controller.service_arguments']
-
     metamodels.view_combination.builder:
         class: MetaModels\ViewCombination\ViewCombinationBuilder
         arguments:
@@ -175,3 +172,40 @@ services:
         class: MetaModels\CoreBundle\Contao\Compat\ContaoFactory
         arguments:
             - '@contao.framework'
+
+    MetaModels\CoreBundle\Migration\TableCollationMigration:
+        arguments:
+            $connection: '@database_connection'
+            # The default table options comes from the doctrine extension.
+            $defaultTableOptions: ~
+        tags:
+            - name: contao.migration
+
+    MetaModels\CoreBundle\Migration\FindXhtmlTemplateMigration:
+        arguments:
+            - '%kernel.project_dir%'
+        tags:
+            - name: contao.migration
+
+    MetaModels\CoreBundle\Migration\FindClearAllTemplateMigration:
+        arguments:
+            - '%kernel.project_dir%'
+        tags:
+            - name: contao.migration
+
+    MetaModels\CoreBundle\Migration\SetDefaultZeroMigration:
+      arguments:
+        $connection: '@database_connection'
+      tags:
+        - name: contao.migration
+
+    MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter:
+        public: false
+
+    MetaModels\Helper\ToolboxFile:
+        public: false
+        arguments:
+            - "@contao.image.image_factory"
+            - "%kernel.project_dir%"
+            - "@contao.assets.files_context"
+            - "@contao.image.picture_factory"

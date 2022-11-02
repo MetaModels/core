@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,8 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -152,7 +153,7 @@ abstract class AbstractAddAllController
      *
      * @return Response
      *
-     * @throws \RuntimeException Throws if could not retrieve a metamodel.
+     * @throws \RuntimeException Throws if you could not retrieve a metamodel.
      */
     protected function process($table, $metaModelName, $parentId, Request $request)
     {
@@ -170,10 +171,12 @@ abstract class AbstractAddAllController
             }
         }
 
-        return new Response($this->twig->render(
-            '@MetaModelsCore/Backend/add-all.html.twig',
-            $this->render($table, $metaModel, $request)
-        ));
+        return new Response(
+            $this->twig->render(
+                '@MetaModelsCore/Backend/add-all.html.twig',
+                $this->render($table, $metaModel, $request)
+            )
+        );
     }
 
     /**
@@ -197,12 +200,14 @@ abstract class AbstractAddAllController
             'add'           => $this->translator->trans('MSC.continue', [], 'contao_default'),
             'saveNclose'    => $this->translator->trans('MSC.saveNclose', [], 'contao_default'),
             'activate'      => $this->translator->trans($table . '.addAll_activate', [], 'contao_' . $table),
+            'tlclass'       => '',
             'headline'      => $this->translator->trans($table . '.addall.1', [], 'contao_' . $table),
-            'selectAll'     => $this->translator->trans('MSC.selectAll', [], 'contao_default'),
+            'selectAll'     => $this->translator->trans('MSC.selectAll', [], 'contao_default') . '.',
             'cacheMessage'  => '',
             'updateMessage' => '',
             'hasCheckbox'   => count($fields) > 0,
             'fields'        => $fields,
+            'stylesheets'   => ['bundles/metamodelscore/css/style.css']
         ];
     }
 
@@ -220,14 +225,13 @@ abstract class AbstractAddAllController
         $this->startSort       = 0;
         $this->knownAttributes = [];
 
-        $alreadyExisting = $this
-            ->connection
+        $alreadyExisting = $this->connection
             ->createQueryBuilder()
-            ->select('*')
-            ->from($table)
-            ->where('pid=:pid')
+            ->select('t.*')
+            ->from($table, 't')
+            ->where('t.pid=:pid')
             ->setParameter('pid', $parentId)
-            ->orderBy('sorting')
+            ->orderBy('t.sorting')
             ->execute();
 
         foreach ($alreadyExisting->fetchAll(\PDO::FETCH_ASSOC) as $item) {
@@ -278,13 +282,13 @@ abstract class AbstractAddAllController
                 ];
                 continue;
             } elseif ($this->isAttributeSubmitted($attrId, $request)) {
-                $fields[] = array(
+                $fields[] = [
                     'checkbox' => false,
                     'text'     => $this->checkboxCaption('addAll_addsuccess', $table, $attribute),
                     'class'    => 'tl_confirm',
                     'attr_id'  => $attrId,
                     'name'     => 'attribute_' . $attrId
-                );
+                ];
                 continue;
             }
             $fields[] = [
@@ -310,7 +314,11 @@ abstract class AbstractAddAllController
      */
     private function checkboxCaption($key, $table, IAttribute $attribute)
     {
-        return $this->translator->trans($table . '.' . $key, [$attribute->getName()], 'contao_' . $table);
+        return $this->translator->trans(
+            $table . '.' . $key,
+            [$attribute->getName(), $attribute->get('type'), $attribute->getColName()],
+            'contao_' . $table
+        );
     }
 
     /**
@@ -339,6 +347,7 @@ abstract class AbstractAddAllController
     private function perform($table, Request $request, $metaModel, $parentId)
     {
         $activate = (bool) $request->request->get('activate');
+        $tlclass  = $request->request->get('tlclass');
 
         $query = $this
             ->connection
@@ -350,11 +359,19 @@ abstract class AbstractAddAllController
             ) {
                 continue;
             }
+
             $data = [];
-            foreach ($this->createEmptyDataFor($attribute, $parentId, $activate, $this->startSort) as $key => $value) {
+            foreach ($this->createEmptyDataFor(
+                $attribute,
+                $parentId,
+                $activate,
+                $this->startSort,
+                $tlclass
+            ) as $key => $value) {
                 $data[$key] = ':' . $key;
                 $query->setParameter($key, $value);
             }
+
             $query->values($data)->execute();
             $this->startSort += 128;
         }

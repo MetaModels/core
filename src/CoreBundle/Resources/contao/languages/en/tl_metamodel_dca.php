@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2018 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2018 The MetaModels team.
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -40,8 +40,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection'][1]           =
     'For models that shall be edited by end users, the "content" section most likely will be appropriate.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon'][0]              = 'Backend icon';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon'][1]              =
-    'Select the desired backend icon. ' .
-    'This icon will get used to draw an image in the left menu and on the top of the edit view in tree displays.';
+    'Select the desired backend icon.' .
+    'This icon will get used to draw an image in the parent list if you have a integration as child table.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption'][0]           = 'Backend caption';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption'][1]           =
     'The text you specify in here, will get used as the label and description text in the backend menu.';
@@ -55,7 +55,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_description'][1]        =
     'The text you specify in here, will get used as the description (hover title) in the backend menu.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout'][0]              = 'Panel layout';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout'][1]              =
-    'Separate panel options with comma (= space) and semicolon (= new line) like sort,filter;search,limit.';
+    'Separate panel options with comma (= space) and semicolon (= new line) like "filter;search;sort,limit".';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker']                 = 'Panelpicker';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['use_limitview'][0]            = 'View limitation';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['use_limitview'][1]            = 'Activate the view limitation.';

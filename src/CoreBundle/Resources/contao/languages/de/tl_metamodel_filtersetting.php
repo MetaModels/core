@@ -79,12 +79,19 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['1']             =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['title_legend']              = 'Typ';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['type']['0']                 = 'Typ';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['type']['1']                 = 'Geben Sie den Typ dieser Einstellung an.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_']     = '<span title="%s"><sup>(?)</sup></span>';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_default_']     = '%s <strong>%s</strong> %s <em>[%s]</em>';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand']  = '%s <strong>%s</strong> %s <br /> Items in allen Ergebnissen.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionor']   = '%s <strong>%s</strong> %s <br /> Items, die in einem Ergebnis vorliegen.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['fefilter']      = '%s <strong>%s</strong> %s <br /> für  Attribut <em>%s</em> (URL-Parameter: %s)';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup']  = '%s <strong>%s</strong> %s <br /> für Attribut <em>%s</em> (URL-Parameter: %s)';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_attribute_']   = ' <em>[%s, "%s"]</em>';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_url_']         = ' <em>(URL: %s)</em>';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_']     = '<br />%s';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_default_']     =
+    '%1$s <strong>%2$s</strong>%3$s%5$s%4$s';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup']  =
+    '%1$s <strong>%2$s</strong>%3$s%5$s%4$s';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['fefilter']      =
+    '%1$s <strong>%2$s</strong> %3$s%4$s';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionor']   =
+    '%1$s <strong>%2$s</strong>%4$s';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand']  =
+    '%1$s <strong>%2$s</strong>%4$s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionand'] = 'UND-Bedingung (AND)';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionor']  = 'ODER-Bedingung (OR)';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['customsql']    = 'Eigenes SQL';

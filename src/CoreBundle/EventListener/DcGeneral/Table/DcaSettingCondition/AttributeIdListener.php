@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,23 +13,50 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSettingCondition;
 
+use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\DecodePropertyValueForWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetPropertyOptionsEvent;
 use ContaoCommunityAlliance\DcGeneral\Event\AbstractEnvironmentAwareEvent;
+use Doctrine\DBAL\Connection;
+use MetaModels\CoreBundle\DcGeneral\PropertyConditionFactory;
+use MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter;
+use MetaModels\IFactory;
 
 /**
  * This handles the rendering of models to labels.
  */
 class AttributeIdListener extends AbstractConditionFactoryUsingListener
 {
+    /**
+     * The attribute select option label formatter.
+     *
+     * @var SelectAttributeOptionLabelFormatter
+     */
+    private $attributeLabelFormatter;
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __construct(
+        RequestScopeDeterminator $scopeDeterminator,
+        IFactory $factory,
+        Connection $connection,
+        PropertyConditionFactory $conditionFactory,
+        SelectAttributeOptionLabelFormatter $attributeLabelFormatter
+    ) {
+        parent::__construct($scopeDeterminator, $factory, $connection, $conditionFactory);
+        $this->attributeLabelFormatter = $attributeLabelFormatter;
+    }
+
     /**
      * Prepares an option list with alias => name connection for all attributes.
      *
@@ -53,9 +80,9 @@ class AttributeIdListener extends AbstractConditionFactoryUsingListener
                 continue;
             }
 
-            $typeName              = $attribute->get('type');
-            $strSelectVal          = $metaModel->getTableName() .'_' . $attribute->getColName();
-            $result[$strSelectVal] = $attribute->getName() . ' [' . $typeName . ']';
+            $colName               = $attribute->getColName();
+            $strSelectVal          = $metaModel->getTableName() .'_' . $colName;
+            $result[$strSelectVal] = $this->attributeLabelFormatter->formatLabel($attribute);
         }
 
         $event->setOptions($result);
@@ -78,6 +105,7 @@ class AttributeIdListener extends AbstractConditionFactoryUsingListener
         $value     = $event->getValue();
 
         if (!($metaModel && $value)) {
+            $event->setValue(null);
             return;
         }
 
