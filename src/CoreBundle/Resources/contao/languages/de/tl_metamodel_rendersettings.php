@@ -1,20 +1,31 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2022 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/de/
+ * Last-updated: 2022-11-02T22:35:15+01:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2018-03-09T21:04:28+01:00
+ * @copyright 2012-2022 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['0']      = 'Zusätzliche CSS-Dateien';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalCss']['1']      = 'Wählen Sie diese Option, wenn Sie zusätzliche CSS-Dateien ausgeben möchten. ';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalJs']['0']       = 'Zusätzliche Javascript-Dateien';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additionalJs']['1']       = 'Wählen Sie diese Option, wenn Sie zusätzliche JavaScript-Dateien ausgeben möchten.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['additional_legend']       = 'Zusätzliche Dateien';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['copy']['0']               = 'Einstellung kopieren';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['copy']['1']               = 'Kopieren Sie die Einstellung ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['delete']['0']             = 'Einstellung löschen';
@@ -47,6 +58,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['0']    = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_language']['1']    = 'Sprache der Weiterleitungsseite.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page']['0']        = 'Springe zu Seite';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_page']['1']        = 'Geben Sie die Seite an, die für die Links zur Detailseite verwendet werden soll.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpto_legend']           = 'Einstellungen der Weiterleitung (jump-to)';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']['0']               = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['name']['1']               = 'Einstellungsname';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['new']['0']                = 'Neu';

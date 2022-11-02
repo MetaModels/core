@@ -1,21 +1,30 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2022 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/rm/
+ * Last-updated: 2022-11-02T22:34:43+01:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2017-08-24T12:42:58+02:00
+ * @copyright 2012-2022 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']            = 'Integraziun en il back-end';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption']['0']       = 'Num en il back-end';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption']['1']       = 'Quest text specifitgescha il label ed il text da descripziun en il menu dal back-end.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon']['0']          = 'Icona dal back-end';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon']['1']          = 'Tscherna l\'icona da back-end giavischada. Questa icona vegn utilisada per visualisar in maletg en il menu sanester e sura en la vista da modifitgar da vistas ierarchicas. ';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']['0']       = 'Secziun dal back-end';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']['1']       = 'Tscherna la secziun dal back-end giavischada nua che ti vusl ch\'il MetaModel vegn mussa. Per models che duain vegnir modifitgads da redacturs è la secziun "cuntegn" probablamain la correcta.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_description']['0']    = 'Text da descripziun';
@@ -45,7 +54,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['name']['1']                 = 'Num da l
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']['0']                  = 'Nova mascra d\'endataziun';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']['1']                  = 'Crear ina nova mascra d\'endataziun';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['0']          = 'Vista dal panel';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['1']          = 'Seperar las opziuns per in panel cun commas (= distanza) e semicolons (= nova lingia) sco p.ex. sort,filter;search,limit.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker']               = 'Panel-picker';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['1']               = 'Num da la tabella da banca da datas che duai vegnir referenzà sco tabella da genitur.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertype']['0']           = 'Integraziun';

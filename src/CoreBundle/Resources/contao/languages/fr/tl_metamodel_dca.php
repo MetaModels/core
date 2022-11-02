@@ -1,21 +1,30 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2022 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/fr/
+ * Last-updated: 2022-11-02T22:34:43+01:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2017-08-24T12:42:58+02:00
+ * @copyright 2012-2022 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']              = 'intégration back-office';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption']['0']         = 'Légende du back-office';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption']['1']         = 'Le texte spécifié sera utilisé comme étiquette et texte de description dans le menu du back-office.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon']['0']            = 'Icône du back-office';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon']['1']            = 'Sélectionnez l\'icône désiré pour le back-office. Cet icône sera utilisé pour le menu de gauche et au sommet de la vue d\'édition de l\'affichage arborescent.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']['0']         = 'Section du back office';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']['1']         = 'Sélectionner la section désirée du back-office où le MetaModel doit apparaître. Pour les models qui doivent être édités par les utilisateur du Front-office, la section "contenu" sera la plus appropriée.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_description']['0']      = 'Texte de description';
@@ -53,7 +62,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['name']['1']                   = 'Nom du
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']['0']                    = 'Nouveau masque de saisie';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']['1']                    = 'Créer nouveau masque de saisie';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['0']            = 'Agencement du panneau';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['1']            = 'Séparez les options de panneau avec des virgules (=space) et des point virgules (=new line) comme sort,filter;search,limit';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker']                 = 'Sélecteur de panneau';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['1']                 = 'Nom de la table base de donnée qui doit être référé comme table parent';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermode']['0']             = 'Mode de rendu';

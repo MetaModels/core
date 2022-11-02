@@ -1,21 +1,28 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2022 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/ru/
+ * Last-updated: 2022-11-02T22:34:50+01:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2018-11-26T23:37:05+01:00
+ * @copyright 2012-2022 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
+
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_activate']              = 'Добавить новые настройки.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Добавлен атрибут "%s" к входному экрану.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess_subpalette'] = 'Добавлен атрибут "%s" к подобласти "%s".';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained']      = 'Атрибут %s уже содержится в входном экране.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd']               = 'Будет добавлен атрибут "%s" к входному экрану.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                  = 'Добавить все';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['1']                  = 'Добавить все атрибуты для входного экрана';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']              = 'Дополнительно';
@@ -66,7 +73,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']                   = 'Название легенды';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['0']                     = 'Новый';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['1']                     = 'Создать новую настройку';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']              = 'Список, фильтрация и сортировка панели управления';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pasteafter']['0']              = 'Создать новую настройку сверху';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pasteafter']['1']              = 'Создать новый после настройки ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pastenew']['0']                = 'Добавить новый сверху';
@@ -108,7 +114,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['0']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['1']                = 'Выберите шаблон, который должен использоваться для выбранного атрибута. Названия шаблонов начинаются с "mm_&lt;type&gt;", где название типа ставится для &lt;type&gt;';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']                 = 'Тип';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['0']                = 'Класс панели управления';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['1']                = 'Вы можете задать класс(ы) панели управления. Используйте средство выбора стиля для упрощения.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle']['0']                  = 'Переключить';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle']['1']                  = 'Переключить состояние настройки ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['0']           = 'Обработка замыкающего слеша';
