@@ -130,7 +130,7 @@ class UserListener
             $localMenu[$section]['metamodel_' . $metaModelName]['callback'] = Module::class;
             array_unshift($localMenu[$section]['metamodel_' . $metaModelName]['tables'], $metaModelName);
             $GLOBALS['TL_LANG']['MOD']['metamodel_' . $metaModelName] = [
-                $screen['label'][$GLOBALS['TL_LANGUAGE']] ?? ($screen['label'][''] ?? '')
+                ($screen['label'][$GLOBALS['TL_LANGUAGE']] ?? ($screen['label'][''] ?? ''))
             ];
         }
     }

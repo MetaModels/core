@@ -104,7 +104,12 @@ class AddAssetListener
     private function scanFiles($extension)
     {
         $files = [];
-        foreach (Finder::create()->followLinks()->in($this->uploadPath)->name('*.' . $extension)->getIterator() as $item) {
+        foreach (Finder::create()
+            ->followLinks()
+            ->in($this->uploadPath)
+            ->name('*.' . $extension)
+            ->getIterator() as $item
+        ) {
             $files[] = 'files/' . Path::normalize($item->getRelativePathname());
         }
 

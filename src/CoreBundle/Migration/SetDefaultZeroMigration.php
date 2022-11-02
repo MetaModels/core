@@ -63,6 +63,8 @@ class SetDefaultZeroMigration extends AbstractMigration
 
     /**
      * The database connection.
+     *
+     * @var Connection
      */
     private Connection $connection;
 
@@ -179,11 +181,13 @@ class SetDefaultZeroMigration extends AbstractMigration
         );
     }
 
+    // @codingStandardsIgnoreStart
     /**
      * Fix a table column.
      *
-     * @param string $tableName  The name of the table.
-     * @param string $columnName The name of the column.
+     * @param string             $tableName   The name of the table.
+     * @param string             $columnName  The name of the column.
+     * @param TColumnInformation $information The column information.
      *
      * @return void
      */
@@ -199,4 +203,5 @@ class SetDefaultZeroMigration extends AbstractMigration
             )
         );
     }
+    // @codingStandardsIgnoreEnd
 }

@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-221 The MetaModels team.
+ * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -53,7 +53,6 @@ class ModuleCallback extends AbstractContentElementAndModuleCallback
      */
     public function getTemplates(\DC_Table $objDC)
     {
-        /** @noinspection PhpUndefinedFieldInspection */
         $type = $objDC->activeRecord->type;
 
         return $this->getTemplateList('mod_' . $type);

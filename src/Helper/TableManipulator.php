@@ -568,7 +568,9 @@ class TableManipulator
 
                 // If there is pre-existing data in the table, we need to provide a separate 'vargroup' value to all of
                 // them, we can do this safely by setting all vargroups to the id of the base item.
-                $this->connection->executeQuery(sprintf('UPDATE `%1$s` SET %1$s.vargroup=id, %1$s.varbase=1', $strTableName));
+                $this->connection->executeQuery(
+                    sprintf('UPDATE `%1$s` SET %1$s.vargroup=id, %1$s.varbase=1', $strTableName)
+                );
             }
         } else {
             if ($this->connection->getSchemaManager()->tablesExist([$strTableName])

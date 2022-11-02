@@ -158,6 +158,8 @@ class ToolboxFile
 
     /**
      * Flag if download keys shall be generated.
+     *
+     * @var bool
      */
     private bool $withDownloadKeys = true;
 
@@ -461,6 +463,13 @@ class ToolboxFile
         return $this;
     }
 
+    /**
+     * Set flag if download keys shall be generated or not.
+     *
+     * @param bool $withDownloadKeys The new value.
+     *
+     * @return void
+     */
     public function withDownloadKeys(bool $withDownloadKeys): void
     {
         $this->withDownloadKeys = $withDownloadKeys;
@@ -947,7 +956,7 @@ class ToolboxFile
 
         foreach ($values as $key => $value) {
             if (!(Validator::isUuid($value))) {
-                if(!\is_string($value)) {
+                if (!\is_string($value)) {
                     continue;
                 }
 
@@ -1074,7 +1083,7 @@ class ToolboxFile
 
             if (isset($GLOBALS['objPage']->layoutId)) {
                 $lightboxSize                   = StringUtil::deserialize(
-                    LayoutModel::findByPk($GLOBALS['objPage']->layoutId)->lightboxSize ?? null,
+                    (LayoutModel::findByPk($GLOBALS['objPage']->layoutId)->lightboxSize ?? null),
                     true
                 );
                 $lightboxPicture                =

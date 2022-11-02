@@ -213,7 +213,7 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
 
         foreach ($values as $value) {
             if ($value && $attribute instanceof IAliasConverter) {
-                $value = $attribute->getIdForAlias($value, $currentLanguage) ?? $value;
+                $value = ($attribute->getIdForAlias($value, $currentLanguage) ?? $value);
             }
 
             if (\in_array($value, $this->propertyValue, $this->strict)) {

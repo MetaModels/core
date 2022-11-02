@@ -133,7 +133,7 @@ class PaginationLimitCalculator
     private string $paramType;
 
     /**
-     * The URL fragment
+     * The URL fragment.
      *
      * @var string
      */
@@ -150,11 +150,11 @@ class PaginationLimitCalculator
      * Create a new instance.
      *
      * @param FilterUrlBuilder|null $filterUrlBuilder   The filter url builder.
-     * @param string                $pageParam          The pagination url key
-     * @param string                $paramType          The pagination parameter url type
+     * @param string                $pageParam          The pagination url key.
+     * @param string                $paramType          The pagination parameter url type.
      * @param int                   $maxPaginationLinks The maximum number of pagination links.
-     * @param string                $paginationTemplate The pagination template
-     * @param string                $paginationFragment        The URL fragment
+     * @param string                $paginationTemplate The pagination template.
+     * @param string                $paginationFragment The URL fragment.
      */
     public function __construct(
         ?FilterUrlBuilder $filterUrlBuilder = null,
@@ -171,11 +171,13 @@ class PaginationLimitCalculator
         $this->paginationFragment = $paginationFragment;
         if (null === $filterUrlBuilder) {
             $filterUrlBuilder = System::getContainer()->get('metamodels.filter_url');
+            // @codingStandardsIgnoreStart
             @trigger_deprecation(
                 'metamodels/core',
                 '2.2.0',
                 __CLASS__ . ' parameter FilterUrlBuilder is null, but the parameter should be set'
             );
+            // @codingStandardsIgnoreEnd
         }
         $this->filterUrlBuilder = $filterUrlBuilder;
 
@@ -281,6 +283,8 @@ class PaginationLimitCalculator
      * Retrieve the current page (in pagination).
      *
      * @return int
+     *
+     * @throws InvalidArgumentException When the param type value is invalid.
      */
     public function getCurrentPage(): int
     {
@@ -297,6 +301,7 @@ class PaginationLimitCalculator
                 return (int) ($this->filterUrl->getGet($this->pageParam)
                               ?? $this->filterUrl->getSlug($this->pageParam)
                                  ?? 1);
+            default:
         }
 
         throw new InvalidArgumentException('Invalid configured value: ' . $this->paramType);
@@ -315,11 +320,13 @@ class PaginationLimitCalculator
     {
         $this->currentPage = $currentPage;
 
+        // @codingStandardsIgnoreStart
         @trigger_deprecation(
             'metamodels/core',
             '2.2.0',
             __METHOD__ . ' is deprecated - the page is determined automatically from the current request'
         );
+        // @codingStandardsIgnoreEnd
 
         return $this->markDirty();
     }

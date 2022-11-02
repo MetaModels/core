@@ -12,6 +12,7 @@
  *
  * @package    MetaModels/core
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -31,6 +32,8 @@ use Symfony\Component\Finder\Finder;
 class FindXhtmlTemplateMigration extends AbstractMigration
 {
     /**
+     * The project directory.
+     *
      * @var string
      */
     private $projectDir;
@@ -38,7 +41,7 @@ class FindXhtmlTemplateMigration extends AbstractMigration
     /**
      * FindXhtmlTemplateMigration constructor.
      *
-     * @param string $projectDir
+     * @param string $projectDir The project directory.
      */
     public function __construct(string $projectDir)
     {
@@ -80,7 +83,9 @@ class FindXhtmlTemplateMigration extends AbstractMigration
         if ($this->findXhtmlTemplates()) {
             return new MigrationResult(
                 false,
-                'Old template files with extension "xhtml" found - please rename extension to "html5" and select in module and content elements. This CAN NOT be done automatically!'
+                'Old template files with extension "xhtml" found - ' .
+                'please rename extension to "html5" and select in module and content elements. ' .
+                'This CAN NOT be done automatically!'
             );
         }
     }

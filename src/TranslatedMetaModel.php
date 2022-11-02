@@ -45,6 +45,8 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
 
     /**
      * The locale territory support.
+     *
+     * @var bool
      */
     private bool $hasTerritorySupport;
 

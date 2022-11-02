@@ -91,7 +91,9 @@ class LoadDataContainer
      */
     public function onLoadDataContainer($tableName)
     {
+        // @codingStandardsIgnoreStart
         // FIXME: make this beautiful.
+        // @codingStandardsIgnoreEnd
         if (!\System::getContainer()->get('cca.dc-general.scope-matcher')->currentScopeIsBackend()) {
             return;
         }

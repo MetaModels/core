@@ -176,7 +176,7 @@ class InputScreen implements IInputScreen
         }
         // Is it a regional locale?
         if (false !== strpos($language, '_')) {
-            $chunks = explode('_', $language);
+            $chunks   = explode('_', $language);
             $language = array_shift($chunks);
             unset($chunks);
             if (null !== ($result = $legend[$language] ?? null)) {

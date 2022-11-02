@@ -448,7 +448,11 @@ abstract class Simple implements ISimple
         }
 
         // Determine current value.
-        $arrWidget['value'] = $arrFilterUrl[$arrWidget['eval']['urlparam']] ?? ($arrWidget['eval']['default'] ?? null);
+        $arrWidget['value'] = (
+            $arrFilterUrl[$arrWidget['eval']['urlparam']]
+            ?? ($arrWidget['eval']['default']
+            ?? null)
+        );
 
         $event = new GetAttributesFromDcaEvent(
             $arrWidget,
@@ -577,7 +581,7 @@ abstract class Simple implements ISimple
     /**
      * Generate legend.
      *
-     * @param $arrWidget
+     * @param array<string, array{label: list<string>}> $arrWidget The widget information array.
      *
      * @return string
      */

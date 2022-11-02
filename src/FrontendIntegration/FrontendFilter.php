@@ -279,7 +279,7 @@ class FrontendFilter
     protected function renderWidget($widget, $filterOptions)
     {
         $filter       = $widget;
-        $templateName = $filter['raw']['eval']['template'] ?? 'mm_filteritem_default';
+        $templateName = ($filter['raw']['eval']['template'] ?? 'mm_filteritem_default');
         $template     = new \FrontendTemplate($templateName);
 
         $template->setData($filter);
@@ -391,7 +391,7 @@ class FrontendFilter
         // If we have POST data, we need to redirect now.
         if (Input::post('FORM_SUBMIT') === $this->formId) {
             foreach ($wantedNames as $widgetName) {
-                if(empty($arrWidgets[$widgetName])) {
+                if (empty($arrWidgets[$widgetName])) {
                     continue;
                 }
                 $filter = $arrWidgets[$widgetName];
@@ -407,7 +407,7 @@ class FrontendFilter
 
         // Render the widgets through the filter templates.
         foreach ($wantedNames as $strWidget) {
-            if(!empty($arrWidgets[$strWidget])) {
+            if (!empty($arrWidgets[$strWidget])) {
                 $renderedWidgets[$strWidget] = $this->renderWidget($arrWidgets[$strWidget], $filterOptions);
             }
         }

@@ -48,17 +48,21 @@ interface IAliasConverter extends IAttribute
     /**
      * Try to get the alias for the given id.
      *
+     * Returns:
+     * - When language support for metamodels is given:
+     *      - Return the alias for the id in the given language
+     *      - Return null if the id isn't found
+     *      - Return null if the given language isn't supported
+     * - When language support for metamodels isn't given:
+     *      - Return the alias for the id, language parameter will be ignored
+     *      - Return null if the id isn't found
+     *
      * @param string $id       The id to search for.
      * @param string $language The target language to use for the result.
      *                         If the metamodels didn't support languages this parameter will be ignored.
      *
-     * @return string|null - When language support for metamodels is given:
-     *                          - Return the alias for the id in the given language
-     *                          - Return null if the id isn't found
-     *                          - Return null if the given language isn't supported
-     *                     - When language support for metamodels isn't given:
-     *                          - Return the alias for the id, language parameter will be ignored
-     *                          - Return null if the id isn't found
+     * @return string|null
+     *
      * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function getAliasForId(string $id, string $language): ?string;
