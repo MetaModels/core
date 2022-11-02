@@ -1044,9 +1044,9 @@ class ToolboxFile
         // Prepare GD images.
         if ($information['isGdImage'] = $file->isGdImage) {
             $information['src'] = urldecode($this->resizeImage($fileName));
+            $information['lb']  = 'lb_' . $this->getLightboxId();
             if (file_exists(TL_ROOT . '/' . $information['src'])) {
                 $size              = getimagesize(TL_ROOT . '/' . $information['src']);
-                $information['lb'] = 'lb' . $this->getLightboxId();
                 $information['w']  = $size[0];
                 $information['h']  = $size[1];
                 $information['wh'] = $size[3];
