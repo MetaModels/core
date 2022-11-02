@@ -111,6 +111,7 @@ trait ListControllerTrait
      * @return Response The response.
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getResponseInternal(Template $template, Model $model, Request $request): ?Response
     {
@@ -283,6 +284,8 @@ trait ListControllerTrait
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function getWildcardInfoText(Model $model, string $href, string $name): string
     {

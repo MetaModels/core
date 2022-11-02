@@ -114,6 +114,8 @@ class UserListener
      * @param array $localMenu Reference to the global array.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     private function buildBackendModules(&$localMenu)
     {

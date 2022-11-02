@@ -174,6 +174,9 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function match(
         ModelInterface $model = null,

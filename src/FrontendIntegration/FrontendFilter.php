@@ -357,6 +357,8 @@ class FrontendFilter
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      *
      * @throws RedirectResponseException When there was a POST request and we have to reload the page.
      */

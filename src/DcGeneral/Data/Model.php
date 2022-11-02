@@ -162,6 +162,9 @@ class Model implements ModelInterface
      * {@inheritDoc}
      *
      * @throws DcGeneralInvalidPropertyValueException When the property is unable to accept the value.
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function setProperty($strPropertyName, $varValue)
     {

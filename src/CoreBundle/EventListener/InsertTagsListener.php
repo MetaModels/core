@@ -431,6 +431,8 @@ class InsertTagsListener implements ServiceAnnotationInterface
      * @deprecated
      *
      * @throws \Doctrine\DBAL\DBALException When a database error occur.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function isPublishedItem($metaModel, $intItemId): bool
     {

@@ -286,6 +286,8 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getJumpTosFor($metaModels, $filter, $view, $rootPage = null): array
     {

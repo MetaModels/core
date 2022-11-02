@@ -133,6 +133,7 @@ class InputScreen implements IInputScreen
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function translateLegend($legend, $metaModel)
     {

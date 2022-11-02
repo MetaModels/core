@@ -1006,6 +1006,9 @@ class ToolboxFile
      * @param string $fileName The file to fetch data for.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     private function processFile($fileName)
     {

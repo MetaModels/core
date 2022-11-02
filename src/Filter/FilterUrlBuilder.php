@@ -100,6 +100,9 @@ class FilterUrlBuilder
      * @param FilterUrl $filterUrl The filter URL.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function generate(FilterUrl $filterUrl)
     {
@@ -340,6 +343,8 @@ class FilterUrlBuilder
      * @param string|null $locale The current locale or null if none requested.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getFolderUrlFragments(string $alias, string $host, string $locale = null): ?array
     {

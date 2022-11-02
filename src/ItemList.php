@@ -56,6 +56,7 @@ use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
  * Implementation of a general purpose MetaModel listing.
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
 class ItemList
 {
@@ -178,6 +179,8 @@ class ItemList
      * @param string                        $paramType            The pagination parameter URL type.
      * @param int                           $maxPaginationLinks   The maximum number of pagination links.
      * @param string                        $paginationTemplate   The pagination template.
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         IFactory $factory = null,
@@ -807,6 +810,8 @@ class ItemList
      * Prepare the rendering.
      *
      * @return ItemList
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function prepare(): self
     {
