@@ -286,6 +286,8 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getJumpTosFor($metaModels, $filter, $view, $rootPage = null): array
     {
@@ -313,16 +315,14 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
 
         // Get the object.
         /** @var Item $item */
-        foreach (
-            $metaModels->findByFilter(
-                $filter,
-                '',
-                0,
-                0,
-                'ASC',
-                array_merge($view->getSettingNames(), $filterAttributes)
-            ) as $item
-        ) {
+        foreach ($metaModels->findByFilter(
+            $filter,
+            '',
+            0,
+            0,
+            'ASC',
+            array_merge($view->getSettingNames(), $filterAttributes)
+        ) as $item) {
             $jumpTo = $item->buildJumpToLink($view);
             $event  = new GetPageDetailsEvent($jumpTo['page']);
             $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GET_PAGE_DETAILS);

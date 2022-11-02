@@ -123,7 +123,7 @@ class FrontendFilterOptions
     /**
      * Set URL fragment.
      *
-     * @param string $urlFragment string The URL fragment.
+     * @param string $urlFragment The URL fragment.
      *
      * @return void
      */

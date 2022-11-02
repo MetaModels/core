@@ -179,6 +179,7 @@ trait ListControllerTrait
      * @return Response The response.
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getResponseInternal(Template $template, Model $model, Request $request): ?Response
     {
@@ -213,7 +214,9 @@ trait ListControllerTrait
         $sorting   = $model->metamodel_sortby;
         $direction = $model->metamodel_sortby_direction;
 
+        // @codingStandardsIgnoreStart
         // FIXME: filter URL should be created from local request and not from master request.
+        // @codingStandardsIgnoreEnd
         $filterUrl = $this->filterUrlBuilder->getCurrentFilterUrl();
         if ($model->metamodel_sort_override) {
             if (null !==
@@ -245,7 +248,7 @@ trait ListControllerTrait
             ->setFilterParameters($filterParams, $this->getFilterParameters($filterUrl, $itemRenderer))
             ->setMetaTags($model->metamodel_meta_title, $model->metamodel_meta_description);
 
-        foreach (StringUtil::deserialize($model->metamodel_parameters ?? null, true) as $key => $value) {
+        foreach (StringUtil::deserialize(($model->metamodel_parameters ?? null), true) as $key => $value) {
             $itemRenderer->setTemplateParameter($key, $value);
         }
 
@@ -308,8 +311,9 @@ trait ListControllerTrait
                 $result = $filterUrl->getSlug($sortParam);
                 break;
             case 'slugNget':
-                $result = $filterUrl->getGet($sortParam)
-                          ?? $filterUrl->getSlug($sortParam);
+                $result = ($filterUrl->getGet($sortParam) ?? $filterUrl->getSlug($sortParam));
+                break;
+            default:
         }
 
         // Mark the parameter as used (otherwise, a 404 is thrown)
@@ -351,6 +355,8 @@ trait ListControllerTrait
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function getWildcardInfoText(Model $model, string $href, string $name): string
     {

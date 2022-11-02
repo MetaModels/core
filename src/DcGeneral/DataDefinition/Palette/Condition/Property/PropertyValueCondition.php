@@ -13,6 +13,7 @@
  * @package    MetaModels/core
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -151,7 +152,7 @@ class PropertyValueCondition implements PropertyConditionInterface
         }
 
         if ($value && $attribute instanceof IAliasConverter) {
-            $value = $attribute->getIdForAlias($value, $currentLanguage) ?? $value;
+            $value = ($attribute->getIdForAlias($value, $currentLanguage) ?? $value);
         }
 
         return $this->strict ? ($value === $this->propertyValue) : ($value == $this->propertyValue);

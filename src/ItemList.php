@@ -56,6 +56,7 @@ use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
  * Implementation of a general purpose MetaModel listing.
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
 class ItemList
 {
@@ -178,6 +179,9 @@ class ItemList
      * @param string                        $paramType            The pagination parameter URL type.
      * @param int                           $maxPaginationLinks   The maximum number of pagination links.
      * @param string                        $paginationTemplate   The pagination template.
+     * @param string                        $paginationFragment   The pagination fragment.
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         IFactory $factory = null,
@@ -199,6 +203,7 @@ class ItemList
             $paginationTemplate,
             $paginationFragment
         );
+
         $this->factory              = $factory;
         $this->filterFactory        = $filterFactory;
         $this->renderSettingFactory = $renderSettingFactory;
@@ -723,6 +728,14 @@ class ItemList
         return $this;
     }
 
+    /**
+     * Set a template parameter
+     *
+     * @param string $name  The name of the parameter.
+     * @param mixed  $value The value to use.
+     *
+     * @return void
+     */
     public function setTemplateParameter(string $name, $value): void
     {
         $this->templateParameter[$name] = $value;
@@ -807,6 +820,8 @@ class ItemList
      * Prepare the rendering.
      *
      * @return ItemList
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function prepare(): self
     {
@@ -1029,11 +1044,10 @@ class ItemList
     /**
      * Render the list view.
      *
-     * @param bool        $isNoNativeParsing  Flag determining if the parsing shall be done internal or if the template
-     *                                        will handle the parsing on it's own.
-     *
-     * @param object|null $caller             The object calling us, might be a Module or ContentElement or anything
-     *                                        else.
+     * @param bool        $isNoNativeParsing Flag determining if the parsing shall be done internal or if the template
+     *                                       will handle the parsing on it's own.
+     * @param object|null $caller            The object calling us, might be a Module or ContentElement or anything
+     *                                       else.
      *
      * @return string
      */

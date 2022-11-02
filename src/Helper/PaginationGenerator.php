@@ -12,6 +12,7 @@
  *
  * @package    MetaModels/core
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -31,61 +32,63 @@ use MetaModels\Filter\FilterUrlBuilder;
 class PaginationGenerator
 {
     /**
+     * The filter url builder.
+     *
      * @var FilterUrlBuilder
      */
     private FilterUrlBuilder $urlBuilder;
 
     /**
-     * Total number of rows
+     * Total number of rows.
      *
      * @var integer
      */
     private int $numRows;
 
     /**
-     * Number of rows per page
+     * Number of rows per page.
      *
      * @var integer
      */
     private int $rowsPerPage;
 
     /**
-     * Total number of pages
+     * Total number of pages.
      *
      * @var integer
      */
     private int $totalPages;
 
     /**
-     * Total number of links
+     * Total number of links.
      *
      * @var integer
      */
     private int $numberOfLinks;
 
     /**
-     * Template object
+     * Template object.
      *
      * @var Template
      */
     private Template $template;
 
     /**
-     * The parameter name
+     * The parameter name.
      *
      * @var string
      */
     private string $pageParam;
 
     /**
-     * The parameter type
+     * The parameter type.
      *
      * @var string
      */
     private string $paramType;
 
     /**
-     * The URL fragment
+     * The URL fragment.
      *
      * @var string
      */
@@ -94,13 +97,14 @@ class PaginationGenerator
     /**
      * Set the number of rows, the number of results per pages and the number of links
      *
-     * @param integer  $numRows            The number of rows
-     * @param integer  $rowsPerPage        The number of items per page
-     * @param integer  $numberOfLinks      The number of links to generate
-     * @param string   $pageParam          The pagination url key
-     * @param string   $paramType          The pagination parameter url type
-     * @param Template $paginationTemplate The pagination template
-     * @param string   $paginationFragment The URL fragment
+     * @param FilterUrlBuilder $urlBuilder         The filter url builder.
+     * @param integer          $numRows            The number of rows.
+     * @param integer          $rowsPerPage        The number of items per page.
+     * @param integer          $numberOfLinks      The number of links to generate.
+     * @param string           $pageParam          The pagination url key.
+     * @param string           $paramType          The pagination parameter url type.
+     * @param Template         $paginationTemplate The pagination template.
+     * @param string           $paginationFragment The URL fragment.
      */
     public function __construct(
         FilterUrlBuilder $urlBuilder,
@@ -158,13 +162,15 @@ class PaginationGenerator
         $template->page               = $page;
         $template->totalPages         = $this->totalPages;
         $template->first              = $template->hasFirst ? $this->linkToPage($filterUrl, 1) : '';
-        $template->previous           = $template->hasPrevious ? $this->linkToPage($filterUrl, $page - 1) : '';
-        $template->next               = $template->hasNext ? $this->linkToPage($filterUrl, $page + 1) : '';
+        $template->previous           = $template->hasPrevious ? $this->linkToPage($filterUrl, ($page - 1)) : '';
+        $template->next               = $template->hasNext ? $this->linkToPage($filterUrl, ($page + 1)) : '';
         $template->last               = $template->hasLast ? $this->linkToPage($filterUrl, $this->totalPages) : '';
         $template->class              = 'pagination-' . $this->pageParam;
         $template->paginationFragment = $this->paginationFragment;
+        // @codingStandardsIgnoreStart
         // Adding rel="prev" and rel="next" links is not possible
         // anymore with unique variable names (see #3515 and #4141)
+        // @codingStandardsIgnoreEnd
 
         return $template->parse();
     }
@@ -175,6 +181,8 @@ class PaginationGenerator
      * @param FilterUrl $filterUrl The filter URL.
      *
      * @return int
+     *
+     * @throws InvalidArgumentException When the param type value is invalid.
      */
     private function getCurrentPage(FilterUrl $filterUrl): int
     {
@@ -187,6 +195,7 @@ class PaginationGenerator
                 return (int) ($filterUrl->getGet($this->pageParam)
                     ?? $filterUrl->getSlug($this->pageParam)
                     ?? 1);
+            default:
         }
 
         throw new InvalidArgumentException('Invalid configured value: ' . $this->paramType);
@@ -194,6 +203,8 @@ class PaginationGenerator
 
     /**
      * Return true if the pagination menu has a "<< first" link
+     *
+     * @param int $page The page number.
      *
      * @return boolean True if the pagination menu has a "<< first" link
      */
@@ -205,6 +216,8 @@ class PaginationGenerator
     /**
      * Return true if the pagination menu has a "< previous" link
      *
+     * @param int $page The page number.
+     *
      * @return boolean True if the pagination menu has a "< previous" link
      */
     public function hasPrevious(int $page): bool
@@ -214,6 +227,8 @@ class PaginationGenerator
 
     /**
      * Return true if the pagination menu has a "next >" link
+     *
+     * @param int $page The page number.
      *
      * @return boolean True if the pagination menu has a "next >" link
      */
@@ -225,6 +240,8 @@ class PaginationGenerator
     /**
      * Return true if the pagination menu has a "last >>" link
      *
+     * @param int $page The page number.
+     *
      * @return boolean True if the pagination menu has a "last >>" link
      */
     private function hasLast(int $page): bool
@@ -235,6 +252,9 @@ class PaginationGenerator
     /**
      * Generate all page links and return them as array
      *
+     * @param FilterUrl $filterUrl The filter url to use.
+     * @param int       $page      The page number.
+     *
      * @return array The page links as array
      */
     private function getItemsAsArray(FilterUrl $filterUrl, int $page): array
@@ -242,25 +262,25 @@ class PaginationGenerator
         $links = [];
 
         $numberOfLinks = floor($this->numberOfLinks / 2);
-        $firstOffset   = $page - $numberOfLinks - 1;
+        $firstOffset   = ($page - $numberOfLinks - 1);
 
         if ($firstOffset > 0) {
             $firstOffset = 0;
         }
 
-        $lastOffset = $page + $numberOfLinks - $this->totalPages;
+        $lastOffset = ($page + $numberOfLinks - $this->totalPages);
 
         if ($lastOffset < 0) {
             $lastOffset = 0;
         }
 
-        $firstLink = $page - $numberOfLinks - $lastOffset;
+        $firstLink = ($page - $numberOfLinks - $lastOffset);
 
         if ($firstLink < 1) {
             $firstLink = 1;
         }
 
-        $lastLink = $page + $numberOfLinks - $firstOffset;
+        $lastLink = ($page + $numberOfLinks - $firstOffset);
 
         if ($lastLink > $this->totalPages) {
             $lastLink = $this->totalPages;
@@ -286,9 +306,8 @@ class PaginationGenerator
     /**
      * Generate a link and return the URL.
      *
-     * @param FilterUrl $filterUrl
-     *
-     * @param integer   $page The page number.
+     * @param FilterUrl $filterUrl The filter url to use.
+     * @param int       $page      The page number.
      *
      * @return string The URL string
      */

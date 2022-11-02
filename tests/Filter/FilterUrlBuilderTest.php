@@ -50,6 +50,7 @@ class FilterUrlBuilderTest extends TestCase
                 'expectedUrl' => 'page-alias/auto/slug/sluggy',
                 'expectedParameters' => [
                     'get2' => 'value',
+                    '_locale' => 'en',
                 ],
                 'page' => [
                     'alias' => 'page-alias',
@@ -70,6 +71,7 @@ class FilterUrlBuilderTest extends TestCase
                 'expectedUrl' => 'alias/auto/slug/sluggy',
                 'expectedParameters' => [
                     'get2' => 'value',
+                    '_locale' => 'en',
                 ],
                 'page' => [
                 ],
@@ -153,7 +155,7 @@ class FilterUrlBuilderTest extends TestCase
         $generator
             ->expects(self::once())
             ->method('generate')
-            ->with('folder/page/auto/slug/sluggy', ['get2' => 'value'])
+            ->with('folder/page/auto/slug/sluggy', ['get2' => 'value', '_locale' => 'en'])
             ->willReturn('success');
 
         $adapter      = $this

@@ -848,7 +848,7 @@ class MetaModel implements IMetaModel
 
         $result = [];
         foreach ($attrNames as $attributeName) {
-            if (null === $attribute = $this->arrAttributes[$attributeName] ?? null) {
+            if (null === $attribute = ($this->arrAttributes[$attributeName] ?? null)) {
                 continue;
             }
             $result[$attributeName] = $attribute;

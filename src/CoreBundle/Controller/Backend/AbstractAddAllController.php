@@ -361,10 +361,13 @@ abstract class AbstractAddAllController
             }
 
             $data = [];
-            foreach (
-                $this->createEmptyDataFor($attribute, $parentId, $activate, $this->startSort, $tlclass) as $key =>
-                $value
-            ) {
+            foreach ($this->createEmptyDataFor(
+                $attribute,
+                $parentId,
+                $activate,
+                $this->startSort,
+                $tlclass
+            ) as $key => $value) {
                 $data[$key] = ':' . $key;
                 $query->setParameter($key, $value);
             }

@@ -174,6 +174,9 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function match(
         ModelInterface $model = null,
@@ -210,7 +213,7 @@ class PropertyContainAnyOfCondition implements PropertyConditionInterface
 
         foreach ($values as $value) {
             if ($value && $attribute instanceof IAliasConverter) {
-                $value = $attribute->getIdForAlias($value, $currentLanguage) ?? $value;
+                $value = ($attribute->getIdForAlias($value, $currentLanguage) ?? $value);
             }
 
             if (\in_array($value, $this->propertyValue, $this->strict)) {

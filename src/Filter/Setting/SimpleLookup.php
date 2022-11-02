@@ -119,8 +119,9 @@ class SimpleLookup extends Simple
                 \natcasesort($arrOptions);
                 break;
             case 'natsort_desc':
-                \rsort($arrOptions, SORT_NATURAL | SORT_FLAG_CASE);
+                \rsort($arrOptions, (SORT_NATURAL | SORT_FLAG_CASE));
                 break;
+            default:
         }
 
         return $arrOptions;

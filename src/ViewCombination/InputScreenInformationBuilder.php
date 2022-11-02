@@ -372,10 +372,9 @@ class InputScreenInformationBuilder
     {
         if ($isTranslated) {
             $label = [];
-            foreach (
-                ($metaModel instanceof ITranslatedMetaModel)
-                    ? $metaModel->getLanguages()
-                    : $metaModel->getAvailableLanguages() as $availableLanguage
+            foreach (($metaModel instanceof ITranslatedMetaModel)
+                ? $metaModel->getLanguages()
+                : $metaModel->getAvailableLanguages() as $availableLanguage
             ) {
                 $label[$availableLanguage] = $metaModel->getName();
             }

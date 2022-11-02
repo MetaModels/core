@@ -531,7 +531,7 @@ abstract class ViewCombinations
     {
         $metaModelName = $this->getMetaModelName($metaModel);
 
-        return $this->information[$metaModelName][self::COMBINATION]['view_id'] ?? null;
+        return ($this->information[$metaModelName][self::COMBINATION]['view_id'] ?? null);
     }
 
     /**
@@ -587,7 +587,7 @@ abstract class ViewCombinations
     {
         $metaModelName = $this->getMetaModelName($metaModel);
 
-        return $this->childMap[$metaModelName] ?? null;
+        return ($this->childMap[$metaModelName] ?? null);
     }
 
     /**

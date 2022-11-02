@@ -12,6 +12,7 @@
  *
  * @package    MetaModels/core
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -31,6 +32,8 @@ use Symfony\Component\Finder\Finder;
 class FindClearAllTemplateMigration extends AbstractMigration
 {
     /**
+     * The project directory.
+     *
      * @var string
      */
     private $projectDir;
@@ -38,7 +41,7 @@ class FindClearAllTemplateMigration extends AbstractMigration
     /**
      * FindClearAllTemplateMigration constructor.
      *
-     * @param string $projectDir
+     * @param string $projectDir The project directory.
      */
     public function __construct(string $projectDir)
     {
@@ -80,9 +83,12 @@ class FindClearAllTemplateMigration extends AbstractMigration
         if ($this->findClearAllTemplates()) {
             return new MigrationResult(
                 false,
-                'Old style named template files "mm_filter_clearall*.*" found - please rename to "mm_clearall*.html5" and select in module and content elements. This CAN NOT be done automatically!'
+                'Old style named template files "mm_filter_clearall*.*" found - ' .
+                'please rename to "mm_clearall*.html5" and select in module and content elements. ' .
+                'This CAN NOT be done automatically!'
             );
         }
+        return new MigrationResult(true, 'Nothing to do.');
     }
 
     /**

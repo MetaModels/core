@@ -231,9 +231,9 @@ class ValueListener extends AbstractListener
     private function aliasToId(string $alias, IAttribute $attribute, string $language): string
     {
         if ($attribute instanceof IAliasConverter) {
-            $id = $attribute->getIdForAlias(substr($alias, 6), $language);
-            if ($id !== null) {
-                return $id;
+            $idForAlias = $attribute->getIdForAlias(substr($alias, 6), $language);
+            if ($idForAlias !== null) {
+                return $idForAlias;
             }
         }
 
@@ -272,6 +272,8 @@ class ValueListener extends AbstractListener
      * @param \MetaModels\IMetaModel $metaModel The current metamodel for the context.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     private function extractCurrentLanguageContext(IMetaModel $metaModel): string
     {

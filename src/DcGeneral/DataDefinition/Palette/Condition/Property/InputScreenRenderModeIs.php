@@ -125,7 +125,7 @@ class InputScreenRenderModeIs implements PropertyConditionInterface
                 ->select('t.rendermode')
                 ->from('tl_metamodel_dca', 't')
                 ->where('t.id=:id')
-                ->setParameter('id',  $value)
+                ->setParameter('id', $value)
                 ->setMaxResults(1)
                 ->executeQuery();
 

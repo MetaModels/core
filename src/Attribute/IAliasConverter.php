@@ -13,6 +13,7 @@
  * @package    MetaModels/core
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -47,17 +48,22 @@ interface IAliasConverter extends IAttribute
     /**
      * Try to get the alias for the given id.
      *
+     * Returns:
+     * - When language support for metamodels is given:
+     *      - Return the alias for the id in the given language
+     *      - Return null if the id isn't found
+     *      - Return null if the given language isn't supported
+     * - When language support for metamodels isn't given:
+     *      - Return the alias for the id, language parameter will be ignored
+     *      - Return null if the id isn't found
+     *
      * @param string $id       The id to search for.
      * @param string $language The target language to use for the result.
      *                         If the metamodels didn't support languages this parameter will be ignored.
      *
-     * @return string|null - When language support for metamodels is given:
-     *                          - Return the alias for the id in the given language
-     *                          - Return null if the id isn't found
-     *                          - Return null if the given language isn't supported
-     *                     - When language support for metamodels isn't given:
-     *                          - Return the alias for the id, language parameter will be ignored
-     *                          - Return null if the id isn't found
+     * @return string|null
+     *
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     public function getAliasForId(string $id, string $language): ?string;
 }

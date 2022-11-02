@@ -49,6 +49,11 @@ class Model implements ModelInterface
      */
     protected $arrMetaInformation = array();
 
+    /**
+     * The language of the contained data.
+     *
+     * @var string|null
+     */
     private ?string $language;
 
     /**
@@ -85,7 +90,7 @@ class Model implements ModelInterface
      */
     public function __construct($objItem, ?string $language = null)
     {
-        $this->objItem = $objItem;
+        $this->objItem  = $objItem;
         $this->language = $language;
     }
 
@@ -162,6 +167,9 @@ class Model implements ModelInterface
      * {@inheritDoc}
      *
      * @throws DcGeneralInvalidPropertyValueException When the property is unable to accept the value.
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function setProperty($strPropertyName, $varValue)
     {
@@ -176,7 +184,7 @@ class Model implements ModelInterface
                 if (null !== $this->language) {
                     if ($model instanceof ITranslatedMetaModel) {
                         $originalLanguage = $model->selectLanguage($this->language);
-                    } else if ($model->isTranslated()) {
+                    } elseif ($model->isTranslated()) {
                         $originalLanguage       = $GLOBALS['TL_LANGUAGE'];
                         $GLOBALS['TL_LANGUAGE'] = $this->language;
                     }

@@ -78,6 +78,10 @@
     }
   },
   "config": {
+    "allow-plugins": {
+      "contao-components/installer": false,
+      "contao/manager-plugin": false
+    },
     "sort-packages": true
   }
 }
