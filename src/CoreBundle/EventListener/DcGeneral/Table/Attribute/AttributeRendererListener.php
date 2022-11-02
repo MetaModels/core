@@ -73,7 +73,7 @@ class AttributeRendererListener extends BaseListener
         $name           = $attribute->getName();
         $arrDescription = StringUtil::deserialize($attribute->get('description'));
         if (is_array($arrDescription)) {
-            $description = $arrDescription[$attribute->getMetaModel()->getActiveLanguage()];
+            $description = $arrDescription[$attribute->getMetaModel()->getActiveLanguage()] ?? null;
             if (!$description) {
                 $description = $arrDescription[$attribute->getMetaModel()->getFallbackLanguage()];
             }
