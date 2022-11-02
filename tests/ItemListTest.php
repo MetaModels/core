@@ -13,6 +13,7 @@
  * @package    MetaModels/core
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  2012-2021 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -22,8 +23,13 @@ declare(strict_types=1);
 
 namespace MetaModels\Test;
 
+use MetaModels\Filter\Setting\IFilterSettingFactory;
+use MetaModels\IFactory;
 use MetaModels\ItemList;
+use MetaModels\Filter\FilterUrlBuilder;
+use MetaModels\Render\Setting\IRenderSettingFactory;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Test the base attribute.
@@ -34,7 +40,12 @@ final class ItemListTest extends TestCase
 {
     public function testGetOutputFormat(): void
     {
-        $itemlist = new ItemList();
+        $factory              = $this->getMockForAbstractClass(IFactory::class);
+        $filterFactory        = $this->getMockForAbstractClass(IFilterSettingFactory::class);
+        $renderSettingFactory = $this->getMockForAbstractClass(IRenderSettingFactory::class);
+        $eventDispatcher      = $this->getMockForAbstractClass(EventDispatcherInterface::class);
+        $filterUrlBuilder     = $this->getMockBuilder(FilterUrlBuilder::class)->disableOriginalConstructor()->getMock();
+        $itemlist             = new ItemList($factory, $filterFactory, $renderSettingFactory, $eventDispatcher, $filterUrlBuilder);
 
         if (!defined('TL_MODE')) {
             define('TL_MODE', 'FE');
