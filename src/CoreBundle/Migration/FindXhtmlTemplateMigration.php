@@ -88,6 +88,7 @@ class FindXhtmlTemplateMigration extends AbstractMigration
                 'This CAN NOT be done automatically!'
             );
         }
+        return new MigrationResult(true, 'Nothing to do.');
     }
 
     /**
