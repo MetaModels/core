@@ -198,16 +198,15 @@ class SimpleLookup extends Simple
     {
         // If defined as static, return nothing as not to be manipulated via editors.
         if (!$this->get('predef_param')) {
-            return array();
+            return [];
         }
 
         $objAttribute = $this->getFilteredAttribute();
         $arrOptions   = $objAttribute->getFilterOptions(null, (bool) $this->get('onlyused'));
 
-        return array(
-            $this->getParamName() => array
-            (
-                'label'   => array(
+        return [
+            $this->getParamName() => [
+                'label'     => [
                     sprintf(
                         $GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'][0],
                         $objAttribute->getName()
@@ -216,15 +215,15 @@ class SimpleLookup extends Simple
                         $GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'][1],
                         $objAttribute->getName()
                     )
-                ),
-                'inputType'    => 'select',
-                'options' => $arrOptions,
-                'eval' => array(
+                ],
+                'inputType' => 'select',
+                'options'   => $arrOptions,
+                'eval'      => [
                     'includeBlankOption' => true,
-                    'style' => 'min-width:450px;width:450px;margin-bottom:16px;margin-right:10px;'
-                )
-            )
-        );
+                    'style'              => 'min-width:450px;width:450px;margin-bottom:16px;margin-right:10px;'
+                ]
+            ]
+        ];
     }
 
     /**
