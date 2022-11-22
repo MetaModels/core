@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,9 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2019-05-03T19:21:47+02:00
+ * Last-updated: 2022-11-02T22:35:03+01:00
  *
- * @copyright 2012-2019 The MetaModels team.
+ * @copyright 2012-2022 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
@@ -25,10 +25,10 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['1']            = 'Выберите, если хотите, выполнить языконезависимый поиск. Если не выбрать, поиск будет произведен только на текущем, активном языке.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['allow_empty']['0']          = 'Разрешить пустое значение';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['allow_empty']['1']          = 'Выберите, если хотите, оставить значение фильтра пустым, если выбрано и параметр имеет пустое значение, это правило фильтра будет вести себя так, как будто оно не определено.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['apply_sorting']['0']        = 'Сортировка';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id']['0']              = 'Атрибут';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id']['1']              = 'Атрибут этой настройки относится к.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['blankoption']['0']          = 'Пустой параметр';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['blankoption']['1']          = 'Показывать пустые параметры в выборе.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['comment']['0']              = 'Комментарий';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['comment']['1']              = 'Краткий комментарий для описания этой настройки фильтра.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['config_legend']             = 'Конфигурация';
@@ -55,6 +55,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['items']['0']                =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['items']['1']                = 'Введите ID элементов для фильтрации как список, разделенный запятыми.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['0']                = 'Метка';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['1']                = 'Показать метки вместо названия атрибута.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['list_label']                = 'Настройки фильтра';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['0']                  = 'Новый';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['1']                  = 'Создать новую настройку';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['0']         = 'Только остальные значения';
@@ -66,6 +67,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteinto']['0']            =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pasteinto']['1']            = 'Создать новое в верхней части настройки ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pastenew']['0']             = 'Добавить новый сверху';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['pastenew']['1']             = 'Добавить новый после настройки ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['placeholder']['0']          = 'Заполнитель';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['0']         = 'Статический параметр';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param']['1']         = 'Проверьте, хотите ли вы установить значение этого параметра в списке родительских прав (модули, элементы контента и т. д.).';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['show']['0']                 = 'Детали настроек фильтра';
@@ -77,14 +79,10 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['1']     =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['0']             = 'Шаблон';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['1']             = 'Подшаблон для этого элемента фильтра. Стандарт: виджет формы.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['title_legend']              = 'Тип';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['toggle']['0']               = 'Переключить';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['toggle']['1']               = 'Переключить состояние настройки ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['type']['0']                 = 'Тип';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['type']['1']                 = 'Тип этого параметра.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_']     = '<span title="%s"><sup>(?)</sup></span>';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_default_']     = '%s <strong>%s</strong> %s <em>[%s]</em>';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand']  = '%s <strong>%s</strong> %s <br /> элементы, которые упомянуты во всех результатах.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionor']   = '%s <strong>%s</strong> %s <br /> элементы, которые упомянуты в любом результате.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['fefilter']      = '%s <strong>%s</strong> %s <br /> для атрибута <em>%s</em> (параметр URL-адреса: %s)';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup']  = '%s <strong>%s</strong> %s <br /> на атрибут <em>%s</em> (параметр URL-адреса: %s)';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionand'] = '\'И\' состояние';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionor']  = '\'ИЛИ\' состояние';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['customsql']    = 'Пользовательский SQL';

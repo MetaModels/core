@@ -1,14 +1,23 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2022 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
+ * Last-updated: 2022-11-02T22:34:16+01:00
  *
- * @link https://www.transifex.com/signup/
- * @link https://www.transifex.com/projects/p/$$project$$/language/$$lang$$/
- *
- * last-updated: 2017-08-24T12:42:40+02:00
+ * @copyright 2012-2022 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
 
@@ -20,4 +29,11 @@ $GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['2']['0'] = 'Kas omadus on nÃ
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['3']['0'] = 'VÃ•I';
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['4']['0'] = 'JA';
 $GLOBALS['TL_LANG']['XPL']['dcasetting_condition']['5']['0'] = 'EI';
+$GLOBALS['TL_LANG']['XPL']['tl_class']['2']['0']             = 'clr';
+$GLOBALS['TL_LANG']['XPL']['tl_class']['3']['0']             = 'clx';
+$GLOBALS['TL_LANG']['XPL']['tl_class']['4']['0']             = 'w50';
+$GLOBALS['TL_LANG']['XPL']['tl_class']['5']['0']             = 'w50x';
+$GLOBALS['TL_LANG']['XPL']['tl_class']['6']['0']             = 'm12';
+$GLOBALS['TL_LANG']['XPL']['tl_class']['7']['0']             = 'juhendaja';
+$GLOBALS['TL_LANG']['XPL']['tl_class']['8']['0']             = 'Pikk';
 

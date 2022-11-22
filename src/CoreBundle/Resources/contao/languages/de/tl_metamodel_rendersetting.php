@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,9 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2019-05-03T19:21:54+02:00
+ * Last-updated: 2022-11-02T22:35:11+01:00
  *
- * @copyright 2012-2019 The MetaModels team.
+ * @copyright 2012-2022 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
@@ -23,9 +23,9 @@
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['row']                     = '%s <strong>%s</strong> <em>[%s]</em>';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_activate']         = 'Hinzugefügte Attribute aktivieren.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_addsuccess']       = 'Das Attribut "%s" wurde der Render-Einstellung hinzugefügt.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_alreadycontained'] = 'Das Attribut %s ist bereits in der Render-Einstellung vorhanden.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_willadd']          = 'Das Attribut %s wird der Render-Einstellung hinzugefügt.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_addsuccess']       = 'Das Attribut "%s" [%s] wurde der Render-Einstellung hinzugefügt.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_alreadycontained'] = 'Das Attribut "%s" [%s] ist bereits in der Render-Einstellung vorhanden.';
+$GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addAll_willadd']          = 'Fügt das Attribut "%s" [%s] den Render-Einstellung hinzu.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']['0']             = 'Alle hinzufügen';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['addall']['1']             = 'Alle Attribute der Render-Einstellung hinzufügen.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersetting']['additional_class']['0']   = 'Eigene CSS-Klasse';

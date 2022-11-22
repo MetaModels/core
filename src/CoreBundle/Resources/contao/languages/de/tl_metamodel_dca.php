@@ -1,21 +1,31 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2022 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/de/
+ * Last-updated: 2022-11-02T22:34:43+01:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2017-08-24T12:42:58+02:00
+ * @copyright 2012-2022 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']              = 'Backend-Integration';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption']['0']         = 'Backend-Hilfetext';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption']['1']         = 'Dieser Text wird als Label und Beschreibung im Backend benutzt.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon']['0']            = 'Backend-Icon';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon']['1']            = 'Wählen Sie das gewünschte Backend-Icon aus. Dieses Icon wird für die linke (Inhalts-)navigation sowie für die \'bearbeiten\'-Ansicht benutzt.';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon']['1']            = 'Wählen Sie das gewünschte Backend-Symbol, das zum Zeichnen eines Icons in der übergeordneten Liste verwendet wird, wenn Sie eine Integration als Kindtabelle haben.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']['0']         = 'Backend-Bereich';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']['1']         = 'Wählen Sie den Backend-Bereich aus, in dem das MetaModel erscheinen soll. Für MetaModels, die von Backend-Benutzern bearbeitet werden sollen, wird der Bereich \'Inhalte\' empfohlen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_description']['0']      = 'Beschreibungstext';
@@ -54,7 +64,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['name']['1']                   = 'Name d
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']['0']                    = 'Neue Eingabemaske';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']['1']                    = 'Erstellen Sie eine neue Eingabemaske.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['0']            = 'Panel-Layout ';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['1']            = 'Separate Bedienfeldoptionen mit Komma (= Raum) und Semikolon (= neue Zeile) wie Sortieren, Filtern, suchen begrenzen.';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['1']            = 'Fügen Sie eine oder mehrere Panel-Optionen hinzu und trennen Sie diese mit einem Komma (= Freiraum) oder Semikolon (= neue Zeile), z. B. "filter;search;sort,limit".';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker']                 = 'Panelpicker';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['permissions_legend']          = 'Berechtigungen zur Datenanpassung';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['0']                 = 'Name der Elterntabelle';
