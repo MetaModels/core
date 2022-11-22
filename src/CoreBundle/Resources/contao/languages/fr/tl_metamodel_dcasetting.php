@@ -1,20 +1,27 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2022 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/fr/
+ * Last-updated: 2022-11-02T22:34:50+01:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2018-07-13T10:50:21+02:00
+ * @copyright 2012-2022 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Attribut "%s" ajouté au masque de saisie.';
+
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess_subpalette'] = 'Attribut "%s" ajouter à la sous région "%s".';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained']      = 'L\'attribut %s est déjà présent dans le masque de saisie.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd']               = 'Ajoutera l\'attribut"%s" au masque de saisie';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                  = 'Ajouter tout';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['1']                  = 'Ajouter tout les attributs au masque de saisie';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']              = 'Avancé';
@@ -53,7 +60,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']                   = 'Titre de la légende';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['0']                     = 'Nouveau';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['1']                     = 'Créer un nouveau paramètre.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']              = 'Tri, filtre et liste back office';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['presentation_legend']          = 'Option relative à l\'apparence du gadget';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['0']                = 'Lecture seulement';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['1']                = 'Si vrai, le gadget sera en mode lecture seulement et ne pourra être modifié.';
@@ -88,7 +94,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['0']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['1']                = 'Sélectionner le modèle qui doit être utilisé pour l\'attribut sélectionné. les fichiers modèle valides commencent par "mm_&lt;type&gt;" où le nom type est mis pour &lt;type&gt;';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']                 = 'Type';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['0']                = 'Classe back office';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['1']                = 'Ici vous pouvez définir les classe(s) du back office. Utilisez le sélecteur de style pour plsu d\'efficacité.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle']['0']                  = 'Basculer';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['0']           = 'Traitement du slash de fin';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['1']           = 'Ici vous pouvez spécifier comment le slash de fin doit être traité.';

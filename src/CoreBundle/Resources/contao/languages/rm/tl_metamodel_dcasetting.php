@@ -1,20 +1,27 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2022 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/rm/
+ * Last-updated: 2022-11-02T22:34:50+01:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2018-07-13T10:50:21+02:00
+ * @copyright 2012-2022 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Agiuntà l\'attribut "%s" a la mascra d\'endataziun.';
+
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess_subpalette'] = 'Agiuntà l\'attribut "%s" a la sut-sparta "%s".';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained']      = 'L\'attribut %s fa gia part da la mascra d\'endataziun.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd']               = 'Agiunta l\'attribut "%s" a la mascra d\'endataziun.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                  = 'Agiuntar tuts';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['1']                  = 'Agiuntar tut ils attributs a la mascra d\'endataziun';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']              = 'Avanzà';
@@ -53,7 +60,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']                   = 'Titel da la legenda';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['0']                     = 'Nov';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['1']                     = 'Crear ina nova configuraziun.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']              = 'Glistar, filtrar e zavrar en il back-end';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['presentation_legend']          = 'Opziuns davart l\'apparientscha dal widget';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['0']                = 'Be leger';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['1']                = 'Sche activà vegn il widget be legì e na po betg vegnir midà.';
@@ -88,7 +94,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['0']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['1']                = 'Tscherna il template che duai vegnir utilisà per l\'attribut tschernì. Datotecas da template validas cumenzan cun "mm_&lt;type&gt;", e &lt;type&gt; stat per il tip.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']                 = 'Tip';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['0']                = 'Classa dal back-end';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['1']                = 'Qua pos ti definir classas dal back-end. Tscherna il style-picker per far pli simpel.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle']['0']                  = 'Activar/deactivar';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['0']           = 'Slash a l\'entschatta';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['1']           = 'Qua pos ti definir sco ch\'in slash a l\'entschatta duai vegnir tractà';

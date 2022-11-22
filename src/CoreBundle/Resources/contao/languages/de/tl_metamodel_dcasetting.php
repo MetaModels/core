@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,9 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2019-05-03T19:21:32+02:00
+ * Last-updated: 2022-11-02T22:34:50+01:00
  *
- * @copyright 2012-2019 The MetaModels team.
+ * @copyright 2012-2022 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
@@ -22,10 +22,11 @@
 
 
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_activate']              = 'Hinzugefügte Attribute aktivieren.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Das Attribut "%s" wurde der Eingabemaske hinzugefügt.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Fügt das Attribut "%s" [%s, "%s"] der Eingabemaske hinzu.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess_subpalette'] = 'Das Attribut "%s" wurde dem Unterbereich "%s" hinzugefügt.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained']      = 'Das Attribut %s ist bereits in der Eingabemaske vorhanden.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd']               = 'Attribut "%s" der Eingabemaske hinzufügen.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained']      = 'Attribut "%s" [%s, "%s"] ist bereits in der Eingabemaske vorhanden.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_tlclass']               = 'Backend-Klasse';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd']               = 'Fügt das Attribut "%s" [%s, "%s"] der Eingabemaske hinzu.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                  = 'Alle hinzufügen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['1']                  = 'Alle Attribute der Eingabemaske hinzufügen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']              = 'Erweitert';
@@ -76,7 +77,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']                   = 'Legenden-Titel';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['0']                     = 'Neu';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['1']                     = 'Neue Einstellung erstellen.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']              = 'Auflistung, Filterung und Sortierung im Backend';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']              = 'Filtern und Suchen in der Backend-Liste';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pasteafter']['0']              = 'Neue Einstellung oben anlegen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pasteafter']['1']              = 'Neue Einstellung nach Element ID %s anlegen';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['pastenew']['0']                = 'Neue Einstellung oben anlegen';
@@ -120,7 +121,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['0']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['1']                = 'Wählen Sie das Template aus, das für das gewählte Attribut verwendet werden soll. Gültige Dateinamen für das Template beginnen mit "mm_&lt;typ&gt;", wobei &lt;typ&gt; für den Typ steht.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']                 = 'Typ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['0']                = 'Backend-Klasse';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['1']                = 'Hier können Sie eine oder mehrere Backend-Klassen festlegen. Benutzen Sie den Stylepicker für eine einfachere Auswahl der Backend-Klassen.';
+$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['1']                = 'Hier können Sie eine oder mehrere Backend-Klassen festlegen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle']['0']                  = 'Wechseln';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle']['1']                  = 'Umschaltung des Status der Einstellung ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['0']           = 'Führende \'/\' bearbeiten';

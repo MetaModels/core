@@ -1,20 +1,27 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2022 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/el/
+ * Last-updated: 2022-11-02T22:34:50+01:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2018-07-13T10:50:21+02:00
+ * @copyright 2012-2022 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Προστέθηκε το χαρακτηριστικό %s στην οθονη εισαγωγης.';
+
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess_subpalette'] = 'Προστέθηκε το χαρακτηριστικό %s στην υποπεριοχη "%s".';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained']      = 'Το χαρακτηριστικό %s είναι ήδη στην οθόνη εισαγωγής. ';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd']               = 'Θα προσθέσει την ιδιότητα "%s" στην οθόνη εισαγωγής. ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                  = 'Προσθηκη ολων';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['1']                  = 'Προσθέστε όλα τα χαρακτηριστικά για την οθόνη εισαγωγής';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']              = 'Προσαρμογη';
@@ -83,7 +90,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['0']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['1']                = 'Επιλέξτε το πρότυπο που πρέπει να χρησιμοποιηθεί για την επιλεγμένη ιδιότητα. Ισχύει για αρχεία προτύπων αρχίζουν με "mm_&lt;type&gt;" όπου το όνομα του τύπου τίθεται για &lt;type&gt;';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']                 = 'Τυπος';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['0']                = 'Backend κατηγορία ';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['1']                = 'Εδώ μπορείτε να ορίσετε μια backend κατηγορια(ες). Χρησιμοποιήστε τον στυλ επιλογέα για μια καλύτερη εμπειρία.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['0']           = 'Ακολουθία χειρισμόυ εκχέρσωσης';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['1']           = 'Εδώ μπορείτε να καθορίσετε τον τρόπο που πρέπει να αντιμετωπίζονται οι τελικές καθέτους ';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash_options']['0']   = 'Strip κάθετος κατά την αποθήκευση ';

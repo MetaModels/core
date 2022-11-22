@@ -1,24 +1,34 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2022 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/fr/
+ * Last-updated: 2022-11-02T22:35:03+01:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2018-03-09T21:04:19+01:00
+ * @copyright 2012-2022 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Cherche dans toutes les langues';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['1']            = 'Cocher si vous voulez effectuer une recherche indépendante du langage. Si non coché, seuls les langages courant activés seront recherché.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['allow_empty']['0']          = 'Permettre valeur vide';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['allow_empty']['1']          = 'Coché si vous souhaitez permettre cette valeur du filtre d\'être vide. si coché et que le paramètre contient une valeur vide, ce filtre ce comportera comme si il n\'était pas définit.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['apply_sorting']['0']        = 'Tri';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id']['0']              = 'Attribut';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id']['1']              = 'Attribut auquel ce paramètre se réfère.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['blankoption']['0']          = 'Option vide';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['blankoption']['1']          = 'Montrer les options vide dans la sélection.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['comment']['0']              = 'Commentaire';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['comment']['1']              = 'Un court commentaire pour décrire l\'objet de ce paramètre de filtre.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['config_legend']             = 'Configuration';
@@ -38,6 +48,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['0']                  =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['1']                  = 'La collection des paramètre de filtre à laquelle ce paramètre appartiens.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['0']                = 'Etiquette';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['1']                = 'Montrer l\'étiquette au lieu du nom d\'attribut';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['list_label']                = 'Paramètres de filtre';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['0']                  = 'Nouveau';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['1']                  = 'Créer un nouveau paramètre.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['0']         = 'Valeurs restante seulement';
@@ -52,14 +63,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['0']     =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['0']             = 'Modèle';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['1']             = 'Sous-modèle pour cet élément filtre. Standard: gadget formulaire.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['title_legend']              = 'Type';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['toggle']['0']               = 'Basculer';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['type']['0']                 = 'Type';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['type']['1']                 = 'Le type de ce paramètre.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_']     = '<span title="%s"><sup>(?)</sup></span>';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_default_']     = '%s <strong>%s</strong> %s <em>[%s]</em>';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand']  = '%s <strong>%s</strong> %s <br /> articles qui sont mentionnés dans tout les résultats.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionor']   = '%s <strong>%s</strong> %s <br /> articles qui sont mentionnés dans aucun résultat.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['fefilter']      = '%s <strong>%s</strong> %s <br /> pour l\'attribut <em>%s</em> (URL parameter: %s)';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup']  = '%s <strong>%s</strong> %s <br /> on attribute <em>%s</em> (URL parameter: %s)';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionand'] = 'condition AND';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionor']  = 'condition OR';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['customsql']    = 'SQL personalisé';
