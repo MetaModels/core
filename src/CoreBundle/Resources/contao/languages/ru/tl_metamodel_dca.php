@@ -1,21 +1,30 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2022 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/ru/
+ * Last-updated: 2022-11-02T22:34:43+01:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2018-11-26T23:36:59+01:00
+ * @copyright 2012-2022 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backend_legend']              = 'Интеграция в панель управления';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption']['0']         = 'Заголовок панели управления';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendcaption']['1']         = 'Текст, указанный здесь, будет использован как метка и описание в меню панели управления.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon']['0']            = 'Значок панели управления';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['backendicon']['1']            = 'Выберите значок раздела в панели управления. Значок будет использован в меню слева, в панели управления.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']['0']         = 'Секция панели управления';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['backendsection']['1']         = 'Выберите раздел панели управления, где хотите разместить вывод MetaModel. Для моделей, которые будут редактироваться конечными пользователями, наиболее подходящим будет раздел \'Контент\'.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['becap_description']['0']      = 'Текст описания';
@@ -54,7 +63,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['name']['1']                   = 'Наз
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']['0']                    = 'Новый входной экран';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']['1']                    = 'Создать новый входной экран';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['0']            = 'Макет панели';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['panelLayout']['1']            = 'Отдельные параметры панели с запятой (= пробел) и точка с запятой (= новая линия) как сортировка, фильтрация; поиск, лимит.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['panelpicker']                 = 'Выбор панели';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['permissions_legend']          = 'Разрешения на обработку данных';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['ptable']['0']                 = 'Имя родительской таблицы';

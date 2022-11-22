@@ -1,24 +1,34 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2022 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/rm/
+ * Last-updated: 2022-11-02T22:35:03+01:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2018-03-09T21:04:19+01:00
+ * @copyright 2012-2022 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Tschertgar tut las linguas';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['1']            = 'Activescha questa chaschetta sche ti vuls tschertgar independentamain da la lingua. Sche la chaschetta n\'è betg activada vegn be tschertgà en la lingua activa actualmain.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['allow_empty']['0']          = 'Lubir nagina valur';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['allow_empty']['1']          = 'Activescha questa chaschetta, sche ti vuls lubir che questa valur da filter è vida. Sche questa chaschetta è activada ed il parameter dal filter è vids, vegn la regla da filter tractada sco sch\'ela na fiss betg definida.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['apply_sorting']['0']        = 'Zavrar';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id']['0']              = 'Attribut';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id']['1']              = 'Attribut che vegn definì da questa configuraziun.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['blankoption']['0']          = 'Opziuns vidas';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['blankoption']['1']          = 'Mussar opziuns vidas per tscherner.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['comment']['0']              = 'Commentari';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['comment']['1']              = 'In curt commentari che descriva l\'intenziun da questa configuraziun da filter.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['config_legend']             = 'Configuraziun';
@@ -38,6 +48,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['0']                  =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['1']                  = 'La collecziun da configuraziun da filters tar la quala questa configuraziun tutga.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['0']                = 'Label';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['1']                = 'Mussar il label empè dal num da l\'attribut.';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['list_label']                = 'Configuraziuns da filter';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['0']                  = 'Nov';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['1']                  = 'Crear ina nova configuraziun.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['0']         = 'Be valurs restantas';
@@ -52,14 +63,9 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match']['0']     =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['0']             = 'Template';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['1']             = 'Sut-template per quest element da filter. Standard: form widget.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['title_legend']              = 'Tip';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['toggle']['0']               = 'Activar/deactivar';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['type']['0']                 = 'Tip';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['type']['1']                 = 'Il tip da questa configuraziun';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_']     = '<span title="%s"><sup>(?)</sup></span>';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_default_']     = '%s <strong>%s</strong> %s <em>[%s]</em>';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand']  = '%s <strong>%s</strong> %s <br /> elements ch\'èn menziunads en tut ils resultats.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionor']   = '%s <strong>%s</strong> %s <br /> elements ch\'èn menziunads en mintga resultat.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['fefilter']      = '%s <strong>%s</strong> %s <br /> per l\'attribut <em>%s</em> (parameter da l\'URL: %s)';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup']  = '%s <strong>%s</strong> %s <br /> per l\'attribut <em>%s</em> (parameter da l\'URL: %s)';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionand'] = 'cundiziun AND';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionor']  = 'cundiziun OR';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['customsql']    = 'SQL persunalisà';

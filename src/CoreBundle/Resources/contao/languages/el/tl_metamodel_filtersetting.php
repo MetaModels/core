@@ -1,15 +1,25 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2022 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/el/
+ * Last-updated: 2022-11-02T22:35:03+01:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2018-03-09T21:04:19+01:00
+ * @copyright 2012-2022 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['0']            = 'Αναζητηση ολων των γλωσσων';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs']['1']            = 'Ελέγξτε εάν θέλετε να εκτελέσετε την αναζήτηση ανεξάρτητης γλώσσας. Αν αυτό δεν είναι επιλεγμένο, μόνο η τρέχουσα ενεργή γλώσσα θα αναζητηθεί. ';
@@ -18,7 +28,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['allow_empty']['1']          =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id']['0']              = ' Χαρακτηριστικο';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id']['1']              = 'Χαρακτηριστικό που η ρύθμιση αυτή το αφορά.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['blankoption']['0']          = 'Κενη επιλογή ';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['blankoption']['1']          = 'Εμφάνιση άδειας επιλογης.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['comment']['0']              = 'Σχολιο';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['comment']['1']              = 'Ένα σύντομο σχόλιο για την περιγραφή του σκοπού της εν λόγω ρύθμισης φίλτρου. ';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['config_legend']             = 'Διαμόρφωση ';
@@ -38,6 +47,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['0']                  =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid']['1']                  = 'Η συλλογή των φίλτρων ρυθμίσεις, η ρύθμιση αυτή ανήκει εκει.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['0']                = 'Ετικετα';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label']['1']                = 'Εμφάνιση ετικέτας αντί για όνομα του χαρακτηριστικού. ';
+$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['list_label']                = 'Ρυθμισεις φιλτρου';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['0']                  = 'Νεος τυπος';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['new']['1']                  = 'Δημιουργια νεας ρυθμισης.';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible']['1']         = 'Εμφάνιση μόνο των επιλογων, που εξακολουθούν να ανατιθενται κάπου μετά το πραγματικο φίλτρο που έχει ρυθμιστεί.';
@@ -52,12 +62,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template']['1']             =
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['title_legend']              = 'Τυπος';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['type']['0']                 = 'Τυπος';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['type']['1']                 = 'Τυπος της ρυθμισης.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_comment_']     = '<span title="%s"><sup>(?)</sup></span>';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['_default_']     = '%s <strong>%s</strong> %s <em>[%s]</em>';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionand']  = '%s <strong>%s</strong> %s <br /> τα στοιχεία που αναφέρονται σε όλα τα αποτελέσματα.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['conditionor']   = '%s <strong>%s</strong> %s <br /> τα στοιχεία που αναφέρονται σε καθε αποτέλεσμα.';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['fefilter']      = '%s <strong>%s</strong> %s <br /> for attribute <em>%s</em> (URL parameter: %s)';
-$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typedesc']['simplelookup']  = '%s <strong>%s</strong> %s <br /> στο χαρακτηριστικο <em>%s</em> (URL παραμετρος: %s)';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionand'] = 'AND κατάσταση';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['conditionor']  = 'OR κατάσταση';
 $GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['typenames']['customsql']    = 'Προσαρμοσμένο SQL ';

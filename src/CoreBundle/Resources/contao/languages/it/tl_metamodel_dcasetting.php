@@ -1,20 +1,27 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2022 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/it/
+ * Last-updated: 2022-11-02T22:34:50+01:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2018-07-13T10:50:21+02:00
+ * @copyright 2012-2022 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess']            = 'Aggiunto l\'attributo "%s" alla maschera di input.';
+
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_addsuccess_subpalette'] = 'L\'attributo "%s" è stato aggiunto alla sotto area "%s".';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_alreadycontained']      = 'L\'attributo %s è già presente all\'interno della maschera di input.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addAll_willadd']               = 'L\'attributo "%s"sarà aggiunto alla maschera di input.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['0']                  = 'Aggiungi tutti';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['addall']['1']                  = 'Aggiungi tutti gli attributi nella maschera di input';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['advanced_legend']              = 'Avanzato';
@@ -53,7 +60,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_langcode']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['name_value']                   = 'Titolo legenda';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['0']                     = 'Nuovo';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['new']['1']                     = 'Crea una nuova impostazione.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['overview_legend']              = 'Lista del backend, filtri ed ordinamenti';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['presentation_legend']          = 'Widget per l\'aspetto delle opzioni correlate';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['0']                = 'Sola lettura';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['readonly']['1']                = 'Selezionare questa opzione per rendere il campo in sola lettura, senza che possa essere cambiata.';
@@ -88,7 +94,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['0']                =
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['template']['1']                = 'Selezionare il template che deve essere utilizzato per l\'attributo selezionato. Il nome del template deve iniziare con  "mm_&lt;type&gt;" dove il nome del tipo deve essere inserito al posto di &lt;type&gt;';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['title_legend']                 = 'Tipo';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['0']                = 'Classe del backend';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['tl_class']['1']                = 'In questo campo è possibile indicare la classe del backend. Utilizza il selettore di stile per una migliore prestazione.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['toggle']['0']                  = 'Toggle';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['0']           = 'Trattamento slash finale';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting']['trailingSlash']['1']           = 'Qui è possibile indicare come verranno trattati gli slash finali';
