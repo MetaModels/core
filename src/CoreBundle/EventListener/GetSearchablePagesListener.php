@@ -324,7 +324,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
             array_merge($view->getSettingNames(), $filterAttributes)
         ) as $item) {
             $jumpTo = $item->buildJumpToLink($view);
-            $event  = new GetPageDetailsEvent($jumpTo['page']);
+            $event  = new GetPageDetailsEvent((int) $jumpTo['page']);
             $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GET_PAGE_DETAILS);
             $pageDetails = $event->getPageDetails();
 
