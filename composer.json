@@ -74,9 +74,6 @@
       "runonce": [
         "runonce/runonce.php"
       ]
-    },
-    "branch-alias": {
-      "dev-hotfix/2.2.2": "2.2.2-dev"
     }
   },
   "config": {
