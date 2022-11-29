@@ -517,7 +517,7 @@ class ToolboxFile
     }
 
     /**
-     * Generate an URL for downloading the given file.
+     * Generate a URL for downloading the given file.
      *
      * @param string $strFile The file that shall be downloaded.
      *
@@ -533,7 +533,8 @@ class ToolboxFile
                 ->setQueryParameter('file', urlencode($strFile))
                 ->getUrl();
         }
-        if (isset($_SESSION) && !is_array($_SESSION['metaModels_downloads'])) {
+
+        if (isset($_SESSION['metaModels_downloads']) && !is_array($_SESSION['metaModels_downloads'])) {
             $_SESSION['metaModels_downloads'] = [];
         }
 
