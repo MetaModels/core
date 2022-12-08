@@ -206,7 +206,15 @@ class FilterUrlBuilder
         }
 
         if (null === $fragments = $this->determineFragments($request)) {
+            $filterUrl->setPageValue('alias', 'index');
+            $this->extractPostData($filterUrl, $options, $request);
+
             return;
+        }
+
+        // If alias part is empty, this means we have the 'index' page.
+        if (empty($fragments[0])) {
+            $fragments[0] = 'index';
         }
 
         $filterUrl->setPageValue('alias', $fragments[0]);
@@ -468,6 +476,10 @@ class FilterUrlBuilder
      */
     private function extractPostData(FilterUrl $filterUrl, $options, Request $request): void
     {
+        if (!$request->isMethod('POST')) {
+            return;
+        }
+
         if (empty($options['postAsSlug']) && empty($options['postAsGet'])) {
             return;
         }
