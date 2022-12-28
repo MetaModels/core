@@ -41,6 +41,8 @@ use MetaModels\Render\Template;
  */
 abstract class Base implements IAttribute
 {
+    use ManagedAttributeTrait;
+
     /**
      * The MetaModel instance this object belongs to.
      *
@@ -297,28 +299,52 @@ abstract class Base implements IAttribute
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function handleMetaChange($strMetaName, $varNewValue)
     {
         // By default, we accept any change of meta information.
         $this->set($strMetaName, $varNewValue);
 
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
+            return $this;
+        }
+        $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
+
         return $this;
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function destroyAUX()
     {
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
+            return;
+        }
+
+        $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
         // No-op.
     }
 
     /**
      * {@inheritdoc}
+     *
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function initializeAUX()
     {
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
+            return;
+        }
+
+        $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
         // No-op.
     }
 

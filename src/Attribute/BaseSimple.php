@@ -39,6 +39,8 @@ use MetaModels\IMetaModel;
  */
 class BaseSimple extends Base implements ISimple
 {
+    use ManagedAttributeTrait;
+
     /**
      * Database connection.
      *
@@ -114,9 +116,16 @@ class BaseSimple extends Base implements ISimple
      * @param mixed  $varNewValue The new value for this meta information.
      *
      * @return \MetaModels\Attribute\IAttribute The instance of this attribute, to support chaining.
+     *
+     * @deprecated Implement schema generators instead.
      */
     public function handleMetaChange($strMetaName, $varNewValue)
     {
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
+            return $this;
+        }
+
         // By default we accept any change of meta information.
         if ($strMetaName == 'colname') {
             if ($this->get($strMetaName) != $varNewValue) {
@@ -240,9 +249,15 @@ class BaseSimple extends Base implements ISimple
      * Deriving classes SHOULD override this function.
      *
      * @return string 'blob NULL'
+     *
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function getSQLDataType()
     {
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
+        }
+
         return 'blob NULL';
     }
 
@@ -250,9 +265,18 @@ class BaseSimple extends Base implements ISimple
      * Create auxiliary data like a column in the MetaModel table or references in another table etc.
      *
      * @return void
+     *
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function destroyAUX()
     {
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
+            return;
+        }
+
+        $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
+
         parent::destroyAUX();
         $this->deleteColumn();
     }
@@ -261,9 +285,18 @@ class BaseSimple extends Base implements ISimple
      * Delete all auxiliary data like a column in the MetaModel table or references in another table etc.
      *
      * @return void
+     *
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function initializeAUX()
     {
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
+            return;
+        }
+
+        $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
+
         parent::initializeAUX();
         $this->createColumn();
     }
@@ -274,9 +307,18 @@ class BaseSimple extends Base implements ISimple
      * You have to override this function in field types, when you want to have multi column structure etc.
      *
      * @return void
+     *
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function createColumn()
     {
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
+            return;
+        }
+
+        $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
+
         if ($this->getColName()) {
             $this->tableManipulator->createColumn(
                 $this->getMetaModel()->getTableName(),
@@ -290,9 +332,18 @@ class BaseSimple extends Base implements ISimple
      * Removes the underlying database structure for this field.
      *
      * @return void
+     *
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function deleteColumn()
     {
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
+            return;
+        }
+
+        $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
+
         $schemaManager = $this->connection->getSchemaManager();
         $columns       = $schemaManager->listTableColumns($this->getMetaModel()->getTableName());
 
@@ -308,9 +359,18 @@ class BaseSimple extends Base implements ISimple
      * @param string $strNewColumnName The new column name.
      *
      * @return void
+     *
+     * @deprecated Implement schema generators instead - see #1267.
      */
     public function renameColumn($strNewColumnName)
     {
+        if ($this->isManagedAttribute($this->get('type'))) {
+            $this->triggerDeprecationShouldNotCallManaged(static::class, __METHOD__);
+            return;
+        }
+
+        $this->triggerDeprecationIsUnmanagedAttribute(static::class, __METHOD__);
+
         $this->tableManipulator->checkColumnName($strNewColumnName);
 
         $schemaManager = $this->connection->getSchemaManager();

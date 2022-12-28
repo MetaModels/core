@@ -99,6 +99,12 @@ services:
 
 
 
+    MetaModels\CoreBundle\EventListener\DoctrineSchemaListener:
+      arguments:
+        $generator: '@MetaModels\Schema\SchemaGenerator'
+        $collector: '@MetaModels\InformationProvider\MetaModelInformationCollector'
+      tags:
+        - { name: doctrine.event_listener, event: postGenerateSchema }
 
     metamodels.backend.auth.listener:
         class: MetaModels\CoreBundle\EventListener\UserListener
