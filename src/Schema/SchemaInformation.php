@@ -21,6 +21,8 @@ declare(strict_types = 1);
 
 namespace MetaModels\Schema;
 
+use InvalidArgumentException;
+
 /**
  * This encapsulates the different schema engine information.
  */
@@ -29,9 +31,9 @@ class SchemaInformation
     /**
      * The list of registered schema information.
      *
-     * @var SchemaInformationInterface[]
+     * @var list<SchemaInformationInterface>
      */
-    private $information = [];
+    private array $information = [];
 
     /**
      * Retrieve schema information.
@@ -40,12 +42,12 @@ class SchemaInformation
      *
      * @return SchemaInformationInterface
      *
-     * @throws \InvalidArgumentException When the information is not registered.
+     * @throws InvalidArgumentException When the information is not registered.
      */
     public function get(string $name): SchemaInformationInterface
     {
         if (!$this->has($name)) {
-            throw new \InvalidArgumentException('Information with name "' . $name . '" not registered.');
+            throw new InvalidArgumentException('Information with name "' . $name . '" not registered.');
         }
 
         return $this->information[$name];
@@ -55,8 +57,6 @@ class SchemaInformation
      * Test if the information with the passed name is registered.
      *
      * @param string $name The name of the information to search.
-     *
-     * @return bool
      */
     public function has(string $name): bool
     {
@@ -68,14 +68,12 @@ class SchemaInformation
      *
      * @param SchemaInformationInterface $information The information to add.
      *
-     * @return void
-     *
-     * @throws \InvalidArgumentException When the information is already registered.
+     * @throws InvalidArgumentException When the information is already registered.
      */
     public function add(SchemaInformationInterface $information): void
     {
         if ($this->has($name = $information->getName())) {
-            throw new \InvalidArgumentException('Information with name "' . $name . '" already registered.');
+            throw new InvalidArgumentException('Information with name "' . $name . '" already registered.');
         }
 
         $this->information[$information->getName()] = $information;
@@ -84,7 +82,7 @@ class SchemaInformation
     /**
      * Obtain the list of registered names.
      *
-     * @return string[]
+     * @return list<string>
      */
     public function getRegisteredNames(): array
     {

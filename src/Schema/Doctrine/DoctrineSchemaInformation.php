@@ -31,31 +31,29 @@ class DoctrineSchemaInformation implements SchemaInformationInterface
 {
     /**
      * The generated doctrine schema.
-     *
-     * @var Schema
      */
-    private $schema;
+    private Schema $schema;
 
     /**
-     * A list of pre processors ordered by priority.
+     * A list of pre-processors ordered by priority.
      *
-     * @var SchemaProcessorInterface[][]
+     * @var array<int, list<SchemaProcessorInterface>>
      */
-    private $preProcessors = [];
+    private array $preProcessors = [];
 
     /**
      * A list of post processors by priority.
      *
-     * @var SchemaProcessorInterface[][]
+     * @var array<int, list<SchemaProcessorInterface>>
      */
-    private $postProcessors = [];
+    private array $postProcessors = [];
 
     /**
      * Create a new instance.
      *
      * @param Schema|null $schema The contained doctrine schema.
      */
-    public function __construct(Schema $schema = null)
+    public function __construct(?Schema $schema = null)
     {
         $this->schema = ($schema ?? new Schema());
     }
@@ -70,8 +68,6 @@ class DoctrineSchemaInformation implements SchemaInformationInterface
 
     /**
      * Retrieve schema.
-     *
-     * @return Schema
      */
     public function getSchema(): Schema
     {
@@ -83,10 +79,8 @@ class DoctrineSchemaInformation implements SchemaInformationInterface
      *
      * @param SchemaProcessorInterface $processor The processor to add.
      * @param int                      $priority  The priority to use.
-     *
-     * @return void
      */
-    public function addPreProcessor(SchemaProcessorInterface $processor, $priority = 0): void
+    public function addPreProcessor(SchemaProcessorInterface $processor, int $priority = 0): void
     {
         if (!isset($this->preProcessors[$priority])) {
             $this->preProcessors[$priority] = [];
@@ -98,7 +92,7 @@ class DoctrineSchemaInformation implements SchemaInformationInterface
     /**
      * Retrieve preProcessors.
      *
-     * @return SchemaProcessorInterface[]
+     * @return list<SchemaProcessorInterface>
      */
     public function getPreProcessors(): array
     {
@@ -114,10 +108,8 @@ class DoctrineSchemaInformation implements SchemaInformationInterface
      *
      * @param SchemaProcessorInterface $processor The processor to add.
      * @param int                      $priority  The priority to use.
-     *
-     * @return void
      */
-    public function addPostProcessor(SchemaProcessorInterface $processor, $priority = 0): void
+    public function addPostProcessor(SchemaProcessorInterface $processor, int $priority = 0): void
     {
         if (!isset($this->postProcessors[$priority])) {
             $this->postProcessors[$priority] = [];
@@ -129,7 +121,7 @@ class DoctrineSchemaInformation implements SchemaInformationInterface
     /**
      * Retrieve postProcessors.
      *
-     * @return SchemaProcessorInterface[]
+     * @return list<SchemaProcessorInterface>
      */
     public function getPostProcessors(): array
     {

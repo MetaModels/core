@@ -21,7 +21,7 @@ declare(strict_types = 1);
 
 namespace MetaModels\Schema\Doctrine;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use MetaModels\Information\MetaModelCollectionInterface;
 use MetaModels\Information\MetaModelInformationInterface;
 
@@ -47,8 +47,6 @@ class SystemColumnSchemaGenerator implements DoctrineSchemaGeneratorInterface
      *
      * @param DoctrineSchemaInformation     $schema               The doctrine schema to populate.
      * @param MetaModelInformationInterface $metaModelInformation The metamodel information to use.
-     *
-     * @return void
      */
     private function generateMetaModelSchema(
         DoctrineSchemaInformation $schema,
@@ -56,20 +54,21 @@ class SystemColumnSchemaGenerator implements DoctrineSchemaGeneratorInterface
     ): void {
         $tableSchema = $this->getSchemaForMetaModel($schema, $metaModelInformation);
 
-        $this->setColumnData($tableSchema, 'id', Type::INTEGER, [
+        $this->setColumnData($tableSchema, 'id', Types::INTEGER, [
             'unsigned' => true,
             'notnull' => true,
             'autoincrement' => true,
         ]);
-        $this->setColumnData($tableSchema, 'pid', Type::INTEGER, [
+        $this->setColumnData($tableSchema, 'pid', Types::INTEGER, [
             'unsigned' => true,
-            'notnull' => false,
+            'notnull' => true,
+            'default' => 0,
         ]);
-        $this->setColumnData($tableSchema, 'sorting', Type::INTEGER, [
+        $this->setColumnData($tableSchema, 'sorting', Types::INTEGER, [
             'unsigned' => true,
             'default' => 0,
         ]);
-        $this->setColumnData($tableSchema, 'tstamp', Type::INTEGER, [
+        $this->setColumnData($tableSchema, 'tstamp', Types::INTEGER, [
             'unsigned' => true,
             'default' => 0,
         ]);
@@ -78,12 +77,12 @@ class SystemColumnSchemaGenerator implements DoctrineSchemaGeneratorInterface
 
         if ($metaModelInformation->hasConfigurationValue('varsupport')
             && '1' === $metaModelInformation->getConfigurationValue('varsupport')) {
-            $this->setColumnData($tableSchema, 'varbase', Type::STRING, [
+            $this->setColumnData($tableSchema, 'varbase', Types::STRING, [
                 'length' => 1,
                 'fixed' => true,
                 'default' => '',
             ]);
-            $this->setColumnData($tableSchema, 'vargroup', Type::INTEGER, [
+            $this->setColumnData($tableSchema, 'vargroup', Types::INTEGER, [
                 'unsigned' => true,
                 'default' => 0,
             ]);

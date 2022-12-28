@@ -29,9 +29,9 @@ class SchemaManager implements SchemaManagerInterface
     /**
      * The list of registered schema managers.
      *
-     * @var SchemaManagerInterface[]
+     * @var list<SchemaManagerInterface>
      */
-    private $managers;
+    private array $managers;
 
     /**
      * Create a new instance.
