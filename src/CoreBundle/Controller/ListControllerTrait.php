@@ -253,14 +253,14 @@ trait ListControllerTrait
         }
 
         $template->items         = StringUtil::encodeEmail($itemRenderer->render($model->metamodel_noparsing, $model));
-        $template->numberOfItems = $itemRenderer->getObjItems()->getCount();
+        $template->numberOfItems = $itemRenderer->getItems()->getCount();
         $template->pagination    = $itemRenderer->getPagination();
 
         $responseTags = array_map(
             static function (IItem $item) {
                 return sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id'));
             },
-            iterator_to_array($itemRenderer->getObjItems(), false)
+            iterator_to_array($itemRenderer->getItems(), false)
         );
 
         $response = $template->getResponse();

@@ -433,9 +433,7 @@ class TableManipulator
      * Checks whether the given column does not exist.
      *
      * @param string  $strTableName      The table name to check.
-     *
      * @param string  $strColName        The column name to check.
-     *
      * @param boolean $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
      *
      * @return void
@@ -443,7 +441,7 @@ class TableManipulator
      * @throws InvalidTableNameException   If an invalid table name has been passed.
      * @throws TableDoesNotExistException  If the table does not exist.
      * @throws InvalidColumnNameException  If an invalid column name has been passed.
-     * @throws ColumnExistsException       If the column does exists.
+     * @throws ColumnExistsException       If the column does exist.
      *
      * @phpcs:ignore Squiz.Commenting.FunctionCommentThrowTag
      */
@@ -452,7 +450,7 @@ class TableManipulator
         $this->checkTableExists($strTableName);
         $this->checkColumnName($strColName, $blnAllowSystemCol);
 
-        if ($this->fieldExists($strColName, $strTableName)) {
+        if ($this->fieldExists($strTableName, $strColName)) {
             throw ColumnExistsException::withName($strColName, $strTableName);
         }
     }

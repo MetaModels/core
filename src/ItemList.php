@@ -883,9 +883,27 @@ class ItemList
      *
      * @return IItems
      */
-    public function getObjItems(): IItems
+    public function getItems(): IItems
     {
         return $this->objItems;
+    }
+
+    /**
+     * Returns the item list in the view.
+     *
+     * @return IItems
+     *
+     * @deprecated The method is deprecated and should not be used anymore.
+     */
+    public function getObjItems(): IItems
+    {
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            '"' .__METHOD__ . '" is deprecated - use \'getItems()\'.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
+        return $this->getItems();
     }
 
     /**

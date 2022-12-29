@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,7 @@
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -124,7 +124,7 @@ class HybridList extends MetaModelHybrid
         // Render items with encoded email strings as contao standard.
         $this->Template->items         =
             \StringUtil::encodeEmail($objItemRenderer->render($this->metamodel_noparsing, $this));
-        $this->Template->numberOfItems = $objItemRenderer->getObjItems()->getCount();
+        $this->Template->numberOfItems = $objItemRenderer->getItems()->getCount();
         $this->Template->pagination    = $objItemRenderer->getPagination();
     }
 }
