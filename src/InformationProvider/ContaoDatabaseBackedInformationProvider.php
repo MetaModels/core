@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,8 @@
  *
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -52,13 +53,17 @@ class ContaoDatabaseBackedInformationProvider implements InformationProviderInte
      */
     public function getNames(): array
     {
-        return $this
-            ->connection
-            ->createQueryBuilder()
-            ->select('tableName')
-            ->from('tl_metamodel')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_COLUMN);
+        if ($this->connection->createSchemaManager()->tablesExist('tl_metamodel')) {
+            return $this
+                ->connection
+                ->createQueryBuilder()
+                ->select('tableName')
+                ->from('tl_metamodel')
+                ->executeQuery()
+                ->fetchAllAssociative();
+        }
+
+        return [];
     }
 
     /**
@@ -76,8 +81,9 @@ class ContaoDatabaseBackedInformationProvider implements InformationProviderInte
             ->where('tableName=:tableName')
             ->setParameter('tableName', $information->getName())
             ->setMaxResults(1)
-            ->execute()
-            ->fetch(\PDO::FETCH_ASSOC);
+            ->executeQuery()
+            ->fetchAllAssociative();
+
         // Not managed by us.
         if (empty($configuration)) {
             return;
@@ -94,8 +100,8 @@ class ContaoDatabaseBackedInformationProvider implements InformationProviderInte
             ->where('pid=:pid')
             ->setParameter('pid', $information->getConfigurationValue('id'))
             ->orderBy('sorting')
-            ->execute()
-            ->fetchAll(\PDO::FETCH_ASSOC);
+            ->executeQuery()
+            ->fetchAllAssociative();
 
         foreach ($attributeRows as $attributeRow) {
             $colName = $attributeRow['colname'];
