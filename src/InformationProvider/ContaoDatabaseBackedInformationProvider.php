@@ -60,7 +60,7 @@ class ContaoDatabaseBackedInformationProvider implements InformationProviderInte
                 ->select('tableName')
                 ->from('tl_metamodel')
                 ->executeQuery()
-                ->fetchAllAssociative();
+                ->fetchFirstColumn();
         }
 
         return [];
@@ -82,7 +82,7 @@ class ContaoDatabaseBackedInformationProvider implements InformationProviderInte
             ->setParameter('tableName', $information->getName())
             ->setMaxResults(1)
             ->executeQuery()
-            ->fetchAllAssociative();
+            ->fetchAssociative();
 
         // Not managed by us.
         if (empty($configuration)) {
