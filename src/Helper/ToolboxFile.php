@@ -247,7 +247,7 @@ class ToolboxFile
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
-            $this->rootDir = System::getContainer()->getParameter('kernel.project_dirt');
+            $this->rootDir = System::getContainer()->getParameter('kernel.project_dir');
         }
 
         if (null === ($this->filesContext = $filesContext)) {
