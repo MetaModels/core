@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2020 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2020 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -181,11 +181,7 @@ class Collection implements ICollection
     {
         $parameters = [];
         foreach ($this->arrSettings as $objSetting) {
-            $filterNames  = $objSetting->getParameterFilterNames();
-            $filterType   = $objSetting->get('type');
-            $parameters[] = \array_map(function ($name) use ($filterType) {
-                return $name . ' [' . $filterType . ']';
-            }, $filterNames);
+            $parameters[] = $objSetting->getParameterFilterNames();
         }
 
         return [] === $parameters ? [] : array_merge(...$parameters);
