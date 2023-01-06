@@ -96,4 +96,7 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermodes']['flat']         = 'Flat';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermodes']['parented']     = 'Parented';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermodes']['hierarchical'] = 'Hierarchical';
 
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['hint_rendermode_hierarchical'] =
+    'When using the "Hierarchical" render mode, the current sort must be enable to "Manual sorting" as default.';
+
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['deleteConfirm'] = 'Do you really want to delete input screen ID %s?';
