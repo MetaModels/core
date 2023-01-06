@@ -272,6 +272,9 @@ services:
     MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter:
         public: false
 
+    MetaModels\CoreBundle\Sorter\AttributeSorter:
+      public: false
+
     MetaModels\Helper\ToolboxFile:
         public: false
         arguments:

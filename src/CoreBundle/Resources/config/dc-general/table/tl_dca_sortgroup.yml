@@ -6,6 +6,7 @@ services:
             - '@MetaModels\IFactory'
             - '@database_connection'
             - '@MetaModels\CoreBundle\Formatter\SelectAttributeOptionLabelFormatter'
+            - '@MetaModels\CoreBundle\Sorter\AttributeSorter'
         tags:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.get-property-options
