@@ -29,3 +29,11 @@ services:
             - name: kernel.event_listener
               event: dc-general.factory.build-data-definition
               method: handle
+
+    MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSortGroup\SortGroupCreateListener:
+      arguments:
+        - '@database_connection'
+      tags:
+        - name: kernel.event_listener
+          event: dc-general.model.pre-edit-model
+          method: handle
