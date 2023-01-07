@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2023 The MetaModels team.
+ * (c) 2012-2022 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2023 The MetaModels team.
+ * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -70,9 +70,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['delete'][0]                  
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['delete'][1]                    = 'Delete the definition ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['show'][0]                      = 'Definition details';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['show'][1]                      = 'Show details of definition ID %s';
-$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['toggle'][0]                 = 'Toggle';
-$GLOBALS['TL_LANG']['tl_metamodel_searchable_pages']['toggle'][1]                 =
-    'Toggle the state of definition ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['settings'][0]                  = 'Definition settings';
 $GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['settings'][1]                  =
     'Edit the settings of definition ID %s';
