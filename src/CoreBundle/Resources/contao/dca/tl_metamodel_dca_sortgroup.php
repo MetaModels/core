@@ -136,6 +136,11 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = [
                 'href'  => 'act=show',
                 'icon'  => 'show.svg'
             ],
+            'toggle' => [
+                'label'          => &$GLOBALS['TL_LANG']['tl_metamodel_dca_sortgroup']['toggle'],
+                'icon'           => 'visible.svg',
+                'toggleProperty' => 'published'
+            ]
         ]
     ],
     'metapalettes'          => [
@@ -270,6 +275,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dca_sortgroup'] = [
                 'rgxp'     => 'digit'
             ],
             'sql'       => "int(10) unsigned NOT NULL default '1'"
+        ],
+        'published' => [
+            'default' => 1,
+            'sql'     => "char(1) NOT NULL default '1'"
         ]
     ]
 ];
