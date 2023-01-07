@@ -204,6 +204,10 @@ class Contao2BackendViewDefinitionBuilder
         }
         $definitions = $listing->getGroupAndSortingDefinition();
         foreach ($this->inputScreen['groupSort'] as $information) {
+            if (!$information['published']) {
+                continue;
+            }
+
             $definition = $definitions->add();
             $definition->setName($information['name']);
             if ($information['isdefault'] && !$definitions->hasDefault()) {
