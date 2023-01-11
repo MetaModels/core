@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,7 +17,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -329,7 +329,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
             $pageDetails = $event->getPageDetails();
 
             // If there is a root page check the context or if we have no page continue.
-            if ($pageDetails === null || ($rootPage !== null && $pageDetails['rootId'] != $rootPage)) {
+            if (empty($pageDetails) || ($rootPage !== null && $pageDetails['rootId'] != $rootPage)) {
                 continue;
             }
 
@@ -401,13 +401,13 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
         // Remove the detail pages.
         foreach ($jumpTos as $jumpTo) {
             // Get the page from the url.
-            $event = new GetPageDetailsEvent($jumpTo['value']);
+            $event = new GetPageDetailsEvent((int) $jumpTo['value']);
             $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GET_PAGE_DETAILS);
 
             $pageDetails = $event->getPageDetails();
 
-            // Check if we have a page If not go to the next one.
-            if ($pageDetails === null) {
+            // Check if we have a page - if not go to the next one.
+            if (empty($pageDetails)) {
                 continue;
             }
 
