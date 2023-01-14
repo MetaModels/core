@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,18 +20,16 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-/**
- * Table tl_metamodel_attribute
- */
+use ContaoCommunityAlliance\DcGeneral\DC\General;
 
 $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
     'config'                => [
-        'dataContainer'    => 'General',
+        'dataContainer'    => General::class,
         'label'            => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['list_label'],
         'switchToEdit'     => false,
         'enableVersioning' => false,
@@ -53,15 +51,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
         ],
         'childCondition' => [
             [
-                'from'   => 'tl_metamodel_filter',
-                'to'     => 'tl_metamodel_filtersetting',
-                'setOn'  => [
+                'from'    => 'tl_metamodel_filter',
+                'to'      => 'tl_metamodel_filtersetting',
+                'setOn'   => [
                     [
                         'to_field'   => 'fid',
                         'from_field' => 'id',
                     ]
                 ],
-                'filter' => [
+                'filter'  => [
                     [
                         'local'     => 'fid',
                         'remote'    => 'id',
@@ -256,26 +254,26 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
         ]
     ],
     'fields'                => [
-        'id'                => [
+        'id'                   => [
             'sql' => 'int(10) unsigned NOT NULL auto_increment'
         ],
-        'pid'               => [
+        'pid'                  => [
             'sql' => "int(10) unsigned NOT NULL default '0'"
         ],
-        'sorting'           => [
+        'sorting'              => [
             'sorting' => true,
             'sql'     => "int(10) unsigned NOT NULL default '0'"
         ],
-        'tstamp'            => [
+        'tstamp'               => [
             'sql' => "int(10) unsigned NOT NULL default '0'"
         ],
-        'fid'               => [
+        'fid'                  => [
             // Keep this empty but keep it here!
             // needed for act=copy in DC_Table, as otherwise the fid value will not be copied.
             'label' => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fid'],
             'sql'   => "int(10) unsigned NOT NULL default '0'"
         ],
-        'type'              => [
+        'type'                 => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['type'],
             'exclude'   => true,
             'inputType' => 'select',
@@ -290,7 +288,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
             ],
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
-        'enabled'           => [
+        'enabled'              => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['enabled'],
             'exclude'   => true,
             'inputType' => 'checkbox',
@@ -301,14 +299,14 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'comment'           => [
+        'comment'              => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['comment'],
             'exclude'   => true,
             'inputType' => 'text',
             'eval'      => ['tl_class' => 'clr long'],
             'sql'       => "varchar(255) NOT NULL default ''"
         ],
-        'attr_id'           => [
+        'attr_id'              => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['attr_id'],
             'exclude'   => true,
             'inputType' => 'select',
@@ -323,7 +321,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
             ],
             'sql'       => "int(10) unsigned NOT NULL default '0'"
         ],
-        'all_langs'         => [
+        'all_langs'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['all_langs'],
             'exclude'   => true,
             'inputType' => 'checkbox',
@@ -333,7 +331,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'items'             => [
+        'items'                => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['items'],
             'exclude'   => true,
             'inputType' => 'textarea',
@@ -344,7 +342,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
             ],
             'sql'       => 'text NULL'
         ],
-        'urlparam'          => [
+        'urlparam'             => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['urlparam'],
             'exclude'   => true,
             'inputType' => 'text',
@@ -353,7 +351,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
             ],
             'sql'       => "varchar(255) NOT NULL default ''"
         ],
-        'predef_param'      => [
+        'predef_param'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['predef_param'],
             'exclude'   => true,
             'inputType' => 'checkbox',
@@ -363,7 +361,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'fe_widget'         => [
+        'fe_widget'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['fe_widget'],
             'exclude'   => true,
             'inputType' => 'checkbox',
@@ -373,7 +371,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_filtersetting'] = [
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'customsql'         => [
+        'customsql'            => [
             'label'       => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['customsql'],
             'exclude'     => true,
             'inputType'   => 'textarea',
@@ -390,7 +388,7 @@ WHERE 1 = 1',
             'explanation' => 'customsql',
             'sql'         => 'text NULL'
         ],
-        'allow_empty'       => [
+        'allow_empty'          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['allow_empty'],
             'exclude'   => true,
             'inputType' => 'checkbox',
@@ -400,7 +398,7 @@ WHERE 1 = 1',
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'stop_after_match'  => [
+        'stop_after_match'     => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['stop_after_match'],
             'exclude'   => true,
             'inputType' => 'checkbox',
@@ -410,7 +408,7 @@ WHERE 1 = 1',
             ],
             'sql'       => "char(1) NOT NULL default ''"
         ],
-        'label'             => [
+        'label'                => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['label'],
             'exclude'   => true,
             'inputType' => 'text',
@@ -419,7 +417,7 @@ WHERE 1 = 1',
             ],
             'sql'       => 'blob NULL'
         ],
-        'template'          => [
+        'template'             => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['template'],
             'default'   => 'mm_filteritem_default',
             'exclude'   => true,
@@ -430,7 +428,7 @@ WHERE 1 = 1',
             ],
             'sql'       => "varchar(64) NOT NULL default ''"
         ],
-        'blankoption'       => [
+        'blankoption'          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['blankoption'],
             'exclude'   => true,
             'default'   => true,
@@ -440,7 +438,7 @@ WHERE 1 = 1',
             ],
             'sql'       => "char(1) NOT NULL default '1'"
         ],
-        'onlyused'          => [
+        'onlyused'             => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlyused'],
             'exclude'   => true,
             'default'   => true,
@@ -451,7 +449,7 @@ WHERE 1 = 1',
             ],
             'sql'       => "char(1) NOT NULL default '0'"
         ],
-        'onlypossible'      => [
+        'onlypossible'         => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['onlypossible'],
             'exclude'   => true,
             'default'   => true,
@@ -461,7 +459,7 @@ WHERE 1 = 1',
             ],
             'sql'       => "char(1) NOT NULL default '0'"
         ],
-        'skipfilteroptions' => [
+        'skipfilteroptions'    => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['skipfilteroptions'],
             'exclude'   => true,
             'default'   => false,
@@ -471,7 +469,7 @@ WHERE 1 = 1',
             ],
             'sql'       => "char(1) NOT NULL default '0'"
         ],
-        'defaultid'         => [
+        'defaultid'            => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['defaultid'],
             'exclude'   => true,
             'inputType' => 'select',
@@ -481,7 +479,7 @@ WHERE 1 = 1',
             ],
             'sql'       => "varchar(255) NOT NULL default ''"
         ],
-        'hide_label' => [
+        'hide_label'           => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['hide_label'],
             'exclude'   => true,
             'default'   => false,
@@ -501,7 +499,7 @@ WHERE 1 = 1',
             ],
             'sql'       => "char(1) NOT NULL default '0'"
         ],
-        'apply_sorting'         => [
+        'apply_sorting'        => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['apply_sorting'],
             'exclude'   => true,
             'inputType' => 'select',
@@ -511,9 +509,9 @@ WHERE 1 = 1',
                 'tl_class'           => 'w50',
                 'includeBlankOption' => true
             ],
-            'sql' => ['type' => 'string', 'length' => '24', 'notnull' => false, 'default' => '']
+            'sql'       => ['type' => 'string', 'length' => '24', 'notnull' => false, 'default' => '']
         ],
-        'cssID' => [
+        'cssID'                => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['cssID'],
             'exclude'   => true,
             'inputType' => 'text',
@@ -524,7 +522,7 @@ WHERE 1 = 1',
             ],
             'sql'       => "varchar(255) NOT NULL default ''"
         ],
-        'placeholder' => [
+        'placeholder'          => [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filtersetting']['placeholder'],
             'exclude'   => true,
             'inputType' => 'text',
