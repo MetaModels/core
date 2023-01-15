@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -20,17 +20,19 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Andreas Fischer <anfischer@kaffee-partner.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Helper;
 
+use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
+use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
+use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use Contao\Controller;
 use Contao\CoreBundle\Image\ImageFactoryInterface;
 use Contao\CoreBundle\Image\PictureFactoryInterface;
-use Contao\CoreBundle\Session\LazySessionAccess;
 use Contao\Dbafs;
 use Contao\Environment;
 use Contao\File;
@@ -38,13 +40,9 @@ use Contao\FilesModel;
 use Contao\Input;
 use Contao\LayoutModel;
 use Contao\PageError403;
-use Contao\Picture;
 use Contao\StringUtil;
 use Contao\System;
 use Contao\Validator;
-use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
-use ContaoCommunityAlliance\Contao\Bindings\Events\Image\ResizeImageEvent;
-use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
 use InvalidArgumentException;
 use Symfony\Component\Asset\Context\ContextInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -65,98 +63,105 @@ class ToolboxFile
      *
      * @deprecated The event dispatcher will get removed in 3.0 as we now use the image factory.
      */
-    private $dispatcher;
+    private EventDispatcherInterface|null $dispatcher;
 
     /**
      * The project root dir.
      *
-     * @var string
+     * @var string|null
      */
-    private $rootDir;
+    private string|null $rootDir;
 
     /**
      * The image factory for resizing.
      *
-     * @var ImageFactoryInterface
+     * @var ImageFactoryInterface|null
      */
-    private $imageFactory;
+    private ImageFactoryInterface|null $imageFactory;
 
     /**
-     * The assets files context.
+     * The assets file context.
      *
-     * @var ContextInterface
+     * @var ContextInterface|null
      */
-    private $filesContext;
+    private ContextInterface|null $filesContext;
 
     /**
      * The picture factory.
      *
-     * @var PictureFactoryInterface
+     * @var PictureFactoryInterface|null
      */
-    private $pictureFactory;
+    private PictureFactoryInterface|null $pictureFactory;
+
+    /**
+     * Symfony session object
+     *
+     * @var Session
+     */
+    private Session $session;
 
     /**
      * Allowed file extensions.
      *
      * @var array
      */
-    protected $acceptedExtensions;
+    protected array $acceptedExtensions = [];
 
     /**
      * Base language, used for retrieving meta.txt information.
      *
      * @var string
      */
-    protected $baseLanguage;
+    protected string $baseLanguage = '';
 
     /**
      * The fallback language, used for retrieving meta.txt information.
      *
      * @var string
      */
-    protected $fallbackLanguage;
+    protected string $fallbackLanguage = '';
 
     /**
      * Determines if we want to generate images or not.
      *
-     * @var boolean
+     * @var bool
      */
-    protected $blnShowImages;
+    protected bool $blnShowImages = false;
 
     /**
      * Image resize information.
      *
      * @var array
      */
-    protected $resizeImages;
+    protected array $resizeImages = [];
 
     /**
      * The id to use in lightboxes.
      *
      * @var string
      */
-    protected $strLightboxId;
+    protected string $strLightboxId = '';
 
     /**
      * The files to process in this instance.
      *
      * @var array
      */
-    protected $foundFiles = [];
+    protected array $foundFiles = [];
 
     /**
      * The pending paths to collect from DB.
      *
      * @var string[]
      */
-    protected $pendingPaths = [];
+    protected array $pendingPaths = [];
 
     /**
      * The pending uuids to collect from DB.
      *
      * @var array
      */
-    protected $pendingIds = [];
+    protected array $pendingIds = [];
 
     /**
      * Flag if download keys shall be generated.
@@ -170,43 +175,37 @@ class ToolboxFile
      *
      * @var array
      */
-    protected $metaInformation;
+    protected array $metaInformation = [];
 
     /**
      * File id mapping for files.
      *
      * @var string[]
      */
-    protected $uuidMap = [];
+    protected array $uuidMap = [];
 
     /**
      * Buffered file information.
      *
      * @var array
      */
-    protected $outputBuffer;
+    protected array $outputBuffer = [];
 
     /**
      * Buffered modification timestamps.
      *
      * @var array
      */
-    protected $modifiedTime;
-
-    /**
-     * Symfony session object
-     *
-     * @var Session
-     */
-    private $session;
+    protected array $modifiedTime = [];
 
     /**
      * Create a new instance.
      *
      * @param ImageFactoryInterface|EventDispatcherInterface|null $imageFactory   The image factory to use.
      * @param string|null                                         $rootDir        The root path of the installation.
-     * @param ContextInterface|null                               $filesContext   The assets files context.
+     * @param ContextInterface|null                               $filesContext   The assets file context.
      * @param PictureFactoryInterface|null                        $pictureFactory The picture factory.
+     * @param Session|null                                        $session        The session.
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
@@ -214,10 +213,11 @@ class ToolboxFile
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
-        $imageFactory = null,
+        ImageFactoryInterface|EventDispatcherInterface $imageFactory = null,
         string $rootDir = null,
         ContextInterface $filesContext = null,
-        PictureFactoryInterface $pictureFactory = null
+        PictureFactoryInterface $pictureFactory = null,
+        Session $session = null
     ) {
         switch (true) {
             case ($imageFactory instanceof ImageFactoryInterface) && !empty($rootDir):
@@ -275,11 +275,22 @@ class ToolboxFile
                 'Not passing an "PictureFactoryInterface" is deprecated.',
                 E_USER_DEPRECATED
             );
-
             // @codingStandardsIgnoreEnd
             $this->pictureFactory = System::getContainer()->get('contao.image.picture_factory');
         }
-        $this->session = System::getContainer()->get('session');
+
+        if (null === $session) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                'Not passing a "Session" is deprecated.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+            $session = System::getContainer()->get('session');
+            assert($session instanceof Session);
+        }
+
+        $this->session = $session;
     }
 
     /**
@@ -297,11 +308,11 @@ class ToolboxFile
         // We must not allow file extensions that are globally disabled.
         $allowedDownload = StringUtil::trimsplit(',', $GLOBALS['TL_CONFIG']['allowedDownload']);
 
-        if (!is_array($acceptedExtensions)) {
+        if (!\is_array($acceptedExtensions)) {
             $acceptedExtensions = StringUtil::trimsplit(',', $acceptedExtensions);
         }
 
-        $this->acceptedExtensions = array_map('strtolower', array_intersect($allowedDownload, $acceptedExtensions));
+        $this->acceptedExtensions = \array_map('strtolower', \array_intersect($allowedDownload, $acceptedExtensions));
     }
 
     /**
@@ -496,14 +507,14 @@ class ToolboxFile
 
         $conditions = [];
         $parameters = [];
-        if (count($this->pendingIds)) {
+        if (\count($this->pendingIds)) {
             $conditions[] = $table . '.uuid IN(' .
-                            implode(',', array_fill(0, count($this->pendingIds), 'UNHEX(?)')) . ')';
-            $parameters   = array_map('bin2hex', $this->pendingIds);
+                            \implode(',', \array_fill(0, count($this->pendingIds), 'UNHEX(?)')) . ')';
+            $parameters   = \array_map('bin2hex', $this->pendingIds);
 
             $this->pendingIds = [];
         }
-        if (count($this->pendingPaths)) {
+        if (\count($this->pendingPaths)) {
             $slug = $table . '.path LIKE ?';
             foreach ($this->pendingPaths as $pendingPath) {
                 $conditions[] = $slug;
@@ -512,11 +523,11 @@ class ToolboxFile
             $this->pendingPaths = [];
         }
 
-        if (!count($conditions)) {
+        if (!\count($conditions)) {
             return;
         }
 
-        if ($files = FilesModel::findBy([implode(' OR ', $conditions)], $parameters)) {
+        if ($files = FilesModel::findBy([\implode(' OR ', $conditions)], $parameters)) {
             $this->addFileModels($files);
         }
 
@@ -540,19 +551,18 @@ class ToolboxFile
     {
         if (!$this->withDownloadKeys) {
             return UrlBuilder::fromUrl(Environment::get('request'))
-                ->setQueryParameter('file', urlencode($strFile))
+                ->setQueryParameter('file', \urlencode($strFile))
                 ->getUrl();
-        }
-
-        if (isset($_SESSION['metaModels_downloads']) && !is_array($_SESSION['metaModels_downloads'])) {
-            $_SESSION['metaModels_downloads'] = [];
         }
 
         $bag = $this->session->getBag('attributes');
 
         $links = $bag->has('metaModels_downloads') ? $bag->get('metaModels_downloads') : [];
+        if (!\is_array($links)) {
+            $links = [];
+        }
         if (!isset($links[$strFile])) {
-            $links[$strFile] = md5(uniqid());
+            $links[$strFile] = \md5(\uniqid('', true));
             $bag->set('metaModels_downloads', $links);
         }
 
@@ -604,7 +614,7 @@ class ToolboxFile
         $files  = [];
         $source = [];
 
-        foreach (array_keys($arrFiles) as $k) {
+        foreach (\array_keys($arrFiles) as $k) {
             $files[]  = $arrFiles[$k];
             $source[] = $arrSource[$k];
         }
@@ -667,8 +677,8 @@ class ToolboxFile
      */
     protected function addClasses(&$arrSource)
     {
-        $countFiles = count($arrSource);
-        foreach (array_keys($arrSource) as $k) {
+        $countFiles = \count($arrSource);
+        foreach (\array_keys($arrSource) as $k) {
             $arrSource[$k]['class'] = (($k == 0) ? ' first' : '') .
                                       (($k == ($countFiles - 1)) ? ' last' : '') .
                                       ((($k % 2) == 0) ? ' even' : ' odd');
@@ -712,9 +722,9 @@ class ToolboxFile
         }
 
         if ($blnAscending) {
-            array_multisort($arrFiles, SORT_NUMERIC, $arrDates, SORT_ASC);
+            \array_multisort($arrFiles, SORT_NUMERIC, $arrDates, SORT_ASC);
         } else {
-            array_multisort($arrFiles, SORT_NUMERIC, $arrDates, SORT_DESC);
+            \array_multisort($arrFiles, SORT_NUMERIC, $arrDates, SORT_DESC);
         }
 
         return $this->remapSorting($arrFiles, $this->outputBuffer);
@@ -733,7 +743,7 @@ class ToolboxFile
         if (!$fileMap) {
             return ['files' => [], 'source' => []];
         }
-        $fileKeys = array_flip(array_keys($this->uuidMap));
+        $fileKeys = \array_flip(\array_keys($this->uuidMap));
         $sorted   = [];
         foreach ($sortIds as $sortStringId) {
             $key          = $fileKeys[$sortStringId];
@@ -760,9 +770,9 @@ class ToolboxFile
             return ['files' => [], 'source' => []];
         }
 
-        $keys  = array_keys($arrFiles);
+        $keys  = \array_keys($arrFiles);
         $files = [];
-        shuffle($keys);
+        \shuffle($keys);
         foreach ($keys as $key) {
             $files[$key] = $arrFiles[$key];
         }
@@ -821,9 +831,14 @@ class ToolboxFile
 
         if (($file = Input::get('file'))) {
             if ($this->withDownloadKeys) {
+                $bag   = $this->session->getBag('attributes');
+                $links = $bag->has('metaModels_downloads') ? $bag->get('metaModels_downloads') : [];
+                if (!\is_array($links)) {
+                    $links = [];
+                }
                 // Check key and return 403 if mismatch
                 // keep both null-coalescing values different to account for missing values.
-                if (($_SESSION['metaModels_downloads'][$file] ?? null) !== (Input::get('fileKey') ?? false)) {
+                if (($links[$file] ?? null) !== (Input::get('fileKey') ?? false)) {
                     $objHandler = new $GLOBALS['TL_PTY']['error_403']();
                     /** @var PageError403 $objHandler */
                     $objHandler->generate($file);
@@ -910,8 +925,8 @@ class ToolboxFile
         }
 
         // Convert UUIDs to binary and clean empty values out.
-        $values = array_filter(
-            array_map(function ($fileId) {
+        $values = \array_filter(
+            \array_map(function ($fileId) {
                 return Validator::isStringUuid($fileId) ? StringUtil::uuidToBin($fileId) : $fileId;
             }, $values)
         );
@@ -961,7 +976,7 @@ class ToolboxFile
      */
     public static function convertUuidsOrPathsToMetaModels($values)
     {
-        $values = array_filter((array) $values);
+        $values = \array_filter((array) $values);
         if (empty($values)) {
             return [
                 'bin'   => [],
@@ -1005,13 +1020,13 @@ class ToolboxFile
         $baseLanguage     = $this->getBaseLanguage();
         $fallbackLanguage = $this->getFallbackLanguage();
         foreach ($files as $file) {
-            if ('folder' === $file->type && !in_array($file->path, $skipPaths)) {
+            if ('folder' === $file->type && !\in_array($file->path, $skipPaths)) {
                 $this->pendingPaths[] = $file->path . '/';
                 continue;
             }
             if (is_file(TL_ROOT . DIRECTORY_SEPARATOR . $file->path)
-                && in_array(
-                    strtolower(pathinfo($file->path, PATHINFO_EXTENSION)),
+                && \in_array(
+                    \strtolower(pathinfo($file->path, PATHINFO_EXTENSION)),
                     $this->acceptedExtensions
                 )
             ) {
@@ -1043,13 +1058,13 @@ class ToolboxFile
     {
         $file  = new File($fileName);
         $meta  = $this->metaInformation[dirname($fileName)][$file->basename] ?? [];
-        $title = isset($meta['title']) && strlen($meta['title'])
+        $title = isset($meta['title']) && \strlen($meta['title'])
             ? $meta['title']
             : StringUtil::specialchars($file->basename);
-        if (isset($meta['caption']) && strlen($meta['caption'])) {
+        if (isset($meta['caption']) && \strlen($meta['caption'])) {
             $altText = $meta['caption'];
         } else {
-            $altText = ucfirst(str_replace('_', ' ', preg_replace('/^[0-9]+_/', '', $file->filename)));
+            $altText = \ucfirst(\str_replace('_', ' ', \preg_replace('/^[0-9]+_/', '', $file->filename)));
         }
 
         $information = [
@@ -1062,7 +1077,7 @@ class ToolboxFile
             'icon'       => 'assets/contao/images/' . $file->icon,
             'extension'  => $file->extension,
             'size'       => $file->filesize,
-            'sizetext'   => sprintf('(%s)', Controller::getReadableSize($file->filesize, 2)),
+            'sizetext'   => \sprintf('(%s)', Controller::getReadableSize($file->filesize, 2)),
             'url'        => StringUtil::specialchars($this->getDownloadLink($fileName)),
             'isGdImage'  => false,
             'isSvgImage' => false,
@@ -1071,7 +1086,7 @@ class ToolboxFile
 
         // Prepare GD images.
         if ($information['isGdImage'] = $file->isGdImage) {
-            $information['src'] = urldecode($this->resizeImage($fileName));
+            $information['src'] = \urldecode($this->resizeImage($fileName));
             $information['lb']  = 'lb_' . $this->getLightboxId();
             if (file_exists(TL_ROOT . '/' . $information['src'])) {
                 $size              = getimagesize(TL_ROOT . '/' . $information['src']);

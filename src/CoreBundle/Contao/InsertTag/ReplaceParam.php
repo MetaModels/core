@@ -147,7 +147,7 @@ final class ReplaceParam
         ) {
             return $content;
         }
-        // FIXME: only frontend now, is this ok? :/
+
         $sessionBag = $this->session->getBag('contao_frontend');
 
         if ((false === \strpos($tag, '&default='))) {
