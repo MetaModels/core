@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,216 +18,172 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-/**
- * Table tl_metamodel_attribute
- */
+use ContaoCommunityAlliance\DcGeneral\DC\General;
 
-$GLOBALS['TL_DCA']['tl_metamodel_filter'] = array
-(
-    'config'                          => array
-    (
-        'dataContainer'               => 'General',
-        'switchToEdit'                => false,
-        'enableVersioning'            => false,
-        'sql'              => array
-        (
-            'keys' => array
-            (
-                'id'      => 'primary',
-                'pid'     => 'index'
-            ),
-        ),
-    ),
+$GLOBALS['TL_DCA']['tl_metamodel_filter'] = [
+    'config' => [
+        'dataContainer'    => General::class,
+        'switchToEdit'     => false,
+        'enableVersioning' => false,
+        'sql'              => [
+            'keys' => [
+                'id'  => 'primary',
+                'pid' => 'index'
+            ],
+        ],
+    ],
 
-    'dca_config'                      => array
-    (
-        'data_provider'               => array
-        (
-            'default'                 => array
-            (
-                'source'              => 'tl_metamodel_filter'
-            ),
-            'parent'                  => array
-            (
-                'source'              => 'tl_metamodel'
-            ),
+    'dca_config' => [
+        'data_provider'  => [
+            'default' => [
+                'source' => 'tl_metamodel_filter'
+            ],
+            'parent'  => [
+                'source' => 'tl_metamodel'
+            ],
 
-            'tl_metamodel_filtersetting' => array
-            (
-                'source'              => 'tl_metamodel_filtersetting'
-            ),
-        ),
-        'childCondition'              => array
-        (
-            array
-            (
-                'from'                => 'tl_metamodel',
-                'to'                  => 'tl_metamodel_filter',
-                'setOn'               => array
-                (
-                    array
-                    (
-                        'to_field'    => 'pid',
-                        'from_field'  => 'id',
-                    ),
-                ),
-                'filter'              => array
-                (
-                    array
-                    (
-                        'local'       => 'pid',
-                        'remote'      => 'id',
-                        'operation'   => '=',
-                    ),
-                ),
-                'inverse'             => array
-                (
-                    array
-                    (
-                        'local'       => 'pid',
-                        'remote'      => 'id',
-                        'operation'   => '=',
-                    ),
-                )
-            ),
+            'tl_metamodel_filtersetting' => [
+                'source' => 'tl_metamodel_filtersetting'
+            ],
+        ],
+        'childCondition' => [
+            [
+                'from'    => 'tl_metamodel',
+                'to'      => 'tl_metamodel_filter',
+                'setOn'   => [
+                    [
+                        'to_field'   => 'pid',
+                        'from_field' => 'id',
+                    ],
+                ],
+                'filter'  => [
+                    [
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ],
+                ],
+                'inverse' => [
+                    [
+                        'local'     => 'pid',
+                        'remote'    => 'id',
+                        'operation' => '=',
+                    ],
+                ]
+            ],
 
-            array(
+            [
                 'from'   => 'tl_metamodel_filter',
                 'to'     => 'tl_metamodel_filtersetting',
-                'setOn'  => array
-                (
-                    array
-                    (
+                'setOn'  => [
+                    [
                         'to_field'   => 'fid',
                         'from_field' => 'id',
-                    )
-                ),
-                'filter' => array
-                (
-                    array
-                    (
+                    ]
+                ],
+                'filter' => [
+                    [
                         'local'     => 'fid',
                         'remote'    => 'id',
                         'operation' => '=',
-                    ),
-                )
-            ),
-        ),
-    ),
+                    ],
+                ]
+            ],
+        ],
+    ],
 
-    'list' => array
-    (
-        'sorting' => array
-        (
-            'mode'                    => 4,
-            'fields'                  => array
-            (
+    'list' => [
+        'sorting' => [
+            'mode'         => 4,
+            'fields'       => [
                 'name'
-            ),
-            'panelLayout'             => 'filter,sort,limit',
-            'headerFields'            => array
-            (
+            ],
+            'panelLayout'  => 'filter,sort,limit',
+            'headerFields' => [
                 'name'
-            ),
-            'flag'                    => 1,
-        ),
+            ],
+            'flag'         => 1,
+        ],
 
-        'label' => array
-        (
-            'fields'                  => array
-            (
+        'label' => [
+            'fields' => [
                 'name'
-            ),
-            'format'                  => '%s'
-        ),
+            ],
+            'format' => '%s'
+        ],
 
-        'global_operations' => array
-        (
-            'all' => array
-            (
-                'label'               => &$GLOBALS['TL_LANG']['MSC']['all'],
-                'href'                => 'act=select',
-                'class'               => 'header_edit_all',
-                'attributes'          => 'onclick="Backend.getScrollOffset();"'
-            )
-        ),
+        'global_operations' => [
+            'all' => [
+                'label'      => &$GLOBALS['TL_LANG']['MSC']['all'],
+                'href'       => 'act=select',
+                'class'      => 'header_edit_all',
+                'attributes' => 'onclick="Backend.getScrollOffset();"'
+            ]
+        ],
 
-        'operations' => array
-        (
-            'edit' => array
-            (
-                'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['edit'],
-                'href'                => 'act=edit',
-                'icon'                => 'edit.svg'
-            ),
-            'delete' => array
-            (
-                'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['delete'],
-                'href'                => 'act=delete',
-                'icon'                => 'delete.svg',
-                'attributes'          => sprintf(
+        'operations' => [
+            'edit'     => [
+                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['edit'],
+                'href'  => 'act=edit',
+                'icon'  => 'edit.svg'
+            ],
+            'delete'   => [
+                'label'      => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['delete'],
+                'href'       => 'act=delete',
+                'icon'       => 'delete.svg',
+                'attributes' => sprintf(
                     'onclick="if (!confirm(\'%s\')) return false; Backend.getScrollOffset();"',
                     $GLOBALS['TL_LANG']['tl_metamodel_filter']['deleteConfirm'] ?? ''
                 )
-            ),
-            'show' => array
-            (
-                'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['show'],
-                'href'                => 'act=show',
-                'icon'                => 'show.svg'
-            ),
-            'settings' => array
-            (
-                'label'               => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['settings'],
-                'href'                => 'table=tl_metamodel_filtersetting',
-                'idparam'             => 'pid',
-                'icon'                => 'bundles/metamodelscore/images/icons/filter_setting.png',
-            ),
-        )
-    ),
+            ],
+            'show'     => [
+                'label' => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['show'],
+                'href'  => 'act=show',
+                'icon'  => 'show.svg'
+            ],
+            'settings' => [
+                'label'   => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['settings'],
+                'href'    => 'table=tl_metamodel_filtersetting',
+                'idparam' => 'pid',
+                'icon'    => 'bundles/metamodelscore/images/icons/filter_setting.png',
+            ],
+        ]
+    ],
 
-    'metapalettes'                    => array
-    (
-        'default'                     => array
-        (
-            'title'                   => array
-            (
+    'metapalettes' => [
+        'default' => [
+            'title' => [
                 'name'
-            )
-        ),
-    ),
+            ]
+        ],
+    ],
 
-    'fields' => array
-    (
-        'id'          => array
-        (
+    'fields' => [
+        'id'     => [
             'sql' => 'int(10) unsigned NOT NULL auto_increment'
-        ),
-        'pid'         => array
-        (
+        ],
+        'pid'    => [
             'sql' => "int(10) unsigned NOT NULL default '0'"
-        ),
-        'tstamp'      => array
-        (
+        ],
+        'tstamp' => [
             'sql' => "int(10) unsigned NOT NULL default '0'"
-        ),
-        'name'                        => array
-        (
-            'label'                   => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['name'],
-            'exclude'                 => true,
-            'inputType'               => 'text',
-            'eval'                    => array
-            (
-                'mandatory'           => true,
-                'maxlength'           => 255,
-                'tl_class'            => 'w50'
-            ),
-            'sql' => "varchar(255) NOT NULL default ''"
-        ),
-    )
-);
+        ],
+        'name'   => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_filter']['name'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => [
+                'mandatory' => true,
+                'maxlength' => 255,
+                'tl_class'  => 'w50'
+            ],
+            'sql'       => "varchar(255) NOT NULL default ''"
+        ],
+    ]
+];

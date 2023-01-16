@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,18 +17,16 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-/**
- * Table tl_metamodel_dcasetting_condition
- */
+use ContaoCommunityAlliance\DcGeneral\DC\General;
 
 $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = [
     'config'                => [
-        'dataContainer'    => 'General',
+        'dataContainer'    => General::class,
         'label'            => &$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['list_label'],
         'switchToEdit'     => false,
         'enableVersioning' => false,
@@ -41,10 +39,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = [
     ],
     'dca_config'            => [
         'data_provider'  => [
-            'root'   => [
+            'root'                    => [
                 'source' => 'tl_metamodel_dcasetting_condition'
             ],
-            'parent' => [
+            'parent'                  => [
                 'source' => 'tl_metamodel_dcasetting',
             ],
             'tl_metamodel_dcasetting' => [
@@ -53,15 +51,15 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = [
         ],
         'childCondition' => [
             [
-                'from'   => 'tl_metamodel_dcasetting',
-                'to'     => 'tl_metamodel_dcasetting_condition',
-                'setOn'  => [
+                'from'    => 'tl_metamodel_dcasetting',
+                'to'      => 'tl_metamodel_dcasetting_condition',
+                'setOn'   => [
                     [
                         'to_field'   => 'settingId',
                         'from_field' => 'id',
                     ]
                 ],
-                'filter' => [
+                'filter'  => [
                     [
                         'local'     => 'settingId',
                         'remote'    => 'id',
@@ -77,9 +75,9 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = [
                 ]
             ],
             [
-                'from'   => 'tl_metamodel_dcasetting_condition',
-                'to'     => 'tl_metamodel_dcasetting_condition',
-                'setOn'  => [
+                'from'    => 'tl_metamodel_dcasetting_condition',
+                'to'      => 'tl_metamodel_dcasetting_condition',
+                'setOn'   => [
                     [
                         'to_field'   => 'pid',
                         'from_field' => 'id',
@@ -89,7 +87,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_dcasetting_condition'] = [
                         'from_field' => 'settingId',
                     ],
                 ],
-                'filter' => [
+                'filter'  => [
                     [
                         'local'     => 'pid',
                         'remote'    => 'id',
