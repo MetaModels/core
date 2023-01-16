@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,16 +17,14 @@
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Filter\Setting;
 
-use Contao\Input;
 use Contao\InsertTags;
-use Contao\Session;
 use Doctrine\DBAL\Connection;
 use MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam;
 use MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName;
@@ -123,10 +121,9 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     public static function getSubscribedServices()
     {
         return [
-            Connection::class => Connection::class,
-            Input::class      => Input::class,
-            InsertTags::class => InsertTags::class,
-            Session::class    => Session::class,
+            Connection::class                  => Connection::class,
+            InsertTags::class                  => InsertTags::class,
+            ReplaceParam::class                => ReplaceParam::class,
             // This one is deprecated.
             IMetaModelsServiceContainer::class => IMetaModelsServiceContainer::class
         ];
