@@ -80,3 +80,10 @@ services:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.encode-property-value-from-widget
               method: encodeValue
+
+    MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute\GetVariantListener:
+        parent: metamodels.listener.table.tl_metamodel_attribute.listener_base
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.view.contao2backend.build-widget
+              method: buildWidget

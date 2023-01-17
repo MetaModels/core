@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -39,13 +39,13 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
     ],
     'dca_config'   => [
         'data_provider'  => [
-            'default' => [
+            'default'                           => [
                 'source' => 'tl_metamodel_attribute'
             ],
-            'parent' => [
+            'parent'                            => [
                 'source' => 'tl_metamodel'
             ],
-            'tl_metamodel_rendersetting' => [
+            'tl_metamodel_rendersetting'        => [
                 'source' => 'tl_metamodel_rendersetting'
             ],
             'tl_metamodel_dcasetting'           => [
@@ -54,7 +54,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
             'tl_metamodel_dcasetting_condition' => [
                 'source' => 'tl_metamodel_dcasetting_condition'
             ],
-            'tl_metamodel_dca_sortgroup' => [
+            'tl_metamodel_dca_sortgroup'        => [
                 'source' => 'tl_metamodel_dca_sortgroup'
             ]
         ],
@@ -315,8 +315,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
             'label'     => &$GLOBALS['TL_LANG']['tl_metamodel_attribute']['isvariant'],
             'inputType' => 'checkbox',
             'eval'      => [
-                'submitOnChange' => true,
-                'tl_class'       => 'w50 cbx m12'
+                'tl_class' => 'w50 cbx m12'
             ],
             'filter'    => true,
             'sql'       => "char(1) NOT NULL default ''"
