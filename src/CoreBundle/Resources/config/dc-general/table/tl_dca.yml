@@ -36,3 +36,11 @@ services:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.get-property-options
               method: handle
+
+    MetaModels\CoreBundle\EventListener\DcGeneral\Table\Dca\RenderModeHintListener:
+        arguments:
+          - "@translator"
+        tags:
+          - name: kernel.event_listener
+            event: dc-general.view.contao2backend.build-widget
+            method: handle
