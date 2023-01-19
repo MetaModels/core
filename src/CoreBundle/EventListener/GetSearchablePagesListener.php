@@ -24,79 +24,81 @@
 
 namespace MetaModels\CoreBundle\EventListener;
 
-use Contao\CoreBundle\ServiceAnnotation\Hook;
-use Contao\StringUtil;
+use Contao\PageModel;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GetPageDetailsEvent;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
+use Contao\CoreBundle\Event\ContaoCoreEvents;
+use Contao\CoreBundle\Event\SitemapEvent;
+use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\Exception;
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Setting\ICollection as IFilterSettingCollection;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\IFactory;
 use MetaModels\IMetaModel;
-use MetaModels\Item;
 use MetaModels\ITranslatedMetaModel;
+use MetaModels\Item;
 use MetaModels\Render\Setting\ICollection as IRenderSettingCollection;
 use MetaModels\Render\Setting\IRenderSettingFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Terminal42\ServiceAnnotationBundle\ServiceAnnotationInterface;
+use Terminal42\ServiceAnnotationBundle\Annotation\ServiceTag;
 
 /**
  * Class SearchablePages.
  */
-class GetSearchablePagesListener implements ServiceAnnotationInterface
+class GetSearchablePagesListener
 {
     /**
      * A list with all pages found by Contao.
      *
      * @var array
      */
-    protected $foundPages = [];
+    protected array $foundPages = [];
 
     /**
      * A list with all settings from the database.
      *
      * @var array
      */
-    private $configs = [];
+    private array $configs = [];
 
     /**
      * Database connection.
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * Factory.
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * Event dispatcher.
      *
      * @var EventDispatcherInterface
      */
-    private $dispatcher;
+    private EventDispatcherInterface $dispatcher;
 
     /**
      * Filter setting factory.
      *
      * @var IFilterSettingFactory
      */
-    private $filterSettingFactory;
+    private IFilterSettingFactory $filterSettingFactory;
 
     /**
      * Render setting factory.
      *
      * @var IRenderSettingFactory
      */
-    private $renderSettingFactory;
+    private IRenderSettingFactory $renderSettingFactory;
 
     /**
      * Construct.
@@ -122,43 +124,47 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
     }
 
     /**
-     * Start point for the hook getSearchablePages.
+     * Start point for the contao sitemap event.
      *
-     * @param array       $pages       List with all pages.
-     * @param int|null    $rootPage    ID of the root page.
-     * @param bool|null   $fromSiteMap True when called from sitemap generator, null otherwise.
-     * @param string|null $language    The current language.
-     *
-     * @return array
-     *
-     * @throws \Doctrine\DBAL\DBALException When an database error occur.
-     *
-     * @see \RebuildIndex::run()
-     * @see \Automator::generateSitemap()
-     *
-     * @Hook("getSearchablePages")
+     * @ServiceTag("kernel.event_listener", event=ContaoCoreEvents::SITEMAP)
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
+     * @throws \DOMException|Exception
      */
-    public function __invoke($pages, $rootPage = null, $fromSiteMap = false, $language = null)
+    public function __invoke(SitemapEvent $event): void
     {
-        // Save the pages.
-        $this->foundPages = $pages;
+        $this->foundPages = [];
+        $rootPageIds      = $event->getRootPageIds();
+
         // Run each entry in the published config array.
         foreach ($this->getConfigs() as $config) {
             if (!$config['published']) {
                 continue;
             }
-            $this->getMetaModelsPages(
-                $config,
-                $rootPage,
-                $language
-            );
+
+            foreach ($rootPageIds as $rootPageId) {
+                $rootPageLanguage = PageModel::findById($rootPageId)->language;
+
+                $this->getMetaModelsPages(
+                    $config,
+                    $rootPageId,
+                    $rootPageLanguage
+                );
+            }
         }
 
-        asort($this->foundPages);
+        $sitemap = $event->getDocument();
+        $urlSet  = $sitemap->childNodes[0];
 
-        return $this->foundPages;
+        foreach ($this->foundPages as $foundPages) {
+            foreach ((array) $foundPages as $page) {
+                $loc   = $sitemap->createElement('loc', $page);
+                $urlEl = $sitemap->createElement('url');
+                $urlEl->appendChild($loc);
+                $urlSet->appendChild($urlEl);
+            }
+        }
     }
 
     /**
@@ -166,7 +172,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      *
      * @return array
      *
-     * @throws \Doctrine\DBAL\DBALException When a database error occur.
+     * @throws Exception When a database error occur.
      */
     protected function getConfigs(): array
     {
@@ -176,9 +182,9 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
                 ->createQueryBuilder()
                 ->select('t.*')
                 ->from('tl_metamodel_searchable_pages', 't')
-                ->execute();
+                ->executeQuery();
 
-            $this->configs = $statement->fetchAll(FetchMode::ASSOCIATIVE);
+            $this->configs = $statement->fetchAllAssociative();
         }
 
         return $this->configs;
@@ -188,14 +194,13 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      * Get a MetaModels by name or id.
      *
      * @param string|int $identifier  The Name or ID of a MetaModels.
-     *
-     * @param boolean    $ignoreError If true ignore errors like the MetaModels was not found.
+     * @param bool       $ignoreError If true ignore errors like the MetaModels was not found.
      *
      * @return IMetaModel|null
      *
      * @throws \RuntimeException When the MetaModels is missing.
      */
-    protected function getMetaModel($identifier, $ignoreError): ?IMetaModel
+    protected function getMetaModel($identifier, bool $ignoreError): ?IMetaModel
     {
         // Id to name.
         if (is_numeric($identifier)) {
@@ -205,7 +210,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
         // Create mm, if yowl is true check if we have really a mm .
         $metaModels = $this->factory->getMetaModel($identifier);
 
-        // If $ignoreError is off and we have no mm throw a new exception.
+        // If $ignoreError is off, and we have no mm throw a new exception.
         if (!$ignoreError && null === $metaModels) {
             throw new \RuntimeException('Could not find the MetaModels with the name ' . $identifier);
         }
@@ -233,7 +238,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      *
      * @return IRenderSettingCollection
      */
-    protected function getView($identifier, $view): ?IRenderSettingCollection
+    protected function getView($identifier, int $view): ?IRenderSettingCollection
     {
         $metaModel = $this->getMetaModel($identifier, false);
         if (null === $metaModel) {
@@ -257,21 +262,22 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    protected function getLanguage($singleLanguage, $metaModels): array
+    protected function getLanguage(string $singleLanguage, IMetaModel $metaModels): array
     {
         if (!empty($singleLanguage)) {
-            return array($singleLanguage);
+            return [$singleLanguage];
         }
 
         if ($metaModels instanceof ITranslatedMetaModel) {
             return $metaModels->getLanguages();
         }
 
+        // Legacy fallback.
         if ($metaModels->isTranslated() && $metaModels->getAvailableLanguages()) {
             return $metaModels->getAvailableLanguages();
         }
 
-        return array(\str_replace('-', '_', $GLOBALS['TL_LANGUAGE']));
+        return [\str_replace('-', '_', $GLOBALS['TL_LANGUAGE'])];
     }
 
     /**
@@ -289,24 +295,28 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function getJumpTosFor($metaModels, $filter, $view, $rootPage = null): array
-    {
+    protected function getJumpTosFor(
+        IMetaModel $metaModels,
+        IFilter $filter,
+        IRenderSettingCollection $view,
+        string $rootPage = null
+    ): array {
         $entries          = [];
         $filterAttributes = [];
         $translated       = ($metaModels instanceof ITranslatedMetaModel) || $metaModels->isTranslated(false);
         $desired          = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
         $fallback         = $translated
             ? (($metaModels instanceof ITranslatedMetaModel) ? $metaModels->getMainLanguage()
-            : $metaModels->getFallbackLanguage()) : null;
+                : $metaModels->getFallbackLanguage()) : null;
 
-        foreach ((array) $view->get('jumpTo') as $jumpTo) {
+        foreach ((array)$view->get('jumpTo') as $jumpTo) {
             $langCode = $jumpTo['langcode'];
             // If either desired language or fallback, keep the result.
             if (!$translated || ($langCode === $desired) || ($langCode === $fallback)) {
                 $jumpToFilterSetting = $this->filterSettingFactory->createCollection($jumpTo['filter']);
                 $filterAttributes    = $jumpToFilterSetting->getReferencedAttributes();
                 // If the desired language, break.
-                // Otherwise try to get the desired one until all have been evaluated.
+                // Otherwise, try to get the desired one until all have been evaluated.
                 if (!$translated || ($desired === $jumpTo['langcode'])) {
                     break;
                 }
@@ -315,16 +325,18 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
 
         // Get the object.
         /** @var Item $item */
-        foreach ($metaModels->findByFilter(
-            $filter,
-            '',
-            0,
-            0,
-            'ASC',
-            array_merge($view->getSettingNames(), $filterAttributes)
-        ) as $item) {
+        foreach (
+            $metaModels->findByFilter(
+                $filter,
+                '',
+                0,
+                0,
+                'ASC',
+                array_merge($view->getSettingNames(), $filterAttributes)
+            ) as $item
+        ) {
             $jumpTo = $item->buildJumpToLink($view);
-            $event  = new GetPageDetailsEvent((int) $jumpTo['page']);
+            $event  = new GetPageDetailsEvent((int)$jumpTo['page']);
             $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GET_PAGE_DETAILS);
             $pageDetails = $event->getPageDetails();
 
@@ -349,12 +361,12 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      * Get the base URL.
      *
      * @param string[]    $pageDetails The page details.
-     * @param null|string $path        Additional path settings.
+     * @param string|null $path        Additional path settings.
      * @param bool        $ignoreSSL   If active the system will ignore the 'rootUseSSL' flag.
      *
      * @return UrlBuilder
      */
-    private function getBaseUrl($pageDetails, $path = null, $ignoreSSL = false): UrlBuilder
+    private function getBaseUrl(array $pageDetails, string $path = null, bool $ignoreSSL = false): UrlBuilder
     {
         $url = new UrlBuilder();
 
@@ -396,12 +408,12 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      *
      * @return void
      */
-    protected function removeEmptyDetailPages($jumpTos): void
+    protected function removeEmptyDetailPages(array $jumpTos): void
     {
         // Remove the detail pages.
         foreach ($jumpTos as $jumpTo) {
             // Get the page from the url.
-            $event = new GetPageDetailsEvent((int) $jumpTo['value']);
+            $event = new GetPageDetailsEvent((int)$jumpTo['value']);
             $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GET_PAGE_DETAILS);
 
             $pageDetails = $event->getPageDetails();
@@ -414,14 +426,14 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
             // Make a full url from it.
             $baseUrl = $this->getBaseUrl($pageDetails);
 
-            if (($strKey = array_search($baseUrl->getUrl(), $this->foundPages)) !== false) {
+            if (($strKey = \array_search($baseUrl->getUrl(), $this->foundPages)) !== false) {
                 unset($this->foundPages[$strKey]);
             }
 
             // Make a full url from it without the https.
             $baseUrl = $this->getBaseUrl($pageDetails, null, true);
 
-            if (($strKey = array_search($baseUrl->getUrl(), $this->foundPages)) !== false) {
+            if (($strKey = \array_search($baseUrl->getUrl(), $this->foundPages)) !== false) {
                 unset($this->foundPages[$strKey]);
             }
         }
@@ -436,7 +448,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      *
      * @return array
      */
-    public function setFilterParameters($filterId, $presets, $values)
+    public function setFilterParameters(string $filterId, array $presets, array $values): array
     {
         $filterSettings = $this->getFilterSettings($filterId);
         $presetNames    = $filterSettings->getParameters();
@@ -455,11 +467,11 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
         // * or are overridable.
         foreach ($feFilterParams as $strParameter) {
             // Unknown parameter? - next please.
-            if (!array_key_exists($strParameter, $values)) {
+            if (!\array_key_exists($strParameter, $values)) {
                 continue;
             }
             // Not a preset or allowed to override? - use value.
-            if ((!array_key_exists($strParameter, $presets)) || $presets[$strParameter]['use_get']) {
+            if ((!\array_key_exists($strParameter, $presets)) || $presets[$strParameter]['use_get']) {
                 $processed[$strParameter] = $values[$strParameter];
             }
         }
@@ -477,34 +489,27 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      *
      * @return array
      *
-     * @throws \Doctrine\DBAL\DBALException When an database error occur.
+     * @see        \RebuildIndex::run()
+     * @see        \Automator::generateSitemap()
      *
-     * @see \RebuildIndex::run()
-     * @see \Automator::generateSitemap()
+     * @deprecated Method is deprecated and will get removed.
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addPages($pages, $rootPage = null, $fromSiteMap = false, $language = null)
-    {
-        // Save the pages.
-        $this->foundPages = $pages;
-        unset($pages);
+    public function addPages(
+        array $pages,
+        int $rootPage = null,
+        ?bool $fromSiteMap = false,
+        string $language = null
+    ): array {
+        // @codingStandardsIgnoreStart
+        @trigger_error(
+            '"' . __METHOD__ . '" is deprecated and will get removed.',
+            E_USER_DEPRECATED
+        );
+        // @codingStandardsIgnoreEnd
 
-        // Run each entry in the published config array.
-        foreach ($this->getConfigs() as $config) {
-            if (!$config['published']) {
-                continue;
-            }
-            $this->getMetaModelsPages(
-                $config,
-                $rootPage,
-                $language
-            );
-        }
-
-        asort($this->foundPages);
-
-        return $this->foundPages;
+        return $pages;
     }
 
     /**
@@ -520,9 +525,9 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function getMetaModelsPages(
-        $config,
-        $rootPage = null,
-        $language = null
+        array $config,
+        string $rootPage = null,
+        string $language = null
     ): void {
         $metaModelsIdentifier = $config['pid'];
         $filterIdentifier     = $config['filter'];
@@ -534,7 +539,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
         $availableLanguages = $this->getLanguage($language, $metaModels);
         $currentLanguage    = $GLOBALS['TL_LANGUAGE'];
 
-        $foundPages = [$this->foundPages];
+        $foundPages = [];
 
         foreach ($availableLanguages as $newLanguage) {
             // Change language.
@@ -571,7 +576,7 @@ class GetSearchablePagesListener implements ServiceAnnotationInterface
             $foundPages[] = $newEntries;
         }
 
-        $this->foundPages = array_merge(...$foundPages);
+        $this->foundPages = \array_merge($this->foundPages, $foundPages);
 
         // Reset the language.
         $GLOBALS['TL_LANGUAGE'] = $currentLanguage;
