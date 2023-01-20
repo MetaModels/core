@@ -137,7 +137,7 @@ class GetSearchablePagesListener
         $this->foundPages = [];
         $rootPageIds      = $event->getRootPageIds();
 
-        // Run each entry in the published config array.
+        // Run each entry in the published config array and search detail pages.
         foreach ($this->getConfigs() as $config) {
             if (!$config['published']) {
                 continue;
@@ -154,9 +154,11 @@ class GetSearchablePagesListener
             }
         }
 
+        // Get sitemap.
         $sitemap = $event->getDocument();
         $urlSet  = $sitemap->childNodes[0];
 
+        // Add detail pages.
         foreach ($this->foundPages as $foundPages) {
             foreach ((array) $foundPages as $page) {
                 $loc   = $sitemap->createElement('loc', $page);
@@ -336,7 +338,7 @@ class GetSearchablePagesListener
             ) as $item
         ) {
             $jumpTo = $item->buildJumpToLink($view);
-            $event  = new GetPageDetailsEvent((int)$jumpTo['page']);
+            $event  = new GetPageDetailsEvent((int) $jumpTo['page']);
             $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GET_PAGE_DETAILS);
             $pageDetails = $event->getPageDetails();
 
@@ -413,7 +415,7 @@ class GetSearchablePagesListener
         // Remove the detail pages.
         foreach ($jumpTos as $jumpTo) {
             // Get the page from the url.
-            $event = new GetPageDetailsEvent((int)$jumpTo['value']);
+            $event = new GetPageDetailsEvent((int) $jumpTo['value']);
             $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GET_PAGE_DETAILS);
 
             $pageDetails = $event->getPageDetails();
@@ -489,8 +491,8 @@ class GetSearchablePagesListener
      *
      * @return array
      *
-     * @see        \RebuildIndex::run()
-     * @see        \Automator::generateSitemap()
+     * @see \RebuildIndex::run()
+     * @see \Automator::generateSitemap()
      *
      * @deprecated Method is deprecated and will get removed.
      *
@@ -504,7 +506,7 @@ class GetSearchablePagesListener
     ): array {
         // @codingStandardsIgnoreStart
         @trigger_error(
-            '"' . __METHOD__ . '" is deprecated and will get removed.',
+            '"' . __METHOD__ . '" is deprecated and will get removed in 3.0.',
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
