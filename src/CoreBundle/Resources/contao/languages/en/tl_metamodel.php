@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Christian de la Haye <service@delahaye.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -85,3 +85,7 @@ $GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['0']      = '%s items';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['1']      = '%s item';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['2:']     = '%s items';
 $GLOBALS['TL_LANG']['tl_metamodel']['deleteConfirm']             = 'Do you really want to delete MetaModel ID %s?';
+
+$GLOBALS['TL_LANG']['tl_metamodel']['hint_schema_manager'] =
+    'After creating a model, the database must be migrated (console, Contao Manager) -' .
+    ' even if the table name is changed. When changing the table name, the user data itself must be transferred.';
