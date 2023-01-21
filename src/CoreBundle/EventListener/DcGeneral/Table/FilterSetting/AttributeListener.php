@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -36,14 +36,14 @@ class AttributeListener
      *
      * @var IFilterSettingFactory
      */
-    private $filterFactory;
+    private IFilterSettingFactory $filterFactory;
 
     /**
      * The attribute select option label formatter.
      *
      * @var SelectAttributeOptionLabelFormatter
      */
-    private $attributeLabelFormatter;
+    private SelectAttributeOptionLabelFormatter $attributeLabelFormatter;
 
     /**
      * Create a new instance.
@@ -66,10 +66,11 @@ class AttributeListener
      *
      * @return void
      */
-    public function getOptions(GetPropertyOptionsEvent $event)
+    public function getOptions(GetPropertyOptionsEvent $event): void
     {
         if (('tl_metamodel_filtersetting' !== $event->getEnvironment()->getDataDefinition()->getName())
-            || ('attr_id' !== $event->getPropertyName())) {
+            || ('attr_id' !== $event->getPropertyName())
+            || null !== $event->getOptions()) {
             return;
         }
 
@@ -102,7 +103,7 @@ class AttributeListener
      *
      * @return void
      */
-    public function decodeValue(DecodePropertyValueForWidgetEvent $event)
+    public function decodeValue(DecodePropertyValueForWidgetEvent $event): void
     {
         if (('tl_metamodel_filtersetting' !== $event->getEnvironment()->getDataDefinition()->getName())
             || ('attr_id' !== $event->getProperty())) {
@@ -130,7 +131,7 @@ class AttributeListener
      *
      * @return void
      */
-    public function encodeValue(EncodePropertyValueFromWidgetEvent $event)
+    public function encodeValue(EncodePropertyValueFromWidgetEvent $event): void
     {
         if (('tl_metamodel_filtersetting' !== $event->getEnvironment()->getDataDefinition()->getName())
             || ('attr_id' !== $event->getProperty())) {
