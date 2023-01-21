@@ -24,47 +24,49 @@
 
 namespace MetaModels\CoreBundle\EventListener;
 
-use Contao\PageModel;
 use ContaoCommunityAlliance\Contao\Bindings\ContaoEvents;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GenerateFrontendUrlEvent;
 use ContaoCommunityAlliance\Contao\Bindings\Events\Controller\GetPageDetailsEvent;
 use ContaoCommunityAlliance\UrlBuilder\UrlBuilder;
-use Contao\CoreBundle\Event\ContaoCoreEvents;
 use Contao\CoreBundle\Event\SitemapEvent;
 use Contao\StringUtil;
+use DOMElement;
+use DOMException;
+use DOMNode;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
+use Environment;
+use Generator;
 use MetaModels\Filter\IFilter;
-use MetaModels\Filter\Setting\ICollection as IFilterSettingCollection;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\IFactory;
+use MetaModels\IItem;
+use MetaModels\IItems;
 use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
-use MetaModels\Item;
 use MetaModels\Render\Setting\ICollection as IRenderSettingCollection;
 use MetaModels\Render\Setting\IRenderSettingFactory;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Terminal42\ServiceAnnotationBundle\Annotation\ServiceTag;
+use RuntimeException;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+
+use function in_array;
 
 /**
  * Class SearchablePages.
+ *
+ * @psalm-type TSearchablePageConfig=array{
+ *   id: int,
+ *   pid: int,
+ *   tstamp: int,
+ *   name: string,
+ *   filter: int,
+ *   filterparams: string,
+ *   rendersetting: int,
+ *   published: string
+ * }
  */
 class GetSearchablePagesListener
 {
-    /**
-     * A list with all pages found by Contao.
-     *
-     * @var array
-     */
-    protected array $foundPages = [];
-
-    /**
-     * A list with all settings from the database.
-     *
-     * @var array
-     */
-    private array $configs = [];
-
     /**
      * Database connection.
      *
@@ -126,237 +128,211 @@ class GetSearchablePagesListener
     /**
      * Start point for the contao sitemap event.
      *
-     * @ServiceTag("kernel.event_listener", event=ContaoCoreEvents::SITEMAP)
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     *
-     * @throws \DOMException|Exception
+     * @throws DOMException|Exception
      */
     public function __invoke(SitemapEvent $event): void
     {
-        $this->foundPages = [];
         $rootPageIds      = $event->getRootPageIds();
+        $sitemap          = $event->getDocument();
+        $urlSet           = $sitemap->childNodes[0];
 
         // Run each entry in the published config array and search detail pages.
-        foreach ($this->getConfigs() as $config) {
-            if (!$config['published']) {
-                continue;
-            }
+        foreach ($this->getPublishedConfigs() as $config) {
+            $metaModelId   = $config['pid'];
+            $metaModel     = $this->getMetaModel($metaModelId);
+            $filterParams  = StringUtil::deserialize($config['filterparams'], true);
+            $listFilter    = $this->getListFilter($metaModel, (string)$config['filter'], $filterParams);
+            $renderSetting = $this->renderSettingFactory->createCollection($metaModel, $config['rendersetting']);
 
-            foreach ($rootPageIds as $rootPageId) {
-                $rootPageLanguage = PageModel::findById($rootPageId)->language;
+            // Now loop over all detail pages...
+            foreach ((array) $renderSetting->get('jumpTo') as $jumpTo) {
+                if (empty($jumpTo['langcode']) || empty($jumpTo['value']) || empty($jumpTo['filter'])) {
+                    continue;
+                }
 
-                $this->getMetaModelsPages(
-                    $config,
-                    $rootPageId,
-                    $rootPageLanguage
-                );
-            }
-        }
+                $event = new GetPageDetailsEvent((int) $jumpTo['value']);
+                $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GET_PAGE_DETAILS);
+                $pageDetails = $event->getPageDetails();
 
-        // Get sitemap.
-        $sitemap = $event->getDocument();
-        $urlSet  = $sitemap->childNodes[0];
+                // If details page not found or root page is not within passed list, continue.
+                if (empty($pageDetails) || !in_array($pageDetails['rootId'], $rootPageIds, true)) {
+                    continue;
+                }
 
-        // Add detail pages.
-        foreach ($this->foundPages as $foundPages) {
-            foreach ((array) $foundPages as $page) {
-                $loc   = $sitemap->createElement('loc', $page);
-                $urlEl = $sitemap->createElement('url');
-                $urlEl->appendChild($loc);
-                $urlSet->appendChild($urlEl);
+                $this->removePlainDetailsUrl($pageDetails, $urlSet);
+
+                $langCode         = $jumpTo['langcode'];
+                $filterSetting    = $this->filterSettingFactory->createCollection($jumpTo['filter']);
+                $filterAttributes = $filterSetting->getReferencedAttributes();
+
+                foreach (
+                    $this->generateUrlsFor(
+                        $metaModel,
+                        $langCode,
+                        $renderSetting,
+                        $pageDetails,
+                        $filterAttributes,
+                        $listFilter
+                    ) as $url
+                ) {
+                    $loc   = $sitemap->createElement('loc', $url);
+                    $urlEl = $sitemap->createElement('url');
+                    $urlEl->appendChild($loc);
+                    $urlSet->appendChild($urlEl);
+                }
             }
         }
     }
 
     /**
-     * Get all configs.
+     * Generate URLs for detail page.
      *
-     * @return array
+     * @param IMetaModel               $metaModel        The MetaModel.
+     * @param string                   $language         The language.
+     * @param IRenderSettingCollection $renderSetting    The render settings for the detail page.
+     * @param array                    $pageDetails      The page information for the detail page.
+     * @param array                    $filterAttributes The filter attributes.
+     * @param IFilter                  $listFilter       The list filter.
+     *
+     * @return Generator
+     */
+    private function generateUrlsFor(
+        IMetaModel $metaModel,
+        string $language,
+        IRenderSettingCollection $renderSetting,
+        array $pageDetails,
+        array $filterAttributes,
+        IFilter $listFilter
+    ): Generator {
+        // Save language.
+        $currentLanguage = $GLOBALS['TL_LANGUAGE'];
+
+        // Try to generate URLs.
+        try {
+            if ($metaModel instanceof ITranslatedMetaModel) {
+                $prevLanguage = $metaModel->selectLanguage($language);
+            }
+            $GLOBALS['TL_LANGUAGE'] = $language;
+
+            $items = $metaModel->findByFilter(
+                $listFilter,
+                '',
+                0,
+                0,
+                'ASC',
+                array_merge($renderSetting->getSettingNames(), $filterAttributes)
+            );
+
+            foreach ($this->buildUrlsForItems($items, $renderSetting, $pageDetails) as $url) {
+                yield $url;
+            }
+        } finally {
+            // Reset language.
+            $GLOBALS['TL_LANGUAGE'] = $currentLanguage;
+            if (isset($prevLanguage) && $metaModel instanceof ITranslatedMetaModel) {
+                $metaModel->selectLanguage($prevLanguage);
+            }
+        }
+    }
+
+    /**
+     * Get all published index configs.
+     *
+     * @return Generator<int, TSearchablePageConfig>
      *
      * @throws Exception When a database error occur.
      */
-    protected function getConfigs(): array
+    private function getPublishedConfigs(): Generator
     {
-        if (!count($this->configs)) {
-            // Init the config from database.
-            $statement = $this->connection
-                ->createQueryBuilder()
-                ->select('t.*')
-                ->from('tl_metamodel_searchable_pages', 't')
-                ->executeQuery();
+        $statement = $this->connection
+            ->createQueryBuilder()
+            ->select('t.*')
+            ->from('tl_metamodel_searchable_pages', 't')
+            ->where('t.published=1')
+            ->executeQuery();
 
-            $this->configs = $statement->fetchAllAssociative();
+        foreach ($statement->fetchAllAssociative() as $config) {
+            yield $config;
+        }
+    }
+
+    /**
+     * Calculate list filter.
+     *
+     * @param IMetaModel                          $metaModel The MetaModel.
+     * @param string                              $filterId  The id of the filter.
+     * @param array<string, array{value: string}> $presets   The parameter preset values to use.
+     *
+     * @return IFilter
+     */
+    private function getListFilter(IMetaModel $metaModel, string $filterId, array $presets): IFilter
+    {
+        $filterSettings = $this->filterSettingFactory->createCollection($filterId);
+        $presetNames    = $filterSettings->getParameters();
+        $processed      = [];
+
+        // We have to use all the preset values we want first.
+        foreach ($presets as $presetName => $arrPreset) {
+            if (in_array($presetName, $presetNames, true)) {
+                $processed[$presetName] = $arrPreset['value'];
+            }
         }
 
-        return $this->configs;
+        // Create a new filter for the search.
+        $filter        = $metaModel->getEmptyFilter();
+        $filterSettings->addRules($filter, $processed);
+
+        return $filter;
     }
 
     /**
      * Get a MetaModels by name or id.
      *
-     * @param string|int $identifier  The Name or ID of a MetaModels.
-     * @param bool       $ignoreError If true ignore errors like the MetaModels was not found.
+     * @param string $identifier  The Name or ID of a MetaModels.
      *
-     * @return IMetaModel|null
+     * @return IMetaModel
      *
-     * @throws \RuntimeException When the MetaModels is missing.
+     * @throws RuntimeException When the MetaModels is missing.
      */
-    protected function getMetaModel($identifier, bool $ignoreError): ?IMetaModel
+    private function getMetaModel(string $identifier): IMetaModel
     {
-        // Id to name.
-        if (is_numeric($identifier)) {
-            $identifier = $this->factory->translateIdToMetaModelName($identifier);
-        }
+        // Translate id to name.
+        $identifier = $this->factory->translateIdToMetaModelName($identifier);
+        $metaModel  = $this->factory->getMetaModel($identifier);
 
-        // Create mm, if yowl is true check if we have really a mm .
-        $metaModels = $this->factory->getMetaModel($identifier);
-
-        // If $ignoreError is off, and we have no mm throw a new exception.
-        if (!$ignoreError && null === $metaModels) {
-            throw new \RuntimeException('Could not find the MetaModels with the name ' . $identifier);
-        }
-
-        return $metaModels;
-    }
-
-    /**
-     * Get a filter based on the id.
-     *
-     * @param mixed $identifier Id of the filter.
-     *
-     * @return IFilterSettingCollection The filter
-     */
-    protected function getFilterSettings($identifier): IFilterSettingCollection
-    {
-        return $this->filterSettingFactory->createCollection($identifier);
-    }
-
-    /**
-     * Get the view for a MetaModels.
-     *
-     * @param string|int $identifier ID/Name of the MetaModels.
-     * @param int        $view       ID of the view.
-     *
-     * @return IRenderSettingCollection
-     */
-    protected function getView($identifier, int $view): ?IRenderSettingCollection
-    {
-        $metaModel = $this->getMetaModel($identifier, false);
+        // If we have no mm throw a new exception.
         if (null === $metaModel) {
-            return null;
+            throw new RuntimeException('Could not find the MetaModels with the name ' . $identifier);
         }
 
-        return $this->renderSettingFactory->createCollection($metaModel, $view);
+        return $metaModel;
     }
 
     /**
-     * Get the language.
+     * Build URL for every item to detail page.
      *
-     * First check the overwrite language. Then check if the MetaModels is translated and get all languages from it.
-     * Use the current language as fallback.
+     * @param IItems                   $items         The items to process.
+     * @param IRenderSettingCollection $renderSetting The render settings for the detail page.
+     * @param array                    $pageDetails   The page information for the detail page.
      *
-     * @param string     $singleLanguage The language with the overwrite.
-     * @param IMetaModel $metaModels     The MetaModels for the check.
-     *
-     * @return string[] A list with all languages or null.
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     * @return Generator<int, string>
      */
-    protected function getLanguage(string $singleLanguage, IMetaModel $metaModels): array
-    {
-        if (!empty($singleLanguage)) {
-            return [$singleLanguage];
-        }
-
-        if ($metaModels instanceof ITranslatedMetaModel) {
-            return $metaModels->getLanguages();
-        }
-
-        // Legacy fallback.
-        if ($metaModels->isTranslated() && $metaModels->getAvailableLanguages()) {
-            return $metaModels->getAvailableLanguages();
-        }
-
-        return [\str_replace('-', '_', $GLOBALS['TL_LANGUAGE'])];
-    }
-
-    /**
-     * Get the list of jumpTos based on the items.
-     *
-     * @param IMetaModel               $metaModels The MetaModels to be used.
-     * @param IFilter                  $filter     The filter to be used.
-     * @param IRenderSettingCollection $view       The view to be used.
-     * @param string|null              $rootPage   The root page id or null if there is no root page.
-     *
-     * @return array A list of urls for the jumpTos
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    protected function getJumpTosFor(
-        IMetaModel $metaModels,
-        IFilter $filter,
-        IRenderSettingCollection $view,
-        string $rootPage = null
-    ): array {
-        $entries          = [];
-        $filterAttributes = [];
-        $translated       = ($metaModels instanceof ITranslatedMetaModel) || $metaModels->isTranslated(false);
-        $desired          = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
-        $fallback         = $translated
-            ? (($metaModels instanceof ITranslatedMetaModel) ? $metaModels->getMainLanguage()
-                : $metaModels->getFallbackLanguage()) : null;
-
-        foreach ((array)$view->get('jumpTo') as $jumpTo) {
-            $langCode = $jumpTo['langcode'];
-            // If either desired language or fallback, keep the result.
-            if (!$translated || ($langCode === $desired) || ($langCode === $fallback)) {
-                $jumpToFilterSetting = $this->filterSettingFactory->createCollection($jumpTo['filter']);
-                $filterAttributes    = $jumpToFilterSetting->getReferencedAttributes();
-                // If the desired language, break.
-                // Otherwise, try to get the desired one until all have been evaluated.
-                if (!$translated || ($desired === $jumpTo['langcode'])) {
-                    break;
-                }
-            }
-        }
-
-        // Get the object.
-        /** @var Item $item */
-        foreach (
-            $metaModels->findByFilter(
-                $filter,
-                '',
-                0,
-                0,
-                'ASC',
-                array_merge($view->getSettingNames(), $filterAttributes)
-            ) as $item
-        ) {
-            $jumpTo = $item->buildJumpToLink($view);
-            $event  = new GetPageDetailsEvent((int) $jumpTo['page']);
-            $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GET_PAGE_DETAILS);
-            $pageDetails = $event->getPageDetails();
-
-            // If there is a root page check the context or if we have no page continue.
-            if (empty($pageDetails) || ($rootPage !== null && $pageDetails['rootId'] != $rootPage)) {
-                continue;
-            }
-
-            $url = UrlBuilder::fromUrl($jumpTo['url']);
+    private function buildUrlsForItems(
+        IItems $items,
+        IRenderSettingCollection $renderSetting,
+        array $pageDetails
+    ): Generator {
+        foreach ($items as $item) {
+            assert($item instanceof IItem);
+            $jumpTo = $item->buildJumpToLink($renderSetting);
+            $url    = UrlBuilder::fromUrl($jumpTo['url']);
             if (null === $url->getScheme()) {
                 // Build the absolute url.
                 $url = $this->getBaseUrl($pageDetails, $jumpTo['url']);
             }
 
-            $entries[] = $url->getUrl();
+            yield $url->getUrl();
         }
-
-        return $entries;
     }
 
     /**
@@ -364,223 +340,65 @@ class GetSearchablePagesListener
      *
      * @param string[]    $pageDetails The page details.
      * @param string|null $path        Additional path settings.
-     * @param bool        $ignoreSSL   If active the system will ignore the 'rootUseSSL' flag.
      *
      * @return UrlBuilder
      */
-    private function getBaseUrl(array $pageDetails, string $path = null, bool $ignoreSSL = false): UrlBuilder
+    private function getBaseUrl(array $pageDetails, string $path = null): UrlBuilder
     {
         $url = new UrlBuilder();
-
         // Set the domain (see contao/core#6421)
-        if ($pageDetails['domain']) {
-            $url->setHost($pageDetails['domain']);
-        } else {
-            $url->setHost(\Environment::get('host'));
-        }
-
-        if ($pageDetails['rootUseSSL'] && !$ignoreSSL) {
-            $url->setScheme('https');
-        } else {
-            $url->setScheme('http');
-        }
-
-        // Make an array for the parts.
-        $fullPath   = [];
-        $fullPath[] = TL_PATH;
+        $url->setHost($pageDetails['domain'] ?: Environment::get('host'));
+        $url->setScheme($pageDetails['rootUseSSL'] ? 'https' : 'http');
 
         // Get the path.
         if ($path === null) {
             $event = new GenerateFrontendUrlEvent($pageDetails, null, $pageDetails['language'], true);
             $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GENERATE_FRONTEND_URL);
-            $fullPath[] = $event->getUrl();
+            $url->setPath($event->getUrl());
         } else {
-            $fullPath[] = $path;
+            $url->setPath($path);
         }
-
-        $url->setPath(implode('/', $fullPath));
 
         return $url;
     }
 
     /**
-     * Remove all empty detail pages.
+     * Remove the plain details URL from the sitemap to omit 404 without filter url.
      *
-     * @param array $jumpTos A list with the jumpTo pages.
+     * @param array      $pageDetails The page details information.
+     * @param DOMElement $urlSet      The list of URLs.
      *
      * @return void
      */
-    protected function removeEmptyDetailPages(array $jumpTos): void
+    public function removePlainDetailsUrl(array $pageDetails, DOMElement $urlSet): void
     {
-        // Remove the detail pages.
-        foreach ($jumpTos as $jumpTo) {
-            // Get the page from the url.
-            $event = new GetPageDetailsEvent((int) $jumpTo['value']);
-            $this->dispatcher->dispatch($event, ContaoEvents::CONTROLLER_GET_PAGE_DETAILS);
-
-            $pageDetails = $event->getPageDetails();
-
-            // Check if we have a page - if not go to the next one.
-            if (empty($pageDetails)) {
+        $removeUrl = $this->getBaseUrl($pageDetails)->getUrl();
+        foreach ($urlSet->childNodes as $childNode) {
+            if (!$this->isDomElement($childNode, 'url')) {
                 continue;
             }
 
-            // Make a full url from it.
-            $baseUrl = $this->getBaseUrl($pageDetails);
+            foreach ($childNode->childNodes as $childNode2) {
+                if (!$this->isDomElement($childNode2, 'loc') || trim($childNode2->nodeValue) !== $removeUrl) {
+                    continue;
+                }
+                $childNode->parentNode->removeChild($childNode);
 
-            if (($strKey = \array_search($baseUrl->getUrl(), $this->foundPages)) !== false) {
-                unset($this->foundPages[$strKey]);
-            }
-
-            // Make a full url from it without the https.
-            $baseUrl = $this->getBaseUrl($pageDetails, null, true);
-
-            if (($strKey = \array_search($baseUrl->getUrl(), $this->foundPages)) !== false) {
-                unset($this->foundPages[$strKey]);
+                return;
             }
         }
     }
 
     /**
-     * Set parameters.
+     * Check if right DOM element.
      *
-     * @param string   $filterId The id of the filter.
-     * @param string[] $presets  The parameter preset values to use.
-     * @param string[] $values   The dynamic parameter values that may be used.
+     * @param DOMNode $node     The node.
+     * @param string  $nodeName The node name.
      *
-     * @return array
+     * @return bool
      */
-    public function setFilterParameters(string $filterId, array $presets, array $values): array
+    private function isDomElement(DOMNode $node, string $nodeName): bool
     {
-        $filterSettings = $this->getFilterSettings($filterId);
-        $presetNames    = $filterSettings->getParameters();
-        $feFilterParams = array_keys($filterSettings->getParameterFilterNames());
-        $processed      = [];
-
-        // We have to use all the preset values we want first.
-        foreach ($presets as $strPresetName => $arrPreset) {
-            if (in_array($strPresetName, $presetNames, true)) {
-                $processed[$strPresetName] = $arrPreset['value'];
-            }
-        }
-
-        // Now we have to use all FE filter params, that are either:
-        // * not contained within the presets
-        // * or are overridable.
-        foreach ($feFilterParams as $strParameter) {
-            // Unknown parameter? - next please.
-            if (!\array_key_exists($strParameter, $values)) {
-                continue;
-            }
-            // Not a preset or allowed to override? - use value.
-            if ((!\array_key_exists($strParameter, $presets)) || $presets[$strParameter]['use_get']) {
-                $processed[$strParameter] = $values[$strParameter];
-            }
-        }
-
-        return $processed;
-    }
-
-    /**
-     * Start point for the hook getSearchablePages.
-     *
-     * @param array       $pages       List with all pages.
-     * @param int|null    $rootPage    ID of the root page.
-     * @param bool|null   $fromSiteMap True when called from sitemap generator, null otherwise.
-     * @param string|null $language    The current language.
-     *
-     * @return array
-     *
-     * @see \RebuildIndex::run()
-     * @see \Automator::generateSitemap()
-     *
-     * @deprecated Method is deprecated and will get removed.
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function addPages(
-        array $pages,
-        int $rootPage = null,
-        ?bool $fromSiteMap = false,
-        string $language = null
-    ): array {
-        // @codingStandardsIgnoreStart
-        @trigger_error(
-            '"' . __METHOD__ . '" is deprecated and will get removed in 3.0.',
-            E_USER_DEPRECATED
-        );
-        // @codingStandardsIgnoreEnd
-
-        return $pages;
-    }
-
-    /**
-     * Get a MetaModels, a filter and a renderSetting. Get all items based on the filter and build the jumpTo urls.
-     *
-     * @param array       $config   ID of the MetaModels.
-     * @param string|null $rootPage The root page id or null if there is no root page.
-     * @param string|null $language The current language.
-     *
-     * @return void
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
-     */
-    private function getMetaModelsPages(
-        array $config,
-        string $rootPage = null,
-        string $language = null
-    ): void {
-        $metaModelsIdentifier = $config['pid'];
-        $filterIdentifier     = $config['filter'];
-        $presetParams         = StringUtil::deserialize($config['filterparams'], true);
-        $renderSettingId      = $config['rendersetting'];
-
-        // Get the MetaModels.
-        $metaModels         = $this->getMetaModel($metaModelsIdentifier, false);
-        $availableLanguages = $this->getLanguage($language, $metaModels);
-        $currentLanguage    = $GLOBALS['TL_LANGUAGE'];
-
-        $foundPages = [];
-
-        foreach ($availableLanguages as $newLanguage) {
-            // Change language.
-            $GLOBALS['TL_LANGUAGE'] = \str_replace('_', '-', $newLanguage);
-            if ($metaModels instanceof ITranslatedMetaModel) {
-                $prevLanguage = $metaModels->selectLanguage($newLanguage);
-            }
-
-            // Get the view.
-            $view    = $this->getView($metaModelsIdentifier, $renderSettingId);
-            $jumpTos = $view->get('jumpTo');
-
-            // Set the filter.
-            $processed = $this->setFilterParameters($filterIdentifier, $presetParams, []);
-
-            // Create a new filter for the search.
-            $filter        = $metaModels->getEmptyFilter();
-            $filterSetting = $this->getFilterSettings($filterIdentifier);
-            $filterSetting->addRules($filter, $processed);
-
-            // Get all jumpTos.
-            $newEntries = $this->getJumpTosFor($metaModels, $filter, $view, $rootPage);
-
-            // Remove all empty page details.
-            $this->removeEmptyDetailPages($jumpTos);
-
-            // Reset language.
-            $GLOBALS['TL_LANGUAGE'] = $currentLanguage;
-            if ($metaModels instanceof ITranslatedMetaModel) {
-                $metaModels->selectLanguage($prevLanguage);
-            }
-
-            // Merge all results.
-            $foundPages[] = $newEntries;
-        }
-
-        $this->foundPages = \array_merge($this->foundPages, $foundPages);
-
-        // Reset the language.
-        $GLOBALS['TL_LANGUAGE'] = $currentLanguage;
+        return ($node instanceof DOMElement) && $node->nodeName === $nodeName;
     }
 }
