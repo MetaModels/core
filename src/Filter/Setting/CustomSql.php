@@ -17,6 +17,7 @@
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @author     Oliver Willmes <info@oliverwillmes.de>
  * @copyright  2012-2022 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -227,9 +228,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     private function compile()
     {
         $this->parseTable();
-        $this->parseRequestVars();
-        $this->parseSecureInsertTags();
-        $this->parseInsertTags();
+        $this->literateQuery();
     }
 
     /**
@@ -435,15 +434,17 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * Convert a parameter in the query string.
      *
-     * @param array $arrMatch The match from the preg_replace_all call in parseRequestVars().
+     * @param string $strMatch 
      *
      * @return string
      *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      * @internal Only to be used via parseRequestVars().
      */
-    public function convertParameter($arrMatch)
+    public function convertParameter($strMatch)
     {
-        list($strSource, $strQuery) = explode('?', $arrMatch[1], 2);
+        list($strSource, $strQuery) = explode('?', $strMatch, 2);
         parse_str($strQuery, $arrArgs);
         $arrName = (array) $arrArgs['name'];
 
@@ -476,20 +477,6 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     }
 
     /**
-     * Parse a request var insert tag within the SQL.
-     *
-     * @return void
-     */
-    private function parseRequestVars()
-    {
-        $this->queryString = preg_replace_callback(
-            '@\{\{param::(.*)\}\}@',
-            [$this, 'convertParameter'],
-            $this->queryString
-        );
-    }
-
-    /**
      * Replace all insert tags in the query string.
      *
      * @param string $queryString The string to replace insert tags within.
@@ -504,40 +491,94 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * Replace all insert tags in the query string.
      *
-     * @param string $arrMatch The match from the preg_replace call.
+     * @param string $strMatch
      *
      * @return string
      *
      * @internal Only to be used internal as callback from parseSecureInsertTags().
      */
-    public function parseAndAddSecureInsertTagAsParameter($arrMatch)
+    public function parseAndAddSecureInsertTagAsParameter($strMatch)
     {
-        $this->addParameter($this->parseInsertTagsInternal('{{' . $arrMatch[1] . '}}'));
+        $this->addParameter($this->parseInsertTagsInternal('{{' . $strMatch . '}}'));
 
         return '?';
     }
-
+    
     /**
-     * Replace all secure insert tags.
+     * Strip inserttags from query string.
      *
-     * @return void
+     * @param string $string The query string.
+     *
+     * @return array
      */
-    private function parseSecureInsertTags()
+    private function stripInserttags(string $string): array
     {
-        $this->queryString = preg_replace_callback(
-            '@\{\{secure::([^}]+)\}\}@',
-            [$this, 'parseAndAddSecureInsertTagAsParameter'],
-            $this->queryString
+        $strRegExpStart = '{{'                     
+                          . '('                    
+                          . '[a-zA-Z0-9\x80-\xFF]'
+                          . '(?:[^{}]|'
+        ;
+        $strRegExpEnd   = ')*)}}';     
+
+        return \preg_split(
+            '(' . $strRegExpStart . str_repeat('{{(?:' . substr($strRegExpStart, 3), 9) . str_repeat($strRegExpEnd, 10)
+            . ')',
+            $string,
+            -1,
+            PREG_SPLIT_DELIM_CAPTURE
         );
     }
 
     /**
-     * Replace all insert tags in the query string.
+     * Checkout nested inserttags and dissolve param::, secure::, other inserttags.
      *
-     * @return void
+     * @param string $tag The string with tag.
+     *
+     * @return string
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    private function parseInsertTags()
+    private function checkTag(string $tag): string
     {
-        $this->queryString = $this->parseInsertTagsInternal($this->queryString);
+        $arrTmp = $this->stripInserttags($tag);
+        if (\array_key_exists(1, $arrTmp)) {
+            $arrTmp[0] .= self::checkTag($arrTmp[1]);
+        }
+
+        $arrStrip = \explode('::', $arrTmp[0]);
+        if (!\array_key_exists(1, $arrStrip)) {
+            return $arrTmp[0]; // wenn explode keinen array key 1 hat
+        }
+
+        switch ($arrStrip[0]) {
+            case 'param':
+                return $this->convertParameter($arrStrip[1]);
+                break;
+            case 'secure':
+                return $this->parseAndAddSecureInsertTagAsParameter($arrStrip[1]);
+                break;
+            default:
+                return $this->parseInsertTagsInternal('{{' . $arrTmp[0] . '}}');
+                break;
+        }
+    }
+
+    /**
+     * Literate queryString, split it in pieces and dissolve inserttags.
+     *
+     */
+    private function literateQuery(): void
+    {
+        // Split the query string.
+        $tags = $this->stripInserttags($this->queryString);
+
+        $newQueryString = '';
+        // Check every part for insert tag and nesting.
+        foreach ($tags as $tag) {
+            $newQueryString .= $this->checkTag($tag);
+        }
+
+        $this->queryString = $newQueryString;
     }
 }
