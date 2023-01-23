@@ -87,3 +87,12 @@ services:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.build-widget
               method: buildWidget
+
+    MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute\AttributeSchemaManagerHintListener:
+        parent: metamodels.listener.table.tl_metamodel_attribute.listener_base
+        arguments:
+            - "@translator"
+        tags:
+            - name: kernel.event_listener
+              event: dc-general.model.pre-edit-model
+              method: handle
