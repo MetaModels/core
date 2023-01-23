@@ -39,6 +39,8 @@ services:
             - '@event_dispatcher'
             - '@metamodels.filter_setting_factory'
             - '@metamodels.render_setting_factory'
+        tags:
+          - { name: 'kernel.event_listener', event: 'contao.sitemap' }
 
     MetaModels\CoreBundle\EventListener\InsertTagsListener:
         arguments:
