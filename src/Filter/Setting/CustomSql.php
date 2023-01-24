@@ -548,7 +548,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
         $arrStrip = \explode('::', $arrTmp[0],2);
         if (!\array_key_exists(1, $arrStrip)) {
             return $arrTmp[0];
-        } // wenn explode keinen array key 1 hat
+        } 
 
         switch ($arrStrip[0]) {
             case 'param':
@@ -569,11 +569,14 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      */
     private function literateQuery()
     {
-        $tags           = $this->stripInserttags($this->queryString); // den QueryString zerlegen
+        $tags           = $this->stripInserttags($this->queryString); 
+        
         $newQueryString = '';
-        foreach ($tags as $tag) { //einzelne Teile auf Inserttag und Verschachtelung prüfen
+        
+        foreach ($tags as $tag) { 
             $newQueryString .= $this->checkTag($tag);
         }
+        
         $this->queryString = $newQueryString;
     }
 }
