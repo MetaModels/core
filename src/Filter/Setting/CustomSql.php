@@ -87,13 +87,6 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     private $container;
 
     /**
-     * Array of found inserttags.
-     *
-     * @var array
-     */
-    private $arrInserttags;
-
-    /**
      * Constructor - initialize the object and store the parameters.
      *
      * @param ICollection        $collection The parenting filter settings object.
@@ -566,7 +559,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      */
     private function literateQuery()
     {
-        $tags           = $this->stripInserttags($this->queryString);
+        $tags = $this->stripInserttags($this->queryString);
 
         $newQueryString = '';
 
