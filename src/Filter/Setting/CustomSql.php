@@ -507,18 +507,15 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     }
 
     /**
-     * Strip inserttags from query string
+     * Strip inserttags from querystring.
      *
-     * @param string
+     * @param string $string The parameter value.
      *
      * @return array
      */
     private function stripInserttags($string): array
     {
-        $strRegExpStart = '{{'
-                          . '('
-                          . '[a-zA-Z0-9\x80-\xFF]'
-                          . '(?:[^{}]|';
+        $strRegExpStart = '{{([a-zA-Z0-9\x80-\xFF](?:[^{}]|';
 
         $strRegExpEnd = ')*)}}';
 
@@ -532,9 +529,9 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     }
 
     /**
-     * checkout nested inserttags and dissolve param::, secure::, other inserttags
+     * checkout nested inserttags and dissolve param::, secure::, other inserttags.
      *
-     * @param string
+     * @param string $tag The parameter value where as an inserttag in it.
      *
      * @return string
      */
@@ -545,29 +542,28 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
             $arrTmp[0] .= self::checkTag($arrTmp[1]);
         }
 
-        $arrStrip = \explode('::', $arrTmp[0], 2); 
+        $arrStrip = \explode('::', $arrTmp[0], 2);
         if (!\array_key_exists(1, $arrStrip)) {
             return $arrTmp[0];
         }
 
-        switch ($arrStrip[0]) {
+        switch ($arrStrip[0])
+        {
             case 'param':
                 return $this->convertParameter($arrStrip[1]);
-                break;
+            
             case 'secure':
                 return $this->parseAndAddSecureInsertTagAsParameter($arrStrip[1]);
-                break;
+            
             default:
                 return $this->parseInsertTagsInternal('{{' . $arrTmp[0] . '}}');
-                break;
         }
     }
 
     /**
-     * literate queryString, split it in pieces and dissolve inserttags.
+     * Literate queryString, split it in pieces and dissolve inserttags.
      *
      */
-    
     private function literateQuery()
     {
         $tags           = $this->stripInserttags($this->queryString);
