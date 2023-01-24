@@ -529,7 +529,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     }
 
     /**
-     * checkout nested inserttags and dissolve param::, secure::, other inserttags.
+     * Checkout nested inserttags and dissolve param::, secure::, other inserttags.
      *
      * @param string $tag The parameter value where as an inserttag in it.
      *
@@ -547,7 +547,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
             return $arrTmp[0];
         }
 
-        switch ($arrStrip[0])
+        switch ($arrStrip[0]) 
         {
             case 'param':
                 return $this->convertParameter($arrStrip[1]);
@@ -563,6 +563,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * Literate queryString, split it in pieces and dissolve inserttags.
      *
+     * @return void
      */
     private function literateQuery()
     {
