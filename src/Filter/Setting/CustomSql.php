@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,16 +18,14 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Oliver Willmes <info@oliverwillmes.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Filter\Setting;
 
-use Contao\Input;
 use Contao\InsertTags;
-use Contao\Session;
 use Doctrine\DBAL\Connection;
 use MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam;
 use MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName;
@@ -38,7 +36,7 @@ use MetaModels\IItem;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\DependencyInjection\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
  * This filter condition generates a filter rule for a predefined SQL query.
@@ -89,11 +87,18 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     private $container;
 
     /**
+     * Array of found inserttags
+     *
+     * @var array
+     */
+    private $arrInserttags;
+
+    /**
      * Constructor - initialize the object and store the parameters.
      *
-     * @param ICollection        $collection   The parenting filter settings object.
-     * @param array              $data         The attributes for this filter setting.
-     * @param ContainerInterface $container    The service container.
+     * @param ICollection        $collection The parenting filter settings object.
+     * @param array              $data       The attributes for this filter setting.
+     * @param ContainerInterface $container  The service container.
      *
      * @throws \InvalidArgumentException When a service is missing.
      */
@@ -124,10 +129,9 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     public static function getSubscribedServices()
     {
         return [
-            Connection::class => Connection::class,
-            Input::class      => Input::class,
-            InsertTags::class => InsertTags::class,
-            Session::class    => Session::class,
+            Connection::class                  => Connection::class,
+            InsertTags::class                  => InsertTags::class,
+            ReplaceParam::class                => ReplaceParam::class,
             // This one is deprecated.
             IMetaModelsServiceContainer::class => IMetaModelsServiceContainer::class
         ];
@@ -335,7 +339,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
 
             case 'filter':
                 if (is_array($this->filterParameters)) {
-                    if (array_key_exists($valueName, $this->filterParameters)) {
+                    if (\array_key_exists($valueName, $this->filterParameters)) {
                         return $this->filterParameters[$valueName];
                     }
 
@@ -400,7 +404,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
         $var = (array) $var;
 
         if (!empty($arguments['recursive'])) {
-            $var = iterator_to_array(
+            $var = \iterator_to_array(
                 new \RecursiveIteratorIterator(
                     new \RecursiveArrayIterator(
                         $var
@@ -414,10 +418,10 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
         }
 
         if (!empty($arguments['key'])) {
-            $var = array_keys($var);
+            $var = \array_keys($var);
         } else {
             // Use values.
-            $var = array_values($var);
+            $var = \array_values($var);
         }
 
         if ($arguments['aggregate'] == 'set') {
@@ -428,18 +432,16 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
 
         $this->addParameters($var);
 
-        return rtrim(str_repeat('?,', count($var)), ',');
+        return \rtrim(\str_repeat('?,', \count($var)), ',');
     }
 
     /**
      * Convert a parameter in the query string.
      *
-     * @param string $strMatch 
+     * @param string $strMatch The match from the preg_replace_all call in parseRequestVars().
      *
      * @return string
      *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      * @internal Only to be used via parseRequestVars().
      */
     public function convertParameter($strMatch)
@@ -457,7 +459,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
         }
 
         if ($index != $count || $var === null) {
-            if (array_key_exists('default', $arrArgs) && (null !== $arrArgs['default'])) {
+            if (\array_key_exists('default', $arrArgs) && (null !== $arrArgs['default'])) {
                 $this->addParameter($arrArgs['default']);
 
                 return '?';
@@ -491,7 +493,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * Replace all insert tags in the query string.
      *
-     * @param string $strMatch
+     * @param string $strMatch The match from the preg_replace call.
      *
      * @return string
      *
@@ -503,22 +505,22 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
 
         return '?';
     }
-    
+
     /**
-     * Strip inserttags from query string.
+     * Strip inserttags from query string
      *
-     * @param string $string The query string.
+     * @param string
      *
      * @return array
      */
-    private function stripInserttags(string $string): array
+    private function stripInserttags($string): array
     {
-        $strRegExpStart = '{{'                     
-                          . '('                    
+        $strRegExpStart = '{{'
+                          . '('
                           . '[a-zA-Z0-9\x80-\xFF]'
-                          . '(?:[^{}]|'
-        ;
-        $strRegExpEnd   = ')*)}}';     
+                          . '(?:[^{}]|';
+
+        $strRegExpEnd = ')*)}}';
 
         return \preg_split(
             '(' . $strRegExpStart . str_repeat('{{(?:' . substr($strRegExpStart, 3), 9) . str_repeat($strRegExpEnd, 10)
@@ -530,16 +532,13 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     }
 
     /**
-     * Checkout nested inserttags and dissolve param::, secure::, other inserttags.
+     * checkout nested inserttags and dissolve param::, secure::, other inserttags
      *
-     * @param string $tag The string with tag.
+     * @param string
      *
      * @return string
-     *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundExceptionInterface
      */
-    private function checkTag(string $tag): string
+    private function checkTag($tag)
     {
         $arrTmp = $this->stripInserttags($tag);
         if (\array_key_exists(1, $arrTmp)) {
@@ -548,8 +547,8 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
 
         $arrStrip = \explode('::', $arrTmp[0]);
         if (!\array_key_exists(1, $arrStrip)) {
-            return $arrTmp[0]; // wenn explode keinen array key 1 hat
-        }
+            return $arrTmp[0];
+        } // wenn explode keinen array key 1 hat
 
         switch ($arrStrip[0]) {
             case 'param':
@@ -565,20 +564,16 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     }
 
     /**
-     * Literate queryString, split it in pieces and dissolve inserttags.
+     * literate queryString, split it in pieces and dissolve inserttags
      *
      */
-    private function literateQuery(): void
+    private function literateQuery()
     {
-        // Split the query string.
-        $tags = $this->stripInserttags($this->queryString);
-
+        $tags           = $this->stripInserttags($this->queryString); // den QueryString zerlegen
         $newQueryString = '';
-        // Check every part for insert tag and nesting.
-        foreach ($tags as $tag) {
+        foreach ($tags as $tag) { //einzelne Teile auf Inserttag und Verschachtelung prüfen
             $newQueryString .= $this->checkTag($tag);
         }
-
         $this->queryString = $newQueryString;
     }
 }
