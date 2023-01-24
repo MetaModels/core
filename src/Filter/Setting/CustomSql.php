@@ -545,7 +545,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
             $arrTmp[0] .= self::checkTag($arrTmp[1]);
         }
 
-        $arrStrip = \explode('::', $arrTmp[0]);
+        $arrStrip = \explode('::', $arrTmp[0],2);
         if (!\array_key_exists(1, $arrStrip)) {
             return $arrTmp[0];
         } // wenn explode keinen array key 1 hat
