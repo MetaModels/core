@@ -547,8 +547,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
             return $arrTmp[0];
         }
 
-        switch ($arrStrip[0]) 
-        {
+        switch ($arrStrip[0]) {
             case 'param':
                 return $this->convertParameter($arrStrip[1]);
             
@@ -568,13 +567,13 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     private function literateQuery()
     {
         $tags           = $this->stripInserttags($this->queryString);
-        
+
         $newQueryString = '';
-        
+
         foreach ($tags as $tag) {
             $newQueryString .= $this->checkTag($tag);
         }
-        
+
         $this->queryString = $newQueryString;
     }
 }
