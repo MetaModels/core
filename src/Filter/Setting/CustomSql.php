@@ -87,7 +87,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     private $container;
 
     /**
-     * Array of found inserttags
+     * Array of found inserttags.
      *
      * @var array
      */
@@ -545,10 +545,10 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
             $arrTmp[0] .= self::checkTag($arrTmp[1]);
         }
 
-        $arrStrip = \explode('::', $arrTmp[0],2);
+        $arrStrip = \explode('::', $arrTmp[0], 2); 
         if (!\array_key_exists(1, $arrStrip)) {
             return $arrTmp[0];
-        } 
+        }
 
         switch ($arrStrip[0]) {
             case 'param':
@@ -564,16 +564,17 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     }
 
     /**
-     * literate queryString, split it in pieces and dissolve inserttags
+     * literate queryString, split it in pieces and dissolve inserttags.
      *
      */
+    
     private function literateQuery()
     {
-        $tags           = $this->stripInserttags($this->queryString); 
+        $tags           = $this->stripInserttags($this->queryString);
         
         $newQueryString = '';
         
-        foreach ($tags as $tag) { 
+        foreach ($tags as $tag) {
             $newQueryString .= $this->checkTag($tag);
         }
         
