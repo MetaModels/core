@@ -387,7 +387,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @param array $var       The parameter value.
      *
-     * @param array  $arguments The arguments of the parameter.
+     * @param array $arguments The arguments of the parameter.
      *
      * @return string
      */
