@@ -28,7 +28,7 @@ namespace MetaModels\CoreBundle\Contao\InsertTag;
 
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\Input;
-use Contao\Session;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * This replaces the insert tag param.
@@ -148,8 +148,10 @@ final class ReplaceParam
             return $content;
         }
 
+        $sessionBag = $this->session->getBag('contao_frontend');
+
         if ((false === \strpos($tag, '&default='))) {
-            $result = $this->session->get($arguments[1]);
+            $result = $sessionBag->get($arguments[1]);
             return \str_replace(
                 '{{' . $tag . '}}',
                 \is_array($result) ? \serialize($result) : ($result ?? ''),
@@ -157,7 +159,7 @@ final class ReplaceParam
             );
         }
 
-        $result = ($this->session->get($arguments[1]) ?: $arguments[2]);
+        $result = ($sessionBag->get($arguments[1]) ?: $arguments[2]);
         return \str_replace(
             '{{' . $tag . '}}',
             \is_array($result) ? \serialize($result) : ($result ?? ''),

@@ -6,4 +6,4 @@ services:
         public: false
         arguments:
             - '@metamodels.contao_input'
-            - '@metamodels.contao_session'
+            - '@session'
