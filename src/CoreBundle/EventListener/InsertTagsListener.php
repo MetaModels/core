@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,26 +17,24 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\CoreBundle\EventListener;
 
-use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\StringUtil;
 use Contao\Input;
-use Contao\System;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\Exception;
 use MetaModels\Filter\Rules\StaticIdList;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\IFactory;
 use MetaModels\IMetaModel;
 use MetaModels\ItemList;
 use MetaModels\Render\Setting\IRenderSettingFactory;
-use Terminal42\ServiceAnnotationBundle\ServiceAnnotationInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * This class handles the replacement of all MetaModels insert tags.
@@ -50,45 +48,52 @@ use Terminal42\ServiceAnnotationBundle\ServiceAnnotationInterface;
  * mm::total::mm::[MM Name|ID](::[ID filter])
  *
  * -- Item --
- * mm::item::[MM Name|ID]::[Item ID|ID,ID,ID]::[ID render setting](::[Output raw|text|html|..])
+ * mm::item::[MM Name|ID]::[Item ID|ID,ID,ID]::[ID render setting](::[Output raw|text|html5])
  *
  * -- Attribute --
- * mm::attribute::[MM Name|ID]::[Item ID]::[Attribute Name|ID](::[Output raw|text|html|..])
+ * mm::attribute::[MM Name|ID]::[Item ID]::[Attribute Name|ID](::[Output (Default:text)|raw|html5])
  *
  * -- JumpTo --
  * mm::jumpTo::[MM Name|ID]::[Item ID]::[ID render setting](::[Parameter (Default:url)|label|page|params.attname])
  *
  * @codingStandardsIgnoreEnd
  */
-class InsertTagsListener implements ServiceAnnotationInterface
+final class InsertTagsListener
 {
     /**
      * Database connection.
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * The MetaModels factory.
      *
      * @var IFactory
      */
-    private $factory;
+    private IFactory $factory;
 
     /**
      * The render setting factory.
      *
      * @var IRenderSettingFactory
      */
-    private $renderSettingFactory;
+    private IRenderSettingFactory $renderSettingFactory;
 
     /**
      * The filter setting factory.
      *
      * @var IFilterSettingFactory
      */
-    private $filterSettingFactory;
+    private IFilterSettingFactory $filterSettingFactory;
+
+    /**
+     * The logger interface.
+     *
+     * @var LoggerInterface|null
+     */
+    private ?LoggerInterface $logger;
 
     /**
      * InsertTagsListener constructor.
@@ -97,17 +102,20 @@ class InsertTagsListener implements ServiceAnnotationInterface
      * @param IFactory              $factory              The MetaModels factory.
      * @param IRenderSettingFactory $renderSettingFactory The render setting factory.
      * @param IFilterSettingFactory $filterSettingFactory The filter setting factory.
+     * @param LoggerInterface|null  $logger               The logger interface.
      */
     public function __construct(
         Connection $connection,
         IFactory $factory,
         IRenderSettingFactory $renderSettingFactory,
-        IFilterSettingFactory $filterSettingFactory
+        IFilterSettingFactory $filterSettingFactory,
+        LoggerInterface $logger = null
     ) {
         $this->connection           = $connection;
         $this->factory              = $factory;
         $this->renderSettingFactory = $renderSettingFactory;
         $this->filterSettingFactory = $filterSettingFactory;
+        $this->logger               = $logger;
     }
 
     /**
@@ -115,13 +123,11 @@ class InsertTagsListener implements ServiceAnnotationInterface
      *
      * @param string $insertTag The tag to evaluate.
      *
-     * @return bool|string
-     *
-     * @Hook("replaceInsertTags")
+     * @return bool|int|string
      */
-    public function __invoke($insertTag)
+    public function __invoke(string $insertTag): bool|int|string
     {
-        $elements = explode('::', $insertTag);
+        $elements = \explode('::', $insertTag);
 
         // Check if we have the mm tags.
         if ('mm' !== $elements[0]) {
@@ -133,23 +139,26 @@ class InsertTagsListener implements ServiceAnnotationInterface
             switch ($elements[1]) {
                 // Count for mod or ce elements.
                 case 'total':
-                    return $this->getCount($elements[2], $elements[3], $elements[4]);
+                    return $this->getCount($elements[2], $elements[3], ($elements[4] ?? null));
 
                 // Get value from an attribute.
                 case 'attribute':
-                    return $this->getAttribute($elements[2], $elements[3], $elements[4], $elements[5]);
+                    return $this->getAttribute($elements[2], $elements[3], $elements[4], ($elements[5] ?? null));
 
                 // Get item.
                 case 'item':
-                    return $this->getItem($elements[2], $elements[3], $elements[4], $elements[5]);
+                    return $this->getItem($elements[2], $elements[3], $elements[4], ($elements[5] ?? null));
 
+                // Get jump-to detail page.
                 case 'jumpTo':
-                    return $this->jumpTo($elements[2], $elements[3], $elements[4], $elements[5]);
+                    return $this->jumpTo($elements[2], $elements[3], $elements[4], ($elements[5] ?? null));
 
                 default:
             }
         } catch (\Exception $exc) {
-            System::log('Error by replace tags: ' . $exc->getMessage(), __CLASS__ . ' | ' . __FUNCTION__, TL_ERROR);
+            $this->logger?->error(
+                'Error by replace tags: ' . $exc->getMessage() . ' | ' . __CLASS__ . ' | ' . __FUNCTION__
+            );
         }
 
         return false;
@@ -158,17 +167,19 @@ class InsertTagsListener implements ServiceAnnotationInterface
     /**
      * Get the jumpTo for a chosen value.
      *
-     * @param string|int $mixMetaModel ID or name of MetaModels.
-     *
+     * @param int|string $mixMetaModel ID or name of MetaModels.
      * @param int        $mixDataId    ID of the data row.
-     *
      * @param int        $viewId       ID of render setting.
-     *
      * @param string     $strParam     Name of parameter - Default:url|label|page|params.[attrname].
      *
-     * @return boolean|string Return false when nothing was found for the requested value.
+     * @return bool|string Return false when nothing was found for the requested value.
      */
-    protected function jumpTo($mixMetaModel, $mixDataId, $viewId, $strParam = 'url')
+    private function jumpTo(
+        int|string $mixMetaModel,
+        int $mixDataId,
+        int $viewId,
+        string $strParam = 'url'
+    ): bool|string
     {
         // Set the param to url if empty.
         if (empty($strParam)) {
@@ -201,7 +212,7 @@ class InsertTagsListener implements ServiceAnnotationInterface
         // Check if someone want the sub params.
         if (stripos($strParam, 'params.') !== false) {
             $mixAttName = StringUtil::trimsplit('.', $strParam);
-            $mixAttName = array_pop($mixAttName);
+            $mixAttName = \array_pop($mixAttName);
 
             if (isset($arrRenderedItem['jumpTo']['params'][$mixAttName])) {
                 return $arrRenderedItem['jumpTo']['params'][$mixAttName];
@@ -218,14 +229,19 @@ class InsertTagsListener implements ServiceAnnotationInterface
     /**
      * Get an item.
      *
-     * @param string|int $metaModelIdOrName ID or name of MetaModels.
-     * @param string|int $mixDataId         ID of the data row.
-     * @param int        $viewId            ID of render setting.
-     * @param string     $strOutput         Name of output. Default:null (fallback to html5)|text|html5|...
+     * @param int|string  $metaModelIdOrName ID or name of MetaModels.
+     * @param int|string  $mixDataId         ID of the data row.
+     * @param int|string  $viewId            ID of render setting.
+     * @param string|null $strOutput         Name of output. Default:null (fallback to html5)|text|html5|...
      *
-     * @return boolean|string Return false when nothing was found or return the value.
+     * @return bool|string Return false when nothing was found or return the value.
      */
-    protected function getItem($metaModelIdOrName, $mixDataId, $viewId, $strOutput = null)
+    private function getItem(
+        int|string $metaModelIdOrName,
+        int|string $mixDataId,
+        int|string $viewId,
+        string $strOutput = null
+    ): bool|string
     {
         // Get the MetaModel. Return if we can not find one.
         $metaModel = $this->loadMetaModel($metaModelIdOrName);
@@ -240,7 +256,7 @@ class InsertTagsListener implements ServiceAnnotationInterface
 
         $objMetaModelList = new ItemList();
         $objMetaModelList
-            ->setMetaModel($metaModel->get('id'), $viewId)
+            ->setMetaModel((int) $metaModel->get('id'), (int) $viewId)
             ->overrideOutputFormat($strOutput);
 
         // Handle a set of ids.
@@ -253,75 +269,84 @@ class InsertTagsListener implements ServiceAnnotationInterface
         }
 
         $objMetaModelList->addFilterRule(new StaticIdList($arrIds));
+
         return $objMetaModelList->render(false, $this);
     }
 
     /**
      * Get from MM X the item with the id Y and parse the attribute Z and return it.
      *
-     * @param string|int $metaModelIdOrName ID or name of MetaModel.
-     * @param int        $intDataId         ID of the data row.
-     * @param string     $strAttributeName  Name of the attribute.
-     * @param string     $strOutput         Name of output. Default:raw|text|html5|...
+     * @param int|string  $metaModelIdOrName   ID or name of MetaModel.
+     * @param int         $intDataId           ID of the data row.
+     * @param string      $attributeIdentifier Name of the attribute.
+     * @param string|null $outputFormat        Type of output format - default: text.
      *
-     * @return boolean|string Return false when nothing was found or return the value.
+     * @return bool|string Return false when nothing was found or return the value.
      *
      * @throws \RuntimeException If $intDataId does not provide an existingMetaModel ID.
      */
-    protected function getAttribute($metaModelIdOrName, $intDataId, $strAttributeName, $strOutput = 'raw')
+    private function getAttribute(
+        int|string $metaModelIdOrName,
+        int $intDataId,
+        int|string $attributeIdentifier,
+        ?string $outputFormat
+    ): bool|string
     {
         // Get the MM.
-        $objMM = $this->loadMetaModel($metaModelIdOrName);
-        if (null === $objMM) {
+        $metaModel = $this->loadMetaModel($metaModelIdOrName);
+        if (null === $metaModel) {
             return false;
         }
 
-        // Set output to default if not set.
-        if (empty($strOutput)) {
-            $strOutput = 'raw';
-        }
-
         // Get item.
-        $objMetaModelItem = $objMM->findById($intDataId);
-        if (null === $objMetaModelItem) {
+        $item = $metaModel->findById($intDataId);
+        if (null === $item) {
             throw new \RuntimeException('MetaModel item not found: ' . $intDataId);
         }
 
-        // Parse attribute.
-        $arrAttr = $objMetaModelItem->parseAttribute($strAttributeName);
+        if (\is_int($attributeIdentifier)) {
+            $attributeIdentifier = $metaModel->getAttributeById($attributeIdentifier)->getName();
+        }
 
-        return $arrAttr[$strOutput];
+        // Parse attribute.
+        $arrAttr = $item->parseAttribute($attributeIdentifier, $outputFormat);
+
+        return $arrAttr[$outputFormat];
     }
 
     /**
      * Get count from a module or content element of a mm or from mm with filter direct.
      *
-     * @param string     $type       Type of element like mod or ce.
-     * @param string|int $identifier ID of content element or module or ID or name of MetaModel.
+     * @param string     $type       Type of element like mod, ce or mm.
+     * @param int|string $identifier ID of content element or module or ID or name of MetaModel.
      * @param int|null   $filterId   ID of the filter.
      *
      * @return int Return the count value.
+     * @throws Exception
      */
-    protected function getCount(string $type, $identifier, int $filterId = null): int
+    private function getCount(string $type, int|string $identifier, int $filterId = null): int
     {
         switch ($type) {
             // From module, can be a MetaModel list or filter.
             case 'mod':
-                if (null !== ($result = $this->getMetaModelDataFrom('tl_module', $identifier))) {
+                if (($result = $this->getMetaModelDataFrom('tl_module', $identifier))) {
                     return $this->getCountFor($result['metamodel'], $result['metamodel_filtering']);
                 }
                 break;
 
             // From content element, can be a MetaModel list or filter.
             case 'ce':
-                if (null !== ($result = $this->getMetaModelDataFrom('tl_content', $identifier))) {
+                if (($result = $this->getMetaModelDataFrom('tl_content', $identifier))) {
                     return $this->getCountFor($result['metamodel'], $result['metamodel_filtering']);
                 }
                 break;
 
             // From MetaModel with filter.
             case 'mm':
-                return $this->getCountFor($identifier, $filterId);
+                if (($result = $this->translateMetaModelNameToId($identifier))) {
+                    return $this->getCountFor((int)$result, $filterId);
+                }
+                break;
 
             // Unknown element type.
             default:
@@ -332,13 +357,42 @@ class InsertTagsListener implements ServiceAnnotationInterface
     }
 
     /**
+     * Translate MetaModel name to id if found.
+     *
+     * @param $identifier int|string The MetaModel identifier.
+     *
+     * @return false|int
+     * @throws Exception
+     */
+    private function translateMetaModelNameToId(int|string $identifier): bool|int
+    {
+        if (\is_numeric($identifier)) {
+            return $identifier;
+        }
+
+        $statement = $this->connection->createQueryBuilder()
+            ->select('t.id')
+            ->from('tl_metamodel', 't')
+            ->where('t.tableName=:tableName')
+            ->setParameter('tableName', $identifier)
+            ->executeQuery();
+
+        // Check if we have some data.
+        if ($statement->rowCount() < 1) {
+            return false;
+        }
+
+        return (int) $statement->fetchFirstColumn();
+    }
+
+    /**
      * Try to load the MetaModel by id or name.
      *
      * @param mixed $nameOrId Name or id of the MetaModel.
      *
      * @return IMetaModel|null
      */
-    protected function loadMetaModel($nameOrId): ?IMetaModel
+    private function loadMetaModel($nameOrId): ?IMetaModel
     {
         if (is_numeric($nameOrId)) {
             // ID.
@@ -362,15 +416,16 @@ class InsertTagsListener implements ServiceAnnotationInterface
      * @param string $strTable Name of table.
      * @param int    $intID    ID of the filter.
      *
-     * @return null|\stdClass Returns null when nothing was found or a \Database\Result with the chosen information.
+     * @return false|array Returns null when nothing was found or a \Database\Result with the chosen information.
      *
      * @throws \Doctrine\DBAL\DBALException When an database error occur.
+     * @throws Exception
      */
-    protected function getMetaModelDataFrom($strTable, $intID)
+    private function getMetaModelDataFrom(string $strTable, int $intID): bool|array
     {
         // Check if we know the table.
-        if (!$this->connection->getSchemaManager()->tablesExist([$strTable])) {
-            return null;
+        if (!$this->connection->createSchemaManager()->tablesExist([$strTable])) {
+            return false;
         }
 
         // Get all information form table or return null if we have no data.
@@ -384,7 +439,7 @@ class InsertTagsListener implements ServiceAnnotationInterface
 
         // Check if we have some data.
         if ($statement->rowCount() < 1) {
-            return null;
+            return false;
         }
 
         return $statement->fetchAssociative();
@@ -398,7 +453,7 @@ class InsertTagsListener implements ServiceAnnotationInterface
      *
      * @return int The count result.
      */
-    protected function getCountFor(int $intMetaModelId, int $intFilterId = null): int
+    private function getCountFor(int $intMetaModelId, int $intFilterId = null): int
     {
         $metaModel = $this->loadMetaModel($intMetaModelId);
         if (null === $metaModel) {
@@ -423,18 +478,18 @@ class InsertTagsListener implements ServiceAnnotationInterface
     /**
      * Check if the item is published.
      *
-     * @param IMetaModel $metaModel Current metamodels.
+     * @param IMetaModel $metaModel Current MetaModel.
      * @param int        $intItemId Id of the item.
      *
-     * @return boolean True => Published | False => Not published
-     *
-     * @deprecated
+     * @return bool True => Published | False => Not published
      *
      * @throws \Doctrine\DBAL\DBALException When a database error occur.
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @deprecated
+     *
      */
-    protected function isPublishedItem($metaModel, $intItemId): bool
+    protected function isPublishedItem(IMetaModel $metaModel, int $intItemId): bool
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
