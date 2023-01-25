@@ -385,17 +385,14 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * Convert a parameter using an aggregate function.
      *
-     * @param string $var       The parameter value.
+     * @param array $var       The parameter value.
      *
      * @param array  $arguments The arguments of the parameter.
      *
      * @return string
      */
-    private function convertParameterAggregate(string $var, array $arguments)
+    private function convertParameterAggregate(array $var, array $arguments)
     {
-        // Treat as list.
-        $var = (array) $var;
-
         if (!empty($arguments['recursive'])) {
             $var = \iterator_to_array(
                 new \RecursiveIteratorIterator(
@@ -466,7 +463,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
             return '?';
         }
 
-        return $this->convertParameterAggregate($var, $arrArgs);
+        return $this->convertParameterAggregate((array) $var, $arrArgs);
     }
 
     /**
