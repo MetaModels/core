@@ -133,7 +133,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public function get($strKey)
+    public function get(string $strKey)
     {
         return isset($this->data[$strKey]) ? $this->data[$strKey] : null;
     }
@@ -141,7 +141,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public function prepareRules(IFilter $objFilter, $arrFilterUrl)
+    public function prepareRules(IFilter $objFilter, array $arrFilterUrl)
     {
         $this->filterParameters = $arrFilterUrl;
         $this->queryString      = $this->get('customsql');
@@ -252,7 +252,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return void
      */
-    private function addParameters($parameters)
+    private function addParameters(array $parameters)
     {
         if (empty($parameters)) {
             return;
@@ -268,7 +268,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return void
      */
-    private function addParameter($parameter)
+    private function addParameter(string $parameter)
     {
         $this->queryParameter[] = $this->parseInsertTagsInternal($parameter);
     }
@@ -293,7 +293,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return mixed
      */
-    private function getValueFromServiceContainer($valueName, $arguments)
+    private function getValueFromServiceContainer(string $valueName, array $arguments)
     {
         if (!empty($arguments['service'])) {
             $serviceName = $arguments['service'];
@@ -321,7 +321,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return mixed
      */
-    private function getValueFromSource($source, $valueName, $arguments)
+    private function getValueFromSource(string $source, string $valueName, array $arguments)
     {
         switch (strtolower($source)) {
             case 'get':
@@ -391,7 +391,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return string
      */
-    private function convertParameterAggregate($var, $arguments)
+    private function convertParameterAggregate(string $var, array $arguments)
     {
         // Treat as list.
         $var = (array) $var;
@@ -476,7 +476,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return string
      */
-    private function parseInsertTagsInternal($queryString)
+    private function parseInsertTagsInternal(string $queryString)
     {
         return $this->container->get(InsertTags::class)->replace($queryString, false);
     }
@@ -502,7 +502,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return array
      */
-    private function stripInserttags($string): array
+    private function stripInserttags(string $string): array
     {
         $strRegExpStart = '{{([a-zA-Z0-9\x80-\xFF](?:[^{}]|';
 
@@ -524,7 +524,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return string
      */
-    private function checkTag($tag)
+    private function checkTag(string $tag)
     {
         $arrTmp = $this->stripInserttags($tag);
         if (\array_key_exists(1, $arrTmp)) {
