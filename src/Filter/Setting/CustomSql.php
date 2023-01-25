@@ -434,10 +434,8 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      * @param string $strMatch The match from the preg_replace_all call in parseRequestVars().
      *
      * @return string
-     *
-     * @internal Only to be used via parseRequestVars().
      */
-    public function convertParameter($strMatch)
+    private function convertParameter( string $strMatch)
     {
         list($strSource, $strQuery) = explode('?', $strMatch, 2);
         parse_str($strQuery, $arrArgs);
@@ -486,13 +484,11 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * Replace all insert tags in the query string.
      *
-     * @param string $strMatch The match from the preg_replace call.
+     * @param string $strMatch The parameter value.
      *
      * @return string
-     *
-     * @internal Only to be used internal as callback from parseSecureInsertTags().
      */
-    public function parseAndAddSecureInsertTagAsParameter($strMatch)
+    private function parseAndAddSecureInsertTagAsParameter(string $strMatch)
     {
         $this->addParameter($this->parseInsertTagsInternal('{{' . $strMatch . '}}'));
 
