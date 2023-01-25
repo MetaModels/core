@@ -133,7 +133,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public function get(string $strKey)
+    public function get($strKey)
     {
         return isset($this->data[$strKey]) ? $this->data[$strKey] : null;
     }
@@ -141,7 +141,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public function prepareRules(IFilter $objFilter, array $arrFilterUrl)
+    public function prepareRules(IFilter $objFilter, $arrFilterUrl)
     {
         $this->filterParameters = $arrFilterUrl;
         $this->queryString      = $this->get('customsql');
