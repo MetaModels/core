@@ -435,7 +435,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return string
      */
-    private function convertParameter( string $strMatch)
+    private function convertParameter(string $strMatch)
     {
         list($strSource, $strQuery) = explode('?', $strMatch, 2);
         parse_str($strQuery, $arrArgs);
