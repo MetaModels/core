@@ -117,16 +117,16 @@ class ToolboxFile
     /**
      * The fallback language, used for retrieving meta.txt information.
      *
-     * @var string
+     * @var string|null
      */
-    protected string $fallbackLanguage = '';
+    protected string|null $fallbackLanguage = '';
 
     /**
      * Determines if we want to generate images or not.
      *
-     * @var bool
+     * @var bool|null
      */
-    protected bool $blnShowImages = false;
+    protected bool|null $blnShowImages = false;
 
     /**
      * Image resize information.
@@ -352,11 +352,11 @@ class ToolboxFile
     /**
      * Set the fallback language.
      *
-     * @param string $fallbackLanguage The fallback language to use.
+     * @param string|null $fallbackLanguage The fallback language to use.
      *
      * @return ToolboxFile
      */
-    public function setFallbackLanguage($fallbackLanguage)
+    public function setFallbackLanguage(?string $fallbackLanguage): static
     {
         $this->fallbackLanguage = $fallbackLanguage;
 
@@ -366,9 +366,9 @@ class ToolboxFile
     /**
      * Retrieve the fallback language.
      *
-     * @return string
+     * @return string|null
      */
-    public function getFallbackLanguage()
+    public function getFallbackLanguage(): ?string
     {
         return $this->fallbackLanguage;
     }
@@ -376,11 +376,11 @@ class ToolboxFile
     /**
      * Set to show/prepare images or not.
      *
-     * @param boolean $blnShowImages True to show images, false otherwise.
+     * @param boolean|null $blnShowImages True to show images, false otherwise.
      *
      * @return ToolboxFile
      */
-    public function setShowImages($blnShowImages)
+    public function setShowImages(?bool $blnShowImages): static
     {
         $this->blnShowImages = $blnShowImages;
 
@@ -1143,7 +1143,7 @@ class ToolboxFile
      */
     private function resizeImage($fileName)
     {
-        [$width, $height, $mode] = $this->getResizeImages();
+        [$width, $height, $mode] = $this->getResizeImages() + [null, null, null];
         if ($this->getShowImages() && ($width || $height || $mode)) {
             if ($this->imageFactory) {
                 $image = $this->imageFactory->create(
