@@ -283,6 +283,3 @@ services:
             - "@contao.assets.files_context"
             - "@contao.image.picture_factory"
             - "@session"
-
-    MetaModels\Helper\LocaleUtil:
-        public: false

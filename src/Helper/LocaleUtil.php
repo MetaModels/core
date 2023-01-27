@@ -20,12 +20,15 @@
 namespace MetaModels\Helper;
 
 use Contao\CoreBundle\Util\LocaleUtil as ContaoLocaleUtil;
+use Contao\System;
 
 final class LocaleUtil
 {
     /**
-     * Converts a Locale ID (_) to a Language Tag (-) and strips keywords
+     * Converts a Locale ID to a Language Tag and strips keywords
      * after the @ sign.
+     * As legacy part we convert a Locale ID (_) to a Language Tag (-)
+     * and strips keywords after the @ sign.
      *
      * @param string $localeId The locale id.
      *
@@ -33,6 +36,14 @@ final class LocaleUtil
      */
     public static function formatAsLanguageTag(string $localeId): string
     {
+        $packages    = System::getContainer()->getParameter('kernel.packages');
+        $coreVersion = $packages['contao/core-bundle'];
+
+        if (\version_compare($coreVersion, '4.13', '>=')) {
+            return self::formatAsLocale($localeId);
+        }
+
+        // Legacy call.
         return \str_replace('_', '-', ContaoLocaleUtil::formatAsLocale($localeId));
     }
 
