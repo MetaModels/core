@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -90,6 +90,10 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['settings'][1]                 = 'Edit t
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['groupsort_settings'][0]       = 'Grouping and sorting';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['groupsort_settings'][1]       =
     'Edit the grouping and sorting settings of input screen ID %s';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['subheadline'][0]              = 'Additions to the mask-heading';
+$GLOBALS['TL_LANG']['tl_metamodel_dca']['subheadline'][1]              =
+    'The field can be used to adapt the heading of the mask at edit and replaces the output of the ID.' .
+    'You can use simple tokens e.g. ##model_name##, ##model_firstname## [##model_id##]';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes']['standalone']   = 'Standalone';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendertypes']['ctable']       = 'As child table';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['rendermodes']['flat']         = 'Flat';

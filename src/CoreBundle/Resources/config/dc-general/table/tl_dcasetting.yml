@@ -115,3 +115,12 @@ services:
         event: dc-general.view.contao2backend.get-operation-button
         method: handle
         priority: 2048
+
+  MetaModels\CoreBundle\EventListener\DcGeneral\Table\DcaSetting\EditMaskSubHeadlineListener:
+    arguments:
+      - '@metamodels.view_combination'
+      - "@metamodels.view_combination.input_screen_information_builder"
+      - "@contao.string.simple_token_parser"
+    tags:
+      - name: kernel.event_listener
+        event: dc-general.view.contao2backend.get-edit-mask-subheadline
