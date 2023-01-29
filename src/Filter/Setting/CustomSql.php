@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,16 +17,15 @@
  * @author     Oliver Hoff <oliver@hofff.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @author     Oliver Willmes <info@oliverwillmes.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
 namespace MetaModels\Filter\Setting;
 
-use Contao\Input;
 use Contao\InsertTags;
-use Contao\Session;
 use Doctrine\DBAL\Connection;
 use MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam;
 use MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName;
@@ -37,7 +36,7 @@ use MetaModels\IItem;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\Render\Setting\ICollection as IRenderSettings;
 use Psr\Container\ContainerInterface;
-use Symfony\Component\DependencyInjection\ServiceSubscriberInterface;
+use Symfony\Contracts\Service\ServiceSubscriberInterface;
 
 /**
  * This filter condition generates a filter rule for a predefined SQL query.
@@ -90,9 +89,9 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * Constructor - initialize the object and store the parameters.
      *
-     * @param ICollection        $collection   The parenting filter settings object.
-     * @param array              $data         The attributes for this filter setting.
-     * @param ContainerInterface $container    The service container.
+     * @param ICollection        $collection The parenting filter settings object.
+     * @param array              $data       The attributes for this filter setting.
+     * @param ContainerInterface $container  The service container.
      *
      * @throws \InvalidArgumentException When a service is missing.
      */
@@ -123,10 +122,9 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     public static function getSubscribedServices()
     {
         return [
-            Connection::class => Connection::class,
-            Input::class      => Input::class,
-            InsertTags::class => InsertTags::class,
-            Session::class    => Session::class,
+            Connection::class                  => Connection::class,
+            InsertTags::class                  => InsertTags::class,
+            ReplaceParam::class                => ReplaceParam::class,
             // This one is deprecated.
             IMetaModelsServiceContainer::class => IMetaModelsServiceContainer::class
         ];
@@ -227,9 +225,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     private function compile()
     {
         $this->parseTable();
-        $this->parseRequestVars();
-        $this->parseSecureInsertTags();
-        $this->parseInsertTags();
+        $this->literateQuery();
     }
 
     /**
@@ -256,7 +252,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return void
      */
-    private function addParameters($parameters)
+    private function addParameters(array $parameters)
     {
         if (empty($parameters)) {
             return;
@@ -272,7 +268,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return void
      */
-    private function addParameter($parameter)
+    private function addParameter(string $parameter)
     {
         $this->queryParameter[] = $this->parseInsertTagsInternal($parameter);
     }
@@ -297,7 +293,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return mixed
      */
-    private function getValueFromServiceContainer($valueName, $arguments)
+    private function getValueFromServiceContainer(string $valueName, array $arguments)
     {
         if (!empty($arguments['service'])) {
             $serviceName = $arguments['service'];
@@ -325,7 +321,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return mixed
      */
-    private function getValueFromSource($source, $valueName, $arguments)
+    private function getValueFromSource(string $source, string $valueName, array $arguments)
     {
         switch (strtolower($source)) {
             case 'get':
@@ -336,7 +332,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
 
             case 'filter':
                 if (is_array($this->filterParameters)) {
-                    if (array_key_exists($valueName, $this->filterParameters)) {
+                    if (\array_key_exists($valueName, $this->filterParameters)) {
                         return $this->filterParameters[$valueName];
                     }
 
@@ -389,19 +385,16 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * Convert a parameter using an aggregate function.
      *
-     * @param string $var       The parameter value.
+     * @param array $var       The parameter value.
      *
-     * @param array  $arguments The arguments of the parameter.
+     * @param array $arguments The arguments of the parameter.
      *
      * @return string
      */
-    private function convertParameterAggregate($var, $arguments)
+    private function convertParameterAggregate(array $var, array $arguments)
     {
-        // Treat as list.
-        $var = (array) $var;
-
         if (!empty($arguments['recursive'])) {
-            $var = iterator_to_array(
+            $var = \iterator_to_array(
                 new \RecursiveIteratorIterator(
                     new \RecursiveArrayIterator(
                         $var
@@ -415,10 +408,10 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
         }
 
         if (!empty($arguments['key'])) {
-            $var = array_keys($var);
+            $var = \array_keys($var);
         } else {
             // Use values.
-            $var = array_values($var);
+            $var = \array_values($var);
         }
 
         if ($arguments['aggregate'] == 'set') {
@@ -429,21 +422,19 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
 
         $this->addParameters($var);
 
-        return rtrim(str_repeat('?,', count($var)), ',');
+        return \rtrim(\str_repeat('?,', \count($var)), ',');
     }
 
     /**
      * Convert a parameter in the query string.
      *
-     * @param array $arrMatch The match from the preg_replace_all call in parseRequestVars().
+     * @param string $strMatch The match from the preg_replace_all call in parseRequestVars().
      *
      * @return string
-     *
-     * @internal Only to be used via parseRequestVars().
      */
-    public function convertParameter($arrMatch)
+    private function convertParameter(string $strMatch)
     {
-        list($strSource, $strQuery) = explode('?', $arrMatch[1], 2);
+        list($strSource, $strQuery) = explode('?', $strMatch, 2);
         parse_str($strQuery, $arrArgs);
         $arrName = (array) $arrArgs['name'];
 
@@ -456,7 +447,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
         }
 
         if ($index != $count || $var === null) {
-            if (array_key_exists('default', $arrArgs) && (null !== $arrArgs['default'])) {
+            if (\array_key_exists('default', $arrArgs) && (null !== $arrArgs['default'])) {
                 $this->addParameter($arrArgs['default']);
 
                 return '?';
@@ -472,21 +463,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
             return '?';
         }
 
-        return $this->convertParameterAggregate($var, $arrArgs);
-    }
-
-    /**
-     * Parse a request var insert tag within the SQL.
-     *
-     * @return void
-     */
-    private function parseRequestVars()
-    {
-        $this->queryString = preg_replace_callback(
-            '@\{\{param::(.*)\}\}@',
-            [$this, 'convertParameter'],
-            $this->queryString
-        );
+        return $this->convertParameterAggregate((array) $var, $arrArgs);
     }
 
     /**
@@ -496,7 +473,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return string
      */
-    private function parseInsertTagsInternal($queryString)
+    private function parseInsertTagsInternal(string $queryString)
     {
         return $this->container->get(InsertTags::class)->replace($queryString, false);
     }
@@ -504,40 +481,85 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     /**
      * Replace all insert tags in the query string.
      *
-     * @param string $arrMatch The match from the preg_replace call.
+     * @param string $strMatch The parameter value.
      *
      * @return string
-     *
-     * @internal Only to be used internal as callback from parseSecureInsertTags().
      */
-    public function parseAndAddSecureInsertTagAsParameter($arrMatch)
+    private function parseAndAddSecureInsertTagAsParameter(string $strMatch)
     {
-        $this->addParameter($this->parseInsertTagsInternal('{{' . $arrMatch[1] . '}}'));
+        $this->addParameter($this->parseInsertTagsInternal('{{' . $strMatch . '}}'));
 
         return '?';
     }
 
     /**
-     * Replace all secure insert tags.
+     * Strip inserttags from querystring.
      *
-     * @return void
+     * @param string $string The parameter value.
+     *
+     * @return array
      */
-    private function parseSecureInsertTags()
+    private function stripInserttags(string $string): array
     {
-        $this->queryString = preg_replace_callback(
-            '@\{\{secure::([^}]+)\}\}@',
-            [$this, 'parseAndAddSecureInsertTagAsParameter'],
-            $this->queryString
+        $strRegExpStart = '{{([a-zA-Z0-9\x80-\xFF](?:[^{}]|';
+
+        $strRegExpEnd = ')*)}}';
+
+        return \preg_split(
+            '(' . $strRegExpStart . str_repeat('{{(?:' . substr($strRegExpStart, 3), 9) . str_repeat($strRegExpEnd, 10)
+            . ')',
+            $string,
+            -1,
+            PREG_SPLIT_DELIM_CAPTURE
         );
     }
 
     /**
-     * Replace all insert tags in the query string.
+     * Checkout nested inserttags and dissolve param::, secure::, other inserttags.
+     *
+     * @param string $tag The parameter value where as an inserttag in it.
+     *
+     * @return string
+     */
+    private function checkTag(string $tag)
+    {
+        $arrTmp = $this->stripInserttags($tag);
+        if (\array_key_exists(1, $arrTmp)) {
+            $arrTmp[0] .= self::checkTag($arrTmp[1]);
+        }
+
+        $arrStrip = \explode('::', $arrTmp[0], 2);
+        if (!\array_key_exists(1, $arrStrip)) {
+            return $arrTmp[0];
+        }
+
+        switch ($arrStrip[0]) {
+            case 'param':
+                return $this->convertParameter($arrStrip[1]);
+            
+            case 'secure':
+                return $this->parseAndAddSecureInsertTagAsParameter($arrStrip[1]);
+            
+            default:
+                return $this->parseInsertTagsInternal('{{' . $arrTmp[0] . '}}');
+        }
+    }
+
+    /**
+     * Literate queryString, split it in pieces and dissolve inserttags.
      *
      * @return void
      */
-    private function parseInsertTags()
+    private function literateQuery()
     {
-        $this->queryString = $this->parseInsertTagsInternal($this->queryString);
+        $tags = $this->stripInserttags($this->queryString);
+
+        $newQueryString = '';
+
+        foreach ($tags as $tag) {
+            $newQueryString .= $this->checkTag($tag);
+        }
+
+        $this->queryString = $newQueryString;
     }
 }
