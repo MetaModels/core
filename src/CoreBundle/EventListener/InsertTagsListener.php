@@ -40,21 +40,22 @@ use Psr\Log\LoggerInterface;
  * This class handles the replacement of all MetaModels insert tags.
  *
  * @codingStandardsIgnoreStart
+ *
  * Available insert tags:
  *
  * -- Total Count --
  * mm::total::mod::[ID]
  * mm::total::ce::[ID]
- * mm::total::mm::[MM Name|ID](::[ID filter])
+ * mm::total::mm::[MM Col-Name|ID](::[ID filter])
  *
  * -- Item --
- * mm::item::[MM Name|ID]::[Item ID|ID,ID,ID]::[ID render setting](::[Output raw|text|html5])
+ * mm::item::[MM Col-Name|ID]::[Item ID|ID,ID,ID]::[ID render setting](::[Output (Default:text)|html5])
  *
  * -- Attribute --
- * mm::attribute::[MM Name|ID]::[Item ID]::[Attribute Name|ID](::[Output (Default:text)|raw|html5])
+ * mm::attribute::[MM Col-Name|ID]::[Item ID]::[ID render setting]::[Attribute Col-Name|ID](::[Output (Default:text)|html5|raw])
  *
  * -- JumpTo --
- * mm::jumpTo::[MM Name|ID]::[Item ID]::[ID render setting](::[Parameter (Default:url)|label|page|params.attname])
+ * mm::jumpTo::[MM Col-Name|ID]::[Item ID]::[ID render setting](::[Parameter (Default:url)|label|page|params.attname])
  *
  * @codingStandardsIgnoreEnd
  */
@@ -143,7 +144,7 @@ final class InsertTagsListener
 
                 // Get value from an attribute.
                 case 'attribute':
-                    return $this->getAttribute($elements[2], $elements[3], $elements[4], ($elements[5] ?? null));
+                    return $this->getAttribute($elements[2], $elements[3], $elements[4], $elements[5], ($elements[6] ?? null));
 
                 // Get item.
                 case 'item':
@@ -167,10 +168,10 @@ final class InsertTagsListener
     /**
      * Get the jumpTo for a chosen value.
      *
-     * @param int|string $mixMetaModel ID or name of MetaModels.
-     * @param int        $mixDataId    ID of the data row.
-     * @param int        $viewId       ID of render setting.
-     * @param string     $strParam     Name of parameter - Default:url|label|page|params.[attrname].
+     * @param int|string  $mixMetaModel ID or column name of MetaModels.
+     * @param int         $mixDataId    ID of the data row.
+     * @param int         $viewId       ID of render setting.
+     * @param string|null $strParam     Name of parameter - (Default:url)|label|page|params.[attrname].
      *
      * @return bool|string Return false when nothing was found for the requested value.
      */
@@ -178,7 +179,7 @@ final class InsertTagsListener
         int|string $mixMetaModel,
         int $mixDataId,
         int $viewId,
-        string $strParam = 'url'
+        ?string $strParam
     ): bool|string
     {
         // Set the param to url if empty.
@@ -193,7 +194,7 @@ final class InsertTagsListener
         }
 
         // Get the render setting.
-        if (null === $renderSettings = $this->renderSettingFactory->createCollection($metaModel, $viewId)) {
+        if (null === $renderSetting = $this->renderSettingFactory->createCollection($metaModel, (int) $viewId)) {
             return false;
         }
 
@@ -204,7 +205,7 @@ final class InsertTagsListener
         }
 
         // Render the item and check if we have a jump to.
-        $arrRenderedItem = $item->parseValue('text', $renderSettings);
+        $arrRenderedItem = $item->parseValue('text', $renderSetting);
         if (!isset($arrRenderedItem['jumpTo'])) {
             return false;
         }
@@ -229,10 +230,10 @@ final class InsertTagsListener
     /**
      * Get an item.
      *
-     * @param int|string  $metaModelIdOrName ID or name of MetaModels.
+     * @param int|string  $metaModelIdOrName ID or column name of MetaModels.
      * @param int|string  $mixDataId         ID of the data row.
      * @param int|string  $viewId            ID of render setting.
-     * @param string|null $strOutput         Name of output. Default:null (fallback to html5)|text|html5|...
+     * @param string|null $outputFormat      Name of output format- (Default:text)|html5.
      *
      * @return bool|string Return false when nothing was found or return the value.
      */
@@ -240,7 +241,7 @@ final class InsertTagsListener
         int|string $metaModelIdOrName,
         int|string $mixDataId,
         int|string $viewId,
-        string $strOutput = null
+        ?string $outputFormat
     ): bool|string
     {
         // Get the MetaModel. Return if we can not find one.
@@ -249,21 +250,21 @@ final class InsertTagsListener
             return false;
         }
 
-        // Set output to default if not set.
-        if (empty($strOutput)) {
-            $strOutput = 'html5';
+        // Set output format to default if not set.
+        if (empty($outputFormat)) {
+            $outputFormat = 'text';
         }
 
         $objMetaModelList = new ItemList();
         $objMetaModelList
             ->setMetaModel((int) $metaModel->get('id'), (int) $viewId)
-            ->overrideOutputFormat($strOutput);
+            ->overrideOutputFormat($outputFormat);
 
         // Handle a set of ids.
         $arrIds = StringUtil::trimsplit(',', $mixDataId);
 
-        // Render an empty insert tag rather than displaying a list with an empty.
-        // result information. do not return false here because the insert tag itself is correct.
+        // Render an empty insert tag rather than displaying a list with an empty
+        // result information - do not return false here because the insert tag itself is correct.
         if (count($arrIds) < 1) {
             return '';
         }
@@ -276,18 +277,19 @@ final class InsertTagsListener
     /**
      * Get from MM X the item with the id Y and parse the attribute Z and return it.
      *
-     * @param int|string  $metaModelIdOrName   ID or name of MetaModel.
+     * @param int|string  $metaModelIdOrName   ID or column name of MetaModel.
      * @param int         $intDataId           ID of the data row.
-     * @param string      $attributeIdentifier Name of the attribute.
-     * @param string|null $outputFormat        Type of output format - default: text.
+     * @param int|string  $viewId              ID of render setting.
+     * @param int|string  $attributeIdentifier ID or column name of the attribute.
+     * @param string|null $outputFormat        Type of output format - (Default:text)|html5|raw.
      *
      * @return bool|string Return false when nothing was found or return the value.
      *
-     * @throws \RuntimeException If $intDataId does not provide an existingMetaModel ID.
      */
     private function getAttribute(
         int|string $metaModelIdOrName,
         int $intDataId,
+        int|string $viewId,
         int|string $attributeIdentifier,
         ?string $outputFormat
     ): bool|string
@@ -301,15 +303,31 @@ final class InsertTagsListener
         // Get item.
         $item = $metaModel->findById($intDataId);
         if (null === $item) {
-            throw new \RuntimeException('MetaModel item not found: ' . $intDataId);
+            return false;
         }
 
-        if (\is_int($attributeIdentifier)) {
-            $attributeIdentifier = $metaModel->getAttributeById($attributeIdentifier)->getName();
+        if (\is_numeric($attributeIdentifier)) {
+            $attributeIdentifier = $metaModel->getAttributeById((int) $attributeIdentifier)->getColName();
+        }
+
+        $originalOutputFormat = $outputFormat;
+        // Set output format to default if not set or raw.
+        if (empty($outputFormat) || 'raw' === $outputFormat) {
+            $outputFormat = 'text';
+        }
+
+        // Get render setting.
+        if (null === ($renderSetting = $this->renderSettingFactory->createCollection($metaModel, (int) $viewId))) {
+            $outputFormat = 'text';
         }
 
         // Parse attribute.
-        $arrAttr = $item->parseAttribute($attributeIdentifier, $outputFormat);
+        $arrAttr = $item->parseAttribute($attributeIdentifier, $outputFormat, $renderSetting);
+
+        // Reset format to raw if is it.
+        if ('raw' === $originalOutputFormat) {
+            $outputFormat = 'raw';
+        }
 
         return $arrAttr[$outputFormat];
     }
@@ -344,7 +362,7 @@ final class InsertTagsListener
             // From MetaModel with filter.
             case 'mm':
                 if (($result = $this->translateMetaModelNameToId($identifier))) {
-                    return $this->getCountFor((int)$result, $filterId);
+                    return $this->getCountFor((int) $result, $filterId);
                 }
                 break;
 
@@ -394,10 +412,10 @@ final class InsertTagsListener
      */
     private function loadMetaModel($nameOrId): ?IMetaModel
     {
-        if (is_numeric($nameOrId)) {
+        if (\is_numeric($nameOrId)) {
             // ID.
             $tableName = $this->factory->translateIdToMetaModelName($nameOrId);
-        } elseif (is_string($nameOrId)) {
+        } elseif (\is_string($nameOrId)) {
             // Name.
             $tableName = $nameOrId;
         }
