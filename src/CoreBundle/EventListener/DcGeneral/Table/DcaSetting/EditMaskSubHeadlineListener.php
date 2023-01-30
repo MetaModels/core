@@ -23,6 +23,7 @@ use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\GetEd
 use Contao\CoreBundle\String\SimpleTokenParser;
 use MetaModels\DcGeneral\DataDefinition\Definition\IMetaModelDefinition;
 use MetaModels\ViewCombination\InputScreenInformationBuilder;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * This handles the additional part of sub-headline in input mask.
@@ -44,15 +45,27 @@ final class EditMaskSubHeadlineListener
     private SimpleTokenParser $tokenParser;
 
     /**
+     * The translator.
+     *
+     * @var TranslatorInterface
+     */
+    private TranslatorInterface $translator;
+
+    /**
      * EditMaskSubHeadlineListener constructor.
      *
      * @param InputScreenInformationBuilder $inputScreens The input screen information builder.
      * @param SimpleTokenParser             $tokenParser  The token parser.
+     * @param TranslatorInterface           $translator   The translator.
      */
-    public function __construct(InputScreenInformationBuilder $inputScreens, SimpleTokenParser $tokenParser)
-    {
+    public function __construct(
+        InputScreenInformationBuilder $inputScreens,
+        SimpleTokenParser $tokenParser,
+        TranslatorInterface $translator
+    ) {
         $this->inputScreens = $inputScreens;
         $this->tokenParser  = $tokenParser;
+        $this->translator   = $translator;
     }
 
     /**
@@ -70,15 +83,13 @@ final class EditMaskSubHeadlineListener
         $status         = 'editRecord';
         $environment    = $event->getEnvironment();
         $dataDefinition = $environment->getDataDefinition();
-        $definitionName = $environment->getDataDefinition()->getName();
-        $translator     = $environment->getTranslator();
         /** @var IMetaModelDefinition $metaModels */
         $metaModel     = $dataDefinition->getDefinition(IMetaModelDefinition::NAME);
         $metaModelName = $dataDefinition->getName();
         $screen        = $this->inputScreens->fetchInputScreens([$metaModelName => $metaModel->getActiveInputScreen()]);
-        $screenMeta    = $screen[$metaModelName]['meta'];
+        $screenMeta    = $screen[$metaModelName]['meta'] ?? null;
 
-        if (empty($headline = $screenMeta['subheadline'])) {
+        if (empty($screenMeta) || empty($headline = ($screenMeta['subheadline'] ?? null))) {
             return;
         }
 
@@ -92,13 +103,8 @@ final class EditMaskSubHeadlineListener
         $headlineAdd = $this->replaceSimpleTokensAtHeadline($headline, $tokenData);
 
         // Translate language key and add headline part.
-        $headline = $translator->translate($status, $definitionName, [$headlineAdd]);
-
-        if ($status !== $headline) {
-            $subHeadline = $headline;
-        } else {
-            $subHeadline = $translator->translate('MSC.' . $status, null, [$headlineAdd]);
-        }
+        $subHeadline =
+            $this->translator->trans('tl_metamodel_item.' . $status, [0 => $headlineAdd], 'contao_tl_metamodel_item');
 
         $event->setHeadline($subHeadline);
     }
