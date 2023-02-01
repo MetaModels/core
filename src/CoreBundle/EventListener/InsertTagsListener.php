@@ -369,9 +369,7 @@ final class InsertTagsListener
 
             // From MetaModel with filter.
             case 'mm':
-                if (($result = $this->translateMetaModelNameToId($identifier))) {
-                    return $this->getCountFor((int) $result, $filterId);
-                }
+                return $this->getCountFor($identifier, $filterId);
                 break;
 
             // Unknown element type.
@@ -383,42 +381,13 @@ final class InsertTagsListener
     }
 
     /**
-     * Translate MetaModel name to id if found.
-     *
-     * @param $identifier int|string The MetaModel identifier.
-     *
-     * @return false|int
-     * @throws Exception
-     */
-    private function translateMetaModelNameToId(int|string $identifier): bool|int
-    {
-        if (\is_numeric($identifier)) {
-            return $identifier;
-        }
-
-        $statement = $this->connection->createQueryBuilder()
-            ->select('t.id')
-            ->from('tl_metamodel', 't')
-            ->where('t.tableName=:tableName')
-            ->setParameter('tableName', $identifier)
-            ->executeQuery();
-
-        // Check if we have some data.
-        if ($statement->rowCount() < 1) {
-            return false;
-        }
-
-        return (int) $statement->fetchFirstColumn();
-    }
-
-    /**
      * Try to load the MetaModel by id or name.
      *
-     * @param mixed $nameOrId Name or id of the MetaModel.
+     * @param int|string $nameOrId Name or id of the MetaModel.
      *
      * @return IMetaModel|null
      */
-    private function loadMetaModel($nameOrId): ?IMetaModel
+    private function loadMetaModel(int|string $nameOrId): ?IMetaModel
     {
         if (\is_numeric($nameOrId)) {
             // ID.
@@ -474,14 +443,14 @@ final class InsertTagsListener
     /**
      * Get count form one MM for chosen filter.
      *
-     * @param int      $intMetaModelId ID of the metamodels.
-     * @param int|null $intFilterId    ID of the filter.
+     * @param string   $metaModelNameOrId Name or id of the MetaModel.
+     * @param int|null $intFilterId       ID of the filter.
      *
      * @return int The count result.
      */
-    private function getCountFor(int $intMetaModelId, int $intFilterId = null): int
+    private function getCountFor(string $metaModelNameOrId, int $intFilterId = null): int
     {
-        $metaModel = $this->loadMetaModel($intMetaModelId);
+        $metaModel = $this->loadMetaModel($metaModelNameOrId);
         if (null === $metaModel) {
             return 0;
         }
