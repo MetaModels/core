@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,9 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2022-11-02T22:34:43+01:00
+ * Last-updated: 2023-02-01T15:47:31+00:00
  *
- * @copyright 2012-2022 The MetaModels team.
+ * @copyright 2012-2023 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
@@ -39,24 +39,16 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['delete']['0']                 = 'Suppri
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['delete']['1']                 = 'Supprimer masque de saisie ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']['0']                   = 'Éditer masque de saisie';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']['1']                   = 'Éditer le masque de saisie ID %s';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']['0']                   = 'Signe de tri';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']['1']                   = 'Signe de tri à utiliser dans la vue articles.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['groupsort_settings']['0']     = 'Classement et tri';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['groupsort_settings']['1']     = 'Modifier les options de classement et de tri du masque de saisie ID %s';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed']['0']               = 'Permettre l\'édition seulement';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed']['1']               = 'Si coché, ce masque de saisie permet seulement l\'édition des écritures. Les fonctionnalités créer et supprimer seront désactivées';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['iscreatable']['0']            = 'Permettre d\'ajouter des enregistrements';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['iscreatable']['1']            = 'Si coché, ce masque de saisie permettra la création de nouveaux enregistrements.';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['0']              = 'Par défaut';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['1']              = 'Détermines que ce masque de saisie doit être utilisé par défaut pour le Metamodel parent.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdeleteable']['0']           = 'Permettre la suppression d\'enregistrements';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdeleteable']['1']           = 'Si coché, ce masque de saisie permettra la suppression d\'enregistrements.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['iseditable']['0']             = 'Permettre la modification des enregistrements';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['iseditable']['1']             = 'Si coché, ce masque de saisie permettra la modification des  enregistrements.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['0']    = 'Limiter les paramètres de rendu';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['1']    = 'Choisir entre front-office et back-office.';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']['0']                   = 'Mode de tri';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']['1']                   = 'Mode de tri utilisé dans la vue articles';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['name']['0']                   = 'Nom';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['name']['1']                   = 'Nom du masque de saisie.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']['0']                    = 'Nouveau masque de saisie';
@@ -77,25 +69,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['show']['0']                   = 'Détai
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['show']['1']                   = 'Montrer détails masque de saisie ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['showColumns']['0']            = 'Affichage en colonne';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['showColumns']['1']            = 'Cocher pour ajouter les noms des colonnes en en-tête du tableau.';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['1']            = 'Trier ascendant selon la première lettre';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['10']           = 'Tri descendant par année';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['11']           = 'Tri ascendant';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['12']           = 'Tri descendant';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['2']            = 'Trier descendant selon première lettre';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['3']            = 'Trier ascendant selon les deux premières lettres';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['4']            = 'Tri descendant selon les deux première lettres';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['5']            = 'Tri ascendant par jour';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['6']            = 'Tri descendant par jour';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['7']            = 'Tri ascendant par mois';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['8']            = 'Tri descendant par mois';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['9']            = 'Tri ascendant par année';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_0']       = '0 Les registre ne sont pas triés';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_1']       = '1 Les registres sont triés par un champ fixe';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_2']       = '2 Les registres sont triés par un champ commutable';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_3']       = '3 Les registres sont triés par la table parent';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_4']       = '4 Affiche les registres enfant des registres parent (voir module feuille de style)';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_5']       = '5 Affichage arborescent des registres (voir structure du site)';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_6']       = '6 Affichage dans une structure arborescente des registres enfants (voir module objet)';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['title_legend']                = 'Nom';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']['0']                 = 'Date de révision';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']['1']                 = 'Date et heure de la dernière révision.';

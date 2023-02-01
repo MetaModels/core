@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,17 +12,15 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2022-11-02T22:34:22+01:00
+ * Last-updated: 2023-02-01T15:47:13+00:00
  *
- * @copyright 2012-2022 The MetaModels team.
+ * @copyright 2012-2023 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
 
-$GLOBALS['TL_LANG']['tl_content']['ASC']                                      = 'aufsteigend';
-$GLOBALS['TL_LANG']['tl_content']['DESC']                                     = 'absteigend';
 $GLOBALS['TL_LANG']['tl_content']['asc']                                      = 'Aufsteigend';
 $GLOBALS['TL_LANG']['tl_content']['desc']                                     = 'Absteigend';
 $GLOBALS['TL_LANG']['tl_content']['editfiltersetting']['0']                   = 'Filtereinstellungen bearbeiten';
@@ -110,7 +108,6 @@ $GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']                         = 
 $GLOBALS['TL_LANG']['tl_content']['mm_meta_legend']                           = 'Suchmaschinen-Optimierung';
 $GLOBALS['TL_LANG']['tl_content']['mm_pagination_legend']                     = 'MetaModel Paginierung';
 $GLOBALS['TL_LANG']['tl_content']['mm_parameters_legend']                     = 'Parameter-Einstellungen';
-$GLOBALS['TL_LANG']['tl_content']['mm_rendering']                             = 'MetaModel Render-Einstellung';
 $GLOBALS['TL_LANG']['tl_content']['mm_rendering_legend']                      = 'MetaModel Render-Einstellung';
 $GLOBALS['TL_LANG']['tl_content']['mm_sorting_legend']                        = 'MetaModel Sortierung';
 

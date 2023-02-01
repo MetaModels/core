@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,9 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2019-05-03T19:20:55+02:00
+ * Last-updated: 2023-02-01T15:42:39+00:00
  *
- * @copyright 2012-2019 The MetaModels team.
+ * @copyright 2012-2023 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
@@ -26,12 +26,10 @@ $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                               
 $GLOBALS['TL_LANG']['BRD']['metamodel_dca']                                           = 'Tut las mascras d\'endataziun da "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dca_sortgroup']                                 = 'Zavrar e gruppar en "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting']                                    = 'Mascra d\'endataziun en "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting_subpalette']                         = 'Sut-spartas per "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_filter']                                        = 'Tut ils filters da "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_filtersetting']                                 = 'Configuraziun da filtrar en "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_rendersetting']                                 = 'Configuraziuns dad elavurar en "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_rendersettings']                                = 'Tut la configuraziun dad elavurar da "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodels']                                              = 'MetaModels';
 $GLOBALS['TL_LANG']['CTE']['metamodel_content']['0']                                  = 'Glista da MetaModel';
 $GLOBALS['TL_LANG']['CTE']['metamodel_content']['1']                                  = 'Agiuntescha ina glista dad elements da MetaModel a l\'artitgel.';
 $GLOBALS['TL_LANG']['CTE']['metamodels']                                              = 'Elements da MetaModel';
@@ -62,8 +60,6 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label']                  
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup']['0'] = 'Valur da filtrar per l\'attribut "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord']                   = 'Modifitgar la configuraziun da l\'attribut %%s per elavurar la configuraziun "%s" en il MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']                        = 'Elavurar la configuraziun "%s" en il MetaModel "%s"';
-$GLOBALS['TL_LANG']['MSC']['metamodels_contributor']                                  = 'Nus engraziain a suandantas persunas per rapportar sbagls, propostas e translaziuns';
-$GLOBALS['TL_LANG']['MSC']['metamodels_help']                                         = 'Nus ta dumandain per agid';
 $GLOBALS['TL_LANG']['MSC']['metamodels_sorting']                                      = 'Zavrar';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['contributor_headline']              = 'Nus engraziain a suandantas persunas per rapportar sbagls, propostas e translaziuns';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['main_headline']                     = 'Nus ta dumandain per agid';
@@ -76,7 +72,6 @@ $GLOBALS['TL_LANG']['MSC']['panelLayout']['limit']['0']                         
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['search']['0']                              = 'Tschertgar';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['sort']['0']                                = 'Zavrar';
 $GLOBALS['TL_LANG']['MSC']['random']                                                  = 'Casual';
-$GLOBALS['TL_LANG']['MSC']['sorting']                                                 = 'Zavrar';
 $GLOBALS['TL_LANG']['MSC']['template_in_theme']                                       = '%s (%s)';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clr']['0']                                    = 'clr';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clr']['1']                                    = 'Annular tut ils floats.';

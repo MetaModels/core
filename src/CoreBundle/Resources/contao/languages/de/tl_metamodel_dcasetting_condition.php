@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,9 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2022-11-02T22:34:53+01:00
+ * Last-updated: 2023-02-01T15:47:42+00:00
  *
- * @copyright 2012-2022 The MetaModels team.
+ * @copyright 2012-2023 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
@@ -57,7 +57,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['pastenew']['0']       
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['pastenew']['1']                                   = 'Neues Einstellung nach dem Element ID %s erstellen.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show']['0']                                       = 'Einstellungsdetails';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['show']['1']                                       = 'Zeige Details der Einstellung ID %s.';
-$GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['title_legend']                                    = 'Titel';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['toggle']['0']                                     = 'Wechseln';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['toggle']['1']                                     = 'Umschaltung des Status der Einstellung ID %s.';
 $GLOBALS['TL_LANG']['tl_metamodel_dcasetting_condition']['type']['0']                                       = 'Typ';

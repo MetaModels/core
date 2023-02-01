@@ -1,15 +1,25 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2023 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/el/
+ * Last-updated: 2023-02-01T15:47:23+00:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2017-08-24T12:42:52+02:00
+ * @copyright 2012-2023 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel']['advanced_legend']           = 'Προσαρμοσμενες ρυθμισεις';
 $GLOBALS['TL_LANG']['tl_metamodel']['copy']['0']                 = 'Αντιγραφη του MetaModel ορισμου';
@@ -29,9 +39,6 @@ $GLOBALS['TL_LANG']['tl_metamodel']['fields']['0']               = 'Ορίσμο
 $GLOBALS['TL_LANG']['tl_metamodel']['fields']['1']               = 'ΔΙαχειριση χαρακτηριστικων του MetaModel ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['filter']['0']               = 'Ορισμος φιλτρων';
 $GLOBALS['TL_LANG']['tl_metamodel']['filter']['1']               = 'Ορισμος φιλτρων του MetaModel ID %s ';
-$GLOBALS['TL_LANG']['tl_metamodel']['itemFormat']                = '%s %s';
-$GLOBALS['TL_LANG']['tl_metamodel']['itemPlural']                = 'στοιχεια';
-$GLOBALS['TL_LANG']['tl_metamodel']['itemSingle']                = 'στοιχειο';
 $GLOBALS['TL_LANG']['tl_metamodel']['languages']['0']            = ' 	
 Γλώσσες για την παροχή μετάφρασης ';
 $GLOBALS['TL_LANG']['tl_metamodel']['languages']['1']            = 'Καθορίστε όλες τις γλώσσες που είναι διαθέσιμες για μετάφραση.';

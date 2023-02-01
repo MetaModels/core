@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,17 +12,15 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2022-11-02T22:34:22+01:00
+ * Last-updated: 2023-02-01T15:47:13+00:00
  *
- * @copyright 2012-2022 The MetaModels team.
+ * @copyright 2012-2023 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
 
 
-$GLOBALS['TL_LANG']['tl_content']['ASC']                                   = 'Ascendant';
-$GLOBALS['TL_LANG']['tl_content']['DESC']                                  = 'Descendant';
 $GLOBALS['TL_LANG']['tl_content']['asc']                                   = 'Ascendant';
 $GLOBALS['TL_LANG']['tl_content']['desc']                                  = 'Descendant';
 $GLOBALS['TL_LANG']['tl_content']['editfiltersetting']['0']                = 'Editer param√®tres de filtre';
@@ -76,6 +74,5 @@ $GLOBALS['TL_LANG']['tl_content']['metamodel_use_limit']['1']              = 'S√
 $GLOBALS['TL_LANG']['tl_content']['mm_config_legend']                      = 'Configuration du MetaModel';
 $GLOBALS['TL_LANG']['tl_content']['mm_filter_legend']                      = 'Filtre du MetaModel';
 $GLOBALS['TL_LANG']['tl_content']['mm_meta_legend']                        = 'Optimisation du moteur de recherche';
-$GLOBALS['TL_LANG']['tl_content']['mm_rendering']                          = 'Rendu du MetaModel';
 $GLOBALS['TL_LANG']['tl_content']['mm_rendering_legend']                   = 'Rendu du MetaModel';
 

@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,9 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2022-11-02T22:34:36+01:00
+ * Last-updated: 2023-02-01T15:47:23+00:00
  *
- * @copyright 2012-2022 The MetaModels team.
+ * @copyright 2012-2023 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
@@ -40,12 +40,9 @@ $GLOBALS['TL_LANG']['tl_metamodel']['fields']['0']                 = 'Attribute 
 $GLOBALS['TL_LANG']['tl_metamodel']['fields']['1']                 = 'Attribute für MetaModel ID %s anlegen.';
 $GLOBALS['TL_LANG']['tl_metamodel']['filter']['0']                 = 'Filtersets definieren';
 $GLOBALS['TL_LANG']['tl_metamodel']['filter']['1']                 = 'Filtersets für MetaModel ID %s anlegen.';
-$GLOBALS['TL_LANG']['tl_metamodel']['itemFormat']                  = '%s %s';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['0']        = '%s Datensätze';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['1']        = '%s Datensätze';
 $GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['2:']       = '%s Datensätze';
-$GLOBALS['TL_LANG']['tl_metamodel']['itemPlural']                  = 'Datensätze';
-$GLOBALS['TL_LANG']['tl_metamodel']['itemSingle']                  = 'Datensatz';
 $GLOBALS['TL_LANG']['tl_metamodel']['languages']['0']              = 'Sprachen für die Übersetzungen';
 $GLOBALS['TL_LANG']['tl_metamodel']['languages']['1']              = 'Geben Sie alle Sprachen an, die für Übersetzungen verfügbar sein sollen.';
 $GLOBALS['TL_LANG']['tl_metamodel']['languages_isfallback']['0']   = 'Fallback-Sprache';
