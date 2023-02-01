@@ -152,7 +152,7 @@ final class InsertTagsListener
 
                 // Get item.
                 case 'item':
-                    return $this->checkMinExpectElements(6, $elements)
+                    return $this->checkMinExpectElements(5, $elements)
                         ? $this->getItem($elements[2], $elements[3], $elements[4], ($elements[5] ?? null))
                         : false;
 
