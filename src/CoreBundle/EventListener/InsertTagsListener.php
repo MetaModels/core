@@ -46,16 +46,16 @@ use Psr\Log\LoggerInterface;
  * -- Total Count --
  * mm::total::mod::[ID]
  * mm::total::ce::[ID]
- * mm::total::mm::[MM Col-Name|ID](::[ID filter])
+ * mm::total::mm::[MM Table-Name|ID](::[ID filter])
  *
  * -- Item --
- * mm::item::[MM Col-Name|ID]::[Item ID|ID,ID,ID]::[ID render setting](::[Output (Default:text)|html5])
+ * mm::item::[MM Table-Name|ID]::[Item ID|ID,ID,ID]::[ID render setting](::[Output (Default:text)|html5])
  *
  * -- Attribute --
- * mm::attribute::[MM Col-Name|ID]::[Item ID]::[ID render setting]::[Attribute Col-Name|ID](::[Output (Default:text)|html5|raw])
+ * mm::attribute::[MM Table-Name|ID]::[Item ID]::[ID render setting]::[Attribute Col-Name|ID](::[Output (Default:text)|html5|raw])
  *
  * -- JumpTo --
- * mm::jumpTo::[MM Col-Name|ID]::[Item ID]::[ID render setting](::[Parameter (Default:url)|label|page|params.attname])
+ * mm::jumpTo::[MM Table-Name|ID]::[Item ID]::[ID render setting](::[Parameter (Default:url)|label|page|params.attname])
  *
  * @codingStandardsIgnoreEnd
  */
@@ -140,19 +140,27 @@ final class InsertTagsListener
             switch ($elements[1]) {
                 // Count for mod or ce elements.
                 case 'total':
-                    return $this->getCount($elements[2], $elements[3], ($elements[4] ?? null));
+                    return $this->checkMinExpectElements(4, $elements)
+                        ? $this->getCount($elements[2], $elements[3], ($elements[4] ?? null))
+                        : false;
 
                 // Get value from an attribute.
                 case 'attribute':
-                    return $this->getAttribute($elements[2], $elements[3], $elements[4], $elements[5], ($elements[6] ?? null));
+                    return $this->checkMinExpectElements(6, $elements)
+                        ? $this->getAttribute($elements[2], $elements[3], $elements[4], $elements[5], ($elements[6] ?? null))
+                        : false;
 
                 // Get item.
                 case 'item':
-                    return $this->getItem($elements[2], $elements[3], $elements[4], ($elements[5] ?? null));
+                    return $this->checkMinExpectElements(6, $elements)
+                        ? $this->getItem($elements[2], $elements[3], $elements[4], ($elements[5] ?? null))
+                        : false;
 
                 // Get jump-to detail page.
                 case 'jumpTo':
-                    return $this->jumpTo($elements[2], $elements[3], $elements[4], ($elements[5] ?? null));
+                    return $this->checkMinExpectElements(5, $elements)
+                        ? $this->jumpTo($elements[2], $elements[3], $elements[4], ($elements[5] ?? null))
+                        : false;
 
                 default:
             }
@@ -494,10 +502,21 @@ final class InsertTagsListener
     }
 
     /**
+     * @param int   $expectCount The expected number of elements.
+     * @param array $elements    The elements.
+     *
+     * @return bool
+     */
+    private function checkMinExpectElements(int $expectCount, array $elements): bool
+    {
+        return \count($elements) >= $expectCount;
+    }
+
+    /**
      * Check if the item is published.
      *
      * @param IMetaModel $metaModel Current MetaModel.
-     * @param int        $intItemId Id of the item.
+     * @param int        $intItemId ID of the item.
      *
      * @return bool True => Published | False => Not published
      *
