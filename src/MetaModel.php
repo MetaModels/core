@@ -799,6 +799,7 @@ class MetaModel implements IMetaModel
                     '"\MetaModels\ITranslatedMetaModel::selectLanguage" instead.', __METHOD__),
                 E_USER_DEPRECATED
             );
+            // @codingStandardsIgnoreEnd
         } else {
             // @codingStandardsIgnoreStart
             @\trigger_error(
