@@ -26,6 +26,7 @@
 
 namespace MetaModels\Attribute;
 
+use MetaModels\Helper\LocaleUtil;
 use MetaModels\IMetaModel;
 use MetaModels\ITranslatedMetaModel;
 use MetaModels\Render\Setting\ISimple as ISimpleRenderSetting;
@@ -136,20 +137,19 @@ abstract class Base implements IAttribute
      * If the language is not contained within the value array, the fallback language from the parenting
      * {@link IMetaModel} instance is tried as well.
      *
-     * @param array  $arrValues   The array holding all language values in the form array('langcode' => $varValue).
-     *
-     * @param string $strLangCode The language code of the language to fetch.
+     * @param array       $arrValues   The array holding all language values in the form array('langcode' => $varValue).
+     * @param string|null $strLangCode The language code of the language to fetch.
      *
      * @return mixed|null the value for the given language or the fallback language, NULL if neither is present.
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    protected function getLangValue($arrValues, $strLangCode = null)
+    protected function getLangValue($arrValues, $strLangCode = null): mixed
     {
         $metaModel = $this->getMetaModel();
         // Not a valid lookup array, exit.
-        if (!is_array($arrValues)) {
+        if (!\is_array($arrValues)) {
             return $arrValues;
         }
 
@@ -163,7 +163,9 @@ abstract class Base implements IAttribute
                 E_USER_DEPRECATED
             );
             // @codingStandardsIgnoreEnd
-            $strLangCode = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
+
+            // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
+            $strLangCode = LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']);
         }
 
         // Not translated, exit.
@@ -171,16 +173,18 @@ abstract class Base implements IAttribute
             return $arrValues;
         }
 
-        if (array_key_exists($strLangCode, $arrValues)) {
+        if (\array_key_exists($strLangCode, $arrValues)) {
             return $arrValues[$strLangCode];
         }
+
         // Language code not set, use fallback.
         if ($metaModel instanceof ITranslatedMetaModel) {
             $strLangCode = $metaModel->getMainLanguage();
         } else {
             $strLangCode = $metaModel->getFallbackLanguage();
         }
-        if (array_key_exists($strLangCode, $arrValues)) {
+
+        if (\array_key_exists($strLangCode, $arrValues)) {
             return $arrValues[$strLangCode];
         }
 
@@ -216,7 +220,7 @@ abstract class Base implements IAttribute
             // @codingStandardsIgnoreEnd
 
             foreach ($GLOBALS['METAMODEL_HOOKS']['parseValue'] as $callback) {
-                list($strClass, $strMethod) = $callback;
+                [$strClass, $strMethod] = $callback;
 
                 $objCallback = (\in_array('getInstance', get_class_methods($strClass)))
                     ? call_user_func(array($strClass, 'getInstance'))
@@ -389,8 +393,8 @@ abstract class Base implements IAttribute
         if (empty($GLOBALS['TL_LANG'][$this->getMetaModel()->getTableName()][$this->getColName()])) {
             $GLOBALS['TL_LANG'][$this->getMetaModel()->getTableName()][$this->getColName()] = array
             (
-                $this->getLangValue($this->get('name'), \str_replace('-', '_', $GLOBALS['TL_LANGUAGE'])),
-                $this->getLangValue($this->get('description'), \str_replace('-', '_', $GLOBALS['TL_LANGUAGE'])),
+                $this->getLangValue($this->get('name'), LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE'])),
+                $this->getLangValue($this->get('description'), LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE'])),
             );
         }
     }

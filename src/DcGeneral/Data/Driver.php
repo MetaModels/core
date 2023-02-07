@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,7 @@
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -42,6 +42,7 @@ use MetaModels\Attribute\IAttribute;
 use MetaModels\Attribute\IComplex;
 use MetaModels\Attribute\ITranslated;
 use MetaModels\Filter\IFilter;
+use MetaModels\Helper\LocaleUtil;
 use MetaModels\IItem;
 use MetaModels\IItems;
 use MetaModels\IMetaModel;
@@ -227,14 +228,16 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     protected function setLanguage($language = '')
     {
-        $previousLanguage = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
+        // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
+        $previousLanguage = LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']);
         if (!empty($language)) {
             $metaModel = $this->getMetaModel();
             if ($metaModel instanceof ITranslatedMetaModel) {
                 $metaModel->selectLanguage($language);
             }
 
-            $language = \str_replace('_', '-', $language);
+            $language = LocaleUtil::formatAsLanguageTag($language);
+            // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
             if ($GLOBALS['TL_LANGUAGE'] !== $language) {
                 $GLOBALS['TL_LANGUAGE'] = $language;
             }

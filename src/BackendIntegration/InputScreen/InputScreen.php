@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -32,6 +32,7 @@ use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionChain;
 use ContaoCommunityAlliance\DcGeneral\DataDefinition\Palette\Condition\Property\PropertyConditionInterface;
 use MetaModels\Events\CreatePropertyConditionEvent;
+use MetaModels\Helper\LocaleUtil;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\ITranslatedMetaModel;
@@ -170,7 +171,8 @@ class InputScreen implements IInputScreen
     private function extractLegendName(array $legend, IMetaModel $metaModel): string
     {
         // Current backend language.
-        $language = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
+        // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
+        $language = LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']);
         if (null !== ($result = $legend[$language] ?? null)) {
             return $result;
         }

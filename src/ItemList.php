@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -25,7 +25,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Fritz Michael Gschwantner <fmg@inspiredminds.at>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -44,6 +44,7 @@ use MetaModels\Filter\IFilter;
 use MetaModels\Filter\IFilterRule;
 use MetaModels\Filter\Setting\ICollection as IFilterSettingCollection;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
+use MetaModels\Helper\LocaleUtil;
 use MetaModels\Helper\PaginationLimitCalculator;
 use MetaModels\Render\Setting\ICollection as IRenderSettingCollection;
 use MetaModels\Render\Setting\IRenderSettingFactory;
@@ -847,7 +848,8 @@ class ItemList
         $this->objTemplate->total = $total;
 
         if ($this->objMetaModel instanceof TranslatedMetaModel) {
-            $previousLanguage = $this->objMetaModel->selectLanguage(\str_replace('-', '_', $GLOBALS['TL_LANGUAGE']));
+            // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
+            $previousLanguage = $this->objMetaModel->selectLanguage(LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']));
         }
 
         $this->objItems = $this->objMetaModel->findByFilter(

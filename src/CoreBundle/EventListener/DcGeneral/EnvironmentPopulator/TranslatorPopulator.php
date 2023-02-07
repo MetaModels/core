@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -26,6 +26,7 @@ use ContaoCommunityAlliance\Contao\Bindings\Events\System\LoadLanguageFileEvent;
 use ContaoCommunityAlliance\DcGeneral\EnvironmentInterface;
 use ContaoCommunityAlliance\Translator\StaticTranslator;
 use ContaoCommunityAlliance\Translator\TranslatorChain;
+use MetaModels\Helper\LocaleUtil;
 use MetaModels\ViewCombination\ViewCombination;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -144,7 +145,8 @@ class TranslatorPopulator
     private function addInputScreenTranslations(StaticTranslator $translator, $inputScreen, $containerName)
     {
         // Either 2 or 5 char long language code.
-        $currentLocale = \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
+        // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
+        $currentLocale = LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']);
         // Either 2 char language code or null.
         $shortLocale = (false !== strpos($currentLocale, '_'))
             ? explode('_', $currentLocale, 2)[0]
