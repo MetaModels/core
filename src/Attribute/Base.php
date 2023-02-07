@@ -205,20 +205,20 @@ abstract class Base implements IAttribute
      */
     public function hookAdditionalFormatters($arrBaseFormatted, $arrRowData, $strOutputFormat, $objSettings)
     {
-        // @codingStandardsIgnoreStart
-        @trigger_error(
-            '"' .__METHOD__ . '" is deprecated and will get removed.',
-            E_USER_DEPRECATED
-        );
-        // @codingStandardsIgnoreEnd
-
         $arrResult = $arrBaseFormatted;
 
-        if (isset($GLOBALS['METAMODEL_HOOKS']['parseValue']) && is_array($GLOBALS['METAMODEL_HOOKS']['parseValue'])) {
+        if (isset($GLOBALS['METAMODEL_HOOKS']['parseValue']) && \is_array($GLOBALS['METAMODEL_HOOKS']['parseValue'])) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                '"' .__METHOD__ . '" is deprecated and will get removed.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+
             foreach ($GLOBALS['METAMODEL_HOOKS']['parseValue'] as $callback) {
                 list($strClass, $strMethod) = $callback;
 
-                $objCallback = (in_array('getInstance', get_class_methods($strClass)))
+                $objCallback = (\in_array('getInstance', get_class_methods($strClass)))
                     ? call_user_func(array($strClass, 'getInstance'))
                     : new $strClass();
 
