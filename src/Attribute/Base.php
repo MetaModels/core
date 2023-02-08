@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,7 +19,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -192,27 +192,33 @@ abstract class Base implements IAttribute
      *
      * @param array                $arrBaseFormatted The current result array. The keys "raw" and "text" are always
      *                                               populated.
-     *
      * @param array                $arrRowData       The Raw values from the database.
-     *
      * @param string               $strOutputFormat  The output format to use.
-     *
      * @param ISimpleRenderSetting $objSettings      The output format settings.
      *
      * @return mixed
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     *
+     * @deprecated This will get removed in 3.0.
      */
     public function hookAdditionalFormatters($arrBaseFormatted, $arrRowData, $strOutputFormat, $objSettings)
     {
         $arrResult = $arrBaseFormatted;
 
-        if (isset($GLOBALS['METAMODEL_HOOKS']['parseValue']) && is_array($GLOBALS['METAMODEL_HOOKS']['parseValue'])) {
+        if (isset($GLOBALS['METAMODEL_HOOKS']['parseValue']) && \is_array($GLOBALS['METAMODEL_HOOKS']['parseValue'])) {
+            // @codingStandardsIgnoreStart
+            @trigger_error(
+                '"' .__METHOD__ . '" is deprecated and will get removed.',
+                E_USER_DEPRECATED
+            );
+            // @codingStandardsIgnoreEnd
+
             foreach ($GLOBALS['METAMODEL_HOOKS']['parseValue'] as $callback) {
                 list($strClass, $strMethod) = $callback;
 
-                $objCallback = (in_array('getInstance', get_class_methods($strClass)))
+                $objCallback = (\in_array('getInstance', get_class_methods($strClass)))
                     ? call_user_func(array($strClass, 'getInstance'))
                     : new $strClass();
 
