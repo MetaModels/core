@@ -849,7 +849,8 @@ class ItemList
 
         if ($this->objMetaModel instanceof TranslatedMetaModel) {
             // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
-            $previousLanguage = $this->objMetaModel->selectLanguage(LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']));
+            $previousLanguage =
+                $this->objMetaModel->selectLanguage(LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']));
         }
 
         $this->objItems = $this->objMetaModel->findByFilter(

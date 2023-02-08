@@ -165,6 +165,7 @@ abstract class Base implements IAttribute
             // @codingStandardsIgnoreEnd
 
             // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
+            // In future versions we try to read from locale request, otherwise we raise an exception.
             $strLangCode = LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']);
         }
 
