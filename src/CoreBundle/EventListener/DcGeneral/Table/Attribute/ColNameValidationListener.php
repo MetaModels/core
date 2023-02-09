@@ -82,7 +82,7 @@ class ColNameValidationListener extends BaseListener
             if (in_array($columnName, $colNames)) {
                 throw new \RuntimeException(
                     sprintf(
-                        $event->getEnvironment()->getTranslator()->translate('columnExists', 'ERR'),
+                        $event->getEnvironment()->getTranslator()->translate('ERR.columnExists'),
                         $columnName,
                         $metaModel->getTableName()
                     )
