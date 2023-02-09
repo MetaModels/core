@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2019 The MetaModels team.
+ * @author     Ingolf Steinhardt <info@e-spin.de>
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -36,7 +37,7 @@ class ColNameValidationListener extends BaseListener
      *
      * @var TableManipulator
      */
-    private $tableManipulator;
+    private TableManipulator $tableManipulator;
 
     /**
      * Create a new instance.
@@ -65,7 +66,7 @@ class ColNameValidationListener extends BaseListener
      *
      * @throws \RuntimeException When the column name is illegal or duplicate.
      */
-    public function handle(EncodePropertyValueFromWidgetEvent $event)
+    public function handle(EncodePropertyValueFromWidgetEvent $event): void
     {
         if (!parent::wantToHandle($event) || ($event->getProperty() !== 'colname')) {
             return;
@@ -78,10 +79,10 @@ class ColNameValidationListener extends BaseListener
         if ((!$columnName) || $oldColumnName !== $columnName) {
             $this->tableManipulator->checkColumnDoesNotExist($metaModel->getTableName(), $columnName);
 
-            $colNames = array_keys($metaModel->getAttributes());
-            if (in_array($columnName, $colNames)) {
+            $colNames = \array_keys($metaModel->getAttributes());
+            if (\in_array($columnName, $colNames)) {
                 throw new \RuntimeException(
-                    sprintf(
+                    \sprintf(
                         $event->getEnvironment()->getTranslator()->translate('ERR.columnExists'),
                         $columnName,
                         $metaModel->getTableName()
