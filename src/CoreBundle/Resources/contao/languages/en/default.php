@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -125,6 +125,10 @@ $GLOBALS['TL_LANG']['metamodels_frontendfilter']['no_combinations']             
     ' (No matching combinations found.)';
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'][0] = 'Filter value for attribute "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup'][1] = '';
+$GLOBALS['TL_LANG']['MSC']['orderMetaModelListByAscending']                         =
+    'Sort by %s in ascending order';
+$GLOBALS['TL_LANG']['MSC']['orderMetaModelListByDescending']                        =
+    'Sort by %s in descending order';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['main_headline']                   = 'We are calling for your help!';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['purpose']                         = 'Purpose';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['other_donations']                 =

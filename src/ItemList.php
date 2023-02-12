@@ -46,6 +46,7 @@ use MetaModels\Filter\Setting\ICollection as IFilterSettingCollection;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
 use MetaModels\Helper\LocaleUtil;
 use MetaModels\Helper\PaginationLimitCalculator;
+use MetaModels\Helper\SortingLinkGenerator;
 use MetaModels\Render\Setting\ICollection as IRenderSettingCollection;
 use MetaModels\Render\Setting\IRenderSettingFactory;
 use MetaModels\Render\Template;
@@ -173,6 +174,13 @@ class ItemList
     private ?string $language = null;
 
     /**
+     * The sorting link generator.
+     *
+     * @var SortingLinkGenerator|null
+     */
+    private ?SortingLinkGenerator $sortingLinkGenerator = null;
+
+    /**
      * Create a new instance.
      *
      * @param IFactory|null                 $factory              The MetaModels factory (required in MetaModels 3.0).
@@ -226,7 +234,7 @@ class ItemList
      *
      * @deprecated Use constructor injection instead.
      */
-    public function setFilterFactory(IFilterSettingFactory $filterFactory)
+    public function setFilterFactory(IFilterSettingFactory $filterFactory): self
     {
         // @codingStandardsIgnoreStart
         @trigger_error(
@@ -411,9 +419,7 @@ class ItemList
      * Set the limit.
      *
      * @param bool $isLimit If true, use limit, if false no limit is applied.
-     *
      * @param int  $offset  Like in SQL, first element to be returned (0 based).
-     *
      * @param int  $limit   Like in SQL, amount of elements to retrieve.
      *
      * @return ItemList
@@ -447,7 +453,6 @@ class ItemList
      * Set sorting to an attribute or system column optionally in the given direction.
      *
      * @param string $sortBy        The name of the attribute or system column to be used for sorting.
-     *
      * @param string $sortDirection The direction, either ASC or DESC (optional).
      *
      * @return ItemList
@@ -483,7 +488,6 @@ class ItemList
      * Set MetaModel and render settings.
      *
      * @param int $intMetaModel The MetaModel to use.
-     *
      * @param int $intView      The render settings to use (if 0, the default will be used).
      *
      * @return ItemList
@@ -657,7 +661,6 @@ class ItemList
      * Set parameters.
      *
      * @param string[][] $presets The parameter preset values to use.
-     *
      * @param string[]   $values  The dynamic parameter values that may be used.
      *
      * @return ItemList
@@ -693,7 +696,7 @@ class ItemList
                 continue;
             }
 
-            // Not a preset or allowed to overriding? - use value.
+            // Not a preset or allowed to override? - use value.
             if ((!array_key_exists($filterParameterKey, $presets)) || $presets[$filterParameterKey]['use_get']) {
                 $processed[$filterParameterKey] = $values[$filterParameterKey];
             }
@@ -756,7 +759,7 @@ class ItemList
      *
      * @return void
      */
-    public function setTemplateParameter(string $name, $value): void
+    public function setTemplateParameter(string $name, mixed $value): void
     {
         $this->templateParameter[$name] = $value;
     }
@@ -881,8 +884,7 @@ class ItemList
                 // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
                 $this->language = LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE'] ?? 'en');
             }
-            $previousLanguage =
-                $this->objMetaModel->selectLanguage($this->language);
+            $previousLanguage = $this->objMetaModel->selectLanguage($this->language);
         }
 
         $this->objItems = $this->objMetaModel->findByFilter(
@@ -938,6 +940,7 @@ class ItemList
             E_USER_DEPRECATED
         );
         // @codingStandardsIgnoreEnd
+
         return $this->getItems();
     }
 
@@ -1094,11 +1097,26 @@ class ItemList
         }
     }
 
+
+    /**
+     * Setter for SortingLinkGenerator.
+     *
+     * @param SortingLinkGenerator $generator The link generator.
+     *
+     * @return $this
+     */
+    public function setSortingLinkGenerator(SortingLinkGenerator $generator): self
+    {
+        $this->sortingLinkGenerator = $generator;
+
+        return $this;
+    }
+
     /**
      * Render the list view.
      *
      * @param bool        $isNoNativeParsing Flag determining if the parsing shall be done internal or if the template
-     *                                       will handle the parsing on it's own.
+     *                                       will handle the parsing on its own.
      * @param object|null $caller            The object calling us, might be a Module or ContentElement or anything
      *                                       else.
      *
@@ -1130,10 +1148,34 @@ class ItemList
 
         $this->setTitleAndDescription();
 
-        $this->objTemplate->caller       = $caller;
-        $this->objTemplate->items        = $this->objItems;
-        $this->objTemplate->filterParams = $this->arrParam;
-        $this->objTemplate->parameter    = $this->templateParameter;
+        $generateSortingLink = function (string $attributeName, string $type): array {
+            if (null === $this->sortingLinkGenerator) {
+                return [];
+            }
+
+            $attribute = $this->objMetaModel->getAttribute($attributeName);
+
+            if (null === $attribute) {
+                throw new \RuntimeException('Attribute not found: ' . $attributeName);
+            }
+
+            return $this->sortingLinkGenerator->generateSortingLink($attribute, $type);
+        };
+
+        $renderSortingLink = function (string $attributeName, string $type) use ($generateSortingLink): string {
+            $sortingLink = $generateSortingLink($attributeName, $type);
+
+            return <<<EOF
+                <a href="{$sortingLink['href']}" class="{$sortingLink['class']}">{$sortingLink['label']}</a>
+            EOF;
+        };
+
+        $this->objTemplate->generateSortingLink = $generateSortingLink;
+        $this->objTemplate->renderSortingLink   = $renderSortingLink;
+        $this->objTemplate->caller              = $caller;
+        $this->objTemplate->items               = $this->objItems;
+        $this->objTemplate->filterParams        = $this->arrParam;
+        $this->objTemplate->parameter           = $this->templateParameter;
 
         return $this->objTemplate->parse($outputFormat);
     }
