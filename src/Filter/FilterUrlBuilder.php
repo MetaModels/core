@@ -373,10 +373,6 @@ class FilterUrlBuilder
 
         $pages = [];
 
-        $locale = ($locale)
-            ? \str_replace('_', '-', $locale)
-            : $locale;
-
         if (!$this->isLocalePrepended) {
             // Use the first result (see #4872)
             $pages = current($languages);
