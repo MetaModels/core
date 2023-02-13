@@ -164,7 +164,14 @@ class ItemList
      *
      * @var EventDispatcherInterface|null
      */
-    private $eventDispatcher;
+    private ?EventDispatcherInterface $eventDispatcher;
+
+    /**
+     * The language.
+     *
+     * @var string|null
+     */
+    private ?string $language = null;
 
     /**
      * Create a new instance.
@@ -498,7 +505,6 @@ class ItemList
      * Add the attribute names for meta title and description.
      *
      * @param string $titleAttribute       Name of attribute for title.
-     *
      * @param string $descriptionAttribute Name of attribute for description.
      *
      * @return ItemList
@@ -507,6 +513,20 @@ class ItemList
     {
         $this->strDescriptionAttribute = $descriptionAttribute;
         $this->strTitleAttribute       = $titleAttribute;
+
+        return $this;
+    }
+
+    /**
+     * Set the language.
+     *
+     * @param string $language The language.
+     *
+     * @return $this
+     */
+    public function setLanguage(string $language): self
+    {
+        $this->language = $language;
 
         return $this;
     }
@@ -848,9 +868,22 @@ class ItemList
         $this->objTemplate->total = $total;
 
         if ($this->objMetaModel instanceof TranslatedMetaModel) {
-            // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
+            if (null === $this->language) {
+                // @codingStandardsIgnoreStart
+                @\trigger_error(
+                    sprintf(
+                        'Not setting a language code in "%s" is deprecated since MetaModels 2.3 and will fail in 3.0',
+                        __CLASS__
+                    ),
+                    E_USER_DEPRECATED
+                );
+                // @codingStandardsIgnoreEnd
+
+                // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
+                $this->language = LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE'] ?? 'en');
+            }
             $previousLanguage =
-                $this->objMetaModel->selectLanguage(LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']));
+                $this->objMetaModel->selectLanguage($this->language);
         }
 
         $this->objItems = $this->objMetaModel->findByFilter(

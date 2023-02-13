@@ -147,9 +147,14 @@ abstract class Base implements IAttribute
      */
     protected function getLangValue($arrValues, $strLangCode = null): mixed
     {
-        $metaModel = $this->getMetaModel();
         // Not a valid lookup array, exit.
         if (!\is_array($arrValues)) {
+            return $arrValues;
+        }
+
+        $metaModel = $this->getMetaModel();
+        // Not translated, exit.
+        if (!($metaModel instanceof ITranslatedMetaModel) && !$metaModel->isTranslated(false)) {
             return $arrValues;
         }
 
@@ -166,12 +171,12 @@ abstract class Base implements IAttribute
 
             // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
             // In future versions we try to read from locale request, otherwise we raise an exception.
-            $strLangCode = LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']);
-        }
-
-        // Not translated, exit.
-        if (!($metaModel instanceof ITranslatedMetaModel) && !$metaModel->isTranslated(false)) {
-            return $arrValues;
+            $strLangCode = LocaleUtil::formatAsLocale(
+                $GLOBALS['TL_LANGUAGE']
+                ?? (($this->metaModel instanceof ITranslatedMetaModel)
+                    ? $this->metaModel->getLanguage()
+                    : $this->metaModel->getActiveLanguage())
+            );
         }
 
         if (\array_key_exists($strLangCode, $arrValues)) {
@@ -388,15 +393,21 @@ abstract class Base implements IAttribute
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    private function setLanguageStrings()
+    private function setLanguageStrings(): void
     {
         // Only overwrite the language if not already set.
         if (empty($GLOBALS['TL_LANG'][$this->getMetaModel()->getTableName()][$this->getColName()])) {
-            $GLOBALS['TL_LANG'][$this->getMetaModel()->getTableName()][$this->getColName()] = array
-            (
-                $this->getLangValue($this->get('name'), LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE'])),
-                $this->getLangValue($this->get('description'), LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE'])),
+            // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
+            $language = LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE'] ?? (
+                ($this->metaModel instanceof ITranslatedMetaModel)
+                ? $this->metaModel->getLanguage()
+                : $this->metaModel->getActiveLanguage())
             );
+
+            $GLOBALS['TL_LANG'][$this->getMetaModel()->getTableName()][$this->getColName()] = [
+                $this->getLangValue($this->get('name'), $language),
+                $this->getLangValue($this->get('description'), $language),
+            ];
         }
     }
 

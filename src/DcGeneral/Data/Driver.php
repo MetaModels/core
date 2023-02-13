@@ -62,37 +62,37 @@ class Driver implements MultiLanguageDataProviderInterface
     /**
      * Name of current table.
      *
-     * @var string
+     * @var null|string
      */
-    protected $strTable = null;
+    protected ?string $strTable = null;
 
     /**
      * The MetaModel this DataContainer is working on.
      *
-     * @var IMetaModel
+     * @var null|IMetaModel
      */
-    protected $metaModel = null;
+    protected ?IMetaModel $metaModel = null;
 
     /**
      * The event dispatcher to pass to items.
      *
      * @var null|EventDispatcherInterface
      */
-    private $dispatcher = null;
+    private ?EventDispatcherInterface $dispatcher = null;
 
     /**
      * The current active language.
      *
      * @var string
      */
-    protected $strCurrentLanguage;
+    protected string $strCurrentLanguage;
 
     /**
      * The database connection.
      *
      * @var Connection|null
      */
-    private $connection;
+    private ?Connection $connection;
 
     /**
      * Set dispatcher.
@@ -228,19 +228,24 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     protected function setLanguage($language = '')
     {
+        $metaModel = $this->getMetaModel();
         // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
-        $previousLanguage = LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']);
-        if (!empty($language)) {
-            $metaModel = $this->getMetaModel();
-            if ($metaModel instanceof ITranslatedMetaModel) {
-                $metaModel->selectLanguage($language);
-            }
+        $previousLanguage = ($metaModel instanceof ITranslatedMetaModel)
+            ? $metaModel->getLanguage()
+            : LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']);
 
-            $language = LocaleUtil::formatAsLanguageTag($language);
-            // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
-            if ($GLOBALS['TL_LANGUAGE'] !== $language) {
-                $GLOBALS['TL_LANGUAGE'] = $language;
-            }
+        if (empty($language)) {
+            return $previousLanguage;
+        }
+
+        if ($metaModel instanceof ITranslatedMetaModel) {
+            $previousLanguage = $metaModel->selectLanguage($language);
+        }
+
+        $language = LocaleUtil::formatAsLanguageTag($language);
+        // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
+        if ($GLOBALS['TL_LANGUAGE'] !== $language) {
+            $GLOBALS['TL_LANGUAGE'] = $language;
         }
 
         return $previousLanguage;

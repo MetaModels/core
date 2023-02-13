@@ -812,7 +812,7 @@ class MetaModel implements IMetaModel
         }
 
         // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
-        return LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']);
+        return LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE'] ?? 'en');
     }
 
     /**
