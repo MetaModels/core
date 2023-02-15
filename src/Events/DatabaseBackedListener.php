@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -26,6 +26,7 @@ namespace MetaModels\Events;
 use Contao\System;
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\Events\CollectMetaModelAttributeInformationEvent;
+use MetaModels\Helper\LocaleUtil;
 use MetaModels\IMetaModel;
 use MetaModels\IMetaModelsServiceContainer;
 use MetaModels\ITranslatedMetaModel;
@@ -212,7 +213,8 @@ class DatabaseBackedListener
         if (!$this->createInstanceViaLegacyFactory($event, $arrData)) {
             if ($arrData['translated']) {
                 $metaModel = new TranslatedMetaModel($arrData, $this->dispatcher, $this->database);
-                $metaModel->selectLanguage(\str_replace('-', '_', $GLOBALS['TL_LANGUAGE']));
+                // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
+                $metaModel->selectLanguage(LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']));
             } else {
                 $metaModel = new MetaModel($arrData, $this->dispatcher, $this->database);
             }

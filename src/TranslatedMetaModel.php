@@ -22,6 +22,7 @@ namespace MetaModels;
 
 use Doctrine\DBAL\Connection;
 use MetaModels\Attribute\ITranslated;
+use MetaModels\Helper\LocaleUtil;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -132,8 +133,9 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
      */
     protected function fetchTranslatedAttributeValues(ITranslated $attribute, $ids)
     {
-        $originalLanguage       = $GLOBALS['TL_LANGUAGE'];
-        $GLOBALS['TL_LANGUAGE'] = \str_replace('_', '-', $this->getLanguage());
+        // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
+        $originalLanguage       = LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE']);
+        $GLOBALS['TL_LANGUAGE'] = LocaleUtil::formatAsLanguageTag($this->getLanguage());
 
         try {
             $attributeData = $attribute->getTranslatedDataFor($ids, $this->getLanguage());
@@ -144,7 +146,8 @@ class TranslatedMetaModel extends MetaModel implements ITranslatedMetaModel
 
             return $attributeData;
         } finally {
-            $GLOBALS['TL_LANGUAGE'] = $originalLanguage;
+            // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
+            $GLOBALS['TL_LANGUAGE'] = LocaleUtil::formatAsLanguageTag($originalLanguage);
         }
     }
 }

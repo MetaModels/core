@@ -37,6 +37,7 @@ use MetaModels\Attribute\ITranslated;
 use MetaModels\Filter\Filter;
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Rules\StaticIdList;
+use MetaModels\Helper\LocaleUtil;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -810,7 +811,8 @@ class MetaModel implements IMetaModel
             // @codingStandardsIgnoreEnd
         }
 
-        return \str_replace('-', '_', $GLOBALS['TL_LANGUAGE']);
+        // @deprecated usage of TL_LANGUAGE - remove for Contao 5.0.
+        return LocaleUtil::formatAsLocale($GLOBALS['TL_LANGUAGE'] ?? 'en');
     }
 
     /**
