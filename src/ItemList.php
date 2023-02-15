@@ -51,7 +51,6 @@ use MetaModels\Render\Setting\IRenderSettingFactory;
 use MetaModels\Render\Template;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 
 /**
  * Implementation of a general purpose MetaModel listing.
@@ -215,7 +214,7 @@ class ItemList
         $this->factory              = $factory;
         $this->filterFactory        = $filterFactory;
         $this->renderSettingFactory = $renderSettingFactory;
-        $this->eventDispatcher      = LegacyEventDispatcherProxy::decorate($eventDispatcher);
+        $this->eventDispatcher      = $eventDispatcher;
     }
 
     /**
