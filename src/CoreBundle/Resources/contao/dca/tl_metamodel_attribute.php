@@ -34,6 +34,7 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
                 'id'      => 'primary',
                 'pid'     => 'index',
                 'colname' => 'index'
+                // TODO: new unique index over pid + colname
             ],
         ],
     ],

@@ -80,30 +80,31 @@ class ModelToLabelListener extends AbstractAbstainingListener
         $model     = $event->getModel();
         $tableName = $model->getProperty('tableName');
 
-        if (!($model && !empty($tableName) && $this->connection->getSchemaManager()->tablesExist([$tableName]))) {
-            return;
+        $count = '?';
+        $transId = 'tl_metamodel.itemFormatCount.0';
+        if ($model && !empty($tableName) && $this->connection->createSchemaManager()->tablesExist([$tableName])) {
+            $count = $this->connection
+                ->createQueryBuilder()
+                ->select('COUNT(t.id) AS itemCount')
+                ->from($tableName, 't')
+                ->executeQuery()
+                ->fetchOne();
+
+            switch ($count) {
+                case 0:
+                    $transId = 'tl_metamodel.itemFormatCount.0';
+                    break;
+                case 1:
+                    $transId = 'tl_metamodel.itemFormatCount.1';
+                    break;
+                default:
+                    $transId = 'tl_metamodel.itemFormatCount.2:';
+            }
         }
 
         // Keep the previous label.
         $label = vsprintf($event->getLabel(), $event->getArgs());
         $image = ((bool) $model->getProperty('translated')) ? 'locale.png' : 'locale_1.png';
-        $count = $this->connection
-            ->createQueryBuilder()
-            ->select('COUNT(t.id) AS itemCount')
-            ->from($tableName, 't')
-            ->executeQuery()
-            ->fetchOne();
-
-        switch ($count) {
-            case 0:
-                $transId = 'tl_metamodel.itemFormatCount.0';
-                break;
-            case 1:
-                $transId = 'tl_metamodel.itemFormatCount.1';
-                break;
-            default:
-                $transId = 'tl_metamodel.itemFormatCount.2:';
-        }
 
         $event
             ->setLabel('

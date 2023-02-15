@@ -24,6 +24,7 @@ namespace MetaModels\CoreBundle\EventListener\DcGeneral\Table\Attribute;
 use ContaoCommunityAlliance\DcGeneral\Contao\RequestScopeDeterminator;
 use ContaoCommunityAlliance\DcGeneral\Contao\View\Contao2BackendView\Event\EncodePropertyValueFromWidgetEvent;
 use MetaModels\Attribute\IAttributeFactory;
+use MetaModels\Exceptions\Database\InvalidColumnNameException;
 use MetaModels\Helper\TableManipulator;
 use MetaModels\IFactory;
 
@@ -77,7 +78,23 @@ class ColNameValidationListener extends BaseListener
         $metaModel     = $this->getMetaModelByModelPid($event->getModel());
 
         if ((!$columnName) || $oldColumnName !== $columnName) {
-            $this->tableManipulator->checkColumnDoesNotExist($metaModel->getTableName(), $columnName);
+            try {
+                $this->tableManipulator->checkColumnName($columnName);
+            } catch (InvalidColumnNameException $exception) {
+                throw new \RuntimeException(
+                    \sprintf(
+                        $event->getEnvironment()->getTranslator()->translate(
+                            'ERR.' . ($this->tableManipulator->isSystemColumn($columnName)
+                                ? 'systemColumn'
+                                : 'invalidColumnName')
+                        ),
+                        $columnName,
+                        $metaModel->getTableName()
+                    ),
+                    0,
+                    $exception
+                );
+            }
 
             $colNames = \array_keys($metaModel->getAttributes());
             if (\in_array($columnName, $colNames)) {
