@@ -817,6 +817,6 @@ class Driver implements MultiLanguageDataProviderInterface
      */
     public function getCurrentLanguage()
     {
-        return $this->strCurrentLanguage;
+        return $this->strCurrentLanguage ?? 'en';
     }
 }
