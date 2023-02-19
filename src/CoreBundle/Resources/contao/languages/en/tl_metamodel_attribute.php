@@ -69,5 +69,5 @@ $GLOBALS['TL_LANG']['tl_metamodel_attribute']['error_unknown_attribute'][1] =
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['deleteConfirm'] = 'Do you really want to delete attribute ID %s?';
 
 $GLOBALS['TL_LANG']['tl_metamodel_attribute']['hint_schema_manager'] =
-    'After creating a attribute, the database must be migrated (console, Contao Manager) -' .
+    'After creating an attribute, the database must be migrated (console, Contao Manager) -' .
     ' even if the column name is changed. When changing the column name, the user data itself must be transferred.';
