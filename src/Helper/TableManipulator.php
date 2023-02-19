@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Cliff Parnitzky <github@cliff-parnitzky.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -27,12 +27,18 @@ namespace MetaModels\Helper;
 
 use ContaoCommunityAlliance\DcGeneral\Contao\InputProvider;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use MetaModels\Exceptions\Database\ColumnDoesNotExistException;
 use MetaModels\Exceptions\Database\ColumnExistsException;
 use MetaModels\Exceptions\Database\InvalidColumnNameException;
 use MetaModels\Exceptions\Database\InvalidTableNameException;
 use MetaModels\Exceptions\Database\TableDoesNotExistException;
 use MetaModels\Exceptions\Database\TableExistsException;
+
+use function in_array;
+use function preg_match;
+use function sprintf;
+use function strtolower;
 
 /**
  * This is the class for table manipulations like creation/renaming/deleting of tables and columns.
@@ -45,7 +51,7 @@ class TableManipulator
      * SQL statement template to create a table.
      * First parameter is the table name.
      */
-    const STATEMENT_CREATE_TABLE = '
+    public const STATEMENT_CREATE_TABLE = '
             CREATE TABLE `%s` (
                 `id` int(10) unsigned NOT NULL auto_increment,
                 `pid` int(10) unsigned NOT NULL default \'0\',
@@ -58,13 +64,13 @@ class TableManipulator
      * SQL statement template to rename a table.
      * First parameter is the old name, second parameter is the new name.
      */
-    const STATEMENT_RENAME_TABLE = 'ALTER TABLE `%s` RENAME TO `%s`';
+    public const STATEMENT_RENAME_TABLE = 'ALTER TABLE `%s` RENAME TO `%s`';
 
     /**
      * SQL statement template to drop a table.
      * First parameter is the table name of the table to drop.
      */
-    const STATEMENT_DROP_TABLE = 'DROP TABLE `%s`';
+    public const STATEMENT_DROP_TABLE = 'DROP TABLE `%s`';
 
     /**
      * SQL statement template to rename a column of a table.
@@ -73,7 +79,7 @@ class TableManipulator
      * Third parameter is the new name of the column.
      * Fourth parameter is the new type of the column.
      */
-    const STATEMENT_RENAME_COLUMN = 'ALTER TABLE `%s` CHANGE COLUMN `%s` `%s` %s';
+    public const STATEMENT_RENAME_COLUMN = 'ALTER TABLE `%s` CHANGE COLUMN `%s` `%s` %s';
 
     /**
      * SQL statement template to add a column to a table.
@@ -81,13 +87,13 @@ class TableManipulator
      * Second parameter is the column name.
      * Third parameter is the type of the new column.
      */
-    const STATEMENT_CREATE_COLUMN = 'ALTER TABLE `%s` ADD `%s` %s';
+    public const STATEMENT_CREATE_COLUMN = 'ALTER TABLE `%s` ADD `%s` %s';
 
     /**
      * SQL statement template to delete a column from a table.
      * First parameter is the name of the column.
      */
-    const STATEMENT_DROP_COLUMN = 'ALTER TABLE `%s` DROP COLUMN `%s`';
+    public const STATEMENT_DROP_COLUMN = 'ALTER TABLE `%s` DROP COLUMN `%s`';
 
     /**
      * SQL statement template to add a index to a column of a table.
@@ -95,7 +101,7 @@ class TableManipulator
      * second parameter is indextype
      * third parameter is name of the column.
      */
-    const STATEMENT_ADD_INDEX_COLUMN = 'ALTER TABLE `%s` ADD %s(`%s`)';
+    public const STATEMENT_ADD_INDEX_COLUMN = 'ALTER TABLE `%s` ADD %s(`%s`)';
 
     /**
      * List of reserved MySQL identifiers.
@@ -104,21 +110,21 @@ class TableManipulator
      *
      * @deprecated We work with backticks for table names and columns instead reserved words.
      */
-    protected static $reservedWords = [];
+    protected static array $reservedWords = [];
 
     /**
      * List of reserved column post fix.
      *
      * @var string[]
      */
-    protected static $reservedColumnPostFix = array('__sort');
+    protected static array $reservedColumnPostFix = ['__sort'];
 
     /**
      * Database connection.
      *
      * @var Connection
      */
-    private $connection;
+    private Connection $connection;
 
     /**
      * All system columns that always are defined in a MetaModel table.
@@ -127,7 +133,7 @@ class TableManipulator
      *
      * @var string[]
      */
-    private $systemColumns;
+    private array $systemColumns;
 
     /**
      * TableManipulator constructor.
@@ -151,7 +157,7 @@ class TableManipulator
      *
      * @deprecated We work with backticks for table names and columns instead reserved words.
      */
-    public function isReservedWord($word)
+    public function isReservedWord($word): bool
     {
         return in_array(strtoupper($word), self::$reservedWords);
     }
@@ -163,7 +169,7 @@ class TableManipulator
      *
      * @return bool
      */
-    public function isReserveColumnPostFix($strColName)
+    public function isReserveColumnPostFix($strColName): bool
     {
         $inputProvider = new InputProvider();
 
@@ -191,7 +197,7 @@ class TableManipulator
      *
      * @return bool
      */
-    public function isValidMySQLIdentifier($strName)
+    public function isValidMySQLIdentifier(string $strName): bool
     {
         // Match for valid table/column name, according to MySQL, a table name must start
         // with a letter and must be combined of letters, decimals and underscore.
@@ -205,7 +211,7 @@ class TableManipulator
      *
      * @return bool true if the table name is valid, false otherwise.
      */
-    public function isValidTablename($strTableName)
+    public function isValidTablename(string $strTableName): bool
     {
         return $this->isValidMySQLIdentifier($strTableName) && !$this->isReservedWord($strTableName);
     }
@@ -217,7 +223,7 @@ class TableManipulator
      *
      * @return bool true if the column is a system column, false otherwise.
      */
-    public function isValidColumnName($strColName)
+    public function isValidColumnName(string $strColName): bool
     {
         return $this->isValidMySQLIdentifier($strColName)
             && !$this->isReservedWord($strColName)
@@ -231,7 +237,7 @@ class TableManipulator
      *
      * @return bool true if the column is a system column, false otherwise.
      */
-    public function isSystemColumn($strColName)
+    public function isSystemColumn(string $strColName): bool
     {
         return in_array($strColName, $this->systemColumns);
     }
@@ -245,7 +251,7 @@ class TableManipulator
      *
      * @throws InvalidTableNameException If an invalid table name has been passed.
      */
-    public function checkTablename($strTableName)
+    public function checkTablename(string $strTableName): void
     {
         if (!$this->isValidTablename($strTableName)) {
             throw InvalidTableNameException::invalidCharacters($strTableName);
@@ -257,9 +263,8 @@ class TableManipulator
      *
      * If there is any problem, an Exception is raised, stating the nature of the error in the Exception message.
      *
-     * @param string  $strColName        The name of the column.
-     *
-     * @param boolean $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
+     * @param string $strColName        The name of the column.
+     * @param bool   $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
      *
      * @return void
      *
@@ -267,7 +272,7 @@ class TableManipulator
      *
      * @see{MetaModelTableManipulation::isSystemColumn()} and @see{MetaModelTableManipulation::isValidColumnName()}.
      */
-    public function checkColumnName($strColName, $blnAllowSystemCol = false)
+    public function checkColumnName(string $strColName, bool $blnAllowSystemCol = false): void
     {
         if (!$this->isValidColumnName($strColName)) {
             throw InvalidColumnNameException::invalidCharacters($strColName);
@@ -287,13 +292,14 @@ class TableManipulator
      *
      * @throws InvalidTableNameException  If an invalid table name has been passed.
      * @throws TableDoesNotExistException If the table does not exist.
+     * @throws Exception
      *
      * @phpcs:ignore Squiz.Commenting.FunctionCommentThrowTag
      */
-    public function checkTableExists($strTableName)
+    public function checkTableExists(string $strTableName): void
     {
         $this->checkTablename($strTableName);
-        if (!$this->connection->getSchemaManager()->tablesExist([$strTableName])) {
+        if (!$this->connection->createSchemaManager()->tablesExist([$strTableName])) {
             throw TableDoesNotExistException::withName($strTableName);
         }
     }
@@ -307,13 +313,14 @@ class TableManipulator
      *
      * @throws InvalidTableNameException If an invalid table name has been passed.
      * @throws TableExistsException      If a table with the given name exists.
+     * @throws Exception
      *
      * @phpcs:ignore Squiz.Commenting.FunctionCommentThrowTag
      */
-    public function checkTableDoesNotExist($strTableName)
+    public function checkTableDoesNotExist(string $strTableName): void
     {
         $this->checkTablename($strTableName);
-        if ($this->connection->getSchemaManager()->tablesExist([$strTableName])) {
+        if ($this->connection->createSchemaManager()->tablesExist([$strTableName])) {
             throw TableExistsException::withName($strTableName);
         }
     }
@@ -327,18 +334,18 @@ class TableManipulator
      *
      * @throws InvalidTableNameException If an invalid table name has been passed.
      * @throws TableExistsException      If a table with the given name exists.
+     * @throws Exception                 If query error.
      */
-    public function createTable($strTableName)
+    public function createTable(string $strTableName): void
     {
         $this->checkTableDoesNotExist($strTableName);
-        $this->connection->query(sprintf(self::STATEMENT_CREATE_TABLE, $strTableName));
+        $this->connection->executeQuery(sprintf(self::STATEMENT_CREATE_TABLE, $strTableName));
     }
 
     /**
      * Renames a table with the given name to the given new name.
      *
      * @param string $strTableName    The name of the table to rename.
-     *
      * @param string $strNewTableName The name to which the table shall be renamed to.
      *
      * @return void
@@ -346,13 +353,14 @@ class TableManipulator
      * @throws InvalidTableNameException  If an invalid table name has been passed.
      * @throws TableDoesNotExistException If the source table does not exist.
      * @throws TableExistsException       If a table with the given target name exists.
+     * @throws Exception                  If query error.
      */
-    public function renameTable($strTableName, $strNewTableName)
+    public function renameTable(string $strTableName, string $strNewTableName): void
     {
         $this->checkTableExists($strTableName);
         $this->checkTableDoesNotExist($strNewTableName);
 
-        $this->connection->query(sprintf(self::STATEMENT_RENAME_TABLE, $strTableName, $strNewTableName));
+        $this->connection->executeQuery(sprintf(self::STATEMENT_RENAME_TABLE, $strTableName, $strNewTableName));
     }
 
     /**
@@ -364,21 +372,20 @@ class TableManipulator
      *
      * @throws InvalidTableNameException  If an invalid table name has been passed.
      * @throws TableDoesNotExistException If the table does not exist.
+     * @throws Exception                  If query error.
      */
-    public function deleteTable($strTableName)
+    public function deleteTable(string $strTableName): void
     {
         $this->checkTableExists($strTableName);
 
-        $this->connection->query(sprintf(self::STATEMENT_DROP_TABLE, $strTableName));
+        $this->connection->executeQuery(sprintf(self::STATEMENT_DROP_TABLE, $strTableName));
     }
 
     /**
-     * Add a index to given tablename for specified columnname
+     * Add an index to given tablename for specified columnname
      *
      * @param string $strTableName The table name.
-     *
      * @param string $strIndexType The index type.
-     *
      * @param string $strColName   The column name to add a index.
      *
      * @return void
@@ -387,11 +394,12 @@ class TableManipulator
      * @throws TableDoesNotExistException  If the table does not exist.
      * @throws InvalidColumnNameException  If an invalid column name has been passed.
      * @throws ColumnDoesNotExistException If the column does not exist.
+     * @throws Exception                   If query error.
      */
-    public function addIndex($strTableName, $strIndexType, $strColName)
+    public function addIndex(string $strTableName, string $strIndexType, string $strColName): void
     {
         $this->checkColumnExists($strTableName, $strColName);
-        $this->connection->query(
+        $this->connection->executeQuery(
             sprintf(
                 self::STATEMENT_ADD_INDEX_COLUMN,
                 $strTableName,
@@ -404,11 +412,9 @@ class TableManipulator
     /**
      * Checks whether the given table exists.
      *
-     * @param string  $strTableName      The table name to check.
-     *
-     * @param string  $strColName        The column name to check.
-     *
-     * @param boolean $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
+     * @param string $strTableName      The table name to check.
+     * @param string $strColName        The column name to check.
+     * @param bool   $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
      *
      * @return void
      *
@@ -419,7 +425,7 @@ class TableManipulator
      *
      * @phpcs:ignore Squiz.Commenting.FunctionCommentThrowTag
      */
-    public function checkColumnExists($strTableName, $strColName, $blnAllowSystemCol = false)
+    public function checkColumnExists(string $strTableName, string $strColName, bool $blnAllowSystemCol = false): void
     {
         $this->checkTableExists($strTableName);
         $this->checkColumnName($strColName, $blnAllowSystemCol);
@@ -432,20 +438,24 @@ class TableManipulator
     /**
      * Checks whether the given column does not exist.
      *
-     * @param string  $strTableName      The table name to check.
-     * @param string  $strColName        The column name to check.
-     * @param boolean $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
+     * @param string $strTableName      The table name to check.
+     * @param string $strColName        The column name to check.
+     * @param bool   $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
      *
      * @return void
      *
-     * @throws InvalidTableNameException   If an invalid table name has been passed.
-     * @throws TableDoesNotExistException  If the table does not exist.
-     * @throws InvalidColumnNameException  If an invalid column name has been passed.
-     * @throws ColumnExistsException       If the column does exist.
+     * @throws InvalidTableNameException  If an invalid table name has been passed.
+     * @throws TableDoesNotExistException If the table does not exist.
+     * @throws InvalidColumnNameException If an invalid column name has been passed.
+     * @throws ColumnExistsException      If the column does exist.
      *
      * @phpcs:ignore Squiz.Commenting.FunctionCommentThrowTag
      */
-    public function checkColumnDoesNotExist($strTableName, $strColName, $blnAllowSystemCol = false)
+    public function checkColumnDoesNotExist(
+        string $strTableName,
+        string $strColName,
+        bool $blnAllowSystemCol = false
+    ): void
     {
         $this->checkTableExists($strTableName);
         $this->checkColumnName($strColName, $blnAllowSystemCol);
@@ -460,20 +470,24 @@ class TableManipulator
      *
      * Throws Exception if the table does not exist, the column name is invalid or the column already exists.
      *
-     * @param string  $strTableName      The name of the table to add the column to.
-     *
-     * @param string  $strColumnName     The name of the new column.
-     *
-     * @param string  $strType           The SQL type notation of the new column.
-     *
-     * @param boolean $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
+     * @param string $strTableName      The name of the table to add the column to.
+     * @param string $strColumnName     The name of the new column.
+     * @param string $strType           The SQL type notation of the new column.
+     * @param bool   $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
      *
      * @return void
+     *
+     * @throws Exception If query error.
      */
-    public function createColumn($strTableName, $strColumnName, $strType, $blnAllowSystemCol = false)
+    public function createColumn(
+        string $strTableName,
+        string $strColumnName,
+        string $strType,
+        bool $blnAllowSystemCol = false
+    ): void
     {
         $this->checkColumnDoesNotExist($strTableName, $strColumnName, $blnAllowSystemCol);
-        $this->connection->query(
+        $this->connection->executeQuery(
             sprintf(
                 self::STATEMENT_CREATE_COLUMN,
                 $strTableName,
@@ -488,30 +502,29 @@ class TableManipulator
      *
      * Throws Exception if the table does not exist, the column name is invalid or the column already exists.
      *
-     * @param string  $strTableName      The name of the table the column is in.
-     *
-     * @param string  $strColumnName     The current name of the column to be renamed.
-     *
-     * @param string  $strNewColumnName  The new name for the column.
-     *
-     * @param string  $strNewType        The new SQL type notation of the column.
-     *
-     * @param boolean $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
+     * @param string $strTableName      The name of the table the column is in.
+     * @param string $strColumnName     The current name of the column to be renamed.
+     * @param string $strNewColumnName  The new name for the column.
+     * @param string $strNewType        The new SQL type notation of the column.
+     * @param bool   $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
      *
      * @return void
+     *
+     * @throws Exception
      */
     public function renameColumn(
-        $strTableName,
-        $strColumnName,
-        $strNewColumnName,
-        $strNewType,
-        $blnAllowSystemCol = false
-    ) {
+        string $strTableName,
+        string $strColumnName,
+        string $strNewColumnName,
+        string $strNewType,
+        bool $blnAllowSystemCol = false
+    ): void
+    {
         if ($strColumnName != $strNewColumnName) {
             $this->checkColumnExists($strTableName, $strColumnName, $blnAllowSystemCol);
             $this->checkColumnDoesNotExist($strTableName, $strNewColumnName, $blnAllowSystemCol);
         }
-        $this->connection->query(
+        $this->connection->executeQuery(
             sprintf(
                 self::STATEMENT_RENAME_COLUMN,
                 $strTableName,
@@ -527,18 +540,18 @@ class TableManipulator
      *
      * Throws Exception if the table does not exist, the column name is invalid or the column does not exist.
      *
-     * @param string  $strTableName      The name of the table the column is in.
-     *
-     * @param string  $strColumnName     The name of the column to drop.
-     *
-     * @param boolean $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
+     * @param string $strTableName      The name of the table the column is in.
+     * @param string $strColumnName     The name of the column to drop.
+     * @param bool   $blnAllowSystemCol If this is set to true, no system column name checking will be applied.
      *
      * @return void
+     *
+     * @throws Exception
      */
-    public function dropColumn($strTableName, $strColumnName, $blnAllowSystemCol = false)
+    public function dropColumn(string $strTableName, string $strColumnName, bool $blnAllowSystemCol = false): void
     {
         $this->checkColumnExists($strTableName, $strColumnName, $blnAllowSystemCol);
-        $this->connection->query(
+        $this->connection->executeQuery(
             sprintf(
                 self::STATEMENT_DROP_COLUMN,
                 $strTableName,
@@ -551,15 +564,16 @@ class TableManipulator
      * Enables or disables Variant support on a certain MetaModel table.
      *
      * @param string $strTableName      The table name of the MetaModel.
-     *
      * @param bool   $blnVariantSupport Flag if the support shall be turned on or off.
      *
      * @return void
+     *
+     * @throws Exception
      */
-    public function setVariantSupport($strTableName, $blnVariantSupport)
+    public function setVariantSupport(string $strTableName, bool $blnVariantSupport): void
     {
         if ($blnVariantSupport) {
-            if ($this->connection->getSchemaManager()->tablesExist([$strTableName])
+            if ($this->connection->createSchemaManager()->tablesExist([$strTableName])
                 && (!$this->fieldExists($strTableName, 'varbase'))) {
                 $this->createColumn($strTableName, 'varbase', 'char(1) NOT NULL default \'\'', true);
                 $this->createColumn($strTableName, 'vargroup', 'int(11) NOT NULL default 0', true);
@@ -570,13 +584,11 @@ class TableManipulator
                     sprintf('UPDATE `%1$s` SET %1$s.vargroup=id, %1$s.varbase=1', $strTableName)
                 );
             }
-        } else {
-            if ($this->connection->getSchemaManager()->tablesExist([$strTableName])
-                && $this->fieldExists($strTableName, 'varbase')
-            ) {
-                $this->dropColumn($strTableName, 'varbase', true);
-                $this->dropColumn($strTableName, 'vargroup', true);
-            }
+        } elseif ($this->connection->createSchemaManager()->tablesExist([$strTableName])
+                  && $this->fieldExists($strTableName, 'varbase')
+        ) {
+            $this->dropColumn($strTableName, 'varbase', true);
+            $this->dropColumn($strTableName, 'vargroup', true);
         }
     }
 
@@ -587,10 +599,12 @@ class TableManipulator
      * @param string $strColumnName Column name.
      *
      * @return bool
+     *
+     * @throws Exception
      */
-    private function fieldExists($strTableName, $strColumnName)
+    private function fieldExists(string $strTableName, string $strColumnName): bool
     {
-        $columns = $this->connection->getSchemaManager()->listTableColumns($strTableName);
+        $columns = $this->connection->createSchemaManager()->listTableColumns($strTableName);
 
         return isset($columns[$strColumnName]);
     }
