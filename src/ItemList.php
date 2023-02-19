@@ -51,6 +51,7 @@ use MetaModels\Render\Setting\IRenderSettingFactory;
 use MetaModels\Render\Template;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 
 /**
  * Implementation of a general purpose MetaModel listing.
