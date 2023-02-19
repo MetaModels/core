@@ -87,5 +87,5 @@ $GLOBALS['TL_LANG']['tl_metamodel']['itemFormatCount']['2:']     = '%s items';
 $GLOBALS['TL_LANG']['tl_metamodel']['deleteConfirm']             = 'Do you really want to delete MetaModel ID %s?';
 
 $GLOBALS['TL_LANG']['tl_metamodel']['hint_schema_manager'] =
-    'After creating a model, the database must be migrated (console, Contao Manager) -' .
+    'After creating an model, the database must be migrated (console, Contao Manager) -' .
     ' even if the table name is changed. When changing the table name, the user data itself must be transferred.';
