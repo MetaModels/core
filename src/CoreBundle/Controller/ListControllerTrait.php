@@ -252,7 +252,11 @@ trait ListControllerTrait
             ->setLimit($model->metamodel_use_limit, $model->metamodel_offset, $model->metamodel_limit)
             ->setPageBreak($model->perPage)
             ->setSorting($sorting, $direction)
-            ->setSortingLinkGenerator(
+            ->setFilterSettings($model->metamodel_filtering)
+            ->setFilterParameters($filterParams, $this->getFilterParameters($filterUrl, $itemRenderer))
+            ->setMetaTags($model->metamodel_meta_title, $model->metamodel_meta_description);
+        if ($sortOverride) {
+            $itemRenderer->setSortingLinkGenerator(
                 new SortingLinkGenerator(
                     $this->filterUrlBuilder,
                     $this->translator,
@@ -263,10 +267,8 @@ trait ListControllerTrait
                     $model->metamodel_sortby,
                     $model->metamodel_sortby_direction
                 )
-            )
-            ->setFilterSettings($model->metamodel_filtering)
-            ->setFilterParameters($filterParams, $this->getFilterParameters($filterUrl, $itemRenderer))
-            ->setMetaTags($model->metamodel_meta_title, $model->metamodel_meta_description);
+            );
+        }
 
         foreach (StringUtil::deserialize(($model->metamodel_parameters ?? null), true) as $key => $value) {
             $itemRenderer->setTemplateParameter($key, $value);

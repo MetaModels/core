@@ -1164,7 +1164,9 @@ class ItemList
         };
 
         $renderSortingLink = function (string $attributeName, string $type) use ($generateSortingLink): string {
-            $sortingLink = $generateSortingLink($attributeName, $type);
+            if ([] === $sortingLink = $generateSortingLink($attributeName, $type)) {
+                return '';
+            }
 
             return <<<EOF
                 <a href="{$sortingLink['href']}" class="{$sortingLink['class']}">{$sortingLink['label']}</a>
