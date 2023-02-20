@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2020 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     David Molineus <david.molineus@netzmacht.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2020 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -101,9 +101,6 @@ $GLOBALS['TL_LANG']['ERR']['no_palette']                                        
     'Attempt to access the MetaModel "%s" without input screen for current user %s.';
 $GLOBALS['TL_LANG']['ERR']['no_view']                                               =
     'Attempt to access the MetaModel "%s" without view for user %s.';
-$GLOBALS['TL_LANG']['ERR']['invalidTableName']                                      = 'The table name is invalid.';
-$GLOBALS['TL_LANG']['ERR']['upgrade_php_version']                                   =
-    'The version of the PHP interpreter is too low, please upgrade to at least %s (you are currently running %s)';
 $GLOBALS['TL_LANG']['ERR']['invalidTableName']                                      = 'The table name "%s" is invalid.';
 $GLOBALS['TL_LANG']['ERR']['invalidColumnName']                                     =
     'The column name "%s" is invalid.';
