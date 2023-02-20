@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Stefan Heimes <stefan_heimes@hotmail.com>
  * @author     Andreas Fischer <anfischer@kaffee-partner.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -25,11 +25,11 @@ namespace MetaModels\Filter;
 
 use Contao\Config;
 use Contao\CoreBundle\Framework\Adapter;
-use Contao\CoreBundle\Routing\UrlGenerator;
 use Contao\PageModel;
 use Contao\System;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * This class builds filter URLs.
@@ -39,59 +39,69 @@ class FilterUrlBuilder
     /**
      * The URL generator.
      *
-     * @var UrlGenerator
+     * @var UrlGeneratorInterface
      */
-    private $urlGenerator;
+    private UrlGeneratorInterface $urlGenerator;
 
     /**
      * The request stack.
      *
      * @var RequestStack
      */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     /**
      * Flag if the locale is prepended.
      *
      * @var bool
      */
-    private $isLocalePrepended = true;
+    private bool $isLocalePrepended = true;
 
     /**
      * The Contao URL suffix.
      *
      * @var string
      */
-    private $urlSuffix = '.html';
+    private string $urlSuffix = '.html';
 
     /**
      * The page model adapter.
      *
      * @var Adapter|PageModel
      */
-    private $pageModelAdapter;
+    private Adapter|PageModel $pageModelAdapter;
+
+    /**
+     * Flag if legacy routing is active.
+     *
+     * @var bool
+     */
+    private bool $hasLegacyRouting;
 
     /**
      * Create a new instance.
      *
-     * @param UrlGenerator $urlGenerator      The Contao URL generator.
-     * @param RequestStack $requestStack      The request stack.
-     * @param bool         $isLocalePrepended Flag if the locale is prepended to the URL.
-     * @param string       $urlSuffix         The URL suffix.
-     * @param Adapter      $pageModelAdapter  The page model adapter.
+     * @param UrlGeneratorInterface $urlGenerator      The Contao URL generator.
+     * @param RequestStack          $requestStack      The request stack.
+     * @param bool                  $isLocalePrepended Flag if the locale is prepended to the URL.
+     * @param string                $urlSuffix         The URL suffix.
+     * @param Adapter               $pageModelAdapter  The page model adapter.
+     * @param bool                  $hasLegacyRouting  Flag if legacy routing is active.
      */
     public function __construct(
-        UrlGenerator $urlGenerator,
+        UrlGeneratorInterface $urlGenerator,
         RequestStack $requestStack,
         bool $isLocalePrepended,
         string $urlSuffix,
-        Adapter $pageModelAdapter
+        Adapter $pageModelAdapter,
+        bool $hasLegacyRouting
     ) {
         $this->urlGenerator      = $urlGenerator;
         $this->requestStack      = $requestStack;
         $this->isLocalePrepended = $isLocalePrepended;
         $this->urlSuffix         = $urlSuffix;
         $this->pageModelAdapter  = $pageModelAdapter;
+        $this->hasLegacyRouting  = $hasLegacyRouting;
     }
 
     /**
@@ -104,7 +114,7 @@ class FilterUrlBuilder
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function generate(FilterUrl $filterUrl)
+    public function generate(FilterUrl $filterUrl): string
     {
         $jumpTo = $filterUrl->getPage();
 
@@ -114,31 +124,28 @@ class FilterUrlBuilder
 
             $jumpTo = $filterUrl->getPage();
         }
-        $alias = $jumpTo['alias'];
 
         $parameters = $filterUrl->getGetParameters();
 
-        $url = $alias;
+        $url = '';
         if ($filterUrl->hasSlug('auto_item')) {
             $url .= '/' . $this->encodeForAllowEncodedSlashes($filterUrl->getSlug('auto_item'));
         }
 
-        if (!empty($jumpTo['domain'])) {
-            $parameters['_domain'] = $jumpTo['domain'];
+        if ($this->hasLegacyRouting) {
+            if (!empty($jumpTo['domain'])) {
+                $parameters['_domain'] = $jumpTo['domain'];
+            }
+            if (!empty($jumpTo['rootUseSSL'])) {
+                $parameters['_ssl'] = (bool) $jumpTo['rootUseSSL'];
+            }
         }
-        if (!empty($jumpTo['rootUseSSL'])) {
-            $parameters['_ssl'] = (bool) $jumpTo['rootUseSSL'];
-        }
-
-        // Initialize with current language - locale is MANDATORY.
-        // See https://github.com/contao/contao/pull/4119
-        $parameters['_locale'] = $GLOBALS['TL_LANGUAGE'];
 
         if (null !== ($locale = $jumpTo['language'] ?? null)) {
             $parameters['_locale'] = $locale;
         }
         foreach ($filterUrl->getSlugParameters() as $name => $value) {
-            if (in_array($name, ['auto_item'])) {
+            if (\in_array($name, ['auto_item'])) {
                 continue;
             }
 
@@ -149,17 +156,22 @@ class FilterUrlBuilder
                 '/' . $this->encodeForAllowEncodedSlashes($value);
         }
 
-        return $this->urlGenerator->generate($url, $parameters);
+        if ($this->hasLegacyRouting) {
+            return $this->urlGenerator->generate($jumpTo['alias'] . $url, $parameters);
+        }
+
+        $parameters['parameters'] = $url;
+        return $this->urlGenerator->generate('tl_page.' . $jumpTo['id'], $parameters);
     }
 
     /**
      * Generate a filter URL from the current request.
      *
-     * @param array $options The options for updating - for details see FilterUrlBuilder::addFromCurrentRequest().
+     * @param array|null $options The options for updating - for details see FilterUrlBuilder::addFromCurrentRequest().
      *
      * @return FilterUrl
      */
-    public function getCurrentFilterUrl($options = null): FilterUrl
+    public function getCurrentFilterUrl(array $options = null): FilterUrl
     {
         $this->addFromCurrentRequest($filterUrl = new FilterUrl(), $options);
 
@@ -179,12 +191,12 @@ class FilterUrlBuilder
      *   bool preserveGet Flag if the GET parameters shall be added to the filter URL.
      *                    default: true
      *
-     * @param FilterUrl $filterUrl The filter URL to update.
-     * @param array     $options   The options for updating.
+     * @param FilterUrl  $filterUrl The filter URL to update.
+     * @param array|null $options   The options for updating.
      *
      * @return void
      */
-    public function addFromCurrentRequest(FilterUrl $filterUrl, $options = null): void
+    public function addFromCurrentRequest(FilterUrl $filterUrl, array $options = null): void
     {
         if (null === $options) {
             $options = [
@@ -194,7 +206,7 @@ class FilterUrlBuilder
             ];
         }
 
-        $request = $this->requestStack->getMasterRequest();
+        $request = $this->requestStack->getCurrentRequest();
         if (null === $request) {
             return;
         }
@@ -205,11 +217,23 @@ class FilterUrlBuilder
             }
         }
 
-        if (null === $fragments = $this->determineFragments($request)) {
-            $filterUrl->setPageValue('alias', 'index');
-            $this->extractPostData($filterUrl, $options, $request);
+        if ($this->hasLegacyRouting) {
+            if (null === $fragments = $this->determineFragments($request)) {
+                $filterUrl->setPageValue('alias', 'index');
+                $this->extractPostData($filterUrl, $options, $request);
 
-            return;
+                return;
+            }
+        } else {
+            if (!\str_starts_with($routeName = $request->attributes->get('_route'), 'tl_page.')) {
+                throw new \RuntimeException('Unknown route name: ' . $routeName);
+            }
+            $filterUrl->setPageValue('id', substr($routeName, 8));
+            $requestUri = \rawurldecode(\substr($request->getPathInfo(), 1));
+            $fragments = \explode(
+                '/',
+                \substr($requestUri, \strlen($request->attributes->get('pageModel')->urlPrefix ?? '') + 1)
+            );
         }
 
         // If alias part is empty, this means we have the 'index' page.
@@ -218,9 +242,9 @@ class FilterUrlBuilder
         }
 
         $filterUrl->setPageValue('alias', $fragments[0]);
-        // Add the fragments to the slug array
+        // Add the fragments to the slug array.
         for ($i = 1, $c = \count($fragments); $i < $c; $i += 2) {
-            // Skip key value pairs if the key is empty (see contao/core/#4702)
+            // Skip key value pairs if the key is empty (see contao/core/#4702).
             if ('' === $fragments[$i]) {
                 continue;
             }
