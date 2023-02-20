@@ -228,11 +228,14 @@ class FilterUrlBuilder
             if (!\str_starts_with($routeName = $request->attributes->get('_route'), 'tl_page.')) {
                 throw new \RuntimeException('Unknown route name: ' . $routeName);
             }
+
             $filterUrl->setPageValue('id', substr($routeName, 8));
             $requestUri = \rawurldecode(\substr($request->getPathInfo(), 1));
+            $pageModel  = $request->attributes->get('_route_object')->getPageModel();
+            $length     = $pageModel->urlSuffix ? -strlen($pageModel->urlSuffix) : null;
             $fragments = \explode(
                 '/',
-                \substr($requestUri, \strlen($request->attributes->get('pageModel')->urlPrefix ?? '') + 1)
+                \substr($requestUri, \strlen($pageModel->urlPrefix ?? '') + 1, $length)
             );
         }
 
