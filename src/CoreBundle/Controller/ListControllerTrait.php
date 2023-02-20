@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -32,6 +32,7 @@ use Contao\Template;
 use MetaModels\Filter\FilterUrl;
 use MetaModels\Filter\FilterUrlBuilder;
 use MetaModels\Filter\Setting\IFilterSettingFactory;
+use MetaModels\Helper\SortingLinkGenerator;
 use MetaModels\IFactory;
 use MetaModels\IItem;
 use MetaModels\ItemList;
@@ -211,27 +212,34 @@ trait ListControllerTrait
 
         $template->searchable = !$model->metamodel_donotindex;
 
-        $sorting   = $model->metamodel_sortby;
-        $direction = $model->metamodel_sortby_direction;
+        $sorting           = $model->metamodel_sortby;
+        $direction         = $model->metamodel_sortby_direction;
+        $sortParamType     = $model->metamodel_sort_param_type;
+        $sortOrderByParam  = 'orderBy';
+        $sortOrderDirParam = 'orderDir';
+        $sortOverride      = $model->metamodel_sort_override;
+        $sortFragment      = $model->metamodel_sort_urlfragment;
 
         // @codingStandardsIgnoreStart
         // FIXME: filter URL should be created from local request and not from master request.
         // @codingStandardsIgnoreEnd
         $filterUrl = $this->filterUrlBuilder->getCurrentFilterUrl();
-        if ($model->metamodel_sort_override) {
+        if ($sortOverride) {
+            $sortOrderByParam  = $model->metamodel_order_by_param ?: $sortOrderByParam;
+            $sortOrderDirParam = $model->metamodel_order_dir_param ?: $sortOrderDirParam;
             if (null !==
                 $value = $this->tryReadFromSlugOrGet(
                     $filterUrl,
-                    ($model->metamodel_order_by_param ?: 'orderBy'),
-                    $model->metamodel_sort_param_type
+                    $sortOrderByParam,
+                    $sortParamType
                 )) {
                 $sorting = $value;
             }
             if (null !==
                 $value = $this->tryReadFromSlugOrGet(
                     $filterUrl,
-                    ($model->metamodel_order_dir_param ?: 'orderDir'),
-                    $model->metamodel_sort_param_type
+                    $sortOrderDirParam,
+                    $sortParamType
                 )) {
                 $direction = $value;
             }
@@ -244,6 +252,18 @@ trait ListControllerTrait
             ->setLimit($model->metamodel_use_limit, $model->metamodel_offset, $model->metamodel_limit)
             ->setPageBreak($model->perPage)
             ->setSorting($sorting, $direction)
+            ->setSortingLinkGenerator(
+                new SortingLinkGenerator(
+                    $this->filterUrlBuilder,
+                    $this->translator,
+                    $sortParamType,
+                    $sortOrderByParam,
+                    $sortOrderDirParam,
+                    $sortFragment,
+                    $model->metamodel_sortby,
+                    $model->metamodel_sortby_direction
+                )
+            )
             ->setFilterSettings($model->metamodel_filtering)
             ->setFilterParameters($filterParams, $this->getFilterParameters($filterUrl, $itemRenderer))
             ->setMetaTags($model->metamodel_meta_title, $model->metamodel_meta_description);
@@ -256,11 +276,11 @@ trait ListControllerTrait
         $template->numberOfItems = $itemRenderer->getItems()->getCount();
         $template->pagination    = $itemRenderer->getPagination();
 
-        $responseTags = array_map(
+        $responseTags = \array_map(
             static function (IItem $item) {
                 return sprintf('contao.db.%s.%d', $item->getMetaModel()->getTableName(), $item->get('id'));
             },
-            iterator_to_array($itemRenderer->getItems(), false)
+            \iterator_to_array($itemRenderer->getItems(), false)
         );
 
         $response = $template->getResponse();
@@ -377,14 +397,14 @@ trait ListControllerTrait
         $metaModel = $this->factory->getMetaModel($metaModelName);
         $header    = $name . ': ' . $metaModel->getName();
         if ($href) {
-            $header .= sprintf(
+            $header .= \sprintf(
                 ' (<a href="%1$s&amp;rt=%2$s" class="tl_gray">ID: %3$s</a>)',
                 $href,
                 REQUEST_TOKEN,
                 $model->id
             );
         }
-        $infoText = sprintf(
+        $infoText = \sprintf(
             $infoTemplate,
             $this->translator->trans('MSC.mm_be_info_name.1', [], 'contao_default'),
             $this->translator->trans('MSC.mm_be_info_name.0', [], 'contao_default'),
@@ -399,10 +419,10 @@ trait ListControllerTrait
                     $filterparams[] = $filterparam['value'];
                 }
             }
-            $infoFiPa = count($filterparams) ? ': ' . implode(', ', $filterparams) : '';
+            $infoFiPa = \count($filterparams) ? ': ' . \implode(', ', $filterparams) : '';
             $infoFi   = $this->filterFactory->createCollection($model->metamodel_filtering)->get('name');
             if ($infoFi) {
-                $infoText .= sprintf(
+                $infoText .= \sprintf(
                     $infoTemplate,
                     $this->translator->trans('MSC.mm_be_info_filter.1', [], 'contao_default'),
                     $this->translator->trans('MSC.mm_be_info_filter.0', [], 'contao_default'),
@@ -417,7 +437,7 @@ trait ListControllerTrait
                 ->createCollection($metaModel, $model->metamodel_rendersettings)
                 ->get('name');
             if ($infoRs) {
-                $infoText .= sprintf(
+                $infoText .= \sprintf(
                     $infoTemplate,
                     $this->translator->trans('MSC.mm_be_info_render_setting.1', [], 'contao_default'),
                     $this->translator->trans('MSC.mm_be_info_render_setting.0', [], 'contao_default'),

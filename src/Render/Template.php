@@ -127,6 +127,10 @@ class Template
      */
     public function __call($strMethod, $arrArgs)
     {
+        if (isset($this->$strMethod) && is_callable($this->$strMethod)) {
+            return call_user_func_array($this->$strMethod, $arrArgs);
+        }
+
         return call_user_func_array(array(ContaoController::getInstance(), $strMethod), $arrArgs);
     }
 

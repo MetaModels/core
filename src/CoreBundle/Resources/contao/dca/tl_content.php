@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,7 +18,7 @@
  * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -69,7 +69,7 @@ array_insert(
     1,
     [
         'metamodel_use_limit'      => 'metamodel_offset,metamodel_limit',
-        'metamodel_sort_override'  => 'metamodel_sort_param_type,metamodel_order_by_param,metamodel_order_dir_param',
+        'metamodel_sort_override'  => 'metamodel_sort_param_type,metamodel_order_by_param,metamodel_order_dir_param,metamodel_sort_urlfragment',
         'metamodel_use_parameters' => 'metamodel_parameters'
     ]
 );
@@ -265,6 +265,16 @@ array_insert(
                 'rgxp'     => 'alias'
             ],
             'sql'       => "varchar(64) NOT NULL default ''"
+        ],
+        'metamodel_sort_urlfragment'          => [
+            'label'     => &$GLOBALS['TL_LANG']['tl_content']['metamodel_sort_urlfragment'],
+            'exclude'   => true,
+            'inputType' => 'text',
+            'eval'      => [
+                'tl_class' => 'clr w50',
+                'rgxp'     => 'alias'
+            ],
+            'sql'       => "char(255) NOT NULL default ''"
         ],
         'metamodel_filtering'           =>
             [
