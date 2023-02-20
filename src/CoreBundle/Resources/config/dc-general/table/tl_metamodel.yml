@@ -41,6 +41,7 @@ services:
         arguments:
             - "@cca.dc-general.scope-matcher"
             - "@metamodels.table_manipulator"
+            - "@metamodels.factory"
         tags:
             - name: kernel.event_listener
               event: dc-general.view.contao2backend.encode-property-value-from-widget

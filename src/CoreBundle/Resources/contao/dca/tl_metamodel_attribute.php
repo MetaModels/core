@@ -31,9 +31,10 @@ $GLOBALS['TL_DCA']['tl_metamodel_attribute'] = [
         'enableVersioning' => false,
         'sql'              => [
             'keys' => [
-                'id'      => 'primary',
-                'pid'     => 'index',
-                'colname' => 'index'
+                'id'          => 'primary',
+                'pid'         => 'index',
+                'colname'     => 'index',
+                'pid,colname' => 'unique',
             ],
         ],
     ],

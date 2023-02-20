@@ -3,7 +3,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Ingolf Steinhardt <info@e-spin.de>
- * @copyright  2012-2022 The MetaModels team.
+ * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -69,9 +69,10 @@ class ModelToLabelListener extends AbstractAbstainingListener
      * @param ModelToLabelEvent $event The event.
      *
      * @return void
+     *
      * @throws \Doctrine\DBAL\Exception
      */
-    public function handle(ModelToLabelEvent $event)
+    public function handle(ModelToLabelEvent $event): void
     {
         if (!$this->wantToHandle($event)) {
             return;
@@ -80,30 +81,31 @@ class ModelToLabelListener extends AbstractAbstainingListener
         $model     = $event->getModel();
         $tableName = $model->getProperty('tableName');
 
-        if (!($model && !empty($tableName) && $this->connection->getSchemaManager()->tablesExist([$tableName]))) {
-            return;
+        $count   = '?';
+        $transId = 'tl_metamodel.itemFormatCount.0';
+        if ($model && !empty($tableName) && $this->connection->createSchemaManager()->tablesExist([$tableName])) {
+            $count = $this->connection
+                ->createQueryBuilder()
+                ->select('COUNT(t.id) AS itemCount')
+                ->from($tableName, 't')
+                ->executeQuery()
+                ->fetchOne();
+
+            switch ($count) {
+                case 0:
+                    $transId = 'tl_metamodel.itemFormatCount.0';
+                    break;
+                case 1:
+                    $transId = 'tl_metamodel.itemFormatCount.1';
+                    break;
+                default:
+                    $transId = 'tl_metamodel.itemFormatCount.2:';
+            }
         }
 
         // Keep the previous label.
-        $label = vsprintf($event->getLabel(), $event->getArgs());
+        $label = \vsprintf($event->getLabel(), $event->getArgs());
         $image = ((bool) $model->getProperty('translated')) ? 'locale.png' : 'locale_1.png';
-        $count = $this->connection
-            ->createQueryBuilder()
-            ->select('COUNT(t.id) AS itemCount')
-            ->from($tableName, 't')
-            ->executeQuery()
-            ->fetchOne();
-
-        switch ($count) {
-            case 0:
-                $transId = 'tl_metamodel.itemFormatCount.0';
-                break;
-            case 1:
-                $transId = 'tl_metamodel.itemFormatCount.1';
-                break;
-            default:
-                $transId = 'tl_metamodel.itemFormatCount.2:';
-        }
 
         $event
             ->setLabel('
