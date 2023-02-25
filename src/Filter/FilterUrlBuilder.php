@@ -23,6 +23,7 @@
 
 namespace MetaModels\Filter;
 
+use Contao\ArrayUtil;
 use Contao\Config;
 use Contao\CoreBundle\Framework\Adapter;
 use Contao\PageModel;
@@ -30,6 +31,7 @@ use Contao\System;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\Route;
 
 /**
  * This class builds filter URLs.
@@ -231,12 +233,23 @@ class FilterUrlBuilder
 
             $filterUrl->setPageValue('id', substr($routeName, 8));
             $requestUri = \rawurldecode(\substr($request->getPathInfo(), 1));
-            $pageModel  = $request->attributes->get('_route_object')->getPageModel();
-            $length     = $pageModel->urlSuffix ? -strlen($pageModel->urlSuffix) : null;
-            $fragments = \explode(
-                '/',
-                \substr($requestUri, \strlen($pageModel->urlPrefix ?? '') + 1, $length)
-            );
+
+            if (null === ($route = $request->attributes->get('_route_object'))) {
+                return;
+            }
+            assert($route instanceof Route);
+
+            $pageModel = $route->getDefault('pageModel');
+            assert($pageModel instanceof PageModel);
+
+            $length    = $pageModel->urlSuffix ? -\strlen($pageModel->urlSuffix) : null;
+            $start     = \strlen($pageModel->urlPrefix ?? '') + \strlen($pageModel->alias);
+            $fragments = \explode('/', \substr($requestUri, $start ? $start + 1 : 0, $length));
+
+            if (1 === \count($fragments) % 2) {
+                array_unshift($fragments, 'auto_item');
+            }
+            array_unshift($fragments, $pageModel->alias);
         }
 
         // If alias part is empty, this means we have the 'index' page.
@@ -255,7 +268,7 @@ class FilterUrlBuilder
             // Decode slashes in slugs - They got encoded in generate() above.
             $filterUrl->setSlug(
                 $this->decodeForAllowEncodedSlashes($fragments[$i]),
-                $this->decodeForAllowEncodedSlashes($fragments[($i + 1)])
+                $this->decodeForAllowEncodedSlashes($fragments[($i + 1)] ?? '')
             );
         }
 
@@ -273,7 +286,7 @@ class FilterUrlBuilder
      */
     private function encodeForAllowEncodedSlashes(string $value): string
     {
-        return str_replace(['/', '\\'], ['%2F', '%5C'], $value);
+        return \str_replace(['/', '\\'], ['%2F', '%5C'], $value);
     }
 
     /**
@@ -287,7 +300,7 @@ class FilterUrlBuilder
      */
     private function decodeForAllowEncodedSlashes(string $value): string
     {
-        return str_replace(['%2F', '%5C'], ['/', '\\'], $value);
+        return \str_replace(['%2F', '%5C'], ['/', '\\'], $value);
     }
 
     /**
@@ -308,7 +321,7 @@ class FilterUrlBuilder
 
         $fragments = null;
         // Use folder-style URLs
-        if (Config::get('folderUrl') && false !== strpos($requestUri, '/')) {
+        if (Config::get('folderUrl') && false !== \strpos($requestUri, '/')) {
             $fragments = $this->getFolderUrlFragments(
                 $requestUri,
                 $request->getHttpHost(),
@@ -321,12 +334,12 @@ class FilterUrlBuilder
             if ('/' === $requestUri) {
                 return null;
             }
-            $fragments = explode('/', $requestUri);
+            $fragments = \explode('/', $requestUri);
         }
 
         // Add the second fragment as auto_item if the number of fragments is even
         if (Config::get('useAutoItem') && 0 === (\count($fragments) % 2)) {
-            array_insert($fragments, 1, ['auto_item']);
+            ArrayUtil::arrayInsert($fragments, 1, ['auto_item']);
         }
 
         $fragments = $this->getPageIdFromUrlHook($fragments);
@@ -344,27 +357,27 @@ class FilterUrlBuilder
      *
      * @param Request $request The request.
      *
-     * @return string
+     * @return string|null
      */
     private function strippedUri(Request $request): ?string
     {
         // Strip leading slash.
-        if (null === $request || '' === $requestUri = rawurldecode(substr($request->getPathInfo(), 1))) {
+        if (null === $request || '' === $requestUri = \rawurldecode(substr($request->getPathInfo(), 1))) {
             return null;
         }
         if ($this->isLocalePrepended) {
             $matches = [];
             // Use the matches instead of substr() (thanks to Mario Müller)
-            if (preg_match('@^([a-z]{2}(-[A-Z]{2})?)/(.*)$@', $requestUri, $matches)) {
+            if (\preg_match('@^([a-z]{2}(-[A-Z]{2})?)/(.*)$@', $requestUri, $matches)) {
                 $requestUri = $matches[3];
             }
         }
 
         // Remove the URL suffix if not just a language root (e.g. en/) is requested
         if ('' !== $this->urlSuffix && '' !== $requestUri && (
-                !$this->isLocalePrepended || !preg_match('@^[a-z]{2}(-[A-Z]{2})?/$@', $requestUri)
+                !$this->isLocalePrepended || !\preg_match('@^[a-z]{2}(-[A-Z]{2})?/$@', $requestUri)
             )) {
-            $requestUri = substr($requestUri, 0, -\strlen($this->urlSuffix));
+            $requestUri = \substr($requestUri, 0, -\strlen($this->urlSuffix));
         }
 
         return $requestUri;
@@ -377,7 +390,7 @@ class FilterUrlBuilder
      * @param string      $host   The host part of the current request.
      * @param string|null $locale The current locale or null if none requested.
      *
-     * @return array
+     * @return array|null
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -402,7 +415,7 @@ class FilterUrlBuilder
 
         if (!$this->isLocalePrepended) {
             // Use the first result (see #4872)
-            $pages = current($languages);
+            $pages = \current($languages);
         } elseif ($locale && isset($languages[$locale])) {
             // Try to find a page matching the language parameter
             $pages = $languages[$locale];
@@ -421,8 +434,8 @@ class FilterUrlBuilder
             $arrFragments = [$alias];
         } else {
             // Remove the alias from the request string, explode it and then re-insert it at the beginning.
-            $arrFragments = explode('/', substr($alias, (\strlen($page->alias) + 1)));
-            array_unshift($arrFragments, $page->alias);
+            $arrFragments = explode('/', \substr($alias, (\strlen($page->alias) + 1)));
+            \array_unshift($arrFragments, $page->alias);
         }
 
         return $arrFragments;
@@ -435,7 +448,7 @@ class FilterUrlBuilder
      *
      * @return array|null
      */
-    private function getPageCandidates(string $alias)
+    private function getPageCandidates(string $alias): ?array
     {
         $aliases = [$alias];
         // Compile all possible aliases by applying dirname() to the request.
@@ -497,7 +510,7 @@ class FilterUrlBuilder
      *
      * @return void
      */
-    private function extractPostData(FilterUrl $filterUrl, $options, Request $request): void
+    private function extractPostData(FilterUrl $filterUrl, array $options, Request $request): void
     {
         if (!$request->isMethod('POST')) {
             return;
@@ -508,13 +521,13 @@ class FilterUrlBuilder
         }
 
         foreach ($request->request->all() as $name => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $value = implode(',', $value);
             }
-            if (in_array($name, $options['postAsSlug'])) {
+            if (\in_array($name, $options['postAsSlug'])) {
                 $filterUrl->setSlug($name, $value);
             }
-            if (in_array($name, $options['postAsGet'])) {
+            if (\in_array($name, $options['postAsGet'])) {
                 $filterUrl->setGet($name, $value);
             }
         }
