@@ -79,9 +79,13 @@ final class EditMaskSubHeadlineListener
             return;
         }
 
-        // Retrieve the settings of the input mask for member attribute.
-        $status         = 'editRecord';
-        $environment    = $event->getEnvironment();
+        // Nothing to do on create item.
+        $environment = $event->getEnvironment();
+        if ('create' === $environment->getInputProvider()->getParameter('act')) {
+            return;
+        }
+
+        // Retrieve the settings of the input mask for item attribute.
         $dataDefinition = $environment->getDataDefinition();
         /** @var IMetaModelDefinition $metaModels */
         $metaModel     = $dataDefinition->getDefinition(IMetaModelDefinition::NAME);
@@ -104,7 +108,7 @@ final class EditMaskSubHeadlineListener
 
         // Translate language key and add headline part.
         $subHeadline =
-            $this->translator->trans('tl_metamodel_item.' . $status, [0 => $headlineAdd], 'contao_tl_metamodel_item');
+            $this->translator->trans('tl_metamodel_item.editRecord', [0 => $headlineAdd], 'contao_tl_metamodel_item');
 
         $event->setHeadline($subHeadline);
     }
