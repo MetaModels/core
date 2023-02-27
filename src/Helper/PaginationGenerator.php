@@ -322,7 +322,7 @@ class PaginationGenerator
         if ($this->paramType === 'get') {
             $pageFilterUrl->setGet($this->pageParam, $page);
         } else {
-            $pageFilterUrl->setSlug($this->pageParam, $page);
+            $pageFilterUrl->setSlug($this->pageParam, $page)->setGet($this->pageParam, '');
         }
 
         return $this->urlBuilder->generate($pageFilterUrl);

@@ -337,7 +337,7 @@ class Collection implements ICollection
             foreach ($parameterList as $strKey => $strValue) {
                 // Sadly the filter values are currently encoded due to legacy reasons.
                 // For MetaModels 3, they should be passed around decoded everywhere.
-                $filterUrl->setSlug($strKey, rawurldecode($strValue));
+                $filterUrl->setSlug($strKey, rawurldecode($strValue))->setGet($strKey, '');
             }
         }
 
