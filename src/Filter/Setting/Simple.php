@@ -384,7 +384,9 @@ abstract class Simple implements ISimple
                     ? $GLOBALS['TL_LANG']['metamodels_frontendfilter']['do_not_filter']
                     : $arrWidget['eval']['blankOptionLabel']
                 ),
-                'href'   => $this->filterUrlBuilder->generate($filterUrl->clone()->setSlug($parameterName, '')),
+                'href'   => $this->filterUrlBuilder->generate(
+                    $filterUrl->clone()->setSlug($parameterName, '')->setGet($parameterName, '')
+                ),
                 'active' => $blnActive,
                 'class'  => 'doNotFilter' . ($blnActive ? ' active' : ''),
             ];
@@ -397,7 +399,9 @@ abstract class Simple implements ISimple
             $arrOptions[] = [
                 'key'    => $strKeyOption,
                 'value'  => $strOption,
-                'href'   => $this->filterUrlBuilder->generate($filterUrl->clone()->setSlug($parameterName, $strValue)),
+                'href'   => $this->filterUrlBuilder->generate(
+                    $filterUrl->clone()->setSlug($parameterName, $strValue)->setGet($parameterName, '')
+                ),
                 'active' => $blnActive,
                 'class'  => StringUtil::standardize($strKeyOption) . ($blnActive ? ' active' : '')
             ];

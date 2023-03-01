@@ -156,8 +156,12 @@ class SortingLinkGenerator
             $pageFilterUrl->setGet($this->sortOrderDirParam, $attributeName ? $dir : '');
         } else {
             // Use slug or slugNget.
-            $pageFilterUrl->setSlug($this->sortOrderByParam, $attributeName);
-            $pageFilterUrl->setSlug($this->sortOrderDirParam, $attributeName ? $dir : '');
+            $pageFilterUrl
+                ->setSlug($this->sortOrderByParam, $attributeName)
+                ->setGet($this->sortOrderByParam, '');
+            $pageFilterUrl
+                ->setSlug($this->sortOrderDirParam, $attributeName ? $dir : '')
+                ->setGet($this->sortOrderDirParam, '');
         }
 
         return [
