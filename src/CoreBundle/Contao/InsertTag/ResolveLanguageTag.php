@@ -38,7 +38,7 @@ final class ResolveLanguageTag
     /**
      * Resolve iflng / ifnlng inserttag in query string.
      *
-     * @param string $queryString
+     * @param string $queryString The query string to check out iflng and ifnlng inserttags.
      *
      * @return string
      */
@@ -48,8 +48,8 @@ final class ResolveLanguageTag
         {
             return $queryString;
         }
-        $tags = \preg_split('~{{(ifn?lng[^{}]*)}}~', $queryString, -1,PREG_SPLIT_DELIM_CAPTURE );
-
+        $tags = \preg_split('~{{(ifn?lng[^{}]*)}}~', $queryString, -1, PREG_SPLIT_DELIM_CAPTURE );
+        
         $strBuffer = '';
 
         for ($_rit=0, $_cnt=\count($tags); $_rit<$_cnt; $_rit+=2)
@@ -67,17 +67,20 @@ final class ResolveLanguageTag
                 continue;
             }
 
-            $flags = \explode('|', $strTag);
-            $tag = \array_shift($flags);
+            $flags    = \explode('|', $strTag);
+            $tag      = \array_shift($flags);
             $elements = \explode('::', $tag);
 
             $arrCache[$strTag] = '';
 
-            if (!empty($elements[1]) && $this->languageMatches($elements[1]) === (\strtolower($elements[0]) === 'ifnlng'))
+            if (!empty($elements[1]) && 
+                $this->languageMatches($elements[1]) === (\strtolower($elements[0]) === 'ifnlng'))
             {
                 for (; $_rit<$_cnt; $_rit+=2)
                 {
-                    if (1 === \preg_match('/^' . \preg_quote($elements[0], '/') . '(?:$|::|\|)/i', $tags[$_rit+3] ?? ''))
+                    if (1 === \preg_match('/^' . 
+                              \preg_quote($elements[0], '/') . 
+                              '(?:$|::|\|)/i', $tags[$_rit+3] ?? ''))
                     {
                         $tags[$_rit+2] = '';
                         break;
@@ -95,7 +98,7 @@ final class ResolveLanguageTag
     /**
      * Check if the language matches.
      *
-     * @param string $language
+     * @param string $language Expects the language code.
      *
      * @return boolean
      */
@@ -103,7 +106,7 @@ final class ResolveLanguageTag
     {
         $request = System::getContainer()->get('request_stack')->getCurrentRequest();
         $pageModel = $request->attributes->get('pageModel');
-
+        
         foreach (StringUtil::trimsplit(',', $language) as $lang)
         {
             if ($pageModel->language === $lang)
