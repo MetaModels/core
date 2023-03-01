@@ -30,6 +30,7 @@ services:
             Contao\Session: '@metamodels.contao_session'
             MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName: '@MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName'
             MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam: '@MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam'
+            MetaModels\CoreBundle\Contao\InsertTag\ResolveLanguageTag: '@MetaModels\CoreBundle\Contao\InsertTag\ResolveLanguageTag'
         tags:
           - { name: container.service_locator }
 
