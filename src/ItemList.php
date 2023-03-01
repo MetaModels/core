@@ -1166,7 +1166,8 @@ class ItemList
             }
 
             return <<<EOF
-                <a href="{$sortingLink['href']}" class="{$sortingLink['class']}">{$sortingLink['label']}</a>
+                <a href="{$sortingLink['href']}" class="{$sortingLink['class']}"
+                   data-escargot-ignore rel="nofollow">{$sortingLink['label']}</a>
             EOF;
         };
 
