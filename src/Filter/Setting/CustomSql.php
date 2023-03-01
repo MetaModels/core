@@ -26,10 +26,10 @@
 namespace MetaModels\Filter\Setting;
 
 use Contao\InsertTags;
-use Contao\StringUtil;
 use Doctrine\DBAL\Connection;
 use MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam;
 use MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName;
+use MetaModels\CoreBundle\Contao\InsertTag\ResolveLanguageTag;
 use MetaModels\Filter\IFilter;
 use MetaModels\Filter\Rules\SimpleQuery;
 use MetaModels\FrontendIntegration\FrontendFilterOptions;
@@ -516,96 +516,6 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     }
     
     /**
-     * Check and find iflng / ifnlng inserttags and resolve query string.
-     *
-     * @param $queryString
-     *
-     * @return string
-     */
-    private function checkLanguageInserttag($queryString)
-    {
-        if (strpos($queryString, '{{iflng') === false && strpos($queryString, '{{ifnlng') === false)
-        {
-            return $queryString;
-        }
-        $tags = preg_split('~{{if([^{}]*)}}~', $queryString, -1,PREG_SPLIT_DELIM_CAPTURE );
-
-        $strBuffer = '';
-
-        for ($_rit=0, $_cnt=\count($tags); $_rit<$_cnt; $_rit+=2)
-        {
-            $strBuffer .= $tags[$_rit];
-
-            if (!isset($tags[$_rit+1]))
-            {
-                continue;
-            }
-            $strTag = $tags[$_rit+1];
-
-            if (!$strTag)
-            {
-                continue;
-            }
-
-            $flags = explode('|', $strTag);
-            $tag = array_shift($flags);
-            $elements = explode('::', $tag);
-
-            $arrCache[$strTag] = '';
-
-            // Replace the tag
-            switch (strtolower($elements[0]))
-            {
-                case 'lng':
-                case 'nlng':
-                    if (!empty($elements[1]) && $this->languageMatches($elements[1]) === (strtolower($elements[0]) === 'nlng'))
-                    {
-                        for (; $_rit<$_cnt; $_rit+=2)
-                        {
-                            if (1 === preg_match('/^' . preg_quote($elements[0], '/') . '(?:$|::|\|)/i', $tags[$_rit+3] ?? ''))
-                            {
-                                $tags[$_rit+2] = '';
-                                break;
-                            }
-                        }
-                    }
-                    unset($arrCache[$strTag]);
-                    continue 2;
-            }
-            $strBuffer .= $arrCache[$strTag] ?? '';
-        }
-
-        return $strBuffer;
-    }
-    
-    /**
-     * Check if the language matches.
-     *
-     * @param string $language
-     *
-     * @return boolean
-     */
-    private function languageMatches($language)
-    {
-        global $objPage;
-
-        foreach (StringUtil::trimsplit(',', $language) as $lang)
-        {
-            if ($objPage->language === $lang)
-            {
-                return true;
-            }
-
-            if (substr($lang, -1) === '*' && 0 === strncmp($objPage->language, $lang, \strlen($lang) - 1))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-    
-    /**
      * Checkout nested inserttags and dissolve param::, secure::, other inserttags.
      *
      * @param string $tag The parameter value where as an inserttag in it.
@@ -643,9 +553,9 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      */
     private function literateQuery()
     {
-        $queryString    = $this->checkLanguageInserttag($this->queryString);
-        
-        $tags = $this->stripInserttags($this->queryString);
+        $queryString    = $this->container->get(ResolveLanguageTag::class)->resolve($this->queryString);
+
+        $tags           = $this->stripInserttags($queryString);
 
         $newQueryString = '';
 
