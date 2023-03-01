@@ -553,9 +553,9 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      */
     private function literateQuery()
     {
-        $queryString    = $this->container->get(ResolveLanguageTag::class)->resolve($this->queryString);
+        $queryString = $this->container->get(ResolveLanguageTag::class)->resolve($this->queryString);
 
-        $tags           = $this->stripInserttags($queryString);
+        $tags = $this->stripInserttags($queryString);
 
         $newQueryString = '';
 
