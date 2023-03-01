@@ -19,6 +19,7 @@
             ?>
             <li class="<?= $class ?>">
                 <a href="<?= $option['href'] . $urlFragment ?>" class="<?= $class ?>"
+                   data-escargot-ignore rel="nofollow"
                    title="<?= $option['value'] ?>"><?= $option['value'] ?></a>
             </li>
         <?php endforeach; ?>
