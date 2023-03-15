@@ -120,6 +120,7 @@ class CustomSqlTest extends AutoLoadingTestCase
         if (!isset($services[Request::class])) {
             $services[Request::class] = new Request();
             $services[Request::class]->attributes->set('pageModel', $services[PageModel::class]);
+            $services[Request::class]->attributes->set('_locale', $services[PageModel::class]->language);
         }
         if (!isset($services[RequestStack::class])) {
             $services[RequestStack::class] = new RequestStack();
@@ -703,6 +704,13 @@ class CustomSqlTest extends AutoLoadingTestCase
             'sql' => '{{ifnlng::de}}1{{ifnlng::en}}3{{ifnlng::nl}}2{{ifnlng::es}}4{{ifnlng::el}}5{{iflng}}',
             'language' => 'cn',
             'exp_sql' => '13245',
+        ];
+        yield [
+            'sql' => 'SELECT id FROM {{table}}
+WHERE alias = {{iflng::de}}moe-yer-ss-hans-herbert-oeaeue{{iflng::en}}3{{iflng::nl}}2{{iflng::es}}4{{iflng::el}}5{{iflng}}',
+            'language' => 'de',
+            'exp_sql' => 'SELECT id FROM tableName
+WHERE alias = moe-yer-ss-hans-herbert-oeaeue',
         ];
     }
 

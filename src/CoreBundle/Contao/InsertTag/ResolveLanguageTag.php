@@ -120,17 +120,17 @@ final class ResolveLanguageTag
         if (null === $request) {
             return false;
         }
-        $pageModel = $request->attributes->get('_locale');
-        if (null === $pageModel) {
+        $pageLanguage = $request->attributes->get('_locale');
+        if (null === $pageLanguage) {
             return false;
         }
 
         foreach (StringUtil::trimsplit(',', $language) as $lang) {
-            if ($pageModel->language === $lang) {
+            if ($pageLanguage === $lang) {
                 return true;
             }
 
-            if (substr($lang, -1) === '*' && 0 === strncmp($pageModel->language, $lang, \strlen($lang) - 1)) {
+            if (substr($lang, -1) === '*' && 0 === strncmp($pageLanguage, $lang, \strlen($lang) - 1)) {
                 return true;
             }
         }
