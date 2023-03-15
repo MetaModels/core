@@ -28,13 +28,20 @@ declare(strict_types=1);
 namespace MetaModels\CoreBundle\Contao\InsertTag;
 
 use Contao\StringUtil;
-use Contao\System;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Check and find iflng / ifnlng inserttags and resolve query string.
  */
 final class ResolveLanguageTag
 {
+    private RequestStack $requestStack;
+
+    public function __construct(RequestStack $requestStack)
+    {
+        $this->requestStack = $requestStack;
+    }
+
     /**
      * Resolve iflng / ifnlng inserttag in query string.
      *
@@ -102,11 +109,17 @@ final class ResolveLanguageTag
      *
      * @return boolean
      */
-    private function languageMatches($language)
+    private function languageMatches(string $language): bool
     {
-        $request = System::getContainer()->get('request_stack')->getCurrentRequest();
+        $request = $this->requestStack->getCurrentRequest();
+        if (null === $request) {
+            return false;
+        }
         $pageModel = $request->attributes->get('pageModel');
-        
+        if (null === $pageModel) {
+            return false;
+        }
+
         foreach (StringUtil::trimsplit(',', $language) as $lang)
         {
             if ($pageModel->language === $lang)

@@ -126,6 +126,8 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
             Connection::class                  => Connection::class,
             InsertTags::class                  => InsertTags::class,
             ReplaceParam::class                => ReplaceParam::class,
+            ReplaceTableName::class            => ReplaceTableName::class,
+            ResolveLanguageTag::class          => ResolveLanguageTag::class,
             // This one is deprecated.
             IMetaModelsServiceContainer::class => IMetaModelsServiceContainer::class
         ];

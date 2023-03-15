@@ -10,3 +10,5 @@ services:
 
     MetaModels\CoreBundle\Contao\InsertTag\ResolveLanguageTag:
         public: false
+        arguments:
+            - '@request_stack'
