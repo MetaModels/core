@@ -39,6 +39,8 @@ final class ResolveLanguageTag
 
     /**
      * Create a new instance.
+     *
+     * @param RequestStack $requestStack The request stack.
      */
     public function __construct(RequestStack $requestStack)
     {
@@ -130,7 +132,7 @@ final class ResolveLanguageTag
                 return true;
             }
 
-            if (substr($lang, -1) === '*' && 0 === strncmp($pageLanguage, $lang, \strlen($lang) - 1)) {
+            if (substr($lang, -1) === '*' && 0 === strncmp($pageLanguage, $lang, (\strlen($lang) - 1))) {
                 return true;
             }
         }
