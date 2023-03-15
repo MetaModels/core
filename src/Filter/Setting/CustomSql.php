@@ -27,6 +27,8 @@ namespace MetaModels\Filter\Setting;
 
 use Contao\InsertTags;
 use Doctrine\DBAL\Connection;
+use MetaModels\InsertTag\Node;
+use MetaModels\InsertTag\Parser;
 use MetaModels\CoreBundle\Contao\InsertTag\ReplaceParam;
 use MetaModels\CoreBundle\Contao\InsertTag\ReplaceTableName;
 use MetaModels\CoreBundle\Contao\InsertTag\ResolveLanguageTag;
@@ -373,8 +375,9 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
         $imploded          = \array_reduce(
             \array_keys($filteredArguments),
             function ($carry, $item) use ($filteredArguments) {
-                return $carry .= ($carry ? '&' : '') . $item . '=' . $filteredArguments[$item];
-            }
+                return $carry . ($carry ? '&' : '') . $item . '=' . $filteredArguments[$item];
+            },
+            ''
         );
 
         $result = $this->container->get(ReplaceParam::class)
@@ -435,7 +438,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return string
      */
-    private function convertParameter(string $strMatch)
+    private function convertParameter(string $strMatch): string
     {
         list($strSource, $strQuery) = explode('?', $strMatch, 2);
         parse_str($strQuery, $arrArgs);
@@ -476,7 +479,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return string
      */
-    private function parseInsertTagsInternal(string $queryString)
+    private function parseInsertTagsInternal(string $queryString): string
     {
         return $this->container->get(InsertTags::class)->replace($queryString, false);
     }
@@ -488,7 +491,7 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
      *
      * @return string
      */
-    private function parseAndAddSecureInsertTagAsParameter(string $strMatch)
+    private function parseAndAddSecureInsertTagAsParameter(string $strMatch): string
     {
         $this->addParameter($this->parseInsertTagsInternal('{{' . $strMatch . '}}'));
 
@@ -496,75 +499,64 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
     }
 
     /**
-     * Strip inserttags from querystring.
-     *
-     * @param string $string The parameter value.
-     *
-     * @return array
-     */
-    private function stripInserttags(string $string): array
-    {
-        $strRegExpStart = '{{([a-zA-Z0-9\x80-\xFF](?:[^{}]|';
-
-        $strRegExpEnd = ')*)}}';
-
-        return \preg_split(
-            '(' . $strRegExpStart . str_repeat('{{(?:' . substr($strRegExpStart, 3), 9) . str_repeat($strRegExpEnd, 10)
-            . ')',
-            $string,
-            -1,
-            PREG_SPLIT_DELIM_CAPTURE
-        );
-    }
-    
-    /**
-     * Checkout nested inserttags and dissolve param::, secure::, other inserttags.
-     *
-     * @param string $tag The parameter value where as an inserttag in it.
-     *
-     * @return string
-     */
-    private function checkTag(string $tag)
-    {
-        $arrTmp = $this->stripInserttags($tag);
-        if (\array_key_exists(1, $arrTmp)) {
-            $arrTmp[0] .= self::checkTag($arrTmp[1]);
-        }
-
-        $arrStrip = \explode('::', $arrTmp[0], 2);
-        if (!\array_key_exists(1, $arrStrip)) {
-            return $arrTmp[0];
-        }
-
-        switch ($arrStrip[0]) {
-            case 'param':
-                return $this->convertParameter($arrStrip[1]);
-            
-            case 'secure':
-                return $this->parseAndAddSecureInsertTagAsParameter($arrStrip[1]);
-            
-            default:
-                return $this->parseInsertTagsInternal('{{' . $arrTmp[0] . '}}');
-        }
-    }
-
-    /**
      * Literate queryString, split it in pieces and dissolve inserttags.
      *
      * @return void
      */
-    private function literateQuery()
+    private function literateQuery(): void
     {
-        $queryString = $this->container->get(ResolveLanguageTag::class)->resolve($this->queryString);
-
-        $tags = $this->stripInserttags($queryString);
+        $newQueryString = $this->container->get(ResolveLanguageTag::class)->resolve($this->queryString);
+        $tagList        = Parser::parse($newQueryString);
 
         $newQueryString = '';
-
-        foreach ($tags as $tag) {
-            $newQueryString .= $this->checkTag($tag);
+        foreach ($tagList->getIterator() as $item) {
+            if ($item instanceof Node) {
+                $newQueryString .= $this->resolveNode($item);
+                continue;
+            }
+            $newQueryString .= $item->asString();
         }
 
         $this->queryString = $newQueryString;
+    }
+
+    private function resolveNode(Node $node): string
+    {
+        $queryString = '';
+        foreach ($node->getIterator() as $item) {
+            if ($item instanceof Node) {
+                $queryString .= $this->resolveNode($item);
+                continue;
+            }
+            $queryString .= $item->asString();
+        }
+
+        return $this->resolveTag($queryString);
+    }
+
+    /**
+     * Checkout insert tags and dissolve param::, secure::, other insert tags.
+     *
+     * @param string $tag The insert tag value to process (without the braces).
+     *
+     * @return string
+     */
+    private function resolveTag(string $tag): string
+    {
+        $parts = \explode('::', $tag, 2);
+        if (!\array_key_exists(1, $parts)) {
+            return $tag;
+        }
+
+        switch ($parts[0]) {
+            case 'param':
+                return $this->convertParameter($parts[1]);
+
+            case 'secure':
+                return $this->parseAndAddSecureInsertTagAsParameter($parts[1]);
+
+            default:
+                return $this->parseInsertTagsInternal('{{' . $tag . '}}');
+        }
     }
 }
