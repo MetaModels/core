@@ -227,9 +227,7 @@ class FilterUrlBuilder
                 return;
             }
         } else {
-            if (!\str_starts_with($routeName = $request->attributes->get('_route'), 'tl_page.')) {
-                throw new \RuntimeException('Unknown route name: ' . $routeName);
-            }
+            $routeName = $this->determineRouteName($request);
 
             $filterUrl->setPageValue('id', substr($routeName, 8));
             $requestUri = \rawurldecode(\substr($request->getPathInfo(), 1));
@@ -243,8 +241,9 @@ class FilterUrlBuilder
             assert($pageModel instanceof PageModel);
 
             $length    = $pageModel->urlSuffix ? -\strlen($pageModel->urlSuffix) : null;
-            $start     = \strlen($pageModel->urlPrefix ?? '') + \strlen($pageModel->alias);
-            $fragments = \explode('/', \substr($requestUri, $start ? $start + 1 : 0, $length));
+            $start     = ($pageModel->urlPrefix ? \strlen($pageModel->urlPrefix . '/') : 0)
+                         + \strlen($pageModel->alias . '/');
+            $fragments = \explode('/', \substr($requestUri, $start, $length));
 
             if (1 === \count($fragments) % 2) {
                 array_unshift($fragments, 'auto_item');
@@ -531,5 +530,24 @@ class FilterUrlBuilder
                 $filterUrl->setGet($name, $value);
             }
         }
+    }
+
+    /**
+     * Determine route name.
+     *
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function determineRouteName(Request $request): string
+    {
+        $pageModel = $request->attributes->get('pageModel');
+
+        return 'tl_page.' . match (true) {
+                ($pageModel instanceof PageModel) => $pageModel->id,
+                is_int($pageModel) => (string) $pageModel,
+                default =>
+                    throw new \RuntimeException('Unknown page model encountered: ' . get_debug_type($pageModel)),
+            };
     }
 }
