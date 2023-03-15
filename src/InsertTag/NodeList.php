@@ -25,18 +25,32 @@ use IteratorAggregate;
 use Traversable;
 
 /**
+ * A node list.
+ *
  * @implements IteratorAggregate<int, NodeInterface>
  */
 final class NodeList implements IteratorAggregate, NodeInterface
 {
-    /** @var list<NodeInterface> */
+    /**
+     * The elements in the list.
+     *
+     * @var list<NodeInterface>
+     */
     private array $elements;
 
+    /**
+     * Create a new instance.
+     *
+     * @param NodeInterface ...$elements The elements for the list.
+     */
     public function __construct(NodeInterface ...$elements)
     {
         $this->elements = $elements;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getIterator(): Traversable
     {
         foreach ($this->elements as $element) {
@@ -44,6 +58,9 @@ final class NodeList implements IteratorAggregate, NodeInterface
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function asString(): string
     {
         return array_reduce(

@@ -12,11 +12,6 @@
  *
  * @package    MetaModels/core
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @author     David Maack <david.maack@arcor.de>
- * @author     Jan Malte Gerth <anmeldungen@malte-gerth.de>
- * @author     Oliver Hoff <oliver@hofff.com>
- * @author     Sven Baumann <baumann.sv@gmail.com>
- * @author     Ingolf Steinhardt <info@e-spin.de>
  * @author     Oliver Willmes <info@oliverwillmes.de>
  * @copyright  2012-2023 The MetaModels team.
  * @license    https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
@@ -35,8 +30,16 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 final class ResolveLanguageTag
 {
+    /**
+     * The request stack.
+     *
+     * @var RequestStack
+     */
     private RequestStack $requestStack;
 
+    /**
+     * Create a new instance.
+     */
     public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
@@ -48,29 +51,29 @@ final class ResolveLanguageTag
      * @param string $queryString The query string to check out iflng and ifnlng inserttags.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     public function resolve(string $queryString): string
     {
-        if (\strpos($queryString, '{{iflng') === false && \strpos($queryString, '{{ifnlng') === false)
-        {
+        // @codingStandardsIgnoreStart
+        if (\strpos($queryString, '{{iflng') === false && \strpos($queryString, '{{ifnlng') === false) {
             return $queryString;
         }
         $tags = \preg_split('~{{(ifn?lng[^{}]*)}}~', $queryString, -1, PREG_SPLIT_DELIM_CAPTURE );
-        
+
         $strBuffer = '';
 
-        for ($_rit=0, $_cnt=\count($tags); $_rit<$_cnt; $_rit+=2)
-        {
+        for ($_rit=0, $_cnt=\count($tags); $_rit<$_cnt; $_rit+=2) {
             $strBuffer .= $tags[$_rit];
 
-            if (!isset($tags[$_rit+1]))
-            {
+            if (!isset($tags[$_rit+1])) {
                 continue;
             }
             $strTag = $tags[$_rit+1];
 
-            if (!$strTag)
-            {
+            if (!$strTag) {
                 continue;
             }
 
@@ -80,15 +83,16 @@ final class ResolveLanguageTag
 
             $arrCache[$strTag] = '';
 
-            if (!empty($elements[1]) && 
-                $this->languageMatches($elements[1]) === (\strtolower($elements[0]) === 'ifnlng'))
-            {
-                for (; $_rit<$_cnt; $_rit+=2)
-                {
-                    if (1 === \preg_match('/^' . 
-                              \preg_quote($elements[0], '/') . 
-                              '(?:$|::|\|)/i', $tags[$_rit+3] ?? ''))
-                    {
+            if (
+                !empty($elements[1]) &&
+                $this->languageMatches($elements[1]) === (\strtolower($elements[0]) === 'ifnlng')
+            ) {
+                for (; $_rit<$_cnt; $_rit+=2) {
+                    if (
+                        1 === \preg_match(
+                            '/^' . \preg_quote($elements[0], '/') . '(?:$|::|\|)/i', $tags[$_rit+3] ?? ''
+                        )
+                    ) {
                         $tags[$_rit+2] = '';
                         break;
                     }
@@ -98,6 +102,7 @@ final class ResolveLanguageTag
 
             $strBuffer .= $arrCache[$strTag] ?? '';
         }
+        // @codingStandardsIgnoreEnd
 
         return $strBuffer;
     }
@@ -115,20 +120,17 @@ final class ResolveLanguageTag
         if (null === $request) {
             return false;
         }
-        $pageModel = $request->attributes->get('pageModel');
+        $pageModel = $request->attributes->get('_locale');
         if (null === $pageModel) {
             return false;
         }
 
-        foreach (StringUtil::trimsplit(',', $language) as $lang)
-        {
-            if ($pageModel->language === $lang)
-            {
+        foreach (StringUtil::trimsplit(',', $language) as $lang) {
+            if ($pageModel->language === $lang) {
                 return true;
             }
 
-            if (substr($lang, -1) === '*' && 0 === strncmp($pageModel->language, $lang, \strlen($lang) - 1))
-            {
+            if (substr($lang, -1) === '*' && 0 === strncmp($pageModel->language, $lang, \strlen($lang) - 1)) {
                 return true;
             }
         }

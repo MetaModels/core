@@ -25,6 +25,8 @@ use IteratorAggregate;
 use Traversable;
 
 /**
+ * An Insert Tag node.
+ *
  * @implements IteratorAggregate<int, NodeInterface>
  */
 final class Node implements IteratorAggregate, NodeInterface
@@ -32,12 +34,15 @@ final class Node implements IteratorAggregate, NodeInterface
     /** @var list<NodeInterface> */
     private array $parts;
 
-    /** @param list<NodeInterface> $parts */
+    /** @param list<NodeInterface> ...$parts */
     public function __construct(NodeInterface ...$parts)
     {
         $this->parts = $parts;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getIterator(): Traversable
     {
         foreach ($this->parts as $part) {
@@ -45,6 +50,9 @@ final class Node implements IteratorAggregate, NodeInterface
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function asString(): string
     {
         return '{{' . array_reduce(

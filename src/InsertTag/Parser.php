@@ -28,19 +28,53 @@ use function strlen;
 use function strpos;
 use function substr;
 
+/**
+ * Parses an arbitrary string into a node list for insert tags.
+ */
 final class Parser
 {
+    /**
+     * The input buffer to parse.
+     *
+     * @var string
+     */
     private string $content;
+
+    /**
+     * The total length of the input buffer.
+     *
+     * @var int
+     */
     private int $length;
+
+    /**
+     * The current parser position.
+     *
+     * @var int
+     */
     private int $position;
 
-    public function __construct(string $content)
+    /**
+     * Private constructor.
+     *
+     * This class should be used from parse() only.
+     *
+     * @param string $content The content to parse.
+     */
+    private function __construct(string $content)
     {
         $this->content  = $content;
         $this->position = 0;
         $this->length   = strlen($this->content);
     }
 
+    /**
+     * Parse the passed buffer.
+     *
+     * @param string $content The content to parse.
+     *
+     * @return NodeList
+     */
     public static function parse(string $content): NodeList
     {
         $instance = new self($content);
@@ -48,6 +82,13 @@ final class Parser
         return $instance->parseInternal();
     }
 
+    /**
+     * Parse the input buffer - called from static method parse().
+     *
+     * @return NodeList
+     *
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     */
     private function parseInternal(): NodeList
     {
         $buffer = [];
@@ -69,14 +110,21 @@ final class Parser
         return new NodeList(...$buffer);
     }
 
-    private function readTag(): NodeInterface
+    /**
+     * Reads a tag from the input buffer.
+     *
+     * @return Node
+     *
+     * @throws LogicException When the insert tag is not properly structured.
+     */
+    private function readTag(): Node
     {
         if (!$this->isAtOpening()) {
             throw new LogicException('Expected to be at opening of insert tag.');
         }
         $this->read(2);
         // Read anything up to the next open or close tag.
-        $parts = [];
+        $parts       = [];
         $nextOpening = $this->findNextOpenTagPosition();
         $nextClosing = $this->findNextCloseTagPosition();
         // Ok, here we have to check what comes first:
@@ -106,19 +154,39 @@ final class Parser
         return new Node(...$parts);
     }
 
+    /**
+     * Read the given amount of bytes from the input.
+     *
+     * @param int $count The amount of bytes to read.
+     *
+     * @return string
+     */
     private function peek(int $count): string
     {
         return substr($this->content, $this->position, $count);
     }
 
+    /**
+     * Read the given amount of bytes from the input and advance the reading position.
+     *
+     * @param int $count The amount of bytes to read.
+     *
+     * @return string
+     */
     private function read(int $count): string
     {
         $data = $this->peek($count);
+
         $this->position += $count;
 
         return $data;
     }
 
+    /**
+     * Find the index of the next insert tag opener.
+     *
+     * @return int|null
+     */
     private function findNextOpenTagPosition(): ?int
     {
         if (false === $next = strpos($this->content, '{{', $this->position)) {
@@ -127,6 +195,11 @@ final class Parser
         return $next;
     }
 
+    /**
+     * Find the index of the next insert tag closer.
+     *
+     * @return int|null
+     */
     private function findNextCloseTagPosition(): ?int
     {
         if (false === $next = strpos($this->content, '}}', $this->position)) {
@@ -135,11 +208,21 @@ final class Parser
         return $next;
     }
 
+    /**
+     * Check if we are at an insert tag closer.
+     *
+     * @return bool
+     */
     private function isAtClosing(): bool
     {
         return '}}' === $this->peek(2);
     }
 
+    /**
+     * Check if we are at an insert tag opener.
+     *
+     * @return bool
+     */
     private function isAtOpening(): bool
     {
         return '{{' === $this->peek(2);

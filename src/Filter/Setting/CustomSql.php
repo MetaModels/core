@@ -520,6 +520,13 @@ class CustomSql implements ISimple, ServiceSubscriberInterface
         $this->queryString = $newQueryString;
     }
 
+    /**
+     * Resolve a single node.
+     *
+     * @param Node $node The node to resolve.
+     *
+     * @return string
+     */
     private function resolveNode(Node $node): string
     {
         $queryString = '';

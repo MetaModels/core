@@ -21,7 +21,13 @@ declare(strict_types=1);
 
 namespace MetaModels\InsertTag;
 
+/**
+ * A node in the insert tag list.
+ */
 interface NodeInterface
 {
+    /**
+     * {@inheritDoc}
+     */
     public function asString(): string;
 }

@@ -21,20 +21,39 @@ declare(strict_types=1);
 
 namespace MetaModels\InsertTag;
 
+/**
+ * This represents a string literal in an insert tag node list.
+ */
 final class LiteralNode implements NodeInterface
 {
+    /**
+     * The node value.
+     *
+     * @var string
+     */
     private string $value;
 
+    /**
+     * Create a new instance.
+     *
+     * @param string $value The node value.
+     */
     public function __construct(string $value)
     {
         $this->value = $value;
     }
 
+    /**
+     * Obtrain the string value
+     */
     public function getValue(): string
     {
         return $this->value;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function asString(): string
     {
         return $this->getValue();
