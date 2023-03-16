@@ -1,15 +1,25 @@
 <?php
 /**
- * Translations are managed using Transifex. To create a new translation
+ * This file is part of MetaModels/core.
+ *
+ * (c) 2012-2023 The MetaModels team.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * This project is provided in good faith and hope to be usable by anyone.
+ *
+ * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * @link http://help.transifex.com/intro/translating.html
- * @link https://www.transifex.com/projects/p/metamodels/language/rm/
+ * Last-updated: 2023-02-01T15:47:57+00:00
  *
- * @license http://www.gnu.org/licenses/lgpl-3.0.html LGPL
- *
- * last-updated: 2017-08-24T12:43:20+02:00
+ * @copyright 2012-2023 The MetaModels team.
+ * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
+ * @link      https://www.transifex.com/metamodels/public/
+ * @link      https://www.transifex.com/signup/?join_project=metamodels
  */
+
 
 $GLOBALS['TL_LANG']['tl_metamodel_item']['copy']['0']          = 'Copiar l\'element';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['copy']['1']          = 'Copiar l\'element cun l\'ID %s';
@@ -23,8 +33,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_item']['edit']['0']          = 'Modifitgar l\'
 $GLOBALS['TL_LANG']['tl_metamodel_item']['edit']['1']          = 'Modifitgar l\'element cun l\'ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['editheader']['0']    = 'Modifitgar il tip da l\'element';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['editheader']['1']    = 'Modifitgar il tip da l\'element';
-$GLOBALS['TL_LANG']['tl_metamodel_item']['fields']['0']        = 'Administrar ils attributs';
-$GLOBALS['TL_LANG']['tl_metamodel_item']['fields']['1']        = 'Administrar ils attributs da quest MetaModel';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['new']['0']           = 'Nov element';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['new']['1']           = 'Crear in nov element';
 $GLOBALS['TL_LANG']['tl_metamodel_item']['pasteafter']['0']    = 'Crear in nov element';

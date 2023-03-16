@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2019 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,9 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2019-05-03T19:20:55+02:00
+ * Last-updated: 2023-02-01T15:42:39+00:00
  *
- * @copyright 2012-2019 The MetaModels team.
+ * @copyright 2012-2023 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
@@ -25,12 +25,10 @@ $GLOBALS['TL_LANG']['BRD']['metamodel']                                         
 $GLOBALS['TL_LANG']['BRD']['metamodel_attribute']                                     = 'Attributs de "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dca']                                           = 'Tous les écrans de saisie de "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting']                                    = 'Écrans de saisie dans "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodel_dcasetting_subpalette']                         = 'Sous-zones pour "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_filter']                                        = 'Tous les fitres de "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_filtersetting']                                 = 'Paramètres des filtres dans "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_rendersetting']                                 = 'Paramètres de rendu dans "%s"';
 $GLOBALS['TL_LANG']['BRD']['metamodel_rendersettings']                                = 'Tous les paramètres de rendu de "%s"';
-$GLOBALS['TL_LANG']['BRD']['metamodels']                                              = 'MetaModels';
 $GLOBALS['TL_LANG']['CTE']['metamodel_content']['0']                                  = 'Liste de MetaModels';
 $GLOBALS['TL_LANG']['CTE']['metamodel_content']['1']                                  = 'Ajoute une liste d\'éléments MetaModel dans l\'article.';
 $GLOBALS['TL_LANG']['CTE']['metamodels']                                              = 'Eléments MetaModel';
@@ -67,8 +65,6 @@ $GLOBALS['TL_LANG']['MSC']['metamodel_filtersetting']['label']                  
 $GLOBALS['TL_LANG']['MSC']['metamodel_filtersettings_parameter']['simplelookup']['0'] = 'Valeur de filtre pour l\'attribut "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['editRecord']                   = 'Éditer les paramètres %%s de l\'attribut "%s" du MetaModel "%s"';
 $GLOBALS['TL_LANG']['MSC']['metamodel_rendersetting']['label']                        = 'Paramètre de rendu "%s" du MetaModel "%s"';
-$GLOBALS['TL_LANG']['MSC']['metamodels_contributor']                                  = 'Merci à ces utilisateurs pour les billets, les suggestions et les traductions';
-$GLOBALS['TL_LANG']['MSC']['metamodels_help']                                         = 'Nous demandons votre aide !';
 $GLOBALS['TL_LANG']['MSC']['metamodels_sorting']                                      = 'Tri';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['contributor_headline']              = 'Merci à ces utilisateurs pour les billets, les suggestions et les traductions';
 $GLOBALS['TL_LANG']['MSC']['metamodels_support']['main_headline']                     = 'Nous demandons votre aide !';
@@ -80,7 +76,6 @@ $GLOBALS['TL_LANG']['MSC']['panelLayout']['filter']['0']                        
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['limit']['0']                               = 'Limit';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['search']['0']                              = 'Search';
 $GLOBALS['TL_LANG']['MSC']['panelLayout']['sort']['0']                                = 'Sort';
-$GLOBALS['TL_LANG']['MSC']['sorting']                                                 = 'Tri';
 $GLOBALS['TL_LANG']['MSC']['template_in_theme']                                       = '%s (%s)';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clr']['0']                                    = 'clr';
 $GLOBALS['TL_LANG']['MSC']['tl_class']['clr']['1']                                    = 'Effacer tous les flottants';

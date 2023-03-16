@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,9 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2022-11-02T22:35:15+01:00
+ * Last-updated: 2023-02-01T15:48:05+00:00
  *
- * @copyright 2012-2022 The MetaModels team.
+ * @copyright 2012-2023 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
@@ -41,14 +41,11 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['format']['0']             = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['format']['1']             = 'Legen Sie das Ausgabeformat fest. Lassen Sie die Definition leer, um das Format zu verwenden, das von der aktuellen Seite benutzt wird.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['html5']  = 'HTML5';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['text']   = 'Text';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['formatOptions']['xhtml']  = 'XHTML';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['general_legend']          = 'Grundeinstellungen';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues']['0']    = 'Leere Einträge verbergen';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideEmptyValues']['1']    = 'Verbirgt leere Einträge im Backend und im Frontend.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['0']         = 'Labels verbergen';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['hideLabels']['1']         = 'Mit dieser Einstellung werden im Backend und im Frontend alle Labels verborgen.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['0']          = 'Als Standard verwenden';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['isdefault']['1']          = 'Bestimmt, dass diese Eingabemaske als Standard für das Eltern-MetaModel benutzt wird. <strong>Wichtig:</strong> Eine Eingabemaske muss als Standard aktiviert sein.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['0']             = 'Weiterleitungsseite';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo']['1']             = 'Wählen Sie die Seite aus, die für die Detailansicht verwendet werden soll. Beachten Sie, dass die genauen URL-Parameter durch die verwendete Filtereinstellung bestimmt werden.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['jumpTo_allLanguages']     = 'Alle Sprachen';
@@ -75,7 +72,4 @@ $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['show']['1']               = 
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['0']           = 'Template';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['template']['1']           = 'Geben Sie das Template an, das für die Render-Einstellung der Einträge benutzt werden soll. Das kann auch ein angepasstes Template sein.';
 $GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['title_legend']            = 'Name';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['0']             = 'Aktualisierungsdatum';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['tstamp']['1']             = 'Datum und Uhrzeit der letzten Aktualisierung.';
-$GLOBALS['TL_LANG']['tl_metamodel_rendersettings']['view_legend']             = 'Einstellungen ansehen';
 

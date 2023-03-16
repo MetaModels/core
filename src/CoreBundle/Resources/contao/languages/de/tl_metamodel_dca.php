@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,9 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2022-11-02T22:34:43+01:00
+ * Last-updated: 2023-02-01T15:47:31+00:00
  *
- * @copyright 2012-2022 The MetaModels team.
+ * @copyright 2012-2023 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
@@ -41,24 +41,16 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['delete']['1']                 = 'Lösch
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['display_legend']              = 'Anzeigeeinstellungen';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']['0']                   = 'Eingabemaske bearbeiten';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']['1']                   = 'Bearbeiten Sie die Eingabemaske ID %s.';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']['0']                   = 'Sortier-Flag';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']['1']                   = 'Sortiermodus für die Item-Ansicht';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['groupsort_settings']['0']     = 'Gruppierung und Sortierung';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['groupsort_settings']['1']     = 'Bearbeiten Sie die Gruppierung und Sortierung der Eingabemaske ID %s.';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed']['0']               = 'Nur die Bearbeitung erlauben';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed']['1']               = 'Wenn aktiviert, erlaubt dieser Input-Screen nur das bearbeiten der Einträge. Die Erstell- und Löschfunktion wird deaktiviert.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['iscreatable']['0']            = 'Erstellen erlauben';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['iscreatable']['1']            = 'Ist die Checkbox gesetzt, können Datensätze erstellt werden.';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['0']              = 'Als Standard verwenden';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['1']              = 'Bestimmt, dass diese Eingabemaske als Standard für das Eltern-MetaModel benutzt wird.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdeleteable']['0']           = 'Löschen erlauben';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['isdeleteable']['1']           = 'Ist die Checkbox gesetzt, können Datensätze gelöscht werden.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['iseditable']['0']             = 'Bearbeitung erlauben';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['iseditable']['1']             = 'Ist die Checkbox gesetzt, können Datensätze bearbeitet werden.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['0']    = 'Rendering-Einstellung begrenzen';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['1']    = 'Wählen Sie zwischen Frontend und Backend aus.';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']['0']                   = 'Sortiermodus';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']['1']                   = 'Sortiermodus für die Item-Ansicht';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['name']['0']                   = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['name']['1']                   = 'Name der Eingabemaske';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']['0']                    = 'Neue Eingabemaske';
@@ -84,25 +76,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['show']['0']                   = 'Detail
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['show']['1']                   = 'Sehen Sie die Details der Eingabemaske %s an.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['showColumns']['0']            = 'Anzeige in Tabellenform';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['showColumns']['1']            = 'Ist die Option ausgewählt, erfolgt die Anzeige in Form einer Tabelle.';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['1']            = 'Nach erstem Buchstaben aufsteigend sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['10']           = 'Nach Jahr absteigend';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['11']           = 'aufsteigend sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['12']           = 'absteigend sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['2']            = 'Nach erstem Buchstaben absteigend sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['3']            = 'Nach ersten beiden Buchstaben aufsteigend sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['4']            = 'Nach ersten beiden Buchstaben absteigend sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['5']            = 'Nach Tag aufsteigend';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['6']            = 'Nach Tag absteigend';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['7']            = 'Nach Monat aufsteigend';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['8']            = 'Nach Monat absteigend';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['9']            = 'Nach Jahr aufsteigend';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_0']       = '0 - Datensätze werden nicht sortiert';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_1']       = '1 - Datensätze nach festem Feld sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_2']       = '2 - Datensätze nach variablem Feld sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_3']       = '3 - Datensätze nach Elterntabelle sortieren';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_4']       = '4 Zeigt die Kindelemente eines Elternelements an (siehe Stylesheet-Modul)';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_5']       = '5 Einträge werden als Baumstruktur dargestellt (siehe Seitenstruktur)';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_6']       = '6 Zeigt die Kindelemente in einer Baumstruktur an (wie im Artikel-Modul)';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['title_legend']                = 'Name';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']['0']                 = 'Aktualisierungsdatum';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']['1']                 = 'Datum und Zeit der letzten Aktualisierung.';

@@ -2,7 +2,7 @@
 /**
  * This file is part of MetaModels/core.
  *
- * (c) 2012-2022 The MetaModels team.
+ * (c) 2012-2023 The MetaModels team.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,9 +12,9 @@
  * Translations are managed automatically using Transifex. To create a new translation
  * or to help to maintain an existing one, please register at transifex.com.
  *
- * Last-updated: 2022-11-02T22:34:43+01:00
+ * Last-updated: 2023-02-01T15:47:31+00:00
  *
- * @copyright 2012-2022 The MetaModels team.
+ * @copyright 2012-2023 The MetaModels team.
  * @license   https://github.com/MetaModels/core/blob/master/LICENSE LGPL-3.0-or-later
  * @link      https://www.transifex.com/metamodels/public/
  * @link      https://www.transifex.com/signup/?join_project=metamodels
@@ -39,16 +39,8 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['delete']['0']               = 'Elimina 
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['delete']['1']               = 'Elimina maschera di inserimento ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']['0']                 = 'Modifica maschera di inserimento';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['edit']['1']                 = 'Modifica la maschera di inserimento ID %s';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']['0']                 = 'Flag ordinamento';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['flag']['1']                 = 'Flag di ordinamento da utilizzare nella vista';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed']['0']             = 'Consenti solo la modifica';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['isclosed']['1']             = 'Se selezionata questa opzione, la schermata di inserimento consentirà solo la modifica delle informazioni. Le funzioni di nuovi inserimenti e di eliminazione dei record verranno disattivate.';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['0']            = 'È default';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['isdefault']['1']            = 'Determina la maschera di inserimento predefinita che sarà utilizzata per il MetaModel padre.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['0']  = 'Limita l\'impostazione di rendering';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['limit_rendersetting']['1']  = 'Scegli tra front-end o back-end.';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']['0']                 = 'Modo di ordinamento';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['mode']['1']                 = 'Modalità di ordinamento da utilizzare nella vista degli elementi.';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['name']['0']                 = 'Nome';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['name']['1']                 = 'Nome della schermata di input';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['new']['0']                  = 'Nuova maschera inserimento';
@@ -64,25 +56,6 @@ $GLOBALS['TL_LANG']['tl_metamodel_dca']['settings']['0']             = 'Configur
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['settings']['1']             = 'Modifica la configurazione della maschera di inserimento  ID %s';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['show']['0']                 = 'Dettagli maschera di inserimento';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['show']['1']                 = 'Mostra i dettagli della maschera di inserimento ID %s';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['1']          = 'Ordina secondo la lettera iniziale in modo ascendente';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['10']         = 'Ordina in base all\'anno in modo discendente';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['11']         = 'Ordinamento ascendente';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['12']         = 'Ordinamento discendente';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['2']          = 'Ordina secondo la lettera iniziale in modo discendente';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['3']          = 'Ordina secondo le prime due lettere in modo ascendente';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['4']          = 'Ordina secondo le prime due lettere in modo discendente';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['5']          = 'Ordina in base al giorno in modo ascendente';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['6']          = 'Ordina in base al giorno in modo discendente';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['7']          = 'Ordina in base al mese in modo ascendente';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['8']          = 'Ordina in base al mese in modo discendente';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingflag']['9']          = 'Ordina in base all\'anno in modo ascendente';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_0']     = '0 Records non sono ordinati';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_1']     = '1 Records ordinati secondo un campo fisso';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_2']     = '2 Records sono ordinati secondo un campo variabile';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_3']     = '3 Records are sorted by the parent table';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_4']     = '4 Consente di visualizzare i records figli di un record padre (vedi modulo dei fogli di stile)';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_5']     = '5 I records sono visualizzati ad albero (vedi la struttura sito)';
-$GLOBALS['TL_LANG']['tl_metamodel_dca']['sortingmode']['mode_6']     = '6 Consente di visualizzare i records figlii all\'interno di una struttura ad albero (vedi modulo di articoli)';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['title_legend']              = 'Nome';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']['0']               = 'Data di revisione';
 $GLOBALS['TL_LANG']['tl_metamodel_dca']['tstamp']['1']               = 'Data e ora dell\'ultima revisione.';
